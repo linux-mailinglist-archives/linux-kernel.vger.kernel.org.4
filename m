@@ -2,158 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0516A9F6D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3436A9F78
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjCCSpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
+        id S232102AbjCCSqi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Mar 2023 13:46:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbjCCSpa (ORCPT
+        with ESMTP id S232108AbjCCSq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:45:30 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A07912BE3;
-        Fri,  3 Mar 2023 10:45:10 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 9B6FA3200437;
-        Fri,  3 Mar 2023 13:45:07 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 03 Mar 2023 13:45:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1677869107; x=1677955507; bh=czCFFzFaQjnmq2jNbCJAn96qNvrXg7kn6ZW
-        3+GAl8rY=; b=UgNeXOGBiEOT2K0HO9CO8DUA56pg5dnquriQOI30B2JrykFlDk0
-        1PzG9LcwcuqcCsE33Vblr+5A+OF40vcaoeNcvywMP1/3WAVwWABoiCoX2deXBbKO
-        p7MaVZLQxBXl44D5UnEBSQdztpUFNPU5nXhTstynMSuShMSfxnIXi/ZMuZ7fRmu7
-        MiGGmEVwrHV1puqWa3PKIwOE0VTtDBhf9fajtV7/SLFH/f1YQcKzkXtxfDCiAi0z
-        HSCAWdzHe4c6f83+cxem9OaubwEdo+k2FNqTNio1GlC/sPbt04CfDjiaEBJV0IS+
-        1xQmw8V3cQzQUfiqsgNdJkylpXFS+Sr8VeQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1677869107; x=1677955507; bh=czCFFzFaQjnmq2jNbCJAn96qNvrXg7kn6ZW
-        3+GAl8rY=; b=eJ38k9/tbcMP5V3O1H8T4a+hJ3eYleAWW3FMcX/436K1vJRVD9m
-        hBrGLTCXKDEWy6907MjpGqtbcZhgeG5+VmucHbMTYwbcrVog/jlRUNiHAqXVNrfT
-        wwfR0SosDGCUqWktWiCAgcokYEIbHgh0us02Azd6eGpVHK2a18cfPzcdh4TtdWFh
-        InoBaLFfXSMVG1VbV+Ob7glh9W7UVzO/pAaHlWkGeaGlyswh1m8hlsTKkuMjQor0
-        m+Ur+XaZcKb973BbnvXJWlCK/HO4aov0FTP1h0/JYrDZTcytDpfQ5HCLfvcgYwKz
-        M5tykf9NLbuRRRUKkhXGReeD4dCVpewQQeg==
-X-ME-Sender: <xms:MkACZI-B57VzZEGcHr3HewJZmTNTYn3BYhRkzrSMt2fPiAdyAEdDnA>
-    <xme:MkACZAvAwiuQcQXA34thnddb8TQWJRe0wlcCUVw10rhVcKcL6b7yl8ySun_sONHHH
-    -2iP8I168CtUGEK>
-X-ME-Received: <xmr:MkACZOD--SVGmwC5Okha9TKVWpe_5_VyXlWRTW71blT48sp1zgxkVhRux4bTf91cvQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepuegv
-    rhhnugcuufgthhhusggvrhhtuceosggvrhhnugdrshgthhhusggvrhhtsehfrghsthhmrg
-    hilhdrfhhmqeenucggtffrrghtthgvrhhnpeekheevkeelkeekjefhheegfedtffduudej
-    jeeiheehudeuleelgefhueekfeevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegsvghrnhgurdhstghhuhgsvghrthesfhgrshhtmhgrihhl
-    rdhfmh
-X-ME-Proxy: <xmx:MkACZIcx0kEajpXtZKxiVQkAzfcPs9qN2VgMNGfPB5jMrFnxCvHDQA>
-    <xmx:MkACZNMkttVwaiAfDZNQZntjG3dCNr6ntf-tZNZ2qZd-i8q6ojL35Q>
-    <xmx:MkACZCncDRGQY2Skq_JC0hmVZOe1A9JxaAC5hGeH_LjOuosKvCuQkg>
-    <xmx:M0ACZOGRiw84xv1VuH5jnLXob_I_3GDZxVwJYXQljv0ndagOXYCE1w>
-Feedback-ID: id8a24192:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Mar 2023 13:45:05 -0500 (EST)
-Message-ID: <ba148a1a-26da-4fcc-e24c-b1f79d9ba014@fastmail.fm>
-Date:   Fri, 3 Mar 2023 19:45:04 +0100
+        Fri, 3 Mar 2023 13:46:29 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DE6E39B;
+        Fri,  3 Mar 2023 10:46:06 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id cf14so3906380qtb.10;
+        Fri, 03 Mar 2023 10:46:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677869146;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rWmPtqpsfnXhGWlFwwoAcJ6STy2NAdkcAIAhL++JN5U=;
+        b=spDHLcCwwSe1Wj1WmG2+4kZEXI3SqklkLiOINIC+alL218SYyuWsvG4Ra1zzuTDskk
+         2DPQA+5+IFLr4yThZyck+AVrCbRj/oQfPv/O5LDAAxNOwhTZC91Pv/fv+RTU9SmBNeN0
+         GNYSkmkRG32WL4Zv1fjl1jf9qi8kDGog3tvzIVWvHcq2aHf+39LIcNDB2McVzc8GTGcg
+         zSBaJdLfc4z8d9nBCMYkhQXQsLVqhXVWuDZB22T89JYhPJMRE/8ocK6rzH1i2lqGt/ma
+         CNySyQP36Jex1Q6t81pt3qOblkuPuTMurwckCjW93EewpLFDN7LrQdTSJpUA+41BG7Yp
+         /qow==
+X-Gm-Message-State: AO0yUKW7Kq+iqGbJrUV3mPNrr/lYXmfL+QwjEmevTZdwFuUNoEWI8Avw
+        o6fmRLKpwvnzr3NWLy/m6wQhp3uCuI+c1g==
+X-Google-Smtp-Source: AK7set+mNN4iAyuZpTx2s7L4+5n5PCoBZG/lfUo+nTBkjK9RAJtyn20c5jrYOre4M8GC5x6eXAynPQ==
+X-Received: by 2002:a05:622a:1992:b0:3bf:e408:6c91 with SMTP id u18-20020a05622a199200b003bfe4086c91mr5114286qtc.51.1677869145863;
+        Fri, 03 Mar 2023 10:45:45 -0800 (PST)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id az31-20020a05620a171f00b007426ec97253sm2165893qkb.111.2023.03.03.10.45.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 10:45:45 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id k23so2826596ybk.13;
+        Fri, 03 Mar 2023 10:45:45 -0800 (PST)
+X-Received: by 2002:a05:6902:208:b0:acd:7374:f154 with SMTP id
+ j8-20020a056902020800b00acd7374f154mr1526090ybs.7.1677869144942; Fri, 03 Mar
+ 2023 10:45:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 6/9] fuse: take fuse connection generation into
- account
-Content-Language: en-US
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        mszeredi@redhat.com
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
- <20230220193754.470330-7-aleksandr.mikhalitsyn@canonical.com>
-From:   Bernd Schubert <bernd.schubert@fastmail.fm>
-In-Reply-To: <20230220193754.470330-7-aleksandr.mikhalitsyn@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230303182922.3903229-1-kumaravel.thiagarajan@microchip.com>
+In-Reply-To: <20230303182922.3903229-1-kumaravel.thiagarajan@microchip.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 3 Mar 2023 19:45:33 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXvwGzyDTUA=E5=pvGhR4xaBj75OkeU7jr651j6B7kBzA@mail.gmail.com>
+Message-ID: <CAMuHMdXvwGzyDTUA=E5=pvGhR4xaBj75OkeU7jr651j6B7kBzA@mail.gmail.com>
+Subject: Re: [PATCH v1 tty-next] serial: 8250_pci1xxxx: Disable
+ SERIAL_8250_PCI1XXXX config by default
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        andriy.shevchenko@linux.intel.com, deller@gmx.de,
+        geert+renesas@glider.be, matthew.gerlach@linux.intel.com,
+        phil.edworthy@renesas.com, UNGLinuxDriver@microchip.com,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 3, 2023 at 7:29 PM Kumaravel Thiagarajan
+<kumaravel.thiagarajan@microchip.com> wrote:
+> Commit 32bb477fa7bf ("serial: 8250_pci1xxxx: Add driver for quad-uart
+> support") made the SERIAL_8250_PCI1XXXX driver enabled when SERIAL_8250
+> is enabled, disable it as this driver need not be enabled by default
 
-[...]
-> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-> index d5b30faff0b9..be9086a1868d 100644
-> --- a/fs/fuse/file.c
-> +++ b/fs/fuse/file.c
-> @@ -110,7 +110,8 @@ static void fuse_file_put(struct fuse_file *ff, bool sync, bool isdir)
->   	if (refcount_dec_and_test(&ff->count)) {
->   		struct fuse_args *args = &ff->release_args->args;
->   
-> -		if (isdir ? ff->fm->fc->flags.no_opendir : ff->fm->fc->flags.no_open) {
-> +		if (fuse_stale_ff(ff) ||
-> +		    (isdir ? ff->fm->fc->flags.no_opendir : ff->fm->fc->flags.no_open)) {
->   			/* Do nothing when client does not implement 'open' */
+does not need to be enabled
 
-The comment does not match anymore.
+>
+> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Link: https://lore.kernel.org/lkml/CAHk-=whhFCeeuo6vTEmNSx6S-KKkugxgzN_W5Z6v-9yH9gc3Zw@mail.gmail.com/
+> Fixes: 32bb477fa7bf ("serial: 8250_pci1xxxx: Add driver for quad-uart support")
+>
+> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> ---
+> v0 -> v1:
+> - Add proper commit description
 
->   			fuse_release_end(ff->fm, args, 0);
->   		} else if (sync) {
-> @@ -597,9 +598,10 @@ static int fuse_fsync(struct file *file, loff_t start, loff_t end,
->   {
->   	struct inode *inode = file->f_mapping->host;
->   	struct fuse_conn *fc = get_fuse_conn(inode);
-> +	struct fuse_file *ff = file->private_data;
->   	int err;
->   
-> -	if (fuse_is_bad(inode))
-> +	if (fuse_stale_ff(ff) || fuse_is_bad(inode))
->   		return -EIO;
->   
->   	inode_lock(inode);
-> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-> index 4f4a6f912c7c..0643de31674d 100644
-> --- a/fs/fuse/fuse_i.h
-> +++ b/fs/fuse/fuse_i.h
-> @@ -954,7 +954,8 @@ static inline bool fuse_stale_inode(const struct inode *inode, int generation,
->   				    struct fuse_attr *attr)
->   {
->   	return inode->i_generation != generation ||
-> -		inode_wrong_type(inode, attr->mode);
-> +		inode_wrong_type(inode, attr->mode) ||
-> +		fuse_stale_inode_conn(inode);
->   }
->   
->   static inline void fuse_make_bad(struct inode *inode)
-> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-> index c3109e016494..f9dc8971274d 100644
-> --- a/fs/fuse/inode.c
-> +++ b/fs/fuse/inode.c
-> @@ -124,7 +124,7 @@ static void fuse_evict_inode(struct inode *inode)
->   			fuse_dax_inode_cleanup(inode);
->   		if (fi->nlookup) {
->   			fuse_queue_forget(fc, fi->forget, fi->nodeid,
-> -					  fi->nlookup, false);
-> +					  fi->nlookup, fuse_stale_inode_conn(inode));
->   			fi->forget = NULL;
->   		}
->   	}
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
