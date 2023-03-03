@@ -2,232 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410446A8FD6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE946A8FE1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:27:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjCCDV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 22:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        id S229621AbjCCD1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 22:27:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCCDVY (ORCPT
+        with ESMTP id S229445AbjCCD1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 22:21:24 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C942DE4E;
-        Thu,  2 Mar 2023 19:21:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677813683; x=1709349683;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=yGAVmQFLftsBVjoGRZ731DoB6VglmhE2iMIWUwlXq/c=;
-  b=XUr6u/+3NDpLDy70XwUl/iJUc56IOBW8ids+4S+aeMlks2bjhAjDwRfS
-   AKay5lGi2Pen+vHiz87ey7PRXjQzPlazCkuDKNOf4ZN85/JMlWkrAtxa1
-   GFVAVKHiHCUDWPvVNi4J61HOF7RJznISpa0LwP3q9jUGzOKoVfnlLrIY3
-   57erk9XjQLL4SVQEH5GPxY//DCxvd2p9ulFk/x54zm7Lo0oWJmm4j04Hj
-   EMqFJMf9ntzvwenvh7pQdcYnGz82hl3AlIPfuop3+7m7f+BxvuyQgIO9i
-   wxMqXmHQwukHvgbc+z1UvFofMfPCzbJzJcfVWZU3LqeefKKli8B74xklr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="323236506"
-X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
-   d="scan'208";a="323236506"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 19:21:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="799087956"
-X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
-   d="scan'208";a="799087956"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga004.jf.intel.com with ESMTP; 02 Mar 2023 19:21:23 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 2 Mar 2023 19:21:22 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 2 Mar 2023 19:21:22 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 2 Mar 2023 19:21:22 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y3obz2uAwlz3ylIxFBZvuwBnm4Q2F8E6mQfme5EWdsr8iSlLAZLModyNiqH2hVoT7x4nYrlB/EpRCTjPfjrFWwo4PJZ/ujguiH+vEPS8DbkoWN2k37UldJirh1GSZDsoqlG3WaRQ/WwUWzOJls+mtER5eu1PVKr0U878otUuGSfB01F3Ve7cespCMxkG4TK3rQpzmz31ORMNlKjtWQRf3DwdaGLTmgdQ9dB6HH2MVmvJFD++/lSLJDyJ1+vr/OOMkhu6c7TK1cN3qrVbQjRcVpHy6VonCOi6Ix+zbCBhjzjrf5Hx74qI6Cnj5AOiQaML+/QwJWBadB9nWTASvv+vsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Jjva57Z52G3dXE6ON8HxfeZ2zS+FJb3IV8p00AbgBz4=;
- b=i3060JZNCG90he/42tEG4ZnS80/9nf4k2/lNCI9fM3b5q4BcPIw9kiHPlgXJw7B+I98XAsAvRaKZkslLbT9lzCPE0MBZMtKarsaTrLz41Ab8sjaQVG3cy+GU7EfMTOgGToQQMSSJB8SBLN3FieGAVLEFKimk5Y8mgcnantn9TlbAMDerPzPvHi9qNAo11XDXyBVQL/pYj6A7n1kN8JSmWF4CmMYJmWCLamFRIWTvQIUXfIfUR1zQeXpzpZJNAVwdv4wSxj2GThi6ztX59uspdoAVCxWltcOnKPt0hq6r72wFKsXzckf4Iphm4Ic86FTylO2yw4xTwn4U5cA7rE4iAA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by MN2PR11MB4600.namprd11.prod.outlook.com (2603:10b6:208:26e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Fri, 3 Mar
- 2023 03:21:21 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::3bd5:710c:ebab:6158]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::3bd5:710c:ebab:6158%8]) with mapi id 15.20.6156.019; Fri, 3 Mar 2023
- 03:21:20 +0000
-Date:   Thu, 2 Mar 2023 22:21:13 -0500
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Rob Clark <robdclark@gmail.com>
-CC:     <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, Daniel Vetter <daniel@ffwll.ch>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Simon Ser <contact@emersion.fr>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        "Sumit Semwal" <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        <intel-gfx@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Subject: Re: [PATCH v9 15/15] drm/i915: Add deadline based boost support
-Message-ID: <ZAFnqbycMleLmRe9@intel.com>
-References: <20230302235356.3148279-1-robdclark@gmail.com>
- <20230302235356.3148279-16-robdclark@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230302235356.3148279-16-robdclark@gmail.com>
-X-ClientProxiedBy: SJ0PR05CA0176.namprd05.prod.outlook.com
- (2603:10b6:a03:339::31) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Thu, 2 Mar 2023 22:27:50 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167AA584B6;
+        Thu,  2 Mar 2023 19:27:47 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32329hb6021258;
+        Fri, 3 Mar 2023 03:27:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=GY0TFrVhMCoPIc7EbW+Q9b60LgtQRQZfYEjJtrvOov0=;
+ b=AmIiv+x2Dbdl8U3viGmZ4NJl5AcqPderxzOAJpEugoBcknh1LgLe7uwIFeEnl77V6vqE
+ 6PI1dwnjtRsh5RbE1+45nghC7fCPsIeKQNru+JcJAP16bsrts0Dq5vXaazAm6+66O0li
+ jabjfmoK9TIGLv7/d4ONfx7kddhu7JyPM5aaobfZSRw+ktxC8tV1rbZLFzTQMaujk4Qw
+ AlGB33OEO8DDOYR+Z2DEe/fgBHUr+DQ7MQD5SMfKu6K1o6ccinZ7B/6SaDgUZ1lVndef
+ h21JvEAWX4Kgn+42M3yb2v7d0CoNQR2dyxrXO2tWNrqN+56EaSWMC4IF0Z1/nNaA2zNK qw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2veet0ky-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 03:27:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3233RdvO032230
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Mar 2023 03:27:39 GMT
+Received: from [10.110.97.207] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 2 Mar 2023
+ 19:27:38 -0800
+Message-ID: <dc6a6c8a-f312-0200-b117-536cb5f9d6b6@quicinc.com>
+Date:   Thu, 2 Mar 2023 19:27:32 -0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|MN2PR11MB4600:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d18d276-ab59-4eb0-4525-08db1b965be8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ksXDrIENKngoyq1F5LykBTiuq7wxil5AQiC5UQb+/nsISOlGSKnZmCgOfeIJmGnfF2E/I30PXEAHlfjEoEwWIXJPDvTuRTpfYaYyjASCASKa7/8JqrzYtbTWQPgej2SDzBDgTzjJe/28PI2sGKNXBsEpMq6C9BNrmcqQqvS8N+NGhHcDBtKUTY9FHSFRsrDqqYz6ecwlMUgrV272rQLqNUZgEKoQaDdnealNqth6hv5is77/9fhRpMgZluqQFfkpgUNflvIiWFsHzV6ZFVKsCbAgce0sdQ9NpasgiOwulRfJ1JBYx+y4IIlpI54ntAiLyYUo0U+kkjsgqzxPgfNTpLsxLDKcqiB76zjDbnQcogAFrC4wI0XwuPxjUDscNEZV6c08B1o0sSfMlCtfnYDBi9ExKBJXsYroksQtieC8/jnfnjw0pbjZGL87aOqw/jBsOgKGwHctHYszmmxHl609udu2FUT/ene0cJEi/hxiKMMDMHUHhC2EOlX/lPTj7JEyF2JY/z7mUS48ICQgmZSwgTMdroJixV4L0I4DXnZdsOrqR3piq2wUXG3xbfw9JvSwOFZjSgGYlNKjBhYz5fwZZKeZx4gy99Mjo6EGRVEuspFKJuA0l2owfQp1UAuVVX8eivOVAziDRw4S461bOgoojA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(366004)(39860400002)(376002)(136003)(451199018)(36756003)(41300700001)(8936002)(6512007)(2616005)(54906003)(4326008)(6916009)(66556008)(8676002)(66476007)(186003)(66946007)(86362001)(2906002)(7416002)(44832011)(83380400001)(26005)(5660300002)(6506007)(478600001)(6666004)(6486002)(316002)(38100700002)(82960400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EeryyZM4FOeVrO02bMW0NPubwNDrNWW8c8o5mTuhpYG25HQ0wEOb8POi/Fy/?=
- =?us-ascii?Q?zc3ayeBTOpTw6oH2CloAVu8QclTf/QfXtFlcntWw4oIEjE3LOQjOPY4OM/Qp?=
- =?us-ascii?Q?b8U8Cvhs2wd2lS+pWQeIdjlihQf5PMf4/1TvxmWUVkEprmxFvQw7T2T8lCJB?=
- =?us-ascii?Q?8KlrEj5OJjH2yUgEj551V524zjcIyFcuodTpg3zWwHkzc2Ye1RtP27jbVvuT?=
- =?us-ascii?Q?PRNi4Vr+KsI1qsZkxA/2K3+Bq0AiJvGfuB6bdq6R1wCch3bKBDY8EaK3We3J?=
- =?us-ascii?Q?o1mLsVuengPbyF4hG/gM6O6fl+Zm1tkEAKO+a5ZAsOLoddhK8OAlDvP5QPs3?=
- =?us-ascii?Q?Jnugvf/XMrzYdA/5K6X7/mJfJF4bRPtHP0FF8YEvr70PbvCvl0Rjfl762JCm?=
- =?us-ascii?Q?13bcZSgIw7uisbBGk2RB8HvgAVXv6Wl1LJ6GEkH6CPFfvRL5i0ZF6LonFbmU?=
- =?us-ascii?Q?x4dsssDlOQruzwVMpCc9Dn46PjOlOgtd/408Wey5osXHgx1nY3O54Ny0xiN1?=
- =?us-ascii?Q?++e5ls1ooMrlNYvSy/UGNVlnx/xbayAh8kIUZ0fePrNDLRBL1gWwTxeJ7L0X?=
- =?us-ascii?Q?aiQOLjh9jfNuApnAxELJP/Uk1qF/fMcE2of1kG+NDLvrxSQJaBY9HdCH8Lay?=
- =?us-ascii?Q?+ldsKB8Mzb+5D9rkl1+GA9Ou5bWLxUNNoS/SHPyLz74Qi4rrC/MH4OotaJRq?=
- =?us-ascii?Q?1Q8n+1QIzgoZlj6pA46IBEMimhxqdZBmdfOIx8AKz9AOsy2WA43Sft9if1iy?=
- =?us-ascii?Q?Ms4457kyuCEDtaWe4aYc4CWFgCjEvigR0VdN8gamnGMVhjHWqd0tX/8UMc1+?=
- =?us-ascii?Q?zECZoqA8VmfSq9ME5a6ioVCn8uJe4bp2z89P5km8/qIZw9YPMmyfMGNQWzFD?=
- =?us-ascii?Q?RGnV1XAr2/AdZ90y0/rYCzMfPBsZivNpRlYIP0UnVNjH/uxNTkSsJ5J2uUtK?=
- =?us-ascii?Q?lhvJ70i+6ecJTv3LOmkzGvYeQdXHiTwisjnNKQiqhy6i31Vg29cnjBNF++jG?=
- =?us-ascii?Q?eWvZxkHP+TxscRZQw4y7efNJbMzOx6p2yougbmNTO3cgHqfr8xaseBV0jIUC?=
- =?us-ascii?Q?3zU+dISOQKIhDuQrXgodhFyE6JDZ+7Bu8Y/Ppb+3XpXC54r5sTHltobi8CkT?=
- =?us-ascii?Q?jR76FaY/S1TETowYiwVX33jrJuS6fiwtSJhOxYY5CNUlTTE6HFI5MqUzjRqK?=
- =?us-ascii?Q?nsV66P2B3cUF3+c+dZ+Yr96bCQuJ3RaIJOz9CLuuU/LJ10WTMOgruWfr+3Pa?=
- =?us-ascii?Q?VaYB4OKfNakP27t8Xy7kmvYtCjN8mVAjHQmoZ6LLictXYct5DC6xZBtpOG89?=
- =?us-ascii?Q?qGaPqoA609mXSdX5jeds66z7GosbR6kp9MHwQeyyLv7BppPLDwo/DAUK+6Xy?=
- =?us-ascii?Q?slCDkJZlsigqtmZJNag4PHg9pHzVbZ2yhQaTjNC2w6pOmv2yWxNWmnlLvafO?=
- =?us-ascii?Q?4ACYva4PjjTzWntIQp8hTOORaYB86fyuLksAVrnLW+GVivuE+mm7PS7GOtYz?=
- =?us-ascii?Q?wVOI9Aclvj2iGCjO5JKALV+KLubXeaoak6epVLZYLB6hDb4A1ZzGyXV556Is?=
- =?us-ascii?Q?xMRMWZobK8/KrARdvNQDN1t40t8XawamvSE72oTQHaxBMXZtfp/IfAtVADW0?=
- =?us-ascii?Q?Og=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d18d276-ab59-4eb0-4525-08db1b965be8
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 03:21:20.8580
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yFqqQh0/V5ALCslhNRKGS4PDn2sNzMRGwumB/0ag778fatcMPMDmdOn9crqN/oDa4NpW7Rn6sYMPdDu4JoenYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4600
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 1/1] remoteproc: qcom: Add remoteproc tracing
+To:     Bjorn Andersson <andersson@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Elliot Berman" <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>
+References: <20230224165142.17745-1-quic_gokukris@quicinc.com>
+ <20230224165142.17745-2-quic_gokukris@quicinc.com>
+ <20230227200639.fei5rsb5omaquhqn@ripper>
+Content-Language: en-US
+From:   Gokul Krishna Krishnakumar <quic_gokukris@quicinc.com>
+In-Reply-To: <20230227200639.fei5rsb5omaquhqn@ripper>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: poS2GyZ8Ril9XOxki7pigAC0CdwlZ0lh
+X-Proofpoint-GUID: poS2GyZ8Ril9XOxki7pigAC0CdwlZ0lh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 mlxlogscore=999 impostorscore=0 bulkscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303030026
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 03:53:37PM -0800, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
+Hi Bjorn,
+Thanks for the review comments.
+
+On 2/27/2023 12:06 PM, Bjorn Andersson wrote:
+> On Fri, Feb 24, 2023 at 08:51:42AM -0800, Gokul krishna Krishnakumar wrote:
+>> This change adds traces to the following rproc events:
+>> 1. subdevices events - (STRAT/STOP/CRASH)
+>> 2. subsystem events - (START/STOP/CRASH)
+>> 3. RPROC framework events - (Firmware Load/Authentication)
+>>
+> 
+> Thanks for proposing the introduction of tracepoints, this is something
+> we have talked about for years, but no one has shown enough
+> need/interest to do the work.
+> 
+> Most of the proposed tracepoints would however be very useful if you
+> move them one step up (or down...) in the stack.
+> 
+> I.e. please move them into the common code.
+> 
+Moving the traces to one step up in the stack.
+>> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+>> ---
+>>   drivers/remoteproc/Makefile           |  3 ++-
+>>   drivers/remoteproc/qcom_common.c      | 25 +++++++++++++++++++
+>>   drivers/remoteproc/qcom_q6v5.c        |  3 +++
+>>   drivers/remoteproc/qcom_q6v5_pas.c    | 17 +++++++++++++
+>>   drivers/remoteproc/qcom_sysmon.c      | 13 ++++++++++
+>>   drivers/remoteproc/qcom_tracepoints.c | 10 ++++++++
+>>   include/trace/events/rproc_qcom.h     | 36 +++++++++++++++++++++++++++
+>>   7 files changed, 106 insertions(+), 1 deletion(-)
+>>   create mode 100644 drivers/remoteproc/qcom_tracepoints.c
+>>   create mode 100644 include/trace/events/rproc_qcom.h
+>>
+>> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+>> index 91314a9b43ce..e52fa815ddc0 100644
+>> --- a/drivers/remoteproc/Makefile
+>> +++ b/drivers/remoteproc/Makefile
+>> @@ -22,7 +22,8 @@ obj-$(CONFIG_KEYSTONE_REMOTEPROC)	+= keystone_remoteproc.o
+>>   obj-$(CONFIG_MESON_MX_AO_ARC_REMOTEPROC)+= meson_mx_ao_arc.o
+>>   obj-$(CONFIG_PRU_REMOTEPROC)		+= pru_rproc.o
+>>   obj-$(CONFIG_QCOM_PIL_INFO)		+= qcom_pil_info.o
+>> -obj-$(CONFIG_QCOM_RPROC_COMMON)		+= qcom_common.o
+>> +obj-$(CONFIG_QCOM_RPROC_COMMON)		+= rproc_qcom_common.o
+>> +rproc_qcom_common-y			:= qcom_common.o qcom_tracepoints.o
+>>   obj-$(CONFIG_QCOM_Q6V5_COMMON)		+= qcom_q6v5.o
+>>   obj-$(CONFIG_QCOM_Q6V5_ADSP)		+= qcom_q6v5_adsp.o
+>>   obj-$(CONFIG_QCOM_Q6V5_MSS)		+= qcom_q6v5_mss.o
+>> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+>> index a0d4238492e9..7da3259be14a 100644
+>> --- a/drivers/remoteproc/qcom_common.c
+>> +++ b/drivers/remoteproc/qcom_common.c
+>> @@ -18,6 +18,7 @@
+>>   #include <linux/slab.h>
+>>   #include <linux/soc/qcom/mdt_loader.h>
+>>   #include <linux/soc/qcom/smem.h>
+>> +#include <trace/events/rproc_qcom.h>
+>>   
+>>   #include "remoteproc_internal.h"
+>>   #include "qcom_common.h"
+>> @@ -26,6 +27,10 @@
+>>   #define to_smd_subdev(d) container_of(d, struct qcom_rproc_subdev, subdev)
+>>   #define to_ssr_subdev(d) container_of(d, struct qcom_rproc_ssr, subdev)
+>>   
+>> +#define GLINK_SUBDEV_NAME	"glink"
+>> +#define SMD_SUBDEV_NAME		"smd"
+>> +#define SSR_SUBDEV_NAME		"ssr"
+>> +
+>>   #define MAX_NUM_OF_SS           10
+>>   #define MAX_REGION_NAME_LENGTH  16
+>>   #define SBL_MINIDUMP_SMEM_ID	602
+>> @@ -189,6 +194,8 @@ static int glink_subdev_start(struct rproc_subdev *subdev)
+>>   {
+>>   	struct qcom_rproc_glink *glink = to_glink_subdev(subdev);
+>>   
+>> +	trace_rproc_qcom_event(dev_name(glink->dev->parent), GLINK_SUBDEV_NAME, "start");
+> 
+> Please do add individual events, rather than adding a single
+> trace_printk()-like event. That allows the user to selectively enable
+> events, and it becomes convenient to use the events in debugging.
+> 
+Adding spearate trace events for load/start/stop/interrupts/subdevices.
+>> +
+>>   	glink->edge = qcom_glink_smem_register(glink->dev, glink->node);
+>>   
+>>   	return PTR_ERR_OR_ZERO(glink->edge);
+> [..]
+>> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+>> index 6cc4e13c5d36..27d3a6f8c92f 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+>> @@ -24,6 +24,7 @@
+>>   #include <linux/soc/qcom/mdt_loader.h>
+>>   #include <linux/soc/qcom/smem.h>
+>>   #include <linux/soc/qcom/smem_state.h>
+>> +#include <trace/events/rproc_qcom.h>
+>>   
+>>   #include "qcom_common.h"
+>>   #include "qcom_pil_info.h"
+>> @@ -206,10 +207,13 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+>>   	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+>>   	int ret;
+>>   
+>> +	trace_rproc_qcom_event(dev_name(adsp->dev), "adsp_load", "enter");
+>> +
+>>   	/* Store firmware handle to be used in adsp_start() */
+>>   	adsp->firmware = fw;
+>>   
+>>   	if (adsp->dtb_pas_id) {
+>> +		trace_rproc_qcom_event(dev_name(adsp->dev), "dtb_firmware_loading", "enter");
+>>   		ret = request_firmware(&adsp->dtb_firmware, adsp->dtb_firmware_name, adsp->dev);
+>>   		if (ret) {
+>>   			dev_err(adsp->dev, "request_firmware failed for %s: %d\n",
+>> @@ -231,6 +235,8 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+>>   			goto release_dtb_metadata;
+>>   	}
+>>   
+>> +	trace_rproc_qcom_event(dev_name(adsp->dev), "adsp_load", "exit");
+> 
+> I believe it would be more useful to capture the error path as well.
+> 
+Done.
+>> +
+>>   	return 0;
+>>   
+>>   release_dtb_metadata:
+>> @@ -247,6 +253,8 @@ static int adsp_start(struct rproc *rproc)
+>>   	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+>>   	int ret;
+>>   
+>> +	trace_rproc_qcom_event(dev_name(adsp->dev), "adsp_start", "enter");
+>> +
+>>   	ret = qcom_q6v5_prepare(&adsp->q6v5);
+>>   	if (ret)
+>>   		return ret;
+>> @@ -276,6 +284,7 @@ static int adsp_start(struct rproc *rproc)
+>>   	}
+>>   
+>>   	if (adsp->dtb_pas_id) {
+>> +	        trace_rproc_qcom_event(dev_name(adsp->dev), "dtb_auth_reset", "enter");
+>>   		ret = qcom_scm_pas_auth_and_reset(adsp->dtb_pas_id);
+>>   		if (ret) {
+>>   			dev_err(adsp->dev,
+>> @@ -289,6 +298,8 @@ static int adsp_start(struct rproc *rproc)
+>>   	if (ret)
+>>   		goto disable_px_supply;
+>>   
+>> +	trace_rproc_qcom_event(dev_name(adsp->dev), "Q6_firmware_loading", "enter");
+> 
+> I would like this to contain move useful information, e.g. what file is
+> it that we're trying to load?
+> 
+> And you only put "enter" here because you have a single tracepoint, it
+> doesn't add any value...
+> 
+Adding firmware name field in the remoteproc load function.
+>> +
+>>   	ret = qcom_mdt_load_no_init(adsp->dev, adsp->firmware, rproc->firmware, adsp->pas_id,
+>>   				    adsp->mem_region, adsp->mem_phys, adsp->mem_size,
+>>   				    &adsp->mem_reloc);
+>> @@ -296,6 +307,7 @@ static int adsp_start(struct rproc *rproc)
+>>   		goto release_pas_metadata;
+>>   
+>>   	qcom_pil_info_store(adsp->info_name, adsp->mem_phys, adsp->mem_size);
+>> +	trace_rproc_qcom_event(dev_name(adsp->dev), "Q6_auth_reset", "enter");
+>>   
+> 
+> When is this tracepoint useful to you? (Same with the mdt loader above)
 >
+To see where the boot failed- if it failed in the dtb authentication or 
+it got timed out in the Q6 boot.
 
-missing some wording here...
+> Should mdt-loader and scm drivers have their own tracepoints defined?
+> They are after all called from a variety of other drivers...
+>
+Yes I think it would be better to move these trace points to the 
+mdt_loader driver.
 
-> v2: rebase
+>>   	ret = qcom_scm_pas_auth_and_reset(adsp->pas_id);
+>>   	if (ret) {
+>> @@ -303,6 +315,7 @@ static int adsp_start(struct rproc *rproc)
+>>   			"failed to authenticate image and release reset\n");
+>>   		goto release_pas_metadata;
+>>   	}
+>> +	trace_rproc_qcom_event(dev_name(adsp->dev), "Q6_auth_reset", "exit");
+>>   
+>>   	ret = qcom_q6v5_wait_for_start(&adsp->q6v5, msecs_to_jiffies(5000));
+>>   	if (ret == -ETIMEDOUT) {
+>> @@ -364,6 +377,8 @@ static int adsp_stop(struct rproc *rproc)
+>>   	int handover;
+>>   	int ret;
+>>   
+>> +	trace_rproc_qcom_event(dev_name(adsp->dev), "adsp_stop", "enter");
+>> +
+>>   	ret = qcom_q6v5_request_stop(&adsp->q6v5, adsp->sysmon);
+>>   	if (ret == -ETIMEDOUT)
+>>   		dev_err(adsp->dev, "timed out on wait\n");
+>> @@ -385,6 +400,8 @@ static int adsp_stop(struct rproc *rproc)
+>>   	if (handover)
+>>   		qcom_pas_handover(&adsp->q6v5);
+>>   
+>> +	trace_rproc_qcom_event(dev_name(adsp->dev), "adsp_stop", "exit");
 > 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->  drivers/gpu/drm/i915/i915_request.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
+> You're missing an opportunity to convey the success/failure by not using
+> "ret".
 > 
-> diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
-> index 7503dcb9043b..44491e7e214c 100644
-> --- a/drivers/gpu/drm/i915/i915_request.c
-> +++ b/drivers/gpu/drm/i915/i915_request.c
-> @@ -97,6 +97,25 @@ static bool i915_fence_enable_signaling(struct dma_fence *fence)
->  	return i915_request_enable_breadcrumb(to_request(fence));
->  }
->  
-> +static void i915_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
-> +{
-> +	struct i915_request *rq = to_request(fence);
-> +
-> +	if (i915_request_completed(rq))
-> +		return;
-> +
-> +	if (i915_request_started(rq))
-> +		return;
-
-why do we skip the boost if already started?
-don't we want to boost the freq anyway?
-
-> +
-> +	/*
-> +	 * TODO something more clever for deadlines that are in the
-> +	 * future.  I think probably track the nearest deadline in
-> +	 * rq->timeline and set timer to trigger boost accordingly?
-> +	 */
-
-I'm afraid it will be very hard to find some heuristics of what's
-late enough for the boost no?
-I mean, how early to boost the freq on an upcoming deadline for the
-timer?
-
-> +
-> +	intel_rps_boost(rq);
-> +}
-> +
->  static signed long i915_fence_wait(struct dma_fence *fence,
->  				   bool interruptible,
->  				   signed long timeout)
-> @@ -182,6 +201,7 @@ const struct dma_fence_ops i915_fence_ops = {
->  	.signaled = i915_fence_signaled,
->  	.wait = i915_fence_wait,
->  	.release = i915_fence_release,
-> +	.set_deadline = i915_fence_set_deadline,
->  };
->  
->  static void irq_execute_cb(struct irq_work *wrk)
-> -- 
-> 2.39.1
+Adding more information in the trace events.
+>> +
+>>   	return ret;
+>>   }
+>>   
+> [..]
+>> diff --git a/include/trace/events/rproc_qcom.h b/include/trace/events/rproc_qcom.h
+>> new file mode 100644
+>> index 000000000000..b8748873ab25
+>> --- /dev/null
+>> +++ b/include/trace/events/rproc_qcom.h
+>> @@ -0,0 +1,36 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+>> +/*
+>> + * Copyright (c) 2021 The Linux Foundation. All rights reserved.
+>> + */
+>> +
+>> +#undef TRACE_SYSTEM
+>> +#define TRACE_SYSTEM rproc_qcom
+>> +
+>> +#if !defined(_TRACE_RPROC_QCOM_H) || defined(TRACE_HEADER_MULTI_READ)
+>> +#define _TRACE_RPROC_QCOM_H
+>> +#include <linux/tracepoint.h>
+>> +
+>> +TRACE_EVENT(rproc_qcom_event,
+>> +
+>> +	TP_PROTO(const char *name, const char *event, const char *subevent),
+>> +
+>> +	TP_ARGS(name, event, subevent),
+>> +
+>> +	TP_STRUCT__entry(
+>> +		__string(name, name)
+>> +		__string(event, event)
+>> +		__string(subevent, subevent)
 > 
+> Please ensure that your trace events are carrying useful information;
+> as seen above, subevent is not useful in all cases, and in several other
+> cases you're missing useful information.
+> 
+> Please think beyond printk, and please consider that these buffers could
+> be consumed by a machine.
+> 
+Please review the V2 patchset where the events are seperated and more 
+information is passed.
+> Regards,
+> Bjorn
+> 
+>> +	),
+>> +
+>> +	TP_fast_assign(
+>> +		__assign_str(name, name);
+>> +		__assign_str(event, event);
+>> +		__assign_str(subevent, subevent);
+>> +	),
+>> +
+>> +	TP_printk("%s: %s: %s", __get_str(name), __get_str(event), __get_str(subevent))
+>> +);
+>> +#endif /* _TRACE_RPROC_QCOM_H */
+>> +
+>> +/* This part must be outside protection */
+>> +#include <trace/define_trace.h>
+>> -- 
+>> 2.39.2
+>>
+Thanks,
+Gokul
