@@ -2,328 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D6C66A9DC5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C9F6A9DC9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbjCCRfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S231243AbjCCRg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:36:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjCCRfQ (ORCPT
+        with ESMTP id S231180AbjCCRgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:35:16 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA51015C84;
-        Fri,  3 Mar 2023 09:35:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677864914; x=1709400914;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8ao04V1VfOFZM4Kz7NYrrxVrK41QA5tkemgEEvrB1iE=;
-  b=BvQ5zkMY3WxKljT7vakBuBQeD7ChzsErnSEJ1NNG4BGJucPvqaQnn4+m
-   25brrn5rBn40klgnB8lWTdVH/OVcTahqiRJ14Bl8n3pRuFYon8guAhJGw
-   zhpJ+bmGoGKzxWrdfv+fO716RmrKOLK3BAo6+KFQPsvoyf4f+gYRLSioU
-   yOCwdaLa0ZNt+vHYaidE7ARCd1rLdHZ1fiJEJ/hAC01LxDXJjPbn1oWaY
-   lytq2oyInMTiNSyGLP3L58JUWfBs0yzlHjwewVGlwGEB4Fipfd6GpFOpB
-   HwlAFYw1dZUXiE4oOPL/yGWoTVOvecW9cRIBuffEUQEzFZK9UHfer0/PC
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="399914043"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="399914043"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 09:35:12 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="785332990"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="785332990"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.155.56])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 09:35:08 -0800
-Date:   Fri, 3 Mar 2023 09:35:06 -0800
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 4/6] cxl/region: Provide region info to the cxl_poison
- trace event
-Message-ID: <ZAIvytPqEyfLsb+a@aschofie-mobl2>
-References: <cover.1676685180.git.alison.schofield@intel.com>
- <62d24b380514c8c39b651aca79c81a424f0b5b37.1676685180.git.alison.schofield@intel.com>
- <20230303164658.00006b4f@Huawei.com>
+        Fri, 3 Mar 2023 12:36:24 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802E51A662
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 09:36:23 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so6872733pjg.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 09:36:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677864983;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UjNXU1tEXsuTG4huv7r5UMJSNLOXXYqAwRyDV6iA0nY=;
+        b=s9e/fu31hth4h2Ezrh++sCZEz7apyCzhh/ecfgZdCSv3b1e+JENsCuofnmp09mrVjb
+         pLww16Zs2kSFitsAi0qb3RHZlU2GofisOBInmnPL/l1FDgQ1Bg12c2oPMvNUtVIiNU3p
+         l8XFzb5HGZCekKW01QSWvD0VW768QdWuqh5g4eLGo1XCrAsuAqT/PLG1XOtxZaZcH7qj
+         M7ZWdyC3sLFRnsMybpfu6AspGCkBwDkNOjxb2wBcVLI9kJAfd7StdtDX4AWnlZdC7jmi
+         iCRQQ6VsJNu8vkh+Lf49Q3V5z5IsUV5JC5ojhGaBywaV8oV2sEF3cLrK6UdINl3nNJWd
+         tSiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677864983;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UjNXU1tEXsuTG4huv7r5UMJSNLOXXYqAwRyDV6iA0nY=;
+        b=r7uomkJlyjiDg7prOr2E+3kw1YQeRIW46YTL8qnwBNsOxCv+eJAB6TZ8KFjFe9EyWP
+         4CYOCV1iIjK1ufiPy0NU2rrdfTSPthBmNLQMzQPeqHxObH2gFJi5++fXN7HWTyS8Ea06
+         /40nFhhDp4h7rdv6PmYanYdpnQc8aZszg4BUx98salJgGdiKDRRlHkn/+HGiXHkW3HL3
+         kyV/8b6TbIwJdIhC+rnII9UoiPxu++gvbcR8vfsDD/A2VOBOP1Lcuoy5P4kCb3OqpZxd
+         iyXpI0Evl2aYMEfXrXZauhkVut1K6uuFviA6PAraS0IB5T24OoSS3g10xm2cGpkUOWMY
+         Hw1Q==
+X-Gm-Message-State: AO0yUKXDYUmU6sRc2DuV+uNc41+Xf0r/I0RIZVKO7AAJ0RCnuhaqS2+h
+        WAqsyp9g0wLm6+mdNOejYS8TXg==
+X-Google-Smtp-Source: AK7set8thLIQH+7wkXPgqf3SnXnzYHJkd3YmLbiqXBcBE1bnZIf/qgdzipF1B7Rgs/q/mlvoGHpmTg==
+X-Received: by 2002:a17:90b:4f8c:b0:237:6178:33b1 with SMTP id qe12-20020a17090b4f8c00b00237617833b1mr2565701pjb.19.1677864982773;
+        Fri, 03 Mar 2023 09:36:22 -0800 (PST)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id fv24-20020a17090b0e9800b002340f58e19bsm1763623pjb.45.2023.03.03.09.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 09:36:21 -0800 (PST)
+Date:   Fri, 3 Mar 2023 09:36:17 -0800
+From:   David Matlack <dmatlack@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
+Message-ID: <ZAIwEZdYcrs5EcHE@google.com>
+References: <20230301133841.18007-1-wei.w.wang@intel.com>
+ <CALzav=eRYpnfg7bVQpVawAMraFdHu3OzqWr55Pg1SJC_Uh8t=Q@mail.gmail.com>
+ <DS0PR11MB637348F1351260F8B7E97A15DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <ZAAsIBUuIIO1prZT@google.com>
+ <DS0PR11MB6373DAA05CEF9AB8A83A6499DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <CAL715WLo90-JkJe6=GfX755t1jvaW-kqD_w++hv3Ed53fhLC3w@mail.gmail.com>
+ <DS0PR11MB63735E9AC8F4636AF27DAA4ADCB39@DS0PR11MB6373.namprd11.prod.outlook.com>
+ <CAL715WJsV3tPkMDK0exgHeuKOP9kJtc62Ra0jnRhT1Gd6AiEWg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230303164658.00006b4f@Huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL715WJsV3tPkMDK0exgHeuKOP9kJtc62Ra0jnRhT1Gd6AiEWg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 04:46:58PM +0000, Jonathan Cameron wrote:
-> On Fri, 17 Feb 2023 18:18:52 -0800
-> alison.schofield@intel.com wrote:
+On Thu, Mar 02, 2023 at 09:53:35PM -0800, Mingwei Zhang wrote:
+> On Thu, Mar 2, 2023 at 5:50 PM Wang, Wei W <wei.w.wang@intel.com> wrote:
+> >
+> > On Friday, March 3, 2023 2:12 AM, Mingwei Zhang wrote:
+> > > > On Thursday, March 2, 2023 12:55 PM, Mingwei Zhang wrote:
+> > > > > I don't get it. Why bothering the type if we just do this?
+> > > > >
+> > > > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > > > index 4f26b244f6d0..10455253c6ea 100644
+> > > > > --- a/include/linux/kvm_host.h
+> > > > > +++ b/include/linux/kvm_host.h
+> > > > > @@ -848,7 +848,7 @@ static inline void kvm_vm_bugged(struct kvm
+> > > > > *kvm)
+> > > > >
+> > > > >  #define KVM_BUG(cond, kvm, fmt...)                           \
+> > > > >  ({                                                           \
+> > > > > -     int __ret = (cond);                                     \
+> > > > > +     int __ret = !!(cond);                                   \
+> > > >
+> > > > This is essentially "bool __ret". No biggie to change it this way.
+> > >
+> > > !! will return an int, not a boolean, but it is used as a boolean.
+> >
+> > What's the point of defining it as an int when actually being used as a Boolean?
+> > Original returning of an 'int' is a bug in this sense. Either returning a Boolean or
+> > the same type (length) as cond is good way to me.
 > 
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > User space may need to know which region, if any, maps the poison
-> > address(es) logged in a cxl_poison trace event. Since the mapping
-> > of DPAs (device physical addresses) to a region can change, the
-> > kernel must provide this information at the time the poison list
-> > is read. The event informs user space that at event <timestamp>
-> > this <region> mapped to this <DPA>, which is poisoned.
-> > 
-> > The cxl_poison trace event is already wired up to log the region
-> > name and uuid if it receives param 'struct cxl_region'.
-> > 
-> > In order to provide that cxl_region, add another method for gathering
-> > poison - by committed endpoint decoder mappings. This method is only
-> > available with CONFIG_CXL_REGION and is only used if a region actually
-> > maps the memdev where poison is being read. After the poison list is
-> > read for all the mapped resources, poison is read for the unmapped
-> > resources, and those events are logged without the region info.
-> > 
-> > Mixed mode decoders are not currently supported in Linux. Add a debug
-> > message to the poison request path. That will serve as an alert that
-> > poison list retrieval needs to add support for mixed mode.
-> > 
-> > The default method remains: read the poison by memdev resource.
-> > 
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> Hi Alison,
+> What's the point of using an integer? I think we need to ask the
+> original author. But I think one of the reasons might be convenience
+> as the return value. I am not sure if we can return a boolean in the
+> function. But it should be fine here since it is a macro.
 > 
-> I decided to give this a test run on to of a single emulated direct
-> attached EP with both persistent and volatile memory, but only
-> part of each added to a region (so we get a skip).
+> Anyway, returning an 'int' is not a bug. The bug is the casting from
+> 'cond' to the integer that may lose information and this is what you
+> have captured.
 
-This looks like issues with 'unsupported' mixed mode decoders.
-How are you getting past the mixed mode decoder check?
+typeof() won't work if cond is a bitfield. See commit 8d4fbcfbe0a4 ("Fix
+WARN_ON() on bitfield ops") from Linus from back in 2007:
 
-Is there a logic error here:
+commit 8d4fbcfbe0a4bfc73e7f0297c59ae514e1f1436f
+Author: Linus Torvalds <torvalds@woody.linux-foundation.org>
+Date:   Tue Jul 31 21:12:07 2007 -0700
 
-A device paritioned into ram and pmem, may have:
-zero or more ram decodes
-  followed by zero or one skip
-    followed by zero or more pmem decodes
-      followed by maybe unused space
+    Fix WARN_ON() on bitfield ops
 
-So EPs may look like these: 
-ram-01, ram-02, skip-pmem-03, pmem-04
-skip-pmem-01, pmem-02
+    Alexey Dobriyan noticed that the new WARN_ON() semantics that were
+    introduced by commit 684f978347deb42d180373ac4c427f82ef963171 (to also
+    return the value to be warned on) didn't compile when given a bitfield,
+    because the typeof doesn't work for bitfields.
 
-But never these: (no multiple skips and only skip over ram)
-ram-01, skip-ram-02, skip-pmem-03
-skip-pmem-01, skip-pmem-02, 
+    So instead of the typeof trick, use an "int" variable together with a
+    "!!(x)" expression, as suggested by Al Viro.
 
-I'm still looking at the snippets below.
+    To make matters more interesting, Paul Mackerras points out that that is
+    sub-optimal on Power, but the old asm-coded comparison seems to be buggy
+    anyway on 32-bit Power if the conditional was 64-bit, so I think there
+    are more problems there.
 
-Thanks,
-Jonathan
+    Regardless, the new WARN_ON() semantics may have been a bad idea.  But
+    this at least avoids the more serious complications.
 
-> 
-> Without regions it all works as expected. With them not so much - see inline
-> 
-> region uuid is also a bit pointless for volatile regions as I think
-> current code makes it all 0s.
-> 
-> Jonathan
-> 
-> 
-> > ---
-> >  drivers/cxl/core/core.h   |  5 +++
-> >  drivers/cxl/core/memdev.c | 14 +++++-
-> >  drivers/cxl/core/region.c | 89 +++++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 107 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
-> > index cde475e13216..4f507cb85926 100644
-> > --- a/drivers/cxl/core/core.h
-> > +++ b/drivers/cxl/core/core.h
-> > @@ -25,7 +25,12 @@ void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled);
-> >  #define CXL_DAX_REGION_TYPE(x) (&cxl_dax_region_type)
-> >  int cxl_region_init(void);
-> >  void cxl_region_exit(void);
-> > +int cxl_get_poison_by_endpoint(struct device *dev, void *data);
-> >  #else
-> > +static inline int cxl_get_poison_by_endpoint(struct device *dev, void *data)
-> > +{
-> > +	return 0;
-> > +}
-> >  static inline void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled)
-> >  {
-> >  }
-> > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
-> > index ea996057815e..c11b7bc253b4 100644
-> > --- a/drivers/cxl/core/memdev.c
-> > +++ b/drivers/cxl/core/memdev.c
-> > @@ -139,14 +139,26 @@ static ssize_t trigger_poison_list_store(struct device *dev,
-> >  					 const char *buf, size_t len)
-> >  {
-> >  	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
-> > +	struct cxl_port *port;
-> >  	bool trigger;
-> >  	int rc;
-> >  
-> >  	if (kstrtobool(buf, &trigger) || !trigger)
-> >  		return -EINVAL;
-> >  
-> > +	port = dev_get_drvdata(&cxlmd->dev);
-> > +	if (!port || !is_cxl_endpoint(port))
-> > +		return -EINVAL;
-> > +
-> >  	down_read(&cxl_dpa_rwsem);
-> > -	rc = cxl_get_poison_by_memdev(cxlmd);
-> > +	if (port->commit_end == -1)
-> > +		/* No regions mapped to this memdev */
-> > +		rc = cxl_get_poison_by_memdev(cxlmd);
-> > +	else
-> > +		/* Regions mapped, collect poison by endpoint */
-> > +		rc = device_for_each_child(&port->dev, port,
-> > +					   cxl_get_poison_by_endpoint);
-> 
-> So this had me confused for a while.  If I setup a couple of regions
-> on a mixed device with a skip between (may happen anyway)
-> then this returns 1 which is not what we are aiming for.
-> 
-> Chasing it through we are reaching the last part of
-> cxl_get_poison_by_endpoint() which has the comment
-> "... Return rc or 1 to stop iteration." which is exactly 
-> what it is doing.
-> 
-> so need an if (rc == 1) rc = 0; here
-> 
-> 
-> 
-> > +
-> >  	up_read(&cxl_dpa_rwsem);
-> >  
-> >  	return rc ? rc : len;
-> > diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> > index f29028148806..a055f8e36ef1 100644
-> > --- a/drivers/cxl/core/region.c
-> > +++ b/drivers/cxl/core/region.c
-> > @@ -2213,6 +2213,95 @@ struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev)
-> >  }
-> >  EXPORT_SYMBOL_NS_GPL(to_cxl_pmem_region, CXL);
-> >  
-> > +int cxl_get_poison_by_endpoint(struct device *dev, void *data)
-> > +{
-> > +	struct cxl_endpoint_decoder *cxled;
-> > +	struct cxl_port *port = data;
-> > +	struct cxl_dev_state *cxlds;
-> > +	struct cxl_memdev *cxlmd;
-> > +	u64 offset, length;
-> > +	int rc = 0;
-> > +
-> > +	down_read(&cxl_dpa_rwsem);
-> > +
-> > +	if (!is_endpoint_decoder(dev))
-> > +		goto out;
-> > +
-> > +	cxled = to_cxl_endpoint_decoder(dev);
-> > +	if (!cxled->dpa_res || !resource_size(cxled->dpa_res))
-> > +		goto out;
-> > +
-> > +	/*
-> > +	 * Regions are only created with single mode decoders: pmem or ram.
-> > +	 * Linux does not currently support mixed mode decoders. This means
-> > +	 * that reading poison per endpoint decoder adheres to the spec
-> > +	 * requirement that poison reads of pmem and ram must be separated.
-> > +	 * CXL 3.0 Spec 8.2.9.8.4.1
-> > +	 *
-> > +	 * Watch for future support of mixed with a dev_dbg() msg.
-> > +	 */
-> > +	if (cxled->mode == CXL_DECODER_MIXED) {
-> > +		dev_dbg(dev, "poison list read unsupported in mixed mode\n");
-> > +		goto out;
-> > +	}
-> > +
-> > +	cxlmd = cxled_to_memdev(cxled);
-> > +	if (cxled->skip) {
-> > +		rc = cxl_mem_get_poison(cxlmd, 0, cxled->skip, NULL);
-> 
-> The base of this should be the top fo the previous decoder. I'm not immediately
-> sure how you can get hold of that.
-> 
-> In my test with 1GB volatile and 1GB persistent the queries that are sent are:
-> 0 to 0x10000000 (correct)
-> 0 to 0x30000000 (wrong start, should be 0x10000000)
-> 
-> 0x40000000 to 0x50000000 (correct)
-> 0x50000000 to 0x40000000 (not correct but at least the start is correct).
-> See below for this one.
-> 
-> > +		if (rc == -EFAULT && cxled->mode == CXL_DECODER_RAM)
-> > +			rc = 0;
-> > +		if (rc)
-> > +			goto out;
-> > +	}
-> > +	length = cxled->dpa_res->end - cxled->dpa_res->start + 1;
-> > +	rc = cxl_mem_get_poison(cxlmd, cxled->dpa_res->start, length,
-> > +				cxled->cxld.region);
-> > +	if (rc == -EFAULT && cxled->mode == CXL_DECODER_RAM)
-> > +		rc = 0;
-> > +	if (rc)
-> > +		goto out;
-> > +
-> > +	/* Iterate until commit_end is reached */
-> > +	if (cxled->cxld.id < port->commit_end)
-> > +		goto out;
-> > +
-> > +	/*
-> > +	 * Reach here with the last committed decoder only.
-> > +	 * Knowing that PMEM must always follow RAM, get poison
-> > +	 * for unmapped ranges based on the last decoder's mode:
-> > +	 *	ram: scan remains of ram range, then scan for pmem
-> > +	 *	pmem: scan remains of pmem range
-> > +	 */
-> > +	cxlds = cxlmd->cxlds;
-> > +
-> > +	if (cxled->mode == CXL_DECODER_RAM) {
-> > +		offset = cxled->dpa_res->end + 1;
-> > +		length = resource_size(&cxlds->ram_res) - offset;
-> > +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
-> > +		if (rc == -EFAULT)
-> > +			rc = 0;
-> > +		if (rc)
-> > +			goto out;
-> > +	}
-> > +	if (cxled->mode == CXL_DECODER_PMEM) {
-> > +		offset = cxled->dpa_res->end + 1;
-> 
-> This is fine, unless you have a ram region in which case
-> the offset computed here includes that as well as the
-> persistent bit.
-> 
-> > +		length = resource_size(&cxlds->pmem_res) - offset;
-> 
-> So you need to take that into account with something like
-> - (offset - cxlds->pmem_res.start);
-> 
-> > +	} else if (resource_size(&cxlds->pmem_res)) {
-> > +		offset = cxlds->pmem_res.start;
-> > +		length = resource_size(&cxlds->pmem_res);
-> > +	} else {
-> > +		rc = 1;
-> > +		goto out;
-> > +	}
-> > +	/* Final get poison call. Return rc or 1 to stop iteration. */
-> > +	rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
-> > +	if (!rc)
-> > +		rc = 1;
-> > +out:
-> > +	up_read(&cxl_dpa_rwsem);
-> > +	return rc;
-> > +}
-> > +
-> >  static struct lock_class_key cxl_pmem_region_key;
-> >  
-> >  static struct cxl_pmem_region *cxl_pmem_region_alloc(struct cxl_region *cxlr)
-> 
+    Cc: Alexey Dobriyan <adobriyan@sw.ru>
+    Cc: Herbert Xu <herbert@gondor.apana.org.au>
+    Cc: Paul Mackerras <paulus@samba.org>
+    Cc: Al Viro <viro@ftp.linux.org.uk>
+    Cc: Ingo Molnar <mingo@elte.hu>
+    Cc: Andrew Morton <akpm@osdl.org>
+    Signed-off-by: Linus Torvalds <torvalds@osdl.org>
+
+diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
+index 344e3091af24..d56fedbb457a 100644
+--- a/include/asm-generic/bug.h
++++ b/include/asm-generic/bug.h
+@@ -33,7 +33,7 @@ struct bug_entry {
+
+ #ifndef HAVE_ARCH_WARN_ON
+ #define WARN_ON(condition) ({                                          \
+-       typeof(condition) __ret_warn_on = (condition);                  \
++       int __ret_warn_on = !!(condition);                              \
+        if (unlikely(__ret_warn_on)) {                                  \
+                printk("WARNING: at %s:%d %s()\n", __FILE__,            \
+                        __LINE__, __FUNCTION__);                        \
+@
+[...]
+
+As for int versus bool, I don't see a strong argument for either. So let's
+stick with int since that's what the current code is using and that
+aligns with the generic kernel WARN_ON().
+
+If someone wants to propose using a bool instead of an int that should
+be a separate commit anyway and needs an actual justification.
