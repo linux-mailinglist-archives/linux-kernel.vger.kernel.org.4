@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257366A9967
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E7796A9969
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjCCO2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S230112AbjCCO3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjCCO2t (ORCPT
+        with ESMTP id S230111AbjCCO3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:28:49 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C3B13D7C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:28:49 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id z5so1726757ilq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:28:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677853728;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=PRcr1qg5pQOktZ9kX0ziwdm9E4pyF51eI2ym5oRUyFE=;
-        b=G5Osnu5hzYoVxhN4oaDmF5ViD0nXFxer6ZmbnkHX+XteHQB6w9jeCBHfe/lpiNZQkF
-         TnXhJ4mCWNuKZoh1vLG+CLsLsS4dUZB+PTvJ44unjclgLGyq+MvLzUP3CQxG/U4mCF7p
-         HjfW/RlyqqIpILTffO10FhS8wZCw9XF+H0CF09VXjfs7qqVp/AdfBdqFqzQLqaO+0KcY
-         hCgjK4WySE5WFwwcxUYEVjwosYEi866GUTErjZuLnAH3haBJiNHO9BeYZXnhtnSWN5pO
-         0bysOuL5OEvrXWBVTvinonfeYXGrf7OPLfqNCTAzMdpNLJwkOs/XTvfPv1Y/X5OoS1ml
-         uDDw==
+        Fri, 3 Mar 2023 09:29:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F81812BF7
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:28:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677853724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o3ApB4exZoXcG63nEHDI8L+9x3I4wPipSfbFGyH/f0E=;
+        b=Kqq8v9XjdczmMFawP4kWi7W8SzB8q/q2eZcBFBSs6gdgFVlpmX1Xb9VBj5t/y7C7hTClF/
+        A/pp0lUaoY2Zqu+4sdmWMFFsegKLTgbvrFqGySSyTp/fg9n9/uMgWbXHSP47f75Athy6Rr
+        s0oag1wOb2OLHXf5GXqHcMs7Wn8XShk=
+Received: from mail-lf1-f72.google.com (mail-lf1-f72.google.com
+ [209.85.167.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-27-2Xu_6hE1P46BBoc39_A4Iw-1; Fri, 03 Mar 2023 09:28:35 -0500
+X-MC-Unique: 2Xu_6hE1P46BBoc39_A4Iw-1
+Received: by mail-lf1-f72.google.com with SMTP id k7-20020ac257c7000000b004db20d1cf7fso1074648lfo.18
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:28:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677853728;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PRcr1qg5pQOktZ9kX0ziwdm9E4pyF51eI2ym5oRUyFE=;
-        b=TqEQh3jz5mU7apBTnfvqPUWi78C+kOsc9r1WqqwnpYKn6CimMsMzIKx0dt+7QJaMW3
-         kDuN3eJrM/1cRWoT32ZSkl3rgf8xUv/MJ9LyXNULnvZV9JVnGp8b87Y1F27jCC5uuWRK
-         dkxCJ2uQmxAgdkrsLfL/XmXn34LT8da12E7EOY7TjIxcFm6+5nDiaiXQg8wjQbEFfBxz
-         Qt3eQse2BAUEsyMyJW8YKtLIPGZqxt/ag4gmKTnWEGeciKkEPVOMrIxPxovNG2e8ww2x
-         3pMxa5zAqVe5U9x3e9UYxi1EXhpXIrVmceL/07ntNV46+1FukBqFnGaU3txSk9J94jO+
-         Oiow==
-X-Gm-Message-State: AO0yUKV9HqsOElv2zkWKGeEy3HnDqHyKhPAgM6ovd9djkXC2GjcVtm7G
-        faX82q2FtF8WtIBbklY0RdKz/u5TqYOElW7ZBHomG2u6sZ6w1WSgGIKZ+w==
-X-Google-Smtp-Source: AK7set+HMBwA2uzkl25q517yrfjU68xIFglNvg4faUnDBtughiHcyxFIGYQcTPiaOodX1W7AzKuxYMhTzUmtC4uKzJI=
-X-Received: by 2002:a05:6e02:130f:b0:315:9761:6965 with SMTP id
- g15-20020a056e02130f00b0031597616965mr931127ilr.5.1677853728379; Fri, 03 Mar
- 2023 06:28:48 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677853714;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o3ApB4exZoXcG63nEHDI8L+9x3I4wPipSfbFGyH/f0E=;
+        b=sAIOOqa+niv/bQtGZYa5uikWkyNOUYGloIq1Ab/DQB6t9AyK8p9Y+/6b94PxdPzq9A
+         sS7VsZtxyHztwOY0sspE00hgCJTLAbYW4G3YjLhNblS6swPMOEhI1lGT3V4MNOrNRDnY
+         G2AQBexbmCSGhH63etstQ23srM2CbX1phgwCop1GwZ26L0gZ4dOhkDPRGZI4tQ3AxChr
+         bompYyXX5EuB3EOhbluGXGhxE3R9Bx4V5EFJ7fgw7XPJFm9JkHfQmmUtpazy7sSNefxV
+         2LNuxDxsQqafMo3bGgKD1gKig2/bgcGbli2Kg1OhgKthjhWhxBmlf7bhr264cPbohuHJ
+         vkJg==
+X-Gm-Message-State: AO0yUKWEPqpoeogiqwmGvOimYu31UOSBLsnE9WfneL2Ab8VI+L1kn+Wk
+        xlm4pym/Y7apiTe93c/SWIsdXQffmcPG2pBmb+VCB//sfeZyR5TfwglyiCrE9hdsnVuteKtx7ik
+        w9e7vwmuQ44uosF/2TUTJyDJiJ/Sx6l3hHg3Xj8zI
+X-Received: by 2002:ac2:5927:0:b0:4d5:ca32:6aec with SMTP id v7-20020ac25927000000b004d5ca326aecmr645064lfi.12.1677853714512;
+        Fri, 03 Mar 2023 06:28:34 -0800 (PST)
+X-Google-Smtp-Source: AK7set89z3ZaDV+0l8hN22o89ZbCZILIi4QRjANWBxaYKra+nJigSS7Ho1XPgvAOO/WyESHVRzmPsFP0RA2BCA7iIf8=
+X-Received: by 2002:ac2:5927:0:b0:4d5:ca32:6aec with SMTP id
+ v7-20020ac25927000000b004d5ca326aecmr645049lfi.12.1677853714194; Fri, 03 Mar
+ 2023 06:28:34 -0800 (PST)
 MIME-Version: 1.0
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 3 Mar 2023 15:28:12 +0100
-Message-ID: <CAG_fn=WZnBtRujLyhouz1AmerSKB71oPej442JDOw2OaORbWQg@mail.gmail.com>
-Subject: Infinite loop in checkpatch.pl
-To:     apw@canonical.com, Joe Perches <joe@perches.com>,
-        dwaipayanray1@gmail.com, Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="00000000000077b6b205f5ffc351"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+References: <20230303132731.1919329-1-trix@redhat.com>
+In-Reply-To: <20230303132731.1919329-1-trix@redhat.com>
+From:   Karol Herbst <kherbst@redhat.com>
+Date:   Fri, 3 Mar 2023 15:28:21 +0100
+Message-ID: <CACO55tuMxp5M+zgG_p3QpXUfrPhcssPMz91tfMBFt5OVobOSaw@mail.gmail.com>
+Subject: Re: [PATCH] drm/nouveau/fifo: set gf100_fifo_nonstall_block_dump
+ storage-class-specifier to static
+To:     Tom Rix <trix@redhat.com>
+Cc:     bskeggs@redhat.com, lyude@redhat.com, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,80 +77,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000077b6b205f5ffc351
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Karol Herbst <kherbst@redhat.com>
 
-Hi folks,
+will push in a moment
 
-I've noticed that checkpatch.pl chokes on the following file (also attached=
-):
+On Fri, Mar 3, 2023 at 2:27 PM Tom Rix <trix@redhat.com> wrote:
+>
+> gcc with W=3D1 reports
+> drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: error:
+>   no previous prototype for =E2=80=98gf100_fifo_nonstall_block=E2=80=99 [=
+-Werror=3Dmissing-prototypes]
+>   451 | gf100_fifo_nonstall_block(struct nvkm_event *event, int type, int=
+ index)
+>       | ^~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> gf100_fifo_nonstall_block is only used in gf100.c, so it should be static
+>
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c b/drivers/g=
+pu/drm/nouveau/nvkm/engine/fifo/gf100.c
+> index 5bb65258c36d..6c94451d0faa 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c
+> @@ -447,7 +447,7 @@ gf100_fifo_nonstall_allow(struct nvkm_event *event, i=
+nt type, int index)
+>         spin_unlock_irqrestore(&fifo->lock, flags);
+>  }
+>
+> -void
+> +static void
+>  gf100_fifo_nonstall_block(struct nvkm_event *event, int type, int index)
+>  {
+>         struct nvkm_fifo *fifo =3D container_of(event, typeof(*fifo), non=
+stall.event);
+> --
+> 2.27.0
+>
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-$ cat test-checkpatch.txt
-diff --git a/mm/kmsan/kmsan_test.c b/mm/kmsan/kmsan_test.c
-@@ -504,6 +504,25 @@ static void
-test_memcpy_aligned_to_unaligned2(struct kunit *test)
-+ EXPECTATION_NO_REPORT(expect);                              \
-+ volatile uint##size##_t uninit;                             \
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-
-, getting into an infinite loop in annotate_values().
-The following patch helps it to proceed:
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 78cc595b98ce1..01d998b416a51 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -2240,8 +2240,13 @@ sub annotate_values {
-                        print "C($1)\n" if ($dbg_values > 1);
-                }
-                if (defined $1) {
--                       $cur =3D substr($cur, length($1));
--                       $res .=3D $type x length($1);
-+                       if (length($1)) {
-+                               $cur =3D substr($cur, length($1));
-+                               $res .=3D $type x length($1);
-+                       } else {
-+                               $res .=3D $cur;
-+                               $cur =3D "";
-+                       }
-                }
-        }
-
-, but I have no idea how to test it properly.
-
-Could you please take a look?
-
-
-Thanks,
-Alex
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
---00000000000077b6b205f5ffc351
-Content-Type: text/plain; charset="US-ASCII"; name="test-checkpatch.txt"
-Content-Disposition: attachment; filename="test-checkpatch.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lesmmnga0>
-X-Attachment-Id: f_lesmmnga0
-
-ZGlmZiAtLWdpdCBhL21tL2ttc2FuL2ttc2FuX3Rlc3QuYyBiL21tL2ttc2FuL2ttc2FuX3Rlc3Qu
-YwpAQCAtNTA0LDYgKzUwNCwyNSBAQCBzdGF0aWMgdm9pZCB0ZXN0X21lbWNweV9hbGlnbmVkX3Rv
-X3VuYWxpZ25lZDIoc3RydWN0IGt1bml0ICp0ZXN0KQorCQlFWFBFQ1RBVElPTl9OT19SRVBPUlQo
-ZXhwZWN0KTsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCisJCXZvbGF0aWxlIHVpbnQj
-I3NpemUjI190IHVuaW5pdDsgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwK
---00000000000077b6b205f5ffc351--
