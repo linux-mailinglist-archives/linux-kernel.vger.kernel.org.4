@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A88C6A90B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CE16A90B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjCCGDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 01:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S229809AbjCCGD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 01:03:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCCGC7 (ORCPT
+        with ESMTP id S229452AbjCCGDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 01:02:59 -0500
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA4093C5;
-        Thu,  2 Mar 2023 22:02:58 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id bg11so1031634oib.5;
-        Thu, 02 Mar 2023 22:02:58 -0800 (PST)
+        Fri, 3 Mar 2023 01:03:55 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68074158A1;
+        Thu,  2 Mar 2023 22:03:54 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id bk32so1007901oib.10;
+        Thu, 02 Mar 2023 22:03:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677823377;
+        d=gmail.com; s=20210112; t=1677823433;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sY40wTgLWqE1HWG5gSrcD3SfOE1S6aDb/jRZfClrmSM=;
-        b=kuZNbXdE6O4INKyXCNzVS0kV/bVcXLFhWJPzILeewXEyHshXoSxVCkzZ+xHvDrSctK
-         0h1y79PnJ0TpzAPQHFHhIaS575c2ixyvfRpQfaga1ATI2srYbYD7y9xr0+jJwoezuI/E
-         S/AZ72AGafYESH+jKUTDIZa9uvPHvKDnPPjtfZ9m9FxuqxPaBE5AJq5veUjwTD3q63Mg
-         LJbpWx5VPMlhgf9h5pZS6p2UMNiV8qddN7ddcq5SPHlKY7RnDz83hP3InszF4ZaM2N27
-         +sEkiFB9LtRvPjuM5IvqIy+E2JyS2Xp0bdkY1A457eBwYCbrdn9LYPA2ZGdgWFxik+CF
-         AVEg==
+        bh=ZJ2aViFV8G5fD3sj6zvP1zwzM+rkvacAu8VneaLs+F0=;
+        b=MPIeoVXSgZQNc49dEdm+5PyxfuyNRWHFy6hY3TPROVGUTnXybd0lj8Feor6Dn14i2I
+         DTjAJyXWKQ7LK/dRZ95078fw6kSk2XPI48BkUnUyDsNkC37GQ71FarEh+iKd29Aeu3Dq
+         /84zs9wM7/QI4C/5Wirt0SD4iaVkvG9Nu1wD+NUZACxFLqwkx2ECxQX1+xK/uOG8K7+o
+         gC/68ag2oH6pq3iqbFkKwhaYTDnFSiCqYhPuBuqPRKQ21tWM4mYP8P7eYUUU8URN2w0w
+         iXUKb1GnLiEZzGCR/FXRWm3kONerrmdEYzZT9QD+qyG7OJPJQ/GOptdYbTBJhytkGMfE
+         2jgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677823377;
+        d=1e100.net; s=20210112; t=1677823433;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sY40wTgLWqE1HWG5gSrcD3SfOE1S6aDb/jRZfClrmSM=;
-        b=qd6/Vh67WXdA3ouZVkHmDrotLav8awBLjR5u1XuGu2NbXRn1aurSmLa/9RO9mZjcfT
-         PJPsnXbwuV/V9YyVvm5JkFlEOd2MG07327lBzEDVAlOJ2gtzbot0HUEvOpttHI6sfiKH
-         dPuxDriJ8lo8xCQZ4tLRokYJTqUlygzrFSD+xPd2LiqswA7s2n/3VGFoKiiprajZd7iU
-         zxXbGEhO15LLaHQLJpfQBsuS6B7fJIANd5MboLXbBd0ccmJ/nID9IyVuf/teky+oil/v
-         ogw6PYgZXjynZy13+0MwOiVR3kv6KPpI0ytW2d46kMPgado3zTDkhwmjQMTtaEqZDTQ+
-         wErA==
-X-Gm-Message-State: AO0yUKXfciA4j1+fOBDr+VjZNB5P0bnXVxpGkEZUdg20W7/2AvgoYORD
-        PXpRO3Q84FU4UVcixoWfjAYhUwgiuNjctVstYwI=
-X-Google-Smtp-Source: AK7set/PPBGBmqaFLu/x/7FEaM9awhg94M6PTTjS9Ii+pHqbbjJ24I27AlnH45802wz/elA/L97MBTJkOhhEpnCw33Q=
-X-Received: by 2002:a05:6808:9b1:b0:384:efe:729a with SMTP id
- e17-20020a05680809b100b003840efe729amr201801oig.2.1677823376576; Thu, 02 Mar
- 2023 22:02:56 -0800 (PST)
+        bh=ZJ2aViFV8G5fD3sj6zvP1zwzM+rkvacAu8VneaLs+F0=;
+        b=5h/1KYrrWQCCFPnou8E16AHAAJVQqq3c8B22wAf/N4sfdVDUfmLwcZcWj/+g0J1zYc
+         vwmUG5zTN2VugBmbeltQsAgEZ7KlAFaZH9qaRn7O7kli56uLwm2XDNbitLlLi29budcs
+         TGsGRFTwcXvrVLnOwkKO5DZdL1NYu34RbK7HUVIhdVP2WMtm5GFgWeTrkiyK7GWhVU11
+         i0mlhV2F8GrcZXqmi6iovKQq00uMojUfBiQkemTHh7z5ZPqndTwv4TRdZ5HvkGiRQ+sF
+         W/eTg8JhfX6XhGLjAHgGjc+9fCRgJZtULcPnA7+J0q5scv1C/8nrbq3nKsdJOkEEMQ8c
+         4/+g==
+X-Gm-Message-State: AO0yUKXTGgTwqgW3JP2ibT4fzRMgpf4ALaW3dLFmsE8lBjnVpayNbeN7
+        NeGhD/oiDALeRoJM+0VVwvOYuV1IXWuptwdDDhk=
+X-Google-Smtp-Source: AK7set8YxDCWPYK7rU1INZGaYhKhWrHNXMzEGlkkj1ToCKsyEYhRAP7UvN+4lrZyv7g91f2zNpmwjk+BtkPXi5r4J8s=
+X-Received: by 2002:aca:1c0b:0:b0:384:2a27:8567 with SMTP id
+ c11-20020aca1c0b000000b003842a278567mr198832oic.2.1677823433805; Thu, 02 Mar
+ 2023 22:03:53 -0800 (PST)
 MIME-Version: 1.0
-References: <20230303002850.51858-1-arinc.unal@arinc9.com> <20230303002850.51858-4-arinc.unal@arinc9.com>
-In-Reply-To: <20230303002850.51858-4-arinc.unal@arinc9.com>
+References: <20230303002850.51858-1-arinc.unal@arinc9.com> <20230303002850.51858-5-arinc.unal@arinc9.com>
+In-Reply-To: <20230303002850.51858-5-arinc.unal@arinc9.com>
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 3 Mar 2023 07:02:44 +0100
-Message-ID: <CAMhs-H_Ydu=A8Dcy8L3KZw_32FNW5iCytqUJXqkk8ijzhLK1yA@mail.gmail.com>
-Subject: Re: [PATCH 03/20] pinctrl: ralink: rt305x: add new compatible string
- for every SoC
+Date:   Fri, 3 Mar 2023 07:03:41 +0100
+Message-ID: <CAMhs-H9qVE0Z23Z3J8D1voo5UaKZrjUYU=7V=oRMd8=vVGASAg@mail.gmail.com>
+Subject: Re: [PATCH 04/20] pinctrl: ralink: mt7620: split out to mt76x8
 To:     arinc9.unal@gmail.com
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -85,22 +84,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 1:29 AM <arinc9.unal@gmail.com> wrote:
+On Fri, Mar 3, 2023 at 1:30 AM <arinc9.unal@gmail.com> wrote:
 >
 > From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 >
-> Add new compatible strings to make every SoC, or SoCs that use the same
-> pinmux data have a unique compatible string. This ensures that the pin
-> muxing information of every SoC, or a set of SoCs that use the same pinmu=
-x
-> data can be properly documented.
+> Split the driver out to pinctrl-mt76x8.c. Remove including the unnecessar=
+y
+> headers since is_mt76x8() is not being used anymore.
+>
+> Introduce a new compatible string to be able to document the pin muxing
+> information properly.
 >
 > Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 > ---
->  drivers/pinctrl/ralink/pinctrl-rt305x.c | 2 ++
->  1 file changed, 2 insertions(+)
-
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-
-Thanks,
-    Sergio Paracuellos
+>  drivers/pinctrl/ralink/Kconfig          |   5 +
+>  drivers/pinctrl/ralink/Makefile         |   1 +
+>  drivers/pinctrl/ralink/pinctrl-mt7620.c | 257 +--------------------
+>  drivers/pinctrl/ralink/pinctrl-mt76x8.c | 283 ++++++++++++++++++++++++
+>  4 files changed, 290 insertions(+), 256 deletions(-)
+>  create mode 100644 drivers/pinctrl/ralink/pinctrl-mt76x8.c
