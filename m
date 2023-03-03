@@ -2,104 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE646A9DC3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6C66A9DC5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbjCCRdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:33:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S230349AbjCCRfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:35:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjCCRdo (ORCPT
+        with ESMTP id S229974AbjCCRfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:33:44 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301EC4207
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 09:33:43 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32385Nnc010547;
-        Fri, 3 Mar 2023 17:32:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rT9oXyMOiJsVqlFyPDuL53W0Fy6C8viYI4Cr8IbjbC0=;
- b=oB/nk/P6rqPZ1p3q7nG5//wY4rA5HAnldkmEzFcDnaN5b/6gF0Ns3oKHhl1aaKPtR/Po
- Ir2pwm/apJM0F1cts1ujpoWCVJk6XqyGebYfb0TSpZ/ELrkEAsAnP5lJREDAAuF6p0XD
- gFiGynL71R7/AGRxR36E7TEjmWEIJoih94zkbiLfV/ZyjjrDER+jvVrcjtyk/940OavN
- KlPDcVA+edfR41a98tQVvJycPYksm0U/Q14BCshXGfqXhk6NF0BDjiyYJcQ2pd4yQwWw
- bjO2FCKzk8QMalr+NurMhpFgR93OX4SzOli05iE7w+c3yZBAe/3W2+eTnkVKuQfeMO94 Mg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3c8hsu98-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 17:32:54 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 323HWrlf016803
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 17:32:53 GMT
-Received: from [10.216.31.251] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 3 Mar 2023
- 09:32:50 -0800
-Message-ID: <79d4f0ad-c014-6b9f-4c0e-c71163457b30@quicinc.com>
-Date:   Fri, 3 Mar 2023 23:02:46 +0530
+        Fri, 3 Mar 2023 12:35:16 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA51015C84;
+        Fri,  3 Mar 2023 09:35:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677864914; x=1709400914;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8ao04V1VfOFZM4Kz7NYrrxVrK41QA5tkemgEEvrB1iE=;
+  b=BvQ5zkMY3WxKljT7vakBuBQeD7ChzsErnSEJ1NNG4BGJucPvqaQnn4+m
+   25brrn5rBn40klgnB8lWTdVH/OVcTahqiRJ14Bl8n3pRuFYon8guAhJGw
+   zhpJ+bmGoGKzxWrdfv+fO716RmrKOLK3BAo6+KFQPsvoyf4f+gYRLSioU
+   yOCwdaLa0ZNt+vHYaidE7ARCd1rLdHZ1fiJEJ/hAC01LxDXJjPbn1oWaY
+   lytq2oyInMTiNSyGLP3L58JUWfBs0yzlHjwewVGlwGEB4Fipfd6GpFOpB
+   HwlAFYw1dZUXiE4oOPL/yGWoTVOvecW9cRIBuffEUQEzFZK9UHfer0/PC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="399914043"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="399914043"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 09:35:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="785332990"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="785332990"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.155.56])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 09:35:08 -0800
+Date:   Fri, 3 Mar 2023 09:35:06 -0800
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 4/6] cxl/region: Provide region info to the cxl_poison
+ trace event
+Message-ID: <ZAIvytPqEyfLsb+a@aschofie-mobl2>
+References: <cover.1676685180.git.alison.schofield@intel.com>
+ <62d24b380514c8c39b651aca79c81a424f0b5b37.1676685180.git.alison.schofield@intel.com>
+ <20230303164658.00006b4f@Huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] ASoC: codecs: tx-macro: Fix for KASAN: slab-out-of-bounds
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-CC:     Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
-        <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230303125717.29196-1-quic_visr@quicinc.com>
- <73ea5ba2-18c8-abd8-3896-eb9656201f53@linaro.org>
-From:   VISHNUVARDHAN RAO RAVULAPATI <quic_visr@quicinc.com>
-In-Reply-To: <73ea5ba2-18c8-abd8-3896-eb9656201f53@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IHn6InOu0g2tCAQk4achWYNMFhGgWF2z
-X-Proofpoint-ORIG-GUID: IHn6InOu0g2tCAQk4achWYNMFhGgWF2z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_03,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 phishscore=0 malwarescore=0 mlxlogscore=750
- priorityscore=1501 impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030150
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303164658.00006b4f@Huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 03, 2023 at 04:46:58PM +0000, Jonathan Cameron wrote:
+> On Fri, 17 Feb 2023 18:18:52 -0800
+> alison.schofield@intel.com wrote:
+> 
+> > From: Alison Schofield <alison.schofield@intel.com>
+> > 
+> > User space may need to know which region, if any, maps the poison
+> > address(es) logged in a cxl_poison trace event. Since the mapping
+> > of DPAs (device physical addresses) to a region can change, the
+> > kernel must provide this information at the time the poison list
+> > is read. The event informs user space that at event <timestamp>
+> > this <region> mapped to this <DPA>, which is poisoned.
+> > 
+> > The cxl_poison trace event is already wired up to log the region
+> > name and uuid if it receives param 'struct cxl_region'.
+> > 
+> > In order to provide that cxl_region, add another method for gathering
+> > poison - by committed endpoint decoder mappings. This method is only
+> > available with CONFIG_CXL_REGION and is only used if a region actually
+> > maps the memdev where poison is being read. After the poison list is
+> > read for all the mapped resources, poison is read for the unmapped
+> > resources, and those events are logged without the region info.
+> > 
+> > Mixed mode decoders are not currently supported in Linux. Add a debug
+> > message to the poison request path. That will serve as an alert that
+> > poison list retrieval needs to add support for mixed mode.
+> > 
+> > The default method remains: read the poison by memdev resource.
+> > 
+> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> Hi Alison,
+> 
+> I decided to give this a test run on to of a single emulated direct
+> attached EP with both persistent and volatile memory, but only
+> part of each added to a region (so we get a skip).
 
-On 3/3/2023 7:45 PM, Srinivas Kandagatla wrote:
->
->
-> On 03/03/2023 12:57, Ravulapati Vishnu Vardhan Rao wrote:
->> @@ -1064,9 +1064,10 @@ static int tx_macro_hw_params(struct 
->> snd_pcm_substream *substream,
->>                     struct snd_soc_dai *dai)
->>   {
->>       struct snd_soc_component *component = dai->component;
->> -    u32 decimator, sample_rate;
->> +    u32 sample_rate;
->>       int tx_fs_rate;
->>       struct tx_macro *tx = snd_soc_component_get_drvdata(component);
->> +    u8 decimator = 0;
-> Minor nit, any reason why decimator is intialized as part of this change.
->
-> --srini
-Will Remove that..Thanks for review
+This looks like issues with 'unsupported' mixed mode decoders.
+How are you getting past the mixed mode decoder check?
+
+Is there a logic error here:
+
+A device paritioned into ram and pmem, may have:
+zero or more ram decodes
+  followed by zero or one skip
+    followed by zero or more pmem decodes
+      followed by maybe unused space
+
+So EPs may look like these: 
+ram-01, ram-02, skip-pmem-03, pmem-04
+skip-pmem-01, pmem-02
+
+But never these: (no multiple skips and only skip over ram)
+ram-01, skip-ram-02, skip-pmem-03
+skip-pmem-01, skip-pmem-02, 
+
+I'm still looking at the snippets below.
+
+Thanks,
+Jonathan
+
+> 
+> Without regions it all works as expected. With them not so much - see inline
+> 
+> region uuid is also a bit pointless for volatile regions as I think
+> current code makes it all 0s.
+> 
+> Jonathan
+> 
+> 
+> > ---
+> >  drivers/cxl/core/core.h   |  5 +++
+> >  drivers/cxl/core/memdev.c | 14 +++++-
+> >  drivers/cxl/core/region.c | 89 +++++++++++++++++++++++++++++++++++++++
+> >  3 files changed, 107 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
+> > index cde475e13216..4f507cb85926 100644
+> > --- a/drivers/cxl/core/core.h
+> > +++ b/drivers/cxl/core/core.h
+> > @@ -25,7 +25,12 @@ void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled);
+> >  #define CXL_DAX_REGION_TYPE(x) (&cxl_dax_region_type)
+> >  int cxl_region_init(void);
+> >  void cxl_region_exit(void);
+> > +int cxl_get_poison_by_endpoint(struct device *dev, void *data);
+> >  #else
+> > +static inline int cxl_get_poison_by_endpoint(struct device *dev, void *data)
+> > +{
+> > +	return 0;
+> > +}
+> >  static inline void cxl_decoder_kill_region(struct cxl_endpoint_decoder *cxled)
+> >  {
+> >  }
+> > diff --git a/drivers/cxl/core/memdev.c b/drivers/cxl/core/memdev.c
+> > index ea996057815e..c11b7bc253b4 100644
+> > --- a/drivers/cxl/core/memdev.c
+> > +++ b/drivers/cxl/core/memdev.c
+> > @@ -139,14 +139,26 @@ static ssize_t trigger_poison_list_store(struct device *dev,
+> >  					 const char *buf, size_t len)
+> >  {
+> >  	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
+> > +	struct cxl_port *port;
+> >  	bool trigger;
+> >  	int rc;
+> >  
+> >  	if (kstrtobool(buf, &trigger) || !trigger)
+> >  		return -EINVAL;
+> >  
+> > +	port = dev_get_drvdata(&cxlmd->dev);
+> > +	if (!port || !is_cxl_endpoint(port))
+> > +		return -EINVAL;
+> > +
+> >  	down_read(&cxl_dpa_rwsem);
+> > -	rc = cxl_get_poison_by_memdev(cxlmd);
+> > +	if (port->commit_end == -1)
+> > +		/* No regions mapped to this memdev */
+> > +		rc = cxl_get_poison_by_memdev(cxlmd);
+> > +	else
+> > +		/* Regions mapped, collect poison by endpoint */
+> > +		rc = device_for_each_child(&port->dev, port,
+> > +					   cxl_get_poison_by_endpoint);
+> 
+> So this had me confused for a while.  If I setup a couple of regions
+> on a mixed device with a skip between (may happen anyway)
+> then this returns 1 which is not what we are aiming for.
+> 
+> Chasing it through we are reaching the last part of
+> cxl_get_poison_by_endpoint() which has the comment
+> "... Return rc or 1 to stop iteration." which is exactly 
+> what it is doing.
+> 
+> so need an if (rc == 1) rc = 0; here
+> 
+> 
+> 
+> > +
+> >  	up_read(&cxl_dpa_rwsem);
+> >  
+> >  	return rc ? rc : len;
+> > diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+> > index f29028148806..a055f8e36ef1 100644
+> > --- a/drivers/cxl/core/region.c
+> > +++ b/drivers/cxl/core/region.c
+> > @@ -2213,6 +2213,95 @@ struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev)
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(to_cxl_pmem_region, CXL);
+> >  
+> > +int cxl_get_poison_by_endpoint(struct device *dev, void *data)
+> > +{
+> > +	struct cxl_endpoint_decoder *cxled;
+> > +	struct cxl_port *port = data;
+> > +	struct cxl_dev_state *cxlds;
+> > +	struct cxl_memdev *cxlmd;
+> > +	u64 offset, length;
+> > +	int rc = 0;
+> > +
+> > +	down_read(&cxl_dpa_rwsem);
+> > +
+> > +	if (!is_endpoint_decoder(dev))
+> > +		goto out;
+> > +
+> > +	cxled = to_cxl_endpoint_decoder(dev);
+> > +	if (!cxled->dpa_res || !resource_size(cxled->dpa_res))
+> > +		goto out;
+> > +
+> > +	/*
+> > +	 * Regions are only created with single mode decoders: pmem or ram.
+> > +	 * Linux does not currently support mixed mode decoders. This means
+> > +	 * that reading poison per endpoint decoder adheres to the spec
+> > +	 * requirement that poison reads of pmem and ram must be separated.
+> > +	 * CXL 3.0 Spec 8.2.9.8.4.1
+> > +	 *
+> > +	 * Watch for future support of mixed with a dev_dbg() msg.
+> > +	 */
+> > +	if (cxled->mode == CXL_DECODER_MIXED) {
+> > +		dev_dbg(dev, "poison list read unsupported in mixed mode\n");
+> > +		goto out;
+> > +	}
+> > +
+> > +	cxlmd = cxled_to_memdev(cxled);
+> > +	if (cxled->skip) {
+> > +		rc = cxl_mem_get_poison(cxlmd, 0, cxled->skip, NULL);
+> 
+> The base of this should be the top fo the previous decoder. I'm not immediately
+> sure how you can get hold of that.
+> 
+> In my test with 1GB volatile and 1GB persistent the queries that are sent are:
+> 0 to 0x10000000 (correct)
+> 0 to 0x30000000 (wrong start, should be 0x10000000)
+> 
+> 0x40000000 to 0x50000000 (correct)
+> 0x50000000 to 0x40000000 (not correct but at least the start is correct).
+> See below for this one.
+> 
+> > +		if (rc == -EFAULT && cxled->mode == CXL_DECODER_RAM)
+> > +			rc = 0;
+> > +		if (rc)
+> > +			goto out;
+> > +	}
+> > +	length = cxled->dpa_res->end - cxled->dpa_res->start + 1;
+> > +	rc = cxl_mem_get_poison(cxlmd, cxled->dpa_res->start, length,
+> > +				cxled->cxld.region);
+> > +	if (rc == -EFAULT && cxled->mode == CXL_DECODER_RAM)
+> > +		rc = 0;
+> > +	if (rc)
+> > +		goto out;
+> > +
+> > +	/* Iterate until commit_end is reached */
+> > +	if (cxled->cxld.id < port->commit_end)
+> > +		goto out;
+> > +
+> > +	/*
+> > +	 * Reach here with the last committed decoder only.
+> > +	 * Knowing that PMEM must always follow RAM, get poison
+> > +	 * for unmapped ranges based on the last decoder's mode:
+> > +	 *	ram: scan remains of ram range, then scan for pmem
+> > +	 *	pmem: scan remains of pmem range
+> > +	 */
+> > +	cxlds = cxlmd->cxlds;
+> > +
+> > +	if (cxled->mode == CXL_DECODER_RAM) {
+> > +		offset = cxled->dpa_res->end + 1;
+> > +		length = resource_size(&cxlds->ram_res) - offset;
+> > +		rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> > +		if (rc == -EFAULT)
+> > +			rc = 0;
+> > +		if (rc)
+> > +			goto out;
+> > +	}
+> > +	if (cxled->mode == CXL_DECODER_PMEM) {
+> > +		offset = cxled->dpa_res->end + 1;
+> 
+> This is fine, unless you have a ram region in which case
+> the offset computed here includes that as well as the
+> persistent bit.
+> 
+> > +		length = resource_size(&cxlds->pmem_res) - offset;
+> 
+> So you need to take that into account with something like
+> - (offset - cxlds->pmem_res.start);
+> 
+> > +	} else if (resource_size(&cxlds->pmem_res)) {
+> > +		offset = cxlds->pmem_res.start;
+> > +		length = resource_size(&cxlds->pmem_res);
+> > +	} else {
+> > +		rc = 1;
+> > +		goto out;
+> > +	}
+> > +	/* Final get poison call. Return rc or 1 to stop iteration. */
+> > +	rc = cxl_mem_get_poison(cxlmd, offset, length, NULL);
+> > +	if (!rc)
+> > +		rc = 1;
+> > +out:
+> > +	up_read(&cxl_dpa_rwsem);
+> > +	return rc;
+> > +}
+> > +
+> >  static struct lock_class_key cxl_pmem_region_key;
+> >  
+> >  static struct cxl_pmem_region *cxl_pmem_region_alloc(struct cxl_region *cxlr)
+> 
