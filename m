@@ -2,110 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A3C6A9468
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9028A6A946D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjCCJsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S230189AbjCCJtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:49:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjCCJsV (ORCPT
+        with ESMTP id S230184AbjCCJtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:48:21 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73B2D31F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:48:17 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so3065231wms.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:48:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=23Z3X1K5N5UuRVaVfx5jG4l/8tOn32i2PmVWKuVL6kA=;
-        b=q9hoRd/t3CA5Sz9OiT2YSI95/ifslPF/GIjYiJAzTXnCh5sD2HlUvUDhDHgj6aVeRj
-         e1RXGNwW0czS96IHKmuj/0I7lCngC4FUTU+mYdAp2hClefE1hYQB61mEV5GWeM5YAJ6I
-         +x/WMXoqPeLq/bwyayA3JJjoZ0H4zU3QjAYZQU1vgMEGadeD01O2WE+5igm8AhNId82g
-         nYvkykUw1OdMifF7BKTnfT4ldtZYsTp2l95238pr96pu+7VInggrCT73O0fB5g53yzo9
-         LJjdOZ9/aHZOQ8g+pLD+nXdcrpK9ZuHO/IfuqhCVRthaT0sQ8mPayCqyRgqpCcnZllb7
-         7BAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=23Z3X1K5N5UuRVaVfx5jG4l/8tOn32i2PmVWKuVL6kA=;
-        b=ZmQTPn1jyt9Mn89BYol8BV+wi4DHVDohPE1h2MiAAy7I3FQEl3P2YkZu5j6+MTQF/h
-         E+HFMCfLCsQishksk4DYsfxopMMix+CpuQzekuJ/jJjm0TSV5aOwURNtMQ16kYTw7Kln
-         WrwJn3T2l/bdFj1xrkASbCWQQ9cE4xHMjOt9dMDnEct2C2d0Y7oLi9mqd9QAMD8nNZ4l
-         qHITGSsUYqONhMfTlC1d+sJG9iPeAaWg2yZ+REB+LlaqGngmzFLdd7un0GOZis68XpZT
-         NrsQxXqM49lpoMBzwbnrbIf+4QHTW3kweKqgwKCWMhPCkOs0NW4pkiUwGWvmHRAzdHoD
-         oflw==
-X-Gm-Message-State: AO0yUKWTcfSyDTaqwc4S0VIb6OmVh6F6J5e+AI1v96oUuwsTfgfXLMpt
-        pABaQyXTGwSub4HtEtAv0xJV1w==
-X-Google-Smtp-Source: AK7set/ZEFLM78ntYTmWl8llRTFGkS4U3M9sRqLEHjCHjzcyKzX9DNaUQQm5tv7/4dKbRmfGZ/4Sww==
-X-Received: by 2002:a05:600c:4e8f:b0:3eb:2da4:f32d with SMTP id f15-20020a05600c4e8f00b003eb2da4f32dmr1002977wmq.26.1677836896081;
-        Fri, 03 Mar 2023 01:48:16 -0800 (PST)
-Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
-        by smtp.gmail.com with ESMTPSA id m29-20020a05600c091d00b003dc521f336esm1902294wmp.14.2023.03.03.01.48.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 01:48:15 -0800 (PST)
-Message-ID: <dbf4b01d-e3c7-28fc-890d-9bb51c919f59@baylibre.com>
-Date:   Fri, 3 Mar 2023 10:48:15 +0100
+        Fri, 3 Mar 2023 04:49:00 -0500
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E77D1040C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:48:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1677836938; x=1709372938;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=uIoGKTM+botEjFPFMsCu6mxNY93QEUww5QbbHkHHhtI=;
+  b=Oo0hwsjsu5vKjoIj2YeF9muynwZUn2Ag0WpI6LGEJDYx9pmX+xSql7oc
+   maUBxJiAVOWUCmMab3A8mhlldPpQgaid7e6I1Pmh1MZlma0avxMqcPAts
+   OVhAB5LEbTvUQHzQhLvH5vEcQW2LHQ5DEF93yKpO0fqFy/MFo5JQdgF00
+   jMp+r6gwpM9k8XwBLXCxs15b6XA8c4gQMkgDQrTI5EM1juqSpNMICBRTT
+   ZZB77rqOeKxMH2cxPlBcijrfE3p7JfcaPBmAOPflFndargW9DyNjHP2EP
+   xSEqNbJosS6vgBZnR4v2FBE3Fc6E6gq4JVQ+4EZmGy0HEFr4MnW+B1gPf
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,230,1673884800"; 
+   d="scan'208";a="329046053"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 03 Mar 2023 17:48:56 +0800
+IronPort-SDR: /p9HGYxeP85v+uyD3b+05xah2koGio1ar/8sqdrowJsF6mFj+cufZfjj8H2qOyF6oU6+DFaYuY
+ evhKwvqPr4cCtK4ZjfJSEDyoc/zgxX3RZxNOG8NRF5Eer+WXFFgeGy9oSSf4CcuGlrs2QWh13O
+ 6hR/DB4TerkikEanYudz/GxFUVBuDNKVhwbBRMmlLa0tFEqkTRuvyL0FikbBTSVtBgwIJhUnY1
+ BYWM7ClfSjZmYqrMFOriv/JwJkuUWr9bHga/CLK8oHxBaxcdVc1nMerMz9y7YvSu3Si7GvoZ/F
+ BiQ=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Mar 2023 00:59:59 -0800
+IronPort-SDR: CU7kIp9R0h2Uzmr2K5ph1sIN7SJrJhlIivh0Ix6di1rEd1ZCpkRLHjJNwyBQ0mapywD+7/ZxQy
+ VkeSwyuNO7tfFncbt+h/n3XYnw7/aGm+xP8Fvq0iuLDGN0G5VrJC0zNKU8D1Oxd4el8VG2o0MX
+ BniaNd2HWgt+N092JscX0eqLw99AYs9NMGeHkzNs/ao2XYFmt7OHfMBuZdlmig+0q692tbEX67
+ viuigIfu5ZwcQ/g0vmxufdOT2r+cFqgYQHd4JX4P4diA28HnS+VJLuK33Ihu9W3Kwx60oUlso3
+ f+A=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Mar 2023 01:48:57 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PSjpv6s40z1RwqL
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:48:55 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1677836935; x=1680428936; bh=uIoGKTM+botEjFPFMsCu6mxNY93QEUww5Qb
+        bHkHHhtI=; b=qupa7oQRg9BOLX4qEG+sh+IsrkELz8Lg8XNpWttJmF+iGgYJbIz
+        9ARw8CzOip9WdFO2Xx52cEIQBRUdXF39Om+RmOKO+az5wK0f+zmLKf9HK6Q+w4tG
+        qu2aBAOwmVY/W4D3+qIAlzhN88z22PtfRsFdUTvvKX6KgXbfCn8WWUC6rlj+nA5R
+        Dbi971vktYK6dO56VzfwcUKutLq2wgsYLRqTk8Je9BSzK98nkvlCcX/xMjC95Zit
+        bVCzXVAmAwXlfRPDS8zabb4hwBJU51FpVAH7FsOb6wAV1/YWpbEJJYeyoMcZijem
+        dN6TKgI2aGMJ0DaynHZzqgYLNIWKmIbZzHQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XF34nmdNToOx for <linux-kernel@vger.kernel.org>;
+        Fri,  3 Mar 2023 01:48:55 -0800 (PST)
+Received: from [10.225.163.47] (unknown [10.225.163.47])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PSjpt1k4Yz1RvLy;
+        Fri,  3 Mar 2023 01:48:54 -0800 (PST)
+Message-ID: <af6a355b-3ac2-a610-379a-167e87145368@opensource.wdc.com>
+Date:   Fri, 3 Mar 2023 18:48:52 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] mfd: tps65219: Add support for soft shutdown via sys-off
- API
+ Thunderbird/102.8.0
+Subject: Re: [regression] Bug 217114 - Tiger Lake SATA Controller not
+ operating correctly [bisected]
 Content-Language: en-US
-To:     Vignesh Raghavendra <vigneshr@ti.com>, tony@atomide.com,
-        lee@kernel.org
-Cc:     linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, nm@ti.com, afd@ti.com, msp@baylibre.com
-References: <20230203140150.13071-1-jneanne@baylibre.com>
- <4b9fc988-5313-757a-b3bc-ec90dba4f4b2@ti.com>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <4b9fc988-5313-757a-b3bc-ec90dba4f4b2@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Simon Gaiser <simon@invisiblethingslab.com>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        emmi@emmixis.net, schwagsucks@gmail.com,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <ad02467d-d623-5933-67e0-09925c185568@leemhuis.info>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <ad02467d-d623-5933-67e0-09925c185568@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/3/23 16:10, Linux regression tracking (Thorsten Leemhuis) wrote:
+> Hi, this is your Linux kernel regression tracker.
+> 
+> I noticed a regression report in bugzilla.kernel.org that apparently
+> affects 6.2 and later as well as 6.1.13 and later, as it was already
+> backported there.
+> 
+> As many (most?) kernel developer don't keep an eye on bugzilla, I
+> decided to forward the report by mail. Quoting from
+> https://bugzilla.kernel.org/show_bug.cgi?id=217114 :
+> 
+>>  emmi@emmixis.net 2023-03-02 11:25:00 UTC
+>>
+>> As per kernel problem found in https://bbs.archlinux.org/viewtopic.php?id=283906 ,
+>>
+>> Commit 104ff59af73aba524e57ae0fef70121643ff270e
+> 
+> [FWIW: That's "ata: ahci: Add Tiger Lake UP{3,4} AHCI controller" from
+> Simon Gaiser]
 
+I sent a revert with cc: stable.
 
-On 03/03/2023 06:36, Vignesh Raghavendra wrote:
-> 
-> 
-> On 03/02/23 19:31, Jerome Neanne wrote:
->> Use new API for power-off mode support:
->> Link: https://lwn.net/Articles/894511/
->> Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
->>
->> sys-off API allows support of shutdown handler and restart handler.
->>
->> Shutdown was not supported before that enhancement.
->> This is required for platform that are not using PSCI.
->>
->> Test:
->> - restart:
->>    # reboot
->>    Default is cold reset:
->>    # cat /sys/kernel/reboot/mode
->>    Switch boot mode to warm reset:
->>    # echo warm > /sys/kernel/reboot/mode
->> - power-off:
->>    # halt
->>
->> Tested on AM62-SP-SK board.
->>
-> 
-> There is no -SP-SK that I am aware of.. Do you mean -LP-SK?
-You are right, this is a typo. It's LP-SK
-> [...]
-> 
+Simon,
+
+Let's work on finding a better solution for enabling LPM for that adapter
+without causing regressions. I will need your help for testing as I do not have
+this hardware.
+
+-- 
+Damien Le Moal
+Western Digital Research
+
