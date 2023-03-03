@@ -2,536 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDC86A9953
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99B56A995E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjCCOUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
+        id S230407AbjCCO1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:27:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjCCOT7 (ORCPT
+        with ESMTP id S229854AbjCCO1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:19:59 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E24113F5;
-        Fri,  3 Mar 2023 06:19:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C1ABB818E3;
-        Fri,  3 Mar 2023 14:19:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48D8FC433D2;
-        Fri,  3 Mar 2023 14:19:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677853193;
-        bh=lBpaM/0Pumc/hglX6VD/VFO2r5wVz8rcWE4RZr/Vsk4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Upt4fahYn5DUadRsqJm+Kv+aQ+jx4VuxLbyXy7lEM/4TjmHVeqmp9CIDuMBsKuoAu
-         CqV7NXDk1b3QbJVzbe7XmfERz/vsgVByhCixkX7iYKHjOIFiK+nuim14ec39HE88JV
-         5RoWqQDrojBFySv+CvnU9dQFxw/7CiWTZgFG19bW0h0Cn98jW1cj+Rd1FSOZXmAj2U
-         UziigVKs8og/epEDnEvAum0vb6CEnpYvsiVZD76JrKcZoruL390O1slwGvnjdFBSCA
-         ElEJqQgKJORiNaZ7TMCoSwXnvWP2s22+TK7FGejBAPYh2XvfVI/bVX6LmkUKc4Octi
-         BuoNYBIDNmDtA==
-Date:   Fri, 3 Mar 2023 16:19:40 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/34] New page table range API
-Message-ID: <ZAIB/A9zENYz/cJq@kernel.org>
-References: <20230228213738.272178-1-willy@infradead.org>
+        Fri, 3 Mar 2023 09:27:22 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C74A12597
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:27:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1677853636; i=j.neuschaefer@gmx.net;
+        bh=n4AWAsnAu9l/SUqiep7OnR9Dao6V+GN042IgQqQPFQk=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=HO5OXSWJ7qjzq+CPhzBpzcXKjC7jNta1NMWVzaLBocdmXfbNWXs0Q5QxCDHzQdjZv
+         LuD7uDrvYXk9k7IiltPKE/dDzy2eGNv5Q0O6CoDeXfH4Lc2xVzPZ59lYkc4rOG1Ahz
+         LoebThZgQTzXmrGC4wBT4p8jNMdyb2l+EwXYh4P3TlXF6OuJv/4G2PqVdJk/oGqui9
+         bCYkepG9NrR39fczdClnr8zH2jYRJW/aoCSjmcBeVNB7TD5svVgZlpl9BvWzVxVDZ0
+         xnwVs4ZLB6UfO2XKtj5OWjAVojWvjueQxJOyyZo95dkv3ctsWVO+o6bv5x+WJ+7tri
+         1fIDMWSe+i7bg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.193]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MeCpR-1q8GLD1n3H-00bJab; Fri, 03
+ Mar 2023 15:27:16 +0100
+Date:   Fri, 3 Mar 2023 15:27:15 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Nick Terrell <terrelln@meta.com>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] zstd: Fix definition of assert()
+Message-ID: <ZAIDw1Qq0W77XQ94@probook>
+References: <20230129131436.1343228-1-j.neuschaefer@gmx.net>
+ <C1912105-5951-4627-83B6-BA84420FED0D@meta.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kPTYGsB/x7M2pU5I"
 Content-Disposition: inline
-In-Reply-To: <20230228213738.272178-1-willy@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <C1912105-5951-4627-83B6-BA84420FED0D@meta.com>
+X-Provags-ID: V03:K1:DAVTiI/2QaDDX/rlOicHG9dDu/qy5g5kgL2bIVVPNmjTGDMFgZp
+ sdcqPWxirUpfu0bSf4jekPczrWc8GF5W/ZpiZwGYbT7i0zRy6dM0u9sbaVYSLA791qPyF82
+ aKZJH0hPdnN3FN0Ib37P9i653Gi1v7kINu4rk1zEqNHQjoavqoA+RPDxbRspAha34FMRwP3
+ D/v3xvqWON2EmggIIK+Xw==
+UI-OutboundReport: notjunk:1;M01:P0:rIXYa91AtWc=;tw3ekBJrHaXmWZix1vn+YwuIhiF
+ RnyYibSvPC9NEtgDcC1OclLWAshSanZe88viBIHdG6N1qJU9+oVHrSp2ZHCRVqbEKDThb0XKr
+ +waGrePwhDZcXy9A5cN+hsWzAeu6i82zxBcOYr1ZeXKCT+4Q3Blex2rrLCCW/W9C/Ys/HYSu8
+ tsXdtiySy9xYXwkoyk88rFYvklaQWqiXSpiVO5nXftXFSPfYEZglFvX8VWOdNgiepfBYR1cq2
+ qXzahnsoluslhvN0eq3DLbsb3DDqea+IABLKm4+kNkx3aFBmzBnbnwdM/KIA1HlnDZz1p3gdi
+ hja56Y3pYJzPEVOoMB0qaIrlxiNRiuT1kawwcQNGeooBPExG5KbhxkMRAOde567T2YBFdbmH2
+ t2aQZcXNBCPOsNB++7b0dxGWS1PRnFV+961QnNrIvz0oWHMNcIgbYOU18WhAQrX2LUsp9SRhD
+ +L+Rvbqa92pRYRapqh+OCkYWUPmPe64HlqXu7QJxav03q6NSMjoziuu7bKnln4yRfRTvGtDT3
+ 96QR9GYFCg6JQpf48k0IMJl1MpOXnHWeceIbPX1up+4tOu/fKsMrxZNYpGOXSb0TYEW4+eBvZ
+ fqzeC7gadxa5XtqV8fgFLLS9hsM/CtVJvmVnIaFgtsEHDKKm98JZ02v3Q2gHgmsk7bLuPzPwP
+ NILlh8oVNyLUM5rfVUToQi6OSq0DkbsGGg4EnKfqZh062XxUyyn/omW3CU5Q4TEgmmgRNF8iW
+ bzzzE0ylFEv+r2yH0dgI0nQ7LTxbuIwaYqDOHMNUwg9cmT3+F7N0ZdrfIHaQrkHE2L1DSVV4e
+ Xpfh0qpvUcR8BcOTdmxyblJg3nTnADO1ccVI10oRyeU2UrB1fytxLm2ofNzKFTmQEq6ivOIDB
+ COwZR15b9Nz2SeGuBnuk3Mdb7LmIMnh6zFyHOtu+eVA5HPTnJBiqjHngu7AhbkR/VMD0FRaNL
+ FpAaGPg8GqjHj9yVZ4mjf3di/xA=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 09:37:03PM +0000, Matthew Wilcox (Oracle) wrote:
-> This patchset changes the API used by the MM to set up page table entries.
-> The four APIs are:
->     set_ptes(mm, addr, ptep, pte, nr)
->     update_mmu_cache_range(vma, addr, ptep, nr)
->     flush_dcache_folio(folio)
->     flush_icache_pages(vma, page, nr)
-> 
-> flush_dcache_folio() isn't technically new, but no architecture
-> implemented it, so I've done that for you.  The old APIs remain around
-> but are mostly implemented by calling the new interfaces.
-> 
-> The new APIs are based around setting up N page table entries at once.
-> The N entries belong to the same PMD, the same folio and the same VMA,
-> so ptep++ is a legitimate operation, and locking is taken care of for
-> you.  Some architectures can do a better job of it than just a loop,
-> but I have hesitated to make too deep a change to architectures I don't
-> understand well.
 
-The new set_ptes() looks unnecessarily duplicated all over arch/
-What do you say about adding the patch below on top of the series?
-Ideally it should be split into per-arch bits, but I can send it separately
-as a cleanup on top.
+--kPTYGsB/x7M2pU5I
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/alpha/include/asm/pgtable.h b/arch/alpha/include/asm/pgtable.h
-index 1e3354e9731b..65fb9e66675d 100644
---- a/arch/alpha/include/asm/pgtable.h
-+++ b/arch/alpha/include/asm/pgtable.h
-@@ -37,6 +37,7 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 		pte_val(pte) += 1UL << 32;
- 	}
- }
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- /* PMD_SHIFT determines the size of the area a second-level page table can map */
-diff --git a/arch/arc/include/asm/pgtable-bits-arcv2.h b/arch/arc/include/asm/pgtable-bits-arcv2.h
-index 4a1b2ce204c6..06d8039180c0 100644
---- a/arch/arc/include/asm/pgtable-bits-arcv2.h
-+++ b/arch/arc/include/asm/pgtable-bits-arcv2.h
-@@ -100,19 +100,6 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
- 	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
- 		      pte_t *ptep, unsigned int nr);
- 
-diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
-index 6525ac82bd50..0d326b201797 100644
---- a/arch/arm/include/asm/pgtable.h
-+++ b/arch/arm/include/asm/pgtable.h
-@@ -209,6 +209,7 @@ extern void __sync_icache_dcache(pte_t pteval);
- 
- void set_ptes(struct mm_struct *mm, unsigned long addr,
- 		      pte_t *ptep, pte_t pteval, unsigned int nr);
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- static inline pte_t clear_pte_bit(pte_t pte, pgprot_t prot)
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index 4d1b79dbff16..a8d6460c5c9f 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -369,6 +369,7 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 		pte_val(pte) += PAGE_SIZE;
- 	}
- }
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- /*
-diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-index a30ae048233e..e426f1820deb 100644
---- a/arch/csky/include/asm/pgtable.h
-+++ b/arch/csky/include/asm/pgtable.h
-@@ -91,20 +91,6 @@ static inline void set_pte(pte_t *p, pte_t pte)
- 	smp_mb();
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- static inline pte_t *pmd_page_vaddr(pmd_t pmd)
- {
- 	unsigned long ptr;
-diff --git a/arch/hexagon/include/asm/pgtable.h b/arch/hexagon/include/asm/pgtable.h
-index f58f1d920769..67ab91662e83 100644
---- a/arch/hexagon/include/asm/pgtable.h
-+++ b/arch/hexagon/include/asm/pgtable.h
-@@ -345,26 +345,6 @@ static inline int pte_exec(pte_t pte)
- #define pte_pfn(pte) (pte_val(pte) >> PAGE_SHIFT)
- #define set_pmd(pmdptr, pmdval) (*(pmdptr) = (pmdval))
- 
--/*
-- * set_ptes - update page table and do whatever magic may be
-- * necessary to make the underlying hardware/firmware take note.
-- *
-- * VM may require a virtual instruction to alert the MMU.
-- */
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- static inline unsigned long pmd_page_vaddr(pmd_t pmd)
- {
- 	return (unsigned long)__va(pmd_val(pmd) & PAGE_MASK);
-diff --git a/arch/ia64/include/asm/pgtable.h b/arch/ia64/include/asm/pgtable.h
-index 0c2be4ea664b..65a6e3b30721 100644
---- a/arch/ia64/include/asm/pgtable.h
-+++ b/arch/ia64/include/asm/pgtable.h
-@@ -303,19 +303,6 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
- 	*ptep = pteval;
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, add, ptep, pte, 1)
--
- /*
-  * Make page protection values cacheable, uncacheable, or write-
-  * combining.  Note that "protection" is really a misnomer here as the
-diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
-index 9154d317ffb4..d4b0ca7b4bf7 100644
---- a/arch/loongarch/include/asm/pgtable.h
-+++ b/arch/loongarch/include/asm/pgtable.h
-@@ -346,6 +346,7 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 	}
- }
- 
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- static inline void pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
-diff --git a/arch/m68k/include/asm/pgtable_mm.h b/arch/m68k/include/asm/pgtable_mm.h
-index 400206c17c97..8c2db20abdb6 100644
---- a/arch/m68k/include/asm/pgtable_mm.h
-+++ b/arch/m68k/include/asm/pgtable_mm.h
-@@ -32,20 +32,6 @@
- 		*(pteptr) = (pteval);				\
- 	} while(0)
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- /* PMD_SHIFT determines the size of the area a second-level page table can map */
- #if CONFIG_PGTABLE_LEVELS == 3
- #define PMD_SHIFT	18
-diff --git a/arch/microblaze/include/asm/pgtable.h b/arch/microblaze/include/asm/pgtable.h
-index a01e1369b486..3e7643a986ad 100644
---- a/arch/microblaze/include/asm/pgtable.h
-+++ b/arch/microblaze/include/asm/pgtable.h
-@@ -335,20 +335,6 @@ static inline void set_pte(pte_t *ptep, pte_t pte)
- 	*ptep = pte;
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += 1 << PFN_SHIFT_OFFSET;
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- #define __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
- static inline int ptep_test_and_clear_young(struct vm_area_struct *vma,
- 		unsigned long address, pte_t *ptep)
-diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
-index 0cf0455e6ae8..18b77567ef72 100644
---- a/arch/mips/include/asm/pgtable.h
-+++ b/arch/mips/include/asm/pgtable.h
-@@ -108,6 +108,7 @@ do {									\
- static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 		pte_t *ptep, pte_t pte, unsigned int nr);
- 
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- #if defined(CONFIG_PHYS_ADDR_T_64BIT) && defined(CONFIG_CPU_MIPS32)
-diff --git a/arch/nios2/include/asm/pgtable.h b/arch/nios2/include/asm/pgtable.h
-index 8a77821a17a5..2a994b225a41 100644
---- a/arch/nios2/include/asm/pgtable.h
-+++ b/arch/nios2/include/asm/pgtable.h
-@@ -193,6 +193,7 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 	}
- }
- 
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte)	set_ptes(mm, addr, ptep, pte, 1)
- 
- static inline int pmd_none(pmd_t pmd)
-diff --git a/arch/openrisc/include/asm/pgtable.h b/arch/openrisc/include/asm/pgtable.h
-index 1a7077150d7b..8f27730a9ab7 100644
---- a/arch/openrisc/include/asm/pgtable.h
-+++ b/arch/openrisc/include/asm/pgtable.h
-@@ -47,20 +47,6 @@ extern void paging_init(void);
-  */
- #define set_pte(pteptr, pteval) ((*(pteptr)) = (pteval))
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- /*
-  * (pmds are folded into pgds so this doesn't get actually called,
-  * but the define is needed for a generic inline function.)
-diff --git a/arch/parisc/include/asm/pgtable.h b/arch/parisc/include/asm/pgtable.h
-index 78ee9816f423..cd04e85cb012 100644
---- a/arch/parisc/include/asm/pgtable.h
-+++ b/arch/parisc/include/asm/pgtable.h
-@@ -73,6 +73,7 @@ extern void __update_cache(pte_t pte);
- 		mb();				\
- 	} while(0)
- 
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- #endif /* !__ASSEMBLY__ */
-diff --git a/arch/powerpc/include/asm/pgtable.h b/arch/powerpc/include/asm/pgtable.h
-index bf1263ff7e67..f10b6c2f8ade 100644
---- a/arch/powerpc/include/asm/pgtable.h
-+++ b/arch/powerpc/include/asm/pgtable.h
-@@ -43,6 +43,7 @@ struct mm_struct;
- 
- void set_ptes(struct mm_struct *mm, unsigned long addr, pte_t *ptep,
- 		pte_t pte, unsigned int nr);
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- #define update_mmu_cache(vma, addr, ptep) \
- 	update_mmu_cache_range(vma, addr, ptep, 1);
-diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-index 3a3a776fc047..8bc49496f8a6 100644
---- a/arch/riscv/include/asm/pgtable.h
-+++ b/arch/riscv/include/asm/pgtable.h
-@@ -473,6 +473,7 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 		pte_val(pteval) += 1 << _PAGE_PFN_SHIFT;
- 	}
- }
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- static inline void pte_clear(struct mm_struct *mm,
-diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-index 46bf475116f1..2fc20558af6b 100644
---- a/arch/s390/include/asm/pgtable.h
-+++ b/arch/s390/include/asm/pgtable.h
-@@ -1346,6 +1346,7 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 	}
- }
- 
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- /*
-diff --git a/arch/sh/include/asm/pgtable_32.h b/arch/sh/include/asm/pgtable_32.h
-index 03ba1834e126..d2f17e944bea 100644
---- a/arch/sh/include/asm/pgtable_32.h
-+++ b/arch/sh/include/asm/pgtable_32.h
-@@ -319,6 +319,7 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 	}
- }
- 
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
- 
- /*
-diff --git a/arch/sparc/include/asm/pgtable_32.h b/arch/sparc/include/asm/pgtable_32.h
-index 47ae55ea1837..7fbc7772a9b7 100644
---- a/arch/sparc/include/asm/pgtable_32.h
-+++ b/arch/sparc/include/asm/pgtable_32.h
-@@ -101,20 +101,6 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
- 	srmmu_swap((unsigned long *)ptep, pte_val(pteval));
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- static inline int srmmu_device_memory(unsigned long x)
- {
- 	return ((x & 0xF0000000) != 0);
-diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
-index d5c0088e0c6a..fddca662ba1b 100644
---- a/arch/sparc/include/asm/pgtable_64.h
-+++ b/arch/sparc/include/asm/pgtable_64.h
-@@ -924,6 +924,7 @@ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
- 	}
- }
- 
-+#define set_ptes set_ptes
- #define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1);
- 
- #define pte_clear(mm,addr,ptep)		\
-diff --git a/arch/um/include/asm/pgtable.h b/arch/um/include/asm/pgtable.h
-index ca78c90ae74f..60d2b20ff218 100644
---- a/arch/um/include/asm/pgtable.h
-+++ b/arch/um/include/asm/pgtable.h
-@@ -242,20 +242,6 @@ static inline void set_pte(pte_t *pteptr, pte_t pteval)
- 	if(pte_present(*pteptr)) *pteptr = pte_mknewprot(*pteptr);
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte)	set_ptes(mm, addr, ptep, pte, 1)
--
- #define __HAVE_ARCH_PTE_SAME
- static inline int pte_same(pte_t pte_a, pte_t pte_b)
- {
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index f424371ea143..1e5fd352880d 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -1019,22 +1019,6 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
- 	return res;
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--			      pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	page_table_check_ptes_set(mm, addr, ptep, pte, nr);
--
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte = __pte(pte_val(pte) + PAGE_SIZE);
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 			      pmd_t *pmdp, pmd_t pmd)
- {
-diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
-index 293101530541..adeee96518b9 100644
---- a/arch/xtensa/include/asm/pgtable.h
-+++ b/arch/xtensa/include/asm/pgtable.h
-@@ -306,20 +306,6 @@ static inline void set_pte(pte_t *ptep, pte_t pte)
- 	update_pte(ptep, pte);
- }
- 
--static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
--		pte_t *ptep, pte_t pte, unsigned int nr)
--{
--	for (;;) {
--		set_pte(ptep, pte);
--		if (--nr == 0)
--			break;
--		ptep++;
--		pte_val(pte) += PAGE_SIZE;
--	}
--}
--
--#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
--
- static inline void
- set_pmd(pmd_t *pmdp, pmd_t pmdval)
- {
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index c63cd44777ec..ef204712eda3 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -172,6 +172,24 @@ static inline int pmd_young(pmd_t pmd)
- }
- #endif
- 
-+#ifndef set_ptes
-+static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-+			    pte_t *ptep, pte_t pte, unsigned int nr)
-+{
-+	page_table_check_ptes_set(mm, addr, ptep, pte, nr);
-+
-+	for (;;) {
-+		set_pte(ptep, pte);
-+		if (--nr == 0)
-+			break;
-+		ptep++;
-+		pte = __pte(pte_val(pte) + PAGE_SIZE);
-+	}
-+}
-+#define set_ptes set_ptes
-+#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
-+#endif
-+
- #ifndef __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
- extern int ptep_set_access_flags(struct vm_area_struct *vma,
- 				 unsigned long address, pte_t *ptep,
+On Fri, Mar 03, 2023 at 06:30:47AM +0000, Nick Terrell wrote:
+> On Jan 29, 2023, at 5:14 AM, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.=
+net> wrote:
+> >=20
+> > assert(x) should emit a warning if x is false. WARN_ON(x) emits a
+> > warning if x is true. Thus, assert(x) should be defined as WARN_ON(!x)
+> > rather than WARN_ON(x).
+> >=20
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+>=20
+> Hi Jonathan,
+>=20
+> I have to apologize, I just submitted my branch for a PR and I realize th=
+at
+> while I intended to take your patch, I took a different equivalent patch.=
+ So
+> I wanted to say thanks for sending the patch!
 
--- 
-Sincerely yours,
-Mike.
+No problem at all, and thanks for informing me!
+
+>=20
+> > ---
+> >=20
+> > Commit e0c1b49f5b674 ("lib: zstd: Upgrade to latest upstream zstd
+> > version 1.4.10") mentions that the zstd code was generated from the
+> > upstream version of zstd, so perhaps the definition of assert based on
+> > WARN_ON should be fixed in the conversion script and/or upstream zstd
+> > source code.
+>=20
+> Yeah, we need to fix it upstream, so if you would like to submit the upst=
+ream PR
+> the file is contrib/linux-kernel/zstd_deps.h [0]. Otherwise, I will updat=
+e it before
+> the next import.
+
+Feel free to do it yourself, as I haven't been involed with zstd
+developement so far.
+
+
+Thanks,
+Jonathan
+
+--kPTYGsB/x7M2pU5I
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmQCA6IACgkQCDBEmo7z
+X9uvHRAA0A7DlV6QqMBFvRRplfmwXj7kogLk8ffIJW09hNtGQRPBuGoa0JrSQyjj
+viStpP9AkF8OHcbABeGQxMe+ywTBvLLK6iqMv/VN7+qNFoItRhyIA6WK3v3N22km
+FduWgptSJBwfNDAwKBTn+g01JHr0eZ9dyJXTTwNCKCeJL0aztPnbr04q5/+A7v9K
+gwbwtGUKNA+nk2xAvSIALyNbBwl9JmVPi4VKE2nUqq5fzZgv0DzeFeTOwusij5zY
+aixfQ0HmpmgQlEjvvsn7AdVyRCckDH75RfXlGK1sLu8EA/rc+kVYJ8kXJnF6DPri
+1hm+G7OFMTFcnMdSRLd2dsmOflSlD0SSu5Ck95heubLnNmkz5V00kl5wpJ/qPYxN
+mxR7pWAscpzT80jdOj2KNNmBPc+XsayECF9Ps2xByfkD4UYLOenLAxy7KmFjogjG
+vXky5wOElg0MMkj2vcmQj2fwZ7KDbnkecBGTYkcEybtg+TlMVsy0qmtsnjg1E9qE
+V3reLAKhQNyOuVM72uLD8u6AMNVwG5ph8zbiiPbvE4Yn0zdIjeEzRg20oPf5/TY+
+Zl+FTWO7EG4oTVNPTnw1V4bhfo8o7nUWS3Wk1pPPdBj5CcxTV3WoiTzyZ/UrG8TV
+O/jHm+gNB8py4qj85qSnsAVNNCWc33TqontWZPU8v552ubYVsGQ=
+=/l8b
+-----END PGP SIGNATURE-----
+
+--kPTYGsB/x7M2pU5I--
