@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94F176AA09A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:29:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242CE6AA09C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:29:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbjCCU3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 15:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
+        id S231510AbjCCU3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 15:29:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjCCU3S (ORCPT
+        with ESMTP id S231575AbjCCU31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 15:29:18 -0500
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24939EF84
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:29:17 -0800 (PST)
-Received: by mail-il1-x12f.google.com with SMTP id x10so2432501ill.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:29:17 -0800 (PST)
+        Fri, 3 Mar 2023 15:29:27 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FF510A8E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:29:25 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id x34so3829528pjj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:29:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1677875356;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e0LzGjIMPosJSmf+/sQBmlwLSdpWvs5gZiiybS0LDqs=;
-        b=GYG5pMHfASSwZJbwRW5683/5cOuRhHCi8afcHqjQV/i4zixiw6DGQV9zshhp2737/F
-         OGKCM1QFKZinO3EC+KUcCxQ3r22zeyId8R3n13oW2iwCbreGS+00RLeLW2sq6LZ6broi
-         d/oHuroYQ4xN6Q+7pDB9B6Nn8tWikD4gzmGlI=
+        d=chromium.org; s=google; t=1677875364;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ug2Z8EfRGa5wXZv9R1S7FFDl+MMXhp2ajp3G/Mo9nU4=;
+        b=NtmQWi9toAZw3wKPMJ7L+bVX7AsKeXEUVZzNc61Sv1eAtGplSPyGYSdSz/thuFy3Ro
+         l0ljb+r0Ij9ZZciynPhNjmrA+EYfaAbbaA1b8Cv7CMo4felDMzLv/e23Dpja0c+f6x9r
+         vxtGhYy7Vif1k7Be1sRbTvqcEiOxW4Z/ZMvX4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677875356;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e0LzGjIMPosJSmf+/sQBmlwLSdpWvs5gZiiybS0LDqs=;
-        b=wXKjiywYF6PtE05iMZUd2XL/w6d2TFeZPTI1SS++RRo3qHvdXvId75JKvhxRR9LkBE
-         JPe7l9Xs8Je3g3w6PJVlbK26n/IZGlPuHRCZ4KJ5mlC6PCLDuJ1kOxi0bGSAVdBzECXE
-         UB27Ua6Vh+NofWkHhjDuBrdvaHG8uNXgrQMmdHJK05GMTE0FD01GggHbC+Y0CLcDQ1Yc
-         vloeTjkCB62FnZ5cmhS1ky4Hj99pzn3q8rkMK/wrqu3rxsMXGBorhR+4Lktq7gGKU8Qk
-         Gs43JaAxJBbHvgAtVuLHaTHa5znfzq5qZIRCc/G3Sewn3aNhj+VgxANxvvE2gC3Aacdg
-         cbew==
-X-Gm-Message-State: AO0yUKUNKwazc1PGEYeeOPzE+evbKZ467o05gSiUCyP8DdeAzfDAEYpB
-        XVN6pRcQkZIfrix36PPy8cZQYscXkYQh1mWt8Oc=
-X-Google-Smtp-Source: AK7set+v5vOte2RN0n2pqz7cfxz2xavYFisT3AmMBWRTKSs3pvHhcztEKGHHBlYWdj74NFDldWHoHA==
-X-Received: by 2002:a05:6e02:13f4:b0:317:16bc:dc97 with SMTP id w20-20020a056e0213f400b0031716bcdc97mr1753665ilj.3.1677875356468;
-        Fri, 03 Mar 2023 12:29:16 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id q22-20020a02cf16000000b0039e89ea68f9sm920025jar.135.2023.03.03.12.29.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 12:29:15 -0800 (PST)
-Message-ID: <3d051308-382f-0f90-41b3-e1ffdd6f11f7@linuxfoundation.org>
-Date:   Fri, 3 Mar 2023 13:29:15 -0700
+        d=1e100.net; s=20210112; t=1677875364;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ug2Z8EfRGa5wXZv9R1S7FFDl+MMXhp2ajp3G/Mo9nU4=;
+        b=fDJ5Y8X69zRk5EGTyNKdQkEK1LHPS/P/ecS4GkpRrJc46xAeLpSupWV+x4ZZXIC8eq
+         /Ibmp0yKo3+Yy+cIyNjoTc9ySXHtItLIfvvsLC3rtkoXgoWCh7S0Q1H06y/Km3tQIJ5z
+         JmI1lJVF0g3yWzBR/34fy7ALILsyVL7jIXp4cJkT5e7G2k3CXJSKf/CtgfIoJ1E57VYt
+         HUfv1aTS+nBcTADU2xelINSU0G9SroksyiTY79oAwydQx6nXbDG1vCDPSBA3k+5KRATY
+         YqOF069+3/YIKKUhPJ3vRJ69eE11zHm+1QzJ5QwrBb3V9lsrCGqVJ+JWzadSeeDT/sLs
+         G4PQ==
+X-Gm-Message-State: AO0yUKWQ+96CjR9AP68hqL/n9LeiVCEJDeE4XDVSW6Uc//DwLP7gxZVY
+        vv/AJeqbXmSCaWa2HZOXp0PG0Q==
+X-Google-Smtp-Source: AK7set8Hbguq1EyX4kofN/jOOCOGo1tFROI/fI6a3VBD2O6AZtNvSLeX3ZNdPVBgKunGYTMNZUCjTA==
+X-Received: by 2002:a17:90b:4b41:b0:234:a9df:db83 with SMTP id mi1-20020a17090b4b4100b00234a9dfdb83mr2996268pjb.10.1677875364637;
+        Fri, 03 Mar 2023 12:29:24 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id r3-20020a17090aa08300b00230befd3b2csm3907348pjp.6.2023.03.03.12.29.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 12:29:24 -0800 (PST)
+Message-ID: <640258a4.170a0220.a298f.8ed5@mx.google.com>
+X-Google-Original-Message-ID: <202303031226.@keescook>
+Date:   Fri, 3 Mar 2023 12:29:23 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Marco Elver <elver@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] ubsan: Tighten UBSAN_BOUNDS on GCC
+References: <20230302225444.never.053-kees@kernel.org>
+ <20230303154433.GA3775@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] selftests: amd-pstate: fix TEST_FILES
-Content-Language: en-US
-To:     Huang Rui <ray.huang@amd.com>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230204133454.260066-1-guillaume.tucker@collabora.com>
- <ZAGOQznWjSNuhn73@amd.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZAGOQznWjSNuhn73@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303154433.GA3775@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 23:05, Huang Rui wrote:
-> On Sat, Feb 04, 2023 at 09:34:54PM +0800, Guillaume Tucker wrote:
->> Bring back the Python scripts that were initially added with
->> TEST_GEN_FILES but now with TEST_FILES to avoid having them deleted
->> when doing a clean.  Also fix the way the architecture is being
->> determined as they should also be installed when ARCH=x86_64 is
->> provided explicitly.  Then also append extra files to TEST_FILES and
->> TEST_PROGS with += so they don't get discarded.
->>
->> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
->> Fixes: ac527cee87c9 ("selftests: amd-pstate: Don't delete source files via Makefile")
->> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+On Fri, Mar 03, 2023 at 08:44:33AM -0700, Nathan Chancellor wrote:
+> On Thu, Mar 02, 2023 at 02:54:45PM -0800, Kees Cook wrote:
+> > [...]
+> >  config CC_HAS_UBSAN_ARRAY_BOUNDS
+> >  	def_bool $(cc-option,-fsanitize=array-bounds)
+> > +	help
+> > +	  The -fsanitize=array-bounds option is only available on Clang,
+> > +	  and is actually composed of two more specific options,
+> > +	  -fsanitize=array-bounds and -fsanitize=local-bounds. However,
+> > +	  -fsanitize=local-bounds can only be used when trap mode is
+> > +	  enabled. (See also the help for CONFIG_LOCAL_BOUNDS.)
 > 
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> 
+> The first sentence does not read right to me, you have array-bounds
+> twice. I think the first one wants to be just bounds?
 
-Thank you both. I will pick this up for 6.3-rc2
+Oops, yes. I rewrote that a few times and seem to have gotten lost. I
+think it is better written as:
 
-thanks,
--- Shuah
+	  Under Clang, the -fsanitize=bounds option is actually composed
+	  of two more specific options, -fsanitize=array-bounds and
+	  -fsanitize=local-bounds. However, -fsanitize=local-bounds can
+	  only be used when trap mode is enabled. (See also the help for
+	  CONFIG_LOCAL_BOUNDS.) Explicitly check for -fsanitize=array-bounds
+	  so that we can build up the options needed for UBSAN_BOUNDS
+	  with or without UBSAN_TRAP.
 
+
+-- 
+Kees Cook
