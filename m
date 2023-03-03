@@ -2,237 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A0E6A9918
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:07:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CF16A991C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:09:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbjCCOHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:07:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S229615AbjCCOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:09:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjCCOH3 (ORCPT
+        with ESMTP id S229511AbjCCOJZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:07:29 -0500
-Received: from out-30.mta0.migadu.com (out-30.mta0.migadu.com [91.218.175.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC6261514
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:07:25 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1677852443;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NW+2VZkkaD7maLaTQ+oM0QO1gb/Joyzx1JiHH9vMbMs=;
-        b=A7qOVN8GzCG0y64sbACMvAruZPyZbnTWfLig7GfDOn4mls50y4J6EZ5ujyLHVQoxVA2+Bv
-        Ss5S0mErDxJJXuMl8m5jhTtkstfvUzijg55NHZMxvPbSG4Q+289wwoSdeUaeXneDZ5zofZ
-        ucmVc38uA+QGXN2ik/9qrRN+D9daMIE=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     cai.huoqing@linux.dev
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/i915/gvt: Make use of idr_find and idr_for_each_entry in dmabuf
-Date:   Fri,  3 Mar 2023 22:07:18 +0800
-Message-Id: <20230303140718.25355-1-cai.huoqing@linux.dev>
+        Fri, 3 Mar 2023 09:09:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24D34741B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:09:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 709FFB818DD
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 14:09:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC3CC433D2;
+        Fri,  3 Mar 2023 14:09:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677852561;
+        bh=DWuc80TU6jIXIb2OlS5m6P6q2jqlotFX19yA8oo6ATY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=c/KvEgcNjKotp+ZRxoAiSIby0ricsjQ8d8+fABm8H/IZJ+x6tHu/uUccdo3UGvvR5
+         TOn6NvvQN6O0DdEANRhcGS4vxN2A1JK3nBxtgzL3kfiTjrMIbXznmcLTkqJF05x0WV
+         ihseYbZt11j0dmDHus+8KA09XyZLzMaH3cAfYmiKyxLUbgQdhTaMBEpZQwZn+WHTnB
+         cKOyV9nnfNaliqi1ANwhvGTzPJF0S+d4JdM4+tWSc17LiMIQ+9Dt/Oc101vzxmdkw4
+         tku1EqznXjSvZzMqtQXxPvsi3wM27zoavpCy4a3q+H43WPMjDlph0EdU2qNOAplTzf
+         sp9X9cmgKo2ng==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4CFCD4049F; Fri,  3 Mar 2023 11:09:18 -0300 (-03)
+Date:   Fri, 3 Mar 2023 11:09:18 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH 1/1 fyi] tools headers: Update the copy of x86's
+ mem{cpy,set}_64.S used in 'perf bench'
+Message-ID: <ZAH/jsioJXGIOrkf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        TO_EQ_FM_DIRECT_MX autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch uses the already existing IDR mechanism to simplify
-and improve the dmabuf code.
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-Using 'vgpu.object_idr' directly instead of 'dmabuf_obj_list_head'
-or 'dmabuf.list', because the dmabuf_obj can be found by 'idr_find'
-or 'idr_for_each_entry'.
+- Arnaldo
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+Full explanation:
+
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
+
+The way these headers are used in perf are not restricted to just
+including them to compile something.
+
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
+
+E.g.:
+
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
+
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
+
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
+
 ---
-v1->v2:
-	1.Use idr_find to get the target one and free it instead of free all dma objs.
-	2.Revert the original code 'ret' related
-	3.Add '&& !idr_is_empty()' like the original code '&& !list_empty()'
 
-v1 link:
-	https://lore.kernel.org/lkml/20230302115318.79487-1-cai.huoqing@linux.dev/
+We also continue with SYM_TYPED_FUNC_START() in util/include/linux/linkage.h
+and with an exception in tools/perf/check_headers.sh's diff check to ignore
+the include cfi_types.h line when checking if the kernel original files drifted
+from the copies we carry.
 
- drivers/gpu/drm/i915/gvt/dmabuf.c | 58 +++++++------------------------
- drivers/gpu/drm/i915/gvt/dmabuf.h |  1 -
- drivers/gpu/drm/i915/gvt/gvt.h    |  1 -
- drivers/gpu/drm/i915/gvt/vgpu.c   |  1 -
- 4 files changed, 12 insertions(+), 49 deletions(-)
+This is to get the changes from:
 
-diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.c b/drivers/gpu/drm/i915/gvt/dmabuf.c
-index 6834f9fe40cf..cf619b1ed3ad 100644
---- a/drivers/gpu/drm/i915/gvt/dmabuf.c
-+++ b/drivers/gpu/drm/i915/gvt/dmabuf.c
-@@ -133,21 +133,15 @@ static void dmabuf_gem_object_free(struct kref *kref)
- 	struct intel_vgpu_dmabuf_obj *obj =
- 		container_of(kref, struct intel_vgpu_dmabuf_obj, kref);
- 	struct intel_vgpu *vgpu = obj->vgpu;
--	struct list_head *pos;
- 	struct intel_vgpu_dmabuf_obj *dmabuf_obj;
+  69d4c0d3218692ff ("entry, kasan, x86: Disallow overriding mem*() functions")
+
+That addresses these perf tools build warning:
+
+  Warning: Kernel ABI header at 'tools/arch/x86/lib/memcpy_64.S' differs from latest version at 'arch/x86/lib/memcpy_64.S'
+  diff -u tools/arch/x86/lib/memcpy_64.S arch/x86/lib/memcpy_64.S
+  Warning: Kernel ABI header at 'tools/arch/x86/lib/memset_64.S' differs from latest version at 'arch/x86/lib/memset_64.S'
+  diff -u tools/arch/x86/lib/memset_64.S arch/x86/lib/memset_64.S
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/arch/x86/lib/memcpy_64.S | 5 ++---
+ tools/arch/x86/lib/memset_64.S | 4 +++-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/tools/arch/x86/lib/memcpy_64.S b/tools/arch/x86/lib/memcpy_64.S
+index 5418e2f99834e5de..a91ac666f758274c 100644
+--- a/tools/arch/x86/lib/memcpy_64.S
++++ b/tools/arch/x86/lib/memcpy_64.S
+@@ -7,7 +7,7 @@
+ #include <asm/alternative.h>
+ #include <asm/export.h>
  
- 	if (vgpu && test_bit(INTEL_VGPU_STATUS_ACTIVE, vgpu->status) &&
--	    !list_empty(&vgpu->dmabuf_obj_list_head)) {
--		list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
--			dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
--			if (dmabuf_obj == obj) {
--				list_del(pos);
--				idr_remove(&vgpu->object_idr,
--					   dmabuf_obj->dmabuf_id);
--				kfree(dmabuf_obj->info);
--				kfree(dmabuf_obj);
--				break;
--			}
-+	    !idr_is_empty(&vgpu->object_idr)) {
-+		dmabuf_obj = idr_find(&vgpu->object_idr, obj->dmabuf_id);
-+		if (dmabuf_obj) {
-+			idr_remove(&vgpu->object_idr, obj->dmabuf_id);
-+			kfree(dmabuf_obj->info);
-+			kfree(dmabuf_obj);
- 		}
- 	} else {
- 		/* Free the orphan dmabuf_objs here */
-@@ -340,13 +334,12 @@ static struct intel_vgpu_dmabuf_obj *
- pick_dmabuf_by_info(struct intel_vgpu *vgpu,
- 		    struct intel_vgpu_fb_info *latest_info)
- {
--	struct list_head *pos;
- 	struct intel_vgpu_fb_info *fb_info;
- 	struct intel_vgpu_dmabuf_obj *dmabuf_obj = NULL;
- 	struct intel_vgpu_dmabuf_obj *ret = NULL;
-+	int id;
+-.pushsection .noinstr.text, "ax"
++.section .noinstr.text, "ax"
  
--	list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
--		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-+	idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
- 		if (!dmabuf_obj->info)
- 			continue;
+ /*
+  * We build a jump to memcpy_orig by default which gets NOPped out on
+@@ -42,7 +42,7 @@ SYM_TYPED_FUNC_START(__memcpy)
+ SYM_FUNC_END(__memcpy)
+ EXPORT_SYMBOL(__memcpy)
  
-@@ -366,24 +359,6 @@ pick_dmabuf_by_info(struct intel_vgpu *vgpu,
- 	return ret;
- }
+-SYM_FUNC_ALIAS_WEAK(memcpy, __memcpy)
++SYM_FUNC_ALIAS(memcpy, __memcpy)
+ EXPORT_SYMBOL(memcpy)
  
--static struct intel_vgpu_dmabuf_obj *
--pick_dmabuf_by_num(struct intel_vgpu *vgpu, u32 id)
--{
--	struct list_head *pos;
--	struct intel_vgpu_dmabuf_obj *dmabuf_obj = NULL;
--	struct intel_vgpu_dmabuf_obj *ret = NULL;
--
--	list_for_each(pos, &vgpu->dmabuf_obj_list_head) {
--		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
--		if (dmabuf_obj->dmabuf_id == id) {
--			ret = dmabuf_obj;
--			break;
--		}
--	}
--
--	return ret;
--}
--
- static void update_fb_info(struct vfio_device_gfx_plane_info *gvt_dmabuf,
- 		      struct intel_vgpu_fb_info *fb_info)
- {
-@@ -477,11 +452,6 @@ int intel_vgpu_query_plane(struct intel_vgpu *vgpu, void *args)
+ /*
+@@ -183,4 +183,3 @@ SYM_FUNC_START_LOCAL(memcpy_orig)
+ 	RET
+ SYM_FUNC_END(memcpy_orig)
  
- 	update_fb_info(gfx_plane_info, &fb_info);
+-.popsection
+diff --git a/tools/arch/x86/lib/memset_64.S b/tools/arch/x86/lib/memset_64.S
+index fc9ffd3ff3b213a3..6143b1a6fa2caa0d 100644
+--- a/tools/arch/x86/lib/memset_64.S
++++ b/tools/arch/x86/lib/memset_64.S
+@@ -6,6 +6,8 @@
+ #include <asm/alternative.h>
+ #include <asm/export.h>
  
--	INIT_LIST_HEAD(&dmabuf_obj->list);
--	mutex_lock(&vgpu->dmabuf_lock);
--	list_add_tail(&dmabuf_obj->list, &vgpu->dmabuf_obj_list_head);
--	mutex_unlock(&vgpu->dmabuf_lock);
--
- 	gvt_dbg_dpy("vgpu%d: %s new dmabuf_obj ref %d, id %d\n", vgpu->id,
- 		    __func__, kref_read(&dmabuf_obj->kref), ret);
++.section .noinstr.text, "ax"
++
+ /*
+  * ISO C memset - set a memory block to a byte value. This function uses fast
+  * string to get better performance than the original function. The code is
+@@ -43,7 +45,7 @@ SYM_FUNC_START(__memset)
+ SYM_FUNC_END(__memset)
+ EXPORT_SYMBOL(__memset)
  
-@@ -508,7 +478,7 @@ int intel_vgpu_get_dmabuf(struct intel_vgpu *vgpu, unsigned int dmabuf_id)
+-SYM_FUNC_ALIAS_WEAK(memset, __memset)
++SYM_FUNC_ALIAS(memset, __memset)
+ EXPORT_SYMBOL(memset)
  
- 	mutex_lock(&vgpu->dmabuf_lock);
- 
--	dmabuf_obj = pick_dmabuf_by_num(vgpu, dmabuf_id);
-+	dmabuf_obj = idr_find(&vgpu->object_idr, dmabuf_id);
- 	if (dmabuf_obj == NULL) {
- 		gvt_vgpu_err("invalid dmabuf id:%d\n", dmabuf_id);
- 		ret = -EINVAL;
-@@ -570,23 +540,19 @@ int intel_vgpu_get_dmabuf(struct intel_vgpu *vgpu, unsigned int dmabuf_id)
- 
- void intel_vgpu_dmabuf_cleanup(struct intel_vgpu *vgpu)
- {
--	struct list_head *pos, *n;
- 	struct intel_vgpu_dmabuf_obj *dmabuf_obj;
-+	int id;
- 
- 	mutex_lock(&vgpu->dmabuf_lock);
--	list_for_each_safe(pos, n, &vgpu->dmabuf_obj_list_head) {
--		dmabuf_obj = list_entry(pos, struct intel_vgpu_dmabuf_obj, list);
-+	idr_for_each_entry(&vgpu->object_idr, dmabuf_obj, id) {
- 		dmabuf_obj->vgpu = NULL;
- 
--		idr_remove(&vgpu->object_idr, dmabuf_obj->dmabuf_id);
--		list_del(pos);
--
-+		idr_remove(&vgpu->object_idr, id);
- 		/* dmabuf_obj might be freed in dmabuf_obj_put */
- 		if (dmabuf_obj->initref) {
- 			dmabuf_obj->initref = false;
- 			dmabuf_obj_put(dmabuf_obj);
- 		}
--
- 	}
- 	mutex_unlock(&vgpu->dmabuf_lock);
- }
-diff --git a/drivers/gpu/drm/i915/gvt/dmabuf.h b/drivers/gpu/drm/i915/gvt/dmabuf.h
-index 3dcdb6570eda..93c0e00bdab9 100644
---- a/drivers/gpu/drm/i915/gvt/dmabuf.h
-+++ b/drivers/gpu/drm/i915/gvt/dmabuf.h
-@@ -57,7 +57,6 @@ struct intel_vgpu_dmabuf_obj {
- 	__u32 dmabuf_id;
- 	struct kref kref;
- 	bool initref;
--	struct list_head list;
- };
- 
- int intel_vgpu_query_plane(struct intel_vgpu *vgpu, void *args);
-diff --git a/drivers/gpu/drm/i915/gvt/gvt.h b/drivers/gpu/drm/i915/gvt/gvt.h
-index 2d65800d8e93..1100c789f207 100644
---- a/drivers/gpu/drm/i915/gvt/gvt.h
-+++ b/drivers/gpu/drm/i915/gvt/gvt.h
-@@ -211,7 +211,6 @@ struct intel_vgpu {
- 
- 	struct dentry *debugfs;
- 
--	struct list_head dmabuf_obj_list_head;
- 	struct mutex dmabuf_lock;
- 	struct idr object_idr;
- 	struct intel_vgpu_vblank_timer vblank_timer;
-diff --git a/drivers/gpu/drm/i915/gvt/vgpu.c b/drivers/gpu/drm/i915/gvt/vgpu.c
-index 08ad1bd651f1..0a511cfef067 100644
---- a/drivers/gpu/drm/i915/gvt/vgpu.c
-+++ b/drivers/gpu/drm/i915/gvt/vgpu.c
-@@ -329,7 +329,6 @@ int intel_gvt_create_vgpu(struct intel_vgpu *vgpu,
- 	vgpu->sched_ctl.weight = conf->weight;
- 	mutex_init(&vgpu->vgpu_lock);
- 	mutex_init(&vgpu->dmabuf_lock);
--	INIT_LIST_HEAD(&vgpu->dmabuf_obj_list_head);
- 	INIT_RADIX_TREE(&vgpu->page_track_tree, GFP_KERNEL);
- 	idr_init_base(&vgpu->object_idr, 1);
- 	intel_vgpu_init_cfg_space(vgpu, 1);
+ /*
 -- 
-2.34.1
+2.39.1
 
