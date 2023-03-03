@@ -2,80 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78ADE6A920B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:55:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9156A9213
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjCCHzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 02:55:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52530 "EHLO
+        id S229667AbjCCH7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 02:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjCCHzP (ORCPT
+        with ESMTP id S229447AbjCCH7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 02:55:15 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC894393D;
-        Thu,  2 Mar 2023 23:54:58 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32353UIO026473;
-        Fri, 3 Mar 2023 07:54:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=OkHo+I+k+xVNMMYxG4UsUUvFkbNhuyIIhfLSBgA3Wio=;
- b=CBnzeFULU4WtKbHORBWyUksJGKxXzlmpgzmwztLpGCWTVuHiC+XAcjFVEFJIJpvswl6/
- VvD5TlYmdt/0rR9MmzzJm/0/QES3LoSc/sgphfMPAB2ZAWbbs8nsgb0u8c4oV8TClwx+
- GCGnBfYdYkP5AgoGBackQlWck+biNnYDqQzQXsf0DjnfhJEY5mGc3OQQ0cSa2SYnWil8
- ye0hrPvtjh764i3sz7p9aTq393za/lZ9/r9BZcK/7+gjpryBNTfI9Yke/oADkpMauDX5
- A0aomZBSWn/PGiMWfwm1G0uR95psoBsr4VwRXz5NIyZOr0EFLqoHeZon+yMQ9p7gqSeB zA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p2rbgb84e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 07:54:55 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3237st05010983
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 07:54:55 GMT
-Received: from [10.216.34.86] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 2 Mar 2023
- 23:54:52 -0800
-Message-ID: <85157e8e-750e-f994-ae51-3e58656b55bf@quicinc.com>
-Date:   Fri, 3 Mar 2023 13:24:48 +0530
+        Fri, 3 Mar 2023 02:59:23 -0500
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B27559EE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 23:59:06 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vd-aexD_1677830342;
+Received: from 30.97.48.241(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vd-aexD_1677830342)
+          by smtp.aliyun-inc.com;
+          Fri, 03 Mar 2023 15:59:03 +0800
+Message-ID: <83454c5d-bcae-cead-c9a8-47d1f08178ca@linux.alibaba.com>
+Date:   Fri, 3 Mar 2023 15:59:02 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 2/4] firmware: scm: Modify only the DLOAD bit in TCSR
- register for download mode
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1677664555-30191-1-git-send-email-quic_mojha@quicinc.com>
- <1677664555-30191-3-git-send-email-quic_mojha@quicinc.com>
- <c59cbc7b-baa8-ec57-ec33-0455edf34c29@linaro.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <c59cbc7b-baa8-ec57-ec33-0455edf34c29@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Smctl5AJNc2MFueBwqjsJiJCsRMwAjBo
-X-Proofpoint-ORIG-GUID: Smctl5AJNc2MFueBwqjsJiJCsRMwAjBo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 impostorscore=0
- mlxscore=0 spamscore=0 malwarescore=0 adultscore=0 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030069
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH v2] erofs: mark z_erofs_lzma_init/erofs_pcpubuf_init w/
+ __init
+To:     Yangtao Li <frank.li@vivo.com>, xiang@kernel.org, chao@kernel.org,
+        huyue2@coolpad.com, jefflexu@linux.alibaba.com
+Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230303063731.66760-1-frank.li@vivo.com>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <20230303063731.66760-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,73 +46,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 3/1/2023 4:09 PM, Dmitry Baryshkov wrote:
-> On 01/03/2023 11:55, Mukesh Ojha wrote:
->> CrashDump collection is based on the DLOAD bit of TCSR register.
->> To retain other bits, we read the register and modify only the
->> DLOAD bit as the other bits have their own significance.
->>
->> Originally-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->> ---
->> Changes in v2:
->>   - Addressed comment made by Bjorn.
->>   - Added download mask from patch 3 to this.
->>
->>   drivers/firmware/qcom_scm.c | 17 +++++++++++++++--
->>   1 file changed, 15 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->> index 51eb853..c9f1fad 100644
->> --- a/drivers/firmware/qcom_scm.c
->> +++ b/drivers/firmware/qcom_scm.c
->> @@ -27,6 +27,8 @@ module_param(download_mode, bool, 0);
->>   #define SCM_HAS_IFACE_CLK    BIT(1)
->>   #define SCM_HAS_BUS_CLK        BIT(2)
->> +#define QCOM_DOWNLOAD_MODE_MASK 0x30
->> +
->>   struct qcom_scm {
->>       struct device *dev;
->>       struct clk *core_clk;
->> @@ -419,6 +421,7 @@ static void qcom_scm_set_download_mode(bool enable)
->>   {
->>       bool avail;
->>       int ret = 0;
->> +    u32 val;
->>       avail = __qcom_scm_is_call_available(__scm->dev,
->>                            QCOM_SCM_SVC_BOOT,
->> @@ -426,8 +429,18 @@ static void qcom_scm_set_download_mode(bool enable)
->>       if (avail) {
->>           ret = __qcom_scm_set_dload_mode(__scm->dev, enable);
->>       } else if (__scm->dload_mode_addr) {
->> -        ret = qcom_scm_io_writel(__scm->dload_mode_addr,
->> -                enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0);
->> +        ret = qcom_scm_io_readl(__scm->dload_mode_addr, &val);
->> +        if (ret) {
->> +            dev_err(__scm->dev,
->> +                "failed to read dload mode address value: %d\n", ret);
->> +            return;
->> +        }
->> +
->> +        val &= ~QCOM_DOWNLOAD_MODE_MASK;
->> +        if (enable)
->> +            val |= QCOM_SCM_BOOT_SET_DLOAD_MODE;
->> +
->> +        ret = qcom_scm_io_writel(__scm->dload_mode_addr, val);
+On 2023/3/3 14:37, Yangtao Li wrote:
+> They are used during the erofs module init phase. Let's mark it as
+> __init like any other function.
 > 
-> Any locking for this RMW?
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-While you ask this, i thought about who all are the user of this 
-function. Only, multiple calls to module param callback where
-this race could be possible.
+Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 
-I am doubtful, if introducing global mutex lock will be allowed to 
-handle this. Any comments.
+Thanks,
+Gao Xiang
 
-
--Mukesh
+> ---
+> v2:
+> -change in internal.h
+>   fs/erofs/decompressor_lzma.c | 2 +-
+>   fs/erofs/internal.h          | 4 ++--
+>   fs/erofs/pcpubuf.c           | 2 +-
+>   3 files changed, 4 insertions(+), 4 deletions(-)
 > 
->>       } else {
->>           dev_err(__scm->dev,
->>               "No available mechanism for setting download mode\n");
-> 
+> diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
+> index 091fd5adf818..307b37f0b9f5 100644
+> --- a/fs/erofs/decompressor_lzma.c
+> +++ b/fs/erofs/decompressor_lzma.c
+> @@ -47,7 +47,7 @@ void z_erofs_lzma_exit(void)
+>   	}
+>   }
+>   
+> -int z_erofs_lzma_init(void)
+> +int __init z_erofs_lzma_init(void)
+>   {
+>   	unsigned int i;
+>   
+> diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+> index 3f3561d37d1b..1db018f8c2e8 100644
+> --- a/fs/erofs/internal.h
+> +++ b/fs/erofs/internal.h
+> @@ -486,7 +486,7 @@ static inline void *erofs_vm_map_ram(struct page **pages, unsigned int count)
+>   void *erofs_get_pcpubuf(unsigned int requiredpages);
+>   void erofs_put_pcpubuf(void *ptr);
+>   int erofs_pcpubuf_growsize(unsigned int nrpages);
+> -void erofs_pcpubuf_init(void);
+> +void __init erofs_pcpubuf_init(void);
+>   void erofs_pcpubuf_exit(void);
+>   
+>   int erofs_register_sysfs(struct super_block *sb);
+> @@ -545,7 +545,7 @@ static inline int z_erofs_fill_inode(struct inode *inode) { return -EOPNOTSUPP;
+>   #endif	/* !CONFIG_EROFS_FS_ZIP */
+>   
+>   #ifdef CONFIG_EROFS_FS_ZIP_LZMA
+> -int z_erofs_lzma_init(void);
+> +int __init z_erofs_lzma_init(void);
+>   void z_erofs_lzma_exit(void);
+>   int z_erofs_load_lzma_config(struct super_block *sb,
+>   			     struct erofs_super_block *dsb,
+> diff --git a/fs/erofs/pcpubuf.c b/fs/erofs/pcpubuf.c
+> index a2efd833d1b6..c7a4b1d77069 100644
+> --- a/fs/erofs/pcpubuf.c
+> +++ b/fs/erofs/pcpubuf.c
+> @@ -114,7 +114,7 @@ int erofs_pcpubuf_growsize(unsigned int nrpages)
+>   	return ret;
+>   }
+>   
+> -void erofs_pcpubuf_init(void)
+> +void __init erofs_pcpubuf_init(void)
+>   {
+>   	int cpu;
+>   
