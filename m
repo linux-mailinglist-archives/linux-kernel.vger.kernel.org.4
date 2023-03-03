@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1423E6A98D1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 758056A98D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjCCNoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 08:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S229541AbjCCNo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 08:44:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCCNoO (ORCPT
+        with ESMTP id S231203AbjCCNoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 08:44:14 -0500
+        Fri, 3 Mar 2023 08:44:21 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4A710D1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:43:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D1213D72
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:43:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677850961;
+        s=mimecast20190719; t=1677850963;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=KjFop+u9gsgumQbI1NT01HU0M1e24GmQr3F/oJ5Ui+I=;
-        b=DyQ98imYUYF3i2a0BI5KPPL0ZvjzMJcuA52IvIGQEwmMxfI5CxW9ygVEkvYY19EFrMnwJ5
-        I9za2Tc/kF0hX4Zh2m/rjYryIqoC30+m5vBChmvjui6cp1de9bDMFEpZc/TDD0C8IMpFyw
-        REuuTWiQ8uTL8ED5U/fad3FHniKdOSU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VRBvAso0m6Mh4AYb8jIiudho0ePNxChhIVaVb3X9gn0=;
+        b=Oa7rcj5jMNYHRrCZm8+QMBxmO22QGfzl9FXSYBF4HSZznfBLEvYZedBssOwWVyeeTAnZxK
+        2ksAWOXyD0ZAzWrplnKR2Fdk8O0NfAlcuXnVLrLHBL80jiwsGgRoMUiqHrkO6gyOk0YELA
+        +WjQvSifJ03gpp8Xm6cyF5tGmjUJh6o=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-373-_2hw8sgMMRiaVi2o5MHIYQ-1; Fri, 03 Mar 2023 08:42:40 -0500
-X-MC-Unique: _2hw8sgMMRiaVi2o5MHIYQ-1
-Received: by mail-wm1-f70.google.com with SMTP id e17-20020a05600c219100b003e21fa60ec1so1032300wme.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 05:42:40 -0800 (PST)
+ us-mta-25-NagnYjm7Nwq9dvTEuFxR1g-1; Fri, 03 Mar 2023 08:42:42 -0500
+X-MC-Unique: NagnYjm7Nwq9dvTEuFxR1g-1
+Received: by mail-wm1-f71.google.com with SMTP id bi21-20020a05600c3d9500b003e836e354e0so1020612wmb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 05:42:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677850960;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KjFop+u9gsgumQbI1NT01HU0M1e24GmQr3F/oJ5Ui+I=;
-        b=y1uFXijItvWjCLwO/m3PQZejBZ9Vezv1DhxvVDT7HVGCK52u9jT3CYgdZP+mJidYG5
-         vWdcEpe8vZ2jjw56xb906hJMvKGj2qijThmxUfrHnJyiI3NaLS0a4cAQW76lXvYmX1ei
-         Xh3OjkwLWMVwcQirs7it2TGSxqdYocZLIhhYO4v/P7mygSSh9NMZ7SL9zcxGdacV/p/s
-         WbebbTyGv9HyCZpIFVZ6m0FhLqeqXomA/ngz9j7Ys/VMKj2zcguvUkdOQac6oZTkGKJZ
-         1r2Q7wflBpPg7uXLMe7k30LgUlFZqnc91ZNaf8WyrPlifhtn6qUsRflj2fmxX5rXDUYF
-         1uJg==
-X-Gm-Message-State: AO0yUKW75PNp7wIjomJeyIGvpa1QgdGZAfKhGCmaYfDQ74q1fX+/uhFh
-        PZlz+cgaYuBNIv5EVCv+/7Gkp74S6ialP2emzLHayU2SFzhqhmNI5GGld6LMakOzZmupQ1+Jh2q
-        /ob7PjcxbEjpzm9s2DGHP9BSQ
-X-Received: by 2002:a5d:4ec8:0:b0:2c7:169b:c577 with SMTP id s8-20020a5d4ec8000000b002c7169bc577mr1090567wrv.19.1677850959755;
-        Fri, 03 Mar 2023 05:42:39 -0800 (PST)
-X-Google-Smtp-Source: AK7set8B4qYd0mFC/ZdyIijg93cTAwkXRp8dgkJL+iYSBZtGCJT1818CAO3C7LJ7lYZ/hehWcWUmww==
-X-Received: by 2002:a5d:4ec8:0:b0:2c7:169b:c577 with SMTP id s8-20020a5d4ec8000000b002c7169bc577mr1090555wrv.19.1677850959403;
-        Fri, 03 Mar 2023 05:42:39 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677850961;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VRBvAso0m6Mh4AYb8jIiudho0ePNxChhIVaVb3X9gn0=;
+        b=uTVzOCPJpBupJMGDdv6RWMAZE/sZt7MzHlvj3I9ucKAlB23uohuzjU26M3iD1fL2xn
+         T10LdAcATKlBcFvtveVIWHQMUnHGRuvma3srzZcD1btznXUJtqIfoaATu8XUbDBleyXZ
+         VtBvJJQl3BFptuh5z9Z6mv+vg2kMRIhwVyiDGTlI/oyPYG8bceVEi7s+zU/TFjAVVhs/
+         004Z2a+EuFrCnVvgfU4+2TicKcBoYxzrZu7D9G33M7Sq0Wa9G+s/9guTRztVlfUpBEav
+         XY6O/LxzePEySwR063mmG6Q9wHPm8rvG71MCz6Wu1TFgIAIjTYK1rNtMIrn1rSV/f8m8
+         kHqw==
+X-Gm-Message-State: AO0yUKVWFlBhlXV++4h39We+TaZj1//iC92+eHB35KzZSrBlsVVNXa+7
+        2mMVsS/0ALk2hzNRQZ/ypbIFQ6x58difAuZDw2LrptzCD2DyrHijOV77JzreIM/uJ0lzUDMIM6/
+        Ze/8IhPKBEta+H6E5rk4L6BDk
+X-Received: by 2002:a05:6000:1289:b0:2c7:1524:eb07 with SMTP id f9-20020a056000128900b002c71524eb07mr1195449wrx.67.1677850961243;
+        Fri, 03 Mar 2023 05:42:41 -0800 (PST)
+X-Google-Smtp-Source: AK7set/LUwHmGIAdTsbIGVjpc4uuopNpN8Lb5bV+jaI23Vz/K5QtjmEqhYCXmnTN3x4dHcJnCwSFbA==
+X-Received: by 2002:a05:6000:1289:b0:2c7:1524:eb07 with SMTP id f9-20020a056000128900b002c71524eb07mr1195437wrx.67.1677850961025;
+        Fri, 03 Mar 2023 05:42:41 -0800 (PST)
 Received: from localhost.localdomain ([46.33.96.29])
-        by smtp.gmail.com with ESMTPSA id a7-20020a5d4d47000000b002c5706f7c6dsm2208708wru.94.2023.03.03.05.42.38
+        by smtp.gmail.com with ESMTPSA id a7-20020a5d4d47000000b002c5706f7c6dsm2208708wru.94.2023.03.03.05.42.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 05:42:38 -0800 (PST)
+        Fri, 03 Mar 2023 05:42:40 -0800 (PST)
 From:   Michal Sekletar <msekleta@redhat.com>
 To:     gregkh@linuxfoundation.org
 Cc:     jirislaby@kernel.org, arozansk@redhat.com, shuah@kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Michal Sekletar <msekleta@redhat.com>
-Subject: [PATCH 1/2] tty: tty_io: update timestamps on all device nodes
-Date:   Fri,  3 Mar 2023 14:36:05 +0100
-Message-Id: <20230303133606.227934-1-msekleta@redhat.com>
+Subject: [PATCH 2/2] selftests: tty: add selftest for tty timestamp updates
+Date:   Fri,  3 Mar 2023 14:36:06 +0100
+Message-Id: <20230303133606.227934-2-msekleta@redhat.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230303133606.227934-1-msekleta@redhat.com>
+References: <20230303133606.227934-1-msekleta@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,102 +79,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-User space applications watch for timestamp changes on character device
-files in order to determine idle time of a given terminal session. For
-example, "w" program uses this information to populate the IDLE column
-of its output [1]. Similarly, systemd-logind has optional feature where
-it uses atime of the tty character device to determine if there was
-activity on the terminal associated with the logind's session object. If
-there was no activity for a configured period of time then logind will
-terminate such session [2].
-
-Now, usually (e.g. bash running on the terminal) the use of the terminal
-will update timestamps (atime and mtime) on the corresponding terminal
-character device. However, if access to the terminal, e.g. /dev/pts/0,
-is performed through magic character device /dev/tty then such access
-obviously changes the state of the terminal, however timestamps on the
-device that correspond to the terminal (/dev/pts/0) are not updated.
-
-This patch makes sure that we update timestamps on *all* character
-devices that correspond to the given tty, because outside observers (w,
-systemd-logind) are maybe checking these timestamps. Obviously, they can
-not check timestamps on /dev/tty as that has per-process meaning.
-
-[1] https://gitlab.com/procps-ng/procps/-/blob/v4.0.0/w.c#L286
-[2] https://github.com/systemd/systemd/blob/v252/NEWS#L477
-
 Signed-off-by: Michal Sekletar <msekleta@redhat.com>
 ---
- drivers/tty/tty_io.c | 32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/tty/.gitignore        |  2 +
+ tools/testing/selftests/tty/Makefile          |  5 ++
+ .../testing/selftests/tty/tty_tstamp_update.c | 88 +++++++++++++++++++
+ 4 files changed, 96 insertions(+)
+ create mode 100644 tools/testing/selftests/tty/.gitignore
+ create mode 100644 tools/testing/selftests/tty/Makefile
+ create mode 100644 tools/testing/selftests/tty/tty_tstamp_update.c
 
-diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-index 36fb945fdad4..48e0148b0f3e 100644
---- a/drivers/tty/tty_io.c
-+++ b/drivers/tty/tty_io.c
-@@ -101,6 +101,7 @@
- #include <linux/compat.h>
- #include <linux/uaccess.h>
- #include <linux/termios_internal.h>
-+#include <linux/fs.h>
- 
- #include <linux/kbd_kern.h>
- #include <linux/vt_kern.h>
-@@ -811,18 +812,27 @@ void start_tty(struct tty_struct *tty)
- }
- EXPORT_SYMBOL(start_tty);
- 
--static void tty_update_time(struct timespec64 *time)
-+static void tty_update_time(struct tty_struct *tty, int tstamp)
- {
-+	struct tty_file_private *priv;
- 	time64_t sec = ktime_get_real_seconds();
- 
--	/*
--	 * We only care if the two values differ in anything other than the
--	 * lower three bits (i.e every 8 seconds).  If so, then we can update
--	 * the time of the tty device, otherwise it could be construded as a
--	 * security leak to let userspace know the exact timing of the tty.
--	 */
--	if ((sec ^ time->tv_sec) & ~7)
--		time->tv_sec = sec;
-+	spin_lock(&tty->files_lock);
-+	list_for_each_entry(priv, &tty->tty_files, list) {
-+		struct file *filp = priv->file;
-+		struct inode *inode = file_inode(filp);
-+		struct timespec64 *time = tstamp == S_MTIME ? &inode->i_mtime : &inode->i_atime;
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 13a6837a0c6b..fc46926f505b 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -84,6 +84,7 @@ TARGETS += timers
+ endif
+ TARGETS += tmpfs
+ TARGETS += tpm2
++TARGETS += tty
+ TARGETS += user
+ TARGETS += vDSO
+ TARGETS += mm
+diff --git a/tools/testing/selftests/tty/.gitignore b/tools/testing/selftests/tty/.gitignore
+new file mode 100644
+index 000000000000..fe70462a4aad
+--- /dev/null
++++ b/tools/testing/selftests/tty/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++tty_tstamp_update
+diff --git a/tools/testing/selftests/tty/Makefile b/tools/testing/selftests/tty/Makefile
+new file mode 100644
+index 000000000000..50d7027b2ae3
+--- /dev/null
++++ b/tools/testing/selftests/tty/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++CFLAGS = -O2 -Wall
++TEST_GEN_PROGS := tty_tstamp_update
 +
-+		/*
-+		 * We only care if the two values differ in anything other than the
-+		 * lower three bits (i.e every 8 seconds).  If so, then we can update
-+		 * the time of the tty device, otherwise it could be construded as a
-+		 * security leak to let userspace know the exact timing of the tty.
-+		 */
-+		if ((sec ^ time->tv_sec) & ~7)
-+			time->tv_sec = sec;
++include ../lib.mk
+diff --git a/tools/testing/selftests/tty/tty_tstamp_update.c b/tools/testing/selftests/tty/tty_tstamp_update.c
+new file mode 100644
+index 000000000000..0ee97943dccc
+--- /dev/null
++++ b/tools/testing/selftests/tty/tty_tstamp_update.c
+@@ -0,0 +1,88 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <errno.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/stat.h>
++#include <unistd.h>
++#include <linux/limits.h>
++
++#include "../kselftest.h"
++
++#define MIN_TTY_PATH_LEN 8
++
++static bool tty_valid(char *tty)
++{
++	if (strlen(tty) < MIN_TTY_PATH_LEN)
++		return false;
++
++	if (strncmp(tty, "/dev/tty", MIN_TTY_PATH_LEN) == 0 ||
++	    strncmp(tty, "/dev/pts", MIN_TTY_PATH_LEN) == 0)
++		return true;
++
++	return false;
++}
++
++static int write_dev_tty(void)
++{
++	FILE *f;
++	int r = 0;
++
++	f = fopen("/dev/tty", "r+");
++	if (!f)
++		return -errno;
++
++	r = fprintf(f, "hello, world!\n");
++	if (r != strlen("hello, world!\n"))
++		r = -EIO;
++
++	fclose(f);
++	return r;
++}
++
++int main(int argc, char **argv)
++{
++	int r;
++	char tty[PATH_MAX] = {};
++	struct stat st1, st2;
++
++	ksft_print_header();
++	ksft_set_plan(1);
++
++	r = readlink("/proc/self/fd/0", tty, PATH_MAX);
++	if (r < 0)
++		ksft_exit_fail_msg("readlink on /proc/self/fd/0 failed: %m\n");
++
++	if (!tty_valid(tty))
++		ksft_exit_skip("invalid tty path '%s'\n", tty);
++
++	r = stat(tty, &st1);
++	if (r < 0)
++		ksft_exit_fail_msg("stat failed on tty path '%s': %m\n", tty);
++
++	/* We need to wait at least 8 seconds in order to observe timestamp change */
++	/* https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fbf47635315ab308c9b58a1ea0906e711a9228de */
++	sleep(10);
++
++	r = write_dev_tty();
++	if (r < 0)
++		ksft_exit_fail_msg("failed to write to /dev/tty: %s\n",
++				   strerror(-r));
++
++	r = stat(tty, &st2);
++	if (r < 0)
++		ksft_exit_fail_msg("stat failed on tty path '%s': %m\n", tty);
++
++	/* We wrote to the terminal so timestamps should have been updated */
++	if (st1.st_atim.tv_sec == st2.st_atim.tv_sec &&
++	    st1.st_mtim.tv_sec == st2.st_mtim.tv_sec) {
++		ksft_test_result_fail("tty timestamps not updated\n");
++		ksft_exit_fail();
 +	}
-+	spin_unlock(&tty->files_lock);
- }
- 
- /*
-@@ -928,7 +938,7 @@ static ssize_t tty_read(struct kiocb *iocb, struct iov_iter *to)
- 	tty_ldisc_deref(ld);
- 
- 	if (i > 0)
--		tty_update_time(&inode->i_atime);
-+		tty_update_time(tty, S_ATIME);
- 
- 	return i;
- }
-@@ -1036,7 +1046,7 @@ static inline ssize_t do_tty_write(
- 		cond_resched();
- 	}
- 	if (written) {
--		tty_update_time(&file_inode(file)->i_mtime);
-+		tty_update_time(tty, S_MTIME);
- 		ret = written;
- 	}
- out:
++
++	ksft_test_result_pass(
++		"timestamps of terminal '%s' updated after write to /dev/tty\n", tty);
++	return EXIT_SUCCESS;
++}
 -- 
 2.39.2
 
