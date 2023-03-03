@@ -2,492 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C5B6A8FFE
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3481B6A9000
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbjCCDzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 22:55:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
+        id S229560AbjCCD4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 22:56:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCCDzS (ORCPT
+        with ESMTP id S229445AbjCCD4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 22:55:18 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230F511EB5;
-        Thu,  2 Mar 2023 19:55:17 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3230C6nE019927;
-        Fri, 3 Mar 2023 03:55:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=9TeXwaTlUIur8LJbd6hvm5hqtIFh+l6PHbAPi0+GvLo=;
- b=UZsB5fR23ggc/KX4XSizMIqEKjzpDoUYqFhv7JuhQjXlzfcfnvVvbz3U+4ttUS1cjFuT
- GaoVT6JxAwYVwdE8+nZflLxqOvzxagAttIPr9gwW89s7TRRCjT+htI8/081VhguBi32z
- sUDyovJDEJWA6umEfk+ujynFyT7WkkO+72/JKIib0rsAlPkXfNhX7G5Xx5TQbVZ/pL58
- K1LfugEimEBrGbjt4MgK2y5LVaIZAjKm+q+93CjV5ZR/UxxJF2XCftLM7TrzgN+f5plz
- 0r40Om4JPt5JN+j/k1fd+eReoKuu/LPGSCg7PeSq9Y/BLuFtL3qEE6asvh3SgEQkFveq TQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p33g58uru-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 03:55:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3233t8NT031888
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 03:55:08 GMT
-Received: from hu-gokukris-sd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 2 Mar 2023 19:55:07 -0800
-From:   Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        "Guru Das Srinagesh" <quic_gurus@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        <linux-trace-kernel@vger.kernel.org>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-Subject: [PATCH v2 1/1] remoteproc: qcom: Add remoteproc tracing
-Date:   Thu, 2 Mar 2023 19:54:53 -0800
-Message-ID: <20230303035453.19034-1-quic_gokukris@quicinc.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 2 Mar 2023 22:56:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FEC48E05;
+        Thu,  2 Mar 2023 19:56:12 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B67FE60FC3;
+        Fri,  3 Mar 2023 03:56:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B0BC4339C;
+        Fri,  3 Mar 2023 03:56:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677815771;
+        bh=TigAmzGesFiCik16l/ZHCdGrAuOsh2zJ2X5nMw/JOHM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sUqJ2MMN4TSZ8YAqH6jwtNR4WxZiSBmR6phMNq8eucBdAi/ZCZlHCLShvguHS0BHw
+         OcnUpKxCpKvSuAp1QRpRMNkMfkjM5G33bMI8Wr2cMP+3Aw8q/pRBYEyxxqfdk1cPVa
+         oIRpUq0bpVhAfKlJ/iiKYhu7CV7v0CS1bV8pd+yrR3zHEzm8LYkSLAvhkobZGPyac1
+         o8VAak71tWqBHusSwr+keRi61ipbmG8uwCrROzmhS5DC/4LZRgEno9XukhdROrGyjb
+         QlRdpLE96qDE/Ayr1fFuRVScSTPLITce3zy+xA7RIjFrpIRw7IweOa2BPaAPyo9dQc
+         DZJIBp041PdeQ==
+Received: by mail-ed1-f41.google.com with SMTP id cw28so5393208edb.5;
+        Thu, 02 Mar 2023 19:56:10 -0800 (PST)
+X-Gm-Message-State: AO0yUKWK4Vr/oKGPK+durTiR6KigW5zf708bU/g0Tf0HN7hcP+3CEX5x
+        KcRIH2FCoCxmIAOeJMD3EQZPy9LvBV57qZIEUr8=
+X-Google-Smtp-Source: AK7set/rrDsI6fQd88WCQ+z91wgae840RpVj6L74L0OH/YS3FY0NasLg1CCyzpRw7Ox+8GfucPlQYSv8TSwFKGnoaTQ=
+X-Received: by 2002:a17:906:2a55:b0:8b2:fa6d:45e3 with SMTP id
+ k21-20020a1709062a5500b008b2fa6d45e3mr92724eje.1.1677815769215; Thu, 02 Mar
+ 2023 19:56:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: A_hbYAWJAd6K6wd7ZAhoOZFdfYlorbJL
-X-Proofpoint-ORIG-GUID: A_hbYAWJAd6K6wd7ZAhoOZFdfYlorbJL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 suspectscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 clxscore=1015 spamscore=0
- malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030032
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230303002508.2891681-1-chenhuacai@loongson.cn> <480ab341-6437-e409-8779-c4938924fd64@xen0n.name>
+In-Reply-To: <480ab341-6437-e409-8779-c4938924fd64@xen0n.name>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 3 Mar 2023 11:55:57 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7NYCdqXGwvmVqR8Njw=kDpBdCq+QRzPFGxR5zjHcdZ9g@mail.gmail.com>
+Message-ID: <CAAhV-H7NYCdqXGwvmVqR8Njw=kDpBdCq+QRzPFGxR5zjHcdZ9g@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Fix the CRC32 feature probing
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change attempts to add traces for start, stop, crash
-subsystem/subdevice event these will serve as standard checkpoints in
-code and could help in debugging the failures in subdevice/subsystem
-prepare, start, stop and unprepare functions. This will also breakdown
-the time taken for each step in remoteproc bootup/shutdown process.
+Hi, Xuerui,
 
-Change-Id: I202814452192ca0733f134daf7c99201881e2c9c
-Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
----
- drivers/remoteproc/Makefile           |   1 +
- drivers/remoteproc/qcom_common.c      |  37 ++++++++
- drivers/remoteproc/qcom_q6v5.c        |   9 ++
- drivers/remoteproc/qcom_tracepoints.c |  12 +++
- drivers/remoteproc/remoteproc_core.c  |   8 ++
- include/trace/events/rproc_qcom.h     | 128 ++++++++++++++++++++++++++
- 6 files changed, 195 insertions(+)
- create mode 100644 drivers/remoteproc/qcom_tracepoints.c
- create mode 100644 include/trace/events/rproc_qcom.h
+On Fri, Mar 3, 2023 at 11:15=E2=80=AFAM WANG Xuerui <kernel@xen0n.name> wro=
+te:
+>
+> On 2023/3/3 08:25, Huacai Chen wrote:
+> > Not all LoongArch processors support CRC32 instructions, and this featu=
+re
+> > is indicated by CPUCFG1.CRC32 (Bit25). This bit is wrongly defined in l=
+oongarch.h
+>
+> The ISA manual suggests it's IOCSR_BRD (likely "IOCSR Branding"). You
+> have to somehow reconcile the two, either by fixing the manuals, or
+> mention here explicitly that the manual is wrong. (Actually thinking
+> about it harder now, you may be in fact re-purposing the IOCSR_BRD field
+> for CRC32 capability, because all LoongArch cores in existence are
+> designed by Loongson, and you may very well know that all cores
+> supporting CRC32 have this bit set, and those not having CRC32 haven't.
+> If that's the case, please explicitly document this reasoning too.)
+The ISA manual has been modified and will be released soon.
 
-diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-index 91314a9b43ce..3399fcaba39b 100644
---- a/drivers/remoteproc/Makefile
-+++ b/drivers/remoteproc/Makefile
-@@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_debugfs.o
- remoteproc-y				+= remoteproc_sysfs.o
- remoteproc-y				+= remoteproc_virtio.o
- remoteproc-y				+= remoteproc_elf_loader.o
-+remoteproc-y				+= qcom_tracepoints.o
- obj-$(CONFIG_REMOTEPROC_CDEV)		+= remoteproc_cdev.o
- obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
- obj-$(CONFIG_IMX_DSP_REMOTEPROC)	+= imx_dsp_rproc.o
-diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
-index 020349f8979d..09b79f39ccd6 100644
---- a/drivers/remoteproc/qcom_common.c
-+++ b/drivers/remoteproc/qcom_common.c
-@@ -18,6 +18,7 @@
- #include <linux/slab.h>
- #include <linux/soc/qcom/mdt_loader.h>
- #include <linux/soc/qcom/smem.h>
-+#include <trace/events/rproc_qcom.h>
- 
- #include "remoteproc_internal.h"
- #include "qcom_common.h"
-@@ -186,6 +187,10 @@ static int glink_subdev_start(struct rproc_subdev *subdev)
- 
- 	glink->edge = qcom_glink_smem_register(glink->dev, glink->node);
- 
-+	trace_rproc_subdev_event(dev_name(glink->dev->parent),
-+					"glink", "start",
-+					PTR_ERR_OR_ZERO(glink->edge));
-+
- 	return PTR_ERR_OR_ZERO(glink->edge);
- }
- 
-@@ -194,6 +199,11 @@ static void glink_subdev_stop(struct rproc_subdev *subdev, bool crashed)
- 	struct qcom_rproc_glink *glink = to_glink_subdev(subdev);
- 
- 	qcom_glink_smem_unregister(glink->edge);
-+
-+	trace_rproc_subdev_event(dev_name(glink->dev->parent),
-+					"glink", "stop",
-+					PTR_ERR_OR_ZERO(glink->edge));
-+
- 	glink->edge = NULL;
- }
- 
-@@ -201,6 +211,10 @@ static void glink_subdev_unprepare(struct rproc_subdev *subdev)
- {
- 	struct qcom_rproc_glink *glink = to_glink_subdev(subdev);
- 
-+	trace_rproc_subdev_event(dev_name(glink->dev->parent),
-+					"glink", "unprepare",
-+					PTR_ERR_OR_ZERO(glink->edge));
-+
- 	qcom_glink_ssr_notify(glink->ssr_name);
- }
- 
-@@ -295,6 +309,10 @@ static int smd_subdev_start(struct rproc_subdev *subdev)
- {
- 	struct qcom_rproc_subdev *smd = to_smd_subdev(subdev);
- 
-+	trace_rproc_subdev_event(dev_name(smd->dev->parent),
-+					"smd", "start",
-+					PTR_ERR_OR_ZERO(smd->edge));
-+
- 	smd->edge = qcom_smd_register_edge(smd->dev, smd->node);
- 
- 	return PTR_ERR_OR_ZERO(smd->edge);
-@@ -304,6 +322,10 @@ static void smd_subdev_stop(struct rproc_subdev *subdev, bool crashed)
- {
- 	struct qcom_rproc_subdev *smd = to_smd_subdev(subdev);
- 
-+	trace_rproc_subdev_event(dev_name(smd->dev->parent),
-+					"smd", "stop",
-+					PTR_ERR_OR_ZERO(smd->edge));
-+
- 	qcom_smd_unregister_edge(smd->edge);
- 	smd->edge = NULL;
- }
-@@ -420,6 +442,10 @@ static int ssr_notify_prepare(struct rproc_subdev *subdev)
- 		.crashed = false,
- 	};
- 
-+	trace_rproc_subdev_event(ssr->info->name,
-+					"ssr", "QCOM_SSR_BEFORE_POWERUP",
-+					data.crashed);
-+
- 	srcu_notifier_call_chain(&ssr->info->notifier_list,
- 				 QCOM_SSR_BEFORE_POWERUP, &data);
- 	return 0;
-@@ -432,6 +458,9 @@ static int ssr_notify_start(struct rproc_subdev *subdev)
- 		.name = ssr->info->name,
- 		.crashed = false,
- 	};
-+	trace_rproc_subdev_event(ssr->info->name,
-+					"ssr", "QCOM_SSR_AFTER_POWERUP",
-+					data.crashed);
- 
- 	srcu_notifier_call_chain(&ssr->info->notifier_list,
- 				 QCOM_SSR_AFTER_POWERUP, &data);
-@@ -446,6 +475,10 @@ static void ssr_notify_stop(struct rproc_subdev *subdev, bool crashed)
- 		.crashed = crashed,
- 	};
- 
-+	trace_rproc_subdev_event(ssr->info->name,
-+					"ssr", "QCOM_SSR_BEFORE_SHUTDOWN",
-+					data.crashed);
-+
- 	srcu_notifier_call_chain(&ssr->info->notifier_list,
- 				 QCOM_SSR_BEFORE_SHUTDOWN, &data);
- }
-@@ -458,6 +491,10 @@ static void ssr_notify_unprepare(struct rproc_subdev *subdev)
- 		.crashed = false,
- 	};
- 
-+	trace_rproc_subdev_event(ssr->info->name,
-+					"ssr", "QCOM_SSR_AFTER_SHUTDOWN",
-+					data.crashed);
-+
- 	srcu_notifier_call_chain(&ssr->info->notifier_list,
- 				 QCOM_SSR_AFTER_SHUTDOWN, &data);
- }
-diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
-index 497acfb33f8f..aff91de3cea0 100644
---- a/drivers/remoteproc/qcom_q6v5.c
-+++ b/drivers/remoteproc/qcom_q6v5.c
-@@ -15,6 +15,7 @@
- #include <linux/soc/qcom/smem.h>
- #include <linux/soc/qcom/smem_state.h>
- #include <linux/remoteproc.h>
-+#include <trace/events/rproc_qcom.h>
- #include "qcom_common.h"
- #include "qcom_q6v5.h"
- 
-@@ -113,6 +114,7 @@ static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
- 		dev_err(q6v5->dev, "watchdog without message\n");
- 
- 	q6v5->running = false;
-+	trace_rproc_interrupt_event(q6v5->rproc, "q6v5_wdog", msg);
- 	rproc_report_crash(q6v5->rproc, RPROC_WATCHDOG);
- 
- 	return IRQ_HANDLED;
-@@ -134,6 +136,7 @@ static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
- 		dev_err(q6v5->dev, "fatal error without message\n");
- 
- 	q6v5->running = false;
-+	trace_rproc_interrupt_event(q6v5->rproc, "fatal", msg);
- 	rproc_report_crash(q6v5->rproc, RPROC_FATAL_ERROR);
- 
- 	return IRQ_HANDLED;
-@@ -165,6 +168,8 @@ int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout)
- 	if (!ret)
- 		disable_irq(q6v5->handover_irq);
- 
-+	trace_rproc_interrupt_event(q6v5->rproc, "Ready", !ret? "-ETIMEDOUT":"done");
-+
- 	return !ret ? -ETIMEDOUT : 0;
- }
- EXPORT_SYMBOL_GPL(qcom_q6v5_wait_for_start);
-@@ -180,6 +185,8 @@ static irqreturn_t q6v5_handover_interrupt(int irq, void *data)
- 
- 	q6v5->handover_issued = true;
- 
-+	trace_rproc_interrupt_event(q6v5->rproc, "handover", "Proxy votes removed");
-+
- 	return IRQ_HANDLED;
- }
- 
-@@ -216,6 +223,8 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon)
- 
- 	qcom_smem_state_update_bits(q6v5->state, BIT(q6v5->stop_bit), 0);
- 
-+	trace_rproc_interrupt_event(q6v5->rproc, "Stop", ret? "done":"-EETIMEDOUT");
-+
- 	return ret == 0 ? -ETIMEDOUT : 0;
- }
- EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
-diff --git a/drivers/remoteproc/qcom_tracepoints.c b/drivers/remoteproc/qcom_tracepoints.c
-new file mode 100644
-index 000000000000..1b587ef54aa7
---- /dev/null
-+++ b/drivers/remoteproc/qcom_tracepoints.c
-@@ -0,0 +1,12 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/rproc_qcom.h>
-+EXPORT_TRACEPOINT_SYMBOL(rproc_load_event);
-+EXPORT_TRACEPOINT_SYMBOL(rproc_start_event);
-+EXPORT_TRACEPOINT_SYMBOL(rproc_stop_event);
-+EXPORT_TRACEPOINT_SYMBOL(rproc_interrupt_event);
-+EXPORT_TRACEPOINT_SYMBOL(rproc_subdev_event);
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index 1cd4815a6dd1..6def868f0a98 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -38,6 +38,7 @@
- #include <linux/virtio_ring.h>
- #include <asm/byteorder.h>
- #include <linux/platform_device.h>
-+#include <trace/events/rproc_qcom.h>
- 
- #include "remoteproc_internal.h"
- 
-@@ -1270,6 +1271,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
- 
- 	/* load the ELF segments to memory */
- 	ret = rproc_load_segments(rproc, fw);
-+	trace_rproc_load_event(rproc, ret);
- 	if (ret) {
- 		dev_err(dev, "Failed to load program segments: %d\n", ret);
- 		return ret;
-@@ -1305,6 +1307,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
- 
- 	/* Start any subdevices for the remote processor */
- 	ret = rproc_start_subdevices(rproc);
-+
- 	if (ret) {
- 		dev_err(dev, "failed to probe subdevices for %s: %d\n",
- 			rproc->name, ret);
-@@ -1729,6 +1732,8 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
- 		return ret;
- 	}
- 
-+	trace_rproc_stop_event(rproc, crashed ? "crash stop" : "stop");
-+
- 	rproc_unprepare_subdevices(rproc);
- 
- 	rproc->state = RPROC_OFFLINE;
-@@ -1939,6 +1944,8 @@ int rproc_boot(struct rproc *rproc)
- 		dev_info(dev, "attaching to %s\n", rproc->name);
- 
- 		ret = rproc_attach(rproc);
-+		trace_rproc_start_event(rproc, ret);
-+
- 	} else {
- 		dev_info(dev, "powering up %s\n", rproc->name);
- 
-@@ -1950,6 +1957,7 @@ int rproc_boot(struct rproc *rproc)
- 		}
- 
- 		ret = rproc_fw_boot(rproc, firmware_p);
-+		trace_rproc_start_event(rproc, ret);
- 
- 		release_firmware(firmware_p);
- 	}
-diff --git a/include/trace/events/rproc_qcom.h b/include/trace/events/rproc_qcom.h
-new file mode 100644
-index 000000000000..66b10cb17965
---- /dev/null
-+++ b/include/trace/events/rproc_qcom.h
-@@ -0,0 +1,128 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM rproc_qcom
-+
-+#if !defined(_TRACE_RPROC_QCOM_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_RPROC_QCOM_H
-+#include <linux/tracepoint.h>
-+#include <linux/remoteproc.h>
-+
-+/*
-+ * Tracepoints for remoteproc and subdevice events
-+ */
-+TRACE_EVENT(rproc_load_event,
-+
-+	TP_PROTO(struct rproc *rproc, int ret),
-+
-+	TP_ARGS(rproc, ret),
-+
-+	TP_STRUCT__entry(
-+		__string(name, rproc->name)
-+		__string(firmware, rproc->firmware)
-+		__field(int,ret)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, rproc->name);
-+		__assign_str(firmware, rproc->firmware);
-+		__entry->ret = ret;
-+	),
-+
-+	TP_printk("%s loading firmware %s returned %d",
-+			__get_str(name), __get_str(firmware),
-+			__entry->ret)
-+);
-+
-+TRACE_EVENT(rproc_start_event,
-+
-+	TP_PROTO(struct rproc *rproc, int ret),
-+
-+	TP_ARGS(rproc, ret),
-+
-+	TP_STRUCT__entry(
-+		__string(name, rproc->name)
-+		__field(int, ret)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, rproc->name);
-+		__entry->ret = ret;
-+	),
-+
-+	TP_printk("%s %d", __get_str(name), __entry->ret)
-+);
-+
-+TRACE_EVENT(rproc_stop_event,
-+
-+	TP_PROTO(struct rproc *rproc, char* crash_msg),
-+
-+	TP_ARGS(rproc, crash_msg),
-+
-+	TP_STRUCT__entry(
-+		__string(name, rproc->name)
-+		__string(crash_msg, crash_msg)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, rproc->name);
-+		__assign_str(crash_msg, crash_msg)
-+	),
-+
-+	TP_printk("%s %s", __get_str(name), __get_str(crash_msg))
-+);
-+
-+TRACE_EVENT(rproc_interrupt_event,
-+
-+	TP_PROTO(struct rproc *rproc, const char* event,
-+			 const char* msg),
-+
-+	TP_ARGS(rproc, event, msg),
-+
-+	TP_STRUCT__entry(
-+		__string(name, rproc->name)
-+		__string(event, event)
-+		__string(msg, msg)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, rproc->name);
-+		__assign_str(event, event);
-+		__assign_str(msg, msg);
-+	),
-+
-+	TP_printk("%s %s returned %s", __get_str(name),
-+			 __get_str(event), __get_str(msg))
-+);
-+
-+TRACE_EVENT(rproc_subdev_event,
-+
-+	TP_PROTO(const char* rproc, const char* subdev,
-+			const char* event, int ret),
-+
-+	TP_ARGS(rproc, subdev, event, ret),
-+
-+	TP_STRUCT__entry(
-+		__string(rproc, rproc)
-+		__string(subdev, subdev)
-+		__string(event, event)
-+		__field(int, ret)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(rproc, rproc);
-+		__assign_str(subdev, subdev);
-+		__assign_str(event, event);
-+		__entry->ret = ret;
-+	),
-+
-+	TP_printk("%s %s %s %d", __get_str(rproc), __get_str(subdev),
-+			__get_str(event), __entry->ret)
-+);
-+#endif /* _TRACE_RPROC_QCOM_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
--- 
-2.39.2
+>
+> > and CRC32 is set unconditionally now, so fix it.
+> >
+> > BTW, expose the CRC32 feature in /proc/cpuinfo.
+> >
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >   arch/loongarch/include/asm/cpu-features.h |  1 +
+> >   arch/loongarch/include/asm/cpu.h          | 40 ++++++++++++----------=
+-
+> >   arch/loongarch/include/asm/loongarch.h    |  2 +-
+> >   arch/loongarch/kernel/cpu-probe.c         |  7 +++-
+> >   arch/loongarch/kernel/proc.c              |  1 +
+> >   5 files changed, 30 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch=
+/include/asm/cpu-features.h
+> > index b07974218393..f6177f133477 100644
+> > --- a/arch/loongarch/include/asm/cpu-features.h
+> > +++ b/arch/loongarch/include/asm/cpu-features.h
+> > @@ -42,6 +42,7 @@
+> >   #define cpu_has_fpu         cpu_opt(LOONGARCH_CPU_FPU)
+> >   #define cpu_has_lsx         cpu_opt(LOONGARCH_CPU_LSX)
+> >   #define cpu_has_lasx                cpu_opt(LOONGARCH_CPU_LASX)
+> > +#define cpu_has_crc32                cpu_opt(LOONGARCH_CPU_CRC32)
+> >   #define cpu_has_complex             cpu_opt(LOONGARCH_CPU_COMPLEX)
+> >   #define cpu_has_crypto              cpu_opt(LOONGARCH_CPU_CRYPTO)
+> >   #define cpu_has_lvz         cpu_opt(LOONGARCH_CPU_LVZ)
+> > diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/=
+asm/cpu.h
+> > index c3da91759472..ca9e2be571ec 100644
+> > --- a/arch/loongarch/include/asm/cpu.h
+> > +++ b/arch/loongarch/include/asm/cpu.h
+> > @@ -78,25 +78,26 @@ enum cpu_type_enum {
+> >   #define CPU_FEATURE_FPU                     3       /* CPU has FPU */
+> >   #define CPU_FEATURE_LSX                     4       /* CPU has LSX (1=
+28-bit SIMD) */
+> >   #define CPU_FEATURE_LASX            5       /* CPU has LASX (256-bit =
+SIMD) */
+> > -#define CPU_FEATURE_COMPLEX          6       /* CPU has Complex instru=
+ctions */
+> > -#define CPU_FEATURE_CRYPTO           7       /* CPU has Crypto instruc=
+tions */
+> > -#define CPU_FEATURE_LVZ                      8       /* CPU has Virtua=
+lization extension */
+> > -#define CPU_FEATURE_LBT_X86          9       /* CPU has X86 Binary Tra=
+nslation */
+> > -#define CPU_FEATURE_LBT_ARM          10      /* CPU has ARM Binary Tra=
+nslation */
+> > -#define CPU_FEATURE_LBT_MIPS         11      /* CPU has MIPS Binary Tr=
+anslation */
+> > -#define CPU_FEATURE_TLB                      12      /* CPU has TLB */
+> > -#define CPU_FEATURE_CSR                      13      /* CPU has CSR */
+> > -#define CPU_FEATURE_WATCH            14      /* CPU has watchpoint reg=
+isters */
+> > -#define CPU_FEATURE_VINT             15      /* CPU has vectored inter=
+rupts */
+> > -#define CPU_FEATURE_CSRIPI           16      /* CPU has CSR-IPI */
+> > -#define CPU_FEATURE_EXTIOI           17      /* CPU has EXT-IOI */
+> > -#define CPU_FEATURE_PREFETCH         18      /* CPU has prefetch instr=
+uctions */
+> > -#define CPU_FEATURE_PMP                      19      /* CPU has perfer=
+mance counter */
+> > -#define CPU_FEATURE_SCALEFREQ                20      /* CPU supports c=
+pufreq scaling */
+> > -#define CPU_FEATURE_FLATMODE         21      /* CPU has flat mode */
+> > -#define CPU_FEATURE_EIODECODE                22      /* CPU has EXTIOI=
+ interrupt pin decode mode */
+> > -#define CPU_FEATURE_GUESTID          23      /* CPU has GuestID featur=
+e */
+> > -#define CPU_FEATURE_HYPERVISOR               24      /* CPU has hyperv=
+isor (running in VM) */
+> > +#define CPU_FEATURE_CRC32            6       /* CPU has Complex instru=
+ctions */
+>
+> "CPU has CRC32 instructions".
+>
+> Also, the diff damage is real, is there any reason this must come here
+> and not last? To me "aesthetics" is not enough to justify such a diff
+> damage.
+To keep CPU_FEATURE and elf_hwcap in the same order.
 
+Huacai
+>
+> > +#define CPU_FEATURE_COMPLEX          7       /* CPU has Complex instru=
+ctions */
+> > +#define CPU_FEATURE_CRYPTO           8       /* CPU has Crypto instruc=
+tions */
+> > +#define CPU_FEATURE_LVZ                      9       /* CPU has Virtua=
+lization extension */
+> > +#define CPU_FEATURE_LBT_X86          10      /* CPU has X86 Binary Tra=
+nslation */
+> > +#define CPU_FEATURE_LBT_ARM          11      /* CPU has ARM Binary Tra=
+nslation */
+> > +#define CPU_FEATURE_LBT_MIPS         12      /* CPU has MIPS Binary Tr=
+anslation */
+> > +#define CPU_FEATURE_TLB                      13      /* CPU has TLB */
+> > +#define CPU_FEATURE_CSR                      14      /* CPU has CSR */
+> > +#define CPU_FEATURE_WATCH            15      /* CPU has watchpoint reg=
+isters */
+> > +#define CPU_FEATURE_VINT             16      /* CPU has vectored inter=
+rupts */
+> > +#define CPU_FEATURE_CSRIPI           17      /* CPU has CSR-IPI */
+> > +#define CPU_FEATURE_EXTIOI           18      /* CPU has EXT-IOI */
+> > +#define CPU_FEATURE_PREFETCH         19      /* CPU has prefetch instr=
+uctions */
+> > +#define CPU_FEATURE_PMP                      20      /* CPU has perfer=
+mance counter */
+> > +#define CPU_FEATURE_SCALEFREQ                21      /* CPU supports c=
+pufreq scaling */
+> > +#define CPU_FEATURE_FLATMODE         22      /* CPU has flat mode */
+> > +#define CPU_FEATURE_EIODECODE                23      /* CPU has EXTIOI=
+ interrupt pin decode mode */
+> > +#define CPU_FEATURE_GUESTID          24      /* CPU has GuestID featur=
+e */
+> > +#define CPU_FEATURE_HYPERVISOR               25      /* CPU has hyperv=
+isor (running in VM) */
+> >
+> >   #define LOONGARCH_CPU_CPUCFG                BIT_ULL(CPU_FEATURE_CPUCF=
+G)
+> >   #define LOONGARCH_CPU_LAM           BIT_ULL(CPU_FEATURE_LAM)
+> > @@ -104,6 +105,7 @@ enum cpu_type_enum {
+> >   #define LOONGARCH_CPU_FPU           BIT_ULL(CPU_FEATURE_FPU)
+> >   #define LOONGARCH_CPU_LSX           BIT_ULL(CPU_FEATURE_LSX)
+> >   #define LOONGARCH_CPU_LASX          BIT_ULL(CPU_FEATURE_LASX)
+> > +#define LOONGARCH_CPU_CRC32          BIT_ULL(CPU_FEATURE_CRC32)
+> >   #define LOONGARCH_CPU_COMPLEX               BIT_ULL(CPU_FEATURE_COMPL=
+EX)
+> >   #define LOONGARCH_CPU_CRYPTO                BIT_ULL(CPU_FEATURE_CRYPT=
+O)
+> >   #define LOONGARCH_CPU_LVZ           BIT_ULL(CPU_FEATURE_LVZ)
+> > diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/in=
+clude/asm/loongarch.h
+> > index 65b7dcdea16d..8c2969965c3c 100644
+> > --- a/arch/loongarch/include/asm/loongarch.h
+> > +++ b/arch/loongarch/include/asm/loongarch.h
+> > @@ -117,7 +117,7 @@ static inline u32 read_cpucfg(u32 reg)
+> >   #define  CPUCFG1_EP                 BIT(22)
+> >   #define  CPUCFG1_RPLV                       BIT(23)
+> >   #define  CPUCFG1_HUGEPG                     BIT(24)
+> > -#define  CPUCFG1_IOCSRBRD            BIT(25)
+> > +#define  CPUCFG1_CRC32                       BIT(25)
+> >   #define  CPUCFG1_MSGINT                     BIT(26)
+> >
+> >   #define LOONGARCH_CPUCFG2           0x2
+> > diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/=
+cpu-probe.c
+> > index 3a3fce2d7846..482643167119 100644
+> > --- a/arch/loongarch/kernel/cpu-probe.c
+> > +++ b/arch/loongarch/kernel/cpu-probe.c
+> > @@ -94,13 +94,18 @@ static void cpu_probe_common(struct cpuinfo_loongar=
+ch *c)
+> >       c->options =3D LOONGARCH_CPU_CPUCFG | LOONGARCH_CPU_CSR |
+> >                    LOONGARCH_CPU_TLB | LOONGARCH_CPU_VINT | LOONGARCH_C=
+PU_WATCH;
+> >
+> > -     elf_hwcap =3D HWCAP_LOONGARCH_CPUCFG | HWCAP_LOONGARCH_CRC32;
+> > +     elf_hwcap =3D HWCAP_LOONGARCH_CPUCFG;
+> >
+> >       config =3D read_cpucfg(LOONGARCH_CPUCFG1);
+> >       if (config & CPUCFG1_UAL) {
+> >               c->options |=3D LOONGARCH_CPU_UAL;
+> >               elf_hwcap |=3D HWCAP_LOONGARCH_UAL;
+> >       }
+> > +     if (config & CPUCFG1_CRC32) {
+> > +             c->options |=3D LOONGARCH_CPU_CRC32;
+> > +             elf_hwcap |=3D HWCAP_LOONGARCH_CRC32;
+> > +     }
+> > +
+> >
+> >       config =3D read_cpucfg(LOONGARCH_CPUCFG2);
+> >       if (config & CPUCFG2_LAM) {
+> > diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.=
+c
+> > index 5c67cc4fd56d..0d82907b5404 100644
+> > --- a/arch/loongarch/kernel/proc.c
+> > +++ b/arch/loongarch/kernel/proc.c
+> > @@ -76,6 +76,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+> >       if (cpu_has_fpu)        seq_printf(m, " fpu");
+> >       if (cpu_has_lsx)        seq_printf(m, " lsx");
+> >       if (cpu_has_lasx)       seq_printf(m, " lasx");
+> > +     if (cpu_has_crc32)      seq_printf(m, " crc32");
+> >       if (cpu_has_complex)    seq_printf(m, " complex");
+> >       if (cpu_has_crypto)     seq_printf(m, " crypto");
+> >       if (cpu_has_lvz)        seq_printf(m, " lvz");
+>
+> --
+> WANG "xen0n" Xuerui
+>
+> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+>
