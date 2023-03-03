@@ -2,47 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E54C6A9DF5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 893AA6A9DFD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjCCRu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37182 "EHLO
+        id S231454AbjCCRvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbjCCRu2 (ORCPT
+        with ESMTP id S231430AbjCCRu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:50:28 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EC028206;
-        Fri,  3 Mar 2023 09:50:25 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PSwRZ3R0Fz6J9fR;
-        Sat,  4 Mar 2023 01:47:54 +0800 (CST)
-Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
- lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 3 Mar 2023 17:50:23 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     <linux-cxl@vger.kernel.org>
-CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <will@kernel.org>,
-        <dan.j.williams@intel.com>, <bwidawsk@kernel.org>,
-        <ira.weiny@intel.com>, <vishal.l.verma@intel.com>,
-        <alison.schofield@intel.com>, <linuxarm@huawei.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 0/4] CXL 3.0 Performance Monitoring Unit support
-Date:   Fri, 3 Mar 2023 17:50:18 +0000
-Message-ID: <20230303175022.10806-1-Jonathan.Cameron@huawei.com>
-X-Mailer: git-send-email 2.37.2
+        Fri, 3 Mar 2023 12:50:58 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B93584B5;
+        Fri,  3 Mar 2023 09:50:56 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id x199so2718164ybg.5;
+        Fri, 03 Mar 2023 09:50:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677865856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SCxddsYYw42LPM43/gkvlie96kmGO3FZ4G2subvXzzU=;
+        b=fLGfl9d8hRxr0PWmqstZFZdpj03Y2a8vI1Icd/J+Yunnnd+mcFIXz4wtbdN2hYiGDW
+         Rk9i60Tw2atvr6IPg1o9J5DPzTbj9nTvca4ZdGzL1gYVxPInrg8c4jDE9op7uuGh+IlO
+         jeVW1ToKEMQcEYzghwsERQBGIXU6nh967eMtdK2JLknjEUztLiCki8FL+nAKYB2xSfBQ
+         ArmboZy9wzMMEtZZnmAFVGm4dRwkqAYcGr6cjy970dTApX6TUtnZ0crw1Ir2Mkls9MTj
+         bdGkPQEaM/mTDmV8YuPKvm3rxa+szH6OSsJoJIuWXepkkb1OwmTQ33pJPk3QDexijb8t
+         1zSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677865856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SCxddsYYw42LPM43/gkvlie96kmGO3FZ4G2subvXzzU=;
+        b=Af9VpsovLTCM1AXEubDIMs3AcAcM6uREF+xvuZlUlGItFE4nb1k015NnoLQDNrxitC
+         Si1n7pZWcA6e3Sc2uaxvtznLDxlgC/W5dxDiewBLumlen6n4O18b2O1p49f71QO3vMkn
+         aCFyqUfJg6RKPgAJ+6IaYCV0Pm//VoAwPRdlLWqbf5bQRFJiJJF246fW1XhEXCWhWsHD
+         k/0wUtj5IMuBgabrZbD15ytf72nCgX5MtD4AleoVGZMXVzQpOk0Ou1IIdxKdEnX0Wwuv
+         +WXoP5vv9X0/KO1DHETb01T3IRiFTfOYhqNguzAe21lNO+S7m1EVPNuzhXh1FAGvAOGN
+         2LBw==
+X-Gm-Message-State: AO0yUKX0/Ic1h1EFqIM19fBy2gTyaERJlqiQZGYD55I6xgF+YEMmYNyj
+        FUKJfbfu3YHryL022jC2JEljuhvJj7tS3KA6rfA=
+X-Google-Smtp-Source: AK7set+guTb0nl3oPFuy1k9LGVkybiSalecoyAl7DJSMWvDgkBFGD40v5vxH/Y40U99lEPgcKmDYhBduebnPL+CBxBw=
+X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
+ k10-20020a5b038a000000b00ac9cb97bd0emr1212723ybp.5.1677865855710; Fri, 03 Mar
+ 2023 09:50:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.122.247.231]
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <Y/9fdYQ8Cd0GI+8C@arm.com> <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
+ <ZADLZJI1W1PCJf5t@arm.com> <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
+ <ZAIgrXQ4670gxlE4@arm.com> <CAMe9rOrM=HXBY25rYrjLnHzSvHFuui06qRpc4xufxeaaGW-Fmw@mail.gmail.com>
+ <ZAIwuvfPqNW/w3yt@arm.com>
+In-Reply-To: <ZAIwuvfPqNW/w3yt@arm.com>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Fri, 3 Mar 2023 09:50:19 -0800
+Message-ID: <CAMe9rOpvUVfhESeM457m2a9EotUEEAma67ivv5pmhrWmcxexDw@mail.gmail.com>
+Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack description
+To:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,89 +110,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There was some interest in CPMU support on the monthly sync call, so
-time to revisit this. The general CXL driver interrupt handling question
-has now been resolved, so this is pretty separable from everything else
-going on in CXL land.
+On Fri, Mar 3, 2023 at 9:40=E2=80=AFAM szabolcs.nagy@arm.com
+<szabolcs.nagy@arm.com> wrote:
+>
+> The 03/03/2023 08:57, H.J. Lu wrote:
+> > On Fri, Mar 3, 2023 at 8:31=E2=80=AFAM szabolcs.nagy@arm.com
+> > <szabolcs.nagy@arm.com> wrote:
+> > > longjmp to different stack should work: it can do the same as
+> > > setcontext/swapcontext: scan for the pivot token. then only
+> > > longjmp out of alt shadow stack fails. (this is non-conforming
+> > > longjmp use, but e.g. qemu relies on it.)
+> >
+> > Restore token may not be used with longjmp.  Unlike setcontext/swapcont=
+ext,
+> > longjmp is optional.  If longjmp isn't called, there will be an extra
+> > token on shadow
+> > stack and RET will fail.
+>
+> what do you mean longjmp is optional?
 
-Since RFC v3: 
- - Simplified registration as no longer need the dynamic interrupt
-   discovery dance as upstream driver is just enabling lots of interrupts :)
- - Various minor things (I forgot to take note).
+In some cases, longjmp is called to handle an error condition and
+longjmp won't be called if there is no error.
 
-Updated cover letter:
+> it can scan the target shadow stack and decide if it's the
+> same as the current one or not and in the latter case there
+> should be a restore token to switch to. then it can INCSSP
+> to reach the target SSP state.
+>
+> qemu does setjmp, then swapcontext, then longjmp back.
+> swapcontext can change the stack, but leaves a token behind
+> so longjmp can switch back.
 
-The CXL rev 3.0 specification introduces a CXL Performance Monitoring
-Unit definition. CXL components may have any number of these blocks. The
-definition is highly flexible, but that does bring complexity in the
-driver.
+This needs changes to support shadow stack.  Replacing setjmp with
+getcontext and longjmp with setcontext may work for shadow stack.
 
-One big question - how do we expose discoverable counters when we don't know
-what they are? (just VID, Group ID and Mask)
+BTW, there is no testcase in glibc for this usage.
 
-A few things to note.
-
-1) The QEMU model against which this was developed needs tidying up and
-   review for correctness. Latest tree at
-   https://gitlab.com/jic23/qemu branch cxl-2023-02-28
-   It's backed up behind other series that I plan to upstream first.
-2) There are quite a lot of corner cases that will need working through
-   with variants of the model, or I'll have to design a pathological
-   set of CPMUs to hit all the corner cases in one go.  So whilst I 'think'
-   the driver should be fine for what it supports, I may have missed
-   something.
-3) I'm not sure it makes sense to hang this of the cxl/pci driver but
-   couldn't really figure out where else in the current structure we could
-   make it fit cleanly.
-4) I'm not sure how to expose to user space the sets of events that may
-   be summed (given by a mask in the Counter Event Capabilities registers).
-   For now the driver advertises the individual events. Each individual
-   event may form part of multiple overlapping groups for example.
-   It may be a case of these allowed combinations only being discoverable
-   by requesting a combination and checking for errors on start.
-5) Related to that, how do we deal with the discoverable nature of vendor
-   defined events?  The CPMU is fully discoverable down to a VID / Group ID
-   and mask that sets which group elements can be used. I can't find any
-   similar drivers.
-6) Driver location. In past perf maintainers have requested perf drivers
-   for PCI etc be under drivers/perf. That would require moving some
-   CXL headers to be more generally visible, but is certainly possible
-   if there is agreement between CXL and perf maintainers on the correct
-   location.
-7) Documentation needs improving, but I didn't want to spend too much
-   time on that whilst we have so many open questions.  I'll separately
-   raise the question about pmu->dev parenting which is mentioned in the
-   Docs patch introduction. (oops - haven't done that yet)
-
-CXL rev 3.0 specification available from https://www.computeexpresslink.org
-
-Based on mainline as of earlier today.
-
-Jonathan Cameron (4):
-  cxl: Add function to count regblocks of a given type.
-  cxl/pci: Find and register CXL PMU devices
-  cxl: CXL Performance Monitoring Unit driver
-  docs: perf: Minimal introduction the the CXL PMU device and driver.
-
- Documentation/admin-guide/perf/cxl.rst   |  65 ++
- Documentation/admin-guide/perf/index.rst |   1 +
- drivers/cxl/Kconfig                      |  12 +
- drivers/cxl/Makefile                     |   1 +
- drivers/cxl/core/Makefile                |   1 +
- drivers/cxl/core/core.h                  |   3 +
- drivers/cxl/core/cpmu.c                  |  69 ++
- drivers/cxl/core/pci.c                   |   2 +-
- drivers/cxl/core/port.c                  |   4 +-
- drivers/cxl/core/regs.c                  |  50 +-
- drivers/cxl/cpmu.c                       | 943 +++++++++++++++++++++++
- drivers/cxl/cxl.h                        |  17 +-
- drivers/cxl/cxlpci.h                     |   1 +
- drivers/cxl/pci.c                        |  27 +-
- 14 files changed, 1188 insertions(+), 8 deletions(-)
- create mode 100644 Documentation/admin-guide/perf/cxl.rst
- create mode 100644 drivers/cxl/core/cpmu.c
- create mode 100644 drivers/cxl/cpmu.c
-
--- 
-2.37.2
-
+--=20
+H.J.
