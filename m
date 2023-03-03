@@ -2,147 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795926AA0A3
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D516C6AA0A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbjCCUfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 15:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54452 "EHLO
+        id S231644AbjCCUgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 15:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbjCCUfO (ORCPT
+        with ESMTP id S230512AbjCCUgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 15:35:14 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8B65D775
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:35:13 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id s8so2449902ilv.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:35:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1677875712;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gIG2lbV3x/WX9TfJ5m60GjgJzOprT7gRvYSAmb5a31o=;
-        b=FJ6sA/TjbHdt21vqiG/xhHJRqG1X3Ljh5C7RueEy8gydHu9b2Jl9lOsiOWbdjiIaf5
-         rceMPxoDBWdfvkHh5/Zi9ac+wskE7SL5PgGSxco/M8lFW2YrttbpyE3KhC/I7BNsceXa
-         XBSR3g2ufq3iNR30Amjty05e/yfyUuVnFAb30=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677875712;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gIG2lbV3x/WX9TfJ5m60GjgJzOprT7gRvYSAmb5a31o=;
-        b=0HkelSiOkBkIeT6iZpLpH3/uNevnf8d1x2ieouQTDb8hPz234E1934apoWoWomAu4E
-         iuUwXbC7xDE5SOEpQfgV2J9YF/BtPIma+xrnl98EZkdPeMFhBhyovIPYnGCdbS2hArd6
-         KLoCbvHvw0qStdcqFHywKOsSdO93n70uqrnIUY6pYBOtCNTk+Xs9RYbPHdI1lJ8DYElW
-         QSeRXUXTvVZpFy77X5Isl1YGqAkezvurJehLCGcTdtoKh3qDr+wUaqSoK4XuxmM60Z77
-         GeKyD9F+BSoHxs+jKzECWr4WVT+Bt+UegrOjUgUraGmJNKJHt7XOaN+L6lX8IhXvFyvd
-         /2sw==
-X-Gm-Message-State: AO0yUKWkZKrepP4bvqS0Fapg7ZUO1+eCuYC7I351ldz31i1l+mgopcjR
-        J+gf2RS5+hxuMvenE47+sfhfpA==
-X-Google-Smtp-Source: AK7set+2ZPUb82QYuAk/QXD4BGuCC4sZziz3GWsudAilWkd7LUyCFZMZW8PST6dhsPxBvdfaA9ljsg==
-X-Received: by 2002:a05:6e02:156d:b0:313:fb1b:2f86 with SMTP id k13-20020a056e02156d00b00313fb1b2f86mr2340332ilu.0.1677875712434;
-        Fri, 03 Mar 2023 12:35:12 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id e5-20020a02a785000000b003a971c488cesm969583jaj.173.2023.03.03.12.35.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 12:35:11 -0800 (PST)
-Message-ID: <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
-Date:   Fri, 3 Mar 2023 13:35:10 -0700
-MIME-Version: 1.0
+        Fri, 3 Mar 2023 15:36:07 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2059.outbound.protection.outlook.com [40.107.93.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFFD5D881
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:36:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bNxpzm03YXdg19AaczfG9iJ9zDyoOp8upQuIy3eI3W/AlkS75gAuAEQPFNgS0jlWSo4/rebbeafvbMmt2L1cceAHXINdUOi31XiQxGY6XNxCsDm+EU1wLbj8NJLvmwWgUx2p1kL/lsNoG298FVSOStT0hlX8bVAkTzV8FmsESod2N0svWXUmZG3RctF5ZHD/+c7PYkC5kgPMf64eZPixMuBTm+4tUbCyhcReFPZU7SbKf8bpYl86OGJzOQklVVXngiB/4+U9T6ZCL7svWphICGiR7/nERtJGy20l/ARoU3EGZ6MbpO1/8HxGj/lxK3NSNEAqWvtq17k8AK+VREvOFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hwS9XM+Nm7QydglutoMe0oUAS5rzaMNA2aGdCbLgva0=;
+ b=XYs4Bq8+KgwDYrt+aAcfZJCFfrMEpFo4nGAVhNhbEIGHcV2egILCtsKY0G8xAT7UbjKIjk2dFO0PhGC8YWEj+/foEiHNl/kc5oQXwUwCuEQxVrD3yToj/XYzA7GusQ6iea7ZIQaZKh+YgwUh23cxpRySN7rEdb86IRmNaOphZ6/7cb5a7meLh8CiwydoSrGzp7bIxKzyQlnJq4iEmhysSNzByfKoLI4Lz1EDsFQkZGSn4yG15PO30I51HvpH6YTqZlT4fqn6TWnwZACf6cW96NctWp1VNnJbIYegfCViq9fUiU67ORIpP6kUlpVFIhXnvLzl9oMxmmm55dzr41SNOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hwS9XM+Nm7QydglutoMe0oUAS5rzaMNA2aGdCbLgva0=;
+ b=ZnV0MVZg/+aNdg94Q8A24GMR+4CkCkmh/lu0RmAEXEWEPW8D10pvC4MYLbButfHjCLTMl9aYf4F5kxUssVclkubw6l6xLJf133CTbzQ9xhy1zjv3uXQ2IL7qdrQvYOZ7rOqkGJwWAZd7ib0EscpFwRv9GseuaQ24SKh105tMsBc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13)
+ by DM4PR12MB5844.namprd12.prod.outlook.com (2603:10b6:8:67::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Fri, 3 Mar
+ 2023 20:36:02 +0000
+Received: from CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aa28:9378:593:868a]) by CO6PR12MB5427.namprd12.prod.outlook.com
+ ([fe80::aa28:9378:593:868a%9]) with mapi id 15.20.6156.022; Fri, 3 Mar 2023
+ 20:36:02 +0000
+Message-ID: <4d670a5c-b680-ba76-a640-88b3d945c0b0@amd.com>
+Date:   Fri, 3 Mar 2023 15:35:58 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
- 165
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/amd/display: Simplify same effect if/else blocks
 Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230206234344.2433950-1-mcgrof@kernel.org>
- <20230206234344.2433950-2-mcgrof@kernel.org>
- <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
- <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Harry Wentland <harry.wentland@amd.com>
+To:     Deepak R Varma <drv@mailo.com>, Joe Perches <joe@perches.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+References: <Y8POxreeC3EvOXhC@ubun2204.myguest.virtualbox.org>
+ <33ecbe8971bb9c90d72c67d43ca740abac160908.camel@perches.com>
+ <Y82GHzOUHgEqTUq7@ubun2204.myguest.virtualbox.org>
+ <Y/+z22xM7NNjX8VP@ubun2204.myguest.virtualbox.org>
+ <f15b10a8-11f6-6c1f-c94e-71796aad9155@amd.com>
+In-Reply-To: <f15b10a8-11f6-6c1f-c94e-71796aad9155@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YT4PR01CA0108.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:d7::7) To CO6PR12MB5427.namprd12.prod.outlook.com
+ (2603:10b6:5:358::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:EE_|DM4PR12MB5844:EE_
+X-MS-Office365-Filtering-Correlation-Id: 796a42f5-67e9-4553-8686-08db1c26e74a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U9RwHoZ39k/SD+8lLX5alQvg9lvNz2n/k2pWRqpZJe+ytSsGl6BBFEsiTdRh/2S1UpIAHQRkJKCDoLG4zTXWTCFgk/zNVbMLrWt4hpWg3elSm7BsL6zlc7y5xfVq7wlhnLwV/ri92nEAh/n0hVIliA57dDBzlAqMii6GmCEHZMaAFwsxvowvWfTdmWsZ+Ww0iq7kKQ68KssmqvKUEYxEKVO3CcxW1nx0HlDMTVpkpKhrLxcCtG+afIEd539nojKs7InoNG/B5CwakRW7SqGayRoDiwHKvQK/Oi7J/c3qjFGAE2ax+le8RdWkXyWbpElOLy90ez6To0eVXFN066GdPEpX4CBfhjRzJQsEsnHk4msMwoqpU/M6cCY7Rf6Nbi2dyNvKVtVFlRRFHvEpp957LNIwYRNscYz8UIvNSaDEjzSxe4KqJ0OuBOr0KA1x8TO9ISL/n2tBVd+R39XoEC2V1XQtK8/zYKvjXPnvnMw3Ze0uQTdAPd8hPlD5YnGVmoxv71Uelwr6TywWjLfZlH65xMJdtmyU2P/+EeUxGbC/HdACYubZVLS/QAsyBCh2jG/YOHLwFsLZ4FNIBY8DPGSjcS1wY/wlZjCpR/3XgUoq+G96H93yALHURRAgfnyq31iOMh2nTX2afHuZ0nc1/MvyNfWpM6U0YyVbWGKqv5mwGa0f2Eq+KAYTNg4oTHrWIvaw3GNeh9CEYAZSKeI55sF6Jr2ySraM6q5aDzAQUGnbpFo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5427.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(136003)(376002)(366004)(451199018)(31696002)(86362001)(6512007)(36756003)(66556008)(8676002)(41300700001)(186003)(53546011)(66946007)(4326008)(8936002)(2616005)(6636002)(54906003)(110136005)(316002)(478600001)(66476007)(6666004)(6506007)(5660300002)(26005)(38100700002)(83380400001)(6486002)(2906002)(44832011)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QU5OMldnMm0rSWNLM3JVbGx6cDArVW9wYkxsUTRlcnVySnQ3VkxmcEg1RWdW?=
+ =?utf-8?B?cXpRZERQcFQ2Z1gvekZoSVpjcDVGOXpKQlN0TG85VndxTU1NRXgycCtTdDhH?=
+ =?utf-8?B?Y0paN1dUdTZxK2FnYm9IbjlSTlpiVXYyZjFBdHVyM3Qxb2xoTVozbGd1U1g0?=
+ =?utf-8?B?SERRR01RYmRzakhXWmxVRkQvZ1JEeDR5S3hiY0dGdXRYSGN5UktJTlZXRXUx?=
+ =?utf-8?B?aFZBWCtPbzVISzdPWERtSGl4Q0lOd3Mya0Q5TFM5dUo1SGlyV3E5TDBZZ2ZG?=
+ =?utf-8?B?eFVRUUgrcDV6YnY5dmRGMHFIMGVidENYQ2FiTEkvQTJRa2V5eWY1Q2Fpc21T?=
+ =?utf-8?B?YXFTRFlWZ1FuZDZiamdkY3dZc2t5eFhXZ1Mwbk1MSXhpTm1NT0E2U1pXbG1X?=
+ =?utf-8?B?bUZaTkk4VWZFaVZNTzdhKzZRU3AzS1FOUFRSOHVpalBmRWx5eFJZTm1UTVBs?=
+ =?utf-8?B?d3h5ZzltU0FlNC9GQkVoUjZvN3hWN0lTbFJ3ek8ydEhUYWNtbjFVSkRGMW5K?=
+ =?utf-8?B?eW9WN2tuS3RxRVhRLzJjL1dFdTJZWlRWK3d1NlNmVCt1WE5YT2k3NnRxOG1K?=
+ =?utf-8?B?dTRzamFrc2J1UG9rVlI0QzhxTnlJVDdkWThZWlI5MDFYN0lKWlpRYU94bnM3?=
+ =?utf-8?B?RWtwSkxIMForWUtwWHRzUi9RM3B3YWpML2dCbFA3TEtJQkkxdlVoTnpWamh3?=
+ =?utf-8?B?bWJVMGNrN3h6c0YrRzduZGprMUYxeFNXK0p3MHh0cHFYVHN6eXBvZ0RkS29M?=
+ =?utf-8?B?NUo5QUJmeVBSVTJsZ2VoZVUzNU1ad1daREQwSy80OENCczJ0c25pYW0yQis2?=
+ =?utf-8?B?eWMyQ01HUTNjb3FyWCs1ZjFFTHBYazJ5Y3cycVFGQUd4eDQwcFE2SGJYczRq?=
+ =?utf-8?B?NVB3S0xTcjJIQW1XZjVFME5jZGF2S3NzUWlkYXVhVTh0OUd4a0tFRUJpd0dF?=
+ =?utf-8?B?REt0WG90S05LaTNGTkUxQ2hITDEwNXJ3dU5tejROUUxpWXRnNHlzOC9obUpZ?=
+ =?utf-8?B?S3lMR2FzN0YwekJHTng3eTI0bTY2VVRwOE1STHg1N05WbWxqcWxjTkRwc0xn?=
+ =?utf-8?B?aldZWXhJV28xTExXc3JVM3pGcWd1QmVudVJ1cnlhT3NoVG1zVi9qUmNqc0ZH?=
+ =?utf-8?B?M20xRVhwNnVETGZMQ21Ua3pMcDBvc3hVZSt6YXl3RGFlVXBxRC9MeXA2K2Fo?=
+ =?utf-8?B?STI1a2ZCNTVnRi9oR00zeW1USEUwZko5Zy85cjYwNFphdU5GNGJSb1FmNm5R?=
+ =?utf-8?B?cWNmOXAvLzZnejl5MjN0TXJobExpREFVTGpaeXVzRW52MlljcUlJQkREdjhD?=
+ =?utf-8?B?NmRCVXZuWXZKRlZIQVQxclpEbnlhZnNUTHFHMzNGMWFMVFlCT3VuQkJVaHlT?=
+ =?utf-8?B?ajVEZ0pOcTFaa0xkcmU2UkF5WER1NG9XaURJTjlzbWViSlRQc0NhZkxNOTdI?=
+ =?utf-8?B?ZUpReEh2UjZPdDJYMjkrcFp2K1F4M3hNZXlvcElVWEw4cDJ6dngwaE1KU1gy?=
+ =?utf-8?B?azRuLzA0RDJuMWZvd29lVzZSR3lleUVtb0hVRkVZWUd5YWNvalFFTjNRL2xS?=
+ =?utf-8?B?L3RjeTVva1ZSV2JDdjlLb3NGZ0c0anZINi9XM1FQWTQxU3ZXbVBYKzFNOEha?=
+ =?utf-8?B?TTBaK3lhcTRzcURZMU5ZbXZwUGF6TFBabGJCMHBWQUo4SWZNbVdBTmZRa1Zn?=
+ =?utf-8?B?SFBOMTFWd25hMWRvRFphYkxmblVuMmxRckhQdm1udmZRYzlIOFFvSWJ6U21S?=
+ =?utf-8?B?RThwL1B4TGdWMEZDRzZEL2RmQVhwYlN5SGJRTjFDOXpJc01jODBoVTMrUjN2?=
+ =?utf-8?B?OVMvOXdwYUV1ek9RMk05SjFnWkJieGVRQWNvNlZ2NXhQQnMrTldybXF1MXV1?=
+ =?utf-8?B?TVRVVHd1WlVTSDY0K2gyS1IyejFSUjRZdHpJNzJEUEpyQ01kQ2JmckJEUmtx?=
+ =?utf-8?B?bDJzbmp4WlQ4TWNTamdaNVF0dmxTY1BvNGx6bW96Uk1VZVRmMEpXbjlCQWVO?=
+ =?utf-8?B?aFF1SVFqWk9lRmVwTWlaWkdJcDRRUmluZXc4ZitZeW94WCtTMXAzeGRJT2xx?=
+ =?utf-8?B?OXJLM1NFbWdKUEluYjQ0RWtMcnBaNDFJZDd2R3prbCtUbmRpajArYkVRWHJ5?=
+ =?utf-8?Q?FHLg+JPVSa4A0V4qbLnenBqsl?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 796a42f5-67e9-4553-8686-08db1c26e74a
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5427.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 20:36:02.0133
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q7EMzeqk/IL5JG40NY6G0WJnuMWMbu4c5Sp/MxXSBAACAoALG/YTs05KSLF231G1iTeUYEkWgEprFYq+dPZ08Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5844
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/27/23 15:42, Luis Chamberlain wrote:
-> On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
->> On 2/6/23 16:43, Luis Chamberlain wrote:
->>> The default sefltests timeout is 45 seconds. If you run the kmod
->>> selftests on your own with say:
->>>
->>> ./tools/testings/selftests/kmod.sh
->>>
->>> Then the default timeout won't be in effect.
->>>
->>> I've never ran kmod selftests using the generic make wrapper
->>> (./tools/testing/selftests/run_kselftest.sh -s) util now
->>> that I have support for it on kdevops [0]. And with that the
->>> test is limitted to the default timeout which we quickly run
->>> into. Bump this up to what I see is required on 8GiB / 8 vcpu
->>> libvirt q35 guest as can be easily created now with kdevops.
->>>
->>> To run selftests with kdevops:
->>>
->>> make menuconfig # enable dedicated selftests and kmod test
->>> make
->>> make bringup
->>> make linux
->>> make selftests-kmod
->>>
->>> This ends up taking about 280 seconds now, give or take add
->>> 50 seconds more more and we end up with 350. Document the
->>> rationale.
->>>
->>> [0] https://github.com/linux-kdevops/kdevops
->>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->>> ---
->>>    tools/testing/selftests/kmod/settings | 4 ++++
->>>    1 file changed, 4 insertions(+)
->>>    create mode 100644 tools/testing/selftests/kmod/settings
->>>
->>> diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
->>> new file mode 100644
->>> index 000000000000..6fca0f1a4594
->>> --- /dev/null
->>> +++ b/tools/testing/selftests/kmod/settings
->>> @@ -0,0 +1,4 @@
->>> +# measured from a manual run:
->>> +# time ./tools/testing/selftests/kmod/kmod.sh
->>> +# Then add ~50 seconds more gracetime.
->>> +timeout=350
->>
->> Adding timeouts like this for individual tests increases the overall kselftest
->> run-time. I am not in favor of adding timeouts.
->>
->> We have to find a better way to do this.
+
+
+On 3/2/23 11:37, Harry Wentland wrote:
 > 
-> Well if folks don't have this the test will fail, and so a false
-> positive. If the goal is to have a low time timeout for "do not run
-> tests past this time and do not fail if we stopped the test" then
-> that seems to be likely one way to go and each test may need to be
-> modified to not fail fatally in case of a special signal.
+> 
+> On 3/1/23 15:21, Deepak R Varma wrote:
+>> On Mon, Jan 23, 2023 at 12:23:19AM +0530, Deepak R Varma wrote:
+>>> On Sun, Jan 15, 2023 at 12:52:10PM -0800, Joe Perches wrote:
+>>>> On Sun, 2023-01-15 at 15:30 +0530, Deepak R Varma wrote:
+>>>>> The if / else block code has same effect irrespective of the logical
+>>>>> evaluation.  Hence, simply the implementation by removing the unnecessary
+>>>>> conditional evaluation. While at it, also fix the long line checkpatch
+>>>>> complaint. Issue identified using cond_no_effect.cocci Coccinelle
+>>>>> semantic patch script.
+>>>>>
+>>>>> Signed-off-by: Deepak R Varma <drv@mailo.com>
+>>>>> ---
+>>>>> Please note: The proposed change is compile tested only. If there are any
+>>>>> inbuilt test cases that I should run for further verification, I will appreciate
+>>>>> guidance about it. Thank you.
+>>>>
+>>>> Preface: I do not know the code.
+>>>>
+>>>> Perhaps Rodrigo Siqueira made a copy/paste error submitting the code for
+>>>> commit 9114b55fabae ("drm/amd/display: Fix SubVP control flow in the MPO context")
+>>>> as the code prior to this change is identical.
+>>>>
+>>>> Perhaps one of the false uses should be true or dependent on the
+>>>> interdependent_update_lock state.
+>>>
+>>> Thank you Joe for the recommendation.
+>>>
+>>> Hi Rodrigo,
+>>> Can you review and comment on if and what is wrong with your commit?
+>>
+>> Hello Rodrigo, Alex,
+>> Could you please suggest what would be the necessary fix for this typo error?
+>>
+> 
+> It's not quite a "typo" error. When I look at this code in our internal repo I see
+> a couple missing lock calls here that differ between the two cases. I don't know why
+> this was never ported over and am surprised it doesn't lead to issues.
+> 
+> I would prefer we keep the code as-is for now until this gets sorted.
 > 
 
-We are finding more and more that timeout values are requiring
-tweaks. I am in favor of coming up a way to exit the test with
-a timeout condition.
+Actually I was wrong. Too many similar-looking snippets in this
+function made me look at the wrong thing. This change is fine and
+Reviewed-by: Harry Wentland <harry.wentland@amd.com.
 
-thanks,
--- Shuah
+Harry
+
+> Harry
+> 
+>> Thank you,
+>> Deepak.
+>>
+>>>
+>>> Thank you,
+>>> ./drv
+>>>
+>>>>
+>>>>> diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+>>>> []
+>>>>> @@ -3470,14 +3470,9 @@ static void commit_planes_for_stream(struct dc *dc,
+>>>>>  		/* Since phantom pipe programming is moved to post_unlock_program_front_end,
+>>>>>  		 * move the SubVP lock to after the phantom pipes have been setup
+>>>>>  		 */
+>>>>> -		if (should_lock_all_pipes && dc->hwss.interdependent_update_lock) {
+>>>>> -			if (dc->hwss.subvp_pipe_control_lock)
+>>>>> -				dc->hwss.subvp_pipe_control_lock(dc, context, false, should_lock_all_pipes, NULL, subvp_prev_use);
+>>>>> -		} else {
+>>>>> -			if (dc->hwss.subvp_pipe_control_lock)
+>>>>> -				dc->hwss.subvp_pipe_control_lock(dc, context, false, should_lock_all_pipes, NULL, subvp_prev_use);
+>>>>> -		}
+>>>>> -
+>>>>
+>>>> Perhaps something like:
+>>>>
+>>>> 		if (dc->hwss.subvp_pipe_control_lock)
+>>>> 			dc->hwss.subvp_pipe_control_lock(dc, context,
+>>>> 							 should_lock_all_pipes &&
+>>>> 							 dc->hwss.interdependent_update_lock,
+>>>> 							 should_lock_all_pipes, NULL, subvp_prev_use);
+>>>>
+>>>>> +		if (dc->hwss.subvp_pipe_control_lock)
+>>>>> +			dc->hwss.subvp_pipe_control_lock(dc, context, false, should_lock_all_pipes,
+>>>>> +							 NULL, subvp_prev_use);
+>>>>>  		return;
+>>>>>  	}
+>>>>>  
+>>>>
+>>>
+>>>
+>>
+>>
+> 
 
