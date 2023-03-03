@@ -2,131 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2786AA408
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC7B6AA3BC
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233679AbjCCWRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 17:17:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S233595AbjCCWDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 17:03:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbjCCWRX (ORCPT
+        with ESMTP id S233568AbjCCWDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 17:17:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDA43D09E;
-        Fri,  3 Mar 2023 14:08:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 026D261912;
-        Fri,  3 Mar 2023 21:51:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5195C433EF;
-        Fri,  3 Mar 2023 21:51:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677880281;
-        bh=Br50V+ZnNhKeUVmf1H88XflaSYA3zbjNUSaOrfbHpWM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L0Wgj2qDMYr7AQFFunxAnGexnwRXj41XfheavwO4sQNH9ThQWN7YWlj2Dp73Ahdw/
-         2uXKlv/22ez+DVr7ejBSi69+v/MiAkOp+L5BIU6bdV3QorAgVbad15r3DUWG3n/DEN
-         M10p5eVyq7bMRTBYHiwIAV7dwH08VMMfs8aaRdkMd/hoae6WtB50Y8/GEMWE9hfPsr
-         X7GJJ+ZO9cmyRf0HO7C4myHQ+bm9TdwZkTHEpy9iYruGmrWIunUXZc3w5CkIZpxxYi
-         kXKl6tYBhJNPTsNy5u9kGPM7Uf/kIR6xDR/XGWpONnVXpZwWkjJ02fE/UU6YbDF9O8
-         LSMB76p+PtvfA==
-Date:   Fri, 3 Mar 2023 21:51:12 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-media@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-riscv@lists.infradead.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: yamllint: Require a space after a comment
- '#'
-Message-ID: <cdad5aa0-bd94-4137-9063-af45e94a25b7@spud>
-References: <20230303214223.49451-1-robh@kernel.org>
+        Fri, 3 Mar 2023 17:03:24 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51AAC664F3;
+        Fri,  3 Mar 2023 13:53:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677880423; x=1709416423;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qxJfn1HMo5o/TEK84TFNUVCEuwu46pEXGqZ2QTppX2c=;
+  b=gNIpRPK8y43yn/q7QNe7cjMBmXt7QFF5J021G4hevFWd3xR6RM97PhiQ
+   UpCm2qAjw1DM4d1BwA94AR38ZRX450hYZ5qqnLhUHzGPj+TpaIA44f1pZ
+   0psJROt+JHrgDMXMZPXSJULeZUp49J51gDoI1Y85jSUKudSkAz9TJSxOr
+   x59LN129nnw7U2cJ8+ztjvCrm8c+IGiyquMsuBetnQstQyWFqW2SUKBFh
+   FI9pGorJpFw7Su1N+Y5wYtQQWhtKrppJKWHp4Ocmsp2dSROxgKR/mi9Ow
+   vYEeq92ndSqlqWrULlvY8G/AYTsJsTp5Ky6kKrYR4aGVO0PEZzLBPWZ/B
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="318989793"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="318989793"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 13:48:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="921252005"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="921252005"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 13:48:20 -0800
+Date:   Fri, 3 Mar 2023 13:52:09 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 4/4] dmaengine/idxd: Re-enable kernel workqueue under
+ DMA API
+Message-ID: <20230303135209.16caf5ad@jacob-builder>
+In-Reply-To: <063ed735-b8d1-1b44-67d7-78c3adb34074@linux.intel.com>
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+        <20230302005959.2695267-5-jacob.jun.pan@linux.intel.com>
+        <063ed735-b8d1-1b44-67d7-78c3adb34074@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mffVr3k4EP4yfp2t"
-Content-Disposition: inline
-In-Reply-To: <20230303214223.49451-1-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Baolu,
 
---mffVr3k4EP4yfp2t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, 3 Mar 2023 09:19:48 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
 
-On Fri, Mar 03, 2023 at 03:42:23PM -0600, Rob Herring wrote:
-> Enable yamllint to check the prefered commenting style of requiring a
-> space after a comment character '#'. Fix the cases in the tree which
-> have a warning with this enabled. Most cases just need a space after the
-> '#'. A couple of cases with comments which were not intended to be
-> comments are revealed. Those were in ti,sa2ul.yaml, ti,cal.yaml, and
-> brcm,bcmgenet.yaml.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-
-> Cc: Conor Dooley <conor.dooley@microchip.com>
-
-> diff --git a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yam=
-l b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> index 1051690e3753..74a817cc7d94 100644
-> --- a/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/microchip,mpfs-spi.yaml
-> @@ -22,7 +22,7 @@ properties:
->        - items:
->            - const: microchip,mpfs-qspi
->            - const: microchip,coreqspi-rtl-v2
-> -      - const: microchip,coreqspi-rtl-v2 #FPGA QSPI
-> +      - const: microchip,coreqspi-rtl-v2 # FPGA QSPI
->        - const: microchip,mpfs-spi
-
-I had to think for a minute as to what that comment even meant...
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> On 3/2/23 8:59 AM, Jacob Pan wrote:
+> > diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+> > index f30eef701970..dadc908318aa 100644
+> > --- a/drivers/dma/idxd/init.c
+> > +++ b/drivers/dma/idxd/init.c
+> > @@ -501,14 +501,52 @@ static struct idxd_device *idxd_alloc(struct
+> > pci_dev *pdev, struct idxd_driver_d 
+> >   static int idxd_enable_system_pasid(struct idxd_device *idxd)
+> >   {
+> > -	return -EOPNOTSUPP;
+> > +	struct pci_dev *pdev = idxd->pdev;
+> > +	struct device *dev = &pdev->dev;
+> > +	struct iommu_domain *domain;
+> > +	union gencfg_reg gencfg;
+> > +	ioasid_t pasid;
+> > +	int ret;
+> > +
+> > +	domain = iommu_get_domain_for_dev(dev);
+> > +	if (!domain || domain->type == IOMMU_DOMAIN_BLOCKED)
+> > +		return -EPERM;  
+> 
+> The idxd driver has claimed the DMA ownership of this device. Unless the
+> idxd driver itself attached another domain, iommu_get_domain_for_dev()
+> should never return a blocking domain.
+> 
+> "domain == NULL" happens when CONFIG_IOMMU_API is not set.
+> 
+> Furthermore, iommu_get_domain_for_dev() doesn't hold any refcount from
+> the domain, so in theory it's not safe here because it possibly causes
+> use-after-release case.
+> 
+> I would say iommu_get_dma_domain() or something similar is more suitable
+> for use here. It directly returns the device's default domain and the
+> iommu core guarantees that default domain will always valid during the
+> life cycle of any device driver.
+> 
+will do, same as Jason's comments.
 
 Thanks,
-Conor.
 
---mffVr3k4EP4yfp2t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAJr0AAKCRB4tDGHoIJi
-0rHgAP9euC+7Ztk0BIMgxdrJzAjogpoZQH6UzawtcdI6SIq2nQD/d5Bvci5DVqMV
-DWn8X2un+KM/vLbl8yUpHlGFB4QKwQY=
-=v1U9
------END PGP SIGNATURE-----
-
---mffVr3k4EP4yfp2t--
+Jacob
