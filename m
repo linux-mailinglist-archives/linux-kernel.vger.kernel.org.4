@@ -2,97 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD93F6A94B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9DF6A94B7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCCKCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 05:02:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S230257AbjCCKC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 05:02:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjCCKCS (ORCPT
+        with ESMTP id S230216AbjCCKC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 05:02:18 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7075C119
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 02:02:17 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id g3so8187321eda.1
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 02:02:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677837735;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hEweQgAYTFTI5lRg9e3VihMmMHbzOsZa8+jPeRmAFV4=;
-        b=sc3u9LlO/XdKRkWyyz49VTzI1aK1BNDAuPVN3ZvX/yyIjSOwiCYrZfmz2ZEL07k+rQ
-         2/dgkYPACoseyZloA6wBD6BMlpDii1laL3W0Il7OT1oGle0KseSbTiaL/paXZfd666JJ
-         hbJv2Wb4Ep5Ob1t0Y9iIA797jr1N/QPOvvPg/VyYdu6SKzKQDSK6XDh71ntInPjAGRuG
-         MgaoqRASTqGuKRG5g32BNh6BktBRvJRaSslg3wYAStvtFxtx54ndisKnVKzRIPe2w0of
-         0p9MPLrb5ndjV9vjuCNi96Bq5xtMfZ3kSXFmyzI8R+nqnX8yK932ZgTR2JqjBA4tErpW
-         Gpfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677837735;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hEweQgAYTFTI5lRg9e3VihMmMHbzOsZa8+jPeRmAFV4=;
-        b=WNQf++OxppsP5o8uKRyrJ6dX8/LI+aBsR/4no8nDmnfCTLs1JqTln2hc0FwablaI0f
-         VJXGhE8CB676ab7Qe7qai8f/YCexjeKvd9neWLoTXogXufiK4DzdvODVqKJhc2Np9uV/
-         QgYMgYq/d2kcZCR6p+8qWiebpoW+R33gclqH3CAUpmUsOtpTWCI669YGAdxiAsTTPcTy
-         athEDAzjpw7Hvl0YBuzW1H1yzC+GkV6MVVhwDN/0L6jctd2L905EUuLdxMKfQumOBhtM
-         pCkQGDRH/mzhqx+v6FbhLi2I9fMqxSJCTnSRq/+cx9cBJ0AN76jX+SzRr++aDirczmZU
-         oyjw==
-X-Gm-Message-State: AO0yUKUrMk5hqRQ9UpO2gVBWazqfEARlOUNWiqd7IBmc8KNHSenO9Bh9
-        j6oIAUCo6Eh2VxMB30aS0P3tbA==
-X-Google-Smtp-Source: AK7set8N788FOZy8TJzMOhbmGsv6nTKqhz1lIxT9d9otKAYpRa0Fv06gvACL+GXzj++IZk4PqdKoVw==
-X-Received: by 2002:a17:907:97d3:b0:883:b1b4:e798 with SMTP id js19-20020a17090797d300b00883b1b4e798mr1263546ejc.10.1677837734553;
-        Fri, 03 Mar 2023 02:02:14 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id o18-20020a170906769200b008dedf1359a0sm782626ejm.104.2023.03.03.02.02.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 02:02:14 -0800 (PST)
-Message-ID: <b5aab510-30ff-0294-315d-509d88853eb1@linaro.org>
-Date:   Fri, 3 Mar 2023 11:02:12 +0100
+        Fri, 3 Mar 2023 05:02:26 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0185CC32;
+        Fri,  3 Mar 2023 02:02:22 -0800 (PST)
+Received: from kwepemm600006.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PSk3F6YXhz16PB4;
+        Fri,  3 Mar 2023 17:59:37 +0800 (CST)
+Received: from [10.174.177.30] (10.174.177.30) by
+ kwepemm600006.china.huawei.com (7.193.23.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 3 Mar 2023 18:02:18 +0800
+Message-ID: <a60e9257-0874-223c-0cd8-7ab284cd0a1f@huawei.com>
+Date:   Fri, 3 Mar 2023 18:02:17 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 7/9] dt-bindings: crypto: drop fsl-sec4 txt binding
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        horia.geanta@nxp.com, pankaj.gupta@nxp.com, gaurav.jain@nxp.com,
-        shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, stefan@agner.ch,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Peng Fan <peng.fan@nxp.com>
-References: <20230301015702.3388458-1-peng.fan@oss.nxp.com>
- <20230301015702.3388458-8-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230301015702.3388458-8-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+CC:     <linfeilong@huawei.com>, "hewenliang (C)" <hewenliang4@huawei.com>,
+        <yeyunfeng@huawei.com>, Wenyu Liu <liuwenyu7@huawei.com>
+From:   "liuwenyu (D)" <liuwenyu7@huawei.com>
+Subject: [PATCH] perf top: Fix rare segfault in thread__comm_len()
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
+        <brauner@kernel.org>, <adrian.hunter@intel.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.30]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600006.china.huawei.com (7.193.23.105)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/03/2023 02:57, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Since we have convert it to two DT schema, fsl-sec4.yaml and
-> fsl-sec4-snvs.yaml, this txt binding could be removed.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+In thread__comm_len(),strlen() is called outside of the
+thread->comm_lock critical section,which may cause a UAF
+problems if comm__free() is called by the process_thread
+concurrently.
 
-No. Conversion includes parts of removal. Don't split logical commits.
-It also makes review difficult.
+backtrace of the core file is as follows:
 
-Best regards,
-Krzysztof
+     (gdb) bt
+     #0  __strlen_evex () at ../sysdeps/x86_64/multiarch/strlen-evex.S:77
+     #1  0x000055ad15d31de5 in thread__comm_len (thread=0x7f627d20e300) 
+at util/thread.c:320
+     #2  0x000055ad15d4fade in hists__calc_col_len (h=0x7f627d295940, 
+hists=0x55ad1772bfe0)
+         at util/hist.c:103
+     #3  hists__calc_col_len (hists=0x55ad1772bfe0, h=0x7f627d295940) at 
+util/hist.c:79
+     #4  0x000055ad15d52c8c in output_resort 
+(hists=hists@entry=0x55ad1772bfe0, prog=0x0,
+         use_callchain=false, cb=cb@entry=0x0, cb_arg=0x0) at 
+util/hist.c:1926
+     #5  0x000055ad15d530a4 in evsel__output_resort_cb 
+(evsel=evsel@entry=0x55ad1772bde0,
+         prog=prog@entry=0x0, cb=cb@entry=0x0, cb_arg=cb_arg@entry=0x0) 
+at util/hist.c:1945
+     #6  0x000055ad15d53110 in evsel__output_resort 
+(evsel=evsel@entry=0x55ad1772bde0,
+         prog=prog@entry=0x0) at util/hist.c:1950
+     #7  0x000055ad15c6ae9a in perf_top__resort_hists 
+(t=t@entry=0x7ffcd9cbf4f0) at builtin-top.c:311
+     #8  0x000055ad15c6cc6d in perf_top__print_sym_table 
+(top=0x7ffcd9cbf4f0) at builtin-top.c:346
+     #9  display_thread (arg=0x7ffcd9cbf4f0) at builtin-top.c:700
+     #10 0x00007f6282fab4fa in start_thread (arg=<optimized out>) at 
+pthread_create.c:443
+     #11 0x00007f628302e200 in clone3 () at 
+../sysdeps/unix/sysv/linux/x86_64/clone3.S:81
+
+The reason is that strlen() get a pointer to a memory that has been freed.
+
+The string pointer is stored in the structure comm_str, which corresponds
+to a rb_tree node,when the node is erased, the memory of the string is 
+also freed.
+
+In thread__comm_len(),it gets the pointer within the thread->comm_lock 
+critical section,
+but passed to strlen() outside of the thread->comm_lock critical 
+section, and the perf
+process_thread may called comm__free() concurrently, cause this segfault 
+problem.
+
+The process is as follows:
+
+display_thread                                  process_thread
+--------------                                  --------------
+
+thread__comm_len
+   -> thread__comm_str
+        # held the comm read lock
+     -> __thread__comm_str(thread)
+        # release the comm read lock
+                                                 thread__delete
+                                                      # held the comm 
+write lock
+                                                   -> comm__free
+                                                     -> 
+comm_str__put(comm->comm_str)
+                                                       -> zfree(&cs->str)
+                                                      # release the comm 
+write lock
+       # The memory of the string pointed
+         to by comm has been free.
+     -> thread->comm_len = strlen(comm);
+
+This patch expand the critical section range of thread->comm_lock in 
+thread__comm_len(),
+to make strlen() called safe.
+
+Signed-off-by: Wenyu Liu  <liuwenyu7@huawei.com>
+---
+  tools/perf/util/thread.c | 25 +++++++++++++++++++------
+  1 file changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
+index e3e5427e1c3c..a2490a20eb56 100644
+--- a/tools/perf/util/thread.c
++++ b/tools/perf/util/thread.c
+@@ -311,17 +311,30 @@ const char *thread__comm_str(struct thread *thread)
+      return str;
+  }
+
++static int __thread__comm_len(struct thread *thread, const char *comm)
++{
++    if (!comm)
++        return 0;
++    thread->comm_len = strlen(comm);
++
++    return thread->comm_len;
++}
++
+  /* CHECKME: it should probably better return the max comm len from its 
+comm list */
+  int thread__comm_len(struct thread *thread)
+  {
+-    if (!thread->comm_len) {
+-        const char *comm = thread__comm_str(thread);
+-        if (!comm)
+-            return 0;
+-        thread->comm_len = strlen(comm);
++    int comm_len = thread->comm_len;
++
++    if (!comm_len) {
++        const char *comm;
++
++        down_read(&thread->comm_lock);
++        comm = __thread__comm_str(thread);
++        comm_len = __thread__comm_len(thread, comm);
++        up_read(&thread->comm_lock);
+      }
+
+-    return thread->comm_len;
++    return comm_len;
+  }
+
+  size_t thread__fprintf(struct thread *thread, FILE *fp)
+-- 
+2.36.1
 
