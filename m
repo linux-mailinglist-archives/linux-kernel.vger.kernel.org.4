@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028476A925A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA53D6A925C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:25:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjCCIZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S230109AbjCCIZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 03:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCCIZC (ORCPT
+        with ESMTP id S229494AbjCCIZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:25:02 -0500
+        Fri, 3 Mar 2023 03:25:04 -0500
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89CB158A1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:23:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC87E65BC
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:23:33 -0800 (PST)
 Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PSgsH0XMrz9tJH;
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PSgsH2FF9z9tKK;
         Fri,  3 Mar 2023 16:20:51 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
  dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 3 Mar 2023 16:22:46 +0800
+ 15.1.2507.21; Fri, 3 Mar 2023 16:22:47 +0800
 From:   Kefeng Wang <wangkefeng.wang@huawei.com>
 To:     SeongJae Park <sj@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <damon@lists.linux.dev>, Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2 1/3] mm/damon/paddr: minor refactor of damon_pa_pageout()
-Date:   Fri, 3 Mar 2023 16:43:41 +0800
-Message-ID: <20230303084343.171958-2-wangkefeng.wang@huawei.com>
+Subject: [PATCH v2 2/3] mm/damon/paddr: minor refactor of damon_pa_young()
+Date:   Fri, 3 Mar 2023 16:43:42 +0800
+Message-ID: <20230303084343.171958-3-wangkefeng.wang@huawei.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230303084343.171958-1-wangkefeng.wang@huawei.com>
 References: <20230303084343.171958-1-wangkefeng.wang@huawei.com>
@@ -52,40 +52,42 @@ Omit three lines by unified folio_put(), and make code more clear.
 
 Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
 ---
- mm/damon/paddr.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ mm/damon/paddr.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
 diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
-index 6c655d9b5639..3fda00a0f786 100644
+index 3fda00a0f786..2ef9db0189ca 100644
 --- a/mm/damon/paddr.c
 +++ b/mm/damon/paddr.c
-@@ -239,21 +239,18 @@ static unsigned long damon_pa_pageout(struct damon_region *r, struct damos *s)
- 		if (!folio)
- 			continue;
- 
--		if (damos_pa_filter_out(s, folio)) {
--			folio_put(folio);
--			continue;
--		}
-+		if (damos_pa_filter_out(s, folio))
-+			goto put_folio;
- 
- 		folio_clear_referenced(folio);
- 		folio_test_clear_young(folio);
--		if (!folio_isolate_lru(folio)) {
--			folio_put(folio);
--			continue;
--		}
-+		if (!folio_isolate_lru(folio))
-+			goto put_folio;
- 		if (folio_test_unevictable(folio))
- 			folio_putback_lru(folio);
+@@ -130,24 +130,21 @@ static bool damon_pa_young(unsigned long paddr, unsigned long *folio_sz)
+ 			accessed = false;
  		else
- 			list_add(&folio->lru, &folio_list);
-+put_folio:
- 		folio_put(folio);
+ 			accessed = true;
+-		folio_put(folio);
+ 		goto out;
  	}
- 	applied = reclaim_pages(&folio_list);
+ 
+ 	need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
+-	if (need_lock && !folio_trylock(folio)) {
+-		folio_put(folio);
+-		return false;
+-	}
++	if (need_lock && !folio_trylock(folio))
++		goto out;
+ 
+ 	rmap_walk(folio, &rwc);
+ 
+ 	if (need_lock)
+ 		folio_unlock(folio);
+-	folio_put(folio);
+ 
+-out:
+ 	*folio_sz = folio_size(folio);
++out:
++	folio_put(folio);
+ 	return accessed;
+ }
+ 
 -- 
 2.35.3
 
