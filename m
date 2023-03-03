@@ -2,247 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7578A6AA3FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34F56AA3F1
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjCCWQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 17:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S232719AbjCCWKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 17:10:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233621AbjCCWPx (ORCPT
+        with ESMTP id S233621AbjCCWJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 17:15:53 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on20616.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e89::616])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501446A1E6;
-        Fri,  3 Mar 2023 14:06:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cn3JQZnKHcVBP7R6OQ75CAJmS3z1Ydw+IRk27bGlbdY/rscr/fuDmvoEj0G4pSjMlCe8J8KmL13degZVd6h9SudOcOvE8yOS0r5JdihqIeNSV3FLmXEI1ZNtMWkmcr7FnDw0va9LywxLwhGLnVQsK1U5cZ/n6zYix/TeuhN/Rf1I10PEyHtgoLbNZsBlaLuvXfyz0CL9QdHePNeslqbX8xhH6PAzGtWu4R2FXR2tacCgxNDNvhjK/U0TwWAsKIqBQ1LKGDhjnoIWkeJ52j/1l3Sw1+DWy4aU0Sg44SCYOUJmAWOY89S9U+2KnW+XrJ/lwICKo6FByUh/Vb9TQm7AlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nO5Sx2qJDTYEBmN0pcaDlPzGVLrUHk+JLP/6jxoUmH0=;
- b=inqpynb+fdgY4b6b5/y8Z8iZw8O7GGxcPw0T7PgciF0tBjJJKij42salFfTnf5q44doxIwH4Fi0i+ek1kQ2ey6j7hks4oRRWxhYhHhTvM6lg28ab53uuWqkCVg+gxhwbFnjeEQzWvEcH7W4vpnU2r/vsxU9YLz5P9NCrzlSrrYNi4n78341xHHyADJdky6f1tKESvcUAWHC/NIoGXErsgE4SFWrjLb6KVqgSLfrkmU0nki8UxQA+BqaMpbsulhertVsLKeqEmzCDs+ilifzTenk8lAhCzHbeTWZXpr24Dq0KIYBlTqMgXr2XUP0S2oaINsV7r7lOIUOhExysVl0aBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nO5Sx2qJDTYEBmN0pcaDlPzGVLrUHk+JLP/6jxoUmH0=;
- b=dFSRjDpy3c32/c1t/9vC6S9Y4OGhBqj5BztDeJ5yCUQ/yXvNg3ri3FMIBdNFQsYFJxQU/8X184J0/1yIjRIOCHW7PbZy4mSp8Mdd2IKiDbVILZOaxU1ZodaSPugQSuDXITAarpimSjTDHJINLIz69hcZbHA4TLKzNRVJwKqzk4Ro5HlBsuCeOOVoNwW1R4TcapYE+c6072+8baV1/PXY/rCf4xhz87GAj/3lX5gDmHDfXjVLbwu94rgd/PqoENTy9AT1Py1VmNtA18xQHfbfiHmqsDdjSU0nVYy632to03RQNnGS0giBE3rqvEAT3MqV/4UYsNTJlMUEgDzaHnCbwQ==
-Received: from BN9P221CA0019.NAMP221.PROD.OUTLOOK.COM (2603:10b6:408:10a::34)
- by DM4PR12MB5264.namprd12.prod.outlook.com (2603:10b6:5:39c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.22; Fri, 3 Mar
- 2023 21:58:19 +0000
-Received: from BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10a:cafe::99) by BN9P221CA0019.outlook.office365.com
- (2603:10b6:408:10a::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
- Transport; Fri, 3 Mar 2023 21:58:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT056.mail.protection.outlook.com (10.13.177.26) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.22 via Frontend Transport; Fri, 3 Mar 2023 21:58:18 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 3 Mar 2023
- 13:58:17 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 3 Mar 2023
- 13:58:17 -0800
-Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server id 15.2.986.5 via Frontend Transport; Fri, 3 Mar
- 2023 13:58:16 -0800
-From:   Asmaa Mnebhi <asmaa@nvidia.com>
-To:     <andy.shevchenko@gmail.com>, <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Asmaa Mnebhi <asmaa@nvidia.com>
-Subject: [PATCH v3] gpio: mmio: handle "ngpios" properly in bgpio_init()
-Date:   Fri, 3 Mar 2023 16:58:14 -0500
-Message-ID: <20230303215814.24783-1-asmaa@nvidia.com>
-X-Mailer: git-send-email 2.30.1
+        Fri, 3 Mar 2023 17:09:27 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F606782C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:59:57 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id x6so3804139ljq.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:59:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677880713;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N1o/g/RY/F8tw5gI99MfNC1MgutCzKG48oc2MA5z/Ao=;
+        b=bpsywCmv25hwZdzAh1PCeTfTnQ8M9UQyOZLcAniWppQtbBrGizltd2VSk9gn0Y4W0Q
+         yzdNQaxAnFvqFLXGWRKFxCIhP0BFTzdfULNUTPwhgUB4xN8zBhsJCfMbOjpNVLP8IrTr
+         XRLZO/3/frAk/71BTSeqKr6YdlNbaufBAvczrkBwpoIedcVrAMcAgnyjXZJjw4xZy7zg
+         OPi3NXwqi3rM98FxJWQcHp12RjDYHlO/9TIZ5qk4cgZa3qr+G9h0MFwpNuBJuc6sQBrz
+         qQvUzANF+qbtVzPY6wXdS4y0VeAcPdQ9Y1KP8+qYIT+6u5UV2d/4ESux7EUS1P0rfVB5
+         pAIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677880713;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N1o/g/RY/F8tw5gI99MfNC1MgutCzKG48oc2MA5z/Ao=;
+        b=xXY6Vl4dI+aWFSEYP3kZDafRrmYzs2PXQEWOmmidbyMSY4LkEyqzIJLGX4TwTi/xEQ
+         +IZPg9Rezp0WyL0Loealv8umhqibWjjA/D+eBx0jE0vMgpTMXJfdutUViutQ7ELMg7z+
+         DjZuZROsRA9JKtPL3CYEw9KmR4LRXoJDXKhFdh35TBzJK7hn6WvnxUFE5E4I4dN3zwfH
+         cEHnh9RxbLRhHeXK/kdvDBUPRaB2rDD5GLrye8JLj11lm1AWlpERDheGf1KM02iLSDPC
+         Al9Gvse1C7fZGUZwxMMBVtbISG97YEp9X9O+qAAlz+FlXqifPbeTpvuB+q0P6W17t3AO
+         zVtg==
+X-Gm-Message-State: AO0yUKVAYViTMAj/Vbyw41xbz8LeyeZloU/vaim1WgHCmrE3JbVttJdB
+        B6S+QR8i6QL18anY12/VCY5c4Q==
+X-Google-Smtp-Source: AK7set8HY/ZWvMDmsFszJ46x+D2bfFXOLEt62IWqldbD7EeuilM2sEPe1aGzehsz3IInfUfazDl8uQ==
+X-Received: by 2002:a2e:8e8c:0:b0:295:9f20:bf16 with SMTP id z12-20020a2e8e8c000000b002959f20bf16mr834883ljk.51.1677880713790;
+        Fri, 03 Mar 2023 13:58:33 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id e27-20020ac2547b000000b004cafa01ebbfsm552670lfn.101.2023.03.03.13.58.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 13:58:33 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Fri, 03 Mar 2023 22:58:15 +0100
+Subject: [PATCH 15/15] arm64: dts: qcom: sm6375-pdx225: Add volume down
+ GPIO key
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT056:EE_|DM4PR12MB5264:EE_
-X-MS-Office365-Filtering-Correlation-Id: ffdf0e3a-e258-41bd-6377-08db1c326635
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pa6kuEyngJQ+OrTLP5/oGv64Pnogay56Hu6b7sPYdfCcGZ7W4L3cRERdW8PTdAQC17xWtWRMFsnXS/BEjletluME6+HzeaLZ0vwWbGmsp0ur1vqlxG2rmPcHHWBQKITJUljSs13fm53/Dkf+0Am9Y1XuBCzrlwEXEabUUGSxhBrctwgPdF/hFVkc2nym5Iv6v8vELV8k4OGoo+d2AQrHwuwzB9Y8ew6AHUw9r9QbPprx1PkOWkUOIRf1pReD4xiKjSMm/lcsUqVqP1yfRlKAU6MEyHq3qU8myeZJLZ9N/EBC0eIoo6CBhyvZQffC2dMiNO8MDjf2WGGshu3V5oCf2VYO2VyC6d4YD2+opzzM2utukDTOJMrPZ1uN4fSqhwbDl/b8RIl3gVgWjlNhWC5mBVaED/Ct4oD3rYcQPx0CkV/5oQ1fNKZzeSnOhSg00yE/ui6Eun/wJc2UU+LMaS/1DDhlUDFZPptNzSaOxFBtwQhLntTiDl2AEzbCF9Qp7Y8u2qZroMryjHaD/bE2/MycFZdBIPisijinjcxE2X1OhownGIAHWkMcu3azAjCFsLqh/EK68UgNMdfXHGd+DNdBmLoqpvLR3EeQ6c8XsuESwTyl4ZNgno37kHNIRTPftjlelCVZeVVwTwi8UhmhqbzUmxSKLXojnPuoLTBg4PanqG2Wdw8/YQVpWVqz/J/XFAsPoJFqRQ9fUoswLTLTN1HjTya5j1p2B8FaFu8XYuQByWo=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(376002)(136003)(451199018)(40470700004)(36840700001)(46966006)(40460700003)(4326008)(70586007)(70206006)(8676002)(110136005)(83380400001)(8936002)(316002)(36860700001)(41300700001)(107886003)(5660300002)(1076003)(2616005)(478600001)(26005)(47076005)(426003)(186003)(336012)(7696005)(40480700001)(36756003)(82310400005)(82740400003)(7636003)(2906002)(356005)(86362001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 21:58:18.9743
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffdf0e3a-e258-41bd-6377-08db1c326635
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT056.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5264
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230303-topic-sm6375_features0_dts-v1-15-8c8d94fba6f0@linaro.org>
+References: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
+In-Reply-To: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677880689; l=1409;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=lUoSxwe6wDxHMv1iTDzFHuYZxKLyt1OMfELUkCo9Rp0=;
+ b=2D1FYt5g9zW3UaMoHWv3uq5a3I+XMRqi4xOdzwph644K+Ge2XkqIHBvdS5lQ6HhN8VB5CAELrLkC
+ Mc12VKGIBVJrmmDYy3Plyso23gn9bU4RYdv5EBTyg4dMyi2kUOIU
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bgpio_init() uses "sz" argument to populate ngpio, which is not
-accurate. Instead, read the "ngpios" property from the DT and if it
-doesn't exist, use the "sz" argument. With this change, drivers no
-longer need to overwrite the ngpio variable after calling bgpio_init.
+Add the required nodes to enable the volume down key on the Sony
+Xperia 10 IV.
 
-Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/gpio/gpio-mmio.c |  7 ++++-
- drivers/gpio/gpiolib.c   | 58 ++++++++++++++++++----------------------
- drivers/gpio/gpiolib.h   |  1 +
- 3 files changed, 33 insertions(+), 33 deletions(-)
+ .../dts/qcom/sm6375-sony-xperia-murray-pdx225.dts  | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
-index d9dff3dc92ae..c9f9f4e36c89 100644
---- a/drivers/gpio/gpio-mmio.c
-+++ b/drivers/gpio/gpio-mmio.c
-@@ -60,6 +60,8 @@ o        `                     ~~~~\___/~~~~    ` controller in FPGA is ,.`
- #include <linux/of.h>
- #include <linux/of_device.h>
+diff --git a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
+index b691c3834b6b..8220e6f44117 100644
+--- a/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
++++ b/arch/arm64/boot/dts/qcom/sm6375-sony-xperia-murray-pdx225.dts
+@@ -46,6 +46,23 @@ framebuffer: framebuffer@85200000 {
+ 		};
+ 	};
  
-+#include "gpiolib.h"
++	gpio-keys {
++		compatible = "gpio-keys";
++		label = "gpio-keys";
 +
- static void bgpio_write8(void __iomem *reg, unsigned long data)
- {
- 	writeb(data, reg);
-@@ -614,10 +616,13 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
- 	gc->parent = dev;
- 	gc->label = dev_name(dev);
- 	gc->base = -1;
--	gc->ngpio = gc->bgpio_bits;
- 	gc->request = bgpio_request;
- 	gc->be_bits = !!(flags & BGPIOF_BIG_ENDIAN);
++		pinctrl-0 = <&vol_down_n>;
++		pinctrl-names = "default";
++
++		key-volume-down {
++			label = "Volume Down";
++			linux,code = <KEY_VOLUMEDOWN>;
++			gpios = <&pmr735a_gpios 1 GPIO_ACTIVE_LOW>;
++			debounce-interval = <15>;
++			linux,can-disable;
++			wakeup-source;
++		};
++	};
++
+ 	reserved-memory {
+ 		cont_splash_mem: memory@85200000 {
+ 			reg = <0 0x85200000 0 0xc00000>;
+@@ -133,6 +150,16 @@ &pmk8350_rtc {
+ 	status = "okay";
+ };
  
-+	ret = gpiochip_get_ngpios(gc, dev);
-+	if (ret)
-+		gc->ngpio = gc->bgpio_bits;
++&pmr735a_gpios {
++	vol_down_n: vol-down-n-state {
++		pins = "gpio1";
++		function = "normal";
++		power-source = <1>;
++		bias-pull-up;
++		input-enable;
++	};
++};
 +
- 	ret = bgpio_setup_io(gc, dat, set, clr, flags);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 939c776b9488..17b63f52fda7 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -647,6 +647,28 @@ static void gpiochip_setup_devs(void)
- 	}
- }
- 
-+int gpiochip_get_ngpios(struct gpio_chip *gc, struct device *dev)
-+{
-+	u32 ngpios = gc->ngpio;
-+	int ret;
-+
-+	if (ngpios == 0) {
-+		ret = device_property_read_u32(dev, "ngpios", &ngpios);
-+		if (ret) {
-+			chip_err(gc, "Failed to get ngpios property\n");
-+			return -EINVAL;
-+		}
-+
-+		gc->ngpio = ngpios;
-+	}
-+
-+	if (gc->ngpio > FASTPATH_NGPIO)
-+		chip_warn(gc, "line cnt %u is greater than fast path cnt %u\n",
-+			gc->ngpio, FASTPATH_NGPIO);
-+
-+	return 0;
-+}
-+
- int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 			       struct lock_class_key *lock_key,
- 			       struct lock_class_key *request_key)
-@@ -655,7 +677,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	struct gpio_device *gdev;
- 	unsigned long flags;
- 	unsigned int i;
--	u32 ngpios = 0;
- 	int base = 0;
- 	int ret = 0;
- 
-@@ -704,36 +725,9 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	else
- 		gdev->owner = THIS_MODULE;
- 
--	/*
--	 * Try the device properties if the driver didn't supply the number
--	 * of GPIO lines.
--	 */
--	ngpios = gc->ngpio;
--	if (ngpios == 0) {
--		ret = device_property_read_u32(&gdev->dev, "ngpios", &ngpios);
--		if (ret == -ENODATA)
--			/*
--			 * -ENODATA means that there is no property found and
--			 * we want to issue the error message to the user.
--			 * Besides that, we want to return different error code
--			 * to state that supplied value is not valid.
--			 */
--			ngpios = 0;
--		else if (ret)
--			goto err_free_dev_name;
--
--		gc->ngpio = ngpios;
--	}
--
--	if (gc->ngpio == 0) {
--		chip_err(gc, "tried to insert a GPIO chip with zero lines\n");
--		ret = -EINVAL;
--		goto err_free_dev_name;
--	}
--
--	if (gc->ngpio > FASTPATH_NGPIO)
--		chip_warn(gc, "line cnt %u is greater than fast path cnt %u\n",
--			  gc->ngpio, FASTPATH_NGPIO);
-+	ret = gpiochip_get_ngpios(gc, &gdev->dev);
-+	if (ret)
-+		return ret;
- 
- 	gdev->descs = kcalloc(gc->ngpio, sizeof(*gdev->descs), GFP_KERNEL);
- 	if (!gdev->descs) {
-@@ -903,7 +897,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
- 	/* failures here can mean systems won't boot... */
- 	if (ret != -EPROBE_DEFER) {
- 		pr_err("%s: GPIOs %d..%d (%s) failed to register, %d\n", __func__,
--		       base, base + (int)ngpios - 1,
-+		       base, base + (int)gc->ngpio - 1,
- 		       gc->label ? : "generic", ret);
- 	}
- 	return ret;
-diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-index b3c2db6eba80..c38cbf1b753b 100644
---- a/drivers/gpio/gpiolib.h
-+++ b/drivers/gpio/gpiolib.h
-@@ -207,6 +207,7 @@ int gpiod_configure_flags(struct gpio_desc *desc, const char *con_id,
- int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce);
- int gpiod_hog(struct gpio_desc *desc, const char *name,
- 		unsigned long lflags, enum gpiod_flags dflags);
-+int gpiochip_get_ngpios(struct gpio_chip *gc, struct device *dev);
- 
- /*
-  * Return the GPIO number of the passed descriptor relative to its chip
+ &pon_pwrkey {
+ 	status = "okay";
+ };
+
 -- 
-2.30.1
+2.39.2
 
