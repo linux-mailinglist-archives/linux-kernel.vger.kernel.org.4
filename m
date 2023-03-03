@@ -2,107 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 893AA6A9DFD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:51:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B36716A9DF9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231454AbjCCRvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:51:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S231447AbjCCRvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:51:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbjCCRu6 (ORCPT
+        with ESMTP id S231150AbjCCRu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:50:58 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B93584B5;
+        Fri, 3 Mar 2023 12:50:57 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB2237B59;
         Fri,  3 Mar 2023 09:50:56 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id x199so2718164ybg.5;
-        Fri, 03 Mar 2023 09:50:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677865856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SCxddsYYw42LPM43/gkvlie96kmGO3FZ4G2subvXzzU=;
-        b=fLGfl9d8hRxr0PWmqstZFZdpj03Y2a8vI1Icd/J+Yunnnd+mcFIXz4wtbdN2hYiGDW
-         Rk9i60Tw2atvr6IPg1o9J5DPzTbj9nTvca4ZdGzL1gYVxPInrg8c4jDE9op7uuGh+IlO
-         jeVW1ToKEMQcEYzghwsERQBGIXU6nh967eMtdK2JLknjEUztLiCki8FL+nAKYB2xSfBQ
-         ArmboZy9wzMMEtZZnmAFVGm4dRwkqAYcGr6cjy970dTApX6TUtnZ0crw1Ir2Mkls9MTj
-         bdGkPQEaM/mTDmV8YuPKvm3rxa+szH6OSsJoJIuWXepkkb1OwmTQ33pJPk3QDexijb8t
-         1zSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677865856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SCxddsYYw42LPM43/gkvlie96kmGO3FZ4G2subvXzzU=;
-        b=Af9VpsovLTCM1AXEubDIMs3AcAcM6uREF+xvuZlUlGItFE4nb1k015NnoLQDNrxitC
-         Si1n7pZWcA6e3Sc2uaxvtznLDxlgC/W5dxDiewBLumlen6n4O18b2O1p49f71QO3vMkn
-         aCFyqUfJg6RKPgAJ+6IaYCV0Pm//VoAwPRdlLWqbf5bQRFJiJJF246fW1XhEXCWhWsHD
-         k/0wUtj5IMuBgabrZbD15ytf72nCgX5MtD4AleoVGZMXVzQpOk0Ou1IIdxKdEnX0Wwuv
-         +WXoP5vv9X0/KO1DHETb01T3IRiFTfOYhqNguzAe21lNO+S7m1EVPNuzhXh1FAGvAOGN
-         2LBw==
-X-Gm-Message-State: AO0yUKX0/Ic1h1EFqIM19fBy2gTyaERJlqiQZGYD55I6xgF+YEMmYNyj
-        FUKJfbfu3YHryL022jC2JEljuhvJj7tS3KA6rfA=
-X-Google-Smtp-Source: AK7set+guTb0nl3oPFuy1k9LGVkybiSalecoyAl7DJSMWvDgkBFGD40v5vxH/Y40U99lEPgcKmDYhBduebnPL+CBxBw=
-X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
- k10-20020a5b038a000000b00ac9cb97bd0emr1212723ybp.5.1677865855710; Fri, 03 Mar
- 2023 09:50:55 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PSwVj4bRvz6J7RX;
+        Sat,  4 Mar 2023 01:50:37 +0800 (CST)
+Received: from SecurePC-101-06.china.huawei.com (10.122.247.231) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 3 Mar 2023 17:50:53 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     <linux-cxl@vger.kernel.org>
+CC:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <will@kernel.org>,
+        <dan.j.williams@intel.com>, <bwidawsk@kernel.org>,
+        <ira.weiny@intel.com>, <vishal.l.verma@intel.com>,
+        <alison.schofield@intel.com>, <linuxarm@huawei.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 1/4] cxl: Add function to count regblocks of a given type.
+Date:   Fri, 3 Mar 2023 17:50:19 +0000
+Message-ID: <20230303175022.10806-2-Jonathan.Cameron@huawei.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230303175022.10806-1-Jonathan.Cameron@huawei.com>
+References: <20230303175022.10806-1-Jonathan.Cameron@huawei.com>
 MIME-Version: 1.0
-References: <Y/9fdYQ8Cd0GI+8C@arm.com> <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
- <ZADLZJI1W1PCJf5t@arm.com> <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
- <ZAIgrXQ4670gxlE4@arm.com> <CAMe9rOrM=HXBY25rYrjLnHzSvHFuui06qRpc4xufxeaaGW-Fmw@mail.gmail.com>
- <ZAIwuvfPqNW/w3yt@arm.com>
-In-Reply-To: <ZAIwuvfPqNW/w3yt@arm.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Fri, 3 Mar 2023 09:50:19 -0800
-Message-ID: <CAMe9rOpvUVfhESeM457m2a9EotUEEAma67ivv5pmhrWmcxexDw@mail.gmail.com>
-Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack description
-To:     "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.122.247.231]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -110,41 +52,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 9:40=E2=80=AFAM szabolcs.nagy@arm.com
-<szabolcs.nagy@arm.com> wrote:
->
-> The 03/03/2023 08:57, H.J. Lu wrote:
-> > On Fri, Mar 3, 2023 at 8:31=E2=80=AFAM szabolcs.nagy@arm.com
-> > <szabolcs.nagy@arm.com> wrote:
-> > > longjmp to different stack should work: it can do the same as
-> > > setcontext/swapcontext: scan for the pivot token. then only
-> > > longjmp out of alt shadow stack fails. (this is non-conforming
-> > > longjmp use, but e.g. qemu relies on it.)
-> >
-> > Restore token may not be used with longjmp.  Unlike setcontext/swapcont=
-ext,
-> > longjmp is optional.  If longjmp isn't called, there will be an extra
-> > token on shadow
-> > stack and RET will fail.
->
-> what do you mean longjmp is optional?
+Until the recently release CXL 3.0 specification, there
+was only ever one instance of any given register block pointed
+to by the Register Block Locator DVSEC. Now, the specification allows
+for multiple CXL PMU instances, each with their own register block.
 
-In some cases, longjmp is called to handle an error condition and
-longjmp won't be called if there is no error.
+To enable this add an index parameter to cxl_find_regblock()
+and use that to implement cxl_count_regblock().
 
-> it can scan the target shadow stack and decide if it's the
-> same as the current one or not and in the latter case there
-> should be a restore token to switch to. then it can INCSSP
-> to reach the target SSP state.
->
-> qemu does setjmp, then swapcontext, then longjmp back.
-> swapcontext can change the stack, but leaves a token behind
-> so longjmp can switch back.
+Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+---
+ drivers/cxl/core/pci.c  |  2 +-
+ drivers/cxl/core/port.c |  2 +-
+ drivers/cxl/core/regs.c | 34 +++++++++++++++++++++++++++++++---
+ drivers/cxl/cxl.h       |  3 ++-
+ drivers/cxl/pci.c       |  2 +-
+ 5 files changed, 36 insertions(+), 7 deletions(-)
 
-This needs changes to support shadow stack.  Replacing setjmp with
-getcontext and longjmp with setcontext may work for shadow stack.
+diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
+index 7328a2552411..c90251f60771 100644
+--- a/drivers/cxl/core/pci.c
++++ b/drivers/cxl/core/pci.c
+@@ -50,7 +50,7 @@ static int match_add_dports(struct pci_dev *pdev, void *data)
+ 				  &lnkcap))
+ 		return 0;
+ 
+-	rc = cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
++	rc = cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map, 0);
+ 	if (rc)
+ 		dev_dbg(&port->dev, "failed to find component registers\n");
+ 
+diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+index 8ee6b6e2e2a4..97cc03dbceee 100644
+--- a/drivers/cxl/core/port.c
++++ b/drivers/cxl/core/port.c
+@@ -1333,7 +1333,7 @@ static resource_size_t find_component_registers(struct device *dev)
+ 
+ 	pdev = to_pci_dev(dev);
+ 
+-	cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
++	cxl_find_regblock(pdev, CXL_REGLOC_RBI_COMPONENT, &map, 0);
+ 	return map.resource;
+ }
+ 
+diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+index 1476a0299c9b..7389dd1af967 100644
+--- a/drivers/cxl/core/regs.c
++++ b/drivers/cxl/core/regs.c
+@@ -290,6 +290,7 @@ static bool cxl_decode_regblock(struct pci_dev *pdev, u32 reg_lo, u32 reg_hi,
+  * @pdev: The CXL PCI device to enumerate.
+  * @type: Register Block Indicator id
+  * @map: Enumeration output, clobbered on error
++ * @index: Index into which particular instance of a regblock we want.
+  *
+  * Return: 0 if register block enumerated, negative error code otherwise
+  *
+@@ -297,9 +298,10 @@ static bool cxl_decode_regblock(struct pci_dev *pdev, u32 reg_lo, u32 reg_hi,
+  * by @type.
+  */
+ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+-		      struct cxl_register_map *map)
++		      struct cxl_register_map *map, int index)
+ {
+ 	u32 regloc_size, regblocks;
++	int instance = 0;
+ 	int regloc, i;
+ 
+ 	map->resource = CXL_RESOURCE_NONE;
+@@ -323,8 +325,11 @@ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+ 		if (!cxl_decode_regblock(pdev, reg_lo, reg_hi, map))
+ 			continue;
+ 
+-		if (map->reg_type == type)
+-			return 0;
++		if (map->reg_type == type) {
++			if (index == instance)
++				return 0;
++			instance++;
++		}
+ 	}
+ 
+ 	map->resource = CXL_RESOURCE_NONE;
+@@ -332,6 +337,29 @@ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+ }
+ EXPORT_SYMBOL_NS_GPL(cxl_find_regblock, CXL);
+ 
++/**
++ * cxl_count_regblock() - Count instances of a given regblock type.
++ * @pdev: The CXL PCI device to enumerate.
++ * @type: Register Block Indicator id
++ *
++ * Some regblocks may be repeated. Count how many instances.
++ *
++ * Return: count of matching regblocks.
++ */
++int cxl_count_regblock(struct pci_dev *pdev, enum cxl_regloc_type type)
++{
++	struct cxl_register_map map;
++	int rc, count = 0;
++
++	while (1) {
++		rc = cxl_find_regblock(pdev, type, &map, count);
++		if (rc)
++			return count;
++		count++;
++	}
++}
++EXPORT_SYMBOL_NS_GPL(cxl_count_regblock, CXL);
++
+ resource_size_t cxl_rcrb_to_component(struct device *dev,
+ 				      resource_size_t rcrb,
+ 				      enum cxl_rcrb which)
+diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+index f2b0962a552d..86c4b3cf69d9 100644
+--- a/drivers/cxl/cxl.h
++++ b/drivers/cxl/cxl.h
+@@ -260,8 +260,9 @@ int cxl_map_device_regs(struct device *dev, struct cxl_device_regs *regs,
+ 			struct cxl_register_map *map);
+ 
+ enum cxl_regloc_type;
++int cxl_count_regblock(struct pci_dev *pdev, enum cxl_regloc_type type);
+ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+-		      struct cxl_register_map *map);
++		      struct cxl_register_map *map, int index);
+ 
+ enum cxl_rcrb {
+ 	CXL_RCRB_DOWNSTREAM,
+diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+index 60b23624d167..74443a5c3cc8 100644
+--- a/drivers/cxl/pci.c
++++ b/drivers/cxl/pci.c
+@@ -343,7 +343,7 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
+ {
+ 	int rc;
+ 
+-	rc = cxl_find_regblock(pdev, type, map);
++	rc = cxl_find_regblock(pdev, type, map, 0);
+ 	if (rc)
+ 		return rc;
+ 
+-- 
+2.37.2
 
-BTW, there is no testcase in glibc for this usage.
-
---=20
-H.J.
