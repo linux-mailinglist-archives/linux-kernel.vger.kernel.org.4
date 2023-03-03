@@ -2,301 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED466A95AB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 205376A95AD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjCCK54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 05:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
+        id S229908AbjCCK6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 05:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjCCK5r (ORCPT
+        with ESMTP id S230152AbjCCK5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 05:57:47 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC4E5F6CD;
-        Fri,  3 Mar 2023 02:57:46 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id c11so1474994oiw.2;
-        Fri, 03 Mar 2023 02:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677841065;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7E4mZs1lSDJuZWPvckglKhTGLvAaeFuzWBmRPW2/AFs=;
-        b=ek0Cq2wlLpdZEwzg3F+W55iG+xhnwmpy4haHdOXVfT4MyoBsb5VgnPQTqhyrHLOEs3
-         +9C18uxO1LZQ3Yl5WVWprYFcZjlzNzU27BUJ9AfODgbobFjZAqx4XQXLp8TFmxjmzMpT
-         CFQir+n9Eg6Olgm/XMtdAkxvhTJFf81ZdTPYnsMDWFrDNP0A2k0fgceh1ing0R8Ul1Ug
-         DRq5dO+rFBqhEdAHdj5izltzArlrUFnuZYaBG26cVZ1gPks2TjCD9bHPUATrz1BvB9M/
-         GcsxsbQwj0WImZ7DFsVt7GBsEKHQmPRo6NRiPy5rHOxi3+UsDiooE8QKCIA8haSA7O0F
-         pDuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677841065;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7E4mZs1lSDJuZWPvckglKhTGLvAaeFuzWBmRPW2/AFs=;
-        b=lFvkTijZnblSM4S7onCO52eUJNIwGqgsBwYuFkCNTwFZR+EKGifHKuwpm3MS4wMuoz
-         RIlqfquL3A4J88UeHXWqBXfxlL9WetJ/XKB3pCsYbeYgvG6qYtc09NaYuGKx0FvBm1EI
-         EJGLfNqqC5UVNY1w0bHQ5U/rIRQtxXefkpBTqs+3NIgJVGASD51D9y9LM4lojxuq2M83
-         +XcF4x/A6nNm3D/T1wi/nvPbMu6ASvCubwzv+QQc+9HU2w8T0oPxk3DyUsaP+i2cFoSM
-         BsrD6cNl5GuMkSCt4imp6U2piBWovI7DsEiCmaSCvm88GQr+8DVW1z4gR2Gz1gmiUADO
-         EeNw==
-X-Gm-Message-State: AO0yUKU04cSx6aLKbIRb1pOCrROvGH1CzsyA53NcDd2GX8iQvVApbMbJ
-        HcIRpe7QwNRM/HMb2lrvcKlOJjwotwUuX/jstXvlpZiKHifRsw==
-X-Google-Smtp-Source: AK7set915H2RvsmyYUYEA9a1k4DJI960i6w5S9Y2V6TuLd/dBrcrKa868w7lyH7n9/AWPq6Hb8uWejWg8ER3mdz/xtI=
-X-Received: by 2002:a05:6808:aa1:b0:384:2022:f9b1 with SMTP id
- r1-20020a0568080aa100b003842022f9b1mr405256oij.2.1677841065626; Fri, 03 Mar
- 2023 02:57:45 -0800 (PST)
+        Fri, 3 Mar 2023 05:57:55 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0121926A6;
+        Fri,  3 Mar 2023 02:57:53 -0800 (PST)
+Received: from [192.168.10.39] (unknown [182.179.171.187])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D53756602FAE;
+        Fri,  3 Mar 2023 10:57:49 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677841071;
+        bh=aJ629f459T2/4SFJjB3CeXdAJ6xSaeA5567kn8eFpEo=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=Ii3psLcOlxb4lKa3kZfiO/8QGnW2AuZi5bscmtyNvq25x6TsODv2DHO5QPdJTR1W8
+         Bx245Gw/BmL5agbvP09Qn7smJGUEvvymQnD8hBmxVgNav7GoE+y+dBzjv2tG5MB4A3
+         c6/xDyMKnqqJUN14qru1QE2l5B9srM8e8GB2ANRciZjhq1TuR9MTqof44usR2PZJhU
+         4RaPvhZ71uDwaWbqDBivSEnLH9rc/UffZh9a/4wPrSHKJJ31aAFGmHZnmgEXkm9gOE
+         6MIEkPaJmj0qCooILSaU8r263DukFij+So6djJkj12JgLbaIqk2vwgwQBtnjaDmGAR
+         IlLWAvbw4PyCQ==
+Message-ID: <2481c947-b558-f536-d505-dffaf6a023a9@collabora.com>
+Date:   Fri, 3 Mar 2023 15:57:45 +0500
 MIME-Version: 1.0
-References: <20230303002850.51858-1-arinc.unal@arinc9.com> <20230303002850.51858-6-arinc.unal@arinc9.com>
- <CAMhs-H-VGjP32AZc2cuY=Co4iqx8xPtvjr+hMg-haMMFaQzzsg@mail.gmail.com>
- <CAMhs-H8OsG-SEWigimG3fT-SGjZruH-7tnjff198Z2qhb0O=yA@mail.gmail.com> <2106f6d0-63cc-4656-1e52-19640994fb43@arinc9.com>
-In-Reply-To: <2106f6d0-63cc-4656-1e52-19640994fb43@arinc9.com>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 3 Mar 2023 11:57:33 +0100
-Message-ID: <CAMhs-H869pR6CzaWfvf44w-ak+0OCyxnMEEU4kWYpw=C14ShsQ@mail.gmail.com>
-Subject: Re: [PATCH 05/20] pinctrl: ralink: move to mediatek as mtmips
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi: Reorder fields in 'struct spi_message'
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mark Brown <broonie@kernel.org>
+References: <c112aad16eb47808e1ec10abd87b3d273c969a68.1677704283.git.christophe.jaillet@wanadoo.fr>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <c112aad16eb47808e1ec10abd87b3d273c969a68.1677704283.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ar=C4=B1n=C3=A7,
+On 3/2/23 1:58 AM, Christophe JAILLET wrote:
+> Group some variables based on their sizes to reduce hole and avoid padding.
+> On x86_64, this shrinks the size from 112 to 96 bytes.
+> 
+> This should have no real impact on memory allocation because 'struct
+> spi_message' is mostly used on stack, but it can save a few cycles
+> when the structure is initialized with spi_message_init() and co.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-On Fri, Mar 3, 2023 at 9:16 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9=
-.com> wrote:
->
-> Hey Sergio,
->
-> On 3.03.2023 09:34, Sergio Paracuellos wrote:
-> > On Fri, Mar 3, 2023 at 7:17 AM Sergio Paracuellos
-> > <sergio.paracuellos@gmail.com> wrote:
-> >>
-> >>   Hi Ar=C4=B1n=C3=A7,
-> >>
-> >> On Fri, Mar 3, 2023 at 1:30 AM <arinc9.unal@gmail.com> wrote:
-> >>>
-> >>> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> >>>
-> >>> This platform from Ralink was acquired by MediaTek in 2011. Then, Med=
-iaTek
-> >>> introduced new SoCs which utilise this platform. Move the driver to
-> >>> mediatek pinctrl directory. Rename the ralink core driver to mtmips.
-> >>>
-> >>> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
-> >>> ---
-> >>>   drivers/pinctrl/Kconfig                       |  1 -
-> >>>   drivers/pinctrl/Makefile                      |  1 -
-> >>>   drivers/pinctrl/mediatek/Kconfig              | 51 ++++++++++-
-> >>>   drivers/pinctrl/mediatek/Makefile             | 63 +++++++------
-> >>>   .../{ralink =3D> mediatek}/pinctrl-mt7620.c     | 34 +++----
-> >>>   .../{ralink =3D> mediatek}/pinctrl-mt7621.c     | 30 +++----
-> >>>   .../{ralink =3D> mediatek}/pinctrl-mt76x8.c     | 60 ++++++-------
-> >>>   .../pinctrl-mtmips.c}                         | 90 +++++++++-------=
----
-> >>>   .../pinctrl-mtmips.h}                         | 16 ++--
-> >>>   .../{ralink =3D> mediatek}/pinctrl-rt2880.c     | 20 ++---
-> >>>   .../{ralink =3D> mediatek}/pinctrl-rt305x.c     | 44 ++++-----
-> >>>   .../{ralink =3D> mediatek}/pinctrl-rt3883.c     | 28 +++---
-> >>>   drivers/pinctrl/ralink/Kconfig                | 40 ---------
-> >>>   drivers/pinctrl/ralink/Makefile               |  9 --
-> >>>   14 files changed, 246 insertions(+), 241 deletions(-)
-> >>>   rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt7620.c (81%=
-)
-> >>>   rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt7621.c (80%=
-)
-> >>>   rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt76x8.c (81%=
-)
-> >>>   rename drivers/pinctrl/{ralink/pinctrl-ralink.c =3D> mediatek/pinct=
-rl-mtmips.c} (74%)
-> >>>   rename drivers/pinctrl/{ralink/pinctrl-ralink.h =3D> mediatek/pinct=
-rl-mtmips.h} (75%)
-> >>>   rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt2880.c (71%=
-)
-> >>>   rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt305x.c (75%=
-)
-> >>>   rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt3883.c (80%=
-)
-> >>>   delete mode 100644 drivers/pinctrl/ralink/Kconfig
-> >>>   delete mode 100644 drivers/pinctrl/ralink/Makefile
-> >>>
-> >>> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-> >>> index dcb53c4a9584..8a6012770640 100644
-> >>> --- a/drivers/pinctrl/Kconfig
-> >>> +++ b/drivers/pinctrl/Kconfig
-> >>> @@ -537,7 +537,6 @@ source "drivers/pinctrl/nomadik/Kconfig"
-> >>>   source "drivers/pinctrl/nuvoton/Kconfig"
-> >>>   source "drivers/pinctrl/pxa/Kconfig"
-> >>>   source "drivers/pinctrl/qcom/Kconfig"
-> >>> -source "drivers/pinctrl/ralink/Kconfig"
-> >>>   source "drivers/pinctrl/renesas/Kconfig"
-> >>>   source "drivers/pinctrl/samsung/Kconfig"
-> >>>   source "drivers/pinctrl/spear/Kconfig"
-> >>> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-> >>> index d5939840bb2a..ada6ed1d4e91 100644
-> >>> --- a/drivers/pinctrl/Makefile
-> >>> +++ b/drivers/pinctrl/Makefile
-> >>> @@ -66,7 +66,6 @@ obj-y                         +=3D nomadik/
-> >>>   obj-y                          +=3D nuvoton/
-> >>>   obj-$(CONFIG_PINCTRL_PXA)      +=3D pxa/
-> >>>   obj-$(CONFIG_ARCH_QCOM)                +=3D qcom/
-> >>> -obj-$(CONFIG_PINCTRL_RALINK)   +=3D ralink/
-> >>>   obj-$(CONFIG_PINCTRL_RENESAS)  +=3D renesas/
-> >>>   obj-$(CONFIG_PINCTRL_SAMSUNG)  +=3D samsung/
-> >>>   obj-$(CONFIG_PINCTRL_SPEAR)    +=3D spear/
-> >>> diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/media=
-tek/Kconfig
-> >>> index a71874fed3d6..2eeb55010563 100644
-> >>> --- a/drivers/pinctrl/mediatek/Kconfig
-> >>> +++ b/drivers/pinctrl/mediatek/Kconfig
-> >>> @@ -1,6 +1,6 @@
-> >>>   # SPDX-License-Identifier: GPL-2.0-only
-> >>>   menu "MediaTek pinctrl drivers"
-> >>> -       depends on ARCH_MEDIATEK || COMPILE_TEST
-> >>> +       depends on ARCH_MEDIATEK || RALINK || COMPILE_TEST
-> >>>
-> >>>   config EINT_MTK
-> >>>          tristate "MediaTek External Interrupt Support"
-> >>> @@ -22,6 +22,12 @@ config PINCTRL_MTK
-> >>>   config PINCTRL_MTK_V2
-> >>>          tristate
-> >>>
-> >>> +config PINCTRL_MTK_MTMIPS
-> >>> +       bool
-> >>> +       depends on RALINK
-> >>> +       select PINMUX
-> >>> +       select GENERIC_PINCONF
-> >>> +
-> >>>   config PINCTRL_MTK_MOORE
-> >>>          bool
-> >>>          depends on OF
-> >>> @@ -43,6 +49,49 @@ config PINCTRL_MTK_PARIS
-> >>>          select OF_GPIO
-> >>>          select PINCTRL_MTK_V2
-> >>>
-> >>> +# For MIPS SoCs
-> >>> +config PINCTRL_MT7620
-> >>> +       bool "MediaTek MT7620 pin control"
-> >>> +       depends on SOC_MT7620 || COMPILE_TEST
-> >>> +       depends on RALINK
-> >>> +       default SOC_MT7620
-> >>> +       select PINCTRL_MTK_MTMIPS
-> >>> +
-> >>> +config PINCTRL_MT7621
-> >>> +       bool "MediaTek MT7621 pin control"
-> >>> +       depends on SOC_MT7621 || COMPILE_TEST
-> >>> +       depends on RALINK
-> >>> +       default SOC_MT7621
-> >>> +       select PINCTRL_MTK_MTMIPS
-> >>> +
-> >>> +config PINCTRL_MT76X8
-> >>> +       bool "MediaTek MT76X8 pin control"
-> >>> +       depends on SOC_MT7620 || COMPILE_TEST
-> >>> +       depends on RALINK
-> >>> +       default SOC_MT7620
-> >>> +       select PINCTRL_MTK_MTMIPS
-> >>> +
-> >>> +config PINCTRL_RT2880
-> >>> +       bool "Ralink RT2880 pin control"
-> >>> +       depends on SOC_RT288X || COMPILE_TEST
-> >>> +       depends on RALINK
-> >>> +       default SOC_RT288X
-> >>> +       select PINCTRL_MTK_MTMIPS
-> >>> +
-> >>> +config PINCTRL_RT305X
-> >>> +       bool "Ralink RT305X pin control"
-> >>> +       depends on SOC_RT305X || COMPILE_TEST
-> >>> +       depends on RALINK
-> >>> +       default SOC_RT305X
-> >>> +       select PINCTRL_MTK_MTMIPS
-> >>> +
-> >>> +config PINCTRL_RT3883
-> >>> +       bool "Ralink RT3883 pin control"
-> >>> +       depends on SOC_RT3883 || COMPILE_TEST
-> >>> +       depends on RALINK
-> >>> +       default SOC_RT3883
-> >>> +       select PINCTRL_MTK_MTMIPS
-> >>> +
-> >>
-> >> I am not a Kconfig expert at all but...
-> >>
-> >> Should not all of these be depends on SOC_XXX || (COMPILE_TEST &&
-> >> RALINK) and avoid the " depends on RALINK" next line in all of them?
->
-> This seems to do the same thing but I'm following the "either change
-> them all or fit into the crowd" ideology.
->
-> >>
-> >> Just asking since we have yet arch read and write register operations
-> >> in pinctrl common ralink code. Having in this way, when we address
-> >> this arch thing  in the next series just removing the "&& RALINK" part
-> >> makes the review pretty obvious.
->
-> You'd have to change RALINK with OF since we're still depending on that.
-> RALINK selects OF by default so it's currently a hidden dependency.
->
-> >>
-> >> Other than that, changes look good to me.
-> >
-> > I think "depends on SOC_XXX || (COMPILE_TEST && MIPS)" would work also
-> > and might be more accurate for compile testing targets.
+> ---
+> Using pahole
+> 
+> Before:
+> ======
+> struct spi_message {
+> 	struct list_head           transfers;            /*     0    16 */
+> 	struct spi_device *        spi;                  /*    16     8 */
+> 	unsigned int               is_dma_mapped:1;      /*    24: 0  4 */
+> 
+> 	/* XXX 31 bits hole, try to pack */
+> 	/* XXX 4 bytes hole, try to pack */
+> 
+> 	void                       (*complete)(void *);  /*    32     8 */
+> 	void *                     context;              /*    40     8 */
+> 	unsigned int               frame_length;         /*    48     4 */
+> 	unsigned int               actual_length;        /*    52     4 */
+> 	int                        status;               /*    56     4 */
+> 
+> 	/* XXX 4 bytes hole, try to pack */
+> 
+> 	/* --- cacheline 1 boundary (64 bytes) --- */
+> 	struct list_head           queue;                /*    64    16 */
+> 	void *                     state;                /*    80     8 */
+> 	struct list_head           resources;            /*    88    16 */
+> 	bool                       prepared;             /*   104     1 */
+> 
+> 	/* size: 112, cachelines: 2, members: 12 */
+> 	/* sum members: 93, holes: 2, sum holes: 8 */
+> 	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 31 bits */
+> 	/* padding: 7 */
+> 	/* last cacheline: 48 bytes */
+> };
+> 
+> 
+> After:
+> =====
+> struct spi_message {
+> 	struct list_head           transfers;            /*     0    16 */
+> 	struct spi_device *        spi;                  /*    16     8 */
+> 	unsigned int               is_dma_mapped:1;      /*    24: 0  4 */
+> 
+> 	/* XXX 7 bits hole, try to pack */
+> 	/* Bitfield combined with next fields */
+> 
+> 	bool                       prepared;             /*    25     1 */
+> 
+> 	/* XXX 2 bytes hole, try to pack */
+> 
+> 	int                        status;               /*    28     4 */
+> 	void                       (*complete)(void *);  /*    32     8 */
+> 	void *                     context;              /*    40     8 */
+> 	unsigned int               frame_length;         /*    48     4 */
+> 	unsigned int               actual_length;        /*    52     4 */
+> 	struct list_head           queue;                /*    56    16 */
+> 	/* --- cacheline 1 boundary (64 bytes) was 8 bytes ago --- */
+> 	void *                     state;                /*    72     8 */
+> 	struct list_head           resources;            /*    80    16 */
+> 
+> 	/* size: 96, cachelines: 2, members: 12 */
+> 	/* sum members: 93, holes: 1, sum holes: 2 */
+> 	/* sum bitfield members: 1 bits, bit holes: 1, sum bit holes: 7 bits */
+> 	/* last cacheline: 32 bytes */
+> };
+> ---
+>  include/linux/spi/spi.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 4fa26b9a3572..bdb35a91b4bf 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -1093,6 +1093,9 @@ struct spi_message {
+>  
+>  	unsigned		is_dma_mapped:1;
+>  
+> +	/* spi_prepare_message() was called for this message */
+> +	bool			prepared;
+> +
+>  	/* REVISIT:  we might want a flag affecting the behavior of the
+>  	 * last transfer ... allowing things like "read 16 bit length L"
+>  	 * immediately followed by "read L bytes".  Basically imposing
+> @@ -1105,11 +1108,11 @@ struct spi_message {
+>  	 */
+>  
+>  	/* Completion is reported through a callback */
+> +	int			status;
+>  	void			(*complete)(void *context);
+>  	void			*context;
+>  	unsigned		frame_length;
+>  	unsigned		actual_length;
+> -	int			status;
+>  
+>  	/* For optional use by whatever driver currently owns the
+>  	 * spi_message ...  between calls to spi_async and then later
+> @@ -1120,9 +1123,6 @@ struct spi_message {
+>  
+>  	/* List of spi_res reources when the spi message is processed */
+>  	struct list_head        resources;
+> -
+> -	/* spi_prepare_message() was called for this message */
+> -	bool			prepared;
+>  };
+>  
+>  static inline void spi_message_init_no_memset(struct spi_message *m)
 
-Are you sure? SOC_XXX here is already being enabled only if RALINK is
-already enabled, right? [0]
-
->
-> This is not OK in both cases. If the driver is dependent on Ralink
-> architecture code, choosing any other MIPS platform will make the driver
-> available to compile, which will fail.
-
-SOC_XXX is already dependent on RALINK for real uses but the driver is
-going to be selected for other MIPS platforms only for COMPILE_TEST
-targets. Ideally drivers should be arch agnostic so can be selected
-for any single arch build. Now we have arch dependent read and write
-calls in the code, so you need the right headers to be properly found
-to be able to compile testing. I think MIPS is enough dependency here
-to properly find them. But if not, this should be (COMPILE_TEST &&
-RALINK)
-
->
-> If the driver is independent of Ralink architecture code, you're
-> limiting the driver to be compiled only when a MIPS platform is selected.
-
-So... how are you planning to allow compile testing of the driver in
-any single arch when we get rid of all the arch dependent code? If you
-make everything dependent on RALINK you cannot.
-
-Maybe I am missing something obvious :)
-
-Thanks,
-     Sergio Paracuellos
-
-[0]: https://elixir.bootlin.com/linux/v6.2.1/source/arch/mips/ralink/Kconfi=
-g
-
->
-> Ar=C4=B1n=C3=A7
+-- 
+BR,
+Muhammad Usama Anjum
