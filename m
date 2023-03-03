@@ -2,86 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198386A9716
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DECD6A9722
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:18:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbjCCMQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 07:16:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
+        id S231164AbjCCMSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 07:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjCCMQL (ORCPT
+        with ESMTP id S229476AbjCCMS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 07:16:11 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1315F531;
-        Fri,  3 Mar 2023 04:16:09 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id cy23so9325277edb.12;
-        Fri, 03 Mar 2023 04:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677845768;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKF5bThLEdXvv6M/eGMYQTDSSRPUXsU5bEyWlcnJsFI=;
-        b=XTw2Ks9VFnobVPmqdmHB4E733ZuVBV38o6jsGQeOzO0QuqW7CsvLy+z95W+jahW8FQ
-         H2nIso0p5952QktEBH/nmuP1PYB6B4k5aTp5T7NnwKGoEHoVdRdFl5th99U8XlFX1yNq
-         wYhXeEJR72UTntkebh1MEmLRZIoobeejQxuzOI0duQlcYpTgDs1XuFsOMZc79VF7R46l
-         z1/FlF3v1sMavx4Jexnw3exmmTev22ydbR0UhxQRmwVE1z9TKtcCpdm5fkmqMwQVV8xX
-         Bg4yoLWhWwmvQo+eDTD5bf+2ThpPbN4af9C4j6QfwQSlK9VUkjOmoAT3Xs4JJRIAIR4X
-         Y4Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677845768;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wKF5bThLEdXvv6M/eGMYQTDSSRPUXsU5bEyWlcnJsFI=;
-        b=Bv6jU93VSJswx5LVKbmfRCjyWVPT7KbbUdgpRZdZrvvq0RNWoS1T/Z+dA0Rq+Bs2eL
-         NOS/sVnOq8EH/77+9R/WfIARRzLEeC9lq/n1H5It43hW47+ouvc7h9X5FXrW1NF5vE2C
-         OOIK//PoQ7IHqhhnOzHPrtrto8QdDf/LT6++RIyivi1XxZJEEHM7dP9Z3f0SiLAPL+KM
-         RaNhJpgNbyU7PTg/3fiAEnYKsk8sEqEFLKOqwmSx59LiLoMAfrUat8cTedB0l92FxvGa
-         WkHCYotlROPk/k5oEqF8vApIKGDfAXo1zYXMldybYBsTEj7qpA1hxn4c4h+3nXDlkUXN
-         P0Mg==
-X-Gm-Message-State: AO0yUKUi+0gNmCdaK8HPWncaLxGxVw/14UIN5foFNu92a28mqAxKFwi7
-        G+rivEer+Qw5xgHfoK6rpy6htDur7rY=
-X-Google-Smtp-Source: AK7set/R588HGFJwcd0eNeafQWwy8KUGJwUvOlfbwq5LI14n2rHC8JUskp9YzyeM9ses1FA3sV97ag==
-X-Received: by 2002:a05:6402:b11:b0:4ae:eb0f:8867 with SMTP id bm17-20020a0564020b1100b004aeeb0f8867mr1568280edb.41.1677845768269;
-        Fri, 03 Mar 2023 04:16:08 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o22-20020a509b16000000b004c4eed3fe20sm1107400edi.5.2023.03.03.04.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 04:16:07 -0800 (PST)
-Date:   Fri, 3 Mar 2023 15:16:03 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Yu Zhe <yuzhe@nfschina.com>
-Cc:     freude@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        liqiong@nfschina.com
-Subject: Re: [PATCH v3] s390/zcrypt: remove unnecessary (void*) conversions
-Message-ID: <ZAHlAxv2QNKpNLmZ@kadam>
-References: <20230303013250.3058-1-yuzhe@nfschina.com>
- <20230303052155.21072-1-yuzhe@nfschina.com>
+        Fri, 3 Mar 2023 07:18:28 -0500
+Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [178.154.239.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F0A14986;
+        Fri,  3 Mar 2023 04:18:25 -0800 (PST)
+Received: from mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:5da4:0:640:ef2d:0])
+        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id B756A5FBC2;
+        Fri,  3 Mar 2023 15:18:22 +0300 (MSK)
+Received: from [IPV6:2a02:6b8:b081:6426::1:21] (unknown [2a02:6b8:b081:6426::1:21])
+        by mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id LIWpnA0OpSw0-JjONf7qC;
+        Fri, 03 Mar 2023 15:18:21 +0300
+X-Yandex-Fwd: 1
+Authentication-Results: mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net; dkim=pass
+Message-ID: <7f292302-97d0-4d66-31cd-f628d013ef4a@yandex-team.ru>
+Date:   Fri, 3 Mar 2023 15:18:21 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303052155.21072-1-yuzhe@nfschina.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [EXT] Re: [PATCH v0] qed/qed_dev: guard against a possible
+ division by zero
+Content-Language: en-US
+From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
+To:     Manish Chopra <manishc@marvell.com>,
+        Simon Horman <simon.horman@corigine.com>
+Cc:     Ariel Elior <aelior@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yuval Mintz <Yuval.Mintz@qlogic.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230209103813.2500486-1-d-tatianin@yandex-team.ru>
+ <Y+TVVuLgF+V7iTO1@corigine.com>
+ <b39e6122-ba7b-60dd-a70c-d3915b203ff0@yandex-team.ru>
+ <BY3PR18MB4612FC497A8B12889548FF82ABA39@BY3PR18MB4612.namprd18.prod.outlook.com>
+ <d3fe83e4-db71-6180-40e8-e0cfaf52be34@yandex-team.ru>
+In-Reply-To: <d3fe83e4-db71-6180-40e8-e0cfaf52be34@yandex-team.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 01:21:55PM +0800, Yu Zhe wrote:
-> Pointer variables of void * type do not require type cast.
+On 2/16/23 9:42 AM, Daniil Tatianin wrote:
+> On 2/16/23 12:20 AM, Manish Chopra wrote:
+>>> -----Original Message-----
+>>> From: Daniil Tatianin <d-tatianin@yandex-team.ru>
+>>> Sent: Tuesday, February 14, 2023 12:53 PM
+>>> To: Simon Horman <simon.horman@corigine.com>
+>>> Cc: Ariel Elior <aelior@marvell.com>; Manish Chopra
+>>> <manishc@marvell.com>; David S. Miller <davem@davemloft.net>; Eric
+>>> Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>; Paolo
+>>> Abeni <pabeni@redhat.com>; Yuval Mintz <Yuval.Mintz@qlogic.com>;
+>>> netdev@vger.kernel.org; linux-kernel@vger.kernel.org
+>>> Subject: [EXT] Re: [PATCH v0] qed/qed_dev: guard against a possible 
+>>> division
+>>> by zero
+>>>
+>>> External Email
+>>>
+>>> ----------------------------------------------------------------------
+>>>
+>>>
+>>> On 2/9/23 2:13 PM, Simon Horman wrote:
+>>>> On Thu, Feb 09, 2023 at 01:38:13PM +0300, Daniil Tatianin wrote:
+>>>>> Previously we would divide total_left_rate by zero if num_vports
+>>>>> happened to be 1 because non_requested_count is calculated as
+>>>>> num_vports - req_count. Guard against this by explicitly checking for
+>>>>> zero when doing the division.
+>>>>>
+>>>>> Found by Linux Verification Center (linuxtesting.org) with the SVACE
+>>>>> static analysis tool.
+>>>>>
+>>>>> Fixes: bcd197c81f63 ("qed: Add vport WFQ configuration APIs")
+>>>>> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+>>>>> ---
+>>>>>    drivers/net/ethernet/qlogic/qed/qed_dev.c | 2 +-
+>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>
+>>>>> diff --git a/drivers/net/ethernet/qlogic/qed/qed_dev.c
+>>>>> b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+>>>>> index d61cd32ec3b6..90927f68c459 100644
+>>>>> --- a/drivers/net/ethernet/qlogic/qed/qed_dev.c
+>>>>> +++ b/drivers/net/ethernet/qlogic/qed/qed_dev.c
+>>>>> @@ -5123,7 +5123,7 @@ static int qed_init_wfq_param(struct qed_hwfn
+>>>>> *p_hwfn,
+>>>>>
+>>>>>        total_left_rate    = min_pf_rate - total_req_min_rate;
+>>>>>
+>>>>> -    left_rate_per_vp = total_left_rate / non_requested_count;
+>>>>> +    left_rate_per_vp = total_left_rate / (non_requested_count ?: 1);
+>>>>
+>>>> I don't know if num_vports can be 1.
+>>>> But if it is then I agree that the above will be a divide by zero.
+>>>>
+>>>> I do, however, wonder if it would be better to either:
+>>>>
+>>>> * Treat this case as invalid and return with -EINVAL if num_vports is
+>>>> 1; or
+>>> I think that's a good idea considering num_vports == 1 is indeed an 
+>>> invalid
+>>> value.
+>>> I'd like to hear a maintainer's opinion on this.
+>> Practically, this flow will only hit with presence of SR-IOV VFs. In 
+>> that case it's
+>> always expected to have num_vports > 1.
 > 
-> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+> In that case, should we add a check and return with -EINVAL otherwise?
+> Thank you!
+>
 
-LGTM.  Thanks!
+Ping
 
-regards,
-dan carpenter
-
+>>>> * Skip both the calculation immediately above and the code
+>>>>     in the if condition below, which is the only place where
+>>>>     the calculated value is used, if num_vports is 1.
+>>>>     I don't think the if clause makes much sense if num_vports is
+>>>> one.left_rate_per_vp is also used below the if clause, it is assigned
+>>>> to
+>>> .min_speed in a for loop. Looking at that code division by 1 seems to 
+>>> make
+>>> sense to me in this case.
+>>>>
+>>>>>        if (left_rate_per_vp <  min_pf_rate / QED_WFQ_UNIT) {
+>>>>>            DP_VERBOSE(p_hwfn, NETIF_MSG_LINK,
+>>>>>                   "Non WFQ configured vports rate [%d Mbps] is less
+>>> than one
+>>>>> percent of configured PF min rate[%d Mbps]\n",
+>>>>> -- 
+>>>>> 2.25.1
+>>>>>
