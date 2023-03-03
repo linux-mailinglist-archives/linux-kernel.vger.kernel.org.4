@@ -2,86 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC576AA5DD
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 00:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 016B66AA5E0
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 00:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCCXwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 18:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S229797AbjCCXxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 18:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjCCXwV (ORCPT
+        with ESMTP id S229803AbjCCXwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 18:52:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0821865479;
-        Fri,  3 Mar 2023 15:52:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA8D618CB;
-        Fri,  3 Mar 2023 23:52:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3CEC433EF;
-        Fri,  3 Mar 2023 23:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677887539;
-        bh=Jmrj/iKDWzzgD7xtWeQj8EIfUptfnvPqo2teGdKzKow=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=UAdmfVRSyMphUcN/oGDQZpdzQoo49H1qhPSvZXnpGTepleb0CK1Szk218GYcac3AV
-         fwScos3/CK/ZwY353yRQaLzybIkaa+vIUQaR0GSyR9BSxKvooFw8RVsve4sKzdvUmn
-         +i86fL+8DND7SOvOmm1BUKp0nx92TwOOG7JCE6GpAoMcZ8N3d5p+sQUaOo7DcDy/cZ
-         WIaikb0gQ/YSqs/7xsv3fVU0HcQEwZcrQRAhmMtz4rH07oHByLt6G9FoYa7GjsrNWR
-         veD1aErQxmmhI37+Q+yaHRQcsdQtdhFGAU0FIG7QOiWIuHiQ3NQvfvq9KvKNZz9Z4h
-         W/t+Bn26hexSA==
-Date:   Fri, 3 Mar 2023 15:52:17 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Richard Cochran <richardcochran@gmail.com>,
-        thomas.petazzoni@bootlin.com, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Jie Wang <wangjie125@huawei.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Sven Eckelmann <sven@narfation.org>,
-        Wang Yufen <wangyufen@huawei.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Alexandru Tachici <alexandru.tachici@analog.com>
-Subject: Re: [PATCH v2 2/4] net: Expose available time stamping layers to
- user space.
-Message-ID: <20230303155217.012337b8@kernel.org>
-In-Reply-To: <20230303164248.499286-3-kory.maincent@bootlin.com>
-References: <20230303164248.499286-1-kory.maincent@bootlin.com>
-        <20230303164248.499286-3-kory.maincent@bootlin.com>
+        Fri, 3 Mar 2023 18:52:54 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223681FC8
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 15:52:51 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id ay14so12980234edb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 15:52:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ds56s+08kdYvDMmH+33NMO0RlnG4QzULUhWsLzSvP4Q=;
+        b=aT9YjIUpnXvrBXw15F7ekj0rJ1qxLOitv11dwxC+CTR2Np2hl4g+NviFNczwSDUbb3
+         2PeAAOKONtU2ZzEW4x9EOCvPkGyDe5b7C9ibJQPXBJZvTs6cITfhLiPqoUFPBIX7AUxX
+         LPWlXNpDebS7Y8cA/dEKg+bajpJWsyVX8i82XymLa6g8ohgpdyb/GCLsbojVOSbIFXi3
+         ebGu6WEAnMYRLJh4UHMD5WAGfK2MJKP9wKkSU58iDkaSzSCHW78mEU0BGWqg+VU+i2u3
+         qqtWU8VnJfNeCQRjADXYBHlIp2TmUUfKGK9k5QpHPgx7HwFhnN+KIM5ebtI+YSVMiio7
+         9HrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ds56s+08kdYvDMmH+33NMO0RlnG4QzULUhWsLzSvP4Q=;
+        b=xC8J9UmzEYCdt/rWHANntLehXMHJ5JzWtwTAz/Rd7Q9meG9PSeeom5NG9anJRnaJNb
+         fj/Slifigt4qEEdigVI2SRdE5A2VgajeE4jW4ZLHoNvRoDYuIIHP2mARVFFvyqhkZJN9
+         Lsb/b+dkqP5nDF5V1RxNAuwhkUd4SMYbaP01gykf+QqaR8rvH6Bg/pqD1z1gILI3GB/K
+         oGyC/JintuumthUbZOyLDYxzSHr6ygaDHpFWPQaICY7HPjfm1/tr/jnDpfGGWq8fV7KO
+         dncIGdvs5nRMh7IsITP+ZsAuhxg/O5uJDqDz/rTtDA3l5BCJ4DVe4qvfkHckWZu5EkGO
+         KTZQ==
+X-Gm-Message-State: AO0yUKV7CB3oZxOn2+r04YIRe5I4tBAFtBKqr3gcEeoz99ZlAvFJP3tm
+        HfLqKOqFd5iEdgJny9ptylU32g==
+X-Google-Smtp-Source: AK7set8Csku+IygSuZ94X43z6Yl9CT+uKiMOenYBeJySofzD5UzJFd3hGZHsrLwydnh1U+fiFp1coA==
+X-Received: by 2002:a17:907:1905:b0:8a6:e075:e364 with SMTP id ll5-20020a170907190500b008a6e075e364mr3286199ejc.26.1677887569559;
+        Fri, 03 Mar 2023 15:52:49 -0800 (PST)
+Received: from [10.203.3.194] ([185.202.34.81])
+        by smtp.gmail.com with ESMTPSA id ch10-20020a170906c2ca00b008cf8c6f5c43sm1454194ejb.83.2023.03.03.15.52.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 15:52:49 -0800 (PST)
+Message-ID: <a9ae3a90-7712-54d1-fa8f-ca98b8c3093e@linaro.org>
+Date:   Sat, 4 Mar 2023 01:52:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: make qcom_cpufreq_get_msm_id()
+ return the SoC ID
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Robert Marko <robimarko@gmail.com>
+Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230121112947.53433-1-robimarko@gmail.com>
+ <20230121112947.53433-4-robimarko@gmail.com>
+ <d71e8a18-8a09-c722-d9dd-b2d48615828f@linaro.org>
+ <CAA8EJppwNVtUjB7fUZSCrZ88Ssbhmc4HD6oA2nV0uEx+vHBXUw@mail.gmail.com>
+ <2a7a43f1-a13d-f094-5167-de74d5092d91@linaro.org>
+ <CAOX2RU6vociXPTQE4tegQE8YXjHgQAHgdQWm3N9PPekgaw3ung@mail.gmail.com>
+ <2faac9b8-03b9-340f-d43f-317624d4d5bb@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <2faac9b8-03b9-340f-d43f-317624d4d5bb@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri,  3 Mar 2023 17:42:39 +0100 K=C3=B6ry Maincent wrote:
-> Time stamping on network packets may happen either in the MAC or in
-> the PHY, but not both.  In preparation for making the choice
-> selectable, expose both the current and available layers via sysfs.
+On 03/03/2023 22:46, Konrad Dybcio wrote:
+> 
+> 
+> On 3.03.2023 19:38, Robert Marko wrote:
+>> On Sat, 18 Feb 2023 at 21:40, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>
+>>>
+>>>
+>>> On 18.02.2023 21:36, Dmitry Baryshkov wrote:
+>>>> On Sat, 18 Feb 2023 at 16:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 21.01.2023 12:29, Robert Marko wrote:
+>>>>>> Currently, qcom_cpufreq_get_msm_id() does not simply return the SoC ID
+>>>>>> after getting it via SMEM call but instead uses an enum to encode the
+>>>>>> matched SMEM ID to 2 variants of MSM8996 which are then used in
+>>>>>> qcom_cpufreq_kryo_name_version() to set the supported version.
+>>>>>>
+>>>>>> This prevents qcom_cpufreq_get_msm_id() from being universal and its doing
+>>>>>> more than its name suggests, so lets make it just return the SoC ID
+>>>>>> directly which allows matching directly on the SoC ID and removes the need
+>>>>>> for msm8996_version enum which simplifies the driver.
+>>>>>> It also allows reusing the qcom_cpufreq_get_msm_id() for new SoC-s.
+>>>>>>
+>>>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>>>>> ---
+>>>>>>   drivers/cpufreq/qcom-cpufreq-nvmem.c | 44 ++++++++--------------------
+>>>>>>   1 file changed, 12 insertions(+), 32 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>>>> index da55d2e1925a..9deaf9521d6d 100644
+>>>>>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>>>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>>>> @@ -32,12 +32,6 @@
+>>>>>>
+>>>>>>   #include <dt-bindings/arm/qcom,ids.h>
+>>>>>>
+>>>>>> -enum _msm8996_version {
+>>>>>> -     MSM8996_V3,
+>>>>>> -     MSM8996_SG,
+>>>>>> -     NUM_OF_MSM8996_VERSIONS,
+>>>>>> -};
+>>>>>> -
+>>>>>>   struct qcom_cpufreq_drv;
+>>>>>>
+>>>>>>   struct qcom_cpufreq_match_data {
+>>>>>> @@ -134,30 +128,16 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+>>>>>>        dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
+>>>>>>   }
+>>>>>>
+>>>>>> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+>>>>>> +static int qcom_cpufreq_get_msm_id(void)
+>>>>> This should be u32 as info->id is __le32
+>>
+>> Nice catch.
+>>
+>>
+>>>>>
+>>>>> And please export this function from socinfo, it'll come in
+>>>>> useful for other drivers!
+>>
+>> I intentionally did not do that as socinfo is currently fully optional
+>> and I dont really like
+>> the idea of making it required for anything using SMEM.
+> "anything using SMEM"? As in the drivers, or SoCs?
+> If the former, I don't see how exporting a function from within
+> socid and using it here would make it required for other drivers.
+> If the latter, we're talking non-qcom SoCs. SMEM has been with
+> us forever.
+> 
+> 
+> I'm planning to reuse this for Adreno speedbin matching. It's one
+> of those blocks that don't have a revision and/or bin reigster
+> within themselves.
 
-Ethtool, please, no sysfs.
+I have mixed feelings towards this. And anyway it might be better to add 
+get_msm_id() function to SCM driver, rather than parsing the data here.
+
+
+-- 
+With best wishes
+Dmitry
+
