@@ -2,89 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343596A97AD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:56:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745E56A9815
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjCCM4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 07:56:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40526 "EHLO
+        id S230343AbjCCM7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 07:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjCCM4v (ORCPT
+        with ESMTP id S230334AbjCCM7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 07:56:51 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311164ECDB;
-        Fri,  3 Mar 2023 04:56:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9478CCE2127;
-        Fri,  3 Mar 2023 12:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C0A9C433D2;
-        Fri,  3 Mar 2023 12:56:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677848206;
-        bh=+b8VhHcKMAf5AlRnGJugTeQ8FLmcJRwHbHLB2Me/d0Q=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=K5f/zp+h6k4W5qp3yW46hJu0292vk2WgBvLP0LSDar561Y18RqRCAqtIamAqCNlIh
-         6vzY2NhmQ7bb2QSXtIQ1CoM+iT7BNp4ei+wE4uebPF3RHAY/gzlkkFQlHPW9yJg5lB
-         Vst1998vixy+qVvhpEWwdaSaPG0XlPG2R2p4J3DSSigFwybKqQZMDjKq/6UIvfq7sO
-         5faVefergO6ULYEzBmILazHWwBIX8bDHHhv7WrMYUWynKgG+4Sa3O1PLQFNpLY1b8z
-         jp+2+S+tV/ps5L+VldD5MnDq4nCofjPZQJLOXg4B2EY+m0RyuwWe06FSjBFfhjRpU5
-         qnVjCNvoaW5GQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, marijn.suijten@somainline.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: ath10k: Add vdd-smps supply
-References: <20230303024246.2175382-1-konrad.dybcio@linaro.org>
-        <8e695c64-6abd-3c1e-8d80-de636d950442@linaro.org>
-        <41665c73-1647-2cb2-bd33-8dc281a97ee5@linaro.org>
-Date:   Fri, 03 Mar 2023 14:56:36 +0200
-In-Reply-To: <41665c73-1647-2cb2-bd33-8dc281a97ee5@linaro.org> (Konrad
-        Dybcio's message of "Fri, 3 Mar 2023 12:28:21 +0100")
-Message-ID: <87o7payovv.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Fri, 3 Mar 2023 07:59:49 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E9F5C10C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 04:59:43 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323BuYLB017371;
+        Fri, 3 Mar 2023 12:59:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=8BafIE9o/pec5ROF3yZCe6ZMiFHXhnJvy21QiVOvAIM=;
+ b=YKrU/vIGWi0tdJ12Y3NFo4z6iLIMulZxlM8AyR3kPeBArH/slkdJ7g9yBB0MBGrnERBw
+ DTeMmE/p+fSU3QLcRu7F8g9oJaZyyI0QhS52KLIQ5mYeZpIqRo+1iFuWxwdCL4/IsHkl
+ hOTkujAIeTLXFtdiFjbDpIxSKO6jOy4/e6rQwwaf5hpE4nDnzo/NQMxPYqluPaiCImxt
+ 2vVo1Kd4+kwLMHLQFjXfGXPF5qo9hjfITfTvZJY3rqgUCzK+h5XAmO70tK4cHQwD23fi
+ D6jY0Ehptk+jNgocQbSO6pVBBJjgUQ9jg+i3nbN7CxYurIl7v0XDNSsuKql/SL11O6Ct UQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3dfrgqhg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 12:59:27 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 323CxQGX011621
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 3 Mar 2023 12:59:26 GMT
+Received: from hu-visr-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 3 Mar 2023 04:59:23 -0800
+From:   Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+CC:     <quic_visr@quicinc.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
+        <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] ASoC: codecs: tx-macro: Fix for KASAN: slab-out-of-bounds
+Date:   Fri, 3 Mar 2023 18:27:16 +0530
+Message-ID: <20230303125717.29196-1-quic_visr@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zjsKqT_8yFUdw4ttv4xaq7advTS_uKgx
+X-Proofpoint-ORIG-GUID: zjsKqT_8yFUdw4ttv4xaq7advTS_uKgx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_01,2023-03-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ adultscore=0 impostorscore=0 bulkscore=0 mlxlogscore=997 clxscore=1015
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303030112
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Konrad Dybcio <konrad.dybcio@linaro.org> writes:
+From: visr <quic_visr@quicinc.com>
 
-> On 3.03.2023 08:12, Krzysztof Kozlowski wrote:
->> On 03/03/2023 03:42, Konrad Dybcio wrote:
->>> Mention the newly added vdd-smps supply.
->> 
->> There is no explanation here, but looking at your driver change it
->> suggests name is not correct. You named it based on regulator (so the
->> provider), not the consumer.
+When we run syzkaller we get below Out of Bound.
+"KASAN: slab-out-of-bounds Read in regcache_flat_read"
 
-Yeah, it would be nice to have more than just one sentence in the commit
-log.
+Below is the backtrace of the issue:
 
-> Right, I admit this could have been posted with an RFC tag.
-> Maybe Kalle knows more.
+dump_backtrace+0x0/0x4c8
+show_stack+0x34/0x44
+dump_stack_lvl+0xd8/0x118
+print_address_description+0x30/0x2d8
+kasan_report+0x158/0x198
+__asan_report_load4_noabort+0x44/0x50
+regcache_flat_read+0x10c/0x110
+regcache_read+0xf4/0x180
+_regmap_read+0xc4/0x278
+_regmap_update_bits+0x130/0x290
+regmap_update_bits_base+0xc0/0x15c
+snd_soc_component_update_bits+0xa8/0x22c
+snd_soc_component_write_field+0x68/0xd4
+tx_macro_digital_mute+0xec/0x140
 
-Unfortunately not, but maybe Bjorn knows?
+Actually There is no need to have decimator with 32 bits.
+By limiting the variable with short type u8 issue is resolved.
 
+Signed-off-by: RAVULAPATI VISHNUVARDHAN RAO <quic_visr@quicinc.com>
+---
+ sound/soc/codecs/lpass-tx-macro.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
+index bf27bdd5be20..73014fa6e4b8 100644
+--- a/sound/soc/codecs/lpass-tx-macro.c
++++ b/sound/soc/codecs/lpass-tx-macro.c
+@@ -242,7 +242,7 @@ enum {
+ 
+ struct tx_mute_work {
+ 	struct tx_macro *tx;
+-	u32 decimator;
++	u8 decimator;
+ 	struct delayed_work dwork;
+ };
+ 
+@@ -635,7 +635,7 @@ static int tx_macro_mclk_enable(struct tx_macro *tx,
+ 	return 0;
+ }
+ 
+-static bool is_amic_enabled(struct snd_soc_component *component, int decimator)
++static bool is_amic_enabled(struct snd_soc_component *component, u8 decimator)
+ {
+ 	u16 adc_mux_reg, adc_reg, adc_n;
+ 
+@@ -849,7 +849,7 @@ static int tx_macro_enable_dec(struct snd_soc_dapm_widget *w,
+ 			       struct snd_kcontrol *kcontrol, int event)
+ {
+ 	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
+-	unsigned int decimator;
++	u8 decimator;
+ 	u16 tx_vol_ctl_reg, dec_cfg_reg, hpf_gate_reg, tx_gain_ctl_reg;
+ 	u8 hpf_cut_off_freq;
+ 	int hpf_delay = TX_MACRO_DMIC_HPF_DELAY_MS;
+@@ -1064,9 +1064,10 @@ static int tx_macro_hw_params(struct snd_pcm_substream *substream,
+ 			      struct snd_soc_dai *dai)
+ {
+ 	struct snd_soc_component *component = dai->component;
+-	u32 decimator, sample_rate;
++	u32 sample_rate;
+ 	int tx_fs_rate;
+ 	struct tx_macro *tx = snd_soc_component_get_drvdata(component);
++	u8 decimator = 0;
+ 
+ 	sample_rate = params_rate(params);
+ 	switch (sample_rate) {
+@@ -1128,7 +1129,7 @@ static int tx_macro_digital_mute(struct snd_soc_dai *dai, int mute, int stream)
+ {
+ 	struct snd_soc_component *component = dai->component;
+ 	struct tx_macro *tx = snd_soc_component_get_drvdata(component);
+-	u16 decimator;
++	u8 decimator;
+ 
+ 	/* active decimator not set yet */
+ 	if (tx->active_decimator[dai->id] == -1)
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.17.1
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
