@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FDE6A8DBC
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 01:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1BF6A8DC0
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 01:12:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjCCAHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 19:07:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S229758AbjCCAMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 19:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjCCAHi (ORCPT
+        with ESMTP id S229487AbjCCAMF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 19:07:38 -0500
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E8F58493;
-        Thu,  2 Mar 2023 16:07:37 -0800 (PST)
-Received: by mail-oi1-x235.google.com with SMTP id bh20so570356oib.9;
-        Thu, 02 Mar 2023 16:07:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677802057;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ook5Ec9qfFVjwleUXj/LqDwssTSlYFmJKpBefHfpo38=;
-        b=GpkWlWwxGnbF1UiRrzzPA8PYfWq2Gvug/QEwfDNE95HaMrLGmvhWoGfn4+L8LH245n
-         yPCEhcEZoLHGlk+K8qscLb+lhB7Tgd+uiw3sXeb01vJ99JxTTR6CbqkJi3bF0TJ6kBx1
-         XhTvB0LCofq6bAHoYKOFDwEPsklr65TObJKdFpn/IwYJGXrKmpeoyatQ6O1yJhWQAhbn
-         9Bn0u9Xi4JTbosst6trYJeg0o68Uj/kbmnVtMpfvg1M6nBP2wy8Qc2h2SLPBIpExveIY
-         ndWUBqcDCSeF4kvYWc2YbdX4w8dmLGOnZJyyqZy+6Pr0Vp5gWKOj/4TBVjuEiI/qzbvC
-         vr/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677802057;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ook5Ec9qfFVjwleUXj/LqDwssTSlYFmJKpBefHfpo38=;
-        b=1r5SqHb3NIV1b42hZWxR7bwZhOUBt0DUZ6ouIOLqJpo2uzk7eHpO1H58HpQ9Zl/Q9E
-         JHjUcUrQXPSaPssocXtA3RBzDmgkzeu6qQvPTC4wqWp4exKuf4b50wi/dGN7ftnUcjoq
-         0qjFNQSWMqct6BSZTmHI2YXJdlV8p8AXgRWLGWn3sP8D2IQkcBmXOrDp+h0u3ROWCcpr
-         VctdCTYXT+Fmadh9fOoaqhdubOq8ovi+y2zmxKeUG7wDnbLpTk5OdFfb3D51iaqgYgRW
-         MSf/jh5nvHWafFLo2gTPPPJe5dUfCI7NzYWPwl5JHhuNto0OFDe7+xhnFt0FVm6yfl/t
-         +vmQ==
-X-Gm-Message-State: AO0yUKXZgZcphkn5jpuI73ysTN7UsWdaFef5VaUg+MlAxGanO+XFDWGf
-        EGqpS8TWHICShaK5l6qD4uY=
-X-Google-Smtp-Source: AK7set9EW2DKpCm4ea/1PhXxoDawI1xVRRIW889jClCCAKllx++mjYNbCzJqfW87Ft9RQlNWV3qdug==
-X-Received: by 2002:a54:4783:0:b0:37f:8682:937b with SMTP id o3-20020a544783000000b0037f8682937bmr5734187oic.13.1677802056863;
-        Thu, 02 Mar 2023 16:07:36 -0800 (PST)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id i67-20020acaea46000000b00383e0c1f6cdsm276360oih.27.2023.03.02.16.07.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 16:07:36 -0800 (PST)
-Message-ID: <f7c32e01-3205-0d57-2223-58ca7b3e731f@gmail.com>
-Date:   Thu, 2 Mar 2023 21:07:31 -0300
+        Thu, 2 Mar 2023 19:12:05 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A6355539;
+        Thu,  2 Mar 2023 16:12:04 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PST185lsbz4x1R;
+        Fri,  3 Mar 2023 11:11:56 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1677802320;
+        bh=y8wWNYars5Wp25KTgB4IaQUGxk80vrVSQ9DCSBUaDpQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=nCx/NlLyhE7MIPjtBUMoILPKlGudC5d2X4jiywJrXt2G2IbBAq3FuwrzyeIV1XsQ/
+         NJhxQxGiIyBkyMp8QrPWxWlSps7uA0HF0VhGHR8xtsyc5kcZdN8wLecb13lRYyN5Hz
+         JvK4CU2orYG4IpG++/9+SS5Tnbgxt4LZ7o7S0eHrjAY8/NH1bGMEfge/UGx+342qiA
+         8n1Mfv5d3ZTVAJoN4lBQczBMy4E8yRwtygE/uOKh0UeJvdODbBM5s6hm+TCpqKu5ID
+         j22U/sK3TyINj7wezs+YeHg9OQFhmM2QorjVFKz4640ZVitj5YmZ1+DCSX/d+VPxM1
+         nK5PnlzmxfGRw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        Rob Herring <robh+dt@kernel.org>, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 5/5] of: address: Always use dma_default_coherent for
+ default coherency
+In-Reply-To: <B43602D1-89D4-465F-83B1-CD106E07CB29@flygoat.com>
+References: <20230223113644.23356-1-jiaxun.yang@flygoat.com>
+ <20230223113644.23356-6-jiaxun.yang@flygoat.com>
+ <20230301130613.GC467@lst.de>
+ <B43602D1-89D4-465F-83B1-CD106E07CB29@flygoat.com>
+Date:   Fri, 03 Mar 2023 11:11:56 +1100
+Message-ID: <87356mlmlv.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/1] rust: bindgen: Add `alt_instr` as opaque type
-Content-Language: en-US
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Derek Barbosa <debarbos@redhat.com>,
-        rust-for-linux@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <ZACvxNOuuyifQ9Nx@kernel.org>
- <37578649-c696-f3b5-a216-196e210929e5@gmail.com>
- <CANiq72=nvg3cU61zRYXxLUKvEib1qezRHGZSC=7sGah8aDH-dw@mail.gmail.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <CANiq72=nvg3cU61zRYXxLUKvEib1qezRHGZSC=7sGah8aDH-dw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 18:02, Miguel Ojeda wrote:
-> On Thu, Mar 2, 2023 at 3:59 PM Martin Rodriguez Reboredo
-> <yakoyoku@gmail.com> wrote:
->>
->> Still, we have to be careful if these kind of things appear in
->> the future.
-> 
-> Not entirely sure what you mean -- do you mean if some Rust
-> abstractions used its fields? But if we were in that case, it would
-> not compile, so we would notice. Or what do you mean?
-> 
+Jiaxun Yang <jiaxun.yang@flygoat.com> writes:
+>> 2023=E5=B9=B43=E6=9C=881=E6=97=A5 13:06=EF=BC=8CChristoph Hellwig <hch@l=
+st.de> =E5=86=99=E9=81=93=EF=BC=9A
+>>=20
+>>> - select OF_DMA_DEFAULT_COHERENT if !NOT_COHERENT_CACHE
+>>=20
+>> Doesn't powerpc need to select CONFIG_ARCH_DMA_DEFAULT_COHERENT now,
+>> or even better should be doing that in the patch adding that
+>> symbol?
+>
+> If I read the code correctly for powerpc OF_DMA_DEFAULT_COHERENT is only =
+selected
+> with !NOT_COHERENT_CACHE, which means non-coherent dma support is disable=
+d=E2=80=A6.
 
-I've meant a general case with any abstraction, but that would be
-noticed right away.
+I think you're right, but it's not easy to understand.
 
->> And I notice that You haven't mentioned the version of Bindgen that
->> You've used, including its linked libclang too. Otherwise I think this
->> could be accepted.
-> 
-> I could reproduce this with the expected versions. Since, for now,
-> those are the only ones supported and the build system emits a warning
-> otherwise, I think it is fair to assume those versions were used
-> unless otherwise stated.
-> 
-> Cheers,
-> Miguel
+powerpc's NOT_COHERENT_CACHE selects:
 
-Sounds fair.
+  select ARCH_HAS_DMA_PREP_COHERENT
+  select ARCH_HAS_SYNC_DMA_FOR_DEVICE
+  select ARCH_HAS_SYNC_DMA_FOR_CPU
+
+
+Then in your patch 3 you do:
+
+ #if defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE) || \
+	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU) || \
+	defined(CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU_ALL)
+-bool dma_default_coherent;
++bool dma_default_coherent =3D IS_ENABLED(CONFIG_ARCH_DMA_DEFAULT_COHERENT);
+ #endif
+
+So for powerpc if NOT_COHERENT_CACHE=3Dn, then none of those ARCH_HAS
+symbols are defined, and so CONFIG_ARCH_DMA_DEFAULT_COHERENT is never used.
+
+But like I said it's not very obvious, and it also seems fragile to
+future changes.
+
+So it seems it would be more future proof, and self documenting for
+powerpc to just have:
+
+        select ARCH_DMA_DEFAULT_COHERENT if !NOT_COHERENT_CACHE
+
+
+cheers
