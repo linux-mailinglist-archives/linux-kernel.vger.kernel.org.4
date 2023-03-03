@@ -2,184 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F3E6A9112
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCBB6A9124
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjCCGg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 01:36:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
+        id S229502AbjCCGjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 01:39:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCCGg4 (ORCPT
+        with ESMTP id S229471AbjCCGjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 01:36:56 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890C0166F4
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:36:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677825414; x=1709361414;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yBbEulseJrexPnRdW5vWgUoM0mlJ+PXGrASH8nKuNaQ=;
-  b=XExiEXv84J/oJJBKlPmbhcvql0TJkKWvEGVFDWJCR97vQxEAPQfMs0/8
-   /6rrSoMpIqFKIMMRRSgXVH030qi4TOY5Kt6VZ2GiR0oPA7FxwXWStWWMn
-   H4heNJ8gTt2n90qm+KC+j2aYv21480Q6d/j8Qzr2T07K4hQ1RXKA1aIoX
-   vZtm06br9jCPXPaCYPJrnxW+j1UOGPlNMWVyAtwBd3Phu7Br5GZ/pG/eU
-   FNQhX9RRrLv9INyLE28J/Hn08/R7X/8ywAXRIi/1Qwpy8KoHpZBE4DvcY
-   hNw62oD21A659jXw1EjkhmJmzAYMgrtMz60ZF5Goig4EEpVXCm3DZiE9f
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="399778631"
-X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
-   d="scan'208";a="399778631"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 22:36:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="707723105"
-X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
-   d="scan'208";a="707723105"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 02 Mar 2023 22:36:52 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pXz2B-0001GA-1V;
-        Fri, 03 Mar 2023 06:36:51 +0000
-Date:   Fri, 3 Mar 2023 14:36:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Matthew Wilcox <mawilcox@microsoft.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in
- argument 2 (different base types)
-Message-ID: <202303031413.o8quncp8-lkp@intel.com>
+        Fri, 3 Mar 2023 01:39:09 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2070d.outbound.protection.outlook.com [IPv6:2a01:111:f400:feab::70d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2702F1ADFA
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:38:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lMsp6fXJxlFpQa5M3veK4DvWWKMHDy6K8TmwnL2UX521AUgQgC7qT3D+Km+4fxEzr5XlTwszWFA/ghpkKTUIiX9jpOlK8kuiKtlyuVfwBURH2SH6ERWFhJ5vEqafBuZdaqmJEN1xLTkXk46huXKUw/U8ruYRKlOwwuQvPI/zdRxWKdCnZt8lXdKjW/qtrBLkFFuRqIiqqk5U2AZgYQ/AGiBmkdLCmwMqPEr1fxwjXxCndT7VF9leax1S0korDmMq4w5HRmGvVJbBiV7TbsXI5oWkgnG+vJ47Hl8rCQ6ma6EMwEE64RmL9SNr6WsTVup862wBvHESCFyA+/NEYme3aA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5HAhkd5J674s6rs/5sdKbDbjP9OJy5jmFp368D+W0so=;
+ b=HKyYI9mAydHFv2Hr3uWdQMWXYsJqYAcp3p6wrd3I1zg3uw155DQyaTUcGBgYErl9NxPWviFaML8Xec6+M+9os9aR/xIX0bQgTvzqvgfi9ValcSQ2OoPERH2E52mZl4GHn3auytTaTmYpUNwYVObRB6IE2YVhr/YmrTgH21elDEU6BucbtEWJfbxje0zzuAacG4S0C8pvzHE6nD/iNHIo1eR3GmbGXrB6eTahkDeIyE9CsbvL34VUfP5UG20ntLppku80y9MgXVWLR4erYXLOTRfynq2b+h8uMoqYkQZYZvzV25Fd4fw/NvUNItgwDYkGibxzz5VrVvL9RdLYBOwGhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5HAhkd5J674s6rs/5sdKbDbjP9OJy5jmFp368D+W0so=;
+ b=YI3cLtZDLMTh9B2rdEnTHWBYFwCMbR0JUbTeT4e6BAaRVBhtiPG5tbNvONht/xW17r4/SP/jNp0MyMsWD3LiN18ZrbeMHa4RlCLpHDt1vuaxSoMZle11ht9wyHfSb89Wgv403cQQjlzdwpYUvsyXdOBEt3lUYYv9lWX9TsXe0DEogWj/y92vv4N75wEfXCinl64xdsbOrZsw8KQJ/G0MzLSPvja7GCPXHdXNOHx8CdbKfgmR9oIyicxCeoxpco2oMotYtygNaL1ErF8bCJ/T66suBYkMLLhhZ27zVhKfX4PF3ENVWRVfkehTGzUORJa/T0S45a4a2Q4+SaBfnGR8gQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SG2PR06MB5287.apcprd06.prod.outlook.com (2603:1096:4:1df::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.10; Fri, 3 Mar
+ 2023 06:37:44 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6156.016; Fri, 3 Mar 2023
+ 06:37:44 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        jefflexu@linux.alibaba.com
+Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH v2] erofs: mark z_erofs_lzma_init/erofs_pcpubuf_init w/ __init
+Date:   Fri,  3 Mar 2023 14:37:31 +0800
+Message-Id: <20230303063731.66760-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0040.apcprd02.prod.outlook.com
+ (2603:1096:3:18::28) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SG2PR06MB5287:EE_
+X-MS-Office365-Filtering-Correlation-Id: 532c0b9b-539f-4f65-0c52-08db1bb1cb6c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ArKsENewWFhQ6hTif0+HDmkukTkw71P6J6axbSE/iEzuUC/A4L8dy97IfP3v4lat/tHCaP68j9o54qPRkZAVa5BtmJ540NOKYim4UsmWGqPP6D/h657GEmTcVTopAzxG7bkCyZAGL/j9OD4A3eghgjszYKhD9QJi5HBNv6Wihuc2sOqZVBsc327/j9/L2EpteGmY988LAxAsJ7Hcx7WHDm/Ac4iffcHNRpFWJY+3lsDH41MbgTRh0+Fa6skec7PbOoDVKcSJ8RuZGGeBhLVtRUoTCqKFzZy3ryGBTUDQdkaD4CwjgbI5AsoWli7sINGWTT3C+BFWcYYYPbPibw4HnTqILLnDiFtAdnbuF4cOGkrn10trRfnN9dYzVg+KfqbbckIh/xSHKZQH2kMYEibFSh23WyCMNR7vVImx4MJspLCg7UBrKTpvLuW9sBf5FhAlQyMAtTGm8YaR247txlT9Ts48TUN0Crn8EepYg/Hbr6N1IT+/AW917lsz5mz1TkhFHqgVnkDtlKEhAooZRoLB2nxxNVocM+Mj5mk7fGZ/Rv6NzuGaFBGeSMmkc6jQiz17HwDrovFk1RXhW+QlxCkWWmISH2BkJdXz7NTnIb4uXMKtINAIrm0IYVBOEIdNCNzgC6AqKHJFPn0qwVY8Yyx3FLx9NbjjsGAJs1uMv0KIRmWoLk6PcbnsMM2p+ITzGJLO3oTi7tzCazVD9kH5d2P//g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(39860400002)(376002)(366004)(136003)(451199018)(5660300002)(316002)(8936002)(8676002)(41300700001)(4326008)(66556008)(83380400001)(66476007)(66946007)(2906002)(6486002)(6512007)(52116002)(36756003)(38350700002)(478600001)(38100700002)(6666004)(2616005)(186003)(1076003)(6506007)(86362001)(107886003)(26005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PvVloSonKDqdzYO+neYwgczSaKP0U+iMtMF7xqBgGsR9jMWTiDQTSeDzqKji?=
+ =?us-ascii?Q?kVHJCSbn7/xyv4aqkOP288i5qoKlZyJPLIDQ6seMi+U1o0LDuVA2uoQDfYTA?=
+ =?us-ascii?Q?xHvdCPd6eokFqoMWz/LMoy4/qKt6BhF8M6+JyXZ6/9KLtLQnFI20XPeVNjbd?=
+ =?us-ascii?Q?/nWuxrMRq3rggbEUIcvngWzYmwBOICUJogEBG8+U2lzvdNPvCTaTgmfAWQmf?=
+ =?us-ascii?Q?SEy/JfTXAoy7MESgyWTKAOhoPGuPdDpjXHFdt4weMKyNOaNhNiYyNd23IhrM?=
+ =?us-ascii?Q?ADKSgxNB6XmVu8G3JLXsvBm/7umeoG1cCoTIGtnes7DIt7omjoKdffcjXndx?=
+ =?us-ascii?Q?580FDtmhuRuxD+DlGImZsDbfwkZztnKik9r12cY56P57n/Sw75bzHbyJ14Da?=
+ =?us-ascii?Q?Gkif/W8gC71RCONDdivtZ5b43cQDFcmlcgMuDzTzrrtTrHmb4/MRmGU2gnP3?=
+ =?us-ascii?Q?mcUAluM3Gm4nJSyT8e7UUTEI/uRrIMtsMj3ZGJnR1oNVRlLaCOTRc9YY/3M1?=
+ =?us-ascii?Q?Jr9TPR1fmZm2J1hcpvhi/Ch+AXwXhsfQDYO6qXwT5j20/5tGnTe8p81tS3sP?=
+ =?us-ascii?Q?um2UAq2RE4wvjQcpzIxXJYEgu/nxiIhiJZe15B04/E+XIP37G5qnskoWsBsT?=
+ =?us-ascii?Q?obak9FA6ZPJRD03bpfUN9vCILyGdaQMJWyKfH0U5PzwiVyvLfzGchrhkpO3I?=
+ =?us-ascii?Q?/zng0GOzyBAOb0Gc+zHaoYGUQiie2VpcmqNLUMKPAsrlRYZQLIwQa+m1IaqC?=
+ =?us-ascii?Q?/FNfLc8Q7cLg6HTUE2ShuSm1p2abY5rLGibT/34L8aQ6kA/lg3jaSiVbOi/Y?=
+ =?us-ascii?Q?zOoZvYuUtihMkJBU3oZaDDrH8xjkSy7W+dIZqCbfidg7e81k30uDMrza5nl6?=
+ =?us-ascii?Q?KM0lDt+syISyhNleVSoDZluP/bYPXXqukq+1QDrSshPd2zc5379NdKFwwZmy?=
+ =?us-ascii?Q?8YIhQZqrTx9/rVQLS0g1fRdU9QkHlt9uP4r7XaKUFTVNGIaDI/N4GmfooFPv?=
+ =?us-ascii?Q?HX3FcpEzU4iFmLeyz6oLVPQO2bocTkj6cm3I6lLdV0EkNMBvL2e2VPgG1s9p?=
+ =?us-ascii?Q?n9Nv1MrYCNqUjfeSrkilG2bQMU5kLtVVVT9xAmG7jJxwl8sy2Y8/UNSDFGJP?=
+ =?us-ascii?Q?eM/r8/VDvqwTdVNnusd/VvSQBAWmtdQXJFOgaMyTXf2pyCf0HZpgShbUsx67?=
+ =?us-ascii?Q?UB5p5BWfyR2KkJdRRC7iY7o25DGpg3zwyGLxVuq1kWJGJAVrh4Gx2UsC2Dy1?=
+ =?us-ascii?Q?TPAxdngGDXBNIzv9JsVFpBxDyHKDerr2CKdWD9vYd7nafH/xfW+EHpWybZ3r?=
+ =?us-ascii?Q?rBy+BoSyPu5zdGN0Vul5nnD9soIPjHuSXyQB8UFqdgYjOAy/8wJuENASWN49?=
+ =?us-ascii?Q?5+M4Vz5V47bkx/CCgOx7CjqvlJL9Fqw5ZNiissNEujg0tyYuSmG/ketvKBwS?=
+ =?us-ascii?Q?jHOvQN81HgKrnKAZzWhxNulbG9EFb2Q7q+IU//XP+GRW3CHPkXtnJgRYV2Jv?=
+ =?us-ascii?Q?av8+J9JDJNQ3aRys0WwldXbNJAlPy7U8+JULp9cekGE9Bvo392MWZesM9YUO?=
+ =?us-ascii?Q?v10F/j7siwDLmq0siwV1SlIeOeBdTfOc/09aWuGt?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 532c0b9b-539f-4f65-0c52-08db1bb1cb6c
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 06:37:44.0636
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zuFX7oht3ROc+yssyfhGcsVZpxYDh7mMKem3uPcGN8UiB7gMBK08tmilu2uYx5dkQbzXqzFUkUa/4xQmOf1Paw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5287
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2eb29d59ddf02e39774abfb60b2030b0b7e27c1f
-commit: ac036f9570a2d318b7d8dbbdbf0e269d7cc68cef vga: optimise console scrolling
-date:   5 years ago
-config: mips-randconfig-s033-20230302 (https://download.01.org/0day-ci/archive/20230303/202303031413.o8quncp8-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ac036f9570a2d318b7d8dbbdbf0e269d7cc68cef
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout ac036f9570a2d318b7d8dbbdbf0e269d7cc68cef
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=mips SHELL=/bin/bash drivers/tty/vt/ kernel/trace/ mm/
+They are used during the erofs module init phase. Let's mark it as
+__init like any other function.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303031413.o8quncp8-lkp@intel.com/
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+v2:
+-change in internal.h
+ fs/erofs/decompressor_lzma.c | 2 +-
+ fs/erofs/internal.h          | 4 ++--
+ fs/erofs/pcpubuf.c           | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/tty/vt/vt.c: note: in included file (through include/linux/vt_buffer.h, include/linux/selection.h):
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
->> arch/mips/include/asm/vga.h:46:21: sparse: sparse: incorrect type in argument 2 (different base types) @@     expected unsigned short [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:46:21: sparse:     expected unsigned short [usertype]
-   arch/mips/include/asm/vga.h:46:21: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:41:16: sparse: sparse: cast to restricted __le16
-   arch/mips/include/asm/vga.h:36:15: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short volatile [usertype] @@     got restricted __le16 [usertype] @@
-   arch/mips/include/asm/vga.h:36:15: sparse:     expected unsigned short volatile [usertype]
-   arch/mips/include/asm/vga.h:36:15: sparse:     got restricted __le16 [usertype]
-   drivers/tty/vt/vt.c: In function 'do_con_trol':
-   drivers/tty/vt/vt.c:1780:20: warning: this statement may fall through [-Wimplicit-fallthrough=]
-    1780 |                 if (!is_kbd(vc, lnm))
-         |                    ^
-   drivers/tty/vt/vt.c:1782:9: note: here
-    1782 |         case 13:
-         |         ^~~~
-   drivers/tty/vt/vt.c:1905:20: warning: this statement may fall through [-Wimplicit-fallthrough=]
-    1905 |                 if (vc->vc_ques)
-         |                    ^
-   drivers/tty/vt/vt.c:1907:9: note: here
-    1907 |         case ESgetpars:
-         |         ^~~~
-
-vim +46 arch/mips/include/asm/vga.h
-
-    43	
-    44	static inline void scr_memsetw(u16 *s, u16 v, unsigned int count)
-    45	{
-  > 46		memset16(s, cpu_to_le16(v), count / 2);
-    47	}
-    48	
-
+diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
+index 091fd5adf818..307b37f0b9f5 100644
+--- a/fs/erofs/decompressor_lzma.c
++++ b/fs/erofs/decompressor_lzma.c
+@@ -47,7 +47,7 @@ void z_erofs_lzma_exit(void)
+ 	}
+ }
+ 
+-int z_erofs_lzma_init(void)
++int __init z_erofs_lzma_init(void)
+ {
+ 	unsigned int i;
+ 
+diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
+index 3f3561d37d1b..1db018f8c2e8 100644
+--- a/fs/erofs/internal.h
++++ b/fs/erofs/internal.h
+@@ -486,7 +486,7 @@ static inline void *erofs_vm_map_ram(struct page **pages, unsigned int count)
+ void *erofs_get_pcpubuf(unsigned int requiredpages);
+ void erofs_put_pcpubuf(void *ptr);
+ int erofs_pcpubuf_growsize(unsigned int nrpages);
+-void erofs_pcpubuf_init(void);
++void __init erofs_pcpubuf_init(void);
+ void erofs_pcpubuf_exit(void);
+ 
+ int erofs_register_sysfs(struct super_block *sb);
+@@ -545,7 +545,7 @@ static inline int z_erofs_fill_inode(struct inode *inode) { return -EOPNOTSUPP;
+ #endif	/* !CONFIG_EROFS_FS_ZIP */
+ 
+ #ifdef CONFIG_EROFS_FS_ZIP_LZMA
+-int z_erofs_lzma_init(void);
++int __init z_erofs_lzma_init(void);
+ void z_erofs_lzma_exit(void);
+ int z_erofs_load_lzma_config(struct super_block *sb,
+ 			     struct erofs_super_block *dsb,
+diff --git a/fs/erofs/pcpubuf.c b/fs/erofs/pcpubuf.c
+index a2efd833d1b6..c7a4b1d77069 100644
+--- a/fs/erofs/pcpubuf.c
++++ b/fs/erofs/pcpubuf.c
+@@ -114,7 +114,7 @@ int erofs_pcpubuf_growsize(unsigned int nrpages)
+ 	return ret;
+ }
+ 
+-void erofs_pcpubuf_init(void)
++void __init erofs_pcpubuf_init(void)
+ {
+ 	int cpu;
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.25.1
+
