@@ -2,123 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B794E6A8F64
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 03:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9816A8F66
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 03:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjCCCsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 21:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        id S229625AbjCCCtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 21:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCCCsC (ORCPT
+        with ESMTP id S229437AbjCCCte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 21:48:02 -0500
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8AE9EE4;
-        Thu,  2 Mar 2023 18:48:01 -0800 (PST)
-Received: by mail-pl1-f193.google.com with SMTP id p20so1279327plw.13;
-        Thu, 02 Mar 2023 18:48:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677811681;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OnpynidftFFkBECkxZccWZ1LMjJJyuwajRKOI+QdZmM=;
-        b=m9o9QQH6emoTTRucGBOqfqe8zfrIew/9xd4a1smyCj60h3DAxLxdwz651XMUSV4v/g
-         y5pgOQyIKSjEdcjpjFN/QSUgNCtR8VKRbLUxnvStjbZp1RN+lcnTrDmJhV6PhzyV991d
-         J5gzGGbEx/FN0HKY2wU6V8QtbKoaW5/GyolNiGCXJUr6pCIlz5ucMHIko8PeeB8XKLCd
-         SO4kjRywhEp5YiXuxD/AwKm8NWZJ9trK1+YdlBu8PLs8N4C8nSWtbKnFslh6AM3jrSaK
-         jxnnFwyTv9tcPXC8fz2o+bQ5NVDrE98k/oMFtoLnvSluYNatI77pwHlTD0dsMVXY5NBP
-         EPwg==
-X-Gm-Message-State: AO0yUKWhV8CuEjVVLQGtVQftsW0uX6G0LRfIhEed4Qwtv5ZSENhRWfyg
-        vVmzelo+W3WZGd6/m/+v0ro=
-X-Google-Smtp-Source: AK7set+RXjeuMXL2sZI9VnRn4tj3yitEu6r6oOY/Sciud9lPFKTvgomWZoSyRdTckPrnAhi3H2zpJA==
-X-Received: by 2002:a17:90a:1a53:b0:234:b4a7:2abd with SMTP id 19-20020a17090a1a5300b00234b4a72abdmr35348pjl.12.1677811681022;
-        Thu, 02 Mar 2023 18:48:01 -0800 (PST)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id cq18-20020a17090af99200b002348bfd3799sm2241767pjb.39.2023.03.02.18.47.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 18:48:00 -0800 (PST)
-From:   Xueqin Luo <luoxueqin@kylinos.cn>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin@kylinos.cn, xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH v2] PM/hibernation: set the default image size for large memory
-Date:   Fri,  3 Mar 2023 10:47:55 +0800
-Message-Id: <20230303024755.27491-1-luoxueqin@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Mar 2023 21:49:34 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC43B9EE8;
+        Thu,  2 Mar 2023 18:49:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677811773; x=1709347773;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ESvh58jnHz4IXPBjDt02WyaBLz5hm1ckjLfmgT8Pgno=;
+  b=aMoXlfZjeVMlE0zQ1UD2yb8fbT9aphtIF98eHhdMUtuyMbHCA4T2syrv
+   FrCl5UTxKpQr1eGNf7Wnp4yZPvVcB+RMyJG+AuenzQBnU7lCNYBiULQaH
+   ebKpooaKbJh/CJYetVARXuGQfIZSo5iWvL7fz5HAlpuIKL553wNFelDOV
+   VoolpQKbh2UOmxKJnF7eHTor5sgnHFGSAwPV2Cnw5hwmY5Dk1WAXXW288
+   hsS69QQgLS1D/xV9mHPWCf+sCr6jiKk+XTKVaFdPw1bLu5iG7tv3FkrUA
+   ELPU8mC9b8QWsKi27ziVxX8hycvWSkNJj91yfnSngs7ybnBQPxF4uXa4A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="399743487"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="399743487"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 18:49:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="818311002"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="818311002"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Mar 2023 18:49:29 -0800
+Message-ID: <2c9115d0-f251-c284-63d6-73714edc96b4@linux.intel.com>
+Date:   Fri, 3 Mar 2023 10:48:36 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: Re: [PATCH 1/4] iommu/vt-d: Implement set device pasid op for default
+ domain
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+ <20230302005959.2695267-2-jacob.jun.pan@linux.intel.com>
+ <fad7f28f-b4e8-c1c3-4ca4-a48c5c6d7f4a@linux.intel.com>
+ <BN9PR11MB52762957011E60E935E82CC88CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB52762957011E60E935E82CC88CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xueqin Luo <luoxueqin@kylinos.cn>
+On 3/3/23 10:36 AM, Tian, Kevin wrote:
+>> From: Baolu Lu <baolu.lu@linux.intel.com>
+>> Sent: Thursday, March 2, 2023 10:07 PM
+>>> +
+>>> +	if (!sm_supported(iommu) || !info)
+>>
+>> @info has been referenced. !info check makes no sense.
+>>
+>> Add pasid_supported(iommu).
+>>
+>> Do you need to check whether the domain is compatible for this rid
+>> pasid?
+> 
+> what kind of compatibility is concerned here? In concept a pasid
+> can be attached to any domain if it has been successfully attached
+> to rid. Probably we can add a check here that RID2PASID must
+> point to the domain already.
 
-We found that the larger the memory, the larger the image saved by the
-S4, so that the S4 took longer and longer. However, through observation,
-we found that the image size is generally more than 900,000 pages, so
-we changed the image_size of a computer with 16GB or more memory to 1
-million pages. Let it release more unnecessary pages to reduce S4 run
-time.
+"...if it has been successfully attached to rid..."
 
-This is the test data for 5 hours after the computer is turned on:
+We should not have this assumption in iommu driver's callback. The iommu
+driver has no (and should not have) knowledge about the history of any
+domain.
 
-Original kernel begin:
+> 
+>>
+>>> +		return -ENODEV;
+>>> +
+>>> +	if (WARN_ON(pasid == PASID_RID2PASID))
+>>> +		return -EINVAL;
+>>
+>> Add a call to domain_attach_iommu() here to get a refcount of the domain
+>> ID. And call domain_detach_iommu() in intel_iommu_remove_dev_pasid().
+>>
+> 
+> Is it necessary? iommu core doesn't allow taking ownership
+> if !xa_empty(&group->pasid_array) so if this pasid attach succeeds
+> this device cannot be attached to another domain before pasid
+> detach is done on the current domain.
 
-[2023-02-24 19:16:56] [   46.105423][ 2] [ T3075] PM: hibernation entry
-[2023-02-24 19:18:05] [   56.987043][ 2] [ T3075] PM: hibernation exit
+It's not about the pasid, but the domain id.
 
-5 hours later:
+This domain's id will be set to a field of the device's pasid entry. It
+must get a refcount of that domain id to avoid use after free.
 
-[2023-02-25 00:22:48] [18069.651640][ 4] [ T7590] PM: hibernation entry
-[2023-02-25 00:24:06] [18080.639889][ 2] [ T7590] PM: hibernation exit
-
-After 5h, you can see that the S4 takes 8s more time.
-
-The modified kernel begin:
-
-[2023-02-24 10:47:04] [  166.309041][ 7] [ T6943] PM: hibernation entry
-[2023-02-24 10:48:14] [  180.382188][ 3] [ T6943] PM: hibernation exit
-
-5 hours later:
-
-[2023-02-24 15:52:08] [18190.171183][ 7] [T11151] PM: hibernation entry
-[2023-02-24 15:53:15] [18201.028488][ 2] [T11151] PM: hibernation exit
-
-You can see that after 5 hours, the time doesn't change much.
-
-Signed-off-by: xueqin Luo <luoxueqin@kylinos.cn>
----
- kernel/power/snapshot.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index cd8b7b35f1e8..de91d6916359 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -136,7 +136,14 @@ unsigned long image_size;
- 
- void __init hibernate_image_size_init(void)
- {
--	image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
-+	/* The totalram pages() for a computer of 16 memory size is
-+	 * equal to 4032990 pages. And according to our observation,
-+	 * the average image size is 1000000 pages.
-+	 */
-+	if (totalram_pages() < 4032990)
-+		image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
-+	else
-+		image_size = 1000000 * PAGE_SIZE;
- }
- 
- /*
--- 
-2.25.1
-
+Best regards,
+baolu
