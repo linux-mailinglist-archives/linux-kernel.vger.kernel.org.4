@@ -2,122 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FCDD6A98F6
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7192F6A98FA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:00:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjCCOAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        id S231182AbjCCOAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:00:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCCOAS (ORCPT
+        with ESMTP id S231138AbjCCOA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:00:18 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F3819F05;
-        Fri,  3 Mar 2023 06:00:17 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 233E022C28;
-        Fri,  3 Mar 2023 14:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677852016; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TSPgcgYep19sTblrzTc534Psr8I1LCQa3PoV9+gaqwY=;
-        b=Js6lzoGRnwnC26dHJ38ZpYrqKV6zGXVayz47S60UXFrJiVG0Z1bubyjVPR2nJTdFDBzpN4
-        +Q0olmSqlXkKafI729qXr06A82ygwBMoP/mFTnYOLy8+e+CqXy+JsqBSmEfNWnRVvUNp0p
-        IFpl9OsqFmeM4yi1Ut03xJaLQ7Ik848=
-Received: from suse.cz (unknown [10.100.201.202])
+        Fri, 3 Mar 2023 09:00:29 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD335C13B;
+        Fri,  3 Mar 2023 06:00:28 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id AA6F02C141;
-        Fri,  3 Mar 2023 14:00:13 +0000 (UTC)
-Date:   Fri, 3 Mar 2023 15:00:13 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Seth Forshee <sforshee@kernel.org>,
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 242C31EC0657;
+        Fri,  3 Mar 2023 15:00:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1677852027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=qnYHVDGtQv3jnmqIeyy8ite/fQyg2MBE/ckQjSbBpNM=;
+        b=YlRhGsYyfadQXHimloeHMfYzHgPMt4rRKJ5ZJpz3f7rZXiR4DcSs61vbGpJcRD7wubIbgn
+        Cy5sYRTCmvgOgF2q8BIUBY0oGyQjXPUVKD2axEEDzT4EdiJfZum0kFSwUDEeQjb4kIYCi9
+        dwYF79zrOj6nrFa4wG5FeRtKoWY9ZUM=
+Date:   Fri, 3 Mar 2023 15:00:22 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
         Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Jiri Kosina <jikos@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Rik van Riel <riel@surriel.com>
-Subject: Re: [PATCH v3 2/3] livepatch,sched: Add livepatch task switching to
- cond_resched()
-Message-ID: <ZAH9baGIOVL4/OHM@alley>
-References: <cover.1677257135.git.jpoimboe@kernel.org>
- <4ae981466b7814ec221014fc2554b2f86f3fb70b.1677257135.git.jpoimboe@kernel.org>
- <Y/zSgw5LOpbp7e/A@alley>
- <20230228165608.kumgxziaietsjaz3@treble>
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v7 19/41] x86/mm: Check shadow stack page fault errors
+Message-ID: <ZAH9dhFGtbR5J8j+@zn.tnic>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-20-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230228165608.kumgxziaietsjaz3@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230227222957.24501-20-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2023-02-28 08:56:08, Josh Poimboeuf wrote:
-> On Mon, Feb 27, 2023 at 04:55:47PM +0100, Petr Mladek wrote:
-> > On Fri 2023-02-24 08:50:00, Josh Poimboeuf wrote:
-> > > There have been reports [1][2] of live patches failing to complete
-> > > within a reasonable amount of time due to CPU-bound kthreads.
-> > > 
-> > > Fix it by patching tasks in cond_resched().
-> > > 
-> > > There are four different flavors of cond_resched(), depending on the
-> > > kernel configuration.  Hook into all of them.
-> > > 
-> > > A more elegant solution might be to use a preempt notifier.  However,
-> > > non-ORC unwinders can't unwind a preempted task reliably.
-> > > 
-> > > [1] https://lore.kernel.org/lkml/20220507174628.2086373-1-song@kernel.org/
-> > > [2] https://lkml.kernel.org/lkml/20230120-vhost-klp-switching-v1-0-7c2b65519c43@kernel.org
-> > > 
-> > > Tested-by: Seth Forshee (DigitalOcean) <sforshee@kernel.org>
-> > > Reviewed-by: Petr Mladek <pmladek@suse.com>
-> > > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> > 
-> > Just for record, I have double checked the changes against v2
-> > and everything looks good to me.
+On Mon, Feb 27, 2023 at 02:29:35PM -0800, Rick Edgecombe wrote:
+> @@ -1310,6 +1324,23 @@ void do_user_addr_fault(struct pt_regs *regs,
+>  
+>  	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+>  
+> +	/*
+> +	 * For conventionally writable pages, a read can be serviced with a
+> +	 * read only PTE. But for shadow stack, there isn't a concept of
+> +	 * read-only shadow stack memory. If it a PTE has the shadow stack
+
+s/it //
+
+> +	 * permission, it can be modified via CALL and RET instructions. So
+> +	 * core MM needs to fault in a writable PTE and do things it already
+> +	 * does for write faults.
+> +	 *
+> +	 * Shadow stack accesses (read or write) need to be serviced with
+> +	 * shadow stack permission memory, which always include write
+> +	 * permissions. So in the case of a shadow stack read access, treat it
+> +	 * as a WRITE fault. This will make sure that MM will prepare
+> +	 * everything (e.g., break COW) such that maybe_mkwrite() can create a
+> +	 * proper shadow stack PTE.
+> +	 */
+> +	if (error_code & X86_PF_SHSTK)
+> +		flags |= FAULT_FLAG_WRITE;
+>  	if (error_code & X86_PF_WRITE)
+>  		flags |= FAULT_FLAG_WRITE;
+>  	if (error_code & X86_PF_INSTR)
+> -- 
+> 2.17.1
 > 
-> Whoops, so I found another little surprise:
-> 
-> static int klp_check_stack(struct task_struct *task, const char **oldname)
-> {
->         static unsigned long entries[MAX_STACK_ENTRIES];
-> 	^^^^^^
-> 
-> That entries array is shared between the klp_mutex owner and all
-> cond_resched() callers.
 
-Huh, great catch!
+-- 
+Regards/Gruss,
+    Boris.
 
-> MAX_STACK_ENTRIES is 100, which seems excessive.  If we halved that, the
-> array would be "only" 400 bytes, which is *almost* reasonable to
-> allocate on the stack?
-
-It is just for the stack in the process context. Right?
-
-I think that I have never seen a stack with over 50 entries. And in
-the worst case, a bigger amount of entries would "just" result in
-a non-reliable stack which might be acceptable.
-
-It looks acceptable to me.
-
-> Alternatively we could have a percpu entries array... :-/
-
-That said, percpu entries would be fine as well. It sounds like
-a good price for the livepatching feature. I think that livepatching
-is used on big systems anyway.
-
-I slightly prefer the per-cpu solution.
-
-Best Regards,
-Petr
+https://people.kernel.org/tglx/notes-about-netiquette
