@@ -2,98 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8886AA367
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8626AA2FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233324AbjCCV6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        id S233043AbjCCVwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:52:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbjCCV5p (ORCPT
+        with ESMTP id S232889AbjCCVvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:57:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2486F6B5F9;
-        Fri,  3 Mar 2023 13:50:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86DFF61919;
-        Fri,  3 Mar 2023 21:48:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C39C4339C;
-        Fri,  3 Mar 2023 21:48:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677880099;
-        bh=cbWO7an7DylfP+mWKJycr3q9q9kP6l5spTuHFzL5k9Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tur+lxfaWS2PEfHqhXCSCqorn0loYFDgF/ysu2nA3Y89cf4bydvogiyKsP8wgrKp2
-         ++6/CwpTJ1Kam3WHl37LtzKwKoTj4WP/bfsgMIpINtvKS/xVwZV2mEaykufRt2VOvy
-         rQKrAJ7IbE+b4fLuhcVVobHkxPbYDzCedd1So0rUN465yGD7kxoEqFa51KKmQw6D8N
-         04zH4H/spilGOGb1EQKnfYPsAr3mhkMu4DLP3PIv/FBq/0U9C5n4SeHVYnqR7ORAKN
-         DKBprDImMjHVFQuYzTkJxeiksIjZxgqcGnE9mEATN8Ukh70fT1LoQaDLHJqvLEt3Na
-         gUs/u7bb1s7Xg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yuan Can <yuancan@huawei.com>, Simon Horman <horms@verge.net.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, drv@mailo.com,
-        linux-staging@lists.linux.dev
-Subject: [PATCH AUTOSEL 5.4 06/20] staging: emxx_udc: Add checks for dma_alloc_coherent()
-Date:   Fri,  3 Mar 2023 16:47:52 -0500
-Message-Id: <20230303214806.1453287-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214806.1453287-1-sashal@kernel.org>
-References: <20230303214806.1453287-1-sashal@kernel.org>
+        Fri, 3 Mar 2023 16:51:43 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFC165449;
+        Fri,  3 Mar 2023 13:47:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677880048; x=1709416048;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=kj65eZ6x1XaMxzFMjvimVXP1TU9dIZpyh6Wk8sLAlnk=;
+  b=n/2TUIYNbv0IsFT7hK71sydMcakD4tcjml8BTP1xeveswn48Jv09HE6f
+   5k+GGKV7RG22OZK/JY1ozTsW3gxpXRAddxlJNxgheoGgOKlb7Smtw+Z0E
+   FUXfLbiG6/wVt7hpvOmR8lWVG43FqwSkx0AZ71bR0kZB8dwvvwyNORlOB
+   e9aDdwjgCXYzYxn9lwezxtpGdXHkQ+eq1tPo9zuJOgNe9plwlcAZJffwH
+   9cJPGDW2K6pYJCUQZj5bSILw8KJP8OZqx4ygb9oRFYWRQxoAT3SaE5vVZ
+   McRc6axBh9XCjdE4kE/dkFwwrQ8Es1Ga3Hz4AU2n7a0VvPAvCWHX53RYH
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="337481927"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="337481927"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 13:44:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="668795971"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="668795971"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 13:44:03 -0800
+Date:   Fri, 3 Mar 2023 13:47:53 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        "David Woodhouse" <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 3/4] iommu/sva: Support reservation of global PASIDs
+Message-ID: <20230303134753.660d0755@jacob-builder>
+In-Reply-To: <BN9PR11MB52765C5E0DC0759880C08E258CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+        <20230302005959.2695267-4-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB52765C5E0DC0759880C08E258CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yuan Can <yuancan@huawei.com>
+Hi Kevin,
 
-[ Upstream commit f6510a93cfd8c6c79b4dda0f2967cdc6df42eff4 ]
+On Thu, 2 Mar 2023 09:43:03 +0000, "Tian, Kevin" <kevin.tian@intel.com>
+wrote:
 
-As the dma_alloc_coherent may return NULL, the return value needs to be
-checked to avoid NULL poineter dereference.
+> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > Sent: Thursday, March 2, 2023 9:00 AM
+> > 
+> > Global PASID allocation is under IOMMU SVA code since it is the primary
+> > use case.  However, some architecture such as VT-d, global PASIDs are
+> > necessary for its internal use of DMA API with PASID.  
+> 
+> No, global PASID is not a VT-d restriction. It's from ENQCMD/S hence a
+> device requirement.
+I meant VT-d based platforms, it is kind of intertwined in that ENQCMDS
+does not restrict RIDPASID!=DMA PASID, vt-d does. Without this
+restriction, there wouldn't be a need for this patch. Let me reword.
+> > 
+> > This patch introduces SVA APIs to reserve and release global PASIDs.
+> > 
+> > Link: https://lore.kernel.org/all/20230301235646.2692846-4-
+> > jacob.jun.pan@linux.intel.com/
+> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > ---
+> >  drivers/iommu/iommu-sva.c | 25 +++++++++++++++++++++++++
+> >  include/linux/iommu.h     | 14 ++++++++++++++
+> >  2 files changed, 39 insertions(+)
+> > 
+> > diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+> > index 8c92a145e15d..cfdeafde88a9 100644
+> > --- a/drivers/iommu/iommu-sva.c
+> > +++ b/drivers/iommu/iommu-sva.c
+> > @@ -149,6 +149,31 @@ u32 iommu_sva_get_pasid(struct iommu_sva
+> > *handle)
+> >  }
+> >  EXPORT_SYMBOL_GPL(iommu_sva_get_pasid);
+> > 
+> > +ioasid_t iommu_sva_reserve_pasid(ioasid_t min, ioasid_t max)
+> > +{
+> > +	int ret;
+> > +
+> > +	if (min == IOMMU_PASID_INVALID || max ==
+> > IOMMU_PASID_INVALID ||
+> > +	    min == 0 || max < min)
+> > +		return IOMMU_PASID_INVALID;
+> > +
+> > +	ret = ida_alloc_range(&iommu_global_pasid_ida, min, max,
+> > GFP_KERNEL);
+> > +	if (ret < 0)
+> > +		return IOMMU_PASID_INVALID;
+> > +
+> > +	return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(iommu_sva_reserve_pasid);
+> > +  
+> 
+> I'm not sure it's the right way. It's not related to SVA.
+> 
+> We should move iommu_global_pasid_ida to iomm.c and then have
+> another interface for allocation.
+> 
+> Above is pretty generic so probably a general one like:
+> 
+> 	ioasid_t iommu_allocate_global_pasid(struct device *dev)
+> 
+> internally it can use [1, dev->iommu->max_pasids] as min/max instead
+> of passed in from the caller.
+sounds good to me, will do.
 
-Signed-off-by: Yuan Can <yuancan@huawei.com>
-Reviewed-by: Simon Horman <horms@verge.net.au>
-Link: https://lore.kernel.org/r/20230119083119.16956-1-yuancan@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/staging/emxx_udc/emxx_udc.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/emxx_udc/emxx_udc.c b/drivers/staging/emxx_udc/emxx_udc.c
-index cc4c18c3fb36d..7d18ad68be264 100644
---- a/drivers/staging/emxx_udc/emxx_udc.c
-+++ b/drivers/staging/emxx_udc/emxx_udc.c
-@@ -2593,10 +2593,15 @@ static int nbu2ss_ep_queue(struct usb_ep *_ep,
- 		req->unaligned = false;
- 
- 	if (req->unaligned) {
--		if (!ep->virt_buf)
-+		if (!ep->virt_buf) {
- 			ep->virt_buf = dma_alloc_coherent(udc->dev, PAGE_SIZE,
- 							  &ep->phys_buf,
- 							  GFP_ATOMIC | GFP_DMA);
-+			if (!ep->virt_buf) {
-+				spin_unlock_irqrestore(&udc->lock, flags);
-+				return -ENOMEM;
-+			}
-+		}
- 		if (ep->epnum > 0)  {
- 			if (ep->direct == USB_DIR_IN)
- 				memcpy(ep->virt_buf, req->req.buf,
--- 
-2.39.2
+Thanks,
 
+Jacob
