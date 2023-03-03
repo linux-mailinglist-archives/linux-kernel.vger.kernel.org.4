@@ -2,155 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7F76A926F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9DE6A9273
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjCCI3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52150 "EHLO
+        id S229522AbjCCIaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 03:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCCI3j (ORCPT
+        with ESMTP id S229964AbjCCIaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:29:39 -0500
-Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8D06E85
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:29:32 -0800 (PST)
-Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 20230303082930760bd7a5cf0b7cee3b
-        for <linux-kernel@vger.kernel.org>;
-        Fri, 03 Mar 2023 09:29:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=florian.bezdeka@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=gr3Hac+WmoWh7ZF0FrDuL6o4QZ9VzlVBNRPd55fOqPY=;
- b=LVD78WxaP4vKOcP8K7GcrNLEJbQCCBawV3tS9mnRP074mpkZTZHHPHu0nR5EdL0PBJ2pxE
- 1SO2waFURPJIflZDEhIRfjbo5kpSpRPzRSd+x3MTlIEeRpGAcy13DYSj44Vrl1WxhhL0TMCV
- k2welFjyFnOQO4VgifJXcfhEkF90A=;
-Message-ID: <21e61d098cd78476770b8a0e782689c76ff30d80.camel@siemens.com>
-Subject: Re: [ANNOUNCE] 5.10.162-rt79
-From:   Florian Bezdeka <florian.bezdeka@siemens.com>
-To:     Daniel Wagner <wagi@monom.org>
-Cc:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jeff Brady <jeffreyjbrady@gmail.com>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>
-Date:   Fri, 03 Mar 2023 09:29:28 +0100
-In-Reply-To: <20230223143356.fa6tqrflmhrcqx33@carbon.lan>
-References: <Y9KOvZH61omPpn/3@uudg.org>
-         <2ad9f8a7528818b9509f62278b42e5bc6d210054.camel@siemens.com>
-         <20230223143356.fa6tqrflmhrcqx33@carbon.lan>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 3 Mar 2023 03:30:12 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D8619F1B
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:30:03 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id o15so7059786edr.13
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 00:30:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677832202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vyMEf9DcHz7Rey1/n9uL5ThzUAVI9l0JbNqQFMHxvRc=;
+        b=ndiZ3xAyUQhK0y/jMn9s9SmP4K2ugri8iWU6ePoBkWIz/Nr6QLQE4nLVBp6MC976Oc
+         WNtRVeQ6J1awkj1ScoitJkhM8K14Z1/PUTRj5zSZ4j15k7rm/eJ6ZiSCCl/bbUknEmSD
+         9B2DosfSEvYB/KYSW9jOFrKKzEg3axpqHCrV18DX2WhLun9fg+JdmF/avPwtsKke23F4
+         zHktnQSWQkJh8aP8BiSY5xZ3O8OpKuGDa7x3AIBlMGO2IYNEvTcBGQhc4fzG1c3LTIAe
+         /d05wpmQOGVYjZZPA45HFBMymdaKNF+jNGD/dxnsAArwC7oVFAD3ejelrTBcOACqg+hN
+         99TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677832202;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vyMEf9DcHz7Rey1/n9uL5ThzUAVI9l0JbNqQFMHxvRc=;
+        b=tgVeVAR4yM6CXUHufGxudcggJjEWRQgVUzDmEvGTuRYzfrgGthvh+/ssJyYXoEspiQ
+         V7CSESxT8UounByOfh3Rd4OaUhKTkyXfpOj06ccCachxQZx7GW7W6FZqK60sfw0D+Mpe
+         qrnokxZZ37uTUwzJI8oADlHaBAsLEAHZEOw0NKRLc4jMNvfZ4R2yWj6l2pUojspMj+aP
+         2afEEu98in9T8T9FCwR4X0b+12QVvyi807WajYgbM1ohoxd08jWleD37DDdxILIujZZu
+         1x9vsT7D5MH01DAhDm4qsQ6lZgHbv2cpli1DqvHAsHzsvjRpMTPVyFYWkp+tXVHcUcEv
+         zGHw==
+X-Gm-Message-State: AO0yUKXyG5XLy/bU2Ucivj6BSTbKmdg5NQIuiHMSJuyW1XmLene0lUve
+        sjjLttiikfnl1UWbYtQTK42VLg==
+X-Google-Smtp-Source: AK7set/VLaLjdiP1fyM/FB0SX/nUogRG2TFTaQAtY/Ry8s11/NL7JEOUGMnEWKl8Vq3fHE6fT+KUvQ==
+X-Received: by 2002:a17:907:9b03:b0:8aa:be5c:b7c5 with SMTP id kn3-20020a1709079b0300b008aabe5cb7c5mr798990ejc.41.1677832202361;
+        Fri, 03 Mar 2023 00:30:02 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f20-20020a1709064dd400b008ec43ae626csm684564ejw.167.2023.03.03.00.30.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 00:30:02 -0800 (PST)
+Message-ID: <d5c93a9f-4a66-f884-a4d1-68cf47bcd7d4@linaro.org>
+Date:   Fri, 3 Mar 2023 09:29:59 +0100
 MIME-Version: 1.0
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-68982:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v9 5/5] dt-bindings: clock: meson: add A1 Peripherals
+ clock controller bindings
+Content-Language: en-US
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
+ <20230301183759.16163-6-ddrokosov@sberdevices.ru>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230301183759.16163-6-ddrokosov@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-02-23 at 15:33 +0100, Daniel Wagner wrote:
-> Hi Florian,
->=20
-> On Thu, Jan 26, 2023 at 06:41:27PM +0100, Florian Bezdeka wrote:
-> > From the CIP projects perspective we would like to improve the
-> > situation.
-> >=20
-> > From my perspective the following could be done:
-> >=20
-> >   - Instead of (or in addition to) building and testing released -rt
-> >     branches enable testing of -rt release candidates
-> >   - Make sure the build results get back to the maintainers
-> >=20
-> > I'm not sure if every -rt branch has a -rc branch. I'm not familiar
-> > with the -rt release process yet.
->=20
-> The process so far is, that every stable maintainer updates his tree (mer=
-ges the
-> stable tree) and does a local build and local tests. Usually when merging=
- latest
-> upstream stable release there are no or little fallouts. When the maintai=
-ner is
-> happy he does the release by pushing the changes to the usptream branch. =
-The
-> release candiates come only into play when there is something the maintai=
-ner is
-> not sure how to handle or -rt patches are backported which need some more=
- eyes
-> to look on. That means Sebastian's approval :)
+On 01/03/2023 19:37, Dmitry Rokosov wrote:
+> Add the documentation for Amlogic A1 Peripherals clock driver,
+> and A1 Peripherals clock controller bindings.
+> 
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++++
+>  include/dt-bindings/clock/a1-clkc.h           | 102 ++++++++++++++++++
+>  2 files changed, 175 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+>  create mode 100644 include/dt-bindings/clock/a1-clkc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+> new file mode 100644
+> index 000000000000..3dc86e912dea
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/amlogic,a1-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Meson A/C serials Peripheral Clock Control Unit
+> +
+> +maintainers:
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +  - Jerome Brunet <jbrunet@baylibre.com>
+> +  - Jian Hu <jian.hu@jian.hu.com>
+> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> +
+> +properties:
+> +  compatible:
+> +    const: amlogic,a1-clkc
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: input fixed pll div2
+> +      - description: input fixed pll div3
+> +      - description: input fixed pll div5
+> +      - description: input fixed pll div7
+> +      - description: input hifi pll
+> +      - description: input oscillator (usually at 24MHz)
+> +
+> +  clock-names:
+> +    items:
+> +      - const: fclk_div2
+> +      - const: fclk_div3
+> +      - const: fclk_div5
+> +      - const: fclk_div7
+> +      - const: hifi_pll
+> +      - const: xtal
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/a1-pll-clkc.h>
 
-Ok, so there are no automated test for each release.
+Eh, this explains bisectability problem.
 
->=20
-> IIRC, I did give a presentation on the workflow some time ago...
->=20
-> https://lpc.events/event/4/contributions/293/attachments/237/416/maintain=
-ing-out-of-tree-patches-over-the-long-term.pdf
-> https://www.youtube.com/watch?v=3D2ab4Knwlmo4
+Please do not sent patchets which are not bisectable. You can hard-code
+the IDs in the example, they don't really matter.
 
-Thanks for the hint!
+> +    apb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clock-controller@800 {
+> +            compatible = "amlogic,a1-clkc";
+> +            reg = <0 0x800 0 0x104>;
+> +            #clock-cells = <1>;
+> +            clocks = <&clkc_pll CLKID_FCLK_DIV2>,
+> +                     <&clkc_pll CLKID_FCLK_DIV3>,
+> +                     <&clkc_pll CLKID_FCLK_DIV5>,
+> +                     <&clkc_pll CLKID_FCLK_DIV7>,
+> +                     <&clkc_pll CLKID_HIFI_PLL>,
+> +                     <&xtal>;
+> +            clock-names = "fclk_div2", "fclk_div3",
+> +                          "fclk_div5", "fclk_div7",
+> +                          "hifi_pll", "xtal";
+> +        };
+> +    };
+> diff --git a/include/dt-bindings/clock/a1-clkc.h b/include/dt-bindings/clock/a1-clkc.h
 
->=20
-> When we started with this process kernelci didn't build these branches bu=
-t that
-> is long time ago.
+Same comment for filename as for previous patch.
 
-At least (some) stable release branches are being build now but it
-seems that nobody is caring about the result. That's one of the things
-I would like to address.
 
->=20
-> Personally, I don't mind doing an official -rc for every release and gett=
-ing
-> some additional builds and tests run by kernelci.
 
-Ok, but that would be something that "all" -rt-stable maintainers
-should agree on, no? At least to some degree to make the testing part
-consistent.
-
->=20
-> Though just piping the results back is the easy thing, the time consuming=
- task
-> is to fix those problems. Do you plan to help out here?
-
-Well, having the pipelines might be easy, but we don't have them yet,=20
-right? Reacting on the pipeline results would be the next step that
-possibly could happen in cooperation with the CIP project.
-
-But yes, generally speaking we want to help. But we don't have infinite
-resources (as usual), so we'd like to know where most impact could be
-achieved.
-
-Are there any plans to build and test the stable -rt branches with the
-help of automation, for example by using the kernelci infrastructure?
-If no: Would that be something that the RT project is interested in?
-
-I'm asking for kernelci because the CIP project is already using that.
-They defined a clear set of supported architectures, kernel configs,
-test suites and concrete hardware (to some degree). This allows them to
-make sure each release candidate of each branch is in good shape before
-doing the actual release.
-
-Regards,
-Florian
-
->=20
-> Thanks,
-> Daniel
+Best regards,
+Krzysztof
 
