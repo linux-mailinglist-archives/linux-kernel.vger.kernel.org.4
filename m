@@ -2,187 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C716A8E92
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7525B6A8E96
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 02:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjCCBQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 20:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S229728AbjCCBUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 20:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCCBQq (ORCPT
+        with ESMTP id S229453AbjCCBUq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 20:16:46 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC401D91D
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 17:16:45 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-536bbe5f888so15314807b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 17:16:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677806204;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pnHArXpnIln4mR9B6GQIrF77J/3Fo4zMukNf/BHzahY=;
-        b=RHZ/5e8m9fy3BrS8H8EuZi/rzgU5IOzlIA8zeJ5GS+PM41zVTymZSYbmzfQmb6OvVl
-         XbYMzhWI2XYBouWUFdAi3S9YuNgZK4dQ1pMEbzVemOlITarcYhDbrAvpvUNLOmNO0uNb
-         nSN08VzpIdhLwlFCfmEhEXARu67/KiCdyKcZSIchfC/ToxDkZAJw/Y8hlcpRiWPmdpYo
-         UOZ5Ki7t/dMFspouEbW3kmRb+c1YsfQu1ym8WzCEiHGbwjfUFG1ZEmhkWkGcbRH78lrw
-         I+jlQIAUVSmtMxCjT2ToCcbJlQoCCnkSOQIyYGh5aqimOH1BKDiZMWJk9SIIbMS4ANiY
-         SU6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677806204;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pnHArXpnIln4mR9B6GQIrF77J/3Fo4zMukNf/BHzahY=;
-        b=GX1wHPkpplJgpgNH0J1xP+9JrzLmBYjjAOzcCXBRLIRmglK/3woDysC395zZSeSjgt
-         OPVHK22FN5jRprsTJZnCRLv3IGCd6fsYmh2PjA5T+s02LJ9yi+LomAYdPH3bqtEqsIZJ
-         6P9J+/UOWQAQYLRtoCbSepso7Dohq35I2fzXjqeAW1cHFlWQD9/r2S9XhmiIXPpAT1Gm
-         1PiRan0agIpriz9Ifhfa4e68ZVYgK3k/uLYEb65jEDBQgRCG1uW/MHZ+gfUG/NNpbKn4
-         LZhsx1a9QpPEWTpZHbv2Ukg0jqT3pzY3vhDaqB5R9lBX2X3G7+MwBV+jqN1t0VOxOz1k
-         1q8w==
-X-Gm-Message-State: AO0yUKWXgxmRG2/xi5HKH7rwhnD20UY87Nkt2QRJnSaFMWg/7bzJZHfx
-        89/IPoeVYcNwUd6hsx41//z/HJT5l70x28vXyCj5hg==
-X-Google-Smtp-Source: AK7set8gB5DbIJ+gLG4zNATh0e4toIdpQr8pDGSph9LTbZyyG9xVSqP7QGYXQGpSjbV8FZuCQlxxqO+eS0dALZFgTVU=
-X-Received: by 2002:a81:af52:0:b0:533:9d49:f9c9 with SMTP id
- x18-20020a81af52000000b005339d49f9c9mr7715100ywj.0.1677806204010; Thu, 02 Mar
- 2023 17:16:44 -0800 (PST)
+        Thu, 2 Mar 2023 20:20:46 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFCC34028;
+        Thu,  2 Mar 2023 17:20:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677806445; x=1709342445;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=j7AIYuX5Qe9oeFbiQyOPvZ4yDa2qH0qd90k8dXQlpAg=;
+  b=GAbJR1fSGvdKEAEQQoMYyBfkcvKVX1zvLcpPr2fBTN6fJc3VnAkssyAp
+   MvfeoS+QVVnvxjOMq6wixq5XdMSEUGcUM6LuCuAOlrUtW4f70/Lbk/NeT
+   mx/6vYAQ/tzJk7oB73gLlyzSkxmP/ic+J/MYHDgTrK1Y26YtpZECrYdPe
+   Kt7J3mlPUpodiszdP7mU8AMsYaq+vH6eELIq/WoFgqoYrSoPpvrHp8Iad
+   hb9GamMJOYim2s5aPFQUPC2hqn4HUEmXraADmBU9tdR0lXCDhKGDj8cSO
+   tMOC4vSHyM41Y0t7UbRg0Z8306D7UcWOgQny2gztviJnvSL9sUMcbxxXO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="333638990"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="333638990"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 17:20:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="920939118"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="920939118"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Mar 2023 17:20:41 -0800
+Message-ID: <063ed735-b8d1-1b44-67d7-78c3adb34074@linux.intel.com>
+Date:   Fri, 3 Mar 2023 09:19:48 +0800
 MIME-Version: 1.0
-References: <20230303011346.3342233-1-surenb@google.com>
-In-Reply-To: <20230303011346.3342233-1-surenb@google.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 2 Mar 2023 17:16:33 -0800
-Message-ID: <CAJuCfpHcgu5Cti0t+U=S1C5-0ZgebhxzrOnhDiSu5qCyuq5_Wg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] psi: remove 500ms min window size limitation for triggers
-To:     peterz@infradead.org
-Cc:     tj@kernel.org, hannes@cmpxchg.org, lizefan.x@bytedance.com,
-        johunt@akamai.com, mhocko@suse.com, keescook@chromium.org,
-        quic_sudaraja@quicinc.com, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: Re: [PATCH 4/4] dmaengine/idxd: Re-enable kernel workqueue under DMA
+ API
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+ <20230302005959.2695267-5-jacob.jun.pan@linux.intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230302005959.2695267-5-jacob.jun.pan@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 5:13=E2=80=AFPM Suren Baghdasaryan <surenb@google.co=
-m> wrote:
->
-> Current 500ms min window size for psi triggers limits polling interval
-> to 50ms to prevent polling threads from using too much cpu bandwidth by
-> polling too frequently. However the number of cgroups with triggers is
-> unlimited, so this protection can be defeated by creating multiple
-> cgroups with psi triggers (triggers in each cgroup are served by a single
-> "psimon" kernel thread).
-> Instead of limiting min polling period, which also limits the latency of
-> psi events, it's better to limit psi trigger creation to authorized users
-> only, like we do for system-wide psi triggers (/proc/pressure/* files can
-> be written only by processes with CAP_SYS_RESOURCE capability). This also
-> makes access rules for cgroup psi files consistent with system-wide ones.
-> Add a CAP_SYS_RESOURCE capability check for cgroup psi file writers and
-> remove the psi window min size limitation.
->
-> Suggested-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-> Link: https://lore.kernel.org/all/cover.1676067791.git.quic_sudaraja@quic=
-inc.com/
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> Acked-by: Michal Hocko <mhocko@suse.com>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-
-Forgot to change the --to field from Tejun to PeterZ.
-Peter, just to clarify, this change is targeted for inclusion in your tree.
-Thanks!
-
-> ---
->  kernel/cgroup/cgroup.c | 10 ++++++++++
->  kernel/sched/psi.c     |  4 +---
->  2 files changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 935e8121b21e..b600a6baaeca 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -3867,6 +3867,12 @@ static __poll_t cgroup_pressure_poll(struct kernfs=
-_open_file *of,
->         return psi_trigger_poll(&ctx->psi.trigger, of->file, pt);
->  }
->
-> +static int cgroup_pressure_open(struct kernfs_open_file *of)
-> +{
-> +       return (of->file->f_mode & FMODE_WRITE && !capable(CAP_SYS_RESOUR=
-CE)) ?
-> +               -EPERM : 0;
-> +}
+On 3/2/23 8:59 AM, Jacob Pan wrote:
+> diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
+> index f30eef701970..dadc908318aa 100644
+> --- a/drivers/dma/idxd/init.c
+> +++ b/drivers/dma/idxd/init.c
+> @@ -501,14 +501,52 @@ static struct idxd_device *idxd_alloc(struct pci_dev *pdev, struct idxd_driver_d
+>   
+>   static int idxd_enable_system_pasid(struct idxd_device *idxd)
+>   {
+> -	return -EOPNOTSUPP;
+> +	struct pci_dev *pdev = idxd->pdev;
+> +	struct device *dev = &pdev->dev;
+> +	struct iommu_domain *domain;
+> +	union gencfg_reg gencfg;
+> +	ioasid_t pasid;
+> +	int ret;
 > +
->  static void cgroup_pressure_release(struct kernfs_open_file *of)
->  {
->         struct cgroup_file_ctx *ctx =3D of->priv;
-> @@ -5266,6 +5272,7 @@ static struct cftype cgroup_psi_files[] =3D {
->         {
->                 .name =3D "io.pressure",
->                 .file_offset =3D offsetof(struct cgroup, psi_files[PSI_IO=
-]),
-> +               .open =3D cgroup_pressure_open,
->                 .seq_show =3D cgroup_io_pressure_show,
->                 .write =3D cgroup_io_pressure_write,
->                 .poll =3D cgroup_pressure_poll,
-> @@ -5274,6 +5281,7 @@ static struct cftype cgroup_psi_files[] =3D {
->         {
->                 .name =3D "memory.pressure",
->                 .file_offset =3D offsetof(struct cgroup, psi_files[PSI_ME=
-M]),
-> +               .open =3D cgroup_pressure_open,
->                 .seq_show =3D cgroup_memory_pressure_show,
->                 .write =3D cgroup_memory_pressure_write,
->                 .poll =3D cgroup_pressure_poll,
-> @@ -5282,6 +5290,7 @@ static struct cftype cgroup_psi_files[] =3D {
->         {
->                 .name =3D "cpu.pressure",
->                 .file_offset =3D offsetof(struct cgroup, psi_files[PSI_CP=
-U]),
-> +               .open =3D cgroup_pressure_open,
->                 .seq_show =3D cgroup_cpu_pressure_show,
->                 .write =3D cgroup_cpu_pressure_write,
->                 .poll =3D cgroup_pressure_poll,
-> @@ -5291,6 +5300,7 @@ static struct cftype cgroup_psi_files[] =3D {
->         {
->                 .name =3D "irq.pressure",
->                 .file_offset =3D offsetof(struct cgroup, psi_files[PSI_IR=
-Q]),
-> +               .open =3D cgroup_pressure_open,
->                 .seq_show =3D cgroup_irq_pressure_show,
->                 .write =3D cgroup_irq_pressure_write,
->                 .poll =3D cgroup_pressure_poll,
-> diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-> index 02e011cabe91..0945f956bf80 100644
-> --- a/kernel/sched/psi.c
-> +++ b/kernel/sched/psi.c
-> @@ -160,7 +160,6 @@ __setup("psi=3D", setup_psi);
->  #define EXP_300s       2034            /* 1/exp(2s/300s) */
->
->  /* PSI trigger definitions */
-> -#define WINDOW_MIN_US 500000   /* Min window size is 500ms */
->  #define WINDOW_MAX_US 10000000 /* Max window size is 10s */
->  #define UPDATES_PER_WINDOW 10  /* 10 updates per window */
->
-> @@ -1278,8 +1277,7 @@ struct psi_trigger *psi_trigger_create(struct psi_g=
-roup *group,
->         if (state >=3D PSI_NONIDLE)
->                 return ERR_PTR(-EINVAL);
->
-> -       if (window_us < WINDOW_MIN_US ||
-> -               window_us > WINDOW_MAX_US)
-> +       if (window_us =3D=3D 0 || window_us > WINDOW_MAX_US)
->                 return ERR_PTR(-EINVAL);
->
->         /* Check threshold */
-> --
-> 2.40.0.rc0.216.gc4246ad0f0-goog
->
+> +	domain = iommu_get_domain_for_dev(dev);
+> +	if (!domain || domain->type == IOMMU_DOMAIN_BLOCKED)
+> +		return -EPERM;
+
+The idxd driver has claimed the DMA ownership of this device. Unless the
+idxd driver itself attached another domain, iommu_get_domain_for_dev()
+should never return a blocking domain.
+
+"domain == NULL" happens when CONFIG_IOMMU_API is not set.
+
+Furthermore, iommu_get_domain_for_dev() doesn't hold any refcount from
+the domain, so in theory it's not safe here because it possibly causes
+use-after-release case.
+
+I would say iommu_get_dma_domain() or something similar is more suitable
+for use here. It directly returns the device's default domain and the
+iommu core guarantees that default domain will always valid during the
+life cycle of any device driver.
+
+Best regards,
+baolu
