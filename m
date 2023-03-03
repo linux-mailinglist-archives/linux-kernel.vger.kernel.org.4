@@ -2,121 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95E36A9102
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF906A9106
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbjCCGaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 01:30:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S229656AbjCCGaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 01:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCCGaK (ORCPT
+        with ESMTP id S229498AbjCCGaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 01:30:10 -0500
-Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52B627685
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:30:09 -0800 (PST)
-Received: from alt-proxy28.mail.unifiedlayer.com (unknown [74.220.216.123])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id EC13780327C2
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:30:08 +0000 (UTC)
-Received: from cmgw15.mail.unifiedlayer.com (unknown [10.0.90.130])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id 7528D1004061B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:30:08 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id XyvgpLKIDdUIVXyvgpHM9r; Fri, 03 Mar 2023 06:30:08 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=U89Xscnu c=1 sm=1 tr=0 ts=640193f0
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=O3hNsnRcHcmrHKJ81Ype8MvM9VzJLv3jdg6F3Aeoh8E=; b=Z7zrzcrJmDEs7oJaDnc8FiPiDR
-        AhIx4IGaXPBSp7HALzHTU4BiOrq8uywW65FBFZZ9O6I6fZWyjz/RNxJpgULlgLWNmM3zunWejd+r1
-        5ZLlc5bHj/SO/OrE0xVqE992iC8URILpYbirkaHtESLWnBJQcxMC9jDXIVrNU+bAmlD7iZgLwR/W/
-        +N4bh1iiCi/aeRvLXXKIFLh5e1+EyxeP5DpX/6GOk0FO4Z3IdnvG1oBmLw6jbJjg5ZP3tvQqHeWJ1
-        eCfoSaacwCzleoM3NXvwmUPXrrk6cYTgNgZjfnPVzFlGaIQDkR9GcjSz/fXcGAkwCsb7d25KjClnx
-        O2WlylvQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:58872 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pXyvf-002nvr-Jk;
-        Thu, 02 Mar 2023 23:30:07 -0700
-Subject: Re: [PATCH 5.15 00/22] 5.15.97-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230301180652.658125575@linuxfoundation.org>
-In-Reply-To: <20230301180652.658125575@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <781059bd-45f0-e300-c01c-7978a8ded5ef@w6rz.net>
-Date:   Thu, 2 Mar 2023 22:30:04 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Fri, 3 Mar 2023 01:30:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CC713DCA;
+        Thu,  2 Mar 2023 22:30:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA8636175A;
+        Fri,  3 Mar 2023 06:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 35F4FC4339E;
+        Fri,  3 Mar 2023 06:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677825018;
+        bh=v+TwSUQil/aZqPYrS+I1R19oIpBJBNyY6M6jyph2oWU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=h9VtjC7VLhz+YfkMwDQJ3eoKiz2E7LCDy2Wz0YVpOWGevrQpVSVhH3Nv+UBf56bx+
+         oKrlf2tXofP1gGkC73neqW5ew4VrqEigRYNFKCqvDjLn1lNnVcWqrH90uy0pDFUtHU
+         0ISngIfGfjryIQ+1eHUeCJiSjdPDD9h3/Rr0FURURTl9lJObNYbBOrL+aQjoRw5ajc
+         mw0COVmxiwqSDB5Y6DoZHe8OE3EvWgIrqw3pBTM6N1tyAEG/uyYtNlMVr7fqJ+36+B
+         DEK+N4n57BcBGZrQ9pqFkM4o9GupW8AoR4BnRP7EDtZwPiLL7M824ZR4O80fTeeZG8
+         jZsWRb6A0Cztw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 12783E68D5F;
+        Fri,  3 Mar 2023 06:30:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pXyvf-002nvr-Jk
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:58872
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] net: caif: Fix use-after-free in
+ cfusbl_device_notify()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167782501807.9922.6649287078886144648.git-patchwork-notify@kernel.org>
+Date:   Fri, 03 Mar 2023 06:30:18 +0000
+References: <20230301163913.391304-1-syoshida@redhat.com>
+In-Reply-To: <20230301163913.391304-1-syoshida@redhat.com>
+To:     Shigeru Yoshida <syoshida@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sjur.brandeland@stericsson.com,
+        syzbot+b563d33852b893653a9e@syzkaller.appspotmail.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 10:08 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.97 release.
-> There are 22 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.97-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hello:
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Tested-by: Ron Economos <re@w6rz.net>
+On Thu,  2 Mar 2023 01:39:13 +0900 you wrote:
+> syzbot reported use-after-free in cfusbl_device_notify() [1].  This
+> causes a stack trace like below:
+> 
+> BUG: KASAN: use-after-free in cfusbl_device_notify+0x7c9/0x870 net/caif/caif_usb.c:138
+> Read of size 8 at addr ffff88807ac4e6f0 by task kworker/u4:6/1214
+> 
+> CPU: 0 PID: 1214 Comm: kworker/u4:6 Not tainted 5.19.0-rc3-syzkaller-00146-g92f20ff72066 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: netns cleanup_net
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+>  print_address_description.constprop.0.cold+0xeb/0x467 mm/kasan/report.c:313
+>  print_report mm/kasan/report.c:429 [inline]
+>  kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
+>  cfusbl_device_notify+0x7c9/0x870 net/caif/caif_usb.c:138
+>  notifier_call_chain+0xb5/0x200 kernel/notifier.c:87
+>  call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1945
+>  call_netdevice_notifiers_extack net/core/dev.c:1983 [inline]
+>  call_netdevice_notifiers net/core/dev.c:1997 [inline]
+>  netdev_wait_allrefs_any net/core/dev.c:10227 [inline]
+>  netdev_run_todo+0xbc0/0x10f0 net/core/dev.c:10341
+>  default_device_exit_batch+0x44e/0x590 net/core/dev.c:11334
+>  ops_exit_list+0x125/0x170 net/core/net_namespace.c:167
+>  cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
+>  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+>  </TASK>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2] net: caif: Fix use-after-free in cfusbl_device_notify()
+    https://git.kernel.org/netdev/net/c/9781e98a9711
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
