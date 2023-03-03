@@ -2,52 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61FE6AA07C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:10:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E566AA07D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbjCCUKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 15:10:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
+        id S231687AbjCCUKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 15:10:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjCCUKL (ORCPT
+        with ESMTP id S231679AbjCCUKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 15:10:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C54B11169
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:10:10 -0800 (PST)
+        Fri, 3 Mar 2023 15:10:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC21B233FC
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:10:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC55B618D7
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 20:10:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0445CC433EF;
-        Fri,  3 Mar 2023 20:10:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 804D2B819A5
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 20:10:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4353DC4339B;
+        Fri,  3 Mar 2023 20:10:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677874209;
-        bh=X4akq66e0gZRvEvk52d1rWM5GurogB2/V8coehvNc0I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FXqApEMdwMw3QQFtPhe4PcOettLioseLX1AS39OBtCN0xgZ9j2UcnOwvS6XfH+D7C
-         y9Nig+CkTxGyE/a62dVcAPyyvORXJTh+UVitULcFWn2oz8qxdSJCBy0tkjH4zSYaWB
-         3iEZpqYe3wqoPZaHbDE4ySpQSxMltjTkJGqerU9m4hXJnrJSHC8gMfV9zT3VmNGgLM
-         9Vh3DsXZkI90kAS/iLk0krWY2N/8D2OTll4rfFBSFx7vyaxZ515eFOaHz/BeqNjkU7
-         T3d+gOe9VtIK7ZrBRz8iICEcIn8gSKq6/85EDKkLrxcdVWip/4R8yjt9ylNfGlOmrD
-         /32dxxFFKgHmg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5C4D14049F; Fri,  3 Mar 2023 17:10:06 -0300 (-03)
-Date:   Fri, 3 Mar 2023 17:10:06 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Subject: [PATCH 1/1 fyi] tools headers: Sync linux/coresight-pmu.h with the
- kernel sources
-Message-ID: <ZAJUHuvK0yvVAQ95@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        s=k20201202; t=1677874233;
+        bh=80j8RKiRq2GoeO26JmcNOummkwVsnrQG/ufcY6/SAiM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q8S/JhaZmZzvk39p6UU/cGYdvWIHA208fO3zDNP8kuBknjRq4NIECPmcvoY8HzYt2
+         T7BmAVqXkBDMy5AW99NUPw/UQTdteQKweExIs3DWpLJj2a5sE2O5bxoyLsePee0IUj
+         lcVAVVH0/q7XW3zSF+BMnUZnhFdDz9ZWowzY/tazpSElY0/jEVZhUcVXxJqg2mddKh
+         5lqr1jjygoLOUALUhlCigLeLfmuvdte6J8pw7pmzJbdLqx91cKICQApHOmtBzPBxrN
+         FIqLa+/cXQDZZnXjL4t+UZMrtF4tYnWmAvWz97NVq+yWA/AGhrXwMYezetQtR69J3G
+         kqmPHivrKnQkA==
+Received: from [206.0.71.4] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pYBja-00EiDs-2k;
+        Fri, 03 Mar 2023 20:10:31 +0000
+Date:   Fri, 03 Mar 2023 20:10:17 +0000
+Message-ID: <87mt4th9zq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Darren Hart <darren@os.amperecomputing.com>
+Cc:     Aristeu Rozanski <aris@redhat.com>, linux-kernel@vger.kernel.org,
+        "D. Scott Phillips" <scott@os.amperecomputing.com>
+Subject: Re: Error reports at boot time in Ampere Altra machines since c733ebb7c
+In-Reply-To: <ZAJMwLMNizPMPzS3@fedora>
+References: <20230302201732.pwnhg46mum6st2bv@redhat.com>
+        <865ybizqfi.wl-maz@kernel.org>
+        <ZAJMwLMNizPMPzS3@fedora>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 206.0.71.4
+X-SA-Exim-Rcpt-To: darren@os.amperecomputing.com, aris@redhat.com, linux-kernel@vger.kernel.org, scott@os.amperecomputing.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -57,130 +67,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+On Fri, 03 Mar 2023 19:38:40 +0000,
+Darren Hart <darren@os.amperecomputing.com> wrote:
+> 
+> On Thu, Mar 02, 2023 at 11:25:37PM +0000, Marc Zyngier wrote:
+> > On Thu, 02 Mar 2023 20:17:32 +0000,
+> > Aristeu Rozanski <aris@redhat.com> wrote:
+> > > 
+> > > Hi Marc,
+> > > 
+> > > Since c733ebb7cb67d ("irqchip/gic-v3-its: Reset each ITS's BASERn
+> > > register before probe"), Ampere Altra machines are reporting corrected
+> > > errors during boot:
+> > > 
+> > > 	[    0.294334] HEST: Table parsing has been initialized.
+> > > 	[    0.294397] sdei: SDEIv1.0 (0x0) detected in firmware.
+> > > 	[    0.299622] {1}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 0
+> > > 	[    0.299626] {1}[Hardware Error]: event severity: recoverable
+> > > 	[    0.299629] {1}[Hardware Error]:  Error 0, type: recoverable
+> > > 	[    0.299633] {1}[Hardware Error]:   section type: unknown, e8ed898d-df16-43cc-8ecc-54f060ef157f
+> > > 	[    0.299638] {1}[Hardware Error]:   section length: 0x30
+> > > 	[    0.299645] {1}[Hardware Error]:   00000000: 00000005 ec30000e 00080110 80001001  ......0.........
+> > > 	[    0.299648] {1}[Hardware Error]:   00000010: 00000300 00000000 00000000 00000000  ................
+> > > 	[    0.299650] {1}[Hardware Error]:   00000020: 00000000 00000000 00000000 00000000  ................
+> > > 	[    0.299714] {2}[Hardware Error]: Hardware error from APEI Generic Hardware Error Source: 3
+> > > 	[    0.299716] {2}[Hardware Error]: event severity: recoverable
+> > > 	[    0.299717] {2}[Hardware Error]:  Error 0, type: recoverable
+> > > 	[    0.299718] {2}[Hardware Error]:   section type: unknown, e8ed898d-df16-43cc-8ecc-54f060ef157f
+> > > 	[    0.299720] {2}[Hardware Error]:   section length: 0x30
+> > > 	[    0.299722] {2}[Hardware Error]:   00000000: 40000005 ec30000e 00080110 80005001  ...@..0......P..
+> > > 	[    0.299724] {2}[Hardware Error]:   00000010: 00000300 00000000 00000000 00000000  ................
+> > > 	[    0.299726] {2}[Hardware Error]:   00000020: 00000000 00000000 00000000 00000000  ................
+> > > 	[    0.299912] GHES: APEI firmware first mode is enabled by APEI bit.
+> > > 
+> > > Because the errors are being reported later in boot, it's hard to
+> > > pinpoint exactly what's causing it without decoding the error information,
+> > > which I currently don't know how to do it.
+> > 
+> > + Darren
+> > 
+> > Hopefully someone at Ampere can decode this and tell us what is happening.
+> 
+> Hi Marc,
+> 
+> + D Scott
+> 
+> Thanks for the connection.
+> 
+> This is reporting that something attempted to access GITS2_BASER2, the base
+> register for the gicv4 vcpu table. Altra doesn't support gicv4. Is c733ebb7c
+> assuming GITS_BASER2 should be accessible on gicv3?
 
-- Arnaldo
+All the GITS_BASERn registers should be RES0 if not implemented, as
+per the spec (12.19.1 GITS_BASER<n>, ITS Translation Table
+Descriptors, n = 0 - 7)
 
-Full explanation:
+<quote>
+A maximum of 8 GITS_BASER<n> registers can be provided. Unimplemented
+registers are RES 0.
+</quote>
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+Returning an error on access is thus definitely a violation of the
+spec.
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+So either the GIC implementation you are using is buggy, or you have
+some sort of HW firewalling between the CPU and the GIC that is
+trigger happy. My hunch is that this is the latter, as buggy
+implementations tend to return an SError when missing this sort of
+detail.
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
+Thanks,
 
-E.g.:
+	M.
 
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
-
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
-
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
-
----
-
-To pick up the fixes in:
-
-  206bb3858949b650 ("coresight: trace id: Remove legacy get trace ID function.")
-  aa19bb4c35834dd5 ("coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID used for Trace ID")
-
-That just rebuild perf when CORESIGHT=1 is used in the make command line
-to enable linking with the libopencsd.
-
-This addresses this perf build warning:
-
-  Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
-  diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
-
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mike Leach <mike.leach@linaro.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Link: http://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/include/linux/coresight-pmu.h | 34 +++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 11 deletions(-)
-
-diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
-index 6c2fd6cc5a983fa4..51ac441a37c3e38f 100644
---- a/tools/include/linux/coresight-pmu.h
-+++ b/tools/include/linux/coresight-pmu.h
-@@ -7,8 +7,19 @@
- #ifndef _LINUX_CORESIGHT_PMU_H
- #define _LINUX_CORESIGHT_PMU_H
- 
-+#include <linux/bits.h>
-+
- #define CORESIGHT_ETM_PMU_NAME "cs_etm"
--#define CORESIGHT_ETM_PMU_SEED  0x10
-+
-+/*
-+ * The legacy Trace ID system based on fixed calculation from the cpu
-+ * number. This has been replaced by drivers using a dynamic allocation
-+ * system - but need to retain the legacy algorithm for backward comparibility
-+ * in certain situations:-
-+ * a) new perf running on older systems that generate the legacy mapping
-+ * b) older tools that may not update at the same time as the kernel.
-+ */
-+#define CORESIGHT_LEGACY_CPU_TRACE_ID(cpu)  (0x10 + (cpu * 2))
- 
- /*
-  * Below are the definition of bit offsets for perf option, and works as
-@@ -34,15 +45,16 @@
- #define ETM4_CFG_BIT_RETSTK	12
- #define ETM4_CFG_BIT_VMID_OPT	15
- 
--static inline int coresight_get_trace_id(int cpu)
--{
--	/*
--	 * A trace ID of value 0 is invalid, so let's start at some
--	 * random value that fits in 7 bits and go from there.  Since
--	 * the common convention is to have data trace IDs be I(N) + 1,
--	 * set instruction trace IDs as a function of the CPU number.
--	 */
--	return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
--}
-+/*
-+ * Interpretation of the PERF_RECORD_AUX_OUTPUT_HW_ID payload.
-+ * Used to associate a CPU with the CoreSight Trace ID.
-+ * [07:00] - Trace ID - uses 8 bits to make value easy to read in file.
-+ * [59:08] - Unused (SBZ)
-+ * [63:60] - Version
-+ */
-+#define CS_AUX_HW_ID_TRACE_ID_MASK	GENMASK_ULL(7, 0)
-+#define CS_AUX_HW_ID_VERSION_MASK	GENMASK_ULL(63, 60)
-+
-+#define CS_AUX_HW_ID_CURR_VERSION 0
- 
- #endif
 -- 
-2.39.2
-
+Without deviation from the norm, progress is not possible.
