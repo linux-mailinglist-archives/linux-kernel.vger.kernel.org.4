@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79816A90AF
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A88C6A90B3
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjCCGCR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 01:02:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
+        id S229787AbjCCGDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 01:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCCGCP (ORCPT
+        with ESMTP id S229452AbjCCGC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 01:02:15 -0500
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FA91A953;
-        Thu,  2 Mar 2023 22:02:14 -0800 (PST)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1763e201bb4so1947094fac.1;
-        Thu, 02 Mar 2023 22:02:14 -0800 (PST)
+        Fri, 3 Mar 2023 01:02:59 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA4093C5;
+        Thu,  2 Mar 2023 22:02:58 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id bg11so1031634oib.5;
+        Thu, 02 Mar 2023 22:02:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677823333;
+        d=gmail.com; s=20210112; t=1677823377;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DsVS/7R0dxzsikXc/PdT/FfkUVNz6uPz9eBYzTzhU4M=;
-        b=Kb/spSKSajU9LBD2Ef/KRzX5WzVnomBcbGnoMYe2t6dMNweIXJA6cdzDlxTB55DnlZ
-         5FtUgkydpOajt1u77sQNJTIqcVNFDV7PdyfJzFiHCQFURS4vHRmtPsZCpQ1nP7QUo1Ve
-         wi7qIGgaf20rY1FRouBjp00ML98nA/nZGyNnP2Ugl4WXf2yeLU46Xy4f4dIkvaK2dd4R
-         fx9U0bADjnpT/LUlzk5GJTLf4yE8nSchRi1tEWIDyxVhHBra96P91j5dzlpiKk/3qRmJ
-         vrgDcxFrty7EHKNOoFHiyTDCreNyD6eiWhB/MwYo+mnviHBjqAfUndJLyQgenUtjMdnn
-         jIhw==
+        bh=sY40wTgLWqE1HWG5gSrcD3SfOE1S6aDb/jRZfClrmSM=;
+        b=kuZNbXdE6O4INKyXCNzVS0kV/bVcXLFhWJPzILeewXEyHshXoSxVCkzZ+xHvDrSctK
+         0h1y79PnJ0TpzAPQHFHhIaS575c2ixyvfRpQfaga1ATI2srYbYD7y9xr0+jJwoezuI/E
+         S/AZ72AGafYESH+jKUTDIZa9uvPHvKDnPPjtfZ9m9FxuqxPaBE5AJq5veUjwTD3q63Mg
+         LJbpWx5VPMlhgf9h5pZS6p2UMNiV8qddN7ddcq5SPHlKY7RnDz83hP3InszF4ZaM2N27
+         +sEkiFB9LtRvPjuM5IvqIy+E2JyS2Xp0bdkY1A457eBwYCbrdn9LYPA2ZGdgWFxik+CF
+         AVEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677823333;
+        d=1e100.net; s=20210112; t=1677823377;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DsVS/7R0dxzsikXc/PdT/FfkUVNz6uPz9eBYzTzhU4M=;
-        b=slwzVFCZyuPDfxjp+axD+YixiE5j3ZWopBeRY7yybEb8UTZk6bHTX7HvNLW+sE6QTU
-         txs1GvFXTY4pMinczvMhHaL+6q5IvABTWVhLjQ66Y13ux6ijcQx8ouLefYqZe3eW245k
-         4ZmRy3Z8QL51ecCqYI0SjZouXtEKYj5awaDZ+17eujE0vYmKWSFEFJY2BaPeCg/miUcl
-         ZxjleUXZ8mh9TW9wAydpYXdpJzaPfJ4U0zOKChavgyKouZgvDoia1I5GhLEHTNVC5L0+
-         ascr9M8/ltNbPp7glN0b+5fp7iuHpdDctY6U8GKAyPsq+C8J4gFL3uMK9xk+rpYQ8iVd
-         2VLA==
-X-Gm-Message-State: AO0yUKVklBG5GJhXMUY8rgczGtleQUVT7q3kMfK+fqei9jDbwNdxr6ep
-        mCpmdcBLoBedUe4H1UUm/lFRdtNjGxAvUTl5rX3m/GDmaIu/yQ==
-X-Google-Smtp-Source: AK7set9S4QcSuJePzBJR5ErJRF54NuH/O2am1XDgcwU4k6vq5NkLeE2IzBTbjz7WViCx2z73kcpZsnIxYHwbU2s6yeY=
-X-Received: by 2002:a05:6870:a2c2:b0:16e:84ea:f1e9 with SMTP id
- w2-20020a056870a2c200b0016e84eaf1e9mr238613oak.2.1677823333736; Thu, 02 Mar
- 2023 22:02:13 -0800 (PST)
+        bh=sY40wTgLWqE1HWG5gSrcD3SfOE1S6aDb/jRZfClrmSM=;
+        b=qd6/Vh67WXdA3ouZVkHmDrotLav8awBLjR5u1XuGu2NbXRn1aurSmLa/9RO9mZjcfT
+         PJPsnXbwuV/V9YyVvm5JkFlEOd2MG07327lBzEDVAlOJ2gtzbot0HUEvOpttHI6sfiKH
+         dPuxDriJ8lo8xCQZ4tLRokYJTqUlygzrFSD+xPd2LiqswA7s2n/3VGFoKiiprajZd7iU
+         zxXbGEhO15LLaHQLJpfQBsuS6B7fJIANd5MboLXbBd0ccmJ/nID9IyVuf/teky+oil/v
+         ogw6PYgZXjynZy13+0MwOiVR3kv6KPpI0ytW2d46kMPgado3zTDkhwmjQMTtaEqZDTQ+
+         wErA==
+X-Gm-Message-State: AO0yUKXfciA4j1+fOBDr+VjZNB5P0bnXVxpGkEZUdg20W7/2AvgoYORD
+        PXpRO3Q84FU4UVcixoWfjAYhUwgiuNjctVstYwI=
+X-Google-Smtp-Source: AK7set/PPBGBmqaFLu/x/7FEaM9awhg94M6PTTjS9Ii+pHqbbjJ24I27AlnH45802wz/elA/L97MBTJkOhhEpnCw33Q=
+X-Received: by 2002:a05:6808:9b1:b0:384:efe:729a with SMTP id
+ e17-20020a05680809b100b003840efe729amr201801oig.2.1677823376576; Thu, 02 Mar
+ 2023 22:02:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20230303002850.51858-1-arinc.unal@arinc9.com> <20230303002850.51858-3-arinc.unal@arinc9.com>
-In-Reply-To: <20230303002850.51858-3-arinc.unal@arinc9.com>
+References: <20230303002850.51858-1-arinc.unal@arinc9.com> <20230303002850.51858-4-arinc.unal@arinc9.com>
+In-Reply-To: <20230303002850.51858-4-arinc.unal@arinc9.com>
 From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Fri, 3 Mar 2023 07:02:01 +0100
-Message-ID: <CAMhs-H80LrYJ4avuRFxKaM1Lj54FQM05k8omLJUjfYnpz1GPZw@mail.gmail.com>
-Subject: Re: [PATCH 02/20] pinctrl: ralink: {mt7620,mt7621}: add new mediatek
- compatible strings
+Date:   Fri, 3 Mar 2023 07:02:44 +0100
+Message-ID: <CAMhs-H_Ydu=A8Dcy8L3KZw_32FNW5iCytqUJXqkk8ijzhLK1yA@mail.gmail.com>
+Subject: Re: [PATCH 03/20] pinctrl: ralink: rt305x: add new compatible string
+ for every SoC
 To:     arinc9.unal@gmail.com
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -89,16 +89,16 @@ On Fri, Mar 3, 2023 at 1:29 AM <arinc9.unal@gmail.com> wrote:
 >
 > From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 >
-> This platform from Ralink was acquired by MediaTek in 2011. Then, MediaTe=
-k
-> introduced these SoCs which utilise this platform. Add new compatible
-> strings to address the incorrect naming.
+> Add new compatible strings to make every SoC, or SoCs that use the same
+> pinmux data have a unique compatible string. This ensures that the pin
+> muxing information of every SoC, or a set of SoCs that use the same pinmu=
+x
+> data can be properly documented.
 >
 > Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 > ---
->  drivers/pinctrl/ralink/pinctrl-mt7620.c | 1 +
->  drivers/pinctrl/ralink/pinctrl-mt7621.c | 1 +
->  2 files changed, 2 insertions(+)
+>  drivers/pinctrl/ralink/pinctrl-rt305x.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
 Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
