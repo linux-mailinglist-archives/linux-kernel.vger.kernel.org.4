@@ -2,73 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B496AA07B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A61FE6AA07C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231665AbjCCUJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 15:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
+        id S231678AbjCCUKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 15:10:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231433AbjCCUJe (ORCPT
+        with ESMTP id S229785AbjCCUKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 15:09:34 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D140914EA4
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:09:32 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id ay14so11203394edb.11
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:09:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677874171;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vBfThdkr+R1QJDSnLWRmQSdiN+ot973n4V1yEiFsi/E=;
-        b=BtpO3JS9nLte8Bhx760Ii9Ype7OH2+MfecEKdXsQT7LJBZxqio9u5G8Imm914EmcvZ
-         Jv9vyzbG5noAob+WXGnDKbSiUKoCtgt3xBx4TwZWw6PSV7JmTSsuqYpwLj/xPYW8uCHU
-         cInea7xBeSYT6UgXkBx+FJQc9woZMkOz+FZKzxmY0tspJ+jbLwbVnTTKhW2z6014A+EG
-         L4FqWxUG2tp/qT22UHxh0QS5Hk7leDuMAwkSpsKGrGGcr/GQeVNjhFfCmM/1cST4GqMT
-         Fi/hWwzs6KxFT/AxMSwD3xcLjPqd8k/fGqtKt8/dxNmh1SL8ehsuCyVWwAyTpkmI3KrY
-         QMcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677874171;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vBfThdkr+R1QJDSnLWRmQSdiN+ot973n4V1yEiFsi/E=;
-        b=uJ5U9cM7PpXYaup+7WdH0943QzN4HbqgzoiDWpSjPgkDcg7bQqOTlU+y+x8AU2J76B
-         k/zqx/LCA3r6ZEbS/BRJHB/kvG41brJAWvlPx6Mjhgwd8oOQtPEwNmcvMwWTy+zlvyYZ
-         nWPWKmwMBqn3UzB/uNSgEo4t4jCFJDCxDQWgdyZI65KoraHdKn83v7E/PEV5uDFIzroM
-         oCbPtkaoweKUIhYH6pr3oLPDQWcTQ0xHj5afqwuuYlf3f7ZwZvfhrKbqFf97OLUynMr/
-         noV214INYB5aWVJOCzqCA1nMKDnrQ30ZqxSUzK+3yiDNqtz8Wci2hKE/0W2ZTxf7Mcyl
-         E2Eg==
-X-Gm-Message-State: AO0yUKWnlPBd01XVMQP6GG7OwmU8pwSS8mbMNZllGLUo6F2pxAn59N8I
-        EpZGL0dxol695AjdW8jwrZooV1rRjnQ/a2nrkfc=
-X-Google-Smtp-Source: AK7set+6uqEnIlJuYZ+p6dJCwocssUfFhZo2hsEt2bd661xunQfZfHWb5HDLKmkaNJsT7+atoRiRbA==
-X-Received: by 2002:a17:907:2be2:b0:860:c12c:14f9 with SMTP id gv34-20020a1709072be200b00860c12c14f9mr2400939ejc.40.1677874171308;
-        Fri, 03 Mar 2023 12:09:31 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:3321:2e91:9111:67ba? ([2a02:810d:15c0:828:3321:2e91:9111:67ba])
-        by smtp.gmail.com with ESMTPSA id p12-20020a17090628cc00b008b1797b77b2sm1273007ejd.221.2023.03.03.12.09.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 12:09:30 -0800 (PST)
-Message-ID: <b945ebe9-cca5-f3c3-5662-c77aa345c964@linaro.org>
-Date:   Fri, 3 Mar 2023 21:09:29 +0100
+        Fri, 3 Mar 2023 15:10:11 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C54B11169
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:10:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC55B618D7
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 20:10:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0445CC433EF;
+        Fri,  3 Mar 2023 20:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677874209;
+        bh=X4akq66e0gZRvEvk52d1rWM5GurogB2/V8coehvNc0I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FXqApEMdwMw3QQFtPhe4PcOettLioseLX1AS39OBtCN0xgZ9j2UcnOwvS6XfH+D7C
+         y9Nig+CkTxGyE/a62dVcAPyyvORXJTh+UVitULcFWn2oz8qxdSJCBy0tkjH4zSYaWB
+         3iEZpqYe3wqoPZaHbDE4ySpQSxMltjTkJGqerU9m4hXJnrJSHC8gMfV9zT3VmNGgLM
+         9Vh3DsXZkI90kAS/iLk0krWY2N/8D2OTll4rfFBSFx7vyaxZ515eFOaHz/BeqNjkU7
+         T3d+gOe9VtIK7ZrBRz8iICEcIn8gSKq6/85EDKkLrxcdVWip/4R8yjt9ylNfGlOmrD
+         /32dxxFFKgHmg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5C4D14049F; Fri,  3 Mar 2023 17:10:06 -0300 (-03)
+Date:   Fri, 3 Mar 2023 17:10:06 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Subject: [PATCH 1/1 fyi] tools headers: Sync linux/coresight-pmu.h with the
+ kernel sources
+Message-ID: <ZAJUHuvK0yvVAQ95@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] MAINTAINERS: i2c: include all I2C bindings in the I2C
- entry
-Content-Language: en-US
-To:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230303082530.11878-1-krzysztof.kozlowski@linaro.org>
- <ZAJPfaY5NxxS6v3R@shikoro>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZAJPfaY5NxxS6v3R@shikoro>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,15 +57,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2023 20:50, Wolfram Sang wrote:
-> 
->> +F:	Documentation/devicetree/bindings/i2c/
-> 
-> This entry is already present a tad later in "I2C SUBSYSTEM HOST
-> DRIVERS".
+tldr; Just FYI, I'm carrying this on the perf tools tree.
 
-Ahh, indeed, I forgot that. Patch can be skipped then.
+- Arnaldo
 
-Best regards,
-Krzysztof
+Full explanation:
+
+There used to be no copies, with tools/ code using kernel headers
+directly. From time to time tools/perf/ broke due to legitimate kernel
+hacking. At some point Linus complained about such direct usage. Then we
+adopted the current model.
+
+The way these headers are used in perf are not restricted to just
+including them to compile something.
+
+There are sometimes used in scripts that convert defines into string
+tables, etc, so some change may break one of these scripts, or new MSRs
+may use some different #define pattern, etc.
+
+E.g.:
+
+  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
+  tools/perf/trace/beauty/arch_errno_names.sh
+  tools/perf/trace/beauty/drm_ioctl.sh
+  tools/perf/trace/beauty/fadvise.sh
+  tools/perf/trace/beauty/fsconfig.sh
+  tools/perf/trace/beauty/fsmount.sh
+  $
+  $ tools/perf/trace/beauty/fadvise.sh
+  static const char *fadvise_advices[] = {
+  	[0] = "NORMAL",
+  	[1] = "RANDOM",
+  	[2] = "SEQUENTIAL",
+  	[3] = "WILLNEED",
+  	[4] = "DONTNEED",
+  	[5] = "NOREUSE",
+  };
+  $
+
+The tools/perf/check-headers.sh script, part of the tools/ build
+process, points out changes in the original files.
+
+So its important not to touch the copies in tools/ when doing changes in
+the original kernel headers, that will be done later, when
+check-headers.sh inform about the change to the perf tools hackers.
+
+---
+
+To pick up the fixes in:
+
+  206bb3858949b650 ("coresight: trace id: Remove legacy get trace ID function.")
+  aa19bb4c35834dd5 ("coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID used for Trace ID")
+
+That just rebuild perf when CORESIGHT=1 is used in the make command line
+to enable linking with the libopencsd.
+
+This addresses this perf build warning:
+
+  Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
+  diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
+
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Link: http://lore.kernel.org/lkml/
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+---
+ tools/include/linux/coresight-pmu.h | 34 +++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
+
+diff --git a/tools/include/linux/coresight-pmu.h b/tools/include/linux/coresight-pmu.h
+index 6c2fd6cc5a983fa4..51ac441a37c3e38f 100644
+--- a/tools/include/linux/coresight-pmu.h
++++ b/tools/include/linux/coresight-pmu.h
+@@ -7,8 +7,19 @@
+ #ifndef _LINUX_CORESIGHT_PMU_H
+ #define _LINUX_CORESIGHT_PMU_H
+ 
++#include <linux/bits.h>
++
+ #define CORESIGHT_ETM_PMU_NAME "cs_etm"
+-#define CORESIGHT_ETM_PMU_SEED  0x10
++
++/*
++ * The legacy Trace ID system based on fixed calculation from the cpu
++ * number. This has been replaced by drivers using a dynamic allocation
++ * system - but need to retain the legacy algorithm for backward comparibility
++ * in certain situations:-
++ * a) new perf running on older systems that generate the legacy mapping
++ * b) older tools that may not update at the same time as the kernel.
++ */
++#define CORESIGHT_LEGACY_CPU_TRACE_ID(cpu)  (0x10 + (cpu * 2))
+ 
+ /*
+  * Below are the definition of bit offsets for perf option, and works as
+@@ -34,15 +45,16 @@
+ #define ETM4_CFG_BIT_RETSTK	12
+ #define ETM4_CFG_BIT_VMID_OPT	15
+ 
+-static inline int coresight_get_trace_id(int cpu)
+-{
+-	/*
+-	 * A trace ID of value 0 is invalid, so let's start at some
+-	 * random value that fits in 7 bits and go from there.  Since
+-	 * the common convention is to have data trace IDs be I(N) + 1,
+-	 * set instruction trace IDs as a function of the CPU number.
+-	 */
+-	return (CORESIGHT_ETM_PMU_SEED + (cpu * 2));
+-}
++/*
++ * Interpretation of the PERF_RECORD_AUX_OUTPUT_HW_ID payload.
++ * Used to associate a CPU with the CoreSight Trace ID.
++ * [07:00] - Trace ID - uses 8 bits to make value easy to read in file.
++ * [59:08] - Unused (SBZ)
++ * [63:60] - Version
++ */
++#define CS_AUX_HW_ID_TRACE_ID_MASK	GENMASK_ULL(7, 0)
++#define CS_AUX_HW_ID_VERSION_MASK	GENMASK_ULL(63, 60)
++
++#define CS_AUX_HW_ID_CURR_VERSION 0
+ 
+ #endif
+-- 
+2.39.2
 
