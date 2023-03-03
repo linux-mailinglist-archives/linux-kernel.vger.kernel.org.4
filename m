@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26836A9762
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD586A9760
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjCCMmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 07:42:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S229987AbjCCMld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 07:41:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjCCMl7 (ORCPT
+        with ESMTP id S229580AbjCCMlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 07:41:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90E5F508
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 04:41:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677847268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FepeFCltrr6Y6adbFfF6ozHOJLVN2784TOOqblo8G3c=;
-        b=Lcf1uUZz8KkgL9RDOAl7ULD6gXigtr4zdbUlbqNl1Ym8ViPdv7HVN3TtPmlvhniiFAeXvk
-        5CPcFT/v7O7KZkaEO7yl4VsIlb13bBe71xI90b4OgVGvhaszlE5lTWmeGTFLsJ4vDluzzf
-        X7KquPU5cFaDZuGVi7xqXzbQfm/qQZs=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-632-F7wK02j7NqacLRYwh5B_eg-1; Fri, 03 Mar 2023 07:41:06 -0500
-X-MC-Unique: F7wK02j7NqacLRYwh5B_eg-1
-Received: by mail-qk1-f199.google.com with SMTP id q25-20020a37f719000000b00742bfdd63ecso1297195qkj.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 04:41:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677847266;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FepeFCltrr6Y6adbFfF6ozHOJLVN2784TOOqblo8G3c=;
-        b=19o382zaDB/djK1xfzyXrb8KyK6skVQ2RaCP/dtholBiVxKeriD7Qp86iY0VTBuYzb
-         QnIG20/lEfXgW3n6cSLmpIy4DmTZExoyH7YAx2ll9O3sS24XcLgYXx5/N2S0u0woCp9o
-         3zIuyieD+tbGApbUkNj0JWGWMRi773ZUk2nSBb9r6y7lhhOJApSfdJBeIT2OGkXUHdFb
-         mE3ZcVmVfYnFhYv9LX5fT7iu8zhYlehbTlkR4eqHY8NtKdML6ifWIUFhkfu3A5J6HSJk
-         Kb5Kr+A9P1RZTO2Ibu8P76q9oCuzNiJpb6S0m1yqtoxuDfQccEw4udP22OPJnkT5z9v/
-         yzUg==
-X-Gm-Message-State: AO0yUKVTNAXUtH40d0Ah7u2xeh7iSPxwNFLcZIwHcoj7uT7w3/pvmtGc
-        QBpGOYKwuH8glagq4PkcKr4T8jmUY5yH9cXwYm+SjykCODE7vgnKx6lzqZKg+3JTWQhS/jNQ81b
-        d0wb89OzzYD5E3HiahP1jORP9
-X-Received: by 2002:a0c:dd94:0:b0:572:54c1:c14e with SMTP id v20-20020a0cdd94000000b0057254c1c14emr1924529qvk.5.1677847266313;
-        Fri, 03 Mar 2023 04:41:06 -0800 (PST)
-X-Google-Smtp-Source: AK7set/FBxS/cUG+PDkuwIhgP84j9mKZaexu2RFQNHEszy7xrIX+bUBvWrgOvHDO1VJWm6twPe6o2g==
-X-Received: by 2002:a0c:dd94:0:b0:572:54c1:c14e with SMTP id v20-20020a0cdd94000000b0057254c1c14emr1924493qvk.5.1677847266015;
-        Fri, 03 Mar 2023 04:41:06 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-121-8.dyn.eolo.it. [146.241.121.8])
-        by smtp.gmail.com with ESMTPSA id r145-20020a37a897000000b0073b69922cfesm1639351qke.85.2023.03.03.04.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 04:41:05 -0800 (PST)
-Message-ID: <d593e9434dba16a869ec48fcdfe8a3fe540c8a82.camel@redhat.com>
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, mptcp@lists.linux.dev,
-        Florian Westphal <fw@strlen.de>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Date:   Fri, 03 Mar 2023 13:41:00 +0100
-In-Reply-To: <ZAHdrhY2P+sBI+xX@kroah.com>
-References: <20230301180657.003689969@linuxfoundation.org>
-         <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
-         <ZAB6pP3MNy152f+7@kroah.com>
-         <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
-         <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com>
-         <9586d0f99e27483b600d8eb3b5c6635b50905d82.camel@redhat.com>
-         <CA+G9fYuLQEfeTjx52NxbXV5914YJQ2tVd8k4SJjrAryujPjnqA@mail.gmail.com>
-         <ZAG8dla274kYfxoK@kroah.com>
-         <28afc90c1b8b51a36ced5b6026d1a64aeb7c0b14.camel@redhat.com>
-         <ZAHdrhY2P+sBI+xX@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Fri, 3 Mar 2023 07:41:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A5D6230E
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 04:41:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B77C617D6
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A550EC433EF;
+        Fri,  3 Mar 2023 12:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677847288;
+        bh=63DyE5JUF6QupKom375epNDwu5fGTFML7abJZ4OIYuE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ICzPEJL24BmiGVbAYkUJnqwVy3kpf6H4d8Ll5H/Zb7G9WZh0MNCMfOzWuqConTEsg
+         8aW7N7KnMyE0DF5xPdIwLkXJKgJJL8GQzJGL+AsHWRgbu+DTtJC2CILM6QRfwqnzda
+         6K5H/9hkZ/nswx0+4ocC17czW8EX99/ZEXc3/sRGSmqqHpoDRY53qAk3gBq+FJdu86
+         yMiOnr8YL3TjyAVBl2LT735OAAOfoEBad/zdLXn8LZYz9vMKjML+lJ+elKXWceNuiG
+         zC7aHhP7FeAVo5oFmJmaIbmqpft0K8apBds8oTrfwMNCkge4hCk9I0H0nimkKTMl6V
+         /VijgMgJK07Tw==
+Date:   Fri, 3 Mar 2023 12:41:23 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
+        <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: codecs: tx-macro: Fix for KASAN: slab-out-of-bounds
+Message-ID: <5c47fa1d-f97c-47d6-a4cc-e20032072ad9@sirena.org.uk>
+References: <20230303121206.22177-1-quic_visr@quicinc.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RAA2Ho7H6wvZ57Io"
+Content-Disposition: inline
+In-Reply-To: <20230303121206.22177-1-quic_visr@quicinc.com>
+X-Cookie: You are fairminded, just and loving.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-03 at 12:44 +0100, Greg Kroah-Hartman wrote:
-> On Fri, Mar 03, 2023 at 12:39:07PM +0100, Paolo Abeni wrote:
-> > Additionally, some self-tests check for known bugs/regressions. Running
-> > them on older kernel will cause real trouble, and checking for bug
-> > presence in the running kernel would be problematic at best, I think.
->=20
-> No, not at all, why wouldn't you want to test for know bugs and
-> regressions and fail?  That's a great thing to do, and so you will know
-> to backport those bugfixes to those older kernels if you have to use
-> them.
 
-I'm sorry, I likely was not clear at all. What I mean is that the self-
-test for a bug may trigger e.g. memory corruption on the bugged kernel
-(or more specifically to networking, the infamous, recurring
-"unregister_netdevice: waiting for ...") which in turn could cause
-random failures later.
+--RAA2Ho7H6wvZ57Io
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If that specific case runs on older (unpatched) kernel will screw the
-overall tests results. The same could happen in less-detectable way for
-old bugs non explicitly checked by any test, but still triggered by the
-test-suite. As a consequence I expect that the results observed running
-newer self-tests on older kernel are unreliable.=20
+On Fri, Mar 03, 2023 at 05:42:06PM +0530, Ravulapati Vishnu Vardhan Rao wrote:
+> From: visr <quic_visr@quicinc.com>
 
-Cheers,
+You're using a different name here compared to in your email and while
+it's the same mail address it's hard to relate it to your name from the
+sender.  "visr" sounds a bit like it might be a bot too.  Could you
+please supply a more clear signoff?
 
-Paolo
+> Actually There is no need to have decimator with 32 bytes.
+> By limiting the variable with short type u8 issue is resolved.
 
+Bits not bytes.
+
+--RAA2Ho7H6wvZ57Io
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQB6vIACgkQJNaLcl1U
+h9DBIAf+O0GEiKa2+I7pScRjDCF/+T54nZH8sgtkemdIQQdR7TPRPkl5R5HISwSd
+XqH4yuc0Rn2aNgLhS3Jcs1ulEjSMKHrbwn9i1xj2tShnxP8KnBoDduS4KbFP6obF
+nJt7f+bOTHw2Q6iZAdxpr2jMO0RMQ5Ibf7FoR4+e3c/b9KRE+ls9GTuzi5e5Vi5C
+QWPWdxkhlObXt0mHehHoBhZR/h1QJZgIDafGCJwsSRkyyQlVM9A4dakDoqGdi+dO
+iRlE673TKCcnNsX9dY9Rsvi4+gGhq6WYOe/AL5FH4CeYNIfblQHwaYUduN5vxmtE
+mM7FYJ17yaMFC0LLtixWUvp3obpw0A==
+=2XE6
+-----END PGP SIGNATURE-----
+
+--RAA2Ho7H6wvZ57Io--
