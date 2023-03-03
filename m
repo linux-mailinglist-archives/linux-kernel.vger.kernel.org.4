@@ -2,103 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F57C6A8F47
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 03:35:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 631ED6A8F44
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 03:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbjCCCfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 21:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
+        id S229801AbjCCCco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 21:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCCCfJ (ORCPT
+        with ESMTP id S229808AbjCCCck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 21:35:09 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7543B3D6
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 18:35:07 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id j11so1774100lfg.13
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 18:35:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677810905;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jLRvX/I7uLgP1lL5sZgRZ4/1Xfsiyoty5CreDeDfcFQ=;
-        b=CCG58myAHYYt0rheTGVmmZ8w/u/CvaQKetINiA1lSjLDfe62iXWW/PF+3AV6/qysQL
-         meP02uIifxyypHpn4IwUeasomdIoWov5Zr82Cz0DUA8VabXsFrPTnPh6HxzKQ1cg2Cq0
-         b6oEXfBso/ZIHt0ckSs260XR2pZbjDpA0TkCONxi7cGePpRyE83pqn+k68bMPvaEXgDS
-         RG07N04jYizbe+I/2lJLvMpim69cCvPblH4NgwkN5bFySG/MrTff/Wj2rR3W8PJqAA/h
-         bpD6yW2uKHrsMNKYZvo4IXjBvdJnhWmW/30IDrr2ysOsf5vRWLdSq0imNsR8GxHkUJuB
-         Motw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677810905;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jLRvX/I7uLgP1lL5sZgRZ4/1Xfsiyoty5CreDeDfcFQ=;
-        b=ckRlBNlCQRdBQMtJS1isvh8ePBpF0wyPp2vMpH6nALEaCesMwCBtxEj5THgaihXQ11
-         VoeV+CnI4M409DnbQaYZW7vKjfmsh3e21S12IFXCL6FFPqMBx7WSQmXEPkKB5IlkVVXe
-         4hXfXs7urCpAOBo0N55ncBc42ZyCdyhvL0f/dz+9jllzTxCWy/V/5oSKSfy4xW5RPqO/
-         J/emu01vqdFYOWtbjyMBLbymo3ZSDzf2uLCCwvsF4UsCGrgRhdm4KdIphZKlB4Bqzcp8
-         8/shPMm4vr61//rmRTjK9DtzmZrc/C/yQBXdUXNzNsThIaOgZwCpW19qYxuO9BkyGrbP
-         mYtw==
-X-Gm-Message-State: AO0yUKWQm3VOFLnKyjg0N6B1lN1hxPPgBC5b6GzhUOTo42aEmaT/96Yo
-        eToMvn4UV4OkBVEaVGVwaZMaEA==
-X-Google-Smtp-Source: AK7set+oWAL6rgxFSwGFJyVSYXvBQK1354nZaYISAHAEPq3wJIWfZHpZZLgIdZ7j34TkAur//5ifFg==
-X-Received: by 2002:ac2:508f:0:b0:4dd:a5aa:accb with SMTP id f15-20020ac2508f000000b004dda5aaaccbmr98125lfm.44.1677810905658;
-        Thu, 02 Mar 2023 18:35:05 -0800 (PST)
-Received: from localhost.localdomain (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id d20-20020ac241d4000000b004d856fe5121sm180218lfi.194.2023.03.02.18.35.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 18:35:05 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call __qcom_icc_set twice on the same node
-Date:   Fri,  3 Mar 2023 03:35:00 +0100
-Message-Id: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 2 Mar 2023 21:32:40 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0AB33B21C;
+        Thu,  2 Mar 2023 18:32:38 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PSX6h2jlKzrS8F;
+        Fri,  3 Mar 2023 10:31:56 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 3 Mar 2023 10:32:37 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <stable@vger.kernel.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <balbi@kernel.org>, <lee.jones@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [PATCH 5.4] usb: dwc3: dwc3-qcom: Add missing platform_device_put() in dwc3_qcom_acpi_register_core
+Date:   Fri, 3 Mar 2023 10:35:12 +0800
+Message-ID: <20230303023512.774777-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, when sync_state calls set(n, n) all the paths for setting
-parameters on an icc node are called twice. Avoid that.
+From: Miaoqian Lin <linmq006@gmail.com>
 
-Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+commit fa0ef93868a6062babe1144df2807a8b1d4924d2 upstream.
+
+Add the missing platform_device_put() before return from
+dwc3_qcom_acpi_register_core in the error handling case.
+
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20211231113641.31474-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CVE: CVE-2023-22995
+Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+[Fix conflict due to lack of 8dc6e6dd1bee39cd65a232a17d51240fc65a0f4a]
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 ---
-RFC comes from the fact that I *believe* this should be correct, but I'm
-not entirely sure about it..
+ drivers/usb/dwc3/dwc3-qcom.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-
- drivers/interconnect/qcom/icc-rpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index a6e0de03f46b..d35db1af9b08 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	ret = __qcom_icc_set(src, src_qn, sum_bw);
- 	if (ret)
- 		return ret;
--	if (dst_qn) {
-+	if (dst_qn && src_qn != dst_qn) {
- 		ret = __qcom_icc_set(dst, dst_qn, sum_bw);
- 		if (ret)
- 			return ret;
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 2dcdeb52fc29..35f94fd69bba 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -486,8 +486,10 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+ 	qcom->dwc3->dev.coherent_dma_mask = dev->coherent_dma_mask;
+ 
+ 	child_res = kcalloc(2, sizeof(*child_res), GFP_KERNEL);
+-	if (!child_res)
++	if (!child_res) {
++		platform_device_put(qcom->dwc3);
+ 		return -ENOMEM;
++	}
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+ 	if (!res) {
+@@ -519,10 +521,15 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
+ 	}
+ 
+ 	ret = platform_device_add(qcom->dwc3);
+-	if (ret)
++	if (ret) {
+ 		dev_err(&pdev->dev, "failed to add device\n");
++		goto out;
++	}
++	kfree(child_res);
++	return 0;
+ 
+ out:
++	platform_device_put(qcom->dwc3);
+ 	kfree(child_res);
+ 	return ret;
+ }
 -- 
-2.39.2
+2.25.1
 
