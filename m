@@ -2,112 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3E06A8F60
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 03:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B794E6A8F64
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 03:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbjCCCm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 21:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S229652AbjCCCsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 21:48:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjCCCmz (ORCPT
+        with ESMTP id S229437AbjCCCsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 21:42:55 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3046226BA
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 18:42:53 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id i9so1845575lfc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 18:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677811371;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U5WGNHoHvFrqEzbIMWPaETRGh642NbHa8AZbtFWCIaY=;
-        b=a1Th93dRZhNLFhiK7IaDAOwo6+U7mQU2G9IxkKcOhsXbtvHHwqOJBbyqnZq9OWlJbe
-         PRy2m3odeC/uu+rdRtGZFHE4CyA+ZQyW570JMMZLN4ZkJTbwPvvrklO6MtzsN/isn4BZ
-         d6+Vw3elF8Thke2Olw45Gfy2cHVxP7Mn/m34a+orjQ73+ZKOSd2QIvCAH5Xjl2PGcOSe
-         Kt+nHfF3mpKhQlnRl82T+Ihx/9ydlw6UJibClFQKxIyBYPPaSJ8YYC0mAaBnuZk5yqdu
-         wUD+TIYQLfmen1g5gsYWk2+PTx84nUjPbl82gCmqpBZeOrpdzxTaESrrrRSVSUuAlubS
-         glEw==
+        Thu, 2 Mar 2023 21:48:02 -0500
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8AE9EE4;
+        Thu,  2 Mar 2023 18:48:01 -0800 (PST)
+Received: by mail-pl1-f193.google.com with SMTP id p20so1279327plw.13;
+        Thu, 02 Mar 2023 18:48:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677811371;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U5WGNHoHvFrqEzbIMWPaETRGh642NbHa8AZbtFWCIaY=;
-        b=40+KQglHdXp9t/koSmdYOJcUGUFGHRipmleJajiMqjd8YSLIEKyl9P7Jin5/jVMPz1
-         Gln9mCD01Ka5N9+Kov+6fvSBlGvxYQle/3byQ+EdXcLQHjL7Oz+mYsBfkUAw3QgK8hzF
-         U7nAsHs4NhBfGZbbp+jEafG0la64jEYIGWvqppOQil5X14LVTw3XIkcLanM+2/SRAWR1
-         g5IueAleGbvHONSyJr8PIjnzY7ONj8DpdNOXqCUQ7rfHpWmQhozK/nY/eCyG6jPsNdct
-         7Sei+un9CQZlzJmegvvj95VxVwB3/bzzAadJM4nlQ/9LPpDbQoxix+MQKN/oN4e4ttk7
-         AzOg==
-X-Gm-Message-State: AO0yUKVGU+w7DoCFpvSoz/9C3iMxOYs/9BYy6lyCTMQsQWzAIT9RPDmH
-        kbSZe05U7Hze0fUPmhUFUbJoYg==
-X-Google-Smtp-Source: AK7set9F3ef7m9KaxrogAYM4oalKAF6WRYPXP6o4DQr3SoBD77rCGtH28CpKaBUu35HPmnfJ/K7pCw==
-X-Received: by 2002:a19:7611:0:b0:4b5:b705:9bf7 with SMTP id c17-20020a197611000000b004b5b7059bf7mr99636lff.11.1677811371416;
-        Thu, 02 Mar 2023 18:42:51 -0800 (PST)
-Received: from localhost.localdomain (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id x19-20020a19f613000000b004db1cd5efcesm181379lfe.241.2023.03.02.18.42.50
+        d=1e100.net; s=20210112; t=1677811681;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OnpynidftFFkBECkxZccWZ1LMjJJyuwajRKOI+QdZmM=;
+        b=m9o9QQH6emoTTRucGBOqfqe8zfrIew/9xd4a1smyCj60h3DAxLxdwz651XMUSV4v/g
+         y5pgOQyIKSjEdcjpjFN/QSUgNCtR8VKRbLUxnvStjbZp1RN+lcnTrDmJhV6PhzyV991d
+         J5gzGGbEx/FN0HKY2wU6V8QtbKoaW5/GyolNiGCXJUr6pCIlz5ucMHIko8PeeB8XKLCd
+         SO4kjRywhEp5YiXuxD/AwKm8NWZJ9trK1+YdlBu8PLs8N4C8nSWtbKnFslh6AM3jrSaK
+         jxnnFwyTv9tcPXC8fz2o+bQ5NVDrE98k/oMFtoLnvSluYNatI77pwHlTD0dsMVXY5NBP
+         EPwg==
+X-Gm-Message-State: AO0yUKWhV8CuEjVVLQGtVQftsW0uX6G0LRfIhEed4Qwtv5ZSENhRWfyg
+        vVmzelo+W3WZGd6/m/+v0ro=
+X-Google-Smtp-Source: AK7set+RXjeuMXL2sZI9VnRn4tj3yitEu6r6oOY/Sciud9lPFKTvgomWZoSyRdTckPrnAhi3H2zpJA==
+X-Received: by 2002:a17:90a:1a53:b0:234:b4a7:2abd with SMTP id 19-20020a17090a1a5300b00234b4a72abdmr35348pjl.12.1677811681022;
+        Thu, 02 Mar 2023 18:48:01 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id cq18-20020a17090af99200b002348bfd3799sm2241767pjb.39.2023.03.02.18.47.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 18:42:51 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] wifi: ath10k: snoc: Add VDD_SMPS regulator
-Date:   Fri,  3 Mar 2023 03:42:46 +0100
-Message-Id: <20230303024246.2175382-2-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303024246.2175382-1-konrad.dybcio@linaro.org>
-References: <20230303024246.2175382-1-konrad.dybcio@linaro.org>
+        Thu, 02 Mar 2023 18:48:00 -0800 (PST)
+From:   Xueqin Luo <luoxueqin@kylinos.cn>
+To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiongxin@kylinos.cn, xueqin Luo <luoxueqin@kylinos.cn>
+Subject: [PATCH v2] PM/hibernation: set the default image size for large memory
+Date:   Fri,  3 Mar 2023 10:47:55 +0800
+Message-Id: <20230303024755.27491-1-luoxueqin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At least SM6375 (bundled with soc_id 0x400e0000) and SM4350 (bundled
-with unknown, probably the same) expect one more supply, called vdd-smps
-downstream. It's set to 0.984V and connected to a - you guessed it - SMPS
-regulator on PM6125. Add support for it.
+From: xueqin Luo <luoxueqin@kylinos.cn>
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+We found that the larger the memory, the larger the image saved by the
+S4, so that the S4 took longer and longer. However, through observation,
+we found that the image size is generally more than 900,000 pages, so
+we changed the image_size of a computer with 16GB or more memory to 1
+million pages. Let it release more unnecessary pages to reduce S4 run
+time.
+
+This is the test data for 5 hours after the computer is turned on:
+
+Original kernel begin:
+
+[2023-02-24 19:16:56] [   46.105423][ 2] [ T3075] PM: hibernation entry
+[2023-02-24 19:18:05] [   56.987043][ 2] [ T3075] PM: hibernation exit
+
+5 hours later:
+
+[2023-02-25 00:22:48] [18069.651640][ 4] [ T7590] PM: hibernation entry
+[2023-02-25 00:24:06] [18080.639889][ 2] [ T7590] PM: hibernation exit
+
+After 5h, you can see that the S4 takes 8s more time.
+
+The modified kernel begin:
+
+[2023-02-24 10:47:04] [  166.309041][ 7] [ T6943] PM: hibernation entry
+[2023-02-24 10:48:14] [  180.382188][ 3] [ T6943] PM: hibernation exit
+
+5 hours later:
+
+[2023-02-24 15:52:08] [18190.171183][ 7] [T11151] PM: hibernation entry
+[2023-02-24 15:53:15] [18201.028488][ 2] [T11151] PM: hibernation exit
+
+You can see that after 5 hours, the time doesn't change much.
+
+Signed-off-by: xueqin Luo <luoxueqin@kylinos.cn>
 ---
-The smps name sounds like a quick downstream hack and is probably
-something more exquisite in reality.. Not something I know, though.
+ kernel/power/snapshot.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
- drivers/net/wireless/ath/ath10k/snoc.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/net/wireless/ath/ath10k/snoc.c b/drivers/net/wireless/ath/ath10k/snoc.c
-index 9a82f0336d95..6443523131db 100644
---- a/drivers/net/wireless/ath/ath10k/snoc.c
-+++ b/drivers/net/wireless/ath/ath10k/snoc.c
-@@ -48,6 +48,7 @@ static const char * const ath10k_regulators[] = {
- 	"vdd-1.3-rfa",
- 	"vdd-3.3-ch0",
- 	"vdd-3.3-ch1",
-+	"vdd-smps",
- };
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index cd8b7b35f1e8..de91d6916359 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -136,7 +136,14 @@ unsigned long image_size;
  
- static const char * const ath10k_clocks[] = {
+ void __init hibernate_image_size_init(void)
+ {
+-	image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
++	/* The totalram pages() for a computer of 16 memory size is
++	 * equal to 4032990 pages. And according to our observation,
++	 * the average image size is 1000000 pages.
++	 */
++	if (totalram_pages() < 4032990)
++		image_size = ((totalram_pages() * 2) / 5) * PAGE_SIZE;
++	else
++		image_size = 1000000 * PAGE_SIZE;
+ }
+ 
+ /*
 -- 
-2.39.2
+2.25.1
 
