@@ -2,305 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D1546A913A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:52:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8026A9142
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 07:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjCCGvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 01:51:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58024 "EHLO
+        id S229674AbjCCGxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 01:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCCGvx (ORCPT
+        with ESMTP id S229535AbjCCGxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 01:51:53 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E795015579
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 22:51:46 -0800 (PST)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PSdqM2zD3z16NrX;
-        Fri,  3 Mar 2023 14:49:03 +0800 (CST)
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
+        Fri, 3 Mar 2023 01:53:36 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02397EFA1;
+        Thu,  2 Mar 2023 22:53:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677826404; x=1709362404;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=dO4y6y2/+1UGYVhxwHkwzMX5LeQC78W+201sDFjATl0=;
+  b=bra/4PRmulxQy29N0hh415BbVblVBB5q1Ez92GkzE+UOrqs1VUHnyfeq
+   wZ7gXGNkjf6BCbPljkMGjvnQyw8f8trcqb2/oVpiTw0uSlFiwJLPwDtuS
+   GGNddY9hOs7mmtU3W1NoM43sGzpxcYt5/H7Yv/3XdzE/PUHCwU9We6MHB
+   p3awJWJMwziP1mf+EPLJQ2JnfuiXgp+pWM4VpoInHTJs9s+8uIp+bAbSz
+   evlJ0Ct1VCexwl39Ta/dWCAAGvDQfS8O4we+/vykuvtWyjKBdZDpyCS55
+   W+UqgNf0aYSyK5jqKMc27lgiq7oGjhiEXY42zUaDcwS/bfhxTwwFC/KYA
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="337290082"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="337290082"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 22:53:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="785165176"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="785165176"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga002.fm.intel.com with ESMTP; 02 Mar 2023 22:53:22 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 3 Mar 2023 14:51:44 +0800
-Message-ID: <5b8bb880-de5a-dd99-4168-89d1281e8348@huawei.com>
-Date:   Fri, 3 Mar 2023 14:51:44 +0800
+ 15.1.2507.21; Thu, 2 Mar 2023 22:53:22 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 2 Mar 2023 22:53:22 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 2 Mar 2023 22:53:22 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 2 Mar 2023 22:53:21 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=heyqaC0755OvdS3SBYp+9re5AEXVtmfpmwROI7mf5F22m+LQ5zeQPJv+ClTinno61GqV9fjpl1fnpt33Gc12vGfY1DWjZbS/hbmUlNOhzLqiSh9xr0uVccYwt585G9yvqz1/w/R3C2WguKQAqO/vCndpGtVgjKCu07L4ZqwsVliTEV8628a/D6/dyUx6skXdUl9DzQCehVzNvtiHPnMusLO+EZn4q7kcArS5OWguCW+K9+2PtckEUfrsBInQDUj7CxKYZGA6YcYse2PhcmmYFyOATBt5ZoXZleB7M5LbuFiIoaDqQmifOLiCHOdCLlhHZZVBXfN9bjGHxp2kOjmgUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NdIhJWF6WPrA3luiZ+jE3/gLWRSGsa8kOLSwaZRxOZc=;
+ b=UW6jcPF6AVZHrDBmF80Qt/naKYNdiuZadwO6hJHu8u8Ba9lEfm1zi0KH6SVwegnNY9/zhs5QREMPUFn4Krb2SkHhKxV4jyQUIAaxmz6uBpIXqo6HPSd0Jqqhi2WYN04QjFkRhkN10TSdI0Lp+zxitffXCsNBC4sT7lS7yfjEzG1MmkgwzGOCEJZugpyFqqZbnyioamLaW4PzE4EZfLs65b2uoDR+hl67P6L8JyeApagwKdnmzdX37WxVwA89ywPe93Lm/zmL0vcjGBuePRzV9baBFDJLFhDBRi7S2UdFk3M/1erjSA9HkDLog59krYkpy+NpQaa5/cF4qGRq2LOeKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
+ by PH0PR11MB7616.namprd11.prod.outlook.com (2603:10b6:510:26d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6134.29; Fri, 3 Mar
+ 2023 06:53:19 +0000
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::6f7:944a:aaad:301f]) by DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::6f7:944a:aaad:301f%8]) with mapi id 15.20.6134.030; Fri, 3 Mar 2023
+ 06:53:19 +0000
+From:   "Liu, Yi L" <yi.l.liu@intel.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "shuah@kernel.org" <shuah@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "farman@linux.ibm.com" <farman@linux.ibm.com>
+Subject: RE: [PATCH v3 1/5] vfio: Do not allow !ops->dma_unmap in
+ vfio_pin/unpin_pages()
+Thread-Topic: [PATCH v3 1/5] vfio: Do not allow !ops->dma_unmap in
+ vfio_pin/unpin_pages()
+Thread-Index: AQHZSLveJvGTuf194EubSScIxR/EM67opvmQ
+Date:   Fri, 3 Mar 2023 06:53:19 +0000
+Message-ID: <DS0PR11MB752965139F9075A4848EDA7EC3B39@DS0PR11MB7529.namprd11.prod.outlook.com>
+References: <cover.1677288789.git.nicolinc@nvidia.com>
+ <0f8d110eabc40e71fd2c37f63b1bc8888c67414f.1677288789.git.nicolinc@nvidia.com>
+In-Reply-To: <0f8d110eabc40e71fd2c37f63b1bc8888c67414f.1677288789.git.nicolinc@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS0PR11MB7529:EE_|PH0PR11MB7616:EE_
+x-ms-office365-filtering-correlation-id: e5556956-6d91-4d66-6481-08db1bb3f91d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JTmSRXQicx261rfCHaRFhOR7kHYASMxipFzHljG+8CUQUlLQWViz+vBRmj8+b9OVR+UgtMaitDEUir1P6hKcXabx868MH4i9EIOlnMtL9SnhJqJKvbH9YYaVnsO7MMLetFHYUwa5iWC3zvRSN5eNsLWd6AqEntr0EjjoEMlJmyzdC604Zog5WisJdFa9VdF/U6NJHvNEB9QeGsnTbMi3S0HgxQitsB0EOIei883PZswaCFXQNakzwOjIv3aLIYpy6LF97/9nwWq5jADFmeQgysWlDrDCxUw9HXwtMWcinY4UyyIZdh4Zs+63sjcInFYcjeiUZbS67Kg/n/eWlUz2QJv3+TLlfhlDjJkucdPOnOoi0P1PsXdT8bX/nNHIYXrdPHJEycoi7dluH+dfwlPxDSNaYoWUiBNYy9B9LrG9ZiUJDwA5HpHkAbcsvH6AlqjsRhh/jYFEVQ9BT3ZlLckxkB1m73PfrD0M38lpNy07Ov6l014RIQxnTTirYrKobKBMYPqvhC7rkV/2kmUV17MJQHubjfm5DAtsk/OIMK8MQ0o/pckuh+pxLLAlE+CRqVehnaKrTZYujF4pqOlxGaYC/uJl2/3k3MDG1VLF8nXja5LF2jNt17GuoS8IFV/4LY42isNbbvfzbutPdbJiHOwh99mgdcUNIedq13uYiR/2zXXje3fz6KWPZzgAmLmfTkdNlbBXauM5t8jUS6sw/KRHtA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(136003)(366004)(376002)(39860400002)(346002)(451199018)(86362001)(38070700005)(64756008)(33656002)(5660300002)(52536014)(38100700002)(66946007)(66446008)(66476007)(82960400001)(2906002)(76116006)(41300700001)(8676002)(66556008)(8936002)(7416002)(55016003)(83380400001)(6506007)(54906003)(110136005)(186003)(26005)(4326008)(9686003)(7696005)(316002)(478600001)(122000001)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?mR4upl8UyXRUAyvrJlakIcRCA4hFm+x0azoWJXjC7B/nud71nasxWFpWb+nd?=
+ =?us-ascii?Q?woC6ZyJSu1GI2D8jWKFQpDv37EuBvLytS7wtL155o4fJpru9HgZ0GL6vNXCk?=
+ =?us-ascii?Q?dr4e4JZhUYA3/aMAyAFBtA0QFt5BirHfiY+/R+IO9jb/R17f+8Ofqand0kM1?=
+ =?us-ascii?Q?98uT6Liqv4FehZx5Y3IEyuZSbU9feP6QcELFVieUjM9nA1muoDRApCdHIL4Q?=
+ =?us-ascii?Q?uxBUcFxKwUhKim9LTi7czwuFPBRdxt8Nz+QGv6DQSjrb7/3UP5A0ruZfATxP?=
+ =?us-ascii?Q?Lovq1MkfAo6yamlkNSN9JtXvT9tpWIfqA5aTAGrE+h7D7fVKQkTo7+LVo3B9?=
+ =?us-ascii?Q?3C89ZVH8OerO15D5xi4K715PXtv1Kb6ZXR0ejYIgxgmnna7l6VMNyJvBMP3a?=
+ =?us-ascii?Q?vq9uLsnDrX8VmN8+8wA2fyT4c4AdsmTGK0adeS7yRNRhOkhEv75sMiLpRajw?=
+ =?us-ascii?Q?1sWfj1MKnMF6sIDIOZWxbxZel8GEdeLEulHwwUvdPeGODGBPOxmw23BREMP3?=
+ =?us-ascii?Q?x/bpPuBx5nbSymiMR/Wrrb9NPuhoFzoGvFDuzHoo/purs0pw7fIUHBk84Mjs?=
+ =?us-ascii?Q?C267EdNbHwFunqENkhP2CafQ1VUauLFWiJk2VXT43MHy2Etk9/QtlzR45DPq?=
+ =?us-ascii?Q?mxmxGEcLbzMq7IQSP0gDuxazGG5d4Gok8cDTNMNcp+C5Q35j26xyURfj8bpA?=
+ =?us-ascii?Q?U67YQtPZV2DFVtCTO7dq4nvZ8AoEWj2wh7snJSrsH1cBdKQoQvSq40Z5+mKM?=
+ =?us-ascii?Q?R7XENrAO1oUoQ5JgT2kzmABBB370BeNG0Q8AEwC+jUuqP0/ISpsMknuJ8TPn?=
+ =?us-ascii?Q?Qh1SHhTkwJJHR672EgizCrOUzH1mJZgNqKRGL/sgVYI4boDyWVon1BLdCJq6?=
+ =?us-ascii?Q?v7osf7ykFqbIuQPfU1WUEaAda/yQ4oYSz3NsqtVTxK9f5HdCf2ILtMxdajMY?=
+ =?us-ascii?Q?yLQhx2RGjwnTXTbVB4g09grQCAWCFguzq2EJB7+g40Mgc67mYWKb2SzjQ6A5?=
+ =?us-ascii?Q?+FYh0IMotH1DN438s8JWrod+y7LcAcnQqdGlPDCM0y7bzbYLawUu2qCPIbYM?=
+ =?us-ascii?Q?fy5BbwUS8DZwsElRGeXomkkQdfaYmvi982u9i6IkU/3apQ8ikHdYK8exkyOh?=
+ =?us-ascii?Q?bNOVbY4N77IAEb//XDCUgEdW1GXwvtoGu87MMcggzZd+m2vbjUOf61qGTzFB?=
+ =?us-ascii?Q?NPZk2nb8RQtmFxoYPDdE/UHibZmH9huXx3vE20EALA1UJrNdBAXPEwIgPxQC?=
+ =?us-ascii?Q?S7CGMYPcEacZEwUtZ2Xvh7E07RZ47hlzIs/KzpKnG37+qFBI4p17tuNAVM8L?=
+ =?us-ascii?Q?TBn8qWQ5hDMsOPskZ2dgo2iHA030pWPTJrLKg5cyM5LQVa/SxjbpnAZzsae6?=
+ =?us-ascii?Q?J0tSjcD+e7gyzZ1YSrwIzY9/fNxKinr5FuvjgKMDDRpS7Fmwsc5faN5Wcd+U?=
+ =?us-ascii?Q?uzqHuK+g1FgIov3xIeRlfqr+j+FRSwSAAQiGqvrz4XamJwLIDmWqso5eOybC?=
+ =?us-ascii?Q?Xr3zX7vfIWLIswEaRj0gd01C2HghfBGFfygKbdOp81nTTrxP46MWF3ptsuec?=
+ =?us-ascii?Q?QOEuh+Z6NktCM9J4am3cD5TIll/ulhw8+uBPmvzU?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v3] sched/fair: sanitize vruntime of entity being placed
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     Roman Kagan <rkagan@amazon.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ben Segall <bsegall@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>
-References: <20230209193107.1432770-1-rkagan@amazon.de>
- <CAKfTPtB7ZDyCh0MiNQtyimVhYJ6E3C+2bTptj9CX3+mepH8YAQ@mail.gmail.com>
- <Y/T36NvaCxSfS8Z/@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtCDxdVEmPQf=6g7n7Y+bkozXAJT1NG92wDc_quNaDiHMg@mail.gmail.com>
- <Y/xtDWYTKLutOqrM@u40bc5e070a0153.ant.amazon.com>
- <CAKfTPtAq3yBYBxpR=RO8zxrQduOymqkdAEhigjfCuGfsY1uHsg@mail.gmail.com>
- <1cd19d3f-18c4-92f9-257a-378cc18cfbc7@huawei.com>
- <CAKfTPtB9oYsKHLF--nVwNT5z-9tCR3bBWd8mPe4NWZ5S3y43Lg@mail.gmail.com>
- <aef87465-221b-3aff-3501-af1a516bbd98@huawei.com>
- <CAKfTPtC=Y-ihdiO3ctrdsLmhMNraf6c-Ft2059T=z38kwzdJ=Q@mail.gmail.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <CAKfTPtC=Y-ihdiO3ctrdsLmhMNraf6c-Ft2059T=z38kwzdJ=Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5556956-6d91-4d66-6481-08db1bb3f91d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2023 06:53:19.5449
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6HMCm9N8f/lrUWukArUYkOQxO/kGq9OpTboFD6GRT+K0cmcU7yllYjkMulXYrvNSQWyvdKzGcS6FPI9iR7gpbw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7616
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Saturday, February 25, 2023 9:52 AM
+>=20
+> A driver that doesn't implement ops->dma_unmap shouldn't be allowed to
+> do
+> vfio_pin/unpin_pages(), though it can use vfio_dma_rw() to access an iova
+> range. Deny !ops->dma_unmap cases in vfio_pin/unpin_pages().
+>=20
+> Suggested-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 
+Reviewed-by: Yi Liu <yi.l.liu@intel.com>
 
-在 2023/3/2 22:55, Vincent Guittot 写道:
-> On Thu, 2 Mar 2023 at 15:29, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>
->>
->>
->> 在 2023/3/2 21:34, Vincent Guittot 写道:
->>> On Thu, 2 Mar 2023 at 10:36, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>>>
->>>>
->>>>
->>>> 在 2023/2/27 22:37, Vincent Guittot 写道:
->>>>> On Mon, 27 Feb 2023 at 09:43, Roman Kagan <rkagan@amazon.de> wrote:
->>>>>>
->>>>>> On Tue, Feb 21, 2023 at 06:26:11PM +0100, Vincent Guittot wrote:
->>>>>>> On Tue, 21 Feb 2023 at 17:57, Roman Kagan <rkagan@amazon.de> wrote:
->>>>>>>> What scares me, though, is that I've got a message from the test robot
->>>>>>>> that this commit drammatically affected hackbench results, see the quote
->>>>>>>> below.  I expected the commit not to affect any benchmarks.
->>>>>>>>
->>>>>>>> Any idea what could have caused this change?
->>>>>>>
->>>>>>> Hmm, It's most probably because se->exec_start is reset after a
->>>>>>> migration and the condition becomes true for newly migrated task
->>>>>>> whereas its vruntime should be after min_vruntime.
->>>>>>>
->>>>>>> We have missed this condition
->>>>>>
->>>>>> Makes sense to me.
->>>>>>
->>>>>> But what would then be the reliable way to detect a sched_entity which
->>>>>> has slept for long and risks overflowing in .vruntime comparison?
->>>>>
->>>>> For now I don't have a better idea than adding the same check in
->>>>> migrate_task_rq_fair()
->>>>
->>>> Hi, Vincent，
->>>> I fixed this condition as you said, and the test results are as follows.
->>>>
->>>> testcase: hackbench -g 44 -f 20 --process --pipe -l 60000 -s 100
->>>> version1: v6.2
->>>> version2: v6.2 + commit 829c1651e9c4
->>>> version3: v6.2 + commit 829c1651e9c4 + this patch
->>>>
->>>> -------------------------------------------------
->>>>         version1        version2        version3
->>>> test1   81.0            118.1           82.1
->>>> test2   82.1            116.9           80.3
->>>> test3   83.2            103.9           83.3
->>>> avg(s)  82.1            113.0           81.9
->>>>
->>>> -------------------------------------------------
->>>> After deal with the task migration case, the hackbench result has restored.
->>>>
->>>> The patch as follow, how does this look?
->>>>
->>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>>> index ff4dbbae3b10..3a88d20fd29e 100644
->>>> --- a/kernel/sched/fair.c
->>>> +++ b/kernel/sched/fair.c
->>>> @@ -4648,6 +4648,26 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>>>  #endif
->>>>  }
->>>>
->>>> +static inline u64 sched_sleeper_credit(struct sched_entity *se)
->>>> +{
->>>> +
->>>> +       unsigned long thresh;
->>>> +
->>>> +       if (se_is_idle(se))
->>>> +               thresh = sysctl_sched_min_granularity;
->>>> +       else
->>>> +               thresh = sysctl_sched_latency;
->>>> +
->>>> +       /*
->>>> +        * Halve their sleep time's effect, to allow
->>>> +        * for a gentler effect of sleepers:
->>>> +        */
->>>> +       if (sched_feat(GENTLE_FAIR_SLEEPERS))
->>>> +               thresh >>= 1;
->>>> +
->>>> +       return thresh;
->>>> +}
->>>> +
->>>>  static void
->>>>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>  {
->>>> @@ -4664,23 +4684,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>                 vruntime += sched_vslice(cfs_rq, se);
->>>>
->>>>         /* sleeps up to a single latency don't count. */
->>>> -       if (!initial) {
->>>> -               unsigned long thresh;
->>>> -
->>>> -               if (se_is_idle(se))
->>>> -                       thresh = sysctl_sched_min_granularity;
->>>> -               else
->>>> -                       thresh = sysctl_sched_latency;
->>>> -
->>>> -               /*
->>>> -                * Halve their sleep time's effect, to allow
->>>> -                * for a gentler effect of sleepers:
->>>> -                */
->>>> -               if (sched_feat(GENTLE_FAIR_SLEEPERS))
->>>> -                       thresh >>= 1;
->>>> -
->>>> -               vruntime -= thresh;
->>>> -       }
->>>> +       if (!initial)
->>>> +               vruntime -= sched_sleeper_credit(se);
->>>>
->>>>         /*
->>>>          * Pull vruntime of the entity being placed to the base level of
->>>> @@ -4690,7 +4695,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>>          * inversed due to s64 overflow.
->>>>          */
->>>>         sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>>> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>>> +       if (se->exec_start != 0 && (s64)sleep_time > 60LL * NSEC_PER_SEC)
->>>>                 se->vruntime = vruntime;
->>>>         else
->>>>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
->>>> @@ -7634,8 +7639,12 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>>>          */
->>>>         if (READ_ONCE(p->__state) == TASK_WAKING) {
->>>>                 struct cfs_rq *cfs_rq = cfs_rq_of(se);
->>>> +               u64 sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>>>
->>>> -               se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->>>> +               if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>>
->>> You also need to test (se->exec_start !=0) here because the task might
->>
->> Hi,
->>
->> I don't understand when the another migration happend. Could you tell me in more detail?
-> 
-> se->exec_start is update when the task becomes current.
-> 
-> You can have the sequence:
-> 
-> task TA runs on CPU0
->     TA's se->exec_start = xxxx
-> TA is put back into the rb tree waiting for next slice while another
-> task is running
-> CPU1 pulls TA which migrates on CPU1
->     migrate_task_rq_fair() w/ TA's se->exec_start == xxxx
->         TA's se->exec_start = 0
-> TA is put into the rb tree of CPU1 waiting to run on CPU1
-> CPU2 pulls TA which migrates on CPU2
->     migrate_task_rq_fair() w/ TA's se->exec_start == 0
->         TA's se->exec_start = 0
-Hi, Vincent,
+> ---
+>  drivers/vfio/vfio_main.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+> index 43bd6b76e2b6..0381f6e7f4e6 100644
+> --- a/drivers/vfio/vfio_main.c
+> +++ b/drivers/vfio/vfio_main.c
+> @@ -1292,6 +1292,8 @@ int vfio_pin_pages(struct vfio_device *device,
+> dma_addr_t iova,
+>  	/* group->container cannot change while a vfio device is open */
+>  	if (!pages || !npage ||
+> WARN_ON(!vfio_assert_device_open(device)))
+>  		return -EINVAL;
+> +	if (!device->ops->dma_unmap)
+> +		return -EINVAL;
+>  	if (vfio_device_has_container(device))
+>  		return vfio_device_container_pin_pages(device, iova,
+>  						       npage, prot, pages);
+> @@ -1329,6 +1331,8 @@ void vfio_unpin_pages(struct vfio_device *device,
+> dma_addr_t iova, int npage)
+>  {
+>  	if (WARN_ON(!vfio_assert_device_open(device)))
+>  		return;
+> +	if (WARN_ON(!device->ops->dma_unmap))
+> +		return;
+>=20
+>  	if (vfio_device_has_container(device)) {
+>  		vfio_device_container_unpin_pages(device, iova, npage);
+> --
+> 2.39.2
 
-yes, you're right, such sequence does exist. But at this point, p->__state != TASK_WAKING.
-
-I have a question, Whether there is case that is "p->se.exec_start == 0 && p->__state == TASK_WAKING" ?
-I analyzed the code and concluded that this case isn't existed, is it right?
-
-Thanks.
-ZhangQiao.
-
-> 
->>
->> I think the next migration will happend after the wakee task enqueued, but at this time
->> the p->__state isn't TASK_WAKING, p->__state already be changed to TASK_RUNNING at ttwu_do_wakeup().
->>
->> If such a migration exists, Previous code "se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);" maybe
->> perform multiple times，wouldn't it go wrong in this way?
-> 
-> the vruntime have been updated when enqueued but not exec_start
-> 
->>
->>> migrate another time before being scheduled. You should create a
->>> helper function like below and use it in both place
->>
->> Ok, I will update at next version.
->>
->>
->> Thanks,
->> ZhangQiao.
->>
->>>
->>> static inline bool entity_long_sleep(se)
->>> {
->>>         struct cfs_rq *cfs_rq;
->>>         u64 sleep_time;
->>>
->>>         if (se->exec_start == 0)
->>>                 return false;
->>>
->>>         cfs_rq = cfs_rq_of(se);
->>>         sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>>         if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>>                 return true;
->>>
->>>         return false;
->>> }
->>>
->>>
->>>> +                       se->vruntime = -sched_sleeper_credit(se);
->>>> +               else
->>>> +                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->>>>         }
->>>>
->>>>         if (!task_on_rq_migrating(p)) {
->>>>
->>>>
->>>>
->>>> Thanks.
->>>> Zhang Qiao.
->>>>
->>>>>
->>>>>>
->>>>>> Thanks,
->>>>>> Roman.
->>>>>>
->>>>>>
->>>>>>
->>>>>> Amazon Development Center Germany GmbH
->>>>>> Krausenstr. 38
->>>>>> 10117 Berlin
->>>>>> Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
->>>>>> Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
->>>>>> Sitz: Berlin
->>>>>> Ust-ID: DE 289 237 879
->>>>>>
->>>>>>
->>>>>>
->>>>> .
->>>>>
->>> .
->>>
-> .
-> 
