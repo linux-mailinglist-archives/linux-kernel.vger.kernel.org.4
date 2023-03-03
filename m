@@ -2,149 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83DC6A935E
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2AE6A9365
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:10:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjCCJGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:06:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S229736AbjCCJKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjCCJGu (ORCPT
+        with ESMTP id S229471AbjCCJKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:06:50 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E93123659
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:06:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677834360;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YS0CjwhYVbsUEzzioDGeRBPspcNXXioriZQMTd1XWIQ=;
-        b=gOIn/CrUMxrg3g+RkC088rjIXObfEiu3mcPhNEvmGr7qLKqtkqzSIz4pO0Cb7Ua1JPL2ys
-        eK9p5oFvMm4jppzJBd8+7ZCsceyEbYrpTy9X3v/KjmjDXiX+pyWb1YHQJDEdy+7efy6IwC
-        UPD5rrRW/fL9zKxmCOn11V1ji+yUfKo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-494-PGe70pWmOxu44z8WjTnUVQ-1; Fri, 03 Mar 2023 04:05:53 -0500
-X-MC-Unique: PGe70pWmOxu44z8WjTnUVQ-1
-Received: by mail-wm1-f69.google.com with SMTP id az39-20020a05600c602700b003e97eb80524so2534083wmb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:05:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YS0CjwhYVbsUEzzioDGeRBPspcNXXioriZQMTd1XWIQ=;
-        b=34K73oKT1awgNlTwIijHcHDWL4LoAiPTCiB76bRaN+ZdCTZjHPpC3acm//SVn6xF3X
-         +3Hr3J4xRvusp7BwuZ8MTr3AKZimhqB2jt/crq6mzvmFXoqfKDDiPqcxF4CaT/sID7BC
-         k0c3FGwdqGlLK76ZGoH6OBTOrKEBNOAtAdGpWUDEEZSgPi34M5Z+2EadpGyQ4aOzfHx7
-         sjtrgbdCqbpZu6mj6bsPoM3GY58t6+4tr1DddUtR2bUmkFEZAKDH672e5h7jLBfk/WQK
-         Gvkg6ZMiipbAEJBkDN4pm7BOXd91aER/XKGMkdhhtUAoRmX+hbiKbyCwHo1fEMadet7c
-         Xcdw==
-X-Gm-Message-State: AO0yUKXzcRN5WwHpNEE1j5GcqQwZkCNt+vJmaroEAfU13hy6lvXndywp
-        2xrXqaQ9q4OG/qZKblW7n2s6GeXS8yBD4ObVbZ4ZySzJ90jF4pk3nPu4h1ylqNvOYOLWV+QrxV2
-        u9s3bzA1rW30h9RhjrcauhoDx
-X-Received: by 2002:a05:600c:46d1:b0:3e1:f8af:8772 with SMTP id q17-20020a05600c46d100b003e1f8af8772mr962685wmo.9.1677834352102;
-        Fri, 03 Mar 2023 01:05:52 -0800 (PST)
-X-Google-Smtp-Source: AK7set8jagMcNMmXQyfHV0dH3kB3yk7ffQXREEni9HXk4xFVSy4fCDC0ZRzxCl37hRsdKx/W7igNWA==
-X-Received: by 2002:a05:600c:46d1:b0:3e1:f8af:8772 with SMTP id q17-20020a05600c46d100b003e1f8af8772mr962632wmo.9.1677834351710;
-        Fri, 03 Mar 2023 01:05:51 -0800 (PST)
-Received: from ?IPV6:2003:cb:c702:6100:f5c9:50a5:3310:d8ac? (p200300cbc7026100f5c950a53310d8ac.dip0.t-ipconnect.de. [2003:cb:c702:6100:f5c9:50a5:3310:d8ac])
-        by smtp.gmail.com with ESMTPSA id o14-20020a5d408e000000b002bfd524255esm1593826wrp.43.2023.03.03.01.05.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 01:05:51 -0800 (PST)
-Message-ID: <787e7d9a-fcf4-ad5f-97f1-c0e1c1553c2d@redhat.com>
-Date:   Fri, 3 Mar 2023 10:05:49 +0100
+        Fri, 3 Mar 2023 04:10:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32B9196AA
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:10:43 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3238cIpW032270;
+        Fri, 3 Mar 2023 09:10:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=Te9klQBS+kCAEC6hYv2BB9GzSiQA75m/Yl9D5zyV7XQ=;
+ b=U+AlU00oGQg+4VDcAggZoMHtQOzY7zUXqKXxv9jddS7sOJpTHlEpLjZ2E14kKtCeSj8u
+ uXeKXA3+SytZEjnidwWPr5nacUrn9adKtiSMbapg8WUC7F339wqgafufRDyhzY+f1X52
+ TF7gM2PvZSIHZDbMccvieCw8EoT9F4z456xBB5LpYU34hbgryTTooaa+VriDBe3KzbXF
+ QWAEDcFM/UwnXRZFgisImsnJRJCuX1DdFJ7zScDBaxrxf2U4R58yWrH4CRDTUNxSokfz
+ BjekTAcwdvHmy1AoO7q2cGcSnOoJ2TRVP2Sm5cB/lOF/YDAYLES+Q5Ui241B73wkrr7u TA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p3cqvt19n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 09:10:30 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3238e9sa011021;
+        Fri, 3 Mar 2023 09:10:30 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p3cqvt18q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 09:10:30 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 322NEcUw010210;
+        Fri, 3 Mar 2023 09:10:28 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3nybbdn56j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 03 Mar 2023 09:10:27 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3239APvM61210974
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 3 Mar 2023 09:10:25 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4351420049;
+        Fri,  3 Mar 2023 09:10:25 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8246E20043;
+        Fri,  3 Mar 2023 09:10:24 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.171.42.36])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  3 Mar 2023 09:10:24 +0000 (GMT)
+Date:   Fri, 3 Mar 2023 11:10:22 +0200
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@suse.de>, Hugh Dickins <hughd@google.com>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [tip: x86/urgent] x86/setup: Always reserve the first 1M of RAM
+Message-ID: <ZAG5fvRl4Z+3vGfS@linux.ibm.com>
+References: <20210601075354.5149-2-rppt@kernel.org>
+ <162274330352.29796.17521974349959809425.tip-bot2@tip-bot2>
+ <7d344756-aec4-4df2-9427-da742ef9ce6b@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, dhowells@redhat.com, hughd@google.com,
-        bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com, chriscli@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com,
-        michalechner92@googlemail.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-References: <20230301190457.1498985-1-surenb@google.com>
- <31a88065-063a-727e-52fd-9fbc7d17fb5c@redhat.com>
- <CAJuCfpGKK5SwxQr_BKrqnn0ZeaLVtX=n31MbKUwdnSSd4umB3A@mail.gmail.com>
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 1/1] mm/nommu: remove unnecessary VMA locking
-In-Reply-To: <CAJuCfpGKK5SwxQr_BKrqnn0ZeaLVtX=n31MbKUwdnSSd4umB3A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7d344756-aec4-4df2-9427-da742ef9ce6b@app.fastmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8wHVh8GK_cWTSeQM9JYKCJnnYeyWu13d
+X-Proofpoint-GUID: 8-BF8Lm2MJqOgwachMFQu6yIgqUY7XVH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 adultscore=0 clxscore=1011 mlxscore=0 mlxlogscore=548
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303030081
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>
->> Just a general comment: usually, if review of the original series is
->> still going on, it makes a lot more sense to raise such things in the
->> original series so the author can fixup while things are still in
->> mm-unstable. Once the series is in mm-stable, it's a different story. In
->> that case, it is usually good to have the mail subjects be something
->> like  "[PATCH mm-stable 1/1] ...".
+Hi Andy,
+
+On Wed, Mar 01, 2023 at 07:51:43PM -0800, Andy Lutomirski wrote:
+> On Thu, Jun 3, 2021, at 11:01 AM, tip-bot2 for Mike Rapoport wrote:
+> >
+> > x86/setup: Always reserve the first 1M of RAM
+> >
+
+...
+
+> +       /*
+> +        * Unconditionally reserve the entire fisrt 1M, see comment in
+> +        * setup_arch().
+> +        */
+> +       memblock_reserve(0, SZ_1M);
 > 
-> Ok... For my education, do you mean the title of this patch should
-> somehow reflect that it should be folded into the original patch? Just
-> trying to understand the actionable item here. How would you change
-> this patch when posting for mm-unstable and for mm-stable?
+> 
+> But this runs even if we just failed to allocate a trampoline on the
+> first try, again dooming the kernel to panic.
+> 
+> I real the commit message and the linked bug, and I'm having trouble
+> finding evidence of anything actually fixed by this patch.  Can we just
+> revert it?  If not, it would be nice to get a fixup patch that genuinely
+> cleans this up -- the whole structure of the code (first, try to allocate
+> trampoline, then free boot services, then try again) isn't really
+> conducive to a model where we *don't* free boot services < 1M.
+ 
+Currently, the second attempt to set_real_mode_mem() in
+efi_free_boot_services() does not allocate from memblock anyway but reuses
+memory freed from EFI services. Could be that failure to boot caused by
+another failing reservation?
+ 
+> Discovered by my delightful laptop, which does not boot with this patch applied.
 
-For patches that fixup something in mm-stable (stable commit ID but not 
-yet master -> we cannot squash anymore so we need separate commits), 
-it's good to include "mm-stable". The main difference to patches that 
-target master is that by indicating "mm-stable", everyone knows that 
-this is not broken in some upstream/production kernel.
-
-
-For patches that fixup something that is in mm-unstable (no stable 
-commit ID -> still under review and fixup easily possible), IMHO we 
-distinguish between two cases:
-
-(1) You fixup your own patches: simply send the fixup as reply to the 
-original patch. Andrew will pick it up and squash it before including it 
-in mm-stable. Sometimes a complete resend of a series makes sense instead.
-
-(2) You fixup patches from someone else: simply raise it as a review 
-comment in reply to the original patch. It might make sense to send a 
-patch, but usually you just raise the issue to the patch author as a 
-review comment and the author will address that. Again, Andrew will pick 
-it up and squash it before moving it to mm-stable.
-
-
-That way, it's clearer when stumbling over patches on the mailing list 
-if they fix a real issue in upstream, fix a issue in 
-soon-to-be-upstream, or are simply part of a WIP series that is still 
-under review.
+Do you have early_printk() visible? 
+ 
+> --Andy
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Sincerely yours,
+Mike.
