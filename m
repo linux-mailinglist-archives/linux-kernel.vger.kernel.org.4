@@ -2,279 +2,400 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3481B6A9000
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F106A9003
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjCCD4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 22:56:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S229555AbjCCD7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 22:59:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCCD4N (ORCPT
+        with ESMTP id S229437AbjCCD7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 22:56:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FEC48E05;
-        Thu,  2 Mar 2023 19:56:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B67FE60FC3;
-        Fri,  3 Mar 2023 03:56:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B0BC4339C;
-        Fri,  3 Mar 2023 03:56:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677815771;
-        bh=TigAmzGesFiCik16l/ZHCdGrAuOsh2zJ2X5nMw/JOHM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sUqJ2MMN4TSZ8YAqH6jwtNR4WxZiSBmR6phMNq8eucBdAi/ZCZlHCLShvguHS0BHw
-         OcnUpKxCpKvSuAp1QRpRMNkMfkjM5G33bMI8Wr2cMP+3Aw8q/pRBYEyxxqfdk1cPVa
-         oIRpUq0bpVhAfKlJ/iiKYhu7CV7v0CS1bV8pd+yrR3zHEzm8LYkSLAvhkobZGPyac1
-         o8VAak71tWqBHusSwr+keRi61ipbmG8uwCrROzmhS5DC/4LZRgEno9XukhdROrGyjb
-         QlRdpLE96qDE/Ayr1fFuRVScSTPLITce3zy+xA7RIjFrpIRw7IweOa2BPaAPyo9dQc
-         DZJIBp041PdeQ==
-Received: by mail-ed1-f41.google.com with SMTP id cw28so5393208edb.5;
-        Thu, 02 Mar 2023 19:56:10 -0800 (PST)
-X-Gm-Message-State: AO0yUKWK4Vr/oKGPK+durTiR6KigW5zf708bU/g0Tf0HN7hcP+3CEX5x
-        KcRIH2FCoCxmIAOeJMD3EQZPy9LvBV57qZIEUr8=
-X-Google-Smtp-Source: AK7set/rrDsI6fQd88WCQ+z91wgae840RpVj6L74L0OH/YS3FY0NasLg1CCyzpRw7Ox+8GfucPlQYSv8TSwFKGnoaTQ=
-X-Received: by 2002:a17:906:2a55:b0:8b2:fa6d:45e3 with SMTP id
- k21-20020a1709062a5500b008b2fa6d45e3mr92724eje.1.1677815769215; Thu, 02 Mar
- 2023 19:56:09 -0800 (PST)
+        Thu, 2 Mar 2023 22:59:32 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C2C1114C;
+        Thu,  2 Mar 2023 19:59:28 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5F17D24E409;
+        Fri,  3 Mar 2023 11:59:27 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Mar
+ 2023 11:59:27 +0800
+Received: from [192.168.125.128] (113.72.145.171) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Mar
+ 2023 11:59:26 +0800
+Message-ID: <7d78d2a1-d552-f25d-557b-c90e6a33eccd@starfivetech.com>
+Date:   Fri, 3 Mar 2023 11:59:40 +0800
 MIME-Version: 1.0
-References: <20230303002508.2891681-1-chenhuacai@loongson.cn> <480ab341-6437-e409-8779-c4938924fd64@xen0n.name>
-In-Reply-To: <480ab341-6437-e409-8779-c4938924fd64@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 3 Mar 2023 11:55:57 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7NYCdqXGwvmVqR8Njw=kDpBdCq+QRzPFGxR5zjHcdZ9g@mail.gmail.com>
-Message-ID: <CAAhV-H7NYCdqXGwvmVqR8Njw=kDpBdCq+QRzPFGxR5zjHcdZ9g@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Fix the CRC32 feature probing
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 06/11] clk: starfive: Add StarFive JH7110
+ Image-Signal-Process clock driver
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
+ <20230221083323.302471-7-xingyu.wu@starfivetech.com>
+ <CAJM55Z-D2s6FkQiR4_KSNkQ-QNHu3mLO_A8GBEY5XwVU5=VXAA@mail.gmail.com>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <CAJM55Z-D2s6FkQiR4_KSNkQ-QNHu3mLO_A8GBEY5XwVU5=VXAA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.171]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xuerui,
+On 2023/3/2 23:39, Emil Renner Berthing wrote:
+> On Tue, 21 Feb 2023 at 09:36, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
+>>
+>> Add driver for the StarFive JH7110 Image-Signal-Process clock controller.
+>>
+>> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+>> ---
+>>  drivers/clk/starfive/Kconfig                  |  11 +
+>>  drivers/clk/starfive/Makefile                 |   1 +
+>>  .../clk/starfive/clk-starfive-jh7110-isp.c    | 254 ++++++++++++++++++
+>>  3 files changed, 266 insertions(+)
+>>  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-isp.c
+>>
+>> diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
+>> index a462b6e53543..59499acb95f7 100644
+>> --- a/drivers/clk/starfive/Kconfig
+>> +++ b/drivers/clk/starfive/Kconfig
+>> @@ -53,3 +53,14 @@ config CLK_STARFIVE_JH7110_STG
+>>         help
+>>           Say yes here to support the System-Top-Group clock controller
+>>           on the StarFive JH7110 SoC.
+>> +
+>> +config CLK_STARFIVE_JH7110_ISP
+>> +       tristate "StarFive JH7110 Image-Signal-Process clock support"
+>> +       depends on CLK_STARFIVE_JH7110_SYS && JH71XX_PMU
+>> +       select AUXILIARY_BUS
+>> +       select CLK_STARFIVE_JH71X0
+>> +       select RESET_STARFIVE_JH7110
+>> +       default CLK_STARFIVE_JH7110_SYS
+> 
+> default m if ARCH_STARFIVE
 
-On Fri, Mar 3, 2023 at 11:15=E2=80=AFAM WANG Xuerui <kernel@xen0n.name> wro=
-te:
->
-> On 2023/3/3 08:25, Huacai Chen wrote:
-> > Not all LoongArch processors support CRC32 instructions, and this featu=
-re
-> > is indicated by CPUCFG1.CRC32 (Bit25). This bit is wrongly defined in l=
-oongarch.h
->
-> The ISA manual suggests it's IOCSR_BRD (likely "IOCSR Branding"). You
-> have to somehow reconcile the two, either by fixing the manuals, or
-> mention here explicitly that the manual is wrong. (Actually thinking
-> about it harder now, you may be in fact re-purposing the IOCSR_BRD field
-> for CRC32 capability, because all LoongArch cores in existence are
-> designed by Loongson, and you may very well know that all cores
-> supporting CRC32 have this bit set, and those not having CRC32 haven't.
-> If that's the case, please explicitly document this reasoning too.)
-The ISA manual has been modified and will be released soon.
+Oh, the ISPCRG and VOUTCRG depend on SYSCRG because it need to enable core clock.
+So I should modify that:
 
->
-> > and CRC32 is set unconditionally now, so fix it.
-> >
-> > BTW, expose the CRC32 feature in /proc/cpuinfo.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >   arch/loongarch/include/asm/cpu-features.h |  1 +
-> >   arch/loongarch/include/asm/cpu.h          | 40 ++++++++++++----------=
--
-> >   arch/loongarch/include/asm/loongarch.h    |  2 +-
-> >   arch/loongarch/kernel/cpu-probe.c         |  7 +++-
-> >   arch/loongarch/kernel/proc.c              |  1 +
-> >   5 files changed, 30 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/arch/loongarch/include/asm/cpu-features.h b/arch/loongarch=
-/include/asm/cpu-features.h
-> > index b07974218393..f6177f133477 100644
-> > --- a/arch/loongarch/include/asm/cpu-features.h
-> > +++ b/arch/loongarch/include/asm/cpu-features.h
-> > @@ -42,6 +42,7 @@
-> >   #define cpu_has_fpu         cpu_opt(LOONGARCH_CPU_FPU)
-> >   #define cpu_has_lsx         cpu_opt(LOONGARCH_CPU_LSX)
-> >   #define cpu_has_lasx                cpu_opt(LOONGARCH_CPU_LASX)
-> > +#define cpu_has_crc32                cpu_opt(LOONGARCH_CPU_CRC32)
-> >   #define cpu_has_complex             cpu_opt(LOONGARCH_CPU_COMPLEX)
-> >   #define cpu_has_crypto              cpu_opt(LOONGARCH_CPU_CRYPTO)
-> >   #define cpu_has_lvz         cpu_opt(LOONGARCH_CPU_LVZ)
-> > diff --git a/arch/loongarch/include/asm/cpu.h b/arch/loongarch/include/=
-asm/cpu.h
-> > index c3da91759472..ca9e2be571ec 100644
-> > --- a/arch/loongarch/include/asm/cpu.h
-> > +++ b/arch/loongarch/include/asm/cpu.h
-> > @@ -78,25 +78,26 @@ enum cpu_type_enum {
-> >   #define CPU_FEATURE_FPU                     3       /* CPU has FPU */
-> >   #define CPU_FEATURE_LSX                     4       /* CPU has LSX (1=
-28-bit SIMD) */
-> >   #define CPU_FEATURE_LASX            5       /* CPU has LASX (256-bit =
-SIMD) */
-> > -#define CPU_FEATURE_COMPLEX          6       /* CPU has Complex instru=
-ctions */
-> > -#define CPU_FEATURE_CRYPTO           7       /* CPU has Crypto instruc=
-tions */
-> > -#define CPU_FEATURE_LVZ                      8       /* CPU has Virtua=
-lization extension */
-> > -#define CPU_FEATURE_LBT_X86          9       /* CPU has X86 Binary Tra=
-nslation */
-> > -#define CPU_FEATURE_LBT_ARM          10      /* CPU has ARM Binary Tra=
-nslation */
-> > -#define CPU_FEATURE_LBT_MIPS         11      /* CPU has MIPS Binary Tr=
-anslation */
-> > -#define CPU_FEATURE_TLB                      12      /* CPU has TLB */
-> > -#define CPU_FEATURE_CSR                      13      /* CPU has CSR */
-> > -#define CPU_FEATURE_WATCH            14      /* CPU has watchpoint reg=
-isters */
-> > -#define CPU_FEATURE_VINT             15      /* CPU has vectored inter=
-rupts */
-> > -#define CPU_FEATURE_CSRIPI           16      /* CPU has CSR-IPI */
-> > -#define CPU_FEATURE_EXTIOI           17      /* CPU has EXT-IOI */
-> > -#define CPU_FEATURE_PREFETCH         18      /* CPU has prefetch instr=
-uctions */
-> > -#define CPU_FEATURE_PMP                      19      /* CPU has perfer=
-mance counter */
-> > -#define CPU_FEATURE_SCALEFREQ                20      /* CPU supports c=
-pufreq scaling */
-> > -#define CPU_FEATURE_FLATMODE         21      /* CPU has flat mode */
-> > -#define CPU_FEATURE_EIODECODE                22      /* CPU has EXTIOI=
- interrupt pin decode mode */
-> > -#define CPU_FEATURE_GUESTID          23      /* CPU has GuestID featur=
-e */
-> > -#define CPU_FEATURE_HYPERVISOR               24      /* CPU has hyperv=
-isor (running in VM) */
-> > +#define CPU_FEATURE_CRC32            6       /* CPU has Complex instru=
-ctions */
->
-> "CPU has CRC32 instructions".
->
-> Also, the diff damage is real, is there any reason this must come here
-> and not last? To me "aesthetics" is not enough to justify such a diff
-> damage.
-To keep CPU_FEATURE and elf_hwcap in the same order.
+default m if CLK_STARFIVE_JH7110_SYS
 
-Huacai
->
-> > +#define CPU_FEATURE_COMPLEX          7       /* CPU has Complex instru=
-ctions */
-> > +#define CPU_FEATURE_CRYPTO           8       /* CPU has Crypto instruc=
-tions */
-> > +#define CPU_FEATURE_LVZ                      9       /* CPU has Virtua=
-lization extension */
-> > +#define CPU_FEATURE_LBT_X86          10      /* CPU has X86 Binary Tra=
-nslation */
-> > +#define CPU_FEATURE_LBT_ARM          11      /* CPU has ARM Binary Tra=
-nslation */
-> > +#define CPU_FEATURE_LBT_MIPS         12      /* CPU has MIPS Binary Tr=
-anslation */
-> > +#define CPU_FEATURE_TLB                      13      /* CPU has TLB */
-> > +#define CPU_FEATURE_CSR                      14      /* CPU has CSR */
-> > +#define CPU_FEATURE_WATCH            15      /* CPU has watchpoint reg=
-isters */
-> > +#define CPU_FEATURE_VINT             16      /* CPU has vectored inter=
-rupts */
-> > +#define CPU_FEATURE_CSRIPI           17      /* CPU has CSR-IPI */
-> > +#define CPU_FEATURE_EXTIOI           18      /* CPU has EXT-IOI */
-> > +#define CPU_FEATURE_PREFETCH         19      /* CPU has prefetch instr=
-uctions */
-> > +#define CPU_FEATURE_PMP                      20      /* CPU has perfer=
-mance counter */
-> > +#define CPU_FEATURE_SCALEFREQ                21      /* CPU supports c=
-pufreq scaling */
-> > +#define CPU_FEATURE_FLATMODE         22      /* CPU has flat mode */
-> > +#define CPU_FEATURE_EIODECODE                23      /* CPU has EXTIOI=
- interrupt pin decode mode */
-> > +#define CPU_FEATURE_GUESTID          24      /* CPU has GuestID featur=
-e */
-> > +#define CPU_FEATURE_HYPERVISOR               25      /* CPU has hyperv=
-isor (running in VM) */
-> >
-> >   #define LOONGARCH_CPU_CPUCFG                BIT_ULL(CPU_FEATURE_CPUCF=
-G)
-> >   #define LOONGARCH_CPU_LAM           BIT_ULL(CPU_FEATURE_LAM)
-> > @@ -104,6 +105,7 @@ enum cpu_type_enum {
-> >   #define LOONGARCH_CPU_FPU           BIT_ULL(CPU_FEATURE_FPU)
-> >   #define LOONGARCH_CPU_LSX           BIT_ULL(CPU_FEATURE_LSX)
-> >   #define LOONGARCH_CPU_LASX          BIT_ULL(CPU_FEATURE_LASX)
-> > +#define LOONGARCH_CPU_CRC32          BIT_ULL(CPU_FEATURE_CRC32)
-> >   #define LOONGARCH_CPU_COMPLEX               BIT_ULL(CPU_FEATURE_COMPL=
-EX)
-> >   #define LOONGARCH_CPU_CRYPTO                BIT_ULL(CPU_FEATURE_CRYPT=
-O)
-> >   #define LOONGARCH_CPU_LVZ           BIT_ULL(CPU_FEATURE_LVZ)
-> > diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/in=
-clude/asm/loongarch.h
-> > index 65b7dcdea16d..8c2969965c3c 100644
-> > --- a/arch/loongarch/include/asm/loongarch.h
-> > +++ b/arch/loongarch/include/asm/loongarch.h
-> > @@ -117,7 +117,7 @@ static inline u32 read_cpucfg(u32 reg)
-> >   #define  CPUCFG1_EP                 BIT(22)
-> >   #define  CPUCFG1_RPLV                       BIT(23)
-> >   #define  CPUCFG1_HUGEPG                     BIT(24)
-> > -#define  CPUCFG1_IOCSRBRD            BIT(25)
-> > +#define  CPUCFG1_CRC32                       BIT(25)
-> >   #define  CPUCFG1_MSGINT                     BIT(26)
-> >
-> >   #define LOONGARCH_CPUCFG2           0x2
-> > diff --git a/arch/loongarch/kernel/cpu-probe.c b/arch/loongarch/kernel/=
-cpu-probe.c
-> > index 3a3fce2d7846..482643167119 100644
-> > --- a/arch/loongarch/kernel/cpu-probe.c
-> > +++ b/arch/loongarch/kernel/cpu-probe.c
-> > @@ -94,13 +94,18 @@ static void cpu_probe_common(struct cpuinfo_loongar=
-ch *c)
-> >       c->options =3D LOONGARCH_CPU_CPUCFG | LOONGARCH_CPU_CSR |
-> >                    LOONGARCH_CPU_TLB | LOONGARCH_CPU_VINT | LOONGARCH_C=
-PU_WATCH;
-> >
-> > -     elf_hwcap =3D HWCAP_LOONGARCH_CPUCFG | HWCAP_LOONGARCH_CRC32;
-> > +     elf_hwcap =3D HWCAP_LOONGARCH_CPUCFG;
-> >
-> >       config =3D read_cpucfg(LOONGARCH_CPUCFG1);
-> >       if (config & CPUCFG1_UAL) {
-> >               c->options |=3D LOONGARCH_CPU_UAL;
-> >               elf_hwcap |=3D HWCAP_LOONGARCH_UAL;
-> >       }
-> > +     if (config & CPUCFG1_CRC32) {
-> > +             c->options |=3D LOONGARCH_CPU_CRC32;
-> > +             elf_hwcap |=3D HWCAP_LOONGARCH_CRC32;
-> > +     }
-> > +
-> >
-> >       config =3D read_cpucfg(LOONGARCH_CPUCFG2);
-> >       if (config & CPUCFG2_LAM) {
-> > diff --git a/arch/loongarch/kernel/proc.c b/arch/loongarch/kernel/proc.=
-c
-> > index 5c67cc4fd56d..0d82907b5404 100644
-> > --- a/arch/loongarch/kernel/proc.c
-> > +++ b/arch/loongarch/kernel/proc.c
-> > @@ -76,6 +76,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> >       if (cpu_has_fpu)        seq_printf(m, " fpu");
-> >       if (cpu_has_lsx)        seq_printf(m, " lsx");
-> >       if (cpu_has_lasx)       seq_printf(m, " lasx");
-> > +     if (cpu_has_crc32)      seq_printf(m, " crc32");
-> >       if (cpu_has_complex)    seq_printf(m, " complex");
-> >       if (cpu_has_crypto)     seq_printf(m, " crypto");
-> >       if (cpu_has_lvz)        seq_printf(m, " lvz");
->
-> --
-> WANG "xen0n" Xuerui
->
-> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
->
+It that OK?
+
+> 
+>> +       help
+>> +         Say yes here to support the Image-Signal-Process clock controller
+>> +         on the StarFive JH7110 SoC.
+>> diff --git a/drivers/clk/starfive/Makefile b/drivers/clk/starfive/Makefile
+>> index b81e97ee2659..76fb9f8d628b 100644
+>> --- a/drivers/clk/starfive/Makefile
+>> +++ b/drivers/clk/starfive/Makefile
+>> @@ -7,3 +7,4 @@ obj-$(CONFIG_CLK_STARFIVE_JH7100_AUDIO) += clk-starfive-jh7100-audio.o
+>>  obj-$(CONFIG_CLK_STARFIVE_JH7110_SYS)  += clk-starfive-jh7110-sys.o
+>>  obj-$(CONFIG_CLK_STARFIVE_JH7110_AON)  += clk-starfive-jh7110-aon.o
+>>  obj-$(CONFIG_CLK_STARFIVE_JH7110_STG)  += clk-starfive-jh7110-stg.o
+>> +obj-$(CONFIG_CLK_STARFIVE_JH7110_ISP)  += clk-starfive-jh7110-isp.o
+>> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-isp.c b/drivers/clk/starfive/clk-starfive-jh7110-isp.c
+>> new file mode 100644
+>> index 000000000000..b5bce1ac22e0
+>> --- /dev/null
+>> +++ b/drivers/clk/starfive/clk-starfive-jh7110-isp.c
+>> @@ -0,0 +1,254 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * StarFive JH7110 Image-Signal-Process Clock Driver
+>> + *
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> + */
+>> +
+>> +#include <linux/clk.h>
+>> +#include <linux/clk-provider.h>
+>> +#include <linux/io.h>
+>> +#include <linux/of.h>
+>> +#include <linux/platform_device.h>
+>> +#include <linux/pm_runtime.h>
+>> +#include <linux/reset.h>
+>> +
+>> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
+>> +
+>> +#include "clk-starfive-jh71x0.h"
+>> +
+>> +/* external clocks */
+>> +#define JH7110_ISPCLK_ISP_TOP_CORE             (JH7110_ISPCLK_END + 0)
+>> +#define JH7110_ISPCLK_ISP_TOP_AXI              (JH7110_ISPCLK_END + 1)
+>> +#define JH7110_ISPCLK_NOC_BUS_ISP_AXI          (JH7110_ISPCLK_END + 2)
+>> +#define JH7110_ISPCLK_DVP_CLK                  (JH7110_ISPCLK_END + 3)
+>> +#define JH7110_ISPCLK_EXT_END                  (JH7110_ISPCLK_END + 4)
+>> +
+>> +static const struct jh71x0_clk_data jh7110_ispclk_data[] = {
+>> +       /* syscon */
+>> +       JH71X0__DIV(JH7110_ISPCLK_DOM4_APB_FUNC, "dom4_apb_func", 15,
+>> +                   JH7110_ISPCLK_ISP_TOP_AXI),
+>> +       JH71X0__DIV(JH7110_ISPCLK_MIPI_RX0_PXL, "mipi_rx0_pxl", 8,
+>> +                   JH7110_ISPCLK_ISP_TOP_CORE),
+>> +       JH71X0__INV(JH7110_ISPCLK_DVP_INV, "dvp_inv", JH7110_ISPCLK_DVP_CLK),
+>> +       /* vin */
+>> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_CFGCLK_IN, "m31dphy_cfgclk_in", 16,
+>> +                   JH7110_ISPCLK_ISP_TOP_CORE),
+>> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_REFCLK_IN, "m31dphy_refclk_in", 16,
+>> +                   JH7110_ISPCLK_ISP_TOP_CORE),
+>> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_TXCLKESC_LAN0, "m31dphy_txclkesc_lan0", 60,
+>> +                   JH7110_ISPCLK_ISP_TOP_CORE),
+>> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PCLK, "vin_pclk", CLK_IGNORE_UNUSED,
+>> +                   JH7110_ISPCLK_DOM4_APB_FUNC),
+>> +       JH71X0__DIV(JH7110_ISPCLK_VIN_SYS_CLK, "vin_sys_clk", 8, JH7110_ISPCLK_ISP_TOP_CORE),
+>> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF0, "vin_pixel_clk_if0", CLK_IGNORE_UNUSED,
+>> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
+>> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF1, "vin_pixel_clk_if1", CLK_IGNORE_UNUSED,
+>> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
+>> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF2, "vin_pixel_clk_if2", CLK_IGNORE_UNUSED,
+>> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
+>> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF3, "vin_pixel_clk_if3", CLK_IGNORE_UNUSED,
+>> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
+>> +       JH71X0__MUX(JH7110_ISPCLK_VIN_CLK_P_AXIWR, "vin_clk_p_axiwr", 2,
+>> +                   JH7110_ISPCLK_MIPI_RX0_PXL,
+>> +                   JH7110_ISPCLK_DVP_INV),
+>> +       /* ispv2_top_wrapper */
+>> +       JH71X0_GMUX(JH7110_ISPCLK_ISPV2_TOP_WRAPPER_CLK_C, "ispv2_top_wrapper_clk_c",
+>> +                   CLK_IGNORE_UNUSED, 2,
+>> +                   JH7110_ISPCLK_MIPI_RX0_PXL,
+>> +                   JH7110_ISPCLK_DVP_INV),
+>> +};
+> 
+> Are all the clocks marked CLK_IGNORE_UNUSED here critical or are they
+> just marked like so because the corresponding drivers don't yet claim
+> the clocks they need? Please mark the clocks that can never be turned
+> off CLK_IS_CRITICAL and remove the flag from the rest of the clocks.
+
+Thanks, I will test it carefully and modify it.
+
+> 
+>> +struct isp_top_crg {
+>> +       struct clk_bulk_data *top_clks;
+>> +       struct reset_control *top_rsts;
+>> +       int top_clks_num;
+>> +       void __iomem *base;
+>> +};
+>> +
+>> +static struct clk_bulk_data jh7110_isp_top_clks[] = {
+>> +       { .id = "isp_top_core" },
+>> +       { .id = "isp_top_axi" }
+>> +};
+>> +
+>> +static struct isp_top_crg *top_crg_from(void __iomem **base)
+>> +{
+>> +       return container_of(base, struct isp_top_crg, base);
+>> +}
+>> +
+>> +static int jh7110_isp_top_crg_get(struct jh71x0_clk_priv *priv, struct isp_top_crg *top)
+>> +{
+>> +       int ret;
+>> +
+>> +       top->top_clks = jh7110_isp_top_clks;
+>> +       top->top_clks_num = ARRAY_SIZE(jh7110_isp_top_clks);
+>> +       ret = devm_clk_bulk_get(priv->dev, top->top_clks_num, top->top_clks);
+>> +       if (ret) {
+>> +               dev_err(priv->dev, "top clks get failed: %d\n", ret);
+>> +               return ret;
+>> +       }
+>> +
+>> +       /* The resets should be shared and other ISP modules will use its. */
+>> +       top->top_rsts = devm_reset_control_array_get_shared(priv->dev);
+>> +       if (IS_ERR(top->top_rsts)) {
+>> +               dev_err(priv->dev, "top rsts get failed\n");
+>> +               return PTR_ERR(top->top_rsts);
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int jh7110_isp_top_crg_enable(struct isp_top_crg *top)
+>> +{
+>> +       int ret;
+>> +
+>> +       ret = clk_bulk_prepare_enable(top->top_clks_num, top->top_clks);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       return reset_control_deassert(top->top_rsts);
+>> +}
+>> +
+>> +static void jh7110_isp_top_crg_disable(struct isp_top_crg *top)
+>> +{
+>> +       clk_bulk_disable_unprepare(top->top_clks_num, top->top_clks);
+>> +}
+>> +
+>> +static struct clk_hw *jh7110_ispclk_get(struct of_phandle_args *clkspec, void *data)
+>> +{
+>> +       struct jh71x0_clk_priv *priv = data;
+>> +       unsigned int idx = clkspec->args[0];
+>> +
+>> +       if (idx < JH7110_ISPCLK_END)
+>> +               return &priv->reg[idx].hw;
+>> +
+>> +       return ERR_PTR(-EINVAL);
+>> +}
+>> +
+>> +static int jh7110_ispcrg_probe(struct platform_device *pdev)
+>> +{
+>> +       struct jh71x0_clk_priv *priv;
+>> +       struct isp_top_crg *top;
+>> +       unsigned int idx;
+>> +       int ret;
+>> +
+>> +       priv = devm_kzalloc(&pdev->dev,
+>> +                           struct_size(priv, reg, JH7110_ISPCLK_END),
+>> +                           GFP_KERNEL);
+>> +       if (!priv)
+>> +               return -ENOMEM;
+>> +
+>> +       top = devm_kzalloc(&pdev->dev, sizeof(*top), GFP_KERNEL);
+>> +       if (!top)
+>> +               return -ENOMEM;
+>> +
+>> +       spin_lock_init(&priv->rmw_lock);
+>> +       priv->dev = &pdev->dev;
+>> +       priv->base = devm_platform_ioremap_resource(pdev, 0);
+>> +       if (IS_ERR(priv->base))
+>> +               return PTR_ERR(priv->base);
+>> +
+>> +       top->base = priv->base;
+>> +       dev_set_drvdata(priv->dev, (void *)(&top->base));
+>> +
+>> +       pm_runtime_enable(priv->dev);
+>> +       ret = pm_runtime_get_sync(priv->dev);
+>> +       if (ret < 0) {
+>> +               dev_err(priv->dev, "failed to turn on power: %d\n", ret);
+>> +               return ret;
+>> +       }
+>> +
+>> +       ret = jh7110_isp_top_crg_get(priv, top);
+>> +       if (ret)
+>> +               goto err_clk;
+>> +
+>> +       ret = jh7110_isp_top_crg_enable(top);
+>> +       if (ret)
+>> +               goto err_clk;
+>> +
+>> +       for (idx = 0; idx < JH7110_ISPCLK_END; idx++) {
+>> +               u32 max = jh7110_ispclk_data[idx].max;
+>> +               struct clk_parent_data parents[4] = {};
+>> +               struct clk_init_data init = {
+>> +                       .name = jh7110_ispclk_data[idx].name,
+>> +                       .ops = starfive_jh71x0_clk_ops(max),
+>> +                       .parent_data = parents,
+>> +                       .num_parents =
+>> +                               ((max & JH71X0_CLK_MUX_MASK) >> JH71X0_CLK_MUX_SHIFT) + 1,
+>> +                       .flags = jh7110_ispclk_data[idx].flags,
+>> +               };
+>> +               struct jh71x0_clk *clk = &priv->reg[idx];
+>> +               unsigned int i;
+>> +               char *fw_name[JH7110_ISPCLK_EXT_END - JH7110_ISPCLK_END] = {
+>> +                       "isp_top_core",
+>> +                       "isp_top_axi",
+>> +                       "noc_bus_isp_axi",
+>> +                       "dvp_clk"
+>> +               };
+>> +
+>> +               for (i = 0; i < init.num_parents; i++) {
+>> +                       unsigned int pidx = jh7110_ispclk_data[idx].parents[i];
+>> +
+>> +                       if (pidx < JH7110_ISPCLK_END)
+>> +                               parents[i].hw = &priv->reg[pidx].hw;
+>> +                       else
+>> +                               parents[i].fw_name = fw_name[pidx - JH7110_ISPCLK_END];
+>> +               }
+>> +
+>> +               clk->hw.init = &init;
+>> +               clk->idx = idx;
+>> +               clk->max_div = max & JH71X0_CLK_DIV_MASK;
+>> +
+>> +               ret = devm_clk_hw_register(&pdev->dev, &clk->hw);
+>> +               if (ret)
+>> +                       goto err_exit;
+>> +       }
+>> +
+>> +       ret = devm_of_clk_add_hw_provider(&pdev->dev, jh7110_ispclk_get, priv);
+>> +       if (ret)
+>> +               goto err_exit;
+>> +
+>> +       ret = jh7110_reset_controller_register(priv, "reset-isp", 3);
+>> +       if (ret)
+>> +               goto err_exit;
+>> +
+>> +       return 0;
+>> +
+>> +err_exit:
+>> +       jh7110_isp_top_crg_disable(top);
+>> +err_clk:
+>> +       pm_runtime_put_sync(priv->dev);
+>> +       pm_runtime_disable(priv->dev);
+>> +       return ret;
+>> +}
+>> +
+>> +static int jh7110_ispcrg_remove(struct platform_device *pdev)
+>> +{
+>> +       void __iomem **base = dev_get_drvdata(&pdev->dev);
+>> +       struct isp_top_crg *top = top_crg_from(base);
+>> +
+>> +       jh7110_isp_top_crg_disable(top);
+>> +       pm_runtime_disable(&pdev->dev);
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static const struct of_device_id jh7110_ispcrg_match[] = {
+>> +       { .compatible = "starfive,jh7110-ispcrg" },
+>> +       { /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, jh7110_ispcrg_match);
+>> +
+>> +static struct platform_driver jh7110_ispcrg_driver = {
+>> +       .probe = jh7110_ispcrg_probe,
+>> +       .remove = jh7110_ispcrg_remove,
+>> +       .driver = {
+>> +               .name = "clk-starfive-jh7110-isp",
+>> +               .of_match_table = jh7110_ispcrg_match,
+>> +       },
+>> +};
+>> +module_platform_driver(jh7110_ispcrg_driver);
+>> +
+>> +MODULE_AUTHOR("Xingyu Wu <xingyu.wu@starfivetech.com>");
+>> +MODULE_DESCRIPTION("StarFive JH7110 Image-Signal-Process clock driver");
+>> +MODULE_LICENSE("GPL");
+>> --
+>> 2.25.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+Best regards,
+Xingyu Wu
