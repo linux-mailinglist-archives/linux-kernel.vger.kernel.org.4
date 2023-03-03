@@ -2,142 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7401D6AA030
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 402346AA031
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbjCCTig convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Mar 2023 14:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
+        id S231557AbjCCTip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 14:38:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbjCCTie (ORCPT
+        with ESMTP id S231529AbjCCTin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 14:38:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CE114484
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 11:38:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69A4FB817F6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 19:38:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF9FC433EF;
-        Fri,  3 Mar 2023 19:38:25 +0000 (UTC)
-Date:   Fri, 3 Mar 2023 14:38:22 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
-        Midas Chien <midaschieh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tony Luck <tony.luck@intel.com>, kernel-team@android.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
-Message-ID: <20230303143822.027ce50b@gandalf.local.home>
-In-Reply-To: <CAEXW_YQN=zPtbd6Nr=F-0GqkHQu+ox3eBnzP30=8MxYGYyFv0Q@mail.gmail.com>
-References: <20230302062741.483079-1-jstultz@google.com>
-        <20230302082414.77613351@gandalf.local.home>
-        <CANDhNCo4ruC4pP+iDe49b3e1nAcWtYQj4bx82+oZhyLFYkdFJQ@mail.gmail.com>
-        <20230302152103.2618f1b7@gandalf.local.home>
-        <20230302163253.541ac3a8@gandalf.local.home>
-        <20230302163603.223313ba@gandalf.local.home>
-        <20230302165613.2dcc18ca@gandalf.local.home>
-        <20230302200136.381468f0@gandalf.local.home>
-        <20230303181134.GA1837196@google.com>
-        <20230303133702.4d336ee9@gandalf.local.home>
-        <CAEXW_YQN=zPtbd6Nr=F-0GqkHQu+ox3eBnzP30=8MxYGYyFv0Q@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 3 Mar 2023 14:38:43 -0500
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB1A1351C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 11:38:34 -0800 (PST)
+Received: by mail-qv1-xf30.google.com with SMTP id ff4so2499943qvb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 11:38:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmu.edu; s=google-2021; t=1677872313;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HYQ/b/2CMo0jQZJbl9gbztbb/ds7IDeF+eF3lNwAa+E=;
+        b=K+wxfTujSJzhr547gDW560HtpnMx27zP4k30p5i8muJ4xRciDbc7FbZRVsoKV8HTuV
+         44z32zSMrVEk/ivCmb2jTREfE4m+O7Pz/qEjziFnraeZwQWJzk33TiUQKiutakpx1am4
+         L13odP2/Bv8vfiMlpR+aGKQlKNlL5o3pge9UTCFWhp6hgbDXL1tKOiXZMtCmP/r7Cv5/
+         ebn148CLiRFPy+SoPzbEU6yag+m5Ft9F+5hJyxYMnlfKpzENQcNeFKgWwcB5itQzcxGJ
+         tCMyAumYLL+STXBAvplYXbZnrcvxQSRgFaQyy5UWMQ2859c05ZPxwbOMXgGuOBD4oesq
+         mPGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677872313;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HYQ/b/2CMo0jQZJbl9gbztbb/ds7IDeF+eF3lNwAa+E=;
+        b=BhJkfs8ghZiLkpHuXJxGT/qnyXk8L1BprbIXma76n66oyLqcadsPwxTZZ+EZ5oI6pn
+         fDaqFkT7yRN9plu/Nc15nukSfcRJ+05VmsM1wb6Jtk86CWv7nfYspgAbp48g2Y5+eBCA
+         vXBPJASIhO3DZ3u67vqUzZbfojPrcAJQMWWLNSteTf4J3+iBfkSDAqW2IL+C49F+kG2Q
+         3zZKUZ3sNTRXR71X1iP2Sxhy16ItH3yqcem4Bx4lHriMJMmlSS9AwKaYr0P4vMqgazub
+         /JKGzZOK9nA7uhTpEs5I8MwI4dRBL7SAcmgMoP5UyTZnuAtnWt9go1+4svjwRkNGVkUH
+         k94A==
+X-Gm-Message-State: AO0yUKXzTtIwzUMsGdm7GbBpA+L9bX73qQ7U8RSvnk5T9RE8RVz4SJ29
+        WYyltZPRiSebmYdiWtGkEloxiQ==
+X-Google-Smtp-Source: AK7set8SAOoXYTlT0gXqz99dKGbNwHBxgqZB5lr3AWbdV3Fq4g/KydoSI12RgxFiqZ48VoTewdmFIA==
+X-Received: by 2002:a05:6214:1c8e:b0:56b:eda1:de3e with SMTP id ib14-20020a0562141c8e00b0056beda1de3emr4744326qvb.36.1677872313396;
+        Fri, 03 Mar 2023 11:38:33 -0800 (PST)
+Received: from errol.ini.cmu.edu (pool-72-77-81-136.pitbpa.fios.verizon.net. [72.77.81.136])
+        by smtp.gmail.com with ESMTPSA id 29-20020a05620a049d00b00741a984943fsm2321202qkr.40.2023.03.03.11.38.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 11:38:33 -0800 (PST)
+Date:   Fri, 3 Mar 2023 14:38:31 -0500
+From:   "Gabriel L. Somlo" <somlo@cmu.edu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>, qemu-devel@nongnu.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] firmware: qemu_fw_cfg: make kobj_type structure constant
+Message-ID: <ZAJMt3nMgvfUpKAi@errol.ini.cmu.edu>
+References: <20230227-kobj_type-firmware-qemu-v1-1-fc0c8b44424f@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230227-kobj_type-firmware-qemu-v1-1-fc0c8b44424f@weissschuh.net>
+X-Clacks-Overhead: GNU Terry Pratchett
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Mar 2023 14:25:23 -0500
-Joel Fernandes <joel@joelfernandes.org> wrote:
-
-> On Fri, Mar 3, 2023 at 1:37‚ÄØPM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > On Fri, 3 Mar 2023 18:11:34 +0000
-> > Joel Fernandes <joel@joelfernandes.org> wrote:
-> >  
-> > > In the normal mutex's adaptive spinning, there is no check for if there is a
-> > > change in waiter AFAICS (ignoring ww mutex stuff for a second).
-> > >
-> > > I can see one may want to do that waiter-check, as spinning
-> > > indefinitely if the lock owner is on the CPU for too long may result in
-> > > excessing power burn. But normal mutex does not seem to do that.
-> > >
-> > > What  makes the rtmutex spin logic different from normal mutex in this
-> > > scenario, so that rtmutex wants to do that but normal ones dont?  
-> >
-> > Well, the point of the patch is that I don't think they should be different
-> > ;-)  
+On Mon, Feb 27, 2023 at 03:19:56AM +0000, Thomas Weiﬂschuh wrote:
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
 > 
-> But there's no "waiter change" thing for mutex_spin_on_owner right.
+> Take advantage of this to constify the structure definition to prevent
+> modification at runtime.
 > 
-> Then, should mutex_spin_on_owner() also add a call to
-> __mutex_waiter_is_first() ?
-
-Ah interesting, I missed the __mutex_waiter_is_first() in the mutex code,
-where it looks to do basically the same thing as rt_mutex (but slightly
-different). From looking at this, it appears that mutex() has FIFO fair
-logic, where the second waiter will sleep.
-
-Would be interesting to see why John sees such a huge difference between
-normal mutex and rtmutex if they are doing the same thing. One thing is
-perhaps the priority logic is causing the issue, where this will not
-improve anything.
-
-I wonder if we add spinning to normal mutex for the other waiters if that
-would improve things or make them worse?
-
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+>  drivers/firmware/qemu_fw_cfg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > > Another thought is, I am wondering if all of them spinning indefinitely might
-> > > be Ok for rtmutex as well, since as you mentioned, preemption is enabled. So
-> > > adding the if (top_waiter != last_waiter) {...} might be unnecessary? In fact
-> > > may be even harmful as you are disabling interrupts in the process.  
-> >
-> > The last patch only does the interrupt disabling if the top waiter changes.
-> > Which in practice is seldom.
-> >
-> > But, I don't think a non top waiter should spin if the top waiter is not
-> > running. The top waiter is the one that will get the lock next. If the
-> > owner releases the lock and gives it to the top waiter, then it has to go
-> > through the wake up of the top waiter.  
+> diff --git a/drivers/firmware/qemu_fw_cfg.c b/drivers/firmware/qemu_fw_cfg.c
+> index a69399a6b7c0..f41de793f41b 100644
+> --- a/drivers/firmware/qemu_fw_cfg.c
+> +++ b/drivers/firmware/qemu_fw_cfg.c
+> @@ -452,7 +452,7 @@ static void fw_cfg_sysfs_release_entry(struct kobject *kobj)
+>  }
+>  
+>  /* kobj_type: ties together all properties required to register an entry */
+> -static struct kobj_type fw_cfg_sysfs_entry_ktype = {
+> +static const struct kobj_type fw_cfg_sysfs_entry_ktype = {
+
+Reviewed-by: Gabriel L. Somlo <somlo@cmu.edu>
+
+Thanks,
+--Gabriel
+
+>  	.default_groups = fw_cfg_sysfs_entry_groups,
+>  	.sysfs_ops = &fw_cfg_sysfs_attr_ops,
+>  	.release = fw_cfg_sysfs_release_entry,
 > 
-> Correct me if I'm wrong, but I don't think it will go through
-> schedule() after spinning, which is what adds the overhead for John.
-
-Only if the lock becomes free.
-
+> ---
+> base-commit: 2fcd07b7ccd5fd10b2120d298363e4e6c53ccf9c
+> change-id: 20230227-kobj_type-firmware-qemu-7746b6320db0
 > 
-> > I don't see why a task should spin
-> > to save a wake up if a wake up has to happen anyway.  
+> Best regards,
+> -- 
+> Thomas Weiﬂschuh <linux@weissschuh.net>
 > 
-> What about regular mutexes, happens there too or no?
-
-Yes, but in a FIFO order, where in rt_mutex, a second, higher priority task
-can make the first ones sleep. So maybe it's just the priority logic that
-is causing the issues.
-
-> 
-> > > Either way, I think a comment should go on top of the "if (top_waiter !=
-> > > waiter)" check IMO.  
-> >
-> > What type of comment?  
-> 
-> Comment explaining why "if (top_waiter != waiter)" is essential :-).
-
-You mean, "Don't spin if the next owner is not on any CPU"?
-
--- Steve
