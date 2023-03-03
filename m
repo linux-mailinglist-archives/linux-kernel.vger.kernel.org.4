@@ -2,146 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1118F6AA180
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD796AA184
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbjCCViH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
+        id S231929AbjCCVjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:39:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231940AbjCCViB (ORCPT
+        with ESMTP id S231793AbjCCVjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:38:01 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E905FC2
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:37:56 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id t4-20020a056e02010400b0031c648b8e4eso420885ilm.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:37:56 -0800 (PST)
+        Fri, 3 Mar 2023 16:39:01 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90734230;
+        Fri,  3 Mar 2023 13:38:52 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so7534688pjb.1;
+        Fri, 03 Mar 2023 13:38:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677879532;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7bcLQ/kVpuxdipjZe1ew1SkB7Qcp7vd86whAJ1c8evM=;
+        b=EgaDL3rhB0SyGn1aTe3CIDYplGrvoXkUG6Jr2/OHu6yfgiRZPgkF58K+XCGzkPAJSC
+         ghUmpIQJH7HmDO9lVoQOyG8T662K0bFZiSvSA5eFDYo71bjqXKMcg0MOS2nhJzol5rSL
+         1aUlOuSD5amKXmmDofXfzhoCwxOfSyVB1VwcG6m3i5yJBdRs2onLqsefemkI+lj5M8Nf
+         Q65KC4amJEdB5HdBLDOSXwAjywNyujGTdrz6GzsuqCED3gdRZWfQwmLsi4Wq5zKVYtrx
+         P1i0S9rt4lo1sKAKpbA6vTRhFwSbz8sKYDYWXJ+CPeZVWVGbCfaH+asIskKJJ8f2L9fv
+         1ukg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VDb/oN8pa2bSuFN4Ui9nfP2pxdomt8W/GDE9wFn9RyQ=;
-        b=TDPlwgqQzouv/PlR4My2clFmsx5lGg+fwiAx7tAtTPPzuHSYJx24z3ponJCKuC3/jw
-         TO2VQYOfvWjim5KnPPBpTd8+Uxe0OhZ2d7fXtvtG5Dhq3hnV82G7viaIFWTC2KDWwy/H
-         aN/iXMi9X0hfRneQMtbDkpOJFaNEXlyR2F1iiZqYs/u1IY/PXArkMuXZH4Yw4360rK4+
-         tvm7wxpiU77W3IuCh/hu/E7rFjQzyIdfWjhnh183/sWDSZdOq16d+hNP2Dpo7V9/CmAv
-         8bMv4T5ZjslHJFaWv3Fw/8uy5kuI4dA9VeCYzp1vylD2nkejZnOcq2SiLyhwpfbvG9h3
-         rf9A==
-X-Gm-Message-State: AO0yUKVhIJS8jgjEaeKzX9jRckOZ7XK5nSKP33F7hq8HfxC3IwhXKwGk
-        4sA0tX8VkrxjUZ01ZcgfJEtAKcaF89Ytfu+i51izl7BhHi+D
-X-Google-Smtp-Source: AK7set+AwR/J9UVhmgkmV9QeFWskMRZYdkjiZFq8Cxv5vt6ZXRsSD5jwvnuIY5btoSPErVNvUsloFypusjrLzeda4T31tsiz4eT3
+        d=1e100.net; s=20210112; t=1677879532;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7bcLQ/kVpuxdipjZe1ew1SkB7Qcp7vd86whAJ1c8evM=;
+        b=OXbaj1EJcMlWCFqs93xSHi+D/5ZMcWTBrtFnjXxsirXf3YYQLcEIwAZnPy9m5KWQfS
+         QGpFtdzkqYy2ux8DJwFlc7msW1g1jLtcICG/JX+pgtYrxwI6bJpzQFFV36NrorXOHtNL
+         ZMvbS2chuSbtVhejKu70qyXBDPv60I2nH45rHN1YMr11bYmkaGduiPEofyRDspieu4yj
+         +QpCYVNyC+0wJBRt9NrTiPDPY6J8JRc0EF6oeiCiqyS2nP1XncPEOTWlgA0e9SzFxiFp
+         T3W7NoELiDBgvGdDEJxE+C/+XP9E6gEWCMs6ihJZFwNu4Ng1Jh2/mdlvBQIFQChu5MQG
+         zTkg==
+X-Gm-Message-State: AO0yUKVPqj1FkkAVphEp5BYXYUxzwCr4296er1ndR3NaHLD+4ZCInKS5
+        p1lnMEg9+5xRV/CyMn1uq6wubBcUDpyg6igjs/qSKkMFQHU=
+X-Google-Smtp-Source: AK7set8xJhluwbKjbdiBJfuBibCdA1yaiCTHLZfumAnwRDfYz20sDp40J9Ke2WR/+hv6OHbeQWfYkXM5QAcZk2WcKXM=
+X-Received: by 2002:a17:903:2644:b0:19a:fdca:e3e9 with SMTP id
+ je4-20020a170903264400b0019afdcae3e9mr1218671plb.10.1677879532312; Fri, 03
+ Mar 2023 13:38:52 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:b512:0:b0:30f:543d:e52c with SMTP id
- f18-20020a92b512000000b0030f543de52cmr1646847ile.2.1677879475508; Fri, 03 Mar
- 2023 13:37:55 -0800 (PST)
-Date:   Fri, 03 Mar 2023 13:37:55 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001d1fb505f605c295@google.com>
-Subject: [syzbot] [hardening?] [mm?] BUG: bad usercopy in con_font_op
-From:   syzbot <syzbot+3af17071816b61e807ed@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, keescook@chromium.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com
+References: <20230121112947.53433-1-robimarko@gmail.com> <20230121112947.53433-4-robimarko@gmail.com>
+ <d71e8a18-8a09-c722-d9dd-b2d48615828f@linaro.org> <CAA8EJppwNVtUjB7fUZSCrZ88Ssbhmc4HD6oA2nV0uEx+vHBXUw@mail.gmail.com>
+ <2a7a43f1-a13d-f094-5167-de74d5092d91@linaro.org> <CAOX2RU6vociXPTQE4tegQE8YXjHgQAHgdQWm3N9PPekgaw3ung@mail.gmail.com>
+ <2faac9b8-03b9-340f-d43f-317624d4d5bb@linaro.org>
+In-Reply-To: <2faac9b8-03b9-340f-d43f-317624d4d5bb@linaro.org>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Fri, 3 Mar 2023 22:38:41 +0100
+Message-ID: <CAOX2RU7GBuDc-uh_EKmXZu57GvRzfwzwESqgts2tUDbDoik-JA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] cpufreq: qcom-nvmem: make qcom_cpufreq_get_msm_id()
+ return the SoC ID
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, 3 Mar 2023 at 21:46, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 3.03.2023 19:38, Robert Marko wrote:
+> > On Sat, 18 Feb 2023 at 21:40, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> >>
+> >>
+> >>
+> >> On 18.02.2023 21:36, Dmitry Baryshkov wrote:
+> >>> On Sat, 18 Feb 2023 at 16:43, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>> On 21.01.2023 12:29, Robert Marko wrote:
+> >>>>> Currently, qcom_cpufreq_get_msm_id() does not simply return the SoC ID
+> >>>>> after getting it via SMEM call but instead uses an enum to encode the
+> >>>>> matched SMEM ID to 2 variants of MSM8996 which are then used in
+> >>>>> qcom_cpufreq_kryo_name_version() to set the supported version.
+> >>>>>
+> >>>>> This prevents qcom_cpufreq_get_msm_id() from being universal and its doing
+> >>>>> more than its name suggests, so lets make it just return the SoC ID
+> >>>>> directly which allows matching directly on the SoC ID and removes the need
+> >>>>> for msm8996_version enum which simplifies the driver.
+> >>>>> It also allows reusing the qcom_cpufreq_get_msm_id() for new SoC-s.
+> >>>>>
+> >>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> >>>>> ---
+> >>>>>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 44 ++++++++--------------------
+> >>>>>  1 file changed, 12 insertions(+), 32 deletions(-)
+> >>>>>
+> >>>>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> >>>>> index da55d2e1925a..9deaf9521d6d 100644
+> >>>>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> >>>>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> >>>>> @@ -32,12 +32,6 @@
+> >>>>>
+> >>>>>  #include <dt-bindings/arm/qcom,ids.h>
+> >>>>>
+> >>>>> -enum _msm8996_version {
+> >>>>> -     MSM8996_V3,
+> >>>>> -     MSM8996_SG,
+> >>>>> -     NUM_OF_MSM8996_VERSIONS,
+> >>>>> -};
+> >>>>> -
+> >>>>>  struct qcom_cpufreq_drv;
+> >>>>>
+> >>>>>  struct qcom_cpufreq_match_data {
+> >>>>> @@ -134,30 +128,16 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
+> >>>>>       dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
+> >>>>>  }
+> >>>>>
+> >>>>> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
+> >>>>> +static int qcom_cpufreq_get_msm_id(void)
+> >>>> This should be u32 as info->id is __le32
+> >
+> > Nice catch.
+> >
+> >
+> >>>>
+> >>>> And please export this function from socinfo, it'll come in
+> >>>> useful for other drivers!
+> >
+> > I intentionally did not do that as socinfo is currently fully optional
+> > and I dont really like
+> > the idea of making it required for anything using SMEM.
+> "anything using SMEM"? As in the drivers, or SoCs?
+> If the former, I don't see how exporting a function from within
+> socid and using it here would make it required for other drivers.
+> If the latter, we're talking non-qcom SoCs. SMEM has been with
+> us forever.
 
-syzbot found the following issue on:
+I feel we have a misunderstanding,
+currently, cpufreq-nvmem does not depend on socinfo being built
+so I don't want to require it as a dependency in order to get the SMEM ID.
 
-HEAD commit:    2eb29d59ddf0 Merge tag 'drm-next-2023-03-03-1' of git://an..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12e88ebcc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
-dashboard link: https://syzkaller.appspot.com/bug?extid=3af17071816b61e807ed
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b71504c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f02d9cc80000
+Granted, socinfo is useful on any QCA SoC so if adding new dependecies to
+cpufreq-nvmem is acceptable I am not against exporting it there.
+>
+>
+> I'm planning to reuse this for Adreno speedbin matching. It's one
+> of those blocks that don't have a revision and/or bin reigster
+> within themselves.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ea23ee201337/disk-2eb29d59.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/40a9db02dede/vmlinux-2eb29d59.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8d4b574642d0/bzImage-2eb29d59.xz
+I understand the use case, I am sure it will be required in some other places
+sooner or later as well.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3af17071816b61e807ed@syzkaller.appspotmail.com
-
-usercopy: Kernel memory exposure attempt detected from page alloc (offset 0, size 4194560)!
-------------[ cut here ]------------
-kernel BUG at mm/usercopy.c:102!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 5073 Comm: syz-executor309 Not tainted 6.2.0-syzkaller-13277-g2eb29d59ddf0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-RIP: 0010:usercopy_abort+0xb7/0xd0 mm/usercopy.c:102
-Code: e8 fe e8 a1 ff 49 89 d9 4c 89 e1 48 89 ee 41 56 48 c7 c7 00 73 5b 8a 41 55 41 57 4c 8b 44 24 20 48 8b 54 24 18 e8 59 8b 85 ff <0f> 0b 48 c7 c3 00 71 5b 8a 49 89 df 49 89 d8 e9 71 ff ff ff 0f 1f
-RSP: 0018:ffffc90003bcf9e0 EFLAGS: 00010286
-RAX: 000000000000005b RBX: ffffffff8a5b7100 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff816931fc RDI: 0000000000000005
-RBP: ffffffff8a5b72c0 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8a5b7500
-R13: 0000000000000000 R14: 0000000000400100 R15: ffffffff8a5b7100
-FS:  0000555555b1b300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 0000000075655000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- check_heap_object mm/usercopy.c:200 [inline]
- __check_object_size mm/usercopy.c:251 [inline]
- __check_object_size+0x50a/0x6e0 mm/usercopy.c:213
- check_object_size include/linux/thread_info.h:215 [inline]
- check_copy_size include/linux/thread_info.h:251 [inline]
- copy_to_user include/linux/uaccess.h:168 [inline]
- con_font_get drivers/tty/vt/vt.c:4580 [inline]
- con_font_op+0x397/0xf10 drivers/tty/vt/vt.c:4674
- vt_k_ioctl drivers/tty/vt/vt_ioctl.c:474 [inline]
- vt_ioctl+0x620/0x2df0 drivers/tty/vt/vt_ioctl.c:752
- tty_ioctl+0x773/0x16e0 drivers/tty/tty_io.c:2777
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6672fd82d9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc66955e38 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f6672fd82d9
-RDX: 0000000020000000 RSI: 0000000000004b72 RDI: 0000000000000003
-RBP: 00007f6672f9c0c0 R08: 000000000000000d R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6672f9c150
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:usercopy_abort+0xb7/0xd0 mm/usercopy.c:102
-Code: e8 fe e8 a1 ff 49 89 d9 4c 89 e1 48 89 ee 41 56 48 c7 c7 00 73 5b 8a 41 55 41 57 4c 8b 44 24 20 48 8b 54 24 18 e8 59 8b 85 ff <0f> 0b 48 c7 c3 00 71 5b 8a 49 89 df 49 89 d8 e9 71 ff ff ff 0f 1f
-RSP: 0018:ffffc90003bcf9e0 EFLAGS: 00010286
-RAX: 000000000000005b RBX: ffffffff8a5b7100 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff816931fc RDI: 0000000000000005
-RBP: ffffffff8a5b72c0 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff8a5b7500
-R13: 0000000000000000 R14: 0000000000400100 R15: ffffffff8a5b7100
-FS:  0000555555b1b300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000000 CR3: 0000000075655000 CR4: 0000000000350ee0
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Regards,
+Robert
+>
+> Konrad
+> >
+> > Regards,
+> > Robert
+> >
+> >>
+> >> Konrad
+> >>>
