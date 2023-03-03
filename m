@@ -2,103 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827796A9426
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5716A9430
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCCJaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:30:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39798 "EHLO
+        id S229909AbjCCJcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231264AbjCCJaG (ORCPT
+        with ESMTP id S229487AbjCCJch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:30:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70C5461BF;
-        Fri,  3 Mar 2023 01:29:55 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3237tHg7011277;
-        Fri, 3 Mar 2023 09:29:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=rHbfoQH2ghWfXbymqzQac2pa2EdByPx/nTWxztKnuS8=;
- b=TaVMw5xrG1oAMAPMa1roYuwuPrBnT5mzy707eT6yyVAP9rby0PySCaoZQ3v9qaFz7JwU
- m4tERB8THSQe2B6wa3WKWJSEpGzgVw3IYgrx8wnbRIymIHLlwZwRE5IikPEtdQ6BjH6g
- t4q8BDSqWGMvl/ueeuLEWXLZGAsCEYE43KpsJ7TnaP1WOCErKaPx6LrRL8CjAsuimyEr
- nD9tS+elvTQqMGifOgkgB2KkVztRH8BnsI1c1YRCTHCHtC8lgDWA4siB7ryew1CCbcXF
- h4fXJp/vpwxmqytEXriTYoSspd4EzkCLqXSQt1ESak/8Uxp9s0Qch2MWKU/GxAIED9fO SQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3bry8d2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 09:29:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3239Tj9J003921
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 09:29:45 GMT
-Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 3 Mar 2023 01:29:42 -0800
-From:   Taniya Das <quic_tdas@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Taniya Das <quic_tdas@quicinc.com>
-Subject: [PATCH 2/2] clk: qcom: lpass: Initialize start_index
-Date:   Fri, 3 Mar 2023 14:58:59 +0530
-Message-ID: <20230303092859.22094-3-quic_tdas@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230303092859.22094-1-quic_tdas@quicinc.com>
-References: <20230303092859.22094-1-quic_tdas@quicinc.com>
+        Fri, 3 Mar 2023 04:32:37 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05AE1B9
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:32:36 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id l1so1576477wry.12
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677835955;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7hBXC0lEHBdCxJFz/wvuTM5XuH7NecPstxoPUgvWZ2s=;
+        b=SSE+X/7c7/EWnLslcWs47ifdnKBucbfsZnJB0hottynmr4Hth/tXZ+ZEjFw3klk3oM
+         sjTML44wafkHpumaiksmrBmrkUQLThpTy7Kx9QN+gdamXckb3kQR67CEYlsRdz9BXdld
+         i6u/y8DoDAkUbdRvTsPM2FoV3UfMXbYz9KJkj1g2LKVObmJBYOtqDowHPVEg1rI8kdpK
+         tPqEy/cFSf2Litt5kQggaJc128Fp0T4QFSP+MGFNlCt2zABPuCRPXhNxdcvhiLHNP1oj
+         jBa9q7rLaC2UsSDriM/KvUM25nC3xaQxkLygZIXlCEArVEy0/ShgEXPan+61TyEwHRDi
+         p2gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677835955;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7hBXC0lEHBdCxJFz/wvuTM5XuH7NecPstxoPUgvWZ2s=;
+        b=YdAEQw7q4nn42L5Se/0sEnzJE96e5REhRtVhoV1t3qSHxvDhXkCytX0gpkt8w8SX3N
+         c8mrn/su8X2R+T74hGYwnQVvs7q57B92zGvsQY37BRxwSMWLrEuIlLw370n026WR5H4G
+         Jyypcv1P7LhSxqJNUwB8+42aho8660/ArOxx+msKbFJ5BCjrhcsmZRESiEIrspcMKCK0
+         IZmlFMNxaeOlNcQpIEZKrskCBZVNvyCRU2MzZdoisN5S3js+gXwoXmuGYuVftbiKvV5P
+         HdvtltelM+h/8ysxGY0OlR2QRbafdwRdeAejmgMRz9kzBvg+CgpbzDeo/tQHxPAnLZkw
+         QbzA==
+X-Gm-Message-State: AO0yUKVoJn34Ev1LzV9uJVdXJiCK3FF75px2jSUG3sZxxTl3cCJzxN6J
+        3nTVsajqiA/PhDJThOZckArJA65cEeGnGcjC
+X-Google-Smtp-Source: AK7set/JHlPkIR9MppkbXv5Ijhh5ttzcjun38qIQ2R+eSHmP8pbzOViSvPR3v5zMY1JfvJlm6rBqCw==
+X-Received: by 2002:a5d:6512:0:b0:2c6:85ef:4086 with SMTP id x18-20020a5d6512000000b002c685ef4086mr841564wru.32.1677835955377;
+        Fri, 03 Mar 2023 01:32:35 -0800 (PST)
+Received: from myrica (054592b0.skybroadband.com. [5.69.146.176])
+        by smtp.gmail.com with ESMTPSA id k5-20020adfe8c5000000b002c56179d39esm1671455wrn.44.2023.03.03.01.32.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 01:32:34 -0800 (PST)
+Date:   Fri, 3 Mar 2023 09:32:35 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v4 3/6] iommu/sva: Stop using ioasid_set for SVA
+Message-ID: <20230303093235.GB361458@myrica>
+References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
+ <20230301235646.2692846-4-jacob.jun.pan@linux.intel.com>
+ <3b7fb4d3-1fe9-a3be-46ad-c271be9f96c7@linux.intel.com>
+ <20230302091707.58d59964@jacob-builder>
+ <794c7dad-2e62-3afa-ea10-92179b0d1659@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -49Tm1k44S1rchx71VyQr6cPDCgqXb2J
-X-Proofpoint-ORIG-GUID: -49Tm1k44S1rchx71VyQr6cPDCgqXb2J
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_01,2023-03-02_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- impostorscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- suspectscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303030084
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <794c7dad-2e62-3afa-ea10-92179b0d1659@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialize start_index for lpass_audio_cc_sc7280_desc
-to fix invalid index error.
+On Fri, Mar 03, 2023 at 10:24:42AM +0800, Baolu Lu wrote:
+> > > > -int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t
+> > > > max) +static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t
+> > > > min, ioasid_t max) {
+> > > > -	int ret = 0;
+> > > > -	ioasid_t pasid;
+> > > > +	int ret;
+> > > > -	if (min == INVALID_IOASID || max == INVALID_IOASID ||
+> > > > +	if (min == IOMMU_PASID_INVALID || max == IOMMU_PASID_INVALID ||
+> > > >    	    min == 0 || max < min)
+> > > 
+> > > It's irrelevant to this patch. Just out of curiosity, why do we need to
+> > > exclude PASID 0 here? I just had a quick look at PCI spec section 6.20.
+> > > The spec does not state that PASID 0 is invalid.
+> > > 
+> > my understanding is that ARM reserves PASID0, unlike VT-d where RID_PASID
+> > is programmable.
 
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
----
- drivers/clk/qcom/lpassaudiocc-sc7280.c | 1 +
- 1 file changed, 1 insertion(+)
+It does, but that's specific to the IOMMU driver so we shouldn't check it
+here.
 
-diff --git a/drivers/clk/qcom/lpassaudiocc-sc7280.c b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-index 1339f9211a14..0567007da8bd 100644
---- a/drivers/clk/qcom/lpassaudiocc-sc7280.c
-+++ b/drivers/clk/qcom/lpassaudiocc-sc7280.c
-@@ -702,6 +702,7 @@ static const struct qcom_cc_desc lpass_audio_cc_sc7280_desc = {
- 	.config = &lpass_audio_cc_sc7280_regmap_config,
- 	.clks = lpass_audio_cc_sc7280_clocks,
- 	.num_clks = ARRAY_SIZE(lpass_audio_cc_sc7280_clocks),
-+	.start_index = LPASS_AUDIO_CC_CDIV_RX_MCLK_DIV_CLK_SRC;
- };
- 
- static const struct qcom_reset_map lpass_audio_cc_sc7280_resets[] = {
--- 
-2.17.1
+> I suppose the common thing is reserving some kind of special PASIDs.
+
+Are you planning to use RID_PASID != 0 in VT-d?  Otherwise we could just
+communicate min_pasid from the IOMMU driver the same way we do max_pasid.
+
+Otherwise I guess re-introduce a lighter ioasid_alloc() that the IOMMU
+driver calls to reserve PASID0/RID_PASID.
+
+Thanks,
+Jean
 
