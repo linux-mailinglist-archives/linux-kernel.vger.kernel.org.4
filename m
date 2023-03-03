@@ -2,125 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D6F6A96E4
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E116A96E8
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbjCCL71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:59:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48486 "EHLO
+        id S231248AbjCCMAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 07:00:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCCL7Z (ORCPT
+        with ESMTP id S229812AbjCCMAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:59:25 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BF82D53;
-        Fri,  3 Mar 2023 03:59:21 -0800 (PST)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id 078BCFF807;
-        Fri,  3 Mar 2023 11:59:01 +0000 (UTC)
-Message-ID: <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
-Date:   Fri, 3 Mar 2023 12:59:01 +0100
+        Fri, 3 Mar 2023 07:00:15 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24F618B01
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 04:00:13 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id bk32so1552856oib.10
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 04:00:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1677844813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5nL802DEo8Vlj8yoMgQ/ErBx26N3r9TcbStYj6srrkE=;
+        b=PHWLqjRg0nhXfP4Er/6XPTd0g+OMA/yEQAfVHrl+Zb8ZDfBt3C+IBcHwjMwU33E2r2
+         LbV5mufvs1vw1r/uNKTW3R+UqKbGXyKxySX3tt3sgaUW16pMbAKRawse60rz1dmcgypL
+         zwTo1/PaWdvTe8m41aSW7fwzWSW6uU50WF/AJjkDr6EWCHITZSq+0KyX129vlq9aCFUr
+         Zc9744UZFHDMaO7s51dRJ67BSeMEjTq6yIWh0FBZqB8/sS+z/4keFXjYFQfE1/Dn/w0E
+         l0RsPH5eLSO0SvXfjiv++OixLtpAdHsFLxwByTs4Z4aKzMEHydVmr7qyLk9vEd5D5T3+
+         k/zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677844813;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5nL802DEo8Vlj8yoMgQ/ErBx26N3r9TcbStYj6srrkE=;
+        b=44G+0+V5o9J6WFDL1PSNg0l6rXirPNrAT3dRjC+ATHr4CSl7Lqnrkg7q8CdDg6ocmg
+         pmxSHg5gjrZ+VbnpAJiutC+SQk1KnZYurCRSj8p5HTfy3N7lL9ka0Dnt+qF8c79l8D8j
+         BstUcQ7/yp5cSzhbVP/L+qh6/DD3rckBM71MIHe9ijmkAS/L62rgKfr7m1ZyPfYdaAsc
+         gcODGqjlKKYV8tymaakHF1LPP3Ze6KmJKmIeD0zCP8soP64cEz3rSQh2Gm9155JS0ya7
+         SZaQUkPnMYNK4iWB7DvusRzAaxn1ImBqBT/8ceFutlw0CUmVRfn0E1uRAtwaEmzW+y9Y
+         CuBQ==
+X-Gm-Message-State: AO0yUKXioutNJCIwBFJG8pHYMeMvqsha1aYyUd+nn27JQ3KNqZO1xfRY
+        V7tjPSSpuEEpJTllVqtLVwu1Ra7uR9JzjskBQEtNDA==
+X-Google-Smtp-Source: AK7set9rSLagXYcQ1dDs85sy097wF1UMooi/Ls1MtAokFSFWKEklD/Q4NLf5UCk5w2ApF3WJypbs7252d4ofBUCofdE=
+X-Received: by 2002:aca:230d:0:b0:383:d3ae:2ef4 with SMTP id
+ e13-20020aca230d000000b00383d3ae2ef4mr431443oie.8.1677844813085; Fri, 03 Mar
+ 2023 04:00:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
-Content-Language: en-US
-To:     "H. Peter Anvin" <hpa@zytor.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, hca@linux.ibm.com
-Cc:     geert@linux-m68k.org, alexghiti@rivosinc.com, corbet@lwn.net,
-        Richard Henderson <richard.henderson@linaro.org>,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, chenhuacai@kernel.org,
-        kernel@xen0n.name, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.osdn.me, dalias@libc.org, davem@davemloft.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net,
-        jcmvbkbc@gmail.com, Arnd Bergmann <arnd@arndb.de>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-References: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
- <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302194235.1724-1-mario.limonciello@amd.com> <20230302194235.1724-9-mario.limonciello@amd.com>
+In-Reply-To: <20230302194235.1724-9-mario.limonciello@amd.com>
+From:   Grzegorz Bernacki <gjb@semihalf.com>
+Date:   Fri, 3 Mar 2023 13:00:02 +0100
+Message-ID: <CAA2Cew5YyufrBZqAA4A5R=1vf_dn=c3ftwziTjzFSm8S5LJZGg@mail.gmail.com>
+Subject: Re: [PATCH v2 8/9] i2c: designware: Add doorbell support for Skyrim
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        Rijo-john.Thomas@amd.com, Thomas.Lendacky@amd.com,
+        herbert@gondor.apana.org.au,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+Hi Mario,
 
+I am not sure if adding a new ACPI ID is a good idea. Actually we are
+talking about the same devices. The only difference is in the
+communication protocol between PSP and CPU. This could be easily
+detected at runtime by checking cpu id. There is no need to introduce
+a new id and create dependency on the FW version.
 
-On 3/2/23 20:50, H. Peter Anvin wrote:
-> On March 1, 2023 7:17:18 PM PST, Palmer Dabbelt <palmer@dabbelt.com> wrote:
->> On Tue, 14 Feb 2023 01:19:02 PST (-0800), hca@linux.ibm.com wrote:
->>> On Tue, Feb 14, 2023 at 09:58:17AM +0100, Geert Uytterhoeven wrote:
->>>> Hi Heiko,
->>>>
->>>> On Tue, Feb 14, 2023 at 9:39 AM Heiko Carstens <hca@linux.ibm.com> wrote:
->>>>> On Tue, Feb 14, 2023 at 08:49:01AM +0100, Alexandre Ghiti wrote:
->>>>>> This all came up in the context of increasing COMMAND_LINE_SIZE in the
->>>>>> RISC-V port.  In theory that's a UABI break, as COMMAND_LINE_SIZE is the
->>>>>> maximum length of /proc/cmdline and userspace could staticly rely on
->>>>>> that to be correct.
->>>>>>
->>>>>> Usually I wouldn't mess around with changing this sort of thing, but
->>>>>> PowerPC increased it with a5980d064fe2 ("powerpc: Bump COMMAND_LINE_SIZE
->>>>>> to 2048").  There are also a handful of examples of COMMAND_LINE_SIZE
->>>>>> increasing, but they're from before the UAPI split so I'm not quite sure
->>>>>> what that means: e5a6a1c90948 ("powerpc: derive COMMAND_LINE_SIZE from
->>>>>> asm-generic"), 684d2fd48e71 ("[S390] kernel: Append scpdata to kernel
->>>>>> boot command line"), 22242681cff5 ("MIPS: Extend COMMAND_LINE_SIZE"),
->>>>>> and 2b74b85693c7 ("sh: Derive COMMAND_LINE_SIZE from
->>>>>> asm-generic/setup.h.").
->>>>>>
->>>>>> It seems to me like COMMAND_LINE_SIZE really just shouldn't have been
->>>>>> part of the uapi to begin with, and userspace should be able to handle
->>>>>> /proc/cmdline of whatever length it turns out to be.  I don't see any
->>>>>> references to COMMAND_LINE_SIZE anywhere but Linux via a quick Google
->>>>>> search, but that's not really enough to consider it unused on my end.
->>>>>>
->>>>>> The feedback on the v1 seemed to indicate that COMMAND_LINE_SIZE really
->>>>>> shouldn't be part of uapi, so this now touches all the ports.  I've
->>>>>> tried to split this all out and leave it bisectable, but I haven't
->>>>>> tested it all that aggressively.
->>>>> Just to confirm this assumption a bit more: that's actually the same
->>>>> conclusion that we ended up with when commit 3da0243f906a ("s390: make
->>>>> command line configurable") went upstream.
->> Thanks, I guess I'd missed that one.  At some point I think there was some discussion of making this a Kconfig for everyone, which seems reasonable to me -- our use case for this being extended is syzkaller, but we're sort of just picking a value that's big enough for now and running with it.
->>
->> Probably best to get it out of uapi first, though, as that way at least it's clear that it's not uABI.
->>
->>>> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
->>>> I assume?
->>> Yes, sorry for that. I got distracted while writing and used the wrong
->>> branch to look this up.
->> Alex: Probably worth adding that to the list in the cover letter as it looks like you were planning on a v4 anyway (which I guess you now have to do, given that I just added the issue to RISC-V).
-> The only use that is uapi is the *default* length of the command line if the kernel header doesn't include it (in the case of x86, it is in the bzImage header, but that is atchitecture- or even boot format-specific.)
+thanks,
+greg
 
-Is COMMAND_LINE_SIZE what you call the default length? Does that mean 
-that to you the patchset is wrong?
-
-Thanks,
-
-Alex
-
-
+czw., 2 mar 2023 o 20:43 Mario Limonciello <mario.limonciello@amd.com>
+napisa=C5=82(a):
+>
+> Skyrim doesn't use the platform feature mailbox for communication
+> for I2C arbitration, it relies upon ringing a doorbell.
+>
+> Add a new ACPI ID to use for Skyrim and when that ID is detected
+> use the doorbell instead.
+>
+> Link: https://lore.kernel.org/linux-i2c/20220916131854.687371-3-jsd@semih=
+alf.com/
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v1->v2:
+>  * New patch
+> Note: This ACPI ID hasn't currently been reserved, but as Skyrim runs cor=
+eboot
+> it should be easy enough to modify the BIOS and test it out.
+> If this approach works and has general agreement it can be reserved.
+> ---
+>  drivers/i2c/busses/i2c-designware-amdpsp.c  | 29 ++++++++++++++-------
+>  drivers/i2c/busses/i2c-designware-platdrv.c |  1 +
+>  2 files changed, 20 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/bus=
+ses/i2c-designware-amdpsp.c
+> index 105584abcf8f..e1a4d3002c80 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -73,34 +73,44 @@ static int psp_send_check_i2c_req(struct psp_i2c_req =
+*req)
+>         return check_i2c_req_sts(req);
+>  }
+>
+> -static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+> +static int psp_send_i2c_req_amdi0019(enum psp_i2c_req_type i2c_req_type)
+>  {
+>         struct psp_i2c_req *req;
+> -       unsigned long start;
+>         int status, ret;
+>
+>         /* Allocate command-response buffer */
+>         req =3D kzalloc(sizeof(*req), GFP_KERNEL);
+>         if (!req)
+>                 return -ENOMEM;
+> -
+>         req->hdr.payload_size =3D sizeof(*req);
+>         req->type =3D i2c_req_type;
+> -
+> -       start =3D jiffies;
+>         ret =3D read_poll_timeout(psp_send_check_i2c_req, status,
+>                                 (status !=3D -EBUSY),
+>                                 PSP_I2C_REQ_RETRY_DELAY_US,
+>                                 PSP_I2C_REQ_RETRY_CNT * PSP_I2C_REQ_RETRY=
+_DELAY_US,
+>                                 0, req);
+> -       if (ret) {
+> +       kfree(req);
+> +
+> +       if (ret)
+>                 dev_err(psp_i2c_dev, "Timed out waiting for PSP to %s I2C=
+ bus\n",
+>                         (i2c_req_type =3D=3D PSP_I2C_REQ_ACQUIRE) ?
+>                         "release" : "acquire");
+> -               goto cleanup;
+> -       }
+>
+> -       ret =3D status;
+> +       return ret ? ret : status;
+> +}
+> +
+> +static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+> +{
+> +       const char *hid =3D acpi_device_hid(ACPI_COMPANION(psp_i2c_dev));
+> +       unsigned long start =3D jiffies;
+> +       int ret;
+> +
+> +       /* Use doorbell for Skyrim and mailbox for Cezanne */
+> +       if (!strcmp(hid, "AMDI0020"))
+> +               ret =3D psp_ring_platform_doorbell(i2c_req_type);
+> +       else
+> +               ret =3D psp_send_i2c_req_amdi0019(i2c_req_type);
+> +
+>         if (ret) {
+>                 dev_err(psp_i2c_dev, "PSP communication error\n");
+>                 goto cleanup;
+> @@ -115,7 +125,6 @@ static int psp_send_i2c_req(enum psp_i2c_req_type i2c=
+_req_type)
+>                 psp_i2c_mbox_fail =3D true;
+>         }
+>
+> -       kfree(req);
+>         return ret;
+>  }
+>
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/bu=
+sses/i2c-designware-platdrv.c
+> index 89ad88c54754..5ca71bda9ac2 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -51,6 +51,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] =
+=3D {
+>         { "AMD0010", ACCESS_INTR_MASK },
+>         { "AMDI0010", ACCESS_INTR_MASK },
+>         { "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+> +       { "AMDI0020", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+>         { "AMDI0510", 0 },
+>         { "APMC0D0F", 0 },
+>         { "HISI02A1", 0 },
+> --
+> 2.34.1
+>
