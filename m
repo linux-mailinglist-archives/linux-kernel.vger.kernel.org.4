@@ -2,193 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 579CE6A9751
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139086A975A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 13:38:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjCCMfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 07:35:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        id S229799AbjCCMih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 07:38:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbjCCMfN (ORCPT
+        with ESMTP id S229580AbjCCMif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 07:35:13 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BD05ADE8
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 04:35:11 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id z5so2150570ljc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 04:35:11 -0800 (PST)
+        Fri, 3 Mar 2023 07:38:35 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593B45CC13;
+        Fri,  3 Mar 2023 04:38:34 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id s22so3367333lfi.9;
+        Fri, 03 Mar 2023 04:38:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677846910;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+y3VNDk/Z06nKlKiA/oJNMccwlA5HSiiicdHD4hUxtk=;
-        b=eoou53ujfDFeNBKfwQs8VVNFXjSRp0KdvSXc1ScCXY5tuFHB/O/XmLiMzF3eVinlAR
-         YNw8vKjtc2lhcA7swj0zGSmHdWAZUoAChS0exCtCSIdQ3D6J9qZ8L4xwbLiHaKg6Flvg
-         983uVGHYKYkaYpt6MznbjEDlecLkjfN3wPzxa7N7BLciL+YA22dT0vGgn/SAWaebJAe9
-         9kJ25he5N3LIKfYF+rsdNgi8Gw4Q+j0PUbh6CgxYuvtUFJsx5x93hcWXAwyhNdPm+jHX
-         A/5aODBTyDYfPgVCzZCSK7nhJSYcdClo2xHlhtfQPg9Dcw68iI5MFOaYencDMUNFSPQC
-         KD0A==
+        d=gmail.com; s=20210112; t=1677847112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LeNXt3isbPRHGAJkEjS0qeuKPk4Ph4hfVApRfVC6Qok=;
+        b=P0YjcZ3S5ACbMGzx+4FQqVrYsfJfk5OAeUWFnmhbhhMgz7Y6myjru7hBUy4wOCtezp
+         /cVnh5BCBuB6qe9UctJ5/iaU0DMycOjd+/JyQMJ4k32z4yKR//VcfV/3kYkvF8ZA63hQ
+         2E8GkyLcl5beiGfzTYH6A7r7Hd0U/Pnztk3O1+cCiKP/TxO/XKrAj3RDU2qL6oAKc74w
+         LlhTjo2eKXUiuAKLfec8YyGpNOmoXr1+3UrFDev1FqdymopeMImPzKEtlyHUCssIw5NA
+         Z/o6XxM04tfRZpp+aBZIT2WGUpY2j3hX1PGFa8d9si5tdeCtGxABmW67F7aRpPd0WCUp
+         6MbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677846910;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+y3VNDk/Z06nKlKiA/oJNMccwlA5HSiiicdHD4hUxtk=;
-        b=4YTTxoufhVOfcjSACFHWJdpxIjWUH2tBg79txT8FZnSmeG0J69HITmzT5UXHAhuBpr
-         ZrmriAcjx3JjDE8NsQwfZtkU1A8ZmayeFDeGF1J/U/JvQA8ERDUOSIAp00NCSNr2HBVM
-         j5ZLtrgdoUYCMc9dhMOX454TLJMaWXotKVVWdQ9ImiHGQ8yJx4OQGZMmSDal7LBuxyRW
-         3P2pA/10jbJTyghkf8Ez9F1JmVQfcsy3nQ5W57qxtqAFqvTljvSznpZ/7F9WukiB9TDe
-         AUQusHDDIPvGP59lzTL+ZvEd938WQp30GJ5kz76+LriUSX/dmjVzadg06BzIeRVqPKzc
-         wVvw==
-X-Gm-Message-State: AO0yUKUrbWNx/OB16nc1JDbpT9ZV22auT+ubQJ0oHLKkJlDb61iAn1rV
-        Ymq3k/ejVVRtV2y1WmYlxa9zrw==
-X-Google-Smtp-Source: AK7set+RMg3rfF+NeQcqLED3fXSnKmpz8e9ZYADW6XQ6nBAztzuOF9bj0Mia3LIYKxPL4sC6t5L5Og==
-X-Received: by 2002:a05:651c:2125:b0:295:aefd:eb13 with SMTP id a37-20020a05651c212500b00295aefdeb13mr652378ljq.30.1677846909788;
-        Fri, 03 Mar 2023 04:35:09 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id e30-20020a05651c039e00b002958c4e96fasm294978ljp.3.2023.03.03.04.35.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 04:35:09 -0800 (PST)
-Message-ID: <11fce8ad-46a4-305c-cc8f-c7530c13ecbd@linaro.org>
-Date:   Fri, 3 Mar 2023 13:35:08 +0100
+        d=1e100.net; s=20210112; t=1677847112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LeNXt3isbPRHGAJkEjS0qeuKPk4Ph4hfVApRfVC6Qok=;
+        b=ZDgpkLKTEG4pDD0Ngu/Nns+ZjajnCTqTqCJPvtB8gsg82HG6F7lLWhtIzmqaY01P0N
+         CxyNDimEHyNs1KjWRicFtrammK4saPuQe+U8Vz7QByayFZr2BfjkAQbN6E12oSazNW/6
+         BthlTnOgp1P0x+tsbIyiFM1vvkeAbd6gA1wcuA9P1Avg3GSST+DkH93qSbV6mEMnWZ4F
+         WTbuVBdOObLYSSNeRhUk6yjuuXglFzQ9iK8rzn3Bw2Inhl9UORvwaix21zUjUdgQbNs8
+         S3Qc2JnOPFrPkvn1nvpvdeXwicswXc2GTTNkiNtCgnAXP/4asuOeGDYNo71DlVmKAbK3
+         heFQ==
+X-Gm-Message-State: AO0yUKWzZ1KUMKAveRX970Ils+3X6rGaxDoNU8qUvQKbgVVfDfoPSph2
+        LfeQCAhcu64SH/FUSoMv5WY=
+X-Google-Smtp-Source: AK7set8AMf7sXcYGM7UKtvCBtcTYORd/6lfdClXFLlsf4lNnLXlfUAkJ2EqaJJ7J2E5fFC/UiNTVrQ==
+X-Received: by 2002:ac2:546a:0:b0:4cb:449a:31f8 with SMTP id e10-20020ac2546a000000b004cb449a31f8mr501789lfn.35.1677847112505;
+        Fri, 03 Mar 2023 04:38:32 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id c4-20020a2e6804000000b002934be1a0a4sm291705lja.70.2023.03.03.04.38.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 04:38:31 -0800 (PST)
+Date:   Fri, 3 Mar 2023 15:38:29 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Shradha Todi <shradha.t@samsung.com>
+Cc:     lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        alim.akhtar@samsung.com, jingoohan1@gmail.com,
+        Sergey.Semin@baikalelectronics.ru, lukas.bulwahn@gmail.com,
+        hongxing.zhu@nxp.com, tglx@linutronix.de, m.szyprowski@samsung.com,
+        jh80.chung@samsung.co, pankaj.dubey@samsung.com,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/16] Refactor Exynos PCIe driver to make it generic
+Message-ID: <20230303123829.er626hqa562sal3t@mobilestation>
+References: <CGME20230214121348epcas5p48a3b2b225f616d748cc20622d01edb97@epcas5p4.samsung.com>
+ <20230214121333.1837-1-shradha.t@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
- __qcom_icc_set twice on the same node
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
- <59b28fb4-1367-9872-ed63-90847e380bb6@linaro.org>
- <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
- <3116a08a-30a8-c9b9-f079-26739c9e6d49@linaro.org>
- <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
- <db4f4e53-e8b9-0807-7490-2c6b76194ad5@linaro.org>
- <2cfba291-656f-9a43-fdd5-7601a6fe6ef5@linaro.org>
- <0b1fafe6-0814-f1a6-ae19-7bd273751102@linaro.org>
- <133be267-1aab-350f-f3ba-142cf4dee4d4@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <133be267-1aab-350f-f3ba-142cf4dee4d4@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230214121333.1837-1-shradha.t@samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Shradha
 
+On Tue, Feb 14, 2023 at 05:43:17PM +0530, Shradha Todi wrote:
+> Currently pci-exynos is being used as a PCIe driver for Exynos5433
+> only. This patch set refactors the driver to make it extensible to
+> other Samsung manufactured SoCs having DWC PCIe controllers.
+> The major change points are:
+> - Renaming all common functions/structures to use "samsung" instead
+>   of "exynos". Make common probe/remove/suspend/resume
+> - Making clock/regulator get/enable/disable generic
+> - Adding private struct to hold platform specific function ops
 
-On 3.03.2023 12:50, Bryan O'Donoghue wrote:
-> On 03/03/2023 11:42, Konrad Dybcio wrote:
->>
->>
->> On 3.03.2023 12:40, Bryan O'Donoghue wrote:
->>> On 03/03/2023 11:39, Konrad Dybcio wrote:
->>>>
->>>>
->>>> On 3.03.2023 12:36, Bryan O'Donoghue wrote:
->>>>> On 03/03/2023 11:35, Bryan O'Donoghue wrote:
->>>>>> On 03/03/2023 11:33, Konrad Dybcio wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 3.03.2023 12:32, Bryan O'Donoghue wrote:
->>>>>>>> On 03/03/2023 02:35, Konrad Dybcio wrote:
->>>>>>>>> Currently, when sync_state calls set(n, n) all the paths for setting
->>>>>>>>> parameters on an icc node are called twice. Avoid that.
->>>>>>>>>
->>>>>>>>> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
->>>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>>>>>> ---
->>>>>>>>> RFC comes from the fact that I *believe* this should be correct, but I'm
->>>>>>>>> not entirely sure about it..
->>>>>>>>>
->>>>>>>>>
->>>>>>>>>      drivers/interconnect/qcom/icc-rpm.c | 2 +-
->>>>>>>>>      1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>>> index a6e0de03f46b..d35db1af9b08 100644
->>>>>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
->>>>>>>>> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->>>>>>>>>          ret = __qcom_icc_set(src, src_qn, sum_bw);
->>>>>>>>>          if (ret)
->>>>>>>>>              return ret;
->>>>>>>>> -    if (dst_qn) {
->>>>>>>>> +    if (dst_qn && src_qn != dst_qn) {
->>>>>>>>>              ret = __qcom_icc_set(dst, dst_qn, sum_bw);
->>>>>>>>>              if (ret)
->>>>>>>>>                  return ret;
->>>>>>>>
->>>>>>>> Is it possible for src_qn == dst_qn ?
->>>>>>> As the commit message says, sync_state calls set(n, n) in
->>>>>>> drivers/interconnect/core.c : icc_sync_state(struct device *dev)
->>>>>>
->>>>>> So you've _seen_ that happen ?
->>>>>>
->>>>>
->>>>> Assuming you have, then why isn't the fix in sync_state i.e. that's an error for everybody right ?
->>>> I believe that there's simply no other way of updating every single node
->>>> on its own with the icc api, without taking any links into play. But I
->>>> see exynos and i.mx also effectively calling it twice on each node.
->>>>
->>>> Konrad
->>>
->>> I mean. I'm fine for you to retain my RB on this qcom specific patch since this seems like a real bug to me but... it seems like a generic bug across arches that should probably be resolved @ the higher level.
->>>
->>> ?
->> I suppose we could change the set(n, n) in sync_state to be set(n, NULL)
->> and enforce parameter null-checking on all provider->set functions. Do
->> I understand this correctly?
->>
->> Konrad
->>>
->>> ---
->>> bod
-> 
-> void icc_sync_state(struct device *dev)
-> {
->         struct icc_provider *p;
->         struct icc_node *n;
->         static int count;
-> 
->         count++;
-> 
->         if (count < providers_count)
->                 return;
-> 
->         mutex_lock(&icc_lock);
->         synced_state = true;
->         list_for_each_entry(p, &icc_providers, provider_list) {
->                 dev_dbg(p->dev, "interconnect provider is in synced state\n");
->                 list_for_each_entry(n, &p->nodes, node_list) {
->                         if (n->init_avg || n->init_peak) {
->                                 n->init_avg = 0;
->                                 n->init_peak = 0;
->                                 aggregate_requests(n);
->                                 p->set(n, n);
->                         }
->                 }
->         }
->         mutex_unlock(&icc_lock);
-> }
-> EXPORT_SYMBOL_GPL(icc_sync_state);
-> 
-> I mean p->set(n,n); is done like this since forever. Now that you draw attention to it, it doesn't make much sense to me..
-Yeah, but we're doing the same thing twice.. So maybe this is not
-so much a bug fix as it's an optimization..
+Just a general note regarding the DT-bindings. If you're willing to fix
+some names or most importantly add new ones please follow as much as
+possible to the generic interface defined in the common part of the
+DW PCIe bindings schema:
+Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
+for instance the generic "reg-names" are "elbi" or "app" defined for
+the application-dependent registers map (normally implemented via the
+ELBI interface in hardware), the "appl" name is marked as vendor-specific
+and should be avoided.
 
-Thinking about it again, this could use a likely() too, as this
-seems to be the only occurence of set(n, n)
+-Serge(y)
 
-Konrad
+> 
+> Shradha Todi (16):
+>   dt-bindings: PCI: Rename Exynos PCIe binding to Samsung PCIe
+>   PCI: exynos: Rename Exynos PCIe driver to Samsung PCIe
+>   PCI: samsung: Change macro names to exynos specific
+>   PCI: samsung: Use clock bulk API to get clocks
+>   dt-bindings: PCI: Rename the term elbi to appl
+>   arm64: dts: exynos: Rename the term elbi to appl
+>   PCI: samsung: Rename the term elbi to appl
+>   PCI: samsung: Rename exynos_pcie to samsung_pcie
+>   PCI: samsung: Make common appl readl/writel functions
+>   dt-bindings: PCI: Add phy-names as required property
+>   arm64: dts: exynos: Add phy-names as DT property
+>   PCI: samsung: Get PHY using non-DT version
+>   PCI: samsung: Rename common functions to samsung
+>   PCI: samsung: Add platform device private data
+>   PCI: samsung: Add structure to hold resource operations
+>   PCI: samsung: Make handling of regulators generic
+> 
+>  ...ung,exynos-pcie.yaml => samsung,pcie.yaml} |  15 +-
+>  MAINTAINERS                                   |   4 +-
+>  arch/arm64/boot/dts/exynos/exynos5433.dtsi    |   3 +-
+>  drivers/pci/controller/dwc/Kconfig            |   6 +-
+>  drivers/pci/controller/dwc/Makefile           |   2 +-
+>  drivers/pci/controller/dwc/pci-samsung.c      | 508 ++++++++++++++++++
+>  6 files changed, 526 insertions(+), 12 deletions(-)
+>  rename Documentation/devicetree/bindings/pci/{samsung,exynos-pcie.yaml => samsung,pcie.yaml} (89%)
+>  create mode 100644 drivers/pci/controller/dwc/pci-samsung.c
+> 
+> -- 
+> 2.17.1
+> 
+> 
