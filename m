@@ -2,73 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75E56A91CD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B146A91D7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 08:42:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCCHjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 02:39:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S229832AbjCCHmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 02:42:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCCHjr (ORCPT
+        with ESMTP id S229453AbjCCHmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 02:39:47 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C259213DC5
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 23:39:45 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id f13so6796608edz.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 23:39:45 -0800 (PST)
+        Fri, 3 Mar 2023 02:42:44 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69E653289
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 23:42:42 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id a25so7073929edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Mar 2023 23:42:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677829184;
+        d=linaro.org; s=google; t=1677829361;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BGfQhG/t4N08bdM7OR/sIi9YbqrZcvYiGl1Zpsb/00E=;
-        b=qm+sRjzjWfPhDM5vw99jBp+rka6Tb/wWGoi99N0seSzXGNpg10ZNfvz0FmLVzmPgox
-         7j0aC6SEr3F0/SJ3QF6oNxmIObprZuh3Zv5jjjS9KrEmm0AdfDP/ANFgxz+Ad0INKhVF
-         njd4zOqN5WeEvllppaIjf+FX2rvFRL/AxJ/X/7dskF0ctfuFveoyz0HoaFEdGzHtDNsG
-         eXjFRb+qpaj9MsChZF2FuGLNwBQd5ilhFMjIYrsAlk3Nt1izDwSo8fmc6IuysABvmv8h
-         4+/6lF1qVlrZuQfrBXJgfIqpLGesRe1+rTAkxNd5bh+TeOyTDpjipaMpT97mnjVzVdjD
-         5nPg==
+        bh=6NaYC7Z7KE3/xDS+ojWZnShCIrXPLH1EZcxegpj4uXo=;
+        b=vRw8wJ2r4i7Z3/3FQ0GALVawwqYtGc5IZ3nkCeTKZwVvCJ93pC8TOrhqdS/aiSDqGa
+         MDEEySc4FT8jD+H4FeVR1ZU1fmdhh5Ezx6susvVz5f0LEC9MWQSNzts23IizlW6LDRDk
+         uAibihwPv3kGtZbFMyuYBpmULGzMsY5BNim0FTLQkSJY0q7VQ8TYL76kG7xy5r5U0C9+
+         3JK+o8axtWR8oFBgB9y3Mu0LKtrfZjbPM1DSawcJMj8LZEqZ6LGoxS8FzGwfxM8RHpHE
+         ijWPbrA27y6Mu4FFYtk8aztOvKlBsUYe6emc2JHIkURRoLWOZiyVIDTd2J+O5AazW4jh
+         iA9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677829184;
+        d=1e100.net; s=20210112; t=1677829361;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BGfQhG/t4N08bdM7OR/sIi9YbqrZcvYiGl1Zpsb/00E=;
-        b=Zq97sCzNqGkOzVzJcclSz/JQcIHtmYzZudk1dAyIRNgpEaaa+UP67Z4QFTRja51zZI
-         0NGHpW8Qpe7kgJkVmuhWavgNMKnTD2/lR6VHHEPZRbAI8q3ulxx2tvD4egvEsGIqAuzW
-         blvtwn/kqOFJBCLTMNpdaQw/29xONgC3FaNLne9EkV/J2x0ZWRlah65CMHtMtIIx0p86
-         /cpNBmhNwMTd/hBR/BfSX/hthauaxlJh7hykD8nW3IGk7GGwBEMkQcV0+2GAkaDqgdoQ
-         MMNgf9P0h9wCtJZhZrJDEmFvSDKDbul2VVjR9iG77BsJrSARO1N2FjGSpsOWory6o/kR
-         t1sA==
-X-Gm-Message-State: AO0yUKXlOJZJV2cVGaqC96EE9MkJRpo4yKoE/qxRV72iNTxZTNAU9/iE
-        wunHFJh4f9O+hOcRW8Pw4t9IfQ==
-X-Google-Smtp-Source: AK7set/LjHBtEwT+6v5RMbFWSyOlRzU4/Gmj8s46nsQwGhXtC/Up0AYfqUZfe2DNqka4LUW7LkdWRg==
-X-Received: by 2002:a17:907:72c2:b0:8ad:51e9:cd57 with SMTP id du2-20020a17090772c200b008ad51e9cd57mr1001868ejc.49.1677829184258;
-        Thu, 02 Mar 2023 23:39:44 -0800 (PST)
+        bh=6NaYC7Z7KE3/xDS+ojWZnShCIrXPLH1EZcxegpj4uXo=;
+        b=nhbItY7I/5R3uBRxXmN2sq4UUKmLK7/a4xsv/30f/gxsv25UZFPYN8ghQqaG26kCFr
+         TorqYRXD8Z4ZLE/rXZX2a7AqS/TcmIf2nIShMaqLGSgRDXKXPeIU/vh4b889M9OjfWle
+         mc9l2Fwed+bwwzZOS++qT7X8MPzku7MWNk2Sa7Yq7tS0DDoNhv+6FxsgURwXCx6r6fQo
+         4NBhHF+40shHNLlWlAFAhDNGirAV4DYbmIyxCdt7Ne7ijvy1jIIL58Ta6f50HhHckwOi
+         EnHV8q1iuN3e0/NpeUwGZWM/TTixnpHe3EmTwdYVzraQGIh36KgMP7AnmBXRt6U6OYIm
+         dR5g==
+X-Gm-Message-State: AO0yUKUnNoT59/6oVJVk+04dgbjs/LxbBiwuHds5P04+D0zO+oemNwFA
+        /r26gOpGeR/o/5dFVdevQ7/C2g==
+X-Google-Smtp-Source: AK7set9XQN5XXL8B1oRWyaxYB8OqaN+rULhPoZWgFzO6jicJxzYWXiJ+BxcApbrfFSwmxpwqMut0ow==
+X-Received: by 2002:aa7:c153:0:b0:4ac:b614:dcfc with SMTP id r19-20020aa7c153000000b004acb614dcfcmr1347767edp.9.1677829361326;
+        Thu, 02 Mar 2023 23:42:41 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n21-20020a17090625d500b00905a1abecbfsm650572ejb.47.2023.03.02.23.39.43
+        by smtp.gmail.com with ESMTPSA id rk9-20020a170907214900b008d2d2d617ccsm676760ejb.17.2023.03.02.23.42.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Mar 2023 23:39:43 -0800 (PST)
-Message-ID: <1c692257-44b5-c443-33d8-1516da3be722@linaro.org>
-Date:   Fri, 3 Mar 2023 08:39:42 +0100
+        Thu, 02 Mar 2023 23:42:40 -0800 (PST)
+Message-ID: <54ee2141-f00a-3193-0821-2faaff826254@linaro.org>
+Date:   Fri, 3 Mar 2023 08:42:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+Subject: Re: [PATCH v2] dt-bindings: display: mediatek: Compatible list
+ cleanup
 Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1677749625.git.quic_varada@quicinc.com>
- <6b8d17006d8ee9a1b0c4df803c1cc7caf53ea3ef.1677749625.git.quic_varada@quicinc.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20230302141234.169985-1-y.oudjana@protonmail.com>
+ <0969ff46-3fba-f679-7943-52da7528185a@collabora.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6b8d17006d8ee9a1b0c4df803c1cc7caf53ea3ef.1677749625.git.quic_varada@quicinc.com>
+In-Reply-To: <0969ff46-3fba-f679-7943-52da7528185a@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,130 +91,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/03/2023 10:55, Varadarajan Narayanan wrote:
-> Add USB phy and controller related nodes
+On 02/03/2023 17:08, AngeloGioacchino Del Regno wrote:
+> Il 02/03/23 15:12, Yassine Oudjana ha scritto:
+>> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>>
+>> Several DT bindings of MediaTek display blocks make unnecessary use of
+>> "oneOf" and "items". Remove them and replace them with enums where
+>> necessary.
+
+
+>> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml
+>> index 7d7cc1ab526b..52f233fe1c0f 100644
+>> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml
+>> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,wdma.yaml
+>> @@ -20,9 +20,7 @@ description: |
+>>   
+>>   properties:
+>>     compatible:
+>> -    oneOf:
+>> -      - items:
+>> -          - const: mediatek,mt8173-disp-wdma
+>> +    const: mediatek,mt8173-disp-wdma
+>>   
 > 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 92 +++++++++++++++++++++++++++++++++++
->  1 file changed, 92 insertions(+)
+> This is present on all MediaTek SoCs - literally. The issue is that the driver
+> currently does not support command mode panels for real, so this binding is...
+> ...well, somehow in forgotten-land...
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index 2bb4053..319b5bd 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -215,6 +215,98 @@
->  		#size-cells = <1>;
->  		ranges = <0 0 0 0xffffffff>;
->  
-> +		ssphy_0: ssphy@7D000 {
+> I would hope that command mode panels get implemented soon(er-than-later), but
+> I'll leave the choice to you and Krzysztof - I'm only providing the information
+> here. :-)
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-> +			compatible = "qcom,ipq9574-qmp-usb3-phy";
-> +			reg = <0x7D000 0x1C4>;
-> +			#clock-cells = <1>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB0_AUX_CLK>,
-> +				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
-> +			clock-names = "aux", "cfg_ahb";
-> +
-> +			resets =  <&gcc GCC_USB0_PHY_BCR>,
-> +				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> +			reset-names = "phy","common";
-> +			status = "disabled";
-> +
-> +			usb0_ssphy: lane@7D200 {
-> +				reg = <0x0007D200 0x130>,	/* Tx */
-> +				      <0x0007D400 0x200>,	/* Rx */
-> +				      <0x0007D800 0x1F8>,	/* PCS  */
-> +				      <0x0007D600 0x044>;	/* PCS misc */
-> +				#phy-cells = <0>;
-> +				clocks = <&gcc GCC_USB0_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "gcc_usb0_pipe_clk_src";
-> +			};
-> +		};
-> +
-> +		qusb_phy_0: qusb@7B000 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-> +			compatible = "qcom,ipq9574-qusb2-phy";
-> +			reg = <0x07B000 0x180>;
-
-Lowercase hex everywhere.
-
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> +				<&xo_board_clk>;
-> +			clock-names = "cfg_ahb", "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> +			status = "disabled";
-> +		};
-> +
-> +		usb3: usb3@8A00000 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
-
-> +			compatible = "qcom,dwc3";
-> +			reg = <0x8AF8800 0x400>;
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_SNOC_USB_CLK>,
-> +				<&gcc GCC_ANOC_USB_AXI_CLK>,
-> +				<&gcc GCC_USB0_MASTER_CLK>,
-> +				<&gcc GCC_USB0_SLEEP_CLK>,
-> +				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +
-> +			clock-names = "sys_noc_axi",
-> +				"anoc_axi",
-> +				"master",
-> +				"sleep",
-> +				"mock_utmi";
-> +
-> +			assigned-clocks = <&gcc GCC_SNOC_USB_CLK>,
-> +					  <&gcc GCC_ANOC_USB_AXI_CLK>,
-> +					  <&gcc GCC_USB0_MASTER_CLK>,
-> +					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +			assigned-clock-rates = <200000000>,
-> +					       <200000000>,
-> +					       <200000000>,
-> +					       <24000000>;
-> +
-> +			resets = <&gcc GCC_USB_BCR>;
-> +			status = "disabled";
-> +
-> +			dwc_0: dwc3@8A00000 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Does not look like you tested the DTS against bindings. Please run `make
-dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
-for instructions).
+Yep, if you predict now that oneOf sooner or later will come back to
+these, just keep it. Does not hurt much and later re-introducing it
+makes patch much more difficult to read. Therefore I prefer to have
+unused oneOf than later a patch which introduces new compatible and
+re-indents old one (so unneeded diff changes).
 
 
 Best regards,
