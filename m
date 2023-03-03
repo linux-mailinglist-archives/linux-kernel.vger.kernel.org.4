@@ -2,54 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6CF16A991C
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E7C6A9924
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjCCOJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
+        id S230322AbjCCOLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:11:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjCCOJZ (ORCPT
+        with ESMTP id S229565AbjCCOLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:09:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24D34741B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:09:23 -0800 (PST)
+        Fri, 3 Mar 2023 09:11:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8D85D897;
+        Fri,  3 Mar 2023 06:11:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 709FFB818DD
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 14:09:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC3CC433D2;
-        Fri,  3 Mar 2023 14:09:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9F41B818D7;
+        Fri,  3 Mar 2023 14:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5295C4339E;
+        Fri,  3 Mar 2023 14:11:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677852561;
-        bh=DWuc80TU6jIXIb2OlS5m6P6q2jqlotFX19yA8oo6ATY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=c/KvEgcNjKotp+ZRxoAiSIby0ricsjQ8d8+fABm8H/IZJ+x6tHu/uUccdo3UGvvR5
-         TOn6NvvQN6O0DdEANRhcGS4vxN2A1JK3nBxtgzL3kfiTjrMIbXznmcLTkqJF05x0WV
-         ihseYbZt11j0dmDHus+8KA09XyZLzMaH3cAfYmiKyxLUbgQdhTaMBEpZQwZn+WHTnB
-         cKOyV9nnfNaliqi1ANwhvGTzPJF0S+d4JdM4+tWSc17LiMIQ+9Dt/Oc101vzxmdkw4
-         tku1EqznXjSvZzMqtQXxPvsi3wM27zoavpCy4a3q+H43WPMjDlph0EdU2qNOAplTzf
-         sp9X9cmgKo2ng==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4CFCD4049F; Fri,  3 Mar 2023 11:09:18 -0300 (-03)
-Date:   Fri, 3 Mar 2023 11:09:18 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 1/1 fyi] tools headers: Update the copy of x86's
- mem{cpy,set}_64.S used in 'perf bench'
-Message-ID: <ZAH/jsioJXGIOrkf@kernel.org>
+        s=k20201202; t=1677852704;
+        bh=rcz5yj2YfYuXUPK0B0fgsHEPcDvF6WUxXgCeRhOTR9U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NIE9s2W2HoLF80+qAryoeuKAgZ5hVt+7/MGti1aKOW8RX7B0fojLJ2GXv2hfFcgSA
+         YW+PXJ6T9FSQmKZbvltjQBrP8D6dmOZPZCCOySDLg/FI/yZTNmOOibDC9zgI9p/KEz
+         Cd1Vv9sCLqwwFhlUIhyd36/taIvHz3jGDEWHKsh2jotjFTQjc8dW98hszBw32hsmRO
+         e2xlmz9926HzTbrvVMqzzBa8grtLTd6mZTeX3Mi1bTMBHINsIw9g5tXlx2fOXExXWC
+         Zqk5lITTyfJgkmU0er0bSafbf2RObcKuyRXxtLBWl6A/7lskvYzJXaWk/aBskyH8O6
+         FSIPVDWFjshnA==
+Date:   Fri, 3 Mar 2023 14:11:39 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Florian Eckert <fe@dev.tdt.de>
+Cc:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, pavel@ucw.cz, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, Eckert.Florian@googlemail.com
+Subject: Re: [PATCH v7 2/2] trigger: ledtrig-tty: add additional modes
+Message-ID: <20230303141139.GP2420672@google.com>
+References: <20230222083335.847655-1-fe@dev.tdt.de>
+ <20230222083335.847655-3-fe@dev.tdt.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230222083335.847655-3-fe@dev.tdt.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,131 +56,295 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tldr; Just FYI, I'm carrying this on the perf tools tree.
+On Wed, 22 Feb 2023, Florian Eckert wrote:
 
-- Arnaldo
+> Add additional modes to trigger the selected LED.
+> The following modes are supported:
+> 
+> Tx/Rx:	Flash LED on data transmission (default)
+> CTS:	DCE Ready to accept data from the DTE.
+> DSR:	DCE is ready to receive and send data.
+> CAR:	DCE is receiving a carrier from a remote DTE.
+> RNG:	DCE has detected an incoming ring signal.
+> 
+> The mode can be changed for example with the following command:
+> echo "CTS" > /sys/class/leds/<led>/mode
+> 
+> This would turn on the LED, when the DTE(modem) signals the DCE that it
+> is ready to accept data.
+> 
+> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
+> ---
+>  .../ABI/testing/sysfs-class-led-trigger-tty   |  17 ++
+>  drivers/leds/trigger/ledtrig-tty.c            | 145 ++++++++++++++++--
+>  2 files changed, 147 insertions(+), 15 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
+> index 2bf6b24e781b..1c28e6c61d19 100644
+> --- a/Documentation/ABI/testing/sysfs-class-led-trigger-tty
+> +++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
+> @@ -4,3 +4,20 @@ KernelVersion:	5.10
+>  Contact:	linux-leds@vger.kernel.org
+>  Description:
+>  		Specifies the tty device name of the triggering tty
+> +
+> +What:		/sys/class/leds/<led>/mode
+> +Date:		January 2023
+> +KernelVersion:	6.3
+> +Description:
+> +		Specifies the operating to trigger the LED.
 
-Full explanation:
+The operating ... ?  "mode"?
 
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
+> +		The following operating modes are supported:
+> +
+> +		* Tx/Rx: Flash LED on data transmission (default)
+> +		* CTS:   DCE Ready to accept data from the DTE.
+> +		  LED on if line is high.
+> +		* DSR:   DCE is ready to receive and send data.
+> +		  LED on if line is high.
+> +		* CAR:   DCE has detected a carrier from a remote DTE.
+> +		  LED on if line is high.
+> +		* RNG:   DCE has detected an incoming ring signal.
+> +		  LED on if line is high.
 
-The way these headers are used in perf are not restricted to just
-including them to compile something.
+Seeing as this is unchanging, how about you mention it once globally?
 
-There are sometimes used in scripts that convert defines into string
-tables, etc, so some change may break one of these scripts, or new MSRs
-may use some different #define pattern, etc.
+> diff --git a/drivers/leds/trigger/ledtrig-tty.c b/drivers/leds/trigger/ledtrig-tty.c
+> index f62db7e520b5..7c4c171c8745 100644
+> --- a/drivers/leds/trigger/ledtrig-tty.c
+> +++ b/drivers/leds/trigger/ledtrig-tty.c
+> @@ -7,6 +7,15 @@
+>  #include <linux/tty.h>
+>  #include <uapi/linux/serial.h>
+>  
+> +enum tty_led_mode {
+> +	TTY_LED_CNT,
 
-E.g.:
+What's CNT?  Is it documented somewhere else?  Ah, I see below that this
+is Tx/Rx.  Odd name, what does it mean?  Defines and Enums should be
+self documenting IMHO.
 
-  $ ls -1 tools/perf/trace/beauty/*.sh | head -5
-  tools/perf/trace/beauty/arch_errno_names.sh
-  tools/perf/trace/beauty/drm_ioctl.sh
-  tools/perf/trace/beauty/fadvise.sh
-  tools/perf/trace/beauty/fsconfig.sh
-  tools/perf/trace/beauty/fsmount.sh
-  $
-  $ tools/perf/trace/beauty/fadvise.sh
-  static const char *fadvise_advices[] = {
-  	[0] = "NORMAL",
-  	[1] = "RANDOM",
-  	[2] = "SEQUENTIAL",
-  	[3] = "WILLNEED",
-  	[4] = "DONTNEED",
-  	[5] = "NOREUSE",
-  };
-  $
+> +	TTY_LED_CTS,
+> +	TTY_LED_DSR,
+> +	TTY_LED_CAR,
+> +	TTY_LED_RNG,
+> +	__TTY_LED_LAST = TTY_LED_RNG
 
-The tools/perf/check-headers.sh script, part of the tools/ build
-process, points out changes in the original files.
+Do you have to prepend with _'s?
 
-So its important not to touch the copies in tools/ when doing changes in
-the original kernel headers, that will be done later, when
-check-headers.sh inform about the change to the perf tools hackers.
+> +};
+> +
+>  struct ledtrig_tty_data {
+>  	struct led_classdev *led_cdev;
+>  	struct delayed_work dwork;
+> @@ -14,6 +23,15 @@ struct ledtrig_tty_data {
+>  	const char *ttyname;
+>  	struct tty_struct *tty;
+>  	int rx, tx;
+> +	enum tty_led_mode mode;
+> +};
+> +
+> +static const char * const mode[] = {
+> +	[TTY_LED_CNT] = "Tx/Rx", // Trasmit Data / Receive Data
 
----
+C++ style comments?
 
-We also continue with SYM_TYPED_FUNC_START() in util/include/linux/linkage.h
-and with an exception in tools/perf/check_headers.sh's diff check to ignore
-the include cfi_types.h line when checking if the kernel original files drifted
-from the copies we carry.
+> +	[TTY_LED_CTS] = "CTS", // CTS Clear To Send
+> +	[TTY_LED_DSR] = "DSR", // DSR Data Set Ready
+> +	[TTY_LED_CAR] = "CAR", // CAR Data Carrier Detect (DCD)
+> +	[TTY_LED_RNG] = "RNG", // RNG Ring Indicator (RI)
+>  };
+>  
+>  static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
+> @@ -21,6 +39,70 @@ static void ledtrig_tty_restart(struct ledtrig_tty_data *trigger_data)
+>  	schedule_delayed_work(&trigger_data->dwork, 0);
+>  }
+>  
+> +static ssize_t ledtrig_tty_mode_show(char *buf, enum tty_led_mode tty_mode)
+> +{
+> +	int len = 0;
+> +	int i;
+> +
+> +	for (i = 0; i <= __TTY_LED_LAST; i++) {
+> +		bool hit = tty_mode == i;
+> +		bool last = i == __TTY_LED_LAST;
+> +
+> +		len += sysfs_emit_at(buf, len, "%s%s%s%s",
+> +				  hit ? "[" : "",
+> +				  mode[i],
+> +				  hit ? "]" : "",
+> +				  last ? "" : " ");
+> +	}
+> +
+> +	len += sysfs_emit_at(buf, len, "\n");
+> +
+> +	return len;
+> +}
+> +
+> +static ssize_t tty_led_mode_show(struct device *dev,
+> +			 struct device_attribute *attr, char *buf)
 
-This is to get the changes from:
+This may be a personal preference, but I'd rather see alignment with the '('.
 
-  69d4c0d3218692ff ("entry, kasan, x86: Disallow overriding mem*() functions")
+> +{
+> +	struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
+> +	enum tty_led_mode tty_mode;
+> +
+> +	mutex_lock(&trigger_data->mutex);
+> +	tty_mode = trigger_data->mode;
+> +	mutex_unlock(&trigger_data->mutex);
+> +
+> +	return ledtrig_tty_mode_show(buf, tty_mode);
+> +}
+> +
+> +static ssize_t tty_led_mode_store(struct device *dev,
+> +			  struct device_attribute *attr, const char *buf,
+> +			  size_t size)
+> +{
+> +	struct ledtrig_tty_data *trigger_data = led_trigger_get_drvdata(dev);
+> +	ssize_t ret = size;
+> +	enum tty_led_mode tty_mode = __TTY_LED_LAST;
 
-That addresses these perf tools build warning:
+Nit: Can you reverse these 2 lines to make my OCD happy please?
 
-  Warning: Kernel ABI header at 'tools/arch/x86/lib/memcpy_64.S' differs from latest version at 'arch/x86/lib/memcpy_64.S'
-  diff -u tools/arch/x86/lib/memcpy_64.S arch/x86/lib/memcpy_64.S
-  Warning: Kernel ABI header at 'tools/arch/x86/lib/memset_64.S' differs from latest version at 'arch/x86/lib/memset_64.S'
-  diff -u tools/arch/x86/lib/memset_64.S arch/x86/lib/memset_64.S
+> +	int i;
+> +
+> +	/* Check for new line in string*/
 
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/lkml/
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/arch/x86/lib/memcpy_64.S | 5 ++---
- tools/arch/x86/lib/memset_64.S | 4 +++-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+' ' before the '*'.
 
-diff --git a/tools/arch/x86/lib/memcpy_64.S b/tools/arch/x86/lib/memcpy_64.S
-index 5418e2f99834e5de..a91ac666f758274c 100644
---- a/tools/arch/x86/lib/memcpy_64.S
-+++ b/tools/arch/x86/lib/memcpy_64.S
-@@ -7,7 +7,7 @@
- #include <asm/alternative.h>
- #include <asm/export.h>
- 
--.pushsection .noinstr.text, "ax"
-+.section .noinstr.text, "ax"
- 
- /*
-  * We build a jump to memcpy_orig by default which gets NOPped out on
-@@ -42,7 +42,7 @@ SYM_TYPED_FUNC_START(__memcpy)
- SYM_FUNC_END(__memcpy)
- EXPORT_SYMBOL(__memcpy)
- 
--SYM_FUNC_ALIAS_WEAK(memcpy, __memcpy)
-+SYM_FUNC_ALIAS(memcpy, __memcpy)
- EXPORT_SYMBOL(memcpy)
- 
- /*
-@@ -183,4 +183,3 @@ SYM_FUNC_START_LOCAL(memcpy_orig)
- 	RET
- SYM_FUNC_END(memcpy_orig)
- 
--.popsection
-diff --git a/tools/arch/x86/lib/memset_64.S b/tools/arch/x86/lib/memset_64.S
-index fc9ffd3ff3b213a3..6143b1a6fa2caa0d 100644
---- a/tools/arch/x86/lib/memset_64.S
-+++ b/tools/arch/x86/lib/memset_64.S
-@@ -6,6 +6,8 @@
- #include <asm/alternative.h>
- #include <asm/export.h>
- 
-+.section .noinstr.text, "ax"
-+
- /*
-  * ISO C memset - set a memory block to a byte value. This function uses fast
-  * string to get better performance than the original function. The code is
-@@ -43,7 +45,7 @@ SYM_FUNC_START(__memset)
- SYM_FUNC_END(__memset)
- EXPORT_SYMBOL(__memset)
- 
--SYM_FUNC_ALIAS_WEAK(memset, __memset)
-+SYM_FUNC_ALIAS(memset, __memset)
- EXPORT_SYMBOL(memset)
- 
- /*
+> +	if (size > 0 && buf[size - 1] == '\n')
+> +		size -= 1;
+> +
+> +	for (i = 0; i <= __TTY_LED_LAST; i++)
+> +		if (strncmp(buf, mode[i], size) == 0) {
+> +			tty_mode = i;
+> +			break;
+> +		}
+> +
+> +	if (i > __TTY_LED_LAST)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&trigger_data->mutex);
+> +	trigger_data->mode = tty_mode;
+> +	mutex_unlock(&trigger_data->mutex);
+> +
+> +	return ret;
+> +}
+> +static DEVICE_ATTR_RW(tty_led_mode);
+> +
+>  static ssize_t ttyname_show(struct device *dev,
+>  			    struct device_attribute *attr, char *buf)
+>  {
+> @@ -76,6 +158,18 @@ static ssize_t ttyname_store(struct device *dev,
+>  }
+>  static DEVICE_ATTR_RW(ttyname);
+>  
+> +static void ledtrig_tty_flags(struct ledtrig_tty_data *trigger_data,
+> +		unsigned int flag)
+
+This can be on a single line.  Please use 100-chars throughout.
+
+> +{
+> +	unsigned int status;
+> +
+> +	status = tty_get_mget(trigger_data->tty);
+> +	if (status & flag)
+> +		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+> +	else
+> +		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
+> +}
+> +
+>  static void ledtrig_tty_work(struct work_struct *work)
+>  {
+>  	struct ledtrig_tty_data *trigger_data =
+> @@ -113,21 +207,38 @@ static void ledtrig_tty_work(struct work_struct *work)
+>  		trigger_data->tty = tty;
+>  	}
+>  
+> -	ret = tty_get_icount(trigger_data->tty, &icount);
+> -	if (ret) {
+> -		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
+> -		mutex_unlock(&trigger_data->mutex);
+> -		return;
+> -	}
+> -
+> -	if (icount.rx != trigger_data->rx ||
+> -	    icount.tx != trigger_data->tx) {
+> -		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+> -
+> -		trigger_data->rx = icount.rx;
+> -		trigger_data->tx = icount.tx;
+> -	} else {
+> -		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
+> +	switch (trigger_data->mode) {
+> +	case TTY_LED_CTS:
+> +		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
+> +		break;
+> +	case TTY_LED_DSR:
+> +		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
+> +		break;
+> +	case TTY_LED_CAR:
+> +		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
+> +		break;
+> +	case TTY_LED_RNG:
+> +		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
+> +		break;
+> +	case TTY_LED_CNT:
+
+I believe this requires a 'fall-through' statement.
+
+Documentation/process/deprecated.rst
+
+> +	default:
+> +		ret = tty_get_icount(trigger_data->tty, &icount);
+> +		if (ret) {
+> +			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
+> +			mutex_unlock(&trigger_data->mutex);
+> +			return;
+> +		}
+> +
+> +		if (icount.rx != trigger_data->rx ||
+> +		    icount.tx != trigger_data->tx) {
+
+One line, etc.
+
+> +			led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+> +
+> +			trigger_data->rx = icount.rx;
+> +			trigger_data->tx = icount.tx;
+> +		} else {
+> +			led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
+> +		}
+> +		break;
+>  	}
+>  
+>  out:
+> @@ -137,6 +248,7 @@ static void ledtrig_tty_work(struct work_struct *work)
+>  
+>  static struct attribute *ledtrig_tty_attrs[] = {
+>  	&dev_attr_ttyname.attr,
+> +	&dev_attr_tty_led_mode.attr,
+>  	NULL
+>  };
+>  ATTRIBUTE_GROUPS(ledtrig_tty);
+> @@ -149,6 +261,9 @@ static int ledtrig_tty_activate(struct led_classdev *led_cdev)
+>  	if (!trigger_data)
+>  		return -ENOMEM;
+>  
+> +	/* set default mode */
+
+Nit: "Set"
+
+> +	trigger_data->mode = TTY_LED_CNT;
+> +
+>  	led_set_trigger_data(led_cdev, trigger_data);
+>  
+>  	INIT_DELAYED_WORK(&trigger_data->dwork, ledtrig_tty_work);
+> -- 
+> 2.30.2
+> 
+
 -- 
-2.39.1
-
+Lee Jones [李琼斯]
