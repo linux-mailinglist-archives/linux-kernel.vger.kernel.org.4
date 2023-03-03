@@ -2,116 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F176AA077
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B496AA07B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231654AbjCCUI2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 15:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S231665AbjCCUJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 15:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbjCCUIX (ORCPT
+        with ESMTP id S231433AbjCCUJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 15:08:23 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AE913DC1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:08:22 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id da10so14950194edb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:08:22 -0800 (PST)
+        Fri, 3 Mar 2023 15:09:34 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D140914EA4
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:09:32 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id ay14so11203394edb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:09:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677874101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=icUeuEqvqPbQnLnoTJFmZqOp/anQ4LMobszRgORXgsw=;
-        b=TDRqKYNlaFjGJRfXNmOIUGOwy4UL8l4YqkENlHDD/aan5Eez3v8eXzQg0eyHmIRWSf
-         EkSZ7ejXEvxO4jJ0JU6tB+uMDU3kfuY31pQsV9fXDf9EblIb2A0sIiziH1KoBwYbkuUy
-         yQFjcNskaa4E4PcnBPbP6vV/amExzZMAZ7kB8=
+        d=linaro.org; s=google; t=1677874171;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vBfThdkr+R1QJDSnLWRmQSdiN+ot973n4V1yEiFsi/E=;
+        b=BtpO3JS9nLte8Bhx760Ii9Ype7OH2+MfecEKdXsQT7LJBZxqio9u5G8Imm914EmcvZ
+         Jv9vyzbG5noAob+WXGnDKbSiUKoCtgt3xBx4TwZWw6PSV7JmTSsuqYpwLj/xPYW8uCHU
+         cInea7xBeSYT6UgXkBx+FJQc9woZMkOz+FZKzxmY0tspJ+jbLwbVnTTKhW2z6014A+EG
+         L4FqWxUG2tp/qT22UHxh0QS5Hk7leDuMAwkSpsKGrGGcr/GQeVNjhFfCmM/1cST4GqMT
+         Fi/hWwzs6KxFT/AxMSwD3xcLjPqd8k/fGqtKt8/dxNmh1SL8ehsuCyVWwAyTpkmI3KrY
+         QMcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677874101;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=icUeuEqvqPbQnLnoTJFmZqOp/anQ4LMobszRgORXgsw=;
-        b=LhGvZEdNp9RwRS4TmaCw6o5rRzB84H6YZz2/0kl9eLb9OnAWpcTl8I3+MKIGRqOuhY
-         Ysj7UM86yT2dqGxmoiFd8Prw+Xc1672haF8muvHZgn0Yz7fNO7p3wxx2hbx48I7JIsXs
-         PLa639+m9x7FI6Y+DQO7Jsnsit3ODMxc81ZRCefDVuVOUzudS6wezI9aNWF0GBEs/o60
-         wqnWylgHpmp3mjeJeNv2FIfbN30wpL08E+GUjg+bvNgWxbb3DodgYXEgf3MJ1K6pgyFu
-         atKPW0d7YFWh+8zEQ7pgBzhGsbWJe8dX3THUfWQTzHXI7Zx/9i1pSyIsasiv68FS7ICQ
-         NwSQ==
-X-Gm-Message-State: AO0yUKVC3gQvVSwZSnjBX11XRxQ9JUIKIkmGsqEWtbsY6Rwle/fzVuEa
-        H4ku12pHJPlNeqXl0XWfuIgWfkgcvbDAGngs99c=
-X-Google-Smtp-Source: AK7set9YtW4fOhDAd/zF/dFByg1rn99SP5be45giAin1sl4Y2TaVVR7BvAhcjTcCoUPCI8DT5LqO0w==
-X-Received: by 2002:a17:906:dac9:b0:8d9:8f8f:d542 with SMTP id xi9-20020a170906dac900b008d98f8fd542mr3165366ejb.32.1677874100743;
-        Fri, 03 Mar 2023 12:08:20 -0800 (PST)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id d8-20020a170906040800b008bda61ff999sm1290136eja.130.2023.03.03.12.08.19
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1677874171;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vBfThdkr+R1QJDSnLWRmQSdiN+ot973n4V1yEiFsi/E=;
+        b=uJ5U9cM7PpXYaup+7WdH0943QzN4HbqgzoiDWpSjPgkDcg7bQqOTlU+y+x8AU2J76B
+         k/zqx/LCA3r6ZEbS/BRJHB/kvG41brJAWvlPx6Mjhgwd8oOQtPEwNmcvMwWTy+zlvyYZ
+         nWPWKmwMBqn3UzB/uNSgEo4t4jCFJDCxDQWgdyZI65KoraHdKn83v7E/PEV5uDFIzroM
+         oCbPtkaoweKUIhYH6pr3oLPDQWcTQ0xHj5afqwuuYlf3f7ZwZvfhrKbqFf97OLUynMr/
+         noV214INYB5aWVJOCzqCA1nMKDnrQ30ZqxSUzK+3yiDNqtz8Wci2hKE/0W2ZTxf7Mcyl
+         E2Eg==
+X-Gm-Message-State: AO0yUKWnlPBd01XVMQP6GG7OwmU8pwSS8mbMNZllGLUo6F2pxAn59N8I
+        EpZGL0dxol695AjdW8jwrZooV1rRjnQ/a2nrkfc=
+X-Google-Smtp-Source: AK7set+6uqEnIlJuYZ+p6dJCwocssUfFhZo2hsEt2bd661xunQfZfHWb5HDLKmkaNJsT7+atoRiRbA==
+X-Received: by 2002:a17:907:2be2:b0:860:c12c:14f9 with SMTP id gv34-20020a1709072be200b00860c12c14f9mr2400939ejc.40.1677874171308;
+        Fri, 03 Mar 2023 12:09:31 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:3321:2e91:9111:67ba? ([2a02:810d:15c0:828:3321:2e91:9111:67ba])
+        by smtp.gmail.com with ESMTPSA id p12-20020a17090628cc00b008b1797b77b2sm1273007ejd.221.2023.03.03.12.09.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 12:08:19 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id d30so14933262eda.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 12:08:19 -0800 (PST)
-X-Received: by 2002:a17:906:498e:b0:901:e556:6e23 with SMTP id
- p14-20020a170906498e00b00901e5566e23mr1471718eju.0.1677874098906; Fri, 03 Mar
- 2023 12:08:18 -0800 (PST)
+        Fri, 03 Mar 2023 12:09:30 -0800 (PST)
+Message-ID: <b945ebe9-cca5-f3c3-5662-c77aa345c964@linaro.org>
+Date:   Fri, 3 Mar 2023 21:09:29 +0100
 MIME-Version: 1.0
-References: <CAHk-=wgbm1rjkSs0w+dVJJzzK2M1No=j419c+i7T4V4ky2skOw@mail.gmail.com>
- <20230302083025.khqdizrnjkzs2lt6@wittgenstein> <CAHk-=wivxuLSE4ESRYv_=e8wXrD0GEjFQmUYnHKyR1iTDTeDwg@mail.gmail.com>
- <CAGudoHF9WKoKhKRHOH_yMsPnX+8Lh0fXe+y-K26mVR0gajEhaQ@mail.gmail.com>
- <ZADoeOiJs6BRLUSd@ZenIV> <CAGudoHFhnJ1z-81FKYpzfDmvcWFeHNkKGdr00CkuH5WJa2FAMQ@mail.gmail.com>
- <CAHk-=wjp5fMupRwnROtC5Yn+MVLA7v=J+_QJSi1rr3qAjdsfXw@mail.gmail.com>
- <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
- <ZAD21ZEiB2V9Ttto@ZenIV> <6400fedb.170a0220.ece29.04b8@mx.google.com>
- <ZAEC3LN6oUe6BKSN@ZenIV> <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
- <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
- <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com> <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com>
-In-Reply-To: <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 3 Mar 2023 12:08:01 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
-Message-ID: <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
-To:     Mateusz Guzik <mjguzik@gmail.com>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] MAINTAINERS: i2c: include all I2C bindings in the I2C
+ entry
+Content-Language: en-US
+To:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230303082530.11878-1-krzysztof.kozlowski@linaro.org>
+ <ZAJPfaY5NxxS6v3R@shikoro>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZAJPfaY5NxxS6v3R@shikoro>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 11:37=E2=80=AFAM Mateusz Guzik <mjguzik@gmail.com> w=
-rote:
->
-> I mentioned in the previous e-mail that memset is used a lot even
-> without the problematic opt and even have shown size distribution of
-> what's getting passed there.
+On 03/03/2023 20:50, Wolfram Sang wrote:
+> 
+>> +F:	Documentation/devicetree/bindings/i2c/
+> 
+> This entry is already present a tad later in "I2C SUBSYSTEM HOST
+> DRIVERS".
 
-Well, I *have* been pushing Intel to try to fix memcpy and memset for
-over two decades by now, but with FSRM I haven't actually seen the
-huge problems any more.
+Ahh, indeed, I forgot that. Patch can be skipped then.
 
-It may just be that the loads I look at don't have issues (or the
-machines I've done profiles on don't tend to show them as much).
+Best regards,
+Krzysztof
 
-Hmm. Just re-did my usual kernel profile. It may also be that
-something has changed. I do see "clear_page" at the top, but yes,
-memset is higher up than I remembered.
-
-I actually used to have the reverse of your hack for this - I've had
-various hacks over the year that made memcpy and memset be inlined
-"rep movs/stos", which (along with inlined spinlocks) is a great way
-to see the _culprit_ (without having to deal with the call chains -
-which always get done the wrong way around imnsho).
-
-            Linus
