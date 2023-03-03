@@ -2,93 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F946A9E16
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6C66A9E1C
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjCCSBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:01:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S231460AbjCCSE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjCCSBm (ORCPT
+        with ESMTP id S231268AbjCCSEZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:01:42 -0500
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BEF5C101;
-        Fri,  3 Mar 2023 10:01:42 -0800 (PST)
-Received: by mail-pj1-f46.google.com with SMTP id x34so3431893pjj.0;
-        Fri, 03 Mar 2023 10:01:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677866501;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GWGuyBa/K9kl/YKy3i+8MdvYGygGQlay2p5yZc2a0D0=;
-        b=z+HNmp/iezbHpAt0aRQ7gPI8RGPdmRysZ7DufM8iATcjMWndkRkQXox7g512g5AXep
-         TlcsPnOJ9lRIhKGCSsx/vZYhoHo8CqjzQwwjNheyAh3QEMK2df3IYis9mLOUpwiPuxWr
-         dXrRtvnBE5MjHXV6e/bOtkiFbwQEJOc81yngSAigvXv2ArwuXzkDzm7rKFxKCulYulRH
-         bf1BoPwdjehGmOEaPdq/ezgV2CuFrvaYEwNsEaCdM4NneVjJss2V3t98TM1mO0+hM0W/
-         QgHkqZ03XTFVu2Rl2lXyTg4EB84l3VAklp3szDDOLUiVX8XS7R2BMHx1LpJoi2NQOf3n
-         7Ijw==
-X-Gm-Message-State: AO0yUKUc9TKPb0N7WFlMBhEX1ajHywoFPtn1BPxIL1KUquOhpaNx/GXO
-        B7KDC+bT1G6elI53B7PU7gM=
-X-Google-Smtp-Source: AK7set8inIdY943yP2v0aKe33V3AWcq8Jl6Fy5mEBuRrcJmAzPBMj1B6BPldlM18ETchZ18MbaDK6A==
-X-Received: by 2002:a17:903:1103:b0:19e:8075:5545 with SMTP id n3-20020a170903110300b0019e80755545mr3342032plh.54.1677866501516;
-        Fri, 03 Mar 2023 10:01:41 -0800 (PST)
-Received: from ?IPV6:2620:15c:211:201:30f3:595a:48e5:cb41? ([2620:15c:211:201:30f3:595a:48e5:cb41])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1709028c8d00b00186b69157ecsm1770403plo.202.2023.03.03.10.01.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 10:01:40 -0800 (PST)
-Message-ID: <67db2c6b-c3b0-c525-e6a9-2b2fe6c6adbb@acm.org>
-Date:   Fri, 3 Mar 2023 10:01:38 -0800
+        Fri, 3 Mar 2023 13:04:25 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6CD29E1D;
+        Fri,  3 Mar 2023 10:04:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677866655; x=1709402655;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=31fthH7gaoN87g1RZvRQ3R3Y0eJR3PQNczHJsxv31eI=;
+  b=Hd1IryWZbcy/wfS4EcArfDmHWlh8cZyuUgRjOlCIsFAaKnRNoCRenVgk
+   P2lbwQ9ooJaNcKK4Pl7XDR0fjRbIAkUshPK6k9fBzPH8nwHzg2wDNHTdv
+   oXyXknibzw22KUKJ91zW6zWI704zHHIVWB6wKkY2f3V9UguGTyrCIyWjs
+   rhjOQtmiJzGVvVqmbO1pTvTUKqgZYxXGXtPeqZqHxCV7tMFtH/0xDicpB
+   NC4wzhskf4REdNHag9n2heu+/8yFlXHllkp6KP6Ls5ZUROqeCsnhANg+4
+   hRLkkR2zDTYi2MIVeIuS2Gjy22QKZdCbK+reOKww7x7gGP/+tSIHi4jbY
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="421381396"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="421381396"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 10:03:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="707926473"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="707926473"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 03 Mar 2023 10:03:22 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pY9kX-0001ak-1X;
+        Fri, 03 Mar 2023 18:03:21 +0000
+Date:   Sat, 4 Mar 2023 02:02:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aradhya Bhatia <a-bhatia1@ti.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Tomi Valkeinen <tomba@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Linux Clock List <linux-clk@vger.kernel.org>,
+        Devicetree List <devicetree@vger.kernel.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jai Luthra <j-luthra@ti.com>, Aradhya Bhatia <a-bhatia1@ti.com>
+Subject: Re: [PATCH v2 2/2] clk: keystone: Add support AM62 DSS clock divider
+Message-ID: <202303040131.k7AUxAg5-lkp@intel.com>
+References: <20230213115954.553-3-a-bhatia1@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4] scsi: ufs: core: Add trace event for MCQ
-Content-Language: en-US
-To:     Ziqi Chen <quic_ziqichen@quicinc.com>, quic_asutoshd@quicinc.com,
-        quic_cang@quicinc.com, mani@kernel.org, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        junwoo80.lee@samsung.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
-References: <1677836154-29192-1-git-send-email-quic_ziqichen@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1677836154-29192-1-git-send-email-quic_ziqichen@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213115954.553-3-a-bhatia1@ti.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/23 01:35, Ziqi Chen wrote:
-> -	doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-> -	trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
-> -			doorbell, transfer_len, intr, lba, opcode, group_id);
-> +
-> +	if (is_mcq_enabled(hba)) {
-> +		hwq = ufshcd_mcq_req_to_hwq(hba, rq);
-> +		trace_ufshcd_command_mcq(dev_name(hba->dev), str_t, tag,
-> +				hwq, transfer_len, intr, lba, opcode, group_id);
-> +	} else {
-> +		doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-> +		trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
-> +				doorbell, transfer_len, intr, lba, opcode, group_id);
-> +	}
->   }
-Users will hate it if the trace events for legacy mode and MCQ mode are 
-different. Instead of defining a new trace event for the MCQ mode, I 
-think we need to add the MCQ information in the existing trace event.
+Hi Aradhya,
 
-Thanks,
+Thank you for the patch! Yet something to improve:
 
-Bart.
+[auto build test ERROR on clk/clk-next]
+[also build test ERROR on linus/master v6.2 next-20230303]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Aradhya-Bhatia/dt-bindings-clock-Add-binding-documentation-for-TI-AM62-DSS-Clock/20230213-200203
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git clk-next
+patch link:    https://lore.kernel.org/r/20230213115954.553-3-a-bhatia1%40ti.com
+patch subject: [PATCH v2 2/2] clk: keystone: Add support AM62 DSS clock divider
+config: arm-randconfig-r046-20230302 (https://download.01.org/0day-ci/archive/20230304/202303040131.k7AUxAg5-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2ddb7301b11092b73d4a16af06362954f3d5f714
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aradhya-Bhatia/dt-bindings-clock-Add-binding-documentation-for-TI-AM62-DSS-Clock/20230213-200203
+        git checkout 2ddb7301b11092b73d4a16af06362954f3d5f714
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/ mm// net/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303040131.k7AUxAg5-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/arm/include/asm/div64.h:107,
+                    from include/linux/math.h:6,
+                    from include/linux/math64.h:6,
+                    from include/linux/time.h:6,
+                    from include/linux/stat.h:19,
+                    from include/linux/module.h:13,
+                    from drivers/clk/keystone/clk-am62-dss.c:5:
+   drivers/clk/keystone/clk-am62-dss.c: In function 'ti_am62_dss_clk_recalc_rate':
+   include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
+     222 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+         |                                   ^~
+   drivers/clk/keystone/clk-am62-dss.c:24:9: note: in expansion of macro 'do_div'
+      24 |         do_div(rate, priv->div);
+         |         ^~~~~~
+   In file included from include/linux/build_bug.h:5,
+                    from include/linux/container_of.h:5,
+                    from include/linux/list.h:5,
+                    from include/linux/module.h:12:
+   include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+     234 |         } else if (likely(((n) >> 32) == 0)) {          \
+         |                                ^~
+   include/linux/compiler.h:77:45: note: in definition of macro 'likely'
+      77 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                             ^
+   drivers/clk/keystone/clk-am62-dss.c:24:9: note: in expansion of macro 'do_div'
+      24 |         do_div(rate, priv->div);
+         |         ^~~~~~
+   include/asm-generic/div64.h:238:36: error: passing argument 1 of '__div64_32' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     238 |                 __rem = __div64_32(&(n), __base);       \
+         |                                    ^~~~
+         |                                    |
+         |                                    long unsigned int *
+   drivers/clk/keystone/clk-am62-dss.c:24:9: note: in expansion of macro 'do_div'
+      24 |         do_div(rate, priv->div);
+         |         ^~~~~~
+   arch/arm/include/asm/div64.h:24:45: note: expected 'uint64_t *' {aka 'long long unsigned int *'} but argument is of type 'long unsigned int *'
+      24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+         |                                   ~~~~~~~~~~^
+   drivers/clk/keystone/clk-am62-dss.c: In function 'clk_hw_unregister_am62_dss_clk':
+>> drivers/clk/keystone/clk-am62-dss.c:99:9: error: implicit declaration of function 'kfree'; did you mean 'kvfree'? [-Werror=implicit-function-declaration]
+      99 |         kfree(priv);
+         |         ^~~~~
+         |         kvfree
+   cc1: some warnings being treated as errors
+
+
+vim +99 drivers/clk/keystone/clk-am62-dss.c
+
+    91	
+    92	static void clk_hw_unregister_am62_dss_clk(struct clk_hw *hw)
+    93	{
+    94		struct ti_am62_dss_clk *priv;
+    95	
+    96		priv = to_ti_am62_dss_clk(hw);
+    97	
+    98		clk_hw_unregister(hw);
+  > 99		kfree(priv);
+   100	}
+   101	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
