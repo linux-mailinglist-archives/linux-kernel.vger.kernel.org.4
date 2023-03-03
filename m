@@ -2,400 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F106A9003
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:59:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0308D6A9009
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 05:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbjCCD7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 22:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S229567AbjCCEFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 23:05:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCCD7c (ORCPT
+        with ESMTP id S229437AbjCCEEs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 22:59:32 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C2C1114C;
-        Thu,  2 Mar 2023 19:59:28 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5F17D24E409;
-        Fri,  3 Mar 2023 11:59:27 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Mar
- 2023 11:59:27 +0800
-Received: from [192.168.125.128] (113.72.145.171) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Mar
- 2023 11:59:26 +0800
-Message-ID: <7d78d2a1-d552-f25d-557b-c90e6a33eccd@starfivetech.com>
-Date:   Fri, 3 Mar 2023 11:59:40 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 06/11] clk: starfive: Add StarFive JH7110
- Image-Signal-Process clock driver
+        Thu, 2 Mar 2023 23:04:48 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC31168B5;
+        Thu,  2 Mar 2023 20:04:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677816286; x=1709352286;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=wUKiiBDoFLr1RQDF0c8t0yjT1y5+45XQWx/jeZRLBR8=;
+  b=X1yGzbOQ5EIcqlDm/r09BW6rf0WujqIH1g9ddCdvAroE1E2pPJviEEsD
+   9EBUzEk6Q9Q7MZojVgqlvUs5FtC2OtMNRgGPJS4DNFaKxOPOhfnaoQcvE
+   LPrhaCktvYSvEPBgZoe1dSKc39PtfSCidhtPeZR8MYrZzGQT8vNX50Qh0
+   AXkiRgNdb2/7zqtQPp45MDOAR+1PO8140qSmPv8H94j0SjEnimJ9hJ5/v
+   EWSqZ4F3HR/Q+PpIuNLJlyyWDui5NdRID1xTHhXlyODJeF3iISLa1RnRj
+   3qqyt7ktDAQ5wbU1rNi0fU/L0LbZN3q/78AZ1YPBUIwzqOp8LfDhRN5kq
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="421218459"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="421218459"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2023 20:04:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="652650742"
+X-IronPort-AV: E=Sophos;i="5.98,229,1673942400"; 
+   d="scan'208";a="652650742"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga006.jf.intel.com with ESMTP; 02 Mar 2023 20:04:45 -0800
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 2 Mar 2023 20:04:45 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 2 Mar 2023 20:04:45 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 2 Mar 2023 20:04:45 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MdnTFIpINKPwCrQHxPs4K/Teqt5vXr3tjJs+6eZ+3c3vXl5pVOCsDEbQ8K06F0PGonjbbyC6DEf4HUomuMx0YbXfzS6trq1h9tgHMO//kpV96mgM6VGrZU9OJQf6dfRkqjd9kXKxe7YJB4/T6OoyjOF1EOTXVekHky8k4mUkGIZ6PKtK1XOPljrNcCzBUHNzDGto22qTY7KyB4PWuzA5kDFfmP2i6zcrAJNBNN5tfH4swuuFaKsgeOrsbmKXn8uSRTs08+N0rkW1iGya2ByCSCfkKWdDIdMJxV8byDc1b7Ju227IAOTw4gbTajyBPioveyJuEN97anpbMSAwlHemKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wUKiiBDoFLr1RQDF0c8t0yjT1y5+45XQWx/jeZRLBR8=;
+ b=kj4xxGb3qhFjPGUrUbbIugC2Ai2RGZH7GS8Bt1YmSYRRp4lS92vNlFeKgEJ8wZ7ldjgydmWleINkAKMMNu5eyCUgJPXFrrNVHWJMQg5rRbEy63pJ4V0dtF0O0i9VJo8dIqbsJK0PtXcP5C7wggIZ4ezV7RiZjqoga29ASmlJ6TacCIdSBcR+OQdJ1Szb9qOQajl6Uotba7vAKMLu0K3xzflmiHb0LvQNnlW3dlJnAH/SXqdnTSVAWrnSCZGN1BvMPEHyXeruJ9b/y6eItbiHmBQtmXEZWnBMd4YX5mwpYlz18OBl+EFWq4iTD7rj1VvBBpW80WUyZ6BMkm58dZW+rQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CY8PR11MB6963.namprd11.prod.outlook.com (2603:10b6:930:58::10)
+ by SN7PR11MB6852.namprd11.prod.outlook.com (2603:10b6:806:2a4::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19; Fri, 3 Mar
+ 2023 04:04:43 +0000
+Received: from CY8PR11MB6963.namprd11.prod.outlook.com
+ ([fe80::a52:ac2:750:f341]) by CY8PR11MB6963.namprd11.prod.outlook.com
+ ([fe80::a52:ac2:750:f341%6]) with mapi id 15.20.6156.021; Fri, 3 Mar 2023
+ 04:04:42 +0000
+From:   "Kang, Shan" <shan.kang@intel.com>
+To:     "Li, Xin3" <xin3.li@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "Christopherson,, Sean" <seanjc@google.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v4 00/34] x86: enable FRED for x86-64
+Thread-Topic: [PATCH v4 00/34] x86: enable FRED for x86-64
+Thread-Index: AQHZTMsDTvoLcRF3hkKc981tzfqLUa7ocO2A
+Date:   Fri, 3 Mar 2023 04:04:42 +0000
+Message-ID: <1f3fe9d2f97831fe24026ce569e4b63e78b20a76.camel@intel.com>
+References: <20230302052511.1918-1-xin3.li@intel.com>
+In-Reply-To: <20230302052511.1918-1-xin3.li@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230221083323.302471-1-xingyu.wu@starfivetech.com>
- <20230221083323.302471-7-xingyu.wu@starfivetech.com>
- <CAJM55Z-D2s6FkQiR4_KSNkQ-QNHu3mLO_A8GBEY5XwVU5=VXAA@mail.gmail.com>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <CAJM55Z-D2s6FkQiR4_KSNkQ-QNHu3mLO_A8GBEY5XwVU5=VXAA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.171]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CY8PR11MB6963:EE_|SN7PR11MB6852:EE_
+x-ms-office365-filtering-correlation-id: 94fed913-1d6a-4efd-6a66-08db1b9c6aa7
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CL30IJLzxrDoz7GmZPj/Vy3UXbsdj+ZAV647dGIVrXYrGb6dgY6NgYptzFLdISAb0UkB61iogfA2/PeBrq4AXPRJ+nOAgOyVLRCeGZaUe2UudoOzLbtPuxLjz4lH8SS+rkpZ5hQAJ09Jg3czfrOI4tl3O4WXZ7TtlYvb/RtcZu5Ubo4IB4lw4hwF7LHR/bpZlNxKviDJTE8lVjH47GzO8o1RYUPjufgNt/oXUAsZoyU/ndgqcG7Gs4TtIv6Z7bbIpdxh6LQThXVIgzOowASVvxrg6Sl5qhBgWXRqDlUQ6fYbyJSE83VKAd2tCLkWnlGf5DrSEC+6K19Q9OC5f98/Ct0KEZZXbGV/zCjkga0i9WVNmyb+lIPSUTGZF9KIpGDomeDHymbmh0hoUc3yLKVkYzSHkru07sdpg6xoDcZHJ4SNA9xqtgEJ2pCwVZnf94DDChnQkvptdBN4qsNVyyrLGh5ngahB1FHZxmivYnKh9Ie0sAJyqd4X1P/4j2W0O71/par40svjtrovem7skY4xtCDha6sqDgClS+UlIz6lKy5PEeqB4uhg3gA/tI4DzFeEq5du6rSRtBrNVyK0r5vKsRTHgiXRRi2IBvDq/tmI5ZU6qKZp66nE3eZZTGdjYEdOFD0paQNgdsvPoIJiwK/SQqIrsB6D3wweUw/hmgOm5Av0klTovRsCLU/0g4++tcGe
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR11MB6963.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(346002)(136003)(366004)(376002)(451199018)(86362001)(8936002)(71200400001)(5660300002)(8676002)(7416002)(41300700001)(2906002)(478600001)(2616005)(6486002)(966005)(110136005)(54906003)(26005)(316002)(186003)(6506007)(38100700002)(66476007)(76116006)(6512007)(83380400001)(66446008)(64756008)(66556008)(82960400001)(91956017)(38070700005)(4326008)(66946007)(36756003)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aUNsZHFUc0RsV1BSNmw1WW8zcjVydDZRdU5RM2ZCbEc2Yk9xVHh4ZkxFVWdY?=
+ =?utf-8?B?aUpwNC9rdVpWUXJabDh5b0x0MWlvRXFDczEvL3M0ZDI1Y0grVS9LcE43VU5n?=
+ =?utf-8?B?cHZGbUk1NHZvTXZmcTBXN0hpeGlJbXB6K2gvY2FEanRKbVJjTmI3SUE4bmJY?=
+ =?utf-8?B?SkYzVVA1VE1BakJCbW5KYWdJSndmcmptTUhzYkx2Yjk4bytVOEQ3Ly9mTldJ?=
+ =?utf-8?B?T2I2UTFGSENMK0ZLazFJRUF0YzdRb291WUhoREg3YjFTR0RuWkQxVURiNW9t?=
+ =?utf-8?B?SE1GL0tUZzFvL3puVFYxSklvbEFtd1BLQlVlTjFPaVIrVVNpSCt6dlI3K2pk?=
+ =?utf-8?B?U2pyRFhkd25HR0Z3Q1VFS3cxdlhiZkwwaENHYjRta2MvbnBiU3A0aUVzTUdM?=
+ =?utf-8?B?M3NXaGtMSHgyVUhNY2ovTDFSWnlIVFVLY1ViOTMvWXVESEc5RDE5WnVMb3J6?=
+ =?utf-8?B?aVNJc0sxQmdqSFRPb1M2VFl4bm5DK2dpdXRBRFNURzF2NGJKc3ZSdm1mUEw2?=
+ =?utf-8?B?Nyt1UGlBZWdDSVJYSzNTNHpScEtJNVdBc2tUdTk3YUhVRkYzOGtuTjRpY2g0?=
+ =?utf-8?B?UVJHR1o5WGNjdUo3S3FJSzFyWnVHNzBZbFQ2VjFHT3ZnM0xCNHNFWG14UC9E?=
+ =?utf-8?B?MFhQaVBlakx3TFArdzdXaDZDNHFvNGFzR3B5eEhlS2krelpIcXVrYnRtMkph?=
+ =?utf-8?B?U2l6UUNwTWVCbm5iVmpvTklsTmkxcXd3V3lUa244WjJEdW1qUVlNMUpUTFlw?=
+ =?utf-8?B?YzFPNHpxS0dLUGhIcTVZMXlldFlzTFdla244MUh3d3JSSnhTZjRMUWs3YjNP?=
+ =?utf-8?B?R0pzWkw1T0VVd2ZXaWt4NWU1SUpDK01XTFY1M2cwQThxdzZSWXpxZ0JJYjk3?=
+ =?utf-8?B?RWZ4eHpRYzROcG9ZY3o1UDBXVWVaZjFuVDFhQ3JUaWNCNEp1KzVBYXhwUFAx?=
+ =?utf-8?B?VnY5MUF3ZEREVzc2ZUJ1RU5YeHZQaEJCWlJJT3hoWUVTVEJ3azlXaGZ2VmJX?=
+ =?utf-8?B?K3dHSTBDQ24rMGxkZ2RZOXRUQk9KWWx4dTk4aUtZeXJ4WUlSNlV0Qk9FTWhi?=
+ =?utf-8?B?dkRQOEVVZ21oalJvQU9oaXBTVVNDa01IdW42UFlBUDdnSjBXSUhoMmlKM0Yx?=
+ =?utf-8?B?dnN3UEswNkJ1UDdSUGxwK1BzRDBhaC9sMHUwWEVpUkRCTWs2Tk9SVFpiNkZL?=
+ =?utf-8?B?ZXFmV2Mwc25IN1Z3Sy85RkROdXdwTkQvb25wN2I1UWZOMWc0dlRwMFZaejMx?=
+ =?utf-8?B?TzA4WnFib1lVNW40aUc3MUI4TnRaSDFnSFJXb2RwcUlveGZndzhGNkY4M1gx?=
+ =?utf-8?B?U2trdzJjMkhxQno4bUtiSDZlNHNEQ294d3E2ay9hSVdwL3hjOUZib1laeE1M?=
+ =?utf-8?B?NWxzaysySTMreDN0c1NMNjFaYVpiQ0ZzSFJvaEp2RDFJMGdYT285MzE5eFFa?=
+ =?utf-8?B?dlZ0TEo1MlNIWDBkbEJmSWFUL2Nuc25QeHRjYnZuY3BrMDlVa2tsRGU3ckV2?=
+ =?utf-8?B?TnB5K1B5aGxQWVMwZlpheVYvbGZ1MDhyaHFWUkpoZlBORlhoREtFZHJkbWw1?=
+ =?utf-8?B?dTZxem5DZnlvZm0xekY4T2Y1aFFKb0lVRWtLa0lDN0htQ3hSdCtvTkZoODVQ?=
+ =?utf-8?B?WWgrVmR5ZXlQQzlZZUN3d0JiWmRlSjV3Qmk2VjdQdlFEb1dxWDFyZ05xcWZi?=
+ =?utf-8?B?WUMvYnh5bk5DVHFHY1hTbGI2TE5YbWFEOHZ0K1ZieTBGbmxxMjdVdFhWRndY?=
+ =?utf-8?B?ZEZFaFQvV2pVR0NqMzgybEc0MVE1Q3NnK1RSclU0ZWwveXBheEpndGVUUkxL?=
+ =?utf-8?B?TDBnRE9SSm1heWhwWFRNSHJxRElrckR1ditQQXNSakg2U0tSK1d6RkRGcVo4?=
+ =?utf-8?B?TXRlVHU1cjN5UWNGcUZ4bGE1MkZVUjNGZllaSDRpUjkvY1IzcXVBb2FpeXZ5?=
+ =?utf-8?B?bDg0NW04ZHYvZDJybW40WFVDMXM2RmsrUFlrQVdaM3Fsc3crT3U4K0xCZ0ZW?=
+ =?utf-8?B?RDBlSENMTDBmMkFTOFNGTW12alpJNE9PRVV4NVVtd05TQk1yaXQxWkpmamx3?=
+ =?utf-8?B?MjhwQnZWZjVITkZsVU0xRk9aWmEwUG5NQ2hBZGo3R05VYlZNWGRTb2w1Z245?=
+ =?utf-8?B?NitrV3FYRDV0eTgyRWx5Tk9iTDhLcUJFakEzakF1NUoxdGtXYmRrakFKVGNB?=
+ =?utf-8?B?Qnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <2CC61A8E892BB74F85D3D787AA9A5988@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR11MB6963.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 94fed913-1d6a-4efd-6a66-08db1b9c6aa7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2023 04:04:42.0929
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DAsH/4cZf6j7M2kL6gz09Ba6GCAi33RATILyXi5yyjdOkw26UBR41lTdn7Lk1E25uYI7bA9A6bO0eRt8PKdnRA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6852
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/2 23:39, Emil Renner Berthing wrote:
-> On Tue, 21 Feb 2023 at 09:36, Xingyu Wu <xingyu.wu@starfivetech.com> wrote:
->>
->> Add driver for the StarFive JH7110 Image-Signal-Process clock controller.
->>
->> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
->> ---
->>  drivers/clk/starfive/Kconfig                  |  11 +
->>  drivers/clk/starfive/Makefile                 |   1 +
->>  .../clk/starfive/clk-starfive-jh7110-isp.c    | 254 ++++++++++++++++++
->>  3 files changed, 266 insertions(+)
->>  create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-isp.c
->>
->> diff --git a/drivers/clk/starfive/Kconfig b/drivers/clk/starfive/Kconfig
->> index a462b6e53543..59499acb95f7 100644
->> --- a/drivers/clk/starfive/Kconfig
->> +++ b/drivers/clk/starfive/Kconfig
->> @@ -53,3 +53,14 @@ config CLK_STARFIVE_JH7110_STG
->>         help
->>           Say yes here to support the System-Top-Group clock controller
->>           on the StarFive JH7110 SoC.
->> +
->> +config CLK_STARFIVE_JH7110_ISP
->> +       tristate "StarFive JH7110 Image-Signal-Process clock support"
->> +       depends on CLK_STARFIVE_JH7110_SYS && JH71XX_PMU
->> +       select AUXILIARY_BUS
->> +       select CLK_STARFIVE_JH71X0
->> +       select RESET_STARFIVE_JH7110
->> +       default CLK_STARFIVE_JH7110_SYS
-> 
-> default m if ARCH_STARFIVE
-
-Oh, the ISPCRG and VOUTCRG depend on SYSCRG because it need to enable core clock.
-So I should modify that:
-
-default m if CLK_STARFIVE_JH7110_SYS
-
-It that OK?
-
-> 
->> +       help
->> +         Say yes here to support the Image-Signal-Process clock controller
->> +         on the StarFive JH7110 SoC.
->> diff --git a/drivers/clk/starfive/Makefile b/drivers/clk/starfive/Makefile
->> index b81e97ee2659..76fb9f8d628b 100644
->> --- a/drivers/clk/starfive/Makefile
->> +++ b/drivers/clk/starfive/Makefile
->> @@ -7,3 +7,4 @@ obj-$(CONFIG_CLK_STARFIVE_JH7100_AUDIO) += clk-starfive-jh7100-audio.o
->>  obj-$(CONFIG_CLK_STARFIVE_JH7110_SYS)  += clk-starfive-jh7110-sys.o
->>  obj-$(CONFIG_CLK_STARFIVE_JH7110_AON)  += clk-starfive-jh7110-aon.o
->>  obj-$(CONFIG_CLK_STARFIVE_JH7110_STG)  += clk-starfive-jh7110-stg.o
->> +obj-$(CONFIG_CLK_STARFIVE_JH7110_ISP)  += clk-starfive-jh7110-isp.o
->> diff --git a/drivers/clk/starfive/clk-starfive-jh7110-isp.c b/drivers/clk/starfive/clk-starfive-jh7110-isp.c
->> new file mode 100644
->> index 000000000000..b5bce1ac22e0
->> --- /dev/null
->> +++ b/drivers/clk/starfive/clk-starfive-jh7110-isp.c
->> @@ -0,0 +1,254 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * StarFive JH7110 Image-Signal-Process Clock Driver
->> + *
->> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> + */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/clk-provider.h>
->> +#include <linux/io.h>
->> +#include <linux/of.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pm_runtime.h>
->> +#include <linux/reset.h>
->> +
->> +#include <dt-bindings/clock/starfive,jh7110-crg.h>
->> +
->> +#include "clk-starfive-jh71x0.h"
->> +
->> +/* external clocks */
->> +#define JH7110_ISPCLK_ISP_TOP_CORE             (JH7110_ISPCLK_END + 0)
->> +#define JH7110_ISPCLK_ISP_TOP_AXI              (JH7110_ISPCLK_END + 1)
->> +#define JH7110_ISPCLK_NOC_BUS_ISP_AXI          (JH7110_ISPCLK_END + 2)
->> +#define JH7110_ISPCLK_DVP_CLK                  (JH7110_ISPCLK_END + 3)
->> +#define JH7110_ISPCLK_EXT_END                  (JH7110_ISPCLK_END + 4)
->> +
->> +static const struct jh71x0_clk_data jh7110_ispclk_data[] = {
->> +       /* syscon */
->> +       JH71X0__DIV(JH7110_ISPCLK_DOM4_APB_FUNC, "dom4_apb_func", 15,
->> +                   JH7110_ISPCLK_ISP_TOP_AXI),
->> +       JH71X0__DIV(JH7110_ISPCLK_MIPI_RX0_PXL, "mipi_rx0_pxl", 8,
->> +                   JH7110_ISPCLK_ISP_TOP_CORE),
->> +       JH71X0__INV(JH7110_ISPCLK_DVP_INV, "dvp_inv", JH7110_ISPCLK_DVP_CLK),
->> +       /* vin */
->> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_CFGCLK_IN, "m31dphy_cfgclk_in", 16,
->> +                   JH7110_ISPCLK_ISP_TOP_CORE),
->> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_REFCLK_IN, "m31dphy_refclk_in", 16,
->> +                   JH7110_ISPCLK_ISP_TOP_CORE),
->> +       JH71X0__DIV(JH7110_ISPCLK_M31DPHY_TXCLKESC_LAN0, "m31dphy_txclkesc_lan0", 60,
->> +                   JH7110_ISPCLK_ISP_TOP_CORE),
->> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PCLK, "vin_pclk", CLK_IGNORE_UNUSED,
->> +                   JH7110_ISPCLK_DOM4_APB_FUNC),
->> +       JH71X0__DIV(JH7110_ISPCLK_VIN_SYS_CLK, "vin_sys_clk", 8, JH7110_ISPCLK_ISP_TOP_CORE),
->> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF0, "vin_pixel_clk_if0", CLK_IGNORE_UNUSED,
->> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
->> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF1, "vin_pixel_clk_if1", CLK_IGNORE_UNUSED,
->> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
->> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF2, "vin_pixel_clk_if2", CLK_IGNORE_UNUSED,
->> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
->> +       JH71X0_GATE(JH7110_ISPCLK_VIN_PIXEL_CLK_IF3, "vin_pixel_clk_if3", CLK_IGNORE_UNUSED,
->> +                   JH7110_ISPCLK_MIPI_RX0_PXL),
->> +       JH71X0__MUX(JH7110_ISPCLK_VIN_CLK_P_AXIWR, "vin_clk_p_axiwr", 2,
->> +                   JH7110_ISPCLK_MIPI_RX0_PXL,
->> +                   JH7110_ISPCLK_DVP_INV),
->> +       /* ispv2_top_wrapper */
->> +       JH71X0_GMUX(JH7110_ISPCLK_ISPV2_TOP_WRAPPER_CLK_C, "ispv2_top_wrapper_clk_c",
->> +                   CLK_IGNORE_UNUSED, 2,
->> +                   JH7110_ISPCLK_MIPI_RX0_PXL,
->> +                   JH7110_ISPCLK_DVP_INV),
->> +};
-> 
-> Are all the clocks marked CLK_IGNORE_UNUSED here critical or are they
-> just marked like so because the corresponding drivers don't yet claim
-> the clocks they need? Please mark the clocks that can never be turned
-> off CLK_IS_CRITICAL and remove the flag from the rest of the clocks.
-
-Thanks, I will test it carefully and modify it.
-
-> 
->> +struct isp_top_crg {
->> +       struct clk_bulk_data *top_clks;
->> +       struct reset_control *top_rsts;
->> +       int top_clks_num;
->> +       void __iomem *base;
->> +};
->> +
->> +static struct clk_bulk_data jh7110_isp_top_clks[] = {
->> +       { .id = "isp_top_core" },
->> +       { .id = "isp_top_axi" }
->> +};
->> +
->> +static struct isp_top_crg *top_crg_from(void __iomem **base)
->> +{
->> +       return container_of(base, struct isp_top_crg, base);
->> +}
->> +
->> +static int jh7110_isp_top_crg_get(struct jh71x0_clk_priv *priv, struct isp_top_crg *top)
->> +{
->> +       int ret;
->> +
->> +       top->top_clks = jh7110_isp_top_clks;
->> +       top->top_clks_num = ARRAY_SIZE(jh7110_isp_top_clks);
->> +       ret = devm_clk_bulk_get(priv->dev, top->top_clks_num, top->top_clks);
->> +       if (ret) {
->> +               dev_err(priv->dev, "top clks get failed: %d\n", ret);
->> +               return ret;
->> +       }
->> +
->> +       /* The resets should be shared and other ISP modules will use its. */
->> +       top->top_rsts = devm_reset_control_array_get_shared(priv->dev);
->> +       if (IS_ERR(top->top_rsts)) {
->> +               dev_err(priv->dev, "top rsts get failed\n");
->> +               return PTR_ERR(top->top_rsts);
->> +       }
->> +
->> +       return 0;
->> +}
->> +
->> +static int jh7110_isp_top_crg_enable(struct isp_top_crg *top)
->> +{
->> +       int ret;
->> +
->> +       ret = clk_bulk_prepare_enable(top->top_clks_num, top->top_clks);
->> +       if (ret)
->> +               return ret;
->> +
->> +       return reset_control_deassert(top->top_rsts);
->> +}
->> +
->> +static void jh7110_isp_top_crg_disable(struct isp_top_crg *top)
->> +{
->> +       clk_bulk_disable_unprepare(top->top_clks_num, top->top_clks);
->> +}
->> +
->> +static struct clk_hw *jh7110_ispclk_get(struct of_phandle_args *clkspec, void *data)
->> +{
->> +       struct jh71x0_clk_priv *priv = data;
->> +       unsigned int idx = clkspec->args[0];
->> +
->> +       if (idx < JH7110_ISPCLK_END)
->> +               return &priv->reg[idx].hw;
->> +
->> +       return ERR_PTR(-EINVAL);
->> +}
->> +
->> +static int jh7110_ispcrg_probe(struct platform_device *pdev)
->> +{
->> +       struct jh71x0_clk_priv *priv;
->> +       struct isp_top_crg *top;
->> +       unsigned int idx;
->> +       int ret;
->> +
->> +       priv = devm_kzalloc(&pdev->dev,
->> +                           struct_size(priv, reg, JH7110_ISPCLK_END),
->> +                           GFP_KERNEL);
->> +       if (!priv)
->> +               return -ENOMEM;
->> +
->> +       top = devm_kzalloc(&pdev->dev, sizeof(*top), GFP_KERNEL);
->> +       if (!top)
->> +               return -ENOMEM;
->> +
->> +       spin_lock_init(&priv->rmw_lock);
->> +       priv->dev = &pdev->dev;
->> +       priv->base = devm_platform_ioremap_resource(pdev, 0);
->> +       if (IS_ERR(priv->base))
->> +               return PTR_ERR(priv->base);
->> +
->> +       top->base = priv->base;
->> +       dev_set_drvdata(priv->dev, (void *)(&top->base));
->> +
->> +       pm_runtime_enable(priv->dev);
->> +       ret = pm_runtime_get_sync(priv->dev);
->> +       if (ret < 0) {
->> +               dev_err(priv->dev, "failed to turn on power: %d\n", ret);
->> +               return ret;
->> +       }
->> +
->> +       ret = jh7110_isp_top_crg_get(priv, top);
->> +       if (ret)
->> +               goto err_clk;
->> +
->> +       ret = jh7110_isp_top_crg_enable(top);
->> +       if (ret)
->> +               goto err_clk;
->> +
->> +       for (idx = 0; idx < JH7110_ISPCLK_END; idx++) {
->> +               u32 max = jh7110_ispclk_data[idx].max;
->> +               struct clk_parent_data parents[4] = {};
->> +               struct clk_init_data init = {
->> +                       .name = jh7110_ispclk_data[idx].name,
->> +                       .ops = starfive_jh71x0_clk_ops(max),
->> +                       .parent_data = parents,
->> +                       .num_parents =
->> +                               ((max & JH71X0_CLK_MUX_MASK) >> JH71X0_CLK_MUX_SHIFT) + 1,
->> +                       .flags = jh7110_ispclk_data[idx].flags,
->> +               };
->> +               struct jh71x0_clk *clk = &priv->reg[idx];
->> +               unsigned int i;
->> +               char *fw_name[JH7110_ISPCLK_EXT_END - JH7110_ISPCLK_END] = {
->> +                       "isp_top_core",
->> +                       "isp_top_axi",
->> +                       "noc_bus_isp_axi",
->> +                       "dvp_clk"
->> +               };
->> +
->> +               for (i = 0; i < init.num_parents; i++) {
->> +                       unsigned int pidx = jh7110_ispclk_data[idx].parents[i];
->> +
->> +                       if (pidx < JH7110_ISPCLK_END)
->> +                               parents[i].hw = &priv->reg[pidx].hw;
->> +                       else
->> +                               parents[i].fw_name = fw_name[pidx - JH7110_ISPCLK_END];
->> +               }
->> +
->> +               clk->hw.init = &init;
->> +               clk->idx = idx;
->> +               clk->max_div = max & JH71X0_CLK_DIV_MASK;
->> +
->> +               ret = devm_clk_hw_register(&pdev->dev, &clk->hw);
->> +               if (ret)
->> +                       goto err_exit;
->> +       }
->> +
->> +       ret = devm_of_clk_add_hw_provider(&pdev->dev, jh7110_ispclk_get, priv);
->> +       if (ret)
->> +               goto err_exit;
->> +
->> +       ret = jh7110_reset_controller_register(priv, "reset-isp", 3);
->> +       if (ret)
->> +               goto err_exit;
->> +
->> +       return 0;
->> +
->> +err_exit:
->> +       jh7110_isp_top_crg_disable(top);
->> +err_clk:
->> +       pm_runtime_put_sync(priv->dev);
->> +       pm_runtime_disable(priv->dev);
->> +       return ret;
->> +}
->> +
->> +static int jh7110_ispcrg_remove(struct platform_device *pdev)
->> +{
->> +       void __iomem **base = dev_get_drvdata(&pdev->dev);
->> +       struct isp_top_crg *top = top_crg_from(base);
->> +
->> +       jh7110_isp_top_crg_disable(top);
->> +       pm_runtime_disable(&pdev->dev);
->> +
->> +       return 0;
->> +}
->> +
->> +static const struct of_device_id jh7110_ispcrg_match[] = {
->> +       { .compatible = "starfive,jh7110-ispcrg" },
->> +       { /* sentinel */ }
->> +};
->> +MODULE_DEVICE_TABLE(of, jh7110_ispcrg_match);
->> +
->> +static struct platform_driver jh7110_ispcrg_driver = {
->> +       .probe = jh7110_ispcrg_probe,
->> +       .remove = jh7110_ispcrg_remove,
->> +       .driver = {
->> +               .name = "clk-starfive-jh7110-isp",
->> +               .of_match_table = jh7110_ispcrg_match,
->> +       },
->> +};
->> +module_platform_driver(jh7110_ispcrg_driver);
->> +
->> +MODULE_AUTHOR("Xingyu Wu <xingyu.wu@starfivetech.com>");
->> +MODULE_DESCRIPTION("StarFive JH7110 Image-Signal-Process clock driver");
->> +MODULE_LICENSE("GPL");
->> --
->> 2.25.1
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
-Best regards,
-Xingyu Wu
+V2UgZm9jdXNlZCBvbiB0ZXN0aW5nIHRob3NlIHByb2JsZW1hdGljIGNhc2VzIChrdm06aHlwZXJ2
+X2Nsb2NrLA0Ka3ZtOmh5cGVydl9mZWF0dXJlcywga3ZtOnhlbl92bWNhbGxfdGVzdCwga3ZtOmh5
+cGVydl9pcGksIGt2bTpoeXBlcnZfdGxiX2ZsdXNoDQphbmQgYnBmOnRlc3RfcHJvZ3MpIGZpcnN0
+LCBhbmQgZm91bmQgdGhhdCB0aGV5IHdlcmUgYWxsIGdvb2Qgb24gSW50ZWwgU2ltaWNzwq4NClNp
+bXVsYXRvciB3LyBGUkVEIG1vZGVsIDYuMi4wKyB3LyB0aGlzIHY0IHBhdGNoIHNldCwgYW5kIHRo
+ZSByZXN0IG9mIHRoZSBjYXNlcw0Kd2VyZSBzdGlsbCBydW5uaW5nLg0KDQpUaGFua3MNCiAgICAt
+LVNoYW4NCg0KT24gV2VkLCAyMDIzLTAzLTAxIGF0IDIxOjI0IC0wODAwLCBYaW4gTGkgd3JvdGU6
+DQo+IFRoaXMgcGF0Y2ggc2V0IGVuYWJsZXMgRlJFRCBmb3IgeDg2LTY0LCBhbmQgaXQncyBiYXNl
+ZCBvbiB0aGUgcHJldmlvdXMgTEtHUw0KPiBwYXRjaCBzZXQuDQo+IA0KPiBUaGUgSW50ZWwgZmxl
+eGlibGUgcmV0dXJuIGFuZCBldmVudCBkZWxpdmVyeSAoRlJFRCkgYXJjaGl0ZWN0dXJlIGRlZmlu
+ZXMNCj4gc2ltcGxlDQo+IG5ldyB0cmFuc2l0aW9ucyB0aGF0IGNoYW5nZSBwcml2aWxlZ2UgbGV2
+ZWwgKHJpbmcgdHJhbnNpdGlvbnMpLiAgVGhlIEZSRUQNCj4gYXJjaGl0ZWN0dXJlIHdhcyBkZXNp
+Z25lZCB3aXRoIHRoZSBmb2xsb3dpbmcgZ29hbHM6DQo+IDEpIEltcHJvdmUgb3ZlcmFsbCBwZXJm
+b3JtYW5jZSBhbmQgcmVzcG9uc2UgdGltZSBieSByZXBsYWNpbmcgZXZlbnQgZGVsaXZlcnkNCj4g
+dGhyb3VnaCB0aGUgaW50ZXJydXB0IGRlc2NyaXB0b3IgdGFibGUgKElEVCBldmVudCBkZWxpdmVy
+eSkgYW5kIGV2ZW50IHJldHVybg0KPiBieQ0KPiB0aGUgSVJFVCBpbnN0cnVjdGlvbiB3aXRoIGxv
+d2VyIGxhdGVuY3kgdHJhbnNpdGlvbnMuDQo+IDIpIEltcHJvdmUgc29mdHdhcmUgcm9idXN0bmVz
+cyBieSBlbnN1cmluZyB0aGF0IGV2ZW50IGRlbGl2ZXJ5IGVzdGFibGlzaGVzIHRoZQ0KPiBmdWxs
+IHN1cGVydmlzb3IgY29udGV4dCBhbmQgdGhhdCBldmVudCByZXR1cm4gZXN0YWJsaXNoZXMgdGhl
+IGZ1bGwgdXNlcg0KPiBjb250ZXh0Lg0KPiANCj4gVGhlIG5ldyB0cmFuc2l0aW9ucyBkZWZpbmVk
+IGJ5IHRoZSBGUkVEIGFyY2hpdGVjdHVyZSBhcmUgRlJFRCBldmVudCBkZWxpdmVyeQ0KPiBhbmQs
+DQo+IGZvciByZXR1cm5pbmcgZnJvbSBldmVudHMsIHR3byBGUkVEIHJldHVybiBpbnN0cnVjdGlv
+bnMuIEZSRUQgZXZlbnQgZGVsaXZlcnkNCj4gY2FuDQo+IGVmZmVjdCBhIHRyYW5zaXRpb24gZnJv
+bSByaW5nIDMgdG8gcmluZyAwLCBidXQgaXQgaXMgdXNlZCBhbHNvIHRvIGRlbGl2ZXINCj4gZXZl
+bnRzDQo+IGluY2lkZW50IHRvIHJpbmcgMC4gT25lIEZSRUQgaW5zdHJ1Y3Rpb24gKEVSRVRVKSBl
+ZmZlY3RzIGEgcmV0dXJuIGZyb20gcmluZyAwDQo+IHRvDQo+IHJpbmcgMywgd2hpbGUgdGhlIG90
+aGVyIChFUkVUUykgcmV0dXJucyB3aGlsZSByZW1haW5pbmcgaW4gcmluZyAwLg0KPiANCj4gU2Vh
+cmNoIGZvciB0aGUgbGF0ZXN0IEZSRUQgc3BlYyBpbiBtb3N0IHNlYXJjaCBlbmdpbmVzIHdpdGgg
+dGhpcyBzZWFyY2gNCj4gcGF0dGVybjoNCj4gDQo+ICAgc2l0ZTppbnRlbC5jb20gRlJFRCAoZmxl
+eGlibGUgcmV0dXJuIGFuZCBldmVudCBkZWxpdmVyeSkgc3BlY2lmaWNhdGlvbg0KPiANCj4gQXMg
+b2Ygbm93IHRoZXJlIGlzIG5vIHB1YmxpY2x5IGF2YWlhYmxlIENQVSBzdXBwb3J0aW5nIEZSRUQs
+IHRodXMgdGhlIEludGVsDQo+IFNpbWljc8KuIFNpbXVsYXRvciBpcyB1c2VkIGFzIHNvZnR3YXJl
+IGRldmVsb3BtZW50IGFuZCB0ZXN0aW5nIHZlaGljbGVzLiBBbmQNCj4gaXQgY2FuIGJlIGRvd25s
+b2FkZWQgZnJvbToNCj4gICANCj4gaHR0cHM6Ly93d3cuaW50ZWwuY29tL2NvbnRlbnQvd3d3L3Vz
+L2VuL2RldmVsb3Blci9hcnRpY2xlcy90b29sL3NpbWljcy1zaW11bGF0b3IuaHRtbA0KPiANCj4g
+VG8gZW5hYmxlIEZSRUQsIFNpbWljcyBwYWNrYWdlIDgxMTIgUVNQLUNQVSBuZWVkcyB0byBiZSBp
+bnN0YWxsZWQgd2l0aCBDUFUNCj4gbW9kZWwgY29uZmlndXJlZCBhczoNCj4gCSRjcHVfY29tcF9j
+bGFzcyA9ICJ4ODYtZXhwZXJpbWVudGFsLWZyZWQiDQo+IA0KPiBMb25nZXIgdGVybSwgd2Ugc2hv
+dWxkIHJlZmFjdG9yIGNvbW1vbiBjb2RlIHNoYXJlZCBieSBGUkVEIGFuZCBJRFQgaW50byBjb21t
+b24NCj4gc2hhcmVkIGZpbGVzLCBhbmQgY29udGFpbiBJRFQgY29kZSB1c2luZyBhIG5ldyBjb25m
+aWcgQ09ORklHX1g4Nl9JRFQuDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIHYzOg0KPiAqIENhbGwgZXh0
+ZXJuYWxfaW50ZXJydXB0KCkgZm9yIFZNWCBJUlEgcmVpbmplY3Rpb24gd2hlbiBGUkVEIGlzIGVu
+YWJsZWQuDQo+ICogRXhlY3V0ZSAiaW50ICQyIiBmb3IgVk1YIE5NSSByZWluamVjdGlvbiB3aGVu
+IEZSRUQgaXMgZW5hYmxlZC4NCj4gKiBSZW5hbWUgY3NsL3NzbCBvZiB0aGUgcHRfcmVncyBzdHJ1
+Y3R1cmUgdG8gY3N4L3NzeCAoeCBmb3IgZXh0ZW5kZWQpDQo+ICAgKEFuZHJldyBDb29wZXIpLg0K
+PiANCj4gQ2hhbmdlcyBzaW5jZSB2MjoNCj4gKiBJbXByb3ZlIGNvbW1lbnRzIGZvciBjaGFuZ2Vz
+IGluIGFyY2gveDg2L2luY2x1ZGUvYXNtL2lkdGVudHJ5LmguDQo+IA0KPiBDaGFuZ2VzIHNpbmNl
+IHYxOg0KPiAqIGNhbGwgaXJxZW50cnlfbm1pX3tlbnRlcixleGl0fSgpIGluIGJvdGggSURUIGFu
+ZCBGUkVEIGRlYnVnIGZhdWx0IGtlcm5lbA0KPiAgIGhhbmRsZXIgKFBldGVyIFppamxzdHJhKS4N
+Cj4gKiBJbml0aWFsaXplIGEgRlJFRCBleGNlcHRpb24gaGFuZGxlciB0byBmcmVkX2JhZF9ldmVu
+dCgpIGluc3RlYWQgb2YgTlVMTA0KPiAgIGlmIG5vIEZSRUQgaGFuZGxlciBkZWZpbmVkIGZvciBh
+biBleGNlcHRpb24gdmVjdG9yIChQZXRlciBaaWpsc3RyYSkuDQo+ICogUHVzaCBjYWxsaW5nIGly
+cWVudHJ5X3tlbnRlcixleGl0fSgpIGFuZCBpbnN0cnVtZW50YXRpb25fe2JlZ2luLGVuZH0oKQ0K
+PiAgIGRvd24gaW50byBpbmRpdmlkdWFsIEZSRUQgZXhjZXB0aW9uIGhhbmRsZXJzLCBpbnN0ZWFk
+IG9mIGluIHRoZSBkaXNwYXRjaA0KPiAgIGZyYW1ld29yayAoUGV0ZXIgWmlqbHN0cmEpLg0KPiAN
+Cj4gSC4gUGV0ZXIgQW52aW4gKEludGVsKSAoMjQpOg0KPiAgIHg4Ni90cmFwczogbGV0IGNvbW1v
+bl9pbnRlcnJ1cHQoKSBoYW5kbGUgSVJRX01PVkVfQ0xFQU5VUF9WRUNUT1INCj4gICB4ODYvdHJh
+cHM6IGFkZCBhIHN5c3RlbSBpbnRlcnJ1cHQgdGFibGUgZm9yIHN5c3RlbSBpbnRlcnJ1cHQgZGlz
+cGF0Y2gNCj4gICB4ODYvdHJhcHM6IGFkZCBleHRlcm5hbF9pbnRlcnJ1cHQoKSB0byBkaXNwYXRj
+aCBleHRlcm5hbCBpbnRlcnJ1cHRzDQo+ICAgeDg2L2NwdWZlYXR1cmU6IGFkZCB0aGUgY3B1IGZl
+YXR1cmUgYml0IGZvciBGUkVEDQo+ICAgeDg2L29wY29kZTogYWRkIEVSRVRVLCBFUkVUUyBpbnN0
+cnVjdGlvbnMgdG8geDg2LW9wY29kZS1tYXANCj4gICB4ODYvb2JqdG9vbDogdGVhY2ggb2JqdG9v
+bCBhYm91dCBFUkVUVSBhbmQgRVJFVFMNCj4gICB4ODYvY3B1OiBhZGQgWDg2X0NSNF9GUkVEIG1h
+Y3JvDQo+ICAgeDg2L2ZyZWQ6IGFkZCBLY29uZmlnIG9wdGlvbiBmb3IgRlJFRCAoQ09ORklHX1g4
+Nl9GUkVEKQ0KPiAgIHg4Ni9mcmVkOiBpZiBDT05GSUdfWDg2X0ZSRUQgaXMgZGlzYWJsZWQsIGRp
+c2FibGUgRlJFRCBzdXBwb3J0DQo+ICAgeDg2L2NwdTogYWRkIE1TUiBudW1iZXJzIGZvciBGUkVE
+IGNvbmZpZ3VyYXRpb24NCj4gICB4ODYvZnJlZDogaGVhZGVyIGZpbGUgd2l0aCBGUkVEIGRlZmlu
+aXRpb25zDQo+ICAgeDg2L2ZyZWQ6IG1ha2UgdW5pb25zIGZvciB0aGUgY3MgYW5kIHNzIGZpZWxk
+cyBpbiBzdHJ1Y3QgcHRfcmVncw0KPiAgIHg4Ni9mcmVkOiByZXNlcnZlIHNwYWNlIGZvciB0aGUg
+RlJFRCBzdGFjayBmcmFtZQ0KPiAgIHg4Ni9mcmVkOiBhZGQgYSBwYWdlIGZhdWx0IGVudHJ5IHN0
+dWIgZm9yIEZSRUQNCj4gICB4ODYvZnJlZDogYWRkIGEgZGVidWcgZmF1bHQgZW50cnkgc3R1YiBm
+b3IgRlJFRA0KPiAgIHg4Ni9mcmVkOiBhZGQgYSBOTUkgZW50cnkgc3R1YiBmb3IgRlJFRA0KPiAg
+IHg4Ni9mcmVkOiBGUkVEIGVudHJ5L2V4aXQgYW5kIGRpc3BhdGNoIGNvZGUNCj4gICB4ODYvZnJl
+ZDogRlJFRCBpbml0aWFsaXphdGlvbiBjb2RlDQo+ICAgeDg2L2ZyZWQ6IHVwZGF0ZSBNU1JfSUEz
+Ml9GUkVEX1JTUDAgZHVyaW5nIHRhc2sgc3dpdGNoDQo+ICAgeDg2L2ZyZWQ6IGxldCByZXRfZnJv
+bV9mb3JrKCkgam1wIHRvIGZyZWRfZXhpdF91c2VyIHdoZW4gRlJFRCBpcw0KPiAgICAgZW5hYmxl
+ZA0KPiAgIHg4Ni9mcmVkOiBkaXNhbGxvdyB0aGUgc3dhcGdzIGluc3RydWN0aW9uIHdoZW4gRlJF
+RCBpcyBlbmFibGVkDQo+ICAgeDg2L2ZyZWQ6IG5vIEVTUEZJWCBuZWVkZWQgd2hlbiBGUkVEIGlz
+IGVuYWJsZWQNCj4gICB4ODYvZnJlZDogYWxsb3cgc2luZ2xlLXN0ZXAgdHJhcCBhbmQgTk1JIHdo
+ZW4gc3RhcnRpbmcgYSBuZXcgdGhyZWFkDQo+ICAgeDg2L2ZyZWQ6IGFsbG93IEZSRUQgc3lzdGVt
+cyB0byB1c2UgaW50ZXJydXB0IHZlY3RvcnMgMHgxMC0weDFmDQo+IA0KPiBYaW4gTGkgKDEwKToN
+Cj4gICB4ODYvdHJhcHM6IGFkZCBpbnN0YWxsX3N5c3RlbV9pbnRlcnJ1cHRfaGFuZGxlcigpDQo+
+ICAgeDg2L3RyYXBzOiBleHBvcnQgZXh0ZXJuYWxfaW50ZXJydXB0KCkgZm9yIFZNWCBJUlEgcmVp
+bmplY3Rpb24NCj4gICB4ODYvZnJlZDogaGVhZGVyIGZpbGUgZm9yIGV2ZW50IHR5cGVzDQo+ICAg
+eDg2L2ZyZWQ6IGFkZCBhIG1hY2hpbmUgY2hlY2sgZW50cnkgc3R1YiBmb3IgRlJFRA0KPiAgIHg4
+Ni9mcmVkOiBmaXh1cCBmYXVsdCBvbiBFUkVUVSBieSBqdW1waW5nIHRvIGZyZWRfZW50cnlwb2lu
+dF91c2VyDQo+ICAgeDg2L2lhMzI6IGRvIG5vdCBtb2RpZnkgdGhlIERQTCBiaXRzIGZvciBhIG51
+bGwgc2VsZWN0b3INCj4gICB4ODYvZnJlZDogYWxsb3cgZHluYW1pYyBzdGFjayBmcmFtZSBzaXpl
+DQo+ICAgeDg2L2ZyZWQ6IGRpc2FibGUgRlJFRCBieSBkZWZhdWx0IGluIGl0cyBlYXJseSBzdGFn
+ZQ0KPiAgIEtWTTogeDg2L3ZteDogY2FsbCBleHRlcm5hbF9pbnRlcnJ1cHQoKSBmb3IgSVJRIHJl
+aW5qZWN0aW9uIHdoZW4gRlJFRA0KPiAgICAgaXMgZW5hYmxlZA0KPiAgIEtWTTogeDg2L3ZteDog
+ZXhlY3V0ZSAiaW50ICQyIiBmb3IgTk1JIHJlaW5qZWN0aW9uIHdoZW4gRlJFRCBpcw0KPiAgICAg
+ZW5hYmxlZA0KPiANCj4gIC4uLi9hZG1pbi1ndWlkZS9rZXJuZWwtcGFyYW1ldGVycy50eHQgICAg
+ICAgICB8ICAgNCArDQo+ICBhcmNoL3g4Ni9LY29uZmlnICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgfCAgIDkgKw0KPiAgYXJjaC94ODYvZW50cnkvTWFrZWZpbGUgICAgICAgICAgICAgICAg
+ICAgICAgIHwgICA1ICstDQo+ICBhcmNoL3g4Ni9lbnRyeS9lbnRyeV8zMi5TICAgICAgICAgICAg
+ICAgICAgICAgfCAgIDIgKy0NCj4gIGFyY2gveDg2L2VudHJ5L2VudHJ5XzY0LlMgICAgICAgICAg
+ICAgICAgICAgICB8ICAgNSArDQo+ICBhcmNoL3g4Ni9lbnRyeS9lbnRyeV82NF9mcmVkLlMgICAg
+ICAgICAgICAgICAgfCAgNTkgKysrKysNCj4gIGFyY2gveDg2L2VudHJ5L2VudHJ5X2ZyZWQuYyAg
+ICAgICAgICAgICAgICAgICB8IDIzNCArKysrKysrKysrKysrKysrKysNCj4gIGFyY2gveDg2L2Vu
+dHJ5L3ZzeXNjYWxsL3ZzeXNjYWxsXzY0LmMgICAgICAgICB8ICAgMiArLQ0KPiAgYXJjaC94ODYv
+aW5jbHVkZS9hc20vY3B1ZmVhdHVyZXMuaCAgICAgICAgICAgIHwgICAxICsNCj4gIGFyY2gveDg2
+L2luY2x1ZGUvYXNtL2Rpc2FibGVkLWZlYXR1cmVzLmggICAgICB8ICAgOCArLQ0KPiAgYXJjaC94
+ODYvaW5jbHVkZS9hc20vZW50cnktY29tbW9uLmggICAgICAgICAgIHwgICAzICsNCj4gIGFyY2gv
+eDg2L2luY2x1ZGUvYXNtL2V2ZW50LXR5cGUuaCAgICAgICAgICAgICB8ICAxNyArKw0KPiAgYXJj
+aC94ODYvaW5jbHVkZS9hc20vZXh0YWJsZV9maXh1cF90eXBlcy5oICAgIHwgICA0ICstDQo+ICBh
+cmNoL3g4Ni9pbmNsdWRlL2FzbS9mcmVkLmggICAgICAgICAgICAgICAgICAgfCAxMzEgKysrKysr
+KysrKw0KPiAgYXJjaC94ODYvaW5jbHVkZS9hc20vaWR0ZW50cnkuaCAgICAgICAgICAgICAgIHwg
+IDc2ICsrKysrLQ0KPiAgYXJjaC94ODYvaW5jbHVkZS9hc20vaXJxLmggICAgICAgICAgICAgICAg
+ICAgIHwgICA1ICsNCj4gIGFyY2gveDg2L2luY2x1ZGUvYXNtL2lycV92ZWN0b3JzLmggICAgICAg
+ICAgICB8ICAxNSArLQ0KPiAgYXJjaC94ODYvaW5jbHVkZS9hc20vbXNyLWluZGV4LmggICAgICAg
+ICAgICAgIHwgIDEzICstDQo+ICBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9wcm9jZXNzb3IuaCAgICAg
+ICAgICAgICAgfCAgMTIgKy0NCj4gIGFyY2gveDg2L2luY2x1ZGUvYXNtL3B0cmFjZS5oICAgICAg
+ICAgICAgICAgICB8ICAzNiArKy0NCj4gIGFyY2gveDg2L2luY2x1ZGUvYXNtL3N3aXRjaF90by5o
+ICAgICAgICAgICAgICB8ICAxMCArLQ0KPiAgYXJjaC94ODYvaW5jbHVkZS9hc20vdGhyZWFkX2lu
+Zm8uaCAgICAgICAgICAgIHwgIDM1ICstLQ0KPiAgYXJjaC94ODYvaW5jbHVkZS9hc20vdHJhcHMu
+aCAgICAgICAgICAgICAgICAgIHwgIDEzICsNCj4gIGFyY2gveDg2L2luY2x1ZGUvYXNtL3ZteC5o
+ICAgICAgICAgICAgICAgICAgICB8ICAxNyArLQ0KPiAgYXJjaC94ODYvaW5jbHVkZS91YXBpL2Fz
+bS9wcm9jZXNzb3ItZmxhZ3MuaCAgIHwgICAyICsNCj4gIGFyY2gveDg2L2tlcm5lbC9NYWtlZmls
+ZSAgICAgICAgICAgICAgICAgICAgICB8ICAgMSArDQo+ICBhcmNoL3g4Ni9rZXJuZWwvYXBpYy9h
+cGljLmMgICAgICAgICAgICAgICAgICAgfCAgMTEgKy0NCj4gIGFyY2gveDg2L2tlcm5lbC9hcGlj
+L3ZlY3Rvci5jICAgICAgICAgICAgICAgICB8ICAgOCArLQ0KPiAgYXJjaC94ODYva2VybmVsL2Nw
+dS9hY3JuLmMgICAgICAgICAgICAgICAgICAgIHwgICA3ICstDQo+ICBhcmNoL3g4Ni9rZXJuZWwv
+Y3B1L2NvbW1vbi5jICAgICAgICAgICAgICAgICAgfCAgODggKysrKy0tLQ0KPiAgYXJjaC94ODYv
+a2VybmVsL2NwdS9tY2UvY29yZS5jICAgICAgICAgICAgICAgIHwgIDExICsNCj4gIGFyY2gveDg2
+L2tlcm5lbC9jcHUvbXNoeXBlcnYuYyAgICAgICAgICAgICAgICB8ICAyMiArLQ0KPiAgYXJjaC94
+ODYva2VybmVsL2VzcGZpeF82NC5jICAgICAgICAgICAgICAgICAgIHwgICA4ICsNCj4gIGFyY2gv
+eDg2L2tlcm5lbC9mcmVkLmMgICAgICAgICAgICAgICAgICAgICAgICB8ICA3MyArKysrKysNCj4g
+IGFyY2gveDg2L2tlcm5lbC9oZWFkXzMyLlMgICAgICAgICAgICAgICAgICAgICB8ICAgMyArLQ0K
+PiAgYXJjaC94ODYva2VybmVsL2lkdC5jICAgICAgICAgICAgICAgICAgICAgICAgIHwgICA2ICst
+DQo+ICBhcmNoL3g4Ni9rZXJuZWwvaXJxLmMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDYg
+Ky0NCj4gIGFyY2gveDg2L2tlcm5lbC9pcnFpbml0LmMgICAgICAgICAgICAgICAgICAgICB8ICAg
+NyArLQ0KPiAgYXJjaC94ODYva2VybmVsL2t2bS5jICAgICAgICAgICAgICAgICAgICAgICAgIHwg
+ICA0ICstDQo+ICBhcmNoL3g4Ni9rZXJuZWwvbm1pLmMgICAgICAgICAgICAgICAgICAgICAgICAg
+fCAgMjggKysrDQo+ICBhcmNoL3g4Ni9rZXJuZWwvcHJvY2Vzcy5jICAgICAgICAgICAgICAgICAg
+ICAgfCAgIDUgKw0KPiAgYXJjaC94ODYva2VybmVsL3Byb2Nlc3NfNjQuYyAgICAgICAgICAgICAg
+ICAgIHwgIDIxICstDQo+ICBhcmNoL3g4Ni9rZXJuZWwvc2lnbmFsXzMyLmMgICAgICAgICAgICAg
+ICAgICAgfCAgMjEgKy0NCj4gIGFyY2gveDg2L2tlcm5lbC90cmFwcy5jICAgICAgICAgICAgICAg
+ICAgICAgICB8IDE3NSArKysrKysrKysrKy0tDQo+ICBhcmNoL3g4Ni9rdm0vdm14L3ZteC5jICAg
+ICAgICAgICAgICAgICAgICAgICAgfCAgMjcgKy0NCj4gIGFyY2gveDg2L2xpYi94ODYtb3Bjb2Rl
+LW1hcC50eHQgICAgICAgICAgICAgICB8ICAgMiArLQ0KPiAgYXJjaC94ODYvbW0vZXh0YWJsZS5j
+ICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDI4ICsrKw0KPiAgYXJjaC94ODYvbW0vZmF1bHQu
+YyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIwICstDQo+ICBkcml2ZXJzL3hlbi9ldmVu
+dHMvZXZlbnRzX2Jhc2UuYyAgICAgICAgICAgICAgfCAgIDUgKy0NCj4gIGtlcm5lbC9mb3JrLmMg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgNiArDQo+ICB0b29scy9hcmNoL3g4
+Ni9pbmNsdWRlL2FzbS9jcHVmZWF0dXJlcy5oICAgICAgfCAgIDEgKw0KPiAgLi4uL2FyY2gveDg2
+L2luY2x1ZGUvYXNtL2Rpc2FibGVkLWZlYXR1cmVzLmggIHwgICA4ICstDQo+ICB0b29scy9hcmNo
+L3g4Ni9pbmNsdWRlL2FzbS9tc3ItaW5kZXguaCAgICAgICAgfCAgMTMgKy0NCj4gIHRvb2xzL2Fy
+Y2gveDg2L2xpYi94ODYtb3Bjb2RlLW1hcC50eHQgICAgICAgICB8ICAgMiArLQ0KPiAgdG9vbHMv
+b2JqdG9vbC9hcmNoL3g4Ni9kZWNvZGUuYyAgICAgICAgICAgICAgIHwgIDIyICstDQo+ICA1NSBm
+aWxlcyBjaGFuZ2VkLCAxMTgxIGluc2VydGlvbnMoKyksIDE3NiBkZWxldGlvbnMoLSkNCj4gIGNy
+ZWF0ZSBtb2RlIDEwMDY0NCBhcmNoL3g4Ni9lbnRyeS9lbnRyeV82NF9mcmVkLlMNCj4gIGNyZWF0
+ZSBtb2RlIDEwMDY0NCBhcmNoL3g4Ni9lbnRyeS9lbnRyeV9mcmVkLmMNCj4gIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9ldmVudC10eXBlLmgNCj4gIGNyZWF0ZSBtb2Rl
+IDEwMDY0NCBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9mcmVkLmgNCj4gIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBhcmNoL3g4Ni9rZXJuZWwvZnJlZC5jDQo+IA0K
