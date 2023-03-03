@@ -2,84 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B9C6AA055
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:51:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6456AA063
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 21:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbjCCTvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 14:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S231351AbjCCUB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 15:01:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjCCTvB (ORCPT
+        with ESMTP id S231150AbjCCUB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 14:51:01 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028095FE8F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 11:50:55 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 72B9E21D64;
-        Fri,  3 Mar 2023 19:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1677873054; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oi/Dc6KdT1oRSvAHPhZ8feRgUthVwWLJjDowTGLD+9g=;
-        b=tb6rpy1ho2utbbrh5ZB/0Wp5HxLnJSqZjnZhd3Wm6auX8oYZ0wx65gfD0JgXp38C7KdZu8
-        JWkF+I4RKGTLHf4hYf4kVjMT76O0ILVG4ZO5sQmdi2sJ0oM3UrZK5PSleUZ8LBiaiqtQoT
-        ZW2LOGJ551WE0/L5hAD9VUnUltbAG2I=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 3 Mar 2023 15:01:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CCD60ABC
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 12:00:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677873634;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=y7Yi1l52AyC6VYyAHckMD0UPWhdM1o7McEseCbmGWHM=;
+        b=LADjygL3PdwurkuKBkxM9mxOH5ltPPyfTbRH9XBu8wdbboPDlVLsuGI+90+L9oHHV2TB6r
+        DNmZhz2hUBcYTPqlXNACPrX4O/dSP3MCATC1raErEMa2hJbaLxuvZ7FfnXwbU3+Fk+eWz5
+        3Pqfz+H2SCKFmWCS45eijxKydPTCN5U=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-435-LoKFVJqMNxqE4wuiHRGJuQ-1; Fri, 03 Mar 2023 15:00:31 -0500
+X-MC-Unique: LoKFVJqMNxqE4wuiHRGJuQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 72D4D2C141;
-        Fri,  3 Mar 2023 19:50:53 +0000 (UTC)
-Date:   Fri, 3 Mar 2023 20:50:52 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew WilCox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH mm-unstable v4 2/3] mm, printk: introduce new format %pGt
- for page_type
-Message-ID: <ZAJPnG2LqjvXkC/Z@alley>
-References: <20230130042514.2418-1-42.hyeyoo@gmail.com>
- <20230130042514.2418-3-42.hyeyoo@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130042514.2418-3-42.hyeyoo@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 911461C05AAD;
+        Fri,  3 Mar 2023 20:00:30 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4CD802026D4B;
+        Fri,  3 Mar 2023 20:00:30 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 85CF4403EA219; Fri,  3 Mar 2023 17:00:12 -0300 (-03)
+Message-ID: <20230303195841.310844446@redhat.com>
+User-Agent: quilt/0.67
+Date:   Fri, 03 Mar 2023 16:58:41 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Christoph Lameter <cl@linux.com>
+Cc:     Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org
+Subject: [PATCH v3 00/11] fold per-CPU vmstats remotely
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2023-01-30 13:25:13, Hyeonggon Yoo wrote:
-> %pGp format is used to display 'flags' field of a struct page.
-> However, some page flags (i.e. PG_buddy, see page-flags.h for more details)
-> are stored in page_type field. To display human-readable output of
-> page_type, introduce %pGt format.
-> 
-> It is important to note the meaning of bits are different in page_type.
-> if page_type is 0xffffffff, no flags are set. Setting PG_buddy (0x00000080)
-> flag results in a page_type of 0xffffff7f. Clearing a bit actually means
-> setting a flag. Bits in page_type are inverted when displaying type names.
-> 
-> Only values for which page_type_has_type() returns true are considered
-> as page_type, to avoid confusion with mapcount values. if it returns false,
-> only raw values are displayed and not page type names.
-> 
-> Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+This patch series addresses the following two problems:
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>   # for vsprintf part
+    1. A customer provided some evidence which indicates that
+       the idle tick was stopped; albeit, CPU-specific vmstat
+       counters still remained populated.
 
-I am sorry for the late review. It has somehow fallen through cracks.
+       Thus one can only assume quiet_vmstat() was not
+       invoked on return to the idle loop. If I understand
+       correctly, I suspect this divergence might erroneously
+       prevent a reclaim attempt by kswapd. If the number of
+       zone specific free pages are below their per-cpu drift
+       value then zone_page_state_snapshot() is used to
+       compute a more accurate view of the aforementioned
+       statistic.  Thus any task blocked on the NUMA node
+       specific pfmemalloc_wait queue will be unable to make
+       significant progress via direct reclaim unless it is
+       killed after being woken up by kswapd
+       (see throttle_direct_reclaim())
 
-Best Regards,
-Petr
+    2. With a SCHED_FIFO task that busy loops on a given CPU,
+       and kworker for that CPU at SCHED_OTHER priority,
+       queuing work to sync per-vmstats will either cause that
+       work to never execute, or stalld (i.e. stall daemon)
+       boosts kworker priority which causes a latency
+       violation
+
+By having vmstat_shepherd flush the per-CPU counters to the
+global counters from remote CPUs.
+
+This is done using cmpxchg to manipulate the counters,
+both CPU locally (via the account functions),
+and remotely (via cpu_vm_stats_fold).
+
+Thanks to Aaron Tomlin for diagnosing issue 1 and writing
+the initial patch series.
+
+v3:
+- Removed unused drain_zone_pages and changes variable (David Hildenbrand)
+- Use xchg instead of cmpxchg in refresh_cpu_vm_stats  (Peter Xu)
+- Add drain_all_pages to vmstat_refresh to make
+  stats more accurate				       (Peter Xu)
+- Improve changelog of
+  "mm/vmstat: switch counter modification to cmpxchg"  (Peter Xu / David)
+- Improve changelog of
+  "mm/vmstat: remove remote node draining"	       (David Hildenbrand)
+
+
+v2:
+- actually use LOCK CMPXCHG on counter mod/inc/dec functions
+  (Christoph Lameter)
+- use try_cmpxchg for cmpxchg loops
+  (Uros Bizjak / Matthew Wilcox)
+
+
+ arch/arm64/include/asm/percpu.h     |   16 ++
+ arch/loongarch/include/asm/percpu.h |   23 +++-
+ arch/s390/include/asm/percpu.h      |    5 
+ arch/x86/include/asm/percpu.h       |   39 +++----
+ include/asm-generic/percpu.h        |   17 +++
+ include/linux/mmzone.h              |    3 
+ include/linux/percpu-defs.h         |    2 
+ kernel/fork.c                       |    2 
+ kernel/scs.c                        |    2 
+ mm/page_alloc.c                     |   23 ----
+ mm/vmstat.c                         |  424 +++++++++++++++++++++++++++++++++++++++++------------------------------------
+ 11 files changed, 307 insertions(+), 249 deletions(-)
+
+
