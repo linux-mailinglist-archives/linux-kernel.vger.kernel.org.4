@@ -2,266 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DB26A931B
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9595F6A932D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjCCIzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:55:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S230331AbjCCI7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 03:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCCIzo (ORCPT
+        with ESMTP id S230252AbjCCI7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:55:44 -0500
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2092.outbound.protection.outlook.com [40.107.215.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCCB1516B;
-        Fri,  3 Mar 2023 00:55:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c8hyGPHvPiua6lQw+Uc0loPKBek9u0yM7XqGJWWJS+ScXjqEB0CDoOmzGE8CwXFstmHtMvMydjVaNKfVjY4nT+uvb7ciJiaZMOt5137hGZ/RZVy89iVhiYIHoT//kkkholaHfVKlaqcA81tgIxzYeu0krYkwSV9nFm6NXYdcL7CDGbd/TKkqJKrqwzBxar7mOqVnAmO8MLAYkKXG35EQ4gwcDqf3dep1yTK82jjidsU/9pqL4t5WyRj1ckNQfYxkvLMB/lnLdjmu3JcYLGBz5oj5zN/N07gDWhdPpL/e9LX7IZy5IqfICdQqGaXvmJ5ETAebcp3/kYZirH755oaCcA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zTWwc4DLJ5aYfwAL81+c7H30f/CjX564NsnJJ91Lkwo=;
- b=VO3xous6UjTq2JbSKTrvxVSGqzHKsUnpdLR/w20iP2mkDagPu40Lj6DaXF16LNNvv5fr8qNkDXti2fo2TWF+uUhG/EP+C0yTR29odMuNuiOj7v5oE1MEhDq0rT9St6mm31fs/asgSjhDLnzjGFf2JM6V3HkpLvNUq9YkIBBOrZRqpZ1elwkUA0KgozWRm5vizH9q0QmZuwMpp/wV/NWX1P7EXWBLGuSyLv2syWYBjjhB6NvcDsVbU9TgWsTyLja5qnr8HRnStS0wtLQtays0gC3nWxdk84d9mRC7fqPJzgmfWFGePRC7sTznnb3O41LQAPRvRiVDO99Gp4kv/lQvyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zTWwc4DLJ5aYfwAL81+c7H30f/CjX564NsnJJ91Lkwo=;
- b=y+zjBPYgPPYiNO72hk41w3GGW2Ae+ImRptXqDtx2Sc2yqmfkesH2dRPpQWoEEI3geMy+SYjdBLkIGDisZmPbdlRWpEur83KZOBJRg2qNSXv49ee2Aurhg8h3nEPHOLVFcaIgMC7CQWRudQuqxy4dFIajraqEMck5C1+tO//d6joD4wqALkehh+6YcOvF0yBOhC8MQViyabNPRXKfWC8OcEHNXKNZhIGIsRWLBaZc/2ineFVVHDK3aUGvn1Ff0RejuYGc/SfdH4BstLcRID4p/sPumWlNPULnscrJv6wyKoZnLbXQIa5zsKO9NBKTqchHyWkHLC19FXrqC399Kf4GBw==
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by TYZPR06MB5099.apcprd06.prod.outlook.com (2603:1096:400:1c5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.14; Fri, 3 Mar
- 2023 08:55:35 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::daf6:5ebb:a93f:1869%9]) with mapi id 15.20.6156.016; Fri, 3 Mar 2023
- 08:55:34 +0000
-From:   Ryan Chen <ryan_chen@aspeedtech.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>
-CC:     Joel Stanley <joel@jms.id.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        Fri, 3 Mar 2023 03:59:38 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B46168BF;
+        Fri,  3 Mar 2023 00:59:36 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 823B024E25C;
+        Fri,  3 Mar 2023 16:59:30 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 3 Mar
+ 2023 16:59:30 +0800
+Received: from starfive-sdk.starfivetech.com (171.223.208.138) by
+ EXMBX162.cuchost.com (172.16.6.72) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Fri, 3 Mar 2023 16:59:29 +0800
+From:   Samin Guo <samin.guo@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-Subject: RE: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-Thread-Topic: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
-Thread-Index: AQHZSZBNCqcj9BIMLU6U/5WV2MINja7idvcAgALva/CAA1hsgIAAAQawgAAHfwCAAAAwwA==
-Date:   Fri, 3 Mar 2023 08:55:34 +0000
-Message-ID: <SEZPR06MB5269E7B8785B3CB56A63A916F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
-References: <20230226031321.3126756-1-ryan_chen@aspeedtech.com>
- <20230226031321.3126756-2-ryan_chen@aspeedtech.com>
- <53090449-58c9-bc03-56df-aa8ae93c0c26@linaro.org>
- <SEZPR06MB52699DEB2255EB54F35C2A59F2AD9@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <fc20a2d1-e2f9-c22b-dcdf-153cb527eea8@linaro.org>
- <SEZPR06MB526902637624A97D7DFB8523F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <c41ee6b5-ddb4-1253-de54-a295b3bab2cc@linaro.org>
-In-Reply-To: <c41ee6b5-ddb4-1253-de54-a295b3bab2cc@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SEZPR06MB5269:EE_|TYZPR06MB5099:EE_
-x-ms-office365-filtering-correlation-id: 652ec6db-8d24-4197-226c-08db1bc50d3f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o3q4lnJNmh8f8Ii74cJtQ/pxwSB2uBB9tD0Kzymn7gnTJ8NmNiRA/tdQQJkYHzTfa2Xef4WKhTkOXU8e/nJbASeF0g78p0ANwsNByzUl2t/pIGz7+1IJQ9yw4gjny8BQKHVRNCcPCHp2K4uBTrv78W3jmGtEglnxYsEEa9+K/QOx9RIgLIa4Bi9R/obSuQxU9v5wFkPxFj0OpXstv5RUNH1mlzW9SON1tfWseGMKxC5qRefXwCTdYQ/xqoOhFirjuIPubFp8S/BkId8PfQlF494F+1OcerJ7nA6p5Jn4KzrcB4i7i2JSCYdMxqJfM+WVC9REdDm3G3CFTyyBZ5EPAKDeZtwFchL+7kooJl3KY0fo3EY/fVGziFCrac5x4iLJmJpRTtKZUFkYVsz+3BUsMN0cFMVd41SglCigK9yJkxt2tNYlVduV7SQ+0xy/E8+Egu6e2KcV4SHPHgVtECxaIOgs2zOddPnmS8bHV1RJ1ibG4pq6aRmfnmjUZ8tzjZrY7oWr4+g68MEnw2Le8ps3CoSzlFQotOApqbyVP82PCHDRTXQfm8aozLehjzE9Nyh8QugeNaqpsxhPWCBmR/sVu8XT+J6HtaVgO8m4rsT3CpW0T1awiGR0gOi+YZWHVeCs7hdLOa0mah8/W02ufy/Ph632wvvBynm7jbzxL6HiYFvmTnaelU8oJfcNbbQGKc/C
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39840400004)(136003)(366004)(396003)(346002)(451199018)(66446008)(41300700001)(66476007)(316002)(110136005)(66946007)(8676002)(64756008)(76116006)(55016003)(54906003)(4326008)(66556008)(2906002)(52536014)(122000001)(38100700002)(38070700005)(53546011)(6506007)(26005)(83380400001)(478600001)(33656002)(71200400001)(7696005)(9686003)(186003)(966005)(86362001)(7416002)(5660300002)(8936002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SFVBcllUb3lUNlA3WVpWcUptcUpLV1BaSGI5YlltbEFSbmlWK0t4U0Q1UDUz?=
- =?utf-8?B?VzEvQ25XOWFTWktYMEFRNVJ5SExXSTBzN3huTkNOSWR6ckw3UWxqZlNtUmls?=
- =?utf-8?B?M3B0QVdXcGkxWDE2bklUMTlocXdrZjUwNVFhc2JhT1M2bWVmTTIySi9jOVBv?=
- =?utf-8?B?WlFSU3BQSndiQ3EzOEcyekFpcmMvdVZ4WHMySkdBU09ENnRYT0JWUkVXTmlJ?=
- =?utf-8?B?bmRNUExBamh4UjQ5ZjZBVElka3g3bWQ1WGE5d1N1MzhWZWVZcVdKZGlOUEdp?=
- =?utf-8?B?dC9Jd2R6TE9vZVpDODhUU2IxWjBSQnBhNS9ncE8vWWtBZEJSKzNrY2drUi9G?=
- =?utf-8?B?S25haWZaOEJHUHFCMHJEeWlJWGVidlB6Mk1hNGV0bjJtZ01LSnhuaTEvb3hs?=
- =?utf-8?B?dmM0NVNQUDlKOUZUMW5ZUG54YXdZZjJHeGxuRjZiSlBvS2dSdkRMMUFXbXJ5?=
- =?utf-8?B?Y2taR0JyQkFldWdteFJ4Z25YbEdNUXp0QnlKY3RMOWZ6aklDQmdabk5WeEx5?=
- =?utf-8?B?d2VkSldMR1J1WG1ZanRIWnJrdFZ1Tm9IdUkyYzJwKzNHaktnNm10TDlpclRa?=
- =?utf-8?B?enMwaCtKOXRNR2ZFRXFBYjlpeVdBV3N4WmpUSEExY3NIdnlWVlZWeHJuZmlo?=
- =?utf-8?B?aTBNVWZPZCt5UVVEQUxpTVdLMUowMHB6enVxN2JiekJGZXhwLzJEb2FUbmFu?=
- =?utf-8?B?YkUvTUJyOGptUUxWMXdrYitoc0k2bmRGdFR6L3FUUFBkbG5UWnBsZXJVNjF2?=
- =?utf-8?B?MktUSmlxbWFLQ3Ayd0pkMTVaZWY5SkUwNUZydEdJclpneUtVamQ2RDVZMGln?=
- =?utf-8?B?L0hvcDFwWS9UK0llN0VCSUc3bHpaMTRUaVlORktsOFRMem9RWkpucTlWV2s3?=
- =?utf-8?B?dkE1Tnh1S3QvaHY4YmRwa2k3OE1yMkt3OXJLRnEzRTFidXRmY2d3YzNDTGh4?=
- =?utf-8?B?THFGVm8wWEJVYk1hKzgyeVByZ0EySWdxb1p3U0FucXgxM3hwOWw2dTFvVUhH?=
- =?utf-8?B?cllqNkVnUWRMMDN1SzliTGJIOS81Qk5YTHZ6L2Z1KzRxcGhWbUFVTk14T0cz?=
- =?utf-8?B?RHowVGhGWEVpL0IvdzZraGpCa0M4MHJaZzF5clRja0Y4Z2VLSUIzWUtMZHdJ?=
- =?utf-8?B?NnBETE1zQVVvN1VUMmFxWkdQVTh4MjRBQ08ydVo4L29zY3lFcVpMRlp1Rm55?=
- =?utf-8?B?cHNNTEtYVUxEMUkxRkxjTzJQV3FnTGFDdkw3S1FjWndxd2UwUGFpbWVndkZl?=
- =?utf-8?B?c1VobXJZc2VUUjhEOUtUTzRRWHBYOXZaeWtQcHNJWndLS0prWTQ5cUFjbXox?=
- =?utf-8?B?d2w5cVNVZUNVcmdSYXVHZWE0VVFrSHhEUFJ2ajBEQ2RXQSswOXlleXBiNGpS?=
- =?utf-8?B?THRYVmhKem41ZW1SYVkxelZvekYvUHZDNk1QajZncnp1WFpLd2wzaWlpcmhS?=
- =?utf-8?B?a1VBaU5JVXNlZXJMZVQvUjVWRk5yd1dFckIvWTNiOVY5UG9URmtLZjRvT1ZX?=
- =?utf-8?B?KzlmZ1BtU0o5ejZhemo3aDh0V0JkUEc4OWVJdUlhNHNtQzBnQSsyL2FvR01G?=
- =?utf-8?B?enpFanVmVml6b1FtRzFva1Z1UUxVdkYrNXNBL0FUNTJWMU5KanA5NW90aDlE?=
- =?utf-8?B?OW80Z0s0S3FOOGpuQURFUkVHL2VsMjBpOXJzUVl1R2czZ3NxcHB2WXdOZDhM?=
- =?utf-8?B?Q2JOZTVmb045UWIrWmVLMjNXa3dxdUpEREtUM21HZmFTYnE5WjBMNnA4dW90?=
- =?utf-8?B?dWEvS2xiZlFmLzdkM0JyTGlub1U0cWlkYy9TVFkrSHFKNEg4VGpGRDFlbXp3?=
- =?utf-8?B?L0pvbUtLbS9mVDI0NW9tWHorbStkdHpXTWl4RG1yTEg3RCt6NzhEa0RMYUFm?=
- =?utf-8?B?bVQ1Vktid0l4b0xNbEk5SWNpM2RJR2hrNmIrRFc0a09QTWtUUjQ1cXhqOWNs?=
- =?utf-8?B?Um4zbEhTTUl1dk5Ka1Z0anBqdWVzaEJrU1RhZWVzUzJjVWpuczRaYk1oUlMz?=
- =?utf-8?B?ZkNkbkUwaWdnQ2Uxc2VmL3NQNlZDdWh4RFd5NnowUWEwUmgvUGJjSmk5SXNw?=
- =?utf-8?B?d2ZHY1JCdVByWGVVKytCZjJPMTdHemcrSVVqMFpHUXZYMVBTSzJTSlZGYWx1?=
- =?utf-8?B?Z1BsekMvZndSMXFDL0dZWmRsdFlNMkdueWNTYlc5UEY1b090RGdISVlKMHhP?=
- =?utf-8?B?UWc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>
+Subject: [PATCH v5 00/12] Add Ethernet driver for StarFive JH7110 SoC
+Date:   Fri, 3 Mar 2023 16:59:16 +0800
+Message-ID: <20230303085928.4535-1-samin.guo@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 652ec6db-8d24-4197-226c-08db1bc50d3f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2023 08:55:34.7493
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5Ltfb0XT+wMnviKzMT7xugbxorksEkBeUl5mk5QkfCf03TRL2V9C5XRR/udrh2QlMM0uJzLu7/NADKFCjTSZCUlQWfURfI+U6rNZW8z8Ji4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB5099
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gS3J6eXN6dG9mLA0KCQ0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZy
-b206IEtyenlzenRvZiBLb3psb3dza2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4N
-Cj4gU2VudDogRnJpZGF5LCBNYXJjaCAzLCAyMDIzIDQ6NTEgUE0NCj4gVG86IFJ5YW4gQ2hlbiA8
-cnlhbl9jaGVuQGFzcGVlZHRlY2guY29tPjsgV29sZnJhbSBTYW5nDQo+IDx3c2FAa2VybmVsLm9y
-Zz4NCj4gQ2M6IEpvZWwgU3RhbmxleSA8am9lbEBqbXMuaWQuYXU+OyBCcmVuZGFuIEhpZ2dpbnMN
-Cj4gPGJyZW5kYW4uaGlnZ2luc0BsaW51eC5kZXY+OyBLcnp5c3p0b2YgS296bG93c2tpDQo+IDxr
-cnp5c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+OyBBbmRyZXcgSmVmZmVyeSA8YW5kcmV3
-QGFqLmlkLmF1PjsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5vcmc7IFBoaWxpcHAgWmFiZWwg
-PHAuemFiZWxAcGVuZ3V0cm9uaXguZGU+OyBSb2INCj4gSGVycmluZyA8cm9iaCtkdEBrZXJuZWwu
-b3JnPjsgQmVuamFtaW4gSGVycmVuc2NobWlkdA0KPiA8YmVuaEBrZXJuZWwuY3Jhc2hpbmcub3Jn
-PjsgbGludXgtYXNwZWVkQGxpc3RzLm96bGFicy5vcmc7DQo+IGxpbnV4LWFybS1rZXJuZWxAbGlz
-dHMuaW5mcmFkZWFkLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsNCj4gb3BlbmJt
-Y0BsaXN0cy5vemxhYnMub3JnOyBsaW51eC1pMmNAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6
-IFJlOiBbUEFUQ0ggdjYgMS8yXSBkdC1iaW5kaW5nczogaTJjOiBhc3BlZWQ6IHN1cHBvcnQgZm9y
-IEFTVDI2MDAtaTJjdjINCj4gDQo+IE9uIDAzLzAzLzIwMjMgMDk6MjgsIFJ5YW4gQ2hlbiB3cm90
-ZToNCj4gPiBIZWxsbyBLcnp5c3p0b2YsDQo+ID4NCj4gPj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdl
-LS0tLS0NCj4gPj4gRnJvbTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3Nr
-aUBsaW5hcm8ub3JnPg0KPiA+PiBTZW50OiBGcmlkYXksIE1hcmNoIDMsIDIwMjMgNDoyMCBQTQ0K
-PiA+PiBUbzogUnlhbiBDaGVuIDxyeWFuX2NoZW5AYXNwZWVkdGVjaC5jb20+OyBXb2xmcmFtIFNh
-bmcNCj4gPj4gPHdzYUBrZXJuZWwub3JnPg0KPiA+PiBDYzogSm9lbCBTdGFubGV5IDxqb2VsQGpt
-cy5pZC5hdT47IEJyZW5kYW4gSGlnZ2lucw0KPiA+PiA8YnJlbmRhbi5oaWdnaW5zQGxpbnV4LmRl
-dj47IEtyenlzenRvZiBLb3psb3dza2kNCj4gPj4gPGtyenlzenRvZi5rb3psb3dza2krZHRAbGlu
-YXJvLm9yZz47IEFuZHJldyBKZWZmZXJ5DQo+ID4+IDxhbmRyZXdAYWouaWQuYXU+OyBkZXZpY2V0
-cmVlQHZnZXIua2VybmVsLm9yZzsgUGhpbGlwcCBaYWJlbA0KPiA+PiA8cC56YWJlbEBwZW5ndXRy
-b25peC5kZT47IFJvYiBIZXJyaW5nIDxyb2JoK2R0QGtlcm5lbC5vcmc+OyBCZW5qYW1pbg0KPiA+
-PiBIZXJyZW5zY2htaWR0IDxiZW5oQGtlcm5lbC5jcmFzaGluZy5vcmc+Ow0KPiA+PiBsaW51eC1h
-c3BlZWRAbGlzdHMub3psYWJzLm9yZzsgbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQu
-b3JnOw0KPiA+PiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBvcGVuYm1jQGxpc3RzLm96
-bGFicy5vcmc7DQo+ID4+IGxpbnV4LWkyY0B2Z2VyLmtlcm5lbC5vcmcNCj4gPj4gU3ViamVjdDog
-UmU6IFtQQVRDSCB2NiAxLzJdIGR0LWJpbmRpbmdzOiBpMmM6IGFzcGVlZDogc3VwcG9ydCBmb3IN
-Cj4gPj4gQVNUMjYwMC1pMmN2Mg0KPiA+Pg0KPiA+PiBPbiAwMS8wMy8yMDIzIDA2OjU3LCBSeWFu
-IENoZW4gd3JvdGU6DQo+ID4+PiBIZWxsbyBLcnp5c3p0b2YsDQo+ID4+Pg0KPiA+Pj4+IC0tLS0t
-T3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+ID4+Pj4gRnJvbTogS3J6eXN6dG9mIEtvemxvd3NraSA8
-a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiA+Pj4+IFNlbnQ6IE1vbmRheSwgRmVi
-cnVhcnkgMjcsIDIwMjMgNDoyNSBQTQ0KPiA+Pj4+IFRvOiBSeWFuIENoZW4gPHJ5YW5fY2hlbkBh
-c3BlZWR0ZWNoLmNvbT47IEFuZHJldyBKZWZmZXJ5DQo+ID4+Pj4gPGFuZHJld0Bhai5pZC5hdT47
-IEJyZW5kYW4gSGlnZ2lucyA8YnJlbmRhbi5oaWdnaW5zQGxpbnV4LmRldj47DQo+ID4+Pj4gQmVu
-amFtaW4gSGVycmVuc2NobWlkdCA8YmVuaEBrZXJuZWwuY3Jhc2hpbmcub3JnPjsgSm9lbCBTdGFu
-bGV5DQo+ID4+Pj4gPGpvZWxAam1zLmlkLmF1PjsgUm9iIEhlcnJpbmcgPHJvYmgrZHRAa2VybmVs
-Lm9yZz47IEtyenlzenRvZg0KPiA+Pj4+IEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraStk
-dEBsaW5hcm8ub3JnPjsgUGhpbGlwcCBaYWJlbA0KPiA+Pj4+IDxwLnphYmVsQHBlbmd1dHJvbml4
-LmRlPjsgbGludXgtaTJjQHZnZXIua2VybmVsLm9yZzsNCj4gPj4+PiBvcGVuYm1jQGxpc3RzLm96
-bGFicy5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJuZWwub3JnOw0KPiA+Pj4+IGxpbnV4LWFybS1r
-ZXJuZWxAbGlzdHMuaW5mcmFkZWFkLm9yZzsNCj4gPj4+PiBsaW51eC1hc3BlZWRAbGlzdHMub3ps
-YWJzLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZw0KPiA+Pj4+IFN1YmplY3Q6IFJl
-OiBbUEFUQ0ggdjYgMS8yXSBkdC1iaW5kaW5nczogaTJjOiBhc3BlZWQ6IHN1cHBvcnQgZm9yDQo+
-ID4+Pj4gQVNUMjYwMC1pMmN2Mg0KPiA+Pj4+DQo+ID4+Pj4gT24gMjYvMDIvMjAyMyAwNDoxMywg
-UnlhbiBDaGVuIHdyb3RlOg0KPiA+Pj4+PiBBZGQgYXN0MjYwMC1pMmN2MiBjb21wYXRpYmxlIGFu
-ZCBhc3BlZWQsZ2xvYmFsLXJlZ3MsDQo+ID4+Pj4+IGFzcGVlZCx0aW1lb3V0IGFzcGVlZCx4ZmVy
-LW1vZGUgZGVzY3JpcHRpb24gZm9yIGFzdDI2MDAtaTJjdjIuDQo+ID4+Pj4+DQo+ID4+Pj4+IFNp
-Z25lZC1vZmYtYnk6IFJ5YW4gQ2hlbiA8cnlhbl9jaGVuQGFzcGVlZHRlY2guY29tPg0KPiA+Pj4+
-PiAtLS0NCj4gPj4+Pj4gIC4uLi9kZXZpY2V0cmVlL2JpbmRpbmdzL2kyYy9hc3BlZWQsaTJjLnlh
-bWwgICB8IDQ0DQo+ID4+ICsrKysrKysrKysrKysrKysrKysNCj4gPj4+Pj4gIDEgZmlsZSBjaGFu
-Z2VkLCA0NCBpbnNlcnRpb25zKCspDQo+ID4+Pj4+DQo+ID4+Pj4+IGRpZmYgLS1naXQgYS9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2FzcGVlZCxpMmMueWFtbA0KPiA+Pj4+
-PiBiL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvYXNwZWVkLGkyYy55YW1s
-DQo+ID4+Pj4+IGluZGV4IGY1OTdmNzNjY2Q4Ny4uNzVkZTNjZTQxY2Y1IDEwMDY0NA0KPiA+Pj4+
-PiAtLS0gYS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJjL2FzcGVlZCxpMmMu
-eWFtbA0KPiA+Pj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvaTJj
-L2FzcGVlZCxpMmMueWFtbA0KPiA+Pj4+PiBAQCAtNDksNiArNDksMjUgQEAgcHJvcGVydGllczoN
-Cj4gPj4+Pj4gICAgICBkZXNjcmlwdGlvbjoNCj4gPj4+Pj4gICAgICAgIHN0YXRlcyB0aGF0IHRo
-ZXJlIGlzIGFub3RoZXIgbWFzdGVyIGFjdGl2ZSBvbiB0aGlzIGJ1cw0KPiA+Pj4+Pg0KPiA+Pj4+
-PiArICBhc3BlZWQsdGltZW91dDoNCj4gPj4+Pj4gKyAgICB0eXBlOiBib29sZWFuDQo+ID4+Pj4+
-ICsgICAgZGVzY3JpcHRpb246IEkyQyBidXMgdGltZW91dCBlbmFibGUgZm9yIG1hc3Rlci9zbGF2
-ZSBtb2RlDQo+ID4+Pj4NCj4gPj4+PiBOb3RoaW5nIGltcHJvdmVkIGhlcmUgaW4gcmVnYXJkcyB0
-byBteSBsYXN0IGNvbW1lbnQuDQo+ID4+Pg0KPiA+Pj4gWWVzLCBhcyBJIGtub3cgeW91ciByZXF1
-aXJlIGlzIGFib3V0ICIgRFQgYmluZGluZyB0byByZXByZXNlbnQNCj4gPj4+IGhhcmR3YXJlDQo+
-ID4+IHNldHVwIg0KPiA+Pj4gU28gSSBhZGQgbW9yZSBkZXNjcmlwdGlvbiBhYm91dCBhc3BlZWQs
-dGltZW91dCBhcyBibG93Lg0KPiA+Pj4NCj4gPj4+IEFTUEVFRCBTT0MgY2hpcCBpcyBzZXJ2ZXIg
-cHJvZHVjdCwgaTJjIGJ1cyBtYXkgaGF2ZSBmaW5nZXJwcmludA0KPiA+Pj4gY29ubmVjdCB0bw0K
-PiA+PiBhbm90aGVyIGJvYXJkLiBBbmQgYWxzbyBzdXBwb3J0IGhvdHBsdWcuDQo+ID4+PiBUaGUg
-Zm9sbG93aW5nIGlzIGJvYXJkLXNwZWNpZmljIGRlc2lnbiBleGFtcGxlLg0KPiA+Pj4gQm9hcmQg
-QSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQm9hcmQgQg0KPiA+Pj4g
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSAgICAgICAgICAgICAgICAgICAgICAgLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tDQo+ID4+PiB8aTJjIGJ1cyMxKG1hc3Rlci9zbGF2ZSkgIDw9PT1maW5n
-ZXJwcmludCA9PT0+IGkyYyBidXMjeCAobWFzdGVyL3NsYXZlKXwNCj4gPj4+IHxpMmMgYnVzIzIo
-bWFzdGVyKS0+IHRtcCBpMmMgZGV2aWNlIHwgICAgICAgICAgfA0KPiA+PiB8DQo+ID4+PiB8aTJj
-IGJ1cyMzKG1hc3RlciktPiBhZGMgaTJjIGRldmljZSB8ICAgICAgICAgIHwNCj4gPj4gfA0KPiA+
-Pj4gLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLSAgICAgICAgICAgICAgICAgICAgICAgLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tDQo+ID4+Pg0KPiA+Pj4gYXNwZWVkLHRpbW91dCBwcm9wZXJpdGVz
-Og0KPiA+Pj4gRm9yIGV4YW1wbGUgSTJDIGNvbnRyb2xsZXIgYXMgc2xhdmUgbW9kZSwgYW5kIHN1
-ZGRlbmx5IGRpc2Nvbm5lY3RlZC4NCj4gPj4+IFNsYXZlIHN0YXRlIG1hY2hpbmUgd2lsbCBrZWVw
-IHdhaXRpbmcgZm9yIG1hc3RlciBjbG9jayBpbiBmb3IgcngvdHgNCj4gdHJhbnNtaXQuDQo+ID4+
-PiBTbyBpdCBuZWVkIHRpbWVvdXQgc2V0dGluZyB0byBlbmFibGUgdGltZW91dCB1bmxvY2sgY29u
-dHJvbGxlciBzdGF0ZS4NCj4gPj4+IEFuZCBpbiBhbm90aGVyIHNpZGUuIEluIE1hc3RlciBzaWRl
-IGFsc28gbmVlZCBhdm9pZCBzdWRkZW5seSBzbGF2ZQ0KPiA+PiBtaXNzKHVuLXBsdWcpLCBNYXN0
-ZXIgd2lsbCB0aW1lb3V0IGFuZCByZWxlYXNlIHRoZSBTREEvU0NMLg0KPiA+Pj4NCj4gPj4+IERv
-IHlvdSBtZWFuIGFkZCB0aG9zZSBkZXNjcmlwdGlvbiBpbnRvIG9yZSBhc3BlZWQsdGltb3V0IHBy
-b3Blcml0ZXMNCj4gPj4gZGVzY3JpcHRpb24/DQo+ID4+DQo+ID4+IFlvdSBhcmUgZGVzY3JpYmlu
-ZyBoZXJlIG9uZSBwYXJ0aWN1bGFyIGZlYXR1cmUgeW91IHdhbnQgdG8gZW5hYmxlIGluDQo+ID4+
-IHRoZSBkcml2ZXIgd2hpY2ggbG9va3Mgbm9uLXNjYWxhYmxlIGFuZCBtb3JlIGRpZmZpY3VsdCB0
-byBjb25maWd1cmUvdXNlLg0KPiA+PiBXaGF0IEkgd2FzIGxvb2tpbmcgZm9yIGlzIHRvIGRlc2Ny
-aWJlIHRoZSBhY3R1YWwgY29uZmlndXJhdGlvbiB5b3UgaGF2ZSAoZS5nLg0KPiA+PiBtdWx0aS1t
-YXN0ZXIpIHdoaWNoIGxlYWRzIHRvIGVuYWJsZSBvciBkaXNhYmxlIHN1Y2ggZmVhdHVyZSBpbiB5
-b3VyDQo+IGhhcmR3YXJlLg0KPiA+PiBFc3BlY2lhbGx5IHRoYXQgYm9vbCB2YWx1ZSBkb2VzIG5v
-dCBzY2FsZSBsYXRlciB0byBhY3R1YWwgdGltZW91dA0KPiA+PiB2YWx1ZXMgaW4gdGltZSAobXMp
-Li4uDQo+ID4+DQo+ID4+IEkgZG9uJ3Qga25vdyBJMkMgdGhhdCBtdWNoLCBidXQgSSB3b25kZXIg
-LSB3aHkgdGhpcyBzaG91bGQgYmUNCj4gPj4gc3BlY2lmaWMgdG8gQXNwZWVkIEkyQyBhbmQgbm8g
-b3RoZXIgSTJDIGNvbnRyb2xsZXJzIGltcGxlbWVudCBpdD8NCj4gPj4gSU9XLCB0aGlzIGxvb2tz
-IHF1aXRlIGdlbmVyaWMgYW5kIGV2ZXJ5IEkyQyBjb250cm9sbGVyIHNob3VsZCBoYXZlDQo+ID4+
-IGl0LiBBZGRpbmcgaXQgc3BlY2lmaWMgdG8gQXNwZWVkIHN1Z2dlc3RzIHRoYXQgZWl0aGVyIHdl
-IG1pc3MgYQ0KPiA+PiBnZW5lcmljIHByb3BlcnR5IG9yIHRoaXMgc2hvdWxkIG5vdCBiZSBpbiBE
-VCBhdCBhbGwgKGJlY2F1c2Ugbm8gb25lIGVsc2UgaGFzDQo+IGl0Li4uKS4NCj4gPj4NCj4gPj4g
-QWxzbyBJIHdvbmRlciwgd2h5IHlvdSB3b3VsZG4ndCBlbmFibGUgdGltZW91dCBhbHdheXMuLi4N
-Cj4gPj4NCj4gPj4gK0NjIFdvbGZyYW0sDQo+ID4+IE1heWJlIHlvdSBrbm93IHdoZXRoZXIgYm9v
-bCAidGltZW91dCIgcHJvcGVydHkgZm9yIG9uZSBjb250cm9sbGVyDQo+ID4+IG1ha2VzIHNlbnNl
-PyBXaHkgd2UgZG8gbm90IGhhdmUgaXQgZm9yIGFsbCBjb250cm9sbGVycz8NCj4gPj4NCj4gPiBC
-ZWNhdXNlLCBpMmMgYnVzIGRpZG7igJl0IHNwZWNpZmljIHRpbWVvdXQuDQo+ID4gQnV0IFNNQnVz
-IGRlZmluZXMgYSBjbG9jayBsb3cgdGltZS1vdXQsIFRJTUVPVVQgb2YgMzUgbXMuDQo+ID4NCj4g
-PiBJdCBoYXZlIGRlZmluaXRpb24gaW4gU01CdXMgc3BlY2lmaWNhdGlvbi4NCj4gPiBodHRwOi8v
-c21idXMub3JnL3NwZWNzL1NNQnVzXzNfMV8yMDE4MDMxOS5wZGYNCj4gPiBZb3UgY2FuIGNoZWNr
-IFBhZ2UgMTgsIE5vdGUzIHRoYXQgaGF2ZSB0aW1lb3V0IGRlc2NyaXB0aW9uLg0KPiANCj4gVGhl
-biB5b3UgaGF2ZSBhbHJlYWR5IHByb3BlcnR5IGZvciB0aGlzIC0gInNtYnVzIj8NClRvIGJlIGEg
-cHJvcGVydHkgInNtYnVzIiwgdGhhdCB3b3VsZCBiZSBhIGJpZyB0b3BpYywgDQpJIHNhdyBmc2wg
-aTJjIGFsc28gaGF2ZSB0aGlzLg0KaHR0cHM6Ly9naXRodWIuY29tL3RvcnZhbGRzL2xpbnV4L2Js
-b2IvbWFzdGVyL0RvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9pMmMvaTJjLW1wYy55
-YW1sI0w0My1MNDcNClNvLCBJIGp1c3QgdGhpbmsgdGhlICJ0aW1lb3V0IiBwcm9wZXJ0eS4NCg0K
-IA0KQmVzdCByZWdhcmRzLA0KUnlhbiBDaGVuDQo=
+This series adds ethernet support for the StarFive JH7110 RISC-V SoC.
+The series includes MAC driver. The MAC version is dwmac-5.20 (from
+Synopsys DesignWare). For more information and support, you can visit
+RVspace wiki[1].
+
+You can simply review or test the patches at the link [2].
+
+This patchset should be applied after the patchset [3], [4], [5].
+[1]: https://wiki.rvspace.org/
+[2]: https://github.com/SaminGuo/linux/tree/vf2-6.2-gmac
+[3]: https://lore.kernel.org/all/20230221024645.127922-1-hal.feng@starfivetech.com/
+[4]: https://lore.kernel.org/all/20230202030037.9075-1-Frank.Sae@motor-comm.com/
+[5]: https://lore.kernel.org/all/20230215113249.47727-5-william.qiu@starfivetech.com/
+
+Changes since v4:
+- Supported both visionfive 2 v1.2A and visionfive 2 v1.3B.
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'.
+- Suggested by Emil, dropped the _PLAT/_plat from the config/function/struct/file names.
+- Suggested by Emil, added MODULE_DEVICE_TABLE().
+- Suggested by Emil, dropped clk_gtxclk and use clk_tx_inv to set the clock frequency.
+- Added phy interface mode configuration function.
+- Rebased on tag v6.2.
+
+Patch 12:
+- No update
+Patch 11:
+- Configuration of gmac and phy for visionfive 2 v1.2A.
+Patch 10:
+- Configuration of gmac and phy for visionfive 2 v1.3B.
+Patch 9:
+- Added starfive,syscon for gmac nodes in jh7110.dtsi.
+Patch 8:
+- Added starfive_dwmac_set_mode to set PHY interface mode.
+Patch 7:
+- Added starfive,syscon item in StarFive-dwmac dt-bindings.
+Patch 6:
+- Moved SOC_STARFIVE to ARCH_STARFIVE in Kconfig.
+- Dropped the _PLAT/_plat from the config/function/struct names. (by Emil)
+- Added MODULE_DEVICE_TABLE() and udev will load the module automatically. (by Emil)
+- Used { /* sentinel */ } for the last entry of starfive_eth_match. (by Emil)
+- Added 'tx_use_rgmii_rxin_clk' to struct starfive_dwmac, to mark the clk_tx'parent is rgmii.
+- Suggested by Emil, dropped clk_gtxclk and use clk_tx_inv to set the clock frequency.
+Patch 5:
+- Suggested by Emil, dropped mdio0/1 labels because there is no reference elsewhere.
+Patch 4:
+- Removed GTXC clk in StarFive-dwmac dt-bindings.
+- Added starfive,tx-use-rgmii-clk item in StarFive-dwmac dt-bindings.
+Patch 3:
+- Added an optional reset single 'ahb' in 'snps,dwmac.yaml', according to
+  stmmac_probe_config_dt/stmmac_dvr_probe.
+Patch 2:
+- No update
+Patch 1:
+- No update
+
+Changes since v3:
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'
+- Removed the unused code in 'dwmac-starfive-plat.c'.
+- Reworded the return statement in 'starfive_eth_plat_fix_mac_speed' function.
+
+Changes since v2:
+- Renamed the dt-bindings 'starfive,jh71x0-dwmac.yaml' to 'starfive,jh7110-dwmac.yaml'.
+- Reworded the commit messages.
+- Reworded the example context in the dt-binding 'starfive,jh7110-dwmac.yaml'.
+- Removed "starfive,jh7100-dwmac" compatible string and special initialization of jh7100.
+- Removed the parts of YT8531,so dropped patch 5 and 6.
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'.
+
+Changes since v1:
+- Recovered the author of the 1st and 3rd patches back to Emil Renner Berthing.
+- Added a new patch to update maxitems number of resets property in 'snps,dwmac.yaml'.
+- Fixed the check errors reported by "make dt_binding_check".
+- Renamed the dt-binding 'starfive,dwmac-plat.yaml' to 'starfive,jh71x0-dwmac.yaml'.
+- Updated the example context in the dt-binding 'starfive,jh71x0-dwmac.yaml'.
+- Added new dt-binding 'motorcomm,yt8531.yaml' to describe details of phy clock
+  delay configuration parameters.
+- Added more comments for PHY driver setting. For more details, see
+  'motorcomm,yt8531.yaml'.
+- Moved mdio device tree node from 'jh7110-starfive-visionfive-v2.dts' to 'jh7110.dtsi'.
+- Re-worded the commit message of several patches.
+- Renamed all the functions with starfive_eth_plat prefix in 'dwmac-starfive-plat.c'.
+- Added "starfive,jh7100-dwmac" compatible string and special init to support JH7100.
+
+Previous versions:
+v1 - https://patchwork.kernel.org/project/linux-riscv/cover/20221201090242.2381-1-yanhong.wang@starfivetech.com/
+v2 - https://patchwork.kernel.org/project/linux-riscv/cover/20221216070632.11444-1-yanhong.wang@starfivetech.com/
+v3 - https://patchwork.kernel.org/project/linux-riscv/cover/20230106030001.1952-1-yanhong.wang@starfivetech.com/
+v4 - https://patchwork.kernel.org/project/linux-riscv/cover/20230118061701.30047-1-yanhong.wang@starfivetech.com/
+
+Emil Renner Berthing (2):
+  dt-bindings: net: snps,dwmac: Add dwmac-5.20 version
+  net: stmmac: platform: Add snps,dwmac-5.20 IP compatible string
+
+Samin Guo (8):
+  dt-bindings: net: snps,dwmac: Add an optional resets single 'ahb'
+  riscv: dts: starfive: jh7110: Add ethernet device nodes
+  net: stmmac: Add glue layer for StarFive JH7110 SoC
+  dt-bindings: net: starfive,jh7110-dwmac: Add starfive,syscon
+  net: stmmac: starfive_dmac: Add phy interface settings
+  riscv: dts: starfive: jh7110: Add syscon to support phy interface
+    settings
+  riscv: dts: starfive: visionfive-2-v1.3b: Add gmac+phy's delay
+    configuration
+  riscv: dts: starfive: visionfive-2-v1.2a: Add gmac+phy's delay
+    configuration
+
+Yanhong Wang (2):
+  dt-bindings: net: Add support StarFive dwmac
+  riscv: dts: starfive: visionfive 2: Enable gmac device tree node
+
+ .../devicetree/bindings/net/snps,dwmac.yaml   |  19 +-
+ .../bindings/net/starfive,jh7110-dwmac.yaml   | 130 +++++++++++++
+ MAINTAINERS                                   |   7 +
+ .../jh7110-starfive-visionfive-2-v1.2a.dts    |  13 ++
+ .../jh7110-starfive-visionfive-2-v1.3b.dts    |  27 +++
+ .../jh7110-starfive-visionfive-2.dtsi         |  10 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  93 ++++++++++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+ .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 171 ++++++++++++++++++
+ .../ethernet/stmicro/stmmac/stmmac_platform.c |   3 +-
+ 11 files changed, 481 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+
+
+base-commit: 11934a315b671ddb09bc7ac5f505649e9f2623c7
+prerequisite-patch-id: ad56ef54d3f2a18025abc9e27321c25beda16422
+prerequisite-patch-id: 1be0fb49e0fbe293ca8fa94601e191b13c8c67d9
+prerequisite-patch-id: 8b402a8d97294a9b568595816b0dc96afc5e6f5d
+prerequisite-patch-id: 5c149662674f9e7dd888e2028fd8c9772948273f
+prerequisite-patch-id: 0caf8a313a9f161447e0480a93b42467378b2164
+prerequisite-patch-id: b2422f7a12f1e86e38c563139f3c1dbafc158efd
+prerequisite-patch-id: be612664eca7049e987bfae15bb460caa82eb211
+prerequisite-patch-id: 8300965cc6c55cad69f009da7916cf9e8ce628e7
+-- 
+2.17.1
+
