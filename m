@@ -2,157 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9886A9887
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C11A6A988A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 14:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbjCCNgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 08:36:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
+        id S231150AbjCCNhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 08:37:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbjCCNgg (ORCPT
+        with ESMTP id S230112AbjCCNhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 08:36:36 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09C83D919
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:36:28 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 67CBA22CF1;
-        Fri,  3 Mar 2023 13:36:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1677850587; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ldNbB431e/ZrOzvtR232Ztvv4QdqleBsDZOUWRjloKA=;
-        b=jfzbGUGtzuxxk/XkFN/jS61VUNyh3TiopbWLoZ0hI2G91eVu6KAArbMUGz/AW1haNkrR8g
-        dlCq/ANRqrB4GGAa9s68n79xTrPckDOMgc10dukYtGI0gQ7/xEm6tvPWp8uLbQjG1w+oDR
-        L+TAGHmLqVd2Bvv0T/X5aVDWU4d95sQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1677850587;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ldNbB431e/ZrOzvtR232Ztvv4QdqleBsDZOUWRjloKA=;
-        b=15qFMsVz58cvQ2nl6DWCa7NNpMEbBCW1jHU1o/xpXMTB5lAic7Iq8NyYVyj4Bmmj0lfHQr
-        lD+R2vNTyhDxypBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 51D9F1329E;
-        Fri,  3 Mar 2023 13:36:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yr84E9v3AWT2egAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Fri, 03 Mar 2023 13:36:27 +0000
-Message-ID: <8f4793ac-c283-8a23-4aff-ef9d7d5994bd@suse.cz>
-Date:   Fri, 3 Mar 2023 14:36:27 +0100
+        Fri, 3 Mar 2023 08:37:04 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90C13B64C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 05:36:55 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id kb15so2540470pjb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 05:36:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1677850615;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0lcRdKQgaZO87kSxaTq3dQQhph83hzwyCoWioxxpX9w=;
+        b=dQBPMBgEvKNCNE3n3JA50GRZRNcDTSbAoYkOIGsdDouI+sJ2krhDk1znB/I3CLBufm
+         cZiURslj26CEnsUlN+iBBdPHXcpzagybSVOPiEOZIzxQErkMEXqjxFtJ5XZEy+aoAyJ2
+         dhXitSLGZNgIW8dqGxNMJNRzdAOJLOKd15Z28jbsXnQbOtp0BHG99JQVTveM5BQR/Lkk
+         Oz/Jd7W5F7I2Z112XWVyysA2snle3N9zlm33gw6329hjoUcTZbCgS7AXe+9WlidHtOHE
+         WwaQLjJsn8RfLVwCrDZw9HNBhBtk0y+orDkDm8WnrCUt1CE2wACMJbuEQNToI0ROF/IP
+         LRWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677850615;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0lcRdKQgaZO87kSxaTq3dQQhph83hzwyCoWioxxpX9w=;
+        b=UQfaaz3wF4LnAFGsV5Kh5M/XL8EWT37KLEI5Y9zGzcF/P9TvgRWXyWI1xUxgevqtxW
+         Tc/cw79QWsqWCxHYvsIPdRc1FULafqeRjFv3PljNh/0U7vafW1CA8bvHWPmW6cVMehGV
+         VPTqlUdk/EuB9BKbEMRLUZ//nEoAJCyEun0EnJwRQjZVRt5BO/q3cx9g8gYtyC2I85Gb
+         dya+CsgkH/ODV5f6Gl87WYi/0u/LRrNVv0bt9kDIk/VCRj6Xu7DYgIr+j7YHMPUVnjnn
+         cZA266zcA/gaCkCFsdiBOXMXqItd1Hr1bA1hoNwt962zYt9KjwNAgj5JfpihwZ50lK0w
+         s9hw==
+X-Gm-Message-State: AO0yUKXNkR1yFUBck7k1qPk/wMCCBpptZGeQqtsw6V0ScYjU+XysMIcg
+        13WwZ0VmqdYv0h8buM9U/V/tgw==
+X-Google-Smtp-Source: AK7set8an551CnhvNkEz3XpDl39Ncgs6Yopsd9JY5sqGN3Ly/d177jbxuWStV6HcSgxyLsh8Y3BKuA==
+X-Received: by 2002:a17:90a:fe17:b0:234:9303:2801 with SMTP id ck23-20020a17090afe1700b0023493032801mr1734761pjb.20.1677850614912;
+        Fri, 03 Mar 2023 05:36:54 -0800 (PST)
+Received: from localhost.localdomain ([49.206.14.226])
+        by smtp.gmail.com with ESMTPSA id m9-20020a170902768900b0019ac5d3ee9dsm1533125pll.157.2023.03.03.05.36.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 05:36:54 -0800 (PST)
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        'Conor Dooley ' <conor.dooley@microchip.com>,
+        Sunil V L <sunilvl@ventanamicro.com>
+Subject: [PATCH V3 00/20] Add basic ACPI support for RISC-V
+Date:   Fri,  3 Mar 2023 19:06:27 +0530
+Message-Id: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mm, page_alloc: batch cma update on pcp buffer refill
-To:     Alexander Halbuer <halbuer@sra.uni-hannover.de>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230217120504.87043-1-halbuer@sra.uni-hannover.de>
- <89778da7-74a3-2f2a-1668-afe7b15487dc@suse.cz>
- <0952ab0d-d640-decb-2f20-57881e45ab52@sra.uni-hannover.de>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <0952ab0d-d640-decb-2f20-57881e45ab52@sra.uni-hannover.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/23 13:52, Alexander Halbuer wrote:
-> On 2/21/23 11:27, Vlastimil Babka wrote:
->> Incidentally, did you observe any improvements by [2] with your test,
->> especially as the batch freeing side also no longer does checking under zone
->> lock?
->> 
->> Thanks!
->> 
-> 
-> I finally managed to repeat the benchmark to see the effects of
-> disabling alloc and free sanity checks by default ("mm, page_alloc:
-> reduce page alloc/free sanity checks"; results below).
+This patch series enables the basic ACPI infrastructure for RISC-V.
+Supporting external interrupt controllers is in progress and hence it is
+tested using poll based HVC SBI console and RAM disk.
 
-Thanks for the measurements!
+The first patch in this series is one of the patch from Jisheng's
+series [1] which is not merged yet. This patch is required to support
+ACPI since efi_init() which gets called before sbi_init() can enable
+static branches and hits a panic.
 
-> Average huge page allocation latency drastically reduces by over 90% in
-> the single core case. However i can't see any real improvements for the
-> free operation.
+Patch 2 and 3 are ACPICA patches which are not merged into acpica yet
+but a PR is raised already.
 
-Ah, I see now why huge page freeing didn't improve. It's because
-bulkfree_pcp_prepare() was calling free_page_is_bad(page) thus checking just
-the head page. So the tail pages were not actually checked. Just another
-detail of how the checking wasn't thorough anyway.
+Below are two ECRs approved by ASWG.
+RINTC - https://drive.google.com/file/d/1R6k4MshhN3WTT-hwqAquu5nX6xSEqK2l/view
+RHCT - https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR-tia/view
 
-> ---
-> 
-> Measurement results for the batch allocation benchmark for different
-> core counts: Internally used functions are alloc_pages_node() for
-> allocation (get) and __free_pages() for free (put).
-> 
-> Compared kernel versions are from the mm-unstable branch:
-> - Reference version (without the mentioned patch):
-> daf4bcbf2b72 ("mm: cma: make kobj_type structure constant")
-> - Patched version:
-> 60114678f165 ("mm-page_alloc-reduce-page-alloc-free-sanity-checks-fix")
-> 
-> Normale pages
-> +-------+------+-------+---------+------+-------+---------+
-> | cores | base | patch |    diff | base | patch |  diff   |
-> |       |  get |   get |     get |  put |   put |   put   |
-> |       | (ns) |  (ns) |         | (ns) |  (ns) |         |
-> +-------+------+-------+---------+------+-------+---------+
-> |     1 |  122 |   118 | (-3.3%) |  118 |   116 | (-1.7%) |
-> |     2 |  133 |   130 | (-2.3%) |  130 |   123 | (-5.4%) |
-> |     3 |  136 |   132 | (-2.9%) |  175 |   162 | (-7.4%) |
-> |     4 |  161 |   149 | (-7.5%) |  241 |   226 | (-6.2%) |
-> |     6 |  247 |   228 | (-7.7%) |  366 |   344 | (-6.0%) |
-> |     8 |  331 |   304 | (-8.2%) |  484 |   456 | (-5.8%) |
-> |    10 |  416 |   390 | (-6.2%) |  615 |   578 | (-6.0%) |
-> |    12 |  502 |   472 | (-6.0%) |  727 |   687 | (-5.5%) |
-> |    14 |  584 |   552 | (-5.5%) |  862 |   816 | (-5.3%) |
-> |    16 |  669 |   632 | (-5.5%) |  967 |   923 | (-4.6%) |
-> |    20 |  833 |   787 | (-5.5%) | 1232 |  1164 | (-5.5%) |
-> |    24 |  999 |   944 | (-5.5%) | 1462 |  1384 | (-5.3%) |
-> +-------+------+-------+---------+------+-------+---------+
-> 
-> Huge Pages
-> +-------+------+-------+----------+-------+-------+---------+
-> | cores | base | patch |     diff |  base | patch |  diff   |
-> |       |  get |   get |      get |   put |   put |   put   |
-> |       | (ns) |  (ns) |          |  (ns) |  (ns) |         |
-> +-------+------+-------+----------+-------+-------+---------+
-> |     1 | 3148 |   177 | (-94.4%) |  2946 |  2872 | (-2.5%) |
-> |     2 | 3404 |   596 | (-82.5%) |  3318 |  3306 | (-0.4%) |
-> |     3 | 3581 |   950 | (-73.5%) |  3401 |  3358 | (-1.3%) |
-> |     4 | 3651 |  1284 | (-64.8%) |  3562 |  3616 | (1.5%)  |
-> |     6 | 3568 |  1929 | (-45.9%) |  4478 |  4564 | (1.9%)  |
-> |     8 | 3605 |  2328 | (-35.4%) |  5658 |  5546 | (-2.0%) |
-> |    10 | 4093 |  2935 | (-28.3%) |  6758 |  6457 | (-4.5%) |
-> |    12 | 4778 |  3540 | (-25.9%) |  7698 |  7565 | (-1.7%) |
-> |    14 | 5565 |  4097 | (-26.4%) |  8748 |  8810 | (0.7%)  |
-> |    16 | 6364 |  4725 | (-25.8%) |  9942 | 10103 | (1.6%)  |
-> |    20 | 8014 |  5915 | (-26.2%) | 12509 | 12772 | (2.1%)  |
-> |    24 | 8732 |  7138 | (-18.3%) | 15217 | 15433 | (1.4%)  |
-> +-------+------+-------+----------+-------+-------+---------+
-> 
->>>
->>> [1] https://lore.kernel.org/lkml/1d468148-936f-8816-eb71-1662f2d4945b@suse.cz/
->>> [2] https://lore.kernel.org/linux-mm/20230216095131.17336-1-vbabka@suse.cz/
+The series depends on Anup's IPI improvement series [2].
+
+[1] https://lore.kernel.org/all/20220821140918.3613-1-jszhang@kernel.org/
+[2] https://lore.kernel.org/lkml/20230103141221.772261-7-apatel@ventanamicro.com/T/
+
+Changes since V2:
+	1) Dropped ACPI_PROCESSOR patch.
+	2) Added new patch to print debug info of RISC-V INTC in MADT
+	3) Addressed other comments from Drew.
+	4) Rebased and updated tags
+
+Changes since V1:
+	1) Dropped PCI changes and instead added dummy interfaces just to enable
+	   building ACPI core when CONFIG_PCI is enabled. Actual PCI changes will
+	   be added in future along with external interrupt controller support
+	   in ACPI.
+	2) Squashed couple of patches so that new code added gets built in each
+	   commit.
+	3) Fixed the missing wake_cpu code in timer refactor patch as pointed by
+	   Conor
+	4) Fixed an issue with SMP disabled.
+	5) Addressed other comments from Conor.
+	6) Updated documentation patch as per feedback from Sanjaya.
+	7) Fixed W=1 and checkpatch --strict issues.
+	8) Added ACK/RB tags
+
+These changes are available at
+https://github.com/vlsunil/linux/commits/acpi_b1_us_review_ipi17_V3
+
+Testing:
+1) Build Qemu with ACPI support using below branch
+https://github.com/vlsunil/qemu/tree/acpi_b1_us_review_V5
+
+2) Build EDK2 as per instructions in
+https://github.com/vlsunil/riscv-uefi-edk2-docs/wiki/RISC-V-Qemu-Virt-support
+
+3) Build Linux after enabling SBI HVC and SBI earlycon
+CONFIG_RISCV_SBI_V01=y
+CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
+CONFIG_HVC_RISCV_SBI=y
+
+4) Build buildroot.
+
+Run with below command.
+qemu-system-riscv64   -nographic \
+-drive file=Build/RiscVVirtQemu/RELEASE_GCC5/FV/RISCV_VIRT.fd,if=pflash,format=raw,unit=1 \
+-machine virt -smp 16 -m 2G \
+-kernel arch/riscv/boot/Image \
+-initrd buildroot/output/images/rootfs.cpio \
+-append "root=/dev/ram ro console=hvc0 earlycon=sbi"
+
+
+Jisheng Zhang (1):
+  riscv: move sbi_init() earlier before jump_label_init()
+
+Sunil V L (19):
+  ACPICA: MADT: Add RISC-V INTC interrupt controller
+  ACPICA: Add structure definitions for RISC-V RHCT
+  ACPI: tables: Print RINTC information when MADT is parsed
+  ACPI: OSL: Make should_use_kmap() 0 for RISC-V
+  RISC-V: Add support to build the ACPI core
+  ACPI: processor_core: RISC-V: Enable mapping processor to the hartid
+  drivers/acpi: RISC-V: Add RHCT related code
+  RISC-V: smpboot: Create wrapper smp_setup()
+  RISC-V: smpboot: Add ACPI support in smp_setup()
+  RISC-V: ACPI: Cache and retrieve the RINTC structure
+  RISC-V: cpufeature: Add ACPI support in riscv_fill_hwcap()
+  RISC-V: cpu: Enable cpuinfo for ACPI systems
+  irqchip/riscv-intc: Add ACPI support
+  clocksource/timer-riscv: Refactor riscv_timer_init_dt()
+  clocksource/timer-riscv: Add ACPI support
+  RISC-V: time.c: Add ACPI support for time_init()
+  RISC-V: Add ACPI initialization in setup_arch()
+  RISC-V: Enable ACPI in defconfig
+  MAINTAINERS: Add entry for drivers/acpi/riscv
+
+ .../admin-guide/kernel-parameters.txt         |   8 +-
+ MAINTAINERS                                   |   8 +
+ arch/riscv/Kconfig                            |   5 +
+ arch/riscv/configs/defconfig                  |   1 +
+ arch/riscv/include/asm/acenv.h                |  11 +
+ arch/riscv/include/asm/acpi.h                 |  82 ++++++
+ arch/riscv/include/asm/cpu.h                  |   8 +
+ arch/riscv/kernel/Makefile                    |   2 +
+ arch/riscv/kernel/acpi.c                      | 262 ++++++++++++++++++
+ arch/riscv/kernel/cpu.c                       |  27 +-
+ arch/riscv/kernel/cpufeature.c                |  41 ++-
+ arch/riscv/kernel/setup.c                     |  27 +-
+ arch/riscv/kernel/smpboot.c                   |  77 ++++-
+ arch/riscv/kernel/time.c                      |  23 +-
+ drivers/acpi/Makefile                         |   2 +
+ drivers/acpi/osl.c                            |   2 +-
+ drivers/acpi/processor_core.c                 |  29 ++
+ drivers/acpi/riscv/Makefile                   |   2 +
+ drivers/acpi/riscv/rhct.c                     |  82 ++++++
+ drivers/acpi/tables.c                         |  10 +
+ drivers/clocksource/timer-riscv.c             |  92 +++---
+ drivers/irqchip/irq-riscv-intc.c              |  77 ++++-
+ include/acpi/actbl2.h                         |  68 ++++-
+ 23 files changed, 854 insertions(+), 92 deletions(-)
+ create mode 100644 arch/riscv/include/asm/acenv.h
+ create mode 100644 arch/riscv/include/asm/acpi.h
+ create mode 100644 arch/riscv/include/asm/cpu.h
+ create mode 100644 arch/riscv/kernel/acpi.c
+ create mode 100644 drivers/acpi/riscv/Makefile
+ create mode 100644 drivers/acpi/riscv/rhct.c
+
+-- 
+2.34.1
 
