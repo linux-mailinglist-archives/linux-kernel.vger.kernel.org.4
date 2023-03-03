@@ -2,75 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CAE6A9F75
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0516A9F6D
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjCCSpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S231956AbjCCSpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231825AbjCCSpc (ORCPT
+        with ESMTP id S231864AbjCCSpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:45:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC5259419;
-        Fri,  3 Mar 2023 10:45:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 84918B819B9;
-        Fri,  3 Mar 2023 18:44:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 37D9CC433A0;
-        Fri,  3 Mar 2023 18:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677869071;
-        bh=3+blzz/o/7Z3s6nIgKqJFPIN1F2p/Qpg7jNgY10jf8M=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=sys8nl3OGFP5UaIn7XbPVmJuhvXBvNbsmnCxuD3n0oo6M+NSDa0jOpWMqKsCQ6mmr
-         oo2XXhhiN5steJKZKQEOVhX5TxVoI7ZE7ZX/i7sUOMDQ07HPSYYMwJAyFXMrOFlrrx
-         qRWqVVD4AgcxPcQfGsE7xt/oInx6D5fET/R6ed/5IESQNTu0kP4O2UIcTcgsZYSXvg
-         t4e4fZVOGDc51mKJ7KAAvX8yr2BNKKlRMuG6g/3zgP2gCK57GwSrT/+aPLKFm/sP0m
-         frrsZ9s5f7D2T1ObaD+hx85oiwRuyX1omcH+lOyiEz7h3UqeG3nUgE+NJPOIsS29Mx
-         P4ewyyhsRatAA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 23CBCE68D5C;
-        Fri,  3 Mar 2023 18:44:31 +0000 (UTC)
-Subject: Re: [GIT PULL] More ACPI updates for v6.3-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0jwa5wpitjs+wf--ndk4k5zpM4iuXV6gzxAoB4UmnKUfQ@mail.gmail.com>
-References: <CAJZ5v0jwa5wpitjs+wf--ndk4k5zpM4iuXV6gzxAoB4UmnKUfQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0jwa5wpitjs+wf--ndk4k5zpM4iuXV6gzxAoB4UmnKUfQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.3-rc1-2
-X-PR-Tracked-Commit-Id: 57b76324c2a03b7b75d2d93f5c83f4340fd9b621
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 44b6f565e79188760851d58fa59628b4c2a1b334
-Message-Id: <167786907114.30023.17088830195921845954.pr-tracker-bot@kernel.org>
-Date:   Fri, 03 Mar 2023 18:44:31 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Mar 2023 13:45:30 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A07912BE3;
+        Fri,  3 Mar 2023 10:45:10 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 9B6FA3200437;
+        Fri,  3 Mar 2023 13:45:07 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 03 Mar 2023 13:45:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1677869107; x=1677955507; bh=czCFFzFaQjnmq2jNbCJAn96qNvrXg7kn6ZW
+        3+GAl8rY=; b=UgNeXOGBiEOT2K0HO9CO8DUA56pg5dnquriQOI30B2JrykFlDk0
+        1PzG9LcwcuqcCsE33Vblr+5A+OF40vcaoeNcvywMP1/3WAVwWABoiCoX2deXBbKO
+        p7MaVZLQxBXl44D5UnEBSQdztpUFNPU5nXhTstynMSuShMSfxnIXi/ZMuZ7fRmu7
+        MiGGmEVwrHV1puqWa3PKIwOE0VTtDBhf9fajtV7/SLFH/f1YQcKzkXtxfDCiAi0z
+        HSCAWdzHe4c6f83+cxem9OaubwEdo+k2FNqTNio1GlC/sPbt04CfDjiaEBJV0IS+
+        1xQmw8V3cQzQUfiqsgNdJkylpXFS+Sr8VeQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1677869107; x=1677955507; bh=czCFFzFaQjnmq2jNbCJAn96qNvrXg7kn6ZW
+        3+GAl8rY=; b=eJ38k9/tbcMP5V3O1H8T4a+hJ3eYleAWW3FMcX/436K1vJRVD9m
+        hBrGLTCXKDEWy6907MjpGqtbcZhgeG5+VmucHbMTYwbcrVog/jlRUNiHAqXVNrfT
+        wwfR0SosDGCUqWktWiCAgcokYEIbHgh0us02Azd6eGpVHK2a18cfPzcdh4TtdWFh
+        InoBaLFfXSMVG1VbV+Ob7glh9W7UVzO/pAaHlWkGeaGlyswh1m8hlsTKkuMjQor0
+        m+Ur+XaZcKb973BbnvXJWlCK/HO4aov0FTP1h0/JYrDZTcytDpfQ5HCLfvcgYwKz
+        M5tykf9NLbuRRRUKkhXGReeD4dCVpewQQeg==
+X-ME-Sender: <xms:MkACZI-B57VzZEGcHr3HewJZmTNTYn3BYhRkzrSMt2fPiAdyAEdDnA>
+    <xme:MkACZAvAwiuQcQXA34thnddb8TQWJRe0wlcCUVw10rhVcKcL6b7yl8ySun_sONHHH
+    -2iP8I168CtUGEK>
+X-ME-Received: <xmr:MkACZOD--SVGmwC5Okha9TKVWpe_5_VyXlWRTW71blT48sp1zgxkVhRux4bTf91cvQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledguddutdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepuegv
+    rhhnugcuufgthhhusggvrhhtuceosggvrhhnugdrshgthhhusggvrhhtsehfrghsthhmrg
+    hilhdrfhhmqeenucggtffrrghtthgvrhhnpeekheevkeelkeekjefhheegfedtffduudej
+    jeeiheehudeuleelgefhueekfeevudenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpegsvghrnhgurdhstghhuhgsvghrthesfhgrshhtmhgrihhl
+    rdhfmh
+X-ME-Proxy: <xmx:MkACZIcx0kEajpXtZKxiVQkAzfcPs9qN2VgMNGfPB5jMrFnxCvHDQA>
+    <xmx:MkACZNMkttVwaiAfDZNQZntjG3dCNr6ntf-tZNZ2qZd-i8q6ojL35Q>
+    <xmx:MkACZCncDRGQY2Skq_JC0hmVZOe1A9JxaAC5hGeH_LjOuosKvCuQkg>
+    <xmx:M0ACZOGRiw84xv1VuH5jnLXob_I_3GDZxVwJYXQljv0ndagOXYCE1w>
+Feedback-ID: id8a24192:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 3 Mar 2023 13:45:05 -0500 (EST)
+Message-ID: <ba148a1a-26da-4fcc-e24c-b1f79d9ba014@fastmail.fm>
+Date:   Fri, 3 Mar 2023 19:45:04 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 6/9] fuse: take fuse connection generation into
+ account
+Content-Language: en-US
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        mszeredi@redhat.com
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Amir Goldstein <amir73il@gmail.com>,
+        =?UTF-8?Q?St=c3=a9phane_Graber?= <stgraber@ubuntu.com>,
+        Seth Forshee <sforshee@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        criu@openvz.org
+References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230220193754.470330-7-aleksandr.mikhalitsyn@canonical.com>
+From:   Bernd Schubert <bernd.schubert@fastmail.fm>
+In-Reply-To: <20230220193754.470330-7-aleksandr.mikhalitsyn@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 3 Mar 2023 19:16:18 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.3-rc1-2
+[...]
+> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> index d5b30faff0b9..be9086a1868d 100644
+> --- a/fs/fuse/file.c
+> +++ b/fs/fuse/file.c
+> @@ -110,7 +110,8 @@ static void fuse_file_put(struct fuse_file *ff, bool sync, bool isdir)
+>   	if (refcount_dec_and_test(&ff->count)) {
+>   		struct fuse_args *args = &ff->release_args->args;
+>   
+> -		if (isdir ? ff->fm->fc->flags.no_opendir : ff->fm->fc->flags.no_open) {
+> +		if (fuse_stale_ff(ff) ||
+> +		    (isdir ? ff->fm->fc->flags.no_opendir : ff->fm->fc->flags.no_open)) {
+>   			/* Do nothing when client does not implement 'open' */
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/44b6f565e79188760851d58fa59628b4c2a1b334
+The comment does not match anymore.
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+>   			fuse_release_end(ff->fm, args, 0);
+>   		} else if (sync) {
+> @@ -597,9 +598,10 @@ static int fuse_fsync(struct file *file, loff_t start, loff_t end,
+>   {
+>   	struct inode *inode = file->f_mapping->host;
+>   	struct fuse_conn *fc = get_fuse_conn(inode);
+> +	struct fuse_file *ff = file->private_data;
+>   	int err;
+>   
+> -	if (fuse_is_bad(inode))
+> +	if (fuse_stale_ff(ff) || fuse_is_bad(inode))
+>   		return -EIO;
+>   
+>   	inode_lock(inode);
+> diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> index 4f4a6f912c7c..0643de31674d 100644
+> --- a/fs/fuse/fuse_i.h
+> +++ b/fs/fuse/fuse_i.h
+> @@ -954,7 +954,8 @@ static inline bool fuse_stale_inode(const struct inode *inode, int generation,
+>   				    struct fuse_attr *attr)
+>   {
+>   	return inode->i_generation != generation ||
+> -		inode_wrong_type(inode, attr->mode);
+> +		inode_wrong_type(inode, attr->mode) ||
+> +		fuse_stale_inode_conn(inode);
+>   }
+>   
+>   static inline void fuse_make_bad(struct inode *inode)
+> diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+> index c3109e016494..f9dc8971274d 100644
+> --- a/fs/fuse/inode.c
+> +++ b/fs/fuse/inode.c
+> @@ -124,7 +124,7 @@ static void fuse_evict_inode(struct inode *inode)
+>   			fuse_dax_inode_cleanup(inode);
+>   		if (fi->nlookup) {
+>   			fuse_queue_forget(fc, fi->forget, fi->nodeid,
+> -					  fi->nlookup, false);
+> +					  fi->nlookup, fuse_stale_inode_conn(inode));
+>   			fi->forget = NULL;
+>   		}
+>   	}
