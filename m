@@ -2,181 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7706A9284
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D29636A9269
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 09:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjCCIeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 03:34:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57952 "EHLO
+        id S230118AbjCCI2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 03:28:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjCCIeK (ORCPT
+        with ESMTP id S229964AbjCCI2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 03:34:10 -0500
+        Fri, 3 Mar 2023 03:28:48 -0500
 Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BFC136E1
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:34:08 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id cy23so7107836edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 00:34:08 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD40193F3
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 00:28:27 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id d30so7246780eda.4
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 00:28:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1677832446;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QX/s24fyXps09GmRUXN6+YF0kQsZjEttAdLoVe9JJU8=;
-        b=KE8kJDfmZXlNopgtYY4tozghvbSzrDPir+aOJyvz4M9lULysiFooq0W9opwHCbAgXM
-         sUokj7MEEiZj0N0IlDYeNWxFcRvLwDeZp+KeuEQfjunuJ/CuLAdXO4JuCss+Ed1ook8C
-         LEPdrpsr4+ThxrdGwOtVsjvc1a/3K3g/X+3CNDsUW9HjKj8CRnLfNgwzTX5pIKoz+ixT
-         2JQ2VPzFZyTvtD3NYd8WQKJmU51lkNbPS1GVRLFoUA7o4GLnIp2OwY02RlSH9kyrltR7
-         oMy1TccoGb2eZ6n1NLq6ehvPWnGMaGiwyyifIcSwIoCBrof6ABWlJwUvBDIJ46zfuxIN
-         iORQ==
+        d=linaro.org; s=google; t=1677832105;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NNoh7Y1eCqw1vILTrX20qgBsgHaoKEZRgMQ7Y2gIJPo=;
+        b=TFZ/47LHMyE5A2PfNGsk2pMHpoLlfD+CLOyn7J57fS5+aqQBd8LdoKsTUkmufj55dZ
+         5JG74u7zawpRBTIXLULjRMfc3ZLmuMtsA3Lu9I+fj5yLdMTt2Dpob2UzqK/vQ4fRF3Be
+         Ohwpi7u2xVkLvopc0D0HwFEuR59z9yfiGUIxD6aNf4XRgOJTWbTRBMOcaM4bWtwP/Fxr
+         IoX9rsGvL9/5IB0EDLyoDYeoAR7Tc/PL2YEVbfJUXOP9yFUIs6iFOANuDWqf6+XCOR/S
+         gT4ggcGE+o+o7gvPLKH5+VXfkJkn+JVc29OEFdhZsVfRbO1//IknXAKmihP+kpjhxEt6
+         /JPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677832446;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QX/s24fyXps09GmRUXN6+YF0kQsZjEttAdLoVe9JJU8=;
-        b=H1/gLsLdo9k7JTqB5ZthojIfvik2+Z4T2qe3wjAnhPBLdIDLyEJwMIWO5s35RMADwB
-         QFVDS80wzavdvKz1dcGALd/YqZirSvU9ZlwM7TGsep5dixdPVSLQzSlzooFsuSQ6IB14
-         HCKlR5ODOiv/lonN0ZtlFIGXNb+pwrMSclkDeVa2xA5e9w7hjhRKvpXxAE/3BdZT8aFH
-         h0LYeJ/iqkYbesstGevwR/n23mJxwojWQ2QrHHBIXjnyDwliSfvNa1wJY/vSj3I3CAqQ
-         kd27YBg33Wvs+cN5OFy9bVyyDbqGV4IQsk40GWPdU7GYOwjCISCsUmjfc3y+vqIFdV+6
-         kGQg==
-X-Gm-Message-State: AO0yUKXJgzIcRh4iwEg9XXHlTD/ab0Y9rqrNCzK0J1i2hlShwRp6cAhP
-        hz/hkWLmn3SShPnJ5H9XhG6Vlg==
-X-Google-Smtp-Source: AK7set+gReERjem/pLhjTAwaodgJwetDff7PtxIZhYQEiDj2UkwqZN3tOQ/Ey6fVvCjcGCGStfPDZA==
-X-Received: by 2002:aa7:cfcb:0:b0:4af:6c25:ed9a with SMTP id r11-20020aa7cfcb000000b004af6c25ed9amr1235797edy.29.1677832446739;
-        Fri, 03 Mar 2023 00:34:06 -0800 (PST)
-Received: from localhost ([194.62.217.3])
-        by smtp.gmail.com with ESMTPSA id t30-20020a50ab5e000000b004ad601533a3sm872101edc.55.2023.03.03.00.34.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 00:34:06 -0800 (PST)
-References: <20230224200502.391570-1-nmi@metaspace.dk>
- <ZAAPBFfqP671N4ue@T590> <87o7pblhi1.fsf@metaspace.dk>
- <ZABfFW+28Jlxq+Ew@T590> <ZABmAR6Du1tUVEa7@T590>
- <CAFj5m9+o4yNA5rNDA+EXWZthMtB+dOLOW0O788i77=Qn1eJ0qQ@mail.gmail.com>
- <87h6v3l9up.fsf@metaspace.dk> <ZAChttVoCHsnXmvF@T590>
- <875ybjl1r0.fsf@metaspace.dk> <ZAFieW9PZ2LNQYHa@T590>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-block@vger.kernel.org, Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        kernel test robot <lkp@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        open list <linux-kernel@vger.kernel.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: Re: [PATCH v2] block: ublk: enable zoned storage support
-Date:   Fri, 03 Mar 2023 09:27:58 +0100
-In-reply-to: <ZAFieW9PZ2LNQYHa@T590>
-Message-ID: <87wn3yfd36.fsf@metaspace.dk>
+        d=1e100.net; s=20210112; t=1677832105;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NNoh7Y1eCqw1vILTrX20qgBsgHaoKEZRgMQ7Y2gIJPo=;
+        b=4GVOlZ2icyU2JUKc0vXCNEoGApUh7vrmUKy0+1+Q7gvQ/bBw+NAgbR/Zzh8H2FIfc2
+         OVx5RfCud6FApFCUqThT3x3rITLIH6eY2EioIwn3MREx2POCH/aOqSslkEwq6cWKg8fp
+         +O8sDJdH5WPUXESJtrtLhx7Vccu72Ft72nsKvmydEDu3mxLrCieOAZDbFI1iiTFcd2k0
+         nyer9HknhIWDBuurnKFnMCdxTZXRDSVyzeRzVnxM9MvAaju9re2L2Gn4lFhtbobRrqz1
+         pxyuyVZwFx/wDr83OVQJxC2tFKmfp1nmEENtPl20swxTsjFMHEvsO3VhrNzrW6mz3yVW
+         s1zw==
+X-Gm-Message-State: AO0yUKXMJBYZ7r9ErFwpQg2f8p32FIoGChDSfH/2ZqcxcnWB9MFzHbgc
+        ZlSLd7GXcetVgTSaOFqaEhqGUg==
+X-Google-Smtp-Source: AK7set8JDCyuD/jVEdIdZMzgRpBie4AkpO5CKfVjB2ToMCxzT2bGHuZqG7hjF2gthEYJRlfjPM0geg==
+X-Received: by 2002:a17:906:ee8d:b0:86f:d0c9:4bdd with SMTP id wt13-20020a170906ee8d00b0086fd0c94bddmr1115380ejb.27.1677832105526;
+        Fri, 03 Mar 2023 00:28:25 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id f21-20020a50d555000000b004c059535b43sm883895edj.31.2023.03.03.00.28.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 00:28:25 -0800 (PST)
+Message-ID: <6a950a51-fe90-9163-b73d-0a396d7187ee@linaro.org>
+Date:   Fri, 3 Mar 2023 09:28:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v9 3/5] dt-bindings: clock: meson: add A1 PLL clock
+ controller bindings
+Content-Language: en-US
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
+ <20230301183759.16163-4-ddrokosov@sberdevices.ru>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230301183759.16163-4-ddrokosov@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01/03/2023 19:37, Dmitry Rokosov wrote:
+> Add the documentation for Amlogic A1 PLL clock driver, and A1 PLL
+> clock controller bindings.
+> Also include new A1 clock controller dt bindings to MAINTAINERS.
+> 
+> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 59 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  include/dt-bindings/clock/a1-pll-clkc.h       | 20 +++++++
+>  3 files changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+>  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> new file mode 100644
+> index 000000000000..8bd2c948df86
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+> @@ -0,0 +1,59 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Amlogic Meson A/C serials PLL Clock Control Unit
+> +
+> +maintainers:
+> +  - Neil Armstrong <neil.armstrong@linaro.org>
+> +  - Jerome Brunet <jbrunet@baylibre.com>
+> +  - Jian Hu <jian.hu@jian.hu.com>
+> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> +
+> +properties:
+> +  compatible:
+> +    const: amlogic,a1-pll-clkc
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: input fixpll_in
+> +      - description: input hifipll_in
+> +
+> +  clock-names:
+> +    items:
+> +      - const: fixpll_in
+> +      - const: hifipll_in
+> +
+> +required:
+> +  - compatible
+> +  - '#clock-cells'
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/a1-clkc.h>
 
-Ming Lei <ming.lei@redhat.com> writes:
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-> On Thu, Mar 02, 2023 at 02:28:33PM +0100, Andreas Hindborg wrote:
->>=20
->> Ming Lei <ming.lei@redhat.com> writes:
->>=20
->> > On Thu, Mar 02, 2023 at 11:07:15AM +0100, Andreas Hindborg wrote:
->> >>=20
->> >> Ming Lei <ming.lei@redhat.com> writes:
->> >>=20
->> >> > On Thu, Mar 2, 2023 at 5:02=E2=80=AFPM Ming Lei <ming.lei@redhat.co=
-m> wrote:
->> >> >>
->> >> >> On Thu, Mar 02, 2023 at 04:32:21PM +0800, Ming Lei wrote:
->> >> >> > On Thu, Mar 02, 2023 at 08:31:07AM +0100, Andreas Hindborg wrote:
->> >> >> > >
->> >> >>
->> >> >> ...
->> >> >>
->> >> >> > >
->> >> >> > > I agree about fetching more zones. However, it is no good to f=
-etch up to
->> >> >> > > a max, since the requested zone report may less than max. I was
->> >> >> >
->> >> >> > Short read should always be supported, so the interface may need=
- to
->> >> >> > return how many zones in single command, please refer to nvme_ns=
-_report_zones().
->> >> >>
->> >> >> blk_zone is part of uapi, maybe the short read can be figured out =
-by
->> >> >> one all-zeroed 'blk_zone'?  then no extra uapi data is needed for
->> >> >> reporting zones.
->> >> >
->> >> > oops, we have blk_zone_report data for reporting zones to userspace=
- already,
->> >> > see blkdev_report_zones_ioctl(), then this way can be re-used for g=
-etting zone
->> >> > report from ublk server too, right?
->> >>=20
->> >> Yes that would be nice. But I did the report_zone command like a read
->> >> operation, so we are not currently copying any buffers to user space
->> >> when issuing the command, we just rely on the iod.
->> >
->> > What I meant is to reuse the format of blk_zone_report for returning
->> > multiple 'blk_zone' info in single command.
->> >
->> > The only change is that you need to allocate one bigger kernel buffer
->> > to hold more 'blk_zone' in single report zone request.
->> >
->> >> I think it would be
->> >> better to use the start_sectors and nr_sectors of the iod instead. Th=
-en
->> >> we don't have to copy the blk_zone_report. What do you think?
->> >
->> > For IN parameter of report zone command, you still can reuse
->> > blk_zone_report:
->> >
->> > struct blk_zone_report {
->> >         __u64           sector;
->> >         __u32           nr_zones;
->> >         __u32           flags;
->> > };
->> >
->> > Just by using the 1st two 64b words of iod for holding 'blk_zone_repor=
-t', and
->> > keep the iod->addr field not touched.
->>=20
->> I see. Would you make the first part of `struct ublksrv_io_desc` a union
->> for this, or would you just cast it at the use site?
->
-> oops, you still need iod->op_flags for recognizing the io op, so just
-> start_sector and nr_sectors can be used.
+> +    apb {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        clock-controller@7c80 {
+> +            compatible = "amlogic,a1-pll-clkc";
+> +            reg = <0 0x7c80 0 0x18c>;
+> +            #clock-cells = <1>;
+> +            clocks = <&clkc_periphs CLKID_FIXPLL_IN>,
+> +                     <&clkc_periphs CLKID_HIFIPLL_IN>;
+> +            clock-names = "fixpll_in", "hifipll_in";
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 39ff1a717625..8438bc9bd636 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1895,6 +1895,7 @@ L:	linux-amlogic@lists.infradead.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/clock/amlogic*
+>  F:	drivers/clk/meson/
+> +F:	include/dt-bindings/clock/a1*
+>  F:	include/dt-bindings/clock/gxbb*
+>  F:	include/dt-bindings/clock/meson*
+>  
+> diff --git a/include/dt-bindings/clock/a1-pll-clkc.h b/include/dt-bindings/clock/a1-pll-clkc.h
 
-We do not actually need to pass the flags to user space, or back from
-user space to kernel for ublk zone report. They are currently used to
-tell user space if the zone report contains capacity field. We could
-exclude them from the ublk kabi since the zone report will always
-contain capacity? But it might be good to have a flags field or future
-things.
+Filename matching bindings, so amlogic,a1-pll-clkc.h
 
-> However, this way isn't good too, cause UBLK_IO_OP_DRV_IN is just mapped
-> to 'report zone' command in your implementation, what if new pt request
-> is required in future?
+> new file mode 100644
+> index 000000000000..3a559518c6e6
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/a1-pll-clkc.h
+> @@ -0,0 +1,20 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
 
-We are currently mapping REQ_OP_* 1:1 to  UBLK_OP_OP_*. If we relax
-this, we can have a UBLK_IO_OP_REPORT_ZONES.
+Any particular reason for using license other than in binding? Was it
+intentional (e.g. because it is derivative work)?
 
->
-> We need to think about how to support ublk pt request in generic way.
+> +/*
+> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+> + * Author: Jian Hu <jian.hu@amlogic.com>
+> + *
+> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
+> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 
-Another option is to allow REQ_OP_DRV_IN to pass a buffer to user space.
-Instead of being similar to a read operation, it could be a combination of
-a read and a write operation.
 
-BR Andreas
+Best regards,
+Krzysztof
 
