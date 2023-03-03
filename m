@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9324F6A8FCD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:17:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 945716A8FCF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 04:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjCCDRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Mar 2023 22:17:48 -0500
+        id S229607AbjCCDRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Mar 2023 22:17:53 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjCCDRk (ORCPT
+        with ESMTP id S229714AbjCCDRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Mar 2023 22:17:40 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF36E57D0B;
-        Thu,  2 Mar 2023 19:17:38 -0800 (PST)
-X-UUID: f0a2e3b4b97111ed945fc101203acc17-20230303
+        Thu, 2 Mar 2023 22:17:41 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C9014E89;
+        Thu,  2 Mar 2023 19:17:40 -0800 (PST)
+X-UUID: f1316a62b97111eda06fc9ecc4dadd91-20230303
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=oaloW61vYsYhb9woC0pGOBCyeLOtwht+oMl/dWqapWk=;
-        b=glsV0qyltodDN1H7Hc4nHPJnafy87ifaNCK70NIgIIgvDQ6eLqi3VCo/PHGDgUvwNuyw3+pj1zr/K2L62BOf/hiaMM55SVaWNmbXSCDtmS3c199bge5/LITgMEjqR2n3IBi5Feh4am7UHTBC1eYixIr3e7xVeRylN0LHkRqlcjQ=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=D94WFA3SndeHGVIdcLs2oaCrSr2lE/+uRTmXDF6D3iM=;
+        b=eJman8+H9rJwAqisCIedJ60Ud0yQCxTh+5gr2lgdy5OwnKHrlETBkYiGFgQc3rtHEHpnR280XQxj3HEFOcYUyvEYqstjO8N/GueAi2Jxma+lMWrN94MV/bG/PDmVqYlJDEhwRrmWajLKNpu0m/1KZ0Hgg68iCIgRz/Wtpv/Jo5M=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:7e66b9e1-ce1b-48b5-8685-9df117c0e00a,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.20,REQID:7e66b9e1-ce1b-48b5-8685-9df117c0e00a,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:25b5999,CLOUDID:9af59ef4-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:230303111735DBDLI1P1,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: f0a2e3b4b97111ed945fc101203acc17-20230303
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.20,REQID:03969ae1-dc0e-47c0-acc3-c13c484eb405,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:25b5999,CLOUDID:ce4511b2-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-UUID: f1316a62b97111eda06fc9ecc4dadd91-20230303
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <allen-kh.cheng@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1106794499; Fri, 03 Mar 2023 11:17:33 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+        with ESMTP id 631483533; Fri, 03 Mar 2023 11:17:34 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Fri, 3 Mar 2023 11:17:32 +0800
+ 15.2.1118.25; Fri, 3 Mar 2023 11:17:33 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
  mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 11:17:32 +0800
+ 15.2.1118.25 via Frontend Transport; Fri, 3 Mar 2023 11:17:33 +0800
 From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -56,9 +52,9 @@ CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         <linux-kernel@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>, <hsinyi@chromium.org>,
         Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v3 4/7] arm64: dts: mediatek: mt8186: Add ADSP node
-Date:   Fri, 3 Mar 2023 11:17:25 +0800
-Message-ID: <20230303031728.24251-5-allen-kh.cheng@mediatek.com>
+Subject: [PATCH v3 5/7] arm64: dts: mediatek: mt8186: Add audio controller node
+Date:   Fri, 3 Mar 2023 11:17:26 +0800
+Message-ID: <20230303031728.24251-6-allen-kh.cheng@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20230303031728.24251-1-allen-kh.cheng@mediatek.com>
 References: <20230303031728.24251-1-allen-kh.cheng@mediatek.com>
@@ -75,40 +71,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ADSP node for MT8186 SoC.
+Add audio controller node for MT8186 SoC.
 
 Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8186.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi | 62 ++++++++++++++++++++++++
+ 1 file changed, 62 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-index 0e42bdbd2cb6..337bcf3c1571 100644
+index 337bcf3c1571..f198fd8abc1d 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-@@ -633,6 +633,22 @@
- 			interrupts = <GIC_SPI 205 IRQ_TYPE_LEVEL_HIGH 0>;
+@@ -1046,6 +1046,68 @@
+ 			};
  		};
  
-+		adsp: adsp@10680000 {
-+			compatible = "mediatek,mt8186-dsp";
-+			reg = <0 0x10680000 0 0x2000>, <0 0x10800000 0 0x100000>,
-+			      <0 0x1068b000 0 0x100>, <0 0x1068f000 0 0x1000>;
-+			reg-names = "cfg", "sram", "sec", "bus";
-+			clocks = <&topckgen CLK_TOP_AUDIODSP>, <&topckgen CLK_TOP_ADSP_BUS>;
-+			clock-names = "audiodsp", "adsp_bus";
-+			assigned-clocks = <&topckgen CLK_TOP_AUDIODSP>,
-+					  <&topckgen CLK_TOP_ADSP_BUS>;
-+			assigned-clock-parents = <&clk26m>, <&topckgen CLK_TOP_MAINPLL_D2_D2>;
-+			mbox-names = "rx", "tx";
-+			mboxes = <&adsp_mailbox0>, <&adsp_mailbox1>;
-+			power-domains = <&spm MT8186_POWER_DOMAIN_ADSP_TOP>;
++		afe: audio-controller@11210000 {
++			compatible = "mediatek,mt8186-sound";
++			reg = <0 0x11210000 0 0x2000>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_AUDIO>,
++				 <&infracfg_ao CLK_INFRA_AO_AUDIO_26M_BCLK>,
++				 <&topckgen CLK_TOP_AUDIO>,
++				 <&topckgen CLK_TOP_AUD_INTBUS>,
++				 <&topckgen CLK_TOP_MAINPLL_D2_D4>,
++				 <&topckgen CLK_TOP_AUD_1>,
++				 <&apmixedsys CLK_APMIXED_APLL1>,
++				 <&topckgen CLK_TOP_AUD_2>,
++				 <&apmixedsys CLK_APMIXED_APLL2>,
++				 <&topckgen CLK_TOP_AUD_ENGEN1>,
++				 <&topckgen CLK_TOP_APLL1_D8>,
++				 <&topckgen CLK_TOP_AUD_ENGEN2>,
++				 <&topckgen CLK_TOP_APLL2_D8>,
++				 <&topckgen CLK_TOP_APLL_I2S0_MCK_SEL>,
++				 <&topckgen CLK_TOP_APLL_I2S1_MCK_SEL>,
++				 <&topckgen CLK_TOP_APLL_I2S2_MCK_SEL>,
++				 <&topckgen CLK_TOP_APLL_I2S4_MCK_SEL>,
++				 <&topckgen CLK_TOP_APLL_TDMOUT_MCK_SEL>,
++				 <&topckgen CLK_TOP_APLL12_CK_DIV0>,
++				 <&topckgen CLK_TOP_APLL12_CK_DIV1>,
++				 <&topckgen CLK_TOP_APLL12_CK_DIV2>,
++				 <&topckgen CLK_TOP_APLL12_CK_DIV4>,
++				 <&topckgen CLK_TOP_APLL12_CK_DIV_TDMOUT_M>,
++				 <&topckgen CLK_TOP_AUDIO_H>,
++				 <&clk26m>;
++			clock-names = "aud_infra_clk",
++				      "mtkaif_26m_clk",
++				      "top_mux_audio",
++				      "top_mux_audio_int",
++				      "top_mainpll_d2_d4",
++				      "top_mux_aud_1",
++				      "top_apll1_ck",
++				      "top_mux_aud_2",
++				      "top_apll2_ck",
++				      "top_mux_aud_eng1",
++				      "top_apll1_d8",
++				      "top_mux_aud_eng2",
++				      "top_apll2_d8",
++				      "top_i2s0_m_sel",
++				      "top_i2s1_m_sel",
++				      "top_i2s2_m_sel",
++				      "top_i2s4_m_sel",
++				      "top_tdm_m_sel",
++				      "top_apll12_div0",
++				      "top_apll12_div1",
++				      "top_apll12_div2",
++				      "top_apll12_div4",
++				      "top_apll12_div_tdm",
++				      "top_mux_audio_h",
++				      "top_clk26m_clk";
++			interrupts = <GIC_SPI 169 IRQ_TYPE_LEVEL_HIGH 0>;
++			mediatek,apmixedsys = <&apmixedsys>;
++			mediatek,infracfg = <&infracfg_ao>;
++			mediatek,topckgen = <&topckgen>;
++			resets = <&watchdog MT8186_TOPRGU_AUDIO_SW_RST>;
++			reset-names = "audiosys";
 +			status = "disabled";
 +		};
 +
- 		adsp_mailbox0: mailbox@10686000 {
- 			compatible = "mediatek,mt8186-adsp-mbox";
- 			#mbox-cells = <0>;
+ 		mmc0: mmc@11230000 {
+ 			compatible = "mediatek,mt8186-mmc",
+ 				     "mediatek,mt8183-mmc";
 -- 
 2.18.0
 
