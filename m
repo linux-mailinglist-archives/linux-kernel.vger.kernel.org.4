@@ -2,146 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 932AC6A9B32
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 602516A9B42
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjCCPwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 10:52:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
+        id S231487AbjCCPyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 10:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbjCCPwK (ORCPT
+        with ESMTP id S231277AbjCCPyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 10:52:10 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15F6EFBA
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 07:52:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677858728; x=1709394728;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=lsRjo7yTXyKCofFwzcN0jbA0ArTfH/fumplb/rfEDjk=;
-  b=d8JDpKdzfQkFLHouzaqxLRot9sroMjcM95SIE1kq+o02cTRQ/JObU9fJ
-   6D2M9VsrWdAPLY+IXbEJ9xTlD32hn83OnZMBcUbOWjZzDv4pQdzX65Z1O
-   MatLcl7QoJ9sKsUBeP+Gqv6ZLoBNi3qpjyuQrYCM0+UqlMkH5yRbN3lSj
-   SslPDKIMy/Yb+XMQRc/dkWHZp2H/aEqkvqzYLe7BnmPQKsT+HtOGnlgDU
-   OaWxtVY2yXBs78AnIQ6FcmEITC62Ei9bYHFPHmYz6LPD+IEmO5IDrMpgt
-   mISRjP+Ujz3nH3AvlPAfKeklF/7P0jP/4uZUK3AdJEcmL8PFQJtnb0EnX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="318896434"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="318896434"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 07:52:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="818509745"
-X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
-   d="scan'208";a="818509745"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
-  by fmsmga001.fm.intel.com with SMTP; 03 Mar 2023 07:52:03 -0800
-Received: by stinkbox (sSMTP sendmail emulation); Fri, 03 Mar 2023 17:52:02 +0200
-Date:   Fri, 3 Mar 2023 17:52:02 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= 
-        <ckoenig.leichtzumerken@gmail.com>,
-        Michel =?iso-8859-1?Q?D=E4nzer?= <michel@daenzer.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v9 11/15] drm/atomic-helper: Set fence deadline for vblank
-Message-ID: <ZAIXonf7orksoFhb@intel.com>
-References: <20230302235356.3148279-1-robdclark@gmail.com>
- <20230302235356.3148279-12-robdclark@gmail.com>
- <ZAIOaiogeUhhNVfo@intel.com>
- <CAF6AEGuL+B6sR2=7MFvqT0zfsgraoOdzAJBF=Ke1ce1umYh4Xw@mail.gmail.com>
+        Fri, 3 Mar 2023 10:54:36 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6431A97D;
+        Fri,  3 Mar 2023 07:54:34 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1FDA82052F;
+        Fri,  3 Mar 2023 15:54:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1677858873; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OX0Zk32MxB1SguOJCebjGzfeq9YQ/kNosNxS6sooeUo=;
+        b=YFSJtO8U5aF5USp1qkar0ddcOveTlTvcnxa4rifI37EyJbdz/878UzFCplMOx2DVEGu49x
+        jdDbxoF+HircpHnXUCGKozAu+NchrWC7iGKUZjLaoa4+h9bkeLNnOcqGM1nuAuYQ6RYOeG
+        mNi4paflRft0fZP9SLKZBM7zGZxXUb8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1677858873;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OX0Zk32MxB1SguOJCebjGzfeq9YQ/kNosNxS6sooeUo=;
+        b=VamsRLAwn96KJo2H0gpwvGwTmBzd958veUi4ZII21ILNcW2KQ/Kh09Btzewxn0B/GCf5jK
+        XZ6SYNliBwRObfDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 894881329E;
+        Fri,  3 Mar 2023 15:54:32 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id b/O0IDgYAmQhSQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 03 Mar 2023 15:54:32 +0000
+Message-ID: <4846fdcd-3e13-548b-dc2c-a47dc163885f@suse.cz>
+Date:   Fri, 3 Mar 2023 16:54:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAF6AEGuL+B6sR2=7MFvqT0zfsgraoOdzAJBF=Ke1ce1umYh4Xw@mail.gmail.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFC v8 23/56] crypto: ccp: Introduce snp leaked pages list
+Content-Language: en-US
+To:     Michael Roth <michael.roth@amd.com>, kvm@vger.kernel.org
+Cc:     linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        bp@alien8.de, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com
+References: <20230220183847.59159-1-michael.roth@amd.com>
+ <20230220183847.59159-24-michael.roth@amd.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230220183847.59159-24-michael.roth@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 07:45:05AM -0800, Rob Clark wrote:
-> On Fri, Mar 3, 2023 at 7:12 AM Ville Syrjälä
-> <ville.syrjala@linux.intel.com> wrote:
-> >
-> > On Thu, Mar 02, 2023 at 03:53:33PM -0800, Rob Clark wrote:
-> > > From: Rob Clark <robdclark@chromium.org>
-> > >
-> > > For an atomic commit updating a single CRTC (ie. a pageflip) calculate
-> > > the next vblank time, and inform the fence(s) of that deadline.
-> > >
-> > > v2: Comment typo fix (danvet)
-> > >
-> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-> > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > ---
-> > >  drivers/gpu/drm/drm_atomic_helper.c | 36 +++++++++++++++++++++++++++++
-> > >  1 file changed, 36 insertions(+)
-> > >
-> > > diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-> > > index d579fd8f7cb8..d8ee98ce2fc5 100644
-> > > --- a/drivers/gpu/drm/drm_atomic_helper.c
-> > > +++ b/drivers/gpu/drm/drm_atomic_helper.c
-> > > @@ -1511,6 +1511,40 @@ void drm_atomic_helper_commit_modeset_enables(struct drm_device *dev,
-> > >  }
-> > >  EXPORT_SYMBOL(drm_atomic_helper_commit_modeset_enables);
-> > >
-> > > +/*
-> > > + * For atomic updates which touch just a single CRTC, calculate the time of the
-> > > + * next vblank, and inform all the fences of the deadline.
-> > > + */
-> > > +static void set_fence_deadline(struct drm_device *dev,
-> > > +                            struct drm_atomic_state *state)
-> > > +{
-> > > +     struct drm_crtc *crtc, *wait_crtc = NULL;
-> > > +     struct drm_crtc_state *new_crtc_state;
-> > > +     struct drm_plane *plane;
-> > > +     struct drm_plane_state *new_plane_state;
-> > > +     ktime_t vbltime;
-> > > +     int i;
-> > > +
-> > > +     for_each_new_crtc_in_state (state, crtc, new_crtc_state, i) {
-> > > +             if (wait_crtc)
-> > > +                     return;
-> > > +             wait_crtc = crtc;
-> > > +     }
-> > > +
-> > > +     /* If no CRTCs updated, then nothing to do: */
-> > > +     if (!wait_crtc)
-> > > +             return;
-> >
-> > Is there an actual point in limiting this to single crtc updates?
-> > That immediately excludes tiled displays/etc.
-> >
-> > Handling an arbitrary number of crtcs shouldn't really be a lot
-> > more complicated should it?
+On 2/20/23 19:38, Michael Roth wrote:
+> From: Ashish Kalra <ashish.kalra@amd.com>
 > 
-> I guess I could find the soonest upcoming vblank of all the CRTCs and
-> use that as the deadline?
+> Pages are unsafe to be released back to the page-allocator, if they
+> have been transitioned to firmware/guest state and can't be reclaimed
+> or transitioned back to hypervisor/shared state. In this case add
+> them to an internal leaked pages list to ensure that they are not freed
+> or touched/accessed to cause fatal page faults.
+> 
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  drivers/crypto/ccp/sev-dev.c | 28 ++++++++++++++++++++++++++++
+>  include/linux/psp-sev.h      |  8 ++++++++
+>  2 files changed, 36 insertions(+)
+> 
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index 35f605936f1b..eca4e59b0f44 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -42,6 +42,12 @@
+>  static DEFINE_MUTEX(sev_cmd_mutex);
+>  static struct sev_misc_dev *misc_dev;
+>  
+> +/* list of pages which are leaked and cannot be reclaimed */
+> +static LIST_HEAD(snp_leaked_pages_list);
+> +static DEFINE_SPINLOCK(snp_leaked_pages_list_lock);
+> +
+> +static atomic_long_t snp_nr_leaked_pages = ATOMIC_LONG_INIT(0);
+> +
+>  static int psp_cmd_timeout = 100;
+>  module_param(psp_cmd_timeout, int, 0644);
+>  MODULE_PARM_DESC(psp_cmd_timeout, " default timeout value, in seconds, for PSP commands");
+> @@ -188,6 +194,28 @@ static int sev_cmd_buffer_len(int cmd)
+>  	return 0;
+>  }
+>  
+> +void snp_mark_pages_offline(unsigned long pfn, unsigned int npages)
 
-Yeah, that seems reasonable. The flips are supposed to happen
-atomically (if possible) anyway so collapsing the thing to
-a single deadline for all makes sense to me.
+Why call it offline which has usually a memory hotplug-related meaning? What
+about e.g. snp_leak_bad_pages() ?
 
--- 
-Ville Syrjälä
-Intel
+> +{
+> +	struct page *page = pfn_to_page(pfn);
+> +
+> +	WARN(1, "psc failed, pfn 0x%lx pages %d (marked offline)\n", pfn, npages);
+> +
+> +	spin_lock(&snp_leaked_pages_list_lock);
+> +	while (npages--) {
+> +		/*
+> +		 * Reuse the page's buddy list for chaining into the leaked
+> +		 * pages list. This page should not be on a free list currently
+> +		 * and is also unsafe to be added to a free list.
+> +		 */
+> +		list_add_tail(&page->buddy_list, &snp_leaked_pages_list);
+> +		sev_dump_rmpentry(pfn);
+> +		pfn++;
+> +	}
+> +	spin_unlock(&snp_leaked_pages_list_lock);
+> +	atomic_long_inc(&snp_nr_leaked_pages);
+> +}
+> +EXPORT_SYMBOL_GPL(snp_mark_pages_offline);
+> +
+>  static void *sev_fw_alloc(unsigned long len)
+>  {
+>  	struct page *page;
+> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> index 46f61e3ae33b..8edf5c548fbf 100644
+> --- a/include/linux/psp-sev.h
+> +++ b/include/linux/psp-sev.h
+> @@ -923,6 +923,12 @@ int sev_do_cmd(int cmd, void *data, int *psp_ret);
+>  
+>  void *psp_copy_user_blob(u64 uaddr, u32 len);
+>  
+> +/**
+> + * sev_mark_pages_offline - insert non-reclaimed firmware/guest pages
+> + * into a leaked pages list.
+> + */
+> +void snp_mark_pages_offline(unsigned long pfn, unsigned int npages);
+> +
+>  #else	/* !CONFIG_CRYPTO_DEV_SP_PSP */
+>  
+>  static inline int
+> @@ -951,6 +957,8 @@ sev_issue_cmd_external_user(struct file *filep, unsigned int id, void *data, int
+>  
+>  static inline void *psp_copy_user_blob(u64 __user uaddr, u32 len) { return ERR_PTR(-EINVAL); }
+>  
+> +void snp_mark_pages_offline(unsigned long pfn, unsigned int npages) {}
+> +
+>  #endif	/* CONFIG_CRYPTO_DEV_SP_PSP */
+>  
+>  #endif	/* __PSP_SEV_H__ */
+
