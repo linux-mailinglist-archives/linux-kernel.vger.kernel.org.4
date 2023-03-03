@@ -2,163 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7036D6AA0DB
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7166AA0D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231816AbjCCVJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:09:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S231793AbjCCVJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:09:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231799AbjCCVJi (ORCPT
+        with ESMTP id S231270AbjCCVJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:09:38 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685996150D;
-        Fri,  3 Mar 2023 13:09:35 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323Hw71Q027393;
-        Fri, 3 Mar 2023 21:09:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0GV0GIblVbFArHNpmZ1Srz0Rk2Sez5YtbO96Shw/C94=;
- b=K3GuB/c67HB+9X5scaPeKggDaitwzAl87gNnC3C2vueKKu5ykHfKheQhr1xKU/22aTAG
- 2+qjLzzrcdUMfHDrMM8J2lxHIyVHw3312cEHlYqeO4nzKWp0jVnGkb3wsqgDTsz83U2S
- nuBYJpzVB0bP0JlKacrywW+IItuotYBNMh/5qrIlH2w3bzY3RVFj2YEo71ZnLw2D5cs0
- kiHUZjliGhYkEWITN3YHvZZeHW/E9PUMeEH2Yv/bx3TZjK2WeuMe2bZZma6hvZxrc/Ta
- tyt1/AmHVAK43H2/wqZIiWRyYD0i8xWBH4KecTVsak0SRfxB0QClW+YoH0gbO2hx0Rh5 zQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3dpxj579-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 03 Mar 2023 21:09:11 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 323L9ALS015416
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 3 Mar 2023 21:09:10 GMT
-Received: from [10.110.20.90] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 3 Mar 2023
- 13:09:09 -0800
-Message-ID: <2ae96b75-82f1-165a-e56d-7446c90bb7af@quicinc.com>
-Date:   Fri, 3 Mar 2023 13:09:08 -0800
+        Fri, 3 Mar 2023 16:09:22 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1759860D70;
+        Fri,  3 Mar 2023 13:09:19 -0800 (PST)
+Received: (Authenticated sender: dodji@seketeli.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 592651BF206;
+        Fri,  3 Mar 2023 21:09:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seketeli.org;
+        s=gm1; t=1677877758;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cv66zFFxlrbcWbvrnbTnad6WW7AbCdUiUsmIER3GGNo=;
+        b=VJ3mH6zdWteY8M4XC4ovydcmbhNtEm1vA24Iv/QkNqJXO8RZpPW1T7U0bgq0raGYksTqtt
+        RLPkBW5UVyKF3rL2oSwz0sy91JQzNeAugxrnzxtmaBo6wElmPyvJhp6IgSNe284tAEYuID
+        p6r4YlwLtc8wfKWWJrGt46K9Od8MJJCQNL5K7eFmbaA4gdt/gJcSCHU7mLqk8NDhpiQFI1
+        viL6RZSpzLJi2mhYHneDXdI/M439SUELnvFcSwddbX6WinC0J4gnxPltN98lnelSo71nV3
+        1A8IAeBQ2AyVH2MPJ5zsJhbpkM2JTsR+rUOwWyV8q8uoTsxvj06aAn5K977Pvg==
+Received: by localhost (Postfix, from userid 1000)
+        id 4FFA9B4E34; Fri,  3 Mar 2023 22:09:11 +0100 (CET)
+From:   Dodji Seketeli <dodji@seketeli.org>
+To:     John Moon via Libabigail <libabigail@sourceware.org>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>,
+        John Moon <quic_johmoo@quicinc.com>,
+        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        <kernel-team@android.com>, Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [PATCH v2 1/2] check-uapi: Introduce check-uapi.sh
+Organization: Me, myself and I
+References: <20230301075402.4578-1-quic_johmoo@quicinc.com>
+        <20230301075402.4578-2-quic_johmoo@quicinc.com>
+X-Operating-System: CentOS Stream release 9
+X-URL:  http://www.seketeli.net/~dodji
+Date:   Fri, 03 Mar 2023 22:09:11 +0100
+In-Reply-To: <20230301075402.4578-2-quic_johmoo@quicinc.com> (John Moon via
+        Libabigail's message of "Tue, 28 Feb 2023 23:54:01 -0800")
+Message-ID: <87zg8t5yq0.fsf@seketeli.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-From:   Elliot Berman <quic_eberman@quicinc.com>
-Subject: Re: [PATCH] firmware: qcom_scm: Use fixed width src vm bitmap
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        "Gokul krishna Krishnakumar" <quic_gokukris@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>
-References: <20230213181832.3489174-1-quic_eberman@quicinc.com>
- <20230213214417.mtcpeultvynyls6s@ripper> <Y+tNRPf0PGdShf5l@kroah.com>
- <20230214172325.lplxgbprhj3bzvr3@ripper>
- <bdda82f7-933d-443b-614a-6befad2899b5@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <bdda82f7-933d-443b-614a-6befad2899b5@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fFgsdjU-gZTIeIOv6LUxDDseAdoa3PuQ
-X-Proofpoint-GUID: fFgsdjU-gZTIeIOv6LUxDDseAdoa3PuQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_05,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
- mlxlogscore=999 clxscore=1011 priorityscore=1501 mlxscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303030177
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello John,
 
+John Moon via Libabigail <libabigail@sourceware.org> a =C3=A9crit:
 
-On 2/14/2023 10:52 AM, Elliot Berman wrote:
-> 
-> 
-> On 2/14/2023 9:23 AM, Bjorn Andersson wrote:
->> On Tue, Feb 14, 2023 at 09:58:44AM +0100, Greg Kroah-Hartman wrote:
->>> On Mon, Feb 13, 2023 at 01:44:17PM -0800, Bjorn Andersson wrote:
->>>> On Mon, Feb 13, 2023 at 10:18:29AM -0800, Elliot Berman wrote:
->>>>> The maximum VMID for assign_mem is 63. Use a u64 to represent this
->>>>> bitmap instead of architecture-dependent "unsigned int" which 
->>>>> varies in
->>>>> size on 32-bit and 64-bit platforms.
->>>>>
->>>>> Acked-by: Kalle Valo <kvalo@kernel.org> (ath10k)
->>>>> Tested-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
->>>>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
->>>>
->>>> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
->>>>
->>>> @Greg, would you mind taking this through your tree for v6.3, you
->>>> already have a related change in fastrpc.c in your tree...
->>>
->>> I tried, but it doesn't apply to my char-misc tree at all:
->>>
->>> checking file drivers/firmware/qcom_scm.c
->>> Hunk #1 succeeded at 898 (offset -7 lines).
->>> Hunk #2 succeeded at 915 (offset -7 lines).
->>> Hunk #3 succeeded at 930 (offset -7 lines).
->>> checking file drivers/misc/fastrpc.c
->>> checking file drivers/net/wireless/ath/ath10k/qmi.c
->>> checking file drivers/remoteproc/qcom_q6v5_mss.c
->>> Hunk #1 succeeded at 227 (offset -8 lines).
->>> Hunk #2 succeeded at 404 (offset -10 lines).
->>> Hunk #3 succeeded at 939 with fuzz 1 (offset -28 lines).
->>> checking file drivers/remoteproc/qcom_q6v5_pas.c
->>> Hunk #1 FAILED at 94.
->>> 1 out of 1 hunk FAILED
->>> checking file drivers/soc/qcom/rmtfs_mem.c
->>> Hunk #1 succeeded at 30 (offset -1 lines).
->>> can't find file to patch at input line 167
->>> Perhaps you used the wrong -p or --strip option?
->>> The text leading up to this was:
->>> --------------------------
->>> |diff --git a/include/linux/firmware/qcom/qcom_scm.h
->>> b/include/linux/firmware/qcom/qcom_scm.h
->>> |index 1e449a5d7f5c..250ea4efb7cb 100644
->>> |--- a/include/linux/firmware/qcom/qcom_scm.h
->>> |+++ b/include/linux/firmware/qcom/qcom_scm.h
->>> --------------------------
->>>
->>> What tree is this patch made against?
->>>
->>
->> Sorry about that, I missed the previous changes in qcom_q6v5_pas in the
->> remoteproc tree. Elliot said he based it on linux-next, so I expect that
->> it will merge fine on top of -rc1, once that arrives.
->>
-> 
-> Yes, this patch applies on next-20230213. I guess there are enough 
-> changes were coming from QCOM side (via Bjorn's qcom tree) as well as 
-> the fastrpc change (via Greg's char-misc tree).
-> 
-> Let me know if I should do anything once -rc1 arrives. Happy to post 
-> version on the -rc1 if it helps.
-> 
+> While the kernel community has been good at maintaining backwards
+> compatibility with kernel UAPIs, it would be helpful to have a tool
+> to check if a commit introduces changes that break backwards
+> compatibility.
+>
+> To that end, introduce check-uapi.sh: a simple shell script that
+> checks for changes to UAPI headers using libabigail.
+>
+> libabigail is "a framework which aims at helping developers and
+> software distributors to spot some ABI-related issues like interface
+> incompatibility in ELF shared libraries by performing a static
+> analysis of the ELF binaries at hand."
+>
+> The script uses one of libabigail's tools, "abidiff", to compile the
+> changed header before and after the commit to detect any changes.
+>
+> abidiff "compares the ABI of two shared libraries in ELF format. It
+> emits a meaningful report describing the differences between the two
+> ABIs."
+>
+> The script also includes the ability to check the compatibilty of
+> all UAPI headers across commits. This allows developers to inspect
+> the stability of the UAPIs over time.
 
-The patch now applies on tip of Linus's tree and on char-misc.
+Thank you for working on this.
+
+The libabigail bits look good to me, for what it's worth.  I just have
+some general considerations to discuss.
+
+[...]
+
+> +# Perform the A/B compilation and compare output ABI
+> +compare_abi() {
+
+[...]
+
+> +	if "$ABIDIFF" --non-reachable-types "${ref_header}.bin" "${base_header}=
+.bin" > "$log"; then
+> +		printf "No ABI differences detected in %s from %s -> %s\n" "$file" "$r=
+ef" "${base_ref:-dirty tree}"
+> +	else
+> +		# If the only changes were additions (not modifications to existing AP=
+Is), then
+> +		# there's no problem. Ignore these diffs.
+> +		if grep "Unreachable types summary" "$log" | grep -q "0 removed" &&
+> +		   grep "Unreachable types summary" "$log" | grep -q "0 changed"; then
+> +			return 0
+
+There is no problem in parsing the output of the tool like this.
+However, the return code of the tool has been designed as a bit field that
+could be analysed to know more about the kind of changes that were
+reported: https://sourceware.org/libabigail/manual/abidiff.html#return-valu=
+es.
+
+Right now, there is no bit assigned to detect new types (or interface)
+addition, but do you think that it would be a helpful new feature to add
+to abidiff for this use case?  We can discuss this in a separate thread
+if you prefer, so that we don't pollute others with this minutiae.
+
+> +		fi
+> +		{
+> +			printf "!!! ABI differences detected in %s from %s -> %s !!!\n\n" "$f=
+ile" "$ref" "${base_ref:-dirty tree}"
+> +			sed  -e '/summary:/d' -e '/changed type/d' -e '/^$/d' -e 's/^/  /g' "=
+$log"
+
+Here again, if you'd like to have a particular output format emitted by
+the tool, we'd be glad to discuss how to improve the plasticity of the
+tool enough to emit the right output for you.  For instance, we could
+add a new --no-summary that would let the tool display the change
+directly without the summary header that you are strimming out with this
+sed script.
+
+[...]
+
+Thanks again for this tool that I think might be very useful.
+
+Cheers,
+
+--=20
+		Dodji
