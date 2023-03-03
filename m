@@ -2,174 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065316A955D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0036A956B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 11:40:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjCCKht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 05:37:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48972 "EHLO
+        id S229834AbjCCKkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 05:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjCCKhr (ORCPT
+        with ESMTP id S229608AbjCCKj6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 05:37:47 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861624DBC1;
-        Fri,  3 Mar 2023 02:37:46 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id CCAFE320094C;
-        Fri,  3 Mar 2023 05:37:42 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 03 Mar 2023 05:37:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1677839862; x=1677926262; bh=/oK2gKw0WQP9P6/4o7LSk3aPOgvTeYe0l2p
-        E4+Q6qcU=; b=hTNskU3uMF2rEM7dtUJ8aPxqkn1EuEEaf0PQbSAGCygA+8CRcSW
-        rLMfh8M67aDs+oAnBFCK+/S8LulYlh3Yyn8DVQaIOHlSK2edFr+a13QH410VCnA0
-        YrwPBqU/7eRGfo0dPJ4Yqi+dNo5Kna6/2eHMHLHX4D2gZG5UghsSMTmX0EMJRzEt
-        Mz247DmMJeAhkgpFCjHTqFr9UznYDGtXrC2QnEJO5FPvZkFoFVO8MPJavL2lHM7d
-        FEOr6WNdqgMGl2BPNr/xzDMjXasUbNQRazllXw7TpKRa0+lUQp9y/isG5iYGZ19O
-        r/Ge+VEBmFQ3vkCzc/lDRuJJx7J+Fkl8Hng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1677839862; x=1677926262; bh=/oK2gKw0WQP9P
-        6/4o7LSk3aPOgvTeYe0l2pE4+Q6qcU=; b=WF5aLGj34/fkS4nhCoUR4X5rp5rEz
-        2FWeh0jTmaKufgSz/tCLJmS6nyaZAZ41t2hk6Odn2kONDAACblD5FTiWNB0axcnh
-        oaS+CBfF4sXvDH2Wp/byR5PnGkuF4Hvx7ULM+1helij/mLH0EJPNnW4dQE3scTIB
-        3yKViKkCQ+PcZnuwHoJfCIerkbApWL/gIAZiV+ulAYrw5llWT3MkG7O5Zrk3bfPo
-        M7zVr5Dx3bcU1rTnvryKllGkEvgq2e360OhzcH45j8NcDmrtkJblyBUO/5hPX5Es
-        O+uoo3Fm06akU3XsGc0qouZmVV7yyq5MR3yY3o779jcwYblqs0+hMfLsw==
-X-ME-Sender: <xms:9s0BZDxz1dPFBkQXjJrjYl-dpvYvsRdhTehHK2zLsP-3g28mfjJ1gw>
-    <xme:9s0BZLQUsIIsgmJ7Dp9joirC4WlKthMJ_Vrrnx_cKrKsWFHZKtRP4UBsmzzLJ-17c
-    _mAuo9BgsExThw>
-X-ME-Received: <xmr:9s0BZNXg4vzg4_03VFy-ym8JuwpliYnEeGqiXTaYGa7FoSoKRKPjIOky8YyHmw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelledguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffggfuvfevfhfhjggtsehgtderredttdejnecuhfhrohhmpefuihhmohhn
-    ucfirghishgvrhcuoehsihhmohhnsehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtg
-    homheqnecuggftrfgrthhtvghrnhepueehgfegtedttedvvdektdelkefhueffgedtiefh
-    keeffefhvdehuedvjeejheehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdprghrtg
-    hhlhhinhhugidrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgr
-    ihhlfhhrohhmpehsihhmohhnsehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
-X-ME-Proxy: <xmx:9s0BZNiE2MHLtEDQYwWBUm888MpkL1DvNij8B9UE6RsdB6qvYKmHzg>
-    <xmx:9s0BZFBk7hNO_I3ph-_WJGaYOh34VR1zNRzuh_h0rG0QLgz4iq8Pzg>
-    <xmx:9s0BZGIyRwUYidKoYDj2XZWPrD72C8P6qNMUeN7plmZTlaGtPf-F6g>
-    <xmx:9s0BZA-ItFwawRSyobA-8mHMgv6jxNNd2y0ZobQzkTVX2LxsX7ZDuw>
-Feedback-ID: idc5945a3:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 3 Mar 2023 05:37:35 -0500 (EST)
-Message-ID: <7135b5c6-daed-a726-c02c-b0ed821e2121@invisiblethingslab.com>
-Date:   Fri, 3 Mar 2023 11:38:16 +0100
+        Fri, 3 Mar 2023 05:39:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7086614485
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 02:39:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677839950;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ZYISymnHUJzQ9oGrozV91eykhzhId/Ob9/Pj/GYOnU=;
+        b=hyjGT557X7VACNKsyfzpzz5wJXZxGtv8D7YIKCcHo8JGcKvlFgQ45hoDLs9c7cMl7SpAro
+        SjEWsf96SW0pDfSN+hua1qJ+qTmeyJeLQ2Z8jJRbFmUFh+88Yn3zYuuNQ90AJPC4CI41WZ
+        DOQDknR86xssLrMPKNl24FCLDY89tEQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-149-KrH6z7niP_6uLiVX-FKJZg-1; Fri, 03 Mar 2023 05:39:09 -0500
+X-MC-Unique: KrH6z7niP_6uLiVX-FKJZg-1
+Received: by mail-ed1-f69.google.com with SMTP id r6-20020aa7c146000000b004acd97105ffso3348750edp.19
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 02:39:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:to
+         :content-language:subject:cc:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ZYISymnHUJzQ9oGrozV91eykhzhId/Ob9/Pj/GYOnU=;
+        b=kQapA+puQsANFfs7TsUMiQ89mvuD5EjuknTj1RPebMe6BXx9Ls9eDNbj6ehaSbKozC
+         2tUb/0iipbLpXQ0NvjkvDsuBoA+vADUDj+TjNaJ2az92SVvFSvZQX5k4PJ+xX2llGtOL
+         4N7ZydWGxk5Rs1LRcGMS65fzAWWbuHVaJKMABf/OZYtiOs7t6BThVrkKfhr9DuZsgIG2
+         TYV4yDDDTUIAB70dAFbFrngS5kdZkMlrmTTaImFPJBuecd4Mx51dOLIprFibVYNel1CR
+         VpawXf+s8dBk+U20I4wkuw6OQAi/QpRBZcLyfnH2aLEgDf2aFBLsOnizCrhcSIxbx6dQ
+         vF/g==
+X-Gm-Message-State: AO0yUKVyHnfcgLVHbggU7n9NcrFiQQh1onPQee6awqMdj9qWpM01X7vw
+        4kcrdqlhZtSUseL3fUZCQkKAKdFyRI21lvnTv4aumQySETc9ZinJ/YGoDLekQatJoh1ibY+Es7d
+        btD9Ud4N5NhiNB8OpRtOorS+k
+X-Received: by 2002:a17:906:d0ca:b0:88d:ba89:183a with SMTP id bq10-20020a170906d0ca00b0088dba89183amr4943407ejb.11.1677839948355;
+        Fri, 03 Mar 2023 02:39:08 -0800 (PST)
+X-Google-Smtp-Source: AK7set8plnpvyHVS2XtWbo4Yk9SK76K0Al5X/5xZLNnTMe4Kr7DlrMRSAMoG9vBm5d4bxXIduPqHdQ==
+X-Received: by 2002:a17:906:d0ca:b0:88d:ba89:183a with SMTP id bq10-20020a170906d0ca00b0088dba89183amr4943389ejb.11.1677839948109;
+        Fri, 03 Mar 2023 02:39:08 -0800 (PST)
+Received: from [192.168.42.100] (nat-cgn9-185-107-15-52.static.kviknet.net. [185.107.15.52])
+        by smtp.gmail.com with ESMTPSA id h17-20020a170906399100b008d1dc5f5692sm808927eje.76.2023.03.03.02.39.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 02:39:07 -0800 (PST)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <22ca47ca-325f-f4df-af5d-344be6b372d8@redhat.com>
+Date:   Fri, 3 Mar 2023 11:39:06 +0100
 MIME-Version: 1.0
-Subject: Re: [regression] Bug 217114 - Tiger Lake SATA Controller not
- operating correctly [bisected]
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     brouer@redhat.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v1 0/2] xdp: recycle Page Pool backed skbs built
+ from XDP frames
 Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        emmi@emmixis.net, schwagsucks@gmail.com,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <ad02467d-d623-5933-67e0-09925c185568@leemhuis.info>
- <af6a355b-3ac2-a610-379a-167e87145368@opensource.wdc.com>
-From:   Simon Gaiser <simon@invisiblethingslab.com>
-In-Reply-To: <af6a355b-3ac2-a610-379a-167e87145368@opensource.wdc.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------eY0wtsDnTwQw10yONnf8MW0F"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+References: <20230301160315.1022488-1-aleksander.lobakin@intel.com>
+In-Reply-To: <20230301160315.1022488-1-aleksander.lobakin@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------eY0wtsDnTwQw10yONnf8MW0F
-Content-Type: multipart/mixed; boundary="------------B7xKDox4LcyyrC95EzxDJhv8";
- protected-headers="v1"
-From: Simon Gaiser <simon@invisiblethingslab.com>
-To: Damien Le Moal <damien.lemoal@opensource.wdc.com>,
- Linux regressions mailing list <regressions@lists.linux.dev>
-Cc: "stable@vger.kernel.org" <stable@vger.kernel.org>, emmi@emmixis.net,
- schwagsucks@gmail.com,
- "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)"
- <linux-ide@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Message-ID: <7135b5c6-daed-a726-c02c-b0ed821e2121@invisiblethingslab.com>
-Subject: Re: [regression] Bug 217114 - Tiger Lake SATA Controller not
- operating correctly [bisected]
-References: <ad02467d-d623-5933-67e0-09925c185568@leemhuis.info>
- <af6a355b-3ac2-a610-379a-167e87145368@opensource.wdc.com>
-In-Reply-To: <af6a355b-3ac2-a610-379a-167e87145368@opensource.wdc.com>
 
---------------B7xKDox4LcyyrC95EzxDJhv8
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+On 01/03/2023 17.03, Alexander Lobakin wrote:
+> Yeah, I still remember that "Who needs cpumap nowadays" (c), but anyway.
+> 
+> __xdp_build_skb_from_frame() missed the moment when the networking stack
+> became able to recycle skb pages backed by a Page Pool. This was making
+                                                ^^^^^^^^^
+When talking about page_pool, can we write "page_pool" instead of
+capitalized "Page Pool", please. I looked through the git log, and here
+we all used "page_pool".
 
-Damien Le Moal:
-> On 3/3/23 16:10, Linux regression tracking (Thorsten Leemhuis) wrote:
->> Hi, this is your Linux kernel regression tracker.
->>
->> I noticed a regression report in bugzilla.kernel.org that apparently
->> affects 6.2 and later as well as 6.1.13 and later, as it was already
->> backported there.
->>
->> As many (most?) kernel developer don't keep an eye on bugzilla, I
->> decided to forward the report by mail. Quoting from
->> https://bugzilla.kernel.org/show_bug.cgi?id=3D217114 :
->>
->>>  emmi@emmixis.net 2023-03-02 11:25:00 UTC
->>>
->>> As per kernel problem found in https://bbs.archlinux.org/viewtopic.ph=
-p?id=3D283906 ,
->>>
->>> Commit 104ff59af73aba524e57ae0fef70121643ff270e
->>
->> [FWIW: That's "ata: ahci: Add Tiger Lake UP{3,4} AHCI controller" from=
+> e.g. cpumap redirect even less effective than simple %XDP_PASS. veth was
+> also affected in some scenarios.
 
->> Simon Gaiser]
->=20
-> I sent a revert with cc: stable.
->=20
-> Simon,
->=20
-> Let's work on finding a better solution for enabling LPM for that
-> adapter without causing regressions. I will need your help for testing
-> as I do not have this hardware.
+Thanks for working on closing this gap :-)
 
-Sure, let me know what I can do to help.
+> A lot of drivers use skb_mark_for_recycle() already, it's been almost
+> two years and seems like there are no issues in using it in the generic
+> code too. {__,}xdp_release_frame() can be then removed as it losts its
+> last user.
+> Page Pool becomes then zero-alloc (or almost) in the abovementioned
+> cases, too. Other memory type models (who needs them at this point)
+> have no changes.
+> 
+> Some numbers on 1 Xeon Platinum core bombed with 27 Mpps of 64-byte
+> IPv6 UDP:
 
-Simon
+What NIC driver?
 
---------------B7xKDox4LcyyrC95EzxDJhv8--
+> 
+> Plain %XDP_PASS on baseline, Page Pool driver:
+> 
+> src cpu Rx     drops  dst cpu Rx
+>    2.1 Mpps       N/A    2.1 Mpps
+> 
+> cpumap redirect (w/o leaving its node) on baseline:
+> 
+>    6.8 Mpps  5.0 Mpps    1.8 Mpps
+> 
+> cpumap redirect with skb PP recycling:
+> 
+>    7.9 Mpps  5.7 Mpps    2.2 Mpps   +22%
+> 
 
---------------eY0wtsDnTwQw10yONnf8MW0F
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+It is of cause awesome, that cpumap SKBs are faster than normal SKB path.
+I do wonder where the +22% number comes from?
 
------BEGIN PGP SIGNATURE-----
+> Alexander Lobakin (2):
+>    xdp: recycle Page Pool backed skbs built from XDP frames
+>    xdp: remove unused {__,}xdp_release_frame()
+> 
+>   include/net/xdp.h | 29 -----------------------------
+>   net/core/xdp.c    | 19 ++-----------------
+>   2 files changed, 2 insertions(+), 46 deletions(-)
+> 
 
-iQIzBAEBCgAdFiEE3E8ezGzG3N1CTQ//kO9xfO/xly8FAmQBzhoACgkQkO9xfO/x
-ly9odw/+McAW/GtDWNrqJlk1I1G1Zbsxv5yhwxT17Ma4A9+VItJj16T3ot6GhxFX
-S4EaEGBl1pipfJyrUoUNdcJk+Kg0XTriTVH0fJl1I66ekFPPmrOa1bigJ1bHKBMk
-EJPx94Av2CNhKTAV1HZ4nSJaO8vZ2+wJ704yDxSEP8eqsAsr/48eGvV04KL6cL6P
-XhUPDstOsmB3SaG0HnXA7aSNPeTJ4SaV8Pz4Em68n92r5/+eVEZu5gzq/xQBTkdB
-3J0gizkm2TR2lNdEvNOMNaHaUaOyOQuXtyDOuxlF3jmOoKgiDMGpdlu7W1gWwTT6
-iBNZnP4g10eooTb/hHtsdvVSsP81pi1RdMJ60n3W6TantQ0BkaM35WPIRxFBhKj1
-+6ov8fQ6LOm0cJOaHJvsOhVa24CYJXbMS0I9avi/3c9D7AWIUfiSoDXxrvql4BIq
-xziQ6EKu2s6haFKZzd/7WRCECnr6+vsqvrCZmMZClyoN3f8GOUn1XkrtO0emwrA/
-+DuivP0l9/40ECTIQkv4j2zYIYKaqws9vsrxGiRCdTOSB7ylMjwXC9YAX4F1OdkJ
-MeR0HzL76MXAIb6R+Nv7qoicKgLdkVORNlz8gMhW2Ga1S/Pe0AClHosuOKRZIlyF
-icYwRVen9SY97Ko7fSZiVTJHLmVpCEnMe9vFEYRFxPVOOHLIbag=
-=G8eI
------END PGP SIGNATURE-----
-
---------------eY0wtsDnTwQw10yONnf8MW0F--
