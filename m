@@ -2,684 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6926A9DD5
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A65466A9DDF
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjCCRiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:38:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
+        id S231351AbjCCRkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:40:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjCCRiE (ORCPT
+        with ESMTP id S230220AbjCCRkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:38:04 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FE41353F
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 09:38:02 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id t25-20020a1c7719000000b003eb052cc5ccso4447158wmi.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 09:38:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677865081;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bdbDb5pBD9gR9JCtSbLh0vtShYx9VxCwkLVLdFW3tqQ=;
-        b=AQ1MeAX+rg42OVogDcTHDvCepfcpzvI8fYpwGFx+iHh9qmN0yH5gZT1xyoI2dCwrcZ
-         Gm0CBvtcJGwBKTePdBIk4Z8dReHC/8mAOlrMuuW/Gpa4C9S+8soq4b6pVgI99ndxXkDe
-         Ja1je0MME5AsIMOUTdoJvuygTar4Ni9hR23rUeZCy+ducQDTiQm5h857mXYw6c2gy3jH
-         PkZn22RbWBjKeIfXeBVQ9PGQg0BO1b8Hm+75P0WgNd0AxJV3te8fIx9wMEx8xZyEQLGC
-         uprce1qviaM6BGhkrsxVqkDMgSYaJKGYWV1V6Z2sBG/KmwW74/11RkuP8Z+Ave6TLWhW
-         sTug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677865081;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bdbDb5pBD9gR9JCtSbLh0vtShYx9VxCwkLVLdFW3tqQ=;
-        b=lTiL/0qb5lyrpgUEDK69CurfwX2S3wrAxKsa0nr3hgqQliUAbL8rbm+96+SX9fy6Gr
-         WPWR5+jTCcxuj5AnJJrCJwbc1lrW8w+57p2rWjITMHE0//nNA70xoe+yA8H5EbB18+pv
-         2jK4Pnl+QcY6+dg0SMk514tN5uT5PYhBomJi9bzHd1etoScH8i3DuacrPHjUgMh2YxZR
-         V4EacJQ4005nux255q/DDSO2cOZrnfO2CWaxf55Bh6Md2ZkUo8dyaanFtL0Drbnhiulr
-         FcRhfTX9kLCDK+rf8SVpR/hWB8m4OpNErjhORet36/OYpcIrbsmFMp7cKEqw2nXBFwOt
-         wcEA==
-X-Gm-Message-State: AO0yUKUzlgATTPwvvfqLg8nJhwonVkTJ9pg3UOq641euDORsRmQwsBI/
-        9yo8iIU8r6ct1vihIUhidd5QjA==
-X-Google-Smtp-Source: AK7set9rTtvVsFTR7D+e/0vyD0u1v0n+kF6P9E+bvlrvTfZaWDwg4isochxmbNRSjtucAvq84nNwzQ==
-X-Received: by 2002:a05:600c:5025:b0:3eb:2e27:2cf0 with SMTP id n37-20020a05600c502500b003eb2e272cf0mr4757375wmr.0.1677865081104;
-        Fri, 03 Mar 2023 09:38:01 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id m19-20020a05600c161300b003eb5a0873e0sm2990170wmn.39.2023.03.03.09.38.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 09:38:00 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 03 Mar 2023 18:37:58 +0100
-Subject: [PATCH 2/2] arm64: dts: amlogic: Add initial support for BPI-CM4
- module with BPI-CM4IO baseboard
+        Fri, 3 Mar 2023 12:40:17 -0500
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2073.outbound.protection.outlook.com [40.107.247.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7DB19693;
+        Fri,  3 Mar 2023 09:40:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zb0z77rTLxbhwHIJ+nIMWrqRkaU1VxL9wNbFu4NMnIo=;
+ b=Pa6A8S3yrlit6l13R4GqkSC4TfZa8O/dFy6da7Th3KX2Kn1rsafvG58rMdS12DGkkODw64q8Vv/ckbAvFyvA5VefCWZnJ4C3BnpR7uX3mSAEZrrWbNda7uZCexKDtP+xKVbuGPNRHLDIGAAx6GPT/Ddia1OdSYo+K04mrz6vbNI=
+Received: from DBBPR09CA0028.eurprd09.prod.outlook.com (2603:10a6:10:d4::16)
+ by AM8PR08MB6531.eurprd08.prod.outlook.com (2603:10a6:20b:355::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.21; Fri, 3 Mar
+ 2023 17:39:43 +0000
+Received: from DBAEUR03FT015.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:d4:cafe::bd) by DBBPR09CA0028.outlook.office365.com
+ (2603:10a6:10:d4::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.19 via Frontend
+ Transport; Fri, 3 Mar 2023 17:39:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DBAEUR03FT015.mail.protection.outlook.com (100.127.142.112) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.21 via Frontend Transport; Fri, 3 Mar 2023 17:39:43 +0000
+Received: ("Tessian outbound 2ba0ed2ebb9f:v135"); Fri, 03 Mar 2023 17:39:42 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 7c1788aba651410f
+X-CR-MTA-TID: 64aa7808
+Received: from 4f51883f0994.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 0094D8F4-9AA1-438C-850C-71E0AB3A0364.1;
+        Fri, 03 Mar 2023 17:39:35 +0000
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 4f51883f0994.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Fri, 03 Mar 2023 17:39:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ArLaq7Atrf76DWOuSsiyILktawCEHXo7BJWFRSs41Ze50AYciJiQgxCKKsokwsJEATkJ7CpiOQlugX/8YlpUv9ASP9JcCNF1IqBRvOpsUGr9CWrmCFJErF42N/lZ1ksTldaFw1j/yHAAF0KXcD5eUBPKtYT7RRS/FPvkU7bzQH8SPeVq61Wifr4nLMMGTfeBtqZUoPJ76O6e9lPx9gWK2m6ks4VQpQh5OeAWtWTrTQWbAtrplHsLikqEiQEfVceTm7t10DyvwqzIECzqhu8Xjv0CUwnJk82YQwvD5pFJ8xd1HZtWwRaqQ3g//j/2bBVjE/1ERBVo31+Ky/NKSnaAaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zb0z77rTLxbhwHIJ+nIMWrqRkaU1VxL9wNbFu4NMnIo=;
+ b=oC39TH9G9p3miBJFaROJQa6ttEXAFSiV6lTYFghk/vIMyCWEZdCa6dkAUCi4dyUsoxgxP87wZ5LvUQ2E+oJe/shU2/5ertC5q6kR4AuvvrFGEkQ8jF6RBUAFvZi9Xs6+Jg5Ag+ziCi+mYKf0oGTE+/KaQEsyJkgZoGDZiUIuDKDfvSfUePmFCnd+oLjoEnefaUu9i+7RtrxpwlcuZMYKjVhJOzmiJh3vCGJfIH4T+d6SH6XlL4qnAPaTWjvgl+hl1SaP+0Pjw4jzbsVBd0r4X55DenhqNdUk/eertQ4gcoDNm02t/6fEYi3b6XtQ7SkyPtBIDQBsLgBgCKmF2qaKWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zb0z77rTLxbhwHIJ+nIMWrqRkaU1VxL9wNbFu4NMnIo=;
+ b=Pa6A8S3yrlit6l13R4GqkSC4TfZa8O/dFy6da7Th3KX2Kn1rsafvG58rMdS12DGkkODw64q8Vv/ckbAvFyvA5VefCWZnJ4C3BnpR7uX3mSAEZrrWbNda7uZCexKDtP+xKVbuGPNRHLDIGAAx6GPT/Ddia1OdSYo+K04mrz6vbNI=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by DB4PR08MB9262.eurprd08.prod.outlook.com (2603:10a6:10:3f9::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.18; Fri, 3 Mar
+ 2023 17:39:34 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6134.027; Fri, 3 Mar 2023
+ 17:39:34 +0000
+Date:   Fri, 3 Mar 2023 17:39:06 +0000
+From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
+To:     "H.J. Lu" <hjl.tools@gmail.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
+Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <ZAIwuvfPqNW/w3yt@arm.com>
+References: <Y/9fdYQ8Cd0GI+8C@arm.com>
+ <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
+ <ZADLZJI1W1PCJf5t@arm.com>
+ <8153f5d15ec6aa4a221fb945e16d315068bd06e4.camel@intel.com>
+ <ZAIgrXQ4670gxlE4@arm.com>
+ <CAMe9rOrM=HXBY25rYrjLnHzSvHFuui06qRpc4xufxeaaGW-Fmw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMe9rOrM=HXBY25rYrjLnHzSvHFuui06qRpc4xufxeaaGW-Fmw@mail.gmail.com>
+X-ClientProxiedBy: SN7P220CA0012.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:806:123::17) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-amlogic-upstream-bpi-cm4-v1-2-5a23a1ade6bd@linaro.org>
-References: <20230303-topic-amlogic-upstream-bpi-cm4-v1-0-5a23a1ade6bd@linaro.org>
-In-Reply-To: <20230303-topic-amlogic-upstream-bpi-cm4-v1-0-5a23a1ade6bd@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DB4PR08MB9262:EE_|DBAEUR03FT015:EE_|AM8PR08MB6531:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1aca97c7-08db-4bd0-34d8-08db1c0e45ec
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: YwH8ViLKUZAnX3aytvxUXeAJBlN5q6Tcwp1WN0R+FEsFzM7gYdIETRYy9Bh/o4FHyfJK181QZBqEeCuxrChKYnZgflT8UMCylAWzrGZmKqRS5qvzUIB8cfTPT42JAYksI5++ekBRlpy4fom5vfyNlV1KcJZzLzJJbQyfs04Wxj4zhIyyb+0pBrT506krDswwdJ+UGeZB9Ii8yXVF1RXh0KnBVpBMcYBSg/MEpkMQsJPicq8iaAVRHBmo8Jl4uawmVmMmQB1av2HxP/E0YjF5qxcQ+YgLv0EM/iWRdRakAInJFYoZCW1z1E0k4SxOUDSCr76fjVbPcBPHj25jA/ROppv3ExNNup+r43lCO5DSngVPBj42YYTAeWRnk1GTE+Y0PUZWmE3J49QDa4dm8L1xgIDZiFvczhYWFKmm29u/jYiBZQJVR5oq2XF+UaiRFz/Zd1Gj2ho8x77I+bAsxmdKSw9NGbSA0cLS0XAtghT217ap6sq5DadtqXh6bJGmiYhe90PFmiHQOriX9bGntPTvOj6cjE5fxDo1Ph1VvmuLe1dB1Mwy7jLXjsxxVhQsYVvTO3rwtpLV/YytgPuxSDrrrLkC+dZgfJQMkcBfRv3dloiU5O1yutj9OX7KwLF8G/e1MP+bIjyyTp+qeijLOEsOGg==
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(396003)(39860400002)(366004)(451199018)(66476007)(6916009)(66556008)(36756003)(54906003)(8676002)(66946007)(4326008)(316002)(2906002)(41300700001)(83380400001)(6486002)(26005)(6506007)(478600001)(6666004)(53546011)(6512007)(186003)(86362001)(38100700002)(4744005)(2616005)(7416002)(5660300002)(7406005)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB9262
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT015.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 5e7b7c14-a57c-4919-9a7e-08db1c0e3fda
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fADR57DSBj6HB5+q16tguZC5OkAmPvNYX/oSn8IzMW3Xk8OQWjNh8VnuDSwVeTdpZHDFhhmMowLvaPd37QkX2JoH9FcHADbao869WX+arZjHpv61ezveQPGwhWt1UNIn0e5B84smvfqPjgkRYzIQ5HzD+T9NRoc1b1Uo70+bWmxbsd3htS7ZSMuOI2uymaLy1Abfw/bRvVUkrcB9eWaGUd2D3Z3t+OGYyyT9t/2+5fV88oJRzPd+tZmtxQJd3sg1SLAnNJmoavz0CmJJ/ATxBWDbh8C2JhoV6do4F5j4UULFqIPNObUFlOAyZ7DdRmOsICt1h+WbPnAWCN39xFa32nLuiXpnOzhiQuSTYfzBONsePPBqAd/Q/KoDADSmGBViNdD5TXI718q7KU5OMcyIWqzodc2oirUIFJSXzC7kHcQ7+GhOutMf1/staD76q051J9uWeUPKCLxPXkumhvdqy8kqeB/KeB+3icqldjk7OHJRyIQ0Ex6/CUIX4FZDCycjyQBmeUb8KqflrmaQR9E9oAKaAfBtryNCGduydlVhMcoBXJlAC9K/z/aCie/h3hFobaI/2HOrsHj66+SmhxOUe+WkfN/DaLRjxI/wTleJh3aJWtgS8iKnV4GEvr3Y0DB0DPfWPS5l10Xg55aRCWgW8c8DKDoTm9lXNjnHlT0f4jcy60QNIUAZKmoUp54yp1ROP3khhJ++CHdTmfLA/XnG9g==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(376002)(396003)(346002)(451199018)(46966006)(36840700001)(40470700004)(47076005)(40460700003)(36756003)(336012)(6666004)(6506007)(6512007)(6486002)(41300700001)(2616005)(26005)(186003)(316002)(54906003)(4326008)(450100002)(70206006)(8676002)(4744005)(70586007)(2906002)(6862004)(5660300002)(478600001)(86362001)(82740400003)(81166007)(53546011)(82310400005)(40480700001)(356005)(83380400001)(8936002)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 17:39:43.1128
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1aca97c7-08db-4bd0-34d8-08db1c0e45ec
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT015.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6531
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for both the BananaPi BPI-CM4 module and the BananaPi
-baseboard which is comnpatible with the RaspberryPi CM4IO baseboard.
+The 03/03/2023 08:57, H.J. Lu wrote:
+> On Fri, Mar 3, 2023 at 8:31 AM szabolcs.nagy@arm.com
+> <szabolcs.nagy@arm.com> wrote:
+> > longjmp to different stack should work: it can do the same as
+> > setcontext/swapcontext: scan for the pivot token. then only
+> > longjmp out of alt shadow stack fails. (this is non-conforming
+> > longjmp use, but e.g. qemu relies on it.)
+> 
+> Restore token may not be used with longjmp.  Unlike setcontext/swapcontext,
+> longjmp is optional.  If longjmp isn't called, there will be an extra
+> token on shadow
+> stack and RET will fail.
 
-The BananaPi BPI-CM4 module follows the CM4 specifications at [1],
-but with a single HDMI port and a since DSI output.
+what do you mean longjmp is optional?
 
-The current CM4IO baseboard DT should work fine on the Raspberry CM4
-baseboard and other derivatives baseboards, but proper DT should
-be written for other baseboards.
+it can scan the target shadow stack and decide if it's the
+same as the current one or not and in the latter case there
+should be a restore token to switch to. then it can INCSSP
+to reach the target SSP state.
 
-The split is done so it's easy to describe a new CM4 baseboard, enabling
-only the necessary HW used on the baseboard.
-
-[1] https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
-
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/amlogic/Makefile               |   1 +
- .../dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts  | 165 +++++++++
- .../boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi  | 388 +++++++++++++++++++++
- 3 files changed, 554 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index ccf1ba57fa87..e626c4b82b29 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -19,6 +19,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2l.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-radxa-zero2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-ugoos-am6.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-bananapi-cm4-cm4io.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-kii-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-nanopi-k2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-nexbox-a95x.dtb
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts
-new file mode 100644
-index 000000000000..2c4a5b3f1b20
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
-+ */
-+
-+/dts-v1/;
-+
-+#include "meson-g12b-bananapi-cm4.dtsi"
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-+
-+/ {
-+	compatible = "bananapi,bpi-cm4io", "bananapi,bpi-cm4", "amlogic,a311d", "amlogic,g12b";
-+	model = "BananaPi BPI-CM4IO Baseboard with BPI-CM4 Module";
-+
-+	aliases {
-+		ethernet0 = &ethmac;
-+		i2c0 = &i2c1;
-+		i2c1 = &i2c3;
-+	};
-+
-+	adc-keys {
-+		compatible = "adc-keys";
-+		io-channels = <&saradc 2>;
-+		io-channel-names = "buttons";
-+		keyup-threshold-microvolt = <1710000>;
-+
-+		button-function {
-+			label = "Function";
-+			linux,code = <KEY_FN>;
-+			press-threshold-microvolt = <10000>;
-+		};
-+	};
-+
-+	hdmi_connector: hdmi-connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_connector_in: endpoint {
-+				remote-endpoint = <&hdmi_tx_tmds_out>;
-+			};
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-blue {
-+			color = <LED_COLOR_ID_BLUE>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&gpio_ao GPIOAO_7 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		led-green {
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	sound {
-+		compatible = "amlogic,axg-sound-card";
-+		model = "BPI-CM4IO";
-+		audio-aux-devs = <&tdmout_b>;
-+		audio-routing =	"TDMOUT_B IN 0", "FRDDR_A OUT 0",
-+				"TDMOUT_B IN 1", "FRDDR_B OUT 0",
-+				"TDMOUT_B IN 2", "FRDDR_C OUT 0",
-+				"TDM_B Playback", "TDMOUT_B OUT";
-+
-+		assigned-clocks = <&clkc CLKID_MPLL2>,
-+				  <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
-+
-+		dai-link-0 {
-+			sound-dai = <&frddr_a>;
-+		};
-+
-+		dai-link-1 {
-+			sound-dai = <&frddr_b>;
-+		};
-+
-+		dai-link-2 {
-+			sound-dai = <&frddr_c>;
-+		};
-+
-+		/* 8ch hdmi interface */
-+		dai-link-3 {
-+			sound-dai = <&tdmif_b>;
-+			dai-format = "i2s";
-+			dai-tdm-slot-tx-mask-0 = <1 1>;
-+			dai-tdm-slot-tx-mask-1 = <1 1>;
-+			dai-tdm-slot-tx-mask-2 = <1 1>;
-+			dai-tdm-slot-tx-mask-3 = <1 1>;
-+			mclk-fs = <256>;
-+
-+			codec {
-+				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
-+			};
-+		};
-+
-+		/* hdmi glue */
-+		dai-link-4 {
-+			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
-+
-+			codec {
-+				sound-dai = <&hdmi_tx>;
-+			};
-+		};
-+	};
-+};
-+
-+&cecb_AO {
-+	status = "okay";
-+};
-+
-+&ethmac {
-+	status = "okay";
-+};
-+
-+&hdmi_tx {
-+	status = "okay";
-+};
-+
-+&hdmi_tx_tmds_port {
-+	hdmi_tx_tmds_out: endpoint {
-+		remote-endpoint = <&hdmi_connector_in>;
-+	};
-+};
-+
-+/* CSI port */
-+&i2c1 {
-+	status = "okay";
-+};
-+
-+/* DSI port for touchscreen */
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+/* miniPCIe port with USB + SIM slot */
-+&pcie {
-+	status = "okay";
-+};
-+
-+&sd_emmc_b {
-+	status = "okay";
-+};
-+
-+&tohdmitx {
-+	status = "okay";
-+};
-+
-+/* Peripheral Only USB-C port */
-+&usb {
-+	dr_mode = "peripheral";
-+
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
-new file mode 100644
-index 000000000000..dc0988c82694
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
-@@ -0,0 +1,388 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
-+ */
-+
-+#include "meson-g12b-a311d.dtsi"
-+#include <dt-bindings/gpio/meson-g12a-gpio.h>
-+
-+/ {
-+	aliases {
-+		serial0 = &uart_AO;
-+		rtc1 = &vrtc;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	emmc_pwrseq: emmc-pwrseq {
-+		compatible = "mmc-pwrseq-emmc";
-+		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x40000000>;
-+	};
-+
-+	sdio_pwrseq: sdio-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&gpio GPIOAO_6 GPIO_ACTIVE_LOW>;
-+		clocks = <&wifi32k>;
-+		clock-names = "ext_clock";
-+	};
-+
-+	emmc_1v8: regulator-emmc_1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "EMMC_1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vddao_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	dc_in: regulator-dc-in {
-+		compatible = "regulator-fixed";
-+		regulator-name = "DC_IN";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
-+
-+	vddio_c: regulator-vddio-c {
-+		compatible = "regulator-gpio";
-+		regulator-name = "VDDIO_C";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+
-+		enable-gpio = <&gpio_ao GPIOAO_3 GPIO_OPEN_DRAIN>;
-+		enable-active-high;
-+		regulator-always-on;
-+
-+		gpios = <&gpio_ao GPIOAO_9 GPIO_OPEN_DRAIN>;
-+		gpios-states = <1>;
-+
-+		states = <1800000 0>,
-+			 <3300000 1>;
-+	};
-+
-+	vddao_1v8: regulator-vddao-1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDDAO_1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vddao_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	vddao_3v3: regulator-vddao-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDDAO_3V3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&dc_in>;
-+		regulator-always-on;
-+	};
-+
-+	vddcpu_a: regulator-vddcpu-a {
-+		/*
-+		 * MP8756GD DC/DC Regulator.
-+		 */
-+		compatible = "pwm-regulator";
-+
-+		regulator-name = "VDDCPU_A";
-+		regulator-min-microvolt = <680000>;
-+		regulator-max-microvolt = <1040000>;
-+
-+		pwm-supply = <&dc_in>;
-+
-+		pwms = <&pwm_ab 0 1250 0>;
-+		pwm-dutycycle-range = <100 0>;
-+
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	vddcpu_b: regulator-vddcpu-b {
-+		/*
-+		 * SY8120B1ABC DC/DC Regulator.
-+		 */
-+		compatible = "pwm-regulator";
-+
-+		regulator-name = "VDDCPU_B";
-+		regulator-min-microvolt = <680000>;
-+		regulator-max-microvolt = <1040000>;
-+
-+		pwm-supply = <&dc_in>;
-+
-+		pwms = <&pwm_AO_cd 1 1250 0>;
-+		pwm-dutycycle-range = <100 0>;
-+
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	wifi32k: wifi32k {
-+		compatible = "pwm-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		pwms = <&pwm_ef 0 30518 0>; /* PWM_E at 32.768KHz */
-+	};
-+};
-+
-+&arb {
-+	status = "okay";
-+};
-+
-+&clkc_audio {
-+	status = "okay";
-+};
-+
-+&cec_AO {
-+	pinctrl-0 = <&cec_ao_a_h_pins>;
-+	pinctrl-names = "default";
-+	hdmi-phandle = <&hdmi_tx>;
-+};
-+
-+&cecb_AO {
-+	pinctrl-0 = <&cec_ao_b_h_pins>;
-+	pinctrl-names = "default";
-+	hdmi-phandle = <&hdmi_tx>;
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu1 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu100 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu101 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu102 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu103 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&ext_mdio {
-+	external_phy: ethernet-phy@0 {
-+		/* Realtek RTL8211F (0x001cc916) */
-+		reg = <0>;
-+		max-speed = <1000>;
-+
-+		interrupt-parent = <&gpio_intc>;
-+		/* MAC_INTR on GPIOZ_14 */
-+		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
-+
-+/* Ethernet to be enabled in baseboard DT */
-+&ethmac {
-+	pinctrl-0 = <&eth_pins>, <&eth_rgmii_pins>;
-+	pinctrl-names = "default";
-+	phy-mode = "rgmii-txid";
-+	phy-handle = <&external_phy>;
-+};
-+
-+&frddr_a {
-+	status = "okay";
-+};
-+
-+&frddr_b {
-+	status = "okay";
-+};
-+
-+&frddr_c {
-+	status = "okay";
-+};
-+
-+/* HDMI to be enabled in baseboard DT */
-+&hdmi_tx {
-+	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
-+	pinctrl-names = "default";
-+	hdmi-supply = <&dc_in>;
-+};
-+
-+/* "Camera" I2C bus */
-+&i2c1 {
-+	pinctrl-0 = <&i2c1_sda_h6_pins>, <&i2c1_sck_h7_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+/* Main I2C bus */
-+&i2c2 {
-+	pinctrl-0 = <&i2c2_sda_x_pins>, <&i2c2_sck_x_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+/* "ID" I2C bus */
-+&i2c3 {
-+	pinctrl-0 = <&i2c3_sda_a_pins>, <&i2c3_sck_a_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&pcie {
-+	reset-gpios = <&gpio GPIOA_8 GPIO_ACTIVE_LOW>;
-+};
-+
-+&pwm_ab {
-+	pinctrl-0 = <&pwm_a_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin0";
-+
-+	status = "okay";
-+};
-+
-+&pwm_ef {
-+	pinctrl-0 = <&pwm_e_pins>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
-+&pwm_AO_cd {
-+	pinctrl-0 = <&pwm_ao_d_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin1";
-+
-+	status = "okay";
-+};
-+
-+&saradc {
-+	vref-supply = <&vddao_1v8>;
-+
-+	status = "okay";
-+};
-+
-+/* on-module SDIO WiFi */
-+&sd_emmc_a {
-+	pinctrl-0 = <&sdio_pins>;
-+	pinctrl-1 = <&sdio_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	bus-width = <4>;
-+	sd-uhs-sdr104;
-+	max-frequency = <50000000>;
-+
-+	non-removable;
-+	disable-wp;
-+
-+	/* WiFi firmware requires power in suspend */
-+	keep-power-in-suspend;
-+
-+	mmc-pwrseq = <&sdio_pwrseq>;
-+
-+	vmmc-supply = <&vddao_3v3>;
-+	vqmmc-supply = <&vddao_3v3>;
-+
-+	status = "okay";
-+
-+	rtl8822cs: wifi@1 {
-+		reg = <1>;
-+	};
-+};
-+
-+/* SD card to be enabled in baseboard DT */
-+&sd_emmc_b {
-+	pinctrl-0 = <&sdcard_c_pins>;
-+	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	max-frequency = <50000000>;
-+	disable-wp;
-+
-+	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&vddao_3v3>;
-+	vqmmc-supply = <&vddio_c>;
-+};
-+
-+/* on-module eMMC */
-+&sd_emmc_c {
-+	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-+	pinctrl-1 = <&emmc_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	max-frequency = <200000000>;
-+	disable-wp;
-+
-+	mmc-pwrseq = <&emmc_pwrseq>;
-+	vmmc-supply = <&vddao_3v3>;
-+	vqmmc-supply = <&vddao_1v8>;
-+
-+	status = "okay";
-+};
-+
-+&tdmif_b {
-+	status = "okay";
-+};
-+
-+&tdmout_b {
-+	status = "okay";
-+};
-+
-+/* on-module UART BT */
-+&uart_A {
-+	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
-+	pinctrl-names = "default";
-+	uart-has-rtscts;
-+
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "realtek,rtl8822cs-bt";
-+		enable-gpios  = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-+		host-wake-gpios = <&gpio GPIOX_19 GPIO_ACTIVE_HIGH>;
-+		device-wake-gpios = <&gpio GPIOX_18 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&uart_AO {
-+	pinctrl-0 = <&uart_ao_a_pins>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
-+&usb {
-+	phys = <&usb2_phy0>, <&usb2_phy1>;
-+	phy-names = "usb2-phy0", "usb2-phy1";
-+};
-
--- 
-2.34.1
-
+qemu does setjmp, then swapcontext, then longjmp back.
+swapcontext can change the stack, but leaves a token behind
+so longjmp can switch back.
