@@ -2,111 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56A4A6A95BD
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4F96A95C0
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjCCLCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:02:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
+        id S230227AbjCCLCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:02:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjCCLCD (ORCPT
+        with ESMTP id S230198AbjCCLCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:02:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E045F6D1;
-        Fri,  3 Mar 2023 03:02:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 3 Mar 2023 06:02:40 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF6F5F6ED;
+        Fri,  3 Mar 2023 03:02:38 -0800 (PST)
+Received: from [192.168.10.39] (unknown [182.179.171.187])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E301617ED;
-        Fri,  3 Mar 2023 11:02:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9514DC433EF;
-        Fri,  3 Mar 2023 11:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677841319;
-        bh=FIRwj8HGUMB0w7zX1cOSIoPalGx7LYpTQXTv6H51pTs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gK7qtsDeZIFWGoDzCStnzybJ2DQ6uz/fnJ/gEDEh6lFgKoNMwOKen37TsgrluXcTb
-         PYzWvzuX5VUqJoV0hcNfzQWTSo2wqrxcr1axL5nd5aCT2QdqO8jd6yVQWWycPn2I3t
-         KaW3ul5uYLgSdmH8XAx1/97E7tmCvHFxxdwGE6yj8kI/Uwxsb8KUJuQlpz9Cdm37vF
-         +UOK+0bS8F6r+sfnvvxOckbeljIuKNR9JFETajGJ58Qy0005fhccDLSH9R9myXxZDC
-         wcHbdC2rBD0/NXV2fHLlK+h1whr3qFSJpeyKEYvmO0r3AyB4GFEu8T9XbcS3A8RBa5
-         UYC6Rvyszp6QQ==
-Date:   Fri, 3 Mar 2023 11:01:55 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Andy Shevchenko <andy@kernel.org>
-Cc:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-Subject: Re: [PATCH 04/27] mfd: intel_soc_pmic_crc: remove MODULE_LICENSE in
- non-modules
-Message-ID: <20230303110155.GD2420672@google.com>
-References: <20230224150811.80316-1-nick.alcock@oracle.com>
- <20230224150811.80316-5-nick.alcock@oracle.com>
- <Y/joT9FM5Q8Fz7Hw@smile.fi.intel.com>
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9BADE6600363;
+        Fri,  3 Mar 2023 11:02:31 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677841357;
+        bh=jYpU2R+/5CCDdv+B9z7WY6WA2foey3UzjG0WVVgYfrg=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=DawcHy4cIsKanK3u1RtWmcN9Z0IGLkwcE3cDI43A1EIpDNBa/4JCUN+TJwTOy9GiC
+         cb4z/eUUyZwB6nslhca7BKzxSkVq7v5gpKcp75vD8MjQo5QB/wUpptwS6IXWcHj9BD
+         LXFPNWVy6KoCg9Jz7wrnqajpIatquB8Vu41mxrK2yZcQP7ILQiqIssXrBUs0bgXZHQ
+         YL+bFpaU7qPhn7OWbpx6ifSBzFjVQHDir2N2qdxAO04vWrHHNeP5Shftxfhp0uLB8k
+         jZk4mM8cnz9IkXfmfk9LchMEUYLzek6WgtXgG8wEiPxgOaaShhElV67lrZl0nTYDBf
+         iQMDkXsINOjnQ==
+Message-ID: <67d475aa-b999-bf57-3aa3-40ad4b50e21d@collabora.com>
+Date:   Fri, 3 Mar 2023 16:02:26 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, liqiong@nfschina.com
+Subject: Re: [PATCH v3] s390/zcrypt: remove unnecessary (void*) conversions
+Content-Language: en-US
+To:     Yu Zhe <yuzhe@nfschina.com>, freude@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com
+References: <20230303013250.3058-1-yuzhe@nfschina.com>
+ <20230303052155.21072-1-yuzhe@nfschina.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230303052155.21072-1-yuzhe@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y/joT9FM5Q8Fz7Hw@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023, Andy Shevchenko wrote:
+On 3/3/23 10:21 AM, Yu Zhe wrote:
+> Pointer variables of void * type do not require type cast.
+> 
+> Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-> On Fri, Feb 24, 2023 at 03:07:48PM +0000, Nick Alcock wrote:
-> > Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> > Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> > are used to identify modules. As a consequence, uses of the macro
-> > in non-modules will cause modprobe to misidentify their containing
-> > object file as a module when it is not (false positives), and modprobe
-> > might succeed rather than failing with a suitable error message.
-> > 
-> > So remove it in the files in this commit, none of which can be built as
-> > modules.
-> > 
-> > Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> > Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  drivers/s390/crypto/zcrypt_msgtype6.c | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
 > 
-> > Cc: Luis Chamberlain <mcgrof@kernel.org>
-> > Cc: linux-modules@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> > Cc: Andy Shevchenko <andy@kernel.org>
-> > Cc: Lee Jones <lee@kernel.org>
-> 
-> Please, use --cc parameter instead of polluting commit message.
-
-I personally use this a lot.  It's better for scripting.
-
-It's okay, I will remove this when applying.
- 
-> With this addressed,
-> Reviewed-by: Andy Shevchenko <andy@kernel.org>
-> 
-> > diff --git a/drivers/mfd/intel_soc_pmic_crc.c b/drivers/mfd/intel_soc_pmic_crc.c
-> > index b1548a933dc3..b745ace46e5b 100644
-> > --- a/drivers/mfd/intel_soc_pmic_crc.c
-> > +++ b/drivers/mfd/intel_soc_pmic_crc.c
-> > @@ -271,6 +271,5 @@ static struct i2c_driver crystal_cove_i2c_driver = {
-> >  module_i2c_driver(crystal_cove_i2c_driver);
-> >  
-> >  MODULE_DESCRIPTION("I2C driver for Intel SoC PMIC");
-> > -MODULE_LICENSE("GPL v2");
-> >  MODULE_AUTHOR("Yang, Bin <bin.yang@intel.com>");
-> >  MODULE_AUTHOR("Zhu, Lejun <lejun.zhu@linux.intel.com>");
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+> diff --git a/drivers/s390/crypto/zcrypt_msgtype6.c b/drivers/s390/crypto/zcrypt_msgtype6.c
+> index 5ad251477593..a2e7fe33ba62 100644
+> --- a/drivers/s390/crypto/zcrypt_msgtype6.c
+> +++ b/drivers/s390/crypto/zcrypt_msgtype6.c
+> @@ -926,8 +926,7 @@ static void zcrypt_msgtype6_receive(struct ap_queue *aq,
+>  		.type = TYPE82_RSP_CODE,
+>  		.reply_code = REP82_ERROR_MACHINE_FAILURE,
+>  	};
+> -	struct response_type *resp_type =
+> -		(struct response_type *)msg->private;
+> +	struct response_type *resp_type = msg->private;
+>  	struct type86x_reply *t86r;
+>  	int len;
+>  
+> @@ -982,8 +981,7 @@ static void zcrypt_msgtype6_receive_ep11(struct ap_queue *aq,
+>  		.type = TYPE82_RSP_CODE,
+>  		.reply_code = REP82_ERROR_MACHINE_FAILURE,
+>  	};
+> -	struct response_type *resp_type =
+> -		(struct response_type *)msg->private;
+> +	struct response_type *resp_type = msg->private;
+>  	struct type86_ep11_reply *t86r;
+>  	int len;
+>  
+> @@ -1157,7 +1155,7 @@ static long zcrypt_msgtype6_send_cprb(bool userspace, struct zcrypt_queue *zq,
+>  				      struct ap_message *ap_msg)
+>  {
+>  	int rc;
+> -	struct response_type *rtype = (struct response_type *)(ap_msg->private);
+> +	struct response_type *rtype = ap_msg->private;
+>  	struct {
+>  		struct type6_hdr hdr;
+>  		struct CPRBX cprbx;
+> @@ -1240,7 +1238,7 @@ static long zcrypt_msgtype6_send_ep11_cprb(bool userspace, struct zcrypt_queue *
+>  {
+>  	int rc;
+>  	unsigned int lfmt;
+> -	struct response_type *rtype = (struct response_type *)(ap_msg->private);
+> +	struct response_type *rtype = ap_msg->private;
+>  	struct {
+>  		struct type6_hdr hdr;
+>  		struct ep11_cprb cprbx;
+> @@ -1359,7 +1357,7 @@ static long zcrypt_msgtype6_rng(struct zcrypt_queue *zq,
+>  		short int verb_length;
+>  		short int key_length;
+>  	} __packed * msg = ap_msg->msg;
+> -	struct response_type *rtype = (struct response_type *)(ap_msg->private);
+> +	struct response_type *rtype = ap_msg->private;
+>  	int rc;
+>  
+>  	msg->cprbx.domain = AP_QID_QUEUE(zq->queue->qid);
 
 -- 
-Lee Jones [李琼斯]
+BR,
+Muhammad Usama Anjum
