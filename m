@@ -2,176 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C9F6A9DC9
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B22C6A9DCA
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 18:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjCCRg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 12:36:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S231260AbjCCRg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 12:36:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbjCCRgY (ORCPT
+        with ESMTP id S230246AbjCCRgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 12:36:24 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 802E51A662
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 09:36:23 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id 6-20020a17090a190600b00237c5b6ecd7so6872733pjg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 09:36:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677864983;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UjNXU1tEXsuTG4huv7r5UMJSNLOXXYqAwRyDV6iA0nY=;
-        b=s9e/fu31hth4h2Ezrh++sCZEz7apyCzhh/ecfgZdCSv3b1e+JENsCuofnmp09mrVjb
-         pLww16Zs2kSFitsAi0qb3RHZlU2GofisOBInmnPL/l1FDgQ1Bg12c2oPMvNUtVIiNU3p
-         l8XFzb5HGZCekKW01QSWvD0VW768QdWuqh5g4eLGo1XCrAsuAqT/PLG1XOtxZaZcH7qj
-         M7ZWdyC3sLFRnsMybpfu6AspGCkBwDkNOjxb2wBcVLI9kJAfd7StdtDX4AWnlZdC7jmi
-         iCRQQ6VsJNu8vkh+Lf49Q3V5z5IsUV5JC5ojhGaBywaV8oV2sEF3cLrK6UdINl3nNJWd
-         tSiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677864983;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UjNXU1tEXsuTG4huv7r5UMJSNLOXXYqAwRyDV6iA0nY=;
-        b=r7uomkJlyjiDg7prOr2E+3kw1YQeRIW46YTL8qnwBNsOxCv+eJAB6TZ8KFjFe9EyWP
-         4CYOCV1iIjK1ufiPy0NU2rrdfTSPthBmNLQMzQPeqHxObH2gFJi5++fXN7HWTyS8Ea06
-         /40nFhhDp4h7rdv6PmYanYdpnQc8aZszg4BUx98salJgGdiKDRRlHkn/+HGiXHkW3HL3
-         kyV/8b6TbIwJdIhC+rnII9UoiPxu++gvbcR8vfsDD/A2VOBOP1Lcuoy5P4kCb3OqpZxd
-         iyXpI0Evl2aYMEfXrXZauhkVut1K6uuFviA6PAraS0IB5T24OoSS3g10xm2cGpkUOWMY
-         Hw1Q==
-X-Gm-Message-State: AO0yUKXDYUmU6sRc2DuV+uNc41+Xf0r/I0RIZVKO7AAJ0RCnuhaqS2+h
-        WAqsyp9g0wLm6+mdNOejYS8TXg==
-X-Google-Smtp-Source: AK7set8thLIQH+7wkXPgqf3SnXnzYHJkd3YmLbiqXBcBE1bnZIf/qgdzipF1B7Rgs/q/mlvoGHpmTg==
-X-Received: by 2002:a17:90b:4f8c:b0:237:6178:33b1 with SMTP id qe12-20020a17090b4f8c00b00237617833b1mr2565701pjb.19.1677864982773;
-        Fri, 03 Mar 2023 09:36:22 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id fv24-20020a17090b0e9800b002340f58e19bsm1763623pjb.45.2023.03.03.09.36.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 09:36:21 -0800 (PST)
-Date:   Fri, 3 Mar 2023 09:36:17 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     "Wang, Wei W" <wei.w.wang@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
-Message-ID: <ZAIwEZdYcrs5EcHE@google.com>
-References: <20230301133841.18007-1-wei.w.wang@intel.com>
- <CALzav=eRYpnfg7bVQpVawAMraFdHu3OzqWr55Pg1SJC_Uh8t=Q@mail.gmail.com>
- <DS0PR11MB637348F1351260F8B7E97A15DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
- <ZAAsIBUuIIO1prZT@google.com>
- <DS0PR11MB6373DAA05CEF9AB8A83A6499DCB29@DS0PR11MB6373.namprd11.prod.outlook.com>
- <CAL715WLo90-JkJe6=GfX755t1jvaW-kqD_w++hv3Ed53fhLC3w@mail.gmail.com>
- <DS0PR11MB63735E9AC8F4636AF27DAA4ADCB39@DS0PR11MB6373.namprd11.prod.outlook.com>
- <CAL715WJsV3tPkMDK0exgHeuKOP9kJtc62Ra0jnRhT1Gd6AiEWg@mail.gmail.com>
+        Fri, 3 Mar 2023 12:36:55 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CE7B44E;
+        Fri,  3 Mar 2023 09:36:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677865014; x=1709401014;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=53YO1WGPLlrAsnqfxbpbcOnEwzAeo87kJqM4uTjUf4I=;
+  b=da9jO8Na9B+se/hVMROVZOQxeb2QABxdOZDR9b2xbyfVEMm7/tIrvsTo
+   AuJidCIJ4wFFfRZdUx7q39Im21Uyw3YHT0hvS8wuWqWodgkt2mPpujDVy
+   JC2uytZ3UkRl8ilJE4SCIP6JVzsAazKQna22ijuHQEYDgvXQk22P8g76/
+   sv3CuFnAsSVAEVQ95uDvbLtPJxkcbM/wTvJ5HZhCIXwE2lLltYbe/NQrP
+   3RBhm9ZOAIqzgX38+/aV7z36yqHt8JRKKxTZ09HsaWO3h9aGO7I9joYHy
+   JFiPMD307Ww/MlrppohoQadLZaHmDCpPlrpP82Pn+HUzJKX3WEdwiDrK1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="399914315"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="399914315"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 09:36:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="739576152"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="739576152"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga008.fm.intel.com with ESMTP; 03 Mar 2023 09:36:52 -0800
+Received: from [10.212.168.11] (kliang2-mobl1.ccr.corp.intel.com [10.212.168.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id E13A3580689;
+        Fri,  3 Mar 2023 09:36:49 -0800 (PST)
+Message-ID: <08b6d2c9-b6f9-fdbd-e871-b81437cca218@linux.intel.com>
+Date:   Fri, 3 Mar 2023 12:36:48 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 02/10] perf stat: Don't remove all grouped events when
+ CPU maps disagree
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+References: <20230302212531.1043318-1-irogers@google.com>
+ <20230302212531.1043318-3-irogers@google.com>
+ <962de75d-8e27-9b47-662e-e324b3ba5812@linux.intel.com>
+ <CAP-5=fXiRtKF661e=-4dX30ooV7uKQbidjaaDhjckVRdjw7CzA@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CAP-5=fXiRtKF661e=-4dX30ooV7uKQbidjaaDhjckVRdjw7CzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL715WJsV3tPkMDK0exgHeuKOP9kJtc62Ra0jnRhT1Gd6AiEWg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 09:53:35PM -0800, Mingwei Zhang wrote:
-> On Thu, Mar 2, 2023 at 5:50 PM Wang, Wei W <wei.w.wang@intel.com> wrote:
-> >
-> > On Friday, March 3, 2023 2:12 AM, Mingwei Zhang wrote:
-> > > > On Thursday, March 2, 2023 12:55 PM, Mingwei Zhang wrote:
-> > > > > I don't get it. Why bothering the type if we just do this?
-> > > > >
-> > > > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > > > > index 4f26b244f6d0..10455253c6ea 100644
-> > > > > --- a/include/linux/kvm_host.h
-> > > > > +++ b/include/linux/kvm_host.h
-> > > > > @@ -848,7 +848,7 @@ static inline void kvm_vm_bugged(struct kvm
-> > > > > *kvm)
-> > > > >
-> > > > >  #define KVM_BUG(cond, kvm, fmt...)                           \
-> > > > >  ({                                                           \
-> > > > > -     int __ret = (cond);                                     \
-> > > > > +     int __ret = !!(cond);                                   \
-> > > >
-> > > > This is essentially "bool __ret". No biggie to change it this way.
-> > >
-> > > !! will return an int, not a boolean, but it is used as a boolean.
-> >
-> > What's the point of defining it as an int when actually being used as a Boolean?
-> > Original returning of an 'int' is a bug in this sense. Either returning a Boolean or
-> > the same type (length) as cond is good way to me.
+
+
+On 2023-03-03 11:44 a.m., Ian Rogers wrote:
+> On Fri, Mar 3, 2023 at 7:50 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>
+>>
+>>
+>> On 2023-03-02 4:25 p.m., Ian Rogers wrote:
+>>> If the events in an evlist's CPU map differ then the entire group is
+>>> removed. For example:
+>>>
+>>> ```
+>>> $ perf stat -e '{imc_free_running/data_read/,imc_free_running/data_write/,cs}' -a sleep 1
+>>> WARNING: grouped events cpus do not match, disabling group:
+>>>   anon group { imc_free_running/data_read/, imc_free_running/data_write/, cs }
+>>> ```
+>>>
+>>> Change the behavior so that just the events not matching the leader
+>>> are removed. So in the example above, just 'cs' will be removed.
+>>>
+>>> Modify the warning so that it is produced once for each group, rather
+>>> than once for the entire evlist. Shrink the scope and size of the
+>>> warning text buffer.
+>>
+>> For the uncore, we usually have to create a group for each uncore PMU.
+>> The number of groups may be big. For example, on ICX, we have 40 CHA
+>> PMUs. For SPR, there should be more CHAs. If we have something like
+>> {cycles,uncore_cha/event=0x1/}, is the warning shown 40 times on ICX?
+>> If so, it should be very annoying.
+>>
+>> Maybe it's better to keep the current behavior which only print a
+>> warning once and notify the users that perf will re-group the events.
+>> For the details, they can get it from the -v option.
 > 
-> What's the point of using an integer? I think we need to ask the
-> original author. But I think one of the reasons might be convenience
-> as the return value. I am not sure if we can return a boolean in the
-> function. But it should be fine here since it is a macro.
+> Thanks Kan, I could imagine that but I was also worried about cases
+> where there are multiple groups like:
 > 
-> Anyway, returning an 'int' is not a bug. The bug is the casting from
-> 'cond' to the integer that may lose information and this is what you
-> have captured.
+> ```
+> $ perf stat -e '{imc_free_running/data_read/,cs},{uncore_clock/clockticks/,cs}'
+> -a sleep 1
+> WARNING: grouped events cpus do not match.
+> Events with CPUs not matching the leader will be removed from the group.
+>  anon group { imc_free_running/data_read/, cs }
+> WARNING: grouped events cpus do not match.
+> Events with CPUs not matching the leader will be removed from the group.
+>  anon group { uncore_clock/clockticks/, cs }
+> 
+> Performance counter stats for 'system wide':
+> 
+>          1,255.75 MiB  imc_free_running/data_read/
+>             7,571      cs
+>     1,327,285,527      uncore_clock/clockticks/
+>             7,571      cs
+> 
+>       1.002772882 seconds time elapsed
+> ```
+> 
+> Knowing that both groups were broken there feels like a value add.
+> Given that this is a warning, and it can be fixed by moving the event
+> out of the group or forcing the CPUs, I lean toward being
+> informative/spammy as the spam is somewhat straightforwardly fixed on
+> the command line.
 
-typeof() won't work if cond is a bitfield. See commit 8d4fbcfbe0a4 ("Fix
-WARN_ON() on bitfield ops") from Linus from back in 2007:
 
-commit 8d4fbcfbe0a4bfc73e7f0297c59ae514e1f1436f
-Author: Linus Torvalds <torvalds@woody.linux-foundation.org>
-Date:   Tue Jul 31 21:12:07 2007 -0700
+I did some tests with the patch. The issue I was worried about didn't
+occur. The change looks good to me.
 
-    Fix WARN_ON() on bitfield ops
+But I found another issue. If I specify a CPU set, the group removal
+fails. It's not an issue of this patch. It looks like the current perf
+compares the user defined CPU set, rather than the PMU's cpumask.
 
-    Alexey Dobriyan noticed that the new WARN_ON() semantics that were
-    introduced by commit 684f978347deb42d180373ac4c427f82ef963171 (to also
-    return the value to be warned on) didn't compile when given a bitfield,
-    because the typeof doesn't work for bitfields.
+./perf stat -e '{cycles,uncore_cha/event=0x1/}' -C0 sleep 1
 
-    So instead of the typeof trick, use an "int" variable together with a
-    "!!(x)" expression, as suggested by Al Viro.
+ Performance counter stats for 'CPU(s) 0':
 
-    To make matters more interesting, Paul Mackerras points out that that is
-    sub-optimal on Power, but the old asm-coded comparison seems to be buggy
-    anyway on 32-bit Power if the conditional was 64-bit, so I think there
-    are more problems there.
+     <not counted>      cycles
+   <not supported>      uncore_cha/event=0x1/
 
-    Regardless, the new WARN_ON() semantics may have been a bad idea.  But
-    this at least avoids the more serious complications.
+       1.001783936 seconds time elapsed
 
-    Cc: Alexey Dobriyan <adobriyan@sw.ru>
-    Cc: Herbert Xu <herbert@gondor.apana.org.au>
-    Cc: Paul Mackerras <paulus@samba.org>
-    Cc: Al Viro <viro@ftp.linux.org.uk>
-    Cc: Ingo Molnar <mingo@elte.hu>
-    Cc: Andrew Morton <akpm@osdl.org>
-    Signed-off-by: Linus Torvalds <torvalds@osdl.org>
+Some events weren't counted. Try disabling the NMI watchdog:
+        echo 0 > /proc/sys/kernel/nmi_watchdog
+        perf stat ...
+        echo 1 > /proc/sys/kernel/nmi_watchdog
+The events in group usually have to be from the same PMU. Try
+reorganizing the group.
 
-diff --git a/include/asm-generic/bug.h b/include/asm-generic/bug.h
-index 344e3091af24..d56fedbb457a 100644
---- a/include/asm-generic/bug.h
-+++ b/include/asm-generic/bug.h
-@@ -33,7 +33,7 @@ struct bug_entry {
+Thanks,
+Kan
 
- #ifndef HAVE_ARCH_WARN_ON
- #define WARN_ON(condition) ({                                          \
--       typeof(condition) __ret_warn_on = (condition);                  \
-+       int __ret_warn_on = !!(condition);                              \
-        if (unlikely(__ret_warn_on)) {                                  \
-                printk("WARNING: at %s:%d %s()\n", __FILE__,            \
-                        __LINE__, __FUNCTION__);                        \
-@
-[...]
-
-As for int versus bool, I don't see a strong argument for either. So let's
-stick with int since that's what the current code is using and that
-aligns with the generic kernel WARN_ON().
-
-If someone wants to propose using a bool instead of an int that should
-be a separate commit anyway and needs an actual justification.
+> 
+> Thanks,
+> Ian
+> 
+>> Thanks,
+>> Kan
+>>>
+>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>> ---
+>>>  tools/perf/builtin-stat.c | 24 +++++++++++++++---------
+>>>  1 file changed, 15 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+>>> index d70b1ec88594..5c12ae5efce5 100644
+>>> --- a/tools/perf/builtin-stat.c
+>>> +++ b/tools/perf/builtin-stat.c
+>>> @@ -181,14 +181,13 @@ static bool cpus_map_matched(struct evsel *a, struct evsel *b)
+>>>
+>>>  static void evlist__check_cpu_maps(struct evlist *evlist)
+>>>  {
+>>> -     struct evsel *evsel, *pos, *leader;
+>>> -     char buf[1024];
+>>> +     struct evsel *evsel, *warned_leader = NULL;
+>>>
+>>>       if (evlist__has_hybrid(evlist))
+>>>               evlist__warn_hybrid_group(evlist);
+>>>
+>>>       evlist__for_each_entry(evlist, evsel) {
+>>> -             leader = evsel__leader(evsel);
+>>> +             struct evsel *leader = evsel__leader(evsel);
+>>>
+>>>               /* Check that leader matches cpus with each member. */
+>>>               if (leader == evsel)
+>>> @@ -197,19 +196,26 @@ static void evlist__check_cpu_maps(struct evlist *evlist)
+>>>                       continue;
+>>>
+>>>               /* If there's mismatch disable the group and warn user. */
+>>> -             WARN_ONCE(1, "WARNING: grouped events cpus do not match, disabling group:\n");
+>>> -             evsel__group_desc(leader, buf, sizeof(buf));
+>>> -             pr_warning("  %s\n", buf);
+>>> -
+>>> +             if (warned_leader != leader) {
+>>> +                     char buf[200];
+>>> +
+>>> +                     pr_warning("WARNING: grouped events cpus do not match.\n"
+>>> +                             "Events with CPUs not matching the leader will "
+>>> +                             "be removed from the group.\n");
+>>> +                     evsel__group_desc(leader, buf, sizeof(buf));
+>>> +                     pr_warning("  %s\n", buf);
+>>> +                     warned_leader = leader;
+>>> +             }
+>>>               if (verbose > 0) {
+>>> +                     char buf[200];
+>>> +
+>>>                       cpu_map__snprint(leader->core.cpus, buf, sizeof(buf));
+>>>                       pr_warning("     %s: %s\n", leader->name, buf);
+>>>                       cpu_map__snprint(evsel->core.cpus, buf, sizeof(buf));
+>>>                       pr_warning("     %s: %s\n", evsel->name, buf);
+>>>               }
+>>>
+>>> -             for_each_group_evsel(pos, leader)
+>>> -                     evsel__remove_from_group(pos, leader);
+>>> +             evsel__remove_from_group(evsel, leader);
+>>>       }
+>>>  }
+>>>
