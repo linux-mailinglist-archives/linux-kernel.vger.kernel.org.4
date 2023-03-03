@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 759A96A9E2A
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465D36A9E2E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbjCCSIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:08:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S231536AbjCCSJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:09:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjCCSIl (ORCPT
+        with ESMTP id S231229AbjCCSJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:08:41 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22EF9DBFB;
-        Fri,  3 Mar 2023 10:08:40 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id b10so3271643ljr.0;
-        Fri, 03 Mar 2023 10:08:40 -0800 (PST)
+        Fri, 3 Mar 2023 13:09:49 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6810113CB;
+        Fri,  3 Mar 2023 10:09:47 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id z5so3206956ljc.8;
+        Fri, 03 Mar 2023 10:09:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Y779fsdPllk73iFSKFWEUZhysRcnGSThIiUqv0kC8lg=;
-        b=KQ5ad3dwukBu7s19Alqt1gcWpRvIarYj1lmtuc3GkDaEjFb03/azs9cd1TngN9K23v
-         vmu+W0tn6okdHwBgFxr+aGF/VaT2R3FJKnW1Zwk9SFCjgW5c2Hb/Nd5m5yAr+RYI3cZG
-         20mdAb1LEgNzwaaymymgH6i82VQjTJZgyEV6mALXSl4Ki8VgbLfFcN4NrKH9TcAz24un
-         5pEEm23LBnxAXe/Ie7kF8kaEcJx4Grv9HyBh8wwZAmCH6SV9vWuC4evMRp/cIiX2qPXG
-         IpETl8ca+Iq1LQTADtDCvb7JGliTo2n/sHIXI3KlyU6Jz3ylD/LWLBxSFslSH1Q4DPJl
-         6D9Q==
+        bh=muWkEi5u2VnAabnAUnAlA8tSUUjR0VEb8VOPXBIRzPU=;
+        b=Ndx/h2RNlXnSmoZYQoGL6rjkIA3L7MgEqcnH71W3Nd+UA5RyL3pH9UwiWObbbSoDux
+         nwgGIhidXikvLk3c0nfEOSYh62zZmp+64UBxoisq8XFeMoo6ywTQOxjD0HLQpOmnISAz
+         gGeFY0vmNq0FFItdA2TooX56/XiVoAO+0ETcGxz904hIHgXdGfrpjL3liKHf5wxBIRye
+         ShQBMlOJspg16EUjJgkpHdhtmvyzhvyj1IGJM+X8CQsypi5GdBnwUoPOXiM2SbL5cDOV
+         b36JtrN6aumRpeOFLWOyMQ4FGconGnq//FoOEY0DNLmAvRqX1eGTZ75sOHa+Jv2gdcmm
+         yfQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Y779fsdPllk73iFSKFWEUZhysRcnGSThIiUqv0kC8lg=;
-        b=FfVFDmTCe4HrXJUaEpJpcQGgGiF2QTCuKL8VrV0UFG9A7nVIoBQR0eYNo0/gBD1qpp
-         UoL+/a8wn8tXDypqB3v/FIkHI5KGrgxYkGhivKBd+E/D7Rbx5C4XlHXcJHQYx6xY6v1h
-         85VSj2DFEagq02vypGect4lGdmGULyos9WMRKf4YD9fluMZVKnFNdsWCrIcN20ixiloA
-         w7YZJRW2MSf6cyxLhzKtGH/aAoY0Jz01xnFG1BYNdpNqTb1+fSRi1iCfPKSvKamk3OKL
-         Tavi9/+rOW0Sjo6XLZW6gqhDf5yySdUsBvH48S+5UPYPXaKoasoqbgrJ508cigAZ+eaE
-         0dwQ==
-X-Gm-Message-State: AO0yUKVMwbsV9tX8KqVeTgYrXSW+LG7lGFVfwWIxeyFrnhqRJJ9jkYZ2
-        aWI65siVxwUt/wH0OdJtNC+8UK5UEVAJk7nNPi3f22GD
-X-Google-Smtp-Source: AK7set8imPN+V4oquFW31wvcp3uzwidOpMD/0dQQTK7/71jiXTpkZumCeQBM1P6XlCIYcfpHL2Okzyh1ue+X7mRpDpM=
-X-Received: by 2002:a2e:b4ae:0:b0:295:a3a8:b2a2 with SMTP id
- q14-20020a2eb4ae000000b00295a3a8b2a2mr836976ljm.9.1677866918365; Fri, 03 Mar
- 2023 10:08:38 -0800 (PST)
+        bh=muWkEi5u2VnAabnAUnAlA8tSUUjR0VEb8VOPXBIRzPU=;
+        b=HAgD+YWmpRp7NGtBCXOB3uDGD3xY0w7isYySXK38B7Pc0JmGp5aoKCkSdYg+d357X1
+         wiPlzR/mHfM1Un0sOYzGZWbfiCqeUowOhTqMU/elZZcEBcePXLo+b8Ti7im/U5TJjWoc
+         ntgu5aubb3w4QwKnx0uI5+PYMlaXXzTXOlzdV1vZbrKThpr2roAJj4k9NJFAjailH8WE
+         Zfi0+NgiCQJDLTC9hhF7ZRxvQsMfCYO5NOYTQRnHcaYrzJjooDfvU6RJ5rDfCfsVIrVB
+         RLMUCGtuQQdr9eNQK9bVx2Lo0urh9ajjqPOdFb0FlvXhV/J7jmJEOxc+5PC2wfOWtcdn
+         SrNg==
+X-Gm-Message-State: AO0yUKUmshRcI9Lm2uQCOEnLQQ/xt3t4r3DxWSnjpvfZgXNCbwSVnpQZ
+        X2VovnTXEyTmnzwCLu7jWgGt59WDuJHwXR9ICIM5VdlbKYE=
+X-Google-Smtp-Source: AK7set8xB7tGrYd3rXu04H2i2pi2t9cn6Ua/3ksF/RwTa1KprzXDfd1Lr/5riBAsF6n5C0wdoVEmo+CGyhiFr0d2cmk=
+X-Received: by 2002:a2e:a4c8:0:b0:28b:e4ac:fea0 with SMTP id
+ p8-20020a2ea4c8000000b0028be4acfea0mr861907ljm.9.1677866986071; Fri, 03 Mar
+ 2023 10:09:46 -0800 (PST)
 MIME-Version: 1.0
-References: <CAAgLYK7pm06588j+W7F0+2mgfVs1Sr7ioL4x+Bd-TZfV-Zw9Pg@mail.gmail.com>
-In-Reply-To: <CAAgLYK7pm06588j+W7F0+2mgfVs1Sr7ioL4x+Bd-TZfV-Zw9Pg@mail.gmail.com>
+References: <CAAgLYK7qZAotVT5mQ_FjaO+RvG_z8HGezKbjeRrd_03ekyrjFA@mail.gmail.com>
+In-Reply-To: <CAAgLYK7qZAotVT5mQ_FjaO+RvG_z8HGezKbjeRrd_03ekyrjFA@mail.gmail.com>
 From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Fri, 3 Mar 2023 10:08:27 -0800
-Message-ID: <CABBYNZL2RPLFfjs=EaS4khqLSXjwN2d=1FqY3Z-feX-j_QmOnw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] Bluetooth: fix race condition in hidp_session_thread
+Date:   Fri, 3 Mar 2023 10:09:34 -0800
+Message-ID: <CABBYNZKr=TdMkEyqvaJ2pJaFtS+4unwVY7QotiJdWtZ5-8Es5w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] Bluetooth: fix race condition in hci_cmd_sync_clear
 To:     lm0963 <lm0963hack@gmail.com>
 Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, security@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Tedd Ho-Jeong An <hj.tedd.an@gmail.com>
+        Johan Hedberg <johan.hedberg@gmail.com>, davem@davemloft.net,
+        edumazet@google.com, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, jkosina@suse.cz,
+        hdegoede@redhat.com, david.rheinsberg@gmail.com,
+        wsa+renesas@sang-engineering.com, linux@weissschuh.net,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,60 +75,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tedd,
+Hi Min,
 
-On Wed, Mar 1, 2023 at 10:18=E2=80=AFPM lm0963 <lm0963hack@gmail.com> wrote=
+On Wed, Mar 1, 2023 at 11:21=E2=80=AFPM lm0963 <lm0963hack@gmail.com> wrote=
 :
 >
-> There is a potential race condition in hidp_session_thread that may
-> lead to use-after-free. For instance, the timer is active while
-> hidp_del_timer is called in hidp_session_thread(). After hidp_session_put=
-,
-> then 'session' will be freed, causing kernel panic when hidp_idle_timeout
-> is running.
+> There is a potential race condition in hci_cmd_sync_work and
+> hci_cmd_sync_clear, and could lead to use-after-free. For instance,
+> hci_cmd_sync_work is added to the 'req_workqueue' after cancel_work_sync
+> The entry of 'cmd_sync_work_list' may be freed in hci_cmd_sync_clear, and
+> causing kernel panic when it is used in hci_cmd_sync_work.
 >
-> The solution is to use del_timer_sync instead of del_timer.
+> Here's the call trace:
 >
-> Here is the call trace:
+> dump_stack_lvl+0x49/0x63
+> print_report.cold+0x5e/0x5d3
+> ? hci_cmd_sync_work+0x282/0x320
+> kasan_report+0xaa/0x120
+> ? hci_cmd_sync_work+0x282/0x320
+> __asan_report_load8_noabort+0x14/0x20
+> hci_cmd_sync_work+0x282/0x320
+> process_one_work+0x77b/0x11c0
+> ? _raw_spin_lock_irq+0x8e/0xf0
+> worker_thread+0x544/0x1180
+> ? poll_idle+0x1e0/0x1e0
+> kthread+0x285/0x320
+> ? process_one_work+0x11c0/0x11c0
+> ? kthread_complete_and_exit+0x30/0x30
+> ret_from_fork+0x22/0x30
+> </TASK>
 >
-> ? hidp_session_probe+0x780/0x780
-> call_timer_fn+0x2d/0x1e0
-> __run_timers.part.0+0x569/0x940
-> hidp_session_probe+0x780/0x780
-> call_timer_fn+0x1e0/0x1e0
-> ktime_get+0x5c/0xf0
-> lapic_next_deadline+0x2c/0x40
-> clockevents_program_event+0x205/0x320
-> run_timer_softirq+0xa9/0x1b0
-> __do_softirq+0x1b9/0x641
-> __irq_exit_rcu+0xdc/0x190
-> irq_exit_rcu+0xe/0x20
-> sysvec_apic_timer_interrupt+0xa1/0xc0
+> Allocated by task 266:
+> kasan_save_stack+0x26/0x50
+> __kasan_kmalloc+0xae/0xe0
+> kmem_cache_alloc_trace+0x191/0x350
+> hci_cmd_sync_queue+0x97/0x2b0
+> hci_update_passive_scan+0x176/0x1d0
+> le_conn_complete_evt+0x1b5/0x1a00
+> hci_le_conn_complete_evt+0x234/0x340
+> hci_le_meta_evt+0x231/0x4e0
+> hci_event_packet+0x4c5/0xf00
+> hci_rx_work+0x37d/0x880
+> process_one_work+0x77b/0x11c0
+> worker_thread+0x544/0x1180
+> kthread+0x285/0x320
+> ret_from_fork+0x22/0x30
 >
-> Cc: stable@vger.kernel.org
+> Freed by task 269:
+> kasan_save_stack+0x26/0x50
+> kasan_set_track+0x25/0x40
+> kasan_set_free_info+0x24/0x40
+> ____kasan_slab_free+0x176/0x1c0
+> __kasan_slab_free+0x12/0x20
+> slab_free_freelist_hook+0x95/0x1a0
+> kfree+0xba/0x2f0
+> hci_cmd_sync_clear+0x14c/0x210
+> hci_unregister_dev+0xff/0x440
+> vhci_release+0x7b/0xf0
+> __fput+0x1f3/0x970
+> ____fput+0xe/0x20
+> task_work_run+0xd4/0x160
+> do_exit+0x8b0/0x22a0
+> do_group_exit+0xba/0x2a0
+> get_signal+0x1e4a/0x25b0
+> arch_do_signal_or_restart+0x93/0x1f80
+> exit_to_user_mode_prepare+0xf5/0x1a0
+> syscall_exit_to_user_mode+0x26/0x50
+> ret_from_fork+0x15/0x30
+>
 > Signed-off-by: Min Li <lm0963hack@gmail.com>
 > ---
->  net/bluetooth/hidp/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  net/bluetooth/hci_sync.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/net/bluetooth/hidp/core.c b/net/bluetooth/hidp/core.c
-> index bed1a7b9205c..707f229f896a 100644
-> --- a/net/bluetooth/hidp/core.c
-> +++ b/net/bluetooth/hidp/core.c
-> @@ -433,7 +433,7 @@ static void hidp_set_timer(struct hidp_session *sessi=
-on)
->  static void hidp_del_timer(struct hidp_session *session)
->  {
->         if (session->idle_to > 0)
-> -               del_timer(&session->timer);
-> +               del_timer_sync(&session->timer);
+> diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+> index 117eedb6f709..3103daf49d63 100644
+> --- a/net/bluetooth/hci_sync.c
+> +++ b/net/bluetooth/hci_sync.c
+> @@ -643,6 +643,7 @@ void hci_cmd_sync_clear(struct hci_dev *hdev)
+>   cancel_work_sync(&hdev->cmd_sync_work);
+>   cancel_work_sync(&hdev->reenable_adv_work);
+>
+> + mutex_lock(&hdev->cmd_sync_work_lock);
+>   list_for_each_entry_safe(entry, tmp, &hdev->cmd_sync_work_list, list) {
+>   if (entry->destroy)
+>   entry->destroy(hdev, entry->data, -ECANCELED);
+> @@ -650,6 +651,7 @@ void hci_cmd_sync_clear(struct hci_dev *hdev)
+>   list_del(&entry->list);
+>   kfree(entry);
+>   }
+> + mutex_unlock(&hdev->cmd_sync_work_lock);
 >  }
->
->  static void hidp_process_report(struct hidp_session *session, int type,
+
+The code style of this one seems broken, did you generate it using git
+format-patch?
+
+>  void __hci_cmd_sync_cancel(struct hci_dev *hdev, int err)
 > --
 > 2.25.1
 
-Looks like CI didn't pick up this one.
+
 
 --=20
 Luiz Augusto von Dentz
