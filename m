@@ -2,67 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7341C6A9BE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 17:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2BF16A9AD9
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 16:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjCCQke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 11:40:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S231172AbjCCPln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 10:41:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231150AbjCCQk3 (ORCPT
+        with ESMTP id S229800AbjCCPll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 11:40:29 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E8D1F4AC
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 08:39:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677861584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A7qH7z8qcUef6NyJXfR2PL9084/lxkL2GnTDPhF4AIk=;
-        b=DNKiG7boyw0e/8HcdQwK+O3PUjOGHzgkMG/s4Q21gncIKfzgNPKF7HQuwiMtZ9IIW3Tq+i
-        m9skDZfCgBPOebMpqwKxijePnrfcfZpMPd5nuCrnYDuWHEG1icLGlmJ3rn8aOhu9qoRy8G
-        SKxry9ff3Y67fXhP6ilIAPIgMFiuC0A=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-618-H4SqEBn-Otq_xZ4Ygilg-A-1; Fri, 03 Mar 2023 11:39:43 -0500
-X-MC-Unique: H4SqEBn-Otq_xZ4Ygilg-A-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3AE8185CCE4;
-        Fri,  3 Mar 2023 16:39:43 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D454C2166B2B;
-        Fri,  3 Mar 2023 16:39:42 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id B6B29401A0A1D; Fri,  3 Mar 2023 12:39:11 -0300 (-03)
-Date:   Fri, 3 Mar 2023 12:39:11 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 02/11] this_cpu_cmpxchg: ARM64: switch
- this_cpu_cmpxchg to locked, add _local function
-Message-ID: <ZAIUn05lmE36oglh@tpad>
-References: <20230209150150.380060673@redhat.com>
- <20230209153204.683821550@redhat.com>
- <ZAEMuD5pkk/TrK23@x1n>
- <ZAEPWQrdZd1N1rkn@tpad>
- <ZAEUNEWQ01w1WXlz@x1n>
+        Fri, 3 Mar 2023 10:41:41 -0500
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7221EBCE;
+        Fri,  3 Mar 2023 07:41:40 -0800 (PST)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17652f24da7so3359638fac.4;
+        Fri, 03 Mar 2023 07:41:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677858100;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SshJXdbsvY52OPqBvcRPFSQyEnl6DfUb/bSMQYfMUnI=;
+        b=BHn0VFC2AIkqwzLAD4/Oc7WjX3VhsoRxAwxi9VIIcGFpp9k1bWcjxX0gsK08y+Ic+I
+         RpeABIPgR3t41LZKkX7Dk4gKqFeJJ1Xs4b4zMNt5QMkVwWlQW2v/SAvNfKiUsZwVSmfY
+         NVToi0m5Ei91UjscYFDMJVRZL/CEgbzeDim8x0XqBhQBgO07jCqGn+Iw/BN4fpFloaHD
+         MAZ7oVuAbKllzROguXnMqUOVwWZAFcyc/EqtACI0CMiOYrlvM4l40F5m9m0lbkLdQCxL
+         ReKuCh4Bmd94J+MOR/kb37BjkdMLpws2qrZDK5GKYULlrp0wj++RiiIbC2DJKihbhSWQ
+         GTFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677858100;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SshJXdbsvY52OPqBvcRPFSQyEnl6DfUb/bSMQYfMUnI=;
+        b=Xb2QN0xp+ul9Z3G0+k9jN0JSGZpLJsN6JIM7QHjzE0Bc89yIqQHLzD7uakPEpvRQDB
+         pub2fB3+TF/Pc6ShzRjKVbrKVn2A6tLf0libtV0CbbKt3L/p+wfVpB9kzdJOAV0YG89x
+         uWundE5Bar6pvTQffzhOIS5KIoti7PLQLkZuOltk20h0m7yAfBVI1VpQDzmpljH+Zcms
+         uHzF5zUvDsmhY6y9oDdQXWsLDE2SQsk9mslHvMeaROZDyJ5VwZCEPGsDvYy/2idg9jh8
+         0sGhAXqUFKis6cyAJ5MCxPRjeV24+SZQ7ZchhP3p2FESlfx5kuhDYxJTaAg+jHMmVWOM
+         bujA==
+X-Gm-Message-State: AO0yUKU80I9SFXuc9HTkgEA3bYPrntw0yZgXZfejXYBaUnwZwey8fHtQ
+        LfBQQdr6N24ILE3gtAhQfjYYdwvRE1LwAfkmY4s=
+X-Google-Smtp-Source: AK7set9kbAxrLIWIWf9sDlHtPi+NyBtnuIbESXhmxYwKZLdZEYTl6cOGzrUwbKU5i1p9v+vIAIwRz0OOUMA3VKw1xjM=
+X-Received: by 2002:a05:6870:5a97:b0:176:31db:9a49 with SMTP id
+ dt23-20020a0568705a9700b0017631db9a49mr726414oab.3.1677858099731; Fri, 03 Mar
+ 2023 07:41:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAEUNEWQ01w1WXlz@x1n>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230302235356.3148279-1-robdclark@gmail.com> <20230302235356.3148279-16-robdclark@gmail.com>
+ <ZAFnqbycMleLmRe9@intel.com> <3bded9d7-9796-4a9b-7c11-aac994d4fdc6@linux.intel.com>
+ <CAF6AEGs6QYTESuwB8E9cTbv9LqQX16tz6-geeu9BCyFos9=sOA@mail.gmail.com> <a5ced581-4060-0fa2-d2fc-d18beee6fdb5@linux.intel.com>
+In-Reply-To: <a5ced581-4060-0fa2-d2fc-d18beee6fdb5@linux.intel.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 3 Mar 2023 07:41:28 -0800
+Message-ID: <CAF6AEGvq0CXohj+y8FkADg7Wxj_hb_HdcLXKty9Uro+xpxNg2w@mail.gmail.com>
+Subject: Re: [Freedreno] [PATCH v9 15/15] drm/i915: Add deadline based boost support
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, David Airlie <airlied@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Matt Turner <mattst88@gmail.com>,
+        =?UTF-8?Q?Michel_D=C3=A4nzer?= <michel@daenzer.net>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Simon Ser <contact@emersion.fr>,
+        open list <linux-kernel@vger.kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        freedreno@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,137 +90,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 04:25:08PM -0500, Peter Xu wrote:
-> On Thu, Mar 02, 2023 at 06:04:25PM -0300, Marcelo Tosatti wrote:
-> > On Thu, Mar 02, 2023 at 03:53:12PM -0500, Peter Xu wrote:
-> > > On Thu, Feb 09, 2023 at 12:01:52PM -0300, Marcelo Tosatti wrote:
-> > > > Goal is to have vmstat_shepherd to transfer from
-> > > > per-CPU counters to global counters remotely. For this, 
-> > > > an atomic this_cpu_cmpxchg is necessary.
-> > > > 
-> > > > Following the kernel convention for cmpxchg/cmpxchg_local,
-> > > > change ARM's this_cpu_cmpxchg_ helpers to be atomic,
-> > > > and add this_cpu_cmpxchg_local_ helpers which are not atomic.
-> > > 
-> > > I can follow on the necessity of having the _local version, however two
-> > > questions below.
-> > > 
-> > > > 
-> > > > Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-> > > > 
-> > > > Index: linux-vmstat-remote/arch/arm64/include/asm/percpu.h
-> > > > ===================================================================
-> > > > --- linux-vmstat-remote.orig/arch/arm64/include/asm/percpu.h
-> > > > +++ linux-vmstat-remote/arch/arm64/include/asm/percpu.h
-> > > > @@ -232,13 +232,23 @@ PERCPU_RET_OP(add, add, ldadd)
-> > > >  	_pcp_protect_return(xchg_relaxed, pcp, val)
-> > > >  
-> > > >  #define this_cpu_cmpxchg_1(pcp, o, n)	\
-> > > > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > > > +	_pcp_protect_return(cmpxchg, pcp, o, n)
-> > > >  #define this_cpu_cmpxchg_2(pcp, o, n)	\
-> > > > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > > > +	_pcp_protect_return(cmpxchg, pcp, o, n)
-> > > >  #define this_cpu_cmpxchg_4(pcp, o, n)	\
-> > > > -	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > > > +	_pcp_protect_return(cmpxchg, pcp, o, n)
-> > > >  #define this_cpu_cmpxchg_8(pcp, o, n)	\
-> > > > +	_pcp_protect_return(cmpxchg, pcp, o, n)
-> > > 
-> > > This makes this_cpu_cmpxchg_*() not only non-local, but also (especially
-> > > for arm64) memory barrier implications since cmpxchg() has a strong memory
-> > > barrier, while the old this_cpu_cmpxchg*() doesn't have, afaiu.
-> > > 
-> > > Maybe it's not a big deal if the audience of this helper is still limited
-> > > (e.g. we can add memory barriers if we don't want strict ordering
-> > > implication), but just to check with you on whether it's intended, and if
-> > > so whether it may worth some comments.
-> > 
-> > It happens that on ARM-64 cmpxchg_local == cmpxchg_relaxed.
-> > 
-> > See cf10b79a7d88edc689479af989b3a88e9adf07ff.
-> 
-> This is more or less a comment in general, rather than for arm only.
-> 
-> Fundamentally starting from this patch it's redefining this_cpu_cmpxchg().
-> What I meant is whether we should define it properly then implement the
-> arch patches with what is defined.
-> 
-> We're adding non-local semantics into it, which is obvious to me.
+On Fri, Mar 3, 2023 at 7:08 AM Tvrtko Ursulin
+<tvrtko.ursulin@linux.intel.com> wrote:
+>
+>
+> On 03/03/2023 14:48, Rob Clark wrote:
+> > On Fri, Mar 3, 2023 at 1:58 AM Tvrtko Ursulin
+> > <tvrtko.ursulin@linux.intel.com> wrote:
+> >>
+> >>
+> >> On 03/03/2023 03:21, Rodrigo Vivi wrote:
+> >>> On Thu, Mar 02, 2023 at 03:53:37PM -0800, Rob Clark wrote:
+> >>>> From: Rob Clark <robdclark@chromium.org>
+> >>>>
+> >>>
+> >>> missing some wording here...
+> >>>
+> >>>> v2: rebase
+> >>>>
+> >>>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>>> ---
+> >>>>    drivers/gpu/drm/i915/i915_request.c | 20 ++++++++++++++++++++
+> >>>>    1 file changed, 20 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
+> >>>> index 7503dcb9043b..44491e7e214c 100644
+> >>>> --- a/drivers/gpu/drm/i915/i915_request.c
+> >>>> +++ b/drivers/gpu/drm/i915/i915_request.c
+> >>>> @@ -97,6 +97,25 @@ static bool i915_fence_enable_signaling(struct dma_fence *fence)
+> >>>>       return i915_request_enable_breadcrumb(to_request(fence));
+> >>>>    }
+> >>>>
+> >>>> +static void i915_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
+> >>>> +{
+> >>>> +    struct i915_request *rq = to_request(fence);
+> >>>> +
+> >>>> +    if (i915_request_completed(rq))
+> >>>> +            return;
+> >>>> +
+> >>>> +    if (i915_request_started(rq))
+> >>>> +            return;
+> >>>
+> >>> why do we skip the boost if already started?
+> >>> don't we want to boost the freq anyway?
+> >>
+> >> I'd wager Rob is just copying the current i915 wait boost logic.
+> >
+> > Yup, and probably incorrectly.. Matt reported fewer boosts/sec
+> > compared to your RFC, this could be the bug
+>
+> Hm, there I have preserved this same !i915_request_started logic.
+>
+> Presumably it's not just fewer boosts but lower performance. How is he
+> setting the deadline? Somehow from clFlush or so?
 
-Which match the cmpxchg() function semantics.
+Yeah, fewer boosts, lower freq/perf.. I cobbled together a quick mesa
+hack to set the DEADLINE flag on syncobj waits, but it seems likely
+that I missed something somewhere
 
-> We're (silently, in this patch for aarch64) adding memory barrier semantics
-> too, this is not obvious to me on whether all archs should implement this
-> api the same way.
+BR,
+-R
 
-Documentation/atomic_t.txt says that _relaxed means "no barriers".
-
-So i'd assume:
-
-cmpxchg_relaxed: no additional barriers
-cmpxchg_local:   only guarantees atomicity to wrt local CPU.
-cmpxchg:	 atomic in SMP context.
-
-https://lore.kernel.org/linux-arm-kernel/20180505103550.s7xsnto7tgppkmle@gmail.com/#r
-
-There seems to be a lack of clarity in documentation.
-
-> It will make a difference IMHO when the helpers are used in any other code
-> clips, because IIUC proper definition of memory barrier implications will
-> decide whether the callers need explicit barriers when ordering is required.
-
-Trying to limit the scope of changes to solve the problem at hand.
-
-More specifically what this patch does is:
-
-1) Add this_cpu_cmpxchg_local, uses arch cmpxchg_local implementation
-to back it.
-2) Add this_cpu_cmpxchg, uses arch cmpxchg implementation to back it.
-
-Note that now becomes consistent with cmpxchg and cmpxchg_local
-semantics.
-
-> > This patchset maintains the current behaviour
-> > of this_cpu_cmpxch (for this_cpu_cmpxch_local), which was:
-> > 
-> >  #define this_cpu_cmpxchg_1(pcp, o, n)  \                                                                           
-> > -       _pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +       _pcp_protect_return(cmpxchg, pcp, o, n)
-> >  #define this_cpu_cmpxchg_2(pcp, o, n)  \                                                                           
-> > -       _pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +       _pcp_protect_return(cmpxchg, pcp, o, n)
-> >  #define this_cpu_cmpxchg_4(pcp, o, n)  \                                                                           
-> > -       _pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > +       _pcp_protect_return(cmpxchg, pcp, o, n)
-> >  #define this_cpu_cmpxchg_8(pcp, o, n)  \                                                                           
-> > +       _pcp_protect_return(cmpxchg, pcp, o, n)
-> > 
-> > > > +
-> > > > +#define this_cpu_cmpxchg_local_1(pcp, o, n)	\
-> > > >  	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > > > +#define this_cpu_cmpxchg_local_2(pcp, o, n)	\
-> > > > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > > > +#define this_cpu_cmpxchg_local_4(pcp, o, n)	\
-> > > > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > > > +#define this_cpu_cmpxchg_local_8(pcp, o, n)	\
-> > > > +	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
-> > > 
-> > > I think cmpxchg_relaxed()==cmpxchg_local() here for aarch64, however should
-> > > we still use cmpxchg_local() to pair with this_cpu_cmpxchg_local_*()?
-> > 
-> > Since cmpxchg_local = cmpxchg_relaxed, seems like this is not necessary.
-> > 
-> > > Nothing about your patch along since it was the same before, but I'm
-> > > wondering whether this is a good time to switchover.
-> > 
-> > I would say that another patch is more appropriate to change this, 
-> > if desired.
-> 
-> Sure on this one.  Thanks,
-> 
-> -- 
-> Peter Xu
-> 
-> 
-
+> Regards,
+>
+> Tvrtko
+>
+> P.S. Take note that I did not post the latest version of my RFC. The one
+> where I fix the fence chain and array misses you pointed out. I did not
+> think it would be worthwhile given no universal love for it, but if
+> people are testing with it more widely that I was aware perhaps I should.
+>
+> >>>> +
+> >>>> +    /*
+> >>>> +     * TODO something more clever for deadlines that are in the
+> >>>> +     * future.  I think probably track the nearest deadline in
+> >>>> +     * rq->timeline and set timer to trigger boost accordingly?
+> >>>> +     */
+> >>>
+> >>> I'm afraid it will be very hard to find some heuristics of what's
+> >>> late enough for the boost no?
+> >>> I mean, how early to boost the freq on an upcoming deadline for the
+> >>> timer?
+> >>
+> >> We can off load this patch from Rob and deal with it separately, or
+> >> after the fact?
+> >
+> > That is completely my intention, I expect you to replace my i915 patch ;-)
+> >
+> > Rough idea when everyone is happy with the core bits is to setup an
+> > immutable branch without the driver specific patches, which could be
+> > merged into drm-next and $driver-next and then each driver team can
+> > add there own driver patches on top
+> >
+> > BR,
+> > -R
+> >
+> >> It's a half solution without a smarter scheduler too. Like
+> >> https://lore.kernel.org/all/20210208105236.28498-10-chris@chris-wilson.co.uk/,
+> >> or if GuC plans to do something like that at any point.
+> >>
+> >> Or bump the priority too if deadline is looming?
+> >>
+> >> IMO it is not very effective to fiddle with the heuristic on an ad-hoc
+> >> basis. For instance I have a new heuristics which improves the
+> >> problematic OpenCL cases for further 5% (relative to the current
+> >> waitboost improvement from adding missing syncobj waitboost). But I
+> >> can't really test properly for regressions over platforms, stacks,
+> >> workloads.. :(
+> >>
+> >> Regards,
+> >>
+> >> Tvrtko
+> >>
+> >>>
+> >>>> +
+> >>>> +    intel_rps_boost(rq);
+> >>>> +}
+> >>>> +
+> >>>>    static signed long i915_fence_wait(struct dma_fence *fence,
+> >>>>                                  bool interruptible,
+> >>>>                                  signed long timeout)
+> >>>> @@ -182,6 +201,7 @@ const struct dma_fence_ops i915_fence_ops = {
+> >>>>       .signaled = i915_fence_signaled,
+> >>>>       .wait = i915_fence_wait,
+> >>>>       .release = i915_fence_release,
+> >>>> +    .set_deadline = i915_fence_set_deadline,
+> >>>>    };
+> >>>>
+> >>>>    static void irq_execute_cb(struct irq_work *wrk)
+> >>>> --
+> >>>> 2.39.1
+> >>>>
