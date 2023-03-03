@@ -2,124 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091026AA5A2
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 00:30:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C816AA5A8
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 00:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjCCXas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 18:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S229676AbjCCXgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 18:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjCCXaq (ORCPT
+        with ESMTP id S229512AbjCCXga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 18:30:46 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C1A5D452;
-        Fri,  3 Mar 2023 15:30:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677886243; x=1709422243;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MsnQ6U1QZT1glkU3UUvrlM2HfAZTPpjEe/eFE0RMVB4=;
-  b=UVAdCLXxZ61nAY7K8VV0fFvW0dnzIqgWleQkMzpQPjzNg3HdrPUOhFIZ
-   60dmszR9hS0W5boPsUFHTS0MGHaN2kL9UiQyBOq10/843prSMz+VMW/hF
-   ADyTVkymjhODUFHmzCLJsCzRaCmitiquNp55PYNo6KfQksrPn8VrH1FyR
-   kB+9HWsGn2U/eYTNqarlzcPqn88Q89ZkNkQXwATBCrvs/NdVphfcBpiUg
-   l+yy+r0SNJIeg4RBUl2qEdsxylYBf8VpUxcKOYANKDWjBggCd8IquKCy3
-   SttOopYZa9bVNiA+EVtXyUhwa8TYcEhCmoPCSkNLipUdhLrL4KLJafgEJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="332663668"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="332663668"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 15:30:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="799381485"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="799381485"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 03 Mar 2023 15:30:28 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYEr6-0001iy-0d;
-        Fri, 03 Mar 2023 23:30:28 +0000
-Date:   Sat, 4 Mar 2023 07:30:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Wang <tomato1220@gmail.com>, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     oe-kbuild-all@lists.linux.dev, avifishman70@gmail.com,
-        tmaimon77@gmail.com, tali.perry1@gmail.com, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
-        fran.hsu@quantatw.com, David Wang <davidwang@quantatw.com>
-Subject: Re: [PATCH 2/7] ARM: dts: nuvoton: Add Quanta GSZ BMC Device Tree
-Message-ID: <202303040612.codF6aYF-lkp@intel.com>
-References: <20230303063435.803097-2-davidwang@quantatw.com>
+        Fri, 3 Mar 2023 18:36:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545426547E;
+        Fri,  3 Mar 2023 15:36:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE86761924;
+        Fri,  3 Mar 2023 23:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 360F0C433EF;
+        Fri,  3 Mar 2023 23:36:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677886588;
+        bh=3u0XsrT3MOKCCnW5myaNz9pwfFsB2lT81dW3MxBXCVI=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=hCGM0LD3uF1QqcsQSaE1mgkjMuVZCKxluma9CjrihKBDquxuKagKJB8nDzXtrbqgq
+         n80EV7rnL+G7m60bk4pJqpZUeVGsMaaRciMFDz2ypVLuGPWjvCb5kowWWHq7+RcdCc
+         glWyfLUVSwiHilXBFTYiaWb5SCGfkTknuouRueg6bj5qgC4j/XVGR6LFOZbXssRuUk
+         0sM+Kq2Y2yVaTOuhFn5Yvdw16f19wz736P6jDWzydilTrd++xxHNcLJJXIP+P0OvkN
+         KY1S2W0UvRgFW/c54GZXgaPEz13yr9SX1kULanqy1kEJRIhJ5B0TgXW5pJjyJdctpR
+         fyMCHfF2INAYA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C78735C0278; Fri,  3 Mar 2023 15:36:27 -0800 (PST)
+Date:   Fri, 3 Mar 2023 15:36:27 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
+        jstultz@google.com, edumazet@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] softirq: avoid spurious stalls due to need_resched()
+Message-ID: <20230303233627.GA2136520@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221222221244.1290833-1-kuba@kernel.org>
+ <20221222221244.1290833-3-kuba@kernel.org>
+ <87r0u6j721.ffs@tglx>
+ <20230303133143.7b35433f@kernel.org>
+ <20230303223739.GC1301832@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303063435.803097-2-davidwang@quantatw.com>
+In-Reply-To: <20230303223739.GC1301832@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On Fri, Mar 03, 2023 at 02:37:39PM -0800, Paul E. McKenney wrote:
+> On Fri, Mar 03, 2023 at 01:31:43PM -0800, Jakub Kicinski wrote:
+> > On Fri, 03 Mar 2023 14:30:46 +0100 Thomas Gleixner wrote:
+> > > > -		if (time_before(jiffies, end) && !need_resched() &&
+> > > > -		    --max_restart)
+> > > > +		unsigned long limit;
+> > > > +
+> > > > +		if (time_is_before_eq_jiffies(end) || !--max_restart)
+> > > > +			limit = SOFTIRQ_OVERLOAD_TIME;
+> > > > +		else if (need_resched())
+> > > > +			limit = SOFTIRQ_DEFER_TIME;
+> > > > +		else
+> > > >  			goto restart;
+> > > >  
+> > > > +		__this_cpu_write(overload_limit, jiffies + limit);  
+> > > 
+> > > The logic of all this is non-obvious and I had to reread it 5 times to
+> > > conclude that it is matching the intent. Please add comments.
+> > > 
+> > > While I'm not a big fan of heuristical duct tape, this looks harmless
+> > > enough to not end up in an endless stream of tweaking. Famous last
+> > > words...
+> > 
+> > Would it all be more readable if I named the "overload_limit"
+> > "overloaded_until" instead? Naming..
+> > I'll add comments, too.
+> > 
+> > > But without the sched_clock() changes the actual defer time depends on
+> > > HZ and the point in time where limit is set. That means it ranges from 0
+> > > to 1/HZ, i.e. the 2ms defer time ends up with close to 10ms on HZ=100 in
+> > > the worst case, which perhaps explains the 8ms+ stalls you are still
+> > > observing. Can you test with that sched_clock change applied, i.e. the
+> > > first two commits from
+> > > 
+> > >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/softirq
+> > > 
+> > > 59be25c466d9 ("softirq: Use sched_clock() based timeout")
+> > > bd5a5bd77009 ("softirq: Rewrite softirq processing loop")
+> > 
+> > Those will help, but I spent some time digging into the jiffies related
+> > warts with kprobes - while annoying they weren't a major source of wake
+> > ups. (FWIW the jiffies noise on our workloads is due to cgroup stats
+> > disabling IRQs for multiple ms on the timekeeping CPU).
+> > 
+> > Here are fresh stats on why we wake up ksoftirqd on our Web workload
+> > (collected over 100 sec):
+> > 
+> > Time exceeded:      484
+> > Loop max run out:  6525
+> > need_resched():   10219
+> > (control: 17226 - number of times wakeup_process called for ksirqd)
+> > 
+> > As you can see need_resched() dominates.
+> > 
+> > Zooming into the time exceeded - we can count nanoseconds between
+> > __do_softirq starting and the check. This is the histogram of actual
+> > usecs as seen by BPF (AKA ktime_get_mono_fast_ns() / 1000):
+> > 
+> > [256, 512)             1 |                                                    |
+> > [512, 1K)              0 |                                                    |
+> > [1K, 2K)             217 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
+> > [2K, 4K)             266 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> > 
+> > So yes, we can probably save ourselves ~200 wakeup with a better clock
+> > but that's just 1.3% of the total wake ups :(
+> > 
+> > 
+> > Now - now about the max loop count. I ORed the pending softirqs every
+> > time we get to the end of the loop. Looks like vast majority of the
+> > loop counter wake ups are exclusively due to RCU:
+> > 
+> > @looped[512]: 5516
+> > 
+> > Where 512 is the ORed pending mask over all iterations
+> > 512 == 1 << RCU_SOFTIRQ.
+> > 
+> > And they usually take less than 100us to consume the 10 iterations.
+> > Histogram of usecs consumed when we run out of loop iterations:
+> > 
+> > [16, 32)               3 |                                                    |
+> > [32, 64)            4786 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> > [64, 128)            871 |@@@@@@@@@                                           |
+> > [128, 256)            34 |                                                    |
+> > [256, 512)             9 |                                                    |
+> > [512, 1K)            262 |@@                                                  |
+> > [1K, 2K)              35 |                                                    |
+> > [2K, 4K)               1 |                                                    |
+> > 
+> > Paul, is this expected? Is RCU not trying too hard to be nice?
+> 
+> This is from way back in the day, so it is quite possible that better
+> tuning and/or better heuristics should be applied.
+> 
+> On the other hand, 100 microseconds is a good long time from an
+> CONFIG_PREEMPT_RT=y perspective!
+> 
+> > # cat /sys/module/rcutree/parameters/blimit
+> > 10
+> > 
+> > Or should we perhaps just raise the loop limit? Breaking after less 
+> > than 100usec seems excessive :(
+> 
+> But note that RCU also has rcutree.rcu_divisor, which defaults to 7.
+> And an rcutree.rcu_resched_ns, which defaults to three milliseconds
+> (3,000,000 nanoseconds).  This means that RCU will do:
+> 
+> o	All the callbacks if there are less than ten.
+> 
+> o	Ten callbacks or 1/128th of them, whichever is larger.
+> 
+> o	Unless the larger of them is more than 100 callbacks, in which
+> 	case there is an additional limit of three milliseconds worth
+> 	of them.
+> 
+> Except that if a given CPU ends up with more than 10,000 callbacks
+> (rcutree.qhimark), that CPU's blimit is set to 10,000.
 
-Thank you for the patch! Yet something to improve:
+Also, if in the context of a softirq handler (as opposed to ksoftirqd)
+that interrupted the idle task with no pending task, the count of
+callbacks is ignored and only the 3-millisecond limit counts.  In the
+context of ksoftirq, the only limit is that which the scheduler chooses
+to impose.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on soc/for-next arm/for-next arm/fixes arm64/for-next/core clk/clk-next kvmarm/next rockchip/for-next shawnguo/for-next xilinx-xlnx/master linus/master v6.2 next-20230303]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+But it sure seems like the ksoftirqd case should also pay attention to
+that 3-millisecond limit.  I will queue a patch to that effect, and maybe
+Eric Dumazet will show me the error of my ways.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Wang/ARM-dts-nuvoton-Add-Quanta-GSZ-BMC-Device-Tree/20230303-143845
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230303063435.803097-2-davidwang%40quantatw.com
-patch subject: [PATCH 2/7] ARM: dts: nuvoton: Add Quanta GSZ BMC Device Tree
-config: arm-randconfig-r046-20230302 (https://download.01.org/0day-ci/archive/20230304/202303040612.codF6aYF-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/582e8c7ca5de26f639e46b839d9b4c6cbf7e43cf
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review David-Wang/ARM-dts-nuvoton-Add-Quanta-GSZ-BMC-Device-Tree/20230303-143845
-        git checkout 582e8c7ca5de26f639e46b839d9b4c6cbf7e43cf
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> So there is much opportunity to tune the existing heuristics and also
+> much opportunity to tweak the heuristics themselves.
+> 
+> But let's see a good use case before tweaking, please.  ;-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303040612.codF6aYF-lkp@intel.com/
+							Thanx, Paul
 
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:223.1-6 Label or path emc0 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:231.1-4 Label or path mc not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:239.1-7 Label or path ohci1 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:243.1-5 Label or path aes not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:247.1-5 Label or path sha not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:251.1-6 Label or path udc5 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:255.1-6 Label or path udc6 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:259.1-6 Label or path udc7 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:263.1-6 Label or path udc8 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:267.1-9 Label or path pcimbox not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:271.1-8 Label or path sdhci0 not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:366.1-5 Label or path otp not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:384.1-10 Label or path lpc_host not found
->> Error: arch/arm/boot/dts/nuvoton-npcm730-gsz.dts:1506.1-7 Label or path peci0 not found
-   FATAL ERROR: Syntax error parsing input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> > > whether that makes a difference? Those two can be applied with some
+> > > minor polishing. The rest of that series is broken by f10020c97f4c
+> > > ("softirq: Allow early break").
+> > > 
+> > > There is another issue with this overload limit. Assume max_restart or
+> > > timeout triggered and limit was set to now + 100ms. ksoftirqd runs and
+> > > gets the issue resolved after 10ms.
+> > > 
+> > > So for the remaining 90ms any invocation of raise_softirq() outside of
+> > > (soft)interrupt context, which wakes ksoftirqd again, prevents
+> > > processing on return from interrupt until ksoftirqd gets on the CPU and
+> > > goes back to sleep, because task_is_running() == true and the stale
+> > > limit is not after jiffies.
+> > > 
+> > > Probably not a big issue, but someone will notice on some weird workload
+> > > sooner than later and the tweaking will start nevertheless. :) So maybe
+> > > we fix it right away. :)
+> > 
+> > Hm, Paolo raised this point as well, but the overload time is strictly
+> > to stop paying attention to the fact ksoftirqd is running.
+> > IOW current kernels behave as if they had overload_limit of infinity.
+> > 
+> > The current code already prevents processing until ksoftirqd schedules
+> > in, after raise_softirq() from a funky context.
