@@ -2,77 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1F96A9949
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:18:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55F7C6A9940
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 15:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjCCOSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 09:18:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S231214AbjCCORX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 09:17:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjCCOR6 (ORCPT
+        with ESMTP id S229511AbjCCORV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 09:17:58 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2DAD173C
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 06:17:51 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id d12so1000939ioe.10
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 06:17:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677853071;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0B3hgicuXjM7bBAtA4QLzoXhHV0rOr+vQWIDTCOLWjA=;
-        b=hgyhk2HWKgqowHC66Krk1Q03UB2/iQ4vrpQKUut4wjBz15Z4kolYIXRJGyjLR0TgDC
-         X7Y5mygfZygXjpKsCTtXlgQKVQE5UjI5w4YVFG5PR3UeA0bcJmIyDfwcKuUP78YUBvFE
-         rod8sdeuET4pFpUrQHHYLVC5bnd4w/h75aVphjm1ar+CWnCDenKrUzj8/QWyGDB0/v/B
-         ttO0k/ot76Ybx7zjiHs5+xjQds1+mv2MtQLayQ7bIv4TQ0V/tfUJT/mD6MnjdOsb/Xp1
-         JYihCA8SPPBbtvGWqnWcTPQLxVCPWeYoUTybbzehF4gnfmOtBSgGTMBB689L7tGaFvGD
-         PbTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677853071;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0B3hgicuXjM7bBAtA4QLzoXhHV0rOr+vQWIDTCOLWjA=;
-        b=7ffhLWjye8yx5nBIaTCm4vVc5Y3PvKkbvQlnOdNQ3vrVc3+HpkHKBsMRm5+xtfUxZs
-         G1fcnNv7nFc7/UgK+fzawY01Ll+qVfL0D2qEYGJ6UIpW7D3nFOC+2Ip4nS0qa68S4ISq
-         SbY4ojbTYBjKbG6gSwWvy9inDJH6yTM0u+mbBLOaH7KrykFTZIs8XBpiT1w/7GpaoPdi
-         F3/QA7BbvnuHJevyY+Fd1/+3z+8TffP0p13DehvbntDB+MOPPicH5bsDeFzY/XDq+6vw
-         rBpR90slpke9WQ2pIjBp99Tks8tVSPl9omMMVtfy/NLaUZiRKQDgEsArzw7zpMo8PpBX
-         +APw==
-X-Gm-Message-State: AO0yUKU7wFA9juBrL11MMs6f11FALw52zCeaR64x3vwDgyCHr6Kog/ST
-        mMj4KKuNHK2O8ddjYx4R060GLvIqRJ7gZguHoAawgw==
-X-Google-Smtp-Source: AK7set+/9ix6iBDvkcAa7MkLZxETywJmcFLhsCC5D3Hn50zH5SEnjXSEBW/PPsP2I4yK8XyKECNfTh3bZqLsW16onO4=
-X-Received: by 2002:a02:9624:0:b0:3c8:c0dc:2d65 with SMTP id
- c33-20020a029624000000b003c8c0dc2d65mr645859jai.5.1677853071249; Fri, 03 Mar
- 2023 06:17:51 -0800 (PST)
+        Fri, 3 Mar 2023 09:17:21 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96B83CE3A;
+        Fri,  3 Mar 2023 06:17:19 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1677853037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c59/pZtJ4BPMeqcHgfx7bb0sCxiifET9QkB2iiMvL70=;
+        b=uYDrfbdFFxTx/MlPDo2DSer/FW9mAdABsQ6QxUlbI7KCeO4FZFtHmG/pUaoNSlcPORz/HT
+        oSS0MuaiaCoF6CTIglkX8LfNjMqJB7c73ZHsW8fHCuFC3OIKZkNTkpunFsIVcVvQmMzB+C
+        f0+XlffnROsQO0FVStl9BfXEzb5++xhqPUG4TWI2DlIrrO/zY4kSjvDIY+7eHxWiH0UBXi
+        S7DnRp2ju8nexW0MYathrvEqyB6AnaVoyithPgvrWiSf5wx4zE/pXTdyUGFZ3er9nhn0CC
+        Ff9kRLsd0S8yQUIKwQU424Of82ljE7dPURxVc6uxz13nNAsPXBtLa5gWYaRQtg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1677853037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c59/pZtJ4BPMeqcHgfx7bb0sCxiifET9QkB2iiMvL70=;
+        b=bE0/L8qjyqbXIK/qu1RacGNDEWO+yGBA7j2F04qNFENU6/kEgzIOUbrH+Kh6odwut7zqiL
+        nCKFBbqdfLIg6/AA==
+To:     Jakub Kicinski <kuba@kernel.org>, peterz@infradead.org
+Cc:     jstultz@google.com, edumazet@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH 3/3] softirq: don't yield if only expedited handlers are
+ pending
+In-Reply-To: <20221222221244.1290833-4-kuba@kernel.org>
+References: <20221222221244.1290833-1-kuba@kernel.org>
+ <20221222221244.1290833-4-kuba@kernel.org>
+Date:   Fri, 03 Mar 2023 15:17:17 +0100
+Message-ID: <87mt4tkjgy.ffs@tglx>
 MIME-Version: 1.0
-References: <20230303141433.3422671-1-glider@google.com> <20230303141433.3422671-3-glider@google.com>
-In-Reply-To: <20230303141433.3422671-3-glider@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Fri, 3 Mar 2023 15:17:14 +0100
-Message-ID: <CAG_fn=V4ePYQ4oYb6GXs7mOFtcuW_9HJo7BK02WK0-OvF4snxA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] x86: kmsan: use C versions of memset16/memset32/memset64
-To:     glider@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        akpm@linux-foundation.org, elver@google.com, dvyukov@google.com,
-        nathan@kernel.org, ndesaulniers@google.com,
-        kasan-dev@googlegroups.com,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Daniel Vetter <daniel@ffwll.ch>, Helge Deller <deller@gmx.de>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the second version of the patch. Sorry for the inconvenience.
+Jakub!
+
+On Thu, Dec 22 2022 at 14:12, Jakub Kicinski wrote:
+> This leads to a situation where we go thru the softirq loop twice.
+> First round we have pending = NET (from the NIC IRQ/NAPI), and
+> the second iteration has pending = TASKLET (the socket tasklet).
+
+...
+
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index ad200d386ec1..4ac59ffb0d55 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -601,7 +601,7 @@ asmlinkage __visible void __softirq_entry __do_softirq(void)
+>  
+>  		if (time_is_before_eq_jiffies(end) || !--max_restart)
+>  			limit = SOFTIRQ_OVERLOAD_TIME;
+> -		else if (need_resched())
+> +		else if (need_resched() && pending & ~SOFTIRQ_NOW_MASK)
+>  			limit = SOFTIRQ_DEFER_TIME;
+>  		else
+>  			goto restart;
+
+While this is the least of my softirq worries on PREEMPT_RT, Peter is
+right about real-time tasks being deferred on a PREEMPT_RT=n
+kernel. That's a real issue for low-latency audio which John Stultz is
+trying to resolve. Especially as the above check can go in circles.
+
+I fear we need to go back to the drawing board and come up with a real
+solution which takes these contradicting aspects into account. Let me
+stare at Peters and Johns patches for a while.
+
+Thanks
+
+        tglx
+
+
