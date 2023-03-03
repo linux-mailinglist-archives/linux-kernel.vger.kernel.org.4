@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4A36AA473
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 23:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE396AA2F7
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjCCWdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 17:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
+        id S232956AbjCCVwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:52:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233074AbjCCWco (ORCPT
+        with ESMTP id S233106AbjCCVue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 17:32:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F52D320;
-        Fri,  3 Mar 2023 14:28:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDC5061950;
-        Fri,  3 Mar 2023 21:49:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5802C4339C;
-        Fri,  3 Mar 2023 21:49:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677880176;
-        bh=3yGipkpIGv9K2wFPL1P5L0Ahphnp0zM8j8TTRic2RUI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tQLhBwp1/npZDW618DPnlBy0D/Hnr1jz0Zal/ii4rnDW7K1kVnDjkGgu3TW1Z5krX
-         s4h6rSn69GiC0JET9+TfR4nsx7hCJSay1UK7Fq2/2VUt1ebAmdsLFTZ1cPNvlISHZq
-         flpiCa2r9C8/jnYzTrrXHEbjzTG+XmE3IYzAHdEv/qZEJau/CvN4Ah495fLCugvBTC
-         nRejrkaVWfdh4GYW4n8ggbzemBamMJw7ktwdv04tBhaTMTRNnEYzIV+Hx6b3q6GsCJ
-         XVRKpsVguIqoqA/luzaUMp/hR3B22UO+MBxEXUeubBy3VAO/1IvNSdETYYHOLnOFwt
-         7U6M4CNbs8/OA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        kishon@kernel.org, heiko@sntech.de, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 16/16] phy: rockchip-typec: Fix unsigned comparison with less than zero
-Date:   Fri,  3 Mar 2023 16:48:49 -0500
-Message-Id: <20230303214849.1454002-16-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230303214849.1454002-1-sashal@kernel.org>
-References: <20230303214849.1454002-1-sashal@kernel.org>
+        Fri, 3 Mar 2023 16:50:34 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452CB1FF0;
+        Fri,  3 Mar 2023 13:46:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677879994; x=1709415994;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qGV5bJjDHw2ZzOUEb+Ljo+MxhpwEmK8AGP04i4kgrdk=;
+  b=QK3H3na/NMHjUAUvhEOBkeGE5IozNLzwZc9q2GYxY7v8HARORkjrfYXi
+   IgZ3co8XHw4p7L8PnRt427pGtBbWevjOkMwh7cwS77NThFqQjJHEgDvQX
+   63xZGN0m4BcWuduzi5bXTXd0y4W+188NLI/s6udOO2y9PynALsqI7EOvJ
+   A6sAA6/9Lhrr/PFvPqHsbcex8OVCfTJjuIPVGBRQOL9L5oOdBSuDRMVka
+   KjanuMvFwdlu37obH/IqXrPMvijYrRgO8R0npA/kfHgdsXsOwKFD+GznE
+   /KY5OQNfQICARXhoftLL4r8t9AbBNx2+A2gLP357cRPeOd2hFEGP6vYW1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="397753654"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="397753654"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 13:45:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="707993274"
+X-IronPort-AV: E=Sophos;i="5.98,231,1673942400"; 
+   d="scan'208";a="707993274"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 13:45:33 -0800
+Date:   Fri, 3 Mar 2023 13:49:23 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 4/4] dmaengine/idxd: Re-enable kernel workqueue under
+ DMA API
+Message-ID: <20230303134923.22b7686f@jacob-builder>
+In-Reply-To: <ZACdTG4QZSHF2QRj@nvidia.com>
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+        <20230302005959.2695267-5-jacob.jun.pan@linux.intel.com>
+        <BN9PR11MB527624EDB9FCD26751C73B128CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <ZACdTG4QZSHF2QRj@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Hi Jason,
 
-[ Upstream commit f765c59c5a72546a2d74a92ae5d0eb0329d8e247 ]
+On Thu, 2 Mar 2023 08:57:48 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-The dp and ufp are defined as bool type, the return value type of
-function extcon_get_state should be int, so the type of dp and ufp
-are modified to int.
+> On Thu, Mar 02, 2023 at 09:47:00AM +0000, Tian, Kevin wrote:
+> > > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > > Sent: Thursday, March 2, 2023 9:00 AM
+> > > 
+> > >  static int idxd_enable_system_pasid(struct idxd_device *idxd)
+> > >  {
+> > > -	return -EOPNOTSUPP;
+> > > +	struct pci_dev *pdev = idxd->pdev;
+> > > +	struct device *dev = &pdev->dev;
+> > > +	struct iommu_domain *domain;
+> > > +	union gencfg_reg gencfg;
+> > > +	ioasid_t pasid;
+> > > +	int ret;
+> > > +
+> > > +	domain = iommu_get_domain_for_dev(dev);
+> > > +	if (!domain || domain->type == IOMMU_DOMAIN_BLOCKED)
+> > > +		return -EPERM;  
+> > 
+> > what about UNMANAGED?  
+> 
+> Why are we checking this anyhow?
+> 
+> Get the domain the DMA API is using and feed it to
+> iommu_attach_device_pasid(). If the driver can't mirror the DMA API's
+> domain onto the PASID then it will just fail the attach. A domain
+> cannot even be NULL on x86.
+makes sense,
 
-./drivers/phy/rockchip/phy-rockchip-typec.c:827:12-14: WARNING: Unsigned expression compared with zero: dp > 0.
+Thanks,
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3962
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Link: https://lore.kernel.org/r/20230213035709.99027-1-jiapeng.chong@linux.alibaba.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/phy/rockchip/phy-rockchip-typec.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/phy/rockchip/phy-rockchip-typec.c b/drivers/phy/rockchip/phy-rockchip-typec.c
-index 76a4b58ec7717..ca4b80d0d8b78 100644
---- a/drivers/phy/rockchip/phy-rockchip-typec.c
-+++ b/drivers/phy/rockchip/phy-rockchip-typec.c
-@@ -817,9 +817,8 @@ static int tcphy_get_mode(struct rockchip_typec_phy *tcphy)
- 	struct extcon_dev *edev = tcphy->extcon;
- 	union extcon_property_value property;
- 	unsigned int id;
--	bool ufp, dp;
- 	u8 mode;
--	int ret;
-+	int ret, ufp, dp;
- 
- 	if (!edev)
- 		return MODE_DFP_USB;
--- 
-2.39.2
-
+Jacob
