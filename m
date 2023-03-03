@@ -2,296 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC0E36A9072
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 06:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 528C66A9074
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 06:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbjCCFXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 00:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S229679AbjCCF0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 00:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCCFX3 (ORCPT
+        with ESMTP id S229511AbjCCF0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 00:23:29 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A707A9C;
-        Thu,  2 Mar 2023 21:23:27 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso3202009wmb.0;
-        Thu, 02 Mar 2023 21:23:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677821006;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OG+lHdMiDPpwmzvp7Y+Ar7RkTFYuuDkeo3aBtq04P/c=;
-        b=dvlaWG+KIeds94l62OhKrbEup0Y9WhFq/RPHm/KhfEa0KYG8AUHFBf46dDFQULjmgG
-         IWZpJiD51gWr2tzgHtiMx5zt0VR3WeX4Kq5DHi/UeYmwn2nqndN9bAEsJ979hAafESvR
-         eFny9qB1C9AdDyi7YDZtzGhj9Tsa51EsFalLixxG4ZIyVJifrgmZa+9V0FeHl9WkpzTC
-         kHt32i7G5cZA0pI1rv+7dS+vc1FX3z4NH1t99BNdMADTrQiIvewbC2AOH4vC/I1sUPl8
-         mMOQ+OwFC3l1PEjQYyBWKmSZOA2nCPwN+vsi/DNya/uGdt6i1AMnl4LODZlTzTbz1q9D
-         huZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677821006;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OG+lHdMiDPpwmzvp7Y+Ar7RkTFYuuDkeo3aBtq04P/c=;
-        b=OUnz/NbJxPHz5Nj5POTZbzNBg+IanttJ3ErYc5ou4DRINs1iXnfyt/Gn849eDOU7Wp
-         bGB1krBde5YlGYAda68xYOHd66Q19Q7O/3S4G5g3rhHpd5FgnzO9skqT5Ku4sB6GizaH
-         4aJVe/A20w4mu0P6ERPECS+aMx1r5wJ4Ff0m0ynYT7KjMHUaZL+l8bXedBKWkdNkqbfn
-         xjAFTvGSoIJNMCvEYCsqykU8tO9gpx4o8EUZVtkPNgCbRoy/k7f1nQtoXsw0w9XiHIE0
-         zhEEYL86zMwQ9KFDGfHx5k/weodQaQovLqcRF4B2wJKTVIiemSTOVPmhXV2bMdHpPdqr
-         a8mw==
-X-Gm-Message-State: AO0yUKWplxug8atPnxB/169X9oajhpzpupNfhFiYczd0Zph4VQPYvtpD
-        gQhH9JZQirNblVQ2kAZCClU=
-X-Google-Smtp-Source: AK7set9r8arZXIQ2k0MxVz+7Db0MjpRk7xY5qWtgsiV7/55iljjQqU2aJA8CpQg/nM1Fc6MWWiqRWA==
-X-Received: by 2002:a05:600c:3b97:b0:3dc:557f:6129 with SMTP id n23-20020a05600c3b9700b003dc557f6129mr427411wms.2.1677821006264;
-        Thu, 02 Mar 2023 21:23:26 -0800 (PST)
-Received: from suse.localnet (host-95-249-145-60.retail.telecomitalia.it. [95.249.145.60])
-        by smtp.gmail.com with ESMTPSA id he5-20020a05600c540500b003e2058a7109sm4754635wmb.14.2023.03.02.21.23.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Mar 2023 21:23:25 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     Benjamin LaHaise <bcrl@kvack.org>, linux-fsdevel@vger.kernel.org,
-        linux-aio@kvack.org, linux-kernel@vger.kernel.org,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jeff Moyer <jmoyer@redhat.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>
-Subject: Re: [PATCH v3] fs/aio: Replace kmap{,_atomic}() with kmap_local_page()
-Date:   Fri, 03 Mar 2023 06:23:24 +0100
-Message-ID: <2172918.1BCLMh4Saa@suse>
-In-Reply-To: <20230119162055.20944-1-fmdefrancesco@gmail.com>
-References: <20230119162055.20944-1-fmdefrancesco@gmail.com>
+        Fri, 3 Mar 2023 00:26:10 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5631518A8F
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Mar 2023 21:26:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gfFCcIL8Wi/j8QDNpMVcnHshZW+7Bz+K3Pj5gscuv94AzJaB4VlmcVVGy54gPJIv/MWfA3aPl4pkSENkv/xpYV7LPQA+vt9z4qyEioITMcGKCw+oOUSBAglSenrm29h7eqtcN3z7sIr8xT34/ZglzpRkW24f2oOSpAQEMh8dxi2rsdkId103I5F8ht3600oLaOqNZii/6dr6S/noRRkhgtfAVv1ZX70WQmwlHRsU/O/aEdLpM+6ISbv2W/6kCVDBGJrO/HNyMszTCbSh2iENv4eU24O2gUG2GhVBdL8NxjNa8MUaFkOMhsFoB1T0EjvM9vY0DsJptfiMIy6hh3S1og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2s8yCLwr7UH0TIcsurUqwYFWHyrBAegYej99Pg3VnPA=;
+ b=BLycVjC9vEKx84ZiVwAWQWeTkHSHwUifewnHesrvlAzlfesuHcTrD58RSOisSmomT4f7lbjmVJ3XfeWfUEzn3KeVPYMwbbNZ95AVxN2bUG6E6UdGOGcEO9mYSqU1zrfkhlWqcd3tlyujwuZ1b4CKlRZQx4oiFp9u3UbH3QnQRYvzRd6Fq5U6v7MDXy0F7hlISiy+1lSGJrjnubjeGjSF2+MLKI8jiQH489EIAVgnREJwzzQwKjup4aMX9YSHCBMwvsjtb8L8wiJt9Vy3phk8K0+EvPSP8yBFVquI+jejxLMPSSG4kGwuChJgZWwHuM+UXDPqhyP8bIRUWo0pNTu4TA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2s8yCLwr7UH0TIcsurUqwYFWHyrBAegYej99Pg3VnPA=;
+ b=RzsgUxdlQNiFVc/FVlK+BwhWlXMP0S2rz2ze/21doGnJG69j0+RNEnYC5tmUOuzw2pcxYG2ge7YYmEL+x/fqnDbj25cpPdWaXHI5Fvq2iSPAoJQabem3wfdqhTKEgl4A/XXktIQwSedYWqK89drnA7EJSTiLbs3akzA/Ns7t2Vo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com (2603:10b6:208:3ae::10)
+ by SJ0PR12MB6989.namprd12.prod.outlook.com (2603:10b6:a03:448::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.21; Fri, 3 Mar
+ 2023 05:26:06 +0000
+Received: from IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::fe66:3fca:2cb4:1e7c]) by IA1PR12MB6434.namprd12.prod.outlook.com
+ ([fe80::fe66:3fca:2cb4:1e7c%6]) with mapi id 15.20.6156.018; Fri, 3 Mar 2023
+ 05:26:06 +0000
+Message-ID: <41b47cd7-1ba9-3205-165e-02e8384e7064@amd.com>
+Date:   Fri, 3 Mar 2023 10:55:54 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 0/5] Memory access profiler(IBS) driven NUMA balancing
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org, mgorman@suse.de,
+        peterz@infradead.org, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org,
+        akpm@linux-foundation.org, luto@kernel.org, tglx@linutronix.de,
+        yue.li@memverge.com, Ravikumar.Bangoria@amd.com
+References: <20230208073533.715-1-bharata@amd.com>
+ <878rh2b5zt.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <72b6ec8b-f141-3807-d7f2-f853b0f0b76c@amd.com>
+ <87zg9i9iw2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <1547d291-1512-faae-aba5-0f84c3502be4@amd.com>
+ <c3e79d2e-97da-726e-bcaa-0258e3ddfafe@amd.com>
+ <87zg9c7rrf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <8fea74ec-8feb-1709-14f2-cecb63fdc9ed@amd.com>
+ <87v8jnbl22.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <b19e0c22-c80b-7223-6ed7-472502948fa0@amd.com>
+ <87jzzz8tgm.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Bharata B Rao <bharata@amd.com>
+In-Reply-To: <87jzzz8tgm.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0068.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:23::13) To IA1PR12MB6434.namprd12.prod.outlook.com
+ (2603:10b6:208:3ae::10)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6434:EE_|SJ0PR12MB6989:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76d97c74-e1f8-4511-b965-08db1ba7c97a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 49ecB6+HJh0NXBHcl+dn3N0OJRrBCTwEcyySdIQYg4W1qurskCuvAs425L/syE5X6f/D1x7oy2jVLmrY+JJqUTaa9/yPJzidIfI0APBAXJb1quRgiL5uILINn7lF9sd9S6bkvmmxphorW5yyycYTn26Mx+RwnrsoVb6Z6X1WxNdXBrRotu1doApypvgDu+4RyS7CjMctJFRhPJQoQ2doBvjJyXSy6HtpruhTvMhJC6uj4MPlN/YLmYzLtCzIZ17B7wcI2kdcfK3sNSgZC5W54Ler5CMSNCq3g7PZtq+5dxMM7WngjNisRQHsaGz/f31LubZK+nsDNXTyOAPcR7ngW3ySC++TYm120wH/8a2uNakdRgt7zwoe/EmqR8q9ahMQUI1SUhV87VfpATdFvAJQhc7TGrLDkHs25lbjjDzMlXR0UZx7nn5XP1rT7MwbaoPiyDUphuJ0sNNy/2SpJajdLfbP+G0xEqGf7EDelwuTSoLM8lS/j7AeALWMzTxdYI3cQ9Q0PhZPSO0XE8ge9QzfwMCJsJEt7iZMyTi/8TDsWsXmZf1CUyiJRNwKbhlQsdqXEuPG6xejYpafUN18zTeaJ9EgZHvrBNT+hoHlg+gzi1oR3xWMDJDGLw8AwKPNYIWMlfjz22PbMQk6ZhSpMC7Hfo9TwBIzNTGxHqh7JRCHyruFSmVtR+YpB8dubtI1m0Ah17r6zxlNVZKijphS0XNvX9FnHsE8K4f0W/apwc9zOUM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6434.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(376002)(366004)(396003)(451199018)(38100700002)(478600001)(53546011)(36756003)(6506007)(6512007)(2616005)(26005)(186003)(83380400001)(6666004)(6486002)(8936002)(41300700001)(66946007)(66556008)(66476007)(4326008)(6916009)(8676002)(31696002)(5660300002)(86362001)(31686004)(7416002)(316002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WEZ0QmUxeEpOWWM4L085c1IrRGpTaUFFM2tBVDg3YzlhL041LzdiZFRsWjZR?=
+ =?utf-8?B?Q3k1VGxXNEFjcEU4M2d4bFB5dDF2aUJmOVk4Ynp2bVQ2UW1LWE5PWCtSUXBj?=
+ =?utf-8?B?bGdHNFlZRk5iTGtYcll0VGpDK3NaSzE5UDlkQVY0VGZnMXphamRNM242dXlJ?=
+ =?utf-8?B?aElCOHY3d1E4OVFVYWt5UURvaWtVNWYvTGdvVnJrZnFDazdNZHZ3ZkpBTmln?=
+ =?utf-8?B?Z2VPeVlReDlKVFI3YXY0ekVkTk9QNW8wdEtzVDgvWklNQ01tRDZtT2dPd1dV?=
+ =?utf-8?B?aWlwUDhZNWJoWmk3WUJlb1pQQVRkQmkrb1BDazYwZTB5WUxjNm8rajdnRGZi?=
+ =?utf-8?B?VW4yMFNqa0cxejhwMzBUaXFPSXYzN1RQWmdFT25ucDRZSFdseTk1Unk3UmVi?=
+ =?utf-8?B?QjlVYkVFck5XNnhONGdXZGtNdHFGVGptYWh4TTg3Z2RsOW01VUpTWlRZOHRt?=
+ =?utf-8?B?R1lIS2krYitoWmJ5UklPU1loS0piL2l3WVB4QitVTjd4a0N0SXhkeHJtSjhq?=
+ =?utf-8?B?Z0JwbmkzSnA0U3crRVRpdGdrOHFIa2lYR2pHclN3VFk1TzF1Q0pYa2xkRGF0?=
+ =?utf-8?B?djY3NGhaeVhsN0pQeVRXNW5sdmkycXQra2cyczcvRWEzOTNQa0FjMEZMWGFZ?=
+ =?utf-8?B?S2FyN2NHWVlGaFJGMWdoZlErN2w3U3REM2RXbldweEZFMkJaeERjUG1Faks2?=
+ =?utf-8?B?OElqUC9yMkZnMWZtaS9sMGdGU09lQ2kwME05QXlacko3YXA3NHVNSWF4ZnVY?=
+ =?utf-8?B?UWJiLzcxYTh2a3htNlZ6cDBRempTRDZMbGl5VmM3c2RiZm0wQkJLdGllbEZ0?=
+ =?utf-8?B?YTEzSXdSN1FpMmZuODV2bEdHWSszMVJCaWlaY2pDSmJiV1RSK0VtK1RxMC8y?=
+ =?utf-8?B?bi9TZTdlVk5SRHJNRCszSWJFRGdxY1BwTVFVakU4c05hSFR6RHFRMUdJNzla?=
+ =?utf-8?B?UkFxOG5HUFhjM082Sm11ZWsrL1VmZ21RM1QvWUpxNVE5U2YzZEdLQXdNWE5C?=
+ =?utf-8?B?Z3FTRkhYRU9hUGM5VzhVZVNkclJhTnFCRnREZFZsT1lDbGlqanFlVnowT3Nn?=
+ =?utf-8?B?ekRlZ3g5RFpIU3ZtZ2JFNEIxNEcwWWJGOWwxRjN6emloTW85dzN5UXNMNWdO?=
+ =?utf-8?B?Vlo0OFU2L01jQlZ2bHF1VmJHTUpRVmdmZzhod1NGSTFJZy9sOGZEbmVKTTg1?=
+ =?utf-8?B?QjlZdlpzOUVXbGtyMWRUejBQbG5xU3F0aHdUeDZGb3ZyN1NLUjJLbmdRTFJY?=
+ =?utf-8?B?cWIzVnEzcS9qKzIxRTNFeks2emxJUk9zRlJLaFVnQjJwNk9aZWszZkMxWGox?=
+ =?utf-8?B?WG9xV3B1Y0ZvUE5QeVRzays1eWFxc0lzd1F3MklCUjBRK2lVL3FsOHppZ2lC?=
+ =?utf-8?B?aThTTGUydS90aUlDWjN6UHp1V1YvRW5PaElYc3FXZVlyWjc5b3k3MkxZVVNy?=
+ =?utf-8?B?ZVRBMEJQRlpnSTRxNlAzYzZZdXFwbkJzQmtycVNJWUtsSVZSMU02cDlSOEFK?=
+ =?utf-8?B?b0xUb0I1V09CMG9JMTB4TVRlZ1JEY2FKOEFnVnFsSGJ6TmxFYWR1MG41Lys1?=
+ =?utf-8?B?YUdyU2JXVlkwK1RMeE9CeXpaamk3b1huWThrMXd6YVB2RFpuTEI1Vll4TGlY?=
+ =?utf-8?B?Q3JhamtCVDlETzF2L21SNUNXTkw1N0dhSzVNN0NyUUd3UGVXeUJYbFo5UEc5?=
+ =?utf-8?B?TnRkVitTNnY4Tk5KT09GR1BwVTgyMURvc3JYRjcvNy9HeXhJSjRKQU1zcmIw?=
+ =?utf-8?B?MHk4MzJJV2RpVWFkTFdEV2g1eW12RUNKN1BGZTdsV3JiTmFFSU5icDRjTnFU?=
+ =?utf-8?B?TEJDWk1xcFA0dG5QKytZaHZJZFJMd05NTEx0dWxGVk1OOVRVSHFBNzhTZlZZ?=
+ =?utf-8?B?Z0pRSUNBR1BQOE1mS0JoRk5EUFFoeFdKc08yaG16ODdvYWVxQkFqN2I1MjZL?=
+ =?utf-8?B?Y1NoeE1SeVdta21nc3JoazNCbDdreEM4bXBKRGhENk1BenE0YllrL1FaQU0v?=
+ =?utf-8?B?RXY0V0J6TmxaaXRmaUIrZ1NtSHVneUhraG9GTm91eFJtN3pqbHlaVFBweVpF?=
+ =?utf-8?B?Z3ZpYms5SzMrTTduUGRVelpLWTNLbG1peHhDdE5jbXV1aEdCOGMzUGpVT200?=
+ =?utf-8?Q?DukYmWuHkS12offRWPw7+bx35?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76d97c74-e1f8-4511-b965-08db1ba7c97a
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6434.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2023 05:26:06.0088
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0kkfdlnKaKUd65tWKDvs+4SFPzQwQbvJnwAidZW0focUZ5KHXI3v2D/VT+IFKWgO/kyuBQFa3/Fs70oSZBaFWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6989
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=C3=AC 19 gennaio 2023 17:20:55 CET Fabio M. De Francesco wrote:
-> The use of kmap() and kmap_atomic() are being deprecated in favor of
-> kmap_local_page().
->=20
-> There are two main problems with kmap(): (1) It comes with an overhead as
-> the mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when the
-> kmap=E2=80=99s pool wraps and it might block when the mapping space is fu=
-lly
-> utilized until a slot becomes available.
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page faults, and can be called from any context (including interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, the
-> kernel virtual addresses are restored and still valid.
->=20
-> The use of kmap_local_page() in fs/aio.c is "safe" in the sense that the
-> code don't hands the returned kernel virtual addresses to other threads
-> and there are no nestings which should be handled with the stack based
-> (LIFO) mappings/un-mappings order. Furthermore, the code between the old
-> kmap_atomic()/kunmap_atomic() did not depend on disabling page-faults
-> and/or preemption, so that there is no need to call pagefault_disable()
-> and/or preempt_disable() before the mappings.
->=20
-> Therefore, replace kmap() and kmap_atomic() with kmap_local_page() in
-> fs/aio.c.
->=20
-> Tested with xfstests on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
-> with HIGHMEM64GB enabled.
->=20
-> Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Reviewed-by: Jeff Moyer <jmoyer@redhat.com>
-> Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> ---
->=20
-> I've tested with "./check -g aio". The tests in this group fail 3/26
-> times, with and without my patch. Therefore, these changes don't introduce
-> further errors. I'm not aware of any other tests which I may run, so that
-> any suggestions would be precious and much appreciated :-)
->=20
-> I'm resending this patch because some recipients were missing in the
-> previous submissions. In the meantime I'm also adding some more informati=
-on
-> in the commit message. There are no changes in the code.
->=20
-> Changes from v1:
->         Add further information in the commit message, and the
->         "Reviewed-by" tags from Ira and Jeff (thanks!).
->=20
-> Changes from v2:
-> 	Rewrite a block of code between mapping/un-mapping to improve
-> 	readability in aio_setup_ring() and add a missing call to
-> 	flush_dcache_page() in ioctx_add_table() (thanks to Al Viro);
-> 	Add a "Reviewed-by" tag from Kent Overstreet (thanks).
->=20
->  fs/aio.c | 46 +++++++++++++++++++++-------------------------
->  1 file changed, 21 insertions(+), 25 deletions(-)
->=20
-> diff --git a/fs/aio.c b/fs/aio.c
-> index 562916d85cba..9b39063dc7ac 100644
-> --- a/fs/aio.c
-> +++ b/fs/aio.c
-> @@ -486,7 +486,6 @@ static const struct address_space_operations=20
-aio_ctx_aops
-> =3D {
->=20
->  static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
->  {
-> -	struct aio_ring *ring;
->  	struct mm_struct *mm =3D current->mm;
->  	unsigned long size, unused;
->  	int nr_pages;
-> @@ -567,16 +566,12 @@ static int aio_setup_ring(struct kioctx *ctx, unsig=
-ned
-> int nr_events) ctx->user_id =3D ctx->mmap_base;
->  	ctx->nr_events =3D nr_events; /* trusted copy */
->=20
-> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
-> -	ring->nr =3D nr_events;	/* user copy */
-> -	ring->id =3D ~0U;
-> -	ring->head =3D ring->tail =3D 0;
-> -	ring->magic =3D AIO_RING_MAGIC;
-> -	ring->compat_features =3D AIO_RING_COMPAT_FEATURES;
-> -	ring->incompat_features =3D AIO_RING_INCOMPAT_FEATURES;
-> -	ring->header_length =3D sizeof(struct aio_ring);
-> -	kunmap_atomic(ring);
-> -	flush_dcache_page(ctx->ring_pages[0]);
-> +	memcpy_to_page(ctx->ring_pages[0], 0, (const char *)&(struct=20
-aio_ring) {
-> +		       .nr =3D nr_events, .id =3D ~0U, .magic =3D=20
-AIO_RING_MAGIC,
-> +		       .compat_features =3D AIO_RING_COMPAT_FEATURES,
-> +		       .incompat_features =3D AIO_RING_INCOMPAT_FEATURES,
-> +		       .header_length =3D sizeof(struct aio_ring) },
-> +		       sizeof(struct aio_ring));
->=20
->  	return 0;
->  }
-> @@ -678,9 +673,10 @@ static int ioctx_add_table(struct kioctx *ctx, struct
-> mm_struct *mm) * we are protected from page migration
->  					 * changes ring_pages by -
->ring_lock.
->  					 */
-> -					ring =3D kmap_atomic(ctx-
->ring_pages[0]);
-> +					ring =3D kmap_local_page(ctx-
->ring_pages[0]);
->  					ring->id =3D ctx->id;
-> -					kunmap_atomic(ring);
-> +					kunmap_local(ring);
-> +					flush_dcache_page(ctx-
->ring_pages[0]);
->  					return 0;
->  				}
->=20
-> @@ -1021,9 +1017,9 @@ static void user_refill_reqs_available(struct kioctx
-> *ctx) * against ctx->completed_events below will make sure we do the
->  		 * safe/right thing.
->  		 */
-> -		ring =3D kmap_atomic(ctx->ring_pages[0]);
-> +		ring =3D kmap_local_page(ctx->ring_pages[0]);
->  		head =3D ring->head;
-> -		kunmap_atomic(ring);
-> +		kunmap_local(ring);
->=20
->  		refill_reqs_available(ctx, head, ctx->tail);
->  	}
-> @@ -1129,12 +1125,12 @@ static void aio_complete(struct aio_kiocb *iocb)
->  	if (++tail >=3D ctx->nr_events)
->  		tail =3D 0;
->=20
-> -	ev_page =3D kmap_atomic(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
-> +	ev_page =3D kmap_local_page(ctx->ring_pages[pos /=20
-AIO_EVENTS_PER_PAGE]);
->  	event =3D ev_page + pos % AIO_EVENTS_PER_PAGE;
->=20
->  	*event =3D iocb->ki_res;
->=20
-> -	kunmap_atomic(ev_page);
-> +	kunmap_local(ev_page);
->  	flush_dcache_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
->=20
->  	pr_debug("%p[%u]: %p: %p %Lx %Lx %Lx\n", ctx, tail, iocb,
-> @@ -1148,10 +1144,10 @@ static void aio_complete(struct aio_kiocb *iocb)
->=20
->  	ctx->tail =3D tail;
->=20
-> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
-> +	ring =3D kmap_local_page(ctx->ring_pages[0]);
->  	head =3D ring->head;
->  	ring->tail =3D tail;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  	flush_dcache_page(ctx->ring_pages[0]);
->=20
->  	ctx->completed_events++;
-> @@ -1211,10 +1207,10 @@ static long aio_read_events_ring(struct kioctx *c=
-tx,
->  	mutex_lock(&ctx->ring_lock);
->=20
->  	/* Access to ->ring_pages here is protected by ctx->ring_lock. */
-> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
-> +	ring =3D kmap_local_page(ctx->ring_pages[0]);
->  	head =3D ring->head;
->  	tail =3D ring->tail;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->=20
->  	/*
->  	 * Ensure that once we've read the current tail pointer, that
-> @@ -1246,10 +1242,10 @@ static long aio_read_events_ring(struct kioctx *c=
-tx,
->  		avail =3D min(avail, nr - ret);
->  		avail =3D min_t(long, avail, AIO_EVENTS_PER_PAGE - pos);
->=20
-> -		ev =3D kmap(page);
-> +		ev =3D kmap_local_page(page);
->  		copy_ret =3D copy_to_user(event + ret, ev + pos,
->  					sizeof(*ev) * avail);
-> -		kunmap(page);
-> +		kunmap_local(ev);
->=20
->  		if (unlikely(copy_ret)) {
->  			ret =3D -EFAULT;
-> @@ -1261,9 +1257,9 @@ static long aio_read_events_ring(struct kioctx *ctx,
->  		head %=3D ctx->nr_events;
->  	}
->=20
-> -	ring =3D kmap_atomic(ctx->ring_pages[0]);
-> +	ring =3D kmap_local_page(ctx->ring_pages[0]);
->  	ring->head =3D head;
-> -	kunmap_atomic(ring);
-> +	kunmap_local(ring);
->  	flush_dcache_page(ctx->ring_pages[0]);
->=20
->  	pr_debug("%li  h%u t%u\n", ret, head, tail);
-> --
-> 2.39.0
+On 02-Mar-23 1:40 PM, Huang, Ying wrote:
+> Bharata B Rao <bharata@amd.com> writes:
+>>
+>> Here is the data for the benchmark run:
+>>
+>> Time taken or overhead (us) for fault, task_work and sched_switch
+>> handling
+>>
+>> 				Default		IBS
+>> Fault handling			2875354862	2602455		
+>> Task work handling		139023		24008121
+>> Sched switch handling				37712
+>> Total overhead			2875493885	26648288	
+>>
+>> Default
+>> -------
+>> 			Total		Min	Max		Avg
+>> do_numa_page		2875354862	0.08	392.13		22.11
+>> task_numa_work		139023		0.14	5365.77		532.66
+>> Total			2875493885
+>>
+>> IBS
+>> ---
+>> 			Total		Min	Max		Avg
+>> ibs_overflow_handler	2602455		0.14	103.91		1.29
+>> task_ibs_access_work	24008121	0.17	485.09		37.65
+>> hw_access_sched_in	37712		0.15	287.55		1.35
+>> Total			26648288
+>>
+>>
+>> 				Default		IBS
+>> Benchmark score(us)		160171762.0	40323293.0
+>> numa_pages_migrated		2097220		511791
+>> Overhead per page		1371		52
+>> Pages migrated per sec		13094		12692
+>> numa_hint_faults_local		2820311		140856
+>> numa_hint_faults		38589520	652647
+> 
+> For default, numa_hint_faults >> numa_pages_migrated.  It's hard to be
+> understood.
 
-Hi Al,
+Most of the migration requests from the numa hint page fault path
+are failing due to failure to isolate the pages.
 
-I see that this patch is here since Jan 19, 2023.
-Is there anything that prevents its merging? Am I expected to do further=20
-changes? Please notice that it already had three "Reviewed-by:" tags (again=
-=20
-thanks to Ira, Jeff and Kent).=20
+This is the check in migrate_misplaced_page() from where it returns
+without even trying to do the subsequent migrate_pages() call:
 
-Can you please take it in your three?
+        isolated = numamigrate_isolate_page(pgdat, page);
+        if (!isolated)
+                goto out;
 
-Thanks,
+I will further investigate this.
 
-=46abio
+> I guess that there aren't many shared pages in the
+> benchmark?
 
+I have a version of the benchmark which has a fraction of 
+shared memory between sets of thread in addition to the
+per-set exclusive memory. Here too the same performance
+difference is seen.
 
+> And I guess that the free pages in the target node is enough
+> too?
 
+The benchmark is using 16G totally with 8G being accessed from
+threads on either nodes. There is enough memory on the target
+node to accept the incoming page migration requests.
+
+> 
+>> hint_faults_local/hint_faults	7%		22%
+>>
+>> Here is the summary:
+>>
+>> - In case of IBS, the benchmark completes 75% faster compared to
+>>   the default case. The gain varies based on how many iterations of
+>>   memory accesses we run as part of the benchmark. For 2048 iterations
+>>   of accesses, I have seen a gain of around 50%.
+>> - The overhead of NUMA balancing (as measured by the time taken in
+>>   the fault handling, task_work time handling and sched_switch time
+>>   handling) in the default case is seen to be pretty high compared to
+>>   the IBS case.
+>> - The number of hint-faults in the default case is significantly
+>>   higher than the IBS case.
+>> - The local hint-faults percentage is much better in the IBS
+>>   case compared to the default case.
+>> - As shown in the graphs (in other threads of this mail thread), in
+>>   the default case, the page migrations start a bit slowly while IBS
+>>   case shows steady migrations right from the start.
+>> - I have also shown (via graphs in other threads of this mail thread)
+>>   that in IBS case the benchmark is able to steadily increase
+>>   the access iterations over time, while in the default case, the
+>>   benchmark doesn't do forward progress for a long time after
+>>   an initial increase.
+> 
+> Hard to understand this too.  Pages are migrated to local, but
+> performance doesn't improve.
+
+Migrations start a bit late and too much of time is spent later
+in the run in hint faults and failed migration attempts (due to failure
+to isolate the pages) is probably the reason?
+> 
+>> - Early migrations due to relevant access sampling from IBS,
+>>   is most probably the significant reason for the uplift that IBS
+>>   case gets.
+> 
+> In original kernel, the NUMA page table scanning will delay for a
+> while.  Please check the below comments in task_tick_numa().
+> 
+> 	/*
+> 	 * Using runtime rather than walltime has the dual advantage that
+> 	 * we (mostly) drive the selection from busy threads and that the
+> 	 * task needs to have done some actual work before we bother with
+> 	 * NUMA placement.
+> 	 */
+> 
+> I think this is generally reasonable, while it's not best for this
+> micro-benchmark.
+
+This is in addition to the initial scan delay that we have via
+sysctl_numa_balancing_scan_delay. I have an equivalent of this
+initial delay where the IBS access sampling is not started for
+the task until an initial delay.
+
+Thanks for your observations.
+
+Regards,
+Bharata.
