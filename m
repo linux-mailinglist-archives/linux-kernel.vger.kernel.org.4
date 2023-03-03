@@ -2,101 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7426A9496
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E8C6A949A
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjCCJ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        id S229702AbjCCJ6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCCJ5t (ORCPT
+        with ESMTP id S229661AbjCCJ6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:57:49 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414345B5DD;
-        Fri,  3 Mar 2023 01:57:49 -0800 (PST)
+        Fri, 3 Mar 2023 04:58:45 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F2F231C4;
+        Fri,  3 Mar 2023 01:58:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677837469; x=1709373469;
-  h=message-id:date:mime-version:cc:subject:to:references:
+  t=1677837524; x=1709373524;
+  h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=dA37+VbNhDthKXVJxlFIvcQryB+hn/AJidWA2VvbN90=;
-  b=intWZVkQpwZBTaTtl9USh4/XjTVP1unr8CP2BIHfnozAVSbrrthOAQsJ
-   DMH7mw9NC6A96eBcNKoguLYoV7o94ACdn5v0+8wBXSG5XqPMKQyy+cjyN
-   RWYoeYzvkk+ggJeQ3kNOuOjR0JG4ismtJaNkEJjclqKRG0IURA8YfHQEl
-   MNnW7/ArxyjocuJOJAhxwaG2a6WELi+pUq46bgy3Yh4i+Va/86Y8V9lZx
-   DBUl6veQ2BLGWVOxwZPHXcdz9cgkCMCPraDxj97y5tyFeQ1bGZ3n9xZqu
-   Kl7Lj2QdbX6gyhhl3XfeOVGbrgpL3EgbtGp2AUHR0CTK41/E07wzn24EU
+  bh=43cn5v2Z9OSPVxLCaHxJZxxi3aLIc72ErHl75qOAgGQ=;
+  b=D/JR6osgk4qiUyE4HJ/ZyC/O6sHxlMLzQUUdpoeHMz21y9eTVKSYr9ie
+   ijWDcprwRedoGcZQ2CC6w4nRhxh7BQLEyToTU3LwEHpbTTZ4LrHjWV6Rx
+   SYi/wHMFxTeqKcGT7+f5t+0+O78fEnUlYJr9X4BSDLhms3uwOGGts8b5J
+   tb+LIHoc5vrgOnFfEsdSHgDzlKyKv2abCO/JGYMWL+L8z5Vri5hL/QfXJ
+   tFdAsj91stkple7y0aP+bntULW3BDihn9XKGNFDUKGhk+rI5znPe+ZI3e
+   tNPuzQxYaboukvVSPxpVGTgpK6MAl1XkaHvszlw7nyKt8e8UMQq6Pnv/X
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="335031687"
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="397598978"
 X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="335031687"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 01:57:48 -0800
+   d="scan'208";a="397598978"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 01:58:43 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="744183445"
+X-IronPort-AV: E=McAfee;i="6500,9779,10637"; a="764356162"
 X-IronPort-AV: E=Sophos;i="5.98,230,1673942400"; 
-   d="scan'208";a="744183445"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.208.51]) ([10.254.208.51])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 01:57:43 -0800
-Message-ID: <3b2c6fe9-821f-9b84-acb6-777e8517a0fc@linux.intel.com>
-Date:   Fri, 3 Mar 2023 17:57:41 +0800
+   d="scan'208";a="764356162"
+Received: from shiyaowa-mobl2.ger.corp.intel.com (HELO [10.213.235.33]) ([10.213.235.33])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 01:58:38 -0800
+Message-ID: <3bded9d7-9796-4a9b-7c11-aac994d4fdc6@linux.intel.com>
+Date:   Fri, 3 Mar 2023 09:58:36 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Cc:     baolu.lu@linux.intel.com,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, bp@alien8.de,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-doc@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v4 3/6] iommu/sva: Stop using ioasid_set for SVA
+Subject: Re: [PATCH v9 15/15] drm/i915: Add deadline based boost support
 Content-Language: en-US
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-References: <20230301235646.2692846-1-jacob.jun.pan@linux.intel.com>
- <20230301235646.2692846-4-jacob.jun.pan@linux.intel.com>
- <3b7fb4d3-1fe9-a3be-46ad-c271be9f96c7@linux.intel.com>
- <20230302091707.58d59964@jacob-builder>
- <794c7dad-2e62-3afa-ea10-92179b0d1659@linux.intel.com>
- <20230303093235.GB361458@myrica>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230303093235.GB361458@myrica>
+To:     Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Simon Ser <contact@emersion.fr>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+References: <20230302235356.3148279-1-robdclark@gmail.com>
+ <20230302235356.3148279-16-robdclark@gmail.com> <ZAFnqbycMleLmRe9@intel.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <ZAFnqbycMleLmRe9@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/3 17:32, Jean-Philippe Brucker wrote:
->> I suppose the common thing is reserving some kind of special PASIDs.
-> Are you planning to use RID_PASID != 0 in VT-d?  Otherwise we could just
-> communicate min_pasid from the IOMMU driver the same way we do max_pasid.
+
+On 03/03/2023 03:21, Rodrigo Vivi wrote:
+> On Thu, Mar 02, 2023 at 03:53:37PM -0800, Rob Clark wrote:
+>> From: Rob Clark <robdclark@chromium.org>
+>>
 > 
-> Otherwise I guess re-introduce a lighter ioasid_alloc() that the IOMMU
-> driver calls to reserve PASID0/RID_PASID.
+> missing some wording here...
+> 
+>> v2: rebase
+>>
+>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>> ---
+>>   drivers/gpu/drm/i915/i915_request.c | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/i915/i915_request.c b/drivers/gpu/drm/i915/i915_request.c
+>> index 7503dcb9043b..44491e7e214c 100644
+>> --- a/drivers/gpu/drm/i915/i915_request.c
+>> +++ b/drivers/gpu/drm/i915/i915_request.c
+>> @@ -97,6 +97,25 @@ static bool i915_fence_enable_signaling(struct dma_fence *fence)
+>>   	return i915_request_enable_breadcrumb(to_request(fence));
+>>   }
+>>   
+>> +static void i915_fence_set_deadline(struct dma_fence *fence, ktime_t deadline)
+>> +{
+>> +	struct i915_request *rq = to_request(fence);
+>> +
+>> +	if (i915_request_completed(rq))
+>> +		return;
+>> +
+>> +	if (i915_request_started(rq))
+>> +		return;
+> 
+> why do we skip the boost if already started?
+> don't we want to boost the freq anyway?
 
-Yes. We probably will use a non-zero RID_PASID in the future. An
-interface to reserve (or allocate) a PASID from iommu_global_pasid_ida
-should work then.
+I'd wager Rob is just copying the current i915 wait boost logic.
 
-Best regards,
-baolu
+>> +
+>> +	/*
+>> +	 * TODO something more clever for deadlines that are in the
+>> +	 * future.  I think probably track the nearest deadline in
+>> +	 * rq->timeline and set timer to trigger boost accordingly?
+>> +	 */
+> 
+> I'm afraid it will be very hard to find some heuristics of what's
+> late enough for the boost no?
+> I mean, how early to boost the freq on an upcoming deadline for the
+> timer?
+
+We can off load this patch from Rob and deal with it separately, or 
+after the fact?
+
+It's a half solution without a smarter scheduler too. Like 
+https://lore.kernel.org/all/20210208105236.28498-10-chris@chris-wilson.co.uk/, 
+or if GuC plans to do something like that at any point.
+
+Or bump the priority too if deadline is looming?
+
+IMO it is not very effective to fiddle with the heuristic on an ad-hoc 
+basis. For instance I have a new heuristics which improves the 
+problematic OpenCL cases for further 5% (relative to the current 
+waitboost improvement from adding missing syncobj waitboost). But I 
+can't really test properly for regressions over platforms, stacks, 
+workloads.. :(
+
+Regards,
+
+Tvrtko
+
+> 
+>> +
+>> +	intel_rps_boost(rq);
+>> +}
+>> +
+>>   static signed long i915_fence_wait(struct dma_fence *fence,
+>>   				   bool interruptible,
+>>   				   signed long timeout)
+>> @@ -182,6 +201,7 @@ const struct dma_fence_ops i915_fence_ops = {
+>>   	.signaled = i915_fence_signaled,
+>>   	.wait = i915_fence_wait,
+>>   	.release = i915_fence_release,
+>> +	.set_deadline = i915_fence_set_deadline,
+>>   };
+>>   
+>>   static void irq_execute_cb(struct irq_work *wrk)
+>> -- 
+>> 2.39.1
+>>
