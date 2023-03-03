@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BE56AA00F
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25EF96AA008
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 20:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbjCCTYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 14:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231430AbjCCTYN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231449AbjCCTYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 3 Mar 2023 14:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231190AbjCCTYL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 3 Mar 2023 14:24:11 -0500
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF3F10AA6;
-        Fri,  3 Mar 2023 11:24:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBC510408;
+        Fri,  3 Mar 2023 11:24:09 -0800 (PST)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id deff83bd08278075; Fri, 3 Mar 2023 20:24:09 +0100
+ id 45dcb4239fb6fbda; Fri, 3 Mar 2023 20:24:07 +0100
 Received: from kreacher.localnet (unknown [213.134.183.41])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id AAB8620619DE;
-        Fri,  3 Mar 2023 20:24:08 +0100 (CET)
+        by v370.home.net.pl (Postfix) with ESMTPSA id CE9CC20619DE;
+        Fri,  3 Mar 2023 20:24:06 +0100 (CET)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     Zhang Rui <rui.zhang@intel.com>,
@@ -33,9 +33,9 @@ Cc:     Zhang Rui <rui.zhang@intel.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Quanxian Wang <quanxian.wang@intel.com>
-Subject: [PATCH v1 3/4] thermal: core: Introduce thermal_cooling_device_update()
-Date:   Fri, 03 Mar 2023 20:23:02 +0100
-Message-ID: <10247847.nUPlyArG6x@kreacher>
+Subject: [PATCH v1 4/4] ACPI: processor: thermal: Update CPU cooling devices on cpufreq policy changes
+Date:   Fri, 03 Mar 2023 20:23:58 +0100
+Message-ID: <1936685.PYKUYFuaPT@kreacher>
 In-Reply-To: <2148907.irdbgypaU6@kreacher>
 References: <2148907.irdbgypaU6@kreacher>
 MIME-Version: 1.0
@@ -57,292 +57,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Introduce a core thermal API function, thermal_cooling_device_update(),
-for updating the max_state value for a cooling device and rearranging
-its statistics in sysfs after a possible change of its ->get_max_state()
-callback return value.
+When a cpufreq policy appears or goes away, the CPU cooling devices for
+the CPUs covered by that policy need to be updated so that the new
+processor_get_max_state() value is stored as max_state and the
+statistics in sysfs are rearranged for each of them.
 
-That callback is now invoked only once, during cooling device
-registration, to populate the max_state field in the cooling device
-object, so if its return value changes, it needs to be invoked again
-and the new return value needs to be stored as max_state.  Moreover,
-the statistics presented in sysfs need to be rearranged in general,
-because there may not be enough room in them to store data for all
-of the possible states (in the case when max_state grows).
+Do that accordingly in acpi_thermal_cpufreq_init() and
+acpi_thermal_cpufreq_exit().
 
-The new function takes care of that (and some other minor things
-related to it), but some extra locking and lockdep annotations are
-added in several places too to protect against crashes in the cases
-when the statistics are not present or when a stale max_state value
-might be used by sysfs attributes.
-
-Note that the actual user of the new function will be added separately.
-
+Fixes: a365105c685c("thermal: sysfs: Reuse cdev->max_state")
+Reported-by: Wang, Quanxian <quanxian.wang@intel.com>
 Link: https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/thermal_core.c  |   47 ++++++++++++++++++++++++++
- drivers/thermal/thermal_core.h  |    1 
- drivers/thermal/thermal_sysfs.c |   72 +++++++++++++++++++++++++++++++++++-----
- include/linux/thermal.h         |    1 
- 4 files changed, 113 insertions(+), 8 deletions(-)
+ drivers/acpi/processor_thermal.c |   16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-Index: linux-pm/drivers/thermal/thermal_core.c
+Index: linux-pm/drivers/acpi/processor_thermal.c
 ===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -1057,6 +1057,53 @@ static bool thermal_cooling_device_prese
- 	return false;
- }
- 
-+void thermal_cooling_device_update(struct thermal_cooling_device *cdev)
-+{
-+	unsigned long state;
+--- linux-pm.orig/drivers/acpi/processor_thermal.c
++++ linux-pm/drivers/acpi/processor_thermal.c
+@@ -140,9 +140,14 @@ void acpi_thermal_cpufreq_init(struct cp
+ 		ret = freq_qos_add_request(&policy->constraints,
+ 					   &pr->thermal_req,
+ 					   FREQ_QOS_MAX, INT_MAX);
+-		if (ret < 0)
++		if (ret < 0) {
+ 			pr_err("Failed to add freq constraint for CPU%d (%d)\n",
+ 			       cpu, ret);
++			continue;
++		}
 +
-+	if (!cdev)
-+		return;
-+
-+	/*
-+	 * Hold thermal_list_lock throughout the update to prevent the device
-+	 * from going away while being updated.
-+	 */
-+	mutex_lock(&thermal_list_lock);
-+
-+	if (!thermal_cooling_device_present(cdev))
-+		goto unlock_list;
-+
-+	/*
-+	 * Update under the cdev lock to prevent the state from being set beyond
-+	 * the new limit concurrently.
-+	 */
-+	mutex_lock(&cdev->lock);
-+
-+	if (cdev->ops->get_max_state(cdev, &cdev->max_state))
-+		goto unlock;
-+
-+	thermal_cooling_device_stats_reinit(cdev);
-+
-+	if (cdev->ops->get_cur_state(cdev, &state))
-+		goto unlock;
-+
-+	if (state <= cdev->max_state)
-+		goto update_stats;
-+
-+	if (cdev->ops->set_cur_state(cdev, state))
-+		goto unlock;
-+
-+update_stats:
-+	thermal_cooling_device_stats_update(cdev, state);
-+
-+unlock:
-+	mutex_unlock(&cdev->lock);
-+
-+unlock_list:
-+	mutex_unlock(&thermal_list_lock);
-+}
-+EXPORT_SYMBOL_GPL(thermal_cooling_device_update);
-+
- static void __unbind(struct thermal_zone_device *tz, int mask,
- 		     struct thermal_cooling_device *cdev)
- {
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -685,6 +685,8 @@ void thermal_cooling_device_stats_update
- {
- 	struct cooling_dev_stats *stats = cdev->stats;
- 
-+	lockdep_assert_held(&cdev->lock);
-+
- 	if (!stats)
- 		return;
- 
-@@ -706,13 +708,22 @@ static ssize_t total_trans_show(struct d
- 				struct device_attribute *attr, char *buf)
- {
- 	struct thermal_cooling_device *cdev = to_cooling_device(dev);
--	struct cooling_dev_stats *stats = cdev->stats;
-+	struct cooling_dev_stats *stats;
- 	int ret;
- 
-+	mutex_lock(&cdev->lock);
-+
-+	stats = cdev->stats;
-+	if (!stats)
-+		goto unlock;
-+
- 	spin_lock(&stats->lock);
- 	ret = sprintf(buf, "%u\n", stats->total_trans);
- 	spin_unlock(&stats->lock);
- 
-+unlock:
-+	mutex_unlock(&cdev->lock);
-+
- 	return ret;
- }
- 
-@@ -721,11 +732,18 @@ time_in_state_ms_show(struct device *dev
- 		      char *buf)
- {
- 	struct thermal_cooling_device *cdev = to_cooling_device(dev);
--	struct cooling_dev_stats *stats = cdev->stats;
-+	struct cooling_dev_stats *stats;
- 	ssize_t len = 0;
- 	int i;
- 
-+	mutex_lock(&cdev->lock);
-+
-+	stats = cdev->stats;
-+	if (!stats)
-+		goto unlock;
-+
- 	spin_lock(&stats->lock);
-+
- 	update_time_in_state(stats);
- 
- 	for (i = 0; i <= cdev->max_state; i++) {
-@@ -734,6 +752,9 @@ time_in_state_ms_show(struct device *dev
++		if (!IS_ERR(pr->cdev))
++			thermal_cooling_device_update(pr->cdev);
  	}
- 	spin_unlock(&stats->lock);
- 
-+unlock:
-+	mutex_unlock(&cdev->lock);
-+
- 	return len;
  }
  
-@@ -742,8 +763,16 @@ reset_store(struct device *dev, struct d
- 	    size_t count)
- {
- 	struct thermal_cooling_device *cdev = to_cooling_device(dev);
--	struct cooling_dev_stats *stats = cdev->stats;
--	int i, states = cdev->max_state + 1;
-+	struct cooling_dev_stats *stats;
-+	int i, states;
-+
-+	mutex_lock(&cdev->lock);
-+
-+	stats = cdev->stats;
-+	if (!stats)
-+		goto unlock;
-+
-+	states = cdev->max_state + 1;
+@@ -153,8 +158,13 @@ void acpi_thermal_cpufreq_exit(struct cp
+ 	for_each_cpu(cpu, policy->related_cpus) {
+ 		struct acpi_processor *pr = per_cpu(processors, cpu);
  
- 	spin_lock(&stats->lock);
- 
-@@ -757,6 +786,9 @@ reset_store(struct device *dev, struct d
- 
- 	spin_unlock(&stats->lock);
- 
-+unlock:
-+	mutex_unlock(&cdev->lock);
+-		if (pr)
+-			freq_qos_remove_request(&pr->thermal_req);
++		if (!pr)
++			continue;
 +
- 	return count;
- }
- 
-@@ -764,10 +796,18 @@ static ssize_t trans_table_show(struct d
- 				struct device_attribute *attr, char *buf)
- {
- 	struct thermal_cooling_device *cdev = to_cooling_device(dev);
--	struct cooling_dev_stats *stats = cdev->stats;
-+	struct cooling_dev_stats *stats;
- 	ssize_t len = 0;
- 	int i, j;
- 
-+	mutex_lock(&cdev->lock);
++		freq_qos_remove_request(&pr->thermal_req);
 +
-+	stats = cdev->stats;
-+	if (!stats) {
-+		len = -ENODATA;
-+		goto unlock;
-+	}
-+
- 	len += snprintf(buf + len, PAGE_SIZE - len, " From  :    To\n");
- 	len += snprintf(buf + len, PAGE_SIZE - len, "       : ");
- 	for (i = 0; i <= cdev->max_state; i++) {
-@@ -775,8 +815,10 @@ static ssize_t trans_table_show(struct d
- 			break;
- 		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u  ", i);
++		if (!IS_ERR(pr->cdev))
++			thermal_cooling_device_update(pr->cdev);
  	}
--	if (len >= PAGE_SIZE)
--		return PAGE_SIZE;
-+	if (len >= PAGE_SIZE) {
-+		len = PAGE_SIZE;
-+		goto unlock;
-+	}
- 
- 	len += snprintf(buf + len, PAGE_SIZE - len, "\n");
- 
-@@ -799,8 +841,12 @@ static ssize_t trans_table_show(struct d
- 
- 	if (len >= PAGE_SIZE) {
- 		pr_warn_once("Thermal transition table exceeds PAGE_SIZE. Disabling\n");
--		return -EFBIG;
-+		len = -EFBIG;
- 	}
-+
-+unlock:
-+	mutex_unlock(&cdev->lock);
-+
- 	return len;
  }
- 
-@@ -830,6 +876,8 @@ static void cooling_device_stats_setup(s
- 	unsigned long states = cdev->max_state + 1;
- 	int var;
- 
-+	lockdep_assert_held(&cdev->lock);
-+
- 	var = sizeof(*stats);
- 	var += sizeof(*stats->time_in_state) * states;
- 	var += sizeof(*stats->trans_table) * states * states;
-@@ -855,6 +903,8 @@ out:
- 
- static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
- {
-+	lockdep_assert_held(&cdev->lock);
-+
- 	kfree(cdev->stats);
- 	cdev->stats = NULL;
- }
-@@ -879,6 +929,12 @@ void thermal_cooling_device_destroy_sysf
- 	cooling_device_stats_destroy(cdev);
- }
- 
-+void thermal_cooling_device_stats_reinit(struct thermal_cooling_device *cdev)
-+{
-+	cooling_device_stats_destroy(cdev);
-+	cooling_device_stats_setup(cdev);
-+}
-+
- /* these helper will be used only at the time of bindig */
- ssize_t
- trip_point_show(struct device *dev, struct device_attribute *attr, char *buf)
-Index: linux-pm/drivers/thermal/thermal_core.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.h
-+++ linux-pm/drivers/thermal/thermal_core.h
-@@ -127,6 +127,7 @@ int thermal_zone_create_device_groups(st
- void thermal_zone_destroy_device_groups(struct thermal_zone_device *);
- void thermal_cooling_device_setup_sysfs(struct thermal_cooling_device *);
- void thermal_cooling_device_destroy_sysfs(struct thermal_cooling_device *cdev);
-+void thermal_cooling_device_stats_reinit(struct thermal_cooling_device *cdev);
- /* used only at binding time */
- ssize_t trip_point_show(struct device *, struct device_attribute *, char *);
- ssize_t weight_show(struct device *, struct device_attribute *, char *);
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -384,6 +384,7 @@ devm_thermal_of_cooling_device_register(
- 				struct device_node *np,
- 				char *type, void *devdata,
- 				const struct thermal_cooling_device_ops *ops);
-+void thermal_cooling_device_update(struct thermal_cooling_device *);
- void thermal_cooling_device_unregister(struct thermal_cooling_device *);
- struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name);
- int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
+ #else				/* ! CONFIG_CPU_FREQ */
 
 
 
