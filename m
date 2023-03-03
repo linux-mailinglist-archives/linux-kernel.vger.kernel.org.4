@@ -2,52 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E996A9698
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265716A969B
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 12:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbjCCLlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 06:41:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32818 "EHLO
+        id S229511AbjCCLlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 06:41:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbjCCLlI (ORCPT
+        with ESMTP id S231203AbjCCLlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 06:41:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D3A5552B;
-        Fri,  3 Mar 2023 03:40:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED10EB81699;
-        Fri,  3 Mar 2023 11:40:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A04C433EF;
-        Fri,  3 Mar 2023 11:40:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677843650;
-        bh=ruSFyxEt4TFvCxQ7D5ZuCTiPoqk6MEI5Mh8KW4fJ6O8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bjYlbWmXEF6/jIBnZn2WVY1xVcL6etElUCDOJWt0Ja/uxH6MV1s8KMEupZrPA+ZLT
-         /cKsT5BTyrxt/M3AQdSMyar+2CZmuevWp/Vp8Sv8x9wlSpCOZ4GEcFeAgJ2IAg45DD
-         u+zOaeX0qBQHgVTigH4veZFtVNQp64llQes6U0scyI9reD0uFrR6QlObdX54CuAmt2
-         vpDYLXWY3f8R8tfyO6z1p7WZv42ECuEESwhVeOpQeRo1g0Gh6E2Df3jaxYoNhEBq+z
-         G8XcbfIt4IUzdXsVXvuktJ9dqDt9HHRsVRg8MHgzLyxbHYk1pOO+tw7Xx5egGBPm80
-         pEO/P6fQwKhsg==
-Date:   Fri, 3 Mar 2023 13:40:38 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org
-Subject: Re: [PATCH v3 09/34] csky: Implement the new page table range API
-Message-ID: <ZAHctugW4aeMy6oy@kernel.org>
-References: <20230228213738.272178-1-willy@infradead.org>
- <20230228213738.272178-10-willy@infradead.org>
+        Fri, 3 Mar 2023 06:41:11 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712535F234
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 03:40:56 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id r18so1978309wrx.1
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 03:40:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677843655;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8Z6C3IEs9+sZB4AdVkwjomCIEC9N7YxUCDwVo818ObQ=;
+        b=tLRqMa0vHMmBhgJSOoyvQKsCIrSRc9ACGqbnyCgy4ObbrVF77OUEcS1rF/XDMqFftL
+         vC7OGpVGJhGgZ9Jvf4aF+Zy4ndRDwu4fxxvH830wpb0LWo+O3oJPmOJ9ublVml34vwp4
+         aP7xBOPKkQKXgb2KFQ1+Wen9buj32n/BeB64rmQTcHGYCGrCSGeL3ZB53OKDOcKVv6an
+         l1FW/ZJrCpWqBPeGk4sCQycIAk2drk36hWQMW6duJDd8S1WrF8PgTR8D5m4m8qtLDe2/
+         zBe5XcsyzOHq2Gr/MLyApECvSrzNqHC02E1LeEX8CT6rqa3k5KtIxOg2Bn0F/9h7EIv7
+         cPfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677843655;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Z6C3IEs9+sZB4AdVkwjomCIEC9N7YxUCDwVo818ObQ=;
+        b=3C42CxsR/9Qdr/1CJDcio1d4/51378jM/kFQGfQbd6qmCqRnosqsID2IkMmttdIz7P
+         UoQOx/L6skHimvedNB2AEsv2l6hPlqCWE5MtjwCeWQScK4mS0wPBmd0QjJt4OQQdn1n8
+         xQyscwWL2Q5mRnl2UbPUte4Oz8HC9kxvyi/Il1cktBFHiH8zpBWBhDyzOoMo61Zu6D8F
+         /49yri1usgXwCrZD4lL0sf0NrCckNEB8v+Veiuk886c2Yu53dGRJvDuO3jgqsIJYF334
+         ZAftfivVVdy2YwE7ZQQlfK38KNWESe9TbJcWD5zQbF5vL+5TpX3FCjLzr1EnCR6mt5RI
+         CTTw==
+X-Gm-Message-State: AO0yUKVEbLhHSXZN9o0iaZEmeY12NmwRTpk/ww4qsMADlRjl8bUKLced
+        FxmzUUeGQPIEW9CGT+xCxHhf5g==
+X-Google-Smtp-Source: AK7set9yObgvzoNRgqWPtz3O4FxX8nmlNXSZnpomFRrBbNVqReKcvaeehnL3MZmH4fqqdP8Y/LKzhQ==
+X-Received: by 2002:a5d:4147:0:b0:2ca:6442:c811 with SMTP id c7-20020a5d4147000000b002ca6442c811mr1058628wrq.51.1677843654887;
+        Fri, 03 Mar 2023 03:40:54 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id p13-20020a056000018d00b002c5691f13eesm1940450wrx.50.2023.03.03.03.40.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Mar 2023 03:40:54 -0800 (PST)
+Message-ID: <2cfba291-656f-9a43-fdd5-7601a6fe6ef5@linaro.org>
+Date:   Fri, 3 Mar 2023 11:40:53 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228213738.272178-10-willy@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH] interconnect: qcom: icc-rpm: Don't call
+ __qcom_icc_set twice on the same node
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230303023500.2173137-1-konrad.dybcio@linaro.org>
+ <59b28fb4-1367-9872-ed63-90847e380bb6@linaro.org>
+ <29513b9e-8561-7f7e-370e-7515116c7ee6@linaro.org>
+ <3116a08a-30a8-c9b9-f079-26739c9e6d49@linaro.org>
+ <08020872-6316-8f81-ac6a-c6eef408818f@linaro.org>
+ <db4f4e53-e8b9-0807-7490-2c6b76194ad5@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <db4f4e53-e8b9-0807-7490-2c6b76194ad5@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,231 +82,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 09:37:12PM +0000, Matthew Wilcox (Oracle) wrote:
-> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
-> Change the PG_dcache_clean flag from being per-page to per-folio.
+On 03/03/2023 11:39, Konrad Dybcio wrote:
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Cc: linux-csky@vger.kernel.org
-> ---
->  arch/csky/abiv1/cacheflush.c         | 32 +++++++++++++++++-----------
->  arch/csky/abiv1/inc/abi/cacheflush.h |  2 ++
->  arch/csky/abiv2/cacheflush.c         | 30 +++++++++++++-------------
->  arch/csky/abiv2/inc/abi/cacheflush.h | 10 +++++++--
->  arch/csky/include/asm/pgtable.h      | 21 +++++++++++++++---
->  5 files changed, 62 insertions(+), 33 deletions(-)
 > 
-> diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
-> index fb91b069dc69..ba43f6c26b4f 100644
-> --- a/arch/csky/abiv1/cacheflush.c
-> +++ b/arch/csky/abiv1/cacheflush.c
-> @@ -14,43 +14,49 @@
->  
->  #define PG_dcache_clean		PG_arch_1
->  
-> -void flush_dcache_page(struct page *page)
-> +void flush_dcache_folio(struct folio *folio)
->  {
->  	struct address_space *mapping;
->  
-> -	if (page == ZERO_PAGE(0))
-> +	if (is_zero_pfn(folio_pfn(folio)))
->  		return;
->  
-> -	mapping = page_mapping_file(page);
-> +	mapping = folio_flush_mapping(folio);
->  
-> -	if (mapping && !page_mapcount(page))
-> -		clear_bit(PG_dcache_clean, &page->flags);
-> +	if (mapping && !folio_mapped(folio))
-> +		clear_bit(PG_dcache_clean, &folio->flags);
->  	else {
->  		dcache_wbinv_all();
->  		if (mapping)
->  			icache_inv_all();
-> -		set_bit(PG_dcache_clean, &page->flags);
-> +		set_bit(PG_dcache_clean, &folio->flags);
->  	}
->  }
-> +EXPORT_SYMBOL(flush_dcache_folio);
-> +
-> +void flush_dcache_page(struct page *page)
-> +{
-> +	flush_dcache_folio(page_folio(page));
-> +}
->  EXPORT_SYMBOL(flush_dcache_page);
->  
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
-> -	pte_t *ptep)
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
-> +		pte_t *ptep, unsigned int nr)
->  {
->  	unsigned long pfn = pte_pfn(*ptep);
-> -	struct page *page;
-> +	struct folio *folio;
->  
->  	if (!pfn_valid(pfn))
->  		return;
->  
-> -	page = pfn_to_page(pfn);
-> -	if (page == ZERO_PAGE(0))
-> +	if (is_zero_pfn(pfn))
->  		return;
->  
-> -	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
-> +	folio = page_folio(pfn_to_page(pfn));
-> +	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
->  		dcache_wbinv_all();
->  
-> -	if (page_mapping_file(page)) {
-> +	if (folio_flush_mapping(folio)) {
->  		if (vma->vm_flags & VM_EXEC)
->  			icache_inv_all();
->  	}
-> diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
-> index ed62e2066ba7..0d6cb65624c4 100644
-> --- a/arch/csky/abiv1/inc/abi/cacheflush.h
-> +++ b/arch/csky/abiv1/inc/abi/cacheflush.h
-> @@ -9,6 +9,8 @@
->  
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  extern void flush_dcache_page(struct page *);
-> +void flush_dcache_folio(struct folio *);
-> +#define flush_dcache_folio flush_dcache_folio
->  
->  #define flush_cache_mm(mm)			dcache_wbinv_all()
->  #define flush_cache_page(vma, page, pfn)	cache_wbinv_all()
-> diff --git a/arch/csky/abiv2/cacheflush.c b/arch/csky/abiv2/cacheflush.c
-> index 39c51399dd81..c1cf0d55a2a1 100644
-> --- a/arch/csky/abiv2/cacheflush.c
-> +++ b/arch/csky/abiv2/cacheflush.c
-> @@ -6,30 +6,30 @@
->  #include <linux/mm.h>
->  #include <asm/cache.h>
->  
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-> -		      pte_t *pte)
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
-> +		pte_t *pte, unsigned int nr)
->  {
-> -	unsigned long addr;
-> +	unsigned long pfn = pte_pfn(*pte);
->  	struct page *page;
-
-Should be struct folio *folio instead:
-
-  CC      arch/csky/abiv2/cacheflush.o
-arch/csky/abiv2/cacheflush.c: In function 'update_mmu_cache_range':
-arch/csky/abiv2/cacheflush.c:19:9: error: 'folio' undeclared (first use in this function)
-   19 |         folio = page_folio(pfn_to_page(pfn));
-      |         ^~~~~
-arch/csky/abiv2/cacheflush.c:19:9: note: each undeclared identifier is reported only once for each function it appears in
-arch/csky/abiv2/cacheflush.c:13:22: warning: unused variable 'page' [-Wunused-variable]
-   13 |         struct page *page;
-      |                      ^~~~
-
-> +	unsigned int i;
->  
-> -	if (!pfn_valid(pte_pfn(*pte)))
-> +	if (!pfn_valid(pfn) || is_zero_pfn(pfn))
->  		return;
->  
-> -	page = pfn_to_page(pte_pfn(*pte));
-> -	if (page == ZERO_PAGE(0))
-> -		return;
-> +	folio = page_folio(pfn_to_page(pfn));
->  
-> -	if (test_and_set_bit(PG_dcache_clean, &page->flags))
-> +	if (test_and_set_bit(PG_dcache_clean, &folio->flags))
->  		return;
->  
-> -	addr = (unsigned long) kmap_atomic(page);
-> -
-> -	dcache_wb_range(addr, addr + PAGE_SIZE);
-> +	for (i = 0; i < folio_nr_pages(folio); i++) {
-> +		unsigned long addr = (unsigned long) kmap_local_folio(folio,
-> +								i * PAGE_SIZE);
->  
-> -	if (vma->vm_flags & VM_EXEC)
-> -		icache_inv_range(addr, addr + PAGE_SIZE);
-> -
-> -	kunmap_atomic((void *) addr);
-> +		dcache_wb_range(addr, addr + PAGE_SIZE);
-> +		if (vma->vm_flags & VM_EXEC)
-> +			icache_inv_range(addr, addr + PAGE_SIZE);
-> +		kunmap_local((void *) addr);
-> +	}
->  }
->  
->  void flush_icache_deferred(struct mm_struct *mm)
-> diff --git a/arch/csky/abiv2/inc/abi/cacheflush.h b/arch/csky/abiv2/inc/abi/cacheflush.h
-> index a565e00c3f70..9c728933a776 100644
-> --- a/arch/csky/abiv2/inc/abi/cacheflush.h
-> +++ b/arch/csky/abiv2/inc/abi/cacheflush.h
-> @@ -18,11 +18,17 @@
->  
->  #define PG_dcache_clean		PG_arch_1
->  
-> +static inline void flush_dcache_folio(struct folio *folio)
-> +{
-> +	if (test_bit(PG_dcache_clean, &folio->flags))
-> +		clear_bit(PG_dcache_clean, &folio->flags);
-> +}
-> +#define flush_dcache_folio flush_dcache_folio
-> +
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  static inline void flush_dcache_page(struct page *page)
->  {
-> -	if (test_bit(PG_dcache_clean, &page->flags))
-> -		clear_bit(PG_dcache_clean, &page->flags);
-> +	flush_dcache_folio(page_folio(page));
->  }
->  
->  #define flush_dcache_mmap_lock(mapping)		do { } while (0)
-> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-> index d4042495febc..a30ae048233e 100644
-> --- a/arch/csky/include/asm/pgtable.h
-> +++ b/arch/csky/include/asm/pgtable.h
-> @@ -90,7 +90,20 @@ static inline void set_pte(pte_t *p, pte_t pte)
->  	/* prevent out of order excution */
->  	smp_mb();
->  }
-> -#define set_pte_at(mm, addr, ptep, pteval) set_pte(ptep, pteval)
-> +
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +		pte_t *ptep, pte_t pte, unsigned int nr)
-> +{
-> +	for (;;) {
-> +		set_pte(ptep, pte);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		pte_val(pte) += PAGE_SIZE;
-> +	}
-> +}
-> +
-> +#define set_pte_at(mm, addr, ptep, pte) set_ptes(mm, addr, ptep, pte, 1)
->  
->  static inline pte_t *pmd_page_vaddr(pmd_t pmd)
->  {
-> @@ -263,8 +276,10 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
->  extern void paging_init(void);
->  
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-> -		      pte_t *pte);
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
-> +		pte_t *pte, unsigned int nr);
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +	update_mmu_cache_range(vma, addr, ptep, 1)
->  
->  #define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
->  	remap_pfn_range(vma, vaddr, pfn, size, prot)
-> -- 
-> 2.39.1
+> On 3.03.2023 12:36, Bryan O'Donoghue wrote:
+>> On 03/03/2023 11:35, Bryan O'Donoghue wrote:
+>>> On 03/03/2023 11:33, Konrad Dybcio wrote:
+>>>>
+>>>>
+>>>> On 3.03.2023 12:32, Bryan O'Donoghue wrote:
+>>>>> On 03/03/2023 02:35, Konrad Dybcio wrote:
+>>>>>> Currently, when sync_state calls set(n, n) all the paths for setting
+>>>>>> parameters on an icc node are called twice. Avoid that.
+>>>>>>
+>>>>>> Fixes: 751f4d14cdb4 ("interconnect: icc-rpm: Set destination bandwidth as well as source bandwidth")
+>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>>> ---
+>>>>>> RFC comes from the fact that I *believe* this should be correct, but I'm
+>>>>>> not entirely sure about it..
+>>>>>>
+>>>>>>
+>>>>>>     drivers/interconnect/qcom/icc-rpm.c | 2 +-
+>>>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>>>>>> index a6e0de03f46b..d35db1af9b08 100644
+>>>>>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>>>>>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>>>>>> @@ -387,7 +387,7 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>>>>>>         ret = __qcom_icc_set(src, src_qn, sum_bw);
+>>>>>>         if (ret)
+>>>>>>             return ret;
+>>>>>> -    if (dst_qn) {
+>>>>>> +    if (dst_qn && src_qn != dst_qn) {
+>>>>>>             ret = __qcom_icc_set(dst, dst_qn, sum_bw);
+>>>>>>             if (ret)
+>>>>>>                 return ret;
+>>>>>
+>>>>> Is it possible for src_qn == dst_qn ?
+>>>> As the commit message says, sync_state calls set(n, n) in
+>>>> drivers/interconnect/core.c : icc_sync_state(struct device *dev)
+>>>
+>>> So you've _seen_ that happen ?
+>>>
+>>
+>> Assuming you have, then why isn't the fix in sync_state i.e. that's an error for everybody right ?
+> I believe that there's simply no other way of updating every single node
+> on its own with the icc api, without taking any links into play. But I
+> see exynos and i.mx also effectively calling it twice on each node.
 > 
+> Konrad
 
--- 
-Sincerely yours,
-Mike.
+I mean. I'm fine for you to retain my RB on this qcom specific patch 
+since this seems like a real bug to me but... it seems like a generic 
+bug across arches that should probably be resolved @ the higher level.
+
+?
+
+---
+bod
