@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E1926A934D
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993036A9350
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 10:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjCCJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 04:02:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        id S230423AbjCCJCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 04:02:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjCCJBl (ORCPT
+        with ESMTP id S230469AbjCCJB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 04:01:41 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B967040D
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 01:01:06 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id d7so1768326vsj.2
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 01:01:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JLsdOAyBgyezK1lgQkAs7g3tPEWRNLmT3YtzhsnA9Eo=;
-        b=Mpff6y11+tajpm4ENnXldBTwnQin3kMRQ35Jp+KKyWKE3NfomdkPgesXEPbzxVmb3u
-         DpgXevAA34AlBXahtjo6WUCEuc0td6jcwDxeUCPhUbCCFtpR+PkvzW0icD4vf7/AWRey
-         9AIPc/rC/r6s0rAz1FaWCORh33o7WCuFkL4KmhR7JwACpAHGeXhYVSo87DvTp0zFEuYh
-         f2nKjCneFaMk7SzKRGtTEC/P9aZfqdyF9d57k+kfQuoZtWMglWWouqW+wOgWUy5pqNiX
-         eRug/NxMn5OrbEQMJr5CL3aj5Dj3vZztlpRmdKpao6yd3yce8PdIq/K9LkCg/Im4QNxH
-         Z8Qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JLsdOAyBgyezK1lgQkAs7g3tPEWRNLmT3YtzhsnA9Eo=;
-        b=treoEqZoHxYrWS4GCHA02XUyolRuXSRD2nxHdIKJJ52mfFzNcPuFajGTuszMDU8qRK
-         E0jdSk38fIT5jMtEmez4K7Utf3muPJVYL7ORTMU1bWos1TrpBpV0TRQ2faFRa2o6zsjX
-         HDPequsQqB+a8QCLh2/zZn8Ax2CAogg+X/a291DLlsZONmaAh+hT7xpeUWtQvZMdqGuA
-         9eK7nITJ0b3NzwUjp07lIV1Ei0QJXSiGfF1OWapKUv48ju/tSVOIc1/qCvoVNLc09XbU
-         fg0kd9tzwE8IEzdbCrPUDS9iiSmo8BZDiMUsD0lyN41fgmfQ234e/W66HZAb/O3TX/cj
-         YbGg==
-X-Gm-Message-State: AO0yUKWPLHGbGPURHe9zTnDmluuQAuU2ZrDSgjTGx7jakn7svLwUY55U
-        B1R95PcBm/VlxK4UFHO/h0O3dKMfyJSUsyhvH6URrw==
-X-Google-Smtp-Source: AK7set/9X7i92FLRbTs4K8F7WILTtmVS53pxFldUzuXDJlvs6xFldr/xpFZjsZya7JsDSXEoQg7weJ37y8z0INCPtdU=
-X-Received: by 2002:a67:f58b:0:b0:411:c62b:6bf0 with SMTP id
- i11-20020a67f58b000000b00411c62b6bf0mr683428vso.3.1677834023770; Fri, 03 Mar
- 2023 01:00:23 -0800 (PST)
+        Fri, 3 Mar 2023 04:01:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B2B580DF;
+        Fri,  3 Mar 2023 01:01:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFF8F61797;
+        Fri,  3 Mar 2023 09:00:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2DA3C4339E;
+        Fri,  3 Mar 2023 09:00:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677834028;
+        bh=qSU8P9ovgaEGbL9TP5hSM/7JR+YjdJKAQCgDYun/ZRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YmqRqQasWdcB54Bd9GBHehqhhOl1Y1FGmyGrAgz2Fs8EmOJKB3tXsFv+0A+rrk0dL
+         mPozdeisZfFiHZaJ5qHInyKgxRXfpF+sPaTIOgaz5LDdxoBAefS3d/hjZ30xLV/j+w
+         RLZNuS1aM2ekwaZWCsSum8ZvebK72w3axfpjJtH4gYi9oJFedf+0ZGBFR1KMHnLvvD
+         r3VeGItQ5EA/pys7NELt+JjDsvmZnaYEETw5GEY0400uNj3J6RM3jARI17IiPnNMDb
+         PqVM1saWDaVZ2guFWzCq/N1bO78xMY868r5NIrG/fkOfpcxd7C4vbf2rVnVOWu1qDE
+         /Y4yWZ1WqJzvg==
+Date:   Fri, 3 Mar 2023 09:00:23 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Deepak R Varma <drv@mailo.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH] leds: qcom-lpg: Release node reference before returning
+Message-ID: <20230303090023.GJ2303077@google.com>
+References: <Y+dw/0DA+j6xFiHR@ubun2204.myguest.virtualbox.org>
 MIME-Version: 1.0
-References: <20230301180657.003689969@linuxfoundation.org> <CA+G9fYtDGpgT4dckXD-y-N92nqUxuvue_7AtDdBcHrbOMsDZLg@mail.gmail.com>
- <ZAB6pP3MNy152f+7@kroah.com> <CA+G9fYsHbQyQFp+vMnmFKDSQxrmj-VKsexWq-aayxgrY+0O7KQ@mail.gmail.com>
- <CA+G9fYsn+AhWTFA+ZJmfFsM71WGLPOFemZp_vhFMMLUcgcAXKg@mail.gmail.com> <ZAGbUsae7DHoI5k4@kroah.com>
-In-Reply-To: <ZAGbUsae7DHoI5k4@kroah.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 3 Mar 2023 14:30:12 +0530
-Message-ID: <CA+G9fYsoEdhf09n-8eFzYPnsvDH=YryJ9rdsphZx8XQ3N3BbMw@mail.gmail.com>
-Subject: Re: [PATCH 6.1 00/42] 6.1.15-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        mptcp@lists.linux.dev, Florian Westphal <fw@strlen.de>,
-        Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y+dw/0DA+j6xFiHR@ubun2204.myguest.virtualbox.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,101 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Mar 2023 at 12:31, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Mar 03, 2023 at 01:32:47AM +0530, Naresh Kamboju wrote:
-> > On Thu, 2 Mar 2023 at 16:30, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > On Thu, 2 Mar 2023 at 16:00, Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Thu, Mar 02, 2023 at 03:49:31PM +0530, Naresh Kamboju wrote:
-> > > > > On Wed, 1 Mar 2023 at 23:42, Greg Kroah-Hartman
-> > > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > >
-> > > > > > This is the start of the stable review cycle for the 6.1.15 release.
-> > > > > > There are 42 patches in this series, all will be posted as a response
-> > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > let me know.
-> > > > > >
-> > > > > > Responses should be made by Fri, 03 Mar 2023 18:06:43 +0000.
-> > > > > > Anything received after that time might be too late.
-> > > > > >
-> > > > > > The whole patch series can be found in one patch at:
-> > > > > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.15-rc1.gz
-> > > > > > or in the git tree and branch at:
-> > > > > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> > > > > > and the diffstat can be found below.
-> > > > > >
-> > > > > > thanks,
-> > > > > >
-> > > > > > greg k-h
-> > > > >
-> > > > > Regression found on Linux version 6.1.15-rc1 on 32-bit arm x15 and i386.
-> > > > >
-> > > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > > >
-> > > > > ## Build
-> > > > > * kernel: 6.1.15-rc1
-> > > > > * git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-> > > > > * git branch: linux-6.1.y
-> > > > > * git commit: b6150251d4ddf8a80510c185d839631e252e6317
-> > > > > * git describe: v6.1.14-43-gb6150251d4dd
-> > > > > * test details:
-> > > > > https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.14-43-gb6150251d4dd
-> > > > >
-> > > > > Regression test cases,
-> > > > > i386:
-> > > > > x15:
-> > > > >   * kselftest-net-mptcp/net_mptcp_mptcp_sockopt_sh
-> > > > >
-> > > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > > Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> > > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > > Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> > > > >
-> > > > > test log:
-> > > > > ----------
-> > > > >
-> > > > > # selftests: net/mptcp: mptcp_sockopt.sh
-> > >
-> > > ....
-> > >
-> > > > Nit, wrapping a log like this makes it hard to read, don't you think?
-> > >
-> > > Me either.
-> > > That is the reason I have shared "Assertion" above.
-> > >
-> > > >
-> > > > > # mptcp_sockopt: mptcp_sockopt.c:353: do_getsockopt_tcp_info:
-> > > > > Assertion `ti.d.size_user == sizeof(struct tcp_info)' failed.
-> > > > > # server killed by signal 6
-> > > > > #
-> > > > > # FAIL: SOL_MPTCP getsockopt
-> > > > > # PASS: TCP_INQ cmsg/ioctl -t tcp
-> > > > > # PASS: TCP_INQ cmsg/ioctl -6 -t tcp
-> > > > > # PASS: TCP_INQ cmsg/ioctl -r tcp
-> > > > > # PASS: TCP_INQ cmsg/ioctl -6 -r tcp
-> > > > > # PASS: TCP_INQ cmsg/ioctl -r tcp -t tcp
-> > > > > not ok 6 selftests: net/mptcp: mptcp_sockopt.sh # exit=1
-> > > >
-> > > > Any chance you can bisect?
-> > >
-> > > We are running our bisection scripts.
-> >
-> > We have tested with 6.1.14 kselftests source again and it passes.
-> > Now that we have upgraded to 6.2.1 kselftests source, we find that
-> > there is this problem reported. so, not a kernel regression.
->
-> Where is this problem reported?
+On Sat, 11 Feb 2023, Deepak R Varma wrote:
 
-We have been running most recent stable (6.2) selftest sources on
-older stable-rc branches ( 6.1 ... 4.14).
+> The iterator for_each_available_child_of_node() increments the refcount
+> of the child node it is processing. Release such a reference when the
+> loop needs to breaks due to en error during its execution.
+> Issue identified using for_each_child.cocci Coccinelle semantic patch.
+> 
+> Signed-off-by: Deepak R Varma <drv@mailo.com>
+> ---
+> Please note: The proposed change is compile tested only. I do not have the
+> necessary hardware to perform additional testing. Please suggest if there is an
+> alternate means available to further test this change.
 
-> Is this a 6.2 test checking for
-> something that is not in 6.1?
+Please send this again and include the authors.
 
-mptcp developers might have a better idea,
+Perhaps they would be kind enough to test it or provide guidance.
+ 
+>  drivers/leds/rgb/leds-qcom-lpg.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
+> index 67f48f222109..993fb9cf0204 100644
+> --- a/drivers/leds/rgb/leds-qcom-lpg.c
+> +++ b/drivers/leds/rgb/leds-qcom-lpg.c
+> @@ -1112,8 +1112,10 @@ static int lpg_add_led(struct lpg *lpg, struct device_node *np)
+>  		i = 0;
+>  		for_each_available_child_of_node(np, child) {
+>  			ret = lpg_parse_channel(lpg, child, &led->channels[i]);
+> -			if (ret < 0)
+> +			if (ret < 0) {
+> +				of_node_put(child);
+>  				return ret;
+> +			}
+>  
+>  			info[i].color_index = led->channels[i]->color;
+>  			info[i].intensity = 0;
+> @@ -1291,8 +1293,10 @@ static int lpg_probe(struct platform_device *pdev)
+>  
+>  	for_each_available_child_of_node(pdev->dev.of_node, np) {
+>  		ret = lpg_add_led(lpg, np);
+> -		if (ret)
+> +		if (ret) {
+> +			of_node_put(np);
+>  			return ret;
+> +		}
+>  	}
+>  
+>  	for (i = 0; i < lpg->num_channels; i++)
+> -- 
+> 2.34.1
+> 
+> 
+> 
 
-- Naresh
+-- 
+Lee Jones [李琼斯]
