@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257EF6A9F04
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 653336A9F46
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 19:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbjCCSiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 13:38:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S232103AbjCCSkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 13:40:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231853AbjCCShv (ORCPT
+        with ESMTP id S231277AbjCCSjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 13:37:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 309F061884
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 10:37:40 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 303A6143D;
-        Fri,  3 Mar 2023 10:38:23 -0800 (PST)
-Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 64F183F93E;
-        Fri,  3 Mar 2023 10:37:36 -0800 (PST)
-Message-ID: <aef194a3-83b4-a9b8-7537-ebe53f07a14a@arm.com>
-Date:   Fri, 3 Mar 2023 18:37:29 +0000
+        Fri, 3 Mar 2023 13:39:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D3410259
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 10:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1677868679;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o7k2343nHEtOHDacvLSOb2uAP9cNtRF4W0zRtzM/VW8=;
+        b=JhnAiQ4xpxEGPnPzNZbSqgDFu0M8P76K4SBF27NdjT/MEq+Pye37GlSH7lYVZYZbimjrIh
+        YIjdo1zMCPBuDOcvUFXi8jqqr+z88Lt3WkhAsG+nMh8wM75YTwd5OjafE7VX0T74nuu/6s
+        rmsbVNci8lmfFcNPwhyh8EjH7r/JKCE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-198-UGs_vAbRN--YLKZWzBntPQ-1; Fri, 03 Mar 2023 13:37:56 -0500
+X-MC-Unique: UGs_vAbRN--YLKZWzBntPQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B740F100F90A;
+        Fri,  3 Mar 2023 18:37:55 +0000 (UTC)
+Received: from pauld.bos.com (dhcp-17-237.bos.redhat.com [10.18.17.237])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6F3E72166B2B;
+        Fri,  3 Mar 2023 18:37:55 +0000 (UTC)
+From:   Phil Auld <pauld@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     pauld@redhat.com, gregkh@linuxfoundation.org, mingo@redhat.com,
+        peterz@infradead.org, ritesh.list@gmail.com,
+        srikar@linux.vnet.ibm.com, sshegde@linux.ibm.com,
+        vincent.guittot@linaro.org, vishalc@linux.vnet.ibm.com,
+        vschneid@redhat.com
+Subject: [RESEND PATCH v2] sched/debug: Put sched/domains files under the verbose flag
+Date:   Fri,  3 Mar 2023 13:37:54 -0500
+Message-Id: <20230303183754.3076321-1-pauld@redhat.com>
+In-Reply-To: <20230119150758.880189-1-pauld@redhat.com>
+References: <20230119150758.880189-1-pauld@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 07/18] x86/resctrl: Move CLOSID/RMID matching and
- setting to use helpers
-Content-Language: en-GB
-To:     "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Chatre, Reinette" <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        "carl@os.amperecomputing.com" <carl@os.amperecomputing.com>,
-        "lcherian@marvell.com" <lcherian@marvell.com>,
-        "bobo.shaobowang@huawei.com" <bobo.shaobowang@huawei.com>,
-        "tan.shaopeng@fujitsu.com" <tan.shaopeng@fujitsu.com>,
-        "xingxin.hx@openanolis.org" <xingxin.hx@openanolis.org>,
-        "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>,
-        "peternewman@google.com" <peternewman@google.com>
-References: <20230113175459.14825-1-james.morse@arm.com>
- <20230113175459.14825-8-james.morse@arm.com>
- <IA1PR11MB6097186B7E9C2CF52A7F29C99BC69@IA1PR11MB6097.namprd11.prod.outlook.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <IA1PR11MB6097186B7E9C2CF52A7F29C99BC69@IA1PR11MB6097.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,62 +64,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fenghua,
+The debug files under sched/domains can take a long time to regenerate,
+especially when updates are done one at a time. Move these files under
+the sched verbose debug flag. Allow changes to verbose to trigger
+generation of the files. This lets a user batch the updates but still
+have the information available.  The detailed topology printk messages
+are also under verbose.
 
-On 17/01/2023 19:10, Yu, Fenghua wrote:
->> When switching tasks, the CLOSID and RMID that the new task should use are
->> stored in struct task_struct. For x86 the CLOSID known by resctrl, the value in
->> task_struct, and the value written to the CPU register are all the same thing.
->>
->> MPAM's CPU interface has two different PARTID's one for data accesses the
->> other for instruction fetch. Storing resctrl's CLOSID value in struct task_struct
->> implies the arch code knows whether resctrl is using CDP.
->>
->> Move the matching and setting of the struct task_struct properties to use
->> helpers. This allows arm64 to store the hardware format of the register, instead
->> of having to convert it each time.
->>
->> __rdtgroup_move_task()s use of READ_ONCE()/WRITE_ONCE() ensures torn
->> values aren't seen as another CPU may schedule the task being moved while the
->> value is being changed. MPAM has an additional corner-case here as the PMG
->> bits extend the PARTID space. If the scheduler sees a new-CLOSID but old-RMID,
->> the task will dirty an RMID that the limbo code is not watching causing an
->> inaccurate count. x86's RMID are independent values, so the limbo code will still
->> be watching the old-RMID in this circumstance.
->> To avoid this, arm64 needs both the CLOSID/RMID WRITE_ONCE()d together.
->> Both values must be provided together.
->>
->> Because MPAM's RMID values are not unique, the CLOSID must be provided
->> when matching the RMID.
+Discussion that lead to this approach can be found in the link below.
 
->> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> index e1f879e13823..ced7400decae 100644
->> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->> @@ -84,7 +84,7 @@ void rdt_last_cmd_printf(const char *fmt, ...)
->>   *
->>   * Using a global CLOSID across all resources has some advantages and
->>   * some drawbacks:
->> - * + We can simply set "current->closid" to assign a task to a resource
->> + * + We can simply set current's closid to assign a task to a resource
->>   *   group.
-> 
-> Seems this change doesn't gain anything. Maybe this change can be removed?
+Simplified code to maintain use of debugfs bool routines suggested by
+Michael Ellerman <mpe@ellerman.id.au>.
 
-After this patch the CLOSID might not be in current at all, this comment would be the only
-thing that suggests it is. I'd prefer not to suggest anyone access 'current->closid'
-directly in resctrl, as such code wouldn't compile on arm64.
+Signed-off-by: Phil Auld <pauld@redhat.com>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Tested-by: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Cc: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Link: https://lore.kernel.org/all/Y01UWQL2y2r69sBX@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com/
+---
 
-This is a 'saves bugs in the future' change.
+ v2: fix comment typo and use cpumask_empty()
 
+ kernel/sched/debug.c | 52 +++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 49 insertions(+), 3 deletions(-)
 
->>   * + Context switch code can avoid extra memory references deciding which
->>   *   CLOSID to load into the PQR_ASSOC MSR
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index 1637b65ba07a..0b2340a79b65 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -280,6 +280,45 @@ static const struct file_operations sched_dynamic_fops = {
+ 
+ __read_mostly bool sched_debug_verbose;
+ 
++#ifdef CONFIG_SMP
++static struct dentry           *sd_dentry;
++
++
++static ssize_t sched_verbose_write(struct file *filp, const char __user *ubuf,
++				  size_t cnt, loff_t *ppos)
++{
++	ssize_t result;
++	bool orig;
++
++	cpus_read_lock();
++	mutex_lock(&sched_domains_mutex);
++
++	orig = sched_debug_verbose;
++	result = debugfs_write_file_bool(filp, ubuf, cnt, ppos);
++
++	if (sched_debug_verbose && !orig)
++		update_sched_domain_debugfs();
++	else if (!sched_debug_verbose && orig) {
++		debugfs_remove(sd_dentry);
++		sd_dentry = NULL;
++	}
++
++	mutex_unlock(&sched_domains_mutex);
++	cpus_read_unlock();
++
++	return result;
++}
++#else
++#define sched_verbose_write debugfs_write_file_bool
++#endif
++
++static const struct file_operations sched_verbose_fops = {
++	.read =         debugfs_read_file_bool,
++	.write =        sched_verbose_write,
++	.open =         simple_open,
++	.llseek =       default_llseek,
++};
++
+ static const struct seq_operations sched_debug_sops;
+ 
+ static int sched_debug_open(struct inode *inode, struct file *filp)
+@@ -303,7 +342,7 @@ static __init int sched_init_debug(void)
+ 	debugfs_sched = debugfs_create_dir("sched", NULL);
+ 
+ 	debugfs_create_file("features", 0644, debugfs_sched, NULL, &sched_feat_fops);
+-	debugfs_create_bool("verbose", 0644, debugfs_sched, &sched_debug_verbose);
++	debugfs_create_file_unsafe("verbose", 0644, debugfs_sched, &sched_debug_verbose, &sched_verbose_fops);
+ #ifdef CONFIG_PREEMPT_DYNAMIC
+ 	debugfs_create_file("preempt", 0644, debugfs_sched, NULL, &sched_dynamic_fops);
+ #endif
+@@ -345,7 +384,6 @@ late_initcall(sched_init_debug);
+ #ifdef CONFIG_SMP
+ 
+ static cpumask_var_t		sd_sysctl_cpus;
+-static struct dentry		*sd_dentry;
+ 
+ static int sd_flags_show(struct seq_file *m, void *v)
+ {
+@@ -402,15 +440,23 @@ void update_sched_domain_debugfs(void)
+ 	if (!debugfs_sched)
+ 		return;
+ 
++	if (!sched_debug_verbose)
++		return;
++
+ 	if (!cpumask_available(sd_sysctl_cpus)) {
+ 		if (!alloc_cpumask_var(&sd_sysctl_cpus, GFP_KERNEL))
+ 			return;
+ 		cpumask_copy(sd_sysctl_cpus, cpu_possible_mask);
+ 	}
+ 
+-	if (!sd_dentry)
++	if (!sd_dentry) {
+ 		sd_dentry = debugfs_create_dir("domains", debugfs_sched);
+ 
++		/* rebuild sd_sysctl_cpus if empty since it gets cleared below */
++		if (cpumask_empty(sd_sysctl_cpus))
++			cpumask_copy(sd_sysctl_cpus, cpu_online_mask);
++	}
++
+ 	for_each_cpu(cpu, sd_sysctl_cpus) {
+ 		struct sched_domain *sd;
+ 		struct dentry *d_cpu;
+-- 
+2.31.1
 
-(please trim your replies!)
-
-
-Thanks,
-
-James
