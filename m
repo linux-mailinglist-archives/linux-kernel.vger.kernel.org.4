@@ -2,155 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11F36AA0F1
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61DD16AA0ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Mar 2023 22:16:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjCCVRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 16:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57796 "EHLO
+        id S231620AbjCCVQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 16:16:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjCCVRR (ORCPT
+        with ESMTP id S231500AbjCCVQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 16:17:17 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6713F6150D
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:17:07 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id ky4so4134211plb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:17:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677878227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OhuLhnLZCviHLHyGIe9EHKicgCaiC5kWp2NCXRvwT4I=;
-        b=nb/SD5Ls7IpbF/vQOkYudAu4gMlzu7iFxRTOsHX8uh5yXs77Dbfbd94UpWLyPcpKT5
-         vmmOy5tH7iPwZuDw+v1Ae9TrWhs+zjtyHuC7kVSDl5maoaon2ZGg1hK0gIuh/XTwvK/0
-         hYGn3id9j5kZFjEHqDII0oeLTTTmKfyCS+41r29/ApvkJc+nOSZxvoiikqd+6ia3LuRN
-         otBAoDslznqT82OwXo9zIt6E7xoJsvV2QqJU930y5lOLYR1XvPX+kGLL/YprGF/coZPs
-         weG5Y7kYSDvHG2VFRgh2FofaakQoo3tAhKsreGHDjv3UtQwsD3EP1OVhxk5SNUCaMIsi
-         FP/A==
+        Fri, 3 Mar 2023 16:16:47 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1582D61505
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 13:16:46 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id 2-20020a056e020ca200b003033a763270so1986726ilg.19
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 13:16:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677878227;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OhuLhnLZCviHLHyGIe9EHKicgCaiC5kWp2NCXRvwT4I=;
-        b=siFz7DUffDg9DlYpbyv/WNxR2KkIFWpdSc6+U3QzG8fo71OPkQdUULBtXemOalhsln
-         RyQ34RB5yQn/f0yKFMI/QBnhTVL3qOmIV6V1hNjKdnHN1G6KVL0d39qNPsrpMbdh6w0C
-         /KHDzT5uqjOoMOgpmcz0l5e1dbjOc9HjrXyXoYih1bSRAvwEOqpDFsPACYWvxGm0kKqh
-         YzLvO6Hh8uYFw+d5xVe172TZEjvvHP/qqWR6Ji54rsZrZwnWaF5NokB8h2+qkf2cpyPC
-         9sRyzzSDQ2iPN44Kma6lGAt0xrIQhtnAOX28UBWpqLfJbSa0d9rJg7ZA8M3b7xLkZkrY
-         LFMw==
-X-Gm-Message-State: AO0yUKW4I/lES2h3DRtPPDXFSZGDkg2uA18UuTGLDHSptUaUclHPGda0
-        laxfUHBYTFpwoFCctwh2Fb7155dnJ7Gf3j5UJGX+Sg==
-X-Google-Smtp-Source: AK7set+32LcKQp112YY6MZ6fMJypwdkQArStXiZgdTOdsG7SWiCMXSTE0LjhEFcXm2TYDtRE+daKrHb6aq/srLIW1gI=
-X-Received: by 2002:a17:903:41c9:b0:19e:2a1b:2797 with SMTP id
- u9-20020a17090341c900b0019e2a1b2797mr1324176ple.10.1677878226573; Fri, 03 Mar
- 2023 13:17:06 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iZMq3I524LZ3LyFG/4UrcrlRiCRLs/dbIEgvULqsulE=;
+        b=FM7McsVBNjyP0QlIOgLyaCddYMFle76mhK//TTBirCblWqlA3eaIVwlraqi9jTjVNR
+         iTltNKby3qWrz4XNZ+6+7ttYT81jpHBFnFmRQaHECP6kBV9TzDYSP9pKX3j7lfZhIRnw
+         rNkrop2wfh7xMqxXy8dL5hLyFp02h1gwI4n0lNz0+FSSHaEtSwWmquonmSXus4PaFPBv
+         73joq9A6gwZOfoedttN6XXaj62b26AUsJhLKaQqZ0wW8qm3suclcAKVFptvRAnc2fWD8
+         ftxlry/9DIg0CBYVtEqh4V/jjbsG8a4YpWX0JOjlV7X+omcVGggHN27SpXHvkNTl9PDn
+         reiw==
+X-Gm-Message-State: AO0yUKUQRJ9O9+lA5DIX0aE4mz0AVvqytRNPcKIS+W0yYxqgVgrPKew5
+        DAxomRfw2K0Kta9t1iZtkvheZv6RIBCuMpiUINTyAb2QSIaD
+X-Google-Smtp-Source: AK7set+mfsbnChKExhVMU5JwTUXJdUffgj3MzkjSGFSmdbTqAwHH5ibRwTuY/I/0xe0RTcrqAcy/xKgvNy+eTZ13UWsMdkUfXvJ8
 MIME-Version: 1.0
-References: <20230302023509.319903-1-saravanak@google.com> <2cc752fb-a25d-0789-0fad-54b99f08ced7@i2se.com>
- <CAGETcx_nCdm2WYLC7h1s8i9tnHc_LcHk2oZUQ0sUDr-PBsUWDg@mail.gmail.com>
- <faad8810-7aa4-e122-f497-73553feb8bcd@gmail.com> <98f5abe2-3d25-661a-a2b8-a50e2d27f085@i2se.com>
- <667f007f-1cb0-7e89-242a-c41823e82bee@gmail.com>
-In-Reply-To: <667f007f-1cb0-7e89-242a-c41823e82bee@gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 3 Mar 2023 13:16:30 -0800
-Message-ID: <CAGETcx9UdOWT+ZnoydcXXqcS-sQ_i0FosWGr4ZTfRmRjA_FVcA@mail.gmail.com>
-Subject: Re: [PATCH v1] serdev: Set fwnode for serdev devices
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, kernel-team@android.com,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Received: by 2002:a02:94ab:0:b0:3c4:d4b2:f72 with SMTP id
+ x40-20020a0294ab000000b003c4d4b20f72mr1362791jah.3.1677878205481; Fri, 03 Mar
+ 2023 13:16:45 -0800 (PST)
+Date:   Fri, 03 Mar 2023 13:16:45 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006a07d505f60576b3@google.com>
+Subject: [syzbot] [bluetooth?] WARNING in hci_send_acl
+From:   syzbot <syzbot+90c0638c7b912d27bfe7@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 9:22=E2=80=AFAM Florian Fainelli <f.fainelli@gmail.c=
-om> wrote:
->
-> On 3/3/23 03:57, Stefan Wahren wrote:
-> > Hi,
-> >
-> > Am 02.03.23 um 18:51 schrieb Florian Fainelli:
-> >>
-> >>
-> >> On 3/2/2023 9:20 AM, Saravana Kannan wrote:
-> >>> On Thu, Mar 2, 2023 at 9:01=E2=80=AFAM Stefan Wahren <stefan.wahren@i=
-2se.com>
-> >>> wrote:
-> >>>>
-> >>>> Hi Saravana,
-> >>>>
-> >>>> Am 02.03.23 um 03:35 schrieb Saravana Kannan:
-> >>>>> This allow fw_devlink to do dependency tracking for serdev devices.
-> >>>>>
-> >>>>> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
-> >>>>> Link:
-> >>>>> https://lore.kernel.org/lkml/03b70a8a-0591-f28b-a567-9d2f736f17e5@g=
-mail.com/
-> >>>>> Cc: Stefan Wahren <stefan.wahren@i2se.com>
-> >>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> >>>>
-> >>>> since this fixes an issue on Raspberry Pi 4, shouldn't this be
-> >>>> mentioned
-> >>>> in the commit message and providing a Fixes tag?
-> >>>
-> >>> So RPi 4 was never creating a device links between serdev devices and
-> >>> their consumers. The error message was just a new one I added and we
-> >>> are noticing and catching the fact that serdev wasn't setting fwnode
-> >>> for a device.
-> >>>
-> >>> I'm also not sure if I can say this commit "Fixes" an issue in serdev
-> >>> core because when serdev core was written, fw_devlink wasn't a thing.
-> >>> Once I add Fixes, people will start pulling this into stable
-> >>> branches/other trees where I don't think this should be pulled into
-> >>> older stable branches.
-> >>
-> >> That is kind of the point of Fixes: tag, is not it? It is appropriate
-> >> to list a commit that is not specific to serdev, but maybe a
-> >> particular point into the fw_devlink history. Given this did not
-> >> appear to have a functional impact, we could go without one.
-> >
-> > i was under the impression that this issue breaks at least Bluetooth on
-> > Raspberry Pi 4 because the driver is never probed. I cannot see the
-> > success output in Florian's trace. Something like this:
-> >
-> > [    7.124879] hci_uart_bcm serial0-0: supply vbat not found, using
-> > dummy regulator
-> > [    7.131743] hci_uart_bcm serial0-0: supply vddio not found, using
-> > dummy regulator
-> > ...
-> > [    7.517249] Bluetooth: hci0: BCM: chip id 107
-> > [    7.517499] Bluetooth: hci0: BCM: features 0x2f
-> > [    7.519757] Bluetooth: hci0: BCM4345C0
-> > [    7.519768] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
-> > [    7.539495] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.hcd' Patch
-> > ...
-> > [    8.348831] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+
-> > [    8.348845] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0342
-> >
-> > I just want to make sure that 6.2 doesn't have a regression.
->
-> My configuration uses hci_uart as a module, and it would always load
-> fine, but I suppose I can make sure that even built-in this works
-> properly. Give me a day or two to test that.
+Hello,
 
-Thanks Stefan and Florian! I'll wait to see the results.
+syzbot found the following issue on:
 
-But based on my mental model of fw_devlink I don't expect BT to be
-broken without this patch. If a device doesn't have fwnode set, it's
-effectively invisible to fw_devlink. That could only affect consumers
-of the device and not the device itself.
+HEAD commit:    2ebd1fbb946d Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=12aad518c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
+dashboard link: https://syzkaller.appspot.com/bug?extid=90c0638c7b912d27bfe7
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
--Saravana
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/16985cc7a274/disk-2ebd1fbb.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fd3452567115/vmlinux-2ebd1fbb.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c75510922212/Image-2ebd1fbb.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+90c0638c7b912d27bfe7@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 22417 at kernel/workqueue.c:1438 __queue_work+0x11e0/0x1484 kernel/workqueue.c:1438
+Modules linked in:
+CPU: 1 PID: 22417 Comm: syz-executor.0 Not tainted 6.2.0-syzkaller-18300-g2ebd1fbb946d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __queue_work+0x11e0/0x1484 kernel/workqueue.c:1438
+lr : __queue_work+0x11e0/0x1484 kernel/workqueue.c:1438
+sp : ffff80002bf37250
+x29: ffff80002bf37290 x28: 0000000000000008 x27: 0000000000002000
+x26: ffff0000ce923800 x25: dfff800000000000 x24: ffff0000ce9239c0
+x23: 0000000000000000 x22: ffff00012c509b48 x21: 1fffe000258a1369
+x20: 00000000000b0012 x19: ffff00012df8cd10 x18: ffff80002bf372e0
+x17: ffff800015b8d000 x16: ffff80000804d18c x15: 0000000000000000
+x14: 1ffff00002b720af x13: dfff800000000000 x12: 0000000000000001
+x11: ff80800008220790 x10: 0000000000000000 x9 : ffff800008220790
+x8 : ffff00012c509b40 x7 : ffff8000105bcce8 x6 : 0000000000000000
+x5 : 0000000000000001 x4 : 0000000000000001 x3 : ffff80000821f4ec
+x2 : ffff00012df8cd10 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ __queue_work+0x11e0/0x1484 kernel/workqueue.c:1438
+ queue_work_on+0x9c/0x128 kernel/workqueue.c:1545
+ queue_work include/linux/workqueue.h:503 [inline]
+ hci_send_acl+0x86c/0xb54 net/bluetooth/hci_core.c:3183
+ l2cap_do_send+0x238/0x350
+ l2cap_chan_send+0x36c/0x2044
+ l2cap_sock_sendmsg+0x184/0x2a8 net/bluetooth/l2cap_sock.c:1172
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ ____sys_sendmsg+0x558/0x844 net/socket.c:2479
+ ___sys_sendmsg net/socket.c:2533 [inline]
+ __sys_sendmmsg+0x318/0x7d8 net/socket.c:2619
+ __do_sys_sendmmsg net/socket.c:2648 [inline]
+ __se_sys_sendmmsg net/socket.c:2645 [inline]
+ __arm64_sys_sendmmsg+0xa0/0xbc net/socket.c:2645
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+irq event stamp: 524
+hardirqs last  enabled at (523): [<ffff80001243d19c>] __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:151 [inline]
+hardirqs last  enabled at (523): [<ffff80001243d19c>] _raw_spin_unlock_irqrestore+0x44/0xa4 kernel/locking/spinlock.c:194
+hardirqs last disabled at (524): [<ffff80000821f4d8>] queue_work_on+0x50/0x128 kernel/workqueue.c:1542
+softirqs last  enabled at (514): [<ffff80001058d02c>] spin_unlock_bh include/linux/spinlock.h:395 [inline]
+softirqs last  enabled at (514): [<ffff80001058d02c>] release_sock+0x178/0x1cc net/core/sock.c:3497
+softirqs last disabled at (512): [<ffff80001058cef0>] spin_lock_bh include/linux/spinlock.h:355 [inline]
+softirqs last disabled at (512): [<ffff80001058cef0>] release_sock+0x3c/0x1cc net/core/sock.c:3484
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
