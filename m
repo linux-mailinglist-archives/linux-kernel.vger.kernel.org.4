@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45C16AA906
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 10:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5976AA910
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 11:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjCDJ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 04:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
+        id S229702AbjCDKPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 05:15:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCDJ5t (ORCPT
+        with ESMTP id S229452AbjCDKPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 04:57:49 -0500
+        Sat, 4 Mar 2023 05:15:30 -0500
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2269755
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 01:57:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6E714496
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 02:15:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
         In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SfhZHUyfDsg19uG6RM4Ou8sW0goxAG745IQOeAQ8QYU=; b=Ck3glLKyuw7zsPy3T5KPDKYpN8
-        wB/Yp42kmEqRur+bfCTNoaRtiKT1gguMX2NimFz3qLYreym9aFs2UXARN+gJeyaXsmS5LpBKrzqV+
-        X19X34RGt8OBT54oYeqiDnFxtPELuc88iMoBShYKWPk6JuitQahUMZbJdgyWrPFrEtjWEjE44ZNeR
-        E8+bXSnFld7gfazK0o+5JexvzG8itIlLIvZD3OS4V95G4CW7SIU6HZklJLtovgTuSevKZaac5Z6vG
-        FC8o3nUGjGpedR6ZjI5oBkhWwzKFg10Fdgg6WQOmpmR50+ZsmcGQBOEoy4IevED76M6C0PAycAlTS
-        B8v3lqwA==;
+        bh=20rwfXvSfzlbRk0nD62/C/o7cAHVfP0W1Yrf/Sje8f4=; b=fdm5Mme2DynvdXn/IGkCvGjrnc
+        gKT1u5E6rPgDGIvhdVYFQby7eaiR9i6qxzLc5kmuW95Myzn7n+9oxvhcm/Cau/8ne2n/n7uwEZat5
+        sTbTJ6lv+rhTvlknegAcaxFl7uiuLS+mi3gZJrT3XsWIH6AkVfX4fyDIGaQoyw/qsnPxDXqhKA5eL
+        Cul4z0PuBLgLzg+0hwxQLqWins457PyfPuxQjVUIOb9wXFcKQ1MzckXdg9YUluj4Xc5lWi9EpA1M6
+        B1yX8TcWzBTIv8pjrt4tWt/9F4Rb/UfGd9o5sk+M/hNH95bsfgetlAI8c71DxXn10LqK5CPjW6dWR
+        bNLoqaIA==;
 Received: from [2001:8b0:10b:5:4ce9:a0c4:1cf4:98d9] (helo=u3832b3a9db3152.ant.amazon.com)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pYOe5-003mLX-IZ; Sat, 04 Mar 2023 09:57:42 +0000
-Message-ID: <c34964056595a5a59d0d53410933a5582ef07d10.camel@infradead.org>
+        id 1pYOvG-003mnN-J7; Sat, 04 Mar 2023 10:15:27 +0000
+Message-ID: <6422cc2395c2f2db126dd4172e82b8d32f254403.camel@infradead.org>
 Subject: Re: IRQ affinity not working on Xen pci-platform device^W^W^W QEMU
  split-irqchip I/O APIC.
 From:   David Woodhouse <dwmw2@infradead.org>
@@ -38,14 +38,15 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         qemu-devel <qemu-devel@nongnu.org>, Peter Xu <peterx@redhat.com>
-Date:   Sat, 04 Mar 2023 09:57:40 +0000
-In-Reply-To: <87356ljr6m.ffs@tglx>
+Date:   Sat, 04 Mar 2023 10:15:25 +0000
+In-Reply-To: <c34964056595a5a59d0d53410933a5582ef07d10.camel@infradead.org>
 References: <07866eaf6354dd43d87cffb6eebf101716845b66.camel@infradead.org>
          <87fsalkcck.ffs@tglx>
          <1060e7786498f384634b01c335bf7bf43365e1fe.camel@infradead.org>
          <87356ljr6m.ffs@tglx>
+         <c34964056595a5a59d0d53410933a5582ef07d10.camel@infradead.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-5Pj+37JDg51UR5035j2m"
+        boundary="=-U1/a4vhKzKCY0SFJQ4L2"
 User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
@@ -59,167 +60,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---=-5Pj+37JDg51UR5035j2m
+--=-U1/a4vhKzKCY0SFJQ4L2
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, 2023-03-04 at 01:28 +0100, Thomas Gleixner wrote:
-> David!
->=20
-> On Fri, Mar 03 2023 at 16:54, David Woodhouse wrote:
-> > On Fri, 2023-03-03 at 17:51 +0100, Thomas Gleixner wrote:
-> > > >=20
-> > > > [=C2=A0=C2=A0=C2=A0 0.577173] ACPI: \_SB_.LNKC: Enabled at IRQ 11
-> > > > [=C2=A0=C2=A0=C2=A0 0.578149] The affinity mask was 0-3
-> > > > [=C2=A0=C2=A0=C2=A0 0.579081] The affinity mask is 0-3 and the hand=
-ler is on 2
-> > > > [=C2=A0=C2=A0=C2=A0 0.580288] The affinity mask is 0 and the handle=
-r is on 2
-> > >=20
-> > > What happens is that once the interrupt is requested, the affinity
-> > > setting is deferred to the first interrupt. See the marvelous dance i=
-n
-> > > arch/x86/kernel/apic/msi.c::msi_set_affinity().
-> > >=20
-> > > If you do the setting before request_irq() then the startup will assi=
-gn
-> > > it to the target mask right away.
-> > >=20
-> > > Btw, you are using irq_get_affinity_mask(), which gives you the desir=
-ed
-> > > target mask. irq_get_effective_affinity_mask() gives you the real one=
-.
-> > >=20
-> > > Can you verify that the thing moves over after the first interrupt or=
- is
-> > > that too late already?
-> >=20
-> > It doesn't seem to move. The hack to just return IRQ_NONE if invoked on
-> > CPU !=3D 0 was intended to do just that. It's a level-triggered interru=
-pt
-> > so when the handler does nothing on the "wrong" CPU, it ought to get
-> > invoked again on the *correct* CPU and actually=C2=A0work that time.
->=20
-> So much for the theory. This is virt after all so it does not
-> necessarily behave like real hardware.
+On Sat, 2023-03-04 at 09:57 +0000, David Woodhouse wrote:
+> I wonder if the EOI is going missing because it's coming
+> from the wrong CPU? Note no 'EOI broadcast' after the last line in the
+> log I showed above; it isn't just that I trimmed it there.
 
-I think you're right. This looks like a QEMU bug with the "split
-irqchip" I/OAPIC.
+I'm running on a host kernel without commit fceb3a36c29a so that's
+probably it.
 
-For reasons I'm unclear about, and which lack a comment in the code,
-QEMU still injects I/OAPIC events into the kernel with kvm_set_irq().
-(I think it's do to with caching, because QEMU doesn't cache interrupt-
-remapping translations anywhere *except* in the KVM IRQ routing table,
-so if it just synthesised an MSI message every time it'd have to
-retranslate it every time?)
+https://git.kernel.org/torvalds/c/fceb3a36c29a
 
-Tracing the behaviour here shows:
-
- =E2=80=A2 First interrupt happens on CPU2.
- =E2=80=A2 Linux updates the I/OAPIC RTE to point to CPU0, but QEMU doesn't
-   update the KVM IRQ routing table yet.
- * QEMU retriggers the (still-high, level triggered) IRQ.
- =E2=80=A2 QEMU calls kvm_set_irq(11), delivering it to CPU2 again.
- =E2=80=A2 QEMU *finally* calls ioapic_update_kvm_routes().
- =E2=80=A2 Linux sees the interrupt on CPU2 again.
-
-  $ qemu-system-x86_64 -display none -serial mon:stdio \
-     -accel kvm,xen-version=3D0x4000a,kernel-irqchip=3Dsplit \
-     -kernel ~/git/linux/arch/x86/boot//bzImage=C2=A0\
-     -append "console=3DttyS0,115200 xen_no_vector_callback" \
-     -smp 4 --trace ioapic\* --trace xenstore\*
-
-
-...
-
-xenstore_read tx 0 path control/platform-feature-xs_reset_watches
-ioapic_set_irq vector: 11 level: 1
-ioapic_set_remote_irr set remote irr for pin 11
-ioapic_service: trigger KVM IRQ 11
-[    0.523627] The affinity mask was 0-3 and the handler is on 2
-ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x27 size 0x4 val 0x26
-ioapic_update_kvm_routes: update KVM route for IRQ 11: fee02000 8021
-ioapic_mem_write ioapic mem write addr 0x10 regsel: 0x26 size 0x4 val 0x180=
-21
-xenstore_reset_watches=20
-ioapic_set_irq vector: 11 level: 1
-ioapic_mem_read ioapic mem read addr 0x10 regsel: 0x26 size 0x4 retval 0x1c=
-021
-[    0.524569] ioapic_ack_level IRQ 11 moveit =3D 1
-ioapic_eoi_broadcast EOI broadcast for vector 33
-ioapic_clear_remote_irr clear remote irr for pin 11 vector 33
-ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x26 size 0x4 val 0x26
-ioapic_mem_read ioapic mem read addr 0x10 regsel: 0x26 size 0x4 retval 0x18=
-021
-[    0.525235] ioapic_finish_move IRQ 11 calls irq_move_masked_irq()
-[    0.526147] irq_do_set_affinity for IRQ 11, 0
-[    0.526732] ioapic_set_affinity for IRQ 11, 0
-[    0.527330] ioapic_setup_msg_from_msi for IRQ11 target 0
-ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x26 size 0x4 val 0x27
-ioapic_mem_write ioapic mem write addr 0x10 regsel: 0x27 size 0x4 val 0x0
-ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x27 size 0x4 val 0x26
-ioapic_mem_write ioapic mem write addr 0x10 regsel: 0x26 size 0x4 val 0x180=
-21
-[    0.527623] ioapic_set_affinity returns 0
-[    0.527623] ioapic_finish_move IRQ 11 calls unmask_ioapic_irq()
-ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x26 size 0x4 val 0x26
-ioapic_mem_write ioapic mem write addr 0x10 regsel: 0x26 size 0x4 val 0x802=
-1
-ioapic_set_remote_irr set remote irr for pin 11
-ioapic_service: trigger KVM IRQ 11
-ioapic_update_kvm_routes: update KVM route for IRQ 11: fee00000 8021
-[    0.529571] The affinity mask was 0 and the handler is on 2
-[    xenstore_watch path memory/target token FFFFFFFF92847D40
-xenstore_watch_event path memory/target token FFFFFFFF92847D40
-ioapic_set_irq vector: 11 level: 1
-0.530486] ioapic_ack_level IRQ 11 moveit =3D 0
-
-
-This is with Linux doing basically nothing when the handler is invoked
-on the 'wrong' CPU, and just waiting for it to be right.
-
-Commenting out the kvm_set_irq() calls in ioapic_service() and letting
-QEMU synthesise an MSI every time works. Better still, so does this,
-making it update the routing table *before* retriggering the IRQ when
-the guest updates the RTE:
-
---- a/hw/intc/ioapic.c
-+++ b/hw/intc/ioapic.c
-@@ -405,6 +409,7 @@ ioapic_mem_write(void *opaque, hwaddr addr,
-uint64_t val,
-                 s->ioredtbl[index] |=3D ro_bits;
-                 s->irq_eoi[index] =3D 0;
-                 ioapic_fix_edge_remote_irr(&s->ioredtbl[index]);
-+                ioapic_update_kvm_routes(s);
-                 ioapic_service(s);
-             }
-         }
-@@ -418,7 +423,6 @@ ioapic_mem_write(void *opaque, hwaddr addr,
-uint64_t val,
-         break;
-     }
-=20
--    ioapic_update_kvm_routes(s);
- }
-=20
- static const MemoryRegionOps ioapic_io_ops =3D {
-
-
-
-Now, I don't quite see why we don't get a *third* interrupt, since
-Linux did nothing to clear the level of IRQ 11 and the last trace I see
-from QEMU's ioapic_set_irq confirms it's still set. But I've exceeded
-my screen time for the day, so I'll have to frown at that part some
-more later. I wonder if the EOI is going missing because it's coming
-from the wrong CPU? Note no 'EOI broadcast' after the last line in the
-log I showed above; it isn't just that I trimmed it there.
-
-I don't think we need to do anything in Linux; if the handler gets
-invoked on the wrong CPU it'll basically find no events pending for
-that CPU and return having done nothing... and *hopefully* should be
-re-invoked on the correct CPU shortly thereafter.
-
---=-5Pj+37JDg51UR5035j2m
+--=-U1/a4vhKzKCY0SFJQ4L2
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -311,24 +166,24 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzA0MDk1NzQwWjAvBgkqhkiG9w0BCQQxIgQgrFR4lPm1
-WDljiYico/w9DdB2c2h8YkQJLvf05v7Z9ZIwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzA0MTAxNTI1WjAvBgkqhkiG9w0BCQQxIgQg7wfgkQqY
+Z6Fvb0PEDhmpnLTf3gvOnS0wVzqNGiaVpVUwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCKjldEN2e1QiSry0BI/VClUsT9X5i9xsQl
-o5kzxXgu2IcI3OzrESs3dmEUgan8PvGOpS+0L8yUygr+0V3VZTHZnnAZERRWE6iD/xpASyp3o9Da
-KPdkfMcgtls6X8k5xI7YELkBQZGcp4SO2QTGXIH0wINAvU64i/k6LpYVKcs5+KTBiPelpCGfGBjx
-QqotOvWPQJauEwDkBR2MoQq1PwvacnSc6BYw5gq0BjiQKgkP73rihMBfAnf6ASr8i1A3IYRHFIg4
-lCvFYJnI8MImFRjfSYQMdfV3j23Em5OWpBX5/iyJLpdpnU+H1d5n9NniF7g/icK1+gSpMm30J2Uk
-sg2yzg2KXz8IyMtVcgOJFqSUZNjPAY/3p5cQ1q3Wlv8+jMgk8xGGrtGjNdAmxkGQZtvB3Kro+jWU
-9vPi6Z/LY3gZ+E+z5rjOaUhMYPfaIuT5ZGdeBeESOrDQhqXqB2XTdsEAIFlyg9P4XpBC0XkYzNMf
-0N5T2tc5VllfvYq+fIyPAoN33TlhovAIaKqe4j9QU0UBnarSeDKYTLyDhqK9k8ZlA45wR0kvMpJA
-PkixXqrDKh54cs8c9NVlHhg2D0lrm7mOw4qQigOXQqGnQ2HefDzFaAXliDYImXK90rtoGCCf9Tt8
-F9OdnbfSKrM68mjIuPwQiI3EqraMswlE8pEs8kKLlwAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgALkZob741/cC//CXzXe3pjA1gZSjLjoKLd
+MuECJH5gZqBr14PIiDEO6mqxtL4uSpxruqxua6BVv/PhlaGGdBdKa1K4dH/avSufK9K85pz2e7CF
+JtdOvf6vx8YOu18aG/wr8+GA5R2eeymmarDOZgXZXPXxiOaaEpg6x1eJZq+a6CH8lTBjOa5t5wJg
+SbVM2EABVKeuWfJc0OKmW71qMXAgGYbDUcyaLBaCXpKRs5JzErxuQ5MPO31o4SsvCEFJZ+DN1QNZ
+pTXUvACVhKia38u34puN7LRGVcppzYN9n4XeMsRoelh/mmqMgAbK6vRjdLLp4jx4eEV3Kx6QFxpG
+rGGktvWmbTfk+tsN0zBQwZvO9trQ2UxNG+XmTvqPwaP+W4m8UHV8xCUPZ7jd4iJpUfTDHxPL6Q3T
+dWG5SOLv6BZmopPd3buf+S3vqDEBvvQW9U5jBLHeeIKbd8ENlIaEvzlevt4PUYdsZszRMTRT82Ev
+mX5TPndlh+R8VchSy+9pIAlf0uDyxX8n6hPMhM0Ez29QVMu1RPjKtLos21Ri4hqSR3xms/gjMnnb
+wrUCXXHgOOSrWlMVucFu3YRbkWlBEcrCgXRsydJIUA6pD3gw/z/j2+Ixj2xmU6zVLeJaJjNmpySy
+amEpnDOrcy314QctJE5+z9JaXm2kQpbRdt8va79cQAAAAAAAAA==
 
 
---=-5Pj+37JDg51UR5035j2m--
+--=-U1/a4vhKzKCY0SFJQ4L2--
