@@ -2,48 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2A16AAB86
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 18:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A226AAB91
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 18:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjCDRPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 12:15:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
+        id S229646AbjCDRUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 12:20:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCDRPs (ORCPT
+        with ESMTP id S229447AbjCDRUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 12:15:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6B1113E7;
-        Sat,  4 Mar 2023 09:15:48 -0800 (PST)
+        Sat, 4 Mar 2023 12:20:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12771E073;
+        Sat,  4 Mar 2023 09:19:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4C0B60018;
-        Sat,  4 Mar 2023 17:15:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF55DC433D2;
-        Sat,  4 Mar 2023 17:15:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DA59B808CA;
+        Sat,  4 Mar 2023 17:19:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A2BC433EF;
+        Sat,  4 Mar 2023 17:19:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677950147;
-        bh=j/TApz3U33B9vesBBlPnTG3qx/jqs/qy1gdag8qdsuQ=;
+        s=k20201202; t=1677950395;
+        bh=SK7Kwhhi/uD/G7RidXbseM1UAmXNuUfv51NQ/U3YKJg=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=POAMaCrCRJ3Y+iUq60qguxB6v93fFgmMxOoUxApLYS0uhj2y7BkOazQHQPUOfhV76
-         kmJqaU749ERbghlMNmAnxPm1bd3O2K0ICZ0Zgq4uKDFhDrAon9WouZ+XBds1SoU/kw
-         3DwOmrjzNBbGbVvehzC8WMRqfebA2G/NPaugxIZNrKrGYvupEbyGkwzA1inDkCZO0m
-         0PMRCfLcPcxgnDVqNYUtku+K7iCMLkEOa8Fe2LeXFk40vYZisW3oDD+83Ef9XT+0mv
-         uVMimzsfJu15FOnIPCX32SPm28ZEfzf1Pc3NVhHd/7xHRWhS2+K8DIRI0PSk42794T
-         bBe7WC1IR+RWA==
-Date:   Sat, 4 Mar 2023 17:15:42 +0000
+        b=rh0wM4+Ml+ReF6Qhs2k32vLNSULLA70mmDWbx2mUMySoqjawNnGB6mX7xaL7UJNso
+         mqkwU+LxrRIp5w8IfkL4768a6u+APrr1D6l/5qxoq6LozxY5VprzAZhMFT/VL8FhpA
+         PAYFZEByZkw6niCsNA3xbg1dVe/7nZM4dfQS2J+jW9DnOZVYs9HZhu7yUWTSmOJEVM
+         QNS/vTiYNF2OZ1967KViRQ8JdNJEu0vV3ezLPVQl9D9u3oMW+8J4nn0vmaHbr4FxtZ
+         UqDGrBPuOhxpVkCmqo+a0TTgxJdSp3ci3LaXNYEJI/iC/P7F4WMnuwmJgxj7CFLknd
+         Wtl6i1BVuZenw==
+Date:   Sat, 4 Mar 2023 17:19:50 +0000
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: addac: ad74413r: fix Current Input, Loop Powered
- Mode
-Message-ID: <20230304171542.642d88e3@jic23-huawei>
-In-Reply-To: <20230301115511.849418-1-linux@rasmusvillemoes.dk>
-References: <20230301115511.849418-1-linux@rasmusvillemoes.dk>
+To:     Lars-Peter Clausen <lars@metafoo.de>
+Cc:     Mike Looijmans <mike.looijmans@topic.nl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] iio: adc: Add TI ADS1100 and ADS1000
+Message-ID: <20230304171950.5a411037@jic23-huawei>
+In-Reply-To: <b635b91e-1dcc-71ba-95d1-1f87a20dbaf2@metafoo.de>
+References: <20230228063151.17598-1-mike.looijmans@topic.nl>
+        <20230228063151.17598-2-mike.looijmans@topic.nl>
+        <Y/9vez/fzLD5dRVF@smile.fi.intel.com>
+        <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.0685d97e-4a28-499e-a9e3-3bafec126832@emailsignatures365.codetwo.com>
+        <a2ba706f-888b-0a72-03a5-cbf761dfaf19@topic.nl>
+        <87bc192e-45ae-9480-5e84-8fe0adfc12e7@metafoo.de>
+        <b635b91e-1dcc-71ba-95d1-1f87a20dbaf2@metafoo.de>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,102 +69,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  1 Mar 2023 12:55:11 +0100
-Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+On Thu, 2 Mar 2023 05:20:38 -0800
+Lars-Peter Clausen <lars@metafoo.de> wrote:
 
-> Currently, the driver handles CH_FUNC_CURRENT_INPUT_LOOP_POWER and
-> CH_FUNC_CURRENT_INPUT_EXT_POWER completely identically. But that's not
-> correct. In order for CH_FUNC_CURRENT_INPUT_LOOP_POWER to work, two
-> changes must be made:
+> On 3/2/23 05:16, Lars-Peter Clausen wrote:
+> > On 3/1/23 23:49, Mike Looijmans wrote: =20
+> >>
+> >> =20
+> >>> ...
+> >>> ...
+> >>> =20
+> >>>> +static int ads1100_runtime_suspend(struct device *dev)
+> >>>> +{
+> >>>> +=C2=A0=C2=A0=C2=A0 struct iio_dev *indio_dev =3D=20
+> >>>> i2c_get_clientdata(to_i2c_client(dev));
+> >>>> +=C2=A0=C2=A0=C2=A0 struct ads1100_data *data =3D iio_priv(indio_dev=
+);
+> >>>> +
+> >>>> +=C2=A0=C2=A0=C2=A0 ads1100_set_config_bits(data, ADS1100_CFG_SC,=20
+> >>>> ADS1100_SINGLESHOT);
+> >>>> +=C2=A0=C2=A0=C2=A0 regulator_disable(data->reg_vdd); =20
+> >>> Wrong devm / non-devm ordering. =20
+> >>
+> >> Don't understand your remark, can you explain further please?
+> >>
+> >> devm / non-devm ordering would be related to the "probe" function. As=
+=20
+> >> far as I can tell, I'm not allocating resources after the devm calls.=
+=20
+> >> And the "remove" is empty. =20
+> >
+> > Strictly speaking we need to unregister the IIO device before=20
+> > disabling the regulator, otherwise there is a small window where the=20
+> > IIO device still exists, but doesn't work anymore. This is a very=20
+> > theoretical scenario though.
+> >
+> > You are lucky :) There is a new function=20
+> > `devm_regulator_get_enable()`[1], which will manage the=20
+> > regulator_disable() for you. Using that will also reduce the=20
+> > boilerplate in `probe()` a bit
+> >
+> > - Lars
+> >
+> > [1] https://lwn.net/Articles/904383/
+> > =20
+> Sorry, just saw that Andy's comment was on the suspend() function, not=20
+> remove(). In that case there is of course no need for any devm things.=20
+> But still a good idea to use `devm_regulator_get_enable()` in probe for=20
+> the boiler plate.
 >=20
-> (1) expose access to the DAC_CODE_x register so that the intended
-> output current can be set, i.e. expose the channel as both current
-> output and current input, and
->=20
-> (2) per the data sheet
->=20
->   When selecting the current input loop powered function, tie the
->   VIOUTN_x pin to ground via the on-chip 200 k=CE=A9 resistor by enabling
->   the CH_200K_TO_GND bit in the ADC_CONFIGx registers.
->=20
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> ---
-> There's of course also CH_FUNC_CURRENT_INPUT_LOOP_POWER_HART which is
-> likely to require a similar fix, but as I don't have a ad74413r I
-> can't test that.=20
-
-Looks correct to me based on the "current input, loop powered" section
-of the datasheet, but want to leave a little more time for someone
-familiar with the part to comment.
-
-Given me a poke if I seem to have lost this in 2 weeks.  (That happens
-less now I track with patchwork, but you never know ;)
-
-Thanks,
+You can't because (annoyingly) devem_regulator_get_enable() doesn't
+provide you access to the struct regulator that you need to be able
+to turn it of for power management.
+That case only works for the leave the power on all the time cases.
 
 Jonathan
-
->=20
->  drivers/iio/addac/ad74413r.c | 21 +++++++++++++++++++--
->  1 file changed, 19 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/iio/addac/ad74413r.c b/drivers/iio/addac/ad74413r.c
-> index f32c8c2fb26d..f5d072092709 100644
-> --- a/drivers/iio/addac/ad74413r.c
-> +++ b/drivers/iio/addac/ad74413r.c
-> @@ -99,6 +99,7 @@ struct ad74413r_state {
->  #define AD74413R_REG_ADC_CONFIG_X(x)		(0x05 + (x))
->  #define AD74413R_ADC_CONFIG_RANGE_MASK		GENMASK(7, 5)
->  #define AD74413R_ADC_CONFIG_REJECTION_MASK	GENMASK(4, 3)
-> +#define AD74413R_ADC_CONFIG_CH_200K_TO_GND	BIT(2)
->  #define AD74413R_ADC_RANGE_10V			0b000
->  #define AD74413R_ADC_RANGE_2P5V_EXT_POW		0b001
->  #define AD74413R_ADC_RANGE_2P5V_INT_POW		0b010
-> @@ -424,9 +425,20 @@ static int ad74413r_set_channel_dac_code(struct ad74=
-413r_state *st,
->  static int ad74413r_set_channel_function(struct ad74413r_state *st,
->  					 unsigned int channel, u8 func)
->  {
-> -	return regmap_update_bits(st->regmap,
-> +	int ret;
-> +
-> +	ret =3D regmap_update_bits(st->regmap,
->  				  AD74413R_REG_CH_FUNC_SETUP_X(channel),
->  				  AD74413R_CH_FUNC_SETUP_MASK, func);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (func =3D=3D CH_FUNC_CURRENT_INPUT_LOOP_POWER)
-> +		ret =3D regmap_set_bits(st->regmap,
-> +				      AD74413R_REG_ADC_CONFIG_X(channel),
-> +				      AD74413R_ADC_CONFIG_CH_200K_TO_GND);
-> +
-> +	return ret;
->  }
-> =20
->  static int ad74413r_set_adc_conv_seq(struct ad74413r_state *st,
-> @@ -1112,6 +1124,11 @@ static struct iio_chan_spec ad74413r_current_input=
-_channels[] =3D {
->  	AD74413R_ADC_CURRENT_CHANNEL,
->  };
-> =20
-> +static struct iio_chan_spec ad74413r_current_input_loop_channels[] =3D {
-> +	AD74413R_DAC_CHANNEL(IIO_CURRENT, BIT(IIO_CHAN_INFO_SCALE)),
-> +	AD74413R_ADC_CURRENT_CHANNEL,
-> +};
-> +
->  static struct iio_chan_spec ad74413r_resistance_input_channels[] =3D {
->  	AD74413R_ADC_CHANNEL(IIO_RESISTANCE, BIT(IIO_CHAN_INFO_PROCESSED)),
->  };
-> @@ -1135,7 +1152,7 @@ static const struct ad74413r_channels ad74413r_chan=
-nels_map[] =3D {
->  	[CH_FUNC_CURRENT_OUTPUT] =3D AD74413R_CHANNELS(current_output),
->  	[CH_FUNC_VOLTAGE_INPUT] =3D AD74413R_CHANNELS(voltage_input),
->  	[CH_FUNC_CURRENT_INPUT_EXT_POWER] =3D AD74413R_CHANNELS(current_input),
-> -	[CH_FUNC_CURRENT_INPUT_LOOP_POWER] =3D AD74413R_CHANNELS(current_input),
-> +	[CH_FUNC_CURRENT_INPUT_LOOP_POWER] =3D AD74413R_CHANNELS(current_input_=
-loop),
->  	[CH_FUNC_RESISTANCE_INPUT] =3D AD74413R_CHANNELS(resistance_input),
->  	[CH_FUNC_DIGITAL_INPUT_LOGIC] =3D AD74413R_CHANNELS(digital_input),
->  	[CH_FUNC_DIGITAL_INPUT_LOOP_POWER] =3D AD74413R_CHANNELS(digital_input),
-
