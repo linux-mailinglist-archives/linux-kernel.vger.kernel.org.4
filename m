@@ -2,81 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B2B6AAC62
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 21:19:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290FC6AAC65
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 21:21:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCDUTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 15:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
+        id S229703AbjCDUVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 15:21:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjCDUTK (ORCPT
+        with ESMTP id S229455AbjCDUVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 15:19:10 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119F990;
-        Sat,  4 Mar 2023 12:19:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=m12OYazIp/kPA8ILuZmCQtNsNjkVovAMQd9c8AOvVGE=; b=nTRr3QDJ4g4SArWl29WAZzR0/w
-        GGS1f4cbEphwNWxWEMKddY2phQGDmhhtYPVrFIfOCsg1ZaJu+ErW7uTQ1oy0eeYX3HBh8ubZCdC4e
-        ZkLp6tKgn+ZExqvM1dvHtgGpVlDzx4xvDQgRbz5LWYD3lJWicu13DJn1l4Z174aWQeHdHms6b5QpA
-        hxWev6Cl/xxVUjjW3GPkLAnR2WbzFwTNROrgp6vOD8N5EGLZmCy38CHbq4hFzIUHohVWxvFcCJVkW
-        LXw2SMc/qJcUbDIHNvxVQM8kr8G4jBDzNT2nLvSOzxIyEaQNcEdI8/OGbPGkAvclb6oO7O2w1Irdx
-        wM9yHWbw==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pYYLI-00DyIh-1D;
-        Sat, 04 Mar 2023 20:18:56 +0000
-Date:   Sat, 4 Mar 2023 20:18:56 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Mateusz Guzik <mjguzik@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if
- possible
-Message-ID: <ZAOnsOl+cXk9mTj5@ZenIV>
-References: <CAHk-=wi11ZbOBdMR5hQDz0x0NNZ9gM-4SxXxK-7R3_yh7e10rQ@mail.gmail.com>
- <ZAD21ZEiB2V9Ttto@ZenIV>
- <6400fedb.170a0220.ece29.04b8@mx.google.com>
- <ZAEC3LN6oUe6BKSN@ZenIV>
- <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
- <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
- <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
- <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com>
- <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
- <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com>
+        Sat, 4 Mar 2023 15:21:40 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883991ACFB;
+        Sat,  4 Mar 2023 12:21:39 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id j11so3940278edq.4;
+        Sat, 04 Mar 2023 12:21:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677961298;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=INgV11plml1IBlee7DL8xge7m1ARbHsCq54faWydJTc=;
+        b=nUU5S+Po/pMhW9DpAzhK52bV2vJxlOw3ZQCPHOyTjXDfbo5Q3WZKBK4Uta0DeAuRpU
+         gcgQCwyiNb+avyHJwZaMSy+8HNTmnYGu/Lo9c2PuUcZrbDcQhRbXEzp8avs4hsbpR3+Y
+         kVn+C5lxbhmjUBvcNyela/KvSQX7yVXtMykr69g43Rn2J1zanTeo8+Lnk3r8h0Pm88GK
+         knrZ/L8WoC8kU09DK9TA7kJ7+uKCdUpMz4zTi6U/aSQN6iN0UjBCTTBt/Ia1CUS1r+S1
+         AyL9LQjcxNwT4/HXqMV8CDXRXH8MA/kiI1o7sVjReEKyD0I1aI/H0kTV/Kvu7BI4TvUK
+         aV5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677961298;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=INgV11plml1IBlee7DL8xge7m1ARbHsCq54faWydJTc=;
+        b=3v7ihDCDfxz758H9x6W+5mQYi4G2c4abndxCxrOc8eQgNiigntkLaw36OcqJqliGXM
+         bg1oIMjyvKJylhbk8Hvohw35UtMPzNK1ErBIoOL1L6oLDBIX8IBP77Tc0DkZKZlnWmV/
+         ePvg8RcaU084ymPi2BYSDhNAZJ/iAep/f89euVHLDo4RwudQIeDnq/GtpPr5RSM/PI/X
+         isP0T2fAx650idmilvwQI/Zzbb18GbwzLDANz8sZO+pZ2B6vgg8BE+5WNTHcW7yGztcP
+         tBMoQ3bVjnlAw4j97Cpa/h1bs1sF+ggIei3UxA6Oom4YF6OCNPjH750C4VCKXsjYfR33
+         n1mw==
+X-Gm-Message-State: AO0yUKUhfX8HStD7VK9qK3PGsp5z3EDlMg8793zsNlMz6CHTBLolz5Gn
+        Xj8haZjByBzH2ZGCs1+6JIxH6aRHZQ0=
+X-Google-Smtp-Source: AK7set+IA5I3dXRFwEY3Bo42AQxrAs3VEvUeUKBFvHfWTz4/rKjELqY0bjkOQNNeUi0gB4yAaiyAYw==
+X-Received: by 2002:a17:906:f84c:b0:8b1:3a8d:6fc5 with SMTP id ks12-20020a170906f84c00b008b13a8d6fc5mr5126150ejb.25.1677961297946;
+        Sat, 04 Mar 2023 12:21:37 -0800 (PST)
+Received: from carbian ([2a02:8109:aa3f:ead8::dc02])
+        by smtp.gmail.com with ESMTPSA id t19-20020a170906065300b008be996c1630sm2396208ejb.39.2023.03.04.12.21.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Mar 2023 12:21:37 -0800 (PST)
+Date:   Sat, 4 Mar 2023 21:21:35 +0100
+From:   Mehdi Djait <mehdi.djait.k@gmail.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     lars@metafoo.de, andriy.shevchenko@linux.intel.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] iio: Improve the kernel-doc of iio_trigger_poll
+Message-ID: <ZAOoT9IkzNT3BpZW@carbian>
+References: <cover.1677761379.git.mehdi.djait.k@gmail.com>
+ <bd84fc17e9d22eab998bf48720297f9a77689f45.1677761379.git.mehdi.djait.k@gmail.com>
+ <20230304164601.3888bbd4@jic23-huawei>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230304164601.3888bbd4@jic23-huawei>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 09:39:11PM +0100, Mateusz Guzik wrote:
-
-> the allocation routine does not have any information about the size
-> available at compilation time, so has to resort to a memset call at
-> runtime. Instead, should this be:
+On Sat, Mar 04, 2023 at 04:46:01PM +0000, Jonathan Cameron wrote:
+> On Thu,  2 Mar 2023 14:04:35 +0100
+> Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
 > 
-> f = kmem_cache_alloc(...);
-> memset(f, 0, sizeof(*f));
+> > Move the kernel-doc of the function to industrialio-trigger.c
+> > Add a note on the context where the function is expected to be called.
+> > 
+> > Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>
+> > ---
+> > v2:
+> > - Changed the expected context of from interrupt to hard IRQ context
+> > 
+> >  drivers/iio/industrialio-trigger.c | 7 +++++++
+> >  include/linux/iio/trigger.h        | 6 ------
+> >  2 files changed, 7 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/iio/industrialio-trigger.c b/drivers/iio/industrialio-trigger.c
+> > index a2f3cc2f65ef..bb0a44df8740 100644
+> > --- a/drivers/iio/industrialio-trigger.c
+> > +++ b/drivers/iio/industrialio-trigger.c
+> > @@ -192,6 +192,13 @@ static void iio_trigger_notify_done_atomic(struct iio_trigger *trig)
+> >  		schedule_work(&trig->reenable_work);
+> >  }
+> >  
+> > +/**
+> > + * iio_trigger_poll() - Call the IRQ trigger handler of the consumers
+> > + * @trig: trigger which occurred
+> > + *
+> > + * This function needs to be called from a hard IRQ context.
+> I tweaked this to drop the line below and to say
+> This function should only be called from a hard IRQ context.
 > 
-> ... the compiler could in principle inititalize stuff as indicated by
-> code and emit zerofill for the rest. Interestingly, last I checked
-> neither clang nor gcc knew how to do it, they instead resort to a full
-> sized memset anyway, which is quite a bummer.
+> Fun subtlety of English that reminds me of the sign on the London underground
+> escalators that said "Guide dogs must be carried" thus apparently limiting
+> their use to people who could find a guide dog to carry.
+> 
+> Here we don't want to oblige all code to call the function :)
 
-For struct file I wouldn't expect a win from that, TBH.
+I was even going for "must be called from hard IRQ context" first :) but
+then decided that I need more accepted patches before instructing others on 
+what must be done in the kernel :)
+
+--
+Kind Regards
+Mehdi Djait
