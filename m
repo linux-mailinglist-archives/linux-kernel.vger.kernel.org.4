@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAE66AAB1D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 17:24:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0430C6AAB20
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 17:27:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjCDQYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 11:24:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S229586AbjCDQ1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 11:27:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229615AbjCDQYL (ORCPT
+        with ESMTP id S229437AbjCDQ1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 11:24:11 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB9D11174;
-        Sat,  4 Mar 2023 08:24:10 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id 4so3788360ilz.6;
-        Sat, 04 Mar 2023 08:24:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677947050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UsIe5Z5hRwOSr549xE297j36VOsUJE5/tQaq3CEC9RU=;
-        b=ICgnDvsyDrZ5zLAv8lwz6P7ATWpP7LpyBOVZiUH0JFWgBe2ONH3IVfIjCmE+XtrnS5
-         zsGNLqO3x4OmZ8n9aUaLGnWrpNBzz7XqD7xQWG1iw0/oJu98GpXrwtWotxifXoqxI+dN
-         9tL0xTopczCCkE0lVdoVp8qIbQKu4GLFb6j9GysYwC6pcDhjrg40bIU5dYwl+O0km4W1
-         TcrzpkRL7eLCaj5CYA+uF6WAy9L7lKik1P53CX7L5GbUpoH/e95mC2ZUokFE9uxAvsGY
-         YdwNJQxtd80rXasgya5+HiWHkxIgLeZVnimC+rlyH5HwbTLlVk793WBazdG0m0b0g2eD
-         vBGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677947050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UsIe5Z5hRwOSr549xE297j36VOsUJE5/tQaq3CEC9RU=;
-        b=Ph9Cu1RuvBWK3wHVGWJ4sHo1YKvTeR3gXr41zcnI4zqT3R0+TqWGbEdulczekIGu0V
-         AAZQ42G5+2kGDDLNqtexbPvPiRMcNiSUHORPLbbSjIScudVMl1ggLONW1RJNZxFJc3X7
-         dOUj7JUhS6vSTsMyAWHzcBlN0JfuVFe7kL0/y+v6FDP+Fwy+aPp6EEkRraZrTOk3avGK
-         e84HGT4lKrB7ViHevQda5cOkh+LpoSn3AYYZlEVtNGU1FkGYzve8+0jj8hpwSuMooPCv
-         TA/QqCgcA8UjWMAx01VQz8guPA8+mEz3CueqGhgIvKAsEbJ4E9S9hab+XS1XhKxpQkEA
-         ZCIw==
-X-Gm-Message-State: AO0yUKU5ewaQlBPJ7TD1SVvhNJn9zZzEciLkyQebJHAJjD6iBc+7hsTF
-        XV7eUdJmG63dtaWZ/XDvCPM=
-X-Google-Smtp-Source: AK7set9lKjx9VdzxEhocK/D2i2awazq3VEo2G0g6puAJ73I89QlJDOpLYfl3ztBKX6Lp22pbSUuWjw==
-X-Received: by 2002:a05:6e02:2164:b0:318:aac9:3e55 with SMTP id s4-20020a056e02216400b00318aac93e55mr4577469ilv.17.1677947050051;
-        Sat, 04 Mar 2023 08:24:10 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id o22-20020a02c6b6000000b003b4dc9ca57asm1735338jan.13.2023.03.04.08.24.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 08:24:09 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <636f01fb-a795-a43a-d57d-88e8228c4bc1@roeck-us.net>
-Date:   Sat, 4 Mar 2023 08:24:08 -0800
+        Sat, 4 Mar 2023 11:27:24 -0500
+Received: from cmx-torrgo002.bell.net (mta-tor-003.bell.net [209.71.212.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC3316330;
+        Sat,  4 Mar 2023 08:27:21 -0800 (PST)
+X-RG-CM-BuS: 0
+X-RG-CM-SC: 0
+X-RG-CM: Clean
+X-Originating-IP: [174.88.80.104]
+X-RG-Env-Sender: dave.anglin@bell.net
+X-RG-Rigid: 63F52EA4013DC794
+X-CM-Envelope: MS4xfPAwDXrr0lTNBpO76MquL13GSzS2lbIIn9y8GHZeXujBE6Kpo2YbpjALv0sJ4k41hU80QEXK+NfxsR7bAKaURZpKKuY0Dz27Jm6T/uvsHzHF5I6alCxw
+ rovtKbUrNmqDADYUNUV/CjeFpC8N0ZgAP8xMbUoi5OMnwAjnsI33apdrCzLxqcUMm5a0pMbQ8pZTte7fq0+6VUJvyDF0wH1DOS6+qrofBNhAMY3LGOvI8wv7
+ nrYkeWYD5jmI0mzozUXyv0BFbXLKhG9u06Yoig7ST+oERZToprfvLQupYmdSQ5rKoiGXeU8Bp6UamTmBomJplWwMdoQDsQmzSmGVW3oRTfy7REFdk5at8Swq
+ WDfmeNpfdyVm5X01C2gpNf3J9JgL81vyIBbzv9dUJJFuXUlxhjftysAOCRgsnd2L8XZbSkt1VpeZOGygx4kOh0YHqCsYpz3aDePIyAunAiyfn3XRRdpvmkn9
+ Pur3yJpsBaZZcsh0
+X-CM-Analysis: v=2.4 cv=ULS+oATy c=1 sm=1 tr=0 ts=6403715c
+ a=jp24WXWxBM5iMX8AJ3NPbw==:117 a=jp24WXWxBM5iMX8AJ3NPbw==:17
+ a=IkcTkHD0fZMA:10 a=FBHGMhGWAAAA:8 a=yjjJ_ZKkwfyTRQLKwtIA:9 a=QEXdDO2ut3YA:10
+ a=9gvnlMMaQFpL9xblJ6ne:22
+Received: from [192.168.2.49] (174.88.80.104) by cmx-torrgo002.bell.net (5.8.814) (authenticated as dave.anglin@bell.net)
+        id 63F52EA4013DC794; Sat, 4 Mar 2023 11:27:08 -0500
+Message-ID: <970f7627-e1fd-9f81-fbfa-091a03f0ac2a@bell.net>
+Date:   Sat, 4 Mar 2023 11:27:07 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH -next] watchdog: sbsa: Test WDOG_HW_RUNNING bit in suspend
- and resume
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 18/34] parisc: Implement the new page table range API
+From:   John David Anglin <dave.anglin@bell.net>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-19-willy@infradead.org>
+ <9bb5280e-c875-6eee-b28e-2abc03427e5f@bell.net>
+ <1d0efde0-a7a5-11ca-158a-a30825d44516@bell.net>
 Content-Language: en-US
-To:     Wang Wensheng <wangwensheng4@huawei.com>, wim@linux-watchdog.org,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     xuqiang36@huawei.com
-References: <20230301113702.76437-1-wangwensheng4@huawei.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230301113702.76437-1-wangwensheng4@huawei.com>
+In-Reply-To: <1d0efde0-a7a5-11ca-158a-a30825d44516@bell.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,49 +61,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 03:37, Wang Wensheng wrote:
-> If the sbsa_gwdt is enabled by BIOS, the kernel set WDOG_HW_RUNNING bit
-> and keep it alive before anyone else would open it. When system suspend,
-> the sbsa_gwdt would not be disabled because WDOG_ACTIVE is not set. Then
-> the sbsa_gwdt would reach timeout since no one touch it during system
-> suspend.
-> 
-> To solve this, just test WDOG_HW_RUNNING bit in suspend and disable the
-> sbsa_gwdt if the bit is set, then reopen it accordingly in resume
-> process.
-> 
-> Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
+On 2023-03-02 3:40 p.m., John David Anglin wrote:
+> On 2023-03-02 11:43 a.m., John David Anglin wrote:
+>> On 2023-02-28 4:37 p.m., Matthew Wilcox (Oracle) wrote:
+>>> Add set_ptes(), update_mmu_cache_range(), flush_dcache_folio()
+>>> and flush_icache_pages().  Change the PG_arch_1 (aka PG_dcache_dirty) flag
+>>> from being per-page to per-folio.
+>> I have tested this change on rp3440 at mainline commit e492250d5252635b6c97d52eddf2792ec26f1ec1
+>> and c8000 at mainline commit ee3f96b164688dae21e2466a57f2e806b64e8a37.
+> Here's another one:
+>
+> ------------[ cut here ]------------
+> kernel BUG at mm/memory.c:3865!
+> CPU: 1 PID: 6972 Comm: sbuild Not tainted 6.2.0+ #1
+> Hardware name: 9000/800/rp3440
+>
+>      YZrvWESTHLNXBCVMcbcbcbcbOGFRQPDI
+> PSW: 00001000000001101111111100001111 Not tainted
+> r00-03  000000000806ff0f 000000004fab8d40 00000000404584b0 000000004fab8d40
+> r04-07  0000000040c2f4c0 0000000047fe60c0 000000004fab8b98 0000000000000953
+> r08-11  000000004de3de00 0000000000000000 0000000047fe60c0 0000004093ff4660
+> r12-15  0000000000000001 0000000047fe60c0 0000000040000540 000000022f8e9540
+> r16-19  0000000000000000 000000004c694c40 000000004fab8860 00000000000003d0
+> r20-23  0000000007be3a40 0000000000000fff 0000000000000000 000000004109f1a0
+> r24-27  0000000000000000 0000000000000cc0 0000000046de3a68 0000000040c2f4c0
+> r28-31  80e00000000a0435 000000004fab8df0 000000004fab8e20 0000000000000001
+> sr00-03  0000000000207c00 0000000000000000 0000000000000000 0000000002f11c00
+> sr04-07  0000000000000000 0000000000000000 0000000000000000 0000000000000000
+>
+> IASQ: 0000000000000000 0000000000000000 IAOQ: 000000004045908c 0000000040459090
+>  IIR: 03ffe01f    ISR: 0000000000000000  IOR: 0000000000000000
+>  CPU:        1   CR30: 0000004095d64c20 CR31: ffffffffffffffff
+>  ORIG_R28: 000000001c569ad0
+>  IAOQ[0]: do_swap_page+0x108c/0x1168
+>  IAOQ[1]: do_swap_page+0x1090/0x1168
+>  RP(r2): do_swap_page+0x4b0/0x1168
+> Backtrace:
+>  [<000000004045a554>] handle_pte_fault+0x244/0x358
+>  [<000000004045c58c>] __handle_mm_fault+0x104/0x1b8
+>  [<000000004045c81c>] handle_mm_fault+0x1dc/0x318
+>  [<000000004044cb38>] faultin_page+0xa8/0x178
+>  [<000000004044e848>] __get_user_pages+0x328/0x560
+>  [<0000000040450ac4>] get_dump_page+0x9c/0x128
+>  [<0000000040596cb8>] dump_user_range+0xc0/0x2d8
+>  [<000000004058e790>] elf_core_dump+0x5f8/0x708
+>  [<0000000040596384>] do_coredump+0xc2c/0x14a0
+>  [<0000000040259040>] get_signal+0x4a8/0xb60
+>  [<000000004021a570>] do_signal+0x50/0x228
+>  [<000000004021ab38>] do_notify_resume+0x68/0x150
+>  [<0000000040203ee0>] syscall_do_signal+0x54/0xa0
+Removed new page table API change and still see a swap issue on rp3440.  So, these bugs are probably
+unrelated to the API change.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+get_swap_device: Bad swap file entry 600000000014ee20
+get_swap_device: Bad swap file entry 600000000014ee20
+[...]
+get_swap_device: Bad swap file entry 600000000014ee20
+_swap_info_get: Bad swap file entry 600000000014ee20
+BUG: Bad page map in process sh  pte:14ee2418 pmd:01372913
+addr:00000000f8406000 vm_flags:00000075 anon_vma:0000000000000000 mapping:000000007f67e1a8 index:25
+file:libc.so.6 fault:xfs_filemap_fault [xfs] mmap:xfs_file_mmap [xfs] read_folio:xfs_vm_read_folio [xfs]
+CPU: 3 PID: 12702 Comm: sh Not tainted 6.2.0+ #1
+Hardware name: 9000/800/rp3440
+Backtrace:
+  [<000000004020ac50>] show_stack+0x70/0x90
+  [<0000000040b7c148>] dump_stack_lvl+0xd8/0x128
+  [<0000000040b7c1cc>] dump_stack+0x34/0x48
+  [<000000004045020c>] print_bad_pte+0x24c/0x318
+  [<0000000040454f78>] zap_pte_range+0x908/0x990
+  [<0000000040455238>] unmap_page_range+0x1d8/0x490
+  [<00000000404556bc>] unmap_vmas+0x10c/0x1a8
+  [<0000000040465278>] exit_mmap+0x198/0x4a0
+  [<0000000040234a3c>] mmput+0x114/0x2a8
+  [<0000000040243c10>] do_exit+0x4e0/0xc68
+  [<00000000402446b8>] do_group_exit+0x68/0x128
+  [<00000000402583fc>] get_signal+0xae4/0xb60
+  [<0000000040219310>] do_signal+0x50/0x228
+  [<00000000402198d8>] do_notify_resume+0x68/0x150
+  [<00000000402030b4>] intr_check_sig+0x38/0x3c
 
-Prerequisite: "watchdog: core: Always set WDOG_HW_RUNNING when starting watchdog"
+Dave
 
-Guenter
-
-> ---
->   drivers/watchdog/sbsa_gwdt.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
-> index 9791c74aebd4..60875a710e43 100644
-> --- a/drivers/watchdog/sbsa_gwdt.c
-> +++ b/drivers/watchdog/sbsa_gwdt.c
-> @@ -360,7 +360,7 @@ static int __maybe_unused sbsa_gwdt_suspend(struct device *dev)
->   {
->   	struct sbsa_gwdt *gwdt = dev_get_drvdata(dev);
->   
-> -	if (watchdog_active(&gwdt->wdd))
-> +	if (watchdog_hw_running(&gwdt->wdd))
->   		sbsa_gwdt_stop(&gwdt->wdd);
->   
->   	return 0;
-> @@ -371,7 +371,7 @@ static int __maybe_unused sbsa_gwdt_resume(struct device *dev)
->   {
->   	struct sbsa_gwdt *gwdt = dev_get_drvdata(dev);
->   
-> -	if (watchdog_active(&gwdt->wdd))
-> +	if (watchdog_hw_running(&gwdt->wdd))
->   		sbsa_gwdt_start(&gwdt->wdd);
->   
->   	return 0;
+-- 
+John David Anglin  dave.anglin@bell.net
 
