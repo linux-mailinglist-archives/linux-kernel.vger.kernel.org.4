@@ -2,96 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D38A6AA784
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 03:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 030BC6AA78E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 03:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjCDCOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 21:14:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
+        id S229649AbjCDCWc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 3 Mar 2023 21:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCDCOR (ORCPT
+        with ESMTP id S229498AbjCDCWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 21:14:17 -0500
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EFDEC51;
-        Fri,  3 Mar 2023 18:14:16 -0800 (PST)
-Received: by mail-yb1-f176.google.com with SMTP id v101so3635634ybi.2;
-        Fri, 03 Mar 2023 18:14:16 -0800 (PST)
+        Fri, 3 Mar 2023 21:22:30 -0500
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F8C1B31E;
+        Fri,  3 Mar 2023 18:22:29 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5384ff97993so76499817b3.2;
+        Fri, 03 Mar 2023 18:22:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677896056;
+        d=1e100.net; s=20210112; t=1677896548;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=r1yLHbAV+7B2knDNBaMWNhfWUYdQQ918iFTfAlED59Y=;
-        b=rm/FblwMjWJvk2qB1/4/+6yZMWOXhpGx8NFdEkucimQv+GRELvPZTzvvQQAw+VmMVH
-         yKH12HJjgo2czRO72Sv8tYTV8s2l1HjUNUIaNGINJHK1PpOaq3bn+Jr71OFSv+uyaQVc
-         j5e3RLV7fO2/9P49RrsYGPekJmutsG5SxkROzrXrXNbjmsGC/1N6OpuMoLeVeAJr7KKW
-         6d2QTXVP5cpMdHw3psw+qH2KaekWkR5BLD+7RCibXYmSboNjRKM37DNx7+jmkq5iyfqx
-         CiFaoPUb4CFO4ODk/QDn0yEQ7NTaTBL0bJB5vUFIr17RR5H+HTh9y9D1IetiOq2Qje7g
-         qdQQ==
-X-Gm-Message-State: AO0yUKWKu/SHjXwh2u5uFNvKeP6GuyEJngIJ6mdFQ9rVjwJb/vOowmM2
-        XtOy7Ogvjtamn2NvXAbKGc1/e31s5ARQwJMN9mE=
-X-Google-Smtp-Source: AK7set8mLbJrCdsH2Pp8WQMr/QNrtGftdxDpKpf9NyWzbnV7rhli39Jy1HnO3qeASTqxoUlXqD8C+qxgHapy7u7hvag=
-X-Received: by 2002:a5b:384:0:b0:a65:8cd3:fc4 with SMTP id k4-20020a5b0384000000b00a658cd30fc4mr2187171ybp.5.1677896055840;
- Fri, 03 Mar 2023 18:14:15 -0800 (PST)
+        bh=qPHnjCLdtmXvj3xOnAC54fhyuMMx2Sn9DQO+LKzZiBw=;
+        b=1vf0uADeLP2cy9IvxWAxXFCQdTYs1FA0pdQeHs+R8tfJPX56QcTiJg/l8xbXHgmUGT
+         tOSl9m6CIXkjSMB4beE8bq4Z/LTTeZRvvo8AlCP0UC7/OxtxuA7GNX27MqE4t0IRCyWh
+         gVHcRD7Dk57uXWLIN+twg6IqZsqHnG87C3qCpWC35CzdAjQjKm2ikBt0nG0nSY/Whlt/
+         AhxLRBH7/kTjFX2W87WY2HOJ5pEbi683b9h7EhCA538VZfAKdDlzD3+Mxj4x2+EPj3zn
+         xdPBJgc9hO8D8DshUfk/93PVKwxUivVRg4zJJnZmaMvW+gPvm6+chlIoDc1nKS4HAn64
+         4/iQ==
+X-Gm-Message-State: AO0yUKVbehjhp3cR9wwrB8A4gmEVlPwYyckMumjBCdhsBbqxzi8DUiVY
+        Cl3H+9+0V5PPMJg3Z2I38UNTimYpLv08/BnRiu4=
+X-Google-Smtp-Source: AK7set+O/rTHZZcjaoCcS0aYmy1w63tC1g9blFpNriZI/g8cwa2hY+STgZcWGaA0fbYhA9F5VWmiYLpbnE1d7OdciBg=
+X-Received: by 2002:a81:ae47:0:b0:533:9ffb:cb13 with SMTP id
+ g7-20020a81ae47000000b005339ffbcb13mr2185799ywk.3.1677896548461; Fri, 03 Mar
+ 2023 18:22:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20230303114637.4015916-1-zangchunxin@lixiang.com>
-In-Reply-To: <20230303114637.4015916-1-zangchunxin@lixiang.com>
+References: <20230302212531.1043318-1-irogers@google.com> <20230302212531.1043318-9-irogers@google.com>
+ <CAM9d7ciBSB33HDD0-vcHHsco9k=H6qZkiCH8po=adt8-jv0ayg@mail.gmail.com> <CAP-5=fWTqSuec8P-Ccztz=HiBHFLYmk7Nq1Z1eYzmi6WOuB=YA@mail.gmail.com>
+In-Reply-To: <CAP-5=fWTqSuec8P-Ccztz=HiBHFLYmk7Nq1Z1eYzmi6WOuB=YA@mail.gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Fri, 3 Mar 2023 18:14:03 -0800
-Message-ID: <CAM9d7cjnkPduqCLTow1m6U2C7dVM5tsu5k42heh8G568-8Jd8Q@mail.gmail.com>
-Subject: Re: [PATCH] perf sched: Fix sched latency analysis incorrect
-To:     Chunxin Zang <zangchunxin@lixiang.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com,
+Date:   Fri, 3 Mar 2023 18:22:16 -0800
+Message-ID: <CAM9d7chCEBvOtAQbozodjEnxqdObZXvoRcsTo8ERyn97PqPtPg@mail.gmail.com>
+Subject: Re: [PATCH v2 08/10] perf parse-events: Sort and group parsed events
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jerry Zhou <zhouchunhua@lixiang.com>
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_50,
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8sDQoNCk9uIEZyaSwgTWFyIDMsIDIwMjMgYXQgMzo1MyBBTSBDaHVueGluIFphbmcgPHph
-bmdjaHVueGluQGxpeGlhbmcuY29tPiB3cm90ZToNCj4NCj4gJ3BlcmYgc2NoZWQgbGF0ZW5jeScg
-aXMgaW5jb3JyZWN0IHRvIGdldCBwcm9jZXNzIHNjaGVkdWxlIGxhdGVuY3kNCj4gd2hlbiBpdCB1
-c2VkICdzY2hlZDpzY2hlZF93YWtldXAnIHRvIGFuYWx5c2lzIHBlcmYuZGF0YS4NCj4NCj4gQmVj
-YXVzZSAncGVyZiByZWNvcmQnIHByZWZlciB1c2UgJ3NjaGVkOnNjaGVkX3dha2luZycgdG8NCj4g
-J3NjaGVkOnNjaGVkX3dha2V1cCcgc2luY2UgY29tbWl0IGQ1NjZhOWMyZDQ4MiAoInBlcmYgc2No
-ZWQ6IFByZWZlcg0KPiBzY2hlZF93YWtpbmcgZXZlbnQgd2hlbiBpdCBleGlzdHMiKS4gSXQncyB2
-ZXJ5IHJlYXNvbmFibGUgdG8NCj4gZXZhbHVhdGUgcHJvY2VzcyBzY2hlZHVsZSBsYXRlbmN5Lg0K
-Pg0KPiBTaW1pbGFybHksIHVwZGF0ZSBzY2hlZCBsYXRlbmN5L21hcC9yZXBsYXkgdG8gdXNlIHNj
-aGVkX3dha2luZyBldmVudHMuDQoNCkhhdmUgeW91IGNoZWNrZWQgaWYgaXQgd29ya3Mgb2sgd2hl
-biBkYXRhIGhhcyBib3RoIHdha2V1cCBhbmQNCndha2luZyBldmVudHM/DQoNCj4NCj4gU2lnbmVk
-LW9mZi1ieTogQ2h1bnhpbiBaYW5nDQo+IFNpZ25lZC1vZmYtYnk6IEplcnJ5IFpob3UNCg0KTWlz
-c2luZyBlbWFpbCBhZGRyZXNzZXMuDQoNCk90aGVyd2lzZSBsb29rcyBnb29kLg0KDQpUaGFua3Ms
-DQpOYW1oeXVuZw0KDQoNCj4gLS0tDQo+IHRvb2xzL3BlcmYvYnVpbHRpbi1zY2hlZC5jIHwgMSAr
-DQo+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPg0KPiBkaWZmIC0tZ2l0IGEvdG9v
-bHMvcGVyZi9idWlsdGluLXNjaGVkLmMgYi90b29scy9wZXJmL2J1aWx0aW4tc2NoZWQuYw0KPiBp
-bmRleCA4NmUxODU3NWM5YmUuLjFhZjRlYzFhYzgyNCAxMDA2NDQNCj4gLS0tIGEvdG9vbHMvcGVy
-Zi9idWlsdGluLXNjaGVkLmMNCj4gKysrIGIvdG9vbHMvcGVyZi9idWlsdGluLXNjaGVkLmMNCj4g
-QEAgLTE4MTksNiArMTgxOSw3IEBAIHN0YXRpYyBpbnQgcGVyZl9zY2hlZF9fcmVhZF9ldmVudHMo
-c3RydWN0IHBlcmZfc2NoZWQgKnNjaGVkKQ0KPiBjb25zdCBzdHJ1Y3QgZXZzZWxfc3RyX2hhbmRs
-ZXIgaGFuZGxlcnNbXSA9IHsNCj4geyAic2NoZWQ6c2NoZWRfc3dpdGNoIiwgcHJvY2Vzc19zY2hl
-ZF9zd2l0Y2hfZXZlbnQsIH0sDQo+IHsgInNjaGVkOnNjaGVkX3N0YXRfcnVudGltZSIsIHByb2Nl
-c3Nfc2NoZWRfcnVudGltZV9ldmVudCwgfSwNCj4gKyB7ICJzY2hlZDpzY2hlZF93YWtpbmciLCBw
-cm9jZXNzX3NjaGVkX3dha2V1cF9ldmVudCwgfSwNCj4geyAic2NoZWQ6c2NoZWRfd2FrZXVwIiwg
-cHJvY2Vzc19zY2hlZF93YWtldXBfZXZlbnQsIH0sDQo+IHsgInNjaGVkOnNjaGVkX3dha2V1cF9u
-ZXciLCBwcm9jZXNzX3NjaGVkX3dha2V1cF9ldmVudCwgfSwNCj4geyAic2NoZWQ6c2NoZWRfbWln
-cmF0ZV90YXNrIiwgcHJvY2Vzc19zY2hlZF9taWdyYXRlX3Rhc2tfZXZlbnQsIH0sDQo+IC0tDQo+
-IDIuMjUuMQ0KPg0KPg0KPiDlo7DmmI7vvJrov5nlsIHpgq7ku7blj6rlhYHorrjmlofku7bmjqXm
-lLbogIXpmIXor7vvvIzmnInlvojpq5jnmoTmnLrlr4bmgKfopoHmsYLjgILnpoHmraLlhbbku5bk
-urrkvb/nlKjjgIHmiZPlvIDjgIHlpI3liLbmiJbovazlj5Hph4zpnaLnmoTku7vkvZXlhoXlrrnj
-gILlpoLmnpzmnKzpgq7ku7bplJnor6/lnLDlj5Hnu5nkuobkvaDvvIzor7fogZTns7vpgq7ku7bl
-j5Hlh7rogIXlubbliKDpmaTov5nkuKrmlofku7bjgILmnLrlr4blj4rms5XlvovnmoTnibnmnYPl
-ubbkuI3lm6DkuLror6/lj5Hpgq7ku7bogIzmlL7lvIPmiJbkuKflpLHjgILku7vkvZXmj5Dlh7rn
-moTop4LngrnmiJbmhI/op4Hlj6rlsZ7kuo7kvZzogIXnmoTkuKrkurrop4Hop6PvvIzlubbkuI3k
-uIDlrprku6PooajmnKzlhazlj7jjgIINCg==
+On Thu, Mar 2, 2023 at 5:39 PM Ian Rogers <irogers@google.com> wrote:
+>
+> On Thu, Mar 2, 2023 at 4:37 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > On Thu, Mar 2, 2023 at 1:26 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > This change is intended to be a no-op for most current cases, the
+> > > default sort order is the order the events were parsed. Where it
+> > > varies is in how groups are handled. Previously an uncore and core
+> > > event that are grouped would most often cause the group to be removed:
+> > >
+> > > ```
+> > > $ perf stat -e '{instructions,uncore_imc_free_running_0/data_total/}' -a sleep 1
+> > > WARNING: grouped events cpus do not match, disabling group:
+> > >   anon group { instructions, uncore_imc_free_running_0/data_total/ }
+> > > ...
+> > > ```
+> > >
+> > > However, when wildcards are used the events should be re-sorted and
+> > > re-grouped in parse_events__set_leader, but this currently fails for
+> > > simple examples:
+> > >
+> > > ```
+> > > $ perf stat -e '{uncore_imc_free_running/data_read/,uncore_imc_free_running/data_write/}' -a sleep 1
+> > >
+> > >  Performance counter stats for 'system wide':
+> > >
+> > >      <not counted> MiB  uncore_imc_free_running/data_read/
+> > >      <not counted> MiB  uncore_imc_free_running/data_write/
+> > >
+> > >        1.000996992 seconds time elapsed
+> > > ```
+> > >
+> > > A futher failure mode, fixed in this patch, is to force topdown events
+> > > into a group.
+> > >
+> > > This change moves sorting the evsels in the evlist after parsing. It
+> > > requires parsing to set up groups. First the evsels are sorted
+> > > respecting the existing groupings and parse order, but also reordering
+> > > to ensure evsels of the same PMU and group appear together. So that
+> > > software and aux events respect groups, their pmu_name is taken from
+> > > the group leader. The sorting is done with list_sort removing a memory
+> > > allocation.
+> > >
+> > > After sorting a pass is done to correct the group leaders and for
+> > > topdown events ensuring they have a group leader.
+> > >
+> > > This fixes the problems seen before:
+> > >
+> > > ```
+> > > $ perf stat -e '{uncore_imc_free_running/data_read/,uncore_imc_free_running/data_write/}' -a sleep 1
+> > >
+> > >  Performance counter stats for 'system wide':
+> > >
+> > >             727.42 MiB  uncore_imc_free_running/data_read/
+> > >              81.84 MiB  uncore_imc_free_running/data_write/
+> > >
+> > >        1.000948615 seconds time elapsed
+> > > ```
+> > >
+> > > As well as making groups not fail for cases like:
+> > >
+> > > ```
+> > > $ perf stat -e '{imc_free_running_0/data_total/,imc_free_running_1/data_total/}' -a sleep 1
+> > >
+> > >  Performance counter stats for 'system wide':
+> > >
+> > >             256.47 MiB  imc_free_running_0/data_total/
+> > >             256.48 MiB  imc_free_running_1/data_total/
+> >
+> > I didn't expect we can group events from different PMUs.
+> > Not sure if it can handle multiplexing properly..
+>
+> You are right, this example is now working as the sorting and
+> regrouping breaks the events into two groups. The rules around
+> grouping are complex and Arnaldo mentioned that maybe cases like this
+> should be warned about. The problem then is that wildcard and metric
+> expansion may naturally produce these cases and we don't want the
+> warning. It is something of a shame that the grouping information in
+> the perf stat output isn't clearer.
+
+Oh, that means the events are not in a group in this case.
+Yeah.. it can be somewhat confusing.  It seems the wildcard
+is a kind of exception.  Then we can warn if there's no wildcard?
+
+Thanks,
+Namhyung
