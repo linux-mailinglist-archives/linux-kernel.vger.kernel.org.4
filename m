@@ -2,285 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053D96AAD6B
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 00:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0C66AAD74
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 00:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjCDXJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 18:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S229616AbjCDXVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 18:21:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjCDXJS (ORCPT
+        with ESMTP id S229484AbjCDXVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 18:09:18 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2BC8EB60
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 15:09:10 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id a25so24521151edb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 15:09:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1677971349;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B4FVEwPEjb+h3HDOuji/DkILA5dCvpbMFiBVRz/16zo=;
-        b=JvBpbX8/Cty4niV1sU2kRD7VtXHFT3hjLWpOfsyPmy9SA5aOg43zBu3wsR45Talq0R
-         6ezDQht1DHqLwnx682IVO9m6iz0C6Ol1wYk1XswtLgEcJrjA+iVjOoIVW8vdLiGkGe6J
-         xOkG8/aPTig9GBoDJXGvy3Pl8QTc6o+WWbiPY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677971349;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B4FVEwPEjb+h3HDOuji/DkILA5dCvpbMFiBVRz/16zo=;
-        b=WgVTVrY9G2+LNU9s4imb1zPtAUG09C55L0Ga47rEFxT1uhA12z+7znqaehAoV1R2K8
-         PNFoEYD2N7aRNux+HmHC16wsFuR+PVpYQBVab/JF/09INcKGdvI7T3Rvh9xIQu1mbxMe
-         z1enhaoaD6cti8e7l1Yl/gaHBDiwl75T4Joy2JO5oj/CVsB9BZsdtX55phMzzl3onIzf
-         edu4hSJ4MmRayBmwEOWqUfdFIuFDuA+TwjedikWSBfbmwgeUL8fDf9EnvV0CSjrmXkoC
-         4mqlMjnmLsnSfUhZvIPLdP1oeUEgpAbqUrKgc8fqHOE2qEK71+m3LxRvEuIquE2pLk+h
-         f2OQ==
-X-Gm-Message-State: AO0yUKUJA+HI2u/G20wPkRNXufOOafeuxQ/kX9TSpAWMBUTBM8zKURvn
-        kTuTJD0kPkgUMi4pmN4oLw4oUZUJZDMrUWMO88+n7Q==
-X-Google-Smtp-Source: AK7set/ScruAX19i3KIoi19IJRXD0FxklDnhF3o62xl8ph2gqY2pOitVc/3dSLTICwWHh1t8QCm/xg==
-X-Received: by 2002:a05:6402:1655:b0:4af:8436:2f59 with SMTP id s21-20020a056402165500b004af84362f59mr5414000edx.31.1677971349154;
-        Sat, 04 Mar 2023 15:09:09 -0800 (PST)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id a25-20020a509b59000000b004c0eac41829sm2914128edj.63.2023.03.04.15.09.06
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 15:09:07 -0800 (PST)
-Received: by mail-ed1-f47.google.com with SMTP id ay14so20582955edb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 15:09:06 -0800 (PST)
-X-Received: by 2002:a50:cd15:0:b0:4c1:1555:152f with SMTP id
- z21-20020a50cd15000000b004c11555152fmr3374896edi.5.1677971346474; Sat, 04 Mar
- 2023 15:09:06 -0800 (PST)
-MIME-Version: 1.0
-References: <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
- <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
- <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com>
- <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
- <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com>
- <CAHk-=wgfNrMFQCFWFtn+UXjAdJAGAAFFJZ1JpEomTneza32A6g@mail.gmail.com>
- <ZAK6Duaf4mlgpZPP@yury-laptop> <CAHk-=wh1r3KfATA-JSdt3qt2y3sC=5U9+wZsbabW+dvPsqRCvA@mail.gmail.com>
- <ZALcbQoKA7K8k2gJ@yury-laptop> <CAHk-=wjit4tstX3q4DkiYLTD6zet_7j=CfjbvTMqtnOwmY7jzA@mail.gmail.com>
- <ZAOvUuxJP7tAKc1e@yury-laptop> <CAHk-=wh2U3a7AdvekB3uyAmH+NNk-CxN-NxGzQ=GZwjaEcM-tg@mail.gmail.com>
- <CAHk-=whEwe1H1_YXki1aYwGnVwazY+z0=6deU-Zd855ogvLgww@mail.gmail.com>
-In-Reply-To: <CAHk-=whEwe1H1_YXki1aYwGnVwazY+z0=6deU-Zd855ogvLgww@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 4 Mar 2023 15:08:49 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiHp3AkvFThpnGSA7k=KpPbXd0vurga+-8FqUNRbML_fA@mail.gmail.com>
-Message-ID: <CAHk-=wiHp3AkvFThpnGSA7k=KpPbXd0vurga+-8FqUNRbML_fA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if possible
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Mateusz Guzik <mjguzik@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biggers <ebiggers@google.com>,
-        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
-        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Content-Type: multipart/mixed; boundary="0000000000000d15e205f61b260f"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sat, 4 Mar 2023 18:21:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EA1113FB;
+        Sat,  4 Mar 2023 15:21:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 53D5BB8085C;
+        Sat,  4 Mar 2023 23:21:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F0CC433EF;
+        Sat,  4 Mar 2023 23:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1677972060;
+        bh=YpOQ8oryHFElt6K2lv1s9uR3pjCugGSDXwduZIz+uYs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=V70rQ0s2Qm2ej6zbgltA2RufuWvBRV9Ayj4zAZYVcHrdb/Bn+PW3LafZ0GC4isuxZ
+         E/YE8SeNl9MOKCQg82KJJtI751TWD3J4enIggJZqGgUcPyQTkY6Y7uXzr+y1lWQTAq
+         +0LGnO92BttDVnyIL9kS9MSztAzklqk3l/wwZa5E=
+Date:   Sat, 4 Mar 2023 15:20:58 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Huang, Ying" <ying.huang@intel.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] hotfixes for 6.3-rc1
+Message-Id: <20230304152058.de91bf7abf424383ce31d500@linux-foundation.org>
+In-Reply-To: <CAHk-=wj9guryjifHyr26w73ta+kNeoHtGde682Z5N6OSjKu4UQ@mail.gmail.com>
+References: <20230304131528.4645d19a2ab897fb7518159e@linux-foundation.org>
+        <CAHk-=wj9guryjifHyr26w73ta+kNeoHtGde682Z5N6OSjKu4UQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000000d15e205f61b260f
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Sat, 4 Mar 2023 14:35:00 -0800 Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-On Sat, Mar 4, 2023 at 1:10=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Whether the end result _works_ or not, I still haven't checked.
+> On Sat, Mar 4, 2023 at 1:15 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > 17 hotfixes.  Eight are for MM and seven are for other parts of the
+> > kernel.  Seven are cc:stable and eight address post-6.3 issues or were
+> > judged unsuitable for -stable backporting.
+> 
+> Hmm. Since this pull didn't fix the gcc note about playing pointer
+> games that I get for my allmodconfig test build, and since I _really_
+> don't want to have an rc1 release tomorrow with that (valid) warning,
+> I fixed it up myself.
 
-Well, this particular patch at least boots for me for my normal
-config. Not that I've run any extensive tests, but I'm writing this
-email while running this patch, so ..
+Ah. Ying did it this way:
 
-           Linus
 
---0000000000000d15e205f61b260f
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="0001-cpumask-reintrudoce-non-MAXSMP-cpumask-optimizations.patch"
-Content-Disposition: attachment; 
-	filename="0001-cpumask-reintrudoce-non-MAXSMP-cpumask-optimizations.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_leuks4cx0>
-X-Attachment-Id: f_leuks4cx0
+From: Huang Ying <ying.huang@intel.com>
+Subject: migrate_pages: silence gcc notes for mis-casting
+Date: Thu, 2 Mar 2023 09:26:10 +0800
 
-RnJvbSA3OGRhMDY3MTRhN2FmNGZjYWJhNTU2NGI3N2ZlM2U2MDI0ZTk1M2M1IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMaW51cyBUb3J2YWxkcyA8dG9ydmFsZHNAbGludXgtZm91bmRh
-dGlvbi5vcmc+CkRhdGU6IFNhdCwgNCBNYXIgMjAyMyAxMzozNTo0MyAtMDgwMApTdWJqZWN0OiBb
-UEFUQ0hdIGNwdW1hc2s6IHJlaW50cnVkb2NlIG5vbi1NQVhTTVAgY3B1bWFzayBvcHRpbWl6YXRp
-b25zCgpDb21taXQgYWE0N2E3YzIxNWU3ICgibGliL2NwdW1hc2s6IGRlcHJlY2F0ZSBucl9jcHVt
-YXNrX2JpdHMiKSByZXN1bHRlZAppbiB0aGUgY3B1bWFzayBvcGVyYXRpb25zIGJlY29taW5nIGh1
-Z2VseSBsZXNzIGVmZmljaWVudCwgYmVjYXVzZQpzdWRkZW5seSB0aGUgY3B1bWFzayB3YXMgYWx3
-YXlzIGNvbnNpZGVyZWQgdG8gYmUgdmFyaWFibGUtc2l6ZWQuCgpJZiB3ZSBoYXZlIENPTkZJR19O
-Ul9DUFVTIGJlIDY0ICh0byBwaWNrIGEgcmVhc29uYWJsZSB2YWx1ZSwgYW5kIG9uZSBJCmhhcHBl
-biB0byB1c2UpLCBhbiBvcGVyYXRpb24gbGlrZSAiY3B1bWFza19jbGVhcigpIiBzaG91bGQgbGl0
-ZXJhbGx5IGJlCmEgc2luZ2xlICJzdG9yZSA2NCBiaXRzIG9mIHplcm8gaW50byB0aGUgY3B1bWFz
-ayIuICBUaGF0IHdhcyB2ZXJ5IG11Y2gKd2hhdCBucl9jcHVtYXNrX2JpdHMgd2FzIGFsbCBhYm91
-dC4KCldpdGhvdXQgdGhpcyBvcHRpbWl6YXRpb24sIGluc3RlYWQgb2YgYmVpbmcgYSBzaW5nbGUg
-c3RvcmUgaW5zdHJ1Y3Rpb24sCmNwdW1hc2tfY2xlYXIoKSB3b3VsZCBnZW5lcmF0ZSBjb2RlIGxp
-a2UKCiAgICAgICAgbW92bCAgICBucl9jcHVfaWRzKCVyaXApLCAlZWR4CiAgICAgICAgYWRkcSAg
-ICAkNjMsICVyZHgKICAgICAgICBzaHJxICAgICQzLCAlcmR4CiAgICAgICAgYW5kbCAgICAkLTgs
-ICVlZHgKICAgICAgICBjYWxscSAgIG1lbXNldEBQTFQKCm9uIHg4Ni02NCB0byBkbyB0aGF0IGVx
-dWl2YWxlbnQgImNsZWFyIG9uZSB3b3JkIiwgYmVjYXVzZSBpdCB3YW50ZWQgdG8KbWFrZSBldmVy
-eXRoaW5nIGR5bmFtaWNhbGx5IGJhc2VkIG9uIHRoZSBhY3R1YWwgbnVtYmVyIG9mIENQVSdzIGlu
-IHRoZQpzeXN0ZW0uCgpUaGlzIGRvZXMgZW5kIHVwIHRpZ2h0ZW5pbmcgdGhlIHJ1bGVzIGEgYml0
-OiBvcGVyYXRpb25zIHRoYXQgc2V0IGJpdHMgaW4KdGhlIGNwdW1hc2sgYXJlIGxpbWl0ZWQgdG8g
-dGhlIGFjdHVhbCBucl9jcHVfaWRzIGxpbWl0LiAgQnV0IGlmIHlvdSBqdXN0CmNsZWFyIGJpdHMs
-IG9yIHNjYW4gZm9yIGJpdHMgdGhhdCBhcmUgc2V0LCB3ZSBjYW4gdXNlIHRoZSBiaWdnZXIKY29t
-cGlsZS10aW1lIGNvbnN0YW50LCB3aGljaCBpcyBtdWNoIG1vcmUgZWZmaWNpZW50LgoKSW4gdGhl
-IHByb2Nlc3MsIHJlbW92ZSAnY3B1bWFza19jb21wbGVtZW50KCknIGFuZCAnZm9yX2VhY2hfY3B1
-X25vdCgpJwp3aGljaCB3ZXJlIG5vdCB1c2VmdWwsIGFuZCB3aGljaCBmdW5kYW1lbnRhbGx5IGhh
-dmUgdG8gYmUgbGltaXRlZCB0bwonbnJfY3B1X2lkcycuICBCZXR0ZXIgcmVtb3ZlIHRoZW0gbm93
-IHRoYW4gaGF2ZSBzb21lYm9keSBpbnRyb2R1Y2UgdXNlCm9mIHRoZW0gbGF0ZXIuCgpPZiBjb3Vy
-c2UsIHdpdGggTUFYU01QIHRoZXJlIGlzIG5vIHNhbmUgc21hbGwgY29tcGlsZS10aW1lIGNvbnN0
-YW50IGZvcgp0aGUgY3B1bWFwIHNpemVzLCBhbmQgd2UgZW5kIHVwIHVzaW5nIHRoZSBhY3R1YWwg
-Q1BVIGJpdHMsIGFuZCB3aWxsCmdlbmVyYXRlIHRoZSBhYm92ZSBraW5kIG9mIGhvcnJvcnMgcmVn
-YXJkbGVzcy4gIFBsZWFzZSBkb24ndCB1c2UgTUFYU01QCnVubGVzcyB5b3UgcmVhbGx5IGV4cGVj
-dCB0byBoYXZlIG1hY2hpbmVzIHdpdGggdGhvdXNhbmRzIG9mIGNvcmVzLgoKU2lnbmVkLW9mZi1i
-eTogTGludXMgVG9ydmFsZHMgPHRvcnZhbGRzQGxpbnV4LWZvdW5kYXRpb24ub3JnPgotLS0KIC5j
-bGFuZy1mb3JtYXQgICAgICAgICAgIHwgIDEgLQogYXJjaC9pYTY0L2tlcm5lbC9hY3BpLmMgfCAg
-NCArLS0KIGluY2x1ZGUvbGludXgvY3B1bWFzay5oIHwgNjggKysrKysrKysrKysrKysrKysrKysr
-Ky0tLS0tLS0tLS0tLS0tLS0tLS0KIGxpYi9jcHVtYXNrX2t1bml0LmMgICAgIHwgMTIgLS0tLS0t
-LS0KIDQgZmlsZXMgY2hhbmdlZCwgMzcgaW5zZXJ0aW9ucygrKSwgNDggZGVsZXRpb25zKC0pCgpk
-aWZmIC0tZ2l0IGEvLmNsYW5nLWZvcm1hdCBiLy5jbGFuZy1mb3JtYXQKaW5kZXggMmM2MWI0NTUz
-Mzc0Li5kOTg4ZTlmYTliMjYgMTAwNjQ0Ci0tLSBhLy5jbGFuZy1mb3JtYXQKKysrIGIvLmNsYW5n
-LWZvcm1hdApAQCAtMjI2LDcgKzIyNiw2IEBAIEZvckVhY2hNYWNyb3M6CiAgIC0gJ2Zvcl9lYWNo
-X2NvbnNvbGVfc3JjdScKICAgLSAnZm9yX2VhY2hfY3B1JwogICAtICdmb3JfZWFjaF9jcHVfYW5k
-JwotICAtICdmb3JfZWFjaF9jcHVfbm90JwogICAtICdmb3JfZWFjaF9jcHVfd3JhcCcKICAgLSAn
-Zm9yX2VhY2hfZGFwbV93aWRnZXRzJwogICAtICdmb3JfZWFjaF9kZWR1cF9jYW5kJwpkaWZmIC0t
-Z2l0IGEvYXJjaC9pYTY0L2tlcm5lbC9hY3BpLmMgYi9hcmNoL2lhNjQva2VybmVsL2FjcGkuYwpp
-bmRleCA5NmQxM2NiN2MxOWYuLjE1ZjZjZmRkY2MwOCAxMDA2NDQKLS0tIGEvYXJjaC9pYTY0L2tl
-cm5lbC9hY3BpLmMKKysrIGIvYXJjaC9pYTY0L2tlcm5lbC9hY3BpLmMKQEAgLTc4MywxMSArNzgz
-LDkgQEAgX19pbml0IHZvaWQgcHJlZmlsbF9wb3NzaWJsZV9tYXAodm9pZCkKIAogc3RhdGljIGlu
-dCBfYWNwaV9tYXBfbHNhcGljKGFjcGlfaGFuZGxlIGhhbmRsZSwgaW50IHBoeXNpZCwgaW50ICpw
-Y3B1KQogewotCWNwdW1hc2tfdCB0bXBfbWFwOwogCWludCBjcHU7CiAKLQljcHVtYXNrX2NvbXBs
-ZW1lbnQoJnRtcF9tYXAsIGNwdV9wcmVzZW50X21hc2spOwotCWNwdSA9IGNwdW1hc2tfZmlyc3Qo
-JnRtcF9tYXApOworCWNwdSA9IGNwdW1hc2tfZmlyc3RfemVybyhjcHVfcHJlc2VudF9tYXNrKTsK
-IAlpZiAoY3B1ID49IG5yX2NwdV9pZHMpCiAJCXJldHVybiAtRUlOVkFMOwogCmRpZmYgLS1naXQg
-YS9pbmNsdWRlL2xpbnV4L2NwdW1hc2suaCBiL2luY2x1ZGUvbGludXgvY3B1bWFzay5oCmluZGV4
-IDEwYzkyYmQ5YjgwNy4uYmQ5NTc2ZThkODU2IDEwMDY0NAotLS0gYS9pbmNsdWRlL2xpbnV4L2Nw
-dW1hc2suaAorKysgYi9pbmNsdWRlL2xpbnV4L2NwdW1hc2suaApAQCAtNTAsOCArNTAsMzAgQEAg
-c3RhdGljIGlubGluZSB2b2lkIHNldF9ucl9jcHVfaWRzKHVuc2lnbmVkIGludCBucikKICNlbmRp
-ZgogfQogCi0vKiBEZXByZWNhdGVkLiBBbHdheXMgdXNlIG5yX2NwdV9pZHMuICovCi0jZGVmaW5l
-IG5yX2NwdW1hc2tfYml0cwlucl9jcHVfaWRzCisvKgorICogVGhlIGRpZmZlcmVuY2UgYmV0d2Vl
-biBucl9jcHVtYXNrX2JpdHMgYW5kIG5yX2NwdV9pZHMgaXMgdGhhdAorICogJ25yX2NwdV9pZHMn
-IGlzIHRoZSBhY3R1YWwgbnVtYmVyIG9mIENQVSBpZHMgaW4gdGhlIHN5c3RlbSwgd2hpbGUKKyAq
-IG5yX2NwdW1hc2tfYml0cyBpcyBhICJyZWFzb25hYmxlIHVwcGVyIHZhbHVlIiB0aGF0IGlzIG9m
-dGVuIG1vcmUKKyAqIGVmZmljaWVudCBiZWNhdXNlIGl0IGNhbiBiZSBhIGZpeGVkIGNvbnN0YW50
-LgorICoKKyAqIFNvIHdoZW4gY2xlYXJpbmcgb3IgdHJhdmVyc2luZyBhIGNwdW1hc2ssIHVzZSAn
-bnJfY3B1bWFza19iaXRzJywKKyAqIGJ1dCB3aGVuIGNoZWNraW5nIGV4YWN0IGxpbWl0cyAoYW5k
-IHdoZW4gX3NldHRpbmdfIGJpdHMpLCB1c2UgdGhlCisgKiB0aWdodGVyIGV4YWN0IGxpbWl0IG9m
-ICducl9jcHVfaWRzJy4KKyAqCisgKiBOT1RFISBUaGUgY29kZSBkZXBlbmRzIG9uIGFueSBleHl0
-YSBiaXRzIGluIG5yX2NwdW1hc2tfYml0cyBhIGFsd2F5cworICogYmVpbmcgKGEpIGFsbG9jYXRl
-ZCBhbmQgKGIpIHplcm8sIHNvIHRoYXQgdGhlIG9ubHkgZWZmZWN0IG9mIHVzaW5nCisgKiAnbnJf
-Y3B1bWFza19iaXRzJyBpcyB0aGF0IHdlIG1pZ2h0IHJldHVybiBhIGhpZ2hlciBtYXhpbXVtIENQ
-VSB2YWx1ZQorICogKHdoaWNoIGlzIHdoeSB3ZSBoYXZlIHRoYXQgcGF0dGVybiBvZgorICoKKyAq
-ICAgUmV0dXJucyA+PSBucl9jcHVfaWRzIGlmIG5vIGNwdXMgc2V0LgorICoKKyAqIGZvciBtYW55
-IG9mIHRoZSBmdW5jdGlvbnMgLSB0aGV5IGNhbiByZXR1cm4gdGhhdCBoaWdoZXIgdmFsdWUpLgor
-ICovCisjaWZuZGVmIENPTkZJR19DUFVNQVNLX09GRlNUQUNLCisgI2RlZmluZSBucl9jcHVtYXNr
-X2JpdHMgKCh1bnNpZ25lZCBpbnQpTlJfQ1BVUykKKyNlbHNlCisgI2RlZmluZSBucl9jcHVtYXNr
-X2JpdHMJbnJfY3B1X2lkcworI2VuZGlmCiAKIC8qCiAgKiBUaGUgZm9sbG93aW5nIHBhcnRpY3Vs
-YXIgc3lzdGVtIGNwdW1hc2tzIGFuZCBvcGVyYXRpb25zIG1hbmFnZQpAQCAtMTE0LDcgKzEzNiw3
-IEBAIHN0YXRpYyBfX2Fsd2F5c19pbmxpbmUgdm9pZCBjcHVfbWF4X2JpdHNfd2Fybih1bnNpZ25l
-ZCBpbnQgY3B1LCB1bnNpZ25lZCBpbnQgYml0CiAvKiB2ZXJpZnkgY3B1IGFyZ3VtZW50IHRvIGNw
-dW1hc2tfKiBvcGVyYXRvcnMgKi8KIHN0YXRpYyBfX2Fsd2F5c19pbmxpbmUgdW5zaWduZWQgaW50
-IGNwdW1hc2tfY2hlY2sodW5zaWduZWQgaW50IGNwdSkKIHsKLQljcHVfbWF4X2JpdHNfd2Fybihj
-cHUsIG5yX2NwdW1hc2tfYml0cyk7CisJY3B1X21heF9iaXRzX3dhcm4oY3B1LCBucl9jcHVfaWRz
-KTsKIAlyZXR1cm4gY3B1OwogfQogCkBAIC0yNDgsMTYgKzI3MCw2IEBAIHVuc2lnbmVkIGludCBj
-cHVtYXNrX25leHRfYW5kKGludCBuLCBjb25zdCBzdHJ1Y3QgY3B1bWFzayAqc3JjMXAsCiAjZGVm
-aW5lIGZvcl9lYWNoX2NwdShjcHUsIG1hc2spCQkJCVwKIAlmb3JfZWFjaF9zZXRfYml0KGNwdSwg
-Y3B1bWFza19iaXRzKG1hc2spLCBucl9jcHVtYXNrX2JpdHMpCiAKLS8qKgotICogZm9yX2VhY2hf
-Y3B1X25vdCAtIGl0ZXJhdGUgb3ZlciBldmVyeSBjcHUgaW4gYSBjb21wbGVtZW50ZWQgbWFzawot
-ICogQGNwdTogdGhlIChvcHRpb25hbGx5IHVuc2lnbmVkKSBpbnRlZ2VyIGl0ZXJhdG9yCi0gKiBA
-bWFzazogdGhlIGNwdW1hc2sgcG9pbnRlcgotICoKLSAqIEFmdGVyIHRoZSBsb29wLCBjcHUgaXMg
-Pj0gbnJfY3B1X2lkcy4KLSAqLwotI2RlZmluZSBmb3JfZWFjaF9jcHVfbm90KGNwdSwgbWFzaykJ
-CQkJXAotCWZvcl9lYWNoX2NsZWFyX2JpdChjcHUsIGNwdW1hc2tfYml0cyhtYXNrKSwgbnJfY3B1
-bWFza19iaXRzKQotCiAjaWYgTlJfQ1BVUyA9PSAxCiBzdGF0aWMgaW5saW5lCiB1bnNpZ25lZCBp
-bnQgY3B1bWFza19uZXh0X3dyYXAoaW50IG4sIGNvbnN0IHN0cnVjdCBjcHVtYXNrICptYXNrLCBp
-bnQgc3RhcnQsIGJvb2wgd3JhcCkKQEAgLTQ5NSwxMCArNTA3LDE0IEBAIHN0YXRpYyBfX2Fsd2F5
-c19pbmxpbmUgYm9vbCBjcHVtYXNrX3Rlc3RfYW5kX2NsZWFyX2NwdShpbnQgY3B1LCBzdHJ1Y3Qg
-Y3B1bWFzayAqCiAvKioKICAqIGNwdW1hc2tfc2V0YWxsIC0gc2V0IGFsbCBjcHVzICg8IG5yX2Nw
-dV9pZHMpIGluIGEgY3B1bWFzawogICogQGRzdHA6IHRoZSBjcHVtYXNrIHBvaW50ZXIKKyAqCisg
-KiBOb3RlOiBzaW5jZSB3ZSBzZXQgYml0cywgd2Ugc2hvdWxkIHVzZSB0aGUgdGlnaHRlciAnYml0
-bWFwX3NldCgpJyB3aXRoCisgKiB0aGUgZWFjdCBudW1iZXIgb2YgYml0cywgbm90ICdiaXRtYXBf
-ZmlsbCgpJyB0aGF0IHdpbGwgZmlsbCBwYXN0IHRoZQorICogZW5kLgogICovCiBzdGF0aWMgaW5s
-aW5lIHZvaWQgY3B1bWFza19zZXRhbGwoc3RydWN0IGNwdW1hc2sgKmRzdHApCiB7Ci0JYml0bWFw
-X2ZpbGwoY3B1bWFza19iaXRzKGRzdHApLCBucl9jcHVtYXNrX2JpdHMpOworCWJpdG1hcF9zZXQo
-Y3B1bWFza19iaXRzKGRzdHApLCAwLCBucl9jcHVfaWRzKTsKIH0KIAogLyoqCkBAIC01NjksMTgg
-KzU4NSw2IEBAIHN0YXRpYyBpbmxpbmUgYm9vbCBjcHVtYXNrX2FuZG5vdChzdHJ1Y3QgY3B1bWFz
-ayAqZHN0cCwKIAkJCQkJICBjcHVtYXNrX2JpdHMoc3JjMnApLCBucl9jcHVtYXNrX2JpdHMpOwog
-fQogCi0vKioKLSAqIGNwdW1hc2tfY29tcGxlbWVudCAtICpkc3RwID0gfipzcmNwCi0gKiBAZHN0
-cDogdGhlIGNwdW1hc2sgcmVzdWx0Ci0gKiBAc3JjcDogdGhlIGlucHV0IHRvIGludmVydAotICov
-Ci1zdGF0aWMgaW5saW5lIHZvaWQgY3B1bWFza19jb21wbGVtZW50KHN0cnVjdCBjcHVtYXNrICpk
-c3RwLAotCQkJCSAgICAgIGNvbnN0IHN0cnVjdCBjcHVtYXNrICpzcmNwKQotewotCWJpdG1hcF9j
-b21wbGVtZW50KGNwdW1hc2tfYml0cyhkc3RwKSwgY3B1bWFza19iaXRzKHNyY3ApLAotCQkJCQkg
-ICAgICBucl9jcHVtYXNrX2JpdHMpOwotfQotCiAvKioKICAqIGNwdW1hc2tfZXF1YWwgLSAqc3Jj
-MXAgPT0gKnNyYzJwCiAgKiBAc3JjMXA6IHRoZSBmaXJzdCBpbnB1dApAQCAtNjQ4LDcgKzY1Miw3
-IEBAIHN0YXRpYyBpbmxpbmUgYm9vbCBjcHVtYXNrX2VtcHR5KGNvbnN0IHN0cnVjdCBjcHVtYXNr
-ICpzcmNwKQogICovCiBzdGF0aWMgaW5saW5lIGJvb2wgY3B1bWFza19mdWxsKGNvbnN0IHN0cnVj
-dCBjcHVtYXNrICpzcmNwKQogewotCXJldHVybiBiaXRtYXBfZnVsbChjcHVtYXNrX2JpdHMoc3Jj
-cCksIG5yX2NwdW1hc2tfYml0cyk7CisJcmV0dXJuIGJpdG1hcF9mdWxsKGNwdW1hc2tfYml0cyhz
-cmNwKSwgbnJfY3B1X2lkcyk7CiB9CiAKIC8qKgpAQCAtNjk0LDcgKzY5OCw3IEBAIHN0YXRpYyBp
-bmxpbmUgdm9pZCBjcHVtYXNrX3NoaWZ0X2xlZnQoc3RydWN0IGNwdW1hc2sgKmRzdHAsCiAJCQkJ
-ICAgICAgY29uc3Qgc3RydWN0IGNwdW1hc2sgKnNyY3AsIGludCBuKQogewogCWJpdG1hcF9zaGlm
-dF9sZWZ0KGNwdW1hc2tfYml0cyhkc3RwKSwgY3B1bWFza19iaXRzKHNyY3ApLCBuLAotCQkJCQkg
-ICAgICBucl9jcHVtYXNrX2JpdHMpOworCQkJCQkgICAgICBucl9jcHVfaWRzKTsKIH0KIAogLyoq
-CkBAIC03NDIsNyArNzQ2LDcgQEAgc3RhdGljIGlubGluZSB2b2lkIGNwdW1hc2tfY29weShzdHJ1
-Y3QgY3B1bWFzayAqZHN0cCwKIHN0YXRpYyBpbmxpbmUgaW50IGNwdW1hc2tfcGFyc2VfdXNlcihj
-b25zdCBjaGFyIF9fdXNlciAqYnVmLCBpbnQgbGVuLAogCQkJCSAgICAgc3RydWN0IGNwdW1hc2sg
-KmRzdHApCiB7Ci0JcmV0dXJuIGJpdG1hcF9wYXJzZV91c2VyKGJ1ZiwgbGVuLCBjcHVtYXNrX2Jp
-dHMoZHN0cCksIG5yX2NwdW1hc2tfYml0cyk7CisJcmV0dXJuIGJpdG1hcF9wYXJzZV91c2VyKGJ1
-ZiwgbGVuLCBjcHVtYXNrX2JpdHMoZHN0cCksIG5yX2NwdV9pZHMpOwogfQogCiAvKioKQEAgLTc1
-Nyw3ICs3NjEsNyBAQCBzdGF0aWMgaW5saW5lIGludCBjcHVtYXNrX3BhcnNlbGlzdF91c2VyKGNv
-bnN0IGNoYXIgX191c2VyICpidWYsIGludCBsZW4sCiAJCQkJICAgICBzdHJ1Y3QgY3B1bWFzayAq
-ZHN0cCkKIHsKIAlyZXR1cm4gYml0bWFwX3BhcnNlbGlzdF91c2VyKGJ1ZiwgbGVuLCBjcHVtYXNr
-X2JpdHMoZHN0cCksCi0JCQkJICAgICBucl9jcHVtYXNrX2JpdHMpOworCQkJCSAgICAgbnJfY3B1
-X2lkcyk7CiB9CiAKIC8qKgpAQCAtNzY5LDcgKzc3Myw3IEBAIHN0YXRpYyBpbmxpbmUgaW50IGNw
-dW1hc2tfcGFyc2VsaXN0X3VzZXIoY29uc3QgY2hhciBfX3VzZXIgKmJ1ZiwgaW50IGxlbiwKICAq
-Lwogc3RhdGljIGlubGluZSBpbnQgY3B1bWFza19wYXJzZShjb25zdCBjaGFyICpidWYsIHN0cnVj
-dCBjcHVtYXNrICpkc3RwKQogewotCXJldHVybiBiaXRtYXBfcGFyc2UoYnVmLCBVSU5UX01BWCwg
-Y3B1bWFza19iaXRzKGRzdHApLCBucl9jcHVtYXNrX2JpdHMpOworCXJldHVybiBiaXRtYXBfcGFy
-c2UoYnVmLCBVSU5UX01BWCwgY3B1bWFza19iaXRzKGRzdHApLCBucl9jcHVfaWRzKTsKIH0KIAog
-LyoqCkBAIC03ODEsNyArNzg1LDcgQEAgc3RhdGljIGlubGluZSBpbnQgY3B1bWFza19wYXJzZShj
-b25zdCBjaGFyICpidWYsIHN0cnVjdCBjcHVtYXNrICpkc3RwKQogICovCiBzdGF0aWMgaW5saW5l
-IGludCBjcHVsaXN0X3BhcnNlKGNvbnN0IGNoYXIgKmJ1Ziwgc3RydWN0IGNwdW1hc2sgKmRzdHAp
-CiB7Ci0JcmV0dXJuIGJpdG1hcF9wYXJzZWxpc3QoYnVmLCBjcHVtYXNrX2JpdHMoZHN0cCksIG5y
-X2NwdW1hc2tfYml0cyk7CisJcmV0dXJuIGJpdG1hcF9wYXJzZWxpc3QoYnVmLCBjcHVtYXNrX2Jp
-dHMoZHN0cCksIG5yX2NwdV9pZHMpOwogfQogCiAvKioKZGlmZiAtLWdpdCBhL2xpYi9jcHVtYXNr
-X2t1bml0LmMgYi9saWIvY3B1bWFza19rdW5pdC5jCmluZGV4IGQxZmM2ZWNlMjFmMy4uYWI3OTgz
-NjViN2RjIDEwMDY0NAotLS0gYS9saWIvY3B1bWFza19rdW5pdC5jCisrKyBiL2xpYi9jcHVtYXNr
-X2t1bml0LmMKQEAgLTIzLDE2ICsyMyw2IEBACiAJCUtVTklUX0VYUEVDVF9FUV9NU0coKHRlc3Qp
-LCBtYXNrX3dlaWdodCwgaXRlciwgTUFTS19NU0cobWFzaykpOwlcCiAJfSB3aGlsZSAoMCkKIAot
-I2RlZmluZSBFWFBFQ1RfRk9SX0VBQ0hfQ1BVX05PVF9FUSh0ZXN0LCBtYXNrKQkJCQkJXAotCWRv
-IHsJCQkJCQkJCQlcCi0JCWNvbnN0IGNwdW1hc2tfdCAqbSA9IChtYXNrKTsJCQkJCVwKLQkJaW50
-IG1hc2tfd2VpZ2h0ID0gY3B1bWFza193ZWlnaHQobSk7CQkJCVwKLQkJaW50IGNwdSwgaXRlciA9
-IDA7CQkJCQkJXAotCQlmb3JfZWFjaF9jcHVfbm90KGNwdSwgbSkJCQkJCVwKLQkJCWl0ZXIrKzsJ
-CQkJCQkJXAotCQlLVU5JVF9FWFBFQ1RfRVFfTVNHKCh0ZXN0KSwgbnJfY3B1X2lkcyAtIG1hc2tf
-d2VpZ2h0LCBpdGVyLCBNQVNLX01TRyhtYXNrKSk7CVwKLQl9IHdoaWxlICgwKQotCiAjZGVmaW5l
-IEVYUEVDVF9GT1JfRUFDSF9DUFVfT1BfRVEodGVzdCwgb3AsIG1hc2sxLCBtYXNrMikJCQlcCiAJ
-ZG8gewkJCQkJCQkJCVwKIAkJY29uc3QgY3B1bWFza190ICptMSA9IChtYXNrMSk7CQkJCQlcCkBA
-IC0xMTMsMTQgKzEwMywxMiBAQCBzdGF0aWMgdm9pZCB0ZXN0X2NwdW1hc2tfbmV4dChzdHJ1Y3Qg
-a3VuaXQgKnRlc3QpCiBzdGF0aWMgdm9pZCB0ZXN0X2NwdW1hc2tfaXRlcmF0b3JzKHN0cnVjdCBr
-dW5pdCAqdGVzdCkKIHsKIAlFWFBFQ1RfRk9SX0VBQ0hfQ1BVX0VRKHRlc3QsICZtYXNrX2VtcHR5
-KTsKLQlFWFBFQ1RfRk9SX0VBQ0hfQ1BVX05PVF9FUSh0ZXN0LCAmbWFza19lbXB0eSk7CiAJRVhQ
-RUNUX0ZPUl9FQUNIX0NQVV9XUkFQX0VRKHRlc3QsICZtYXNrX2VtcHR5KTsKIAlFWFBFQ1RfRk9S
-X0VBQ0hfQ1BVX09QX0VRKHRlc3QsIGFuZCwgJm1hc2tfZW1wdHksICZtYXNrX2VtcHR5KTsKIAlF
-WFBFQ1RfRk9SX0VBQ0hfQ1BVX09QX0VRKHRlc3QsIGFuZCwgY3B1X3Bvc3NpYmxlX21hc2ssICZt
-YXNrX2VtcHR5KTsKIAlFWFBFQ1RfRk9SX0VBQ0hfQ1BVX09QX0VRKHRlc3QsIGFuZG5vdCwgJm1h
-c2tfZW1wdHksICZtYXNrX2VtcHR5KTsKIAogCUVYUEVDVF9GT1JfRUFDSF9DUFVfRVEodGVzdCwg
-Y3B1X3Bvc3NpYmxlX21hc2spOwotCUVYUEVDVF9GT1JfRUFDSF9DUFVfTk9UX0VRKHRlc3QsIGNw
-dV9wb3NzaWJsZV9tYXNrKTsKIAlFWFBFQ1RfRk9SX0VBQ0hfQ1BVX1dSQVBfRVEodGVzdCwgY3B1
-X3Bvc3NpYmxlX21hc2spOwogCUVYUEVDVF9GT1JfRUFDSF9DUFVfT1BfRVEodGVzdCwgYW5kLCBj
-cHVfcG9zc2libGVfbWFzaywgY3B1X3Bvc3NpYmxlX21hc2spOwogCUVYUEVDVF9GT1JfRUFDSF9D
-UFVfT1BfRVEodGVzdCwgYW5kbm90LCBjcHVfcG9zc2libGVfbWFzaywgJm1hc2tfZW1wdHkpOwot
-LSAKMi4zOS4xLjQzNy5nODhhZTVjN2Y4MQoK
---0000000000000d15e205f61b260f--
+The following GCC notes was reported for commit 64c8902ed441
+("migrate_pages: split unmap_and_move() to _unmap() and _move()").
+
+    mm/migrate.c: In function `__migrate_folio_extract':
+    mm/migrate.c:1050:20: note: randstruct: casting between randomized
+structure pointer types (ssa): `struct anon_vma' and `struct
+address_space'
+
+     1050 |         *anon_vmap = (void *)dst->mapping;
+          |         ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~
+
+The casting itself is safe.  Because we only use dst->mapping to store the
+pointer itself temporarily and dst is a newly allocated folio and not used
+by anyone else during that.  But the notes should be silenced and some
+comments are deserved.  So, we do that in this patch.
+
+Link: https://lkml.kernel.org/r/20230302012610.17055-1-ying.huang@intel.com
+Fixes: 64c8902ed441 ("migrate_pages: split unmap_and_move() to _unmap() and _move()")
+Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: Xin Hao <xhao@linux.alibaba.com>
+Cc: Zi Yan <ziy@nvidia.com>
+Cc: Yang Shi <shy828301@gmail.com>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Bharata B Rao <bharata@amd.com>
+Cc: Alistair Popple <apopple@nvidia.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+
+--- a/mm/migrate.c~migrate_pages-silence-gcc-notes-for-mis-casting
++++ a/mm/migrate.c
+@@ -1047,7 +1047,16 @@ static void __migrate_folio_extract(stru
+ 				   int *page_was_mappedp,
+ 				   struct anon_vma **anon_vmap)
+ {
+-	*anon_vmap = (void *)dst->mapping;
++	struct anon_vma *anon_vma;
++
++	/*
++	 * 2 steps assignment to silence gcc notes for mis-casting. The
++	 * casting is safe.  Because we only use dst->mapping to store
++	 * the pointer itself temporarily and dst is a newly allocated
++	 * folio and not used by anyone else during that.
++	 */
++	anon_vma = (void *)dst->mapping;
++	*anon_vmap = anon_vma;
+ 	*page_was_mappedp = (unsigned long)dst->private;
+ 	dst->mapping = NULL;
+ 	dst->private = NULL;
+_
+
