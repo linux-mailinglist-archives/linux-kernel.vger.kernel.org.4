@@ -2,152 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F406AAB0D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 17:17:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CF16AAB10
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 17:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjCDQQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 11:16:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
+        id S229744AbjCDQRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 11:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCDQQv (ORCPT
+        with ESMTP id S229568AbjCDQRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 11:16:51 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC2F12843;
-        Sat,  4 Mar 2023 08:16:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xplF4RgVqCgG9n4366j4n690Q9EbKHhkNofY33Y7nZU=; b=q1yHqmFUic9Le/0j+EfJwHb0Je
-        L+DZFGlaje6I2nrnmNEKAizh5i8VH3TGweEO2xDhgkNToizM04T4ZzYeG0P0ay8f6Q9rNynzdaOde
-        iy750VbQckM32GX8yFrnLYTXbKY3IyRosEJUBPwVnhARSmzID6VWjXuE9Q6MjbBhZ4ATsU4bMKooI
-        0lxmh3wxvQmPG0mEG04q484qNZ8EaTrPnVl7CgSgbtOQox7jfL6wyoJqGJoN8rlkekJ23WmVG4qhj
-        izm0lURK+V8nD2E+MgYj97UwIytBJes3k9DkWSD+FwVoNoyBEoRgYktlAoZRfugEf7GuMmoXha+r4
-        BBsGr+iA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48232)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pYUYp-0002oO-Cc; Sat, 04 Mar 2023 16:16:39 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pYUYh-00071n-Vv; Sat, 04 Mar 2023 16:16:31 +0000
-Date:   Sat, 4 Mar 2023 16:16:31 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     =?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Richard Cochran <richardcochran@gmail.com>,
-        thomas.petazzoni@bootlin.com, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Jie Wang <wangjie125@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wang Yufen <wangyufen@huawei.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Subject: Re: [PATCH v2 3/4] net: Let the active time stamping layer be
- selectable.
-Message-ID: <ZANu37JHCKwsiCTT@shell.armlinux.org.uk>
-References: <20230303164248.499286-1-kory.maincent@bootlin.com>
- <20230303164248.499286-4-kory.maincent@bootlin.com>
- <011d63c3-e3ff-4b67-8ab7-d39f541c7b31@lunn.ch>
+        Sat, 4 Mar 2023 11:17:03 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1649A144B3;
+        Sat,  4 Mar 2023 08:17:02 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id g9so3772788ila.8;
+        Sat, 04 Mar 2023 08:17:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677946621;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=eL+JzT062skIms6dI3Im2RP8HO443dBwJahK7ZRJfqU=;
+        b=j+dQCSHUKp45Xuu0DRFHJE+5pSSjXyztjR0ZMkWsO3JbKII7k6J+bJ2J+CWjtfIevZ
+         bvWZ3NR52/yDr6oTEpj8aoroUo12Rx5zaOT3v1/rxb/Ht4K/8QmZhDODU3LZxrN6DYwg
+         28aDjb4f8vJL6zvD58Dm6a71+0KX+izcjmMPpuN+I/RCV3sNJzrUEuj6NvssTv8lKqaG
+         kVs2kz5o+PeDwhfbyqX/AHJVImJydlRFIVJpfCz+5g82GRY9ecDjj4R8H/aqWd7r2aa5
+         yKgqgXi883zHW5ZDo7T/LT7R+REyZ/xaKYdrnpzW1pOWVZW3SDGrufbHilh39wLYB+Mr
+         +zsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677946621;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eL+JzT062skIms6dI3Im2RP8HO443dBwJahK7ZRJfqU=;
+        b=38z+1aznRL3XEALz9tUNTyyDGdICtH9wtpx4e1zcgDKt1HnbY4ed3LGUaAIolRqr//
+         yOm9E7g6bGwOH92M9+XZybxPReG/2YCCmuHXDHy7mKd7FkfYi0fttZ4Ds3gzOuxfM/vS
+         oBNpwQyXh4DmtWdYWSD6PMVW9NwDzc2YGh26VoyA0Ndm+6WN+xYjL6zoM1kwBCEICUy/
+         H247P2Eyu+FPwNJNlz6xtVvPgjO6S9BF53BFwa9UfJpmLp4YvTQa/XeO9vTAZ/tM8aeX
+         0PfiNklXY9B8fdMchycZi5nNr1StH8VZF8YTRxqjPuNLZ0aQ8iGSJLYzDXpAc5gCJxNy
+         +sHQ==
+X-Gm-Message-State: AO0yUKWIt2Lu+pTfRatGQ5ECcKBDURWQz/ENL46AKWOve7jIEHeIoLX0
+        XAIgw/rRTbpG171E0oA3SNQrlAo5HOQ=
+X-Google-Smtp-Source: AK7set9n/uOrpfVvY95KSjCv7KZ/Ix/BlgSCNDraxZ6CA5zMsQtwgKWBowpCN/F7Q9VRom6JwURmMg==
+X-Received: by 2002:a05:6e02:1d05:b0:317:97ab:e5d1 with SMTP id i5-20020a056e021d0500b0031797abe5d1mr5480272ila.12.1677946621445;
+        Sat, 04 Mar 2023 08:17:01 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z26-20020a056638001a00b003c2c5f13596sm1636063jao.59.2023.03.04.08.17.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Mar 2023 08:17:01 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <af0122a5-7f1a-7a8a-9a28-06092b12f2dd@roeck-us.net>
+Date:   Sat, 4 Mar 2023 08:16:59 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH -next] watchdog: sbsa: Test WDOG_HW_RUNNING bit in suspend
+ and resume
+Content-Language: en-US
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Wang Wensheng <wangwensheng4@huawei.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     xuqiang36@huawei.com
+References: <20230301113702.76437-1-wangwensheng4@huawei.com>
+ <8aff260c-7151-fe1c-91cd-1e107225a25f@roeck-us.net>
+In-Reply-To: <8aff260c-7151-fe1c-91cd-1e107225a25f@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <011d63c3-e3ff-4b67-8ab7-d39f541c7b31@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 04, 2023 at 04:43:47PM +0100, Andrew Lunn wrote:
-> On Fri, Mar 03, 2023 at 05:42:40PM +0100, K�ry Maincent wrote:
-> > From: Richard Cochran <richardcochran@gmail.com>
-> > 
-> > Make the sysfs knob writable, and add checks in the ioctl and time
-> > stamping paths to respect the currently selected time stamping layer.
+On 3/4/23 06:54, Guenter Roeck wrote:
+> On 3/1/23 03:37, Wang Wensheng wrote:
+>> If the sbsa_gwdt is enabled by BIOS, the kernel set WDOG_HW_RUNNING bit
+>> and keep it alive before anyone else would open it. When system suspend,
+>> the sbsa_gwdt would not be disabled because WDOG_ACTIVE is not set. Then
+>> the sbsa_gwdt would reach timeout since no one touch it during system
+>> suspend.
+>>
+>> To solve this, just test WDOG_HW_RUNNING bit in suspend and disable the
+>> sbsa_gwdt if the bit is set, then reopen it accordingly in resume
+>> process.
+>>
+>> Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
+>> ---
+>>   drivers/watchdog/sbsa_gwdt.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+>> index 9791c74aebd4..60875a710e43 100644
+>> --- a/drivers/watchdog/sbsa_gwdt.c
+>> +++ b/drivers/watchdog/sbsa_gwdt.c
+>> @@ -360,7 +360,7 @@ static int __maybe_unused sbsa_gwdt_suspend(struct device *dev)
+>>   {
+>>       struct sbsa_gwdt *gwdt = dev_get_drvdata(dev);
+>> -    if (watchdog_active(&gwdt->wdd))
+>> +    if (watchdog_hw_running(&gwdt->wdd))
+>>           sbsa_gwdt_stop(&gwdt->wdd);
 > 
-> Although it probably works, i think the ioctl code is ugly.
+> That will not stop the watchdog if it is currently open (active)
+> and if it wasn't running when the module was loaded.
 > 
-> I think it would be better to pull the IOCTL code into the PTP object
-> interface. Add an ioctl member to struct ptp_clock_info. The PTP core
-> can then directly call into the PTP object.
 
-Putting it into ptp_clock_info makes little sense to me, because this
-is for the PHC, which is exposed via /dev/ptp*, and that's what the
-various methods in that structure are for
+I just sent a patch which fixes the problem in the watchdog core.
 
-The timestamping part is via the netdev, which is a separate entity,
-and its that entity which is responsible for identifying which PHC it
-is connected to (normally by filling in the phc_index field of
-ethtool_ts_info.)
+Guenter
 
-Think of is as:
+> Guenter
+> 
+>>       return 0;
+>> @@ -371,7 +371,7 @@ static int __maybe_unused sbsa_gwdt_resume(struct device *dev)
+>>   {
+>>       struct sbsa_gwdt *gwdt = dev_get_drvdata(dev);
+>> -    if (watchdog_active(&gwdt->wdd))
+>> +    if (watchdog_hw_running(&gwdt->wdd))
+>>           sbsa_gwdt_start(&gwdt->wdd);
+>>       return 0;
+> 
 
-  netdev ---- timestamping ---- PHC
-
-since we can have:
-
-  netdev1 ---- timestamping \
-  netdev2 ---- timestamping -*--- PHC
-  netdev3 ---- timestamping /
-
-Since the ioctl is to do with requesting what we want the timestamping
-layer to be doing with packets, putting it in ptp_clock_info makes
-very little sense.
-
-> You now have a rather odd semantic that calling the .ndo_eth_ioctl
-> means operate on the MAC PTP. If you look at net_device_ops, i don't
-> think any of the other members have this semantic. They all look at
-> the netdev as a whole, and ask the netdev to do something, without
-> caring what level it operates at. So a PTP ioctl should operate on
-> 'the' PTP of the netdev, whichever that might be, MAC or PHY.
-
-Well, what we have today is:
-
-int __ethtool_get_ts_info(struct net_device *dev, struct ethtool_ts_info *info)
-{
-...
-        if (phy_has_tsinfo(phydev))
-                return phy_ts_info(phydev, info);
-        if (ops->get_ts_info)
-                return ops->get_ts_info(dev, info);
-}
-
-So, one can argue that we already have this "odd" semantic, in that
-calling get_ts_info() means to operate on the MAC PTP implementation.
-Making the ioctl also do that merely brings it into line with this
-existing code!
-
-If we want in general for the netdev to always be called, then we need
-to remove the above, but then we need to go through all the networking
-drivers working out which need to provide a get_ts_info() and forward
-that to phylib. Maybe that's a good thing in the longer run though?
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
