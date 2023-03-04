@@ -2,101 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599006AACC4
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 22:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C456AACC7
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 22:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjCDVpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 16:45:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
+        id S229622AbjCDVqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 16:46:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCDVpI (ORCPT
+        with ESMTP id S229484AbjCDVqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 16:45:08 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC2125B4
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 13:45:06 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id o15so23714291edr.13
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 13:45:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WKDIxvFH4F3D/Bp8+BmLpjtlutHoc8KA5An4csidBcU=;
-        b=jzS3yeCClEU5ic+r6pgQ/vQwrY4Lj324IPOIkZYoWfvdmucb1ln4sYfsza2nWDWTNL
-         4mtcMhMyNlIRWv24QYhcwEtOU12QAYKj9EURBj5bcbmpQoF5570sCwvVOR+IWU30DjI/
-         7AB3YMigQcTKQX2rwSYrtfKZwOPcSK7sXlBMzB89QkV5CPJhzpYwTu0LTWwr1CPk5bfT
-         5fkm41zDUcAzcqfeaR4Sq3b9aKdO1oRkZ3f6dXusQwZ70heMW1IzC3n+O7Kpew8BPliH
-         4AQkZ6ptMn5c7dafr/RgoabPd0AAMGkJUl0j6IH8PTgxEdPCpRvcIzAKTKg/4oLKEwWd
-         WXfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WKDIxvFH4F3D/Bp8+BmLpjtlutHoc8KA5An4csidBcU=;
-        b=jFbmOm178PoFBnQoaAgaH5jagQrU3H0uHnDP2OLaARgDXEG4iY4R7n4Lx7HASeY9lr
-         luMmhjdQBeQRo5pcNOwVrW1XZOvkbigNGA1YJJ66vn2aDe2WWbtH45hQvqa0Nd9NGJBe
-         O/9eMuQW64eaWN7mulTiTZ7ms2tcaXWAFyX2sapCw8hv8Kh+4m6GMLSqvtEpeJVAPCfS
-         V54r4nUclSpUnZwTUuA/H7d7DGmL8sSdummP3t3IJqcTMZZ8G0I1HXFlLZ/dg/gGd1ZF
-         9G0sWz57InsVksF8SgpM95TmdWGybdUJboKBo1kK73KJ8wyiAnqrkO81VETccIbKEY8O
-         mQ0A==
-X-Gm-Message-State: AO0yUKX+F8vs50XgqtAvyEKW6yPM9DGG+WsGvRs+3vtZal9qMQc2fBOu
-        CP5q6vIJbvjvpgWdQrDPhNHWxAktgPQWZywKiJQ=
-X-Google-Smtp-Source: AK7set9wY0tIW78yGxDw99q432fpv27SQCH8++tgi5/mw5cQNNLf7m3KivFDf11whC1GeXIRw82onTzmkovP2vSJ4lI=
-X-Received: by 2002:a17:906:f18f:b0:8af:2ad8:3453 with SMTP id
- gs15-20020a170906f18f00b008af2ad83453mr5871550ejb.6.1677966304797; Sat, 04
- Mar 2023 13:45:04 -0800 (PST)
+        Sat, 4 Mar 2023 16:46:43 -0500
+Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18EE13D4C
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 13:46:41 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id YZi6peXMSbVeoYZi6pIK01; Sat, 04 Mar 2023 22:46:39 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 04 Mar 2023 22:46:39 +0100
+X-ME-IP: 86.243.2.178
+Message-ID: <93d115a2-702d-7d68-cd88-98f1c9f03f95@wanadoo.fr>
+Date:   Sat, 4 Mar 2023 22:46:34 +0100
 MIME-Version: 1.0
-References: <20230303123312.155164-1-christianshewitt@gmail.com>
-In-Reply-To: <20230303123312.155164-1-christianshewitt@gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 4 Mar 2023 22:44:53 +0100
-Message-ID: <CAFBinCDwGW-NaMx63t2v=Rt298MY1W13A1b1BDwHN72q7ifbZQ@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/meson: fix 1px pink line on GXM when scaling video overlay
-To:     Christian Hewitt <christianshewitt@gmail.com>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] watchdog: s3c2410_wdt: Use Use
+ devm_clk_get[_optional]_enabled() helpers
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+References: <20230304165653.2179835-1-linux@roeck-us.net>
+Content-Language: fr
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230304165653.2179835-1-linux@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 1:33=E2=80=AFPM Christian Hewitt
-<christianshewitt@gmail.com> wrote:
->
-> Playing media with a resolution smaller than the crtc size requires the
-> video overlay to be scaled for output and GXM boards display a 1px pink
-> line on the bottom of the scaled overlay. Comparing with the downstream
-> vendor driver revealed VPP_DUMMY_DATA not being set [0].
->
-> Setting VPP_DUMMY_DATA prevents the 1px pink line from being seen.
->
-> [0] https://github.com/endlessm/linux-s905x/blob/master/drivers/amlogic/a=
-mports/video.c#L7869
->
-> Fixes: bbbe775ec5b5 ("drm: Add support for Amlogic Meson Graphic Controll=
-er")
-> Suggested-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-
+Le 04/03/2023 à 17:56, Guenter Roeck a écrit :
+> The devm_clk_get[_optional]_enabled() helpers:
+>      - call devm_clk_get[_optional]()
+>      - call clk_prepare_enable() and register what is needed in order to
+>        call clk_disable_unprepare() when needed, as a managed resource.
+> 
+> This simplifies the code and avoids the calls to clk_disable_unprepare().
+> 
+> While at it, use dev_err_probe consistently, and use its return value
+> to return the error code.
+> 
+> Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
-> Change since v1:
-> This time I sent the right patch from the correct branch; the wording in
-> v1 is incorrect and the change to meson_registers.h is not required.
-Thanks Christian - I was about to ask whether you could isolate which
-part of the original patch fixes the issue, but you've been quicker
-:-)
+>   drivers/watchdog/s3c2410_wdt.c | 45 +++++++---------------------------
+>   1 file changed, 9 insertions(+), 36 deletions(-)
+> 
+> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+> index 200ba236a72e..a1fcb79b0b7c 100644
+> --- a/drivers/watchdog/s3c2410_wdt.c
+> +++ b/drivers/watchdog/s3c2410_wdt.c
+> @@ -661,35 +661,17 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>   	if (IS_ERR(wdt->reg_base))
+>   		return PTR_ERR(wdt->reg_base);
+>   
+> -	wdt->bus_clk = devm_clk_get(dev, "watchdog");
+> -	if (IS_ERR(wdt->bus_clk)) {
+> -		dev_err(dev, "failed to find bus clock\n");
+> -		return PTR_ERR(wdt->bus_clk);
+> -	}
+> -
+> -	ret = clk_prepare_enable(wdt->bus_clk);
+> -	if (ret < 0) {
+> -		dev_err(dev, "failed to enable bus clock\n");
+> -		return ret;
+> -	}
+> +	wdt->bus_clk = devm_clk_get_enabled(dev, "watchdog");
+> +	if (IS_ERR(wdt->bus_clk))
+> +		return dev_err_probe(dev, PTR_ERR(wdt->bus_clk), "failed to get bus clock\n");
+>   
+>   	/*
+>   	 * "watchdog_src" clock is optional; if it's not present -- just skip it
+>   	 * and use "watchdog" clock as both bus and source clock.
+>   	 */
+> -	wdt->src_clk = devm_clk_get_optional(dev, "watchdog_src");
+> -	if (IS_ERR(wdt->src_clk)) {
+> -		dev_err_probe(dev, PTR_ERR(wdt->src_clk),
+> -			      "failed to get source clock\n");
+> -		ret = PTR_ERR(wdt->src_clk);
+> -		goto err_bus_clk;
+> -	}
+> -
+> -	ret = clk_prepare_enable(wdt->src_clk);
+> -	if (ret) {
+> -		dev_err(dev, "failed to enable source clock\n");
+> -		goto err_bus_clk;
+> -	}
+> +	wdt->src_clk = devm_clk_get_optional_enabled(dev, "watchdog_src");
+> +	if (IS_ERR(wdt->src_clk))
+> +		return dev_err_probe(dev, PTR_ERR(wdt->src_clk), "failed to get source clock\n");
+>   
+>   	wdt->wdt_device.min_timeout = 1;
+>   	wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt);
+> @@ -710,7 +692,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>   				 S3C2410_WATCHDOG_DEFAULT_TIME);
+>   		} else {
+>   			dev_err(dev, "failed to use default timeout\n");
+> -			goto err_src_clk;
+> +			return ret;
+
+Hi,
+
+Nit: this also could be "return dev_err_probe()"
+
+>   		}
+>   	}
+>   
+> @@ -718,7 +700,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>   			       pdev->name, pdev);
+>   	if (ret != 0) {
+>   		dev_err(dev, "failed to install irq (%d)\n", ret);
+> -		goto err_src_clk;
+> +		return ret;
+
+Nit: this also could be "return dev_err_probe()"
+
+CJ
+
+>   	}
+>   
+>   	watchdog_set_nowayout(&wdt->wdt_device, nowayout);
+> @@ -744,7 +726,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>   
+>   	ret = watchdog_register_device(&wdt->wdt_device);
+>   	if (ret)
+> -		goto err_src_clk;
+> +		return ret;
+>   
+>   	ret = s3c2410wdt_enable(wdt, true);
+>   	if (ret < 0)
+> @@ -766,12 +748,6 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>    err_unregister:
+>   	watchdog_unregister_device(&wdt->wdt_device);
+>   
+> - err_src_clk:
+> -	clk_disable_unprepare(wdt->src_clk);
+> -
+> - err_bus_clk:
+> -	clk_disable_unprepare(wdt->bus_clk);
+> -
+>   	return ret;
+>   }
+>   
+> @@ -786,9 +762,6 @@ static int s3c2410wdt_remove(struct platform_device *dev)
+>   
+>   	watchdog_unregister_device(&wdt->wdt_device);
+>   
+> -	clk_disable_unprepare(wdt->src_clk);
+> -	clk_disable_unprepare(wdt->bus_clk);
+> -
+>   	return 0;
+>   }
+>   
+
