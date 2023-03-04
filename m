@@ -2,724 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347CF6AA905
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 10:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C45C16AA906
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 10:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCDJzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 04:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42106 "EHLO
+        id S229698AbjCDJ5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 04:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCDJzb (ORCPT
+        with ESMTP id S229551AbjCDJ5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 04:55:31 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B1714486;
-        Sat,  4 Mar 2023 01:55:28 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id t15so4411494wrz.7;
-        Sat, 04 Mar 2023 01:55:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7g5C+jDGu0VzYCCEnoAOmIA11KXnKzjh89GrKtitMVo=;
-        b=iwoMHyoVyoREUmmOcaw9R0MCS0tT+6iXqzunxmbehsSDXPfqL5kLBXF+/CHkUoTOEK
-         huMXh8+0TP0LQ3yq4Yf97y9c2uJ21E1IK2pqXOtfNtbiog9UrGscpQzcnzg1CvspEbsP
-         8Tt8X+tD8RJmDNbtkAPvYj6o/BI5x2EUWPloQiMShD9tsTMxNZwWoP7ZwY3uLZZ9OK5I
-         JyH7ZWqfk3ohPD2Q6RaXb/qb4UgxE2e1jOIe+P/nXjNIDAujOrG0oI6BJtRU0syMDCfv
-         kBywUN+IdgvvPZJrbYoKI76WSMvOBwekEYsSjgVZS5+TEbGD+su+/KNUpi9gJhCFZT3T
-         IjWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7g5C+jDGu0VzYCCEnoAOmIA11KXnKzjh89GrKtitMVo=;
-        b=5bogOyoZl+byIs5EusNHGMBudhKqmc9pB1HbNLv8aa3AajnYrkUMPwYmlUP6r7O1ai
-         GAz+j+je/U/v2coDbpeWGzD1QgvGPgaXqJ2hOhqnU+0Q9UDCv4Zka+MvNGgpJuNwbEfE
-         jxqDcl2K/eTUAQqNxm6P1t4Q5oo+wybrSuYIqO2Pv31SL6+ZE65QE40cacXKIR8LW9QP
-         375R5f6FzyJtiNxQajU/3tCeNNPOGuMQuv8YokYnNzxw1B7wkUd77Pv/Rz2xBfWXaGr6
-         ngqnqC66myRgYK4wyIpyOkT69nrCs4gRgQtN2mSfrE7Dwi2XySs75U+1e1lsMnrOPyZD
-         qisg==
-X-Gm-Message-State: AO0yUKWJk68VCJv4Nh3qinrBevI7gFgb3RC+cVoac8quYkl4l/4sgM/L
-        2GPEKgIk4JhCuS/Y/duw0aM=
-X-Google-Smtp-Source: AK7set9nNvmFzQc9tlkKgIe33pvNfR5jPiyNO23YXyDgmM2jppgUKmD2eCGohqP4hSyhGSCEkqRuyA==
-X-Received: by 2002:a05:6000:11c8:b0:2cb:a82c:2523 with SMTP id i8-20020a05600011c800b002cba82c2523mr4040242wrx.35.1677923727091;
-        Sat, 04 Mar 2023 01:55:27 -0800 (PST)
-Received: from smtpclient.apple ([167.99.200.149])
-        by smtp.gmail.com with ESMTPSA id t20-20020a0560001a5400b002c54f4d0f71sm4624702wry.38.2023.03.04.01.55.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 04 Mar 2023 01:55:26 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 2/2] arm64: dts: amlogic: Add initial support for BPI-CM4
- module with BPI-CM4IO baseboard
-From:   Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <20230303-topic-amlogic-upstream-bpi-cm4-v1-2-5a23a1ade6bd@linaro.org>
-Date:   Sat, 4 Mar 2023 13:55:22 +0400
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <6714BB2C-0E80-4F16-93A4-9DAF6FA93EE9@gmail.com>
-References: <20230303-topic-amlogic-upstream-bpi-cm4-v1-0-5a23a1ade6bd@linaro.org>
- <20230303-topic-amlogic-upstream-bpi-cm4-v1-2-5a23a1ade6bd@linaro.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 4 Mar 2023 04:57:49 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2269755
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 01:57:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SfhZHUyfDsg19uG6RM4Ou8sW0goxAG745IQOeAQ8QYU=; b=Ck3glLKyuw7zsPy3T5KPDKYpN8
+        wB/Yp42kmEqRur+bfCTNoaRtiKT1gguMX2NimFz3qLYreym9aFs2UXARN+gJeyaXsmS5LpBKrzqV+
+        X19X34RGt8OBT54oYeqiDnFxtPELuc88iMoBShYKWPk6JuitQahUMZbJdgyWrPFrEtjWEjE44ZNeR
+        E8+bXSnFld7gfazK0o+5JexvzG8itIlLIvZD3OS4V95G4CW7SIU6HZklJLtovgTuSevKZaac5Z6vG
+        FC8o3nUGjGpedR6ZjI5oBkhWwzKFg10Fdgg6WQOmpmR50+ZsmcGQBOEoy4IevED76M6C0PAycAlTS
+        B8v3lqwA==;
+Received: from [2001:8b0:10b:5:4ce9:a0c4:1cf4:98d9] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pYOe5-003mLX-IZ; Sat, 04 Mar 2023 09:57:42 +0000
+Message-ID: <c34964056595a5a59d0d53410933a5582ef07d10.camel@infradead.org>
+Subject: Re: IRQ affinity not working on Xen pci-platform device^W^W^W QEMU
+ split-irqchip I/O APIC.
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        xen-devel <xen-devel@lists.xenproject.org>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        qemu-devel <qemu-devel@nongnu.org>, Peter Xu <peterx@redhat.com>
+Date:   Sat, 04 Mar 2023 09:57:40 +0000
+In-Reply-To: <87356ljr6m.ffs@tglx>
+References: <07866eaf6354dd43d87cffb6eebf101716845b66.camel@infradead.org>
+         <87fsalkcck.ffs@tglx>
+         <1060e7786498f384634b01c335bf7bf43365e1fe.camel@infradead.org>
+         <87356ljr6m.ffs@tglx>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-5Pj+37JDg51UR5035j2m"
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Resending from an email account that doesn=E2=80=99t get rejected by all =
-the lists. Apologies
-if you did get this twice:
 
-> On 3 Mar 2023, at 9:37 pm, Neil Armstrong <neil.armstrong@linaro.org> =
-wrote:
+--=-5Pj+37JDg51UR5035j2m
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, 2023-03-04 at 01:28 +0100, Thomas Gleixner wrote:
+> David!
 >=20
-> Add support for both the BananaPi BPI-CM4 module and the BananaPi
-> baseboard which is comnpatible with the RaspberryPi CM4IO baseboard.
+> On Fri, Mar 03 2023 at 16:54, David Woodhouse wrote:
+> > On Fri, 2023-03-03 at 17:51 +0100, Thomas Gleixner wrote:
+> > > >=20
+> > > > [=C2=A0=C2=A0=C2=A0 0.577173] ACPI: \_SB_.LNKC: Enabled at IRQ 11
+> > > > [=C2=A0=C2=A0=C2=A0 0.578149] The affinity mask was 0-3
+> > > > [=C2=A0=C2=A0=C2=A0 0.579081] The affinity mask is 0-3 and the hand=
+ler is on 2
+> > > > [=C2=A0=C2=A0=C2=A0 0.580288] The affinity mask is 0 and the handle=
+r is on 2
+> > >=20
+> > > What happens is that once the interrupt is requested, the affinity
+> > > setting is deferred to the first interrupt. See the marvelous dance i=
+n
+> > > arch/x86/kernel/apic/msi.c::msi_set_affinity().
+> > >=20
+> > > If you do the setting before request_irq() then the startup will assi=
+gn
+> > > it to the target mask right away.
+> > >=20
+> > > Btw, you are using irq_get_affinity_mask(), which gives you the desir=
+ed
+> > > target mask. irq_get_effective_affinity_mask() gives you the real one=
+.
+> > >=20
+> > > Can you verify that the thing moves over after the first interrupt or=
+ is
+> > > that too late already?
+> >=20
+> > It doesn't seem to move. The hack to just return IRQ_NONE if invoked on
+> > CPU !=3D 0 was intended to do just that. It's a level-triggered interru=
+pt
+> > so when the handler does nothing on the "wrong" CPU, it ought to get
+> > invoked again on the *correct* CPU and actually=C2=A0work that time.
 >=20
-> The BananaPi BPI-CM4 module follows the CM4 specifications at [1],
-> but with a single HDMI port and a since DSI output.
->=20
-> The current CM4IO baseboard DT should work fine on the Raspberry CM4
-> baseboard and other derivatives baseboards, but proper DT should
-> be written for other baseboards.
->=20
-> The split is done so it's easy to describe a new CM4 baseboard, =
-enabling
-> only the necessary HW used on the baseboard.
->=20
-> [1] https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
->=20
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-> arch/arm64/boot/dts/amlogic/Makefile               |   1 +
-> .../dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts  | 165 +++++++++
-> .../boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi  | 388 =
-+++++++++++++++++++++
-> 3 files changed, 554 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/amlogic/Makefile =
-b/arch/arm64/boot/dts/amlogic/Makefile
-> index ccf1ba57fa87..e626c4b82b29 100644
-> --- a/arch/arm64/boot/dts/amlogic/Makefile
-> +++ b/arch/arm64/boot/dts/amlogic/Makefile
-> @@ -19,6 +19,7 @@ dtb-$(CONFIG_ARCH_MESON) +=3D =
-meson-g12b-odroid-n2l.dtb
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-g12b-radxa-zero2.dtb
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-g12b-s922x-khadas-vim3.dtb
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-g12b-ugoos-am6.dtb
-> +dtb-$(CONFIG_ARCH_MESON) +=3D meson-g12b-bananapi-cm4-cm4io.dtb
+> So much for the theory. This is virt after all so it does not
+> necessarily behave like real hardware.
 
-^ Please add before meson-g12b-gsking-x.dtb to keep the list sorted
+I think you're right. This looks like a QEMU bug with the "split
+irqchip" I/OAPIC.
 
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-gxbb-kii-pro.dtb
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-gxbb-nanopi-k2.dtb
-> dtb-$(CONFIG_ARCH_MESON) +=3D meson-gxbb-nexbox-a95x.dtb
-> diff --git =
-a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts =
-b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts
-> new file mode 100644
-> index 000000000000..2c4a5b3f1b20
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts
-> @@ -0,0 +1,165 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "meson-g12b-bananapi-cm4.dtsi"
-> +#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
-> +#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-> +
-> +/ {
-> +	compatible =3D "bananapi,bpi-cm4io", "bananapi,bpi-cm4", =
-"amlogic,a311d", "amlogic,g12b";
-> +	model =3D "BananaPi BPI-CM4IO Baseboard with BPI-CM4 Module";
-> +
-> +	aliases {
-> +		ethernet0 =3D &ethmac;
-> +		i2c0 =3D &i2c1;
-> +		i2c1 =3D &i2c3;
-> +	};
-> +
-> +	adc-keys {
-> +		compatible =3D "adc-keys";
-> +		io-channels =3D <&saradc 2>;
-> +		io-channel-names =3D "buttons";
-> +		keyup-threshold-microvolt =3D <1710000>;
-> +
-> +		button-function {
-> +			label =3D "Function";
-> +			linux,code =3D <KEY_FN>;
-> +			press-threshold-microvolt =3D <10000>;
-> +		};
-> +	};
-> +
-> +	hdmi_connector: hdmi-connector {
-> +		compatible =3D "hdmi-connector";
-> +		type =3D "a";
-> +
-> +		port {
-> +			hdmi_connector_in: endpoint {
-> +				remote-endpoint =3D <&hdmi_tx_tmds_out>;
-> +			};
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible =3D "gpio-leds";
-> +
-> +		led-blue {
-> +			color =3D <LED_COLOR_ID_BLUE>;
-> +			function =3D LED_FUNCTION_STATUS;
-> +			gpios =3D <&gpio_ao GPIOAO_7 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger =3D "heartbeat";
-> +		};
-> +
-> +		led-green {
-> +			color =3D <LED_COLOR_ID_GREEN>;
-> +			function =3D LED_FUNCTION_STATUS;
-> +			gpios =3D <&gpio_ao GPIOAO_2 GPIO_ACTIVE_HIGH>;
-> +		};
-> +	};
-> +
-> +	sound {
-> +		compatible =3D "amlogic,axg-sound-card";
-> +		model =3D "BPI-CM4IO";
-> +		audio-aux-devs =3D <&tdmout_b>;
-> +		audio-routing =3D	"TDMOUT_B IN 0", "FRDDR_A OUT =
-0",
-> +				"TDMOUT_B IN 1", "FRDDR_B OUT 0",
-> +				"TDMOUT_B IN 2", "FRDDR_C OUT 0",
+For reasons I'm unclear about, and which lack a comment in the code,
+QEMU still injects I/OAPIC events into the kernel with kvm_set_irq().
+(I think it's do to with caching, because QEMU doesn't cache interrupt-
+remapping translations anywhere *except* in the KVM IRQ routing table,
+so if it just synthesised an MSI message every time it'd have to
+retranslate it every time?)
 
-^ Should be =E2=80=9CFRDDR_A OUT 1=E2=80=9D and same for FRDDR_B/C else =
-dmesg is spammed with:
+Tracing the behaviour here shows:
 
-Mar 04 08:12:24 LibreELEC kernel:  fe.dai-link-0: ASoC: no backend DAIs =
-enabled for fe.dai-link-0
-Mar 04 08:12:24 LibreELEC kernel:  fe.dai-link-0: ASoC: error at =
-dpcm_fe_dai_prepare on fe.dai-link-0: -22
-Mar 04 08:12:24 LibreELEC kernel:  fe.dai-link-0: ASoC: no backend DAIs =
-enabled for fe.dai-link-0
-Mar 04 08:12:24 LibreELEC kernel:  fe.dai-link-0: ASoC: error at =
-dpcm_fe_dai_prepare on fe.dai-link-0: -22
+ =E2=80=A2 First interrupt happens on CPU2.
+ =E2=80=A2 Linux updates the I/OAPIC RTE to point to CPU0, but QEMU doesn't
+   update the KVM IRQ routing table yet.
+ * QEMU retriggers the (still-high, level triggered) IRQ.
+ =E2=80=A2 QEMU calls kvm_set_irq(11), delivering it to CPU2 again.
+ =E2=80=A2 QEMU *finally* calls ioapic_update_kvm_routes().
+ =E2=80=A2 Linux sees the interrupt on CPU2 again.
 
-> +				"TDM_B Playback", "TDMOUT_B OUT";
-> +
-> +		assigned-clocks =3D <&clkc CLKID_MPLL2>,
-> +				  <&clkc CLKID_MPLL0>,
-> +				  <&clkc CLKID_MPLL1>;
-> +		assigned-clock-parents =3D <0>, <0>, <0>;
-> +		assigned-clock-rates =3D <294912000>,
-> +				       <270950400>,
-> +				       <393216000>;
-> +
-> +		dai-link-0 {
-> +			sound-dai =3D <&frddr_a>;
-> +		};
-> +
-> +		dai-link-1 {
-> +			sound-dai =3D <&frddr_b>;
-> +		};
-> +
-> +		dai-link-2 {
-> +			sound-dai =3D <&frddr_c>;
-> +		};
-> +
-> +		/* 8ch hdmi interface */
-> +		dai-link-3 {
-> +			sound-dai =3D <&tdmif_b>;
-> +			dai-format =3D "i2s";
-> +			dai-tdm-slot-tx-mask-0 =3D <1 1>;
-> +			dai-tdm-slot-tx-mask-1 =3D <1 1>;
-> +			dai-tdm-slot-tx-mask-2 =3D <1 1>;
-> +			dai-tdm-slot-tx-mask-3 =3D <1 1>;
-> +			mclk-fs =3D <256>;
-> +
-> +			codec {
-> +				sound-dai =3D <&tohdmitx =
-TOHDMITX_I2S_IN_B>;
-> +			};
-> +		};
-> +
-> +		/* hdmi glue */
-> +		dai-link-4 {
-> +			sound-dai =3D <&tohdmitx TOHDMITX_I2S_OUT>;
-> +
-> +			codec {
-> +				sound-dai =3D <&hdmi_tx>;
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&cecb_AO {
-> +	status =3D "okay";
-> +};
-> +
-> +&ethmac {
-> +	status =3D "okay";
-> +};
-> +
-> +&hdmi_tx {
-> +	status =3D "okay";
-> +};
-> +
-> +&hdmi_tx_tmds_port {
-> +	hdmi_tx_tmds_out: endpoint {
-> +		remote-endpoint =3D <&hdmi_connector_in>;
-> +	};
-> +};
-> +
-> +/* CSI port */
-> +&i2c1 {
-> +	status =3D "okay";
-> +};
-> +
-> +/* DSI port for touchscreen */
-> +&i2c3 {
-> +	status =3D "okay";
-> +};
-> +
-> +/* miniPCIe port with USB + SIM slot */
-> +&pcie {
-> +	status =3D "okay";
-> +};
-> +
-> +&sd_emmc_b {
-> +	status =3D "okay";
-> +};
-> +
-> +&tohdmitx {
-> +	status =3D "okay";
-> +};
-> +
-> +/* Peripheral Only USB-C port */
-> +&usb {
-> +	dr_mode =3D "peripheral";
-> +
-> +	status =3D "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi =
-b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
-> new file mode 100644
-> index 000000000000..dc0988c82694
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
-> @@ -0,0 +1,388 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
-> + */
-> +
-> +#include "meson-g12b-a311d.dtsi"
-> +#include <dt-bindings/gpio/meson-g12a-gpio.h>
-> +
-> +/ {
-> +	aliases {
-> +		serial0 =3D &uart_AO;
-> +		rtc1 =3D &vrtc;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path =3D "serial0:115200n8";
-> +	};
-> +
-> +	emmc_pwrseq: emmc-pwrseq {
-> +		compatible =3D "mmc-pwrseq-emmc";
-> +		reset-gpios =3D <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-> +	};
-> +
-> +	memory@0 {
-> +		device_type =3D "memory";
-> +		reg =3D <0x0 0x0 0x0 0x40000000>;
-> +	};
-> +
-> +	sdio_pwrseq: sdio-pwrseq {
-> +		compatible =3D "mmc-pwrseq-simple";
-> +		reset-gpios =3D <&gpio GPIOAO_6 GPIO_ACTIVE_LOW>;
-> +		clocks =3D <&wifi32k>;
-> +		clock-names =3D "ext_clock";
-> +	};
-> +
-> +	emmc_1v8: regulator-emmc_1v8 {
-> +		compatible =3D "regulator-fixed";
-> +		regulator-name =3D "EMMC_1V8";
-> +		regulator-min-microvolt =3D <1800000>;
-> +		regulator-max-microvolt =3D <1800000>;
-> +		vin-supply =3D <&vddao_3v3>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	dc_in: regulator-dc-in {
-> +		compatible =3D "regulator-fixed";
-> +		regulator-name =3D "DC_IN";
-> +		regulator-min-microvolt =3D <5000000>;
-> +		regulator-max-microvolt =3D <5000000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddio_c: regulator-vddio-c {
-> +		compatible =3D "regulator-gpio";
-> +		regulator-name =3D "VDDIO_C";
-> +		regulator-min-microvolt =3D <1800000>;
-> +		regulator-max-microvolt =3D <3300000>;
-> +
-> +		enable-gpio =3D <&gpio_ao GPIOAO_3 GPIO_OPEN_DRAIN>;
-> +		enable-active-high;
-> +		regulator-always-on;
-> +
-> +		gpios =3D <&gpio_ao GPIOAO_9 GPIO_OPEN_DRAIN>;
-> +		gpios-states =3D <1>;
-> +
-> +		states =3D <1800000 0>,
-> +			 <3300000 1>;
-> +	};
-> +
-> +	vddao_1v8: regulator-vddao-1v8 {
-> +		compatible =3D "regulator-fixed";
-> +		regulator-name =3D "VDDAO_1V8";
-> +		regulator-min-microvolt =3D <1800000>;
-> +		regulator-max-microvolt =3D <1800000>;
-> +		vin-supply =3D <&vddao_3v3>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddao_3v3: regulator-vddao-3v3 {
-> +		compatible =3D "regulator-fixed";
-> +		regulator-name =3D "VDDAO_3V3";
-> +		regulator-min-microvolt =3D <3300000>;
-> +		regulator-max-microvolt =3D <3300000>;
-> +		vin-supply =3D <&dc_in>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddcpu_a: regulator-vddcpu-a {
-> +		/*
-> +		 * MP8756GD DC/DC Regulator.
-> +		 */
-> +		compatible =3D "pwm-regulator";
-> +
-> +		regulator-name =3D "VDDCPU_A";
-> +		regulator-min-microvolt =3D <680000>;
-> +		regulator-max-microvolt =3D <1040000>;
-> +
-> +		pwm-supply =3D <&dc_in>;
-> +
-> +		pwms =3D <&pwm_ab 0 1250 0>;
-> +		pwm-dutycycle-range =3D <100 0>;
-> +
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vddcpu_b: regulator-vddcpu-b {
-> +		/*
-> +		 * SY8120B1ABC DC/DC Regulator.
-> +		 */
-> +		compatible =3D "pwm-regulator";
-> +
-> +		regulator-name =3D "VDDCPU_B";
-> +		regulator-min-microvolt =3D <680000>;
-> +		regulator-max-microvolt =3D <1040000>;
-> +
-> +		pwm-supply =3D <&dc_in>;
-> +
-> +		pwms =3D <&pwm_AO_cd 1 1250 0>;
-> +		pwm-dutycycle-range =3D <100 0>;
-> +
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +	};
-> +
-> +	wifi32k: wifi32k {
-> +		compatible =3D "pwm-clock";
-> +		#clock-cells =3D <0>;
-> +		clock-frequency =3D <32768>;
-> +		pwms =3D <&pwm_ef 0 30518 0>; /* PWM_E at 32.768KHz */
-> +	};
-> +};
-> +
-> +&arb {
-> +	status =3D "okay";
-> +};
-> +
-> +&clkc_audio {
-> +	status =3D "okay";
-> +};
-> +
-> +&cec_AO {
-> +	pinctrl-0 =3D <&cec_ao_a_h_pins>;
-> +	pinctrl-names =3D "default";
-> +	hdmi-phandle =3D <&hdmi_tx>;
-> +};
-> +
-> +&cecb_AO {
-> +	pinctrl-0 =3D <&cec_ao_b_h_pins>;
-> +	pinctrl-names =3D "default";
-> +	hdmi-phandle =3D <&hdmi_tx>;
-> +};
-> +
-> +&cpu0 {
-> +	cpu-supply =3D <&vddcpu_b>;
-> +	operating-points-v2 =3D <&cpu_opp_table_0>;
-> +	clocks =3D <&clkc CLKID_CPU_CLK>;
-> +	clock-latency =3D <50000>;
-> +};
-> +
-> +&cpu1 {
-> +	cpu-supply =3D <&vddcpu_b>;
-> +	operating-points-v2 =3D <&cpu_opp_table_0>;
-> +	clocks =3D <&clkc CLKID_CPU_CLK>;
-> +	clock-latency =3D <50000>;
-> +};
-> +
-> +&cpu100 {
-> +	cpu-supply =3D <&vddcpu_a>;
-> +	operating-points-v2 =3D <&cpub_opp_table_1>;
-> +	clocks =3D <&clkc CLKID_CPUB_CLK>;
-> +	clock-latency =3D <50000>;
-> +};
-> +
-> +&cpu101 {
-> +	cpu-supply =3D <&vddcpu_a>;
-> +	operating-points-v2 =3D <&cpub_opp_table_1>;
-> +	clocks =3D <&clkc CLKID_CPUB_CLK>;
-> +	clock-latency =3D <50000>;
-> +};
-> +
-> +&cpu102 {
-> +	cpu-supply =3D <&vddcpu_a>;
-> +	operating-points-v2 =3D <&cpub_opp_table_1>;
-> +	clocks =3D <&clkc CLKID_CPUB_CLK>;
-> +	clock-latency =3D <50000>;
-> +};
-> +
-> +&cpu103 {
-> +	cpu-supply =3D <&vddcpu_a>;
-> +	operating-points-v2 =3D <&cpub_opp_table_1>;
-> +	clocks =3D <&clkc CLKID_CPUB_CLK>;
-> +	clock-latency =3D <50000>;
-> +};
-> +
-> +&ext_mdio {
-> +	external_phy: ethernet-phy@0 {
-> +		/* Realtek RTL8211F (0x001cc916) */
-> +		reg =3D <0>;
-> +		max-speed =3D <1000>;
-> +
-> +		interrupt-parent =3D <&gpio_intc>;
-> +		/* MAC_INTR on GPIOZ_14 */
-> +		interrupts =3D <26 IRQ_TYPE_LEVEL_LOW>;
-> +	};
-> +};
-> +
-> +/* Ethernet to be enabled in baseboard DT */
-> +&ethmac {
-> +	pinctrl-0 =3D <&eth_pins>, <&eth_rgmii_pins>;
-> +	pinctrl-names =3D "default";
-> +	phy-mode =3D "rgmii-txid";
-> +	phy-handle =3D <&external_phy>;
-> +};
-> +
-> +&frddr_a {
-> +	status =3D "okay";
-> +};
-> +
-> +&frddr_b {
-> +	status =3D "okay";
-> +};
-> +
-> +&frddr_c {
-> +	status =3D "okay";
-> +};
-> +
-> +/* HDMI to be enabled in baseboard DT */
-> +&hdmi_tx {
-> +	pinctrl-0 =3D <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
-> +	pinctrl-names =3D "default";
-> +	hdmi-supply =3D <&dc_in>;
-> +};
-> +
-> +/* "Camera" I2C bus */
-> +&i2c1 {
-> +	pinctrl-0 =3D <&i2c1_sda_h6_pins>, <&i2c1_sck_h7_pins>;
-> +	pinctrl-names =3D "default";
-> +};
-> +
-> +/* Main I2C bus */
-> +&i2c2 {
-> +	pinctrl-0 =3D <&i2c2_sda_x_pins>, <&i2c2_sck_x_pins>;
-> +	pinctrl-names =3D "default";
-> +};
-> +
-> +/* "ID" I2C bus */
-> +&i2c3 {
-> +	pinctrl-0 =3D <&i2c3_sda_a_pins>, <&i2c3_sck_a_pins>;
-> +	pinctrl-names =3D "default";
-> +};
-> +
-> +&pcie {
-> +	reset-gpios =3D <&gpio GPIOA_8 GPIO_ACTIVE_LOW>;
-> +};
-> +
-> +&pwm_ab {
-> +	pinctrl-0 =3D <&pwm_a_e_pins>;
-> +	pinctrl-names =3D "default";
-> +	clocks =3D <&xtal>;
-> +	clock-names =3D "clkin0";
-> +
-> +	status =3D "okay";
-> +};
-> +
-> +&pwm_ef {
-> +	pinctrl-0 =3D <&pwm_e_pins>;
-> +	pinctrl-names =3D "default";
-> +
-> +	status =3D "okay";
-> +};
-> +
-> +&pwm_AO_cd {
-> +	pinctrl-0 =3D <&pwm_ao_d_e_pins>;
-> +	pinctrl-names =3D "default";
-> +	clocks =3D <&xtal>;
-> +	clock-names =3D "clkin1";
-> +
-> +	status =3D "okay";
-> +};
-> +
-> +&saradc {
-> +	vref-supply =3D <&vddao_1v8>;
-> +
-> +	status =3D "okay";
-> +};
-> +
-> +/* on-module SDIO WiFi */
-> +&sd_emmc_a {
-> +	pinctrl-0 =3D <&sdio_pins>;
-> +	pinctrl-1 =3D <&sdio_clk_gate_pins>;
-> +	pinctrl-names =3D "default", "clk-gate";
-> +	#address-cells =3D <1>;
-> +	#size-cells =3D <0>;
-> +
-> +	bus-width =3D <4>;
-> +	sd-uhs-sdr104;
-> +	max-frequency =3D <50000000>;
-> +
-> +	non-removable;
-> +	disable-wp;
-> +
-> +	/* WiFi firmware requires power in suspend */
-> +	keep-power-in-suspend;
-> +
-> +	mmc-pwrseq =3D <&sdio_pwrseq>;
-> +
-> +	vmmc-supply =3D <&vddao_3v3>;
-> +	vqmmc-supply =3D <&vddao_3v3>;
-> +
-> +	status =3D "okay";
-> +
-> +	rtl8822cs: wifi@1 {
-> +		reg =3D <1>;
-> +	};
-> +};
-> +
-> +/* SD card to be enabled in baseboard DT */
-> +&sd_emmc_b {
-> +	pinctrl-0 =3D <&sdcard_c_pins>;
-> +	pinctrl-1 =3D <&sdcard_clk_gate_c_pins>;
-> +	pinctrl-names =3D "default", "clk-gate";
-> +
-> +	bus-width =3D <4>;
-> +	cap-sd-highspeed;
-> +	max-frequency =3D <50000000>;
-> +	disable-wp;
-> +
-> +	cd-gpios =3D <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-> +	vmmc-supply =3D <&vddao_3v3>;
-> +	vqmmc-supply =3D <&vddio_c>;
-> +};
-> +
-> +/* on-module eMMC */
-> +&sd_emmc_c {
-> +	pinctrl-0 =3D <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, =
-<&emmc_ds_pins>;
-> +	pinctrl-1 =3D <&emmc_clk_gate_pins>;
-> +	pinctrl-names =3D "default", "clk-gate";
-> +
-> +	bus-width =3D <8>;
-> +	cap-mmc-highspeed;
-> +	mmc-ddr-1_8v;
-> +	mmc-hs200-1_8v;
-> +	max-frequency =3D <200000000>;
-> +	disable-wp;
-> +
-> +	mmc-pwrseq =3D <&emmc_pwrseq>;
-> +	vmmc-supply =3D <&vddao_3v3>;
-> +	vqmmc-supply =3D <&vddao_1v8>;
-> +
-> +	status =3D "okay";
-> +};
-> +
-> +&tdmif_b {
-> +	status =3D "okay";
-> +};
-> +
-> +&tdmout_b {
-> +	status =3D "okay";
-> +};
-> +
-> +/* on-module UART BT */
-> +&uart_A {
-> +	pinctrl-0 =3D <&uart_a_pins>, <&uart_a_cts_rts_pins>;
-> +	pinctrl-names =3D "default";
-> +	uart-has-rtscts;
-> +
-> +	status =3D "okay";
-> +
-> +	bluetooth {
-> +		compatible =3D "realtek,rtl8822cs-bt";
-> +		enable-gpios  =3D <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-> +		host-wake-gpios =3D <&gpio GPIOX_19 GPIO_ACTIVE_HIGH>;
-> +		device-wake-gpios =3D <&gpio GPIOX_18 GPIO_ACTIVE_HIGH>;
-> +	};
-> +};
-> +
-> +&uart_AO {
-> +	pinctrl-0 =3D <&uart_ao_a_pins>;
-> +	pinctrl-names =3D "default";
-> +
-> +	status =3D "okay";
-> +};
-> +
-> +&usb {
-> +	phys =3D <&usb2_phy0>, <&usb2_phy1>;
-> +	phy-names =3D "usb2-phy0", "usb2-phy1";
-> +};
+  $ qemu-system-x86_64 -display none -serial mon:stdio \
+     -accel kvm,xen-version=3D0x4000a,kernel-irqchip=3Dsplit \
+     -kernel ~/git/linux/arch/x86/boot//bzImage=C2=A0\
+     -append "console=3DttyS0,115200 xen_no_vector_callback" \
+     -smp 4 --trace ioapic\* --trace xenstore\*
 
-With the audio correction all appears to be good, here=E2=80=99s dmesg: =
-http://ix.io/4pTy
 
-Tested-by: Christian Hewitt <christianshewitt@gmail.com>
+...
 
-Christian=
+xenstore_read tx 0 path control/platform-feature-xs_reset_watches
+ioapic_set_irq vector: 11 level: 1
+ioapic_set_remote_irr set remote irr for pin 11
+ioapic_service: trigger KVM IRQ 11
+[    0.523627] The affinity mask was 0-3 and the handler is on 2
+ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x27 size 0x4 val 0x26
+ioapic_update_kvm_routes: update KVM route for IRQ 11: fee02000 8021
+ioapic_mem_write ioapic mem write addr 0x10 regsel: 0x26 size 0x4 val 0x180=
+21
+xenstore_reset_watches=20
+ioapic_set_irq vector: 11 level: 1
+ioapic_mem_read ioapic mem read addr 0x10 regsel: 0x26 size 0x4 retval 0x1c=
+021
+[    0.524569] ioapic_ack_level IRQ 11 moveit =3D 1
+ioapic_eoi_broadcast EOI broadcast for vector 33
+ioapic_clear_remote_irr clear remote irr for pin 11 vector 33
+ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x26 size 0x4 val 0x26
+ioapic_mem_read ioapic mem read addr 0x10 regsel: 0x26 size 0x4 retval 0x18=
+021
+[    0.525235] ioapic_finish_move IRQ 11 calls irq_move_masked_irq()
+[    0.526147] irq_do_set_affinity for IRQ 11, 0
+[    0.526732] ioapic_set_affinity for IRQ 11, 0
+[    0.527330] ioapic_setup_msg_from_msi for IRQ11 target 0
+ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x26 size 0x4 val 0x27
+ioapic_mem_write ioapic mem write addr 0x10 regsel: 0x27 size 0x4 val 0x0
+ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x27 size 0x4 val 0x26
+ioapic_mem_write ioapic mem write addr 0x10 regsel: 0x26 size 0x4 val 0x180=
+21
+[    0.527623] ioapic_set_affinity returns 0
+[    0.527623] ioapic_finish_move IRQ 11 calls unmask_ioapic_irq()
+ioapic_mem_write ioapic mem write addr 0x0 regsel: 0x26 size 0x4 val 0x26
+ioapic_mem_write ioapic mem write addr 0x10 regsel: 0x26 size 0x4 val 0x802=
+1
+ioapic_set_remote_irr set remote irr for pin 11
+ioapic_service: trigger KVM IRQ 11
+ioapic_update_kvm_routes: update KVM route for IRQ 11: fee00000 8021
+[    0.529571] The affinity mask was 0 and the handler is on 2
+[    xenstore_watch path memory/target token FFFFFFFF92847D40
+xenstore_watch_event path memory/target token FFFFFFFF92847D40
+ioapic_set_irq vector: 11 level: 1
+0.530486] ioapic_ack_level IRQ 11 moveit =3D 0
+
+
+This is with Linux doing basically nothing when the handler is invoked
+on the 'wrong' CPU, and just waiting for it to be right.
+
+Commenting out the kvm_set_irq() calls in ioapic_service() and letting
+QEMU synthesise an MSI every time works. Better still, so does this,
+making it update the routing table *before* retriggering the IRQ when
+the guest updates the RTE:
+
+--- a/hw/intc/ioapic.c
++++ b/hw/intc/ioapic.c
+@@ -405,6 +409,7 @@ ioapic_mem_write(void *opaque, hwaddr addr,
+uint64_t val,
+                 s->ioredtbl[index] |=3D ro_bits;
+                 s->irq_eoi[index] =3D 0;
+                 ioapic_fix_edge_remote_irr(&s->ioredtbl[index]);
++                ioapic_update_kvm_routes(s);
+                 ioapic_service(s);
+             }
+         }
+@@ -418,7 +423,6 @@ ioapic_mem_write(void *opaque, hwaddr addr,
+uint64_t val,
+         break;
+     }
+=20
+-    ioapic_update_kvm_routes(s);
+ }
+=20
+ static const MemoryRegionOps ioapic_io_ops =3D {
+
+
+
+Now, I don't quite see why we don't get a *third* interrupt, since
+Linux did nothing to clear the level of IRQ 11 and the last trace I see
+from QEMU's ioapic_set_irq confirms it's still set. But I've exceeded
+my screen time for the day, so I'll have to frown at that part some
+more later. I wonder if the EOI is going missing because it's coming
+from the wrong CPU? Note no 'EOI broadcast' after the last line in the
+log I showed above; it isn't just that I trimmed it there.
+
+I don't think we need to do anything in Linux; if the handler gets
+invoked on the wrong CPU it'll basically find no events pending for
+that CPU and return having done nothing... and *hopefully* should be
+re-invoked on the correct CPU shortly thereafter.
+
+--=-5Pj+37JDg51UR5035j2m
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzA0MDk1NzQwWjAvBgkqhkiG9w0BCQQxIgQgrFR4lPm1
+WDljiYico/w9DdB2c2h8YkQJLvf05v7Z9ZIwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCKjldEN2e1QiSry0BI/VClUsT9X5i9xsQl
+o5kzxXgu2IcI3OzrESs3dmEUgan8PvGOpS+0L8yUygr+0V3VZTHZnnAZERRWE6iD/xpASyp3o9Da
+KPdkfMcgtls6X8k5xI7YELkBQZGcp4SO2QTGXIH0wINAvU64i/k6LpYVKcs5+KTBiPelpCGfGBjx
+QqotOvWPQJauEwDkBR2MoQq1PwvacnSc6BYw5gq0BjiQKgkP73rihMBfAnf6ASr8i1A3IYRHFIg4
+lCvFYJnI8MImFRjfSYQMdfV3j23Em5OWpBX5/iyJLpdpnU+H1d5n9NniF7g/icK1+gSpMm30J2Uk
+sg2yzg2KXz8IyMtVcgOJFqSUZNjPAY/3p5cQ1q3Wlv8+jMgk8xGGrtGjNdAmxkGQZtvB3Kro+jWU
+9vPi6Z/LY3gZ+E+z5rjOaUhMYPfaIuT5ZGdeBeESOrDQhqXqB2XTdsEAIFlyg9P4XpBC0XkYzNMf
+0N5T2tc5VllfvYq+fIyPAoN33TlhovAIaKqe4j9QU0UBnarSeDKYTLyDhqK9k8ZlA45wR0kvMpJA
+PkixXqrDKh54cs8c9NVlHhg2D0lrm7mOw4qQigOXQqGnQ2HefDzFaAXliDYImXK90rtoGCCf9Tt8
+F9OdnbfSKrM68mjIuPwQiI3EqraMswlE8pEs8kKLlwAAAAAAAA==
+
+
+--=-5Pj+37JDg51UR5035j2m--
