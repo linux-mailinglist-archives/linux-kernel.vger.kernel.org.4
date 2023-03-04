@@ -2,44 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03446AA823
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 06:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6990D6AA83B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 06:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjCDFI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 00:08:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
+        id S229670AbjCDFvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 00:51:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjCDFIZ (ORCPT
+        with ESMTP id S229437AbjCDFvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 00:08:25 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDF11284B
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 21:08:23 -0800 (PST)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PTCTZ1rDLz16P79;
-        Sat,  4 Mar 2023 13:05:38 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Sat, 4 Mar
- 2023 13:07:43 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>,
-        <s.hauer@pengutronix.de>, <george.kennedy@oracle.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH] ubi: Fix failure attaching when vid_hdr offset equals to (sub)page size
-Date:   Sat, 4 Mar 2023 13:30:56 +0800
-Message-ID: <20230304053056.403325-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Sat, 4 Mar 2023 00:51:44 -0500
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3A7584BE;
+        Fri,  3 Mar 2023 21:51:43 -0800 (PST)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1720433ba75so5536666fac.5;
+        Fri, 03 Mar 2023 21:51:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677909103;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lV4xSWA6B/kZCLMPP9P6bGMix2r6oXMxC3w0PVfN1xU=;
+        b=C7xz1+8VtvgucFIr60EgZ6jCOfu1Qo49vvVA6fcNeOGRm/evXbdAyuhzRsS8Trw7IS
+         whmb3FXNk1GD3qSX4csrB0G0NIB+Eq+fvEpJ655XcoNZXqzGv+hvKg9RYQzk12X3maoC
+         y1rUytcxZi5hlqJhbhIJRdrXZrXPZn/a/bM7aE0XnHusKvjyP4pkY6p0RUXqOuAH5l0A
+         A1cx2PkpGj3F3YKRj05dmScPqp7pYA1jmcLmJ/4Vt53KdTo7aGuZTmdBzGUJJPww7Fdw
+         TEDVg3CsmNAq/uZ2OfTnkemoSKT6GKo4tPUFvKUuIKIkw2TdSP/nnEwDE4RC34kX9+2Q
+         qePQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677909103;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lV4xSWA6B/kZCLMPP9P6bGMix2r6oXMxC3w0PVfN1xU=;
+        b=TQbcy68hkVqZ42kw0WH5fV5+AD2Jp+92/N/ILR4GYXYKpjQk0qYLGHBojdbYBN34ZA
+         sAaZzPNqEcw6fdtZ6TVd+X1cnbCUGJs2sWFoYlSgduV0ts1IjoPDg1QDLJ45lQDP3SfF
+         jC8ZUMZ2samQLv32KCvhDkY44ngbVhfLGRRDnVDnsJzXJwx9BmJvJupS/jqJQV+/8RJ+
+         fMDltIE7StLpm11ky0IGBfH0xz0GjENLz8FOoSzC21x/zXu7wRWC5QUnt/FP1Gdf2ZEc
+         2/2zjYcYvhoPj1/Wxit1xQ1vQ++WKqV4WRQIbIpQsYlb4wef9qU7WlYqpS4eLMvZtXCp
+         EEuQ==
+X-Gm-Message-State: AO0yUKVN4DYyOqF4Y/Kf8Kp7VtlelhR6DRwTZMfjzUnHZ2Bg1vqehw3u
+        LEDzlt1uzxioRTBcnVfncy6CyLYdOu4=
+X-Google-Smtp-Source: AK7set+Ny18RNUVYFJ5StTLqD9YWTaDTF7ZnHU8oVq1cPCy6qioPO3rC7SJ19SH95kE0zCgnGwD/pg==
+X-Received: by 2002:a05:6870:8090:b0:176:5089:4fc8 with SMTP id q16-20020a056870809000b0017650894fc8mr2971720oab.34.1677909102859;
+        Fri, 03 Mar 2023 21:51:42 -0800 (PST)
+Received: from localhost ([50.208.89.9])
+        by smtp.gmail.com with ESMTPSA id d44-20020a056870d2ac00b00172473f9fe0sm1826004oae.13.2023.03.03.21.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Mar 2023 21:51:42 -0800 (PST)
+Date:   Fri, 3 Mar 2023 21:51:41 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mateusz Guzik <mjguzik@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@google.com>,
+        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if
+ possible
+Message-ID: <ZALcbQoKA7K8k2gJ@yury-laptop>
+References: <ZAEC3LN6oUe6BKSN@ZenIV>
+ <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
+ <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
+ <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
+ <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com>
+ <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
+ <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com>
+ <CAHk-=wgfNrMFQCFWFtn+UXjAdJAGAAFFJZ1JpEomTneza32A6g@mail.gmail.com>
+ <ZAK6Duaf4mlgpZPP@yury-laptop>
+ <CAHk-=wh1r3KfATA-JSdt3qt2y3sC=5U9+wZsbabW+dvPsqRCvA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wh1r3KfATA-JSdt3qt2y3sC=5U9+wZsbabW+dvPsqRCvA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,68 +89,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following process will make ubi attaching failed since commit
-1b42b1a36fc946 ("ubi: ensure that VID header offset ... size"):
+On Fri, Mar 03, 2023 at 07:42:36PM -0800, Linus Torvalds wrote:
+> ing: quoted-printable
+> Status: O
+> Content-Length: 1593
+> Lines: 41
+> 
+> On Fri, Mar 3, 2023 at 7:25 PM Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > Did you enable CONFIG_FORCE_NR_CPUS? If you pick it, the kernel will
+> > bind nr_cpu_ids to NR_CPUS at compile time, and the memset() call
+> > should disappear.
+> 
+> I do not believe CONFIG_FORCE_NR_CPUS makes any sense, and I think I
+> told you so at the time.
 
-ID="0xec,0xa1,0x00,0x15" # 128M 128KB 2KB
-modprobe nandsim id_bytes=$ID
-flash_eraseall /dev/mtd0
-modprobe ubi mtd="0,2048"  # set vid_hdr offset as 2048 (one page)
-(dmesg):
-  ubi0 error: ubi_attach_mtd_dev [ubi]: VID header offset 2048 too large.
-  UBI error: cannot attach mtd0
-  UBI error: cannot initialize UBI, error -22
+At that time you was OK with CONFIG_FORCE_NR_CPUS, only suggested to
+hide it behind CONFIG_EXPERT:
 
-Rework original solution, the key point is making sure
-'vid_hdr_shift + UBI_VID_HDR_SIZE < ubi->vid_hdr_alsize',
-so we should check vid_hdr_shift rather not vid_hdr_offset.
-Then, ubi still support (sub)page aligined VID header offset.
-
-Fixes: 1b42b1a36fc946 ("ubi: ensure that VID header offset ... size")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- drivers/mtd/ubi/build.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
-index 0904eb40c95f..677e809526d2 100644
---- a/drivers/mtd/ubi/build.c
-+++ b/drivers/mtd/ubi/build.c
-@@ -666,12 +666,6 @@ static int io_init(struct ubi_device *ubi, int max_beb_per1024)
- 	ubi->ec_hdr_alsize = ALIGN(UBI_EC_HDR_SIZE, ubi->hdrs_min_io_size);
- 	ubi->vid_hdr_alsize = ALIGN(UBI_VID_HDR_SIZE, ubi->hdrs_min_io_size);
+https://lore.kernel.org/all/Yzx4fSmmr8bh6gdl@yury-laptop/T/#m92d405527636154c3b2000e0105379170d988315
  
--	if (ubi->vid_hdr_offset && ((ubi->vid_hdr_offset + UBI_VID_HDR_SIZE) >
--	    ubi->vid_hdr_alsize)) {
--		ubi_err(ubi, "VID header offset %d too large.", ubi->vid_hdr_offset);
--		return -EINVAL;
--	}
--
- 	dbg_gen("min_io_size      %d", ubi->min_io_size);
- 	dbg_gen("max_write_size   %d", ubi->max_write_size);
- 	dbg_gen("hdrs_min_io_size %d", ubi->hdrs_min_io_size);
-@@ -689,6 +683,21 @@ static int io_init(struct ubi_device *ubi, int max_beb_per1024)
- 						ubi->vid_hdr_aloffset;
- 	}
- 
-+	/*
-+	 * Memory allocation for VID header is ubi->vid_hdr_alsize
-+	 * which is described in comments in io.c.
-+	 * Make sure VID header shift + UBI_VID_HDR_SIZE not exceeds
-+	 * ubi->vid_hdr_alsize, so that all vid header operations
-+	 * won't access memory out of bounds.
-+	 */
-+	if ((ubi->vid_hdr_shift + UBI_VID_HDR_SIZE) > ubi->vid_hdr_alsize) {
-+		ubi_err(ubi, "Invalid VID header offset %d, VID header shift(%d)"
-+			" + VID header size(%lu) > VID header aligned size(%d).",
-+			ubi->vid_hdr_offset, ubi->vid_hdr_shift,
-+			UBI_VID_HDR_SIZE, ubi->vid_hdr_alsize);
-+		return -EINVAL;
-+	}
-+
- 	/* Similar for the data offset */
- 	ubi->leb_start = ubi->vid_hdr_offset + UBI_VID_HDR_SIZE;
- 	ubi->leb_start = ALIGN(ubi->leb_start, ubi->min_io_size);
--- 
-2.31.1
+> This all used to just work *without* some kind of config thing, First
+> removing the automatic "do the right thing", and then adding a config
+> option to "force" doing the right thing seems more than a bit silly to
+> me.
+> 
+> I think CONFIG_FORCE_NR_CPUS should go away, and - once more - become
+> just the "is the cpumask small enough to be just allocated directly"
+> thing.
 
+This all was just broken. For example, as I mentioned in commit message,
+cpumask_full() was broken. I know because I wrote a test. There were no
+a single user for the function, and nobody complained. Now we have one
+in BPF code. So if we simply revert the aa47a7c215e, it will hurt real
+users.
+
+The pre-CONFIG_FORCE_NR_CPUS cpumask machinery would work only if you
+set NR_CPUS to the number that matches to the actual number of CPUs as
+detected at boot time.
+
+In your example, if you have NR_CPUS == 64, and for some reason disable
+hyper threading, nr_cpumask_bits will be set to 64 at compile time, but
+nr_cpu_ids will be set to 32 at boot time, assuming
+CONFIG_CPUMASK_OFFSTACK is disabled.
+
+And the following code will be broken:
+
+cpumask_t m1, m2;
+
+cpumask_setall(m1); // m1 is ffff ffff ffff ffff because it uses
+                    // compile-time optimized nr_cpumask_bits
+
+for_each_cpu(cpu, m1) // 32 iterations because it relied on nr_cpu_ids
+        cpumask_set_cpu(cpu, m2); // m2 is ffff ffff XXXX XXXX
+
+BUG_ON(!cpumask_equal(m1, m2)); // Bug because it will test all 64 bits
+
+Today with CONFIG_FORCE_NR_CPUS disabled, kernel consistently relies
+on boot-time defined nr_cpu_ids in functions like cpumask_equal()
+with the cost of disabled runtime optimizations.
+
+If CONFIG_FORCE_NR_CPUS is enabled, it wires nr_cpu_ids to NR_CPUS
+at compile time, which allows compile-time optimization.
+
+If CONFIG_FORCE_NR_CPUS is enabled, but actual number of CPUs doesn't
+match to NR_CPUS, the kernel throws a warning at boot time - better
+than nothing.
+
+I'm not happy bothering people with a new config parameter in such a
+simple case. I just don't know how to fix it better. Is there a safe
+way to teach compiler to optimize against NR_CPUS other than telling
+it explicitly?
+
+> Of course, the problem for others remain that distros will do that
+> CONFIG_CPUMASK_OFFSTACK thing, and then things will suck regardless.
+> 
+> I was *so* happy with our clever "you can have large cpumasks, and
+> we'll just allocate them off the stack" long long ago, because it
+> meant that we could have one single source tree where this was all
+> cleanly abstracted away, and we even had nice types and type safety
+> for it all.
+> 
+> That meant that we could support all the fancy SGI machines with
+> several thousand cores, and it all "JustWorked(tm)", and didn't make
+> the normal case any worse.
+> 
+> I didn't expect distros to then go "ooh, we want that too", and enable
+> it all by default, and make all our clever "you only see this
+> indirection if you need it" go away, and now the normal case is the
+> *bad* case, unless you just build your own kernel and pick sane
+> defaults.
+>
+> Oh well.
+
+From distro people's perspective, 'one size fits all' is the best
+approach. It's hard to blame them.
+
+Thanks,
+Yury
