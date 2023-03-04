@@ -2,108 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD5C6AA7CA
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 04:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C1C6AA7CF
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 04:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjCDDXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 22:23:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S229706AbjCDDZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 22:25:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCDDXS (ORCPT
+        with ESMTP id S229445AbjCDDZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 22:23:18 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C07DBF6
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 19:23:17 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id h19so5119884qtk.7
-        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 19:23:16 -0800 (PST)
+        Fri, 3 Mar 2023 22:25:06 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E13661B3;
+        Fri,  3 Mar 2023 19:25:05 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-17638494edbso5289748fac.10;
+        Fri, 03 Mar 2023 19:25:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1677900196;
+        d=gmail.com; s=20210112; t=1677900304;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KveNw6GiBJGhER0kmH1MC4Rj4WX1pTJHwoEhumUI5pE=;
-        b=CiJDND9K7VRj/4+yGBzU08OB+NxZL0eF6wzIoW393ngi7NeX2NfBtbGiTkdmvO7aUr
-         gTbisCenRysJ7ra0SOmltZwK/Ah1cter4814u6UPONp4Ph2j0BnEThrPr7/hta5oOW0g
-         ABfKjBBlD27VxoqKYxx/zh/xa9i+ZNDlEpMFI=
+        bh=De/kLTneLvXzHEBgIWucE5xB8O5Vnx+8IbmgurjxawA=;
+        b=ho0gXEYddhN3jlxiuXsuDnbe8PQRJ7cQsQ+yR6KrhafvX/gUF7qG9OCwlOd0WXQUsv
+         Z0bwBCX65uzpm3XYibQOZ1Mn3Ma+1bN8Ipp3G8EDpNC3EapFvXcyaQix9jnu50RTwAg+
+         v700TuO7vs2ibQlTLhG95BEk/sH1zx/hWm1GmSoAMQFT3bAsPp+QjbrcNrhpGmNsVT5m
+         FEq/xE2H22a5HvfpxHOlfYCt5Mnavig9sM3mE3TYPzkezNMfOEkUYh9dNck4TubTMjer
+         n2/zgZ3YHEb42vY8c+dpvObmmH5MHBt7ZcB2GdfKf50Uq8lBKFkW3pUCWCMeacxHHBNa
+         cMSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677900196;
+        d=1e100.net; s=20210112; t=1677900304;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KveNw6GiBJGhER0kmH1MC4Rj4WX1pTJHwoEhumUI5pE=;
-        b=zirJpF0WxauZrqBc1oXMV61210pC3Qp6oXMFACaRLEkNwAKBqTe51NfedWrksgCjzt
-         YI5nklNO+ssSUpvSrq1wtmUVfp1fq+7k60iueCMkDAFXH2Yc6fJ8R5uefTnXXh4c0niC
-         1E6kR0AqPxP9TBpJPeEkRcsZkMc/qyPpcYriO1aXt3q8w9vSzjhqEO9bjJeNl9S+WnES
-         0wAP2Smhlf9weGl69wzcA+7+gFdQBOb9JGIILIruL4jiQz1Le46r1Sjju2tPudaVJ/ww
-         h1PGBKSX6NJhpSzHz8yaduBtSDACH/9ruL/RQnwzyyOrY6s4VxuqnJ0ZwyP77AmlqRri
-         T8VA==
-X-Gm-Message-State: AO0yUKV0JTZ/r01/wZBdPlUmvyKPD6ddL00RiBkRKGM0da9RyVIocHX1
-        UhszlQKLlwOCiIDKmp6FtHpiAg==
-X-Google-Smtp-Source: AK7set/zSM95DT7RmEh/FxXrwbMFuxCkXfG+mDWAVPtbLz10ympvDCWH3ZSRmF+KuHegF8m8fHZjzA==
-X-Received: by 2002:ac8:5894:0:b0:3bf:ba7c:29ca with SMTP id t20-20020ac85894000000b003bfba7c29camr6647634qta.32.1677900196069;
-        Fri, 03 Mar 2023 19:23:16 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id o8-20020ac80248000000b003c00573aaffsm3035088qtg.3.2023.03.03.19.23.15
+        bh=De/kLTneLvXzHEBgIWucE5xB8O5Vnx+8IbmgurjxawA=;
+        b=G2LhOc9phkPT3IRK/kSuEvRiUWAZGBMiw7lST7FZA0A8gkBJEKRPPy/lI6yMMlXMDs
+         /VXaOkPrjNZAeUWAWlDoixxae7IexwSSz35Ts+PfvuAOgmt1gF2TAH8Azivd5xwgjDzv
+         H/nICerIDBVvkHcb/6mQP8j5P6UxeHT4jkW/4otICLki4RGc0Glo1otqZ6ml78ifsH/J
+         x4ElfqivQCu1DO6XaNRmWPHA3tNOFXOIDemp9NbbiIJBJXjWL3v8YXgnV/+Xm7Ft16+8
+         kLN8X575MIP6J+r/atRGPSq/qT7n4cwFHDCpVp30Nvth2TS3UCKMQwdIIJ6gshBhjr+o
+         tYrw==
+X-Gm-Message-State: AO0yUKW+jUKj9yq7n6IOEDjfEUgQJEwy2zjY+CGFiesbiH7+ifkZiraL
+        teVLA9Tprj6qlfpfR5AWAcU=
+X-Google-Smtp-Source: AK7set/m3K3+OJ063AciflXFmtktgX0pn9hwBEuJky8opjHMbWqPjzFwtIg9Cr21j2BN0+YvF6/SEg==
+X-Received: by 2002:a05:6870:a44b:b0:176:4b04:522e with SMTP id n11-20020a056870a44b00b001764b04522emr2436468oal.35.1677900304467;
+        Fri, 03 Mar 2023 19:25:04 -0800 (PST)
+Received: from localhost ([50.208.89.9])
+        by smtp.gmail.com with ESMTPSA id z6-20020a05687042c600b00172289de1besm1733133oah.18.2023.03.03.19.25.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 19:23:15 -0800 (PST)
-Date:   Sat, 4 Mar 2023 03:23:15 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
-        Midas Chien <midaschieh@google.com>,
+        Fri, 03 Mar 2023 19:25:03 -0800 (PST)
+Date:   Fri, 3 Mar 2023 19:25:02 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mateusz Guzik <mjguzik@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
         Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tony Luck <tony.luck@intel.com>, kernel-team@android.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
-Message-ID: <20230304032315.GC2176990@google.com>
-References: <20230302152103.2618f1b7@gandalf.local.home>
- <20230302163253.541ac3a8@gandalf.local.home>
- <20230302163603.223313ba@gandalf.local.home>
- <20230302165613.2dcc18ca@gandalf.local.home>
- <20230302200136.381468f0@gandalf.local.home>
- <20230303181134.GA1837196@google.com>
- <20230303133702.4d336ee9@gandalf.local.home>
- <CAEXW_YQN=zPtbd6Nr=F-0GqkHQu+ox3eBnzP30=8MxYGYyFv0Q@mail.gmail.com>
- <20230303143822.027ce50b@gandalf.local.home>
- <20230304030130.GA2176990@google.com>
+        Eric Biggers <ebiggers@google.com>,
+        Christian Brauner <brauner@kernel.org>, serge@hallyn.com,
+        paul@paul-moore.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] vfs: avoid duplicating creds in faccessat if
+ possible
+Message-ID: <ZAK6Duaf4mlgpZPP@yury-laptop>
+References: <ZAD21ZEiB2V9Ttto@ZenIV>
+ <6400fedb.170a0220.ece29.04b8@mx.google.com>
+ <ZAEC3LN6oUe6BKSN@ZenIV>
+ <CAG_fn=UQEuvJ9WXou_sW3moHcVQZJ9NvJ5McNcsYE8xw_WEYGw@mail.gmail.com>
+ <CAGudoHFqNdXDJM2uCQ9m7LzP0pAx=iVj1WBnKc4k9Ky1Xf5XmQ@mail.gmail.com>
+ <CAHk-=wh-eTh=4g28Ec5W4pHNTaCSZWJdxVj4BH2sNE2hAA+cww@mail.gmail.com>
+ <CAGudoHG+anGcO1XePmLjb+Hatr4VQMiZ2FufXs8hT3JrHyGMAw@mail.gmail.com>
+ <CAHk-=wjy_q9t4APgug9q-EBMRKAybXt9DQbyM9Egsh=F+0k2Mg@mail.gmail.com>
+ <CAGudoHGYaWTCnL4GOR+4Lbcfg5qrdOtNjestGZOkgtUaTwdGrQ@mail.gmail.com>
+ <CAHk-=wgfNrMFQCFWFtn+UXjAdJAGAAFFJZ1JpEomTneza32A6g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230304030130.GA2176990@google.com>
+In-Reply-To: <CAHk-=wgfNrMFQCFWFtn+UXjAdJAGAAFFJZ1JpEomTneza32A6g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 04, 2023 at 03:01:30AM +0000, Joel Fernandes wrote:
 [...]
-> > > > > Either way, I think a comment should go on top of the "if (top_waiter !=
-> > > > > waiter)" check IMO.  
-> > > >
-> > > > What type of comment?  
-> > > 
-> > > Comment explaining why "if (top_waiter != waiter)" is essential :-).
-> > 
+
+> In particular, 'cpumask_clear()' should just zero the cpumask, and on
+> the config I use, I have
 > 
-> Maybe "/* Only the top waiter needs to spin. If we are no longer the
-> top-waiter, no point in spinning, as we do not get the lock next anyway. */"
+>     CONFIG_NR_CPUS=64
 > 
-> ?
+> so it should literally just be a single "store zero to cpumask word".
+> And that's what it used to be.
+> 
+> But then we had commit aa47a7c215e7 ("lib/cpumask: deprecate
+> nr_cpumask_bits") and suddenly 'nr_cpumask_bits' isn't a simple
+> constant any more for the "small mask that fits on stack" case, and
+> instead you end up with code like
+> 
+>         movl    nr_cpu_ids(%rip), %edx
+>         addq    $63, %rdx
+>         shrq    $3, %rdx
+>         andl    $-8, %edx
+>         ..
+>         callq   memset@PLT
+> 
+> that does a 8-byte memset because I have 32 cores and 64 threads.
 
-And it could be added to that comment that, we want to continue spinning as
-long as the top-waiter is still on the CPU (even if we are no longer the
-top-waiter).
+Did you enable CONFIG_FORCE_NR_CPUS? If you pick it, the kernel will
+bind nr_cpu_ids to NR_CPUS at compile time, and the memset() call
+should disappear.
 
-thanks,
+Depending on your compiler you might want to apply this patch as well:
 
- - Joel
+https://lore.kernel.org/lkml/20221027043810.350460-2-yury.norov@gmail.com/
 
+> Now, at least some distro kernels seem to be built with CONFIG_MAXSMP,
+> so CONFIG_NR_CPUS is something insane (namely 8192), and then it is
+> indeed better to calculate some minimum size instead of doing a 1kB
+> memset().
+
+Ubuntu too. That was one of the reasons for the patch.
+
+Thanks,
+Yury
