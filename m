@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0F86AA704
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 02:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD736AA6ED
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 02:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjCDBIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 20:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
+        id S229982AbjCDBIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 20:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjCDBHd (ORCPT
+        with ESMTP id S230040AbjCDBHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 20:07:33 -0500
+        Fri, 3 Mar 2023 20:07:36 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E46069078;
-        Fri,  3 Mar 2023 17:07:17 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323NdeqR017178;
-        Sat, 4 Mar 2023 01:07:04 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576886B31A;
+        Fri,  3 Mar 2023 17:07:19 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 323NjDqh003547;
+        Sat, 4 Mar 2023 01:07:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=MaVCwpT5GoBYhUfIWvF2v8THe49xZ8C+mZ8RNreqWGo=;
- b=K+BJ448nZkgGEv3RV5JB+oTGgLaKJgl0i+CVQZm/cUafjLlYjjKUbVwbLcFe7Rg9CvSm
- vuC/EWqrhjDeMnruajyDfU5CwaFEZ5QggmW4Veq2HhUdqzPnsGCOPuq9vrMMHNGliJnl
- eqKDEzAQm9UxUgGZQxmMwlAfoFmvqyjGCYOR+pANF29o/duwNWJgIO8lA1FWAWFqaNPd
- mK7E8pqVnBYKp9t/6oI0iWfa7HjezPp2SCbVMwr5DrhmiSV+kzXXXPsUHI5oGm/M/oo1
- xceMrsssSyC1KANhODpnWmQIZbsz2N5OCMtlGAnBMO2QMS2cKBIE43Swg1nrEbw347er XA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3dfrjf3x-1
+ bh=Y5//UadlEdV0a+5zcX8TQ4LlO7IHHl8LDnZbN/15rkM=;
+ b=DmMtkSJXpmDNIw3XKIRtnqA7C4mY7tEaPFGnoGc2JbevtDcmwt+dR5n7OhWpLSyHLMEz
+ ORzm8Y8uYUqkpmdw30s2hIRLOemp25S1BFHyBro6Lx6OKwuIHUns5TVYCi1aBszHj7FC
+ P7QUd82FmaZY0TDIoOp1znhEx/TRuzBeD9/oX0ulSLi5Evjd9NbVQu6vw5Wk0QTiBum5
+ f4xOu2hrSz5d32y7kTPKRbcLyV3q+LaFj508xDd5rlwL5qaOM9PCu7wFRubKdTL26WNT
+ CUYXQokUKNS9hiCZeiJFomNv2hVE5jjM3gh8BnIkxoyG5kE1z9vmkHKvz/UELG2oRlyH pw== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p36mybghm-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 04 Mar 2023 01:07:04 +0000
+        Sat, 04 Mar 2023 01:07:06 +0000
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 324173gY018726
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 324175Jt019307
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 4 Mar 2023 01:07:03 GMT
+        Sat, 4 Mar 2023 01:07:05 GMT
 Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
  nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 3 Mar 2023 17:07:02 -0800
+ 15.2.986.41; Fri, 3 Mar 2023 17:07:04 -0800
 From:   Elliot Berman <quic_eberman@quicinc.com>
 To:     Alex Elder <elder@linaro.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -63,9 +63,9 @@ CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
         <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v11 13/26] gunyah: vm_mgr: Add ioctls to support basic non-proxy VM boot
-Date:   Fri, 3 Mar 2023 17:06:19 -0800
-Message-ID: <20230304010632.2127470-14-quic_eberman@quicinc.com>
+Subject: [PATCH v11 14/26] samples: Add sample userspace Gunyah VM Manager
+Date:   Fri, 3 Mar 2023 17:06:20 -0800
+Message-ID: <20230304010632.2127470-15-quic_eberman@quicinc.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230304010632.2127470-1-quic_eberman@quicinc.com>
 References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
@@ -77,15 +77,15 @@ X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZTwRCB7bU_EhQRaXBPnsYGMVGFJAzsIV
-X-Proofpoint-ORIG-GUID: ZTwRCB7bU_EhQRaXBPnsYGMVGFJAzsIV
+X-Proofpoint-GUID: 4aFFUlhMHjADqvlSjcmx3j-iaZqyyyzq
+X-Proofpoint-ORIG-GUID: 4aFFUlhMHjADqvlSjcmx3j-iaZqyyyzq
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-03_07,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- adultscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999 clxscore=1015
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ clxscore=1015 mlxscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
+ priorityscore=1501 spamscore=0 malwarescore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2303040005
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -96,424 +96,422 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add remaining ioctls to support non-proxy VM boot:
+Add a sample Gunyah VMM capable of launching a non-proxy scheduled VM.
 
- - Gunyah Resource Manager uses the VM's devicetree to configure the
-   virtual machine. The location of the devicetree in the guest's
-   virtual memory can be declared via the SET_DTB_CONFIG ioctl.
- - Trigger start of the virtual machine with VM_START ioctl.
-
-Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
 Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 ---
- drivers/virt/gunyah/vm_mgr.c    | 243 ++++++++++++++++++++++++++++++--
- drivers/virt/gunyah/vm_mgr.h    |  10 ++
- drivers/virt/gunyah/vm_mgr_mm.c |  23 +++
- include/linux/gunyah_rsc_mgr.h  |   6 +
- include/uapi/linux/gunyah.h     |  13 ++
- 5 files changed, 282 insertions(+), 13 deletions(-)
+ samples/Kconfig              |  10 ++
+ samples/Makefile             |   1 +
+ samples/gunyah/.gitignore    |   2 +
+ samples/gunyah/Makefile      |   6 +
+ samples/gunyah/gunyah_vmm.c  | 270 +++++++++++++++++++++++++++++++++++
+ samples/gunyah/sample_vm.dts |  68 +++++++++
+ 6 files changed, 357 insertions(+)
+ create mode 100644 samples/gunyah/.gitignore
+ create mode 100644 samples/gunyah/Makefile
+ create mode 100644 samples/gunyah/gunyah_vmm.c
+ create mode 100644 samples/gunyah/sample_vm.dts
 
-diff --git a/drivers/virt/gunyah/vm_mgr.c b/drivers/virt/gunyah/vm_mgr.c
-index e950274c6a53..299b9bb81edc 100644
---- a/drivers/virt/gunyah/vm_mgr.c
-+++ b/drivers/virt/gunyah/vm_mgr.c
-@@ -9,37 +9,118 @@
- #include <linux/file.h>
- #include <linux/gunyah_rsc_mgr.h>
- #include <linux/miscdevice.h>
-+#include <linux/mm.h>
- #include <linux/module.h>
+diff --git a/samples/Kconfig b/samples/Kconfig
+index 30ef8bd48ba3..11070bf02bd7 100644
+--- a/samples/Kconfig
++++ b/samples/Kconfig
+@@ -273,6 +273,16 @@ config SAMPLE_CORESIGHT_SYSCFG
+ 	  This demonstrates how a user may create their own CoreSight
+ 	  configurations and easily load them into the system at runtime.
  
- #include <uapi/linux/gunyah.h>
++config SAMPLE_GUNYAH
++	bool "Build example Gunyah Virtual Machine Manager"
++	depends on CC_CAN_LINK && HEADERS_INSTALL
++	depends on GUNYAH
++	help
++	  Build an example Gunyah VMM userspace program capable of launching
++	  a basic virtual machine under the Gunyah hypervisor.
++	  This demonstrates how to create a virtual machine under the Gunyah
++	  hypervisor.
++
+ source "samples/rust/Kconfig"
  
- #include "vm_mgr.h"
- 
-+static int gh_vm_rm_notification_status(struct gh_vm *ghvm, void *data)
-+{
-+	struct gh_rm_vm_status_payload *payload = data;
+ endif # SAMPLES
+diff --git a/samples/Makefile b/samples/Makefile
+index 7cb632ef88ee..a65555802642 100644
+--- a/samples/Makefile
++++ b/samples/Makefile
+@@ -37,3 +37,4 @@ obj-$(CONFIG_DEBUG_KMEMLEAK_TEST)	+= kmemleak/
+ obj-$(CONFIG_SAMPLE_CORESIGHT_SYSCFG)	+= coresight/
+ obj-$(CONFIG_SAMPLE_FPROBE)		+= fprobe/
+ obj-$(CONFIG_SAMPLES_RUST)		+= rust/
++obj-$(CONFIG_SAMPLE_GUNYAH)		+= gunyah/
+diff --git a/samples/gunyah/.gitignore b/samples/gunyah/.gitignore
+new file mode 100644
+index 000000000000..adc7d1589fde
+--- /dev/null
++++ b/samples/gunyah/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++/gunyah_vmm
+diff --git a/samples/gunyah/Makefile b/samples/gunyah/Makefile
+new file mode 100644
+index 000000000000..faf14f9bb337
+--- /dev/null
++++ b/samples/gunyah/Makefile
+@@ -0,0 +1,6 @@
++# SPDX-License-Identifier: GPL-2.0-only
 +
-+	if (payload->vmid != ghvm->vmid)
-+		return NOTIFY_OK;
++userprogs-always-y += gunyah_vmm
++dtb-y += sample_vm.dtb
 +
-+	/* All other state transitions are synchronous to a corresponding RM call */
-+	if (payload->vm_status == GH_RM_VM_STATUS_RESET) {
-+		down_write(&ghvm->status_lock);
-+		ghvm->vm_status = payload->vm_status;
-+		up_write(&ghvm->status_lock);
-+		wake_up(&ghvm->vm_status_wait);
-+	}
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int gh_vm_rm_notification_exited(struct gh_vm *ghvm, void *data)
-+{
-+	struct gh_rm_vm_exited_payload *payload = data;
-+
-+	if (payload->vmid != ghvm->vmid)
-+		return NOTIFY_OK;
-+
-+	down_write(&ghvm->status_lock);
-+	ghvm->vm_status = GH_RM_VM_STATUS_EXITED;
-+	up_write(&ghvm->status_lock);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int gh_vm_rm_notification(struct notifier_block *nb, unsigned long action, void *data)
-+{
-+	struct gh_vm *ghvm = container_of(nb, struct gh_vm, nb);
-+
-+	switch (action) {
-+	case GH_RM_NOTIFICATION_VM_STATUS:
-+		return gh_vm_rm_notification_status(ghvm, data);
-+	case GH_RM_NOTIFICATION_VM_EXITED:
-+		return gh_vm_rm_notification_exited(ghvm, data);
-+	default:
-+		return NOTIFY_OK;
-+	}
-+}
-+
-+static void gh_vm_stop(struct gh_vm *ghvm)
-+{
-+	int ret;
-+
-+	down_write(&ghvm->status_lock);
-+	if (ghvm->vm_status == GH_RM_VM_STATUS_RUNNING) {
-+		ret = gh_rm_vm_stop(ghvm->rm, ghvm->vmid);
-+		if (ret)
-+			dev_warn(ghvm->parent, "Failed to stop VM: %d\n", ret);
-+	}
-+
-+	ghvm->vm_status = GH_RM_VM_STATUS_EXITED;
-+	up_write(&ghvm->status_lock);
-+}
-+
- static void gh_vm_free(struct work_struct *work)
- {
- 	struct gh_vm *ghvm = container_of(work, struct gh_vm, free_work);
- 	struct gh_vm_mem *mapping, *tmp;
- 	int ret;
- 
--	mutex_lock(&ghvm->mm_lock);
--	list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
--		gh_vm_mem_reclaim(ghvm, mapping);
--		kfree(mapping);
--	}
--	mutex_unlock(&ghvm->mm_lock);
--
--	ret = gh_rm_dealloc_vmid(ghvm->rm, ghvm->vmid);
--	if (ret)
--		pr_warn("Failed to deallocate vmid: %d\n", ret);
-+	switch (ghvm->vm_status) {
-+	case GH_RM_VM_STATUS_RUNNING:
-+		gh_vm_stop(ghvm);
-+		fallthrough;
-+	case GH_RM_VM_STATUS_INIT_FAILED:
-+	case GH_RM_VM_STATUS_LOAD:
-+	case GH_RM_VM_STATUS_EXITED:
-+		mutex_lock(&ghvm->mm_lock);
-+		list_for_each_entry_safe(mapping, tmp, &ghvm->memory_mappings, list) {
-+			gh_vm_mem_reclaim(ghvm, mapping);
-+			kfree(mapping);
-+		}
-+		mutex_unlock(&ghvm->mm_lock);
-+		fallthrough;
-+	case GH_RM_VM_STATUS_NO_STATE:
-+		ret = gh_rm_dealloc_vmid(ghvm->rm, ghvm->vmid);
-+		if (ret)
-+			dev_warn(ghvm->parent, "Failed to deallocate vmid: %d\n", ret);
-+
-+		gh_rm_notifier_unregister(ghvm->rm, &ghvm->nb);
-+		gh_rm_put(ghvm->rm);
-+		kfree(ghvm);
-+		break;
-+	default:
-+		dev_err(ghvm->parent, "VM is unknown state: %d. VM will not be cleaned up.\n",
-+			ghvm->vm_status);
- 
--	put_gh_rm(ghvm->rm);
--	kfree(ghvm);
-+		gh_rm_notifier_unregister(ghvm->rm, &ghvm->nb);
-+		gh_rm_put(ghvm->rm);
-+		kfree(ghvm);
-+		break;
-+	}
- }
- 
- static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
- {
- 	struct gh_vm *ghvm;
--	int vmid;
-+	int vmid, ret;
- 
- 	vmid = gh_rm_alloc_vmid(rm, 0);
- 	if (vmid < 0)
-@@ -55,13 +136,130 @@ static __must_check struct gh_vm *gh_vm_alloc(struct gh_rm *rm)
- 	ghvm->vmid = vmid;
- 	ghvm->rm = rm;
- 
-+	init_waitqueue_head(&ghvm->vm_status_wait);
-+	ghvm->nb.notifier_call = gh_vm_rm_notification;
-+	ret = gh_rm_notifier_register(rm, &ghvm->nb);
-+	if (ret) {
-+		gh_rm_put(rm);
-+		gh_rm_dealloc_vmid(rm, vmid);
-+		kfree(ghvm);
-+		return ERR_PTR(ret);
-+	}
-+
- 	mutex_init(&ghvm->mm_lock);
- 	INIT_LIST_HEAD(&ghvm->memory_mappings);
-+	init_rwsem(&ghvm->status_lock);
- 	INIT_WORK(&ghvm->free_work, gh_vm_free);
-+	ghvm->vm_status = GH_RM_VM_STATUS_LOAD;
- 
- 	return ghvm;
- }
- 
-+static int gh_vm_start(struct gh_vm *ghvm)
-+{
-+	struct gh_vm_mem *mapping;
-+	u64 dtb_offset;
-+	u32 mem_handle;
-+	int ret;
-+
-+	down_write(&ghvm->status_lock);
-+	if (ghvm->vm_status != GH_RM_VM_STATUS_LOAD) {
-+		up_write(&ghvm->status_lock);
-+		return 0;
-+	}
-+
-+	ghvm->vm_status = GH_RM_VM_STATUS_RESET;
-+
-+	mutex_lock(&ghvm->mm_lock);
-+	list_for_each_entry(mapping, &ghvm->memory_mappings, list) {
-+		switch (mapping->share_type) {
-+		case VM_MEM_LEND:
-+			ret = gh_rm_mem_lend(ghvm->rm, &mapping->parcel);
-+			break;
-+		case VM_MEM_SHARE:
-+			ret = gh_rm_mem_share(ghvm->rm, &mapping->parcel);
-+			break;
-+		}
-+		if (ret) {
-+			dev_warn(ghvm->parent, "Failed to %s parcel %d: %d\n",
-+				mapping->share_type == VM_MEM_LEND ? "lend" : "share",
-+				mapping->parcel.label,
-+				ret);
-+			goto err;
-+		}
-+	}
-+	mutex_unlock(&ghvm->mm_lock);
-+
-+	mapping = gh_vm_mem_find_by_addr(ghvm, ghvm->dtb_config.guest_phys_addr,
-+					ghvm->dtb_config.size);
-+	if (!mapping) {
-+		dev_warn(ghvm->parent, "Failed to find the memory_handle for DTB\n");
-+		ret = -EINVAL;
-+		goto err;
-+	}
-+
-+	mem_handle = mapping->parcel.mem_handle;
-+	dtb_offset = ghvm->dtb_config.guest_phys_addr - mapping->guest_phys_addr;
-+
-+	ret = gh_rm_vm_configure(ghvm->rm, ghvm->vmid, ghvm->auth, mem_handle,
-+				0, 0, dtb_offset, ghvm->dtb_config.size);
-+	if (ret) {
-+		dev_warn(ghvm->parent, "Failed to configure VM: %d\n", ret);
-+		goto err;
-+	}
-+
-+	ret = gh_rm_vm_init(ghvm->rm, ghvm->vmid);
-+	if (ret) {
-+		dev_warn(ghvm->parent, "Failed to initialize VM: %d\n", ret);
-+		goto err;
-+	}
-+
-+	ret = gh_rm_vm_start(ghvm->rm, ghvm->vmid);
-+	if (ret) {
-+		dev_warn(ghvm->parent, "Failed to start VM: %d\n", ret);
-+		goto err;
-+	}
-+
-+	ghvm->vm_status = GH_RM_VM_STATUS_RUNNING;
-+	up_write(&ghvm->status_lock);
-+	return ret;
-+err:
-+	ghvm->vm_status = GH_RM_VM_STATUS_INIT_FAILED;
-+	/* gh_vm_free will handle releasing resources and reclaiming memory */
-+	up_write(&ghvm->status_lock);
-+	return ret;
-+}
-+
-+static int gh_vm_ensure_started(struct gh_vm *ghvm)
-+{
-+	int ret;
-+
-+	ret = down_read_interruptible(&ghvm->status_lock);
-+	if (ret)
-+		return ret;
-+
-+	/* Unlikely because VM is typically started */
-+	if (unlikely(ghvm->vm_status == GH_RM_VM_STATUS_LOAD)) {
-+		up_read(&ghvm->status_lock);
-+		ret = gh_vm_start(ghvm);
-+		if (ret)
-+			goto out;
-+		/** gh_vm_start() is guaranteed to bring status out of
-+		 * GH_RM_VM_STATUS_LOAD, thus inifitely recursive call is not
-+		 * possible
-+		 */
-+		return gh_vm_ensure_started(ghvm);
-+	}
-+
-+	/* Unlikely because VM is typically running */
-+	if (unlikely(ghvm->vm_status != GH_RM_VM_STATUS_RUNNING))
-+		ret = -ENODEV;
-+
-+out:
-+	up_read(&ghvm->status_lock);
-+	return ret;
-+}
-+
- static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- {
- 	struct gh_vm *ghvm = filp->private_data;
-@@ -85,6 +283,25 @@ static long gh_vm_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 		r = gh_vm_mem_alloc(ghvm, &region);
- 		break;
- 	}
-+	case GH_VM_SET_DTB_CONFIG: {
-+		struct gh_vm_dtb_config dtb_config;
-+
-+		if (copy_from_user(&dtb_config, argp, sizeof(dtb_config)))
-+			return -EFAULT;
-+
-+		dtb_config.size = PAGE_ALIGN(dtb_config.size);
-+		if (dtb_config.guest_phys_addr + dtb_config.size < dtb_config.guest_phys_addr)
-+			return -EOVERFLOW;
-+
-+		ghvm->dtb_config = dtb_config;
-+
-+		r = 0;
-+		break;
-+	}
-+	case GH_VM_START: {
-+		r = gh_vm_ensure_started(ghvm);
-+		break;
-+	}
- 	default:
- 		r = -ENOTTY;
- 		break;
-diff --git a/drivers/virt/gunyah/vm_mgr.h b/drivers/virt/gunyah/vm_mgr.h
-index c9f6fa5478ed..26bcc2ae4478 100644
---- a/drivers/virt/gunyah/vm_mgr.h
-+++ b/drivers/virt/gunyah/vm_mgr.h
-@@ -10,6 +10,8 @@
- #include <linux/list.h>
- #include <linux/miscdevice.h>
- #include <linux/mutex.h>
-+#include <linux/rwsem.h>
-+#include <linux/wait.h>
- 
- #include <uapi/linux/gunyah.h>
- 
-@@ -34,6 +36,13 @@ struct gh_vm {
- 	u16 vmid;
- 	struct gh_rm *rm;
- 	struct device *parent;
-+	enum gh_rm_vm_auth_mechanism auth;
-+	struct gh_vm_dtb_config dtb_config;
-+
-+	struct notifier_block nb;
-+	enum gh_rm_vm_status vm_status;
-+	wait_queue_head_t vm_status_wait;
-+	struct rw_semaphore status_lock;
- 
- 	struct work_struct free_work;
- 	struct mutex mm_lock;
-@@ -44,5 +53,6 @@ int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *regio
- void gh_vm_mem_reclaim(struct gh_vm *ghvm, struct gh_vm_mem *mapping);
- int gh_vm_mem_free(struct gh_vm *ghvm, u32 label);
- struct gh_vm_mem *gh_vm_mem_find_by_label(struct gh_vm *ghvm, u32 label);
-+struct gh_vm_mem *gh_vm_mem_find_by_addr(struct gh_vm *ghvm, u64 guest_phys_addr, u32 size);
- 
- #endif
-diff --git a/drivers/virt/gunyah/vm_mgr_mm.c b/drivers/virt/gunyah/vm_mgr_mm.c
-index db6f55cef37f..6e1d2e8bddb7 100644
---- a/drivers/virt/gunyah/vm_mgr_mm.c
-+++ b/drivers/virt/gunyah/vm_mgr_mm.c
-@@ -47,6 +47,29 @@ void gh_vm_mem_reclaim(struct gh_vm *ghvm, struct gh_vm_mem *mapping)
- 	list_del(&mapping->list);
- }
- 
-+struct gh_vm_mem *gh_vm_mem_find_by_addr(struct gh_vm *ghvm, u64 guest_phys_addr, u32 size)
-+{
-+	struct gh_vm_mem *mapping = NULL;
-+	int ret;
-+
-+	ret = mutex_lock_interruptible(&ghvm->mm_lock);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	list_for_each_entry(mapping, &ghvm->memory_mappings, list) {
-+		if (guest_phys_addr >= mapping->guest_phys_addr &&
-+			(guest_phys_addr + size <= mapping->guest_phys_addr +
-+			(mapping->npages << PAGE_SHIFT))) {
-+			goto unlock;
-+		}
-+	}
-+
-+	mapping = NULL;
-+unlock:
-+	mutex_unlock(&ghvm->mm_lock);
-+	return mapping;
-+}
-+
- struct gh_vm_mem *gh_vm_mem_find_by_label(struct gh_vm *ghvm, u32 label)
- {
- 	struct gh_vm_mem *mapping;
-diff --git a/include/linux/gunyah_rsc_mgr.h b/include/linux/gunyah_rsc_mgr.h
-index 88a429dad09e..8b0b46f28e39 100644
---- a/include/linux/gunyah_rsc_mgr.h
-+++ b/include/linux/gunyah_rsc_mgr.h
-@@ -29,6 +29,12 @@ struct gh_rm_vm_exited_payload {
- #define GH_RM_NOTIFICATION_VM_EXITED		 0x56100001
- 
- enum gh_rm_vm_status {
-+	/**
-+	 * RM doesn't have a state where load partially failed because
-+	 * only Linux
-+	 */
-+	GH_RM_VM_STATUS_LOAD_FAILED	= -1,
-+
- 	GH_RM_VM_STATUS_NO_STATE	= 0,
- 	GH_RM_VM_STATUS_INIT		= 1,
- 	GH_RM_VM_STATUS_READY		= 2,
-diff --git a/include/uapi/linux/gunyah.h b/include/uapi/linux/gunyah.h
-index a19207e3e065..d6abd8605a2e 100644
---- a/include/uapi/linux/gunyah.h
-+++ b/include/uapi/linux/gunyah.h
-@@ -49,4 +49,17 @@ struct gh_userspace_memory_region {
- #define GH_VM_SET_USER_MEM_REGION	_IOW(GH_IOCTL_TYPE, 0x1, \
- 						struct gh_userspace_memory_region)
- 
-+/**
-+ * struct gh_vm_dtb_config - Set the location of the VM's devicetree blob
-+ * @guest_phys_addr: Address of the VM's devicetree in guest memory.
-+ * @size: Maximum size of the devicetree.
++userccflags += -I usr/include
+diff --git a/samples/gunyah/gunyah_vmm.c b/samples/gunyah/gunyah_vmm.c
+new file mode 100644
+index 000000000000..d0ba9c20cb13
+--- /dev/null
++++ b/samples/gunyah/gunyah_vmm.c
+@@ -0,0 +1,270 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
 + */
-+struct gh_vm_dtb_config {
-+	__u64 guest_phys_addr;
-+	__u64 size;
++
++#include <stdlib.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <sys/ioctl.h>
++#include <getopt.h>
++#include <limits.h>
++#include <stdint.h>
++#include <fcntl.h>
++#include <string.h>
++#include <sys/sysmacros.h>
++#define __USE_GNU
++#include <sys/mman.h>
++
++#include <linux/gunyah.h>
++
++struct vm_config {
++	int image_fd;
++	int dtb_fd;
++	int ramdisk_fd;
++
++	uint64_t guest_base;
++	uint64_t guest_size;
++
++	uint64_t image_offset;
++	off_t image_size;
++	uint64_t dtb_offset;
++	off_t dtb_size;
++	uint64_t ramdisk_offset;
++	off_t ramdisk_size;
 +};
-+#define GH_VM_SET_DTB_CONFIG	_IOW(GH_IOCTL_TYPE, 0x2, struct gh_vm_dtb_config)
 +
-+#define GH_VM_START		_IO(GH_IOCTL_TYPE, 0x3)
++static struct option options[] = {
++	{ "help", no_argument, NULL, 'h' },
++	{ "image", required_argument, NULL, 'i' },
++	{ "dtb", required_argument, NULL, 'd' },
++	{ "ramdisk", optional_argument, NULL, 'r' },
++	{ "base", optional_argument, NULL, 'B' },
++	{ "size", optional_argument, NULL, 'S' },
++	{ "image_offset", optional_argument, NULL, 'I' },
++	{ "dtb_offset", optional_argument, NULL, 'D' },
++	{ "ramdisk_offset", optional_argument, NULL, 'R' },
++	{ }
++};
 +
- #endif
++static void print_help(char *cmd)
++{
++	printf("gunyah_vmm, a sample tool to launch Gunyah VMs\n"
++	       "Usage: %s <options>\n"
++	       "       --help,    -h  this menu\n"
++	       "       --image,   -i <image> VM image file to load (e.g. a kernel Image) [Required]\n"
++	       "       --dtb,     -d <dtb>   Devicetree to load [Required]\n"
++	       "       --ramdisk, -r <ramdisk>  Ramdisk to load\n"
++	       "       --base,    -B <address>  Set the base address of guest's memory [Default: 0x80000000]\n"
++	       "       --size,    -S <number>   The number of bytes large to make the guest's memory [Default: 0x6400000 (100 MB)]\n"
++	       "       --image_offset, -I <number>  Offset into guest memory to load the VM image file [Default: 0x10000]\n"
++	       "        --dtb_offset,  -D <number>  Offset into guest memory to load the DTB [Default: 0]\n"
++	       "        --ramdisk_offset, -R <number>  Offset into guest memory to load a ramdisk [Default: 0x4600000]\n"
++	       , cmd);
++}
++
++int main(int argc, char **argv)
++{
++	int gunyah_fd, vm_fd, guest_fd;
++	struct gh_userspace_memory_region guest_mem_desc = { 0 };
++	struct gh_vm_dtb_config dtb_config = { 0 };
++	char *guest_mem;
++	struct vm_config config = {
++		/* Defaults good enough to boot static kernel and a basic ramdisk */
++		.ramdisk_fd = -1,
++		.guest_base = 0x80000000,
++		.guest_size = 0x6400000, /* 100 MB */
++		.image_offset = 0,
++		.dtb_offset = 0x45f0000,
++		.ramdisk_offset = 0x4600000, /* put at +70MB (30MB for ramdisk) */
++	};
++	struct stat st;
++	int opt, optidx, ret = 0;
++	long l;
++
++	while ((opt = getopt_long(argc, argv, "hi:d:r:B:S:I:D:R:c:", options, &optidx)) != -1) {
++		switch (opt) {
++		case 'i':
++			config.image_fd = open(optarg, O_RDONLY | O_CLOEXEC);
++			if (config.image_fd < 0) {
++				perror("Failed to open image");
++				return -1;
++			}
++			if (stat(optarg, &st) < 0) {
++				perror("Failed to stat image");
++				return -1;
++			}
++			config.image_size = st.st_size;
++			break;
++		case 'd':
++			config.dtb_fd = open(optarg, O_RDONLY | O_CLOEXEC);
++			if (config.dtb_fd < 0) {
++				perror("Failed to open dtb");
++				return -1;
++			}
++			if (stat(optarg, &st) < 0) {
++				perror("Failed to stat dtb");
++				return -1;
++			}
++			config.dtb_size = st.st_size;
++			break;
++		case 'r':
++			config.ramdisk_fd = open(optarg, O_RDONLY | O_CLOEXEC);
++			if (config.ramdisk_fd < 0) {
++				perror("Failed to open ramdisk");
++				return -1;
++			}
++			if (stat(optarg, &st) < 0) {
++				perror("Failed to stat ramdisk");
++				return -1;
++			}
++			config.ramdisk_size = st.st_size;
++			break;
++		case 'B':
++			l = strtol(optarg, NULL, 0);
++			if (l == LONG_MIN) {
++				perror("Failed to parse base address");
++				return -1;
++			}
++			config.guest_base = l;
++			break;
++		case 'S':
++			l = strtol(optarg, NULL, 0);
++			if (l == LONG_MIN) {
++				perror("Failed to parse memory size");
++				return -1;
++			}
++			config.guest_size = l;
++			break;
++		case 'I':
++			l = strtol(optarg, NULL, 0);
++			if (l == LONG_MIN) {
++				perror("Failed to parse image offset");
++				return -1;
++			}
++			config.image_offset = l;
++			break;
++		case 'D':
++			l = strtol(optarg, NULL, 0);
++			if (l == LONG_MIN) {
++				perror("Failed to parse dtb offset");
++				return -1;
++			}
++			config.dtb_offset = l;
++			break;
++		case 'R':
++			l = strtol(optarg, NULL, 0);
++			if (l == LONG_MIN) {
++				perror("Failed to parse ramdisk offset");
++				return -1;
++			}
++			config.ramdisk_offset = l;
++			break;
++		case 'h':
++			print_help(argv[0]);
++			return 0;
++		default:
++			print_help(argv[0]);
++			return -1;
++		}
++	}
++
++	if (!config.image_fd || !config.dtb_fd) {
++		print_help(argv[0]);
++		return -1;
++	}
++
++	if (config.image_offset + config.image_size > config.guest_size) {
++		fprintf(stderr, "Image offset and size puts it outside guest memory. Make image smaller or increase guest memory size.\n");
++		return -1;
++	}
++
++	if (config.dtb_offset + config.dtb_size > config.guest_size) {
++		fprintf(stderr, "DTB offset and size puts it outside guest memory. Make dtb smaller or increase guest memory size.\n");
++		return -1;
++	}
++
++	if (config.ramdisk_fd == -1 &&
++		config.ramdisk_offset + config.ramdisk_size > config.guest_size) {
++		fprintf(stderr, "Ramdisk offset and size puts it outside guest memory. Make ramdisk smaller or increase guest memory size.\n");
++		return -1;
++	}
++
++	gunyah_fd = open("/dev/gunyah", O_RDWR | O_CLOEXEC);
++	if (gunyah_fd < 0) {
++		perror("Failed to open /dev/gunyah");
++		return -1;
++	}
++
++	vm_fd = ioctl(gunyah_fd, GH_CREATE_VM, 0);
++	if (vm_fd < 0) {
++		perror("Failed to create vm");
++		return -1;
++	}
++
++	guest_fd = memfd_create("guest_memory", MFD_CLOEXEC);
++	if (guest_fd < 0) {
++		perror("Failed to create guest memfd");
++		return -1;
++	}
++
++	if (ftruncate(guest_fd, config.guest_size) < 0) {
++		perror("Failed to grow guest memory");
++		return -1;
++	}
++
++	guest_mem = mmap(NULL, config.guest_size, PROT_READ | PROT_WRITE, MAP_SHARED, guest_fd, 0);
++	if (guest_mem == MAP_FAILED) {
++		perror("Not enough memory");
++		return -1;
++	}
++
++	if (read(config.image_fd, guest_mem + config.image_offset, config.image_size) < 0) {
++		perror("Failed to read image into guest memory");
++		return -1;
++	}
++
++	if (read(config.dtb_fd, guest_mem + config.dtb_offset, config.dtb_size) < 0) {
++		perror("Failed to read dtb into guest memory");
++		return -1;
++	}
++
++	if (config.ramdisk_fd > 0 &&
++		read(config.ramdisk_fd, guest_mem + config.ramdisk_offset,
++			config.ramdisk_size) < 0) {
++		perror("Failed to read ramdisk into guest memory");
++		return -1;
++	}
++
++	guest_mem_desc.label = 0;
++	guest_mem_desc.flags = GH_MEM_ALLOW_READ | GH_MEM_ALLOW_WRITE | GH_MEM_ALLOW_EXEC;
++	guest_mem_desc.guest_phys_addr = config.guest_base;
++	guest_mem_desc.memory_size = config.guest_size;
++	guest_mem_desc.userspace_addr = (__u64)guest_mem;
++
++	if (ioctl(vm_fd, GH_VM_SET_USER_MEM_REGION, &guest_mem_desc) < 0) {
++		perror("Failed to register guest memory with VM");
++		return -1;
++	}
++
++	dtb_config.guest_phys_addr = config.guest_base + config.dtb_offset;
++	dtb_config.size = config.dtb_size;
++	if (ioctl(vm_fd, GH_VM_SET_DTB_CONFIG, &dtb_config) < 0) {
++		perror("Failed to set DTB configuration for VM");
++		return -1;
++	}
++
++	ret = ioctl(vm_fd, GH_VM_START);
++	if (ret) {
++		perror("GH_VM_START failed");
++		return -1;
++	}
++
++	while (1)
++		sleep(10);
++
++	return 0;
++}
+diff --git a/samples/gunyah/sample_vm.dts b/samples/gunyah/sample_vm.dts
+new file mode 100644
+index 000000000000..293bbc0469c8
+--- /dev/null
++++ b/samples/gunyah/sample_vm.dts
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++/dts-v1/;
++
++/ {
++	#address-cells = <2>;
++	#size-cells = <2>;
++	interrupt-parent = <&intc>;
++
++	chosen {
++		bootargs = "nokaslr";
++	};
++
++	cpus {
++		#address-cells = <0x2>;
++		#size-cells = <0>;
++
++		cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,armv8";
++			reg = <0 0>;
++		};
++	};
++
++	intc: interrupt-controller@3FFF0000 {
++		compatible = "arm,gic-v3";
++		#interrupt-cells = <3>;
++		#address-cells = <2>;
++		#size-cells = <2>;
++		interrupt-controller;
++		reg = <0 0x3FFF0000 0 0x10000>,
++		      <0 0x3FFD0000 0 0x20000>;
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		always-on;
++		interrupts = <1 13 0x108>,
++			     <1 14 0x108>,
++			     <1 11 0x108>,
++			     <1 10 0x108>;
++		clock-frequency = <19200000>;
++	};
++
++	gunyah-vm-config {
++		image-name = "linux_vm_0";
++
++		memory {
++			#address-cells = <2>;
++			#size-cells = <2>;
++
++			base-address = <0 0x80000000>;
++		};
++
++		interrupts {
++			config = <&intc>;
++		};
++
++		vcpus {
++			affinity-map = < 0 >;
++			sched-priority = < (-1) >;
++			sched-timeslice = < 2000 >;
++		};
++	};
++};
 -- 
 2.39.2
 
