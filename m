@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AD3E6AA8CB
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 09:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D5B6AA8CC
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 09:44:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjCDIn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 03:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55202 "EHLO
+        id S229783AbjCDIoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 03:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCDInq (ORCPT
+        with ESMTP id S229679AbjCDInr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 03:43:46 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A93014E90;
-        Sat,  4 Mar 2023 00:43:45 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id y14so4660934ljq.4;
-        Sat, 04 Mar 2023 00:43:45 -0800 (PST)
+        Sat, 4 Mar 2023 03:43:47 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BB115CA9;
+        Sat,  4 Mar 2023 00:43:46 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id z42so4605349ljq.13;
+        Sat, 04 Mar 2023 00:43:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112; t=1677919424;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2cvh0M4miY/BiqN/UdWftX82fG+Lj6GlwYOBUkwznvo=;
-        b=m1ToztVg71sF//PDkJ4aaec1p1ekpe4vM1Qq33sQPo64MSs2jYzSiYQomfzKLk7BYl
-         88hDn6JA/rRnl7AjHsK3civP46hb4J2M4x9k6b6nC9ZNnhM9zpzrKJoGGAC4f6yFk/mv
-         gKC61jroGglFbpd4zsDvKr/q+1g1bGxHfjgOCkY3p2JeS3pmlp47SuUfQHQMxWW2QexG
-         9Spf59og2Kmld3Ku5a7rrocR1uEVqp/uoYO1V0vjZ043I2Eud1GETiUrdjCT54+yfF6L
-         rtHWEXgZZMirf+2atu9BTQN+ajZ8q5ZlqowRMICIOyjLCZnBSV+BArHypbCsWqxxuL9j
-         JAfQ==
+        bh=70ZWc+aPECVoIOGnXpdYWCEvBu+S9xi4hcK/1o5dA1g=;
+        b=f+jiYGLCjdp88kte6Sr3DZVP2pNxla0i0slfaGRNUVkQPrYfPwWxwrWTpjwUeX1eAM
+         eGAWpY9Lda33j+BmirHcvUWl5hkMyqJfUbc3H586O4PRuSv5n6WPy2yRRtd7Nx+LqfRK
+         6ozNIRBux/9q+KG/o7nMD3cz5UffR9v9RDQURSFcnaWM7SZ25vwrotT6CI9QJVtDnmph
+         TLZo4O5NjUhgWKHZPJRmhmMkxEp8aogeLWwunUiAbLf6vA+egtjP5Hsg0db3uF/EJ7Zd
+         P+lckVE4ClTCUDTY2PVqEms1cPKzDuodzsgTMEZK1egM8J7JTcrz+vOwLs0nd69RxvVg
+         8bEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1677919424;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2cvh0M4miY/BiqN/UdWftX82fG+Lj6GlwYOBUkwznvo=;
-        b=zxGl9Nk4CKTrGcAKoZuHqxI2Gjs7tbM7kn/PI3iZI6mxIEyZ+Oh+AEPw/+xUEkJ8J1
-         Fza1H+gXaLIZ4TBG6ZB8h4enJEM56My8XqbmHwo8+7bo5gE9LzPIIyRVL1dCZLvkpxZu
-         vtzyeGz/Cb0hg4MVVr/VtCyHDTfQrAYAm5/1gKxjE2inlWnXboIhRh0vBUBeNBncLGb+
-         P5YRx642I99iDG1HlOsy+st8SzmPMVSnFbM3vYSLsxuezbeIA58IZVc740se0q4AqQeH
-         IlzUfHBuny+6Klq0QxMUkCsYxlQ+AGG8Kg0g+UY1uRj6nd3VIAB7fWuwVk7o84/GlyUw
-         eK8w==
-X-Gm-Message-State: AO0yUKWqq0DI+APQp+zaa00JIzMVNOQ2u+2meiDt8jCuRzc6AYJNa/+J
-        PKLwwuyyminDkBizMk/9n2zLQPZQdo8=
-X-Google-Smtp-Source: AK7set8/zLn/KQKDsTNXArki7yWZ4e/yRiyPsJZcALWB7N1eOVwB/wRHbJV6j1lNM/OzckIqnQYVWg==
-X-Received: by 2002:a2e:9d51:0:b0:295:8a9b:d8d6 with SMTP id y17-20020a2e9d51000000b002958a9bd8d6mr1350936ljj.4.1677919423679;
-        Sat, 04 Mar 2023 00:43:43 -0800 (PST)
+        bh=70ZWc+aPECVoIOGnXpdYWCEvBu+S9xi4hcK/1o5dA1g=;
+        b=MeoNf/pDmo93uywQRROFKAJYBA68yiPgwihzgq7hAVRVQrdzdZWditRTynCsDRb626
+         X2ALXYKJ6iASot/Q1IVE9UeJNErjtO3DdwyVnhsLEaZAGStvluSoVAnlo7lg/qXq7+PS
+         wP8IVPbqu7PsSbYLOXjHMOb+nqxcCnj6LTdIG6P+TcOsXknnViXqdRryZRb7gTunBELV
+         s9T6DtHnPtVNRC+nzOBJwRd37etDpMPFkTkdwsGLcRh6Yih5bgQ46/r76RTxKokd0m0y
+         nbqyJtKl9sOi0mfkYDhFGzQwZf1oc8SUO/30uwPdpb9vsv0Hfe4YJrA6X9KQncKmnN6+
+         4CWQ==
+X-Gm-Message-State: AO0yUKUbEhG9FoKTzbEHKyyg+DcAAIcvOt4Mll6fZNBegB5XuJaWOCdZ
+        7v0AnKI1c7x9O4mHKC7zew8=
+X-Google-Smtp-Source: AK7set/QjskNvisTw7PCJzaFpS7u2g4mGSir56UAUiG88iga+Xb1BvwOpk3xpArRGz5Bd1I4ErXMNA==
+X-Received: by 2002:a05:651c:11c6:b0:293:591d:d859 with SMTP id z6-20020a05651c11c600b00293591dd859mr1164414ljo.17.1677919424557;
+        Sat, 04 Mar 2023 00:43:44 -0800 (PST)
 Received: from xeon.. ([188.163.112.76])
-        by smtp.gmail.com with ESMTPSA id u5-20020a2ea165000000b00293cc5f83b4sm693575ljl.27.2023.03.04.00.43.42
+        by smtp.gmail.com with ESMTPSA id u5-20020a2ea165000000b00293cc5f83b4sm693575ljl.27.2023.03.04.00.43.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 00:43:43 -0800 (PST)
+        Sat, 04 Mar 2023 00:43:44 -0800 (PST)
 From:   Svyatoslav Ryhel <clamor95@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -60,9 +60,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
         Dmitry Osipenko <digetx@gmail.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/5] ARM: tegra: transformer: use labels for mmc in aliases
-Date:   Sat,  4 Mar 2023 10:43:17 +0200
-Message-Id: <20230304084319.18424-4-clamor95@gmail.com>
+Subject: [PATCH v2 4/5] ARM: tegra: asus-tf101: fix accelerometer mount matrix
+Date:   Sat,  4 Mar 2023 10:43:18 +0200
+Message-Id: <20230304084319.18424-5-clamor95@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230304084319.18424-1-clamor95@gmail.com>
 References: <20230304084319.18424-1-clamor95@gmail.com>
@@ -78,31 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since mmc devices in common dtsi are labeled let's use labels
-for simpler comprehension of tree.
+Accelerometer mount matrix used in tf101 downstream is inverted.
+This new matrix was generated on actual device using calibration
+script, like on other transformers.
 
+Tested-by: Robert Eckelmann <longnoserob@gmail.com>
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
- arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi | 6 +++---
+ arch/arm/boot/dts/tegra20-asus-tf101.dts | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-index 08ea9cb32d0e..70f7f279fd35 100644
---- a/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-+++ b/arch/arm/boot/dts/tegra30-asus-transformer-common.dtsi
-@@ -12,9 +12,9 @@ / {
- 	chassis-type = "convertible";
+diff --git a/arch/arm/boot/dts/tegra20-asus-tf101.dts b/arch/arm/boot/dts/tegra20-asus-tf101.dts
+index c39ddb462ad0..588845965f99 100644
+--- a/arch/arm/boot/dts/tegra20-asus-tf101.dts
++++ b/arch/arm/boot/dts/tegra20-asus-tf101.dts
+@@ -577,9 +577,9 @@ accelerometer@f {
+ 					vdd-supply = <&vdd_1v8_sys>;
+ 					vddio-supply = <&vdd_1v8_sys>;
  
- 	aliases {
--		mmc0 = "/mmc@78000600"; /* eMMC */
--		mmc1 = "/mmc@78000000"; /* uSD slot */
--		mmc2 = "/mmc@78000400"; /* WiFi */
-+		mmc0 = &sdmmc4; /* eMMC */
-+		mmc1 = &sdmmc1; /* uSD slot */
-+		mmc2 = &sdmmc3; /* WiFi */
- 
- 		rtc0 = &pmic;
- 		rtc1 = "/rtc@7000e000";
+-					mount-matrix =	 "1",  "0",  "0",
+-							 "0",  "1",  "0",
+-							 "0",  "0",  "1";
++					mount-matrix =	"-1",  "0",  "0",
++							 "0", "-1",  "0",
++							 "0",  "0", "-1";
+ 				};
+ 			};
+ 		};
 -- 
 2.37.2
 
