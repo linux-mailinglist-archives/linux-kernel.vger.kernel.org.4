@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BA66AA860
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 07:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7256AA864
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 07:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229532AbjCDGfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 01:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S229642AbjCDGgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 01:36:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjCDGfp (ORCPT
+        with ESMTP id S229636AbjCDGgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 01:35:45 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BD75B5DD;
-        Fri,  3 Mar 2023 22:35:31 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id i5so5010304pla.2;
-        Fri, 03 Mar 2023 22:35:31 -0800 (PST)
+        Sat, 4 Mar 2023 01:36:03 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3D3559E8;
+        Fri,  3 Mar 2023 22:35:43 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id v11so4976409plz.8;
+        Fri, 03 Mar 2023 22:35:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677911731;
+        d=gmail.com; s=20210112; t=1677911742;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
         bh=uWZVzjzMOpNR5BEvh4Q6TcLUcrqDcqkAnRC7oIHscP0=;
-        b=jKnsb7cqslqYpiZZN6tyMLK2/CeN9KUmwEdLMbQXPjfsmIa5mtXaKnOBCKjn3T9izT
-         Q0OYWAc4p5Ms5ne6bF0jqKmPDMePuqGmQJJXIaAuL7QTrGQtbM3XLS/MBhNdZLH0tfJK
-         ZrqgLDqs/H9OkYyJOASutYH3rkPyAOrQKwFFpaBGlohsnICoYx4VzM1w3T9IqCWQ3Uk5
-         ym99PhUE6JKMiC/ODqStKqMgvtbhJR0Xh3P6IpbYyFEA520qaQ33uHOHFmh/FivtyauK
-         93BdOYgS90o8EcXuQKBnfs9jL/ozjFz3HEAkzvbbYCWIkBzuobRZBYQTnllya8Bnx2Dp
-         +F1w==
+        b=adK1MiVmokR1e6iM6K4RXBUMAJKcT+QxI3oLqEoN4zt7DWHIuCo5xkW49SnFUHPBmN
+         ai1YvUYSm03E1bUq/evZzKWmOOMyWUVsCnGO+Qj/OWznzOcfd86Y9DkmQEdVB9RGh6sP
+         GzKY0MA9IU0TynNzZmXQAgoAZAdZPtLwHBUkCi2mWrskupa9czRFP+Z1pZPl6L7tT3WS
+         zOPnY6AYWXu+n0Volso4shrP+HCCL5xLiG79LjyNBiX66eqDfGLhd+NdLiQxp46bHcxr
+         3w/BYTvJImk1rnhP4HlDuV3CfS+7/65wwh+H9Po3lqDS9OUn+JlMyugPjj3uErkAHmMA
+         tMkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677911731;
+        d=1e100.net; s=20210112; t=1677911742;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=uWZVzjzMOpNR5BEvh4Q6TcLUcrqDcqkAnRC7oIHscP0=;
-        b=oTGY75+5uoKS01aeEK6o/uUG1D9vja/N4Oyiw4Hi8b/roWWpLOXjctgLdL5ufJVgPH
-         Zmewc42lwfo0mzLBhymJxxBVpDbPqgsG9fmbtz+KCgYe2jxodxjOM1uO4YNDMyTmOsSW
-         A91KOQDM59ihxNLpfB5dz8TDfjhE5S+U/LjRxxZ+zaqgt4Pj9wlYUWxccllO3plyZ4Vg
-         45A8LziKqxpe/OsOWGm41R9xR0o82Aw74uY9BVo5hILj9b99DPWLuXxj8dx95f0YjOQr
-         JLq9nI9OjGiHCBaZEkL6s+pwJ2pMeCxaGeuTs4eKDCdZUBsHvrq5lt/NdISHfaOetWl0
-         DtQw==
-X-Gm-Message-State: AO0yUKUZ50jIG3wW0zoJetVFG3IE72RK7Hq5SqYGWQXJgQnjR/50NI3i
-        dU/3YF1oQAVLwj0Y+aw6/Wc=
-X-Google-Smtp-Source: AK7set+/kaC4WKts9NrpX3aVCCBlIdNAy0IYKIlmL+ZdGq3SaJ6/DhieMyzuYo7EI5L3V5LIPgj0CQ==
-X-Received: by 2002:a17:902:bc42:b0:19e:6a4c:9fa0 with SMTP id t2-20020a170902bc4200b0019e6a4c9fa0mr3840032plz.49.1677911730939;
-        Fri, 03 Mar 2023 22:35:30 -0800 (PST)
+        b=l1QgBVTxDaYMDsHzQUiGk8G/Oz7Nn4M+fXmOXKSd5Adv5sfsLv0zcWegOUCWWpaMqz
+         YjGxLh/Pb6nzx2rWp3dRksY5UfuaVeIJfCeomW0qcQVCHUCo8SGWv3gLAVhRqhtAMz5d
+         GdhvmerROoa8ozoglbvYonqSarBX8pHdgVUA2Rjhk5NQ/oaedY4G6tMBh0m/mb4qGUTB
+         I1vL4W3SQ27NcBmCCe+f9yADkmTQvQiNZFZ1mQfvfdRUzeWGNf9n7kbduKne7RMFGn7V
+         0wx2fPnns0K8afTjCxP1DwMM3C8OwX5A7K3L3PtyknP6woQpoEA+/IlVXqsl5VSLIqjF
+         Ueqw==
+X-Gm-Message-State: AO0yUKVuzEx8OfFskhYLKrZdSitDh90Qe25vBfjS9tvdwbK7w8CKelLN
+        N4ui2YUQh7JfDXudiPCMSI8=
+X-Google-Smtp-Source: AK7set+6oHOjZvq6OpDCtSc2BkeVnfI7sfHZT/X7/kcTexvxStEFlhM3eCFBS73Eo8eA8WOF2QONLw==
+X-Received: by 2002:a17:902:b68a:b0:19e:98fe:856b with SMTP id c10-20020a170902b68a00b0019e98fe856bmr2521131pls.24.1677911742467;
+        Fri, 03 Mar 2023 22:35:42 -0800 (PST)
 Received: from y.ha.lan ([104.28.245.199])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b0019aa6bf4450sm2520938plg.188.2023.03.03.22.35.26
+        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b0019aa6bf4450sm2520938plg.188.2023.03.03.22.35.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 22:35:30 -0800 (PST)
+        Fri, 03 Mar 2023 22:35:42 -0800 (PST)
 From:   David Yang <mmyangfl@gmail.com>
 To:     mmyangfl@gmail.com
 Cc:     Michael Turquette <mturquette@baylibre.com>,
@@ -58,9 +58,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/6] dt-bindings: clk: Add Hi3798MV100 CRG driver binding
-Date:   Sat,  4 Mar 2023 14:33:25 +0800
-Message-Id: <20230304063333.162309-4-mmyangfl@gmail.com>
+Subject: [PATCH v2 3/6] dt-bindings: clock: Add Hi3798MV100 CRG driver binding
+Date:   Sat,  4 Mar 2023 14:33:26 +0800
+Message-Id: <20230304063333.162309-5-mmyangfl@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230304063333.162309-1-mmyangfl@gmail.com>
 References: <20230304063333.162309-1-mmyangfl@gmail.com>
