@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82AE6AAC46
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 20:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6F16AAC4E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 21:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229658AbjCDT6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 14:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S229667AbjCDUMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 15:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCDT6v (ORCPT
+        with ESMTP id S229484AbjCDUMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 14:58:51 -0500
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ABCF96A
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 11:58:50 -0800 (PST)
-Received: by mail-qv1-xf36.google.com with SMTP id nv15so4056357qvb.7
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 11:58:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677959929;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q63Ai1i/9UPUOlnOyilqU1QWRHEjKtIUl21gSmzfwj0=;
-        b=qtYu46HJFLXbZY5dV68LdXYCHvbl4UgtutL5ldkp8ASsZBTzmfMFIXc4zI2dfExpN0
-         YVtY7R8Fp4GTiZX7xvbLF7oc29Z9cLA6Q/qB7cQ31wBipkuFnw2nH1oc1eEj8mQdK9Qi
-         nPFIN6msNwg11Lp9J1AuCmNUHDQBVWtqOpN5Q/sV5vTdSt5q8K6U3IL4sj7g4jF/9HjD
-         gxa1EV6t2JdcExsz9n3dAdU4VeVFWGlM0zwRv6hGZsN+beH13nHcrrs5qbr4Ap+ztp4P
-         ns483WTEvwgFI2+PoP2SKIZNehtlBiJ8UuI3Kkdbj4I3wXOIVrcfF+T8eZuXOg0fCLTW
-         MbYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677959929;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q63Ai1i/9UPUOlnOyilqU1QWRHEjKtIUl21gSmzfwj0=;
-        b=eA01R0N2jsXc0xAMdk6sYmRawPpwe7UJpQ8jb5dcqzG8QkddiSGfn+p5iQOU0nvrjo
-         0NxenqopHJdQLSv8UBJbPCQwnvxA1xbfkMP11B65Bj4fhwK4st1Ex2RqXD6tYf7Zd6cZ
-         7Us/34lsbIyqT+EQzte/D51nvFTbN2c8tv86FsqpvstH27AXUKcB6HE3ijv+n3xZ2ect
-         toWr6JwOpsk0/EDmp2JOc8SLhxL08rbJ2z5bCKioVkPk8X77X0qFbQMZqiSpzv/aerw0
-         DWCA7Aej/fLA/ehdozn3ilth6oS61Tqu1UxIIJvnKZU4VDDvrCPic5n8Z4rD8MUXXDiv
-         EkfQ==
-X-Gm-Message-State: AO0yUKVv1LzsUU6YWzeAJPcb/3FvXJ80F3xIMR1+01QrTlgo1qwuVIBX
-        9UeUJVo60SApG+9ZCDiRIeCHqLiKAog=
-X-Google-Smtp-Source: AK7set8KlQ0XwcKdFVihnuD03zjT+6vDf6MpPWQQZNJAsmZ/W3wsRWi76P/igds+TaommT5I3inM2Q==
-X-Received: by 2002:a05:6214:c46:b0:56e:aa11:daa3 with SMTP id r6-20020a0562140c4600b0056eaa11daa3mr9765239qvj.14.1677959929522;
-        Sat, 04 Mar 2023 11:58:49 -0800 (PST)
-Received: from hotmail.com ([137.118.186.11])
-        by smtp.gmail.com with ESMTPSA id r3-20020ae9d603000000b007423a4ae27esm4291745qkk.12.2023.03.04.11.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 11:58:48 -0800 (PST)
-Date:   Sat, 4 Mar 2023 14:58:46 -0500
-From:   Storm Dragon <stormdragon2976@gmail.com>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     George Kennedy <george.kennedy@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
-Message-ID: <ZAOi9hDBTYqoAZuI@hotmail.com>
-References: <Y/KtG9vK0oz0nQrN@hotmail.com>
- <20230220064612.1783-1-linux@weissschuh.net>
- <Y/OacHw6nL/ZtrH3@hotmail.com>
- <00e5aee7-c7b3-4077-8c9f-4f28ec220567@t-8ch.de>
- <ZAJqrfcfoM2eO5VL@mjollnir>
- <ce24d06b-7967-4b50-8913-ad42717e4c05@t-8ch.de>
+        Sat, 4 Mar 2023 15:12:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BB818157;
+        Sat,  4 Mar 2023 12:12:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1127A60A3B;
+        Sat,  4 Mar 2023 20:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB187C433D2;
+        Sat,  4 Mar 2023 20:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677960760;
+        bh=lh2zO/N+K/8gqFuO7G82Vx4lZLxCoX2cMJOhzYzwZ0o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FQiHuJcefAgrXBRuLlQEyxF2GAJ9TV0inkBwtGDr42z5WoTBFqXP2sJv8GoggRn/Q
+         nWWVKAT43TyuBqloAGT71bqjI0bnexQp5y2lcBy0hl1TECfadEKi4g019Dm3YmzRp5
+         6EbBxD9R9Sn4fF2W3/x0rLXg+GwoojkyDbP21htNG0+iQCORAOKZOX/ZYJXVI/DZQg
+         UICpODjGOz10byXZOLxeg9x3z6oXTwMo01vBQJhiKko0TGIk9yJvn2CL/1ClA5TSDv
+         ZMoNGJ+z7faXYfTuP0DESVtBen/5xlVk+TYjq3f16/YaRBvNcyA6CByaeEVbgcEZHz
+         MEO4KMnpHqd7Q==
+Date:   Sat, 4 Mar 2023 20:12:36 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 13/17] regulator: stm32-pwr: remove MODULE_LICENSE in
+ non-modules
+Message-ID: <ZAOmNCVtEIgXYhJ9@sirena.org.uk>
+References: <20230302211759.30135-1-nick.alcock@oracle.com>
+ <20230302211759.30135-14-nick.alcock@oracle.com>
+ <ZAE//jJ0GHvLN1m2@sirena.org.uk>
+ <87fsalbsd1.fsf@esperi.org.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nxu0+L+82/Uw6Rsy"
+        protocol="application/pgp-signature"; boundary="FF2iHxi4V67JT3nv"
 Content-Disposition: inline
-In-Reply-To: <ce24d06b-7967-4b50-8913-ad42717e4c05@t-8ch.de>
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NO_RDNS_DOTCOM_HELO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87fsalbsd1.fsf@esperi.org.uk>
+X-Cookie: Single tasking: Just Say No.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,49 +66,64 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---nxu0+L+82/Uw6Rsy
-Content-Type: text/plain; charset=utf-8; format=flowed
+--FF2iHxi4V67JT3nv
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 03, 2023 at 11:25:00PM +0000, Thomas Wei=C3=9Fschuh wrote:
+On Fri, Mar 03, 2023 at 06:30:02PM +0000, Nick Alcock wrote:
+> On 3 Mar 2023, Mark Brown outgrape:
 
->Does this mean the screenreader now works correctly or is it still
->broken somehow?
->
->Thomas
+> > on.  If there are no strong interdependencies then it's generally
+> > simplest to just send the patches separately to avoid any
+> > possible confusion.
 
-I have still been testing this kernel. Most things work as expected, but
-the pasting functionality for Fenrir's clipboard is broken. After
-checking into the problem, it seems that tiocsti is disabled, and that
-is causing the problem. Was that something done in this test kernel
-only, or will that be the default for all new Arch kernels? If it is the
-default, is there a way to turn it back on? I tried the following:
+> The cover letter was sent to every related mailing list (or at least it
+> was for patch series 2 and 5+: scripting problems blocked 3 and 4,
+> sorry), which is what the LWN article on big patch series which I'm
+> following recommended: <https://lwn.net/Articles/585782/>. I didn't want
+> to spam actual maintainers with more info than that, since presumably
+> they follow related-according-to-maintainer.pl lists anyway.
 
-[storm@mjollnir ~] $ sudo sysctl dev.tty.legacy_tiocsti=3D1
-sysctl: setting key "dev.tty.legacy_tiocsti": Invalid argument
+> As for copying everyone on a 121-patch monster like this... well, I
+> think everyone would have wanted to throttle me, and I'm not sure they'd
+> have been wrong.
 
-Thanks,
-Storm
+So given that there's no depenencies between the patches this
+seems like a good candidate for not sending as a series in the
+first place.
 
---nxu0+L+82/Uw6Rsy
+> I don't think anyone has previously suggested making it 121 individual
+> patches with no cover letter whatsoever. As it is, those series that
+> accidentally went out without cover letters properly Cc:ed confused some
+> maintainers because of the lack of the cover letter. My apologies.
+
+It's really quite common for people to just send lots of
+individual patches when there's no interdependencies - a lot of
+the generated cleanups do that.
+
+> It does seem this is an area where I can't please everyone. Some people
+> don't want to be Cc:ed, others want everyone Cc:ed on all of them: some
+> people want series, others want individual patches for everyone. I can't
+> do both. Sorry about that.
+
+The important thing isn't so much the specific thing as making it
+clear what's going on - if you send a series with no information
+about the how the series should be handled it's unclear what's
+going on.
+
+--FF2iHxi4V67JT3nv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEjjImGMhZhYoKESBfW+ojcUPdwZMFAmQDovMACgkQW+ojcUPd
-wZP08hAAjuseTCmUJhs8OcS3scbgYFakLLEoIhn9HC29EoIBKUaOuXStMStkYXgf
-9iZsgkpHXHK9j0gRNtMVutFV+Oi7jc0GXOOZh2ulPu/cTVdyt6QHbtaTDqOx/ewH
-YY4qKiWdjcH5e3AuwSKLF7fRHNLcWRSVtIicpqGKi1PU3ogzg6apVzt055/O74wn
-KEaVgY/hnAP6whpHpF5VyL23A0/Z65gkIK/YFevVc2qXsJSbd2c+RLBwsD97wFlc
-LUot+vEOyW7oeyK/VFf5C1qeRIATQhUip/T+om8Dg57mz5LRTruf6owjrGkMd4uc
-CNuJKqVAl/GcoN4McsVN887Ley6mhQ2P2cWaHMBqHxIGsRZdWtqD8QCV4mfe3MJg
-BT4R4YqIQRa7jN4ISWSRjHI7Nu0htgdk756QBKXG+ksIw3hBbLUFlQMRd9BMoadL
-juaeZLceeiH1eYxoTEs3Dkh8lksmpIUOobcIFnMAsT06VndQ45DVcs4UZwqjKpoh
-M8Avp7/Msiw0gYlzzOY/yHK+OVnbgnm0ZltUJKsrT/DHt7mVBP6L7dpMgm73SFSt
-PeEkVcfyub2GaboQCq52EosKfdzUK9FZNa69wzJmbeD3eJLjgq7tx0Pf+BifKfE9
-089ZIPAaVmw51OJDhyZrhvA4C3wtMB+gyy91SqTHZzDsXpjJ5OQ=
-=Vhk8
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQDpjQACgkQJNaLcl1U
+h9BpQAf/cwTCDQoO3DJHbW+V3KN7lXab63nPmzx8YLsOCN08E6dkxqkKu/k3gYfP
+zycpsR1Fh/IlAxGnXkl9WxADQv939kf/JB3DOWZYucpIu9WxjNb2993Bh8O3RsWw
+Mza2stTJNGeSr5CeOoim/tUHJW57nLz+9JkTgFzvf+bX62WMiBzCoXukhvoO46D5
+qMvNkZcqd9Ukt2yacBkopxOJWgSlgBkvZ9rzqZCoCtJCEvReRuDtb+etI9xGwtBO
+G/AYa1+jOm/8QvxGlxfBNAPHlOMaC9pTa759pYX+mL1vd6+ffO2WRM7s5ykm9FZj
+Q9POomT2hjl0i2SwYXYBVsrva5MbWQ==
+=Psnl
 -----END PGP SIGNATURE-----
 
---nxu0+L+82/Uw6Rsy--
+--FF2iHxi4V67JT3nv--
