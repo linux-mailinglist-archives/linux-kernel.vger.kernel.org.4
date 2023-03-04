@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0AF6AACD3
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 23:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D936AACDF
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 23:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjCDWBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 17:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
+        id S229638AbjCDWGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 17:06:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCDWBv (ORCPT
+        with ESMTP id S229484AbjCDWGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 17:01:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6479E12BFD;
-        Sat,  4 Mar 2023 14:01:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 4 Mar 2023 17:06:10 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1AA1025D
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 14:06:09 -0800 (PST)
+Received: from workpc.. (unknown [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CE81B8091B;
-        Sat,  4 Mar 2023 22:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50E19C433EF;
-        Sat,  4 Mar 2023 22:01:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677967306;
-        bh=UYtT1s6jaE+WlTD4IRj7qJ/n9RvpSEgfJCFqBFbQs+g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=U30rrlEa/Hj4P/thQoOoQkI6gNTBZ2kZvf3CABuqm6l9incnZ7GBOn5PZ+V+kRHhm
-         mAA3BNP7Zw+waJ5qDcBTX87d0e55MwmC4IO2uP4/k+kleJdGjXxIXIDNEwHNs9HyS1
-         PLEas+slIn2TZE8Yaf+BiG99tnUcJYavIGRaNqyU9MKZXswidAhrRjrJDtA9/GPlca
-         3JW1hxOcU9SjWhZt485b76idQiU4bViDDRPBxAOdgNsCXnZ7V/l22YxrS59zNpy39O
-         Lnzfqeedv3po4O9BCUr7YoJSrpOQZiyTTG6r9+pJ9wvEwfkBkRTA7gAyWRD5wFbvbz
-         fsBNMa5CBoXfA==
-Date:   Sat, 4 Mar 2023 23:01:27 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-6.3-rc1-part2
-Message-ID: <ZAO/txYiFrl9y6T0@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5CF96660225B;
+        Sat,  4 Mar 2023 22:06:06 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1677967567;
+        bh=2eKMCTATYlFljPW4aNKFeI2xXrg1Vr8JjX3ydL1iphA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Mta7oilfDcpP/YPqBk+mVLhxrdHDWyRdFu4rrXqaTPyWyy+PviM+MY//n5dFkgA5l
+         D8HBxiur4wjYfc7szaXnlB3DxFzlbNE78J6vj3teDaw0oke9hEKHZsDWroBTwprEFi
+         UpZnKckWkdkespKstG/8C+YHt4AD68oU4w/Hg7I2AqZUkvzBJ/V5YKGag6ncWarr+0
+         Cw58jG3zW6X37YSBYplutby4WmiMhfERG4/cAccYviyhVyovMd3Ix7VZZUJ65FT/+z
+         Lg440TYsDe6sZfNtMiAn8uhLLA6jWAQNuJuKxfI5iLu4Hfp5hguHJtYs/1qSAfH/Zv
+         U6rNa2Rd/G8rw==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Gerd Hoffmann <kraxel@redhat.com>, Rob Clark <robdclark@gmail.com>
+Cc:     Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Ryan Neph <ryanneph@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@redhat.com>, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+Subject: [PATCH v1] drm/virtio: Fix handling CONFIG_DRM_VIRTIO_GPU_KMS option
+Date:   Sun,  5 Mar 2023 01:05:10 +0300
+Message-Id: <20230304220510.964715-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7EIcxp6qdXqCs8FQ"
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+VirtIO-GPU got a new config option for disabling KMS. There were two
+problems left unnoticed during review when the new option was added:
 
---7EIcxp6qdXqCs8FQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+1. The IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) check in the code was
+inverted, hence KMS was disabled when it should be enabled and vice versa.
 
-The following changes since commit 0a3f9a6b0265b64c02226fcabb5e9a958307913b:
+2. The disabled KMS crashed kernel with a NULL dereference in
+drm_kms_helper_hotplug_event(), which shall not be invoked with a
+disabled KMS.
 
-  Merge tag 'thermal-6.3-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm (2023-03-03 10:41:59 -0800)
+Fix the inverted config option check in the code and skip handling the
+VIRTIO_GPU_EVENT_DISPLAY sent by host when KMS is disabled in guest to fix
+the crash.
 
-are available in the Git repository at:
+Fixes: 72122c69d717 ("drm/virtio: Add option to disable KMS support")
+Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+---
+ drivers/gpu/drm/virtio/virtgpu_kms.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-6.3-rc1-part2
+diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
+index 874ad6c2621a..7522fab2b709 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_kms.c
++++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
+@@ -45,9 +45,11 @@ static void virtio_gpu_config_changed_work_func(struct work_struct *work)
+ 	if (events_read & VIRTIO_GPU_EVENT_DISPLAY) {
+ 		if (vgdev->has_edid)
+ 			virtio_gpu_cmd_get_edids(vgdev);
+-		virtio_gpu_cmd_get_display_info(vgdev);
+-		virtio_gpu_notify(vgdev);
+-		drm_helper_hpd_irq_event(vgdev->ddev);
++		if (vgdev->num_scanouts) {
++			virtio_gpu_cmd_get_display_info(vgdev);
++			virtio_gpu_notify(vgdev);
++			drm_helper_hpd_irq_event(vgdev->ddev);
++		}
+ 		events_clear |= VIRTIO_GPU_EVENT_DISPLAY;
+ 	}
+ 	virtio_cwrite_le(vgdev->vdev, struct virtio_gpu_config,
+@@ -224,7 +226,7 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
+ 	vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
+ 				    VIRTIO_GPU_MAX_SCANOUTS);
+ 
+-	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) || !vgdev->num_scanouts) {
++	if (!IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) || !vgdev->num_scanouts) {
+ 		DRM_INFO("KMS disabled\n");
+ 		vgdev->num_scanouts = 0;
+ 		vgdev->has_edid = false;
+-- 
+2.39.2
 
-for you to fetch changes up to 65609d3206f784489eb1ebd6fce64b84a42cc63c:
-
-  i2c: gxp: fix an error code in probe (2023-03-03 21:00:54 +0100)
-
-----------------------------------------------------------------
-Some improvements/fixes for the newly added GXP driver and a Kconfig
-dependency fix
-
-----------------------------------------------------------------
-Benjamin Gray (1):
-      i2c: Disable I2C_APPLE when I2C_PASEMI is a builtin
-
-Dan Carpenter (1):
-      i2c: gxp: fix an error code in probe
-
-Wolfram Sang (2):
-      i2c: gxp: remove "empty" switch statement
-      i2c: gxp: return proper error on address NACK
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Nick Hawkins (1):
-      (Rev.) i2c: gxp: fix an error code in probe
-
- drivers/i2c/busses/Kconfig   |  1 +
- drivers/i2c/busses/i2c-gxp.c | 21 ++++++---------------
- 2 files changed, 7 insertions(+), 15 deletions(-)
-
---7EIcxp6qdXqCs8FQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQDv7cACgkQFA3kzBSg
-KbaBeQ/8D+wevoRxGGD7ZyazMEVC8N4mCC+dJOWDadmG0qyEwlO0oSLgayuA25JK
-z5XNXxxYyCOGY3u8rmpcY5hI6jyaLiZyaGF2YQcAdmRuPg1pEhvhs+wJ6bE9v4JS
-s3Vkp4FvQgeWwOUJqoJOpWvi3aeEBHlvNVf++dkwAavxuqK/US2j62NmvWUQndRG
-MdizX3QGF5t1LAPb97qHgHC1mVKdVtx/GiE0RRO4dIgLl7XkSvAxark9pKZf9AbQ
-Q3sPDiEFXBF7knOYAgj77gVk0nF/qAQoMmWFxoiAO1bMx0MID60GTKnAW5HHhquG
-APkEYIbAxa+iH7Ae7q/+G+5vRXfeM1ND8S4opkL70WRW6g91kzdSsTGepUgzU9tq
-xmZLW7WYSi5z3Cm1oo7pJpTbiJs9/le3ZnUMiHQUnoLWgwP49SYAjdiwfetF3PG0
-+Bbw6XVNwYeI+fDASz51cVsLCy+wWGFmfe1SdZuCgnq4S17hUun7KaAGE9mS0uuN
-Ik4fPLogvse80mPORF68aCFgjqyj+eS4mC4fOeT89+zkeNzAuczq2XuTqBgLWMx3
-qVpxcoa3NqGBk9G//TJ23OTd4J7IXEEfcDL+t5EDT/wH0U0LoGeMU8+UcJvz3Vkd
-/UB76GJIBGHuMVYYd2H8TsQtTK8+m0oNhZi08b5NixKdtpzsUco=
-=4PAs
------END PGP SIGNATURE-----
-
---7EIcxp6qdXqCs8FQ--
