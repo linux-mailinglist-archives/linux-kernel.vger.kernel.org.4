@@ -2,343 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F386AA6BC
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 02:03:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E5D6AA6D9
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 02:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjCDBC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 20:02:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S229688AbjCDBHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 20:07:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCDBC5 (ORCPT
+        with ESMTP id S229644AbjCDBHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 20:02:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6803A40D6;
-        Fri,  3 Mar 2023 17:02:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9ED8B81A07;
-        Sat,  4 Mar 2023 01:02:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E8A0C433EF;
-        Sat,  4 Mar 2023 01:02:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677891772;
-        bh=ym7qx8wNjJvm34/55yIQPinV4zEa0waqv64SxiSaI/M=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=MoH69gI9CVg1JUtPYYzncd3Ux2V//ch1Pz6xBHxYmg89ANI1kdXJyoMKSoLeScQg9
-         SpCL8yXRAm26X6yAmzUfIcLLV4cCx1//3CnU8Czh5JVOIWfU3Da0cRIGfW7XLc8IF7
-         b6R3w9RjS//ohY6Qvah8iFybRsUSLGsBrsjIg5z9cXloFV+fShrYbdcF2ISd/mzKSt
-         unuE8gkRoEec0sxPzjKkm4qWQeJPYq5k8zf2XEDY8NL3ku8/peugudPzrv6mithWW3
-         9oUOIhS6fYvjRehyJaAbts62otQ2EdRPgx6lB3smOaJYxfYM9CfBr0ae+8bZu0SR5f
-         mQjw2VYRyJs1w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id F35595C0278; Fri,  3 Mar 2023 17:02:51 -0800 (PST)
-Date:   Fri, 3 Mar 2023 17:02:51 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org, urezki@gmail.com
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Message-ID: <20230304010251.GD1301832@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230303213851.2090365-1-joel@joelfernandes.org>
+        Fri, 3 Mar 2023 20:07:05 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5282360D70;
+        Fri,  3 Mar 2023 17:07:04 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3240N75u010520;
+        Sat, 4 Mar 2023 01:06:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=0GzSapir4/eqTrWhKwiE4McG39gEN8E3X2UnTUnJtvc=;
+ b=S6+xHO3HkAfyXkSgDF1aqDJDYgr7v9tP4Z+QT0tXxn+rKtvwrDkrkRYzhP3yA7U/+mxE
+ sMqpVxEu+9S6GVX8IY3zULZWOA7ncgKDpaqLDQ3B2+T334VUE29tXl4p2iSaYHyflstT
+ +fGVNGY+s0hXERUvBO7eyOh72HM+HmBNaxd2XGy1GJ/8XeXtMr0WhCseX+Lt1fdUuAQY
+ zEcf/P1V7kwd4J87WPmrSnR8KfXByl+lI9rJNBWbDAAFoEjbLayjULb/aMsV8cSSSiwk
+ yMEOdr6v73ZnGCPUP7h6B4YxKMnB3EkMgIEAMA0yOfgkGxUMOAz6oO9kKjNm65fGu7m+ /A== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3ph4rpd8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 04 Mar 2023 01:06:45 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32416iKO028187
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 4 Mar 2023 01:06:44 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 3 Mar 2023 17:06:43 -0800
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: [PATCH v11 00/26] Drivers for gunyah hypervisor
+Date:   Fri, 3 Mar 2023 17:06:06 -0800
+Message-ID: <20230304010632.2127470-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230303213851.2090365-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: qL962zMWh0AmcQs4v1YJqIfY6A95-pcc
+X-Proofpoint-GUID: qL962zMWh0AmcQs4v1YJqIfY6A95-pcc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-03_07,2023-03-03_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ lowpriorityscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 adultscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303040004
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 09:38:51PM +0000, Joel Fernandes (Google) wrote:
-> On many systems, a great deal of boot (in userspace) happens after the
-> kernel thinks the boot has completed. It is difficult to determine if
-> the system has really booted from the kernel side. Some features like
-> lazy-RCU can risk slowing down boot time if, say, a callback has been
-> added that the boot synchronously depends on. Further expedited callbacks
-> can get unexpedited way earlier than it should be, thus slowing down
-> boot (as shown in the data below).
-> 
-> For these reasons, this commit adds a config option
-> 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter rcupdate.boot_end_delay.
-> Userspace can also make RCU's view of the system as booted, by writing the
-> time in milliseconds to: /sys/module/rcupdate/parameters/rcu_boot_end_delay
-> Or even just writing a value of 0 to this sysfs node.
-> However, under no circumstance will the boot be allowed to end earlier
-> than just before init is launched.
-> 
-> The default value of CONFIG_RCU_BOOT_END_DELAY is chosen as 15s. This
-> suites ChromeOS and also a PREEMPT_RT system below very well, which need
-> no config or parameter changes, and just a simple application of this patch. A
-> system designer can also choose a specific value here to keep RCU from marking
-> boot completion.  As noted earlier, RCU's perspective of the system as booted
-> will not be marker until at least rcu_boot_end_delay milliseconds have passed
-> or an update is made via writing a small value (or 0) in milliseconds to:
-> /sys/module/rcupdate/parameters/rcu_boot_end_delay.
-> 
-> One side-effect of this patch is, there is a risk that a real-time workload
-> launched just after the kernel boots will suffer interruptions due to expedited
-> RCU, which previous ended just before init was launched. However, to mitigate
-> such an issue (however unlikely), the user should either tune
-> CONFIG_RCU_BOOT_END_DELAY to a smaller value than 15 seconds or write a value
-> of 0 to /sys/module/rcupdate/parameters/rcu_boot_end_delay, once userspace
-> boots, and before launching the real-time workload.
+Gunyah is a Type-1 hypervisor independent of any
+high-level OS kernel, and runs in a higher CPU privilege level. It does
+not depend on any lower-privileged OS kernel/code for its core
+functionality. This increases its security and can support a much smaller
+trusted computing base than a Type-2 hypervisor.
 
-Much better, thank you!
+Gunyah is an open source hypervisor. The source repo is available at
+https://github.com/quic/gunyah-hypervisor.
 
-> Qiuxu also noted impressive boot-time improvements with earlier version
-> of patch. An excerpt from the data he shared:
-> 
-> 1) Testing environment:
->     OS            : CentOS Stream 8 (non-RT OS)
->     Kernel     : v6.2
->     Machine : Intel Cascade Lake server (2 sockets, each with 44 logical threads)
->     Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=2,sockets=2, …
-> 
-> 2) OS boot time definition:
->     The time from the start of the kernel boot to the shell command line
->     prompt is shown from the console. [ Different people may have
->     different OS boot time definitions. ]
-> 
-> 3) Measurement method (very rough method):
->     A timer in the kernel periodically prints the boot time every 100ms.
->     As soon as the shell command line prompt is shown from the console,
->     we record the boot time printed by the timer, then the printed boot
->     time is the OS boot time.
-> 
-> 4) Measured OS boot time (in seconds)
->    a) Measured 10 times w/o this patch:
->         8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
->         The average OS boot time was: ~8.7s
-> 
->    b) Measure 10 times w/ this patch:
->         8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
->         The average OS boot time was: ~8.3s.
+The diagram below shows the architecture.
 
-Unfortunately, given that a's average is within one standard deviation
-of b's average, this is most definitely not statistically significant.
-Especially given only ten measurements for each case -- you need *at*
-*least* 24, preferably more.  Especially in this case, where you don't
-really know what the underlying distribution is.
+::
 
-But we can apply the binomial distribution instead of the usual
-normal distribution.  First, let's sort and take the medians:
+         VM A                    VM B
+     +-----+ +-----+  | +-----+ +-----+ +-----+
+     |     | |     |  | |     | |     | |     |
+ EL0 | APP | | APP |  | | APP | | APP | | APP |
+     |     | |     |  | |     | |     | |     |
+     +-----+ +-----+  | +-----+ +-----+ +-----+
+ ---------------------|-------------------------
+     +--------------+ | +----------------------+
+     |              | | |                      |
+ EL1 | Linux Kernel | | |Linux kernel/Other OS |   ...
+     |              | | |                      |
+     +--------------+ | +----------------------+
+ --------hvc/smc------|------hvc/smc------------
+     +----------------------------------------+
+     |                                        |
+ EL2 |            Gunyah Hypervisor           |
+     |                                        |
+     +----------------------------------------+
 
-a: 8.2 8.3 8.4 8.6 8.7 8.7 8.8 8.8 9.0 9.3  Median: 8.7
-b: 7.6 7.8 8.2 8.2 8.2 8.2 8.4 8.5 8.7 9.3  Median: 8.2
+Gunyah provides these following features.
 
-8/10 of a's data points are greater than 0.1 more than b's median
-and 8/10 of b's data points are less than 0.1 less than a's median.
-What are the odds that this happens by random chance?
+- Threads and Scheduling: The scheduler schedules virtual CPUs (VCPUs) on
+physical CPUs and enables time-sharing of the CPUs.
+- Memory Management: Gunyah tracks memory ownership and use of all memory
+under its control. Memory partitioning between VMs is a fundamental
+security feature.
+- Interrupt Virtualization: All interrupts are handled in the hypervisor
+and routed to the assigned VM.
+- Inter-VM Communication: There are several different mechanisms provided
+for communicating between VMs.
+- Device Virtualization: Para-virtualization of devices is supported using
+inter-VM communication. Low level system features and devices such as
+interrupt controllers are supported with emulation where required.
 
-This is given by sum_0^2 (0.5^10 * binomial(10,i)), which is about 0.055.
-This is not quite 95% confidence, so not hugely convincing, but it is at
-least close.  Not that this is the confidence that (b) is 100ms faster
-than (a), not just that (b) is faster than (a).
+This series adds the basic framework for detecting that Linux is running
+under Gunyah as a virtual machine, communication with the Gunyah Resource
+Manager, and a virtual machine manager capable of launching virtual machines.
 
-Not sure that this really carries its weight, but in contrast to the
-usual statistics based on the normal distribution, it does suggest at
-least a little improvement.  On the other hand, anyone who has carefully
-studied nonparametric statistics probably jumped out of the boat several
-paragraphs ago.  ;-)
+The series relies on two other patches posted separately:
+ - https://lore.kernel.org/all/20230213181832.3489174-1-quic_eberman@quicinc.com/
+ - https://lore.kernel.org/all/20230213232537.2040976-2-quic_eberman@quicinc.com/
 
-A few more questions interspersed below.
+Changes in v11:
+ - Rename struct gh_vm_dtb_config:gpa -> guest_phys_addr & overflow checks for this
+ - More docstrings throughout
+ - Make resp_buf and resp_buf_size optional
+ - Replace deprecated idr with xarray
+ - Refconting on misc device instead of RM's platform device
+ - Renaming variables, structs, etc. from gunyah_ -> gh_
+ - Drop removal of user mem regions
+ - Drop mem_lend functionality; to converge with restricted_memfd later
 
-							Thanx, Paul
+Changes in v10: https://lore.kernel.org/all/20230214211229.3239350-1-quic_eberman@quicinc.com/
+ - Fix bisectability (end result of series is same, --fixups applied to wrong commits)
+ - Convert GH_ERROR_* and GH_RM_ERROR_* to enums
+ - Correct race condition between allocating/freeing user memory
+ - Replace offsetof with struct_size
+ - Series-wide renaming of functions to be more consistent
+ - VM shutdown & restart support added in vCPU and VM Manager patches
+ - Convert VM function name (string) to type (number)
+ - Convert VM function argument to value (which could be a pointer) to remove memory wastage for arguments
+ - Remove defensive checks of hypervisor correctness
+ - Clean ups to ioeventfd as suggested by Srivatsa
 
-> Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
-> v1->v2:
-> 	Update some comments and description.
-> v2->v3:
->         Add sysfs param, and update with Test data.
-> 
->  .../admin-guide/kernel-parameters.txt         | 12 ++++
->  cc_list                                       |  8 +++
->  kernel/rcu/Kconfig                            | 19 ++++++
->  kernel/rcu/update.c                           | 68 ++++++++++++++++++-
->  4 files changed, 106 insertions(+), 1 deletion(-)
->  create mode 100644 cc_list
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 2429b5e3184b..611de90d9c13 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5085,6 +5085,18 @@
->  	rcutorture.verbose= [KNL]
->  			Enable additional printk() statements.
->  
-> +	rcupdate.rcu_boot_end_delay= [KNL]
-> +			Minimum time in milliseconds that must elapse
-> +			before the boot sequence can be marked complete
-> +			from RCU's perspective, after which RCU's behavior
-> +			becomes more relaxed. The default value is also
-> +			configurable via CONFIG_RCU_BOOT_END_DELAY.
-> +			Userspace can also mark the boot as completed
-> +			sooner by writing the time in milliseconds, say once
-> +			userspace considers the system as booted, to:
-> +			/sys/module/rcupdate/parameters/rcu_boot_end_delay
-> +			Or even just writing a value of 0 to this sysfs node.
+Changes in v9: https://lore.kernel.org/all/20230120224627.4053418-1-quic_eberman@quicinc.com/
+ - Refactor Gunyah API flags to be exposed as feature flags at kernel level
+ - Move mbox client cleanup into gunyah_msgq_remove()
+ - Simplify gh_rm_call return value and response payload
+ - Missing clean-up/error handling/little endian fixes as suggested by Srivatsa and Alex in v8 series
 
-Can userspace also extend the time in this manner?  I am not too worried
-either way, but it would be good to make this clear.
+Changes in v8: https://lore.kernel.org/all/20221219225850.2397345-1-quic_eberman@quicinc.com/
+ - Treat VM manager as a library of RM
+ - Add patches 21-28 as RFC to support proxy-scheduled vCPUs and necessary bits to support virtio
+   from Gunyah userspace
 
-If userspace writes a non-zero value, is that from the current time or
-from boot?
+Changes in v7: https://lore.kernel.org/all/20221121140009.2353512-1-quic_eberman@quicinc.com/
+ - Refactor to remove gunyah RM bus
+ - Refactor allow multiple RM device instances
+ - Bump UAPI to start at 0x0
+ - Refactor QCOM SCM's platform hooks to allow CONFIG_QCOM_SCM=Y/CONFIG_GUNYAH=M combinations
 
-> +
->  	rcupdate.rcu_cpu_stall_ftrace_dump= [KNL]
->  			Dump ftrace buffer after reporting RCU CPU
->  			stall warning.
-> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> index 9071182b1284..4b5ffa36cbaf 100644
-> --- a/kernel/rcu/Kconfig
-> +++ b/kernel/rcu/Kconfig
-> @@ -217,6 +217,25 @@ config RCU_BOOST_DELAY
->  
->  	  Accept the default if unsure.
->  
-> +config RCU_BOOT_END_DELAY
-> +	int "Minimum time before RCU may consider in-kernel boot as completed"
-> +	range 0 120000
-> +	default 15000
-> +	help
-> +	  Default value of the minimum time in milliseconds that must elapse
-> +	  before the boot sequence can be marked complete from RCU's perspective,
-> +	  after which RCU's behavior becomes more relaxed.
-> +	  Userspace can also mark the boot as completed sooner than this default
-> +	  by writing the time in milliseconds, say once userspace considers
-> +	  the system as booted, to: /sys/module/rcupdate/parameters/rcu_boot_end_delay.
-> +	  Or even just writing a value of 0 to this sysfs node.
-> +
-> +	  The actual delay for RCU's view of the system to be marked as booted can be
-> +	  higher than this value if the kernel takes a long time to initialize but it
-> +	  will never be smaller than this value.
-> +
-> +	  Accept the default if unsure.
-> +
->  config RCU_EXP_KTHREAD
->  	bool "Perform RCU expedited work in a real-time kthread"
->  	depends on RCU_BOOST && RCU_EXPERT
-> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-> index 19bf6fa3ee6a..93138c92136e 100644
-> --- a/kernel/rcu/update.c
-> +++ b/kernel/rcu/update.c
-> @@ -224,18 +224,84 @@ void rcu_unexpedite_gp(void)
->  }
->  EXPORT_SYMBOL_GPL(rcu_unexpedite_gp);
->  
-> +/*
-> + * Minimum time in milliseconds until RCU can consider in-kernel boot as
-> + * completed.  This can also be tuned at runtime to end the boot earlier, by
-> + * userspace init code writing the time in milliseconds (even 0) to:
-> + * /sys/module/rcupdate/parameters/rcu_boot_end_delay
-> + */
-> +static int rcu_boot_end_delay = CONFIG_RCU_BOOT_END_DELAY;
-> +
->  static bool rcu_boot_ended __read_mostly;
-> +static bool rcu_boot_end_called __read_mostly;
-> +static DEFINE_MUTEX(rcu_boot_end_lock);
-> +
-> +static int param_set_rcu_boot_end(const char *val, const struct kernel_param *kp)
-> +{
-> +	uint end_ms;
-> +	int ret = kstrtouint(val, 0, &end_ms);
-> +
-> +	if (ret)
-> +		return ret;
-> +	WRITE_ONCE(*(uint *)kp->arg, end_ms);
+Changes in v6: https://lore.kernel.org/all/20221026185846.3983888-1-quic_eberman@quicinc.com/
+ - *Replace gunyah-console with gunyah VM Manager*
+ - Move include/asm-generic/gunyah.h into include/linux/gunyah.h
+ - s/gunyah_msgq/gh_msgq/
+ - Minor tweaks and documentation tidying based on comments from Jiri, Greg, Arnd, Dmitry, and Bagas.
 
-Doesn't this write to rcu_boot_end_delay outside of the lock?
+Changes in v5: https://lore.kernel.org/all/20221011000840.289033-1-quic_eberman@quicinc.com/
+ - Dropped sysfs nodes
+ - Switch from aux bus to Gunyah RM bus for the subdevices
+ - Cleaning up RM console
 
-> +
-> +	/*
-> +	 * rcu_end_inkernel_boot() should be called at least once during init
-> +	 * before we can allow param changes to end the boot.
-> +	 */
-> +	mutex_lock(&rcu_boot_end_lock);
-> +	rcu_boot_end_delay = end_ms;
-> +	if (!rcu_boot_ended && rcu_boot_end_called) {
-> +		mutex_unlock(&rcu_boot_end_lock);
-> +		rcu_end_inkernel_boot();
+Changes in v4: https://lore.kernel.org/all/20220928195633.2348848-1-quic_eberman@quicinc.com/
+ - Tidied up documentation throughout based on questions/feedback received
+ - Switched message queue implementation to use mailboxes
+ - Renamed "gunyah_device" as "gunyah_resource"
 
-Temporarily dropping rcu_boot_end_lock looks like an accident waiting
-to happen.
+Changes in v3: https://lore.kernel.org/all/20220811214107.1074343-1-quic_eberman@quicinc.com/
+ - /Maintained/Supported/ in MAINTAINERS
+ - Tidied up documentation throughout based on questions/feedback received
+ - Moved hypercalls into arch/arm64/gunyah/; following hyper-v's implementation
+ - Drop opaque typedefs
+ - Move sysfs nodes under /sys/hypervisor/gunyah/
+ - Moved Gunyah console driver to drivers/tty/
+ - Reworked gh_device design to drop the Gunyah bus.
 
-> +	}
-> +	mutex_unlock(&rcu_boot_end_lock);
+Changes in v2: https://lore.kernel.org/all/20220801211240.597859-1-quic_eberman@quicinc.com/
+ - DT bindings clean up
+ - Switch hypercalls to follow SMCCC 
 
-And dropping it twice does not seem good, either.  Or am I missing some
-subtle control-flow trick?
+v1: https://lore.kernel.org/all/20220223233729.1571114-1-quic_eberman@quicinc.com/
 
-> +	return ret;
-> +}
-> +
-> +static const struct kernel_param_ops rcu_boot_end_ops = {
-> +	.set = param_set_rcu_boot_end,
-> +	.get = param_get_uint,
-> +};
-> +module_param_cb(rcu_boot_end_delay, &rcu_boot_end_ops, &rcu_boot_end_delay, 0644);
->  
->  /*
-> - * Inform RCU of the end of the in-kernel boot sequence.
-> + * Inform RCU of the end of the in-kernel boot sequence. The boot sequence will
-> + * not be marked ended until at least rcu_boot_end_delay milliseconds have passed.
->   */
-> +void rcu_end_inkernel_boot(void);
-> +static void rcu_boot_end_work_fn(struct work_struct *work)
-> +{
-> +	rcu_end_inkernel_boot();
-> +}
-> +static DECLARE_DELAYED_WORK(rcu_boot_end_work, rcu_boot_end_work_fn);
-> +
->  void rcu_end_inkernel_boot(void)
->  {
-> +	mutex_lock(&rcu_boot_end_lock);
-> +	rcu_boot_end_called = true;
-> +
-> +	if (rcu_boot_ended)
-> +		return;
-> +
-> +	if (rcu_boot_end_delay) {
-> +		u64 boot_ms = div_u64(ktime_get_boot_fast_ns(), 1000000UL);
-> +
-> +		if (boot_ms < rcu_boot_end_delay) {
+Elliot Berman (26):
+  docs: gunyah: Introduce Gunyah Hypervisor
+  dt-bindings: Add binding for gunyah hypervisor
+  gunyah: Common types and error codes for Gunyah hypercalls
+  virt: gunyah: Add hypercalls to identify Gunyah
+  virt: gunyah: Identify hypervisor version
+  virt: gunyah: msgq: Add hypercalls to send and receive messages
+  mailbox: Add Gunyah message queue mailbox
+  gunyah: rsc_mgr: Add resource manager RPC core
+  gunyah: rsc_mgr: Add VM lifecycle RPC
+  gunyah: vm_mgr: Introduce basic VM Manager
+  gunyah: rsc_mgr: Add RPC for sharing memory
+  gunyah: vm_mgr: Add/remove user memory regions
+  gunyah: vm_mgr: Add ioctls to support basic non-proxy VM boot
+  samples: Add sample userspace Gunyah VM Manager
+  gunyah: rsc_mgr: Add platform ops on mem_lend/mem_reclaim
+  firmware: qcom_scm: Register Gunyah platform ops
+  docs: gunyah: Document Gunyah VM Manager
+  virt: gunyah: Translate gh_rm_hyp_resource into gunyah_resource
+  gunyah: vm_mgr: Add framework to add VM Functions
+  virt: gunyah: Add resource tickets
+  virt: gunyah: Add IO handlers
+  virt: gunyah: Add proxy-scheduled vCPUs
+  virt: gunyah: Add hypercalls for sending doorbell
+  virt: gunyah: Add irqfd interface
+  virt: gunyah: Add ioeventfd
+  MAINTAINERS: Add Gunyah hypervisor drivers section
 
-Isn't it necessary to cancel a previously scheduled work to make sure
-that the new value overrides the old one?
+ .../bindings/firmware/gunyah-hypervisor.yaml  |  82 ++
+ .../userspace-api/ioctl/ioctl-number.rst      |   1 +
+ Documentation/virt/gunyah/index.rst           | 114 +++
+ Documentation/virt/gunyah/message-queue.rst   |  71 ++
+ Documentation/virt/gunyah/vm-manager.rst      | 151 +++
+ Documentation/virt/index.rst                  |   1 +
+ MAINTAINERS                                   |  13 +
+ arch/arm64/Kbuild                             |   1 +
+ arch/arm64/gunyah/Makefile                    |   3 +
+ arch/arm64/gunyah/gunyah_hypercall.c          | 148 +++
+ arch/arm64/include/asm/gunyah.h               |  23 +
+ drivers/firmware/Kconfig                      |   2 +
+ drivers/firmware/qcom_scm.c                   | 100 ++
+ drivers/mailbox/Makefile                      |   2 +
+ drivers/mailbox/gunyah-msgq.c                 | 209 +++++
+ drivers/virt/Kconfig                          |   2 +
+ drivers/virt/Makefile                         |   1 +
+ drivers/virt/gunyah/Kconfig                   |  46 +
+ drivers/virt/gunyah/Makefile                  |  11 +
+ drivers/virt/gunyah/gunyah.c                  |  57 ++
+ drivers/virt/gunyah/gunyah_ioeventfd.c        | 117 +++
+ drivers/virt/gunyah/gunyah_irqfd.c            | 164 ++++
+ drivers/virt/gunyah/gunyah_platform_hooks.c   |  80 ++
+ drivers/virt/gunyah/gunyah_vcpu.c             | 465 +++++++++
+ drivers/virt/gunyah/rsc_mgr.c                 | 885 ++++++++++++++++++
+ drivers/virt/gunyah/rsc_mgr.h                 |  19 +
+ drivers/virt/gunyah/rsc_mgr_rpc.c             | 497 ++++++++++
+ drivers/virt/gunyah/vm_mgr.c                  | 785 ++++++++++++++++
+ drivers/virt/gunyah/vm_mgr.h                  |  71 ++
+ drivers/virt/gunyah/vm_mgr_mm.c               | 252 +++++
+ include/linux/gunyah.h                        | 194 ++++
+ include/linux/gunyah_rsc_mgr.h                | 168 ++++
+ include/linux/gunyah_vm_mgr.h                 | 112 +++
+ include/uapi/linux/gunyah.h                   | 257 +++++
+ samples/Kconfig                               |  10 +
+ samples/Makefile                              |   1 +
+ samples/gunyah/.gitignore                     |   2 +
+ samples/gunyah/Makefile                       |   6 +
+ samples/gunyah/gunyah_vmm.c                   | 270 ++++++
+ samples/gunyah/sample_vm.dts                  |  68 ++
+ 40 files changed, 5461 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+ create mode 100644 Documentation/virt/gunyah/index.rst
+ create mode 100644 Documentation/virt/gunyah/message-queue.rst
+ create mode 100644 Documentation/virt/gunyah/vm-manager.rst
+ create mode 100644 arch/arm64/gunyah/Makefile
+ create mode 100644 arch/arm64/gunyah/gunyah_hypercall.c
+ create mode 100644 arch/arm64/include/asm/gunyah.h
+ create mode 100644 drivers/mailbox/gunyah-msgq.c
+ create mode 100644 drivers/virt/gunyah/Kconfig
+ create mode 100644 drivers/virt/gunyah/Makefile
+ create mode 100644 drivers/virt/gunyah/gunyah.c
+ create mode 100644 drivers/virt/gunyah/gunyah_ioeventfd.c
+ create mode 100644 drivers/virt/gunyah/gunyah_irqfd.c
+ create mode 100644 drivers/virt/gunyah/gunyah_platform_hooks.c
+ create mode 100644 drivers/virt/gunyah/gunyah_vcpu.c
+ create mode 100644 drivers/virt/gunyah/rsc_mgr.c
+ create mode 100644 drivers/virt/gunyah/rsc_mgr.h
+ create mode 100644 drivers/virt/gunyah/rsc_mgr_rpc.c
+ create mode 100644 drivers/virt/gunyah/vm_mgr.c
+ create mode 100644 drivers/virt/gunyah/vm_mgr.h
+ create mode 100644 drivers/virt/gunyah/vm_mgr_mm.c
+ create mode 100644 include/linux/gunyah.h
+ create mode 100644 include/linux/gunyah_rsc_mgr.h
+ create mode 100644 include/linux/gunyah_vm_mgr.h
+ create mode 100644 include/uapi/linux/gunyah.h
+ create mode 100644 samples/gunyah/.gitignore
+ create mode 100644 samples/gunyah/Makefile
+ create mode 100644 samples/gunyah/gunyah_vmm.c
+ create mode 100644 samples/gunyah/sample_vm.dts
 
-Mightn't this be simpler if the user was only permitted to write zero,
-thus just saying "stop immediately"?  If people really need the ability
-to extend or shorten the time, a patch can be produced at that point.
-And then a non-zero write to the file would become legal.
 
-> +			schedule_delayed_work(&rcu_boot_end_work,
-> +					rcu_boot_end_delay - boot_ms);
-> +			mutex_unlock(&rcu_boot_end_lock);
-> +			return;
-> +		}
-> +	}
-> +
-> +	cancel_delayed_work(&rcu_boot_end_work);
->  	rcu_unexpedite_gp();
->  	rcu_async_relax();
->  	if (rcu_normal_after_boot)
->  		WRITE_ONCE(rcu_normal, 1);
->  	rcu_boot_ended = true;
-> +	mutex_unlock(&rcu_boot_end_lock);
->  }
->  
->  /*
-> -- 
-> 2.40.0.rc0.216.gc4246ad0f0-goog
+base-commit: 2eb29d59ddf02e39774abfb60b2030b0b7e27c1f
+prerequisite-patch-id: 25a39c504532b2fcdf51baff6dc55f7885db2375
+prerequisite-patch-id: b48c45acdec06adf37e09fe35e6a9412c5784800
+-- 
+2.39.2
+
