@@ -2,58 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED436AA91B
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 11:18:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 804BF6AA92F
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 11:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjCDKSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 05:18:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56714 "EHLO
+        id S229707AbjCDKet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 05:34:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjCDKSj (ORCPT
+        with ESMTP id S229500AbjCDKer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 05:18:39 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674E617CDF
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 02:18:36 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYOyB-0006Z6-CZ; Sat, 04 Mar 2023 11:18:27 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYOy9-001lQT-BQ; Sat, 04 Mar 2023 11:18:25 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pYOy8-0025Pj-IL; Sat, 04 Mar 2023 11:18:24 +0100
-Date:   Sat, 4 Mar 2023 11:18:24 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lorenz Brun <lorenz@brun.one>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] pwm: mediatek: support inverted polarity
-Message-ID: <20230304101824.ja7otxatkrrv2xxq@pengutronix.de>
-References: <20230303205821.2285418-1-lorenz@brun.one>
- <20230303211725.7wtxdxjqpxlrp77b@pengutronix.de>
- <J6UYQR.PWF59DFFYYO71@brun.one>
+        Sat, 4 Mar 2023 05:34:47 -0500
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101D910AB8;
+        Sat,  4 Mar 2023 02:34:45 -0800 (PST)
+Received: from pro2.mail.ovh.net (unknown [10.108.20.84])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id BF00C20CD4;
+        Sat,  4 Mar 2023 10:34:40 +0000 (UTC)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Sat, 4 Mar
+ 2023 11:34:39 +0100
+Message-ID: <7fa7f07f-d1e1-1e43-992c-4981c5810284@traphandler.com>
+Date:   Sat, 4 Mar 2023 11:34:39 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gtzva4fuv4iy5elv"
-Content-Disposition: inline
-In-Reply-To: <J6UYQR.PWF59DFFYYO71@brun.one>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] of: irq: make callers of of_irq_parse_one() release
+ the device node
+Content-Language: en-US
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+CC:     <saravanak@google.com>, <clement.leger@bootlin.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        <zajec5@gmail.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Marc Zyngier <maz@kernel.org>, <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Nishanth Menon <nm@ti.com>, <ssantosh@kernel.org>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-wireless@vger.kernel.org>,
+        <linux-actions@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>, <linux-sunxi@lists.linux.dev>,
+        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>
+References: <20230301185209.274134-1-jjhiblot@traphandler.com>
+ <20230301185209.274134-3-jjhiblot@traphandler.com>
+ <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: CAS2.emp2.local (172.16.1.2) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 2216615445481994549
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtuddgudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthekredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepvdefkedugeekueeuvdeuueevjefftddvtefhleekhfefffdtteetffeigfdvtdeinecukfhppeduvdejrddtrddtrddupdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehgvggvrhhtsehlihhnuhigqdhmieekkhdrohhrghdpsghhvghlghgrrghssehgohhoghhlvgdrtghomhdpnhhmsehtihdrtghomhdpshhsrghnthhoshhhsehkvghrnhgvlhdrohhrghdpmhgrthhhihgrshdrnhihmhgrnhesihhnthgvlhdrtghomhdpghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhthhhivghrrhihrdhrvgguihhnghesghhmrghilhdrtghomhdpjhhonhgrthhhrg
+ hnhhesnhhvihguihgrrdgtohhmpdhlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhgpdhlihhnuhigqdifihhrvghlvghsshesvhhgvghrrdhkvghrnhgvlhdrohhrghdplhhinhhugidqrggtthhiohhnsheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqrhhishgtvheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdplhhinhhugidqshhunhigiheslhhishhtshdrlhhinhhugidruggvvhdpuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhfrhhofigrnhgurdhlihhsthesghhmrghilhdrtghomhdplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhhosghhodgutheskhgvrhhnvghlrdhorhhgpdhjvghrnhgvjhdrshhkrhgrsggvtgesghhmrghilhdrtghomhdpshgrrhgrvhgrnhgrkhesghhoohhglhgvrdgtohhmpdgtlhgvmhgvnhhtrdhlvghgvghrsegsohhothhlihhnrdgtohhmpdhmrghgnhhushdruggrmhhmsehgmhgrihhlrdgtohhmpdhlihhnuhigsegrrhhmlhhinhhugid
+ rohhrghdruhhkpdhmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdpnhhpihhgghhinhesghhmrghilhdrtghomhdptghhrhhishhtohhphhgvrdhlvghrohihsegtshhgrhhouhhprdgvuhdpiigrjhgvtgehsehgmhgrihhlrdgtohhmpdgurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhtghhlgieslhhinhhuthhrohhnihigrdguvgdptghlrghuughiuhdrsggviihnvggrsehmihgtrhhotghhihhprdgtohhmpdhmrgiisehkvghrnhgvlhdrohhrghdprghfrggvrhgsvghrsehsuhhsvgdruggvpdhmrghniheskhgvrhhnvghlrdhorhhgpdhprghlmhgvrhesuggrsggsvghlthdrtghomhdpphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhmpdifvghnshestghsihgvrdhorhhgpdhsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgpdhlihhnuhigqdhtvghgrhgrsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehvdekpdhmohguvgepshhmthhpohhuth
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,95 +87,50 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---gtzva4fuv4iy5elv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello Lorenz,
+On 02/03/2023 08:49, Geert Uytterhoeven wrote:
+> Hi Jean-Jacques,
+> 
+> Thanks for your patch!
+> 
+> On Wed, Mar 1, 2023 at 7:53 PM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+>> of_irq_parse_one() does a get() on the device node returned in out_irq->np.
+>> Callers of of_irq_parse_one() must do a put() when they are done with it.
+> 
+> What does "be done with it" really mean here?
+> 
+>> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+> 
+>> --- a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+>> +++ b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
+>> @@ -184,6 +184,7 @@ static int __init rcar_gen2_regulator_quirk(void)
+>>                          kfree(quirk);
+>>                          continue;
+>>                  }
+>> +               of_node_put(argsa->np);
+> 
+> The quirk object, which is a container of argsa, is still used below,
+> and stored in a linked list.  I agree argsa->np is not dereferenced,
+> but the pointer itself is still compared to other pointers.
+Hi Geert,
 
-On Fri, Mar 03, 2023 at 11:23:07PM +0100, Lorenz Brun wrote:
-> On Fri, Mar 3 2023 at 22:17:25 +01:00:00, Uwe Kleine-K=F6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> > On Fri, Mar 03, 2023 at 09:58:21PM +0100, Lorenz Brun wrote:
-> > >  According to the MT7986 Reference Manual the Mediatek  PWM
-> > > controller
-> > >  doesn't appear to have support for inverted polarity.
-> > >=20
-> > >  This implements the same solution as in pwm-meson and just inverts
-> > > the
-> > >  duty cycle instead, which results in the same outcome.
-> >=20
-> > This idea is broken. This was recently discussed on the linux-pwm list
-> > and I hope will be fixed soon. See
-> > https://lore.kernel.org/linux-pwm/20230228093911.bh2sbp4tyfir2z5g@pengu=
-tronix.de/T/#meda75ffbd4ef2048991ea2cd091c0c14b1bb09c2
-> >=20
-> Is the issue here emulating PWM_POLARITY_INVERSED by inverting the period=
- or
-> the overflow issues?
-> This driver currently rejects PWM_POLARITY_INVERSED, but the problem is t=
-hat
-> I have a board which inverts the output of the PWM peripheral (low-side
-> MOSFET for higher-voltage open-drain output), thus I need to set the PWM
-> node to output an inverted signal so that the final open-drain output
-> behaves correctly as the signal has been inverted twice now.
->=20
-> In my specific case this logic could also be added to pwm-fan, but this
-> would lead to more complexity there as this type of circuit is generally
-> handled by the PWM driver.
+I fail to see when the pointers are compared. It looks to me that only 
+the args are compared. Am I missing something ?
+In any case, looking more closely at the code, I guess that indeed the
+of_node_put() shouldn't be added here because this code expects that the
+nodes never go away. That is probably a good assertion in case of PMICs
 
-The issue is clear, and I'm sure the motivation was similar for meson.
-
-However just inverting duty_cycle might hurt consumers who rely on
-actually inversed polarity.
-
-There is an approach available: You could implement support for
-=2Eusage_power. However I don't like that concept because its semantic is
-unclear (but in the past there is no agreement about that betweeen
-Thierry and me).
-
-My favourite would be to add a u64 duty_offset to struct pwm_state that
-would allow to request something like:
-
-       ________          ________          ________
-   ___/        \________/        \________/        \______
-   ^                 ^                 ^                 ^
-   <->                duty_offset
-      <------->       duty_cycle
-   <----------------> period
-
-Then todays requests would be equivalent to .duty_offset =3D 0, and
-drivers would be advised to implement the biggest duty_offset not bigger
-than requested (i.e. similar to how period and duty_cycle work).
-
-This could even replace .polarity by setting .duty_offset =3D .period -
-=2Eduty_cycle. And a consumer who doesn't care about polarity but only
-about percentage of the active time during a period could signal that by
-=2Eduty_offset =3D .period (or .period - 1?).
-
-Of course that would be a bigger effort.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---gtzva4fuv4iy5elv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQDGu0ACgkQwfwUeK3K
-7AmsnAf/fWQuuTY0c+1r1b43FElwpoyXMnsuq1QzKB5KQRU60v/Z2fTek2f8fy0A
-f+0KbZCb+OGdv6V0Ct83X41A4tIYWGDVs1dJYX6ZxbGFbaCWZ6dRIU/P9qpni2BO
-3ezvTFrtY75hX6mrXNlEAmOG7oliIyw4vcSA+J4uR3z+lg8xNuj8/EVaWv1UVo8l
-n8uUfImwADeST1FTJqTZnWTXywWoITc4Cql5ITWn+ZAmCTfTGBOkc3v1hvta7rOs
-vBoIajVUbbL9QU9m/uuKaBk/YRLiuIIBxVdrNgV+RzY0mG3w/EpfSdXVVDPmz7vd
-1pZRniBxLaHUN7aoSwm50Uczd6/UvA==
-=Q76Z
------END PGP SIGNATURE-----
-
---gtzva4fuv4iy5elv--
+JJ
+> IIUIC, calling of_node_put() might cause the reference count to drop to
+> zero, and the underlying struct node object to be deallocated.
+> So when a future reference to the same DT node will be taken, a new
+> struct node object will be allocated, and the pointer comparison below
+> will fail?
+> 
+> Or am I missing something?
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
