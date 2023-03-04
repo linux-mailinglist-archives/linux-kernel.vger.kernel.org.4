@@ -2,124 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A176AA95C
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 12:56:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256286AA960
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 13:01:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjCDL4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 06:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S229557AbjCDMB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 07:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCDL4q (ORCPT
+        with ESMTP id S229437AbjCDMB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 06:56:46 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5E51CF63;
-        Sat,  4 Mar 2023 03:56:43 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E0B4C5FD06;
-        Sat,  4 Mar 2023 14:56:40 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1677931000;
-        bh=7qfzvVdKEr4IJNXGP2dAPhrdfNxpE3d77PssvtlsIyQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=MNd4X+TMrfwgC0uGm4bwk5UJot2vPhp5C49vKksPRrlxBYsKx5hdwRxLBTZANICCH
-         4DdxjTVfitQxrsPVaRZ5HK1dSbsACP0Ndusg3RG7Os5Z0bVzM4TRGDvgpuvvqX9/Dc
-         G7NxveTwSIX69IvM0+JEMCBnMuF3/jxEFcrE+0K5JYBAt3W7GgQ/ulUSKZ3WZHYO0v
-         YVuBmWjuTX2fRfM2ziay9iVbS/1QLBrPqDjIZaGYEiOysznDn5UwyEHM+R+zRg7mxJ
-         uXaTGbfkugD7Ruc/ToYt9jlxZWMflp0/DtpODft3Nhdc40zQUkjZq4D+EVJMmAIP/4
-         MVNvuMXsC51YQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sat,  4 Mar 2023 14:56:35 +0300 (MSK)
-Message-ID: <f7ce6794-c7c8-5f83-f63e-381a1e3a5bf7@sberdevices.ru>
-Date:   Sat, 4 Mar 2023 14:53:44 +0300
+        Sat, 4 Mar 2023 07:01:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA3B1A481;
+        Sat,  4 Mar 2023 04:01:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFDAD60ADC;
+        Sat,  4 Mar 2023 12:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0982AC433D2;
+        Sat,  4 Mar 2023 12:01:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677931284;
+        bh=kxArD6kqa3Zrpk8FVHbixCQ4K9R+00pElouDl7sjmXQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CEwtMFKx/Zt9JcpA24Cr3DaBpUwxpxY4mZz6eW08SEEeN3bfPhT25kzHZe2uEX+tv
+         Fm8X/Kk8hPSsnwZOqSmoDQfBq7Ch2dD66rhZkftLx21OnS5y6Afl8WDm2Nru4eyquw
+         VEqXP8VtakyPYBr4a63Xr5+XdhM+CD5KWSvtzSuwlrGciwd/3GaergSN5CrUBeha3B
+         o1Z82bhZGEPwt46cZwCUvx6OWq2HDHuVftoST4FkKskwZ4cX7URlSFKVv06l0OgvCa
+         4Cr3RCzK6UC/WPeGNiTJVlX6LrGyY4QEIxDdYPz5tTGvI7Gz0zG+O017XkAA10zSd9
+         CAoXFqg1VZ1kA==
+Date:   Sat, 4 Mar 2023 13:01:18 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Glenn Washburn <development@efficientek.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH v2] hostfs: handle idmapped mounts
+Message-ID: <20230304120118.bhbilwzhmjt72fok@wittgenstein>
+References: <20230301015002.2402544-1-development@efficientek.com>
+ <20230302083928.zek46ybxvuwgwdf5@wittgenstein>
+ <20230304002846.48278199@crass-HP-ZBook-15-G2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [External] [RFC PATCH v1 3/3] virtio/vsock: remove all data from
- sk_buff
-Content-Language: en-US
-To:     "Robert Eshleman ." <bobby.eshleman@bytedance.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <kvm@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <c2d3e204-89d9-88e9-8a15-3fe027e56b4b@sberdevices.ru>
- <b6fe000f-5638-28d0-525f-ce38cc2cb036@sberdevices.ru>
- <CALa-AnCu8g+jt1m_rY0QJFcRUhtWJ64Txro69j9KsnK7hyuBMg@mail.gmail.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <CALa-AnCu8g+jt1m_rY0QJFcRUhtWJ64Txro69j9KsnK7hyuBMg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/04 07:52:00 #20914547
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230304002846.48278199@crass-HP-ZBook-15-G2>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 04.03.2023 02:00, Robert Eshleman . wrote:
-> On Fri, Mar 3, 2023 at 2:05 PM Arseniy Krasnov <avkrasnov@sberdevices.ru>
-> wrote:
+On Sat, Mar 04, 2023 at 12:28:46AM -0600, Glenn Washburn wrote:
+> On Thu, 2 Mar 2023 09:39:28 +0100
+> Christian Brauner <brauner@kernel.org> wrote:
 > 
->> In case of SOCK_SEQPACKET all sk_buffs are used once - after read some
->> data from it, it will be removed, so user will never read rest of the
->> data. Thus we need to update credit parameters of the socket like whole
->> sk_buff is read - so call 'skb_pull()' for the whole buffer.
->>
->> Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->>  net/vmw_vsock/virtio_transport_common.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/net/vmw_vsock/virtio_transport_common.c
->> b/net/vmw_vsock/virtio_transport_common.c
->> index d80075e1db42..bbcf331b6ad6 100644
->> --- a/net/vmw_vsock/virtio_transport_common.c
->> +++ b/net/vmw_vsock/virtio_transport_common.c
->> @@ -470,7 +470,7 @@ static int
->> virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
->>                                         dequeued_len = err;
->>                                 } else {
->>                                         user_buf_len -= bytes_to_copy;
->> -                                       skb_pull(skb, bytes_to_copy);
->> +                                       skb_pull(skb, skb->len);
->>                                 }
->>
->>
-> I believe this may also need to be done when memcpy_to_msg() returns an
-> error.
-Hello! Thanks for quick reply. Yes, moreover  in case of SEQPACKET 'skb_pull()' must be called
-every time when skbuff was removed from queue - it doesn't matter did we copy data from, get
-error on memcpy_to_msg(), or just drop it - otherwise we get leak of 'rx_bytes'.
-
-Also in case of STREAM, skb_pull() must be called for the rest of data in skbuff in case of error,
-because again - 'rx_bytes' will leak.
-
-I think, i'll prepare fixes and tests for this case in the next week
-
-Thanks, Arseniy
+> > On Tue, Feb 28, 2023 at 07:50:02PM -0600, Glenn Washburn wrote:
+> > > Let hostfs handle idmapped mounts. This allows to have the same
+> > > hostfs mount appear in multiple locations with different id
+> > > mappings.
+> > > 
+> > > root@(none):/media# id
+> > > uid=0(root) gid=0(root) groups=0(root)
+> > > root@(none):/media# mkdir mnt idmapped
+> > > root@(none):/media# mount -thostfs -o/home/user hostfs mnt
+> > > 
+> > > root@(none):/media# touch mnt/aaa
+> > > root@(none):/media# mount-idmapped --map-mount u:`id -u user`:0:1
+> > > --map-mount g:`id -g user`:0:1 /media/mnt /media/idmapped
+> > > root@(none):/media# ls -l mnt/aaa idmapped/aaa -rw-r--r-- 1 root
+> > > root 0 Jan 28 01:23 idmapped/aaa -rw-r--r-- 1 user user 0 Jan 28
+> > > 01:23 mnt/aaa
+> > > 
+> > > root@(none):/media# touch idmapped/bbb
+> > > root@(none):/media# ls -l mnt/bbb idmapped/bbb
+> > > -rw-r--r-- 1 root root 0 Jan 28 01:26 idmapped/bbb
+> > > -rw-r--r-- 1 user user 0 Jan 28 01:26 mnt/bbb
+> > > 
+> > > Signed-off-by: Glenn Washburn <development@efficientek.com>
+> > > ---
+> > > Changes from v1:
+> > >  * Rebase on to tip. The above commands work and have the results
+> > > expected. The __vfsuid_val(make_vfsuid(...)) seems ugly to get the
+> > > uid_t, but it seemed like the best one I've come across. Is there a
+> > > better way?
+> > 
+> > Sure, I can help you with that. ;)
 > 
-> Best,
-> Bobby
+> Thank you!
 > 
+> > > 
+> > > Glenn
+> > > ---
+> > >  fs/hostfs/hostfs_kern.c | 13 +++++++------
+> > >  1 file changed, 7 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+> > > index c18bb50c31b6..9459da99a0db 100644
+> > > --- a/fs/hostfs/hostfs_kern.c
+> > > +++ b/fs/hostfs/hostfs_kern.c
+> > > @@ -786,7 +786,7 @@ static int hostfs_permission(struct mnt_idmap
+> > > *idmap, err = access_file(name, r, w, x);
+> > >  	__putname(name);
+> > >  	if (!err)
+> > > -		err = generic_permission(&nop_mnt_idmap, ino,
+> > > desired);
+> > > +		err = generic_permission(idmap, ino, desired);
+> > >  	return err;
+> > >  }
+> > >  
+> > > @@ -794,13 +794,14 @@ static int hostfs_setattr(struct mnt_idmap
+> > > *idmap, struct dentry *dentry, struct iattr *attr)
+> > >  {
+> > >  	struct inode *inode = d_inode(dentry);
+> > > +	struct user_namespace *fs_userns = i_user_ns(inode);
+> > 
+> > Fyi, since hostfs can't be mounted in a user namespace
+> > fs_userns == &init_user_ns
+> > so it doesn't really matter what you use.
+> 
+> What would you suggest as preferable?
+
+I would leave init_user_ns hardcoded as it clearly indicates that hostfs
+can only be mounted in the initial user namespace. Plus, the patch is
+smaller.
+
+> 
+> > >  	struct hostfs_iattr attrs;
+> > >  	char *name;
+> > >  	int err;
+> > >  
+> > >  	int fd = HOSTFS_I(inode)->fd;
+> > >  
+> > > -	err = setattr_prepare(&nop_mnt_idmap, dentry, attr);
+> > > +	err = setattr_prepare(idmap, dentry, attr);
+> > >  	if (err)
+> > >  		return err;
+> > >  
+> > > @@ -814,11 +815,11 @@ static int hostfs_setattr(struct mnt_idmap
+> > > *idmap, }
+> > >  	if (attr->ia_valid & ATTR_UID) {
+> > >  		attrs.ia_valid |= HOSTFS_ATTR_UID;
+> > > -		attrs.ia_uid = from_kuid(&init_user_ns,
+> > > attr->ia_uid);
+> > > +		attrs.ia_uid = __vfsuid_val(make_vfsuid(idmap,
+> > > fs_userns, attr->ia_uid)); }
+> > >  	if (attr->ia_valid & ATTR_GID) {
+> > >  		attrs.ia_valid |= HOSTFS_ATTR_GID;
+> > > -		attrs.ia_gid = from_kgid(&init_user_ns,
+> > > attr->ia_gid);
+> > > +		attrs.ia_gid = __vfsgid_val(make_vfsgid(idmap,
+> > > fs_userns, attr->ia_gid));
+> > 
+> > Heh, if you look include/linux/fs.h:
+> > 
+> >         /*
+> >          * The two anonymous unions wrap structures with the same
+> > member. *
+> >          * Filesystems raising FS_ALLOW_IDMAP need to use
+> > ia_vfs{g,u}id which
+> >          * are a dedicated type requiring the filesystem to use the
+> > dedicated
+> >          * helpers. Other filesystem can continue to use ia_{g,u}id
+> > until they
+> >          * have been ported.
+> >          *
+> >          * They always contain the same value. In other words
+> > FS_ALLOW_IDMAP
+> >          * pass down the same value on idmapped mounts as they would
+> > on regular
+> >          * mounts.
+> >          */
+> >         union {
+> >                 kuid_t          ia_uid;
+> >                 vfsuid_t        ia_vfsuid;
+> >         };
+> >         union {
+> >                 kgid_t          ia_gid;
+> >                 vfsgid_t        ia_vfsgid;
+> >         };
+> > 
+> > this just is:
+> > 
+> > attrs.ia_uid = from_vfsuid(idmap, fs_userns, attr->ia_vfsuid));
+> > attrs.ia_gid = from_vfsgid(idmap, fs_userns, attr->ia_vfsgid));
+> 
+> Its easy to miss from this patch because of lack of context, but attrs
+> is a struct hostfs_iattr, not struct iattr. And attrs.ia_uid is of type
+> uid_t, not kuid_t. So the above fails to compile. This is why I needed
+
+Oh, I see. And then that raw value is used by calling
+fchmod()/chmod()/chown()/fchown() and so on. That's rather special.
+Ok, then I know what to do.
+
+> to wrap make_vfsuid() in __vfsuid_val() (to get the uid_t).
+
+Right. My point had been - independent of the struct hostfs_iattr issue
+you thankfully pointed out - that make_vfsuid() is wrong here.
+
+make_vfsuid() is used to map a filesystem wide k{g,u}id_t according to
+the mount's idmapping that operation originated from. But that's done
+by the vfs way before we're calling into the filesystem. For example,
+it's done in chown_common().
+
+So the value placed in struct iattr (the VFS struct) is already a
+vfs{g,u}id stored in iattr->ia_vfs{g,u}id. So you need to use
+from_vfs{g,u}id() here.
+
+> 
+> I had decided against using from_vfsuid() because then I thought I'd
+> need to use from_kuid() to get the uid_t. And from_kuid() takes the
+> namespace (again), which seemed uglier.
+> 
+> Based on this, what do you suggest?
+
+Ok, so just some details on the background before I paste what I think
+we should do.
+
+As soon as you support idmapped mounts you at least technically are
+always dealing with two mappings:
+
+(1) First, there's the filesystem wide idmapping which is taken from the
+    namespace the filessytem was mounted in. This idmapping is applied
+    when you read the raw uid/gid value from disk and turn into a kuid_t
+    type. That value is persistent and stored in inode->i_{g,u}id. All
+    things that are cached and that can be accessed from multiple mounts
+    concurrently can only ever cache k{g,u}id_t aka filesystem values.
+(2) Whenever we're dealing with an operation that's coming from an
+    idmapped mount we need to take the idmapping of the mount into
+    account. That idmapping is completely separate type struct
+    mnt_idmap that's opaque for filesystems and most of the vfs.
+
+    That idmapping is used to generate the vfs{g,u}id_t. IOW, translates
+    from the filesystem representation to a mount/vfs representation.
+
+So, in order to store the correct value on disk we need to invert those
+two idmappings to arrive at the raw value that we want to store:
+(U1) from_vfsuid() // map to the filesystem wide value aka something
+     that we can store in inode->i_{g,u}id and that's cacheable. This is
+     done in setattr_copy().
+(U2) from_kuid() // map the filesystem wide value to the raw value we
+     want to store on disk
+
+For nearly all filesystems these steps almost never need to be performed
+explicitly. Instead, dedicated vfs helpers will do this:
+
+(U1) i_{g,u}id_update() // map to filesystem wide value
+(U2) i_{g,u}id_read() // map to raw on-disk value
+
+For filesystems that don't support being mounted in namespaces the (U2)
+step is always a nop. So technically there's no difference between:
+
+(U2) from_kuid() and __kuid_val(kuid)
+
+but it's cleaner to use the helpers even in that case.
+
+So given how hostfs works these two steps need to be performed
+explicitly. So I suggest (untested):
+
+diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+index c18bb50c31b6..72b7e1bcc32e 100644
+--- a/fs/hostfs/hostfs_kern.c
++++ b/fs/hostfs/hostfs_kern.c
+@@ -813,12 +813,22 @@ static int hostfs_setattr(struct mnt_idmap *idmap,
+                attrs.ia_mode = attr->ia_mode;
+        }
+        if (attr->ia_valid & ATTR_UID) {
++               kuid_t kuid;
++
+                attrs.ia_valid |= HOSTFS_ATTR_UID;
+-               attrs.ia_uid = from_kuid(&init_user_ns, attr->ia_uid);
++               /* Map the vfs id into the filesystem. */
++               kuid = from_vfsuid(idmap, &init_user_ns, attr->ia_vfsuid);
++               /* Map the filesystem id to its raw on disk value. */
++               attrs.ia_uid = from_kuid(&init_user_ns, kuid);
+        }
+        if (attr->ia_valid & ATTR_GID) {
++               kgid_t kgid;
++
+                attrs.ia_valid |= HOSTFS_ATTR_GID;
+-               attrs.ia_gid = from_kgid(&init_user_ns, attr->ia_gid);
++               /* Map the vfs id into the filesystem. */
++               kgid = from_vfsgid(idmap, &init_user_ns, attr->ia_vfsgid);
++               /* Map the filesystem id to its raw on disk value. */
++               attrs.ia_gid = from_kgid(&init_user_ns, kgid);
+        }
+        if (attr->ia_valid & ATTR_SIZE) {
+                attrs.ia_valid |= HOSTFS_ATTR_SIZE;
