@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A314D6AAA12
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 14:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F4D6AAA41
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 14:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjCDN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 08:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
+        id S229564AbjCDNpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 08:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjCDN2p (ORCPT
+        with ESMTP id S229445AbjCDNpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 08:28:45 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E5A1ACD6
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 05:28:05 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id i9so7025693lfc.6
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 05:28:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677936484;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8DK+DHJSy2xBUh4Vr8/3y2ODv7He3a8h/4QGwZUApeI=;
-        b=mRPq98teuJUqn1DsSyenBZ25dQ+EQZd1E8Jer+5bbm42Z2bV78WQTWozwodo1HtuAX
-         LWKwetK7sptG4EBNjfp/NydEtpcVOwb+p4WvdSYnBUQoBj/3kqfJ86kTzdd8rFXEvxwu
-         7Jqn58pIcYTA6pkGruymAeh1CGZ6PSo3vx7iLGW56eBWzmERxgRm5Mshu/nfLkUQPx5r
-         Y/yiTXoYUmzTCloWM7y5+iasJMbB62ygqrK79O4psOMfV0Bid7O/4uJEursgHBbD32iR
-         bT9t+1JRuMcIk82r1LqGj6d89Z5EzX6p9qoJ5ami7xviVt95qk9F75wu08oX7PwDUVFC
-         Viww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677936484;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8DK+DHJSy2xBUh4Vr8/3y2ODv7He3a8h/4QGwZUApeI=;
-        b=7wQgYe1EuMuBljTByAR+Dm48LPqhTFn3Dnr8NmxqHHAs/TiC8+UzgIfkAS6Xi/wQW1
-         cHqWqZAxZGERGiR7hlJE3picEZmZ7hqM5QHqMvf+s/3QWi2uPvX+UI8lfj0zs8wfIfyu
-         d1ufUQewNj/rH1ydqZL/vwSUKWQ1KmNpUMGiIU3t04iPkbezOroRjFwuDvyBXNsn/hos
-         DlyF9q8Pn/7XTIv9CunUUWyEQHlK5xbx1FjYzJgQ45xJEc9qsnu2c+Iwj0KiQz7iVZN8
-         a/6E1pk6Tsrpi1gIjcqs+c2LOdgH/pUUWwHnZAB2ZfVb+rV4D97HvDAVd66KGhU3ksMQ
-         k1xg==
-X-Gm-Message-State: AO0yUKWDrMoGLkfUFOSWV2urBCtf1nMASd6yT7r4Qt6dzAqAvKGPV/PF
-        LqerHfAhqvcb1Do8OmRfQ/kxGA==
-X-Google-Smtp-Source: AK7set/JyhYxiRX5lUiA3rM4DZyKptGNxJ+xI5ufLT/+XAGpWkA0q+f621yxtmtT1PCt9NVmCO/7pQ==
-X-Received: by 2002:ac2:4a90:0:b0:4cb:d3:3b99 with SMTP id l16-20020ac24a90000000b004cb00d33b99mr1375577lfp.36.1677936484771;
-        Sat, 04 Mar 2023 05:28:04 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id j15-20020a19f50f000000b004e7fa99f2b5sm342975lfb.186.2023.03.04.05.28.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 05:28:04 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Sat, 04 Mar 2023 14:27:55 +0100
-Subject: [PATCH RFT 20/20] clk: qcom: smd-rpm: Add keepalive_clks for
- QCS404
+        Sat, 4 Mar 2023 08:45:15 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765AF18168;
+        Sat,  4 Mar 2023 05:45:12 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pYSC6-0006XR-1P;
+        Sat, 04 Mar 2023 14:45:02 +0100
+Date:   Sat, 4 Mar 2023 13:43:20 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Subject: [PATCH net] net: ethernet: mtk_eth_soc: fix RX data corruption issue
+Message-ID: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-rpmcc_sleep-v1-20-d9cfaf9b27a7@linaro.org>
-References: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org>
-In-Reply-To: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1677936461; l=777;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=7QPqo1GGgCEJKo/s3JptnfQVu+vbrWF3+vXEnhyWs3g=;
- b=jtPxDC2HrczqJjFmn93XT4HDRLpY4unqhpYlyqESg494bkZUTgJ0eQCc1+aKQodnCXYW7RUOIBIS
- xychouPNCaltqNJBMf666A4jpGuiqOm2EIBI4T1OM6pMw66XV2q6
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QCS404 requires that the PCNoC clock always gets an active vote.
-Guarantee that.
+Fix data corruption issue with SerDes connected PHYs operating at 1.25
+Gbps speed where we could previously observe about 30% packet loss while
+the bad packet counter was increasing.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+As almost all boards with MediaTek MT7622 or MT7986 use either the MT7531
+switch IC operating at 3.125Gbps SerDes rate or single-port PHYs using
+rate-adaptation to 2500Base-X mode, this issue only got exposed now when
+we started trying to use SFP modules operating with 1.25 Gbps with the
+BananaPi R3 board.
+
+The fix is to set bit 12 which disables the RX FIFO clear function when
+setting up MAC MCR, MediaTek SDK did the same change stating:
+"If without this patch, kernel might receive invalid packets that are
+corrupted by GMAC."[1]
+
+[1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/d8a2975939a12686c4a95c40db21efdc3f821f63
+
+Fixes: 42c03844e93d ("net-next: mediatek: add support for MediaTek MT7622 SoC")
+Tested-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 ---
- drivers/clk/qcom/clk-smd-rpm.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 3 ++-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 2d0efe2cb1f5..af8a43394349 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -934,6 +934,8 @@ static struct clk_smd_rpm *qcs404_clks[] = {
- static const struct rpm_smd_clk_desc rpm_clk_qcs404 = {
- 	.clks = qcs404_clks,
- 	.num_clks = ARRAY_SIZE(qcs404_clks),
-+	.keepalive_clks = pnoc_keepalive_clks,
-+	.num_keepalive_clks = ARRAY_SIZE(pnoc_keepalive_clks),
- };
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index 14be6ea51b88..3cb43623d3db 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -616,7 +616,8 @@ static int mtk_mac_finish(struct phylink_config *config, unsigned int mode,
+ 	mcr_cur = mtk_r32(mac->hw, MTK_MAC_MCR(mac->id));
+ 	mcr_new = mcr_cur;
+ 	mcr_new |= MAC_MCR_IPG_CFG | MAC_MCR_FORCE_MODE |
+-		   MAC_MCR_BACKOFF_EN | MAC_MCR_BACKPR_EN | MAC_MCR_FORCE_LINK;
++		   MAC_MCR_BACKOFF_EN | MAC_MCR_BACKPR_EN | MAC_MCR_FORCE_LINK |
++		   MAC_MCR_RX_FIFO_CLR_DIS;
  
- static struct clk_smd_rpm *msm8998_clks[] = {
+ 	/* Only update control register when needed! */
+ 	if (mcr_new != mcr_cur)
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+index afc9d52e79bf..b65de174c3d9 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+@@ -397,6 +397,7 @@
+ #define MAC_MCR_FORCE_MODE	BIT(15)
+ #define MAC_MCR_TX_EN		BIT(14)
+ #define MAC_MCR_RX_EN		BIT(13)
++#define MAC_MCR_RX_FIFO_CLR_DIS	BIT(12)
+ #define MAC_MCR_BACKOFF_EN	BIT(9)
+ #define MAC_MCR_BACKPR_EN	BIT(8)
+ #define MAC_MCR_FORCE_RX_FC	BIT(5)
 
+base-commit: 528125268588a18a2f257002af051b62b14bb282
 -- 
 2.39.2
 
