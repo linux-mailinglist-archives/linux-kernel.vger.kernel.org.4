@@ -2,162 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D232F6AA8A2
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 09:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497AC6AA8B5
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 09:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjCDIH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 03:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33090 "EHLO
+        id S229691AbjCDIX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 03:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDIHy (ORCPT
+        with ESMTP id S229662AbjCDIXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 03:07:54 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F3FE6
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 00:07:51 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3247S1aI017697;
-        Sat, 4 Mar 2023 08:07:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=3ixhqHIjWMWyKr5kvN/r2nBDlDnDAMu2vZ+Fva0mD9k=;
- b=XgN5AhQAKLBvTaGrHPeYPiRXym7FXbmzziP0Cpw6D+dDvalGOHtifmwC4413Vdf/URKr
- ntVDrCfqGlB7W0OJTXL4gqblJhMNEgPKxOz8scYKRk8NlXY/qv2Ut3cRETLg39bGEJNP
- DvWCG4apHQnX5lPeZGPo9s4SI1C2+h3aXMKBRQwA0bFW7UwIzRZmplpgHK1fqF8v9Br5
- ClnnoWe572GZIseQvSOkFcU5SIh4/F1leqzVEAmWPR0f+kycRCOf3/zyah6AIjybsuUz
- BxgU1b6PsIuQ8Kv4WO8JMeb2AxEJIjV0Fvds+7ugcpyV4zLqNVglKWm44y/CHiXs9/yf TA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p417eg2xk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 04 Mar 2023 08:07:25 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32487PgV019610
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 4 Mar 2023 08:07:25 GMT
-Received: from hu-visr-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Sat, 4 Mar 2023 00:07:22 -0800
-From:   Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
-CC:     <quic_visr@quicinc.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
-        <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ASoC: codecs: tx-macro: Fix for KASAN: slab-out-of-bounds
-Date:   Sat, 4 Mar 2023 13:37:02 +0530
-Message-ID: <20230304080702.609-1-quic_visr@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Sat, 4 Mar 2023 03:23:52 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B2011EBE;
+        Sat,  4 Mar 2023 00:23:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677918231; x=1709454231;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=be1rXqOTaA9TmHSy7Fu3SagO+W1K5eB5Fn1fhibjMYE=;
+  b=ibmWX0F0/7f6DOIOHaDnOF7eAVfxCvsYOayREiEWCVOkVjLZCAvNCX0o
+   ZuYxddqrZrwrpXPLxaQCq+kGe6npfe5S/RSd4rqLvZY5PkgCRHaM/k7Kq
+   gss8ojqHYuwkYaRFdde3D88LY1ROSWeEpY8KSSKs9IJbQiP4L+GssjHCP
+   LkXSdtHolwcL7tDPadJlXOh2x8erqhhww6C2XIB9FN4dXhBoo+XT+f6Mq
+   t/y7ahmkldV9d9jj6WvpreG5fyHhsbqtNwOZvK6ABgu440EARu7dnFhS8
+   dzAV74H+jEHGEJF5iak0dISc3RRzJ3j3s+gPIri9kvB6wNfgN6NhW987O
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="336758159"
+X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
+   d="scan'208";a="336758159"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 00:23:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="705896951"
+X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
+   d="scan'208";a="705896951"
+Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 04 Mar 2023 00:23:46 -0800
+Received: from kbuild by 776573491cc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pYNBB-00020e-0n;
+        Sat, 04 Mar 2023 08:23:45 +0000
+Date:   Sat, 4 Mar 2023 16:22:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-cxl@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, will@kernel.org, dan.j.williams@intel.com,
+        bwidawsk@kernel.org, ira.weiny@intel.com, vishal.l.verma@intel.com,
+        alison.schofield@intel.com, linuxarm@huawei.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] cxl/pci: Find and register CXL PMU devices
+Message-ID: <202303041641.maw8XfoZ-lkp@intel.com>
+References: <20230303175022.10806-3-Jonathan.Cameron@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ClR28dDgfd5nUy8Y8IXYr8LfXdvUVyI5
-X-Proofpoint-GUID: ClR28dDgfd5nUy8Y8IXYr8LfXdvUVyI5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-04_02,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- impostorscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
- phishscore=0 adultscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=938 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303040066
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303175022.10806-3-Jonathan.Cameron@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we run syzkaller we get below Out of Bound.
-    "KASAN: slab-out-of-bounds Read in regcache_flat_read"
+Hi Jonathan,
 
-    Below is the backtrace of the issue:
+I love your patch! Yet something to improve:
 
-    dump_backtrace+0x0/0x4c8
-    show_stack+0x34/0x44
-    dump_stack_lvl+0xd8/0x118
-    print_address_description+0x30/0x2d8
-    kasan_report+0x158/0x198
-    __asan_report_load4_noabort+0x44/0x50
-    regcache_flat_read+0x10c/0x110
-    regcache_read+0xf4/0x180
-    _regmap_read+0xc4/0x278
-    _regmap_update_bits+0x130/0x290
-    regmap_update_bits_base+0xc0/0x15c
-    snd_soc_component_update_bits+0xa8/0x22c
-    snd_soc_component_write_field+0x68/0xd4
-    tx_macro_digital_mute+0xec/0x140
+[auto build test ERROR on cxl/next]
+[also build test ERROR on cxl/pending linus/master next-20230303]
+[cannot apply to v6.2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-    Actually There is no need to have decimator with 32 bits.
-    By limiting the variable with short type u8 issue is resolved.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230304-015342
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git next
+patch link:    https://lore.kernel.org/r/20230303175022.10806-3-Jonathan.Cameron%40huawei.com
+patch subject: [PATCH 2/4] cxl/pci: Find and register CXL PMU devices
+config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20230304/202303041641.maw8XfoZ-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/0790ed82bb7adf04c834e8c03008b92c1b23945e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230304-015342
+        git checkout 0790ed82bb7adf04c834e8c03008b92c1b23945e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cxl/
 
-Signed-off-by: Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
----
- sound/soc/codecs/lpass-tx-macro.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303041641.maw8XfoZ-lkp@intel.com/
 
-diff --git a/sound/soc/codecs/lpass-tx-macro.c b/sound/soc/codecs/lpass-tx-macro.c
-index bf27bdd5be20..473d3cd39554 100644
---- a/sound/soc/codecs/lpass-tx-macro.c
-+++ b/sound/soc/codecs/lpass-tx-macro.c
-@@ -242,7 +242,7 @@ enum {
- 
- struct tx_mute_work {
- 	struct tx_macro *tx;
--	u32 decimator;
-+	u8 decimator;
- 	struct delayed_work dwork;
- };
- 
-@@ -635,7 +635,7 @@ static int tx_macro_mclk_enable(struct tx_macro *tx,
- 	return 0;
- }
- 
--static bool is_amic_enabled(struct snd_soc_component *component, int decimator)
-+static bool is_amic_enabled(struct snd_soc_component *component, u8 decimator)
- {
- 	u16 adc_mux_reg, adc_reg, adc_n;
- 
-@@ -849,7 +849,7 @@ static int tx_macro_enable_dec(struct snd_soc_dapm_widget *w,
- 			       struct snd_kcontrol *kcontrol, int event)
- {
- 	struct snd_soc_component *component = snd_soc_dapm_to_component(w->dapm);
--	unsigned int decimator;
-+	u8 decimator;
- 	u16 tx_vol_ctl_reg, dec_cfg_reg, hpf_gate_reg, tx_gain_ctl_reg;
- 	u8 hpf_cut_off_freq;
- 	int hpf_delay = TX_MACRO_DMIC_HPF_DELAY_MS;
-@@ -1064,7 +1064,8 @@ static int tx_macro_hw_params(struct snd_pcm_substream *substream,
- 			      struct snd_soc_dai *dai)
- {
- 	struct snd_soc_component *component = dai->component;
--	u32 decimator, sample_rate;
-+	u32 sample_rate;
-+	u8 decimator;
- 	int tx_fs_rate;
- 	struct tx_macro *tx = snd_soc_component_get_drvdata(component);
- 
-@@ -1128,7 +1129,7 @@ static int tx_macro_digital_mute(struct snd_soc_dai *dai, int mute, int stream)
- {
- 	struct snd_soc_component *component = dai->component;
- 	struct tx_macro *tx = snd_soc_component_get_drvdata(component);
--	u16 decimator;
-+	u8 decimator;
- 
- 	/* active decimator not set yet */
- 	if (tx->active_decimator[dai->id] == -1)
+All errors (new ones prefixed by >>):
+
+>> drivers/cxl/core/regs.c:9:10: fatal error: 'cpmu.h' file not found
+   #include <cpmu.h>
+            ^~~~~~~~
+   1 error generated.
+--
+>> drivers/cxl/core/cpmu.c:8:10: fatal error: 'cpmu.h' file not found
+   #include <cpmu.h>
+            ^~~~~~~~
+   1 error generated.
+
+
+vim +9 drivers/cxl/core/regs.c
+
+   > 9	#include <cpmu.h>
+    10	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
