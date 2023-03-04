@@ -2,107 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8B36AA9C2
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 14:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5B86AA9C4
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 14:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjCDNDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 08:03:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39522 "EHLO
+        id S229567AbjCDNEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 08:04:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCDNDa (ORCPT
+        with ESMTP id S229445AbjCDNEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 08:03:30 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BF4F975
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 05:03:21 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id cy23so20564949edb.12
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 05:03:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677934999;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x4G0qf8dTLAf7njJtTk+v5kvGa3NoxWfF7xQsqRpSsI=;
-        b=m/klVkfAgSPv+uTNFsJ8A5ctXJYY/KiwphuQlOBDbOEL/vy3ff2SXXQitiydbvMvyN
-         Kuhl2fhYwCAF5stVkO2EXDIDMMSIGG7LdUC44TgiW0yCy8OOQUm0peClCvzsT/NXkBVs
-         rLEZYKmN0OOU1bt5MbGUCwuDjEHP7yFg0upOQ6lwV2qg7pspr281EdIcsUU2oPn7/XUX
-         kzhSbdD94eAKv7XZWpeF4WNPepNUb6qmnZqnUV9p4xAygf3vZzcgTl2Iwu4haO8qQUVF
-         gH7md4CSkL8KyCHZuA9fL7czFJhQljx0yv+0u75BOZiTWZ1O6b1rbjpJAoqBmBiu33jX
-         2GYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677934999;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x4G0qf8dTLAf7njJtTk+v5kvGa3NoxWfF7xQsqRpSsI=;
-        b=jJd+9atEkcMOsyXyDAidi4dqTGJEIybK8TA+Qsc56ei/Aaf4e5u1FPJFJ2CHjWfEi8
-         0xXfBKtY604D+plFCmCRNt+FQhkemgWZxuCS6JMh4scwXup94eedzFnrzDy9q2jYpJ3s
-         NBn2rW1tPk+O+/sAkUjijEgkAtOe+I9OgFgahxuhg+ItbloV+7eijLKbKvSlXyc3cn48
-         Qwz7bkoea7qFloiWSfyZ04kl81KWHpo+I+GaDUNO6q6aAzsL3Yb4bGpEtM/5kO7QGILa
-         ojEms+LcpCC3gYsv5tbE+AfMb9JXS1IOIUCyGUt5jGkVC8FLcP+zYcvsHaUJN3+Z922g
-         d0mg==
-X-Gm-Message-State: AO0yUKWdo27z3VK9+h4D/YAqFDC8JHNn4k9q4+21Wz8rVG1+hCoOdqSb
-        6yF+kAMa2FY9zGpDU8iMVfIDGw==
-X-Google-Smtp-Source: AK7set/2/4SvFV+0OjnWkKgPftA7+FeQxNKdBT7hxrYftfHnpyHOQycxdNqNjHQOHBoKz7fazax2NA==
-X-Received: by 2002:a17:906:4882:b0:8af:3739:bdd7 with SMTP id v2-20020a170906488200b008af3739bdd7mr8098256ejq.27.1677934999664;
-        Sat, 04 Mar 2023 05:03:19 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:b758:6326:1292:e2aa])
-        by smtp.gmail.com with ESMTPSA id u23-20020a50c057000000b004c19f1891fasm2423220edd.59.2023.03.04.05.03.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 05:03:19 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jianhua Lu <lujianhua000@gmail.com>,
-        Katherine Perez <kaperez@linux.microsoft.com>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 2/2] arm64: dts: qcom: sm8350-microsoft-surface: fix USB dual-role mode property
-Date:   Sat,  4 Mar 2023 14:03:15 +0100
-Message-Id: <20230304130315.51595-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230304130315.51595-1-krzysztof.kozlowski@linaro.org>
-References: <20230304130315.51595-1-krzysztof.kozlowski@linaro.org>
+        Sat, 4 Mar 2023 08:04:33 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F03AF777;
+        Sat,  4 Mar 2023 05:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=o1V4bPDp9RjOX5IVjz87L3/JjhTGESn2h01X3jbS3fc=; b=lhkvKBDDL7Mdqv+FXEr7lOJzuV
+        zycE44M2CTYcUo4mJzXyTs+7itC5K0PO5qD9qsvFm2QUngqIQmOaJIvHUE0mZ1RKQAyIcaRXtB3au
+        Q3O5/oSzR7MjMlHHwoe2wEu555n7kX7uw0Sm7T9N0ns/bNrbR1NnGyzpn4grw++WQ8jIVDjkeBHpv
+        yT1RCd5rneafkVz/vUrxAszHCbD8wDawbGGOtEZOax+fHgvXJJHTN34kj63tYWpigrMtM7jfI2VgP
+        596gGVaxH6OwRU6jpxD0N2q9DT7EPsi4HULAi8MFG1ony9OINusemamaHrQG6ryiC90ENyLkPQIx8
+        3Vx05wdw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:53642)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pYRYW-0002cK-A5; Sat, 04 Mar 2023 13:04:08 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pYRYP-0006uV-Dy; Sat, 04 Mar 2023 13:04:01 +0000
+Date:   Sat, 4 Mar 2023 13:04:01 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [RFC PATCH net] net: dsa: mt7530: move PLL setup out of port 6
+ pad configuration
+Message-ID: <ZANBwZryFXDEVEtG@shell.armlinux.org.uk>
+References: <20230304125453.53476-1-arinc.unal@arinc9.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230304125453.53476-1-arinc.unal@arinc9.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "dr_mode" is a property of USB DWC3 node, not the Qualcomm wrapper
-one:
-  sm8350-microsoft-surface-duo2.dtb: usb@a6f8800: 'dr_mode' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+On Sat, Mar 04, 2023 at 03:54:54PM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> Move the PLL setup of the MT7530 switch out of the pad configuration of
+> port 6 to mt7530_setup, after reset.
+> 
+> This fixes the improper initialisation of the switch when only port 5 is
+> used as a CPU port.
+> 
+> Add supported phy modes of port 5 on the PLL setup.
+> 
+> Remove now incorrect comment regarding P5 as GMAC5.
 
-Fixes: c16160cfa565 ("arm64: dts: qcom: add minimal DTS for Microsoft Surface Duo 2")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts | 3 +++
- 1 file changed, 3 insertions(+)
+If this is what is necessary, you're taking some of the configuration
+out of phylink's control, effectively making port 6 a fixed-interface
+mode port. In that case, there should only ever be one interface
+mode set in port 6's supported_interface mask, so that phylink knows
+that no other interface modes can be selected for that port.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-index b536ae36ae6d..3bd5e57cbcda 100644
---- a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-@@ -341,6 +341,9 @@ &ufs_mem_phy {
- 
- &usb_1 {
- 	status = "okay";
-+};
-+
-+&usb_1_dwc3 {
- 	dr_mode = "peripheral";
- };
- 
 -- 
-2.34.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
