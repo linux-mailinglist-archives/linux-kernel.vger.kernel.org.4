@@ -2,114 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADD06AA9D3
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 14:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3010A6AA9D9
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 14:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCDN1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 08:27:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52946 "EHLO
+        id S229771AbjCDN1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 08:27:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCDN1Q (ORCPT
+        with ESMTP id S229707AbjCDN1q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 08:27:16 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0AB91632F
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 05:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677936390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=o+BfPKfMV9FPE8I8DD3zBXj28xwofcn4hyxEYIowXkA=;
-        b=O7I/bpu5eOXMKPVD7BGVBOcxEBa5mxzJhHpWx1n+FrvwGix/JNS+gNr+L1XqjZHRUyyswl
-        sXvuwGz0F58zFDsxmJbG6ZxuYnrv/mwoOfIqhqELxV46ssuPlqkQH0QzRdjBeHWG7H2JN9
-        9KtdQkM9+8+vWUZZrVWP8rhDvoSGz+Q=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-310-wrY-VUF7M72MNEUgigALRA-1; Sat, 04 Mar 2023 08:26:29 -0500
-X-MC-Unique: wrY-VUF7M72MNEUgigALRA-1
-Received: by mail-qk1-f197.google.com with SMTP id s21-20020a05620a0bd500b0074234f33f24so3055051qki.3
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 05:26:29 -0800 (PST)
+        Sat, 4 Mar 2023 08:27:46 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128791CF49
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 05:27:45 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id d36so3867814lfv.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 05:27:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677936463;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XgZ4hZqUy+tdTMafR0Y1NpglWZ1Uga2EatLNEtTwC9Q=;
+        b=L3XkohyhqWwukysfGvq18Qbo7HlBdn9yyiJGEp66AYu+WhhTh+APIUjvZcd5TLhs4a
+         p+oORRAdIc08RHTYBs75K6zJYKxAQcYM4+IeYvv12NiAri226p/PzobZlY6+bVs0YZSS
+         VAo3Gfd2luL/gKYxI869wsBXNwxHPaa7asoEMdWMpB0FfJ0kq6PLd4M450jTk7Up8P8f
+         blKX1DTnKYldTSFTb/im7wDu5k4GasIKBKVhxa0DvajyDteIwqTthwcMZ7lO4Z6Hhf+7
+         pV3VMm1btZ4sOJVZuJUoSL9SXAEm5kQWy/ziKL3y2l7QsdE+BrBQB/aEJR2xO4klrQMO
+         EtXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677936388;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1677936463;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=o+BfPKfMV9FPE8I8DD3zBXj28xwofcn4hyxEYIowXkA=;
-        b=kUSEu5ZoUuYtPq/GY47mQdhbWHJU6RyBHA70IrabgQbPc3cDJCB6MHhplXhQhtv2qO
-         QZRy8ZpuAxNeDBJGm8geVPerh3VNmzOqzpo1Zfl3Yw5taujmohYk72bBeSNJHBnKiLPs
-         7OIBveeRxBsmWQA+opNTqkp1OoZ31x7LS5VIbMUFaZ263n/8QdYFcG+0YpaKrhIpgH7e
-         BnHrD+IjMNhM8NvXHFD7C8tEs8vzMpaEb51/bSGATVrbFSuVstYt9olon0UK+Dq2VkQJ
-         tQM+5G+doCRee2nOM+0++JVc5z9sE3MOYT3e9D1ndj4Kjc6BtXdm9K6Sh6bgQKZqEvro
-         Cphw==
-X-Gm-Message-State: AO0yUKUL5xYQQcM3imfDgWcuLDjpM3tACDyriDJEQlHYWE/NXY28oTNF
-        6cu84pe9c2i8L5PCTNI0RSNGB7O9RDa4A9Yn56hLKsSx5yEdI3FedNcwce7X5mBwnE++8OCOV8o
-        rzqWFS2dsx9Ct6yKtz4dlfYzp
-X-Received: by 2002:ac8:5c16:0:b0:3bf:d237:b12a with SMTP id i22-20020ac85c16000000b003bfd237b12amr5893380qti.56.1677936388623;
-        Sat, 04 Mar 2023 05:26:28 -0800 (PST)
-X-Google-Smtp-Source: AK7set/YbLpDQrN0mdiFLKbZlCfgTpafc0LpGjIXy2E6eFPSzph2ZgM4mRiQsUVLhhdqACgAq9bG7g==
-X-Received: by 2002:ac8:5c16:0:b0:3bf:d237:b12a with SMTP id i22-20020ac85c16000000b003bfd237b12amr5893361qti.56.1677936388354;
-        Sat, 04 Mar 2023 05:26:28 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id d82-20020a376855000000b007419eb86df0sm3721036qkc.127.2023.03.04.05.26.27
+        bh=XgZ4hZqUy+tdTMafR0Y1NpglWZ1Uga2EatLNEtTwC9Q=;
+        b=uQxtSUu9V5w28NKZ1ARLST/zThmzrmGwixX9USFGpjbAMYd3G2yolfdL+SHNbm1nv/
+         QMrKqTgm3b/Q+TLsQFziR23bnXS3dS9f9QxEcy5ryhSouM9ci9gsDjSPzKiE4SD9bzMN
+         l/7jRAKUfLtiWxNcJ1KiL3NtN5rsBY+aMGs9G6BuJGl2kwS14GVsv1y/J+fuI2FsRX9c
+         EiOvcJkM2tdXcszbTQfiDr5WNFPe+Z8baTXz8kXQtmV3zafTjGejCCL41SKI+GiGURBq
+         uOx0SyVZvPagQQgQD+mEntPGODi1CqwU+DYIaZd7/+LU2Ct1buyE+1cXuQrEFEAe+Yxh
+         MPlw==
+X-Gm-Message-State: AO0yUKUYmn6BvFFzm//ax5GWHGcTdzOTILgvO1xQyprcMfHE6SVOGarX
+        8GWQR/pNA2lNByt7gHyXo0aq8w==
+X-Google-Smtp-Source: AK7set96p3e5eNUS0iELkOj3cIo7vkqtrQ+7naW1utqtFe42t0csa80IFs8GW3hrAko3ZC0q7B0MjA==
+X-Received: by 2002:ac2:5633:0:b0:4dd:9f86:859d with SMTP id b19-20020ac25633000000b004dd9f86859dmr1350094lff.13.1677936463369;
+        Sat, 04 Mar 2023 05:27:43 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id j15-20020a19f50f000000b004e7fa99f2b5sm342975lfb.186.2023.03.04.05.27.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 05:26:27 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     rpeterso@redhat.com, agruenba@redhat.com
-Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] gfs2: remove extern from free_local_statfs_inodes and find_local_statfs_inode
-Date:   Sat,  4 Mar 2023 08:26:25 -0500
-Message-Id: <20230304132625.1936034-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 04 Mar 2023 05:27:42 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH RFT 00/20] SMD RPMCC sleep preparations
+Date:   Sat, 04 Mar 2023 14:27:35 +0100
+Message-Id: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEdHA2QC/x2NQQrCMBBFr1Jm7UCagqIH8ADiroikk6kdiGnI2
+ CKU3t1B/up9eLwNlKuwwqXZoPIqKnM2aA8N0BTyi1GiMXjnO2fDz1yEsJY30VMTc8F4PIUQz2P
+ nWg/mDUEZhxoyTWbmJSU7S+VRvv9QD7frHR77/gM5DpYNfQAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1677936461; l=2001;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=XWLgT1bwHF7eV8z8nCWgSR4obUXZ6NlsDIoxUnshn8g=;
+ b=ZpizBgFMCTab1JVuT1rFMghCLQTENq7h2AK8wg7kkO10M9OSJBsWi5jjB//iVCA1xdsfodARzfd5
+ Bqdx4uysDag7+z4hjr582qNssUwRcnoLXuDe1Wd6c2ugkec298bi
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-fs/gfs2/super.c:1477:13: warning: function 'free_local_statfs_inodes' with external linkage has definition
-fs/gfs2/super.c:1492:21: warning: function 'find_local_statfs_inode' with external linkage has definition
+This series brings support for a couple of things necessary for the full
+system idle on SMD RPM SoCs, namely unused clk shutdown and keepalive
+votes (permanent active votes that are required on certain clocks for the
+platform to function).
 
-extern is only needed in a declaration, so remove them.
+Tested on MSM8996 and SM6375, does not seem to introduce any additional
+regressions.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+Keepalive clocks for other platforms were gathered by digging in old
+downstream kernels, please give them a test.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- fs/gfs2/super.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Konrad Dybcio (18):
+      clk: qcom: smd-rpm: Add support for keepalive votes
+      clk: qcom: smd-rpm: Add keepalive_clks for SM6375
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8996
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8909
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8916
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8936
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8974
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8976
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8992
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8994
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8998
+      clk: qcom: smd-rpm: Add keepalive_clks for SDM660
+      clk: qcom: smd-rpm: Add keepalive_clks for MDM9607
+      clk: qcom: smd-rpm: Add keepalive_clks for MSM8953
+      clk: qcom: smd-rpm: Add keepalive_clks for SM6125
+      clk: qcom: smd-rpm: Add keepalive_clks for SM6115
+      clk: qcom: smd-rpm: Add keepalive_clks for QCM2290
+      clk: qcom: smd-rpm: Add keepalive_clks for QCS404
 
-diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
-index a83fa62106f0..189d7f7a4548 100644
---- a/fs/gfs2/super.c
-+++ b/fs/gfs2/super.c
-@@ -1474,7 +1474,7 @@ static void gfs2_free_inode(struct inode *inode)
- 	kmem_cache_free(gfs2_inode_cachep, GFS2_I(inode));
- }
- 
--extern void free_local_statfs_inodes(struct gfs2_sbd *sdp)
-+void free_local_statfs_inodes(struct gfs2_sbd *sdp)
- {
- 	struct local_statfs_inode *lsi, *safe;
- 
-@@ -1489,8 +1489,8 @@ extern void free_local_statfs_inodes(struct gfs2_sbd *sdp)
- 	}
- }
- 
--extern struct inode *find_local_statfs_inode(struct gfs2_sbd *sdp,
--					     unsigned int index)
-+struct inode *find_local_statfs_inode(struct gfs2_sbd *sdp,
-+				      unsigned int index)
- {
- 	struct local_statfs_inode *lsi;
- 
+Shawn Guo (2):
+      clk: qcom: smd-rpm: Add .is_enabled hook
+      clk: qcom: smd-rpm: Add .is_prepared hook
+
+ drivers/clk/qcom/clk-smd-rpm.c | 85 +++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 83 insertions(+), 2 deletions(-)
+---
+base-commit: 1acf39ef8f1425cd105f630dc2c7c1d8fff27ed1
+change-id: 20230303-topic-rpmcc_sleep-d67aad9f3012
+
+Best regards,
 -- 
-2.27.0
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
