@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54006AAD76
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 00:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738DC6AAD84
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 00:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjCDX0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 18:26:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59320 "EHLO
+        id S229649AbjCDXhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 18:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjCDX0G (ORCPT
+        with ESMTP id S229455AbjCDXhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 18:26:06 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6305CD33C
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 15:26:05 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id x199so5019240ybg.5
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 15:26:05 -0800 (PST)
+        Sat, 4 Mar 2023 18:37:32 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F72712077
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 15:37:31 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id k10so518688edk.13
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 15:37:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1677972364;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RyFHuSabdXskT7o5KuCkB0maeQkY66+o/DnfFkdhBiE=;
-        b=j5pUyWqIM4qqaXra/q1gm5l+Rrxt3/gxNNbU9bD+iCQfnOBIx1N/hO/J2Owi6e+Cmi
-         ES+7FedXhyFT92k4iOMFTIoAChF6c+cfjEYNN81MN4eFGbTrXPFKezTpupvJrmObaxto
-         msh7zvGEhiokA6mCHqfriXB9wTWrEd2aG4m/L1Gidhr8kk+gR/lq5L1aR87Gb7EcDPdp
-         UUQaH5oALkzqX2vRtsj+/vjs2q1vdiX5MZeUjMYy+dqytpGC3ySDJM/iC/Yd/KvT0xLr
-         lR6CBPvCrAC+XJtY5HqIH7YOb4y5GRjo0He6b8cXC+0XgEku69nOGRuym7vvp9OkGhXl
-         ecJg==
+        d=linux-foundation.org; s=google; t=1677973049;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8+/lbf3pRH4GEnXXO6XgzXlucudkUa6edzWyNE+Dnks=;
+        b=XZhnPUxDdrVyuhYQGEvuqFyLspoLTzdRrYf9kmy9BUAB1BSurTrpDbdw+/DcTzlHx4
+         GLva4noO4jKZUtwiHdx0f6D+q0CXBPZymx7+AnMhZEcvVsXoUirURjHz9N6mssGungAD
+         Pks23WRVCYI7d3e9+a5FePAut1FivnfaQU030=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677972364;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RyFHuSabdXskT7o5KuCkB0maeQkY66+o/DnfFkdhBiE=;
-        b=U02dtLETg86/j4lbKksEUUxnBnIJYwvbCrJpizAw99zasgs7Dqpn7GszSYrFvnUDO1
-         Hxp723Bipq7o4TA0JBwbUduFsTQ+2Ytu2bwtJ3/VNHpKkr796w0HNHo0a90MqlPzUPCk
-         UTICXYl4oVSTGYMlnxNMehaxRRAxuRkSBeYML2IDThZW+d9l/1zDcrwr/HgxL5cftQL6
-         4Civ1ilMoBXnddXiSDG783mxzWZbuJQDHgIDcJ4gumoipUWJodup9s40wwCWAf7TAjJM
-         fDr2VHgYlHiSmqMb65l+Sgyf+l5qTJcCbnYMy1VyFnFOifg6GyiPqes8bLDT/GB1Vku9
-         0wow==
-X-Gm-Message-State: AO0yUKVATYdD8OsKLbGrwuMiQwgxXG9RqIeC7J79fo92W+vaf3647A0Y
-        4LXFbcTwXgkCx1XLKWxAyso44YvCcP0AivFjQrI5/Q==
-X-Google-Smtp-Source: AK7set9MGrcd7OX+jyQL3bPRFDTlcTb8iKtIwFr+cEznVewr5XHLHgIlkxlPYX6Wv26mEDxLxmTUjyIJ2/sYuwcoIW0=
-X-Received: by 2002:a05:6902:524:b0:ab8:1ed9:cfc5 with SMTP id
- y4-20020a056902052400b00ab81ed9cfc5mr3668856ybs.6.1677972364336; Sat, 04 Mar
- 2023 15:26:04 -0800 (PST)
+        d=1e100.net; s=20210112; t=1677973049;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8+/lbf3pRH4GEnXXO6XgzXlucudkUa6edzWyNE+Dnks=;
+        b=3Gj6TXAOQQVl4LMn7lre3hW6B14VxDBaze4a8SYuvt7+DuQ8f8Mp2ym6e1n2yBexam
+         k/inYWLF7j0BvnCWLNrEjokIWY81kUmFxXwCJZqwenYwaw4lGom/7A7vm7cJ1o/tMAfd
+         8KX5GMbTErsuy6kdIUfkV+k+Ow4BU03snYLClMuBJI1S0dRF+M1dkI4v0eGb1TUOrk5i
+         2jPdMv2WhaaKmIGia3ery3X+IuumqedaLfzCh4T0+Q6uw2z0nHn4HYh8DGalyG5XWzkG
+         d2+0uEG3m0dyvRmRJUmNu/7j2Ncz3BdYr2cSA+r+aZU2S23wrDpMP3EZfQEzkCDTFZQm
+         GE7A==
+X-Gm-Message-State: AO0yUKUoPQ0HMBC0TrVmvIC7IsP0bXecTQu0416sCdUGtbmxUvyicOOo
+        dhEI6HIvPPSOlWPpL005rOynTNv6FpYBfZnaBiyk5g==
+X-Google-Smtp-Source: AK7set/t/ssYlKOH37D4BZrP0r+yFa59vYeKtgm1zXGgFe3T//uCPo1jUz3FUH0PhmZOGrIOuqvlAA==
+X-Received: by 2002:a17:907:7604:b0:8de:e66a:ece9 with SMTP id jx4-20020a170907760400b008dee66aece9mr5191295ejc.24.1677973049338;
+        Sat, 04 Mar 2023 15:37:29 -0800 (PST)
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
+        by smtp.gmail.com with ESMTPSA id op28-20020a170906bcfc00b008e309da3253sm2508080ejb.202.2023.03.04.15.37.28
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Mar 2023 15:37:28 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id u9so24492746edd.2
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 15:37:28 -0800 (PST)
+X-Received: by 2002:a17:906:2bc2:b0:8f1:4cc5:f14c with SMTP id
+ n2-20020a1709062bc200b008f14cc5f14cmr2954554ejg.0.1677973048247; Sat, 04 Mar
+ 2023 15:37:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20230303213250.3555716-1-surenb@google.com>
-In-Reply-To: <20230303213250.3555716-1-surenb@google.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Sat, 4 Mar 2023 15:25:53 -0800
-Message-ID: <CAJuCfpG4yM1k-RuJXzm3EpPGuD32hD_O3cLH-wAAEnnWaBKZ6w@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm/khugepaged: fix vm_lock/i_mmap_rwsem inversion in retract_page_tables
-To:     akpm@linux-foundation.org
-Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
-        vbabka@suse.cz, hannes@cmpxchg.org, mgorman@techsingularity.net,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        songliubraving@fb.com, peterx@redhat.com, david@redhat.com,
-        dhowells@redhat.com, hughd@google.com, bigeasy@linutronix.de,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com, rppt@kernel.org,
-        jannh@google.com, shakeelb@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, posk@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com,
-        syzbot+8955a9646d1a48b8be92@syzkaller.appspotmail.com
+References: <20230304131528.4645d19a2ab897fb7518159e@linux-foundation.org>
+ <CAHk-=wj9guryjifHyr26w73ta+kNeoHtGde682Z5N6OSjKu4UQ@mail.gmail.com> <20230304152058.de91bf7abf424383ce31d500@linux-foundation.org>
+In-Reply-To: <20230304152058.de91bf7abf424383ce31d500@linux-foundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 4 Mar 2023 15:37:11 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiHX2NQiVH8uQZ_U8vB=qnzmQHauGAqAkC=4ZWp95ya8w@mail.gmail.com>
+Message-ID: <CAHk-=wiHX2NQiVH8uQZ_U8vB=qnzmQHauGAqAkC=4ZWp95ya8w@mail.gmail.com>
+Subject: Re: [GIT PULL] hotfixes for 6.3-rc1
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Huang, Ying" <ying.huang@intel.com>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,148 +77,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 1:32 PM Suren Baghdasaryan <surenb@google.com> wrote:
+On Sat, Mar 4, 2023 at 3:21=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
+.org> wrote:
 >
-> Internal syscaller on linux-next reported a lock inversion cause by
-> vm_lock being taken after i_mmap_rwsem:
->
-> ======================================================
-> WARNING: possible circular locking dependency detected
-> 6.2.0-next-20230301-syzkaller #0 Not tainted
-> ------------------------------------------------------
-> syz-executor115/5084 is trying to acquire lock:
-> ffff888078307a90 (&vma->vm_lock->lock){++++}-{3:3}, at: vma_start_write include/linux/mm.h:678 [inline]
-> ffff888078307a90 (&vma->vm_lock->lock){++++}-{3:3}, at: retract_page_tables mm/khugepaged.c:1826 [inline]
-> ffff888078307a90 (&vma->vm_lock->lock){++++}-{3:3}, at: collapse_file+0x4fa5/0x5980 mm/khugepaged.c:2204
->
-> but task is already holding lock:
-> ffff88801f93efa8 (&mapping->i_mmap_rwsem){++++}-{3:3}, at: i_mmap_lock_write include/linux/fs.h:468 [inline]
-> ffff88801f93efa8 (&mapping->i_mmap_rwsem){++++}-{3:3}, at: retract_page_tables mm/khugepaged.c:1745 [inline]
-> ffff88801f93efa8 (&mapping->i_mmap_rwsem){++++}-{3:3}, at: collapse_file+0x3da6/0x5980 mm/khugepaged.c:2204
->
-> retract_page_tables takes i_mmap_rwsem before exclusive mmap_lock, which
-> is inverse to normal order. Deadlock is avoided by try-locking mmap_lock
-> and skipping on failure to obtain it. Locking the VMA should use the same
-> locking pattern to avoid this lock inversion.
->
-> Fixes: 44a83f2083bd ("mm/khugepaged: write-lock VMA while collapsing a huge page")
-> Reported-by: syzbot+8955a9646d1a48b8be92@syzkaller.appspotmail.com
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  include/linux/mm.h | 39 ++++++++++++++++++++++++++++-----------
->  mm/khugepaged.c    |  5 ++++-
->  2 files changed, 32 insertions(+), 12 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 1b9be34a24fb..5f16263d176d 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -676,18 +676,23 @@ static inline void vma_end_read(struct vm_area_struct *vma)
->         rcu_read_unlock();
->  }
->
-> -static inline void vma_start_write(struct vm_area_struct *vma)
-> +static bool __is_vma_write_locked(struct vm_area_struct *vma, int *mm_lock_seq)
->  {
-> -       int mm_lock_seq;
-> -
->         mmap_assert_write_locked(vma->vm_mm);
->
->         /*
->          * current task is holding mmap_write_lock, both vma->vm_lock_seq and
->          * mm->mm_lock_seq can't be concurrently modified.
->          */
-> -       mm_lock_seq = READ_ONCE(vma->vm_mm->mm_lock_seq);
-> -       if (vma->vm_lock_seq == mm_lock_seq)
-> +       *mm_lock_seq = READ_ONCE(vma->vm_mm->mm_lock_seq);
-> +       return (vma->vm_lock_seq == *mm_lock_seq);
-> +}
-> +
-> +static inline void vma_start_write(struct vm_area_struct *vma)
-> +{
-> +       int mm_lock_seq;
-> +
-> +       if (__is_vma_write_locked(vma, &mm_lock_seq))
->                 return;
->
->         down_write(&vma->vm_lock->lock);
-> @@ -695,14 +700,26 @@ static inline void vma_start_write(struct vm_area_struct *vma)
->         up_write(&vma->vm_lock->lock);
->  }
->
-> +static inline bool vma_try_start_write(struct vm_area_struct *vma)
-> +{
-> +       int mm_lock_seq;
-> +
-> +       if (__is_vma_write_locked(vma, &mm_lock_seq))
-> +               return true;
-> +
-> +       if (!down_write_trylock(&vma->vm_lock->lock))
-> +               return false;
-> +
-> +       vma->vm_lock_seq = mm_lock_seq;
-> +       up_write(&vma->vm_lock->lock);
-> +       return true;
-> +}
-> +
->  static inline void vma_assert_write_locked(struct vm_area_struct *vma)
->  {
-> -       mmap_assert_write_locked(vma->vm_mm);
-> -       /*
-> -        * current task is holding mmap_write_lock, both vma->vm_lock_seq and
-> -        * mm->mm_lock_seq can't be concurrently modified.
-> -        */
-> -       VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
-> +       int mm_lock_seq;
-> +
-> +       VM_BUG_ON_VMA(!__is_vma_write_locked(vma, &mm_lock_seq), vma);
->  }
+> Ah. Ying did it this way:
 
-Hi Andrew,
-I missed vma_try_start_write() definition for CONFIG_PER_VMA_LOCK=n
-configuration. Could you please patch this with the following?:
+Yeah, I saw that patch flying past, but I actually think that it only
+silences the warning almost by mistake. There's nothing fundamental in
+there that a compiler wouldn't just follow across two assignments, and
+it just happens to now not trigger any more.
 
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -740,6 +740,8 @@ static inline bool vma_start_read(struct
-vm_area_struct *vma)
-  { return false; }
- static inline void vma_end_read(struct vm_area_struct *vma) {}
- static inline void vma_start_write(struct vm_area_struct *vma) {}
-+static inline bool vma_try_start_write(struct vm_area_struct *vma) {
-return true; }
- static inline void vma_assert_write_locked(struct vm_area_struct *vma) {}
+Assigning to a union entry is a more fundamental operation in that
+respect. Not that the compiler still doesn't see that it's assigning a
+value that in the end is not really type compatible, so a different
+version of gcc could still warn, but at that point I feel like it's
+more of an actual compiler bug than just "oh, the compiler didn't
+happen to follow the cast through a temporary".
 
-or should I send a separate patch?
-Thanks,
-Suren.
-
-
->
->  static inline void vma_mark_detached(struct vm_area_struct *vma, bool detached)
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index c64e01f03f27..408fed42c9f5 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1795,6 +1795,10 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
->                 result = SCAN_PTE_MAPPED_HUGEPAGE;
->                 if ((cc->is_khugepaged || is_target) &&
->                     mmap_write_trylock(mm)) {
-> +                       /* trylock for the same lock inversion as above */
-> +                       if (!vma_try_start_write(vma))
-> +                               goto unlock_next;
-> +
->                         /*
->                          * Re-check whether we have an ->anon_vma, because
->                          * collapse_and_free_pmd() requires that either no
-> @@ -1823,7 +1827,6 @@ static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
->                                 result = SCAN_PTE_UFFD_WP;
->                                 goto unlock_next;
->                         }
-> -                       vma_start_write(vma);
->                         collapse_and_free_pmd(mm, vma, addr, pmd);
->                         if (!cc->is_khugepaged && is_target)
->                                 result = set_huge_pmd(vma, addr, pmd, hpage);
-> --
-> 2.40.0.rc0.216.gc4246ad0f0-goog
->
+            Linus
