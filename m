@@ -2,102 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D486AA840
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 06:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D1146AA84E
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 07:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjCDF70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 00:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S229498AbjCDG0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 01:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDF7Y (ORCPT
+        with ESMTP id S229437AbjCDG0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 00:59:24 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0492113F3;
-        Fri,  3 Mar 2023 21:59:22 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id g3so18532495eda.1;
-        Fri, 03 Mar 2023 21:59:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cZdOR2mQrM2Yh/ZdXBDU9hVL0HlZsZVueh/CEeqYueU=;
-        b=Spc5p3ovs3CEvWjvB15Lsxi3xGjMUIlNSYNFAcggChHEqyh1XQIV3ghzRysFCQdwot
-         B+Pzk25ozrx9jxO/cugIqFD/r06/RjYzQnBpUsHfl/0KYoxab8FIKN/6rnu8co2Z7lxk
-         Mz/CVbIsMog2abpNbYK7pFe96zz3t3Rm2GralvuU2HiegQXFXYRGe79tiCnlqDK3Rrl6
-         8VS8m3lEou653ypRcub4hORgngyVE/4CfwaI/6Ymv9PPP20xwlEC+gP0A5TBq1L9JjQx
-         WqrbysUxMMTh2VK+L+GDogxIkZBJXxBrm5+58547IY4AFuOrd0rJYXORJ4HKz5lJfuqe
-         f6og==
+        Sat, 4 Mar 2023 01:26:53 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A14C25B8C
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 22:26:51 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id h1-20020a92d841000000b0031b4d3294dfso1564041ilq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 22:26:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cZdOR2mQrM2Yh/ZdXBDU9hVL0HlZsZVueh/CEeqYueU=;
-        b=1MuB48RNZVENhO0ftSViFZkYdobpOJHd8Ci6EpOVOC3LpyOnWFXT/qKLL2gebV4/bW
-         dFH2fwgSmMUq2juKuEfgHz+42srJOKsAB2WaXKouKFPnFtqDpXQCxwBo2HWQo0LIG9md
-         6iLV/8TZMK5Box7rVwLNujUmNNumYDx1bXaKGjabrJQbWn5pHOVcIMQwLQoyCRgMKKoz
-         8PN5nH8dD923YrSJ/pnjh1u1Fu9MpkDf4tZSeV2tGbozbHjkyMX1Xmzgr6EvyHoTfH2Y
-         KfSWMfftRUn9Ha7eroXJMeQQHYw4n4SNpybYlX/Tm1DSId/L+GP8TgImDMoEGdReuFUA
-         nJhw==
-X-Gm-Message-State: AO0yUKVTsG+fgkgOFehh299C4C537/Gx2y0C6Sb20RvMoyupXQAptkzT
-        i5eAWqtEjX9OOMcOkR0UXPs=
-X-Google-Smtp-Source: AK7set8UXUFWR2ui/AgXkHFAvLBJPzNPX6LhnlTox4YZzu7Cyy9qpwNmgZWB6VYga3nqRk1K4I90aA==
-X-Received: by 2002:a05:6402:510:b0:4bb:83fa:5e83 with SMTP id m16-20020a056402051000b004bb83fa5e83mr4125414edv.12.1677909561087;
-        Fri, 03 Mar 2023 21:59:21 -0800 (PST)
-Received: from [192.168.0.173] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id v12-20020a50c40c000000b004bb810e0b87sm2030841edf.39.2023.03.03.21.59.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Mar 2023 21:59:20 -0800 (PST)
-Message-ID: <5bd48f09-f7ba-e5b3-60ba-49ecd1493e36@gmail.com>
-Date:   Sat, 4 Mar 2023 07:59:16 +0200
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8b1/t8Nqjt+49ocjKAgJWd+UAu49XM23tOZbPtJ+WS4=;
+        b=UHmyGj2r2Jy7cOHLv4tdHRbovU+9w/E9LAedBjOelO07oA7we4BEGW2faotyQPBpOb
+         /ZrPA9Md2eVCWIziDnd/iY9t+2/ekZOes/KAsKQSapj8fkjv7bU/EzTGY6iTe1e6e6GQ
+         0RjYyTXc1PWWV24FQDvEcCUO1djy/FIp488N6zF9d++0WFfZEhCmNYri8CVSyyQC1eJ3
+         KgMXmkW4NRCvR9t8OItTJ7AKf5en1ngqZkHXMjOMJOkYjwzdIUSUdcoOkNqM5O9eLw4E
+         Aacw5eVqQQNCwaNxzok35kFc9b80BwjGTEWWiXlCuCRUtD6vIdDemO4yBRYSU09HCyxM
+         K3pw==
+X-Gm-Message-State: AO0yUKVz5OYYRqBVBtCfrzPa3ceDQdn38ZsaqeBPmeN4+OBF5ccAhwR8
+        di+IjfbE64fq1HWc+0l7bGo/R4eyI/Pll0m3I2zQdOQAAIsF
+X-Google-Smtp-Source: AK7set9CQ8z4oNv4G2Y3ici09DGsJT+UCgWrGetPv+TmPhKS/WqfKnJqBzmuJaUF3KlckmLLFPxuiGgUbbtIpDiu8yOqvqOxKxae
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] spi: Replace `dummy.nbytes` with `dummy.ncycles`
-To:     Sergiu Moga <sergiu.moga@microchip.com>, pratyush@kernel.org,
-        michael@walle.cc, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, broonie@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        chin-ting_kuo@aspeedtech.com, clg@kaod.org, joel@jms.id.au,
-        andrew@aj.id.au, kdasu.kdev@gmail.com, fancer.lancer@gmail.com,
-        han.xu@nxp.com, john.garry@huawei.com, matthias.bgg@gmail.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        haibo.chen@nxp.com, yogeshgaur.83@gmail.com, heiko@sntech.de,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        michal.simek@xilinx.com, tkuw584924@gmail.com,
-        Takahiro Kuwano <Takahiro.Kuwano@infineon.com>,
-        tudor.ambarus@linaro.org
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-mediatek@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-References: <20220911174551.653599-1-sergiu.moga@microchip.com>
-From:   Tudor Ambarus <tudor.ambarus@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20220911174551.653599-1-sergiu.moga@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:36ea:b0:3ec:46d4:e15 with SMTP id
+ t42-20020a05663836ea00b003ec46d40e15mr3356235jau.3.1677911210494; Fri, 03 Mar
+ 2023 22:26:50 -0800 (PST)
+Date:   Fri, 03 Mar 2023 22:26:50 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000aa920505f60d25ad@google.com>
+Subject: [syzbot] [bluetooth?] KASAN: slab-use-after-free Read in hci_conn_hash_flush
+From:   syzbot <syzbot+8bb72f86fc823817bc5d@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-Sergiu changed his interests, I'm going to send a new version of this
-patch. We really need the conversion in SPI NOR as there are flashes
-that require a number of dummy cycles that is not multiple of 8.
+syzbot found the following issue on:
 
-Cheers,
-ta
+HEAD commit:    1acf39ef8f14 Add linux-next specific files for 20230303
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=115b8e38c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e4da7f0aef5d2eb8
+dashboard link: https://syzkaller.appspot.com/bug?extid=8bb72f86fc823817bc5d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/721c5c42a073/disk-1acf39ef.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c5ca5353e61a/vmlinux-1acf39ef.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/29f477775fe9/bzImage-1acf39ef.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8bb72f86fc823817bc5d@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-use-after-free in hci_conn_hash_flush+0x23c/0x260 net/bluetooth/hci_conn.c:2437
+Read of size 8 at addr ffff88808d354000 by task syz-executor.1/6401
+
+CPU: 1 PID: 6401 Comm: syz-executor.1 Not tainted 6.2.0-next-20230303-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
+ print_report mm/kasan/report.c:430 [inline]
+ kasan_report+0x11c/0x130 mm/kasan/report.c:536
+ hci_conn_hash_flush+0x23c/0x260 net/bluetooth/hci_conn.c:2437
+ hci_dev_close_sync+0x5fb/0x1200 net/bluetooth/hci_sync.c:4889
+ hci_dev_do_close+0x31/0x70 net/bluetooth/hci_core.c:554
+ hci_unregister_dev+0x1ce/0x580 net/bluetooth/hci_core.c:2702
+ vhci_release+0x80/0xf0 drivers/bluetooth/hci_vhci.c:568
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb42/0x2b60 kernel/exit.c:869
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
+ __do_sys_exit_group kernel/exit.c:1030 [inline]
+ __se_sys_exit_group kernel/exit.c:1028 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1028
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fea0308c0f9
+Code: Unable to access opcode bytes at 0x7fea0308c0cf.
+RSP: 002b:00007fff14dbd268 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fff14dbd410 RCX: 00007fea0308c0f9
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000043
+RBP: 0000000000000000 R08: 0000000000000025 R09: 00007fff14dbd410
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007fea030e7aba
+R13: 000000000000001c R14: 000000000000000f R15: 00007fff14dbd450
+ </TASK>
+
+Allocated by task 6988:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:333 [inline]
+ __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
+ kmalloc include/linux/slab.h:580 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ hci_conn_add+0xb8/0x15c0 net/bluetooth/hci_conn.c:962
+ hci_connect_sco+0x42c/0xac0 net/bluetooth/hci_conn.c:1607
+ sco_connect net/bluetooth/sco.c:255 [inline]
+ sco_sock_connect+0x350/0xa60 net/bluetooth/sco.c:598
+ __sys_connect_file+0x153/0x1a0 net/socket.c:2004
+ __sys_connect+0x165/0x1a0 net/socket.c:2021
+ __do_sys_connect net/socket.c:2031 [inline]
+ __se_sys_connect net/socket.c:2028 [inline]
+ __x64_sys_connect+0x73/0xb0 net/socket.c:2028
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 6401:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:521
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ __kmem_cache_free+0xaf/0x2d0 mm/slub.c:3800
+ device_release+0xa3/0x240 drivers/base/core.c:2436
+ kobject_cleanup lib/kobject.c:681 [inline]
+ kobject_release lib/kobject.c:712 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1c2/0x4d0 lib/kobject.c:729
+ put_device+0x1f/0x30 drivers/base/core.c:3697
+ hci_conn_del+0x212/0xa70 net/bluetooth/hci_conn.c:1112
+ hci_conn_del+0x7df/0xa70 net/bluetooth/hci_conn.c:1071
+ hci_conn_hash_flush+0x19b/0x260 net/bluetooth/hci_conn.c:2441
+ hci_dev_close_sync+0x5fb/0x1200 net/bluetooth/hci_sync.c:4889
+ hci_dev_do_close+0x31/0x70 net/bluetooth/hci_core.c:554
+ hci_unregister_dev+0x1ce/0x580 net/bluetooth/hci_core.c:2702
+ vhci_release+0x80/0xf0 drivers/bluetooth/hci_vhci.c:568
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0xb42/0x2b60 kernel/exit.c:869
+ do_group_exit+0xd4/0x2a0 kernel/exit.c:1019
+ __do_sys_exit_group kernel/exit.c:1030 [inline]
+ __se_sys_exit_group kernel/exit.c:1028 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1028
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Last potentially related work creation:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:491
+ insert_work+0x48/0x350 kernel/workqueue.c:1361
+ __queue_work+0x5fd/0x1170 kernel/workqueue.c:1524
+ __queue_delayed_work+0x1c8/0x270 kernel/workqueue.c:1672
+ queue_delayed_work_on+0x109/0x120 kernel/workqueue.c:1708
+ queue_delayed_work include/linux/workqueue.h:519 [inline]
+ hci_conn_drop include/net/bluetooth/hci_core.h:1417 [inline]
+ hci_conn_drop include/net/bluetooth/hci_core.h:1387 [inline]
+ sco_chan_del+0x1f8/0x4f0 net/bluetooth/sco.c:169
+ __sco_sock_close+0x178/0x740 net/bluetooth/sco.c:431
+ sco_sock_close net/bluetooth/sco.c:446 [inline]
+ sco_sock_release+0x81/0x360 net/bluetooth/sco.c:1254
+ __sock_release+0xcd/0x290 net/socket.c:651
+ sock_close+0x1c/0x20 net/socket.c:1393
+ __fput+0x27c/0xa90 fs/file_table.c:321
+ task_work_run+0x16f/0x270 kernel/task_work.c:179
+ get_signal+0x1c7/0x25b0 kernel/signal.c:2635
+ arch_do_signal_or_restart+0x79/0x5c0 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop kernel/entry/common.c:168 [inline]
+ exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:203
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
+ syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:296
+ do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88808d354000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 0 bytes inside of
+ freed 4096-byte region [ffff88808d354000, ffff88808d355000)
+
+The buggy address belongs to the physical page:
+page:ffffea000234d400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x8d350
+head:ffffea000234d400 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000010200 ffff888012442140 dead000000000100 dead000000000122
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 5125, tgid 5125 (syz-executor.2), ts 331563645285, free_ts 0
+ prep_new_page mm/page_alloc.c:2492 [inline]
+ get_page_from_freelist+0xf75/0x2ad0 mm/page_alloc.c:4256
+ __alloc_pages+0x1cb/0x5c0 mm/page_alloc.c:5522
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2283
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x28e/0x380 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ __kmem_cache_alloc_node+0x136/0x320 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:966 [inline]
+ __kmalloc+0x4a/0xd0 mm/slab_common.c:980
+ kmalloc include/linux/slab.h:584 [inline]
+ tomoyo_realpath_from_path+0xc3/0x600 security/tomoyo/realpath.c:251
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_path_perm+0x22d/0x430 security/tomoyo/file.c:822
+ security_inode_getattr+0xd3/0x140 security/security.c:1375
+ vfs_getattr fs/stat.c:167 [inline]
+ vfs_fstat+0x47/0xb0 fs/stat.c:192
+ __do_sys_newfstat+0x7a/0xf0 fs/stat.c:456
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff88808d353f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88808d353f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff88808d354000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                   ^
+ ffff88808d354080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88808d354100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
