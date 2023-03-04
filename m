@@ -2,134 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747906AA7C1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 04:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CA16AA7C2
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 04:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjCDDHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 22:07:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S229658AbjCDDKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 22:10:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDDHl (ORCPT
+        with ESMTP id S229437AbjCDDKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 22:07:41 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DAB1ABEC;
-        Fri,  3 Mar 2023 19:07:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677899259; x=1709435259;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=p9wuUBRJAuSisbmC0MWSa/lJzRmQ5d5xrSZ5zn9hbAk=;
-  b=YsMIL3I6IQxHiWbUS2LYvMpQ4yxeMtwwN00qZVqnI8rkENF0Fc/MHdRU
-   UNnDiv2WQ50giFiNIW5WAvFpd5hnWShewxzRViEUVmiu1VWoGZ1blSccW
-   kxHeH2aSiZ4PkHmilrCerzzvw9C3Z17eNw3WN2OLG32P4ZFSnn49FvHMj
-   88aGKqJQ/XieIIrH5gmMiOmskeGtTueAUqAQ9xs6M5D78UNpIHY4mghJq
-   a5rhM7fcbDlPzBjqwjVtZxrZjo70/nkR9V5NEMQ7GInBenCQGJvmDTgyZ
-   eYNmusTEneDxNk8FvwFdSWOe1srH3Qu2opsSjMRcl8Roniu6RYLdtkTjm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="421485942"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="421485942"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 19:07:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="744450365"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="744450365"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 03 Mar 2023 19:07:32 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYIF9-0001oW-2T;
-        Sat, 04 Mar 2023 03:07:31 +0000
-Date:   Sat, 4 Mar 2023 11:06:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Michael Walle <michael@walle.cc>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Kory Maincent <kory.maincent@bootlin.com>,
-        thomas.petazzoni@bootlin.com, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Jie Wang <wangjie125@huawei.com>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Wolfram Sang <wsa-dev@sang-engineering.com>,
-        Wang Yufen <wangyufen@huawei.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Oleksij Rempel <linux@rempel-privat.de>
-Subject: Re: [PATCH v2 3/4] net: Let the active time stamping layer be
- selectable.
-Message-ID: <202303041027.GxlLyldN-lkp@intel.com>
-References: <20230303164248.499286-4-kory.maincent@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230303164248.499286-4-kory.maincent@bootlin.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 3 Mar 2023 22:10:40 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDA7D30D
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 19:10:39 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id h14-20020aa786ce000000b005a89856900eso2258338pfo.14
+        for <linux-kernel@vger.kernel.org>; Fri, 03 Mar 2023 19:10:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1677899439;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s3BTWvMS4HbVHXG0hGuYCfsLy+8T8n3QOZ6K5OLKcZQ=;
+        b=PYqykcRThs1t2MTEZDoAFl2N5+VjqJGMnW4HMnvWS5uOUbY6+X687w0oTX07D/azgz
+         +9MjpV47JZw4tR4ecQ3S7yLACiD9m8QM1crbz18tu9WFwPuTN7MvLN8jkGt9DMdWbk55
+         oju/xXXYD5qYZO6V9v5FSJWt9KBOZ5Kb8HkaIq8EbdSam0foeEdV9qIH0UYc8w1SyF/E
+         Kevi/X8l+7oEpr3p9BGJvNBLne2WwG4/C42JbHnPNh76yw9vpytxaQBOEXnPEuWb6+Fk
+         wxrLYk5D+aJjgWOBbt9ao0wkkJ1EM91CqdH5sHAUKGqpMm2xewGwnREgxkg/7lL5tLC8
+         oVKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677899439;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=s3BTWvMS4HbVHXG0hGuYCfsLy+8T8n3QOZ6K5OLKcZQ=;
+        b=i96JRE2SCJ705mdrEwxMr3d0dfYMvAPWxf/LXxdmKoWVWU6RaASOxssgXcNU7rj1jv
+         ioUQUyykppJDn5wQS9ppDdR5uxTpHP3FyWgiSmr88PB21t30/omL01ydUagjcNZjUDv5
+         QETvvudxNDVs5O8VRm3hm/VkzIpCgqs9zTT7sTCd4k7HLHNVyic+34j82FY1Mqju1qe5
+         x2bG0/VmyIJ/YQA+VrSr6u3ZYhb+s10bICHbRCRgLZkIW7TFFur3P9D/IxZA8aC5ol4e
+         GVnPWfiXURgDlMszWy83ZRRKMznXoLc0SB9+Fi1qic0AlZQFd0w/Lo3Mm+AIhr90j04t
+         JkrA==
+X-Gm-Message-State: AO0yUKW+YD/mKNLmIgf+DBCZDIKEAgORuZfGMjNe5Aw2x96gdlEUlsQt
+        gKJLYdl2B+fPZrPkoIKiaQ3ZHHtJIh60p7L+yJnPXuWVVhmnhPAy8b7M7f8xHiUiy2zJ9Thml0Q
+        E0TyVBhz+IjWeOIaueF5ehMXZewx/8ixM4sPKwYghymym4/3JRLovr6dcpqsP5w05/aki6OA=
+X-Google-Smtp-Source: AK7set84JZ0dONAReFiSD1tjandDarkPmUACRbw07MLU8dza9zwdqMI1V7uoPqo7C/3teqgwwB046pAfYFxb
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a17:903:2587:b0:19a:9f86:adab with SMTP id
+ jb7-20020a170903258700b0019a9f86adabmr1474639plb.7.1677899439077; Fri, 03 Mar
+ 2023 19:10:39 -0800 (PST)
+Date:   Sat,  4 Mar 2023 03:10:29 +0000
+In-Reply-To: <20230302062741.483079-1-jstultz@google.com>
+Mime-Version: 1.0
+References: <20230302062741.483079-1-jstultz@google.com>
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230304031029.3037914-1-jstultz@google.com>
+Subject: [PATCH v2] pstore: Revert pmsg_lock back to a normal mutex
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <jstultz@google.com>, Wei Wang <wvw@google.com>,
+        Midas Chien <midaschieh@google.com>,
+        "=?UTF-8?q?Chunhui=20Li=20=28=E6=9D=8E=E6=98=A5=E8=BE=89=29?=" 
+        <chunhui.li@mediatek.com>, Steven Rostedt <rostedt@goodmis.org>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Tony Luck <tony.luck@intel.com>, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Köry,
+This reverts commit 76d62f24db07f22ccf9bc18ca793c27d4ebef721.
 
-I love your patch! Yet something to improve:
+So while priority inversion on the pmsg_lock is an occasional
+problem that an rt_mutex would help with, in uses where logging
+is writing to pmsg heavily from multiple threads, the pmsg_lock
+can be heavily contended.
 
-[auto build test ERROR on v6.2]
-[also build test ERROR on next-20230303]
-[cannot apply to net/master net-next/master horms-ipvs/master linus/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Normal mutexes can do adaptive spinning, which keeps the
+contention overhead fairly low maybe adding on the order of 10s
+of us delay waiting, but the slowpath w/ rt_mutexes makes the
+blocked tasks sleep & wake. This makes matters worse when there
+is heavy contentention, as it just allows additional threads to
+run and line up to try to take the lock.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/K-ry-Maincent/net-ethtool-Refactor-identical-get_ts_info-implementations/20230304-004527
-patch link:    https://lore.kernel.org/r/20230303164248.499286-4-kory.maincent%40bootlin.com
-patch subject: [PATCH v2 3/4] net: Let the active time stamping layer be selectable.
-config: csky-defconfig (https://download.01.org/0day-ci/archive/20230304/202303041027.GxlLyldN-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/00a0656f9b222cfeb7c1253a4a2771b1f63b5c9b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review K-ry-Maincent/net-ethtool-Refactor-identical-get_ts_info-implementations/20230304-004527
-        git checkout 00a0656f9b222cfeb7c1253a4a2771b1f63b5c9b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
+It devolves to a worse case senerio where the lock acquisition
+and scheduling overhead dominates, and each thread is waiting on
+the order of ~ms to do ~us of work.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303041027.GxlLyldN-lkp@intel.com/
+Obviously, having tons of threads all contending on a single
+lock for logging is non-optimal, so the proper fix is probably
+reworking pstore pmsg to have per-cpu buffers so we don't have
+contention.
 
-All errors (new ones prefixed by >>):
+But in the short term, lets revert the change to the rt_mutex
+and go back to normal mutexes to avoid a potentially major
+performance regression.
 
-   csky-linux-ld: net/core/dev_ioctl.o: in function `dev_ifsioc':
->> dev_ioctl.c:(.text+0x292): undefined reference to `phy_mii_ioctl'
->> csky-linux-ld: dev_ioctl.c:(.text+0x370): undefined reference to `phy_do_ioctl'
->> csky-linux-ld: dev_ioctl.c:(.text+0x374): undefined reference to `phy_mii_ioctl'
+Cc: Wei Wang <wvw@google.com>
+Cc: Midas Chien<midaschieh@google.com>
+Cc: "Chunhui Li (=E6=9D=8E=E6=98=A5=E8=BE=89)" <chunhui.li@mediatek.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Anton Vorontsov <anton@enomsg.org>
+Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc: Tony Luck <tony.luck@intel.com>
+Cc: kernel-team@android.com
+Fixes: 76d62f24db07 ("pstore: Switch pmsg_lock to an rt_mutex to avoid prio=
+rity inversion")
+Reported-by: "Chunhui Li (=E6=9D=8E=E6=98=A5=E8=BE=89)" <chunhui.li@mediate=
+k.com>
+Tested-by: Chunhui Li <chunhui.li@mediatek.com>
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+I know Steven is working on a fix to address the rtmutex not
+spinning, but as the earlier version of it didn't resolve the
+issue for Chunhui Li, I wanted to resend this out again w/
+Tested-by tags, so it is ready to go if needed. I am looking
+to get a local reproducer so I can help validate Steven's
+efforts.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+v2:
+* Fix quoting around Chunhui Li's email name (so they are actually
+  cc'ed)
+* Added tested by tag
+---
+ fs/pstore/pmsg.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/fs/pstore/pmsg.c b/fs/pstore/pmsg.c
+index ab82e5f05346..b31c9c72d90b 100644
+--- a/fs/pstore/pmsg.c
++++ b/fs/pstore/pmsg.c
+@@ -7,10 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/fs.h>
+ #include <linux/uaccess.h>
+-#include <linux/rtmutex.h>
+ #include "internal.h"
+=20
+-static DEFINE_RT_MUTEX(pmsg_lock);
++static DEFINE_MUTEX(pmsg_lock);
+=20
+ static ssize_t write_pmsg(struct file *file, const char __user *buf,
+ 			  size_t count, loff_t *ppos)
+@@ -29,9 +28,9 @@ static ssize_t write_pmsg(struct file *file, const char _=
+_user *buf,
+ 	if (!access_ok(buf, count))
+ 		return -EFAULT;
+=20
+-	rt_mutex_lock(&pmsg_lock);
++	mutex_lock(&pmsg_lock);
+ 	ret =3D psinfo->write_user(&record, buf);
+-	rt_mutex_unlock(&pmsg_lock);
++	mutex_unlock(&pmsg_lock);
+ 	return ret ? ret : count;
+ }
+=20
+--=20
+2.40.0.rc0.216.gc4246ad0f0-goog
+
