@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7256AA864
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 07:36:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C596AA867
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 07:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjCDGgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 01:36:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38470 "EHLO
+        id S229586AbjCDGgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 01:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCDGgD (ORCPT
+        with ESMTP id S229655AbjCDGgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 01:36:03 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3D3559E8;
-        Fri,  3 Mar 2023 22:35:43 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id v11so4976409plz.8;
-        Fri, 03 Mar 2023 22:35:43 -0800 (PST)
+        Sat, 4 Mar 2023 01:36:14 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1F35B5D4;
+        Fri,  3 Mar 2023 22:35:53 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so8351997pjh.0;
+        Fri, 03 Mar 2023 22:35:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677911742;
+        d=gmail.com; s=20210112; t=1677911753;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uWZVzjzMOpNR5BEvh4Q6TcLUcrqDcqkAnRC7oIHscP0=;
-        b=adK1MiVmokR1e6iM6K4RXBUMAJKcT+QxI3oLqEoN4zt7DWHIuCo5xkW49SnFUHPBmN
-         ai1YvUYSm03E1bUq/evZzKWmOOMyWUVsCnGO+Qj/OWznzOcfd86Y9DkmQEdVB9RGh6sP
-         GzKY0MA9IU0TynNzZmXQAgoAZAdZPtLwHBUkCi2mWrskupa9czRFP+Z1pZPl6L7tT3WS
-         zOPnY6AYWXu+n0Volso4shrP+HCCL5xLiG79LjyNBiX66eqDfGLhd+NdLiQxp46bHcxr
-         3w/BYTvJImk1rnhP4HlDuV3CfS+7/65wwh+H9Po3lqDS9OUn+JlMyugPjj3uErkAHmMA
-         tMkw==
+        bh=cGsqutyALv7zzkKlKZSw6z7zA7BQ8DDsuhwdYZVmVZE=;
+        b=IYIzTm1mKXIlkTu3zFBDs2TE3iNzgZaIFNGqOZnCuC2GiapOkS8dzDJqvsOGLw2nYH
+         Z3J0frXxsUGXcxvFqoe3q+AD9sBBgc7ncWN0db7FcrBdZ8xs/5lxHjc1IDT0Cm/xtauc
+         1Gs4QkwSb5EOj5U/bagxDX5a5vsnhvWMdJ8R24yYs19NSTxpI/eyanVl8z2FeklCG+wW
+         i+ClpT91mzYGf4hFVG+B0za4ZJuiO0tRka4kgXheS1U+xUHK3lJ6bez6X1Wbl1tQJm8G
+         VE5mD/eYIdsuh/Pc0H5iupSNnWopz3pQRsVkSqtBuNjZpw1NcI+AZMpAPg8UnQjEt2US
+         Dqeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677911742;
+        d=1e100.net; s=20210112; t=1677911753;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uWZVzjzMOpNR5BEvh4Q6TcLUcrqDcqkAnRC7oIHscP0=;
-        b=l1QgBVTxDaYMDsHzQUiGk8G/Oz7Nn4M+fXmOXKSd5Adv5sfsLv0zcWegOUCWWpaMqz
-         YjGxLh/Pb6nzx2rWp3dRksY5UfuaVeIJfCeomW0qcQVCHUCo8SGWv3gLAVhRqhtAMz5d
-         GdhvmerROoa8ozoglbvYonqSarBX8pHdgVUA2Rjhk5NQ/oaedY4G6tMBh0m/mb4qGUTB
-         I1vL4W3SQ27NcBmCCe+f9yADkmTQvQiNZFZ1mQfvfdRUzeWGNf9n7kbduKne7RMFGn7V
-         0wx2fPnns0K8afTjCxP1DwMM3C8OwX5A7K3L3PtyknP6woQpoEA+/IlVXqsl5VSLIqjF
-         Ueqw==
-X-Gm-Message-State: AO0yUKVuzEx8OfFskhYLKrZdSitDh90Qe25vBfjS9tvdwbK7w8CKelLN
-        N4ui2YUQh7JfDXudiPCMSI8=
-X-Google-Smtp-Source: AK7set+6oHOjZvq6OpDCtSc2BkeVnfI7sfHZT/X7/kcTexvxStEFlhM3eCFBS73Eo8eA8WOF2QONLw==
-X-Received: by 2002:a17:902:b68a:b0:19e:98fe:856b with SMTP id c10-20020a170902b68a00b0019e98fe856bmr2521131pls.24.1677911742467;
-        Fri, 03 Mar 2023 22:35:42 -0800 (PST)
+        bh=cGsqutyALv7zzkKlKZSw6z7zA7BQ8DDsuhwdYZVmVZE=;
+        b=OuZcXZb7STmxQZ8zO4uTBS26hKUkmPP9u7T2tXUDFYKKLGTmGDIbLmE/RRWEA5AKCi
+         /Hc4RByawQ21fwtNsBXWo/WvUeQh24ZpBUolq3UzkPdeoGROaYSByHDD6NyQjT5bfzHm
+         WJQwnuRzVFoyBgtOJxVjT7NhMo6viB8lLU7ubFSve8sqHQbLUEkU87kUCUZGF+nsMon8
+         k/sdW7M3rvK0ua0BzTw1qTJX5xUQJjyCI84WaB0+twXUV2yQ/TMmo79pywb8Hw9qj+PZ
+         rw/VyB+vrkQKCVMcf2cuiN0p2Vybo64nhgOUPCaf50vAEWhS/aZCItdIWn7fay/1mXxF
+         C+bA==
+X-Gm-Message-State: AO0yUKVp5+sG9loQz+UcQTA0ulQeLZbwhI+/L3gJFuafggrDyt2EkNF1
+        1K+yFnVRqlRrjE1n+c5pwnE=
+X-Google-Smtp-Source: AK7set8RmkY/3q/RROCH7gIAnqHIb8K6PQu9HkpUHAHGr7YE+iiORPpS6OC3YT13LvY1kJy37+/N3w==
+X-Received: by 2002:a17:903:24f:b0:19c:c8c8:b545 with SMTP id j15-20020a170903024f00b0019cc8c8b545mr4785536plh.50.1677911752853;
+        Fri, 03 Mar 2023 22:35:52 -0800 (PST)
 Received: from y.ha.lan ([104.28.245.199])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b0019aa6bf4450sm2520938plg.188.2023.03.03.22.35.37
+        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b0019aa6bf4450sm2520938plg.188.2023.03.03.22.35.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Mar 2023 22:35:42 -0800 (PST)
+        Fri, 03 Mar 2023 22:35:52 -0800 (PST)
 From:   David Yang <mmyangfl@gmail.com>
 To:     mmyangfl@gmail.com
 Cc:     Michael Turquette <mturquette@baylibre.com>,
@@ -58,9 +58,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/6] dt-bindings: clock: Add Hi3798MV100 CRG driver binding
-Date:   Sat,  4 Mar 2023 14:33:26 +0800
-Message-Id: <20230304063333.162309-5-mmyangfl@gmail.com>
+Subject: [PATCH v2 4/6] clk: hisilicon: Rename some symbols for Hi3798CV200
+Date:   Sat,  4 Mar 2023 14:33:27 +0800
+Message-Id: <20230304063333.162309-6-mmyangfl@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230304063333.162309-1-mmyangfl@gmail.com>
 References: <20230304063333.162309-1-mmyangfl@gmail.com>
@@ -76,49 +76,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add CRG driver for Hi3798MV100 SoC. CRG (Clock and Reset Generator) module
-generates clock and reset signals used by other module blocks on SoC.
+These symbols might cause confusion when adding support for other Hi3798
+series SoCs.
 
 Signed-off-by: David Yang <mmyangfl@gmail.com>
 ---
- Documentation/devicetree/bindings/clock/hisi-crg.txt |  2 ++
- include/dt-bindings/clock/histb-clock.h              | 10 ++++++++++
- 2 files changed, 12 insertions(+)
+ drivers/clk/hisilicon/crg-hi3798.c | 35 +++++++++++++++---------------
+ 1 file changed, 18 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/hisi-crg.txt b/Documentation/devicetree/bindings/clock/hisi-crg.txt
-index cc60b3d42..972c038c8 100644
---- a/Documentation/devicetree/bindings/clock/hisi-crg.txt
-+++ b/Documentation/devicetree/bindings/clock/hisi-crg.txt
-@@ -13,6 +13,8 @@ Required Properties:
-   - "hisilicon,hi3516cv300-crg"
-   - "hisilicon,hi3516cv300-sysctrl"
-   - "hisilicon,hi3519-crg"
-+  - "hisilicon,hi3798mv100-crg"
-+  - "hisilicon,hi3798mv100-sysctrl"
-   - "hisilicon,hi3798cv200-crg"
-   - "hisilicon,hi3798cv200-sysctrl"
+diff --git a/drivers/clk/hisilicon/crg-hi3798.c b/drivers/clk/hisilicon/crg-hi3798.c
+index 9c933172b..b52d44350 100644
+--- a/drivers/clk/hisilicon/crg-hi3798.c
++++ b/drivers/clk/hisilicon/crg-hi3798.c
+@@ -177,30 +177,31 @@ static void hi3798_sysctrl_clk_unregister(
  
-diff --git a/include/dt-bindings/clock/histb-clock.h b/include/dt-bindings/clock/histb-clock.h
-index e64e5770a..5042c2a7a 100644
---- a/include/dt-bindings/clock/histb-clock.h
-+++ b/include/dt-bindings/clock/histb-clock.h
-@@ -58,6 +58,16 @@
- #define HISTB_USB3_UTMI_CLK1		48
- #define HISTB_USB3_PIPE_CLK1		49
- #define HISTB_USB3_SUSPEND_CLK1		50
-+#define HISTB_USB2_UTMI_CLK1		51
-+#define HISTB_USB2_2_BUS_CLK		52
-+#define HISTB_USB2_2_PHY_CLK		53
-+#define HISTB_USB2_2_UTMI_CLK		54
-+#define HISTB_USB2_2_UTMI_CLK1		55
-+#define HISTB_USB2_2_12M_CLK		56
-+#define HISTB_USB2_2_48M_CLK		57
-+#define HISTB_USB2_2_OTG_UTMI_CLK		58
-+#define HISTB_USB2_2_PHY1_REF_CLK		59
-+#define HISTB_USB2_2_PHY2_REF_CLK		60
+ /* hi3798CV200 */
  
- /* clocks provided by mcu CRG */
- #define HISTB_MCE_CLK			1
+-static const char *const mmc_mux_p[] = {
++static const char *const hi3798cv200_mmc_mux_p[] = {
+ 		"100m", "50m", "25m", "200m", "150m" };
+-static u32 mmc_mux_table[] = {0, 1, 2, 3, 6};
++static u32 hi3798cv200_mmc_mux_table[] = {0, 1, 2, 3, 6};
+ 
+-static const char *const comphy_mux_p[] = {
++static const char *const hi3798cv200_comphy_mux_p[] = {
+ 		"100m", "25m"};
+-static u32 comphy_mux_table[] = {2, 3};
++static u32 hi3798cv200_comphy_mux_table[] = {2, 3};
+ 
+-static const char *const sdio_mux_p[] = {
++static const char *const hi3798cv200_sdio_mux_p[] = {
+ 		"100m", "50m", "150m", "166p5m" };
+-static u32 sdio_mux_table[] = {0, 1, 2, 3};
++static u32 hi3798cv200_sdio_mux_table[] = {0, 1, 2, 3};
+ 
+ static struct hisi_mux_clock hi3798cv200_mux_clks[] = {
+-	{ HI3798_MMC_MUX, "mmc_mux", mmc_mux_p, ARRAY_SIZE(mmc_mux_p),
+-		CLK_SET_RATE_PARENT, 0xa0, 8, 3, 0, mmc_mux_table, },
+-	{ HI3798_COMBPHY0_MUX, "combphy0_mux",
+-		comphy_mux_p, ARRAY_SIZE(comphy_mux_p),
+-		CLK_SET_RATE_PARENT, 0x188, 2, 2, 0, comphy_mux_table, },
+-	{ HI3798_COMBPHY1_MUX, "combphy1_mux",
+-		comphy_mux_p, ARRAY_SIZE(comphy_mux_p),
+-		CLK_SET_RATE_PARENT, 0x188, 10, 2, 0, comphy_mux_table, },
+-	{ HI3798_SDIO0_MUX, "sdio0_mux", sdio_mux_p,
+-		ARRAY_SIZE(sdio_mux_p), CLK_SET_RATE_PARENT,
+-		0x9c, 8, 2, 0, sdio_mux_table, },
++	{ HI3798_MMC_MUX, "mmc_mux", hi3798cv200_mmc_mux_p,
++		ARRAY_SIZE(hi3798cv200_mmc_mux_p), CLK_SET_RATE_PARENT,
++		0xa0, 8, 3, 0, hi3798cv200_mmc_mux_table, },
++	{ HI3798_COMBPHY0_MUX, "combphy0_mux", hi3798cv200_comphy_mux_p,
++		ARRAY_SIZE(hi3798cv200_comphy_mux_p), CLK_SET_RATE_PARENT,
++		0x188, 2, 2, 0, hi3798cv200_comphy_mux_table, },
++	{ HI3798_COMBPHY1_MUX, "combphy1_mux", hi3798cv200_comphy_mux_p,
++		ARRAY_SIZE(hi3798cv200_comphy_mux_p), CLK_SET_RATE_PARENT,
++		0x188, 10, 2, 0, hi3798cv200_comphy_mux_table, },
++	{ HI3798_SDIO0_MUX, "sdio0_mux", hi3798cv200_sdio_mux_p,
++		ARRAY_SIZE(hi3798cv200_sdio_mux_p), CLK_SET_RATE_PARENT,
++		0x9c, 8, 2, 0, hi3798cv200_sdio_mux_table, },
+ };
+ 
+ static u32 mmc_phase_regvals[] = {0, 1, 2, 3, 4, 5, 6, 7};
 -- 
 2.39.2
 
