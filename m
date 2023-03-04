@@ -2,93 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AD86AACF9
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 23:33:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C336AACFA
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 23:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbjCDWdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 17:33:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
+        id S229520AbjCDWfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 17:35:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDWdp (ORCPT
+        with ESMTP id S229535AbjCDWfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 17:33:45 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF9C1025C
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 14:33:42 -0800 (PST)
-Date:   Sat, 4 Mar 2023 22:33:37 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1677969220;
-        bh=KFyhLwQsTeEVsLuUHKYhCEX6M3NsGkyXVzG3z+JFODQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EfgODp01ZW/Klcjt7alZ6ap2h4emrVHDOI9TRqDhNiB1Wmivc/aJcVeA7FgYNi57f
-         RP8oTBHt59Nb6SBHHT6cY2WwAsZxam0wx4CInzvlhgfREM0G4+2xJ4vyoDRRIzi589
-         kocwygdURYvtOn6F9lm95TWhqOV82/FdHuUqzq9k=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Storm Dragon <stormdragon2976@gmail.com>
-Cc:     George Kennedy <george.kennedy@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH] vc_screen: don't clobber return value in vcs_read
-Message-ID: <58af4510-13cd-4f4c-9199-b6b59b2f2bff@t-8ch.de>
-References: <Y/KtG9vK0oz0nQrN@hotmail.com>
- <20230220064612.1783-1-linux@weissschuh.net>
- <Y/OacHw6nL/ZtrH3@hotmail.com>
- <00e5aee7-c7b3-4077-8c9f-4f28ec220567@t-8ch.de>
- <ZAJqrfcfoM2eO5VL@mjollnir>
- <ce24d06b-7967-4b50-8913-ad42717e4c05@t-8ch.de>
- <ZAOi9hDBTYqoAZuI@hotmail.com>
+        Sat, 4 Mar 2023 17:35:21 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D359011EBE
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 14:35:19 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id u9so24209648edd.2
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 14:35:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1677969318;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VjLU05mpbmIrZ5UOJsg0FItkE1EtBF9bZysOGBrLVhQ=;
+        b=Y6wD5A6CQnmMTLgQdcGKSUoePY7qOwARkvWy2V77lvrUHkJN9BB/+tofM45h5yiddG
+         cpiW5r05bjqOE35GSPOwhMSrkBSY/Ed9P0hYO3GeN/QMBB2wm3354o69R+zOXBlrIb+7
+         odxgV+ICXHIi7jvjH00v6RiQxKmxSG+tv/yvA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677969318;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VjLU05mpbmIrZ5UOJsg0FItkE1EtBF9bZysOGBrLVhQ=;
+        b=jN1grEzSjNPUF+D6HmquQxZjxLnxFLbqvAv4DONAxjCr2rW9Av8rNznHSu9lPYCPEo
+         XZ1MW/g0yJuufXJLEByjdB9kP7sYxPiTcCuudfQs2mOXw56Cjl9BEUww2Nk+DAzh5XQ3
+         GaH/lndlRNSJC0QGtsY3D0Y8irND5za82Ee0SgPkhLwS4DnpULU8T216H4whMvrrkEKW
+         Mz4wAVxJTPqOVtYajQB4T9zBtoDoFW500YvE7k00fwujSpwBFuSk1GWpK78xBVrwHxvs
+         1gCw8DMlyzrxOHwPVzl7+LS7yoNzHwaQ8KRPPm1CqWK2o8g4jttGUEi1YlpDAu3/G6CJ
+         Ir2g==
+X-Gm-Message-State: AO0yUKWdodUUHhmS0BgoIB2P77ivKIYZFix6Dwmi9cEz+2U7ZT/4HIbb
+        MovmVPh70gNlzfRhhiBxIYOj1d40wwTKj1xtZKIfyQ==
+X-Google-Smtp-Source: AK7set9F/s1mU+Dt9bJAbs76JFicvVoHOXUWJzUgYXUtq0VfzOItc7zNiqVZ+wokWU8ineLA5eIXAQ==
+X-Received: by 2002:a17:907:9719:b0:895:ef96:9d9b with SMTP id jg25-20020a170907971900b00895ef969d9bmr6743908ejc.30.1677969318095;
+        Sat, 04 Mar 2023 14:35:18 -0800 (PST)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id lo2-20020a170906fa0200b008e09deb6610sm2469094ejb.200.2023.03.04.14.35.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Mar 2023 14:35:17 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id s11so24087985edy.8
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 14:35:17 -0800 (PST)
+X-Received: by 2002:a50:cd94:0:b0:4c2:1a44:642e with SMTP id
+ p20-20020a50cd94000000b004c21a44642emr3476060edi.5.1677969317070; Sat, 04 Mar
+ 2023 14:35:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZAOi9hDBTYqoAZuI@hotmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230304131528.4645d19a2ab897fb7518159e@linux-foundation.org>
+In-Reply-To: <20230304131528.4645d19a2ab897fb7518159e@linux-foundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 4 Mar 2023 14:35:00 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj9guryjifHyr26w73ta+kNeoHtGde682Z5N6OSjKu4UQ@mail.gmail.com>
+Message-ID: <CAHk-=wj9guryjifHyr26w73ta+kNeoHtGde682Z5N6OSjKu4UQ@mail.gmail.com>
+Subject: Re: [GIT PULL] hotfixes for 6.3-rc1
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 04, 2023 at 02:58:46PM -0500, Storm Dragon wrote:
-> On Fri, Mar 03, 2023 at 11:25:00PM +0000, Thomas Weißschuh wrote:
-> 
-> > Does this mean the screenreader now works correctly or is it still
-> > broken somehow?
-> > 
-> > Thomas
-> 
-> I have still been testing this kernel. Most things work as expected, but
-> the pasting functionality for Fenrir's clipboard is broken. After
-> checking into the problem, it seems that tiocsti is disabled, and that
-> is causing the problem. Was that something done in this test kernel
-> only, or will that be the default for all new Arch kernels? If it is the
-> default, is there a way to turn it back on?
+On Sat, Mar 4, 2023 at 1:15=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
+.org> wrote:
+>
+> 17 hotfixes.  Eight are for MM and seven are for other parts of the
+> kernel.  Seven are cc:stable and eight address post-6.3 issues or were
+> judged unsuitable for -stable backporting.
 
-By now this package has been promoted to [core] so it is in fact the
-default ArchLinux kernel.
+Hmm. Since this pull didn't fix the gcc note about playing pointer
+games that I get for my allmodconfig test build, and since I _really_
+don't want to have an rc1 release tomorrow with that (valid) warning,
+I fixed it up myself.
 
-As a workaround you can use the "linux-lts" package that now also
-carries the fix for your original problem but not the code responsible
-for the new issue.
+I fixed up the gcc note the cleanest way I could, by using a union to
+make it very explicit that yes, we're basically doing a bit-for-bit
+assignment from one incompatible type to another.
 
-pacman -Sy linux-lts
+I would *not* encourage this pattern in general, but it had a comment
+about why that invalid pointer conversion was fine in this case, and
+it really does seem to be a fairly natural use of a union. This
+situation really is that kind of "don't convert types, just copy the
+bit representation".
 
-> I tried the following:
-> 
-> [storm@mjollnir ~] $ sudo sysctl dev.tty.legacy_tiocsti=1
-> sysctl: setting key "dev.tty.legacy_tiocsti": Invalid argument
+So it's kind of conceptually quite similar to the traditional "use a
+union to convert floating point bit representations to integers" and
+back (as opposed to using a cast to convert a pointer in order to then
+_use_ it as a pointer in the new form).
 
-This is indeed the correct way to enable the feature again.
+See
 
-It seems that the commit that introduced this sysctl[0] depends on
-another commit [1] to be applied. But the 6.2.2 stable kernel is missing
-the requirement.
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/comm=
+it/?id=3De77d587a2c04e82c6a0dffa4a32c874a4029385d
 
-I'll validate that this indeed is the issue and will then send a formal
-request for backporting.
+for details.
 
-[0] 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled")
-[1] f1aa2eb5ea05 ("sysctl: fix proc_dobool() usability")
+At least gcc generated identical code (well, for an unholy version of
+that patch that had been edited to avoid line number changes) for me,
+so that "go through a union type" doesn't cause any other differences
+than getting rid of the gcc note.
+
+(And this was definitely one of the cases where I felt that the gcc
+note was entirely valid, and a good warning - even if it wasn't
+technically a warnign that would cause -Werror to trigger. So I didn't
+want to shut up the note by turning it off, I really wanted the code
+to be more clear about what it does).
+
+             Linus
