@@ -2,52 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678FD6AAA98
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 16:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DF46AAA9B
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 16:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCDPBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 10:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S229689AbjCDPEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 10:04:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCDPBv (ORCPT
+        with ESMTP id S229473AbjCDPEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 10:01:51 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB49CDD0
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 07:01:48 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 09DD52D3;
-        Sat,  4 Mar 2023 15:01:46 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 09DD52D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1677942107; bh=Dy3GMJRCcyJI6flIQ6mIYDtYEv3aWSWcRGCgUowv2Rc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=naRwBbQzG1kwwJ21J40qVZTI8uIci9CRvtvnRtX4kryQ88YsVjkB2ssyHWqhiINDb
-         r40RzJCUH3QABRQb6SCbp3n1wm9QkZXDTDaKwHj/xmwYeIaZGK1uG569JwhmESNw9k
-         V7TyQvCOuZ55Elel3BalijV7IryhfBaJN0H8X/UVIuziEGQO75//+S3TruMQxxHLpp
-         DMPjutwh+N014T9/VP+L9sOtfHZzkd669656xssvcc/Oegqq1XXepF0VRSsN5EATUb
-         h10Jdz2h1S7QWjGErBIULPBDEqQ4DWsr+sy9CdZmnIf3dNYAKQ9aTf1LKb1cxqq7S2
-         eu+EjFUCYeTcg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Wei Wang <wei.w.wang@intel.com>, arnd@arndb.de,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        herbert@gondor.apana.org.au, josh@joshtriplett.org,
-        jani.nikula@intel.com, jgg@mellanox.com, dmatlack@google.com,
-        mizhang@google.com, pbonzini@redhat.com, seanjc@google.com
-Cc:     linux-kernel@vger.kernel.org, Wei Wang <wei.w.wang@intel.com>
-Subject: Re: [PATCH v1 2/3] Documentation/CodingStyle: do not use data type
- names as variable names
-In-Reply-To: <20230304041932.847133-3-wei.w.wang@intel.com>
-References: <20230304041932.847133-1-wei.w.wang@intel.com>
- <20230304041932.847133-3-wei.w.wang@intel.com>
-Date:   Sat, 04 Mar 2023 08:01:46 -0700
-Message-ID: <87mt4szhk5.fsf@meer.lwn.net>
+        Sat, 4 Mar 2023 10:04:44 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC64D324;
+        Sat,  4 Mar 2023 07:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=3EW+cE1iPdOSlYV+9XVPWeV5/ZUNFFr2RNIs7Bm7Q44=; b=1au3pzdpramIt1YwUPSqtQumKR
+        0r4t1ixg0lzWmEO/XivdFeomCxi/BBZopPzoFBt/tpl4omWM2O8Yg/YVr5kOtVyb5gqwjWoZDbn+v
+        xOOW/5Dxdcx7RRU10CY85NgVYCy1Z+3nWwhx5U4ah5qO62qa59w7B6V9IqrIw1z3fT8M=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pYTQy-006S1R-4R; Sat, 04 Mar 2023 16:04:28 +0100
+Date:   Sat, 4 Mar 2023 16:04:28 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     =?iso-8859-1?Q?K=F6ry?= Maincent <kory.maincent@bootlin.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Richard Cochran <richardcochran@gmail.com>,
+        thomas.petazzoni@bootlin.com, Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Jie Wang <wangjie125@huawei.com>,
+        Guangbin Huang <huangguangbin2@huawei.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Wang Yufen <wangyufen@huawei.com>,
+        Alexandru Tachici <alexandru.tachici@analog.com>,
+        Oleksij Rempel <linux@rempel-privat.de>
+Subject: Re: [PATCH v2 3/4] net: Let the active time stamping layer be
+ selectable.
+Message-ID: <ZANd/LE8Jk+0gPdI@lunn.ch>
+References: <20230303164248.499286-1-kory.maincent@bootlin.com>
+ <20230303164248.499286-4-kory.maincent@bootlin.com>
+ <640289d5ef54c_cc8e2087a@willemb.c.googlers.com.notmuch>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <640289d5ef54c_cc8e2087a@willemb.c.googlers.com.notmuch>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,32 +74,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wei Wang <wei.w.wang@intel.com> writes:
+> Should setting netdev->selected_timestamping_layer be limited to
+> choices that the device supports?
+> 
+> At a higher level, this series assumes that any timestamp not through
+> phydev is a MAC timestamp. I don't think that is necessarily true for
+> all devices. Some may timestamp at the phy, but not expose a phydev.
+> This is a somewhat pedantic point. I understand that the purpose of
+> the series is to select from among two sets of APIs.
 
-> Observed some merged code uses "bool" as variable name. This is
-> confusion either for the reader or compilier. Add a rule to have
-> programmers avoid using data types as variable names.
->
-> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
-> ---
->  Documentation/process/coding-style.rst | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
-> index 007e49ef6cec..6d7f4069d55d 100644
-> --- a/Documentation/process/coding-style.rst
-> +++ b/Documentation/process/coding-style.rst
-> @@ -356,6 +356,9 @@ specification that mandates those terms. For new specifications
->  translate specification usage of the terminology to the kernel coding
->  standard where possible.
->  
-> +"bool", "int", "long" etc. are specific names for data types, C
-> +programmers should not use them as variable names.
+Network drivers tend to fall into one of two classes.
 
-It seems you found one place where bool was being misused.  Fixing it
-was certainly the right thing to do, but I'm not convinced we need to
-add clutter to the documentation for this.
+1) Linux drives the whole hardware, MAC, PCS, PHY, SPF cage, LEDs etc.
 
-Thanks,
+2) Linux drives just the MAC, and the rest is hidden away by firmware.
 
-jon
+For this to work, the MAC API should be sufficient to configure and
+get status information for things which are hidden away from Linux.
+An example of this is the ethtool .get_link_ksettings, which mostly
+deals with PHY settings. Those which have linux controlling the
+hardware call phy_ethtool_get_link_ksettings to get phylib to do the
+work, where as if the hardware is hidden away, calls into the firmware
+are made to implement the API.
+
+When we are talking about time stamping, i assume you are talking
+about firmware driver the lower level hardware. I can see two ways
+this could go:
+
+1) The MAC driver registers two timestamping devices with the core,
+one for the MAC and another for the PHY. In that case, all we need is
+the registration API to include some sort of indicator what layer this
+time stamper works at. The core can then expose to user space that
+there are two, and mux kAPI calls to one or the other.
+
+2) Despite the hardware having two stampers, it only exposes one to
+the PTP core. Firmware driven hardware already has intimate knowledge
+of the hardware, since it has to have firmware to drive the hardware,
+so it should be able to say which is the better stamper. So it just
+exposes that one.
+
+So i think the proposed API does work for firmware driven stampers,
+but we might need to extend ptp_caps to include a level indication,
+MAC, bump in the wire, PHY, etc.
+
+     Andrew
