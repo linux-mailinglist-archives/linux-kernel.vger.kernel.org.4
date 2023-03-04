@@ -2,154 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BB76AAA82
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 15:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69C16AAA88
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 15:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjCDOrr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 4 Mar 2023 09:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53568 "EHLO
+        id S229637AbjCDOtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 09:49:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjCDOrq (ORCPT
+        with ESMTP id S229625AbjCDOs6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 09:47:46 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9D512F12;
-        Sat,  4 Mar 2023 06:47:44 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id z6so6108053qtv.0;
-        Sat, 04 Mar 2023 06:47:44 -0800 (PST)
+        Sat, 4 Mar 2023 09:48:58 -0500
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF22C6A68;
+        Sat,  4 Mar 2023 06:48:56 -0800 (PST)
+Received: by mail-qv1-xf35.google.com with SMTP id ev13so3689564qvb.10;
+        Sat, 04 Mar 2023 06:48:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1677941336;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TsKKHJ0/GD+1zuzNsuCdWtAJjvxya3Twz8P8LNYqCwY=;
+        b=o0XqqF9KH2cTPnL75tHljXD8nVLW6wpV2NwV7X4XXX+8CRd/3AiCnKdEDZYSwR76vS
+         z8DZ8fDxhR9+Ldwet6gfGkh2EsHwkG4Dy7dIJF9dPCMa6YH7fOTsxGPuSPTCkAS8XnXz
+         OfwYYEu30tPOkw33e6UktE/vuadPB2J8SBzRq91ZzIsoBzpFT+a/OEoRYN3MxofBSzE3
+         n2D3eHQaHuIWSse1usU0WLHDT0VedC2vd3YjKYqeoWc8J/YzpCrNaTcZorTn2ZaYobKj
+         vcDaPFP2HtRgLwcyZQk40ii3Uxz5WJNVJ4F+7fU5RfFO0z0TzUrHE3mMAIJLs5FvwND4
+         pCBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677941263;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KeKbxzDZy3GcKkrGUofgHv5MAh6MoP5a08Lg7rMsvMk=;
-        b=S3qNnTfaGG8dWVsorNdGIUyak/GpcZUpktOkv6gyxtw3XAcFdhL/CEPTnxawlQEyNf
-         ahJg6xrVKof9Ba8qj4jmw8QWAUQHq5sg8lZVrnFFXNh2e6FSXM8aN92iCBHMkyHyhFOW
-         pF5M9IbKRWk6kueY6GrPeTRsBtYQnAJ+bqHZJg2WQdnDvJo82uZG4w76/sYjAQcpPvj5
-         X3PdR7+eBUj3v3V5VGL6SUaQt75AyLPdgwuQKZZZXmKfQaf0t6b+z4rxR4EzF95nhetG
-         mkUGP6pbLyZPqZlct7Y+mkWH0S8etn2r4am3ttLR2fi3LMB2kL6kUnxO0X/vIDvBZFe5
-         5UKQ==
-X-Gm-Message-State: AO0yUKVzoLn4IAtoBJaDXBH/SlyIWWFCRfWfBdJsVlpAKhiY40HLN8OC
-        Olj/cAkGxTOPQq8Y+JsX6KiYQ9LQxU20VA==
-X-Google-Smtp-Source: AK7set8iJFGfogd8HyTfcNNFYdWDx6zvwpzg4FmQZW+Si0Gg/ZbY1ExyzEf60dMofx6GBE4kRARcwA==
-X-Received: by 2002:ac8:7f14:0:b0:3bf:c407:10c5 with SMTP id f20-20020ac87f14000000b003bfc40710c5mr10006171qtk.26.1677941263461;
-        Sat, 04 Mar 2023 06:47:43 -0800 (PST)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id r15-20020ac867cf000000b003bfc2fc3235sm3817779qtp.67.2023.03.04.06.47.43
+        d=1e100.net; s=20210112; t=1677941336;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TsKKHJ0/GD+1zuzNsuCdWtAJjvxya3Twz8P8LNYqCwY=;
+        b=GV6rS7aCTFOg3Ji/DZkg9IQEpqkCrC/fJ8qy/+JMzJr6052Pn4ywdEvOgb7g6GCsIL
+         CZ4pnSJHDxscBXlKM+Isu3D02NmCb63VW7o8RuJVIy7GjKNQhKXa2mm0t6l+x+LtbBn/
+         vWx3cRoi7FhHF+1Fs1zm2QUAezoU+kszn+9Ah9yFUab58wpRZAbnT1a4QUX6nU6hmohM
+         U/dYtzjvRyI5+OAWgVMIC5uhHY7EjPI7HIG3GXnsDcKK6uS95pMAwwdJDyw+mrIVm3D9
+         SBKv/jiWnIhOFZWofVw9U8aqwnXU56F2CO24Q8TqCEVGMrLznxK5Hl4mqVkHt/FljpNv
+         L70Q==
+X-Gm-Message-State: AO0yUKVY9Ke2HkOTc/tNCNtOAhXWV5p3SsZU8qJ3kzyLdlE75ER+4PIp
+        uhEd7cxPndSTiqOVIOCz+eg=
+X-Google-Smtp-Source: AK7set/lpTeE6jSzoh7eLRmNQ2aPTpe64xLeLcMiiEyIor3lA8OcSo+NeLshc41rysf1tZHsq/I8fQ==
+X-Received: by 2002:a05:6214:23c8:b0:583:a07b:554c with SMTP id hr8-20020a05621423c800b00583a07b554cmr2306311qvb.40.1677941335935;
+        Sat, 04 Mar 2023 06:48:55 -0800 (PST)
+Received: from ?IPV6:2600:1700:2442:6db0:99e6:eec3:1daa:f163? ([2600:1700:2442:6db0:99e6:eec3:1daa:f163])
+        by smtp.gmail.com with ESMTPSA id d82-20020a376855000000b007419eb86df0sm3835899qkc.127.2023.03.04.06.48.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 06:47:43 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-536cb25982eso96915597b3.13;
-        Sat, 04 Mar 2023 06:47:43 -0800 (PST)
-X-Received: by 2002:a81:b723:0:b0:536:38b4:f51 with SMTP id
- v35-20020a81b723000000b0053638b40f51mr3187721ywh.5.1677941242747; Sat, 04 Mar
- 2023 06:47:22 -0800 (PST)
+        Sat, 04 Mar 2023 06:48:55 -0800 (PST)
+Message-ID: <6668e83c-eb2c-7ac9-7b6f-2c8146c2175d@gmail.com>
+Date:   Sat, 4 Mar 2023 08:48:54 -0600
 MIME-Version: 1.0
-References: <20230301185209.274134-1-jjhiblot@traphandler.com>
- <20230301185209.274134-3-jjhiblot@traphandler.com> <CAMuHMdVF337k+zyjpbzoDtWWDnYhM6eM3+As6UuZ7FCgASsMQg@mail.gmail.com>
- <7fa7f07f-d1e1-1e43-992c-4981c5810284@traphandler.com>
-In-Reply-To: <7fa7f07f-d1e1-1e43-992c-4981c5810284@traphandler.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sat, 4 Mar 2023 15:47:11 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVdZatMYsc=367OuGotzYuo2-XVe5MAZdzh+kBs31=t5A@mail.gmail.com>
-Message-ID: <CAMuHMdVdZatMYsc=367OuGotzYuo2-XVe5MAZdzh+kBs31=t5A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] of: irq: make callers of of_irq_parse_one() release
- the device node
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     saravanak@google.com, clement.leger@bootlin.com,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        zajec5@gmail.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Marc Zyngier <maz@kernel.org>, afaerber@suse.de,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Nishanth Menon <nm@ti.com>, ssantosh@kernel.org,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-renesas-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-wireless@vger.kernel.org,
-        linux-actions@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
+Content-Language: en-US
+To:     Rob Herring <robh+dt@kernel.org>, David Gow <davidgow@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+References: <20230302013822.1808711-1-sboyd@kernel.org>
+ <CABVgOSnpMNCtEEsJV28OzUoxdDuiT4a2T0avP0AYf9xFW1jxrw@mail.gmail.com>
+ <CAL_JsqJMd3Fi0ZBObdyE1VDKTH1_+smuGDymHnKOkVH2HB3jJQ@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <CAL_JsqJMd3Fi0ZBObdyE1VDKTH1_+smuGDymHnKOkVH2HB3jJQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jean-Jacques,
+On 3/2/23 11:32, Rob Herring wrote:
+> On Thu, Mar 2, 2023 at 2:14 AM David Gow <davidgow@google.com> wrote:
+>>
+>> On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
+>>>
+>>> This patch series adds unit tests for the clk fixed rate basic type and
+>>> the clk registration functions that use struct clk_parent_data. To get
+>>> there, we add support for loading a DTB into the UML kernel that's
+>>> running the unit tests along with probing platform drivers to bind to
+>>> device nodes specified in DT.
+>>>
+>>> With this series, we're able to exercise some of the code in the common
+>>> clk framework that uses devicetree lookups to find parents and the fixed
+>>> rate clk code that scans devicetree directly and creates clks. Please
+>>> review.
+>>>
+>>
+>> Thanks Stephen -- this is really neat!
+>>
+>> This works well here, and I love all of the tests for the
+>> KUnit/device-tree integration as well.
+>>
+>> I'm still looking through the details of it (alas, I've mostly lived
+>> in x86-land, so my device-tree knowledge is, uh, spotty to say the
+>> least), but apart from possibly renaming some things or similarly
+>> minor tweaks, I've not got any real suggestions thus far.
+>>
+>> I do wonder whether we'll want, on the KUnit side, to have some way of
+>> supporting KUnit device trees on non-UML architecctures (e.g., if we
+>> need to test something architecture-specific, or on a big-endian
+>> platform, etc), but I think that's a question for the future, rather
+>> than something that affects this series.
+> 
+> I'll say that's a requirement. We should be able to structure the
+> tests to not interfere with the running system's DT. The DT unittest
+> does that.
+> 
+> As a side topic, Is anyone looking at getting UML to work on arm64?
+> It's surprising how much x86 stuff there is which is I guess one
+> reason it hasn't happened.
+> 
+>> Similarly, I wonder if there's something we could do with device tree
+>> overlays, in order to make it possible for tests to swap nodes in and
+>> out for testing.
+> 
+> Yes, that's how the DT unittest works. But it is pretty much one big
+> overlay (ignoring the overlay tests). It could probably be more
+> modular where it is apply overlay, test, remove overlay, repeat.
 
-On Sat, Mar 4, 2023 at 11:34 AM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
-> On 02/03/2023 08:49, Geert Uytterhoeven wrote:
-> > On Wed, Mar 1, 2023 at 7:53 PM Jean-Jacques Hiblot
-> > <jjhiblot@traphandler.com> wrote:
-> >> of_irq_parse_one() does a get() on the device node returned in out_irq->np.
-> >> Callers of of_irq_parse_one() must do a put() when they are done with it.
-> >
-> > What does "be done with it" really mean here?
-> >
-> >> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-> >
-> >> --- a/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
-> >> +++ b/arch/arm/mach-shmobile/regulator-quirk-rcar-gen2.c
-> >> @@ -184,6 +184,7 @@ static int __init rcar_gen2_regulator_quirk(void)
-> >>                          kfree(quirk);
-> >>                          continue;
-> >>                  }
-> >> +               of_node_put(argsa->np);
-> >
-> > The quirk object, which is a container of argsa, is still used below,
-> > and stored in a linked list.  I agree argsa->np is not dereferenced,
-> > but the pointer itself is still compared to other pointers.
->
-> I fail to see when the pointers are compared. It looks to me that only
-> the args are compared. Am I missing something ?
+Actually, no, the bulk of the DT unittest devicetree data is _not_ an
+overlay.  It is an FDT that is loaded via of_fdt_unflatten_tree() instead
+of the overlay load API.  Note that the base DT unittest runs with
+  CONFIG_OF_DYNAMIC=n
+  CONFIG_OF_OVERLAY=n
+so the overlay support code is not even present in the built kernel.
 
-You're right, in upstream, there is no such check.
-In my local tree, I have converted the comparisons below to use a new
-helper of_phandle_args_eq() (which does compare the np member, too),
-but that change never went upstream, as the other user of that helper
-was rejected.
+One can then enable CONFIG_OF_DYNAMIC to test the dynamic code.
 
-> In any case, looking more closely at the code, I guess that indeed the
-> of_node_put() shouldn't be added here because this code expects that the
-> nodes never go away. That is probably a good assertion in case of PMICs
+One can further enable CONFIG_OF_OVERLAY to test the overlay code
+(this will in turn select CONFIG_OF_DYNAMIC if not already enabled).
 
-OK.
+I would strongly discourage use of the overlay APIs for kunit tests,
+unless the point of the kunit test is to test the overlay API.  Basic
+tests should always be performed with devicetree data that has been
+populated by the normal processing of an FDT during early boot.  If
+one want to test proper overlay infrastructure functionality, then
+those (essentially) same basic tests could/should be repeated with
+devicetree data that has been populated by loading an overlay.
 
-> > IIUIC, calling of_node_put() might cause the reference count to drop to
-> > zero, and the underlying struct node object to be deallocated.
-> > So when a future reference to the same DT node will be taken, a new
-> > struct node object will be allocated, and the pointer comparison below
-> > will fail?
+> 
+> Rob
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
