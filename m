@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968DC6AA887
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 08:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 663CC6AA886
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 08:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjCDHTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 02:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35912 "EHLO
+        id S229590AbjCDHTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 02:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCDHTe (ORCPT
+        with ESMTP id S229445AbjCDHTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 02:19:34 -0500
+        Sat, 4 Mar 2023 02:19:04 -0500
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1712717CDD
-        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 23:19:33 -0800 (PST)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PTGNw4j48z16NpV;
-        Sat,  4 Mar 2023 15:16:48 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Sat, 4 Mar
- 2023 15:19:30 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <richard@nod.at>, <miquel.raynal@bootlin.com>,
-        <s.hauer@pengutronix.de>, <george.kennedy@oracle.com>
-CC:     <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH v2] ubi: Fix failure attaching when vid_hdr offset equals to (sub)page size
-Date:   Sat, 4 Mar 2023 15:42:43 +0800
-Message-ID: <20230304074243.1348767-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B7517CC6
+        for <linux-kernel@vger.kernel.org>; Fri,  3 Mar 2023 23:19:01 -0800 (PST)
+Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PTGNH0QN0z16Nj5;
+        Sat,  4 Mar 2023 15:16:15 +0800 (CST)
+Received: from localhost.huawei.com (10.175.126.31) by
+ canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sat, 4 Mar 2023 15:18:57 +0800
+From:   Su Weifeng <suweifeng1@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <mst@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <shikemeng@huawei.com>,
+        <liuzhiqiang26@huawei.com>, <linfeilong@huawei.com>,
+        <zhanghongtao22@huawei.com>, Weifeng Su <suweifeng1@huawei.com>
+Subject: [PATCH v3] uio:uio_pci_generic:Don't clear master bit when the process does not exit
+Date:   Sat, 4 Mar 2023 15:43:16 +0800
+Message-ID: <20230304074316.736922-1-suweifeng1@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.126.31]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500005.china.huawei.com (7.192.104.229)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -47,69 +47,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following process will make ubi attaching failed since commit
-1b42b1a36fc946 ("ubi: ensure that VID header offset ... size"):
+From: Weifeng Su <suweifeng1@huawei.com>
 
-ID="0xec,0xa1,0x00,0x15" # 128M 128KB 2KB
-modprobe nandsim id_bytes=$ID
-flash_eraseall /dev/mtd0
-modprobe ubi mtd="0,2048"  # set vid_hdr offset as 2048 (one page)
-(dmesg):
-  ubi0 error: ubi_attach_mtd_dev [ubi]: VID header offset 2048 too large.
-  UBI error: cannot attach mtd0
-  UBI error: cannot initialize UBI, error -22
+The /dev/uioX device has concurrent operations in a few scenarios.
 
-Rework original solution, the key point is making sure
-'vid_hdr_shift + UBI_VID_HDR_SIZE < ubi->vid_hdr_alsize',
-so we should check vid_hdr_shift rather not vid_hdr_offset.
-Then, ubi still support (sub)page aligined VID header offset.
+For example, when a process is operating the uio0 device, someone executes
+like "cat /dev/uio0" command. In this case, the bus master bit is cleared
+unconditionally. As a result, the running program cannot work commands
+or I/Os, which is usually unaware of. This happens after
+865a11f("uio/uio_pci_generic: Disable bus-mastering on release");
+The restriction on the process that uses the PCI device is added. The new
+process can be used only after the process that uses the PCI device exits.
+Otherwise, the system returns a message indicating that the device is busy.
 
-Fixes: 1b42b1a36fc946 ("ubi: ensure that VID header offset ... size")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Weifeng Su <suweifeng1@huawei.com>
 ---
- v1->v2: Convert UBI_VID_HDR_SIZE as int type.
- drivers/mtd/ubi/build.c | 21 +++++++++++++++------
- 1 file changed, 15 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/mtd/ubi/build.c b/drivers/mtd/ubi/build.c
-index 0904eb40c95f..80803ada0528 100644
---- a/drivers/mtd/ubi/build.c
-+++ b/drivers/mtd/ubi/build.c
-@@ -666,12 +666,6 @@ static int io_init(struct ubi_device *ubi, int max_beb_per1024)
- 	ubi->ec_hdr_alsize = ALIGN(UBI_EC_HDR_SIZE, ubi->hdrs_min_io_size);
- 	ubi->vid_hdr_alsize = ALIGN(UBI_VID_HDR_SIZE, ubi->hdrs_min_io_size);
+Change v2 -> v3:
+  The process is restricted from using the PCI device. Before the process 
+that uses the PCI device exits, the device returns EBUSY.
+After the process exits, the master bit is cleared unconditionally 
+to ensure DMA security.
+
+ drivers/uio/uio_pci_generic.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/uio/uio_pci_generic.c b/drivers/uio/uio_pci_generic.c
+index e03f9b532..19bf5ead9 100644
+--- a/drivers/uio/uio_pci_generic.c
++++ b/drivers/uio/uio_pci_generic.c
+@@ -31,6 +31,7 @@
+ struct uio_pci_generic_dev {
+ 	struct uio_info info;
+ 	struct pci_dev *pdev;
++	atomic_t	refcnt;
+ };
  
--	if (ubi->vid_hdr_offset && ((ubi->vid_hdr_offset + UBI_VID_HDR_SIZE) >
--	    ubi->vid_hdr_alsize)) {
--		ubi_err(ubi, "VID header offset %d too large.", ubi->vid_hdr_offset);
--		return -EINVAL;
--	}
--
- 	dbg_gen("min_io_size      %d", ubi->min_io_size);
- 	dbg_gen("max_write_size   %d", ubi->max_write_size);
- 	dbg_gen("hdrs_min_io_size %d", ubi->hdrs_min_io_size);
-@@ -689,6 +683,21 @@ static int io_init(struct ubi_device *ubi, int max_beb_per1024)
- 						ubi->vid_hdr_aloffset;
- 	}
+ static inline struct uio_pci_generic_dev *
+@@ -39,10 +40,21 @@ to_uio_pci_generic_dev(struct uio_info *info)
+ 	return container_of(info, struct uio_pci_generic_dev, info);
+ }
  
-+	/*
-+	 * Memory allocation for VID header is ubi->vid_hdr_alsize
-+	 * which is described in comments in io.c.
-+	 * Make sure VID header shift + UBI_VID_HDR_SIZE not exceeds
-+	 * ubi->vid_hdr_alsize, so that all vid header operations
-+	 * won't access memory out of bounds.
-+	 */
-+	if ((ubi->vid_hdr_shift + UBI_VID_HDR_SIZE) > ubi->vid_hdr_alsize) {
-+		ubi_err(ubi, "Invalid VID header offset %d, VID header shift(%d)"
-+			" + VID header size(%d) > VID header aligned size(%d).",
-+			ubi->vid_hdr_offset, ubi->vid_hdr_shift,
-+			(int)UBI_VID_HDR_SIZE, ubi->vid_hdr_alsize);
-+		return -EINVAL;
-+	}
++static int open(struct uio_info *info, struct inode *inode)
++{
++	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
 +
- 	/* Similar for the data offset */
- 	ubi->leb_start = ubi->vid_hdr_offset + UBI_VID_HDR_SIZE;
- 	ubi->leb_start = ALIGN(ubi->leb_start, ubi->min_io_size);
++	if (atomic_add_unless(&gdev->refcnt, 1, 1))
++		return 0;
++	else
++		return -EBUSY;
++}
++
+ static int release(struct uio_info *info, struct inode *inode)
+ {
+ 	struct uio_pci_generic_dev *gdev = to_uio_pci_generic_dev(info);
+ 
++	atomic_dec(&gdev->refcnt);
+ 	/*
+ 	 * This driver is insecure when used with devices doing DMA, but some
+ 	 * people (mis)use it with such devices.
+@@ -93,7 +105,9 @@ static int probe(struct pci_dev *pdev,
+ 	gdev->info.name = "uio_pci_generic";
+ 	gdev->info.version = DRIVER_VERSION;
+ 	gdev->info.release = release;
++	gdev->info.open = open;
+ 	gdev->pdev = pdev;
++	atomic_set(&gdev->refcnt, 0);
+ 	if (pdev->irq && (pdev->irq != IRQ_NOTCONNECTED)) {
+ 		gdev->info.irq = pdev->irq;
+ 		gdev->info.irq_flags = IRQF_SHARED;
 -- 
-2.31.1
+2.33.0
 
