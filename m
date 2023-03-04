@@ -2,133 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D803F6AABB6
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 18:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D435C6AABBA
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 18:56:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjCDRx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 12:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
+        id S229642AbjCDR4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 12:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCDRx4 (ORCPT
+        with ESMTP id S229560AbjCDR4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 12:53:56 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F553125B4
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 09:53:54 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id bx12so5067250wrb.11
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 09:53:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677952432;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rHEvIkFqTLgxaMd8/19YTSXz3cbo7lRJ8eKob5TrLqk=;
-        b=lyOp+rYsZdKh1H2omPmNEuYyRcT9UccB7oYjQi5yr/+DkVHHK4/PcZjLk3Yq2p1nfr
-         EQn7n0MeMl2KLi9W+w9xLglC+zzNEa4S8t9LOPQT8WY6VeTC8L6QW7aETVqHHTA65RXT
-         c6CtWQPt+/MYzqVVbKDyop8+Nz0+xp/MAlrJ9N1dxecj+FOLCq2RjrhdXMXpMp6HshLx
-         rt0EgNf4/md0neyef/NbueHsiYJGpSWrhp/kam2Qruea+V+FW7tSbTzTAaHj/aCPQuEL
-         IXfJ+SxfChdhoy/Of0erRRYu5f3OcZgnXTFBf7sftSmHo8nKg6L6Ydziv4HKtEkSOUCJ
-         xzWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677952432;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rHEvIkFqTLgxaMd8/19YTSXz3cbo7lRJ8eKob5TrLqk=;
-        b=z8WH7JS3+d4pqPWlImUMOp478taglY+hMTP7ppGOK65+zFpoWy9loYCAeVyYrbZeyC
-         phey2Gk07ARXnn572CYd+NT8bgpL6YYg24gxfo2H8D9YSPRKH5XSvV3fTDh+W9ZT04kU
-         wi0dtu774dokiuC8Ab28aSAVUAbo/jYxhaVWQLtadN2/++nDkG104x57e27yrgBaABBB
-         E6RM1TepeKIEnl2us0HrJcoLAaWx4gcnICc2rVxfho3sVGYSRyh0S6xs/NzCURng2RNX
-         9hxdEG0H4YUR/xc3eN7lrciF3eiP2CTEmDpbzunMRid1yGMhjl73qGjMvLws/8FTExg9
-         KTjw==
-X-Gm-Message-State: AO0yUKVGJrLXb1LABZB/9jfEowRPnHCwdAzugRS/L2D5t0JHd+BFd955
-        PwViucX/WG0y04maUWW35I+5EQ==
-X-Google-Smtp-Source: AK7set9WFBR5j0nxd+qqovwsRvSizgDMYkC09Qx1BKZCVE+JNDwpUEQbtysHHXgJ/uZDZfaUBrd9zw==
-X-Received: by 2002:adf:e9c2:0:b0:2c7:1d75:b0cc with SMTP id l2-20020adfe9c2000000b002c71d75b0ccmr3766253wrn.43.1677952432543;
-        Sat, 04 Mar 2023 09:53:52 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id k8-20020a5d66c8000000b002c573a6216fsm5531688wrw.37.2023.03.04.09.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 09:53:52 -0800 (PST)
-Message-ID: <35e19031-877c-329f-3bdd-4f04bc8ccc6f@linaro.org>
-Date:   Sat, 4 Mar 2023 17:53:50 +0000
+        Sat, 4 Mar 2023 12:56:11 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4541A966;
+        Sat,  4 Mar 2023 09:56:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Gp9yDw+lde96rjkpbWNq/KcnPUE+kpJLVXLZBhzPFbo=; b=PRAczwbgSHj8+hKZPen1p7He/k
+        yavcgIjgqgLzc6drgXFp+6BvElyoQVly7lP8/hTeEC+BS5AIJ7pe4LCSEjRc4QAALvgdsVmP2vdVG
+        gZprB7mOAITFGJA00FQcqTVlsiwFpoGADfkzGi6AEg+T4zEZt2WVk5JqCkDtk2QxFmT6/zCqkKEXk
+        xVdtFZPEbfLpys+qXbNO//kyLkvX3lDe0NlO4E4ACRikI5R3Xu/l2zzFOHd/TMb6mikyTMqkh7/Rc
+        ebzN1Oo+6A4ZGx3OcBSCB1YommajCnD90d8kxY7qtLa8mBFs0LF0X/ER+Y5VmwS4DAuyrk05MN0vH
+        IuDZO89g==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pYW76-009Nsq-Vv; Sat, 04 Mar 2023 17:56:09 +0000
+Message-ID: <d01112c2-b5a4-4aa3-4ee7-711abc9da079@infradead.org>
+Date:   Sat, 4 Mar 2023 09:56:08 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
- deprecated compatible
+Subject: Re: [PATCH 1/2] menuconfig: delete shadows, reclaim vertical space
 Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230304-topic-dsi_fixup-v3-0-b8565944d0e6@linaro.org>
- <20230304-topic-dsi_fixup-v3-1-b8565944d0e6@linaro.org>
- <c1a2ba5b-4cd9-362b-5a4e-e95a6bf27b3e@linaro.org>
- <30798bd2-5805-45e6-92d2-a9df6fb52600@linaro.org>
- <28561c8b-e9a3-b58e-429a-6dc331ad94e4@linaro.org>
-In-Reply-To: <28561c8b-e9a3-b58e-429a-6dc331ad94e4@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Alexey Dobriyan <adobriyan@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <94a94ef4-9d55-4293-8363-3c0243eceae1@p183>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <94a94ef4-9d55-4293-8363-3c0243eceae1@p183>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/03/2023 17:45, Bryan O'Donoghue wrote:
-> On 04/03/2023 17:35, Konrad Dybcio wrote:
->>> you'll see no error. However if you just do this
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi 
->>> b/arch/arm64/boot/dts/qcom/msm8916.dtsi
->>> index 0733c2f4f3798..829fbe05b5713 100644
->>> --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
->>> @@ -1094,8 +1094,7 @@ mdp5_intf1_out: endpoint {
->>>                          };
->>>
->>>                          dsi0: dsi@1a98000 {
->>> -                               compatible = "qcom,msm8916-dsi-ctrl",
->>> -                                            "qcom,mdss-dsi-ctrl";
->>> +                               compatible = "qcom,mdss-dsi-ctrl";
->>>                                  reg = <0x01a98000 0x25c>;
->>>                                  reg-names = "dsi_ctrl";
->>>
->>>
->>> and run the same test you get
->> Yes, correct. It's valid but it's deprecated, so the bindings are
->> sane. Keep in mind there's an ABI-like aspect to this.
->>
->> Konrad
+Hi,
+
+On 3/4/23 08:55, Alexey Dobriyan wrote:
+> Menuconfig has lots of vertical space wasted: on my system there are
+> 17 lines of useful information about config options and 14 lines of
+> useless fluff: legend, horizontal separators and shadows.
 > 
-> The _driver_ will still accept "qcom,mdss-dsi-ctrl" which is ABI 
-> compliant but, I don't see why the yaml should.
+> Sitation is even worse on smaller terminals because fixed vertical lines
+> do not go away, but config option lines do decreasing informational
+> density even more.
 > 
-> If you declare a new .dts with only "qcom,mdss-dsi-ctrl", that should 
-> throw a yaml check error.
+> Delete shadows and increase menu size to reclaim vertical space.
 > 
+> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
 > ---
-> bod
+> 
+>  scripts/kconfig/lxdialog/checklist.c |    2 --
+>  scripts/kconfig/lxdialog/dialog.h    |    1 -
+>  scripts/kconfig/lxdialog/inputbox.c  |    2 --
+>  scripts/kconfig/lxdialog/menubox.c   |    6 ++----
+>  scripts/kconfig/lxdialog/textbox.c   |    2 --
+>  scripts/kconfig/lxdialog/util.c      |   22 ----------------------
+>  scripts/kconfig/lxdialog/yesno.c     |    2 --
+>  7 files changed, 2 insertions(+), 35 deletions(-)
+> 
 
-Actually. I agree with you, I just dislike it.
+This patch works for me, but since the right side shadow is
+also being removed, the one column (width) that it had
+occupied might as well be used (reclaimed) instead of just
+going to waste.
 
-- "qcom,mdss-dsi-ctrl" <- the driver will accept this
-- "qcom,dsi-ctrl-6g-qcm2290" <- the driver will not accept this
-
-bah
-
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Thanks.
+-- 
+~Randy
