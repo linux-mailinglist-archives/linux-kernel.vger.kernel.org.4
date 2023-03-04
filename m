@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06456AA69C
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 01:46:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58AAE6AA6A7
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 01:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjCDAqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 19:46:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45798 "EHLO
+        id S229834AbjCDAu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 19:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCDAqG (ORCPT
+        with ESMTP id S229445AbjCDAuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 19:46:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EDD19F07;
-        Fri,  3 Mar 2023 16:46:06 -0800 (PST)
+        Fri, 3 Mar 2023 19:50:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC1B5FE95;
+        Fri,  3 Mar 2023 16:50:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2F196198C;
-        Sat,  4 Mar 2023 00:46:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA89CC433EF;
-        Sat,  4 Mar 2023 00:46:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB905B81A1C;
+        Sat,  4 Mar 2023 00:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 63138C4339E;
+        Sat,  4 Mar 2023 00:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1677890765;
-        bh=6W3qdtAivVcS8WP5XfwkRsvcwAvK9X/0B7ofRyL5EfI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=twBWcp6spsPRD50/txu+X2BHne9eyHDluaCWZ2hWZPnZAIP0OpCsJh0O9wjcAiDUS
-         5JHK3UbbTONRiaZHXtwGZ5EH7KY8e1GUQY72d2KRc/dyswOldHDs2RRBLxqFnZ1aIq
-         8D6uoP86NlX0nINMAVtB017JhtB3S0V5MUNoBo/RJ5SPK2MGJvKecXvRKc9HCeiZ6q
-         YuRLK23gUY7nWISlBmxy7roEzY0pxxfj3cYbgTyaM09/GJLnz8SvrLB2E1/URStmCO
-         hIz5bb5X+Bsq2qs8WzZohmg4BE5fa9uNyqSdbyF6WCbHabUf3N0OLRKsqfO6ashf93
-         fsQZEtyJ758cg==
-Date:   Fri, 3 Mar 2023 16:46:03 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, rbradford@rivosinc.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] virtio-net: Fix probe of virtio-net on kvmtool
-Message-ID: <20230303164603.7b35a76f@kernel.org>
-In-Reply-To: <20230302044806-mutt-send-email-mst@kernel.org>
-References: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com>
-        <20230301093054-mutt-send-email-mst@kernel.org>
-        <CACGkMEsG10CWigz+S6JgSVK8XfbpT=L=30hZ8LDvohtaanAiZQ@mail.gmail.com>
-        <20230302044806-mutt-send-email-mst@kernel.org>
+        s=k20201202; t=1677891020;
+        bh=4FbmRPeFiBlY8SC4Ui2iNIvrNbes1G5D8qC4NFkg3bQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ar2x9XQEzoIZS/PDptbUpeD0MQx0vQ+1kZIvtlPz7BIYnMGIsvvZPnNLTji+H2pJ3
+         zY3vUUuMt5Dt2SAD2rHAIBY+mN6c1+WYA3biqbV7D1O1L2LJBIdig/uIkKxu6TsoGU
+         LXPER8gXryb9hlkb9x6Z4qi02IeckOoNgZx2ZePAwMbguvA2lWZ9VlFzYW7G+/PcVj
+         dkWI9rcTrvny49Uy+zpHmjUlNC7GTgAmZwH5Ld8yEDslS9Pu58oee9UvDfKWRW+1vm
+         NroiqprM8g6VAwSIGjoeK0tZ8S1QDjoAzVqo4DVlaYzW7UvrmXmT40YgZ4nUtqCxL1
+         cAQpZ8SlWX6Bw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 452FDC04E35;
+        Sat,  4 Mar 2023 00:50:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] Bluetooth: btusb: Add new PID/VID 04ca:3801 for MT7663
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <167789102028.19976.10449875720237508514.git-patchwork-notify@kernel.org>
+Date:   Sat, 04 Mar 2023 00:50:20 +0000
+References: <20230228055517.17348-1-tangmeng@uniontech.com>
+In-Reply-To: <20230228055517.17348-1-tangmeng@uniontech.com>
+To:     Meng Tang <tangmeng@uniontech.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhuweijun@uniontech.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,16 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Mar 2023 04:48:38 -0500 Michael S. Tsirkin wrote:
-> > Looks not the core can try to enable and disable features according to
-> > the diff between features and hw_features
-> > 
-> > static inline netdev_features_t netdev_get_wanted_features(
-> >         struct net_device *dev)
-> > {
-> >         return (dev->features & ~dev->hw_features) | dev->wanted_features;
-> > }
-> 
-> yes what we do work according to code.  So the documentation is wrong then?
+Hello:
 
-It's definitely incomplete but which part are you saying is wrong?
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+
+On Tue, 28 Feb 2023 13:55:17 +0800 you wrote:
+> This bluetooth device is found in a combo WLAN/BT card
+> for a MediaTek 7663.
+> 
+> Tested on Acer Aspire A315-24P Notebook
+> 
+> The device information:
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] Bluetooth: btusb: Add new PID/VID 04ca:3801 for MT7663
+    https://git.kernel.org/bluetooth/bluetooth-next/c/5e9b50ee3995
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
