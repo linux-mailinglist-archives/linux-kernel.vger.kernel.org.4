@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436B76AA971
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 13:33:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F696AA972
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 13:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjCDMde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 07:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42864 "EHLO
+        id S229568AbjCDMdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 07:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjCDMdc (ORCPT
+        with ESMTP id S229562AbjCDMdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 07:33:32 -0500
+        Sat, 4 Mar 2023 07:33:47 -0500
 Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E602F11162
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 04:33:30 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id u9so20601985edd.2
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 04:33:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8003111174
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 04:33:43 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id u9so20603240edd.2
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 04:33:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1677933209;
+        d=linaro.org; s=google; t=1677933223;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kwTzw4guUx/lmKZKp9FZAIf2Iof4nlld7Lfmrz0x5hU=;
-        b=g0M5abk9yetoeCh1MvLSCStFIhC2kotpRDtZm9RXd1GT8H0qbqE93GWruGz3ez+ik3
-         DrSlthpwkgcCzfWFZ2LYun5SrfHRF/9eV2absC1CGIliOIVl/Mlcj+bQRrxsNsSTwG4V
-         zSd/H8e6iJ1si5OfympFT8LvfTIID+L0RhGMlSmVQsVXnZiLjiSVQGASaSv+PCJ/2F5X
-         wrUCguBT4WC1AMpTWRIDDZbxni66gnFBXz9G3lqMe38jsFN/zGr46KCpCgA/cQJQP1gI
-         5MAL2xEytqf/ejRMeDaKhW5vl6M3BI/3vLmTyVbn212a9rq/W222/hQY8zlvnWoCtmp7
-         yDhQ==
+        bh=jYT4jMLZ95Xys/g3bLJcTF972/TquYeElIQo4Dg5KU0=;
+        b=bZTWOa8yyQo5Z2UWCnxUQmeHXHkvgKOOqNamXziKOJDztw4XOkOut9E10cKGdEYsz8
+         ynjYXDNzHHwGOVxwbsvCHyUN8/ofein0TW7/+kT+Aw9GK7FPANJfWAk6DpKwFvGOPLqe
+         2RvOrpn0KhPMtfDlWLVc2/tcj1r917CERBXHWeYIaDGv+Q9qqG7WhDHcMK5TC/8RZ9uz
+         c991FPvdScqf0C+Y7nKRndd11BYkQRjIIHHnQRlXQtVLGWBkAdq3/R4x/lMwc47PyfYr
+         J8NM+vNEp2VFnxcr2g53X/GlHKvc9mjg0xGxWUWMeFEXklG36VrdA0XSJjb8RLUzW2Pe
+         mfqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677933209;
+        d=1e100.net; s=20210112; t=1677933223;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kwTzw4guUx/lmKZKp9FZAIf2Iof4nlld7Lfmrz0x5hU=;
-        b=LJjBaxBHaUy6QmWlOxtbrDbQdVzoW2V+hIKhpkGQhLucvvMF00ZOHAS6Y2iIT7EMjE
-         q60rSV2lwCmCfPvpZ9VH3m5U6Mob+cP/l6C9VnQQxW8dALDS5NoPbYBxBpXDrLmC0g7z
-         brVALQYDEnClp/ZOMgqngA5m20UZ+4OoiEfqY0WrwMGWLcc3VDOrdpRd/9kGYq4p/ufR
-         Kkzr7XfLJ/5QhYhQlu5jEdpFkscaEq/6Hw3qbQwRlZFx68NU18PKX9O9HvAZk4+tcuRp
-         m8zNm7I+UX74G/bcHZI5pFJEIBKvSEnYPtvtvLK6hvj2ReyaJNv9TXbT/L0rcvhvj1o8
-         S3Sw==
-X-Gm-Message-State: AO0yUKXsjSB81oIsJID3DRlM33vfDv4+MkV4A8z7V4jRskKVurgs/rDW
-        i4pyhbi1Rj304wVNAPec0bSRK7gyznMJpQ8CwAY=
-X-Google-Smtp-Source: AK7set8fNgHrOb48YLQc+6jt7WeWZgjA4V1pBu4H5fd3OnTyex77l70mE02EF96wpTJcyjLTMPKYtg==
-X-Received: by 2002:a17:906:3a48:b0:8b1:2f0e:e3a4 with SMTP id a8-20020a1709063a4800b008b12f0ee3a4mr4557869ejf.26.1677933209401;
-        Sat, 04 Mar 2023 04:33:29 -0800 (PST)
+        bh=jYT4jMLZ95Xys/g3bLJcTF972/TquYeElIQo4Dg5KU0=;
+        b=BvVoSPQtGeaX++ELlkPdxSd0+Q4mmQONUKtoJltkQ9KO443AXNiTjOurG+djzQ0e4D
+         JKq6X0tv0bIC27+vE882V0ne9OVgI+DivP24e0bYP/5dih543nxAaC/ImrYdLLqBdtr4
+         Kbe27tSBN39n0EmArVX81LbMcvJQEiKL7mIlq2Yb9+4k77yl22OTLWrSSdSXwfIsJBGS
+         CESiUfVCBSfS+kv2z927ZjVREaVS26ZhgaxkVFOsmUIaj3jQOTStTdIECdC8WEnkgYqC
+         qN1k1exjyiLSx1P3vfbfLFqKfB0LWSdEaGcw8ZMZOPzWdFX2KSI+IhvwEUeVKCs882y4
+         uE8A==
+X-Gm-Message-State: AO0yUKV2Yom1GbE7KcxPpQxHdiFLNnFrR7oz0AimAKJXck8WZAqWPC5L
+        RbY1GSjg94vM6ZK6lbYISoRU8g==
+X-Google-Smtp-Source: AK7set/mmUaaPdp2AymtP7v78OSVFNIv0URgmBLmRE8WYZExXzQhdZGh0ReZ5YLQXDuczSJrkdbnhQ==
+X-Received: by 2002:a17:907:9611:b0:8aa:1f89:122e with SMTP id gb17-20020a170907961100b008aa1f89122emr6242603ejc.39.1677933223133;
+        Sat, 04 Mar 2023 04:33:43 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:b758:6326:1292:e2aa])
-        by smtp.gmail.com with ESMTPSA id e22-20020a170906081600b008d1693c212csm2021300ejd.8.2023.03.04.04.33.28
+        by smtp.gmail.com with ESMTPSA id j22-20020a1709066dd600b008e6bd130b14sm2058342ejt.64.2023.03.04.04.33.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 04:33:28 -0800 (PST)
+        Sat, 04 Mar 2023 04:33:42 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: mediatek: mt8173: correct GPIO keys wakeup
-Date:   Sat,  4 Mar 2023 13:33:01 +0100
-Message-Id: <20230304123301.33952-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] arm64: dts: mba6ulx: correct GPIO keys wakeup
+Date:   Sat,  4 Mar 2023 13:33:41 +0100
+Message-Id: <20230304123341.34223-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -78,40 +73,22 @@ gpio-keys,wakeup is a deprecated property.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/mba6ulx.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-index d452cab28c67..d77f6af19065 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-@@ -58,7 +58,7 @@ switch-lid {
- 			gpios = <&pio 69 GPIO_ACTIVE_LOW>;
- 			linux,code = <SW_LID>;
- 			linux,input-type = <EV_SW>;
--			gpio-key,wakeup;
-+			wakeup-source;
- 		};
- 
- 		switch-power {
-@@ -66,7 +66,7 @@ switch-power {
- 			gpios = <&pio 14 GPIO_ACTIVE_HIGH>;
+diff --git a/arch/arm/boot/dts/mba6ulx.dtsi b/arch/arm/boot/dts/mba6ulx.dtsi
+index 5bf831b072d6..e25f8f209760 100644
+--- a/arch/arm/boot/dts/mba6ulx.dtsi
++++ b/arch/arm/boot/dts/mba6ulx.dtsi
+@@ -57,7 +57,7 @@ power-button {
+ 			label = "POWER";
  			linux,code = <KEY_POWER>;
- 			debounce-interval = <30>;
+ 			gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
 -			gpio-key,wakeup;
 +			wakeup-source;
  		};
+ 	};
  
- 		switch-tablet-mode {
-@@ -74,7 +74,7 @@ switch-tablet-mode {
- 			gpios = <&pio 121 GPIO_ACTIVE_HIGH>;
- 			linux,code = <SW_TABLET_MODE>;
- 			linux,input-type = <EV_SW>;
--			gpio-key,wakeup;
-+			wakeup-source;
- 		};
- 
- 		switch-volume-down {
 -- 
 2.34.1
 
