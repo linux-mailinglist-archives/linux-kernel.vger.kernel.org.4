@@ -2,124 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 789626AA7AD
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 03:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E276AA79A
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 03:32:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjCDCqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 21:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
+        id S229691AbjCDCb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 21:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjCDCqh (ORCPT
+        with ESMTP id S229659AbjCDCbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 21:46:37 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F827AAC;
-        Fri,  3 Mar 2023 18:46:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677897996; x=1709433996;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l/A99rMM5WHL0wv+tSavfNrlLcDVEGZfVCVXimd15eM=;
-  b=ed4MVFEkgrEAxdj3JoMr7zQE5ERYuaOFOhWvQc5kKnCb8pg3ElGZH6s9
-   6uOWzhghyGytH3bgnThsU4OUArgeAfuuuQo9OeBo285spMdID7Ozz4hQb
-   DgzhTxCoj6UmmNuYALILFw1gv4N3pSHDX1zHNzNq4cD3LPeZs065q4f2C
-   aTW4Gy1w0c/GjZO5ley6nbpi6w3Bd/qOilj9JSIxQhNRk6wvGhLyMWCE+
-   ajWLLfvs3ABzF3GZPp9xhiI0suQMP+MIN909OpFxV4WPhqKScXPcKpRnl
-   BTm36NtOKLjUPoO35Et2aMSP/TPXU7Fo6yysSdqcOUW8YBbJFAyGjvla4
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="421484483"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="421484483"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2023 18:46:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10638"; a="705850369"
-X-IronPort-AV: E=Sophos;i="5.98,232,1673942400"; 
-   d="scan'208";a="705850369"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 03 Mar 2023 18:46:32 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYHup-0001oS-2O;
-        Sat, 04 Mar 2023 02:46:31 +0000
-Date:   Sat, 4 Mar 2023 10:46:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-cxl@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        will@kernel.org, dan.j.williams@intel.com, bwidawsk@kernel.org,
-        ira.weiny@intel.com, vishal.l.verma@intel.com,
-        alison.schofield@intel.com, linuxarm@huawei.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] cxl/pci: Find and register CXL PMU devices
-Message-ID: <202303041001.G9OUGQ6l-lkp@intel.com>
-References: <20230303175022.10806-3-Jonathan.Cameron@huawei.com>
+        Fri, 3 Mar 2023 21:31:51 -0500
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E88664CA;
+        Fri,  3 Mar 2023 18:31:49 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PT83z1NwRz4f3jHY;
+        Sat,  4 Mar 2023 10:31:43 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgCnUiCPrQJk3eg0EQ--.50517S4;
+        Sat, 04 Mar 2023 10:31:45 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>
+Subject: [PATCH v3 0/2] ext4: fix WARNING in ext4_update_inline_data
+Date:   Sat,  4 Mar 2023 10:54:56 +0800
+Message-Id: <20230304025458.4007825-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303175022.10806-3-Jonathan.Cameron@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgCnUiCPrQJk3eg0EQ--.50517S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5l7kC6x804xWl14x267AKxVW8JVW5JwAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
+        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48J
+        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+        v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+        14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jonathan,
+From: Ye Bin <yebin10@huawei.com>
 
-I love your patch! Yet something to improve:
+Diff v3 vs v2:
+Remove set 'EXT4_STATE_MAY_INLINE_DATA' flag from ext4_find_inline_data_nolock()
 
-[auto build test ERROR on cxl/next]
-[also build test ERROR on cxl/pending linus/master next-20230303]
-[cannot apply to v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Diff v2 vs v1:
+Only update 'inline_off' when do extra expand.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230304-015342
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git next
-patch link:    https://lore.kernel.org/r/20230303175022.10806-3-Jonathan.Cameron%40huawei.com
-patch subject: [PATCH 2/4] cxl/pci: Find and register CXL PMU devices
-config: alpha-randconfig-r003-20230302 (https://download.01.org/0day-ci/archive/20230304/202303041001.G9OUGQ6l-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0790ed82bb7adf04c834e8c03008b92c1b23945e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230304-015342
-        git checkout 0790ed82bb7adf04c834e8c03008b92c1b23945e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/cxl/
+Ye Bin (2):
+  ext4: remove set 'EXT4_STATE_MAY_INLINE_DATA' flag from
+    ext4_find_inline_data_nolock()
+  ext4: fix WARNING in ext4_update_inline_data
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303041001.G9OUGQ6l-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/cxl/core/regs.c:9:10: fatal error: cpmu.h: No such file or directory
-       9 | #include <cpmu.h>
-         |          ^~~~~~~~
-   compilation terminated.
---
->> drivers/cxl/core/cpmu.c:8:10: fatal error: cpmu.h: No such file or directory
-       8 | #include <cpmu.h>
-         |          ^~~~~~~~
-   compilation terminated.
-
-
-vim +9 drivers/cxl/core/regs.c
-
-   > 9	#include <cpmu.h>
-    10	
+ fs/ext4/inline.c | 1 -
+ fs/ext4/inode.c  | 7 ++++++-
+ fs/ext4/xattr.c  | 3 +++
+ 3 files changed, 9 insertions(+), 2 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.31.1
+
