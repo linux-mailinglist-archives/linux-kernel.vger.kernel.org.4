@@ -2,125 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A207A6AACC0
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 22:39:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 599006AACC4
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 22:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCDVjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 16:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S229609AbjCDVpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 16:45:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCDVjp (ORCPT
+        with ESMTP id S229484AbjCDVpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 16:39:45 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEC117179
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 13:39:40 -0800 (PST)
-Received: from [192.168.2.210] (unknown [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 061CC660225B;
-        Sat,  4 Mar 2023 21:39:36 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1677965978;
-        bh=9CrHTxyZW3KFylnn871/cD0eq6Djuw1QBrR3CDRcqBI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=I6HoBgf/AQJHufIa+5Tx6ghOUVJqyq6TtBj5oaoc2UHq9Jw7Sf8aBLVZq8ChzQ4q7
-         j1URZyVz3lW/rFcUw3ujKSP1wOANunAspGJIy7iEku5QqLaGAnvrSmt+EVQASPjM1m
-         JgpPdhET7YCA8ddiPeiJmI09TYUAFmApsotMqphr+0i1uguhBcoAnyBK19N+wOVSbC
-         +SjWg/J3j2AtE1NLvtGNrpYeiCv6Xi8CR6YoR+axsjM9DOU3T6xfkkPf2ZKd8+9vgw
-         4y4zs8G82rIXEdr7FtcFziOKpDxnWmHty91qWRMS3Z9S1lD/Li8X0SoLD2vstQgmlo
-         FuS+dFhJA73Zg==
-Message-ID: <5ce56330-f4a3-e09d-e7bf-f8ae6d1cdc02@collabora.com>
-Date:   Sun, 5 Mar 2023 00:39:33 +0300
+        Sat, 4 Mar 2023 16:45:08 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DC2125B4
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 13:45:06 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id o15so23714291edr.13
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 13:45:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WKDIxvFH4F3D/Bp8+BmLpjtlutHoc8KA5An4csidBcU=;
+        b=jzS3yeCClEU5ic+r6pgQ/vQwrY4Lj324IPOIkZYoWfvdmucb1ln4sYfsza2nWDWTNL
+         4mtcMhMyNlIRWv24QYhcwEtOU12QAYKj9EURBj5bcbmpQoF5570sCwvVOR+IWU30DjI/
+         7AB3YMigQcTKQX2rwSYrtfKZwOPcSK7sXlBMzB89QkV5CPJhzpYwTu0LTWwr1CPk5bfT
+         5fkm41zDUcAzcqfeaR4Sq3b9aKdO1oRkZ3f6dXusQwZ70heMW1IzC3n+O7Kpew8BPliH
+         4AQkZ6ptMn5c7dafr/RgoabPd0AAMGkJUl0j6IH8PTgxEdPCpRvcIzAKTKg/4oLKEwWd
+         WXfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WKDIxvFH4F3D/Bp8+BmLpjtlutHoc8KA5An4csidBcU=;
+        b=jFbmOm178PoFBnQoaAgaH5jagQrU3H0uHnDP2OLaARgDXEG4iY4R7n4Lx7HASeY9lr
+         luMmhjdQBeQRo5pcNOwVrW1XZOvkbigNGA1YJJ66vn2aDe2WWbtH45hQvqa0Nd9NGJBe
+         O/9eMuQW64eaWN7mulTiTZ7ms2tcaXWAFyX2sapCw8hv8Kh+4m6GMLSqvtEpeJVAPCfS
+         V54r4nUclSpUnZwTUuA/H7d7DGmL8sSdummP3t3IJqcTMZZ8G0I1HXFlLZ/dg/gGd1ZF
+         9G0sWz57InsVksF8SgpM95TmdWGybdUJboKBo1kK73KJ8wyiAnqrkO81VETccIbKEY8O
+         mQ0A==
+X-Gm-Message-State: AO0yUKX+F8vs50XgqtAvyEKW6yPM9DGG+WsGvRs+3vtZal9qMQc2fBOu
+        CP5q6vIJbvjvpgWdQrDPhNHWxAktgPQWZywKiJQ=
+X-Google-Smtp-Source: AK7set9wY0tIW78yGxDw99q432fpv27SQCH8++tgi5/mw5cQNNLf7m3KivFDf11whC1GeXIRw82onTzmkovP2vSJ4lI=
+X-Received: by 2002:a17:906:f18f:b0:8af:2ad8:3453 with SMTP id
+ gs15-20020a170906f18f00b008af2ad83453mr5871550ejb.6.1677966304797; Sat, 04
+ Mar 2023 13:45:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v6] drm/virtio: Add option to disable KMS support
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org,
-        Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Chia-I Wu <olvaffe@gmail.com>, Ryan Neph <ryanneph@chromium.org>,
+References: <20230303123312.155164-1-christianshewitt@gmail.com>
+In-Reply-To: <20230303123312.155164-1-christianshewitt@gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 4 Mar 2023 22:44:53 +0100
+Message-ID: <CAFBinCDwGW-NaMx63t2v=Rt298MY1W13A1b1BDwHN72q7ifbZQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/meson: fix 1px pink line on GXM when scaling video overlay
+To:     Christian Hewitt <christianshewitt@gmail.com>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230302233506.3146290-1-robdclark@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230302233506.3146290-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/23 02:35, Rob Clark wrote:
-> @@ -223,12 +223,15 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
->  			num_scanouts, &num_scanouts);
->  	vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
->  				    VIRTIO_GPU_MAX_SCANOUTS);
-> -	if (!vgdev->num_scanouts) {
-> -		DRM_ERROR("num_scanouts is zero\n");
-> -		ret = -EINVAL;
-> -		goto err_scanouts;
-> +
-> +	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) || !vgdev->num_scanouts) {
+On Fri, Mar 3, 2023 at 1:33=E2=80=AFPM Christian Hewitt
+<christianshewitt@gmail.com> wrote:
+>
+> Playing media with a resolution smaller than the crtc size requires the
+> video overlay to be scaled for output and GXM boards display a 1px pink
+> line on the bottom of the scaled overlay. Comparing with the downstream
+> vendor driver revealed VPP_DUMMY_DATA not being set [0].
+>
+> Setting VPP_DUMMY_DATA prevents the 1px pink line from being seen.
+>
+> [0] https://github.com/endlessm/linux-s905x/blob/master/drivers/amlogic/a=
+mports/video.c#L7869
+>
+> Fixes: bbbe775ec5b5 ("drm: Add support for Amlogic Meson Graphic Controll=
+er")
+> Suggested-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Unfortunately the IS_ENABLED check needs to be inverted here.
-
-Secondly, with the IS_ENABLED check fixed and CONFIG_DRM_VIRTIO_GPU_KMS
-disabled, kernel crashes with a NULL deref on boot after getting the
-VIRTIO_GPU_EVENT_DISPLAY from host.
-
- ==================================================================
-[    0.870144] BUG: KASAN: null-ptr-deref in
-drm_kms_helper_hotplug_event+0x2b/0x50
-[    0.870588] Read of size 8 at addr 0000000000000010 by task
-kworker/0:1/14
-[    0.870588]
-[    0.870588] CPU: 0 PID: 14 Comm: kworker/0:1 Not tainted
-6.2.0-next-20230303+ #387
-[    0.871441] scsi host0: ahci
-[    0.870588] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
-rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
-[    0.870588] Workqueue: events virtio_gpu_dequeue_ctrl_func
-[    0.870588] Call Trace:
-[    0.870588]  <TASK>
-[    0.872841] scsi host1: ahci
-[    0.870588]  dump_stack_lvl+0x46/0x70
-[    0.870588]  kasan_report+0xbb/0xf0
-[    0.870588]  ? drm_kms_helper_hotplug_event+0x2b/0x50
-[    0.870588]  drm_kms_helper_hotplug_event+0x2b/0x50
-[    0.870588]  virtio_gpu_dequeue_ctrl_func+0x143/0x500
-[    0.870588]  ? lock_is_held_type+0xd8/0x130
-[    0.870588]  ? virtio_gpu_free_vbufs+0x40/0x40
-[    0.875105] scsi host2: ahci
-[    0.870588]  process_one_work+0x4f5/0x9a0
-[    0.870588]  ? pwq_dec_nr_in_flight+0x100/0x100
-[    0.870588]  ? spin_bug+0xe0/0xe0
-[    0.870588]  worker_thread+0x8c/0x610
-[    0.870588]  ? process_one_work+0x9a0/0x9a0
-[    0.870588]  kthread+0x15a/0x190
-[    0.870588]  ? kthread_complete_and_exit+0x20/0x20
-[    0.870588]  ret_from_fork+0x1f/0x30
-[    0.877201] scsi host3: ahci
-[    0.870588]  </TASK>
-[    0.870588]
-==================================================================
-
-I'll send a follow up fix.
-
--- 
-Best regards,
-Dmitry
-
+> ---
+> Change since v1:
+> This time I sent the right patch from the correct branch; the wording in
+> v1 is incorrect and the change to meson_registers.h is not required.
+Thanks Christian - I was about to ask whether you could isolate which
+part of the original patch fixes the issue, but you've been quicker
+:-)
