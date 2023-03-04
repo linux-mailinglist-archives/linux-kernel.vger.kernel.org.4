@@ -2,132 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63606AA76D
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 02:46:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A116AA732
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 02:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjCDBqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 3 Mar 2023 20:46:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45482 "EHLO
+        id S229604AbjCDBQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 3 Mar 2023 20:16:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjCDBqi (ORCPT
+        with ESMTP id S229562AbjCDBQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 3 Mar 2023 20:46:38 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587B46A06A;
-        Fri,  3 Mar 2023 17:46:36 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3240GUiE006914;
-        Sat, 4 Mar 2023 01:07:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=7qJRx+Bc0RxDhyPOVZD28FbA36S3iDuE8wdALiNyenI=;
- b=J8NQZwKWcYur1s1m5NYeBFjWzz67QB/EHDBVT/F3spr6hb/J8h8v78NZB58g7xzkl6i3
- xdGjqV81ROM37+HIP5qSjkfRUvm0wKTN2sIRYYo7d3xq+Q3rWBG6legbaj8l5na9F+M/
- u6TCMlax+lj0ParH+o7OlFJLJK/8mtCYF6yB/lWv75EKS7Dkit1adUSWilws77QsFI1e
- nbezafR1WKsq3vxA7xcfD9DSI+2acnf02jHClK8EJNfipVyfqk4B8GsnP95WBB6ktuP0
- F68PbjlZZVpqI5bNpTAKOQQd+Tu5gHB/HfKxS5Gdgab/HE5a6708R7ywVMgRwNP80+Ki lQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p3pu48mb8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 04 Mar 2023 01:07:24 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32417NMO019526
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 4 Mar 2023 01:07:23 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Fri, 3 Mar 2023 17:07:23 -0800
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Alex Elder <elder@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Will Deacon <will@kernel.org>, Andy Gross <agross@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v11 26/26] MAINTAINERS: Add Gunyah hypervisor drivers section
-Date:   Fri, 3 Mar 2023 17:06:32 -0800
-Message-ID: <20230304010632.2127470-27-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230304010632.2127470-1-quic_eberman@quicinc.com>
-References: <20230304010632.2127470-1-quic_eberman@quicinc.com>
+        Fri, 3 Mar 2023 20:16:22 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE5A64850;
+        Fri,  3 Mar 2023 17:15:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE7D4B81A0C;
+        Sat,  4 Mar 2023 01:14:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE623C433D2;
+        Sat,  4 Mar 2023 01:14:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677892475;
+        bh=VhonvLy8O+pflz+3Bd7drjd0a4V6yJlZnzkfpNCtEj4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=lQHP3DaD4PBx+3x405C1VZgAeU5jrxn4dCM66jYzzVSaviK9HPyWl8uYqnUOeZhQa
+         shuW7QjIDugNMgZ2y2XUsNNAaKj0p9lu85dDw2Ux6hvsWE9UcSbhPBRQP+rJgZkr/0
+         RFdKz9j+hgU7WO3yvEny35Q+u6oduYMT+OD3rtjmzhrhduZJRLDbzG4xLo3o4UP8DO
+         b11r0ZRRCLa3PyfZ7UD7kkTv7YtGEp6PTXapZ5DH6PumuXCsfeM+w8s1yeayvUEUjR
+         xEsbLkPDpgR7t7ovIjMZlJUqwuRhbqylSnGBUj1wmvrlVjdeEFgRFqv5eQ8cozLebL
+         qX0djSPKL12Ig==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 4E6515C0278; Fri,  3 Mar 2023 17:14:35 -0800 (PST)
+Date:   Fri, 3 Mar 2023 17:14:35 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Dave Taht <dave.taht@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
+        jstultz@google.com, edumazet@google.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] softirq: avoid spurious stalls due to need_resched()
+Message-ID: <20230304011435.GE1301832@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221222221244.1290833-1-kuba@kernel.org>
+ <20221222221244.1290833-3-kuba@kernel.org>
+ <87r0u6j721.ffs@tglx>
+ <20230303133143.7b35433f@kernel.org>
+ <20230303223739.GC1301832@paulmck-ThinkPad-P17-Gen-1>
+ <CAA93jw5nHjHTFiN9D4wCeOJ4UYmP2537Ar+5ZsCYftzhg7RLPw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QDQdUgSvbm-CZtNLBf4mE_tACS6T5Faa
-X-Proofpoint-ORIG-GUID: QDQdUgSvbm-CZtNLBf4mE_tACS6T5Faa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-03_07,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=916
- priorityscore=1501 suspectscore=0 phishscore=0 malwarescore=0 bulkscore=0
- spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303040005
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAA93jw5nHjHTFiN9D4wCeOJ4UYmP2537Ar+5ZsCYftzhg7RLPw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add myself and Prakruthi as maintainers of Gunyah hypervisor drivers.
+On Fri, Mar 03, 2023 at 03:25:32PM -0800, Dave Taht wrote:
+> On Fri, Mar 3, 2023 at 2:56 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Fri, Mar 03, 2023 at 01:31:43PM -0800, Jakub Kicinski wrote:
+> > > On Fri, 03 Mar 2023 14:30:46 +0100 Thomas Gleixner wrote:
+> > > > > -         if (time_before(jiffies, end) && !need_resched() &&
+> > > > > -             --max_restart)
+> > > > > +         unsigned long limit;
+> > > > > +
+> > > > > +         if (time_is_before_eq_jiffies(end) || !--max_restart)
+> > > > > +                 limit = SOFTIRQ_OVERLOAD_TIME;
+> > > > > +         else if (need_resched())
+> > > > > +                 limit = SOFTIRQ_DEFER_TIME;
+> > > > > +         else
+> > > > >                   goto restart;
+> > > > >
+> > > > > +         __this_cpu_write(overload_limit, jiffies + limit);
+> > > >
+> > > > The logic of all this is non-obvious and I had to reread it 5 times to
+> > > > conclude that it is matching the intent. Please add comments.
+> > > >
+> > > > While I'm not a big fan of heuristical duct tape, this looks harmless
+> > > > enough to not end up in an endless stream of tweaking. Famous last
+> > > > words...
+> > >
+> > > Would it all be more readable if I named the "overload_limit"
+> > > "overloaded_until" instead? Naming..
+> > > I'll add comments, too.
+> > >
+> > > > But without the sched_clock() changes the actual defer time depends on
+> > > > HZ and the point in time where limit is set. That means it ranges from 0
+> > > > to 1/HZ, i.e. the 2ms defer time ends up with close to 10ms on HZ=100 in
+> > > > the worst case, which perhaps explains the 8ms+ stalls you are still
+> > > > observing. Can you test with that sched_clock change applied, i.e. the
+> > > > first two commits from
+> > > >
+> > > >   git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git core/softirq
+> > > >
+> > > > 59be25c466d9 ("softirq: Use sched_clock() based timeout")
+> > > > bd5a5bd77009 ("softirq: Rewrite softirq processing loop")
+> > >
+> > > Those will help, but I spent some time digging into the jiffies related
+> > > warts with kprobes - while annoying they weren't a major source of wake
+> > > ups. (FWIW the jiffies noise on our workloads is due to cgroup stats
+> > > disabling IRQs for multiple ms on the timekeeping CPU).
+> > >
+> > > Here are fresh stats on why we wake up ksoftirqd on our Web workload
+> > > (collected over 100 sec):
+> > >
+> > > Time exceeded:      484
+> > > Loop max run out:  6525
+> > > need_resched():   10219
+> > > (control: 17226 - number of times wakeup_process called for ksirqd)
+> > >
+> > > As you can see need_resched() dominates.
+> > >
+> > > Zooming into the time exceeded - we can count nanoseconds between
+> > > __do_softirq starting and the check. This is the histogram of actual
+> > > usecs as seen by BPF (AKA ktime_get_mono_fast_ns() / 1000):
+> > >
+> > > [256, 512)             1 |                                                    |
+> > > [512, 1K)              0 |                                                    |
+> > > [1K, 2K)             217 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@         |
+> > > [2K, 4K)             266 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> > >
+> > > So yes, we can probably save ourselves ~200 wakeup with a better clock
+> > > but that's just 1.3% of the total wake ups :(
+> > >
+> > >
+> > > Now - now about the max loop count. I ORed the pending softirqs every
+> > > time we get to the end of the loop. Looks like vast majority of the
+> > > loop counter wake ups are exclusively due to RCU:
+> > >
+> > > @looped[512]: 5516
+> > >
+> > > Where 512 is the ORed pending mask over all iterations
+> > > 512 == 1 << RCU_SOFTIRQ.
+> > >
+> > > And they usually take less than 100us to consume the 10 iterations.
+> > > Histogram of usecs consumed when we run out of loop iterations:
+> > >
+> > > [16, 32)               3 |                                                    |
+> > > [32, 64)            4786 |@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@|
+> > > [64, 128)            871 |@@@@@@@@@                                           |
+> > > [128, 256)            34 |                                                    |
+> > > [256, 512)             9 |                                                    |
+> > > [512, 1K)            262 |@@                                                  |
+> > > [1K, 2K)              35 |                                                    |
+> > > [2K, 4K)               1 |                                                    |
+> > >
+> > > Paul, is this expected? Is RCU not trying too hard to be nice?
+> >
+> > This is from way back in the day, so it is quite possible that better
+> > tuning and/or better heuristics should be applied.
+> >
+> > On the other hand, 100 microseconds is a good long time from an
+> > CONFIG_PREEMPT_RT=y perspective!
+> 
+> All I have to add to this conversation is the observation that
+> sampling things at the
+> nyquist rate helps to observe problems like these.
+> 
+> So if you care about sub 8ms response time, a sub 4ms sampling rate is needed.
 
-Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
----
- MAINTAINERS | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+My guess is that Jakub is side-stepping Nyquist by sampling every call
+to and return from the rcu_do_batch() function.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b0db911207ba..26ba59610276 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8916,6 +8916,19 @@ L:	linux-efi@vger.kernel.org
- S:	Maintained
- F:	block/partitions/efi.*
- 
-+GUNYAH HYPERVISOR DRIVER
-+M:	Elliot Berman <quic_eberman@quicinc.com>
-+M:	Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Supported
-+F:	Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
-+F:	Documentation/virt/gunyah/
-+F:	arch/arm64/gunyah/
-+F:	drivers/mailbox/gunyah-msgq.c
-+F:	drivers/virt/gunyah/
-+F:	include/linux/gunyah*.h
-+F:	samples/gunyah/
-+
- HABANALABS PCI DRIVER
- M:	Oded Gabbay <ogabbay@kernel.org>
- L:	dri-devel@lists.freedesktop.org
--- 
-2.39.2
+> > > # cat /sys/module/rcutree/parameters/blimit
+> > > 10
+> > >
+> > > Or should we perhaps just raise the loop limit? Breaking after less
+> > > than 100usec seems excessive :(
+> 
+> 
+> > But note that RCU also has rcutree.rcu_divisor, which defaults to 7.
+> > And an rcutree.rcu_resched_ns, which defaults to three milliseconds
+> > (3,000,000 nanoseconds).  This means that RCU will do:
+> >
+> > o       All the callbacks if there are less than ten.
+> >
+> > o       Ten callbacks or 1/128th of them, whichever is larger.
+> >
+> > o       Unless the larger of them is more than 100 callbacks, in which
+> >         case there is an additional limit of three milliseconds worth
+> >         of them.
+> >
+> > Except that if a given CPU ends up with more than 10,000 callbacks
+> > (rcutree.qhimark), that CPU's blimit is set to 10,000.
+> >
+> > So there is much opportunity to tune the existing heuristics and also
+> > much opportunity to tweak the heuristics themselves.
+> 
+> This I did not know, and to best observe rcu in action nyquist is 1.5ms...
 
+This is not an oscillator, and because this all happens within a
+single system, you cannot you hang your hat on speed-of-light delays.
+In addition, an application can dump thousands of callbacks down RCU's
+throat in a very short time, which changes RCU's timing.  Also, the
+time constants for expedited grace periods are typically in the tens
+of microseconds.  Something about prioritizing survivability over
+measurability.  ;-)
+
+But that is OK because ftrace and BPF can provide fine-grained
+measurements quite cheaply.
+
+> Something with less constants and more curves seems in order.
+
+In the immortal words of MS-DOS, are you sure?
+
+							Thanx, Paul
+
+> > But let's see a good use case before tweaking, please.  ;-)
+> >
+> >                                                         Thanx, Paul
+> >
+> > > > whether that makes a difference? Those two can be applied with some
+> > > > minor polishing. The rest of that series is broken by f10020c97f4c
+> > > > ("softirq: Allow early break").
+> > > >
+> > > > There is another issue with this overload limit. Assume max_restart or
+> > > > timeout triggered and limit was set to now + 100ms. ksoftirqd runs and
+> > > > gets the issue resolved after 10ms.
+> > > >
+> > > > So for the remaining 90ms any invocation of raise_softirq() outside of
+> > > > (soft)interrupt context, which wakes ksoftirqd again, prevents
+> > > > processing on return from interrupt until ksoftirqd gets on the CPU and
+> > > > goes back to sleep, because task_is_running() == true and the stale
+> > > > limit is not after jiffies.
+> > > >
+> > > > Probably not a big issue, but someone will notice on some weird workload
+> > > > sooner than later and the tweaking will start nevertheless. :) So maybe
+> > > > we fix it right away. :)
+> > >
+> > > Hm, Paolo raised this point as well, but the overload time is strictly
+> > > to stop paying attention to the fact ksoftirqd is running.
+> > > IOW current kernels behave as if they had overload_limit of infinity.
+> > >
+> > > The current code already prevents processing until ksoftirqd schedules
+> > > in, after raise_softirq() from a funky context.
+> 
+> 
+> 
+> -- 
+> A pithy note on VOQs vs SQM: https://blog.cerowrt.org/post/juniper/
+> Dave Täht CEO, TekLibre, LLC
