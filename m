@@ -2,76 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AB96AAAB1
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 16:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7FF6AAAE2
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 16:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjCDP1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 10:27:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S229613AbjCDPlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 10:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDP1k (ORCPT
+        with ESMTP id S229500AbjCDPla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 10:27:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06001E29D
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 07:26:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1677943611;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/UDCKfL+7KAewaP80OA62WS4MzOdBiesWSnnrtlTFvY=;
-        b=GUB3AEX9jY699jElosFY6cpUYniIxfxC6vB243EBvk8q0EGnXeFQ/ju0UuAwhY+BXnzRlB
-        BqoPbLCNy79FZCd/MZP9mhQkyTgMTmzkd6ezERnrPzrB8eTyLGUUlRhfcXGUgNJcMQGN5a
-        cUtpFePLdFrOcJFhMQvQ7FEV3HwTcTw=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-653-bseNC7KiOdOwzKFpGZIjZA-1; Sat, 04 Mar 2023 10:26:50 -0500
-X-MC-Unique: bseNC7KiOdOwzKFpGZIjZA-1
-Received: by mail-qt1-f199.google.com with SMTP id p7-20020ac84607000000b003b9b6101f65so3028007qtn.11
-        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 07:26:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677943609;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/UDCKfL+7KAewaP80OA62WS4MzOdBiesWSnnrtlTFvY=;
-        b=rog2R1IHKkvTjg+Epg0rLunhIpHnlP4GPTeoTMeMmsCbob2SQBveaUX6XJffMFrLWk
-         FiBBbqE/iw9KpQB6u5tQkdkRB/tu8z8LxQJSoWeI6TZJg9EhcyoxGoF03FewgGnzeUr9
-         635a9k0fUMAM6VGlbkr2PXnppc68R15ZVvVSB2al/gFpZBKwkZC5xo+0UIC+RGCaYdWg
-         BVGR0rk0QBbYMhAnO+N4gqLKlhG5eLRzfR+e8Y7jWJl3bSznSrKhu9CUgNfb9i19yPLo
-         P2QW1U4KdYj0Rp8KtCAymaArIHd+yXh4mD9zkYRAPreMZHbFrbC8bEBAF33u4Kw0JaPG
-         e8zw==
-X-Gm-Message-State: AO0yUKUcLFw3lLV1na0Vg1SDDuqb5AJb741vKbY8R+vHwZAARgRZTnEz
-        MDBQKHRucd8DllZmnETjqQ1pqqIAmiF3sSSgeYg2DWQpRN05p9DxmhKEQU2iVwbl1nChUfdctc/
-        wjyFcyq5o7n5oyXA58r/09V+v
-X-Received: by 2002:a05:622a:91:b0:3bf:e320:ba5d with SMTP id o17-20020a05622a009100b003bfe320ba5dmr9306169qtw.17.1677943609587;
-        Sat, 04 Mar 2023 07:26:49 -0800 (PST)
-X-Google-Smtp-Source: AK7set/MOHotq65z85YoYXsl+9GxKlOMDwDiVF39R9D7RfzOLxzdvuuX5Qo/4zrs6kDMXmPcM2L2fg==
-X-Received: by 2002:a05:622a:91:b0:3bf:e320:ba5d with SMTP id o17-20020a05622a009100b003bfe320ba5dmr9306142qtw.17.1677943609343;
-        Sat, 04 Mar 2023 07:26:49 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id j26-20020ac874da000000b003b82489d8acsm3884477qtr.21.2023.03.04.07.26.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 07:26:48 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, jiapeng.chong@linux.alibaba.com,
-        Pavle.Kotarac@amd.com, oliver.logush@amd.com, alex.hung@amd.com,
-        aurabindo.pillai@amd.com, HaoPing.Liu@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amd/display: change several dcn201 variables storage-class-specifier to static
-Date:   Sat,  4 Mar 2023 10:26:40 -0500
-Message-Id: <20230304152640.1938302-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 4 Mar 2023 10:41:30 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D935513D6E;
+        Sat,  4 Mar 2023 07:41:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677944469; x=1709480469;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1O6X2bU+hlU9cc69CuzgjEH35kCbP1rkBwjWe5GsnTg=;
+  b=ZmDAVdaRpVj5qKlUbs/Fbnt6F1QUqJFQqsguFjWb0SHSJGjxC9MvGhoj
+   Ng9r85VEFUrA6s59U4+Kucmn+E2wWQxYLEQuJwt3jNoweUr2hRKWjB7pa
+   LF9LMTTA/257tfmIiGkR0gnw/btCFCQ+rLDlrBXFNTGUYD+UdxizA4kwy
+   3NL0Oj4d7YyVq55C/StGCcN4QTeZjsBdp1kHKeMNcV8Ezx6QzZCvhq4gS
+   F82FpVxLkLBsu0dQc7RrUudLFtvbfY8NgweLswn8yDq1SRoM90ZSxIOgc
+   e+KvCu33W9v8JxprTIfgbJD8IgQEO/JW/RKoJN51p/lEPmganQko+Tk6x
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="400089681"
+X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
+   d="scan'208";a="400089681"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 07:41:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="785645656"
+X-IronPort-AV: E=Sophos;i="5.98,233,1673942400"; 
+   d="scan'208";a="785645656"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmsmga002.fm.intel.com with ESMTP; 04 Mar 2023 07:41:07 -0800
+Date:   Sat, 4 Mar 2023 23:29:59 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Tom Rix <trix@redhat.com>
+Cc:     Marco Pagani <marpagan@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Tull <atull@kernel.org>, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpga: bridge: fix kernel-doc parameter description
+Message-ID: <ZANj9+SILtNZkqUE@yilunxu-OptiPlex-7050>
+References: <20230301140309.512578-1-marpagan@redhat.com>
+ <4e15feab-5d75-6748-324d-ff58d0f862b8@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e15feab-5d75-6748-324d-ff58d0f862b8@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,73 +65,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports these similar problems in dcn201
-drivers/gpu/drm/amd/amdgpu/../display/dc/clk_mgr/dcn201/dcn201_clk_mgr.c:165:22:
-  warning: symbol 'dcn201_funcs' was not declared. Should it be static?
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_resource.c:77:30:
-  warning: symbol 'dcn201_ip' was not declared. Should it be static?
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_resource.c:139:37:
-  warning: symbol 'dcn201_soc' was not declared. Should it be static?
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn201/dcn201_mpc.c:79:24:
-  warning: symbol 'dcn201_mpc_funcs' was not declared. Should it be static?
+On 2023-03-02 at 04:51:43 -0800, Tom Rix wrote:
+> 
+> On 3/1/23 6:03 AM, Marco Pagani wrote:
+> > Fix the kernel-doc description for the "struct fpga_image_info *info"
+> > parameter of the fpga_bridge_get() function.
+> > 
+> > Fixes: 060ac5c8fa7b ("fpga: bridge: kernel-doc fixes")
+> > Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> Reviewed-by: Tom Rix <trix@redhat.com>
 
-All of these are only used in their definition file, so they should be static
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- .../gpu/drm/amd/display/dc/clk_mgr/dcn201/dcn201_clk_mgr.c    | 2 +-
- drivers/gpu/drm/amd/display/dc/dcn201/dcn201_mpc.c            | 2 +-
- drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c       | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn201/dcn201_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn201/dcn201_clk_mgr.c
-index f0577dcd1af6..811720749faf 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn201/dcn201_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn201/dcn201_clk_mgr.c
-@@ -162,7 +162,7 @@ static void dcn201_update_clocks(struct clk_mgr *clk_mgr_base,
- 	}
- }
- 
--struct clk_mgr_funcs dcn201_funcs = {
-+static struct clk_mgr_funcs dcn201_funcs = {
- 	.get_dp_ref_clk_frequency = dce12_get_dp_ref_freq_khz,
- 	.update_clocks = dcn201_update_clocks,
- 	.init_clocks = dcn201_init_clocks,
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_mpc.c b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_mpc.c
-index 95c4c55f067c..1af03a86ec9b 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_mpc.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_mpc.c
-@@ -76,7 +76,7 @@ static void mpc201_init_mpcc(struct mpcc *mpcc, int mpcc_inst)
- 	mpcc->shared_bottom = false;
- }
- 
--const struct mpc_funcs dcn201_mpc_funcs = {
-+static const struct mpc_funcs dcn201_mpc_funcs = {
- 	.read_mpcc_state = mpc1_read_mpcc_state,
- 	.insert_plane = mpc1_insert_plane,
- 	.remove_mpcc = mpc1_remove_mpcc,
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
-index 407d995bfa99..cd46701398d9 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
-@@ -74,7 +74,7 @@
- #define MIN_DISP_CLK_KHZ 100000
- #define MIN_DPP_CLK_KHZ 100000
- 
--struct _vcs_dpi_ip_params_st dcn201_ip = {
-+static struct _vcs_dpi_ip_params_st dcn201_ip = {
- 	.gpuvm_enable = 0,
- 	.hostvm_enable = 0,
- 	.gpuvm_max_page_table_levels = 4,
-@@ -136,7 +136,7 @@ struct _vcs_dpi_ip_params_st dcn201_ip = {
- 	.number_of_cursors = 1,
- };
- 
--struct _vcs_dpi_soc_bounding_box_st dcn201_soc = {
-+static struct _vcs_dpi_soc_bounding_box_st dcn201_soc = {
- 	.clock_limits = {
- 			{
- 				.state = 0,
--- 
-2.27.0
-
+> > ---
+> >   drivers/fpga/fpga-bridge.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/fpga/fpga-bridge.c b/drivers/fpga/fpga-bridge.c
+> > index 5cd40acab5bf..ff4470067ed5 100644
+> > --- a/drivers/fpga/fpga-bridge.c
+> > +++ b/drivers/fpga/fpga-bridge.c
+> > @@ -115,7 +115,7 @@ static int fpga_bridge_dev_match(struct device *dev, const void *data)
+> >   /**
+> >    * fpga_bridge_get - get an exclusive reference to an fpga bridge
+> >    * @dev:	parent device that fpga bridge was registered with
+> > - * @info:	fpga manager info
+> > + * @info:	fpga image specific information
+> >    *
+> >    * Given a device, get an exclusive reference to an fpga bridge.
+> >    *
+> 
