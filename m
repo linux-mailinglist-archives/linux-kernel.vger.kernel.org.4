@@ -2,87 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B69C16AAA88
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 15:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5376AAA92
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 15:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjCDOtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 09:49:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55164 "EHLO
+        id S229622AbjCDOzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 09:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjCDOs6 (ORCPT
+        with ESMTP id S229484AbjCDOzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 09:48:58 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF22C6A68;
-        Sat,  4 Mar 2023 06:48:56 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id ev13so3689564qvb.10;
-        Sat, 04 Mar 2023 06:48:56 -0800 (PST)
+        Sat, 4 Mar 2023 09:55:04 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38CD15CB8;
+        Sat,  4 Mar 2023 06:55:01 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id 4so3680861ilz.6;
+        Sat, 04 Mar 2023 06:55:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677941336;
+        d=gmail.com; s=20210112; t=1677941701;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TsKKHJ0/GD+1zuzNsuCdWtAJjvxya3Twz8P8LNYqCwY=;
-        b=o0XqqF9KH2cTPnL75tHljXD8nVLW6wpV2NwV7X4XXX+8CRd/3AiCnKdEDZYSwR76vS
-         z8DZ8fDxhR9+Ldwet6gfGkh2EsHwkG4Dy7dIJF9dPCMa6YH7fOTsxGPuSPTCkAS8XnXz
-         OfwYYEu30tPOkw33e6UktE/vuadPB2J8SBzRq91ZzIsoBzpFT+a/OEoRYN3MxofBSzE3
-         n2D3eHQaHuIWSse1usU0WLHDT0VedC2vd3YjKYqeoWc8J/YzpCrNaTcZorTn2ZaYobKj
-         vcDaPFP2HtRgLwcyZQk40ii3Uxz5WJNVJ4F+7fU5RfFO0z0TzUrHE3mMAIJLs5FvwND4
-         pCBg==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=MJLJpd9NzIbgfT1PX8LwJ+KD+O/5AxkPiWkXsZqZ0+w=;
+        b=TpOBrX7Ht8Z0FrjSyZMH10AauJS7UYNWUJi9eICV9imYeS/ZgLzUVO/9CGqVfok0aY
+         guBMCUhbR806Tu953K9SEzqeWC4dMXt94BgkLrtgX7ILc9EmpCv7g1XL1AcoHmO6vHqa
+         dQDFANKeNPfC/eP+WEKNcYyf3aVcmAfeBJNpNe5bbPyeh5CwFzJGG0W6Dr0snuZ2Oo+d
+         KneECNRJ7DRE2tiULTmEl0s56Qq3ulOchB/OxZl0SJxcahCnH37GH1zSv1rNIpPNUKSo
+         9ZSEoKGCLF27VOdkASOBCcf7T1Y3aja7calmRQyLSe8y3XyhRvGESCm23piWKUsRIP80
+         f6Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677941336;
+        d=1e100.net; s=20210112; t=1677941701;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TsKKHJ0/GD+1zuzNsuCdWtAJjvxya3Twz8P8LNYqCwY=;
-        b=GV6rS7aCTFOg3Ji/DZkg9IQEpqkCrC/fJ8qy/+JMzJr6052Pn4ywdEvOgb7g6GCsIL
-         CZ4pnSJHDxscBXlKM+Isu3D02NmCb63VW7o8RuJVIy7GjKNQhKXa2mm0t6l+x+LtbBn/
-         vWx3cRoi7FhHF+1Fs1zm2QUAezoU+kszn+9Ah9yFUab58wpRZAbnT1a4QUX6nU6hmohM
-         U/dYtzjvRyI5+OAWgVMIC5uhHY7EjPI7HIG3GXnsDcKK6uS95pMAwwdJDyw+mrIVm3D9
-         SBKv/jiWnIhOFZWofVw9U8aqwnXU56F2CO24Q8TqCEVGMrLznxK5Hl4mqVkHt/FljpNv
-         L70Q==
-X-Gm-Message-State: AO0yUKVY9Ke2HkOTc/tNCNtOAhXWV5p3SsZU8qJ3kzyLdlE75ER+4PIp
-        uhEd7cxPndSTiqOVIOCz+eg=
-X-Google-Smtp-Source: AK7set/lpTeE6jSzoh7eLRmNQ2aPTpe64xLeLcMiiEyIor3lA8OcSo+NeLshc41rysf1tZHsq/I8fQ==
-X-Received: by 2002:a05:6214:23c8:b0:583:a07b:554c with SMTP id hr8-20020a05621423c800b00583a07b554cmr2306311qvb.40.1677941335935;
-        Sat, 04 Mar 2023 06:48:55 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:99e6:eec3:1daa:f163? ([2600:1700:2442:6db0:99e6:eec3:1daa:f163])
-        by smtp.gmail.com with ESMTPSA id d82-20020a376855000000b007419eb86df0sm3835899qkc.127.2023.03.04.06.48.54
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MJLJpd9NzIbgfT1PX8LwJ+KD+O/5AxkPiWkXsZqZ0+w=;
+        b=6xNX1prdhG0zZrk6HcIsVxMfxDgeNPugs4N7NboI76cibYoP8VLG/urOEPGJgDo4vZ
+         ZPPq4/HaFYvLzw4B2rsuVpf3LPlBK9hjdIO2dwDzY90pwzbp4suyo44VinW+4nmbzv3N
+         AOPKGlyD5I7fCEji0R/5T3r6KeO2bj/2oQ8D6j00vCqYh3ekSOl02VUSMNsmzMHtKwkj
+         P6hGSznw/VbkCyUbN4gfIlLodkg7nGF83jWet9BZnJhwzLWGOXkfwrUHHturMmyLQw1S
+         5yVJJU6v6fbXp0UTRz2a5zkMjMCiW4VUIu+o61oYNdgY+O7S5hqYamG3DfXA1X0kdCqV
+         Sbrg==
+X-Gm-Message-State: AO0yUKW0NQM6nju6TTReO7ufTCnrkJFZr53fta7kPEUzqlGNNEbvW2Tk
+        iVuE0GlNvts5JeV2/lbQBYVFiNqwzeM=
+X-Google-Smtp-Source: AK7set+NMfTt7/RTqZc23ne2fOvPG6y0aFL5fNgIr3dNWsMMo2YDi/QXBRc8pswkrNuig7bxSMvDpQ==
+X-Received: by 2002:a05:6e02:20e6:b0:315:4738:1b04 with SMTP id q6-20020a056e0220e600b0031547381b04mr4315358ilv.20.1677941701275;
+        Sat, 04 Mar 2023 06:55:01 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g9-20020a0566380bc900b003c4e9b78e0asm1615638jad.2.2023.03.04.06.54.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 06:48:55 -0800 (PST)
-Message-ID: <6668e83c-eb2c-7ac9-7b6f-2c8146c2175d@gmail.com>
-Date:   Sat, 4 Mar 2023 08:48:54 -0600
+        Sat, 04 Mar 2023 06:55:00 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8aff260c-7151-fe1c-91cd-1e107225a25f@roeck-us.net>
+Date:   Sat, 4 Mar 2023 06:54:58 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
+Subject: Re: [PATCH -next] watchdog: sbsa: Test WDOG_HW_RUNNING bit in suspend
+ and resume
 Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>, David Gow <davidgow@google.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20230302013822.1808711-1-sboyd@kernel.org>
- <CABVgOSnpMNCtEEsJV28OzUoxdDuiT4a2T0avP0AYf9xFW1jxrw@mail.gmail.com>
- <CAL_JsqJMd3Fi0ZBObdyE1VDKTH1_+smuGDymHnKOkVH2HB3jJQ@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CAL_JsqJMd3Fi0ZBObdyE1VDKTH1_+smuGDymHnKOkVH2HB3jJQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+To:     Wang Wensheng <wangwensheng4@huawei.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     xuqiang36@huawei.com
+References: <20230301113702.76437-1-wangwensheng4@huawei.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230301113702.76437-1-wangwensheng4@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,75 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 11:32, Rob Herring wrote:
-> On Thu, Mar 2, 2023 at 2:14 AM David Gow <davidgow@google.com> wrote:
->>
->> On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
->>>
->>> This patch series adds unit tests for the clk fixed rate basic type and
->>> the clk registration functions that use struct clk_parent_data. To get
->>> there, we add support for loading a DTB into the UML kernel that's
->>> running the unit tests along with probing platform drivers to bind to
->>> device nodes specified in DT.
->>>
->>> With this series, we're able to exercise some of the code in the common
->>> clk framework that uses devicetree lookups to find parents and the fixed
->>> rate clk code that scans devicetree directly and creates clks. Please
->>> review.
->>>
->>
->> Thanks Stephen -- this is really neat!
->>
->> This works well here, and I love all of the tests for the
->> KUnit/device-tree integration as well.
->>
->> I'm still looking through the details of it (alas, I've mostly lived
->> in x86-land, so my device-tree knowledge is, uh, spotty to say the
->> least), but apart from possibly renaming some things or similarly
->> minor tweaks, I've not got any real suggestions thus far.
->>
->> I do wonder whether we'll want, on the KUnit side, to have some way of
->> supporting KUnit device trees on non-UML architecctures (e.g., if we
->> need to test something architecture-specific, or on a big-endian
->> platform, etc), but I think that's a question for the future, rather
->> than something that affects this series.
+On 3/1/23 03:37, Wang Wensheng wrote:
+> If the sbsa_gwdt is enabled by BIOS, the kernel set WDOG_HW_RUNNING bit
+> and keep it alive before anyone else would open it. When system suspend,
+> the sbsa_gwdt would not be disabled because WDOG_ACTIVE is not set. Then
+> the sbsa_gwdt would reach timeout since no one touch it during system
+> suspend.
 > 
-> I'll say that's a requirement. We should be able to structure the
-> tests to not interfere with the running system's DT. The DT unittest
-> does that.
+> To solve this, just test WDOG_HW_RUNNING bit in suspend and disable the
+> sbsa_gwdt if the bit is set, then reopen it accordingly in resume
+> process.
 > 
-> As a side topic, Is anyone looking at getting UML to work on arm64?
-> It's surprising how much x86 stuff there is which is I guess one
-> reason it hasn't happened.
+> Signed-off-by: Wang Wensheng <wangwensheng4@huawei.com>
+> ---
+>   drivers/watchdog/sbsa_gwdt.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->> Similarly, I wonder if there's something we could do with device tree
->> overlays, in order to make it possible for tests to swap nodes in and
->> out for testing.
-> 
-> Yes, that's how the DT unittest works. But it is pretty much one big
-> overlay (ignoring the overlay tests). It could probably be more
-> modular where it is apply overlay, test, remove overlay, repeat.
+> diff --git a/drivers/watchdog/sbsa_gwdt.c b/drivers/watchdog/sbsa_gwdt.c
+> index 9791c74aebd4..60875a710e43 100644
+> --- a/drivers/watchdog/sbsa_gwdt.c
+> +++ b/drivers/watchdog/sbsa_gwdt.c
+> @@ -360,7 +360,7 @@ static int __maybe_unused sbsa_gwdt_suspend(struct device *dev)
+>   {
+>   	struct sbsa_gwdt *gwdt = dev_get_drvdata(dev);
+>   
+> -	if (watchdog_active(&gwdt->wdd))
+> +	if (watchdog_hw_running(&gwdt->wdd))
+>   		sbsa_gwdt_stop(&gwdt->wdd);
 
-Actually, no, the bulk of the DT unittest devicetree data is _not_ an
-overlay.  It is an FDT that is loaded via of_fdt_unflatten_tree() instead
-of the overlay load API.  Note that the base DT unittest runs with
-  CONFIG_OF_DYNAMIC=n
-  CONFIG_OF_OVERLAY=n
-so the overlay support code is not even present in the built kernel.
+That will not stop the watchdog if it is currently open (active)
+and if it wasn't running when the module was loaded.
 
-One can then enable CONFIG_OF_DYNAMIC to test the dynamic code.
+Guenter
 
-One can further enable CONFIG_OF_OVERLAY to test the overlay code
-(this will in turn select CONFIG_OF_DYNAMIC if not already enabled).
-
-I would strongly discourage use of the overlay APIs for kunit tests,
-unless the point of the kunit test is to test the overlay API.  Basic
-tests should always be performed with devicetree data that has been
-populated by the normal processing of an FDT during early boot.  If
-one want to test proper overlay infrastructure functionality, then
-those (essentially) same basic tests could/should be repeated with
-devicetree data that has been populated by loading an overlay.
-
-> 
-> Rob
+>   
+>   	return 0;
+> @@ -371,7 +371,7 @@ static int __maybe_unused sbsa_gwdt_resume(struct device *dev)
+>   {
+>   	struct sbsa_gwdt *gwdt = dev_get_drvdata(dev);
+>   
+> -	if (watchdog_active(&gwdt->wdd))
+> +	if (watchdog_hw_running(&gwdt->wdd))
+>   		sbsa_gwdt_start(&gwdt->wdd);
+>   
+>   	return 0;
 
