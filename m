@@ -2,137 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C5B6AAD0A
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 23:56:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A89C06AAD0C
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 23:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjCDW4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 17:56:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
+        id S229580AbjCDW5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 17:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCDW4M (ORCPT
+        with ESMTP id S229534AbjCDW5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 17:56:12 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B69CDBC0
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 14:56:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677970571; x=1709506571;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yGOeu57Run92DBgeExuwVxif9x2vjXc76l3Vnl8JTSg=;
-  b=aeWQmnxcs8nh94ZPuQ/8o4lim9zM+FxQ+W/V7Vwl75KU6vkFWiE5qtij
-   ikjEavyGhjzOJVBBuOaxltIc1Zvp6EIVWKcZ72hLHYt3KMnhdGVyWoWXn
-   n3xF/VXJ+ZwU03bBvE9i9ZyHbV69/TSFvacA7UrLV1AhvJ9LFtwUOTslC
-   4U1n8q9xv44k53LO72kdnOm1xboqdBgh8zD5wlVE+ChuZdU+SxXOynddb
-   UXZ+IfrXtte/mzmwy4CGmpXzvMCGm60tU4/YxziIClJDgb/Qdkfp3xyy3
-   VZ07HuJOfA5uGMvKWyBwqts9Zr718oQ9cH42IfbzPjdyNrWLMx8Jhtun2
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="323623231"
-X-IronPort-AV: E=Sophos;i="5.98,234,1673942400"; 
-   d="scan'208";a="323623231"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 14:56:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="625729470"
-X-IronPort-AV: E=Sophos;i="5.98,234,1673942400"; 
-   d="scan'208";a="625729470"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 04 Mar 2023 14:56:08 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYanQ-0002PI-0a;
-        Sat, 04 Mar 2023 22:56:08 +0000
-Date:   Sun, 5 Mar 2023 06:56:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Aurelien Jarno <aurelien@aurel32.net>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: drivers/clocksource/timer-clint.c:82:24: sparse: sparse: cast
- removes address space '__iomem' of expression
-Message-ID: <202303050655.acu5xXOh-lkp@intel.com>
+        Sat, 4 Mar 2023 17:57:41 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147F81206B
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 14:57:38 -0800 (PST)
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BE0DA4168E
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 22:57:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1677970656;
+        bh=Vju82LMq7Hb3dulxwnm87osrgbRmnYPvBM1vXLn4dUA=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=eVuXfteV4OyfoBeHCOKLBLDrTUF2AN4RIQ5VxgHsDYFtbUUswzwmUqj1MBx6ZwlFZ
+         geielPHAU7QBpSgAE4Z7UaG5Qp0kaQoM46PY1GAeNg9fpXTiAJWUyF7gMZG5uSlmc3
+         ry5G4pe9DRTd6F4A08fo+Cq7i98rMj7+Hl5keO3b4bkxKlQxlJUsogWIsFOf7Ci+1f
+         ptkYyy+OW+M14Z4zrsmKX6IkmibnmijAqbHnLSAAcrIOGEjEj81WsRqeMvut59hTj6
+         OWwDqf9qJDPIW0g0bISKeZAUzscm0OVnPQUJ1jbo1iCWyFChDFLimDT87slvaxq8TN
+         lZatfuLgALM8Q==
+Received: by mail-qv1-f72.google.com with SMTP id d27-20020a0caa1b000000b00572765a687cso3422934qvb.19
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 14:57:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677970654;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vju82LMq7Hb3dulxwnm87osrgbRmnYPvBM1vXLn4dUA=;
+        b=E/PaQMyoPEYUpedH+kV7V+z+EmaU9H/CQnRA7Vk1ez9p4PjzA8cnwfa76An04Ass1j
+         95bicg+87pDZZt4I6ejgLocYFnRjLDs9+euFrrd4udwfGBh9ChNeQhprY3X6yP9QHC6s
+         iyKNWTn8mVfjSQyZC9X6kCnVyoH/NBQRsBN2aV/5ElY5IFk6soVw7TmvmrMhH1/Bek+E
+         saSZdx7MIXdgTmZke0gDnfSlzDTzTAaBqYy4qSaYu4LeK1uMX/tNiG9ovywlwVxcL/bW
+         WqUfjFBUN2yXv5x3roVVt/f1WraOvYlzJyB5Qs9mne84rxxuYmKhPgIfPOaZ6XjaBV40
+         Ll1w==
+X-Gm-Message-State: AO0yUKUi5ZSOdiQqItepF6HyUeEZxTs3bvPjuDGTjBHzboeIFWi2aBaT
+        ZeQDoWNc/jQf+RDjbApDbAMYK1W+JBXyoOd4sFlgZjmukhJd2lUGGUcUHOGXjIDpsMCjWbK9QiJ
+        FcXbr5sMbJAuikISb5TafUhmcIQyJyIAJDhpHQKQ2cEK+KBOVKeqmFxXoSg==
+X-Received: by 2002:a05:6214:933:b0:571:1409:5ee1 with SMTP id dk19-20020a056214093300b0057114095ee1mr1789514qvb.0.1677970654694;
+        Sat, 04 Mar 2023 14:57:34 -0800 (PST)
+X-Google-Smtp-Source: AK7set9OCpr8hRBc/QazhmBC/md4LdexEqTNSjYLrirDk7uhU3nwpz+1l8MCPf/QOPXZH2D1Js8bjRxfqR+PGxy3+lk=
+X-Received: by 2002:a05:6214:933:b0:571:1409:5ee1 with SMTP id
+ dk19-20020a056214093300b0057114095ee1mr1789506qvb.0.1677970654498; Sat, 04
+ Mar 2023 14:57:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20230303085928.4535-1-samin.guo@starfivetech.com> <20230303085928.4535-6-samin.guo@starfivetech.com>
+In-Reply-To: <20230303085928.4535-6-samin.guo@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Sat, 4 Mar 2023 23:57:18 +0100
+Message-ID: <CAJM55Z_SV3ig56JY9BF5LeWt4M+bKYh_HdxSY02CP+9i7F0vCQ@mail.gmail.com>
+Subject: Re: [PATCH v5 05/12] riscv: dts: starfive: jh7110: Add ethernet
+ device nodes
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aurelien,
+On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wrote:
+>
+> Add JH7110 ethernet device node to support gmac driver for the JH7110
+> RISC-V SoC.
+>
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> ---
+>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 91 ++++++++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> index 09806418ed1b..2ce28292b721 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> @@ -233,6 +233,13 @@
+>                 #clock-cells = <0>;
+>         };
+>
+> +       stmmac_axi_setup: stmmac-axi-config {
+> +               snps,lpi_en;
+> +               snps,wr_osr_lmt = <4>;
+> +               snps,rd_osr_lmt = <4>;
+> +               snps,blen = <256 128 64 32 0 0 0>;
+> +       };
+> +
+>         tdm_ext: tdm-ext-clock {
+>                 compatible = "fixed-clock";
+>                 clock-output-names = "tdm_ext";
+> @@ -518,5 +525,89 @@
+>                         gpio-controller;
+>                         #gpio-cells = <2>;
+>                 };
+> +
+> +               gmac0: ethernet@16030000 {
+> +                       compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
+> +                       reg = <0x0 0x16030000 0x0 0x10000>;
+> +                       clocks = <&aoncrg JH7110_AONCLK_GMAC0_AXI>,
+> +                                <&aoncrg JH7110_AONCLK_GMAC0_AHB>,
+> +                                <&syscrg JH7110_SYSCLK_GMAC0_PTP>,
+> +                                <&aoncrg JH7110_AONCLK_GMAC0_TX_INV>,
+> +                                <&syscrg JH7110_SYSCLK_GMAC0_GTXC>;
+> +                       clock-names = "stmmaceth", "pclk", "ptp_ref",
+> +                                     "tx", "gtx";
+> +                       resets = <&aoncrg JH7110_AONRST_GMAC0_AXI>,
+> +                                <&aoncrg JH7110_AONRST_GMAC0_AHB>;
+> +                       reset-names = "stmmaceth", "ahb";
+> +                       interrupts = <7>, <6>, <5>;
+> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
+> +                       phy-mode = "rgmii-id";
+> +                       snps,multicast-filter-bins = <64>;
+> +                       snps,perfect-filter-entries = <8>;
+> +                       rx-fifo-depth = <2048>;
+> +                       tx-fifo-depth = <2048>;
+> +                       snps,fixed-burst;
+> +                       snps,no-pbl-x8;
+> +                       snps,force_thresh_dma_mode;
+> +                       snps,axi-config = <&stmmac_axi_setup>;
+> +                       snps,tso;
+> +                       snps,en-tx-lpi-clockgating;
+> +                       snps,txpbl = <16>;
+> +                       snps,rxpbl = <16>;
+> +                       status = "disabled";
+> +                       phy-handle = <&phy0>;
+> +
+> +                       mdio {
+> +                               #address-cells = <1>;
+> +                               #size-cells = <0>;
+> +                               compatible = "snps,dwmac-mdio";
+> +
+> +                               phy0: ethernet-phy@0 {
+> +                                       reg = <0>;
+> +                               };
+> +                       };
+> +               };
+> +
+> +               gmac1: ethernet@16040000 {
+> +                       compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
+> +                       reg = <0x0 0x16040000 0x0 0x10000>;
+> +                       clocks = <&syscrg JH7110_SYSCLK_GMAC1_AXI>,
+> +                                <&syscrg JH7110_SYSCLK_GMAC1_AHB>,
+> +                                <&syscrg JH7110_SYSCLK_GMAC1_PTP>,
+> +                                <&syscrg JH7110_SYSCLK_GMAC1_TX_INV>,
+> +                                <&syscrg JH7110_SYSCLK_GMAC1_GTXC>;
+> +                       clock-names = "stmmaceth", "pclk", "ptp_ref",
+> +                                     "tx", "gtx";
+> +                       resets = <&syscrg JH7110_SYSRST_GMAC1_AXI>,
+> +                                <&syscrg JH7110_SYSRST_GMAC1_AHB>;
+> +                       reset-names = "stmmaceth", "ahb";
+> +                       interrupts = <78>, <77>, <76>;
+> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
+> +                       phy-mode = "rgmii-id";
+> +                       snps,multicast-filter-bins = <64>;
+> +                       snps,perfect-filter-entries = <8>;
+> +                       rx-fifo-depth = <2048>;
+> +                       tx-fifo-depth = <2048>;
+> +                       snps,fixed-burst;
+> +                       snps,no-pbl-x8;
+> +                       snps,force_thresh_dma_mode;
+> +                       snps,axi-config = <&stmmac_axi_setup>;
+> +                       snps,tso;
+> +                       snps,en-tx-lpi-clockgating;
+> +                       snps,txpbl = <16>;
+> +                       snps,rxpbl = <16>;
+> +                       status = "disabled";
+> +                       phy-handle = <&phy1>;
+> +
+> +                       mdio {
+> +                               #address-cells = <1>;
+> +                               #size-cells = <0>;
+> +                               compatible = "snps,dwmac-mdio";
+> +
+> +                               phy1: ethernet-phy@1 {
+> +                                       reg = <0>;
 
-First bad commit (maybe != root cause):
+I'm getting errors on eth1 unless this is set to <1>. In any case the
+number after @ in the node name should match the reg value.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   c29214bc89169f735657f614bde7c0fad74bd1b5
-commit: 6df2a016c0c8a3d0933ef33dd192ea6606b115e3 riscv: fix build with binutils 2.38
-date:   1 year, 1 month ago
-config: riscv-randconfig-s033-20230305 (https://download.01.org/0day-ci/archive/20230305/202303050655.acu5xXOh-lkp@intel.com/config)
-compiler: riscv32-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6df2a016c0c8a3d0933ef33dd192ea6606b115e3
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6df2a016c0c8a3d0933ef33dd192ea6606b115e3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash drivers/clocksource/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303050655.acu5xXOh-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/clocksource/timer-clint.c:82:24: sparse: sparse: cast removes address space '__iomem' of expression
->> drivers/clocksource/timer-clint.c:82:24: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
-   drivers/clocksource/timer-clint.c:82:24: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/clocksource/timer-clint.c:82:24: sparse:     got unsigned int [usertype] *
-   drivers/clocksource/timer-clint.c:80:22: sparse: sparse: cast removes address space '__iomem' of expression
-   drivers/clocksource/timer-clint.c:80:22: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
-   drivers/clocksource/timer-clint.c:80:22: sparse:     expected void const volatile [noderef] __iomem *addr
-   drivers/clocksource/timer-clint.c:80:22: sparse:     got unsigned int [usertype] *
-   drivers/clocksource/timer-clint.c:237:36: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void * @@     got struct clock_event_device [noderef] __percpu * @@
-   drivers/clocksource/timer-clint.c:237:36: sparse:     expected void *
-   drivers/clocksource/timer-clint.c:237:36: sparse:     got struct clock_event_device [noderef] __percpu *
-
-vim +/__iomem +82 drivers/clocksource/timer-clint.c
-
-2ac6795fcc085e Anup Patel 2020-08-17  68  
-2ac6795fcc085e Anup Patel 2020-08-17  69  #ifdef CONFIG_64BIT
-2ac6795fcc085e Anup Patel 2020-08-17  70  static u64 notrace clint_get_cycles64(void)
-2ac6795fcc085e Anup Patel 2020-08-17  71  {
-2ac6795fcc085e Anup Patel 2020-08-17  72  	return clint_get_cycles();
-2ac6795fcc085e Anup Patel 2020-08-17  73  }
-2ac6795fcc085e Anup Patel 2020-08-17  74  #else /* CONFIG_64BIT */
-2ac6795fcc085e Anup Patel 2020-08-17  75  static u64 notrace clint_get_cycles64(void)
-2ac6795fcc085e Anup Patel 2020-08-17  76  {
-2ac6795fcc085e Anup Patel 2020-08-17  77  	u32 hi, lo;
-2ac6795fcc085e Anup Patel 2020-08-17  78  
-2ac6795fcc085e Anup Patel 2020-08-17  79  	do {
-2ac6795fcc085e Anup Patel 2020-08-17  80  		hi = clint_get_cycles_hi();
-2ac6795fcc085e Anup Patel 2020-08-17  81  		lo = clint_get_cycles();
-2ac6795fcc085e Anup Patel 2020-08-17 @82  	} while (hi != clint_get_cycles_hi());
-2ac6795fcc085e Anup Patel 2020-08-17  83  
-2ac6795fcc085e Anup Patel 2020-08-17  84  	return ((u64)hi << 32) | lo;
-2ac6795fcc085e Anup Patel 2020-08-17  85  }
-2ac6795fcc085e Anup Patel 2020-08-17  86  #endif /* CONFIG_64BIT */
-2ac6795fcc085e Anup Patel 2020-08-17  87  
-
-:::::: The code at line 82 was first introduced by commit
-:::::: 2ac6795fcc085e8d03649f1bbd0d70aaff612cad clocksource/drivers: Add CLINT timer driver
-
-:::::: TO: Anup Patel <anup.patel@wdc.com>
-:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> +                               };
+> +                       };
+> +               };
+>         };
+>  };
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
