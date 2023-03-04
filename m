@@ -2,149 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B20F6AA938
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 11:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CC56AA946
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 12:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCDKmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 05:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
+        id S229656AbjCDLPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 06:15:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDKml (ORCPT
+        with ESMTP id S229636AbjCDLPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 05:42:41 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB6023304
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 02:42:40 -0800 (PST)
-Received: from dggpeml100003.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PTLvH5Frwz16Nvq;
-        Sat,  4 Mar 2023 18:39:55 +0800 (CST)
-Received: from [10.174.177.173] (10.174.177.173) by
- dggpeml100003.china.huawei.com (7.185.36.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 4 Mar 2023 18:42:38 +0800
-Message-ID: <5373d269-84e4-b199-3011-4c879c480b68@huawei.com>
-Date:   Sat, 4 Mar 2023 18:42:37 +0800
+        Sat, 4 Mar 2023 06:15:44 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B1B1C5BF
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 03:15:42 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id o12so19998167edb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 04 Mar 2023 03:15:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1677928540;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ftk4PV2UVoiZ3+JPdTCAz4kPzDVIhLMOG9HeEl28Ozs=;
+        b=vCHiWYscL9Kbfe0TAVo7UWRE8jVnjWvNU5XWSmAOdwXPwkTPh/2G2WO9Ax/EG753V/
+         qfgLTp+FDuLjPUQhylZqyx1njWAtFwD94byKnj9eBsDX0J3Tx74pf+OpEZ/S5pAF+0YU
+         KXOFha4Ilb/hwMEtKQbNQwJy2hPJIF8wZ+Cn0itd02eLGhIInbfuEFJ3DHx8kfHLmpiL
+         VY/ndXwVLEa7EIW0ti0J+cst7EeghQc4gSzYLHkIgIgkLaoRkF5EGwsqXfQzc+DzYiH5
+         CPWNg7ujEbay5ZqbNrW+3B4nwOS1III99ZEMhPpB4EAwxr4fCby5dhJU4XVj3iK2U+cy
+         wD5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1677928540;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ftk4PV2UVoiZ3+JPdTCAz4kPzDVIhLMOG9HeEl28Ozs=;
+        b=brWF4WtNot3RSLsqay4JnJnvBmNwY4zhPk5sq7X44qw3C/hE4hkjZ44bKMQzVQS8OX
+         U3By1dP/KLiuorWK3k0ZTiofAzXVdY/8g7rdV/N9KvVSUXa38nU9mUsU+r46USYAKVa3
+         NTydfx7Xd6jvf/5RMuOqrYQmtrB0Ig9DOCxI8wtY7IFe8RYlIX7EFdMy8HWwxISQMEl8
+         Kp5XuwoQDcoXaxEf3Mr7X512nbFF/88dNO7VLBRnlhTqf44xn0AY3TQ43bGkPrtPddbu
+         jzWoiUYrbtymRzIohZ14ADuFTO2mjltiRZ9t9T90bwxcBq710OugJhYUwADi/VRot04S
+         oKQQ==
+X-Gm-Message-State: AO0yUKVrOw3pc7Srj0DqiFFUcZH3dU92CGJhKwbcsYXZC1pstb+Qlp6l
+        aWWSoQSQVYHLAwMm9gMcaBItPA==
+X-Google-Smtp-Source: AK7set/KGQOOy6z0wzqUoxZNRI9lxGHxaqc0AaV8j+0HjKSadP4nPVI5SC/GjiprJLDQAt/MuWv/dg==
+X-Received: by 2002:a17:906:2756:b0:878:79e6:4672 with SMTP id a22-20020a170906275600b0087879e64672mr3595195ejd.42.1677928540692;
+        Sat, 04 Mar 2023 03:15:40 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:b758:6326:1292:e2aa? ([2a02:810d:15c0:828:b758:6326:1292:e2aa])
+        by smtp.gmail.com with ESMTPSA id s4-20020a1709062ec400b008f89953b761sm1968521eji.3.2023.03.04.03.15.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Mar 2023 03:15:39 -0800 (PST)
+Message-ID: <db22af89-6ec5-437d-520e-38aafdb195fc@linaro.org>
+Date:   Sat, 4 Mar 2023 12:15:38 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [BUG] possible deadlock in __rcu_irq_enter_check_tick
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] arm64: dts: amlogic: Add initial support for BPI-CM4
+ module with BPI-CM4IO baseboard
 Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>,
-        "Zhang, Qiang1" <qiang1.zhang@intel.com>
-CC:     "liwei (GF)" <liwei391@huawei.com>, <linux-kernel@vger.kernel.org>
-References: <e015e32d-d068-2d17-1ca5-c584c30ffebb@huawei.com>
- <20221012064911.GN4221@paulmck-ThinkPad-P17-Gen-1> <Y063MGk3oVg6ney0@lakrids>
- <Y1AGWuwZsq/NW1U3@FVFF77S0Q05N>
-From:   Yu Liao <liaoyu15@huawei.com>
-In-Reply-To: <Y1AGWuwZsq/NW1U3@FVFF77S0Q05N>
-Content-Type: text/plain; charset="UTF-8"
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+References: <20230303-topic-amlogic-upstream-bpi-cm4-v1-0-5a23a1ade6bd@linaro.org>
+ <20230303-topic-amlogic-upstream-bpi-cm4-v1-2-5a23a1ade6bd@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230303-topic-amlogic-upstream-bpi-cm4-v1-2-5a23a1ade6bd@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.173]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml100003.china.huawei.com (7.185.36.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/10/19 22:14, Mark Rutland wrote:
-> On Tue, Oct 18, 2022 at 03:24:48PM +0100, Mark Rutland wrote:
->> On Tue, Oct 11, 2022 at 11:49:11PM -0700, Paul E. McKenney wrote:
->>> On Tue, Oct 11, 2022 at 09:18:11PM +0800, Yu Liao wrote:
->>>> Hello,
->>>>
->>>> When I run syzkaller, a deadlock problem occurs. The call stack is as follows:
->>>> [ 1088.244366][    C1] ======================================================
->>>> [ 1088.244838][    C1] WARNING: possible circular locking dependency detected
->>>> [ 1088.245313][    C1] 5.10.0-04424-ga472e3c833d3 #1 Not tainted
->>>> [ 1088.245745][    C1] ------------------------------------------------------
->>>
->>> It is quite possible that an unfortunate set of commits were backported
->>> to v5.10.  Could you please bisect?
->>>
->>>> [ 1088.246214][    C1] syz-executor.2/932 is trying to acquire lock:
->>>> [ 1088.246628][    C1] ffffa0001440c418 (rcu_node_0){..-.}-{2:2}, at:
->>>> __rcu_irq_enter_check_tick+0x128/0x2f4
->>>> [ 1088.247330][    C1]
->>>> [ 1088.247330][    C1] but task is already holding lock:
->>>> [ 1088.247830][    C1] ffff000224d0c298 (&rq->lock){-.-.}-{2:2}, at:
->>>> try_to_wake_up+0x6e0/0xd40
->>>> [ 1088.248424][    C1]
->>>> [ 1088.248424][    C1] which lock already depends on the new lock.
->>>> [ 1088.248424][    C1]
->>>> [ 1088.249127][    C1]
->>>> [ 1088.249127][    C1] the existing dependency chain (in reverse order) is:
->>>> [ 1088.249726][    C1]
->>>> [ 1088.249726][    C1] -> #1 (&rq->lock){-.-.}-{2:2}:
->>>> [ 1088.250239][    C1]        validate_chain+0x6dc/0xb0c
->>>> [ 1088.250591][    C1]        __lock_acquire+0x498/0x940
->>>> [ 1088.250942][    C1]        lock_acquire+0x228/0x580
->>>> [ 1088.251346][    C1]        _raw_spin_lock_irqsave+0xc0/0x15c
->>>> [ 1088.251758][    C1]        resched_cpu+0x5c/0x110
->>>> [ 1088.252091][    C1]        rcu_implicit_dynticks_qs+0x2b0/0x5d0
->>>> [ 1088.252501][    C1]        force_qs_rnp+0x244/0x39c
->>>> [ 1088.252847][    C1]        rcu_gp_fqs_loop+0x2e4/0x440
->>>> [ 1088.253219][    C1]        rcu_gp_kthread+0x1a4/0x240
->>>> [ 1088.253597][    C1]        kthread+0x20c/0x260
->>>> [ 1088.253963][    C1]        ret_from_fork+0x10/0x18
->>>> [ 1088.254389][    C1]
->>>> [ 1088.254389][    C1] -> #0 (rcu_node_0){..-.}-{2:2}:
->>>> [ 1088.255296][    C1]        check_prev_add+0xe0/0x105c
->>>> [ 1088.256000][    C1]        check_prevs_add+0x1c8/0x3d4
->>>> [ 1088.256693][    C1]        validate_chain+0x6dc/0xb0c
->>>> [ 1088.257372][    C1]        __lock_acquire+0x498/0x940
->>>> [ 1088.257731][    C1]        lock_acquire+0x228/0x580
->>>> [ 1088.258079][    C1]        _raw_spin_lock+0xa0/0x120
->>>> [ 1088.258425][    C1]        __rcu_irq_enter_check_tick+0x128/0x2f4
->>>> [ 1088.258844][    C1]        rcu_nmi_enter+0xc4/0xd0
->>>
->>> This is looking like we took an interrupt while holding an rq lock.
->>> Am I reading this correctly?  If so, that is bad in and of itself.
->>
->> In this case it's not an interrupt; per the entry bits below:
->>
->>>> [ 1088.259183][    C1]        arm64_enter_el1_dbg+0xb0/0x160
->>>> [ 1088.259623][    C1]        el1_dbg+0x28/0x50
->>>> [ 1088.260011][    C1]        el1_sync_handler+0xf4/0x150
->>>> [ 1088.260481][    C1]        el1_sync+0x74/0x100
->>
->> ... this is a synchronous debug exception, which is one of:
->>
->>  * A hardware single-step exception
->>  * A hardware watchpoint
->>  * A hardware breakpoint
->>  * A software breakpoint (i.e. a BRK instruction)
->>
->> ... and we have to treat those as NMIs.
->>
->> That could be a kprobe, or a WARN, etc.
+On 03/03/2023 18:37, Neil Armstrong wrote:
+> Add support for both the BananaPi BPI-CM4 module and the BananaPi
+> baseboard which is comnpatible with the RaspberryPi CM4IO baseboard.
 > 
-> Having a go with v6.1-rc1, placing a kprobe on __rcu_irq_enter_check_tick()
-> causes a recursive exception which triggers the stack overflow detection, so
-> there are bigger problems here, and we'll need to do some further rework of the
-> arm64 entry code. FWIW, x86-64 seems fine.
+> The BananaPi BPI-CM4 module follows the CM4 specifications at [1],
+> but with a single HDMI port and a since DSI output.
 > 
-> I have a vague recollection that that there was something (some part kprobes,
-> perhaps) that didn't like being called in NMI context, which is why debug
-> exceptions aren't accounted as true NMIs (but get most of the same treatment).
-> 
-> I'll have to dig into this a bit more; there are a bunch of subtle interactions
-> in this area, and I don't want to put a band-aid over this without fully
-> understanding the implications.
-> 
-> Once we've figured that out for mainline, we can figure out what needs to go to
-> stable.
 
-Hi Mark,
+(...)
 
-Do you have any plans to apply Zhang Qiang's patch that treats el1_dbg as NMI,
-or do you have any other better solutions?
+> +	sdio_pwrseq: sdio-pwrseq {
+> +		compatible = "mmc-pwrseq-simple";
+> +		reset-gpios = <&gpio GPIOAO_6 GPIO_ACTIVE_LOW>;
+> +		clocks = <&wifi32k>;
+> +		clock-names = "ext_clock";
+> +	};
+> +
+> +	emmc_1v8: regulator-emmc_1v8 {
 
-Thanks,
-Yu
+No underscores in node names.
+
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "EMMC_1V8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		vin-supply = <&vddao_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	dc_in: regulator-dc-in {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "DC_IN";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +	};
+> +
+
+> 
+
+Best regards,
+Krzysztof
 
