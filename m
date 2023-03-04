@@ -2,113 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4BE6AA8BA
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 09:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE3A6AA8A9
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 09:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjCDIgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 03:36:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
+        id S229633AbjCDIRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 03:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDIgK (ORCPT
+        with ESMTP id S229512AbjCDIRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 03:36:10 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD21BAC7;
-        Sat,  4 Mar 2023 00:36:08 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id m20-20020a17090ab79400b00239d8e182efso8409718pjr.5;
-        Sat, 04 Mar 2023 00:36:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677918968;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CLEGwvh2qYbgB4rTOKx78eSVSdlKxGUFU7IahmTi8kg=;
-        b=cZBLUpvgd39BJ8BGY4K2n3nc2VIGwsmFeaaVmw3xM/zCu1Hgj6mxNav9wjBE6qHN2x
-         hHRBmc3SrcEPPTgV514Vy6oZjVvKT/9L5Dc/z3wlrFNxCRpAHtZT0WnBsZb71ATuFcml
-         vf/sbRwVg6PhncP9Zno6bYObazplHotdGedjFtfvvliMhWdpGic6foFrefeTZi3hNPcu
-         EkEidmuBcMHK4DM2FT3Kp6NJYL1rqqxbmi57yovKHzMLylc6LKDy+C5CRdYWyWHFYpUJ
-         ohbBb1YHNIY6STz5/Pbe1Fy0F1EWricmFqUSyDtsiB/F0H4BBjQxnMhIB+f9/BQN1bzd
-         3ITw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677918968;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CLEGwvh2qYbgB4rTOKx78eSVSdlKxGUFU7IahmTi8kg=;
-        b=V/WQsXRK0Vy2D+ocUlTnfcvny18gIKXMKhbYviAdVKpkxTD1E7vKKuIHiizZaex2TO
-         Gr+GXtlhO7M/DiIZ/iZEuQcsjA5VtZLs6imEG/7gixwHIs3mKowWDDyZ9RoS4BVvqLqp
-         d7+DS5EJKCWGRV7BGMoawuf2igKGX1QJTZeOCELgoZ/WwC5kBhJyfEiDp4wcCDO9FpOV
-         M+vsRjq66E7/DpV4yNep9+kHLX8uAZGWyxE+TMQVKWYk7KfkuxFSK/ngvW9BotKlx4qe
-         bTpob1/QLfw2nTaU2MgJGaZWVWrTYC3bFkdwa6kDQm0G4PCG4CKWYf9FyMbPIKu7Gzjs
-         QBBg==
-X-Gm-Message-State: AO0yUKVp/thVR0IVNe1m04zHaZsGS4gXv10QKhDR/iowQa9vSeSLy20a
-        y4FMEH9fsN2ZMlo9sDN57qc=
-X-Google-Smtp-Source: AK7set/xUMSOQt3Jg4JgzeijVRwsTzvD9rCjv1wKIwRnRSgfekzhcYusGk/nKtvHei5uGo+2dG/9zA==
-X-Received: by 2002:a17:902:d4cd:b0:19a:70f9:affb with SMTP id o13-20020a170902d4cd00b0019a70f9affbmr5885752plg.2.1677918967926;
-        Sat, 04 Mar 2023 00:36:07 -0800 (PST)
-Received: from c1ion.lan ([139.227.13.23])
-        by smtp.gmail.com with ESMTPSA id e4-20020a17090301c400b0019e866acda5sm2869103plh.9.2023.03.04.00.36.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 00:36:07 -0800 (PST)
-From:   MIngyi Cong <congmingyi@gmail.com>
-To:     linkinjeon@kernel.org, senozhatsky@chromium.org, sfrench@samba.org,
-        hyc.lee@gmail.com
-Cc:     congmingyi@gmail.com, linux-kernel@vger.kernel.org,
-        linux-cifs@vger.kernel.org
-Subject: [PATCH] fs: add the tuncate check of exfat and hfsplus
-Date:   Sat,  4 Mar 2023 16:35:59 +0800
-Message-Id: <20230304083559.172398-1-congmingyi@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Sat, 4 Mar 2023 03:17:43 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415EB4B803;
+        Sat,  4 Mar 2023 00:17:42 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PTHl44tDsz4f3jM7;
+        Sat,  4 Mar 2023 16:17:36 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP3 (Coremail) with SMTP id _Ch0CgDHcyGg_gJkXTNDEQ--.38480S4;
+        Sat, 04 Mar 2023 16:17:38 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     hch@lst.de, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yukuai1@huaweicloud.com, yi.zhang@huawei.com,
+        yangerkun@huawei.com
+Subject: [PATCH -next 0/3] blk-wbt: cleanup patches
+Date:   Sat,  4 Mar 2023 16:40:50 +0800
+Message-Id: <20230304084053.2822411-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _Ch0CgDHcyGg_gJkXTNDEQ--.38480S4
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUU5_7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeV
+        CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mingyi Cong <congmingyi@gmail.com>
+From: Yu Kuai <yukuai3@huawei.com>
 
-EXFAT and HFSPLUS will fill zero data in truncated range.
-Fix this by adding *_SUPER_MAGIC check.
+Yu Kuai (3):
+  blk-wbt: cleanup rwb_enabled() and wbt_disabled()
+  blk-wbt: freeze queue in wbt_enable/disable_default
+  blk-wbt: remove deadcode
 
-Signed-off-by: Mingyi Cong <congmingyi@gmail.com>
----
- fs/ksmbd/smb2pdu.c         | 4 +++-
- include/uapi/linux/magic.h | 2 ++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ block/blk-wbt.c | 43 ++++++++++++++++++++-----------------------
+ 1 file changed, 20 insertions(+), 23 deletions(-)
 
-diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
-index ac029dfd2..10ab929ad 100644
---- a/fs/ksmbd/smb2pdu.c
-+++ b/fs/ksmbd/smb2pdu.c
-@@ -5738,7 +5738,9 @@ static int set_end_of_file_info(struct ksmbd_work *work, struct ksmbd_file *fp,
- 	 * truncate of some filesystem like FAT32 fill zero data in
- 	 * truncated range.
- 	 */
--	if (inode->i_sb->s_magic != MSDOS_SUPER_MAGIC) {
-+	if (inode->i_sb->s_magic != MSDOS_SUPER_MAGIC ||
-+		inode->i_sb->s_magic != EXFAT_SUPER_MAGIC ||
-+		inode->i_sb->s_magic != HFSPLUS_SUPER_MAGIC) {
- 		ksmbd_debug(SMB, "filename : %s truncated to newsize %lld\n",
- 			    fp->filename, newsize);
- 		rc = ksmbd_vfs_truncate(work, fp, newsize);
-diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
-index 35687dcb1..687b7f584 100644
---- a/include/uapi/linux/magic.h
-+++ b/include/uapi/linux/magic.h
-@@ -43,6 +43,8 @@
- #define MINIX3_SUPER_MAGIC	0x4d5a		/* minix v3 fs, 60 char names */
- 
- #define MSDOS_SUPER_MAGIC	0x4d44		/* MD */
-+#define EXFAT_SUPER_MAGIC	0x2011BAB0UL		/* EXFAT */
-+#define HFSPLUS_SUPER_MAGIC	0x482b		/* HFSPLUS */
- #define NCP_SUPER_MAGIC		0x564c		/* Guess, what 0x564c is :-) */
- #define NFS_SUPER_MAGIC		0x6969
- #define OCFS2_SUPER_MAGIC	0x7461636f
 -- 
-2.34.1
+2.31.1
 
