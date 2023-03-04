@@ -2,191 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24486AA966
-	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 13:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0766AA969
+	for <lists+linux-kernel@lfdr.de>; Sat,  4 Mar 2023 13:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjCDMHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 07:07:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        id S229564AbjCDMLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 07:11:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCDMHO (ORCPT
+        with ESMTP id S229437AbjCDMLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 07:07:14 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB691A960;
-        Sat,  4 Mar 2023 04:07:13 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id s22so6834334lfi.9;
-        Sat, 04 Mar 2023 04:07:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677931631;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YhUNlBpnC7SpjDcF5mqCCGNAI6o9whocfh3JcKsMDz4=;
-        b=eKTZe2k6FuT8y98Zp3sKdlzaHCETWA0c5PvPXGUANkMd0Z1bRnjCVWIPyplEFN16F7
-         iJYX0P8jwOuBZWwZDdsf3jiHJFhQCecnmB4Fz0ZZUEmPyYwyRaE0xKl680zy0GO9JjDc
-         7JPPxmL9Xcjk4BlnkP1dqG3VFAuSluh53xK/4lbnrEVtu774N1P0TM9WWsYBf06/b0WM
-         7VJESza6o1j6SNlAS1k55op4ys9PmlSMAqljs/e9XWKcMZDyx4f0H75A4w/L79vNkRA9
-         0npvx8O0+eJBu9jnQDn3OsHjd5ej8w93aoRp/uGIUHNnXsPzIlI+TnBIkVhYGj6IZBMU
-         Ay/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677931631;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YhUNlBpnC7SpjDcF5mqCCGNAI6o9whocfh3JcKsMDz4=;
-        b=IbpdsiAqkkWhakMNVazJHdjTWTiirbnKq4LyZSZnn3i6RhMAsVmJrfhpV0PBDvoYpn
-         hC3CSXwGhhclamcAaJrkPOD6JE+lsa59vmUNAZCaFJdkkLsfy2+g/E8CrA23yBxF69OW
-         zPyEj5Wqek7S8nApnXYZrceCZNXxX+QUL5PYW+sYf8GDLQKhVXdQGxsWjPB35rnuHASY
-         e8E2rZ7pFbG3xNqWisIvzajHKDcrePdy+1K7/3N3tqFFzJNoCRoAn7Lmwg7PRojZ5Vy2
-         esCkCgUEyUd/HvV1xClCZbrqpjkyI0gGOVOAHPN2zPfKlW3TecjVSzDcjS0SBmv+3N7F
-         6ctQ==
-X-Gm-Message-State: AO0yUKVixOBnvWAAqQ81TEC9ItwZ7Wg9awMZ05fCxs9pbIIcsqV5BFA4
-        sc0iOz77sJ7Pp3TLSYSwfpk=
-X-Google-Smtp-Source: AK7set/vVZAWJc8yBBDMO+BZ3k5F2I5H1owWuApGRXUlBzAw5i5xHH41U3p6mN0bAIG6cvO/sX8/sA==
-X-Received: by 2002:ac2:5624:0:b0:4db:3890:cb59 with SMTP id b4-20020ac25624000000b004db3890cb59mr1282818lff.1.1677931631114;
-        Sat, 04 Mar 2023 04:07:11 -0800 (PST)
-Received: from localhost (88-113-32-99.elisa-laajakaista.fi. [88.113.32.99])
-        by smtp.gmail.com with ESMTPSA id y10-20020ac255aa000000b004db2b54714bsm805531lfg.67.2023.03.04.04.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 04:07:11 -0800 (PST)
-Date:   Sat, 4 Mar 2023 14:07:09 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Steven Price <steven.price@arm.com>
-Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Joey Gouly <joey.gouly@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
-Subject: Re: [RFC PATCH 04/28] arm64: RME: Check for RME support at KVM init
-Message-ID: <20230304140709.0000112e@gmail.com>
-In-Reply-To: <748a6bcf-ec16-0870-8e33-bc29ab311211@arm.com>
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
-        <20230127112932.38045-1-steven.price@arm.com>
-        <20230127112932.38045-5-steven.price@arm.com>
-        <20230213174846.00003fad@gmail.com>
-        <748a6bcf-ec16-0870-8e33-bc29ab311211@arm.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Sat, 4 Mar 2023 07:11:41 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D393D11E86
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 04:11:38 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PTNx11bwhz4whr;
+        Sat,  4 Mar 2023 23:11:33 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1677931893;
+        bh=x24pwSQjiyNE2jAvF8VEQSkqNcfQmhLdz4k4VXFK7ZE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Hu13E+P+HuwxhdnLEkPWae84QTud83/eNfPv7GDZCrgPbwunu1eVozcl/wBA/c1nQ
+         eaAqb4OrcrefzcjaV1jyrEeOeCBXhHc65c2U7g557Ovay46foxtMGDgM5ZeCZZpW9u
+         RYBgUCkIe827PMPzq3kNlUPJCIjiOJWiBzV2HVsoWsHONMGPzxQPFJLRKLaKgiETtc
+         fV4C0Ff6P2Q4OUfEREYNaFvD0I0u3XgZvpNyqLhRyWQEwzwgZciB99gQnqjeX6Kj9Y
+         Sz/1LesC1SruSQX0LmoG6lhuwNSYq8LASL7HLX/RZVavaeZJ359AxNWF7/vMu2zP2q
+         dousBFz/hAQvw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.3-2 tag
+Date:   Sat, 04 Mar 2023 23:11:29 +1100
+Message-ID: <87v8jg1zta.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Feb 2023 15:59:05 +0000
-Steven Price <steven.price@arm.com> wrote:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-> On 13/02/2023 15:48, Zhi Wang wrote:
-> > On Fri, 27 Jan 2023 11:29:08 +0000
-> > Steven Price <steven.price@arm.com> wrote:
-> > 
-> >> Query the RMI version number and check if it is a compatible version. A
-> >> static key is also provided to signal that a supported RMM is available.
-> >>
-> >> Functions are provided to query if a VM or VCPU is a realm (or rec)
-> >> which currently will always return false.
-> >>
-> >> Signed-off-by: Steven Price <steven.price@arm.com>
-> >> ---
-> >>  arch/arm64/include/asm/kvm_emulate.h | 17 ++++++++++
-> >>  arch/arm64/include/asm/kvm_host.h    |  4 +++
-> >>  arch/arm64/include/asm/kvm_rme.h     | 22 +++++++++++++
-> >>  arch/arm64/include/asm/virt.h        |  1 +
-> >>  arch/arm64/kvm/Makefile              |  3 +-
-> >>  arch/arm64/kvm/arm.c                 |  8 +++++
-> >>  arch/arm64/kvm/rme.c                 | 49 ++++++++++++++++++++++++++++
-> >>  7 files changed, 103 insertions(+), 1 deletion(-)
-> >>  create mode 100644 arch/arm64/include/asm/kvm_rme.h
-> >>  create mode 100644 arch/arm64/kvm/rme.c
-> >>
-> >> diff --git a/arch/arm64/include/asm/kvm_emulate.h b/arch/arm64/include/asm/kvm_emulate.h
-> >> index 9bdba47f7e14..5a2b7229e83f 100644
-> >> --- a/arch/arm64/include/asm/kvm_emulate.h
-> >> +++ b/arch/arm64/include/asm/kvm_emulate.h
-> >> @@ -490,4 +490,21 @@ static inline bool vcpu_has_feature(struct kvm_vcpu *vcpu, int feature)
-> >>  	return test_bit(feature, vcpu->arch.features);
-> >>  }
-> >>  
-> >> +static inline bool kvm_is_realm(struct kvm *kvm)
-> >> +{
-> >> +	if (static_branch_unlikely(&kvm_rme_is_available))
-> >> +		return kvm->arch.is_realm;
-> >> +	return false;
-> >> +}
-> >> +
-> >> +static inline enum realm_state kvm_realm_state(struct kvm *kvm)
-> >> +{
-> >> +	return READ_ONCE(kvm->arch.realm.state);
-> >> +}
-> >> +
-> >> +static inline bool vcpu_is_rec(struct kvm_vcpu *vcpu)
-> >> +{
-> >> +	return false;
-> >> +}
-> >> +
-> >>  #endif /* __ARM64_KVM_EMULATE_H__ */
-> >> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> >> index 35a159d131b5..04347c3a8c6b 100644
-> >> --- a/arch/arm64/include/asm/kvm_host.h
-> >> +++ b/arch/arm64/include/asm/kvm_host.h
-> >> @@ -26,6 +26,7 @@
-> >>  #include <asm/fpsimd.h>
-> >>  #include <asm/kvm.h>
-> >>  #include <asm/kvm_asm.h>
-> >> +#include <asm/kvm_rme.h>
-> >>  
-> >>  #define __KVM_HAVE_ARCH_INTC_INITIALIZED
-> >>  
-> >> @@ -240,6 +241,9 @@ struct kvm_arch {
-> >>  	 * the associated pKVM instance in the hypervisor.
-> >>  	 */
-> >>  	struct kvm_protected_vm pkvm;
-> >> +
-> >> +	bool is_realm;
-> >                ^
-> > It would be better to put more comments which really helps on the review.
-> 
-> Thanks for the feedback - I had thought "is realm" was fairly
-> self-documenting, but perhaps I've just spent too much time with this code.
-> 
-> > I was looking for the user of this memeber to see when it is set. It seems
-> > it is not in this patch. It would have been nice to have a quick answer from the
-> > comments.
-> 
-> The usage is in the kvm_is_realm() function which is used in several of
-> the later patches as a way to detect this kvm guest is a realm guest.
-> 
-> I think the main issue is that I've got the patches in the wrong other.
-> Patch 7 "arm64: kvm: Allow passing machine type in KVM creation" should
-> probably be before this one, then I could add the assignment of is_realm
-> into this patch (potentially splitting out the is_realm parts into
-> another patch).
-> 
+Hi Linus,
 
-I agree the patch order seems a problem here. The name is self-documenting
-but if the user of the variable is not in this patch, still needs to jump to
-the related patch to confirm if the variable is used as expected. In that
-situation, a comment would help to avoid jumping between patches (sometimes
-finding the the user of a variable from a patch bundle really slows down
-the review progress and eventually you have to open a terminal and check
-it in the git tree).
+Please pull a few powerpc fixes for 6.3:
 
-> Thanks,
-> 
-> Steve
-> 
+The following changes since commit d0a32f5520a33e7f2ace396db6913625e0d29544:
 
+  Merge tag 'powerpc-6.3-1' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux (2023-02-25 11:00:06 -0800)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.3-2
+
+for you to fetch changes up to f8b2336f15f3bc30e37ce5c052cde5b6319bb6df:
+
+  powerpc: Avoid dead code/data elimination when using recordmcount (2023-02-28 14:32:34 +1100)
+
+- ------------------------------------------------------------------
+powerpc fixes for 6.3 #2
+
+ - Drop orphaned VAS MAINTAINERS entry.
+
+ - Fix build errors with clang and KCSAN.
+
+ - Avoid build errors seen with LD_DEAD_CODE_DATA_ELIMINATION & recordmcount.
+
+Thanks to: Nathan Chancellor
+
+- ------------------------------------------------------------------
+Michael Ellerman (3):
+      powerpc: Drop orphaned VAS MAINTAINERS entry
+      powerpc/vmlinux.lds: Add .text.asan/tsan sections
+      powerpc: Avoid dead code/data elimination when using recordmcount
+
+
+ MAINTAINERS                       | 7 -------
+ arch/powerpc/Kconfig              | 2 +-
+ arch/powerpc/kernel/vmlinux.lds.S | 1 +
+ 3 files changed, 2 insertions(+), 8 deletions(-)
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmQDNRIACgkQUevqPMjh
+pYBhOg/+NsVj0eyKjVphxmu0dxIb5Qb262EzDcryuxRP56+kk4Q3BvUYrzYB/0mh
+xauoqa+ui4Dn9oar+F5v5wyGmR0A16SebUs2bqfjKvjsvHAlsSxxNlL7jRjCdKEZ
+yl23e/0YmEGEpUuxy7mxRwzhwobxO9K4JT/ysqUfxR8PNrTbGk+pT6Vo0lYyBDmD
+N4jx9i0jxwPR/gxbyOODbXekKu9RysojPUCKjAX7uHq1qO1aefE+1Ajn+mhZsmOI
+hi5yaCv2+FUgteCsaCy1eC8pBVmRzY6A/eDGV6ia0Lrs9si+UvqqSAmOsRP0a0lp
+r/8RoUFj0T7rJ7PUeZjWxz3l5s+IY+RLW5/a56te9fscsk5gYS9EKZOJhTdjSBo2
+9NLySoaBvpHJmcxShkuN/b88NmQwmTq0DkcyggEXsdU85HBhqqx8Fd+5H7sgJ2aN
+wK5tOUyo5mkZSK7VBB1m9OG66n4YYrh9glUIda90tNRHDLTGjyKTXKatW9WgUsZH
+ufAaZZYGF2NV98c4IrWQqqmYaXQZ4wXlwmBEP9ionPU7GZOkCls7A8pAI42hExh4
+Dsd8az78aFcHnJxy2w9845N9Iea1ef2HoDEYvSWIjmkmeCDCueLWusnqWxXG+1zE
+LSBHDK+OkjudX0vvnwuL0Y1V9EawoPkI7618cdocIbOs2CDagV8=
+=6Vrj
+-----END PGP SIGNATURE-----
