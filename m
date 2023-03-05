@@ -2,113 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6576AB203
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 21:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0654C6AB215
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 21:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjCEULS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 15:11:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S229700AbjCEU0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 15:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjCEULP (ORCPT
+        with ESMTP id S229489AbjCEU0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 15:11:15 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77ECC16891;
-        Sun,  5 Mar 2023 12:10:56 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 456115C00E6;
-        Sun,  5 Mar 2023 15:10:53 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 05 Mar 2023 15:10:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1678047053; x=1678133453; bh=cjW13UmZQsjwyJDeHx5kIcthGLujwjX/c4O
-        TYrUnVEo=; b=M+iX57D3tki6mdnYuiW2+/TVDcTnCB2Ga/GIjvvg25JyIDtZhzU
-        mLkYC+yAY4SFZTnNttwjLlO8DD8yCYVw2kqWR6oHe88HECHGwU2I7Axt7fx139oN
-        etVdN33n4Awn9hGCJAMtMjqHAQtx2VRikVcaIkNPJ7OSOLVm6//NltGUsHzgIj37
-        6Q3ejPZj5Yi2cHI9b414CB+2Y/WNWnifgSj0Gzxyz7KQ4KCQRarWS5CulHYbi5eC
-        ag9J4dSS2qmKbTaLa9/5xYv+fAFL3Yxj7jbc/4GSpKvlOtsPrPUdGxBgQX6SJ5Z/
-        5TNCZ2yUU9mfrFdl1+bt1hfGmpR+ALzk/+w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1678047053; x=1678133453; bh=cjW13UmZQsjwyJDeHx5kIcthGLujwjX/c4O
-        TYrUnVEo=; b=CYjynxi2XdbvcwdySeuJXuc1PmUeES5qN5N0+ACWBaHPfzz2mdY
-        KOtHjXR5RghXHpnlzSUA3NKQ8HzaPRpU50fjVFpJJj2Vy6sGAfy9/jRTA0VzqhBk
-        8GsAumW0PCYRukJgw9SVPtwhkxwpu7ePss7hnK46F7qIf9wvuoF9/IIYqYHLSQ6S
-        WYeQ8pkNDtW0oDCAUXUKxKH9ooj8BOTq4NG7N1mHccROcNqGiApuSD4gGmN67hlg
-        /JkwqqShEOb8mieY78lGMfW+Gz28CVp4X2Co4shGbu4N41Qb30SR08YRmY/mYRXg
-        wfIYMYkcUjgcGZeIAy669di3WjfqzK4B1xQ==
-X-ME-Sender: <xms:TPcEZBo-q52j-jqchY2XGMpcTPYR06yXpKAxCmCfSK69n_WJZvxBew>
-    <xme:TPcEZDrpog9WoSHrCoXbSnoa2mLg-BTyPhTgGzmB-0qEgXBt4T7_tYyFgcQXJBgjV
-    lAj5AsSTwmqOpGlKmY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgedgudefgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedf
-    tehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrf
-    grthhtvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeu
-    feefieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:TPcEZOPBv0ou0224OqiUylR9QEbHsuuPAEnRPF5o8Yfvrtw8YAv_tg>
-    <xmx:TPcEZM7r_vfyT0vMjnpfebYe8dIUVygFUa3KtMBPW88bfxP-LizgeA>
-    <xmx:TPcEZA4_keGj9AgoFlOut-Hu30B0X1Jw1pHtsEd1RMfb_pDQw2T6KA>
-    <xmx:TfcEZLJhlAB4TepxklBPOSFU5nuw9mrTxiy269e0J3uc6tV0KxUo8A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 15985B60086; Sun,  5 Mar 2023 15:10:51 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-183-gbf7d00f500-fm-20230220.001-gbf7d00f5
-Mime-Version: 1.0
-Message-Id: <5dec69d0-0bc9-4f6c-8d0d-ee5422783100@app.fastmail.com>
-In-Reply-To: <CAMuHMdXoM24uAZGcjBtscNMOSY_+4u08PEOR7gOfCH7jvCceDg@mail.gmail.com>
-References: <20230303102817.212148-1-bhe@redhat.com>
- <20230303102817.212148-3-bhe@redhat.com> <87sfej1rie.fsf@mpe.ellerman.id.au>
- <CAMuHMdXoM24uAZGcjBtscNMOSY_+4u08PEOR7gOfCH7jvCceDg@mail.gmail.com>
-Date:   Sun, 05 Mar 2023 21:10:31 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        "Baoquan He" <bhe@redhat.com>, linux-sh@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-hexagon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        "Christoph Hellwig" <hch@infradead.org>, linux-mm@kvack.org,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 2/2] arch/*/io.h: remove ioremap_uc in some architectures
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 5 Mar 2023 15:26:35 -0500
+X-Greylist: delayed 4109 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Mar 2023 12:26:33 PST
+Received: from smtp63.i.mail.ru (smtp63.i.mail.ru [95.163.41.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D96810AA8;
+        Sun,  5 Mar 2023 12:26:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=Q2Dz7klb9fUun5EuXXTQz+k2rdK4tcPV0DNNqNcNIyM=;
+        t=1678047993;x=1678137993; 
+        b=fYRwM8BD88J+kml5vJJi5Hrp17fGFywSXNtUbc944zWQhrpJKhUUCKYbCnDbGAZiKNbwueqklVJKYzpthTS0PK4wUTP68LxQVCJla3vDSLea76usS3jVi2R9FTSUjADcFSmNlIGIA3YGP/mankGCsPq1IHE3ICNWBtklEuqZpPU=;
+Received: by smtp63.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
+        id 1pYuw9-00A5Rd-SJ; Sun, 05 Mar 2023 23:26:30 +0300
+From:   Danila Tikhonov <danila@jiaxyga.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        abel.vesa@linaro.org, rishabhb@codeaurora.org,
+        saiprakash.ranjan@codeaurora.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Danila Tikhonov <danila@jiaxyga.com>
+Subject: [PATCH 0/2] soc: qcom: llcc: Add support for SM7150
+Date:   Sun,  5 Mar 2023 23:26:25 +0300
+Message-Id: <20230305202627.402386-1-danila@jiaxyga.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp63.i.mail.ru; auth=pass smtp.auth=danila@jiaxyga.com smtp.mailfrom=danila@jiaxyga.com
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD9BCEC41593EBD83572AB17126CD52FE0BB53BB47C1B744DA8182A05F538085040A193DC1D783C78F0C20D9E06EC9FFA623E7D45A2AC67888C381CD2B743DF3F11
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE70D278D70F8433719EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F790063727C65896DA7AF7D78638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8D36A4EFD6C8BEEF5A1058D8BB0E0CE66117882F4460429724CE54428C33FAD305F5C1EE8F4F765FC20302DFC78685446A471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F4460429728776938767073520437C869540D2AB0FF04B652EEC242312D2E47CDBA5A96583BA9C0B312567BB2376E601842F6C81A19E625A9149C048EEFAD5A440E159F97D0CB8D3112395442FD8FC6C240DEA7642DBF02ECDB25306B2B78CF848AE20165D0A6AB1C7CE11FEE36D3A1509E11137116E0066C2D8992A16C4224003CC836476E2F48590F00D11D6E2021AF6380DFAD1A18204E546F3947C2FFDA4F57982C5F42E808ACE2090B5E1725E5C173C3A84C3C5EA940A35A165FF2DBA43225CD8A89FAE2BFB9A60527F4F42539A7722CA490CB5C8C57E37DE458BEDA766A37F9254B7
+X-C1DE0DAB: 0D63561A33F958A55AE790616CACB79C607F191F3D2191A00481BBBF8FB2F9A14EAF44D9B582CE87C8A4C02DF684249CC203C45FEA855C8F
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34F1ADD4D8CD3C81CE674013458A7D635E8E19CA6522A027EB53130BF92E8D4C128B85F1869D2973A81D7E09C32AA3244CBFCC5841CE99163D9976FFE49A0F121AB4DF56057A86259F111969D93F5DC462
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojMXwBDQf4j7PCoVM9JeMT+w==
+X-Mailru-Sender: 9EB879F2C80682A09F26F806C739498118617784DBFF2E98692A37846008A533A475549227A3A2E2643683D8C0F3ED1CA3C71A376745D86BBE86167304C7680C3980CE5AAA35C7CD60F22E8815EDE5EAEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 5, 2023, at 10:29, Geert Uytterhoeven wrote:
->
-> On Sun, Mar 5, 2023 at 10:23=E2=80=AFAM Michael Ellerman <mpe@ellerman=
-.id.au> wrote:
->> Maybe that exact code path is only reachable on x86/ia64? But if so
->> please explain why.
->>
->> Otherwise it looks like this series could break that driver on powerpc
->> at least.
->
-> Indeed.
+This series adds LLCC support for Qualcomm SM7150 SoC.
 
-When I last looked into this, I sent a patch to use ioremap()
-on non-x86:
+Danila Tikhonov (2):
+  dt-bindings: arm: msm: Add LLCC for SM7150
+  soc: qcom: llcc: Add configuration data for SM7150
 
-https://lore.kernel.org/all/20191111192258.2234502-1-arnd@arndb.de/
+ .../devicetree/bindings/arm/msm/qcom,llcc.yaml  |  1 +
+ drivers/soc/qcom/llcc-qcom.c                    | 17 +++++++++++++++++
+ 2 files changed, 18 insertions(+)
 
-    Arnd
+-- 
+2.39.2
+
