@@ -2,217 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2896AB1A3
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 19:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B0C6AB1A5
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 19:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCESAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 13:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
+        id S229698AbjCESFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 13:05:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCESAn (ORCPT
+        with ESMTP id S229556AbjCESF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 13:00:43 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC94CD518;
-        Sun,  5 Mar 2023 10:00:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678039241; x=1709575241;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QE6+X0t0qr1Xce3NWsaYovK34zD80dqy8fScs/jetB4=;
-  b=dPb6NbPlfRb/dGXA2IfYKZT0EDO2Gq9/89/TI5oki8pdnXLtGA0hG+aJ
-   y3d3qPtJG0Vl4nDyZuqZwISp402KoO7HzdKTO65RhoDDzgc6nv9k97Lof
-   h09ZwfGbuTcXKB9cc9CosJPmtu4wWCSNdi8QIvaQv5dTH8F8HbbrhYRsw
-   FIMCafMKIdtZJ1TbTrWLOnx2Lycx+sK8WvAS9cOZOFysSp/PBvUaUFhXN
-   cTsTASgxGYBI2z/DfhXa35HW+Y/9apFIcWlRGgx9nnL6Of3ipskd/baTg
-   t5VKVADNpZlWZMt+gq4mamlABLerrSZln6yT9bq+rwDXfjryixMpgIuJy
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="421681526"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="421681526"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 10:00:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="675928398"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="675928398"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 05 Mar 2023 10:00:36 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYsey-0002x0-0Q;
-        Sun, 05 Mar 2023 18:00:36 +0000
-Date:   Mon, 6 Mar 2023 02:00:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xu Kuohai <xukuohai@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf: add bound tracking for BPF_MOD
-Message-ID: <202303060155.cNDEo1Br-lkp@intel.com>
-References: <20230306033119.2634976-2-xukuohai@huaweicloud.com>
+        Sun, 5 Mar 2023 13:05:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92402CDD7;
+        Sun,  5 Mar 2023 10:05:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 068D260B4B;
+        Sun,  5 Mar 2023 18:05:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A160C433EF;
+        Sun,  5 Mar 2023 18:05:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678039525;
+        bh=mTv0i3HFNwyEjaj1TI8i2X3pSZ54/PzZ+U4eMXghe/M=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=I3Ha+xHyFcPWGDqAgSBQmM5ilFRiwoXsGyedT91ugUFfq5aDL3TOrE6Tnmo/gTc9s
+         7hl4zvpkDcHY+ruLWmjQQQ2hTcrAaphup7zGrd26RMAez2wO0aYhCCZPI+ZUqksy/u
+         rfsZ4tdvjpr7RdM8BH3/EiFFvtnFeAb6T92plBO/LrK2Gsnp5k//f+uQLHMYcWoaui
+         /Sfq7ps4QpH30Q3rNI/BF8jRuLO8MYsF2Ye66z2t8D2iDAbYEIwSOzIBiT4nfPGnh7
+         xbK9PZrWMCcZ79tAP2J80Z4HLTXW7YD+nM41TpT8XK5tq3LopDxSLcHdRCTPl3p75u
+         EOCxubBypCtkw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id ED82E5C035B; Sun,  5 Mar 2023 10:05:24 -0800 (PST)
+Date:   Sun, 5 Mar 2023 10:05:24 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 13/13] rcu/kvfree: Eliminate k[v]free_rcu() single
+ argument macro
+Message-ID: <20230305180524.GL1301832@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <ZAR//FKO4syzapk6@pc636>
+ <D8B84631-860B-41CF-8311-88E220C7254F@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230306033119.2634976-2-xukuohai@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <D8B84631-860B-41CF-8311-88E220C7254F@joelfernandes.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xu,
+On Sun, Mar 05, 2023 at 07:56:33AM -0500, Joel Fernandes wrote:
+> 
+> 
+> > On Mar 5, 2023, at 6:41 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
+> > 
+> > ﻿
+> >> 
+> >>>> On Mar 5, 2023, at 5:29 AM, Joel Fernandes <joel@joelfernandes.org> wrote:
+> >>> 
+> >>> ﻿Hi, All,
+> >>> 
+> >>>> On Wed, Feb 1, 2023 at 10:11 AM Uladzislau Rezki (Sony)
+> >>>> <urezki@gmail.com> wrote:
+> >>>> 
+> >>>> For a single argument invocations a new kfree_rcu_mightsleep()
+> >>>> and kvfree_rcu_mightsleep() macroses are used. This is done in
+> >>>> order to prevent users from calling a single argument from
+> >>>> atomic contexts as "_mightsleep" prefix signals that it can
+> >>>> schedule().
+> >>>> 
+> >>> 
+> >>> Since this commit in -dev branch [1] suggests more users still need
+> >>> conversion, let us drop this single patch for 6.4 and move the rest of
+> >>> the series forward? Let me know if you disagree.
+> >>> https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=dev&id=9bf5e3a2626ed474d080f695007541b6ecd6e60b
+> >>> 
+> >>> All -- please supply Ack/Review tags for patches 1-12.
+> >> 
+> >> Or put another way, what is the transition plan for these remaining users?
+> >> 
+> >> I am getting on a plane right now but I can research which users are remaining later.
+> >> 
+> > I am not sure. I think we can cover it on the meeting.
+> 
+> Cool, thanks.
 
-Thank you for the patch! Yet something to improve:
+My current plan is as follows:
 
-[auto build test ERROR on bpf-next/master]
+1.	Addition of kvfree_rcu_mightsleep() went into v6.3.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Kuohai/bpf-add-bound-tracking-for-BPF_MOD/20230305-223257
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20230306033119.2634976-2-xukuohai%40huaweicloud.com
-patch subject: [PATCH bpf-next 1/2] bpf: add bound tracking for BPF_MOD
-config: arm-randconfig-r025-20230305 (https://download.01.org/0day-ci/archive/20230306/202303060155.cNDEo1Br-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/e66c7bbd32e375af92c776a2b9f51be4c515ad71
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Xu-Kuohai/bpf-add-bound-tracking-for-BPF_MOD/20230305-223257
-        git checkout e66c7bbd32e375af92c776a2b9f51be4c515ad71
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash kernel/
+2.	After creating branches, I send out the series, including 12/12.
+	The -rcu tree's "dev" branch continues to have a revert to avoid
+	breaking -next until we achieve clean -next and clean "dev"
+	branch.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303060155.cNDEo1Br-lkp@intel.com/
+3.	Any conversion patches that get maintainer acks go into v6.4.
+	Along with a checkpatch error, as Joel notes below.
 
-All errors (new ones prefixed by >>):
+4.	There are periodic checks for new code using the single-argument
+	forms of kfree_rcu() and kvfree_rcu().	Patches are produced
+	for them, or responses to the patches introducing them, as
+	appropriate.  A coccinelle script might be helpful, perhaps
+	even as part of kernel test robot or similar.
 
-   kernel/bpf/verifier.c:10298:24: warning: array index 16 is past the end of the array (that has type 'u32[16]' (aka 'unsigned int[16]')) [-Warray-bounds]
-                                      meta.func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
-                                                      ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared here
-   BTF_ID_LIST(special_kfunc_list)
-   ^
-   include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
-   #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
-                             ^
-   kernel/bpf/verifier.c:11622:13: warning: comparison of distinct pointer types ('typeof ((umax)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-           umax_rem = do_div(umax, val);
-                      ^~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
->> kernel/bpf/verifier.c:11622:13: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-           umax_rem = do_div(umax, val);
-                      ^~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-                   __rem = __div64_32(&(n), __base);       \
-                                      ^~~~
-   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
-   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
-                                               ^
-   kernel/bpf/verifier.c:11623:13: warning: comparison of distinct pointer types ('typeof ((umin)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
-           umin_rem = do_div(umin, val);
-                      ^~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:222:28: note: expanded from macro 'do_div'
-           (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-                  ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
-   kernel/bpf/verifier.c:11623:13: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
-           umin_rem = do_div(umin, val);
-                      ^~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:238:22: note: expanded from macro 'do_div'
-                   __rem = __div64_32(&(n), __base);       \
-                                      ^~~~
-   arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
-   static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
-                                               ^
-   kernel/bpf/verifier.c:11622:13: warning: shift count >= width of type [-Wshift-count-overflow]
-           umax_rem = do_div(umax, val);
-                      ^~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-           } else if (likely(((n) >> 32) == 0)) {          \
-                                  ^  ~~
-   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                                               ^
-   kernel/bpf/verifier.c:11623:13: warning: shift count >= width of type [-Wshift-count-overflow]
-           umin_rem = do_div(umin, val);
-                      ^~~~~~~~~~~~~~~~~
-   include/asm-generic/div64.h:234:25: note: expanded from macro 'do_div'
-           } else if (likely(((n) >> 32) == 0)) {          \
-                                  ^  ~~
-   include/linux/compiler.h:77:40: note: expanded from macro 'likely'
-   # define likely(x)      __builtin_expect(!!(x), 1)
-                                               ^
-   5 warnings and 2 errors generated.
+5.	The -rcu tree's "dev" branch will revert to unclean from time
+	to time as maintainers choose to take conversion patches into
+	their own trees.
 
+6.	Once mainline is clean, we push 12/12 into the next merge
+	window.
 
-vim +11622 kernel/bpf/verifier.c
+7.	We then evaluate whether further cleanups are needed.
 
- 11606	
- 11607	static void scalar32_min_max_mod(struct bpf_reg_state *dst_reg,
- 11608					 struct bpf_reg_state *src_reg)
- 11609	{
- 11610		u32 val = (u32)src_reg->var_off.value; /* src_reg is const */
- 11611		u32 umax = dst_reg->u32_max_value;
- 11612		u32 umin = dst_reg->u32_min_value;
- 11613		u32 umax_rem, umin_rem;
- 11614	
- 11615		/* dst_reg is 32-bit truncated when mod32 zero, since
- 11616		 * adjust_scalar_min_max_vals calls zext_32_to_64 to do truncation for
- 11617		 * all alu32 ops, here we do nothing and just return.
- 11618		 */
- 11619		if (!val)
- 11620			return;
- 11621	
- 11622		umax_rem = do_div(umax, val);
- 11623		umin_rem = do_div(umin, val);
- 11624	
- 11625		/* no winding */
- 11626		if (umax - umin < val && umin_rem <= umax_rem) {
- 11627			dst_reg->var_off = tnum_range(umin_rem, umax_rem);
- 11628			dst_reg->u32_min_value = umin_rem;
- 11629			dst_reg->u32_max_value = umax_rem;
- 11630		} else {
- 11631			dst_reg->var_off = tnum_range(0, val - 1);
- 11632			dst_reg->u32_min_value = 0;
- 11633			dst_reg->u32_max_value = val - 1;
- 11634		}
- 11635	
- 11636		/* cross the sign boundary */
- 11637		if ((s32)dst_reg->u32_min_value > (s32)dst_reg->u32_max_value) {
- 11638			dst_reg->s32_min_value = S32_MIN;
- 11639			dst_reg->s32_max_value = S32_MAX;
- 11640		} else {
- 11641			dst_reg->s32_min_value = (s32)dst_reg->u32_min_value;
- 11642			dst_reg->s32_max_value = (s32)dst_reg->u32_max_value;
- 11643		}
- 11644	
- 11645		/* mark reg64 unbounded to deduce 64-bit bounds from var_off */
- 11646		__mark_reg64_unbounded(dst_reg);
- 11647	}
- 11648	
+> > My feeling is
+> > that, we introduced "_mightsleep" macros first and after that try to
+> > convert users.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> One stopgap could be to add a checkpatch error if anyone tries to use old API,
+> and then in the meanwhile convert all users.
+> Though, that requires people listening to checkpatch complaints.
+
+Every person who listens is that much less hassle.  It doesn't have to
+be perfect.  ;-)
+
+							Thanx, Paul
+
+> Thanks,
+> 
+>  - Joel
+> 
+> 
+> > 
+> > @Paul what is your view?
+> > 
+> > Thanks!
+> > 
+> > --
+> > Uladzislau Rezki
