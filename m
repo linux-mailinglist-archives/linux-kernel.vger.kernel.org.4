@@ -2,178 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B9A6AAE59
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 06:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C4A6AAE66
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 07:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjCEFxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 00:53:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S229615AbjCEGUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 01:20:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjCEFx2 (ORCPT
+        with ESMTP id S229379AbjCEGT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 00:53:28 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3527814E82;
-        Sat,  4 Mar 2023 21:53:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1677995603; bh=ru9CFu4osSLUM/PSNshnk6mPmLOfwqKnocmDx/wnhi0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=V5nrTBOB8Hb5ZA2SK2gLNursyCkiyOvf+dsfE9n5mWzNm65hJiz/SQD8/gRt8Dfw6
-         x/2L8cwzlFB18vZysaaa0bmaAvu0X1pV/gkaP8uu6q6pHyEhHzCUkCc5x1xa3b8hb2
-         t9I1FnA8TVddZsfNxMZRmpJSR0HQE0/Uqy+IOzA4=
-Received: from [192.168.9.172] (unknown [114.93.192.93])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 0DE53600F8;
-        Sun,  5 Mar 2023 13:53:23 +0800 (CST)
-Message-ID: <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
-Date:   Sun, 5 Mar 2023 13:53:21 +0800
+        Sun, 5 Mar 2023 01:19:59 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD791689D;
+        Sat,  4 Mar 2023 22:19:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=mCw3qlccCZ7Fdqt9RrwRnLxZ5h4SPVaUk3+bNuEDCeI=; b=bgx+vLIQQuBBLQwTieomKaf79v
+        mJJBWybsH6QBtZkr8uKLrgxcPPGpBvsvJzeBcME2RanJfTpMuVPRZuTUfdCkYQWZvhaMVaWYl0e3q
+        pDqGxMP2I6X96DFvJdzSVFk63Rpne4xHqdh6ekUXVT4ojn4D5TOmGjdKpOE0h+QrpJdEtgUi3B4U5
+        Eakdc/YgytpC3m5Iz3Rd0JEU4M0bEi4gZ2xugLpcXzDFFGRFqS2KyuFYTIWkSJHAxSPXvkR8KYsgz
+        jPUEbqIMkC0bu9rwgdfUeYKf9iTOX4lQJ0rLgh38q2igWeAaMIsnUE4djdx0jFG2aMmZhUuWDYUgJ
+        m1GxfuOA==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pYhis-009sQB-2V; Sun, 05 Mar 2023 06:19:54 +0000
+Message-ID: <0fbd4e90-17de-fb1f-1b1a-7578a34ce386@infradead.org>
+Date:   Sat, 4 Mar 2023 22:19:53 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] LoongArch: Provide kernel fpu functions
+Subject: Re: [PATCH 1/2] menuconfig: delete shadows, reclaim vertical space
 Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <20230305052818.4030447-1-chenhuacai@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230305052818.4030447-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <94a94ef4-9d55-4293-8363-3c0243eceae1@p183>
+ <d01112c2-b5a4-4aa3-4ee7-711abc9da079@infradead.org>
+ <1c28155c-6931-432c-8308-c9b3638e3202@p183>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <1c28155c-6931-432c-8308-c9b3638e3202@p183>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/5/23 13:28, Huacai Chen wrote:
-> Provide kernel_fpu_begin()/kernel_fpu_end() to let the kernel use fpu
-> itself. They can be used by AMDGPU graphic driver for DCN.
 
-Grammar nit: "itself" is wrongly placed. "allow the kernel itself to use 
-FPU" could be better.
 
-Also the expected usage is way broader than a single driver's single 
-component. It's useful for a wide array of operations that will benefit 
-from SIMD acceleration support that'll hopefully appear later. For now 
-I'd suggest at least adding a single "e.g." after "used by" to signify 
-this, if you're not rewording the sentence.
+On 3/4/23 10:54, Alexey Dobriyan wrote:
+> On Sat, Mar 04, 2023 at 09:56:08AM -0800, Randy Dunlap wrote:
+>> Hi,
+>>
+>> On 3/4/23 08:55, Alexey Dobriyan wrote:
+>>> Menuconfig has lots of vertical space wasted: on my system there are
+>>> 17 lines of useful information about config options and 14 lines of
+>>> useless fluff: legend, horizontal separators and shadows.
+>>>
+>>> Sitation is even worse on smaller terminals because fixed vertical lines
+>>> do not go away, but config option lines do decreasing informational
+>>> density even more.
+>>>
+>>> Delete shadows and increase menu size to reclaim vertical space.
+>>>
+>>> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+>>> ---
+>>>
+>>>  scripts/kconfig/lxdialog/checklist.c |    2 --
+>>>  scripts/kconfig/lxdialog/dialog.h    |    1 -
+>>>  scripts/kconfig/lxdialog/inputbox.c  |    2 --
+>>>  scripts/kconfig/lxdialog/menubox.c   |    6 ++----
+>>>  scripts/kconfig/lxdialog/textbox.c   |    2 --
+>>>  scripts/kconfig/lxdialog/util.c      |   22 ----------------------
+>>>  scripts/kconfig/lxdialog/yesno.c     |    2 --
+>>>  7 files changed, 2 insertions(+), 35 deletions(-)
+>>>
+>>
+>> This patch works for me, but since the right side shadow is
+>> also being removed, the one column (width) that it had
+>> occupied might as well be used (reclaimed) instead of just
+>> going to waste.
+> 
+> Horizontal space is not really important because monitors are wider
+> than taller and our config option descriptions are quite short.
 
->
-> Reported-by: Xuerui Wang <kernel@xen0n.name>
-Thanks, but I prefer my name spelled in the native word order ;-)
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->   arch/loongarch/include/asm/fpu.h |  3 +++
->   arch/loongarch/kernel/Makefile   |  2 +-
->   arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
->   3 files changed, 45 insertions(+), 1 deletion(-)
->   create mode 100644 arch/loongarch/kernel/kfpu.c
->
-> diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
-> index 358b254d9c1d..192f8e35d912 100644
-> --- a/arch/loongarch/include/asm/fpu.h
-> +++ b/arch/loongarch/include/asm/fpu.h
-> @@ -21,6 +21,9 @@
->   
->   struct sigcontext;
->   
-> +extern void kernel_fpu_begin(void);
-> +extern void kernel_fpu_end(void);
-> +
->   extern void _init_fpu(unsigned int);
->   extern void _save_fp(struct loongarch_fpu *);
->   extern void _restore_fp(struct loongarch_fpu *);
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> index 78d4e3384305..9a72d91cd104 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
->   obj-$(CONFIG_ACPI)		+= acpi.o
->   obj-$(CONFIG_EFI) 		+= efi.o
->   
-> -obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
-> +obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
->   
->   obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
->   
-> diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
-> new file mode 100644
-> index 000000000000..cd2a18fecdcc
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/kfpu.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/cpu.h>
-> +#include <linux/init.h>
-> +#include <asm/fpu.h>
-> +#include <asm/smp.h>
-> +
-> +static DEFINE_PER_CPU(bool, in_kernel_fpu);
-> +
-> +void kernel_fpu_begin(void)
-> +{
-> +	if(this_cpu_read(in_kernel_fpu))
-> +		return;
-Could be a conditional WARN_ON_ONCE like in arch/x86?
-> +
-> +	preempt_disable();
-> +	this_cpu_write(in_kernel_fpu, true);
-> +
-> +	if (!is_fpu_owner())
-> +		enable_fpu();
-> +	else
-> +		_save_fp(&current->thread.fpu);
-> +}
-> +EXPORT_SYMBOL_GPL(kernel_fpu_begin);
+Yeah, but there is no reason not to reclaim the one horizontal column.
+This does it for me: (lightly tested)
 
-Might be good to provide some explanation in the commit message as to 
-why the pair of helpers should be GPL-only. Do they touch state buried 
-deep enough to make any downstream user a "derivative work"? Or are the 
-annotation inspired by arch/x86?
+diff -- a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
+--- a/scripts/kconfig/lxdialog/menubox.c
++++ b/scripts/kconfig/lxdialog/menubox.c
+@@ -184,7 +184,7 @@ do_resize:
+ 		return -ERRDISPLAYTOOSMALL;
+ 
+ 	height -= 2;
+-	width  -= 5;
++	width  -= 4;
+ 	menu_height = height - 10;
+ 
 
-I think this kinda needs more thought, because similar operations like 
-arm's kernel_neon_{begin,end}, powerpc's enable_kernel_{fp,vsx,altivec} 
-or s390's __kernel_fpu_{begin,end} are not made GPL-only. Making these 
-helpers GPL-only precludes any non-GPL module to make use of SIMD on 
-LoongArch, which may or may not be what you want. This can have 
-commercial consequences so I can only leave the decision to you. 
-(Although IMO the semantics are encapsulated and high-level enough to 
-not warrant GPL-only marks, but it may well be the case that you have 
-thought of something else but didn't mention here.)
-
-> +
-> +void kernel_fpu_end(void)
-> +{
-> +	if(!this_cpu_read(in_kernel_fpu))
-> +		return;
-> +
-> +	if (!is_fpu_owner())
-> +		disable_fpu();
-> +	else
-> +		_restore_fp(&current->thread.fpu);
-> +
-> +	this_cpu_write(in_kernel_fpu, false);
-> +	preempt_enable();
-> +}
-> +EXPORT_SYMBOL_GPL(kernel_fpu_end);
+We might also be able to reduce the length of menu_instructions[]
+and put more of it into the other Help text if that interests you.
 
 -- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+~Randy
