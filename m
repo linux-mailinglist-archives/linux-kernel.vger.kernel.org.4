@@ -2,730 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737906AAFE2
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AB46AAFE5
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjCENVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 08:21:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S229718AbjCEN1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 08:27:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjCENU7 (ORCPT
+        with ESMTP id S229662AbjCEN1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 08:20:59 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696DF12F0D;
-        Sun,  5 Mar 2023 05:20:56 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id q16so6336448wrw.2;
-        Sun, 05 Mar 2023 05:20:56 -0800 (PST)
+        Sun, 5 Mar 2023 08:27:42 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0F712051
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 05:27:39 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id cy23so28008133edb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 05:27:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vqXrc5vpLFEXqIOLK5+asnO/IPa6WfwXsqwh2Pebo0o=;
-        b=It9CAxzQqsBgnxKg4qnWlaAKMzm4pJdnVlywM27ASvhAtMgsXWrXrvu+lOkG7HLp5/
-         qY4etttWF6fWzT7zg8c6ViRGngXGPCURxA6xDs4KYVJJA1K8ddLCmEcA7fO0xNmerqTu
-         zLuafsgkFH6O5OMQL8fCbtZcTyxfPNndIkjgDLOGkAtTnwSca4XxBelmmZug42PVlN/P
-         CjDn6QXbpmeeCHpg2KmBL51/stqc5JfNcJevlRqPtfNXM8nPQ84yW1MT6S83yxkTjAMR
-         TFYbHXO/ifW8A9u0L77uUIAJKKHIwcujXO6gu3YbRJVpctdU61y0J2DbX6iiJ3yCelaX
-         HHlw==
+        d=linaro.org; s=google; t=1678022858;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wk9e/fOya2qw+v+GTDMWGjK594tp8ByxmYu2FhMlkrs=;
+        b=f4P4IYU00G7BMwwH+EjFsp8cMyDWi546De7SwAspqCuwfPFTMSjwNdpJ+czCK3lgXZ
+         34/82qa0iR1AxYL3LQScFIrmXNT3Nrgql2FyUvl0OV/5anS6hVIh4RTHRsLL9fltLbfb
+         Ij5TuIVzXvSdp8zOlEgLJT5K6UEcjme1Wh1aY4eiikwa4Tgc+WVSV607fdBKSPKEtAOU
+         CS519h3IWx/A2dyk0V/6FRHi8tTf0AXZzXQ7sI5rj9rNEllNQZsS8NTmVcieVMbPRLyB
+         Bkua+h7r7nZb87CRO7BhLgg/QNCsvq99yZYht5ZJ2eEoDql8vGb41Yt2l5MQayjZWxO/
+         pg1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vqXrc5vpLFEXqIOLK5+asnO/IPa6WfwXsqwh2Pebo0o=;
-        b=xKjSlxvzhJhsCg46JDsJ/CKaA9Ly/4CvwJ94HlTeUHZ52MqiWhcVQ0uWlqcFUEYvp5
-         UacuaA18RW+uq4C5XuPWgh/2KrjeF0XMvWLqS3d86eAfFQRqhOXY8A8nBL/ah71F8dp7
-         oepr4mx1J/3bs98qFIseKUbGvHMIsu1YND6SeGF0A1fM4Wg3X9Izmuv9IP27nXFMbaXR
-         ZIrLvYmq/mswzUhDH4F/tJZ5wK3/AQBolil+GMAD/WaxCcQcGDUaoMbCsC6TARP5yTlK
-         5sgaOhynW6IzS7hMa+y1PR8IBtGxjXZZ8T2Fqjds01gg3Sa0w/iOS71lfSmTUjxtQChn
-         3QDA==
-X-Gm-Message-State: AO0yUKVENnQE+Xu3iDNzCR4L5GqhzTishUWHmsiZDiI0QbcR6wI1OQQo
-        nD0U4/K5vAoIIZ/EO5uXUP4=
-X-Google-Smtp-Source: AK7set9oQnGi3UjZEDhxwJmrVCKKYlcZas/8sbviyL0t9LRwr0M6a9Cb74Pf+AZKyuqLzsUMoSRz0Q==
-X-Received: by 2002:adf:e7ce:0:b0:2c8:cdde:c28a with SMTP id e14-20020adfe7ce000000b002c8cddec28amr4947091wrn.59.1678022454792;
-        Sun, 05 Mar 2023 05:20:54 -0800 (PST)
-Received: from toolbox.. ([87.200.95.144])
-        by smtp.gmail.com with ESMTPSA id w7-20020a5d6087000000b002c567b58e9asm7496851wrt.56.2023.03.05.05.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Mar 2023 05:20:54 -0800 (PST)
-From:   Christian Hewitt <christianshewitt@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian Hewitt <christianshewitt@gmail.com>
-Subject: [PATCH 2/2] arm64: dts: meson: add support for BananaPi M2S variants
-Date:   Sun,  5 Mar 2023 13:20:44 +0000
-Message-Id: <20230305132044.1596320-3-christianshewitt@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230305132044.1596320-1-christianshewitt@gmail.com>
-References: <20230305132044.1596320-1-christianshewitt@gmail.com>
+        d=1e100.net; s=20210112; t=1678022858;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wk9e/fOya2qw+v+GTDMWGjK594tp8ByxmYu2FhMlkrs=;
+        b=xgWL1BzhbcNEyNr+TPT69s5cRR8Oyw8P2MyTlRcsO1vUjJY1GdbxkAXnh+w/8Q23hJ
+         RzdkQvKJ97aF7lQR74m7+CTmrNp6llh5IjZ7gygwkRyzRxrUQqRcCAyI0NTO4JC3kYxk
+         RFvn+BiB3Q6ENQ2GORzp76UK5/7pH2zVHiBNvzmj8RJzOkMi45IeOvH/h3pF1saRZrbK
+         wNzgudJADh8spuD9NUK/t5vIoPOg1W+WLad9e85B8xSHl5FvTL8HeqJjdGx2t1FSKSN2
+         k+v/7jy4oO0laKItE4dpM3U6+Cm328E8+nxK/K6wIZsqqlwjsLkQjLsJKLdET+lX3uEo
+         phQg==
+X-Gm-Message-State: AO0yUKXrSitgHV/2l6IDTY+x7eNwTDCmrznyqSF6ynN/isRX/q7CJ3y8
+        jKyrxUTFxubTN6gxkNrLlodw3A==
+X-Google-Smtp-Source: AK7set8uCdsNlNMXYyxX/Y6M92riRRMG0J6OaMxyzNkpROQSRFo91Q8DBrj+HWkcSkVJ99QQlASuIg==
+X-Received: by 2002:aa7:d28d:0:b0:4ad:99de:91bc with SMTP id w13-20020aa7d28d000000b004ad99de91bcmr7653033edq.31.1678022858321;
+        Sun, 05 Mar 2023 05:27:38 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:71e7:13d:1c29:505f? ([2a02:810d:15c0:828:71e7:13d:1c29:505f])
+        by smtp.gmail.com with ESMTPSA id f27-20020a50a6db000000b004acc61206cfsm3681839edc.33.2023.03.05.05.27.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Mar 2023 05:27:37 -0800 (PST)
+Message-ID: <b0344291-d1f5-23d5-2d48-50bf15999fd7@linaro.org>
+Date:   Sun, 5 Mar 2023 14:27:37 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] watchdog: s3c2410_wdt: Use Use
+ devm_clk_get[_optional]_enabled() helpers
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230304165653.2179835-1-linux@roeck-us.net>
+ <93d115a2-702d-7d68-cd88-98f1c9f03f95@wanadoo.fr>
+ <431a8ae1-54a7-e71a-484d-cab618a2a1c4@roeck-us.net>
+ <20230305111500.jvass6ymkity4nnd@pengutronix.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230305111500.jvass6ymkity4nnd@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BananaPi M2S ships in Amlogic S922X and A311D variants with the
-following common specifications:
+On 05/03/2023 12:15, Uwe Kleine-König wrote:
+> Hello Guenter,
+> 
+> On Sat, Mar 04, 2023 at 02:10:47PM -0800, Guenter Roeck wrote:
+>> On 3/4/23 13:46, Christophe JAILLET wrote:
+>>> Le 04/03/2023 à 17:56, Guenter Roeck a écrit :
+>>>> The devm_clk_get[_optional]_enabled() helpers:
+>>>>      - call devm_clk_get[_optional]()
+>>>>      - call clk_prepare_enable() and register what is needed in order to
+>>>>        call clk_disable_unprepare() when needed, as a managed resource.
+>>>>
+>>>> This simplifies the code and avoids the calls to clk_disable_unprepare().
+>>>>
+>>>> While at it, use dev_err_probe consistently, and use its return value
+>>>> to return the error code.
+>>>>
+>>>> Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+>>>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+>>>> ---
+>>>>   drivers/watchdog/s3c2410_wdt.c | 45 +++++++---------------------------
+>>>>   1 file changed, 9 insertions(+), 36 deletions(-)
+>>>>
+>>>> diff --git a/drivers/watchdog/s3c2410_wdt.c b/drivers/watchdog/s3c2410_wdt.c
+>>>> index 200ba236a72e..a1fcb79b0b7c 100644
+>>>> --- a/drivers/watchdog/s3c2410_wdt.c
+>>>> +++ b/drivers/watchdog/s3c2410_wdt.c
+>>>> @@ -661,35 +661,17 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>>>>       if (IS_ERR(wdt->reg_base))
+>>>>           return PTR_ERR(wdt->reg_base);
+>>>> -    wdt->bus_clk = devm_clk_get(dev, "watchdog");
+>>>> -    if (IS_ERR(wdt->bus_clk)) {
+>>>> -        dev_err(dev, "failed to find bus clock\n");
+>>>> -        return PTR_ERR(wdt->bus_clk);
+>>>> -    }
+>>>> -
+>>>> -    ret = clk_prepare_enable(wdt->bus_clk);
+>>>> -    if (ret < 0) {
+>>>> -        dev_err(dev, "failed to enable bus clock\n");
+>>>> -        return ret;
+>>>> -    }
+>>>> +    wdt->bus_clk = devm_clk_get_enabled(dev, "watchdog");
+>>>> +    if (IS_ERR(wdt->bus_clk))
+>>>> +        return dev_err_probe(dev, PTR_ERR(wdt->bus_clk), "failed to get bus clock\n");
+>>>>       /*
+>>>>        * "watchdog_src" clock is optional; if it's not present -- just skip it
+>>>>        * and use "watchdog" clock as both bus and source clock.
+>>>>        */
+>>>> -    wdt->src_clk = devm_clk_get_optional(dev, "watchdog_src");
+>>>> -    if (IS_ERR(wdt->src_clk)) {
+>>>> -        dev_err_probe(dev, PTR_ERR(wdt->src_clk),
+>>>> -                  "failed to get source clock\n");
+>>>> -        ret = PTR_ERR(wdt->src_clk);
+>>>> -        goto err_bus_clk;
+>>>> -    }
+>>>> -
+>>>> -    ret = clk_prepare_enable(wdt->src_clk);
+>>>> -    if (ret) {
+>>>> -        dev_err(dev, "failed to enable source clock\n");
+>>>> -        goto err_bus_clk;
+>>>> -    }
+>>>> +    wdt->src_clk = devm_clk_get_optional_enabled(dev, "watchdog_src");
+>>>> +    if (IS_ERR(wdt->src_clk))
+>>>> +        return dev_err_probe(dev, PTR_ERR(wdt->src_clk), "failed to get source clock\n");
+>>>>       wdt->wdt_device.min_timeout = 1;
+>>>>       wdt->wdt_device.max_timeout = s3c2410wdt_max_timeout(wdt);
+>>>> @@ -710,7 +692,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>>>>                    S3C2410_WATCHDOG_DEFAULT_TIME);
+>>>>           } else {
+>>>>               dev_err(dev, "failed to use default timeout\n");
+>>>> -            goto err_src_clk;
+>>>> +            return ret;
+>>>
+>>> Hi,
+>>>
+>>> Nit: this also could be "return dev_err_probe()"
+>>>
+>>>>           }
+>>>>       }
+>>>> @@ -718,7 +700,7 @@ static int s3c2410wdt_probe(struct platform_device *pdev)
+>>>>                      pdev->name, pdev);
+>>>>       if (ret != 0) {
+>>>>           dev_err(dev, "failed to install irq (%d)\n", ret);
+>>>> -        goto err_src_clk;
+>>>> +        return ret;
+>>>
+>>> Nit: this also could be "return dev_err_probe()"
+>>>
+>>
+>> The primary reason to call dev_err_probe() is that the error may be
+>> -EPROBE_DEFER, in which case the error message is suppressed.
+>> That is not the case for those two functions; they never return
+>> -EPROBE_DEFER. Calling dev_err_probe() would give the false impression
+>> that the functions _might_ return -EPROBE_DEFER.
+> 
+> That is subjective. In my book dev_err_probe() handling -EPROBE_DEFER is
+> only one aspect. Another is that using it allows to have return and error
+> message in a single line and also that if already other exit paths use
+> it to get a consistent style for the emitted messages. Having said that
+> *I* wouldn't assume that the previous call might return -EPROBE_DEFER
+> just because dev_err_probe() is used.
+> 
 
-- 16GB eMMC
-- HDMI 2.1a video
-- 2x 10/100/1000 Base-T Ethernet (1x RTL8211F, 1x RTL811H)
-- 2x USB 2.0 ports
-- 2x Status LED's (green/blue)
-- 1x Power/Reset button
-- 1x micro SD card slot
-- 40-pin GPIO header
-- PWM fan header
-- UART header
+I agree with this. I stopped looking at dev_err_probe() as related to
+deferred probe. It is just useful helper in the context of probe. With
+or without defer.
 
-The S992X variant has:
-- 2GB LPDDR4 RAM
-
-The A311D variant has:
-
-- 4GB LPDDR4 RAM
-- NPU (5.0 TOPS)
-- MIPI DSI header
-- MIPI CSI header
-
-An optional RTL8822CS SDIO WiFi/BT mezzanine is available for
-both board variants.
-
-Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
----
- arch/arm64/boot/dts/amlogic/Makefile          |   2 +
- .../amlogic/meson-g12b-a311d-bananapi-m2s.dts |  37 ++
- .../boot/dts/amlogic/meson-g12b-bananapi.dtsi | 521 ++++++++++++++++++
- .../amlogic/meson-g12b-s922x-bananapi-m2s.dts |  14 +
- 4 files changed, 574 insertions(+)
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts
-
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index ccf1ba57fa87..2bb9f1d4bc1a 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -8,6 +8,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12a-radxa-zero.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-sei510.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-u200.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-x96-max.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-bananapi-m2s.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gsking-x.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking-pro.dtb
-@@ -17,6 +18,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2-plus.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2l.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-radxa-zero2.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-bananapi-m2s.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-ugoos-am6.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-kii-pro.dtb
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts
-new file mode 100644
-index 000000000000..ac6f7ae1d103
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2023 Christian Hewitt <christianshewitt@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "meson-g12b-a311d.dtsi"
-+#include "meson-g12b-bananapi.dtsi"
-+
-+/ {
-+	compatible = "bananapi,bpi-m2s", "amlogic,a311d", "amlogic,g12b";
-+	model = "BananaPi M2S";
-+
-+	aliases {
-+		i2c0 = &i2c1;
-+		i2c1 = &i2c3;
-+	};
-+};
-+
-+/* Camera (CSI) bus */
-+&i2c1 {
-+	status = "okay";
-+	pinctrl-0 = <&i2c1_sda_h6_pins>, <&i2c1_sck_h7_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+/* Display (DSI) bus */
-+&i2c3 {
-+	status = "okay";
-+	pinctrl-0 = <&i2c3_sda_a_pins>, <&i2c3_sck_a_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&npu {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
-new file mode 100644
-index 000000000000..d02b50a0f7a8
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
-@@ -0,0 +1,521 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2019 BayLibre, SAS
-+ * Author: Neil Armstrong <narmstrong@baylibre.com>
-+ * Copyright (c) 2023 Christian Hewitt <christianshewitt@gmail.com>
-+ */
-+
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/gpio/meson-g12a-gpio.h>
-+#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-+
-+/ {
-+	aliases {
-+		serial0 = &uart_AO;
-+		ethernet0 = &ethmac;
-+		rtc1 = &vrtc;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x80000000>; /* 2 GiB or 4 GiB */
-+	};
-+
-+	adc-keys {
-+		compatible = "adc-keys";
-+		io-channels = <&saradc 2>;
-+		io-channel-names = "buttons";
-+		keyup-threshold-microvolt = <1710000>;
-+
-+		button-function {
-+			label = "RST";
-+			linux,code = <KEY_POWER>;
-+			press-threshold-microvolt = <10000>;
-+		};
-+	};
-+
-+	emmc_pwrseq: emmc-pwrseq {
-+		compatible = "mmc-pwrseq-emmc";
-+		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	fan0: pwm-fan {
-+		compatible = "pwm-fan";
-+		#cooling-cells = <2>;
-+		cooling-min-state = <0>;
-+		cooling-max-state = <3>;
-+		cooling-levels = <0 120 170 220>;
-+		pwms = <&pwm_cd 1 40000 0>;
-+	};
-+
-+	hdmi-connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_connector_in: endpoint {
-+				remote-endpoint = <&hdmi_tx_tmds_out>;
-+			};
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		blue {
-+			color = <LED_COLOR_ID_BLUE>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&gpio_ao GPIOAO_7 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		green {
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	sdio_pwrseq: sdio-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&gpio GPIOX_6 GPIO_ACTIVE_LOW>;
-+		clocks = <&wifi32k>;
-+		clock-names = "ext_clock";
-+	};
-+
-+	wifi32k: wifi32k {
-+		compatible = "pwm-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		pwms = <&pwm_ef 0 30518 0>; /* PWM_E at 32.768KHz */
-+	};
-+
-+	dc_in: regulator-dc-in {
-+		compatible = "regulator-fixed";
-+		regulator-name = "DC_IN";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
-+
-+	vcc_5v: regulator-vcc-5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_5V";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&dc_in>;
-+
-+		gpio = <&gpio GPIOH_8 GPIO_OPEN_DRAIN>;
-+		enable-active-high;
-+	};
-+
-+	vcc_3v3: regulator-vcc-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_3V3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&vsys_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	vcc_1v8: regulator-vcc-1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VCC_1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vcc_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	vddao_1v8: regulator-vddao-1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDDIO_AO1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vsys_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	vddcpu_a: regulator-vddcpu-a {
-+		compatible = "pwm-regulator";
-+		regulator-name = "VDDCPU_A";
-+		regulator-min-microvolt = <690000>;
-+		regulator-max-microvolt = <1050000>;
-+		pwm-supply = <&dc_in>;
-+		pwms = <&pwm_ab 0 1250 0>;
-+		pwm-dutycycle-range = <100 0>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	vddcpu_b: regulator-vddcpu-b {
-+		compatible = "pwm-regulator";
-+		regulator-name = "VDDCPU_B";
-+		regulator-min-microvolt = <690000>;
-+		regulator-max-microvolt = <1050000>;
-+		pwm-supply = <&vsys_3v3>;
-+		pwms = <&pwm_AO_cd 1 1250 0>;
-+		pwm-dutycycle-range = <100 0>;
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	vsys_3v3: regulator-vsys-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VSYS_3V3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&dc_in>;
-+		regulator-always-on;
-+	};
-+
-+	emmc_1v8: regulator-emmc-1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "EMMC_AO1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vcc_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	usb_pwr: regulator-usb-pwr {
-+		compatible = "regulator-fixed";
-+		regulator-name = "USB_PWR";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		vin-supply = <&vcc_5v>;
-+
-+		gpio = <&gpio GPIOA_6 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	sound {
-+		compatible = "amlogic,axg-sound-card";
-+		model = "BPI-M2S";
-+		audio-aux-devs = <&tdmout_b>;
-+		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
-+				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
-+				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
-+				"TDM_B Playback", "TDMOUT_B OUT";
-+
-+		assigned-clocks = <&clkc CLKID_MPLL2>,
-+				  <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
-+
-+		dai-link-0 {
-+			sound-dai = <&frddr_a>;
-+		};
-+
-+		dai-link-1 {
-+			sound-dai = <&frddr_b>;
-+		};
-+
-+		dai-link-2 {
-+			sound-dai = <&frddr_c>;
-+		};
-+
-+		/* 8ch hdmi interface */
-+		dai-link-3 {
-+			sound-dai = <&tdmif_b>;
-+			dai-format = "i2s";
-+			dai-tdm-slot-tx-mask-0 = <1 1>;
-+			dai-tdm-slot-tx-mask-1 = <1 1>;
-+			dai-tdm-slot-tx-mask-2 = <1 1>;
-+			dai-tdm-slot-tx-mask-3 = <1 1>;
-+			mclk-fs = <256>;
-+
-+			codec {
-+				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
-+			};
-+		};
-+
-+		/* hdmi glue */
-+		dai-link-4 {
-+			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
-+
-+			codec {
-+				sound-dai = <&hdmi_tx>;
-+			};
-+		};
-+	};
-+};
-+
-+&arb {
-+	status = "okay";
-+};
-+
-+&clkc_audio {
-+	status = "okay";
-+};
-+
-+&cecb_AO {
-+	pinctrl-0 = <&cec_ao_b_h_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+	hdmi-phandle = <&hdmi_tx>;
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu1 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu100 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu101 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu102 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu103 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&ethmac {
-+	pinctrl-0 = <&eth_pins>, <&eth_rgmii_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+	phy-mode = "rgmii";
-+	phy-handle = <&external_phy>;
-+	amlogic,tx-delay-ns = <2>;
-+};
-+
-+&ext_mdio {
-+	external_phy: ethernet-phy@0 {
-+		/* Realtek RTL8211F (0x001cc916) */
-+		reg = <0>;
-+		max-speed = <1000>;
-+
-+		reset-assert-us = <10000>;
-+		reset-deassert-us = <80000>;
-+		reset-gpios = <&gpio GPIOZ_15 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>;
-+
-+		interrupt-parent = <&gpio_intc>;
-+		/* MAC_INTR on GPIOZ_14 */
-+		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
-+
-+&frddr_a {
-+	status = "okay";
-+};
-+
-+&frddr_b {
-+	status = "okay";
-+};
-+
-+&frddr_c {
-+	status = "okay";
-+};
-+
-+&hdmi_tx {
-+	status = "okay";
-+	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
-+	pinctrl-names = "default";
-+	hdmi-supply = <&vcc_5v>;
-+};
-+
-+&hdmi_tx_tmds_port {
-+	hdmi_tx_tmds_out: endpoint {
-+		remote-endpoint = <&hdmi_connector_in>;
-+	};
-+};
-+
-+/* Main i2c bus */
-+&i2c2 {
-+	status = "okay";
-+	pinctrl-0 = <&i2c2_sda_x_pins>, <&i2c2_sck_x_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&pcie {
-+	status = "okay";
-+	reset-gpios = <&gpio GPIOA_8 GPIO_ACTIVE_LOW>;
-+};
-+
-+&pwm_ab {
-+	status = "okay";
-+	pinctrl-0 = <&pwm_a_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin0";
-+};
-+
-+&pwm_cd {
-+	status = "okay";
-+	pinctrl-0 = <&pwm_d_x6_pins>;
-+	pinctrl-names = "default";
-+	pwm-gpios = <&gpio GPIOAO_10 GPIO_ACTIVE_HIGH>;
-+};
-+
-+&pwm_ef {
-+	status = "okay";
-+	pinctrl-0 = <&pwm_e_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&pwm_AO_cd {
-+	pinctrl-0 = <&pwm_ao_d_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin1";
-+	status = "okay";
-+};
-+
-+&saradc {
-+	status = "okay";
-+	vref-supply = <&vddao_1v8>;
-+};
-+
-+/* SDIO */
-+&sd_emmc_a {
-+	/* enable if WiFi/BT board connected */
-+	status = "disabled";
-+	pinctrl-0 = <&sdio_pins>;
-+	pinctrl-1 = <&sdio_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	bus-width = <4>;
-+	sd-uhs-sdr104;
-+	max-frequency = <50000000>;
-+
-+	non-removable;
-+	disable-wp;
-+
-+	/* WiFi firmware requires power in suspend */
-+	keep-power-in-suspend;
-+
-+	mmc-pwrseq = <&sdio_pwrseq>;
-+
-+	vmmc-supply = <&vsys_3v3>;
-+	vqmmc-supply = <&vddao_1v8>;
-+
-+	rtl8822cs: wifi@1 {
-+		reg = <1>;
-+	};
-+};
-+
-+/* SD card */
-+&sd_emmc_b {
-+	status = "okay";
-+	pinctrl-0 = <&sdcard_c_pins>;
-+	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	max-frequency = <50000000>;
-+	disable-wp;
-+
-+	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&vsys_3v3>;
-+	vqmmc-supply = <&vsys_3v3>;
-+};
-+
-+/* eMMC */
-+&sd_emmc_c {
-+	status = "okay";
-+	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-+	pinctrl-1 = <&emmc_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	max-frequency = <200000000>;
-+	disable-wp;
-+
-+	mmc-pwrseq = <&emmc_pwrseq>;
-+	vmmc-supply = <&vcc_3v3>;
-+	vqmmc-supply = <&emmc_1v8>;
-+};
-+
-+&tdmif_b {
-+	status = "okay";
-+};
-+
-+&tdmout_b {
-+	status = "okay";
-+};
-+
-+&tohdmitx {
-+	status = "okay";
-+};
-+
-+&uart_A {
-+	/* enable if WiFi/BT board connected */
-+	status = "disabled";
-+	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
-+	pinctrl-names = "default";
-+	uart-has-rtscts;
-+
-+	bluetooth {
-+		compatible = "realtek,rtl8822cs-bt";
-+		enable-gpios  = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-+		host-wake-gpios = <&gpio GPIOX_19 GPIO_ACTIVE_HIGH>;
-+		device-wake-gpios = <&gpio GPIOX_18 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&uart_AO {
-+	status = "okay";
-+	pinctrl-0 = <&uart_ao_a_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&usb2_phy0 {
-+	phy-supply = <&dc_in>;
-+};
-+
-+&usb2_phy1 {
-+	phy-supply = <&usb_pwr>;
-+};
-+
-+&usb3_pcie_phy {
-+	phy-supply = <&usb_pwr>;
-+};
-+
-+&usb {
-+	status = "okay";
-+	dr_mode = "peripheral";
-+	phys = <&usb2_phy0>, <&usb2_phy1>;
-+	phy-names = "usb2-phy0", "usb2-phy1";
-+};
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts
-new file mode 100644
-index 000000000000..7f66f263a2ce
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2023 Christian Hewitt <christianshewitt@gmail.com>
-+ */
-+
-+/dts-v1/;
-+
-+#include "meson-g12b-s922x.dtsi"
-+#include "meson-g12b-bananapi.dtsi"
-+
-+/ {
-+	compatible = "bananapi,bpi-m2s", "amlogic,s922x", "amlogic,g12b";
-+	model = "BananaPi M2S";
-+};
--- 
-2.34.1
+Best regards,
+Krzysztof
 
