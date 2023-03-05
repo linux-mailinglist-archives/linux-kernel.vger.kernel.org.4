@@ -2,348 +2,395 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 679CE6AB124
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 16:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3D16AB12A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 16:07:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjCEPDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 10:03:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S229607AbjCEPG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 10:06:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjCEPD2 (ORCPT
+        with ESMTP id S229510AbjCEPG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 10:03:28 -0500
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D921B13DEA
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 07:03:25 -0800 (PST)
-Received: by mail-qv1-xf31.google.com with SMTP id ne1so5010470qvb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 07:03:25 -0800 (PST)
+        Sun, 5 Mar 2023 10:06:56 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6427C14994
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 07:06:54 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id o12so28655999edb.9
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 07:06:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678028604;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v50ev4n9UQpdwMmK5/LeeLVgUufJdVBsxARKC22jKRI=;
-        b=eTQTVmD4u6DpM0JhY99+UDNxoKmrE92JfldVLODG+F7rQYu0E4niUXIGiZMbONvf67
-         0Sch3eWJwy8N38i1nhv1jWcMhqUJxvA04k8W9DBQbLkPs/9mqS+2sFD7pDojXQjers3G
-         YLlyT1j0qNIMJ+nh9SUBB2Nqcnl5xcl0Z4kyA=
+        d=linaro.org; s=google; t=1678028813;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VUPEOsZRG5KTaj8wY22HcLuxFqq6GzcV1ULmW/dJpQE=;
+        b=CLi+AQcDTjPeAvn/KeKsE06jjG4wjvMlUk5qEdDTQP9jNsLcnrknfbpgkWlbmrbwgz
+         x8uJgGhHpEDuZ3SoZvW1iVAGjRvvbb2r2Fv7p4TTvu8DKmfO0QF0MXDizI1w640/LnEw
+         4u/GtQT3dWpn0gFdK2XdtmdZB2X+lwxGJP4XEpI2JE6PBNIYLPj42E6YjhXYZBLGXhT+
+         rXABNo2iFbrhuMHPAaBPHvrVG84oebGi6cU67EWDpfUiM8b7eWKI/ALLWYan9TwoRM7L
+         sc7uFkpWqJn+gj/0pbANz5jlpdRceTuC7COj1HNTkR5dccnmjlfnmewMeOq820MyhjBd
+         O5Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678028604;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v50ev4n9UQpdwMmK5/LeeLVgUufJdVBsxARKC22jKRI=;
-        b=MlmFpAZWrY6x2V1nAF7swMf0iDRbCyzOvvj+2OvKQUtAI6fgf9tqC4KmhqqRgzwBVM
-         rOaO1edoqE9/MXPKnVjDxTmilMW+NEBaO8T0ZlNUOCSADPoTlNDVxirpMBBzmJIiPbE/
-         /VE0lj6cMzJHIJFfAjEhy0hw9Zq+9hsMflQfLEaNlxO5lknDC7DhWen2jNWZPcdDuuFN
-         Fh4589as0wt8l9Wr581NHX/aT8xdtlH8pD8VY1lfnByiodtzMqGUEJwAYWVeuHPqkmGp
-         KR0Q3V2D1EF3GJO6tIhYG2B61b2PCoSG2l7NpOLg3LOtp0IoabQkBcr6odlyLseL5i/K
-         LSEQ==
-X-Gm-Message-State: AO0yUKUg1OTYmBdX//7Ri0XWbcu6aealBgdBJFPCgAUgypzfH03KKONt
-        rWrUOaprXRh5uIMFs4bqRwvJ5fXzvHnrrDzZAcU=
-X-Google-Smtp-Source: AK7set8v953Yh8JpOrd20UDD2OoJdJPBS5ueZ8ouAH8tZl7wYuTmsMeKDDplsf5bWqOTLQk5PEyqlw==
-X-Received: by 2002:ad4:5ece:0:b0:539:b68e:3444 with SMTP id jm14-20020ad45ece000000b00539b68e3444mr15464538qvb.27.1678028604216;
-        Sun, 05 Mar 2023 07:03:24 -0800 (PST)
-Received: from smtpclient.apple ([2600:1005:b003:394d:acb0:58:f50c:218b])
-        by smtp.gmail.com with ESMTPSA id d64-20020a37b443000000b0073b587194d0sm5603351qkf.104.2023.03.05.07.03.23
+        d=1e100.net; s=20210112; t=1678028813;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VUPEOsZRG5KTaj8wY22HcLuxFqq6GzcV1ULmW/dJpQE=;
+        b=2FgzFiO9rHa8RmE7VoLXlxFZ21LmkZO+tp6yhjdOzNYmO0QWw2T9Whd9/RUkvfEaWw
+         bnlZt67020vfDU6tPzIqBDr4mwkKG5Ybwy50D7lMcm12zjlnJHQvQ8/2XAxJlOpau82g
+         8xG03Re/rYfNFFi/KwEJGzzyS1Q24pTqzmIOz8RKhsvUK7/9YxFOiKCZc8KeDphQxUj6
+         iPSv7VxZLJFfAvrYJ8t6ECyeU3AweiyGHlxqLLn+o85ZOBH2s62I8szj8sLbjbjIQnMx
+         revbVvevxwzY46LjPQE8bUaTvqTLo/+y7J9wpDKujzx/X5tHP7YOpaCtYHVCnnairKc7
+         y/iw==
+X-Gm-Message-State: AO0yUKXHgnEeyf64z1jfO362HJGOdjXFEPGVJwuMfd6X/N228VjBioMh
+        o1//ukW6lB3DhHpkl1RY5G0UqA==
+X-Google-Smtp-Source: AK7set9WjGvA+faL/hfVLxMuYkZz+hqd3MZ7LUU+bxSbrjE77tk++oQyHW1RkGB8DkqBCnYaqSCj2w==
+X-Received: by 2002:a17:906:d9c2:b0:8b1:7b22:90b6 with SMTP id qk2-20020a170906d9c200b008b17b2290b6mr7289619ejb.37.1678028812874;
+        Sun, 05 Mar 2023 07:06:52 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:71e7:13d:1c29:505f? ([2a02:810d:15c0:828:71e7:13d:1c29:505f])
+        by smtp.gmail.com with ESMTPSA id ot19-20020a170906ccd300b008b9d2da5343sm3319875ejb.210.2023.03.05.07.06.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 07:03:23 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Date:   Sun, 5 Mar 2023 10:03:12 -0500
-Message-Id: <E5E8224E-B5C4-4796-8ACA-F2E26BEA1374@joelfernandes.org>
-References: <ZAR/VdMNBwdrWA/5@pc636>
-Cc:     linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        rcu@vger.kernel.org
-In-Reply-To: <ZAR/VdMNBwdrWA/5@pc636>
-To:     Uladzislau Rezki <urezki@gmail.com>
-X-Mailer: iPhone Mail (20B101)
+        Sun, 05 Mar 2023 07:06:52 -0800 (PST)
+Message-ID: <a85c9c5d-b57d-9212-0e24-1991b5b580b3@linaro.org>
+Date:   Sun, 5 Mar 2023 16:06:51 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/3] soc: qcom: icc-bwmon: Handle global registers
+ correctly
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org>
+ <20230304-topic-ddr_bwmon-v1-2-e563837dc7d1@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230304-topic-ddr_bwmon-v1-2-e563837dc7d1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 04/03/2023 16:39, Konrad Dybcio wrote:
+> The BWMON hardware has two sets of registers: one for the monitor itself
+> and one called "global". It has what seems to be some kind of a head
+> switch and an interrupt control register. It's usually 0x200 in size.
+> 
+> On fairly recent SoCs (with the starting point seemingly being moving
+> the OSM programming to the firmware) these two register sets are
+> contiguous and overlapping, like this (on sm8450):
+> 
+> /* notice how base.start == global_base.start+0x100 */
+> reg = <0x90b6400 0x300>, <0x90b6300 0x200>;
+> reg-names = "base", "global_base";
+> 
+> Which led to some confusion and the assumption that since the
+> "interesting" global registers begin right after global_base+0x100,
+> there's no need to map two separate regions and one can simply subtract
+> 0x100 from the offsets.
+> 
+> This is however not the case for anything older than SDM845, as the
+> global region can appear in seemingly random spots on the register map.
+> 
+> Add support for it to let bwmon function on older SoCs like MSM8998 and
+> allow operation with just one set of registers for newer platforms.
+> 
+> Fixes: b9c2ae6cac40 ("soc: qcom: icc-bwmon: Add bandwidth monitoring driver")
+
+You did not describe any bug to be fixed. Adding support for different
+devices with different memory layour is a feature, not bugfix. If this
+is a bugfix, please share what exactly is broken on sdm845?
+
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/soc/qcom/icc-bwmon.c | 136 +++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 118 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
+> index d07be3700db6..9ef632d80ee3 100644
+> --- a/drivers/soc/qcom/icc-bwmon.c
+> +++ b/drivers/soc/qcom/icc-bwmon.c
+> @@ -34,14 +34,27 @@
+>  /* Internal sampling clock frequency */
+>  #define HW_TIMER_HZ				19200000
+>  
+> -#define BWMON_V4_GLOBAL_IRQ_CLEAR		0x008
+> -#define BWMON_V4_GLOBAL_IRQ_ENABLE		0x00c
+> +#define BWMON_V4_GLOBAL_IRQ_CLEAR		0x108
+> +#define BWMON_V4_GLOBAL_IRQ_ENABLE		0x10c
+>  /*
+>   * All values here and further are matching regmap fields, so without absolute
+>   * register offsets.
+>   */
+>  #define BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE	BIT(0)
+>  
+> +/*
+> + * Starting with SDM845, the BWMON4 register space has changed a bit:
+> + * the global registers were jammed into the beginning of the monitor region.
+> + * To keep the proper offsets, one would have to map <GLOBAL_BASE 0x200> and
+> + * <GLOBAL_BASE+0x100 0x300>, which is straight up wrong.
+> + * To facilitate for that, while allowing the older, arguably more proper
+> + * implementations to work, offset the global registers by -0x100 to avoid
+> + * having to map half of the global registers twice.
+> + */
+> +#define BWMON_V4_845_OFFSET			0x100
+
+MSM8998? It's a bit confusing to keep calling it 845 while it is for
+MSM8998 variant... or it's not anymore for MSM8998?
 
 
-> On Mar 5, 2023, at 6:39 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
->=20
-> =EF=BB=BFOn Fri, Mar 03, 2023 at 09:38:51PM +0000, Joel Fernandes (Google)=
- wrote:
->> On many systems, a great deal of boot (in userspace) happens after the
->> kernel thinks the boot has completed. It is difficult to determine if
->> the system has really booted from the kernel side. Some features like
->> lazy-RCU can risk slowing down boot time if, say, a callback has been
->> added that the boot synchronously depends on. Further expedited callbacks=
+> +#define BWMON_V4_GLOBAL_IRQ_CLEAR_845		(BWMON_V4_GLOBAL_IRQ_CLEAR - BWMON_V4_845_OFFSET)
+> +#define BWMON_V4_GLOBAL_IRQ_ENABLE_845		(BWMON_V4_GLOBAL_IRQ_ENABLE - BWMON_V4_845_OFFSET)
+> +
+>  #define BWMON_V4_IRQ_STATUS			0x100
+>  #define BWMON_V4_IRQ_CLEAR			0x108
+>  
+> @@ -118,8 +131,10 @@
+>  #define BWMON_NEEDS_FORCE_CLEAR			BIT(1)
+>  
+>  enum bwmon_fields {
+> -	F_GLOBAL_IRQ_CLEAR,
+> -	F_GLOBAL_IRQ_ENABLE,
+> +	/* Fields used only on >=SDM845 with BWMON_HAS_GLOBAL_IRQ */
+> +	F_GLB_IRQ_CLEAR,
+> +	F_GLB_IRQ_ENABLE,
 
->> can get unexpedited way earlier than it should be, thus slowing down
->> boot (as shown in the data below).
->>=20
->> For these reasons, this commit adds a config option
->> 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter rcupdate.boot_end_delay.=
+I am not sure what's the benefit of this rename.
 
->> Userspace can also make RCU's view of the system as booted, by writing th=
-e
->> time in milliseconds to: /sys/module/rcupdate/parameters/rcu_boot_end_del=
-ay
->> Or even just writing a value of 0 to this sysfs node.
->> However, under no circumstance will the boot be allowed to end earlier
->> than just before init is launched.
->>=20
->> The default value of CONFIG_RCU_BOOT_END_DELAY is chosen as 15s. This
->> suites ChromeOS and also a PREEMPT_RT system below very well, which need
->> no config or parameter changes, and just a simple application of this pat=
-ch. A
->> system designer can also choose a specific value here to keep RCU from ma=
-rking
->> boot completion.  As noted earlier, RCU's perspective of the system as bo=
-oted
->> will not be marker until at least rcu_boot_end_delay milliseconds have pa=
-ssed
->> or an update is made via writing a small value (or 0) in milliseconds to:=
+> +
+>  	F_IRQ_STATUS,
+>  	F_IRQ_CLEAR,
+>  	F_IRQ_ENABLE,
+> @@ -145,6 +160,13 @@ enum bwmon_fields {
+>  	F_NUM_FIELDS
+>  };
+>  
+> +enum bwmon_global_fields {
+> +	F_GLOBAL_IRQ_CLEAR,
+> +	F_GLOBAL_IRQ_ENABLE,
+> +
+> +	F_NUM_GLOBAL_FIELDS
+> +};
+> +
+>  struct icc_bwmon_data {
+>  	unsigned int sample_ms;
+>  	unsigned int count_unit_kb; /* kbytes */
+> @@ -157,6 +179,9 @@ struct icc_bwmon_data {
+>  
+>  	const struct regmap_config *regmap_cfg;
+>  	const struct reg_field *regmap_fields;
+> +
+> +	const struct regmap_config *global_regmap_cfg;
+> +	const struct reg_field *global_regmap_fields;
+>  };
+>  
+>  struct icc_bwmon {
+> @@ -166,6 +191,7 @@ struct icc_bwmon {
+>  
+>  	struct regmap *regmap;
+>  	struct regmap_field *regs[F_NUM_FIELDS];
+> +	struct regmap_field *global_regs[F_NUM_FIELDS];
+>  
+>  	unsigned int max_bw_kbps;
+>  	unsigned int min_bw_kbps;
+> @@ -175,8 +201,8 @@ struct icc_bwmon {
+>  
+>  /* BWMON v4 */
+>  static const struct reg_field msm8998_bwmon_reg_fields[] = {
+> -	[F_GLOBAL_IRQ_CLEAR]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_CLEAR, 0, 0),
+> -	[F_GLOBAL_IRQ_ENABLE]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_ENABLE, 0, 0),
+> +	[F_GLB_IRQ_CLEAR]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_CLEAR_845, 0, 0),
+> +	[F_GLB_IRQ_ENABLE]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_ENABLE_845, 0, 0),
+>  	[F_IRQ_STATUS]		= REG_FIELD(BWMON_V4_IRQ_STATUS, 4, 7),
+>  	[F_IRQ_CLEAR]		= REG_FIELD(BWMON_V4_IRQ_CLEAR, 4, 7),
+>  	[F_IRQ_ENABLE]		= REG_FIELD(BWMON_V4_IRQ_ENABLE, 4, 7),
+> @@ -202,7 +228,7 @@ static const struct reg_field msm8998_bwmon_reg_fields[] = {
+>  };
+>  
+>  static const struct regmap_range msm8998_bwmon_reg_noread_ranges[] = {
+> -	regmap_reg_range(BWMON_V4_GLOBAL_IRQ_CLEAR, BWMON_V4_GLOBAL_IRQ_CLEAR),
+> +	regmap_reg_range(BWMON_V4_GLOBAL_IRQ_CLEAR_845, BWMON_V4_GLOBAL_IRQ_CLEAR_845),
+>  	regmap_reg_range(BWMON_V4_IRQ_CLEAR, BWMON_V4_IRQ_CLEAR),
+>  	regmap_reg_range(BWMON_V4_CLEAR, BWMON_V4_CLEAR),
+>  };
+> @@ -222,16 +248,34 @@ static const struct regmap_access_table msm8998_bwmon_reg_volatile_table = {
+>  	.n_yes_ranges	= ARRAY_SIZE(msm8998_bwmon_reg_volatile_ranges),
+>  };
+>  
+> +static const struct reg_field msm8998_bwmon_global_reg_fields[] = {
+> +	[F_GLOBAL_IRQ_CLEAR]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_CLEAR, 0, 0),
+> +	[F_GLOBAL_IRQ_ENABLE]	= REG_FIELD(BWMON_V4_GLOBAL_IRQ_ENABLE, 0, 0),
+> +};
+> +
+> +static const struct regmap_range msm8998_bwmon_global_reg_noread_ranges[] = {
+> +	regmap_reg_range(BWMON_V4_GLOBAL_IRQ_CLEAR, BWMON_V4_GLOBAL_IRQ_CLEAR),
+> +};
+> +
+> +static const struct regmap_access_table msm8998_bwmon_global_reg_read_table = {
+> +	.no_ranges	= msm8998_bwmon_global_reg_noread_ranges,
+> +	.n_no_ranges	= ARRAY_SIZE(msm8998_bwmon_global_reg_noread_ranges),
+> +};
+> +
+>  /*
+>   * Fill the cache for non-readable registers only as rest does not really
+>   * matter and can be read from the device.
+>   */
+>  static const struct reg_default msm8998_bwmon_reg_defaults[] = {
+> -	{ BWMON_V4_GLOBAL_IRQ_CLEAR, 0x0 },
+> +	{ BWMON_V4_GLOBAL_IRQ_CLEAR_845, 0x0 },
+>  	{ BWMON_V4_IRQ_CLEAR, 0x0 },
+>  	{ BWMON_V4_CLEAR, 0x0 },
+>  };
+>  
+> +static const struct reg_default msm8998_bwmon_global_reg_defaults[] = {
+> +	{ BWMON_V4_GLOBAL_IRQ_CLEAR, 0x0 },
+> +};
+> +
+>  static const struct regmap_config msm8998_bwmon_regmap_cfg = {
+>  	.reg_bits		= 32,
+>  	.reg_stride		= 4,
+> @@ -252,10 +296,27 @@ static const struct regmap_config msm8998_bwmon_regmap_cfg = {
+>  	.cache_type		= REGCACHE_RBTREE,
+>  };
+>  
+> +static const struct regmap_config msm8998_bwmon_global_regmap_cfg = {
+> +	.reg_bits		= 32,
+> +	.reg_stride		= 4,
+> +	.val_bits		= 32,
+> +	/*
+> +	 * No concurrent access expected - driver has one interrupt handler,
+> +	 * regmap is not shared, no driver or user-space API.
+> +	 */
+> +	.disable_locking	= true,
+> +	.rd_table		= &msm8998_bwmon_global_reg_read_table,
+> +	.reg_defaults		= msm8998_bwmon_global_reg_defaults,
+> +	.num_reg_defaults	= ARRAY_SIZE(msm8998_bwmon_global_reg_defaults),
+> +	/*
+> +	 * Cache is necessary for using regmap fields with non-readable
+> +	 * registers.
+> +	 */
+> +	.cache_type		= REGCACHE_RBTREE,
+> +};
+> +
+>  /* BWMON v5 */
+>  static const struct reg_field sdm845_llcc_bwmon_reg_fields[] = {
+> -	[F_GLOBAL_IRQ_CLEAR]	= {},
+> -	[F_GLOBAL_IRQ_ENABLE]	= {},
+>  	[F_IRQ_STATUS]		= REG_FIELD(BWMON_V5_IRQ_STATUS, 0, 3),
+>  	[F_IRQ_CLEAR]		= REG_FIELD(BWMON_V5_IRQ_CLEAR, 0, 3),
+>  	[F_IRQ_ENABLE]		= REG_FIELD(BWMON_V5_IRQ_ENABLE, 0, 3),
+> @@ -369,16 +430,21 @@ static void bwmon_clear_irq(struct icc_bwmon *bwmon)
+>  	regmap_field_force_write(bwmon->regs[F_IRQ_CLEAR], BWMON_IRQ_ENABLE_MASK);
+>  	if (bwmon->data->quirks & BWMON_NEEDS_FORCE_CLEAR)
+>  		regmap_field_force_write(bwmon->regs[F_IRQ_CLEAR], 0);
+> -	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+> -		regmap_field_force_write(bwmon->regs[F_GLOBAL_IRQ_CLEAR],
+> +	if (bwmon->global_regs[0])
+> +		regmap_field_force_write(bwmon->global_regs[F_GLOBAL_IRQ_CLEAR],
+> +					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+> +	else
+> +		regmap_field_force_write(bwmon->regs[F_GLB_IRQ_CLEAR],
+>  					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+>  }
+>  
+>  static void bwmon_disable(struct icc_bwmon *bwmon)
+>  {
+>  	/* Disable interrupts. Strict ordering, see bwmon_clear_irq(). */
+> -	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+> -		regmap_field_write(bwmon->regs[F_GLOBAL_IRQ_ENABLE], 0x0);
+> +	if (bwmon->global_regs[0])
+> +		regmap_field_write(bwmon->global_regs[F_GLOBAL_IRQ_ENABLE], 0x0);
+> +	else
+> +		regmap_field_write(bwmon->regs[F_GLB_IRQ_ENABLE], 0x0);
+>  	regmap_field_write(bwmon->regs[F_IRQ_ENABLE], 0x0);
+>  
+>  	/*
+> @@ -391,9 +457,13 @@ static void bwmon_disable(struct icc_bwmon *bwmon)
+>  static void bwmon_enable(struct icc_bwmon *bwmon, unsigned int irq_enable)
+>  {
+>  	/* Enable interrupts */
+> -	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ)
+> -		regmap_field_write(bwmon->regs[F_GLOBAL_IRQ_ENABLE],
+> -				   BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+> +	if (bwmon->global_regs[0])
+> +		regmap_field_write(bwmon->global_regs[F_GLOBAL_IRQ_ENABLE],
+> +					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
+> +	else
+> +		regmap_field_write(bwmon->regs[F_GLB_IRQ_ENABLE],
+> +					 BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE);
 
->> /sys/module/rcupdate/parameters/rcu_boot_end_delay.
->>=20
->> One side-effect of this patch is, there is a risk that a real-time worklo=
-ad
->> launched just after the kernel boots will suffer interruptions due to exp=
-edited
->> RCU, which previous ended just before init was launched. However, to miti=
-gate
->> such an issue (however unlikely), the user should either tune
->> CONFIG_RCU_BOOT_END_DELAY to a smaller value than 15 seconds or write a v=
-alue
->> of 0 to /sys/module/rcupdate/parameters/rcu_boot_end_delay, once userspac=
-e
->> boots, and before launching the real-time workload.
->>=20
->> Qiuxu also noted impressive boot-time improvements with earlier version
->> of patch. An excerpt from the data he shared:
->>=20
->> 1) Testing environment:
->>    OS            : CentOS Stream 8 (non-RT OS)
->>    Kernel     : v6.2
->>    Machine : Intel Cascade Lake server (2 sockets, each with 44 logical t=
-hreads)
->>    Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=3D2,sockets=3D2, =E2=
-=80=A6
->>=20
->> 2) OS boot time definition:
->>    The time from the start of the kernel boot to the shell command line
->>    prompt is shown from the console. [ Different people may have
->>    different OS boot time definitions. ]
->>=20
->> 3) Measurement method (very rough method):
->>    A timer in the kernel periodically prints the boot time every 100ms.
->>    As soon as the shell command line prompt is shown from the console,
->>    we record the boot time printed by the timer, then the printed boot
->>    time is the OS boot time.
->>=20
->> 4) Measured OS boot time (in seconds)
->>   a) Measured 10 times w/o this patch:
->>        8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
->>        The average OS boot time was: ~8.7s
->>=20
->>   b) Measure 10 times w/ this patch:
->>        8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
->>        The average OS boot time was: ~8.3s.
->>=20
->> Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
->> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->> ---
->> v1->v2:
->>    Update some comments and description.
->> v2->v3:
->>        Add sysfs param, and update with Test data.
->>=20
->> .../admin-guide/kernel-parameters.txt         | 12 ++++
->> cc_list                                       |  8 +++
->> kernel/rcu/Kconfig                            | 19 ++++++
->> kernel/rcu/update.c                           | 68 ++++++++++++++++++-
->> 4 files changed, 106 insertions(+), 1 deletion(-)
->> create mode 100644 cc_list
->>=20
->> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
-ion/admin-guide/kernel-parameters.txt
->> index 2429b5e3184b..611de90d9c13 100644
->> --- a/Documentation/admin-guide/kernel-parameters.txt
->> +++ b/Documentation/admin-guide/kernel-parameters.txt
->> @@ -5085,6 +5085,18 @@
->>    rcutorture.verbose=3D [KNL]
->>            Enable additional printk() statements.
->>=20
->> +    rcupdate.rcu_boot_end_delay=3D [KNL]
->> +            Minimum time in milliseconds that must elapse
->> +            before the boot sequence can be marked complete
->> +            from RCU's perspective, after which RCU's behavior
->> +            becomes more relaxed. The default value is also
->> +            configurable via CONFIG_RCU_BOOT_END_DELAY.
->> +            Userspace can also mark the boot as completed
->> +            sooner by writing the time in milliseconds, say once
->> +            userspace considers the system as booted, to:
->> +            /sys/module/rcupdate/parameters/rcu_boot_end_delay
->> +            Or even just writing a value of 0 to this sysfs node.
->> +
->>    rcupdate.rcu_cpu_stall_ftrace_dump=3D [KNL]
->>            Dump ftrace buffer after reporting RCU CPU
->>            stall warning.
->> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
->> index 9071182b1284..4b5ffa36cbaf 100644
->> --- a/kernel/rcu/Kconfig
->> +++ b/kernel/rcu/Kconfig
->> @@ -217,6 +217,25 @@ config RCU_BOOST_DELAY
->>=20
->>      Accept the default if unsure.
->>=20
->> +config RCU_BOOT_END_DELAY
->> +    int "Minimum time before RCU may consider in-kernel boot as complete=
-d"
->> +    range 0 120000
->> +    default 15000
->> +    help
->> +      Default value of the minimum time in milliseconds that must elapse=
+Probably this would be more readable if regmap_field_write() is called
+only once and you parametrize the first argument (field) from the
+'struct bwmon'.
 
->> +      before the boot sequence can be marked complete from RCU's perspec=
-tive,
->> +      after which RCU's behavior becomes more relaxed.
->> +      Userspace can also mark the boot as completed sooner than this def=
-ault
->> +      by writing the time in milliseconds, say once userspace considers
->> +      the system as booted, to: /sys/module/rcupdate/parameters/rcu_boot=
-_end_delay.
->> +      Or even just writing a value of 0 to this sysfs node.
->> +
->> +      The actual delay for RCU's view of the system to be marked as boot=
-ed can be
->> +      higher than this value if the kernel takes a long time to initiali=
-ze but it
->> +      will never be smaller than this value.
->> +
->> +      Accept the default if unsure.
->> +
->> config RCU_EXP_KTHREAD
->>    bool "Perform RCU expedited work in a real-time kthread"
->>    depends on RCU_BOOST && RCU_EXPERT
->> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
->> index 19bf6fa3ee6a..93138c92136e 100644
->> --- a/kernel/rcu/update.c
->> +++ b/kernel/rcu/update.c
->> @@ -224,18 +224,84 @@ void rcu_unexpedite_gp(void)
->> }
->> EXPORT_SYMBOL_GPL(rcu_unexpedite_gp);
->>=20
->> +/*
->> + * Minimum time in milliseconds until RCU can consider in-kernel boot as=
+> +
+>  	regmap_field_write(bwmon->regs[F_IRQ_ENABLE], irq_enable);
+>  
+>  	/* Enable bwmon */
+> @@ -556,7 +626,9 @@ static int bwmon_init_regmap(struct platform_device *pdev,
+>  	struct device *dev = &pdev->dev;
+>  	void __iomem *base;
+>  	struct regmap *map;
+> +	int ret;
+>  
+> +	/* Map the monitor base */
+>  	base = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(base))
+>  		return dev_err_probe(dev, PTR_ERR(base),
+> @@ -567,12 +639,38 @@ static int bwmon_init_regmap(struct platform_device *pdev,
+>  		return dev_err_probe(dev, PTR_ERR(map),
+>  				     "failed to initialize regmap\n");
+>  
+> +	BUILD_BUG_ON(ARRAY_SIZE(msm8998_bwmon_global_reg_fields) != F_NUM_GLOBAL_FIELDS);
+>  	BUILD_BUG_ON(ARRAY_SIZE(msm8998_bwmon_reg_fields) != F_NUM_FIELDS);
+>  	BUILD_BUG_ON(ARRAY_SIZE(sdm845_llcc_bwmon_reg_fields) != F_NUM_FIELDS);
+>  
+> -	return devm_regmap_field_bulk_alloc(dev, map, bwmon->regs,
+> +	ret = devm_regmap_field_bulk_alloc(dev, map, bwmon->regs,
+>  					   bwmon->data->regmap_fields,
+>  					   F_NUM_FIELDS);
 
->> + * completed.  This can also be tuned at runtime to end the boot earlier=
-, by
->> + * userspace init code writing the time in milliseconds (even 0) to:
->> + * /sys/module/rcupdate/parameters/rcu_boot_end_delay
->> + */
->> +static int rcu_boot_end_delay =3D CONFIG_RCU_BOOT_END_DELAY;
->> +
->> static bool rcu_boot_ended __read_mostly;
->> +static bool rcu_boot_end_called __read_mostly;
->> +static DEFINE_MUTEX(rcu_boot_end_lock);
->> +
->> +static int param_set_rcu_boot_end(const char *val, const struct kernel_p=
-aram *kp)
->> +{
->> +    uint end_ms;
->> +    int ret =3D kstrtouint(val, 0, &end_ms);
->> +
->> +    if (ret)
->> +        return ret;
->> +    WRITE_ONCE(*(uint *)kp->arg, end_ms);
->> +
->> +    /*
->> +     * rcu_end_inkernel_boot() should be called at least once during ini=
-t
->> +     * before we can allow param changes to end the boot.
->> +     */
->> +    mutex_lock(&rcu_boot_end_lock);
->> +    rcu_boot_end_delay =3D end_ms;
->> +    if (!rcu_boot_ended && rcu_boot_end_called) {
->> +        mutex_unlock(&rcu_boot_end_lock);
->> +        rcu_end_inkernel_boot();
->> +    }
->> +    mutex_unlock(&rcu_boot_end_lock);
->> +    return ret;
->> +}
->> +
->> +static const struct kernel_param_ops rcu_boot_end_ops =3D {
->> +    .set =3D param_set_rcu_boot_end,
->> +    .get =3D param_get_uint,
->> +};
->> +module_param_cb(rcu_boot_end_delay, &rcu_boot_end_ops, &rcu_boot_end_del=
-ay, 0644);
->>=20
->> /*
->> - * Inform RCU of the end of the in-kernel boot sequence.
->> + * Inform RCU of the end of the in-kernel boot sequence. The boot sequen=
-ce will
->> + * not be marked ended until at least rcu_boot_end_delay milliseconds ha=
-ve passed.
->>  */
->> +void rcu_end_inkernel_boot(void);
->> +static void rcu_boot_end_work_fn(struct work_struct *work)
->> +{
->> +    rcu_end_inkernel_boot();
->> +}
->> +static DECLARE_DELAYED_WORK(rcu_boot_end_work, rcu_boot_end_work_fn);
->> +
->> void rcu_end_inkernel_boot(void)
->> {
->> +    mutex_lock(&rcu_boot_end_lock);
->> +    rcu_boot_end_called =3D true;
->> +
->> +    if (rcu_boot_ended)
->> +        return;
->> +
->> +    if (rcu_boot_end_delay) {
->> +        u64 boot_ms =3D div_u64(ktime_get_boot_fast_ns(), 1000000UL);
->> +
->> +        if (boot_ms < rcu_boot_end_delay) {
->> +            schedule_delayed_work(&rcu_boot_end_work,
->> +                    rcu_boot_end_delay - boot_ms);
-> <snip>
-> urezki@pc638:~/data/raid0/coding/linux-rcu.git$ git diff
-> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-> index 93138c92136e..93f426f0f4ec 100644
-> --- a/kernel/rcu/update.c
-> +++ b/kernel/rcu/update.c
-> @@ -289,7 +289,7 @@ void rcu_end_inkernel_boot(void)
->=20
->                if (boot_ms < rcu_boot_end_delay) {
->                        schedule_delayed_work(&rcu_boot_end_work,
-> -                                       rcu_boot_end_delay - boot_ms);
-> +                               msecs_to_jiffies(rcu_boot_end_delay - boot=
-_ms));
->                        mutex_unlock(&rcu_boot_end_lock);
->                        return;
->                }
-> urezki@pc638:~/data/raid0/coding/linux-rcu.git$
-> <snip>
->=20
-> I think you need to apply above patch. I am not sure maybe Paul
-> has already mentioned about it. But just in case.
+What exactly happens now on msm8998 (or updated sdm845 from your binding
+example) for the "global" fields in this region? The regmap references
+non-existing fields for the "monitor" region, doesn't it?
 
-Ah, the reason my testing did not catch it is because for HZ=3D1000, msecs
-and jiffies are the same.
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (bwmon->data->quirks & BWMON_HAS_GLOBAL_IRQ) {
+> +		/* Map the global base, if separate */
+> +		base = devm_platform_ioremap_resource(pdev, 1);
 
-Great eyes and thank you Vlad, I=E2=80=99ll make the fix and repost it.
+Wouldn't this now print errors for sdm845, thus introduce dmesg regression?
 
- - Joel
+> +
+> +		/* If it's not, bail out early and assume the 845 register scheme */
+> +		if (IS_ERR(base) && PTR_ERR(base) == -EINVAL)
+> +			goto exit;
+> +		else if (IS_ERR(base))
+> +			return dev_err_probe(dev, PTR_ERR(base),
+> +					     "failed to map bwmon global registers\n");
+> +
+> +		map = devm_regmap_init_mmio(dev, base, bwmon->data->global_regmap_cfg);
+> +		if (IS_ERR(map))
+> +			return dev_err_probe(dev, PTR_ERR(map),
+> +					     "failed to initialize global regmap\n");
+> +
+> +		ret = devm_regmap_field_bulk_alloc(dev, map, bwmon->global_regs,
+> +						   bwmon->data->global_regmap_fields,
+> +						
+> 
 
->=20
-> --
-> Uladzislau Rezki
+Best regards,
+Krzysztof
+
