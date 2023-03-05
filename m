@@ -2,222 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216BC6AAF47
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 12:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC6B6AAF4F
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 12:39:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjCELWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 06:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
+        id S229614AbjCELjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 06:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCELW2 (ORCPT
+        with ESMTP id S229455AbjCELjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 06:22:28 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A61EA5F5;
-        Sun,  5 Mar 2023 03:22:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678015347; x=1709551347;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YspSz6HVobERfe6tNMqxvlJoMX2cvmnkOE7gTDTCvwc=;
-  b=hWy9tgX/YFwWU79t0lL5ivVoWxHJR6yXsTGPhEntx5uGF24GVndYUQUW
-   golAzVZKiPMHor92slTwEMZdDquFvss5RPMsyJPX+1aO5KfMngyvb70rm
-   4rTuJPXUqZvnPCeHp8dNgAKO8N8pm0MgoONmqCsEopQRxa30oWO2KZP3N
-   h/T1rAChrY9kC7px1KuMUp1pcI0gTer2FRQTB4T8mjB5isvrNyFHxDxTX
-   OtfmoiwvPPRbtVRGK+lD1vly+2n3/konGwbBaEKns+B2JVXps2+lWXiui
-   +CKrEYsXQZ++98eRX8zrfmBpaeiXfs5+m4+qIdhN7SrtOm+1bd8wYdugx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="336883397"
-X-IronPort-AV: E=Sophos;i="5.98,235,1673942400"; 
-   d="scan'208";a="336883397"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 03:22:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="764924029"
-X-IronPort-AV: E=Sophos;i="5.98,235,1673942400"; 
-   d="scan'208";a="764924029"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Mar 2023 03:22:24 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYmRb-0002im-2h;
-        Sun, 05 Mar 2023 11:22:23 +0000
-Date:   Sun, 5 Mar 2023 19:21:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        virtualization@lists.linux-foundation.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v2 6/8] vdpa_sim: use kthread worker
-Message-ID: <202303051841.bPAIzJRy-lkp@intel.com>
-References: <20230302113421.174582-7-sgarzare@redhat.com>
+        Sun, 5 Mar 2023 06:39:07 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF73CDDB;
+        Sun,  5 Mar 2023 03:39:05 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id x3so27446201edb.10;
+        Sun, 05 Mar 2023 03:39:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678016344;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ia6NTRBi8I6vwEXopSdGm/7/hJAaOLIxwJMBDzaRQbk=;
+        b=YuJLNERon9EeN3uC7k5q0JaBBoE0FMoFDZB1bpH92Xo4tl0vE4H+iEnMOV8miIq/Xg
+         uDT/i7xtnt9H8OrWMbUq4Bk8kOQAyKTHXTtLy72XTDSlUnk1RX2cdmHvSW7rppVpdoMJ
+         mCjAQd2XEeY+82curxZZKyi0sJq4/RoWxnJnCYlPuDFnsMw0MZgYrHjbqxAjMUBRZj4w
+         vAJ2miIIo2M2Oh/osYYFX7Npz33OwyjwAbebQgs5pUwnW+Sce09ry7pTPQd2/u8gMn8D
+         80EU87zhbAZ6ozn22urrtc+SwJ5xj0vz7nCe0v8ze696Toc8tki1twOTFmnq7BT0WRSQ
+         tS5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678016344;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ia6NTRBi8I6vwEXopSdGm/7/hJAaOLIxwJMBDzaRQbk=;
+        b=HHJDFXr0ZgWLB1OrGFdOsxRDiFO1QDCbYBYtcfCUWGVPDx3ZUXYbz1zMpFgEyASANw
+         EX09RZhQjq5KzvCXLbyscGO1AgCIaGggYjfTzVhhq9GxyeOQ17fnFAa40SWvAyVSBiGP
+         /o1Qtm4GYH/G8K44TYPC+gfCauGroRbsCljc1FEgN0EZRfr0CmVzHrPH0HS2corGGhpU
+         MtOOnHIbPozHr4Rkh1jsU+Hpf4veumLXSYYusC+6NBJTTEBIhp/pH7dDypxaggHCXDzw
+         HsFyjmNbiCPGPsQDUpXjsFu2DT2E0mxLBs0QgN9diUwQ9axch/5+/XCArc6B3PfkoP8c
+         NNsA==
+X-Gm-Message-State: AO0yUKV6hXBI36KOpHTcVvU3/2JmR12JGl4/TJ3od+z+h3xOuktd9dDE
+        v7K2v0vE4J8S9yBT6b3/7aI=
+X-Google-Smtp-Source: AK7set9rxPr/K59/UeOn/u8hJhDgEvAccHBDTYGzh8yJF43UHWdezk/4cWHfvhqYfO+lE+Nts1ZFXg==
+X-Received: by 2002:a17:906:ee82:b0:8b1:7891:19e8 with SMTP id wt2-20020a170906ee8200b008b1789119e8mr9693476ejb.44.1678016343908;
+        Sun, 05 Mar 2023 03:39:03 -0800 (PST)
+Received: from pc636 ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id v8-20020a50c408000000b004c09f0ba24dsm3564542edf.48.2023.03.05.03.39.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Mar 2023 03:39:03 -0800 (PST)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Sun, 5 Mar 2023 12:39:01 +0100
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        rcu@vger.kernel.org, urezki@gmail.com
+Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
+Message-ID: <ZAR/VdMNBwdrWA/5@pc636>
+References: <20230303213851.2090365-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230302113421.174582-7-sgarzare@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230303213851.2090365-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefano,
+On Fri, Mar 03, 2023 at 09:38:51PM +0000, Joel Fernandes (Google) wrote:
+> On many systems, a great deal of boot (in userspace) happens after the
+> kernel thinks the boot has completed. It is difficult to determine if
+> the system has really booted from the kernel side. Some features like
+> lazy-RCU can risk slowing down boot time if, say, a callback has been
+> added that the boot synchronously depends on. Further expedited callbacks
+> can get unexpedited way earlier than it should be, thus slowing down
+> boot (as shown in the data below).
+> 
+> For these reasons, this commit adds a config option
+> 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter rcupdate.boot_end_delay.
+> Userspace can also make RCU's view of the system as booted, by writing the
+> time in milliseconds to: /sys/module/rcupdate/parameters/rcu_boot_end_delay
+> Or even just writing a value of 0 to this sysfs node.
+> However, under no circumstance will the boot be allowed to end earlier
+> than just before init is launched.
+> 
+> The default value of CONFIG_RCU_BOOT_END_DELAY is chosen as 15s. This
+> suites ChromeOS and also a PREEMPT_RT system below very well, which need
+> no config or parameter changes, and just a simple application of this patch. A
+> system designer can also choose a specific value here to keep RCU from marking
+> boot completion.  As noted earlier, RCU's perspective of the system as booted
+> will not be marker until at least rcu_boot_end_delay milliseconds have passed
+> or an update is made via writing a small value (or 0) in milliseconds to:
+> /sys/module/rcupdate/parameters/rcu_boot_end_delay.
+> 
+> One side-effect of this patch is, there is a risk that a real-time workload
+> launched just after the kernel boots will suffer interruptions due to expedited
+> RCU, which previous ended just before init was launched. However, to mitigate
+> such an issue (however unlikely), the user should either tune
+> CONFIG_RCU_BOOT_END_DELAY to a smaller value than 15 seconds or write a value
+> of 0 to /sys/module/rcupdate/parameters/rcu_boot_end_delay, once userspace
+> boots, and before launching the real-time workload.
+> 
+> Qiuxu also noted impressive boot-time improvements with earlier version
+> of patch. An excerpt from the data he shared:
+> 
+> 1) Testing environment:
+>     OS            : CentOS Stream 8 (non-RT OS)
+>     Kernel     : v6.2
+>     Machine : Intel Cascade Lake server (2 sockets, each with 44 logical threads)
+>     Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=2,sockets=2, …
+> 
+> 2) OS boot time definition:
+>     The time from the start of the kernel boot to the shell command line
+>     prompt is shown from the console. [ Different people may have
+>     different OS boot time definitions. ]
+> 
+> 3) Measurement method (very rough method):
+>     A timer in the kernel periodically prints the boot time every 100ms.
+>     As soon as the shell command line prompt is shown from the console,
+>     we record the boot time printed by the timer, then the printed boot
+>     time is the OS boot time.
+> 
+> 4) Measured OS boot time (in seconds)
+>    a) Measured 10 times w/o this patch:
+>         8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
+>         The average OS boot time was: ~8.7s
+> 
+>    b) Measure 10 times w/ this patch:
+>         8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
+>         The average OS boot time was: ~8.3s.
+> 
+> Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+> v1->v2:
+> 	Update some comments and description.
+> v2->v3:
+>         Add sysfs param, and update with Test data.
+> 
+>  .../admin-guide/kernel-parameters.txt         | 12 ++++
+>  cc_list                                       |  8 +++
+>  kernel/rcu/Kconfig                            | 19 ++++++
+>  kernel/rcu/update.c                           | 68 ++++++++++++++++++-
+>  4 files changed, 106 insertions(+), 1 deletion(-)
+>  create mode 100644 cc_list
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 2429b5e3184b..611de90d9c13 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -5085,6 +5085,18 @@
+>  	rcutorture.verbose= [KNL]
+>  			Enable additional printk() statements.
+>  
+> +	rcupdate.rcu_boot_end_delay= [KNL]
+> +			Minimum time in milliseconds that must elapse
+> +			before the boot sequence can be marked complete
+> +			from RCU's perspective, after which RCU's behavior
+> +			becomes more relaxed. The default value is also
+> +			configurable via CONFIG_RCU_BOOT_END_DELAY.
+> +			Userspace can also mark the boot as completed
+> +			sooner by writing the time in milliseconds, say once
+> +			userspace considers the system as booted, to:
+> +			/sys/module/rcupdate/parameters/rcu_boot_end_delay
+> +			Or even just writing a value of 0 to this sysfs node.
+> +
+>  	rcupdate.rcu_cpu_stall_ftrace_dump= [KNL]
+>  			Dump ftrace buffer after reporting RCU CPU
+>  			stall warning.
+> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> index 9071182b1284..4b5ffa36cbaf 100644
+> --- a/kernel/rcu/Kconfig
+> +++ b/kernel/rcu/Kconfig
+> @@ -217,6 +217,25 @@ config RCU_BOOST_DELAY
+>  
+>  	  Accept the default if unsure.
+>  
+> +config RCU_BOOT_END_DELAY
+> +	int "Minimum time before RCU may consider in-kernel boot as completed"
+> +	range 0 120000
+> +	default 15000
+> +	help
+> +	  Default value of the minimum time in milliseconds that must elapse
+> +	  before the boot sequence can be marked complete from RCU's perspective,
+> +	  after which RCU's behavior becomes more relaxed.
+> +	  Userspace can also mark the boot as completed sooner than this default
+> +	  by writing the time in milliseconds, say once userspace considers
+> +	  the system as booted, to: /sys/module/rcupdate/parameters/rcu_boot_end_delay.
+> +	  Or even just writing a value of 0 to this sysfs node.
+> +
+> +	  The actual delay for RCU's view of the system to be marked as booted can be
+> +	  higher than this value if the kernel takes a long time to initialize but it
+> +	  will never be smaller than this value.
+> +
+> +	  Accept the default if unsure.
+> +
+>  config RCU_EXP_KTHREAD
+>  	bool "Perform RCU expedited work in a real-time kthread"
+>  	depends on RCU_BOOST && RCU_EXPERT
+> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+> index 19bf6fa3ee6a..93138c92136e 100644
+> --- a/kernel/rcu/update.c
+> +++ b/kernel/rcu/update.c
+> @@ -224,18 +224,84 @@ void rcu_unexpedite_gp(void)
+>  }
+>  EXPORT_SYMBOL_GPL(rcu_unexpedite_gp);
+>  
+> +/*
+> + * Minimum time in milliseconds until RCU can consider in-kernel boot as
+> + * completed.  This can also be tuned at runtime to end the boot earlier, by
+> + * userspace init code writing the time in milliseconds (even 0) to:
+> + * /sys/module/rcupdate/parameters/rcu_boot_end_delay
+> + */
+> +static int rcu_boot_end_delay = CONFIG_RCU_BOOT_END_DELAY;
+> +
+>  static bool rcu_boot_ended __read_mostly;
+> +static bool rcu_boot_end_called __read_mostly;
+> +static DEFINE_MUTEX(rcu_boot_end_lock);
+> +
+> +static int param_set_rcu_boot_end(const char *val, const struct kernel_param *kp)
+> +{
+> +	uint end_ms;
+> +	int ret = kstrtouint(val, 0, &end_ms);
+> +
+> +	if (ret)
+> +		return ret;
+> +	WRITE_ONCE(*(uint *)kp->arg, end_ms);
+> +
+> +	/*
+> +	 * rcu_end_inkernel_boot() should be called at least once during init
+> +	 * before we can allow param changes to end the boot.
+> +	 */
+> +	mutex_lock(&rcu_boot_end_lock);
+> +	rcu_boot_end_delay = end_ms;
+> +	if (!rcu_boot_ended && rcu_boot_end_called) {
+> +		mutex_unlock(&rcu_boot_end_lock);
+> +		rcu_end_inkernel_boot();
+> +	}
+> +	mutex_unlock(&rcu_boot_end_lock);
+> +	return ret;
+> +}
+> +
+> +static const struct kernel_param_ops rcu_boot_end_ops = {
+> +	.set = param_set_rcu_boot_end,
+> +	.get = param_get_uint,
+> +};
+> +module_param_cb(rcu_boot_end_delay, &rcu_boot_end_ops, &rcu_boot_end_delay, 0644);
+>  
+>  /*
+> - * Inform RCU of the end of the in-kernel boot sequence.
+> + * Inform RCU of the end of the in-kernel boot sequence. The boot sequence will
+> + * not be marked ended until at least rcu_boot_end_delay milliseconds have passed.
+>   */
+> +void rcu_end_inkernel_boot(void);
+> +static void rcu_boot_end_work_fn(struct work_struct *work)
+> +{
+> +	rcu_end_inkernel_boot();
+> +}
+> +static DECLARE_DELAYED_WORK(rcu_boot_end_work, rcu_boot_end_work_fn);
+> +
+>  void rcu_end_inkernel_boot(void)
+>  {
+> +	mutex_lock(&rcu_boot_end_lock);
+> +	rcu_boot_end_called = true;
+> +
+> +	if (rcu_boot_ended)
+> +		return;
+> +
+> +	if (rcu_boot_end_delay) {
+> +		u64 boot_ms = div_u64(ktime_get_boot_fast_ns(), 1000000UL);
+> +
+> +		if (boot_ms < rcu_boot_end_delay) {
+> +			schedule_delayed_work(&rcu_boot_end_work,
+> +					rcu_boot_end_delay - boot_ms);
+<snip>
+urezki@pc638:~/data/raid0/coding/linux-rcu.git$ git diff
+diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+index 93138c92136e..93f426f0f4ec 100644
+--- a/kernel/rcu/update.c
++++ b/kernel/rcu/update.c
+@@ -289,7 +289,7 @@ void rcu_end_inkernel_boot(void)
+ 
+                if (boot_ms < rcu_boot_end_delay) {
+                        schedule_delayed_work(&rcu_boot_end_work,
+-                                       rcu_boot_end_delay - boot_ms);
++                               msecs_to_jiffies(rcu_boot_end_delay - boot_ms));
+                        mutex_unlock(&rcu_boot_end_lock);
+                        return;
+                }
+urezki@pc638:~/data/raid0/coding/linux-rcu.git$
+<snip>
 
-I love your patch! Perhaps something to improve:
+I think you need to apply above patch. I am not sure maybe Paul
+has already mentioned about it. But just in case.
 
-[auto build test WARNING on mst-vhost/linux-next]
-[also build test WARNING on linus/master next-20230303]
-[cannot apply to v6.2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Stefano-Garzarella/vdpa-add-bind_mm-unbind_mm-callbacks/20230302-193850
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
-patch link:    https://lore.kernel.org/r/20230302113421.174582-7-sgarzare%40redhat.com
-patch subject: [PATCH v2 6/8] vdpa_sim: use kthread worker
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230305/202303051841.bPAIzJRy-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/5b2107457ac0e7b1bb0aa3635ebf13b02e82bb78
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Stefano-Garzarella/vdpa-add-bind_mm-unbind_mm-callbacks/20230302-193850
-        git checkout 5b2107457ac0e7b1bb0aa3635ebf13b02e82bb78
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wireless/ath/ath10k/ drivers/vdpa/vdpa_sim/ fs/erofs/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303051841.bPAIzJRy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/vdpa/vdpa_sim/vdpa_sim.c:166:6: warning: variable 'dev' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-           if (IS_ERR(vdpasim->worker))
-               ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vdpa/vdpa_sim/vdpa_sim.c:213:13: note: uninitialized use occurs here
-           put_device(dev);
-                      ^~~
-   drivers/vdpa/vdpa_sim/vdpa_sim.c:166:2: note: remove the 'if' if its condition is always false
-           if (IS_ERR(vdpasim->worker))
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/vdpa/vdpa_sim/vdpa_sim.c:132:20: note: initialize the variable 'dev' to silence this warning
-           struct device *dev;
-                             ^
-                              = NULL
-   1 warning generated.
-
-
-vim +166 drivers/vdpa/vdpa_sim/vdpa_sim.c
-
-   125	
-   126	struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
-   127				       const struct vdpa_dev_set_config *config)
-   128	{
-   129		const struct vdpa_config_ops *ops;
-   130		struct vdpa_device *vdpa;
-   131		struct vdpasim *vdpasim;
-   132		struct device *dev;
-   133		int i, ret = -ENOMEM;
-   134	
-   135		if (!dev_attr->alloc_size)
-   136			return ERR_PTR(-EINVAL);
-   137	
-   138		if (config->mask & BIT_ULL(VDPA_ATTR_DEV_FEATURES)) {
-   139			if (config->device_features &
-   140			    ~dev_attr->supported_features)
-   141				return ERR_PTR(-EINVAL);
-   142			dev_attr->supported_features =
-   143				config->device_features;
-   144		}
-   145	
-   146		if (batch_mapping)
-   147			ops = &vdpasim_batch_config_ops;
-   148		else
-   149			ops = &vdpasim_config_ops;
-   150	
-   151		vdpa = __vdpa_alloc_device(NULL, ops,
-   152					   dev_attr->ngroups, dev_attr->nas,
-   153					   dev_attr->alloc_size,
-   154					   dev_attr->name, false);
-   155		if (IS_ERR(vdpa)) {
-   156			ret = PTR_ERR(vdpa);
-   157			goto err_alloc;
-   158		}
-   159	
-   160		vdpasim = vdpa_to_sim(vdpa);
-   161		vdpasim->dev_attr = *dev_attr;
-   162	
-   163		kthread_init_work(&vdpasim->work, vdpasim_work_fn);
-   164		vdpasim->worker = kthread_create_worker(0, "vDPA sim worker: %s",
-   165							dev_attr->name);
- > 166		if (IS_ERR(vdpasim->worker))
-   167			goto err_iommu;
-   168	
-   169		spin_lock_init(&vdpasim->lock);
-   170		spin_lock_init(&vdpasim->iommu_lock);
-   171	
-   172		dev = &vdpasim->vdpa.dev;
-   173		dev->dma_mask = &dev->coherent_dma_mask;
-   174		if (dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64)))
-   175			goto err_iommu;
-   176		vdpasim->vdpa.mdev = dev_attr->mgmt_dev;
-   177	
-   178		vdpasim->config = kzalloc(dev_attr->config_size, GFP_KERNEL);
-   179		if (!vdpasim->config)
-   180			goto err_iommu;
-   181	
-   182		vdpasim->vqs = kcalloc(dev_attr->nvqs, sizeof(struct vdpasim_virtqueue),
-   183				       GFP_KERNEL);
-   184		if (!vdpasim->vqs)
-   185			goto err_iommu;
-   186	
-   187		vdpasim->iommu = kmalloc_array(vdpasim->dev_attr.nas,
-   188					       sizeof(*vdpasim->iommu), GFP_KERNEL);
-   189		if (!vdpasim->iommu)
-   190			goto err_iommu;
-   191	
-   192		vdpasim->iommu_pt = kmalloc_array(vdpasim->dev_attr.nas,
-   193						  sizeof(*vdpasim->iommu_pt), GFP_KERNEL);
-   194		if (!vdpasim->iommu_pt)
-   195			goto err_iommu;
-   196	
-   197		for (i = 0; i < vdpasim->dev_attr.nas; i++)
-   198			vhost_iotlb_init(&vdpasim->iommu[i], max_iotlb_entries, 0);
-   199	
-   200		vdpasim->buffer = kvmalloc(dev_attr->buffer_size, GFP_KERNEL);
-   201		if (!vdpasim->buffer)
-   202			goto err_iommu;
-   203	
-   204		for (i = 0; i < dev_attr->nvqs; i++)
-   205			vringh_set_iotlb(&vdpasim->vqs[i].vring, &vdpasim->iommu[0],
-   206					 &vdpasim->iommu_lock);
-   207	
-   208		vdpasim->vdpa.dma_dev = dev;
-   209	
-   210		return vdpasim;
-   211	
-   212	err_iommu:
-   213		put_device(dev);
-   214	err_alloc:
-   215		return ERR_PTR(ret);
-   216	}
-   217	EXPORT_SYMBOL_GPL(vdpasim_create);
-   218	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--
+Uladzislau Rezki
