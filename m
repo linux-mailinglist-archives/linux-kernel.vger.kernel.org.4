@@ -2,201 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9CC6AAEC5
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 10:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EE56AAEC6
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 10:28:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjCEJ1A convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 5 Mar 2023 04:27:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S229642AbjCEJ2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 04:28:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjCEJ07 (ORCPT
+        with ESMTP id S229561AbjCEJ2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 04:26:59 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE35113DDC;
-        Sun,  5 Mar 2023 01:26:56 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id s12so7529654qtq.11;
-        Sun, 05 Mar 2023 01:26:56 -0800 (PST)
+        Sun, 5 Mar 2023 04:28:20 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323B67A8E;
+        Sun,  5 Mar 2023 01:28:19 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id kb15so6921833pjb.1;
+        Sun, 05 Mar 2023 01:28:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678008498;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DjyKHW/kawAuwuQfrAWVGuzBmTM7GYJlp82gYhymMcs=;
+        b=jABWayejwtGhcItoAt3G7bLw466a5H5PPhNAyj/17NYmQeniElDScMW8f1oclGzhpq
+         3Hzgt26m3KUuGZWox+tg6RcyyCaPKyacXGxZf8NgsxnUzuZu/X3NNEV3JM37QDoPwLHu
+         Ryx0zCRZAcKCxUk3HP6/9wHIqV4ykjyQtanrdEEagsY6O9KKyxCrCVcuuymCgqWGdA34
+         lAqApg1ezaVz27wA0yLKRAn6uRWYaObKPKe7f7h3c9Im7CTisAAUvpPPdfG5xCVvIEEx
+         7xnInnHAXuiI+XX1RS3x2X9f8qYTij/IsZ+4TqTWBjtzO98OexFsQ0fCtrYaTqPLGdTh
+         P0zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678008415;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678008498;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mqH/fUNw1v+IeKE/kiXgUEg5Js8jhAM4t/LI9qQb7pQ=;
-        b=3Y4emuKqfRXeH7fuWtyAYbjB2SfdQkxzc8Pswk6X/OgAHgVsehMY8Kinc0nfJJdU/c
-         AWfeXElwaYj254FaEJU4alCPK5v8st/0OkRJzaQYm4M1rMSMtKfhD3MdNuGIYDPdf752
-         uBiQIFfJe+mmsOSzCNXrWBRf0S/RL2SlZjnvl9/2iqTjmLnLvpnGxA3nYn+UGMNQMUSh
-         J9vLtTE+NJRELfgPsEG7/8UMP16nrWM1jFb5XSnG+KSRe3+FAD/Gn/NO1AF4dN9jEPLV
-         lzkfl/YJy8W8hUkYRrsbLvgtIeNu6l2d9yV+tsuhAIDC2QZ9dzKJPMIZdswuUuj8gbrZ
-         UZ2Q==
-X-Gm-Message-State: AO0yUKVCAroO5Hoc7r//Fdss9r8GFWI2R02TJ/I77LLKTlMYGEx9dVkh
-        CCbqt+aaBTFX0P3J82msIVIoecxMrToh0g==
-X-Google-Smtp-Source: AK7set/ePzqKDAnQzuzP4vPRHgyCXZnI6zTHj40AgUo9CerF8kxJWf9UucB1j0WMnznem3ZRuSLjZw==
-X-Received: by 2002:ac8:5dd1:0:b0:3bf:db29:b79e with SMTP id e17-20020ac85dd1000000b003bfdb29b79emr12765131qtx.5.1678008415672;
-        Sun, 05 Mar 2023 01:26:55 -0800 (PST)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id t190-20020a3746c7000000b0074235745fdasm5216626qka.58.2023.03.05.01.26.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 01:26:54 -0800 (PST)
-Received: by mail-yb1-f179.google.com with SMTP id 82so5444138ybn.6;
-        Sun, 05 Mar 2023 01:26:53 -0800 (PST)
-X-Received: by 2002:a5b:c42:0:b0:a43:52fe:c36f with SMTP id
- d2-20020a5b0c42000000b00a4352fec36fmr3381016ybr.7.1678008413630; Sun, 05 Mar
- 2023 01:26:53 -0800 (PST)
+        bh=DjyKHW/kawAuwuQfrAWVGuzBmTM7GYJlp82gYhymMcs=;
+        b=V4yAbiI5KXXMgIBfnOraFWFJOqsVan7FK49peXfYU2UPYZckX6s2Xgo6ZHigExSqaN
+         z1KDR6+gysr1vGxvoCE0dWNc8FQ/+WZ3xFxUes4fam6smoDDrR1V74dsHNJ82J3tWzDd
+         B7AGy+OJC4O83+D6aJ0Cf++cRW+Wd7RuUNlMY7edAuga/UO+mZ/jEoE+DTeIRVhZOT2d
+         CWn9lbExPiJ75rAlFirm20mNGPVajTP7cLGzTORGtch4jc0pCElG5/+Iqq838zTV4OM/
+         909kt3GVry9PUrg1iTM81dOy5t174dK3pObiQJQn2bYC4YW4iXPjXMHD9gr4+t2j5Ypw
+         M6Uw==
+X-Gm-Message-State: AO0yUKVd+fFVMlMBxqrp7tyeYBkvyrItJ2LDxMX5DG6lqZDEzJz8ZWfa
+        5r9vc0dr23kxRHGNlKQFVanbWqDgx9HYSQ==
+X-Google-Smtp-Source: AK7set++UyKWGrsZ10B0LNEUIUmCxHzBKAElgojOCieONFfl9ObfJihWWVgmFzngmwJQU1V35v7Yeg==
+X-Received: by 2002:a17:902:f693:b0:19d:e11:32de with SMTP id l19-20020a170902f69300b0019d0e1132demr9442026plg.34.1678008498536;
+        Sun, 05 Mar 2023 01:28:18 -0800 (PST)
+Received: from mbhardwaj.nvidia.com ([203.200.25.7])
+        by smtp.googlemail.com with ESMTPSA id w22-20020a1709029a9600b001991f3d85acsm4418019plp.299.2023.03.05.01.28.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Mar 2023 01:28:18 -0800 (PST)
+From:   Manish Bhardwaj <bhardwajmanish18@gmail.com>
+To:     bhardwajmanish18@gmail.com
+Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        irogers@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, mark.rutland@arm.com,
+        mingo@redhat.com, namhyung@kernel.org, peterz@infradead.org
+Subject: [PATCH] perf/core: introduced stub APIs for exported APIs
+Date:   Sun,  5 Mar 2023 14:57:59 +0530
+Message-Id: <20230305092759.10754-1-bhardwajmanish18@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230305053934.9948-1-bhardwajmanish18@gmail.com>
+References: <20230305053934.9948-1-bhardwajmanish18@gmail.com>
 MIME-Version: 1.0
-References: <20230302013822.1808711-1-sboyd@kernel.org> <CABVgOSnpMNCtEEsJV28OzUoxdDuiT4a2T0avP0AYf9xFW1jxrw@mail.gmail.com>
- <CAL_JsqJMd3Fi0ZBObdyE1VDKTH1_+smuGDymHnKOkVH2HB3jJQ@mail.gmail.com>
- <3759b28cca7ab751296d4dd83f2dcc51.sboyd@kernel.org> <CAMuHMdXDx6ChRj4xvWbQgcdJd0CGFi-RXySXr=M8QhBkA7YiGw@mail.gmail.com>
- <a2fdbd70-ca44-0d13-5b6f-4177761ecc18@gmail.com>
-In-Reply-To: <a2fdbd70-ca44-0d13-5b6f-4177761ecc18@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 5 Mar 2023 10:26:41 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUMrG9yuXDhDRd+mAUGo5_A6ONjAXXZkJTPXQsO_0C41A@mail.gmail.com>
-Message-ID: <CAMuHMdUMrG9yuXDhDRd+mAUGo5_A6ONjAXXZkJTPXQsO_0C41A@mail.gmail.com>
-Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, David Gow <davidgow@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+Introduced stub APIs for exported APIs so that we can build
+independent module without any error if CONFIG_PERF_EVENT
+feature is disabled in kernel.
 
-On Sun, Mar 5, 2023 at 4:33 AM Frank Rowand <frowand.list@gmail.com> wrote:
-> On 3/2/23 13:47, Geert Uytterhoeven wrote:
-> > On Thu, Mar 2, 2023 at 8:28 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> >> Quoting Rob Herring (2023-03-02 09:32:09)
-> >>> On Thu, Mar 2, 2023 at 2:14 AM David Gow <davidgow@google.com> wrote:
-> >>>> On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
-> >>>>> This patch series adds unit tests for the clk fixed rate basic type and
-> >>>>> the clk registration functions that use struct clk_parent_data. To get
-> >>>>> there, we add support for loading a DTB into the UML kernel that's
-> >>>>> running the unit tests along with probing platform drivers to bind to
-> >>>>> device nodes specified in DT.
-> >>>>>
-> >>>>> With this series, we're able to exercise some of the code in the common
-> >>>>> clk framework that uses devicetree lookups to find parents and the fixed
-> >>>>> rate clk code that scans devicetree directly and creates clks. Please
-> >>>>> review.
-> >>>>>
-> >>>>
-> >>>> Thanks Stephen -- this is really neat!
-> >>>>
-> >>>> This works well here, and I love all of the tests for the
-> >>>> KUnit/device-tree integration as well.
-> >>>>
-> >>>> I'm still looking through the details of it (alas, I've mostly lived
-> >>>> in x86-land, so my device-tree knowledge is, uh, spotty to say the
-> >>>> least), but apart from possibly renaming some things or similarly
-> >>>> minor tweaks, I've not got any real suggestions thus far.
-> >>>>
-> >>>> I do wonder whether we'll want, on the KUnit side, to have some way of
-> >>>> supporting KUnit device trees on non-UML architecctures (e.g., if we
-> >>>> need to test something architecture-specific, or on a big-endian
-> >>>> platform, etc), but I think that's a question for the future, rather
-> >>>> than something that affects this series.
-> >>>
-> >>> I'll say that's a requirement. We should be able to structure the
-> >>> tests to not interfere with the running system's DT. The DT unittest
-> >>> does that.
-> >>
-> >> That could be another choice in the unit test choice menu.
-> >> CONFIG_OF_KUNIT_NOT_UML that injects some built-in DTB overlay on an
-> >> architecture that wants to run tests.
-> >
-> > As long as you use compatible values that don't exist elsewhere,
-> > and don't overwrite anything, you can load your kunit test overlays
-> > on any running system that has DT support.
-> >
-> >>> As a side topic, Is anyone looking at getting UML to work on arm64?
-> >>> It's surprising how much x86 stuff there is which is I guess one
-> >>> reason it hasn't happened.
-> >>
-> >> I've no idea but it would be nice indeed.
-> >
-> > I believe that's non-trivial. At least for arm32 (I didn't have any arm64
-> > systems last time I asked the experts).
-> >
-> >>>> Similarly, I wonder if there's something we could do with device tree
-> >>>> overlays, in order to make it possible for tests to swap nodes in and
-> >>>> out for testing.
-> >>>
-> >>> Yes, that's how the DT unittest works. But it is pretty much one big
-> >>> overlay (ignoring the overlay tests). It could probably be more
-> >>> modular where it is apply overlay, test, remove overlay, repeat.
-> >>
-> >> I didn't want to rely on the overlay code to inject DT nodes. Having
-> >> tests written for the fake KUnit machine is simple. It closely matches
-> >> how clk code probes the DTB and how nodes are created and populated on
-> >> the platform bus as devices. CLK_OF_DECLARE() would need the overlay to
-> >> be applied early too, which doesn't happen otherwise as far as I know.
-> >
-> > Don't all generic clock drivers also create a platform driver?
-> > At least drivers/clk/clk-fixed-factor.c does.
-> >
-> >> But perhaps this design is too much of an end-to-end test and not a unit
-> >> test? In the spirit of unit testing we shouldn't care about how the node
-> >> is added to the live devicetree, just that there is a devicetree at all.
-> >>
-> >> Supporting overlays to more easily test combinations sounds like a good
-> >> idea. Probably some kunit_*() prefixed functions could be used to
-> >> apply a test managed overlay and automatically remove it when the test
-> >> is over would work. The clk registration tests could use this API to
-> >> inject an overlay and then manually call the of_platform_populate()
-> >> function to create the platform device(s). The overlay could be built in
-> >> drivers/clk/ too and then probably some macroish function can find the
-> >> blob and apply it.
-> >
-> > No need to manually call of_platform_populate() to create the
-> > platform devices. That is taken care of automatically when applying
-> > an overlay.
-> >
-> >> Is there some way to delete the platform devices that we populate from
-> >> the overlay? I'd like the tests to be hermetic.
->
-> > Removing the overlay will delete the platform devices.
->
-> I _think_ that is incorrect.  Do you have a pointer to the overlay code that
-> deletes the device?  (If I remember correctly, the overlay remove code does not
-> even check whether the device exists and whether a driver is bound to it -- but
-> this is on my todo list to look into.)
+drivers/platform/tegra/uncore_pmu/tegra23x_perf_uncore.c:
+In function _scf_pmu_device_probe_:
+drivers/platform/tegra/uncore_pmu/tegra23x_perf_uncore.c:596:    8:
+error: implicit declaration of function _perf_pmu_register_
+[-Werror=implicit-function-declaration]
+  err = perf_pmu_register(&uncore_pmu->pmu, uncore_pmu->pmu.name,
+531       |        ^~~~~~~~~~~~~~~~~
+drivers/platform/tegra/uncore_pmu/tegra23x_perf_uncore.c: In
+function _scf_pmu_device_remove_:
+drivers/platform/tegra/uncore_pmu/tegra23x_perf_uncore.c:611:    2:
+error: implicit declaration of function _perf_pmu_unregister_; did you
+mean _device_unregister_? [-Werror=implicit-function-declaration]
+  611 |  perf_pmu_unregister(&uncore_pmu->pmu);
+      |  ^~~~~~~~~~~~~~~~~~~
+      |  device_unregister
+cc1: some warnings being treated as errors
+scripts/Makefile.build:297: recipe for target
+'drivers/platform/tegra/uncore_pmu/tegra23x_perf_uncore.o' failed
+make[7]: *** [drivers/platform/tegra/
+uncore_pmu/tegra23x_perf_uncore.o] Error 1
 
-https://elixir.bootlin.com/linux/latest/source/drivers/of/platform.c#L769
+Signed-off-by: Manish Bhardwaj <bhardwajmanish18@gmail.com>
+---
+ include/linux/perf_event.h | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-> > All of that works if you have your own code to apply a DT overlay.
-> > The recent fw_devlinks patches did cause some regressions, cfr.
-> > https://lore.kernel.org/all/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index d5628a7b5eaa..96259320aff1 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -1679,6 +1679,42 @@ extern int perf_event_account_interrupt(struct perf_event *event);
+ extern int perf_event_period(struct perf_event *event, u64 value);
+ extern u64 perf_event_pause(struct perf_event *event, bool reset);
+ #else /* !CONFIG_PERF_EVENTS: */
++static void perf_event_addr_filters_sync(struct perf_event *event)		{ }
++static u64 perf_event_read_value(struct perf_event *event,
++				 u64 *enabled, u64 *running)
++{
++	return 0;
++}
++static void perf_event_update_userpage(struct perf_event *event)			{ }
++static void perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)	{ }
++static void perf_unregister_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)	{ }
++static void perf_report_aux_output_id(struct perf_event *event, u64 hw_id)		{ }
++static void perf_tp_event(u16 event_type, u64 count, void *record,
++			  int entry_size, struct pt_regs *regs,
++			  struct hlist_head *head, int rctx,
++			  struct task_struct *task)
++{
++}
++static int perf_pmu_register(struct pmu *pmu, const char *name, int type)
++{
++	return -1;
++}
++static void perf_pmu_unregister(struct pmu *pmu)					{ }
++static struct perf_event *
++perf_event_create_kernel_counter(struct perf_event_attr *attr,
++				int cpu,
++				struct task_struct *task,
++				perf_overflow_handler_t callback,
++				void *context)
++{
++	return NULL;
++}
++static void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu)		{ }
++static ssize_t perf_event_sysfs_show(struct device *dev, struct device_attribute *attr,
++			      char *page)
++{
++	return -1;
++}
+ static inline void *
+ perf_aux_output_begin(struct perf_output_handle *handle,
+ 		      struct perf_event *event)				{ return NULL; }
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
+base-commit: b01fe98d34f3bed944a93bd8119fed80c856fad8
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.39.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
