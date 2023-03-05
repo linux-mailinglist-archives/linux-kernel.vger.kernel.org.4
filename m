@@ -2,143 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30C86AB159
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 17:14:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1022A6AB164
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 17:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCEQOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 11:14:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S229570AbjCEQgk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 5 Mar 2023 11:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCEQO2 (ORCPT
+        with ESMTP id S229437AbjCEQgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 11:14:28 -0500
-Received: from sonic301-22.consmr.mail.ir2.yahoo.com (sonic301-22.consmr.mail.ir2.yahoo.com [77.238.176.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3709C13DC0
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 08:14:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1678032864; bh=p75KKh6R36Q0Knz+CmsNst/5CA5AvrTLTrRrW2802z4=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=fKo40SdJ0CWtI9+7DUBgrCZOKrjdNDM0CRAFivVuF03ccA79S5N6bVNEbqY5DJ+tTqVKQUNjrunbu5YmYruzC2a9uJal2jzVJ+EgBIqO5pY3HKNl7PXr5+NumBZThZ5mJwa/zD3yCo6TQSV9qAEXD1I1/974e1CRQn9vDTN4nMJ2vtkBDwqNa5r9lRV+WoP78rEKfkNxpjgB5KNVVGKhKpS4Hb/97ckl73jPO09RnKuYOb7emb96cjj4hGNcRAlXlp//AkLNiof2LznE5Y0cv5iwzOn+9QNGUYdJgh8m1Q48nfPxin10WL475DpgpysnxTnAnyoZInpzG+/kj5kIMw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678032864; bh=WEIEOMeVEHLPFzSKXhg3TnZhlBOh2mPkaMU9HLFa63j=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=MdDp3lXmXIx3Gfcob3y9pTYYA3JOJUF1gaeIzIDt7eEaDGh1kFmTAdSLYvZPnbku63QCdxSmkuCq+1cCCd1RZBkmvsJzR0yhbbIYddFPLuDQ0JlGxyFJ5dXyNDP/QuWNBv5aV7SPTyzbsOm3Xa5o/fNCOHXk5AYkfy8OQXCDxg1BOFq/jChEj+kJCiIAWt+7yAawD4wxs4Kukys6X1EtFcCebOZKeC70BAVEsahabgZ9BBqB7sJQslSd/1Gjy5q+HLFry3pHRAOEESGo3yQ8WO7lp0IOPA6bKfUJ6Mqs2KlE++VnG+QyXa2F5V5qL2W1PPZNKGM4kVN2MyhEtqkqnA==
-X-YMail-OSG: jXpvQLYVM1lldrKWCdTkj9gZXbIeCnjhff_uXlK9uPT9yp0muabLm6NjFMPqdPh
- 2r4FziHYmv_7_ybZCQrnXy1EqJsBFOlfg0ClZMd8ePnI7S3Y3081kB_oIdA0D8kuER6GNR5cf6ja
- sC96iCfFZ6VOumhNhAucSAlOSNT3KcXVPjy3C2mKwm0Lz4PJDmvuLW0cc2gCSZwGQ5BWuFs1RQM0
- wLbdfFifKQ1qYeHU7807FybDVS4l6pqDsixDYTH1WiIp8k5Hhzf1ZL4wp4vuaprGcYPWk1miu2G7
- CqJnPQcIaxdaezTySHctW_WMSXSEcTmpZTbTfy8y4kVwN9c.Jbw39GHWLVsQ.ov0vC7W6FKwp5xG
- 1noEdUcXye0lxgQ3bZU7BPGt5YYeEvapbe5lFpLfyzodbkdfF6ZB5yjw32X81jE0Eu0b5xN8Mg05
- j.DMnG8R3jSoM3VG54Rl8u8W3kCG50fNZVeK0khPbnGXMxXJC30xHOfWAB2qi9I7v8fCnVklbNcf
- 7aSDv_WpArK9fBJlLdGVtxhjnm4VENNUI40TYVZUlrPvTyUKGS2C6KlIedCnqRyzkFh2YevipK.D
- 1NH7LdYCAKFVLZNvezOiTV8s05dVF4Gk1K.IGgnY3NcvU1FX5QkOazvkuxFNgpUetiLoKaJJGLJ5
- akI6vdsjdLNhYBfshg.5Y1H8laKOfTHSKZTR26H2BsqLgd6zWRiopiivVnkKifl5H35_7NEzL.yI
- tW.AsrFLP4R3Q8qn67fZCbZTOlmBobvF4q_4fCTgnHHgyVru6GoiWA9Tf5kPjeKegUtoctlVCdIS
- 9eaMJ6GqoS4G9i971YoOGHGr7kxqyW_Xb5nDX1RrmIy.QVTpqHqHEeazT760eQWMpwOkcz.KNpQF
- 1Pv7gaNFMSu785MSEBsMOf06QmfD4BEz.H1MTQVN3UMOCuL3a2C7oFcieD2AN2mTyTHeKJR3RFpo
- WNbYIzH99pjs3YGYXIQ0J58FEpzPmPiWRR.41sss4bpfPRKC6vYpp.6w68fq7B2fUrcNJqlJGU00
- 6_YfRjCoFs91aAkNm.iRc_N99zdVD8owLHNMWcmvT.h_oylhzyUeNFFqCpYgmiO0yPcftzfsI9Jj
- Gn4zm4hJI3LjbXlG1PEtZytohoRhbGIKmteJKjqD8GQMrGHINMmnmwH4I3qVB3I7JBGvvRJUZski
- DFFaLjtAJm9C7C33kdqLdH3EiTToSzeu.6XhIs2Flu2fmU8kt2.iHepQrhinCWsDgpecryS_gk9n
- qeU089vNJ.PGfhPkZ1rQo1fws553w8LZH194ivqjUQyDGhZ.J77O.nFDxmRK32_xWfQwCD7wdqs5
- nm7l2ttBqdVdDFp2Cp1kLsHCiRe__9Pp1hjj5iKLkJnLQJn5jS5Wkj6QM0wV1b48ja14kXoO6gGH
- IwNVkAA8151WDy6uMKOtJEEijfVu6sAH7.xL7HZQXiHC0_Vi.xXWV98DAcDyMW7ikTch0JwFQVce
- BhWUL5VBo4Osl0o2UnwD8FaIPVL60P7_QT4W3kg1FUKi6_KPFk4OTE5kjpP7EVaHARWEwJ2_znHU
- HY.XGcw7TqKxPb6sOTCgEJN2zZ7QymV3PLHUfHVd9JKtFhku_s_L3YpE9YEH7UiFPAPVDNXttpt5
- a5zqf0vcvd08HnWsue5mM8OkESFOqNlJXUe.noD9uezdTdrEGdaUmp7r1ktGwoL5uV.TlKUCIUDm
- e24_W7Ho8qHObMaN8X4TM42KV9debODgeQo9zl51vGYNMKRTvyFPK1zBCBAmbZy2QngQ_y8WVtQQ
- .lZYT220UbZ4NiBiffpD11V11J6LfVHGItF6W_xiLaM3eLj8NX3ksqyrH.h_8eZyyYGVe_g7aFCG
- 9jdHAvlyn5IUsxmEj6IEJV8ucDQ2fgPb3ADi6CJT6uUAFe1Yr.y8bXfYXyxAzyGVmjGrDfEiSF29
- Dt.xym8BjueYPrXrAxlmvIQamd4XfwGA7Ff4lXy7H.hlW1_tlLmxuUxvFaQxHVp6AkmovVBx_sna
- bEv8UPeTZlhM2_lrguTZUirGIUM9CNAaDW8Uc8uuGjMPT0qbwMg3xF0wbikTxUF64IHvMuTu3nIp
- Az4AcnEK7CFJddovC6wxG2JgT6BjxT.7NjyJMPKg5HECtzAcR_h4ZSacBc0alVNPoEymUOKKcJ4Z
- JDv6uM09N4EN6yzPFO5supCRw5E5w7.wBU.ZDSrSsOGphnQyqBzDCMXGHjSPdGkK1y4upldp4yxP
- IQj64OEt.QNc.RTCmtA4AoFOjB.BVlWeOZ2gNeEDT.0k6Yt5I6RzfwnHsmUIf7fcQFKZkgBnSzyF
- 2A5vcA.Wrg7SnMx7SmN3irW.w7mtf
-X-Sonic-MF: <jahau@rocketmail.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Sun, 5 Mar 2023 16:14:24 +0000
-Received: by hermes--production-ir2-5b7d458747-grn8r (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1d2fddbecdb94da144c4d8cdf4e4ee4b;
-          Sun, 05 Mar 2023 16:14:21 +0000 (UTC)
-Message-ID: <9ce4110c-eaff-3f8b-65da-8407e05af493@rocketmail.com>
-Date:   Sun, 5 Mar 2023 17:14:19 +0100
+        Sun, 5 Mar 2023 11:36:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016C313521
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 08:36:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1294060B06
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 16:36:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47268C433EF;
+        Sun,  5 Mar 2023 16:36:34 +0000 (UTC)
+Date:   Sun, 5 Mar 2023 11:36:32 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
+        Midas Chien <midaschieh@google.com>,
+        "Chunhui Li (=?UTF-8?B?5p2O5pil6L6J?=)" <chunhui.li@mediatek.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Tony Luck <tony.luck@intel.com>, kernel-team@android.com
+Subject: Re: [PATCH v2] pstore: Revert pmsg_lock back to a normal mutex
+Message-ID: <20230305113632.26de0a4d@gandalf.local.home>
+In-Reply-To: <20230304031029.3037914-1-jstultz@google.com>
+References: <20230302062741.483079-1-jstultz@google.com>
+        <20230304031029.3037914-1-jstultz@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 05/10] mfd: rt5033: Apply preparatory changes before
- adding rt5033-charger driver
-To:     Lee Jones <lee@kernel.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-References: <cover.1677620677.git.jahau@rocketmail.com>
- <4edfef7fdf129185355d4dd2d3928d63c04bac73.1677620677.git.jahau@rocketmail.com>
- <20230305105551.GJ2574592@google.com>
-Content-Language: en-US
-From:   Jakob Hauser <jahau@rocketmail.com>
-In-Reply-To: <20230305105551.GJ2574592@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21221 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+On Sat,  4 Mar 2023 03:10:29 +0000
+John Stultz <jstultz@google.com> wrote:
 
-On 05.03.23 11:55, Lee Jones wrote:
-> On Tue, 28 Feb 2023, Jakob Hauser wrote:
+> This reverts commit 76d62f24db07f22ccf9bc18ca793c27d4ebef721.
 > 
->> Order the register blocks to have the masks in descending manner.
->>
->> Add new defines for constant voltage shift (RT5033_CHGCTRL2_CV_SHIFT),
->> MIVR mask (RT5033_CHGCTRL4_MIVR_MASK), pre-charge current shift
->> (RT5033_CHGCTRL4_IPREC_SHIFT), internal timer disable
->> (RT5033_INT_TIMER_DISABLE), termination disable (RT5033_TE_DISABLE),
->> CFO disable (RT5033_CFO_DISABLE), UUG disable (RT5033_CHARGER_UUG_DISABLE).
->>
->> The fast charge timer type needs to be written on mask 0x38
->> (RT5033_CHGCTRL3_TIMER_MASK). To avoid a bit shift on application, change the
->> values of the timer types to fit the mask. Added the timout duration as a
->> comment. And the timer between TIMER8 and TIMER12 is most likely TIMER10, see
->> e.g. RT5036 [1] page 28 bottom.
->>
->> Add value options for MIVR (Minimum Input Voltage Regulation).
->>
->> Move RT5033_TE_ENABLE_MASK to the block "RT5033 CHGCTRL1 register", in order
->> to have the masks of the register collected there. To fit the naming scheme,
->> rename it to RT5033_CHGCTRL1_TE_EN_MASK.
->>
->> Move RT5033_CHG_MAX_CURRENT to the block "RT5033 charger fast-charge current".
->>
->> Add new defines RT5033_CV_MAX_VOLTAGE and RT5033_CHG_MAX_PRE_CURRENT to the
->> blocks "RT5033 charger constant charge voltage" and "RT5033 charger pre-charge
->> current limits".
->>
->> In include/linux/mfd/rt5033.h, turn power_supply "psy" into a pointer in order
->> to use it in devm_power_supply_register().
+> So while priority inversion on the pmsg_lock is an occasional
+> problem that an rt_mutex would help with, in uses where logging
+> is writing to pmsg heavily from multiple threads, the pmsg_lock
+> can be heavily contended.
 > 
-> Are there no present users to account for?
+> Normal mutexes can do adaptive spinning, which keeps the
+> contention overhead fairly low maybe adding on the order of 10s
+> of us delay waiting, but the slowpath w/ rt_mutexes makes the
+> blocked tasks sleep & wake. This makes matters worse when there
+> is heavy contentention, as it just allows additional threads to
+> run and line up to try to take the lock.
 
-At least none I'm aware of. Within the upstream kernel the 
-rt5033_charger power_supply didn't exist so far, the patchset is about 
-to implement it.
+That is incorrect. rt_mutexes have pretty much the same adaptive spinning
+as normal mutexes. So that is *not* the reason for the difference in
+performance, and should not be stated so in this change log.
 
->> [1] https://media.digikey.com/pdf/Data%20Sheets/Richtek%20PDF/RT5036%20%20Preliminary.pdf
->>
->> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
->> ---
->>   include/linux/mfd/rt5033-private.h | 53 ++++++++++++++++++++----------
->>   include/linux/mfd/rt5033.h         |  2 +-
->>   2 files changed, 36 insertions(+),` 19 deletions(-)
+The difference between rt_mutex and normal mutex, is that the rt_mutex will
+trigger priority inheritance. Perhaps on high contention, that makes a
+difference. But do not state it's because rt_mutex does not have adaptive
+spinning, because it most definitely does.
+
+-- Steve
+
+
 > 
+> It devolves to a worse case senerio where the lock acquisition
+> and scheduling overhead dominates, and each thread is waiting on
+> the order of ~ms to do ~us of work.
+> 
+> Obviously, having tons of threads all contending on a single
+> lock for logging is non-optimal, so the proper fix is probably
+> reworking pstore pmsg to have per-cpu buffers so we don't have
+> contention.
+> 
+> But in the short term, lets revert the change to the rt_mutex
+> and go back to normal mutexes to avoid a potentially major
+> performance regression.
+> 
+> Cc: Wei Wang <wvw@google.com>
+> Cc: Midas Chien<midaschieh@google.com>
+> Cc: "Chunhui Li (李春辉)" <chunhui.li@mediatek.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Anton Vorontsov <anton@enomsg.org>
+> Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: kernel-team@android.com
+> Fixes: 76d62f24db07 ("pstore: Switch pmsg_lock to an rt_mutex to avoid priority inversion")
+> Reported-by: "Chunhui Li (李春辉)" <chunhui.li@mediatek.com>
+> Tested-by: Chunhui Li <chunhui.li@mediatek.com>
+> Signed-off-by: John Stultz <jstultz@google.com>
+> ---
+> I know Steven is working on a fix to address the rtmutex not
+> spinning, but as the earlier version of it didn't resolve the
+> issue for Chunhui Li, I wanted to resend this out again w/
+> Tested-by tags, so it is ready to go if needed. I am looking
+> to get a local reproducer so I can help validate Steven's
+> efforts.
+> 
+> v2:
+> * Fix quoting around Chunhui Li's email name (so they are actually
+>   cc'ed)
+> * Added tested by tag
+> ---
+>  fs/pstore/pmsg.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/pstore/pmsg.c b/fs/pstore/pmsg.c
+> index ab82e5f05346..b31c9c72d90b 100644
+> --- a/fs/pstore/pmsg.c
+> +++ b/fs/pstore/pmsg.c
+> @@ -7,10 +7,9 @@
+>  #include <linux/device.h>
+>  #include <linux/fs.h>
+>  #include <linux/uaccess.h>
+> -#include <linux/rtmutex.h>
+>  #include "internal.h"
+>  
+> -static DEFINE_RT_MUTEX(pmsg_lock);
+> +static DEFINE_MUTEX(pmsg_lock);
+>  
+>  static ssize_t write_pmsg(struct file *file, const char __user *buf,
+>  			  size_t count, loff_t *ppos)
+> @@ -29,9 +28,9 @@ static ssize_t write_pmsg(struct file *file, const char __user *buf,
+>  	if (!access_ok(buf, count))
+>  		return -EFAULT;
+>  
+> -	rt_mutex_lock(&pmsg_lock);
+> +	mutex_lock(&pmsg_lock);
+>  	ret = psinfo->write_user(&record, buf);
+> -	rt_mutex_unlock(&pmsg_lock);
+> +	mutex_unlock(&pmsg_lock);
+>  	return ret ? ret : count;
+>  }
+>  
 
-Kind regards,
-Jakob
