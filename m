@@ -2,121 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D926AADED
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 03:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE5946AADFC
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 04:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjCECv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 21:51:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
+        id S229595AbjCEDGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 22:06:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjCECvy (ORCPT
+        with ESMTP id S229568AbjCEDGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 21:51:54 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EABBDBE3;
-        Sat,  4 Mar 2023 18:51:53 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id s12so7114866qtq.11;
-        Sat, 04 Mar 2023 18:51:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677984712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ssCYvtaMVUQ0bmw1fetXjwle40pFXJeB7ey4NrJBqrQ=;
-        b=L/9CcqJZ7Y5BAl0Ax9MPPhrNlQgvW3zEkoD4r82QJJquzpLd6cqCyGtFASHbyoxEaN
-         Kq4g/JSvx25DUFqHEn6PdTiz/ZNmv+0KrVTUWX6DdWKVObnUT+/JkEJd6LITLSpHteTs
-         yegG3m2mV4lnjr9N0h4Ymteef5GniACR1FOETLPr5pP92zJFVCYjwm6pSFV8xT14p5q/
-         BklZD+qpaufBMqHvRwvBVJZ5I5wrULchn0dXS2LLShNORtX9KWYxQtcKV0i0I6L2/Mat
-         oCxVrMFLj9cy02yk/7VaYyqDv3IkNAYpngDM6CoBNKgZY5oqLfZpiH/sgp3WkXgt2/b+
-         uxHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677984712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ssCYvtaMVUQ0bmw1fetXjwle40pFXJeB7ey4NrJBqrQ=;
-        b=veV/Ytb8Kor5UtoJ0XVli64oDZNHiZ/toai+aMZBwrGE+yzfPXQw28ouT80T5lKgQs
-         urYoK2uGBiE8WMbktGrpxod/1bbOSQmAyAHYPXMk1q2LcyiyeWrQ0GjjUzBjddXRbtzn
-         Nok0c90IV4uKyEqAbYmelin/asHTNbTA+9y/j/IceftIxoaVUikm3OSI2iIPzOEQyVnr
-         j0VeBvkcRdRoLQg+br164E7UdkPvm7ewfLJVe7olX1mZq5wqHGe/vVK2xqrUsY77Iwy4
-         kqC92xAzsXqhGug/P3b8x+xXbut8h2xJnwsN1anAukxq6dok8aqCuaqZkbk2lVlGaTJe
-         jyZg==
-X-Gm-Message-State: AO0yUKW0h7WSLOBdnxlcK4Ibkq9jMM58DjiSuVz5RJYu12PIzRhZmG0H
-        gYNbHMfADqJ2Dx69YeeeUGI=
-X-Google-Smtp-Source: AK7set/VqxZ7BmSwhGh+efpD8a+Y30Joz0UpEE4EGI/VqfPjIzhq+yGFK6IS8axEZ03yCT2gRGSumA==
-X-Received: by 2002:a05:622a:34d:b0:3b8:6c8e:4f85 with SMTP id r13-20020a05622a034d00b003b86c8e4f85mr12249702qtw.43.1677984712374;
-        Sat, 04 Mar 2023 18:51:52 -0800 (PST)
-Received: from mjollnir ([137.118.186.11])
-        by smtp.gmail.com with ESMTPSA id m18-20020ac866d2000000b003bfbfd9a4aesm4832188qtp.56.2023.03.04.18.51.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Mar 2023 18:51:51 -0800 (PST)
-Date:   Sat, 4 Mar 2023 21:51:49 -0500
-From:   Storm Dragon <stormdragon2976@gmail.com>
-To:     Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     stable@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: Request to backport "sysctl: fix proc_dobool() usability" to
- stable kernels
-Message-ID: <ZAQDxbTlaIoKb9yB@mjollnir>
-References: <20230210145823.756906-1-omosnace@redhat.com>
- <9563010d-a5cf-49e2-8c51-f2e66f064997@t-8ch.de>
+        Sat, 4 Mar 2023 22:06:53 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DF4E078;
+        Sat,  4 Mar 2023 19:06:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1677985609; x=1709521609;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6j2czBUasix/Si30IrOEzCkpwnec8zlaVJBpQd4RERs=;
+  b=FS0LuZ2shW9x//rlGYksPis+abX+Ej3NxKuKkVK/21GZ7Ka+HZ358yS9
+   P0han9EWw4Nvm2Jk4mFJhie8iQUYoGbWhY+uuh78AJuzk78s+TjUx95Ez
+   NxGi8O1WRfyioPwB8PqBal8UO01ekQImJNdjOAQtUvUtUF7yDIqBPsjDX
+   p3GgKhfhnmfbbdvQDnzAG74QHLz/7TIQe+nuTd/Z8Z+ZX6t8Gssp8Edes
+   FhzlHt3rvuOP7agmJy3DIHQpeWuyqYSEHmemAc/j0N2nsvhmCwt8+Ai2u
+   DnsDV93TiuPtn1dLs+ImwpNY2rRiyA8fQ0eePCEchi0d3dfQFW/FVeWkM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="362944369"
+X-IronPort-AV: E=Sophos;i="5.98,234,1673942400"; 
+   d="scan'208";a="362944369"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 19:06:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="818927690"
+X-IronPort-AV: E=Sophos;i="5.98,234,1673942400"; 
+   d="scan'208";a="818927690"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 04 Mar 2023 19:06:45 -0800
+Message-ID: <c54aebf7-4282-b8a6-f03b-03af2deea59c@linux.intel.com>
+Date:   Sun, 5 Mar 2023 11:05:50 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UVi+2tY/WTbx02tm"
-Content-Disposition: inline
-In-Reply-To: <9563010d-a5cf-49e2-8c51-f2e66f064997@t-8ch.de>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>
+Subject: Re: [PATCH 1/4] iommu/vt-d: Implement set device pasid op for default
+ domain
+Content-Language: en-US
+To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+ <20230302005959.2695267-2-jacob.jun.pan@linux.intel.com>
+ <fad7f28f-b4e8-c1c3-4ca4-a48c5c6d7f4a@linux.intel.com>
+ <BN9PR11MB527627C597F6478536477A8F8CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20230303083512.663ce758@jacob-builder>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230303083512.663ce758@jacob-builder>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/4/23 12:35 AM, Jacob Pan wrote:
+>>> From: Baolu Lu<baolu.lu@linux.intel.com>
+>>> Sent: Thursday, March 2, 2023 10:07 PM
+>>>    
+>>>> +
+>>>> +	if (hw_pass_through && domain_type_is_si(dmar_domain))
+>>>> +		ret = intel_pasid_setup_pass_through(iommu,
+>>>> dmar_domain,
+>>>> +						     dev, pasid);
+>>>> +	else if (dmar_domain->use_first_level)
+>>>> +		ret = domain_setup_first_level(iommu, dmar_domain,
+>>>> +					       dev, pasid);
+>>>> +	else
+>>>> +		ret = intel_pasid_setup_second_level(iommu,
+>>>> dmar_domain,
+>>>> +						     dev, pasid);
+>>>> +
+>>>> +	return ret;
+>>>> +}
+>>> Do you need to consider pasid cache invalidation?
+>>>    
+>> To avoid confusion this is not about invalidation of pasid cache itself
+>> which should be covered by above setup functions already.
+>>
+>> Here actually means per-PASID invalidation in iotlb and devtlb. Today
+>> only RID is tracked per domain for invalidation. it needs extension to
+>> walk attached pasid too.
+> Yes, will add.
+> 
+> For the set up path, there is no need to flush IOTLBs,  because we're going
+> from non present to present.
+> 
+> On the remove path, IOTLB flush should be covered when device driver
+> calls iommu_detach_device_pasid(). Covered with this patch.
 
---UVi+2tY/WTbx02tm
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's not only for the PASID teardown path, but also for unmap(). As the
+device has issued DMA requests with PASID, the IOMMU probably will cache
+the DMA translation with PASID tagged. Hence, we need to invalidate the
+PASID-specific IOTLB and device TLB in the unmap() path.
 
-On Sun, Mar 05, 2023 at 02:18:11AM +0000, Thomas Wei=C3=9Fschuh wrote:
->This ioctl is used for the copy-and-paste functionality of the
->screenreader "fenrir".
->( https://github.com/chrys87/fenrir )
->
->Reported-by: Storm Dragon <stormdragon2976@gmail.com>
->Link: https://lore.kernel.org/lkml/ZAOi9hDBTYqoAZuI@hotmail.com/
+I once had a patch for this:
 
-I believe this will also cause some loss of functionality in brltty as
-well:
+https://lore.kernel.org/linux-iommu/20220614034411.1634238-1-baolu.lu@linux.intel.com/
 
-https://brltty.app
+Probably you can use it as a starting point.
 
---UVi+2tY/WTbx02tm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEjjImGMhZhYoKESBfW+ojcUPdwZMFAmQEA8EACgkQW+ojcUPd
-wZPc2Q//a9VEtvVqYy4h12/VmQ3O8jFGugQlKeslrPQiks3i3MyA0xyfcLPa1ukW
-89GU9S/vCOd+WKiatL2dd9kJ5DrK46i/N5k4LcENUShOtfgmoIjwAsM9G8/mnve6
-Kg3l6O7JXbZMBJSn1nbvD4+iT7tS5Kfxe07JpKXAX0ihKutQTVN8PLdWs5OFDlAq
-vdRARVyI6rk0crAAinbx04rnQeOYeEl31eGlJ/zRg/MytdlMHVur/8uCpcf/sWoa
-RtKRVQDqgBiuM63cEhxpBwXWGzqwsGjjmQ3kBqNFtNm5y4dgKrmnoCcm5RCeVm00
-LYL6zUOVZdkKKcyI/C1Nvt2b9/ULW21HtOYpXnpHNpNwFdrNZTJ9Zx3UBWR60/uY
-0V5nSC0ne/CDrbGnDj9wYLGxc7YxJ3WJbSxuh3hMmbURerlaAfMB7x8yNWawCZSB
-UNLXoNxTy6swYiIR/7FWXb70ocO/e2UYz8/ahAiCABx1r9gkUtB0fo/+27u8HstF
-Q/S+mWez7542dHYtEAUMcmEEFTVaU+7sq5teGF826mZUTHYsr1sdVT9vM866QTZ8
-r3OlKIvU+1jNo/BjNQuHkf5ESkF6arimGj0oKmF/p9uiSriWLvtmHnr/L7MmmA2v
-XhX6SU0SA+JGI9lUlPmYHMgaQtgRu7vXOd/l/Rp7DBzY4eI+S7w=
-=Z8di
------END PGP SIGNATURE-----
-
---UVi+2tY/WTbx02tm--
+Best regards,
+baolu
