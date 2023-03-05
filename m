@@ -2,217 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3456B6AAE09
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 04:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6132A6AAE1B
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 05:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCEDdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 22:33:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45740 "EHLO
+        id S229489AbjCEEDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 23:03:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjCEDdD (ORCPT
+        with ESMTP id S229471AbjCEEDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 22:33:03 -0500
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0D614E90;
-        Sat,  4 Mar 2023 19:33:01 -0800 (PST)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-176261d7f45so7716238fac.11;
-        Sat, 04 Mar 2023 19:33:01 -0800 (PST)
+        Sat, 4 Mar 2023 23:03:36 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E56BBDCC;
+        Sat,  4 Mar 2023 20:03:34 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id u5so6796223plq.7;
+        Sat, 04 Mar 2023 20:03:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1677987180;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bolxzuks2JcSU3HwyBsAdbA4mZ0mTabc+KtDVeTfiCU=;
-        b=diZowVieJrXW3f9z0gQ5C/xwfNog5urV/PlR4bjOvdhBcWaZmNGMxjLm7QT695jZDf
-         Wlyv1+1wqFtQ6+Ny2J9ah3hskUhSdj0PzsyPtymcP/tpqTMtZJRERGinZ78vRC2YtEPx
-         Z66LRwaQfVt/8tAjtqTIzIbqsxKdB63+/9qJoJmgg6vk/pnLCuNXxsIsELd6vf2h6f1p
-         d2kR0HH3yQ9CucrxKNjyDjdcxaIU5bVv5ECaihxFGOMfqPiR5rMDfFsxlA4kCd3O25q7
-         PoM+8UxbppBDsrHm23jAiHwqf5jwRY2/9UAI1eUzBeRJ/MX09e0J463SEvLEXjQ4sYJb
-         xIMg==
+        d=gmail.com; s=20210112; t=1677989014;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=St+LXbAwYb6pdrMuptqZn7fDDP6I0sfWlOco0YZvkco=;
+        b=WZjsJco8N1ikNVVmqEQ7C/RXdh58a1X6dq3AnmYCZOKAmIGBXM/na2ZGOSIBwAgJ0x
+         D0pZGc2D+HBfP731JuhP2f6Xxd3xBJuOijHsGKW0eJZUa/IY8StjCCkpFbcxJWlmTOtA
+         TwogSW5BJAOoObhK9rqwKZbS/A7QaIRqfhMmACA+dvkxSDVPu+IcnIQ12eCAgIPc9I9G
+         lnOrHlzmCQOUta96rhzUdflwgxJgtjdifecFUuPMianupBEB6CbTjVnogRqHqP7l0suR
+         k0/wf7prQ6auGPPOd+YZZpL/9rRx5UbIxgUrJ+uYARg3yN8EvQNdyP9cXd8zdS6ZF3A1
+         335Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1677987180;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bolxzuks2JcSU3HwyBsAdbA4mZ0mTabc+KtDVeTfiCU=;
-        b=Tv81KmFilLYUIyQMBVrbLBN6kjngXcgdx9PMZJjccYbTUuPku6a8RsFKRNqGiqYhqA
-         P7PsNGipfiSCfn8s0Sgi4H/xcMa5MN6uaV37UBTLpLUteGlcak62Yi89L5nhAKzr089n
-         AMXOOQy3pM0rF6IzOQzQ/XIWykKF2ldKClHmmsKy9RlGK7BF6fTsXytPcGBG5lYYkxP0
-         Sn1Ziq+a2gHFLyvAM+TKxpeTLHu4X8krgpDtlHVVW+yTx69zUOmh3SMDisfNtNxzSC1n
-         MKYMMCUGz85TFBR0CHsxSzSOa36ZWeYXqpsj+vNz0kOJGAF1yiT3BRPFaipkJhDjyQPV
-         DfnA==
-X-Gm-Message-State: AO0yUKVwFkIO79x6rtn45vAxjajYS9KQIVnpkMNNaLztv/FEzHb+lUEV
-        fDWjlXhxMe8yd/gKr4ia7WA=
-X-Google-Smtp-Source: AK7set+bmqniPd5A8UuYoxpUYf2XWbLjw0+erhzxRCKZLD8QvB3a8go9x8K98NXKg/52znQ7oBsQuQ==
-X-Received: by 2002:a05:6870:1116:b0:176:21a9:bf95 with SMTP id 22-20020a056870111600b0017621a9bf95mr3242193oaf.46.1677987179902;
-        Sat, 04 Mar 2023 19:32:59 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:b008:9c28:aa1a:1293? ([2600:1700:2442:6db0:b008:9c28:aa1a:1293])
-        by smtp.gmail.com with ESMTPSA id v2-20020a05687105c200b0017299192eb1sm2610374oan.25.2023.03.04.19.32.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Mar 2023 19:32:59 -0800 (PST)
-Message-ID: <a2fdbd70-ca44-0d13-5b6f-4177761ecc18@gmail.com>
-Date:   Sat, 4 Mar 2023 21:32:57 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 0/8] clk: Add kunit tests for fixed rate and parent data
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     David Gow <davidgow@google.com>, Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
+        d=1e100.net; s=20210112; t=1677989014;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=St+LXbAwYb6pdrMuptqZn7fDDP6I0sfWlOco0YZvkco=;
+        b=s8to6cMqu0G2wDNY8ziTmeilP88GJ5O8y54O8gtIrmowYpsel5KFfmWVi2GlYbxkp1
+         OZiMTw5ddNtpP022To+G1Lb5JRs6EZa4SFZAofLZDL9jsfDYMwK6G5Ck/r3qRqK0BZLD
+         OsYLrCTX0H8gEl/5729B5i4DyS3WuAYfqT8sqdrLV1AXsnuS159OCdQftplGIJYBOt4k
+         qDp00LR3stRC4ER5Ga5KcH9aWWRQKfWLecZviluNc+r5QzzUHxFbbWg1ZL7j81RCYURo
+         iLrCAO6QM9GjSMB94IyYdkhbj257grSSjy1KCDplFBCjQAnwPJxlnI1fmlmbOqtAKICP
+         NpAg==
+X-Gm-Message-State: AO0yUKVDda9cpYeBM7A5ULaoARKZkqJNTtJhcJNZRaEzuxyuBWqM3X+6
+        TnhTrq28XjzyxGDNKoEPOdgvpDYSqRg=
+X-Google-Smtp-Source: AK7set9qHxMhSv6UDvC/imoSB+PoGEl5y1Qe2a3PzFSooQDzANyH7sQmctk76Ui+u45gyKcopHkX7A==
+X-Received: by 2002:a05:6a21:6d81:b0:cb:cd6a:2e42 with SMTP id wl1-20020a056a216d8100b000cbcd6a2e42mr9035269pzb.29.1677989013886;
+        Sat, 04 Mar 2023 20:03:33 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-71.three.co.id. [180.214.232.71])
+        by smtp.gmail.com with ESMTPSA id p18-20020a62ab12000000b005825b8e0540sm3867201pff.204.2023.03.04.20.03.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 04 Mar 2023 20:03:33 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 12594105FA1; Sun,  5 Mar 2023 11:03:29 +0700 (WIB)
+Date:   Sun, 5 Mar 2023 11:03:29 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Vegard Nossum <vegard.nossum@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, backports@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20230302013822.1808711-1-sboyd@kernel.org>
- <CABVgOSnpMNCtEEsJV28OzUoxdDuiT4a2T0avP0AYf9xFW1jxrw@mail.gmail.com>
- <CAL_JsqJMd3Fi0ZBObdyE1VDKTH1_+smuGDymHnKOkVH2HB3jJQ@mail.gmail.com>
- <3759b28cca7ab751296d4dd83f2dcc51.sboyd@kernel.org>
- <CAMuHMdXDx6ChRj4xvWbQgcdJd0CGFi-RXySXr=M8QhBkA7YiGw@mail.gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <CAMuHMdXDx6ChRj4xvWbQgcdJd0CGFi-RXySXr=M8QhBkA7YiGw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [PATCH] docs: add backporting and conflict resolution document
+Message-ID: <ZAQUkbxQxCanh+9c@debian.me>
+References: <20230303162553.17212-1-vegard.nossum@oracle.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yxswqAePtvTOIAX3"
+Content-Disposition: inline
+In-Reply-To: <20230303162553.17212-1-vegard.nossum@oracle.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_PDS_SHORTFWD_URISHRT_QP autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/2/23 13:47, Geert Uytterhoeven wrote:
-> Hi Stephen,
-> 
-> On Thu, Mar 2, 2023 at 8:28 PM Stephen Boyd <sboyd@kernel.org> wrote:
->> Quoting Rob Herring (2023-03-02 09:32:09)
->>> On Thu, Mar 2, 2023 at 2:14 AM David Gow <davidgow@google.com> wrote:
->>>> On Thu, 2 Mar 2023 at 09:38, Stephen Boyd <sboyd@kernel.org> wrote:
->>>>> This patch series adds unit tests for the clk fixed rate basic type and
->>>>> the clk registration functions that use struct clk_parent_data. To get
->>>>> there, we add support for loading a DTB into the UML kernel that's
->>>>> running the unit tests along with probing platform drivers to bind to
->>>>> device nodes specified in DT.
->>>>>
->>>>> With this series, we're able to exercise some of the code in the common
->>>>> clk framework that uses devicetree lookups to find parents and the fixed
->>>>> rate clk code that scans devicetree directly and creates clks. Please
->>>>> review.
->>>>>
->>>>
->>>> Thanks Stephen -- this is really neat!
->>>>
->>>> This works well here, and I love all of the tests for the
->>>> KUnit/device-tree integration as well.
->>>>
->>>> I'm still looking through the details of it (alas, I've mostly lived
->>>> in x86-land, so my device-tree knowledge is, uh, spotty to say the
->>>> least), but apart from possibly renaming some things or similarly
->>>> minor tweaks, I've not got any real suggestions thus far.
->>>>
->>>> I do wonder whether we'll want, on the KUnit side, to have some way of
->>>> supporting KUnit device trees on non-UML architecctures (e.g., if we
->>>> need to test something architecture-specific, or on a big-endian
->>>> platform, etc), but I think that's a question for the future, rather
->>>> than something that affects this series.
->>>
->>> I'll say that's a requirement. We should be able to structure the
->>> tests to not interfere with the running system's DT. The DT unittest
->>> does that.
->>
->> That could be another choice in the unit test choice menu.
->> CONFIG_OF_KUNIT_NOT_UML that injects some built-in DTB overlay on an
->> architecture that wants to run tests.
-> 
-> As long as you use compatible values that don't exist elsewhere,
-> and don't overwrite anything, you can load your kunit test overlays
-> on any running system that has DT support.
-> 
->>> As a side topic, Is anyone looking at getting UML to work on arm64?
->>> It's surprising how much x86 stuff there is which is I guess one
->>> reason it hasn't happened.
->>
->> I've no idea but it would be nice indeed.
-> 
-> I believe that's non-trivial. At least for arm32 (I didn't have any arm64
-> systems last time I asked the experts).
-> 
->>>> Similarly, I wonder if there's something we could do with device tree
->>>> overlays, in order to make it possible for tests to swap nodes in and
->>>> out for testing.
->>>
->>> Yes, that's how the DT unittest works. But it is pretty much one big
->>> overlay (ignoring the overlay tests). It could probably be more
->>> modular where it is apply overlay, test, remove overlay, repeat.
->>
->> I didn't want to rely on the overlay code to inject DT nodes. Having
->> tests written for the fake KUnit machine is simple. It closely matches
->> how clk code probes the DTB and how nodes are created and populated on
->> the platform bus as devices. CLK_OF_DECLARE() would need the overlay to
->> be applied early too, which doesn't happen otherwise as far as I know.
-> 
-> Don't all generic clock drivers also create a platform driver?
-> At least drivers/clk/clk-fixed-factor.c does.
-> 
->> But perhaps this design is too much of an end-to-end test and not a unit
->> test? In the spirit of unit testing we shouldn't care about how the node
->> is added to the live devicetree, just that there is a devicetree at all.
->>
->> Supporting overlays to more easily test combinations sounds like a good
->> idea. Probably some kunit_*() prefixed functions could be used to
->> apply a test managed overlay and automatically remove it when the test
->> is over would work. The clk registration tests could use this API to
->> inject an overlay and then manually call the of_platform_populate()
->> function to create the platform device(s). The overlay could be built in
->> drivers/clk/ too and then probably some macroish function can find the
->> blob and apply it.
-> 
-> No need to manually call of_platform_populate() to create the
-> platform devices. That is taken care of automatically when applying
-> an overlay.
-> 
->> Is there some way to delete the platform devices that we populate from
->> the overlay? I'd like the tests to be hermetic.
-> 
 
-> Removing the overlay will delete the platform devices.
+--yxswqAePtvTOIAX3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I _think_ that is incorrect.  Do you have a pointer to the overlay code that
-deletes the device?  (If I remember correctly, the overlay remove code does not
-even check whether the device exists and whether a driver is bound to it -- but
-this is on my todo list to look into.)
+On Fri, Mar 03, 2023 at 05:25:53PM +0100, Vegard Nossum wrote:
+> +It is strongly recommended to instead find an appropriate base version
+> +where the patch applies cleanly and *then* cherry-pick it over to your
+> +destination tree, as this will make git output conflict markers and let
+> +you resolve conflicts with the help of git and any other conflict
+> +resolution tools you might prefer to use.
+> +
+> +It's generally better to use the exact same base as the one the patch
+> +was generated from, but it doesn't really matter that much as long as it
+> +applies cleanly and isn't too far from the original base. The only
+> +problem with applying the patch to the "wrong" base is that it may pull
+> +in more unrelated changes in the context of the diff when cherry-picking
+> +it to the older branch.
+> +
+> +If you are using
+> +`b4 <https://people.kernel.org/monsieuricon/introducing-b4-and-patch-att=
+estation>`__
+> +and you are applying the patch directly from an email, you can use
+> +``b4 am`` with the options ``-g``/``--guess-base`` and
+> +``-3``/``--prep-3way`` to do some of this automatically (see `this
+> +presentation <https://youtu.be/mF10hgVIx9o?t=3D2996>`__ for more
+> +information). However, the rest of this article will assume that you are
+> +doing a plain ``git cherry-pick``.
 
--Frank
+Above are from applier's perspective (maintainers and/or developers
+doing the backport). For patch submitter, don't forget to pass
+--base=3D<base-commit> to git-format-patch(1) so that the applier can know
+the base commit of the patch to be applied. For patches intended for
+mainline submission, the applier could create a temporary branch based on
+specified base commit (as described above), apply the patch, and rebase
+to latest appropriate subsystem tree (and resolve conflicts if any).
+Others could instead directly apply the patch on top of subsystem tree.
 
-> 
-> All of that works if you have your own code to apply a DT overlay.
-> The recent fw_devlinks patches did cause some regressions, cfr.
-> https://lore.kernel.org/all/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com
-> 
-> P.S. Shameless plug: for loading overlays from userspace, there are
->      my overlay branches, cfr. https://elinux.org/R-Car/DT-Overlays
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+> +
+> +Once you have the patch in git, you can go ahead and cherry-pick it into
+> +your source tree. Don't forget to cherry-pick with ``-x`` if you want a
+> +written record of where the patch came from!
 
+"In most cases, you will likely want to cherry-pick with ``-x`` option
+to record upstream commit in the resulting backport commit description,
+which looks like::
+
+    (cherry picked from commit <upstream commit>)
+
+However, for backporting to stable, you need to edit the description
+above to either::
+
+    commit <upstream commit> upstream
+
+or
+    [ Upstream commit <upstream commit> ]
+
+"
+
+> +For backports, what likely happened was that your older branch is
+> +missing a patch compared to the branch you are backporting from --
+> +however, it is also possible that your older branch has some commit that
+> +doesn't exist in the newer branch. In any case, the result is a conflict
+> +that needs to be resolved.
+
+Another conflict culprit that there are non-prerequisite commits that
+change the context line.
+
+> +git log
+> +^^^^^^^
+> +
+> +A good first step is to look at ``git log`` for the file that has the
+> +conflict -- this is usually sufficient when there aren't a lot of
+> +patches to the file, but may get confusing if the file is big and
+> +frequently patched. You should run ``git log`` on the range of commits
+> +between your currently checked-out branch (``HEAD``) and the parent of
+> +the patch you are picking (``COMMIT``), i.e.::
+> +
+> +    git log HEAD..COMMIT^ -- PATH
+
+HEAD and <commit> swapped, giving empty log. The correct way is:
+
+```
+git log <commit>^..HEAD -- <path>
+```
+
+Note that for placeholder arguments, I'd like to write the
+placeholder name inside chevrons, like above (git manpage style).
+
+> +
+> +Even better, if you want to restrict this output to a single function
+> +(because that's where the conflict appears), you can use the following
+> +syntax::
+> +
+> +    git log -L:'\<function\>':PATH HEAD..COMMIT^
+
+Similar reply as above.
+
+> +Another useful option for ``git log`` is ``-G``, which allows you to
+> +filter on certain strings appearing in the diffs of the commits you are
+> +listing::
+> +
+> +    git log -G'regex' HEAD..COMMIT^ -- PATH
+
+Similar reply.
+
+> +It might be a good idea to ``git show`` these commits and see if they
+=2E.. to show these commits with ``git show <commit>`` ...
+
+> +Prerequisite vs. incidental patches
+> +^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +
+> +Having found the patch that caused the conflict, you need to determine
+> +whether it is a prerequisite for the patch you are backporting or
+> +whether it is just incidental and can be skipped. An incidental patch
+> +would be one that touches the same code as the patch you are
+> +backporting, but does not change the semantics of the code in any
+> +material way. For example, a whitespace cleanup patch is completely
+> +incidental -- likewise, a patch that simply renames a function or a
+> +variable would be incidental as well. On the other hand, if the function
+> +being changed does not even exist in your current branch then this would
+> +not be incidental at all and you need to carefully consider whether the
+> +patch adding the function should be cherry-picked first.
+> +
+> +If you find that there is a necessary prerequisite patch, then you need
+> +to stop and cherry-pick that instead. If you've already resolved some
+> +conflicts in a different file and don't want to do it again, you can
+> +create a temporary copy of that file.
+> +
+> +To abort the current cherry-pick, go ahead and run
+> +``git cherry-pick --abort``, then restart the cherry-picking process
+> +with the commit ID of the prerequisite patch instead.
+
+IMO, finding prerequisite commits can be done without attempting to
+cherry-pick the desired commit first.
+
+> +Sometimes the right thing to do will be to also backport the patch that
+> +did the rename, but that's definitely not the most common case. Instead,
+> +what you can do is to temporarily rename the file in the branch you're
+> +backporting to (using ``git mv`` and committing the result), restart the
+> +attempt to cherry-pick the patch, rename the file back (``git mv`` and
+> +committing again), and finally squash the result using ``git rebase -i``
+> +(`tutorial <https://medium.com/@slamflipstrom/a-beginners-guide-to-squas=
+hing-commits-with-git-rebase-8185cf6e62ec>`__)
+> +so it appears as a single commit when you are done.
+
+I'm kinda confused with above. Did you mean that after renaming file, I
+have to abort cherry-picking (``git cherry-pick --abort``) first and
+then redo cherry-picking?
+
+> +Build testing
+> +~~~~~~~~~~~~~
+> +
+> +We won't cover runtime testing here, but it can be a good idea to build
+Runtime testing is described in the next section.
+> +just the files touched by the patch as a quick sanity check. For the
+> +Linux kernel you can build single files like this, assuming you have the
+> +``.config`` and build environment set up correctly::
+> +
+> +    make path/to/file.o
+> +
+> +Note that this won't discover linker errors, so you should still do a
+> +full build after verifying that the single file compiles. By compiling
+> +the single file first you can avoid having to wait for a full build *in
+> +case* there are compiler errors in any of the files you've changed.
+> +
+
+plain ``make``?
+
+> +One concrete example of this was where a patch to the system call entry
+> +code saved/restored a register and a later patch made use of the saved
+> +register somewhere in the middle -- since there was no conflict, one
+> +could backport the second patch and believe that everything was fine,
+> +but in fact the code was now scribbling over an unsaved register.
+
+Did you mean the later patch is the backported syscall patch?
+
+> +
+> +Although the vast majority of errors will be caught during compilation
+> +or by superficially exercising the code, the only way to *really* verify
+> +a backport is to review the final patch with the same level of scrutiny
+> +as you would (or should) give to any other patch. Having unit tests and
+"... patches intended for mainline."
+
+> +The above shows roughly the idealized process of backporting a patch.
+> +For a more concrete example, see this video tutorial where two patches
+> +are backported from mainline to stable:
+> +`Backporting Linux Kernel patches <https://youtu.be/sBR7R1V2FeA>`__
+
+For the external link targets, I'd like to separate them from
+corresponding link texts (see
+https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#ext=
+ernal-links
+for details).
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--yxswqAePtvTOIAX3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAQUiwAKCRD2uYlJVVFO
+o/nkAP9HAoOxmJf20hmzYd1d7cNXTgEElPbqD9if4LZlq42gZwD/Tw/wra8mCG2H
+1XBywHdzs4o154/N+50FaksJWIPzPQE=
+=Mtfy
+-----END PGP SIGNATURE-----
+
+--yxswqAePtvTOIAX3--
