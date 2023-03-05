@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 979C26AAE7D
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 08:37:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DD56AAE84
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 08:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjCEHhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 02:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37812 "EHLO
+        id S229581AbjCEH50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 02:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjCEHhY (ORCPT
+        with ESMTP id S229379AbjCEH5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 02:37:24 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE0BEC7C;
-        Sat,  4 Mar 2023 23:37:22 -0800 (PST)
+        Sun, 5 Mar 2023 02:57:25 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364B7FF14;
+        Sat,  4 Mar 2023 23:57:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678001842; x=1709537842;
+  t=1678003043; x=1709539043;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=w4eE0e1ro3KAzqTi6eAbZM43RBSMQFQXw8xLRXeA79M=;
-  b=PCqKNV+JiR928o6W/kSY/Mqtu0ozAWlaNk8ISM3NjQ4LGUXpK7GBTO0i
-   IAGs6ApZQiKLZ3nCBITR96QKHlfGu9Ut56dmI5h1OtWWBXjlpYbIZb0MW
-   9J1pdhtoP+wHIWmOM7QPiKdLmheS71rOJvgEkxpSLvEqJudcmMQj61Inf
-   drkoipdvXuzSrGaMvl1jcGyYMD6qWBq44tmP1X1Ixpdo+FwUCTydZEsB4
-   AkJz2+5i6gFFV3ls3PzNiu7TFJucWeWQCMvJIYu+fSAH7DFEXtYwDxd67
-   J/+Q+S4YUG7afJrEoHdINCmI9eCPAQRbunohmjDpfgVZzbPtn9XPLV5UQ
+  bh=rgI8FiDvq7QKlX/xEL1EAcrcj2WdThaYEQRC3SJSy5E=;
+  b=HPmi5HHdtXCDN1qN7+d3SPS+lBBLI5Qd4nya2E+sWrQgJsv2jhccRIm9
+   k6Jz10DWDO0OUZN82pPaE2ywm4O/2+7Xw0KmlMVAj0qjqL3Q5y+5uPwL4
+   RWkcMlX+Yl9B6GswgLjxAxYLwFDB2xNfac4tiTtDOB1EXFBDSdiZWUeU8
+   BQwJJ4zhyG76CeVdV8BFPTKstJXXMaF9ji4kdR7OsqwySHB3X0iIaNR6A
+   rMmMdwKZ5j4CXtvg923H0nxeC0iP3s/IEY+aziuCyFe18bMqaAlQD/Juc
+   ECAKWIQX0cEKVaf69RoFYzYvKeWI6gxKzav1tWkDzZmwCwICWtpBKvXPP
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="362963675"
+X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="336872851"
 X-IronPort-AV: E=Sophos;i="5.98,235,1673942400"; 
-   d="scan'208";a="362963675"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 23:37:21 -0800
+   d="scan'208";a="336872851"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 23:57:22 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="764887077"
+X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="706095173"
 X-IronPort-AV: E=Sophos;i="5.98,235,1673942400"; 
-   d="scan'208";a="764887077"
+   d="scan'208";a="706095173"
 Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 04 Mar 2023 23:37:18 -0800
+  by orsmga008.jf.intel.com with ESMTP; 04 Mar 2023 23:57:19 -0800
 Received: from kbuild by 776573491cc5 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pYivm-0002bJ-0V;
-        Sun, 05 Mar 2023 07:37:18 +0000
-Date:   Sun, 5 Mar 2023 15:36:52 +0800
+        id 1pYjF8-0002c2-20;
+        Sun, 05 Mar 2023 07:57:18 +0000
+Date:   Sun, 5 Mar 2023 15:57:08 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Manish Bhardwaj <bhardwajmanish18@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         Manish Bhardwaj <bhardwajmanish18@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -58,7 +57,7 @@ Cc:     oe-kbuild-all@lists.linux.dev,
         Ian Rogers <irogers@google.com>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] perf/core: introduced stub APIs for exported APIs
-Message-ID: <202303051558.FF5cjvLT-lkp@intel.com>
+Message-ID: <202303051534.Ni7GS2vf-lkp@intel.com>
 References: <20230305053934.9948-1-bhardwajmanish18@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -76,10 +75,10 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Manish,
 
-Thank you for the patch! Yet something to improve:
+Thank you for the patch! Perhaps something to improve:
 
-[auto build test ERROR on tip/perf/core]
-[also build test ERROR on acme/perf/core tip/master tip/auto-latest linus/master v6.2 next-20230303]
+[auto build test WARNING on tip/perf/core]
+[also build test WARNING on acme/perf/core tip/master tip/auto-latest linus/master v6.2 next-20230303]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
@@ -87,128 +86,248 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 url:    https://github.com/intel-lab-lkp/linux/commits/Manish-Bhardwaj/perf-core-introduced-stub-APIs-for-exported-APIs/20230305-134024
 patch link:    https://lore.kernel.org/r/20230305053934.9948-1-bhardwajmanish18%40gmail.com
 patch subject: [PATCH] perf/core: introduced stub APIs for exported APIs
-config: nios2-randconfig-r021-20230305 (https://download.01.org/0day-ci/archive/20230305/202303051558.FF5cjvLT-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
+config: riscv-randconfig-r033-20230305 (https://download.01.org/0day-ci/archive/20230305/202303051534.Ni7GS2vf-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/2636181e6d3f39c8485077cb15927f84f00a617c
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Manish-Bhardwaj/perf-core-introduced-stub-APIs-for-exported-APIs/20230305-134024
         git checkout 2636181e6d3f39c8485077cb15927f84f00a617c
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303051558.FF5cjvLT-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202303051534.Ni7GS2vf-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   nios2-linux-ld: init/do_mounts.o: in function `perf_pmu_unregister':
->> do_mounts.c:(.text+0x184): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: init/do_mounts_initrd.o: in function `perf_pmu_unregister':
-   do_mounts_initrd.c:(.text+0x0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: init/initramfs.o: in function `perf_pmu_unregister':
-   initramfs.c:(.text+0x48): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: arch/nios2/kernel/sys_nios2.o: in function `perf_pmu_unregister':
-   sys_nios2.c:(.text+0x0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: arch/nios2/kernel/syscall_table.o: in function `perf_pmu_unregister':
-   syscall_table.c:(.text+0x0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: arch/nios2/mm/fault.o: in function `perf_pmu_unregister':
-   fault.c:(.text+0x0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/fork.o: in function `perf_pmu_unregister':
-   fork.c:(.text+0xa78): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/exec_domain.o: in function `perf_pmu_unregister':
-   exec_domain.c:(.text+0x0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/cpu.o: in function `perf_pmu_unregister':
-   cpu.c:(.text+0x584): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/exit.o: in function `perf_pmu_unregister':
-   exit.c:(.text+0xf58): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/sysctl.o: in function `perf_pmu_unregister':
-   sysctl.c:(.text+0x60): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/capability.o: in function `perf_pmu_unregister':
-   capability.c:(.text+0x5dc): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/ptrace.o: in function `perf_pmu_unregister':
-   ptrace.c:(.text+0x600): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/signal.o: in function `perf_pmu_unregister':
-   signal.c:(.text+0x16bc): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/sys.o: in function `perf_pmu_unregister':
-   sys.c:(.text+0x1478): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/umh.o: in function `perf_pmu_unregister':
-   umh.c:(.text+0xa08): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/pid.o: in function `perf_pmu_unregister':
-   pid.c:(.text+0x5f8): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/nsproxy.o: in function `perf_pmu_unregister':
-   nsproxy.c:(.text+0x26c): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/reboot.o: in function `perf_pmu_unregister':
-   reboot.c:(.text+0xa74): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/kmod.o: in function `perf_pmu_unregister':
-   kmod.c:(.text+0x358): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/groups.o: in function `perf_pmu_unregister':
-   groups.c:(.text+0x270): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/sched/core.o: in function `perf_pmu_unregister':
-   core.c:(.text+0xc04): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/sched/fair.o: in function `perf_pmu_unregister':
-   fair.c:(.text+0x2184): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/sched/build_policy.o: in function `perf_pmu_unregister':
-   build_policy.c:(.text+0x3318): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/sched/build_utility.o: in function `perf_pmu_unregister':
-   build_utility.c:(.text+0x38a8): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/power/qos.o: in function `perf_pmu_unregister':
-   qos.c:(.text+0xe0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/printk/printk.o: in function `perf_pmu_unregister':
-   printk.c:(.text+0xb5c): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/rcu/tree.o: in function `perf_pmu_unregister':
-   tree.c:(.text+0x7a00): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/module/main.o: in function `perf_pmu_unregister':
-   main.c:(.text+0xeb4): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/kcmp.o: in function `perf_pmu_unregister':
-   kcmp.c:(.text+0x570): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/time/time.o: in function `perf_pmu_unregister':
-   time.c:(.text+0xc98): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/time/timer.o: in function `perf_pmu_unregister':
-   timer.c:(.text+0x1650): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/time/hrtimer.o: in function `perf_pmu_unregister':
-   hrtimer.c:(.text+0x13c4): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/time/posix-stubs.o: in function `perf_pmu_unregister':
-   posix-stubs.c:(.text+0x0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/time/tick-common.o: in function `perf_pmu_unregister':
-   tick-common.c:(.text+0x1a0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: kernel/bpf/core.o: in function `perf_pmu_unregister':
-   core.c:(.text+0x4c0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/oom_kill.o: in function `perf_pmu_unregister':
-   oom_kill.c:(.text+0x748): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/fadvise.o: in function `perf_pmu_unregister':
-   fadvise.c:(.text+0x324): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/page-writeback.o: in function `perf_pmu_unregister':
-   page-writeback.c:(.text+0x287c): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/readahead.o: in function `perf_pmu_unregister':
-   readahead.c:(.text+0xb6c): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/shmem.o: in function `perf_pmu_unregister':
-   shmem.c:(.text+0x5968): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/debug.o: in function `perf_pmu_unregister':
-   debug.c:(.text+0x1a8): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/mmap_lock.o: in function `perf_pmu_unregister':
-   mmap_lock.c:(.text+0x0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/memory.o: in function `perf_pmu_unregister':
-   memory.c:(.text+0x1130): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/mincore.o: in function `perf_pmu_unregister':
-   mincore.c:(.text+0x52c): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/mlock.o: in function `perf_pmu_unregister':
-   mlock.c:(.text+0x1c34): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/mmap.o: in function `perf_pmu_unregister':
-   mmap.c:(.text+0xa34): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/mprotect.o: in function `perf_pmu_unregister':
-   mprotect.c:(.text+0x0): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/mremap.o: in function `perf_pmu_unregister':
-   mremap.c:(.text+0x121c): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/msync.o: in function `perf_pmu_unregister':
-   msync.c:(.text+0x24c): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
-   nios2-linux-ld: mm/process_vm_access.o: in function `perf_pmu_unregister':
-   process_vm_access.c:(.text+0x5b4): multiple definition of `perf_pmu_unregister'; init/main.o:main.c:(.text+0x18): first defined here
+   In file included from arch/riscv/kernel/ptrace.c:23:
+   In file included from include/trace/events/syscalls.h:73:
+   In file included from include/trace/define_trace.h:102:
+   In file included from include/trace/trace_events.h:21:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1702:13: warning: no previous prototype for function 'perf_pmu_unregister' [-Wmissing-prototypes]
+   extern void perf_pmu_unregister(struct pmu *pmu)                                        { }
+               ^
+   include/linux/perf_event.h:1702:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   extern void perf_pmu_unregister(struct pmu *pmu)                                        { }
+          ^
+   include/linux/perf_event.h:1682:13: warning: unused function 'perf_event_addr_filters_sync' [-Wunused-function]
+   static void perf_event_addr_filters_sync(struct perf_event *event)              { }
+               ^
+   include/linux/perf_event.h:1683:12: warning: unused function 'perf_event_read_value' [-Wunused-function]
+   static u64 perf_event_read_value(struct perf_event *event,
+              ^
+   include/linux/perf_event.h:1688:13: warning: unused function 'perf_event_update_userpage' [-Wunused-function]
+   static void perf_event_update_userpage(struct perf_event *event)                        { }
+               ^
+   include/linux/perf_event.h:1689:13: warning: unused function 'perf_register_guest_info_callbacks' [-Wunused-function]
+   static void perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)   { }
+               ^
+   include/linux/perf_event.h:1690:13: warning: unused function 'perf_unregister_guest_info_callbacks' [-Wunused-function]
+   static void perf_unregister_guest_info_callbacks(struct perf_guest_info_callbacks *cbs) { }
+               ^
+   include/linux/perf_event.h:1691:13: warning: unused function 'perf_report_aux_output_id' [-Wunused-function]
+   static void perf_report_aux_output_id(struct perf_event *event, u64 hw_id)              { }
+               ^
+   include/linux/perf_event.h:1692:13: warning: unused function 'perf_tp_event' [-Wunused-function]
+   static void perf_tp_event(u16 event_type, u64 count, void *record,
+               ^
+   include/linux/perf_event.h:1698:12: warning: unused function 'perf_pmu_register' [-Wunused-function]
+   static int perf_pmu_register(struct pmu *pmu, const char *name, int type)
+              ^
+   include/linux/perf_event.h:1704:1: warning: unused function 'perf_event_create_kernel_counter' [-Wunused-function]
+   perf_event_create_kernel_counter(struct perf_event_attr *attr,
+   ^
+   include/linux/perf_event.h:1712:13: warning: unused function 'perf_pmu_migrate_context' [-Wunused-function]
+   static void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu)         { }
+               ^
+   include/linux/perf_event.h:1713:16: warning: unused function 'perf_event_sysfs_show' [-Wunused-function]
+   static ssize_t perf_event_sysfs_show(struct device *dev, struct device_attribute *attr,
+                  ^
+   12 warnings generated.
+--
+   In file included from arch/riscv/kernel/signal.c:12:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+>> include/linux/perf_event.h:1702:13: warning: no previous prototype for function 'perf_pmu_unregister' [-Wmissing-prototypes]
+   extern void perf_pmu_unregister(struct pmu *pmu)                                        { }
+               ^
+   include/linux/perf_event.h:1702:8: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   extern void perf_pmu_unregister(struct pmu *pmu)                                        { }
+          ^
+   arch/riscv/kernel/signal.c:319:27: warning: no previous prototype for function 'do_work_pending' [-Wmissing-prototypes]
+   asmlinkage __visible void do_work_pending(struct pt_regs *regs,
+                             ^
+   arch/riscv/kernel/signal.c:319:22: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   asmlinkage __visible void do_work_pending(struct pt_regs *regs,
+                        ^
+                        static 
+   In file included from arch/riscv/kernel/signal.c:12:
+   In file included from include/linux/syscalls.h:88:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:10:
+   include/linux/perf_event.h:1682:13: warning: unused function 'perf_event_addr_filters_sync' [-Wunused-function]
+   static void perf_event_addr_filters_sync(struct perf_event *event)              { }
+               ^
+   include/linux/perf_event.h:1683:12: warning: unused function 'perf_event_read_value' [-Wunused-function]
+   static u64 perf_event_read_value(struct perf_event *event,
+              ^
+   include/linux/perf_event.h:1688:13: warning: unused function 'perf_event_update_userpage' [-Wunused-function]
+   static void perf_event_update_userpage(struct perf_event *event)                        { }
+               ^
+   include/linux/perf_event.h:1689:13: warning: unused function 'perf_register_guest_info_callbacks' [-Wunused-function]
+   static void perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)   { }
+               ^
+   include/linux/perf_event.h:1690:13: warning: unused function 'perf_unregister_guest_info_callbacks' [-Wunused-function]
+   static void perf_unregister_guest_info_callbacks(struct perf_guest_info_callbacks *cbs) { }
+               ^
+   include/linux/perf_event.h:1691:13: warning: unused function 'perf_report_aux_output_id' [-Wunused-function]
+   static void perf_report_aux_output_id(struct perf_event *event, u64 hw_id)              { }
+               ^
+   include/linux/perf_event.h:1692:13: warning: unused function 'perf_tp_event' [-Wunused-function]
+   static void perf_tp_event(u16 event_type, u64 count, void *record,
+               ^
+   include/linux/perf_event.h:1698:12: warning: unused function 'perf_pmu_register' [-Wunused-function]
+   static int perf_pmu_register(struct pmu *pmu, const char *name, int type)
+              ^
+   include/linux/perf_event.h:1704:1: warning: unused function 'perf_event_create_kernel_counter' [-Wunused-function]
+   perf_event_create_kernel_counter(struct perf_event_attr *attr,
+   ^
+   include/linux/perf_event.h:1712:13: warning: unused function 'perf_pmu_migrate_context' [-Wunused-function]
+   static void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu)         { }
+               ^
+   include/linux/perf_event.h:1713:16: warning: unused function 'perf_event_sysfs_show' [-Wunused-function]
+   static ssize_t perf_event_sysfs_show(struct device *dev, struct device_attribute *attr,
+                  ^
+   13 warnings generated.
+
+
+vim +/perf_pmu_unregister +1702 include/linux/perf_event.h
+
+  1649	
+  1650	extern int perf_output_begin(struct perf_output_handle *handle,
+  1651				     struct perf_sample_data *data,
+  1652				     struct perf_event *event, unsigned int size);
+  1653	extern int perf_output_begin_forward(struct perf_output_handle *handle,
+  1654					     struct perf_sample_data *data,
+  1655					     struct perf_event *event,
+  1656					     unsigned int size);
+  1657	extern int perf_output_begin_backward(struct perf_output_handle *handle,
+  1658					      struct perf_sample_data *data,
+  1659					      struct perf_event *event,
+  1660					      unsigned int size);
+  1661	
+  1662	extern void perf_output_end(struct perf_output_handle *handle);
+  1663	extern unsigned int perf_output_copy(struct perf_output_handle *handle,
+  1664				     const void *buf, unsigned int len);
+  1665	extern unsigned int perf_output_skip(struct perf_output_handle *handle,
+  1666					     unsigned int len);
+  1667	extern long perf_output_copy_aux(struct perf_output_handle *aux_handle,
+  1668					 struct perf_output_handle *handle,
+  1669					 unsigned long from, unsigned long to);
+  1670	extern int perf_swevent_get_recursion_context(void);
+  1671	extern void perf_swevent_put_recursion_context(int rctx);
+  1672	extern u64 perf_swevent_set_period(struct perf_event *event);
+  1673	extern void perf_event_enable(struct perf_event *event);
+  1674	extern void perf_event_disable(struct perf_event *event);
+  1675	extern void perf_event_disable_local(struct perf_event *event);
+  1676	extern void perf_event_disable_inatomic(struct perf_event *event);
+  1677	extern void perf_event_task_tick(void);
+  1678	extern int perf_event_account_interrupt(struct perf_event *event);
+  1679	extern int perf_event_period(struct perf_event *event, u64 value);
+  1680	extern u64 perf_event_pause(struct perf_event *event, bool reset);
+  1681	#else /* !CONFIG_PERF_EVENTS: */
+  1682	static void perf_event_addr_filters_sync(struct perf_event *event)		{ }
+  1683	static u64 perf_event_read_value(struct perf_event *event,
+  1684					 u64 *enabled, u64 *running)
+  1685	{
+  1686		return 0;
+  1687	}
+  1688	static void perf_event_update_userpage(struct perf_event *event)			{ }
+  1689	static void perf_register_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)	{ }
+  1690	static void perf_unregister_guest_info_callbacks(struct perf_guest_info_callbacks *cbs)	{ }
+  1691	static void perf_report_aux_output_id(struct perf_event *event, u64 hw_id)		{ }
+  1692	static void perf_tp_event(u16 event_type, u64 count, void *record,
+  1693				  int entry_size, struct pt_regs *regs,
+  1694				  struct hlist_head *head, int rctx,
+  1695				  struct task_struct *task)
+  1696	{
+  1697	}
+  1698	static int perf_pmu_register(struct pmu *pmu, const char *name, int type)
+  1699	{
+  1700		return -1;
+  1701	}
+> 1702	extern void perf_pmu_unregister(struct pmu *pmu)					{ }
+  1703	static struct perf_event *
+  1704	perf_event_create_kernel_counter(struct perf_event_attr *attr,
+  1705					int cpu,
+  1706					struct task_struct *task,
+  1707					perf_overflow_handler_t callback,
+  1708					void *context)
+  1709	{
+  1710		return NULL;
+  1711	}
+  1712	static void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu)		{ }
+  1713	static ssize_t perf_event_sysfs_show(struct device *dev, struct device_attribute *attr,
+  1714				      char *page)
+  1715	{
+  1716		return -1;
+  1717	}
+  1718	static inline void *
+  1719	perf_aux_output_begin(struct perf_output_handle *handle,
+  1720			      struct perf_event *event)				{ return NULL; }
+  1721	static inline void
+  1722	perf_aux_output_end(struct perf_output_handle *handle, unsigned long size)
+  1723										{ }
+  1724	static inline int
+  1725	perf_aux_output_skip(struct perf_output_handle *handle,
+  1726			     unsigned long size)				{ return -EINVAL; }
+  1727	static inline void *
+  1728	perf_get_aux(struct perf_output_handle *handle)				{ return NULL; }
+  1729	static inline void
+  1730	perf_event_task_migrate(struct task_struct *task)			{ }
+  1731	static inline void
+  1732	perf_event_task_sched_in(struct task_struct *prev,
+  1733				 struct task_struct *task)			{ }
+  1734	static inline void
+  1735	perf_event_task_sched_out(struct task_struct *prev,
+  1736				  struct task_struct *next)			{ }
+  1737	static inline int perf_event_init_task(struct task_struct *child,
+  1738					       u64 clone_flags)			{ return 0; }
+  1739	static inline void perf_event_exit_task(struct task_struct *child)	{ }
+  1740	static inline void perf_event_free_task(struct task_struct *task)	{ }
+  1741	static inline void perf_event_delayed_put(struct task_struct *task)	{ }
+  1742	static inline struct file *perf_event_get(unsigned int fd)	{ return ERR_PTR(-EINVAL); }
+  1743	static inline const struct perf_event *perf_get_event(struct file *file)
+  1744	{
+  1745		return ERR_PTR(-EINVAL);
+  1746	}
+  1747	static inline const struct perf_event_attr *perf_event_attrs(struct perf_event *event)
+  1748	{
+  1749		return ERR_PTR(-EINVAL);
+  1750	}
+  1751	static inline int perf_event_read_local(struct perf_event *event, u64 *value,
+  1752						u64 *enabled, u64 *running)
+  1753	{
+  1754		return -EINVAL;
+  1755	}
+  1756	static inline void perf_event_print_debug(void)				{ }
+  1757	static inline int perf_event_task_disable(void)				{ return -EINVAL; }
+  1758	static inline int perf_event_task_enable(void)				{ return -EINVAL; }
+  1759	static inline int perf_event_refresh(struct perf_event *event, int refresh)
+  1760	{
+  1761		return -EINVAL;
+  1762	}
+  1763	
 
 -- 
 0-DAY CI Kernel Test Service
