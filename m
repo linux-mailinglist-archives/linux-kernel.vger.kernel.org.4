@@ -2,83 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2448B6AAEF4
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 11:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4433F6AAEF6
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 11:16:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjCEKPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 05:15:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
+        id S229625AbjCEKQR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 5 Mar 2023 05:16:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjCEKPe (ORCPT
+        with ESMTP id S229500AbjCEKQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 05:15:34 -0500
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21451E3A8;
-        Sun,  5 Mar 2023 02:15:31 -0800 (PST)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pYlOh-000SfT-J0; Sun, 05 Mar 2023 18:15:20 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 05 Mar 2023 18:15:19 +0800
-Date:   Sun, 5 Mar 2023 18:15:19 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Subject: [GIT PULL] Crypto Fixes for 6.3
-Message-ID: <ZARrt99wJb7IhoY4@gondor.apana.org.au>
-References: <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
- <YgMn+1qQPQId50hO@gondor.apana.org.au>
- <YjE5yThYIzih2kM6@gondor.apana.org.au>
- <YkUdKiJflWqxBmx5@gondor.apana.org.au>
- <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
- <Yqw7bf7ln6vtU/VH@gondor.apana.org.au>
- <Yr1XPJsAH2l1cx3A@gondor.apana.org.au>
- <Y0zcWCmNmdXnX8RP@gondor.apana.org.au>
- <Y1thZ/+Gh/ONyf7x@gondor.apana.org.au>
- <Y7fmtJHWT1Zx+A1j@gondor.apana.org.au>
+        Sun, 5 Mar 2023 05:16:13 -0500
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7789FF777;
+        Sun,  5 Mar 2023 02:16:12 -0800 (PST)
+Received: by mail-qv1-f53.google.com with SMTP id nv15so4736467qvb.7;
+        Sun, 05 Mar 2023 02:16:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678011371;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Lotoz11ggMGtNTl3aQvMMzWHUqGY2U+vaeJhB00aaRc=;
+        b=3oR63exngN1IQTE99V1MRdnggDePgOUzrC/blSENxspFcoC/nh7hxE8gCJBArVLutM
+         f595BzpAc56pFmvNR0yqinHwzyxLl7bfwODrANjzThBEANOUxcWMmMcfKKW0+ihjH64e
+         F0Kvv8FJQB2mI9IbvZRMHi4JPxrPRUzKH2cKEgm6QIKtUIt+3EvzINvcXhmRwatkszwQ
+         UpRJdnU+Q3P8+Z8xLiy/+6evlSI0bamljijHmet2GWWHkj7a45EdDazti2fl+9VWr033
+         XpVEn4ULSd0eZJVfxndHrH2vfyB6Oj6gZdRX79CswT7awiwqfEnCi3IqnWl7HR8Sc9yd
+         DflA==
+X-Gm-Message-State: AO0yUKX1D9qgzH4V3hQMuCV/JmulsJQdAGsXwJxgTEoikDlGh7KaF5p+
+        EKl5hlHbPdf624owm0RG/9bx+vYJWj1imQ==
+X-Google-Smtp-Source: AK7set+z8ddUHNmML6QnccXLW4f8zqI2tL19/eB/h+fezKq/uz1hXgMd4CQ+UpkLwGtl1+uxne5eWg==
+X-Received: by 2002:a05:6214:1250:b0:570:bf43:475 with SMTP id r16-20020a056214125000b00570bf430475mr11896594qvv.22.1678011371342;
+        Sun, 05 Mar 2023 02:16:11 -0800 (PST)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id q79-20020a374352000000b0073b27323c6dsm5141934qka.136.2023.03.05.02.16.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Mar 2023 02:16:10 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-536be69eadfso130125547b3.1;
+        Sun, 05 Mar 2023 02:16:10 -0800 (PST)
+X-Received: by 2002:a81:b61d:0:b0:52e:f66d:b70f with SMTP id
+ u29-20020a81b61d000000b0052ef66db70fmr4376133ywh.5.1678011370431; Sun, 05 Mar
+ 2023 02:16:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y7fmtJHWT1Zx+A1j@gondor.apana.org.au>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
+References: <20230228213738.272178-1-willy@infradead.org>
+In-Reply-To: <20230228213738.272178-1-willy@infradead.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 5 Mar 2023 11:15:59 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVD-de_jzfidbz7BQaH59=qsFVcV8wpWRfQAtdpakB0SA@mail.gmail.com>
+Message-ID: <CAMuHMdVD-de_jzfidbz7BQaH59=qsFVcV8wpWRfQAtdpakB0SA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/34] New page table range API
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus:
+Hi Willy,
 
-The following changes since commit 8b84475318641c2b89320859332544cf187e1cbd:
+On Tue, Feb 28, 2023 at 10:40 PM Matthew Wilcox (Oracle)
+<willy@infradead.org> wrote:
+> This patchset changes the API used by the MM to set up page table entries.
+> The four APIs are:
+>     set_ptes(mm, addr, ptep, pte, nr)
+>     update_mmu_cache_range(vma, addr, ptep, nr)
+>     flush_dcache_folio(folio)
+>     flush_icache_pages(vma, page, nr)
+>
+> flush_dcache_folio() isn't technically new, but no architecture
+> implemented it, so I've done that for you.  The old APIs remain around
+> but are mostly implemented by calling the new interfaces.
+>
+> The new APIs are based around setting up N page table entries at once.
+> The N entries belong to the same PMD, the same folio and the same VMA,
+> so ptep++ is a legitimate operation, and locking is taken care of for
+> you.  Some architectures can do a better job of it than just a loop,
+> but I have hesitated to make too deep a change to architectures I don't
+> understand well.
+>
+> One thing I have changed in every architecture is that PG_arch_1 is now a
+> per-folio bit instead of a per-page bit.  This was something that would
+> have to happen eventually, and it makes sense to do it now rather than
+> iterate over every page involved in a cache flush and figure out if it
+> needs to happen.
+>
+> The point of all this is better performance, and Fengwei Yin has
+> measured improvement on x86.  I suspect you'll see improvement on
+> your architecture too.  Try the new will-it-scale test mentioned here:
+> https://lore.kernel.org/linux-mm/20230206140639.538867-5-fengwei.yin@intel.com/
+> You'll need to run it on an XFS filesystem and have
+> CONFIG_TRANSPARENT_HUGEPAGE set.
 
-  crypto: x86/aria-avx - Do not use avx2 instructions (2023-02-14 13:39:33 +0800)
+Thanks for your series!
 
-are available in the Git repository at:
+> For testing, I've only run the code on x86.  If an x86->foo compiler
+> exists in Debian, I've built defconfig.  I'm relying on the buildbots
+> to tell me what I missed, and people who actually have the hardware to
+> tell me if it actually works.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.3-p2 
+Seems to work fine on ARAnyM and qemu-system-m68k/virt, so
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-for you to fetch changes up to 660ca9470f9c613fa2c71a123a9469c80a697ee4:
+Gr{oetje,eeting}s,
 
-  crypto: caam - Fix edesc/iv ordering mixup (2023-02-28 16:30:58 +0800)
+                        Geert
 
-----------------------------------------------------------------
-This push fixes a regression in the caam driver.
-----------------------------------------------------------------
-
-Herbert Xu (1):
-      crypto: caam - Fix edesc/iv ordering mixup
-
- drivers/crypto/caam/caamalg.c    | 26 +++++++++++++++++++-------
- drivers/crypto/caam/caamalg_qi.c | 40 ++++++++++++++++++++++++++--------------
- drivers/crypto/caam/qi.c         | 10 ++++++++--
- 3 files changed, 53 insertions(+), 23 deletions(-)
-
-Thanks,
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
