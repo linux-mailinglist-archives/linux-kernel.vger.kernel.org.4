@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4626E6AADD1
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 03:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0375E6AADD7
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 03:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbjCECKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 21:10:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
+        id S229500AbjCECST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 21:18:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjCECKr (ORCPT
+        with ESMTP id S229455AbjCECSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 21:10:47 -0500
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8518713D58;
-        Sat,  4 Mar 2023 18:10:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=3ZoSoAgAc45as1CbqRRfIYjrDgicK0h9/Eydc3y8CvI=; b=uL31q83onkyvAad/3/HrEjNKCF
-        Q/ch0bwsL0cHBeH6t9o2+jUxC2h8HCgZI/LXxuinBRAoVWnVCYgV6xsqom+okFRwpFHQhX/UEv/dN
-        NqobvNrRa4F1jk9282S6xqaRWr6ROxfsYwDGm0c0hYMI9LcQjBvIRWxehofrjp4ki3r8LvaUc+FRX
-        QOOcyiTIKlmU1xCZEfhsUrryeCOl3HcV2yy6EExlSG+1rHuWkxrV2N/SdNohdYFD/9lrjuABti8M4
-        80e3bfyd5AANlUga0YQ8UfpARuBHnlx0Ex4W9ThuI/075uHJxTvx7ADxMFxLHjCQuygoxCcamtfrP
-        VmNkyUXQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pYdpi-00E15l-21;
-        Sun, 05 Mar 2023 02:10:42 +0000
-Date:   Sun, 5 Mar 2023 02:10:42 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [git pull] VM_FAULT_RETRY fixes
-Message-ID: <ZAP6IvbWaNjPthCq@ZenIV>
+        Sat, 4 Mar 2023 21:18:18 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C495EF80;
+        Sat,  4 Mar 2023 18:18:17 -0800 (PST)
+Date:   Sun, 5 Mar 2023 02:18:11 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1677982694;
+        bh=5sfEmY5t1qq4BwNnE7N+61KyzgK3aKNQJDhCA+hG7Aw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fib/hnFw1wXgLgx2WVqNRfwAS/XUGKq7gSgou4W+u6tk7Upxbkwx3CxhAUL53vF5b
+         LIqKacta6GrnEgHQ58UcC5skPYLP2LbRuUkMIbrHErQqjRxVCWcrbLcBpuLYCOyYNf
+         N3OTVsYaKhfhYnt4kHWu5u8UYW0kzf2IMfjBnIQY=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     stable@vger.kernel.org
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Storm Dragon <stormdragon2976@gmail.com>
+Subject: Request to backport "sysctl: fix proc_dobool() usability" to stable
+ kernels
+Message-ID: <9563010d-a5cf-49e2-8c51-f2e66f064997@t-8ch.de>
+References: <20230210145823.756906-1-omosnace@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20230210145823.756906-1-omosnace@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,71 +51,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit c9c3395d5e3dcc6daee66c6908354d47bf98cb0c:
+Hi -stable team,
 
-  Linux 6.2 (2023-02-19 14:24:22 -0800)
+please backport the commit f1aa2eb5ea05 ("sysctl: fix proc_dobool() usability")
+to the stable kernels containing commit 83efeeeb3d04 ("tty: Allow TIOCSTI to be disabled").
+(Which seems only to be the 6.2 branch only at the moment)
 
-are available in the Git repository at:
+Without this backport the sysctl dev.net.legacy_tiocsti to enable
+ioctl(TIOCSTI) is not functional. So on kernels that don't enable
+CONFIG_LEGACY_TIOCSTI, ioctl(TIOCSTI) is not usable at all.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-fixes
+This ioctl is used for the copy-and-paste functionality of the
+screenreader "fenrir".
+( https://github.com/chrys87/fenrir )
 
-for you to fetch changes up to caa82ae7ef52b7cf5f80a2b2fbcbdbcfd16426cc:
-
-  openrisc: fix livelock in uaccess (2023-03-02 12:32:44 -0500)
-
-----------------------------------------------------------------
-VM_FAULT_RETRY fixes
-
-Some of the page fault handlers do not deal with the following case
-correctly:
-	* handle_mm_fault() has returned VM_FAULT_RETRY
-	* there is a pending fatal signal
-	* fault had happened in kernel mode
-Correct action in such case is not "return unconditionally" - fatal
-signals are handled only upon return to userland and something like
-copy_to_user() would end up retrying the faulting instruction and
-triggering the same fault again and again.
-
-What we need to do in such case is to make the caller to treat that
-as failed uaccess attempt - handle exception if there is an exception
-handler for faulting instruction or oops if there isn't one.
-
-Over the years some architectures had been fixed and now are handling
-that case properly; some still do not.  This series should fix the
-remaining ones.
-
-Status:
-	m68k, riscv, hexagon, parisc: tested/acked by maintainers.
-	alpha, sparc32, sparc64: tested locally - bug has been
-reproduced on the unpatched kernel and verified to be fixed by
-this series.
-	ia64, microblaze, nios2, openrisc: build, but otherwise
-completely untested.
-
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-
-----------------------------------------------------------------
-Al Viro (10):
-      m68k: fix livelock in uaccess
-      riscv: fix livelock in uaccess
-      hexagon: fix livelock in uaccess
-      parisc: fix livelock in uaccess
-      alpha: fix livelock in uaccess
-      sparc: fix livelock in uaccess
-      ia64: fix livelock in uaccess
-      microblaze: fix livelock in uaccess
-      nios2: fix livelock in uaccess
-      openrisc: fix livelock in uaccess
-
- arch/alpha/mm/fault.c      | 5 ++++-
- arch/hexagon/mm/vm_fault.c | 5 ++++-
- arch/ia64/mm/fault.c       | 5 ++++-
- arch/m68k/mm/fault.c       | 5 ++++-
- arch/microblaze/mm/fault.c | 5 ++++-
- arch/nios2/mm/fault.c      | 5 ++++-
- arch/openrisc/mm/fault.c   | 5 ++++-
- arch/parisc/mm/fault.c     | 7 ++++++-
- arch/riscv/mm/fault.c      | 5 ++++-
- arch/sparc/mm/fault_32.c   | 5 ++++-
- arch/sparc/mm/fault_64.c   | 7 ++++++-
- 11 files changed, 48 insertions(+), 11 deletions(-)
+Reported-by: Storm Dragon <stormdragon2976@gmail.com>
+Link: https://lore.kernel.org/lkml/ZAOi9hDBTYqoAZuI@hotmail.com/
