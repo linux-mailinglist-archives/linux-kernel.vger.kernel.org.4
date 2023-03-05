@@ -2,719 +2,1236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81246AAFD5
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C826AAFD7
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjCENES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 08:04:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34482 "EHLO
+        id S229670AbjCENFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 08:05:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCENEQ (ORCPT
+        with ESMTP id S229616AbjCENFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 08:04:16 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBBEA268
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 05:04:11 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id l1so7164806pjt.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 05:04:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DIJvde58gpNQc0MNWcCt4vjX6Hsm0jHUuX2JnNS7qgk=;
-        b=LioH4F4sZKBjlf7nnx//gcAIIhY+06Q0ifwUI40Sc5hIrrqNfAegYgWWHUskMx7clb
-         LMFtFx+jmUGyjgZzivW4tA+52CVqGu/1cfi+HwuZd3Hmry7GUx/oM4MBNM5wVMg9Bceb
-         RWmLp3RdVFaD8nqvm71God1vw6j1gEoTWSBsQQB9TGFu4i50WPJq3ZtsSJiwyHF4xgMZ
-         Ly1N8u345Rp6yuU4IIkn+uKoLKewp3d1I4WCW7qYkBoQTNgQS1TaUKY6bfzMidqzAa5T
-         7Ogakv7q+/HFIFXEKrd5r0p7BVLiyBXElDTyPEuPKbi2j/gVFwTeNJJn62lid3VoVAoE
-         /0Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DIJvde58gpNQc0MNWcCt4vjX6Hsm0jHUuX2JnNS7qgk=;
-        b=aASXp4CHZxn2p/HM304XS4bYgwet2SYAhAtPDGyYhODaslkEOyzbBXRoQjXVSAlnLd
-         mpuQiEiwV2+r3cMpDEdBm3noGbDPkXHPRRp4rbqSuYb67vSZZYjLSWoZ13bXssdDIdMi
-         m82vWFKWMDepLmqqLjs1jFwG/FigTxyGcDn23bvBkdGtLq8P1Fs5Rzy+qEDo33LWa9Md
-         j457poUvwLMqn9Y6XJ08NuPgzdULlu6A+C/2nAKHumXVxMzw+8XmXNSdhiJ4nZ+tqi4y
-         qB62hhWiqzlugLU+3yqjG4AIusXVm+Ixr4+yRxDj3g/7hhS4Ix4hxVYiMcbkKF83dh4Q
-         d5jg==
-X-Gm-Message-State: AO0yUKV35JGmORRbtSYqQCVT/xHyu3bf/X8Wf5N+PlnMeF152l378PHV
-        sMwkG3WgdIgRgc+spNjFokbYmnLLZ0V83HX6XnaG+A==
-X-Google-Smtp-Source: AK7set8gnpl5RUGFxWlqsKtOLAmwuoj+jMmrbWhPoenY1GMNfP+Bkr/li87p3bOo111W2wQh0oz3AlFljgffgEXYbDQ=
-X-Received: by 2002:a17:903:492:b0:19b:456:63e8 with SMTP id
- jj18-20020a170903049200b0019b045663e8mr2922067plb.6.1678021450609; Sun, 05
- Mar 2023 05:04:10 -0800 (PST)
+        Sun, 5 Mar 2023 08:05:00 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE929B76D;
+        Sun,  5 Mar 2023 05:04:54 -0800 (PST)
+Received: from ip4d148da6.dynamic.kabel-deutschland.de ([77.20.141.166] helo=truhe.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1pYo2f-0004o8-Ac; Sun, 05 Mar 2023 14:04:45 +0100
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: [PATCH v3] docs: describe how to quickly build a trimmed kernel
+Date:   Sun,  5 Mar 2023 14:04:44 +0100
+Message-Id: <1a788a8e7ba8a2063df08668f565efa832016032.1678021408.git.linux@leemhuis.info>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230224093454.956298-1-vincent.guittot@linaro.org>
- <20230224093454.956298-9-vincent.guittot@linaro.org> <4982b608-f8c7-531c-3322-c055643a5b2d@linux.vnet.ibm.com>
- <CAKfTPtAEbzrxKOGXYRxp0qMM-TPj1q8BdcaVpK7ObZfe8QWn4g@mail.gmail.com>
- <913b0491-cef6-87ac-bf7e-d6d6c8fc380a@linux.vnet.ibm.com> <CAKfTPtA5wqBb1hAQa=qd6CicJbHsRi+q=s2tT0n6XspGOEA2Xg@mail.gmail.com>
- <7dd8fa7e-3cbc-6d3f-5748-74ffdeb056a7@linux.vnet.ibm.com> <2226e488-390d-ed64-832e-ca8e6a3a1731@linux.vnet.ibm.com>
- <ZAIg5de3EkHtHqLM@vingu-book> <48b8f849-fa81-d968-8fb6-b25c5fe94edb@linux.vnet.ibm.com>
-In-Reply-To: <48b8f849-fa81-d968-8fb6-b25c5fe94edb@linux.vnet.ibm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Sun, 5 Mar 2023 14:03:59 +0100
-Message-ID: <CAKfTPtA9=03eeXemrVDFHCviqS4NOBLedkbcG_FwGd2SfAd+wQ@mail.gmail.com>
-Subject: Re: [PATCH v12 8/8] sched/fair: Add latency list
-To:     Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
-Cc:     qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, David.Laight@aculab.com,
-        pjt@google.com, pavel@ucw.cz, qperret@google.com,
-        tim.c.chen@linux.intel.com, joshdon@google.com, timj@gnu.org,
-        kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, joel@joelfernandes.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, parth@linux.ibm.com, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1678021494;e0c3508c;
+X-HE-SMSGID: 1pYo2f-0004o8-Ac
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 4 Mar 2023 at 16:13, Shrikanth Hegde <sshegde@linux.vnet.ibm.com> w=
-rote:
->
->
->
-> On 3/3/23 10:01 PM, Vincent Guittot wrote:
-> > Le jeudi 02 mars 2023 =C3=A0 23:37:52 (+0530), Shrikanth Hegde a =C3=A9=
-crit :
-> >>
-> >> On 3/2/23 8:30 PM, Shrikanth Hegde wrote:
-> >>> On 3/2/23 6:47 PM, Vincent Guittot wrote:
-> >>>> On Thu, 2 Mar 2023 at 12:00, Shrikanth Hegde <sshegde@linux.vnet.ibm=
-.com> wrote:
-> >>>>> On 3/2/23 1:20 PM, Vincent Guittot wrote:
-> >>>>>> On Wed, 1 Mar 2023 at 19:48, shrikanth hegde <sshegde@linux.vnet.i=
-bm.com> wrote:
-> >>>>>>> On 2/24/23 3:04 PM, Vincent Guittot wrote:
-> > [...]
-> >
-> >>>>>>> Ran the schbench and hackbench with this patch series. Here compa=
-rison is
-> >>>>>>> between 6.2 stable tree, 6.2 + Patch and 6.2 + patch + above re-a=
-rrange of
-> >>>>>>> latency_node. Ran two cgroups, in one cgroup running stress-ng at=
- 50%(group1)
-> >>>>>>> and other is running these benchmarks (group2). Set the latency n=
-ice
-> >>>>>>> of group2 to -20. These are run on Power system with 12 cores wit=
-h SMT=3D8.
-> >>>>>>> Total of 96 CPU.
-> >>>>>>>
-> >>>>>>> schbench gets lower latency compared to stabletree. Whereas hackb=
-ench seems
-> >>>>>>> to regress under this case. Maybe i am doing something wrong. I w=
-ill re-run
-> >>>>>>> and attach the numbers to series.
-> >>>>>>> Please suggest if any variation in the test i need to try.
-> >>>>>> hackbench takes advanatge of a latency nice 19 as it mainly wants =
-to
-> >>>>>> run longer slice to move forward rather than preempting others all=
- the
-> >>>>>> time
-> >>>>> hackbench still seems to regress in different latency nice values c=
-ompared to
-> >>>>> baseline of 6.2 in this case. up to 50% in some cases.
-> >>>>>
-> >>>>> 12 core powerpc system  with SMT=3D8 i.e 96 CPU
-> >>>>> running 2 CPU cgroups. No quota assigned.
-> >>>>> 1st cgroup is running stress-ng with 48 threads. Consuming 50% of C=
-PU.
-> >>>>> latency is not changed for this cgroup.
-> >>>>> 2nd cgroup is running hackbench. This cgroup is assigned the differ=
-ent latency
-> >>>>> nice values of 0, -20 and 19.
-> >>>> According to your other emails, you are using the cgroup interface a=
-nd
-> >>>> not the task's one. Do I get it right ?
-> >>> right. I create cgroup, attach bash command with echo $$,
-> >>> assign the latency nice to cgroup, and run hackbench from that bash p=
-rompt.
-> >>>
-> >>>> I haven't run test such tests in a cgroup but at least the test with
-> >>>> latency_nice =3D=3D 0 should not make any noticeable difference. Doe=
-s this
-> >>>> include the re-arrange patch that you have proposed previously ?
-> >>> No. This is only with V12 of the series.
-> >>>
-> >>>> Also, the tests that you did on v6, gave better result.
-> >>>> https://lore.kernel.org/lkml/34112324-de67-55eb-92bc-181a98c4311c@li=
-nux.vnet.ibm.com/
-> >>>>
-> >>>> Are you running same tests or you changed something in the mean time=
- ?
-> >>> Test machine got changed.
-> >>> now i re-read my earlier mail. I see it was slightly different.
-> >>> I had created only one cgroup and stress-ng was run
-> >>> without any cgroup. Let me try that scenario and get the numbers.
-> >>
-> >> Tried the same method of testing i had done on V7 of the series. on th=
-is
-> >> machine hackbench still regress's both on V12 as well as V7 of the ser=
-ies.
-> >>
-> >> Created one cpu cgroup called cgroup1. created two bash prompts.
-> >> assigned "bash $$" to cgroup1 and on other bash prompt running,
-> >> stress-ng --cpu=3D96 -l 50. Ran hackbench from cgroup1 prompt.
-> >> assigned latency values to the cgroup1.
-> > I have tried to reproduce your results on some of my systems but I can'=
-t see
-> > the impacts that you are reporting below.
-> > The fact that your other platform was not impacted as well could imply =
-that
-> > it's specific to this platform.
-> > In particular, the lat nice=3D0 case should not show any real impact as=
- it
-> > should be similar to a nop. At least that what I can see in the tests o=
-n my
-> > platforms and Prateek on his.
-> >
-> > Nevertheless, could you try to run your tests with the changes below ?
-> > These are the only places which could have an impact even with lat nice=
- =3D 0
-> >
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 8137bca80572..979571a98b28 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -4991,8 +4991,7 @@ check_preempt_tick(struct cfs_rq *cfs_rq, struct =
-sched_entity *curr)
-> >         if (delta < offset)
-> >                 return;
-> >
-> > -       if ((delta > ideal_runtime) ||
-> > -           (delta > get_latency_max()))
-> > +       if (delta > ideal_runtime)
-> >                 resched_curr(rq_of(cfs_rq));
-> >  }
-> >
-> > @@ -7574,9 +7573,10 @@ static long wakeup_latency_gran(struct sched_ent=
-ity *curr, struct sched_entity *
-> >          * Otherwise, use the latency weight to evaluate how much sched=
-uling
-> >          * delay is acceptable by se.
-> >          */
-> > -       if ((latency_offset < 0) || (curr->latency_offset < 0))
-> > +       if ((latency_offset < 0) || (curr->latency_offset < 0)) {
-> >                 latency_offset -=3D curr->latency_offset;
-> > -       latency_offset =3D min_t(long, latency_offset, get_latency_max(=
-));
-> > +               latency_offset =3D min_t(long, latency_offset, get_late=
-ncy_max());
-> > +       }
-> >
-> >         return latency_offset;
-> >  }
-> > @@ -7635,7 +7635,6 @@ wakeup_preempt_entity(struct sched_entity *curr, =
-struct sched_entity *se)
-> >          * for low priority task. Make sure that long sleeping task wil=
-l get a
-> >          * chance to preempt current.
-> >          */
-> > -       gran =3D min_t(s64, gran, get_latency_max());
-> >
-> >         if (vdiff > gran)
-> >                 return 1;
-> >
->
-> Above patch helps. thank you.
+Add a text explaining how to quickly build a kernel, as that's something
+users will often have to do when they want to report an issue or test
+proposed fixes. This is a huge and frightening task for quite a few
+users these days, as many rely on pre-compiled kernels and have never
+built their own. They find help on quite a few websites explaining the
+process in various ways, but those howtos often omit important details
+or make things too hard for the 'quickly build just for testing' case
+that 'localmodconfig' is really useful for. Hence give users something
+at hand to guide them, as that makes it easier for them to help with
+testing, debugging, and fixing the kernel.
 
-Great. At least we have narrow the problem to one f the 3 changes.
+To keep the complexity at bay, the document explicitly focuses on how to
+compile the kernel on commodity distributions running on commodity
+hardware. People that deal with less common distributions or hardware
+will often know their way around already anyway.
 
-> Numbers are comparable to 6.2 and there is slight improvement. Much bette=
-r than V12 numbers.
->
-> type       groups |   v6.2      |v6.2 + V12| v6.2 + V12  | v6.2 + V12
->                   |             |lat nice=3D0| lat nice=3D-20| lat nice=
-=3D+19
->
-> Process       10  |     0.33    |   0.37   |   0.38     |   0.37
-> Process       20  |     0.61    |   0.67   |   0.68     |   0.67
-> Process       30  |     0.85    |   0.95   |   0.95     |   0.96
-> Process       40  |     1.10    |   1.20   |   1.20     |   1.21
-> Process       50  |     1.34    |   1.47   |   1.44     |   1.45
-> Process       60  |     1.57    |   1.70   |   1.71     |   1.70
-> thread        10  |     0.36    |   0.40   |   0.39     |   0.39
-> thread        20  |     0.65    |   0.72   |   0.71     |   0.71
-> Process(Pipe) 10  |     0.18    |   0.31   |   0.31     |   0.33
-> Process(Pipe) 20  |     0.32    |   0.51   |   0.50     |   0.50
-> Process(Pipe) 30  |     0.43    |   0.65   |   0.67     |   0.67
-> Process(Pipe) 40  |     0.57    |   0.82   |   0.83     |   0.83
-> Process(Pipe) 50  |     0.67    |   1.00   |   0.97     |   0.98
-> Process(Pipe) 60  |     0.81    |   1.13   |   1.11     |   1.12
-> thread(Pipe)  10  |     0.19    |   0.33   |   0.33     |   0.33
-> thread(Pipe)  20  |     0.34    |   0.53   |   0.51     |   0.52
->
->
->
-> type       groups |   v6.2      |v6.2+ V12+ | v6.2 + V12+| v6.2 + V12
->                   |             |above patch|above patch | above patch
->                   |             |lat nice=3D0 |lat nice=3D-20| lat nice=
-=3D+19
->
-> Process       10  |     0.36    |   0.33    |   0.34     |   0.34
-> Process       20  |     0.62    |   0.60    |   0.61     |   0.61
-> Process       30  |     0.87    |   0.84    |   0.85     |   0.84
-> Process       40  |     1.13    |   1.09    |   1.10     |   1.09
-> Process       50  |     1.38    |   1.33    |   1.33     |   1.34
-> Process       60  |     1.64    |   1.56    |   1.58     |   1.56
-> thread        10  |     0.35    |   0.35    |   0.35     |   0.35
-> thread        20  |     0.64    |   0.63    |   0.63     |   0.63
-> Process(Pipe) 10  |     0.20    |   0.18    |   0.18     |   0.18
-> Process(Pipe) 20  |     0.32    |   0.31    |   0.31     |   0.32
-> Process(Pipe) 30  |     0.44    |   0.43    |   0.43     |   0.43
-> Process(Pipe) 40  |     0.56    |   0.57    |   0.56     |   0.55
-> Process(Pipe) 50  |     0.70    |   0.67    |   0.67     |   0.67
-> Process(Pipe) 60  |     0.83    |   0.79    |   0.81     |   0.80
-> thread(Pipe)  10  |     0.21    |   0.19    |   0.19     |   0.19
-> thread(Pipe)  20  |     0.35    |   0.33    |   0.34     |   0.33
->
->
-> Do you want me to try any other experiment on this further?
+The text describes a few oddities of Arch and Debian that were found by
+the author and a few volunteers that tested the described procedure.
+There are likely more such quirks that need to be covered as well as a
+few things the author will have missed -- but one has to start
+somewhere.
 
-Yes, would be good to know which of the 3 changes in the patch create
-the regression
+The document heavily uses anchors and links to them, which makes things
+slightly harder to read in the source form. But the intended target
+audience is way more likely to read rendered versions of this text on
+pages like docs.kernel.org anyway -- and there those anchors and links
+allow easy jumps to the reference section and back, which makes the
+document a lot easier to work with for the intended target audience.
 
-I suspect the 1st change to be the root cause of your problem but It
-would be good if you can confirm my assumption with some tests
+Aspects relevant for bisection were left out on purpose, as that is a
+related, but in the end different use case. The rough plan is to have a
+second document with a similar style to cover bisection. The idea is to
+reuse a few bits from this document and link quite often to entries in
+the reference section with the help of the anchors in this text.
 
-Thanks
+Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
 
->
-> >> I will try to run with only task's set with latency_nice=3D0 as well.
-> >>
-> >> type    groups |   v6.2      |v6.2 + V12| v6.2 + V12  | v6.2 + V12
-> >>                |             |lat nice=3D0| lat nice=3D-20| lat nice=
-=3D+19
-> >>
-> >> Process            10  |     0.33    |   0.37   |   0.38     |   0.37
-> >> Process       20  |  0.61    |   0.67   |   0.68     |   0.67
-> >> Process            30  |     0.85    |   0.95   |   0.95     |   0.96
-> >> Process            40  |     1.10    |   1.20   |   1.20     |   1.21
-> >> Process            50  |     1.34    |   1.47   |   1.44     |   1.45
-> >> Process            60  |     1.57    |   1.70   |   1.71     |   1.70
-> >> thread             10  |     0.36    |   0.40   |   0.39     |   0.39
-> >> thread             20  |     0.65    |   0.72   |   0.71     |   0.71
-> >> Process(Pipe) 10  |  0.18    |   0.31   |   0.31     |   0.33
-> >> Process(Pipe) 20  |  0.32    |   0.51   |   0.50     |   0.50
-> >> Process(Pipe) 30  |  0.43    |   0.65   |   0.67     |   0.67
-> >> Process(Pipe) 40  |  0.57    |   0.82   |   0.83     |   0.83
-> >> Process(Pipe) 50  |  0.67    |   1.00   |   0.97     |   0.98
-> >> Process(Pipe) 60  |  0.81    |   1.13   |   1.11     |   1.12
-> >> thread(Pipe)  10  |  0.19    |   0.33   |   0.33     |   0.33
-> >> thread(Pipe)  20  |  0.34    |   0.53   |   0.51     |   0.52
-> >>
-> >>
-> >>
-> >> type    groups |   v6.2      |v6.2 + V7 | v6.2 + V7  | v6.2 + V7
-> >>                |             |lat nice=3D0|lat nice=3D-20| lat nice=3D=
-+19
-> >> Process            10  |     0.33    |   0.37   |   0.37     |   0.37
-> >> Process            20  |     0.61    |   0.67   |   0.67     |   0.67
-> >> Process            30  |     0.85    |   0.96   |   0.94     |   0.95
-> >> Process            40  |     1.10    |   1.20   |   1.20     |   1.20
-> >> Process            50  |     1.34    |   1.45   |   1.46     |   1.45
-> >> Process            60  |     1.57    |   1.71   |   1.68     |   1.72
-> >> thread             10  |     0.36    |   0.40   |   0.40     |   0.40
-> >> thread             20  |     0.65    |   0.71   |   0.71     |   0.71
-> >> Process(Pipe) 10  |  0.18    |   0.30   |   0.30     |   0.31
-> >> Process(Pipe) 20  |  0.32    |   0.50   |   0.50     |   0.50
-> >> Process(Pipe) 30  |  0.43    |   0.67   |   0.67     |   0.66
-> >> Process(Pipe) 40  |  0.57    |   0.86   |   0.84     |   0.84
-> >> Process(Pipe) 50  |  0.67    |   0.99   |   0.97     |   0.97
-> >> Process(Pipe) 60  |  0.81    |   1.10   |   1.13     |   1.13
-> >> thread(Pipe)  10  |  0.19    |   0.34   |   0.34     |   0.33
-> >> thread(Pipe)  20  |  0.34    |   0.55   |   0.53     |   0.54
-> >>
-> >>>>> Numbers are average of 10 runs in each case. Time is in seconds
-> >>>>>
-> >>>>> type       groups |   v6.2     |  v6.2 + V12   | v6.2 + V12  | v6.2=
- + V12
-> >>>>>                   |            | lat nice=3D0    | lat nice=3D-20| =
-lat nice=3D+19
-> >>>>>                   |            |               |             |
-> >>>>> Process       10  |   0.36     |     0.41      |    0.43     |    0=
-.42
-> >>>>> Process       20  |   0.62     |     0.76      |    0.75     |    0=
-.75
-> >>>>> Process       30  |   0.87     |     1.05      |    1.04     |    1=
-.06
-> >>>>> Process       40  |   1.13     |     1.34      |    1.33     |    1=
-.33
-> >>>>> Process       50  |   1.38     |     1.62      |    1.66     |    1=
-.63
-> >>>>> Process       60  |   1.64     |     1.91      |    1.97     |    1=
-.90
-> >>>>> thread        10  |   0.35     |     0.41      |    0.44     |    0=
-.42
-> >>>>> thread        20  |   0.64     |     0.78      |    0.77     |    0=
-.79
-> >>>>> Process(Pipe) 10  |   0.20     |     0.34      |    0.33     |    0=
-.34
-> >>>>> Process(Pipe) 20  |   0.32     |     0.52      |    0.53     |    0=
-.52
-> >>>>> Process(Pipe) 30  |   0.44     |     0.70      |    0.70     |    0=
-.69
-> >>>>> Process(Pipe) 40  |   0.56     |     0.88      |    0.89     |    0=
-.88
-> >>>>> Process(Pipe) 50  |   0.70     |     1.08      |    1.08     |    1=
-.07
-> >>>>> Process(Pipe) 60  |   0.83     |     1.27      |    1.27     |    1=
-.26
-> >>>>> thread(Pipe)  10  |   0.21     |     0.35      |    0.34     |    0=
-.36
-> >>>>> thread(Pipe)  10  |   0.35     |     0.55      |    0.58     |    0=
-.55
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>>>> Re-arrange seems to help the patch series by avoiding an cachelin=
-e miss.
-> >>>>>>>
-> >>>>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> >>>>>>> schbench
-> >>>>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> >>>>>>>                  6.2   |  6.2 + V12     |     6.2 + V12 + re-arra=
-nge
-> >>>>>>> 1 Thread
-> >>>>>>>   50.0th:        9.00  |    9.00        |        9.50
-> >>>>>>>   75.0th:       10.50  |   10.00        |        9.50
-> >>>>>>>   90.0th:       11.00  |   11.00        |       10.50
-> >>>>>>>   95.0th:       11.00  |   11.00        |       11.00
-> >>>>>>>   99.0th:       11.50  |   11.50        |       11.50
-> >>>>>>>   99.5th:       12.50  |   12.00        |       12.00
-> >>>>>>>   99.9th:       14.50  |   13.50        |       12.00
-> >>>>>>> 2 Threads
-> >>>>>>>   50.0th:        9.50  |    9.50        |        8.50
-> >>>>>>>   75.0th:       11.00  |   10.50        |        9.50
-> >>>>>>>   90.0th:       13.50  |   11.50        |       10.50
-> >>>>>>>   95.0th:       14.00  |   12.00        |       11.00
-> >>>>>>>   99.0th:       15.50  |   13.50        |       12.00
-> >>>>>>>   99.5th:       16.00  |   14.00        |       12.00
-> >>>>>>>   99.9th:       17.00  |   16.00        |       16.50
-> >>>>>>> 4 Threads
-> >>>>>>>   50.0th:       11.50  |   11.50        |       10.50
-> >>>>>>>   75.0th:       13.50  |   12.50        |       12.50
-> >>>>>>>   90.0th:       15.50  |   14.50        |       14.00
-> >>>>>>>   95.0th:       16.50  |   15.50        |       14.50
-> >>>>>>>   99.0th:       20.00  |   17.50        |       16.50
-> >>>>>>>   99.5th:       20.50  |   18.50        |       17.00
-> >>>>>>>   99.9th:       22.50  |   21.00        |       19.00
-> >>>>>>> 8 Threads
-> >>>>>>>   50.0th:       14.00  |   14.00        |       14.00
-> >>>>>>>   75.0th:       16.00  |   16.00        |       16.00
-> >>>>>>>   90.0th:       18.00  |   18.00        |       17.50
-> >>>>>>>   95.0th:       18.50  |   18.50        |       18.50
-> >>>>>>>   99.0th:       20.00  |   20.00        |       20.00
-> >>>>>>>   99.5th:       20.50  |   21.50        |       21.00
-> >>>>>>>   99.9th:       22.50  |   23.50        |       23.00
-> >>>>>>> 16 Threads
-> >>>>>>>   50.0th:       19.00  |   18.50        |       19.00
-> >>>>>>>   75.0th:       23.00  |   22.50        |       23.00
-> >>>>>>>   90.0th:       25.00  |   25.50        |       25.00
-> >>>>>>>   95.0th:       26.50  |   26.50        |       26.00
-> >>>>>>>   99.0th:       28.50  |   29.00        |       28.50
-> >>>>>>>   99.5th:       31.00  |   30.00        |       30.00
-> >>>>>>>   99.9th:     5626.00  | 4761.50        |       32.50
-> >>>>>>> 32 Threads
-> >>>>>>>   50.0th:       27.00  |   27.50        |       29.00
-> >>>>>>>   75.0th:       35.50  |   36.50        |       38.50
-> >>>>>>>   90.0th:       42.00  |   44.00        |       50.50
-> >>>>>>>   95.0th:      447.50  | 2959.00        |     8544.00
-> >>>>>>>   99.0th:     7372.00  | 17032.00       |    19136.00
-> >>>>>>>   99.5th:    15360.00  | 19808.00       |    20704.00
-> >>>>>>>   99.9th:    20640.00  | 30048.00       |    30048.00
-> >>>>>>>
-> >>>>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>>>> hackbench
-> >>>>>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >>>>>>>                         6.2     |  6.2 + V12        |     6.2+ V1=
-2 +re-arrange
-> >>>>>>>
-> >>>>>>> Process 10 Time:        0.35    |       0.42        |           0=
-.41
-> >>>>>>> Process 20 Time:        0.61    |       0.76        |           0=
-.76
-> >>>>>>> Process 30 Time:        0.87    |       1.06        |           1=
-.05
-> >>>>>>> thread 10 Time:         0.35    |       0.43        |           0=
-.42
-> >>>>>>> thread 20 Time:         0.66    |       0.79        |           0=
-.78
-> >>>>>>> Process(Pipe) 10 Time:  0.21    |       0.33        |           0=
-.32
-> >>>>>>> Process(Pipe) 20 Time:  0.34    |       0.52        |           0=
-.52
-> >>>>>>> Process(Pipe) 30 Time:  0.46    |       0.72        |           0=
-.71
-> >>>>>>> thread(Pipe) 10 Time:   0.21    |       0.34        |           0=
-.34
-> >>>>>>> thread(Pipe) 20 Time:   0.36    |       0.56        |           0=
-.56
-> >>>>>>>
-> >>>>>>>
-> >>>>>>>>       struct list_head                group_node;
-> >>>>>>>>       unsigned int                    on_rq;
-> >>>>>>>>
-> >>>>>>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >>>>>>>> index 093cc1af73dc..752fd364216c 100644
-> >>>>>>>> --- a/kernel/sched/core.c
-> >>>>>>>> +++ b/kernel/sched/core.c
-> >>>>>>>> @@ -4434,6 +4434,7 @@ static void __sched_fork(unsigned long clo=
-ne_flags, struct task_struct *p)
-> >>>>>>>>       p->se.nr_migrations             =3D 0;
-> >>>>>>>>       p->se.vruntime                  =3D 0;
-> >>>>>>>>       INIT_LIST_HEAD(&p->se.group_node);
-> >>>>>>>> +     RB_CLEAR_NODE(&p->se.latency_node);
-> >>>>>>>>
-> >>>>>>>>  #ifdef CONFIG_FAIR_GROUP_SCHED
-> >>>>>>>>       p->se.cfs_rq                    =3D NULL;
-> >>>>>>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> >>>>>>>> index 125a6ff53378..e2aeb4511686 100644
-> >>>>>>>> --- a/kernel/sched/fair.c
-> >>>>>>>> +++ b/kernel/sched/fair.c
-> >>>>>>>> @@ -680,7 +680,85 @@ struct sched_entity *__pick_last_entity(str=
-uct cfs_rq *cfs_rq)
-> >>>>>>>>
-> >>>>>>>>       return __node_2_se(last);
-> >>>>>>>>  }
-> >>>>>>>> +#endif
-> >>>>>>>>
-> >>>>>>>> +/**************************************************************
-> >>>>>>>> + * Scheduling class tree data structure manipulation methods:
-> >>>>>>>> + * for latency
-> >>>>>>>> + */
-> >>>>>>>> +
-> >>>>>>>> +static inline bool latency_before(struct sched_entity *a,
-> >>>>>>>> +                             struct sched_entity *b)
-> >>>>>>>> +{
-> >>>>>>>> +     return (s64)(a->vruntime + a->latency_offset - b->vruntime=
- - b->latency_offset) < 0;
-> >>>>>>>> +}
-> >>>>>>>> +
-> >>>>>>>> +#define __latency_node_2_se(node) \
-> >>>>>>>> +     rb_entry((node), struct sched_entity, latency_node)
-> >>>>>>>> +
-> >>>>>>>> +static inline bool __latency_less(struct rb_node *a, const stru=
-ct rb_node *b)
-> >>>>>>>> +{
-> >>>>>>>> +     return latency_before(__latency_node_2_se(a), __latency_no=
-de_2_se(b));
-> >>>>>>>> +}
-> >>>>>>>> +
-> >>>>>>>> +/*
-> >>>>>>>> + * Enqueue an entity into the latency rb-tree:
-> >>>>>>>> + */
-> >>>>>>>> +static void __enqueue_latency(struct cfs_rq *cfs_rq, struct sch=
-ed_entity *se, int flags)
-> >>>>>>>> +{
-> >>>>>>>> +
-> >>>>>>>> +     /* Only latency sensitive entity can be added to the list =
-*/
-> >>>>>>>> +     if (se->latency_offset >=3D 0)
-> >>>>>>>> +             return;
-> >>>>>>>> +
-> >>>>>>>> +     if (!RB_EMPTY_NODE(&se->latency_node))
-> >>>>>>>> +             return;
-> >>>>>>>> +
-> >>>>>>>> +     /*
-> >>>>>>>> +      * The entity is always added the latency list at wakeup.
-> >>>>>>>> +      * Then, a not waking up entity that is put back in the li=
-st after an
-> >>>>>>>> +      * execution time less than sysctl_sched_min_granularity, =
-means that
-> >>>>>>>> +      * the entity has been preempted by a higher sched class o=
-r an entity
-> >>>>>>>> +      * with higher latency constraint. In thi case, the entity=
- is also put
-> >>>>>>>> +      * back in the latency list so it gets a chance to run 1st=
- during the
-> >>>>>>>> +      * next slice.
-> >>>>>>>> +      */
-> >>>>>>>> +     if (!(flags & ENQUEUE_WAKEUP)) {
-> >>>>>>>> +             u64 delta_exec =3D se->sum_exec_runtime - se->prev=
-_sum_exec_runtime;
-> >>>>>>>> +
-> >>>>>>>> +             if (delta_exec >=3D sysctl_sched_min_granularity)
-> >>>>>>>> +                     return;
-> >>>>>>>> +     }
-> >>>>>>>> +
-> >>>>>>>> +     rb_add_cached(&se->latency_node, &cfs_rq->latency_timeline=
-, __latency_less);
-> >>>>>>>> +}
-> >>>>>>>> +
-> >>>>>>>> +/*
-> >>>>>>>> + * Dequeue an entity from the latency rb-tree and return true i=
-f it was really
-> >>>>>>>> + * part of the rb-tree:
-> >>>>>>>> + */
-> >>>>>>>> +static bool __dequeue_latency(struct cfs_rq *cfs_rq, struct sch=
-ed_entity *se)
-> >>>>>>>> +{
-> >>>>>>>> +     if (!RB_EMPTY_NODE(&se->latency_node)) {
-> >>>>>>>> +             rb_erase_cached(&se->latency_node, &cfs_rq->latenc=
-y_timeline);
-> >>>>>>>> +             RB_CLEAR_NODE(&se->latency_node);
-> >>>>>>>> +             return true;
-> >>>>>>>> +     }
-> >>>>>>>> +
-> >>>>>>>> +     return false;
-> >>>>>>>> +}
-> >>>>>>>> +
-> >>>>>>>> +static struct sched_entity *__pick_first_latency(struct cfs_rq =
-*cfs_rq)
-> >>>>>>>> +{
-> >>>>>>>> +     struct rb_node *left =3D rb_first_cached(&cfs_rq->latency_=
-timeline);
-> >>>>>>>> +
-> >>>>>>>> +     if (!left)
-> >>>>>>>> +             return NULL;
-> >>>>>>>> +
-> >>>>>>>> +     return __latency_node_2_se(left);
-> >>>>>>>> +}
-> >>>>>>>> +
-> >>>>>>>> +#ifdef CONFIG_SCHED_DEBUG
-> >>>>>>>>  /**************************************************************
-> >>>>>>>>   * Scheduling class statistics methods:
-> >>>>>>>>   */
-> >>>>>>>> @@ -4758,8 +4836,10 @@ enqueue_entity(struct cfs_rq *cfs_rq, str=
-uct sched_entity *se, int flags)
-> >>>>>>>>       check_schedstat_required();
-> >>>>>>>>       update_stats_enqueue_fair(cfs_rq, se, flags);
-> >>>>>>>>       check_spread(cfs_rq, se);
-> >>>>>>>> -     if (!curr)
-> >>>>>>>> +     if (!curr) {
-> >>>>>>>>               __enqueue_entity(cfs_rq, se);
-> >>>>>>>> +             __enqueue_latency(cfs_rq, se, flags);
-> >>>>>>>> +     }
-> >>>>>>>>       se->on_rq =3D 1;
-> >>>>>>>>
-> >>>>>>>>       if (cfs_rq->nr_running =3D=3D 1) {
-> >>>>>>>> @@ -4845,8 +4925,10 @@ dequeue_entity(struct cfs_rq *cfs_rq, str=
-uct sched_entity *se, int flags)
-> >>>>>>>>
-> >>>>>>>>       clear_buddies(cfs_rq, se);
-> >>>>>>>>
-> >>>>>>>> -     if (se !=3D cfs_rq->curr)
-> >>>>>>>> +     if (se !=3D cfs_rq->curr) {
-> >>>>>>>>               __dequeue_entity(cfs_rq, se);
-> >>>>>>>> +             __dequeue_latency(cfs_rq, se);
-> >>>>>>>> +     }
-> >>>>>>>>       se->on_rq =3D 0;
-> >>>>>>>>       account_entity_dequeue(cfs_rq, se);
-> >>>>>>>>
-> >>>>>>>> @@ -4941,6 +5023,7 @@ set_next_entity(struct cfs_rq *cfs_rq, str=
-uct sched_entity *se)
-> >>>>>>>>                */
-> >>>>>>>>               update_stats_wait_end_fair(cfs_rq, se);
-> >>>>>>>>               __dequeue_entity(cfs_rq, se);
-> >>>>>>>> +             __dequeue_latency(cfs_rq, se);
-> >>>>>>>>               update_load_avg(cfs_rq, se, UPDATE_TG);
-> >>>>>>>>       }
-> >>>>>>>>
-> >>>>>>>> @@ -4979,7 +5062,7 @@ static struct sched_entity *
-> >>>>>>>>  pick_next_entity(struct cfs_rq *cfs_rq, struct sched_entity *cu=
-rr)
-> >>>>>>>>  {
-> >>>>>>>>       struct sched_entity *left =3D __pick_first_entity(cfs_rq);
-> >>>>>>>> -     struct sched_entity *se;
-> >>>>>>>> +     struct sched_entity *latency, *se;
-> >>>>>>>>
-> >>>>>>>>       /*
-> >>>>>>>>        * If curr is set we have to see if its left of the leftmo=
-st entity
-> >>>>>>>> @@ -5021,6 +5104,12 @@ pick_next_entity(struct cfs_rq *cfs_rq, s=
-truct sched_entity *curr)
-> >>>>>>>>               se =3D cfs_rq->last;
-> >>>>>>>>       }
-> >>>>>>>>
-> >>>>>>>> +     /* Check for latency sensitive entity waiting for running =
-*/
-> >>>>>>>> +     latency =3D __pick_first_latency(cfs_rq);
-> >>>>>>>> +     if (latency && (latency !=3D se) &&
-> >>>>>>>> +         wakeup_preempt_entity(latency, se) < 1)
-> >>>>>>>> +             se =3D latency;
-> >>>>>>>> +
-> >>>>>>>>       return se;
-> >>>>>>>>  }
-> >>>>>>>>
-> >>>>>>>> @@ -5044,6 +5133,7 @@ static void put_prev_entity(struct cfs_rq =
-*cfs_rq, struct sched_entity *prev)
-> >>>>>>>>               update_stats_wait_start_fair(cfs_rq, prev);
-> >>>>>>>>               /* Put 'current' back into the tree. */
-> >>>>>>>>               __enqueue_entity(cfs_rq, prev);
-> >>>>>>>> +             __enqueue_latency(cfs_rq, prev, 0);
-> >>>>>>>>               /* in !on_rq case, update occurred at dequeue */
-> >>>>>>>>               update_load_avg(cfs_rq, prev, 0);
-> >>>>>>>>       }
-> >>>>>>>> @@ -12222,6 +12312,7 @@ static void set_next_task_fair(struct rq=
- *rq, struct task_struct *p, bool first)
-> >>>>>>>>  void init_cfs_rq(struct cfs_rq *cfs_rq)
-> >>>>>>>>  {
-> >>>>>>>>       cfs_rq->tasks_timeline =3D RB_ROOT_CACHED;
-> >>>>>>>> +     cfs_rq->latency_timeline =3D RB_ROOT_CACHED;
-> >>>>>>>>       u64_u32_store(cfs_rq->min_vruntime, (u64)(-(1LL << 20)));
-> >>>>>>>>  #ifdef CONFIG_SMP
-> >>>>>>>>       raw_spin_lock_init(&cfs_rq->removed.lock);
-> >>>>>>>> @@ -12378,6 +12469,7 @@ void init_tg_cfs_entry(struct task_group=
- *tg, struct cfs_rq *cfs_rq,
-> >>>>>>>>       se->my_q =3D cfs_rq;
-> >>>>>>>>
-> >>>>>>>>       se->latency_offset =3D calc_latency_offset(tg->latency_pri=
-o);
-> >>>>>>>> +     RB_CLEAR_NODE(&se->latency_node);
-> >>>>>>>>
-> >>>>>>>>       /* guarantee group entities always have weight */
-> >>>>>>>>       update_load_set(&se->load, NICE_0_LOAD);
-> >>>>>>>> @@ -12529,8 +12621,19 @@ int sched_group_set_latency(struct task=
-_group *tg, int prio)
-> >>>>>>>>
-> >>>>>>>>       for_each_possible_cpu(i) {
-> >>>>>>>>               struct sched_entity *se =3D tg->se[i];
-> >>>>>>>> +             struct rq *rq =3D cpu_rq(i);
-> >>>>>>>> +             struct rq_flags rf;
-> >>>>>>>> +             bool queued;
-> >>>>>>>> +
-> >>>>>>>> +             rq_lock_irqsave(rq, &rf);
-> >>>>>>>>
-> >>>>>>>> +             queued =3D __dequeue_latency(se->cfs_rq, se);
-> >>>>>>>>               WRITE_ONCE(se->latency_offset, latency_offset);
-> >>>>>>>> +             if (queued)
-> >>>>>>>> +                     __enqueue_latency(se->cfs_rq, se, ENQUEUE_=
-WAKEUP);
-> >>>>>>>> +
-> >>>>>>>> +
-> >>>>>>>> +             rq_unlock_irqrestore(rq, &rf);
-> >>>>>>>>       }
-> >>>>>>>>
-> >>>>>>>>       mutex_unlock(&shares_mutex);
-> >>>>>>>> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> >>>>>>>> index 9a2e71231083..21dd309e98a9 100644
-> >>>>>>>> --- a/kernel/sched/sched.h
-> >>>>>>>> +++ b/kernel/sched/sched.h
-> >>>>>>>> @@ -570,6 +570,7 @@ struct cfs_rq {
-> >>>>>>>>  #endif
-> >>>>>>>>
-> >>>>>>>>       struct rb_root_cached   tasks_timeline;
-> >>>>>>>> +     struct rb_root_cached   latency_timeline;
-> >>>>>>>>
-> >>>>>>>>       /*
-> >>>>>>>>        * 'curr' points to currently running entity on this cfs_r=
-q.
->
+---
+Lo! Here is v3 of the text with some more changes after input from the
+community. A rendered version can be found here:
+
+https://www.leemhuis.info/files/misc/How%20to%20quickly%20build%20a%20trimmed%20Linux%20kernel%20%e2%80%94%20The%20Linux%20Kernel%20documentation.html
+
+Ciao, Thorsten
+
+v3:
+- do not seperate build artifacts using 'O=', it's likely not worth it
+- briefly mentioned make targets like bindeb-pkg
+- add a comment telling users they might want to read a rendered version
+- point to Documentation/admin-guide/module-signing.rst
+
+v2:
+https://lore.kernel.org/all/8cfcf069d48c1b8d7b83aafe0132f8dad0f1d0ea.1676400947.git.linux@leemhuis.info/
+- default to a shallow clone
+- rename to "How to quickly build a trimmed Linux kernel"
+- use a localversion file instead of patching Makefile
+- various small improvements
+
+v1:
+https://lore.kernel.org/regressions/fabdb44fa44db2531f0dbe5e88545c49dfb87040.1675252073.git.linux@leemhuis.info/
+- inital version
+---
+ Documentation/admin-guide/index.rst           |    1 +
+ .../quickly-build-trimmed-linux.rst           | 1092 +++++++++++++++++
+ MAINTAINERS                                   |    1 +
+ 3 files changed, 1094 insertions(+)
+ create mode 100644 Documentation/admin-guide/quickly-build-trimmed-linux.rst
+
+diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
+index f475554382e2..f796d65ba1f8 100644
+--- a/Documentation/admin-guide/index.rst
++++ b/Documentation/admin-guide/index.rst
+@@ -37,6 +37,7 @@ problems and bugs in particular.
+    reporting-issues
+    reporting-regressions
+    security-bugs
++   quickly-build-trimmed-linux
+    bug-hunting
+    bug-bisect
+    tainted-kernels
+diff --git a/Documentation/admin-guide/quickly-build-trimmed-linux.rst b/Documentation/admin-guide/quickly-build-trimmed-linux.rst
+new file mode 100644
+index 000000000000..ff4f4cc8522b
+--- /dev/null
++++ b/Documentation/admin-guide/quickly-build-trimmed-linux.rst
+@@ -0,0 +1,1092 @@
++.. SPDX-License-Identifier: (GPL-2.0+ OR CC-BY-4.0)
++.. [see the bottom of this file for redistribution information]
++
++===========================================
++How to quickly build a trimmed Linux kernel
++===========================================
++
++This guide explains how to swiftly build Linux kernels that are ideal for
++testing purposes, but perfectly fine for day-to-day use, too.
++
++The essence of the process (aka 'TL;DR')
++========================================
++
++*[If you are new to compiling Linux, ignore this TLDR and head over to the next
++section below: it contains a step-by-step guide, which is more detailed, but
++still brief and easy to follow; that guide and its accompanying reference
++section also mention alternatives, pitfalls, and additional aspects, all of
++which might be relevant for you.]*
++
++If your system uses techniques like Secure Boot, prepare it to permit starting
++self-compiled Linux kernels; install compilers and everything else needed for
++building Linux; make sure to have 12 Gigabyte free space in your home directory.
++Now run the following commands to download fresh Linux mainline sources, which
++you then use to configure, build and install your own kernel::
++
++    git clone --depth 1 -b master \
++      https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git ~/linux/
++    cd ~/linux/
++    # Hint: if you want to apply patches, do it at this point. See below for details.
++    # Hint: it's recommended to tag your build at this point. See below for details.
++    yes "" | make localmodconfig
++    # Hint: at this point you might want to adjust the build configuration; you'll
++    #   have to, if you are running Debian. See below for details.
++    make -j $(nproc --all)
++    # Note: on many commodity distributions the next command suffices, but on Arch
++    #   Linux, its derivatives, and some others it does not. See below for details.
++    command -v installkernel && sudo make modules_install install
++    reboot
++
++If you later want to build a newer mainline snapshot, use these commands::
++
++    cd ~/linux/
++    git fetch --depth 1 origin
++    # Note: the next command will discard any changes you did to the code:
++    git checkout --force --detach origin/master
++    # Reminder: if you want to (re)apply patches, do it at this point.
++    # Reminder: you might want to add or modify a build tag at this point.
++    make olddefconfig
++    make -j $(nproc --all)
++    # Reminder: the next command on some distributions does not suffice.
++    command -v installkernel && sudo make modules_install install
++    reboot
++
++Step-by-step guide
++==================
++
++Compiling your own Linux kernel is easy in principle. There are various ways to
++do it. Which of them actually work and is the best depends on the circumstances.
++
++This guide describes a way perfectly suited for those who want to quickly
++install Linux from sources without being bothered by complicated details; the
++goal is to cover everything typically needed on mainstream Linux distributions
++running on commodity PC or server hardware.
++
++The described approach is great for testing purposes, for example to try a
++proposed fix or to check if a problem was already fixed in the latest codebase.
++Nonetheless, kernels built this way are also totally fine for day-to-day use
++while at the same time being easy to keep up to date.
++
++The following steps describe the important aspects of the process; a
++comprehensive reference section later explains each of them in more detail. It
++sometimes also describes alternative approaches, pitfalls, as well as errors
++that might occur at a particular point -- and how to then get things rolling
++again.
++
++..
++   Note: if you see this note, you are reading the text's source file. You
++   might want to switch to a rendered version, as it makes it a lot easier to
++   quickly look something up in the reference section and afterwards jump back
++   to where you left off. Find a the latest rendered version here:
++   https://docs.kernel.org/admin-guide/quickly-build-trimmed-linux.html
++
++.. _backup_sbs:
++
++ * Create a fresh backup and put system repair and restore tools at hand, just
++   to be prepared for the unlikely case of something going sideways.
++
++   [:ref:`details<backup>`]
++
++.. _secureboot_sbs:
++
++ * On platforms with 'Secure Boot' or similar techniques, prepare everything to
++   ensure the system will permit your self-compiled kernel to boot later. The
++   quickest and easiest way to achieve this on commodity x86 systems is to
++   disable such techniques in the BIOS setup utility; alternatively, remove
++   their restrictions through a process initiated by
++   ``mokutil --disable-validation``.
++
++   [:ref:`details<secureboot>`]
++
++.. _buildrequires_sbs:
++
++ * Install all software required to build a Linux kernel. Often you will need:
++   'bc', 'binutils' ('ld' et al.), 'bison', 'flex', 'gcc', 'git', 'openssl',
++   'pahole', 'perl', and the development headers for 'libelf' and 'openssl'. The
++   reference section shows how to quickly install those on various popular Linux
++   distributions.
++
++   [:ref:`details<buildrequires>`]
++
++.. _diskspace_sbs:
++
++ * Ensure to have enough free space for building and installing Linux. For the
++   latter 150 Megabyte in /lib/ and 100 in /boot/ are a safe bet. For storing
++   sources and build artifacts 12 Gigabyte in your home directory should
++   typically suffice. If you have less available, be sure to check the reference
++   section for the step that explains adjusting your kernels build
++   configuration: it mentions a trick that reduce the amount of required space
++   in /home/ to around 4 Gigabyte.
++
++   [:ref:`details<diskspace>`]
++
++.. _sources_sbs:
++
++ * Retrieve the sources of the Linux version you intend to build; then change
++   into the directory holding them, as all further commands in this guide are
++   meant to be executed from there.
++
++   *[Note: the following paragraphs describe how to retrieve the sources by
++   partially cloning the Linux stable git repository. This is called a shallow
++   clone. The reference section explains two alternatives:* :ref:`packaged
++   archives<sources_archive>` *and* :ref:`a full git clone<sources_full>` *;
++   prefer the latter, if downloading a lot of data does not bother you, as that
++   will avoid some* :ref:`peculiar characteristics of shallow clones the
++   reference section explains<sources_shallow>` *.]*
++
++   First, execute the following command to retrieve a fresh mainline codebase::
++
++     git clone --no-checkout --depth 1 -b master \
++       https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git ~/linux/
++     cd ~/linux/
++
++   If you want to access recent mainline releases and pre-releases, deepen you
++   clone's history to the oldest mainline version you are interested in::
++
++     git fetch --shallow-exclude=v6.0 origin
++
++   In case you want to access a stable/longterm release (say v6.1.5), simply add
++   the branch holding that series; afterwards fetch the history at least up to
++   the mainline version that started the series (v6.1)::
++
++     git remote set-branches --add origin linux-6.1.y
++     git fetch --shallow-exclude=v6.0 origin
++
++   Now checkout the code you are interested in. If you just performed the
++   initial clone, you will be able to check out a fresh mainline codebase, which
++   is ideal for checking whether developers already fixed an issue::
++
++      git checkout --detach origin/master
++
++   If you deepened your clone, you instead of ``origin/master`` can specify the
++   version you deepened to (``v6.0`` above); later releases like ``v6.1`` and
++   pre-release like ``v6.2-rc1`` will work, too. Stable or longterm versions
++   like ``v6.1.5`` work just the same, if you added the appropriate
++   stable/longterm branch as described.
++
++   [:ref:`details<sources>`]
++
++.. _patching_sbs:
++
++ * In case you want to apply a kernel patch, do so now. Often a command like
++   this will do the trick::
++
++     patch -p1 < ../proposed-fix.patch
++
++   If the ``-p1`` is actually needed, depends on how the patch was created; in
++   case it does not apply thus try without it.
++
++   If you cloned the sources with git and anything goes sideways, run ``git
++   reset --hard`` to undo any changes to the sources.
++
++   [:ref:`details<patching>`]
++
++.. _tagging_sbs:
++
++ * If you patched your kernel or have one of the same version installed already,
++   better add a unique tag to the one you are about to build::
++
++     echo "-proposed_fix" > localversion
++
++   Running ``uname -r`` under your kernel later will then print something like
++   '6.1-rc4-proposed_fix'.
++
++   [:ref:`details<tagging>`]
++
++ .. _configuration_sbs:
++
++ * Create the build configuration for your kernel based on an existing
++   configuration.
++
++   If you already prepared such a '.config' file yourself, copy it to
++   ~/linux/ and run ``make olddefconfig``.
++
++   Use the same command, if your distribution or somebody else already tailored
++   your running kernel to your or your hardware's needs: the make target
++   'olddefconfig' will then try to use that kernel's .config as base.
++
++   Using this make target is fine for everybody else, too -- but you often can
++   save a lot of time by using this command instead::
++
++     yes "" | make localmodconfig
++
++   This will try to pick your distribution's kernel as base, but then disable
++   modules for any features apparently superfluous for your setup. This will
++   reduce the compile time enormously, especially if you are running an
++   universal kernel from a commodity Linux distribution.
++
++   There is a catch: the make target 'localmodconfig' will disable kernel
++   features you have not directly or indirectly through some program utilized
++   since you booted the system. You can reduce or nearly eliminate that risk by
++   using tricks outlined in the reference section; for quick testing purposes
++   that risk is often negligible, but it is an aspect you want to keep in mind
++   in case your kernel behaves oddly.
++
++   [:ref:`details<configuration>`]
++
++.. _configmods_sbs:
++
++ * Check if you might want to or have to adjust some kernel configuration
++   options:
++
++  * Evaluate how you want to handle debug symbols. Enable them, if you later
++    might need to decode a stack trace found for example in a 'panic', 'Oops',
++    'warning', or 'BUG'; on the other hand disable them, if you are short on
++    storage space or prefer a smaller kernel binary. See the reference section
++    for details on how to do either. If neither applies, it will likely be fine
++    to simply not bother with this. [:ref:`details<configmods_debugsymbols>`]
++
++  * Are you running Debian? Then to avoid known problems by performing
++    additional adjustments explained in the reference section.
++    [:ref:`details<configmods_distros>`].
++
++  * If you want to influence the other aspects of the configuration, do so now
++    by using make targets like 'menuconfig' or 'xconfig'.
++    [:ref:`details<configmods_individual>`].
++
++.. _build_sbs:
++
++ * Build the image and the modules of your kernel::
++
++     make -j $(nproc --all)
++
++   If you want your kernel packaged up as deb, rpm, or tar file, see the
++   reference section for alternatives.
++
++   [:ref:`details<build>`]
++
++.. _install_sbs:
++
++ * Now install your kernel::
++
++     command -v installkernel && sudo make modules_install install
++
++   Often all left for you to do afterwards is a ``reboot``, as many commodity
++   Linux distributions will then create an initramfs (also known as initrd) and
++   an entry for your kernel in your bootloader's configuration; but on some
++   distributions you have to take care of these two steps manually for reasons
++   the reference section explains.
++
++   On a few distributions like Arch Linux and its derivatives the above command
++   does nothing at all; in that case you have to manually install your kernel,
++   as outlined in the reference section.
++
++   [:ref:`details<install>`]
++
++.. _another_sbs:
++
++ * To later build another kernel you need similar steps, but sometimes slightly
++   different commands.
++
++   First, switch back into the sources tree::
++
++      cd ~/linux/
++
++   In case you want to build a version from a stable/longterm series you have
++   not used yet (say 6.2.y), tell git to track it::
++
++      git remote set-branches --add origin linux-6.2.y
++
++   Now fetch the latest upstream changes; you again need to specify the earliest
++   version you care about, as git otherwise might retrieve the entire commit
++   history::
++
++     git fetch --shallow-exclude=v6.1 origin
++
++   If you modified the sources (for example by applying a patch), you now need
++   to discard those modifications; that's because git otherwise will not be able
++   to switch to the sources of another version due to potential conflicting
++   changes::
++
++     git reset --hard
++
++   Now checkout the version you are interested in, as explained above::
++
++     git checkout --detach origin/master
++
++   At this point you might want to patch the sources again or set/modify a build
++   tag, as explained earlier; afterwards adjust the build configuration to the
++   new codebase and build your next kernel::
++
++     # reminder: if you want to apply patches, do it at this point
++     # reminder: you might want to update your build tag at this point
++     make olddefconfig
++     make -j $(nproc --all)
++
++   Install the kernel as outlined above::
++
++     command -v installkernel && sudo make modules_install install
++
++   [:ref:`details<another>`]
++
++.. _uninstall_sbs:
++
++ * Your kernel is easy to remove later, as its parts are only stored in two
++   places and clearly identifiable by the kernel's release name. Just ensure to
++   not delete the kernel you are running, as that might render your system
++   unbootable.
++
++   Start by deleting the directory holding your kernel's modules, which is named
++   after its release name -- '6.0.1-foobar' in the following example::
++
++     sudo rm -rf /lib/modules/6.0.1-foobar
++
++   Now try the following command, which on some distributions will delete all
++   other kernel files installed while also removing the kernel's entry from the
++   bootloader configuration::
++
++     command -v kernel-install && sudo kernel-install -v remove 6.0.1-foobar
++
++   If that command does not output anything or fails, see the reference section;
++   do the same if any files named '*6.0.1-foobar*' remain in /boot/.
++
++   [:ref:`details<uninstall>`]
++
++.. _submit_improvements:
++
++Did you run into trouble following any of the above steps that is not cleared up
++by the reference section below? Or do you have ideas how to improve the text?
++Then please take a moment of your time and let the maintainer of this document
++know by email (Thorsten Leemhuis <linux@leemhuis.info>), ideally while CCing the
++Linux docs mailing list (linux-doc@vger.kernel.org). Such feedback is vital to
++improve this document further, which is in everybody's interest, as it will
++enable more people to master the task described here.
++
++Reference section for the step-by-step guide
++============================================
++
++This section holds additional information for each of the steps in the above
++guide.
++
++.. _backup:
++
++Prepare for emergencies
++-----------------------
++
++   *Create a fresh backup and put system repair and restore tools at hand*
++   [:ref:`... <backup_sbs>`]
++
++Remember, you are dealing with computers, which sometimes do unexpected things
++-- especially if you fiddle with crucial parts like the kernel of an operating
++system. That's what you are about to do in this process. Hence, better prepare
++for something going sideways, even if that should not happen.
++
++[:ref:`back to step-by-step guide <backup_sbs>`]
++
++.. _secureboot:
++
++Dealing with techniques like Secure Boot
++----------------------------------------
++
++   *On platforms with 'Secure Boot' or similar techniques, prepare everything to
++   ensure the system will permit your self-compiled kernel to boot later.*
++   [:ref:`... <secureboot_sbs>`]
++
++Many modern systems allow only certain operating systems to start; they thus by
++default will reject booting self-compiled kernels.
++
++You ideally deal with this by making your platform trust your self-built kernels
++with the help of a certificate and signing. How to do that is not described
++here, as it requires various steps that would take the text too far away from
++its purpose; 'Documentation/admin-guide/module-signing.rst' and various web
++sides already explain this in more detail.
++
++Temporarily disabling solutions like Secure Boot is another way to make your own
++Linux boot. On commodity x86 systems it is possible to do this in the BIOS Setup
++utility; the steps to do so are not described here, as they greatly vary between
++machines.
++
++On mainstream x86 Linux distributions there is a third and universal option:
++disable all Secure Boot restrictions for your Linux environment. You can
++initiate this process by running ``mokutil --disable-validation``; this will
++tell you to create a one-time password, which is safe to write down. Now
++restart; right after your BIOS performed all self-tests the bootloader Shim will
++show a blue box with a message 'Press any key to perform MOK management'. Hit
++some key before the countdown exposes. This will open a menu and choose 'Change
++Secure Boot state' there. Shim's 'MokManager' will now ask you to enter three
++randomly chosen characters from the one-time password specified earlier. Once
++you provided them, confirm that you really want to disable the validation.
++Afterwards, permit MokManager to reboot the machine.
++
++[:ref:`back to step-by-step guide <secureboot_sbs>`]
++
++.. _buildrequires:
++
++Install build requirements
++--------------------------
++
++   *Install all software required to build a Linux kernel.*
++   [:ref:`...<buildrequires_sbs>`]
++
++The kernel is pretty stand-alone, but besides tools like the compiler you will
++sometimes need a few libraries to build one. How to install everything needed
++depends on your Linux distribution and the configuration of the kernel you are
++about to build.
++
++Here are a few examples what you typically need on some mainstream
++distributions:
++
++ * Debian, Ubuntu, and derivatives::
++
++     sudo apt install bc binutils bison dwarves flex gcc git make openssl \
++       pahole perl-base libssl-dev libelf-dev
++
++ * Fedora and derivatives::
++
++     sudo dnf install binutils /usr/include/{libelf.h,openssl/pkcs7.h} \
++       /usr/bin/{bc,bison,flex,gcc,git,openssl,make,perl,pahole}
++
++ * openSUSE and derivatives::
++
++     sudo zypper install bc binutils bison dwarves flex gcc git make perl-base \
++       openssl openssl-devel libelf-dev
++
++In case you wonder why these lists include openssl and its development headers:
++they are needed for the Secure Boot support, which many distributions enable in
++their kernel configuration for x86 machines.
++
++Sometimes you will need tools for compression formats like bzip2, gzip, lz4,
++lzma, lzo, xz, or zstd as well.
++
++You might need additional libraries and their development headers in case you
++perform tasks not covered in this guide. For example, zlib will be needed when
++building kernel tools from the tools/ directory; adjusting the build
++configuration with make targets like 'menuconfig' or 'xconfig' will require
++development headers for ncurses or Qt5.
++
++[:ref:`back to step-by-step guide <buildrequires_sbs>`]
++
++.. _diskspace:
++
++Space requirements
++------------------
++
++   *Ensure to have enough free space for building and installing Linux.*
++   [:ref:`... <diskspace_sbs>`]
++
++The numbers mentioned are rough estimates with a big extra charge to be on the
++safe side, so often you will need less.
++
++If you have space constraints, remember to read the reference section when you
++reach the :ref:`section about configuration adjustments' <configmods>`, as
++ensuring debug symbols are disabled will reduce the consumed disk space by quite
++a few gigabytes.
++
++[:ref:`back to step-by-step guide <diskspace_sbs>`]
++
++
++.. _sources:
++
++Download the sources
++--------------------
++
++  *Retrieve the sources of the Linux version you intend to build.*
++  [:ref:`...<sources_sbs>`]
++
++The step-by-step guide outlines how to retrieve Linux' sources using a shallow
++git clone. There is :ref:`more to tell about this method<sources_shallow>` and
++two alternate ways worth describing: :ref:`packaged archives<sources_archive>`
++and :ref:`a full git clone<sources_full>`. And the aspects ':ref:`wouldn't it
++be wiser to use a proper pre-release than the latest mainline code
++<sources_snapshot>`' and ':ref:`how to get an even fresher mainline codebase
++<sources_fresher>`' need elaboration, too.
++
++Note, to keep things simple the commands used in this guide store the build
++artifacts in the source tree. If you prefer to separate them, simply add
++something like ``O=~/linux-builddir/`` to all make calls; also adjust the path
++in all commands that add files or modify any generated (like your '.config').
++
++[:ref:`back to step-by-step guide <sources_sbs>`]
++
++.. _sources_shallow:
++
++Noteworthy characteristics of shallow clones
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The step-by-step guide uses a shallow clone, as it is the best solution for most
++of this document's target audience. There are a few aspects of this approach
++worth mentioning:
++
++ * This document in most places uses ``git fetch`` with ``--shallow-exclude=``
++   to specify the earliest version you care about (or to be precise: its git
++   tag). You alternatively can use the parameter ``--shallow-since=`` to specify
++   an absolute (say ``'2023-07-15'``) or relative (``'12 months'``) date to
++   define the depth of the history you want to download. As a second
++   alternative, you can also specify a certain depth explicitly with a parameter
++   like ``--depth=1``, unless you add branches for stable/longterm kernels.
++
++ * When running ``git fetch``, remember to always specify the oldest version,
++   the time you care about, or an explicit depth as shown in the step-by-step
++   guide. Otherwise you will risk downloading nearly the entire git history,
++   which will consume quite a bit of time and bandwidth while also stressing the
++   servers.
++
++   Note, you do not have to use the same version or date all the time. But when
++   you change it over time, git will deepen or flatten the history to the
++   specified point. That allows you to retrieve versions you initially thought
++   you did not need -- or it will discard the sources of older versions, for
++   example in case you want to free up some disk space. The latter will happen
++   automatically when using ``--shallow-since=`` or
++   ``--depth=``.
++
++ * Be warned, when deepening your clone you might encounter an error like
++   'fatal: error in object: unshallow cafecaca0c0dacafecaca0c0dacafecaca0c0da'.
++   In that case run ``git repack -d`` and try again``
++
++ * In case you want to revert changes from a certain version (say Linux 6.3) or
++   perform a bisection (v6.2..v6.3), better tell ``git fetch`` to retrieve
++   objects up to three versions earlier (e.g. 6.0): ``git describe`` will then
++   be able to describe most commits just like it would in a full git clone.
++
++[:ref:`back to step-by-step guide <sources_sbs>`] [:ref:`back to section intro <sources>`]
++
++.. _sources_archive:
++
++Downloading the sources using a packages archive
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++People new to compiling Linux often assume downloading an archive via the
++front-page of https://kernel.org is the best approach to retrieve Linux'
++sources. It actually can be, if you are certain to build just one particular
++kernel version without changing any code. Thing is: you might be sure this will
++be the case, but in practice it often will turn out to be a wrong assumption.
++
++That's because when reporting or debugging an issue developers will often ask to
++give another version a try. They also might suggest temporarily undoing a commit
++with ``git revert`` or might provide various patches to try. Sometimes reporters
++will also be asked to use ``git bisect`` to find the change causing a problem.
++These things rely on git or are a lot easier and quicker to handle with it.
++
++A shallow clone also does not add any significant overhead. For example, when
++you use ``git clone --depth=1`` to create a shallow clone of the latest mainline
++codebase git will only retrieve a little more data than downloading the latest
++mainline pre-release (aka 'rc') via the front-page of kernel.org would.
++
++A shallow clone therefore is often the better choice. If you nevertheless want
++to use a packaged source archive, download one via kernel.org; afterwards
++extract its content to some directory and change to the subdirectory created
++during extraction. The rest of the step-by-step guide will work just fine, apart
++from things that rely on git -- but this mainly concerns the section on
++successive builds of other versions.
++
++[:ref:`back to step-by-step guide <sources_sbs>`] [:ref:`back to section intro <sources>`]
++
++.. _sources_full:
++
++Downloading the sources using a full git clone
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++If downloading and storing a lot of data (~4,4 Gigabyte as of early 2023) is
++nothing that bothers you, instead of a shallow clone perform a full git clone
++instead. You then will avoid the specialties mentioned above and will have all
++versions and individual commits at hand at any time::
++
++    curl -L \
++      https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/clone.bundle \
++      -o linux-stable.git.bundle
++    git clone clone.bundle ~/linux/
++    rm linux-stable.git.bundle
++    cd ~/linux/
++    git remote set-url origin
++    https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
++    git fetch origin
++    git checkout --detach origin/master
++
++[:ref:`back to step-by-step guide <sources_sbs>`] [:ref:`back to section intro <sources>`]
++
++.. _sources_snapshot:
++
++Proper pre-releases (RCs) vs. latest mainline
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++When cloning the sources using git and checking out origin/master, you often
++will retrieve a codebase that is somewhere between the latest and the next
++release or pre-release. This almost always is the code you want when giving
++mainline a shot: pre-releases like v6.1-rc5 are in no way special, as they do
++not get any significant extra testing before being published.
++
++There is one exception: you might want to stick to the latest mainline release
++(say v6.1) before its successor's first pre-release (v6.2-rc1) is out. That is
++because compiler errors and other problems are more likely to occur during this
++time, as mainline then is in its 'merge window': a usually two week long phase,
++in which the bulk of the changes for the next release is merged.
++
++[:ref:`back to step-by-step guide <sources_sbs>`] [:ref:`back to section intro <sources>`]
++
++.. _sources_fresher:
++
++Avoiding the mainline lag
++~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The explanations for both the shallow clone and the full clone both retrieve the
++code from the Linux stable git repository. That makes things simpler for this
++document's audience, as it allows easy access to both mainline and
++stable/longterm releases. This approach has just one downside:
++
++Changes merged into the mainline repository are only synced to the master branch
++of the Linux stable repository  every few hours. This lag most of the time is
++not something to worry about; but in case you really need the latest code, just
++add the mainline repo as additional remote and checkout the code from there::
++
++    git remote add mainline \
++      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
++    git fetch mainline
++    git checkout --detach mainline/master
++
++When doing this with a shallow clone, remember to call ``git fetch`` with one
++of the parameters described earlier to limit the depth.
++
++[:ref:`back to step-by-step guide <sources_sbs>`] [:ref:`back to section intro <sources>`]
++
++.. _patching:
++
++Patch the sources (optional)
++----------------------------
++
++  *In case you want to apply a kernel patch, do so now.*
++  [:ref:`...<patching_sbs>`]
++
++This is the point where you might want to patch your kernel -- for example when
++a developer proposed a fix and asked you to check if it helps. The step-by-step
++guide already explains everything crucial here.
++
++[:ref:`back to step-by-step guide <patching_sbs>`]
++
++.. _tagging:
++
++Tagging this kernel build (optional, often wise)
++------------------------------------------------
++
++  *If you patched your kernel or already have that kernel version installed,
++  better tag your kernel by extending its release name:*
++  [:ref:`...<tagging_sbs>`]
++
++Tagging your kernel will help avoid confusion later, especially when you patched
++your kernel. Adding an individual tag will also ensure the kernel's image and
++its modules are installed in parallel to any existing kernels.
++
++There are various ways to add such a tag. The step-by-step guide realizes one by
++creating a 'localversion' file in your build directory from which the kernel
++build scripts will automatically pick up the tag. You can later change that file
++to use a different tag in subsequent builds or simply remove that file to dump
++the tag.
++
++[:ref:`back to step-by-step guide <tagging_sbs>`]
++
++.. _configuration:
++
++Define the build configuration for your kernel
++----------------------------------------------
++
++  *Create the build configuration for your kernel based on an existing
++  configuration.* [:ref:`... <configuration_sbs>`]
++
++There are various aspects for this steps that require a more careful
++explanation:
++
++Pitfalls when using another configuration file as base
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++Make targets like localmodconfig and olddefconfig share a few common snares you
++want to be aware of:
++
++ * These targets will reuse a kernel build configuration in your build directory
++   (e.g. '~/linux/.config'), if one exists. In case you want to start from
++   scratch you thus need to delete it.
++
++ * The make targets try to find the configuration for your running kernel
++   automatically, but might choose poorly. A line like '# using defaults found
++   in /boot/config-6.0.7-250.fc36.x86_64' or 'using config:
++   '/boot/config-6.0.7-250.fc36.x86_64' tells you which file they picked. If
++   that is not the intended one, simply store it as '~/linux/.config'
++   before using these make targets.
++
++ * Unexpected things might happen if you try to use a config file prepared for
++   one kernel (say v6.0) on an older generation (say v5.15). In that case you
++   might want to use a configuration as base which your distribution utilized
++   when they used that or an slightly older kernel version.
++
++Influencing the configuration
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++The make target olddefconfig and the ``yes "" |`` used when utilizing
++localmodconfig will set any undefined build options to their default value. This
++among others will disable many kernel features that were introduced after your
++base kernel was released.
++
++If you want to set these configurations options manually, use ``oldconfig``
++instead of ``olddefconfig`` or omit the ``yes "" |`` when utilizing
++localmodconfig. Then for each undefined configuration option you will be asked
++how to proceed. In case you are unsure what to answer, simply hit 'enter' to
++apply the default value.
++
++Big pitfall when using localmodconfig
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++As explained briefly in the step-by-step guide already: with localmodconfig it
++can easily happen that your self-built kernel will lack modules for tasks you
++did not perform before utilizing this make target. That's because those tasks
++require kernel modules that are normally autoloaded when you perform that task
++for the first time; if you didn't perform that task at least once before using
++localmodonfig, the latter will thus assume these modules are superfluous and
++disable them.
++
++You can try to avoid this by performing typical tasks that often will autoload
++additional kernel modules: start a VM, establish VPN connections, loop-mount a
++CD/DVD ISO, mount network shares (CIFS, NFS, ...), and connect all external
++devices (2FA keys, headsets, webcams, ...) as well as storage devices with file
++systems you otherwise do not utilize (btrfs, ext4, FAT, NTFS, XFS, ...). But it
++is hard to think of everything that might be needed -- even kernel developers
++often forget one thing or another at this point.
++
++Do not let that risk bother you, especially when compiling a kernel only for
++testing purposes: everything typically crucial will be there. And if you forget
++something important you can turn on a missing feature later and quickly run the
++commands to compile and install a better kernel.
++
++But if you plan to build and use self-built kernels regularly, you might want to
++reduce the risk by recording which modules your system loads over the course of
++a few weeks. You can automate this with `modprobed-db
++<https://github.com/graysky2/modprobed-db>`_. Afterwards use ``LSMOD=<path>`` to
++point localmodconfig to the list of modules modprobed-db noticed being used::
++
++    yes "" | make LSMOD="${HOME}"/.config/modprobed.db localmodconfig
++
++Remote building with localmodconfig
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++If you want to use localmodconfig to build a kernel for another machine, run
++``lsmod > lsmod_foo-machine`` on it and transfer that file to your build host.
++Now point the build scripts to the file like this: ``yes "" | make
++LSMOD=~/lsmod_foo-machine localmodconfig``. Note, in this case
++you likely want to copy a base kernel configuration from the other machine over
++as well and place it as .config in your build directory.
++
++[:ref:`back to step-by-step guide <configuration_sbs>`]
++
++.. _configmods:
++
++Adjust build configuration
++--------------------------
++
++   *Check if you might want to or have to adjust some kernel configuration
++   options:*
++
++Depending on your needs you at this point might want or have to adjust some
++kernel configuration options.
++
++.. _configmods_debugsymbols:
++
++Debug symbols
++~~~~~~~~~~~~~
++
++   *Evaluate how you want to handle debug symbols.*
++   [:ref:`...<configmods_sbs>`]
++
++Most users do not need to care about this, it's often fine to leave everything
++as it is; but you should take a closer look at this, if you might need to decode
++a stack trace or want to reduce space consumption.
++
++Having debug symbols available can be important when your kernel throws a
++'panic', 'Oops', 'warning', or 'BUG' later when running, as then you will be
++able to find the exact place where the problem occurred in the code. But
++collecting and embedding the needed debug information takes time and consumes
++quite a bit of space: in late 2022 the build artifacts for a typical x86 kernel
++configured with localmodconfig consumed around 5 Gigabyte of space with debug
++symbols, but less than 1 when they were disabled. The resulting kernel image and
++the modules are bigger as well, which increases load times.
++
++Hence, if you want a small kernel and are unlikely to decode a stack trace
++later, you might want to disable debug symbols to avoid above downsides::
++
++    ./scripts/config --file .config -d DEBUG_INFO \
++      -d DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT -d DEBUG_INFO_DWARF4 \
++      -d DEBUG_INFO_DWARF5 -e CONFIG_DEBUG_INFO_NONE
++    make olddefconfig
++
++You on the other hand definitely want to enable them, if there is a decent
++chance that you need to decode a stack trace later (as explained by 'Decode
++failure messages' in Documentation/admin-guide/tainted-kernels.rst in more
++detail)::
++
++    ./scripts/config --file .config -d DEBUG_INFO_NONE -e DEBUG_KERNEL
++      -e DEBUG_INFO -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT -e KALLSYMS -e KALLSYMS_ALL
++    make olddefconfig
++
++Note, many mainstream distributions enable debug symbols in their kernel
++configurations -- make targets like localmodconfig and olddefconfig thus will
++often pick that setting up.
++
++[:ref:`back to step-by-step guide <configmods_sbs>`]
++
++.. _configmods_distros:
++
++Distro specific adjustments
++~~~~~~~~~~~~~~~~~~~~~~~~~~~
++
++   *Are you running* [:ref:`... <configmods_sbs>`]
++
++The following sections help you to avoid build problems that are known to occur
++when following this guide on a few commodity distributions.
++
++**Debian:**
++
++ * Remove a stale reference to a certificate file that would cause your build to
++   fail::
++
++    ./scripts/config --file .config --set-str SYSTEM_TRUSTED_KEYS ''
++
++   Alternatively, download the needed certificate and make that configuration
++   option point to it, as `the Debian handbook explains in more detail
++   <https://debian-handbook.info/browse/stable/sect.kernel-compilation.html>`_
++   -- or generate your own, as explained in
++   Documentation/admin-guide/module-signing.rst.
++
++[:ref:`back to step-by-step guide <configmods_sbs>`]
++
++.. _configmods_individual:
++
++Individual adjustments
++~~~~~~~~~~~~~~~~~~~~~~
++
++   *If you want to influence the other aspects of the configuration, do so
++   now* [:ref:`... <configmods_sbs>`]
++
++You at this point can use a command like ``make menuconfig`` to enable or
++disable certain features using a text-based user interface; to use a graphical
++configuration utilize, use the make target ``xconfig`` or ``gconfig`` instead.
++All of them require development libraries from toolkits they are based on
++(ncurses, Qt5, Gtk2); an error message will tell you if something required is
++missing.
++
++[:ref:`back to step-by-step guide <configmods_sbs>`]
++
++.. _build:
++
++Build your kernel
++-----------------
++
++  *Build the image and the modules of your kernel* [:ref:`... <build_sbs>`]
++
++A lot can go wrong at this stage, but the instructions below will help you help
++yourself. Another subsection explains how to directly package your kernel up as
++deb, rpm or tar file.
++
++Dealing with build errors
++~~~~~~~~~~~~~~~~~~~~~~~~~
++
++When a build error occurs, it might be caused by some aspect of your machine's
++setup that often can be fixed quickly; other times though the problem lies in
++the code and can only be fixed by a developer. A close examination of the
++failure messages coupled with some research on the internet will often tell you
++which of the two it is. To perform such a investigation, restart the build
++process like this::
++
++    make V=1
++
++The ``V=1`` activates verbose output, which might be needed to see the actual
++error. To make it easier to spot, this command also omits the ``-j $(nproc
++--all)`` used earlier to utilize every CPU core in the system for the job -- but
++this parallelism also results in some clutter when failures occur.
++
++After a few seconds the build process should run into the error again. Now try
++to find the most crucial line describing the problem. Then search the internet
++for the most important and non-generic section of that line (say 4 to 8 words);
++avoid or remove anything that looks remotely system-specific, like your username
++or local path names like ``/home/username/linux/``. First try your regular
++internet search engine with that string, afterwards search Linux kernel mailing
++lists via `lore.kernel.org/all/ <https://lore.kernel.org/all/>`_.
++
++This most of the time will find something that will explain what is wrong; quite
++often one of the hits will provide a solution for your problem, too. If you
++do not find anything that matches your problem, try again from a different angle
++by modifying your search terms or using another line from the error messages.
++
++In the end, most trouble you are to run into has likely been encountered and
++reported by others already. That includes issues where the cause is not your
++system, but lies the code. If you run into one of those, you might thus find a
++solution (e.g. a patch) or workaround for your problem, too.
++
++Package your kernel up
++~~~~~~~~~~~~~~~~~~~~~~
++
++The step-by-step guide uses the default make targets (e.g. 'bzImage' and
++'modules' on x86) to build the image and the modules of your kernel, which later
++steps of the guide then install. You instead can also directly build everything
++and directly package it up by using one of the following targets:
++
++ * ``make -j $(nproc --all) bindeb-pkg`` to generate a deb package
++
++ * ``make -j $(nproc --all) binrpm-pkg`` to generate a rpm package
++
++ * ``make -j $(nproc --all) tarbz2-pkg`` to generate a bz2 compressed tarball
++
++This is just a selection of available make targets for this purpose, see
++``make help`` for others. You can also use these targets after running
++``make -j $(nproc --all)``, as they will pick up everything already built.
++
++If you employ the targets to generate deb or rpm packages, ignore the
++step-by-step guide's instructions on installing and removing your kernel;
++instead install and remove the packages using the package utility for the format
++(e.g. dpkg and rpm) or a package management utility build on top of them (apt,
++aptitude, dnf/yum, zypper, ...). Be aware that the packages generated using
++these two make targets are designed to work on various distributions utilizing
++those formats, they thus will sometimes behave differently than your
++distribution's kernel packages.
++
++[:ref:`back to step-by-step guide <build_sbs>`]
++
++.. _install:
++
++Install your kernel
++-------------------
++
++  *Now install your kernel* [:ref:`... <install_sbs>`]
++
++What you need to do after executing the command in the step-by-step guide
++depends on the existence and the implementation of an ``installkernel``
++executable. Many commodity Linux distributions ship such a kernel installer in
++``/sbin/`` that does everything needed, hence there is nothing left for you
++except rebooting. But some distributions contain an installkernel that does
++only part of the job -- and a few lack it completely and leave all the work to
++you.
++
++If ``installkernel`` is found, the kernel's build system will delegate the
++actual installation of your kernel's image and related files to this executable.
++On almost all Linux distributions it will store the image as '/boot/vmlinuz-
++<your kernel's release name>' and put a 'System.map-<your kernel's release
++name>' alongside it. Your kernel will thus be installed in parallel to any
++existing ones, unless you already have one with exactly the same release name.
++
++Installkernel on many distributions will afterwards generate an 'initramfs'
++(often also called 'initrd'), which commodity distributions rely on for booting;
++hence be sure to keep the order of the two make targets used in the step-by-step
++guide, as things will go sideways if you install your kernel's image before its
++modules. Often installkernel will then add your kernel to the bootloader
++configuration, too. You have to take care of one or both of these tasks
++yourself, if your distributions installkernel doesn't handle them.
++
++A few distributions like Arch Linux and its derivatives totally lack an
++installkernel executable. On those just install the modules using the kernel's
++build system and then install the image and the System.map file manually::
++
++     sudo make modules_install
++     sudo install -m 0600 $(make -s image_name) /boot/vmlinuz-$(make -s kernelrelease)
++     sudo install -m 0600 System.map /boot/System.map-$(make -s kernelrelease)
++
++If your distribution boots with the help of an initramfs, now generate one for
++your kernel using the tools your distribution provides for this process.
++Afterwards add your kernel to your bootloader configuration and reboot.
++
++[:ref:`back to step-by-step guide <install_sbs>`]
++
++.. _another:
++
++Another round later
++-------------------
++
++  *To later build another kernel you need similar, but sometimes slightly
++  different commands* [:ref:`... <another_sbs>`]
++
++The process to build later kernels is similar, but at some points slightly
++different. You for example do not want to use 'localmodconfig' for succeeding
++kernel builds, as you already created a trimmed down configuration you want to
++use from now on. Hence instead just use ``oldconfig`` or ``olddefconfig`` to
++adjust your build configurations to the needs of the kernel version you are
++about to build.
++
++If you created a shallow-clone with git, remember what the :ref:`section that
++explained the setup described in more detail <sources>`: you need to use a
++slightly different ``git fetch`` command and when switching to another series
++need to add an additional remote branch.
++
++[:ref:`back to step-by-step guide <another_sbs>`]
++
++.. _uninstall:
++
++Uninstall the kernel later
++--------------------------
++
++  *All parts of your installed kernel are identifiable by its release name and
++  thus easy to remove later.* [:ref:`... <uninstall_sbs>`]
++
++Do not worry installing your kernel manually and thus bypassing your
++distribution's packaging system will totally mess up your machine: all parts of
++your kernel are easy to remove later, as files are stored in two places only and
++normally identifiable by the kernel's release name.
++
++One of the two places is a directory in /lib/modules/, which holds the modules
++for each installed kernel. This directory is named after the kernel's release
++name; hence, to remove all modules for one of your kernels, simply remove its
++modules directory in /lib/modules/.
++
++The other place is /boot/, where typically one to five files will be placed
++during installation of a kernel. All of them usually contain the release name in
++their file name, but how many files and their name depends somewhat on your
++distribution's installkernel executable (:ref:`see above <install>`) and its
++initramfs generator. On some distributions the ``kernel-install`` command
++mentioned in the step-by-step guide will remove all of these files for you --
++and the entry for your kernel in the bootloader configuration at the same time,
++too. On others you have to take care of these steps yourself. The following
++command should interactively remove the two main files of a kernel with the
++release name '6.0.1-foobar'::
++
++    rm -i /boot/{System.map,vmlinuz}-6.0.1-foobar
++
++Now remove the belonging initramfs, which often will be called something like
++``/boot/initramfs-6.0.1-foobar.img`` or ``/boot/initrd.img-6.0.1-foobar``.
++Afterwards check for other files in /boot/ that have '6.0.1-foobar' in their
++name and delete them as well. Now remove the kernel from your bootloader's
++configuration.
++
++Note, be very careful with wildcards like '*' when deleting files or directories
++for kernels manually: you might accidentally remove files of a 6.0.11 kernel
++when all you want is to remove 6.0 or 6.0.1.
++
++[:ref:`back to step-by-step guide <uninstall_sbs>`]
++
++.. _faq:
++
++FAQ
++===
++
++Why does this 'how-to' not work on my system?
++---------------------------------------------
++
++As initially stated, this guide is 'designed to cover everything typically
++needed [to build a kernel] on mainstream Linux distributions running on
++commodity PC or server hardware'. The outlined approach despite this should work
++on many other setups as well. But trying to cover every possible use-case in one
++guide would defeat its purpose, as without such a focus you would need dozens or
++hundreds of constructs along the lines of 'in case you are having <insert
++machine or distro>, you at this point have to do <this and that>
++<instead|additionally>'. Each of which would make the text longer, more
++complicated, and harder to follow.
++
++That being said: this of course is a balancing act. Hence, if you think an
++additional use-case is worth describing, suggest it to the maintainers of this
++document, as :ref:`described above <submit_improvements>`.
++
++
++..
++   end-of-content
++..
++   This document is maintained by Thorsten Leemhuis <linux@leemhuis.info>. If
++   you spot a typo or small mistake, feel free to let him know directly and
++   he'll fix it. You are free to do the same in a mostly informal way if you
++   want to contribute changes to the text -- but for copyright reasons please CC
++   linux-doc@vger.kernel.org and 'sign-off' your contribution as
++   Documentation/process/submitting-patches.rst explains in the section 'Sign
++   your work - the Developer's Certificate of Origin'.
++..
++   This text is available under GPL-2.0+ or CC-BY-4.0, as stated at the top
++   of the file. If you want to distribute this text under CC-BY-4.0 only,
++   please use 'The Linux kernel development community' for author attribution
++   and link this as source:
++   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/plain/Documentation/admin-guide/quickly-build-trimmed-linux.rst
++..
++   Note: Only the content of this RST file as found in the Linux kernel sources
++   is available under CC-BY-4.0, as versions of this text that were processed
++   (for example by the kernel's build system) might contain content taken from
++   files which use a more restrictive license.
++
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7f86d02cb427..bfbed79c0ea1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6329,6 +6329,7 @@ DOCUMENTATION REPORTING ISSUES
+ M:	Thorsten Leemhuis <linux@leemhuis.info>
+ L:	linux-doc@vger.kernel.org
+ S:	Maintained
++F:	Documentation/admin-guide/quickly-build-trimmed-linux.rst
+ F:	Documentation/admin-guide/reporting-issues.rst
+ 
+ DOCUMENTATION SCRIPTS
+
+base-commit: e076f253283c3e55a128fa9665c0e6cd8146948d
+-- 
+2.39.2
+
