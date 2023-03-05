@@ -2,99 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B5D16AB1F8
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 21:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C71386AB1F2
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 21:07:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjCEUJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 15:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S229558AbjCEUHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 15:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjCEUJX (ORCPT
+        with ESMTP id S229461AbjCEUHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 15:09:23 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116FE6EBD;
-        Sun,  5 Mar 2023 12:09:22 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 6D6655FD04;
-        Sun,  5 Mar 2023 23:09:20 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678046960;
-        bh=OP9Q+D6ddKpeccLb8Rmg9aPK4JcBMYN/s1rz2P24TnQ=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=pvRXfzfYGzpc+pLpl2XVgBwgUqDIDKDVwBu61NuJw6pFIFzwQ4JMJ989jxq6qWvwN
-         VoVc15b+2FrAtp9/WVnm7jC5rhl8b3mMuS5/oxY1tMM8+8Kh3AvIYBgMXWbq8HyIhA
-         Cz+O6dfugq9AI4+y6liW4YAguudzQBIpmFbJ/LgjswJv9eu+yvJyQDium+NNcgat3y
-         GIevkso0bdj7Rg1/FJIwjXB/GUoomtoYx4x7aTb+nAh71laGR11mgOdjmeja9G1AOL
-         rFaKu+YfWjTXQyIcLocFUIEdke9//kdGTc70SQheIYP64wSLHaouTAOSm6YlcJCM9N
-         i+iegLpyxz8pw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Sun,  5 Mar 2023 23:09:19 +0300 (MSK)
-Message-ID: <4a3f3978-1093-4c0a-663f-28d77eeb0806@sberdevices.ru>
-Date:   Sun, 5 Mar 2023 23:06:26 +0300
+        Sun, 5 Mar 2023 15:07:38 -0500
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A70166DC
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 12:07:36 -0800 (PST)
+Received: by mail-qv1-xf31.google.com with SMTP id g9so3647313qvt.8
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 12:07:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678046856;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l2XD/lnGb6wqP5beCOn5WCviv+KlTriN0tPq9p0OZx0=;
+        b=ZiepaHz/3URShuzoFoTr0n9W8X5wcj246wGtTT/Olhn5ve+KWs9fHyddEJYhQzfN/3
+         pBepIWgH+H6w+ohrTSwLN5fm5t7B7Bp+DJI9rA+wI1IUeRAc5nzQDVQXew+BdNxSszG/
+         4DvutTPHqvy4HjwgihilnMqOtigWxYD5nm17BJ8vf4H6Ky2rjcRITsZe5BUCpI+0DMxK
+         ArFPUtVQUXc2iR4Pa4ZDFcLv66H9muQThJUKgYsXQ98WbfsEKxkQtQAWGx4fTpUtat9n
+         hHodksyqnAct1QlwMHy8PUxcKbBdaVZXj+3QCm8gFMYdugBlT+0zvOQ3Dt+NgvyaS4Af
+         ZaTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678046856;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l2XD/lnGb6wqP5beCOn5WCviv+KlTriN0tPq9p0OZx0=;
+        b=WGIBbfSI0KNURr/v7h8wfvLBXf/rXSqIxHk/mDI8fmhn1ZSXSc/AdS0hVVYWnJq1Ax
+         ZCyTtqYw61eCmh/HRCYPDfnTNMGHiuEpM1UgJnrGm4O0nHqs9EN/HnB+EWZFe6xBoZfm
+         z1m0pAU7hbd1GMApFgjXAJcEsetr/hYZtB2mzA1RDArKyl8//CPdojKeTQ8ficj2OQha
+         y4btNgZPGwEgXGh6vEcqef0EKgqdbmrxiAAiWt/4Ln0LNal6TIhqv37S+4FOwJOOaUWw
+         LNxxMglZy37QWgFGWHdfAHBPbBree/YyedYeOOIuhnBtJnQ1OfaHXTyif9o5Izt/HR4S
+         j8JQ==
+X-Gm-Message-State: AO0yUKUzH1gDWbXUbCsEX7IcdZkVAiX1Xl8O2i5obkeWd+76MXCqFET4
+        GLRGLY5+3XbYQsVHWOODIWUuGjz496vUIXzB77E=
+X-Google-Smtp-Source: AK7set8ffpGdQTQKZXseL19PQNbp0QAJxCqSTuBgQI6JOwZMNS6jG42VnLiplfWD5Ci8Tx/oBsGMXMN/O2OWL8pwwYU=
+X-Received: by 2002:a05:6214:4c06:b0:56f:3aef:1633 with SMTP id
+ qh6-20020a0562144c0600b0056f3aef1633mr2224377qvb.1.1678046856083; Sun, 05 Mar
+ 2023 12:07:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-In-Reply-To: <a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [RFC PATCH v2 1/4] virtio/vsock: fix 'rx_bytes'/'fwd_cnt' calculation
+Sender: oliveromar280@gmail.com
+Received: by 2002:ac8:4814:0:b0:3bf:a737:f12d with HTTP; Sun, 5 Mar 2023
+ 12:07:35 -0800 (PST)
+From:   Caroline Wood <mrscaroline74@gmail.com>
+Date:   Sun, 5 Mar 2023 21:07:35 +0100
+X-Google-Sender-Auth: YeaIbx4Us4yTojhH2FT_Aouz_EI
+Message-ID: <CALeCgsrVDmremjqmg5Q6mqLwMk=OdJ5SOazQQn55TKP+AwevtA@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/05 16:13:00 #20917262
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Substraction of 'skb->len' is redundant here: 'skb_headroom()' is delta
-between 'data' and 'head' pointers, e.g. it is number of bytes returned
-to user (of course accounting size of header). 'skb->len' is number of
-bytes rest in buffer.
-
-Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- net/vmw_vsock/virtio_transport_common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index a1581c77cf84..2e2a773df5c1 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -255,7 +255,7 @@ static void virtio_transport_dec_rx_pkt(struct virtio_vsock_sock *vvs,
- {
- 	int len;
- 
--	len = skb_headroom(skb) - sizeof(struct virtio_vsock_hdr) - skb->len;
-+	len = skb_headroom(skb) - sizeof(struct virtio_vsock_hdr);
- 	vvs->rx_bytes -= len;
- 	vvs->fwd_cnt += len;
- }
--- 
-2.25.1
+Good day, Please did you received my message?
