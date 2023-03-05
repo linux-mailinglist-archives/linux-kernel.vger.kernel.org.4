@@ -2,113 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031C26AADCF
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 03:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4626E6AADD1
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 03:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbjCECKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 4 Mar 2023 21:10:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S229556AbjCECKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 4 Mar 2023 21:10:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjCECKQ (ORCPT
+        with ESMTP id S229557AbjCECKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 4 Mar 2023 21:10:16 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361C79EF9
-        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 18:10:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1677982215; x=1709518215;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Aw7ZICILfzUEfc1c3TACgiXOOm6qAu3x+JHmN8YxoNQ=;
-  b=dzT/gVOOLbuqr5864SAqprRkNTbFY4VAeWSGtypDJw6cbNG5xnDkd1cI
-   z4OIE6u8hl41bJSS0J0/tnWUmVx0UT4vSt/cniAbFU9ARAiezefG49XGE
-   acx7Wywym25hnKghCfhpRsgfkzEKg/OL0PSU2yNyzXbykARJuBLDLxKxG
-   e4sPrUDsGVT2hgLbVh46FEJZkgea5zuK15yJh/7o7DURtTgjTvoRev7Gs
-   K1mqiMLHCX/yr+Vh4DxjFxBt90d+B9cXUjEkRf1dFNWPMHac7FDRGerC/
-   0ChTWGn4UjsIzNOoXfGr1XjbgfN5SMmuJbPaSm6W9/0baEJxqBatqgYRr
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="334052154"
-X-IronPort-AV: E=Sophos;i="5.98,234,1673942400"; 
-   d="scan'208";a="334052154"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2023 18:10:14 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10639"; a="1005000651"
-X-IronPort-AV: E=Sophos;i="5.98,234,1673942400"; 
-   d="scan'208";a="1005000651"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 04 Mar 2023 18:10:13 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pYdpE-0002VC-1h;
-        Sun, 05 Mar 2023 02:10:12 +0000
-Date:   Sun, 5 Mar 2023 10:09:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kalesh Singh <kaleshsingh@google.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, Fuad Tabba <tabba@google.com>
-Subject: arch/arm64/kvm/hyp/nvhe/stacktrace.c:46:6: warning: no previous
- prototype for 'kvm_nvhe_prepare_backtrace'
-Message-ID: <202303050938.aodeOdgp-lkp@intel.com>
+        Sat, 4 Mar 2023 21:10:47 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8518713D58;
+        Sat,  4 Mar 2023 18:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=3ZoSoAgAc45as1CbqRRfIYjrDgicK0h9/Eydc3y8CvI=; b=uL31q83onkyvAad/3/HrEjNKCF
+        Q/ch0bwsL0cHBeH6t9o2+jUxC2h8HCgZI/LXxuinBRAoVWnVCYgV6xsqom+okFRwpFHQhX/UEv/dN
+        NqobvNrRa4F1jk9282S6xqaRWr6ROxfsYwDGm0c0hYMI9LcQjBvIRWxehofrjp4ki3r8LvaUc+FRX
+        QOOcyiTIKlmU1xCZEfhsUrryeCOl3HcV2yy6EExlSG+1rHuWkxrV2N/SdNohdYFD/9lrjuABti8M4
+        80e3bfyd5AANlUga0YQ8UfpARuBHnlx0Ex4W9ThuI/075uHJxTvx7ADxMFxLHjCQuygoxCcamtfrP
+        VmNkyUXQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pYdpi-00E15l-21;
+        Sun, 05 Mar 2023 02:10:42 +0000
+Date:   Sun, 5 Mar 2023 02:10:42 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [git pull] VM_FAULT_RETRY fixes
+Message-ID: <ZAP6IvbWaNjPthCq@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalesh,
+The following changes since commit c9c3395d5e3dcc6daee66c6908354d47bf98cb0c:
 
-FYI, the error/warning still remains.
+  Linux 6.2 (2023-02-19 14:24:22 -0800)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b01fe98d34f3bed944a93bd8119fed80c856fad8
-commit: 879e5ac7b2e4db05799a905b5a07fc9e5dedf651 KVM: arm64: Prepare non-protected nVHE hypervisor stacktrace
-date:   7 months ago
-config: arm64-defconfig (https://download.01.org/0day-ci/archive/20230305/202303050938.aodeOdgp-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=879e5ac7b2e4db05799a905b5a07fc9e5dedf651
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 879e5ac7b2e4db05799a905b5a07fc9e5dedf651
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kvm/hyp/nvhe/ drivers/remoteproc/
+are available in the Git repository at:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303050938.aodeOdgp-lkp@intel.com/
+  git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-fixes
 
-All warnings (new ones prefixed by >>):
+for you to fetch changes up to caa82ae7ef52b7cf5f80a2b2fbcbdbcfd16426cc:
 
->> arch/arm64/kvm/hyp/nvhe/stacktrace.c:46:6: warning: no previous prototype for 'kvm_nvhe_prepare_backtrace' [-Wmissing-prototypes]
-      46 | void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+  openrisc: fix livelock in uaccess (2023-03-02 12:32:44 -0500)
 
+----------------------------------------------------------------
+VM_FAULT_RETRY fixes
 
-vim +/kvm_nvhe_prepare_backtrace +46 arch/arm64/kvm/hyp/nvhe/stacktrace.c
+Some of the page fault handlers do not deal with the following case
+correctly:
+	* handle_mm_fault() has returned VM_FAULT_RETRY
+	* there is a pending fatal signal
+	* fault had happened in kernel mode
+Correct action in such case is not "return unconditionally" - fatal
+signals are handled only upon return to userland and something like
+copy_to_user() would end up retrying the faulting instruction and
+triggering the same fault again and again.
 
-    36	
-    37	/*
-    38	 * kvm_nvhe_prepare_backtrace - prepare to dump the nVHE backtrace
-    39	 *
-    40	 * @fp : frame pointer at which to start the unwinding.
-    41	 * @pc : program counter at which to start the unwinding.
-    42	 *
-    43	 * Saves the information needed by the host to dump the nVHE hypervisor
-    44	 * backtrace.
-    45	 */
-  > 46	void kvm_nvhe_prepare_backtrace(unsigned long fp, unsigned long pc)
+What we need to do in such case is to make the caller to treat that
+as failed uaccess attempt - handle exception if there is an exception
+handler for faulting instruction or oops if there isn't one.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Over the years some architectures had been fixed and now are handling
+that case properly; some still do not.  This series should fix the
+remaining ones.
+
+Status:
+	m68k, riscv, hexagon, parisc: tested/acked by maintainers.
+	alpha, sparc32, sparc64: tested locally - bug has been
+reproduced on the unpatched kernel and verified to be fixed by
+this series.
+	ia64, microblaze, nios2, openrisc: build, but otherwise
+completely untested.
+
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+
+----------------------------------------------------------------
+Al Viro (10):
+      m68k: fix livelock in uaccess
+      riscv: fix livelock in uaccess
+      hexagon: fix livelock in uaccess
+      parisc: fix livelock in uaccess
+      alpha: fix livelock in uaccess
+      sparc: fix livelock in uaccess
+      ia64: fix livelock in uaccess
+      microblaze: fix livelock in uaccess
+      nios2: fix livelock in uaccess
+      openrisc: fix livelock in uaccess
+
+ arch/alpha/mm/fault.c      | 5 ++++-
+ arch/hexagon/mm/vm_fault.c | 5 ++++-
+ arch/ia64/mm/fault.c       | 5 ++++-
+ arch/m68k/mm/fault.c       | 5 ++++-
+ arch/microblaze/mm/fault.c | 5 ++++-
+ arch/nios2/mm/fault.c      | 5 ++++-
+ arch/openrisc/mm/fault.c   | 5 ++++-
+ arch/parisc/mm/fault.c     | 7 ++++++-
+ arch/riscv/mm/fault.c      | 5 ++++-
+ arch/sparc/mm/fault_32.c   | 5 ++++-
+ arch/sparc/mm/fault_64.c   | 7 ++++++-
+ 11 files changed, 48 insertions(+), 11 deletions(-)
