@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CC86AB1EA
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 20:37:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3C96AB1ED
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 20:47:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjCEThc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 14:37:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S229539AbjCETrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 14:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjCETh1 (ORCPT
+        with ESMTP id S229463AbjCETru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 14:37:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09DC216ADF
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 11:37:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FB6060B55
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 19:37:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 03F59C4339C;
-        Sun,  5 Mar 2023 19:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678045045;
-        bh=bUFkFfLJWJWV74RrQ/Eee3Ybj9CDZaE86ARA1IFoyYE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=Z3o+m0Mjfx7W2AN/g3kGtFUPELrskOeNcEs80H8lpUk3YsZyZUiNyYm6cRSU/8tUf
-         MnYqQFjhuDxKgFlvmaZOhsExgK8yvMB9zLg9Xe0HI/3XjN3YlAHkUZA7lnY+6/YIj/
-         0pxDb4AeMe8teqWBo6aaIsoP5OoZtP3ekqzJEDzg1UeFvaES3Qa14D/kemNf2kE/rX
-         hcQySEfmlcBxuAwJNUQtopTFx0gGKM5fVhwDID1KyvtWub4VDP8G1hHSaqMafXKu4k
-         O3XebUpaHwJTmkOMlvy8qfICDj1YqbYd9vv4B8eam7Bn28p5cVDmzyaYBmaVGcEoNP
-         QYrnYdS2iwzTQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E3A0CE68D22;
-        Sun,  5 Mar 2023 19:37:24 +0000 (UTC)
-Subject: Re: [GIT pull] x86/urgent for v6.3-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <167800644337.309766.13683413258889415288.tglx@xen13>
-References: <167800644191.309766.5757985605946414576.tglx@xen13> <167800644337.309766.13683413258889415288.tglx@xen13>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <167800644337.309766.13683413258889415288.tglx@xen13>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-urgent-2023-03-05
-X-PR-Tracked-Commit-Id: dd093fb08e8f8a958fec4eef36f9f09eac047f60
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7f9ec7d8169b5281eff2b907d8ffb1bf56045f73
-Message-Id: <167804504492.1860.1190810168147944920.pr-tracker-bot@kernel.org>
-Date:   Sun, 05 Mar 2023 19:37:24 +0000
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 5 Mar 2023 14:47:50 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF7011E85
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 11:47:48 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678045666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zPM3qYsnkHfVfSNugo+2iBRQXDGqlC/LOv4FLGuQneY=;
+        b=d5j1GhvO4uo4OpycFbDJxXWsar708dWcp6fGZHeXVWXJP4dZQ+CG8+6vcdtN95EcB3kiaB
+        pmMBusiHA76Xh3fBE5DqDjlvDSkuSdK5z767IEK0P9PryZ+43HCmTWdR5J4+mkDJ0kZyoX
+        sYGswe/CGvsAcSsfBt/hoDT84fNK/QRw5XO//VVnXL5im5Fwh9jR2ukWR6ukS0eoU84LZB
+        elmdI7mg2UrcrXcUymShbVYzRWHMrlKGBrTUDe3REocJVw9AkJtP+96Qe0UqBFiKyTcpKA
+        wOkFC4S3xigc5OKgDj+jHGKO3JWSBkvVk/Pw0l77wj/rmUXrdOI41IpbsQ2Igg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678045666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zPM3qYsnkHfVfSNugo+2iBRQXDGqlC/LOv4FLGuQneY=;
+        b=wpOPFF9vvvqzqvp+h0TreugLdCjoJqgL11KVq0lley7W18Y6cb1RaPMlUcZ4rGSN4bKhHP
+        O6WHghLP4iVlNPAg==
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: [GIT pull] irq/urgent for v6.3-rc1
+In-Reply-To: <CAHk-=whr2KrDkMnQ5pKKxn8nCD718ExKAmPE3TLxkWnjtj6OvA@mail.gmail.com>
+References: <167800644191.309766.5757985605946414576.tglx@xen13>
+ <CAHk-=whr2KrDkMnQ5pKKxn8nCD718ExKAmPE3TLxkWnjtj6OvA@mail.gmail.com>
+Date:   Sun, 05 Mar 2023 20:47:45 +0100
+Message-ID: <87ttyzhtem.ffs@tglx>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun,  5 Mar 2023 09:54:58 +0100 (CET):
+On Sun, Mar 05 2023 at 11:24, Linus Torvalds wrote:
+> On Sun, Mar 5, 2023 at 12:55=E2=80=AFAM Thomas Gleixner <tglx@linutronix.=
+de> wrote:
+>> ...
+>>  kernel/irq/msi.c            |   28 +++++++++++++++++++++++-----
+>>  kernel/irq/msi.c            |    9 ++++++---
+>>  8 files changed, 44 insertions(+), 15 deletions(-)
+>
+> Funky diffstat you have there, with the same file done twice. I get
+> (and would have expected)
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-urgent-2023-03-05
+Hrm.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7f9ec7d8169b5281eff2b907d8ffb1bf56045f73
+>  ...
+>  kernel/irq/msi.c            | 37 +++++++++++++++++++++++++++++--------
+>  7 files changed, 44 insertions(+), 15 deletions(-)
+>
+> instead.
 
-Thank you!
+That looks more correct. Let me see what my script zoo managed to get
+wrong this time.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+
+        tglx
