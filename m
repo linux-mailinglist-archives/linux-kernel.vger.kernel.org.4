@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34EBF6AB174
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 17:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A166AB17C
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 18:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjCEQ63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 11:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S229661AbjCERBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 12:01:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCEQ60 (ORCPT
+        with ESMTP id S229565AbjCERBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 11:58:26 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54A7CA2A
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 08:58:22 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id j8so162782ilf.4
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 08:58:22 -0800 (PST)
+        Sun, 5 Mar 2023 12:01:50 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD371423D
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 09:01:48 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id cf14so8261128qtb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 09:01:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1678035502;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aj+sCMCZSrVKo/Uw+s7aitBRb/4NWTM49sBMqERhEpg=;
-        b=Ani9WhXYsvqGrbaM/ZwAoURorj6hFZNvybfaw90UB54nZEMgAdiyUOU1PiNPtRGQRa
-         pj/lrqdmWvoC8qaZ28RSh1P0XlTwcNx8UTpfk6+2Nw0866SfRfwdqD4V0ysNB5yMhGBu
-         2txFv7UUfQkC5ZQCH4nQrcfgaI+XomU50F+vM=
+        d=linaro.org; s=google; t=1678035707;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VD7JJ18qbpCxrbn9PGOqAjymCnI3P0wfCvSjqvqIeqM=;
+        b=eEXjW8G+nV3xMb8Yq16SNLcbHkB54bf6uY8mfS6kWokKqMGRpIRq9Lna16N5OQZV/9
+         I9dH0MIKs6mO+6njcGrlYVpQ5dLG2m9QXW299nY7e8b0ig3W3v55nCwWVjzrAOiR7HrJ
+         ezWVW+yod3LB9sm3rDBMuoNGCynwUtY9cRnNjl6SPDeZV87uLpN+AXc2cCV6u86Fg9/2
+         YktS+xSYx2cemGy0tlR9wm4iUEJz+whW/26n4Kpp1a++DIfxRTdLlI7N5g8rigoD45PP
+         b8qnoCSq8WbigE9f+xN6pRNSHsNEFeTixU6c7Dlc5Omb9JoEPmSwpCeJGDqGQRTza+Sk
+         JGfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678035502;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aj+sCMCZSrVKo/Uw+s7aitBRb/4NWTM49sBMqERhEpg=;
-        b=A9fr0jRcgLN7bTHwf+xKEVeWgSPXnuw0cI5npYv2L21pUPR64aCTZgpDdirwY8dbUU
-         CKYp7t8nMNR1nQw8ZYNYlio3RxPi8bVwaS2RnBeP9AbHz3YHsGc3oOi/PDwEQuboe7Ww
-         m8bOfLDw1Dj4nnQJBTphZiAu20hh2TxPdSjy3xnqs8PLC58K4kbX++qhF8awkc4k+MdN
-         Xa/TEDPclUCtY+jjQUp7NU4J6tqrDCdznjRlqHRyR22Vyv4gkLcGiDS3ubcCHG3zUClg
-         HdgJFxpdozCQwiLP89Fqkcmc3zHvvJyQv8AExBUohwj8CkwooUTHN5CeyirNoZL2onXO
-         6U7A==
-X-Gm-Message-State: AO0yUKXvVZKgs6oEAHM413Gpop+8hJbdZOU3AXwDbn5mHSPfpD+JIs03
-        EN6LPEHkd5SW7W5Jq/c1I0jpFg==
-X-Google-Smtp-Source: AK7set+rwXEfKWTFcnCQMZXRHbEdVRTYlTfIugZqOftJv3Qt3HR7/P2Gcd3pkLvWzm380at8+xIWIQ==
-X-Received: by 2002:a05:6e02:1527:b0:317:e415:bc55 with SMTP id i7-20020a056e02152700b00317e415bc55mr8622126ilu.23.1678035501921;
-        Sun, 05 Mar 2023 08:58:21 -0800 (PST)
-Received: from [10.211.55.3] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id p17-20020a92da51000000b0031796c6d735sm2246671ilq.41.2023.03.05.08.58.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 08:58:21 -0800 (PST)
-Message-ID: <5d90b252-c650-9908-05d3-fbbfdf47aa38@ieee.org>
-Date:   Sun, 5 Mar 2023 10:58:19 -0600
+        d=1e100.net; s=20210112; t=1678035707;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VD7JJ18qbpCxrbn9PGOqAjymCnI3P0wfCvSjqvqIeqM=;
+        b=mxJfbCrRH6gr5r586DiIDJxnwbVT9WcyJh9SeJAIXsyYxK57usdFgvMLZivshx3pCB
+         EOFZ5Xkdb0bPjNCXuwMFrItSTR9rrTYkdu+Rp+lWDvAfaw3FNZEYA0y8RpqEoD+1l2Di
+         FLdQHVqgUWKkmgdeirrsmHEFmbCEDT0ebLw1E3iixtS2a2+5aGeIPVTElaGSxNXdbxHj
+         fM8gnUL8pM3ak0l+c0uedzW/VcrOOxsZDAlAGabn9lw8vTdJNKlExUqblgL1sp0pR30i
+         tPsHdpSteXPFe5nejxUAcAHXOJROfgO1SJP4UEJ7/oepgF+E7+rs0HVpGNvefzjWlo/j
+         6r4w==
+X-Gm-Message-State: AO0yUKUNuFTVHgc+94Vd6zOklPJoFdrtkL+DMnXSWuFhHeL6/KXpX/mm
+        e5Ju05OEv79sWmF0hF2z2QrqUpNvQVE1TeZQmBw=
+X-Google-Smtp-Source: AK7set8zLgDTip7qAPGC9c+Lz/VbeirSKDwP5NTYtUPVz2mt+9UnVj19xeKCr2LoQDjRA0SUYfdXjQ==
+X-Received: by 2002:ac8:7f4f:0:b0:3bd:16cf:2f17 with SMTP id g15-20020ac87f4f000000b003bd16cf2f17mr13769137qtk.53.1678035707583;
+        Sun, 05 Mar 2023 09:01:47 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id c6-20020ac81e86000000b003b9bb59543fsm5810423qtm.61.2023.03.05.09.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Mar 2023 09:01:46 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        techsupport@winsystems.com, pdemetrotion@winsystems.com,
+        quarium@gmail.com, jhentges@accesio.com, jay.dolan@accesio.com
+Subject: [PATCH v3 0/3] Migrate the PCIe-IDIO-24 and WS16C48 GPIO drivers to the regmap API
+Date:   Sun,  5 Mar 2023 12:01:31 -0500
+Message-Id: <cover.1678034378.git.william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net-next 2/6] net: ipa: kill gsi->virt_raw
-To:     Alex Elder <elder@linaro.org>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, caleb.connolly@linaro.org, mka@chromium.org,
-        evgreen@chromium.org, andersson@kernel.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230215195352.755744-1-elder@linaro.org>
- <20230215195352.755744-3-elder@linaro.org>
- <b0b2ae77-3311-34c8-d1a2-c6f30eca3f1e@intel.com>
- <c76bbb06-b6b0-8dae-965f-95e8af3634b6@linaro.org>
- <4c92160f-b2ea-c5ef-5647-6078ab47e518@intel.com>
- <a919afca-d33e-618d-5db3-17a08d90e8af@linaro.org>
-Content-Language: en-US
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <a919afca-d33e-618d-5db3-17a08d90e8af@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/17/23 7:04 AM, Alex Elder wrote:
-> On 2/17/23 5:57 AM, Alexander Lobakin wrote:
->>>> just devm_platform_ioremap_resource_byname() be used here for 
->>>> simplicity?
->>> Previously, virt_raw would be the "real" re-mapped pointer, and then
->>> virt would be adjusted downward from that.  It was a weird thing to
->>> do, because the result pointed to a non-mapped address.  But all uses
->>> of the virt pointer added an offset that was enough to put the result
->>> into the mapped range.
->>>
->>> The new code updates all offsets to account for what the adjustment
->>> previously did.  The test that got removed isn't necessary any more.
->> Yeah I got it, just asked that maybe you can now use
->> platform_ioremap_resource_byname() instead of
->> platform_get_resource_byname() + ioremap() :)
-> 
-> Sorry, I focused on the "devm" part and not this part.
-> Yes I like that, but let me do that as a follow-on
-> patch, and I think I can do it in more than this
-> spot (possibly three, but I have to look closely).
+Changes in v3:
+ - Drop map from set_type_config() parameter list; regmap can be passed
+   by irq_drv_data instead
+ - Adjust ws16c48_set_type_config() for parameter list
+ - Add mutex to prevent clobbering the COS_ENABLE register when masking
+   IRQ and setting their type configuration
+Changes in v2:
+ - Simplify PCIe-IDIO-24 register offset defines to remove superfluous
+   arithmetic
+ - Check for NULL pointer after chip->irq_drv_data allocation
+ - Set gpio_regmap drvdata and use gpio_regmap_get_drvdata() to get the
+   regmap in idio_24_reg_map_xlate()
 
-Looking at this today, the only OF functions that look up a
-resource and I/O remap it in one call are devm_*() variants.
-There is no platform_ioremap_resource_byname() function.
+The regmap API supports IO port accessors so we can take advantage of
+regmap abstractions rather than handling access to the device registers
+directly in the driver.
 
-One that's available is devm_platform_ioremap_resource_byname(),
-which could possibly be used in the two locations that call
-platform_get_resource_byname() followed by ioremap().
+A patch to pass irq_drv_data as a parameter for struct regmap_irq_chip
+set_type_config() is included. This is needed by the
+idio_24_set_type_config() and ws16c48_set_type_config() callbacks in
+order to update the type configuration on their respective devices.
 
-As I said earlier, if I were to use any devm_*() function
-calls the driver, I would want to convert *everything* to
-use devm_*() variants, and I have no plans to do that at
-this time.
+A patch to migrate the WS16C48 GPIO driver to the regmap API is included
+in this patchset due to its dependence on the struct regmap_irq_chip
+set_type_config() change.
 
-So I will not be implementing your suggestion.
+William Breathitt Gray (3):
+  regmap: Pass irq_drv_data as a parameter for set_type_config()
+  gpio: pcie-idio-24: Migrate to the regmap API
+  gpio: ws16c48: Migrate to the regmap API
 
-					-Alex
+ drivers/base/regmap/regmap-irq.c |   8 +-
+ drivers/gpio/Kconfig             |   6 +
+ drivers/gpio/gpio-pcie-idio-24.c | 709 ++++++++++++-------------------
+ drivers/gpio/gpio-ws16c48.c      | 566 +++++++++---------------
+ include/linux/regmap.h           |   6 +-
+ 5 files changed, 496 insertions(+), 799 deletions(-)
 
-> Thanks.
-> 
->                      -Alex
-> 
-> 
+
+base-commit: 4827aae061337251bb91801b316157a78b845ec7
+-- 
+2.39.2
 
