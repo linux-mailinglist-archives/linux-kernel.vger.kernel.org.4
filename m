@@ -2,42 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BCB6AAE4E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 06:28:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22FA16AAE50
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 06:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjCEF2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 00:28:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S229589AbjCEFas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 00:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjCEF2q (ORCPT
+        with ESMTP id S229489AbjCEFaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 00:28:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 633A8B45C;
-        Sat,  4 Mar 2023 21:28:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD276B808D5;
-        Sun,  5 Mar 2023 05:28:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093DFC433EF;
-        Sun,  5 Mar 2023 05:28:39 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH] LoongArch: Provide kernel fpu functions
-Date:   Sun,  5 Mar 2023 13:28:18 +0800
-Message-Id: <20230305052818.4030447-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Sun, 5 Mar 2023 00:30:46 -0500
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD11CD53A
+        for <linux-kernel@vger.kernel.org>; Sat,  4 Mar 2023 21:30:44 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R481e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vd5I5eW_1677994236;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vd5I5eW_1677994236)
+          by smtp.aliyun-inc.com;
+          Sun, 05 Mar 2023 13:30:41 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH] mm/page_alloc: avoid high-order page allocation warn with __GFP_NOFAIL
+Date:   Sun,  5 Mar 2023 13:30:35 +0800
+Message-Id: <20230305053035.1911-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,92 +42,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide kernel_fpu_begin()/kernel_fpu_end() to let the kernel use fpu
-itself. They can be used by AMDGPU graphic driver for DCN.
+My knowledge of this is somewhat limited, however, since vmalloc already
+supported __GFP_NOFAIL in commit 9376130c390a ("mm/vmalloc: add
+support for __GFP_NOFAIL").  __GFP_NOFAIL could trigger the following
+stack and allocate high-order pages when CONFIG_HAVE_ARCH_HUGE_VMALLOC
+is enabled:
 
-Reported-by: Xuerui Wang <kernel@xen0n.name>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+ __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2286
+ vm_area_alloc_pages mm/vmalloc.c:2989 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3057 [inline]
+ __vmalloc_node_range+0x978/0x13c0 mm/vmalloc.c:3227
+ kvmalloc_node+0x156/0x1a0 mm/util.c:606
+ kvmalloc include/linux/slab.h:737 [inline]
+ kvmalloc_array include/linux/slab.h:755 [inline]
+ kvcalloc include/linux/slab.h:760 [inline]
+ (codebase: Linux 6.2-rc2)
+
+Don't warn such cases since high-order pages with __GFP_NOFAIL is
+somewhat legel.
+
+Cc: Mel Gorman <mgorman@techsingularity.net>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 ---
- arch/loongarch/include/asm/fpu.h |  3 +++
- arch/loongarch/kernel/Makefile   |  2 +-
- arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+), 1 deletion(-)
- create mode 100644 arch/loongarch/kernel/kfpu.c
+ mm/page_alloc.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
-index 358b254d9c1d..192f8e35d912 100644
---- a/arch/loongarch/include/asm/fpu.h
-+++ b/arch/loongarch/include/asm/fpu.h
-@@ -21,6 +21,9 @@
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0745aedebb37..0618716c49df 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3822,12 +3822,6 @@ struct page *rmqueue(struct zone *preferred_zone,
+ {
+ 	struct page *page;
  
- struct sigcontext;
- 
-+extern void kernel_fpu_begin(void);
-+extern void kernel_fpu_end(void);
-+
- extern void _init_fpu(unsigned int);
- extern void _save_fp(struct loongarch_fpu *);
- extern void _restore_fp(struct loongarch_fpu *);
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index 78d4e3384305..9a72d91cd104 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
- obj-$(CONFIG_ACPI)		+= acpi.o
- obj-$(CONFIG_EFI) 		+= efi.o
- 
--obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
-+obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
- 
- obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
- 
-diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
-new file mode 100644
-index 000000000000..cd2a18fecdcc
---- /dev/null
-+++ b/arch/loongarch/kernel/kfpu.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/cpu.h>
-+#include <linux/init.h>
-+#include <asm/fpu.h>
-+#include <asm/smp.h>
-+
-+static DEFINE_PER_CPU(bool, in_kernel_fpu);
-+
-+void kernel_fpu_begin(void)
-+{
-+	if(this_cpu_read(in_kernel_fpu))
-+		return;
-+
-+	preempt_disable();
-+	this_cpu_write(in_kernel_fpu, true);
-+
-+	if (!is_fpu_owner())
-+		enable_fpu();
-+	else
-+		_save_fp(&current->thread.fpu);
-+}
-+EXPORT_SYMBOL_GPL(kernel_fpu_begin);
-+
-+void kernel_fpu_end(void)
-+{
-+	if(!this_cpu_read(in_kernel_fpu))
-+		return;
-+
-+	if (!is_fpu_owner())
-+		disable_fpu();
-+	else
-+		_restore_fp(&current->thread.fpu);
-+
-+	this_cpu_write(in_kernel_fpu, false);
-+	preempt_enable();
-+}
-+EXPORT_SYMBOL_GPL(kernel_fpu_end);
+-	/*
+-	 * We most definitely don't want callers attempting to
+-	 * allocate greater than order-1 page units with __GFP_NOFAIL.
+-	 */
+-	WARN_ON_ONCE((gfp_flags & __GFP_NOFAIL) && (order > 1));
+-
+ 	if (likely(pcp_allowed_order(order))) {
+ 		/*
+ 		 * MIGRATE_MOVABLE pcplist could have the pages on CMA area and
 -- 
-2.39.1
+2.24.4
 
