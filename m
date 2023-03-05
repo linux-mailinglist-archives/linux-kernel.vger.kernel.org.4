@@ -2,113 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C4A6AAE66
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 07:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979BF6AAE69
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 07:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbjCEGUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 01:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
+        id S229638AbjCEGUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 01:20:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjCEGT7 (ORCPT
+        with ESMTP id S229379AbjCEGUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 01:19:59 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD791689D;
-        Sat,  4 Mar 2023 22:19:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=mCw3qlccCZ7Fdqt9RrwRnLxZ5h4SPVaUk3+bNuEDCeI=; b=bgx+vLIQQuBBLQwTieomKaf79v
-        mJJBWybsH6QBtZkr8uKLrgxcPPGpBvsvJzeBcME2RanJfTpMuVPRZuTUfdCkYQWZvhaMVaWYl0e3q
-        pDqGxMP2I6X96DFvJdzSVFk63Rpne4xHqdh6ekUXVT4ojn4D5TOmGjdKpOE0h+QrpJdEtgUi3B4U5
-        Eakdc/YgytpC3m5Iz3Rd0JEU4M0bEi4gZ2xugLpcXzDFFGRFqS2KyuFYTIWkSJHAxSPXvkR8KYsgz
-        jPUEbqIMkC0bu9rwgdfUeYKf9iTOX4lQJ0rLgh38q2igWeAaMIsnUE4djdx0jFG2aMmZhUuWDYUgJ
-        m1GxfuOA==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pYhis-009sQB-2V; Sun, 05 Mar 2023 06:19:54 +0000
-Message-ID: <0fbd4e90-17de-fb1f-1b1a-7578a34ce386@infradead.org>
-Date:   Sat, 4 Mar 2023 22:19:53 -0800
+        Sun, 5 Mar 2023 01:20:52 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893B1168A3;
+        Sat,  4 Mar 2023 22:20:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18A0B60AB2;
+        Sun,  5 Mar 2023 06:20:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7651AC433AE;
+        Sun,  5 Mar 2023 06:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1677997250;
+        bh=NXUx35r8E2F5/ovSer3FHXGfQg1/8K2vxVgkKH2WPdw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ul2SFKnxMh2EQbC251FQx40O1RZEJmSLMNVDAiC8CDYXTRemiQhFeFQwHk6R7BeL3
+         d8VapBMez/6GsdrEHxtB0wZre5f4RjIBWPYUskQjf1B23/9H7C6CAwBycWNgvvCCeM
+         fKifQUTceuir/A56T6ipQz/JaPwY3vVd4YtU3fej/ZVt5dlrLCCnjS0bK9ReMgixoZ
+         bmHHp5uhYmYrbYYDEI/QLuqL78yUOVAoTzicnzwGXjLsK07AjI+yBCZePfq9/xZiGW
+         DG69PW4M0IrID5XUoZcQnePJMfNzLw9Efw3/0ZnfP/YjvxLuRfQOGnHktFno6aZios
+         y7zNsfSZ/7WCw==
+Received: by mail-oi1-f173.google.com with SMTP id e21so4843777oie.1;
+        Sat, 04 Mar 2023 22:20:50 -0800 (PST)
+X-Gm-Message-State: AO0yUKUGJBxSXnVnBJktjWYN6UVf+/vtUO7FNPgTr6NwnaRV9phAr7M4
+        aXERPtG2XT321ntGmwDxgwZwyGrG8lyrBx3RgPY=
+X-Google-Smtp-Source: AK7set/p8ALnhWz6u0J/k9USI6xuZBnEzTTyCo33EYtP2sBmWcza7zH4UDMaAGyHPcqfn6v1LTrLRK+yqJ/w6l5lt7I=
+X-Received: by 2002:a05:6808:8d7:b0:384:65af:e554 with SMTP id
+ k23-20020a05680808d700b0038465afe554mr2166536oij.1.1677997249545; Sat, 04 Mar
+ 2023 22:20:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] menuconfig: delete shadows, reclaim vertical space
-Content-Language: en-US
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <94a94ef4-9d55-4293-8363-3c0243eceae1@p183>
- <d01112c2-b5a4-4aa3-4ee7-711abc9da079@infradead.org>
- <1c28155c-6931-432c-8308-c9b3638e3202@p183>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1c28155c-6931-432c-8308-c9b3638e3202@p183>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230301075402.4578-1-quic_johmoo@quicinc.com> <20230301075402.4578-3-quic_johmoo@quicinc.com>
+In-Reply-To: <20230301075402.4578-3-quic_johmoo@quicinc.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 5 Mar 2023 15:20:13 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQUgr0rrJv8ZvPKfyC8zZ1XX-Wv2Npw4iJXDGor=HSKyQ@mail.gmail.com>
+Message-ID: <CAK7LNAQUgr0rrJv8ZvPKfyC8zZ1XX-Wv2Npw4iJXDGor=HSKyQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] docs: dev-tools: Add UAPI checker documentation
+To:     John Moon <quic_johmoo@quicinc.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Todd Kjos <tkjos@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Giuliano Procida <gprocida@google.com>,
+        kernel-team@android.com, libabigail@sourceware.org,
+        Jordan Crouse <jorcrous@amazon.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 1, 2023 at 4:54=E2=80=AFPM John Moon <quic_johmoo@quicinc.com> =
+wrote:
+>
+> Add detailed documentation for scripts/check-uapi.sh.
+> ---
+>  Documentation/dev-tools/checkuapi.rst | 258 ++++++++++++++++++++++++++
+>  Documentation/dev-tools/index.rst     |   1 +
+>  2 files changed, 259 insertions(+)
+>  create mode 100644 Documentation/dev-tools/checkuapi.rst
+>
+> diff --git a/Documentation/dev-tools/checkuapi.rst b/Documentation/dev-to=
+ols/checkuapi.rst
+> new file mode 100644
+> index 000000000000..2255066658e3
+> --- /dev/null
+> +++ b/Documentation/dev-tools/checkuapi.rst
+> @@ -0,0 +1,258 @@
+> +.. SPDX-License-Identifier: GPL-2.0-only
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +UAPI Checker
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +The UAPI checker (scripts/check-uapi.sh) is a shell script which checks =
+UAPI
+> +header files for userspace backwards-compatibility across the git tree.
+> +
+> +The script can produce false positives in some cases, so developers are
 
 
-On 3/4/23 10:54, Alexey Dobriyan wrote:
-> On Sat, Mar 04, 2023 at 09:56:08AM -0800, Randy Dunlap wrote:
->> Hi,
->>
->> On 3/4/23 08:55, Alexey Dobriyan wrote:
->>> Menuconfig has lots of vertical space wasted: on my system there are
->>> 17 lines of useful information about config options and 14 lines of
->>> useless fluff: legend, horizontal separators and shadows.
->>>
->>> Sitation is even worse on smaller terminals because fixed vertical lines
->>> do not go away, but config option lines do decreasing informational
->>> density even more.
->>>
->>> Delete shadows and increase menu size to reclaim vertical space.
->>>
->>> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
->>> ---
->>>
->>>  scripts/kconfig/lxdialog/checklist.c |    2 --
->>>  scripts/kconfig/lxdialog/dialog.h    |    1 -
->>>  scripts/kconfig/lxdialog/inputbox.c  |    2 --
->>>  scripts/kconfig/lxdialog/menubox.c   |    6 ++----
->>>  scripts/kconfig/lxdialog/textbox.c   |    2 --
->>>  scripts/kconfig/lxdialog/util.c      |   22 ----------------------
->>>  scripts/kconfig/lxdialog/yesno.c     |    2 --
->>>  7 files changed, 2 insertions(+), 35 deletions(-)
->>>
->>
->> This patch works for me, but since the right side shadow is
->> also being removed, the one column (width) that it had
->> occupied might as well be used (reclaimed) instead of just
->> going to waste.
-> 
-> Horizontal space is not really important because monitors are wider
-> than taller and our config option descriptions are quite short.
+and false negatives too.
 
-Yeah, but there is no reason not to reclaim the one horizontal column.
-This does it for me: (lightly tested)
 
-diff -- a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
---- a/scripts/kconfig/lxdialog/menubox.c
-+++ b/scripts/kconfig/lxdialog/menubox.c
-@@ -184,7 +184,7 @@ do_resize:
- 		return -ERRDISPLAYTOOSMALL;
- 
- 	height -= 2;
--	width  -= 5;
-+	width  -= 4;
- 	menu_height = height - 10;
- 
 
-We might also be able to reduce the length of menu_instructions[]
-and put more of it into the other Help text if that interests you.
 
--- 
-~Randy
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
