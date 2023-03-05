@@ -2,139 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DEC6AAFA6
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 13:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47D66AAFAA
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 13:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbjCEMx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 07:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50994 "EHLO
+        id S229556AbjCEM4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 07:56:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCEMx1 (ORCPT
+        with ESMTP id S229455AbjCEM4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 07:53:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B498CC2E
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 04:52:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678020759;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=vQQ0uYBPxRhMjlBoHSkG7kjvkj++lGtvOQg+vNT+2wk=;
-        b=ep0dNilsfrDK5tUBFz+UF7bgtaSWJ/rYWtk9E+9fkCW0AvhNi5Ep7ZBAAXQictHl3jH6uL
-        3Sga/b1OmuDPMCEVqgUKkzV03nQSh5rGIYaw2YcFyu4vie1Rf+zbZXQARdNoIlHNrsBqv2
-        v9azCkU/3X/XWxSIyD3P8kIj8n8x6IQ=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-502-SvnZDXiLMjujIZQ8okvo3A-1; Sun, 05 Mar 2023 07:52:35 -0500
-X-MC-Unique: SvnZDXiLMjujIZQ8okvo3A-1
-Received: by mail-qk1-f199.google.com with SMTP id ea22-20020a05620a489600b00742cec04043so4030256qkb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 04:52:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678020754;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        Sun, 5 Mar 2023 07:56:48 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2155F10AB5
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 04:56:47 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id cf14so7795927qtb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 04:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678021006;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vQQ0uYBPxRhMjlBoHSkG7kjvkj++lGtvOQg+vNT+2wk=;
-        b=UKBm4Ay0ncaWoBpQ3K+QWMrNxPmZYVoE/EdfVYfXG/19+RhMIOdhP4C6MEeSCFVVpp
-         Eziy2mkQljsqEvdW3w4XTW7bYH0S8j8DlQU96oMFc2ADlaH6jFNxpCZR2Om+8Xu17lbl
-         bEsfdIrurg2zW5LjpQRhkBx0fKbrhpaSpji3Ngf88BOMrHzoUS6japxYeBb3ZemRiW9O
-         P04Hkiv+aE2tLaSQui5hwjoYP/g6pXT6xbc9lqMy4e1x0I+CxGfPk1aqGp50ogZezY6s
-         d75p579Ews3BeXDzfzZUyKkYdoPtfjjS3u5kqvvkVmjrU4ALKfCy9AvptPjVak3mx0Br
-         oFrg==
-X-Gm-Message-State: AO0yUKV26aCP1+rQbjy/gCTtBqhY0ifrBFv0a4arKE/jMEN5aJVnKlzu
-        iL7nZsN5FCuWm1bFglLp7GubEy0C2ERAbmegEr/jG+2DwRhbGYCxKD7kg2KnXjM10r0+E9S/rLN
-        wUciWXMwr5cUdcMF0w3oDlTBR
-X-Received: by 2002:a05:622a:5d2:b0:3b9:a5d8:2c50 with SMTP id d18-20020a05622a05d200b003b9a5d82c50mr12269839qtb.38.1678020754030;
-        Sun, 05 Mar 2023 04:52:34 -0800 (PST)
-X-Google-Smtp-Source: AK7set+W7zKVuSVvPa9kOsfNu2XMxPKYssuDIr6jC6Wd16rob9HdjLdX/3AcHy4wLZTo1nMeA5PdoQ==
-X-Received: by 2002:a05:622a:5d2:b0:3b9:a5d8:2c50 with SMTP id d18-20020a05622a05d200b003b9a5d82c50mr12269819qtb.38.1678020753790;
-        Sun, 05 Mar 2023 04:52:33 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id a3-20020ac86103000000b003b63dfad2b4sm5681344qtm.0.2023.03.05.04.52.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Mar 2023 04:52:32 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, jiapeng.chong@linux.alibaba.com,
-        aurabindo.pillai@amd.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] drm/amd/display: change several dcn30 variables storage-class-specifier to static
-Date:   Sun,  5 Mar 2023 07:52:26 -0500
-Message-Id: <20230305125226.1953574-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        bh=o2XDFrZbN2R3QrerdWbI2vAM5IjvoYd3LrvKIPWNBMM=;
+        b=DwcsnVM/0wvDSVFvwkJg7MMwygBOl3ma1cPtNzXr1XVib4DICM6ylSyldpxox7oQe3
+         QKajr5oX3v27f7YG4mlZYCSon9P7tfFcgclzhhjbenClPZ3daN7aV68XhGtu1hWazAeA
+         wwSaWoosO4HCblQpg+mfiZ6c21tAiZtOr+jr8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678021006;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o2XDFrZbN2R3QrerdWbI2vAM5IjvoYd3LrvKIPWNBMM=;
+        b=X37cZhF0IQwD4idSeTh09iDgC35juPmY39fZHLVel434vAPH5WpmvS5rq0jVSmA5R8
+         2xqY3HjmtBSM3PibUHcr029IHlR9BMAjnJECFlzNu1vB2wPJZjg77gk/q43Kb/PRpdln
+         7cIgxKsFbXXGY5PzQxerYS/IJ/mohFB9T706tM3SJzqS3729CRmtEGMma9S/FcTp9Bg4
+         +QcvkRBbSPb1jVuBNGb8XLKjubdJFXXB0TO0xo9Zp1vCJnHyJTKyUFs8tXo4+moIOgx/
+         kHVHVG0fYqDdxjOVDNdFElzMZ4ifLjo7iWhkn8L+cwCNLbI94P0fv3NcrztqmmGCVwz6
+         RLmA==
+X-Gm-Message-State: AO0yUKUilRrfw3vy/LZfXbW2PVbVw713rBI1QwdPXMoKGVh+IJWFyJkU
+        uixNp/+mXKH+plhCYI1vul3r5w==
+X-Google-Smtp-Source: AK7set96BMq3T6wQESxMr1hZ3PhBGzTnQewXdFI8luRoOSNMaoCJgqBzLjJv6DBKWxzKI70C3m24sw==
+X-Received: by 2002:ac8:7f87:0:b0:3bf:daae:7ee6 with SMTP id z7-20020ac87f87000000b003bfdaae7ee6mr12426886qtj.18.1678021006206;
+        Sun, 05 Mar 2023 04:56:46 -0800 (PST)
+Received: from smtpclient.apple ([2600:1005:b003:394d:acb0:58:f50c:218b])
+        by smtp.gmail.com with ESMTPSA id q25-20020a37f719000000b007343fceee5fsm5486765qkj.8.2023.03.05.04.56.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Mar 2023 04:56:45 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH 13/13] rcu/kvfree: Eliminate k[v]free_rcu() single argument macro
+Date:   Sun, 5 Mar 2023 07:56:33 -0500
+Message-Id: <D8B84631-860B-41CF-8311-88E220C7254F@joelfernandes.org>
+References: <ZAR//FKO4syzapk6@pc636>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+In-Reply-To: <ZAR//FKO4syzapk6@pc636>
+To:     Uladzislau Rezki <urezki@gmail.com>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports these similar problems in dcn30
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_dwb.c:223:25:
-  warning: symbol 'dcn30_dwbc_funcs' was not declared. Should it be static?
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_mmhubbub.c:214:28:
-  warning: symbol 'dcn30_mmhubbub_funcs' was not declared. Should it be static?
-drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_mpc.c:1402:24:
-  warning: symbol 'dcn30_mpc_funcs' was not declared. Should it be static?
 
-All of these are only used in their definition file, so they should be static
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c      | 2 +-
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c | 2 +-
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c      | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+> On Mar 5, 2023, at 6:41 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
+>=20
+> =EF=BB=BF
+>>=20
+>>>> On Mar 5, 2023, at 5:29 AM, Joel Fernandes <joel@joelfernandes.org> wro=
+te:
+>>>=20
+>>> =EF=BB=BFHi, All,
+>>>=20
+>>>> On Wed, Feb 1, 2023 at 10:11=E2=80=AFAM Uladzislau Rezki (Sony)
+>>>> <urezki@gmail.com> wrote:
+>>>>=20
+>>>> For a single argument invocations a new kfree_rcu_mightsleep()
+>>>> and kvfree_rcu_mightsleep() macroses are used. This is done in
+>>>> order to prevent users from calling a single argument from
+>>>> atomic contexts as "_mightsleep" prefix signals that it can
+>>>> schedule().
+>>>>=20
+>>>=20
+>>> Since this commit in -dev branch [1] suggests more users still need
+>>> conversion, let us drop this single patch for 6.4 and move the rest of
+>>> the series forward? Let me know if you disagree.
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/co=
+mmit/?h=3Ddev&id=3D9bf5e3a2626ed474d080f695007541b6ecd6e60b
+>>>=20
+>>> All -- please supply Ack/Review tags for patches 1-12.
+>>=20
+>> Or put another way, what is the transition plan for these remaining users=
+?
+>>=20
+>> I am getting on a plane right now but I can research which users are rema=
+ining later.
+>>=20
+> I am not sure. I think we can cover it on the meeting.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c
-index f14f69616692..0d98918bf0fc 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c
-@@ -220,7 +220,7 @@ void dwb3_set_denorm(struct dwbc *dwbc, struct dc_dwb_params *params)
- }
- 
- 
--const struct dwbc_funcs dcn30_dwbc_funcs = {
-+static const struct dwbc_funcs dcn30_dwbc_funcs = {
- 	.get_caps		= dwb3_get_caps,
- 	.enable			= dwb3_enable,
- 	.disable		= dwb3_disable,
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c
-index 7a93eff183d9..6f2a0d5d963b 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c
-@@ -211,7 +211,7 @@ static void mmhubbub3_config_mcif_arb(struct mcif_wb *mcif_wb,
- 	REG_UPDATE(MCIF_WB_ARBITRATION_CONTROL, MCIF_WB_CLIENT_ARBITRATION_SLICE,  params->arbitration_slice);
- }
- 
--const struct mcif_wb_funcs dcn30_mmhubbub_funcs = {
-+static const struct mcif_wb_funcs dcn30_mmhubbub_funcs = {
- 	.warmup_mcif		= mmhubbub3_warmup_mcif,
- 	.enable_mcif		= mmhubbub2_enable_mcif,
- 	.disable_mcif		= mmhubbub2_disable_mcif,
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c
-index ad1c1b703874..6cf40c1332bc 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c
-@@ -1399,7 +1399,7 @@ static void mpc3_set_mpc_mem_lp_mode(struct mpc *mpc)
- 	}
- }
- 
--const struct mpc_funcs dcn30_mpc_funcs = {
-+static const struct mpc_funcs dcn30_mpc_funcs = {
- 	.read_mpcc_state = mpc1_read_mpcc_state,
- 	.insert_plane = mpc1_insert_plane,
- 	.remove_mpcc = mpc1_remove_mpcc,
--- 
-2.27.0
+Cool, thanks.
 
+> My feeling is
+> that, we introduced "_mightsleep" macros first and after that try to
+> convert users.
+
+One stopgap could be to add a checkpatch error if anyone tries to use old AP=
+I,
+and then in the meanwhile convert all users.
+Though, that requires people listening to checkpatch complaints.
+
+Thanks,
+
+ - Joel
+
+
+>=20
+> @Paul what is your view?
+>=20
+> Thanks!
+>=20
+> --
+> Uladzislau Rezki
