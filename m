@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774EB6AB2E6
+	by mail.lfdr.de (Postfix) with ESMTP id C260F6AB2E7
 	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 23:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjCEWMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 17:12:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S229884AbjCEWMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 17:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjCEWLw (ORCPT
+        with ESMTP id S229892AbjCEWLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 17:11:52 -0500
+        Sun, 5 Mar 2023 17:11:53 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E171ABDD
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 14:11:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A841B56C
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 14:11:44 -0800 (PST)
 Received: from workpc.. (unknown [109.252.117.89])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CE5BE6602135;
-        Sun,  5 Mar 2023 22:11:39 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 88FF366021D4;
+        Sun,  5 Mar 2023 22:11:41 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678054301;
-        bh=fVk7ULP0XC5kyqZM3H+xYM25NxHnpt8PzEVejSWgv/E=;
+        s=mail; t=1678054303;
+        bh=TDFrhbBWF0ucqm92sCbpy3xDfts2RbHE70GCYFDMUb4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JsnbIjI+xhKYZkBCAiWYyqQ8yz0r3tVTzsGaXEvG2rKnUMBoq/mvpZCp8zzlCsTXK
-         JcDRAqab5tU5l/Icxqcul/JKGeFdwxeKJszoeu/0n782qbeoZTAb+JM3RKr0VhFG+r
-         XG1yuua2/PCbpDsUJBa3duTHw5H21EUv3nXzJnc8BefLwRe+yVw/6JkLNSGUQpN3NQ
-         27gKSocysh9Bbadd7d8rm7lt+LPuJzVrfspKhSeMv10DyPGIjanMzb5+ZFC6MOPp6x
-         ANDK4GPCKhGtQxBAfpD4wUnEBu/cKOhTij+O2EElFGhlxhtIUgwfBxWEYDo5bKcdhS
-         7p0dmTvBD25OQ==
+        b=byw/5vK60u75qY454Bl72GHjzJj560DDhYFhFQJ5C9TD11PhDfK0rtHAUmAFkjZWP
+         7+oVbeqeK4tgi5eKXmjQ//WhIs+oDsV96QiXmJaoHE28AXYD+yX9z63+DuMg1lT2DM
+         kUv7VMU2lbpQz5rp3SOBewLDOQGfSRc2u/AJwP3LyhDSzgMT7FT6U3M0NNjueAcjNx
+         I8Fk/Bgghohi6d21sbTGUQ7ghMN5W1Sn6qW3nYx0QQ+voCaKdZE/eC5UgdhDo4kJrq
+         gvZVpqElKgvpxbfzWKoUyejlE3/s7UYlp7rj4Q6WlS0hBzL1NsJ48gKu2BWr8aIVsM
+         jkTxVu9Wfrd+A==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     David Airlie <airlied@gmail.com>,
         Gerd Hoffmann <kraxel@redhat.com>,
@@ -52,9 +52,9 @@ To:     David Airlie <airlied@gmail.com>,
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         kernel@collabora.com, virtualization@lists.linux-foundation.org,
         intel-gfx@lists.freedesktop.org
-Subject: [PATCH v12 08/11] drm/shmem-helper: Export drm_gem_shmem_get_pages_sgt_locked()
-Date:   Mon,  6 Mar 2023 01:10:08 +0300
-Message-Id: <20230305221011.1404672-9-dmitry.osipenko@collabora.com>
+Subject: [PATCH v12 09/11] drm/gem: Export drm_gem_pin/unpin()
+Date:   Mon,  6 Mar 2023 01:10:09 +0300
+Message-Id: <20230305221011.1404672-10-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230305221011.1404672-1-dmitry.osipenko@collabora.com>
 References: <20230305221011.1404672-1-dmitry.osipenko@collabora.com>
@@ -69,48 +69,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export drm_gem_shmem_get_pages_sgt_locked() that will be used by virtio-gpu
-shrinker during GEM swap-in operation done under the held reservation lock.
+Export drm_gem_un/pin() functions. They will be used by VirtIO-GPU driver
+for pinning of an active framebuffer, preventing it from swapping out by
+memory shrinker.
 
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/gpu/drm/drm_gem_shmem_helper.c | 3 ++-
- include/drm/drm_gem_shmem_helper.h     | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/drm_gem.c      | 2 ++
+ drivers/gpu/drm/drm_internal.h | 2 --
+ include/drm/drm_gem.h          | 3 +++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-index b814352aae33..b79e74c72b65 100644
---- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-+++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-@@ -849,7 +849,7 @@ struct sg_table *drm_gem_shmem_get_sg_table(struct drm_gem_shmem_object *shmem)
+diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+index 3da34b121c93..6492c47b7142 100644
+--- a/drivers/gpu/drm/drm_gem.c
++++ b/drivers/gpu/drm/drm_gem.c
+@@ -1153,12 +1153,14 @@ int drm_gem_pin(struct drm_gem_object *obj)
+ 	else
+ 		return 0;
  }
- EXPORT_SYMBOL_GPL(drm_gem_shmem_get_sg_table);
++EXPORT_SYMBOL(drm_gem_pin);
  
--static struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_object *shmem)
-+struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_object *shmem)
+ void drm_gem_unpin(struct drm_gem_object *obj)
  {
- 	struct drm_gem_object *obj = &shmem->base;
- 	int ret;
-@@ -887,6 +887,7 @@ static struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_
- 	drm_gem_shmem_put_pages(shmem);
- 	return ERR_PTR(ret);
+ 	if (obj->funcs->unpin)
+ 		obj->funcs->unpin(obj);
  }
-+EXPORT_SYMBOL_GPL(drm_gem_shmem_get_pages_sgt_locked);
++EXPORT_SYMBOL(drm_gem_unpin);
  
- /**
-  * drm_gem_shmem_get_pages_sgt - Pin pages, dma map them, and return a
-diff --git a/include/drm/drm_gem_shmem_helper.h b/include/drm/drm_gem_shmem_helper.h
-index e99f1715514b..61aaacc6cb99 100644
---- a/include/drm/drm_gem_shmem_helper.h
-+++ b/include/drm/drm_gem_shmem_helper.h
-@@ -144,6 +144,7 @@ void drm_gem_shmem_purge(struct drm_gem_shmem_object *shmem);
+ int drm_gem_vmap(struct drm_gem_object *obj, struct iosys_map *map)
+ {
+diff --git a/drivers/gpu/drm/drm_internal.h b/drivers/gpu/drm/drm_internal.h
+index d7e023bbb0d5..55d0ee7475f7 100644
+--- a/drivers/gpu/drm/drm_internal.h
++++ b/drivers/gpu/drm/drm_internal.h
+@@ -173,8 +173,6 @@ void drm_gem_release(struct drm_device *dev, struct drm_file *file_private);
+ void drm_gem_print_info(struct drm_printer *p, unsigned int indent,
+ 			const struct drm_gem_object *obj);
  
- struct sg_table *drm_gem_shmem_get_sg_table(struct drm_gem_shmem_object *shmem);
- struct sg_table *drm_gem_shmem_get_pages_sgt(struct drm_gem_shmem_object *shmem);
-+struct sg_table *drm_gem_shmem_get_pages_sgt_locked(struct drm_gem_shmem_object *shmem);
+-int drm_gem_pin(struct drm_gem_object *obj);
+-void drm_gem_unpin(struct drm_gem_object *obj);
+ int drm_gem_vmap(struct drm_gem_object *obj, struct iosys_map *map);
+ void drm_gem_vunmap(struct drm_gem_object *obj, struct iosys_map *map);
  
- void drm_gem_shmem_print_info(const struct drm_gem_shmem_object *shmem,
- 			      struct drm_printer *p, unsigned int indent);
+diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+index 7bd8e2bbbb36..f7703cb66569 100644
+--- a/include/drm/drm_gem.h
++++ b/include/drm/drm_gem.h
+@@ -493,4 +493,7 @@ unsigned long drm_gem_lru_scan(struct drm_gem_lru *lru,
+ 
+ int drm_gem_evict(struct drm_gem_object *obj);
+ 
++int drm_gem_pin(struct drm_gem_object *obj);
++void drm_gem_unpin(struct drm_gem_object *obj);
++
+ #endif /* __DRM_GEM_H__ */
 -- 
 2.39.2
 
