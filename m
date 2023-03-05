@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E67A6AAFBF
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:00:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8726AAFC5
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjCENAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 08:00:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56144 "EHLO
+        id S229737AbjCENAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 08:00:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjCENAD (ORCPT
+        with ESMTP id S229662AbjCENAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 08:00:03 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781BD12BF7
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 05:00:01 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id k10so4092749edk.13
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 05:00:01 -0800 (PST)
+        Sun, 5 Mar 2023 08:00:04 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9129012F2A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 05:00:02 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id cw28so28010852edb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 05:00:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678021200;
+        d=linaro.org; s=google; t=1678021201;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fFfz+uU4iWi4U+HUbSDcz5V28QAKSpXo5fhqvwVadow=;
-        b=n+SD7hNb6xKs/p7kZz7hBJYUhMEh+LeBOXsrBYTNSfm9LClYyNOa5YBThUmGUQbxhI
-         SRZ9A6Q1VyHaEb8UH5LYRvKT/fzmRKIdiTKGRvPosL4dXpOSE85qqOZIjIokNzhqk1K7
-         4Cch4MO/gqZyWmJavzWEPOp6LH0yiyOsXOUS/5RUtYezMkxgOYcwoZmTHkJjFQeyUX/d
-         vTZryVZNTurr3JN/dcL76e0FnI71nQ+jx44d9FG6etU33WPR/t8PCnj8SqXvQeNBQDY1
-         u52CaX+R0iVF8EeCJuJm6fQDFcKtptpY/yS6uKpIZOaAwiS9CdTmb7P/QJc+K9qVKYGK
-         hISw==
+        bh=YCq0CnvrYsIMiWt62VoCpfQmqZyRKFVCNg+apqdqte0=;
+        b=ReQvG03vS2ZnHS4/Ql+V+luSbXLj92jDZH/kjhK1A+W8hxdidz6+lsZXtH076gnon7
+         cUGRcD6tIULchnK5AJlciPVvLjpEqGFtXvsK/1qLP5Hru87LOqmthYGLg2JQQ5UoNVWn
+         OEeI/HlOYF+JSTrSXNBjyQdiT0VuMYGT4Z+cosK5XXtlORaFBmePYCx+FFaWZKo/x4WG
+         6RoVAg/HxdhEvmKb9cpOzCt5qJfKgm07hDWtmJAG3PRJiDXSObGBhwrmaX+/9EDnQfs5
+         NWMnms+PH3/ZKjNxa3PIFB2Ab+qzwLZrzkthop+SwIJSnfDHBue1vxePui6zmS6/FdVw
+         WPbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678021200;
+        d=1e100.net; s=20210112; t=1678021201;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fFfz+uU4iWi4U+HUbSDcz5V28QAKSpXo5fhqvwVadow=;
-        b=7GA83kNxNM5RsKGaw/VwfN2tJSY9ZpNxBsRq1SwYH0yozX9FrLz5niDL+lJYW1KJHy
-         ZpswOTKe9beSNXGOvBBq+puisqMASQH2SPjuRdUnCOMIJ+7PuNiSmdsoQMTh3ZdPT1J0
-         bUMtaAERuePxYe3KTDcZQLnHLc252MdKUGbu8VcvhiMplq6NSJPDNfNzJoJHxl2HPwwJ
-         VPD0b7+ENo4WD8Z71EzZKAoOY3K5LR26+jl3pjE47TYsx3VOlRJ5ppMMR1/KXKthJX4B
-         lrnXRfNhoRaFUXKSN2qoMU0YGKsjPyUc1ztfOqvJC+NwVqZ4AHUAZaKPeKZJd8uKs9NU
-         CeUA==
-X-Gm-Message-State: AO0yUKU7uv7HcbMjwQM7sdPs43tL1qYWdJ2/XPvZqtEAW4Kym6KUmvsA
-        agYxGu25afINhCrcmfmDkRmhpg==
-X-Google-Smtp-Source: AK7set+2w8/+auLbf7kER/xyHrNTh34MJznRznyCSBH92LnJWx4qIVDaQZtUVPalbYr1pM1lsloYeQ==
-X-Received: by 2002:a17:907:20aa:b0:878:814d:bc99 with SMTP id pw10-20020a17090720aa00b00878814dbc99mr7571116ejb.66.1678021199977;
-        Sun, 05 Mar 2023 04:59:59 -0800 (PST)
+        bh=YCq0CnvrYsIMiWt62VoCpfQmqZyRKFVCNg+apqdqte0=;
+        b=q1Y6yTn62fgwkUr96uUX58ODeBb6MsnyVooEpOtO1S0cHpxs3n+aU4VZIorXM4wcud
+         ua+lQUpsaH42BFq/NfiYd6Ssq9DQWu2IiU15gk5fuMkt0xZ8AwpfbRqeszNhz/tFn8+f
+         6yzFexeln4DJscQtwzRKL3KtSXcezVn6ajduL6n/nZ55DTH1RJpAOx8+ywBXWOWYI3bv
+         qGjPqetQwSPFYL3sCpstgIUCCfTs60YQgsdeqmmWacf4qYm2VsT2yMqhoUPlPVScmKxa
+         66NhmVkGDvcJ9/tv3UHxSQ3u8jaM9yqhP04UWz56SGAbiYD8+RlIZDyoum5pqB5rXJ7S
+         J9lw==
+X-Gm-Message-State: AO0yUKV5OOapnKpiOR2dVQMXchXqaRbd5nd25US1nOdlTTcTIgO1POrl
+        bdJljzSX9E8oU7XYsfY5QvhUog==
+X-Google-Smtp-Source: AK7set/zMWIWpXlRSnQG2tOUnDsvKX/QBMvNpc4TClh/pEA/pcN7ExBzPddLP3KXLi4Yo+xmPdsDIQ==
+X-Received: by 2002:aa7:d88c:0:b0:4ab:4c36:463c with SMTP id u12-20020aa7d88c000000b004ab4c36463cmr8019708edq.16.1678021200939;
+        Sun, 05 Mar 2023 05:00:00 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:71e7:13d:1c29:505f])
-        by smtp.gmail.com with ESMTPSA id l15-20020a170906078f00b008ea8effe947sm3193158ejc.225.2023.03.05.04.59.58
+        by smtp.gmail.com with ESMTPSA id l15-20020a170906078f00b008ea8effe947sm3193158ejc.225.2023.03.05.05.00.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Mar 2023 04:59:59 -0800 (PST)
+        Sun, 05 Mar 2023 05:00:00 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -62,9 +62,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 04/11] arm64: dts: qcom: sdm845-db845c: drop SPI label
-Date:   Sun,  5 Mar 2023 13:59:47 +0100
-Message-Id: <20230305125954.209559-4-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 05/11] arm64: dts: qcom: apq8096-db820c: drop SPI label
+Date:   Sun,  5 Mar 2023 13:59:48 +0100
+Message-Id: <20230305125954.209559-5-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230305125954.209559-1-krzysztof.kozlowski@linaro.org>
 References: <20230305125954.209559-1-krzysztof.kozlowski@linaro.org>
@@ -82,22 +82,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The SPI controller nodes do not use/allow label property:
 
-  sdm845-db845c.dtb: spi@888000: Unevaluated properties are not allowed ('label' was unexpected)
+  apq8096-db820c.dtb: spi@7575000: Unevaluated properties are not allowed ('label' was unexpected)
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/qcom/apq8096-db820c.dts | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-index d4866feef2c4..acd4f9ca6c09 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
-@@ -819,7 +819,6 @@ can@0 {
+diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+index eb18811b2676..842836ed680a 100644
+--- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
++++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
+@@ -146,7 +146,6 @@ &blsp1_i2c3 {
  
- &spi2 {
+ &blsp1_spi1 {
  	/* On Low speed expansion */
 -	label = "LS-SPI0";
+ 	status = "okay";
+ };
+ 
+@@ -183,7 +182,6 @@ &blsp2_i2c1 {
+ 
+ &blsp2_spi6 {
+ 	/* On High speed expansion */
+-	label = "HS-SPI1";
  	status = "okay";
  };
  
