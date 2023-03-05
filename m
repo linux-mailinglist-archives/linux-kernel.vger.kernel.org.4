@@ -2,206 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548086AAF73
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 13:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9001F6AAF78
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 13:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjCEMTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 07:19:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S229669AbjCEMW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 07:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjCEMTN (ORCPT
+        with ESMTP id S229555AbjCEMW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 07:19:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC05E07F;
-        Sun,  5 Mar 2023 04:19:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B79DD60A54;
-        Sun,  5 Mar 2023 12:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18100C433A0;
-        Sun,  5 Mar 2023 12:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678018751;
-        bh=eaCWuGYM9w2VikIC3ptHBvXxP1mOVgZ4wreQHD81Uxs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sibKS33VbRqkU21P3oHklXd8gYnm0+bd2m5OWXY1IiKAZzvXD9Ocgk1VQAC0SVAZO
-         zesHPuha5GAInx110yVLuYJnQ3hE0aeu1IfaPuV5y+MEJxnNYFo5fJqVDKjdit6PtY
-         fWb8K7uy2NrAa766LzELwt+RPpBELMVEJcqyC3AhV72X2A1SNh3FqD2pf6v5D0Di0Z
-         HjcqALi/rUzkx6wNZy7+pRb88SHV05JssascfrqBrpV5hYVB4X09YhXKCG8tSiHf5R
-         dLQ43zT+C/6cYjFSF2k3VBh5aMWDElHAQsWAL+0LiqaeKON8QmxzuID5z3I29u6dz0
-         79oPHPiLzvIzQ==
-Received: by mail-ed1-f50.google.com with SMTP id i34so27749000eda.7;
-        Sun, 05 Mar 2023 04:19:11 -0800 (PST)
-X-Gm-Message-State: AO0yUKW1w1+2nl68bdpfzQNQ3S99h8eHGI746fbRGuCIa1n7otvLUhvD
-        ANmS/Fc5exP3IjGQsRah0SopO/ywCWf38k2vTg0=
-X-Google-Smtp-Source: AK7set9HpSqnBuNpG80A12biEE3obOYDBysgdv7zsSl6uIn/ixbsWEZFTSp5H3jXGZIX4xtaGv3ccl3ST0qpDr2RNu8=
-X-Received: by 2002:a17:906:d041:b0:87b:da7a:f202 with SMTP id
- bo1-20020a170906d04100b0087bda7af202mr3308431ejb.1.1678018749262; Sun, 05 Mar
- 2023 04:19:09 -0800 (PST)
+        Sun, 5 Mar 2023 07:22:56 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA85A19B9;
+        Sun,  5 Mar 2023 04:22:54 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id z42so6853149ljq.13;
+        Sun, 05 Mar 2023 04:22:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678018973;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fxa3JSdBjR11ggW+4GvWfjNtDCdDCa14Je0bJ6V+ye0=;
+        b=MGVCQe3n1eOH7uafvXwqLYaGUe9gMVE32oAwU0R6AgYkBJ32ZyhE8JL85rBXS+uWtM
+         tkvBv8Ws4Ie8eGx/TgOXaf0aPbvERmzggWBBbi9RLgQzZ38KsNqCbveeAN6gYPezW2px
+         zgbmKjaWVNbjDXAVsuYbeQf1UrSuQYJo8aLu6ZHQxFTa6dC06M2crkeFmd6Udao6sScE
+         XPyJuvyYUl8RKCjfl6XGHR6yNSvHBsepZnHCGo6Ushwl3MXbJF8xPo+WcVI/krDWAfNu
+         fgN74n/22IIWVBkYV9FEha+mNohQU+VtjlksLGMM43+96lGX/evJRABAZ5+eVIcq1X6Z
+         rfKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678018973;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fxa3JSdBjR11ggW+4GvWfjNtDCdDCa14Je0bJ6V+ye0=;
+        b=6DJrTsNz6tPYE3wtAnk8GkqcgU2BbHrh2t3bjgXMe2dnKyicsUp92rkninL/uRT8QO
+         QCTK3E9D44oOwh27l4x9O/5MUbNB7QrJmi2AG4IDCDHtd8GOSvyqp3PiRPMz/2SQ9kkD
+         zWqLLBlOAhSROZe8S6fNnn1A324gCXfa6a5HQIj5s8Zr9q+JLWAkP/m/uvkiLB5HOLt6
+         LSwlISm+VtQrvmzVockaZZIwFtnlhLtVkVhSEr2qAOZMnbG7DBBRzTMY5b/eZvPY5rfY
+         nKKkdqpVV6lGZ4prilf/RVE5PtguYXFgD9HrIxPBLpF0Ye/gc7E5gvIo3r2a42JehKgl
+         tO3A==
+X-Gm-Message-State: AO0yUKW1fOvMNsgWeP8qt1fiW6/BFpz1Jjgm9NgdgZ1bEgtnJG/2wgsI
+        ua6Prz0SPwYvqB1O9PBIFEg=
+X-Google-Smtp-Source: AK7set/3S6rVVdv63wz55P4MryjwzL61IpmXOF+dG4AmBan/kGNyis3Ixuouanc4XgBPrbJMNSnDAg==
+X-Received: by 2002:a2e:9011:0:b0:295:a96d:66fa with SMTP id h17-20020a2e9011000000b00295a96d66famr1832146ljg.20.1678018972655;
+        Sun, 05 Mar 2023 04:22:52 -0800 (PST)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id p8-20020a2e9ac8000000b0029353201fddsm1249539ljj.129.2023.03.05.04.22.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Mar 2023 04:22:52 -0800 (PST)
+Message-ID: <c16d372f-a122-16d6-ad08-1fbffb01d9ff@gmail.com>
+Date:   Sun, 5 Mar 2023 14:22:51 +0200
 MIME-Version: 1.0
-References: <20230305052818.4030447-1-chenhuacai@loongson.cn> <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
-In-Reply-To: <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 5 Mar 2023 20:18:54 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
-Message-ID: <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Provide kernel fpu functions
-To:     WANG Xuerui <kernel@xen0n.name>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+References: <cover.1677750859.git.mazziesaccount@gmail.com>
+ <874d59be98703bb58a98fea72138de5b94d71a52.1677750859.git.mazziesaccount@gmail.com>
+ <20230304201720.2d554f07@jic23-huawei>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v2 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
+In-Reply-To: <20230304201720.2d554f07@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Xuerui,
+On 3/4/23 22:17, Jonathan Cameron wrote:
+> On Thu, 2 Mar 2023 12:58:59 +0200
+> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> 
+>> +/*
+>> + * The BU27034 does not have interrupt or any other mechanism of triggering
+>> + * the data read when measurement has finished. Hence we poll the VALID bit in
+>> + * a thread. We will try to wake the thread BU27034_MEAS_WAIT_PREMATURE_MS
+>> + * milliseconds before the expected sampling time to prevent the drifting. Eg,
+>> + * If we constantly wake up a bit too late we would eventually skip a sample.
+> 
+> Lazier approach would be to just sent the sampling frequency at twice the
+> expected frequency and you'll never miss a sample unless you the wake up is
+> delayed massively for some reason.  Particularly 'fresh' data might not matter
+> enough that half a cycle late is a problem.
 
-On Sun, Mar 5, 2023 at 1:53=E2=80=AFPM WANG Xuerui <kernel@xen0n.name> wrot=
-e:
->
-> On 3/5/23 13:28, Huacai Chen wrote:
-> > Provide kernel_fpu_begin()/kernel_fpu_end() to let the kernel use fpu
-> > itself. They can be used by AMDGPU graphic driver for DCN.
->
-> Grammar nit: "itself" is wrongly placed. "allow the kernel itself to use
-> FPU" could be better.
->
-> Also the expected usage is way broader than a single driver's single
-> component. It's useful for a wide array of operations that will benefit
-> from SIMD acceleration support that'll hopefully appear later. For now
-> I'd suggest at least adding a single "e.g." after "used by" to signify
-> this, if you're not rewording the sentence.
-OK, I will update it.
+Hmm. Do I read this right - You suggest we drop the polling loop for 
+valid bit and just always sleep for int_time / 2 if data was not valid?
 
->
-> >
-> > Reported-by: Xuerui Wang <kernel@xen0n.name>
-> Thanks, but I prefer my name spelled in the native word order ;-)
-OK, I will correct it.
+I don't know. That would probably make the time-stamps for buffered 
+results to be jumping quite a bit - especially with the longer 
+integration times.
 
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >   arch/loongarch/include/asm/fpu.h |  3 +++
-> >   arch/loongarch/kernel/Makefile   |  2 +-
-> >   arch/loongarch/kernel/kfpu.c     | 41 +++++++++++++++++++++++++++++++=
-+
-> >   3 files changed, 45 insertions(+), 1 deletion(-)
-> >   create mode 100644 arch/loongarch/kernel/kfpu.c
-> >
-> > diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/=
-asm/fpu.h
-> > index 358b254d9c1d..192f8e35d912 100644
-> > --- a/arch/loongarch/include/asm/fpu.h
-> > +++ b/arch/loongarch/include/asm/fpu.h
-> > @@ -21,6 +21,9 @@
-> >
-> >   struct sigcontext;
-> >
-> > +extern void kernel_fpu_begin(void);
-> > +extern void kernel_fpu_end(void);
-> > +
-> >   extern void _init_fpu(unsigned int);
-> >   extern void _save_fp(struct loongarch_fpu *);
-> >   extern void _restore_fp(struct loongarch_fpu *);
-> > diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Mak=
-efile
-> > index 78d4e3384305..9a72d91cd104 100644
-> > --- a/arch/loongarch/kernel/Makefile
-> > +++ b/arch/loongarch/kernel/Makefile
-> > @@ -13,7 +13,7 @@ obj-y               +=3D head.o cpu-probe.o cacheinfo=
-.o env.o setup.o entry.o genex.o \
-> >   obj-$(CONFIG_ACPI)          +=3D acpi.o
-> >   obj-$(CONFIG_EFI)           +=3D efi.o
-> >
-> > -obj-$(CONFIG_CPU_HAS_FPU)    +=3D fpu.o
-> > +obj-$(CONFIG_CPU_HAS_FPU)    +=3D fpu.o kfpu.o
-> >
-> >   obj-$(CONFIG_ARCH_STRICT_ALIGN)     +=3D unaligned.o
-> >
-> > diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.=
-c
-> > new file mode 100644
-> > index 000000000000..cd2a18fecdcc
-> > --- /dev/null
-> > +++ b/arch/loongarch/kernel/kfpu.c
-> > @@ -0,0 +1,41 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-> > + */
-> > +
-> > +#include <linux/cpu.h>
-> > +#include <linux/init.h>
-> > +#include <asm/fpu.h>
-> > +#include <asm/smp.h>
-> > +
-> > +static DEFINE_PER_CPU(bool, in_kernel_fpu);
-> > +
-> > +void kernel_fpu_begin(void)
-> > +{
-> > +     if(this_cpu_read(in_kernel_fpu))
-> > +             return;
-> Could be a conditional WARN_ON_ONCE like in arch/x86?
-> > +
-> > +     preempt_disable();
-> > +     this_cpu_write(in_kernel_fpu, true);
-> > +
-> > +     if (!is_fpu_owner())
-> > +             enable_fpu();
-> > +     else
-> > +             _save_fp(&current->thread.fpu);
-> > +}
-> > +EXPORT_SYMBOL_GPL(kernel_fpu_begin);
->
-> Might be good to provide some explanation in the commit message as to
-> why the pair of helpers should be GPL-only. Do they touch state buried
-> deep enough to make any downstream user a "derivative work"? Or are the
-> annotation inspired by arch/x86?
-Yes, just inspired by arch/x86, and I don't think these symbols should
-be used by non-GPL modules.
+>> + * And because the sleep can't wake up _exactly_ at given time this would be
+>> + * inevitable even if the sensor clock would be perfectly phase-locked to CPU
+>> + * clock - which we can't say is the case.
+>> + *
+>> + * This is still fragile. No matter how big advance do we have, we will still
+>> + * risk of losing a sample because things can in a rainy-day skenario be
+>> + * delayed a lot. Yet, more we reserve the time for polling, more we also lose
+>> + * the performance by spending cycles polling the register. So, selecting this
+>> + * value is a balancing dance between severity of wasting CPU time and severity
+>> + * of losing samples.
+>> + *
+>> + * In most cases losing the samples is not _that_ crucial because light levels
+>> + * tend to change slowly.
+>> + */
+>> +#define BU27034_MEAS_WAIT_PREMATURE_MS	5
+>> +#define BU27034_DATA_WAIT_TIME_US	1000
+>> +#define BU27034_TOTAL_DATA_WAIT_TIME_US (BU27034_MEAS_WAIT_PREMATURE_MS * 1000)
+> 
+>> +static const struct iio_chan_spec bu27034_channels[] = {
+>> +	{
+>> +		.type = IIO_LIGHT,
+>> +		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
+>> +				      BIT(IIO_CHAN_INFO_SCALE),
+> 
+> What is this scale for?
 
-Huacai
->
-> I think this kinda needs more thought, because similar operations like
-> arm's kernel_neon_{begin,end}, powerpc's enable_kernel_{fp,vsx,altivec}
-> or s390's __kernel_fpu_{begin,end} are not made GPL-only. Making these
-> helpers GPL-only precludes any non-GPL module to make use of SIMD on
-> LoongArch, which may or may not be what you want. This can have
-> commercial consequences so I can only leave the decision to you.
-> (Although IMO the semantics are encapsulated and high-level enough to
-> not warrant GPL-only marks, but it may well be the case that you have
-> thought of something else but didn't mention here.)
->
-> > +
-> > +void kernel_fpu_end(void)
-> > +{
-> > +     if(!this_cpu_read(in_kernel_fpu))
-> > +             return;
-> > +
-> > +     if (!is_fpu_owner())
-> > +             disable_fpu();
-> > +     else
-> > +             _restore_fp(&current->thread.fpu);
-> > +
-> > +     this_cpu_write(in_kernel_fpu, false);
-> > +     preempt_enable();
-> > +}
-> > +EXPORT_SYMBOL_GPL(kernel_fpu_end);
->
-> --
-> WANG "xen0n" Xuerui
->
-> Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
->
+The scale is to inform users that we return data using milli lux.
+
+> Given the channel is computed from various different inputs, is there a
+> clear definition of how it is scaled?  What does a write to it mean?
+
+Nothing. writing anything else but milli lux scale fails with -EINVAL.
+
+I guess I am doing something in an unusual way here :) Do you have a 
+suggestion for me?
+
+
+>> +			/*
+>> +			 * As Jonathan put it, if caller requests for
+> 
+> Probably don't reference me directly in a driver.  Keep the 'blame' for the
+> email threads :)  Comment is fine otherwise.
+
+Okay, okay :) I just liked the expression and didn't want to take the 
+credit for it ;)
+
+>> +
+>> +	/*
+>> +	 * The new integration time can be supported while keeping the scale of
+>> +	 * channels intact by tuning the gains.
+> 
+> This comment is in a path that is hit event if we go through the warnings
+> above that say this isn't true.
+
+Oh! Valid point! This changed when I allowed gain to be changed - need 
+to drop the comment. Thanks!
+
+>> +
+>> +static int bu27034_calc_lux(struct bu27034_data *data, __le16 *res, int *val)
+> 
+> As you are going to put it in the buffer, make val a fixed size integer.
+> The current approach of calculate in an int and copy to a u32 is a bit nasty.
+> Of course if there is a chance of a large enough value you'll have to be careful
+> for the unsigned to signed conversion on 32 bit platforms. I doubt there is, but
+> a comment saying why not would be great in the code that is hit from read_raw()
+
+This same ..._calc_lux() is used also from the read_raw. I'd rather keep 
+this using ints so there would be no need for involving u32 in 
+read_raw() path. However, you are correct in that the current calling 
+from buffered read where we pass pointer to u32 here - is nasty. I'll 
+add temporary int in the calling function there, and add casting with a 
+comment when storing value to scan.lux. Thanks for pointing this out! 
+There was also missing an error return problem - see below.
+
+>> +
+>> +	if (d1_d0_ratio_scaled < 87)
+>> +		*val = bu27034_fixp_calc_lx(ch0, ch1, gain0, gain1, meastime, 0);
+>> +	else if (d1_d0_ratio_scaled < 100)
+>> +		*val = bu27034_fixp_calc_lx(ch0, ch1, gain0, gain1, meastime, 1);
+>> +	else
+>> +		*val = bu27034_fixp_calc_lx(ch0, ch1, gain0, gain1, meastime, 2);
+>> +
+
+The bu27034_fixp_calc_lx() might return -EINVAL - which we missed here. 
+I'll fix also this one.
+
+>> +
+>> +	case IIO_CHAN_INFO_PROCESSED:
+>> +		if (chan->type != IIO_LIGHT)
+>> +			return -EINVAL;
+>> +
+>> +		/* Don't mess with measurement enabling while buffering */
+>> +		ret = iio_device_claim_direct_mode(idev);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		mutex_lock(&data->mutex);
+> 
+> See below. I would factor out the rest of this so that you can
+> unconditionally unlock and then check the return value.
+
+Yes. moving measurement start/stop in bu27034_get_lux() makes this much 
+nicer. I wonder how I didn't see that myself - thanks.
+
+>> +
+>> +	ret = regmap_read(regmap, BU27034_REG_SYSTEM_CONTROL, &part_id);
+> 
+> As it's not all of the register I'd rename the temporary variable to
+> val or reg or something along those lines.
+
+I still like having the variable named part_id - as it makes the check 
+obvious. What I did was adding another temporary variable 'reg' and doing:
+
+part_id = FIELD_GET(BU27034_MASK_PART_ID, reg);
+
+and then using the part_id in if() and dev_warn().
+
+> 
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "Failed to access sensor\n");
+>> +
+>> +	part_id &= BU27034_MASK_PART_ID;
+> 
+> FIELD_GET() even when it's lower bits as then there is no need for
+> a reviewer to confirm that it is the lower bits.
+> Then you can just do
+> 
+> 	if (FIELD_GET(BU27034_MASK_PART_ID, reg) != BU27034_ID)
+> 
+>> +
+>> +	if (part_id != BU27034_ID)
+>> +		dev_warn(dev, "unsupported device 0x%x\n", part_id);
+> 
+> I'd adjust that to "unknown device" or "unrecognised device" as it might
+> well be supported just fine based on the compatible fallback, we just have
+> no way of knowing if it is.
+> 
+
+Hmm. Won't promise but maybe I have the time to finish v3 tonight. We 
+can then continue discussions towards the v4 :)
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
