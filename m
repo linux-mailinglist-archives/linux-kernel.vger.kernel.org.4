@@ -2,134 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5DD6AAFF5
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D7B6AAFF3
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCENmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 08:42:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53948 "EHLO
+        id S229700AbjCENhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 08:37:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCENme (ORCPT
+        with ESMTP id S229757AbjCENhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 08:42:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE2212840
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 05:41:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678023706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=HEd4Z20qHewy4816S06cVIYXHbFUi/GbntWDJMKAj40=;
-        b=VMmdIeenlu/o1NfIpB9mXcrrVHIGf0lBAV4lkbpcPE9t9DIL+g7536FhXPCiosQOOZxEhu
-        uslcmOwYWxF8kIg0XflbgMN4sjOSfRWrN3b8YNigIdk6xwVk7ATbRLyALB+N3yY16FFUZI
-        h7t/sZZoOdrU1901YByTtqNbQx6H9L8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-558--pV2x-S5NLK2R9p0DNh-wg-1; Sun, 05 Mar 2023 08:41:43 -0500
-X-MC-Unique: -pV2x-S5NLK2R9p0DNh-wg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EEB34800B23;
-        Sun,  5 Mar 2023 13:41:42 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B673D401B290;
-        Sun,  5 Mar 2023 13:41:42 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 48C48401A1D9F; Sun,  5 Mar 2023 10:41:23 -0300 (-03)
-Message-ID: <20230305134053.711640642@redhat.com>
-User-Agent: quilt/0.67
-Date:   Sun, 05 Mar 2023 10:37:09 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Christoph Lameter <cl@linux.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH v4 12/12] mm/vmstat: refresh stats remotely instead of via work item
-References: <20230305133657.255737580@redhat.com>
+        Sun, 5 Mar 2023 08:37:17 -0500
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E5812862
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 05:37:15 -0800 (PST)
+Received: by mail-qt1-x843.google.com with SMTP id c18so7889955qte.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 05:37:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678023434;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rPhVajQXAHXiBtIhnC6tYfEPxdRwtoGcOTVFE1WWvNs=;
+        b=CJDMjHa7Gf8S49yjyg0g4Cs5oYyKflnAYbThXeImkioxieh3iv7lZh7fBsf7whDcqd
+         +hfxgE/3MIawdSqiYew7rRxW7bTYDp8AccJCLsuWYEgwNhppDxNOXe6VsW2qqBH51LLj
+         Q7xiyiKE13fPHEHtevpZ2TfDJvtZaFWYukJWvDi3Gq1nSoCoVw4s14a9TxGxbgsF7Xk4
+         B8hpGlMb2ixnfvN0Vo47D/MAUfI8WeM4AqI8dMeJC3bZAp8aDN2VeO8tGfQdlv4bbB6O
+         LH29cxVQw1MJEK0UrO8JnceJH4diKuUN+gEnaVHWssTw4rrODdPoZ9uW/RwtPGMcsr4T
+         cJ3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678023434;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rPhVajQXAHXiBtIhnC6tYfEPxdRwtoGcOTVFE1WWvNs=;
+        b=2sHsrnz0rlI8VqIoW7m1cQUe7QStS4pNPgkIFEOhfOqo8prEdbyBBi/9BIiTwHrjwl
+         K0K9kV6q2Imvf/uTDC772UnyeacpCDdaE4a02Oy+kDsYEvpt6F7c0aer9MTMKDiqzS7Z
+         1zZhAaBugEbDWbUbV8pAKqvUizw5a7ZpjIGllwJMHVfDywuoUbJB/wGcPTw9OxisdFDa
+         H5YyRISgZID76se3h1M9LUtY9J0oOqpA9zC48SxnSETosJrjKpEAaVamBRLbQ/Hofxo2
+         Dg51x+rFNMxgue/kb/Qb6KIn6sgDivuqMseExRX1wNbWkYFvTfdU+ZoQM2LRC/QCsEO3
+         CHkQ==
+X-Gm-Message-State: AO0yUKX+5zpRCKhUOI0XCpMYTdlQOsoFVaC2v4RahKW6tmehRSLhhwC5
+        AZh8RAO6XYsjKuBqLqusmhrQz1/TEAhmOb9ei9g=
+X-Google-Smtp-Source: AK7set9gwa+7pdU/M/u2bz7oKmXd++Dr/sEA7f4cQHO6VS6zHD6dJXND79Y1onEZ9uEqsKzY0mcZrE00Q8IJts/gzN4=
+X-Received: by 2002:ac8:4117:0:b0:3bf:f401:37e5 with SMTP id
+ q23-20020ac84117000000b003bff40137e5mr2198717qtl.13.1678023434471; Sun, 05
+ Mar 2023 05:37:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ac8:66d9:0:b0:3bf:b9d4:c139 with HTTP; Sun, 5 Mar 2023
+ 05:37:14 -0800 (PST)
+Reply-To: ava014708@gmail.com
+From:   Dr Ava Smith <ava19910ava@gmail.com>
+Date:   Sun, 5 Mar 2023 14:37:14 +0100
+Message-ID: <CAE1P5ofHZ5-UELvu=dkChm9K-hTL=2c6uvYZVmat_EuYDnFdPw@mail.gmail.com>
+Subject: Hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:843 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.7077]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [ava19910ava[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [ava014708[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refresh per-CPU stats remotely, instead of queueing 
-work items, for the stat_refresh procfs method.
+-- 
 
-This fixes sosreport hang (which uses vmstat_refresh) with
-spinning SCHED_FIFO process.
-
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
-
-Index: linux-vmstat-remote/mm/vmstat.c
-===================================================================
---- linux-vmstat-remote.orig/mm/vmstat.c
-+++ linux-vmstat-remote/mm/vmstat.c
-@@ -1860,11 +1860,21 @@ static DEFINE_PER_CPU(struct delayed_wor
- int sysctl_stat_interval __read_mostly = HZ;
- 
- #ifdef CONFIG_PROC_FS
-+
-+#ifdef CONFIG_HAVE_CMPXCHG_LOCAL
-+static int refresh_all_vm_stats(void);
-+#else
- static void refresh_vm_stats(struct work_struct *work)
- {
- 	refresh_cpu_vm_stats();
- }
- 
-+static int refresh_all_vm_stats(void)
-+{
-+	return schedule_on_each_cpu(refresh_vm_stats);
-+}
-+#endif
-+
- int vmstat_refresh(struct ctl_table *table, int write,
- 		   void *buffer, size_t *lenp, loff_t *ppos)
- {
-@@ -1886,7 +1896,7 @@ int vmstat_refresh(struct ctl_table *tab
- 	 * transiently negative values, report an error here if any of
- 	 * the stats is negative, so we know to go looking for imbalance.
- 	 */
--	err = schedule_on_each_cpu(refresh_vm_stats);
-+	err = refresh_all_vm_stats();
- 	if (err)
- 		return err;
- 	for (i = 0; i < NR_VM_ZONE_STAT_ITEMS; i++) {
-@@ -2006,7 +2016,7 @@ static DECLARE_DEFERRABLE_WORK(shepherd,
- 
- #ifdef CONFIG_HAVE_CMPXCHG_LOCAL
- /* Flush counters remotely if CPU uses cmpxchg to update its per-CPU counters */
--static void vmstat_shepherd(struct work_struct *w)
-+static int refresh_all_vm_stats(void)
- {
- 	int cpu;
- 
-@@ -2016,7 +2026,12 @@ static void vmstat_shepherd(struct work_
- 		cond_resched();
- 	}
- 	cpus_read_unlock();
-+	return 0;
-+}
- 
-+static void vmstat_shepherd(struct work_struct *w)
-+{
-+	refresh_all_vm_stats();
- 	schedule_delayed_work(&shepherd,
- 		round_jiffies_relative(sysctl_stat_interval));
- }
-
-
+Hello Dear,
+how are you today? I hope you are fine
+My name is Dr. Ava Smith, I Am an English and French nationality.
+I will give you pictures and more details about me as soon as I hear from you
+Thanks
+Ava
