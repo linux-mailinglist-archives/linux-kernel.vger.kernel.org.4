@@ -2,132 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9616AAF03
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 11:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 576166AAF08
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 11:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjCEKYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 05:24:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
+        id S229669AbjCEK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 05:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjCEKYo (ORCPT
+        with ESMTP id S229495AbjCEK3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 05:24:44 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5135DE3A8;
-        Sun,  5 Mar 2023 02:24:43 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id c3so7615690qtc.8;
-        Sun, 05 Mar 2023 02:24:43 -0800 (PST)
+        Sun, 5 Mar 2023 05:29:20 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12BD302
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 02:29:18 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id z42so6688797ljq.13
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 02:29:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678011882;
+        d=joelfernandes.org; s=google; t=1678012157;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cqMINr6iQSeskbEpBS6bkpmue99yioMBFhLHh7sxvHs=;
-        b=NHHME9OYNe5qcDM7ezj/qgLYaateTVLfjHc0wFx7pHAn58Ixrtyw4RJ3pfnWlhov6P
-         +4L082borw06qmOc9/qfCNhmQORt1+phuwHStY3VxL9ECAE5zIkX2LI/nipPYActtZFC
-         ZW9sThVZJ0MdHpR5EPqxqQPY7KkW+u5tThtSeZoteiahhRRIkVywiGeNwOYMQoeLozn3
-         dyDf56mqCDxPG9dS7J0tk++jeYaYL6jO0e19e4EIZlUC467VsPFwZqlFcqB+RoqSQWD3
-         9EvTVENGSqeis7wTglZSA38fA3EihOwVgDoYrCYvybakxOqIUmi+Kf0dG9aR+oQEL29l
-         bW2g==
+        bh=bzkzPKjLjmcIIk+MXeDNFz8SlV10tGBtTo3+SDfOWQ0=;
+        b=Lt+13Q44DHx4wQTpK09D4hVuLpRv9ubsVbqbBVuHOItnLRqBRs+MPYPTdyBVau1Pxs
+         jFBd/orrXfd0AYH5C5Fq6orWxbQIxtYbdO5hmM0t9Wsvt0RwQvOE0+w0XdXnaV+3BsWD
+         E7Mwi1w8/ao5HWnsXoYqH94ThgzGYHhwkRkL0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678011882;
+        d=1e100.net; s=20210112; t=1678012157;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cqMINr6iQSeskbEpBS6bkpmue99yioMBFhLHh7sxvHs=;
-        b=LAjNqQARWXtmBt52dN5qPAzrOcAkIJ48qs7u3mBrLqKh3kU3RxHpHKr9V0rsQWgKkZ
-         cypkJ++KlUsFwCPrLJ7tt2s1v/L1U+57DozNsTSu4KEdVtww1S274x52JBsMj3GPwe/B
-         Gxqx0igN/8f1x6RZvvgcPk+dCvpuuHa7o6DTG1m+GQHR0nC66x53cybMbTmhfjznsOXM
-         jHXnd8QDeK7nkg3HsPtz81lx5rZRw+4aQsPnzuPe/Hfw2iLRzDnRh/LGZ6Athx1mKbTz
-         dP3zCqAYWj0kbtdTW2xb5V/6O5BZUC5U0cw7mnxJnqkUmEvvhE74KgD2wyqvyp9LL8rM
-         191A==
-X-Gm-Message-State: AO0yUKV0D+VClE3i1VXVg+CalrDEgpfXsK9DRCV5Do/a9GzsTGrFVZja
-        3sTzMFfg68bnHphv87nunsS/H+fnuoudeJewdDI=
-X-Google-Smtp-Source: AK7set+dBxXSlIEGi6EDukdzbUkI+kB8AePqzhPv7tgQhbrKr02somGK3IPoQy8PAOjVOz8rniLhFAoZuKRl1uB7VKg=
-X-Received: by 2002:ac8:56f6:0:b0:3bf:d993:f353 with SMTP id
- 22-20020ac856f6000000b003bfd993f353mr2249036qtu.7.1678011882326; Sun, 05 Mar
- 2023 02:24:42 -0800 (PST)
+        bh=bzkzPKjLjmcIIk+MXeDNFz8SlV10tGBtTo3+SDfOWQ0=;
+        b=tQYo2ZYMnyALACuShO8oWaXLh19lPBiTwS2UME588nf88UP4yeCBb0NL3N5rUOFCrL
+         nl0r7zdRu7tW8XvWN1xxLuVBT8RVEKaCW4owz8t1O1NNEQXjl2IMmdo7/RHp6or357V4
+         QSXcWOnAV9P3UIbCChj3QqhzgoSfv3THPzheLODlnSrJdb3+FuRaWArfCMO0lT2xK0Ml
+         x5v/w1Y5ceEu3/h9GYCWNV9ylemy3PCN+K/46IvbcT1XUENVKqU0n3Vmrtc910UpR9sy
+         5qQd2jIzG7dh/+W1YCHHh3v13iRZ9HfNKkMemKdOHlkm9VpYs8Byxk/AHyI/XhwH2STb
+         1yuw==
+X-Gm-Message-State: AO0yUKWLmrdHprfeG3f/5uVWh+YeaIP1z7+L6oKyIV/iqVwfWbmSekna
+        rDPv7TwdWWa0/JYwF13JnN8Yx8Yzs+973h8kYZwMow==
+X-Google-Smtp-Source: AK7set9YeJqnuTO6GPbeUeUubABtFPqDdNiBrtFeQv+RspFfojeCZKWsLOwNkmYeASAE4pZ5Cw/UFo4qE/Itjav+e2I=
+X-Received: by 2002:a05:651c:b9b:b0:293:4e6d:f4f7 with SMTP id
+ bg27-20020a05651c0b9b00b002934e6df4f7mr2157714ljb.3.1678012156960; Sun, 05
+ Mar 2023 02:29:16 -0800 (PST)
 MIME-Version: 1.0
-References: <20230219073318.366189-1-nphamcs@gmail.com> <20230219073318.366189-3-nphamcs@gmail.com>
- <Y/IUTiL03C9OOSFx@casper.infradead.org> <CAKEwX=M7HSzSF6GZ_Nv26FQv_j+5UD9FQ_v3CL4=a1q5epyvPA@mail.gmail.com>
- <ZAGbyM8xnLKC/2uX@casper.infradead.org>
-In-Reply-To: <ZAGbyM8xnLKC/2uX@casper.infradead.org>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Sun, 5 Mar 2023 02:24:31 -0800
-Message-ID: <CAKEwX=M3VveHstbwxFdmWjPA_ruSBufEYD5Pn_awFD38WF_AqQ@mail.gmail.com>
-Subject: Re: [PATCH v10 2/3] cachestat: implement cachestat syscall
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com, arnd@arndb.de,
-        linux-api@vger.kernel.org, kernel-team@meta.com
+References: <20230201150954.409693-1-urezki@gmail.com> <20230201150954.409693-4-urezki@gmail.com>
+In-Reply-To: <20230201150954.409693-4-urezki@gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Sun, 5 Mar 2023 05:29:11 -0500
+Message-ID: <CAEXW_YRhHaVuq+5f+VgCZM=SF+9xO+QXaxe0yE7oA9iCXK-XPg@mail.gmail.com>
+Subject: Re: [PATCH 13/13] rcu/kvfree: Eliminate k[v]free_rcu() single
+ argument macro
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 11:03=E2=80=AFPM Matthew Wilcox <willy@infradead.org=
-> wrote:
->
-> On Thu, Mar 02, 2023 at 10:55:48PM -0800, Nhat Pham wrote:
-> > On Sun, Feb 19, 2023 at 4:21=E2=80=AFAM Matthew Wilcox <willy@infradead=
-.org> wrote:
-> > > > +/**
-> > > > + * filemap_cachestat() - compute the page cache statistics of a ma=
-pping
-> > > > + * @mapping: The mapping to compute the statistics for.
-> > > > + * @first_index:     The starting page cache index.
-> > > > + * @last_index:      The final page index (inclusive).
-> > > > + * @cs:      the cachestat struct to write the result to.
-> > > > + *
-> > > > + * This will query the page cache statistics of a mapping in the
-> > > > + * page range of [first_index, last_index] (inclusive). The statis=
-tics
-> > > > + * queried include: number of dirty pages, number of pages marked =
-for
-> > > > + * writeback, and the number of (recently) evicted pages.
-> > > > + */
-> > >
-> > > Do we care that this isn't going to work for hugetlbfs?
-> >
-> > I ran a quick test using hugetlbfs. It looks like the current
-> > implementation is treating it in accordance to the multi-page
-> > folio case we discussed earlier, i.e:
-> >
-> > - Returned number of "pages" is in terms of the number of
-> > base/small pages (i.e 512 dirty pages instead of 1 dirty
-> > huge page etc.)
-> > - If we touch one byte in the huge page, it would report the
-> > entire huge page as dirty, but again in terms of the underlying
-> > pages.
-> >
-> > Is this what you have in mind, or is there another edge
-> > case that I'm missing...?
->
-> Hugetlbfs indexes its pages by hugepage number rather than by smallpage
-> number.  Imagine you have a 2MB folio at offset 4MB into the file.
-> Filesystems other than hugetlbfs store it at indices 1024-1535.
-> hugetlbfs stores it at index 2.
->
-> So your report probably seems to work, but if you ask it about a
-> range, you might be surprised by how wide that range will cover for
-> hugetlbfs.
->
-> I know Sidhartha is working on fixing that, but I'm not sure if what he
-> has is working yet.
+Hi, All,
 
-Oh I see! Thanks for letting us know about this, Matthew.
+On Wed, Feb 1, 2023 at 10:11=E2=80=AFAM Uladzislau Rezki (Sony)
+<urezki@gmail.com> wrote:
+>
+> For a single argument invocations a new kfree_rcu_mightsleep()
+> and kvfree_rcu_mightsleep() macroses are used. This is done in
+> order to prevent users from calling a single argument from
+> atomic contexts as "_mightsleep" prefix signals that it can
+> schedule().
+>
 
-In that case, I think we should just drop support for hugetlbfs for now.
-It's also an odd ball - not swappable, no backing files, not fully
-under user management, etc., so it's less interesting with respect to
-cachestat as well.
+Since this commit in -dev branch [1] suggests more users still need
+conversion, let us drop this single patch for 6.4 and move the rest of
+the series forward? Let me know if you disagree.
+https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commi=
+t/?h=3Ddev&id=3D9bf5e3a2626ed474d080f695007541b6ecd6e60b
 
-In the future, we can always lift this restriction with a follow-up patch
-or with Sidhartha's fix.
+All -- please supply Ack/Review tags for patches 1-12.
+
+thanks,
+
+ - Joel
+
+
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  include/linux/rcupdate.h | 29 ++++++++---------------------
+>  1 file changed, 8 insertions(+), 21 deletions(-)
+>
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index 094321c17e48..7571dbfecb18 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -957,9 +957,8 @@ static inline notrace void rcu_read_unlock_sched_notr=
+ace(void)
+>
+>  /**
+>   * kfree_rcu() - kfree an object after a grace period.
+> - * @ptr: pointer to kfree for both single- and double-argument invocatio=
+ns.
+> - * @rhf: the name of the struct rcu_head within the type of @ptr,
+> - *       but only for double-argument invocations.
+> + * @ptr: pointer to kfree for double-argument invocations.
+> + * @rhf: the name of the struct rcu_head within the type of @ptr.
+>   *
+>   * Many rcu callbacks functions just call kfree() on the base structure.
+>   * These functions are trivial, but their size adds up, and furthermore
+> @@ -982,26 +981,18 @@ static inline notrace void rcu_read_unlock_sched_no=
+trace(void)
+>   * The BUILD_BUG_ON check must not involve any function calls, hence the
+>   * checks are done in macros here.
+>   */
+> -#define kfree_rcu(ptr, rhf...) kvfree_rcu(ptr, ## rhf)
+> +#define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
+> +#define kvfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
+>
+>  /**
+> - * kvfree_rcu() - kvfree an object after a grace period.
+> - *
+> - * This macro consists of one or two arguments and it is
+> - * based on whether an object is head-less or not. If it
+> - * has a head then a semantic stays the same as it used
+> - * to be before:
+> - *
+> - *     kvfree_rcu(ptr, rhf);
+> - *
+> - * where @ptr is a pointer to kvfree(), @rhf is the name
+> - * of the rcu_head structure within the type of @ptr.
+> + * kfree_rcu_mightsleep() - kfree an object after a grace period.
+> + * @ptr: pointer to kfree for single-argument invocations.
+>   *
+>   * When it comes to head-less variant, only one argument
+>   * is passed and that is just a pointer which has to be
+>   * freed after a grace period. Therefore the semantic is
+>   *
+> - *     kvfree_rcu(ptr);
+> + *     kfree_rcu_mightsleep(ptr);
+>   *
+>   * where @ptr is the pointer to be freed by kvfree().
+>   *
+> @@ -1010,13 +1001,9 @@ static inline notrace void rcu_read_unlock_sched_n=
+otrace(void)
+>   * annotation. Otherwise, please switch and embed the
+>   * rcu_head structure within the type of @ptr.
+>   */
+> -#define kvfree_rcu(...) KVFREE_GET_MACRO(__VA_ARGS__,          \
+> -       kvfree_rcu_arg_2, kvfree_rcu_arg_1)(__VA_ARGS__)
+> -
+> +#define kfree_rcu_mightsleep(ptr) kvfree_rcu_arg_1(ptr)
+>  #define kvfree_rcu_mightsleep(ptr) kvfree_rcu_arg_1(ptr)
+> -#define kfree_rcu_mightsleep(ptr) kvfree_rcu_mightsleep(ptr)
+>
+> -#define KVFREE_GET_MACRO(_1, _2, NAME, ...) NAME
+>  #define kvfree_rcu_arg_2(ptr, rhf)                                     \
+>  do {                                                                   \
+>         typeof (ptr) ___p =3D (ptr);                                     =
+ \
+> --
+> 2.30.2
+>
