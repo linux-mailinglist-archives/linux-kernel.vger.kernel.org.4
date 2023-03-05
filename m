@@ -2,128 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0DE6AAEF8
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 11:16:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B6726AAEFC
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 11:18:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjCEKQg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 5 Mar 2023 05:16:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S229563AbjCEKSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 05:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjCEKQ2 (ORCPT
+        with ESMTP id S229495AbjCEKSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 05:16:28 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFA714EAE;
-        Sun,  5 Mar 2023 02:16:26 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id jo29so4790022qvb.0;
-        Sun, 05 Mar 2023 02:16:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678011385;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h5qRGfTs5+kV00emn3Oo5iN+DSAN1HACfQYEpZctxMY=;
-        b=4K6y9814ZyQ0hwtUKKBmR3oS8/2R5G5CKDMOqOqnlpftu6GPIK+P5as99uyggPWWwY
-         D0m12G7PRVLpWeD38MMEci9pM69YzMX78rTM+NxAcRuWQZ+5NCMyRubDYMhu0tJgjXKp
-         Oe0Kf8ov5rN3yWf37kxb7SW7k/3qdu9w77XzDNp9n/Zcmq0poAvyKQUo6PStw4IFRvD7
-         acqpmUPqawqULtfm1pdFEWbxAusZ46tLiotivi0gSFyk7T6/w4DaWol9B3CsaZq9GID9
-         Wno4TVNlOM2efxN8nXl1NSKI/DzVokhWN6ksafMSX/6jFPgNAWCWGeLJBRMv1joMYSMM
-         VtDQ==
-X-Gm-Message-State: AO0yUKU2hot4uLRnEZnP2+ecTwD0hPpbRw+rpw4DfAkdzFf49mwtQKbX
-        GHNMMCbL/gtD5jt+ph9PpXJKUY5f9Jg6pw==
-X-Google-Smtp-Source: AK7set+WkshgVzUUvxr+RB0KBsVwUS07ynJt+HPDLkRG47WFTc4UcMK4NbAlcssGYMvgyxxgmnN/Xw==
-X-Received: by 2002:a05:6214:20a4:b0:583:a07b:5566 with SMTP id 4-20020a05621420a400b00583a07b5566mr5888801qvd.41.1678011385557;
-        Sun, 05 Mar 2023 02:16:25 -0800 (PST)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id t190-20020a3746c7000000b0074235745fdasm5273276qka.58.2023.03.05.02.16.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 02:16:25 -0800 (PST)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-536af432ee5so130761407b3.0;
-        Sun, 05 Mar 2023 02:16:24 -0800 (PST)
-X-Received: by 2002:a81:b61d:0:b0:52e:f66d:b70f with SMTP id
- u29-20020a81b61d000000b0052ef66db70fmr4376324ywh.5.1678011384672; Sun, 05 Mar
- 2023 02:16:24 -0800 (PST)
+        Sun, 5 Mar 2023 05:18:33 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3079FD52C;
+        Sun,  5 Mar 2023 02:18:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B172E60AF0;
+        Sun,  5 Mar 2023 10:18:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D873C433D2;
+        Sun,  5 Mar 2023 10:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678011511;
+        bh=BqiMKn3RghRbcr4+/wUZ/+Ee50jKJj55sBSSUqyBSfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OtThlPKDFnTfNx5xXDxaCUoxkiBM/T7WP33tkYkit2llqBNoPX93N91X8zCR+7Kg2
+         iFXBb/OtAXkXJWncbFAI0A7lWLj4u6fHr08IBd/dinZpPlRIEtp/Q35sW+5JMI9Hmz
+         Q2Xcyar0XSUkp+9gFb9jmlqKeCb0gVFwCy/0QXGOLDDsS2Wr9WhXZHP2w/+2m6azaj
+         CwiGbBXMG+fPk8XEqByRrWYJKoAC2/DYbZ5rIArkYglc6oXTXsTfSZAGEf4+f77mtr
+         X4DDTQj9BhWapPsktMtmyXpm6ZTXHpemaJoTiUtwhFgVMkKpmarqQ3KtRpOsc1t3NE
+         tPwIjFe96wqZg==
+Date:   Sun, 5 Mar 2023 10:18:24 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     ChiaEn Wu <chiaen_wu@richtek.com>
+Cc:     corbet@lwn.net, pavel@ucw.cz, matthias.bgg@gmail.com,
+        andriy.shevchenko@linux.intel.com, jacek.anaszewski@gmail.com,
+        angelogioacchino.delregno@collabora.com, linux-doc@vger.kernel.org,
+        peterwu.pub@gmail.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        szunichen@gmail.com
+Subject: Re: [PATCH v17 RESEND 3/3] docs: leds: Add MT6370 RGB LED pattern
+ document
+Message-ID: <20230305101824.GE2574592@google.com>
+References: <cover.1677150607.git.chiaen_wu@richtek.com>
+ <c6487954daff5e514023056ad7de1d0ddee674a8.1677150607.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-References: <20230228213738.272178-1-willy@infradead.org> <20230228213738.272178-14-willy@infradead.org>
-In-Reply-To: <20230228213738.272178-14-willy@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 5 Mar 2023 11:16:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW5TtUeZDmtHvxw+DxqUADC-OCW=tHE2Gptcoie62T+4w@mail.gmail.com>
-Message-ID: <CAMuHMdW5TtUeZDmtHvxw+DxqUADC-OCW=tHE2Gptcoie62T+4w@mail.gmail.com>
-Subject: Re: [PATCH v3 13/34] m68k: Implement the new page table range API
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c6487954daff5e514023056ad7de1d0ddee674a8.1677150607.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
+On Thu, 23 Feb 2023, ChiaEn Wu wrote:
 
-On Tue, Feb 28, 2023 at 10:37 PM Matthew Wilcox (Oracle)
-<willy@infradead.org> wrote:
-> Add set_ptes(), update_mmu_cache_range(), flush_icache_pages() and
-> flush_dcache_folio().
->
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-
-Thanks for your patch!
-
-> --- a/arch/m68k/include/asm/cacheflush_mm.h
-> +++ b/arch/m68k/include/asm/cacheflush_mm.h
-> @@ -220,24 +220,28 @@ static inline void flush_cache_page(struct vm_area_struct *vma, unsigned long vm
->
->  /* Push the page at kernel virtual address and clear the icache */
->  /* RZ: use cpush %bc instead of cpush %dc, cinv %ic */
-> -static inline void __flush_page_to_ram(void *vaddr)
-> +static inline void __flush_pages_to_ram(void *vaddr, unsigned int nr)
->  {
->         if (CPU_IS_COLDFIRE) {
->                 unsigned long addr, start, end;
->                 addr = ((unsigned long) vaddr) & ~(PAGE_SIZE - 1);
->                 start = addr & ICACHE_SET_MASK;
-> -               end = (addr + PAGE_SIZE - 1) & ICACHE_SET_MASK;
-> +               end = (addr + nr * PAGE_SIZE - 1) & ICACHE_SET_MASK;
->                 if (start > end) {
->                         flush_cf_bcache(0, end);
->                         end = ICACHE_MAX_ADDR;
->                 }
->                 flush_cf_bcache(start, end);
->         } else if (CPU_IS_040_OR_060) {
-> -               __asm__ __volatile__("nop\n\t"
-> -                                    ".chip 68040\n\t"
-> -                                    "cpushp %%bc,(%0)\n\t"
-> -                                    ".chip 68k"
-> -                                    : : "a" (__pa(vaddr)));
-> +               unsigned long paddr = __pa(vaddr);
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Document the MT6370 RGB LED pattern trigger.
+> 
+> This simply describe how the pattern works, each timing period, and the
+> pattern diagram for MT6370 RGB LED.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+>  Documentation/leds/leds-mt6370-rgb.rst | 64 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/leds/leds-mt6370-rgb.rst
+> 
+> diff --git a/Documentation/leds/leds-mt6370-rgb.rst b/Documentation/leds/leds-mt6370-rgb.rst
+> new file mode 100644
+> index 00000000..d1b2e4f
+> --- /dev/null
+> +++ b/Documentation/leds/leds-mt6370-rgb.rst
+> @@ -0,0 +1,64 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +               while (nr--) {
-> +                       __asm__ __volatile__("nop\n\t"
-> +                                            ".chip 68040\n\t"
-> +                                            "cpushp %%bc,(%0)\n\t"
-> +                                            ".chip 68k"
-> +                                            : : "a" (paddr + nr * PAGE_SIZE));
+> +=========================================
+> +Kernel driver for Mediatek MT6370 RGB LED
 
-As gcc (9.5.0) keeps on calculating "paddr + nr * PAGE_SIZE"
-inside the loop (albeit using a shift instead of a multiplication),
-please use "paddr" here, followed by "paddr += PAGE_SIZE;".
+Are you describing the device or the kernel driver?
 
-Gr{oetje,eeting}s,
+> +=========================================
+> +
+> +Description
+> +-----------
+> +
+> +The MT6370 integrates a four-channel RGB LED driver, designed to provide a
+> +variety of lighting effect for mobile device applications. The RGB LED driver
 
-                        Geert
+"devices"
 
+> +includes a smart LED string controller and it can drive 3 channels of LEDs with
+> +a sink current up to 24mA and a CHG_VIN power good indicator LED with sink
+> +current up to 6mA. It provides three operation modes for RGB LEDs:
+> +PWM Dimming mode, breath pattern mode, and constant current mode. The device
+> +can increase or decrease the brightness of the RGB LED via I2C interface.
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+"an I2C interface"
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +The breath pattern for a channel can be programmed using the "pattern" trigger,
+> +using the hw_pattern attribute.
+> +
+> +/sys/class/leds/<led>/hw_pattern
+> +--------------------------------
+> +
+> +Specify a hardware breath pattern for a MT6370 RGB LED.
+> +
+> +The breath pattern is a series of timing pairs, with the hold-time expressed in
+> +milliseconds. And the brightness is controlled by
+> +'/sys/class/leds/<led>/brightness'. The pattern doesn't include the brightness
+> +setting. Hardware pattern only controls the timing for each pattern stage
+> +depending on the current brightness setting.
+> +
+> +Pattern diagram::
+> +
+> +     "0 Tr1 0 Tr2 0 Tf1 0 Tf2 0 Ton 0 Toff" --> '0' for dummy brightness code
+> +
+> +      ^
+> +      |           ============
+> +      |          /            \                                /
+> +Icurr |         /              \                              /
+> +      |        /                \                            /
+> +      |       /                  \                          /   .....repeat
+> +      |      /                    \                        /
+> +      |   ---                      ---                  ---
+> +      |---                            ---            ---
+> +      +----------------------------------============------------> Time
+> +       < Tr1><Tr2><   Ton    ><Tf1><Tf2 ><  Toff    >< Tr1><Tr2>
+> +
+> +Timing description::
+> +
+> +Tr1:    First rising time for duty 0 to 30%.
+> +Tr2:    Second rising time for duty 31% to 100%.
+> +Ton:    On time for duty 100%.
+> +Tf1:    First falling time for duty 100% to 31%.
+> +Tf2:    Second falling time for duty 30% to 0%.
+> +Toff:   Off time for duty 0%.
+> +
+> +Tr1/Tr2/Tf1/Tf2/Ton: 125ms to 3125ms, 200ms per step.
+> +Toff: 250ms to 6250ms, 400ms per step.
+> +
+> +Pattern example::
+> +
+> +       "0 125 0 125 0 125 0 125 0 625 0 1050"
+> +
+> +This Will configure Tr1/Tr2/Tf1/Tf2 to 125m, Ton to 625ms, and Toff to 1050ms.
+> -- 
+> 2.7.4
+> 
+
+-- 
+Lee Jones [李琼斯]
