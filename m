@@ -2,177 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576166AAF08
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 11:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD706AAF13
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 11:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjCEK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 05:29:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37904 "EHLO
+        id S229702AbjCEKcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 05:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjCEK3U (ORCPT
+        with ESMTP id S229542AbjCEKcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 05:29:20 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD12BD302
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 02:29:18 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id z42so6688797ljq.13
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 02:29:18 -0800 (PST)
+        Sun, 5 Mar 2023 05:32:21 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E6BFF34;
+        Sun,  5 Mar 2023 02:32:20 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id n8so2151024qkp.5;
+        Sun, 05 Mar 2023 02:32:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678012157;
+        d=gmail.com; s=20210112; t=1678012339;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bzkzPKjLjmcIIk+MXeDNFz8SlV10tGBtTo3+SDfOWQ0=;
-        b=Lt+13Q44DHx4wQTpK09D4hVuLpRv9ubsVbqbBVuHOItnLRqBRs+MPYPTdyBVau1Pxs
-         jFBd/orrXfd0AYH5C5Fq6orWxbQIxtYbdO5hmM0t9Wsvt0RwQvOE0+w0XdXnaV+3BsWD
-         E7Mwi1w8/ao5HWnsXoYqH94ThgzGYHhwkRkL0=
+        bh=HyWuCklZqeWHeAAvpRzvccua2zn3XmympaWs29aKNGQ=;
+        b=RpxZlBFYj7ktpGFKb2LRVRIYWz3V9QosLteYaUkRcCR0QYNaGXzpYJ+UQ4bhGCZ87B
+         aDBzGSpC+ANhYSGo/P7znGRLP+rYWE+n6PmbH9kUyhxZ12tRVMSA/UWn8pl0BnUctyvn
+         7BRrx6rA2vTUlt5RkOyQ1PORtOE/O5cxF46RzmExF5u9X5Az7S7tovxjgUhNEUa1231q
+         vj4I6uYo/Ar8gRN8usfsqgymfHEhi024MInhPTCJGSgVGBtwVoMKkkZ0WK/cXhYaaCVs
+         buEvQRTFADyYBtFYlziJvx8jgvHSlTJodB2o0/KtyW8r4RzIm+j83bLf9zkDN3ltvhV0
+         A6TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678012157;
+        d=1e100.net; s=20210112; t=1678012339;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bzkzPKjLjmcIIk+MXeDNFz8SlV10tGBtTo3+SDfOWQ0=;
-        b=tQYo2ZYMnyALACuShO8oWaXLh19lPBiTwS2UME588nf88UP4yeCBb0NL3N5rUOFCrL
-         nl0r7zdRu7tW8XvWN1xxLuVBT8RVEKaCW4owz8t1O1NNEQXjl2IMmdo7/RHp6or357V4
-         QSXcWOnAV9P3UIbCChj3QqhzgoSfv3THPzheLODlnSrJdb3+FuRaWArfCMO0lT2xK0Ml
-         x5v/w1Y5ceEu3/h9GYCWNV9ylemy3PCN+K/46IvbcT1XUENVKqU0n3Vmrtc910UpR9sy
-         5qQd2jIzG7dh/+W1YCHHh3v13iRZ9HfNKkMemKdOHlkm9VpYs8Byxk/AHyI/XhwH2STb
-         1yuw==
-X-Gm-Message-State: AO0yUKWLmrdHprfeG3f/5uVWh+YeaIP1z7+L6oKyIV/iqVwfWbmSekna
-        rDPv7TwdWWa0/JYwF13JnN8Yx8Yzs+973h8kYZwMow==
-X-Google-Smtp-Source: AK7set9YeJqnuTO6GPbeUeUubABtFPqDdNiBrtFeQv+RspFfojeCZKWsLOwNkmYeASAE4pZ5Cw/UFo4qE/Itjav+e2I=
-X-Received: by 2002:a05:651c:b9b:b0:293:4e6d:f4f7 with SMTP id
- bg27-20020a05651c0b9b00b002934e6df4f7mr2157714ljb.3.1678012156960; Sun, 05
- Mar 2023 02:29:16 -0800 (PST)
+        bh=HyWuCklZqeWHeAAvpRzvccua2zn3XmympaWs29aKNGQ=;
+        b=O40U1+bMLHwW3fOprI27AKS4GnTDv9oxEVHBJ/9VY5h8qtoWOKhANL+EGXpOmH9H1Z
+         HavG+DhhXxaKGpRB4IqGIvpEZxEVIqCjqz+XZ8GM3nt/OgxC8ueB6pUsofZJNEPf4IFt
+         KZtnQfM8dOz642WeFtiIlLJM0pYX+OUBE/s5cEsnOQT+0Uc3wnAAcJpu2w9w4hqLFDIc
+         /nu4qGIViFJIU9chwyyuSI40m1evZy5TF3+5JNdS6Mk7I7uQbLZwyCgxSQOz0/ehHXlI
+         LvrVqgvrtHGnvFP1l1qvtL0WXXm1Xdfe1XzzfRAuXsTTVPhkthDxa3dzNDEbR/oT/q0L
+         ztVw==
+X-Gm-Message-State: AO0yUKVs6HGEmev4vru7/YNxIuJuuVCTTgJcjmDK/TVEGJ+PstdbKRyb
+        Z8LHh8NTVKcS6UXGjVe/fCzttE0L13E84p6wzAA=
+X-Google-Smtp-Source: AK7set+dbxiU9HKVUjdXSTLsWZhS1FzVFcfvLw7VRJXoIt9CBrIZUYxSyYPJNZN/bfB76VozAT8xvEIg2wXXSfhRKXg=
+X-Received: by 2002:a37:64c1:0:b0:71f:b89c:5ac7 with SMTP id
+ y184-20020a3764c1000000b0071fb89c5ac7mr1479076qkb.8.1678012339264; Sun, 05
+ Mar 2023 02:32:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20230201150954.409693-1-urezki@gmail.com> <20230201150954.409693-4-urezki@gmail.com>
-In-Reply-To: <20230201150954.409693-4-urezki@gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sun, 5 Mar 2023 05:29:11 -0500
-Message-ID: <CAEXW_YRhHaVuq+5f+VgCZM=SF+9xO+QXaxe0yE7oA9iCXK-XPg@mail.gmail.com>
-Subject: Re: [PATCH 13/13] rcu/kvfree: Eliminate k[v]free_rcu() single
- argument macro
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+References: <20230219073318.366189-1-nphamcs@gmail.com> <20230219073318.366189-3-nphamcs@gmail.com>
+ <Y/IUTiL03C9OOSFx@casper.infradead.org>
+In-Reply-To: <Y/IUTiL03C9OOSFx@casper.infradead.org>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Sun, 5 Mar 2023 02:32:08 -0800
+Message-ID: <CAKEwX=PTXLp7oe5HmmTpMuCbupuxsvw3gCwMqe=p4ck2byr7Zw@mail.gmail.com>
+Subject: Re: [PATCH v10 2/3] cachestat: implement cachestat syscall
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com, arnd@arndb.de,
+        linux-api@vger.kernel.org, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, All,
-
-On Wed, Feb 1, 2023 at 10:11=E2=80=AFAM Uladzislau Rezki (Sony)
-<urezki@gmail.com> wrote:
+On Sun, Feb 19, 2023 at 4:21=E2=80=AFAM Matthew Wilcox <willy@infradead.org=
+> wrote:
 >
-> For a single argument invocations a new kfree_rcu_mightsleep()
-> and kvfree_rcu_mightsleep() macroses are used. This is done in
-> order to prevent users from calling a single argument from
-> atomic contexts as "_mightsleep" prefix signals that it can
-> schedule().
+> On Sat, Feb 18, 2023 at 11:33:17PM -0800, Nhat Pham wrote:
+> > diff --git a/include/linux/fs.h b/include/linux/fs.h
+> > index e654435f1651..83300f1491e7 100644
+> > --- a/include/linux/fs.h
+> > +++ b/include/linux/fs.h
+> > @@ -75,6 +75,7 @@ struct fs_context;
+> >  struct fs_parameter_spec;
+> >  struct fileattr;
+> >  struct iomap_ops;
+> > +struct cachestat;
+> >
+> >  extern void __init inode_init(void);
+> >  extern void __init inode_init_early(void);
+> > @@ -830,6 +831,8 @@ void filemap_invalidate_lock_two(struct address_spa=
+ce *mapping1,
+> >                                struct address_space *mapping2);
+> >  void filemap_invalidate_unlock_two(struct address_space *mapping1,
+> >                                  struct address_space *mapping2);
+> > +void filemap_cachestat(struct address_space *mapping, pgoff_t first_in=
+dex,
+> > +             pgoff_t last_index, struct cachestat *cs);
 >
-
-Since this commit in -dev branch [1] suggests more users still need
-conversion, let us drop this single patch for 6.4 and move the rest of
-the series forward? Let me know if you disagree.
-https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commi=
-t/?h=3Ddev&id=3D9bf5e3a2626ed474d080f695007541b6ecd6e60b
-
-All -- please supply Ack/Review tags for patches 1-12.
-
-thanks,
-
- - Joel
-
-
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> ---
->  include/linux/rcupdate.h | 29 ++++++++---------------------
->  1 file changed, 8 insertions(+), 21 deletions(-)
+> 1. Why is this in fs.h instead of pagemap.h?
 >
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index 094321c17e48..7571dbfecb18 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -957,9 +957,8 @@ static inline notrace void rcu_read_unlock_sched_notr=
-ace(void)
+> 2. Why is it not static, since it's only used by the syscall,
+> which is also in filemap.c?
+
+Actually, I think I can remove its occurrence in another header file
+altogether. I think it was an artifact from a past iteration, which
+has filemap_cachestat in filemap.c but the syscall in its own
+file (cachestat.c).
+
+And you're right - we only have one use case for it now
+(for the syscall). I'll make it static.
+
 >
->  /**
->   * kfree_rcu() - kfree an object after a grace period.
-> - * @ptr: pointer to kfree for both single- and double-argument invocatio=
-ns.
-> - * @rhf: the name of the struct rcu_head within the type of @ptr,
-> - *       but only for double-argument invocations.
-> + * @ptr: pointer to kfree for double-argument invocations.
-> + * @rhf: the name of the struct rcu_head within the type of @ptr.
->   *
->   * Many rcu callbacks functions just call kfree() on the base structure.
->   * These functions are trivial, but their size adds up, and furthermore
-> @@ -982,26 +981,18 @@ static inline notrace void rcu_read_unlock_sched_no=
-trace(void)
->   * The BUILD_BUG_ON check must not involve any function calls, hence the
->   * checks are done in macros here.
->   */
-> -#define kfree_rcu(ptr, rhf...) kvfree_rcu(ptr, ## rhf)
-> +#define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-> +#define kvfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
+> > @@ -55,6 +56,9 @@
+> >  #include <linux/buffer_head.h> /* for try_to_free_buffers */
+> >
+> >  #include <asm/mman.h>
+> > +#include <uapi/linux/mman.h>
 >
->  /**
-> - * kvfree_rcu() - kvfree an object after a grace period.
-> - *
-> - * This macro consists of one or two arguments and it is
-> - * based on whether an object is head-less or not. If it
-> - * has a head then a semantic stays the same as it used
-> - * to be before:
-> - *
-> - *     kvfree_rcu(ptr, rhf);
-> - *
-> - * where @ptr is a pointer to kvfree(), @rhf is the name
-> - * of the rcu_head structure within the type of @ptr.
-> + * kfree_rcu_mightsleep() - kfree an object after a grace period.
-> + * @ptr: pointer to kfree for single-argument invocations.
->   *
->   * When it comes to head-less variant, only one argument
->   * is passed and that is just a pointer which has to be
->   * freed after a grace period. Therefore the semantic is
->   *
-> - *     kvfree_rcu(ptr);
-> + *     kfree_rcu_mightsleep(ptr);
->   *
->   * where @ptr is the pointer to be freed by kvfree().
->   *
-> @@ -1010,13 +1001,9 @@ static inline notrace void rcu_read_unlock_sched_n=
-otrace(void)
->   * annotation. Otherwise, please switch and embed the
->   * rcu_head structure within the type of @ptr.
->   */
-> -#define kvfree_rcu(...) KVFREE_GET_MACRO(__VA_ARGS__,          \
-> -       kvfree_rcu_arg_2, kvfree_rcu_arg_1)(__VA_ARGS__)
-> -
-> +#define kfree_rcu_mightsleep(ptr) kvfree_rcu_arg_1(ptr)
->  #define kvfree_rcu_mightsleep(ptr) kvfree_rcu_arg_1(ptr)
-> -#define kfree_rcu_mightsleep(ptr) kvfree_rcu_mightsleep(ptr)
+> I think this hunk should be:
 >
-> -#define KVFREE_GET_MACRO(_1, _2, NAME, ...) NAME
->  #define kvfree_rcu_arg_2(ptr, rhf)                                     \
->  do {                                                                   \
->         typeof (ptr) ___p =3D (ptr);                                     =
- \
-> --
-> 2.30.2
+> -#include <asm/mman.h>
+> +#include <linux/mman.h>
+
+Will be fixed in the next version - thanks for letting me know!
+
 >
+> (linux/mman.h includes uapi/linux/mman.h, which includes asm/mman.h)
+>
+> > +/**
+> > + * filemap_cachestat() - compute the page cache statistics of a mappin=
+g
+> > + * @mapping: The mapping to compute the statistics for.
+> > + * @first_index:     The starting page cache index.
+> > + * @last_index:      The final page index (inclusive).
+> > + * @cs:      the cachestat struct to write the result to.
+> > + *
+> > + * This will query the page cache statistics of a mapping in the
+> > + * page range of [first_index, last_index] (inclusive). The statistics
+> > + * queried include: number of dirty pages, number of pages marked for
+> > + * writeback, and the number of (recently) evicted pages.
+> > + */
+>
+> Do we care that this isn't going to work for hugetlbfs?
+>
+> > +     rcu_read_lock();
+> > +     xas_for_each(&xas, folio, last_index) {
+> > +             unsigned long nr_pages;
+> > +             pgoff_t folio_first_index, folio_last_index;
+> > +
+> > +             if (xas_retry(&xas, folio))
+> > +                     continue;
+> > +
+> > +             nr_pages =3D folio_nr_pages(folio);
+> > +             folio_first_index =3D folio_pgoff(folio);
+> > +             folio_last_index =3D folio_first_index + nr_pages - 1;
+> > +
+> > +             /* Folios might straddle the range boundaries, only count=
+ covered subpages */
+>
+> s/subpages/pages/
+
+Yeah that comment is incorrect/confusing with the pages terminology.
+It'll be fixed!
