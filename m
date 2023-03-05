@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9615F6AB00A
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:46:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F656AB004
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 14:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjCENqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 08:46:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        id S229771AbjCENqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 08:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCENq3 (ORCPT
+        with ESMTP id S229715AbjCENqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 08:46:29 -0500
-Received: from out199-10.us.a.mail.aliyun.com (out199-10.us.a.mail.aliyun.com [47.90.199.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E782D6F;
-        Sun,  5 Mar 2023 05:46:01 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0Vd6Wt0b_1678023896;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vd6Wt0b_1678023896)
-          by smtp.aliyun-inc.com;
-          Sun, 05 Mar 2023 21:45:05 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>, stable@vger.kernel.org
-Subject: [PATCH] erofs: fix wrong kunmap when using LZMA on HIGHMEM platforms
-Date:   Sun,  5 Mar 2023 21:44:55 +0800
-Message-Id: <20230305134455.88236-1-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
+        Sun, 5 Mar 2023 08:46:06 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56F1CA04;
+        Sun,  5 Mar 2023 05:45:34 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id h11so6354417wrm.5;
+        Sun, 05 Mar 2023 05:45:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c3lfSrbd4QG8pApbR/SCATb+t3wLQomrPBsssXD+brM=;
+        b=lRu8tiCiBCSJ0FkKW4I2QJ0maefa4Rsck5BBpAD7C8nyPs5GyUvxGH2+zVgybJuJvj
+         yznYU6tyGj14agJHJ5mJ1b5gO2wPleUobpq8KaJjGnAkzybLvHMwJmcEJnkSQ3czWoQr
+         GC8vLJ9AHr8iGYUxqMl/WekrZQpH+lEsCgXa9Sf2B0/GkiOBAm80dwlulo524+kfM+cL
+         BxAEuyFlezic4W+0EbA+CS8c2LXRFAItT5GWcaGIG5L+phwh/bzuoUsSoFL09iAc61aQ
+         sYloYT4NW+1dX4RQvrUTQzdRO9AM2BqWehyNGWVohdWDlDUUKzRu/W5jn9MR63TCedS0
+         Hdew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c3lfSrbd4QG8pApbR/SCATb+t3wLQomrPBsssXD+brM=;
+        b=FFWhx1J/25Z2w+2Y7XXn3dYHJQ5UIoVGfXtguguVq2PlKewkknlf25eH2gRLPuxI0Z
+         kNZKNieaeiF+uTD8jFh+4Z74Ay8xe1zqqr8idHDazdioB1rJ3l4ScdWmXYp9/H2PBoNk
+         icLuyarjJ1b9u8x2yKyv9KvcmbKsqSx708L/xr/w+Hejtqtmd9FJzV1dTilasiJKZY+4
+         6cgoBzVxZ2eOnRhCqQRDKZaOxeu8NzSjhOQZ05JXvHMPWbcFlRaJg04zjiSFGIYBiwiX
+         9v/K3pyf3NlUArz73sLtZ08p4EMQH4XwVvrDoruBlTTroX6g8IQR6MuwnLb780V2wAue
+         mjoQ==
+X-Gm-Message-State: AO0yUKUqFgug6YyxR8OxIoe/swhWXJ2jto+hkijJQueMV3fnosigd/RP
+        JtvftH2Hay3LtdiiGaBRiqA=
+X-Google-Smtp-Source: AK7set/J1KAoZpvFBzDy6E/mVM5T+GeQDY3QdIQXn8Cr88+Bb4rbmJg2AHQphHxF5zWBNJtBO2H/5Q==
+X-Received: by 2002:adf:ec47:0:b0:2c7:e48:8ca3 with SMTP id w7-20020adfec47000000b002c70e488ca3mr5119278wrn.0.1678023916627;
+        Sun, 05 Mar 2023 05:45:16 -0800 (PST)
+Received: from toolbox.. ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id d1-20020a5d4f81000000b002c54e26bca5sm7421507wru.49.2023.03.05.05.45.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Mar 2023 05:45:16 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+Subject: [PATCH v2 0/2] arm64: amlogic: Add initial support for BPI-M2S variants
+Date:   Sun,  5 Mar 2023 13:45:10 +0000
+Message-Id: <20230305134512.1596572-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the call trace shown, the root cause is kunmap incorrect pages:
+Add support for the BananaPi M2S which ships in two board variants with
+the Amlogic S922X or A311D chipset. Schematics for the board are not
+currently available from Sinovoip so the device-tree is largely derived
+from the Khadas VIM3 (also S922X/A311D) and other recent BPI boards that
+have public documentation. The device-tree also supports the RTL8822CS
+WiFi/BT module. This is optional so the nodes must be enabled though an
+overlay or fdtput.
 
- BUG: kernel NULL pointer dereference, address: 00000000
- CPU: 1 PID: 40 Comm: kworker/u5:0 Not tainted 6.2.0-rc5 #4
- Workqueue: erofs_worker z_erofs_decompressqueue_work
- EIP: z_erofs_lzma_decompress+0x34b/0x8ac
-  z_erofs_decompress+0x12/0x14
-  z_erofs_decompress_queue+0x7e7/0xb1c
-  z_erofs_decompressqueue_work+0x32/0x60
-  process_one_work+0x24b/0x4d8
-  ? process_one_work+0x1a4/0x4d8
-  worker_thread+0x14c/0x3fc
-  kthread+0xe6/0x10c
-  ? rescuer_thread+0x358/0x358
-  ? kthread_complete_and_exit+0x18/0x18
-  ret_from_fork+0x1c/0x28
- ---[ end trace 0000000000000000 ]---
+Patches are based on current (v6.3) for-next branch.
 
-The bug is trivial and should be fixed now.  It has no impact on
-!HIGHMEM platforms.
+Changes from v1:
+- Fix LED node names to follow schema
+- Add Krzysztof's ack to bindings patch
 
-Fixes: 622ceaddb764 ("erofs: lzma compression support")
-Cc: <stable@vger.kernel.org> # 5.16+
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
- fs/erofs/decompressor_lzma.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Christian Hewitt (2):
+  dt-bindings: arm: amlogic: add support for BananaPi M2S variants
+  arm64: dts: meson: add support for BananaPi M2S variants
 
-diff --git a/fs/erofs/decompressor_lzma.c b/fs/erofs/decompressor_lzma.c
-index 091fd5adf818..5cd612a8f858 100644
---- a/fs/erofs/decompressor_lzma.c
-+++ b/fs/erofs/decompressor_lzma.c
-@@ -278,7 +278,7 @@ int z_erofs_lzma_decompress(struct z_erofs_decompress_req *rq,
- 		}
- 	}
- 	if (no < nrpages_out && strm->buf.out)
--		kunmap(rq->in[no]);
-+		kunmap(rq->out[no]);
- 	if (ni < nrpages_in)
- 		kunmap(rq->in[ni]);
- 	/* 4. push back LZMA stream context to the global list */
+ .../devicetree/bindings/arm/amlogic.yaml      |   2 +
+ arch/arm64/boot/dts/amlogic/Makefile          |   2 +
+ .../amlogic/meson-g12b-a311d-bananapi-m2s.dts |  37 ++
+ .../boot/dts/amlogic/meson-g12b-bananapi.dtsi | 521 ++++++++++++++++++
+ .../amlogic/meson-g12b-s922x-bananapi-m2s.dts |  14 +
+ 5 files changed, 576 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts
+
 -- 
-2.24.4
+2.34.1
 
