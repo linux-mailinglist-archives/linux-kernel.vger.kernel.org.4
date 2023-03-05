@@ -2,94 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D6126AB1D9
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 20:24:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E6F6AB1E5
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 20:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbjCETYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 14:24:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S229540AbjCEThW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 14:37:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjCETYc (ORCPT
+        with ESMTP id S229507AbjCEThU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 14:24:32 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B08901B
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 11:24:29 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id cw28so30268931edb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 11:24:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678044268;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fi44WCd57at26UJSzcMRS82R0NS2E49ZTf2iYW8hb6E=;
-        b=BT4l5QLHVE+3ikZ2h7j6l155DEcI33MOp5a5pSBv2d2ne6xCbUOc4ckDCrBGHeXvdk
-         jE/AvDXNPfx3WdS2I7NpbM9AzLNE5cO0KrmC0DRrngRGGazYQROJ4fVs9Y10nXOTrPG0
-         WyvRtWSFpUbuBSuevgWatcXwparAzm8LwBfhc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678044268;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fi44WCd57at26UJSzcMRS82R0NS2E49ZTf2iYW8hb6E=;
-        b=yyqPwV/BJN9YDqO4TsSGiNjlJWMijO4JUpbBK278DRSCVQMQnD4ES74wugOnyXSv4D
-         BhT4WqQE50whr1G98ULHkv1bkNCI1O32bFH9bCAuLvLzsLdLxOJ2OTD2yJZdl45J/9OZ
-         wRaGjdb7etRi7Ln2PYYyTzDJphVsSqXjMmsikgFLqyfQ5Qq6KWiIWP3HdHG+k2MV8pb1
-         eSC8GIfcFpDhFsFM4PtprD3oxsdxfRpU6iMSQct+rzV+Iz7TwcSG0qu/3U1d9VpqjgYt
-         5Y8wgv9nkNe20PX1oV93HoIkYKxLYUr+/6FkFzxbpj2VaSWpz11wd2gapKyG/WVuWkmp
-         t/WQ==
-X-Gm-Message-State: AO0yUKWB5l25oADqHtsDuD2ULRm4zFlKzzbjOPNaf80PZkEjvIbz2PD9
-        dN6YFjpRBVYsPFv8UK+YXFEyeVPmhoIkDJTEjaGTcg==
-X-Google-Smtp-Source: AK7set/orOw7Asd5YCwGLD1Zb0YHsqZI+sYKMEIDYeDphJx+VATX3EEPRPqY+H1wU4WEJH19XsAhwA==
-X-Received: by 2002:a17:906:e4d:b0:8b1:7b5d:fe9b with SMTP id q13-20020a1709060e4d00b008b17b5dfe9bmr9613597eji.28.1678044268059;
-        Sun, 05 Mar 2023 11:24:28 -0800 (PST)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id p22-20020a1709060dd600b008b17aae2a01sm3533010eji.86.2023.03.05.11.24.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 11:24:27 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id u9so30334901edd.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 11:24:27 -0800 (PST)
-X-Received: by 2002:a17:906:b10d:b0:878:561c:6665 with SMTP id
- u13-20020a170906b10d00b00878561c6665mr3962745ejy.0.1678044267197; Sun, 05 Mar
- 2023 11:24:27 -0800 (PST)
-MIME-Version: 1.0
-References: <167800644191.309766.5757985605946414576.tglx@xen13>
-In-Reply-To: <167800644191.309766.5757985605946414576.tglx@xen13>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 5 Mar 2023 11:24:10 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whr2KrDkMnQ5pKKxn8nCD718ExKAmPE3TLxkWnjtj6OvA@mail.gmail.com>
-Message-ID: <CAHk-=whr2KrDkMnQ5pKKxn8nCD718ExKAmPE3TLxkWnjtj6OvA@mail.gmail.com>
-Subject: Re: [GIT pull] irq/urgent for v6.3-rc1
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Sun, 5 Mar 2023 14:37:20 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF79FF25;
+        Sun,  5 Mar 2023 11:37:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DECBB60B54;
+        Sun,  5 Mar 2023 19:37:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4CBA4C433EF;
+        Sun,  5 Mar 2023 19:37:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678045038;
+        bh=R11WY1CFSMMzf+fziJywudIzTwyCMsUuneDOj5AF0jY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=J3tYoZMD8DPwh4uIzrEjenGbrQZ68/B7bvNFPGpWQc5HxnckMkHU/9lQOXlZck+/+
+         2WGtBj6fbIbrAfzxrPXmQ8d3bd2c992HtwoQzTnDK3uQr05PSYqS0s9+SQrIv7NBkp
+         TaIuJ5CL/qxgCg8Gw+UnG0RKWYmGmZLje0iHyfI+eoHrN/oGCzF56om8mKF2Z/6ryG
+         gaDsy6I+1LZIE7dMWRE3v1/KMPBFOO8UrQDS6pyOmxYC2HHDu//hrecK6cAqlwFbhL
+         2MFvsj0EouwM6NijKU6kfH+sKFODBIlO1Yie5zTYJHrKz5kwa5ukwOuVNVhZH9K4Fq
+         l3F5t7WgW36gA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B81EE68D22;
+        Sun,  5 Mar 2023 19:37:18 +0000 (UTC)
+Subject: Re: [GIT PULL] Crypto Fixes for 6.3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZARrt99wJb7IhoY4@gondor.apana.org.au>
+References: <YcKz4wHYTe3qlW7L@gondor.apana.org.au>
+ <YgMn+1qQPQId50hO@gondor.apana.org.au>
+ <YjE5yThYIzih2kM6@gondor.apana.org.au>
+ <YkUdKiJflWqxBmx5@gondor.apana.org.au>
+ <YpC1/rWeVgMoA5X1@gondor.apana.org.au>
+ <Yqw7bf7ln6vtU/VH@gondor.apana.org.au>
+ <Yr1XPJsAH2l1cx3A@gondor.apana.org.au>
+ <Y0zcWCmNmdXnX8RP@gondor.apana.org.au>
+ <Y1thZ/+Gh/ONyf7x@gondor.apana.org.au>
+ <Y7fmtJHWT1Zx+A1j@gondor.apana.org.au> <ZARrt99wJb7IhoY4@gondor.apana.org.au>
+X-PR-Tracked-List-Id: <linux-crypto.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZARrt99wJb7IhoY4@gondor.apana.org.au>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.3-p2
+X-PR-Tracked-Commit-Id: 660ca9470f9c613fa2c71a123a9469c80a697ee4
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f915322fe014c5c515119381e886faf07b3c9d31
+Message-Id: <167804503823.1860.745945862604336880.pr-tracker-bot@kernel.org>
+Date:   Sun, 05 Mar 2023 19:37:18 +0000
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 5, 2023 at 12:55=E2=80=AFAM Thomas Gleixner <tglx@linutronix.de=
-> wrote:
->
-> ...
->  kernel/irq/msi.c            |   28 +++++++++++++++++++++++-----
->  kernel/irq/msi.c            |    9 ++++++---
->  8 files changed, 44 insertions(+), 15 deletions(-)
+The pull request you sent on Sun, 5 Mar 2023 18:15:19 +0800:
 
-Funky diffstat you have there, with the same file done twice. I get
-(and would have expected)
+> git://git.kernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6.git v6.3-p2
 
- ...
- kernel/irq/msi.c            | 37 +++++++++++++++++++++++++++++--------
- 7 files changed, 44 insertions(+), 15 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f915322fe014c5c515119381e886faf07b3c9d31
 
-instead.
+Thank you!
 
-           Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
