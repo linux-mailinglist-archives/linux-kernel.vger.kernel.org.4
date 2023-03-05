@@ -2,157 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE616AB11E
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 15:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E8D6AB121
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 16:00:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjCEOwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 09:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40098 "EHLO
+        id S229563AbjCEPAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 10:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCEOwH (ORCPT
+        with ESMTP id S229554AbjCEPAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 09:52:07 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E60D532
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 06:52:05 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id a25so28879590edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 06:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678027923;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nBZSdN0DyHSO54HE9hS1dDLmyIrE4P9z0Pt6ulnNjQg=;
-        b=UJsE7qIVwTaD8wsBWGkcvFux/apLI9B2J7s1V02XolGy2yvqrpwKbl8mmKSi4CLI8a
-         PCjDQYEPRlDwboQ4P/ms0X8+9zCN9uUT+ik6FFoyGmAzn/zYRaxeDZtva1J2zt+ZwARa
-         TYI7FH5a0WYD5ggbvcS4SpIQX2cPEF/uFG5udi9hHxIeVvF69S8MnyhDIKmRAB8YjsWD
-         0/Jtt6lotbRgENoYJWdm4IyVslnRdZmiuWOQk42mKIFvhz0Qs1sE8NShTN1Lu3HDrYiN
-         GkEYb3hKoi69QRXmnR8i+a7tSW3VlO1dyJ7tTlo/MtZhRZoh5GbIFJdf/bbP8VSROpbj
-         h/dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678027923;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBZSdN0DyHSO54HE9hS1dDLmyIrE4P9z0Pt6ulnNjQg=;
-        b=bGIML/J2S4cnKYt8oDQBE0LPaoGt3auhTurr13EWmacXBgVRKh5WhCVRst9V5IjmFO
-         4En3g6s00464fM0o9o3udfXkoRNrxUOmvN9D1bFVop559sVco2BVtonuCHACjsUTRD5L
-         dsGNmAJLWHLr9V7Va9njdzVS/opEZEhD2BSly4xPQbHzQhtGNHHUs/PEaqSV6tqIyS1i
-         EVf3i2boEbSd2ioq5S8laNLbqAziaqOIjl21WG7EsL31D9ZirQnfeuzYJ6MjRChkPC20
-         S30FT8e+Qm14ljtLKii8N5ClrzdVauR1fyzXGoVacj9P2mS2VyI1/susuHU4Vhqm5l0J
-         qrzg==
-X-Gm-Message-State: AO0yUKWkQIfySgW46W+I80tj3xVnty/7pXuyzhLgK0U9hjC0tUwxSfss
-        XL2Tv/6x56xIm/hINWf/nuur8w==
-X-Google-Smtp-Source: AK7set/F+sXy8LkpD8XCOmy+yyZa+HkKpCcFPKUsnRhHZqgS2BvgLkz6K9jC7HKFnuxsXl0H1EjGHA==
-X-Received: by 2002:aa7:df93:0:b0:4ab:5ce9:9f83 with SMTP id b19-20020aa7df93000000b004ab5ce99f83mr7850828edy.23.1678027923659;
-        Sun, 05 Mar 2023 06:52:03 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:71e7:13d:1c29:505f? ([2a02:810d:15c0:828:71e7:13d:1c29:505f])
-        by smtp.gmail.com with ESMTPSA id hy3-20020a1709068a6300b008e57b5e0ce9sm3302506ejc.108.2023.03.05.06.52.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 06:52:03 -0800 (PST)
-Message-ID: <0e74ad9a-2333-ea9e-b569-1bf8c965b217@linaro.org>
-Date:   Sun, 5 Mar 2023 15:52:02 +0100
+        Sun, 5 Mar 2023 10:00:48 -0500
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D0310403;
+        Sun,  5 Mar 2023 07:00:46 -0800 (PST)
+Received: from [192.168.1.141] ([37.4.248.41]) by mrelayeu.kundenserver.de
+ (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MpUpW-1qMAEt0jOu-00pqbz; Sun, 05 Mar 2023 16:00:31 +0100
+Message-ID: <05bc8f6e-b0cc-2ae6-db7a-ad90b3e69778@i2se.com>
+Date:   Sun, 5 Mar 2023 16:00:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/3] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
- global registers
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] serdev: Set fwnode for serdev devices
+To:     Florian Fainelli <f.fainelli@gmail.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kernel-team@android.com,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230302023509.319903-1-saravanak@google.com>
+ <2cc752fb-a25d-0789-0fad-54b99f08ced7@i2se.com>
+ <CAGETcx_nCdm2WYLC7h1s8i9tnHc_LcHk2oZUQ0sUDr-PBsUWDg@mail.gmail.com>
+ <faad8810-7aa4-e122-f497-73553feb8bcd@gmail.com>
+ <98f5abe2-3d25-661a-a2b8-a50e2d27f085@i2se.com>
+ <667f007f-1cb0-7e89-242a-c41823e82bee@gmail.com>
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org>
- <20230304-topic-ddr_bwmon-v1-1-e563837dc7d1@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230304-topic-ddr_bwmon-v1-1-e563837dc7d1@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <667f007f-1cb0-7e89-242a-c41823e82bee@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:rbVzumpqnIti5BN1cNnsoj8HXxEsoaEaPuUBVCzHUU80ur7twyo
+ 4HajNfcjEKOuow+d7ns+k1fu3x3GD0JgvYaBd1LPvSJE3xTZP14kkrtZDZLb2SNZ3dEecAY
+ OpvDvab7hFIxykPfCXoFyk3VDAKK4fQBfy1WbmH7TQ3T9gulxL7GppXxSXWhWG0jwijGQLd
+ DUz8yoCg5JcJ7zautIljQ==
+UI-OutboundReport: notjunk:1;M01:P0:3Ibv/ixqOV4=;es4tMNxdvNCu3yjkBmuW5I+n7ng
+ uTyYfRZI+kdN+bAJfgLUxN/E6HB30KKniweuXHTkFM+miINmXPYldfI7Bj1rXvdsNopLJz+d3
+ 7CBaUp1AZPO7mqcdtqwvBU/fCvqeeAaZyDSQjitBA8VeF66lArskkP+5Xsrvp2LLon2k5meUc
+ giR9pRf9TLz8CtsiG9U3qXEFDTHaCpyXa7epjxwuRdPBZae1o60KrbDjc9afXwpp91sobdsTx
+ 8iMCIBX0m5VMX2EFwxHWLOY2ABWtJovis+IQqbt+RmmX7YiPKlSeqpuWa5sacU0SSzWN0L1Ps
+ z/Iqu786LSC/+NtGJ11hC5g96XqV8btubzvAw7p832vxrRNJc1w1OZTvSTeqSYlxPezWhzPRD
+ 6BL8O5PmTABQ8UGJreot3gYQeOUYHgDl9A1V7wfN6QlGfCeecZ3aZyfUnz6a85JC7pC9tveNT
+ 12Jm8QysW/t6b8JCHy0GMoSiNqj0wkJ8BNuoFkOfVCPkCrttUpdhl8ddgBCG4UXI0cq0/ATEx
+ ON9alkjdy3KA4O2lAPFtDsIuU7wmrgTrietLmyIFht+xGeUp3Ft6wYz5N77ejJe9z3/d0DqBm
+ hzjAQc70IH6n7U/8X7y+UxTAw3i0ZX3xdxp/GQAcdwDUIj4rugVUv/1IOFFFZlvsf/nPOgRjD
+ 0sM8JDCrrf3CAxrminf7zp8nRWl++QBcwNrBiqew4w==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/03/2023 16:39, Konrad Dybcio wrote:
-> The BWMON has two sets of registers: one for handling the monitor itself
-> and one called "global", which we didn't care about before, as on newer
-> SoCs it was made contiguous with (but not the same as) the monitor's
-> register range. Describe it.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/interconnect/qcom,msm8998-bwmon.yaml  | 28 ++++++++++++++++++----
->  1 file changed, 24 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> index 12a0d3ecbabb..6dd0cb0a1f43 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> @@ -49,9 +49,13 @@ properties:
->      type: object
->  
->    reg:
-> -    # BWMON v4 (currently described) and BWMON v5 use one register address
-> -    # space.  BWMON v2 uses two register spaces - not yet described.
-> -    maxItems: 1
-> +    # BWMON v5 uses one register address space, v1-v4 use one or two.
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    minItems: 1
-> +    maxItems: 2
->  
->  required:
->    - compatible
-> @@ -63,6 +67,21 @@ required:
->  
->  additionalProperties: false
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          const: qcom,msm8998-bwmon
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-> +
-> +        reg-names:
-> +          items:
-> +            - const: monitor
-> +            - const: global
+Hi,
 
-else:
-  reg:
-    maxItems: 1
+Am 03.03.23 um 18:22 schrieb Florian Fainelli:
+> On 3/3/23 03:57, Stefan Wahren wrote:
+>> Hi,
+>>
+>> Am 02.03.23 um 18:51 schrieb Florian Fainelli:
+>>>
+>>>
+>>> On 3/2/2023 9:20 AM, Saravana Kannan wrote:
+>>>> On Thu, Mar 2, 2023 at 9:01 AM Stefan Wahren 
+>>>> <stefan.wahren@i2se.com> wrote:
+>>>>>
+>>>>> Hi Saravana,
+>>>>>
+>>>>> Am 02.03.23 um 03:35 schrieb Saravana Kannan:
+>>>>>> This allow fw_devlink to do dependency tracking for serdev devices.
+>>>>>>
+>>>>>> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
+>>>>>> Link: 
+>>>>>> https://lore.kernel.org/lkml/03b70a8a-0591-f28b-a567-9d2f736f17e5@gmail.com/
+>>>>>> Cc: Stefan Wahren <stefan.wahren@i2se.com>
+>>>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
+>>>>>
+>>>>> since this fixes an issue on Raspberry Pi 4, shouldn't this be 
+>>>>> mentioned
+>>>>> in the commit message and providing a Fixes tag?
+>>>>
+>>>> So RPi 4 was never creating a device links between serdev devices and
+>>>> their consumers. The error message was just a new one I added and we
+>>>> are noticing and catching the fact that serdev wasn't setting fwnode
+>>>> for a device.
+>>>>
+>>>> I'm also not sure if I can say this commit "Fixes" an issue in serdev
+>>>> core because when serdev core was written, fw_devlink wasn't a thing.
+>>>> Once I add Fixes, people will start pulling this into stable
+>>>> branches/other trees where I don't think this should be pulled into
+>>>> older stable branches.
+>>>
+>>> That is kind of the point of Fixes: tag, is not it? It is 
+>>> appropriate to list a commit that is not specific to serdev, but 
+>>> maybe a particular point into the fw_devlink history. Given this did 
+>>> not appear to have a functional impact, we could go without one.
+>>
+>> i was under the impression that this issue breaks at least Bluetooth 
+>> on Raspberry Pi 4 because the driver is never probed. I cannot see 
+>> the success output in Florian's trace. Something like this:
+>>
+>> [    7.124879] hci_uart_bcm serial0-0: supply vbat not found, using 
+>> dummy regulator
+>> [    7.131743] hci_uart_bcm serial0-0: supply vddio not found, using 
+>> dummy regulator
+>> ...
+>> [    7.517249] Bluetooth: hci0: BCM: chip id 107
+>> [    7.517499] Bluetooth: hci0: BCM: features 0x2f
+>> [    7.519757] Bluetooth: hci0: BCM4345C0
+>> [    7.519768] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0000
+>> [    7.539495] Bluetooth: hci0: BCM4345C0 'brcm/BCM4345C0.hcd' Patch
+>> ...
+>> [    8.348831] Bluetooth: hci0: BCM43455 37.4MHz Raspberry Pi 3+
+>> [    8.348845] Bluetooth: hci0: BCM4345C0 (003.001.025) build 0342
+>>
+>> I just want to make sure that 6.2 doesn't have a regression.
+>
+> My configuration uses hci_uart as a module, and it would always load 
+> fine, but I suppose I can make sure that even built-in this works 
+> properly. Give me a day or two to test that.
 
-and either disallow reg-names or move it to the top-level.
+okay, this is fine. From my point of view this is not necessary to test 
+built-in.
 
-> +
->  examples:
->    - |
->      #include <dt-bindings/interconnect/qcom,sdm845.h>
-> @@ -70,7 +89,8 @@ examples:
->  
->      pmu@1436400 {
->          compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
-> -        reg = <0x01436400 0x600>;
-> +        reg = <0x01436400 0x600>, <0x01436300 0x200>;
+I tested latest mainline with Raspberry Pi 4 (multi_v7_defconfig + 
+ARM_LPAE) and there is no regression:
 
-That's not correct for sdm845. It's only one address space for sdm845.
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-
-Best regards,
-Krzysztof
+Thanks
 
