@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6BB6AB37C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 00:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E1B6AB394
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 00:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjCEXZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 18:25:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
+        id S229539AbjCEXvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 18:51:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjCEXZv (ORCPT
+        with ESMTP id S229457AbjCEXvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 18:25:51 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32CE193E6;
-        Sun,  5 Mar 2023 15:25:50 -0800 (PST)
-From:   Bastian Germann <bage@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678058747;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V1oqD3RLQE54KREnjnPSNU36NDXrqx5n49sI1IXyxQQ=;
-        b=OX3+jXTYtDpuW7Y6HuXsrKM3fyr63rOlkxq722F4e7HW5MeMioSc5zunPt+90c6ilYhA8Q
-        ydfErU+k6sFzF4pDzVDjJlDrVbZ565dC79fmULqHnbuW0YqXdBrHyK9XvtZn2C+UqC9/n2
-        6U875vPXwtnSovDKO6IjKZuUdQ3gNE6q59myCyjHRDCFzQJKXCY3KGHdJgbqRXli2WsEFr
-        v/PYhd3gMKz9jGE1wpF8xyCvX8PhWiTmhpZYODndz2Xiul/5UteGRTiAkTtq/JurbKvh2j
-        ssIsVMqWjchsJ2/QhtYjTH/PV1oynO1+SNZE5GQ+EzfBm1Ej5RkJSKFVc6Sdkg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678058747;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V1oqD3RLQE54KREnjnPSNU36NDXrqx5n49sI1IXyxQQ=;
-        b=/YWYg87hXlmtkAgCJ2Vk4S8dmVu+0GGg8XgI3VgijIoVrIYrSs2XNhY+s74vleyA6tt00G
-        0ri1XNInXIFhwnCg==
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Bastian Germann <bage@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] kbuild: deb-pkg: default dpkg-buildpackage --build
-Date:   Mon,  6 Mar 2023 00:25:35 +0100
-Message-Id: <20230305232536.19528-2-bage@linutronix.de>
-In-Reply-To: <20230305232536.19528-1-bage@linutronix.de>
-References: <20230305232536.19528-1-bage@linutronix.de>
+        Sun, 5 Mar 2023 18:51:31 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B67612BF7;
+        Sun,  5 Mar 2023 15:51:29 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVJQ44cNSz4whh;
+        Mon,  6 Mar 2023 10:51:24 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678060284;
+        bh=4Ubvfc+N2WszvIxBH/o9AtdMacnaJ6vKoMlGg/A1NOA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Z6sRDkcNixC8v/i5nilfhbWnjT1sGapaPTDWm/jPhMRx8rqduD97I/CPrv3r40tPZ
+         Y+TPKbnZwinbD69vBjjOSvbuQ2TXwKYBpt9EELfxuEYwwkdl2eVzEfsimCo5VuyGT7
+         CzYG+SETF7/4uLayUfnufGYaT4fwFEJCgaVodcNIvSj4h2iOJtw4xM3qA+dH5bnA/I
+         sIdtrQph/4XmwEIPp39Ag8tSlvLiZwfoVN/pT4qtn4LltmkHPBrh6QyAC2lOSvWD7T
+         UySU5mryXUhd7hE75/HGEnl2ikTkSBU62lHm1aak65SqkKEVPfx7jdyu6aZmG3+VZu
+         4gLSDjmVq4U5w==
+Date:   Mon, 6 Mar 2023 10:51:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the nvmem tree
+Message-ID: <20230306105123.5ea1acc0@canb.auug.org.au>
+In-Reply-To: <20230206083215.723e7f72@canb.auug.org.au>
+References: <20230206083215.723e7f72@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/_z=4luYuA4bXw1eBvX61LwO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-deb-pkg's dpkg-buildpackage invocation was added --build=source,binary
-recently. Before, it relied on the default, which is
---build=source,binary,all and makes no difference for the built packages
-as there is no "Arch: all" package.
+--Sig_/_z=4luYuA4bXw1eBvX61LwO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-However, the explicit --build eliminates overriding it via DPKG_FLAGS,
-which used to fill the gap of generating only a source package without
-building it.
+Hi,
 
-Recover the old, default behavior.
+On Mon, 6 Feb 2023 08:32:15 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+>=20
+>   03b6f71ceeb1 ("nvmem: core: fix cleanup after dev_set_name()")
+>   6b868c1a2ec0 ("nvmem: sunxi_sid: Always use 32-bit MMIO reads")
+>   957b1f840ce0 ("nvmem: brcm_nvram: Add check for kzalloc")
+>   9afef75ce71c ("nvmem: core: remove nvmem_config wp_gpio")
+>   a895af2746e3 ("nvmem: core: fix return value")
+>   b02c75889942 ("nvmem: core: fix registration vs use race")
+>   b3a9be9040b7 ("nvmem: core: initialise nvmem->id early")
+>   ba716d020bc8 ("nvmem: qcom-spmi-sdam: fix module autoloading")
+>   c976fd0b6970 ("nvmem: core: fix device node refcounting")
+>   ee29286033ef ("nvmem: core: fix cell removal on error")
 
-Fixes: 7bf4582d7aad ("kbuild: deb-pkg: create source package without cleaning")
-Signed-off-by: Bastian Germann <bage@linutronix.de>
----
- scripts/Makefile.package | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This duplication has now started causing conflicts ... please clean up
+your tree now that v6.3-rc1 is out.
 
-diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-index b941e6341b36..fe1721915a59 100644
---- a/scripts/Makefile.package
-+++ b/scripts/Makefile.package
-@@ -120,7 +120,7 @@ debian-orig: linux.tar.gz debian
- PHONY += deb-pkg
- deb-pkg: debian-orig
- 	+dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
--		--build=source,binary -nc -us -uc
-+		-nc -us -uc
- 
- PHONY += bindeb-pkg
- bindeb-pkg: debian
--- 
-2.39.2
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/_z=4luYuA4bXw1eBvX61LwO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQFKvsACgkQAVBC80lX
+0GwsCgf8DbV0wJYYtLEfVR3zPOBfb9wmFs4Ns8Pnz2kKV99Pi2foXEx5vlM5vAc/
+895SIiswHjaY5AKY6mRtQo1UeW6lTFyid/+y4f3QJ0y+GkkV2f+5v/JIxECjGmaZ
+fXrLMUWQT8I2usmMuf03BZcYsCTJxZWdq4yTA1lLKZB/ibU776MhbPK3jTgT5/nM
+VpTeZmcbPbHcCtvKNfSpJ1zY3CybVTWyji2Nz8hozPqfftRVQSvvb5MVFp/FrNm7
+L8k9bsfSgWUh5Wofo0zBZReAB1qQVNH98QHK6GxraedMcMMI/AxZAaB9DFB8KvJI
+FOJmicLuUX/TOkjPAvcM3MrqX1Qo4A==
+=XLgs
+-----END PGP SIGNATURE-----
+
+--Sig_/_z=4luYuA4bXw1eBvX61LwO--
