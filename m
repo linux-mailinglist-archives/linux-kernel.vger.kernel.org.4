@@ -2,546 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5A936AB186
-	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 18:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D966AB18A
+	for <lists+linux-kernel@lfdr.de>; Sun,  5 Mar 2023 18:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjCERJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 12:09:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S229535AbjCERQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 12:16:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjCERJL (ORCPT
+        with ESMTP id S229437AbjCERQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 12:09:11 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50FEEB60;
-        Sun,  5 Mar 2023 09:09:08 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 325GjDIw018482;
-        Sun, 5 Mar 2023 17:08:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=1njsHmqyQTdoddQCPxcxlkPisxjoXRxh6bMmERz5WC8=;
- b=JMYDEgf/NsxKhPd6NoNIJi9H3KMZCpFEqZN/lQwMb0CnT8MIIfQ2IspF3xDfuvaGTRCm
- KuvQCBBUChnL5UGyD4gCHIvrUCxtKQj0VUUFpjaMQPasOkso4UMDL2gRddqQ3CFzCmDg
- AFO8GpsoTyB1dM1C8GqP0kdL4fYykTIElTMorKwUMOO4zjf+DWUuxFn6zAjIrLvmXEt7
- wxj8WxFPju5wvA3tMEeGnOzo90HOkmmDlCYaxFLtn364QTHGUjQUyRPe+b7pgUkUq8sj
- WE3ZzJHYw5v7p2suo4DS3s48Mj/gVnlbOvqN1pCud8ftodvjJX+o0RkFNeXKqx8Ukxcq jw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p41872gqd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 05 Mar 2023 17:08:26 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 325H8PoQ029890
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 5 Mar 2023 17:08:25 GMT
-Received: from [10.110.39.221] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Sun, 5 Mar 2023
- 09:08:23 -0800
-Message-ID: <d193d7e3-8fa5-d66b-d184-aac9239da417@quicinc.com>
-Date:   Sun, 5 Mar 2023 09:08:21 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/2] check-uapi: Introduce check-uapi.sh
-To:     Masahiro Yamada <masahiroy@kernel.org>
-CC:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Todd Kjos <tkjos@google.com>,
-        Matthias Maennich <maennich@google.com>,
-        Giuliano Procida <gprocida@google.com>,
-        <kernel-team@android.com>, <libabigail@sourceware.org>,
-        Jordan Crouse <jorcrous@amazon.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>
-References: <20230301075402.4578-1-quic_johmoo@quicinc.com>
- <20230301075402.4578-2-quic_johmoo@quicinc.com>
- <CAK7LNAS-TSKYi8JGGZVa7YrLqLR+SjM-gYkd6ND=hAzGAxK1tg@mail.gmail.com>
-Content-Language: en-US
-From:   John Moon <quic_johmoo@quicinc.com>
-In-Reply-To: <CAK7LNAS-TSKYi8JGGZVa7YrLqLR+SjM-gYkd6ND=hAzGAxK1tg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: L4X44KqPhqs_YGFWhypV28aa1heWff5X
-X-Proofpoint-ORIG-GUID: L4X44KqPhqs_YGFWhypV28aa1heWff5X
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-05_06,2023-03-03_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 mlxlogscore=999 bulkscore=0 suspectscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303050151
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 5 Mar 2023 12:16:53 -0500
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7802125B8;
+        Sun,  5 Mar 2023 09:16:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1678036612; x=1709572612;
+  h=from:to:cc:subject:date:message-id;
+  bh=YgHLYfMgJIfaFotHaMfy6wc+7QCxHH5ImBuCGOxV31k=;
+  b=PAzUuS+U81Qh303tJ/IoonORSstG+x5Gz28kQZf8Lh8R5+f/6LdXIIEc
+   s+JYKLuOzq1DJnAyf/kI/AWNqK0457FjjsojpSqbCnpwybhVLoEZDKrbD
+   9jB60dKP1nJ/8asSyUzezwOhvBmmRtoeA2WcUSGEuGzfBVGqy1I6s5a3u
+   tHal9n9U5exyE8vt5SbOWRLn7AqURNWC4b0lEdn9DuB0sBOVDZeWt+rT3
+   5DhBAA2/g7h/Tw3LeqtH8Tb9TiSivRAPkET5gvHpfsBVCXhjpgaQW9nWf
+   M3stPUl8dEXx3cXuXO1d8UtV3xuxEG874ydq+4LTC55IeBy+cPFr+flF+
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,236,1673884800"; 
+   d="scan'208";a="223130994"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 06 Mar 2023 01:16:32 +0800
+IronPort-SDR: Ytu2dLfqx9MY66tl2qm8zrQxRl5ozezrK8H99k1g0p8/zoyPp6oKlue2SqplqPDqtlfBAYSczm
+ sMf54s+m2kxJKDqr3bkLweiGrOLWwBvmfZx5M3AQ9xVh0eQayUgfyrPu/M25TQeVTwjMe+K9Mm
+ cZzezXvTkKaSD6iTMo45IsSOAAi4Cc8Q67hlJdsPDLt16DnprKa802oiIF+pE7FLMRWYRpoRhf
+ DWKFdQpdPHXL61hIiZyS/yWIA/vdgb5zcChkE1C9cjzX/jnwe3H7fXYOirCgqm/oaqvut+ZjvY
+ hhg=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Mar 2023 08:27:33 -0800
+IronPort-SDR: seNZIYL3rHeeGT8p9sLl88EgfKvf3bTE/peawXRpC/MstOBfXWsyCs+DK74XSp3IjLdTlI+vLS
+ GU2hDerHRFT4beA3bwJx9/Spj3rCJaKe5u0V0IYQFZQRpFNuX7q7Ac3VGILoOZKOGKW1wWk50h
+ eMdxP8i8PABQN7sUbKfAtPoedM3Y2EOmOLKlcD3oJBdfkr6FJoiQANbviLNXfInMC+jelmeEOh
+ YIFfig+GcvIsleK/hHrjpT5B0Q5dGcBJ14p7Ql1LsOV7spTwnvqvo8JZNI7bBZn2pNW4QgQ2P9
+ UhY=
+WDCIronportException: Internal
+Received: from ilb001078.ad.shared (HELO ilb001078.sdcorp.global.sandisk.com) ([10.45.31.219])
+  by uls-op-cesaip02.wdc.com with ESMTP; 05 Mar 2023 09:16:30 -0800
+From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
+To:     martin.petersen@oracle.com
+Cc:     avri.altman@wdc.com, Avi.Shchislowski@wdc.com, beanhuo@micron.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bvanassche@acm.org, Arthur Simchaev <Arthur.Simchaev@wdc.com>
+Subject: [PATCH] ufs: core: Add support for qTimestamp attribute
+Date:   Sun,  5 Mar 2023 19:16:27 +0200
+Message-Id: <1678036587-26927-1-git-send-email-Arthur.Simchaev@wdc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/2023 8:22 PM, Masahiro Yamada wrote:
-> On Wed, Mar 1, 2023 at 4:54 PM John Moon <quic_johmoo@quicinc.com> wrote:
->>
->> While the kernel community has been good at maintaining backwards
->> compatibility with kernel UAPIs, it would be helpful to have a tool
->> to check if a commit introduces changes that break backwards
->> compatibility.
->>
->> To that end, introduce check-uapi.sh: a simple shell script that
->> checks for changes to UAPI headers using libabigail.
->>
->> libabigail is "a framework which aims at helping developers and
->> software distributors to spot some ABI-related issues like interface
->> incompatibility in ELF shared libraries by performing a static
->> analysis of the ELF binaries at hand."
->>
->> The script uses one of libabigail's tools, "abidiff", to compile the
->> changed header before and after the commit to detect any changes.
->>
->> abidiff "compares the ABI of two shared libraries in ELF format. It
->> emits a meaningful report describing the differences between the two
->> ABIs."
->>
->> The script also includes the ability to check the compatibilty of
->> all UAPI headers across commits. This allows developers to inspect
->> the stability of the UAPIs over time.
-> 
-> 
-> Let's see more test cases.
-> 
-> 
-> [Case 1]
-> 
-> I think d759be8953febb6e5b5376c7d9bbf568864c6e2d
-> is a trivial/good cleanup.
-> Apparently, it still exports equivalent headers,
-> but this tool reports "incorrectly removed".
-> 
-> 
-> 
-> $ ./scripts/check-uapi.sh -b d759be8953
-> Saving current tree state... OK
-> Installing sanitized UAPI headers from d759be8953... OK
-> Installing sanitized UAPI headers from d759be8953^1... OK
-> Restoring current tree state... OK
-> Checking changes to UAPI headers starting from d759be8953
-> error - UAPI header arch/alpha/include/uapi/asm/poll.h was incorrectly removed
-> error - UAPI header arch/ia64/include/uapi/asm/poll.h was incorrectly removed
-> error - UAPI header arch/x86/include/uapi/asm/poll.h was incorrectly removed
-> /tmp/tmp.ixUIBlntUP/d759be8953/x86/usr/include/asm/Kbuild does not
-> exist - cannot compare ABI
-> /tmp/tmp.ixUIBlntUP/d759be8953/alpha/usr/include/asm/Kbuild does not
-> exist - cannot compare ABI
-> /tmp/tmp.ixUIBlntUP/d759be8953/ia64/usr/include/asm/Kbuild does not
-> exist - cannot compare ABI
-> error - 6/6 UAPI headers modified between d759be8953^1 and d759be8953
-> are not backwards compatible
-> error - UAPI header ABI check failed
-> Failure summary saved to /home/masahiro/ref/linux/abi_error_log.txt
-> 
-> 
+The new qTimestamp attribute was added to UFS 4.0 spec, in order to
+synchronize timestamp between device logs and the host.The spec recommend
+to send this attribute upon device power-on Reset/HW reset or when
+switching to Active state (using SSU command). Due to this attribute,
+the attribute's max value was extended to 8 bytes. As a result,
+the new definition of struct utp_upiu_query_v4_0 was added.
 
-This is an interesting test case. Thanks for bringing it up. I don't 
-know if there's a way for the script to filter out these kinds of 
-changes, so it may just need to be noted under possible false positives 
-in the document.
+Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
+---
+ drivers/ufs/core/ufshcd.c        | 37 +++++++++++++++++++++++++++++++++++++
+ include/uapi/scsi/scsi_bsg_ufs.h | 25 +++++++++++++++++++++++++
+ include/ufs/ufs.h                |  1 +
+ 3 files changed, 63 insertions(+)
 
-It also reveals that the script isn't filtering out non-headers from the 
-git diffs... I'll fix that in v3.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 629442c..48ef2e3 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -8378,6 +8378,40 @@ static int ufshcd_device_params_init(struct ufs_hba *hba)
+ 	return ret;
+ }
+ 
++static void ufshcd_set_timestamp_attr(struct ufs_hba *hba)
++{
++	int err;
++	struct ufs_query_req *request = NULL;
++	struct ufs_dev_info *dev_info = &hba->dev_info;
++	struct utp_upiu_query_v4_0 *upiu_data;
++
++	if (dev_info->wspecversion < 0x400)
++		return;
++
++	ufshcd_hold(hba, false);
++
++	mutex_lock(&hba->dev_cmd.lock);
++
++	ufshcd_init_query(hba, &request, 0,
++			  UPIU_QUERY_OPCODE_WRITE_ATTR,
++			  QUERY_ATTR_IDN_TIMESTAMP, 0, 0);
++
++	request->query_func = UPIU_QUERY_FUNC_STANDARD_WRITE_REQUEST;
++
++	upiu_data = (struct utp_upiu_query_v4_0 *)&request->upiu_req;
++
++	put_unaligned_be64(ktime_get_real_ns(), &upiu_data->osf3);
++
++	err = ufshcd_exec_dev_cmd(hba, DEV_CMD_TYPE_QUERY, QUERY_REQ_TIMEOUT);
++
++	if (err)
++		dev_err(hba->dev, "%s: failed to set timestamp %d\n",
++			__func__, err);
++
++	mutex_unlock(&hba->dev_cmd.lock);
++	ufshcd_release(hba);
++}
++
+ /**
+  * ufshcd_add_lus - probe and add UFS logical units
+  * @hba: per-adapter instance
+@@ -8547,6 +8581,8 @@ static int ufshcd_device_init(struct ufs_hba *hba, bool init_dev_params)
+ 	ufshcd_set_ufs_dev_active(hba);
+ 	ufshcd_force_reset_auto_bkops(hba);
+ 
++	ufshcd_set_timestamp_attr(hba);
++
+ 	/* Gear up to HS gear if supported */
+ 	if (hba->max_pwr_info.is_valid) {
+ 		/*
+@@ -9566,6 +9602,7 @@ static int __ufshcd_wl_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 		ret = ufshcd_set_dev_pwr_mode(hba, UFS_ACTIVE_PWR_MODE);
+ 		if (ret)
+ 			goto set_old_link_state;
++		ufshcd_set_timestamp_attr(hba);
+ 	}
+ 
+ 	if (ufshcd_keep_autobkops_enabled_except_suspend(hba))
+diff --git a/include/uapi/scsi/scsi_bsg_ufs.h b/include/uapi/scsi/scsi_bsg_ufs.h
+index 2801b65..fd3f9e5e 100644
+--- a/include/uapi/scsi/scsi_bsg_ufs.h
++++ b/include/uapi/scsi/scsi_bsg_ufs.h
+@@ -71,6 +71,31 @@ struct utp_upiu_query {
+ };
+ 
+ /**
++ * struct utp_upiu_query_v4_0 - upiu request buffer structure for
++ * query request >= UFS 4.0 spec.
++ * @opcode: command to perform B-0
++ * @idn: a value that indicates the particular type of data B-1
++ * @index: Index to further identify data B-2
++ * @selector: Index to further identify data B-3
++ * @osf4: spec field B-5
++ * @osf5: spec field B 6,7
++ * @osf6: spec field DW 8,9
++ * @osf7: spec field DW 10,11
++ */
++struct utp_upiu_query_v4_0 {
++	__u8 opcode;
++	__u8 idn;
++	__u8 index;
++	__u8 selector;
++	__u8 osf3;
++	__u8 osf4;
++	__be16 osf5;
++	__be32 osf6;
++	__be32 osf7;
++	__be32 reserved;
++};
++
++/**
+  * struct utp_upiu_cmd - Command UPIU structure
+  * @data_transfer_len: Data Transfer Length DW-3
+  * @cdb: Command Descriptor Block CDB DW-4 to DW-7
+diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h
+index 4e8d624..198cb39 100644
+--- a/include/ufs/ufs.h
++++ b/include/ufs/ufs.h
+@@ -170,6 +170,7 @@ enum attr_idn {
+ 	QUERY_ATTR_IDN_WB_BUFF_LIFE_TIME_EST    = 0x1E,
+ 	QUERY_ATTR_IDN_CURR_WB_BUFF_SIZE        = 0x1F,
+ 	QUERY_ATTR_IDN_EXT_IID_EN		= 0x2A,
++	QUERY_ATTR_IDN_TIMESTAMP		= 0x30
+ };
+ 
+ /* Descriptor idn for Query requests */
+-- 
+2.7.4
 
-> 
-> [Case 2]
-> 
-> This tool compiles only changed headers.
-> Does it detect ABI change?
-> 
-> I believe the users of the headers must be compiled.
-> 
-> 
-> 
-> Think about this case.
-> 
-> 
-> $ cat foo-typedef.h
-> typedef int foo_cap_type;
-> 
-> 
-> $ cat foo.h
-> #include "foo-typedef.h"
-> 
-> struct foo {
->         foo_cap_type capability;
-> };
-> 
-> 
-> 
-> Then, change the first header to
->    typedef long long foo_cap_type;
-> 
-> abidiff will never notice the ABI change
-> until it compiles "foo.h" instead of "foo-typedef.h"
->  >
-> 
-> For testing, I applied the following patch.
-> 
-> 
->   --- a/include/uapi/linux/types.h
->   +++ b/include/uapi/linux/types.h
->   @@ -52,7 +52,7 @@ typedef __u32 __bitwise __wsum;
->    #define __aligned_be64 __be64 __attribute__((aligned(8)))
->    #define __aligned_le64 __le64 __attribute__((aligned(8)))
-> 
->   -typedef unsigned __bitwise __poll_t;
->   +typedef unsigned short __bitwise __poll_t;
-> 
->    #endif /*  __ASSEMBLY__ */
->    #endif /* _UAPI_LINUX_TYPES_H */
-> 
-> 
-> 
-> 
-> I believe this is an ABI change because this will change
-> 'struct epoll_event' in the include/uapi/linux/eventpoll.h
-> but the tool happily reports it is backwards compatible.
-> 
-> 
-> $ ./scripts/check-uapi.sh
-> Saving current tree state... OK
-> Installing sanitized UAPI headers from HEAD... OK
-> Installing sanitized UAPI headers from HEAD^1... OK
-> Restoring current tree state... OK
-> Checking changes to UAPI headers starting from HEAD
-> No ABI differences detected in include/uapi/linux/types.h from HEAD^1 -> HEAD
-> All 1 UAPI headers modified between HEAD^1 and HEAD are backwards compatible!
-> 
-> 
-
-You're correct, this case is missed when only checking modified headers. 
-With the same patch, if I pass "-a" to the script, it does catch the change:
-
-% ./scripts/check-uapi.sh -a
---- snip ---
-error - 1/1328 UAPI headers modified between HEAD and dirty tree are not 
-backwards compatible
-error - UAPI header ABI check failed
-
-
-% cat abi_error_log.txt
-Generated by "./scripts/check-uapi.sh -a" from git ref 
-94b1166f7954f1136f307dafbaad5f9d871b73bf
-
-!!! ABI differences detected in include/uapi/linux/eventpoll.h from HEAD 
--> dirty tree !!!
-
-     [C] 'struct epoll_event' changed:
-       type size changed from 96 to 80 (in bits)
-       2 data member changes:
-         type of '__poll_t events' changed:
-           underlying type 'unsigned int' changed:
-             type name changed from 'unsigned int' to 'unsigned short int'
-             type size changed from 32 to 16 (in bits)
-         '__u64 data' offset changed from 32 to 16 (in bits) (by -16 bits)
-
-Perhaps in the next revision we could add some way to detect these 
-dependencies (e.g. if foo.h includes bar.h, and bar.h was modified, we 
-should check foo.h). However, the time savings may not be worth the 
-complicated and potentially fragile dependency detection.
-
-For now, "-a" should catch this, and it only took about 1 minute to run 
-through all the headers on my 8-core machine, so it should be a 
-resonable test step for a CI system.
-
-> 
-> 
-> 
-> I would not use such a tool that contains both false positives
-> and false negatives, but you may notice this is more difficult
-> than you had expected.
-> 
-
-Right, it certainly has its shortcomings. I appreciate you helping us 
-find and address them! Even in its current state, I believe the script 
-has value for developers and reviewers. :)
-
-> I do not know if further review is worthwhile since this does not work
-> but I added some more in-line comments.
-> 
-> 
-> 
-> 
-> 
-> 
->> +
->> +# Some UAPI headers require an architecture-specific compiler to build properly.
->> +ARCH_SPECIFIC_CC_NEEDED=(
->> +       "arch/hexagon/include/uapi/asm/sigcontext.h"
->> +       "arch/ia64/include/uapi/asm/intel_intrin.h"
->> +       "arch/ia64/include/uapi/asm/setup.h"
->> +       "arch/ia64/include/uapi/asm/sigcontext.h"
->> +       "arch/mips/include/uapi/asm/bitfield.h"
->> +       "arch/mips/include/uapi/asm/byteorder.h"
->> +       "arch/mips/include/uapi/asm/inst.h"
->> +       "arch/sparc/include/uapi/asm/fbio.h"
->> +       "arch/sparc/include/uapi/asm/uctx.h"
->> +       "arch/xtensa/include/uapi/asm/byteorder.h"
->> +       "arch/xtensa/include/uapi/asm/msgbuf.h"
->> +       "arch/xtensa/include/uapi/asm/sembuf.h"
->> +)
-> 
-> 
-> Yes, arch/*/include/ must be compiled by the target compiler.
-> If you compile them by the host compiler, it is unpredictable (i.e. wrong).
-> 
-> BTW, was this blacklist detected on a x86 host?
-> 
-
-Yes.
-
-> If you do this on an ARM/ARM64 host, some headers
-> under arch/x86/include/uapi/ might be blacklisted?
-> 
-
-Good point - I missed those!
-
-> 
-> 
->> +# Compile the simple test app
->> +do_compile() {
->> +       local -r inc_dir="$1"
->> +       local -r header="$2"
->> +       local -r out="$3"
->> +       printf "int main(void) { return 0; }\n" | \
->> +               "${CC:-gcc}" -c \
->> +                 -o "$out" \
->> +                 -x c \
->> +                 -O0 \
->> +                 -std=c90 \
->> +                 -fno-eliminate-unused-debug-types \
->> +                 -g \
->> +                 "-I${inc_dir}" \
->> +                 -include "$header" \
->> +                 -
->> +}
->> +
->> +# Print the list of incompatible headers from the usr/include Makefile
->> +get_no_header_list() {
->> +       {
->> +               # shellcheck disable=SC2016
->> +               printf 'all: ; @echo $(no-header-test)\n'
->> +               cat "usr/include/Makefile"
-> 
-> You must pass SRCARCH=$arch.
-> 
-> Otherwise,
-> 
-> ifeq ($(SRCARCH),...)
->    ...
-> endif
-> 
-> are all skipped.
-> 
-> 
-
-Thanks for the tip, that explains it. Should be able to address this in v3.
-
-> 
-> 
-> 
->> +       } | make -f - | tr " " "\n" | grep -v "asm-generic"
->> +
->> +       # One additional header file is not building correctly
->> +       # with this method.
->> +       # TODO: why can't we build this one?
->> +       printf "asm-generic/ucontext.h\n"
-> 
-> 
-> Answer - it is not intended for standalone compiling in the first place.
-> 
-> <asm-generic/*.h> should be included from <asm/*.h>.
-> 
-> Userspace never ever includes <asm-generic/*.h> directly.
-> (If it does, it is a bug in the userspace program)
-> 
-> I am afraid you read user/include/Makefile wrongly.
-> 
-> 
-
-Understood. I think I had misinterpreted one of your comments on v1, but 
-now I'm clear. Will address in v3.
-
-> 
-> 
->> +
->> +# Install headers for every arch and ref we need
->> +install_headers() {
->> +       local -r check_all="$1"
->> +       local -r base_ref="$2"
->> +       local -r ref="$3"
->> +
->> +       local arch_list=()
->> +       while read -r status file; do
->> +               if arch="$(printf "%s" "$file" | grep -o 'arch/.*/uapi' | cut -d '/' -f 2)"; then
->> +                       # shellcheck disable=SC2076
->> +                       if ! [[ " ${arch_list[*]} " =~ " $arch " ]]; then
->> +                               arch_list+=("$arch")
->> +                       fi
->> +               fi
->> +       done < <(get_uapi_files "$check_all" "$base_ref" "$ref")
->> +
->> +       deviated_from_current_tree="false"
->> +       for inst_ref in "$base_ref" "$ref"; do
->> +               if [ -n "$inst_ref" ]; then
->> +                       if [ "$deviated_from_current_tree" = "false" ]; then
->> +                               save_tree_state
->> +                               trap 'rm -rf "$tmp_dir"; restore_tree_state;' EXIT
->> +                               deviated_from_current_tree="true"
->> +                       fi
->> +                       git checkout --quiet "$(git rev-parse "$inst_ref")"
-> 
-> 
-> I might be wrong, but I was worried when I looked at this line
-> because git-checkout may change the running code
-> if check-uapi.sh is changed between ref and base_ref.
-> 
-> If bash always loads all code into memory before running
-> it is safe but I do not know how it works.
-> 
-> 
-> If this is safe, some comments might be worthwhile:
-> 
->      # 'git checkout' may update this script itself while running,
->      # but it is OK because ...
-> 
-
-Yes, my understanding is that since the script is all encapsulated in 
-functions, the shell has loaded all of the functions before execution 
-starts. My testing has shown this to be safe as well. Will add a comment 
-in v3.
-
-> 
-> 
-> 
-> 
->> +
->> +# Make sure we have the tools we need
->> +check_deps() {
->> +       export ABIDIFF="${ABIDIFF:-abidiff}"
->> +
->> +       if ! command -v "$ABIDIFF" > /dev/null 2>&1; then
->> +               eprintf "error - abidiff not found!\n"
->> +               eprintf "Please install abigail-tools (version 1.7 or greater)\n"
->> +               eprintf "See: https://sourceware.org/libabigail/manual/libabigail-overview.html\n"
->> +               exit 1
->> +       fi
->> +
->> +       read -r abidiff_maj abidiff_min _unused < <("$ABIDIFF" --version | cut -d ' ' -f 2 | tr '.' ' ')
->> +       if [ "$abidiff_maj" -lt 1 ] || { [ "$abidiff_maj" -eq 1 ] && [ "$abidiff_min" -lt 7 ]; }; then
-> 
-> 
-> This is up to you, but I think "sort -V" would be cleaner.
-> (see Documentation/devicetree/bindings/Makefile for example)
-> 
-> 
-
-Noted.
-
-> 
-> 
->> +       fi
->> +
->> +       if [ ! -x "scripts/unifdef" ]; then
->> +               if ! make -f /dev/null scripts/unifdef; then
-> 
-> Previously, I wanted to point out that using Make is meaningless,
-> and using gcc directly is better.
-> 
-> 
-> But, is this still necessary?
-> 
-> V2 uses 'make headers_install' to install all headers.
-> scripts/unifdef is not used anywhere in this script.
-> 
-> 
-
-Ah, you're right it is not necessary. Previously, we were calling 
-headers_install.sh directly, so make wasn't there to supply the unifdef 
-dependency. Will remove this in v3.
-
-> 
-> 
-> 
-> 
->> +
->> +       abi_error_log="${abi_error_log:-${KERNEL_SRC}/abi_error_log.txt}"
->> +
->> +       check_deps
->> +
->> +       tmp_dir=$(mktemp -d)
->> +       trap 'rm -rf "$tmp_dir"' EXIT
->> +
->> +       # Set of UAPI directories to check by default
->> +       UAPI_DIRS=(include/uapi arch/*/include/uapi)
->> +
->> +       if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
->> +               eprintf "error - this script requires the kernel tree to be initialized with Git\n"
->> +               exit 1
->> +       fi
->> +
->> +       # If there are no dirty UAPI files, use HEAD as base_ref
->> +       if [ -z "$base_ref" ] && [ "$(get_uapi_files "" "" | wc -l)" -eq 0 ]; then
->> +               base_ref="HEAD"
->> +       fi
->> +
->> +       if [ -z "$ref_to_check" ]; then
->> +               if [ -n "$base_ref" ]; then
->> +                       ref_to_check="${base_ref}^1"
->> +               else
->> +                       ref_to_check="HEAD"
->> +               fi
->> +       fi
-> 
-> 
-> I think this is because I am not good at English, but
-> I was so confused between 'base_ref' vs 'ref_to_check'.
-> I do not get which one is the ancestor from the names.
-> 
-> I thought 'ref_a' and 'ref_b' would be less confusing,
-> but I hope somebody will come up with better naming
-> than that.
-> 
-
-Agreed, I think this is a confusing case for native English-speakers too. :)
-
-I want to indicate that one ref has to come after the other in the Git 
-tree. Maybe "base_ref" and "past_ref"? We'll think on it.
-
-> 
-> 
-> 
-> --
-> Best Regards
-> 
-> 
-> 
-> 
-> 
-> Masahiro Yamada
-
-Thank you again for the detailed review!
