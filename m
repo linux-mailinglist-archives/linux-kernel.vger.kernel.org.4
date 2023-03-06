@@ -2,120 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40876ABFC0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84B36ABFC3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCFMlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S230092AbjCFMlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:41:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCFMlO (ORCPT
+        with ESMTP id S229622AbjCFMlj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:41:14 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0D62B2B7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:41:12 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id r16so8598036qtx.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 04:41:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678106472;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6XrdgZjMDlRLFUbyVPxJfBpwx76lgBG7lHXmFXxIIe0=;
-        b=U92togDggQfebFB+oCNSCcXsZbxpGePUFP3ikADRG6yzR7syMch4sYx3BcPbAHkflT
-         XK1Kj+4jKssvq/kJJq1e8naG9O8KHAnyfxBVzOBoFkIpBEWAh9DPnvxr05kI8FLpl0aj
-         kumC2G3oTOFIk7cWg3iIQjO12DUpbeZ27eyh+PD142mAqUYXfI6XQc2bQW16b7Dm6Anl
-         iVr8ApM5YTEDLOSpsYjlxQZKpKvTHphg2oAtc/e1B3uZ5iiD/PjC8O0R6RyChc+SzMqS
-         e4Wfc2RpqIbpxMTo2MpTDso63NBC9hYdfTUUs4kRyuvJG7E97nsjdO5rurLS0Myq7xaF
-         4vvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678106472;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6XrdgZjMDlRLFUbyVPxJfBpwx76lgBG7lHXmFXxIIe0=;
-        b=J78r+eRbp+TXns9e47iCFsRkJvTJYzMnW40jmJ0iJZ+pFkQWvgcHvXrdqM1730zqP1
-         qsEquMauQ7/PIEiquI0kBzOOwBgri6bJhuQwqO5piXT/aWkx8cnPrjHCk5+p6iSYt/B9
-         f+AKqo1T4DUlW2TI6IiscMio+RZnUKGkuoiWujfj8KBEJcycDOQC1+fowPPtlbfRyZCs
-         memsg7/ZxdPLAHARPbBCE2HxruAZAoEg9L1yZKuZsETxZ2QWo1AL7fBUxj527tzvCBn9
-         X2zDdquUhpIq9MkPdkTWBj18iraEENX8I221xdmsetDOQHuDHDK0p7gcS1MqfsOchP0P
-         mCdg==
-X-Gm-Message-State: AO0yUKXbiz2LnSY1Yo7U3QOudqTbydpzEKAhqwO0JBohDJTRp8M5vR3D
-        nb0n6OxXl16m8mP0rc9fYeltaw==
-X-Google-Smtp-Source: AK7set9TfEy2X1DOujpMKIH+igyL2YEO/hoGzriXXAWSRxRsb3UHkcR/L6n7Onm7AHa1lQCQR1vI8g==
-X-Received: by 2002:a05:622a:34b:b0:3b8:6ca4:bb23 with SMTP id r11-20020a05622a034b00b003b86ca4bb23mr15273152qtw.15.1678106471798;
-        Mon, 06 Mar 2023 04:41:11 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id l19-20020a05620a211300b007423c122457sm7340219qkl.63.2023.03.06.04.41.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 04:41:11 -0800 (PST)
-Date:   Mon, 6 Mar 2023 07:41:09 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, techsupport@winsystems.com,
-        stable@vger.kernel.org,
-        Paul Demetrotion <pdemetrotion@winsystems.com>
-Subject: Re: [RESEND] gpio: ws16c48: Fix off-by-one error in WS16C48 resource
- region extent
-Message-ID: <ZAXfZbywWOo2pg4L@fedora>
-References: <20230228081724.94786-1-william.gray@linaro.org>
- <CAMRc=MfD3=ifo9EJf=5_HZKLXnbASi=ehYm=Zs4WQA+YxfffQw@mail.gmail.com>
+        Mon, 6 Mar 2023 07:41:39 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563C42B2BD;
+        Mon,  6 Mar 2023 04:41:36 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 14BC52229F;
+        Mon,  6 Mar 2023 12:41:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678106495; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HI6JlS7hJSDM0R1Llsm8+r83GtIOvPDGo3kiUyn7gmo=;
+        b=Lhfwwo82a+fjOa8vunJ07m6qHB6X+FOnsAeRzQt/rT4OUUbWB6lsO1TajfcYWnqOMA+PzR
+        qSVARIPyHdaF6Zc2q7ZfofVp4EE50xhRq6AEkmsDM5lxJDZU6XVe7WTz0t7sLqI4wfEMlY
+        a0gNuWolhLtztOe8ZecpH3gVW7ey25w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678106495;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HI6JlS7hJSDM0R1Llsm8+r83GtIOvPDGo3kiUyn7gmo=;
+        b=hZ0H3qhSxYc0rgaOEaezrExx2qNmE5XUTrPND99JEd/TcGZO4357fCCilY8B2Qi0kRSrJc
+        EBwvLNEasDhYrEBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0321613A66;
+        Mon,  6 Mar 2023 12:41:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 07eyAH/fBWRcRQAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 06 Mar 2023 12:41:35 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 76870A064F; Mon,  6 Mar 2023 13:41:34 +0100 (CET)
+Date:   Mon, 6 Mar 2023 13:41:34 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        ext4 Development <linux-ext4@vger.kernel.org>
+Subject: Re: The state of ext4 tree merging (was Re: Linux 6.3-rc1)
+Message-ID: <20230306124134.hmeuvjhihs4ubpmz@quack3>
+References: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
+ <ZAVbZJSyOdF0BxAJ@debian.me>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zqx7Ofl6bIpHu7bU"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMRc=MfD3=ifo9EJf=5_HZKLXnbASi=ehYm=Zs4WQA+YxfffQw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZAVbZJSyOdF0BxAJ@debian.me>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 06-03-23 10:17:56, Bagas Sanjaya wrote:
+> On Sun, Mar 05, 2023 at 03:24:41PM -0800, Linus Torvalds wrote:
+> > In fact, it was quite nice in a couple of ways: not only didn't I have
+> > a hugely compressed merge window where I felt I had to cram as much as
+> > possible into the first few days, but the fact that we _have_ had a
+> > couple of merge windows where I really asked for people to have
+> > everything ready when the merge window opened seems to have set a
+> > pattern: the bulk of everything really did come in early.
+> > 
+> 
+> Not so for me watching updates to ext4 merging hell...
+> 
+> In this merge window, Ted only submitted the first part of ext4 updates
+> [1] as noted in the resolution message [2]. The second part didn't make
+> through the merge window (PR not sent). As such, the data=writepage
+> cleanups have to wait for 6.4 merge window, and it is IMO inconvenient
+> for linux-next to contain ext4 tree from next-20230217 for about
+> seven weeks, as any enhancements and fixes applied to the tree are
+> holding back from testing in linux-next until this hell can be sorted
+> out.
+> 
+> In the long term, I'd like to see a co-maintainer step in to help
+> maintaining the tree in case Ted is busy. Of couse I'm not eligible
+> for that role (I played as documentation janitor instead), but
+> any developer with deep knowledge and experience for the fs and its
+> internals should fit the role.
 
---zqx7Ofl6bIpHu7bU
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+To be fair, the data=journal cleanups got held back only partially due to
+the merge issues. Another problem is that they somehow make problems with
+filesystem freezing in data=journal mode more frequent and we wanted to
+understand (and hopefully fix) that. Of course if Ted could look into this
+earlier or I could earlier debug these issues, we could have merged the
+cleanups but that's always the case that you have to prioritize and these
+cleanups don't have that high priority...
 
-On Mon, Mar 06, 2023 at 10:23:30AM +0100, Bartosz Golaszewski wrote:
-> On Thu, Mar 2, 2023 at 11:30=E2=80=AFPM William Breathitt Gray
-> <william.gray@linaro.org> wrote:
-> >
-> > The WinSystems WS16C48 I/O address region spans offsets 0x0 through 0xA,
-> > which is a total of 11 bytes. Fix the WS16C48_EXTENT define to the
-> > correct value of 11 so that access to necessary device registers is
-> > properly requested in the ws16c48_probe() callback by the
-> > devm_request_region() function call.
-> >
-> > Fixes: 2c05a0f29f41 ("gpio: ws16c48: Implement and utilize register str=
-uctures")
-> > Cc: stable@vger.kernel.org
-> > Cc: Paul Demetrotion <pdemetrotion@winsystems.com>
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-> > ---
->=20
-> Why did you need to resend this? Anything changed?
->=20
-> Bart
-
-No changes in code, just added the stable@ver.kernel.org Cc tag.
-
-William Breathitt Gray
-
---zqx7Ofl6bIpHu7bU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAXfZQAKCRC1SFbKvhIj
-K5j3AQCDDi/opSFAVX095eZN7sUZr/Nq6/HOpDiRxrg0Da27EAD+Ir3Vs4hMQ8ik
-dvGD/xKnfiuEDHex5yeQzjHChNUO6Qo=
-=d1q2
------END PGP SIGNATURE-----
-
---zqx7Ofl6bIpHu7bU--
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
