@@ -2,90 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF096AD0DC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796A96AD0E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjCFVwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:52:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S229565AbjCFVyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:54:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjCFVwJ (ORCPT
+        with ESMTP id S229717AbjCFVyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:52:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6766907E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:52:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 6 Mar 2023 16:54:53 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D874E5F4;
+        Mon,  6 Mar 2023 13:54:52 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9BED60F58
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 21:52:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFDA2C4339B;
-        Mon,  6 Mar 2023 21:52:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678139521;
-        bh=kO0Keh//hnfQf8ULbQJWCH8cX47nO17LVIchs+as6WU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YB3IQJ2xZiXWlJSkxMXIgc658PghDmAlpzfen7DzM6yBsYExhqY7DYF741alTyqRi
-         KoPeGZ99XE2t7ZQc86cJfnpXmQA1hXLiuPz7WTQlIlP4wOcdQt5E0W6w3kaXBUT7B3
-         +lEo80rezUP/7mpU9wFNdmaHAsoayTfEF8ZOxCiWohBBmYwHS4Ot/BbRd1q8O7nnMZ
-         KG1uuMAqQeaLZzkPiydzMLscJT+QCRpFb5TUrZvoh9t+dQseK0sjZulbHoO3DWsw7P
-         cxdKlQoMJ34cWpBofSl6UBH5qO9e6E+74Bp72zlQP5+C8VQDWAp0c8C8MGiMtPAgs+
-         oXVxtLf7w8ZDg==
-Date:   Mon, 6 Mar 2023 13:51:59 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Yonggil Song <yonggil.song@samsung.com>
-Cc:     Chao Yu <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "daehojeong@google.com" <daehojeong@google.com>,
-        Seokhwan Kim <sukka.kim@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>
-Subject: Re: [PATCH v2] f2fs: fix uninitialized skipped_gc_rwsem
-Message-ID: <ZAZgf4sbh14sVZMp@google.com>
-References: <CGME20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p7>
- <20230216071350epcms2p7b3f5f37b168b634ec7a7ba8555fd0b49@epcms2p7>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE15A1EC0373;
+        Mon,  6 Mar 2023 22:54:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678139690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=9pGyAdmsQDmfnIw6UPkfHo8gBZoi4g0acS6myxehQUE=;
+        b=ct+VQC3mXM9cIAwtZVnPH64+DubbftOPBbUFpPTw7MmQf25I4qxsjRXPyVJHJl0GrwhOob
+        AIU6qaikFre8yWzu8IiMTvVO+LN7mJRv0B3WX+f8WyVpiVDS3/HKc84tXj1G+5Yp2A1z8X
+        L2CsjK8nt61VGRMorqcGRNZgYhy+MLY=
+Date:   Mon, 6 Mar 2023 22:54:50 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Takahiro Itazuri <itazur@amazon.com>,
+        dave.hansen@linux.intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@redhat.com, tglx@linutronix.de,
+        x86@kernel.org, zulinx86@gmail.com
+Subject: Re: [PATCH 0/2] KVM: x86: Propagate AMD-specific IBRS bits to guests
+Message-ID: <20230306215450.GFZAZhKnr6zMCeeDNd@fat_crate.local>
+References: <Y/5oBKi6vjZe83ac@zn.tnic>
+ <20230228222416.61484-1-itazur@amazon.com>
+ <Y/6FIeJ5KCOfKEPN@zn.tnic>
+ <ZAZYKe4L8jhMG4An@google.com>
+ <20230306214419.GDZAZes941k+4NPgDL@fat_crate.local>
+ <25249e7d-4fd9-e1c1-8efb-31750740ec27@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230216071350epcms2p7b3f5f37b168b634ec7a7ba8555fd0b49@epcms2p7>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <25249e7d-4fd9-e1c1-8efb-31750740ec27@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/16, Yonggil Song wrote:
-> When f2fs skipped a gc round during victim migration, there was a bug which
-> would skip all upcoming gc rounds unconditionally because skipped_gc_rwsem
-> was not initialized. It fixes the bug by correctly initializing the
-> skipped_gc_rwsem inside the gc loop.
-> 
-> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
+On Mon, Mar 06, 2023 at 10:47:18PM +0100, Paolo Bonzini wrote:
+> It's very rare that KVM can provide a CPUID feature if the kernel has
+> masked it,
 
-Applied with the below fix.
+I'm talking about pure hw feature bits which don't need any enablement.
+Like AVX512 insns subset support or something else which the hw does
+without the need for the kernel.
 
-Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc"
+Those should be KVM-only if baremetal doesn't use them.
 
-> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
-> 
-> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> index b22f49a6f128..81d326abaac1 100644
-> --- a/fs/f2fs/gc.c
-> +++ b/fs/f2fs/gc.c
-> @@ -1786,8 +1786,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->  				prefree_segments(sbi));
->  
->  	cpc.reason = __get_cp_reason(sbi);
-> -	sbi->skipped_gc_rwsem = 0;
->  gc_more:
-> +	sbi->skipped_gc_rwsem = 0;
->  	if (unlikely(!(sbi->sb->s_flags & SB_ACTIVE))) {
->  		ret = -EINVAL;
->  		goto stop;
-> -- 
-> 2.34.1
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
