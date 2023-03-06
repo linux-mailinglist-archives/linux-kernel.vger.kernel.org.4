@@ -2,148 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2266ACCCE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04346ACCE8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjCFSkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42484 "EHLO
+        id S230061AbjCFSob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 13:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjCFSj4 (ORCPT
+        with ESMTP id S229952AbjCFSo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:39:56 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8526504B;
-        Mon,  6 Mar 2023 10:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678127995; x=1709663995;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LGzMj6SEWczKGd/+Bs1LUvlMn+f9r7qzBVfF1JbDiRE=;
-  b=OLZ6FLdUY7MkxjJRdhemtdbORNOtg1Myj4NgRCvpa5Em3xcvykcE9ilx
-   cx9KUgemONEOHiHYFWzNZ3kL6Sqd02Wqm2G0WMXiIn5G6nzgHWSSZU+eS
-   iWhNStUoP15YSCRaimTLulnYQcYosRPG8ZjoGAwv9HET2hWOT48uQO9Le
-   VD6XfLDLb22xiJ3YKmB4iRUaR5p1LQEndb1g5VSFYRSn8v6OdR3dZ8odw
-   cAZki+jceL6JfbsLxfM2OAstKUuvaTmTlcEA3QuTjoJGNPYSxeDcTH/9a
-   7/rNM9bt5uSviDmZMYBlQiSqSQqpbgBZXK60yzXozO3+DEAovqn2B7eKX
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="398224565"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="398224565"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 10:39:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="626252082"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="626252082"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 10:39:54 -0800
-Date:   Mon, 6 Mar 2023 10:43:46 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 1/4] iommu/vt-d: Implement set device pasid op for
- default domain
-Message-ID: <20230306104346.022849ee@jacob-builder>
-In-Reply-To: <BN9PR11MB527649B07E006466882F3D278CB69@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
-        <20230302005959.2695267-2-jacob.jun.pan@linux.intel.com>
-        <fad7f28f-b4e8-c1c3-4ca4-a48c5c6d7f4a@linux.intel.com>
-        <BN9PR11MB527627C597F6478536477A8F8CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20230303083512.663ce758@jacob-builder>
-        <c54aebf7-4282-b8a6-f03b-03af2deea59c@linux.intel.com>
-        <BN9PR11MB527649B07E006466882F3D278CB69@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 6 Mar 2023 13:44:28 -0500
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B48165134
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:44:02 -0800 (PST)
+Received: by mail-pl1-x62f.google.com with SMTP id y11so11500867plg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 10:44:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678128241;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=365J6Piko6rztWGOR0yLK2bsAIKP4u5eMy2EMrLl6w0=;
+        b=tf2EZgbURrgBp9bwac8RT/sGU9/M1fIIhoYFbwBGIZCucpJpms9fV5d0sSKqeeBUTR
+         yvA3MbEO79BepXdOrT/5ZFy3mPpPCNjVGV4uIH7nphVdHFPwt7RJ+BtNrWr1SbPTiRpM
+         uY2u7IBYkTptpeqmiQatMMbTrSpZ3gugd7v/rhz/5vrB8Nst1NbnfjBC9Q4Gk6XnjT5j
+         wAekaMDoTtBVA8LkcCN8xJGcnrSON8plNIUjxVJjwKiM95yYIJ1s0VgQup0G5OntHy1T
+         EwlhGVYvgyeuk6OyxFPggK+oOIQ7fOyepEXF1cf1PFMIoRfOhFzWJbzP6+HosX0UcLYw
+         QN8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678128241;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=365J6Piko6rztWGOR0yLK2bsAIKP4u5eMy2EMrLl6w0=;
+        b=6RHGIz/Kqr/7bihTSBPWO6/cS0SzzC+NHHrTbgcX7SRNNLMgVSVYfe/jUgT3vrGlNO
+         9bngIQ4R27TpiZNkfN6m6AF7gEYwdi/0rvyl3Jl/BY8fIKdfQWlT3DiXcoFu1zQ6toKU
+         /cEpWatJi5B8P3gK8f9GvvCNwiDEpQXmUVrftNB9bVJAf8OsrWE2riBJpd6cxJtiVbyV
+         Hai0l6MMx8dNH7TDXWNnkLkfrlZqDEvi4kel71AtLPCJ3CHofCRG6ndg/xwYUhjS899S
+         qXgiId0znl5c52f8DF3d5s6TJLgHtZdsBH0hwl81cu7iLczebRa4l/0qkVrQM6Uox+8j
+         o0NA==
+X-Gm-Message-State: AO0yUKXpgLttS9Hp8JfecQ5s+N6ISNzDXbNkPW3/SceDfPTgc7hsvsCG
+        yvwTqtqTOFXwNgJ27YRbXn4eUA==
+X-Google-Smtp-Source: AK7set+/MEIeQEy/F6GN5ZSD5HtwdnA/tFtpDPXbVIG5nrXJuyJNtIIVYf4bU3UboWwix9n+UDkZEw==
+X-Received: by 2002:a17:903:246:b0:19c:fd73:5586 with SMTP id j6-20020a170903024600b0019cfd735586mr14251090plh.38.1678128241615;
+        Mon, 06 Mar 2023 10:44:01 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:e8cc:984:8f0a:efd3])
+        by smtp.gmail.com with ESMTPSA id x6-20020a170902ec8600b0019c91d3bdb4sm7010259plg.304.2023.03.06.10.44.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 10:44:01 -0800 (PST)
+Date:   Mon, 6 Mar 2023 11:43:58 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <t-kristo@ti.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] Introduce PRU platform consumer API
+Message-ID: <20230306184358.GA1633717@p14s>
+References: <20230306110934.2736465-1-danishanwar@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306110934.2736465-1-danishanwar@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
-
-On Mon, 6 Mar 2023 08:18:37 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
-
-> > From: Baolu Lu <baolu.lu@linux.intel.com>
-> > Sent: Sunday, March 5, 2023 11:06 AM
-> > 
-> > On 3/4/23 12:35 AM, Jacob Pan wrote:  
-> > >>> From: Baolu Lu<baolu.lu@linux.intel.com>
-> > >>> Sent: Thursday, March 2, 2023 10:07 PM
-> > >>>  
-> > >>>> +
-> > >>>> +	if (hw_pass_through && domain_type_is_si(dmar_domain))
-> > >>>> +		ret = intel_pasid_setup_pass_through(iommu,
-> > >>>> dmar_domain,
-> > >>>> +						     dev, pasid);
-> > >>>> +	else if (dmar_domain->use_first_level)
-> > >>>> +		ret = domain_setup_first_level(iommu, dmar_domain,
-> > >>>> +					       dev, pasid);
-> > >>>> +	else
-> > >>>> +		ret = intel_pasid_setup_second_level(iommu,
-> > >>>> dmar_domain,
-> > >>>> +						     dev, pasid);
-> > >>>> +
-> > >>>> +	return ret;
-> > >>>> +}  
-> > >>> Do you need to consider pasid cache invalidation?
-> > >>>  
-> > >> To avoid confusion this is not about invalidation of pasid cache
-> > >> itself which should be covered by above setup functions already.
-> > >>
-> > >> Here actually means per-PASID invalidation in iotlb and devtlb. Today
-> > >> only RID is tracked per domain for invalidation. it needs extension
-> > >> to walk attached pasid too.  
-> > > Yes, will add.
-> > >
-> > > For the set up path, there is no need to flush IOTLBs,  because we're
-> > > going from non present to present.
-> > >
-> > > On the remove path, IOTLB flush should be covered when device driver
-> > > calls iommu_detach_device_pasid(). Covered with this patch.  
-> > 
-> > It's not only for the PASID teardown path, but also for unmap(). As the
-> > device has issued DMA requests with PASID, the IOMMU probably will cache
-> > the DMA translation with PASID tagged. Hence, we need to invalidate the
-> > PASID-specific IOTLB and device TLB in the unmap() path.
-> > 
-> > I once had a patch for this:
-> > 
-> > https://lore.kernel.org/linux-iommu/20220614034411.1634238-1-
-> > baolu.lu@linux.intel.com/
-> > 
-> > Probably you can use it as a starting point.
-> >   
+On Mon, Mar 06, 2023 at 04:39:28PM +0530, MD Danish Anwar wrote:
+> Hi All,
+> The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+> or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+> (Programmable Real-Time Units, or PRUs) for program execution.
 > 
-> just that we should not have a sub-device term there. Just name
-> the tracking information per pasid.
-Sounds good, I should be enable to use Baolu's patch for the most part.
+> There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+> driver, the PRUSS INTC driver and the PRUSS remoteproc driver. All of them have
+> already been merged and can be found under:
+> 1) drivers/soc/ti/pruss.c
+>    Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
+> 2) drivers/irqchip/irq-pruss-intc.c
+>    Documentation/devicetree/bindings/interrupt-controller/ti,pruss-intc.yaml
+> 3) drivers/remoteproc/pru_rproc.c
+>    Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
+> 
+> The programmable nature of the PRUs provide flexibility to implement custom
+> peripheral interfaces, fast real-time responses, or specialized data handling.
+> Example of a PRU consumer drivers will be: 
+>   - Software UART over PRUSS
+>   - PRU-ICSS Ethernet EMAC
+> 
+> In order to make usage of common PRU resources and allow the consumer drivers to
+> configure the PRU hardware for specific usage the PRU API is introduced.
+> 
+> This is the v3 of the old patch series[1]. This doesn't have any functional 
+> changes, the old series has been rebased on linux-next (tag: next-20230306).
+> 
+> This series depends on another series which is already merged in the remoteproc
+> tree[2] and is part of v6.3-rc1. This series and the remoteproc series form the
+> PRUSS consumer API which can be used by consumer drivers to utilize the PRUs.
+> 
+> One example of the consumer driver is the PRU-ICSSG ethernet driver [3],which 
+> depends on this series and the remoteproc series[2].
+> 
+> [1] https://lore.kernel.org/all/20220418123004.9332-1-p-mohan@ti.com/
+> [2] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/#t
+> [3] https://lore.kernel.org/all/20230210114957.2667963-1-danishanwar@ti.com/
+> 
+> Thanks and Regards,
+> Md Danish Anwar
+> 
+> Andrew F. Davis (1):
+>   soc: ti: pruss: Add pruss_{request,release}_mem_region() API
+> 
+> Suman Anna (3):
+>   soc: ti: pruss: Add pruss_cfg_read()/update() API
+>   soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and
+>     XFR
+>   soc: ti: pruss: Add helper function to enable OCP master ports
+> 
+> Tero Kristo (2):
+>   soc: ti: pruss: Add pruss_get()/put() API
+>   soc: ti: pruss: Add helper functions to get/set PRUSS_CFG_GPMUX
+> 
+>  drivers/soc/ti/pruss.c           | 257 ++++++++++++++++++++++++++++++-
+>  include/linux/pruss_driver.h     |  72 ++++++---
+>  include/linux/remoteproc/pruss.h | 221 ++++++++++++++++++++++++++
+>  3 files changed, 526 insertions(+), 24 deletions(-)
+
+The last revision of this set was sent out on April 18th 2022... It is always
+very difficult to follow-up with a patchset when it has been this long.
+Moreover, you added a SoB to patch 1 and 2 but none of the other ones.
+
+Roger had comments on the previous set - I will look at this revision when he
+has provided his RB for this entire set.
 
 Thanks,
+Mathieu
 
-Jacob
+> 
+> -- 
+> 2.25.1
+> 
