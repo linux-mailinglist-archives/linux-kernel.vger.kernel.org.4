@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCC06AC75A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75206AC74D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjCFQJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S231616AbjCFQGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjCFQJD (ORCPT
+        with ESMTP id S231526AbjCFQBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:09:03 -0500
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489753773D;
-        Mon,  6 Mar 2023 08:04:42 -0800 (PST)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 9AC985FD14;
-        Mon,  6 Mar 2023 19:03:08 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678118588;
-        bh=+H/yIDFblESWhJAjIO/UydHde3ipPgD6xiILEM9fyM8=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=NgIe+taN93O6ZJaE0D7bG2ev/qhkBSX9HRIvSjuAXhlDewq9HCT+U44nIq83IFkc4
-         a/j0uWnLg+GnOk3icLuaY2JYZoqoSFrL/uI1mSjOaLfW10e9AyU0L9dRvouVviD1aE
-         O3g+ASnMIO0RJQSxVowM99MfKZYY4ZjxyptfdFabS6zqXeMWxXvvlZBnuPOUJG2Val
-         lxb+uL6QsADtcO40mJvKdcaTBx2hAroxBpzEe9eEc+DxAVW3m0lzmXR2ek3Tm2jB10
-         E4QW2QCXWUX8OZ1Uew6SDhrlHUw7TXkP+1gPyquVVfsgq751+DbUePKELIcJjBiSyA
-         mvVbC7UyyguUw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 19:03:05 +0300 (MSK)
-Message-ID: <9b882d45-3d9d-c44d-a172-f23fff54962b@sberdevices.ru>
-Date:   Mon, 6 Mar 2023 19:00:10 +0300
+        Mon, 6 Mar 2023 11:01:09 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D28D36696;
+        Mon,  6 Mar 2023 08:01:01 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8DF771FF07;
+        Mon,  6 Mar 2023 16:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678118460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MXGv0fdp1SeaTBkcusJuAlPjwuf6QThoq9N0qSVQosw=;
+        b=xEBvVtc7IHAwtr8aMdThOyNogMbo2jDUcd40NuQu+ZPz+tWqoZ3ZgZIb28m0Vth5qLdT1O
+        TdfRrjPUmkmyFds2fInAA4eFuEns6jW/mtJ+uu3xLJkNAoPapFXbrluzXcaSVdl/qIEZDK
+        Uky6A4KqcMOhZUQV4qDzWlWPWouO9PM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678118460;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MXGv0fdp1SeaTBkcusJuAlPjwuf6QThoq9N0qSVQosw=;
+        b=N+XPBP7uH1ru2SSAXWo9HC/OdhcR8kP2omP1FXPZhhMsytvzeSYbJ6G0WttlIcnv7XJbHk
+        HdhebkDvmKr83gAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 330F013513;
+        Mon,  6 Mar 2023 16:01:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YFeSCzwOBmQ/PwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 06 Mar 2023 16:01:00 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, paulus@samba.org, benh@kernel.crashing.org,
+        linux@armlinux.org.uk, pjones@redhat.com, timur@kernel.org,
+        adaplas@gmail.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
+        mbroemme@libmpq.org, thomas@winischhofer.net,
+        James.Bottomley@HansenPartnership.com, spock@gentoo.org,
+        sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        geert+renesas@glider.be, corbet@lwn.net
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH 93/99] fbdev/vfb: Remove trailing whitespaces
+Date:   Mon,  6 Mar 2023 17:00:10 +0100
+Message-Id: <20230306160016.4459-94-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230306160016.4459-1-tzimmermann@suse.de>
+References: <20230306160016.4459-1-tzimmermann@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v2 2/4] virtio/vsock: remove all data from sk_buff
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru>
- <dfadea17-a91e-105f-c213-a73f9731c8bd@sberdevices.ru>
- <20230306120857.6flftb3fftmsceyl@sgarzare-redhat>
- <b18e3b13-3386-e9ee-c817-59588e6d5fb6@sberdevices.ru>
- <20230306155121.7xwxzgxtle7qjbnc@sgarzare-redhat>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230306155121.7xwxzgxtle7qjbnc@sgarzare-redhat>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/06 11:48:00 #20919088
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +77,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix coding style. No functional changes.
 
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+---
+ drivers/video/fbdev/vfb.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-On 06.03.2023 18:51, Stefano Garzarella wrote:
-> On Mon, Mar 06, 2023 at 06:31:22PM +0300, Arseniy Krasnov wrote:
->>
->>
->> On 06.03.2023 15:08, Stefano Garzarella wrote:
->>> On Sun, Mar 05, 2023 at 11:07:37PM +0300, Arseniy Krasnov wrote:
->>>> In case of SOCK_SEQPACKET all sk_buffs are used once - after read some
->>>> data from it, it will be removed, so user will never read rest of the
->>>> data. Thus we need to update credit parameters of the socket like whole
->>>> sk_buff is read - so call 'skb_pull()' for the whole buffer.
->>>>
->>>> Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
->>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>>> ---
->>>> net/vmw_vsock/virtio_transport_common.c | 2 +-
->>>> 1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> Maybe we could avoid this patch if we directly use pkt_len as I
->>> suggested in the previous patch.
->> Hm, may be we can avoid calling 'skb_pull()' here if 'virtio_transport_dec_rx_pkt()'
->> will use integer argument?
-> 
-> Yep, exactly!
-> 
->> Just call 'virtio_transport_dec_rx_pkt(skb->len)'. skb
-> 
-> It depends on how we call virtio_transport_inc_rx_pkt(). If we use
-> hdr->len there I would use the same to avoid confusion. Plus that's the
-> value the other peer sent us, so definitely the right value to increase
-> fwd_cnt with. But if skb->len always reflects it, then that's fine.
-i've checked 'virtio_transport_rx_work()', it calls 'virtio_vsock_skb_rx_put()' which
-sets 'skb->len'. Value is used from header, so seems 'skb->len' == 'hdr->len' in this
-case.
-> 
->> is never returned to queue to read it again, so i think may be there is no sense for
->> extra call 'skb_pull'?
-> 
-> Right!
-> 
-> Thanks,
-> Stefano
-> 
+diff --git a/drivers/video/fbdev/vfb.c b/drivers/video/fbdev/vfb.c
+index 95d3c59867d0..680c88267ef4 100644
+--- a/drivers/video/fbdev/vfb.c
++++ b/drivers/video/fbdev/vfb.c
+@@ -110,7 +110,7 @@ static u_long get_line_length(int xres_virtual, int bpp)
+      *  First part, xxxfb_check_var, must not write anything
+      *  to hardware, it should only verify and adjust var.
+      *  This means it doesn't alter par but it does use hardware
+-     *  data from it to check this var. 
++     *  data from it to check this var.
+      */
+ 
+ static int vfb_check_var(struct fb_var_screeninfo *var,
+@@ -168,7 +168,7 @@ static int vfb_check_var(struct fb_var_screeninfo *var,
+ 
+ 	/*
+ 	 * Now that we checked it we alter var. The reason being is that the video
+-	 * mode passed in might not work but slight changes to it might make it 
++	 * mode passed in might not work but slight changes to it might make it
+ 	 * work. This way we let the user know what is acceptable.
+ 	 */
+ 	switch (var->bits_per_pixel) {
+@@ -234,8 +234,8 @@ static int vfb_check_var(struct fb_var_screeninfo *var,
+ }
+ 
+ /* This routine actually sets the video mode. It's in here where we
+- * the hardware state info->par and fix which can be affected by the 
+- * change in par. For this driver it doesn't do much. 
++ * the hardware state info->par and fix which can be affected by the
++ * change in par. For this driver it doesn't do much.
+  */
+ static int vfb_set_par(struct fb_info *info)
+ {
+@@ -378,7 +378,7 @@ static int vfb_pan_display(struct fb_var_screeninfo *var,
+ }
+ 
+     /*
+-     *  Most drivers don't need their own mmap function 
++     *  Most drivers don't need their own mmap function
+      */
+ 
+ static int vfb_mmap(struct fb_info *info,
+-- 
+2.39.2
+
