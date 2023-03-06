@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C6F6AC48E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 997D46AC493
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjCFPN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
+        id S231233AbjCFPOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCFPN4 (ORCPT
+        with ESMTP id S230506AbjCFPOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:13:56 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D90C17CEA;
-        Mon,  6 Mar 2023 07:13:55 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id u5so10683777plq.7;
-        Mon, 06 Mar 2023 07:13:55 -0800 (PST)
+        Mon, 6 Mar 2023 10:14:08 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A46241FD
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:14:06 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id l7-20020a05600c1d0700b003eb5e6d906bso5388598wms.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 07:14:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678115635;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=X+nNvkpchLnkczpLTpflAGsHRqbPoVTogqo6z26wUpc=;
-        b=ZAGV4qjoYCFHUsT/wTse6RdqonU9M5Y3OySZtLssotwpHfww6fM4l99wINL+U4KJYb
-         32aHGMQDZtywW0NcrYAE3XBshXsrv/9Y46O7bomQbuIY2NaY6HaHa/OI2DkEXzsdZXAZ
-         p8iKNF3TAvUxJWRJs1zkgyGjQBHGkXYBK3eRPCRGSR36n5Pv2sXyiMcvZHMz1PmVaL69
-         zQq5hmNcDyse24S7gMuQmQ29A421Lv5DQlKAflqg6hXEaius6udaqPhW42AtjJIWfFb3
-         BwPgZeUubbWbQTWWm80CHkr+WVqMAh9gLRbPnaJo/R42PXXuuR9+eGoSQiTe42B5ITKs
-         bkpg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678115645;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDsVKUJtlRFJ3s7/7Fhta8tnir6GRw1n4iIHe/gNKzU=;
+        b=g6TpI3EaF6Mnq6dVosVQi2ooR09TYPHSfAA7xspAY+SO2DiCQRQnuvLzjy4X7arWDm
+         ssgDWuQLSngJE6j6CHHvB4Qd+XyXRHBNQbpBSpfnooqBOavpGqw6z13dtSW9W/CLeFSS
+         GcPJprT3JEAq4cjsAwxQoV5mlhRe8+jcjRfT9NMlzoaI++FBM2Q97u5pp3F4gmB32/AS
+         HovaV+YmPPOaRho60WlIirttF4g+HX6a0NMiTgsGfifQ15X/wQ4lPLiIzFcHqaJs0AyM
+         cFT8bvXy30vvqJ8ueVP2Fnm1FtlkJv1CqlwHuv67cYzF+53Agrs47sXr3Dpum/GlRLZ6
+         tiCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678115635;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X+nNvkpchLnkczpLTpflAGsHRqbPoVTogqo6z26wUpc=;
-        b=hWecRgKowKnSK8lk2Ku9MUtQR2t5mIBQfJWqv8tkCvSqItJvCzQiKJZgqQk8M3hRch
-         WQUg9h0JnZTaa3UbHML7oyefBs3naxYEl0wFQQ6ccj7g9vaNWZGGNHOu0SmtQOTEXQl0
-         GDivK0HzcPdlvfPolv5/pSD7cgE4bKGS0XqtEQV7x/X+D9Lgv5/DkMQHj87V+6nI2HQW
-         L4IqiYVYGcGmE6xcxhJ19v7QGHqPJ+/YN8R6lMkzqkXy3Eb0hPMHa1m9FogiclRvuZnL
-         yvoVMHOIjRgnw7c1ENdpe0YjRyB2Mi3pnNwmCM6pbcFjXEREg6KX1WSGLPHcvakR8qSH
-         Dd9A==
-X-Gm-Message-State: AO0yUKUSzpXdv2W+UPnSi9cqDIU78zio0TEQKe5kx3gANWBoxd79v58V
-        /FjKJrSU0pXZ14bJvMvK6SI=
-X-Google-Smtp-Source: AK7set/pABW2A3R+yvmnZ+uVbbg7070C3b+GZe8dZfCUVbk0PnIwHWKumbiX+5I9+Y03RK/sa9ifsQ==
-X-Received: by 2002:a05:6a21:3385:b0:cd:238f:4f4b with SMTP id yy5-20020a056a21338500b000cd238f4f4bmr12367948pzb.23.1678115634642;
-        Mon, 06 Mar 2023 07:13:54 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id e14-20020a63d94e000000b0050362744b63sm6211900pgj.90.2023.03.06.07.13.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 07:13:54 -0800 (PST)
-Message-ID: <38cb9f23-a56a-f420-5942-0bfeb620306e@gmail.com>
-Date:   Tue, 7 Mar 2023 00:13:50 +0900
+        d=1e100.net; s=20210112; t=1678115645;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vDsVKUJtlRFJ3s7/7Fhta8tnir6GRw1n4iIHe/gNKzU=;
+        b=AMWhYdwjr4v6UIMPMTLtrzMOh8wzZD04quauhOfJpSTjSWibnOdKmlMpPMAY50Z81f
+         Hg48l89+oLffLYdfuevV755NGKXf1w8UYfmHn+tpVWEnYLDPa1sB4VE82m+crXfOmxN2
+         lWr67gip9C689+QHXZ82LwklvAP3HX+EpC8aTb1A9AShnB2TW8eVjT3Or2xUX0JjatiE
+         yXBkgdgYDR00V9zL/Lbk2Lbkyhq45cO8bDtUwtjPJxZvHmQ2SDOlcGGWL1BOZjA83Zh7
+         tM8X6vMbdnsjoLwsQzPOk+xLfhVRIsAgwqt1ihvFulqT6kcKKbxu0NCRng016ljlz62p
+         lupA==
+X-Gm-Message-State: AO0yUKWXx01QbG3G3OjToh650U/kc+7fo1W5O9eF+0T1Qe813y+b6ZUV
+        TP6ZON42yIHxUnKzOBhNou/pag==
+X-Google-Smtp-Source: AK7set/P4TgN3KWNiQpuKTiNllOykldbwBd5AH2H1IH7KoOoCIMCopw9mjcunu/lB7pwcErFNQdh/A==
+X-Received: by 2002:a05:600c:a47:b0:3eb:2b88:9adc with SMTP id c7-20020a05600c0a4700b003eb2b889adcmr8826948wmq.25.1678115645173;
+        Mon, 06 Mar 2023 07:14:05 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id o2-20020a05600c510200b003e208cec49bsm23156746wms.3.2023.03.06.07.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 07:14:04 -0800 (PST)
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: amlogic: gxl: use gxl mdio multiplexer
+Date:   Mon,  6 Mar 2023 16:13:54 +0100
+Message-Id: <20230306151354.132973-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-To:     carlos.bilbao@amd.com
-Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sergio.collado@gmail.com,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20230306134420.30210-1-carlos.bilbao@amd.com>
-Subject: Re: [PATCH] docs/sp_SP: Add process deprecated translation
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20230306134420.30210-1-carlos.bilbao@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,48 +73,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Carlos,
+So the far, GXL SoCs were using the generic mmio register based mdio
+multiplexer. This properly sets one of the glue register but the SoC
+actually has 3 of those registers.
 
-Minor nits in the Subject and Sob area.
+One of them sets the ID under which the internal phy will advertise
+itself. If nothing sets this register before linux boots (like u-boot), the
+internal phy path is broken.
 
-On Mon, 6 Mar 2023 07:44:20 -0600, Carlos Bilbao wrote:
-> Subject: [PATCH] docs/sp_SP: Add process deprecated translation
+To address this problem, a dedicated MDIO mux driver has been
+introduced. Switch to this new driver.
 
-This summary looks ambiguous to me.
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+---
+ arch/arm64/boot/dts/amlogic/meson-gxl.dtsi | 25 +++++++++++-----------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-Maybe
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
+index 6f3c2bc36919..17bcfa4702e1 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-gxl.dtsi
+@@ -773,16 +773,23 @@ mux {
+ 		};
+ 	};
+ 
+-	eth-phy-mux@55c {
+-		compatible = "mdio-mux-mmioreg", "mdio-mux";
++	eth_phy_mux: mdio@558 {
++		reg = <0x0 0x558 0x0 0xc>;
++		compatible = "amlogic,gxl-mdio-mux";
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+-		reg = <0x0 0x55c 0x0 0x4>;
+-		mux-mask = <0xffffffff>;
++		clocks = <&clkc CLKID_FCLK_DIV4>;
++		clock-names = "ref";
+ 		mdio-parent-bus = <&mdio0>;
+ 
+-		internal_mdio: mdio@e40908ff {
+-			reg = <0xe40908ff>;
++		external_mdio: mdio@0 {
++			reg = <0x0>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++		};
++
++		internal_mdio: mdio@1 {
++			reg = <0x1>;
+ 			#address-cells = <1>;
+ 			#size-cells = <0>;
+ 
+@@ -793,12 +800,6 @@ internal_phy: ethernet-phy@8 {
+ 				max-speed = <100>;
+ 			};
+ 		};
+-
+-		external_mdio: mdio@2009087f {
+-			reg = <0x2009087f>;
+-			#address-cells = <1>;
+-			#size-cells = <0>;
+-		};
+ 	};
+ };
+ 
+-- 
+2.39.2
 
-   docs/sp_SP: Add translation of process/deprecated 
-
-??
-
-> Translate Documentation/process/deprecated.rst into Spanish.
-> 
-> Co-developed-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> Signed-off-by: Sergio Gonzalez <sergio.collado@gmail.com>
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-
-To me, Co-developed-by: from the author of the patch looks
-strange, because it is obvious the author did some development on
-the patch.
-
-Which is your intent:
-
-   Author: Carlos
-   Co-developer: Sergio
-
-, or
-
-   Author: Sergio
-   Co-developer: Carlos
-
-???
-
-        Thanks, Akira
-
-> ---
->  .../translations/sp_SP/process/deprecated.rst | 381 ++++++++++++++++++
->  .../translations/sp_SP/process/index.rst      |   1 +
->  2 files changed, 382 insertions(+)
->  create mode 100644 Documentation/translations/sp_SP/process/deprecated.rst
-[...]
