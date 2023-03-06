@@ -2,98 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6C06AC0CC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35276AC305
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbjCFN02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36460 "EHLO
+        id S230366AbjCFOUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:20:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCFN00 (ORCPT
+        with ESMTP id S231429AbjCFOTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:26:26 -0500
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4FCF2A6C4;
-        Mon,  6 Mar 2023 05:26:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=82L4rewpG2uOVMVD/V2rJNYXu1V6/Kk/AXQ5nwFZis4=;
-        b=Qf1gsh12D3AUCtrRvSFF4wwXtvJahU5rtctPk5vU8J3rZsyrsUekZa7tu+ZswfsHBd3OOiEhtrZrA
-         i0gn8MAPu85QlTZiV+Q/svH5qclVzxru2FERgHcDdSdDKZTNkUW6yGjbSI+0p/1LOxLNEAxg4hbFMD
-         OQ9gohfpEol9jQNR8R9nWxpAKnSAiIrtJml41RqUyUU95ZLUkCX5GRCghl3ffokBhhOiopxR0MVGoY
-         fDjjRDDxrOWppNtKD10qAj648ypnD7P4L72MrtX+63+VEmcACsjU9SleAiHJBy/SPUmv5+zIfs+w/B
-         G58t6JL74xi2akSUgNyeLGkO2IIauRA==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.17.1.1470, Stamp: 3], Multi: [Enabled, t: (0.000009,0.008115)], BW: [Enabled, t: (0.000025,0.000001)], RTDA: [Enabled, t: (0.091709), Hit: No, Details: v2.48.0; Id: 15.jzm45.1gqrhjk9o.h54; mclb], total: 0(700)
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([78.37.166.219])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Mon, 6 Mar 2023 16:26:05 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     linux-imx@nxp.com
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v2] bus: imx-weim: fix branch condition evaluates to a garbage value
-Date:   Mon,  6 Mar 2023 16:25:26 +0300
-Message-Id: <20230306132526.8763-1-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230306060505.11657-1-i.bornyakov@metrotek.ru>
-References: 
+        Mon, 6 Mar 2023 09:19:55 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8EB30D1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:19:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To;
+        bh=2tbxEoCPUrSuQdqvsz5yrww5k1UhZ+IwnZUoRosCkBQ=; b=e04qVoGYbc5wvxNwYFGzNOBVZG
+        D1E3RrsRUYjNsqoy01tsKge5ZagR5z4T8GGkYhTkZ5rOz/OL6m3UdCmgsVfpWGOyV9z71cho5VVBB
+        l16Lvh9D8+TTZIsvZO5Xc6fL/0Tqb1JKXAhz/EJ69KvVW8+giAXIFBRzKm+E0pnCU6dnrrTW9s7Mv
+        UFWtNJYn5tVjb/e6m4XCVz5kesS2TGYbQOopkyXrPl9wXtvk+SXf8ylnLWS6VvPDqHNCYAfsNx8x3
+        MvLZCAE08LA93ZByL0u4mE/iX3sgPlCn3iO9kHSB3A4FSX5k2EwL7eys96icgTPEuUw4OyLjH5zgd
+        iA1d+9qw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZBe6-005P2g-CQ; Mon, 06 Mar 2023 14:16:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8904E300E10;
+        Mon,  6 Mar 2023 15:16:56 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 094DD23BC8E2E; Mon,  6 Mar 2023 15:16:55 +0100 (CET)
+Message-ID: <20230306141502.569748782@infradead.org>
+User-Agent: quilt/0.66
+Date:   Mon, 06 Mar 2023 14:25:27 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     mingo@kernel.org, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
+        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Subject: [PATCH 06/10] sched/fair: Add avg_vruntime
+References: <20230306132521.968182689@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If bus type is other than imx50_weim_devtype and have no child devices,
-variable 'ret' in function weim_parse_dt() will not be initialized, but
-will be used as branch condition and return value. Fix this by
-initializing 'ret' with 0.
+In order to move to an eligibility based scheduling policy it is
+needed to have a better approximation of the ideal scheduler.
 
-This was discovered with help of clang-analyzer, but the situation is
-quite possible in real life.
+Specifically, for a virtual time weighted fair queueing based
+scheduler the ideal scheduler will be the weighted average of the
+individual virtual runtimes (math in the comment).
 
-Fixes: 52c47b63412b ("bus: imx-weim: improve error handling upon child probe-failure")
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc: stable@vger.kernel.org
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+As such, compute the weighted average to approximate the ideal
+scheduler -- note that the approximation is in the individual task
+behaviour, which isn't strictly conformant.
+
+Specifically consider adding a task with a vruntime left of center, in
+this case the average will move backwards in time -- something the
+ideal scheduler would of course never do.
+
+[ Note: try and replace cfs_rq::avg_load with cfs_rq->load.weight, the
+        conditions are slightly different but should be possible ]
+
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- drivers/bus/imx-weim.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/sched/debug.c |   32 +++++++--------
+ kernel/sched/fair.c  |  105 +++++++++++++++++++++++++++++++++++++++++++++++++--
+ kernel/sched/sched.h |    5 ++
+ 3 files changed, 122 insertions(+), 20 deletions(-)
 
-ChangeLog:
-  v1:
-[https://lore.kernel.org/all/20230306060505.11657-1-i.bornyakov@metrotek.ru/]
-  v2:
-    * add "Fixes" tag
-    * add Fabio's "Reviewed-by" tag
-
-diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
-index 828c66bbaa67..55d917bd1f3f 100644
---- a/drivers/bus/imx-weim.c
-+++ b/drivers/bus/imx-weim.c
-@@ -204,8 +204,8 @@ static int weim_parse_dt(struct platform_device *pdev)
- 	const struct of_device_id *of_id = of_match_device(weim_id_table,
- 							   &pdev->dev);
- 	const struct imx_weim_devtype *devtype = of_id->data;
-+	int ret = 0, have_child = 0;
- 	struct device_node *child;
--	int ret, have_child = 0;
- 	struct weim_priv *priv;
- 	void __iomem *base;
- 	u32 reg;
--- 
-2.39.2
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -580,10 +580,9 @@ static void print_rq(struct seq_file *m,
+ 
+ void print_cfs_rq(struct seq_file *m, int cpu, struct cfs_rq *cfs_rq)
+ {
+-	s64 MIN_vruntime = -1, min_vruntime, max_vruntime = -1,
+-		spread, rq0_min_vruntime, spread0;
++	s64 left_vruntime = -1, min_vruntime, right_vruntime = -1, spread;
++	struct sched_entity *last, *first;
+ 	struct rq *rq = cpu_rq(cpu);
+-	struct sched_entity *last;
+ 	unsigned long flags;
+ 
+ #ifdef CONFIG_FAIR_GROUP_SCHED
+@@ -597,26 +596,25 @@ void print_cfs_rq(struct seq_file *m, in
+ 			SPLIT_NS(cfs_rq->exec_clock));
+ 
+ 	raw_spin_rq_lock_irqsave(rq, flags);
+-	if (rb_first_cached(&cfs_rq->tasks_timeline))
+-		MIN_vruntime = (__pick_first_entity(cfs_rq))->vruntime;
++	first = __pick_first_entity(cfs_rq);
++	if (first)
++		left_vruntime = first->vruntime;
+ 	last = __pick_last_entity(cfs_rq);
+ 	if (last)
+-		max_vruntime = last->vruntime;
++		right_vruntime = last->vruntime;
+ 	min_vruntime = cfs_rq->min_vruntime;
+-	rq0_min_vruntime = cpu_rq(0)->cfs.min_vruntime;
+ 	raw_spin_rq_unlock_irqrestore(rq, flags);
+-	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "MIN_vruntime",
+-			SPLIT_NS(MIN_vruntime));
++
++	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "left_vruntime",
++			SPLIT_NS(left_vruntime));
+ 	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "min_vruntime",
+ 			SPLIT_NS(min_vruntime));
+-	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "max_vruntime",
+-			SPLIT_NS(max_vruntime));
+-	spread = max_vruntime - MIN_vruntime;
+-	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "spread",
+-			SPLIT_NS(spread));
+-	spread0 = min_vruntime - rq0_min_vruntime;
+-	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "spread0",
+-			SPLIT_NS(spread0));
++	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "avg_vruntime",
++			SPLIT_NS(avg_vruntime(cfs_rq)));
++	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "right_vruntime",
++			SPLIT_NS(right_vruntime));
++	spread = right_vruntime - left_vruntime;
++	SEQ_printf(m, "  .%-30s: %Ld.%06ld\n", "spread", SPLIT_NS(spread));
+ 	SEQ_printf(m, "  .%-30s: %d\n", "nr_spread_over",
+ 			cfs_rq->nr_spread_over);
+ 	SEQ_printf(m, "  .%-30s: %d\n", "nr_running", cfs_rq->nr_running);
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -601,9 +601,102 @@ static inline bool entity_before(const s
+ 	return (s64)(a->vruntime - b->vruntime) < 0;
+ }
+ 
++static inline s64 entity_key(struct cfs_rq *cfs_rq, struct sched_entity *se)
++{
++	return (s64)(se->vruntime - cfs_rq->min_vruntime);
++}
++
+ #define __node_2_se(node) \
+ 	rb_entry((node), struct sched_entity, run_node)
+ 
++/*
++ * Compute virtual time from the per-task service numbers:
++ *
++ * Fair schedulers conserve lag: \Sum lag_i = 0
++ *
++ * lag_i = S - s_i = w_i * (V - v_i)
++ *
++ * \Sum lag_i = 0 -> \Sum w_i * (V - v_i) = V * \Sum w_i - \Sum w_i * v_i = 0
++ *
++ * From which we solve V:
++ *
++ *     \Sum v_i * w_i
++ * V = --------------
++ *        \Sum w_i
++ *
++ * However, since v_i is u64, and the multiplcation could easily overflow
++ * transform it into a relative form that uses smaller quantities:
++ *
++ * Substitute: v_i == (v_i - v) + v
++ *
++ *     \Sum ((v_i - v) + v) * w_i   \Sum (v_i - v) * w_i
++ * V = -------------------------- = -------------------- + v
++ *              \Sum w_i                   \Sum w_i
++ *
++ * min_vruntime = v
++ * avg_vruntime = \Sum (v_i - v) * w_i
++ * cfs_rq->load = \Sum w_i
++ *
++ * Since min_vruntime is a monotonic increasing variable that closely tracks
++ * the per-task service, these deltas: (v_i - v), will be in the order of the
++ * maximal (virtual) lag induced in the system due to quantisation.
++ */
++static void
++avg_vruntime_add(struct cfs_rq *cfs_rq, struct sched_entity *se)
++{
++	s64 key = entity_key(cfs_rq, se);
++	cfs_rq->avg_vruntime += key * se->load.weight;
++	cfs_rq->avg_load += se->load.weight;
++}
++
++static void
++avg_vruntime_sub(struct cfs_rq *cfs_rq, struct sched_entity *se)
++{
++	s64 key = entity_key(cfs_rq, se);
++	cfs_rq->avg_vruntime -= key * se->load.weight;
++	cfs_rq->avg_load -= se->load.weight;
++}
++
++static inline
++void avg_vruntime_update(struct cfs_rq *cfs_rq, s64 delta)
++{
++	/*
++	 * v' = v + d ==> avg_vruntime' = avg_runtime - d*avg_load
++	 */
++	cfs_rq->avg_vruntime -= cfs_rq->avg_load * delta;
++}
++
++u64 avg_vruntime(struct cfs_rq *cfs_rq)
++{
++	struct sched_entity *curr = cfs_rq->curr;
++	s64 lag = cfs_rq->avg_vruntime;
++	long load = cfs_rq->avg_load;
++
++	if (curr && curr->on_rq) {
++		lag += entity_key(cfs_rq, curr) * curr->load.weight;
++		load += curr->load.weight;
++	}
++
++	if (load)
++		lag = div_s64(lag, load);
++
++	return cfs_rq->min_vruntime + lag;
++}
++
++static u64 __update_min_vruntime(struct cfs_rq *cfs_rq, u64 vruntime)
++{
++	u64 min_vruntime = cfs_rq->min_vruntime;
++	/*
++	 * open coded max_vruntime() to allow updating avg_vruntime
++	 */
++	s64 delta = (s64)(vruntime - min_vruntime);
++	if (delta > 0) {
++		avg_vruntime_update(cfs_rq, delta);
++		min_vruntime = vruntime;
++	}
++	return min_vruntime;
++}
++
+ static void update_min_vruntime(struct cfs_rq *cfs_rq)
+ {
+ 	struct sched_entity *curr = cfs_rq->curr;
+@@ -629,7 +722,7 @@ static void update_min_vruntime(struct c
+ 
+ 	/* ensure we never gain time by being placed backwards. */
+ 	u64_u32_store(cfs_rq->min_vruntime,
+-		      max_vruntime(cfs_rq->min_vruntime, vruntime));
++		      __update_min_vruntime(cfs_rq, vruntime));
+ }
+ 
+ static inline bool __entity_less(struct rb_node *a, const struct rb_node *b)
+@@ -642,12 +735,14 @@ static inline bool __entity_less(struct
+  */
+ static void __enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ {
++	avg_vruntime_add(cfs_rq, se);
+ 	rb_add_cached(&se->run_node, &cfs_rq->tasks_timeline, __entity_less);
+ }
+ 
+ static void __dequeue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ {
+ 	rb_erase_cached(&se->run_node, &cfs_rq->tasks_timeline);
++	avg_vruntime_sub(cfs_rq, se);
+ }
+ 
+ struct sched_entity *__pick_first_entity(struct cfs_rq *cfs_rq)
+@@ -3330,6 +3425,8 @@ static void reweight_entity(struct cfs_r
+ 		/* commit outstanding execution time */
+ 		if (cfs_rq->curr == se)
+ 			update_curr(cfs_rq);
++		else
++			avg_vruntime_sub(cfs_rq, se);
+ 		update_load_sub(&cfs_rq->load, se->load.weight);
+ 	}
+ 	dequeue_load_avg(cfs_rq, se);
+@@ -3345,9 +3442,11 @@ static void reweight_entity(struct cfs_r
+ #endif
+ 
+ 	enqueue_load_avg(cfs_rq, se);
+-	if (se->on_rq)
++	if (se->on_rq) {
+ 		update_load_add(&cfs_rq->load, se->load.weight);
+-
++		if (cfs_rq->curr != se)
++			avg_vruntime_add(cfs_rq, se);
++	}
+ }
+ 
+ void reweight_task(struct task_struct *p, int prio)
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -558,6 +558,9 @@ struct cfs_rq {
+ 	unsigned int		idle_nr_running;   /* SCHED_IDLE */
+ 	unsigned int		idle_h_nr_running; /* SCHED_IDLE */
+ 
++	s64			avg_vruntime;
++	u64			avg_load;
++
+ 	u64			exec_clock;
+ 	u64			min_vruntime;
+ #ifdef CONFIG_SCHED_CORE
+@@ -3312,4 +3315,6 @@ static inline void switch_mm_cid(struct
+ static inline void switch_mm_cid(struct task_struct *prev, struct task_struct *next) { }
+ #endif
+ 
++extern u64 avg_vruntime(struct cfs_rq *cfs_rq);
++
+ #endif /* _KERNEL_SCHED_SCHED_H */
 
 
