@@ -2,98 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B51B36AD130
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772D36AD138
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjCFWJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S229963AbjCFWLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjCFWJ2 (ORCPT
+        with ESMTP id S229628AbjCFWLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:09:28 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C409839CF8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:09:27 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id x12so9708480ybt.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 14:09:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678140567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5c358ipi4Vt99BrjRiy5z3SaM/LHgeps04nWxxfLfzs=;
-        b=y6IlTFq9wh6AAJI0b2On9RPaIxlkMAom2XGC3qtLKngFcU+K2v1/dUd6PojmMTJka9
-         LpWy+qNud0PFYrKrnd1OA3FhmUdBnOJCNxmWr2EmTVJEPw7sIQS2L0siDGqIV3esrP6G
-         dAS7U14k2PTv/oEJlzzdbfFZvU+JGd/gxmmoLVc55SE6QmKhLZoi5RYpdgWOmO2z8pND
-         y79Eqhdfzs5V+eJOm5j8N47lPfRnamv3m8rqToNX6Gc+AGXVM9d5dLwPe0FnFOU5Z+Gr
-         Ko9Px+2oN8udbhUyRvJ6xv3RbuOsKljw9PCX7RKhDi0KxPrJRoEWWSA2xhzQOJ99+tDp
-         vMwQ==
+        Mon, 6 Mar 2023 17:11:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C463B20A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:09:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678140598;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=vOophCpjusgwUNYYPMTooXspBj++ckS+ruBhJaNGhv0=;
+        b=G9vBUaad8dHxJFxLRjfYdtHUwbt64Q7UAXgyIOH8olB9Vkyt60kMccldR/Wf0f1Z0JMA7Q
+        J1ropCK0TyRs46mDmo/38mIYeq2+InSDA85ebYYcjNqtgaNbEkhlqgKQLznuE/WrDqEbAV
+        SL2EOkv0CsWBUVPZkWflPjVmId/urlM=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-450-EXgVhvnxOauqAZrGcD1eTw-1; Mon, 06 Mar 2023 17:09:57 -0500
+X-MC-Unique: EXgVhvnxOauqAZrGcD1eTw-1
+Received: by mail-qt1-f197.google.com with SMTP id o10-20020a05622a138a00b003bfdabf3b89so6069180qtk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 14:09:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678140567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5c358ipi4Vt99BrjRiy5z3SaM/LHgeps04nWxxfLfzs=;
-        b=ngdLrgJNDNIM7FCRNiyJwdUpCTGiEA02LWqdhmnapWy+lmhSjrhlnRd1QTAuWn10Mn
-         ePvaPNA9rXYvczvG1HodiduGm/nxCbbhWVP1FLo6hgkRGYHjHdNlakA9OeosmNnP1EgC
-         9GqSjitjBCS1UyxHiFTBPOADFFhq8mjHa4BFxLp95jGueOilwtsl/6NS7JdHkmJElFEa
-         hcFKweEU5dzqHsrWLiLojsMI/5+vpH5Mc2dnGzSf/6fHmdXtrHnArKx50N5TgoKq27Rm
-         l6l9Yp/pb5L/50CIeJedQWePf4XRo7oOh6f9w8aL/VXX6cHJDgF+l0ItL8RR0GUNp2CD
-         1kMg==
-X-Gm-Message-State: AO0yUKURUR9bvhZXlXdu4Wr6C8loTqm6HptIoQ6N9M4g8J0UazL3KdTU
-        b5tMY3EId7+1o/k8A8Dqd2jgBBhN1DXfVaUUhvs/gw==
-X-Google-Smtp-Source: AK7set/PdFBK9urMpw+5M7Ji1nzK6dx2LJ23tdjkUepZRyWvDmY3aEBF0cZ+iYqMw1+m4OTu85tD91S/epnMzfXpVHM=
-X-Received: by 2002:a5b:b84:0:b0:ab8:1ed9:cfd2 with SMTP id
- l4-20020a5b0b84000000b00ab81ed9cfd2mr7363696ybq.5.1678140566986; Mon, 06 Mar
- 2023 14:09:26 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678140596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vOophCpjusgwUNYYPMTooXspBj++ckS+ruBhJaNGhv0=;
+        b=AnCDBc1LbVsJfNuY+J7YGqwGWv5TLfIDVsmAYcgAsCPCuH7TSAUtMl7wZOMYblW5Q4
+         aTKy7y76l6QZSfYJr9SazCLqU6eQ7HtRlo3dzDsMKHSbXigNf/nvvRrboMnZ2ibKKjqG
+         XBNcIGyMW8DgK6XGPOCfTN3eyTisVD3Pofrqh829MEoXefJmgR56mfqldjrA5g3gROqS
+         koHkrc3eliVC5Ngu8xkPpEIky+xvztQczLf8h/XllDf3j8+EoHfcYb098bnePg+ygs4O
+         jOFtpkTKE07Cl/ctu1D/4gr98rVbDx+Yxzun38bJ2JjLGRhwPh8ZRKXb8vvfWg3rEs7j
+         3xxQ==
+X-Gm-Message-State: AO0yUKVDC4EnyVYQlyn/PQKLbO9c9Ugw5EF+Xpadk025I/qKmFY41DGA
+        8ju3yNwHO6kzjDsa+C0u+HaPQlFeXD0izHaW6q4OmOqEcjNCGYywuw68FNpIg541yRLNcxRyoob
+        aqQwm1OqOfpNsVuqS/0rUQyjq
+X-Received: by 2002:a05:622a:134b:b0:3b6:3260:fa1d with SMTP id w11-20020a05622a134b00b003b63260fa1dmr20997327qtk.45.1678140596685;
+        Mon, 06 Mar 2023 14:09:56 -0800 (PST)
+X-Google-Smtp-Source: AK7set8GgiY+9cbM7LBZb/BNp1EefmRpRUsArdkNAYzYrqtiFnS2dotD0Rfl7N/1s/gPpiBBAtSG2A==
+X-Received: by 2002:a05:622a:134b:b0:3b6:3260:fa1d with SMTP id w11-20020a05622a134b00b003b63260fa1dmr20997293qtk.45.1678140596472;
+        Mon, 06 Mar 2023 14:09:56 -0800 (PST)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id d24-20020ac800d8000000b003bfaf01af24sm8432345qtg.46.2023.03.06.14.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 14:09:55 -0800 (PST)
+From:   Tom Rix <trix@redhat.com>
+To:     mhiramat@kernel.org, akpm@linux-foundation.org,
+        ndesaulniers@google.com, masahiroy@kernel.org, paulmck@kernel.org,
+        hannes@cmpxchg.org, ojeda@kernel.org, thunder.leizhen@huawei.com,
+        christophe.leroy@csgroup.eu, vbabka@suse.cz
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] init/Kconfig: extend -Wno-array-bounds to gcc 13
+Date:   Mon,  6 Mar 2023 17:09:47 -0500
+Message-Id: <20230306220947.1982272-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20230303002850.51858-1-arinc.unal@arinc9.com> <CACRpkdayVLTT0x6hfnwvL-Atafkj8PRw5uwe7Wic3jtn+X-axA@mail.gmail.com>
- <486ebf30-dde3-b77d-c292-ba7605313273@arinc9.com>
-In-Reply-To: <486ebf30-dde3-b77d-c292-ba7605313273@arinc9.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 23:09:15 +0100
-Message-ID: <CACRpkdagmqfrsZtJrWn9h8ZMiJUrsKF1_B4KV7+LhZdc6C7tLA@mail.gmail.com>
-Subject: Re: [PATCH 00/20] pinctrl: ralink: fix ABI, improve driver, move to
- mediatek, improve dt-bindings
-To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        William Dean <williamsukatube@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 3:56=E2=80=AFPM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.una=
-l@arinc9.com> wrote:
+With gcc 13.0.1 on x86, there are several false positives like
 
-> Sure, if it's necessary. Once I get feedback, I'll rebase it to your
-> linusw/linux-pinctrl.git for-next tree, see if it needs manual changes.
-> I'll let you know.
+drivers/net/ethernet/microchip/sparx5/sparx5_psfp.c:167:31:
+  error: array subscript 4 is above array bounds of ‘const struct sparx5_psfp_gce[4]’ [-Werror=array-bounds=]
+  167 |                 gce = &sg->gce[i];
+      |                        ~~~~~~~^~~
+In file included from drivers/net/ethernet/microchip/sparx5/sparx5_psfp.c:8:
+drivers/net/ethernet/microchip/sparx5/sparx5_main.h:506:32: note: while referencing ‘gce’
+  506 |         struct sparx5_psfp_gce gce[SPX5_PSFP_GCE_CNT];
+      |                                ^~~
 
-Hm my for-next branch is a mixdown for linux-next so use the branch
-named "devel" instead.
+The code lines for the reported problem
+	/* For each scheduling entry */
+	for (i = 0; i < sg->num_entries; i++) {
+		gce = &sg->gce[i];
 
-Thanks!
+i is bounded by num_entries, which is set in sparx5_tc_flower.c
+	if (act->gate.num_entries >= SPX5_PSFP_GCE_CNT) {
+		NL_SET_ERR_MSG_MOD(extack, "Invalid number of gate entries");
+		return -EINVAL;
+	}
+..
+	sg->num_entries = act->gate.num_entries;
 
-Linus Walleij
+So disable array-bounds as was done on gcc 11 and 12
+
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ init/Kconfig | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/init/Kconfig b/init/Kconfig
+index 1fb5f313d18f..10d0a0020726 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -898,10 +898,14 @@ config GCC11_NO_ARRAY_BOUNDS
+ config GCC12_NO_ARRAY_BOUNDS
+ 	def_bool y
+ 
++config GCC13_NO_ARRAY_BOUNDS
++	def_bool y
++
+ config CC_NO_ARRAY_BOUNDS
+ 	bool
+ 	default y if CC_IS_GCC && GCC_VERSION >= 110000 && GCC_VERSION < 120000 && GCC11_NO_ARRAY_BOUNDS
+ 	default y if CC_IS_GCC && GCC_VERSION >= 120000 && GCC_VERSION < 130000 && GCC12_NO_ARRAY_BOUNDS
++	default y if CC_IS_GCC && GCC_VERSION >= 130000 && GCC_VERSION < 140000 && GCC13_NO_ARRAY_BOUNDS
+ 
+ #
+ # For architectures that know their GCC __int128 support is sound
+-- 
+2.27.0
+
