@@ -2,178 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2646ACDE0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC59C6ACDF1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjCFTTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
+        id S229738AbjCFTZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:25:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjCFTTg (ORCPT
+        with ESMTP id S229486AbjCFTZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:19:36 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7CE47437
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:19:29 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so8930003wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 11:19:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112; t=1678130368;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=a+9jUMtKAP1NsIxmt9bemROFT6ZGSIHYy5IhxK+eFxM=;
-        b=UztCyb+pblWL09z37NNkOpKrqJHbODceCYqnhgfUFFmQdOT/TuRVWCWbfdZ3zpqWOH
-         k9OroYRbQbGY9KEJx1ZU0Xgg8V0LPdM3HCMatM2XJ+LQYjzqtDbU0h8RTYBqW1fA9nrZ
-         kBj/V02tMGHt91gcJcFn6Ell1+1e7Dk0sRfUdntrzOCyJoPzATQAtkQ1tD2o3AXgS4oy
-         j46mwSPu1l/iBc54DAiAK8eEzlJ/WMIaRbqtDaEo9ZRt5K8w9IRHIN7Y0qj9nrtyETII
-         rDO+r29gYVyKTuqUdVmv/lc6lK4o7/MddMVClyxRq8qvm0vJQLGmDl4qBSL351bCwMH9
-         sQtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678130368;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a+9jUMtKAP1NsIxmt9bemROFT6ZGSIHYy5IhxK+eFxM=;
-        b=Hmiaz59gdRKYfB9xKTDbRKmVhciba0vcxikW/Rpa/opKQPivYI6bGVOocE4OyiwYBC
-         En/xdiCqQ8D+6jENqNjfO7b3uOQis+nn60gpbH9E3PQ6DTtgsHHTJCOa9Qp9oF9Sopcf
-         q3NCzVkLGxJ6fnWfWmXI7H0CHQW/pIsaKWwYKDgHuyPzt/QAZ1iJVuz336+916kXSTzF
-         g/9ZgWr/769kv2Br7L3p+Zc2n1eBMQ+LWjvPU8Vd+JWgVv4YUXPgxY1FwUI7ycArmtoN
-         uN45G7aZ/WA44upkUtMVoXBBh7ABjlGWOoXmCzNPQamDnTbo5h4JvMMMTqwQZ7SYDtiG
-         W+Cw==
-X-Gm-Message-State: AO0yUKUGemoGrw4A1O38FflnOKmrbbZlNeA+PTvRFPV52MZ2LcG1aTI/
-        IGCNC/KkIGWP8630AmV6ysxYWA==
-X-Google-Smtp-Source: AK7set9UcwiG9kb5YSCosLZVO0ZC+9NoblMB7M0gpHqnvvkQ66Xxx2yIWw/GgamAqy5R0BB7Cq9X3w==
-X-Received: by 2002:a05:600c:5103:b0:3eb:40de:9838 with SMTP id o3-20020a05600c510300b003eb40de9838mr7619557wms.7.1678130368096;
-        Mon, 06 Mar 2023 11:19:28 -0800 (PST)
-Received: from airbuntu (host86-168-251-3.range86-168.btcentralplus.com. [86.168.251.3])
-        by smtp.gmail.com with ESMTPSA id v38-20020a05600c4da600b003eb68bb61c8sm10471393wmp.3.2023.03.06.11.19.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 11:19:27 -0800 (PST)
-Date:   Mon, 6 Mar 2023 19:19:26 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        John Stultz <jstultz@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
-        Midas Chien <midaschieh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Tony Luck <tony.luck@intel.com>, kernel-team@android.com,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
-Message-ID: <20230306191926.n5526srkze5fnqag@airbuntu>
-References: <20230302163253.541ac3a8@gandalf.local.home>
- <20230302163603.223313ba@gandalf.local.home>
- <20230302165613.2dcc18ca@gandalf.local.home>
- <20230302200136.381468f0@gandalf.local.home>
- <20230303181134.GA1837196@google.com>
- <20230303133702.4d336ee9@gandalf.local.home>
- <CAEXW_YQN=zPtbd6Nr=F-0GqkHQu+ox3eBnzP30=8MxYGYyFv0Q@mail.gmail.com>
- <20230303143822.027ce50b@gandalf.local.home>
- <20230303203645.etfz444pzg4xxi6f@airbuntu>
- <20230304032135.GB2176990@google.com>
+        Mon, 6 Mar 2023 14:25:26 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F22F5F508;
+        Mon,  6 Mar 2023 11:25:25 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326J182T013880;
+        Mon, 6 Mar 2023 19:25:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=6+23jHM4l58hoG7GSUu7wO0221imSXoSx+ETuZMRz4c=;
+ b=TIOp11uObWUHecHhZ/YVuD3frIrKUrUaGQRHneur7arLaIKDDrI2JrMCyOEl7bAjgo71
+ ttheay5MkWER9LJEEPPLW9ltvSqe6YIreKH33gGFJPYDIlWE7bO6O+iyhJrBGy4ZLTJx
+ H6EEERLADE1bszosJy6RtwegN/91Xim3g/7kkWPm/ZhZ1jr6Dp99N5rh5FqQ7CiJSeW9
+ UVC2krbcVxXDpvzhc3CWxa4UY5Sj6BqORtmWEyDU0jL7X3uOiudvaP8KOpSZxSq7tsvt
+ kABwdqtvpCFeaHsTwXgg2rjgfIbHQnEmvPT22ehIWIwosQiUQqFTHTRZl6d0Z1s7UoAr dA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4uaeu1xr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:24:59 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326J6rrK030908;
+        Mon, 6 Mar 2023 19:24:59 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4uaeu1wt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:24:59 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326IoZsk017255;
+        Mon, 6 Mar 2023 19:24:57 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3p41akajea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:24:57 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326JOt5228246674
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Mar 2023 19:24:56 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D09C25805E;
+        Mon,  6 Mar 2023 19:24:55 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CEA575805D;
+        Mon,  6 Mar 2023 19:24:51 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Mar 2023 19:24:51 +0000 (GMT)
+Message-ID: <e5303185-c698-0243-8208-6cb553fde37b@linux.ibm.com>
+Date:   Mon, 6 Mar 2023 14:24:51 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230304032135.GB2176990@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 16/28] security: Introduce file_post_open hook
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+ <20230303181842.1087717-17-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230303181842.1087717-17-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: epqk5AExyAg6NYq9PP8NxSaDFSR5J6H4
+X-Proofpoint-ORIG-GUID: be0YuCLZdPBMY9GxhbA9tw1SdswEaE-e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_12,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
+ phishscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 mlxscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060168
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/04/23 03:21, Joel Fernandes wrote:
-> On Fri, Mar 03, 2023 at 08:36:45PM +0000, Qais Yousef wrote:
-> > On 03/03/23 14:38, Steven Rostedt wrote:
-> > > On Fri, 3 Mar 2023 14:25:23 -0500
-> > > Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > 
-> > > > On Fri, Mar 3, 2023 at 1:37 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > > > >
-> > > > > On Fri, 3 Mar 2023 18:11:34 +0000
-> > > > > Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > > >  
-> > > > > > In the normal mutex's adaptive spinning, there is no check for if there is a
-> > > > > > change in waiter AFAICS (ignoring ww mutex stuff for a second).
-> > > > > >
-> > > > > > I can see one may want to do that waiter-check, as spinning
-> > > > > > indefinitely if the lock owner is on the CPU for too long may result in
-> > > > > > excessing power burn. But normal mutex does not seem to do that.
-> > > > > >
-> > > > > > What  makes the rtmutex spin logic different from normal mutex in this
-> > > > > > scenario, so that rtmutex wants to do that but normal ones dont?  
-> > > > >
-> > > > > Well, the point of the patch is that I don't think they should be different
-> > > > > ;-)  
-> > > > 
-> > > > But there's no "waiter change" thing for mutex_spin_on_owner right.
-> > > > 
-> > > > Then, should mutex_spin_on_owner() also add a call to
-> > > > __mutex_waiter_is_first() ?
-> > > 
-> > > Ah interesting, I missed the __mutex_waiter_is_first() in the mutex code,
-> > > where it looks to do basically the same thing as rt_mutex (but slightly
-> > > different). From looking at this, it appears that mutex() has FIFO fair
-> > > logic, where the second waiter will sleep.
-> > > 
-> > > Would be interesting to see why John sees such a huge difference between
-> > > normal mutex and rtmutex if they are doing the same thing. One thing is
-> > > perhaps the priority logic is causing the issue, where this will not
-> > > improve anything.
-> > 
-> > I think that can be a good suspect. If the waiters are RT tasks the root cause
-> > might be starvation issue due to bad priority setup and moving to FIFO just
-> > happens to hide it.
+
+
+On 3/3/23 13:18, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> I wonder if mutex should actually prioritize giving the lock to RT tasks
-> instead of FIFO, since that's higher priority work. It sounds that's more
-> 'fair'. But that's likely to make John's issue worse.
-
-It is the right thing to do IMHO, but I guess the implications are just too
-hard to tell to enforce it by default yet. Which is I guess why it's all
-protected by PREEMPT_RT still.
-
-(I'm not sure but I assumed that logically PREEMPT_RT would convert all mutex
-to rt_mutexes by default)
-
+> In preparation to move IMA and EVM to the LSM infrastructure, introduce the
+> file_post_open hook. Also, export security_file_post_open() for NFS.
 > 
-> > For same priority RT tasks, we should behave as FIFO too AFAICS.
-> > 
-> > If there are a mix of RT vs CFS; RT will always win of course.
-> > 
-> > > 
-> > > I wonder if we add spinning to normal mutex for the other waiters if that
-> > > would improve things or make them worse?
-> > 
-> > I see a potential risk depending on how long the worst case scenario for this
-> > optimistic spinning.
-> > 
-> > RT tasks can prevent all lower priority RT and CFS from running.
-> 
-> Agree, I was kind of hoping need_resched() in mutex_spin_on_owner() would
-> come to the rescue in such a scenario, but obviously not. Modifications to
-> check_preempt_curr_rt() could obviously aid there but...
-> 
-> > CFS tasks will lose some precious bandwidth from their sched_slice() as this
-> > will be accounted for them as RUNNING time even if they were effectively
-> > waiting.
-> 
-> True, but maybe the CFS task is happy to lose some bandwidth and get back to
-> CPU quickly, than blocking and not getting any work done. ;-)
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-It depends on the worst case scenario of spinning. If we can ensure it's
-bounded to something small, then yeah I don't see an issue :-)
+>   
+> +/**
+> + * security_file_post_open() - Recheck access to a file after it has been opened
+> + * @file: the file
+> + * @mask: access mask
+> + *
+> + * Recheck access with mask after the file has been opened. The hook is useful
+> + * for LSMs that require the file content to be available in order to make
+> + * decisions.
+> + *
+> + * Return: Returns 0 if permission is granted.
+> + */
+> +int security_file_post_open(struct file *file, int mask)
+> +{
 
+Files with private inodes don't seem to checked for in any existing functions, either, so no check. Good..
 
-Cheers
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
---
-Qais Yousef
+> +	return call_int_hook(file_post_open, 0, file, mask);
+> +}
+> +EXPORT_SYMBOL_GPL(security_file_post_open);
+> +
+>   /**
+>    * security_file_truncate() - Check if truncating a file is allowed
+>    * @file: file
