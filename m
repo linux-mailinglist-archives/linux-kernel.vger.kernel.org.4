@@ -2,55 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15CD36ABA05
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A9A6AB947
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:07:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjCFJgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:36:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
+        id S229885AbjCFJHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:07:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjCFJgX (ORCPT
+        with ESMTP id S229706AbjCFJHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:36:23 -0500
-X-Greylist: delayed 1412 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 01:36:15 PST
-Received: from 5.mo575.mail-out.ovh.net (5.mo575.mail-out.ovh.net [46.105.62.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3744233E7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:36:15 -0800 (PST)
-Received: from director11.ghost.mail-out.ovh.net (unknown [10.108.4.253])
-        by mo575.mail-out.ovh.net (Postfix) with ESMTP id 46ECC24CFE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:06:59 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-jbrfz (unknown [10.110.103.233])
-        by director11.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 127281FE8C;
-        Mon,  6 Mar 2023 09:06:56 +0000 (UTC)
-Received: from etezian.org ([37.59.142.101])
-        by ghost-submission-6684bf9d7b-jbrfz with ESMTPSA
-        id 8aX6LTCtBWR9AgAA58LVJg
-        (envelope-from <andi@etezian.org>); Mon, 06 Mar 2023 09:06:56 +0000
-Authentication-Results: garm.ovh; auth=pass (GARM-101G004ac770ce1-db47-4670-b400-4d32ddd5c3e6,
-                    E6EC2E320FFEB7B5CA07697FBFAF7FF511F3A6BF) smtp.auth=andi@etezian.org
-X-OVh-ClientIp: 178.238.173.28
-Date:   Mon, 6 Mar 2023 10:06:56 +0100
-From:   Andi Shyti <andi@etezian.org>
-To:     Jaewon Kim <jaewon02.kim@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] spi: s3c64xx: add no_cs description
-Message-ID: <ZAWtMIDHGd+nBTA1@intel.intel>
-References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
- <20230306014239.80570-1-jaewon02.kim@samsung.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306014239.80570-1-jaewon02.kim@samsung.com>
-X-Ovh-Tracer-Id: 12480037520701262555
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddthedguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhguihcuufhhhihtihcuoegrnhguihesvghtvgiiihgrnhdrohhrgheqnecuggftrfgrthhtvghrnhepjefgleegkeeiffejgeevuedvheegleevteevjeduffevvdelhedvfeelheduleeunecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrddutddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorghnughisegvthgviihirghnrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheejhedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Mon, 6 Mar 2023 04:07:36 -0500
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFF722A0C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:07:36 -0800 (PST)
+Received: by mail-pl1-x64a.google.com with SMTP id t11-20020a170902e84b00b0019e399b2efaso5584882plg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:07:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678093655;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4A46wKTC+CcMedW/G9j+SuC/vj+S0/LGxEORBPUqymI=;
+        b=jkvSAN8NSy+uLMta6N+AwFqfJL62XqCwN2Bvyh1/a4/UbQHwRL3F/PnRe/nQwArwp+
+         pOFb3Q5ynk4fHladF23EbePCt7qkXIXnZz31qzXoKEcyttpIsLznMvMwOYwFrIAZzTaa
+         JQ6HYh6KSSQtTZAjFvWY2qaQCCyGsnsU+sQGrAVrIEJMzbMjsSKERgSuP8SFd1AhIIXQ
+         nzs4sYU43IKvUecajKYsdYNRSr2m4gS6DyRR2g0M8z4QOplfdoba7KAt0mdbmpReptu/
+         kHiIF4rCYUdxPJkcT1kxuhqhIf3ofnBN6ZJjhZayUrHE/t/M+5gSPyyhK14GKyXbNDzB
+         lsGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678093655;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4A46wKTC+CcMedW/G9j+SuC/vj+S0/LGxEORBPUqymI=;
+        b=agHtsAWh9kMaRJfA6DqJ8A8B7Hm8q/BbQUks9EYZauQN2fSmbh79lVg/743hzSp5Sz
+         0b+WCR46hVg0MocZXgn05js2nWl30Dvejiy+L1yuPUUb7t+XKfQ3OctWtq6s8/yLn68u
+         Op/DFJMOms3x1gK8gp4tsfumanmkATc/gCgC09bg8tivNbjQcsQJCHJJsX5dYxYKbCjQ
+         Q+ieeqaOcRMg7+vWmbJ2NZis+3qt58G06h/8aXWxDcoz51qTYNNSo6Cvy4YiIAsBZncR
+         b7XE+cHXPrkxMZiMsuEarDC24KX4lzqVOeSluPSNqZ49iL7Bh6KbHPTkNwQhid0+FitR
+         VtFg==
+X-Gm-Message-State: AO0yUKVZthZhbo43i9F7rKAsopT1CYtBOmhwmeXfeAO1l1NpwdWgCB1B
+        pOC3iNXDm8usF0F/d00+9CNyS21qUsQg
+X-Google-Smtp-Source: AK7set/jjFYkNXqa31b0x4vkHuOnIhd4oQL+wq7Pm60LeC6WBNHSXLU9Hyr58Rwz92XV5T/MwzVUExwVqHoS
+X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:d5f3:860e:1224:5e0a])
+ (user=apusaka job=sendgmr) by 2002:a62:ce43:0:b0:593:dc61:2161 with SMTP id
+ y64-20020a62ce43000000b00593dc612161mr4272494pfg.2.1678093655488; Mon, 06 Mar
+ 2023 01:07:35 -0800 (PST)
+Date:   Mon,  6 Mar 2023 17:07:07 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230306170628.1.I8d0612b2968dd4740a4ceaf42f329fb59d5b9324@changeid>
+Subject: [PATCH] Bluetooth: hci_sync: Don't wait peer's reply when powering off
+From:   Archie Pusaka <apusaka@google.com>
+To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Archie Pusaka <apusaka@chromium.org>,
+        Abhishek Pandit-Subedi <abhishekpandit@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,33 +75,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jaewon,
+From: Archie Pusaka <apusaka@chromium.org>
 
-On Mon, Mar 06, 2023 at 10:42:39AM +0900, Jaewon Kim wrote:
-> This patch adds missing variable no_cs descriptions.
-> 
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+Currently, when we initiate disconnection, we will wait for the peer's
+reply unless when we are suspending, where we fire and forget the
+disconnect request.
 
-Reviewed-by: Andi Shyti <andi@etezian.org>
+A similar case is when adapter is powering off. However, we still wait
+for the peer's reply in this case. Therefore, if the peer is
+unresponsive, the command will time out and the power off sequence
+will fail, causing "bluetooth powered on by itself" to users.
 
-Thanks,
-Andi
+This patch makes the host doesn't wait for the peer's reply when the
+disconnection reason is powering off.
 
-> ---
->  include/linux/platform_data/spi-s3c64xx.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/linux/platform_data/spi-s3c64xx.h b/include/linux/platform_data/spi-s3c64xx.h
-> index 5df1ace6d2c9..3101152ce449 100644
-> --- a/include/linux/platform_data/spi-s3c64xx.h
-> +++ b/include/linux/platform_data/spi-s3c64xx.h
-> @@ -29,6 +29,7 @@ struct s3c64xx_spi_csinfo {
->   * struct s3c64xx_spi_info - SPI Controller defining structure
->   * @src_clk_nr: Clock source index for the CLK_CFG[SPI_CLKSEL] field.
->   * @num_cs: Number of CS this controller emulates.
-> + * @no_cs: Used when CS line is not connected.
->   * @cfg_gpio: Configure pins for this SPI controller.
->   */
->  struct s3c64xx_spi_info {
-> -- 
-> 2.17.1
+Signed-off-by: Archie Pusaka <apusaka@chromium.org>
+Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@google.com>
+
+---
+
+ net/bluetooth/hci_sync.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
+index 561a519a11bd6..a6cea389b675f 100644
+--- a/net/bluetooth/hci_sync.c
++++ b/net/bluetooth/hci_sync.c
+@@ -5103,10 +5103,12 @@ static int hci_disconnect_sync(struct hci_dev *hdev, struct hci_conn *conn,
+ 	cp.handle = cpu_to_le16(conn->handle);
+ 	cp.reason = reason;
+ 
+-	/* Wait for HCI_EV_DISCONN_COMPLETE not HCI_EV_CMD_STATUS when not
+-	 * suspending.
++	/* Wait for HCI_EV_DISCONN_COMPLETE, not HCI_EV_CMD_STATUS, when the
++	 * reason is anything but HCI_ERROR_REMOTE_POWER_OFF. This reason is
++	 * used when suspending or powering off, where we don't want to wait
++	 * for the peer's response.
+ 	 */
+-	if (!hdev->suspended)
++	if (reason != HCI_ERROR_REMOTE_POWER_OFF)
+ 		return __hci_cmd_sync_status_sk(hdev, HCI_OP_DISCONNECT,
+ 						sizeof(cp), &cp,
+ 						HCI_EV_DISCONN_COMPLETE,
+-- 
+2.40.0.rc0.216.gc4246ad0f0-goog
+
