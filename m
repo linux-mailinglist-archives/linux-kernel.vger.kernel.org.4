@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91ED86ACE57
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59F56ACE55
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjCFTms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42570 "EHLO
+        id S230091AbjCFTmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:42:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjCFTmp (ORCPT
+        with ESMTP id S229834AbjCFTmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:42:45 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF1742BC5;
+        Mon, 6 Mar 2023 14:42:46 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C39DB39B8B;
         Mon,  6 Mar 2023 11:42:44 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id k10so19468121edk.13;
+Received: by mail-ed1-x52e.google.com with SMTP id o12so43292468edb.9;
         Mon, 06 Mar 2023 11:42:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1678131762;
+        d=googlemail.com; s=20210112; t=1678131763;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FAuGjsD3YjXPSmXRNqq5neuVV5rzxkAVxoe9/cuaDU8=;
-        b=gMg8Ztq7gcsPGSligxplddglJIR4jRc3VmdV6qWwyR7aJXUnu+KbOFa0tyhC9VmLCN
-         /PBoOGB345nuH6q/57SPzmAf25HZ+4lNncybUkDBZcV0rWQpctVOLDp4wPJsDDnFd3ni
-         h+wu9yNwqjKtIewqXoKqRGJ1D+R1JpYXXOYnpS2QOPUzT8AyIN+ZSO0j+3yapFa23frB
-         dLKAokjsldKcjmJR3zl13eMZKD21u6iMA6ELfUx3kpv4BrJRlCwuJjLqEsJ340GvqGBi
-         6id1CfRUttoVmY4G4Stbe/++WLf0Uo03S/9TSkMEcAfuU4gm4yq3kXTO7y7uKYjxWcWG
-         8XnA==
+        bh=Q41eI3CW9uAy7k5oi4qNmPdGdSMRz93rZBadRTLziRk=;
+        b=qVMrDRmQn/iaiP9Wa2lsVvY0Irv1NqrUfRTXCepPG5gW4vXNaGEtS1CxDqleR6VYrx
+         soQwe1Bola+ES46V3O2Ha/+bItqmj23kDdUN/5YfYEywdpla3BYqwnitqWDttTYPn6RR
+         10VhYy2tVr7o0yWAsH1ouzn2but4BRxcoVp6MC9GExtFdr7epyhBqRgO6xAR/V6/K7Ht
+         oW0CYLnJrkB97sERv7jp18DzTIBQmnBNf16zsCbxL1UWSD3maO/f7e8MIBMekdTayNs/
+         Kabpc360zAECQGiJXsl66tEqpls+ECpFruy0gmgRGYoyWAwVsMTlimaMfWs8UkzSsdoj
+         rKbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678131762;
+        d=1e100.net; s=20210112; t=1678131763;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FAuGjsD3YjXPSmXRNqq5neuVV5rzxkAVxoe9/cuaDU8=;
-        b=MTI9UNtVvlPiyPr8+qIGJvp/xgRuUqy4RwHLxZE9F+bZ1/I+OHVU8DBRDoGMyu675a
-         4GqgHKGtpp7/sSXHIUbSeDi+n/NQm7vsyIL5iOsZyasQa1j5euPG5gwW9WVNPq7tNp/K
-         czavkp3/6GeLr/2AgzdCJmMCWjWlyEguXZCRm4ujceQ9t15uLLBv33/io4CQ+UHMGNjG
-         jDTnfObYMTQPotQYVMxHu/XN759QJIrP+jNH6l6KOgfFifYEOAVgIWxPPmDiUJHp3rtv
-         oIoF46T8QJsSMsWEgPdTYPsg7sb9s0wGzlz+bByBftFN6dWsLAJGc0mnG1WFDX5r5kuJ
-         F2NQ==
-X-Gm-Message-State: AO0yUKVP6IJ05Nd5cEqdw74o/+vHYYPx/+w2goOqmiGosvdxixBkWpCV
-        jAIxw0DX65q8Ce1vaylKVbU=
-X-Google-Smtp-Source: AK7set/vI81sU/bEE2xdggFmsoR+9XzbWFDXJj4M4FS2nSfJbOPBifs6jt9xxUd+fzvvBM5h4FCrRw==
-X-Received: by 2002:aa7:d296:0:b0:4bd:6b93:1286 with SMTP id w22-20020aa7d296000000b004bd6b931286mr12532264edq.25.1678131762493;
-        Mon, 06 Mar 2023 11:42:42 -0800 (PST)
+        bh=Q41eI3CW9uAy7k5oi4qNmPdGdSMRz93rZBadRTLziRk=;
+        b=eQYpk69xTxM3JVx54dTTCZ21IFMQBjVxAezDZ5aQ8e7jLJs0pljpgOditLcdEY9eoN
+         uYr/z4yejkSwXTvXw0NIDAzVfX6u5L2a1mzkYTs/gXDyPEAf6v8e82bu6fVKn7xTHLK9
+         6Y3lJsNcOWIe3VvRoyF72pzx8tVfQrRuuTi58x3YyCOQ110cgDrwW03NqnKbm1CIapOf
+         E0qH1p6be2UDdy765lWvF44HzoSMcBtcoqjgjEQ655zGKaChNwVvKNyhf/ftCtjcBqTb
+         QycpdYuaAwikFxLgC6g65KBZDl+j1eR31kvMuUAfsMGh3g6Q1oj4rC1OY1il5O23+lbY
+         RCvA==
+X-Gm-Message-State: AO0yUKV71Me4GjFRXcP2LJfjQ/aJoFV1fZVFh7QxUIaBeO69alKhy4j7
+        DHzluPGyqbYgpZqe6Wk9U7M=
+X-Google-Smtp-Source: AK7set9HvmALN/zwsmRbaBhWZ8lXmYT6BfuINzZbe8SDfa45rG8WuMTks/HGygS9zDUm/OQ3bSgQ/A==
+X-Received: by 2002:a17:907:7fa7:b0:8d7:6699:3bae with SMTP id qk39-20020a1709077fa700b008d766993baemr14147626ejc.57.1678131763279;
+        Mon, 06 Mar 2023 11:42:43 -0800 (PST)
 Received: from localhost.localdomain (dynamic-2a01-0c23-c405-5c00-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c405:5c00::e63])
-        by smtp.googlemail.com with ESMTPSA id e19-20020a170906315300b008f2b0c6052csm4951868eje.89.2023.03.06.11.42.41
+        by smtp.googlemail.com with ESMTPSA id e19-20020a170906315300b008f2b0c6052csm4951868eje.89.2023.03.06.11.42.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Mon, 06 Mar 2023 11:42:42 -0800 (PST)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
@@ -58,9 +58,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         gregkh@linuxfoundation.org,
         Christian Hewitt <christianshewitt@gmail.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2 1/3] dt-bindings: serial: amlogic,meson-uart: Add compatible string for G12A
-Date:   Mon,  6 Mar 2023 20:42:21 +0100
-Message-Id: <20230306194223.1869814-2-martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2 2/3] tty: serial: meson: Add a new compatible string for the G12A SoC
+Date:   Mon,  6 Mar 2023 20:42:22 +0100
+Message-Id: <20230306194223.1869814-3-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230306194223.1869814-1-martin.blumenstingl@googlemail.com>
 References: <20230306194223.1869814-1-martin.blumenstingl@googlemail.com>
@@ -76,66 +76,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Amlogic G12A SoCs gained a new "divide XTAL by 2" bit. Everything else
-(we know about) is identical to the UART IP on GX (GXBB/GXL/GXM) SoCs.
-Add a new compatible string for this SoC so this new bit can be managed
-accordingly while keeping "amlogic,meson-gx-uart" as fallback compatible
-string.
+Amlogic Meson G12A (and later) SoCs also have the "divide XTAL by 2" bit
+as the S4 UART controllers. Add a new compatible string for these SoCs
+and enable the has_xtal_div2 flag for them.
 
+Tested-by: Christian Hewitt <christianshewitt@gmail.com>
 Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
 Changes from v1 -> v2:
-- make meson-gx-uart a valid compatible string for meson-g12a-uart
+- none
 
 
- .../bindings/serial/amlogic,meson-uart.yaml   | 28 +++++++++++++------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ drivers/tty/serial/meson_uart.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-index 3cbdde85ed71..f3af0da8edaf 100644
---- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-@@ -26,21 +26,31 @@ properties:
-   compatible:
-     oneOf:
-       - description: Always-on power domain UART controller
--        items:
-+        oneOf:
-+          - items:
-+              - enum:
-+                  - amlogic,meson6-uart
-+                  - amlogic,meson8-uart
-+                  - amlogic,meson8b-uart
-+                  - amlogic,meson-gx-uart
-+                  - amlogic,meson-s4-uart
-+              - const: amlogic,meson-ao-uart
-+          - items:
-+              - const: amlogic,meson-g12a-uart
-+              - const: amlogic,meson-gx-uart
-+              - const: amlogic,meson-ao-uart
-+      - description: Everything-Else power domain UART controller
-+        oneOf:
-           - enum:
-               - amlogic,meson6-uart
-               - amlogic,meson8-uart
-               - amlogic,meson8b-uart
-               - amlogic,meson-gx-uart
-+              - amlogic,meson-g12a-uart
-               - amlogic,meson-s4-uart
--          - const: amlogic,meson-ao-uart
--      - description: Everything-Else power domain UART controller
--        enum:
--          - amlogic,meson6-uart
--          - amlogic,meson8-uart
--          - amlogic,meson8b-uart
--          - amlogic,meson-gx-uart
--          - amlogic,meson-s4-uart
-+          - items:
-+              - const: amlogic,meson-g12a-uart
-+              - const: amlogic,meson-gx-uart
+diff --git a/drivers/tty/serial/meson_uart.c b/drivers/tty/serial/meson_uart.c
+index 74110017988a..2501db5a7aaf 100644
+--- a/drivers/tty/serial/meson_uart.c
++++ b/drivers/tty/serial/meson_uart.c
+@@ -779,7 +779,7 @@ static int meson_uart_remove(struct platform_device *pdev)
+ 	return 0;
+ }
  
-   reg:
-     maxItems: 1
+-static struct meson_uart_data s4_uart_data = {
++static struct meson_uart_data meson_g12a_uart_data = {
+ 	.has_xtal_div2 = true,
+ };
+ 
+@@ -788,9 +788,13 @@ static const struct of_device_id meson_uart_dt_match[] = {
+ 	{ .compatible = "amlogic,meson8-uart" },
+ 	{ .compatible = "amlogic,meson8b-uart" },
+ 	{ .compatible = "amlogic,meson-gx-uart" },
++	{
++		.compatible = "amlogic,meson-g12a-uart",
++		.data = (void *)&meson_g12a_uart_data,
++	},
+ 	{
+ 		.compatible = "amlogic,meson-s4-uart",
+-		.data = (void *)&s4_uart_data,
++		.data = (void *)&meson_g12a_uart_data,
+ 	},
+ 	{ /* sentinel */ },
+ };
 -- 
 2.39.2
 
