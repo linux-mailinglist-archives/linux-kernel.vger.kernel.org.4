@@ -2,171 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0266ACCAC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3176ACCB8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbjCFSdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:33:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
+        id S230344AbjCFSdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 13:33:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCFSdU (ORCPT
+        with ESMTP id S230036AbjCFSdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:33:20 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F273591
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:32:53 -0800 (PST)
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A97A541304
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 18:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678127564;
-        bh=uRuGhhJh0B5paspR70yM6+MkAzhmoYmbibaOB25WZSU=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=LhlKGEJvC/j917zRsSYTrNXw1ryQMQW/oeOJ21V6PGtdMpL+nlFKwqhy/g9MvAKY8
-         TcKy7OIEneVDD/xyRQHzUro9vtKXxcVOPfWDWr8YmkSF1UIHtGLOe9BQ5HZo+dT6sX
-         BZkHvzAhhKfwaxaVpZLkqYCpGGEYlAeUODTMfzJrCFlTOqiA0uDZer8NgmSFNRJE5F
-         VEgOjVhxN5D/h9po1LSp9EDNOgnT8L9+y6tGMzYjEe1+2oyOp8nFyfMfiybOfsx9Ep
-         q0E1Jfq24QD5VF/lkTpA4nLxDTPlBQKdCcfyMh5ObY6MIW7u79hz3Tgo93U+3Savpj
-         qtHvhT6NeodXA==
-Received: by mail-qk1-f197.google.com with SMTP id z23-20020a376517000000b00731b7a45b7fso5973093qkb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 10:32:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678127563;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uRuGhhJh0B5paspR70yM6+MkAzhmoYmbibaOB25WZSU=;
-        b=N0sxYknic/2mZX7BogHmrt7JGvMBmImmTGuIYCjxVGU2K9Z+/UPMHpkS9uLRjpfwZe
-         gp8fRnUb7lyPkfzA3WI/sePTzXUM9+kGBbrUWJuyovDZnlvxnOjqIt946GyxcK9jgxCh
-         +BbYzA+RPcnYUn3NRgtAX3ZQDNO3WzvcE9pRONuS1xwjseBfTj/wyY4icvID9i16OS9n
-         1xJAC4l8+HB4EBYFGZW5SGJ7rNQfOe+hWoBGXfrHFJxBU/Fw6p2S6SUxWnHYE6+bBaBa
-         TX5XuFIIlD9dt63L+5cAIym0krqf+5YuEyec+0egDcTVzp+rsNxJgFszFy8cG9Ar6+GQ
-         HJUw==
-X-Gm-Message-State: AO0yUKWDryL+Lz6sAsbOND9TA7H067pMz+QwVm5ydWR1c5nzphRm7H7k
-        BjH2RTfKb+GnNZ23BId7ydTy660ZxzLblE32foo6doPvyyeM0goMkkQC++kFdrvRkjBV3PNYOjY
-        bKd1A0PrjwLRiXcFr47cJD1DA2BzZg+rXnaG0NjkqY3GDfcPIUIrp2TjyZA==
-X-Received: by 2002:a05:620a:5373:b0:742:876c:7786 with SMTP id op51-20020a05620a537300b00742876c7786mr2547909qkn.7.1678127563544;
-        Mon, 06 Mar 2023 10:32:43 -0800 (PST)
-X-Google-Smtp-Source: AK7set/FfxFW58rFA6xFcPm17xJiOXzf0oBhBPlJuQ5UtvxTnCOcg0VVjMp7xYxNF99d8TYTZOlrLJlDuuTmLbNvTyw=
-X-Received: by 2002:a05:620a:5373:b0:742:876c:7786 with SMTP id
- op51-20020a05620a537300b00742876c7786mr2547902qkn.7.1678127563187; Mon, 06
- Mar 2023 10:32:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20230306095408.26057-1-minda.chen@starfivetech.com>
-In-Reply-To: <20230306095408.26057-1-minda.chen@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Mon, 6 Mar 2023 19:32:26 +0100
-Message-ID: <CAJM55Z_kUPYOXwccDOaGk2DoRd9sNrGdpKKMyRUijh5SoPnJ4w@mail.gmail.com>
-Subject: Re: [PATCH 3/3] dts: usb: add StarFive JH7110 USB dts configuration.
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Mon, 6 Mar 2023 13:33:40 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200C53B3F4;
+        Mon,  6 Mar 2023 10:33:06 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326AxVIL008442;
+        Mon, 6 Mar 2023 18:32:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=jX7TiP9sbtiAIjTOMCwck5/ZOER8fIpAIp2/bY4ZGIU=;
+ b=mZ69QLb2E31aMxxz5ZSBMRyEl/GsArLIUMBWquQcRpxR4hrcRhWFoHSkGlfk2t8VbEyC
+ hrBtRrIrF/GNvVr3tIStnxDm2SPktKCo2ooEXPx2Gzrzdg1Pdel98B9QPYkmOjRLVTp3
+ WvAN36Li9MogFXE7uUMrM1xNQ6+Nk+Avn5MajsyVL3XX/7u/TFpMsadlB2sfqX0FUyDE
+ KLW8bydBy0akWYqGheem3caKie+fe9AOYL75hXoI+Xaub1BcN/hQgUPgHred6RA53vB2
+ KyOW0a3Y8kes8/vl2spU59WtwCoHZaZ+HE6v0ZmWb4/nlkqMvG5/3TSJJnuUh2GFGU73 VQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p417d5n2n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 18:32:52 +0000
+Received: from pps.filterd (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 326IWplg014331;
+        Mon, 6 Mar 2023 18:32:51 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTPS id 3p4few1h6f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 06 Mar 2023 18:32:51 +0000
+Received: from NALASPPMTA04.qualcomm.com (NALASPPMTA04.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326ITW7n007846;
+        Mon, 6 Mar 2023 18:32:51 GMT
+Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
+        by NALASPPMTA04.qualcomm.com (PPS) with ESMTP id 326IWo58014317;
+        Mon, 06 Mar 2023 18:32:50 +0000
+Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
+        id B24DB20E38; Mon,  6 Mar 2023 10:32:50 -0800 (PST)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        balbi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v6 0/5] Add function suspend/resume and remote wakeup support
+Date:   Mon,  6 Mar 2023 10:32:43 -0800
+Message-Id: <1678127568-10609-1-git-send-email-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jimiZ_9kd9ZQbhN6o8_GkgwTI6kDNtgS
+X-Proofpoint-ORIG-GUID: jimiZ_9kd9ZQbhN6o8_GkgwTI6kDNtgS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_12,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 bulkscore=0 mlxlogscore=752
+ phishscore=0 clxscore=1015 adultscore=0 priorityscore=1501 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060163
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Mar 2023 at 10:55, Minda Chen <minda.chen@starfivetech.com> wrote:
->
-> USB phy dts configuration. Also includes Cadence USB
-> subnode configuration.
->
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> ---
->  .../jh7110-starfive-visionfive-2.dtsi         |  6 +++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 39 +++++++++++++++++++
->  2 files changed, 45 insertions(+)
->
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> index e8b8f4346fdd..2a9ed8b9ee25 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -244,3 +244,9 @@
->                 };
->         };
->  };
-> +
-> +&usb0 {
-> +       starfive,usb2-only;
-> +       dr_mode = "peripheral";
-> +       status = "okay";
-> +};
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index be180f23963e..ee665cdc3510 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -628,5 +628,44 @@
->                         starfive,sysreg = <&sys_syscon 0x9c 0x1 0x3e>;
->                         status = "disabled";
->                 };
-> +
-> +               usb0: usbphy@10200000 {
+Changes in v6
+ - Combined usb_gadget_func_wakeup API with usb_func_wakeup API in composite layer
+   so that there is only 1 API for triggering function remote wakeup for better error
+   handling. Since function suspend is something specific to usb functions, better to
+   keep the related APIs in composite layer and above. Also documented the usage and
+   applicability of the usb_func_wakeup API.
 
-Please keep the nodes sorted by the address after @
+Changes in v5
+ - Add wakeup_armed check in patch2 in the link status change event handler
+   so that resume gets triggeed only in the remote wakeup context.
+ - Costmetic changes in patch3 and patch4
 
-> +                       compatible = "starfive,jh7110-usb";
-> +                       reg = <0x0 0x10210000 0x0 0x1000>,
-> +                             <0x0 0x10200000 0x0 0x1000>;
-> +                       reg-names = "usb3", "usb2";
-> +                       clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
-> +                                <&stgcrg JH7110_STGCLK_USB0_APP_125>,
-> +                                <&stgcrg JH7110_STGCLK_USB0_LPM>,
-> +                                <&stgcrg JH7110_STGCLK_USB0_STB>,
-> +                                <&stgcrg JH7110_STGCLK_USB0_APB>,
-> +                                <&stgcrg JH7110_STGCLK_USB0_AXI>,
-> +                                <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
-> +                       clock-names = "usb_125m", "usb0_app_125", "usb0_lpm",
-> +                               "usb0_stb", "usb0_apb", "usb0_axi", "usb0_utmi_apb";
-> +                       resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
-> +                                <&stgcrg JH7110_STGRST_USB0_APB>,
-> +                                <&stgcrg JH7110_STGRST_USB0_AXI>,
-> +                                <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
-> +                       starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
-> +                       starfive,sys-syscon = <&sys_syscon 0x18>;
-> +                       status = "disabled";
-> +                       #address-cells = <2>;
-> +                       #size-cells = <2>;
-> +                       #interrupt-cells = <1>;
-> +                       #phy-cells = <0>;
-> +                       ranges;
+Changes in v4
+ - Moved the wakeup bit check to bind function for warning the user at an early
+   stage itself.
+ - Added the remote wakeup configured check to gadget_wakeup() and func_wakeup()
+   routines so that wakeup can be triggered only if user has configured it.
+ - Cosmetic changes with respect to renaming the variables to reflect the operation
+   better.
 
-Please add an empty line here.
+Changes in v3
+ - Modified rw_capable flag to reflect the gadgets capability for wakeup
+   signalling.
+ - Added a check to configure wakeup bit in bmAttributes only if gadget
+   is capable of triggering wakeup.
+ - Implemented a gadget op for composite layer to inform UDC whether device
+   is configured for remote wakeup.
+ - Added a check in __usb_gadget_wakeup() API to trigger wakeup only if the
+   device is configured for it.
+ - Cosmetic changes in dwc3_gadget_func_wakeup() API.
 
-> +                       usbdrd_cdns3: usb@10100000 {
-> +                               compatible = "cdns,usb3";
-> +                               reg = <0x0 0x10100000 0x0 0x10000>,
-> +                                     <0x0 0x10110000 0x0 0x10000>,
-> +                                     <0x0 0x10120000 0x0 0x10000>;
-> +                               reg-names = "otg", "xhci", "dev";
-> +                               interrupts = <100>, <108>, <110>;
-> +                               interrupt-names = "host", "peripheral", "otg";
-> +                               phy-names = "cdns3,usb3-phy", "cnds3,usb2-phy";
-> +                               maximum-speed = "super-speed";
-> +                       };
-> +               };
->         };
->  };
-> --
-> 2.17.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+Changes in v2
+ - Added a flag to indicate whether the device is remote wakeup capable.
+ - Added an async parameter to _dwc3_gadget_wakeup() API and few cosmetic
+   changes.
+ - Added flags to reflect the state of  function suspend and function remote
+   wakeup to usb_function struct rather than function specific struct (f_ecm).
+ - Changed the dwc3_gadget_func__wakeup() API to run synchronously by first
+   checking the link state and then sending the device notification. Also
+   added debug log for DEVICE_NOTIFICATION generic cmd.
+ - Added changes to arm the device for remotewakeup/function remotewakeup
+   only if device is capable.
+
+An usb device can initate a remote wakeup and bring the link out of
+suspend as dictated by the DEVICE_REMOTE_WAKEUP feature selector.
+To achieve this an interface can invoke gadget_wakeup op and wait for the
+device to come out of LPM. But the current polling based implementation
+fails if the host takes a long time to drive the resume signaling specially
+in high speed capable devices. Switching to an interrupt based approach is
+more robust and efficient. This can be leveraged by enabling link status
+change events and triggering a gadget resume when the link comes to active
+state.
+
+If the device is enhanced super-speed capable, individual interfaces can
+also be put into suspend state. An interface can be in function suspend
+state even when the device is not in suspend state. Function suspend state
+is retained throughout the device suspend entry and exit process.
+A function can be put to function suspend through FUNCTION_SUSPEND feature
+selector sent by the host. This setup packet also decides whether that
+function is capable of initiating a function remote wakeup. When the
+function sends a wakeup notification to the host the link must be first
+brought to a non-U0 state and then this notification is sent.
+
+This change adds the infrastructure needed to support the above
+functionalities.
+
+Elson Roy Serrao (5):
+  usb: gadget: Properly configure the device for remote wakeup
+  usb: dwc3: Add remote wakeup handling
+  usb: gadget: Add function wakeup support
+  usb: dwc3: Add function suspend and function wakeup support
+  usb: gadget: f_ecm: Add suspend/resume and remote wakeup support
+
+ drivers/usb/dwc3/core.h               |   5 ++
+ drivers/usb/dwc3/debug.h              |   2 +
+ drivers/usb/dwc3/ep0.c                |  16 ++---
+ drivers/usb/dwc3/gadget.c             | 118 ++++++++++++++++++++++++++++++++--
+ drivers/usb/gadget/composite.c        |  58 +++++++++++++++++
+ drivers/usb/gadget/configfs.c         |   3 +
+ drivers/usb/gadget/function/f_ecm.c   |  68 ++++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.c |  63 ++++++++++++++++++
+ drivers/usb/gadget/function/u_ether.h |   4 ++
+ drivers/usb/gadget/udc/core.c         |  27 ++++++++
+ drivers/usb/gadget/udc/trace.h        |   5 ++
+ include/linux/usb/composite.h         |   8 +++
+ include/linux/usb/gadget.h            |   9 +++
+ 13 files changed, 372 insertions(+), 14 deletions(-)
+
+-- 
+2.7.4
+
