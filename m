@@ -2,50 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE3C16ACFD4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3316ACFD7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjCFVI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:08:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
+        id S229776AbjCFVJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:09:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjCFVIZ (ORCPT
+        with ESMTP id S229559AbjCFVJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:08:25 -0500
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798743BDB7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:08:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Myq4oW0FNya1g2HlnuWwn+aBlWwPfsZwgZBVa+Mj0+Y=;
-  b=GAEXEMtJ/xd8nOEm5BB5kwL43wnEqTOGdjLCknmWLCcLqM7qJBbXVQKe
-   uDppI9NsCl3E5825UEm1okaRRKCsP/PXjzRGk9UeYU0aJrfz3IrmAgj2z
-   m5Oy7wzaDsVvI6Rdq7wMQjCZlh+DM12eWq7e86YLt3r+SHRJqyjP7TLFB
-   0=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,238,1673910000"; 
-   d="scan'208";a="95740869"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 22:08:19 +0100
-Date:   Mon, 6 Mar 2023 22:08:21 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: axis-fifo: alignment should match opening
- parenthesis in axis-fifo.c
-In-Reply-To: <ZAZSmPpB6fcozGa4@khadija-virtual-machine>
-Message-ID: <alpine.DEB.2.22.394.2303062202500.3050@hadrien>
-References: <ZAZSmPpB6fcozGa4@khadija-virtual-machine>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 6 Mar 2023 16:09:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AAC206BF;
+        Mon,  6 Mar 2023 13:09:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22E3F60B84;
+        Mon,  6 Mar 2023 21:09:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5523C433EF;
+        Mon,  6 Mar 2023 21:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678136957;
+        bh=D7hWlHPkxCHLmVrT+DiT6xkGdDskW5thK7niBxeh04M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mJWPEujZmIUYE6OUHwuuyaWs5gYoiX4mwLmxqbrcHALw1Ox54QKIpzoH9FueSBEGh
+         /DthUfR3FQvRQExHZWC8w3zsDF8GuKihsyq6/+UGMI+E1SKQr8rzjz4dwuPc+Bt+vG
+         ZsY9Ll9URemzFEKiU2ctO3x9wG1m0YzHJEW7lxr9Rw1HejeoBf5h2WORWwofq9wC3Z
+         LRVcKmO7vapRRHJgCmEQO/HusrwP0bnR4rKRTWaK2JQdkO97QAojCUOfQjA4iH7A+9
+         TeEWxynFs1m+xVi9yPWPXd+7DPjrFhqmYnUowWzhc7MNPI1BiPPvBK4fkPD1bHuqzl
+         EtBoSD8wWFh5Q==
+Date:   Mon, 6 Mar 2023 21:09:11 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        'Conor Dooley ' <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V3 17/20] RISC-V: time.c: Add ACPI support for time_init()
+Message-ID: <0cceafc3-522b-4ce0-9016-e931c818adec@spud>
+References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+ <20230303133647.845095-18-sunilvl@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="9ueEUgWWOucslAoO"
+Content-Disposition: inline
+In-Reply-To: <20230303133647.845095-18-sunilvl@ventanamicro.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,54 +69,93 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--9ueEUgWWOucslAoO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 7 Mar 2023, Khadija Kamran wrote:
-
-> In file drivers/staging/axis-fifo/axis-fifo.c the alignment did not match the opening parenthesis. So, a few tabs were added to match the alignment to exactly where the parenthesis started.
-
-Hello Khadija,
-
-Thanks for plunging in and being the first participant!
-
-However, there are a number of issues with the proposed patch.
-
-1.  The log message should be at most around 70 characters wide.  You have
-one long line.
-
-2.  The log message should be written in the imperative.  Instead of "a
-few tabs were added", ay "add a few tabs".
-
-3.  I'm not sure that it is worth creating a very long line to respect the
-rule about (.  On the other hand, the way the code is written at the
-moment seems to be very misleading, because the third argument to
-wait_event_interruptible_timeout is written as though it is the second
-argument to ioread32.  So you can adjust the argument list of
-wait_event_interruptible_timeout so that at least all of the arguments
-that are not on the same line as the function call are lined up.
-
-julia
-
->
-> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+On Fri, Mar 03, 2023 at 07:06:44PM +0530, Sunil V L wrote:
+> On ACPI based platforms, timer related information is
+> available in RHCT. Add ACPI based probe support to the
+> timer initialization.
+>=20
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 > ---
->  drivers/staging/axis-fifo/axis-fifo.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-> index dfd2b357f484..6e959224add0 100644
-> --- a/drivers/staging/axis-fifo/axis-fifo.c
-> +++ b/drivers/staging/axis-fifo/axis-fifo.c
-> @@ -383,7 +383,7 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
->  		 */
->  		mutex_lock(&fifo->read_lock);
->  		ret = wait_event_interruptible_timeout(fifo->read_queue,
-> -			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
-> +						       ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
->  				 (read_timeout >= 0) ?
->  				  msecs_to_jiffies(read_timeout) :
->  				  MAX_SCHEDULE_TIMEOUT);
-> --
+>  arch/riscv/kernel/time.c | 23 +++++++++++++++++------
+>  1 file changed, 17 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/arch/riscv/kernel/time.c b/arch/riscv/kernel/time.c
+> index babaf3b48ba8..2c29543549c3 100644
+> --- a/arch/riscv/kernel/time.c
+> +++ b/arch/riscv/kernel/time.c
+> @@ -4,6 +4,7 @@
+>   * Copyright (C) 2017 SiFive
+>   */
+> =20
+> +#include <linux/acpi.h>
+>  #include <linux/of_clk.h>
+>  #include <linux/clockchips.h>
+>  #include <linux/clocksource.h>
+> @@ -18,17 +19,27 @@ EXPORT_SYMBOL_GPL(riscv_timebase);
+>  void __init time_init(void)
+>  {
+>  	struct device_node *cpu;
+> +	struct acpi_table_rhct *rhct;
+> +	acpi_status status;
+>  	u32 prop;
+> =20
+> -	cpu =3D of_find_node_by_path("/cpus");
+> -	if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
+> -		panic(KERN_WARNING "RISC-V system with no 'timebase-frequency' in DTS\=
+n");
+> -	of_node_put(cpu);
+> -	riscv_timebase =3D prop;
+> +	if (acpi_disabled) {
+> +		cpu =3D of_find_node_by_path("/cpus");
+> +		if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
+> +			panic("RISC-V system with no 'timebase-frequency' in DTS\n");
+
+I appreciate that it was like this before, but a newline here (and in
+the corresponding spot below) would be nice.
+That's a minor nit though, so:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+> +		of_node_put(cpu);
+> +		riscv_timebase =3D prop;
+> +		of_clk_init(NULL);
+> +	} else {
+> +		status =3D acpi_get_table(ACPI_SIG_RHCT, 0, (struct acpi_table_header =
+**)&rhct);
+> +		if (ACPI_FAILURE(status))
+> +			panic("RISC-V ACPI system with no RHCT table\n");
+> +		riscv_timebase =3D rhct->time_base_freq;
+> +		acpi_put_table((struct acpi_table_header *)rhct);
+> +	}
+> =20
+>  	lpj_fine =3D riscv_timebase / HZ;
+> =20
+> -	of_clk_init(NULL);
+>  	timer_probe();
+> =20
+>  	tick_setup_hrtimer_broadcast();
+> --=20
 > 2.34.1
->
->
->
+>=20
+
+--9ueEUgWWOucslAoO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAZWdwAKCRB4tDGHoIJi
+0tRbAP9sV9/i+Nt5TFgt3D3dQu0MRkMmaWwMmRuG9k6Af62B0QD/cYMZAGC8XVRw
+vGCpsH5Ygi+gGrH6Cok66aQs9RTt+wU=
+=S8pz
+-----END PGP SIGNATURE-----
+
+--9ueEUgWWOucslAoO--
