@@ -2,101 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC4A6ACFAE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:00:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F23A6ACFB2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:01:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjCFVAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:00:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S229718AbjCFVBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:01:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCFVAG (ORCPT
+        with ESMTP id S229524AbjCFVBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:00:06 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9393B4392E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:00:03 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id a25so44435746edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 13:00:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678136402;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZKN2IAvn/W0itV5cN/krjEBOmvG6gUeQK8zrdi9C4NE=;
-        b=H36F/k2ar0biFkJweyAOBEVLELT0+KVoCyu8tEcgy6ro4cAVIDS54i2T4CRJnyVwBU
-         IsCMU8GqCxPbVxEL3wEDQE630FDLKANt00rQJ9yBhiArgBmXrmacHdMBDzSwek0GSi4n
-         SViG2uvBxbhHmiFa7j1WwmKwWvVR1zD9sMBJk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678136402;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZKN2IAvn/W0itV5cN/krjEBOmvG6gUeQK8zrdi9C4NE=;
-        b=6gijPniDHz18TiV/bR6VxceIHWiPin/+EHm7fAI9Q+wZUzPk6ctM07eZ74OaD6dKnh
-         UYsN5+brxOj4qXKxdLQekLq4e3NXo2FShKZ5XTzDF6vtyy2fyTAZX6b5bKv/LAY+Vb+w
-         418Mpmao1w25m52B0LR4UQlYTP95/L7HBrdtd0/mwZcQan/JCif7RGcqBs8ZYAETvB9U
-         Q3+NIqBOWJNMa2orISoInMH/CGt5SzlbpJkN0hEdkG56ZEM897Oa2CcRtIi7w1XnN9Z6
-         8bw222r0jm0XLEq0etWTNDjFvFIGCpphEnQE7ST7bMc/KPLO6QLo10+KCGJppkmywkkT
-         qaWw==
-X-Gm-Message-State: AO0yUKWUWFPvSk8YY0xbXxvJF3gZeJ4FFbboIAONesggtvbEmcAfjGyP
-        xadCdVidmLmkZOlqz4mquTbgGz1pFhruRyjkx8uavalI
-X-Google-Smtp-Source: AK7set9Y2SOYQm/WBtVDPP2+G6s/yJ6NAF4GRjhYT0l0rH0j3hRf2/SI7jOB5TE2EpcYrmt8UtUj1w==
-X-Received: by 2002:aa7:c54b:0:b0:4ac:b760:f07a with SMTP id s11-20020aa7c54b000000b004acb760f07amr11915198edr.19.1678136401801;
-        Mon, 06 Mar 2023 13:00:01 -0800 (PST)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id hy26-20020a1709068a7a00b008d92897cc29sm5028241ejc.37.2023.03.06.13.00.01
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 13:00:01 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id cy23so44066226edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 13:00:01 -0800 (PST)
-X-Received: by 2002:a50:8711:0:b0:4bb:d098:2138 with SMTP id
- i17-20020a508711000000b004bbd0982138mr6547861edb.5.1678136400888; Mon, 06 Mar
- 2023 13:00:00 -0800 (PST)
+        Mon, 6 Mar 2023 16:01:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AB93C7B9;
+        Mon,  6 Mar 2023 13:01:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FBEBB8112C;
+        Mon,  6 Mar 2023 21:01:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF3FEC433D2;
+        Mon,  6 Mar 2023 21:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678136468;
+        bh=yqidNwgp7HCd2mFZnWBGnmFlAErUVkw5CNhyg4udVxo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qVYEPC7fl+EPjpQBV09cn3eYFU4yvIjPx82G6PRN9v4dGWM7tA0Uf7g4KCQsAVEJZ
+         BMS0RlGS+jbVJ4CmY6Rjl/RJz8595YaL3wny6SgyYMrT2CvdGFBArTzlZIavyXPdBX
+         8EIZy/xbp1NUQbcZontIMKh8PuZf6msVDD6hDu67oEXxH4GIDc1uig2GhK3/FIJxIc
+         DgHcPz4QZSWidhO6pwVizj6S7vePesaNQNPuTu+N83Zj8/20XzDOvpKIwG0mVaC/7W
+         d1gNKYsQp+cUVKRBBFdF1QMsoLKZAZLuBM/m/fCAluemq3ibDzOc3u+OyXltmDog7Z
+         nZgpgP2KMoQKA==
+Date:   Mon, 6 Mar 2023 21:01:02 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        'Conor Dooley ' <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V3 15/20] clocksource/timer-riscv: Refactor
+ riscv_timer_init_dt()
+Message-ID: <c2c1bdb5-aee6-4f4c-9f7d-073917e75b88@spud>
+References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+ <20230303133647.845095-16-sunilvl@ventanamicro.com>
 MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Mar 2023 12:59:44 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiGA7WRzP9uDNwKjsgZ8B=ycnYaqOcEAPudfNfKtQP_vw@mail.gmail.com>
-Message-ID: <CAHk-=wiGA7WRzP9uDNwKjsgZ8B=ycnYaqOcEAPudfNfKtQP_vw@mail.gmail.com>
-Subject: cpumask emergency fixes pushed out
-To:     Vernon Yang <vernon2gm@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="AQdH4wZIprRDoHja"
+Content-Disposition: inline
+In-Reply-To: <20230303133647.845095-16-sunilvl@ventanamicro.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just a note to people involved in the multiple different threads that
-I did a "quick fix" push of the verified fix for the random.c issue.
 
-I still think that the lpfc driver in particular could be cleaned up,
-and considering that the random.c use-case looks like it really wants
-the same thing ("give me the next cpu, but wrap to the beginning if
-that fails") I wonder if we should just have a generic helper for that
-case.
+--AQdH4wZIprRDoHja
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The existing "cpumask_next_wrap()" function does do pretty much
-exactly that, you just have to give it some unusual arguments. It *is*
-used, but it's an odd enough interface that I'm not really sure that
-I'm a huge fan of it.
+On Fri, Mar 03, 2023 at 07:06:42PM +0530, Sunil V L wrote:
+> Refactor the timer init function such that few things can be
+> shared by both DT and ACPI based platforms.
+>=20
+> Co-developed-by: Anup Patel <apatel@ventanamicro.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> ---
+>  drivers/clocksource/timer-riscv.c | 81 +++++++++++++++----------------
+>  1 file changed, 40 insertions(+), 41 deletions(-)
+>=20
+> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/time=
+r-riscv.c
+> index 5f0f10c7e222..cecc4662293b 100644
+> --- a/drivers/clocksource/timer-riscv.c
+> +++ b/drivers/clocksource/timer-riscv.c
+> @@ -124,61 +124,28 @@ static irqreturn_t riscv_timer_interrupt(int irq, v=
+oid *dev_id)
+>  	return IRQ_HANDLED;
+>  }
+> =20
+> -static int __init riscv_timer_init_dt(struct device_node *n)
+> +static int __init riscv_timer_init_common(void)
+>  {
+> -	int cpuid, error;
+> -	unsigned long hartid;
+> -	struct device_node *child;
+> +	int error;
+>  	struct irq_domain *domain;
+> +	struct fwnode_handle *intc_fwnode =3D riscv_get_intc_hwnode();
+> =20
+> -	error =3D riscv_of_processor_hartid(n, &hartid);
+> -	if (error < 0) {
+> -		pr_warn("Not valid hartid for node [%pOF] error =3D [%lu]\n",
+> -			n, hartid);
+> -		return error;
+> -	}
+> -
+> -	cpuid =3D riscv_hartid_to_cpuid(hartid);
+> -	if (cpuid < 0) {
+> -		pr_warn("Invalid cpuid for hartid [%lu]\n", hartid);
+> -		return cpuid;
+> -	}
+> -
+> -	if (cpuid !=3D smp_processor_id())
+> -		return 0;
+> -
+> -	child =3D of_find_compatible_node(NULL, NULL, "riscv,timer");
+> -	if (child) {
+> -		riscv_timer_cannot_wake_cpu =3D of_property_read_bool(child,
+> -					"riscv,timer-cannot-wake-cpu");
+> -		of_node_put(child);
+> -	}
+> -
+> -	domain =3D NULL;
+> -	child =3D of_get_compatible_child(n, "riscv,cpu-intc");
+> -	if (!child) {
+> -		pr_err("Failed to find INTC node [%pOF]\n", n);
+> -		return -ENODEV;
+> -	}
+> -	domain =3D irq_find_host(child);
+> -	of_node_put(child);
+> +	domain =3D irq_find_matching_fwnode(intc_fwnode, DOMAIN_BUS_ANY);
+>  	if (!domain) {
+> -		pr_err("Failed to find IRQ domain for node [%pOF]\n", n);
+> +		pr_err("Failed to find irq_domain for INTC node [%pfwP]\n",
+> +		       intc_fwnode);
+>  		return -ENODEV;
+>  	}
+> =20
+>  	riscv_clock_event_irq =3D irq_create_mapping(domain, RV_IRQ_TIMER);
+>  	if (!riscv_clock_event_irq) {
+> -		pr_err("Failed to map timer interrupt for node [%pOF]\n", n);
+> +		pr_err("Failed to map timer interrupt for node [%pfwP]\n", intc_fwnode=
+);
+>  		return -ENODEV;
+>  	}
+> =20
+> -	pr_info("%s: Registering clocksource cpuid [%d] hartid [%lu]\n",
+> -	       __func__, cpuid, hartid);
+>  	error =3D clocksource_register_hz(&riscv_clocksource, riscv_timebase);
+>  	if (error) {
+> -		pr_err("RISCV timer register failed [%d] for cpu =3D [%d]\n",
+> -		       error, cpuid);
+> +		pr_err("RISCV timer registration failed [%d]\n", error);
+>  		return error;
+>  	}
+> =20
+> @@ -207,4 +174,36 @@ static int __init riscv_timer_init_dt(struct device_=
+node *n)
+>  	return error;
+>  }
+> =20
+> +static int __init riscv_timer_init_dt(struct device_node *n)
+> +{
+> +	int cpuid, error;
+> +	unsigned long hartid;
+> +	struct device_node *child;
+> +
+> +	error =3D riscv_of_processor_hartid(n, &hartid);
+> +	if (error < 0) {
+> +		pr_warn("Invalid hartid for node [%pOF] error =3D [%lu]\n",
+> +			n, hartid);
 
-Somewhat ironically, the native bitmap version
-("find_next_bit_wrap()") does *not* have that ugly interface, and is
-fairly straightforward. So it's really just the cpumask version that
-has that extension that makes it so non-intuitive.
+I know this was there initially, but why is this (and the one below) a
+pr_warn() if we're aborting the init if we hit the condition? :thinking:
 
-Anyway, I did that quick fix commit, but I do hope that people take a
-look at those fixes for maybe doing things better. And if somebody
-finds other not-quite-as obvious cases of that incorrect pattern of
-checking a bit scanning function for 'nr_cpumask_bits', please holler.
+It's not your doing though, so:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-                    Linus
+Thanks,
+Conor.
+
+> +		return error;
+> +	}
+> +
+> +	cpuid =3D riscv_hartid_to_cpuid(hartid);
+> +	if (cpuid < 0) {
+> +		pr_warn("Invalid cpuid for hartid [%lu]\n", hartid);
+> +		return cpuid;
+> +	}
+> +
+> +	if (cpuid !=3D smp_processor_id())
+> +		return 0;
+> +
+> +	child =3D of_find_compatible_node(NULL, NULL, "riscv,timer");
+> +	if (child) {
+> +		riscv_timer_cannot_wake_cpu =3D of_property_read_bool(child,
+> +					"riscv,timer-cannot-wake-cpu");
+> +		of_node_put(child);
+> +	}
+> +
+> +	return riscv_timer_init_common();
+> +}
+> +
+>  TIMER_OF_DECLARE(riscv_timer, "riscv", riscv_timer_init_dt);
+> --=20
+> 2.34.1
+>=20
+
+--AQdH4wZIprRDoHja
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAZUjgAKCRB4tDGHoIJi
+0mZPAQCogioAGeu/rH7vLjcGivv0bAimROIjihyABpXi3fiJ0AEAmUe5cTGCAW1k
+wL1pBsU4gSGXk9HUSJpK0vRRT/x7OgA=
+=fi1h
+-----END PGP SIGNATURE-----
+
+--AQdH4wZIprRDoHja--
