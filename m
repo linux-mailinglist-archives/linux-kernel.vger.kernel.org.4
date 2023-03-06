@@ -2,411 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B5C06ABFD3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:48:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BB06ABFD5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjCFMsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:48:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
+        id S230005AbjCFMtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjCFMsp (ORCPT
+        with ESMTP id S229528AbjCFMte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:48:45 -0500
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9D52597B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:48:42 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:b745:671d:a946:57fa])
-        by xavier.telenet-ops.be with bizsmtp
-        id V0og2900Q4LuvSS010ogci; Mon, 06 Mar 2023 13:48:40 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pZAG8-00B5IY-4r;
-        Mon, 06 Mar 2023 13:48:40 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1pZAGe-005B35-4g;
-        Mon, 06 Mar 2023 13:48:40 +0100
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-To:     linux-m68k@lists.linux-m68k.org
-Cc:     linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] m68k: defconfig: Update defconfigs for v6.3-rc1
-Date:   Mon,  6 Mar 2023 13:48:37 +0100
-Message-Id: <2b6d1357f4cb7e23bb2c7a7d39c4486e77e138ad.1678106848.git.geert@linux-m68k.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 6 Mar 2023 07:49:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF312265A0;
+        Mon,  6 Mar 2023 04:49:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 670A0B80E01;
+        Mon,  6 Mar 2023 12:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BF60C4339E;
+        Mon,  6 Mar 2023 12:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678106971;
+        bh=ZVAeDaw8Bjw0ZWq26G0vbEl1cHK0g7tJ4/XCL+s6YhM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=GySefDdZikQqjE8E0Dv0GxgvaN8nPi/ZcIPhgYsnV5EsRx2JaE4PjBp6C7Mx8ow+l
+         +5mFHhTwcOSn/zjn61JLDk5O4Xw+bbFsRAT+CMnNvVBohTLJpTVZAIIjRQ7/aadzrq
+         6UpCWgrMkmA8z4IEKeKwr6shWTtfCw2aZZ1xoqfjaR0iHNsbG3Ji6UiruXwNkY3Vl2
+         VbHgnzC+kf85qIYK041etERwYUCV4RFX/+4gmsO061z5DzhdCWQnhlMeTo4rRqCgqe
+         fWBFYeMopZai+ASP/EInA4mENKZiVZDaa6MywcUTgAPiBmShI+N+syzkwhLUtlKNrS
+         80OKs7PBk/fiA==
+Received: by mail-ed1-f50.google.com with SMTP id k10so14124360edk.13;
+        Mon, 06 Mar 2023 04:49:30 -0800 (PST)
+X-Gm-Message-State: AO0yUKUyHcpIzxqQfcRuGj4mDmelMOSa3PIuUDfrwTTfASenDhzKoqjh
+        C7WIf6UpI2Mvnvi4k5PubW1kbon+R3FflpS+TuQ=
+X-Google-Smtp-Source: AK7set/68S6FBEZWrciQcx1rE28acaJnul7BjG0QtBvr7bA1iHQjNFZ6QOhdb5LQlNVacW9xtPkUEBbG+F4OOR2wer8=
+X-Received: by 2002:a17:906:2a55:b0:8b2:fa6d:45e3 with SMTP id
+ k21-20020a1709062a5500b008b2fa6d45e3mr4626371eje.1.1678106969196; Mon, 06 Mar
+ 2023 04:49:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230306095934.609589-1-chenhuacai@loongson.cn> <029a5993-b993-ab73-0a14-0df9b0ddf3da@loongson.cn>
+In-Reply-To: <029a5993-b993-ab73-0a14-0df9b0ddf3da@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 6 Mar 2023 20:49:19 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6_-iVAK6-MmfJq12JBzD6nyYNOiObEbzu8yzew3raAvg@mail.gmail.com>
+Message-ID: <CAAhV-H6_-iVAK6-MmfJq12JBzD6nyYNOiObEbzu8yzew3raAvg@mail.gmail.com>
+Subject: Re: [PATCH V3] LoongArch: Provide kernel fpu functions
+To:     maobibo <maobibo@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  - Drop CONFIG_IP_NF_TARGET_CLUSTERIP=m (removed in commit
-    9db5d918e2c07fa0 ("netfilter: ip_tables: remove clusterip target")),
-  - Enable modular build of the Kerberos V mechanism for Secure RPC
-    (auto-builtin since commit dfe9a123451a6e73 ("SUNRPC: Enable
-    rpcsec_gss_krb5.ko to be built without CRYPTO_DES")),
-  - Enable modular build of the new Dhrystone benchmark test.
+On Mon, Mar 6, 2023 at 8:03=E2=80=AFPM maobibo <maobibo@loongson.cn> wrote:
+>
+>
+>
+> =E5=9C=A8 2023/3/6 17:59, Huacai Chen =E5=86=99=E9=81=93:
+> > Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
+> > to use fpu. They can be used by some other kernel components, e.g., the
+> > AMDGPU graphic driver for DCN.
+> Since kernel is compiled with -msoft-float, I guess hw fpu will not be
+> used in kernel by present:). However it is deserved to try.
+> >
+> > Reported-by: WANG Xuerui <kernel@xen0n.name>
+> > Tested-by: WANG Xuerui <kernel@xen0n.name>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> > V2: Use non-GPL exports and update commit messages.
+> > V3: Add spaces for coding style.
+> >
+> >  arch/loongarch/include/asm/fpu.h |  3 +++
+> >  arch/loongarch/kernel/Makefile   |  2 +-
+> >  arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
+> >  3 files changed, 45 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/loongarch/kernel/kfpu.c
+> >
+> > diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/=
+asm/fpu.h
+> > index 358b254d9c1d..192f8e35d912 100644
+> > --- a/arch/loongarch/include/asm/fpu.h
+> > +++ b/arch/loongarch/include/asm/fpu.h
+> > @@ -21,6 +21,9 @@
+> >
+> >  struct sigcontext;
+> >
+> > +extern void kernel_fpu_begin(void);
+> > +extern void kernel_fpu_end(void);
+> > +
+> >  extern void _init_fpu(unsigned int);
+> >  extern void _save_fp(struct loongarch_fpu *);
+> >  extern void _restore_fp(struct loongarch_fpu *);
+> > diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Mak=
+efile
+> > index 78d4e3384305..9a72d91cd104 100644
+> > --- a/arch/loongarch/kernel/Makefile
+> > +++ b/arch/loongarch/kernel/Makefile
+> > @@ -13,7 +13,7 @@ obj-y               +=3D head.o cpu-probe.o cacheinfo=
+.o env.o setup.o entry.o genex.o \
+> >  obj-$(CONFIG_ACPI)           +=3D acpi.o
+> >  obj-$(CONFIG_EFI)            +=3D efi.o
+> >
+> > -obj-$(CONFIG_CPU_HAS_FPU)    +=3D fpu.o
+> > +obj-$(CONFIG_CPU_HAS_FPU)    +=3D fpu.o kfpu.o
+> >
+> >  obj-$(CONFIG_ARCH_STRICT_ALIGN)      +=3D unaligned.o
+> >
+> > diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.=
+c
+> > new file mode 100644
+> > index 000000000000..cd2a18fecdcc
+> > --- /dev/null
+> > +++ b/arch/loongarch/kernel/kfpu.c
+> > @@ -0,0 +1,41 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2023 Loongson Technology Corporation Limited
+> > + */
+> > +
+> > +#include <linux/cpu.h>
+> > +#include <linux/init.h>
+> > +#include <asm/fpu.h>
+> > +#include <asm/smp.h>
+> > +
+> > +static DEFINE_PER_CPU(bool, in_kernel_fpu);
+> > +
+> > +void kernel_fpu_begin(void)
+> > +{
+> > +     if (this_cpu_read(in_kernel_fpu))
+> > +             return;
+> > +
+> > +     preempt_disable();
+> > +     this_cpu_write(in_kernel_fpu, true);
+> > +
+> > +     if (!is_fpu_owner())
+> > +             enable_fpu();
+> > +     else
+> > +             _save_fp(&current->thread.fpu);
+> Do we need initialize fcsr rather than using random fcsr value
+> of other processes? There may be fpu exception enabled by
+> other tasks.
+Emm, I think initialize fcsr to 0 is better here.
 
-Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
----
-To be queued in the m68k for-v6.4 branch.
-
- arch/m68k/configs/amiga_defconfig    | 3 ++-
- arch/m68k/configs/apollo_defconfig   | 3 ++-
- arch/m68k/configs/atari_defconfig    | 3 ++-
- arch/m68k/configs/bvme6000_defconfig | 3 ++-
- arch/m68k/configs/hp300_defconfig    | 3 ++-
- arch/m68k/configs/mac_defconfig      | 3 ++-
- arch/m68k/configs/multi_defconfig    | 3 ++-
- arch/m68k/configs/mvme147_defconfig  | 3 ++-
- arch/m68k/configs/mvme16x_defconfig  | 3 ++-
- arch/m68k/configs/q40_defconfig      | 3 ++-
- arch/m68k/configs/sun3_defconfig     | 3 ++-
- arch/m68k/configs/sun3x_defconfig    | 3 ++-
- 12 files changed, 24 insertions(+), 12 deletions(-)
-
-diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
-index ec2d792015a4bdd0..b26469a65bc11ed4 100644
---- a/arch/m68k/configs/amiga_defconfig
-+++ b/arch/m68k/configs/amiga_defconfig
-@@ -214,7 +214,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -495,6 +494,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -621,6 +621,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
-index 061a07824dc29502..944a49a129bedab0 100644
---- a/arch/m68k/configs/apollo_defconfig
-+++ b/arch/m68k/configs/apollo_defconfig
-@@ -210,7 +210,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -452,6 +451,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -577,6 +577,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
-index 79c49647e4818b7a..f3790c45cac722af 100644
---- a/arch/m68k/configs/atari_defconfig
-+++ b/arch/m68k/configs/atari_defconfig
-@@ -217,7 +217,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -483,6 +482,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -609,6 +609,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
-index 0d5832cb3e10b9ce..23b7805309bd4407 100644
---- a/arch/m68k/configs/bvme6000_defconfig
-+++ b/arch/m68k/configs/bvme6000_defconfig
-@@ -207,7 +207,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -444,6 +443,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -569,6 +569,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
-index c246c3538839beb5..5605ab5c3dcfc25f 100644
---- a/arch/m68k/configs/hp300_defconfig
-+++ b/arch/m68k/configs/hp300_defconfig
-@@ -209,7 +209,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -454,6 +453,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -579,6 +579,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
-index 98d2d0599e5a8f2c..d0d1f9c33756d795 100644
---- a/arch/m68k/configs/mac_defconfig
-+++ b/arch/m68k/configs/mac_defconfig
-@@ -208,7 +208,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -474,6 +473,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -600,6 +600,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
-index b2d5ec6ba625c7b2..2ff3fdb524f11b15 100644
---- a/arch/m68k/configs/multi_defconfig
-+++ b/arch/m68k/configs/multi_defconfig
-@@ -228,7 +228,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -561,6 +560,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -687,6 +687,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
-index d3420c642992b2e7..e6f5ae526d089339 100644
---- a/arch/m68k/configs/mvme147_defconfig
-+++ b/arch/m68k/configs/mvme147_defconfig
-@@ -206,7 +206,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -443,6 +442,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -568,6 +568,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
-index e294b0b67695069c..f2d4dff4787aade7 100644
---- a/arch/m68k/configs/mvme16x_defconfig
-+++ b/arch/m68k/configs/mvme16x_defconfig
-@@ -207,7 +207,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -444,6 +443,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -569,6 +569,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
-index 764a94b089362003..907eedecd040262c 100644
---- a/arch/m68k/configs/q40_defconfig
-+++ b/arch/m68k/configs/q40_defconfig
-@@ -208,7 +208,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -461,6 +460,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -587,6 +587,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
-index d4eeddac6bb8de48..9e3d47008f218675 100644
---- a/arch/m68k/configs/sun3_defconfig
-+++ b/arch/m68k/configs/sun3_defconfig
-@@ -204,7 +204,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -443,6 +442,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -567,6 +567,7 @@ CONFIG_TEST_LOCKUP=m
- CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
-diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
-index ca359b8806830d56..f6540078cb4beb48 100644
---- a/arch/m68k/configs/sun3x_defconfig
-+++ b/arch/m68k/configs/sun3x_defconfig
-@@ -204,7 +204,6 @@ CONFIG_IP_NF_TARGET_MASQUERADE=m
- CONFIG_IP_NF_TARGET_NETMAP=m
- CONFIG_IP_NF_TARGET_REDIRECT=m
- CONFIG_IP_NF_MANGLE=m
--CONFIG_IP_NF_TARGET_CLUSTERIP=m
- CONFIG_IP_NF_TARGET_ECN=m
- CONFIG_IP_NF_TARGET_TTL=m
- CONFIG_IP_NF_RAW=m
-@@ -442,6 +441,7 @@ CONFIG_NFS_V4=m
- CONFIG_NFS_SWAP=y
- CONFIG_ROOT_NFS=y
- CONFIG_NFSD=m
-+CONFIG_RPCSEC_GSS_KRB5=m
- CONFIG_CIFS=m
- # CONFIG_CIFS_STATS2 is not set
- # CONFIG_CIFS_DEBUG is not set
-@@ -567,6 +567,7 @@ CONFIG_WW_MUTEX_SELFTEST=m
- CONFIG_EARLY_PRINTK=y
- CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
-+CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
- CONFIG_TEST_DIV64=m
- CONFIG_REED_SOLOMON_TEST=m
--- 
-2.34.1
-
+Huacai
+>
+> Regards
+> Bibo,mao
+> > +}
+> > +EXPORT_SYMBOL(kernel_fpu_begin);
+> > +
+> > +void kernel_fpu_end(void)
+> > +{
+> > +     if (!this_cpu_read(in_kernel_fpu))
+> > +             return;
+> > +
+> > +     if (!is_fpu_owner())
+> > +             disable_fpu();
+> > +     else
+> > +             _restore_fp(&current->thread.fpu);
+> > +
+> > +     this_cpu_write(in_kernel_fpu, false);
+> > +     preempt_enable();
+> > +}
+> > +EXPORT_SYMBOL(kernel_fpu_end);
+>
+>
