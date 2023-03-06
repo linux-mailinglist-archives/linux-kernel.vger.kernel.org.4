@@ -2,101 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5026ACDFB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF236ACDFE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjCFT0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:26:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
+        id S229972AbjCFT1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:27:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCFT0u (ORCPT
+        with ESMTP id S229716AbjCFT1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:26:50 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21F44DBC0;
-        Mon,  6 Mar 2023 11:26:49 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326J1cfD028798;
-        Mon, 6 Mar 2023 19:26:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=+q++XhNMCuBroRQanbJBtnwzviG8ku7sK01SCNDSHl4=;
- b=FpcJ/X/xaqq946pbKD9Wc+VYwpfzMG5QforUc/8owthbYrY5wGw7F5iVLRtTI62jHifw
- +sz5EZ6cHnkUvJ5fN+1u+K2mgRPQLV+fSeM0RVKp8UuSwS5rrMhNTNm2VDc2y3p5zzOi
- KpjzmZS8VsCVfjK8Y3H/QPj+7aKTodUtAtNGfgneo2ioRF5QZiIYOjLozsQeB5GinUsA
- TNwt61m0wf2a4fgPtdFBh/Wzean/L2Gy1I4VZxA8M6p9uhVnmwq0UI6mcQs7V9xszxsf
- wedBOSIqw6U52jtR/+J4IODFqgbuNbz8A7NAaO0gjZMWjdQSpvGZFaNEoCMrYyfJeU2V 5Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4ysdy8qr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 19:26:33 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326JDMLa026681;
-        Mon, 6 Mar 2023 19:26:32 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4ysdy8pt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 19:26:32 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326Imwet023908;
-        Mon, 6 Mar 2023 19:26:30 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p4187am5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 19:26:30 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326JQTiO7144036
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 19:26:29 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74C8A58058;
-        Mon,  6 Mar 2023 19:26:29 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 924EB58059;
-        Mon,  6 Mar 2023 19:26:27 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 19:26:27 +0000 (GMT)
-Message-ID: <ad4103fd-76b6-d219-7be6-ba8d644e9a64@linux.ibm.com>
-Date:   Mon, 6 Mar 2023 14:26:27 -0500
+        Mon, 6 Mar 2023 14:27:01 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883506F497;
+        Mon,  6 Mar 2023 11:26:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39284B810CB;
+        Mon,  6 Mar 2023 19:26:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33DB7C433D2;
+        Mon,  6 Mar 2023 19:26:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678130815;
+        bh=qJZNuK31WcsEJiNza1huRTw6AstehkIf7XEiHaxQpRc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=evMW9Jw7+rFCbiPUyIffpCsSKySfnXOeDFIjsBW5Fk3mDSZcpzqM7Gd5VTD1JjEYO
+         jX3bQa67lPhzW4mY/KQ3NLqtrwGc07oXNikGq0s9KqHrzy22vwP4FoFnCcbQpOn42/
+         oaShy5iJLKwBE8386ZPLowLJoxWAv0fvOrnxTOGJp9l8yFBCyPBdgKP35bXa5YX3Qp
+         bnHqPOIxhEzkWZCD+BYQUqNywK5c/+Vu/LNuJKH5J/GgkajAA0dXlV+Z5ZW6sw1ZwY
+         cK0wY0ExeNC2REvxMki/R6Eou/7VghZxpht18BkclAHc+4/gapoSDZ+6KuC+z4b3vn
+         vzLb7zRlegB8A==
+Date:   Mon, 6 Mar 2023 19:26:49 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     miguel.ojeda.sandonis@gmail.com,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, ojeda@kernel.org,
+        alex.gaynor@gmail.com, wedsonaf@gmail.com, boqun.feng@gmail.com,
+        gary@garyguo.net, bjorn3_gh@protonmail.com, corbet@lwn.net,
+        Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com,
+        rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [RFC 0/2] RISC-V: enable rust
+Message-ID: <719ed82b-ffe5-4f2f-a21c-f32b9b4f867b@spud>
+References: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
+ <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 17/28] security: Introduce file_pre_free_security hook
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
- <20230303181842.1087717-18-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230303181842.1087717-18-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _fcfO6336LS6gV1ERfPZ4viqXWLN587a
-X-Proofpoint-GUID: 2wTAeykhh_0XkHvhdZmgGuzjw-aN5m05
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_12,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- malwarescore=0 adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=949 suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303060168
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bv6pgk4XOEP22YAx"
+Content-Disposition: inline
+In-Reply-To: <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -104,14 +63,57 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--bv6pgk4XOEP22YAx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 3/3/23 13:18, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
-> the file_pre_free_security hook.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+On Mon, Mar 06, 2023 at 11:18:06AM -0800, Palmer Dabbelt wrote:
+> On Sat, 25 Feb 2023 00:37:29 PST (-0800), miguel.ojeda.sandonis@gmail.com=
+ wrote:
+> > On Sat, Feb 25, 2023 at 12:18 AM Palmer Dabbelt <palmer@dabbelt.com> wr=
+ote:
+> > >=20
+> > > Works for me.
+> > >=20
+> > > I've got a few other things in the pipeline for this merge window so
+> > > this probably won't make it, but I'll dig in after that.  We've got a
+> > > bunch of Rust-types floating around Rivos as well, so with any luck
+> > > someone else will have some time to poke around.  Having a full cycle=
+ in
+> > > linux-next is probably the right way to go for this sort of thing
+> > > anyway, as it's likely to shake out some long-tail issues.
+> >=20
+> > Thanks a lot! That would be great.
+> >=20
+> > At least from our side, no rush. In fact, we are letting users (or
+> > arch maintainers) to request/submit the architectures themselves as
+> > they need/want them.
+>=20
+> It's time for the next release.  IIUC there were some authorship issues
+> here, did you guys want to re-spin this with those sorted out?  I can give
+> it a shot if you want, but I'm probably as likely to screw it up as anyone
+> else...
+
+It's in my queue to respin, I wasn't bothered doing one until after -rc1.
+I'll try to get to it tomorrow since it's simpler than anything else I
+currently owe one for.
+Should be able to do something that satisfies everyone, or, at least,
+gives everyone the opportunity to be satisfied!
+
+Cheers,
+Conor.
 
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+--bv6pgk4XOEP22YAx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAY+QAAKCRB4tDGHoIJi
+0obrAP9X3eFi/wo3T5hY5jI6VcYOgDX5U9nhlmdJj6G1KUkFGgD9FSf22UcJPohT
+atZEWK7qWW8liEdc0PizSJE8mWeNrwY=
+=IHr0
+-----END PGP SIGNATURE-----
+
+--bv6pgk4XOEP22YAx--
