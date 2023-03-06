@@ -2,78 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8BE6AB4F5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 04:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D1A6AB4FA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 04:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjCFDLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 22:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        id S229750AbjCFDNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 22:13:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjCFDLM (ORCPT
+        with ESMTP id S229572AbjCFDNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 22:11:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F148F764;
-        Sun,  5 Mar 2023 19:11:10 -0800 (PST)
+        Sun, 5 Mar 2023 22:13:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781008688;
+        Sun,  5 Mar 2023 19:13:11 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CC8CB80B18;
-        Mon,  6 Mar 2023 03:11:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00850C433D2;
-        Mon,  6 Mar 2023 03:11:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678072267;
-        bh=AK43SQyKJZUihUt0Xy3vFkqCXBiD2WrokES4O8k/UeE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mxvfaEXInsnU8yD8gCDVev1RahBCGC83N2qN8otUooLXY0geqTInl9rb4zj6Br7RH
-         KL/fj4VkQ5IAjR/aJBgScFNaWkc0euXJrXqobPw0VMcbfQFwFQelGii7W9lixLVtjk
-         Hif5GeHy55H06xAfEqGn8nAxQZn13rn6GjxO4fEYH3obP23l2ju6ojPG5YM7URjKAn
-         /tuLZu9VA3Ot4zMSPQ3Rg/iT/0A7sP3ZcVXrbgJrvYuCulLHUy7XL2N29gBbGEAJDb
-         XifYBMrbk8BnC97BTvo+nQoQarju4DJ/jeUIVX3GBuAVgI0fhay0fgDWJj2ocza0AT
-         H8DlDjyBBY/gg==
-Date:   Mon, 6 Mar 2023 11:10:54 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Revert "arm64: dts: ls1028a: sl28: get MAC addresses
- from VPD"
-Message-ID: <20230306031054.GG143566@dragon>
-References: <20230207131020.2458027-1-michael@walle.cc>
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC1E5B80B0E;
+        Mon,  6 Mar 2023 03:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEEAC433EF;
+        Mon,  6 Mar 2023 03:13:05 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V2] LoongArch: Provide kernel fpu functions
+Date:   Mon,  6 Mar 2023 11:12:58 +0800
+Message-Id: <20230306031258.99230-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230207131020.2458027-1-michael@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 02:10:20PM +0100, Michael Walle wrote:
-> With commit b203e6f1e833 ("arm64: dts: ls1028a: sl28: get MAC addresses
-> from VPD"), the network adapter now depends on the nvmem device to be
-> present, which isn't the case and thus breaks networking on this board.
-> Revert it.
-> 
-> Fixes: b203e6f1e833 ("arm64: dts: ls1028a: sl28: get MAC addresses from VPD")
-> Signed-off-by: Michael Walle <michael@walle.cc>
+Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
+to use fpu. They can be used by some other kernel components, e.g., the
+AMDGPU graphic driver for DCN.
 
-Applied!
+Reported-by: WANG Xuerui<kernel@xen0n.name>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+V2: Use non-GPL exports and update commit messages.
 
-> ---
-> Shawn, unfortunately, the driver was NAKed, so this will break our
-> KernelCI setup. Alternatively, the original commit can just be dropped
-> from your tree, if that's how you do things like this. I've learned that
-> the correct way is to get the driver in and then in the next release enable
-> the driver and add it to the dts. Next time :)
+ arch/loongarch/include/asm/fpu.h |  3 +++
+ arch/loongarch/kernel/Makefile   |  2 +-
+ arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
+ 3 files changed, 45 insertions(+), 1 deletion(-)
+ create mode 100644 arch/loongarch/kernel/kfpu.c
 
-Yes, please follow the correct way!
+diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
+index 358b254d9c1d..192f8e35d912 100644
+--- a/arch/loongarch/include/asm/fpu.h
++++ b/arch/loongarch/include/asm/fpu.h
+@@ -21,6 +21,9 @@
+ 
+ struct sigcontext;
+ 
++extern void kernel_fpu_begin(void);
++extern void kernel_fpu_end(void);
++
+ extern void _init_fpu(unsigned int);
+ extern void _save_fp(struct loongarch_fpu *);
+ extern void _restore_fp(struct loongarch_fpu *);
+diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+index 78d4e3384305..9a72d91cd104 100644
+--- a/arch/loongarch/kernel/Makefile
++++ b/arch/loongarch/kernel/Makefile
+@@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+ obj-$(CONFIG_ACPI)		+= acpi.o
+ obj-$(CONFIG_EFI) 		+= efi.o
+ 
+-obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
++obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
+ 
+ obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
+ 
+diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
+new file mode 100644
+index 000000000000..cd2a18fecdcc
+--- /dev/null
++++ b/arch/loongarch/kernel/kfpu.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/cpu.h>
++#include <linux/init.h>
++#include <asm/fpu.h>
++#include <asm/smp.h>
++
++static DEFINE_PER_CPU(bool, in_kernel_fpu);
++
++void kernel_fpu_begin(void)
++{
++	if(this_cpu_read(in_kernel_fpu))
++		return;
++
++	preempt_disable();
++	this_cpu_write(in_kernel_fpu, true);
++
++	if (!is_fpu_owner())
++		enable_fpu();
++	else
++		_save_fp(&current->thread.fpu);
++}
++EXPORT_SYMBOL(kernel_fpu_begin);
++
++void kernel_fpu_end(void)
++{
++	if(!this_cpu_read(in_kernel_fpu))
++		return;
++
++	if (!is_fpu_owner())
++		disable_fpu();
++	else
++		_restore_fp(&current->thread.fpu);
++
++	this_cpu_write(in_kernel_fpu, false);
++	preempt_enable();
++}
++EXPORT_SYMBOL(kernel_fpu_end);
+-- 
+2.39.1
 
-Shawn
