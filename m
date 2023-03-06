@@ -2,208 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794586AB894
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7ED6AB8A8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjCFIl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:41:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
+        id S229685AbjCFInQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:43:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjCFIlz (ORCPT
+        with ESMTP id S230041AbjCFInF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:41:55 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D5F21290
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:41:53 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id i34so35172773eda.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:41:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678092112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vC2UMy/rdFsJj0D2BlHZptJUd1EfeaZsqvifezHhP80=;
-        b=GlyLxJXQRtZVPo3XhuyN75NML1JaCyxuD2Mi4XOKvRip5DG/fEuki7mxlqpd9cpR1f
-         rUtTWXVvab9MczuD0fo5h8EWCHN/gcPmnwsjc10LUtFbCSXv2fJgyKn45jCvrxzOkPYf
-         E8hnWuwayUZcydUaXpXx16PT5hWrEjr3h6cyACAteAvczjOHzU4rv8MBYOuwBwAyCP8K
-         N33X1gkbC+DYrhrqgKV89tOPjv0/Ec9q6neM/BDELQNNCq8iX6VK+BxcA2wfirzuLX+G
-         4w3VUj+sLeR8jyCHqgWv6xzEYjO+8ZRoNfsrOrnS3MAxacWSZDVNm6vqVP02FwmxyFaB
-         etuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678092112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vC2UMy/rdFsJj0D2BlHZptJUd1EfeaZsqvifezHhP80=;
-        b=3heQF7asx8ajN/5gLBwLIGo1XuE242TwoxiXx8J0bjgSvp9UMZJtKpb4NXybVXzTgJ
-         G6py4ttm0cNTd8XFHuCdK0OksMoxgKtF6c00pDR5MkSpSd16JQS2h2kro9UkgWnpsVTQ
-         Fuk9z2vUKjtIAxMr1yyZoagfPt1JOd3aibEhSpnLBwRfUXOlCCaibad0blWNkjutfMdX
-         M9UsKcO/HUINseL0cVhtemEkWO4TA8gPrUD8IXTbid9fNz8KUR8yuB2AURTQRuuXJAYm
-         mHGGLx+PRdXKVwJsXvRShnX9Z6kqT59CElTd870/77d1vY+xoaaicDnZPcsRCiE+q91k
-         VYkQ==
-X-Gm-Message-State: AO0yUKVhJJt9mGdEcbVOyjUnHW65mOBv7Pnv1z86jY/KTwePTQKyRwSs
-        VwhLFJuL1gfvOiwrrTo/egJ71g==
-X-Google-Smtp-Source: AK7set/LZG0DGhn2WM9G7iZfaL/U03tBL9IUollWkti6wvZuDTVbK9E23k3Dq9iI1GyC/hL+s7VoOg==
-X-Received: by 2002:a17:906:b14f:b0:8b1:7de9:b38c with SMTP id bt15-20020a170906b14f00b008b17de9b38cmr9381185ejb.52.1678092112251;
-        Mon, 06 Mar 2023 00:41:52 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
-        by smtp.gmail.com with ESMTPSA id c15-20020a170906170f00b008c6c47f59c1sm4208292eje.48.2023.03.06.00.41.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 00:41:51 -0800 (PST)
-Message-ID: <95d5b97c-ccdc-cede-a6d7-8cc64086d62d@linaro.org>
-Date:   Mon, 6 Mar 2023 09:41:50 +0100
+        Mon, 6 Mar 2023 03:43:05 -0500
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CCE6E8D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:43:00 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:b745:671d:a946:57fa])
+        by albert.telenet-ops.be with bizsmtp
+        id Uwiy2900F4LuvSS06wiyHW; Mon, 06 Mar 2023 09:42:59 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pZ6Qs-00AzRe-ER;
+        Mon, 06 Mar 2023 09:42:58 +0100
+Date:   Mon, 6 Mar 2023 09:42:58 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-um@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-sh@vger.kernel.org
+Subject: Re: Build regressions/improvements in v6.3-rc1
+In-Reply-To: <20230306082035.3709036-1-geert@linux-m68k.org>
+Message-ID: <148a4a5f-d228-e289-f333-8d5df6cad4f5@linux-m68k.org>
+References: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com> <20230306082035.3709036-1-geert@linux-m68k.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: gpio: add fcs,fxl6408-gpio binding
- document
-Content-Language: en-US
-To:     Francesco Dolcini <francesco@dolcini.it>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230306083446.41082-1-francesco@dolcini.it>
- <20230306083446.41082-2-francesco@dolcini.it>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230306083446.41082-2-francesco@dolcini.it>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2023 09:34, Francesco Dolcini wrote:
-> From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-> 
-> Add binding document for Fairchild FXL6408 GPIO expander.
+On Mon, 6 Mar 2023, Geert Uytterhoeven wrote:
+> Below is the list of build error/warning regressions/improvements in
+> v6.3-rc1[1] compared to v6.2[2].
+>
+> Summarized:
+>  - build errors: +9/-14
+>  - build warnings: +4/-1447
+>
+> Happy fixing! ;-)
+>
+> Thanks to the linux-next team for providing the build service.
+>
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/fe15c26ee26efa11741a7b632e9f23b01aca4cc6/ (all 152 configs)
+> [2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c9c3395d5e3dcc6daee66c6908354d47bf98cb0c/ (all 152 configs)
+>
+>
+> *** ERRORS ***
+>
+> 9 error regressions:
+>  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: 'struct cpuinfo_um' has no member named 'apicid':  => 2157:41, 2157:48
 
-Subject: drop second/last, redundant "binding document". The
-"dt-bindings" prefix is already stating that these are bindings.
+um-x86_64/um-all{mod,yes}config
+um-x86_64-gcc12/um-all{mod,yes}config
 
-> 
-> Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+>  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7086:1
 
-Missing SoB.
+arm64-gcc5/arm64-allmodconfig
 
-> ---
->  .../bindings/gpio/fcs,fxl6408-gpio.yaml       | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/fcs,fxl6408-gpio.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/gpio/fcs,fxl6408-gpio.yaml b/Documentation/devicetree/bindings/gpio/fcs,fxl6408-gpio.yaml
-> new file mode 100644
-> index 000000000000..ccf946040d00
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/fcs,fxl6408-gpio.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/fcs,fxl6408-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: FXL6408 GPIO driver
+(Already improved from 2224 to 2208 bytes)
 
-If "driver" means Linux driver, then drop.
+>  + /kisskb/src/drivers/gpu/drm/msm/msm_mdss.c: error: case label does not reduce to an integer constant:  => 299:2, 300:2, 296:2
 
-Fairchild FXL6408 GPIO Expander
+powerpc-gcc5/{ppc32,ppc64_book3e,ppc64le}_allmodconfig
+powerpc-gcc5/powerpc-all{mod,yes}config
+arm64-gcc5/arm64-allmodconfig
 
-> +
-> +maintainers:
-> +  - Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-> +
-> +description: |
-> +  Driver for Fairchild FXL6408 GPIO expander
+>  + /kisskb/src/drivers/media/i2c/imx290.c: error: 'imx290_runtime_resume' defined but not used [-Werror=unused-function]:  => 1082:12
+>  + /kisskb/src/drivers/media/i2c/imx290.c: error: 'imx290_runtime_suspend' defined but not used [-Werror=unused-function]:  => 1090:12
 
-This is not a driver. Drop entire description as it is duplicating title
-or add here something useful.
+m68k-gcc{8,11}/m68k-allmodconfig
+parisc-gcc{8,11}/parisc-allmodconfig
+s390x-gcc11/s390-all{mod,yes}config
 
+Fix available since Feb 7.
 
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fcs,fxl6408
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
-> +  gpio-controller: true
-> +
-> +  gpio-line-names:
-> +    minItems: 1
-> +    maxItems: 8
-> +
-> +patternProperties:
-> +  "^(hog-[0-9]+|.+-hog(-[0-9]+)?)$":
+>  + /kisskb/src/fs/btrfs/inode.c: error: 'location.type' may be used uninitialized [-Werror=maybe-uninitialized]:  => 5730:21
 
-From here....
+sparc64-gcc11/sparc{,64}-allmodconfig
+parisc-gcc11/parisc-allmodconfig
 
-> +    type: object
-> +    properties:
-> +      gpio-hog: true
-> +      gpios: true
-> +      input: true
-> +      output-high: true
-> +      output-low: true
-> +      line-name: true
-> +
-> +    required:
-> +      - gpio-hog
-> +      - gpios
-> +
-> +    additionalProperties: false
+>  + /kisskb/src/fs/btrfs/send.c: error: 'right_gen' may be used uninitialized in this function [-Werror=maybe-uninitialized]:  => 1909:13, 1902:23
 
-To here, all this can be simpler:
+powerpc-gcc5/powerpc-all{mod,yes}config
+powerpc-gcc5/{ppc32,ppc64_book3e,ppc64le}_allmodconfig
+powerpc-gcc5/{ppc64,ppc64le,pseries,pseries_le,skiroot}_defconfig
 
-  "^(hog-[0-9]+|.+-hog(-[0-9]+)?)$":
-    required:
-      - gpio-hog
+>  + /opt/cross/kisskb/fe-x86-64-core-i7-2017.05/x86_64-buildroot-linux-gnu/sysroot/usr/include/bits/stdlib-float.h: error: SSE register return with SSE disabled:  => 27:1
 
-which selects gpio hog schema.
+um-x86_64/um-allyesconfig
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - gpio-controller
-> +  - "#gpio-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        gpio_expander_43: gpio-expander@43 {
-> +            compatible = "fcs,fxl6408";
-> +            gpio-controller;
-> +            #gpio-cells = <2>;
-> +            reg = <0x43>;
-> +            gpio-line-names = "Wi-Fi_W_DISABLE", "Wi-Fi_WKUP_WLAN",
-> +              "PWR_EN_+V3.3_WiFi_N", "PCIe_REF_CLK_EN",
+>  + {standard input}: Error: unknown pseudo-op: `.':  => 1118
 
-Align with previous line/entries.
+sh4-gcc11/sh-all{mod,yes}config (ICE)
 
-> +              "USB_RESET_N", "USB_BYPASS_N", "Wi-Fi_PDn",
-> +              "Wi-Fi_WKUP_BT";
-> +        };
-> +    };
+Gr{oetje,eeting}s,
 
-Best regards,
-Krzysztof
+ 						Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
