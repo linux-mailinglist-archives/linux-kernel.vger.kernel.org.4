@@ -2,164 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB736ABF69
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337746ABF6C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjCFMZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:25:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S229864AbjCFM0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjCFMZ0 (ORCPT
+        with ESMTP id S229835AbjCFM0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:25:26 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F110A279AD;
-        Mon,  6 Mar 2023 04:25:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678105524; x=1709641524;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W8RPdrA6zsq5zgKn1+vk/ssD+rDKRswAS+XkKih0rHw=;
-  b=eBeMP4ZOaLjG9xXdfJ1mEx1KLnXFjRpV6Ar/hsUwEOFHam98+GF9XC6z
-   1tJi5D8QZLP7VB2dUlAo5pBAjHcgqAzidAk8ghI0XlTaip8ve/y7E82nq
-   iL01bpfMx468m4EMTkFNZWVnmCEEYj7RvrFxOTXinGUlob1zc+XMtba0N
-   c86X63z8JsA0IYH/MQQvtd+X79DQi/mZgnackyonDN7g+GnVFO7mkStVU
-   WP7eHpKCMWIzjOvTVEW7p6pxkKQv19cKRPj9b/imm09oguGvuwN2jlbu1
-   /8WhLgudZFCySnrXS7e4iYnhBsMZfjCUZvwEIDxCO9KxztlVN30Nlyuz1
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="363157714"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="363157714"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:25:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="678461002"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="678461002"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Mar 2023 04:25:20 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZ9u2-00GLSW-0t;
-        Mon, 06 Mar 2023 14:25:18 +0200
-Date:   Mon, 6 Mar 2023 14:25:18 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        devicetree@vger.kernel.org, Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liam Beguin <liambeguin@gmail.com>
-Subject: Re: [PATCH v3 0/6] Support ROHM BU27034 ALS sensor
-Message-ID: <ZAXbrtXUmWXWDby1@smile.fi.intel.com>
-References: <cover.1678093787.git.mazziesaccount@gmail.com>
+        Mon, 6 Mar 2023 07:26:11 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9576B29E22;
+        Mon,  6 Mar 2023 04:26:08 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC07512FC;
+        Mon,  6 Mar 2023 04:26:51 -0800 (PST)
+Received: from e126130.cambridge.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 68D863F67D;
+        Mon,  6 Mar 2023 04:26:06 -0800 (PST)
+From:   Douglas RAILLARD <douglas.raillard@arm.com>
+To:     douglas.raillard@arm.com, Jaegeuk Kim <jaegeuk@kernel.org>,
+        Chao Yu <chao@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net (open list:F2FS FILE SYSTEM),
+        linux-kernel@vger.kernel.org (open list:TRACING),
+        linux-trace-kernel@vger.kernel.org (open list:TRACING)
+Subject: [PATCH] f2fs: Fix f2fs_truncate_partial_nodes ftrace event
+Date:   Mon,  6 Mar 2023 12:25:49 +0000
+Message-Id: <20230306122549.236561-1-douglas.raillard@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1678093787.git.mazziesaccount@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 11:15:10AM +0200, Matti Vaittinen wrote:
-> Support ROHM BU27034 ALS sensor
-> 
-> This series adds support for ROHM BU27034 Ambient Light Sensor.
-> 
-> The BU27034 has configurable gain and measurement (integration) time
-> settings. Both of these have inversely proportional relation to the
-> sensor's intensity channel scale.
-> 
-> Many users only set the scale, which means that many drivers attempt to
-> 'guess' the best gain+time combination to meet the scale. Usually this
-> is the biggest integration time which allows setting the requested
-> scale. Typically, increasing the integration time has better accuracy
-> than increasing the gain, which often amplifies the noise as well as the
-> real signal.
-> 
-> However, there may be cases where more responsive sensors are needed.
-> So, in some cases the longest integration times may not be what the user
-> prefers. The driver has no way of knowing this.
-> 
-> Hence, the approach taken by this series is to allow user to set both
-> the scale and the integration time with following logic:
-> 
-> 1. When scale is set, the existing integration time is tried to be
->    maintained as a first priority.
->    1a) If the requested scale can't be met by current time, then also
->        other time + gain combinations are searched. If scale can be met
->        by some other integration time, then the new time may be applied.
->        If the time setting is common for all channels, then also other
->        channels must be able to maintain their scale with this new time
->        (by changing their gain). The new times are scanned in the order
->        of preference (typically the longest times first).
->    1b) If the requested scale can be met using current time, then only
->        the gain for the channel is changed.
-> 
-> 2. When the integration time change - scale is tried to be maintained.
->    When integration time change is requested also gain for all impacted
->    channels is adjusted so that the scale is not changed, or is chaned
->    as little as possible. This is different from the RFCv1 where the
->    request was rejected if suitable gain couldn't be found for some
->    channel(s).
-> 
-> This logic is simple. When total gain (either caused by time or hw-gain)
-> is doubled, the scale gets halved. Also, the supported times are given a
-> 'multiplier' value which tells how much they increase the total gain.
-> 
-> However, when I wrote this logic in bu27034 driver, I made quite a few
-> errors on the way - and driver got pretty big. As I am writing drivers
-> for two other sensors (RGB C/IR + flicker BU27010 and RGB C/IR BU27008)
-> with similar gain-time-scale logic I thought that adding common helpers
-> for these computations might be wise. I hope this way all the bugs will
-> be concentrated in one place and not in every individual driver ;)
-> 
-> Hence, this series also intriduces IIO gain-time-scale helpers
-> (abbreviated as gts-helpers) + a couple of KUnit tests for the most
-> hairy parts.
-> 
-> I can't help thinking that there should've been simpler way of computing
-> the gain-time-scale conversions. Also, pretty good speed improvements
-> might be available if some of the do_div()s could be replaced by >>.
-> This, however, is not a priority for my light-sensor use-case where
-> speed demands are not that big.
-> 
-> Finally, these added helpers do provide some value also for drivers
-> which only:
->  a) allow gain change
->   or
->  b) allow changing both the time and gain but so that the time-change is
->     not reflected in register values.
-> 
-> For a) we provide the gain - selector (register value) table format +
-> selector to gain look-ups, gain <-> scale conversions and the available
-> scales helpers.
-> 
-> For latter case we also provide the time-tables, and actually all the
-> APIs should be usable by setting the time multiplier to 1. (not testeted
-> thoroughly though).
+From: Douglas Raillard <douglas.raillard@arm.com>
 
-A few comments can still be applied here.
-Can you comment on the discussion against the previous version?
+Fix the nid_t field so that its size is correctly reported in the text
+format embedded in trace.dat files. As it stands, it is reported as
+being of size 4:
 
+        field:nid_t nid[3];     offset:24;      size:4; signed:0;
+
+Instead of 12:
+
+        field:nid_t nid[3];     offset:24;      size:12;        signed:0;
+
+This also fixes the reported offset of subsequent fields so that they
+match with the actual struct layout.
+
+
+Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
+---
+ include/trace/events/f2fs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+index 31d994e6b4ca..8d053838d6cf 100644
+--- a/include/trace/events/f2fs.h
++++ b/include/trace/events/f2fs.h
+@@ -512,7 +512,7 @@ TRACE_EVENT(f2fs_truncate_partial_nodes,
+ 	TP_STRUCT__entry(
+ 		__field(dev_t,	dev)
+ 		__field(ino_t,	ino)
+-		__field(nid_t,	nid[3])
++		__array(nid_t,	nid, 3)
+ 		__field(int,	depth)
+ 		__field(int,	err)
+ 	),
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
