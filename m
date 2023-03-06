@@ -2,84 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEBA6AC23C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E636AC25D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCFOGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:06:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S231154AbjCFOHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:07:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjCFOGC (ORCPT
+        with ESMTP id S230451AbjCFOHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:06:02 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B96D25BB0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678111503;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MpjQI4eZNUyy1a8d8ToFfb8eUyexksQgeyNW7lbutB0=;
-        b=Xz8NXAgbsxxpnlqfXXJlA30md+H8ysAPiwoeLXv3gORGnWdQbdqbnNDjr1D9WVfIbF2WTI
-        CAS+xSaycmZuzbKvyjaWZVELg4DpaSzdZYLQc7EC+D2TJrGg8ZSW4D2Z8qp9EBLTgIbJR3
-        F9eQWdB315kU9CCUMQVI6/9NjUMwElE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-86-nRMqiSTUPMuokcpJShebRg-1; Mon, 06 Mar 2023 09:05:00 -0500
-X-MC-Unique: nRMqiSTUPMuokcpJShebRg-1
-Received: by mail-wm1-f71.google.com with SMTP id j32-20020a05600c1c2000b003e9bdf02c9fso6788269wms.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:04:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678111499;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MpjQI4eZNUyy1a8d8ToFfb8eUyexksQgeyNW7lbutB0=;
-        b=QR0AY9wv0TVPB/0UXdsm7jMf2p3jjP2cyNo0XXW8NoHNHOYYzFuZ0I6w8QSrrBFUuH
-         5EPSpbPZIfpmTD6s+4d11UAQq9n0etNHaPlvaZppx+LENEJgYTORzWWPIaZoEmOmbxld
-         sHwU8AaYk60fAMhfFtvNnY5QvaASRwYwZyWFSjQJZbK+01sVrwaeH8bfHHcVqoeVcL/g
-         hePTdqwAmPfUx33yTnEsF7Fgpx7y/08pzuNSVxDCEShZ1x4dkgcNKfaFTQoLkwlrjSPT
-         J49O95ficVDQb1y8Qr/4vyU8sguRWS5WAmkCzbs3qmkpQ/Ox+8fc1Rf4jgtRTqiKVmpn
-         2Bmw==
-X-Gm-Message-State: AO0yUKWpRCFhSiZx8E4u2U4wGrtRDtH2X0crVe5QJ3TvZ/MhTdVVy0eo
-        3N+jBzeqixiNfQFBSoWVTkotYeAO7vz4q9rucjkr8sjm2YhX1Okokg4zDCEn0nLXqcQCz8w2oLX
-        nINMgc4935cn1sYcXtqK2jK9pvqooASVY
-X-Received: by 2002:a05:600c:1990:b0:3e2:20c7:6553 with SMTP id t16-20020a05600c199000b003e220c76553mr9340866wmq.13.1678111498923;
-        Mon, 06 Mar 2023 06:04:58 -0800 (PST)
-X-Google-Smtp-Source: AK7set9t/0QaqgG9LAMjdWr1ncqogSGh8xkuI6ju2p3ppfz/c1knl1GVMAO3FPLfnnJj9dP9HbPRUA==
-X-Received: by 2002:a05:600c:1990:b0:3e2:20c7:6553 with SMTP id t16-20020a05600c199000b003e220c76553mr9340820wmq.13.1678111498605;
-        Mon, 06 Mar 2023 06:04:58 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:3500:b8a3:191c:eae:cc05? (p200300cbc7043500b8a3191c0eaecc05.dip0.t-ipconnect.de. [2003:cb:c704:3500:b8a3:191c:eae:cc05])
-        by smtp.gmail.com with ESMTPSA id y33-20020a05600c342100b003e21f20b646sm10432673wmp.21.2023.03.06.06.04.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 06:04:58 -0800 (PST)
-Message-ID: <efae0531-7f72-a78c-07c9-82879adf5666@redhat.com>
-Date:   Mon, 6 Mar 2023 15:04:57 +0100
+        Mon, 6 Mar 2023 09:07:17 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E2630B02;
+        Mon,  6 Mar 2023 06:06:50 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 50DC16602F6A;
+        Mon,  6 Mar 2023 14:06:01 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678111562;
+        bh=c06sztOuI8DQ5DDjj8gCYxk1bqozhA9LrG1lTO5UoY4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hRRik9yhPavOoET28fPMy3EQmRsCtZmw2t4i7xc1ws4b9JPXUQfzBmiTd4pPevYNj
+         FIzRdLTLjPG1qUCchXNy9pwpbpNzpNisDDHUkbpRsPg6cjQi06gmcFiC1cWhaTtqU5
+         YUBB5l675xjYbCRUQtv3qLp7eDXzAYS/1pp9k2Bptg/HcxW8fAXBUgSV6qmXAACSyj
+         GRiINnS3AhoQxC5zZ7LaRM5O6xNpSQK7V7Hdf9gben6Gb6pt9bo+ypY/93b7q696ly
+         WLDImDWGk9GhKdl9WEFGgGkWrHeHk1cKXhtkHvDb774yhyVMdNhbXi79vIpcgLjVmU
+         HJKfdUMXfHIYw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     mturquette@baylibre.com
+Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
+        johnson.wang@mediatek.com, miles.chen@mediatek.com,
+        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
+        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
+        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
+        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
+        yangyingliang@huawei.com, granquet@baylibre.com,
+        pablo.sun@mediatek.com, sean.wang@mediatek.com,
+        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+Subject: [PATCH v6 09/54] clk: mediatek: mt2712-apmixedsys: Add .remove() callback for module build
+Date:   Mon,  6 Mar 2023 15:04:58 +0100
+Message-Id: <20230306140543.1813621-10-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230306140543.1813621-1-angelogioacchino.delregno@collabora.com>
+References: <20230306140543.1813621-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5/6] shmem: update documentation
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>, hughd@google.com,
-        akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org
-Cc:     linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
-        keescook@chromium.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230302232758.888157-1-mcgrof@kernel.org>
- <20230302232758.888157-6-mcgrof@kernel.org>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230302232758.888157-6-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,41 +64,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.03.23 00:27, Luis Chamberlain wrote:
-> Update the docs to reflect a bit better why some folks prefer tmpfs
-> over ramfs and clarify a bit more about the difference between brd
-> ramdisks.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> ---
->   Documentation/filesystems/tmpfs.rst | 27 +++++++++++++++++++--------
->   1 file changed, 19 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/filesystems/tmpfs.rst b/Documentation/filesystems/tmpfs.rst
-> index 0408c245785e..e77ebdacadd0 100644
-> --- a/Documentation/filesystems/tmpfs.rst
-> +++ b/Documentation/filesystems/tmpfs.rst
-> @@ -13,14 +13,25 @@ everything stored therein is lost.
->   
->   tmpfs puts everything into the kernel internal caches and grows and
->   shrinks to accommodate the files it contains and is able to swap
-> -unneeded pages out to swap space. It has maximum size limits which can
-> -be adjusted on the fly via 'mount -o remount ...'
-> -
-> -If you compare it to ramfs (which was the template to create tmpfs)
-> -you gain swapping and limit checking. Another similar thing is the RAM
-> -disk (/dev/ram*), which simulates a fixed size hard disk in physical
-> -RAM, where you have to create an ordinary filesystem on top. Ramdisks
-> -cannot swap and you do not have the possibility to resize them.
-> +unneeded pages out to swap space.
+Add a .remove() callback to the apmixedsys driver to allow full module
+build; while at it, also change the usage of builtin_platform_driver()
+to module_platform_driver() to actually make use of the new callback.
 
-I suppose, in contrast to ramfs, tmpfs also supports THP. Maybe worth 
-adding as well.
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ drivers/clk/mediatek/clk-mt2712-apmixedsys.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
-
+diff --git a/drivers/clk/mediatek/clk-mt2712-apmixedsys.c b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+index 1e1a8272a4ac..2f4061c9a59e 100644
+--- a/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
++++ b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+@@ -138,6 +138,18 @@ static int clk_mt2712_apmixed_probe(struct platform_device *pdev)
+ 	return r;
+ }
+ 
++static int clk_mt2712_apmixed_remove(struct platform_device *pdev)
++{
++	struct device_node *node = pdev->dev.of_node;
++	struct clk_hw_onecell_data *clk_data = platform_get_drvdata(pdev);
++
++	of_clk_del_provider(node);
++	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
++	mtk_free_clk_data(clk_data);
++
++	return 0;
++}
++
+ static const struct of_device_id of_match_clk_mt2712_apmixed[] = {
+ 	{ .compatible = "mediatek,mt2712-apmixedsys" },
+ 	{ /* sentinel */ }
+@@ -145,9 +157,10 @@ static const struct of_device_id of_match_clk_mt2712_apmixed[] = {
+ 
+ static struct platform_driver clk_mt2712_apmixed_drv = {
+ 	.probe = clk_mt2712_apmixed_probe,
++	.remove = clk_mt2712_apmixed_remove,
+ 	.driver = {
+ 		.name = "clk-mt2712-apmixed",
+ 		.of_match_table = of_match_clk_mt2712_apmixed,
+ 	},
+ };
+-builtin_platform_driver(clk_mt2712_apmixed_drv)
++module_platform_driver(clk_mt2712_apmixed_drv)
 -- 
-Thanks,
-
-David / dhildenb
+2.39.2
 
