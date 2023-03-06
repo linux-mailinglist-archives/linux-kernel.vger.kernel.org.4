@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190F76AB967
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A366AB968
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCFJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
+        id S229580AbjCFJMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:12:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCFJMS (ORCPT
+        with ESMTP id S229661AbjCFJMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:12:18 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F273022A08;
-        Mon,  6 Mar 2023 01:12:17 -0800 (PST)
-Date:   Mon, 06 Mar 2023 09:12:15 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678093936;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPqol8GguYxpQaSlhqCPqr6CbtzNeeDD6oAyW1y2hbA=;
-        b=HdZvp+3kXRmwPfzSNcPXFWMrekFwyI7Q8plsCHF/phdRhJmlbrKzYrMXFI3bjqxzGx7sRr
-        8OCGjjDnHKG5mSVqTUEZro/2TqCryP1im36ZOwJ8TVo6M4dNXyGaaYY8dnGKDblTX2zisl
-        pWmmwrQ82t7SKkD8BE3OizAOfaQbvpyYnMmpOnpREHxp/FOIDuv4mY5NDzcy0GKu8n+Bck
-        Kz4tmDZYLbdbIZqq1WqYbuB50QbwsU2wNXVHLIoq6dKiw4XmfUjFIYyKHnHGzcceCPBJg6
-        4993/NiEIBvgn5IlxNHU+G1cKa/y2TUG7i15J3L4acXQmQB4h2er0LNukxZnKQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678093936;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cPqol8GguYxpQaSlhqCPqr6CbtzNeeDD6oAyW1y2hbA=;
-        b=R16gBApjqTZp2yvHr+kdlNCtgOqBE742n6rYycr9x3GGiZjtMw6GiwO+OY9Ad0x76SHHrX
-        wnqxr2AkFigbabAA==
-From:   tip-bot2 for Thomas =?utf-8?q?Wei=C3=9Fschuh?= 
-        <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: ras/core] x86/MCE/AMD: Make kobj_type structure constant
-Cc:     linux@weissschuh.net, "Borislav Petkov (AMD)" <bp@alien8.de>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230217-kobj_type-mce-amd-v1-1-40ef94816444@weissschuh.net>
-References: <20230217-kobj_type-mce-amd-v1-1-40ef94816444@weissschuh.net>
+        Mon, 6 Mar 2023 04:12:39 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAC522A0B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:12:38 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id g3so35609569eda.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:12:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678093957;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4mTfGx0mp9/LWUdj2UvEsovJkAt+RFABCOqqYv14V70=;
+        b=NdvnDywVIzQx5bVkpYvWuwCDxBJEtDr0Ft8ay2Ya8vmx1+sKT2IuSp+ovPnd6Lp2Ob
+         Rlh1nNqfs2FwGSmfpgl/A7++KH4lmY8sqOzQkZGNnOZnyl8s0z5+r9GlgIgp2m1IGPCP
+         CrZTc5n8a3XtQ3y+35LWFi8mz7dSgAVALC4F5/r+iHxq5G6DQrm+YBdr+0N/ZIOzB5VX
+         9rvSubDB7XMapgeBtKatGvMDD+6enfhJ2D50rSvvzfyZ2qBcl9m3tFY0v6Hw861UrejV
+         rTE0rf7632ZTmZnkNZne+vcoEAyiKwhNp4ZyQtavNHG/KUntcCxvQScBMAe1dlsn9eS4
+         0awQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678093957;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4mTfGx0mp9/LWUdj2UvEsovJkAt+RFABCOqqYv14V70=;
+        b=pxuMvODGGrDmMlkor9+RemKEB0JYe/QJcc063/0+A9vTUkfbjX1176oxPf6QxMFQDe
+         GzfYyFXgDCL4TjZyn/OyzhJXeFTmoT62KE39d9BqV46zWtqd0fEMzIPZIH9xZ8MpCT1O
+         aEAbH912IB6C8C0JBynwODHOa/Tyvz0YzloXBYIvm8KlzGNnNBhqwqCtzSYP1KLSoyRo
+         uHANjPEfuvSFq3ovD4SZmeHZ0b1hQIOJshjCxkzwciOBYnRzu8sxWZ0Ko310JdbavnAM
+         gsNR0nfkFW/IGw/PCersah6PewiKuxHvmlNTuhT37KzF/WoPzmNW24GEdWJVGI62aw1b
+         GKPw==
+X-Gm-Message-State: AO0yUKVq7CY+FgfpxSojIdbglrOZkTg74k75Q5+pgJ+Ukc3vmcnR0mrv
+        lJjSf8W/DTSSRyel0aZdldg=
+X-Google-Smtp-Source: AK7set8+B/WkBbXW6QVxciYpO7XflUL7lhU5VYTsfbZ66mjsMs/p4NW1PHT7yRc+xC9MZYQwCHa89Q==
+X-Received: by 2002:a17:906:af62:b0:8d9:383a:be39 with SMTP id os2-20020a170906af6200b008d9383abe39mr11790006ejb.41.1678093956822;
+        Mon, 06 Mar 2023 01:12:36 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id e25-20020a170906081900b008eb2a1474d0sm4293780ejd.77.2023.03.06.01.12.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 01:12:36 -0800 (PST)
+Date:   Mon, 6 Mar 2023 12:12:32 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] staging: rtl8192e: Remove empty Array
+ Rtl8192PciERadioC_Array
+Message-ID: <51b147e6-d502-461d-9c29-647ec67e0d38@kili.mountain>
+References: <cover.1678051460.git.philipp.g.hortmann@gmail.com>
+ <d8f0e8c7ee6dd820b56636db8d891012aa3ab263.1678051460.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-Message-ID: <167809393567.5837.232629854886011130.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d8f0e8c7ee6dd820b56636db8d891012aa3ab263.1678051460.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the ras/core branch of tip:
+On Sun, Mar 05, 2023 at 11:33:05PM +0100, Philipp Hortmann wrote:
+> Remove empty array Rtl8192PciERadioC_Array and the code where it is used
+> because it is dead code.
+> 
+> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> ---
+>  drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 12 ------------
+>  drivers/staging/rtl8192e/rtl8192e/r8192E_phy.h |  2 --
+>  drivers/staging/rtl8192e/rtl8192e/table.c      |  3 ---
+>  drivers/staging/rtl8192e/rtl8192e/table.h      |  2 --
+>  4 files changed, 19 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> index 35ca01ab65ff..fe0ef52c163a 100644
+> --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+> @@ -649,18 +649,6 @@ u8 rtl92e_config_rf_path(struct net_device *dev, enum rf90_radio_path eRFPath)
+>  					  bMask12Bits,
+>  					  Rtl819XRadioB_Array[i+1]);
+>  
+> -		}
+> -		break;
+> -	case RF90_PATH_C:
+> -		for (i = 0; i < RadioC_ArrayLength; i += 2) {
+> -			if (Rtl819XRadioC_Array[i] == 0xfe) {
+> -				msleep(100);
+> -				continue;
+> -			}
+> -			rtl92e_set_rf_reg(dev, eRFPath, Rtl819XRadioC_Array[i],
+> -					  bMask12Bits,
+> -					  Rtl819XRadioC_Array[i+1]);
+> -
 
-Commit-ID:     7214b32b6f4c6c1385a52f2e3a7107f28349f505
-Gitweb:        https://git.kernel.org/tip/7214b32b6f4c6c1385a52f2e3a7107f2834=
-9f505
-Author:        Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-AuthorDate:    Fri, 17 Feb 2023 03:20:05=20
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Mon, 06 Mar 2023 09:57:27 +01:00
+Why is this dead code?  So far as I can see "== 0xfe" is always false
+so this calls rtl92e_set_rf_reg() on every iteration through the loop.
+It only does one iteration through the loop.
 
-x86/MCE/AMD: Make kobj_type structure constant
+Is it dead code because case RF90_PATH_C is always false?  If so then
+that needs to be explained in the commit message.
 
-Since
+regards,
+dan carpenter
 
-  ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-
-the driver core allows the usage of const struct kobj_type.
-
-Take advantage of this to constify the structure definition to prevent
-modification at runtime.
-
-Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/20230217-kobj_type-mce-amd-v1-1-40ef94816444@=
-weissschuh.net
----
- arch/x86/kernel/cpu/mce/amd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 23c5072..4881893 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1029,7 +1029,7 @@ static const struct sysfs_ops threshold_ops =3D {
-=20
- static void threshold_block_release(struct kobject *kobj);
-=20
--static struct kobj_type threshold_ktype =3D {
-+static const struct kobj_type threshold_ktype =3D {
- 	.sysfs_ops		=3D &threshold_ops,
- 	.default_groups		=3D default_groups,
- 	.release		=3D threshold_block_release,
