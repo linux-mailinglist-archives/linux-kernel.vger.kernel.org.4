@@ -2,156 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0CA6AB745
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598276AB74D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjCFHvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 02:51:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50110 "EHLO
+        id S229711AbjCFHz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 02:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCFHvp (ORCPT
+        with ESMTP id S229510AbjCFHz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 02:51:45 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3784D1E1E5
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:51:44 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D341D21D66;
-        Mon,  6 Mar 2023 07:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678089101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S2m309QEoxNkbd3Zt8B9KYqe2aoELZppDrass+pnAeo=;
-        b=LLPtpMVsajSSJ4yVb53aLeKTUMdZu/9uZTdN2XZv/62JSX4KVNR02Mnj8krSRXe8cC/pn7
-        LPclrsCaRv6kls6gxqiMNMRt3YSnvqPsr2GIxe/ZdOr8jmm5wHTm+nSMdLJj/Bmrnthl9l
-        Oxi46gjcoM1SitnsC0KUY13BsJT3Ntk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B46F313A66;
-        Mon,  6 Mar 2023 07:51:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yapeKY2bBWQeNAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 06 Mar 2023 07:51:41 +0000
-Date:   Mon, 6 Mar 2023 08:51:40 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Uladzislau Rezki <urezki@gmail.com>
-Subject: Re: [PATCH] mm/page_alloc: avoid high-order page allocation warn
- with __GFP_NOFAIL
-Message-ID: <ZAWbjIJCarmxGa8k@dhcp22.suse.cz>
-References: <20230305053035.1911-1-hsiangkao@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230305053035.1911-1-hsiangkao@linux.alibaba.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Mar 2023 02:55:57 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D75518151
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:55:56 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so12341393pjb.1
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 23:55:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678089356;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DXM+F0nCeNTp6Op2aBBfKjMUtWoANY5Axbyzod0a2dk=;
+        b=JuHi9hM/KWhW1Mri//QAde/70PgU9JOPU4yDSh9qWdIQdD8fzQGWUiePB8OSSZAnV1
+         zT9kyW1GwWMvvo/Zr8C5c0mst/Ch8s3CljIrPvOkGexctWW/m/vJ12+TSDPlSE6at6N1
+         MnCrM1NAjW1I2sDCEgFV9bM66E2nTCR0K8SqwYPDCxba5DUcuMmnYrTpMGqa+WUOLqm1
+         dHZxYY6KvpB0Ox486ldWbITM5Cb3E+O5AW7d9DLzcnA5671fRdlB24bn2Sl2PMQo/KnW
+         iW/1iOojHqoQg7k0yafD8+jSiwgMK0zgRTcQ3ja7w8ajdG0b7u6H/Ey7Z0SvWEJWExzt
+         DHJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678089356;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DXM+F0nCeNTp6Op2aBBfKjMUtWoANY5Axbyzod0a2dk=;
+        b=299ovpMpk4A2TZABvG5KCRoIQI+MUeTlATkRmuLRW7zKMmM+9GrFNM4riUCGwUJW5Z
+         mtds8KVCrvnc+Rll/iRHbNSq8qu7sECf6bdv11SW05LC9hNMc1x2CeWKFVi3+aG48QlJ
+         nKbTLCIh2/+YoNq9suCAEso+S4+x+R9NW0r4OorEbi/ZK+KrgEVH8VaJVyOKQ1TWiDf4
+         no0J+dR6sWM70EWyFsFIQ/Y1qTfn93AyhzG+16g2XVBbvAHi2xyCkqvA9tBujFrjeUEH
+         4IPq7sj6v9DQq4qJREc91fab5RBVMWjQQzBJqOc9vMmwuZx5t7y0my69vIZyxEmuLFPh
+         nVLQ==
+X-Gm-Message-State: AO0yUKUHjfkgtlvSfA1DAh2AWFgs96cNe6CDh9olx3ALAYkMwZ6jUK53
+        1+mtj0XZUtGvnP8GqUaV3Fc=
+X-Google-Smtp-Source: AK7set81pCf7l04ni0N9M1wStJKHShAv5aKLKdYUmKU14uNwyjDN4qqUNH/yoOsUTw7c7PAana0Alg==
+X-Received: by 2002:a17:90b:3b85:b0:234:8c58:c325 with SMTP id pc5-20020a17090b3b8500b002348c58c325mr10160476pjb.31.1678089355951;
+        Sun, 05 Mar 2023 23:55:55 -0800 (PST)
+Received: from localhost.localdomain ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id e8-20020a17090ac20800b0022be36be19asm5383079pjt.53.2023.03.05.23.55.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Mar 2023 23:55:55 -0800 (PST)
+From:   Yue Hu <zbestahu@gmail.com>
+To:     xiang@kernel.org, chao@kernel.org, jefflexu@linux.alibaba.com,
+        linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, huyue2@coolpad.com,
+        zhangwen@coolpad.com
+Subject: [PATCH] erofs: use wrapper i_blocksize() in erofs_file_read_iter()
+Date:   Mon,  6 Mar 2023 15:55:27 +0800
+Message-Id: <20230306075527.1338-1-zbestahu@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc couple of more people recently involved with vmalloc code]
+From: Yue Hu <huyue2@coolpad.com>
 
-On Sun 05-03-23 13:30:35, Gao Xiang wrote:
-> My knowledge of this is somewhat limited, however, since vmalloc already
-> supported __GFP_NOFAIL in commit 9376130c390a ("mm/vmalloc: add
-> support for __GFP_NOFAIL").  __GFP_NOFAIL could trigger the following
-> stack and allocate high-order pages when CONFIG_HAVE_ARCH_HUGE_VMALLOC
-> is enabled:
-> 
->  __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
->  alloc_pages+0x1aa/0x270 mm/mempolicy.c:2286
->  vm_area_alloc_pages mm/vmalloc.c:2989 [inline]
->
->  __vmalloc_area_node mm/vmalloc.c:3057 [inline]
->  __vmalloc_node_range+0x978/0x13c0 mm/vmalloc.c:3227
->  kvmalloc_node+0x156/0x1a0 mm/util.c:606
->  kvmalloc include/linux/slab.h:737 [inline]
->  kvmalloc_array include/linux/slab.h:755 [inline]
->  kvcalloc include/linux/slab.h:760 [inline]
->  (codebase: Linux 6.2-rc2)
-> 
-> Don't warn such cases since high-order pages with __GFP_NOFAIL is
-> somewhat legel.
+linux/fs.h has a wrapper for this operation.
 
-OK, this is definitely a bug and it seems my 9376130c390a was
-incomplete because it hasn't covered the high order case. Not sure how
-that happened but removing the warning is not the right thing to do
-here. The higher order allocation is an optimization rather than a must.
-So it is perfectly fine to fail that allocation and retry rather than
-go into a very expensive and potentially impossible higher order
-allocation that must not fail.
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+---
+ fs/erofs/data.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The proper fix should look like this unless I am missing something. I
-would appreciate another pair of eyes on this because I am not fully
-familiar with the high order optimization part much.
-
-Thanks!
---- 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index ef910bf349e1..a8aa2765618a 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2883,6 +2883,8 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
- 		unsigned int order, unsigned int nr_pages, struct page **pages)
- {
- 	unsigned int nr_allocated = 0;
-+	gfp_t alloc_gfp = gfp;
-+	bool nofail = false;
- 	struct page *page;
- 	int i;
- 
-@@ -2931,20 +2933,30 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
- 			if (nr != nr_pages_request)
- 				break;
- 		}
-+	} else {
-+		alloc_gfp &= ~__GFP_NOFAIL;
-+		nofail = true;
- 	}
- 
- 	/* High-order pages or fallback path if "bulk" fails. */
--
- 	while (nr_allocated < nr_pages) {
- 		if (fatal_signal_pending(current))
- 			break;
- 
- 		if (nid == NUMA_NO_NODE)
--			page = alloc_pages(gfp, order);
-+			page = alloc_pages(alloc_gfp, order);
+diff --git a/fs/erofs/data.c b/fs/erofs/data.c
+index 5bd0c956a142..7e8baf56faa5 100644
+--- a/fs/erofs/data.c
++++ b/fs/erofs/data.c
+@@ -380,7 +380,7 @@ static ssize_t erofs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+ 		if (bdev)
+ 			blksize_mask = bdev_logical_block_size(bdev) - 1;
  		else
--			page = alloc_pages_node(nid, gfp, order);
--		if (unlikely(!page))
--			break;
-+			page = alloc_pages_node(nid, alloc_gfp, order);
-+		if (unlikely(!page)) {
-+			if (!nofail)
-+				break;
-+
-+			/* fall back to the zero order allocations */
-+			alloc_gfp |= __GFP_NOFAIL;
-+			order = 0;
-+			continue;
-+		}
-+
- 		/*
- 		 * Higher order allocations must be able to be treated as
- 		 * indepdenent small pages by callers (as they can with
+-			blksize_mask = (1 << inode->i_blkbits) - 1;
++			blksize_mask = i_blocksize(inode) - 1;
+ 
+ 		if ((iocb->ki_pos | iov_iter_count(to) |
+ 		     iov_iter_alignment(to)) & blksize_mask)
 -- 
-Michal Hocko
-SUSE Labs
+2.17.1
+
