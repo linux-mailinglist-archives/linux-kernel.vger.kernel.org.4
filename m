@@ -2,104 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD006AD308
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E2C6AD30E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:54:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjCFXvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 18:51:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S229760AbjCFXyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 18:54:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCFXv3 (ORCPT
+        with ESMTP id S229483AbjCFXyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 18:51:29 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A2E3B3E3;
-        Mon,  6 Mar 2023 15:51:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AAE5BB80E98;
-        Mon,  6 Mar 2023 23:51:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11C78C433EF;
-        Mon,  6 Mar 2023 23:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678146685;
-        bh=jL7xXOOyjDrI1lWEUBmIuKIMDYmR+aYVz30Qx6CwOT0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TU1RuuekTGlXlz65IZhKSq04p671+b9C3B6TVcUVnowY4mlVDgUE2HJTkNrBj6AJ9
-         sVOuwDE8Lx9oeU2Sd+WlOvfB6lAho86dFhJLVoLLa1n4TA3eLk/v4b37tj+2iimWIr
-         bLvDMil1xwUhHsg+77M/MeOoWUAUwp4F+ucIn4ZU055VR/ay7ko9rpwIf4S0AUJaLu
-         4kK3mN+V1NG+eG3UwU4EKt/tere4MUnd0ymUTzmwcTLtoVd0Q7gupKXSoUkYDBqy2C
-         LXB316/9x7OldO2mkCFqs4n08ekxtUXmUGZRFQxqa3tF+RWZDQa5J5tb6jUbdFdLDk
-         U7VjVDlQKCV7Q==
-Date:   Mon, 6 Mar 2023 17:51:52 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] net/mlx4_en: Replace fake flex-array with
- flexible-array member
-Message-ID: <ZAZ8mNbphtPyZWM6@work>
+        Mon, 6 Mar 2023 18:54:11 -0500
+Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B70C5329B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 15:54:10 -0800 (PST)
+Received: from localhost (88-113-24-128.elisa-laajakaista.fi [88.113.24.128])
+        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+        id 2f0d44cd-bc7a-11ed-b972-005056bdfda7;
+        Tue, 07 Mar 2023 01:54:08 +0200 (EET)
+From:   andy.shevchenko@gmail.com
+Date:   Tue, 7 Mar 2023 01:54:07 +0200
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] gpio: fxl6408: add I2C GPIO expander driver
+Message-ID: <ZAZ9H4Eh/TUzuJan@surfacebook>
+References: <20230306083446.41082-1-francesco@dolcini.it>
+ <20230306083446.41082-3-francesco@dolcini.it>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306083446.41082-3-francesco@dolcini.it>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays as fake flexible arrays are deprecated and we are
-moving towards adopting C99 flexible-array members instead.
+Mon, Mar 06, 2023 at 09:34:46AM +0100, Francesco Dolcini kirjoitti:
+> From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+> 
+> Support Fairchild (now ON Semiconductor) fxl6408 which has 8 GPIO lines
+> and is controlled by I2C bus.
 
-Transform zero-length array into flexible-array member in struct
-mlx4_en_rx_desc. 
+Is it really GPIO expander and not a (semi-)featured pin control with GPIO
+capability?
 
-Address the following warnings found with GCC-13 and
--fstrict-flex-arrays=3 enabled:
-drivers/net/ethernet/mellanox/mlx4/en_rx.c:88:30: warning: array subscript i is outside array bounds of ‘struct mlx4_wqe_data_seg[0]’ [-Warray-bounds=]
-drivers/net/ethernet/mellanox/mlx4/en_rx.c:149:30: warning: array subscript 0 is outside array bounds of ‘struct mlx4_wqe_data_seg[0]’ [-Warray-bounds=]
-drivers/net/ethernet/mellanox/mlx4/en_rx.c:127:30: warning: array subscript i is outside array bounds of ‘struct mlx4_wqe_data_seg[0]’ [-Warray-bounds=]
-drivers/net/ethernet/mellanox/mlx4/en_rx.c:128:30: warning: array subscript i is outside array bounds of ‘struct mlx4_wqe_data_seg[0]’ [-Warray-bounds=]
-drivers/net/ethernet/mellanox/mlx4/en_rx.c:129:30: warning: array subscript i is outside array bounds of ‘struct mlx4_wqe_data_seg[0]’ [-Warray-bounds=]
-drivers/net/ethernet/mellanox/mlx4/en_rx.c:117:30: warning: array subscript i is outside array bounds of ‘struct mlx4_wqe_data_seg[0]’ [-Warray-bounds=]
-drivers/net/ethernet/mellanox/mlx4/en_rx.c:119:30: warning: array subscript i is outside array bounds of ‘struct mlx4_wqe_data_seg[0]’ [-Warray-bounds=]
+Can we have a Datasheet: tag here?
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+> Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
 
-Link: https://github.com/KSPP/linux/issues/21
-Link: https://github.com/KSPP/linux/issues/264
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/net/ethernet/mellanox/mlx4/mlx4_en.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h b/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-index 544e09b97483..034733b13b1a 100644
---- a/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-+++ b/drivers/net/ethernet/mellanox/mlx4/mlx4_en.h
-@@ -323,7 +323,7 @@ struct mlx4_en_tx_ring {
+> +	help
+> +	  GPIO driver for Fairchild Semiconductor FXL6408 GPIO expander
+
+Checkpatch usually complains on the help < 3 lines.
+You may add the module name for M choice.
+
+...
+
+> + * Author: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+
+> + *
+
+Unneeded blank line.
+
+...
+
+> +#include <linux/gpio.h>
+
+No way. This must not be in any code.
+
+...
+
+> +#include <linux/of_platform.h>
+
+Why?
+For discrete components make sure you have not an OF-centric code.
+
+...
+
+> +static const struct regmap_range rd_range[] = {
+> +	{ FXL6408_REG_DEVICE_ID, FXL6408_REG_DEVICE_ID },
+> +	{ FXL6408_REG_IO_DIR, FXL6408_REG_OUTPUT },
+> +	{ FXL6408_REG_INPUT_STATUS, FXL6408_REG_INPUT_STATUS }
+
+In all definitions where the entry is _not_ a terminator, leave the trailing
+comma in place.
+
+> +};
+
+...
+
+> +	};
+
+> +	gpio_config.regmap = devm_regmap_init_i2c(client, &regmap);
+
+> +
+
+This blank line is misplaced. Should be before devm_regmap_init_i2c() call.
+
+> +	if (IS_ERR(gpio_config.regmap)) {
+
+> +		dev_err(dev, "failed to allocate register map\n");
+> +		return PTR_ERR(gpio_config.regmap);
+
+	return dev_err_probe();
+
+> +	}
+
+...
+
+> +	/* Disable High-Z of outputs, so that our OUTPUT updates
+> +	 * actually take effect.
+> +	 */
+
+/*
+ * This is correct style for multi-line
+ * comments. Yours needs to be fixed.
+ */
+
+...
+
+> +	ret = regmap_write(gpio_config.regmap, FXL6408_REG_OUTPUT_HIGH_Z, 0);
+> +	if (ret) {
+
+> +		dev_err(dev, "failed to write 'output high Z' register\n");
+> +		return ret;
+
+	return dev_err_probe(...);
+
+> +	}
+
+...
+
+> +static const struct i2c_device_id fxl6408_id[] = {
+> +	{ "fxl6408", 0 },
+> +	{ },
+
+But no comma for a terminator entry.
  
- struct mlx4_en_rx_desc {
- 	/* actual number of entries depends on rx ring stride */
--	struct mlx4_wqe_data_seg data[0];
-+	DECLARE_FLEX_ARRAY(struct mlx4_wqe_data_seg, data);
- };
- 
- struct mlx4_en_rx_ring {
+> +};
+
+...
+
+> +
+
+Unneeded blank line.
+
+> +module_i2c_driver(fxl6408_driver);
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
