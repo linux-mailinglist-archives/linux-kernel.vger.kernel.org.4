@@ -2,105 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0296E6AD1F8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 162216AD1FF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjCFWtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:49:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S229817AbjCFWul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjCFWtO (ORCPT
+        with ESMTP id S229525AbjCFWui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:49:14 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFD96A77;
-        Mon,  6 Mar 2023 14:48:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Nj3vMJ/ctllkbeLpBt41rftvOwSQFABnTEwJIKhBS/A=; b=b1jXXo78VNTfEO7+sYEviZTy6u
-        qelJqGE+xM6EkhMOK5Cih5h9wBa9JcQ+n89YUWXB3lR3i4p1y+EQ449wdPMyh247qb4WUGslVoQ/T
-        LsWTPmYcff+p++jMB13T3zaIrtGSHtsUfZXeLZOhqAJQSuBfMUa/GK3nIlbm1JXc9LBl7x8Jwvpq3
-        6S0VpmNesJbN1ydjl2x+fNJRWSNzAwLYjU1YZrmDniNBdo1TMjxOaxYy98ynjYFIR1JIzFzcs+bkO
-        FVVSlZum+iwNpzo8rdRnGd1mrBG/F0f60HS9+AlVmQnqqKwHjdLoiq+iwvfNBzTuyFDS9CGgzU7fY
-        isuP7yOQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58090)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pZJdV-00071Q-I2; Mon, 06 Mar 2023 22:48:53 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pZJdQ-0000tT-Em; Mon, 06 Mar 2023 22:48:49 +0000
-Date:   Mon, 6 Mar 2023 22:48:48 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH net-next] net: mdio: Add netlink interface
-Message-ID: <ZAZt0D+CQBnYIogp@shell.armlinux.org.uk>
-References: <20230306204517.1953122-1-sean.anderson@seco.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306204517.1953122-1-sean.anderson@seco.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Mar 2023 17:50:38 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B465733479
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:50:33 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536cb268ab8so117654197b3.17
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 14:50:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678143033;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Hb/JdJnRstCiHb6uLxjoHUqYIXBW/NZZorg2FHxQCFI=;
+        b=TPbOnADmbdqpnFsFLvKPr/SSUzR+W34C2wwBC2s89REqAS27kO9UPTCLcVJGnZ8WPi
+         Jbz6BVE0uZl0launrxRyvrYVUt3gR/9D8g6QnIlWtOG+/YrQSU/yxJbfl79OmURQF6kA
+         yIMqG+RPxcJFFOq6BPHBQKkEJc/0Ygf4x7BrKU+rmieTxu7KBIDwiosDR5iFBSV4CdhU
+         r8FeFIAxn6PC0wCeDIiHpy7/ZWl9jvXk1j8x5zCKMr6UDCL1a0YL8oxt9owiblyw04mk
+         bFojdRIzsLagPOBwUaXTuHyxh65jJ1kVzTW7/LzNhPx2ijGew4/eFcFdr2EnrFd4qZcT
+         4c4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678143033;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hb/JdJnRstCiHb6uLxjoHUqYIXBW/NZZorg2FHxQCFI=;
+        b=mEHKaGvfWk8V3yqBnCC/jaCqTGMUSi9H+kMFX0aa+ulTRhYAFnIztB76pLYHwURbiT
+         ei6GpARKvSfOZjK9zTQF+YFMJEqESgpiIKJZG81Nc2oOS5b9yAVov4wziFNz3atUcQy5
+         zD0KcYcU6Pj8k5MtSWlxPFmdHNHt9VNn0RaiJd3dkkAO5LFuB4V3hLKnJtI8mbssD2WI
+         aahHdeoymE5A4SF0dQn9wGdvjVgyp1dMtYMsOxIbFwrbZDxOzl/WhxKlQgVIYRPhywcR
+         vbbNikkLo/wi99hCdTJYkL6Wu8hxSDoo+uaW/rOpssI9yyglrnuDxk0HoyayltYGL6QZ
+         LXJQ==
+X-Gm-Message-State: AO0yUKUg/maCoZU0NWY2rzVcb6yRieRmtGI5YBLOCn7CC6p3eyIEcjZ5
+        yspC3g127RM0e6ArGZMRs0tnmJcG4dTxYN1Mm8DR
+X-Google-Smtp-Source: AK7set/PkFKTBVv8rb/ijZL0g/DGcxrk7FAkepszlqBXVP6/dldfpgHNd3E2bbiQcSg5PYF5nqRueFqjf9KjosxcivgJ
+X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:17e9:c330:41ce:6b08])
+ (user=axelrasmussen job=sendgmr) by 2002:a25:910f:0:b0:afd:66d8:a495 with
+ SMTP id v15-20020a25910f000000b00afd66d8a495mr3941062ybl.0.1678143032874;
+ Mon, 06 Mar 2023 14:50:32 -0800 (PST)
+Date:   Mon,  6 Mar 2023 14:50:19 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230306225024.264858-1-axelrasmussen@google.com>
+Subject: [PATCH v3 0/5] mm: userfaultfd: refactor and add UFFDIO_CONTINUE_MODE_WP
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Axel Rasmussen <axelrasmussen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 03:45:16PM -0500, Sean Anderson wrote:
-> +static int mdio_nl_eval(struct mdio_nl_xfer *xfer)
-> +{
-> +	struct mdio_nl_insn *insn;
-> +	unsigned long timeout;
-> +	u16 regs[8] = { 0 };
-> +	int pc, ret = 0;
+This series, currently based on 6.3-rc1, is divided into two parts:
 
-So "pc" is signed.
+- Commits 1-4 refactor userfaultfd ioctl code without behavior changes, with the
+  main goal of improving consistency and reducing the number of function args.
+- Commit 5 adds UFFDIO_CONTINUE_MODE_WP.
 
-> +	int phy_id, reg, prtad, devad, val;
-> +
-> +	timeout = jiffies + msecs_to_jiffies(xfer->timeout_ms);
-> +
-> +	mutex_lock(&xfer->mdio->mdio_lock);
-> +
-> +	for (insn = xfer->prog, pc = 0;
-> +	     pc < xfer->prog_len;
+The refactors are sorted by increasing controversial-ness, the idea being we
+could drop some of the refactors if they are deemed not worth it.
 
-xfer->prog_len is signed, so this is a signed comparison.
+Changelog:
 
-> +		case MDIO_NL_OP_JEQ:
-> +			if (__arg_ri(insn->arg0, regs) ==
-> +			    __arg_ri(insn->arg1, regs))
-> +				pc += (s16)__arg_i(insn->arg2);
+v2->v3:
+ - rebase onto 6.3-rc1
+ - typedef a new type for mfill flags in patch 3/5 (suggested by Nadav)
 
-This adds a signed 16-bit integer to pc, which can make pc negative.
+v1->v2:
+ - refactor before adding the new flag, to avoid perpetuating messiness
 
-And so the question becomes... what prevents pc becoming negative
-and then trying to use a negative number as an index?
+Axel Rasmussen (5):
+  mm: userfaultfd: rename functions for clarity + consistency
+  mm: userfaultfd: don't pass around both mm and vma
+  mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
+  mm: userfaultfd: don't separate addr + len arguments
+  mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to install WP PTEs
 
-I think prog_len and pc should both be unsigned, then the test you
-have will be unsigned, and thus wrapping "pc" around zero makes it
-a very large integer which fails the test - preventing at least
-access outside of the array. Better still would be a validator
-that checks that the program is in fact safe to execute.
+ fs/userfaultfd.c                         | 120 +++++-------
+ include/linux/hugetlb.h                  |  27 ++-
+ include/linux/shmem_fs.h                 |   9 +-
+ include/linux/userfaultfd_k.h            |  61 +++---
+ include/uapi/linux/userfaultfd.h         |   7 +
+ mm/hugetlb.c                             |  34 ++--
+ mm/shmem.c                               |  14 +-
+ mm/userfaultfd.c                         | 235 +++++++++++------------
+ tools/testing/selftests/mm/userfaultfd.c |   4 +
+ 9 files changed, 247 insertions(+), 264 deletions(-)
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+--
+2.40.0.rc0.216.gc4246ad0f0-goog
+
