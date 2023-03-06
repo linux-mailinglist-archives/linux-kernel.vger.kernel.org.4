@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507F06AD167
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5616AD16A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:20:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjCFWUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
+        id S229580AbjCFWUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjCFWUJ (ORCPT
+        with ESMTP id S229570AbjCFWUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:20:09 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9974E5D440;
-        Mon,  6 Mar 2023 14:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=6SMG2y85qlWl9rXIC5Vu/6a2pGG6CNaDI1Qm4HZXZYc=; b=HXRlh2ZugTXHUvbzhCYeIbK0/f
-        kwpFMAe+UGyvuIfdKgmuYlRcuXmVC0n5yqwe6SpDBcKbfPvMGg/lNbC6lciY5X5jP5gnaKc/31Osj
-        InwftpPuwDCi5QEFEcUAjx+DWgdIlpy0hPb2aSZJni9+lBxZqi5lLEV86XMDlLDiyskXs0C1kIq5I
-        VnjUXGioPmgW9D17Ra42mmldQi/mqQwrt7WkPk6ftqaaC2ed7qR/b5cOXLpVKfQHFvh4tWeDPplBv
-        cvFEjScxYVfU1p1ApCL9LnSMhjCWIqrhxpZAdnG91ImHgX+7rsUQxo6OIQxacXQOt1hnsffwenIFU
-        HHHcsbBg==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pZJBY-000BVa-Lx; Mon, 06 Mar 2023 23:20:00 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pZJBY-000Pts-5m; Mon, 06 Mar 2023 23:20:00 +0100
-Subject: Re: [PATCH bpf v2 1/2] btf: fix resolving BTF_KIND_VAR after ARRAY,
- STRUCT, UNION, PTR
-To:     Lorenz Bauer <lorenz.bauer@isovalent.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc:     Lorenz Bauer <lmb@isovalent.com>, Martin KaFai Lau <kafai@fb.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230306112138.155352-1-lmb@isovalent.com>
- <20230306112138.155352-2-lmb@isovalent.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <19d825ad-0ec3-9979-a157-99289339d438@iogearbox.net>
-Date:   Mon, 6 Mar 2023 23:19:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 6 Mar 2023 17:20:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C436545E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:20:40 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EBFF3B81136
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 22:20:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83812C433D2;
+        Mon,  6 Mar 2023 22:20:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678141237;
+        bh=WqfXto5v5JhP8rNlVVHSnk4v3F8owjQLa1cFEG0ODEw=;
+        h=From:Subject:Date:To:Cc:From;
+        b=KATh8VQH4UsUuvw6HeuKxqi87j/8wLugtzm5aEeYF7G2+eWmJB/A2QSKDVAGvtUm4
+         s29miU6wHvV8ZM7Egg8XKR6/HMrCC1XBiXGWNnZQXHug2N5FrllL0hFTDtEYgkJt0j
+         fqp6xQx+9iyyRcnh8qeSsvCFpxzkX/GtwjckE5HPbcsJIAwimVZpZG+pK0iJQ90MjO
+         FbkIi/UuFE+v3uuoj8sx+6vzV9Dbszd94L4HbsBsV7TgVHqGq0y/GXRdz97W2+839o
+         Htz000J1ZD1zSRRONRQxxn/oGhzfrhIgHhIsoIksHSqPNtoHY8fjmETCFFOOA5aQjy
+         z8oIv/8ZIsOpQ==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/3] arm64/cpufeature: Use macros for ID based matches
+Date:   Mon, 06 Mar 2023 22:20:22 +0000
+Message-Id: <20230303-arm64-cpufeature-helpers-v1-0-b16cf36acaea@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230306112138.155352-2-lmb@isovalent.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26833/Mon Mar  6 09:22:59 2023)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIACZnBmQC/x2NwQqDMBBEf0X23IUYQ4X+SulhjWMTqGnYqBTEf
+ 2+UOb2BN7NTgUYUejQ7KbZY4jdVaG8N+SDpDY5jZbLGdqaGRee7Y5/XCbKsCg74ZGhh6Y1tO7H
+ OoaeqD1LAg0ry4RxY5ny2WTHF33X4fB3HH+ik2uGAAAAA
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bd1bf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=985; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=WqfXto5v5JhP8rNlVVHSnk4v3F8owjQLa1cFEG0ODEw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBmcxEtRKdBuG47lDJ9BMUMeDmBo5mwD8LDUOij05
+ u+twaOeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAZnMQAKCRAk1otyXVSH0MgcB/
+ 9l8w+I9Dr8vBbYpHc5tM9JPhawCiQllLykMWDb84OoQ/68LnsKySUh2w0P9jdX1wf7/t7+4dFbiYqw
+ NS/k0HKoObm9JkDVTGr/gsi4qG+34Ic9YmxRURx9Th/I23/xy1kQObBzk54J7NVzbqIL1HcnG+M+f/
+ QCxncrHGzm4wkKVas6+s01QeuUi0p1HTlZt0LINXPpnjh76kEmHie95DMS2AJYSfCb109b9c8mAPV8
+ dK8QINeTNM2t05r/KtF1x3bo99+N0a61brsuznHOi/dcjsqa1OG5ZBE+tvfaKuic5rrmqNqDcwZD7v
+ ySjg5HLGTBihOirBCSUotF35q134OL
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/6/23 12:21 PM, Lorenz Bauer wrote:
-> btf_datasec_resolve contains a bug that causes the following BTF
-> to fail loading:
-> 
->      [1] DATASEC a size=2 vlen=2
->          type_id=4 offset=0 size=1
->          type_id=7 offset=1 size=1
->      [2] INT (anon) size=1 bits_offset=0 nr_bits=8 encoding=(none)
->      [3] PTR (anon) type_id=2
->      [4] VAR a type_id=3 linkage=0
->      [5] INT (anon) size=1 bits_offset=0 nr_bits=8 encoding=(none)
->      [6] TYPEDEF td type_id=5
->      [7] VAR b type_id=6 linkage=0
-> 
-[...]
-> The fix is to reset resolve_mode to RESOLVE_TBD before attempting to
-> resolve a VAR from a DATASEC.
-> 
-> Fixes: 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
-> Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
+As was recently done for hwcaps convert all the cpufeatures that match
+on ID registers to use helper macros to initialise all the data fields
+that the matching code uses.  The feature table is much less of an eye
+chart than the hwcap tables were so the benefits are less substantial
+but the result is still less verbose and error prone so still seems like
+a win.
 
-Looks like patchbot is on strike, the series got applied to bpf, thanks!
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (3):
+      arm64/cpufeature: Pull out helper for CPUID register definitions
+      arm64/cpufeature: Consistently use symbolic constants for min_field_value
+      arm64/cpufeature: Use helper macro to specify ID register for capabilites
+
+ arch/arm64/kernel/cpufeature.c | 272 +++++++++--------------------------------
+ 1 file changed, 59 insertions(+), 213 deletions(-)
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230303-arm64-cpufeature-helpers-a70213a244e7
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
