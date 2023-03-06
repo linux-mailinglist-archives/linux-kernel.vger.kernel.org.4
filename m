@@ -2,96 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3517B6AB844
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0F86AB849
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:30:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCFI3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:29:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S229689AbjCFI36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:29:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjCFI2z (ORCPT
+        with ESMTP id S229579AbjCFI3z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:28:55 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED3CAD02
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:28:54 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-53cb9ac9470so169505487b3.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:28:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=519NpLUqxOKWPBwAuOC9bU9ZvrYJvgJKHiIp383stmI=;
-        b=W3sGp9tNOLk4oOb1TbBhmTVgOkfoc3jNvYh/DHNAvPgy67bZMPKLQWxrpJ0zDdcp+m
-         S3wh1xHQnwUyPdXvJ2fnkADVNJh2ucQuqk4rR7iDOAB1VWSAMBZ3P5S2esv8D81mx3FE
-         ySbGrtbzeZbdtXEo3ZG24oQN8iTy8LnSxuKH8dw90uG1ciqhzoJCBWUZhZsfgiv2IoPf
-         aMVk4WiNShz8IChoW/yMstyhaBVYtGJ+MTlDC2Yv/xDdfulCssgz4JYckicGNUKxZrb+
-         YrQT7vimpOgsn4RLRyxeyCJ1YxtNjprHA6SvcTTjvdn0BOvpVeUsEtY2+pqoxK1Svzc/
-         TgHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=519NpLUqxOKWPBwAuOC9bU9ZvrYJvgJKHiIp383stmI=;
-        b=RT/FcLKjJp1vLatP6XVc1TZzVTmcy314it4/Sjzs1t4Lz8NVwDRJuaX7yv1PzUofr8
-         O+vG8E2ok4eOLNZSeeMcvxXnOyCUhPva8wjoi/OQ4Ek3gCnmFo/FZR26nYiii1f/oOwy
-         eMqdBfNMPmIajF9mLomTBMNAk/eJnn20lrN2oQsXz8Q0Z3YYKLBFk4J1ner2CKABRP3H
-         uGm8PIn4cafswGYayL7gpHzpVQlVSuIn2pZdHULuvly0SFPDaDehyu0G1xeMXTbIIPyv
-         pIvZzhDypwTFJZADqTubV0Z+p611YmlX+5vJ+zv/e6T4AQvuNJyYA3zZJAGeRs+BIPhS
-         IpYw==
-X-Gm-Message-State: AO0yUKVl2b6rz+gkuuimbDTsRcD1m7+3MEcO0aJzOMUR7IbPH2S1kaSx
-        pOEMiH4RFIFIsBr8fsVn3zRAd1gurAYTM5EAeqnVZg==
-X-Google-Smtp-Source: AK7set8qJpcrUyUWuXm2GtgPYfVJIrTfSr7hyswBMwx4xoG28NxTC5y13Rie+RRDGbzHFSPGeKUBnzA9auOnDQ4Aey0=
-X-Received: by 2002:a81:b624:0:b0:52e:f77c:315d with SMTP id
- u36-20020a81b624000000b0052ef77c315dmr6476228ywh.3.1678091333277; Mon, 06 Mar
- 2023 00:28:53 -0800 (PST)
+        Mon, 6 Mar 2023 03:29:55 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B623BDD8;
+        Mon,  6 Mar 2023 00:29:53 -0800 (PST)
+Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVWsv59tFzKpsP;
+        Mon,  6 Mar 2023 16:27:47 +0800 (CST)
+Received: from [10.174.178.159] (10.174.178.159) by
+ kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 6 Mar 2023 16:29:17 +0800
+Message-ID: <02189eaa-1964-3fa6-6a06-16d248a3d80d@huawei.com>
+Date:   Mon, 6 Mar 2023 16:29:16 +0800
 MIME-Version: 1.0
-References: <ZAVu/XHbL9IR5D3h@gondor.apana.org.au> <E1pZ2fj-000e1B-Kg@formenos.hmeau.com>
-In-Reply-To: <E1pZ2fj-000e1B-Kg@formenos.hmeau.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 09:28:41 +0100
-Message-ID: <CACRpkdbfttwCoMPQATNkj1_sbhs1H_s7vfXRQbW_dDf4d_dUBw@mail.gmail.com>
-Subject: Re: [v5 PATCH 3/7] crypto: stm32 - Simplify finup
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH-next] scsi: fix use-after-free problem in
+ scsi_remove_target
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Zhong Jinghua <zhongjinghua@huaweicloud.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yukuai3@huawei.com>
+References: <20230213034321.3261114-1-zhongjinghua@huaweicloud.com>
+ <5cf19e69-b851-abe9-9496-bbba33109404@acm.org>
+From:   zhongjinghua <zhongjinghua@huawei.com>
+In-Reply-To: <5cf19e69-b851-abe9-9496-bbba33109404@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.159]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600002.china.huawei.com (7.193.23.29)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 5:42=E2=80=AFAM Herbert Xu <herbert@gondor.apana.org=
-.au> wrote:
 
-> The current finup code is unnecessarily convoluted.  There is no
-> need to call update and final separately as update already does
-> all the necessary work on its own.
+在 2023/3/2 3:46, Bart Van Assche 写道:
+> On 2/12/23 19:43, Zhong Jinghua wrote:
+>> T0                            T1
+>>   sdev_store_delete
+>>    scsi_remove_device
+>>     device_remove_file
+>>      __scsi_remove_device
+>>                              __iscsi_unbind_session
+>>                               scsi_remove_target
+>>                           spin_lock_irqsave
+>>                                list_for_each_entry
+>>       scsi_target_reap // starget->reaf 1 -> 0
 >
-> Simplify this by utilising the HASH_FLAGS_FINUP bit in rctx to
-> indicate only finup and use the HASH_FLAGS_FINAL bit instead to
-> signify processing common to both final and finup.
+> What is "reaf"? Did you perhaps want to write "reap_ref"?
+Yes, I will modify late.
 >
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+>> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+>> index e7893835b99a..0ad357ff4c59 100644
+>> --- a/drivers/scsi/scsi_sysfs.c
+>> +++ b/drivers/scsi/scsi_sysfs.c
+>> @@ -1561,7 +1561,17 @@ void scsi_remove_target(struct device *dev)
+>>               starget->state == STARGET_CREATED_REMOVE)
+>>               continue;
+>>           if (starget->dev.parent == dev || &starget->dev == dev) {
+>> -            kref_get(&starget->reap_ref);
+>> +
+>> +            /*
+>> +             * If starget->reap_ref is reduced to 0, it means
+>> +             * that other processes are releasing it and
+>> +             * there is no need to delete it again
+>> +             */
+>> +            if (!kref_get_unless_zero(&starget->reap_ref)) {
+>> +                spin_unlock_irqrestore(shost->host_lock, flags);
+>> +                goto restart;
+>> +            }
+>> +
+>>               if (starget->state == STARGET_CREATED)
+>>                   starget->state = STARGET_CREATED_REMOVE;
+>>               else
+>
+> The above comment should be made more clear, e.g. as follows: "If the 
+> reference count is already zero, skip this target. Calling 
+> kref_get_unless_zero() if the reference count is zero is safe because 
+> scsi_target_destroy() will wait until the host lock has been released 
+> before freeing starget."
 
-This "v5.5 version" indeed works!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Tested-by: Linus Walleij <linus.walleij@linaro.org>
+Agree. Thanks for your e.g.
 
-I had to pick the patch manually because Konstantin's b4 tool
-got completely confused by the version numbering and picked
-the old v5, but once I got the right one, all worked fine!
+I will send the v2 late.
 
-Yours,
-Linus Walleij
+>
+> Otherwise this patch looks fine to me.
+>
+> Thanks,
+>
+> Bart.
+>
+>
+Thanks,
+
+Jinghua
+
