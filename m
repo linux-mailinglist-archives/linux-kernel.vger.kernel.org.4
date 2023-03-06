@@ -2,150 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863D16AC0EA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7536AC0EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjCFN3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:29:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
+        id S231183AbjCFNaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjCFN3o (ORCPT
+        with ESMTP id S231194AbjCFNaF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:29:44 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AAE23671;
-        Mon,  6 Mar 2023 05:29:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678109384; x=1709645384;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dWELgJ6UKYulLa0yVyGSUh1o9vmjbEAcGp3BvCpR7/0=;
-  b=Ny6Bdmhyf+d/e8qS/LLEUEaaP9YCwje2Vn9J9bihSRqJPy1TH0+/TYIb
-   ZDQqMccGUINYeC9XZScfzLytp/baib9pFIGOFBP1bPCHa4in9X3QLPhv2
-   hMREARdufyrHtXFynlFFsb2chSgnBTaWWvTiYt9Pu7yjxacvfbZxhE7tN
-   6Kd+ker27OyjxxOEpU9QD6v+YzEXUqMglXwsQwerjcen2wvliIBtzJFlm
-   f62qt7Awsc4gayySv96/3TwxVNfEyovcCSFmEA9gQAJpsB8Y2C0oO6KiL
-   nqMXhy6i+KH4b8E2Bd/sjqO/yp2G2qoRrXXW8JLs4NuKqCcq5y5ce7jjf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400372283"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="400372283"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 05:29:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="799994608"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="799994608"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 06 Mar 2023 05:29:39 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZAuH-00GRQZ-2v;
-        Mon, 06 Mar 2023 15:29:37 +0200
-Date:   Mon, 6 Mar 2023 15:29:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mike Looijmans <mike.looijmans@topic.nl>
-Cc:     devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] iio: adc: Add TI ADS1100 and ADS1000
-Message-ID: <ZAXqwaKA3Uh6TH2q@smile.fi.intel.com>
-References: <20230306131312.7170-1-mike.looijmans@topic.nl>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.0270109b-145d-4024-b8ff-05d54be2ad97@emailsignatures365.codetwo.com>
- <20230306131312.7170-2-mike.looijmans@topic.nl>
+        Mon, 6 Mar 2023 08:30:05 -0500
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7295279B1;
+        Mon,  6 Mar 2023 05:30:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1678109398; bh=lITNNvdtYsjqw5lqa0YQTU4ptGEenKZNcLXWw4qTE18=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UftSwTS/34MZUF5jcucRs9JAODbvtXjZnYKG3wnjL2eA/0G+Trvz/pyAtOOwPazT8
+         hgUBUygRbBGWCehovcnTlyPn9cPwh5HBb4X4UfZ1LvogFyWjfPxyyV5VjtX1eIUY7E
+         SbFp/zITanIah/9KbAdbkTHNMgB9bMprJ9n1Oyq4=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 7EE0560B18;
+        Mon,  6 Mar 2023 21:29:58 +0800 (CST)
+Message-ID: <fbbd1e3d-6554-0d09-eba1-9e432e05746f@xen0n.name>
+Date:   Mon, 6 Mar 2023 21:29:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306131312.7170-2-mike.looijmans@topic.nl>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH] LoongArch: Provide kernel fpu functions
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Xi Ruoyao <xry111@xry111.site>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "loongson-kernel@lists.loongnix.cn" 
+        <loongson-kernel@lists.loongnix.cn>
+References: <20230305052818.4030447-1-chenhuacai@loongson.cn>
+ <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
+ <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
+ <58cc7e6d19628757d6d8dc192d07876288f6077e.camel@xry111.site>
+ <CAAhV-H7vv+AE-7kDf7YpU6_f_dTNxKKoRSHC6vA4aBHOVyMRAQ@mail.gmail.com>
+ <65d890c8-9c37-070c-f5c6-db26ab8cfe54@xen0n.name>
+ <50dd43063e244fa9a4d025873c862331@AcuMS.aculab.com>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <50dd43063e244fa9a4d025873c862331@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 02:13:12PM +0100, Mike Looijmans wrote:
-> The ADS1100 is a 16-bit ADC (at 8 samples per second).
-> The ADS1000 is similar, but has a fixed data rate.
+On 2023/3/6 20:53, David Laight wrote:
+> ...
+>> Also, if the old world is taken into consideration (which we normally
+>> have the luxury of not having to do so), consider Ruoyao's case where a
+>> commercial partner of Loongson wants to do this with the vendor kernel,
+>> but the symbols are exported GPL -- in this case I doubt the GPL marking
+>> will remain, thus creating inconsistency between upstream and vendor
+>> kernels, and community distros are going to complain loudly about the
+>> need to patch things. It's probably best to avoid all of this upfront.
+> 
+> It is pretty easy to load a non-GPL module into a distro-built
+> kernel and call GPL-only functions.
+> (And without doing horrid things with kallsyms.)
+> As soon as you actually need to do one, adding others isn't a problem.
 
-...
-
-> +	/* Value is always 16-bit 2's complement */
-> +	value = be16_to_cpu(buffer);
-
-+ Blank line?
-
-> +	/* Shift result to compensate for bit resolution vs. sample rate */
-> +	value <<= 16 - ads1100_data_bits(data);
-
-+ Blank line?
-
-> +	*val = sign_extend32(value, 15);
-
-...
-
-> +	microvolts = regulator_get_voltage(data->reg_vdd);
-> +	/*
-> +	 * val2 is in 'micro' units, n = val2 / 1000000
-> +	 * result must be millivolts, d = microvolts / 1000
-> +	 * the full-scale value is d/n, corresponds to 2^15,
-> +	 * hence the gain = (d / n) >> 15, factoring out the 1000 and moving the
-> +	 * bitshift so everything fits in 32-bits yields this formula.
-> +	 */
-> +	gain = ((microvolts + BIT(14)) >> 15) * 1000 / val2;
-
-Perhaps adding MICROVOLT_PER_MILLIVOLT (to units.h) and use it here?
-
-Besides that it's seems like
-
-	microvolts = regulator_get_voltage(data->reg_vdd);
-	gain = DIV_ROUNDUP_CLOSEST(microvolts, BIT(15)) *
-	       MICROVOLT_PER_MILLIVOLT / val2;
-
-> +	if (gain <= 0 || gain > 8)
-> +		return -EINVAL;
-
-As I commented out in the previous discussion (please, give a chance to the
-reviewers to answer before issuing a new version of the series) this better
-to be
-
-	if (gain < BIT(0) || gain > BIT(3))
-
-which will show the nature of power of two implicitly.
-
-> +	regval = ffs(gain) - 1;
-> +	ads1100_set_config_bits(data, ADS1100_PGA_MASK, regval);
-
-Can be unified in one line.
-
-> +	return 0;
-> +}
-
-...
-
-> +			return ads1100_set_config_bits(
-> +					data, ADS1100_DR_MASK,
-> +					FIELD_PREP(ADS1100_DR_MASK, i));
-
-Wrong indentation.
-Please, check all your code for this kind of issues.
+Hmm, do you mean patching the kernel downstream to remove the license 
+checks, or something like that? I remember the so-called "GPL condom" 
+trick was banned some time earlier, in commit 262e6ae7081df ("modules: 
+inherit TAINT_PROPRIETARY_MODULE"). For now I can't think of a way that 
+would allow such reference...
 
 -- 
-With Best Regards,
-Andy Shevchenko
+WANG "xen0n" Xuerui
 
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
