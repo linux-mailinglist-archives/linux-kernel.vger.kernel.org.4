@@ -2,187 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7371B6AC11A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D826AC117
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjCFNcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:32:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S231305AbjCFNcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbjCFNcE (ORCPT
+        with ESMTP id S231264AbjCFNcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:32:04 -0500
-Received: from out-13.mta0.migadu.com (out-13.mta0.migadu.com [IPv6:2001:41d0:1004:224b::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E18152ED71
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:32:00 -0800 (PST)
-Date:   Mon, 6 Mar 2023 21:31:54 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678109518;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+6MwLYYeoBVNw5VNLqTKtx7XTgm8oOzL+0yJ0w0vYPY=;
-        b=sUo8hL0Ms2i7J8kqESapb9XWPqx5aUEptAFMeAbjMNsgxpNxcBH2xwYia9h1Y5sUG5yAnh
-        JCpHKcBm7CW5NTkmPzuilvkijKck7cQBfmydKrl8WI6o1cFMElxqgBZTDGfKB02rZXw9lz
-        XsHL/VBTx7Tlv2REIO0gCRdyNilM3xI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] dmaengine: dw-edma: Rename dw_edma_core_ops
- structure to dw_edma_plat_ops
-Message-ID: <ZAXrSq1A8O7e55F6@chq-MS-7D45>
-References: <20230303124642.5519-1-cai.huoqing@linux.dev>
- <20230303124642.5519-2-cai.huoqing@linux.dev>
- <20230303165125.fuymevji2jkybmbl@mobilestation>
+        Mon, 6 Mar 2023 08:32:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBBD2ED66;
+        Mon,  6 Mar 2023 05:32:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A826060F10;
+        Mon,  6 Mar 2023 13:31:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61B25C4339C;
+        Mon,  6 Mar 2023 13:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678109519;
+        bh=GGz/XSquEEkd/c1A8ozA7mQ9It/zjD2cp/cMY4WB4vA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=iBaz7RSpiIHju+faTJoDDbYnqmTn2YoDyADXL2vTPaHobu59JQLQT7lk3IOORGJdB
+         0ike2irMWoLD0BnVbFfW4l4Vhd9zdBvaTqjmyqMrp30fQPZTk6z/SElweq1D/d2gO1
+         M0Rfe35aZMF/Z/lnJEVVioyP6WK6U1VSJjhfXR6RzqAlYFWwkGLlbCGxBTNGFRjljk
+         pd3D8BWREFA3wcQM8gLvC5JSxBhHzNCSw55xylUXpfeeEV6J3mp25lQ75K6wZXapTS
+         PZq/MV4+1/V9uUTYi79oYIab4NqqASTK7vAWyVgeMlsS/uDLxPKdkCCbAi06YgHS+I
+         fZNTLSfJsfAVw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     alsa-devel@alsa-project.org, linux-renesas-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230217185225.43310-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20230217185225.43310-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: (subset) [PATCH 0/4] RZ/G2L SSI: Update interrupt numbers
+Message-Id: <167810951612.75807.7701310254952965635.b4-ty@kernel.org>
+Date:   Mon, 06 Mar 2023 13:31:56 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230303165125.fuymevji2jkybmbl@mobilestation>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03 3月 23 19:51:25, Serge Semin wrote:
-> On Fri, Mar 03, 2023 at 08:46:31PM +0800, Cai Huoqing wrote:
-> > From: Cai huoqing <cai.huoqing@linux.dev>
-> > 
+On Fri, 17 Feb 2023 18:52:21 +0000, Prabhakar wrote:
+> This patch series aims to fix interrupt numbers for SSI channels and updates
+> the DT binding and the driver accordingly.
 > 
-> > Rename dw_edma_core_ops structure to dw_edma_plat_ops, the ops is platform
-> > specific operations: the DMA device environment configs like IRQs,
-> > address translation, etc.
-> > 
-> > The dw_edma_plat_ops name was supposed to refer to the platform which
-> > the DW eDMA engine is embedded to, like PCIe end-point (accessible via
-> > the PCIe bus) or a PCIe root port (directly accessible by CPU).
-> > Needless to say that for them the IRQ-vector and PCI-addresses are
-> > differently determined. The suggested name has a connection with the
-> > kernel platform device only as a private case of the eDMA/hDMA embedded
-> > into the DW PCI Root ports, though basically it was supposed to refer to
-> > any platform in which the DMA hardware lives.
-> > 
-> > Anyway the renaming was necessary to distinguish two types of
-> > the implementation callbacks:
-> > 1. DW eDMA/hDMA IP-core specific operations: device-specific CSR
-> > setups in one or another aspect of the DMA-engine initialization.
-> > 2. DW eDMA/hDMA platform specific operations: the DMA device
-> > environment configs like IRQs, address translation, etc.
-> > 
-> > dw_edma_core_ops is supposed to be used for the case 1, and
-> > dw_edma_plat_ops - for the case 2.
+> Note, this patch series applies on top of [0].
 > 
-> This text was my explanation to Bjorn of why the renaming was
-> necessary. The patch log has a bit different context so I would
-> change it to something like this:
+> [0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/20230131223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
 > 
-> "The dw_edma_core_ops structure contains a set of the operations:
-> device IRQ numbers getter, CPU/PCI address translation. Based on the
-> functions semantics the structure name "dw_edma_plat_ops" looks more
-> descriptive since indeed the operations are platform-specific. The
-> "dw_edma_core_ops" name shall be used for a structure with the IP-core
-> specific set of callbacks in order to abstract out DW eDMA and DW HDMA
-> setups. Such structure will be added in one of the next commit in the
-> framework of the set of changes adding the DW HDMA device support."
-OK
+> [...]
 
-> 
-> > 
-> > Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
-> > ---
-> >   v4->v5:
-> >     1.Revert the instance dw_edma_pcie_core_ops
-> >     2.Move the change EDMA_MF_HDMA_NATIVE to patch[3/4] 
-> > 
-> >   v4 link:
-> >   https://lore.kernel.org/lkml/20230221034656.14476-2-cai.huoqing@linux.dev/
-> >  
-> >  drivers/dma/dw-edma/dw-edma-pcie.c           | 2 +-
-> >  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
-> >  include/linux/dma/edma.h                     | 4 ++--
-> >  3 files changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
-> > index 2b40f2b44f5e..190b32d8016d 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-pcie.c
-> > +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
-> > @@ -109,7 +109,7 @@ static u64 dw_edma_pcie_address(struct device *dev, phys_addr_t cpu_addr)
-> >  	return region.start;
-> >  }
-> >  
-> 
-> > -static const struct dw_edma_core_ops dw_edma_pcie_core_ops = {
-> > +static const struct dw_edma_plat_ops dw_edma_pcie_core_ops = {
-> 
-> Please carefully note my comment to v4. I asked to add the prefix
-> specific to the local naming convention:
-> 
-> -static const struct dw_edma_core_ops dw_edma_pcie_core_ops = {
-> +static const struct dw_edma_plat_ops dw_edma_pcie_plat_ops = {
-> 
-> But besides of adding the correct prefix you changed the suffix to the
-> improper one. Please get it back so the instance name would be
-> "dw_edma_pcie_plat_ops".
-Do you mean ditto
--	chip->ops = &dw_edma_pcie_core_ops;
-+	chip->ops = &dw_edma_pcie_plat_ops;
+Applied to
 
-> 
-> -Serge(y)
-> 
-> >  	.irq_vector = dw_edma_pcie_irq_vector,
-> >  	.pci_address = dw_edma_pcie_address,
-> >  };
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > index 53a16b8b6ac2..44e90b71d429 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > @@ -828,7 +828,7 @@ static int dw_pcie_edma_irq_vector(struct device *dev, unsigned int nr)
-> >  	return platform_get_irq_byname_optional(pdev, name);
-> >  }
-> >  
-> > -static struct dw_edma_core_ops dw_pcie_edma_ops = {
-> > +static struct dw_edma_plat_ops dw_pcie_edma_ops = {
-> >  	.irq_vector = dw_pcie_edma_irq_vector,
-> >  };
-> >  
-> > diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-> > index d2638d9259dc..ed401c965a87 100644
-> > --- a/include/linux/dma/edma.h
-> > +++ b/include/linux/dma/edma.h
-> > @@ -40,7 +40,7 @@ struct dw_edma_region {
-> >   *			iATU windows. That will be done by the controller
-> >   *			automatically.
-> >   */
-> > -struct dw_edma_core_ops {
-> > +struct dw_edma_plat_ops {
-> >  	int (*irq_vector)(struct device *dev, unsigned int nr);
-> >  	u64 (*pci_address)(struct device *dev, phys_addr_t cpu_addr);
-> >  };
-> > @@ -80,7 +80,7 @@ enum dw_edma_chip_flags {
-> >  struct dw_edma_chip {
-> >  	struct device		*dev;
-> >  	int			nr_irqs;
-> > -	const struct dw_edma_core_ops   *ops;
-> > +	const struct dw_edma_plat_ops	*ops;
-> >  	u32			flags;
-> >  
-> >  	void __iomem		*reg_base;
-> > -- 
-> > 2.34.1
-> > 
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/4] ASoC: dt-bindings: renesas,rz-ssi: Update interrupts and interrupt-names properties
+      commit: 56a3840486ae22c42176828e25d4073712837bfd
+[2/4] ASoC: sh: rz-ssi: Update interrupt handling for half duplex channels
+      commit: 38c042b59af0248a8b13f01b1a09d890997c9f6e
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
