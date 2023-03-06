@@ -2,262 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02DC06AB678
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E716AB67A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjCFGla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 01:41:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S229736AbjCFGmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 01:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjCFGlY (ORCPT
+        with ESMTP id S229633AbjCFGmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 01:41:24 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EB61ABDE;
-        Sun,  5 Mar 2023 22:41:21 -0800 (PST)
-X-UUID: e33485aabbe911ed945fc101203acc17-20230306
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=a0B6/XL3DbH7On3ZlTeFQisMTApe4VM/2ap32sf9A48=;
-        b=NUDUWu1lc1s2nI1g+5OfwqnscJWIoOdD+UumJy49SPYBaUFrE/WVha1a2IVAl9JcQn6Wuprs+VBp1l9yHVGKHCUK0r6TmjeffYcGNet/D34sJUrOzKVXL6t/q1YOnz5IeHOPEJf5VkakDjKF2mx00bmtmXJhHMP0POJ9ECYOIZk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:b0baccf8-9cef-4984-b4b0-aa439717a90b,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.20,REQID:b0baccf8-9cef-4984-b4b0-aa439717a90b,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:25b5999,CLOUDID:fda0def4-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:2303061441156P9TF7UR,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: e33485aabbe911ed945fc101203acc17-20230306
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <jian.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2142228151; Mon, 06 Mar 2023 14:41:13 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Mon, 6 Mar 2023 14:41:11 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Mon, 6 Mar 2023 14:41:11 +0800
-From:   Jian Yang <jian.yang@mediatek.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        "Rob Herring" <robh@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <jian.yang@mediatek.com>, <chuanjia.liu@mediatek.com>,
-        <jieyy.yang@mediatek.com>, <qizhong.cheng@mediatek.com>
-Subject: [PATCH v2 2/2] PCI: mediatek-gen3: Add power and reset control feature for downstream component
-Date:   Mon, 6 Mar 2023 14:40:59 +0800
-Message-ID: <20230306064059.7239-3-jian.yang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230306064059.7239-1-jian.yang@mediatek.com>
-References: <20230306064059.7239-1-jian.yang@mediatek.com>
+        Mon, 6 Mar 2023 01:42:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4D41CF78;
+        Sun,  5 Mar 2023 22:42:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BB615B80B6B;
+        Mon,  6 Mar 2023 06:42:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02E7CC433D2;
+        Mon,  6 Mar 2023 06:42:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678084956;
+        bh=vbmXtwLQpExWUGSPmIpEouqE3pH/PZT2tUi97t12HTo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DpvK1VlfPgt5Rfmh4kY+Ho9TArL/E0CXfcQbUUlMX14YIbEF4g2/1YIFMoorB0QXz
+         ZMBoL0qIf7rEHA/ARF0csk6UXDCPFQ1CZOQSqmGg7OUwWnnI4z41nRBQYl8EDOx34J
+         TMi8WU0tx5lZL1kX1W6H8Wtfwvxg0763oHM1+4ec=
+Date:   Mon, 6 Mar 2023 07:42:33 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Vegard Nossum <vegard.nossum@oracle.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Jiri Kosina <jkosina@suse.cz>,
+        Solar Designer <solar@openwall.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        Amit Shah <aams@amazon.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Subject: Re: [PATCH v3 0/7] Documentation/security-bugs: overhaul
+Message-ID: <ZAWLWWofpqKtH3CT@kroah.com>
+References: <20230305220010.20895-1-vegard.nossum@oracle.com>
+ <ZAWB5kwcG9IpWvE/@kroah.com>
+ <ZAWJtvfnFWEjsIXd@1wt.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAWJtvfnFWEjsIXd@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "jian.yang" <jian.yang@mediatek.com>
+On Mon, Mar 06, 2023 at 07:35:34AM +0100, Willy Tarreau wrote:
+> On Mon, Mar 06, 2023 at 07:02:14AM +0100, Greg Kroah-Hartman wrote:
+> > Secondly, and the bigger one, I think we should just drop all of the
+> > references to linux-distros and oss-security entirely, as those are
+> > groups that are outside of our control and interaction and have
+> > different rules that we might not agree with.  They also just a tiny
+> > subset of Linux users and companies and as such do not really reflect
+> > the majority of where Linux is used anymore.
+> 
+> I'm wondering if instead they shouldn't just be mentioned as a warning
+> about the risk of leak or forced disclosure. We know that reporters may
+> find the address from various places, including various sites that may
+> enumerate the long list of potential contacts, and not just this doc.
+> It can be useful to have just a paragraph warning about the fact that
+> oss-sec is public and that linux-distros has this strict disclosure
+> policy without consideration for the availability of a fix, in order
+> to warn them to only contact such lists once the fix is available and
+> tested if they want to, but never before. Anything we can do to help
+> serious reporters (i.e. those who are really embarrassed with a bug,
+> not those who seek a Curiculum Vitae Enhancer) should be done. It's
+> always a stressful moment to report a security issue on a project,
+> you always fear that you might be doing an irreversible mistake, so
+> whatever info we can pass about the risks (or lack of) should be
+> welcome I guess.
 
-Make MediaTek's controller driver capable of controlling power
-supplies and reset pin of a downstream component in power-on and
-power-off flow.
+That's a good idea, if it can be worded in a way that reflects that is
+is not any sort of requirement or that it is normal part of our
+development process.
 
-Some downstream components (e.g., a WIFI chip) may need an extra
-reset other than PERST# and their power supplies, depending on
-the requirements of platform, may need to controlled by their
-parent's driver. To meet the requirements described above, I add this
-feature to MediaTek's PCIe controller driver as a optional feature.
+thanks,
 
-Signed-off-by: jian.yang <jian.yang@mediatek.com>
----
- drivers/pci/controller/pcie-mediatek-gen3.c | 86 ++++++++++++++++++++-
- 1 file changed, 85 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c b/drivers/pci/controller/pcie-mediatek-gen3.c
-index b8612ce5f4d0..45e368b03ed2 100644
---- a/drivers/pci/controller/pcie-mediatek-gen3.c
-+++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-@@ -8,6 +8,8 @@
- 
- #include <linux/clk.h>
- #include <linux/delay.h>
-+#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/iopoll.h>
- #include <linux/irq.h>
- #include <linux/irqchip/chained_irq.h>
-@@ -15,11 +17,14 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/msi.h>
-+#include <linux/of_gpio.h>
- #include <linux/pci.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
-+#include <linux/pm_wakeup.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/reset.h>
- 
- #include "../pci.h"
-@@ -100,6 +105,13 @@
- #define PCIE_ATR_TLP_TYPE_MEM		PCIE_ATR_TLP_TYPE(0)
- #define PCIE_ATR_TLP_TYPE_IO		PCIE_ATR_TLP_TYPE(2)
- 
-+/* Downstream Component power supplies used by MediaTek PCIe */
-+static const char *const dsc_power_supplies[] = {
-+	"pcie1v8",
-+	"pcie3v3",
-+	"pcie12v",
-+};
-+
- /**
-  * struct mtk_msi_set - MSI information for each set
-  * @base: IO mapped register base
-@@ -122,6 +134,9 @@ struct mtk_msi_set {
-  * @phy: PHY controller block
-  * @clks: PCIe clocks
-  * @num_clks: PCIe clocks count for this port
-+ * @supplies: Downstream Component power supplies
-+ * @num_supplies: Downstream Component power supplies count
-+ * @dsc_reset: The GPIO pin to reset Downstream component
-  * @irq: PCIe controller interrupt number
-  * @saved_irq_state: IRQ enable state saved at suspend time
-  * @irq_lock: lock protecting IRQ register access
-@@ -141,6 +156,9 @@ struct mtk_gen3_pcie {
- 	struct phy *phy;
- 	struct clk_bulk_data *clks;
- 	int num_clks;
-+	struct regulator_bulk_data *supplies;
-+	int num_supplies;
-+	struct gpio_desc *dsc_reset;
- 
- 	int irq;
- 	u32 saved_irq_state;
-@@ -763,7 +781,7 @@ static int mtk_pcie_parse_port(struct mtk_gen3_pcie *pcie)
- 	struct device *dev = pcie->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
- 	struct resource *regs;
--	int ret;
-+	int ret, i;
- 
- 	regs = platform_get_resource_byname(pdev, IORESOURCE_MEM, "pcie-mac");
- 	if (!regs)
-@@ -809,14 +827,72 @@ static int mtk_pcie_parse_port(struct mtk_gen3_pcie *pcie)
- 		return pcie->num_clks;
- 	}
- 
-+	pcie->num_supplies = ARRAY_SIZE(dsc_power_supplies);
-+	pcie->supplies = devm_kcalloc(dev, pcie->num_supplies,
-+				      sizeof(*pcie->supplies),
-+				      GFP_KERNEL);
-+	if (!pcie->supplies)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < pcie->num_supplies; i++)
-+		pcie->supplies[i].supply = dsc_power_supplies[i];
-+
-+	ret = devm_regulator_bulk_get(dev, pcie->num_supplies, pcie->supplies);
-+	if (ret)
-+		return ret;
-+
-+	pcie->dsc_reset = devm_gpiod_get_optional(dev, "dsc-reset",
-+						  GPIOD_OUT_LOW);
-+	if (IS_ERR(pcie->dsc_reset)) {
-+		ret = PTR_ERR(pcie->dsc_reset);
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(dev, "failed to request DSC reset gpio\n");
-+
-+		return ret;
-+	}
-+
- 	return 0;
- }
- 
-+static int mtk_pcie_dsc_power_up(struct mtk_gen3_pcie *pcie)
-+{
-+	struct device *dev = pcie->dev;
-+	int ret;
-+
-+	/* Assert Downstream Component reset */
-+	if (pcie->dsc_reset)
-+		gpiod_set_value_cansleep(pcie->dsc_reset, 1);
-+
-+	ret = regulator_bulk_enable(pcie->num_supplies, pcie->supplies);
-+	if (ret)
-+		dev_err(dev, "failed to enable DSC power supplies: %d\n", ret);
-+
-+	/* De-assert Downstream Component reset */
-+	if (pcie->dsc_reset)
-+		gpiod_set_value_cansleep(pcie->dsc_reset, 0);
-+
-+	return ret;
-+}
-+
-+static void mtk_pcie_dsc_power_down(struct mtk_gen3_pcie *pcie)
-+{
-+	/* Assert Downstream Component reset */
-+	if (pcie->dsc_reset)
-+		gpiod_set_value_cansleep(pcie->dsc_reset, 1);
-+
-+	regulator_bulk_disable(pcie->num_supplies, pcie->supplies);
-+}
-+
- static int mtk_pcie_power_up(struct mtk_gen3_pcie *pcie)
- {
- 	struct device *dev = pcie->dev;
- 	int err;
- 
-+	/* Downstream Component power up before RC */
-+	err = mtk_pcie_dsc_power_up(pcie);
-+	if (err)
-+		return err;
-+
- 	/* PHY power on and enable pipe clock */
- 	reset_control_deassert(pcie->phy_reset);
- 
-@@ -855,6 +931,7 @@ static int mtk_pcie_power_up(struct mtk_gen3_pcie *pcie)
- 	phy_exit(pcie->phy);
- err_phy_init:
- 	reset_control_assert(pcie->phy_reset);
-+	mtk_pcie_dsc_power_down(pcie);
- 
- 	return err;
- }
-@@ -870,6 +947,13 @@ static void mtk_pcie_power_down(struct mtk_gen3_pcie *pcie)
- 	phy_power_off(pcie->phy);
- 	phy_exit(pcie->phy);
- 	reset_control_assert(pcie->phy_reset);
-+
-+	/*
-+	 * Keep downstream component powered on if it might need to wake up the
-+	 * system in suspend state
-+	 */
-+	if (!pcie->dev->power.is_suspended || !device_wakeup_path(pcie->dev))
-+		mtk_pcie_dsc_power_down(pcie);
- }
- 
- static int mtk_pcie_setup(struct mtk_gen3_pcie *pcie)
--- 
-2.18.0
-
+greg k-h
