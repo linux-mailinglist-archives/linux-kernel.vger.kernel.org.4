@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B6796ACBD6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C1D6ACBBF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjCFSCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
+        id S230510AbjCFR7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbjCFSCh (ORCPT
+        with ESMTP id S231200AbjCFR7C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:02:37 -0500
-Received: from mail-io1-xd45.google.com (mail-io1-xd45.google.com [IPv6:2607:f8b0:4864:20::d45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A776E686
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:02:10 -0800 (PST)
-Received: by mail-io1-xd45.google.com with SMTP id d25-20020a0566022bf900b00745469852cfso5651115ioy.19
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 10:02:10 -0800 (PST)
+        Mon, 6 Mar 2023 12:59:02 -0500
+Received: from mail-il1-x147.google.com (mail-il1-x147.google.com [IPv6:2607:f8b0:4864:20::147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E11B6BDE8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:58:27 -0800 (PST)
+Received: by mail-il1-x147.google.com with SMTP id z8-20020a92cd08000000b00317b27a795aso5660142iln.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 09:58:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678125404;
+        d=1e100.net; s=20210112; t=1678125405;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=xpXeWn+ld/QoRYa6dboRl0RpYBuFcgqvSJPJnISHoDQ=;
-        b=B8dvPtrd2H+37V//sNcl3fQy2AAWZ1df00ikOgbPkIr6AYPYm7lmf1qxPtdYjjgARC
-         1jg8meLfxa5GFw7YcQMV1j7D5KTTN/7ilnoxUQnoaNXluf6bRu2uNBxa939FJKIEHxcE
-         caepcBWI4je4xG0w38G+ndS936yf4xtfxl6Nazp+zYodxOZvCWeeYxNhQyvv1+IMNxbE
-         HCQy1/LhLshVbpBH1TP3L8jC2t71jbPml2IFS4dEgkxfh3O4fAVD/f+Fxwz9yKCMIjUE
-         EDImi31RMy/L5ULMrHhNjLbIub/jw9/HNCVs53SjpAjeR5GDdW+IbvP3ZZEL7baHmu1m
-         QPLA==
-X-Gm-Message-State: AO0yUKVR8GkJ0Is5Canw1rWC1hm0tGJcSkpCgddkB7Fop6SfsRhtKkWY
-        ttnv0KwPvNERFiVMyTwtS5hvslsYYHO454F4NyfVt90zciBY
-X-Google-Smtp-Source: AK7set8vBerzS4513rHfr/KAGU/J5MHnpDKCUEBSnoM1kK8r1zMTjhA2CY+QPO1mQZiE3SCrv3zk82UWAIGMPkYIWwn8u9IL0dXJ
+        bh=tK9ZXC6YfZH4j9qfqbaIVRSqmEgs/PeD52exQAy10PA=;
+        b=MHVIHR5x04s6zcKJRVT0fPzp8nTPwUuSwHtQ5Eha2IN7rqScbsKBOfLbE1x41F7i1S
+         43zID+fF68QnkpF+nFT1erHbPdpXEczpAYYulSJmlae3PCvr3FYwwbMD3Q/JMLhOpwiD
+         hJwwUK3RJFe8d7PMPItjRrNMaO8GlUQpAagh4PL0Qwl5BmVKnoWllJZt5/sO550Ay1lI
+         bAxy/OqtpqxwnW/su/iPv3byN+KJix3KASw9KvsKyDbNQn9qF2PAhGft0h5bhxLqSa9S
+         a3NL1PBK8II0pOVCK026ZMO4aP/UiNsTm2GJ4PNgNVimEdtV6xNdLEO3c99tTn5+piAy
+         bM7w==
+X-Gm-Message-State: AO0yUKV6YdZ8i/KY1yBoJH7JV6PbQMDMEj0v2Br+H4dAV+dLSp6XJDZI
+        4G+jZbQguZmN1RysjYhjwVK2q+LzOUjHLNQc+CPmOtXC5OOG
+X-Google-Smtp-Source: AK7set/nYocyn99uYw4qf7ESqyd6k8CfSeNtM+qG6Atp4m9fkBoQ/6k7ClZzYpGooR74eEgHPOMJedA2zaz9yZF3AYQVHTUO7q3J
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:13f3:b0:310:d348:e59b with SMTP id
- w19-20020a056e0213f300b00310d348e59bmr5881132ilj.4.1678125404672; Mon, 06 Mar
+X-Received: by 2002:a5e:d60c:0:b0:74d:13bc:e9e6 with SMTP id
+ w12-20020a5ed60c000000b0074d13bce9e6mr5672924iom.3.1678125404894; Mon, 06 Mar
  2023 09:56:44 -0800 (PST)
 Date:   Mon, 06 Mar 2023 09:56:44 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a25ab205f63f0461@google.com>
-Subject: [syzbot] [btrfs?] KMSAN: uninit-value in extent_fiemap
-From:   syzbot <syzbot+8d245945ddc97769435f@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, glider@google.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+Message-ID: <000000000000a5bd2d05f63f04ae@google.com>
+Subject: [syzbot] [nilfs?] KMSAN: kernel-infoleak in nilfs_ioctl_wrap_copy
+From:   syzbot <syzbot+132fdd2f1e1805fdc591@syzkaller.appspotmail.com>
+To:     glider@google.com, konishi.ryusuke@gmail.com,
         linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+        linux-nilfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,81 +58,66 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    49a9a20768f5 kmsan: allow using __msan_instrument_asm_stor..
+HEAD commit:    97e36f4aa06f Revert "sched/core: kmsan: do not instrument ..
 git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=1597ff87880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d901b2d28729cb6a
-dashboard link: https://syzkaller.appspot.com/bug?extid=8d245945ddc97769435f
-compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+console output: https://syzkaller.appspot.com/x/log.txt?x=106829a8c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=46c642641b9ef616
+dashboard link: https://syzkaller.appspot.com/bug?extid=132fdd2f1e1805fdc591
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 userspace arch: i386
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/4a944f9f50fb/disk-49a9a207.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/a2ec5594e201/vmlinux-49a9a207.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3aafc1a9ba37/bzImage-49a9a207.xz
+disk image: https://storage.googleapis.com/syzbot-assets/9931a9627dc6/disk-97e36f4a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1aafdb2fd6dc/vmlinux-97e36f4a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/90df5872c7ff/bzImage-97e36f4a.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8d245945ddc97769435f@syzkaller.appspotmail.com
+Reported-by: syzbot+132fdd2f1e1805fdc591@syzkaller.appspotmail.com
 
-BTRFS info (device loop0): using xxhash64 (xxhash64-generic) checksum algorithm
-BTRFS info (device loop0): using free space tree
-BTRFS info (device loop0): enabling ssd optimizations
 =====================================================
-BUG: KMSAN: uninit-value in extent_fiemap+0x2ece/0x6040 fs/btrfs/extent_io.c:3966
- extent_fiemap+0x2ece/0x6040 fs/btrfs/extent_io.c:3966
- btrfs_fiemap+0x20c/0x260 fs/btrfs/inode.c:8126
- ioctl_fiemap fs/ioctl.c:219 [inline]
- do_vfs_ioctl+0x2daa/0x3c20 fs/ioctl.c:810
- __do_compat_sys_ioctl fs/ioctl.c:962 [inline]
- __se_compat_sys_ioctl+0x68c/0xfa0 fs/ioctl.c:910
- __ia32_compat_sys_ioctl+0x8f/0xd0 fs/ioctl.c:910
+BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:121 [inline]
+BUG: KMSAN: kernel-infoleak in _copy_to_user+0xc0/0x100 lib/usercopy.c:33
+ instrument_copy_to_user include/linux/instrumented.h:121 [inline]
+ _copy_to_user+0xc0/0x100 lib/usercopy.c:33
+ copy_to_user include/linux/uaccess.h:169 [inline]
+ nilfs_ioctl_wrap_copy+0x6fa/0xc10 fs/nilfs2/ioctl.c:99
+ nilfs_ioctl_get_info fs/nilfs2/ioctl.c:1173 [inline]
+ nilfs_ioctl+0x2402/0x4450 fs/nilfs2/ioctl.c:1290
+ nilfs_compat_ioctl+0x1b8/0x200 fs/nilfs2/ioctl.c:1343
+ __do_compat_sys_ioctl fs/ioctl.c:968 [inline]
+ __se_compat_sys_ioctl+0x7dd/0x1000 fs/ioctl.c:910
+ __ia32_compat_sys_ioctl+0x93/0xd0 fs/ioctl.c:910
  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-Uninit was stored to memory at:
- read_extent_buffer fs/btrfs/extent_io.c:5185 [inline]
- btrfs_item_key fs/btrfs/ctree.h:2201 [inline]
- btrfs_item_key_to_cpu fs/btrfs/ctree.h:2306 [inline]
- extent_fiemap+0x2092/0x6040 fs/btrfs/extent_io.c:3965
- btrfs_fiemap+0x20c/0x260 fs/btrfs/inode.c:8126
- ioctl_fiemap fs/ioctl.c:219 [inline]
- do_vfs_ioctl+0x2daa/0x3c20 fs/ioctl.c:810
- __do_compat_sys_ioctl fs/ioctl.c:962 [inline]
- __se_compat_sys_ioctl+0x68c/0xfa0 fs/ioctl.c:910
- __ia32_compat_sys_ioctl+0x8f/0xd0 fs/ioctl.c:910
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
  entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
 Uninit was created at:
- __alloc_pages+0x9f1/0xe80 mm/page_alloc.c:5581
- __alloc_pages_bulk+0x1a99/0x2690 mm/page_alloc.c:5506
- alloc_pages_bulk_array include/linux/gfp.h:201 [inline]
- btrfs_alloc_page_array fs/btrfs/extent_io.c:1317 [inline]
- btrfs_clone_extent_buffer+0x48d/0x1230 fs/btrfs/extent_io.c:4303
- fiemap_search_slot fs/btrfs/extent_io.c:3688 [inline]
- extent_fiemap+0x1cf4/0x6040 fs/btrfs/extent_io.c:3940
- btrfs_fiemap+0x20c/0x260 fs/btrfs/inode.c:8126
- ioctl_fiemap fs/ioctl.c:219 [inline]
- do_vfs_ioctl+0x2daa/0x3c20 fs/ioctl.c:810
- __do_compat_sys_ioctl fs/ioctl.c:962 [inline]
- __se_compat_sys_ioctl+0x68c/0xfa0 fs/ioctl.c:910
- __ia32_compat_sys_ioctl+0x8f/0xd0 fs/ioctl.c:910
+ __alloc_pages+0x9f6/0xe90 mm/page_alloc.c:5572
+ alloc_pages+0xab0/0xd80 mm/mempolicy.c:2287
+ __get_free_pages+0x34/0xc0 mm/page_alloc.c:5599
+ nilfs_ioctl_wrap_copy+0x223/0xc10 fs/nilfs2/ioctl.c:74
+ nilfs_ioctl_get_info fs/nilfs2/ioctl.c:1173 [inline]
+ nilfs_ioctl+0x2402/0x4450 fs/nilfs2/ioctl.c:1290
+ nilfs_compat_ioctl+0x1b8/0x200 fs/nilfs2/ioctl.c:1343
+ __do_compat_sys_ioctl fs/ioctl.c:968 [inline]
+ __se_compat_sys_ioctl+0x7dd/0x1000 fs/ioctl.c:910
+ __ia32_compat_sys_ioctl+0x93/0xd0 fs/ioctl.c:910
  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
  __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
  entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-CPU: 0 PID: 6991 Comm: syz-executor.0 Not tainted 6.1.0-rc7-syzkaller-63931-g49a9a20768f5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Bytes 16-127 of 3968 are uninitialized
+Memory access of size 3968 starts at ffff888014534000
+Data copied to user address 000000002000002f
+
+CPU: 0 PID: 18968 Comm: syz-executor.0 Not tainted 6.2.0-syzkaller-81152-g97e36f4aa06f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
 =====================================================
 
 
