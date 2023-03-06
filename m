@@ -2,686 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D176AB858
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCD16AB85A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCFIb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S229969AbjCFIc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:32:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjCFIbr (ORCPT
+        with ESMTP id S229988AbjCFIcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:31:47 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACECC21287
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:31:42 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso7617012wmb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:31:42 -0800 (PST)
+        Mon, 6 Mar 2023 03:32:21 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7169212AA;
+        Mon,  6 Mar 2023 00:31:59 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id i34so35072927eda.7;
+        Mon, 06 Mar 2023 00:31:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678091501;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T9paQOaq2eEB2qjbuVIt0wzXMqlxj1jY9L16aa86PI8=;
-        b=ggrN4NuyTni6QREDuDxe2nkm4a6ejQJSi/MPpl6QrJQf3DTcF8wcVCC7sTPkiEpFDd
-         fBYazb+nSjZYDS947j9Hx3UaGMb7IQspJt2C8VcnWoBNaLEWe2aBrdi9qjtaK/slc+QD
-         NymJpbPGpO9FEU+m8w3FhkvJv/EvadT7Y4z8BKojrhHp2xKVuIJ+dapy4Mqrcxp1mn84
-         nyerxSY8MkF+AJDNPnV2KUOmHCX89LBnapEUH8jMNbWHDkf6DFdGJGBizN0zI9cIWFWO
-         TBQ6O1birQAfDzA861mVAZWwLj/3ThgPzcyLoSll22y80eCA8D465wZ85tsVunKSPVSm
-         U+AA==
+        d=gmail.com; s=20210112; t=1678091518;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=l9LP7bOG1M0J7nDrxY/rPNDyeXRjQxGxyQ2mWu+wlb0=;
+        b=R79rh8cvsq/BotA7SR/qy1NbOqU5r5GPQiW9SsnU0rQ2gmdV07G9BqGwwW+lNsFcMS
+         5Agkz/rdka2zcFhFAgcOS9zvd3oL6hD621/IWVbha+M+vCVSylYzQXDgg+5uy/uuRcB+
+         Gc07ZSXHdIUIYT0Yp9XaYCVb5LpKJsDutCcY0DDl5SOCSsG8VkRpsmkVUdesvHnKoavl
+         YNVQcpYREsUPzQIpfFpeMmV4gmVn5blMdzWFHSqxWKEGiRxpjC7luLHPTWJF4AtYrv4a
+         ybrcX2AUWPLTueL1pg9e2k7egNucZJj2JDR40vCrCrW67WhBfBU4i85A69FsZv7X/wko
+         ldgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678091501;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T9paQOaq2eEB2qjbuVIt0wzXMqlxj1jY9L16aa86PI8=;
-        b=E1f6NjyhaPIrBspixZE7R1oecxDITYtV9enQ8OExgRzzlEMw6K/JU+/OpGzlO1XlIv
-         CnJ8ik3IKG9ztuBAq88TnzEJFOBudeeLpBVYIqGiGkW1pZW86j9UMQ53C+m/b+xVXEjv
-         KxAIako7tB7QPJ7CzjLx9N4eY7BNCTtouXU8yA1HlNtYYiJnH25hlQs/VPVGRKqkg61Y
-         fEvSrEWAeFpZ3+aOui8mzNnEntQEk9uroHKqTYlpIjojoU0B5VObgJgTwD9ucoVyyqR8
-         Bn7n8k8jiY2WOgX4miEhgNI+nZYOx+J2Hwvq5WHBi71wwX5/GzlrUs0seH6cfBCP5C0B
-         u6Ow==
-X-Gm-Message-State: AO0yUKUHJoPnRFk0u/o6St51835CKoKaLCVEoWJ3J+wdmRN9ofYN72/G
-        dDEGSaVYOyKZ3cKLAhrq0QJJKw==
-X-Google-Smtp-Source: AK7set8n4mM9eJH7Un6l4s9q+A2Zc+Dlp9pyCgMQeL9DgW+UE/Bxb9n5SUIAuQS2OMaLK+djQEAb8g==
-X-Received: by 2002:a05:600c:5126:b0:3ea:f6c4:3060 with SMTP id o38-20020a05600c512600b003eaf6c43060mr8361298wms.18.1678091501100;
-        Mon, 06 Mar 2023 00:31:41 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id he11-20020a05600c540b00b003daf7721bb3sm13529724wmb.12.2023.03.06.00.31.40
+        d=1e100.net; s=20210112; t=1678091518;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l9LP7bOG1M0J7nDrxY/rPNDyeXRjQxGxyQ2mWu+wlb0=;
+        b=e+i5+5PVrogiEPggcqiJ5zJkqDib357Jpu0TKwOib9ZeLbZtB502f7Vsa7b6Rpzpm+
+         hSQ4T53HsIBSb/eldqVK+9gmG4gcyOvnjD9tydn19zR0Cwvlr3zHBIXxh/TnwIBP4/lp
+         9wENGyzjUsRSZqiD+xNiwSBIhXhDIcV1n1r/4IKmsKFIWPZ+aMlMir77lCPd91HPcWUS
+         ddnM6C0vfy70Ckwcv9kH4icLIGJc7/d1wuzjHjKpz/OUVhcwaJKesnHAbgrQkvFFMdp/
+         KbC8uGjG0hsFDzOLurbzHYU+p2TUL665G4s23xYHz/cxbB66Mexf+GEgiwPWdZArgbtM
+         5raQ==
+X-Gm-Message-State: AO0yUKVY/qh12yhq+CVhfPy3XKpSP3wePbEGgL+yUJMlHZRpFzjbKTtX
+        YfJJhBxOXVEurStt1ZvzhZA=
+X-Google-Smtp-Source: AK7set9qotnlsbz5yc0qVnc49U4ouzoOZ0iySrvzB7SZ0KUHh9LNdwGGMFF3oYw8OnyX4EhVRmfwoA==
+X-Received: by 2002:a17:907:1c15:b0:8af:2fa1:2226 with SMTP id nc21-20020a1709071c1500b008af2fa12226mr12771669ejc.6.1678091518019;
+        Mon, 06 Mar 2023 00:31:58 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id gq15-20020a170906e24f00b008b17b123a47sm4205223ejb.208.2023.03.06.00.31.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 00:31:40 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 06 Mar 2023 09:31:39 +0100
-Subject: [PATCH v2 2/2] arm64: dts: amlogic: Add initial support for
- BPI-CM4 module with BPI-CM4IO baseboard
+        Mon, 06 Mar 2023 00:31:57 -0800 (PST)
+Date:   Mon, 6 Mar 2023 11:31:52 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     oe-kbuild@lists.linux.dev,
+        William Breathitt Gray <william.gray@linaro.org>,
+        linus.walleij@linaro.org, brgl@bgdev.pl
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        broonie@kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnaud de Turckheim <quarium@gmail.com>,
+        John Hentges <jhentges@accesio.com>,
+        Jay Dolan <jay.dolan@accesio.com>
+Subject: Re: [PATCH v3 2/3] gpio: pcie-idio-24: Migrate to the regmap API
+Message-ID: <179ed443-a67b-4633-b62c-a4dda0f0f088@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230303-topic-amlogic-upstream-bpi-cm4-v2-2-2ecfde76fc4d@linaro.org>
-References: <20230303-topic-amlogic-upstream-bpi-cm4-v2-0-2ecfde76fc4d@linaro.org>
-In-Reply-To: <20230303-topic-amlogic-upstream-bpi-cm4-v2-0-2ecfde76fc4d@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Christian Hewitt <christianshewitt@gmail.com>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <278e328cd1689a4e331e7515050c12c29f2a4785.1678034378.git.william.gray@linaro.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for both the BananaPi BPI-CM4 module and the BananaPi
-baseboard which is comnpatible with the RaspberryPi CM4IO baseboard.
+Hi William,
 
-The BananaPi BPI-CM4 module follows the CM4 specifications at [1],
-but with a single HDMI port and a since DSI output.
+url:    https://github.com/intel-lab-lkp/linux/commits/William-Breathitt-Gray/regmap-Pass-irq_drv_data-as-a-parameter-for-set_type_config/20230306-010313
+base:   4827aae061337251bb91801b316157a78b845ec7
+patch link:    https://lore.kernel.org/r/278e328cd1689a4e331e7515050c12c29f2a4785.1678034378.git.william.gray%40linaro.org
+patch subject: [PATCH v3 2/3] gpio: pcie-idio-24: Migrate to the regmap API
+config: loongarch-randconfig-m041-20230305 (https://download.01.org/0day-ci/archive/20230306/202303060606.ooBzB3pr-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
 
-The current CM4IO baseboard DT should work fine on the Raspberry CM4
-baseboard and other derivatives baseboards, but proper DT should
-be written for other baseboards.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202303060606.ooBzB3pr-lkp@intel.com/
 
-The split is done so it's easy to describe a new CM4 baseboard, enabling
-only the necessary HW used on the baseboard.
+smatch warnings:
+drivers/gpio/gpio-pcie-idio-24.c:365 idio_24_probe() error: potentially dereferencing uninitialized 'idio24gpio'.
 
-[1] https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
+vim +/idio24gpio +365 drivers/gpio/gpio-pcie-idio-24.c
 
-Tested-by: Christian Hewitt <christianshewitt@gmail.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/amlogic/Makefile               |   1 +
- .../dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts  | 165 +++++++++
- .../boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi  | 388 +++++++++++++++++++++
- 3 files changed, 554 insertions(+)
+58556204662812 William Breathitt Gray 2018-01-09  330  static int idio_24_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+58556204662812 William Breathitt Gray 2018-01-09  331  {
+58556204662812 William Breathitt Gray 2018-01-09  332  	struct device *const dev = &pdev->dev;
+58556204662812 William Breathitt Gray 2018-01-09  333  	struct idio_24_gpio *idio24gpio;
+58556204662812 William Breathitt Gray 2018-01-09  334  	int err;
+10a2f11d3c9e48 Arnaud de Turckheim    2020-11-04  335  	const size_t pci_plx_bar_index = 1;
+58556204662812 William Breathitt Gray 2018-01-09  336  	const size_t pci_bar_index = 2;
+58556204662812 William Breathitt Gray 2018-01-09  337  	const char *const name = pci_name(pdev);
+e60d5c32ff098c William Breathitt Gray 2023-03-05  338  	struct gpio_regmap_config gpio_config = {};
+e60d5c32ff098c William Breathitt Gray 2023-03-05  339  	void __iomem *pex8311_intcsr;
+e60d5c32ff098c William Breathitt Gray 2023-03-05  340  	void __iomem *idio_24_regs;
+e60d5c32ff098c William Breathitt Gray 2023-03-05  341  	struct regmap *pex8311_intcsr_map;
+e60d5c32ff098c William Breathitt Gray 2023-03-05  342  	struct regmap_irq_chip *chip;
+e60d5c32ff098c William Breathitt Gray 2023-03-05  343  	struct regmap_irq_chip_data *chip_data;
+58556204662812 William Breathitt Gray 2018-01-09  344  
+58556204662812 William Breathitt Gray 2018-01-09  345  	err = pcim_enable_device(pdev);
+58556204662812 William Breathitt Gray 2018-01-09  346  	if (err) {
+58556204662812 William Breathitt Gray 2018-01-09  347  		dev_err(dev, "Failed to enable PCI device (%d)\n", err);
+58556204662812 William Breathitt Gray 2018-01-09  348  		return err;
+58556204662812 William Breathitt Gray 2018-01-09  349  	}
+58556204662812 William Breathitt Gray 2018-01-09  350  
+10a2f11d3c9e48 Arnaud de Turckheim    2020-11-04  351  	err = pcim_iomap_regions(pdev, BIT(pci_plx_bar_index) | BIT(pci_bar_index), name);
+58556204662812 William Breathitt Gray 2018-01-09  352  	if (err) {
+58556204662812 William Breathitt Gray 2018-01-09  353  		dev_err(dev, "Unable to map PCI I/O addresses (%d)\n", err);
+58556204662812 William Breathitt Gray 2018-01-09  354  		return err;
+58556204662812 William Breathitt Gray 2018-01-09  355  	}
+58556204662812 William Breathitt Gray 2018-01-09  356  
+e60d5c32ff098c William Breathitt Gray 2023-03-05  357  	pex8311_intcsr = pcim_iomap_table(pdev)[pci_plx_bar_index] + PLX_PEX8311_PCI_LCS_INTCSR;
+e60d5c32ff098c William Breathitt Gray 2023-03-05  358  	idio_24_regs = pcim_iomap_table(pdev)[pci_bar_index];
+e60d5c32ff098c William Breathitt Gray 2023-03-05  359  
+e60d5c32ff098c William Breathitt Gray 2023-03-05  360  	pex8311_intcsr_map = devm_regmap_init_mmio(dev, pex8311_intcsr,
+e60d5c32ff098c William Breathitt Gray 2023-03-05  361  						   &pex8311_intcsr_regmap_config);
+e60d5c32ff098c William Breathitt Gray 2023-03-05  362  	if (IS_ERR(pex8311_intcsr_map))
+e60d5c32ff098c William Breathitt Gray 2023-03-05  363  		return dev_err_probe(dev, PTR_ERR(pex8311_intcsr_map),
+e60d5c32ff098c William Breathitt Gray 2023-03-05  364  				     "Unable to initialize PEX8311 register map\n");
+e60d5c32ff098c William Breathitt Gray 2023-03-05 @365  	idio24gpio->map = devm_regmap_init_mmio(dev, idio_24_regs,
+e60d5c32ff098c William Breathitt Gray 2023-03-05  366  					    &idio_24_regmap_config);
 
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index ccf1ba57fa87..7acce22434a8 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -9,6 +9,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12a-sei510.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-u200.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12a-x96-max.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-khadas-vim3.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-bananapi-cm4-cm4io.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gsking-x.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking.dtb
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts
-new file mode 100644
-index 000000000000..1b0c3881c6a1
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4-cm4io.dts
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
-+ */
-+
-+/dts-v1/;
-+
-+#include "meson-g12b-bananapi-cm4.dtsi"
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-+
-+/ {
-+	compatible = "bananapi,bpi-cm4io", "bananapi,bpi-cm4", "amlogic,a311d", "amlogic,g12b";
-+	model = "BananaPi BPI-CM4IO Baseboard with BPI-CM4 Module";
-+
-+	aliases {
-+		ethernet0 = &ethmac;
-+		i2c0 = &i2c1;
-+		i2c1 = &i2c3;
-+	};
-+
-+	adc-keys {
-+		compatible = "adc-keys";
-+		io-channels = <&saradc 2>;
-+		io-channel-names = "buttons";
-+		keyup-threshold-microvolt = <1710000>;
-+
-+		button-function {
-+			label = "Function";
-+			linux,code = <KEY_FN>;
-+			press-threshold-microvolt = <10000>;
-+		};
-+	};
-+
-+	hdmi_connector: hdmi-connector {
-+		compatible = "hdmi-connector";
-+		type = "a";
-+
-+		port {
-+			hdmi_connector_in: endpoint {
-+				remote-endpoint = <&hdmi_tx_tmds_out>;
-+			};
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-blue {
-+			color = <LED_COLOR_ID_BLUE>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&gpio_ao GPIOAO_7 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		led-green {
-+			color = <LED_COLOR_ID_GREEN>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_HIGH>;
-+		};
-+	};
-+
-+	sound {
-+		compatible = "amlogic,axg-sound-card";
-+		model = "BPI-CM4IO";
-+		audio-aux-devs = <&tdmout_b>;
-+		audio-routing =	"TDMOUT_B IN 0", "FRDDR_A OUT 1",
-+				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
-+				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
-+				"TDM_B Playback", "TDMOUT_B OUT";
-+
-+		assigned-clocks = <&clkc CLKID_MPLL2>,
-+				  <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
-+
-+		dai-link-0 {
-+			sound-dai = <&frddr_a>;
-+		};
-+
-+		dai-link-1 {
-+			sound-dai = <&frddr_b>;
-+		};
-+
-+		dai-link-2 {
-+			sound-dai = <&frddr_c>;
-+		};
-+
-+		/* 8ch hdmi interface */
-+		dai-link-3 {
-+			sound-dai = <&tdmif_b>;
-+			dai-format = "i2s";
-+			dai-tdm-slot-tx-mask-0 = <1 1>;
-+			dai-tdm-slot-tx-mask-1 = <1 1>;
-+			dai-tdm-slot-tx-mask-2 = <1 1>;
-+			dai-tdm-slot-tx-mask-3 = <1 1>;
-+			mclk-fs = <256>;
-+
-+			codec {
-+				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
-+			};
-+		};
-+
-+		/* hdmi glue */
-+		dai-link-4 {
-+			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
-+
-+			codec {
-+				sound-dai = <&hdmi_tx>;
-+			};
-+		};
-+	};
-+};
-+
-+&cecb_AO {
-+	status = "okay";
-+};
-+
-+&ethmac {
-+	status = "okay";
-+};
-+
-+&hdmi_tx {
-+	status = "okay";
-+};
-+
-+&hdmi_tx_tmds_port {
-+	hdmi_tx_tmds_out: endpoint {
-+		remote-endpoint = <&hdmi_connector_in>;
-+	};
-+};
-+
-+/* CSI port */
-+&i2c1 {
-+	status = "okay";
-+};
-+
-+/* DSI port for touchscreen */
-+&i2c3 {
-+	status = "okay";
-+};
-+
-+/* miniPCIe port with USB + SIM slot */
-+&pcie {
-+	status = "okay";
-+};
-+
-+&sd_emmc_b {
-+	status = "okay";
-+};
-+
-+&tohdmitx {
-+	status = "okay";
-+};
-+
-+/* Peripheral Only USB-C port */
-+&usb {
-+	dr_mode = "peripheral";
-+
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
-new file mode 100644
-index 000000000000..97e522921b06
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
-@@ -0,0 +1,388 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2023 Neil Armstrong <neil.armstrong@linaro.org>
-+ */
-+
-+#include "meson-g12b-a311d.dtsi"
-+#include <dt-bindings/gpio/meson-g12a-gpio.h>
-+
-+/ {
-+	aliases {
-+		serial0 = &uart_AO;
-+		rtc1 = &vrtc;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	emmc_pwrseq: emmc-pwrseq {
-+		compatible = "mmc-pwrseq-emmc";
-+		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x40000000>;
-+	};
-+
-+	sdio_pwrseq: sdio-pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		reset-gpios = <&gpio GPIOAO_6 GPIO_ACTIVE_LOW>;
-+		clocks = <&wifi32k>;
-+		clock-names = "ext_clock";
-+	};
-+
-+	emmc_1v8: regulator-emmc-1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "EMMC_1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vddao_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	dc_in: regulator-dc-in {
-+		compatible = "regulator-fixed";
-+		regulator-name = "DC_IN";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+	};
-+
-+	vddio_c: regulator-vddio-c {
-+		compatible = "regulator-gpio";
-+		regulator-name = "VDDIO_C";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+
-+		enable-gpio = <&gpio_ao GPIOAO_3 GPIO_OPEN_DRAIN>;
-+		enable-active-high;
-+		regulator-always-on;
-+
-+		gpios = <&gpio_ao GPIOAO_9 GPIO_OPEN_DRAIN>;
-+		gpios-states = <1>;
-+
-+		states = <1800000 0>,
-+			 <3300000 1>;
-+	};
-+
-+	vddao_1v8: regulator-vddao-1v8 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDDAO_1V8";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		vin-supply = <&vddao_3v3>;
-+		regulator-always-on;
-+	};
-+
-+	vddao_3v3: regulator-vddao-3v3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDDAO_3V3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		vin-supply = <&dc_in>;
-+		regulator-always-on;
-+	};
-+
-+	vddcpu_a: regulator-vddcpu-a {
-+		/*
-+		 * MP8756GD DC/DC Regulator.
-+		 */
-+		compatible = "pwm-regulator";
-+
-+		regulator-name = "VDDCPU_A";
-+		regulator-min-microvolt = <680000>;
-+		regulator-max-microvolt = <1040000>;
-+
-+		pwm-supply = <&dc_in>;
-+
-+		pwms = <&pwm_ab 0 1250 0>;
-+		pwm-dutycycle-range = <100 0>;
-+
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	vddcpu_b: regulator-vddcpu-b {
-+		/*
-+		 * SY8120B1ABC DC/DC Regulator.
-+		 */
-+		compatible = "pwm-regulator";
-+
-+		regulator-name = "VDDCPU_B";
-+		regulator-min-microvolt = <680000>;
-+		regulator-max-microvolt = <1040000>;
-+
-+		pwm-supply = <&dc_in>;
-+
-+		pwms = <&pwm_AO_cd 1 1250 0>;
-+		pwm-dutycycle-range = <100 0>;
-+
-+		regulator-boot-on;
-+		regulator-always-on;
-+	};
-+
-+	wifi32k: wifi32k {
-+		compatible = "pwm-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		pwms = <&pwm_ef 0 30518 0>; /* PWM_E at 32.768KHz */
-+	};
-+};
-+
-+&arb {
-+	status = "okay";
-+};
-+
-+&clkc_audio {
-+	status = "okay";
-+};
-+
-+&cec_AO {
-+	pinctrl-0 = <&cec_ao_a_h_pins>;
-+	pinctrl-names = "default";
-+	hdmi-phandle = <&hdmi_tx>;
-+};
-+
-+&cecb_AO {
-+	pinctrl-0 = <&cec_ao_b_h_pins>;
-+	pinctrl-names = "default";
-+	hdmi-phandle = <&hdmi_tx>;
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu1 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu100 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu101 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu102 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu103 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&ext_mdio {
-+	external_phy: ethernet-phy@0 {
-+		/* Realtek RTL8211F (0x001cc916) */
-+		reg = <0>;
-+		max-speed = <1000>;
-+
-+		interrupt-parent = <&gpio_intc>;
-+		/* MAC_INTR on GPIOZ_14 */
-+		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-+	};
-+};
-+
-+/* Ethernet to be enabled in baseboard DT */
-+&ethmac {
-+	pinctrl-0 = <&eth_pins>, <&eth_rgmii_pins>;
-+	pinctrl-names = "default";
-+	phy-mode = "rgmii-txid";
-+	phy-handle = <&external_phy>;
-+};
-+
-+&frddr_a {
-+	status = "okay";
-+};
-+
-+&frddr_b {
-+	status = "okay";
-+};
-+
-+&frddr_c {
-+	status = "okay";
-+};
-+
-+/* HDMI to be enabled in baseboard DT */
-+&hdmi_tx {
-+	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
-+	pinctrl-names = "default";
-+	hdmi-supply = <&dc_in>;
-+};
-+
-+/* "Camera" I2C bus */
-+&i2c1 {
-+	pinctrl-0 = <&i2c1_sda_h6_pins>, <&i2c1_sck_h7_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+/* Main I2C bus */
-+&i2c2 {
-+	pinctrl-0 = <&i2c2_sda_x_pins>, <&i2c2_sck_x_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+/* "ID" I2C bus */
-+&i2c3 {
-+	pinctrl-0 = <&i2c3_sda_a_pins>, <&i2c3_sck_a_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&pcie {
-+	reset-gpios = <&gpio GPIOA_8 GPIO_ACTIVE_LOW>;
-+};
-+
-+&pwm_ab {
-+	pinctrl-0 = <&pwm_a_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin0";
-+
-+	status = "okay";
-+};
-+
-+&pwm_ef {
-+	pinctrl-0 = <&pwm_e_pins>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
-+&pwm_AO_cd {
-+	pinctrl-0 = <&pwm_ao_d_e_pins>;
-+	pinctrl-names = "default";
-+	clocks = <&xtal>;
-+	clock-names = "clkin1";
-+
-+	status = "okay";
-+};
-+
-+&saradc {
-+	vref-supply = <&vddao_1v8>;
-+
-+	status = "okay";
-+};
-+
-+/* on-module SDIO WiFi */
-+&sd_emmc_a {
-+	pinctrl-0 = <&sdio_pins>;
-+	pinctrl-1 = <&sdio_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	bus-width = <4>;
-+	sd-uhs-sdr104;
-+	max-frequency = <50000000>;
-+
-+	non-removable;
-+	disable-wp;
-+
-+	/* WiFi firmware requires power in suspend */
-+	keep-power-in-suspend;
-+
-+	mmc-pwrseq = <&sdio_pwrseq>;
-+
-+	vmmc-supply = <&vddao_3v3>;
-+	vqmmc-supply = <&vddao_3v3>;
-+
-+	status = "okay";
-+
-+	rtl8822cs: wifi@1 {
-+		reg = <1>;
-+	};
-+};
-+
-+/* SD card to be enabled in baseboard DT */
-+&sd_emmc_b {
-+	pinctrl-0 = <&sdcard_c_pins>;
-+	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	max-frequency = <50000000>;
-+	disable-wp;
-+
-+	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&vddao_3v3>;
-+	vqmmc-supply = <&vddio_c>;
-+};
-+
-+/* on-module eMMC */
-+&sd_emmc_c {
-+	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-+	pinctrl-1 = <&emmc_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	max-frequency = <200000000>;
-+	disable-wp;
-+
-+	mmc-pwrseq = <&emmc_pwrseq>;
-+	vmmc-supply = <&vddao_3v3>;
-+	vqmmc-supply = <&vddao_1v8>;
-+
-+	status = "okay";
-+};
-+
-+&tdmif_b {
-+	status = "okay";
-+};
-+
-+&tdmout_b {
-+	status = "okay";
-+};
-+
-+/* on-module UART BT */
-+&uart_A {
-+	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
-+	pinctrl-names = "default";
-+	uart-has-rtscts;
-+
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "realtek,rtl8822cs-bt";
-+		enable-gpios  = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
-+		host-wake-gpios = <&gpio GPIOX_19 GPIO_ACTIVE_HIGH>;
-+		device-wake-gpios = <&gpio GPIOX_18 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&uart_AO {
-+	pinctrl-0 = <&uart_ao_a_pins>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+};
-+
-+&usb {
-+	phys = <&usb2_phy0>, <&usb2_phy1>;
-+	phy-names = "usb2-phy0", "usb2-phy1";
-+};
+Heh.  This needs to be after the idio24gpio = devm_kzalloc().
+
+e60d5c32ff098c William Breathitt Gray 2023-03-05  367  	if (IS_ERR(idio24gpio->map))
+e60d5c32ff098c William Breathitt Gray 2023-03-05  368  		return dev_err_probe(dev, PTR_ERR(idio24gpio->map),
+e60d5c32ff098c William Breathitt Gray 2023-03-05  369  				     "Unable to initialize register map\n");
+e60d5c32ff098c William Breathitt Gray 2023-03-05  370  
+e60d5c32ff098c William Breathitt Gray 2023-03-05  371  	idio24gpio = devm_kzalloc(dev, sizeof(*idio24gpio), GFP_KERNEL);
+e60d5c32ff098c William Breathitt Gray 2023-03-05  372  	if (!idio24gpio)
+e60d5c32ff098c William Breathitt Gray 2023-03-05  373  		return -ENOMEM;
+e60d5c32ff098c William Breathitt Gray 2023-03-05  374  
+e60d5c32ff098c William Breathitt Gray 2023-03-05  375  	mutex_init(&idio24gpio->lock);
+e60d5c32ff098c William Breathitt Gray 2023-03-05  376  
+e60d5c32ff098c William Breathitt Gray 2023-03-05  377  	/* Initialize all IRQ type configuration to IRQ_TYPE_EDGE_BOTH */
+e60d5c32ff098c William Breathitt Gray 2023-03-05  378  	idio24gpio->irq_type = GENMASK(7, 0);
+e60d5c32ff098c William Breathitt Gray 2023-03-05  379  
+e60d5c32ff098c William Breathitt Gray 2023-03-05  380  	chip = devm_kzalloc(dev, sizeof(*chip), GFP_KERNEL);
+e60d5c32ff098c William Breathitt Gray 2023-03-05  381  	if (!chip)
+e60d5c32ff098c William Breathitt Gray 2023-03-05  382  		return -ENOMEM;
+e60d5c32ff098c William Breathitt Gray 2023-03-05  383  
+e60d5c32ff098c William Breathitt Gray 2023-03-05  384  	chip->name = name;
 
 -- 
-2.34.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
