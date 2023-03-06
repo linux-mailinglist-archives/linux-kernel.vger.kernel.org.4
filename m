@@ -2,125 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1916AC823
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 395216AC826
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCFQf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:35:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S230011AbjCFQf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:35:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbjCFQe5 (ORCPT
+        with ESMTP id S230034AbjCFQfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:34:57 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066D73B21A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:34:24 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id s13so6858538uac.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 08:34:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1678120410;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MvApvSQPHB3PWpjKondY69ytQhcKZi3i19/amC3x9Y0=;
-        b=fZTqtDBGbeUdr9LhD6WLJ9SKEFZV9zc2fFUQaaCMkaWpH8XBQzcQ7hPVnwcaq0SIWB
-         mw90vDe23Rbf1BmQ0Ccl7vlKyP9/BJ1yDq2B2UuhOIz7PB/ESoDdltw0UuVCqAeIwpwy
-         XS/gsuzhpN0Utc6Lne2Qy2c2hbNxXjcOQGIHkbYHn99VN1AY9moNrsWivJhDpzHC72Pv
-         WuHyVU/lgG9ipSnrVv/pxZBpuhQRFgIhGIMc6wbXCC1LJSTeZwLBG8vBuvgE9Rcr8tIA
-         6ewFro2Ytvjzw1srqIcspp/h6Z6t9dxi4VewrzkdlwQASivLlNXs6J1DHz2xNO4FOgaG
-         LAog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678120410;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MvApvSQPHB3PWpjKondY69ytQhcKZi3i19/amC3x9Y0=;
-        b=llnSvVt57dMXf99SCSFIzAiCyo6fWK9E5ob4XxTA5CGrsFtxnjBGmsKzEN32lID/b0
-         my6rX786Vt1X5gki0i9mYQbJQCTKxsQ+tcVykblHWttYTm5ClZmei0dz/ZVgwpvcQ7OM
-         J38E1qKGz0AhtqRFtgvpA4dHlvsIt66EqUhgr4B7dOe5Ddqv6+W+A7wZv4Vw1YTXG5MB
-         4Qg7K4Ht5v2rJoH3RHYNZotu+FcZKb6y7AtDdULh+7jVpzySaWeCQmjFahXDKOq89AyO
-         Lm9Zz6dhqvl8eLzhep7XOC0n9uaHchDyxr4wCgjUtTH6Tf4i5o9Tpcr3jcRqtqvsmL1q
-         riCg==
-X-Gm-Message-State: AO0yUKWCy0OJa/WLL4RHcgtvcugzzbmpTANvc3jF6arMlc0PW8tcXmIF
-        /pUFQUB8tWQ8hL85yKnCzPawr+fzSi5+c+U6t58PLQ==
-X-Google-Smtp-Source: AK7set8lpZupzBC2wZxG8SF0D7v87NfGH9XR/gLCdfzuYWDFiF+Q9dg678R/UHm6bKolSv8rgGNbS0W1W68qRNi9xOo=
-X-Received: by 2002:a1f:4a81:0:b0:410:4a2c:1e9a with SMTP id
- x123-20020a1f4a81000000b004104a2c1e9amr6555050vka.1.1678120410113; Mon, 06
- Mar 2023 08:33:30 -0800 (PST)
+        Mon, 6 Mar 2023 11:35:45 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4513D0B5;
+        Mon,  6 Mar 2023 08:35:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C070F1FDE1;
+        Mon,  6 Mar 2023 16:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678120467; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=JLyl7tOs3cGxnl6jsRkLZyKtPgiGs1BfdB5/trbJ61I=;
+        b=r/FPHOOIxRKcnzZfsnhcLhNSIeo/EHZYI4avFDkcRAthhaPL+ESDs+pl7x30PrrtdHFHiD
+        rrUlNtqqhJNYUcPQFRnCq9u8HQk5NdAmhkaWH9+UD99uzFrYU4IBBNSvBSpSdBxZuKMqZj
+        9r+C5NXvqSpUgM7B+3kCuWGYx/kVMLs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5B10B13A66;
+        Mon,  6 Mar 2023 16:34:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id YcD4FBMWBmQSUwAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 06 Mar 2023 16:34:27 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hyperv@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v4 00/12] x86/mtrr: fix handling with PAT but without MTRR
+Date:   Mon,  6 Mar 2023 17:34:13 +0100
+Message-Id: <20230306163425.8324-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20230301082552.274331-1-alexghiti@rivosinc.com>
-In-Reply-To: <20230301082552.274331-1-alexghiti@rivosinc.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Mon, 6 Mar 2023 22:03:19 +0530
-Message-ID: <CAK9=C2XAOKbyrbOnDP1GzW1VyO-f-V-oEVcp+PhGHeHKFh4C6A@mail.gmail.com>
-Subject: Re: [PATCH v6 0/2] riscv: Use PUD/P4D/PGD pages for the linear mapping
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 1, 2023 at 1:56=E2=80=AFPM Alexandre Ghiti <alexghiti@rivosinc.=
-com> wrote:
->
-> This patchset intends to improve tlb utilization by using hugepages for
-> the linear mapping.
->
-> base-commit-tag: v6.2-rc7
->
-> v6:
-> - quiet LLVM warning by casting phys_ram_base into an unsigned long
->
-> v5:
-> - Fix nommu builds by getting rid of riscv_pfn_base in patch 1, thanks
->   Conor
-> - Add RB from Andrew
->
-> v4:
-> - Rebase on top of v6.2-rc3, as noted by Conor
-> - Add Acked-by Rob
->
-> v3:
-> - Change the comment about initrd_start VA conversion so that it fits
->   ARM64 and RISCV64 (and others in the future if needed), as suggested
->   by Rob
->
-> v2:
-> - Add a comment on why RISCV64 does not need to set initrd_start/end that
->   early in the boot process, as asked by Rob
->
-> Alexandre Ghiti (2):
->   riscv: Get rid of riscv_pfn_base variable
->   riscv: Use PUD/P4D/PGD pages for the linear mapping
+This series tries to fix the rather special case of PAT being available
+without having MTRRs (either due to CONFIG_MTRR being not set, or
+because the feature has been disabled e.g. by a hypervisor).
 
-I tried this series but it is getting stuck after reaching user space.
+The main use cases are Xen PV guests and SEV-SNP guests running under
+Hyper-V.
 
-Does this series require some other dependent patches ?
+Instead of trying to work around all the issues by adding if statements
+here and there, just try to use the complete available infrastructure
+by setting up a read-only MTRR state when needed.
 
-Regards,
-Anup
+In the Xen PV case the current MTRR MSR values can be read from the
+hypervisor, while for the SEV-SNP case all needed is to set the
+default caching mode to "WB".
 
->
->  arch/riscv/include/asm/page.h | 19 +++++++++++++++++--
->  arch/riscv/mm/init.c          | 28 ++++++++++++++++++----------
->  arch/riscv/mm/physaddr.c      | 16 ++++++++++++++++
->  drivers/of/fdt.c              | 11 ++++++-----
->  4 files changed, 57 insertions(+), 17 deletions(-)
->
-> --
-> 2.37.2
->
+I have added more cleanup which has been discussed when looking into
+the most recent failures.
+
+Note that I couldn't test the Hyper-V related change (patch 3).
+
+Running on bare metal and with Xen didn't show any problems with the
+series applied.
+
+It should be noted that patches 9+10 are replacing today's way to
+lookup the MTRR cache type for a memory region from looking at the
+MTRR register values to building a memory map with the cache types.
+This should make the lookup much faster and much easier to understand.
+
+Changes in V2:
+- replaced former patches 1+2 with new patches 1-4, avoiding especially
+  the rather hacky approach of V1, while making all the MTRR type
+  conflict tests available for the Xen PV case
+- updated patch 6 (was patch 4 in V1)
+
+Changes in V3:
+- dropped patch 5 of V2, as already applied
+- split patch 1 of V2 into 2 patches
+- new patches 6-10
+- addressed comments
+
+Changes in V4:
+- addressed comments
+
+Juergen Gross (12):
+  x86/mtrr: split off physical address size calculation
+  x86/mtrr: optimize mtrr_calc_physbits()
+  x86/mtrr: support setting MTRR state for software defined MTRRs
+  x86/hyperv: set MTRR state when running as SEV-SNP Hyper-V guest
+  x86/xen: set MTRR state when running as Xen PV initial domain
+  x86/mtrr: replace vendor tests in MTRR code
+  x86/mtrr: allocate mtrr_value array dynamically
+  x86/mtrr: add get_effective_type() service function
+  x86/mtrr: construct a memory map with cache modes
+  x86/mtrr: use new cache_map in mtrr_type_lookup()
+  x86/mtrr: don't let mtrr_type_lookup() return MTRR_TYPE_INVALID
+  x86/mm: only check uniform after calling mtrr_type_lookup()
+
+ arch/x86/include/asm/mtrr.h        |  15 +-
+ arch/x86/include/uapi/asm/mtrr.h   |   6 +-
+ arch/x86/kernel/cpu/mshyperv.c     |   4 +
+ arch/x86/kernel/cpu/mtrr/amd.c     |   2 +-
+ arch/x86/kernel/cpu/mtrr/centaur.c |   2 +-
+ arch/x86/kernel/cpu/mtrr/cleanup.c |   4 +-
+ arch/x86/kernel/cpu/mtrr/cyrix.c   |   2 +-
+ arch/x86/kernel/cpu/mtrr/generic.c | 492 ++++++++++++++++++-----------
+ arch/x86/kernel/cpu/mtrr/mtrr.c    |  94 +++---
+ arch/x86/kernel/cpu/mtrr/mtrr.h    |   7 +-
+ arch/x86/kernel/setup.c            |   2 +
+ arch/x86/mm/pgtable.c              |  24 +-
+ arch/x86/xen/enlighten_pv.c        |  52 +++
+ 13 files changed, 454 insertions(+), 252 deletions(-)
+
+-- 
+2.35.3
+
