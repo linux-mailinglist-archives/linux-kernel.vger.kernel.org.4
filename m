@@ -2,143 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18556AC36F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92BC6AC370
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjCFOgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        id S229509AbjCFOgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:36:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjCFOgm (ORCPT
+        with ESMTP id S230325AbjCFOgo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:36:42 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531A12331C;
-        Mon,  6 Mar 2023 06:36:14 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id l13so10672083qtv.3;
-        Mon, 06 Mar 2023 06:36:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678113323;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yDK95qUmtK7rh4BRcl+d6FS8ceWw89ds2nqEahTwuz0=;
-        b=UxOtsg7RxUDG4Xjoo+aHR/G2P6QbDE51VloPKiDakUKx8jC2b+3P7Of6qjanYrsZIG
-         RlaHNFQNDmSSEdWjyF479uEEbwsmwH+ct4w0L/JdPkfazg+bpzGI+jd19Y3mqp29Tj2l
-         +ZzPJTXy6cXhzIajxllL0ef38Bno0pK+AW5h0ZBPmllMTLKQulu12v/tN5l5ezkJBT42
-         3/+FKfgJHbMB4ptKkBo+qQ+treW6IZuQohQYKWF5N1aaLFBCJrKtPY9WKY9Ne3gENFYp
-         Bta53p17MHw/P2dAD0JwFUu5Ip3PUEcZySM9P0yce8j/QNZMMXZIA2DnOe0W/GrQMlmn
-         JyaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678113323;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yDK95qUmtK7rh4BRcl+d6FS8ceWw89ds2nqEahTwuz0=;
-        b=gBtiFx0tYPI3oLwN23lNxn7xSR3nF13kSd8319HacXouVY8adqQxY9WYat8/eIe9Sc
-         +4Jjwg3UJv2lyjljmTDkvR65OMXqGxb568rKDQQiNUtlwPK7JoeoaKaqWC3nFgtUUuNr
-         K2nCe7SWZ2R8TYKcKILjMiaQD8mWu2f42IZcUmJeC4NHZG1M7UpcuUd4R2Ujw1RAFJA4
-         0us1t5gOWZ3vgR3MX8pq4FdmbTD0f3pItlFvbupKATF8bPBCI/NCq6Za92w4o3isowdK
-         TyRJNHJNwYQTpFDJTve08KJ/qRXqgsmLl89ajzljuktk8I3UYXyj9PcWUXDlW1SLL5jb
-         +zCw==
-X-Gm-Message-State: AO0yUKUdaVII2auXkogO+HHghYpf7QloxO5Pu0BR/IHg3r+ptCsWwT3u
-        57ht+Y6W84/kRj6lRCfjRmU=
-X-Google-Smtp-Source: AK7set+n57WUuNR+qYBo3bFZ13IGkIiD5yt+MG1lXujWHqHI8rUS/QMChjkzpn2uvAv1TLOhSXWfLA==
-X-Received: by 2002:ac8:5c02:0:b0:3bf:dc2e:ce5d with SMTP id i2-20020ac85c02000000b003bfdc2ece5dmr20367194qti.4.1678113323074;
-        Mon, 06 Mar 2023 06:35:23 -0800 (PST)
-Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
-        by smtp.gmail.com with ESMTPSA id 191-20020a370cc8000000b007416c11ea03sm7606527qkm.26.2023.03.06.06.35.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 06:35:22 -0800 (PST)
-Date:   Mon, 06 Mar 2023 09:35:22 -0500
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     xu xin <xu.xin.sc@gmail.com>, willemdebruijn.kernel@gmail.com
-Cc:     davem@davemloft.net, edumazet@google.com, jiang.xuexin@zte.com.cn,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, xu.xin16@zte.com.cn,
-        yang.yang29@zte.com.cn, zhang.yunkai@zte.com.cn
-Message-ID: <6405fa2a80577_bb2242089c@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20230306073136.155697-1-xu.xin16@zte.com.cn>
-References: <6401f7889e959_3f6dc82084b@willemb.c.googlers.com.notmuch>
- <20230306073136.155697-1-xu.xin16@zte.com.cn>
-Subject: RE: [PATCH linux-next v2] selftests: net: udpgso_bench_tx: Add test
- for IP fragmentation of UDP packets
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        Mon, 6 Mar 2023 09:36:44 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFE532E42;
+        Mon,  6 Mar 2023 06:36:16 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id E33EB164C;
+        Mon,  6 Mar 2023 15:35:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1678113329;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w1B+vQ9jUvb0XuC28lF696ECAnddLFijBB7M8fB4ToY=;
+        b=VuqXn6OLtrw3jBWI6/XwhgibVi0mKlaVNBqe/bgsLrSvkD9O6DPxZv37h4Nm2RYypZMQQJ
+        2S04l6pWG2Q1VQkuV1KtKdrWLR33Ar60TioR5f+DAehOvbFyAk1QYYrtqpaRyra+0ilopT
+        Bdc7+purDnJHaz4q9Pi9U1kn8NRRLiBUGBeQLVDRzl6qLQ82kxAoLIQEETMOXapTa7Dg0y
+        aFl8WC9dlE4K/AdFCstS8x4ART4KaDX2nWGnSEE0zr6Ijmr6PUnClVpQ5DZXCExnpoVSKs
+        JFpvkq4MO7q/gb7e36ZfU3I0IcHbqT862XyruF6y3udWGflF9fsLCxtJ4ohHog==
+From:   Michael Walle <michael@walle.cc>
+To:     william.gray@linaro.org
+Cc:     andriy.shevchenko@linux.intel.com, brgl@bgdev.pl,
+        broonie@kernel.org, linus.walleij@linaro.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pdemetrotion@winsystems.com, techsupport@winsystems.com,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v4 3/3] gpio: ws16c48: Migrate to the regmap API
+Date:   Mon,  6 Mar 2023 15:35:23 +0100
+Message-Id: <20230306143523.759040-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <4b6cd42426521808962d68a44952b95818fc5daf.1678106722.git.william.gray@linaro.org>
+References: <4b6cd42426521808962d68a44952b95818fc5daf.1678106722.git.william.gray@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xu xin wrote:
-> >> >     IP_PMTUDISC_DONT: turn off pmtu detection.
-> >> >     IP_PMTUDISC_OMIT: the same as DONT, but in some scenarios, DF will
-> >> > be ignored. I did not construct such a scene, presumably when forwarding.
-> >> > Any way, in this test, is the same as DONT.
-> >
-> >My points was not to compare IP_PMTUDISC_OMIT to .._DONT but to .._DO,
-> >which is what the existing UDP GSO test is setting.
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver.
 > 
-> Yeah, we got your point, but the result was as the patch showed, which hadn't
-> changed much (patch v2 V.S patch v1), because the fragmentation option of 'patch v1'
-> used the default PMTU discovery strategy(IP_PMTUDISC_DONT, because the code didn't
-> setting PMTU explicitly by setsockopt() when use './udpgso_bench_tx -f' ), which is
-> not much different from the 'patch v2' using IP_PMTUDISC_OMIT.
-
-Or IP_PMTUDISC_WANT unless sysctl_ip_no_pmtu_disc is set.
-But fair point. Explicitly disabling pmtu is not needed.
- 
-> >
-> >USO should generate segments that meet MTU rules. The test forces
-> >the DF bit (IP_PMTUDISC_DO).
-> >
-> >UFO instead requires local fragmentation, must enter the path for this
-> >in ip_output.c. It should fail if IP_PMTUDISC_DO is set:
-> >
-> >        /* Unless user demanded real pmtu discovery (IP_PMTUDISC_DO), we allow
-> >         * to fragment the frame generated here. No matter, what transforms
-> >         * how transforms change size of the packet, it will come out.
-> >         */
-> >        skb->ignore_df = ip_sk_ignore_df(sk);
-> >
-> >        /* DF bit is set when we want to see DF on outgoing frames.
-> >         * If ignore_df is set too, we still allow to fragment this frame
-> >         * locally. */
-> >        if (inet->pmtudisc == IP_PMTUDISC_DO ||
-> >            inet->pmtudisc == IP_PMTUDISC_PROBE ||
-> >            (skb->len <= dst_mtu(&rt->dst) &&
-> >             ip_dont_fragment(sk, &rt->dst)))
-> >                df = htons(IP_DF);
-> > 
-> >> >
-> >> > We have a question, what is the point of this test if it is not compared to
-> >> > UDP GSO and IP fragmentation. No user or tool will segment in user mode,
-> >
-> >Are you saying no process will use UDP_SEGMENT?
-> >
-> No, we are saying "user-space payload splitting", in other words, use ./udpgso_bench_tx
-> without '-f' or '-S'.
-
-I see. I guess you heard the arguments why the test does not compare
-udp segmentation with udp fragmentation:
-
-- fragmentation is particularly expensive on the receiver side
-- fragmentation cannot be offloaded, while segmentation can
-
-> Sincerely.
+> The WinSystems WS16C48 provides the following registers:
 > 
-> >The local protocol stack removed UFO in series d9d30adf5677.
-> >USO can be offloaded to hardware by quite a few devices (NETIF_F_GSO_UDP_L4).
-> >> > UDP GSO should compare performance with IP fragmentation.
-> >> 
-> >> I think it is misleading to think the cost of IP fragmentation matters
+>     Offset 0x0-0x5: Port 0-5 I/O
+>     Offset 0x6: Int_Pending
+>     Offset 0x7: Page/Lock
+>     Offset 0x8-0xA (Page 1): Pol_0-Pol_2
+>     Offset 0x8-0xA (Page 2): Enab_0-Enab_2
+>     Offset 0x8-0xA (Page 3): Int_ID0-Int_ID2
+> 
+> Port 0-5 I/O provides access to 48 lines of digital I/O across six
+> registers, each bit position corresponding to the respective line.
+> Writing a 1 to a respective bit position causes that output pin to sink
+> current, while writing a 0 to the same bit position causes that output
+> pin to go to a high-impedance state and allows it to be used an input.
+> Reads on a port report the inverted state (0 = high, 1 = low) of an I/O
+> pin when used in input mode. Interrupts are supported on Port 0-2.
+> 
+> Int_Pending is a read-only register that reports the combined state of
+> the INT_ID0 through INT_ID2 registers; an interrupt pending is indicated
+> when any of the low three bits are set.
+> 
+> The Page/Lock register provides the following bits:
+> 
+>     Bit 0-5: Port 0-5 I/O Lock
+>     Bit 6-7: Page 0-3 Selection
+> 
+> For Bits 0-5, writing a 1 to a respective bit position locks the output
+> state of the corresponding I/O port. Writing the page number to Bits 6-7
+> selects that respective register page for use.
+> 
+> Pol_0-Pol_2 are accessible when Page 1 is selected. Writing a 1 to a
+> respective bit position selects the rising edge detection interrupts for
+> that input line, while writing a 0 to the same bit position selects the
+> falling edge detection interrupts.
+> 
+> Enab_0-Enab_2 are accessible when Page 2 is selected. Writing a 1 to a
+> respective bit position enables interrupts for that input line, while
+> writing a 0 to that same bit position clears and disables interrupts for
+> that input line.
+> 
+> Int_ID0-Int_ID2 are accessible when Page 3 is selected. A respective bit
+> when read as a 1 indicates that an edge of the polarity set in the
+> corresponding polarity register was detected for the corresponding input
+> line. Writing any value to this register clears all pending interrupts
+> for the register.
+> 
+> Cc: Paul Demetrotion <pdemetrotion@winsystems.com>
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
+Same here, gpio-regmap part looks good:
 
+Reviewed-by: Michael Walle <michael@walle.cc>
+
+-michael
