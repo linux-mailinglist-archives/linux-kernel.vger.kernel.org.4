@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81636AC3AC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB9D6AC39A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:43:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjCFOp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
+        id S230355AbjCFOny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:43:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjCFOps (ORCPT
+        with ESMTP id S230135AbjCFOnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:45:48 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604495B9F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:45:31 -0800 (PST)
+        Mon, 6 Mar 2023 09:43:52 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FB0233D5
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:43:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=sMJx6b/CxL1Su3B8XIuAOsNn/3tYb0QvTWKkBLS2Aaw=; b=Eyhjj0kQppj99/M6scwljF1Ci9
-        8Za4R/qWyEibkfq1nLAm4uHdW5E/l2jOoGyu2/FGYqS7PAXcb5c/PS8r7IWOoTjAP4nrACrpkDzDq
-        R8NeObnb2aPiQJhuySIt7p2qoshmduNZnHPcY9cIK8OfLcdk5qdcCbUb07+UZCd5OitI/jl29/0w+
-        saoW2cuK2xV03csyIpXt2ITuXcRlBoGEU1XSKOsj7g5L6PQOPv8rfSBezgKe2QtfYrALrcBGOD8VV
-        M+f6RIyjJ8mBiPpfzBFVwXwO8MeDJpfaXtcuyocyOgDg0fXB0NRLPzPvqgWklrWSF7PeGvi1MG8YE
-        II0C8Lcw==;
+        bh=9t25UyY8GsyWpyj/eeeTlIlu/SI7oOBQaOdBT8jlk2E=; b=mLHD0T3uw08quqSPuOSfIa/Eis
+        cLX+zIruVrcLAtPCpU4ucMQCicOyoxoB43+Zl8DnpSztzrurL26L2gQf00z+2oAeDofyFWPYLP1Hv
+        FST5d1HrmZPuh2YXco40pK6AG+mOwN39M95WFah0HxXS+tVxX00WSM+5HXcweJIj9suJGnzr5bPCL
+        20nswJtcmtpdLueRNWH8l6iRW4l/iV7DNrGtAky8AoD77NZJDgb1bLTGYt5N8X7WGFIVa+4ry2U9q
+        vwDnVu/YKe0EhbwGozHeAo/FcMNy5fpnPIiAcB0KoybCL2dY8PZ45va8TVSmyfcC4QZscC3wDk7h2
+        e5RbAqNw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pZBe6-00GhOv-09;
-        Mon, 06 Mar 2023 14:16:58 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZBe5-005P2O-JN; Mon, 06 Mar 2023 14:16:58 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0D96B300487;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 11DF23007FB;
         Mon,  6 Mar 2023 15:16:55 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id E9E7E23BC8E2B; Mon,  6 Mar 2023 15:16:54 +0100 (CET)
-Message-ID: <20230306141502.269897544@infradead.org>
+        id EBEA323BC8E2D; Mon,  6 Mar 2023 15:16:54 +0100 (CET)
+Message-ID: <20230306141502.329973596@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 06 Mar 2023 14:25:22 +0100
+Date:   Mon, 06 Mar 2023 14:25:23 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     mingo@kernel.org, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -51,7 +50,7 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
         yu.c.chen@intel.com, youssefesmat@chromium.org,
         joel@joelfernandes.org, Parth Shah <parth@linux.ibm.com>
-Subject: [PATCH 01/10] sched: Introduce latency-nice as a per-task attribute
+Subject: [PATCH 02/10] sched/core: Propagate parent tasks latency requirements to the child task
 References: <20230306132521.968182689@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -66,81 +65,48 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Parth Shah <parth@linux.ibm.com>
 
-Latency-nice indicates the latency requirements of a task with respect
-to the other tasks in the system. The value of the attribute can be within
-the range of [-20, 19] both inclusive to be in-line with the values just
-like task nice values.
+Clone parent task's latency_nice attribute to the forked child task.
 
-latency_nice = -20 indicates the task to have the least latency as
-compared to the tasks having latency_nice = +19.
+Reset the latency_nice value to default value when the child task is
+set to sched_reset_on_fork.
 
-The latency_nice may affect only the CFS SCHED_CLASS by getting
-latency requirements from the userspace.
+Also, initialize init_task.latency_nice value with DEFAULT_LATENCY_NICE
+value
 
-Additionally, add debugging bits for newly added latency_nice attribute.
-
-[rebase, move defines in sched/prio.h]
+[rebase]
 Signed-off-by: Parth Shah <parth@linux.ibm.com>
 Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
-Link: https://lkml.kernel.org/r/20230224093454.956298-3-vincent.guittot@linaro.org
+Link: https://lkml.kernel.org/r/20230224093454.956298-4-vincent.guittot@linaro.org
 ---
- include/linux/sched.h      |  1 +
- include/linux/sched/prio.h | 18 ++++++++++++++++++
- kernel/sched/debug.c       |  1 +
- 3 files changed, 20 insertions(+)
+ init/init_task.c    | 1 +
+ kernel/sched/core.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-Index: linux-2.6/include/linux/sched.h
+Index: linux-2.6/init/init_task.c
 ===================================================================
---- linux-2.6.orig/include/linux/sched.h
-+++ linux-2.6/include/linux/sched.h
-@@ -784,6 +784,7 @@ struct task_struct {
- 	int				static_prio;
- 	int				normal_prio;
- 	unsigned int			rt_priority;
-+	int				latency_nice;
+--- linux-2.6.orig/init/init_task.c
++++ linux-2.6/init/init_task.c
+@@ -78,6 +78,7 @@ struct task_struct init_task
+ 	.prio		= MAX_PRIO - 20,
+ 	.static_prio	= MAX_PRIO - 20,
+ 	.normal_prio	= MAX_PRIO - 20,
++	.latency_nice	= DEFAULT_LATENCY_NICE,
+ 	.policy		= SCHED_NORMAL,
+ 	.cpus_ptr	= &init_task.cpus_mask,
+ 	.user_cpus_ptr	= NULL,
+Index: linux-2.6/kernel/sched/core.c
+===================================================================
+--- linux-2.6.orig/kernel/sched/core.c
++++ linux-2.6/kernel/sched/core.c
+@@ -4684,6 +4684,7 @@ int sched_fork(unsigned long clone_flags
+ 		p->prio = p->normal_prio = p->static_prio;
+ 		set_load_weight(p, false);
  
- 	struct sched_entity		se;
- 	struct sched_rt_entity		rt;
-Index: linux-2.6/include/linux/sched/prio.h
-===================================================================
---- linux-2.6.orig/include/linux/sched/prio.h
-+++ linux-2.6/include/linux/sched/prio.h
-@@ -42,4 +42,22 @@ static inline long rlimit_to_nice(long p
- 	return (MAX_NICE - prio + 1);
- }
- 
-+/*
-+ * Latency nice is meant to provide scheduler hints about the relative
-+ * latency requirements of a task with respect to other tasks.
-+ * Thus a task with latency_nice == 19 can be hinted as the task with no
-+ * latency requirements, in contrast to the task with latency_nice == -20
-+ * which should be given priority in terms of lower latency.
-+ */
-+#define MAX_LATENCY_NICE	19
-+#define MIN_LATENCY_NICE	-20
-+
-+#define LATENCY_NICE_WIDTH	\
-+	(MAX_LATENCY_NICE - MIN_LATENCY_NICE + 1)
-+
-+/*
-+ * Default tasks should be treated as a task with latency_nice = 0.
-+ */
-+#define DEFAULT_LATENCY_NICE	0
-+
- #endif /* _LINUX_SCHED_PRIO_H */
-Index: linux-2.6/kernel/sched/debug.c
-===================================================================
---- linux-2.6.orig/kernel/sched/debug.c
-+++ linux-2.6/kernel/sched/debug.c
-@@ -1043,6 +1043,7 @@ void proc_sched_show_task(struct task_st
- #endif
- 	P(policy);
- 	P(prio);
-+	P(latency_nice);
- 	if (task_has_dl_policy(p)) {
- 		P(dl.runtime);
- 		P(dl.deadline);
++		p->latency_nice = DEFAULT_LATENCY_NICE;
+ 		/*
+ 		 * We don't need the reset flag anymore after the fork. It has
+ 		 * fulfilled its duty:
 
 
