@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F230C6AC318
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:22:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A553A6AC31C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjCFOV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:21:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S230018AbjCFOWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjCFOVe (ORCPT
+        with ESMTP id S230020AbjCFOW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:21:34 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189572A6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:20:09 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id i6so8229154ybu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:20:09 -0800 (PST)
+        Mon, 6 Mar 2023 09:22:28 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C160C3527B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:20:54 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id t39so8250012ybi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:20:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678112332;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSuWilkYCJFsV7IY3WrT2Gn2CfcAm+FHoFIi1EIJdfw=;
-        b=CrCSn/hY/Pn3OIYiTzzC8GJtvWpUB9dzR3nWq6D52TKPxspzM5n1Pdvl94fz/mx87C
-         m/1PEAwns2uSZyTOG8Mnyneu/EZmd8VLZU4KePObsSanw1hntLXEjaQMug6t1K8iIqdi
-         fnmq9fsgDrAH/Mx+DTyy/d/YbQ+kgBGOpM3sBH4bjH0uOJ58CQp1p9K5g9rEUYBW9oxP
-         DNwRhsNDFEw1ax6MCVyH3XbsNlUbvTFVOugDAwBLZSNkFL3Xitr2RedlbUajuyUHAgj8
-         delve7oZI+VqEg28RCSoYlORT3B2T+RZ+RpsvG2tRn7VRyOBt1moQJmyx4IIr1xzcPkb
-         8I5g==
+        d=linaro.org; s=google; t=1678112380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nxZOC/oFAJ7mVCTrB11HvO0wkDiTX72CDJEEOJC+H98=;
+        b=oz/3ISlqzr1Mu56AOXdfAZhRsdyVbUIbvaCsf038voyuYh9RBd4ZMV/3TML2N4WaOL
+         AevGchGy+zENGB22WKH72f2fhiaJRQOeFKQ5Z7zw/HxDBn49nepzjt58VMf6VIBcvd3P
+         wd+P604MzHnOGXdD5OSzlPEjTdMyt3BllKzs/9GhiS3kF4eSR5QliQ+rgSIMipOFkgbM
+         DC6OaAAPz3VvAoOVLPQK2GFwtzAgbdsLsNIgUEUinb+Am1Jtjvbo+pFl4dK6tthEqXzd
+         Sc7m8p3DqDaO0rhsSUOHnxnyU96UVQdJw8ohBBUfW1MtMZ9oVdnPHEapE5rE70J68SZZ
+         EDiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678112332;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BSuWilkYCJFsV7IY3WrT2Gn2CfcAm+FHoFIi1EIJdfw=;
-        b=lyFcw/hD7/Nh1swdYC/iHc6mDhJGu1ATHGrhyEzXAKLq1DgAwFtW8dv+InZCYjOVGR
-         FpJq/7W5yBqBfuLi7NLCNr19jMON7QzEgbop+M3E+Doilcu4NO8hsSYfGhB+l+7a895L
-         p/o/MC2HQpDkiWyA/WwkQ0GLQDGNTdwm+YSbqta4Yx6mMaaLQswXb416bBSGq8G6FsA2
-         RT8XdeLw/6yBDb1UaneDS0UCbYaS0LX34MG3Kva+1+uN1Q9G2N3C07UPL0sXa455+Gk1
-         TLXSLPNLv8qGrFJ0fa0JTVkgb3tHfQ1sUx9zpQXwVBO5rcTK38n/oWebHYv/3oAUOq8e
-         Of1A==
-X-Gm-Message-State: AO0yUKUUeQkdv+Mt/NQUHOfHJEQnJ7wdRnJr6fl8naGWQaqJQhya7bkg
-        j9amqBxXIv0uJ/E31Z3eEMQyAJwxqLLNg+BaIOe642XttDwv6iMk
-X-Google-Smtp-Source: AK7set8SLvtaEIzMFs/ct9lUoE90JnY9UNlhBsKArcGXEzrP5gpzowNx3909XhZ7n3C1qDJEkWxKzgtuWVYK6UiyEsg=
-X-Received: by 2002:a5b:b84:0:b0:ab8:1ed9:cfd2 with SMTP id
- l4-20020a5b0b84000000b00ab81ed9cfd2mr6552182ybq.5.1678112332336; Mon, 06 Mar
- 2023 06:18:52 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678112380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nxZOC/oFAJ7mVCTrB11HvO0wkDiTX72CDJEEOJC+H98=;
+        b=jSEbeglUF5sT0IjWKIWsq7/za8U91u7R+lvL8W6VveKZRi4vJgBbi9uBjhZMmrKqCR
+         Do9goULyTO9NUSYAk9eW3U/zl7ncPfG0WAWG/Ax/emj3RGb4oiSglHqYFbCv2ktMl7Ca
+         fKgGDLJunU9rtm7297QXVPw1oBdh72AwayYKy7HhOiCgQH0LQEnoLKEepwGt9FfGwqW+
+         fhO022DKT1x+4q8FXv3RSqYecSUN4vRNx1AHtJo4Rs76W/yzU7dRZXZ945Zjf9ar5yZl
+         SvBjZyj6l9R+4HuwaSBba++yuIdyybS4UysTP3iOaYOQwC2J0sFxjYkI+x+EsL/JmJN+
+         Rb3Q==
+X-Gm-Message-State: AO0yUKWb1h/E+3t1DgKDOMsjyB+LnOx9QoSIIafjI7XcVxiYeRY5SQap
+        6x7xZSq5ey2dH2lvP2GieiL9Unp+VlrkXQgZLy7hbA==
+X-Google-Smtp-Source: AK7set/FqB1a3gzaiHVXuJsE8H16TW/OMBYIdNp4jrArFvJtsJcWBeIdZQ/8vyZPwqyhO7+6BMYOgloJ+MUsrPAUvRU=
+X-Received: by 2002:a25:9281:0:b0:b0a:7108:71e9 with SMTP id
+ y1-20020a259281000000b00b0a710871e9mr2331645ybl.4.1678112380304; Mon, 06 Mar
+ 2023 06:19:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20230206203720.1177718-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20230206203720.1177718-1-horatiu.vultur@microchip.com>
+References: <20230227205035.18551-1-git@apitzsch.eu>
+In-Reply-To: <20230227205035.18551-1-git@apitzsch.eu>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 15:18:40 +0100
-Message-ID: <CACRpkdZsWFJEU7xoc-r+tBkD2TzRTW34x3RbeqMEqrRfq6A7YA@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: ocelot: Fix alt mode for ocelot
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexandre.belloni@bootlin.com, andy.shevchenko@gmail.com
+Date:   Mon, 6 Mar 2023 15:19:29 +0100
+Message-ID: <CACRpkdZROb6q20yMJomhy4KF0R-vwNSwXPSkN7Tn8S-kf0wYKQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: input: atmel,maxtouch: add linux,keycodes
+To:     =?UTF-8?Q?Andr=C3=A9_Apitzsch?= <git@apitzsch.eu>
+Cc:     Nick Dyer <nick@shmanahar.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -66,19 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 6, 2023 at 9:37 PM Horatiu Vultur
-<horatiu.vultur@microchip.com> wrote:
+On Mon, Feb 27, 2023 at 9:50 PM Andr=C3=A9 Apitzsch <git@apitzsch.eu> wrote=
+:
 
-> In case the driver was trying to set an alternate mode for gpio
-> 0 or 32 then the mode was not set correctly. The reason is that
-> there is computation error inside the function ocelot_pinmux_set_mux
-> because in this case it was trying to shift to left by -1.
-> Fix this by actually shifting the function bits and not the position.
+> In some configurations the touch controller can support the touch keys.
+> Document the linux,keycodes property that enables those keys and
+> specifies the keycodes that should be used to report the key events.
 >
-> Fixes: 4b36082e2e09 ("pinctrl: ocelot: fix pinmuxing for pins after 31")
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Signed-off-by: Andr=C3=A9 Apitzsch <git@apitzsch.eu>
 
-Patch applied for fixes.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
 Linus Walleij
