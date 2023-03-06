@@ -2,111 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E962F6AB6B6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD35F6AB6BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:01:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjCFG6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 01:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S229576AbjCFHBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 02:01:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjCFG57 (ORCPT
+        with ESMTP id S229457AbjCFHBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 01:57:59 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603F44C37
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 22:57:58 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ4n1-0003ST-N9; Mon, 06 Mar 2023 07:57:43 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ4n0-002BSI-Bd; Mon, 06 Mar 2023 07:57:42 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ4mz-002a99-ME; Mon, 06 Mar 2023 07:57:41 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] spi: imx: Convert to platform remove callback returning void
-Date:   Mon,  6 Mar 2023 07:57:33 +0100
-Message-Id: <20230306065733.2170662-3-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230306065733.2170662-1-u.kleine-koenig@pengutronix.de>
-References: <20230306065733.2170662-1-u.kleine-koenig@pengutronix.de>
+        Mon, 6 Mar 2023 02:01:00 -0500
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E782F5BA3
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:00:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1678086047; bh=2uYo5+Ekm6bW81PDMXlh0yBHRTyvtLp33m9m88ampfo=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=Pv3/bEP21IMnHDQvGYSyt8QjsopyoTC/7vOVQoa4PChvzBSoQxhD2phiQSmPxTMtA
+         /ZEmxj0BGzEzKxTy+zrYuoc7fwt5qqetwJdmqpEurmb3UqjhzU8UhN7GUIRsa/z8zV
+         MC0WtMuOjSnlWTnknSLbLczmcJ/Jeeb/SpvSN5qo=
+Received: by b221-2.in.mailobj.net [192.168.90.22] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Mon,  6 Mar 2023 08:00:47 +0100 (CET)
+X-EA-Auth: f8S8VMenhzbwONE81uWdVlU7BSOAyJMGwXGWLrbuklAqboANg0qnzixx2++ggWF+KhOomZvWzU6g9UBqOUX1xAtXZKuV8Wjx
+Date:   Mon, 6 Mar 2023 12:30:35 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Forest Bond <forest@alittletooquiet.net>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] staging: vt6655: Macro with braces issue change to
+ inline function
+Message-ID: <ZAWPk12Fz0gxaqzB@ubun2204.myguest.virtualbox.org>
+References: <Y9/xXHvOAwfqoDxn@combine-ThinkPad-S1-Yoga>
+ <3cb45313-209a-8190-12f8-6a2d49e4173b@wanadoo.fr>
+ <Y+A+HF1vDeRIqye5@combine-ThinkPad-S1-Yoga>
+ <Y+DL3O5lcMyZ/aNR@kroah.com>
+ <Y+H9BT8Am4Ik2ZDA@combine-ThinkPad-S1-Yoga>
+ <Y+IJgxF52lpgk0RC@ubun2204.myguest.virtualbox.org>
+ <ZAVxo6WHGu3kO1nl@combine-ThinkPad-S1-Yoga>
+ <ZAV7xvr3BCqByjy6@ubun2204.myguest.virtualbox.org>
+ <ZAWAyyNt0rgrpA1l@combine-ThinkPad-S1-Yoga>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1744; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=UlDEcAQeTLnDJOo9EVbQwCee+YS5RvPcdkVROdgL1H4=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBY7YVhL31nvYTd99aigldXesE1RDqhSTJAVB0 AVv8bJV6T+JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAWO2AAKCRDB/BR4rcrs CS4DB/9i6Uj1BsU71AURls85hBXt40HJAxsOaqkZ4eIaaYndCUw8SQPPv+tktmQ/JJrYks9Ngze wTnhDYFLrM5MhZqlGWskGAGEUo1qC05FYCpPeFpEaNM79ZaQcDUs3m3KSvCeSifotnU91f1vZ9q Yaaw8W5RWcmLGstHacw99zBgrlVlU791r8m/jM9yBrSeo2+w9/wVkKOuXxP/YdqX8x2BY1SGC73 uPRgHHrv62WP9ZVkSrF8CbFeOu1rTS5Gx2dAw/mAqRmD0JKwr6DhXe5wY1bV+qax0wyRKhULqKY DGI53oNYLOswCuBwRW4VNO3XfrJEbJrSxvb2ok0UtK6xupke
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAWAyyNt0rgrpA1l@combine-ThinkPad-S1-Yoga>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is (mostly) ignored
-and this typically results in resource leaks. To improve here there is a
-quest to make the remove callback return void. In the first step of this
-quest all drivers are converted to .remove_new() which already returns
-void.
+On Mon, Mar 06, 2023 at 06:57:31AM +0100, Guru Mehar Rachaputi wrote:
+> On Mon, Mar 06, 2023 at 11:06:06AM +0530, Deepak R Varma wrote:
+> > On Mon, Mar 06, 2023 at 05:52:51AM +0100, Guru Mehar Rachaputi wrote:
+> > > On Tue, Feb 07, 2023 at 01:49:15PM +0530, Deepak R Varma wrote:
+> > > 
+> > > Hej Deepak,
+> > > 
+> > > I have a problem in sending patchset through mutt.
+> > > I have been trying sending to my own mail address but it won't work.
+> > 
+> > This could be because of mutt configuration. There are some additional checks if
+> > you are trying to use mutt with gmail. Search over google or lore old posts to
+> > know more about it. The important aspect is to configure and test mutt well
+> > before you use it for sending out patches.
+> > 
+> > > 
+> > > When sending patchset I think we should use "In-Reply-To" flag and
+> > > include "Message-ID" to which we want this to be in series to. I tried
+> > > both "git send-email" feature and mutt "forwarding feature".
+> > 
+> > I have not used "git send-email", so can't help you there. But mutt has worked
+> > very well for me. Ensure you are reading and following the instructions from
+> > this page well: https://kernelnewbies.org/Outreachyfirstpatch
+> >
+> 
+> So for example from these patches: 0.patch, 1.patch
+> how to use "mutt -H" to send patches in one thread?
+> 
+> if first one is: mutt -H 0.patch
+> then should second one be: mutt -H 1.patch In-Reply-To: Message-ID?
 
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
+Try this out by sending to yourself and you will know :)
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/spi/spi-imx.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+There is a section "Using git format-patch to send patchsets" in the link I sent
+in my last email. Please read that.
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 6c9c87cd14ca..f128fb296d49 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -1848,7 +1848,7 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int spi_imx_remove(struct platform_device *pdev)
-+static void spi_imx_remove(struct platform_device *pdev)
- {
- 	struct spi_controller *controller = platform_get_drvdata(pdev);
- 	struct spi_imx_data *spi_imx = spi_controller_get_devdata(controller);
-@@ -1867,8 +1867,6 @@ static int spi_imx_remove(struct platform_device *pdev)
- 	pm_runtime_disable(spi_imx->dev);
- 
- 	spi_imx_sdma_exit(spi_imx);
--
--	return 0;
- }
- 
- static int __maybe_unused spi_imx_runtime_resume(struct device *dev)
-@@ -1930,7 +1928,7 @@ static struct platform_driver spi_imx_driver = {
- 		   .pm = &imx_spi_pm,
- 	},
- 	.probe = spi_imx_probe,
--	.remove = spi_imx_remove,
-+	.remove_new = spi_imx_remove,
- };
- module_platform_driver(spi_imx_driver);
- 
--- 
-2.39.1
+Deepak.
+
+> 
+> 
+> > > 
+> > > Another issue is, how to attach patch file from inside mutt(for example: 
+> > > "mutt -H x.patch" from command line is used to extract header and body of a 
+> > > mail in mutt)?
+> > 
+> > Why do you want to do that?
+> > Build a patch file using "git format-patch" and then use "mutt -H" to send the
+> > patch. Both the commands work directly from the command line. If there is a need 
+> > for any additional attachments in support of your patch [configs, logs, trace as
+> > evidence, test outcomes etc], you can attach those from within the "mutt -H"
+> > execution context.
+> > 
+> > I suggest testing mutt well before you start sending any patches out by sending
+> > the patches to yourself. Do not use any kernel mailing list for testing.
+> > 
+> > 
+> > Regards,
+> > Deepak.
+> > 
+> > > 
+> > > 
+> > > -- 
+> > > Thanks & Regards,
+> > > Guru
+> > > 
+> > 
+> > 
+> 
+> -- 
+> Thanks & Regards,
+> Guru
+> 
+
 
