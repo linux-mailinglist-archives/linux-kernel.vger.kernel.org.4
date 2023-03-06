@@ -2,149 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3496AC47D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A84CD6AC484
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:12:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231329AbjCFPKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:10:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57290 "EHLO
+        id S230338AbjCFPMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjCFPKb (ORCPT
+        with ESMTP id S229671AbjCFPMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:10:31 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9469A21A15;
-        Mon,  6 Mar 2023 07:10:23 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326E4XeR018627;
-        Mon, 6 Mar 2023 15:10:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=cdeoGIcHHzCL0k2JupdvblKXHbuQ6+3cuSp2bpqbVuw=;
- b=Y8LGMwzRelHs4lavqBhBjbCUyQhn1G1aEtTSx+kbfIWvxsSiq1QySQxT4jBdjfFU3C3X
- CtTJYAimPRxD+8yuv8KBv+vimIH8Uq2RoS+5WIbD3ZBa0z83jpqRgxU+kCL+FeU84Aaf
- 35pxyFC2RZt+AW9VxZBQuKgVnhFkKFrrH1mUyrsp4IZLzC5p/iKw5B/XYyoYrd46n+8F
- C5Rf1JakNTPhI0Mt6ZmPX8f57stYM3vzzbnTxfUOYf2jTxNgY2YhgsLnW5q6PBgVY13Y
- //U1meB92hYjY3NjTCxa0XXdt0a8EF9+RrVnM3FR8yD0lgbQddVx7FZAqex7qlpy3ziI fA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p507ny1er-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 15:10:22 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326EtDSi016069;
-        Mon, 6 Mar 2023 15:10:22 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p507ny1dm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 15:10:22 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326BsSEf007338;
-        Mon, 6 Mar 2023 15:10:20 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3p4188avpe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 15:10:20 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326FAG2516646640
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 15:10:16 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 91FA32004F;
-        Mon,  6 Mar 2023 15:10:16 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58A012004D;
-        Mon,  6 Mar 2023 15:10:16 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 15:10:16 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>
-Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH v2 4/4] s390/pci: clean up left over special treatment for function zero
-Date:   Mon,  6 Mar 2023 16:10:14 +0100
-Message-Id: <20230306151014.60913-5-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230306151014.60913-1-schnelle@linux.ibm.com>
-References: <20230306151014.60913-1-schnelle@linux.ibm.com>
+        Mon, 6 Mar 2023 10:12:12 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07CF22A1C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:12:05 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id d7so10784772qtr.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 07:12:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678115525;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qpjRwMBpeQIyYBuVAs6Veb66byuhymu6yZKVw/mFN2g=;
+        b=fSJNDRDk4A+hkSZsMhrKhJ0kmPEjlw5YnDGm8tlvtk1jagwZBEC1+kjnf5HsgmkarE
+         X4cJFbHzVv5rm97FTIPSV50F11uDFNJorIDPhEBReSxOEiDWeFLJCvBtrVCHoM9qhEsm
+         M/if6GQF1kTG3YwEzWXar3xr/ktiKsNy+ohlY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678115525;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qpjRwMBpeQIyYBuVAs6Veb66byuhymu6yZKVw/mFN2g=;
+        b=NaHzdjXJtMYCIYTKhIrZuqkZKaBm+m50/2p9WtSkSJY6MZvXCbXQnUTAYhigxzXYr3
+         kgCAWJsjjrY98KSsofV3vZugwdUWDq5Q6s7saH+qUPpvvvo0xk9A1qLsLtE8mWxqgb2t
+         LXTXuc1nsjG3+2wu/Nyu7tzIiZ+yKNnpmewKxuhqBi/3pAV8kZB6Z8ntW+85Fmm3AYnr
+         GK0yDEfrz/CGl8cik/tZfk2NfXbQ1lJwhekofCGZL5y8838/eS5uAcsdsj0KX3NiPUeC
+         aIst664cxisXlF28xToF2XrnKZBm17uG+OpBtFXF/u9OHXD64Icevqa2uFMpUSKeVB1k
+         Vlsg==
+X-Gm-Message-State: AO0yUKWXL+sOTwgDL5vR1WSq9ZAcSKCQKaHQ1zqZDBaJXR04aGEgoU8t
+        oP4GcxrVBQOz5H3rX7R9N/jDLwVdA0OW/qYMOr4=
+X-Google-Smtp-Source: AK7set97E9vII1jsCN7q8RvIvSNf+febcQOfp6CdZM+ka/pDRW6TLdav8X+QbuxQnGEE07P58jWSjg==
+X-Received: by 2002:ac8:5cc5:0:b0:3bf:c849:4971 with SMTP id s5-20020ac85cc5000000b003bfc8494971mr16492535qta.62.1678115524741;
+        Mon, 06 Mar 2023 07:12:04 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id i10-20020ac871ca000000b003bfb950f670sm7683092qtp.41.2023.03.06.07.12.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 07:12:04 -0800 (PST)
+Date:   Mon, 6 Mar 2023 15:12:03 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 13/13] rcu/kvfree: Eliminate k[v]free_rcu() single
+ argument macro
+Message-ID: <20230306151203.GC3280216@google.com>
+References: <ZAR//FKO4syzapk6@pc636>
+ <D8B84631-860B-41CF-8311-88E220C7254F@joelfernandes.org>
+ <20230305180524.GL1301832@paulmck-ThinkPad-P17-Gen-1>
+ <20230306144948.GA3280216@google.com>
+ <20230306150108.GT1301832@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: IcLO8TOR6pRVsDO2-ZyQJCW8KESMkqAQ
-X-Proofpoint-ORIG-GUID: eJCSNeUOt5cZyM-r4XCGa6_SWrlPeyfV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- adultscore=0 phishscore=0 mlxlogscore=999 bulkscore=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303060133
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306150108.GT1301832@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to commit 960ac3626487 ("s390/pci: allow zPCI zbus without
-a function zero") enabling and scanning a PCI function had to
-potentially be postponed until the function with devfn zero on that bus
-was plugged. While the commit removed the waiting itself extra code to
-scan all functions on the PCI bus once function zero appeared was
-missed. Remove that code and the outdated comments about waiting for
-function zero.
+On Mon, Mar 06, 2023 at 07:01:08AM -0800, Paul E. McKenney wrote:
+[..] 
+> > > 7.	We then evaluate whether further cleanups are needed.
+> > > 
+> > > > > My feeling is
+> > > > > that, we introduced "_mightsleep" macros first and after that try to
+> > > > > convert users.
+> > > 
+> > > > One stopgap could be to add a checkpatch error if anyone tries to use old API,
+> > > > and then in the meanwhile convert all users.
+> > > > Though, that requires people listening to checkpatch complaints.
+> > > 
+> > > Every person who listens is that much less hassle.  It doesn't have to
+> > > be perfect.  ;-)
+> > 
+> > The below checkpatch change can catch at least simple single-arg uses (i.e.
+> > not having compound expressions inside of k[v]free_rcu() args). I will submit
+> > a proper patch to it which we can include in this set.
+> > 
+> > Thoughts?
+> > ---
+> >  scripts/checkpatch.pl | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> > 
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > index 78cc595b98ce..fc73786064b3 100755
+> > --- a/scripts/checkpatch.pl
+> > +++ b/scripts/checkpatch.pl
+> > @@ -6362,6 +6362,15 @@ sub process {
+> >  			}
+> >  		}
+> >  
+> > +# check for soon-to-be-deprecated single-argument k[v]free_rcu() API
+> > +		if ($line =~ /\bk[v]?free_rcu\s*\([^(]+\)/) {
+> > +			if ($line =~ /\bk[v]?free_rcu\s*\([^,]+\)/) {
+> > +				ERROR("DEPRECATED_API",
+> > +				      "Single-argument k[v]free_rcu() API is deprecated, please pass an rcu_head object." . $herecurr);
+> 
+> Nice!
+> 
+> But could you please also tell them what to use instead?  Sure, they
+> could look it up, but if it tells them directly, they are less likely
+> to ignore it.
 
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- arch/s390/pci/pci.c | 23 +++--------------------
- 1 file changed, 3 insertions(+), 20 deletions(-)
+Sounds good, I will modify the warning to include the API to call and send
+out a patch soon.
 
-diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
-index e16afacc8fd1..f5709b5dae7a 100644
---- a/arch/s390/pci/pci.c
-+++ b/arch/s390/pci/pci.c
-@@ -874,32 +874,15 @@ bool zpci_is_device_configured(struct zpci_dev *zdev)
-  * @fh: The general function handle supplied by the platform
-  *
-  * Given a device in the configuration state Configured, enables, scans and
-- * adds it to the common code PCI subsystem if possible. If the PCI device is
-- * parked because we can not yet create a PCI bus because we have not seen
-- * function 0, it is ignored but will be scanned once function 0 appears.
-- * If any failure occurs, the zpci_dev is left disabled.
-+ * adds it to the common code PCI subsystem if possible.If any failure occurs,
-+ * the zpci_dev is left disabled.
-  *
-  * Return: 0 on success, or an error code otherwise
-  */
- int zpci_scan_configured_device(struct zpci_dev *zdev, u32 fh)
- {
--	int rc;
--
- 	zpci_update_fh(zdev, fh);
--	/* the PCI function will be scanned once function 0 appears */
--	if (!zdev->zbus->bus)
--		return 0;
--
--	/* For function 0 on a multi-function bus scan whole bus as we might
--	 * have to pick up existing functions waiting for it to allow creating
--	 * the PCI bus
--	 */
--	if (zdev->devfn == 0 && zdev->zbus->multifunction)
--		rc = zpci_bus_scan_bus(zdev->zbus);
--	else
--		rc = zpci_bus_scan_device(zdev);
--
--	return rc;
-+	return zpci_bus_scan_device(zdev);
- }
- 
- /**
--- 
-2.37.2
+thanks,
+
+ - Joel
 
