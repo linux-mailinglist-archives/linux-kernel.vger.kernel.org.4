@@ -2,133 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD35F6AB6BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:01:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DD96AB6C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbjCFHBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 02:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S229579AbjCFHIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 02:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFHBA (ORCPT
+        with ESMTP id S229450AbjCFHIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 02:01:00 -0500
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E782F5BA3
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:00:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1678086047; bh=2uYo5+Ekm6bW81PDMXlh0yBHRTyvtLp33m9m88ampfo=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Pv3/bEP21IMnHDQvGYSyt8QjsopyoTC/7vOVQoa4PChvzBSoQxhD2phiQSmPxTMtA
-         /ZEmxj0BGzEzKxTy+zrYuoc7fwt5qqetwJdmqpEurmb3UqjhzU8UhN7GUIRsa/z8zV
-         MC0WtMuOjSnlWTnknSLbLczmcJ/Jeeb/SpvSN5qo=
-Received: by b221-2.in.mailobj.net [192.168.90.22] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Mon,  6 Mar 2023 08:00:47 +0100 (CET)
-X-EA-Auth: f8S8VMenhzbwONE81uWdVlU7BSOAyJMGwXGWLrbuklAqboANg0qnzixx2++ggWF+KhOomZvWzU6g9UBqOUX1xAtXZKuV8Wjx
-Date:   Mon, 6 Mar 2023 12:30:35 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: vt6655: Macro with braces issue change to
- inline function
-Message-ID: <ZAWPk12Fz0gxaqzB@ubun2204.myguest.virtualbox.org>
-References: <Y9/xXHvOAwfqoDxn@combine-ThinkPad-S1-Yoga>
- <3cb45313-209a-8190-12f8-6a2d49e4173b@wanadoo.fr>
- <Y+A+HF1vDeRIqye5@combine-ThinkPad-S1-Yoga>
- <Y+DL3O5lcMyZ/aNR@kroah.com>
- <Y+H9BT8Am4Ik2ZDA@combine-ThinkPad-S1-Yoga>
- <Y+IJgxF52lpgk0RC@ubun2204.myguest.virtualbox.org>
- <ZAVxo6WHGu3kO1nl@combine-ThinkPad-S1-Yoga>
- <ZAV7xvr3BCqByjy6@ubun2204.myguest.virtualbox.org>
- <ZAWAyyNt0rgrpA1l@combine-ThinkPad-S1-Yoga>
+        Mon, 6 Mar 2023 02:08:09 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2109683C5;
+        Sun,  5 Mar 2023 23:08:08 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id s13so5721334uac.8;
+        Sun, 05 Mar 2023 23:08:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678086487;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nPMxN+7aE/eDgv+4Gb5i0j4P3VUwS4IPF/CTWOVkNGM=;
+        b=fRqNtYdlEv5fZLps4+majz9AHPvYvaic55g6HWsHiSVAZEXMVAJDabsuU/LqlyVeP/
+         hsEtEHVTr4KYsp2ukX7V8C9wftrW2ezKkjejJ5zYnIx6EUXhmzSak6cc9zbDLVuWGw+w
+         aYMUl45VSDS2yK43KQQjQcFOfHZWmS/YRhegzgj57/aok9eNxJ5HPmsqLQo9HC2Lprfv
+         hBmZ7qGyCA/ozA609V2Wfu/bpUH7KIB5VIJiSZLZFCCmwNaAaf+ZxUEWkiaMdfxDeVwo
+         Gruje/oXyYq09WgSjdXJ7q4KzSNywnN4UvI+/Mei7XCB6X6aUzDRWwVYOoVzt+VC6pl6
+         FXDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678086487;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nPMxN+7aE/eDgv+4Gb5i0j4P3VUwS4IPF/CTWOVkNGM=;
+        b=UAIs0hGXDFALvUFTcRPwtQ53kSEiKsb4tQZ7ttpgJrrx62YhF8n1vuy9UcNvhyCxWo
+         cQOwRBDYrKuJOdLbG7JmOrJRRg+7GzjAFN+PmNx+H+354x4D5rRmkODR9xt9T2nhW9Q1
+         uN+K8vD9yo7FLAqfptsYgXBLgcU1zq/HS42rs4+MUNkCnO6TmrbhegZ2di8/WXvJq4mI
+         lvoPggAQwzL+qFFMY8GGIl9oF00fZcXky0GwoBl+bbdbPVeTWlnNvy7zOKNJye+ZpEoP
+         zkgue7yatrqRRc/uHVym68bPagiQ20BJERVj/QhPR1WoF0ncZQepNFWaCKFoHTbKl8Oc
+         AOTg==
+X-Gm-Message-State: AO0yUKUFquDoIQAQcGoZlt0Fz55v/KLHZ3cROUqEUviTOwUw/P78wOZk
+        zKB+N/jmE6B6T+abrYzZkkY8wf75PPBJg373kds=
+X-Google-Smtp-Source: AK7set9TZcmB2GVYH/FuARKwCQ91BhrjHIj87pIyDTLjCNWkpaFUIFsb0UDJvdVN9GedqoFrpAIpEhchJ1R+9EV49oc=
+X-Received: by 2002:a1f:38d6:0:b0:401:a4bf:210d with SMTP id
+ f205-20020a1f38d6000000b00401a4bf210dmr6044664vka.1.1678086487119; Sun, 05
+ Mar 2023 23:08:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAWAyyNt0rgrpA1l@combine-ThinkPad-S1-Yoga>
+References: <20230306060446.414986-1-chunyan.zhang@unisoc.com> <fecb3d5c-86b7-f052-6cba-f92b45714665@linaro.org>
+In-Reply-To: <fecb3d5c-86b7-f052-6cba-f92b45714665@linaro.org>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Mon, 6 Mar 2023 15:07:31 +0800
+Message-ID: <CAAfSe-tE1kTZCUeC6bPQLrxDR1WEASatc8VXr1G5x_RhzGm6Yw@mail.gmail.com>
+Subject: Re: [PATCH V3] arm64: dts: sprd: Add support for Unisoc's UMS512
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 06:57:31AM +0100, Guru Mehar Rachaputi wrote:
-> On Mon, Mar 06, 2023 at 11:06:06AM +0530, Deepak R Varma wrote:
-> > On Mon, Mar 06, 2023 at 05:52:51AM +0100, Guru Mehar Rachaputi wrote:
-> > > On Tue, Feb 07, 2023 at 01:49:15PM +0530, Deepak R Varma wrote:
-> > > 
-> > > Hej Deepak,
-> > > 
-> > > I have a problem in sending patchset through mutt.
-> > > I have been trying sending to my own mail address but it won't work.
-> > 
-> > This could be because of mutt configuration. There are some additional checks if
-> > you are trying to use mutt with gmail. Search over google or lore old posts to
-> > know more about it. The important aspect is to configure and test mutt well
-> > before you use it for sending out patches.
-> > 
-> > > 
-> > > When sending patchset I think we should use "In-Reply-To" flag and
-> > > include "Message-ID" to which we want this to be in series to. I tried
-> > > both "git send-email" feature and mutt "forwarding feature".
-> > 
-> > I have not used "git send-email", so can't help you there. But mutt has worked
-> > very well for me. Ensure you are reading and following the instructions from
-> > this page well: https://kernelnewbies.org/Outreachyfirstpatch
+On Mon, 6 Mar 2023 at 14:43, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 06/03/2023 07:04, Chunyan Zhang wrote:
+> > Add basic support for Unisoc's UMS512, with this patch,
+> > the board ums512-1h10 can run into console.
 > >
-> 
-> So for example from these patches: 0.patch, 1.patch
-> how to use "mutt -H" to send patches in one thread?
-> 
-> if first one is: mutt -H 0.patch
-> then should second one be: mutt -H 1.patch In-Reply-To: Message-ID?
+> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> > ---
+> > Changes since V2:
+> > * Removed redundant gpio.h from ums512-1h10.dts
+> >
+> > Changes since v1:
+> > * Addressed comments:
+> >   - Removed earlycon bootargs;
+> >   - Moved up gic reg as second property;
+> >   - Moved two sdio nodes under to the apb bus node;
+> >   - Renamed node name of all fixed clocks;
+> >   - Fixed warnings reported by dtbs_check.
+>
+> Please always mention  under --- why you do not send a binding for new
+> board compatible.
 
-Try this out by sending to yourself and you will know :)
+Ok, I will address.
 
-There is a section "Using git format-patch to send patchsets" in the link I sent
-in my last email. Please read that.
+>
+> > ---
+> >  arch/arm64/boot/dts/sprd/Makefile        |   3 +-
+> >  arch/arm64/boot/dts/sprd/ums512-1h10.dts |  61 ++
+> >  arch/arm64/boot/dts/sprd/ums512.dtsi     | 911 +++++++++++++++++++++++
+> >  3 files changed, 974 insertions(+), 1 deletion(-)
+> >  create mode 100644 arch/arm64/boot/dts/sprd/ums512-1h10.dts
+> >  create mode 100644 arch/arm64/boot/dts/sprd/ums512.dtsi
+> >
+>
+> (...)
+>                 };
+> > +
+> > +             apb@70000000 {
+> > +                     compatible = "simple-bus";
+> > +                     #address-cells = <1>;
+> > +                     #size-cells = <1>;
+> > +                     ranges = <0 0x0 0x70000000 0x10000000>;
+> > +
+> > +                     uart0: serial@0 {
+> > +                             compatible = "sprd,ums512-uart",
+> > +                                          "sprd,sc9836-uart";
+> > +                             reg = <0x0 0x100>;
+> > +                             interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
+> > +                             clocks = <&ext_26m>;
+> > +                             status = "disabled";
+> > +                     };
+> > +
+> > +                     uart1: serial@100000 {
+> > +                             compatible = "sprd,ums512-uart",
+> > +                                          "sprd,sc9836-uart";
+> > +                             reg = <0x100000 0x100>;
+> > +                             interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+> > +                             clocks = <&ext_26m>;
+> > +                             status = "disabled";
+> > +                     };
+> > +
+> > +                     sdio0: sdio@1100000 {
+>
+> Isn't the node name required to be "mmc"?
 
-Deepak.
+Yes, I agree.
 
-> 
-> 
-> > > 
-> > > Another issue is, how to attach patch file from inside mutt(for example: 
-> > > "mutt -H x.patch" from command line is used to extract header and body of a 
-> > > mail in mutt)?
-> > 
-> > Why do you want to do that?
-> > Build a patch file using "git format-patch" and then use "mutt -H" to send the
-> > patch. Both the commands work directly from the command line. If there is a need 
-> > for any additional attachments in support of your patch [configs, logs, trace as
-> > evidence, test outcomes etc], you can attach those from within the "mutt -H"
-> > execution context.
-> > 
-> > I suggest testing mutt well before you start sending any patches out by sending
-> > the patches to yourself. Do not use any kernel mailing list for testing.
-> > 
-> > 
-> > Regards,
-> > Deepak.
-> > 
-> > > 
-> > > 
-> > > -- 
-> > > Thanks & Regards,
-> > > Guru
-> > > 
-> > 
-> > 
-> 
-> -- 
-> Thanks & Regards,
-> Guru
-> 
+>
+> > +                             compatible = "sprd,sdhci-r11";
+> > +                             reg = <0x1100000 0x1000>;
+> > +                             interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+> > +                             clock-names = "sdio", "enable";
+> > +                             clocks = <&ap_clk CLK_SDIO0_2X>,
+> > +                                      <&apapb_gate CLK_SDIO0_EB>;
+> > +                             assigned-clocks = <&ap_clk CLK_SDIO0_2X>;
+> > +                             assigned-clock-parents = <&pll1 CLK_RPLL>;
+> > +                             status = "disabled";
+> > +                     };
+> > +
+> > +                     sdio3: sdio@1400000 {
+>
+> Same problem.
 
-
+Thanks for the review,
+Chunyan
