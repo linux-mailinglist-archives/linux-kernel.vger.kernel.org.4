@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDDE36AC7E7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D4F6AC7EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjCFQ1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:27:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        id S229668AbjCFQ2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCFQ1t (ORCPT
+        with ESMTP id S229624AbjCFQ2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:27:49 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64ABB119
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:27:17 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id e194so8746929ybf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 08:27:17 -0800 (PST)
+        Mon, 6 Mar 2023 11:28:13 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B8B1258F;
+        Mon,  6 Mar 2023 08:27:36 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id l15-20020a9d7a8f000000b0069447f0db6fso5633036otn.4;
+        Mon, 06 Mar 2023 08:27:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678119968;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Oquj9zczWta39dkibg5GfP7EL+Ye+DwkctVIeTmEPfU=;
-        b=bosj6vnLUEt0XF9hTitW9opaoGtgVkZRNCeGSYikHGh3TN+eYxRp69ZbhlogPQt3FC
-         8+rYgTRXE1ny3erHUDalB0QrgQcH8attkXk+h1d2LtKytFU8zc8Pfma1exRiysE8xxTq
-         oMF80ZLxkA2wZf2Lm3emXf73HHEVNb7Dxy2mPqbtX4uvytvi41oLdUwW5V6fpqzYeGbX
-         X+vayVe/4cTpkB5QiIc48PF7K8R2Hb/423TKKHaptnPZ5AOBhPwL7PTzyQkDVPxXiV0J
-         ImE7y9Qsd+bXutgMq2XH3h21VjyFBpDzN2BVXtPNSZ1nX2TSuzooHCJh0aW5l141RdfQ
-         g6aw==
+        d=gmail.com; s=20210112; t=1678119994;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JXnJjEIOpZbPuEgqFoR8MuwGlYRD8/do8e4iqVYe9jA=;
+        b=g2J1sOvHFScq9ttVIurPqh6uAVdu9A9+zHDROKJbzN8VcYNxBAVfI+tsucHnUA8/Ac
+         8tq9jyUdB63cpoi9l0zvWwyf2mdYmtBfgqEwUkHi5aw4AKS2lLQoG6JZoCTo1EQXpC5d
+         mjQ2vS7bP7YwIcosH996Cgf2tKcoXLNfKwZnuXvOnKDJG4r5Tpyqs1JdvZakHp1KvNlZ
+         0YDzTjz7eakWo+QR8wrkz7uT/6nAcIhTBWimKa/6KmyM+YEXfapBRIqwUSKh215xAUn6
+         VlfoXFS+0t0Gl5NLgaJ6Ar1Ld4OjC4EX5wk1s2WenrPJoIy34wEEqo2rC/EF/8eFOMA/
+         CKsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678119968;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Oquj9zczWta39dkibg5GfP7EL+Ye+DwkctVIeTmEPfU=;
-        b=dekflriFvK2Xanr6zpOHlh2UDn+4nY1NhZPGK+5vMykr4q3TqZFKBZf/US5rTa3lMJ
-         LHJCwI8PPH1McbRIS5GX+gbmj/FBsPz5hliGINcswj86JW01Ju6ifHT19atHBuTERHZz
-         szgyeIIjb2aUV14muaBc9kd+aVr4U3rffTMuCVtogkijglcgNCdYYTGkh93hrVR54DyL
-         jDd1SoWmu3f7IEnHidUk9G3bx4pqYh+IQuLFdTs2Wijpav5DvEgsp7pfW9ECeBCra/qY
-         t16Ksjm/5OaTA7N1Lv9xTXGJB+3q802dcS2VuU0r2bqoKY8yvo4UgNWHrmBiWcFDchjP
-         Xo6w==
-X-Gm-Message-State: AO0yUKXTyzW1KFbkI2OCSMNQeFVGNLr3Y0JEt9KXC+Y5Fb1w9LN+NkDW
-        Oy3SDAv6SL7EV1wkJnClHL+Cr+X9BN9ARHJyk2mRbw==
-X-Google-Smtp-Source: AK7set/bl1YCDuzZbRLxZZxYYgRLfDhfUgKFQPGCZLcWXBeJhSMqG+AOOEAHAovSQFDOkZMkYqcVs2oCTW3epOUAtvw=
-X-Received: by 2002:a25:7808:0:b0:a4a:a708:2411 with SMTP id
- t8-20020a257808000000b00a4aa7082411mr6589900ybc.10.1678119968601; Mon, 06 Mar
- 2023 08:26:08 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678119994;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JXnJjEIOpZbPuEgqFoR8MuwGlYRD8/do8e4iqVYe9jA=;
+        b=yhnUEvPCVdbCytJ3F6i7RXjbWGWmbXX/An2SJ18HEG4I9FWLAidnotpynQG513YhGj
+         Imuf/7rAUnQwnuSpDZW9nVAB9149gptTNZ26aLThIA2W3NEYKJ5hMBhSHbWdDTvhoHG9
+         EjFTtz+HOl4XrtEMuHl9KWNMQvf+BskamKTy3lFGrd/Tz6IHWi3ETf46TFe7mLRetrH4
+         h+ZYhTSHgLnbFDrC3LhMChdWa2a1DSDJ5AlUb1zZ7p3iMct3SVuGJuKHNdOawkeY+HjZ
+         gPtTTh7WDAoKlm1y2V9E2NYJOLfPLS0nkPfeAxmlnNYavk5czdv9wVJaPfOovlc8QqWz
+         Hv9Q==
+X-Gm-Message-State: AO0yUKXeyZYec/WsRHJIYK989P/FaqkJCY58PeCavUsm5pPkIPb73VNL
+        1HHpN6zlM085/MFzs7oBWDo=
+X-Google-Smtp-Source: AK7set854bcEzEyHdjoLmMiODiDoqSho1Jnq1WR5UQCRePSQOWlyKsiQ7DfOgrVk6sIwi1qC6U3GzQ==
+X-Received: by 2002:a9d:718e:0:b0:694:1f5b:9a81 with SMTP id o14-20020a9d718e000000b006941f5b9a81mr4626020otj.28.1678119993802;
+        Mon, 06 Mar 2023 08:26:33 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id f9-20020a9d5f09000000b0068bce0cd4e1sm4260265oti.9.2023.03.06.08.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 08:26:33 -0800 (PST)
+Date:   Mon, 6 Mar 2023 08:26:32 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Vernon Yang <vernon2gm@gmail.com>
+Cc:     torvalds@linux-foundation.org, tytso@mit.edu, Jason@zx2c4.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 1/5] random: fix try_to_generate_entropy() if no further
+ cpus set
+Message-ID: <ZAYUODI1yaH5PqHk@yury-laptop>
+References: <20230306160651.2016767-1-vernon2gm@gmail.com>
+ <20230306160651.2016767-2-vernon2gm@gmail.com>
 MIME-Version: 1.0
-References: <20230306154138.3775-1-findns94@gmail.com>
-In-Reply-To: <20230306154138.3775-1-findns94@gmail.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Mon, 6 Mar 2023 08:25:57 -0800
-Message-ID: <CALvZod5z4F=mS=kgd4DOy8HHCDpL--hxw2uf_bjE+7Svs5ps_g@mail.gmail.com>
-Subject: Re: [PATCH v2, 0/4] mm, memcg: cgroup v1 and v2 tunable load/store
- tearing fixes
-To:     Yue Zhao <findns94@gmail.com>
-Cc:     akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        hannes@cmpxchg.org, mhocko@kernel.org, muchun.song@linux.dev,
-        willy@infradead.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tangyeechou@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306160651.2016767-2-vernon2gm@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,25 +78,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 7:42=E2=80=AFAM Yue Zhao <findns94@gmail.com> wrote:
->
-> This patch series helps to prevent load/store tearing in
-> several cgroup knobs.
->
-> As kindly pointed out by Michal Hocko and Roman Gushchin
-> , the changelog has been rephrased.
->
-> Besides, more knobs were checked, according to kind suggestions
-> from Shakeel Butt and Muchun Song.
->
-> v1:
-> - Add [WRITE|READ]_ONCE for memcg->oom_group
-> v2:
-> - Rephrase changelog
-> - Add [WRITE|READ]_ONCE for memcg->oom_kill_disable,
->  memcg->swappiness, vm_swappiness and memcg->soft_limit
->
+On Tue, Mar 07, 2023 at 12:06:47AM +0800, Vernon Yang wrote:
+> After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
+> optimizations"), when NR_CPUS <= BITS_PER_LONG, small_cpumask_bits used
+> a macro instead of variable-sized for efficient.
+> 
+> If no further cpus set, the cpumask_next() returns small_cpumask_bits,
+> it must greater than or equal to nr_cpumask_bits, so fix it to correctly.
+> 
+> Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
 
-Thanks Yue and for the whole series:
+Hi Vernon,
 
-Acked-by: Shakeel Butt <shakeelb@google.com>
+In all that cases, nr_cpu_ids must be used. The difference is that
+nr_cpumask_bits is an upper limit for possible CPUs, and it's derived
+from compile-time NR_CPUS, unless CPUMASK_OFFSTACK is enabled.
+
+nr_cpu_ids is an actual number of CPUS as counted on boot.
+
+So, nr_cpu_ids is always equal or less than nr_cpumask_bits, and we'd
+compare with the smaller number.
+
+Nor sure, but maybe it's worth to introduce a macro like:
+ #define valid_cpuid(cpu) (cpu) < nr_cpu_ids
+
+Thanks,
+Yury
+> ---
+>  drivers/char/random.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index ce3ccd172cc8..d76f12a5f74f 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -1311,7 +1311,7 @@ static void __cold try_to_generate_entropy(void)
+>  			/* Basic CPU round-robin, which avoids the current CPU. */
+>  			do {
+>  				cpu = cpumask_next(cpu, &timer_cpus);
+> -				if (cpu == nr_cpumask_bits)
+> +				if (cpu >= nr_cpumask_bits)
+>  					cpu = cpumask_first(&timer_cpus);
+>  			} while (cpu == smp_processor_id() && num_cpus > 1);
+>  
+> -- 
+> 2.34.1
