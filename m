@@ -2,104 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF296AC0E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863D16AC0EA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCFN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:29:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S231166AbjCFN3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:29:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjCFN3J (ORCPT
+        with ESMTP id S230048AbjCFN3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:29:09 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139FA10A9A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:29:08 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id e194so8092987ybf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:29:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678109347;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wdQ6uUXw6eLlqKNPq8Dwry7lvb1Ttr+GrRVdC8+muhc=;
-        b=l2ZAfX/DEvwxQ2Y8xyQQKr4rCOExDvn8sOpBNCt5+XjYpH0mB1IwSGmmArkULngJme
-         gKXkybkiivT1JpXF6SmaEKUZpD9Zcu4jxcL/oe4mrgpjywjTzaVQFvH7iP1+dXjpnNES
-         MsnXD50DsGXnXbq1kBoSIFTZx1xNSd6BWvbG6OHiqwkraELFxDn6HuLb8sc2Vaa0fJ2C
-         glFElm0T6lcrhpeRzfzpP/Of3PWT0egmhJQ1w9lZtGiKivcWdwdCBAW9k3erryYOFT2U
-         8TRNoZT5mW+P/p1V/B2x8iky/xL5DtD0L6WBiilMuOiJKAY/Me5BM7bRKumyAksmRn4f
-         /3iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678109347;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wdQ6uUXw6eLlqKNPq8Dwry7lvb1Ttr+GrRVdC8+muhc=;
-        b=ME4q7kD4SC1Ptjh/FAdoy91ZhThChla3eoCoatm9C0tgET3Ik5o+ifdaSs1ns6P3fB
-         7Ir+gmDz7s/z9eM9ofj2NdpANvZalNibZYV78CYazxMjJ7qTN6WOkd7IslbShLXWL7n6
-         c/JaaymbiurhL+tMUhCI2hNL85EOXy+P/SUFV9OX7fF/RhLXFrl6+VgrnN7YgBWioqZV
-         oQrYSr9xJ2cMe4vzy92GXljYd8ZKJo5I+qYDn1rDcqHV3Kbef7X16U8vA8NmsRB4hojp
-         p4640aurOnc8I59dIBoo9paKT+OHbVwqINp3BZCYioQAIVh4JY+ZEAV/oWFUvBFOsCuH
-         TwXw==
-X-Gm-Message-State: AO0yUKU+SVvRsqoXoVZh56spL3NAbEQhVglEYaeRa3Vuqyg2Ugxkyc6J
-        5cUlxudEyHScEuVkGcNu4beZ4cr6lIHWXO9mH+BjxQ==
-X-Google-Smtp-Source: AK7set+OiQbj6mLBs96xasjZbpT5NcfAb8pHkprzWfrKaEEsFheZ9Lhi42qtELHmboMFGuSw2/wd+NFyZSXiKZJmSfA=
-X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
- k10-20020a5b038a000000b00ac9cb97bd0emr4934384ybp.5.1678109347288; Mon, 06 Mar
- 2023 05:29:07 -0800 (PST)
+        Mon, 6 Mar 2023 08:29:44 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AAE23671;
+        Mon,  6 Mar 2023 05:29:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678109384; x=1709645384;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dWELgJ6UKYulLa0yVyGSUh1o9vmjbEAcGp3BvCpR7/0=;
+  b=Ny6Bdmhyf+d/e8qS/LLEUEaaP9YCwje2Vn9J9bihSRqJPy1TH0+/TYIb
+   ZDQqMccGUINYeC9XZScfzLytp/baib9pFIGOFBP1bPCHa4in9X3QLPhv2
+   hMREARdufyrHtXFynlFFsb2chSgnBTaWWvTiYt9Pu7yjxacvfbZxhE7tN
+   6Kd+ker27OyjxxOEpU9QD6v+YzEXUqMglXwsQwerjcen2wvliIBtzJFlm
+   f62qt7Awsc4gayySv96/3TwxVNfEyovcCSFmEA9gQAJpsB8Y2C0oO6KiL
+   nqMXhy6i+KH4b8E2Bd/sjqO/yp2G2qoRrXXW8JLs4NuKqCcq5y5ce7jjf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400372283"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="400372283"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 05:29:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="799994608"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="799994608"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 06 Mar 2023 05:29:39 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pZAuH-00GRQZ-2v;
+        Mon, 06 Mar 2023 15:29:37 +0200
+Date:   Mon, 6 Mar 2023 15:29:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mike Looijmans <mike.looijmans@topic.nl>
+Cc:     devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] iio: adc: Add TI ADS1100 and ADS1000
+Message-ID: <ZAXqwaKA3Uh6TH2q@smile.fi.intel.com>
+References: <20230306131312.7170-1-mike.looijmans@topic.nl>
+ <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.0270109b-145d-4024-b8ff-05d54be2ad97@emailsignatures365.codetwo.com>
+ <20230306131312.7170-2-mike.looijmans@topic.nl>
 MIME-Version: 1.0
-References: <20230220023320.3499-1-clin@suse.com>
-In-Reply-To: <20230220023320.3499-1-clin@suse.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 14:28:56 +0100
-Message-ID: <CACRpkdYknZo3Q7_CeSkOL2XwwAmKERskx24o-toaVy=rs0Yf5Q@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] Add pinctrl support for S32 SoC family
-To:     Chester Lin <clin@suse.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, s32@nxp.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        Matthias Brugger <mbrugger@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306131312.7170-2-mike.looijmans@topic.nl>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 3:33 AM Chester Lin <clin@suse.com> wrote:
+On Mon, Mar 06, 2023 at 02:13:12PM +0100, Mike Looijmans wrote:
+> The ADS1100 is a 16-bit ADC (at 8 samples per second).
+> The ADS1000 is similar, but has a fixed data rate.
 
-> Here I want to introduce a new patch series, which aims to support IOMUX
-> functions provided by SIUL2 [System Integration Unit Lite2] on S32 SoCs,
-> such as S32G2. This series is originally from NXP's implementation on
-> nxp-auto-linux repo[1] and it will be required by upstream kernel for
-> supporting a variety of devices on S32 SoCs which need to config PINMUXs,
-> such as PHYs and MAC controllers.
->
-> Thanks,
-> Chester
->
-> Changes in v5:
-> - dt-bindings: No change
-> - driver:
->   - Refactor register r/w access based on REGMAP_MMIO and regmap APIs.
->   - Tag PM functions with '__maybe_unused'.
->   - Add mask check while parsing pin ID from a pinmux value.
->   - Simplify s32_pinconf_mscr_* functions.
+...
 
-This looks really good any no more comments arrived, so patches are applied
-for v6.4!
+> +	/* Value is always 16-bit 2's complement */
+> +	value = be16_to_cpu(buffer);
 
-Thanks for your work on this so far Chester! (I suppose there will be
-maintenance
-for this family going forward.)
++ Blank line?
 
-Yours,
-Linus Walleij
+> +	/* Shift result to compensate for bit resolution vs. sample rate */
+> +	value <<= 16 - ads1100_data_bits(data);
+
++ Blank line?
+
+> +	*val = sign_extend32(value, 15);
+
+...
+
+> +	microvolts = regulator_get_voltage(data->reg_vdd);
+> +	/*
+> +	 * val2 is in 'micro' units, n = val2 / 1000000
+> +	 * result must be millivolts, d = microvolts / 1000
+> +	 * the full-scale value is d/n, corresponds to 2^15,
+> +	 * hence the gain = (d / n) >> 15, factoring out the 1000 and moving the
+> +	 * bitshift so everything fits in 32-bits yields this formula.
+> +	 */
+> +	gain = ((microvolts + BIT(14)) >> 15) * 1000 / val2;
+
+Perhaps adding MICROVOLT_PER_MILLIVOLT (to units.h) and use it here?
+
+Besides that it's seems like
+
+	microvolts = regulator_get_voltage(data->reg_vdd);
+	gain = DIV_ROUNDUP_CLOSEST(microvolts, BIT(15)) *
+	       MICROVOLT_PER_MILLIVOLT / val2;
+
+> +	if (gain <= 0 || gain > 8)
+> +		return -EINVAL;
+
+As I commented out in the previous discussion (please, give a chance to the
+reviewers to answer before issuing a new version of the series) this better
+to be
+
+	if (gain < BIT(0) || gain > BIT(3))
+
+which will show the nature of power of two implicitly.
+
+> +	regval = ffs(gain) - 1;
+> +	ads1100_set_config_bits(data, ADS1100_PGA_MASK, regval);
+
+Can be unified in one line.
+
+> +	return 0;
+> +}
+
+...
+
+> +			return ads1100_set_config_bits(
+> +					data, ADS1100_DR_MASK,
+> +					FIELD_PREP(ADS1100_DR_MASK, i));
+
+Wrong indentation.
+Please, check all your code for this kind of issues.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
