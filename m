@@ -2,118 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3209F6AC804
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12EDD6AC794
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:19:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCFQcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:32:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S229854AbjCFQTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCFQco (ORCPT
+        with ESMTP id S229824AbjCFQTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:32:44 -0500
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F069A38654
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:32:07 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id u9so41155202edd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 08:32:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1678120167;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=24/5jEnRxS77JLQYP3KCQkPVfdQcMFrYWM1aG3/d1pI=;
-        b=PeMn8my/ImjOvT54YmCnkSVgHS4U2S3dV4lYoAUXGKW8IgxF82lBeCLXMoUamGBUvZ
-         w9WOl2PAXIt4OIMErmXXlkQPj5zHNDvuR5WuQfAWUoTgFMbPhgdcbae2qrNZOCEcrXTh
-         EOY9YRyLH5kmF6uxr43JPJGeFlVvjM8lbPwKY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678120167;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=24/5jEnRxS77JLQYP3KCQkPVfdQcMFrYWM1aG3/d1pI=;
-        b=LcfI+LZWnPkxdMhYxWuQ0MS4lLLqiR+das6VyTMMrmWjpU2ugPwfUgkTJLhg2A9kkP
-         +Bye4LvdFG87eg0dKawgK0Z8fqUlA6qv3RkQsZsrYUWx+PTAptmWE4CDmOfmPzYaNj/9
-         NHK5cekwBu3ANqUKDl7JBbk9L34M8x92KQqrRPJTTM0bDXfh31mxtcFquYcv4IdhCOp/
-         lR5OAyNXhiyBiIBWMpKH3ZAHgEqv47hw3g8OfXoDaaebv85R72++RKeSeCs8kp410yRb
-         DCLvZDvEEpXJxaSNcUf67BROCnbcfnm5BAckzFYQwOFLj3VzH1RXzRnjjFALa3KLknRX
-         J2rQ==
-X-Gm-Message-State: AO0yUKWwPgoxLZ1gQj68y1sv+1y8uUNgpq0VCBil63ZmCde5epjKTt+x
-        NVw02hI4rz5ZC/mVUGXAns99dUz4bBqvfmFEoERDSkOhrwsfkEfB1Uw=
-X-Google-Smtp-Source: AK7set+qf7SFHAiNCIIe/y2arjCq+xoMRnPLuL+4ZvciprziaazTRftUVKg5erVzTHvqsyeGD4McJbOrI6XpkJdcSM0=
-X-Received: by 2002:a17:906:d041:b0:877:747d:4a82 with SMTP id
- bo1-20020a170906d04100b00877747d4a82mr5503308ejb.0.1678119310195; Mon, 06 Mar
- 2023 08:15:10 -0800 (PST)
+        Mon, 6 Mar 2023 11:19:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323824E5EC;
+        Mon,  6 Mar 2023 08:16:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0FD25CE13A3;
+        Mon,  6 Mar 2023 16:15:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80115C433EF;
+        Mon,  6 Mar 2023 16:15:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678119316;
+        bh=9a3UZUAnwjQQhgCgDJ7MKuT6/Sf1dQsHXr9Zku6OsNY=;
+        h=From:Date:Subject:To:Cc:From;
+        b=k4iNlWOLOaOPbJBQZByspHrjv0TPajRL00imAcrw5uz7ZihtZ19wt8gepaS6SN7M5
+         VPzGJuSRg83f0B5QlDSkpQDDt6m1GGiTATtuvcxF8RCwew2M1pf5X6dPL4EN+0Okdp
+         KIRTqoFFKdBiDdeuJvyUE+Xh2MXOHmjSNe9ID7Q3XuSom/VQP5+46V9+3qYoDi109e
+         RfYkqp9NCN8IXHrCnYBQN40HZbdescJie7T5nwZHzg+biBZJAGrJmWPrZfz7xA8Gp3
+         tGM7ZvnwJnbW/GrgkMoxTTNrSYwxShi46sTl6SocSB/7ushtCEerj0rEr1HS4AjgjZ
+         ZwfL0j657IqNg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Mon, 06 Mar 2023 16:15:07 +0000
+Subject: [PATCH] KVM: selftests: Comment newly defined aarch64 ID registers
 MIME-Version: 1.0
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
-In-Reply-To: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 6 Mar 2023 17:14:59 +0100
-Message-ID: <CAJfpegvQyD-+EL2DdVWmyKF8odYWj4kAONyRf6VH_h4JCTu=vg@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/9] fuse: API for Checkpoint/Restore
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     mszeredi@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230210-kvm-arm64-getreg-comments-v1-1-a16c73be5ab4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIoRBmQC/x2NywqDMBBFf0Vm3YEY2/TxK6WLGMc4SJIyI7Yg/
+ ntjl+fCuWcDJWFSeDQbCK2sXHKF9tRAmHyOhDxUBmtsZ2xrcF4TeknujJEWoYihpER5UTTXm7l
+ 3zrlxuED1e6+EvfgcpuPhU2Q+5rfQyN9/8vna9x8Kf5ivggAAAA==
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bd1bf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2507; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=9a3UZUAnwjQQhgCgDJ7MKuT6/Sf1dQsHXr9Zku6OsNY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBhGQou3gS/eCqhQJI1oy3yDoWgiJU61dH1a0K++y
+ wR+MAHyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAYRkAAKCRAk1otyXVSH0DC3CA
+ CDAlrk7iMJb+P1P7II5kQl9iLm3JOqbxtT4U0hX2XoMPNi/rCRv8G+lF50in82+/4HmuJTc6kjNdrn
+ Kr0CNdsdXI6DT9Q+fXgjU+n9PWBjxopbldbl0XbK0uYD2a2HhmMgJwh5+N4NkMNqKiXrKW6J3WCNdY
+ +9vyBZLSSIMEbKMaV5SD4OMm+2fJEizZQZhcnmb0sqwVfqGi9ZIxo2C2paxi1T4y8wuukZmXsHItWy
+ Rm1qiT5g31+3SSpFo96WgFJ0iQmK0/1K2G/K8kXJnYLY1FXQsqEIvmO2NNvS5PyGbJ8PORTjiM8HCt
+ I94yCVBxTAqZ2k5G6P1Ier927x7PJa
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 20 Feb 2023 at 20:38, Alexander Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> Hello everyone,
->
-> It would be great to hear your comments regarding this proof-of-concept Checkpoint/Restore API for FUSE.
->
-> Support of FUSE C/R is a challenging task for CRIU [1]. Last year I've given a brief talk on LPC 2022
-> about how we handle files C/R in CRIU and which blockers we have for FUSE filesystems. [2]
->
-> The main problem for CRIU is that we have to restore mount namespaces and memory mappings before the process tree.
-> It means that when CRIU is performing mount of fuse filesystem it can't use the original FUSE daemon from the
-> restorable process tree, but instead use a "fake daemon".
->
-> This leads to many other technical problems:
-> * "fake" daemon has to reply to FUSE_INIT request from the kernel and initialize fuse connection somehow.
-> This setup can be not consistent with the original daemon (protocol version, daemon capabilities/settings
-> like no_open, no_flush, readahead, and so on).
-> * each fuse request has a unique ID. It could confuse userspace if this unique ID sequence was reset.
->
-> We can workaround some issues and implement fragile and limited support of FUSE in CRIU but it doesn't make any sense, IMHO.
-> Btw, I've enumerated only CRIU restore-stage problems there. The dump stage is another story...
->
-> My proposal is not only about CRIU. The same interface can be useful for FUSE mounts recovery after daemon crashes.
-> LXC project uses LXCFS [3] as a procfs/cgroupfs/sysfs emulation layer for containers. We are using a scheme when
-> one LXCFS daemon handles all the work for all the containers and we use bindmounts to overmount particular
-> files/directories in procfs/cgroupfs/sysfs. If this single daemon crashes for some reason we are in trouble,
-> because we have to restart all the containers (fuse bindmounts become invalid after the crash).
-> The solution is fairly easy:
-> allow somehow to reinitialize the existing fuse connection and replace the daemon on the fly
-> This case is a little bit simpler than CRIU cause we don't need to care about the previously opened files
-> and other stuff, we are only interested in mounts.
->
-> Current PoC implementation was developed and tested with this "recovery case".
-> Right now I only have LXCFS patched and have nothing for CRIU. But I wanted to discuss this idea before going forward with CRIU.
+All otherwise unspecified aarch64 ID registers should be read as zero so
+we cover the whole ID register space in the get-reg-list test but we've
+added comments for those that have been named. Add comments for
+ID_AA64PFR2_EL1, ID_AA64SMFR0_EL1, ID_AA64ISAR2_EL1, ID_AA64MMFR3_EL1
+and ID_AA64MMFR4_EL1 which have been defined since the comments were
+added so someone looking for them will see that they are covered.
 
-Apparently all of the added mechanisms (REINIT, BM_REVAL, conn_gen)
-are crash recovery related, and not useful for C/R.  Why is this being
-advertised as a precursor for CRIU support?
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-BTW here's some earlier attempt at partial recovery, which might be interesting:
+diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+index d287dd2cac0a..df8a8afca4fc 100644
+--- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
++++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+@@ -807,10 +807,10 @@ static __u64 base_regs[] = {
+ 	ARM64_SYS_REG(3, 0, 0, 3, 7),
+ 	ARM64_SYS_REG(3, 0, 0, 4, 0),	/* ID_AA64PFR0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
+-	ARM64_SYS_REG(3, 0, 0, 4, 2),
++	ARM64_SYS_REG(3, 0, 0, 4, 2),	/* ID_AA64PFR2_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 4, 3),
+ 	ARM64_SYS_REG(3, 0, 0, 4, 4),	/* ID_AA64ZFR0_EL1 */
+-	ARM64_SYS_REG(3, 0, 0, 4, 5),
++	ARM64_SYS_REG(3, 0, 0, 4, 5),	/* ID_AA64SMFR0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 4, 6),
+ 	ARM64_SYS_REG(3, 0, 0, 4, 7),
+ 	ARM64_SYS_REG(3, 0, 0, 5, 0),	/* ID_AA64DFR0_EL1 */
+@@ -823,7 +823,7 @@ static __u64 base_regs[] = {
+ 	ARM64_SYS_REG(3, 0, 0, 5, 7),
+ 	ARM64_SYS_REG(3, 0, 0, 6, 0),	/* ID_AA64ISAR0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 6, 1),	/* ID_AA64ISAR1_EL1 */
+-	ARM64_SYS_REG(3, 0, 0, 6, 2),
++	ARM64_SYS_REG(3, 0, 0, 6, 2),	/* ID_AA64ISAR2_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 6, 3),
+ 	ARM64_SYS_REG(3, 0, 0, 6, 4),
+ 	ARM64_SYS_REG(3, 0, 0, 6, 5),
+@@ -832,8 +832,8 @@ static __u64 base_regs[] = {
+ 	ARM64_SYS_REG(3, 0, 0, 7, 0),	/* ID_AA64MMFR0_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 7, 1),	/* ID_AA64MMFR1_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 7, 2),	/* ID_AA64MMFR2_EL1 */
+-	ARM64_SYS_REG(3, 0, 0, 7, 3),
+-	ARM64_SYS_REG(3, 0, 0, 7, 4),
++	ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
++	ARM64_SYS_REG(3, 0, 0, 7, 4),	/* ID_AA64MMFR4_EL1 */
+ 	ARM64_SYS_REG(3, 0, 0, 7, 5),
+ 	ARM64_SYS_REG(3, 0, 0, 7, 6),
+ 	ARM64_SYS_REG(3, 0, 0, 7, 7),
 
-  https://lore.kernel.org/all/CAPm50a+j8UL9g3UwpRsye5e+a=M0Hy7Tf1FdfwOrUUBWMyosNg@mail.gmail.com/
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230210-kvm-arm64-getreg-comments-078093666fd5
 
-Thanks,
-Miklos
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
