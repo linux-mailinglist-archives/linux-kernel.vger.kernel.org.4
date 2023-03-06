@@ -2,123 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 915BA6ABF4C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38C4E6ABF4E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:16:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjCFMQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:16:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
+        id S230313AbjCFMQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjCFMQa (ORCPT
+        with ESMTP id S230311AbjCFMQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:16:30 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DF020579;
-        Mon,  6 Mar 2023 04:16:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678104990; x=1709640990;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PuPDornh1OEsP3yzAZOWoqW4lUda0/ttH3RpXrbjS8s=;
-  b=PygDbpHWIPxWSyE8IvXWrpvUkiZ2qYqLNhVQalvcTExejMAl/hzX2nyo
-   IGaV+pk7uurgm+DIdOtWtM2KiVnUEug8bU8aAdadtdj/nIx5uEetgMHEA
-   l+pVdeqL/y90C/b7cMJJf4HSC7rTnA1DNxtnYjXeRchIL/M06SK+EJWt9
-   9VpsD8xGFxsSAKp7jsHbQDPmGR5JXXcagLujdJbjXSa0G0M2XD3rWnOxK
-   13RUexfez0b8CzYRVGf+oDrrgGaMXyU4wBTPAqTjwE7O7xt27eqZpMkuK
-   o4rdI994UCUOIB/tp1oZsqgcr8Jcl9I99SONT2oc6fu5f2bnIrAfQpeOf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="335560376"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="335560376"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:16:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="708633313"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="708633313"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 06 Mar 2023 04:16:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZ9lQ-00GLG9-1E;
-        Mon, 06 Mar 2023 14:16:24 +0200
-Date:   Mon, 6 Mar 2023 14:16:24 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] iio: adc: Add TI ADS1100 and ADS1000
-Message-ID: <ZAXZmETRgpWAsE/+@smile.fi.intel.com>
-References: <20230228063151.17598-1-mike.looijmans@topic.nl>
- <20230228063151.17598-2-mike.looijmans@topic.nl>
- <20230304175751.2daae308@jic23-huawei>
- <ZAXYhIETzMa/7G6N@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAXYhIETzMa/7G6N@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 6 Mar 2023 07:16:37 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CA32A99B;
+        Mon,  6 Mar 2023 04:16:35 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id l25so8593855wrb.3;
+        Mon, 06 Mar 2023 04:16:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678104994;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2rlBIhyxmZ71ToNHpy5Y5u3P6vJwhvrMUv8FnCvij4k=;
+        b=GBZXHFVTX/nW7TfztXUpgb9u4EZwalKnVSWhWRlUNL1HrGhladuhW4RqDJ+desSKBq
+         B6dOEb2OUkPDDtnh2ml5puA3h1vN8FZ5KBbZZ639qFYS8dXim9O1GyZ149GYyBwoXiog
+         ebtc8VTIWv9rylU1ME+WvJEF0pVB95Pjr8LaO14JWfyILr0OxS7nsCI8yH36NRkE6nc6
+         e895DR7rVRNZbkm0kQNw1VJ4tkInR65KlCG8ino1dXeaY+IS9LSFnZPgKa7KlQf0JNcx
+         f4moetX10h88dT26GN3gfHHftCrPYTK9VhlyQAVuh/qCk3ovsA1cvTLtBFtu5PTMU5vf
+         zxwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678104994;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2rlBIhyxmZ71ToNHpy5Y5u3P6vJwhvrMUv8FnCvij4k=;
+        b=12AxfyZA41l/VjjVbvKCBCamRIOBNJ9Mr+eyK03wr9zUNRKz3SyoI1l7ior/dyOr/R
+         8Ul/jD7BLv90FK8H8Tc8syWyHnl/ZnprXrGsOVUHwj06A59Hxx6i0CPwM8QZyxKWl4iK
+         aFN7i9pPG8uBcV0qEeKDMharoF9jzYlcGludlRFZucmwRYJzhFw2tqed4fB43dmyRNhl
+         MPh2ccvnuyW6uaq9cOxVR4NmHrxKYWn4r76rPsTaHtM9nW5/sJKmFn/GRAXrBk09oX+l
+         3MR53qLU7gqCXsH3eyZ0tbe2vIrrGKxCK1l83poPpM5jQg3ysJ/b8CqxL/js053VYP3K
+         wFsQ==
+X-Gm-Message-State: AO0yUKUSA/f7/Tiilzmndt9VpW+F20xCh6W+Pj+SfsZmBE+4vQTBPzuN
+        2OV1qcyypYEXH0XNrmN6WeY=
+X-Google-Smtp-Source: AK7set/dr5gwWAwOoOQIEaDI1DmLE8EnieEcXWk9g4KmUrTN8MWgILONe9KJ7EE/5eh28WmC3KC5dQ==
+X-Received: by 2002:adf:dc89:0:b0:2c7:1d0d:7183 with SMTP id r9-20020adfdc89000000b002c71d0d7183mr6359306wrj.9.1678104994318;
+        Mon, 06 Mar 2023 04:16:34 -0800 (PST)
+Received: from smtpclient.apple ([167.99.200.149])
+        by smtp.gmail.com with ESMTPSA id n16-20020a5d67d0000000b002c758fe9689sm9628435wrw.52.2023.03.06.04.16.32
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 06 Mar 2023 04:16:34 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v2 0/3] arm64: dts: meson: gxbb-kii-pro: device-tree
+ updates
+From:   Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <3db5ae6c-a3f1-b64a-b605-4eac32fb4086@linaro.org>
+Date:   Mon, 6 Mar 2023 16:16:29 +0400
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <9CCCF479-88B7-4C02-B0D7-B2B062B7E7B7@gmail.com>
+References: <20230210170721.1285914-1-christianshewitt@gmail.com>
+ <3db5ae6c-a3f1-b64a-b605-4eac32fb4086@linaro.org>
+To:     neil.armstrong@linaro.org
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 02:11:48PM +0200, Andy Shevchenko wrote:
-> On Sat, Mar 04, 2023 at 05:57:51PM +0000, Jonathan Cameron wrote:
-> > On Tue, 28 Feb 2023 07:31:51 +0100
-> > Mike Looijmans <mike.looijmans@topic.nl> wrote:
 
-...
+> On 6 Mar 2023, at 12:40 pm, Neil Armstrong <neil.armstrong@linaro.org> =
+wrote:
+>=20
+> Hi !
+>=20
+> On 10/02/2023 18:07, Christian Hewitt wrote:
+>> First we sort nodes in the current dts and remove some blank lines. =
+Then we
+>> add the remaining bits needed for Bluetooth to work. And finally we =
+add the
+>> AIU audio card to have HDMI and S/PDIF audio output.
+>> Changes since v1:
+>> - Add reviews from Neil
+>> - Drop unneded 'okay' from audio patch
+>> Christian Hewitt (3):
+>>   arm64: dts: meson: gxbb-kii-pro: sort and tidy the dts
+>>   arm64: dts: meson: gxbb-kii-pro: complete the bluetooth node
+>>   arm64: dts: meson: gxbb-kii-pro: add initial audio support
+>>  .../boot/dts/amlogic/meson-gxbb-kii-pro.dts   | 83 =
+++++++++++++++++---
+>>  1 file changed, 72 insertions(+), 11 deletions(-)
+>=20
+> This doesn't apply anymore on v6.3-rc1, can you rebase ?
+> Thanks!
 
-> > > +	for (i = 0; i < 4; i++) {
-> > > +		if (BIT(i) == gain) {
-> > > +			ads1100_set_config_bits(data, ADS1100_PGA_MASK, i);
-> > > +			return 0;
-> > > +		}
-> > > +	}
-> > Andy's suggestion of something like..
-> > 	if (!gain)
-> > 		return -EINVAL;
-> > 	i = ffs(gain);
-> > 	if (i >= 4 || BIT(i) != gain)
-> > 		return -EINVAL;
-> > 
-> > 	ads...
-> > 
-> > Is perhaps nicer than the loop.
-> 
-> Even better:
-> 
-> 	if (!gain || !is_power_of_2(gain))
-> 		return -EINVAL;
+v3 rebased on for-next sent.=20
 
-Or if you want to combine all checks:
-
-	if (clamp_val(gain, BIT(0), BIT(3)) != gain || !is_power_of_2(gain))
-		return -EINVAL;
-
-	ads1100_set_config_bits(data, ADS1100_PGA_MASK, ffs(gain));
-	return 0;
-
-(You can play with bloat-o-meter for the code generation and see which one is
- better from that aspect)
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Christian=
