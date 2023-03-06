@@ -2,117 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9566ACEAB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ABF6ACEB3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjCFT4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:56:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58564 "EHLO
+        id S229710AbjCFT75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:59:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjCFT4Q (ORCPT
+        with ESMTP id S229726AbjCFT7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:56:16 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8D7664C7;
-        Mon,  6 Mar 2023 11:55:51 -0800 (PST)
+        Mon, 6 Mar 2023 14:59:43 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D992078CAD
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:59:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678132552; x=1709668552;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=z9mXunzTxFtyQxWYx0D3ZdzQzJ0LQXRYVBzePKOyr2Y=;
-  b=Ih5XHDYMjtD0cz0TMSQiXyHKSDKfnufpV//bJv0nhLgh5Wbn6VNAkcXw
-   bpYN+QoLmOa9H7/Lm0940umiZUNAJZIwFQaJ2HcreJpdGOzM5fFaYOHem
-   xiV8QTV28OLCjWT14GoTtXIx4bd4TdYV7Sg7/86jtGwC4CWWa8NCDiwbz
-   3MAGB+5ke+hfAaTIchNwV/1+nfWWu08UXf9sxQpWekfdAfnQliH+Ohy+R
-   6I4g1VUZ4hqLFOk69zK60pfoUz11VVNM32ZIvrk5DENmn9wNxUYOWAB1x
-   2r7bC38Wq2lUyO+R1d64CHuzasZKvhYqHGi6LJ+vXOXjhZBvPIvCRV/68
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="333129039"
+  t=1678132763; x=1709668763;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ecju4sYx+yWQbiEi5d0o5kp1Bet6ABCYcaCyo6+cyqk=;
+  b=abXp9aZS/TLQ8ZVxyqQlRkICsG6HngUFCS/W/sqSIDzM4YZP71Fkl5cC
+   phD1gJa1JAhXffTkOuJsyLhadDlTLq+YCL7S+sy2yYaQRzBvuaUtPL0Zn
+   hpQfw6HiCtR2gtp7BNqGNTqC6fO83ePixTlmTkFGnSm5k77vo/b87qhmA
+   wUoXT58O884eXOytCW+CM6mqJmvPffR2kdg7pulKjNgceCykdpO7B0qzk
+   Mu4NgPpRatoMnaRfCOzaazBGjzykgde5ozkaMV3EjjJZ5Z6R4jeMgPvIA
+   eTadP6MN6p16mqds2cGZf/AigCkHEBlk1INufgWONH2ebAXURrH3Wbtmm
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="334374856"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="333129039"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 11:55:41 -0800
+   d="scan'208";a="334374856"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 11:56:33 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745185205"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="653711649"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="745185205"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Mar 2023 11:55:36 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id EDC5787; Mon,  6 Mar 2023 21:56:12 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        patches@opensource.cirrus.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Nandor Han <nandor.han@ge.com>,
-        Semi Malinen <semi.malinen@ge.com>
-Subject: [PATCH v1 16/16] gpio: xra1403: Utilize helpers from string_choices.h
-Date:   Mon,  6 Mar 2023 21:55:56 +0200
-Message-Id: <20230306195556.55475-17-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
-References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
+   d="scan'208";a="653711649"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 06 Mar 2023 11:56:32 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZGwh-0000ad-1E;
+        Mon, 06 Mar 2023 19:56:31 +0000
+Date:   Tue, 07 Mar 2023 03:56:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ f918413697ac28e19f90fd028725367483e0b555
+Message-ID: <6406455d.gPJkU6v9C9xZy5U8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are a few helpers available to convert a boolean variable
-to the dedicated string literals depending on the application.
-Use them in the driver.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: f918413697ac28e19f90fd028725367483e0b555  Merge branch into tip/master: 'x86/cleanups'
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpio/gpio-xra1403.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+elapsed time: 725m
 
-diff --git a/drivers/gpio/gpio-xra1403.c b/drivers/gpio/gpio-xra1403.c
-index 49c878cfd5c6..bc17beaba9e7 100644
---- a/drivers/gpio/gpio-xra1403.c
-+++ b/drivers/gpio/gpio-xra1403.c
-@@ -15,6 +15,7 @@
- #include <linux/seq_file.h>
- #include <linux/spi/spi.h>
- #include <linux/regmap.h>
-+#include <linux/string_choices.h>
- 
- /* XRA1403 registers */
- #define XRA_GSR   0x00 /* GPIO State */
-@@ -140,8 +141,8 @@ static void xra1403_dbg_show(struct seq_file *s, struct gpio_chip *chip)
- 	for_each_requested_gpio(chip, i, label) {
- 		seq_printf(s, " gpio-%-3d (%-12s) %s %s\n",
- 			   chip->base + i, label,
--			   (gcr & BIT(i)) ? "in" : "out",
--			   (gsr & BIT(i)) ? "hi" : "lo");
-+			   str_in_out(gcr & BIT(i)),
-+			   str_hi_lo(gsr & BIT(i)));
- 	}
- }
- #else
+configs tested: 32
+configs skipped: 124
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230306   gcc  
+i386                 randconfig-a002-20230306   gcc  
+i386                 randconfig-a003-20230306   gcc  
+i386                 randconfig-a004-20230306   gcc  
+i386                 randconfig-a005-20230306   gcc  
+i386                 randconfig-a006-20230306   gcc  
+i386                 randconfig-a011-20230306   clang
+i386                 randconfig-a012-20230306   clang
+i386                 randconfig-a013-20230306   clang
+i386                 randconfig-a014-20230306   clang
+i386                 randconfig-a015-20230306   clang
+i386                 randconfig-a016-20230306   clang
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230306   gcc  
+x86_64               randconfig-a002-20230306   gcc  
+x86_64               randconfig-a003-20230306   gcc  
+x86_64               randconfig-a004-20230306   gcc  
+x86_64               randconfig-a005-20230306   gcc  
+x86_64               randconfig-a006-20230306   gcc  
+x86_64               randconfig-a011-20230306   clang
+x86_64               randconfig-a012-20230306   clang
+x86_64               randconfig-a013-20230306   clang
+x86_64               randconfig-a014-20230306   clang
+x86_64               randconfig-a015-20230306   clang
+x86_64               randconfig-a016-20230306   clang
+x86_64                               rhel-8.3   gcc  
+
 -- 
-2.39.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
