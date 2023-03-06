@@ -2,137 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 311CF6AC85E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B181F6AC86A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:43:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjCFQl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:41:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50198 "EHLO
+        id S229864AbjCFQn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjCFQlj (ORCPT
+        with ESMTP id S230348AbjCFQnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:41:39 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC4139BA1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:40:52 -0800 (PST)
-Received: from workpc.. (unknown [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C67DD6602EE4;
-        Mon,  6 Mar 2023 16:39:36 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678120777;
-        bh=2qF0hUp8glqDQ1ktUcSd1pu0qhpff4ScS2Sp+BIuEaU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=W+n6JtB8n30LcsAnOQBmt8DYkHssmRq4ybXRTK7ze63cYN5xZJVUlMFV3qx9bXVTD
-         j/CIjJklOkgonUVbISB8pOqdQEyWUu916qZ7CzRH2fhoF61YjwPEgGXK2OXIjhFTRY
-         MWIWty2OOEVJhkVzLYE0AAlqTGLuMApawktqS9i+kgx30nBKcAwwPXvvWTslHqSIPe
-         jeeB88G3cA2qFqS9DNK7JjeF0WesAtmsy0Q5hJFEBoimyQ1y9wsfEGpR7kxmj9mK2D
-         Hs1sK++8a8NiSh0iTCT8DTOhKx14TKSHD7ldpt7Bvk+DdnbmGngXx3FKYedRZ/PpV6
-         RY8KK9bD0cOiQ==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Gerd Hoffmann <kraxel@redhat.com>, Rob Clark <robdclark@gmail.com>,
-        Emil Velikov <emil.velikov@collabora.com>
-Cc:     Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@redhat.com>, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v3] drm/virtio: Fix handling CONFIG_DRM_VIRTIO_GPU_KMS option
-Date:   Mon,  6 Mar 2023 19:39:16 +0300
-Message-Id: <20230306163916.1595961-1-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 6 Mar 2023 11:43:18 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F007EEB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:42:53 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id i34so41219574eda.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 08:42:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678120900;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CBQLhMJNJwBxWCZBMKKd2ZioyWT7HHTdTuSHuSD5zeE=;
+        b=RymyUxEqXDN6lqEMPjXJTgOOGQgr5jbPevWg8i40M+/MPF9dFVfBLTwCZgxRLAl46d
+         Nw/KqOGzbnN3Q4Ki62BMdS7r2U3bvniAWizojRlbFsi2tCP9JpJ/kBxnPGuGrGT4q8xy
+         raXXBoV2dAXAfj90iQOvAzDND8z0f2MR5DjBr5lepEWwn/d0ZzmiuL74BixrSAxBIVcH
+         rREZOqtfY8LN8WH5mHd0lTO80qa/S8ovZopCCPZ1yjpC2F3ziHWty8MZ9gFFgAQhxW7n
+         TZiRddDGSdircQbHifgYgGIhdIbNL5yofWgbB4LX1Qrblg8MyEt90pqodeP9mhBrnavh
+         SNpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678120900;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CBQLhMJNJwBxWCZBMKKd2ZioyWT7HHTdTuSHuSD5zeE=;
+        b=rIfBoSbcamDAANilORDOUr1Skg69at6Ut0rU5/Rd2va33kTtNhh29iAzHDIWvHyB6d
+         TNMHRNR1Lcl+ukomZUnowFJGQGtchKBnJhjHR9nKf5paxFClwARf/Q67HCdcPbQ5WCp4
+         QoG921w9NrFPZkIhbrJvDEEY74qNTfe7VGFnjN9FWcfbYf/PWfWxe7hszkirTsgKXZUT
+         RDB/7FWLkZtO7/74kojls44+db67sHOu+UCh1uOeDVzNX8N+K82+NP14uuqhx0W8Biha
+         CqV/0drMsPLFh0HGtXgPUoRO/YktUuSfl1h/1jzOoKGhA6ZwMngPRoeAEyvsKavP12Fr
+         eegQ==
+X-Gm-Message-State: AO0yUKV7o7kZ68TiHerwdkxx6j6FF9QHF4bTGdgQ3QAPcv3Q3xzjjkvj
+        zotY9Ay9XmYg5SNMjwuSTDV8IQ==
+X-Google-Smtp-Source: AK7set8jxix0Za/DVd/wm3kcw43surTXMo2qOCiwMqzZSVfE/iqtn5rPhfFDjsexdGCVyoGKW4OM/Q==
+X-Received: by 2002:a17:906:ee9:b0:8af:2bb3:80d7 with SMTP id x9-20020a1709060ee900b008af2bb380d7mr15158307eji.31.1678120899857;
+        Mon, 06 Mar 2023 08:41:39 -0800 (PST)
+Received: from [192.168.1.70] (125.62.71.86.rev.sfr.net. [86.71.62.125])
+        by smtp.gmail.com with ESMTPSA id m30-20020a50d7de000000b004c13fe8fabfsm5355664edj.84.2023.03.06.08.41.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 08:41:39 -0800 (PST)
+Message-ID: <7ade5f76-426c-297c-2809-af5f67279cf9@baylibre.com>
+Date:   Mon, 6 Mar 2023 17:41:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 2/4] mfd: tps6594: Add driver for TI TPS6594 PMIC
+Content-Language: en-US
+To:     Lee Jones <lee@kernel.org>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        corbet@lwn.net, hdegoede@redhat.com, eric.auger@redhat.com,
+        jgg@ziepe.ca, razor@blackwall.org, suma.hegde@amd.com,
+        stephen@networkplumber.org, arnd@arndb.de,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, eblanc@baylibre.com,
+        jneanne@baylibre.com
+References: <20230216114410.183489-1-jpanis@baylibre.com>
+ <20230216114410.183489-3-jpanis@baylibre.com>
+ <20230303150355.GQ2420672@google.com>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <20230303150355.GQ2420672@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VirtIO-GPU got a new config option for disabling KMS. There were two
-problems left unnoticed during review when the new option was added:
 
-1. The IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) check in the code was
-inverted, hence KMS was disabled when it should be enabled and vice versa.
 
-2. The disabled KMS crashed kernel with a NULL dereference in
-drm_kms_helper_hotplug_event(), which shall not be invoked with a
-disabled KMS.
+On 3/3/23 16:03, Lee Jones wrote:
+> On Thu, 16 Feb 2023, Julien Panis wrote:
+>
+>> This patch adds support for TPS6594 PMIC MFD core. It provides
+>> communication through the I2C and SPI interfaces, and supports
+>> protocols with embedded CRC data fields for safety applications.
+>>
+>> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+>> ---
 
-Fix the inverted config option check in the code and skip handling the
-VIRTIO_GPU_EVENT_DISPLAY sent by host when KMS is disabled in guest to fix
-the crash.
+(...)
 
-Acked-by: Gerd Hoffmann <kraxel@redhat.com>
-Fixes: 72122c69d717 ("drm/virtio: Add option to disable KMS support")
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
+>> +
+>> +static int tps6594_check_crc_mode(struct tps6594 *tps, bool primary_pmic)
+>> +{
+>> +	int ret;
+>> +
+>> +	/*
+>> +	 * Ensure that CRC is enabled.
+>> +	 * Once CRC is enabled, it can't be disabled until next power cycle.
+>> +	 */
+>> +	tps->use_crc = true;
+>> +	ret = regmap_test_bits(tps->regmap, TPS6594_REG_SERIAL_IF_CONFIG,
+>> +			       TPS6594_BIT_I2C1_SPI_CRC_EN);
+>> +	if (ret < 0) {
+>> +		tps->use_crc = false;
+>> +	} else if (ret == 0) {
+>> +		tps->use_crc = false;
+> Will this value be used again after you return an error?
 
-Changelog:
+No, it is not used any more. I will remove this line in v2.
 
-v3: - Moved another similar "has_edid" occurence under the "num_scanouts"
-      condition in virtio_gpu_init(), like was suggested by Emil Velikov.
+>
+>> +		ret = -EIO;
+>> +	} else {
+>> +		dev_info(tps->dev, "CRC feature enabled on %s PMIC",
+>> +			 primary_pmic ? "primary" : "secondary");
+>> +		ret = 0;
+> I would consider reversing the logic of the if()s, default to 'false'
+> then set 'true' in here before the print.
 
-    - Added ack from Gerd Hoffmann.
+Do you speak about 'tps->use_crc' value ?
+'tps->use_crc' is used in regmap read/write callbacks, so it
+must be set 'true' before calling 'regmap_test_bits()' function.
+In other words, CRC_EN bit must be read with 'tps->use_crc = true'.
 
-v2: - Moved the "has_edid" under the "num_scanouts" condition, like was
-      suggested by Gerd Hoffmann.
+>
+>> +	}
+>> +
+>> +	return ret;
+>> +}
+>> +
+>> +static int tps6594_set_crc_feature(struct tps6594 *tps)
+>> +{
+>> +	int ret;
+>> +
+>> +	/* Force PFSM I2C_2 trigger to enable CRC on primary PMIC */
+>> +	ret = regmap_write_bits(tps->regmap, TPS6594_REG_FSM_I2C_TRIGGERS,
+>> +				TPS6594_BIT_TRIGGER_I2C(2), TPS6594_BIT_TRIGGER_I2C(2));
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	/* Wait for PFSM to process trigger */
+>> +	msleep(20);
+> Is this the time specified in the datasheet?
 
- drivers/gpu/drm/virtio/virtgpu_kms.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+I checked with the customer after your review and the datasheet
+specifies 2 ms.
+The clock specification is +/-5%. The customer recommends
+using 4ms, which is a simple number providing sufficient margin.
+As a consequence, I will adjust this delay in v2.
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
-index 874ad6c2621a..43e237082cec 100644
---- a/drivers/gpu/drm/virtio/virtgpu_kms.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
-@@ -43,11 +43,13 @@ static void virtio_gpu_config_changed_work_func(struct work_struct *work)
- 	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
- 			events_read, &events_read);
- 	if (events_read & VIRTIO_GPU_EVENT_DISPLAY) {
--		if (vgdev->has_edid)
--			virtio_gpu_cmd_get_edids(vgdev);
--		virtio_gpu_cmd_get_display_info(vgdev);
--		virtio_gpu_notify(vgdev);
--		drm_helper_hpd_irq_event(vgdev->ddev);
-+		if (vgdev->num_scanouts) {
-+			if (vgdev->has_edid)
-+				virtio_gpu_cmd_get_edids(vgdev);
-+			virtio_gpu_cmd_get_display_info(vgdev);
-+			virtio_gpu_notify(vgdev);
-+			drm_helper_hpd_irq_event(vgdev->ddev);
-+		}
- 		events_clear |= VIRTIO_GPU_EVENT_DISPLAY;
- 	}
- 	virtio_cwrite_le(vgdev->vdev, struct virtio_gpu_config,
-@@ -224,7 +226,7 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
- 	vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
- 				    VIRTIO_GPU_MAX_SCANOUTS);
- 
--	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) || !vgdev->num_scanouts) {
-+	if (!IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) || !vgdev->num_scanouts) {
- 		DRM_INFO("KMS disabled\n");
- 		vgdev->num_scanouts = 0;
- 		vgdev->has_edid = false;
-@@ -253,9 +255,9 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
- 
- 	if (num_capsets)
- 		virtio_gpu_get_capsets(vgdev, num_capsets);
--	if (vgdev->has_edid)
--		virtio_gpu_cmd_get_edids(vgdev);
- 	if (vgdev->num_scanouts) {
-+		if (vgdev->has_edid)
-+			virtio_gpu_cmd_get_edids(vgdev);
- 		virtio_gpu_cmd_get_display_info(vgdev);
- 		virtio_gpu_notify(vgdev);
- 		wait_event_timeout(vgdev->resp_wq, !vgdev->display_info_pending,
--- 
-2.39.2
+>
+>> +	return tps6594_check_crc_mode(tps, true);
+>> +}
+>> +
+>> +int tps6594_device_init(struct tps6594 *tps)
+>> +{
+>> +	struct device *dev = tps->dev;
+>> +	unsigned int prop;
+> Since this only has a single use, better to rename it to something specific.
+>
+>> +	unsigned long timeout = msecs_to_jiffies(TPS6594_CRC_SYNC_TIMEOUT_MS);
+>> +	int n_dev = ARRAY_SIZE(tps6594_cells);
+>> +	int ret;
+>> +
+>> +	/* Keep PMIC in ACTIVE state */
+>> +	ret = regmap_set_bits(tps->regmap, TPS6594_REG_FSM_NSLEEP_TRIGGERS,
+>> +			      TPS6594_BIT_NSLEEP1B | TPS6594_BIT_NSLEEP2B);
+>> +	if (ret)
+>> +		return dev_err_probe(dev, ret, "Failed to set PMIC state\n");
+>> +
+>> +	/*
+>> +	 * CRC mode can be used with I2C or SPI protocols.
+>> +	 * If this mode is specified for primary PMIC, it will also be applied to secondary PMICs
+>> +	 * through SPMI serial interface.
+>> +	 * In this multi-PMIC synchronization scheme, the primary PMIC is the controller device
+>> +	 * on the SPMI bus, and the secondary PMICs are the target devices on the SPMI bus.
+>> +	 */
+>> +	prop = of_property_read_bool(dev->of_node, "ti,use-crc");
 
+As discussed with Krzysztof for dt-bindings, this 'ti,use-crc'
+property will be removed from the device tree, in v2.
+Instead, a property will be used to identify the primary PMIC.
+Moreover, since using CRC applies either to all the PMICs or
+to none of them, it is a global feature. That's why a driver
+parameter will be added to enable CRC feature at initialization
+(something like a 'enable_crc' bool).
+
+(...)
+
+>> diff --git a/include/linux/mfd/tps6594.h b/include/linux/mfd/tps6594.h
+>> new file mode 100644
+>> index 000000000000..e2ffd4dc034d
+>> --- /dev/null
+>> +++ b/include/linux/mfd/tps6594.h
+>> @@ -0,0 +1,1018 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Functions to access TPS6594 Power Management IC
+>> + *
+>> + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
+>> + */
+>> +
+>> +#ifndef __LINUX_MFD_TPS6594_H
+>> +#define __LINUX_MFD_TPS6594_H
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/regmap.h>
+>> +
+>> +struct regmap_irq_chip_data;
+>> +
+>> +/* Chip id list */
+>> +#define TPS6594		0
+>> +#define TPS6593		1
+>> +#define LP8764X		2
+> enum?
+
+Yes indeed, I will fix that in v2.
+
+(...)
+
+Your others suggestions will also be implemented in v2.
+
+Thank you Lee for your time and feedback.
+
+Julien
