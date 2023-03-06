@@ -2,84 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485356ACFFF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C49026AD008
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:17:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbjCFVQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S229975AbjCFVRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:17:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjCFVQ3 (ORCPT
+        with ESMTP id S229716AbjCFVRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:16:29 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D97515F9
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:16:26 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id k17-20020a170902d59100b0019abcf45d75so6406279plh.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 13:16:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678137386;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cSjs2hF+stLMorZuJ3Q4yg6wn5aTQLGNhdQrvetiCw=;
-        b=nO81Dd+ZdOpPz+rMZF+TlStTUcOdB9fYf13b12+wmj6L3uW+fQA7rdl9b7YXUwV0jX
-         I13woF73Otxijbj8ERXL0Ue7ErTR+09OxofYhExYX82U38pFRLv7VwAAVLlkCf8njVEy
-         Z/kRmWywNVghsM99HWEY5cKmP9X1L+vYcJn9Gu5g39MFFMOh6J/04/U2GjXKa8nzeKgt
-         VXWrXIyQkhG/rNkxiRYiCvs89f/6XCE73rAe2CCcH2mdABft17Q0wfBOkrN9i7G7XGV9
-         qMRC7I0Cn3xahUbo9C0V4E1U0nKdC9XcIy+nSLME4DyqC6ubKOlchC87aSk/WleNGZN1
-         Vi9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678137386;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cSjs2hF+stLMorZuJ3Q4yg6wn5aTQLGNhdQrvetiCw=;
-        b=iPHrnRj5UCyeKyDA+VadUjcDDp/WSqTW1N5lBGyS747fdDIkxin/z5UZM4+cUr9cGp
-         7ebF6pIWRKaz7b4cSOgJFaeECKjU5qzb+/1l8cDeVqEs+im1o3Okms8KYNIWMAT+iWbm
-         rMhG6KfOKSQO10Ma6jueNVJo1R1RNt61kt5Ot3DMKPcBTqqjZcdN5an2j3jjWZ8CDnam
-         rK8xDq1oFzCB2xD8YSPkaMQx5AZmOAvOGk977dVNBWdt7BM5XC7gc39Zs6Gv6P/BRFxk
-         Z/xek8w5lT5MLLDxT3JPokOe6xKKroVCGJT15CCwE0vBryKpqyOyAH0xaGE6XVTqDkuJ
-         VPZA==
-X-Gm-Message-State: AO0yUKWY2N7g7krAnkFwXJIA7lBmbQ5SsqRaaHP/QqAJWbCezzX/PgPJ
-        aWA5WNDA9BT+M6B/+cmUWMJu7ZtQq5w=
-X-Google-Smtp-Source: AK7set/FdOs8fBG1Qf4JZnE/q2KTXSkvw2Xh3WHAVa7wzG+qH5k8o2Dr60lo7nSbCYK7xaiiauyALjwZOQ8=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:d443:0:b0:5df:9809:6220 with SMTP id
- u3-20020a62d443000000b005df98096220mr5102359pfl.3.1678137386366; Mon, 06 Mar
- 2023 13:16:26 -0800 (PST)
-Date:   Mon, 6 Mar 2023 13:16:25 -0800
-In-Reply-To: <Y/6FIeJ5KCOfKEPN@zn.tnic>
-Mime-Version: 1.0
-References: <Y/5oBKi6vjZe83ac@zn.tnic> <20230228222416.61484-1-itazur@amazon.com>
- <Y/6FIeJ5KCOfKEPN@zn.tnic>
-Message-ID: <ZAZYKe4L8jhMG4An@google.com>
-Subject: Re: [PATCH 0/2] KVM: x86: Propagate AMD-specific IBRS bits to guests
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Takahiro Itazuri <itazur@amazon.com>, dave.hansen@linux.intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, tglx@linutronix.de,
-        x86@kernel.org, zulinx86@gmail.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 6 Mar 2023 16:17:38 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE61D51FAA
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:17:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678137456; x=1709673456;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IceOBOEUff+6cT1sEZx3UbSe7A+q5pFp70G94wBGbDc=;
+  b=YwbFGVk5JQYDdkI/Dn+iU4hCJSG8xJM613IXkXpvlWMPC0F5gl+fKq3S
+   x6PRiNZm4ukc8GNFsD4pqd7slQs7wRzX4+VAXVbgzx4dk+VOxKKTBgS8h
+   vO4Mwc+vzM0Bix9YNJsTE9s7o45R21fZDLWAsqtvyg1gA13hxJE4spBAS
+   9x7HCPWaE+RdX69FRZWJ3tWGZrDskcmXzLixDUi87Km4yhQtiCm3Bjz1d
+   v6eRILpbYeO6GmY2sHo4PFthTR3rN/RxKAJyMYU2n55ZiFHjNsrMdfFOr
+   6h5ApPTNAdYWw/2OTljZ1KMPQwOrEBdDrL6k/IMOMgvC8d+4KowYm9uK8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="335696947"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="335696947"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 13:17:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="676324096"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="676324096"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 06 Mar 2023 13:17:35 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZID8-0000e1-2l;
+        Mon, 06 Mar 2023 21:17:34 +0000
+Date:   Tue, 07 Mar 2023 05:16:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:ras/core] BUILD SUCCESS
+ 7214b32b6f4c6c1385a52f2e3a7107f28349f505
+Message-ID: <6406583c.w2sBGLT6WBwShsA8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023, Borislav Petkov wrote:
-> On Tue, Feb 28, 2023 at 10:24:16PM +0000, Takahiro Itazuri wrote:
-> > I'm still a kernel newbie and I don't have a strong opinion for that.
-> > I just thought it would be helpful if the KVM_GET_SUPPORTED_CPUID API
-> > returns the same security information as the host, as long as it is
-> > harmless.
-> 
-> Not harmless - cpufeatures.h should contain flags which the kernel uses
-> and not *every* CPUID bit out there.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras/core
+branch HEAD: 7214b32b6f4c6c1385a52f2e3a7107f28349f505  x86/MCE/AMD: Make kobj_type structure constant
 
-I thought that the consensus was that adding unused-by-the-kernel flags to
-cpufeatures.h is ok so long as the feature is hidden from /proc/cpuinfo and the
-kernel already dedicates a word to the CPUID leaf?
+elapsed time: 725m
+
+configs tested: 26
+configs skipped: 205
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230306   gcc  
+i386                 randconfig-a002-20230306   gcc  
+i386                 randconfig-a003-20230306   gcc  
+i386                 randconfig-a004-20230306   gcc  
+i386                 randconfig-a005-20230306   gcc  
+i386                 randconfig-a006-20230306   gcc  
+i386                 randconfig-a011-20230306   clang
+i386                 randconfig-a012-20230306   clang
+i386                 randconfig-a013-20230306   clang
+i386                 randconfig-a014-20230306   clang
+i386                 randconfig-a015-20230306   clang
+i386                 randconfig-a016-20230306   clang
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a011-20230306   clang
+x86_64               randconfig-a012-20230306   clang
+x86_64               randconfig-a013-20230306   clang
+x86_64               randconfig-a014-20230306   clang
+x86_64               randconfig-a015-20230306   clang
+x86_64               randconfig-a016-20230306   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
