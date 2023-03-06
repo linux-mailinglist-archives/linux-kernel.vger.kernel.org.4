@@ -2,135 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9346AC84D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E6C6AC812
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:34:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjCFQis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:38:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
+        id S229862AbjCFQeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:34:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjCFQhD (ORCPT
+        with ESMTP id S229795AbjCFQeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:37:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1640B410A9
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:35:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678120504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8gChhWa5+pV9cvva7KKeCwxEw+kt5hxoG0ztKCrLbRE=;
-        b=Ecxh7HjTlmpjSP+r2T058X2l2otz6koqr/ebem0PJ9W/B8NsVyUllFRfbci2yjsTOSLf9a
-        HlXF4K9ITZe6jSzY3XaK9morIxklujf1VDYsaLlqWkjXK6fALpolimN4OvYHOlWu0SSA56
-        rIozv5FPI1tFEAHDN8H8pjBThvWSLPA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-479-xAeRr96XNX6SiROa8aY1Yg-1; Mon, 06 Mar 2023 11:31:52 -0500
-X-MC-Unique: xAeRr96XNX6SiROa8aY1Yg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 583BE3850545;
-        Mon,  6 Mar 2023 16:31:50 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.2.16.80])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 62FB140C10FA;
-        Mon,  6 Mar 2023 16:31:42 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     szabolcs.nagy@arm.com
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
-Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
- description
-References: <Y/9fdYQ8Cd0GI+8C@arm.com>
-        <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
-        <df8ef3a9e5139655a223589c16a68393ab3f6d1d.camel@intel.com>
-        <ZADQISkczejfgdoS@arm.com>
-        <9714f724b53b04fdf69302c6850885f5dfbf3af5.camel@intel.com>
-        <ZAYS6CHuZ0MiFvmE@arm.com>
-Date:   Mon, 06 Mar 2023 17:31:40 +0100
-In-Reply-To: <ZAYS6CHuZ0MiFvmE@arm.com> (szabolcs's message of "Mon, 6 Mar
-        2023 16:20:56 +0000")
-Message-ID: <87wn3tsuxf.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+        Mon, 6 Mar 2023 11:34:08 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F683C642;
+        Mon,  6 Mar 2023 08:33:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678120420; x=1709656420;
+  h=from:subject:date:message-id:mime-version:
+   content-transfer-encoding:to:cc;
+  bh=tkVzW7sXUIGeU7LLrAVYS19oco2M/sPVMoMkRXsEHoE=;
+  b=X4yCDwYm4V7dvzaPRJNP7PqdvFh06fqi7YewJSKmy8BVs32j7IwGmlVa
+   rmb5jV7k7+XIxrDoZbEdMJH1aGopo+czj0j5bGSxrnHuYOISuHONQ2XGC
+   68dXf9W4GNtCBXY4dLr4iu9fcwxJfSME0+N6Be9PURGgGOFeizzo30y++
+   yFUNOdR931AuAWcJ8w+Ig9WHk4wWFRXzdCoX/DK9uLeop4qz3ukP9MwKG
+   qsNZs2rtWyM0HMt5yERQ2PGH1qIymgV3jEINqLnQ2JyBVLYmQ4Is8s/Ew
+   G5V5Cr+DSo4fzE624DM3WIVD9Jit8gKVLL0L3T3AidlLcFMMPX3i8Ql87
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="315998543"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="315998543"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 08:32:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745132781"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="745132781"
+Received: from lab-ah.igk.intel.com ([10.102.42.211])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 08:32:19 -0800
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Subject: [PATCH v4 00/10] drm/i915: use ref_tracker library for tracking wakerefs
+Date:   Mon, 06 Mar 2023 17:31:57 +0100
+Message-Id: <20230224-track_gt-v4-0-464e8ab4c9ab@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH0VBmQC/22Nyw6CMBBFf4XM2ppSCD5W/ochpJ0OMFGLmTZEQ
+ /h3C2uX5z5yFogkTBGuxQJCM0eeQob6UACONgyk2GcGo02ljalVEouPbkiqdJW3Z+ct+hPkubOR
+ lBMbcNwOQn23b0m29p2ZP7vo3mYeOaZJvrt3Lrf0j2IulVY5MvrS9OixuXFI9Dzi9IJ2XdcfMfY
+ 9gr4AAAA=
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Chris Wilson <chris.p.wilson@intel.com>
+X-Mailer: b4 0.11.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* szabolcs:
+This is revived patchset improving ref_tracker library and converting
+i915 internal tracker to ref_tracker.
+The old thread ended without consensus about small kernel allocations,
+which are performed under spinlock.
+I have tried to solve the problem by splitting the calls, but it results
+in complicated API, so I went back to original solution.
+If there are better solutions I am glad to discuss them.
+Meanwhile I send original patchset with addressed remaining comments.
 
-> syscall overhead in case of frequent stack trace collection can be
-> avoided by caching (in tls) when ssp falls within the thread shadow
-> stack bounds. otherwise caching does not work as the shadow stack may
-> be reused (alt shadow stack or ucontext case).
+To: Jani Nikula <jani.nikula@linux.intel.com>
+To: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+Cc: linux-kernel@vger.kernel.org
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
+Cc: netdev@vger.kernel.org
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
 
-Do we need to perform the system call at each page boundary only?  That
-should reduce overhead to the degree that it should not matter.
+---
+Changes in v4:
+- split "Separate wakeref tracking" to smaller parts
+- fixed typos,
+- Link to v1-v3: https://patchwork.freedesktop.org/series/100327/
 
-> unfortunately i don't know if syscall overhead is actually a problem
-> (probably not) or if backtrace across signal handlers need to work
-> with alt shadow stack (i guess it should work for crash reporting).
+---
+Andrzej Hajda (7):
+      lib/ref_tracker: add unlocked leak print helper
+      lib/ref_tracker: __ref_tracker_dir_print improve printing
+      lib/ref_tracker: add printing to memory buffer
+      lib/ref_tracker: remove warnings in case of allocation failure
+      drm/i915: Separate wakeref tracking types from rpm
+      drm/i915: Correct type of wakeref variable
+      drm/i915: replace Intel internal tracker with kernel core ref_tracker
 
-Ideally, we would implement the backtrace function (in glibc) as just a
-shadow stack copy.  But this needs to follow the chain of alternate
-stacks, and it may also need some form of markup for signal handler
-frames (which need program counter adjustment to reflect that a
-*non-signal* frame is conceptually nested within the previous
-instruction, and not the function the return address points to).  But I
-think we can add support for this incrementally.
+Chris Wilson (3):
+      drm/i915: Separate wakeref tracking
+      drm/i915: Track leaked gt->wakerefs
+      drm/i915/gt: Hold a wakeref for the active VM
 
-I assume there is no desire at all on the kernel side that sigaltstack
-transparently allocates the shadow stack?  Because there is no
-deallocation function today for sigaltstack?
+ drivers/gpu/drm/i915/Kconfig.debug                 |  19 ++
+ drivers/gpu/drm/i915/Makefile                      |   1 +
+ drivers/gpu/drm/i915/display/intel_display_power.c |   2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c     |   7 +-
+ .../drm/i915/gem/selftests/i915_gem_coherency.c    |  10 +-
+ drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c |  14 +-
+ drivers/gpu/drm/i915/gt/intel_breadcrumbs.c        |  13 +-
+ drivers/gpu/drm/i915/gt/intel_breadcrumbs_types.h  |   3 +-
+ drivers/gpu/drm/i915/gt/intel_context.h            |  15 +-
+ drivers/gpu/drm/i915/gt/intel_context_types.h      |   2 +
+ drivers/gpu/drm/i915/gt/intel_engine_pm.c          |  10 +-
+ drivers/gpu/drm/i915/gt/intel_engine_types.h       |   2 +
+ .../gpu/drm/i915/gt/intel_execlists_submission.c   |   2 +-
+ drivers/gpu/drm/i915/gt/intel_gt_pm.c              |  12 +-
+ drivers/gpu/drm/i915/gt/intel_gt_pm.h              |  38 +++-
+ drivers/gpu/drm/i915/gt/intel_gt_pm_debugfs.c      |   4 +-
+ drivers/gpu/drm/i915/gt/selftest_engine_cs.c       |  20 +-
+ drivers/gpu/drm/i915/gt/selftest_gt_pm.c           |   5 +-
+ drivers/gpu/drm/i915/gt/selftest_reset.c           |  10 +-
+ drivers/gpu/drm/i915/gt/selftest_rps.c             |  17 +-
+ drivers/gpu/drm/i915/gt/selftest_slpc.c            |   5 +-
+ drivers/gpu/drm/i915/gt/uc/intel_guc_submission.c  |  11 +-
+ drivers/gpu/drm/i915/i915_driver.c                 |   2 +-
+ drivers/gpu/drm/i915/i915_pmu.c                    |  16 +-
+ drivers/gpu/drm/i915/intel_runtime_pm.c            | 221 ++-------------------
+ drivers/gpu/drm/i915/intel_runtime_pm.h            |  11 +-
+ drivers/gpu/drm/i915/intel_wakeref.c               |   7 +-
+ drivers/gpu/drm/i915/intel_wakeref.h               | 112 ++++++++++-
+ include/linux/ref_tracker.h                        |  31 ++-
+ lib/ref_tracker.c                                  | 179 ++++++++++++++---
+ 30 files changed, 469 insertions(+), 332 deletions(-)
+---
+base-commit: 1ddc2effff762c6a109af52f3c39534c7115aebe
+change-id: 20230224-track_gt-1b3da8bdacd7
 
-Thanks,
-Florian
-
+Best regards,
+-- 
+Andrzej Hajda <andrzej.hajda@intel.com>
