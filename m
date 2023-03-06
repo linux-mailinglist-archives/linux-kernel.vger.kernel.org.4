@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9A86AC8BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:52:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A4E6AC8A5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCFQwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:52:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S231139AbjCFQsB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Mar 2023 11:48:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjCFQwD (ORCPT
+        with ESMTP id S230198AbjCFQrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:52:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DD71FEA;
-        Mon,  6 Mar 2023 08:51:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B98AD61001;
-        Mon,  6 Mar 2023 16:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB615C433EF;
-        Mon,  6 Mar 2023 16:49:57 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="p7OvzPz1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1678121396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l0IN1VirqLiMA24UJjnZzI6umrNwjSsL7ENm7zhRfEY=;
-        b=p7OvzPz1NmfKhe6kfIuqjE+THJUupW4DBOjmYlYF+caw15CTip4wmluH9W1Flbbziaghta
-        9it828fCf9UjeM+GVJF6yiGH5IwDVBBToxv13m1Gr6Sn6dMmMxa0OIpkUeipfG8xYK/h8c
-        VRnTEB0oxbtXms6RWFdtVuaEt9rvUN8=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 23ff5f42 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 6 Mar 2023 16:49:55 +0000 (UTC)
-Received: by mail-yb1-xb35.google.com with SMTP id v13so8823855ybu.0;
-        Mon, 06 Mar 2023 08:49:55 -0800 (PST)
-X-Gm-Message-State: AO0yUKWyrk7X+Mwn/2jQjt7u//l5Ze38dvVnboiuEKSYACkwU4OJwD7L
-        V0XiCNjvJzx/chpWGkluvioLXrhbarXtiA5d8V4=
-X-Google-Smtp-Source: AK7set9CK46/v8qFmWbdZ/4F4SRDr5QbKoIrAv/Wae6SuQP8a65V94c1vPHoCPtLR3gHjN4UILUiQdF7vxmAXeMOPdQ=
-X-Received: by 2002:a25:7808:0:b0:a4a:a708:2411 with SMTP id
- t8-20020a257808000000b00a4aa7082411mr6622201ybc.10.1678121092709; Mon, 06 Mar
- 2023 08:44:52 -0800 (PST)
+        Mon, 6 Mar 2023 11:47:37 -0500
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C75211F1;
+        Mon,  6 Mar 2023 08:47:03 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id s12so11188440qtq.11;
+        Mon, 06 Mar 2023 08:47:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678121109;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jvViXneQW0Y0NLgAFFQaV/kY8HJotQKpErXAhKId1Yg=;
+        b=gtIyHwFHGRKNHMB9aPCa4szwpRkGGLSEbcz+tN0uXgnrp87hPAniTRG72ZPZm9waU2
+         ctRK0+z0kwlN5xBYmaWgYTnnnRiSUnn5fnak1iCizfUQYF7H1oDFlRyRmzSGC4wSnIv+
+         Ib5VGLGzcOq34CIAsEY4V0QSntYko4LTs8P5OR4xaSFNqofvxuprspi2ROZIyDDuSB5c
+         NevY/XkhsetoSOp7hWFe/9Aoc0i4IqsG0NomFkVXaMeQxlE8UeoL/o1q+TOo/tB6Oxkw
+         kHCMpj3Xymq1/GD0h3tPhBJWkvi0tw0VoEN5ovbCN4NKl3rTzAJGRqEzKkIZU+KSZKpF
+         fKjw==
+X-Gm-Message-State: AO0yUKVnrkN8A7H0g0wsJ0FtwXEeLLZMmLy/HXQkmL7KFuI1LK4Jvkru
+        mPTW7cumUUp0zL8KgrkTcr+ilDyZz/J0yw==
+X-Google-Smtp-Source: AK7set8a7d6K2pBd8zdb2FExPiIjZFF6sq89g9Mhl3mhcmpUfZgdEgjMKNgrqQe0csF0/3ITZyaNVg==
+X-Received: by 2002:a05:622a:206:b0:3b9:17d7:66f4 with SMTP id b6-20020a05622a020600b003b917d766f4mr19711213qtx.11.1678121108736;
+        Mon, 06 Mar 2023 08:45:08 -0800 (PST)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id p188-20020a3742c5000000b006fed58fc1a3sm7778914qka.119.2023.03.06.08.45.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 08:45:08 -0800 (PST)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-53916ab0c6bso194643897b3.7;
+        Mon, 06 Mar 2023 08:45:08 -0800 (PST)
+X-Received: by 2002:a81:af4b:0:b0:533:91d2:9d94 with SMTP id
+ x11-20020a81af4b000000b0053391d29d94mr7137846ywj.5.1678121107857; Mon, 06 Mar
+ 2023 08:45:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306160651.2016767-1-vernon2gm@gmail.com> <20230306160651.2016767-6-vernon2gm@gmail.com>
- <ZAYXJ2E+JHcp2kD/@yury-laptop>
-In-Reply-To: <ZAYXJ2E+JHcp2kD/@yury-laptop>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Mon, 6 Mar 2023 17:44:41 +0100
-X-Gmail-Original-Message-ID: <CAHmME9r_JXNCVVCNxZRQkafA=eOOu5k0+AweRDor3tNu283bdg@mail.gmail.com>
-Message-ID: <CAHmME9r_JXNCVVCNxZRQkafA=eOOu5k0+AweRDor3tNu283bdg@mail.gmail.com>
-Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Vernon Yang <vernon2gm@gmail.com>, torvalds@linux-foundation.org,
-        tytso@mit.edu, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, linux-kernel@vger.kernel.org,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org
+References: <20230216175347.99778-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20230216175347.99778-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20230216175347.99778-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 6 Mar 2023 17:44:55 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWh-nt7gMbfLOCNx79BrThAF+DqU6fKrQaqE+OHqcHQ6g@mail.gmail.com>
+Message-ID: <CAMuHMdWh-nt7gMbfLOCNx79BrThAF+DqU6fKrQaqE+OHqcHQ6g@mail.gmail.com>
+Subject: Re: [PATCH 1/3] arm64: dts: renesas: r9a07g044: Add CSI and CRU nodes
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,44 +74,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 5:39=E2=80=AFPM Yury Norov <yury.norov@gmail.com> wr=
-ote:
+On Thu, Feb 16, 2023 at 6:54 PM Prabhakar <prabhakar.csengg@gmail.com> wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 >
-> On Tue, Mar 07, 2023 at 12:06:51AM +0800, Vernon Yang wrote:
-> > After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumas=
-k
-> > optimizations"), the cpumask size is divided into three different case,
-> > so fix comment of cpumask_xxx correctly.
-> >
-> > Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
-> > ---
-> >  include/linux/cpumask.h | 46 ++++++++++++++++++++---------------------
-> >  1 file changed, 23 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > index 8fbe76607965..248bdb1c50dc 100644
-> > --- a/include/linux/cpumask.h
-> > +++ b/include/linux/cpumask.h
-> > @@ -155,7 +155,7 @@ static __always_inline unsigned int cpumask_check(u=
-nsigned int cpu)
-> >   * cpumask_first - get the first cpu in a cpumask
-> >   * @srcp: the cpumask pointer
-> >   *
-> > - * Returns >=3D nr_cpu_ids if no cpus set.
-> > + * Returns >=3D small_cpumask_bits if no cpus set.
+> Add CSI and CRU nodes r9a07g044 (RZ/G2L) SoC DTSI.
 >
-> There's no such thing like small_cpumask_bits. Here and everywhere,
-> nr_cpu_ids must be used.
->
-> Actually, before 596ff4a09b89 nr_cpumask_bits was deprecated, and it
-> must be like that for all users even now.
->
-> nr_cpumask_bits must be considered as internal cpumask parameter and
-> never referenced outside of cpumask code.
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-What's the right thing I should do, then, for wireguard's usage and
-for random.c's usage? It sounds like you object to this patchset, but
-if the problem is real, it sounds like I should at least fix the two
-cases I maintain. What's the right check?
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Jason
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
