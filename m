@@ -2,61 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A4F6AC20A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6746AC212
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbjCFN7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54220 "EHLO
+        id S230166AbjCFOAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCFN7q (ORCPT
+        with ESMTP id S230129AbjCFOAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:59:46 -0500
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B802684D;
-        Mon,  6 Mar 2023 05:59:43 -0800 (PST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1678111180; bh=+O/tQvEEKg/Fmeucrj8YQ2UpdRcW6qnPWq0vPinoPQ4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ABe4eQunxTj/gMkIU0okCsnylD+iOO9YT+yVb2oxZXPQGC7UbP8TEiXtNC3urgL15
-         N5c2GkFNaNk+Xl1uccqOEp4TbXH2oH/FsaaKcilSQTdG/nJdeEnD6hDqRbHNQSzHCA
-         B07zzWB+ZUPDMDndR59HqwtjgpkbbZ+1oUmsvDZNqBPti6s44V8woF0Y/ksXUrVBCt
-         eavzv4DkuaMFMtEP/hwu7aMVLqCqa29QHRoB0oZNcEicUdZuZUT24x8knqYbADCvlf
-         rIFCOtPv8QAOuCvw7/kUELJeKsn/MoXvchwn1iBPVUaZ86t8oObuQgBudHLnKoOA/A
-         Ldljoz4ki4Q8g==
-To:     Bastian Germann <bage@debian.org>, Kalle Valo <kvalo@kernel.org>
-Cc:     Bastian Germann <bage@debian.org>, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] wifi: ath9k: Remove Qwest/Actiontec 802AIN ID
-In-Reply-To: <20230306125041.2221-1-bage@debian.org>
-References: <20230305210245.9831-1-bage@debian.org>
- <20230306125041.2221-1-bage@debian.org>
-Date:   Mon, 06 Mar 2023 14:59:40 +0100
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87mt4qaskz.fsf@toke.dk>
+        Mon, 6 Mar 2023 09:00:44 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87845305D3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:00:40 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id i6so8161119ybu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:00:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678111240;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j/Y94Pc8yhv157LBUch/tn3T/6KugP9L4mHMFv2Mi1c=;
+        b=vA6tYOcfyoBCdfKlR/1Lr7HvkVd06OiCVrXU4TOnwFiit65IdM0kFbVBLqZW5cMmK+
+         A5yUU9Mw/tLMUDAf7NRanaVp4fZU9TqqacCQeyq6sJnEI+FMxoGagywCeMfqEPqOeBlu
+         nXZe3GT1ey9hKarOppW/jvJi0wQDqDiDWkgi+zWo3VL53r/o2qQ6XywZjqGNfVs+aziJ
+         vFDiFhoPpunDokD6pdrYjro1heNldIyNfmCy5fkj2rW2gZBBy0mMduKlEM3Hcg2IYroD
+         KAvVMKy94smfbRsD0o8BkZJR9a+/t+J9dmoQ7IUmtTEfx2oHWkOThNqkknbmyZqubsnk
+         Ti0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678111240;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j/Y94Pc8yhv157LBUch/tn3T/6KugP9L4mHMFv2Mi1c=;
+        b=uf49k5YAlf6SRs9H8ZRW/mh/4VCn5SD1DfdAdMHoaJmi5pjU4d3XcSPJcwWVB2jK9E
+         Ef1OuPUcoj2lPTvejN82Tbv2so7ZqbFql+tKjS27vMAklCt1RzOnCQ66oMXJgBD8GoL/
+         OxOBxqr9pEoRBBbHwEppRgBX0037w2ZoUrQoif4EpZF4O/RBRUlXK9Fkhdp82Aj03Diz
+         HBeSPEWtjCr8SI+KyadTn99cXikmDomrdmHuY5jpb8jNleawbFPHKZs5wBf3+Advd1Ky
+         LBrcNKbiZJiELvEsnmZi56egQr51FJwgTcNO2/xTRT6zsq0tayYYpUjUvK06qWkuqFhA
+         Tg2A==
+X-Gm-Message-State: AO0yUKU9v5MjYjqYl6w3Gq99u0pg9xie+LKJLwrj4cZP5+qpMeqGMape
+        zijvovHLa+o5w3OfmZpWJ5a9opRYDIT23E31+xCCSQ==
+X-Google-Smtp-Source: AK7set/+qd3FzcDCbbQjlLKSyczCieknA6kNFFX6l4uSmFR+66HJ7iMYS6i/ooDX/uospypKCFmfiNndLJj2B5M0Ve0=
+X-Received: by 2002:a25:8b8f:0:b0:906:307b:1449 with SMTP id
+ j15-20020a258b8f000000b00906307b1449mr6437900ybl.5.1678111239717; Mon, 06 Mar
+ 2023 06:00:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20230219183059.1029525-1-xiang.ye@intel.com> <20230219183059.1029525-6-xiang.ye@intel.com>
+ <CACRpkdbAve++nA0zwHvOm3fy0t9J9g0fR_FO71TTv=TwM6CJYA@mail.gmail.com> <Y/j7cAQaaCXXYe6s@ye-NUC7i7DNHE>
+In-Reply-To: <Y/j7cAQaaCXXYe6s@ye-NUC7i7DNHE>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Mar 2023 15:00:28 +0100
+Message-ID: <CACRpkdbg4zu9-yKy3AEKqxTiNKa-LUO2Lokg3pufT0nBz3ubKg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] Documentation: Add ABI doc for attributes of LJCA device
+To:     "Ye, Xiang" <xiang.ye@intel.com>
+Cc:     Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, srinivas.pandruvada@intel.com,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+        wentong.wu@intel.com, lixu.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bastian Germann <bage@debian.org> writes:
+On Fri, Feb 24, 2023 at 7:02 PM Ye, Xiang <xiang.ye@intel.com> wrote:
+> On Fri, Feb 24, 2023 at 11:53:08AM +0100, Linus Walleij wrote:
 
-> The USB device 1668:1200 is Qwest/Actiontec 802AIN which is also
-> correctly claimed to be supported by carl9170.
->
-> Supposedly, the successor 802AIN2 which has an ath9k compatible chip
-> whose USB ID (unknown) could be inserted instead.
->
-> Drop the ID from the wrong driver.
->
-> Signed-off-by: Bastian Germann <bage@debian.org>
+> > Is the idea that e.g. fwupdmgr should provide a front-end for this?
 
-Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
+> We haven't implemented a front-end in fwupdmgr. dfu-util is used to
+> update LJCA firmware manually currently. Maybe we will consider
+> implementing this in fwupdmgr later.
+
+It's a matter of process rather than implementation really, but if you can
+please communicate upward to the project that if this is to go into
+consumer hands (i.e. be used by random people on random laptops)
+the firmware update should come via fwupdmgr.
+
+Yours,
+Linus Walleij
