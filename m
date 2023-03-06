@@ -2,110 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700F76AC06E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AEF6AC06F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbjCFNK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:10:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
+        id S230522AbjCFNKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:10:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbjCFNK0 (ORCPT
+        with ESMTP id S230519AbjCFNKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:10:26 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369E928864;
-        Mon,  6 Mar 2023 05:10:19 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B221A1EC04DA;
-        Mon,  6 Mar 2023 14:10:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678108217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=bWmcddmzGW5yzynufI6rjsmSnLtiGLy5KYxja3tJ0Z8=;
-        b=B8mcPzwvMPSYO4I+OvKl5AfMKP7855m2KCKcP9KOUVszEzgJdjNqkWvJcMA7QfJSyyBTt9
-        qO1zUWZ+n9bzrRq4rlVZeJXOKYFQs1KYAKKh+nM2U/gtcRAN9sIniVVphbNrFpKd2mbZAR
-        MXoTf9V/XVsPQ8WRnhN3mJJiq6GdCQo=
-Date:   Mon, 6 Mar 2023 14:10:17 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com
-Subject: Re: [PATCH v7 24/41] mm: Don't allow write GUPs to shadow stack
- memory
-Message-ID: <ZAXmOZYcoR3hq/CH@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-25-rick.p.edgecombe@intel.com>
+        Mon, 6 Mar 2023 08:10:51 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3103D2C650
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:10:39 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C90EE12FC;
+        Mon,  6 Mar 2023 05:11:22 -0800 (PST)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DE5A3F885;
+        Mon,  6 Mar 2023 05:10:38 -0800 (PST)
+Date:   Mon, 6 Mar 2023 13:10:37 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 08/10] sched/topology: Remove SHARED_CHILD from
+ ASYM_PACKING
+Message-ID: <ZAXmTT0bG4qf+HKN@arm.com>
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207045838.11243-9-ricardo.neri-calderon@linux.intel.com>
+ <ZAHaMKH7C0sVIjXX@arm.com>
+ <20230305190811.GA4352@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-25-rick.p.edgecombe@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230305190811.GA4352@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:40PM -0800, Rick Edgecombe wrote:
-> The x86 Control-flow Enforcement Technology (CET) feature includes a new
-> type of memory called shadow stack. This shadow stack memory has some
-> unusual properties, which requires some core mm changes to function
-> properly.
+Hey,
+
+On Sunday 05 Mar 2023 at 11:08:11 (-0800), Ricardo Neri wrote:
+> On Fri, Mar 03, 2023 at 11:29:52AM +0000, Ionela Voinescu wrote:
+> > Hi Ricardo,
 > 
-> Shadow stack memory is writable only in very specific, controlled ways.
-> However, since it is writable, the kernel treats it as such. As a result
-									  ^
-									  ,
+> Hi Ionela!
+> 
+> > 
+> > On Monday 06 Feb 2023 at 20:58:36 (-0800), Ricardo Neri wrote:
+> > > Only x86 and Power7 use ASYM_PACKING. They use it differently.
+> > > 
+> > > Power7 has cores of equal priority, but the SMT siblings of a core have
+> > > different priorities. Parent scheduling domains do not need (nor have) the
+> > > ASYM_PACKING flag. SHARED_CHILD is not needed. Using SHARED_PARENT would
+> > > cause the topology debug code to complain.
+> > > 
+> > > X86 has cores of different priority, but all the SMT siblings of the core
+> > > have equal priority. It needs ASYM_PACKING at the MC level, but not at the
+> > > SMT level (it also needs it at upper levels if they have scheduling groups
+> > > of different priority). Removing ASYM_PACKING from the SMT domain causes
+> > > the topology debug code to complain.
+> > > 
+> > > Remove SHARED_CHILD for now. We still need a topology check that satisfies
+> > > both architectures.
+> > > 
+> > > Cc: Ben Segall <bsegall@google.com>
+> > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > > Cc: Len Brown <len.brown@intel.com>
+> > > Cc: Mel Gorman <mgorman@suse.de>
+> > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > > Cc: Valentin Schneider <vschneid@redhat.com>
+> > > Cc: x86@kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Suggested-by: Valentin Schneider <vschneid@redhat.com>
+> > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > > ---
+> > > Changes since v2:
+> > >  * Introduced this patch.
+> > > 
+> > > Changes since v1:
+> > >  * N/A
+> > > ---
+> > >  include/linux/sched/sd_flags.h | 5 +----
+> > >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > > 
+> > > diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
+> > > index 57bde66d95f7..800238854ba5 100644
+> > > --- a/include/linux/sched/sd_flags.h
+> > > +++ b/include/linux/sched/sd_flags.h
+> > > @@ -132,12 +132,9 @@ SD_FLAG(SD_SERIALIZE, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
+> > >  /*
+> > >   * Place busy tasks earlier in the domain
+> > >   *
+> > > - * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
+> > > - *               up, but currently assumed to be set from the base domain
+> > > - *               upwards (see update_top_cache_domain()).
+> > >   * NEEDS_GROUPS: Load balancing flag.
+> > >   */
+> > > -SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
+> > > +SD_FLAG(SD_ASYM_PACKING,  SDF_NEEDS_GROUPS)
+> > 
+> > While this silences the warning one would have gotten when removing
+> > SD_ASYM_PACKING from SMT level, it will still result in sd_asym_packing
+> > being NULL for these systems, which breaks nohz balance. That is because
+> > highest_flag_domain() still stops searching at the first level without
+> > the flag set, in this case SMT, even if levels above have the flag set.
+> 
+> You are absolutely right! This how this whole discussion started. It
+> slipped my mind.
+> 
+> > 
+> > Maybe highest_flag_domain() should be changed to take into account the
+> > metadata flags?
+> 
+> What about the patch below? Search will stop if the flag has
+> SDF_SHARED_CHILD as it does today. Otherwise it will search all the
+> domains.
+> 
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1773,6 +1773,12 @@ queue_balance_callback(struct rq *rq,
+>  	for (__sd = rcu_dereference_check_sched_domain(cpu_rq(cpu)->sd); \
+>  			__sd; __sd = __sd->parent)
+>  
+> +#define SD_FLAG(name, mflags) (name * !!((mflags) & SDF_SHARED_CHILD)) |
+> +static const unsigned int SD_SHARED_CHILD_MASK =
+> +#include <linux/sched/sd_flags.h>
+> +0;
+> +#undef SD_FLAG
+> +
+>  /**
+>   * highest_flag_domain - Return highest sched_domain containing flag.
+>   * @cpu:	The CPU whose highest level of sched domain is to
+> @@ -1781,15 +1787,19 @@ queue_balance_callback(struct rq *rq,
+>   *		for the given CPU.
+>   *
+>   * Returns the highest sched_domain of a CPU which contains the given flag.
+> - */
+> +*/
+  ^^^
+  likely an unintended change
+>  static inline struct sched_domain *highest_flag_domain(int cpu, int flag)
+>  {
+>  	struct sched_domain *sd, *hsd = NULL;
+>  
+>  	for_each_domain(cpu, sd) {
+> -		if (!(sd->flags & flag))
+> +		if (sd->flags & flag) {
+> +			hsd = sd;
+> +			continue;
+> +		}
+> +
 
-> there remain many ways for userspace to trigger the kernel to write to
-> shadow stack's via get_user_pages(, FOLL_WRITE) operations. To make this a
+There might be room for a comment here:
+                /*
+		 * If the flag is not set and is known to be shared with lower
+		 * domains, stop the search, as it won't be found further up.
+		 */
+> +		if (flag & SD_SHARED_CHILD_MASK)
+>  			break;
+> -		hsd = sd;
+>  	}
+>  
+>  	return hsd;
 
-"stacks"
+It looks nice and sane to me - I've not compiled or tested it :).
 
-or "to write to a shadow stack via..."
+Thanks,
+Ionela.
 
-> little less exposed, block writable GUPs for shadow stack VMAs.
-
-GUPs?
-
-I supposed this means "prevent get_user_pages() from pinning pages to
-which the corresponding VMA is a shadow stack one."?
-
-Or something like that which is less mm-internal speak...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+> > 
+> > Thanks,
+> > Ionela.
+> > 
+> > >  
+> > >  /*
+> > >   * Prefer to place tasks in a sibling domain
+> > > -- 
+> > > 2.25.1
+> > > 
+> > > 
