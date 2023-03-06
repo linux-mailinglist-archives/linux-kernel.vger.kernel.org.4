@@ -2,121 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78CF16AC880
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359AA6AC455
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCFQpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
+        id S231269AbjCFPE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbjCFQoO (ORCPT
+        with ESMTP id S230111AbjCFPE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:44:14 -0500
-X-Greylist: delayed 7525 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 08:43:49 PST
-Received: from 14.mo550.mail-out.ovh.net (14.mo550.mail-out.ovh.net [178.32.97.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256753BD92
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:43:49 -0800 (PST)
-Received: from director5.ghost.mail-out.ovh.net (unknown [10.109.143.183])
-        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 9F7F8230AB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:23:51 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-dqffs (unknown [10.110.103.233])
-        by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id E3EF11FD28;
-        Mon,  6 Mar 2023 14:23:50 +0000 (UTC)
-Received: from RCM-web1.webmail.mail.ovh.net ([176.31.238.120])
-        by ghost-submission-6684bf9d7b-dqffs with ESMTPSA
-        id GltaNXb3BWSE4wAALXMDEQ
-        (envelope-from <rafal@milecki.pl>); Mon, 06 Mar 2023 14:23:50 +0000
+        Mon, 6 Mar 2023 10:04:27 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D6D1F91F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:04:25 -0800 (PST)
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id A0BEA3F206
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678112698;
+        bh=jLrOdxm4BfVg1b7ahin7NvZThIQkleQBnBBbiXWn1WA=;
+        h=From:To:Subject:Date:Message-Id:MIME-Version;
+        b=vasQnCm7Uy9V4h6kVATiDHV2Wv31xuH3b5TOMzgR69ZSmpAgdtjgI3h8pP3rJOOGr
+         1lCVqyA5t/s4xZVXWI3PkbPnStbkQ6Uku7pmC+RKtdqmVVGxJyZgZ7oMlnJcayy6lU
+         3hqw9MI+h1v5FuHQwiOswrO98w2oXsU0B9iZZ633H/BeaQxUswo1TFxYoGwZx7H+jH
+         jZY8KUDdZiOof1lTC8hnNB3hRN+6SrtAw+W3MPnjyBSyhkORbaCkxA9aeqJUpCIgnd
+         PMq+q26vJ0JseDbQ9dYuWc4o85hldjjfXmFocfjAej+Jmkz/ZbHsFxZtoFrochwLNy
+         ThEU/k41vY8PQ==
+Received: by mail-pl1-f200.google.com with SMTP id iw4-20020a170903044400b0019ccafc1fbeso5916871plb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:24:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678112697;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jLrOdxm4BfVg1b7ahin7NvZThIQkleQBnBBbiXWn1WA=;
+        b=VzwIdMcUQaZDF9Zl/XZD1+NejsbpWxLYVYFQH6Rc+RCp7ZxEFUt6rhAnmycKs/KZy9
+         iHhYMLsaSV8Z2i+jRjOHiBYzsixex8eQVSFh5aV83kQ+5LqAZfs9z9nA4N2lXsX+Ipi2
+         57PZzu9NMV4LHP1TUaE8e5aiZGDndQrKgi+vH+ROGi3ID/PAjtQX9c8pE4erIiFRavOj
+         Ce99ZwEwRo+3/lWwnirWo5yjSmswjEnhDWaDmlgfAIe0T2lByAmHcR8eX85YVkpq5UEb
+         UwEPrgEEijvH3xlLnqMC561YxrmbyMRCmrfDJTmimPgejf+YTl/AkPgXaOC+PkPH8wgp
+         gCvw==
+X-Gm-Message-State: AO0yUKX0HV4wmiEnuepA00PmEJnUAP7e7LSipyFoXT87XDAeqT9Qha9e
+        XXw94Id7pN2eQxtUWr0VRC/vplKShn+moa+H7uJHr1BkvQH4j/0ZaheDV4o6d5IOwUBDXToYH/i
+        4yd+7wA1g58YfFiW5YXnAYvXsbvBPzowhCtEFtNjrww==
+X-Received: by 2002:a17:902:dace:b0:19a:abb0:1e with SMTP id q14-20020a170902dace00b0019aabb0001emr13793807plx.38.1678112696982;
+        Mon, 06 Mar 2023 06:24:56 -0800 (PST)
+X-Google-Smtp-Source: AK7set8yRm6vMsguUdvFvF4CPKFmlidP5fs0hAF1op/NAMOxO7KqGHcOXh11AXZYZBR4Zlv8TUKA7Q==
+X-Received: by 2002:a17:902:dace:b0:19a:abb0:1e with SMTP id q14-20020a170902dace00b0019aabb0001emr13793771plx.38.1678112696545;
+        Mon, 06 Mar 2023 06:24:56 -0800 (PST)
+Received: from canonical.com (2001-b011-3007-39ac-d0ea-4b57-e3f1-317b.dynamic-ip6.hinet.net. [2001:b011:3007:39ac:d0ea:4b57:e3f1:317b])
+        by smtp.gmail.com with ESMTPSA id kw6-20020a170902f90600b0019cad2de86bsm6822224plb.156.2023.03.06.06.24.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 06:24:56 -0800 (PST)
+From:   Koba Ko <koba.ko@canonical.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] platform/x86: dell-laptop: Register ctl-led for speaker-mute
+Date:   Mon,  6 Mar 2023 22:24:54 +0800
+Message-Id: <20230306142454.722020-1-koba.ko@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Mon, 06 Mar 2023 15:23:50 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Michael Walle <michael@walle.cc>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 0/8] nvmem: Let layout drivers be modules
-In-Reply-To: <20230306151829.57c689b4@xps-13>
-References: <20230301152239.531194-1-miquel.raynal@bootlin.com>
- <ee7923a8b5fa8358e6805d20df7d8049@walle.cc> <20230306143528.7407fda5@xps-13>
- <73a04afaf658292c05ef27117c60b21d@milecki.pl>
- <20230306151829.57c689b4@xps-13>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <0b94d38a25f5d8ea70f228213ba14fa4@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 17831721252273499120
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtkedgfeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegfrhhlucfvnfffucdludehmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepjedvlefguedthfefleehgeeftdeludeluedvgfeffeevhfevtdehteejteefheegnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffedpudejiedrfedurddvfeekrdduvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheehtddpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-06 15:18, Miquel Raynal wrote:
-> Hi Rafał,
-> 
-> rafal@milecki.pl wrote on Mon, 06 Mar 2023 14:57:03 +0100:
-> 
->> On 2023-03-06 14:35, Miquel Raynal wrote:
->> > Hi Michael,
->> >
->> > michael@walle.cc wrote on Mon, 06 Mar 2023 14:01:34 +0100:
->> >
->> >> > Miquel Raynal (8):
->> >> >   of: Fix modalias string generation
->> >> >   of: Change of_device_get_modalias() main argument
->> >> >   of: Create an of_device_request_module() receiving an OF node
->> >> >   nvmem: core: Fix error path ordering
->> >> >   nvmem: core: Handle the absence of expected layouts
->> >> >   nvmem: core: Request layout modules loading
->> >> >   nvmem: layouts: sl28vpd: Convert layout driver into a module
->> >> >   nvmem: layouts: onie-tlv: Convert layout driver into a module
->> >> >> With the fixes series [1] applied:
->> >
->> > Thanks for the series! Looks good to me. I believe both series can live
->> > in separate tress, any reason why we would like to avoid this? I am > keen
->> > to apply [1] into the mtd tree rather soon.
->> 
->> Given past events with nvmem patches I'm against that.
->> 
->> Let's wait for Srinivas to collect pending patches, let them spend a
->> moment in linux-next maybe, ask Srinivas to send them to Greg early if
->> he can. That way maybe you can merge Greg's branch (assuming he 
->> doesn't
->> rebase).
-> 
-> Just to be on the same page, we're talking about the mtd core fixups to
-> handle correctly probe deferrals in the nvmem side.
-> 
-> Applying mtd patches then nvmem patches is totally fine in this order.
-> Applying nvmem patches and then mtd patches creates a range of commits
-> where some otp devices might have troubles probing if:
-> - a layout driver is used
-> - the driver is compiled as a module
-> - the driver is also not installed in an initramfs
-> 
-> I was actually asking out loud whether we should care about this
-> commit range given the unlikelihood that someone would have troubles
-> with this while bisecting a linux-next kernel.
-> 
-> So getting an immutable tag from Greg would not help. The opposite
-> might make sense though, and involves that I apply [1] to mtd/next
-> rather soon anyway, I guess?
+Some platforms have the speaker-mute led and
+current driver doesn't control it.
 
-The problem IIUC is nvmem.git / for-next containing broken code after
-adding nvmem stuff. That is unless Srinivas takes your patches in some
-way. Hopefully not by waiting for 6.4-rc1.
+If the platform support the control of speaker-mute led, register it
+
+Signed-off-by: Koba Ko <koba.ko@canonical.com>
+---
+ drivers/platform/x86/dell/dell-laptop.c | 43 +++++++++++++++++++++++++
+ drivers/platform/x86/dell/dell-smbios.h |  2 ++
+ 2 files changed, 45 insertions(+)
+
+diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x86/dell/dell-laptop.c
+index 1321687d923ed..38d95bae8e3ab 100644
+--- a/drivers/platform/x86/dell/dell-laptop.c
++++ b/drivers/platform/x86/dell/dell-laptop.c
+@@ -97,6 +97,7 @@ static struct rfkill *bluetooth_rfkill;
+ static struct rfkill *wwan_rfkill;
+ static bool force_rfkill;
+ static bool micmute_led_registered;
++static bool mute_led_registered;
+ 
+ module_param(force_rfkill, bool, 0444);
+ MODULE_PARM_DESC(force_rfkill, "enable rfkill on non whitelisted models");
+@@ -2177,6 +2178,34 @@ static struct led_classdev micmute_led_cdev = {
+ 	.default_trigger = "audio-micmute",
+ };
+ 
++static int mute_led_set(struct led_classdev *led_cdev,
++			   enum led_brightness brightness)
++{
++	struct calling_interface_buffer buffer;
++	struct calling_interface_token *token;
++	int state = brightness != LED_OFF;
++
++	if (state == 0)
++		token = dell_smbios_find_token(GLOBAL_MUTE_DISABLE);
++	else
++		token = dell_smbios_find_token(GLOBAL_MUTE_ENABLE);
++
++	if (!token)
++		return -ENODEV;
++
++	dell_fill_request(&buffer, token->location, token->value, 0, 0);
++	dell_send_request(&buffer, CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
++
++	return 0;
++}
++
++static struct led_classdev mute_led_cdev = {
++	.name = "platform::mute",
++	.max_brightness = 1,
++	.brightness_set_blocking = mute_led_set,
++	.default_trigger = "audio-mute",
++};
++
+ static int __init dell_init(void)
+ {
+ 	struct calling_interface_token *token;
+@@ -2230,6 +2259,16 @@ static int __init dell_init(void)
+ 		micmute_led_registered = true;
+ 	}
+ 
++	if (dell_smbios_find_token(GLOBAL_MUTE_DISABLE) &&
++	    dell_smbios_find_token(GLOBAL_MUTE_ENABLE) &&
++	    !dell_privacy_has_mic_mute()) {
++		mute_led_cdev.brightness = ledtrig_audio_get(LED_AUDIO_MUTE);
++		ret = led_classdev_register(&platform_device->dev, &mute_led_cdev);
++		if (ret < 0)
++			goto fail_led;
++		mute_led_registered = true;
++	}
++
+ 	if (acpi_video_get_backlight_type() != acpi_backlight_vendor)
+ 		return 0;
+ 
+@@ -2277,6 +2316,8 @@ static int __init dell_init(void)
+ fail_backlight:
+ 	if (micmute_led_registered)
+ 		led_classdev_unregister(&micmute_led_cdev);
++	if (mute_led_registered)
++		led_classdev_unregister(&mute_led_cdev);
+ fail_led:
+ 	dell_cleanup_rfkill();
+ fail_rfkill:
+@@ -2299,6 +2340,8 @@ static void __exit dell_exit(void)
+ 	backlight_device_unregister(dell_backlight_device);
+ 	if (micmute_led_registered)
+ 		led_classdev_unregister(&micmute_led_cdev);
++	if (mute_led_registered)
++		led_classdev_unregister(&mute_led_cdev);
+ 	dell_cleanup_rfkill();
+ 	if (platform_device) {
+ 		platform_device_unregister(platform_device);
+diff --git a/drivers/platform/x86/dell/dell-smbios.h b/drivers/platform/x86/dell/dell-smbios.h
+index 75fa8ea0476dc..eb341bf000c67 100644
+--- a/drivers/platform/x86/dell/dell-smbios.h
++++ b/drivers/platform/x86/dell/dell-smbios.h
+@@ -34,6 +34,8 @@
+ #define KBD_LED_AUTO_100_TOKEN	0x02F6
+ #define GLOBAL_MIC_MUTE_ENABLE	0x0364
+ #define GLOBAL_MIC_MUTE_DISABLE	0x0365
++#define GLOBAL_MUTE_ENABLE	0x058C
++#define GLOBAL_MUTE_DISABLE	0x058D
+ 
+ struct notifier_block;
+ 
+-- 
+2.25.1
+
