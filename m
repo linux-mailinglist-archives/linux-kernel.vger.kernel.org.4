@@ -2,216 +2,1560 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB41C6AB81E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0147C6AB81F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjCFISv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:18:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50146 "EHLO
+        id S229877AbjCFIUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:20:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjCFISs (ORCPT
+        with ESMTP id S229579AbjCFIUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:18:48 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D838A60;
-        Mon,  6 Mar 2023 00:18:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678090725; x=1709626725;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=tp8FGmpvYhJ6rzYO99Sj3Bio7YJFrDzgtal1l/iaTuM=;
-  b=bUCwYcN3M+ufrT/I9fly4f52ExgXx+lGI8OFSewijb+og1LpD0t2tqoq
-   xjX8xMLlF7dQjWVM/zNk1stAaIdlT9kbJq767pDKKtTTfyIZ2Gj71jv7d
-   vREa2wU6LvIEHWZWqtkFxtnYO+6ceIlshjMJhqIFcNBwg/HTbyOLF/QKU
-   6n8Yt9o3rt6z94qjgikqJHA5TDCJD0PdqZQqrxTh7ig3G/FL2WJIrZknq
-   ZEXIGEAadgYQiwCCfttazDFf3LuskX9/W4AopSvIRIAiNLVoH6W2dq/+E
-   B/bySeFp0bCQfPAS5AOz5lqaCbcDAa/hiba/HApJfrNklO0bvGyYjt+x2
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="319323779"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="319323779"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 00:18:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="786119095"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="786119095"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Mar 2023 00:18:40 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 6 Mar 2023 00:18:40 -0800
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 6 Mar 2023 00:18:40 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 6 Mar 2023 00:18:40 -0800
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 6 Mar 2023 00:18:40 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GvzY3051+lmaULIVfq7BFFTch4Ai+WA+sEL+qaA/P8AU3610bn4LHMD3cQikOd6x0/eZTZxYoXRkXBdpzD26/xY60WmhYKUM9+SCvuTw6E6vqXsTJBe8f+vyWOdnaZ0vn2v028AHmi3gHKr5malrS2RyJdH5no+iXk9IpL8mE7FZoPJBzyJy6InQ8eZoe/6OyrEQK5sRx1vuiSZ/F9C82C9yfyvMB282STOOXwkQ3AKmcObBU0Vu0FlCCzgvlly5l0APCE+yUm5EGknMjwHvh9JVNZ4Q0pNGe11Akz3CB5rGZST3Nyz1Bp8u0lKqJEcl9cKsRXYMo+alPtLVXuKmBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tp8FGmpvYhJ6rzYO99Sj3Bio7YJFrDzgtal1l/iaTuM=;
- b=Cns/xAwWdVK9oRxKg9DTVXjQPAt3dzU5qXHVLGS+e7l4W8O6cMFYpMlKCY25tgqDtHN7yrETUhSkeivIQ/GeEjEkFnsg612gnnDa0O8MTB1JAecM/D6XsFCmx6rruPbMS6OK9ztMgzLrL5B3/DxrdEKGTSPA/0q76ghIGPergtrnejjruMUGgPMSRqpDyDhJaLGWKB6h2p2H0st10P71L0fFX+Rn+9taA4BpOo+/4bPSobC+omiA/POLYKphHvpgXnP5MY6sG6bO/f53Avw7jIjTTSALfCMFoxXZx9kV6+pu1kDB66/kBWQAElkn4OSU2nPR08W92MY94ituPuDI8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by MW3PR11MB4714.namprd11.prod.outlook.com (2603:10b6:303:5d::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Mon, 6 Mar
- 2023 08:18:38 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6156.028; Mon, 6 Mar 2023
- 08:18:38 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: RE: [PATCH 1/4] iommu/vt-d: Implement set device pasid op for default
- domain
-Thread-Topic: [PATCH 1/4] iommu/vt-d: Implement set device pasid op for
- default domain
-Thread-Index: AQHZTKHOquacUFj9QkCYXpGTEWy1oa7nhycAgAEDtGCAALghAIACQocAgAHpPMA=
-Date:   Mon, 6 Mar 2023 08:18:37 +0000
-Message-ID: <BN9PR11MB527649B07E006466882F3D278CB69@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
- <20230302005959.2695267-2-jacob.jun.pan@linux.intel.com>
- <fad7f28f-b4e8-c1c3-4ca4-a48c5c6d7f4a@linux.intel.com>
- <BN9PR11MB527627C597F6478536477A8F8CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20230303083512.663ce758@jacob-builder>
- <c54aebf7-4282-b8a6-f03b-03af2deea59c@linux.intel.com>
-In-Reply-To: <c54aebf7-4282-b8a6-f03b-03af2deea59c@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MW3PR11MB4714:EE_
-x-ms-office365-filtering-correlation-id: 19d158b9-0a00-4391-7fab-08db1e1b633c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xGY6zmuRhRv1bEncaIcMCSW/gOQ2RTTTifmH3HhHWGKOm+wDvZfHN1PebrbvNVZsdcNiQ/ic5SZVk/JbAdrYSGjTIFjNSNbWHJzzc83ORR/McDnb5umYbmZ61X55vr+MuZ1HGMobjFuHSwj+Zgi0tTNK2llwvTzDwixqQvg+L60PJxPFI1UnLKoPl6x/Y5b0cxHFDGieDgDh2D3GSkmNkxWZbeTTqFQ9F18XjSVSmjiZDcgdKHxLHFPKomTUDeryOZnW9YePkyVR3bQeOydYXtfl+vUj2GspeDjFKNcQyODubfpuRB+K7VhoMXeSmQ4Iwkql4ObqyRxYlCP7NoXWgElfmu8TJ3Dy9+TiHVCUJInTso6X1bXlqHTmbG8uPgdyLjdK8k/V/iCAwTTHfQd8XIov3eGI+Lw89Xy3CNNmhd40XvkLF+/afTssEOg8vRT9ecgIG+rew8iHfD1Pd56o9GZzLvgT/iP1I4F7HwBmQ4poiVwtNTD/k5fHqgcLfIiZ/NsIiCJd+6/HaEIUS0yh6zGT4FQliNDfNlk+aIGQXd75wb/9fm8SXfaKzqysc2WR5p5F/u4iVw4+J3vSg0zr9HWfDVeIbHxvUNO9SfY3LjoW9J4v5kxybc3yRFG9mvcL/8ioGBM24dVCKviwfXgI8PwVO5G3jURVCzBf2LpyB3f3JNrHRXYXjZzpeEjeION4
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(366004)(136003)(39860400002)(396003)(346002)(451199018)(52536014)(7416002)(5660300002)(8936002)(76116006)(66476007)(41300700001)(66446008)(66946007)(66556008)(2906002)(8676002)(64756008)(4326008)(54906003)(110136005)(316002)(478600001)(7696005)(71200400001)(26005)(966005)(53546011)(6506007)(186003)(55016003)(122000001)(33656002)(86362001)(82960400001)(83380400001)(38070700005)(38100700002)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dzdnd3lzbkcvc3lnSTJJWGJrTGl5RFIxdVVidzVHeFYwWk80b2ZJSmlGdHBr?=
- =?utf-8?B?Wk5TSm50WHZoU0ZrTGdjOSttT0JPV2pLMmlhSEZDQ2tncHlxaVdNNlhHV0dl?=
- =?utf-8?B?dGRjZGtmUnhBVi9YTk5PZkNXYmQ1WTY3a0ZNQmJZMTRnaXRZYmtXSzJwOVVr?=
- =?utf-8?B?RmVvNW5mbmZYTUtyWWpHRGpNWHp3NmtUeTlhWmFUTDhFUUtFUUZWejhRdDRO?=
- =?utf-8?B?OGl1bitHUUhBcnB3NTljRzhPVkJVSXNubzRUMWQzL05rTDlsUm9Id2x6bngz?=
- =?utf-8?B?RUFqYm5tTkovSGxrcTlGNU5BeGVSK0liWGdTc3RwSURuK2xsUHhiUU5Rcjdo?=
- =?utf-8?B?Qm5WQWFyZFVJV2xwYXBUN2h6c2xmdkdVWlZZVWZtOTRtMUlUOHRKbjhRSHdx?=
- =?utf-8?B?SmY4ckM5ek1zSlBYUG1OeDFrbER1Z0pCeC83Z2Z2S09TS0VIcnZaeTFxeElq?=
- =?utf-8?B?Ym4vRUFXaGx2T3BNWmRYZTUrSUlzbjNyU3didGc2Q21PSW9FRnIwREJxcjB3?=
- =?utf-8?B?Wmo1MXFUdTJYb2VpbHcxb1RQdzAyaXh2YktRL0FPN2F3QlA4YmxvTUJzNEEy?=
- =?utf-8?B?Y1ZZeHFEN2RWVVlTYXlNamFiNVhHcldsQzVZb2lVT0NRYXR0RTBkVitPMWtX?=
- =?utf-8?B?U3N6cXFudk5YTXpzdkhmMlRtcllBY1AycmVNdGk4STBidm5CbTZMRDlQM0Nx?=
- =?utf-8?B?dWtmaWN2Rmp4SDVCVU1Dd2tMR2RKWjRCdFQ2K2NnQVJhRGIrN2FuL2VjOUdV?=
- =?utf-8?B?ZHlXN3h4SEZLNXhONXhXdWVieHpobzVpZnZpZjErcU5haUp0MXB3amd2OVZE?=
- =?utf-8?B?OUlPbmg2dmtIZXg1dXJPZGp5bitUeWdEdXU2NlV6ZHZXNDVoblcxb0E1WUw2?=
- =?utf-8?B?TWZySG82WnpxeWoxdm1jd0xyNlZOd2ZONmcwbmY2VnFtWXlSR0RyTHZuek5X?=
- =?utf-8?B?VnYyM1k3UjZ2OWd6ZGVtUFFPMkdxWEJqcmZDcWE2VStUckltSHNWQkJaN2Jm?=
- =?utf-8?B?MlNxZVZHNzJ3OEppWlExY3o5bDdsNHljK3lxKysxN1hrTVpldkpqdGh0dzRY?=
- =?utf-8?B?T3dhU0dOaGFYcHVxR3o1SDVJd1JSaUZDNGxUQ3ovemNqYnRsUnNEKy96OHJN?=
- =?utf-8?B?WStrT2xqWmZ3OWd1MjR2UkNDaGg1a2tEY1ZBTFZHUVBpZGlTM3o3Q0QvWVlD?=
- =?utf-8?B?V043c2lPZ3M4UFR4RytjTk5qUnIrd256WCs0WEkrK25QZmZjSkN6NXlvYTFO?=
- =?utf-8?B?aEExaWRqbUZhalFnWXZYWmJnZnBydk5nZVgvSWhRWEYyYmxqNUM4MExtQVA1?=
- =?utf-8?B?RXdFTTJrUFJoR2FPZEFET2k0QnRMSHFQclRWaUtHMDN1SE9nZ2prUjdaYWRo?=
- =?utf-8?B?MC9HNXFRQkEyN0VYaHVzYVpvc1hvbGpING5Rem1EQldMdDZvVHNpOUU3ZG01?=
- =?utf-8?B?amw3bVVqZnRPQzNoVi9QSGtsa3Z1R2F4SjVZVkhlV21Oa21mMUxqMXc0a0hU?=
- =?utf-8?B?U3RVaklhaU5WL2cxK3ExL0s0N1NCeWpJTlkwVnVkS245N2RBdGtrS05WV29q?=
- =?utf-8?B?RERTbk1EWmpwRGV4Y0JVMTcvOFoxelZjY1oxaFM3bE1lNDRQQjZnanhqU3No?=
- =?utf-8?B?NXgzSVRWVnl5TFBWL2tOcDBHWWc5T0NORVkvTUpBNytnSlc2dFptWGFmUUtk?=
- =?utf-8?B?bGpPZzh1dnlldGFSNGltbzhGY2c0ODRVY0M4aG4wakVPOXF1dXdOLyt4eG5I?=
- =?utf-8?B?b2svMm5MSFVsNktGZGdIZVI3SVRKa3RxWlZCbHJsOVU3V0I1ZWM2QlA2bXNK?=
- =?utf-8?B?VW04dzhoTW9aSEZ2dDI3TkxUZVdtSG4ySDN1RENQR3h6QmhJMjlac1ZQMUND?=
- =?utf-8?B?c0NLMEh1cC85YmhKKythUnFCZUlDWmV3dTVPcDhZc0p1NDRjSWpDM2hVekNq?=
- =?utf-8?B?NEkwU1c4czFPS2JuTFBxdDlWMmZER1hxa0pTalFERlExTlJ3ZSs5WEdCa2xV?=
- =?utf-8?B?c2VRcDlab2JhM1V4dVhFVUYwVmZNL2F1djAxdkxJb3hNZ0JvWGhoKzdKYVBT?=
- =?utf-8?B?ZkNzd1NXU1RkRjdCUlM2a3J2OVhvSXRHVkhYaW1PS3kwOWJ0VGl3dE9YQ2JG?=
- =?utf-8?Q?z3OjbEkMeI9keXiLBdtGqTcDR?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 6 Mar 2023 03:20:44 -0500
+Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAC21E5C2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:20:37 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:b745:671d:a946:57fa])
+        by michel.telenet-ops.be with bizsmtp
+        id UwLb290074LuvSS06wLb8q; Mon, 06 Mar 2023 09:20:35 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pZ64h-00AzKH-1f
+        for linux-kernel@vger.kernel.org;
+        Mon, 06 Mar 2023 09:20:35 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pZ65D-00FYtd-1d
+        for linux-kernel@vger.kernel.org;
+        Mon, 06 Mar 2023 09:20:35 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     linux-kernel@vger.kernel.org
+Subject: Build regressions/improvements in v6.3-rc1
+Date:   Mon,  6 Mar 2023 09:20:35 +0100
+Message-Id: <20230306082035.3709036-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
+References: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19d158b9-0a00-4391-7fab-08db1e1b633c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2023 08:18:38.0448
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LJGaHeshBmA04and6w8sZIkkAn9D8aeODXtDemLbFniqyZkmmFXp5sKufnfAYh5fuTcpMUgDhb74Grqq68TCuw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4714
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBCYW9sdSBMdSA8YmFvbHUubHVAbGludXguaW50ZWwuY29tPg0KPiBTZW50OiBTdW5k
-YXksIE1hcmNoIDUsIDIwMjMgMTE6MDYgQU0NCj4gDQo+IE9uIDMvNC8yMyAxMjozNSBBTSwgSmFj
-b2IgUGFuIHdyb3RlOg0KPiA+Pj4gRnJvbTogQmFvbHUgTHU8YmFvbHUubHVAbGludXguaW50ZWwu
-Y29tPg0KPiA+Pj4gU2VudDogVGh1cnNkYXksIE1hcmNoIDIsIDIwMjMgMTA6MDcgUE0NCj4gPj4+
-DQo+ID4+Pj4gKw0KPiA+Pj4+ICsJaWYgKGh3X3Bhc3NfdGhyb3VnaCAmJiBkb21haW5fdHlwZV9p
-c19zaShkbWFyX2RvbWFpbikpDQo+ID4+Pj4gKwkJcmV0ID0gaW50ZWxfcGFzaWRfc2V0dXBfcGFz
-c190aHJvdWdoKGlvbW11LA0KPiA+Pj4+IGRtYXJfZG9tYWluLA0KPiA+Pj4+ICsJCQkJCQkgICAg
-IGRldiwgcGFzaWQpOw0KPiA+Pj4+ICsJZWxzZSBpZiAoZG1hcl9kb21haW4tPnVzZV9maXJzdF9s
-ZXZlbCkNCj4gPj4+PiArCQlyZXQgPSBkb21haW5fc2V0dXBfZmlyc3RfbGV2ZWwoaW9tbXUsIGRt
-YXJfZG9tYWluLA0KPiA+Pj4+ICsJCQkJCSAgICAgICBkZXYsIHBhc2lkKTsNCj4gPj4+PiArCWVs
-c2UNCj4gPj4+PiArCQlyZXQgPSBpbnRlbF9wYXNpZF9zZXR1cF9zZWNvbmRfbGV2ZWwoaW9tbXUs
-DQo+ID4+Pj4gZG1hcl9kb21haW4sDQo+ID4+Pj4gKwkJCQkJCSAgICAgZGV2LCBwYXNpZCk7DQo+
-ID4+Pj4gKw0KPiA+Pj4+ICsJcmV0dXJuIHJldDsNCj4gPj4+PiArfQ0KPiA+Pj4gRG8geW91IG5l
-ZWQgdG8gY29uc2lkZXIgcGFzaWQgY2FjaGUgaW52YWxpZGF0aW9uPw0KPiA+Pj4NCj4gPj4gVG8g
-YXZvaWQgY29uZnVzaW9uIHRoaXMgaXMgbm90IGFib3V0IGludmFsaWRhdGlvbiBvZiBwYXNpZCBj
-YWNoZSBpdHNlbGYNCj4gPj4gd2hpY2ggc2hvdWxkIGJlIGNvdmVyZWQgYnkgYWJvdmUgc2V0dXAg
-ZnVuY3Rpb25zIGFscmVhZHkuDQo+ID4+DQo+ID4+IEhlcmUgYWN0dWFsbHkgbWVhbnMgcGVyLVBB
-U0lEIGludmFsaWRhdGlvbiBpbiBpb3RsYiBhbmQgZGV2dGxiLiBUb2RheQ0KPiA+PiBvbmx5IFJJ
-RCBpcyB0cmFja2VkIHBlciBkb21haW4gZm9yIGludmFsaWRhdGlvbi4gaXQgbmVlZHMgZXh0ZW5z
-aW9uIHRvDQo+ID4+IHdhbGsgYXR0YWNoZWQgcGFzaWQgdG9vLg0KPiA+IFllcywgd2lsbCBhZGQu
-DQo+ID4NCj4gPiBGb3IgdGhlIHNldCB1cCBwYXRoLCB0aGVyZSBpcyBubyBuZWVkIHRvIGZsdXNo
-IElPVExCcywgIGJlY2F1c2Ugd2UncmUgZ29pbmcNCj4gPiBmcm9tIG5vbiBwcmVzZW50IHRvIHBy
-ZXNlbnQuDQo+ID4NCj4gPiBPbiB0aGUgcmVtb3ZlIHBhdGgsIElPVExCIGZsdXNoIHNob3VsZCBi
-ZSBjb3ZlcmVkIHdoZW4gZGV2aWNlIGRyaXZlcg0KPiA+IGNhbGxzIGlvbW11X2RldGFjaF9kZXZp
-Y2VfcGFzaWQoKS4gQ292ZXJlZCB3aXRoIHRoaXMgcGF0Y2guDQo+IA0KPiBJdCdzIG5vdCBvbmx5
-IGZvciB0aGUgUEFTSUQgdGVhcmRvd24gcGF0aCwgYnV0IGFsc28gZm9yIHVubWFwKCkuIEFzIHRo
-ZQ0KPiBkZXZpY2UgaGFzIGlzc3VlZCBETUEgcmVxdWVzdHMgd2l0aCBQQVNJRCwgdGhlIElPTU1V
-IHByb2JhYmx5IHdpbGwgY2FjaGUNCj4gdGhlIERNQSB0cmFuc2xhdGlvbiB3aXRoIFBBU0lEIHRh
-Z2dlZC4gSGVuY2UsIHdlIG5lZWQgdG8gaW52YWxpZGF0ZSB0aGUNCj4gUEFTSUQtc3BlY2lmaWMg
-SU9UTEIgYW5kIGRldmljZSBUTEIgaW4gdGhlIHVubWFwKCkgcGF0aC4NCj4gDQo+IEkgb25jZSBo
-YWQgYSBwYXRjaCBmb3IgdGhpczoNCj4gDQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4
-LWlvbW11LzIwMjIwNjE0MDM0NDExLjE2MzQyMzgtMS0NCj4gYmFvbHUubHVAbGludXguaW50ZWwu
-Y29tLw0KPiANCj4gUHJvYmFibHkgeW91IGNhbiB1c2UgaXQgYXMgYSBzdGFydGluZyBwb2ludC4N
-Cj4gDQoNCmp1c3QgdGhhdCB3ZSBzaG91bGQgbm90IGhhdmUgYSBzdWItZGV2aWNlIHRlcm0gdGhl
-cmUuIEp1c3QgbmFtZQ0KdGhlIHRyYWNraW5nIGluZm9ybWF0aW9uIHBlciBwYXNpZC4NCg==
+Below is the list of build error/warning regressions/improvements in
+v6.3-rc1[1] compared to v6.2[2].
+
+Summarized:
+  - build errors: +9/-14
+  - build warnings: +4/-1447
+
+Happy fixing! ;-)
+
+Thanks to the linux-next team for providing the build service.
+
+[1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/fe15c26ee26efa11741a7b632e9f23b01aca4cc6/ (all 152 configs)
+[2] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/c9c3395d5e3dcc6daee66c6908354d47bf98cb0c/ (all 152 configs)
+
+
+*** ERRORS ***
+
+9 error regressions:
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../amdkfd/kfd_topology.c: error: 'struct cpuinfo_um' has no member named 'apicid':  => 2157:41, 2157:48
+  + /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2208 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]:  => 7086:1
+  + /kisskb/src/drivers/gpu/drm/msm/msm_mdss.c: error: case label does not reduce to an integer constant:  => 299:2, 300:2, 296:2
+  + /kisskb/src/drivers/media/i2c/imx290.c: error: 'imx290_runtime_resume' defined but not used [-Werror=unused-function]:  => 1082:12
+  + /kisskb/src/drivers/media/i2c/imx290.c: error: 'imx290_runtime_suspend' defined but not used [-Werror=unused-function]:  => 1090:12
+  + /kisskb/src/fs/btrfs/inode.c: error: 'location.type' may be used uninitialized [-Werror=maybe-uninitialized]:  => 5730:21
+  + /kisskb/src/fs/btrfs/send.c: error: 'right_gen' may be used uninitialized in this function [-Werror=maybe-uninitialized]:  => 1909:13, 1902:23
+  + /opt/cross/kisskb/fe-x86-64-core-i7-2017.05/x86_64-buildroot-linux-gnu/sysroot/usr/include/bits/stdlib-float.h: error: SSE register return with SSE disabled:  => 27:1
+  + {standard input}: Error: unknown pseudo-op: `.':  => 1118
+
+14 error improvements:
+  - /kisskb/src/arch/um/include/asm/processor-generic.h: error: called object is not a function or function pointer: 94:18, 94:19 => 
+  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_stream.c: error: array subscript is above array bounds [-Werror=array-bounds]: 543:55 => 
+  - /kisskb/src/drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn31/display_mode_vba_31.c: error: the frame size of 2224 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]: 7082:1 => 
+  - /kisskb/src/drivers/spi/spi-stm32-qspi.c: error: 'op' is used uninitialized [-Werror=uninitialized]: 564:27, 523:27 => 
+  - /kisskb/src/include/linux/sh_intc.h: error: division 'sizeof (void *) / sizeof (void)' does not compute the number of array elements [-Werror=sizeof-pointer-div]: 100:63 => 
+  - error: modpost: "ebus_dma_enable" [drivers/parport/parport_pc.ko] undefined!: N/A => 
+  - error: modpost: "ebus_dma_irq_enable" [drivers/parport/parport_pc.ko] undefined!: N/A => 
+  - error: modpost: "ebus_dma_prepare" [drivers/parport/parport_pc.ko] undefined!: N/A => 
+  - error: modpost: "ebus_dma_register" [drivers/parport/parport_pc.ko] undefined!: N/A => 
+  - error: modpost: "ebus_dma_request" [drivers/parport/parport_pc.ko] undefined!: N/A => 
+  - error: modpost: "ebus_dma_residue" [drivers/parport/parport_pc.ko] undefined!: N/A => 
+  - error: modpost: "ebus_dma_unregister" [drivers/parport/parport_pc.ko] undefined!: N/A => 
+  - error: modpost: "ns87303_lock" [drivers/parport/parport_pc.ko] undefined!: N/A => 
+  - {standard input}: Error: unknown pseudo-op: `.cfi_def_c': 1718 => 
+
+
+*** WARNINGS ***
+
+4 warning regressions:
+  + /kisskb/src/fs/btrfs/extent_io.c: warning: 'last_extent_end' may be used uninitialized in this function [-Wmaybe-uninitialized]:  => 3542:19
+  + /kisskb/src/fs/btrfs/send.c: warning: 'right_gen' may be used uninitialized in this function [-Wmaybe-uninitialized]:  => 1909:13, 1902:23, 1909:27
+  + /kisskb/src/fs/btrfs/volumes.c: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]:  => 2515:9, 2515:2
+  + /kisskb/src/include/linux/list.h: warning: 'seed_devices' may be used uninitialized in this function [-Wmaybe-uninitialized]:  => 74:19, 74:12
+
+1447 warning improvements:
+  - .config: warning: override: reassigning to symbol UML_NET_MCAST: 12669, 12874, 12655, 12888 => 
+  - /kisskb/src/include/linux/sh_intc.h: warning: division 'sizeof (void *) / sizeof (void)' does not compute the number of array elements [-Wsizeof-pointer-div]: 100:63 => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/block/drbd/drbd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/bus/mhi/host/mhi_pci_generic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/extcon/extcon-fsa9480.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/infiniband/hw/mlx4/mlx4_ib.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/input/joystick/sidewinder.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-integrity.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-verity.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-writecache.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/md/dm-zoned.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/media/cec/core/cec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/media/usb/hdpvr/hdpvr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/misc/habanalabs/habanalabs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/onenand/onenand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/mtd/nand/raw/nandsim.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/chelsio/cxgb4/cxgb4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/sfc/sfc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/ethernet/xilinx/xilinx_emac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/virtio_net.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireguard/wireguard.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/ath10k/ath10k_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/net/wireless/ath/wil6210/wil6210.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/ntb/hw/mscc/ntb_hw_switchtec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/ntb/ntb_transport.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/pwm/pwm-sifive.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/scsi/hptiop.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/scsi/mpi3mr/mpi3mr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [fs/btrfs/btrfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [fs/ext4/ext4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [fs/gfs2/gfs2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [fs/hfsplus/hfsplus.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [fs/ntfs/ntfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [fs/ntfs3/ntfs3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [fs/ocfs2/ocfs2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [fs/xfs/xfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashldi3" [net/mac80211/mac80211.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashrdi3" [drivers/nvme/target/nvmet.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashrdi3" [drivers/usb/gadget/function/usb_f_mass_storage.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashrdi3" [fs/ext4/ext4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashrdi3" [fs/ntfs/ntfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashrdi3" [fs/xfs/xfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ashrdi3" [fs/zonefs/zonefs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/block/drbd/drbd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/md/bcache/bcache.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-integrity.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-verity.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-writecache.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/md/dm-zoned.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/nand/raw/diskonchip.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/nand/raw/nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/nand/raw/nandsim.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/mtd/tests/mtd_nandbiterrs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/net/ethernet/ti/cpts.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/nvme/host/nvme-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/hpsa.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/mpt3sas/mpt3sas.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/scsi/sd_mod.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [drivers/thunderbolt/thunderbolt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [fs/btrfs/btrfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [fs/ext2/ext2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [fs/ext4/ext4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [fs/gfs2/gfs2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [fs/ntfs3/ntfs3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [fs/ocfs2/ocfs2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [fs/xfs/xfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [fs/zonefs/zonefs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [lib/test_bitmap.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [lib/test_scanf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [net/mac80211/mac80211.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__lshrdi3" [net/sched/act_police.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/ata/libata.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/ata/pata_pdc202xx_old.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/ata/sata_nv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/clk/qcom/clk-spmi-pmic-div.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/fsi/fsi-master-gpio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/gpio/gpio-latch.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/hwmon/sht15.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/hwspinlock/sprd_hwspinlock.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/hwspinlock/stm32_hwspinlock.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/hwspinlock/u8500_hsem.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/i2c/busses/i2c-pca-platform.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/i2c/busses/i2c-s3c2410.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/i2c/busses/i2c-synquacer.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/i2c/i2c-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/iio/adc/ad7606.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/iio/adc/aspeed_adc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/iio/adc/cc10001_adc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/iio/adc/hx711.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/iio/dac/ad5766.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/input/touchscreen/pixcir_i2c_ts.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/media/i2c/tvp5150.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/media/pci/ddbridge/ddbridge.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/media/rc/gpio-ir-tx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/media/rc/serial_ir.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/memstick/host/jmb38x_ms.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/misc/eeprom/eeprom_93cx6.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/misc/eeprom/eeprom_93xx46.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/ams-delta.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/bcm47xxnflash/bcm47xxnflash.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/cafe_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/davinci_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/diskonchip.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/fsmc_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/gpio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/ingenic/ingenic_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/marvell_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/mtd/nand/raw/stm32_fmc2_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/net/dsa/hirschmann/hellcreek_sw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/net/dsa/realtek/realtek-smi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/net/ethernet/amd/xgbe/amd-xgbe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/net/ethernet/dnet.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/net/ethernet/engleder/tsnep.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/net/ethernet/intel/ice/ice.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/net/mdio/mdio-bitbang.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/net/wireless/marvell/libertas/libertas_spi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/phy/cadence/phy-cadence-torrent.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/platform/chrome/cros_ec_spi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/pwm/pwm-bcm-iproc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/pwm/pwm-bcm-kona.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/scsi/qla2xxx/qla2xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/siox/siox-bus-gpio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/spi/spi-ath79.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/spi/spi-bitbang.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/spi/spi-cadence-quadspi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/spi/spi-pic32.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/spi/spi-pxa2xx-platform.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/spi/spi-sh-hspi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/spi/spi-uniphier.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/tty/serial/8250/8250_base.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/tty/serial/sccnxp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/usb/c67x00/c67x00.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/usb/dwc3/dwc3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/usb/gadget/udc/m66592-udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/usb/gadget/udc/r8a66597-udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/usb/host/r8a66597-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/usb/isp1760/isp1760.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/video/backlight/ktd253-backlight.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/w1/masters/ds2482.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/watchdog/mena21_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [drivers/watchdog/rzg2l_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [kernel/rcu/refscale.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [lib/test_lockup.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [sound/soc/codecs/snd-soc-adau1977.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [sound/soc/codecs/snd-soc-cs4270.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [sound/soc/codecs/snd-soc-tlv320aic31xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__ndelay" [sound/soc/codecs/snd-soc-tlv320aic32x4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/accessibility/speakup/speakup.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/accessibility/speakup/speakup_acntpc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/accessibility/speakup/speakup_acntsa.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/accessibility/speakup/speakup_decpc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/accessibility/speakup/speakup_dtlk.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/accessibility/speakup/speakup_keypc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/ahci_imx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/ahci_sunxi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/libahci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/libata.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_arasan_cf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_hpt37x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_hpt3x2n.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_it821x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_ixp4xx_cf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_legacy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_ns87415.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_samsung_cf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_sl82c105.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pata_via.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/pdc_adma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/sata_highbank.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/sata_mv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/sata_nv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/sata_promise.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/sata_rcar.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/sata_svw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/sata_sx4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ata/sata_vsc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/atm/eni.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/atm/fore_200e.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/atm/he.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/atm/idt77252.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/atm/iphase.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/atm/lanai.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/atm/nicstar.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/atm/suni.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/auxdisplay/hd44780.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/auxdisplay/ks0108.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/auxdisplay/lcd2s.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/auxdisplay/panel.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/bcma/bcma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/floppy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/mtip32xx/mtip32xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/aten.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/bpck.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/comm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/dstr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/epat.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/epia.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/fit2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/fit3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/friq.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/frpw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/kbic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/ktti.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/on20.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/on26.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pg.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/block/paride/pt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/bluetooth/bluecard_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/bluetooth/bt3c_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/bluetooth/btmrvl_sdio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/bluetooth/btusb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/bluetooth/hci_uart.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/bus/mhi/host/mhi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/hw_random/ba431-rng.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/hw_random/ks-sa-rng.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/hw_random/mtk-rng.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/hw_random/omap-rng.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/hw_random/stm32-rng.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/ipmi/ipmi_si.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/lp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/char/pcmcia/synclink_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/clk/clk-cs2000-cp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/clk/clk-plldig.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/clk/imx/mxc-clk.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/clk/qcom/clk-qcom.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/clk/qcom/gcc-ipq4019.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/clk/qcom/mmcc-msm8960.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/clk/sprd/clk-sprd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/clk/sunxi-ng/sunxi-ccu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/comedi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/adl_pci9118.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/amplc_pci230.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/cb_das16_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/cb_pcidas.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/cb_pcidas64.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/daqboard2000.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/das800.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/dt3000.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/gsc_hpdi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/icp_multi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/jr3_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/mpc624.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/ni_atmio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/ni_daq_700.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/ni_labpc_common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/ni_mio_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/ni_pcidio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/ni_pcimio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/pcl812.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/pcl816.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/pcl818.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/rti800.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/comedi/drivers/s626.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/devfreq/sun8i-a33-mbus.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/altera-msgdma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/dw/dw_dmac_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/hsu/hsu_dma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/idma64.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/mediatek/mtk-cqdma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/sh/rcar-dmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/sh/usb-dmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/tegra20-apb-dma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/tegra210-adma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/ti/omap-dma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/uniphier-xdmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/dma/xilinx/xilinx_dpdma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/firewire/firewire-ohci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fpga/altera-freeze-bridge.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fpga/altera-pr-ip-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fpga/altera-ps-spi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fpga/socfpga.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fpga/xilinx-spi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fsi/fsi-master-aspeed.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fsi/fsi-master-ast-cf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fsi/fsi-master-gpio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/fsi/fsi-master-hub.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/gpio/gpio-pisosr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/hwmon/ad7418.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/hwmon/lm93.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/hwmon/pmbus/max15301.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/hwmon/pmbus/zl6100.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/hwmon/powr1220.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/hwmon/smm665.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/algos/i2c-algo-bit.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/algos/i2c-algo-pca.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-altera.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-amd8111.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-bcm-iproc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-davinci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-digicolor.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-eg20t.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-gpio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-imx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-jz4780.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-meson.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-mt65xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-mv64xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-npcm7xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-ocores.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-owl.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-pca-platform.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-pnx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-pxa.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-qup.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-rcar.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-rk3x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-s3c2410.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-sh_mobile.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-stm32f4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-stm32f7-drv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-synquacer.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/busses/i2c-tegra.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/i2c-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/muxes/i2c-arb-gpio-challenge.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/muxes/i2c-mux-ltc4306.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/muxes/i2c-mux-pca9541.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i2c/muxes/i2c-mux-pca954x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i3c/master/dw-i3c-master.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i3c/master/i3c-master-cdns.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/i3c/master/svc-i3c-master.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/accel/mma9551_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/ad7280a.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/ad7476.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/ad7949.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/ad9467.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/adi-axi-adc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/aspeed_adc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/bcm_iproc_adc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/cc10001_adc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/hi8435.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/imx8qxp-adc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max11410.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/max1241.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/meson_saradc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/mt6577_auxadc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/nau7802.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/rcar-gyroadc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/sun4i-gpadc-iio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/ti-ads124s08.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/ti-ads131e08.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/adc/ti-ads8344.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/dac/ad5592r-base.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/dac/ad5755.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/dac/stm32-dac-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/dac/stm32-dac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/frequency/ad9523.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/gyro/itg3200.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/potentiometer/ad5272.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/pressure/dlhl60d.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/proximity/as3935.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/proximity/ping.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/proximity/srf04.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iio/resolver/ad2s1200.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/infiniband/hw/irdma/irdma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/gameport/gameport.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/joystick/analog.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/joystick/as5011.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/joystick/db9.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/joystick/gamecon.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/joystick/gf2k.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/joystick/grip_mp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/joystick/sidewinder.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/imx_keypad.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/matrix_keypad.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/pmic8xxx-keypad.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/samsung-keypad.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/sh_keysc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/keyboard/tegra-kbc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/misc/adxl34x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/misc/cma3000_d0x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/misc/drv260x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/mouse/vsxxxaa.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/rmi4/rmi_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/serio/apbps2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/serio/i8042.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/serio/olpc_apsp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/ads7846.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/cyttsp4_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/edt-ft5x06.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/elants_i2c.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/ili210x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/ilitek_ts_i2c.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/mms114.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/raydium_i2c_ts.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/rohm_bu21023.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/stmpe-ts.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/sx8654.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/tps6507x-ts.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/ucb1400_ts.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/wdt87xx_i2c.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/wm97xx-ts.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/zforce_ts.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/input/touchscreen/zinitix.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/iommu/mtk_iommu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/avmfritz.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/hfcmulti.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/hfcpci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/mISDNinfineon.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/mISDNipac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/mISDNisar.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/netjet.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/speedfax.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/isdn/hardware/mISDN/w6692.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/leds/flash/leds-aat1290.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/leds/flash/leds-ktd2692.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/leds/flash/leds-mt6360.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/leds/flash/leds-rt8515.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/leds/leds-bcm6358.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/leds/leds-bd2802.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/leds/leds-is31fl319x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/leds/leds-lt3593.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mailbox/hi3660-mailbox.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mailbox/mtk-cmdq-mailbox.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mailbox/sprd-mailbox.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/md/bcache/bcache.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/cec/platform/meson/ao-cec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/common/b2c2/b2c2-flexcop.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-core/dvb-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/atbm8830.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/m88rs2000.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/mb86a16.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/mt312.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/s5h1420.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/si2168.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/stb6000.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/stv0288.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/stv0299.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/stv6110.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/dvb-frontends/zl10353.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/adp1653.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/adv7183.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/adv7604.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/adv7842.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/bt819.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/cx25840/cx25840.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/et8ek8/et8ek8.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/imx274.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/ks0127.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/mt9t112.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/mt9v032.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/noon010pc30.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/ov6650.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/tc358743.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/tda1997x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/vpx3220.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/i2c/vs6624.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/bt8xx/bttv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/bt8xx/dst.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/bt8xx/dvb-bt8xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cobalt/cobalt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cx18/cx18.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cx23885/cx23885.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cx25821/cx25821-alsa.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cx25821/cx25821.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cx88/cx88-blackbird.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cx88/cx88-dvb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cx88/cx8802.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/cx88/cx88xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/dm1105/dm1105.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/dt3155/dt3155.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/ivtv/ivtv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/mantis/mantis_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/netup_unidvb/netup-unidvb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/saa7134/saa7134-dvb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/saa7134/saa7134.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/saa7164/saa7164.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/smipcie/smipcie.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/solo6x10/solo6x10.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/tw686x/tw686x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/pci/zoran/zr36067.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/amlogic/meson-ge2d/ge2d.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/amphion/amphion-vpu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/cadence/cdns-csi2rx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/cadence/cdns-csi2tx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/chips-media/coda-vpu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/marvell/cafe_ccic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/renesas/renesas-ceu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/renesas/sh_vou.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/rockchip/rga/rockchip-rga.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/samsung/exynos4-is/exynos-fimc-is.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/samsung/exynos4-is/s5p-csis.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/samsung/exynos4-is/s5p-fimc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/samsung/s5p-jpeg/s5p-jpeg.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/samsung/s5p-mfc/s5p-mfc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/st/sti/bdisp/bdisp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/ti/omap3isp/omap3-isp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/verisilicon/hantro-vpu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/platform/xilinx/xilinx-csi2rxss.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/dsbr100.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/radio-aimslab.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/radio-aztech.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/radio-cadet.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/radio-gemtek.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/radio-keene.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/radio-sf16fmi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/radio-sf16fmr2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/radio-zoltrix.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/si4713/si4713.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/tea575x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/radio/wl128x/fm_drv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/rc/gpio-ir-tx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/rc/ir-hix5hd2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/rc/serial_ir.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/tuners/max2165.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/tuners/mt20xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/tuners/mxl5007t.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/tuners/tda18271.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/tuners/tuner-simple.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/as102/dvb-as102.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/au0828/au0828.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/cx231xx/cx231xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/dvb-usb-v2/dvb-usb-anysee.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/dvb-usb/dvb-usb-cxusb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/dvb-usb/dvb-usb-dw2102.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/dvb-usb/dvb-usb-umt-010.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/em28xx/em28xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/gspca/gspca_ov519.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/usb/gspca/gspca_stk1135.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/media/v4l2-core/tuner.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/memory/tegra/tegra20-emc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/memory/tegra/tegra210-emc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/memory/tegra/tegra30-emc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/message/fusion/mptbase.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mfd/acer-ec-a500.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mfd/atmel-hlcdc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mfd/axp20x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mfd/ene-kb3930.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mfd/rn5t618.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mfd/si476x-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mfd/sm501.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mfd/ssbi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/misc/altera-stapl/altera-stapl.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/misc/c2port/core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/misc/cardreader/rtsx_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/misc/dw-xdata-pcie.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/misc/eeprom/eeprom_93xx46.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/misc/hpilo.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/misc/ti-st/st_drv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/core/pwrseq_emmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/alcor.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/cb710-mmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/davinci_mmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/dw_mmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/meson-mx-sdhc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/moxart-mmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/mtk-sd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/omap_hsmmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/owl-mmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/renesas_sdhi_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/rtsx_pci_sdmmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/rtsx_usb_sdmmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-bcm-kona.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-cns3xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-esdhc-imx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-iproc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-milbeaut.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-msm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-of-dwcmshc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-of-esdhc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-omap.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-pxav3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-s3c.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-tegra.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci-xenon-driver.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sdhci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sh_mmcif.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunplus-mmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/sunxi-mmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/toshsd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mmc/host/uniphier-sd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/chips/cfi_cmdset_0001.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/chips/cfi_cmdset_0002.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/chips/cfi_util.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/lpddr/lpddr_cmds.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/lpddr/qinfo_probe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/ecc-mtk.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/onenand/onenand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/atmel/atmel-nand-controller.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/brcmnand/brcmnand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/cafe_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/diskonchip.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/gpmi-nand/gpmi-nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/intel-nand-controller.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/lpc32xx_mlc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/lpc32xx_slc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/marvell_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/mtk_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/mxc_nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/nand.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/nandsim.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/sh_flctl.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mtd/nand/raw/txx9ndfmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/mux/mux-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/arcnet/arcnet.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/arcnet/com20020.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/arcnet/com20020_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/arcnet/com90io.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/arcnet/com90xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/c_can/c_can.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/c_can/c_can_platform.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/flexcan/flexcan.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/grcan.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/m_can/m_can.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/sja1000/plx_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/sja1000/sja1000.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/spi/hi311x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/can/spi/mcp251x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/dsa/b53/b53_common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/dsa/b53/b53_spi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/dsa/bcm-sf2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/dsa/hirschmann/hellcreek_sw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/dsa/vitesse-vsc73xx-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/3com/3c574_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/3com/3c59x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/3com/typhoon.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/8390/8390.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/8390/ax88796.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/8390/axnet_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/8390/pcnet_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/adaptec/starfire.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/agere/et131x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/alacritech/slicoss.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/alteon/acenic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/altera/altera_tse.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/amd/amd8111e.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/amd/nmclan_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/amd/pcnet32.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/amd/sunlance.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/amd/xgbe/amd-xgbe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/apm/xgene/xgene-enet.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/aquantia/atlantic/atlantic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/atheros/alx/alx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/atheros/atl1c/atl1c.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/atheros/atl1e/atl1e.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/atheros/atlx/atl1.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/atheros/atlx/atl2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/b44.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/bcmsysport.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/bgmac-bcma-mdio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/bgmac-platform.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/bgmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/bnx2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/bnx2x/bnx2x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/bnxt/bnxt_en.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/cnic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/genet/genet.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/broadcom/tg3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/brocade/bna/bna.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/cadence/macb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/calxeda/xgmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/chelsio/cxgb/cxgb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/chelsio/cxgb3/cxgb3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/chelsio/cxgb4/cxgb4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/chelsio/cxgb4vf/cxgb4vf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/cisco/enic/enic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/cortina/gemini.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/davicom/dm9000.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/dec/tulip/de2104x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/dec/tulip/dmfe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/dec/tulip/tulip.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/dec/tulip/uli526x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/dec/tulip/winbond-840.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/dec/tulip/xircom_cb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/dlink/dl2k.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/dlink/sundance.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/emulex/benet/be2net.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/engleder/tsnep.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/enetc/fsl-enetc-vf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/enetc/fsl-enetc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/fec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/fman/fsl_dpaa_fman.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/fman/fsl_dpaa_fman_port.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/fman/fsl_dpaa_mac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/freescale/gianfar_driver.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/fujitsu/fmvj18x_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/hisilicon/hns/hns_dsaf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/hisilicon/hns/hns_enet_drv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/hisilicon/hns3/hclge.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/hisilicon/hns3/hclgevf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/e100.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/e1000/e1000.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/fm10k/fm10k.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/i40e/i40e.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/iavf/iavf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/ice/ice.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/igb/igb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/igbvf/igbvf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/igc/igc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/ixgb/ixgb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/ixgbe/ixgbe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/intel/ixgbevf/ixgbevf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/jme.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/korina.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/marvell/mv643xx_eth.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/marvell/mvneta.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/marvell/mvpp2/mvpp2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/marvell/prestera/prestera.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/marvell/pxa168_eth.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/marvell/skge.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/marvell/sky2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/mediatek/mtk_eth.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/mediatek/mtk_star_emac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/mellanox/mlxsw/mlxsw_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/micrel/ks8851_common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/micrel/ks8851_par.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/micrel/ksz884x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/microchip/enc28j60.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/microchip/lan743x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/microchip/lan966x/lan966x-switch.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/microchip/sparx5/sparx5-switch.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/mscc/mscc_ocelot_switch_lib.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/myricom/myri10ge/myri10ge.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/natsemi/natsemi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/neterion/s2io.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/netronome/nfp/nfp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/nvidia/forcedeth.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/oki-semi/pch_gbe/pch_gbe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/packetengines/hamachi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/qlogic/netxen/netxen_nic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/qlogic/qed/qed.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/qlogic/qla3xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/qlogic/qlcnic/qlcnic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/qualcomm/emac/qcom-emac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/rdc/r6040.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/realtek/8139cp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/realtek/8139too.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/realtek/r8169.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/ravb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/rswitch_drv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/renesas/sh_eth.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/samsung/sxgbe/samsung-sxgbe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sfc/falcon/sfc-falcon.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sfc/sfc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sfc/siena/sfc-siena.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/silan/sc92031.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sis/sis190.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sis/sis900.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/epic100.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc91c92_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smc91x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smsc911x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/smsc/smsc9420.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/socionext/sni_ave.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/stmicro/stmmac/dwmac-altr-socfpga.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/stmicro/stmmac/dwmac-dwc-qos-eth.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/stmicro/stmmac/dwmac-rk.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sun/cassini.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sun/niu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sun/sunbmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sun/sungem.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sun/sunhme.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sun/sunqe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/sunplus/sp7021_emac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/tehuti/tehuti.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/ti/ti_cpsw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/ti/ti_cpsw_new.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/ti/ti_davinci_emac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/ti/tlan.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/via/via-rhine.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/via/via-velocity.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/wiznet/w5100.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/wiznet/w5300.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/xilinx/ll_temac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ethernet/xircom/xirc2ps_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/fddi/defxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/hippi/rrunner.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ieee802154/at86rf230.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ieee802154/cc2520.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ieee802154/mrf24j40.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/ipa/ipa.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-ipq4019.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-moxart.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-mscc-miim.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-mux-bcm6368.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-mux-meson-g12a.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/mdio/mdio-xgene.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/phy/bcm7xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/phy/dp83640.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/phy/icplus.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/phy/libphy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/phy/sfp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/phy/spi_ks8995.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/plip/plip.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/sungem_phy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/usb/asix.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/usb/dm9601.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/usb/kaweth.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/usb/lan78xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/usb/smsc75xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/usb/smsc95xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/usb/sr9700.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/usb/sr9800.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wan/pc300too.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wan/pci200syn.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wan/wanxl.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/admtek/adm8211.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath10k/ath10k_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath10k/ath10k_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath10k/ath10k_sdio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath11k/ath11k_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath5k/ath5k.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath6kl/ath6kl_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath6kl/ath6kl_usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/ath9k/ath9k_hw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ath/wil6210/wil6210.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/atmel/atmel.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/broadcom/b43/b43.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/broadcom/b43legacy/b43legacy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/broadcom/brcm80211/brcmsmac/brcmsmac.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/cisco/airo.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intel/ipw2x00/ipw2100.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intel/ipw2x00/ipw2200.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intel/iwlegacy/iwl3945.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intel/iwlegacy/iwl4965.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intel/iwlegacy/iwlegacy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intel/iwlwifi/iwlwifi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/hostap/hostap.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/hostap/hostap_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/hostap/hostap_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/hostap/hostap_plx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/orinoco/orinoco.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/orinoco/orinoco_nortel.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/orinoco/orinoco_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/orinoco/orinoco_plx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/orinoco/orinoco_tmd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/orinoco/orinoco_usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/orinoco/spectrum_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/p54/p54pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/intersil/p54/p54usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/marvell/libertas/libertas.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/marvell/libertas/libertas_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/marvell/libertas/libertas_sdio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/marvell/libertas/libertas_spi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/marvell/mwifiex/mwifiex_sdio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/marvell/mwl8k.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt76.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7603/mt7603e.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7615/mt7615-common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt76x0/mt76x0-common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt76x02-lib.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt76x2/mt76x2-common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt76x2/mt76x2e.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt76x2/mt76x2u.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7915/mt7915e.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7921/mt7921-common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt76/mt7996/mt7996e.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/mediatek/mt7601u/mt7601u.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/microchip/wilc1000/wilc1000-spi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt2400pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt2500pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt2500usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt2800lib.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt2800pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt2x00mmio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt2x00usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt61pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ralink/rt2x00/rt73usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtl818x/rtl8180/rtl818x_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtl818x/rtl8187/rtl8187.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/btcoexist/btcoexist.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8188ee/rtl8188ee.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8192c/rtl8192c-common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8192ce/rtl8192ce.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8192cu/rtl8192cu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8192de/rtl8192de.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8192ee/rtl8192ee.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8192se/rtl8192se.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8723ae/rtl8723ae.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8723be/rtl8723be.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8723com/rtl8723-common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl8821ae/rtl8821ae.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtl_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtlwifi/rtlwifi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw88/rtw88_8723d.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw88/rtw88_8822b.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw88/rtw88_8822c.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw88/rtw88_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw88/rtw88_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852a.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852b.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_8852c.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/realtek/rtw89/rtw89_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/rsi/rsi_91x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/rsi/rsi_sdio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/silabs/wfx/wfx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/st/cw1200/cw1200_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ti/wl1251/wl1251.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ti/wl12xx/wl12xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ti/wl18xx/wl18xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/ti/wlcore/wlcore.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wireless/zydas/zd1201.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/net/wwan/t7xx/mtk_t7xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/nvmem/nvmem-bcm-ocotp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/nvmem/nvmem-imx-ocotp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/nvmem/nvmem-mxs-ocotp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/nvmem/nvmem-rockchip-otp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/nvmem/nvmem-vf610-ocotp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/nvmem/nvmem_meson_mx_efuse.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/nvmem/nvmem_rockchip_efuse.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/parport/parport.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/parport/parport_pc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pci/controller/dwc/pci-dra7xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pci/controller/dwc/pci-meson.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pci/controller/dwc/pcie-tegra194.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pci/controller/pci-aardvark.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pci/controller/pcie-altera.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pci/controller/pcie-brcmstb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pci/controller/pcie-mediatek.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pcmcia/pcmcia_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/allwinner/phy-sun6i-mipi-dphy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/amlogic/phy-meson-axg-pcie.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/amlogic/phy-meson-g12a-usb2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/amlogic/phy-meson-g12a-usb3-pcie.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/amlogic/phy-meson-gxl-usb2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/amlogic/phy-meson8b-usb2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/broadcom/phy-bcm-kona-usb2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/broadcom/phy-bcm-ns2-usbdrd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/broadcom/phy-bcm-sr-usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/broadcom/phy-brcm-sata.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/broadcom/phy-brcm-usb-dvr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/cadence/phy-cadence-salvo.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/freescale/phy-fsl-imx8mq-usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/hisilicon/phy-hi3670-pcie.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/hisilicon/phy-hisi-inno-usb2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/hisilicon/phy-histb-combphy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/intel/phy-intel-keembay-emmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/intel/phy-intel-keembay-usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/intel/phy-intel-lgm-emmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/intel/phy-intel-thunderbay-emmc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/lantiq/phy-lantiq-vrx200-pcie.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/marvell/phy-armada38x-comphy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/marvell/phy-mmp3-usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/marvell/phy-mvebu-cp110-utmi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/marvell/phy-pxa-usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/mediatek/phy-mtk-mipi-dsi-drv.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/mediatek/phy-mtk-ufs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/qualcomm/phy-qcom-qmp-combo.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/ralink/phy-ralink-usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/renesas/r8a779f0-ether-serdes.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/rockchip/phy-rockchip-inno-dsidphy.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/rockchip/phy-rockchip-pcie.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/rockchip/phy-rockchip-snps-pcie3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/rockchip/phy-rockchip-typec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/samsung/phy-exynos-usb2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/samsung/phy-exynos5-usbdrd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/st/phy-stm32-usbphyc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/sunplus/phy-sunplus-usb2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/ti/phy-am654-serdes.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/phy/xilinx/phy-zynqmp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pinctrl/bcm/pinctrl-bcm2835.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/platform/olpc/olpc-xo175-ec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/power/reset/atc260x-poweroff.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/power/reset/piix4-poweroff.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/power/supply/sc27xx_fuel_gauge.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ptp/ptp_idt82p33.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/pwm/pwm-pca9685.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rapidio/devices/tsi721_mport.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rapidio/rapidio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rapidio/rio-scan.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rapidio/switches/idt_gen2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rapidio/switches/idt_gen3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/regulator/mt6359-regulator.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/regulator/qcom_spmi-regulator.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/regulator/rk808-regulator.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/regulator/ti-abb-regulator.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/reset/reset-berlin.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/reset/reset-imx7.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-armada38x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-ds2404.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-meson.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-moxart.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-msc313.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-msm6242.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-omap.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-r7301.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-rs5c348.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-stm32.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-stmp3xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-tegra.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-v3020.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/rtc/rtc-x1205.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/sbus/char/uctrl.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/BusLogic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/a100u2w.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/aacraid/aacraid.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/advansys.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/aic7xxx/aic79xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/aic7xxx/aic7xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/aic94xx/aic94xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/am53c974.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/arcmsr/arcmsr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/atp870u.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/be2iscsi/be2iscsi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/bfa/bfa.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/csiostor/csiostor.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/dc395x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/dmx3191d.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/esas2r/esas2r.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/esp_scsi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/fdomain.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/hisi_sas/hisi_sas_v1_hw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/hisi_sas/hisi_sas_v2_hw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/imm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/initio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/ipr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/ips.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/libiscsi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/megaraid.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/megaraid/megaraid_mbox.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/mpi3mr/mpi3mr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/mpt3sas/mpt3sas.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/mvsas/mvsas.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/mvumi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/myrb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/myrs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/pcmcia/aha152x_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/pcmcia/nsp_cs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/pm8001/pm80xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/ppa.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/qla1280.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/qla2xxx/qla2xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/qla4xxx/qla4xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/qlogicpti.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/snic/snic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/stex.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/sun_esp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/sym53c8xx_2/sym53c8xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/scsi/wd719x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/soc/ixp4xx/ixp4xx-npe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/soc/qcom/qcom_rpmh.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/soc/samsung/exynos-usi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-armada-3700.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-bcm-qspi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-cadence.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-fsl-qspi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-imx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-lm70llp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-loopback-test.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-mt7621.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-npcm-pspi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-omap-100k.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-orion.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-pic32-sqi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-pxa2xx-platform.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-sh-hspi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-sh-msiof.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-sh.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-sprd-adi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-st-ssc4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-stm32-qspi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-stm32.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-tegra114.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-tegra20-sflash.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-tegra20-slink.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-tegra210-quad.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spi/spi-xtensa-xtfpga.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spmi/hisi-spmi-controller.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spmi/spmi-mtk-pmif.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/spmi/spmi-pmic-arb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ssb/ssb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/emxx_udc/emxx_udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_agm1264k-fl.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_bd663474.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_hx8340bn.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_hx8347d.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_hx8353d.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_ili9163.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_ili9320.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_ili9325.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_ili9340.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_ili9341.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_ra8875.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_st7789v.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_tinylcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_uc1701.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fb_upd161704.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/fbtft/fbtft.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/iio/impedance-analyzer/ad5933.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/iio/resolver/ad2s1210.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/av7110/budget-patch.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/av7110/dvb-ttpci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/av7110/sp8870.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/common/saa7146.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/saa7146/hexium_orion.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/ttpci/budget-av.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/ttpci/budget-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/saa7146/ttpci/budget.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/deprecated/zr364xx/zr364xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/omap4iss/omap4-iss.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/media/sunxi/cedrus/sunxi-cedrus.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/qlge/qlge.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/r8188eu/r8188eu.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/rtl8192e/rtl8192e/r8192e_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/rtl8192u/r8192u_usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/rtl8712/r8712u.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/rtl8723bs/r8723bs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/rts5208/rts5208.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/staging/vt6655/vt6655_stage.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/thermal/k3_j72xx_bandgap.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/thermal/rockchip_thermal.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/thermal/ti-soc-thermal/ti-soc-thermal.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/8250/8250_base.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/8250/8250_dw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/8250/8250_omap.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/8250/8250_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/8250/8250_tegra.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/bcm63xx_uart.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/imx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/jsm/jsm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/msm_serial.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/mxs-auart.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/omap-serial.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/qcom_geni_serial.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/rp2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/samsung_tty.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/sc16is7xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/serial-tegra.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/sh-sci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/sifive.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/stm32-usart.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/sunplus-uart.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/sunsab.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/tty/serial/sunzilog.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ufs/core/ufshcd-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ufs/host/ufs-exynos.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ufs/host/ufs-hisi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/ufs/host/ufs-renesas.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/cdns3/cdns-usb-common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/cdns3/cdns3-imx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/cdns3/cdns3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/chipidea/ci_hdrc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/chipidea/ci_hdrc_msm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/chipidea/ci_hdrc_tegra.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/dwc2/dwc2.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/dwc3/dwc3-meson-g12a.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/dwc3/dwc3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/fotg210/fotg210.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/aspeed-vhub/aspeed-vhub.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/aspeed_udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/bdc/bdc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/goku_udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/m66592-udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/mv_u3d_core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/mv_udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/net2272.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/net2280.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/pch_udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/pxa27x_udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/r8a66597-udc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/renesas_usb3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/gadget/udc/udc-xilinx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/ehci-brcm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/ehci-fsl.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/ehci-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/ehci-platform.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/isp116x-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/isp1362-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/ohci-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/ohci-s3c2410.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/oxu210hp-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/r8a66597-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/sl811-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/ssb-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/u132-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/uhci-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/xhci-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/xhci-mtk-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/xhci-pci-renesas.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/host/xhci-plat-hcd.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/isp1760/isp1760.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/misc/ftdi-elan.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/misc/onboard_usb_hub.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/mtu3/mtu3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/musb/musb_hdrc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/musb/ux500.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/phy/phy-am335x-control.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/phy/phy-tegra-usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/renesas_usbhs/renesas_usbhs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/usb/serial/keyspan.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/vfio/platform/reset/vfio_platform_bcmflexrm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/backlight/ili9320.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/backlight/l4f00242t03.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/backlight/lms283gf05.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/backlight/vgg2432a4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/arcfb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/aty/aty128fb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/aty/radeonfb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/broadsheetfb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/carminefb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/cirrusfb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/core/fb_ddc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/da8xx-fb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/gxt4500.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/i740fb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/matrox/matroxfb_DAC1064.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/matrox/matroxfb_Ti3026.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/mb862xx/mb862xxfb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/neofb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/nvidia/nvidiafb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/omap2/omapfb/displays/encoder-tpd12s015.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/omap2/omapfb/dss/omapdss.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/riva/rivafb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/s1d13xxxfb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/s3fb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/savage/savagefb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/sh_mobile_lcdcfb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/sm501fb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/ssd1307fb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/sstfb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/tmiofb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/via/viafb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/vt8623fb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/video/fbdev/w100fb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/w1/masters/mxc_w1.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/w1/masters/sgi_w1.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/w1/slaves/w1_ds28e17.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/w1/wire.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/apple_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/asm9260_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/aspeed_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/at91rm9200_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/bcm2835_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/bcm_kona_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/da9052_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/da9055_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/da9062_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/da9063_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/digicolor_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/dw_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/gpio_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/imx2_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/meson_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/mtk_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/npcm_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/pcwd_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/pcwd_usb.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/pnx4008_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/qcom-wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/rave-sp-wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/realtek_otto_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/renesas_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/rza_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/rzg2l_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/s3c2410_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/sama5d4_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/sunxi_wdt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [drivers/watchdog/wdt_pci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [fs/xfs/xfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [kernel/locking/locktorture.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [kernel/rcu/rcuscale.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [kernel/rcu/rcutorture.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [kernel/rcu/refscale.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [kernel/scftorture.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [kernel/time/test_udelay.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [lib/test_lockup.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/core/snd-timer.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/drivers/mpu401/snd-mpu401-uart.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/drivers/opl3/snd-opl3-lib.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/drivers/snd-mtpav.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/drivers/vx/snd-vx-lib.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/hda/ext/snd-hda-ext-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/hda/snd-hda-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/i2c/other/snd-ak4113.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/i2c/other/snd-ak4114.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/i2c/other/snd-ak4117.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/i2c/other/snd-ak4xxx-adda.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/ac97/snd-ac97-codec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/au88x0/snd-au8810.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/au88x0/snd-au8820.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/au88x0/snd-au8830.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/ca0106/snd-ca0106.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/cs46xx/snd-cs46xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/cs5535audio/snd-cs5535audio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/ctxfi/snd-ctxfi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-darla20.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-darla24.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-echo3g.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-gina20.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-gina24.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-indigo.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-indigodj.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-indigodjx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-indigoio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-indigoiox.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-layla20.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-layla24.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-mia.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/echoaudio/snd-mona.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/hda/snd-hda-codec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/hda/snd-hda-intel.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/ice1712/snd-ice1724.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/ice1712/snd-ice17xx-ak4xxx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/korg1212/snd-korg1212.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/lola/snd-lola.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/lx6464es/snd-lx6464es.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/nm256/snd-nm256.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/oxygen/snd-oxygen-lib.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/pcxhr/snd-pcxhr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/riptide/snd-riptide.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/rme9652/snd-hdsp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/rme9652/snd-rme9652.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-ad1889.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-atiixp-modem.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-atiixp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-cmipci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-cs4281.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-ens1370.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-ens1371.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-fm801.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-intel8x0.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-intel8x0m.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-rme96.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-via82xx-modem.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/snd-via82xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/vx222/snd-vx222.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pci/ymfpci/snd-ymfpci.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pcmcia/pdaudiocf/snd-pdaudiocf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/pcmcia/vx/snd-vxpocket.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/amd/acp_audio_dma.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/mt6359-accdet.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-adau1373.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-adau1701.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-adau17x1.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-ak4458.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-ak4613.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-ak4641.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-arizona.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-aw8738.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-cpcap.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-cs35l41-lib.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-cs4265.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-cs4271.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-cs42l51.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-cs42l73.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-da732x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-dmic.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-jz4740-codec.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-l3.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-madera.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-max98357a.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-nau8540.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-nau8810.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-nau8821.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-nau8822.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-nau8824.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-nau8825.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-rk3328.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-rt286.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-rt298.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-rt5616.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-rt5645.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-rt5670.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-rt5677.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-sgtl5000.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-sta32x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-sta350.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-tas5086.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-tlv320aic23.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-tlv320aic31xx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-tlv320aic32x4.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-tlv320aic3x.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-uda1380.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm-hubs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8510.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8711.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8903.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8904.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8961.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8962.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8974.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8978.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm8995.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/codecs/snd-soc-wm9081.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/fsl/snd-soc-fsl-asrc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/fsl/snd-soc-fsl-easrc.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/fsl/snd-soc-fsl-sai.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/fsl/snd-soc-fsl-ssi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/fsl/snd-soc-fsl-xcvr.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/intel/avs/snd-soc-avs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/kirkwood/snd-soc-kirkwood.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/mediatek/mt8186/snd-soc-mt8186-afe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/mediatek/mt8195/snd-soc-mt8195-afe.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/meson/snd-soc-meson-t9015.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/mxs/snd-soc-mxs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/rockchip/snd-soc-rockchip-i2s-tdm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/rockchip/snd-soc-rockchip-i2s.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/samsung/snd-soc-s3c24xx-i2s.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/sh/rcar/snd-soc-rcar.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/sh/snd-soc-fsi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/sh/snd-soc-rz-ssi.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/snd-soc-core.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/sof/intel/snd-sof-acpi-intel-bdw.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/sof/intel/snd-sof-intel-hda-common.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/sof/mediatek/mt8186/snd-sof-mt8186.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/sof/mediatek/mt8195/snd-sof-mt8195.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/sti/snd-soc-sti.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/stm/snd-soc-stm32-i2s.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/stm/snd-soc-stm32-sai.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/stm/snd-soc-stm32-spdifrx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/tegra/snd-soc-tegra20-ac97.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/tegra/snd-soc-tegra210-admaif.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/tegra/snd-soc-tegra210-adx.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/ti/snd-soc-davinci-asp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/ti/snd-soc-omap-mcbsp.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/soc/xilinx/snd-soc-xlnx-formatter-pcm.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/sparc/snd-sun-cs4231.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/sparc/snd-sun-dbri.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/usb/line6/snd-usb-line6.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "__udelay" [sound/usb/snd-usb-audio.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "empty_zero_page" [drivers/infiniband/core/ib_uverbs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "empty_zero_page" [drivers/md/dm-crypt.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "empty_zero_page" [drivers/md/dm-mod.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "empty_zero_page" [fs/cramfs/cramfs.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "empty_zero_page" [lib/crypto/libchacha20poly1305.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "empty_zero_page" [net/ceph/libceph.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: "empty_zero_page" [net/rxrpc/rxperf.ko] has no CRC!: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "___rw_read_enter" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "___rw_read_exit" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "___rw_read_try" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "___rw_write_enter" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__ashldi3" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__ashrdi3" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__copy_1page" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__divdi3" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__lshrdi3" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__muldi3" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__ndelay" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "__udelay" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "bzero_1page" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+  - modpost: WARNING: modpost: EXPORT symbol "empty_zero_page" [vmlinux] version generation failed, symbol will not be versioned.: N/A => 
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
