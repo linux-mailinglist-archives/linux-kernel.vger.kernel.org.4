@@ -2,131 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD106AC1EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E8A6AC1F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:56:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjCFNzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:55:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
+        id S229891AbjCFNz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjCFNzg (ORCPT
+        with ESMTP id S229961AbjCFNzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:55:36 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843A929426
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:55:35 -0800 (PST)
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326D59jg018320;
-        Mon, 6 Mar 2023 13:55:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : content-transfer-encoding : mime-version; s=pp1;
- bh=gRD8JJYANQoaDeDDLwQmfnykMhkvwfwnnj9U9gA27mA=;
- b=m6V+7NL6ucr8BkYk9y+2W8uMUK50NAyeDGOY6X9ZF0aBaUmJDmWFE2MwDhQA6R4PFGCA
- ogtqy8M1Ib7Ou8a5wg945i8rVgiVzzhLysZb7QUs/ll93cAPb0u0fAONqwcKcsUmzx7R
- i/57EqO8Sr5/PgohMQ9UyEZY9EM7qYDPsby50LOH7sZEZKzr5KAh9P0q+E/4WQDXSas2
- TbnJlyH9fXEWhjXTSt3ahyOaIhSVzt0XiPxzL6xfr1+nqlX8ALfmdTWgFQAnzb/rD8i2
- rtrgcNS6d5f46AHO9IxBuRQ0GzfR5wAQE5+mJ2nsEBBAYzu5/X1yjLbQ8WG1vyY8DjXu Hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4vp20636-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 13:55:28 +0000
-Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326D9B4R024378;
-        Mon, 6 Mar 2023 13:55:28 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4vp2062g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 13:55:28 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3266D2uk008169;
-        Mon, 6 Mar 2023 13:55:26 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3p419ka7dv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 13:55:25 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326DtLHF19792456
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 13:55:21 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 28ABE2006A;
-        Mon,  6 Mar 2023 13:55:21 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D4B7920067;
-        Mon,  6 Mar 2023 13:55:20 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.101.4.33])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 13:55:20 +0000 (GMT)
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, Sachin Sant <sachinp@linux.ibm.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: [PATCH] powerpc/mm: fix mmap_lock bad unlock
-Date:   Mon,  6 Mar 2023 14:55:20 +0100
-Message-Id: <20230306135520.4222-1-ldufour@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: -mfselKxpsUFz8XBPm9kLaG4aVfl3jwU
-X-Proofpoint-GUID: OchV6nD80rsjtI295AnTPoQEGnRuyelA
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 6 Mar 2023 08:55:54 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C14303C9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:55:49 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso5257966wmo.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:55:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678110948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6EPk/yxhkspR8/DJQsxy544G2V8zAJbCDLKWqTOj46w=;
+        b=kgY1Dp5Ew/FXHTgZM8qaXsLS1dDMQZ2a8xrpy3FJbO1JmjfocvLJTxm0IHxtK+VSQ2
+         jQekCGaf0BBw3B6A/LFT2AQ62UaTfrXH40HpB/UT6DNfbc5qpC99RMpIn0TZ2dQCJzFM
+         +LERGcIMDN58BAm1SEt35dvTbszgQp/5+TO3vI/AkGX1Jw00iHTve1rJX+jRqAOxZsEa
+         958vjqEL9xtXF9kgCZe38xJCjxmG1O3jO60YOSFWyt0QBCYREhikuNtLquZMdHxPDZl5
+         p5/yiS/rgCXBt604H+R0CR+IdFj5P8dC9l3VG1RNHK928oBKkgxS4BHyGbHNB+Uk/6TF
+         wxiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678110948;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6EPk/yxhkspR8/DJQsxy544G2V8zAJbCDLKWqTOj46w=;
+        b=uYyHXCGE9FnQGf81OhrUafI90yFgK3BQ5otXEsT7q4JkwwJQyVOfMEtjiTiJWV9D25
+         8aCB4DIHXDJOHlBzVWzUbAZdJU+pnjxXBwBG+hO/QAy6N5DeJGXD8pOChtwMBYo7PNdF
+         avgtjyCjWgHbh6XqRAuPy62sdvnBhsOXahuOAE2C9+fE+Xp14KJIZ3ODEOJExcQgQdq4
+         2WzjmyGZD8yI0lxjZqAnAQv9zyoEZOjXuzKUS082Qeuw1hAE774J7j1UGDUwDnqDgvY5
+         Aa8HTUeejGpPNRqfB5OEyyOZTU9FIOa0lyrCp0nq5lNPoQcam3dnEdO4ZPj2hBKTwQmm
+         pluA==
+X-Gm-Message-State: AO0yUKXQKoN5sp+/mk9K59MUKCAZb6jM7kNf2nqhZY6Y7I7IGMhFQ4f2
+        9vq4yYRcYecjYLSVHC5Oy0bOAJBwvsa2veCxCs4=
+X-Google-Smtp-Source: AK7set8t3Eqavntj8kFwEh8wpn9kndsaf9bmZAUemRYma9rsJHkTtsjmx+z62uLwS/Of71CgxvHgIA==
+X-Received: by 2002:a05:600c:4fd6:b0:3df:d8c5:ec18 with SMTP id o22-20020a05600c4fd600b003dfd8c5ec18mr9072578wmq.13.1678110948133;
+        Mon, 06 Mar 2023 05:55:48 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id r1-20020a056000014100b002c5534db60bsm10206752wrx.71.2023.03.06.05.55.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 05:55:47 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Johan Hovold <johan@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v4] soc: qcom: llcc: Fix slice configuration values for SC8280XP
+Date:   Mon,  6 Mar 2023 15:55:27 +0200
+Message-Id: <20230306135527.509796-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_05,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1015 suspectscore=0
- mlxlogscore=999 mlxscore=0 priorityscore=1501 adultscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303060120
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When page fault is tried holding the per VMA lock, bad_access_pkey() and
-bad_access() should not be called because it is assuming the mmap_lock is
-held.
-In the case a bad access is detected, fall back to the default path,
-grabbing the mmap_lock to handle the fault and report the error.
+The slice IDs for CVPFW, CPUSS1 and CPUWHT currently overflow the 32bit
+LLCC config registers, which means it is writing beyond the upper limit
+of the ATTR0_CFGn and ATTR1_CFGn range of registers. But the most obvious
+impact is the fact that the mentioned slices do not get configured at all,
+which will result in reduced performance. Fix that by using the slice ID
+values taken from the latest LLCC SC table.
 
-Fixes: 169db3bb4609 ("powerc/mm: try VMA lock-based page fault handling first")
-Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-Link: https://lore.kernel.org/linux-mm/842502FB-F99C-417C-9648-A37D0ECDC9CE@linux.ibm.com
-Cc: Suren Baghdasaryan <surenb@google.com>
-Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+Fixes: ec69dfbdc426 ("soc: qcom: llcc: Add sc8180x and sc8280xp configurations")
+Cc: stable@vger.kernel.org	# 5.19+
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+Tested-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- arch/powerpc/mm/fault.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/arch/powerpc/mm/fault.c b/arch/powerpc/mm/fault.c
-index c7ae86b04b8a..e191b3ebd8d6 100644
---- a/arch/powerpc/mm/fault.c
-+++ b/arch/powerpc/mm/fault.c
-@@ -479,17 +479,13 @@ static int ___do_page_fault(struct pt_regs *regs, unsigned long address,
+The v3 is here:
+https://lore.kernel.org/all/20230219165701.2557446-1-abel.vesa@linaro.org/
+
+Changes since v3:
+ * explicitly mentioned in the commit message the fact that some random
+   registers might get written and the fact that there is an impact
+   on performance.
+ * Added Johan's R-b tag
+
+Changes since v2:
+ * specifically mentioned the 3 slice IDs that are being fixed and
+   what is happening without this patch
+ * added stabke Cc line
+ * added Juerg's T-b tag
+ * added Sai's R-b tag
+ * added Konrad's A-b tag
+
+Changes since v1:
+ * dropped the LLCC_GPU and LLCC_WRCACHE max_cap changes
+ * took the new values from documentatio this time rather than
+   downstream kernel
+
+ drivers/soc/qcom/llcc-qcom.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+index 23ce2f78c4ed..26efe12012a0 100644
+--- a/drivers/soc/qcom/llcc-qcom.c
++++ b/drivers/soc/qcom/llcc-qcom.c
+@@ -191,9 +191,9 @@ static const struct llcc_slice_config sc8280xp_data[] = {
+ 	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+ 	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
+ 	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+-	{ LLCC_CVPFW,    32, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+-	{ LLCC_CPUSS1,   33, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+-	{ LLCC_CPUHWT,   36, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
++	{ LLCC_CVPFW,    17, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
++	{ LLCC_CPUSS1,   3, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
++	{ LLCC_CPUHWT,   5, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+ };
  
- 	if (unlikely(access_pkey_error(is_write, is_exec,
- 				       (error_code & DSISR_KEYFAULT), vma))) {
--		int rc = bad_access_pkey(regs, address, vma);
--
- 		vma_end_read(vma);
--		return rc;
-+		goto lock_mmap;
- 	}
- 
- 	if (unlikely(access_error(is_write, is_exec, vma))) {
--		int rc = bad_access(regs, address);
--
- 		vma_end_read(vma);
--		return rc;
-+		goto lock_mmap;
- 	}
- 
- 	fault = handle_mm_fault(vma, address, flags | FAULT_FLAG_VMA_LOCK, regs);
+ static const struct llcc_slice_config sdm845_data[] =  {
 -- 
-2.39.2
+2.34.1
 
