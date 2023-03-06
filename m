@@ -2,76 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4380C6ACE1F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C706ACE21
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjCFTas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:30:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S229743AbjCFTbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:31:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjCFTap (ORCPT
+        with ESMTP id S229540AbjCFTbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:30:45 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B81F38004;
-        Mon,  6 Mar 2023 11:30:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Mar 2023 14:31:50 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A42372026
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:31:48 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE972B810C6;
-        Mon,  6 Mar 2023 19:30:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BB4C433D2;
-        Mon,  6 Mar 2023 19:30:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678131038;
-        bh=y2LTQiZFTAycrk7HmfcrNSsVpGXsaOa8A/dbm5J1ayY=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Ie3nQYJsv+RzZ1NZ+BDULCYZn8GB/e9JROMtiMVzWYrNPU1zpVkQi5HJLmBZAdqPL
-         iuM97EkjQUaMZjHzeUJJ7NzfkzOKvZRFae8oHDZTI6YLC6iLb4pM410EteMs9qm9vH
-         pQLsVPoMgEYO8QA3uAvE77q8jUy+z/9MnGoTxoaj8aRtr7Epgz8iCMjqx4hblPQE0X
-         MMfoeZ8PF6aPtPgUhpuS5hySkAfBvuoiQRjw2b2o0axcB5ZgJDF7HNzrg9Xsa0QiDr
-         yvTLF16iw6j/kdZBSfALao4x57KdH7CkiU8UhvcVCgohJb5lSD0nFh0PAXXqFv6HPz
-         QGs/OxX2cbXBw==
-Message-ID: <d97ab14301c65d775cd69c1efebedb37.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1154321E34;
+        Mon,  6 Mar 2023 19:31:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678131107; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=v4lIRT5dTzL9UnegIXyhyP78C6AopA969E0hoJXW+hw=;
+        b=qsEnY8jSZasVQr8h0ZwP0pzOdSopHMM8piQPp8vqt+EdcVWEmTug//6pSX+HkPiGsPIWbF
+        IY/F4wjYiOkdIzDRJlbve4HgVdoJ/AE5Llwlm2XRJaK1ZgFvD2xQDjtzMNOyWVlDASf4uA
+        q0j7xYYCDJMUGZvx6AV/ATWmKuRDEWA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDB0213A66;
+        Mon,  6 Mar 2023 19:31:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id J5GuMKI/BmTEMwAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Mon, 06 Mar 2023 19:31:46 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v2] x86/mm: Do not shuffle CPU entry areas without KASLR
+Date:   Mon,  6 Mar 2023 20:31:44 +0100
+Message-Id: <20230306193144.24605-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230226053953.4681-3-rdunlap@infradead.org>
-References: <20230226053953.4681-1-rdunlap@infradead.org> <20230226053953.4681-3-rdunlap@infradead.org>
-Subject: Re: [PATCH 2/8] clk: HI655X: select REGMAP instead of depending on it
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Riku Voipio <riku.voipio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-clk@vger.kernel.org
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Date:   Mon, 06 Mar 2023 11:30:36 -0800
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Randy Dunlap (2023-02-25 21:39:47)
-> REGMAP is a hidden (not user visible) symbol. Users cannot set it
-> directly thru "make *config", so drivers should select it instead of
-> depending on it if they need it.
->=20
-> Consistently using "select" or "depends on" can also help reduce
-> Kconfig circular dependency issues.
->=20
-> Therefore, change the use of "depends on REGMAP" to "select REGMAP".
->=20
-> Fixes: 3a49afb84ca0 ("clk: enable hi655x common clk automatically")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Riku Voipio <riku.voipio@linaro.org>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: linux-clk@vger.kernel.org
-> ---
+The commit 97e3d26b5e5f ("x86/mm: Randomize per-cpu entry area") fixed
+an omission of KASLR on CPU entry areas. It doesn't take into account
+KASLR switches though, which may result in unintended non-determinism
+when a user wants to avoid it (e.g. debugging, benchmarking).
 
-Applied to clk-fixes
+Generate only a single combination of CPU entry areas offsets -- the
+linear array that existed prior randomization when KASLR is turned off.
+
+Since we have 3f148f331814 ("x86/kasan: Map shadow for percpu pages on
+demand") and followups, we can use the more relaxed guard
+kasrl_enabled() (in contrast to kaslr_memory_enabled()).
+
+Fixes: 97e3d26b5e5f ("x86/mm: Randomize per-cpu entry area")
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+
+v1: https://lore.kernel.org/r/20230303160645.3594-1-mkoutny@suse.com
+
+Changes in v2:
+- s/kaslr_memory_enabled/kasrl_enabled/, commit message
+
+ arch/x86/mm/cpu_entry_area.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/arch/x86/mm/cpu_entry_area.c b/arch/x86/mm/cpu_entry_area.c
+index 7316a8224259..e91500a80963 100644
+--- a/arch/x86/mm/cpu_entry_area.c
++++ b/arch/x86/mm/cpu_entry_area.c
+@@ -10,6 +10,7 @@
+ #include <asm/fixmap.h>
+ #include <asm/desc.h>
+ #include <asm/kasan.h>
++#include <asm/setup.h>
+ 
+ static DEFINE_PER_CPU_PAGE_ALIGNED(struct entry_stack_page, entry_stack_storage);
+ 
+@@ -29,6 +30,12 @@ static __init void init_cea_offsets(void)
+ 	unsigned int max_cea;
+ 	unsigned int i, j;
+ 
++	if (!kaslr_enabled()) {
++		for_each_possible_cpu(i)
++			per_cpu(_cea_offset, i) = i;
++		return;
++	}
++
+ 	max_cea = (CPU_ENTRY_AREA_MAP_SIZE - PAGE_SIZE) / CPU_ENTRY_AREA_SIZE;
+ 
+ 	/* O(sodding terrible) */
+-- 
+2.39.2
+
