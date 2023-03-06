@@ -2,160 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3316ACFD7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2496ACFF3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCFVJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:09:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
+        id S229841AbjCFVNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:13:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjCFVJT (ORCPT
+        with ESMTP id S229715AbjCFVNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:09:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AAC206BF;
-        Mon,  6 Mar 2023 13:09:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22E3F60B84;
-        Mon,  6 Mar 2023 21:09:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5523C433EF;
-        Mon,  6 Mar 2023 21:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678136957;
-        bh=D7hWlHPkxCHLmVrT+DiT6xkGdDskW5thK7niBxeh04M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mJWPEujZmIUYE6OUHwuuyaWs5gYoiX4mwLmxqbrcHALw1Ox54QKIpzoH9FueSBEGh
-         /DthUfR3FQvRQExHZWC8w3zsDF8GuKihsyq6/+UGMI+E1SKQr8rzjz4dwuPc+Bt+vG
-         ZsY9Ll9URemzFEKiU2ctO3x9wG1m0YzHJEW7lxr9Rw1HejeoBf5h2WORWwofq9wC3Z
-         LRVcKmO7vapRRHJgCmEQO/HusrwP0bnR4rKRTWaK2JQdkO97QAojCUOfQjA4iH7A+9
-         TeEWxynFs1m+xVi9yPWPXd+7DPjrFhqmYnUowWzhc7MNPI1BiPPvBK4fkPD1bHuqzl
-         EtBoSD8wWFh5Q==
-Date:   Mon, 6 Mar 2023 21:09:11 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        'Conor Dooley ' <conor.dooley@microchip.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V3 17/20] RISC-V: time.c: Add ACPI support for time_init()
-Message-ID: <0cceafc3-522b-4ce0-9016-e931c818adec@spud>
-References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
- <20230303133647.845095-18-sunilvl@ventanamicro.com>
+        Mon, 6 Mar 2023 16:13:42 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183AF1D936;
+        Mon,  6 Mar 2023 13:13:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678137221; x=1709673221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W+pwkRjL2XU/wrlakyvjwEDMpoQqOshgjsZ9AhZ+GLE=;
+  b=g2mQZcBWSeddtWICKUIqFDyx7ielFT+haAHo3TyfYHXWXmzaoraMo6tP
+   Iex3njjViLXjUAseZ/dSj+eqytnKrwbn/bapN9ytZsewAZy7JUw6LJrig
+   wlegQH6HsDb171LpT0Odk3P36DYauIvQb6lAqxuP0WrwOxuPaNeesWY16
+   B++ojBhPWsVSqKQEAcaYiyFlnfrCzSGvP1biyPyYTE902Fu6uBLeYnL7Q
+   9ka6msERDEFRzU6CZtxJQHBuVAiF3NAq9oriaS3t7TzM8cTa8cGFWiv+e
+   FCh/JUmbFqbs5nl/3zzCn428lzquYLvbZMhxLXRVLb/dPAZ87csT+exn+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="421952428"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="421952428"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 13:13:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="740471266"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="740471266"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Mar 2023 13:13:35 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZI9G-0000df-21;
+        Mon, 06 Mar 2023 21:13:34 +0000
+Date:   Tue, 7 Mar 2023 05:12:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
+        paulus@samba.org, benh@kernel.crashing.org, linux@armlinux.org.uk,
+        pjones@redhat.com, timur@kernel.org, adaplas@gmail.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org, mbroemme@libmpq.org,
+        thomas@winischhofer.net, James.Bottomley@hansenpartnership.com,
+        spock@gentoo.org, sudipm.mukherjee@gmail.com,
+        teddy.wang@siliconmotion.com, geert+renesas@glider.be,
+        corbet@lwn.net
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH 08/99] fbdev/arkfb: Duplicate video-mode option string
+Message-ID: <202303070537.699fZDEm-lkp@intel.com>
+References: <20230306160016.4459-9-tzimmermann@suse.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="9ueEUgWWOucslAoO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303133647.845095-18-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306160016.4459-9-tzimmermann@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Thomas,
 
---9ueEUgWWOucslAoO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Yet something to improve:
 
-On Fri, Mar 03, 2023 at 07:06:44PM +0530, Sunil V L wrote:
-> On ACPI based platforms, timer related information is
-> available in RHCT. Add ACPI based probe support to the
-> timer initialization.
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/kernel/time.c | 23 +++++++++++++++++------
->  1 file changed, 17 insertions(+), 6 deletions(-)
->=20
-> diff --git a/arch/riscv/kernel/time.c b/arch/riscv/kernel/time.c
-> index babaf3b48ba8..2c29543549c3 100644
-> --- a/arch/riscv/kernel/time.c
-> +++ b/arch/riscv/kernel/time.c
-> @@ -4,6 +4,7 @@
->   * Copyright (C) 2017 SiFive
->   */
-> =20
-> +#include <linux/acpi.h>
->  #include <linux/of_clk.h>
->  #include <linux/clockchips.h>
->  #include <linux/clocksource.h>
-> @@ -18,17 +19,27 @@ EXPORT_SYMBOL_GPL(riscv_timebase);
->  void __init time_init(void)
->  {
->  	struct device_node *cpu;
-> +	struct acpi_table_rhct *rhct;
-> +	acpi_status status;
->  	u32 prop;
-> =20
-> -	cpu =3D of_find_node_by_path("/cpus");
-> -	if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
-> -		panic(KERN_WARNING "RISC-V system with no 'timebase-frequency' in DTS\=
-n");
-> -	of_node_put(cpu);
-> -	riscv_timebase =3D prop;
-> +	if (acpi_disabled) {
-> +		cpu =3D of_find_node_by_path("/cpus");
-> +		if (!cpu || of_property_read_u32(cpu, "timebase-frequency", &prop))
-> +			panic("RISC-V system with no 'timebase-frequency' in DTS\n");
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v6.3-rc1 next-20230306]
+[cannot apply to deller-parisc/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I appreciate that it was like this before, but a newline here (and in
-the corresponding spot below) would be nice.
-That's a minor nit though, so:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/lib-Add-option-iterator/20230307-000524
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230306160016.4459-9-tzimmermann%40suse.de
+patch subject: [PATCH 08/99] fbdev/arkfb: Duplicate video-mode option string
+config: x86_64-randconfig-a016-20230306 (https://download.01.org/0day-ci/archive/20230307/202303070537.699fZDEm-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f8a56fb51ff846d7daca02280ac0355e1a82264e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Thomas-Zimmermann/lib-Add-option-iterator/20230307-000524
+        git checkout f8a56fb51ff846d7daca02280ac0355e1a82264e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Thanks,
-Conor.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303070537.699fZDEm-lkp@intel.com/
 
-> +		of_node_put(cpu);
-> +		riscv_timebase =3D prop;
-> +		of_clk_init(NULL);
-> +	} else {
-> +		status =3D acpi_get_table(ACPI_SIG_RHCT, 0, (struct acpi_table_header =
-**)&rhct);
-> +		if (ACPI_FAILURE(status))
-> +			panic("RISC-V ACPI system with no RHCT table\n");
-> +		riscv_timebase =3D rhct->time_base_freq;
-> +		acpi_put_table((struct acpi_table_header *)rhct);
-> +	}
-> =20
->  	lpj_fine =3D riscv_timebase / HZ;
-> =20
-> -	of_clk_init(NULL);
->  	timer_probe();
-> =20
->  	tick_setup_hrtimer_broadcast();
-> --=20
-> 2.34.1
->=20
+All errors (new ones prefixed by >>):
 
---9ueEUgWWOucslAoO
-Content-Type: application/pgp-signature; name="signature.asc"
+>> drivers/video/fbdev/arkfb.c:1205:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   drivers/video/fbdev/arkfb.c:1207:4: error: 'continue' statement not in loop statement
+                           continue;
+                           ^
+   2 errors generated.
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAZWdwAKCRB4tDGHoIJi
-0tRbAP9sV9/i+Nt5TFgt3D3dQu0MRkMmaWwMmRuG9k6Af62B0QD/cYMZAGC8XVRw
-vGCpsH5Ygi+gGrH6Cok66aQs9RTt+wU=
-=S8pz
------END PGP SIGNATURE-----
+vim +/continue +1205 drivers/video/fbdev/arkfb.c
 
---9ueEUgWWOucslAoO--
+  1191	
+  1192		if (fb_modesetting_disabled("arkfb"))
+  1193			return -ENODEV;
+  1194	
+  1195	#ifndef MODULE
+  1196		if (fb_get_options("arkfb", &option))
+  1197			return -ENODEV;
+  1198	
+  1199		if (option && *option) {
+  1200			static char mode_option_buf[256];
+  1201			int ret;
+  1202	
+  1203			ret = snprintf(mode_option_buf, sizeof(mode_option_buf), "%s", option);
+  1204			if (WARN(ret < 0, "arkfb: ignoring invalid option, ret=%d\n", ret))
+> 1205				continue;
+  1206			if (WARN(ret >= sizeof(mode_option_buf), "arkfb: option too long\n"))
+  1207				continue;
+  1208			mode_option = mode_option_buf;
+  1209		}
+  1210	#endif
+  1211	
+  1212		pr_debug("arkfb: initializing\n");
+  1213		return pci_register_driver(&arkfb_pci_driver);
+  1214	}
+  1215	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
