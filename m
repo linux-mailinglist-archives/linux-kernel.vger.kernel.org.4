@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDBD6ABD2E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E92B6ABD37
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjCFKrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S229915AbjCFKsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:48:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjCFKrc (ORCPT
+        with ESMTP id S229911AbjCFKsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:47:32 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9678D20D34
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:47:30 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id x6so9153081ljq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:47:30 -0800 (PST)
+        Mon, 6 Mar 2023 05:48:38 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6ABBBB1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:48:37 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id n2so12062409lfb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:48:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678099649;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FQCRshdQg1v0si9EwPt4TtPtYK6E589Q6hmnpjPICm4=;
-        b=sJQ7h5p47zK/Pls6m/WmYq2eD0pdis9NeiPwQe7r/SnBuV7R7rJQuFOvO5DFiVmboN
-         ZypGPjScBG1NC09CChgOEVSDRCdJOzI3Qg4HdTqPz9W3y4tcv20ohLEaWZ92fv12932K
-         J0Cs/KEov+jIPfJg3o8SoO6HNu8pjtE0hEHvCbHX+r28Fr1qqLr1kr7/cIS10RW0FjGi
-         JtmULfGos2E5BbjrYTW2NEGOPbt5Se709hErNL6qKSKSXlkFDFKl3sM8MaCjXmTDq736
-         FeOxcS2ZlNobxYKOil8NbhrAWTUghZi1LEiYsvoeYunEtNtqyssCaZeytnvcAvnnbaMC
-         GVcQ==
+        d=linaro.org; s=google; t=1678099715;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2lEWb9M+27usFFCg4r17f9lWCbgLfmjVxKsZzU2ZwyM=;
+        b=q7O0FGrmn41rY8tsM47xZZKULIR2uEQ1Q1xXgDy4e51HNv2SAJittZeN/fEEnyEt8t
+         uez/LH9Bs7sOifuQ5YveqdCIx8wPuhsE1G9e4gQMheFG6kd/RAzm9w5LCVubkOjF5SPQ
+         DxMlPLvqt+nPLKjcHB/qbiXJ969Q3jjzopJpR6micpUmyOPrv4+SJxnKRbszKRo6YVUa
+         uWC8FLZ6BrWupFxLA9vwVwxu2uLD5cnjBtbEg6nudoKVyzxliCSzjnDZfmtG6ETXPRcU
+         F547MeT7r34DYFMr+TZnCRcxJP2oEK4/9PP/wItJodP0r5KQF4z/lO/+gj7qalXBokEU
+         AriQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678099649;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FQCRshdQg1v0si9EwPt4TtPtYK6E589Q6hmnpjPICm4=;
-        b=YS6BsH6mvNq5d1geAESRBhvm/TI5onBVc2b0sDkcv/dYjYITrxZuPsbNMTVRwkKYP+
-         tblSXlXvS/Yri1EFdI0iBbaisQGUUY11fDY5UXoEEPtd/cnsPSw561TVQ0dP4bdTGuvx
-         TMYArkH4usFreJnnKI7SAxNQeWH9pAns35WpTHknPRFGHbTnkvCz99X3I3hY4afRSZHE
-         j18rJg1H0HBLMo4UhzSgnjciqkfZbgLQrE7revoaa46dlN3o8mQI6a2SWL0P7wPxBePd
-         Ew9jF7KMUErPbxQzpn7KdBbBWhT9t4PUOIYIiwt56ExBcgkrcbeTeso7Gvev6XOpWIzH
-         RNqA==
-X-Gm-Message-State: AO0yUKVQAUkf1pfCI89ugmTbJFcs0IrqMdYynnHyZoyfyHdkPeSnWXge
-        8V8dp004LrcfxRk6XnQjn2VtbuYa5w4vgY929QF81w==
-X-Google-Smtp-Source: AK7set/OFxw/Sf4dXegmBrjGIG9BKjWy0BEU/Sp7Ch4KHJbWekGeicsrSc5ir8fOPijVjDZuEyFCPbZGFnvS2ni2cuI=
-X-Received: by 2002:a2e:593:0:b0:295:b0cd:523 with SMTP id 141-20020a2e0593000000b00295b0cd0523mr3059795ljf.6.1678099648880;
- Mon, 06 Mar 2023 02:47:28 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678099715;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2lEWb9M+27usFFCg4r17f9lWCbgLfmjVxKsZzU2ZwyM=;
+        b=ieBotv6zF5OaHF65jyj4i66I2B64W8gZLW5qgEnJgOJDyloNfQFdzOSXxLB+GjEqnc
+         6sVJOpKeiWXhl+VLe3L7lNrvbJ18tezngGbMRlSB8tbZwPww+IL8zHhd8DuqfN/QkPHI
+         UEFpOnVDnL7Q3/W5FS1uAWYH4Z8YALyS5SsVHxTkbjRZoxaROHM7GP6hKnvjNNLAVJY6
+         OzJ2C6jnBMtmWRUqWsIOuM5jKVGU7FEKdrojQlcoJiSHHQCMX07LQs3LLnHTNfrDgCR4
+         fRhOFSETPQX89qAkqRsCoV5Hc88gzfsUQebfBFVyN1UpT1F0hM3ojBpRLM/2UkBMFvuX
+         /nSA==
+X-Gm-Message-State: AO0yUKXC1I20od54N5hFcuMHRxab1eRmXmrgP5+Dh3BXpJLNoH8xpODg
+        5Qh97FbCRMYxL95J7yks7cWZnA==
+X-Google-Smtp-Source: AK7set/6LkeOMH3WQokq5Ob72HziBLcaxSdFyJaqE4F3uGUs0etpCVKPVO4f1bdeNW/ue7KuPE+dhQ==
+X-Received: by 2002:ac2:5181:0:b0:4cb:4571:9efe with SMTP id u1-20020ac25181000000b004cb45719efemr3333656lfi.35.1678099715563;
+        Mon, 06 Mar 2023 02:48:35 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id s9-20020ac25fa9000000b004dc807b904bsm1579512lfe.120.2023.03.06.02.48.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 02:48:35 -0800 (PST)
+Message-ID: <51eec3fc-3016-e314-d4a3-bce16f28eebc@linaro.org>
+Date:   Mon, 6 Mar 2023 11:48:33 +0100
 MIME-Version: 1.0
-References: <cover.1677063656.git.viresh.kumar@linaro.org> <CABymUCMhoKoFHy8K6-ohrcAbyTpDe0Hig3oUM_wH4Db0-9yx+g@mail.gmail.com>
- <20230224021713.stpcykx2tjkjwyti@vireshk-i7> <Y/hyf+/EqEeTu436@niej-dt-7B47>
- <20230227042349.3p2ijo6s6yyqc267@vireshk-i7> <CABymUCNBkr_65JHNVfbUGjxs6rhnj=eUyZ+5j6VtiDwqzLYtcA@mail.gmail.com>
- <20230227092953.ekh72r5h6xcqgusn@vireshk-i7>
-In-Reply-To: <20230227092953.ekh72r5h6xcqgusn@vireshk-i7>
-From:   Jun Nie <jun.nie@linaro.org>
-Date:   Mon, 6 Mar 2023 18:48:09 +0800
-Message-ID: <CABymUCO4Gb-vALx=qa1q=QNfTJWoqNpT2r3J_xHxhGk7FZE0nQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] OPP: Simplify set_required_opp handling
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     cw00.choi@samsung.com, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 03/11] arm64: dts: qcom: qdu1000: drop incorrect serial
+ properties
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <20230305125954.209559-1-krzysztof.kozlowski@linaro.org>
+ <20230305125954.209559-3-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230305125954.209559-3-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,28 +83,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Viresh Kumar <viresh.kumar@linaro.org> =E4=BA=8E2023=E5=B9=B42=E6=9C=8827=
-=E6=97=A5=E5=91=A8=E4=B8=80 17:29=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 27-02-23, 17:21, Jun Nie wrote:
-> > Sorry for not expressing it accurately. I should say devfreq devices
-> > pointers, just
-> > devfreq_virt_devs vs genpd_virt_devs. Then you know why I add devfreq-d=
-evs
-> > dts nodes below.
->
-> Won't something like dev_pm_opp_set_clkname() would be enough here too ? =
-We
-> already do this kind of work for clks and regulators.
 
-Thanks! It is a possible solution. I will try to spare time on this as
-higher priority tasks
-are on my list.
 
->
-> Having power domain specific information within CPU nodes isn't a require=
-ment of
-> the OPP core, but the general requirement of genpd core instead.
->
-> --
-> viresh
+On 5.03.2023 13:59, Krzysztof Kozlowski wrote:
+> The serial node does not use/allow address/size cells:
+> 
+>   qdu1000-idp.dtb: geniqup@9c0000: serial@99c000: Unevaluated properties are not allowed ('#address-cells', '#size-cells' were unexpected)
+> 
+> Fixes: 6bd20c54b589 ("arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  arch/arm64/boot/dts/qcom/qdu1000.dtsi | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> index f234159d2060..c72a51c32a30 100644
+> --- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> @@ -412,8 +412,6 @@ uart0: serial@980000 {
+>  				pinctrl-0 = <&qup_uart0_default>;
+>  				pinctrl-names = "default";
+>  				interrupts = <GIC_SPI 601 IRQ_TYPE_LEVEL_HIGH>;
+> -				#address-cells = <1>;
+> -				#size-cells = <0>;
+>  				status = "disabled";
+>  			};
+>  
+> @@ -581,8 +579,6 @@ uart7: serial@99c000 {
+>  				pinctrl-0 = <&qup_uart7_tx>, <&qup_uart7_rx>;
+>  				pinctrl-names = "default";
+>  				interrupts = <GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>;
+> -				#address-cells = <1>;
+> -				#size-cells = <0>;
+>  				status = "disabled";
+>  			};
+>  		};
