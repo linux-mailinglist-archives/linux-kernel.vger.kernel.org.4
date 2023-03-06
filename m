@@ -2,186 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 425186AC372
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A18556AC36F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjCFOhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
+        id S230224AbjCFOgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:36:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbjCFOg4 (ORCPT
+        with ESMTP id S230088AbjCFOgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:36:56 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7C433463
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:36:22 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id cy23so39276742edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:36:22 -0800 (PST)
+        Mon, 6 Mar 2023 09:36:42 -0500
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531A12331C;
+        Mon,  6 Mar 2023 06:36:14 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id l13so10672083qtv.3;
+        Mon, 06 Mar 2023 06:36:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678113308;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LVEoV2e9JxxVuffMnk5zPqnGKqMmb25URoKT4WzdzCk=;
-        b=Nb8c7ev2IA1SH4QtZdfFCC04Z7JlwXFJPjlQXUJ5fpBftQR//be8jeOSu5SHL+kgvm
-         vCnaFqF/ib+OYrColMepbohcBy5TPRk1rGv2I2xwLxGdN2vuwQ9iVngc6K18aggLeEeK
-         Pk+ho0abMLBdkujVfEkkrfjWCKLD+ezWMoGjSutLAKJHND8Qv95owevYWs+TxvjKdzzz
-         bn5jSvrNLgA7uhHNTjjVZQ9tqRBwwBV50DvIcgEK6yqiZoKTb352Nd1nmaCg+BhTL/2/
-         hGNxkX82ZmtV0JPMUuP/AeCaG2EEuVW3oYKnkwYlA97m5itILpf9t4pqXMWWYd8T+dfV
-         ZzSQ==
+        d=gmail.com; s=20210112; t=1678113323;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yDK95qUmtK7rh4BRcl+d6FS8ceWw89ds2nqEahTwuz0=;
+        b=UxOtsg7RxUDG4Xjoo+aHR/G2P6QbDE51VloPKiDakUKx8jC2b+3P7Of6qjanYrsZIG
+         RlaHNFQNDmSSEdWjyF479uEEbwsmwH+ct4w0L/JdPkfazg+bpzGI+jd19Y3mqp29Tj2l
+         +ZzPJTXy6cXhzIajxllL0ef38Bno0pK+AW5h0ZBPmllMTLKQulu12v/tN5l5ezkJBT42
+         3/+FKfgJHbMB4ptKkBo+qQ+treW6IZuQohQYKWF5N1aaLFBCJrKtPY9WKY9Ne3gENFYp
+         Bta53p17MHw/P2dAD0JwFUu5Ip3PUEcZySM9P0yce8j/QNZMMXZIA2DnOe0W/GrQMlmn
+         JyaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678113308;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LVEoV2e9JxxVuffMnk5zPqnGKqMmb25URoKT4WzdzCk=;
-        b=aO6Vx0f41yTrLKeA6fTPyiMwYMRF23u04/9I8BG4xEMJXE/tUr/OU/xKWCyULXVnIz
-         ar1WDFYnDXXMCZj0fYd7GhWGFwWVhXPSxdbXYlepLxHSoqShYCtpGUzpoRN0ujRm5zzo
-         Up++foa5ti2gc6spB3F88C5OjFp3gqzPuuq9ok837BxM6b78zSfihWCE1HX+ft2Iq8l2
-         Rr3sJy91o5pjHsVIZmOF6JnU1chhSTcJ2dz84ArhI+LenMgAhG4g5WyvE3BBLVTCCwFS
-         GK0cal8OACNV7oU4gNrExFPkGWlXf896FTmlFr0pjdzn3AjYDdsmeieUGu+DhQo9l1kS
-         H7CQ==
-X-Gm-Message-State: AO0yUKVitWM5irQD/CdiCWIlmEhpjcM3kzwym+YF+glilaMNEWhxrneq
-        3p4/LHRKWbIv68GNgKfNpEuMFg==
-X-Google-Smtp-Source: AK7set+4UvM4WeEld9d1MulJogMXnAMeCG6KRrVaYnMJvULGkXtdKx6KbJfIVfvtsaFwQiGlh6VYcQ==
-X-Received: by 2002:a17:907:701:b0:8f3:f976:ac13 with SMTP id xb1-20020a170907070100b008f3f976ac13mr14099986ejb.10.1678113307986;
-        Mon, 06 Mar 2023 06:35:07 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:c1e7:5006:98ac:f57? ([2a02:810d:15c0:828:c1e7:5006:98ac:f57])
-        by smtp.gmail.com with ESMTPSA id uk19-20020a170907ca1300b008cecb8f374asm4634653ejc.0.2023.03.06.06.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 06:35:07 -0800 (PST)
-Message-ID: <7cbc24bf-6920-c75f-effc-fd9d827ca324@linaro.org>
-Date:   Mon, 6 Mar 2023 15:35:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 5/6] clk: samsung: Extract parent clock enabling to
- common function
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230223041938.22732-1-semen.protsenko@linaro.org>
- <20230223041938.22732-6-semen.protsenko@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230223041938.22732-6-semen.protsenko@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        d=1e100.net; s=20210112; t=1678113323;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yDK95qUmtK7rh4BRcl+d6FS8ceWw89ds2nqEahTwuz0=;
+        b=gBtiFx0tYPI3oLwN23lNxn7xSR3nF13kSd8319HacXouVY8adqQxY9WYat8/eIe9Sc
+         +4Jjwg3UJv2lyjljmTDkvR65OMXqGxb568rKDQQiNUtlwPK7JoeoaKaqWC3nFgtUUuNr
+         K2nCe7SWZ2R8TYKcKILjMiaQD8mWu2f42IZcUmJeC4NHZG1M7UpcuUd4R2Ujw1RAFJA4
+         0us1t5gOWZ3vgR3MX8pq4FdmbTD0f3pItlFvbupKATF8bPBCI/NCq6Za92w4o3isowdK
+         TyRJNHJNwYQTpFDJTve08KJ/qRXqgsmLl89ajzljuktk8I3UYXyj9PcWUXDlW1SLL5jb
+         +zCw==
+X-Gm-Message-State: AO0yUKUdaVII2auXkogO+HHghYpf7QloxO5Pu0BR/IHg3r+ptCsWwT3u
+        57ht+Y6W84/kRj6lRCfjRmU=
+X-Google-Smtp-Source: AK7set+n57WUuNR+qYBo3bFZ13IGkIiD5yt+MG1lXujWHqHI8rUS/QMChjkzpn2uvAv1TLOhSXWfLA==
+X-Received: by 2002:ac8:5c02:0:b0:3bf:dc2e:ce5d with SMTP id i2-20020ac85c02000000b003bfdc2ece5dmr20367194qti.4.1678113323074;
+        Mon, 06 Mar 2023 06:35:23 -0800 (PST)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id 191-20020a370cc8000000b007416c11ea03sm7606527qkm.26.2023.03.06.06.35.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 06:35:22 -0800 (PST)
+Date:   Mon, 06 Mar 2023 09:35:22 -0500
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     xu xin <xu.xin.sc@gmail.com>, willemdebruijn.kernel@gmail.com
+Cc:     davem@davemloft.net, edumazet@google.com, jiang.xuexin@zte.com.cn,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, xu.xin16@zte.com.cn,
+        yang.yang29@zte.com.cn, zhang.yunkai@zte.com.cn
+Message-ID: <6405fa2a80577_bb2242089c@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20230306073136.155697-1-xu.xin16@zte.com.cn>
+References: <6401f7889e959_3f6dc82084b@willemb.c.googlers.com.notmuch>
+ <20230306073136.155697-1-xu.xin16@zte.com.cn>
+Subject: RE: [PATCH linux-next v2] selftests: net: udpgso_bench_tx: Add test
+ for IP fragmentation of UDP packets
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/02/2023 05:19, Sam Protsenko wrote:
-> Extract parent clock enabling from exynos_arm64_register_cmu() to
-> dedicated function.
+xu xin wrote:
+> >> >     IP_PMTUDISC_DONT: turn off pmtu detection.
+> >> >     IP_PMTUDISC_OMIT: the same as DONT, but in some scenarios, DF will
+> >> > be ignored. I did not construct such a scene, presumably when forwarding.
+> >> > Any way, in this test, is the same as DONT.
+> >
+> >My points was not to compare IP_PMTUDISC_OMIT to .._DONT but to .._DO,
+> >which is what the existing UDP GSO test is setting.
 > 
-> Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-> ---
-> Changes in v3:
->   - Rebased on top of latest soc/for-next tree
->   - Added Marek's Acked-by tag
-> 
-> Changes in v2:
->   - Rebased on top of latest soc/for-next tree
->   - Improved English in kernel doc comment
->   - Added clk_prepare_enable() return value check
->   - Added exynos_arm64_enable_bus_clk() check in
->     exynos_arm64_register_cmu()
->   - Changed the commit message to reflect code changes
-> 
->  drivers/clk/samsung/clk-exynos-arm64.c | 51 ++++++++++++++++++--------
->  1 file changed, 35 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/clk/samsung/clk-exynos-arm64.c b/drivers/clk/samsung/clk-exynos-arm64.c
-> index b921b9a1134a..2aa3f0a5644e 100644
-> --- a/drivers/clk/samsung/clk-exynos-arm64.c
-> +++ b/drivers/clk/samsung/clk-exynos-arm64.c
-> @@ -56,6 +56,37 @@ static void __init exynos_arm64_init_clocks(struct device_node *np,
->  	iounmap(reg_base);
->  }
->  
-> +/**
-> + * exynos_arm64_enable_bus_clk - Enable parent clock of specified CMU
-> + *
-> + * @dev:	Device object; may be NULL if this function is not being
-> + *		called from platform driver probe function
-> + * @np:		CMU device tree node
-> + * @cmu:	CMU data
-> + *
-> + * Keep CMU parent clock running (needed for CMU registers access).
-> + *
-> + * Return: 0 on success or a negative error code on failure.
-> + */
-> +static int __init exynos_arm64_enable_bus_clk(struct device *dev,
-> +		struct device_node *np, const struct samsung_cmu_info *cmu)
-> +{
-> +	struct clk *parent_clk;
-> +
-> +	if (!cmu->clk_name)
-> +		return 0;
-> +
-> +	if (dev)
-> +		parent_clk = clk_get(dev, cmu->clk_name);
-> +	else
-> +		parent_clk = of_clk_get_by_name(np, cmu->clk_name);
-> +
-> +	if (IS_ERR(parent_clk))
-> +		return PTR_ERR(parent_clk);
-> +
-> +	return clk_prepare_enable(parent_clk);
-> +}
-> +
->  /**
->   * exynos_arm64_register_cmu - Register specified Exynos CMU domain
->   * @dev:	Device object; may be NULL if this function is not being
-> @@ -72,23 +103,11 @@ static void __init exynos_arm64_init_clocks(struct device_node *np,
->  void __init exynos_arm64_register_cmu(struct device *dev,
->  		struct device_node *np, const struct samsung_cmu_info *cmu)
->  {
-> -	/* Keep CMU parent clock running (needed for CMU registers access) */
-> -	if (cmu->clk_name) {
-> -		struct clk *parent_clk;
-> -
-> -		if (dev)
-> -			parent_clk = clk_get(dev, cmu->clk_name);
-> -		else
-> -			parent_clk = of_clk_get_by_name(np, cmu->clk_name);
-> -
-> -		if (IS_ERR(parent_clk)) {
-> -			pr_err("%s: could not find bus clock %s; err = %ld\n",
-> -			       __func__, cmu->clk_name, PTR_ERR(parent_clk));
-> -		} else {
-> -			clk_prepare_enable(parent_clk);
-> -		}
-> -	}
-> +	int err;
->  
-> +	err = exynos_arm64_enable_bus_clk(dev, np, cmu);
-> +	if (err)
-> +		panic("%s: could not enable bus clock\n", __func__);
+> Yeah, we got your point, but the result was as the patch showed, which hadn't
+> changed much (patch v2 V.S patch v1), because the fragmentation option of 'patch v1'
+> used the default PMTU discovery strategy(IP_PMTUDISC_DONT, because the code didn't
+> setting PMTU explicitly by setsockopt() when use './udpgso_bench_tx -f' ), which is
+> not much different from the 'patch v2' using IP_PMTUDISC_OMIT.
 
-The error handling is changed and not equivalent. I would say that we
-could still try to boot even if this failed, so kernel should not panic.
-Maybe the parent clock is enabled by bootloader.
+Or IP_PMTUDISC_WANT unless sysctl_ip_no_pmtu_disc is set.
+But fair point. Explicitly disabling pmtu is not needed.
+ 
+> >
+> >USO should generate segments that meet MTU rules. The test forces
+> >the DF bit (IP_PMTUDISC_DO).
+> >
+> >UFO instead requires local fragmentation, must enter the path for this
+> >in ip_output.c. It should fail if IP_PMTUDISC_DO is set:
+> >
+> >        /* Unless user demanded real pmtu discovery (IP_PMTUDISC_DO), we allow
+> >         * to fragment the frame generated here. No matter, what transforms
+> >         * how transforms change size of the packet, it will come out.
+> >         */
+> >        skb->ignore_df = ip_sk_ignore_df(sk);
+> >
+> >        /* DF bit is set when we want to see DF on outgoing frames.
+> >         * If ignore_df is set too, we still allow to fragment this frame
+> >         * locally. */
+> >        if (inet->pmtudisc == IP_PMTUDISC_DO ||
+> >            inet->pmtudisc == IP_PMTUDISC_PROBE ||
+> >            (skb->len <= dst_mtu(&rt->dst) &&
+> >             ip_dont_fragment(sk, &rt->dst)))
+> >                df = htons(IP_DF);
+> > 
+> >> >
+> >> > We have a question, what is the point of this test if it is not compared to
+> >> > UDP GSO and IP fragmentation. No user or tool will segment in user mode,
+> >
+> >Are you saying no process will use UDP_SEGMENT?
+> >
+> No, we are saying "user-space payload splitting", in other words, use ./udpgso_bench_tx
+> without '-f' or '-S'.
 
-Best regards,
-Krzysztof
+I see. I guess you heard the arguments why the test does not compare
+udp segmentation with udp fragmentation:
+
+- fragmentation is particularly expensive on the receiver side
+- fragmentation cannot be offloaded, while segmentation can
+
+> Sincerely.
+> 
+> >The local protocol stack removed UFO in series d9d30adf5677.
+> >USO can be offloaded to hardware by quite a few devices (NETIF_F_GSO_UDP_L4).
+> >> > UDP GSO should compare performance with IP fragmentation.
+> >> 
+> >> I think it is misleading to think the cost of IP fragmentation matters
+
 
