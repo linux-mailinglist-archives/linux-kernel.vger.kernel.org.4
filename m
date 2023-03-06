@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A3C6AC1E1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0656AC1E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjCFNwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        id S229837AbjCFNxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:53:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCFNwS (ORCPT
+        with ESMTP id S229807AbjCFNxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:52:18 -0500
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47D15FC2
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:52:17 -0800 (PST)
-Received: by mail-yb1-xb32.google.com with SMTP id v13so8173624ybu.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:52:17 -0800 (PST)
+        Mon, 6 Mar 2023 08:53:31 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B4520692
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:53:30 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id x7so3831076pff.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:53:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678110737;
+        d=linaro.org; s=google; t=1678110810;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPh6DRJ9CcazPLZjLGRmwkvYgFkVSdBurUSE2ObxVJ4=;
-        b=qUgJtmNLgHGE4Bp38Mh2sm9vgRq0M8Fva0CT7yqcP+/NVMxBa9kdV7dNoOFdsNgLLJ
-         4/ETkDNKpO6RHGFEj5tPPJVpv4CXd60RgXSW3jmQj6XT6dyZdHHoexc/DhRZ+JM32WBF
-         ab+yE3lrDMwq3b8G2fsQXDSMFtOrv/tcgrEsxI4Rcu+YFqxI5F7ngH5+43cvBoE3AlIW
-         3T7xEDG+clPW0xlirojmcqJ3JM3WYJIVTf9iU9RAcw6UQJXk4R/zeSPKOFvYA+PdMF2c
-         asZ8gOz7L46HA4IfVdtp0midDQL6kiV2ykwA/RDJPQqYweg0CsvIXfW+I9/oNIzWsbxb
-         LuMw==
+        bh=m36Zf4qpmqz3Sb0ht3fhBo9XI/t/djRJmql4ojKfHz4=;
+        b=mTwyzZihAMQKmMesznG8HaKvTbUgt8QnT4333hU3+ZMfEwrT7Jw96pJ9ocoZGuXsY7
+         lI0gvww2SS3Jncncr5/G0n5NQPiSFKVyeQC3ftARGZNeRRFOQyop1uFn8wFHIfFb/Ycs
+         iQo1SGzuXJivtwDrAn/ts5j1OQEqU9b0ucd+CbYrhtaE7tGloAmDn3BIQLhcWsf+FBxV
+         9Fc26TDOoSAcSbhsOrSVxTS/KAPz4j1hPWFyGWpoAZnhJyQp+SpfAo0pFO0PUEJ2f+oh
+         t3Ef98LnrvmnMRDeLALncvkMGJUsxRTQiEKUVX6FTpZMZLWvPNvAYxq1QhiVhJ3C4So2
+         AiTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678110737;
+        d=1e100.net; s=20210112; t=1678110810;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BPh6DRJ9CcazPLZjLGRmwkvYgFkVSdBurUSE2ObxVJ4=;
-        b=lE/AeM+lY+GY5oAMVVfoINzkYEaBNGTm/JDvH0W0qTq6H4nEb+ycEz+0FTDpBaayqh
-         j+gBkjRcaFAu4M2zqv+5yAZPHcgSntllRZMrqnOjCIrA8k8iz0bGI8i1/bxO0oPL4cgA
-         lsQDl0UxaEqBwi29BFpHWgaVxNQnvsXNUo1jno1BLQsK8uAFyU6IOuYyJ1YiI58bZ+Q/
-         82F9c+aZwBElTkYKR6Bk7S0yqtSTdYzWjiNNPrTXTyxp46Cjxbd7cTUw12JljrLa3oY4
-         qyPTeDw//Uk4ZbmRg64RMdD9k+HO/oZXzkOPFAp2J9K1agpHuLJ/cyoV+MpVVAVH/CpP
-         D4hA==
-X-Gm-Message-State: AO0yUKXt+DHhBAd9v4Wg3BTlDQ1TxO+a6zWToPI3ocfb1gyxF/IyKOBH
-        k223hv7xhZrz/gh6jdR7GzsfxYypIjDVLQOsta6swQ==
-X-Google-Smtp-Source: AK7set96XVuLEwBCuezT4MzqONLfE0LMULjfJzchaO7bM4o8d+8Bu9LL/jc3Nw8LQAc2/AdguTvz8jvtK130zakvUqI=
-X-Received: by 2002:a05:6902:c3:b0:9f1:6c48:f95f with SMTP id
- i3-20020a05690200c300b009f16c48f95fmr5065214ybs.5.1678110736893; Mon, 06 Mar
- 2023 05:52:16 -0800 (PST)
+        bh=m36Zf4qpmqz3Sb0ht3fhBo9XI/t/djRJmql4ojKfHz4=;
+        b=m6PYki86dJF7oyb+YLPowywHRmClAu5p8Ch0t9MJ7WbeOEzIiso3JoBw6Xp7u/9+zN
+         jrztPYBn/i2yeI+Ar8mFniQbXYYk2Pb8TD+AbiYj5cEhH0ItGkEg9k0BWvpPv/zvJCVu
+         MqTA5AtWK3pZYWwqHL4zu0dnMuSdpVhUJuLUgq0AJ7vY6ki5snEDeVua7zA8zm3+4kCs
+         PNW4aETOxCcqZo6jf2U/XCGU2pO4KzxLYM7ZxanVSmdDBSzcMNHYZH3/YFdRX3EYea/B
+         WuYrA2hQa8DLkYGZZRvmAPDeDfE1B3fX62277u5JH0xNevlQTuWTp7HDP7q09+fQhCtm
+         xFdw==
+X-Gm-Message-State: AO0yUKU7SASWdJFBEJQTj1cOXkE/wt9r5aVucNHEHb3LydHKXxsMbxy7
+        L/Itz4dWJIDW6BbkmhWQxJgpvb1ltM/QVjNgCzgJZw==
+X-Google-Smtp-Source: AK7set/sZVIh6GKeFV+uo3q/F9cwXIQ2aKDCYValHAeEXrvIJ3wpelFWfjVTW6nPFzp2CBixdV8rq5kNQwgLSMWWEG8=
+X-Received: by 2002:a63:7f5d:0:b0:501:26b5:f0d2 with SMTP id
+ p29-20020a637f5d000000b0050126b5f0d2mr3724756pgn.3.1678110809649; Mon, 06 Mar
+ 2023 05:53:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20230222115020.55867-1-avromanov@sberdevices.ru>
- <20230222115020.55867-2-avromanov@sberdevices.ru> <CACRpkdbWubk3A3qYuYqDc4OBGP6T7TaKwFeW17CwAzPvttk=WQ@mail.gmail.com>
- <2d9e01df-0047-98bc-f1e7-fa860d92c254@linaro.org>
-In-Reply-To: <2d9e01df-0047-98bc-f1e7-fa860d92c254@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 14:52:05 +0100
-Message-ID: <CACRpkdbDXnzKcrYnjHA3z5tiD9_FHgk5O8PO1esXNNDBVvtT+Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] meson: pinctrl: use CONFIG_PINCTRL_A1 with CONFIG_ARM
-To:     neil.armstrong@linaro.org
-Cc:     Alexey Romanov <avromanov@sberdevices.ru>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
+References: <20230306132418.50389-1-zhangqiao22@huawei.com>
+In-Reply-To: <20230306132418.50389-1-zhangqiao22@huawei.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 6 Mar 2023 14:53:18 +0100
+Message-ID: <CAKfTPtAYpkQVDBR0mcymVgu7aYY5rN1svW713mGJxbewHGJRqQ@mail.gmail.com>
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+To:     Zhang Qiao <zhangqiao22@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        rkagan@amazon.de
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -72,20 +69,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 2:49 PM <neil.armstrong@linaro.org> wrote:
-> On 06/03/2023 14:45, Linus Walleij wrote:
-> > On Wed, Feb 22, 2023 at 12:50 PM Alexey Romanov
-> > <avromanov@sberdevices.ru> wrote:
-> >
-> >> Tested A1 pinctrl support for ARM and it works.
-> >>
-> >> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
-> >
-> > This patch applied to the pinctrl tree for v6.4.
+On Mon, 6 Mar 2023 at 13:57, Zhang Qiao <zhangqiao22@huawei.com> wrote:
 >
-> Erf, this serie is something we would avoid, so no need to apply it for v6.4
+> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
+> entity being placed") fix an overflowing bug, but ignore
+> a case that se->exec_start is reset after a migration.
+>
+> For fixing this case, we reset the vruntime of a long
+> sleeping task in migrate_task_rq_fair().
+>
+> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
 
-OK I take that as "Neil says NACK" and backed out the patch.
+Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
 
-Yours,
-Linus Walleij
+> ---
+>
+> v1 -> v2:
+> - fix some typos and update comments
+> - reformat the patch
+>
+> ---
+>  kernel/sched/fair.c | 76 ++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 55 insertions(+), 21 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 7a1b1f855b96..74c9918ffe76 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4648,11 +4648,45 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  #endif
+>  }
+>
+> +static inline bool entity_is_long_sleep(struct sched_entity *se)
+> +{
+> +       struct cfs_rq *cfs_rq;
+> +       u64 sleep_time;
+> +
+> +       if (se->exec_start == 0)
+> +               return false;
+> +
+> +       cfs_rq = cfs_rq_of(se);
+> +       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> +       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+> +               return true;
+> +
+> +       return false;
+> +}
+> +
+> +static inline u64 sched_sleeper_credit(struct sched_entity *se)
+> +{
+> +       unsigned long thresh;
+> +
+> +       if (se_is_idle(se))
+> +               thresh = sysctl_sched_min_granularity;
+> +       else
+> +               thresh = sysctl_sched_latency;
+> +
+> +       /*
+> +        * Halve their sleep time's effect, to allow
+> +        * for a gentler effect of sleepers:
+> +        */
+> +       if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> +               thresh >>= 1;
+> +
+> +       return thresh;
+> +}
+> +
+>  static void
+>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>  {
+>         u64 vruntime = cfs_rq->min_vruntime;
+> -       u64 sleep_time;
+>
+>         /*
+>          * The 'current' period is already promised to the current tasks,
+> @@ -4664,23 +4698,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>                 vruntime += sched_vslice(cfs_rq, se);
+>
+>         /* sleeps up to a single latency don't count. */
+> -       if (!initial) {
+> -               unsigned long thresh;
+> -
+> -               if (se_is_idle(se))
+> -                       thresh = sysctl_sched_min_granularity;
+> -               else
+> -                       thresh = sysctl_sched_latency;
+> -
+> -               /*
+> -                * Halve their sleep time's effect, to allow
+> -                * for a gentler effect of sleepers:
+> -                */
+> -               if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> -                       thresh >>= 1;
+> -
+> -               vruntime -= thresh;
+> -       }
+> +       if (!initial)
+> +               vruntime -= sched_sleeper_credit(se);
+>
+>         /*
+>          * Pull vruntime of the entity being placed to the base level of
+> @@ -4689,8 +4708,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>          * the base as it may be too far off and the comparison may get
+>          * inversed due to s64 overflow.
+>          */
+> -       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+> +       if (entity_is_long_sleep(se))
+>                 se->vruntime = vruntime;
+>         else
+>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
+> @@ -7635,7 +7653,23 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+>         if (READ_ONCE(p->__state) == TASK_WAKING) {
+>                 struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>
+> -               se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+> +               /*
+> +                * We determine whether a task sleeps for long by checking
+> +                * se->exec_start, and if it is, we sanitize its vruntime at
+> +                * place_entity(). However, after a migration, this detection
+> +                * method fails due to se->exec_start being reset.
+> +                *
+> +                * For fixing this case, we add the same check here. For a task
+> +                * which has slept for a long time, its vruntime should be reset
+> +                * to cfs_rq->min_vruntime with a sleep credit. Because waking
+> +                * task's vruntime will be added to cfs_rq->min_vruntime when
+> +                * enqueue, we only need to reset the se->vruntime of waking task
+> +                * to a credit here.
+> +                */
+> +               if (entity_is_long_sleep(se))
+> +                       se->vruntime = -sched_sleeper_credit(se);
+> +               else
+> +                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+>         }
+>
+>         if (!task_on_rq_migrating(p)) {
+> --
+> 2.17.1
+>
