@@ -2,123 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6322F6ABF49
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915BA6ABF4C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjCFMP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        id S230239AbjCFMQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:16:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjCFMP4 (ORCPT
+        with ESMTP id S229977AbjCFMQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:15:56 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45E520579;
-        Mon,  6 Mar 2023 04:15:53 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id g3so37728421eda.1;
-        Mon, 06 Mar 2023 04:15:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678104952;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1g4AYGzxTWyuARpoPesNpg8EiVTXYK4wwkJzSL4nXXs=;
-        b=bNBYn1TnRcdbUj1TqpxVf5w4INnvEjSqvJATHZL3viiCgAe5kp/1aYJV3tXUZ+I8YT
-         0vCWGQuC16ynAcvcZnRa5hfRn/jz/QCFUY6K7Zrww2DOxPQLM9RLS3vqxXuG8Yc26yPz
-         o2IVbERznLqdY8VE1LgEKZh+B5AfNg7DwIjDcTKTy1k9Or5yOIV3cCyZ9Dr6vQ993zDC
-         CEZBUuUoHmV8iNhBwIuy9wsE5KyOBmLoNeECjwtbZQ1S03Of68bWqzXkOCIsZJBdYaHe
-         JoZGH+txs9zp+P6QinTeqi9DThGgPfkNutBu2p20LjJsTtWbv0J12Z2H/1D48xXogVHp
-         Buuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678104952;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1g4AYGzxTWyuARpoPesNpg8EiVTXYK4wwkJzSL4nXXs=;
-        b=ii+iQLNpl5fM09H1cyJDPB1T7L7EeT6aWQ06KmtGD9vA2BrS9CO6XTri2dyOgt4G2F
-         Ry6gg6prR66X5IXpHjjWKryk0NA0vphv6dmxKZK0ULWlwTga3v2isIdQaPyUwR9BY6Sc
-         1VFIDgsXBn5mm1tRfrSa0SyUhetCUjTIw9828IE1bU6h+Ut+tvOuwBQwDMM8ZqpaNrt2
-         qciDSXGtAXaT6Hg0MNXylcNGieNnxdFbcCMH2/lvmSu4+CuqD/tGPhDpXOW0/gVyLlx4
-         /0FmYPqRzIEcbqZmREVnUg/Dgb40/i27Dbby7L6LJovifxemOWAvssu98lEszsrC2Qqm
-         BVsA==
-X-Gm-Message-State: AO0yUKW5c+nqmPIjHAU9FIlne8I/YerxopT8foFJn2fxe7ddcXocvMWO
-        hmjbDNiucn6BICscn01ctOM=
-X-Google-Smtp-Source: AK7set83ncGukr5k9XtPEBkCv42ZvOmeZIY23CtKgfOVZ1N4PNDRl2X2UQy2myUkpOZpI/aknFckcQ==
-X-Received: by 2002:a17:907:c689:b0:914:4164:658a with SMTP id ue9-20020a170907c68900b009144164658amr506482ejc.42.1678104952142;
-        Mon, 06 Mar 2023 04:15:52 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id o13-20020a1709062e8d00b008e22978b98bsm4525453eji.61.2023.03.06.04.15.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 04:15:51 -0800 (PST)
-Date:   Mon, 6 Mar 2023 14:15:48 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
-        arinc9.unal@gmail.com, frank-w@public-files.de
-Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: fix RX data corruption
- issue
-Message-ID: <20230306121548.k33fgu7adg44zruu@skbuf>
-References: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
- <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
+        Mon, 6 Mar 2023 07:16:30 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23DF020579;
+        Mon,  6 Mar 2023 04:16:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678104990; x=1709640990;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PuPDornh1OEsP3yzAZOWoqW4lUda0/ttH3RpXrbjS8s=;
+  b=PygDbpHWIPxWSyE8IvXWrpvUkiZ2qYqLNhVQalvcTExejMAl/hzX2nyo
+   IGaV+pk7uurgm+DIdOtWtM2KiVnUEug8bU8aAdadtdj/nIx5uEetgMHEA
+   l+pVdeqL/y90C/b7cMJJf4HSC7rTnA1DNxtnYjXeRchIL/M06SK+EJWt9
+   9VpsD8xGFxsSAKp7jsHbQDPmGR5JXXcagLujdJbjXSa0G0M2XD3rWnOxK
+   13RUexfez0b8CzYRVGf+oDrrgGaMXyU4wBTPAqTjwE7O7xt27eqZpMkuK
+   o4rdI994UCUOIB/tp1oZsqgcr8Jcl9I99SONT2oc6fu5f2bnIrAfQpeOf
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="335560376"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="335560376"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:16:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="708633313"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="708633313"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 06 Mar 2023 04:16:26 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pZ9lQ-00GLG9-1E;
+        Mon, 06 Mar 2023 14:16:24 +0200
+Date:   Mon, 6 Mar 2023 14:16:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Mike Looijmans <mike.looijmans@topic.nl>,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        ChiaEn Wu <chiaen_wu@richtek.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] iio: adc: Add TI ADS1100 and ADS1000
+Message-ID: <ZAXZmETRgpWAsE/+@smile.fi.intel.com>
+References: <20230228063151.17598-1-mike.looijmans@topic.nl>
+ <20230228063151.17598-2-mike.looijmans@topic.nl>
+ <20230304175751.2daae308@jic23-huawei>
+ <ZAXYhIETzMa/7G6N@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
- <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZAXYhIETzMa/7G6N@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 04, 2023 at 01:43:20PM +0000, Daniel Golle wrote:
-> Fix data corruption issue with SerDes connected PHYs operating at 1.25
-> Gbps speed where we could previously observe about 30% packet loss while
-> the bad packet counter was increasing.
-> 
-> As almost all boards with MediaTek MT7622 or MT7986 use either the MT7531
-> switch IC operating at 3.125Gbps SerDes rate or single-port PHYs using
-> rate-adaptation to 2500Base-X mode, this issue only got exposed now when
-> we started trying to use SFP modules operating with 1.25 Gbps with the
-> BananaPi R3 board.
-> 
-> The fix is to set bit 12 which disables the RX FIFO clear function when
-> setting up MAC MCR, MediaTek SDK did the same change stating:
-> "If without this patch, kernel might receive invalid packets that are
-> corrupted by GMAC."[1]
-> 
-> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/d8a2975939a12686c4a95c40db21efdc3f821f63
-> 
-> Fixes: 42c03844e93d ("net-next: mediatek: add support for MediaTek MT7622 SoC")
-> Tested-by: Bjørn Mork <bjorn@mork.no>
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
+On Mon, Mar 06, 2023 at 02:11:48PM +0200, Andy Shevchenko wrote:
+> On Sat, Mar 04, 2023 at 05:57:51PM +0000, Jonathan Cameron wrote:
+> > On Tue, 28 Feb 2023 07:31:51 +0100
+> > Mike Looijmans <mike.looijmans@topic.nl> wrote:
 
-I don't see something particularly controversial with this change.
+...
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> > > +	for (i = 0; i < 4; i++) {
+> > > +		if (BIT(i) == gain) {
+> > > +			ads1100_set_config_bits(data, ADS1100_PGA_MASK, i);
+> > > +			return 0;
+> > > +		}
+> > > +	}
+> > Andy's suggestion of something like..
+> > 	if (!gain)
+> > 		return -EINVAL;
+> > 	i = ffs(gain);
+> > 	if (i >= 4 || BIT(i) != gain)
+> > 		return -EINVAL;
+> > 
+> > 	ads...
+> > 
+> > Is perhaps nicer than the loop.
+> 
+> Even better:
+> 
+> 	if (!gain || !is_power_of_2(gain))
+> 		return -EINVAL;
+
+Or if you want to combine all checks:
+
+	if (clamp_val(gain, BIT(0), BIT(3)) != gain || !is_power_of_2(gain))
+		return -EINVAL;
+
+	ads1100_set_config_bits(data, ADS1100_PGA_MASK, ffs(gain));
+	return 0;
+
+(You can play with bloat-o-meter for the code generation and see which one is
+ better from that aspect)
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
