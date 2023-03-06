@@ -2,201 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1C56AC89F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252EF6AC8AD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjCFQre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S231147AbjCFQs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:48:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbjCFQrQ (ORCPT
+        with ESMTP id S230392AbjCFQsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:47:16 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C991E3346F;
-        Mon,  6 Mar 2023 08:46:26 -0800 (PST)
-Received: from [192.168.254.32] (unknown [47.187.203.192])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 517FE205749B;
-        Mon,  6 Mar 2023 08:45:35 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 517FE205749B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1678121136;
-        bh=YcoUX/2qCqQPDCK8IDInDMDtWaFz8e9Rpcguu9pOTXA=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=AbSR297bn4+I8KzkRz4bWpbyUjbUXiqyASy4lnrB1mbWoAOk/yIwxcwXM+DJ0gZiC
-         +3Da6g/iUzzT8StKd/poDk8elU50gtLAlx8i7X9csedOsCz6zFAoBrF1LrzXdlghPm
-         vTGo0wyIDb2MY+Syh0lpS6mkMv2PCBTEASr1xnoI=
-Message-ID: <aa63d868-d97a-cfec-27c1-13ac9e74e584@linux.microsoft.com>
-Date:   Mon, 6 Mar 2023 10:45:34 -0600
+        Mon, 6 Mar 2023 11:48:12 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B244C6E2;
+        Mon,  6 Mar 2023 08:47:43 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326FGtLP007103;
+        Mon, 6 Mar 2023 16:46:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Prg32a8lypSzsuzKaLaRGI/598mjJ01sZ+3Tf2eA04o=;
+ b=WPr+37PUtw4EvxFS7nTnqlOPXddkNrZMARg2cCBjv+yiMR2WfOss6zzbv1bYsJnVCenW
+ BU4sx6jUyt3DXUD8jkpJuWbVVt7g5QNSBSC9IOZ1VMt8H8vD5ldvSkYDy2G0fg0STPv9
+ xW3RtaCVeTv4aHOFHk+jETz1WHqTtS5RQorDmzejdEiLaMGKf1EjdO3QmMLF1lxuOLWh
+ AW4/Zyeq8pXVWsTzjokRodmszy6ZXGXY766K0qWUHyO0HqZxHS7Balh/w9LAKnNtDAhb
+ kZcU9KoxOM0VOQfaqIJ07lrYkBAWcub0yD6ldShft3RctU3l4oO3Rb+Z0PHRuix23DDN wA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4ysdt79x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 16:46:05 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326Eb8kJ004998;
+        Mon, 6 Mar 2023 16:46:05 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4ysdt79d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 16:46:05 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326GNp3Z010183;
+        Mon, 6 Mar 2023 16:46:03 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3p419e67k6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 16:46:03 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326Gk2dm46465464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Mar 2023 16:46:02 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B814F5805E;
+        Mon,  6 Mar 2023 16:46:02 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E82A5805A;
+        Mon,  6 Mar 2023 16:46:01 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Mar 2023 16:46:01 +0000 (GMT)
+Message-ID: <c3360cee-b6c8-2ea3-a9e3-e6fbba198b57@linux.ibm.com>
+Date:   Mon, 6 Mar 2023 11:46:01 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v3 05/22] objtool: Reorganize ORC types
+Subject: Re: [PATCH 01/28] ima: Align ima_inode_post_setattr() definition with
+ LSM infrastructure
 Content-Language: en-US
-To:     Suraj Jitindar Singh <sjitindarsingh@gmail.com>,
-        jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
-        mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
- <20230202074036.507249-6-madvenka@linux.microsoft.com>
- <a1b83a8d621e37310194c0c32b9d847a0952d282.camel@gmail.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <a1b83a8d621e37310194c0c32b9d847a0952d282.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+ <20230303181842.1087717-2-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230303181842.1087717-2-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Hjw8-b5VOVH_KkdYeH9FjpUbzxLar_WK
+X-Proofpoint-GUID: dPhapGl98lRGn8zDeRdkzVYryXO4oXcc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_10,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ malwarescore=0 adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ mlxlogscore=956 suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303060142
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the delay in responding to your comments. I was out sick.
-Please find my responses inline.
 
-On 2/18/23 03:30, Suraj Jitindar Singh wrote:
-> On Thu, 2023-02-02 at 01:40 -0600, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> The ORC code needs to be reorganized into arch-specific and generic
->> parts
->> so that architectures other than X86 can use the generic parts.
->>
->> orc_types.h contains the following ORC definitions shared between
->> objtool
->> and the kernel:
->>
->> 	- ORC register definitions which are arch-specific.
->> 	- orc_entry structure which is generic.
->>
->> Move orc_entry into a new file include/linux/orc_entry.h. Also, the
->> field
->> names bp_reg and bp_offset in struct orc_entry are x86-specific.
->> Change
->> them to fp_reg and fp_offset. FP stands for frame pointer.
->>
->> Currently, the type field in orc_entry is only 2 bits. For other
->> architectures, we will need more. So, expand this to 3 bits.
->>
->> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com
->>>
->> ---
->>  arch/x86/include/asm/orc_types.h       | 37 +++++-------------------
->>  include/linux/orc_entry.h              | 39
->> ++++++++++++++++++++++++++
->>  tools/arch/x86/include/asm/orc_types.h | 37 +++++-------------------
->>  tools/include/linux/orc_entry.h        | 39
->> ++++++++++++++++++++++++++
->>  tools/objtool/orc_gen.c                |  4 +--
->>  tools/objtool/sync-check.sh            |  1 +
->>  6 files changed, 95 insertions(+), 62 deletions(-)
->>  create mode 100644 include/linux/orc_entry.h
->>  create mode 100644 tools/include/linux/orc_entry.h
->>
-> 
-> [snip]
-> 
->> diff --git a/tools/include/linux/orc_entry.h
->> b/tools/include/linux/orc_entry.h
->> new file mode 100644
->> index 000000000000..3d49e3b9dabe
->> --- /dev/null
->> +++ b/tools/include/linux/orc_entry.h
->> @@ -0,0 +1,39 @@
->> +/* SPDX-License-Identifier: GPL-2.0-or-later */
->> +/*
->> + * Copyright (C) 2017 Josh Poimboeuf <jpoimboe@redhat.com>
->> + */
->> +
->> +#ifndef _ORC_ENTRY_H
->> +#define _ORC_ENTRY_H
->> +
->> +#ifndef __ASSEMBLY__
->> +#include <asm/byteorder.h>
->> +
->> +/*
->> + * This struct is more or less a vastly simplified version of the
->> DWARF Call
->> + * Frame Information standard.  It contains only the necessary parts
->> of DWARF
->> + * CFI, simplified for ease of access by the in-kernel unwinder.  It
->> tells the
->> + * unwinder how to find the previous SP and BP (and sometimes entry
->> regs) on
->> + * the stack for a given code address.  Each instance of the struct
->> corresponds
->> + * to one or more code locations.
->> + */
->> +struct orc_entry {
->> +	s16		sp_offset;
->> +	s16		fp_offset;
->> +#if defined(__LITTLE_ENDIAN_BITFIELD)
->> +	unsigned	sp_reg:4;
->> +	unsigned	fp_reg:4;
->> +	unsigned	type:3;
->> +	unsigned	end:1;
->> +#elif defined(__BIG_ENDIAN_BITFIELD)
->> +	unsigned	fp_reg:4;
->> +	unsigned	sp_reg:4;
->> +	unsigned	unused:4;
->> +	unsigned	end:1;
->> +	unsigned	type:3;
->> +#
-> 
-> nit:
-> I believe you also need to update fp_reg/bp_offset -> fp_reg/fp_offset
-> in orc_dump() in orc_dump.c
-> 
 
-OK. Will do.
-
-Madhavan
-> - Suraj
+On 3/3/23 13:18, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
->> +
->> +#endif /* __ASSEMBLY__ */
->> +
->> +#endif /* _ORC_ENTRY_H */
->> diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
->> index dd3c64af9db2..68c317daadbf 100644
->> --- a/tools/objtool/orc_gen.c
->> +++ b/tools/objtool/orc_gen.c
->> @@ -98,7 +98,7 @@ static int write_orc_entry(struct elf *elf, struct
->> section *orc_sec,
->>  	orc = (struct orc_entry *)orc_sec->data->d_buf + idx;
->>  	memcpy(orc, o, sizeof(*orc));
->>  	orc->sp_offset = bswap_if_needed(orc->sp_offset);
->> -	orc->bp_offset = bswap_if_needed(orc->bp_offset);
->> +	orc->fp_offset = bswap_if_needed(orc->fp_offset);
->>  
->>  	/* populate reloc for ip */
->>  	if (elf_add_reloc_to_insn(elf, ip_sec, idx * sizeof(int),
->> R_X86_64_PC32,
->> @@ -149,7 +149,7 @@ int orc_create(struct objtool_file *file)
->>  
->>  	struct orc_entry null = {
->>  		.sp_reg  = ORC_REG_UNDEFINED,
->> -		.bp_reg  = ORC_REG_UNDEFINED,
->> +		.fp_reg  = ORC_REG_UNDEFINED,
->>  		.type    = UNWIND_HINT_TYPE_CALL,
->>  	};
->>  
->> diff --git a/tools/objtool/sync-check.sh b/tools/objtool/sync-
->> check.sh
->> index ee49b4e9e72c..ef1acb064605 100755
->> --- a/tools/objtool/sync-check.sh
->> +++ b/tools/objtool/sync-check.sh
->> @@ -18,6 +18,7 @@ arch/x86/include/asm/unwind_hints.h
->>  arch/x86/lib/x86-opcode-map.txt
->>  arch/x86/tools/gen-insn-attr-x86.awk
->>  include/linux/static_call_types.h
->> +include/linux/orc_entry.h
->>  "
->>  
->>  SYNC_CHECK_FILES='
+> Change ima_inode_post_setattr() definition, so that it can be registered as
+> implementation of the inode_post_setattr hook.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
