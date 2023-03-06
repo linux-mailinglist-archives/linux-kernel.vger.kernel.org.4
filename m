@@ -2,242 +2,736 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 042BE6AB82E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DABC26AB830
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjCFIZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:25:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        id S229883AbjCFIZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:25:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjCFIY6 (ORCPT
+        with ESMTP id S229749AbjCFIZD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:24:58 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B3993E4;
-        Mon,  6 Mar 2023 00:24:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678091095; x=1709627095;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ZhJdKNNmd5cW07xowwKYORD+kEzn0T20Ma/CP1nj1S8=;
-  b=AZwZhr4V0BnnoqukEplY9Sri08Jzy18j69mO6T6ebTnGLFkG7JD/TDUO
-   Z4C/tqwUlDEMdvMHtSXg0y7S2+JEb5SDH1kT6cuSziSHryFAMwcUYiBHj
-   wISeJNnCBbUvMWUbzu5xpxnDi+5NohCLuSzGHFjS+lTLAnJ2y7FUgK6xk
-   r1AegKPLZHbjBQOeNMYJsH6BuZPj7+9l0h03pdnGhgHSsP8X0MrykV4G2
-   LdiHnjy1wctOqweIMf6UGhOLw6VDNCKMXDDPSWNnSqkVmXWfM+Xlse62r
-   bNBkaejXAbr4WtTAeOpfVCbbLMUqEFqwzwED+B3b269PA/UCFS2HoNvuv
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="337015566"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="337015566"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 00:24:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="669357035"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="669357035"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga007.jf.intel.com with ESMTP; 06 Mar 2023 00:24:54 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 6 Mar 2023 00:24:54 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 6 Mar 2023 00:24:54 -0800
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.177)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 6 Mar 2023 00:24:53 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CklH25QvyhmSsZ9lrWlFFojoj4Cv0X54Rl4Ho6f1h5Mz1PH1XClGZw95VUmDsizDvw848kICoBJPVEoegBAMAACb2tFzv/YliemvfUMQl3/dnTbKBKuxkMMxIoDKMpmwmwypzgoDhCPAqD470DejmY6fJoHqWTvXWIb/qGB9UKZOCVTmf77Uc2b3yirqdX9kBvVTvK0kuGihcseqpVBh2MKFKmcIjGLtEQ9zp2vKMRgsGqGMd6nQETfg2tBHjimZBPXFV2NkFo78ourp2lsQI1EdJ/EH1U71KliHTy2JJoCr5k06nnQWMQBANqkt45Fcz4+p+GuNnCPGjahPhrMZWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZhJdKNNmd5cW07xowwKYORD+kEzn0T20Ma/CP1nj1S8=;
- b=jC9tbc1NXsflVMZ/6J1EyIkFfzYUGscHcE0gmghQuWMQ3Eqfwv5q4AH0YmYsYBJ9MUEC6g9Tb+27shnLpnpxSEVYGIcq+Ds0tDU7wuX91OnhhqMVN/rCqNEVGHR5GgIoJJpsJ6U37mN4a7yDNANEsbf2ozcQqFUNLvkwLLMikduVfZu0LY48CpMqfV7PK1iLiNmh4UWJiSEpYCM+2vZRsLgZ9tgxsWyBaSJpPgApKFJC0S/eOjgcrdLnDP8UgSTguypihWYIogDgJNOBRbMV2QUXSCHs4u1wXG+CQGIBtotKQ2tfXmWrsliZAoNvGoGev4WUhLiE6q+0R2C97Wh9TA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from IA1PR11MB6171.namprd11.prod.outlook.com (2603:10b6:208:3e9::13)
- by SN7PR11MB6773.namprd11.prod.outlook.com (2603:10b6:806:266::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Mon, 6 Mar
- 2023 08:24:51 +0000
-Received: from IA1PR11MB6171.namprd11.prod.outlook.com
- ([fe80::2aed:1a72:b351:1601]) by IA1PR11MB6171.namprd11.prod.outlook.com
- ([fe80::2aed:1a72:b351:1601%8]) with mapi id 15.20.6156.027; Mon, 6 Mar 2023
- 08:24:44 +0000
-From:   "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-To:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Frederic Weisbecker" <frederic@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "urezki@gmail.com" <urezki@gmail.com>
-Subject: RE: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Thread-Topic: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Thread-Index: AQHZThiYp3MlrzfqvEWnd0vYLxlOHa7pzeSAgAOQlXA=
-Date:   Mon, 6 Mar 2023 08:24:44 +0000
-Message-ID: <IA1PR11MB617141A98ADB1F301FCA07E589B69@IA1PR11MB6171.namprd11.prod.outlook.com>
-References: <20230303213851.2090365-1-joel@joelfernandes.org>
- <20230304010251.GD1301832@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20230304010251.GD1301832@paulmck-ThinkPad-P17-Gen-1>
-Accept-Language: en-US
-Content-Language: en-US
-X-Mentions: joel@joelfernandes.org
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA1PR11MB6171:EE_|SN7PR11MB6773:EE_
-x-ms-office365-filtering-correlation-id: 7ce209c0-180b-46e4-0c96-08db1e1c3dcd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mNA/Z6l165txyi+mOflpsZSIdRb9xSd1/Suiaah2HzZEmOvznnt2/dCZeBIvVwKPe36czXZYDTN/SRI4Unqpt1JwGLPO+vapgCu7Wd5KZ8+46ssZvNSQDeH+mgud+7QvgEIWfp/4iMx8m7l/TCsQ/nleEKv0pftaHGW5H+XIYdvRKgLRXNVncOHl22Zd7wUuuvJ5rbGEQa6T387t+24s8TWS5/lQxbkOAwfmTFJmUGQmvzXWtXGS5WzZtlcVprvDBOhvQVTJwGkRABQsYrEOCgwvsnCbnDHtteUDsz+kBXnDNSJhx+mKeRmV1JBjSFySkOk+XjVgihr7FRcOKNRSgKF9/KreLZlEV+3GRSYKFlaHNrVNEzLy5IAub3YIrk1pkMyERLOY69YJjdggq0PiexIfWJRZgUFPRM8cPXQFs+KBNhFfR3FiLko9hJdsRcCMe5OpxVdWS5n+YRgwcGtfgXTF1cokmuFnb00+ARMdI0dvXXq9Uzvq832O9Il1ctArzxs4seFeG8o2Z9C9ijVdwz8UYuxxAVy2Sds1enlXuzScbVFDVvoiQfVei5tjE8NR9nC6yDcGCUSsDvfNyiAoFhBTxDL6MP5Jsg0REpqvGLcww8U/kYvZzhFSLiPsHypfJQNxUURXfwPP2MbtsFhNnqM4qCFjszUBxwQWcTL6QfISrz8JcOwZYr3wmveMljztZ2LI0xriMec8UWwKsAsRAw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB6171.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(346002)(376002)(396003)(136003)(366004)(451199018)(110136005)(54906003)(316002)(83380400001)(55016003)(33656002)(86362001)(9686003)(186003)(2906002)(76116006)(5660300002)(66556008)(66446008)(8936002)(8676002)(66946007)(41300700001)(66476007)(4326008)(478600001)(26005)(6506007)(64756008)(71200400001)(82960400001)(7696005)(122000001)(52536014)(38100700002)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OExRV01yTWx2aTZFdmF1SitNNDh0RWpMMGtWeGVuTEh3blUwaTNIYjhIY1Rr?=
- =?utf-8?B?OE1KRFNJU25MOXRoQmkzU2QxSjR6aVNGTEVPUTM2Ti84Q2tlYU9LQ04wOVdy?=
- =?utf-8?B?SUNlOHQ3ZEtmMWRSejMxQXpkSFlUTVNsQ2xCYW9UaFVkL2E1QVQ2TU9tV3Jk?=
- =?utf-8?B?ZnBmRzY2R00xbHUxcWxIYnZDVmR1eG53akxxY3Y2OEJNK1NMYnBIMUF0R1A0?=
- =?utf-8?B?V0psc0RKTFdsUU16ZkJOdzYva1B1RHRFampiQ0tSNUFkeEJkMUFicSs0YThw?=
- =?utf-8?B?aW9WOWZ2cTJaR0hVTkVkekZtUzVqZW03WCtqQnNoTHo3NzIxa1hLL00zQm8v?=
- =?utf-8?B?bVl6MkxVY3RIT200aG9BZkFwZmh1R0M1OXhqRDBzN3ROMlIyR282NGtZY3dD?=
- =?utf-8?B?R2FTT1V6QmpCcSs2Y1djdHJsZFZGYjdiU2FrNktFMEFCL3VjMXRuTmFZemxp?=
- =?utf-8?B?UnFDUWZXdTYwU1pYSkZmdTNXRitwTmM3Z1JtZnNDYW04T0pBRkoybW8wVnNt?=
- =?utf-8?B?RUhaZW9vamJnZllTdkpDT3dNRFBZRHRwbklJb3BZeUF5NUZwMnVFTnV6amgx?=
- =?utf-8?B?MzlZc25WLyszVTNpZUFxT0xaZlc3U2dsWENkb2hrYzhJUnBMcVlkSkw2ZThI?=
- =?utf-8?B?Ty91ajBVUTZWUENDcVR0M1RoN3EvaXBKR2d2ZXh1THkvRjRNQ0VTN0RBTGNo?=
- =?utf-8?B?R2gzUmp6VnFkd011SEsvVmFKTjZrRzlTSG85RDFRRk1DTmxzakZqaUhiSlkz?=
- =?utf-8?B?d2ZUNCtUa1A1WWR3V0doVy91eEoxaDlqb1RWUk9LV0tpNmg2SkxTTC9WL1NW?=
- =?utf-8?B?ZEpvQURmblhEUzVJam15dHI1a29pbzJ5cUx1eElwam5HTUxIRDNyczRqTXZJ?=
- =?utf-8?B?YjBCdW5WS1RMZUlFdmFvNHF2cG9aS2NMYXI3bk5RVUl4bWtFQkJ4eUd5MnJU?=
- =?utf-8?B?TjNjQUNzbExSZ2lVR2dEVnV2Q0NHd01ETHU2SzdWZVJ4TVdNejZodnNicmQ2?=
- =?utf-8?B?cDA2clJ6aGhadE9Kb0F3NWlld1BJS2FoTXZHVGJIdXBCZlFRL2NQRGhwUUlv?=
- =?utf-8?B?eWo4dkZOVzR2RGlEN1BIaWVmeHhSbFdZcFQ5ZVVlNXJQTTV4R1VRSEhsb2Vu?=
- =?utf-8?B?UDB1Zm9PNFhvalVLREJaRTZwanF3eWFWQlRTVU95WVNvSUxvWnRmc2FrdGM5?=
- =?utf-8?B?N3FLUHR5ZHBUVzdEenVNSFdvWXFtZldyM3VsRnlSVCtzTTdLTENYai9UbGxv?=
- =?utf-8?B?L053UCtzVkxwc3ZuRldpNEEwV2JycjhiN293N2FkcXozK0RCcFd2azZyRTlK?=
- =?utf-8?B?ZEIzRWpsRUtVNjNucHpmemEyeE5qT1I3UC9KUlJYNGRuVjh0NkI2YVljNjQv?=
- =?utf-8?B?KzhtZlRFTmRuajFLTUM1R1dWRGRMdkE0eXFBdUpwbUUzNmQybGhHRHhIR25X?=
- =?utf-8?B?ckdzWkIzYmlxYjVSV3p0NzAybHhtSFBMVXhnV0RRNDlkY29QQkNJYlltZURM?=
- =?utf-8?B?NEl3SGN5T0N5c21ZbHdNUnZRaUZDMEc2Mk52SlRFd2x0WHordW1aNzUxNVRD?=
- =?utf-8?B?WGJPdWlGSkNMVmRKeE1jdDhPclBtVHIwSUpkVnpvblp4QjNwTTVzTXRPczha?=
- =?utf-8?B?ck4vN2dUQ3llVnB5WU1DQjZPc1BmakR0OHA2R3Bodlk1ck1KTjRIUnJJQkNa?=
- =?utf-8?B?aXBYei9NNHhCaXMrWEZlVVpVUm1peGxZTkFYN1VFQTlpNjhMeXJ0Z285NDNz?=
- =?utf-8?B?Y2pkcElrYlpxRFlNbUUvSWpqVkhCZitsMExaNW1ZWFEyelJGWFRuZGw2YUZJ?=
- =?utf-8?B?QWpncnl3UkRIVm8rb0UyZzdxNGIwUG5GMlozcitHN2NzTHJEOEZPYzV6dWNx?=
- =?utf-8?B?WGN0a1lYanBzbVVqNVdLVkpPT09LSWpEUWlzdGZMNU5OanhLcDB1RmwyUVVn?=
- =?utf-8?B?TVNrZ3p2dlh3ZTRycHBLTlpkRnhGY0NlL3lISjBFQjJjN1lmNktYT2VGVU00?=
- =?utf-8?B?OExTTG1qcVk3YW5hNUlCclpkb0VCSDJRN0tmZ0JyaS9NMVFwTG5udmIvOE5O?=
- =?utf-8?B?L1FMUGJ4KzYxMXVTVE85dmp3aWVpMG95SHRNazlvTWZJVXZIZ3RiWUllU1Zz?=
- =?utf-8?Q?l90DOfSp4QROcGiz+zB2ERZX8?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 6 Mar 2023 03:25:03 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B5193E4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:25:01 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id t15so7868567wrz.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:25:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678091100;
+        h=content-transfer-encoding:in-reply-to:organization:references:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=y6zMxZow19UvkvTjHr7NRN7CurMWl2Tkz2hiPJo4rPY=;
+        b=jQ+EgIARmtM0UnLQKX5qrD5sh2Y/MmZoAFzbPVBmCJyzZiNJ4f2hU+y7MCs7LNhP7G
+         aNRLJ6uVyTvUBKIMqDmoP0CibjTpJPe7ps6qQqfQjxEu+4sm5kiu10Hmy9ItGD8dzRh/
+         +PuP6qD6GpF00ttqaTsUSyExRIuhxZ7ipUshjuAmkOICKVgEoEcifIx+7UnSX8cOsKtZ
+         vc9hfzdIgo9NTALhn86NLJL3YQEHrUoLs2AiQxHPy6BWp7x0sqMmXp9eOWt2uXBJTHqn
+         ky9mJwbNx3+y8C2+NNPDaBSCE7PI7Vra05Ottw6mhx/wkuNsx4Znd3x1iViI8VTfLcs3
+         yDUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678091100;
+        h=content-transfer-encoding:in-reply-to:organization:references:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y6zMxZow19UvkvTjHr7NRN7CurMWl2Tkz2hiPJo4rPY=;
+        b=yzcpa7sWtRMerv+OO14VCubcy0bvHwNAC0GtCBBCJF47bmLMri4MBgY++WoHg6qBHb
+         YU09i+dKw6u7k9OMJZ8x2AXyy5UOMFO0c+ltsgr/lMWRJPCpziA4hT9Z9zchrUC6Uu7l
+         Cd8HlyySs8tXhCQZkDQFHTm+Nqv+lUL+KYHGEL1rUajfHGWr410SgvYm5dW59RWQgfmF
+         0Tvfw/pAs+C85GYcCm9zPMXRIvMQHn7vqAFtmyp3choq7tQ+Gouh84qYp/BRz/v5Qd+e
+         9YVz7FqrmD6lP77NcZvo9CkQiN5BzbIwj7XSUyXLRsdwsQNH+3Je/f80tWAaHX3uruxA
+         m2mQ==
+X-Gm-Message-State: AO0yUKUJT3ghtXvHBWip0LbFF+liu93AI0jKsPOtOOXN7xgysBPruwLf
+        7l8ciDb9isICToXAL82K1Uh/ng==
+X-Google-Smtp-Source: AK7set+MD6XdAnYGM80xuImDWmRJJ0sJqJ8p1ImINLgCPzjNqkR50QTdOOu0J7vI9tZuZIJpjZuUGA==
+X-Received: by 2002:adf:ed44:0:b0:2c7:6c7:7bc2 with SMTP id u4-20020adfed44000000b002c706c77bc2mr5381779wro.38.1678091099848;
+        Mon, 06 Mar 2023 00:24:59 -0800 (PST)
+Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id r11-20020a5d494b000000b002c54c9bd71fsm8888041wrs.93.2023.03.06.00.24.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 00:24:59 -0800 (PST)
+Message-ID: <06022ea9-4875-d6cd-cd4f-d4b2b2e6df24@linaro.org>
+Date:   Mon, 6 Mar 2023 09:24:59 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB6171.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ce209c0-180b-46e4-0c96-08db1e1c3dcd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Mar 2023 08:24:44.7198
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pSItKeu7GDym7OtlPthN40ilXuFTT27X8Uw4/B/K5medjNxK7WRMBXikt/mhFbQ/+BTCaEKzd6EiXIjJqxTNbg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6773
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 2/2] arm64: dts: meson: add support for BananaPi M2S
+ variants
+Content-Language: en-US
+To:     Christian Hewitt <christianshewitt@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230305134512.1596572-1-christianshewitt@gmail.com>
+ <20230305134512.1596572-3-christianshewitt@gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230305134512.1596572-3-christianshewitt@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBQYXVsIEUuIE1jS2VubmV5IDxwYXVsbWNrQGtlcm5lbC5vcmc+DQo+IFsuLi5dDQo+
-ID4gUWl1eHUgYWxzbyBub3RlZCBpbXByZXNzaXZlIGJvb3QtdGltZSBpbXByb3ZlbWVudHMgd2l0
-aCBlYXJsaWVyDQo+ID4gdmVyc2lvbiBvZiBwYXRjaC4gQW4gZXhjZXJwdCBmcm9tIHRoZSBkYXRh
-IGhlIHNoYXJlZDoNCj4gPg0KPiA+IDEpIFRlc3RpbmcgZW52aXJvbm1lbnQ6DQo+ID4gICAgIE9T
-ICAgICAgICAgICAgOiBDZW50T1MgU3RyZWFtIDggKG5vbi1SVCBPUykNCj4gPiAgICAgS2VybmVs
-ICAgICA6IHY2LjINCj4gPiAgICAgTWFjaGluZSA6IEludGVsIENhc2NhZGUgTGFrZSBzZXJ2ZXIg
-KDIgc29ja2V0cywgZWFjaCB3aXRoIDQ0IGxvZ2ljYWwNCj4gdGhyZWFkcykNCj4gPiAgICAgUWVt
-dSAgYXJncyAgOiAtY3B1IGhvc3QgLWVuYWJsZS1rdm0sIC1zbXAgODgsdGhyZWFkcz0yLHNvY2tl
-dHM9MiwNCj4gPiDigKYNCj4gPg0KPiA+IDIpIE9TIGJvb3QgdGltZSBkZWZpbml0aW9uOg0KPiA+
-ICAgICBUaGUgdGltZSBmcm9tIHRoZSBzdGFydCBvZiB0aGUga2VybmVsIGJvb3QgdG8gdGhlIHNo
-ZWxsIGNvbW1hbmQgbGluZQ0KPiA+ICAgICBwcm9tcHQgaXMgc2hvd24gZnJvbSB0aGUgY29uc29s
-ZS4gWyBEaWZmZXJlbnQgcGVvcGxlIG1heSBoYXZlDQo+ID4gICAgIGRpZmZlcmVudCBPUyBib290
-IHRpbWUgZGVmaW5pdGlvbnMuIF0NCj4gPg0KPiA+IDMpIE1lYXN1cmVtZW50IG1ldGhvZCAodmVy
-eSByb3VnaCBtZXRob2QpOg0KPiA+ICAgICBBIHRpbWVyIGluIHRoZSBrZXJuZWwgcGVyaW9kaWNh
-bGx5IHByaW50cyB0aGUgYm9vdCB0aW1lIGV2ZXJ5IDEwMG1zLg0KPiA+ICAgICBBcyBzb29uIGFz
-IHRoZSBzaGVsbCBjb21tYW5kIGxpbmUgcHJvbXB0IGlzIHNob3duIGZyb20gdGhlIGNvbnNvbGUs
-DQo+ID4gICAgIHdlIHJlY29yZCB0aGUgYm9vdCB0aW1lIHByaW50ZWQgYnkgdGhlIHRpbWVyLCB0
-aGVuIHRoZSBwcmludGVkIGJvb3QNCj4gPiAgICAgdGltZSBpcyB0aGUgT1MgYm9vdCB0aW1lLg0K
-PiA+DQo+ID4gNCkgTWVhc3VyZWQgT1MgYm9vdCB0aW1lIChpbiBzZWNvbmRzKQ0KPiA+ICAgIGEp
-IE1lYXN1cmVkIDEwIHRpbWVzIHcvbyB0aGlzIHBhdGNoOg0KPiA+ICAgICAgICAgOC43cywgOC40
-cywgOC42cywgOC4ycywgOS4wcywgOC43cywgOC44cywgOS4zcywgOC44cywgOC4zcw0KPiA+ICAg
-ICAgICAgVGhlIGF2ZXJhZ2UgT1MgYm9vdCB0aW1lIHdhczogfjguN3MNCj4gPg0KPiA+ICAgIGIp
-IE1lYXN1cmUgMTAgdGltZXMgdy8gdGhpcyBwYXRjaDoNCj4gPiAgICAgICAgIDguNXMsIDguMnMs
-IDcuNnMsIDguMnMsIDguN3MsIDguMnMsIDcuOHMsIDguMnMsIDkuM3MsIDguNHMNCj4gPiAgICAg
-ICAgIFRoZSBhdmVyYWdlIE9TIGJvb3QgdGltZSB3YXM6IH44LjNzLg0KPiANCj4gVW5mb3J0dW5h
-dGVseSwgZ2l2ZW4gdGhhdCBhJ3MgYXZlcmFnZSBpcyB3aXRoaW4gb25lIHN0YW5kYXJkIGRldmlh
-dGlvbiBvZiBiJ3MNCj4gYXZlcmFnZSwgdGhpcyBpcyBtb3N0IGRlZmluaXRlbHkgbm90IHN0YXRp
-c3RpY2FsbHkgc2lnbmlmaWNhbnQuDQo+IEVzcGVjaWFsbHkgZ2l2ZW4gb25seSB0ZW4gbWVhc3Vy
-ZW1lbnRzIGZvciBlYWNoIGNhc2UgLS0geW91IG5lZWQgKmF0Kg0KPiAqbGVhc3QqIDI0LCBwcmVm
-ZXJhYmx5IG1vcmUuICBFc3BlY2lhbGx5IGluIHRoaXMgY2FzZSwgd2hlcmUgeW91IGRvbid0IHJl
-YWxseQ0KPiBrbm93IHdoYXQgdGhlIHVuZGVybHlpbmcgZGlzdHJpYnV0aW9uIGlzLg0KDQpUaGFu
-ayB5b3Ugc28gbXVjaCBQYXVsIGZvciB0aGUgZGV0YWlsZWQgY29tbWVudHMgb24gdGhlIG1lYXN1
-cmVkIGRhdGEuDQoNCkknbSBjdXJpb3VzIGhvdyBkaWQgeW91IGZpZ3VyZSBvdXQgdGhlIG51bWJl
-ciAyNCB0aGF0IHdlIGF0ICpsZWFzdCogbmVlZC4NClRoaXMgY2FuIGd1aWRlIG1lIG9uIHdoZXRo
-ZXIgdGhlIG51bWJlciBvZiBzYW1wbGVzIGlzIGVub3VnaCBmb3IgDQpmdXR1cmUgdGVzdGluZyA7
-LSkuDQoNCkkgZGlkIGFub3RoZXIgNDggbWVhc3VyZW1lbnRzICgyeCBvZiAyNCkgZm9yIGVhY2gg
-Y2FzZSANCih3L28gYW5kIHcvIEpvZWwncyB2MiBwYXRjaCkgYXMgYmVsb3cuIA0KQWxsIHRoZSB0
-ZXN0aW5nIGNvbmZpZ3VyYXRpb25zIGZvciB0aGUgbmV3IHRlc3RpbmcNCmFyZSB0aGUgc2FtZSBh
-cyBiZWZvcmUuDQoNCmEpIE1lYXN1cmVkIDQ4IHRpbWVzIHcvbyB2MiBwYXRjaCAoaW4gc2Vjb25k
-cyk6DQogICAgOC40LCA4LjgsIDkuMiwgOS4wLCA4LjMsIDkuNiwgOC44LCA5LjQsDQogICAgOC43
-LCA5LjIsIDguMywgOS40LCA4LjQsIDkuNiwgOC41LCA4LjgsDQogICAgOC44LCA4LjksIDkuMywg
-OS4yLCA4LjYsIDkuNywgOS4yLCA4LjgsDQogICAgOC43LCA5LjAsIDkuMSwgOS41LCA4LjYsIDgu
-OSwgOS4xLCA4LjYsDQogICAgOC4yLCA5LjEsIDguOCwgOS4yLCA5LjEsIDguOSwgOC40LCA5LjAs
-DQogICAgOS44LCA5LjgsIDguNywgOC44LCA5LjEsIDkuNSwgOS41LCA4LjcNCiAgICBUaGUgYXZl
-cmFnZSBPUyBib290IHRpbWUgd2FzOiB+OS4wcw0KDQpiKSBNZWFzdXJlIDQ4IHRpbWVzIHcvIHYy
-IHBhdGNoIChpbiBzZWNvbmRzKToNCiAgICA3LjcsIDguNiwgOC4xLCA3LjgsIDguMiwgOC4yLCA4
-LjgsIDguMiwNCiAgICA5LjgsIDguMCwgOS4yLCA4LjgsIDkuMiwgOC41LCA4LjQsIDkuMiwNCiAg
-ICA4LjUsIDguMywgOC4xLCA4LjMsIDguNiwgNy45LCA4LjMsIDguMywNCiAgICA4LjYsIDguOSwg
-OC4wLCA4LjUsIDguNCwgOC42LCA4LjcsIDguMCwNCiAgICA4LjgsIDguOCwgOS4xLCA3LjksIDku
-NywgNy45LCA4LjIsIDcuOCwNCiAgICA4LjEsIDguNSwgOC42LCA4LjQsIDkuMiwgOC42LCA5LjYs
-IDguMywNCiAgICBUaGUgYXZlcmFnZSBPUyBib290IHRpbWUgd2FzOiB+OC41cw0KDQpASm9lbCBG
-ZXJuYW5kZXMgKEdvb2dsZSksIHlvdSBtYXkgcmVwbGFjZSBteSBvbGQgZGF0YSB3aXRoIHRoZSBh
-Ym92ZSANCm5ldyBkYXRhIGluIHlvdXIgY29tbWl0IG1lc3NhZ2UuDQoNCj4gQnV0IHdlIGNhbiBh
-cHBseSB0aGUgYmlub21pYWwgZGlzdHJpYnV0aW9uIGluc3RlYWQgb2YgdGhlIHVzdWFsIG5vcm1h
-bA0KPiBkaXN0cmlidXRpb24uICBGaXJzdCwgbGV0J3Mgc29ydCBhbmQgdGFrZSB0aGUgbWVkaWFu
-czoNCj4gDQo+IGE6IDguMiA4LjMgOC40IDguNiA4LjcgOC43IDguOCA4LjggOS4wIDkuMyAgTWVk
-aWFuOiA4LjcNCj4gYjogNy42IDcuOCA4LjIgOC4yIDguMiA4LjIgOC40IDguNSA4LjcgOS4zICBN
-ZWRpYW46IDguMg0KPiANCj4gOC8xMCBvZiBhJ3MgZGF0YSBwb2ludHMgYXJlIGdyZWF0ZXIgdGhh
-biAwLjEgbW9yZSB0aGFuIGIncyBtZWRpYW4gYW5kIDgvMTANCj4gb2YgYidzIGRhdGEgcG9pbnRz
-IGFyZSBsZXNzIHRoYW4gMC4xIGxlc3MgdGhhbiBhJ3MgbWVkaWFuLg0KPiBXaGF0IGFyZSB0aGUg
-b2RkcyB0aGF0IHRoaXMgaGFwcGVucyBieSByYW5kb20gY2hhbmNlPw0KPiANCj4gVGhpcyBpcyBn
-aXZlbiBieSBzdW1fMF4yICgwLjVeMTAgKiBiaW5vbWlhbCgxMCxpKSksIHdoaWNoIGlzIGFib3V0
-IDAuMDU1Lg0KDQpXaGF0J3MgdGhlIG1lYW5pbmcgb2YgMC41IGhlcmU/IFdhcyBpdCB0aGUgcHJv
-YmFiaWxpdHkgKHdlIGFzc3VtZT8pIHRoYXQgDQplYWNoIHRpbWUgYidzIGRhdGEgcG9pbnQgZmFp
-bGVkIChvciBkaWRuJ3Qgc2F0aXNmeSkgImxlc3MgdGhhbiAwLjEgbGVzcyB0aGFuIA0KYSdzIG1l
-ZGlhbiI/DQoNCj4gVGhpcyBpcyBub3QgcXVpdGUgOTUlIGNvbmZpZGVuY2UsIHNvIG5vdCBodWdl
-bHkgY29udmluY2luZywgYnV0IGl0IGlzIGF0IGxlYXN0DQo+IGNsb3NlLiAgTm90IHRoYXQgdGhp
-cyBpcyB0aGUgY29uZmlkZW5jZSB0aGF0IChiKSBpcyAxMDBtcyBmYXN0ZXIgdGhhbiAoYSksIG5v
-dA0KPiBqdXN0IHRoYXQgKGIpIGlzIGZhc3RlciB0aGFuIChhKS4NCj4gDQo+IE5vdCBzdXJlIHRo
-YXQgdGhpcyByZWFsbHkgY2FycmllcyBpdHMgd2VpZ2h0LCBidXQgaW4gY29udHJhc3QgdG8gdGhl
-IHVzdWFsDQo+IHN0YXRpc3RpY3MgYmFzZWQgb24gdGhlIG5vcm1hbCBkaXN0cmlidXRpb24sIGl0
-IGRvZXMgc3VnZ2VzdCBhdCBsZWFzdCBhIGxpdHRsZQ0KPiBpbXByb3ZlbWVudC4gIE9uIHRoZSBv
-dGhlciBoYW5kLCBhbnlvbmUgd2hvIGhhcyBjYXJlZnVsbHkgc3R1ZGllZA0KPiBub25wYXJhbWV0
-cmljIHN0YXRpc3RpY3MgcHJvYmFibHkganVtcGVkIG91dCBvZiB0aGUgYm9hdCBzZXZlcmFsIHBh
-cmFncmFwaHMNCj4gYWdvLiAgOy0pDQo+IA0KPiBBIGZldyBtb3JlIHF1ZXN0aW9ucyBpbnRlcnNw
-ZXJzZWQgYmVsb3cuDQo+IA0KPiAJCQkJCQkJVGhhbngsIFBhdWwNCj4gDQo+ID4gVGVzdGVkLWJ5
-OiBRaXV4dSBaaHVvIDxxaXV4dS56aHVvQGludGVsLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBK
-b2VsIEZlcm5hbmRlcyAoR29vZ2xlKSA8am9lbEBqb2VsZmVybmFuZGVzLm9yZz4NCg0K
+On 05/03/2023 14:45, Christian Hewitt wrote:
+> BananaPi M2S ships in Amlogic S922X and A311D variants with the
+> following common specifications:
+> 
+> - 16GB eMMC
+> - HDMI 2.1a video
+> - 2x 10/100/1000 Base-T Ethernet (1x RTL8211F, 1x RTL811H)
+> - 2x USB 2.0 ports
+> - 2x Status LED's (green/blue)
+> - 1x Power/Reset button
+> - 1x micro SD card slot
+> - 40-pin GPIO header
+> - PWM fan header
+> - UART header
+> 
+> The S992X variant has:
+> - 2GB LPDDR4 RAM
+> 
+> The A311D variant has:
+> 
+> - 4GB LPDDR4 RAM
+> - NPU (5.0 TOPS)
+> - MIPI DSI header
+> - MIPI CSI header
+> 
+> An optional RTL8822CS SDIO WiFi/BT mezzanine is available for
+> both board variants.
+> 
+> Signed-off-by: Christian Hewitt <christianshewitt@gmail.com>
+> ---
+>   arch/arm64/boot/dts/amlogic/Makefile          |   2 +
+>   .../amlogic/meson-g12b-a311d-bananapi-m2s.dts |  37 ++
+>   .../boot/dts/amlogic/meson-g12b-bananapi.dtsi | 521 ++++++++++++++++++
+>   .../amlogic/meson-g12b-s922x-bananapi-m2s.dts |  14 +
+>   4 files changed, 574 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts
+>   create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+>   create mode 100644 arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
+> index ccf1ba57fa87..2bb9f1d4bc1a 100644
+> --- a/arch/arm64/boot/dts/amlogic/Makefile
+> +++ b/arch/arm64/boot/dts/amlogic/Makefile
+> @@ -8,6 +8,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12a-radxa-zero.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12a-sei510.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12a-u200.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12a-x96-max.dtb
+> +dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-bananapi-m2s.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-khadas-vim3.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gsking-x.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking-pro.dtb
+> @@ -17,6 +18,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2-plus.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2l.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-radxa-zero2.dtb
+> +dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-bananapi-m2s.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-g12b-ugoos-am6.dtb
+>   dtb-$(CONFIG_ARCH_MESON) += meson-gxbb-kii-pro.dtb
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts
+> new file mode 100644
+> index 000000000000..ac6f7ae1d103
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-bananapi-m2s.dts
+> @@ -0,0 +1,37 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2023 Christian Hewitt <christianshewitt@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "meson-g12b-a311d.dtsi"
+> +#include "meson-g12b-bananapi.dtsi"
+> +
+> +/ {
+> +	compatible = "bananapi,bpi-m2s", "amlogic,a311d", "amlogic,g12b";
+> +	model = "BananaPi M2S";
+> +
+> +	aliases {
+> +		i2c0 = &i2c1;
+> +		i2c1 = &i2c3;
+> +	};
+> +};
+> +
+> +/* Camera (CSI) bus */
+> +&i2c1 {
+> +	status = "okay";
+> +	pinctrl-0 = <&i2c1_sda_h6_pins>, <&i2c1_sck_h7_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +/* Display (DSI) bus */
+> +&i2c3 {
+> +	status = "okay";
+> +	pinctrl-0 = <&i2c3_sda_a_pins>, <&i2c3_sck_a_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +&npu {
+> +	status = "okay";
+> +};
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+> new file mode 100644
+> index 000000000000..83709787eb91
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+> @@ -0,0 +1,521 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2019 BayLibre, SAS
+> + * Author: Neil Armstrong <narmstrong@baylibre.com>
+> + * Copyright (c) 2023 Christian Hewitt <christianshewitt@gmail.com>
+> + */
+> +
+> +#include <dt-bindings/input/input.h>
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/gpio/meson-g12a-gpio.h>
+> +#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
+> +
+> +/ {
+> +	aliases {
+> +		serial0 = &uart_AO;
+> +		ethernet0 = &ethmac;
+> +		rtc1 = &vrtc;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial0:115200n8";
+> +	};
+> +
+> +	memory@0 {
+> +		device_type = "memory";
+> +		reg = <0x0 0x0 0x0 0x80000000>; /* 2 GiB or 4 GiB */
+> +	};
+> +
+> +	adc-keys {
+> +		compatible = "adc-keys";
+> +		io-channels = <&saradc 2>;
+> +		io-channel-names = "buttons";
+> +		keyup-threshold-microvolt = <1710000>;
+> +
+> +		button-function {
+> +			label = "RST";
+> +			linux,code = <KEY_POWER>;
+> +			press-threshold-microvolt = <10000>;
+> +		};
+> +	};
+> +
+> +	emmc_pwrseq: emmc-pwrseq {
+> +		compatible = "mmc-pwrseq-emmc";
+> +		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
+> +	};
+> +
+> +	fan0: pwm-fan {
+> +		compatible = "pwm-fan";
+> +		#cooling-cells = <2>;
+> +		cooling-min-state = <0>;
+> +		cooling-max-state = <3>;
+> +		cooling-levels = <0 120 170 220>;
+> +		pwms = <&pwm_cd 1 40000 0>;
+> +	};
+> +
+> +	hdmi-connector {
+> +		compatible = "hdmi-connector";
+> +		type = "a";
+> +
+> +		port {
+> +			hdmi_connector_in: endpoint {
+> +				remote-endpoint = <&hdmi_tx_tmds_out>;
+> +			};
+> +		};
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led-0 {
+> +			color = <LED_COLOR_ID_BLUE>;
+> +			function = LED_FUNCTION_STATUS;
+> +			gpios = <&gpio_ao GPIOAO_7 GPIO_ACTIVE_LOW>;
+> +			linux,default-trigger = "heartbeat";
+> +		};
+> +
+> +		led-1 {
+> +			color = <LED_COLOR_ID_GREEN>;
+> +			function = LED_FUNCTION_STATUS;
+> +			gpios = <&gpio_ao GPIOAO_2 GPIO_ACTIVE_LOW>;
+> +		};
+> +	};
+> +
+> +	sdio_pwrseq: sdio-pwrseq {
+> +		compatible = "mmc-pwrseq-simple";
+> +		reset-gpios = <&gpio GPIOX_6 GPIO_ACTIVE_LOW>;
+> +		clocks = <&wifi32k>;
+> +		clock-names = "ext_clock";
+> +	};
+> +
+> +	wifi32k: wifi32k {
+> +		compatible = "pwm-clock";
+> +		#clock-cells = <0>;
+> +		clock-frequency = <32768>;
+> +		pwms = <&pwm_ef 0 30518 0>; /* PWM_E at 32.768KHz */
+> +	};
+> +
+> +	dc_in: regulator-dc-in {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "DC_IN";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vcc_5v: regulator-vcc-5v {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VCC_5V";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&dc_in>;
+> +
+> +		gpio = <&gpio GPIOH_8 GPIO_OPEN_DRAIN>;
+> +		enable-active-high;
+> +	};
+> +
+> +	vcc_3v3: regulator-vcc-3v3 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VCC_3V3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vsys_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vcc_1v8: regulator-vcc-1v8 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VCC_1V8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		vin-supply = <&vcc_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vddao_1v8: regulator-vddao-1v8 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VDDIO_AO1V8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		vin-supply = <&vsys_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vddcpu_a: regulator-vddcpu-a {
+> +		compatible = "pwm-regulator";
+> +		regulator-name = "VDDCPU_A";
+> +		regulator-min-microvolt = <690000>;
+> +		regulator-max-microvolt = <1050000>;
+> +		pwm-supply = <&dc_in>;
+> +		pwms = <&pwm_ab 0 1250 0>;
+> +		pwm-dutycycle-range = <100 0>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vddcpu_b: regulator-vddcpu-b {
+> +		compatible = "pwm-regulator";
+> +		regulator-name = "VDDCPU_B";
+> +		regulator-min-microvolt = <690000>;
+> +		regulator-max-microvolt = <1050000>;
+> +		pwm-supply = <&vsys_3v3>;
+> +		pwms = <&pwm_AO_cd 1 1250 0>;
+> +		pwm-dutycycle-range = <100 0>;
+> +		regulator-boot-on;
+> +		regulator-always-on;
+> +	};
+> +
+> +	vsys_3v3: regulator-vsys-3v3 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "VSYS_3V3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&dc_in>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	emmc_1v8: regulator-emmc-1v8 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "EMMC_AO1V8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		vin-supply = <&vcc_3v3>;
+> +		regulator-always-on;
+> +	};
+> +
+> +	usb_pwr: regulator-usb-pwr {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "USB_PWR";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		vin-supply = <&vcc_5v>;
+> +
+> +		gpio = <&gpio GPIOA_6 GPIO_ACTIVE_HIGH>;
+> +		enable-active-high;
+> +	};
+> +
+> +	sound {
+> +		compatible = "amlogic,axg-sound-card";
+> +		model = "BPI-M2S";
+> +		audio-aux-devs = <&tdmout_b>;
+> +		audio-routing = "TDMOUT_B IN 0", "FRDDR_A OUT 1",
+> +				"TDMOUT_B IN 1", "FRDDR_B OUT 1",
+> +				"TDMOUT_B IN 2", "FRDDR_C OUT 1",
+> +				"TDM_B Playback", "TDMOUT_B OUT";
+> +
+> +		assigned-clocks = <&clkc CLKID_MPLL2>,
+> +				  <&clkc CLKID_MPLL0>,
+> +				  <&clkc CLKID_MPLL1>;
+> +		assigned-clock-parents = <0>, <0>, <0>;
+> +		assigned-clock-rates = <294912000>,
+> +				       <270950400>,
+> +				       <393216000>;
+> +
+> +		dai-link-0 {
+> +			sound-dai = <&frddr_a>;
+> +		};
+> +
+> +		dai-link-1 {
+> +			sound-dai = <&frddr_b>;
+> +		};
+> +
+> +		dai-link-2 {
+> +			sound-dai = <&frddr_c>;
+> +		};
+> +
+> +		/* 8ch hdmi interface */
+> +		dai-link-3 {
+> +			sound-dai = <&tdmif_b>;
+> +			dai-format = "i2s";
+> +			dai-tdm-slot-tx-mask-0 = <1 1>;
+> +			dai-tdm-slot-tx-mask-1 = <1 1>;
+> +			dai-tdm-slot-tx-mask-2 = <1 1>;
+> +			dai-tdm-slot-tx-mask-3 = <1 1>;
+> +			mclk-fs = <256>;
+> +
+> +			codec {
+> +				sound-dai = <&tohdmitx TOHDMITX_I2S_IN_B>;
+> +			};
+> +		};
+> +
+> +		/* hdmi glue */
+> +		dai-link-4 {
+> +			sound-dai = <&tohdmitx TOHDMITX_I2S_OUT>;
+> +
+> +			codec {
+> +				sound-dai = <&hdmi_tx>;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&arb {
+> +	status = "okay";
+> +};
+> +
+> +&clkc_audio {
+> +	status = "okay";
+> +};
+> +
+> +&cecb_AO {
+> +	pinctrl-0 = <&cec_ao_b_h_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +	hdmi-phandle = <&hdmi_tx>;
+> +};
+> +
+> +&cpu0 {
+> +	cpu-supply = <&vddcpu_b>;
+> +	operating-points-v2 = <&cpu_opp_table_0>;
+> +	clocks = <&clkc CLKID_CPU_CLK>;
+> +	clock-latency = <50000>;
+> +};
+> +
+> +&cpu1 {
+> +	cpu-supply = <&vddcpu_b>;
+> +	operating-points-v2 = <&cpu_opp_table_0>;
+> +	clocks = <&clkc CLKID_CPU_CLK>;
+> +	clock-latency = <50000>;
+> +};
+> +
+> +&cpu100 {
+> +	cpu-supply = <&vddcpu_a>;
+> +	operating-points-v2 = <&cpub_opp_table_1>;
+> +	clocks = <&clkc CLKID_CPUB_CLK>;
+> +	clock-latency = <50000>;
+> +};
+> +
+> +&cpu101 {
+> +	cpu-supply = <&vddcpu_a>;
+> +	operating-points-v2 = <&cpub_opp_table_1>;
+> +	clocks = <&clkc CLKID_CPUB_CLK>;
+> +	clock-latency = <50000>;
+> +};
+> +
+> +&cpu102 {
+> +	cpu-supply = <&vddcpu_a>;
+> +	operating-points-v2 = <&cpub_opp_table_1>;
+> +	clocks = <&clkc CLKID_CPUB_CLK>;
+> +	clock-latency = <50000>;
+> +};
+> +
+> +&cpu103 {
+> +	cpu-supply = <&vddcpu_a>;
+> +	operating-points-v2 = <&cpub_opp_table_1>;
+> +	clocks = <&clkc CLKID_CPUB_CLK>;
+> +	clock-latency = <50000>;
+> +};
+> +
+> +&ethmac {
+> +	pinctrl-0 = <&eth_pins>, <&eth_rgmii_pins>;
+> +	pinctrl-names = "default";
+> +	status = "okay";
+> +	phy-mode = "rgmii";
+> +	phy-handle = <&external_phy>;
+> +	amlogic,tx-delay-ns = <2>;
+> +};
+> +
+> +&ext_mdio {
+> +	external_phy: ethernet-phy@0 {
+> +		/* Realtek RTL8211F (0x001cc916) */
+> +		reg = <0>;
+> +		max-speed = <1000>;
+> +
+> +		reset-assert-us = <10000>;
+> +		reset-deassert-us = <80000>;
+> +		reset-gpios = <&gpio GPIOZ_15 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>;
+> +
+> +		interrupt-parent = <&gpio_intc>;
+> +		/* MAC_INTR on GPIOZ_14 */
+> +		interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
+> +	};
+> +};
+> +
+> +&frddr_a {
+> +	status = "okay";
+> +};
+> +
+> +&frddr_b {
+> +	status = "okay";
+> +};
+> +
+> +&frddr_c {
+> +	status = "okay";
+> +};
+> +
+> +&hdmi_tx {
+> +	status = "okay";
+> +	pinctrl-0 = <&hdmitx_hpd_pins>, <&hdmitx_ddc_pins>;
+> +	pinctrl-names = "default";
+> +	hdmi-supply = <&vcc_5v>;
+> +};
+> +
+> +&hdmi_tx_tmds_port {
+> +	hdmi_tx_tmds_out: endpoint {
+> +		remote-endpoint = <&hdmi_connector_in>;
+> +	};
+> +};
+> +
+> +/* Main i2c bus */
+> +&i2c2 {
+> +	status = "okay";
+> +	pinctrl-0 = <&i2c2_sda_x_pins>, <&i2c2_sck_x_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +&pcie {
+> +	status = "okay";
+> +	reset-gpios = <&gpio GPIOA_8 GPIO_ACTIVE_LOW>;
+> +};
+> +
+> +&pwm_ab {
+> +	status = "okay";
+> +	pinctrl-0 = <&pwm_a_e_pins>;
+> +	pinctrl-names = "default";
+> +	clocks = <&xtal>;
+> +	clock-names = "clkin0";
+> +};
+> +
+> +&pwm_cd {
+> +	status = "okay";
+> +	pinctrl-0 = <&pwm_d_x6_pins>;
+> +	pinctrl-names = "default";
+> +	pwm-gpios = <&gpio GPIOAO_10 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+> +&pwm_ef {
+> +	status = "okay";
+> +	pinctrl-0 = <&pwm_e_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +&pwm_AO_cd {
+> +	pinctrl-0 = <&pwm_ao_d_e_pins>;
+> +	pinctrl-names = "default";
+> +	clocks = <&xtal>;
+> +	clock-names = "clkin1";
+> +	status = "okay";
+> +};
+> +
+> +&saradc {
+> +	status = "okay";
+> +	vref-supply = <&vddao_1v8>;
+> +};
+> +
+> +/* SDIO */
+> +&sd_emmc_a {
+> +	/* enable if WiFi/BT board connected */
+> +	status = "disabled";
+> +	pinctrl-0 = <&sdio_pins>;
+> +	pinctrl-1 = <&sdio_clk_gate_pins>;
+> +	pinctrl-names = "default", "clk-gate";
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +
+> +	bus-width = <4>;
+> +	sd-uhs-sdr104;
+> +	max-frequency = <50000000>;
+> +
+> +	non-removable;
+> +	disable-wp;
+> +
+> +	/* WiFi firmware requires power in suspend */
+> +	keep-power-in-suspend;
+> +
+> +	mmc-pwrseq = <&sdio_pwrseq>;
+> +
+> +	vmmc-supply = <&vsys_3v3>;
+> +	vqmmc-supply = <&vddao_1v8>;
+> +
+> +	rtl8822cs: wifi@1 {
+> +		reg = <1>;
+> +	};
+> +};
+> +
+> +/* SD card */
+> +&sd_emmc_b {
+> +	status = "okay";
+> +	pinctrl-0 = <&sdcard_c_pins>;
+> +	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
+> +	pinctrl-names = "default", "clk-gate";
+> +
+> +	bus-width = <4>;
+> +	cap-sd-highspeed;
+> +	max-frequency = <50000000>;
+> +	disable-wp;
+> +
+> +	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
+> +	vmmc-supply = <&vsys_3v3>;
+> +	vqmmc-supply = <&vsys_3v3>;
+> +};
+> +
+> +/* eMMC */
+> +&sd_emmc_c {
+> +	status = "okay";
+> +	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
+> +	pinctrl-1 = <&emmc_clk_gate_pins>;
+> +	pinctrl-names = "default", "clk-gate";
+> +
+> +	bus-width = <8>;
+> +	cap-mmc-highspeed;
+> +	mmc-ddr-1_8v;
+> +	mmc-hs200-1_8v;
+> +	max-frequency = <200000000>;
+> +	disable-wp;
+> +
+> +	mmc-pwrseq = <&emmc_pwrseq>;
+> +	vmmc-supply = <&vcc_3v3>;
+> +	vqmmc-supply = <&emmc_1v8>;
+> +};
+> +
+> +&tdmif_b {
+> +	status = "okay";
+> +};
+> +
+> +&tdmout_b {
+> +	status = "okay";
+> +};
+> +
+> +&tohdmitx {
+> +	status = "okay";
+> +};
+> +
+> +&uart_A {
+> +	/* enable if WiFi/BT board connected */
+> +	status = "disabled";
+> +	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
+> +	pinctrl-names = "default";
+> +	uart-has-rtscts;
+> +
+> +	bluetooth {
+> +		compatible = "realtek,rtl8822cs-bt";
+> +		enable-gpios  = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
+> +		host-wake-gpios = <&gpio GPIOX_19 GPIO_ACTIVE_HIGH>;
+> +		device-wake-gpios = <&gpio GPIOX_18 GPIO_ACTIVE_HIGH>;
+> +	};
+> +};
+> +
+> +&uart_AO {
+> +	status = "okay";
+> +	pinctrl-0 = <&uart_ao_a_pins>;
+> +	pinctrl-names = "default";
+> +};
+> +
+> +&usb2_phy0 {
+> +	phy-supply = <&dc_in>;
+> +};
+> +
+> +&usb2_phy1 {
+> +	phy-supply = <&usb_pwr>;
+> +};
+> +
+> +&usb3_pcie_phy {
+> +	phy-supply = <&usb_pwr>;
+> +};
+> +
+> +&usb {
+> +	status = "okay";
+> +	dr_mode = "peripheral";
+> +	phys = <&usb2_phy0>, <&usb2_phy1>;
+> +	phy-names = "usb2-phy0", "usb2-phy1";
+> +};
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts
+> new file mode 100644
+> index 000000000000..7f66f263a2ce
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x-bananapi-m2s.dts
+> @@ -0,0 +1,14 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2023 Christian Hewitt <christianshewitt@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include "meson-g12b-s922x.dtsi"
+> +#include "meson-g12b-bananapi.dtsi"
+> +
+> +/ {
+> +	compatible = "bananapi,bpi-m2s", "amlogic,s922x", "amlogic,g12b";
+> +	model = "BananaPi M2S";
+> +};
+
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
