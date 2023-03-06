@@ -2,129 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B946AC8CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B253F6AC8D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjCFQzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:55:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S229556AbjCFQ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjCFQzm (ORCPT
+        with ESMTP id S229954AbjCFQ4j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:55:42 -0500
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD16497DA;
-        Mon,  6 Mar 2023 08:55:14 -0800 (PST)
-Received: by mail-ot1-x32d.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso5692734ota.1;
-        Mon, 06 Mar 2023 08:55:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678121648;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OOfn1AerasUS9ICTw0rEuQ9lCFS4+7nv1OQbmZdEVCo=;
-        b=EOaVCRsHqgl2uqGltPzu8aonWC2uhbJ0E6jehzJi9EN22aq8u+BWmjtcLhHr5QK58f
-         KJOPqayFFAolBQLLc6ZBv8qsupHxbnID78JLn8/0zCPAEEUzqKb6l7Cq5cNPxnFWMUgs
-         R9t1boZhO+J9BBbc7eM+GTk7Zl5WnyZUvwwwHR2QKp7KylnOuV1cb7I8ECP+oiDj4Gk0
-         mIYsoE589sCGTvRupXowE/MKnA+llI7Pdj8I8BFbKzsP9x/khxBNjVjgN8/y7AhyZjwQ
-         oaC+Th4DHAUw2fnOjP3OuWB0b1Sgjk+fgI5DBRJwZVLsVvF4glFH8rvwiy/SDxL5/oGA
-         jeTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678121648;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OOfn1AerasUS9ICTw0rEuQ9lCFS4+7nv1OQbmZdEVCo=;
-        b=5GKHe7wS79NDjGJOVJnm68dLwu7AUnCwWg5NaaapGLChU1INL5hmmX8p4CMdghxuAv
-         QOvIFhlSb5Tj9Sgi90WiAMspuCrgE8h3ZWfnUPhCa10WnXjD07ZPBiZDumB4g1f4weDR
-         Y3FLv9p6qMSZaT5PK8vkzxpuy949tsKVWyf10QgtjBA0mOLSFl1DYKXcIS0vpiO7m0Nl
-         uNgiGmw5mnnaPkemmvLprmpAg7H9pU419tELKNZzebNQIjCHsl2Qlc4pnGCHvZI+Yrum
-         YPnbNc0OJoJW4BBbayWI5+4JdyyI1zjrTN5t3RzihXK9oLNTI0qelCu9BHMxjeFvUHVm
-         PMVQ==
-X-Gm-Message-State: AO0yUKWpIXjvhQrfPK5x3ek0ThUC4wROOYjnivfAF6giCOMgsYi5nz+1
-        g0O0OED01Z/4MfX0CvVka/k=
-X-Google-Smtp-Source: AK7set9lCHqv4JZ0R5pBNzoiQy05SJNmnktQ6CARvZPrtVMzchG+owZd5TdIHMVxjPQP6P5u4j7SxQ==
-X-Received: by 2002:a05:6830:3142:b0:68d:bd4d:f4b7 with SMTP id c2-20020a056830314200b0068dbd4df4b7mr6193198ots.21.1678121648416;
-        Mon, 06 Mar 2023 08:54:08 -0800 (PST)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id z10-20020a9d468a000000b0069452b2aa2dsm3633661ote.50.2023.03.06.08.54.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 08:54:07 -0800 (PST)
-Date:   Mon, 6 Mar 2023 08:54:06 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Vernon Yang <vernon2gm@gmail.com>, torvalds@linux-foundation.org,
-        tytso@mit.edu, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, linux-kernel@vger.kernel.org,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
-Message-ID: <ZAYartD+NsF1JxlH@yury-laptop>
-References: <20230306160651.2016767-1-vernon2gm@gmail.com>
- <20230306160651.2016767-6-vernon2gm@gmail.com>
- <ZAYXJ2E+JHcp2kD/@yury-laptop>
- <CAHmME9r_JXNCVVCNxZRQkafA=eOOu5k0+AweRDor3tNu283bdg@mail.gmail.com>
+        Mon, 6 Mar 2023 11:56:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404E6E3B5;
+        Mon,  6 Mar 2023 08:56:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EDE561001;
+        Mon,  6 Mar 2023 16:55:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6352C433D2;
+        Mon,  6 Mar 2023 16:55:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678121701;
+        bh=vAuCzr4fu58SsnQF+KaVkPyoc0/03dsJYRfNfWFMkgQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FHzjaX3wQvVM7PUKV3x568t6U/9jd0qBj5bvw+LG/cd7vNp71EapVQE3HVwJskP0E
+         vsozWWAip2YnaKmHxGWZFxQYp3dtCqKbUA8F82qVTfkWPkalo2WW23tpJU7Dsd3VBe
+         IU+D+znElLSfHSHdsI9S7eRdIyWTuD1/lGnePRxPOkK0EvgJwBVTlv4SRj5qNZwmGL
+         aA9w0oYPcK4NoY2tx8Vltw3wx1h61DcfJlgCM9+96TsDHUsfc0hJQIABIGSezqAKgh
+         GnlPHh/MXIRABpgvXihWvw3y+uM6wTCD2Ou1cgU/5PBDuC8mrUzwzdmBHMLHH7P8Yp
+         CPj0AtZfYUSZw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5D5105C0175; Mon,  6 Mar 2023 08:55:01 -0800 (PST)
+Date:   Mon, 6 Mar 2023 08:55:01 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 13/13] rcu/kvfree: Eliminate k[v]free_rcu() single
+ argument macro
+Message-ID: <20230306165501.GX1301832@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <ZAR//FKO4syzapk6@pc636>
+ <D8B84631-860B-41CF-8311-88E220C7254F@joelfernandes.org>
+ <20230305180524.GL1301832@paulmck-ThinkPad-P17-Gen-1>
+ <20230306144948.GA3280216@google.com>
+ <20230306150108.GT1301832@paulmck-ThinkPad-P17-Gen-1>
+ <20230306151203.GC3280216@google.com>
+ <ZAYYBEnIZEfUhBYW@pc636>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHmME9r_JXNCVVCNxZRQkafA=eOOu5k0+AweRDor3tNu283bdg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZAYYBEnIZEfUhBYW@pc636>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 05:44:41PM +0100, Jason A. Donenfeld wrote:
-> On Mon, Mar 6, 2023 at 5:39 PM Yury Norov <yury.norov@gmail.com> wrote:
-> >
-> > On Tue, Mar 07, 2023 at 12:06:51AM +0800, Vernon Yang wrote:
-> > > After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
-> > > optimizations"), the cpumask size is divided into three different case,
-> > > so fix comment of cpumask_xxx correctly.
-> > >
-> > > Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
-> > > ---
-> > >  include/linux/cpumask.h | 46 ++++++++++++++++++++---------------------
-> > >  1 file changed, 23 insertions(+), 23 deletions(-)
-> > >
-> > > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > > index 8fbe76607965..248bdb1c50dc 100644
-> > > --- a/include/linux/cpumask.h
-> > > +++ b/include/linux/cpumask.h
-> > > @@ -155,7 +155,7 @@ static __always_inline unsigned int cpumask_check(unsigned int cpu)
-> > >   * cpumask_first - get the first cpu in a cpumask
-> > >   * @srcp: the cpumask pointer
-> > >   *
-> > > - * Returns >= nr_cpu_ids if no cpus set.
-> > > + * Returns >= small_cpumask_bits if no cpus set.
-> >
-> > There's no such thing like small_cpumask_bits. Here and everywhere,
-> > nr_cpu_ids must be used.
-> >
-> > Actually, before 596ff4a09b89 nr_cpumask_bits was deprecated, and it
-> > must be like that for all users even now.
-> >
-> > nr_cpumask_bits must be considered as internal cpumask parameter and
-> > never referenced outside of cpumask code.
-> 
-> What's the right thing I should do, then, for wireguard's usage and
-> for random.c's usage? It sounds like you object to this patchset, but
-> if the problem is real, it sounds like I should at least fix the two
-> cases I maintain. What's the right check?
+On Mon, Mar 06, 2023 at 05:42:44PM +0100, Uladzislau Rezki wrote:
+> On Mon, Mar 06, 2023 at 03:12:03PM +0000, Joel Fernandes wrote:
+> > On Mon, Mar 06, 2023 at 07:01:08AM -0800, Paul E. McKenney wrote:
+> > [..] 
+> > > > > 7.	We then evaluate whether further cleanups are needed.
+> > > > > 
+> > > > > > > My feeling is
+> > > > > > > that, we introduced "_mightsleep" macros first and after that try to
+> > > > > > > convert users.
+> > > > > 
+> > > > > > One stopgap could be to add a checkpatch error if anyone tries to use old API,
+> > > > > > and then in the meanwhile convert all users.
+> > > > > > Though, that requires people listening to checkpatch complaints.
+> > > > > 
+> > > > > Every person who listens is that much less hassle.  It doesn't have to
+> > > > > be perfect.  ;-)
+> > > > 
+> > > > The below checkpatch change can catch at least simple single-arg uses (i.e.
+> > > > not having compound expressions inside of k[v]free_rcu() args). I will submit
+> > > > a proper patch to it which we can include in this set.
+> > > > 
+> > > > Thoughts?
+> > > > ---
+> > > >  scripts/checkpatch.pl | 9 +++++++++
+> > > >  1 file changed, 9 insertions(+)
+> > > > 
+> > > > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> > > > index 78cc595b98ce..fc73786064b3 100755
+> > > > --- a/scripts/checkpatch.pl
+> > > > +++ b/scripts/checkpatch.pl
+> > > > @@ -6362,6 +6362,15 @@ sub process {
+> > > >  			}
+> > > >  		}
+> > > >  
+> > > > +# check for soon-to-be-deprecated single-argument k[v]free_rcu() API
+> > > > +		if ($line =~ /\bk[v]?free_rcu\s*\([^(]+\)/) {
+> > > > +			if ($line =~ /\bk[v]?free_rcu\s*\([^,]+\)/) {
+> > > > +				ERROR("DEPRECATED_API",
+> > > > +				      "Single-argument k[v]free_rcu() API is deprecated, please pass an rcu_head object." . $herecurr);
+> > > 
+> > > Nice!
+> > > 
+> > > But could you please also tell them what to use instead?  Sure, they
+> > > could look it up, but if it tells them directly, they are less likely
+> > > to ignore it.
+> > 
+> > Sounds good, I will modify the warning to include the API to call and send
+> > out a patch soon.
+> > 
+> Maybe compile warnings? Or is it too aggressive?
 
-Everywhere outside of cpumasks internals use (cpu < nr_cpu_ids) to
-check if the cpu is in a valid range, like:
+That is an excellent option if people ignore the checkpatch.pl warnings,
+thus forcing us to delay past v6.5.  So Murphy would argue that we will
+in fact take your good advice at some point.  ;-)
 
-cpu = cpumask_first(cpus);
-if (cpu >= nr_cpu_ids)
-        pr_err("There's no cpus");
- 
-
+							Thanx, Paul
