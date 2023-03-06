@@ -2,133 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5997E6ABE10
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB28F6ABE11
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCFLVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S230129AbjCFLV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjCFLVt (ORCPT
+        with ESMTP id S230104AbjCFLVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:21:49 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CCD241F8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:21:47 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id l25so8425097wrb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:21:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1678101706;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mFoPMccumpB7Jg6MG/+Y9XEhQvfr9CtFnuJx3l1V4DE=;
-        b=d8mXmXI3nA2pSmxPOcpNa0FlSQv089G1qG8NhyBEUzH7S6WGN7qoymBEwZFuPSe6b+
-         2x2/EwY+qEWka9m1n7nfmP/FNT3edecUvZnVWcEcHXCyJa3r6RX/lybe6q3lZC0eWLyY
-         awsfaHqKxSUwmGhYEM840o56zqy6r11AmjU1759Ax849jgoCSXJn+9FNzQaCGDp5P6SZ
-         sZytn+bo3cwrKmLZDo1CAYSuzhuoZQBPbDydT7zLK1KA4zapzlKfoFu6PCwd9/HZZlIW
-         QVl+vfpLVJ0z+aWko6MBsTeluzPvma1unkilApssCEN+jWPhoVzQalLL40z1dVusXSgd
-         aD8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678101706;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mFoPMccumpB7Jg6MG/+Y9XEhQvfr9CtFnuJx3l1V4DE=;
-        b=TJcQhai7hzt4OcScu5SfXnU31OdXA+PpcafkRFelU/7qLQNb9QYRFfvde6ODSq0Kwd
-         m7W14qUQA+qrPZ5iyP9jNEZ3fQGz+I7Spz4RlSEO7BHSmjg5Kkj9Tg2nKO1YJ3yEunmx
-         qPClMOcbF/qYJ9jX65M6oIKqulpgO5kJNAGt2WWVU5/O5BiU8BP17xjAecZnfLhskL1Y
-         bEkru4gfMouQii5Is+vbYQhPypRB0W8WvvzHN+fepM3JEW530fOonTBoan/6cjiQVL4m
-         LTwhE2jS2d/kGxIcIPRdifOZrFtVnyC+aGYuBkSHQLz5bRkQV2WxPdQoMpGvDrFvlS9E
-         BG/A==
-X-Gm-Message-State: AO0yUKXQICflWlbf3gfsHp98BZN2WuDPXVeA0IDVVAzc+jAwYPfAvgm6
-        OUXnEudjMaEpSycFoA1ZGW+gpg==
-X-Google-Smtp-Source: AK7set+Zu3b69i/KACJqyI3EmGDipLz+Du2Ldc2ipOzZBaSMCZeO6VIhMXQkvi9mRGC2wHk5+jm3nQ==
-X-Received: by 2002:a05:6000:1109:b0:2c9:9147:a710 with SMTP id z9-20020a056000110900b002c99147a710mr6968458wrw.43.1678101706049;
-        Mon, 06 Mar 2023 03:21:46 -0800 (PST)
-Received: from tpx1.lan (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
-        by smtp.gmail.com with ESMTPSA id j4-20020adfff84000000b002cda9aa1dc1sm9604854wrr.111.2023.03.06.03.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 03:21:45 -0800 (PST)
-From:   Lorenz Bauer <lorenz.bauer@isovalent.com>
-X-Google-Original-From: Lorenz Bauer <lmb@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc:     Lorenz Bauer <lmb@isovalent.com>, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: check that modifier resolves after pointer
-Date:   Mon,  6 Mar 2023 11:21:38 +0000
-Message-Id: <20230306112138.155352-3-lmb@isovalent.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230306112138.155352-1-lmb@isovalent.com>
-References: <20230306112138.155352-1-lmb@isovalent.com>
+        Mon, 6 Mar 2023 06:21:50 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3D423DB7;
+        Mon,  6 Mar 2023 03:21:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678101709; x=1709637709;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=uJGZkkOZUOLtV4OMGL6xsHq8XhYEfQ1vxoKiyq5x9V0=;
+  b=Uh9N28ayLBwWqdzsjFdbEUJwNQme3AtA/UtBv5/dsxgpqRcYUwQILrvr
+   Uv1kVrBLWjo1Aux8aMTmxIhCsXfdx2jAO/dzHkiem5dgP4Ux/FKE1f7pW
+   2v24DNzRvtds2DKFvy17lagfO9sjsr0cVoetugfunzBgMiCx138wjAYxp
+   JLa9Wu4ED35qke91TjFBs0GANpp3Gdn2lTlQ23a809+/9Eaju7AR2uaow
+   VAVGcx7jt7I4mopLR6Ip2t6RkFOVTDzce4dkZHqNZsoToV3d/evo42iY5
+   pFDkCfS8x837vRICIHy3VxB/WInF+22tVw1USkbyEKhHPgWdKghsxZ07H
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="333004401"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="333004401"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 03:21:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="626125781"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="626125781"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003.jf.intel.com with ESMTP; 06 Mar 2023 03:21:46 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pZ8uV-00GJxv-3D;
+        Mon, 06 Mar 2023 13:21:43 +0200
+Date:   Mon, 6 Mar 2023 13:21:43 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
+Message-ID: <ZAXMx9orQMoNnWr8@smile.fi.intel.com>
+References: <cover.1677750859.git.mazziesaccount@gmail.com>
+ <874d59be98703bb58a98fea72138de5b94d71a52.1677750859.git.mazziesaccount@gmail.com>
+ <20230304201720.2d554f07@jic23-huawei>
+ <4beef812-8f4f-3857-c814-efd9173d49e6@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <4beef812-8f4f-3857-c814-efd9173d49e6@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a regression test that ensures that a VAR pointing at a
-modifier which follows a PTR (or STRUCT or ARRAY) is resolved
-correctly by the datasec validator.
+On Sun, Mar 05, 2023 at 03:10:38PM +0200, Matti Vaittinen wrote:
+> On 3/4/23 22:17, Jonathan Cameron wrote:
+> > On Thu, 2 Mar 2023 12:58:59 +0200
+> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> > 
+> > As per other branch of the thread.
+> > 
+> > 	ch0 = max(1, le16_to_cpu(res[0]);
+> >  > would be cleaner.
+> 
+> I tried this out. Comparing u16 to literal 1 results comparison of values
+> with different sizes:
+> 
+> ./include/linux/minmax.h:20:28: warning: comparison of distinct pointer
+> types lacks a cast
+>   (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+>                             ^
+> ./include/linux/minmax.h:26:4: note: in expansion of macro ‘__typecheck’
+>    (__typecheck(x, y) && __no_side_effects(x, y))
+>     ^~~~~~~~~~~
+> ./include/linux/minmax.h:36:24: note: in expansion of macro ‘__safe_cmp’
+>   __builtin_choose_expr(__safe_cmp(x, y), \
+>                         ^~~~~~~~~~
+> ./include/linux/minmax.h:74:19: note: in expansion of macro ‘__careful_cmp’
+>  #define max(x, y) __careful_cmp(x, y, >)
+>                    ^~~~~~~~~~~~~
+> drivers/iio/light/rohm-bu27034.c:1057:8: note: in expansion of macro ‘max’
+>   ch0 = max(1, ch0);
+> 
+> 
+> I could work around this by doing:
+> 
+> const u16 min_ch_val = 1;
+> 
+> ...
+> 
+> ch0 = max(min_ch_val, le16_to_cpu(res[0]));
+> 
+> but I think that would really be obfuscating the meaning. I assume
+> 
+> ch0 = max((u16)1, le16_to_cpu(res[0]));
+> 
+> might work too - but to me it's pretty ugly.
 
-Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
----
- tools/testing/selftests/bpf/prog_tests/btf.c | 28 ++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+That's why we have max_t() and clamp_val().
+And you know that.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index cbb600be943d..210d643fda6c 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -879,6 +879,34 @@ static struct btf_raw_test raw_tests[] = {
- 	.btf_load_err = true,
- 	.err_str = "Invalid elem",
- },
-+{
-+	.descr = "var after datasec, ptr followed by modifier",
-+	.raw_types = {
-+		/* .bss section */				/* [1] */
-+		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2),
-+			sizeof(void*)+4),
-+		BTF_VAR_SECINFO_ENC(4, 0, sizeof(void*)),
-+		BTF_VAR_SECINFO_ENC(6, sizeof(void*), 4),
-+		/* int */					/* [2] */
-+		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),
-+		/* int* */					/* [3] */
-+		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 2),
-+		BTF_VAR_ENC(NAME_TBD, 3, 0),			/* [4] */
-+		/* const int */					/* [5] */
-+		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), 2),
-+		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
-+		BTF_END_RAW,
-+	},
-+	.str_sec = "\0a\0b\0c\0",
-+	.str_sec_size = sizeof("\0a\0b\0c\0"),
-+	.map_type = BPF_MAP_TYPE_ARRAY,
-+	.map_name = ".bss",
-+	.key_size = sizeof(int),
-+	.value_size = sizeof(void*)+4,
-+	.key_type_id = 0,
-+	.value_type_id = 1,
-+	.max_entries = 1,
-+},
- /* Test member exceeds the size of struct.
-  *
-  * struct A {
+> 
+> The more I am looking at this, the stronger I feel we should really just
+> write this as it was. Check if res[0] contains the only unsafe data
+> "!res[0]" - and if yes, set it to 1. The comment above it will clarify it to
+> a reader wondering what happens.
+> 
+> I will leave it like it was in v2 for v3. If you still feel strong about it
+> then we need to continue rubbing it.
+
+You need to convert bit ordering first, then check for 0. It would at least
+make more sense. (Today is 0 you are comparing with, tomorrow it might be
+0xfffe, which is different to 0x7fff).
+
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
