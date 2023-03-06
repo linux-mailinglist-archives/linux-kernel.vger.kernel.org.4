@@ -2,101 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779746ABA52
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D296ABA57
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjCFJt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:49:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35926 "EHLO
+        id S230151AbjCFJuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCFJtZ (ORCPT
+        with ESMTP id S229540AbjCFJuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:49:25 -0500
-Received: from sonata.ens-lyon.org (sonata.ens-lyon.org [140.77.166.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE608C651;
-        Mon,  6 Mar 2023 01:49:24 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by sonata.ens-lyon.org (Postfix) with ESMTP id BFA9E20137;
-        Mon,  6 Mar 2023 10:49:22 +0100 (CET)
-Received: from sonata.ens-lyon.org ([127.0.0.1])
-        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hErAdg_uF3sj; Mon,  6 Mar 2023 10:49:22 +0100 (CET)
-Received: from begin (nat-inria-interne-52-gw-01-bso.bordeaux.inria.fr [194.199.1.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 455092012C;
-        Mon,  6 Mar 2023 10:49:22 +0100 (CET)
-Received: from samy by begin with local (Exim 4.96)
-        (envelope-from <samuel.thibault@ens-lyon.org>)
-        id 1pZ7T7-0001Rf-1i;
-        Mon, 06 Mar 2023 10:49:21 +0100
-Date:   Mon, 6 Mar 2023 10:49:21 +0100
-From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>,
-        Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        keescook@chromium.org,
-        syzbot+3af17071816b61e807ed@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-hardening@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH] VT: Protect KD_FONT_OP_GET_TALL from unbound access
-Message-ID: <20230306094921.tik5ewne4ft6mfpo@begin>
-Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        gregkh@linuxfoundation.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Sanan Hasanov <sanan.hasanov@Knights.ucf.edu>,
-        keescook@chromium.org,
-        syzbot+3af17071816b61e807ed@syzkaller.appspotmail.com,
-        akpm@linux-foundation.org, linux-hardening@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        Jiri Slaby <jirislaby@kernel.org>
+        Mon, 6 Mar 2023 04:50:01 -0500
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6751B2CB;
+        Mon,  6 Mar 2023 01:49:59 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=0443564136=fe@dev.tdt.de>)
+        id 1pZ7Te-000S4y-Oj; Mon, 06 Mar 2023 10:49:54 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1pZ7Td-0004yY-W5; Mon, 06 Mar 2023 10:49:54 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id 9BC29240049;
+        Mon,  6 Mar 2023 10:49:53 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 14387240040;
+        Mon,  6 Mar 2023 10:49:53 +0100 (CET)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id CF3B520E0D;
+        Mon,  6 Mar 2023 10:49:52 +0100 (CET)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Organization: I am not organized
-User-Agent: NeoMutt/20170609 (1.8.3)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 06 Mar 2023 10:49:52 +0100
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        pavel@ucw.cz, lee@kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, Eckert.Florian@googlemail.com
+Subject: Re: [PATCH v8 0/3] leds: ledtrig-tty: add tty_led_mode xtension
+In-Reply-To: <97e6f0ad-bc77-db86-5a8e-2f5e0a817662@kernel.org>
+References: <20230306094113.273988-1-fe@dev.tdt.de>
+ <97e6f0ad-bc77-db86-5a8e-2f5e0a817662@kernel.org>
+Message-ID: <598bd1136138b83932323eab91faab70@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-purgate: clean
+X-purgate-type: clean
+X-purgate-ID: 151534::1678096194-2CB5A8D8-8055A542/0/0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ioctl(KD_FONT_OP_GET_TALL), userland tells through op->height which
-vpitch should be used to copy over the font. In con_font_get, we were
-not checking that it is within the maximum height value, and thus
-userland could make the vc->vc_sw->con_font_get(vc, &font, vpitch);
-call possibly overflow the allocated max_font_size bytes, and the
-copy_to_user(op->data, font.data, c) call possibly read out of that
-allocated buffer.
 
-By checking vpitch against max_font_height, the max_font_size buffer
-will always be large enough for the vc->vc_sw->con_font_get(vc, &font,
-vpitch) call (since we already prevent loading a font larger than that),
-and c = (font.width+7)/8 * vpitch * font.charcount will always remain
-below max_font_size.
+>> 
+>> here commes v8 of this series to add additional tty_led_modes.
+> 
+> I think u r 2 fast. Uwe had some more comments on v7.
+> 
+> Don't be afraid to wait some days after the last comments ;). As it
+> is, it makes the review harder...
+> 
 
-Fixes: 24d69384bcd3 ("VT: Add KD_FONT_OP_SET/GET_TALL operations")
-Reported-by: syzbot+3af17071816b61e807ed@syzkaller.appspotmail.com
-Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 57a5c23b51d4..3c2ea9c098f7 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -4545,6 +4545,9 @@ static int con_font_get(struct vc_data *vc, struct console_font_op *op)
- 	int c;
- 	unsigned int vpitch = op->op == KD_FONT_OP_GET_TALL ? op->height : 32;
- 
-+	if (vpitch > max_font_height)
-+		return -EINVAL;
-+
- 	if (op->data) {
- 		font.data = kvmalloc(max_font_size, GFP_KERNEL);
- 		if (!font.data)
+That was probably a race condition ;-) This must have been received when 
+I sent the v8.
