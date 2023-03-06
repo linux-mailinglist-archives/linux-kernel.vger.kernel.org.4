@@ -2,117 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB066AC342
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC286AC34B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjCFOai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:30:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
+        id S230372AbjCFObz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:31:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjCFOaa (ORCPT
+        with ESMTP id S230144AbjCFObs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:30:30 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F75AF6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:30:00 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id cy23so39185693edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:29:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678112917;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zmy26/h8ZpqCDoD8NgfNomf5KMzB/1KHZ5Wln1BijJY=;
-        b=N8ji7KFXfBC+j6EmX58zz4T0Mun0G9IDEiu417dAjJ4IYcJ+B4mAAFxA0ufwAYMGlu
-         NFNqvgSqpNDfmT5yNv9OUXR6JOI5oWH8GCVHeK/NhkxOuxRCkaL/Ia7dkUc+a6QCiTmi
-         pt55dCtPI2Ehs3PcHrMCe2Fc9Ih7r13abNqs1QwoZboMKz+dqLFv9oFWz/rclDvGyLv7
-         YbeVs/HXSxS96J+7SMJ4LrEOK8rsvudWNEd0bgY4NBF8Oum0zAlqS5cxCU2dg4GzpL74
-         hCF4Q7Tm0QQ3S43CP3Tg89mA25A4N0eQ50djsPiTt/jIei5kxRWGf/L0JpPdTwPASdlO
-         ST4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678112917;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zmy26/h8ZpqCDoD8NgfNomf5KMzB/1KHZ5Wln1BijJY=;
-        b=L6FQRppNVOi7Puyp9001LfaCaKenuYmGKjuHOw9vIb7PAU8B9E6nBB+tQwsPnOsCIV
-         k9WFQajKeBEOwNbYW/5Z4U0uH7nS4S/gQ+VykJCDbNRLwcKKahm2q0B+tVYu1CurmXC9
-         4+8DclPX/7/PUVcuq+wkNKREr0eWvT3Fdcwa1mycnqBzpsxSoieILXG8EHg9keWMhZZk
-         613XIyEYC5l+inF0zRFi55W06TtxFdYJLPJAAoWvze+xs4g8Ub4qayhQ0z3u9Lqj8mzJ
-         XY/qucujinpJOKtdOZCKTIU/NmkdYp0Y+JaCCCqdIVZAjOHW1o68lHulP1vXWDffXNWa
-         jqqQ==
-X-Gm-Message-State: AO0yUKU51FRfbinKY5yxNjqkDQmilTV1cJip15pZlw+2OkUWKNz7XvBJ
-        1Ttpf26rW4gcVSIHUyaaNN8Q6R00yxD6YgZ5BC0=
-X-Google-Smtp-Source: AK7set84NdE45wadG7UnHcLdzGzJlGTey9l6uquHFp4z/vgUrm2BJPWiCPYKlCGcuksiJUcjHjfh0g==
-X-Received: by 2002:a05:6402:690:b0:4ad:7301:fe77 with SMTP id f16-20020a056402069000b004ad7301fe77mr10117782edy.9.1678112916963;
-        Mon, 06 Mar 2023 06:28:36 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:c1e7:5006:98ac:f57])
-        by smtp.gmail.com with ESMTPSA id y64-20020a50bb46000000b004bc2d1c0fadsm5245545ede.32.2023.03.06.06.28.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 06:28:36 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: [PATCH v2 0/6] clk: samsung: exynos850: Add missing clocks for PM
-Date:   Mon,  6 Mar 2023 15:28:33 +0100
-Message-Id: <167811290503.11716.15730246749418548221.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230223042133.26551-1-semen.protsenko@linaro.org>
-References: <20230223042133.26551-1-semen.protsenko@linaro.org>
+        Mon, 6 Mar 2023 09:31:48 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B79183FC;
+        Mon,  6 Mar 2023 06:31:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678113066; x=1709649066;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SksSVVJC6Th1nYSN79c+dSdt06LId3S3q3vX1EepjTk=;
+  b=bLiM5Fsf/HxbJaj498hJZmNv9N2g+NRix0a9/Dvxug5lGspBdc1MQRqi
+   Fov0WKwTNRpEKhi4fGwB13rJq6jDrasyLGjpOpCngchflBDovB7Sk3iPU
+   XBXF4tbdPQUIQkNn96ks36Rf7pZlddK1ee89s3aAOBlxhW8yRM6g21n/Q
+   93AKwwO0atIgPpeX9qJrl3yuPM9xbHNU066RAXklWdindjv8D6JmfNqH2
+   EhtEHwlfHR6Xu/d/C0GLoHlklPmOtASpw9Sdwb6Ycd2B7kyPL3Z5dP8MA
+   7cHNWPdhawM7eD1pTG0wbsdaTsGgUr8zA0ae8ays55ObAhya+CLcqXEpv
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="315223089"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="315223089"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 06:29:24 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="765234872"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="765234872"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Mar 2023 06:29:23 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pZBq5-00GTZD-2K;
+        Mon, 06 Mar 2023 16:29:21 +0200
+Date:   Mon, 6 Mar 2023 16:29:21 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] regmap: Reorder fields in 'struct regmap_bus' to save
+ some memory
+Message-ID: <ZAX4wSFwKwr+2pZY@smile.fi.intel.com>
+References: <077ca39622c8870a3ea932298a9cec34f7a8295a.1676363976.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <077ca39622c8870a3ea932298a9cec34f7a8295a.1676363976.git.christophe.jaillet@wanadoo.fr>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Feb 2023 22:21:27 -0600, Sam Protsenko wrote:
-> As a part of preparation for PM enablement in Exynos850 clock driver,
-> this patch series implements CMU_G3D, and also main gate clocks for AUD
-> and HSI CMUs. The series brings corresponding changes to bindings, the
-> driver and SoC dts file.
+On Tue, Feb 14, 2023 at 09:40:14AM +0100, Christophe JAILLET wrote:
+> Group some bool variables to reduce hole and avoid padding.
+> On x86_64, this shrinks the size from 136 to 128 bytes.
 > 
-> Changes in v2:
->   - Rebased all patches on top of the most recent soc/for-next tree
->   - Added A-b and R-b tags
->   - Minor fixes
+> As an example:
 > 
-> [...]
+> $ size drivers/base/regmap/regmap-fsi.o (Before)
+>    text	   data	    bss	    dec	    hex	filename
+>    4837	    136	      0	   4973	   136d	drivers/base/regmap/regmap-fsi.o
+> 
+> $ size drivers/base/regmap/regmap-fsi.o (After)
+>    text	   data	    bss	    dec	    hex	filename
+>    4701	    136	      0	   4837	   12e5	drivers/base/regmap/regmap-fsi.o
 
-Applied, thanks!
+FYI: we have scripts/bloat-o-meter for this.
 
-[1/6] dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
-      https://git.kernel.org/krzk/linux/c/067ba1605806e52118bb598afb357718df9f0e19
-[2/6] dt-bindings: clock: exynos850: Add AUD and HSI main gate clocks
-      https://git.kernel.org/krzk/linux/c/e289665ed0d6df9fca3ebc128f1232d305e4600b
-[3/6] clk: samsung: clk-pll: Implement pll0818x PLL type
-      https://git.kernel.org/krzk/linux/c/a6feedab8ab9a9e4483deb0bcc87919d92c88b7e
-[4/6] clk: samsung: exynos850: Implement CMU_G3D domain
-      https://git.kernel.org/krzk/linux/c/c5704a56893b4e77e434597c7c53d878bb3073b0
-[5/6] clk: samsung: exynos850: Add AUD and HSI main gate clocks
-      https://git.kernel.org/krzk/linux/c/d8d12e0d079aff4b1d8079a0a55944c0596f1d67
-[6/6] arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
-      https://git.kernel.org/krzk/linux/c/ad8f6ad9a4f219950df65731a8ff91baa022c4b0
-
-Best regards,
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+With Best Regards,
+Andy Shevchenko
+
+
