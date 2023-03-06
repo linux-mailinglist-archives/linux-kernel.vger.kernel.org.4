@@ -2,263 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC0B6ACB88
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:55:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 074536ACB6B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:54:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCFRzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:55:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
+        id S229539AbjCFRx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjCFRzJ (ORCPT
+        with ESMTP id S229576AbjCFRxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:55:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966B23CE39
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:53:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678125183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 6 Mar 2023 12:53:54 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5810842BDF;
+        Mon,  6 Mar 2023 09:53:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5A5DD1FDED;
+        Mon,  6 Mar 2023 17:53:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678125196; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=T38aicOap2L3dNrO05NaSlkk1BAlJFKJpc6HTRG+yuU=;
-        b=Vpzadfa3/Cb97pyc7MDQCFh5ubObKPBBFZXeqfg54pTd3AqqGXztzRPyeXBzK5HToyJwRD
-        y1J/JWEXET2O5/mdXUon+lQomtDCrUgWl8+AhNS5o6s/ApH4UfmJJ/7rFRCDGL2M5kU3Tq
-        sizz9xt0XTeH31XyNZl7HzseDSzmXyc=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-582-RZkfBwMgNRywFVX4TbZlug-1; Mon, 06 Mar 2023 12:53:02 -0500
-X-MC-Unique: RZkfBwMgNRywFVX4TbZlug-1
-Received: by mail-wm1-f71.google.com with SMTP id x18-20020a1c7c12000000b003e1e7d3cf9fso7059287wmc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 09:53:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678125180;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T38aicOap2L3dNrO05NaSlkk1BAlJFKJpc6HTRG+yuU=;
-        b=baOq0mkeyIdKvEqpQekzcoC1ifjBhaMYkLm2fbZ+e8PIa/ak38jN7uuZpahNBS6q8m
-         WesFyyIvdRA6IjBmxGjWtQt7Co9qBhS/PEQ08ZV5751q3nI48DvDZD+B72aS9TcAUFbh
-         xZMMTHntESE+hbVpP/6dvd+cKN8CoFIYY08+0S29IaabBVUxAfracq5ItIuvLa368Bxd
-         /i4HuZnReW/qTukHQj1SAdXXY0iv9UvwRkUhTRjInDHBh7Ghbtc3xQlWmeueR9f9Ap3s
-         q+KxaRHkUhBAmejd2hr7rjgbd+LAmYj0hoQJZDclbsYDPYig+7l70AFnxy+v0XGLMtGI
-         KtSA==
-X-Gm-Message-State: AO0yUKWDDL9zwXdgtF+vE/yWQ0XlNjmgFclwpyyDx+OenQ1QNIaEzwzo
-        0iL6b5EIXNzVcUmy/kLdSKGrJf2rG6JVahO3w1ho2UudS54fX49nMlEVs9/vqxaW3DXdMhLS+ET
-        /q5RF9mdmAdlUiFhzKyM+sSC6
-X-Received: by 2002:a05:600c:19d2:b0:3eb:37ce:4c38 with SMTP id u18-20020a05600c19d200b003eb37ce4c38mr10211160wmq.3.1678125180573;
-        Mon, 06 Mar 2023 09:53:00 -0800 (PST)
-X-Google-Smtp-Source: AK7set+DQ6Hj585upRJSMuaCrimvzjCLUzKELwmvcMSrnRwhWcJzXaCnhc/QXuhs5e0ugUZqBN78lw==
-X-Received: by 2002:a05:600c:19d2:b0:3eb:37ce:4c38 with SMTP id u18-20020a05600c19d200b003eb37ce4c38mr10211140wmq.3.1678125180274;
-        Mon, 06 Mar 2023 09:53:00 -0800 (PST)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id v12-20020a05600c12cc00b003de2fc8214esm10560271wmd.20.2023.03.06.09.52.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 09:52:59 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kvm@vger.kernel.org, Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-In-Reply-To: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
-Date:   Mon, 06 Mar 2023 18:52:58 +0100
-Message-ID: <87lek9zs05.fsf@redhat.com>
+        bh=C1hwoiYmIzjyFk8ZALc5sULe62pU2P1ms/hhtGj0y1k=;
+        b=jwHB7kNZdVMu7pORMKiDgDdWZI0fuRoEnFOqAwGt0mE6k4eAt5T1x+raVUsiRb0qyU9riW
+        /SXi4S4tVqanqOvQoom/OxpX4HBsaGCkjfQqJxpcVgINgSZL+rhxKWmFU8fDVzgu1acaMV
+        /jN2VHcmUYjvKvHqXSsbaYb3PY9Heng=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3B50813513;
+        Mon,  6 Mar 2023 17:53:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6U3zC4woBmTgfwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 06 Mar 2023 17:53:16 +0000
+Date:   Mon, 6 Mar 2023 18:53:15 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yue Zhao <findns94@gmail.com>
+Cc:     akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        hannes@cmpxchg.org, shakeelb@google.com, muchun.song@linux.dev,
+        willy@infradead.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tangyeechou@gmail.com
+Subject: Re: [PATCH v2, 3/4] mm, memcg: Prevent memory.oom_control load/store
+ tearing
+Message-ID: <ZAYoi8ZwwbXT9j7f@dhcp22.suse.cz>
+References: <20230306154138.3775-1-findns94@gmail.com>
+ <20230306154138.3775-4-findns94@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306154138.3775-4-findns94@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeremi Piotrowski <jpiotrowski@linux.microsoft.com> writes:
-
-> TDP MMU has been broken on AMD CPUs when running on Hyper-V since v5.17.
-> The issue was first introduced by two commmits:
->
-> - bb95dfb9e2dfbe6b3f5eb5e8a20e0259dadbe906 "KVM: x86/mmu: Defer TLB
->   flush to caller when freeing TDP MMU shadow pages"
-> - efd995dae5eba57c5d28d6886a85298b390a4f07 "KVM: x86/mmu: Zap defunct
->   roots via asynchronous worker"
->
-> The root cause is that since then there are missing TLB flushes which
-> are required by HV_X64_NESTED_ENLIGHTENED_TLB.
-
-Please share more details on what's actually missing as you get them,
-I'd like to understand which flushes can be legally avoided on bare
-hardware and Hyper-V/VMX but not on Hyper-V/SVM.
-
->  The failure manifests
-> as L2 guest VMs being unable to complete boot due to memory
-> inconsistencies between L1 and L2 guests which lead to various
-> assertion/emulation failures.
->
-> The HV_X64_NESTED_ENLIGHTENED_TLB enlightenment is always exposed by
-> Hyper-V on AMD and is always used by Linux. The TLB flush required by
-> HV_X64_NESTED_ENLIGHTENED_TLB is much stricter than the local TLB flush
-> that TDP MMU wants to issue. We have also found that with TDP MMU L2 guest
-> boot performance on AMD is reproducibly slower compared to when TDP MMU is
-> disabled.
->
-> Disable TDP MMU when using SVM Hyper-V for the time being while we
-> search for a better fix.
-
-I'd suggest we go the other way around: disable
-HV_X64_NESTED_ENLIGHTENED_TLB on SVM:
-
-diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
-index 6981c1e9a809..be98da5a4277 100644
---- a/arch/x86/kvm/svm/svm_onhyperv.h
-+++ b/arch/x86/kvm/svm/svm_onhyperv.h
-@@ -32,7 +32,8 @@ static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
- 
- static inline void svm_hv_hardware_setup(void)
- {
--       if (npt_enabled &&
-+       /* A comment about missing TLB flushes */
-+       if (!tdp_mmu_enabled && npt_enabled &&
-            ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB) {
-                pr_info(KBUILD_MODNAME ": Hyper-V enlightened NPT TLB flush enabled\n");
-                svm_x86_ops.tlb_remote_flush = hv_remote_flush_tlb;
-
-this way we won't have a not-obvious-at-all MMU change on Hyper-V. I
-understand this may have some performance implications but MMU switch
-has some as well.
-
->
-> Link: https://lore.kernel.org/lkml/43980946-7bbf-dcef-7e40-af904c456250@linux.microsoft.com/t/#u
-> Signed-off-by: Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+On Mon 06-03-23 23:41:37, Yue Zhao wrote:
+> The knob for cgroup v1 memory controller: memory.oom_control
+> is not protected by any locking so it can be modified while it is used.
+> This is not an actual problem because races are unlikely.
+> But it is better to use READ_ONCE/WRITE_ONCE to prevent compiler from
+> doing anything funky.
+> 
+> The access of memcg->oom_kill_disable is lockless,
+> so it can be concurrently set at the same time as we are
+> trying to read it.
+> 
+> Signed-off-by: Yue Zhao <findns94@gmail.com>
 > ---
-> Based on kvm-x86-mmu-6.3. The approach used here does not apply cleanly to
-> <=v6.2. This would be needed in stable too, and I don't know about putting
-> fixes tags.
+>  mm/memcontrol.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index dca895c66a9b..26605b2f51b1 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -4515,7 +4515,7 @@ static int mem_cgroup_oom_control_read(struct seq_file *sf, void *v)
+>  {
+>  	struct mem_cgroup *memcg = mem_cgroup_from_seq(sf);
+>  
+> -	seq_printf(sf, "oom_kill_disable %d\n", memcg->oom_kill_disable);
+> +	seq_printf(sf, "oom_kill_disable %d\n", READ_ONCE(memcg->oom_kill_disable));
+>  	seq_printf(sf, "under_oom %d\n", (bool)memcg->under_oom);
+>  	seq_printf(sf, "oom_kill %lu\n",
+>  		   atomic_long_read(&memcg->memory_events[MEMCG_OOM_KILL]));
+> @@ -4531,7 +4531,7 @@ static int mem_cgroup_oom_control_write(struct cgroup_subsys_state *css,
+>  	if (mem_cgroup_is_root(memcg) || !((val == 0) || (val == 1)))
+>  		return -EINVAL;
+>  
+> -	memcg->oom_kill_disable = val;
+> +	WRITE_ONCE(memcg->oom_kill_disable, val);
+>  	if (!val)
+>  		memcg_oom_recover(memcg);
 
-Cc: stable@vger.kernel.org # 5.17.0 
-
-should do)
-
->
-> Jeremi
->
->  arch/x86/include/asm/kvm_host.h |  3 ++-
->  arch/x86/kvm/mmu/mmu.c          |  5 +++--
->  arch/x86/kvm/svm/svm.c          |  6 +++++-
->  arch/x86/kvm/svm/svm_onhyperv.h | 10 ++++++++++
->  arch/x86/kvm/vmx/vmx.c          |  3 ++-
->  5 files changed, 22 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 4d2bc08794e4..a0868ae3688d 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -2031,7 +2031,8 @@ void kvm_mmu_invpcid_gva(struct kvm_vcpu *vcpu, gva_t gva, unsigned long pcid);
->  void kvm_mmu_new_pgd(struct kvm_vcpu *vcpu, gpa_t new_pgd);
+Any specific reasons you haven't covered other accesses
+(mem_cgroup_css_alloc, mem_cgroup_oom, mem_cgroup_oom_synchronize)?
 >  
->  void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
-> -		       int tdp_max_root_level, int tdp_huge_page_level);
-> +		       int tdp_max_root_level, int tdp_huge_page_level,
-> +		       bool enable_tdp_mmu);
->  
->  static inline u16 kvm_read_ldt(void)
->  {
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index c91ee2927dd7..5c0e28a7a3bc 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5787,14 +5787,15 @@ void kvm_mmu_invpcid_gva(struct kvm_vcpu *vcpu, gva_t gva, unsigned long pcid)
->  }
->  
->  void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
-> -		       int tdp_max_root_level, int tdp_huge_page_level)
-> +		       int tdp_max_root_level, int tdp_huge_page_level,
-> +		       bool enable_tdp_mmu)
->  {
->  	tdp_enabled = enable_tdp;
->  	tdp_root_level = tdp_forced_root_level;
->  	max_tdp_level = tdp_max_root_level;
->  
->  #ifdef CONFIG_X86_64
-> -	tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled;
-> +	tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled && enable_tdp_mmu;
->  #endif
->  	/*
->  	 * max_huge_page_level reflects KVM's MMU capabilities irrespective
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index d13cf53e7390..070c3f7f8c9f 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4925,6 +4925,7 @@ static __init int svm_hardware_setup(void)
->  	struct page *iopm_pages;
->  	void *iopm_va;
->  	int r;
-> +	bool enable_tdp_mmu;
->  	unsigned int order = get_order(IOPM_SIZE);
->  
->  	/*
-> @@ -4991,9 +4992,12 @@ static __init int svm_hardware_setup(void)
->  	if (!boot_cpu_has(X86_FEATURE_NPT))
->  		npt_enabled = false;
->  
-> +	enable_tdp_mmu = svm_hv_enable_tdp_mmu();
-> +
->  	/* Force VM NPT level equal to the host's paging level */
->  	kvm_configure_mmu(npt_enabled, get_npt_level(),
-> -			  get_npt_level(), PG_LEVEL_1G);
-> +			  get_npt_level(), PG_LEVEL_1G,
-> +			  enable_tdp_mmu);
->  	pr_info("Nested Paging %sabled\n", npt_enabled ? "en" : "dis");
->  
->  	/* Setup shadow_me_value and shadow_me_mask */
-> diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
-> index 6981c1e9a809..aa49ac5d66bc 100644
-> --- a/arch/x86/kvm/svm/svm_onhyperv.h
-> +++ b/arch/x86/kvm/svm/svm_onhyperv.h
-> @@ -30,6 +30,11 @@ static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
->  		hve->hv_enlightenments_control.msr_bitmap = 1;
->  }
->  
-> +static inline bool svm_hv_enable_tdp_mmu(void)
-> +{
-> +	return !(npt_enabled && ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB);
-> +}
-> +
->  static inline void svm_hv_hardware_setup(void)
->  {
->  	if (npt_enabled &&
-> @@ -84,6 +89,11 @@ static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
->  {
->  }
->  
-> +static inline bool svm_hv_enable_tdp_mmu(void)
-> +{
-> +	return true;
-> +}
-> +
->  static inline void svm_hv_hardware_setup(void)
->  {
->  }
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index c788aa382611..4d3808755d39 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -8442,7 +8442,8 @@ static __init int hardware_setup(void)
->  	vmx_setup_me_spte_mask();
->  
->  	kvm_configure_mmu(enable_ept, 0, vmx_get_max_tdp_level(),
-> -			  ept_caps_to_lpage_level(vmx_capability.ept));
-> +			  ept_caps_to_lpage_level(vmx_capability.ept),
-> +			  true);
->  
->  	/*
->  	 * Only enable PML when hardware supports PML feature, and both EPT
+> -- 
+> 2.17.1
 
 -- 
-Vitaly
-
+Michal Hocko
+SUSE Labs
