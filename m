@@ -2,115 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420766ABF77
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 767A36ABF7E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjCFM2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
+        id S229646AbjCFMaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjCFM2p (ORCPT
+        with ESMTP id S229618AbjCFMaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:28:45 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10268B76F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:28:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=OOwsDntjIKex0UXX4PvsSe30lt6AMd9spZxoObCB/2U=; b=W/gV7hRiVVAZOkrkZ+JBYTwlqV
-        L0ukXGRZgvUkMcgPZA+riCZRd9lJ6YGicMOh8tXDfXekPrqVXcms6DMSxo3+gXY7N4SjjGZop8S6i
-        +KaCTGWumCYqZtY+Rav29q4ay3QNFluqhxph0uo1QgQzACgPmEx2eG2ZOTlIIKE9wLnMvjPKeZi0q
-        8hv/nP/FpgFEJB+G76TDBW59I1bCpOYc82iJuxgh9zCa/DfMpOCX9Zvc7gakKWbmiwbPH41VkNKfE
-        /78Gva979C3hUhBycz8a3QTBpEQPkXurD1vI/RnFPr9strTF6UdDa5WsBg1yVKntnch/dBIfhLpbj
-        RLajglVQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43970)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pZ9xF-0005hl-Ly; Mon, 06 Mar 2023 12:28:37 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pZ9xE-0000UL-7W; Mon, 06 Mar 2023 12:28:36 +0000
-Date:   Mon, 6 Mar 2023 12:28:36 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jungseung Lee <js07.lee@samsung.com>
-Cc:     linus.walleij@linaro.org, amit.kachhap@arm.com, ardb@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, js07.lee@gmail.com
-Subject: Re: [PATCH 2/2] arm/mm : Report actual image regions in /proc/iomem
-Message-ID: <ZAXcdDBiQ9JVo4pY@shell.armlinux.org.uk>
-References: <1678081915-12599-1-git-send-email-js07.lee@samsung.com>
- <CGME20230306061057epcas1p17def087649be56b75c7830385ff2fb2f@epcas1p1.samsung.com>
- <1678081915-12599-2-git-send-email-js07.lee@samsung.com>
- <ZAXKHDb4QY1awyRA@shell.armlinux.org.uk>
- <076401d95025$305fb150$911f13f0$@samsung.com>
+        Mon, 6 Mar 2023 07:30:12 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D83520076;
+        Mon,  6 Mar 2023 04:30:11 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E65F3223E4;
+        Mon,  6 Mar 2023 12:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678105809; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bx1jsO/P8097xBEBJpSzCoB7uzE2WNezm82adktscac=;
+        b=cuw8vHDl9dJVsL89RgPr/dYxtP3QP/qm6KI6fHmKL4FvbyrgIbN6g4fgNdgo3nr6BdKIbw
+        VYBtibSou9Y16RFftXNcgmBWsE4nJh5t0rZbakKLakk7fW3qj83vTZGBdQckr8Mu7K4O/b
+        jdURiw/59ehxePqPCwyyywkLwgePKy4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678105809;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bx1jsO/P8097xBEBJpSzCoB7uzE2WNezm82adktscac=;
+        b=9/EHIWCyCPyEWMT4837eZ9VGVPZEal7tfeqMnIZiOB4P7JbJim8xt6fahR9KSE0Zmw6obZ
+        NiHQWGZszxqzWPBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA66E13A66;
+        Mon,  6 Mar 2023 12:30:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 27JKNdHcBWTbPgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 06 Mar 2023 12:30:09 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 64903A064F; Mon,  6 Mar 2023 13:30:09 +0100 (CET)
+Date:   Mon, 6 Mar 2023 13:30:09 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH v3 1/2] ext4: remove set 'EXT4_STATE_MAY_INLINE_DATA'
+ flag from ext4_find_inline_data_nolock()
+Message-ID: <20230306123009.7qxbavnnl2k4lwgx@quack3>
+References: <20230304025458.4007825-1-yebin@huaweicloud.com>
+ <20230304025458.4007825-2-yebin@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <076401d95025$305fb150$911f13f0$@samsung.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <20230304025458.4007825-2-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 09:14:23PM +0900, Jungseung Lee wrote:
-> Hi, Russell
+On Sat 04-03-23 10:54:57, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
 > 
-> > -----Original Message-----
-> > From: Russell King (Oracle) <linux@armlinux.org.uk>
-> > Sent: Monday, March 6, 2023 8:10 PM
-> > To: Jungseung Lee <js07.lee@samsung.com>
-> > Cc: linus.walleij@linaro.org; amit.kachhap@arm.com; ardb@kernel.org;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > keescook@chromium.org; js07.lee@gmail.com
-> > Subject: Re: [PATCH 2/2] arm/mm : Report actual image regions in
-> > /proc/iomem
-> > 
-> > On Mon, Mar 06, 2023 at 02:51:55PM +0900, Jungseung Lee wrote:
-> > >  The resource reservations in /proc/iomem made for the kernel image
-> > > did  not reflect the gaps between text, rodata, and data.
-> > >  Add the "rodata" resource and update the start/end calculations.
-> > >
-> > >  Before :
-> > > 04000000-2f7fffff : System RAM
-> > >   04100000-04cfffff : Kernel code
-> > >   04e00000-05369a27 : Kernel data
-> > >
-> > >  After :
-> > > 04000000-2f7fffff : System RAM
-> > >   04100000-049fffff : Kernel code
-> > >   04a00000-04cb2fff : Kernel rodata
-> > >   04e00000-05369a27 : Kernel data
-> > 
-> > NAK. This is API, and programs do read and parse this file. It is
-> > important that this file reports these parameters in a similar way to
-> > other architectures. Other architectures do not split up the
-> > individual regions.
-> > 
+> As only ext4_iget_extra_inode() call ext4_find_inline_data_nolock() need
+> to set 'EXT4_STATE_MAY_INLINE_DATA' flag. The call in
+> ext4_write_inline_data_end() is there only need to update i_inline_off.
+> So move set 'EXT4_STATE_MAY_INLINE_DATA' flag from
+> ext4_find_inline_data_nolock() to ext4_iget_extra_inode().
+
+I'd just rephrase the changelog to be more comprehensible:
+
+The only caller of ext4_find_inline_data_nolock() that needs setting of
+EXT4_STATE_MAY_INLINE_DATA flag is ext4_iget_extra_inode(). In
+ext4_write_inline_data_end() we just need to update inode->i_inline_off.
+Since we are going to add one more caller that does not need to set
+EXT4_STATE_MAY_INLINE_DATA, just move setting of EXT4_STATE_MAY_INLINE_DATA
+out to ext4_iget_extra_inode().
+
+Otherwise feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > 
-> Sounds like an important point, but I failed to find which programs use it
-> as an API. Could you tell me which program uses it as an API?
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>  fs/ext4/inline.c | 1 -
+>  fs/ext4/inode.c  | 7 ++++++-
+>  2 files changed, 6 insertions(+), 2 deletions(-)
 > 
-> In fact, x86 architecture also split up the individual regions in this way.
-> In addition, most architectures separate the "Kernel bss" area, but arm does
-> not.
-
-Take a look at kexec-tools - that certainly does parse /proc/iomem
-looking for entries such as "Kernel code" and "Kernel data".
-
-It's fine for an architecture to decide to do something else if it
-started to do it early on, but not when something has been established
-for decades.
-
+> diff --git a/fs/ext4/inline.c b/fs/ext4/inline.c
+> index 2b42ececa46d..1602d74b5eeb 100644
+> --- a/fs/ext4/inline.c
+> +++ b/fs/ext4/inline.c
+> @@ -159,7 +159,6 @@ int ext4_find_inline_data_nolock(struct inode *inode)
+>  					(void *)ext4_raw_inode(&is.iloc));
+>  		EXT4_I(inode)->i_inline_size = EXT4_MIN_INLINE_DATA_SIZE +
+>  				le32_to_cpu(is.s.here->e_value_size);
+> -		ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+>  	}
+>  out:
+>  	brelse(is.iloc.bh);
+> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> index d251d705c276..bf0b7dea4900 100644
+> --- a/fs/ext4/inode.c
+> +++ b/fs/ext4/inode.c
+> @@ -4797,8 +4797,13 @@ static inline int ext4_iget_extra_inode(struct inode *inode,
+>  
+>  	if (EXT4_INODE_HAS_XATTR_SPACE(inode)  &&
+>  	    *magic == cpu_to_le32(EXT4_XATTR_MAGIC)) {
+> +		int err;
+> +
+>  		ext4_set_inode_state(inode, EXT4_STATE_XATTR);
+> -		return ext4_find_inline_data_nolock(inode);
+> +		err = ext4_find_inline_data_nolock(inode);
+> +		if (!err && ext4_has_inline_data(inode))
+> +			ext4_set_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+> +		return err;
+>  	} else
+>  		EXT4_I(inode)->i_inline_off = 0;
+>  	return 0;
+> -- 
+> 2.31.1
+> 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
