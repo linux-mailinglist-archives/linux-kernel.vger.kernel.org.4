@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9E36AB611
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 06:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B296AB616
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 06:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCFFka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 00:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43522 "EHLO
+        id S229633AbjCFFk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 00:40:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjCFFk1 (ORCPT
+        with ESMTP id S229579AbjCFFkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 00:40:27 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7D51A49D;
-        Sun,  5 Mar 2023 21:40:26 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pZ3a7-0005ht-2J; Mon, 06 Mar 2023 06:40:19 +0100
-Message-ID: <3d6a30ee-f093-f5b6-a193-cd86320f9452@leemhuis.info>
-Date:   Mon, 6 Mar 2023 06:40:18 +0100
+        Mon, 6 Mar 2023 00:40:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6311A64E;
+        Sun,  5 Mar 2023 21:40:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A4ABB80C6E;
+        Mon,  6 Mar 2023 05:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 264E4C433D2;
+        Mon,  6 Mar 2023 05:40:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678081249;
+        bh=ozxEJ4XFCHc0BADBdwIy4ELSX5qpfo2qbo1MrODvuy8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bHN+kMHiv4Jyy7FXsPSetvL8Vkg+/m76gScZIzvwjPNjP0ox220En3ejMyHiO+hFc
+         6kjMM2s7Cp9EK7OjylRuauBE0GQH6mJS59b7ZL0ffSqHwky0cchlvSfZq8MDm6OiGt
+         vGigdCflbB3O+hNGcHtpvPfI0rPp1qzxz47eFH98=
+Date:   Mon, 6 Mar 2023 06:40:46 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Bernhard =?iso-8859-1?Q?Rosenkr=E4nzer?= <bero@baylibre.com>
+Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, daniel.lezcano@linaro.org,
+        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com,
+        khilman@baylibre.com
+Subject: Re: [PATCH v9 9/9] arm64: dts: mediatek: Initial mt8365-evk support
+Message-ID: <ZAV83gLh+qNqrHrg@kroah.com>
+References: <20230125143503.1015424-1-bero@baylibre.com>
+ <20230125143503.1015424-10-bero@baylibre.com>
+ <8c348b39-67f3-9210-1929-8b2f093be24c@baylibre.com>
+ <Y/XenZUmT7Nh2qGP@kroah.com>
+ <CAP2ifjPvsvPyF56=YXrc9Ti6ZSLOxEXbMCOP-Qa4ZSempfod=g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-References: <1a788a8e7ba8a2063df08668f565efa832016032.1678021408.git.linux@leemhuis.info>
- <ZAVp6jdeWzYcisUO@debian.me>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH v3] docs: describe how to quickly build a trimmed kernel
-In-Reply-To: <ZAVp6jdeWzYcisUO@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1678081226;cbc15c05;
-X-HE-SMSGID: 1pZ3a7-0005ht-2J
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP2ifjPvsvPyF56=YXrc9Ti6ZSLOxEXbMCOP-Qa4ZSempfod=g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.03.23 05:19, Bagas Sanjaya wrote:
-> On Sun, Mar 05, 2023 at 02:04:44PM +0100, Thorsten Leemhuis wrote:
->> + * Create the build configuration for your kernel based on an existing
->> +   configuration.
->> +
->> +   If you already prepared such a '.config' file yourself, copy it to
->> +   ~/linux/ and run ``make olddefconfig``.
->> +
->> +   Use the same command, if your distribution or somebody else already tailored
->> +   your running kernel to your or your hardware's needs: the make target
->> +   'olddefconfig' will then try to use that kernel's .config as base.
->> +
->> +   Using this make target is fine for everybody else, too -- but you often can
->> +   save a lot of time by using this command instead::
->> +
->> +     yes "" | make localmodconfig
->> +
->> +   This will try to pick your distribution's kernel as base, but then disable
->> +   modules for any features apparently superfluous for your setup. This will
->> +   reduce the compile time enormously, especially if you are running an
->> +   universal kernel from a commodity Linux distribution.
->> +
->> +   There is a catch: the make target 'localmodconfig' will disable kernel
->> +   features you have not directly or indirectly through some program utilized
->> +   since you booted the system. You can reduce or nearly eliminate that risk by
->> +   using tricks outlined in the reference section; for quick testing purposes
->> +   that risk is often negligible, but it is an aspect you want to keep in mind
->> +   in case your kernel behaves oddly.
+On Mon, Mar 06, 2023 at 06:02:03AM +0100, Bernhard Rosenkränzer wrote:
+> Hi,
 > 
-> If your distro config have ``CONFIG_IKCONFIG=y``, you can copy from
-> procfs::
+> On Wed, Feb 22, 2023 at 10:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Feb 22, 2023 at 09:17:39AM +0100, Alexandre Mergnat wrote:
+> > > Hi Matthias,
+> > >
+> > > This is a gentle ping to know if you can take this patch please.
+> > > Sorry for the double mail, I screwed up the first send.
+> >
+> > It's the middle of the merge window, we can't take _ANYTHING_ now.
+> > Please wait until after 6.3-rc1 is out.
 > 
->     zcat /proc/config.gz > .config
+> Now that 6.3-rc1 is out, can we try to get this patch merged? All the
+> i350 driver patches are waiting for this to land.
 
-Localmodconfig afaics does that automatically and I'm pretty sure
-olddefconfig does that, too (but I didn't check either). So no need to
-explain this in the text afaics.
+$ mdfrm -c ~/mail/todo/
+1459 messages in /home/gregkh/mail/todo/
 
-> If it isn't the case, you may want to enable the aforementioned config
-> option.
+Please relax, it's only been out for a few hours, and our review queues
+are large.  To help out, please help review patches from others to
+reduce our load.
 
-That or put them in /boot/config-$(uname -r). But well, that is
-something the provider of the running kernel needs to do, so it won't
-help the reader if we mention it here.
+thanks,
 
-Or do you think the guide should explain this to ensure people can
-pickup their config from there again in case they deleted their build
-artifacts? Hmmm. I currently tend to think that's not worth making the
-text longer for, as at that point it might be better to restart from
-scratch with a distro config anyway.
-
-Ciao, Thorsten
+greg k-h
