@@ -2,149 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FFD6ACC45
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 533636AC94F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjCFSQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:16:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S230436AbjCFRH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:07:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjCFSQG (ORCPT
+        with ESMTP id S229822AbjCFRHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:16:06 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42FBB6F63F;
-        Mon,  6 Mar 2023 10:15:34 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326EUeor007186;
-        Mon, 6 Mar 2023 16:16:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=bqD1fQf93A6+PaLYS1ZatZURmW6WTInu6NJMIouFU7U=;
- b=s0BkIkhtcb1oglvI6BqMSVe0Bpi6YaPQ2uU4pH0EOVstHKuJcHwYXsGRK1REFdeSh4/Q
- oiGS7TtjJP8WrermVftdH4oU40JA7cH2WEkXwJLKX5rR7Xy7Omk17aPN4RQTRloogO7U
- c1uirCEEWyrI4EnUTxyCNp76S6Lb8gNSeA7v/wDTbiVCdfEZTs+anoq+U450kGxmvqMt
- RCGqUNserq4U0VxGn2v671W9H9TDgS7RqkYQ2FQiH2ja4YrHorky8ybZuQSeXv1hc+/s
- CHEMs3AK59+DhwaZ5h6HaM4Q7HaHsCPpu/A538m8ouQubCGZ9olG69kj8GtAfdNt7FvR 4g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4ysdshg5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 16:16:49 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326EbGbm005496;
-        Mon, 6 Mar 2023 16:16:48 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4ysdshfp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 16:16:48 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326DoL6X017299;
-        Mon, 6 Mar 2023 16:16:47 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3p41ak9kf7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 16:16:47 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326GGkAF58982828
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 16:16:46 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 37C3058067;
-        Mon,  6 Mar 2023 16:16:46 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F34B58065;
-        Mon,  6 Mar 2023 16:16:44 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 16:16:44 +0000 (GMT)
-Message-ID: <2dcc460c-73ff-d468-0c43-63ccbe0c4f9e@linux.ibm.com>
-Date:   Mon, 6 Mar 2023 11:16:43 -0500
+        Mon, 6 Mar 2023 12:07:31 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584E04B81C;
+        Mon,  6 Mar 2023 09:07:01 -0800 (PST)
+Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 6AB11C3EF3;
+        Mon,  6 Mar 2023 16:18:46 +0000 (UTC)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPA id B8DE6240011;
+        Mon,  6 Mar 2023 16:18:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678119486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AEHB70r9T6Xb4b/oyO9gU4B0pTFiE3k8r5z+jtLT0dI=;
+        b=KLgXll9UVG4p9bonmysPq63TNtxUR0Yet2qsQ/rpVlhq8DKJCO6ITCbS/JsKQPcv2En9+w
+        wxobG22c2Uh9Rg8HVZXFwWTTXY3ZL/P/HevSIdUEF0vttdv3KdW7GtYOpCWl9Ta8pQx7pM
+        3YV8HaF6lS9Z++o5Vc90IOkMgHtpRgWummRWsw1cBy2EtA9InWQqIJpwq0Qn2D5ya+AzuV
+        62HiiGNMr54leuOiWDu7LQS1UKdROpJZCjgkDboPEqOxSVPbFTlbn3l55fWDT2x370KQgt
+        Q8bTLsfbXnu8bAKyVH4RR4qDvW5ST2m8RpbvPCTY5RLug+QIGc8kzXKINlaiGA==
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v7 00/10] Add the PowerQUICC audio support using the QMC
+Date:   Mon,  6 Mar 2023 17:17:44 +0100
+Message-Id: <20230306161754.89146-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 21/28] security: Introduce inode_post_remove_acl hook
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
- <20230303181842.1087717-22-roberto.sassu@huaweicloud.com>
- <6393eb31-5eb3-cb1c-feb7-2ab347703042@linux.ibm.com>
- <7bde74e6e5ccf24b2a2bd9dc2bbfcae5c424eac7.camel@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <7bde74e6e5ccf24b2a2bd9dc2bbfcae5c424eac7.camel@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MWaLbIaI9NdMBOq3S9HXS4e_XU0QxD-l
-X-Proofpoint-GUID: nqChop_acBrGbOPxx8sFOam96JFy-FH-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- malwarescore=0 adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=999 suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303060142
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+This series adds support for audio using the QMC controller available in
+some Freescale PowerQUICC SoCs.
 
-On 3/6/23 10:34, Roberto Sassu wrote:
-> On Mon, 2023-03-06 at 10:22 -0500, Stefan Berger wrote:
->>
->> On 3/3/23 13:18, Roberto Sassu wrote:
->>> From: Roberto Sassu <roberto.sassu@huawei.com>
->>>
->>> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
->>> the inode_post_remove_acl hook.
->>>
->>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->>> ---
->>>    
->>> +/**
->>> + * security_inode_post_remove_acl() - Update inode sec after remove_acl op
->>> + * @idmap: idmap of the mount
->>> + * @dentry: file
->>> + * @acl_name: acl name
->>> + *
->>> + * Update inode security field after successful remove_acl operation on @dentry
->>> + * in @idmap. The posix acls are identified by @acl_name.
->>> + */
->>> +void security_inode_post_remove_acl(struct mnt_idmap *idmap,
->>> +				    struct dentry *dentry, const char *acl_name)
->>> +{
->>> +	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
->>> +		return;
->>
->> Was that a mistake before that EVM and IMA functions did not filtered out private inodes?
-> 
-> Looks like that. At least for hooks that are not called from
-> security.c.
+This series contains three parts in order to show the different blocks
+hierarchy and their usage in this support.
 
-It seems like that all security_* functions are filtering on private inodes. Anonymous inodes have them and some filesystem set the S_PRIVATE flag. So it may not make a difference fro IMA and EVM then.
+The first one is related to TSA (Time Slot Assigner).
+The TSA handles the data present at the pin level (TDM with up to 64
+time slots) and dispatchs them to one or more serial controller (SCC).
 
-     Stefan
+The second is related to QMC (QUICC Multichannel Controller).
+The QMC handles the data at the serial controller (SCC) level and splits
+again the data to creates some virtual channels.
 
-> 
-> Thanks
-> 
-> Roberto
-> 
+The last one is related to the audio component (QMC audio).
+It is the glue between the QMC controller and the ASoC component. It
+handles one or more QMC virtual channels and creates one DAI per QMC
+virtual channels handled.
+
+Compared to the previous iteration
+  https://lore.kernel.org/linux-kernel/20230217145645.1768659-1-herve.codina@bootlin.com/
+this v7 series:
+  - remove '#fsl,serial-cells' (TSA) and '#fsl,chan-cells' (QMC)
+    properties
+  - Fix the QMC timeslots mask generation in case of 64 timeslots
+
+Best regards,
+Herve Codina
+
+Changes v6 -> v7
+  - Patch 1
+    Remove #fsl,serial-cells
+    Add 'Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+
+  - Patch 2, 3, 7, 8 and 10
+    Add	'Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+
+  - Patch 5
+    Remove #fsl,chan-cells
+    Add 'Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+
+  - Patch 6
+    Fix the timeslot assigned mask in case of 64 timeslots
+
+  - Patch 9
+    Add 'Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+    Add 'Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+
+Changes v5 -> v6
+  - Patch 1
+    Fix blank lines and spaces
+    Remove fsl,diagnostic-mode
+    Add some maxItems values
+    Renamed fsl,tsa.h to cpm1-fsl,tsa.h
+
+  - Patch 2
+    Remove fsl,diagnostic-mode
+    Renamed fsl,tsa.h to cpm1-fsl,tsa.h
+    Add 'Acked-by: Li Yang <leoyang.li@nxp.com>'
+
+  - Patch 3
+    Renamed fsl,tsa.h to cpm1-fsl,tsa.h
+
+  - Patch 5
+    Renamed fsl,tsa.h to cpm1-fsl,tsa.h
+    Add 'Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>'
+
+Changes v4 -> v5
+  - patch 1
+    Rename fsl,tsa.yaml to fsl,cpm1-tsa.yaml
+    Rename #serial-cells to #fsl,serial-cells and add a description
+    Fix typos
+    Remove examples present in description
+    Use a pattern property for fsl,[rt]x-ts-routes
+
+  - patch 2
+    Remove one left out_8() ppc specific function call
+    Remove the no more needed PPC dependency in case of COMPILE_TEST
+
+  - patch 4
+    Add 'Acked-by: Michael Ellerman <mpe@ellerman.id.au>'
+
+  - patch 5
+    Rename fsl,qmc.yaml to fsl,cpm1-scc-qmc.yaml
+    Rename #chan-cells to #fsl,chan-cells and add a description
+
+  - patch 6
+    Add the SOC_FSL dependency in case of COMPILE_TEST (issue raised by
+    the kernel test robot).
+    Fix a typo in commit log
+    Add 'Acked-by: Li Yang <leoyang.li@nxp.com>'
+
+Changes v3 -> v4
+  - patches 2, 6 and 9
+    Update code comment format.
+
+  - patch 1
+    Fix some description formats.
+    Add 'additionalProperties: false' in subnode.
+    Move fsl,mode to fsl,diagnostic-mode.
+    Change clocks and clock-names properties.
+    Add '#serial-cells' property related to the newly introduced
+    fsl,tsa-serial phandle.
+
+  - patch 2
+    Move fsl,mode to fsl,diagnostic-mode.
+    Replace the	fsl,tsa phandle and the	fsl,tsa-cell-id	property by a
+    fsl,tsa-serial phandle and update the related API.
+    Add missing locks.
+
+  - patch 5
+    Fix some description format.
+    Replace the fsl,tsa phandle and the fsl,tsa-cell-id property by a
+    fsl,tsa-serial phandle.
+    Rename fsl,mode to fsl,operational-mode and update its description.
+
+  - patch 6
+    Replace the	fsl,tsa phandle and the	fsl,tsa-cell-id	property by a
+    fsl,tsa-serial phandle and use the TSA updated API.
+    Rename fsl,mode to fsl,operational-mode.
+
+  - patch 8
+    Add 'Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>'
+
+Changes v2 -> v3
+  - All bindings
+    Rename fsl-tsa.h to fsl,tsa.h
+    Add missing vendor prefix
+    Various fixes (quotes, node names, upper/lower case)
+
+  - patches 1 and 2 (TSA binding specific)
+    Remove 'reserved' values in the routing tables
+    Remove fsl,grant-mode
+    Add a better description for 'fsl,common-rxtx-pins'
+    Fix clocks/clocks-name handling against fsl,common-rxtx-pins
+    Add information related to the delays unit
+    Removed FSL_CPM_TSA_NBCELL
+    Fix license in binding header file fsl,tsa.h
+
+  - patches 5 and 6 (QMC binding specific)
+    Remove fsl,cpm-command property
+    Add interrupt property constraint
+
+  - patches 8 and 9 (QMC audio binding specific)
+    Remove 'items' in compatible property definition
+    Add missing 'dai-common.yaml' reference
+    Fix the qmc_chan phandle definition
+
+  - patch 2 and 6
+    Use io{read,write}be{32,16}
+    Change commit subjects and logs
+
+  - patch 4
+    Add 'Acked-by: Christophe Leroy <christophe.leroy@csgroup.eu>'
+
+Changes v1 -> v2:
+  - patch 2 and 6
+    Fix kernel test robot errors
+
+  - other patches
+    No changes
+
+Herve Codina (10):
+  dt-bindings: soc: fsl: cpm_qe: Add TSA controller
+  soc: fsl: cpm1: Add support for TSA
+  MAINTAINERS: add the Freescale TSA controller entry
+  powerpc/8xx: Use a larger CPM1 command check mask
+  dt-bindings: soc: fsl: cpm_qe: Add QMC controller
+  soc: fsl: cpm1: Add support for QMC
+  MAINTAINERS: add the Freescale QMC controller entry
+  dt-bindings: sound: Add support for QMC audio
+  ASoC: fsl: Add support for QMC audio
+  MAINTAINERS: add the Freescale QMC audio entry
+
+ .../soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml      |  162 ++
+ .../bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml |  205 +++
+ .../bindings/sound/fsl,qmc-audio.yaml         |  117 ++
+ MAINTAINERS                                   |   25 +
+ arch/powerpc/platforms/8xx/cpm1.c             |    2 +-
+ drivers/soc/fsl/qe/Kconfig                    |   23 +
+ drivers/soc/fsl/qe/Makefile                   |    2 +
+ drivers/soc/fsl/qe/qmc.c                      | 1537 +++++++++++++++++
+ drivers/soc/fsl/qe/tsa.c                      |  846 +++++++++
+ drivers/soc/fsl/qe/tsa.h                      |   42 +
+ include/dt-bindings/soc/cpm1-fsl,tsa.h        |   13 +
+ include/soc/fsl/qe/qmc.h                      |   71 +
+ sound/soc/fsl/Kconfig                         |    9 +
+ sound/soc/fsl/Makefile                        |    2 +
+ sound/soc/fsl/fsl_qmc_audio.c                 |  735 ++++++++
+ 15 files changed, 3790 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
+ create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-tsa.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/fsl,qmc-audio.yaml
+ create mode 100644 drivers/soc/fsl/qe/qmc.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.c
+ create mode 100644 drivers/soc/fsl/qe/tsa.h
+ create mode 100644 include/dt-bindings/soc/cpm1-fsl,tsa.h
+ create mode 100644 include/soc/fsl/qe/qmc.h
+ create mode 100644 sound/soc/fsl/fsl_qmc_audio.c
+
+-- 
+2.39.2
+
