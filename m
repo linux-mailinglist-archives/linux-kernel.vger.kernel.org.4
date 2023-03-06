@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3706ABE6D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 208F26ABE75
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbjCFLjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:39:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58442 "EHLO
+        id S229570AbjCFLji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:39:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjCFLjV (ORCPT
+        with ESMTP id S230215AbjCFLj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:39:21 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D6426589
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:39:20 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a25so37441644edb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:39:20 -0800 (PST)
+        Mon, 6 Mar 2023 06:39:26 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A850728D11
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:39:21 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id g3so37301556eda.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:39:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678102759;
+        d=linaro.org; s=google; t=1678102761;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cm1yYv6PwNcfTuc6RLRT1JagKFtdluR/CBnlVVN7Nuo=;
-        b=CvDsRcHiP0S6OeAHKqhq7BwYHXrHHZeMhmGrVnRWSGktF5U3I5Q0mwKIAviG/fQBW2
-         atKiF9+NNzsAF7rUhLBqVZ1bEyDYulgy9xtxf+Gtmh6Ywi/4Z2nOqhr88fFU/zcUnP+2
-         kaSZ8gpKSWbdfD65Q2NXcueguQgAfHDzWS+Z8te3wn57+qbds6GxDyX04+h9qUc+pkaa
-         3EAWd04tUhtoKqQUq35VZK/VrPUvwyyAiOqtgO7yjKRfAda4Qo+5vveoEY7lYBusYi9n
-         wntlP925K6xS0qW0kk3TEwkbPYhggdhZqc+PKZ84ynjyd48PCpsGXbP46GWcYwsY2qrM
-         bDcw==
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uOwpkhY0VMzGqwYvvdIIY+PDDP+eSachjPL5/6vvxwc=;
+        b=uHGGjWaLwwtd1qnco3tAffq4+y4t/BBWgWyqTg8tohKtzY+MKYR41mDbatfLhGkPWJ
+         X2Z/pRrbMHS95UNiZegynAI1GEndlXPgaMaoQI9CPO7Ftln7OReiHnVjuVt8OG3XTNOx
+         X8N+dGEHyMc9/ESqPkkUyUhkF7Xx50SAjCZJmu9sAUnsLVr/N2KvXjXXhlF7T/g9VZir
+         fUR9a4YLJldfvwQfz6zIvd+kyOpHoWJq6hC5pKMtpeJErjlP/FWNH/w/bQFjg66S+dRg
+         27DWdFsHJ/7cF0JDJq8/7KP/1XRyyxTYxfeMztO7dZx8R3RIPPu+qXStvgKgtpieKodf
+         jwhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678102759;
+        d=1e100.net; s=20210112; t=1678102761;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cm1yYv6PwNcfTuc6RLRT1JagKFtdluR/CBnlVVN7Nuo=;
-        b=yqinj8fXhz34QuZ0OqAj8OQQHjqzLh3T/hlkzusf2DATa4xcurVRUB3oRVcq1xQhK0
-         iOTDrclwTwNpapSQjnWOqV+But4RZegbvRaEc7DVETAlenVSSP1dL73uPAU4XMIUMz+5
-         Fw3yGHEyCMVRWsvvBEht7F2RwL0r9YvdNv8ja6kHpK0taas+2bti2avmcmVJACa3zl/H
-         HI0DddiwY0SCaIpKsCc4W0+m4xVZxZ+xvt5rh50HmCHC9mFNCs7ACWmkf1xQNNHF6xdF
-         g9hs4DD9d0Kvy5WbNbUTK5s+6wYVge6J9C+Od7acoNTP2Qr+wcd0DslTobYDDKFgKG02
-         SPCQ==
-X-Gm-Message-State: AO0yUKX3KidUNWiVngW10jTlbn6kBNMs4Yzo2/toVlWxPQWuIYH+cXmt
-        TFWzTrHu+09k/NPGHFNE1eN+Ww==
-X-Google-Smtp-Source: AK7set9/1jGBVnlHcB4wPEcu1EWHvxazivhejdpvar3ANC+iIdka6WPhPbZFfqHwm21dYIdRA/nILA==
-X-Received: by 2002:a17:906:ca5a:b0:8b2:abc7:1ef9 with SMTP id jx26-20020a170906ca5a00b008b2abc71ef9mr10750344ejb.68.1678102759662;
-        Mon, 06 Mar 2023 03:39:19 -0800 (PST)
+        bh=uOwpkhY0VMzGqwYvvdIIY+PDDP+eSachjPL5/6vvxwc=;
+        b=sqayN6XixkFX4Zk8NKAO3MsCA9av5WibDCoV3jgB8/vSOW6ya8faL0ihmkwVRJag4G
+         x9O+tYTokvG5fVVS2/IGDTtNUDsuBEmKg1Hdrb+6V36YCfr0/nVYyRXfasbt5L2WYD2n
+         ZuIaceGbHy/u6O5vktB+4iC0+I5YQHZWdLUfFLuG3L2c1Uhf6gB4+WJe+Dw7BxnjEVYc
+         TIhz79iFJVrmUlFBtXircOKGBg9ggqDmd6A9GJR9ycUw/NJJUOon5Ltxn0WXMdHaEEic
+         BH+b91bPj/fcNz9t8sFUsQCM9jYbB2GsOC03Wd5szjwzwuC/bzwcIhjYN6o0nhyVwx/8
+         ujEA==
+X-Gm-Message-State: AO0yUKVH0V13eHc0s1oz63tZpVFAhuM2gIUBq24UyPXieRbS/zOvFvc4
+        OJG5cqnafoeZRu4zIR6PV+iqRA==
+X-Google-Smtp-Source: AK7set+2d8kZqPdKpXeq5pwga95WBNECs47qUaTLd/DZCBqEalqOpBwXh1rtQBno91qttDxdOmfW9A==
+X-Received: by 2002:a17:906:dac9:b0:8d9:8f8f:d542 with SMTP id xi9-20020a170906dac900b008d98f8fd542mr11381523ejb.32.1678102761141;
+        Mon, 06 Mar 2023 03:39:21 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
-        by smtp.gmail.com with ESMTPSA id ch10-20020a170906c2ca00b008cf8c6f5c43sm4411936ejb.83.2023.03.06.03.39.18
+        by smtp.gmail.com with ESMTPSA id ch10-20020a170906c2ca00b008cf8c6f5c43sm4411936ejb.83.2023.03.06.03.39.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 03:39:19 -0800 (PST)
+        Mon, 06 Mar 2023 03:39:20 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-samsung-soc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+To:     devicetree@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        Randy Li <ayaka@soulik.info>, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        - <patches@opensource.cirrus.com>,
+        Adrien Grassein <adrien.grassein@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-samsung-soc@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: (subset) [PATCH 3/3] ARM: dts: exynos: drop unused samsung,camclk-out property in Midas
-Date:   Mon,  6 Mar 2023 12:39:08 +0100
-Message-Id: <167810274095.82312.4920507037861037087.b4-ty@linaro.org>
+        alsa-devel@alsa-project.org
+Cc:     stable@vger.kernel.org
+Subject: Re: (subset) [PATCH 3/3] ARM: dts: exynos: fix WM8960 clock name in Itop Elite
+Date:   Mon,  6 Mar 2023 12:39:09 +0100
+Message-Id: <167810274095.82312.7597082551301229104.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230211134731.85957-3-krzysztof.kozlowski@linaro.org>
-References: <20230211134731.85957-1-krzysztof.kozlowski@linaro.org> <20230211134731.85957-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230217150627.779764-3-krzysztof.kozlowski@linaro.org>
+References: <20230217150627.779764-1-krzysztof.kozlowski@linaro.org> <20230217150627.779764-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -77,16 +87,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Feb 2023 14:47:31 +0100, Krzysztof Kozlowski wrote:
-> The S5K6A3 camera sensor does not use nor allow samsung,camclk-out
-> property.
+On Fri, 17 Feb 2023 16:06:27 +0100, Krzysztof Kozlowski wrote:
+> The WM8960 Linux driver expects the clock to be named "mclk".  Otherwise
+> the clock will be ignored and not prepared/enabled by the driver.
 > 
 > 
 
 Applied, thanks!
 
-[3/3] ARM: dts: exynos: drop unused samsung,camclk-out property in Midas
-      https://git.kernel.org/krzk/linux/c/cb8d0fcc5024981e1aed2516921f8bfb3476ffa7
+[3/3] ARM: dts: exynos: fix WM8960 clock name in Itop Elite
+      https://git.kernel.org/krzk/linux/c/6c950c20da38debf1ed531e0b972bd8b53d1c11f
 
 Best regards,
 -- 
