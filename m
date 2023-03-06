@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F156ABF36
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:11:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879976ABF3C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjCFML4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:11:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
+        id S230173AbjCFMOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:14:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjCFMLz (ORCPT
+        with ESMTP id S229710AbjCFMN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:11:55 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61269136CC;
-        Mon,  6 Mar 2023 04:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678104714; x=1709640714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jWzw0zQYttpDEdLcvUP0fpKhTGSS4pMEq94I2zok2gc=;
-  b=Uy9RwxO9UqvD7uTXJ7wrsVG3OO15BMqMdC91A52O9TqH9PH0B6sAGv08
-   ea1ArhyOv5lICJpDH8CTFd7dfHy5npMNCnDwPtsTkSifZfPL8YB/X96d+
-   WhqkibJXNr8Kkgov+y7ec8vC6iwSAq4zkwtlzkb2siqWDORjMQBpZBctg
-   L0EgBAvVVOZC+qCXVDUrXkjv/ffH3KhSGGRFLzZqUrMyimIJUrFqU3x9n
-   lrkvzNrYmbKmur2klHNF+rnqsOlkpO7dbfKxpYZBqBXuEeQp8o53USKyF
-   hZUpn+lq5Hwxf15dhjKnqO+LhhSQly4EfOa9pCCC8/MGyt8YPvGv7SAlx
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="335559397"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="335559397"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:11:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="708630791"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="708630791"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 06 Mar 2023 04:11:50 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZ9gy-00GL8q-1d;
-        Mon, 06 Mar 2023 14:11:48 +0200
-Date:   Mon, 6 Mar 2023 14:11:48 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] iio: adc: Add TI ADS1100 and ADS1000
-Message-ID: <ZAXYhIETzMa/7G6N@smile.fi.intel.com>
-References: <20230228063151.17598-1-mike.looijmans@topic.nl>
- <20230228063151.17598-2-mike.looijmans@topic.nl>
- <20230304175751.2daae308@jic23-huawei>
+        Mon, 6 Mar 2023 07:13:59 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9669F1EBEB;
+        Mon,  6 Mar 2023 04:13:57 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id t25-20020a1c7719000000b003eb052cc5ccso8015393wmi.4;
+        Mon, 06 Mar 2023 04:13:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678104836;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZT9y+F3nAx8M1+hkZjVAuy8akn4IL3WwNtD6c7JLnj8=;
+        b=SOssMskgVOFHRRzz+EZDrSBhxRu46Q/D0JnfzQQY/JmmuNWbIBYI6amj6hG0jL6EGD
+         uwmLw9HYjQAH8biJqv4XaMfB35k0i8uz+wd0LzTpeDL+aXchHssuBv0QhyRnl7kCVBuR
+         ZHY9oPKG5ZQs5/UHAbPvpvN2wlOZYZxA9k/7qr/JdV92vD/nUAEc0hb+u983/b9X8nTI
+         n07BYY+DWweJ3MerFY9w7zevne2hIGdnFr3OULfJzk4DG+TWSzK9mgNpXvOhMNsdtS82
+         hL8WnROhHlPDTu2KSLTNFyxL38gvcolMbi7fXL+DzN4vFIqN9QdmYLIYYGSGT8G/aHNv
+         nFdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678104836;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZT9y+F3nAx8M1+hkZjVAuy8akn4IL3WwNtD6c7JLnj8=;
+        b=UsXRbwUhNWI+nVSzwn59286kFWvmJqt0U8GCqwIo0ywjkmvapmkvzY/SkpATGRG0Yu
+         lFQQo+bRPEjbjVV+MiMCOV9GiNcCQSQelsSNeRSdCSj6z+x+cNU5R/D+xV81x3V2Yfy/
+         6B01rzJwBdBXEdxzeVD976w3/Cx+YHYG8COypv057G6VVU3VJQdanp/oT//677FEmxbb
+         zhJ9h7O6ub+lioG2dhPm5wZmnZr1fc5obtCb15m2+roFs5GU0FlazkY4+eifV/Ztz7Bd
+         otchZYCPEGw7Jb60QCgFFaIXYk2xXnYu6x6hGL1ZVxBNshQeMLq327bUSRo1eJozFzbH
+         rQ0g==
+X-Gm-Message-State: AO0yUKWjpGMEeFcjN6GDSE5RctFnhpCTsPn6rJSs4O73IC/USebuRwHY
+        RaKr0iH36Ilym6NyOSCumkbHx5qp4J9q2g==
+X-Google-Smtp-Source: AK7set9dFzn2lm4BCjjz5GEIMiJre2zEgf/nPRpL7Z+sxuK83NltFVE2upco+0CsgkMyJdZjXRA/Jw==
+X-Received: by 2002:a05:600c:4509:b0:3eb:29fe:7343 with SMTP id t9-20020a05600c450900b003eb29fe7343mr8812408wmo.33.1678104835886;
+        Mon, 06 Mar 2023 04:13:55 -0800 (PST)
+Received: from toolbox.. ([87.200.95.144])
+        by smtp.gmail.com with ESMTPSA id n10-20020a5d660a000000b002c70ce264bfsm9814798wru.76.2023.03.06.04.13.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 04:13:55 -0800 (PST)
+From:   Christian Hewitt <christianshewitt@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Christian Hewitt <christianshewitt@gmail.com>
+Subject: [PATCH v3 0/3] arm64: dts: meson: gxbb-kii-pro: device-tree updates
+Date:   Mon,  6 Mar 2023 12:13:48 +0000
+Message-Id: <20230306121351.1606360-1-christianshewitt@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230304175751.2daae308@jic23-huawei>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 04, 2023 at 05:57:51PM +0000, Jonathan Cameron wrote:
-> On Tue, 28 Feb 2023 07:31:51 +0100
-> Mike Looijmans <mike.looijmans@topic.nl> wrote:
+First we sort nodes in the current dts and remove some blank lines. Then we
+add the remaining bits needed for Bluetooth to work. And finally we add the
+AIU audio card to have HDMI and S/PDIF audio output.
 
-...
+Changes since v2:
+- Rebase on linux-amlogic/for-next
 
-> > +	for (i = 0; i < 4; i++) {
-> > +		if (BIT(i) == gain) {
-> > +			ads1100_set_config_bits(data, ADS1100_PGA_MASK, i);
-> > +			return 0;
-> > +		}
-> > +	}
-> Andy's suggestion of something like..
-> 	if (!gain)
-> 		return -EINVAL;
-> 	i = ffs(gain);
-> 	if (i >= 4 || BIT(i) != gain)
-> 		return -EINVAL;
-> 
-> 	ads...
-> 
-> Is perhaps nicer than the loop.
+Changes since v1:
+- Add reviews from Neil
+- Drop unneded 'okay' from audio patch
 
-Even better:
+Christian Hewitt (3):
+  arm64: dts: meson: gxbb-kii-pro: sort and tidy the dts
+  arm64: dts: meson: gxbb-kii-pro: complete the bluetooth node
+  arm64: dts: meson: gxbb-kii-pro: add initial audio support
 
-	if (!gain || !is_power_of_2(gain))
-		return -EINVAL;
-
-	i = ffs(gain);
-	if (i >= 4)
-		return -EINVAL;
+ .../boot/dts/amlogic/meson-gxbb-kii-pro.dts   | 82 ++++++++++++++++---
+ 1 file changed, 71 insertions(+), 11 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.34.1
 
