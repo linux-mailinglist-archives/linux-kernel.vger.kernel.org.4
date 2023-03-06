@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD5E6AC0B1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:21:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2486AC0B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjCFNVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:21:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
+        id S230023AbjCFNXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:23:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCFNVi (ORCPT
+        with ESMTP id S229771AbjCFNXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:21:38 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DBD2E817
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:21:08 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id e194so8069339ybf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:21:08 -0800 (PST)
+        Mon, 6 Mar 2023 08:23:21 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74FCA1EBD4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:23:20 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-53d277c1834so7881687b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:23:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678108867;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zG8PAsk5iQpv4ooSAO30iwBH3h8edixexdethfVkxcw=;
-        b=Q9jQcBLYmgbMH/VoiFAQ4x7ARre4GTiZx6sBeohZ/lI/912p1ak6YCLj4e2GWZUB8j
-         sEq+L5afWSj/RYULQSXz6b+o2JnXBeckQbgZX9jdT+EnRUky6uOiXZ/o1Dfb6YMC7e3n
-         Xz/oJHcdb+wf5vKSEgsv2IuD5DEwK4kIGLMTlFEM9N1qSGMg2rK2PpSCYfJXRCirpmyR
-         rwtFtlx2Gmy4xe6kqLocmvhRg2PAIvna/AXd8G/NQgBFEXdz2fLdxWqALC6DYLSNKqnV
-         lZV8wMb7qpk9UhlpTWb93avamCcZnPvkITNE3WnUvnTqRJ2iEc8alx6pHdZfGH6iXLio
-         QOug==
+        d=linaro.org; s=google; t=1678108999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6UPnvKq09Wou2+IQachtCQ63VCTkOWQC89w6AgtMPM=;
+        b=BxnBHQDCamtmwpqCeExj//dagBQrW6HHltyHkLJJEamdTia5Xi3n1MMpVx3WQN3uTR
+         ++YezTuGdjOjToEuahsL0RuqU5p3n0m5PcyMnLBFdxYJlMv07cHkeflOgYGHj+U1bJzC
+         5o6Hcyf6d4uLkUYn/ZXjxOlQELveWzV6ouKvFCfMQ4oYWN8rZfsPgdymBeKkzD2KHtAb
+         UeNdBSMi5GkrILM+YioOmOir9B39Uo/4hHJgZI9AX1n2up1lP/HMwHUKOwKJaYdpSKEj
+         3hBlTqD/qdxoHSyUXuHIYg8OK+VQCWZTcGPgT3w+4bHF16ibOB+o63mSYJG1Jh6raUR9
+         mMLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678108867;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zG8PAsk5iQpv4ooSAO30iwBH3h8edixexdethfVkxcw=;
-        b=aIXYiLYGWUpRojfOZmis2m1spOfraNlaP1tVm07jhNnocUIBFAa/9MhFq26uR5WYY0
-         ITAYiHPms3spLCaurJRq1kx8AT5f5WnklQ8+jlQWmQ5G4/6kjBAqxx0e+X8lGfJHqXt6
-         FCfdhfLfVQd3uxgaP+WORVzKVd5YuWnCqtITGtR2M7CcRbCOpbJiulgO99lwrAGPcTA2
-         R9fCIe0t6UQ5dmSSlZNqXnf+356AE7UPr5cEFnV+0kMdbMGyGBGEzLD8bvuUl/CXUJRW
-         LZXAMPvcmiq/xf9I27H5yluADW4eI3+ag6tQjWo2+AXZx8yPwmhDtAZnHUh5EXTNtYvi
-         WcvA==
-X-Gm-Message-State: AO0yUKVfM61FJPLSYn+YM0j9MUOSDtp3InH8rOzXRePkIR2hGBZ7ZUGA
-        koOrZ2ppOl+zArfPxzRVIPI/u4ukgqn1M89BjQzMkQ==
-X-Google-Smtp-Source: AK7set9A6CQZnT/dfz7U4hlA9VvtXvYSBqDcRDzjO5o9BsU1ZkSjNPqi6wVSVWLnvQZXhEVVQs/0dRAlC/m4WrS4XoA=
-X-Received: by 2002:a25:9281:0:b0:b0a:7108:71e9 with SMTP id
- y1-20020a259281000000b00b0a710871e9mr2231178ybl.4.1678108867432; Mon, 06 Mar
- 2023 05:21:07 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678108999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A6UPnvKq09Wou2+IQachtCQ63VCTkOWQC89w6AgtMPM=;
+        b=2qwLW0FY4MfHLxrzXZnZKvC74nDfi7LeyD/S2ndTnFM8cgPG66mB6U+5U4NwtfG9va
+         ZFuJWnbqoBpJVxO4BUMuI6ZDX62RyeLaC7EqQxfrItdqbPTiGZEsXudkd8xTD/asm7+W
+         jqUZ+2LSCOCrYZzcIYgMwsy70X1DunSkIhgWHYNkBJbRrDVrn9ozylX0y02HY61vSAwm
+         XALPT8Lh+6tUM7k7MGOUma7W0w5+iwRFFM+jX0wTz4HdrqLl8+pR8zjUi3jvINKcvEpC
+         23C/hhM9WHqFuCTgy+FuRJ1TifN/Wav9vb9sWIXv31VNercwYpiURsfo+47E0a6b22tH
+         28Pw==
+X-Gm-Message-State: AO0yUKW48eJqyIPsJ2Tk8cAfsorKZ5vzz2hOignFJJXCmepAooKwGEHA
+        KA57m+5tfABVZvHV61esOCrzT1934YrwWIaghMLqHQ==
+X-Google-Smtp-Source: AK7set/s6kdSu1VcFIDUDDAjhyT5WX5VXxR9fDOOK3NMP0aCh1mWegJfszBB8kiuEvAwn0UNiI+jPIKsmpqnhlWyXBE=
+X-Received: by 2002:a81:b61a:0:b0:52e:cea7:f6e3 with SMTP id
+ u26-20020a81b61a000000b0052ecea7f6e3mr6509470ywh.10.1678108999681; Mon, 06
+ Mar 2023 05:23:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20230216-gpio-at91-immutable-v1-0-44f52f148ab9@kernel.org> <20230216-gpio-at91-immutable-v1-1-44f52f148ab9@kernel.org>
-In-Reply-To: <20230216-gpio-at91-immutable-v1-1-44f52f148ab9@kernel.org>
+References: <20230218065108.8958-1-arinc.unal@arinc9.com>
+In-Reply-To: <20230218065108.8958-1-arinc.unal@arinc9.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 14:20:56 +0100
-Message-ID: <CACRpkdbeVw1vBikYi3RimOO8K-KKLOpO=9O_yZFBt4oORi=Wgg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] pinctrl: at91: Make the irqchip immutable
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Mon, 6 Mar 2023 14:23:08 +0100
+Message-ID: <CACRpkdY1xPVd1dTch1jvP6Wc27977Qm7GJ9fKffzhF9odHWG9Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] pinctrl: mediatek: add missing options to PINCTRL_MT7981
+To:     arinc9.unal@gmail.com
+Cc:     Sean Wang <sean.wang@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,21 +72,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 4:49 PM Mark Brown <broonie@kernel.org> wrote:
+On Sat, Feb 18, 2023 at 7:51 AM <arinc9.unal@gmail.com> wrote:
 
-> To help gpiolib not fiddle around with the internals of the irqchip
-> flag the chip as immutable, adding the calls into the gpiolib core
-> required to do so.
+> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 >
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> There are options missing from PINCTRL_MT7981 whilst being on every other
+> pin controller. Add them.
+>
+> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
 
-1) I'm impressed that you're using AT91 hardware
-
-2) Can you respin this on top of my pinctrl devel branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
-There are some Andy-cleanups already queued for AT91 so I am a bit
-worried of collisions. (If you feel confident they are orthogonal just
-use v6.3-rc1)
+Patch applied for fixes.
 
 Yours,
 Linus Walleij
