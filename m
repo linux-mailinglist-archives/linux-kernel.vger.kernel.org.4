@@ -2,92 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 029236ABCE8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777246ABCE0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjCFKdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:33:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38610 "EHLO
+        id S230044AbjCFKc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:32:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbjCFKcl (ORCPT
+        with ESMTP id S231248AbjCFKce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:32:41 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA38A231D3;
-        Mon,  6 Mar 2023 02:32:17 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PVZRQ5K81z9xFQ0;
-        Mon,  6 Mar 2023 18:23:30 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAX4lgMwQVkVqJ0AQ--.17447S2;
-        Mon, 06 Mar 2023 11:31:53 +0100 (CET)
-Message-ID: <03b6f99cb62a876f7d070239d816cab7baad79cb.camel@huaweicloud.com>
-Subject: Re: [PATCH 12/28] fs: Fix description of vfs_tmpfile()
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Mon, 06 Mar 2023 11:31:37 +0100
-In-Reply-To: <20230306102836.xmfl2qryl6sp3xuz@wittgenstein>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
-         <20230303181842.1087717-13-roberto.sassu@huaweicloud.com>
-         <20230306102836.xmfl2qryl6sp3xuz@wittgenstein>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Mon, 6 Mar 2023 05:32:34 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0BA244BE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:32:09 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id m6so12059343lfq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:32:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678098727;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9ZTV+4Gmwp9zOCF5DZ06H8JPUmoVNQM9yDBfTH3SiIY=;
+        b=s8Ddyl/wtVcnfUe2AbuxysW9nFMskqqveAQfu0HULr5YmBsfMK79p6WXzrmGg9yjIn
+         RTYVglLSOqI1AelhWiLd3/l1DvZGZTWh6MYUjOSeDfjJMv60Vz6Yeea2AEMBgS7v7xMO
+         i4YpNRujDgBRT/4DQ6AlhmiaQzG3eyTKab1O/vGJGqBdQN7T84Nho1o4isEx5VA4brFE
+         200fVKMW5Ebdg0maLIqPkC6InfkVqnmYebhvJtrx0tT7O/o7VImLabwpFIJZ83IoeOgA
+         SVbs+izLsgxQwLIx3FTZLGmL93N4qfDi29e1fbL29lVCVxyvpAOJfG8lNn6bXMEhVMi2
+         +8JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678098727;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ZTV+4Gmwp9zOCF5DZ06H8JPUmoVNQM9yDBfTH3SiIY=;
+        b=ol58AvRI4Od6FfcSYZ0Jm5AKb3XygoYyYJ5SkrHfeRh0dQ4ngJgeSuBuECNIE0M77n
+         Yk92af/xhURei3VoKAOH6d7S9qFR/UxGFcTAQ8HNTgf6s98JQ9psujcQrgcEtUJDcQ5Z
+         vjtzx0qyuxWQQ+tFOj7xMZPVRIRxY2y5OOfPRyFzTcrK3SFPUJHPYQNyUs2vumIYyT++
+         J6aWDt4pnG7JXdNJlsNsR2HsJYxGpuKaPLnSILRZvCcI+aW/Iup6MJWLRVXwyIhCdCT4
+         RGeN89CIrfFELBcWj0bJ3l/Dk7DaEol8KB9Wm9uehpYRBNCEN7+gu5NdVCk7/azUjTaH
+         +Wfg==
+X-Gm-Message-State: AO0yUKU5bT//qVQcaq1CK9TFKhBG0VekioW7MJ6F5bKCNF3kBtm4Vqgt
+        32f4po5DV7I9vZB8QkAkCBR+yvHfB4aCXXd0j6I=
+X-Google-Smtp-Source: AK7set/QsD+accgDtrwErpouZPCmD4mAzYUsXsFT/IpdOeKpjtAkgHDudvtna865/TvgT//zoJ8T4g==
+X-Received: by 2002:a19:760f:0:b0:4d5:c996:2940 with SMTP id c15-20020a19760f000000b004d5c9962940mr2806820lff.61.1678098727263;
+        Mon, 06 Mar 2023 02:32:07 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id n14-20020a19550e000000b004db1b99055dsm1598067lfe.229.2023.03.06.02.32.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 02:32:06 -0800 (PST)
+Message-ID: <a24841f4-ad59-24dd-0110-814995d95655@linaro.org>
+Date:   Mon, 6 Mar 2023 11:32:05 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 6/6] ARM: dts: qcom: sdx65-mtp: Enable PCIe EP
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mani@kernel.org,
+        lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com,
+        manivannan.sadhasivam@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+References: <1678080302-29691-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1678080302-29691-7-git-send-email-quic_rohiagar@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1678080302-29691-7-git-send-email-quic_rohiagar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAX4lgMwQVkVqJ0AQ--.17447S2
-X-Coremail-Antispam: 1UD129KBjvdXoWruw4xAr15Aw1rArWxur17Wrg_yoWxZFbE9F
-        sayry3A398JF47G34DuFW5ZFWjgryDAF13KwsIqw1agrWDG34kAF48Ca9Yvws3JF4ktFyf
-        Gr9avFyjy3W7WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb78YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj4Y8fgABs6
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-06 at 11:28 +0100, Christian Brauner wrote:
-> On Fri, Mar 03, 2023 at 07:18:26PM +0100, Roberto Sassu wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Update the description of vfs_tmpfile() to match the current parameters of
-> > that function.
-> > 
-> > Fixes: 9751b338656f ("vfs: move open right after ->tmpfile()")
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
+
+
+On 6.03.2023 06:25, Rohit Agarwal wrote:
+> Enable PCIe Endpoint controller on the SDX65 MTP board based
+> on Qualcomm SDX65 platform.
 > 
-> Trivially correct. But this shouldn't need to be a part of this series
-> afaict. Please send a this separately to fsdevel so we can pick it up
-> right now,
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> ---
+>  arch/arm/boot/dts/qcom-sdx65-mtp.dts | 46 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
 > 
-> Acked-by: Christian Brauner <brauner@kernel.org>
+> diff --git a/arch/arm/boot/dts/qcom-sdx65-mtp.dts b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> index 86bb853..952de105 100644
+> --- a/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> +++ b/arch/arm/boot/dts/qcom-sdx65-mtp.dts
+> @@ -252,6 +252,14 @@
+>  	vdda-pll-supply = <&vreg_l4b_0p88>;
+>  };
+>  
+> +&pcie_ep {
+> +	status = "okay";
+> +
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&pcie_ep_clkreq_default &pcie_ep_perst_default
+> +			&pcie_ep_wake_default>;
+status last
 
-Ok, thanks. I do the same for the EVM one.
+pinctrl-n goes before pinctrl-names
+> +};
+> +
+>  &qpic_bam {
+>  	status = "okay";
+>  };
+> @@ -276,6 +284,44 @@
+>  	memory-region = <&mpss_adsp_mem>;
+>  };
+>  
+> ++&tlmm {
+> +	pcie_ep_clkreq_default: pcie_ep_clkreq_default {
+No underscores in node names, pinctrl children node names
+must end in -state. Please check your patches against
+"make dtbs_check"
+> +		mux {
+> +			pins = "gpio56";
+> +			function = "pcie_clkreq";
+> +		};
+> +		config {
+> +			pins = "gpio56";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +		};
+mux {} / config {} is unnecessary. You can simply do:
 
-Roberto
+{
+    pins = "gpio56";
+    function = "pcie_clkreq";
+    drive-strength = <2>;
+    bias-disable;
+};
 
+Konrad
+> +	};
+> +
+> +	pcie_ep_perst_default: pcie_ep_perst_default {
+> +		mux {
+> +			pins = "gpio57";
+> +			function = "gpio";
+> +		};
+> +		config {
+> +			pins = "gpio57";
+> +			drive-strength = <2>;
+> +			bias-pull-down;
+> +		};
+> +	};
+> +
+> +	pcie_ep_wake_default: pcie_ep_wake_default {
+> +		mux {
+> +			pins = "gpio53";
+> +			function = "gpio";
+> +		};
+> +		config {
+> +			pins = "gpio53";
+> +			drive-strength = <2>;
+> +			bias-disable;
+> +		};
+> +	};
+> +};
+> +
+>  &usb {
+>  	status = "okay";
+>  };
