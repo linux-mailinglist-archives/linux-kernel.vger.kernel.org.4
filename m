@@ -2,58 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFFB6AC958
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DDE6ACC32
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjCFRIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:08:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
+        id S229692AbjCFSOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 13:14:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjCFRHs (ORCPT
+        with ESMTP id S230070AbjCFSNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:07:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC185FE8E;
-        Mon,  6 Mar 2023 09:07:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BE3C61044;
-        Mon,  6 Mar 2023 17:06:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A21C433D2;
-        Mon,  6 Mar 2023 17:06:47 +0000 (UTC)
-Date:   Mon, 6 Mar 2023 17:06:44 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-mips <linux-mips@vger.kernel.org>,
-        linux-power <linuxppc-dev@lists.ozlabs.org>,
-        linux-x86 <x86@kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>
-Subject: Re: [PATCH] mm: add PTE pointer parameter to
- flush_tlb_fix_spurious_fault()
-Message-ID: <ZAYdpLCxicptr4MJ@arm.com>
-References: <20230306161548.661740-1-gerald.schaefer@linux.ibm.com>
+        Mon, 6 Mar 2023 13:13:19 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7CC36F628;
+        Mon,  6 Mar 2023 10:12:42 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326GrlnM027651;
+        Mon, 6 Mar 2023 17:08:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=9Hb9Jii1BMHQLuOdDPR1ksjEq8SaRqtVSYQ4jmCw+tQ=;
+ b=KNF7FNKNnnWJtomL1o/Suzjo3clcJEvQCo7boR6WHDPz90ZvJa9l/ZRcXCJkNAI1POXR
+ /cTa51YK32wskj8vnGZHf0thlut/wquJMzhqGJ9NDoXIxe+gy5B5EodJ6PLDCituVzX9
+ phIWkdYk707dmFmmS4xMQpHFJQkgmHxUOkZ6h0xV+BEtOzGbvT3fzAGQ0M42gKn0wYS0
+ qfQeZMdUP0sEOgADibcljVXTO0N/dvA9Ivi/J1c4DnTHFDBn4R8cqTOThELqk4kfA7BI
+ xAtZsDCDBlGAbrMckftwnI0cZSZD7Z8/HcMmzXu6kuAmpvFusQwiAm96qoR9UGa5vb7h 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4u1jq24x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 17:08:06 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326GsGoJ029436;
+        Mon, 6 Mar 2023 17:08:05 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4u1jq24e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 17:08:05 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326GBGm4028669;
+        Mon, 6 Mar 2023 17:08:03 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
+        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3p419v6ag5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 17:08:03 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326H82vE11010760
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Mar 2023 17:08:02 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BFDF95805D;
+        Mon,  6 Mar 2023 17:08:02 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C738F58043;
+        Mon,  6 Mar 2023 17:08:00 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Mar 2023 17:08:00 +0000 (GMT)
+Message-ID: <0df82f23-527a-d436-f33c-2c81ab5fd59b@linux.ibm.com>
+Date:   Mon, 6 Mar 2023 12:08:00 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306161548.661740-1-gerald.schaefer@linux.ibm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 14/28] security: Introduce inode_post_setattr hook
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+ <20230303181842.1087717-15-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230303181842.1087717-15-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: lkjxzaeqcjhjwMCU3Hto9CwTWh9O-DgF
+X-Proofpoint-ORIG-GUID: BRTRYxjJjXWHC0BRn3FEkbTqLPd-gqh8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_10,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060151
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,53 +103,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 05:15:48PM +0100, Gerald Schaefer wrote:
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index b6ba466e2e8a..0bd18de9fd97 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -57,7 +57,7 @@ static inline bool arch_thp_swp_supported(void)
->   * fault on one CPU which has been handled concurrently by another CPU
->   * does not need to perform additional invalidation.
->   */
-> -#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
-> +#define flush_tlb_fix_spurious_fault(vma, address, ptep) do { } while (0)
 
-For arm64:
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+On 3/3/23 13:18, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> the inode_post_setattr hook.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-> diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
-> index 2c70b4d1263d..c1f6b46ec555 100644
-> --- a/arch/s390/include/asm/pgtable.h
-> +++ b/arch/s390/include/asm/pgtable.h
-> @@ -1239,7 +1239,8 @@ static inline int pte_allow_rdp(pte_t old, pte_t new)
->  }
->  
->  static inline void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
-> -						unsigned long address)
-> +						unsigned long address,
-> +						pte_t *ptep)
->  {
->  	/*
->  	 * RDP might not have propagated the PTE protection reset to all CPUs,
-> @@ -1247,11 +1248,12 @@ static inline void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
->  	 * NOTE: This will also be called when a racing pagetable update on
->  	 * another thread already installed the correct PTE. Both cases cannot
->  	 * really be distinguished.
-> -	 * Therefore, only do the local TLB flush when RDP can be used, to avoid
-> -	 * unnecessary overhead.
-> +	 * Therefore, only do the local TLB flush when RDP can be used, and the
-> +	 * PTE does not have _PAGE_PROTECT set, to avoid unnecessary overhead.
-> +	 * A local RDP can be used to do the flush.
->  	 */
-> -	if (MACHINE_HAS_RDP)
-> -		asm volatile("ptlb" : : : "memory");
-> +	if (MACHINE_HAS_RDP && !(pte_val(*ptep) & _PAGE_PROTECT))
-> +		__ptep_rdp(address, ptep, 0, 0, 1);
-
-I wonder whether passing the actual entry is somewhat quicker as it
-avoids another memory access (though it might already be in the cache).
-
--- 
-Catalin
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
