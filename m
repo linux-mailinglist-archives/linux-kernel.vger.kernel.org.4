@@ -2,118 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A019C6ABDE9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5526ABDEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjCFLNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S230166AbjCFLNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjCFLND (ORCPT
+        with ESMTP id S229816AbjCFLNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:13:03 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812AD27D7D;
-        Mon,  6 Mar 2023 03:12:36 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PVbSq5cFkz6J9kD;
-        Mon,  6 Mar 2023 19:09:47 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 6 Mar
- 2023 11:12:23 +0000
-Date:   Mon, 6 Mar 2023 11:12:23 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     kernel test robot <lkp@intel.com>
-CC:     <linux-cxl@vger.kernel.org>, <oe-kbuild-all@lists.linux.dev>,
-        <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <will@kernel.org>,
-        <dan.j.williams@intel.com>, <bwidawsk@kernel.org>,
-        <ira.weiny@intel.com>, <vishal.l.verma@intel.com>,
-        <alison.schofield@intel.com>, <linuxarm@huawei.com>,
-        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/4] cxl/pci: Find and register CXL PMU devices
-Message-ID: <20230306111223.00005f9b@Huawei.com>
-In-Reply-To: <202303041001.G9OUGQ6l-lkp@intel.com>
-References: <20230303175022.10806-3-Jonathan.Cameron@huawei.com>
-        <202303041001.G9OUGQ6l-lkp@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 6 Mar 2023 06:13:07 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF1B28233
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:12:41 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 130so5286510pgg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:12:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678101161;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y4yO/4ikGRcg9UJ/g5KkI9P66rz7lPE6H/2uNJnO46s=;
+        b=o3sD1KF5DiZyD3iZJ5ji9poZZlcb7Wq/v1LG/gMrjYpTqZVpi9RWmegqANbcGiQU4n
+         wXYIdnKgnN4pdxQtOYd/JAEUxobuITKjxfo99xtmAaM/TC8sH5cZTU8qUm5u5kXuv2o8
+         LULoto/LggzOJANi/0sE4npkQhDF0obtgu7w8eTvu5P8OSXVrpy9adWp+uZTPGCm4gUM
+         g5FDsHeXZp6oGfbte7oUREucSZC3EYY70n0m5s92bgt/FkgKqZjOm7nin1YMWVJJdU/h
+         vOdvGfNzFSMy1+M/WnnD0bWRXkUVVU35eF8F4be6SZ4owWlHDGKb+sxfv6EScyoB3bEu
+         dJbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678101161;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y4yO/4ikGRcg9UJ/g5KkI9P66rz7lPE6H/2uNJnO46s=;
+        b=2GwBkuYow7PIXzO78ej47Wxshrbj+aoEA4caXRZfYEkNuz/I35zzO8OckO/rkmsx4D
+         naJI0IwZAKeGyzAyaIQRDweZjd+HAbBwnQe1YUxvr01QWxP0BZ3GuOe3Xywf1v7qKFOd
+         NlZ48q8Hlz4N+OfOJbr2WmCpK2BsBsQwo0peftrU2rnqMv8vdTIY2WDQWkDPi3wy7pIl
+         FKjKI7rTNG0U/CKNWO2aIF7yHnt+LqVuGp3QbcyFwVhzeNFYadqVoz50rDozx7XfOHy1
+         G8nFvJf88LwIDAPwykm1JU0R63kEWnGFyvNKYYGDeeSHPEVj/aXz2JJnXaJ6OZrJdqdF
+         JcVg==
+X-Gm-Message-State: AO0yUKW251l1Qp6I9jtAPFLdjU0kt/CfD+iIUH53qFOqpZYmHBJsD9HQ
+        YgvqZd5Cl3cu4Hi49PkqWgUVi/8fY+u94775vDjWmQ==
+X-Google-Smtp-Source: AK7set+zpdMAyIWX2is1kCSBd1kn95NSJbV1XQLGOgBogP1q2Fb1Ob2Ydde4FA1s0lLJYhwXiBLJChrMqEEQ/teoYfU=
+X-Received: by 2002:a63:2950:0:b0:4fd:5105:eb93 with SMTP id
+ bu16-20020a632950000000b004fd5105eb93mr3356480pgb.3.1678101160591; Mon, 06
+ Mar 2023 03:12:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <79850642-ebac-5c23-d32d-b28737dcb91e@huawei.com>
+In-Reply-To: <79850642-ebac-5c23-d32d-b28737dcb91e@huawei.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Mon, 6 Mar 2023 12:12:29 +0100
+Message-ID: <CAKfTPtArYhmq42ZEwi8gkVAEK0R5=PGws95j8KmQWutJaUZMAA@mail.gmail.com>
+Subject: Re: [PATCH] sched/fair: sanitize vruntime of entity being migrated
+To:     Zhang Qiao <zhangqiao22@huawei.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 4 Mar 2023 10:46:28 +0800
-kernel test robot <lkp@intel.com> wrote:
+On Sat, 4 Mar 2023 at 09:29, Zhang Qiao <zhangqiao22@huawei.com> wrote:
+>
+> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
+> entity being placed") fix an overflowing bug, but ignore
+> a case that se->exec_start is reset after a migration.
+>
+> For fix this case, we reset the vruntime of a loog sleep
+> task in migrate_task_rq_fair().
 
-> Hi Jonathan,
-> 
-> I love your patch! Yet something to improve:
-> 
+some typo:
+"For fixing this case, we reset the vruntime of a long sleeping task
+in migrate_task_rq_fair()."
 
-Last minute rebase mess up.  Will fix for v2.
+>
+> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
 
-One day I'll remember to run a sanity check build on a clean tree.
+Your patch doesn't apply. It seems to be malformed
 
-Jonathan
+> ---
+>  kernel/sched/fair.c | 73 ++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 53 insertions(+), 20 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index ff4dbbae3b10..6697462baf0f 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4648,6 +4648,41 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>  #endif
+>  }
+>  +static inline bool entity_is_long_sleep(struct sched_entity *se)
 
-> [auto build test ERROR on cxl/next]
-> [also build test ERROR on cxl/pending linus/master next-20230303]
-> [cannot apply to v6.2]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230304-015342
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git next
-> patch link:    https://lore.kernel.org/r/20230303175022.10806-3-Jonathan.Cameron%40huawei.com
-> patch subject: [PATCH 2/4] cxl/pci: Find and register CXL PMU devices
-> config: alpha-randconfig-r003-20230302 (https://download.01.org/0day-ci/archive/20230304/202303041001.G9OUGQ6l-lkp@intel.com/config)
-> compiler: alpha-linux-gcc (GCC) 12.1.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/0790ed82bb7adf04c834e8c03008b92c1b23945e
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jonathan-Cameron/cxl-Add-function-to-count-regblocks-of-a-given-type/20230304-015342
->         git checkout 0790ed82bb7adf04c834e8c03008b92c1b23945e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash drivers/cxl/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303041001.G9OUGQ6l-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/cxl/core/regs.c:9:10: fatal error: cpmu.h: No such file or directory  
->        9 | #include <cpmu.h>
->          |          ^~~~~~~~
->    compilation terminated.
+This extra space at the beg of the line above looks strange
+
+> +{
+> +       struct cfs_rq *cfs_rq;
+> +       u64 sleep_time;
+> +
+> +       if (se->exec_start == 0)
+> +               return false;
+> +
+> +       cfs_rq = cfs_rq_of(se);
+> +       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> +       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+> +               return true;
+> +
+> +       return false;
+> +}
+> +
+> +static inline u64 sched_sleeper_credit(struct sched_entity *se)
+> +{
+> +       unsigned long thresh;
+> +
+> +       if (se_is_idle(se))
+> +               thresh = sysctl_sched_min_granularity;
+> +       else
+> +               thresh = sysctl_sched_latency;
+> +
+> +       /*
+> +        * Halve their sleep time's effect, to allow
+> +        * for a gentler effect of sleepers:
+> +        */
+> +       if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> +               thresh >>= 1;
+> +
+> +       return thresh;
+> +}
+> +
+>  static void
+>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>  {
+> @@ -4664,23 +4699,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>                 vruntime += sched_vslice(cfs_rq, se);
+>         /* sleeps up to a single latency don't count. */
+> -       if (!initial) {
+> -               unsigned long thresh;
+> -
+> -               if (se_is_idle(se))
+> -                       thresh = sysctl_sched_min_granularity;
+> -               else
+> -                       thresh = sysctl_sched_latency;
+> -
+> -               /*
+> -                * Halve their sleep time's effect, to allow
+> -                * for a gentler effect of sleepers:
+> -                */
+> -               if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> -                       thresh >>= 1;
+> -
+> -               vruntime -= thresh;
+> -       }
+> +       if (!initial)
+> +               vruntime -= sched_sleeper_credit(se);
+>         /*
+>          * Pull vruntime of the entity being placed to the base level of
+> @@ -4689,8 +4709,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>          * the base as it may be too far off and the comparison may get
+>          * inversed due to s64 overflow.
+>          */
+> -       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+> +       if (entity_is_long_sleep(se))
+>                 se->vruntime = vruntime;
+>         else
+>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
+> @@ -7635,7 +7654,21 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+>         if (READ_ONCE(p->__state) == TASK_WAKING) {
+>                 struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>  -              se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+> +               /*
+> +                * We determine a task whether sleep for long by checking se->exec_start,
+> +                * and if it is, sanitize its vruntime at place_entity(). However, after
+> +                * a migration, this detection method fails due to se->exec_start is reset.
+
+some typo
+
+"We determine whether a task sleeps for long by checking
+se->exec_start, and if it is, we sanitize its vruntime at
+place_entity(). However, after a migration, this detection method
+fails due to se->exec_start being reset."
+
+> +                *
+> +                * For fix this case, we add the same check at here. For a task which has
+> +                * slept for long, its vruntime should be reset cfs_rq->min_vruntime and get
+> +                * a sleep credit. Because waking task's vruntime will be added cfs_rq->min_vruntime
+
+For fixing this case, we add the same check here. For a task which has
+slept for a long time, its vruntime should be reset to
+cfs_rq->min_vruntime with a sleep credit.
+
+Beside the typo and malformed patch, the proposed fix looks good to me
+
+> +                * when enqueue, so we only need resetting the se->vruntime of waking task
+> +                * to a credit at here.
+> +                */
+> +               if (entity_is_long_sleep(se))
+> +                       se->vruntime = -sched_sleeper_credit(se);
+> +               else
+> +                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+>         }
+>         if (!task_on_rq_migrating(p)) {
 > --
-> >> drivers/cxl/core/cpmu.c:8:10: fatal error: cpmu.h: No such file or directory  
->        8 | #include <cpmu.h>
->          |          ^~~~~~~~
->    compilation terminated.
-> 
-> 
-> vim +9 drivers/cxl/core/regs.c
-> 
->    > 9	#include <cpmu.h>  
->     10	
-> 
-
+> 2.17.1
+>
+> .
