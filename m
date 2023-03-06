@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1116AC4BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:23:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152196AC46F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCFPXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:23:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S230365AbjCFPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbjCFPX2 (ORCPT
+        with ESMTP id S229671AbjCFPJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:23:28 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FDC93CE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:23:21 -0800 (PST)
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
+        Mon, 6 Mar 2023 10:09:41 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D085822A24
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:09:25 -0800 (PST)
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id BAE1D412B6
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:06:51 +0000 (UTC)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 528D03F22C
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678111611;
-        bh=/D42eMJZgZ7OPGoMocOPrjvW3/oUv+rveESzzqsiFAQ=;
+        s=20210705; t=1678111783;
+        bh=f2v5CEMXX3gXYzLE99k6iR0CRvXpbrxSSolJwoueXz0=;
         h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
          To:Cc:Content-Type;
-        b=O75vcd5vyCBldTNijDhLXyDmav5xujWaUGv++FTcI9X7+brodCNtJxub8ST+EnjT/
-         /rF25degysems4Mx7dSXvWsVtJ6eFpThWtt7kwhwimSeRsv5MXTql5Z0TNS9enAdjB
-         WazALxmnj8fxPyAHfpdir6NlwVpfLr3upNcHtkOChtKQgTykjq5MYa9fjx7TUjlnEa
-         a8njKmXIltWZwkuDR6OXp94VX8r1OG8lyXXBwRtBR5sxf9AOBwuN0lMOyFujaAqYK4
-         g8DH5PNj9vlTfPR4inU+z3FmzKWRILCgsaY/XhHc+IIauQnCvfN09k516zXgXHVrtQ
-         25Qkku4ZxvlqA==
-Received: by mail-yb1-f198.google.com with SMTP id n203-20020a25dad4000000b0091231592671so10535242ybf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:06:51 -0800 (PST)
+        b=gy4eaVoWe+pMUO0IEjp4ENz74sKrnlfW1KKUKCkiBP8exMDjBbACax3TtbhWOoGkH
+         Elp2SxguW/r2WU6Dy9R8PscK2ZY/EkbwoNuWgITw2hMyt5EezifoY8MAZXQA/c3KyC
+         4Gs7Ge1ZUVAjph9T1et97Mhv3HreJL8HpzUJg2cjcrzWMMeoNqJnp1GMC25NINkujJ
+         6jOb3eeWOzD8WfHtAIxkHaCaddYjjDQZa/nObndMMGJyYKoiXDzgfOk+83Z23Wvrfo
+         dMHmI8lRqMCuvt0dTLDnr3nM5yqmkqXbZqGtZPuIDjub/k3JbIoreNKrXxg+/3dGgE
+         WHioAhdPIe5/A==
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-536d63d17dbso104146657b3.22
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:09:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678111610;
+        d=1e100.net; s=20210112; t=1678111782;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/D42eMJZgZ7OPGoMocOPrjvW3/oUv+rveESzzqsiFAQ=;
-        b=UxArGQ1Dbqj5mlkO5+hDm678Sa5fc/qOL2Ynou+m7D2PHBlQasB5vJun40qn3CVdbn
-         oG6kIGzKEq/PnnB3wSENq1oSGzCwM2Deod3FAV+zb6H0nmQnwEfAJ8x+1RucdcCpIWyU
-         34pnLz3hxUnI2XpbGHQObarT7PMhmCUQi5hE3iUi+vjZh32rbZKmsdXSUy+F/hTeiD4h
-         Ool/SRVW9LfRlsk3k4V+3Ai6299lGf9IZ+x06cme7Dpv1DU3LpYt3di7F6kPR/AAWe3u
-         AJcl1Jir01MyPi9qMkoMZpgSmvq/2W3X4LLAU2Zz3OkNBKBEejxux3JKVBVbPyRYg/oe
-         gdPg==
-X-Gm-Message-State: AO0yUKVC6gBn8X5gm5+J5ZeJ4fTAaCFjYloQHhm3kfGZYryW5jIQp4Ia
-        ErZMHaIVUsEbXYwNZlB6VYrf0BJMlLYrHVomOiwg8FJwMDpkmTw7Y+iChcuKhVNm2mZbPiN3pmN
-        dTW/xxsP/MowNi0QOKdU5q7N2ohd8Vf22aFxvfGZlNcWeTiFdZ/fiTL9gDg==
-X-Received: by 2002:a81:af52:0:b0:52e:b48f:7349 with SMTP id x18-20020a81af52000000b0052eb48f7349mr6956597ywj.6.1678111610473;
-        Mon, 06 Mar 2023 06:06:50 -0800 (PST)
-X-Google-Smtp-Source: AK7set9XJaE1ycvsX1GHyO29Ms+GXboiZHBdlTeNCSP7soxAAoIyIS6f8pksSgKASOAiWWiJ4Yip7LSQoVql6h000eA=
+        bh=f2v5CEMXX3gXYzLE99k6iR0CRvXpbrxSSolJwoueXz0=;
+        b=y3qdbzarwOfPsYT8hn3HFhoLEKUxZ5wwiEchVs6qXzwP27/uhmlMGyuyAWxo6Jf31V
+         ZaeZlvaMBLQrdOYjkweaLQBymthm+4XvGFHq40cAFDMnZJUBv26HIu6kei0j+ixr59U6
+         dckeWxetq38KHO2oSJxLg65HDrCxg8BP6LtcZ6Gl8pfTNCGAjPqUDpohatUT5mfoG5Lz
+         tSXIBFrhcbNpcCPEqCW+t/bnSqPrSFzpFta4GC2LJiwfz9Q5rFu4iMF9aoeVkLGZextO
+         dNRDTYgm6StCbnOHWP8CO3FFi5ZUa65O5sKAPXvclvMs/32gSyyHQV1RqnYHGkvXrbux
+         mXOw==
+X-Gm-Message-State: AO0yUKVSC/5xs8FtjRSAmqlnOb9Ko72sppWT6jRpSw+w6FcF8dhVGtDV
+        aazPiiDvUbwStcTd/Ym31pvZCmdVuNBzTKoRsv5Z3sQTzXcGBLCwdt7mU5jxTVmOKBY74toHhZr
+        60PGeOtwdNnrUGYb+b6vLV2CIvUwpEkSe8FIiz7iG0M7GHz9VtfVzdU8mGw==
+X-Received: by 2002:a81:af52:0:b0:52e:b48f:7349 with SMTP id x18-20020a81af52000000b0052eb48f7349mr6964031ywj.6.1678111782228;
+        Mon, 06 Mar 2023 06:09:42 -0800 (PST)
+X-Google-Smtp-Source: AK7set/qGKtb7f/W60UbxpJV4lHpxUt88fYIdqGi3qnpEpEAIFHYbXk+SL7tIS3T0MF+znhipcG5v3sWI+bgGQWdtDc=
 X-Received: by 2002:a81:af52:0:b0:52e:b48f:7349 with SMTP id
- x18-20020a81af52000000b0052eb48f7349mr6956573ywj.6.1678111610184; Mon, 06 Mar
- 2023 06:06:50 -0800 (PST)
+ x18-20020a81af52000000b0052eb48f7349mr6964020ywj.6.1678111782030; Mon, 06 Mar
+ 2023 06:09:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com> <fc8d6066-a550-455c-c864-f418db3239a3@ddn.com>
-In-Reply-To: <fc8d6066-a550-455c-c864-f418db3239a3@ddn.com>
+References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230220193754.470330-8-aleksandr.mikhalitsyn@canonical.com> <381a19bb-d17e-b48b-8259-6287dbe170df@fastmail.fm>
+In-Reply-To: <381a19bb-d17e-b48b-8259-6287dbe170df@fastmail.fm>
 From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Mon, 6 Mar 2023 15:06:39 +0100
-Message-ID: <CAEivzxfk0pEUePi7r=sdy5jVjUpZD6okLmPH-twxvv4P2cm34A@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/9] fuse: API for Checkpoint/Restore
-To:     Bernd Schubert <bschubert@ddn.com>
+Date:   Mon, 6 Mar 2023 15:09:31 +0100
+Message-ID: <CAEivzxf8HKs2FJwTohzGVcb0TRNy9QJbEALC3dni3zx+tOb9Gg@mail.gmail.com>
+Subject: Re: [RFC PATCH 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
+To:     Bernd Schubert <bernd.schubert@fastmail.fm>
 Cc:     mszeredi@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
         Amir Goldstein <amir73il@gmail.com>,
         =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
@@ -76,100 +77,68 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 8:43=E2=80=AFPM Bernd Schubert <bschubert@ddn.com> w=
-rote:
+On Fri, Mar 3, 2023 at 8:26=E2=80=AFPM Bernd Schubert
+<bernd.schubert@fastmail.fm> wrote:
 >
 >
 >
 > On 2/20/23 20:37, Alexander Mikhalitsyn wrote:
-> > Hello everyone,
+> > This ioctl aborts fuse connection and then reinitializes it,
+> > sends FUSE_INIT request to allow a new userspace daemon
+> > to pick up the fuse connection.
 > >
-> > It would be great to hear your comments regarding this proof-of-concept=
- Checkpoint/Restore API for FUSE.
+> > Cc: Miklos Szeredi <mszeredi@redhat.com>
+> > Cc: Al Viro <viro@zeniv.linux.org.uk>
+> > Cc: Amir Goldstein <amir73il@gmail.com>
+> > Cc: St=C3=83=C2=A9phane Graber <stgraber@ubuntu.com>
+> > Cc: Seth Forshee <sforshee@kernel.org>
+> > Cc: Christian Brauner <brauner@kernel.org>
+> > Cc: Andrei Vagin <avagin@gmail.com>
+> > Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> > Cc: linux-fsdevel@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: criu@openvz.org
+> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> > ---
+> >   fs/fuse/dev.c             | 132 +++++++++++++++++++++++++++++++++++++=
++
+> >   include/uapi/linux/fuse.h |   1 +
+> >   2 files changed, 133 insertions(+)
 > >
-> > Support of FUSE C/R is a challenging task for CRIU [1]. Last year I've =
-given a brief talk on LPC 2022
-> > about how we handle files C/R in CRIU and which blockers we have for FU=
-SE filesystems. [2]
+> > diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+> > index 737764c2295e..0f53ffd63957 100644
+> > --- a/fs/fuse/dev.c
+> > +++ b/fs/fuse/dev.c
+> > @@ -2187,6 +2187,112 @@ void fuse_abort_conn(struct fuse_conn *fc)
+> >   }
+> >   EXPORT_SYMBOL_GPL(fuse_abort_conn);
 > >
-> > The main problem for CRIU is that we have to restore mount namespaces a=
-nd memory mappings before the process tree.
-> > It means that when CRIU is performing mount of fuse filesystem it can't=
- use the original FUSE daemon from the
-> > restorable process tree, but instead use a "fake daemon".
-> >
-> > This leads to many other technical problems:
-> > * "fake" daemon has to reply to FUSE_INIT request from the kernel and i=
-nitialize fuse connection somehow.
-> > This setup can be not consistent with the original daemon (protocol ver=
-sion, daemon capabilities/settings
-> > like no_open, no_flush, readahead, and so on).
-> > * each fuse request has a unique ID. It could confuse userspace if this=
- unique ID sequence was reset.
-> >
-> > We can workaround some issues and implement fragile and limited support=
- of FUSE in CRIU but it doesn't make any sense, IMHO.
-> > Btw, I've enumerated only CRIU restore-stage problems there. The dump s=
-tage is another story...
-> >
-> > My proposal is not only about CRIU. The same interface can be useful fo=
-r FUSE mounts recovery after daemon crashes.
-> > LXC project uses LXCFS [3] as a procfs/cgroupfs/sysfs emulation layer f=
-or containers. We are using a scheme when
-> > one LXCFS daemon handles all the work for all the containers and we use=
- bindmounts to overmount particular
-> > files/directories in procfs/cgroupfs/sysfs. If this single daemon crash=
-es for some reason we are in trouble,
-> > because we have to restart all the containers (fuse bindmounts become i=
-nvalid after the crash).
-> > The solution is fairly easy:
-> > allow somehow to reinitialize the existing fuse connection and replace =
-the daemon on the fly
-> > This case is a little bit simpler than CRIU cause we don't need to care=
- about the previously opened files
-> > and other stuff, we are only interested in mounts.
+> > +static int fuse_reinit_conn(struct fuse_conn *fc)
+> > +{
+> > +     struct fuse_iqueue *fiq =3D &fc->iq;
+> > +     struct fuse_dev *fud;
+> > +     unsigned int i;
+> > +
+> > +     if (fc->conn_gen + 1 < fc->conn_gen)
+> > +             return -EOVERFLOW;
+> > +
+> > +     fuse_abort_conn(fc);
+> > +     fuse_wait_aborted(fc);
 >
+> Shouldn't this also try to flush all data first?
 
-Hello, Bernd!
+I think we should. Thanks for pointing to that!
 
-Thanks a lot for your attention/review to this patch series!
+I've read all your comments and I'll prepare -v2 series soon.
 
->
-> I like your patches, small and easy to read :)
-
-Glad to hear, thanks! ;-)
-
-> So this basically fails all existing open files - our (future) needs go
-> beyond that. I wonder if we can extend it later and re-init the new
-> daemon with something like "fuse_queue_recall" - basically the opposite
-> of fuse_queue_forget. Not sure if fuse can access the vfs dentry cache
-> to know for which files that would need to be done - if not, it would
-> need to do its own book-keeping.
->
-
-I thought about this (problem with existing opened FDs) too, it's just
-a first approach to the problem and as far as I mentioned I have no
-CRIU-side implementation (so it's not tested with full
-Checkpoint/Restore),
-but it works well for "fuse reinitialization" (which is needed for
-LXCFS and can be useful for other fuse filesystems).
-
-I think we can easily extend this later if we come up with some
-agreement about generic UAPI.
-
-I hope that more people will react to this and post their opinions.
-
-Kind regards,
-Alex
+Thanks a lot, Bernd!
 
 >
-> Thanks,
-> Bernd
