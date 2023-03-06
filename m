@@ -2,72 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A9A6AB947
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D1A6AB944
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:07:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCFJHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S229886AbjCFJHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:07:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjCFJHg (ORCPT
+        with ESMTP id S229698AbjCFJHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:07:36 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AFF722A0C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:07:36 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id t11-20020a170902e84b00b0019e399b2efaso5584882plg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:07:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678093655;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4A46wKTC+CcMedW/G9j+SuC/vj+S0/LGxEORBPUqymI=;
-        b=jkvSAN8NSy+uLMta6N+AwFqfJL62XqCwN2Bvyh1/a4/UbQHwRL3F/PnRe/nQwArwp+
-         pOFb3Q5ynk4fHladF23EbePCt7qkXIXnZz31qzXoKEcyttpIsLznMvMwOYwFrIAZzTaa
-         JQ6HYh6KSSQtTZAjFvWY2qaQCCyGsnsU+sQGrAVrIEJMzbMjsSKERgSuP8SFd1AhIIXQ
-         nzs4sYU43IKvUecajKYsdYNRSr2m4gS6DyRR2g0M8z4QOplfdoba7KAt0mdbmpReptu/
-         kHiIF4rCYUdxPJkcT1kxuhqhIf3ofnBN6ZJjhZayUrHE/t/M+5gSPyyhK14GKyXbNDzB
-         lsGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678093655;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4A46wKTC+CcMedW/G9j+SuC/vj+S0/LGxEORBPUqymI=;
-        b=agHtsAWh9kMaRJfA6DqJ8A8B7Hm8q/BbQUks9EYZauQN2fSmbh79lVg/743hzSp5Sz
-         0b+WCR46hVg0MocZXgn05js2nWl30Dvejiy+L1yuPUUb7t+XKfQ3OctWtq6s8/yLn68u
-         Op/DFJMOms3x1gK8gp4tsfumanmkATc/gCgC09bg8tivNbjQcsQJCHJJsX5dYxYKbCjQ
-         Q+ieeqaOcRMg7+vWmbJ2NZis+3qt58G06h/8aXWxDcoz51qTYNNSo6Cvy4YiIAsBZncR
-         b7XE+cHXPrkxMZiMsuEarDC24KX4lzqVOeSluPSNqZ49iL7Bh6KbHPTkNwQhid0+FitR
-         VtFg==
-X-Gm-Message-State: AO0yUKVZthZhbo43i9F7rKAsopT1CYtBOmhwmeXfeAO1l1NpwdWgCB1B
-        pOC3iNXDm8usF0F/d00+9CNyS21qUsQg
-X-Google-Smtp-Source: AK7set/jjFYkNXqa31b0x4vkHuOnIhd4oQL+wq7Pm60LeC6WBNHSXLU9Hyr58Rwz92XV5T/MwzVUExwVqHoS
-X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:d5f3:860e:1224:5e0a])
- (user=apusaka job=sendgmr) by 2002:a62:ce43:0:b0:593:dc61:2161 with SMTP id
- y64-20020a62ce43000000b00593dc612161mr4272494pfg.2.1678093655488; Mon, 06 Mar
- 2023 01:07:35 -0800 (PST)
-Date:   Mon,  6 Mar 2023 17:07:07 +0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
-Message-ID: <20230306170628.1.I8d0612b2968dd4740a4ceaf42f329fb59d5b9324@changeid>
-Subject: [PATCH] Bluetooth: hci_sync: Don't wait peer's reply when powering off
-From:   Archie Pusaka <apusaka@google.com>
-To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
-        Archie Pusaka <apusaka@chromium.org>,
-        Abhishek Pandit-Subedi <abhishekpandit@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Mon, 6 Mar 2023 04:07:33 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF221F5EF;
+        Mon,  6 Mar 2023 01:07:31 -0800 (PST)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pZ6oZ-0007Rz-WC; Mon, 06 Mar 2023 10:07:28 +0100
+Message-ID: <b12d433e-62ea-3ac4-dd97-be0288f1335f@leemhuis.info>
+Date:   Mon, 6 Mar 2023 10:07:26 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, de-DE
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+References: <1a788a8e7ba8a2063df08668f565efa832016032.1678021408.git.linux@leemhuis.info>
+ <ZAVp6jdeWzYcisUO@debian.me>
+ <3d6a30ee-f093-f5b6-a193-cd86320f9452@leemhuis.info>
+ <f53f84b5-9da7-0726-2e1f-f7e81e8ecd24@gmail.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v3] docs: describe how to quickly build a trimmed kernel
+In-Reply-To: <f53f84b5-9da7-0726-2e1f-f7e81e8ecd24@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1678093652;e0a85556;
+X-HE-SMSGID: 1pZ6oZ-0007Rz-WC
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,48 +50,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Archie Pusaka <apusaka@chromium.org>
 
-Currently, when we initiate disconnection, we will wait for the peer's
-reply unless when we are suspending, where we fire and forget the
-disconnect request.
 
-A similar case is when adapter is powering off. However, we still wait
-for the peer's reply in this case. Therefore, if the peer is
-unresponsive, the command will time out and the power off sequence
-will fail, causing "bluetooth powered on by itself" to users.
+On 06.03.23 09:57, Bagas Sanjaya wrote:
+> On 3/6/23 12:40, Thorsten Leemhuis wrote:
+>>> If your distro config have ``CONFIG_IKCONFIG=y``, you can copy from
+>>> procfs::
+>>>
+>>>     zcat /proc/config.gz > .config
+>> <snipped>
+>>
+>>> If it isn't the case, you may want to enable the aforementioned config
+>>> option.
+>>
+>> That or put them in /boot/config-$(uname -r). But well, that is
+>> something the provider of the running kernel needs to do, so it won't
+>> help the reader if we mention it here.
+>>
+>> Or do you think the guide should explain this to ensure people can
+>> pickup their config from there again in case they deleted their build
+>> artifacts? Hmmm. I currently tend to think that's not worth making the
+>> text longer for, as at that point it might be better to restart from
+>> scratch with a distro config anyway.
+>>
+> 
+> I think it depends whether someone would pick from /proc/config.gz or
+> /boot/config. My kernel configuration have CONFIG_IKCONFIG=y but I
+> often copy the config from the latter instead, since I booted with
+> arbitrary kernel version when compiling two or three versions, and I
+> want to ensure that the config used is from correct version (i.e.
+> I use /boot/config-5.15.x-string to build 5.15.x+1 kernel).
 
-This patch makes the host doesn't wait for the peer's reply when the
-disconnection reason is powering off.
+Well, I'd say for most users the file that was automatically picked up
+by olddefconfig/localmodconfig will be the right one. And for cases like
+yours there is already this in the text:
 
-Signed-off-by: Archie Pusaka <apusaka@chromium.org>
-Reviewed-by: Abhishek Pandit-Subedi <abhishekpandit@google.com>
+```
+The make targets try to find the configuration for your running kernel
+automatically, but might choose poorly. A line like ‘# using defaults
+found in /boot/config-6.0.7-250.fc36.x86_64’ or ‘using config:
+‘/boot/config-6.0.7-250.fc36.x86_64’ tells you which file they picked.
+If that is not the intended one, simply store it as ‘~/linux/.config’
+before using these make targets.
+```
 
----
+Or am I missing something?
 
- net/bluetooth/hci_sync.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 561a519a11bd6..a6cea389b675f 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -5103,10 +5103,12 @@ static int hci_disconnect_sync(struct hci_dev *hdev, struct hci_conn *conn,
- 	cp.handle = cpu_to_le16(conn->handle);
- 	cp.reason = reason;
- 
--	/* Wait for HCI_EV_DISCONN_COMPLETE not HCI_EV_CMD_STATUS when not
--	 * suspending.
-+	/* Wait for HCI_EV_DISCONN_COMPLETE, not HCI_EV_CMD_STATUS, when the
-+	 * reason is anything but HCI_ERROR_REMOTE_POWER_OFF. This reason is
-+	 * used when suspending or powering off, where we don't want to wait
-+	 * for the peer's response.
- 	 */
--	if (!hdev->suspended)
-+	if (reason != HCI_ERROR_REMOTE_POWER_OFF)
- 		return __hci_cmd_sync_status_sk(hdev, HCI_OP_DISCONNECT,
- 						sizeof(cp), &cp,
- 						HCI_EV_DISCONN_COMPLETE,
--- 
-2.40.0.rc0.216.gc4246ad0f0-goog
-
+Ciao, Thorsten
