@@ -2,202 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0700F6ABE22
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4BB6ABF11
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjCFL2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
+        id S229918AbjCFMGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:06:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFL2H (ORCPT
+        with ESMTP id S229639AbjCFMGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:28:07 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA8720559
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:28:04 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id t14so9241116ljd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:28:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678102083;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=205oYFe4/B3UC/X3qLrV4lWCFSwtZFx9u6zXNGXzdZg=;
-        b=tYxvsHkYitctMbDyn+0brKMs7h03vuc34++qTOgQCEXY0QOltjVFzavue7XOjwIBXz
-         LMKRO0A1xwNSzXZFnd0JnvqMD9VThgr+5mGucoUg14TXX2erPQBCSmP5U3Zv5gOQ65YF
-         aJr59vehRqEcPD2OJICJnlRAOPRS0o8Th0I/W50leAD4actrR0r66yCMpHZfK2W4QnVb
-         y2JpLiJKGSxhNvSnCXnVuO2CI3HaHH25c1zAjGpMDB/IfbeJY8iHeylBZssZHVRrvh0U
-         ZoIK374BF80gQZHCo+SjoxWz2s+K8KggfaBJCFuzAeZ4KmG3/3vlBTh6k7gY99yBx6HI
-         HjEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678102083;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=205oYFe4/B3UC/X3qLrV4lWCFSwtZFx9u6zXNGXzdZg=;
-        b=7T34aTUCal5LcZ6+jtaFX6IpNqc8clWeaTKipj6BbhTiJ6WyMpJegGxLTofpyNNmHH
-         BIxWc93RT1BrJPFqAe1ZQ7YQMG7W7UwXYhEuH7G1+45hQSyPXo2rGs26aYK6zmmNJ1Fs
-         j9lZk5zOFpeQUwSXkfzvO6LDt9wvtYmjIk2kwdLi6ZwrPMbZ99fQJ0Rx7DU5xltI6t26
-         G/GbLBDcFXEF4YFeXqisaFEv9/zw/roZ+ZpE4eRLZh3vWZ0hFr7mkyB2LZzRTSw5O6X3
-         +X+NoDlobJ6/UEFSnEmUVHYClhNtsM6HxaTkKGHZwJbyXOjXmELkA4/atd1zpa/cOAId
-         2OJQ==
-X-Gm-Message-State: AO0yUKUA7dK9NChh7meRFQf04UfiD5W7REHp7kYC9G4NzhaCltyT2KNa
-        Gvunki/5dUghrro3MfcKQT7tFQ==
-X-Google-Smtp-Source: AK7set8aBql9IKQglXdI+C9VtpQK0WdlDEU+pVafNQuJJSo71a5RDLIA3RP28ZVtY1ImqHSRtfjaDw==
-X-Received: by 2002:a2e:86d5:0:b0:295:a932:8e40 with SMTP id n21-20020a2e86d5000000b00295a9328e40mr2943634ljj.17.1678102082812;
-        Mon, 06 Mar 2023 03:28:02 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id c14-20020ac2530e000000b004db51387ad6sm1588681lfh.129.2023.03.06.03.28.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 03:28:02 -0800 (PST)
-Message-ID: <afa95a2d-dbf3-621e-a1ed-fa484d288432@linaro.org>
-Date:   Mon, 6 Mar 2023 12:28:01 +0100
+        Mon, 6 Mar 2023 07:06:19 -0500
+X-Greylist: delayed 2213 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 04:06:10 PST
+Received: from fallback18.i.mail.ru (fallback18.i.mail.ru [79.137.243.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F04206A3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:06:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=h4VGDoBsgspJTdXbCO7qW1b7WGjbWxU1wQ/lWinoSAg=;
+        t=1678104370;x=1678194370; 
+        b=TQt5dH8iNEP+ztSDwEPnjT9VCfgIcSQSbzGCIwavRFUIQ3dJb1e/vBuCNvPNaJKU5D1r5t1v2T9hKPYkzpL89FslynicThDGsjAV+6W0/1ZbGf0d2hvqlsZeEHgcuwBUbyBZjGGV9mInjm4HbYUTa2n+WO2eLn9L9SaLa3CQ8ga6+REdsVPYkfe3kn0banTe3Nhxhq5J+BU1JaXNmmiSqt54pFGRvk084s4kxNbtx2vHk2ZuGqWZ56FVq1IeUePehbxQ9K53Vqcae1v6sB/6x2a4VhMpy9QydGneb7uxIPvmjj4sb3/3Xgu8WZ1OYGcMgTksQphSdzrcCh/pkTLg0g==;
+Received: from [10.12.4.13] (port=37126 helo=smtp38.i.mail.ru)
+        by fallback18.i.mail.ru with esmtp (envelope-from <listdansp@mail.ru>)
+        id 1pZ91n-00F3Q2-OQ; Mon, 06 Mar 2023 14:29:15 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=h4VGDoBsgspJTdXbCO7qW1b7WGjbWxU1wQ/lWinoSAg=;
+        t=1678102155;x=1678192155; 
+        b=KDV6nmbexfHzVoxjnMW7ElvGyq0AQcMFwvfCe4UQHfCeHEP+CDlGin33bZjd8S+dJNxLbre9E6pJ9Tu+6m+jip32QTBn5BqFagGZKtO/uY3B6LPQigqyMWTV3/yEiNnfNTfWT/ISgnHlBwfc23IFl5xYn+2bp6jX7lAsWCrelT6q/gwlr88NFQ8dwKYY/9mJHmhJwE2aHiH+3M1UQTMuuWw4WhgkeRcBO03sDjHOJ7kn/TlyASO6K3nw8R4nlQ0WB776TU8mO+DGO1LY//29rfvL+fEJ/ovWRBPMJr5G2VJj3F7MF3rq7fZCrMu0tIKGH8ahMKWH1tECxFaYj4iB5Q==;
+Received: by smtp38.i.mail.ru with esmtpa (envelope-from <listdansp@mail.ru>)
+        id 1pZ91c-00FgqB-9M; Mon, 06 Mar 2023 14:29:04 +0300
+From:   Danila Chernetsov <listdansp@mail.ru>
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Danila Chernetsov <listdansp@mail.ru>, Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH] drm/amd/display: remove an unnecessary NULL check
+Date:   Mon,  6 Mar 2023 11:28:24 +0000
+Message-Id: <20230306112824.8049-1-listdansp@mail.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH RFT 03/20] clk: qcom: smd-rpm: Add support for keepalive
- votes
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-References: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org>
- <20230303-topic-rpmcc_sleep-v1-3-d9cfaf9b27a7@linaro.org>
- <CAA8EJpp6cxY5+L28qsTeXCmA31e4dv21u1Tz9SquAugaV+EqfQ@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJpp6cxY5+L28qsTeXCmA31e4dv21u1Tz9SquAugaV+EqfQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD9BCEC41593EBD8357C44FF2494EBC845BD7AEF656CFC8618A182A05F5380850407AAAB7044E02CB9B414A6F5C01DD568A1464148261DD8DAB87349C382CCD176E
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE77BF46084C0059042EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637CE17C7754E00FC028638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8B016A246DDE16CE6CE9C66B9EF8B9FEF6F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE7212612128AA291179FA2833FD35BB23D9E625A9149C048EE3F735096452955E3C26CFBAC0749D213D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8BD77DF2741F6D7EBCA471835C12D1D977C4224003CC836476EB9C4185024447017B076A6E789B0E975F5C1EE8F4F765FCE93681558A2C9BD03AA81AA40904B5D9CF19DD082D7633A078D18283394535A93AA81AA40904B5D98AA50765F790063720748F29B94A53BDD81D268191BDAD3D3666184CF4C3C14F3FC91FA280E0CE3D1A620F70A64A45A98AA50765F79006372E808ACE2090B5E1725E5C173C3A84C3C5EA940A35A165FF2DBA43225CD8A89FE3CA985283E39ABD6D8C47C27EEC5E9FB5C8C57E37DE458BEDA766A37F9254B7
+X-C1DE0DAB: 0D63561A33F958A549E2961E890F56F30BEA83F3CBBF9969DE678A5BD2C0A5E74EAF44D9B582CE87C8A4C02DF684249C2E763F503762DF505830FD47C92F6C63
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34EC58E35A639A24717EF9FFCB2582C4CE9685E1A881FD599AF437D96B6782AAB28FA5DE920320117D1D7E09C32AA3244C03A6BB35BA37848FCB5D409686E6C48C853296C06374E60298DBA7662A2C9987
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojo8yGo04U2e24zAj8bFTDMA==
+X-Mailru-Sender: 4CE1109FD677D2770147F6A9E21DCA7BAAB1B1B66B3222840ED6C1C441B85F206115718EBCD968C67E3C9C7AF06D9E7B78274A4A9E9E44FD3C3897ABF9FF211DE8284E426C7B2D9A5FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-7564579A: 78E4E2B564C1792B
+X-77F55803: 6242723A09DB00B4BD2EB812D5A6E5F7D3C1BE093F4DBF3EB2D947066E19A99D049FFFDB7839CE9E8A9D5799ED9E1A2444D8461CACA1603EE94E99B57B1F40A8A4D66971C28B3C74
+X-7FA49CB5: 0D63561A33F958A59C14BF51AC7C436FBB2F4EF9A83765FF9435D9682D80C156CACD7DF95DA8FC8BD5E8D9A59859A8B6A096F61ED9298604
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5xhPKz0ZEsZ5k6NOOPWz5QAiZSCXKGQRq3/7KxbCLSB2ESzQkaOXqCBFZPLWFrEGlV1shfWe2EVcxl5toh0c/aCGOghz/frdRhzMe95NxDFdAc2jUOxWGfxps9h1Uf8DGQ==
+X-Mailru-MI: 800
+X-Mras: Ok
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The 'pipe' can't be NULL because it points to an element of array.
 
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-On 6.03.2023 02:21, Dmitry Baryshkov wrote:
-> On Sat, 4 Mar 2023 at 15:27, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>
->> Some bus clock should always have a minimum (19.2 MHz) vote cast on
->> them, otherwise the platform will fall apart, hang and reboot.
->>
->> Add support for specifying which clocks should be kept alive and
->> always keep a vote on XO_A to make sure the clock tree doesn't
->> collapse. This removes the need to keep a maximum vote that was
->> previously guaranteed by clk_smd_rpm_handoff.
->>
->> This commit is a combination of existing (not-exactly-upstream) work
->> by Taniya Das, Shawn Guo and myself.
->>
->> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
->> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/clk/qcom/clk-smd-rpm.c | 23 +++++++++++++++++++++++
->>  1 file changed, 23 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
->> index cce7daa97c1e..8e017c575361 100644
->> --- a/drivers/clk/qcom/clk-smd-rpm.c
->> +++ b/drivers/clk/qcom/clk-smd-rpm.c
->> @@ -4,6 +4,7 @@
->>   * Copyright (c) 2014, The Linux Foundation. All rights reserved.
->>   */
->>
->> +#include <linux/clk.h>
->>  #include <linux/clk-provider.h>
->>  #include <linux/err.h>
->>  #include <linux/export.h>
->> @@ -178,6 +179,8 @@ struct clk_smd_rpm_req {
->>  struct rpm_smd_clk_desc {
->>         struct clk_smd_rpm **clks;
->>         size_t num_clks;
->> +       struct clk_hw **keepalive_clks;
->> +       size_t num_keepalive_clks;
->>  };
->>
->>  static DEFINE_MUTEX(rpm_smd_clk_lock);
->> @@ -1278,6 +1281,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->>         struct qcom_smd_rpm *rpm;
->>         struct clk_smd_rpm **rpm_smd_clks;
->>         const struct rpm_smd_clk_desc *desc;
->> +       struct clk_hw **keepalive_clks;
->>
->>         rpm = dev_get_drvdata(pdev->dev.parent);
->>         if (!rpm) {
->> @@ -1291,6 +1295,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->>
->>         rpm_smd_clks = desc->clks;
->>         num_clks = desc->num_clks;
->> +       keepalive_clks = desc->keepalive_clks;
->>
->>         for (i = 0; i < num_clks; i++) {
->>                 if (!rpm_smd_clks[i])
->> @@ -1321,6 +1326,24 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->>         if (ret)
->>                 goto err;
->>
->> +       /* Leave a permanent active vote on clocks that require it. */
->> +       for (i = 0; i < desc->num_keepalive_clks; i++) {
->> +               if (WARN_ON(!keepalive_clks[i]))
->> +                       continue;
->> +
->> +               ret = clk_prepare_enable(keepalive_clks[i]->clk);
->> +               if (ret)
->> +                       return ret;
-> 
-> Would it be better to use CLK_IS_CRITICAL instead? Using the existing
-> API has a bonus that it is more visible compared to the ad-hoc
-> solutions.
-Yeah, I think that makes sense.
+Fixed: 7cf2c840c6b5 (drm/amd/display: Commit validation set from state)
+Signed-off-by: Danila Chernetsov <listdansp@mail.ru>
+---
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
->> +
->> +               ret = clk_set_rate(keepalive_clks[i]->clk, 19200000);
-> 
-> Don't we also need to provide a determine_rate() that will not allow
-> one to set clock frequency below 19.2 MHz?
-Hm, sounds like a good idea..
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index 0cb8d1f934d1..d3b850372eb3 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -1854,7 +1854,7 @@ static enum dc_status dc_commit_state_no_check(struct dc *dc, struct dc_state *c
+ 		for (k = 0; k < MAX_PIPES; k++) {
+ 			pipe = &context->res_ctx.pipe_ctx[k];
+ 
+-			for (l = 0 ; pipe && l < context->stream_count; l++)  {
++			for (l = 0 ; l < context->stream_count; l++)  {
+ 				if (context->streams[l] &&
+ 					context->streams[l] == pipe->stream &&
+ 					dc->hwss.setup_stereo)
+-- 
+2.25.1
 
-> 
->> +               if (ret)
->> +                       return ret;
->> +       }
->> +
->> +       /* Keep an active vote on CXO in case no other driver votes for it. */
->> +       if (rpm_smd_clks[RPM_SMD_XO_A_CLK_SRC])
->> +               return clk_prepare_enable(rpm_smd_clks[RPM_SMD_XO_A_CLK_SRC]->hw.clk);
->> +
->>         return 0;
->>  err:
->>         dev_err(&pdev->dev, "Error registering SMD clock driver (%d)\n", ret);
-> 
-> 
-> I have mixed feelings towards this patch (and the rest of the
-> patchset). It looks to me like we are trying to patch an issue of the
-> interconnect drivers (or in kernel configuration).
-Well, as you noticed, this patch tries to address a situation where a
-critical clock could be disabled. The interconnect driver (as per my
-other recent patchset) also has a concept of "keepalive", but:
-
-1. not very many SoCs already have a functional icc driver
-2. devices with an existing interconnect driver should also be
-   testable without one (through painful ripping out everything-icc
-   from the dts) for regression tracking
-
-Konrad
-
-> 
-> 
-> --
-> With best wishes
-> Dmitry
