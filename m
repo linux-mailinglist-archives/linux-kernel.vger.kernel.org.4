@@ -2,92 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109F16AD0F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC7C6AD133
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:09:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbjCFWAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:00:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
+        id S229917AbjCFWJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:09:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCFWAX (ORCPT
+        with ESMTP id S229651AbjCFWJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:00:23 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC5A3CE0F;
-        Mon,  6 Mar 2023 14:00:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Mar 2023 17:09:30 -0500
+X-Greylist: delayed 434 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 14:09:28 PST
+Received: from gimli.rothwell.id.au (gimli.rothwell.id.au [103.230.158.156])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C4F3A86A;
+        Mon,  6 Mar 2023 14:09:28 -0800 (PST)
+Received: from authenticated.rothwell.id.au (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DFC5DCE17D5;
-        Mon,  6 Mar 2023 22:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 16414C433D2;
-        Mon,  6 Mar 2023 22:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678140019;
-        bh=E6ffbDOM6Vr/OgGspczlxERJkY+WFlvEdjkFwcftpQw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rJN7rE4aaA9TioixAKhoHBb0CRiUTciC7N+X1m/02PBt2jFveDXLnIZHimDmEvoaH
-         M+nYJ/U4OEv9zj90vsCZxFNz75yXAik2pFDDBHAAs+lMHofqm53pC3AYzccfzPe3wH
-         xVyowdOpBCCzP28EFeD/zrEhY1dyxU4ub+DPdZmW+FtcQqW/MTJ/t7i4nHvSA85JGu
-         XhI7iGrnchipdCguLUrUEZYf32EbZz7tvFC7ATwdHQIaRwPHBHx2QyX6/Pdw2oGTx0
-         uD2DJ6Gds57vozeHolfcot6qZtJPzyPxDXICBdukeEMpSiAeI4pYbO6bIPd7S0jaWI
-         AP2Ac3CQwxx+A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E83CDE68C35;
-        Mon,  6 Mar 2023 22:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mail.rothwell.id.au (Postfix) with ESMTPSA id 4PVsxT2rNJz10D8;
+        Tue,  7 Mar 2023 09:02:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rothwell.id.au;
+        s=201702; t=1678140128;
+        bh=CT3TMcpY6lA0teNpfbCN+jQnW4E+gRCV+4UTTjMGssc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lnIMNfLIUI7olNLDKs9n+tXXOi8l7ihqREx1UhulmGiXDoQ11PR1r+P1Et1pck5kh
+         YEfAWenwbH616KGWrC10Feqk9XWjVtzo4p8sHbV1mSSRMcsWlCBdreo/w91nIEA/yQ
+         CybzKjirCMvMcAx5dEy/2vHq7BKbSt266tIeBbHBo6HhYYXLqd+JMsd/s9VP2POfuK
+         bTHdZsqk5sG8L0OXGksmFi572maPf8/gMr8arwdGMeu2zse4/ni3TaiOGG36D4k7NB
+         VpcHZAUMecXBk/RRhY6Rw0lLKmbhXBS3XLZCbxPjkAy9sLTEvHAhbzJenE4gP6K57A
+         E2lzj/xiwtoAg==
+Date:   Tue, 7 Mar 2023 09:02:03 +1100
+From:   Stephen Rothwell <sfr@rothwell.id.au>
+To:     Jan Kara <jack@suse.cz>, Theodore Ts'o <tytso@mit.edu>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        ext4 Development <linux-ext4@vger.kernel.org>
+Subject: Re: The state of ext4 tree merging (was Re: Linux 6.3-rc1)
+Message-ID: <20230307090203.56c41488@oak.ozlabs.ibm.com>
+In-Reply-To: <20230306124134.hmeuvjhihs4ubpmz@quack3>
+References: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
+        <ZAVbZJSyOdF0BxAJ@debian.me>
+        <20230306124134.hmeuvjhihs4ubpmz@quack3>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: fix RX data corruption issue
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167814001894.23313.3204096836474065574.git-patchwork-notify@kernel.org>
-Date:   Mon, 06 Mar 2023 22:00:18 +0000
-References: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
-In-Reply-To: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk, hkallweit1@gmail.com, lorenzo@kernel.org,
-        Mark-MC.Lee@mediatek.com, john@phrozen.org, nbd@nbd.name,
-        angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
-        dqfext@gmail.com, Landen.Chao@mediatek.com, sean.wang@mediatek.com,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net, olteanv@gmail.com, f.fainelli@gmail.com,
-        andrew@lunn.ch, vladimir.oltean@nxp.com, bjorn@mork.no
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/azmCj37hp48XC88B.Q0BoGS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+--Sig_/azmCj37hp48XC88B.Q0BoGS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Hi all,
 
-On Sat, 4 Mar 2023 13:43:20 +0000 you wrote:
-> Fix data corruption issue with SerDes connected PHYs operating at 1.25
-> Gbps speed where we could previously observe about 30% packet loss while
-> the bad packet counter was increasing.
-> 
-> As almost all boards with MediaTek MT7622 or MT7986 use either the MT7531
-> switch IC operating at 3.125Gbps SerDes rate or single-port PHYs using
-> rate-adaptation to 2500Base-X mode, this issue only got exposed now when
-> we started trying to use SFP modules operating with 1.25 Gbps with the
-> BananaPi R3 board.
-> 
-> [...]
+On Mon, 6 Mar 2023 13:41:34 +0100 Jan Kara <jack@suse.cz> wrote:
+>
+> To be fair, the data=3Djournal cleanups got held back only partially due =
+to
+> the merge issues. Another problem is that they somehow make problems with
+> filesystem freezing in data=3Djournal mode more frequent and we wanted to
+> understand (and hopefully fix) that. Of course if Ted could look into this
+> earlier or I could earlier debug these issues, we could have merged the
+> cleanups but that's always the case that you have to prioritize and these
+> cleanups don't have that high priority...
 
-Here is the summary with links:
-  - [net] net: ethernet: mtk_eth_soc: fix RX data corruption issue
-    https://git.kernel.org/netdev/net/c/193250ace270
+In that case, it would be nice (for me at least) if the ext4 tree was
+now reset to be v6.3-rc1 i.e. get rid of the duplicate commits and the
+new stuff that is still being worked on.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/azmCj37hp48XC88B.Q0BoGS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGYtsACgkQAVBC80lX
+0Gzs2wgAjNS8RWpLPCi6vkgiXrAVXehIVNeARS5omvrCfoPz7D00jC2QkzjfjV69
+IskkliLupht9ZvOllPkerP5ToqZSof+qDQZBJqGUkbPnK/+jnq1mvPn1OLdjYR6A
+7PBWiBhcJ3nyU7wxLmdu5GPt1ETViOgWl6SM7Cj+y482kfM0+OiTbdN8Xtfyj8rD
+i0Z7J50DlFFq6xqKCPhUvZiYj1L7L1vHX3klSGbjc3AW5VFjkJfJXELUS0P4foOu
+v17o7RbnjlA1UMFFdXQyNg9PEG4lf68vNUmiKR6MW5KPzJ0i2BDuRpe77plBzE1o
+gBaFfrT0rplyWiWfJHBWVi81NFohJA==
+=z0a5
+-----END PGP SIGNATURE-----
+
+--Sig_/azmCj37hp48XC88B.Q0BoGS--
