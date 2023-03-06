@@ -2,160 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988636AC4FD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F21026AC4F3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbjCFP3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:29:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
+        id S231343AbjCFP2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbjCFP3M (ORCPT
+        with ESMTP id S231285AbjCFP2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:29:12 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B202022DF9;
-        Mon,  6 Mar 2023 07:28:48 -0800 (PST)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326EFXOl029637;
-        Mon, 6 Mar 2023 15:28:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=gj/5qssEk3LgrGAJ6YpdyJPq7RIt01JbXP10LSwuQfs=;
- b=m8R58hh+iUKa7w2pd1lXGeOW+pa4/BA6YO8+JfDYd4WvnepU01cMJ5I0HxWioswKpQYf
- SLAXyYgytzxyahaoIsn5D73VXwnHeA81QFFmtg6vk2ebW0A8QOewu44CKUVZNxfxTDvU
- uLDPVsJ5yBLvKRVcGrALF6F1lDOuMOaozWdlLVZZbEaopmDFRgLXUR9fmYLJ/S534aUN
- SljOJRXh4fFI0aslGkBtXQgvDMpDEQ6C+IvBX9gb9vsVa1sIXOTrXXt9snbMzg9oVOlU
- +Ae/FUNMvMornXSZOm498OtoTIO6qReIpjZxC9hpsWL+PCtRLCqa7Vv1UVF6qkOult6G PA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p417jw3uc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 15:28:14 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 326FSDnQ007388
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Mar 2023 15:28:13 GMT
-Received: from [10.216.63.59] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
- 07:28:09 -0800
-Message-ID: <8f3c6bea-ee49-dc0e-7491-19714b97255a@quicinc.com>
-Date:   Mon, 6 Mar 2023 20:58:04 +0530
+        Mon, 6 Mar 2023 10:28:34 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4634ED9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:28:14 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id m6so13256551lfq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 07:28:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678116492;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=My1MFXSD/RWeKCEqSJZ9TX01DdnzJtrMv7kbrxpycI4=;
+        b=Ymb5/WI4gW9yBplYiAuQmNp4N4SodHb4uZk6ZUxx+RZs7ew9PDJE/0mgtAbuhqBi5D
+         WkWK6zrEy+v6ecFJcYvc52rHLuMmLMgubaWjFa0MLdlPpJiolqfa0N5JnVdDS0PV8Obz
+         G9j7Lk+Lg/T1BYlGFETEoI5liD3S3ujz7Hszlol8PnZJ7rRdh+xQ+b1UC1CZP7zOFGFw
+         59iyTMrK+ZWKqDIKlgXGiXDSwnOLkyoyn/Dc9lbytn/jsI+DcEB25xbZP4MfLv9fBjja
+         y+WHx6Baj0UHvp10YMReenk4y4Y0OELP0UGR45wYFHsypZOM+7Col5a9/Bgjl4hEjacU
+         CRDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678116492;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=My1MFXSD/RWeKCEqSJZ9TX01DdnzJtrMv7kbrxpycI4=;
+        b=uXWkoNrqz22LP3SM5V6jJx3N7TmlwAuVvPYNkZi4u/OpW0pCIS5doXK0QVmoAuYfKg
+         wqIgyFoavNMLZMjpdaNQHtrgogLPcx5hD6/NpONzeGch8cymW2d1ShVmZD4uq+XBOSK/
+         DL5jLfhCyOtcusPZIP1gKn/C7A7hIFAHclI+IgT57bckgSlFUKXJBOcTmqMYb1myr1Oe
+         xnW78UvaaMLwOSXyxZ/5TtbBhymclZBoows3wSCW7O5uaC72dBgjbFs0XlKE00gOYuXM
+         AO6DnWRB0tJVYsVuSk60G4v0qvs6Jg0M+CfcOMfKxZqtygGO1u2y1EJb/Etj4hPVKYQT
+         OZiQ==
+X-Gm-Message-State: AO0yUKWgr0r2rPEYFnw+5GFnzk1SRKmtmQsMaWcKWPJbqlybQWwpJ6RV
+        uaeCDcR+L2ZJACM51/1PG+c=
+X-Google-Smtp-Source: AK7set8QknUUjBPaJJUkVEulRaDql/56Ncy5gJ4sSLp6mFoFQ470mVFeJDp9hdw1jnhsTrNCM/AN9Q==
+X-Received: by 2002:ac2:4a65:0:b0:4dc:8215:5524 with SMTP id q5-20020ac24a65000000b004dc82155524mr2553337lfp.31.1678116492513;
+        Mon, 06 Mar 2023 07:28:12 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id a18-20020ac25212000000b004d813ec9b47sm1666020lfl.132.2023.03.06.07.28.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 07:28:11 -0800 (PST)
+Date:   Mon, 6 Mar 2023 18:28:10 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Kang Chen <void0red@gmail.com>
+Cc:     jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        ntb@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ntb_tool: check null return of devm_kcalloc in
+ tool_init_mws
+Message-ID: <20230306152810.ptb622tfhoxehhdc@mobilestation>
+References: <20230226055743.2522819-1-void0red@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 0/6] Add basic Minidump kernel driver support
-Content-Language: en-US
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <keescook@chromium.org>,
-        <tony.luck@intel.com>, <gpiccoli@igalia.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: i9Ag_dKQwXO2KWgJhTZgOwgdkuXVBBVb
-X-Proofpoint-ORIG-GUID: i9Ag_dKQwXO2KWgJhTZgOwgdkuXVBBVb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1015 adultscore=0 impostorscore=0 lowpriorityscore=0
- malwarescore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060136
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230226055743.2522819-1-void0red@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Friendly review reminder..
+On Sun, Feb 26, 2023 at 01:57:43PM +0800, Kang Chen wrote:
+> devm_kcalloc may fails, tc->peers[pidx].outmws might be null
+> and will cause null pointer dereference later.
+> 
+> Signed-off-by: Kang Chen <void0red@gmail.com>
 
--Mukesh
+Please add the fixes tag:
+Fixes: 7f46c8b3a552 ("NTB: ntb_tool: Add full multi-port NTB API support")
+so the patch could be noticeable by the stable kernel maintainers.
 
-On 2/21/2023 4:55 PM, Mukesh Ojha wrote:
-> Minidump is a best effort mechanism to collect useful and predefined data
-> for first level of debugging on end user devices running on Qualcomm SoCs.
-> It is built on the premise that System on Chip (SoC) or subsystem part of
-> SoC crashes, due to a range of hardware and software bugs. Hence, the
-> ability to collect accurate data is only a best-effort. The data collected
-> could be invalid or corrupted, data collection itself could fail, and so on.
+Other than that looks good.
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+* Please don't forget to add the Rb-tags on v2.
+
+-Serge(y)
+
+> ---
+>  drivers/ntb/test/ntb_tool.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> Qualcomm devices in engineering mode provides a mechanism for generating
-> full system ramdumps for post mortem debugging. But in some cases it's
-> however not feasible to capture the entire content of RAM. The minidump
-> mechanism provides the means for selecting which snippets should be
-> included in the ramdump.
+> diff --git a/drivers/ntb/test/ntb_tool.c b/drivers/ntb/test/ntb_tool.c
+> index 5ee0afa62..eeeb4b1c9 100644
+> --- a/drivers/ntb/test/ntb_tool.c
+> +++ b/drivers/ntb/test/ntb_tool.c
+> @@ -998,6 +998,8 @@ static int tool_init_mws(struct tool_ctx *tc)
+>  		tc->peers[pidx].outmws =
+>  			devm_kcalloc(&tc->ntb->dev, tc->peers[pidx].outmw_cnt,
+>  				   sizeof(*tc->peers[pidx].outmws), GFP_KERNEL);
+> +		if (tc->peers[pidx].outmws == NULL)
+> +			return -ENOMEM;
+>  
+>  		for (widx = 0; widx < tc->peers[pidx].outmw_cnt; widx++) {
+>  			tc->peers[pidx].outmws[widx].pidx = pidx;
+> -- 
+> 2.34.1
 > 
-> The core of minidump feature is part of Qualcomm's boot firmware code.
-> It initializes shared memory (SMEM), which is a part of DDR and
-> allocates a small section of SMEM to minidump table i.e also called
-> global table of content (G-ToC). Each subsystem (APSS, ADSP, ...) has
-> their own table of segments to be included in the minidump and all get
-> their reference from G-ToC. Each segment/region has some details like
-> name, physical address and it's size etc. and it could be anywhere
-> scattered in the DDR.
-> 
-> Existing upstream Qualcomm remoteproc driver[1] already supports minidump
-> feature for remoteproc instances like ADSP, MODEM, ... where predefined
-> selective segments of subsystem region can be dumped as part of
-> coredump collection which generates smaller size artifacts compared to
-> complete coredump of subsystem on crash.
-> 
-> [1]
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/drivers/remoteproc/qcom_common.c#n142
-> 
-> In addition to managing and querying the APSS minidump description,
-> the Linux driver maintains a ELF header in a segment. This segment
-> gets updated with section/program header whenever a new entry gets
-> registered.
-> 
-> Patch 1/6 is very trivial change.
-> Patch 2/6 moves the minidump specific data structure and macro to
->   qcom_minidump.h so that (3/6) minidump driver can use.
-> Patch 3/6 implements qualcomm minidump kernel driver and exports
->   symbol which other minidump kernel client can use.
-> Patch 4/6 enables the qualcomm minidump driver.
-> Patch 5/6 Use the exported symbol from minidump driver in qcom_common
->   for querying minidump descriptor for a subsystem.
-> Patch 6/6 Register pstore region with minidump.
-> 
-> Testing of the patches has been done on sm8450 target with the help
-> of out of tree patch which helps to set the download mode and storage
-> type(on which dump will be saved) for which i will send separate series.
-> 
-> Mukesh Ojha (6):
->    remoteproc: qcom: Expand MD_* as MINIDUMP_*
->    remoteproc: qcom: Move minidump specific data to qcom_minidump.h
->    soc: qcom: Add Qualcomm minidump kernel driver
->    arm64: defconfig: Enable Qualcomm minidump driver
->    remoterproc: qcom: refactor to leverage exported minidump symbol
->    pstore/ram: Register context with minidump
-> 
->   arch/arm64/configs/defconfig     |   1 +
->   drivers/remoteproc/qcom_common.c |  75 +-----
->   drivers/soc/qcom/Kconfig         |  14 ++
->   drivers/soc/qcom/Makefile        |   1 +
->   drivers/soc/qcom/qcom_minidump.c | 490 +++++++++++++++++++++++++++++++++++++++++
->   fs/pstore/ram.c                  |  77 ++++++
->   include/soc/qcom/minidump.h      |  40 ++++
->   include/soc/qcom/qcom_minidump.h |  88 +++++++
->   8 files changed, 717 insertions(+), 69 deletions(-)
->   create mode 100644 drivers/soc/qcom/qcom_minidump.c
->   create mode 100644 include/soc/qcom/minidump.h
->   create mode 100644 include/soc/qcom/qcom_minidump.h
 > 
