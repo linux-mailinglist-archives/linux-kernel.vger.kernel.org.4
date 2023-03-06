@@ -2,116 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC446AB462
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3EC6AB465
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCFBpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 20:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
+        id S229646AbjCFBqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 20:46:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCFBpn (ORCPT
+        with ESMTP id S229636AbjCFBqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 20:45:43 -0500
-Received: from smtpbgsg1.qq.com (smtpbgsg1.qq.com [54.254.200.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0055010AA0;
-        Sun,  5 Mar 2023 17:45:38 -0800 (PST)
-X-QQ-mid: bizesmtp67t1678067106tf8szd7k
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 06 Mar 2023 09:45:00 +0800 (CST)
-X-QQ-SSF: 01400000000000I0Z000000A0000000
-X-QQ-FEAT: 3M0okmaRx3hGLLbyuvswhxaPXmqKj5Us9hhiqzRpHOXpzhFciG8Kcfuqt3EkD
-        VJ5ECR2Bir2UCawLtnhxTKPnOME5Q9kzXppQVbKXXh73Pt7YuTKGkh8BI8ClY1RUlMqLSZ3
-        q8WjT66WZvrKscvlr5F96I/1mY7Qd8QnB1DnfoUbFSSJxY83h07mTmOaykyy+b7oXd49l05
-        bK92y727C7NWFJBnSXPSBiDkkIhWORRilxVAdco+MmV+BEpq9BcOezykiwwPNdGL+4f6myW
-        /Q+Kotrw7caLp9DQ9AOEYBk1piB3GuzKOJojjgXYRhAvUcj5Xfzsl9xmymwuKMeY68/7/mL
-        ooIvTs5b6TYwOs7wNBDRLk7NVZwVyOeXBL2Pll7JqQ6+7z3C3S1tcnNusesNSYtY0rFJmF/
-X-QQ-GoodBg: 1
-From:   Meng Tang <tangmeng@uniontech.com>
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, zhuweijun@uniontech.com,
-        Meng Tang <tangmeng@uniontech.com>
-Subject: [PATCH] Bluetooth: Add VID/PID 0489/e0e4 for MediaTek MT7922
-Date:   Mon,  6 Mar 2023 09:44:59 +0800
-Message-Id: <20230306014459.25023-1-tangmeng@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Sun, 5 Mar 2023 20:46:09 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3D813523
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 17:46:04 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id f18so10762677lfa.3
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 17:46:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678067163;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q4zNZSkdkbwHO9J+rqedPZEMqIZsYdo/MQm0ECFIqdQ=;
+        b=Ou+RkVPzeUniMRb/ZEPt3z20p6Rvv/yGzA/sEyUizIVz+xtV/Of8LudBAiBe/tXtG5
+         1ODB6AKfDYufSX0pV7ctla9JWxIBkB22k9ximYR8wuCn6XCCV2G8hMZZhq+3kK9zh9LV
+         0cckje3Jft1TMEUtQI3/xi/XJnYG0Hth6Ul7A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678067163;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q4zNZSkdkbwHO9J+rqedPZEMqIZsYdo/MQm0ECFIqdQ=;
+        b=3Ac/ofK3Qbh1ngt/H7QOf2zsvZoHsaLRYQ46u9+/8QSDOW/HLvRikf5qiJvP+YxdHR
+         IbP1WzI/8aMFDVEbv9yolCCBpIx/bEbhal2HwodPfVSe4aWYShUSGR8r4BgNlFiBsSFm
+         W1VNk0divwFXEM4ZEemJqUXfZ4NlfRyUqdOTAMTAULSEAeH41o/H3/8bwS0WbFGBZzz8
+         73zHrMlYbO/4VJQjN3R9xLoc1znUjbWE6ZH9dlYBKgUJZS2W9zLsA3A0ZiL04gCN8rLR
+         MR7/NlugvaLKwp6rf1MzA0vJL4D/5ncT2k247g0WktvX2ET4JksU0Pn21hexww2NdpLv
+         7NQQ==
+X-Gm-Message-State: AO0yUKWkJu24XEUB3WgUVor1WigeBNWto9gRA4AEUBQJUDBsb7S0rqSu
+        17vSy6pMmL5XjCfgZqp6y8Q28TXpq+nTWA695Fq4Yg==
+X-Google-Smtp-Source: AK7set+YM3+oL/m1+RTW0glRFAjhQq3CZCbwaLK6ekLjyOtbtmtiut5TRou6qSjMzovUvDHaRAL+XV/pK0xAuOXi/qw=
+X-Received: by 2002:a05:6512:4c2:b0:4dd:9931:c4ee with SMTP id
+ w2-20020a05651204c200b004dd9931c4eemr2701803lfq.12.1678067162788; Sun, 05 Mar
+ 2023 17:46:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230127044500.680329-1-stevensd@google.com> <Y9QjquvzoL7kKHWE@google.com>
+In-Reply-To: <Y9QjquvzoL7kKHWE@google.com>
+From:   David Stevens <stevensd@chromium.org>
+Date:   Mon, 6 Mar 2023 10:45:51 +0900
+Message-ID: <CAD=HUj7P8XmWLVpwB_XABKT7GT1sLPRozmr=guVktOyk9R+3fw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] KVM: x86: replace kvm_vcpu_map usage in vmx
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Woodhouse <dwmw@amazon.co.uk>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tested on Acer Nitro AN515-47 Notebook
+On Sat, Jan 28, 2023 at 4:19=E2=80=AFAM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Fri, Jan 27, 2023, David Stevens wrote:
+> > From: David Stevens <stevensd@chromium.org>
+> >
+> > This series replaces the usage of kvm_vcpu_map in vmx with
+> > gfn_to_pfn_cache. See [1] for details on why kvm_vcpu_map is broken.
+> >
+> > The presence of kvm_vcpu_map blocks another series I would like to
+> > try to merge [2]. Although I'm not familiar with the internals of vmx,
+> > I've gone ahead and taken a stab at this cleanup. I've done some manual
+> > testing with nested VMs, and KVM selftests pass, but thorough feedback
+> > would be appreciated. Once this cleanup is done, I'll take a look at
+> > removing kvm_vcpu_map from svm.
+>
+> Woot, been waiting for someone to take this one, thanks!  It'll likely be=
+ a week
+> or two until I get 'round to this, but it's definitely something I want t=
+o get
+> merged sooner than later.
 
-output from /sys/kernel/debug/usb/devices:
+Sean, will you be able to get to this in the next few weeks?
 
-T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=02 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0489 ProdID=e0e4 Rev= 1.00
-S:  Manufacturer=MediaTek Inc.
-S:  Product=Wireless_Device
-S:  SerialNumber=000000000
-C:* #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
-A:  FirstIf#= 0 IfCount= 3 Cls=e0(wlcon) Sub=01 Prot=01
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
-I:  If#= 2 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=8a(I) Atr=03(Int.) MxPS= 512 Ivl=125us
-E:  Ad=0a(O) Atr=03(Int.) MxPS= 512 Ivl=125us
-
-Signed-off-by: Meng Tang <tangmeng@uniontech.com>
----
- drivers/bluetooth/btusb.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 5272eef576ed..5809fd2d143e 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -615,6 +615,9 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x0489, 0xe0e2), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x0489, 0xe0e4), .driver_info = BTUSB_MEDIATEK |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
- 	{ USB_DEVICE(0x0489, 0xe0f2), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
--- 
-2.20.1
-
+Thanks,
+David
