@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47D946AB534
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 05:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB206AB540
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 05:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjCFEAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 23:00:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
+        id S229871AbjCFEBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 23:01:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjCFEAo (ORCPT
+        with ESMTP id S229780AbjCFEAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 23:00:44 -0500
+        Sun, 5 Mar 2023 23:00:45 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AE0F94E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC51F74B;
         Sun,  5 Mar 2023 20:00:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
-        To:From:Sender:Reply-To:Content-ID:Content-Description;
-        bh=M92hecT3X/bcNNKtMijVpnARHRKJzwee5XeX6ujHiXI=; b=zldEoKhuNQMsRoTg4EU4F7CabF
-        tnGTA1U6Ksh2HJm0AYJyCun3JtWkTIYWOIv02Hw/tAASegg4WsL0+nEQ1rMJ8fqhxAo16Gxy9nD83
-        Ash8mkxdSXYFZjWycU1RjQ+aqVbEe4IctWmBVEGVRGqrVhJnKTUKkb9kPIDyBslkLDvgf2fyrzS6p
-        ee7viG16yDIh779VGDq5BYA/a+VwPOMM+cx+oJnCiT2/T4FvmA7Vk9BDHV5IdxlhC4QWH7Cw1ioJB
-        RVJi3DM+jRU08Kx0JobOC7/lds2zcS70P1GVXUWEAJlR4JZdvZjzjjB90qTnGwF6P5tX9SGDUPQ1t
-        n6fxxoiA==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
+        :Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=4aGYejjB597mgiQZIbHKlJkYyDrDVt5t4jYswvUz7/M=; b=OGEUSvE17nE6gU+pUUq4hEqpoa
+        Ludgfh7fJs61WUf5u/2uSYLU+lQ/wyKkfoyDx0FifHJhGiXPghTR7cbmPai7MVZOU9xOGp998pGma
+        ro3fYBGeqoHPjxb0p7JKxpK2fPceIlBcp91CzdL1tKJHrp7aF2Nbpu45KnS8elOfWMQt+Jm4TiHjq
+        vtySjfLRKe+E6dK5LIpyOBdHnMTEF63qYOsdak60oa3JiSkrLmoBUhXVpmDeu68E0Iuck5MV+RT6j
+        sBhy/PWK6yiDgzPS6CmhtG1++1gu79FgwUWQRcjFDFVX23gFmmvbzIFlGUyQ5rYZ494EIP0mwqiWX
+        Ilm8HaJg==;
 Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZ21i-00B9yD-6o; Mon, 06 Mar 2023 04:00:42 +0000
+        id 1pZ21i-00B9yD-Oc; Mon, 06 Mar 2023 04:00:42 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org
-Subject: [PATCH 5/7 v4] sh: remove sh5/sh64 last fragments
-Date:   Sun,  5 Mar 2023 20:00:35 -0800
-Message-Id: <20230306040037.20350-6-rdunlap@infradead.org>
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
+Date:   Sun,  5 Mar 2023 20:00:36 -0800
+Message-Id: <20230306040037.20350-7-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230306040037.20350-1-rdunlap@infradead.org>
 References: <20230306040037.20350-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -54,139 +53,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A previous patch removed most of the sh5 (sh64) support from the
-kernel tree. Now remove the last stragglers.
+Fix SUPERH builds that select SYS_SUPPORTS_NUMA but do not select
+SYS_SUPPORTS_SMP and SMP.
 
-Fixes: 37744feebc08 ("sh: remove sh5 support")
+kernel/sched/topology.c is only built for CONFIG_SMP and then the NUMA
+code + data inside topology.c is only built when CONFIG_NUMA is
+set/enabled, so these arch/sh/ configs need to select SMP and
+SYS_SUPPORTS_SMP to build the NUMA support.
+
+Fixes this build error in multiple SUPERH configs:
+
+mm/page_alloc.o: In function `get_page_from_freelist':
+page_alloc.c:(.text+0x2ca8): undefined reference to `node_reclaim_distance'
+
+Fixes: 357d59469c11 ("sh: Tidy up dependencies for SH-2 build.")
+Fixes: 9109a30e5a54 ("sh: add support for sh7366 processor")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Rich Felker <dalias@libc.org>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
 Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+Cc: Rich Felker <dalias@libc.org>
 Cc: linux-sh@vger.kernel.org
-Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc: stable@vger.kernel.org
 ---
-v2: update after adding the parisc64 alias to kbuild.rst
+v2: skipped
 v3: skipped
 v4: refresh & resend
 
- Documentation/kbuild/kbuild.rst                           |    1 -
- Documentation/scheduler/sched-arch.rst                    |    2 --
- Documentation/translations/zh_CN/scheduler/sched-arch.rst |    2 --
- scripts/checkstack.pl                                     |    7 -------
- tools/perf/arch/common.c                                  |    2 --
- tools/scripts/Makefile.arch                               |    5 -----
- tools/testing/selftests/mm/Makefile                       |    2 +-
- tools/testing/selftests/mm/run_vmtests.sh                 |    2 +-
- 8 files changed, 2 insertions(+), 21 deletions(-)
+ arch/sh/Kconfig |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff -- a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
---- a/Documentation/kbuild/kbuild.rst
-+++ b/Documentation/kbuild/kbuild.rst
-@@ -161,7 +161,6 @@ But some architectures such as x86 and s
+diff -- a/arch/sh/Kconfig b/arch/sh/Kconfig
+--- a/arch/sh/Kconfig
++++ b/arch/sh/Kconfig
+@@ -477,6 +477,8 @@ config CPU_SUBTYPE_SH7722
+ 	select CPU_SHX2
+ 	select ARCH_SHMOBILE
+ 	select ARCH_SPARSEMEM_ENABLE
++	select SYS_SUPPORTS_SMP
++	select SMP
+ 	select SYS_SUPPORTS_NUMA
+ 	select SYS_SUPPORTS_SH_CMT
+ 	select PINCTRL
+@@ -487,6 +489,8 @@ config CPU_SUBTYPE_SH7366
+ 	select CPU_SHX2
+ 	select ARCH_SHMOBILE
+ 	select ARCH_SPARSEMEM_ENABLE
++	select SYS_SUPPORTS_SMP
++	select SMP
+ 	select SYS_SUPPORTS_NUMA
+ 	select SYS_SUPPORTS_SH_CMT
  
- - x86: i386 for 32 bit, x86_64 for 64 bit
- - parisc: parisc64 for 64 bit
--- sh: sh for 32 bit, sh64 for 64 bit
- - sparc: sparc32 for 32 bit, sparc64 for 64 bit
- 
- CROSS_COMPILE
-diff -- a/Documentation/scheduler/sched-arch.rst b/Documentation/scheduler/sched-arch.rst
---- a/Documentation/scheduler/sched-arch.rst
-+++ b/Documentation/scheduler/sched-arch.rst
-@@ -70,7 +70,5 @@ Possible arch problems I found (and eith
- 
- ia64 - is safe_halt call racy vs interrupts? (does it sleep?) (See #4a)
- 
--sh64 - Is sleeping racy vs interrupts? (See #4a)
--
- sparc - IRQs on at this point(?), change local_irq_save to _disable.
-       - TODO: needs secondary CPUs to disable preempt (See #1)
-diff -- a/Documentation/translations/zh_CN/scheduler/sched-arch.rst b/Documentation/translations/zh_CN/scheduler/sched-arch.rst
---- a/Documentation/translations/zh_CN/scheduler/sched-arch.rst
-+++ b/Documentation/translations/zh_CN/scheduler/sched-arch.rst
-@@ -70,7 +70,5 @@ 我发现的可能的arch问题（并试
- 
- ia64 - safe_halt的调用与中断相比，是否很荒谬？ (它睡眠了吗) (参考 #4a)
- 
--sh64 - 睡眠与中断相比，是否很荒谬？ (参考 #4a)
--
- sparc - 在这一点上，IRQ是开着的（？），把local_irq_save改为_disable。
-       - 待办事项: 需要第二个CPU来禁用抢占 (参考 #1)
-diff -- a/scripts/checkstack.pl b/scripts/checkstack.pl
---- a/scripts/checkstack.pl
-+++ b/scripts/checkstack.pl
-@@ -10,7 +10,6 @@
- #	Mips port by Juan Quintela <quintela@mandrakesoft.com>
- #	IA64 port via Andreas Dilger
- #	Arm port by Holger Schurig
--#	sh64 port by Paul Mundt
- #	Random bits by Matt Mackall <mpm@selenic.com>
- #	M68k port by Geert Uytterhoeven and Andreas Schwab
- #	AArch64, PARISC ports by Kyle McMartin
-@@ -100,12 +99,6 @@ my (@stack, $re, $dre, $sub, $x, $xs, $f
- 		#  100092:	 e3 f0 ff c8 ff 71	 lay	 %r15,-56(%r15)
- 		$re = qr/.*(?:lay|ag?hi).*\%r15,-(([0-9]{2}|[3-9])[0-9]{2})
- 		      (?:\(\%r15\))?$/ox;
--	} elsif ($arch =~ /^sh64$/) {
--		#XXX: we only check for the immediate case presently,
--		#     though we will want to check for the movi/sub
--		#     pair for larger users. -- PFM.
--		#a00048e0:       d4fc40f0        addi.l  r15,-240,r15
--		$re = qr/.*addi\.l.*r15,-(([0-9]{2}|[3-9])[0-9]{2}),r15/o;
- 	} elsif ($arch eq 'sparc' || $arch eq 'sparc64') {
- 		# f0019d10:       9d e3 bf 90     save  %sp, -112, %sp
- 		$re = qr/.*save.*%sp, -(([0-9]{2}|[3-9])[0-9]{2}), %sp/o;
-diff -- a/tools/perf/arch/common.c b/tools/perf/arch/common.c
---- a/tools/perf/arch/common.c
-+++ b/tools/perf/arch/common.c
-@@ -51,9 +51,7 @@ const char *const s390_triplets[] = {
- 
- const char *const sh_triplets[] = {
- 	"sh-unknown-linux-gnu-",
--	"sh64-unknown-linux-gnu-",
- 	"sh-linux-gnu-",
--	"sh64-linux-gnu-",
- 	NULL
- };
- 
-diff -- a/tools/scripts/Makefile.arch b/tools/scripts/Makefile.arch
---- a/tools/scripts/Makefile.arch
-+++ b/tools/scripts/Makefile.arch
-@@ -29,11 +29,6 @@ ifeq ($(ARCH),sparc64)
-        SRCARCH := sparc
- endif
- 
--# Additional ARCH settings for sh
--ifeq ($(ARCH),sh64)
--       SRCARCH := sh
--endif
--
- # Additional ARCH settings for loongarch
- ifeq ($(ARCH),loongarch32)
-        SRCARCH := loongarch
-diff -- a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -90,7 +90,7 @@ endif
- 
- endif
- 
--ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
-+ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sparc64 x86_64))
- TEST_GEN_FILES += va_128TBswitch
- TEST_GEN_FILES += virtual_address_range
- TEST_GEN_FILES += write_to_hugetlbfs
-diff -- a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -132,7 +132,7 @@ else
- fi
- 
- # filter 64bit architectures
--ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
-+ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sparc64 x86_64"
- if [ -z "$ARCH" ]; then
- 	ARCH=$(uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/')
- fi
