@@ -2,61 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022FB6ACEF3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539646ACEEA
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjCFUMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 15:12:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+        id S229996AbjCFULG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 15:11:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbjCFULo (ORCPT
+        with ESMTP id S230306AbjCFULA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 15:11:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E3E4E5D1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 12:09:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678133372;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XQ/fbLiMTxYvcy4Xv+isuWXHLsrugKjziame8MLcKpQ=;
-        b=Dx8dhNPrgNv36jOv2+qcVSTN+Fumsl8tBZqrmv+W3RVAAVLh9KJvR7N+Afy698H2VVOa86
-        /7yRQ8RfG8C2+WFPG1ZNh8ivKjh0F6qW6FUYhrzwGfNTW5iGse/nskJetTncaaq2KmAcpd
-        kmUuEkRm2nA9Z2aae8kVRJHOApZRLZo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317-5KLDa69LNIygZSqWcf9rbw-1; Mon, 06 Mar 2023 15:09:28 -0500
-X-MC-Unique: 5KLDa69LNIygZSqWcf9rbw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9DEC93C20EE5;
-        Mon,  6 Mar 2023 20:09:27 +0000 (UTC)
-Received: from llong.com (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5ABB940B40E4;
-        Mon,  6 Mar 2023 20:09:27 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH 5/5] cgroup/cpuset: Minor updates to test_cpuset_prs.sh
-Date:   Mon,  6 Mar 2023 15:08:49 -0500
-Message-Id: <20230306200849.376804-6-longman@redhat.com>
-In-Reply-To: <20230306200849.376804-1-longman@redhat.com>
-References: <20230306200849.376804-1-longman@redhat.com>
+        Mon, 6 Mar 2023 15:11:00 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5C634322;
+        Mon,  6 Mar 2023 12:09:44 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id v11so11734350plz.8;
+        Mon, 06 Mar 2023 12:09:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678133383;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6/LQ22SxCIaIMKCmzqtubiDIW3rGorKjMWE5QuR4ZXc=;
+        b=fHyBqUUng0UtV2DrPjYsCsxUdTJ0m92kQd6HPV9pj4B7tkHIl2tI/EGKc1+lBqHwWr
+         dS+YnXVZUQAQdgrw4g/nsX3PlB3PCAA1/fKNTO3g6Pa8BlX0xwcwOHuJQp/o4Ftt06U7
+         SCwmAdgtzvw7JEjy3zW8BDcHQjKudPCgkjuRafuzM42A+0bK0f+jnrbQxPtb0okVQ2/A
+         nccDT5T4/ir/zLCsOtcqRbz7FIVzqeNDs+zWimcQahkKSDSwCsxVAh0bcEzP1akiZNMw
+         f6M+0CT4biDiU1LRo58zXen/y5TeCXYFQqRnUw3sZzwnXJ2+PEeKDAxWlPM+rpBS1ZJB
+         Cbcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678133383;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6/LQ22SxCIaIMKCmzqtubiDIW3rGorKjMWE5QuR4ZXc=;
+        b=PRo+FPdfuwtDs12zKsZKFA+Ngb4q7NKiccghuKRKdA2pK6hXgoNKBAjssOgKvDEvMK
+         kOdW5j1lIYhwuhvrp8sZtZH+8Jjb06IXhFZwnnRK9ehw+gC5yMm/p8LQGwAlFW8/w555
+         KXu9baJR11KYcEtmjUE/VCscG7L13XObrUc51mTEHstKKsdNo/eAH/ZyGzKC/XaQlj99
+         2pYUqxjRBtTj8PrHP9qUusyh+eMbYZuriGm2X4UIDFCK7eKvr0joi1g/6hxlCruFJ9dl
+         +Ktt9sD+G5xgiNVzAbWsPh1FKyTbpifWtKHKeJNSJwtAJkvoZRy0KuijWqy3yQzL1MF8
+         REkw==
+X-Gm-Message-State: AO0yUKXVZC4homHKoDTlXwvACdovSEIychLf29BmclaoemL2MAk8XTJq
+        lOZB7YomCXQfTt4ZIdcA/cI=
+X-Google-Smtp-Source: AK7set8ml1Zwwn2Jgrqz4SIpPButPySeJkHFErNLtXD+4bzwyvrMYjJswOKnxcAA24bZzTL44s7Ohw==
+X-Received: by 2002:a17:902:ea0c:b0:19a:727e:d4f3 with SMTP id s12-20020a170902ea0c00b0019a727ed4f3mr18574527plg.5.1678133383608;
+        Mon, 06 Mar 2023 12:09:43 -0800 (PST)
+Received: from vernon-pc ([49.67.2.142])
+        by smtp.gmail.com with ESMTPSA id v4-20020a1709029a0400b00198b01b412csm7059281plp.303.2023.03.06.12.09.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 12:09:43 -0800 (PST)
+Date:   Tue, 7 Mar 2023 04:09:37 +0800
+From:   Vernon Yang <vernon2gm@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     tytso@mit.edu, Jason@zx2c4.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 3/5] scsi: lpfc: fix lpfc_cpu_affinity_check() if no
+ further cpus set
+Message-ID: <ZAZIgcpEBE7HXBuy@vernon-pc>
+References: <20230306160651.2016767-1-vernon2gm@gmail.com>
+ <20230306160651.2016767-4-vernon2gm@gmail.com>
+ <CAHk-=wj73=Os1p=W7D2va=Rd81ZKvjb35yWgXQNgn1hXNRpAbw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <CAHk-=wj73=Os1p=W7D2va=Rd81ZKvjb35yWgXQNgn1hXNRpAbw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,102 +82,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch makes the following minor updates to the cpuset partition
-testing script test_cpuset_prs.sh.
+On Mon, Mar 06, 2023 at 10:48:04AM -0800, Linus Torvalds wrote:
+> On Mon, Mar 6, 2023 at 8:07 AM Vernon Yang <vernon2gm@gmail.com> wrote:
+> >
+> > -                               if (new_cpu == nr_cpumask_bits)
+> > +                               if (new_cpu >= nr_cpumask_bits)
+>
+> This all should use "nr_cpu_ids", not "nr_cpumask_bits".
+>
+> But I really suspect that it should all be rewritten to not do that
+> thing over and over, but just use a helper function for it.
+>
+>   int lpfc_next_present_cpu(int n, int alternate)
+>   {
+>         n = cpumask_next(n, cpu_present_mask);
+>         if (n >= nr_cpu_ids)
+>                 n = alternate;
+>         return n;
+>   }
+>
+> and then you could just use
+>
+>         start_cpu = lpfc_next_present_cpu(new_cpu, first_cpu);
 
- - Remove online_cpus function call as it will be called anyway on exit
-   in cleanup.
- - Make the enabling of sched/verbose debugfs flag conditional on the
-   "-v" verbose option and set DELAY_FACTOR to 2 in this case as cpuset
-   partition operations are likely to be slowed down by enabling that.
+OK, thanks you very much.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../selftests/cgroup/test_cpuset_prs.sh       | 25 +++++++++++--------
- 1 file changed, 14 insertions(+), 11 deletions(-)
+I'll send a second version shortly
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 75c100de90ff..2b5215cc599f 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -15,13 +15,6 @@ skip_test() {
- 
- [[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
- 
--# Set sched verbose flag, if available
--if [[ -d /sys/kernel/debug/sched ]]
--then
--	# Used to restore the original setting during cleanup
--	SCHED_DEBUG=$(cat /sys/kernel/debug/sched/verbose)
--	echo Y > /sys/kernel/debug/sched/verbose
--fi
- 
- # Get wait_inotify location
- WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
-@@ -37,10 +30,14 @@ CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
- PROG=$1
- VERBOSE=
- DELAY_FACTOR=1
-+SCHED_DEBUG=
- while [[ "$1" = -* ]]
- do
- 	case "$1" in
- 		-v) VERBOSE=1
-+		    # Enable sched/verbose can slow thing down
-+		    [[ $DELAY_FACTOR -eq 1 ]] &&
-+			DELAY_FACTOR=2
- 		    break
- 		    ;;
- 		-d) DELAY_FACTOR=$2
-@@ -54,6 +51,14 @@ do
- 	shift
- done
- 
-+# Set sched verbose flag if available when "-v" option is specified
-+if [[ -n "$VERBOSE" && -d /sys/kernel/debug/sched ]]
-+then
-+	# Used to restore the original setting during cleanup
-+	SCHED_DEBUG=$(cat /sys/kernel/debug/sched/verbose)
-+	echo Y > /sys/kernel/debug/sched/verbose
-+fi
-+
- cd $CGROUP2
- echo +cpuset > cgroup.subtree_control
- [[ -d test ]] || mkdir test
-@@ -65,7 +70,8 @@ cleanup()
- 	rmdir A1/A2/A3 A1/A2 A1 B1 > /dev/null 2>&1
- 	cd ..
- 	rmdir test > /dev/null 2>&1
--	echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
-+	[[ -n "$SCHED_DEBUG" ]] &&
-+		echo "$SCHED_DEBUG" > /sys/kernel/debug/sched/verbose
- }
- 
- # Pause in ms
-@@ -571,7 +577,6 @@ run_state_test()
- 			echo "Test $TEST[$I] failed result check!"
- 			eval echo \"\${$TEST[$I]}\"
- 			dump_states
--			online_cpus
- 			exit 1
- 		}
- 
-@@ -582,7 +587,6 @@ run_state_test()
- 				eval echo \"\${$TEST[$I]}\"
- 				echo
- 				dump_states
--				online_cpus
- 				exit 1
- 			}
- 		}
-@@ -594,7 +598,6 @@ run_state_test()
- 				eval echo \"\${$TEST[$I]}\"
- 				echo
- 				dump_states
--				online_cpus
- 				exit 1
- 			}
- 		}
--- 
-2.31.1
-
+>
+> or similar.
+>
+>               Linus
+>
+> PS. We "kind of" already have a helper function for this:
+> cpumask_next_wrap(). But it's really meant for a different pattern
+> entirely, so let's not confuse things.
