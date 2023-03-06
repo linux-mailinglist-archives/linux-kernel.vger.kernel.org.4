@@ -2,127 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131866AD228
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DA56AD236
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjCFW6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:58:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S229975AbjCFXAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 18:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCFW6h (ORCPT
+        with ESMTP id S229688AbjCFW75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:58:37 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8605301A2;
-        Mon,  6 Mar 2023 14:58:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVvBW2Yldz4x80;
-        Tue,  7 Mar 2023 09:58:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678143507;
-        bh=h5XIYN5L+EoItQ8HxafPRNG77c3wSJgo16ZNnxBR3Es=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bOs5su7ciaqw/yKhjZ7qLbanP2hVmgE7EhMpI3QYSN3MDjAuBTbPBCIkB/V7nMZRb
-         HV1zj27yRmk0ViLD4qpDhOiUMIEsJXf2EoZFvP16QBoH6T9hJt97yIunlJc0vNfKCm
-         2sbNSxBN5eSZ/959kPfY/y4BGW3i3ZGwUloUmqvIBKionrG5OkRXmzihLi2Rr1y0Bo
-         +xyqt+5s7VsMoGrvhhRq5rcXs7bFTPgXQhKHj1SsMjdZNZsm+PCcSlvSoSVxi8ER0I
-         d/E+EwB1mEhulUvpkzDnsj/eeLcR3nqWs87Ux3OsKumDdJcMtbnmHlHs5yUvX+cMFI
-         5HTqYTrnXYJ3Q==
-Date:   Tue, 7 Mar 2023 09:58:12 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        David Vernet <void@manifault.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <20230307095812.236eb1be@canb.auug.org.au>
+        Mon, 6 Mar 2023 17:59:57 -0500
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A71832CD6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:59:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1678143595; x=1709679595;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iZxmEGOWp/OXxEv+WC2yV5njZDK+QBRlzNqW4+BA9H0=;
+  b=T/QTry7MjHioUG0wbSTycKnTcz+IK26Ec4+/anTpIy50r54Wl5FaGAvZ
+   EslXHIQfpmmsew3z9kSLfVSkKrIK/+wRQ8178mAf00rmc+/AksRTyZtwa
+   IZ/2Gkj4p3MYDBhW0wQ303DxnZuwS216R7KBEHjVzzXzNcvBdOhX+R5Z0
+   Fw1Ln5UcPxBmKgmd+pzMj4qeFxRljfd2r/vg2VIW3133ki5uJNgydDZVb
+   ea2Sjz6Ixy71HWBui/ICZnRQTe4eBKkpn2cNiOSU1mdwzWf6FQuf7wZ50
+   Sh+pnF2AkbT64bF8b9b6Gi5Yg7Ba5gMTLBQIM/neyoym4JFWksKqQx/rh
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,238,1673884800"; 
+   d="scan'208";a="229902445"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 07 Mar 2023 06:59:53 +0800
+IronPort-SDR: fLFzarOZ+COwmIO6X/WO1Vx6w0veHrdzl+3qkW6vL9orB+UCBC+XdP7Mh1bB7/U7nqtgKO6I6a
+ FFItCgF9XH0LmttcrxXPcuf0TicnddXctTypk55fS+kco+xOonKVrsvAxw6lQ/+zz2qohmRFpK
+ AFd09UdgD6lMyKKM92qKOf/8ngof8oUIF+4UUONB/O+K8wdU/ZQzbb5ms+SiFuvD8klg40xmvd
+ HnaPX/Sg3Rbpapgi0/mzgyYaIZ3dPGoKrJZ8+g5MZnQLet5am2bfYrPOR2aYwT+idlfvl/o0kl
+ cEo=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Mar 2023 14:16:34 -0800
+IronPort-SDR: YZsWPNMGpBjrU7hbeADPPTrl16kR6I+t1oSw8uH/PSVPCt5zA9smwaOzR1IWSx2750qA2/lKLD
+ Byw7SYKILqlmjTSBhdPchwRbcf7B0gEKpqb9uEqKqZ5u4fWtP/X1w2wH18QrCGMEQtkcCXamTX
+ mNp/o9bI7xVmvem9bbFQGzct5LR2O1um99A6OAiD3pyJPIa7x9P77hqQ0z3S36O8Ww1NNUOErU
+ JBnkH1SqS4/4b+CtPQxE5HHSoW1M5chrBQyn2cDSenPbT8AwrTu3B1jfqUZ8sO8i/cIzlxs+oD
+ O9g=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Mar 2023 14:59:53 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PVvD92Dlrz1RwtC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:59:53 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:content-language:references:to
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1678143592; x=1680735593; bh=iZxmEGOWp/OXxEv+WC2yV5njZDK+QBRlzNq
+        W4+BA9H0=; b=Yu/TwQoJxDcY5ppEF57COV7O89ylia/4/nhYPCXOj21LZR2ANWL
+        0YaBoDMTppI9GW5yo3NsfXXi29vFavC3dmGvJyutrkMOnCm0FDiypSq9+O5v76vC
+        exdJEWLZ2eqsC62K4A5r65FI9qrwO5yC8QFkASVygFv9YqK5nKB7YQrDy08qwDKr
+        6snJivlwbpteuNq53cINOJxCRzvP+Q/b9MiFJxw//ogiEtXPLfGtrg/+YkXk98hA
+        zObVKO1q9e+9+8EtcvTg6wxPsGrbrK0T32f7vYvCBBUY6oVL2dBxvkYvEGI/QtL2
+        h9S77UEpKn2J2B/hhbpeg0RIcG+YuguECnQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id n78nOUe1dqxx for <linux-kernel@vger.kernel.org>;
+        Mon,  6 Mar 2023 14:59:52 -0800 (PST)
+Received: from [10.225.163.60] (unknown [10.225.163.60])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PVvD71Gqvz1RvLy;
+        Mon,  6 Mar 2023 14:59:50 -0800 (PST)
+Message-ID: <4273f666-0c69-8111-308d-173df500c288@opensource.wdc.com>
+Date:   Tue, 7 Mar 2023 07:59:49 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//ojnktPX=ubI7kDj46Szf7e";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RESEND v4 0/18] pata_parport: protocol drivers fixes and
+ cleanups
+To:     Ondrej Zary <linux@zary.sk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Jens Axboe <axboe@kernel.dk>, Tim Waugh <tim@cyberelk.net>,
+        linux-block@vger.kernel.org, linux-parport@lists.infradead.org,
+        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230306172752.7727-1-linux@zary.sk>
+Content-Language: en-US
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230306172752.7727-1-linux@zary.sk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_//ojnktPX=ubI7kDj46Szf7e
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 3/7/23 02:27, Ondrej Zary wrote:
+> This patch series fixes two bugs and cleans up pata_parport protocol drivers,
+> making the code simpler with no changes in behavior (except logged messages).
+> 
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
-Hi all,
+Already queued for 6.4, but I have not pushed the branch yet.
+Thanks !
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+> ---
+> Changes in v4:
+>  - dropped whitespace changes from patch 12/18
+> Changes in v3:
+>  - added missing reviewed-by tags
+>  - added more detailed changelog:
+>    - patches 04-05 are split from v1 patch 02/12
+>    - patch 06: comment-out instead of if(1)
+>    - patches 11-14 are split from v1 patch 08/12
+> Changes in v2:
+>  - added two bugfixes (first two patches)
+>  - addressed Sergey's comments (mostly split patches)
+> 
+>  drivers/ata/pata_parport/aten.c                            |  45 ++++----------
+>  drivers/ata/pata_parport/bpck.c                            |  86 ++++++++------------------
+>  drivers/ata/pata_parport/bpck6.c                           | 107 ++++++++-------------------------
+>  drivers/ata/pata_parport/comm.c                            |  52 +++++-----------
+>  drivers/ata/pata_parport/dstr.c                            |  45 ++++----------
+>  drivers/ata/pata_parport/epat.c                            |  48 ++++++---------
+>  drivers/ata/pata_parport/epia.c                            |  55 +++++------------
+>  drivers/ata/pata_parport/fit2.c                            |  37 ++++--------
+>  drivers/ata/pata_parport/fit3.c                            |  39 ++++--------
+>  drivers/ata/pata_parport/friq.c                            |  56 ++++++-----------
+>  drivers/ata/pata_parport/frpw.c                            |  71 ++++++----------------
+>  drivers/ata/pata_parport/kbic.c                            |  66 +++++++++-----------
+>  drivers/ata/pata_parport/ktti.c                            |  38 ++++--------
+>  drivers/ata/pata_parport/on20.c                            |  45 ++++----------
+>  drivers/ata/pata_parport/on26.c                            |  52 ++++------------
+>  drivers/ata/pata_parport/pata_parport.c                    |  31 +++++-----
+>  {include/linux => drivers/ata/pata_parport}/pata_parport.h |  41 ++++---------
+>  17 files changed, 271 insertions(+), 643 deletions(-)
+> 
+> 
 
-  Documentation/bpf/bpf_devel_QA.rst
+-- 
+Damien Le Moal
+Western Digital Research
 
-between commit:
-
-  b7abcd9c656b ("bpf, doc: Link to submitting-patches.rst for general patch=
- submission info")
-
-from the bpf tree and commit:
-
-  d56b0c461d19 ("bpf, docs: Fix link to netdev-FAQ target")
-
-from the bpf-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/bpf/bpf_devel_QA.rst
-index b421d94dc9f2,5f5f9ccc3862..000000000000
---- a/Documentation/bpf/bpf_devel_QA.rst
-+++ b/Documentation/bpf/bpf_devel_QA.rst
-@@@ -684,8 -684,12 +684,8 @@@ when
- =20
- =20
-  .. Links
-- .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
- -.. _Documentation/process/: https://www.kernel.org/doc/html/latest/proces=
-s/
-+ .. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintainer=
--netdev.html
-  .. _selftests:
-     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tre=
-e/tools/testing/selftests/bpf/
- -.. _Documentation/dev-tools/kselftest.rst:
- -   https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
- -.. _Documentation/bpf/btf.rst: btf.rst
- =20
-  Happy BPF hacking!
-
---Sig_//ojnktPX=ubI7kDj46Szf7e
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGcAQACgkQAVBC80lX
-0Gzo3ggAnAwF8pcK2Kgrbc2Gbw7zflcf000en2d5pNmMqM6mnK52SVm8vlJ+HCEV
-GHy7UMv4SWf7mFe8jcN7II58aW5s2xzt1ZRU8v0grEOJq1kIYEF1Ei42raeEJ9dm
-IIriGREcFGWrMSM41tt7Pfw6v7O7pSkxCz4bHztHbYcRDcBQ/LqxUmulE9JWmtlU
-cCSJ85UFLn20XDUkHf1bhTQZM/4QK/K61vNqNPuM9eniyVgSh66USPEDDDV3xSme
-RXKKaoIZ7bytDwV4VO2Z0wLemdfuFXTBQ4WjDtLnJQKQSfNDjOousvdfSTaBZZ51
-ivV1HIKCKsgzAVdQEgIiVSG0c8wdfA==
-=scRr
------END PGP SIGNATURE-----
-
---Sig_//ojnktPX=ubI7kDj46Szf7e--
