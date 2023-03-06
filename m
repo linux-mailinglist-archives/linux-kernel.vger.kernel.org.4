@@ -2,92 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FDA6ABF60
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07F96ABF65
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:25:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCFMYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:24:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S230047AbjCFMZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:25:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCFMYi (ORCPT
+        with ESMTP id S229910AbjCFMZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:24:38 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614601F48F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:24:37 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326A4N0c032086;
-        Mon, 6 Mar 2023 12:24:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=TKo4EniFyUQ9UcC9ptHSFwojy0uYD8MjopG2PyaQYZE=;
- b=ijwThBVXNjGbogoIGaFmGas03Rah9wXP0E+AjOAfNM7GkIqSEyJFC14l/h6R+HpsXJpc
- LVa+44eP0pQBISJRD8KeqU5Hpn75KpGJ73c5uuBSC88kPhG2uytmITaGZWi5YavaOFzJ
- 2Srl9r4Q9YRS+gTLGyc/xAR6w8NfAT+k5syL3V0Py3nr05/u/8/U634Wx9l7OzDvJ0Fp
- tueVPTWTaS4nKYKFGjPUuFdLiEgC+apJ5fJXjTfzyGQ0qyuUmFdsNPIeQhMXN1EMhYbN
- /O/ryb9lo1YxjAWBgJQxZwnAIEM2vuH4FFIq/EVddtbS8NLjGRTbVQ0z6CTApbPoXAZJ 5g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4u1jfgyj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 12:24:27 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326BnQCW022896;
-        Mon, 6 Mar 2023 12:24:26 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4u1jfgxx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 12:24:25 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326BPUd6006237;
-        Mon, 6 Mar 2023 12:24:23 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3p418ctpdu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 12:24:23 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326COKl859441514
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 12:24:20 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F24232004D;
-        Mon,  6 Mar 2023 12:24:19 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AD02F20040;
-        Mon,  6 Mar 2023 12:24:17 +0000 (GMT)
-Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.109.216.99])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon,  6 Mar 2023 12:24:17 +0000 (GMT)
-Date:   Mon, 6 Mar 2023 17:54:15 +0530
-From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] arch/powerpc/kvm: kvmppc_hv_entry: remove r4 argument
-Message-ID: <ZAXbb9shzU+6l0wh@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
-References: <20230220052355.109033-1-kconsul@linux.vnet.ibm.com>
- <20230220052355.109033-3-kconsul@linux.vnet.ibm.com>
+        Mon, 6 Mar 2023 07:25:21 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77334212BB;
+        Mon,  6 Mar 2023 04:25:20 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id l13so10197529qtv.3;
+        Mon, 06 Mar 2023 04:25:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678105519;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=go08yN8ZO/E8IL+UZzsM8Ypz4ifwLeuitk1Dpvtflhg=;
+        b=xikt3ZY3Av/8h9/8GUY5FS9lpFtQ+YUppgSTeqvZgSYDr6Ub6zuK1zQUD/7+umCqeA
+         e1U+G5X/DgQ+nKa2A3b3Nu++D/4DDgyzOT/LHwnWo+n5y3nzGlkSpFuSLlkLOANVI8jB
+         Fx8/Z8t7pykr3sGh6f6fSiFyJ87Fvg6IWe4AdhUc0yNUn/+g9fovOBQRroGZS9ICTgvt
+         Uyc2IFLL+1zk9dJzwDJBC8V/g+Qon1TUIMzHLuVOO5TMAZQPVtJG8klFrV3ICJYlf0TI
+         76mHnwP3jYgQXhatMJJBUvp64DVwKKjptmf7UcgOiKJxxwdXevhySQmTDXneFrElpCz6
+         0x4Q==
+X-Gm-Message-State: AO0yUKWLFSNamnqx7Dw7+5d3Mwqg14b5xDj8WvwDDgpo1QrRJuVMLmmC
+        JtlEB5DIXfya3Lj/TUbEGg==
+X-Google-Smtp-Source: AK7set9PTrNQli3SGEVrUKOSYgH4tGMPmdZVopkIMoc0rL2EVX/XmqG4LHiVP695Fy0kaUkbWU8B6w==
+X-Received: by 2002:ac8:5bc9:0:b0:3bf:cd81:3a31 with SMTP id b9-20020ac85bc9000000b003bfcd813a31mr18660401qtb.65.1678105519378;
+        Mon, 06 Mar 2023 04:25:19 -0800 (PST)
+Received: from robh_at_kernel.org ([209.91.220.210])
+        by smtp.gmail.com with ESMTPSA id y8-20020ac85248000000b003b86b962030sm7518717qtn.72.2023.03.06.04.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 04:25:18 -0800 (PST)
+Received: (nullmailer pid 31427 invoked by uid 1000);
+        Mon, 06 Mar 2023 12:25:17 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220052355.109033-3-kconsul@linux.vnet.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FQXufYaLm8jNx6O2KAyuTTxb16rR77nS
-X-Proofpoint-ORIG-GUID: 0QUjFn2q0seyNg8pxknah_alctjC9P_F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_05,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060106
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+From:   Rob Herring <robh@kernel.org>
+To:     Minda Chen <minda.chen@starfivetech.com>
+Cc:     linux-phy@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>
+In-Reply-To: <20230306095257.25957-1-minda.chen@starfivetech.com>
+References: <20230306095257.25957-1-minda.chen@starfivetech.com>
+Message-Id: <167810459782.12203.9014682894570874393.robh@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: phy: Add StarFive JH7110 USB
+ dt-binding
+Date:   Mon, 06 Mar 2023 06:25:17 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,67 +68,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 2023-02-20 10:53:55, Kautuk Consul wrote:
-> kvmppc_hv_entry is called from only 2 locations within
-> book3s_hv_rmhandlers.S. Both of those locations set r4
-> as HSTATE_KVM_VCPU(r13) before calling kvmppc_hv_entry.
-> So, shift the r4 load instruction to kvmppc_hv_entry and
-> thus modify the calling convention of this function.
+On Mon, 06 Mar 2023 17:52:57 +0800, Minda Chen wrote:
+> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
+> USB controller is cadence USB 3.0 IP.
 > 
-
-I am posting v2 of this patch-set now.
-I have tested this on POWER8 and it works fine.
-Can anyone review the v2 for this patch ? 
-I didn't receive any review comments for this patch.
-
-> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
 > ---
->  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+>  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
 > 
-> diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> index 7e063fde7adc..922667b09168 100644
-> --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
-> @@ -85,7 +85,7 @@ _GLOBAL_TOC(kvmppc_hv_entry_trampoline)
->  	RFI_TO_KERNEL
-> 
->  kvmppc_call_hv_entry:
-> -	ld	r4, HSTATE_KVM_VCPU(r13)
-> +	/* Enter guest. */
->  	bl	kvmppc_hv_entry
-> 
->  	/* Back from guest - restore host state and return to caller */
-> @@ -352,9 +352,7 @@ kvm_secondary_got_guest:
->  	mtspr	SPRN_LDBAR, r0
->  	isync
->  63:
-> -	/* Order load of vcpu after load of vcore */
-> -	lwsync
-> -	ld	r4, HSTATE_KVM_VCPU(r13)
-> +	/* Enter guest. */
->  	bl	kvmppc_hv_entry
-> 
->  	/* Back from the guest, go back to nap */
-> @@ -506,7 +504,6 @@ kvmppc_hv_entry:
-> 
->  	/* Required state:
->  	 *
-> -	 * R4 = vcpu pointer (or NULL)
->  	 * MSR = ~IR|DR
->  	 * R13 = PACA
->  	 * R1 = host R1
-> @@ -524,6 +521,8 @@ kvmppc_hv_entry:
->  	li	r6, KVM_GUEST_MODE_HOST_HV
->  	stb	r6, HSTATE_IN_GUEST(r13)
-> 
-> +	ld	r4, HSTATE_KVM_VCPU(r13)
-> +
->  #ifdef CONFIG_KVM_BOOK3S_HV_P8_TIMING
->  	/* Store initial timestamp */
->  	cmpdi	r4, 0
-> -- 
-> 2.31.1
-> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml:30:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+./Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml:40:8: [warning] wrong indentation: expected 6 but found 7 (indentation)
+./Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml:57:12: [error] syntax error: mapping values are not allowed here (syntax)
+
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.example.dts'
+Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml:57:12: mapping values are not allowed in this context
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml:57:12: mapping values are not allowed in this context
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml: ignoring, error parsing file
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230306095257.25957-1-minda.chen@starfivetech.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
