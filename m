@@ -2,122 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998296AB6B2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095796AB6B7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjCFG5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 01:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36694 "EHLO
+        id S229772AbjCFG6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 01:58:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCFG5d (ORCPT
+        with ESMTP id S229510AbjCFG57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 01:57:33 -0500
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351311A49D;
-        Sun,  5 Mar 2023 22:57:32 -0800 (PST)
-Received: by mail-wm1-f47.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso7478397wmb.0;
-        Sun, 05 Mar 2023 22:57:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0rVKFNICUiosMKhBpyplwuprzcEnyE+B2l5hfazP7zE=;
-        b=lHx2LBug5Hkw2lgBdR/dIXKZVpkCq0zuG7MfH0MCfvuq5Yx1Uw2Fkznp3TlRHpGIWb
-         yRMXeT0DGSoAYPRRuhMmPIgbctwMHcr9i3fKE1F0PA6ywoerKoYpJCc4wd0kRlERsRCu
-         UigHlFHryjLvzFgESfTMVF/Md0A4xdpfI0hXrBJwFeFxz3ZnF0d56LyZ+OSj7odDdo11
-         hlh+FfeuwaLKrMJpcvbW4ptFiCWO6CyCNOiftBpJViBSVN51wbKpZE6WIC1KiUXJcaDs
-         WDeBuzQweirqPxn7rg4J8SR1OPNi4OPI93ZInNix1+iUdw6KYcVzBBpCNY/K0GiKhiN7
-         2A3w==
-X-Gm-Message-State: AO0yUKXswmZ3PE7IbXXi+pawimjVqZj1ZeU4eWyqyGai7HKU0UERgrd+
-        Vequu0ivpFzWaJIo3uSng2YAlTgJJliR1A==
-X-Google-Smtp-Source: AK7set++PzSugaLMb9ntcRa1NaTS46WIvaJ62xq3bFDBE885ih8Hg+A+v2ZOXNDWUR2XeIa+t8oMpw==
-X-Received: by 2002:a05:600c:4fd6:b0:3e2:6ec:7fb7 with SMTP id o22-20020a05600c4fd600b003e206ec7fb7mr8300622wmq.0.1678085850213;
-        Sun, 05 Mar 2023 22:57:30 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id i47-20020a05600c4b2f00b003eb5a531232sm9334722wmp.38.2023.03.05.22.57.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 22:57:29 -0800 (PST)
-Message-ID: <be7c90cf-4c65-1cf0-3001-8706415c3d34@kernel.org>
-Date:   Mon, 6 Mar 2023 07:57:28 +0100
+        Mon, 6 Mar 2023 01:57:59 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC59B5BA3
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 22:57:58 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ4n1-0003SS-ND; Mon, 06 Mar 2023 07:57:44 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ4mz-002BSE-UH; Mon, 06 Mar 2023 07:57:41 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pZ4mz-002a93-9A; Mon, 06 Mar 2023 07:57:41 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Stefan Agner <stefan@agner.ch>
+Cc:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] spi: imx: Fix cleanup in remove and convert to .remove_new()
+Date:   Mon,  6 Mar 2023 07:57:31 +0100
+Message-Id: <20230306065733.2170662-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 2/2] trigger: ledtrig-tty: add additional modes
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>, Florian Eckert <fe@dev.tdt.de>
-Cc:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
-        pavel@ucw.cz, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, Eckert.Florian@googlemail.com
-References: <20230222083335.847655-1-fe@dev.tdt.de>
- <20230222083335.847655-3-fe@dev.tdt.de> <20230303141139.GP2420672@google.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230303141139.GP2420672@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=716; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=iiPlfkNGTQtHIdeLCyT911x4K26qGgM1r4nTBJQWiAs=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBY7RTAkRL5NRvNzODTQz/oDx232L+yMCPvB+G /3cNhC3I1SJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAWO0QAKCRDB/BR4rcrs CTqTB/9WGavBEyJ/eKFU/UHp4ITgLOMqrkH3F7uS/dOK47YGSJlJZCziLGICdP4xF+roi5Ef9XN HPiLSdYK7kox26FREe0eHj+Jnr2/DRd/PUb5AnQ0pTOVFr1AQKQhQ6oyQwK7E6HLgjlc1tFrWmF SMnjnPIvenR8m2h9Ag/ka3nOep7ZYwU2u2AurLaGu1k8t635PK+sn+zMqaXetXDRCqjFAsCcMwH zaCkXZb/6I8OkDljDajb1yuvaAp3HaWgXNnhPMjxaiX901Chq3+TRMlSxDQ854h7AIEzWP1tJss aHX1L4DNRCRoJ5rMXjGr+gT8AtJDBjjkf/+pBizH69PDt3DG
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03. 03. 23, 15:11, Lee Jones wrote:
-> On Wed, 22 Feb 2023, Florian Eckert wrote:
->> @@ -113,21 +207,38 @@ static void ledtrig_tty_work(struct work_struct *work)
->>   		trigger_data->tty = tty;
->>   	}
->>   
->> -	ret = tty_get_icount(trigger_data->tty, &icount);
->> -	if (ret) {
->> -		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
->> -		mutex_unlock(&trigger_data->mutex);
->> -		return;
->> -	}
->> -
->> -	if (icount.rx != trigger_data->rx ||
->> -	    icount.tx != trigger_data->tx) {
->> -		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
->> -
->> -		trigger_data->rx = icount.rx;
->> -		trigger_data->tx = icount.tx;
->> -	} else {
->> -		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
->> +	switch (trigger_data->mode) {
->> +	case TTY_LED_CTS:
->> +		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
->> +		break;
->> +	case TTY_LED_DSR:
->> +		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
->> +		break;
->> +	case TTY_LED_CAR:
->> +		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
->> +		break;
->> +	case TTY_LED_RNG:
->> +		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
->> +		break;
->> +	case TTY_LED_CNT:
-> 
-> I believe this requires a 'fall-through' statement.
+From: Uwe Kleine-König <uwe@kleine-koenig.org>
 
-I don't think this is the case. Isn't fallthrough required only in cases 
-when there is at least one statement, i.e. a block?
+Hello,
 
-> Documentation/process/deprecated.rst
-> 
->> +	default:
->> +		ret = tty_get_icount(trigger_data->tty, &icount);
->> +		if (ret) {
->> +			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
->> +			mutex_unlock(&trigger_data->mutex);
->> +			return;
->> +		}
->> +
+this small series converts the spi-imx driver to .remove_new(). The
+motivation for this tree-wide effort are drivers that don't properly
+cleanup and return an error code. This is broken as this results in
+resource leaks. The spi-imx driver is such a driver. The idea is that if
+the remove callback returns void it's obvious that an early error return
+is wrong.
+
+Best regards
+Uwe
+
+Uwe Kleine-König (2):
+  spi: imx: Don't skip cleanup in remove's error path
+  spi: imx: Convert to platform remove callback returning void
+
+ drivers/spi/spi-imx.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
 
 
+base-commit: b01fe98d34f3bed944a93bd8119fed80c856fad8
 -- 
-js
+2.39.1
 
