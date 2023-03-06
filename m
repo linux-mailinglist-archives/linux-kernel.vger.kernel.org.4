@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299C06AC853
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A826AC852
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:39:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjCFQjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49798 "EHLO
+        id S230392AbjCFQjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:39:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjCFQhx (ORCPT
+        with ESMTP id S229815AbjCFQhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Mar 2023 11:37:53 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8B43029B
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E5537544
         for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:36:50 -0800 (PST)
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 326GYg4o037926;
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 326GYgGN109333;
         Mon, 6 Mar 2023 10:34:42 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1678120482;
-        bh=36HPc20Av2a4E1MK2c2q9PRaM1msVDPTCRfwCTMDVmM=;
+        bh=dt50SOqINtlC2m+oRAyAVxNG+x8ngvwQFOlJF/rdU4Y=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=GW6TUA9JnZPj7xriLfirPHC2BXPjtf5MGbOQdmJEZwB1FmMYeZHSx4ScCYW/SqGgp
-         2h1Jex2qD98fxFmcNq9Uwn3nCu1/KTcpb19zv83+/aD+odjZYMItOb79CdUZ3nFuv/
-         e2nW3luzD7VjPpLAyRk0jLn1PDaFyt4wG2ah9INk=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 326GYg9d075730
+        b=GKdfntIwlPlvG8dFj/T8OVCuD+awuvLT7rU+7qY25RKM7LDY6cjkqg3pEd+xct3+o
+         RHtz48SniW0/c7YqC5lSL8BbXsikmB3RbTWzLVe6SV5Td631swwHllf+YRJel+9b4J
+         FWyUjy23q/BwogKv3zRaeLfX3pzA/CorjFjo9hdc=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 326GYgS1075744
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Mon, 6 Mar 2023 10:34:42 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
- Mar 2023 10:34:42 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 10:34:41 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Mon, 6 Mar 2023 10:34:41 -0600
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 326GYfMA110554;
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 326GYfMD110554;
         Mon, 6 Mar 2023 10:34:41 -0600
 From:   Andrew Davis <afd@ti.com>
 To:     Russell King <linux@armlinux.org.uk>,
@@ -56,9 +56,9 @@ To:     Russell King <linux@armlinux.org.uk>,
         Qin Jian <qinjian@cqplus1.com>
 CC:     <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH 05/10] ARM: mach-moxart: Move MOXA ART support into Kconfig.platforms
-Date:   Mon, 6 Mar 2023 10:34:36 -0600
-Message-ID: <20230306163441.16179-5-afd@ti.com>
+Subject: [PATCH 08/10] ARM: mach-hpe: Rework support and directory structure
+Date:   Mon, 6 Mar 2023 10:34:39 -0600
+Message-ID: <20230306163441.16179-8-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230306163441.16179-1-afd@ti.com>
 References: <20230306163441.16179-1-afd@ti.com>
@@ -75,141 +75,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This removes the need for a dedicated Kconfig and empty mach directory.
+Having a platform need a mach-* directory should be seen as a negative,
+it means the platform needs special non-standard handling. ARM64 support
+does not allow mach-* directories at all. While we may not get to that
+given all the non-standard architectures we support, we should still try
+to get as close as we can and reduce the number of mach directories.
+
+The mach-hpe/ directory and files, provides just one "feature":
+having the kernel print the machine name if the DTB does not also contain
+a "model" string (which they always do). To reduce the number of mach-*
+directories let's do without that feature and remove this directory.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm/Kconfig              |  2 --
- arch/arm/Kconfig.platforms    | 28 ++++++++++++++++++++++++++++
- arch/arm/Makefile             |  1 -
- arch/arm/mach-moxart/Kconfig  | 28 ----------------------------
- arch/arm/mach-moxart/Makefile |  4 ----
- arch/arm/mach-moxart/moxart.c |  6 ------
- 6 files changed, 28 insertions(+), 41 deletions(-)
- delete mode 100644 arch/arm/mach-moxart/Kconfig
- delete mode 100644 arch/arm/mach-moxart/Makefile
- delete mode 100644 arch/arm/mach-moxart/moxart.c
+ MAINTAINERS                |  1 -
+ arch/arm/Kconfig           |  2 --
+ arch/arm/Kconfig.platforms | 25 +++++++++++++++++++++++++
+ arch/arm/Makefile          |  1 -
+ arch/arm/mach-hpe/Kconfig  | 23 -----------------------
+ arch/arm/mach-hpe/Makefile |  1 -
+ arch/arm/mach-hpe/gxp.c    | 16 ----------------
+ 7 files changed, 25 insertions(+), 44 deletions(-)
+ delete mode 100644 arch/arm/mach-hpe/Kconfig
+ delete mode 100644 arch/arm/mach-hpe/Makefile
+ delete mode 100644 arch/arm/mach-hpe/gxp.c
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 58f526c3457e..7da5ab1d5f6c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2245,7 +2245,6 @@ F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
+ F:	Documentation/devicetree/bindings/timer/hpe,gxp-timer.yaml
+ F:	arch/arm/boot/dts/hpe-bmc*
+ F:	arch/arm/boot/dts/hpe-gxp*
+-F:	arch/arm/mach-hpe/
+ F:	drivers/clocksource/timer-gxp.c
+ F:	drivers/hwmon/gxp-fan-ctrl.c
+ F:	drivers/i2c/busses/i2c-gxp.c
 diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index e0b45269aa49..02f284681994 100644
+index 90086040de90..d782631a635e 100644
 --- a/arch/arm/Kconfig
 +++ b/arch/arm/Kconfig
-@@ -408,8 +408,6 @@ source "arch/arm/mach-milbeaut/Kconfig"
+@@ -377,8 +377,6 @@ source "arch/arm/mach-highbank/Kconfig"
  
- source "arch/arm/mach-mmp/Kconfig"
+ source "arch/arm/mach-hisi/Kconfig"
  
--source "arch/arm/mach-moxart/Kconfig"
+-source "arch/arm/mach-hpe/Kconfig"
 -
- source "arch/arm/mach-mstar/Kconfig"
+ source "arch/arm/mach-imx/Kconfig"
  
- source "arch/arm/mach-mv78xx0/Kconfig"
+ source "arch/arm/mach-ixp4xx/Kconfig"
 diff --git a/arch/arm/Kconfig.platforms b/arch/arm/Kconfig.platforms
-index 0e6d7172bf61..4b5fad18ca8b 100644
+index c74392419cc3..60f2140c9ff2 100644
 --- a/arch/arm/Kconfig.platforms
 +++ b/arch/arm/Kconfig.platforms
-@@ -76,6 +76,34 @@ config MACH_ASM9260
- 	help
- 	  Support for Alphascale ASM9260 based platform.
+@@ -98,6 +98,31 @@ config ARCH_DIGICOLOR
+ 	select PINCTRL
+ 	select PINCTRL_DIGICOLOR
  
-+menuconfig ARCH_MOXART
-+	bool "MOXA ART SoC"
-+	depends on ARCH_MULTI_V4
-+	depends on CPU_LITTLE_ENDIAN
-+	select CPU_FA526
-+	select ARM_DMA_MEM_BUFFERABLE
-+	select FARADAY_FTINTC010
-+	select FTTMR010_TIMER
-+	select GPIOLIB
-+	select PHYLIB if NETDEVICES
++menuconfig ARCH_HPE
++	bool "HPE SoC support"
++	depends on ARCH_MULTI_V7
 +	help
-+	  Say Y here if you want to run your kernel on hardware with a
-+	  MOXA ART SoC.
-+	  The MOXA ART SoC is based on a Faraday FA526 ARMv4 32-bit
-+	  192 MHz CPU with MMU and 16KB/8KB D/I-cache (UC-7112-LX).
-+	  Used on models UC-7101, UC-7112/UC-7110, IA240/IA241, IA3341.
++	  This enables support for HPE ARM based BMC chips.
 +
-+if ARCH_MOXART
++if ARCH_HPE
 +
-+config MACH_UC7112LX
-+	bool "MOXA UC-7112-LX"
-+	depends on ARCH_MOXART
++config ARCH_HPE_GXP
++	bool "HPE GXP SoC"
++	depends on ARCH_MULTI_V7
++	select ARM_VIC
++	select GENERIC_IRQ_CHIP
++	select CLKSRC_MMIO
 +	help
-+	  Say Y here if you intend to run this kernel on a MOXA
-+	  UC-7112-LX embedded computer.
++	  HPE GXP is the name of the HPE Soc. This SoC is used to implement many
++	  BMC features at HPE. It supports ARMv7 architecture based on the Cortex
++	  A9 core. It is capable of using an AXI bus to which a memory controller
++	  is attached. It has multiple SPI interfaces to connect boot flash and
++	  BIOS flash. It uses a 10/100/1000 MAC for network connectivity. It
++	  has multiple i2c engines to drive connectivity with a host
++	  infrastructure.
 +
 +endif
 +
- config ARCH_RDA
- 	bool "RDA Micro SoCs"
- 	depends on ARCH_MULTI_V7
+ menuconfig ARCH_MOXART
+ 	bool "MOXA ART SoC"
+ 	depends on ARCH_MULTI_V4
 diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 485a439e22ca..f861204fcd4e 100644
+index c2f5925b15fa..ec5adf695a0c 100644
 --- a/arch/arm/Makefile
 +++ b/arch/arm/Makefile
-@@ -192,7 +192,6 @@ machine-$(CONFIG_ARCH_LPC18XX)		+= lpc18xx
- machine-$(CONFIG_ARCH_LPC32XX)		+= lpc32xx
- machine-$(CONFIG_ARCH_MESON)		+= meson
- machine-$(CONFIG_ARCH_MMP)		+= mmp
--machine-$(CONFIG_ARCH_MOXART)		+= moxart
- machine-$(CONFIG_ARCH_MV78XX0)		+= mv78xx0
- machine-$(CONFIG_ARCH_MVEBU)		+= mvebu
- machine-$(CONFIG_ARCH_MXC)		+= imx
-diff --git a/arch/arm/mach-moxart/Kconfig b/arch/arm/mach-moxart/Kconfig
+@@ -183,7 +183,6 @@ machine-$(CONFIG_ARCH_FOOTBRIDGE)	+= footbridge
+ machine-$(CONFIG_ARCH_GEMINI)		+= gemini
+ machine-$(CONFIG_ARCH_HIGHBANK)		+= highbank
+ machine-$(CONFIG_ARCH_HISI)		+= hisi
+-machine-$(CONFIG_ARCH_HPE)		+= hpe
+ machine-$(CONFIG_ARCH_IXP4XX)		+= ixp4xx
+ machine-$(CONFIG_ARCH_KEYSTONE)		+= keystone
+ machine-$(CONFIG_ARCH_LPC18XX)		+= lpc18xx
+diff --git a/arch/arm/mach-hpe/Kconfig b/arch/arm/mach-hpe/Kconfig
 deleted file mode 100644
-index 909c6573ba8b..000000000000
---- a/arch/arm/mach-moxart/Kconfig
+index 3372bbf38d38..000000000000
+--- a/arch/arm/mach-hpe/Kconfig
 +++ /dev/null
-@@ -1,28 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--menuconfig ARCH_MOXART
--	bool "MOXA ART SoC"
--	depends on ARCH_MULTI_V4
--	depends on CPU_LITTLE_ENDIAN
--	select CPU_FA526
--	select ARM_DMA_MEM_BUFFERABLE
--	select FARADAY_FTINTC010
--	select FTTMR010_TIMER
--	select GPIOLIB
--	select PHYLIB if NETDEVICES
+@@ -1,23 +0,0 @@
+-menuconfig ARCH_HPE
+-	bool "HPE SoC support"
+-	depends on ARCH_MULTI_V7
 -	help
--	  Say Y here if you want to run your kernel on hardware with a
--	  MOXA ART SoC.
--	  The MOXA ART SoC is based on a Faraday FA526 ARMv4 32-bit
--	  192 MHz CPU with MMU and 16KB/8KB D/I-cache (UC-7112-LX).
--	  Used on models UC-7101, UC-7112/UC-7110, IA240/IA241, IA3341.
+-	  This enables support for HPE ARM based BMC chips.
+-if ARCH_HPE
 -
--if ARCH_MOXART
--
--config MACH_UC7112LX
--	bool "MOXA UC-7112-LX"
--	depends on ARCH_MOXART
+-config ARCH_HPE_GXP
+-	bool "HPE GXP SoC"
+-	depends on ARCH_MULTI_V7
+-	select ARM_VIC
+-	select GENERIC_IRQ_CHIP
+-	select CLKSRC_MMIO
 -	help
--	  Say Y here if you intend to run this kernel on a MOXA
--	  UC-7112-LX embedded computer.
+-	  HPE GXP is the name of the HPE Soc. This SoC is used to implement many
+-	  BMC features at HPE. It supports ARMv7 architecture based on the Cortex
+-	  A9 core. It is capable of using an AXI bus to which a memory controller
+-	  is attached. It has multiple SPI interfaces to connect boot flash and
+-	  BIOS flash. It uses a 10/100/1000 MAC for network connectivity. It
+-	  has multiple i2c engines to drive connectivity with a host
+-	  infrastructure.
 -
 -endif
-diff --git a/arch/arm/mach-moxart/Makefile b/arch/arm/mach-moxart/Makefile
+diff --git a/arch/arm/mach-hpe/Makefile b/arch/arm/mach-hpe/Makefile
 deleted file mode 100644
-index ded3e38fb98d..000000000000
---- a/arch/arm/mach-moxart/Makefile
+index 8b0a91234df4..000000000000
+--- a/arch/arm/mach-hpe/Makefile
 +++ /dev/null
-@@ -1,4 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--# Object file lists.
+@@ -1 +0,0 @@
+-obj-$(CONFIG_ARCH_HPE_GXP) += gxp.o
+diff --git a/arch/arm/mach-hpe/gxp.c b/arch/arm/mach-hpe/gxp.c
+deleted file mode 100644
+index ef3341373006..000000000000
+--- a/arch/arm/mach-hpe/gxp.c
++++ /dev/null
+@@ -1,16 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/* Copyright (C) 2022 Hewlett-Packard Enterprise Development Company, L.P. */
 -
--obj-$(CONFIG_MACH_UC7112LX)	+= moxart.o
-diff --git a/arch/arm/mach-moxart/moxart.c b/arch/arm/mach-moxart/moxart.c
-deleted file mode 100644
-index f1f58c0c0fa1..000000000000
---- a/arch/arm/mach-moxart/moxart.c
-+++ /dev/null
-@@ -1,6 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * arch/arm/mach-moxart/moxart.c
-- *
-- * (C) Copyright 2013, Jonas Jensen <jonas.jensen@gmail.com>
-- */
+-#include <linux/of_platform.h>
+-#include <asm/mach/arch.h>
+-
+-static const char * const gxp_board_dt_compat[] = {
+-	"hpe,gxp",
+-	NULL,
+-};
+-
+-DT_MACHINE_START(GXP_DT, "HPE GXP")
+-	.dt_compat	= gxp_board_dt_compat,
+-	.l2c_aux_val = 0,
+-	.l2c_aux_mask = ~0,
+-MACHINE_END
 -- 
 2.39.2
 
