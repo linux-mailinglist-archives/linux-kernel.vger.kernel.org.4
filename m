@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56C866AD284
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 191366AD287
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjCFXIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 18:08:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
+        id S230101AbjCFXJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 18:09:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCFXIJ (ORCPT
+        with ESMTP id S229702AbjCFXJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 18:08:09 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9A72C66B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 15:08:07 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id k23so9817064ybk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 15:08:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678144086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xJWNmiAqmMOlquXl+tYVU4J1Zj2biLWfltfnZaEEZEE=;
-        b=SPHrevpiyj2EYs8L5vGjWF9+U1wOVedHn/ohQPSRTRfH2ix0ldVVSmbnyOPTHKK8+D
-         CrmmLmkb+n2Zc0QDeGZn32rnCczFdqNbbbfIaVPMCIU/pBd43/aZHhMQSAs1sHUr688E
-         C0R/jrWgkOvpPY0m+FrzoXt/zaOpdj1eChht/LmHZkmdE51wElVFTqW7TKFqh819kHEH
-         XB72kdy1VE5wBYAnrO5TTXC9WHmWlluXmDqXZI+QKj1rTS8p/ES/df4MBasOj7/lqv2S
-         sB/3D3+k0i5OuFcyFfogr/AwXX1eMJ+c0guST1GFAXT/2NlN+jMfuxIxsBhusq7d7dAu
-         uMdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678144086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xJWNmiAqmMOlquXl+tYVU4J1Zj2biLWfltfnZaEEZEE=;
-        b=EujFlkQUmW8LX8CAZ6zvoWJ99vwUq9WNSgicBnU2PuR4KqASYJcWMpSNaqD6A0IGfV
-         EBtR2iY1b0IyFQrAX+aIcSy3n4bGuzptCml3xTHOOIM5I6bEKgd5sOoroh+TLf/N9rTP
-         7XTfyi86q8BlcKtiEKVpoTiduD7FTn5lz77OsLj7zhpenARCXuzxInFsAWNnNgI8Z0zK
-         nOiBG7whAhIealzrcS9kMmA6YlbZvUcJUmCPNYky0i7urC1Xyvqt2vXykvqEpp3JWz6Y
-         MskvVOuPiNfcqCjOHJh0NqfYhTuKbqByInqryXbSC5xvEXmuZHlPyjiewM3uksYrnuhJ
-         eMQA==
-X-Gm-Message-State: AO0yUKW6m1bmd4yFjZq1/erWLp1Kg788quTvKjZ+WZhmmV1fnHkFPxBq
-        fJBQyp/nBIkA/7fLZbYvz3Jk2yTXaOSDtQQa8BRq7UwxdVDqfevo8qM=
-X-Google-Smtp-Source: AK7set/r262v9/zoBcT5r5ZLxxh2LiNIhyA7qgBq09jU2JtYL4H83jbraOkZ49WuZDPD1Lu/NfmrieyzNMUNtjnjHG0=
-X-Received: by 2002:a25:8b8f:0:b0:906:307b:1449 with SMTP id
- j15-20020a258b8f000000b00906307b1449mr7385460ybl.5.1678144086697; Mon, 06 Mar
- 2023 15:08:06 -0800 (PST)
+        Mon, 6 Mar 2023 18:09:16 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619C0303DE;
+        Mon,  6 Mar 2023 15:09:11 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVvQr1kRHz4xDh;
+        Tue,  7 Mar 2023 10:09:07 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678144149;
+        bh=Zu980PEf3uYdJqFmYlQ36m7G+AYyS3zkGCPtGK8eeqI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oc3cmjg40DSfntGJbigyvNXzPHUs7bTKLHKGbox8PerHedolSp/qLpt9K9j3z+KH3
+         J3Es0KLANBikK6IYFSI436dBuXCoL3T04coddv6aj6IJYqJFYA4wlDy2yuUYTVdmd3
+         519foK98XxnQ3pfvUP0jPP3EPs2J2uC3Lq2e8c6Y9yjEZXPE20wNu5i7HRkC+FOFOO
+         St9wVITQOFlvNmlrYOL64SdFbooFmEQyiA7C55pVpHXXsvYu27/X/cac8jJEaWRQOq
+         4TWrdydj6uxoMdsfmFvCNItmdRgV5tfCeiED5Q4LbI1JNZyHTLvyhJRCtOhqt0KjDP
+         EAkCfX5a7FIzA==
+Date:   Tue, 7 Mar 2023 10:09:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Andi Shyti <andi.shyti@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Nirmoy Das <nirmoy.das@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with Linus' tree
+Message-ID: <20230307100906.60384f71@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230226205319.1013332-1-dario.binacchi@amarulasolutions.com> <CAMRc=MdoMPROUVeu3m9Jx+-5deRMC9jm+zbGBQ=OdHaLApmJ-g@mail.gmail.com>
-In-Reply-To: <CAMRc=MdoMPROUVeu3m9Jx+-5deRMC9jm+zbGBQ=OdHaLApmJ-g@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 7 Mar 2023 00:07:55 +0100
-Message-ID: <CACRpkdYV3mHNYvBg1nf+12Q2XZH_g4iTrA2YB1SVQ=ROriRRgg@mail.gmail.com>
-Subject: Re: [PATCH] gpio: mxc: use dynamic allocation of base
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/KfzsMz2nuDG5O7oKpHgeQgG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 11:03=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
- wrote:
-> On Sun, Feb 26, 2023 at 9:53=E2=80=AFPM Dario Binacchi
-> <dario.binacchi@amarulasolutions.com> wrote:
-> >
-> > Since commit 502df79b860563d7 ("gpiolib: Warn on drivers still using st=
-atic
-> > gpiobase allocation"), one or more warnings are printed during boot on
-> > systems where static allocation of GPIO base is used:
-> >
-> > [    1.611480] gpio gpiochip0: Static allocation of GPIO base is deprec=
-ated, use dynamic allocation.
-> > [    1.622893] gpio gpiochip1: Static allocation of GPIO base is deprec=
-ated, use dynamic allocation.
-> > [    1.633272] gpio gpiochip2: Static allocation of GPIO base is deprec=
-ated, use dynamic allocation.
-> > [    1.643388] gpio gpiochip3: Static allocation of GPIO base is deprec=
-ated, use dynamic allocation.
-> > [    1.653474] gpio gpiochip4: Static allocation of GPIO base is deprec=
-ated, use dynamic allocation.
-(...)
-> Linus,
->
-> I'm afraid we'll need to do something about this warning, because
-> we're getting the same patch for like 4th time already...
+--Sig_/KfzsMz2nuDG5O7oKpHgeQgG
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-OK what about reverting
-commit 502df79b860563d79143be7a1453c2b3224cd836
-"gpiolib: Warn on drivers still using static gpiobase allocation"
+Hi all,
 
-Until we have less drivers with static allocations?
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-In a way it is good that it is fixed, but it's not good if you get
-snowed under by patches and discussions about this.
+  drivers/gpu/drm/i915/i915_driver.c
 
-Yours,
-Linus Walleij
+between commit:
+
+  2293a73ad4f3 ("drm/i915: Remove unused variable")
+
+from Linus' tree and commit:
+
+  e5e43d3363d7 ("drm/i915/display: Pass drm_i915_private as param to i915 f=
+uncs")
+
+from the drm-intel tree.
+
+I fixed it up (the latter commit means that the variable removed in
+the former is still needed - see below ) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/i915_driver.c
+index cf1c0970ecb4,4a2dc43791c3..000000000000
+--- a/drivers/gpu/drm/i915/i915_driver.c
++++ b/drivers/gpu/drm/i915/i915_driver.c
+@@@ -936,9 -930,12 +930,11 @@@ static int i915_driver_open(struct drm_
+   */
+  static void i915_driver_lastclose(struct drm_device *dev)
+  {
+- 	intel_fbdev_restore_mode(dev);
++ 	struct drm_i915_private *i915 =3D to_i915(dev);
++=20
++ 	intel_fbdev_restore_mode(i915);
+ =20
+ -	if (HAS_DISPLAY(i915))
+ -		vga_switcheroo_process_delayed_switch();
+ +	vga_switcheroo_process_delayed_switch();
+  }
+ =20
+  static void i915_driver_postclose(struct drm_device *dev, struct drm_file=
+ *file)
+
+--Sig_/KfzsMz2nuDG5O7oKpHgeQgG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGcpIACgkQAVBC80lX
+0Gx6Ygf/RZZReLwAWdHhqnVcS9m61JdNvARZPjvB04KgE4yeoIKbwECCleSBbSOC
+c5xBxJobMri0Bqs6EXRXphRq+4lZpszt1VhbAo8jA3im3OIcoxkjH+RdhW0Vuk8L
+AjAGuoRlW7IzM6Lv1ABq0CRWb3BbFM8mrqdqzU3GQ/SYekibILqtrch+zZBAa1DD
+o2ETeeFfWlG1OQpwUMO01XDQFzv86Na0hBQazcjFMpxoDz44up7J2zM2q2+qic2q
+MFraf6xh9iTAV4jLZGG7g3i/t9xikvqL32JA4Bqe0tefVNl5nlOvaX5F80Q6J5KX
+kr5s88TzGbCQZMZjATuboLfbi++tnA==
+=5ab0
+-----END PGP SIGNATURE-----
+
+--Sig_/KfzsMz2nuDG5O7oKpHgeQgG--
