@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE146AB8C3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:48:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EE46AB8D6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjCFIsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:48:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
+        id S229725AbjCFIxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCFIsl (ORCPT
+        with ESMTP id S229510AbjCFIx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:48:41 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD15449E;
-        Mon,  6 Mar 2023 00:48:39 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id y2so9020528pjg.3;
-        Mon, 06 Mar 2023 00:48:39 -0800 (PST)
+        Mon, 6 Mar 2023 03:53:29 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F2D93D9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:53:27 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id h9so8820820ljq.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:53:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678092519;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QL3D3IFssfqAcoz9U5L3ra97LeXFC8PAa9Bxh4q7krk=;
-        b=kInJZia6jXpz4sGTiwT3kN9m3USfoq4YOvN1MahB6MW7+J3QBFlBhdXd+WY3WsPgov
-         ZpL+jvBDgyswYuIGAlnkXRv2dD4GZapO7NidAP3EWa4rq/QrO/xYC0kmSnTq/0B5iZVO
-         u5wqRGc7NR8a2wqPu9uq6n+u9L9uLj6mSgHtIte/UPEMk3U0xslI5WX0HvYBz0K21CAb
-         axyoyyuC0WzeJYl6Xggx6fniXJ3ZOCvyLHamEN/REI0TOUiL9ECAahALVOinpH0c8nU+
-         t4rdmA6Wa+GqzqQBoRF0JCa3BX61tHy380xkm2orG+uhVzIBzfJ+DVgVFEG+A7XVhcoU
-         ucBQ==
+        d=google.com; s=20210112; t=1678092806;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wKGnj2LWVcfOTDaOSxybdZGGw5kYROUNKfFjgkTuOvg=;
+        b=fDUyHbQQokUXfw+im+2/kj2w6w+GTsDUijcfvXUW0P/cPAe2YIdzvckqjEaTe4BMB0
+         eHdgDcP9jaBX1w1Zw1sJhf4zgouT7mhUuB/Tj57teFxaiHvULcVMAoGIdT580BbXFCpg
+         DhYTHBtbYTWwDvyOpO5EziVU+0jCVUE0POIiNbEKzuh8inhJAhXVze+DlJ16kZw7f0Re
+         TgeGJk9sJR84rCkAUT80HfHB33+5cBcBfN1P3Y4dkS6PE2C/ycVljFKeFtugSHy14c26
+         blj2igqllymVwwE9KrawC/aEgMNdsKJGK8JjANyXaNmexIk2I1OZsL2b7q8Cg5dVtx8u
+         skyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678092519;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QL3D3IFssfqAcoz9U5L3ra97LeXFC8PAa9Bxh4q7krk=;
-        b=QQcjS4Jk+9LN9LXTKYWL8kDyIwBcj/T5mq2+JmARhuQT0Laku7RcWqvmMf/COChJEk
-         dbkh4tsAatKDLWNvr/f3JwhrlnOE5djIR/sNwfwXpfrZknDR+T5Hg4PV1BBor8wLMERn
-         /3FAhB9z5rrgUpq+i+K0gkf+GAW2uxO1D8DSQe4b4ZE3wljemRy2a/Y0xfqa0/+xI/PV
-         wDTiVFrz32rA74lupgw/yBnYjxTo+jmWhcmX2zW76RPxVrnh4Ow55Z3ALYjmQuBf1yAs
-         875JYOV0rEi9BVH1YoQR0VNpUxQJlYF5duaFQOKOsgOfV8T/BVVUxVargObNxuK+bwnT
-         Y8Rg==
-X-Gm-Message-State: AO0yUKWHLOsuL3EDlKSnux3SqE9XkYLyWm8jnz7ID+Bj4xxxVFRRG48P
-        PIrYVbioKKz9S4Y5pOepUtQ=
-X-Google-Smtp-Source: AK7set9ckGHLdbVf+/Cm+9akHzUlyw9lUKHzYuQYd9IdP0H9Msr9rxBucnt1pfh2hjkANMRshctdKw==
-X-Received: by 2002:a17:902:ea02:b0:19d:2a3:f017 with SMTP id s2-20020a170902ea0200b0019d02a3f017mr12474545plg.62.1678092519375;
-        Mon, 06 Mar 2023 00:48:39 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-82.three.co.id. [180.214.233.82])
-        by smtp.gmail.com with ESMTPSA id lf15-20020a170902fb4f00b00194ac38bc86sm2206992plb.131.2023.03.06.00.48.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 00:48:38 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 7236C1062E0; Mon,  6 Mar 2023 15:48:36 +0700 (WIB)
-Date:   Mon, 6 Mar 2023 15:48:36 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Vegard Nossum <vegard.nossum@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Jiri Kosina <jkosina@suse.cz>,
-        Solar Designer <solar@openwall.com>,
-        Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Subject: Re: [PATCH v3 0/7] Documentation/security-bugs: overhaul
-Message-ID: <ZAWo5BEPmNTkC2Gf@debian.me>
-References: <20230305220010.20895-1-vegard.nossum@oracle.com>
+        d=1e100.net; s=20210112; t=1678092806;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wKGnj2LWVcfOTDaOSxybdZGGw5kYROUNKfFjgkTuOvg=;
+        b=QgbhW1ZuIjCGRP628j7U9NTsovXbKu5CYKZaFiQ2wjc3iY10sTFOBLs0XBBm3lwbVF
+         b8fZ1zHGaFOQzcvqiq+EVlu42UhjgZ5HoTxRAh7Nq0zzRWdk4Phqqlfk0M4TulKoT1Vo
+         zoPz5SumTlX/nRjeuChHPTwngGB9MVLe5q27wMJxXAeTClaviZdbssgdxgm+jvwtIuBL
+         xE3SNL+Raq37r4ELHVcUxfjPsrQlMKEayjptMhNL7RGQys2UaUQvxfEWg/eS6qgiy+c5
+         vxRqbet61VQjStawr9HxUpe5fXk2nkCfaa0UZ6bAwHDzWY6P+D4QjCg3+98Osd9VN73e
+         GF9Q==
+X-Gm-Message-State: AO0yUKWr8y2GDEo6iMXkyw9hDtuFlcuuf2+CO7lZHtdWeN6uO7diWkGA
+        rmDV5m7q/9a0tkJgw7m1evV0rL4uo1ErOIFefrnEDw==
+X-Google-Smtp-Source: AK7set+O61X6BiXVbsYSVxrx7gaMiIRRL1Nm9ZG3DeVEwCnJcHQwkiJtMmdxdB+y0fdGlkBY9XGFm85cu2UWqeEbxKI=
+X-Received: by 2002:a05:651c:124e:b0:295:945d:b382 with SMTP id
+ h14-20020a05651c124e00b00295945db382mr2985593ljh.4.1678092806079; Mon, 06 Mar
+ 2023 00:53:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="L2+HyKnihq8gts0j"
-Content-Disposition: inline
-In-Reply-To: <20230305220010.20895-1-vegard.nossum@oracle.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1674217480.git.linux@leemhuis.info> <bb5dfd55ea2026303ab2296f4a6df3da7dd64006.1674217480.git.linux@leemhuis.info>
+ <20230301204602.5e9bf3c0@kernel.org> <ff62632d-7558-a86c-5541-a54de6e107e7@leemhuis.info>
+ <20230301214023.610a9feb@kernel.org> <CACT4Y+bxUA1v14y0SGC887er5Nif3ZEanjO_m=K4WBwyNfmZHA@mail.gmail.com>
+ <17fdf6f1-60ab-bfde-afc8-5afef6cc797b@leemhuis.info> <CACT4Y+Zm3d9jqK=R-E4xTihEUNdahagPyMPcinWowx8RABawrw@mail.gmail.com>
+ <3275c17f-1a62-4e4a-4a5b-06b34098f8d2@leemhuis.info> <20230302181010.859456e24e8aaf0990b0dead@linux-foundation.org>
+In-Reply-To: <20230302181010.859456e24e8aaf0990b0dead@linux-foundation.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 6 Mar 2023 09:53:13 +0100
+Message-ID: <CACT4Y+brH-ygxHYzstC9dgFcQ=NnYgE48E4j+csE3JqH4FaM5w@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] checkpatch: warn when Reported-by: is not followed
+ by Link:
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=C3=A4ch?= <kai@dev.carbon-project.org>,
+        linux-kernel@vger.kernel.org, Aleksandr Nogikh <nogikh@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        "Theodore Ts'o" <tytso@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 3 Mar 2023 at 03:10, Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > We can parse out our hash from any tag, but the problem is that the
+> > > current email api we use, does not allow to specify Message-ID before
+> > > sending, so we don't know it when generating the text.
+> > > We don't even know it after sending, the API is super simple:
+> > > https://pkg.go.dev/google.golang.org/appengine/mail
+> > > So we don't know what the lore link will be...
+> >
+> > That's... unfortunate, as from my understanding of things that would be
+> > the most important "Link:" to have in any patches that fix issues report
+> > by syzbot. But well, that's how it is for now. In that case I'd vote for
+> > this:
+> >
+> > Reported-by: syzbot@syzkaller.appspotmail.com
+> > Link: https://syzkaller.appspot.com/b/cafecafecaca0cafecafe
+>
+> As you previously mentioned, patch preparers should also include
+> the lore link so any followup discussion is easily located.
 
---L2+HyKnihq8gts0j
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If the link we need to include is to lore, then we don't need to
+change the current syzbot Reported-by, right? Instead of asking 3
+tags, we can ask only for:
 
-On Sun, Mar 05, 2023 at 11:00:03PM +0100, Vegard Nossum wrote:
-> Hi,
->=20
-> This is v3 of clarifying our documentation for reporting security
-> issues.
->=20
-> The current document is not clear enough, in particular the process of
-> disclosure and requesting CVEs, and what the roles of the different
-> lists are and how exactly to report to each of them.
->=20
-> Lots of people have been confused about the 7/14 days of the kernel list
-> vs. the 7/14 days of the distros list, the fact that these are two
-> separate lists, etc. Many reporters contact distros first, or submit
-> their report to both lists at the same time (which has the unfortunate
-> effect of starting off the disclosure countdown for the distros list
-> before s@k.o has had a chance to look at the report). I've shared the v2
-> document with a couple of people who submitted reports and they said
-> they found it a lot clearer.=20
->=20
+Reported-by: syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/r/cafecafecaca0cafecafe@google.com/
 
-The docs LGTM, thanks!
+But as I mentioned we can't provide the lore link at the moment, we
+can only add a text to ask to include it.
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---L2+HyKnihq8gts0j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAWo5AAKCRD2uYlJVVFO
-oy9UAQCcdhC6kNEb/Ch1VdBnFbItrrJIHkj953sjJx6TkqlZdwEA7JHcMEkcUGLj
-5C22FvhMyVeMAlg73eSmH04v+m/0hQg=
-=rHOT
------END PGP SIGNATURE-----
-
---L2+HyKnihq8gts0j--
+This also means that checkpatch does not need special casing for syzbot.
