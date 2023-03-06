@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50FB6AC133
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:33:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5BB6AC155
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCFNdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:33:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S231255AbjCFNfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjCFNc4 (ORCPT
+        with ESMTP id S231337AbjCFNe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:32:56 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617382F78C;
-        Mon,  6 Mar 2023 05:32:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 169EDCE127A;
-        Mon,  6 Mar 2023 13:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD95C433A1;
-        Mon,  6 Mar 2023 13:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678109546;
-        bh=r2YevUTaEioy0IiiN4oIORAATS724rvNMW2/rHghHCQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=T25nklooE0ahT7WUzKCeUE4BraSm+vDbPKMRF2OXSEFIP+4lRgO7Wshph58T3JAt3
-         jniU6sOuca3s247kwAySQQkJH//HS4IeA7hnjgcyObifJnRGe2VxXSk4uuHzklwXFP
-         /YUGrbi3SYG2cNwJtRH4DESQD48Yemx5ZkxuYPsjJD+A9qvQtvKQlc/CeX+6XGgKSf
-         ieeoU/3jHTvqm9V3K5lHQYKINzJ2vMrroqmO+XPvZfLkb52ZHTIwFnZwL/Wsw3zTWp
-         YEaJqY6KYe1uutES9F7wKJ4CSW4D0w9bF75y1vd13a95U1JEtBM5yKmPEKYTaI14oP
-         79dlnmO/CpwlQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        William Qiu <william.qiu@starfivetech.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-In-Reply-To: <20230302105221.197421-1-william.qiu@starfivetech.com>
-References: <20230302105221.197421-1-william.qiu@starfivetech.com>
-Subject: Re: [PATCH v1 0/2] Add Quad SPI driver for StarFive JH7110 SoC
-Message-Id: <167810954467.76172.7217821282766106312.b4-ty@kernel.org>
-Date:   Mon, 06 Mar 2023 13:32:24 +0000
+        Mon, 6 Mar 2023 08:34:56 -0500
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0CD28210
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:34:38 -0800 (PST)
+Received: by mail-ua1-x92e.google.com with SMTP id x1so6420853uav.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:34:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678109672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M6pycp9wejfOSD6NpKbRsXjWRkgwi1tjorQysukPNaU=;
+        b=tccZYS+Z0U+KQyB49J02mAnSgnbMcDA9pIkiOOz0RzGVC4hIRB+t0iNDQUhWGIGEop
+         yf4IzQcWXceh/ypH1QUx+Z5R7KHWVXPohZ0wlm7TaoyAO82Nby6GeWxnXUNvh7zKhV1s
+         c7Z3ZdluKTWaJYfT/7r+2YFI0rxNs8Bu00u0ZfTMw6nC3FyDuanNuwnYKiVguhyfnwZG
+         Vc2hMiBklcK54Yyw3lDuJKxbwb+nx5Xn1U42/TkB0qb5tvA0zf65WITA2guYaaR6mo3D
+         Q8Nm9+p/f8sID8G24s2xf1wn4ojuz1mckZrw9Y9cdztlKHNpjErME0+uw7yuMcu3FhOU
+         9W1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678109672;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M6pycp9wejfOSD6NpKbRsXjWRkgwi1tjorQysukPNaU=;
+        b=OJTPpW9Ccb/OGQzWeMdHqTAvYwa+nG5znB20t4i5R2EanbUWFlBekHKUD17pK7GeNs
+         eRjoUaa3CfSYmLrmkP3XIW+hl3KFanQnnf70gDMGOSuajGxuHL5i41PK2DC0qzAX7nfB
+         a+SpVPr8cxT/VPH7S9ze0pYgw9zLZCm/ngOZi23c9hD3TDjWJ1k4ebN+cd6jh6ruNQTy
+         t4vKogRguUsqpvUJsbzOH1APynQdon3+zmA05TU1bDwrTIXJ18vHGFYb0dntoLAogFQ0
+         MWt2SbM2mFb/4sWMwTPzB+0AK/pQl4+ZKeY9fonI1Snq672InwNP0js2Lyl4iffCHSYL
+         7R3A==
+X-Gm-Message-State: AO0yUKXLr5yhu7IMRzfiEI4OTJjXLX7SD2Z93ToKjKzd1F9sk0GtFKHN
+        Mg99tlCXmhzKc9XUsMaAEzpLaDjp2Y+vblirvldl3Q==
+X-Google-Smtp-Source: AK7set8rlDbjRu4mirR9cg4IcTS7SYd05iHTrYKbKdKV2K8c/iT3Zadt213cga4eNeljgM1jjM/6lcNKE76AJmmvmiI=
+X-Received: by 2002:a9f:3104:0:b0:687:afc8:ffb9 with SMTP id
+ m4-20020a9f3104000000b00687afc8ffb9mr7118679uab.2.1678109672089; Mon, 06 Mar
+ 2023 05:34:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230221150543.283487-1-brgl@bgdev.pl> <20230221150543.283487-3-brgl@bgdev.pl>
+In-Reply-To: <20230221150543.283487-3-brgl@bgdev.pl>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Mar 2023 14:34:21 +0100
+Message-ID: <CAMRc=Mfh=m_+_XpxnYuBPisWNZxyLmhEDO9KxtWTT-p4YHFT8Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sa8775p: add cpufreq node
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 02 Mar 2023 18:52:19 +0800, William Qiu wrote:
-> This patchset adds initial rudimentary support for the StarFive
-> Quad SPI controller driver. And this driver will be used in
-> StarFive's VisionFive 2 board.The first patch constrain
-> minItems/maxItems of resets for JH7110 QSPI and Patch 2 adds
-> support for StarFive JH7110 QSPI.
-> 
-> The patch series is based on v6.2.
-> 
-> [...]
+On Tue, Feb 21, 2023 at 4:05=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
+>
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> Add a node for the cpufreq engine and specify the frequency domains for
+> all CPUs.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
 
-Applied to
+Bjorn,
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Viresh picked up the dt-bindings, so this is the only thing left to go
+into the qcom tree.
 
-Thanks!
-
-[1/2] dt-bindings: qspi: cdns,qspi-nor: constrain minItems/maxItems of resets
-      commit: 13f1033e07588b7d1151d22d7ee3ca8f16181de7
-[2/2] spi: cadence-quadspi: Add support for StarFive JH7110 QSPI
-      commit: 47fef94afeae2a125607b6b45145594713471320
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Bartosz
