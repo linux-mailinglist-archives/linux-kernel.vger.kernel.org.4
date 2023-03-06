@@ -2,178 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9709B6AB9F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12EE6AB9FD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbjCFJfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S229800AbjCFJfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjCFJfQ (ORCPT
+        with ESMTP id S229807AbjCFJfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:35:16 -0500
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141743ABF;
-        Mon,  6 Mar 2023 01:35:12 -0800 (PST)
-Received: by mail-ed1-f47.google.com with SMTP id g3so35860510eda.1;
-        Mon, 06 Mar 2023 01:35:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c9on8nJ5BHbcHwyEQhyWGS+CeCE+weljlfDVcLlawfM=;
-        b=g/WrH3BwBKy2DBb0Gepo+bWOVfXnLLrm+cV+B7H4Ut5KRvytoInhtqyLO15EjKOuxk
-         w0Ftdpoy3N246exKxzONWJ2oYPdZsP11sUXG8oHowmEiSMV7n9JphDFtGJoZ9P49qaCc
-         Kh+qaEw0XbABLO5hBz3PM0jN1y32VThMTAnaHKF83bIopDBlANs6vzZUNqVBnIoEZbSt
-         P/z639HSSnR6+fixiGItpM4VAWzs9wRoSSrLJHqiQfpykUW1O38f0eAoyHVi/izBG3k8
-         axat03h39HbKLewO08E69Jp2B+Pb7oDeyxUBqI6fZV7qF0Sb1HiCFNreU+lZUJAT4OWu
-         +/sg==
-X-Gm-Message-State: AO0yUKXKW3skVoeH5Zae/535WLD3ShGnae/1SjRUzn9NYtAzmghh/uRL
-        7iAPUlrJRSQGCMA009kZaug=
-X-Google-Smtp-Source: AK7set+ZN+g7THBufgKmu7BH8GSraRQUNBXupyiPo0/K+LWqoJPjrC4vjqfNruF+fdDvYKUm3RpgEg==
-X-Received: by 2002:a17:907:3f23:b0:84d:4e4f:1f85 with SMTP id hq35-20020a1709073f2300b0084d4e4f1f85mr13827542ejc.59.1678095310491;
-        Mon, 06 Mar 2023 01:35:10 -0800 (PST)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id fy23-20020a170906b7d700b008b17de9d1f2sm4386370ejb.15.2023.03.06.01.35.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 01:35:09 -0800 (PST)
-Message-ID: <1faade8f-d5e6-fd60-bd60-22e3b79c5ba4@kernel.org>
-Date:   Mon, 6 Mar 2023 10:35:08 +0100
+        Mon, 6 Mar 2023 04:35:37 -0500
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D56CA275;
+        Mon,  6 Mar 2023 01:35:33 -0800 (PST)
+Received: (Authenticated sender: alex@ghiti.fr)
+        by mail.gandi.net (Postfix) with ESMTPSA id D7AAE60017;
+        Mon,  6 Mar 2023 09:35:17 +0000 (UTC)
+Message-ID: <caaed678-4a5a-70e5-2ee7-cb2c8042afc0@ghiti.fr>
+Date:   Mon, 6 Mar 2023 10:35:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 00/24] Remove COMMAND_LINE_SIZE from uapi
 Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>
-Cc:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, pavel@ucw.cz,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com
-References: <20230222083335.847655-1-fe@dev.tdt.de>
- <20230222083335.847655-3-fe@dev.tdt.de> <20230303141139.GP2420672@google.com>
- <be7c90cf-4c65-1cf0-3001-8706415c3d34@kernel.org>
- <20230306090456.GA9667@google.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v7 2/2] trigger: ledtrig-tty: add additional modes
-In-Reply-To: <20230306090456.GA9667@google.com>
+To:     Arnd Bergmann <arnd@arndb.de>, "H. Peter Anvin" <hpa@zytor.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, gor@linux.ibm.com,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        borntraeger@linux.ibm.com, Sven Schnelle <svens@linux.ibm.com>,
+        ysato@users.osdn.me, Rich Felker <dalias@libc.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        chris@zankel.net, Max Filippov <jcmvbkbc@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        Linux-Arch <linux-arch@vger.kernel.org>
+References: <mhng-e8b09772-24e5-4729-a0bf-01a9e4c76636@palmer-ri-x1c9a>
+ <21F95EC4-71EA-4154-A7DC-8A5BA54F174B@zytor.com>
+ <674bc31e-e4ed-988f-820d-54213d83f9c7@ghiti.fr>
+ <c500840b-b57d-47f2-a3d9-41465b10ffae@app.fastmail.com>
+From:   Alexandre Ghiti <alex@ghiti.fr>
+In-Reply-To: <c500840b-b57d-47f2-a3d9-41465b10ffae@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06. 03. 23, 10:04, Lee Jones wrote:
-> On Mon, 06 Mar 2023, Jiri Slaby wrote:
-> 
->> On 03. 03. 23, 15:11, Lee Jones wrote:
->>> On Wed, 22 Feb 2023, Florian Eckert wrote:
->>>> @@ -113,21 +207,38 @@ static void ledtrig_tty_work(struct work_struct *work)
->>>>    		trigger_data->tty = tty;
->>>>    	}
->>>> -	ret = tty_get_icount(trigger_data->tty, &icount);
->>>> -	if (ret) {
->>>> -		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
->>>> -		mutex_unlock(&trigger_data->mutex);
->>>> -		return;
->>>> -	}
->>>> -
->>>> -	if (icount.rx != trigger_data->rx ||
->>>> -	    icount.tx != trigger_data->tx) {
->>>> -		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
->>>> -
->>>> -		trigger_data->rx = icount.rx;
->>>> -		trigger_data->tx = icount.tx;
->>>> -	} else {
->>>> -		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
->>>> +	switch (trigger_data->mode) {
->>>> +	case TTY_LED_CTS:
->>>> +		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
->>>> +		break;
->>>> +	case TTY_LED_DSR:
->>>> +		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
->>>> +		break;
->>>> +	case TTY_LED_CAR:
->>>> +		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
->>>> +		break;
->>>> +	case TTY_LED_RNG:
->>>> +		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
->>>> +		break;
->>>> +	case TTY_LED_CNT:
->>>
->>> I believe this requires a 'fall-through' statement.
->>
->> I don't think this is the case. Isn't fallthrough required only in cases
->> when there is at least one statement, i.e. a block?
-> 
-> There's no mention of this caveat in the document.
-> 
-> To my untrained eyes, the rule looks fairly explicit, starting with "All".
-> 
-> "
->    All switch/case blocks must end in one of:
-> 
->    * break;
->    * fallthrough;
->    * continue;
->    * goto <label>;
->    * return [expression];
-> "
-> 
-> If you're aware of something I'm not, please consider updating the doc.
 
-The magic word in the above is "block", IMO. A block is defined for me 
-as a list of declarations and/or statements. Which is not the case in 
-the above (i.e. in sequential "case"s).
-
-Furthermore, the gcc docs specifically say about fallthrough attribute:
-It can only be used in a switch statement (the compiler will issue an 
-error otherwise), after a preceding statement and before a logically 
-succeeding case label, or user-defined label.
-
-While "case X:" is technically a (label) statement, I don't think they 
-were thinking of it as such here due to following "succeeding case 
-label" in the text.
-
-So checking with the code, gcc indeed skips those 
-(should_warn_for_implicit_fallthrough()):
-   /* Skip all immediately following labels.  */
-   while (!gsi_end_p (gsi)
-          && (gimple_code (gsi_stmt (gsi)) == GIMPLE_LABEL
-              || gimple_code (gsi_stmt (gsi)) == GIMPLE_PREDICT))
-     gsi_next_nondebug (&gsi);
+On 3/3/23 17:40, Arnd Bergmann wrote:
+> On Fri, Mar 3, 2023, at 12:59, Alexandre Ghiti wrote:
+>> On 3/2/23 20:50, H. Peter Anvin wrote:
+>>> On March 1, 2023 7:17:18 PM PST, Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>>>>>> Commit 622021cd6c560ce7 ("s390: make command line configurable"),
+>>>>>> I assume?
+>>>>> Yes, sorry for that. I got distracted while writing and used the wrong
+>>>>> branch to look this up.
+>>>> Alex: Probably worth adding that to the list in the cover letter as it looks like you were planning on a v4 anyway (which I guess you now have to do, given that I just added the issue to RISC-V).
+>>> The only use that is uapi is the *default* length of the command line if the kernel header doesn't include it (in the case of x86, it is in the bzImage header, but that is atchitecture- or even boot format-specific.)
+>> Is COMMAND_LINE_SIZE what you call the default length? Does that mean
+>> that to you the patchset is wrong?
+> On x86, the COMMAND_LINE_SIZE value is already not part of a uapi header,
+> but instead (since bzImage format version 2.06) is communicated from
+> the kernel to the boot loader, which then knows how much data the
+> kernel will read (at most) from the command line.
+>
+> Most x86 kernels these days are booted using UEFI, which I think has
+> no such interface, the firmware just passes the command line and a
+> length, but has no way of knowing if the kernel will truncate this.
+> I think that is the same as with any other architecture that passes
+> the command line through UEFI, DT or ATAGS, all of which use
+> length/value pairs.
+>
+> Russell argued on IRC that this can be considered an ABI since a
+> boot loader may use its knowledge of the kernel's command line size
+> limit to reject long command lines. On the other hand, I don't
+> think that any boot loader actually does, they just trust that it
+> fits and don't have a good way of rejecting invalid configuration
+> other than truncating and/or warning.
+>
+> One notable exception I found while looking through is the old
+> (pre-ATAGS) parameter structure on Arm, which uses COMMAND_LINE_SIZE
+> as part of the structure definition. Apparently this was deprecated
+> 22 years ago, so hopefully the remaining riscpc and footbridge
+> users have all upgraded their bootloaders.
+>
+> The only other case I could find that might go wrong is
+> m68knommu with a few files copying a COMMAND_LINE_SIZE sized
+> buffer from flash into a kernel buffer:
+>
+> arch/m68k/coldfire/m5206.c:void __init config_BSP(char *commandp, int size)
+> arch/m68k/coldfire/m5206.c-{
+> arch/m68k/coldfire/m5206.c-#if defined(CONFIG_NETtel)
+> arch/m68k/coldfire/m5206.c-     /* Copy command line from FLASH to local buffer... */
+> arch/m68k/coldfire/m5206.c-     memcpy(commandp, (char *) 0xf0004000, size);
+> arch/m68k/coldfire/m5206.c-     commandp[size-1] = 0;
+> arch/m68k/coldfire/m5206.c-#endif /* CONFIG_NETtel */
 
 
-Apart from that, fallthrough only makes the code harder to read:
+I see, thanks your thorough explanation: I don't see this m64k issue as 
+a blocker (unless Geert disagrees but he already reviewed the m64k 
+patches),  so I'll send the v5 now.
 
-case X:
-case Y:
-case Z:
-default:
-   do_something();
+Thanks again,
 
-VS
+Alex
 
-case X:
-   fallthrough;
-case Y:
-   fallthrough;
-case Z:
-   fallthrough;
-default:
-   do_something();
 
-The first one is a clear win, IMO, and it's pretty clear that it falls 
-through on purpose. And even for compiler -- it shall not produce a 
-warning in that case.
-
-regards,
--- 
-js
-suse labs
-
+>
+>       Arnd
