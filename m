@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503616AB727
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:35:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F6276AB726
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCFHfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 02:35:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        id S229805AbjCFHfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 02:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjCFHfE (ORCPT
+        with ESMTP id S229771AbjCFHfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 02:35:04 -0500
+        Mon, 6 Mar 2023 02:35:03 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69DEE388
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:35:03 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37322EB63
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:35:02 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pZ5N2-0008Os-NA; Mon, 06 Mar 2023 08:34:57 +0100
+        id 1pZ5N2-0008Ot-6m; Mon, 06 Mar 2023 08:34:56 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pZ5N1-002C0m-Gw; Mon, 06 Mar 2023 08:34:55 +0100
+        id 1pZ5N1-002C0p-Iz; Mon, 06 Mar 2023 08:34:55 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pZ5N0-002bam-No; Mon, 06 Mar 2023 08:34:54 +0100
+        id 1pZ5N0-002bap-Ts; Mon, 06 Mar 2023 08:34:54 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@pengutronix.de
-Subject: [PATCH 0/3] spmi: Convert to platform remove callback returning void
-Date:   Mon,  6 Mar 2023 08:34:43 +0100
-Message-Id: <20230306073446.2194048-1-u.kleine-koenig@pengutronix.de>
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH 1/3] spmi: hisi-spmi-controller: Convert to platform remove callback returning void
+Date:   Mon,  6 Mar 2023 08:34:44 +0100
+Message-Id: <20230306073446.2194048-2-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
+In-Reply-To: <20230306073446.2194048-1-u.kleine-koenig@pengutronix.de>
+References: <20230306073446.2194048-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1458; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=LDehB5gsx29IvbmffavsnSV8Eu2SN5vC8ARQBx16fdE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBZeGXJt15Yv/ivjvwz1ZXiL3FL+DYlk2Ho0rZ BuAMxOa1WqJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAWXhgAKCRDB/BR4rcrs CW3AB/9vd0mEZbajImYQ7YcxspnZ2asSFbRlMWaqXKeQms/i2l3cKZBq26qcx882t9TpiwyDxpa vw5OxyLIMJp5dgDjXeTTssEpYY12XhMTh8TJTVsbLYklA+9Q0JBPQkgoVJds4WCdJd8qpO7A+IU Q8ECg2+oDNQRdZhXP7IR+8MduOzvpzrPaGaCPedZqNUY4eTuLEbdNNZEF+sjncofHacPc1KDmWl 4h5e/x8C0GMrGC8NWVoVvIZ1uYJpmNdO1ha2txwHaUqvk2Hwz2VyuP5xdPDskW2JI5heJK+rPcf WAmEuKjeyACjDX5GrRlqEgLMvnx5woR95e08sBOv4xFH3zwM
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1769; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=x46iUoVgDIkav2eWjEW3fVwWqvRPWVkTe9JpC8hEs6g=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBZeKumnzDEGS3cNKpPSgFIsbr4ESrKdUuOXs/ wj2cK5zxUaJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAWXigAKCRDB/BR4rcrs CaeNCACNimmydFtC9/L6aAebZ10gGzFctSiRYpMUXHe6JH2e9I6Ol6C/p0Ijg4HjV1NAYeud/A0 9UQWbay91553sz82s8dXIQaJ5bLBYFgVMThRG6JupwkhpF+b4Tiyt7iSocLK6dMqPKut3Vs+JDt pifCSelGFKjbCAcSPqtLi2uSSuBKwowm+xutjSH6SoGjCQgJfEuPg/3qPoWXRmQUoVfk9j1a1Gh L2em8drjYf1bnOC5zOwlMorTI2sAClCBaz1ToIdH7gvs9vFWyPMg8WxtcoD9PQGKrZ8fAYudzrK Q8tjIgpWXxvGg3rVV+vDQaE7AVmPHDspR7NrCVOvU7b8m8mS
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -58,39 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-this patch series adapts the platform drivers below drivers/spmi
-to use the .remove_new() callback. Compared to the traditional .remove()
-callback .remove_new() returns no value. This is a good thing because
-the driver core doesn't (and cannot) cope for errors during remove. The
-only effect of a non-zero return value in .remove() is that the driver
-core emits a warning. The device is removed anyhow and an early return
-from .remove() usually yields a resource leak.
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is (mostly) ignored
+and this typically results in resource leaks. To improve here there is a
+quest to make the remove callback return void. In the first step of this
+quest all drivers are converted to .remove_new() which already returns
+void.
 
-By changing the remove callback to return void driver authors cannot
-reasonably assume any more that there is some kind of cleanup later.
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
-All drivers in drivers/spmi returned zero unconditionally in their remove
-callback, so they could all be converted trivially to .remove_new().
-
-Note that this series depends on commit 5c5a7680e67b ("platform: Provide
-a remove callback that returns no value") which is included in v6.3-rc1.
-
-Best regards
-Uwe
-
-
-Uwe Kleine-König (3):
-  spmi: hisi-spmi-controller: Convert to platform remove callback
-    returning void
-  spmi: mtk-pmif: Convert to platform remove callback returning void
-  spmi: pmic-arb: Convert to platform remove callback returning void
-
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
  drivers/spmi/hisi-spmi-controller.c | 5 ++---
- drivers/spmi/spmi-mtk-pmif.c        | 5 ++---
- drivers/spmi/spmi-pmic-arb.c        | 5 ++---
- 3 files changed, 6 insertions(+), 9 deletions(-)
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+diff --git a/drivers/spmi/hisi-spmi-controller.c b/drivers/spmi/hisi-spmi-controller.c
+index 5bd23262abd6..9cbd473487cb 100644
+--- a/drivers/spmi/hisi-spmi-controller.c
++++ b/drivers/spmi/hisi-spmi-controller.c
+@@ -324,13 +324,12 @@ static int spmi_controller_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static int spmi_del_controller(struct platform_device *pdev)
++static void spmi_del_controller(struct platform_device *pdev)
+ {
+ 	struct spmi_controller *ctrl = platform_get_drvdata(pdev);
+ 
+ 	spmi_controller_remove(ctrl);
+ 	spmi_controller_put(ctrl);
+-	return 0;
+ }
+ 
+ static const struct of_device_id spmi_controller_match_table[] = {
+@@ -343,7 +342,7 @@ MODULE_DEVICE_TABLE(of, spmi_controller_match_table);
+ 
+ static struct platform_driver spmi_controller_driver = {
+ 	.probe		= spmi_controller_probe,
+-	.remove		= spmi_del_controller,
++	.remove_new	= spmi_del_controller,
+ 	.driver		= {
+ 		.name	= "hisi_spmi_controller",
+ 		.of_match_table = spmi_controller_match_table,
 -- 
 2.39.1
 
