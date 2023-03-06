@@ -2,176 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116406AD14B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5F36AD14E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbjCFWQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:16:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S229797AbjCFWSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjCFWQp (ORCPT
+        with ESMTP id S229578AbjCFWR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:16:45 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1841555531
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:16:40 -0800 (PST)
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4933041B4B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 22:16:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678140998;
-        bh=/Cz9JAODfWj9EecWtolAL46Y63zYaEN/sjObQ7ypGFc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=FQJH7Y0yTRbvsG2vo5WYbAEZr3G1Cgy/icVDSNRXvr2SVSfIcvSAmIEKIaeppTRO1
-         rXRoM6zNSmSrlsJSHNHYkYkFC70y+JBy82I4EcXcJMbMEJWfFX+lKw4XUPY8Aq3Hpx
-         X92Q18TcmAODs+AwpbLrBXGuIHYHhUX/dRU5ZM3ehWn/WOUFhmYuN2KnvxoZGfnFn+
-         BpiScDeSLFT4PSf9aX3ez1zk73qIoHMrfUNGvNBB3MQAHslNvkBydF1RtKqrTb8NoX
-         OfDgeAzHcwVVu3NGQtmH8G/WEnXnOUd7oJEyexLe9fLnW0hObsqNI9o76KKEyy7YF5
-         aC21oqm4w4D6g==
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-536cad819c7so115865957b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 14:16:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678140997;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Cz9JAODfWj9EecWtolAL46Y63zYaEN/sjObQ7ypGFc=;
-        b=X4FXQhYt0oQTCqR/WXN5wC90YLiaTZt051qz3/xTr13x+fZtEMAPLtKbU+vVyB80U2
-         YecGQnl8ugmZpSho/Yu6Hl0BSzil8deedVojKYtwqub++CZJ54Rqwn489BIgvnq+6UZJ
-         /1pNahk9wUGHqPo2SVTL5eZC4ATeoXImhRCgohrRxq1yyQE2DPE9LlphWDdrCpmI1hTq
-         QBPRtNKGVQ+nY5C16zwzUIHFm1UUnzyQuT7NA24DwKfui50E7sOAvsCMS2DdJATaNtnA
-         MLb6dahNgmWFAVCwk3JuwUdelxeYO+Zg0tx3nSi6Yc0Rro9GksczBA6PxcKI1gPaubRf
-         pJVQ==
-X-Gm-Message-State: AO0yUKVJxKtkeJgi80gjzoYcsJ5HOG71X7KgpcHBXRjGVc5CIgMmrE6f
-        z1ZG19l5wqtgG5pEPgoTh/X1NvuWehz64V/v8AvLNHqbOGWBse65CQXcRhlrmOZYZrEwUUSVnUa
-        6C8AYKlCz2cxAGB1IpjnmmJQ/KUMrHwm4W19F8N+cFB24kG8IDJVSmgy6fw==
-X-Received: by 2002:a81:ae4e:0:b0:52f:3399:ed08 with SMTP id g14-20020a81ae4e000000b0052f3399ed08mr7452414ywk.6.1678140996996;
-        Mon, 06 Mar 2023 14:16:36 -0800 (PST)
-X-Google-Smtp-Source: AK7set91uXjC5HOEE11UD3MtHxIaPsn5S5dDIxuq8BliPL2DtF/t9vW9Yo+mNYAjmS4pwxFY8g9CJl8okjO0C2kEqns=
-X-Received: by 2002:a81:ae4e:0:b0:52f:3399:ed08 with SMTP id
- g14-20020a81ae4e000000b0052f3399ed08mr7452400ywk.6.1678140996747; Mon, 06 Mar
- 2023 14:16:36 -0800 (PST)
+        Mon, 6 Mar 2023 17:17:57 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCC544A7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:17:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=b7qcF0x4SX4MV2RBRzenSFiYbYEE6QBBbo1StKCcj44=; b=AqfKkXOPffK33lCr+uXF4Nbjy4
+        x2NTrGMEKTy+MyN0lPIuNyMGbI0l43oZTKFgfy3Y3Yr0etOsBbce3mK91aaNBZEvzJKhEEvVrtTiL
+        B/mWbVRwtmqOz/mrcH8qHyF0RnQXWU2WeDEkgeVJdA7AJYZ6rY9VsbkCD4NRFyS8Pk9hhmdlkUpYc
+        61J+C/u5ySYJz3HBRZ7ZXG/ECE69g82mV+UTO7sIEs35mMpZEbyS2sFDXNELEIJ3zwDJO+P3cT6iN
+        qkx861k0dvfgO3+iceNkBF3rHYvMJiJy7NJy0TqFxKp6abA+EyVYVmoIbFp73SQQipb263yioXbq6
+        Zknb5lJA==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZJ9T-00FEJ6-6l; Mon, 06 Mar 2023 22:17:51 +0000
+Message-ID: <12ed59e9-3e54-30c1-0013-2c13e0ee2039@infradead.org>
+Date:   Mon, 6 Mar 2023 14:17:47 -0800
 MIME-Version: 1.0
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
- <CAJfpegvQyD-+EL2DdVWmyKF8odYWj4kAONyRf6VH_h4JCTu=vg@mail.gmail.com>
- <CAEivzxdX28JhA+DY92nTGn56kmMgdeT9WX__j7NU3QHpg+wcdQ@mail.gmail.com>
- <CAJfpeguYO9J=np5vxH+HjCSAxn=8fcQRhh_-BVadTt86zWfkpQ@mail.gmail.com> <d20393b4-017e-19f1-b49a-452a6f3acdc8@ddn.com>
-In-Reply-To: <d20393b4-017e-19f1-b49a-452a6f3acdc8@ddn.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Mon, 6 Mar 2023 23:16:25 +0100
-Message-ID: <CAEivzxdWe_gC0L0-Ui4fdytLecCEaknz4+CPTaLUgdaYhbhjhA@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/9] fuse: API for Checkpoint/Restore
-To:     Bernd Schubert <bschubert@ddn.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        "mszeredi@redhat.com" <mszeredi@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "criu@openvz.org" <criu@openvz.org>,
-        "flyingpeng@tencent.com" <flyingpeng@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] MAINTAINERS: replace maintainer of FireWire subsystem
+Content-Language: en-US
+To:     Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+        linux-kernel@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, stefanr@s5r6.in-berlin.de
+Cc:     tiwai@suse.de, broonie@kernel.org
+References: <20230306035814.78455-1-o-takashi@sakamocchi.jp>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230306035814.78455-1-o-takashi@sakamocchi.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 10:05=E2=80=AFPM Bernd Schubert <bschubert@ddn.com> =
-wrote:
->
->
->
-> On 3/6/23 20:18, Miklos Szeredi wrote:
-> > On Mon, 6 Mar 2023 at 17:44, Aleksandr Mikhalitsyn
-> > <aleksandr.mikhalitsyn@canonical.com> wrote:
-> >>
-> >> On Mon, Mar 6, 2023 at 5:15=E2=80=AFPM Miklos Szeredi <miklos@szeredi.=
-hu> wrote:
-> >
-> >>> Apparently all of the added mechanisms (REINIT, BM_REVAL, conn_gen)
-> >>> are crash recovery related, and not useful for C/R.  Why is this bein=
-g
-> >>> advertised as a precursor for CRIU support?
-> >>
-> >> It's because I'm doing this with CRIU in mind too, I think it's a good
-> >> way to make a universal interface
-> >> which can address not only the recovery case but also the C/R, cause
-> >> in some sense it's a close problem.
-> >
-> > That's what I'm wondering about...
-> >
-> > Crash recovery is about restoring (or at least regenerating) state in
-> > the userspace server.
-> >
-> > In CRIU restoring the state of the userspace server is a solved
-> > problem, the issue is restoring state in the kernel part of fuse.  In
-> > a sense it's the exact opposite problem that crash recovery is doing.
+Hi,
 
-I can't argue, you're right. In the "recover" case we don't care about user=
-space
-state, we just want to forget everything in the kernel but only keep
-mounts (someone may want to keep opened FDs too).
-In the C/R case we want to recreate full userspace and kernel states.
+On 3/5/23 19:58, Takashi Sakamoto wrote:
+> In the last few years, I have reviewed patches for FireWire subsystem and
+> requested sound subsystem maintainer to sent them to mainline, since
+> FireWire subsystem maintainer has been long absent. This situation is not
+> preferable since we have some user of sound hardware in IEEE 1394 bus.
+> 
+> I will stand for the maintainer, and work for FireWire core functions and
+> 1394 OHCI driver, as well as sound drivers. This commit replaces the
+> corresponding entry.
 
-These are different problems, but in some parts they require the same UAPIs=
-.
-I think I need to write a detailed motivation for the CRIU part in the
--v2 cover letter, so we can discuss it. What do you think?
+I agree that some change needs to be made. Thank you for offering.
 
-> >
-> >> But of course, Checkpoint/Restore is a way more trickier. But before
-> >> doing all the work with CRIU PoC,
-> >> I wanted to consult with you and folks if there are any serious
-> >> objections to this interface/feature or, conversely,
-> >> if there is someone else who is interested in it.
-> >>
-> >> Now about interfaces REINIT, BM_REVAL.
-> >>
-> >> I think it will be useful for CRIU case, but probably I need to extend
-> >> it a little bit, as I mentioned earlier in the cover letter:
-> >>>> * "fake" daemon has to reply to FUSE_INIT request from the kernel an=
-d initialize fuse connection somehow.
-> >>>> This setup can be not consistent with the original daemon (protocol =
-version, daemon capabilities/settings
-> >>>> like no_open, no_flush, readahead, and so on).
-> >>
-> >> So, after the "fake" demon has done its job during CRIU restore, we
-> >> need to replace it with the actual demon from
-> >> the dumpee tree and performing REINIT looks like a sanner way.
-> >
-> > I don't get it.  How does REINIT help with switching to the real daemon=
-?
->
-> The way I read the patches, the new daemon sends FUSE_INIT to advertise
-> all of its features.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-Yes, thanks, Bernd!
+> As you know, IEEE 1394 is enough legacy. I would like to schedule the end
+> of my work in the subsystem. My effort will last next 6 years. In 2026, I
+> will start strong announcement for users to migrate their work load from
+> IEEE 1394 bus (e.g. by purchasing alternative devices in USB and hardening
+> system for them), then in 2029 let me resign the maintainer and close
+> Linux 1394 project.
+> 
+> My current work focuses on real time data (sampling data) transmission
+> protocol in packet-oriented communication, thus I would provide less help
+> to implementations for the other type of protocol; i.e. IPv4/IPv6 over
+> IEEE 1394 bus (firewire-net), SCSI transport protocol over IEEE 1394 bus
+> (firewire-sbp2) and iSCSI target (sbp-target).
+> 
+> If receiving few objections from developers, I will start my work to send
+> fixes for v6.3 prepatch, and PR for future v6.4 or later. I'm pleased if
+> getting any help until the end.
+> 
+> Reference: commit b32744751e75 ("firewire: add to MAINTAINERS")
+> Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+> ---
+>  MAINTAINERS | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8d5bc223f..e137c1b2f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7954,10 +7954,11 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/nab/lio-core-2.6.git master
+>  F:	drivers/target/sbp/
+>  
+>  FIREWIRE SUBSYSTEM
+> -M:	Stefan Richter <stefanr@s5r6.in-berlin.de>
+> +M:	Takashi Sakamoto <o-takashi@sakamocchi.jp>
+> +M:	Takashi Sakamoto <takaswie@kernel.org>
+>  L:	linux1394-devel@lists.sourceforge.net
+>  S:	Maintained
+> -W:	http://ieee1394.wiki.kernel.org/
+> +W:	http://ieee1394.docs.kernel.org/
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git
+>  F:	drivers/firewire/
+>  F:	include/linux/firewire.h
 
-Theoretically, we can implement some basic C/R without using reinit.
-It was my first idea and I've described it in my LPC 2022 talk,
-but this approach is not fully safe and universal because CRIU fake
-daemon will implement a particular fuse protocol version (and define a
-particular set on fuse ops/features),
-but the dumpee fuse daemon can use a different set of fuse ops and
-fuse protocol version. So, changing fuse daemon fully transparently to
-the kernel is not fully safe.
-
-Thank you guys for your attention to this!
-
-Kind regards,
-Alex
+-- 
+~Randy
