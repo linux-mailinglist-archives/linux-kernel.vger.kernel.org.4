@@ -2,93 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D7A6AC5F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91366AC5FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCFPys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S229909AbjCFPzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:55:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjCFPyr (ORCPT
+        with ESMTP id S229784AbjCFPzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:54:47 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0462E23669;
-        Mon,  6 Mar 2023 07:54:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678118086; x=1709654086;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nqBEyqCxPf0CdDuSxcYS7HYgQHSI7GNHr2exg16wCz4=;
-  b=jVQzGY7cm78n24RleIe4Y3IOOs3UvWUJWxBpsB/poUmwiF9/IrOrNKZM
-   OD+iw8EXaul0+YEKyD++alUsF8rrZaLXwZMBqO6v5iUz9O+Ifd1btlGPa
-   3gegQYjR+fJPu8tu63x4Fw3C3HDl/HpPjVOCDftObd0Cf+McdcLyiQwJr
-   SZymu+KeyZnGzYLPIvkO1vYi5VFyfxB+B3827udan9BaXt0wN5mvJisGp
-   o8ACMGyZtn9lsB9bTVxO+Sxi4lLIsXmEAKeGeM0A3O1mbK4gPyhq9Oqjf
-   yC1KptYpTosbjzUQA4ux1R5xkslaiLHrxQEKCz6OBmOJMrNMVGQXW+Alz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400411726"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="400411726"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 07:54:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="850346560"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="850346560"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 06 Mar 2023 07:54:40 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZDAc-00GVWx-0e;
-        Mon, 06 Mar 2023 17:54:38 +0200
-Date:   Mon, 6 Mar 2023 17:54:37 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Gene Chen <gene_chen@richtek.com>, linux-leds@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v4 11/11] net: dsa: hellcreek: Get rid of custom
- led_init_default_state_get()
-Message-ID: <ZAYMvVR+6eQ9qjAk@smile.fi.intel.com>
-References: <20230103131256.33894-1-andriy.shevchenko@linux.intel.com>
- <20230103131256.33894-12-andriy.shevchenko@linux.intel.com>
+        Mon, 6 Mar 2023 10:55:25 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99F323C48
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:55:22 -0800 (PST)
+Received: from [192.168.2.23] (unknown [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3888D6602087;
+        Mon,  6 Mar 2023 15:55:20 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678118121;
+        bh=XyqnRCXolXHUZxZOJfpHbepcakk7OmYtZwrG/qj46gY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Prh0JZsxK166/cnlkXfFrU3mxiLAjoJU1J8EYhGbQwYJJOxnWxq7aKxSyR9rc9WEB
+         8nIKH/KrkOmYyunzG1knBFnzoDh4RvPHdVf34C/kWbjm/p6KfRm+owk9l/tl7GB8ad
+         NGbN8DSd/VOKXoyEVTSCzWDK8WtiUNeaSw2Utu6QW4uq3yBgIP0r+vB1AG6orGOgvo
+         mnivsc4qsXUS8cVV964zR+Ni/zDjIzgXny/2t0ZXIDN0IFMqkWRJdVbUdzmiEji3fv
+         Ppv4qmBTMRkUHNai7D4O9p+h2LBiEGdMqrXV+HEBiRXIz7uk5cEMAHnqzaAOgl/5GA
+         TdAfuj4iaottQ==
+Message-ID: <abcb4ae1-399c-d3c4-1e80-ade08b391329@collabora.com>
+Date:   Mon, 6 Mar 2023 18:55:17 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103131256.33894-12-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] drm/virtio: Fix handling CONFIG_DRM_VIRTIO_GPU_KMS
+ option
+To:     Emil Velikov <emil.velikov@collabora.com>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>, Rob Clark <robdclark@gmail.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Ryan Neph <ryanneph@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@redhat.com>, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+References: <20230306143234.1561759-1-dmitry.osipenko@collabora.com>
+ <ZAYAbIXlLLkNCB6f@arch-x395>
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <ZAYAbIXlLLkNCB6f@arch-x395>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 03:12:56PM +0200, Andy Shevchenko wrote:
-> LED core provides a helper to parse default state from firmware node.
-> Use it instead of custom implementation.
+On 3/6/23 18:02, Emil Velikov wrote:
+> On 2023/03/06, Dmitry Osipenko wrote:
+>> VirtIO-GPU got a new config option for disabling KMS. There were two
+>> problems left unnoticed during review when the new option was added:
+>>
+>> 1. The IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) check in the code was
+>> inverted, hence KMS was disabled when it should be enabled and vice versa.
+>>
+>> 2. The disabled KMS crashed kernel with a NULL dereference in
+>> drm_kms_helper_hotplug_event(), which shall not be invoked with a
+>> disabled KMS.
+>>
+>> Fix the inverted config option check in the code and skip handling the
+>> VIRTIO_GPU_EVENT_DISPLAY sent by host when KMS is disabled in guest to fix
+>> the crash.
+>>
+>> Fixes: 72122c69d717 ("drm/virtio: Add option to disable KMS support")
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> ---
+>>
+>> Changelog:
+>>
+>> v2: - Moved the "has_edid" under the "num_scanouts" condition, like was
+>>       suggested by Gerd Hoffmann.
+>>
+> 
+> Hi Dmitry, I think there's more than one piece like that in the driver.
+> 
+>>  drivers/gpu/drm/virtio/virtgpu_kms.c | 14 ++++++++------
+>>  1 file changed, 8 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
+>> index 874ad6c2621a..15f2519988e7 100644
+>> --- a/drivers/gpu/drm/virtio/virtgpu_kms.c
+>> +++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
+>> @@ -43,11 +43,13 @@ static void virtio_gpu_config_changed_work_func(struct work_struct *work)
+>>  	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
+>>  			events_read, &events_read);
+>>  	if (events_read & VIRTIO_GPU_EVENT_DISPLAY) {
+>> -		if (vgdev->has_edid)
+>> -			virtio_gpu_cmd_get_edids(vgdev);
+>> -		virtio_gpu_cmd_get_display_info(vgdev);
+>> -		virtio_gpu_notify(vgdev);
+>> -		drm_helper_hpd_irq_event(vgdev->ddev);
+>> +		if (vgdev->num_scanouts) {
+>> +			if (vgdev->has_edid)
+>> +				virtio_gpu_cmd_get_edids(vgdev);
+> 
+> Worth doing the same thing in virtio_gpu_init()? Aka move the has_edid
+> && get_edids within the num_scanouts if block.
 
-Jakub, if you are okay with thi, it may be applied now
-(Lee hadn't taken it in via LEDS subsystem for v6.3-rc1).
+Good catch, that could be done for consistency.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Best regards,
+Dmitry
 
