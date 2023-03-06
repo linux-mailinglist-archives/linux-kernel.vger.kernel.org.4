@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A6A6AB53B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 05:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF376AB52D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 05:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjCFEA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 23:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjCFEAp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229540AbjCFEAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sun, 5 Mar 2023 23:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229457AbjCFEAm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 5 Mar 2023 23:00:42 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4409CF962;
-        Sun,  5 Mar 2023 20:00:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2325AF74B;
+        Sun,  5 Mar 2023 20:00:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
         :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=WgyXM7Qo3viihserObDO4DAWeU3lIl1inofxTIVc+4I=; b=sLHdFy4WxAhVNW1qn8Tqz/mfZx
-        EjfOu5z0GJrrCgy+lXG1pdjvHCSOdl0REBoLuRxbcs5q0hbpogg6e0s1RfznWmvsNTymj4d2ncbJ9
-        WjaQrOJJyYZpH/jrRrKSlhIPCWhQoDgBG7MaVfJ01cLErJK4CawuAXz7/xVfIYRdvtrr7VuZ5I7rk
-        x2DOe5aFqqcVlHDqUnG0BJei+qIrY6seGHjq5nLOB3lAK7LRZH5b1OxiNr3oyYyciyDKbZ0ltXAoi
-        QRNxtvMOeSEU4M/lNK7mHrpyBwwt3pq8/XGqr04nZOpikMuikxgzQnvDyQk/VeEdZyerMIGW0G+Hz
-        JC9H9TsA==;
+        bh=q4i2L9mFgoWjrsHlBXky+D6dbfsBgFxhqp15flWkw9k=; b=2Fzol0PcE0ZfGAK4Yenf3qfW1z
+        zwKzKQ8wu4rEHZme/FrfCmoqKeW4wUil7Fj8RApgHgpJLePU+ThWlt03qdxhURSc20gxd+xqt8Hx3
+        f9GW2U76lHsp8McuSzwMfu/ehyP1f6TuFRBXyQcjgWHzsk5vx8SOd7uXIOcNUGDhnDw7LIIb3yPqO
+        ZJvoLp06YlqmwKlzSweL9C5CU0tXH9MXAE6FLl1y/Z1wdPBXk7zMih+VKWjZsJS5soEkEvIbtYki1
+        42imzvQdXwiDJrHUlkgJgabfcDO4jzA3GTMAyS28aUnZspWNoDA7sYxk1kGNJVT86YC7qrwtDZViB
+        F1zPvhDw==;
 Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZ21f-00B9yD-FR; Mon, 06 Mar 2023 04:00:40 +0000
+        id 1pZ21g-00B9yD-GM; Mon, 06 Mar 2023 04:00:40 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <izh1979@gmail.com>,
         John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
         Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>,
-        linux-sh@vger.kernel.org
-Subject: [PATCH 1/7 v4] sh: SH2007: drop the bad URL info
-Date:   Sun,  5 Mar 2023 20:00:31 -0800
-Message-Id: <20230306040037.20350-2-rdunlap@infradead.org>
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH 2/7 v4] sh: nmi_debug: fix return value of __setup handler
+Date:   Sun,  5 Mar 2023 20:00:32 -0800
+Message-Id: <20230306040037.20350-3-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230306040037.20350-1-rdunlap@infradead.org>
 References: <20230306040037.20350-1-rdunlap@infradead.org>
@@ -54,33 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This URL provided is no longer functional, so drop it.
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings. Also, error return codes don't mean anything to
+obsolete_checksetup() -- only non-zero (usually 1) or zero.
+So return 1 from nmi_debug_setup().
 
-Fixes: 3a598264436e ("sh: SH-2007 board support.")
+Fixes: 1e1030dccb10 ("sh: nmi_debug support.")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <izh1979@gmail.com>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
 Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
 Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
 Cc: Rich Felker <dalias@libc.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>
 Cc: linux-sh@vger.kernel.org
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: stable@vger.kernel.org
 ---
-v2: skipped
-v3: skipped
-v4: refresh/rebase and resend
+v2: add more Cc's;
+    refresh and resend;
+v3: add Arnd to Cc: list
+v4: update Cc: list, refresh & resend
 
- arch/sh/boards/Kconfig |    1 -
- 1 file changed, 1 deletion(-)
+ arch/sh/kernel/nmi_debug.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff -- a/arch/sh/boards/Kconfig b/arch/sh/boards/Kconfig
---- a/arch/sh/boards/Kconfig
-+++ b/arch/sh/boards/Kconfig
-@@ -358,7 +358,6 @@ config SH_SH2007
- 	  intended for embedded applications.
- 	  It has an Ethernet interface (SMC9118), direct connected
- 	  Compact Flash socket, two serial ports and PC-104 bus.
--	  More information at <http://sh2000.sh-linux.org>.
+diff -- a/arch/sh/kernel/nmi_debug.c b/arch/sh/kernel/nmi_debug.c
+--- a/arch/sh/kernel/nmi_debug.c
++++ b/arch/sh/kernel/nmi_debug.c
+@@ -49,7 +49,7 @@ static int __init nmi_debug_setup(char *
+ 	register_die_notifier(&nmi_debug_nb);
  
- config SH_APSH4A3A
- 	bool "AP-SH4A-3A"
+ 	if (*str != '=')
+-		return 0;
++		return 1;
+ 
+ 	for (p = str + 1; *p; p = sep + 1) {
+ 		sep = strchr(p, ',');
+@@ -70,6 +70,6 @@ static int __init nmi_debug_setup(char *
+ 			break;
+ 	}
+ 
+-	return 0;
++	return 1;
+ }
+ __setup("nmi_debug", nmi_debug_setup);
