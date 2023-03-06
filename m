@@ -2,172 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47156ABEFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:03:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAED66ABF06
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCFMDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:03:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S229995AbjCFMEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:04:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjCFMDe (ORCPT
+        with ESMTP id S229998AbjCFMEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:03:34 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B6F91E5CD;
-        Mon,  6 Mar 2023 04:03:32 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8DxWNmT1gVkA80IAA--.16689S3;
-        Mon, 06 Mar 2023 20:03:31 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxyr2R1gVks5BMAA--.2932S3;
-        Mon, 06 Mar 2023 20:03:29 +0800 (CST)
-Message-ID: <029a5993-b993-ab73-0a14-0df9b0ddf3da@loongson.cn>
-Date:   Mon, 6 Mar 2023 20:03:29 +0800
+        Mon, 6 Mar 2023 07:04:35 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEE120695;
+        Mon,  6 Mar 2023 04:04:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678104274; x=1709640274;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CVxITIz/taDItviqkNdDZC22Ok+YGY38badLQU0qG5s=;
+  b=hXVf9TtNwY/Mam+8yBZcr6fPeCxqTS99hh4G3d76GRx7n/6I/tVVcjGf
+   5qtX31jN7TNFz7EWiKW+8P7OWDdBn6i0lGDRyrI6Pjh2mCK0Lx/3t8NsQ
+   /zpqt5qAKpvWZGHRHgx9MoCbOsGdC8SgjUjHG5MWUlznDK40s7+EOfRUB
+   esJtmqls6QHMGLKpQeKVE9dDmlT522K8I7Z7S9McKWSPx+gB1pfkGrQLL
+   rWKrIAt3M1CeHScopxDnKymUi2srluV7xPowqnAEtOt4Ovj++WlViFstI
+   4bducyPTN2BbT5ZnDxARQsSod1jNTNbElXd3T+Yg6zUoLx6rre2C1GhMC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="398118377"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="398118377"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:04:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="740301743"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="740301743"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga008.fm.intel.com with ESMTP; 06 Mar 2023 04:04:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pZ9Zs-00GKz4-28;
+        Mon, 06 Mar 2023 14:04:28 +0200
+Date:   Mon, 6 Mar 2023 14:04:28 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>, Rijo-john.Thomas@amd.com,
+        Thomas.Lendacky@amd.com, herbert@gondor.apana.org.au,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 9/9] i2c: designware: Add support for AMDI0020 ACPI ID
+Message-ID: <ZAXWzMFBjo57UUa+@smile.fi.intel.com>
+References: <20230303165050.2918-1-mario.limonciello@amd.com>
+ <20230303165050.2918-10-mario.limonciello@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH V3] LoongArch: Provide kernel fpu functions
-Content-Language: en-US
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <20230306095934.609589-1-chenhuacai@loongson.cn>
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <20230306095934.609589-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxyr2R1gVks5BMAA--.2932S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxAF1fCF1rKrWDCw4DWr1ftFb_yoW5Zry3pF
-        ZIkFs5GrZ5Cr92v3sxJa4j9r98Jw4kGw1ag3W3GFyrAF4jgF1DWr4vqr9rXFyjva18K3y0
-        qFn5K39xK3WDJwUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
-        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303165050.2918-10-mario.limonciello@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 03, 2023 at 10:50:47AM -0600, Mario Limonciello wrote:
+> Cezanne and Skyrim have the same PSP hardware but use a different
+> protocol to negotiate I2C arbitration. To disambiguate this going
+> forward introduce a new ACPI ID to represent the protocol that utilizes
+> a doorbell.
 
-
-在 2023/3/6 17:59, Huacai Chen 写道:
-> Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
-> to use fpu. They can be used by some other kernel components, e.g., the
-> AMDGPU graphic driver for DCN.
-Since kernel is compiled with -msoft-float, I guess hw fpu will not be
-used in kernel by present:). However it is deserved to try.
-> 
-> Reported-by: WANG Xuerui <kernel@xen0n.name>
-> Tested-by: WANG Xuerui <kernel@xen0n.name>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
-> V2: Use non-GPL exports and update commit messages.
-> V3: Add spaces for coding style.
+> v2->v3:
+>  * Split from earlier patch to standalone
+> ---
+>  drivers/i2c/busses/i2c-designware-amdpsp.c  | 5 +++--
+>  drivers/i2c/busses/i2c-designware-platdrv.c | 1 +
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 > 
->  arch/loongarch/include/asm/fpu.h |  3 +++
->  arch/loongarch/kernel/Makefile   |  2 +-
->  arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
->  3 files changed, 45 insertions(+), 1 deletion(-)
->  create mode 100644 arch/loongarch/kernel/kfpu.c
-> 
-> diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
-> index 358b254d9c1d..192f8e35d912 100644
-> --- a/arch/loongarch/include/asm/fpu.h
-> +++ b/arch/loongarch/include/asm/fpu.h
-> @@ -21,6 +21,9 @@
+> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> index 2c671973010d..44b8432458b0 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> @@ -101,11 +101,12 @@ static int psp_send_i2c_req_amdi0019(enum psp_i2c_req_type i2c_req_type)
 >  
->  struct sigcontext;
+>  static int psp_send_i2c_req(enum psp_i2c_req_type i2c_req_type)
+>  {
+> +	const char *hid = acpi_device_hid(ACPI_COMPANION(psp_i2c_dev));
+>  	unsigned long start = jiffies;
+>  	int ret;
 >  
-> +extern void kernel_fpu_begin(void);
-> +extern void kernel_fpu_end(void);
-> +
->  extern void _init_fpu(unsigned int);
->  extern void _save_fp(struct loongarch_fpu *);
->  extern void _restore_fp(struct loongarch_fpu *);
-> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-> index 78d4e3384305..9a72d91cd104 100644
-> --- a/arch/loongarch/kernel/Makefile
-> +++ b/arch/loongarch/kernel/Makefile
-> @@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
->  obj-$(CONFIG_ACPI)		+= acpi.o
->  obj-$(CONFIG_EFI) 		+= efi.o
->  
-> -obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
-> +obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
->  
->  obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
->  
-> diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
-> new file mode 100644
-> index 000000000000..cd2a18fecdcc
-> --- /dev/null
-> +++ b/arch/loongarch/kernel/kfpu.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/cpu.h>
-> +#include <linux/init.h>
-> +#include <asm/fpu.h>
-> +#include <asm/smp.h>
-> +
-> +static DEFINE_PER_CPU(bool, in_kernel_fpu);
-> +
-> +void kernel_fpu_begin(void)
-> +{
-> +	if (this_cpu_read(in_kernel_fpu))
-> +		return;
-> +
-> +	preempt_disable();
-> +	this_cpu_write(in_kernel_fpu, true);
-> +
-> +	if (!is_fpu_owner())
-> +		enable_fpu();
-> +	else
-> +		_save_fp(&current->thread.fpu);
-Do we need initialize fcsr rather than using random fcsr value
-of other processes? There may be fpu exception enabled by
-other tasks.
+> -	/* Use doorbell for Skyrim and mailbox for Cezanne */
+> -	if (boot_cpu_data.x86 == 25 && boot_cpu_data.x86_model == 80)
 
-Regards
-Bibo,mao
-> +}
-> +EXPORT_SYMBOL(kernel_fpu_begin);
-> +
-> +void kernel_fpu_end(void)
-> +{
-> +	if (!this_cpu_read(in_kernel_fpu))
-> +		return;
-> +
-> +	if (!is_fpu_owner())
-> +		disable_fpu();
-> +	else
-> +		_restore_fp(&current->thread.fpu);
-> +
-> +	this_cpu_write(in_kernel_fpu, false);
-> +	preempt_enable();
-> +}
-> +EXPORT_SYMBOL(kernel_fpu_end);
+Ah, in this form it's getting better than I thought!
+
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> +	/* Use doorbell for AMDI0020 and mailbox for AMDI0019 */
+> +	if (!strcmp(hid, "AMDI0019"))
+>  		ret = psp_send_i2c_req_amdi0019(i2c_req_type);
+>  	else
+>  		ret = psp_ring_platform_doorbell(i2c_req_type);
+> diff --git a/drivers/i2c/busses/i2c-designware-platdrv.c b/drivers/i2c/busses/i2c-designware-platdrv.c
+> index 89ad88c54754..5ca71bda9ac2 100644
+> --- a/drivers/i2c/busses/i2c-designware-platdrv.c
+> +++ b/drivers/i2c/busses/i2c-designware-platdrv.c
+> @@ -51,6 +51,7 @@ static const struct acpi_device_id dw_i2c_acpi_match[] = {
+>  	{ "AMD0010", ACCESS_INTR_MASK },
+>  	{ "AMDI0010", ACCESS_INTR_MASK },
+>  	{ "AMDI0019", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+> +	{ "AMDI0020", ACCESS_INTR_MASK | ARBITRATION_SEMAPHORE },
+>  	{ "AMDI0510", 0 },
+>  	{ "APMC0D0F", 0 },
+>  	{ "HISI02A1", 0 },
+> -- 
+> 2.34.1
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
