@@ -2,121 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 853436AC0E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF296AC0E6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjCFN2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S230281AbjCFN3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjCFN2P (ORCPT
+        with ESMTP id S229808AbjCFN3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:28:15 -0500
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9018A24A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:28:14 -0800 (PST)
-Received: by mail-vs1-xe2f.google.com with SMTP id v27so9077102vsa.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:28:14 -0800 (PST)
+        Mon, 6 Mar 2023 08:29:09 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139FA10A9A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:29:08 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id e194so8092987ybf.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:29:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678109294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j35GhvY7E7mzlkVrpReZp4vmk4NhI+cSNe2C9lnbMoM=;
-        b=Cp7BGW2N/LitFxqVU0zIZGZILOHZKB5Hvtr9iEjBuWniKsqU1k02YRbolBhvP7HDQE
-         vs5qjVYboTS6hRewp+GpDsbFnjRJ9jobZGRo/yVj3spASRMY0GKBKayHcvFYtX/JceVv
-         4PS5emrLyPMC5w3TOFoJreAcdbY4izRJg3OnoMb9uzXp1TnKANHVSydfPEN8cQbqI+Yr
-         +5UIItPm1lXasKejcowYm6yRQ6ReQapZEjFhEpHVuPxoQyZwzNZJzr9OxlFR32FaozlP
-         x0xbQcO0TxBT8qmhhqFr1Q2ohLXWKsWOxlZkRuBU3RunlIdeu7xSBhiFnxe0OtTwU+8E
-         4bVw==
+        d=linaro.org; s=google; t=1678109347;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wdQ6uUXw6eLlqKNPq8Dwry7lvb1Ttr+GrRVdC8+muhc=;
+        b=l2ZAfX/DEvwxQ2Y8xyQQKr4rCOExDvn8sOpBNCt5+XjYpH0mB1IwSGmmArkULngJme
+         gKXkybkiivT1JpXF6SmaEKUZpD9Zcu4jxcL/oe4mrgpjywjTzaVQFvH7iP1+dXjpnNES
+         MsnXD50DsGXnXbq1kBoSIFTZx1xNSd6BWvbG6OHiqwkraELFxDn6HuLb8sc2Vaa0fJ2C
+         glFElm0T6lcrhpeRzfzpP/Of3PWT0egmhJQ1w9lZtGiKivcWdwdCBAW9k3erryYOFT2U
+         8TRNoZT5mW+P/p1V/B2x8iky/xL5DtD0L6WBiilMuOiJKAY/Me5BM7bRKumyAksmRn4f
+         /3iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678109294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j35GhvY7E7mzlkVrpReZp4vmk4NhI+cSNe2C9lnbMoM=;
-        b=f5xeARoXeAqd/jUv7xighHN0PHys1SjRLeIZjanw21tPCWEnU3USdi0gVmFLWv2BpH
-         WnnOiqDoo0o4S+OeD9Y2PIkdchJ55N1VQC5kzv48ZzN99VXFFcFQ5ztKh+FVm0urcJRr
-         dfmZwBLUkU5caBbTnZNmod/vIIn6cQDGa8y/fOK1EBrDH6HhBivNK0gMMH4K9EqUQJiC
-         lxSN+yXo1DCGe/E5FQLi6UchlB5mNWtLBeCVbhjpN/sMPKnJiShzhC5v+mQG6Nc4HAWZ
-         KaizXpZiiPgpEAtzhyeQEncf47buIZGVj0bciIln97VL/5lSerNYCoTRjxiwa7AqoIXT
-         Y9Dw==
-X-Gm-Message-State: AO0yUKWFtr1abS2+BGh86+7KoYPwn0nQJEj1oWGPTD9aSf6URTLXBe6k
-        oUqa8uKDRGff6c4nUNSYAjzdtw6yBCoMO2RnHrIvwA==
-X-Google-Smtp-Source: AK7set8kNbHwEPOA1Fk3J4jAhX7ozG8BFymribiYfNd6DXqK9NHPT2EhYPXCEenbaKo/fN1CQBSrkfPcKfIiS92DHQ4=
-X-Received: by 2002:a67:7305:0:b0:411:c666:583b with SMTP id
- o5-20020a677305000000b00411c666583bmr7328571vsc.5.1678109293921; Mon, 06 Mar
- 2023 05:28:13 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678109347;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wdQ6uUXw6eLlqKNPq8Dwry7lvb1Ttr+GrRVdC8+muhc=;
+        b=ME4q7kD4SC1Ptjh/FAdoy91ZhThChla3eoCoatm9C0tgET3Ik5o+ifdaSs1ns6P3fB
+         7Ir+gmDz7s/z9eM9ofj2NdpANvZalNibZYV78CYazxMjJ7qTN6WOkd7IslbShLXWL7n6
+         c/JaaymbiurhL+tMUhCI2hNL85EOXy+P/SUFV9OX7fF/RhLXFrl6+VgrnN7YgBWioqZV
+         oQrYSr9xJ2cMe4vzy92GXljYd8ZKJo5I+qYDn1rDcqHV3Kbef7X16U8vA8NmsRB4hojp
+         p4640aurOnc8I59dIBoo9paKT+OHbVwqINp3BZCYioQAIVh4JY+ZEAV/oWFUvBFOsCuH
+         TwXw==
+X-Gm-Message-State: AO0yUKU+SVvRsqoXoVZh56spL3NAbEQhVglEYaeRa3Vuqyg2Ugxkyc6J
+        5cUlxudEyHScEuVkGcNu4beZ4cr6lIHWXO9mH+BjxQ==
+X-Google-Smtp-Source: AK7set+OiQbj6mLBs96xasjZbpT5NcfAb8pHkprzWfrKaEEsFheZ9Lhi42qtELHmboMFGuSw2/wd+NFyZSXiKZJmSfA=
+X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
+ k10-20020a5b038a000000b00ac9cb97bd0emr4934384ybp.5.1678109347288; Mon, 06 Mar
+ 2023 05:29:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20230216125257.112300-1-brgl@bgdev.pl>
-In-Reply-To: <20230216125257.112300-1-brgl@bgdev.pl>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Mar 2023 14:28:03 +0100
-Message-ID: <CAMRc=MeBCuJ6eiAVXmHkpHz6KsogdcaPym5nabncmebpJR75FA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] arm64: dts: qcom: sa8775p-ride: enable relevant
- QUPv3 IPs
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
+References: <20230220023320.3499-1-clin@suse.com>
+In-Reply-To: <20230220023320.3499-1-clin@suse.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Mar 2023 14:28:56 +0100
+Message-ID: <CACRpkdYknZo3Q7_CeSkOL2XwwAmKERskx24o-toaVy=rs0Yf5Q@mail.gmail.com>
+Subject: Re: [PATCH v5 0/3] Add pinctrl support for S32 SoC family
+To:     Chester Lin <clin@suse.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, s32@nxp.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Larisa Grigore <larisa.grigore@nxp.com>,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
+        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
+        Radu Pirea <radu-nicolae.pirea@nxp.com>,
+        Matthias Brugger <mbrugger@suse.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 1:53=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
- wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> This enables the QUPv3 interfaces that are exposed on the sa8775p-ride
-> board: I2C, SPI and the Bluetooth and GNSS UART ports.
->
-> v2 -> v3:
-> - fix the interrupt number for uart12
-> - replace underscores with hyphens in DT node names (although make dtbs_c=
-heck
->   does not raise warnings about this)
-> - rearrange the commits so that they're more fine-grained with separate
->   patches for adding nodes to dtsi and enabling them for the board
->
-> v1 -> v2:
-> - uart17 is the Bluetooth port, not GNSS
-> - add uart12 for GNSS too in that case
->
-> Bartosz Golaszewski (9):
->   arm64: dts: qcom: sa8775p: add the QUPv3 #2 node
->   arm64: dts: qcom: sa8775p-ride: enable QUPv3 #2
->   arm64: dts: qcom: sa8775p: add the i2c18 node
->   arm64: dts: qcom: sa8775p-ride: enable i2c18
->   arm64: dts: qcom: sa8775p: add the spi16 node
->   arm64: dts: qcom: sa8775p-ride: enable the SPI node
->   arm64: dts: qcom: sa8775p: add high-speed UART nodes
->   arm64: dts: qcom: sa8775p-ride: enable the GNSS UART port
->   arm64: dts: qcom: sa8775p-ride: enable the BT UART port
->
->  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 100 ++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi     |  86 +++++++++++++++++++
->  2 files changed, 186 insertions(+)
->
-> --
-> 2.37.2
->
+On Mon, Feb 20, 2023 at 3:33 AM Chester Lin <clin@suse.com> wrote:
 
-Konrad, Krzysztof et al,
+> Here I want to introduce a new patch series, which aims to support IOMUX
+> functions provided by SIUL2 [System Integration Unit Lite2] on S32 SoCs,
+> such as S32G2. This series is originally from NXP's implementation on
+> nxp-auto-linux repo[1] and it will be required by upstream kernel for
+> supporting a variety of devices on S32 SoCs which need to config PINMUXs,
+> such as PHYs and MAC controllers.
+>
+> Thanks,
+> Chester
+>
+> Changes in v5:
+> - dt-bindings: No change
+> - driver:
+>   - Refactor register r/w access based on REGMAP_MMIO and regmap APIs.
+>   - Tag PM functions with '__maybe_unused'.
+>   - Add mask check while parsing pin ID from a pinmux value.
+>   - Simplify s32_pinconf_mscr_* functions.
 
-It's been over two weeks, could you please take a look and let me know
-if this is good to go?
+This looks really good any no more comments arrived, so patches are applied
+for v6.4!
 
-Thanks,
-Bartosz
+Thanks for your work on this so far Chester! (I suppose there will be
+maintenance
+for this family going forward.)
+
+Yours,
+Linus Walleij
