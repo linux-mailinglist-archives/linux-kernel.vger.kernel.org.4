@@ -2,101 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5CA6AB6E5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 228A26AB6EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjCFHWF convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Mar 2023 02:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52408 "EHLO
+        id S229695AbjCFHW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 02:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCFHWC (ORCPT
+        with ESMTP id S229556AbjCFHWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 02:22:02 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578B41CADE;
-        Sun,  5 Mar 2023 23:21:58 -0800 (PST)
-Received: by mail-qt1-f169.google.com with SMTP id l18so9608986qtp.1;
-        Sun, 05 Mar 2023 23:21:58 -0800 (PST)
+        Mon, 6 Mar 2023 02:22:53 -0500
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8635E1CF5E
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:22:51 -0800 (PST)
+Received: by mail-il1-f198.google.com with SMTP id t16-20020a92c0d0000000b00319bb6f4282so4758862ilf.20
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 23:22:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678087317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KF4/rhYJLCb1V3udoZ6HDdLYb1astmKZTSpEt1KMS3k=;
-        b=IrdpkYGwq1W+2wjvLYeQ73U1cZQwq5rbK5NKpPeFJyxZU7ZaFhJ5VtlCl40yrYFl7o
-         1UDTqnmK3QK9G3V4A59ylfSJoEgCBDQOKEq/vzaoINnP8kQw2IUsZcO66MzSkQ9ATw3U
-         KbLplf0lbFp5ArwRr5eta7/9Qy48kwgNc602sCtXlD1JUy+/Ag+XU+N/1jtu6EYj6Sts
-         4Cac/Fn50iwifk60KrTlX9gb0PFk2EAAT+lY8SGVfW5yvwj5wcyL6x6Mz0SyYlktZt7B
-         z7hfE/11eLZsVvBs/I8JBVpEatMt3OoydT6+KRG793COJ1qRfWCgF4YnooyEC8IXLTvX
-         tWug==
-X-Gm-Message-State: AO0yUKVQJCkKbruLUo7S7X6DC0EB8MY1dXwafPmfXW4o2NS2ftYvlcy/
-        ma7gnD+3nezKfsUkMoG+RElF8tpVtXr3Eg==
-X-Google-Smtp-Source: AK7set8mcAJ423JXJsA21vVn1OfcQyoRUUIgXpQ4jjvx3hT20oWRcD4ruVWtCq0vLmU3joUh6fjxAQ==
-X-Received: by 2002:ac8:5b95:0:b0:3bf:b6cf:25c5 with SMTP id a21-20020ac85b95000000b003bfb6cf25c5mr17906454qta.14.1678087317247;
-        Sun, 05 Mar 2023 23:21:57 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05620a254a00b007426b917031sm6972702qko.121.2023.03.05.23.21.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 05 Mar 2023 23:21:56 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id t39so7154190ybi.3;
-        Sun, 05 Mar 2023 23:21:56 -0800 (PST)
-X-Received: by 2002:a5b:308:0:b0:90d:af77:9ca6 with SMTP id
- j8-20020a5b0308000000b0090daf779ca6mr5841580ybp.7.1678087316135; Sun, 05 Mar
- 2023 23:21:56 -0800 (PST)
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lZoa4m6FEfnQaYMSu4CgCJx4+GY8uuz4pvBCiPijuw0=;
+        b=N4wkZf9W9FG00XrS8zVsbZr/1n+ttD55/NBYpL9Dy0fp++xaf/E2mfdhT4CzHJuUUf
+         +5Tl0XdUO7dschDWI5I3drnSDcUJWdKcp/ys08qwS8OWjcAiQ6VufV3nErm4Tuu1TEO/
+         8Q+sphxxSD0d/sH/GCMA1lrJN4Gn36wbX5Eh2Ch5ammfS40nslhRDsMMMtg8YXSALdpY
+         kox9qzisQtOK06VhymkwQU4AQQy5Y6j5uHrhb6MauICpbWlquwbm7ijbFv2eWP78OZj/
+         +AuJI7NLiBucJ6sFcNfAYKbcC9T4iTQcwIvZgWdlGa8gi1kZq0WsQCrJ7bpk9WSpVPrc
+         Gftw==
+X-Gm-Message-State: AO0yUKVe8AdWywgstWlA//2/jjglJuRpemUHr1/oFIw9OXg1QeczWUR5
+        IGjbMxQOSh079ZDW6mpr3+pW1/gaYl4M4wtEZg+ZofXZaN5S
+X-Google-Smtp-Source: AK7set93N6rJzgsUJtWwSTMcs7aQ81sO3w7Wq4CfHTV4TScoHLpiKcssCsNEdoqZu3tX7gG19NKXLTXiWl350WJP/e56mh5hqK1o
 MIME-Version: 1.0
-References: <20230228213738.272178-1-willy@infradead.org> <20230228213738.272178-14-willy@infradead.org>
- <CAMuHMdW5TtUeZDmtHvxw+DxqUADC-OCW=tHE2Gptcoie62T+4w@mail.gmail.com>
- <ZAS1Lq6//oO/0PXe@casper.infradead.org> <0b00a30e-cb7f-d42b-7d16-0ae8d50ed916@gmail.com>
-In-Reply-To: <0b00a30e-cb7f-d42b-7d16-0ae8d50ed916@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Mar 2023 08:21:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUDrOD3DezbvxaJH6CXxDFRNC7G-8uU7mqVHxZcG6GNBA@mail.gmail.com>
-Message-ID: <CAMuHMdUDrOD3DezbvxaJH6CXxDFRNC7G-8uU7mqVHxZcG6GNBA@mail.gmail.com>
-Subject: Re: [PATCH v3 13/34] m68k: Implement the new page table range API
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org
+X-Received: by 2002:a5d:8858:0:b0:745:33df:c498 with SMTP id
+ t24-20020a5d8858000000b0074533dfc498mr4767773ios.3.1678087370881; Sun, 05 Mar
+ 2023 23:22:50 -0800 (PST)
+Date:   Sun, 05 Mar 2023 23:22:50 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a4c51705f63629cb@google.com>
+Subject: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
+From:   syzbot <syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, glider@google.com,
+        kuba@kernel.org, kvalo@kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com, toke@toke.dk
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Hello,
 
-On Sun, Mar 5, 2023 at 9:44 PM Michael Schmitz <schmitzmic@gmail.com> wrote:
-> On 6/03/23 04:28, Matthew Wilcox wrote:
-> > On Sun, Mar 05, 2023 at 11:16:13AM +0100, Geert Uytterhoeven wrote:
-> >>> +               while (nr--) {
-> >>> +                       __asm__ __volatile__("nop\n\t"
-> >>> +                                            ".chip 68040\n\t"
-> >>> +                                            "cpushp %%bc,(%0)\n\t"
-> >>> +                                            ".chip 68k"
-> >>> +                                            : : "a" (paddr + nr * PAGE_SIZE));
-> >> As gcc (9.5.0) keeps on calculating "paddr + nr * PAGE_SIZE"
-> >> inside the loop (albeit using a shift instead of a multiplication),
-> >> please use "paddr" here, followed by "paddr += PAGE_SIZE;".
->
-> Are we certain that contiguous vaddr always maps to contiguous paddr?
+syzbot found the following issue on:
 
-For a general __flush_pages_to_ram() function, that would not be
-guaranteed. But as this is meant for folios, it must be true:
-https://elixir.bootlin.com/linux/latest/source/include/linux/mm_types.h#L320
+HEAD commit:    944070199c5e kmsan: add memsetXX tests
+git tree:       https://github.com/google/kmsan.git master
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=172481f2c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=46c642641b9ef616
+dashboard link: https://syzkaller.appspot.com/bug?extid=df61b36319e045c00a08
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15055432c80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1010b19cc80000
 
-Gr{oetje,eeting}s,
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/055bbd57e905/disk-94407019.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/82472690bcfe/vmlinux-94407019.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/db3f379532ab/bzImage-94407019.xz
 
-                        Geert
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ath9k_htc 6-1:1.0: ath9k_htc: HTC initialized with 33 credits
+=====================================================
+BUG: KMSAN: uninit-value in ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
+BUG: KMSAN: uninit-value in __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+BUG: KMSAN: uninit-value in ath9k_hw_init+0x11e0/0x2d60 drivers/net/wireless/ath/ath9k/hw.c:700
+ ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
+ __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+ ath9k_hw_init+0x11e0/0x2d60 drivers/net/wireless/ath/ath9k/hw.c:700
+ ath9k_init_priv drivers/net/wireless/ath/ath9k/htc_drv_init.c:662 [inline]
+ ath9k_init_device drivers/net/wireless/ath/ath9k/htc_drv_init.c:839 [inline]
+ ath9k_htc_probe_device+0xf48/0x3b60 drivers/net/wireless/ath/ath9k/htc_drv_init.c:963
+ ath9k_htc_hw_init+0x4f/0x100 drivers/net/wireless/ath/ath9k/htc_hst.c:521
+ ath9k_hif_usb_firmware_cb+0x2eb/0x800 drivers/net/wireless/ath/ath9k/hif_usb.c:1243
+ request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
+ process_one_work+0xb0d/0x1410 kernel/workqueue.c:2289
+ worker_thread+0x107b/0x1d60 kernel/workqueue.c:2436
+ kthread+0x31f/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Local variable val created at:
+ ath9k_regread+0x62/0x1b0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:239
+ ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:287 [inline]
+ __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+ ath9k_hw_init+0x5be/0x2d60 drivers/net/wireless/ath/ath9k/hw.c:700
+
+CPU: 0 PID: 115 Comm: kworker/0:2 Not tainted 6.2.0-syzkaller-81157-g944070199c5e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
+Workqueue: events request_firmware_work_func
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
