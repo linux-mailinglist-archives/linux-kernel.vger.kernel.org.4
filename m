@@ -2,370 +2,514 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD2F6AC5D3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4CE6AC5DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjCFPqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:46:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        id S231205AbjCFPsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjCFPqW (ORCPT
+        with ESMTP id S229974AbjCFPsO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:46:22 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85FE2D14F;
-        Mon,  6 Mar 2023 07:45:59 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id i34so40428581eda.7;
-        Mon, 06 Mar 2023 07:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678117556;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+agbrQBr9UIR6u+yd/9aPdKOrcjr4SJiOd6RvbJ917E=;
-        b=Y77j9wNfCqhsQgS5VtBqGxkr8fNqSRIiwr7uASxDqh41IHEK6k6P0iDCMIQ010xLN8
-         8gGCpcmgTFWfiJ61RPep8tFG0/ivQG1G0DByq8/8QDtpvocC4GkMyu04ddS/cWmT/7s5
-         06n64qwzdpI34bvi8Pj6WzfCuLgjEmFW1lL5RTSoRz4fVk65VA4E67Cyo7tqAufgQz2U
-         E9UvW3OpZaef7UqqVnqAcvGJ1yeVay1LIstSzDk8cIS73hReozWfns/A3W4VRwZEniRh
-         zvQqrnG7Bl4V/uGRce4XXabZsWlm40LofmGGxVRT6yVCi9SArylPJDlUqdOH6XchBb28
-         zl9w==
+        Mon, 6 Mar 2023 10:48:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5568136FE4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:47:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678117606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HnRnJzVkQ05cIBfaW/UIWxfgz32C3WXvJ7LIg8LN0Ks=;
+        b=TibfzNJYTxV5Rn1xH1SE/RM1PrXKSTK4zLX9rzgh+AqKhwi70OPAsOabgG4CMDBV2RBphv
+        gHKqXKbdVSr+dysGnwCeFf95h3WHHR2YvyH+BNPo5RiA2L1yu8d6UqmrpNxhQPIETT6lum
+        QYfiu97I4aPnT0vvKJEd0FCUWzsnqtc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-519-JcXflxPgPT-H_7sB80hQXw-1; Mon, 06 Mar 2023 10:46:43 -0500
+X-MC-Unique: JcXflxPgPT-H_7sB80hQXw-1
+Received: by mail-ed1-f70.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so4318638eda.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 07:46:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678117556;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20210112; t=1678117602;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+agbrQBr9UIR6u+yd/9aPdKOrcjr4SJiOd6RvbJ917E=;
-        b=78bRD269mz/8LGKcV1+dZdzg7bzjpfx6NYkY7uJB/hp6z7zVlQw2d4terV44mkajbn
-         pbI4R9SGeznrQsQiC1enUToD6Kdxzt9YhBQg+m9t8db3rCITZWGPmmFtEws/pvmwKGi0
-         GStyB4f3ftnqXaIo9cmFW5IRBdy202QricYn+zMxtUd0myWmvtktyh0WiNcImnCeaODj
-         yyNoAMG723FCuyzwo6eaKA5jR/N2w3MgFDCp6K5C8Xgy+K4HuWHOCe0oYTJy8u4RpSWV
-         +EdpCTbPTV2sHx30SO5CJvWysJ38ZmypcWGkAV2bpMcTNjumMVHU7GbOS1471l0KDTNY
-         ksaQ==
-X-Gm-Message-State: AO0yUKU6hp7PcI3qvs/2ZzyLjlfunqjFPAhnVPghu5O2WfBevPHj14h+
-        wL1dC7gSPAUZQpf8I91oeH4=
-X-Google-Smtp-Source: AK7set9BlqZGG5uxTwNphRDgJIRMh0nQJIjcZc4FuO0fw/8jOfMKvBhYTdg7oIcUFcf1w1KT+Ji3hw==
-X-Received: by 2002:aa7:d513:0:b0:4af:7f6e:297b with SMTP id y19-20020aa7d513000000b004af7f6e297bmr11260638edq.35.1678117555732;
-        Mon, 06 Mar 2023 07:45:55 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id j7-20020a17090643c700b008caaae1f1e1sm4686362ejn.110.2023.03.06.07.45.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 07:45:55 -0800 (PST)
-Date:   Mon, 6 Mar 2023 17:45:52 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
-        Alexander Couzens <lynxis@fe80.eu>,
-        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
-        Richard van Schagen <richard@routerhints.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [RFC PATCH net] net: dsa: mt7530: move PLL setup out of port 6
- pad configuration
-Message-ID: <20230306154552.26o6sbwf3rfekcyz@skbuf>
-References: <20230304125453.53476-1-arinc.unal@arinc9.com>
- <20230304125453.53476-1-arinc.unal@arinc9.com>
+        bh=HnRnJzVkQ05cIBfaW/UIWxfgz32C3WXvJ7LIg8LN0Ks=;
+        b=v1D9ocmyCvGe6PE9Oqe8mHSjPSoQrilkURNE2+hg051ggl32wxTttg+I/H6qSwNsW/
+         xtwQiN5UzhGfDy1PQh76+4U5Kee3czuxQx5cPE/B+ueUZbIrQOL5emFRjHhc7/1o4pWl
+         KwuXQPET9pWlvRH/+ikf0Fvmp5g2WbhYRYOoQPbBXDkIwLAUE6Xc0qN6PpVHIcj68PI/
+         D7R6QYclO/541qr8DLlTHL3VZ3g9e23vKsDdOPu+N4L0Ok1cDloEGcx50XMN6/L8GFDe
+         Jvy70QWn8ZqmIjL/dncTQ/SIapSsSikvkLT4UdsEE6QSf9KkqzHQUzgvg+d4T+3AXejK
+         O8oQ==
+X-Gm-Message-State: AO0yUKUzsep6UOYWLseJ4jcZUtFZssoiXjZX5em2jsugTgV1MjZccZcm
+        zCSA1vF0Njw0UoxNi7Sy7lVM5Dlm5IBfN8sc6KAn8GkLZBKzVFJdHj+fprilsGAUQkAylB/mec5
+        IGRqObG8jCLPr5F3z+MABQVzDrvCN6o0L
+X-Received: by 2002:a17:907:9484:b0:886:7eae:26c4 with SMTP id dm4-20020a170907948400b008867eae26c4mr14437831ejc.5.1678117601821;
+        Mon, 06 Mar 2023 07:46:41 -0800 (PST)
+X-Google-Smtp-Source: AK7set/2ddl8EU3rqQtMdbt4EZqi8jX/47toLcTtvhHsfv/bif2UoFZYVciZw7WK6Z4T7es63iiZNg==
+X-Received: by 2002:a17:907:9484:b0:886:7eae:26c4 with SMTP id dm4-20020a170907948400b008867eae26c4mr14437780ejc.5.1678117601395;
+        Mon, 06 Mar 2023 07:46:41 -0800 (PST)
+Received: from ?IPV6:2a02:810d:4b3f:de78:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de78:642:1aff:fe31:a15c])
+        by smtp.gmail.com with ESMTPSA id x22-20020a170906b09600b008d9ddd2da88sm4723069ejy.6.2023.03.06.07.46.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 07:46:40 -0800 (PST)
+Message-ID: <87be9261-1206-75db-6aeb-27abe6e05821@redhat.com>
+Date:   Mon, 6 Mar 2023 16:46:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230304125453.53476-1-arinc.unal@arinc9.com>
- <20230304125453.53476-1-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH drm-next v2 05/16] drm: manager to keep track of GPUs VA
+ mappings
+Content-Language: en-US
+To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>, airlied@gmail.com,
+        daniel@ffwll.ch, tzimmermann@suse.de, mripard@kernel.org,
+        corbet@lwn.net, christian.koenig@amd.com, bskeggs@redhat.com,
+        matthew.brost@intel.com, boris.brezillon@collabora.com,
+        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
+        willy@infradead.org, jason@jlekstrand.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Dave Airlie <airlied@redhat.com>
+References: <20230217134422.14116-1-dakr@redhat.com>
+ <20230217134422.14116-6-dakr@redhat.com>
+ <20230221182050.day6z5ge2e3dxerv@revolver>
+ <ce3ee7f2-e8a3-80eb-9bca-cd465f7f332e@redhat.com>
+ <20230223190941.bkkloowmvqjiu6d7@revolver>
+ <0868bbeb-11b4-b832-a601-f289278e3e76@redhat.com>
+ <20230302023829.kcxyukt7guacr7xg@revolver>
+From:   Danilo Krummrich <dakr@redhat.com>
+Organization: RedHat
+In-Reply-To: <20230302023829.kcxyukt7guacr7xg@revolver>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arınç,
-
-On Sat, Mar 04, 2023 at 03:54:54PM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On 3/2/23 03:38, Liam R. Howlett wrote:
+> * Danilo Krummrich <dakr@redhat.com> [230227 08:17]:
 > 
-> Move the PLL setup of the MT7530 switch out of the pad configuration of
-> port 6 to mt7530_setup, after reset.
-
-it would have been good if this patch had done that and only that, no?
-
-> This fixes the improper initialisation of the switch when only port 5 is
-> used as a CPU port.
+> ...
+>>>> Would this variant be significantly more efficient?
+>>>
+>>> Well, what you are doing is walking the tree to see if there's anything
+>>> there... then re-walking the tree to store it.  So, yes, it's much more
+>>> efficient..  However, writing is heavier.  How much of the time is spent
+>>> walking vs writing depends on the size of the tree, but it's rather easy
+>>> to do this in a single walk of the tree so why wouldn't you?
+>>
+>> I will, I was just curious about how much of an impact it has.
+>>
+>>>
+>>>>
+>>>> Also, would this also work while already walking the tree?
+>>>
+>>> Yes, to an extent.  If you are at the correct location in the tree, you
+>>> can write to that location.  If you are not in the correct location and
+>>> try to write to the tree then things will go poorly..  In this scenario,
+>>> we are very much walking the tree and writing to it in two steps.
+>>>
+>>>>
+>>>> To remove an entry while walking the tree I have a separate function
+>>>> drm_gpuva_iter_remove(). Would I need something similar for inserting
+>>>> entries?
+>>>
+>>> I saw that.  Your remove function uses the erase operation which is
+>>> implemented as a walk to that location and a store of a null over the
+>>> range that is returned.  You do not need a function to insert an entry
+>>> if the maple state is at the correct location, and that doesn't just
+>>> mean setting mas.index/mas.last to the correct value.  There is a node &
+>>> offset saved in the maple state that needs to be in the correct
+>>> location.  If you store to that node then the node may be replaced, so
+>>> other iterators that you have may become stale, but the one you used
+>>> execute the store operation will now point to the new node with the new
+>>> entry.
+>>>
+>>>>
+>>>> I already provided this example in a separate mail thread, but it may makes
+>>>> sense to move this to the mailing list:
+>>>>
+>>>> In __drm_gpuva_sm_map() we're iterating a given range of the tree, where the
+>>>> given range is the size of the newly requested mapping. __drm_gpuva_sm_map()
+>>>> invokes a callback for each sub-operation that needs to be taken in order to
+>>>> fulfill this mapping request. In most cases such a callback just creates a
+>>>> drm_gpuva_op object and stores it in a list.
+>>>>
+>>>> However, drivers can also implement the callback, such that they directly
+>>>> execute this operation within the callback.
+>>>>
+>>>> Let's have a look at the following example:
+>>>>
+>>>>        0     a     2
+>>>> old: |-----------|       (bo_offset=n)
+>>>>
+>>>>              1     b     3
+>>>> req:       |-----------| (bo_offset=m)
+>>>>
+>>>>        0  a' 1     b     3
+>>>> new: |-----|-----------| (a.bo_offset=n,b.bo_offset=m)
+>>>>
+>>>> This would result in the following operations.
+>>>>
+>>>> __drm_gpuva_sm_map() finds entry "a" and calls back into the driver
+>>>> suggesting to re-map "a" with the new size. The driver removes entry "a"
+>>>> from the tree and adds "a'"
+>>>
+>>> What you have here won't work.  The driver will cause your iterators
+>>> maple state to point to memory that is freed.  You will either need to
+>>> pass through your iterator so that the modifications can occur with that
+>>> maple state so it remains valid, or you will need to invalidate the
+>>> iterator on every modification by the driver.
+>>>
+>>> I'm sure the first idea you have will be to invalidate the iterator, but
+>>> that is probably not the way to proceed.  Even ignoring the unclear
+>>> locking of two maple states trying to modify the tree, this is rather
+>>> inefficient - each invalidation means a re-walk of the tree.  You may as
+>>> well not use an iterator in this case.
+>>>
+>>> Depending on how/when the lookups occur, you could still iterate over
+>>> the tree and let the driver modify the ending of "a", but leave the tree
+>>> alone and just store b over whatever - but the failure scenarios may
+>>> cause you grief.
+>>>
+>>> If you pass the iterator through, then you can just use it to do your
+>>> writes and keep iterating as if nothing changed.
+>>
+>> Passing through the iterater clearly seems to be the way to go.
+>>
+>> I assume that if the entry to insert isn't at the location of the iterator
+>> (as in the following example) we can just keep walking to this location my
+>> changing the index of the mas and calling mas_walk()?
 > 
-> Add supported phy modes of port 5 on the PLL setup.
+> no.  You have to mas_set() to the value and walk from the top of the
+> tree.  mas_walk() walks down, not from side to side - well, it does go
+> forward within a node (increasing offset), but if you hit the node limit
+> then you have gotten yourself in trouble.
 > 
-> Remove now incorrect comment regarding P5 as GMAC5.
+>> This would also imply
+>> that the "outer" tree walk continues after the entry we just inserted,
+>> right?
 > 
-> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
-> Fixes: 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
-> 
-> I'm trying to mimic this change by Alexander [0] for the MT7530 switch.
-> This is already the case for MT7530 and MT7531 on the MediaTek ethernet
-> driver on U-Boot [1] [2].
-> 
-> [0] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=42bc4fafe359ed6b73602b7a2dba0dd99588f8ce
-> [1] https://github.com/u-boot/u-boot/blob/a94ab561e2f49a80d8579930e840b810ab1a1330/drivers/net/mtk_eth.c#L729
-> [2] https://github.com/u-boot/u-boot/blob/a94ab561e2f49a80d8579930e840b810ab1a1330/drivers/net/mtk_eth.c#L903
-> 
-> There are some parts I couldn't figure out myself with my limited C
-> knowledge. I've pointed them out on the code. Vladimir, could you help?
-> 
-> There is a lot of code which is only needed for port 6 or trgmii on port 6,
-> but runs whether port 6 or trgmii is used or not. For now, the best I can
-> do is to fix port 5 so it works without port 6 being used.
-> 
-> The U-Boot driver seems to be much more organised so it could be taken as
-> a reference to sort out this DSA driver further.
-> 
-> Also, now that the pad setup for mt7530 is also moved somewhere else, can
-> we completely get rid of @pad_setup?
-> 
-> Arınç
+> I don't understand the "outer" tree walk statement.
 
-I don't like the strategy you used in this patch here, and I don't want
-to answer these questions just yet, because I'm not certain that my
-answers will be useful in the end.
+I think I could have phrased this better. I just mean "my" iterator 
+walking each tree entry rather than an internal tree walk, as it happens 
+in e.g. mas_walk() or mas_find().
 
 > 
-> ---
->  drivers/net/dsa/mt7530.c | 46 +++++++++++++++++++++++++++++-----------
->  1 file changed, 34 insertions(+), 12 deletions(-)
+>>
+>>             1     a     3
+>> old:       |-----------| (bo_offset=n)
+>>
+>>       0     b     2
+>> req: |-----------|       (bo_offset=m)
+>>
+>>       0     b     2  a' 3
+>> new: |-----------|-----| (b.bo_offset=m,a.bo_offset=n+2)
+>>
+>> Again, after finding "a", we want to remove it and insert "a'" instead.
 > 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index 0e99de26d159..fb20ce4f443e 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -395,9 +395,8 @@ mt7530_fdb_write(struct mt7530_priv *priv, u16 vid,
->  
->  /* Setup TX circuit including relevant PAD and driving */
->  static int
-> -mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
-> +mt7530_pad_clk_setup(struct mt7530_priv *priv, phy_interface_t interface)
->  {
-> -	struct mt7530_priv *priv = ds->priv;
->  	u32 ncpo1, ssc_delta, trgint, i, xtal;
->  
->  	xtal = mt7530_read(priv, MT7530_MHWTRAP) & HWTRAP_XTAL_MASK;
-> @@ -409,9 +408,32 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
->  		return -EINVAL;
->  	}
->  
-> +	/* Is setting trgint to 0 really needed for the !trgint check? */
-> +	trgint = 0;
-> +
-> +	/* FIXME: run this switch if p5 is defined on the devicetree */
-> +	/* and change interface to the phy-mode of port 5 */
-> +	switch (interface) {
-
-so this should be something like priv->p5_interface (assuming this is
-initialized by the time mt7530_pad_clk_setup() is called, which it isn't).
-
-> +	case PHY_INTERFACE_MODE_GMII:
-> +		/* PLL frequency: 125MHz */
-> +		ncpo1 = 0x0c80;
-> +		break;
-> +	case PHY_INTERFACE_MODE_MII:
-> +		break;
-
-so with priv->p5_interface == "mii", ncpo1 is uninitialized (will be
-potentially still initialized by the port 6 "switch" statement below).
-
-> +	case PHY_INTERFACE_MODE_RGMII:
-> +		/* PLL frequency: 125MHz */
-> +		ncpo1 = 0x0c80;
-> +		break;
-> +	default:
-> +		dev_err(priv->dev, "xMII interface %d not supported\n",
-> +			interface);
-> +		return -EINVAL;
-> +	}
-
-What method did you use to determine the ncpo1 values here? Are they
-coordinated with what p6 wants? I would expect to see a table with
-
-  priv->p5_interface        priv->p6_interface       ncpo1 value
-      gmii                     rgmii                     ???
-      mii                      rgmii                     ???
-      rgmii                    rgmii                     ???
-      gmii                     trgmii                    ???
-      mii                      trgmii                    ???
-      rgmii                    trgmii                    ???
-
-right now, you let the p6_interface logic overwrite the ncpo1 selected
-by the p5_interface logic like crazy, and it's not clear to me that this
-is what you want.
-
-This problem is way deeper than knowledge of the C language, your pseudo
-code simply does not describe what should happen in all combinations.
-
-From our private conversation dated Feb 08, I guess that what you're
-doing is also a useless complication and not what you truly want. What
-you truly want is for the CORE_GSWPLL_GRP2 register to be programmed
-regardless of whether port 6 is used or not.
-
-> +
-> +	/* FIXME: run this switch if p6 is defined on the devicetree */
-> +	/* and change interface to the phy-mode of port 6 */
->  	switch (interface) {
-
-same comment as above, this should approximate priv->p6_interface.
-
->  	case PHY_INTERFACE_MODE_RGMII:
-> -		trgint = 0;
->  		/* PLL frequency: 125MHz */
->  		ncpo1 = 0x0c80;
->  		break;
-> @@ -2172,7 +2194,11 @@ mt7530_setup(struct dsa_switch *ds)
->  		     SYS_CTRL_PHY_RST | SYS_CTRL_SW_RST |
->  		     SYS_CTRL_REG_RST);
->  
-> -	/* Enable Port 6 only; P5 as GMAC5 which currently is not supported */
-> +	/* Setup switch core pll */
-> +	/* FIXME: feed the phy-mode of port 5 and 6, if the ports are defined on the devicetree */
-> +	mt7530_pad_clk_setup(priv, interface);
-
-"interface" is completely uninitialized here.
-
-Sorry, I'm not reviewing this any further, because it obviously doesn't work.
-
-> +
-> +	/* Enable Port 6 */
->  	val = mt7530_read(priv, MT7530_MHWTRAP);
->  	val &= ~MHWTRAP_P6_DIS & ~MHWTRAP_PHY_ACCESS;
->  	val |= MHWTRAP_MANUAL;
-> @@ -2491,11 +2517,9 @@ static void mt7531_mac_port_get_caps(struct dsa_switch *ds, int port,
->  }
->  
->  static int
-> -mt753x_pad_setup(struct dsa_switch *ds, const struct phylink_link_state *state)
-> +mt7530_pad_setup(struct dsa_switch *ds, phy_interface_t interface)
->  {
-> -	struct mt7530_priv *priv = ds->priv;
-> -
-> -	return priv->info->pad_setup(ds, state->interface);
-> +	return 0;
->  }
->  
->  static int
-> @@ -2769,8 +2793,6 @@ mt753x_phylink_mac_config(struct dsa_switch *ds, int port, unsigned int mode,
->  		if (priv->p6_interface == state->interface)
->  			break;
->  
-> -		mt753x_pad_setup(ds, state);
-> -
->  		if (mt753x_mac_config(ds, port, mode, state) < 0)
->  			goto unsupported;
->  
-> @@ -3187,7 +3209,7 @@ static const struct mt753x_info mt753x_table[] = {
->  		.phy_write_c22 = mt7530_phy_write_c22,
->  		.phy_read_c45 = mt7530_phy_read_c45,
->  		.phy_write_c45 = mt7530_phy_write_c45,
-> -		.pad_setup = mt7530_pad_clk_setup,
-> +		.pad_setup = mt7530_pad_setup,
->  		.mac_port_get_caps = mt7530_mac_port_get_caps,
->  		.mac_port_config = mt7530_mac_config,
->  	},
-> @@ -3199,7 +3221,7 @@ static const struct mt753x_info mt753x_table[] = {
->  		.phy_write_c22 = mt7530_phy_write_c22,
->  		.phy_read_c45 = mt7530_phy_read_c45,
->  		.phy_write_c45 = mt7530_phy_write_c45,
-> -		.pad_setup = mt7530_pad_clk_setup,
-> +		.pad_setup = mt7530_pad_setup,
-
-as a general rule, for bug fixes don't touch stuff that you don't need to touch
-
->  		.mac_port_get_caps = mt7530_mac_port_get_caps,
->  		.mac_port_config = mt7530_mac_config,
->  	},
-> -- 
-> 2.37.2
+> Ah, so you could walk to 0, see that it's NULL from 0 - 1, call
+> mas_next() and get "a" from 1 - 3, write "a'" from 2 - 3:
 > 
+>          0     1  a   2  a' 3
+> broken: |-----|------|-----| (a is broken in this 1/2 step)
+> 
+> mas_set_range(&mas, 0, 2); /* Resets the tree location to MAS_START */
+> mas_store(&mas, b);
+>          0     b     2  a' 3
+> new:    |-----------|-----| (b.bo_offset=m,a.bo_offset=n+2)
+> 
+> 
+> You can *probably* also get away with this:
+> 
+> walk to 0, see that it's NULL from 0 - 1, call mas_next() and get "a"
+> from 1 - 3, write "a'" from 2 - 3:
+> 
+>          0     1  a   2  a' 3
+> broken: |-----|------|-----| (a is broken in this 1/2 step)
+> 
+> mas_prev(&mas, 0); /* Looking at broken a from 1-2.
+> mas_store(&mas, NULL); /* NULL is expanded on write to 0-2.
+>              0    NULL   2  a' 3
+> broken':    |-----------|-----| (b.bo_offset=m,a.bo_offset=n+2)
+> 
+> mas_store(&mas, b);
+>          0     b     2  a' 3
+> new:    |-----------|-----| (b.bo_offset=m,a.bo_offset=n+2)
+> 
+> You may want to iterate backwards and do the writes as you go until you
+> have enough room.. it really depends how you want to go about doing
+> things.
 
-Could you please let me know if this patch works, instead of what you've
-posted above? It does what you *said* you tried to do, aka it performs
-the initialization of CORE_GSWPLL_GRP2 independently of port 6 setup.
-There is a slight reordering of register writes with MT7530_P6ECR, but
-hopefully that doesn't bother anyone.
+I see, again thanks for explaining.
 
-diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-index 3a15015bc409..a508402c4ecb 100644
---- a/drivers/net/dsa/mt7530.c
-+++ b/drivers/net/dsa/mt7530.c
-@@ -393,6 +393,24 @@ mt7530_fdb_write(struct mt7530_priv *priv, u16 vid,
- 		mt7530_write(priv, MT7530_ATA1 + (i * 4), reg[i]);
- }
- 
-+/* Set up switch core clock for MT7530 */
-+static void mt7530_pll_setup(struct mt7530_priv *priv)
-+{
-+	/* Disable PLL */
-+	core_write(priv, CORE_GSWPLL_GRP1, 0);
-+
-+	/* Set core clock into 500Mhz */
-+	core_write(priv, CORE_GSWPLL_GRP2,
-+		   RG_GSWPLL_POSDIV_500M(1) |
-+		   RG_GSWPLL_FBKDIV_500M(25));
-+
-+	/* Enable PLL */
-+	core_write(priv, CORE_GSWPLL_GRP1,
-+		   RG_GSWPLL_EN_PRE |
-+		   RG_GSWPLL_POSDIV_200M(2) |
-+		   RG_GSWPLL_FBKDIV_200M(32));
-+}
-+
- /* Setup TX circuit including relevant PAD and driving */
- static int
- mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
-@@ -453,21 +471,6 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
- 	core_clear(priv, CORE_TRGMII_GSW_CLK_CG,
- 		   REG_GSWCK_EN | REG_TRGMIICK_EN);
- 
--	/* Setup core clock for MT7530 */
--	/* Disable PLL */
--	core_write(priv, CORE_GSWPLL_GRP1, 0);
--
--	/* Set core clock into 500Mhz */
--	core_write(priv, CORE_GSWPLL_GRP2,
--		   RG_GSWPLL_POSDIV_500M(1) |
--		   RG_GSWPLL_FBKDIV_500M(25));
--
--	/* Enable PLL */
--	core_write(priv, CORE_GSWPLL_GRP1,
--		   RG_GSWPLL_EN_PRE |
--		   RG_GSWPLL_POSDIV_200M(2) |
--		   RG_GSWPLL_FBKDIV_200M(32));
--
- 	/* Setup the MT7530 TRGMII Tx Clock */
- 	core_write(priv, CORE_PLL_GROUP5, RG_LCDDS_PCW_NCPO1(ncpo1));
- 	core_write(priv, CORE_PLL_GROUP6, RG_LCDDS_PCW_NCPO0(0));
-@@ -2196,6 +2199,8 @@ mt7530_setup(struct dsa_switch *ds)
- 		     SYS_CTRL_PHY_RST | SYS_CTRL_SW_RST |
- 		     SYS_CTRL_REG_RST);
- 
-+	mt7530_pll_setup(priv);
-+
- 	/* Enable Port 6 only; P5 as GMAC5 which currently is not supported */
- 	val = mt7530_read(priv, MT7530_MHWTRAP);
- 	val &= ~MHWTRAP_P6_DIS & ~MHWTRAP_PHY_ACCESS;
--- 
-2.34.1
+I think I would prefer to either (1) have generic insert() function with 
+a similar behavior as when iterating through a list or (2) have a 
+function dedicated to the "split" use case.
+
+1) When iterating the tree inserting entries at arbitrary locations 
+should not influence the next iteration step. Unless the new entry 
+really is the next entry, but that'd be optional. I don't see a use case 
+for that.
+
+2) Similar to how you broke it down above I could imagine a function 
+dedicated to the split operation. This would be similar to what you 
+mention for mmap below. However, it wouldn't be a single operation.
+
+The GPUVA manager provides sub-operations to the driver for a single 
+mapping request. Those can be an arbitrary amount of unmaps (for 
+mappings "in the way", as you say below), one or two remaps (for splits 
+at the beginning or end or both) and exactly one map (which is the last 
+sub-operation adding the newly requested mapping).
+
+Remaps consist out of the mapping to unmap and one or two new mappings 
+to map. The only case where a remap sub-op has two new mappings to map 
+is when the newly requested mapping is enclosed by a single existing 
+mapping. If we overlap a mapping at the beginning and another one at the 
+end this would be two separate remap sub-ops. Of course, between the two 
+remaps there could be an arbitrary amount of unmap sub-ops.
+
+Unmap sub-ops are simple, I just need to remove a single entry in the 
+tree. drm_gpuva_iter_remove() should be fine for that.
+
+For remap sub-ops, I would need a function that removes an entry and 
+then adds one or two new entries within the range of the removed one. 
+The next loop iteration should then continue at the entry (is any) after 
+the range of the removed one.
+
+However, I'm unsure how to implement this. Would I need to just do a 
+mas_store() of the new entry/entries (since the nodes should already be 
+allocated) and then clean up the nodes that are left with mas_erase()?
+
+Let's say there is an entry A = [0 - 5] and I want to replace it with B 
+= [0 - 1] and C = [4 - 5].
+
+Could I just store B and C and then somehow clean up the range [2 - 3]?
+
+Maybe 1) would be the most flexible way, however, if 2) can be 
+implemented more efficiently that's perfectly fine too.
+
+> 
+>>
+>>>
+>>>>
+>>>> __drm_gpuva_sm_map(), ideally, continues the loop searching for nodes
+>>>> starting from the end of "a" (which is 2) till the end of the requested
+>>>> mapping "b" (which is 3). Since it doesn't find any other mapping within
+>>>> this range it calls back into the driver suggesting to finally map "b".
+>>>>
+>>>> If there would have been another mapping between 2 and 3 it would have
+>>>> called back into the driver asking to unmap this mapping beforehand.
+>>>>
+>>>> So, it boils down to re-mapping as described at the beginning (and
+>>>> analogously at the end) of a new mapping range and removing of entries that
+>>>> are enclosed by the new mapping range.
+>>>
+>>> I assume the unmapped area is no longer needed, and the 're-map' is
+>>> really a removal of information?  Otherwise I'd suggest searching for a
+>>> gap which fits your request.  What you have here is a lot like
+>>> "MAP_FIXED" vs top-down/bottom-up search in the VMA code, this seems to
+>>> be like your __drm_gpuva_sm_map() and the drm mm range allocator with
+>>> DRM_MM_INSERT_LOW, and DRM_MM_INSERT_HIGH.
+>>>
+>>> Why can these split/unmappings fail?  Is it because they are still
+>>> needed?
+>>>
+>>
+>> You mean the check before the mas_*() operations in drm_gpuva_insert()?
+> 
+> Yes, the callbacks.
+> 
+>>
+>> Removing entries should never fail, inserting entries should fail when the
+>> caller tries to store to an area outside of the VA space (it doesn't
+>> necessarily span the whole 64-bit space), a kernel reserved area of the VA
+>> space, is not in any pre-allocated range of the VA space (if regions are
+>> enabled) or an entry already exists at that location.
+> 
+> In the mmap code, I have to deal with splitting the start/end VMA and
+> removing any VMAs in the way.  I do this by making a 'detached' tree
+> that is dealt with later, then just overwriting the area with one
+> mas_store() operation.  Would something like that work for you?
+
+I think this is pretty much the same thing I want to do, hence this 
+should work. However, this would require more state keeping for the 
+whole iteration, I guess. Drivers shouldn't know how the GPUVA manager 
+keeps track of mappings internally (and hence they shouldn't know about 
+the maple tree). If I could get away with something similar to what I 
+wrote above, I think I'd probably not add this extra complexity, unless 
+there are relevant performance reasons to do so.
+
+> 
+>>
+>>>>
+>>>>>> +	if (unlikely(ret))
+>>>>>> +		return ret;
+>>>>>> +
+>>>>>> +	va->mgr = mgr;
+>>>>>> +	va->region = reg;
+>>>>>> +
+>>>>>> +	return 0;
+>>>>>> +}
+>>>>>> +EXPORT_SYMBOL(drm_gpuva_insert);
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * drm_gpuva_remove - remove a &drm_gpuva
+>>>>>> + * @va: the &drm_gpuva to remove
+>>>>>> + *
+>>>>>> + * This removes the given &va from the underlaying tree.
+>>>>>> + */
+>>>>>> +void
+>>>>>> +drm_gpuva_remove(struct drm_gpuva *va)
+>>>>>> +{
+>>>>>> +	MA_STATE(mas, &va->mgr->va_mt, va->va.addr, 0);
+>>>>>> +
+>>>>>> +	mas_erase(&mas);
+>>>>>> +}
+>>>>>> +EXPORT_SYMBOL(drm_gpuva_remove);
+>>>>>> +
+>>>>> ...
+>>>>>
+>>>>>> +/**
+>>>>>> + * drm_gpuva_find_first - find the first &drm_gpuva in the given range
+>>>>>> + * @mgr: the &drm_gpuva_manager to search in
+>>>>>> + * @addr: the &drm_gpuvas address
+>>>>>> + * @range: the &drm_gpuvas range
+>>>>>> + *
+>>>>>> + * Returns: the first &drm_gpuva within the given range
+>>>>>> + */
+>>>>>> +struct drm_gpuva *
+>>>>>> +drm_gpuva_find_first(struct drm_gpuva_manager *mgr,
+>>>>>> +		     u64 addr, u64 range)
+>>>>>> +{
+>>>>>> +	MA_STATE(mas, &mgr->va_mt, addr, 0);
+>>>>>> +
+>>>>>> +	return mas_find(&mas, addr + range - 1);
+>>>>>> +}
+>>>>>> +EXPORT_SYMBOL(drm_gpuva_find_first);
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * drm_gpuva_find - find a &drm_gpuva
+>>>>>> + * @mgr: the &drm_gpuva_manager to search in
+>>>>>> + * @addr: the &drm_gpuvas address
+>>>>>> + * @range: the &drm_gpuvas range
+>>>>>> + *
+>>>>>> + * Returns: the &drm_gpuva at a given &addr and with a given &range
+>>>>>
+>>>>> Note that mas_find() will continue upwards in the address space if there
+>>>>> isn't anything at @addr.  This means that &drm_gpuva may not be at
+>>>>> &addr.  If you want to check just at &addr, use mas_walk().
+>>>>
+>>>> Good catch. drm_gpuva_find() should then either also check for 'va->va.addr
+>>>> == addr' as well or, alternatively, use mas_walk(). As above, any reason to
+>>>> prefer mas_walk()?
+> 
+> I think I missed this question last time..
+> 
+> Internally, mas_find() is just a mas_walk() on the first call, then
+> mas_next() for each call after that.  If, during the mas_walk(), there
+> is no value at addr, it immediately calls mas_next() to get a value to
+> return.  It will continue upwards until the limit is reached (addr +
+> range - 1 in your case).
+> 
+> So if you only want to know if there is something at addr, then it's
+> best to use mas_walk() and keep things a bit more efficient.  Then you
+> can check mas.last for your end value.
+> 
+> If you do want the first VMA within the range passed in, then mas_find()
+> is the function you want.
+> 
+>>>>
+>>>>>
+>>>>>> + */
+>>>>>> +struct drm_gpuva *
+>>>>>> +drm_gpuva_find(struct drm_gpuva_manager *mgr,
+>>>>>> +	       u64 addr, u64 range)
+>>>>>> +{
+>>>>>> +	struct drm_gpuva *va;
+>>>>>> +
+>>>>>> +	va = drm_gpuva_find_first(mgr, addr, range);
+>>>>>> +	if (!va)
+>>>>>> +		goto out;
+>>>>>> +
+>>>>>> +	if (va->va.range != range)
+>>>>>> +		goto out;
+>>>>>> +
+>>>>>> +	return va;
+>>>>>> +
+>>>>>> +out:
+>>>>>> +	return NULL;
+>>>>>> +}
+>>>>>> +EXPORT_SYMBOL(drm_gpuva_find);
+>>>>>> +
+>>>>>> +/**
+>>>>>> + * drm_gpuva_find_prev - find the &drm_gpuva before the given address
+>>>>>> + * @mgr: the &drm_gpuva_manager to search in
+>>>>>> + * @start: the given GPU VA's start address
+>>>>>> + *
+>>>>>> + * Find the adjacent &drm_gpuva before the GPU VA with given &start address.
+>>>>>> + *
+>>>>>> + * Note that if there is any free space between the GPU VA mappings no mapping
+>>>>>> + * is returned.
+>>>>>> + *
+>>>>>> + * Returns: a pointer to the found &drm_gpuva or NULL if none was found
+>>>>>> + */
+>>>>>> +struct drm_gpuva *
+>>>>>> +drm_gpuva_find_prev(struct drm_gpuva_manager *mgr, u64 start)
+>>>>>
+>>>>> find_prev() usually continues beyond 1 less than the address. I found
+>>>>> this name confusing.
+>>>>
+>>>> Don't really get that, mind explaining?
+>>>
+>>> When I ask for the previous one in a list or tree, I think the one
+>>> before.. but since you are limiting your search from start to start - 1,
+>>> you may as well walk to start - 1 and see if one exists.
+>>>
+>>> Is that what you meant to do here?
+>>
+>> Yes, I want to know whether there is a previous entry which ends right
+>> before the current entry, without a gap between the two.
+>>
+>>>
+>>>>
+>>>>> You may as well use mas_walk(), it would be faster.
+>>>>
+>>>> How would I use mas_walk() for that? If I understand it correctly,
+>>>> mas_walk() requires me to know that start address, which I don't know for
+>>>> the previous entry.
+>>>
+>>> mas_walk() walks to the value you specify and returns the entry at that
+>>> address, not necessarily the start address, but any address in the
+>>> range.
+>>>
+>>> If you have a tree and store A = [0x1000 - 0x2000] and set your maple
+>>> state to walk to 0x1500, mas_walk() will return A, and the maple state
+>>> will have mas.index = 0x1000 and mas.last = 0x2000.
+>>>
+>>> You have set the maple state to start at "start" and called
+>>> mas_prev(&mas, start - 1).  start - 1 is the lower limit, so the
+>>> internal implementation will walk to start then go to the previous entry
+>>> until start - 1.. it will stop at start - 1 and return NULL if there
+>>> isn't one there.
+>>
+>> Thanks for the clarification and all the other very helpful comments and
+>> explanations!
+>>
+> 
+> Always glad to help.  The more users the tree has, the more I can see
+> where we may need to expand the interface to help others.
+> 
+> ...
+> 
 
