@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAB96AC35F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF546AC37F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjCFOfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:35:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S229919AbjCFOjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:39:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjCFOfB (ORCPT
+        with ESMTP id S229767AbjCFOjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:35:01 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F96BBBB1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:34:25 -0800 (PST)
-Received: from workpc.. (unknown [109.252.117.89])
+        Mon, 6 Mar 2023 09:39:09 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5707B6EBE;
+        Mon,  6 Mar 2023 06:38:40 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2A553660220B;
-        Mon,  6 Mar 2023 14:33:05 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678113186;
-        bh=gJrshKNUaitWNWbqYmQJvTDpbgAcQ7xq5COOHL06j48=;
-        h=From:To:Cc:Subject:Date:From;
-        b=VGYL25Nk+XguA0di2RClfj+YaJ7Z/yUfecAaaKgHQlu2cWiveT+N/ZkiXqQZ7ZBfv
-         66hnylM0mBMgus89gmzTNnWbJ5fzRbSOwmj3OvyO+r0TaunD8uhDqxKjtiKU8aSCfL
-         84WVBND/GmoitV0965ylpRG9ZH5dUyvGdMHljXxFK0eFR6FeKjlR8VrZm9R5KcWZD5
-         rwv5qfVlh7YdYgOVpo7N9mKKcxS18BDm4NUikrXb0kcpjV0XCmu9hNesHp+si7H06b
-         xdi+mkCoOcffTEpKjTRORXPfUkLg5RgpVmdShpmTICo5TdD2fa/lvWmSEjPneOFf9t
-         bnDfiWFXi1A1A==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Gerd Hoffmann <kraxel@redhat.com>, Rob Clark <robdclark@gmail.com>
-Cc:     Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@redhat.com>, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-Subject: [PATCH v2] drm/virtio: Fix handling CONFIG_DRM_VIRTIO_GPU_KMS option
-Date:   Mon,  6 Mar 2023 17:32:34 +0300
-Message-Id: <20230306143234.1561759-1-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.39.2
+        by mail.3ffe.de (Postfix) with ESMTPSA id A9DF4D27;
+        Mon,  6 Mar 2023 15:33:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1678113198;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dcx1Z+mQ9kyIzZhbOPRPBb/rBVGlQz4iqABIHXKcMdQ=;
+        b=qGYyny0k3uTeywGiVxJ/2RN7/630Mg6LmAREuV62PulrksrBG56Gjvo9vd5OzirIkH/dSs
+        M8J7T9Mqg0lFR+mSm1qnsxrHLybpNp96s/mchZac8HrGnNsv8pmtvXxixAUFPowOJ6bbn+
+        Wbsl6GZQNecz36uVxM08f1gsfEsQOvaEL67AI5o4b9VC7E0napHqUZNJSAanD00jdwFv/u
+        /jRs5Lsb0TLXBRrBUiKiGBQxzH93eLCELLngGyh1ct4KQmDIbHGZs7fTTvAVEePUIsruB2
+        cF+QVD8u9HNeli3/8w2anDdJZmcQhLk30oNB1yxZNcZuyCnnh44l7Sr+KakSDw==
+From:   Michael Walle <michael@walle.cc>
+To:     william.gray@linaro.org
+Cc:     andriy.shevchenko@linux.intel.com, brgl@bgdev.pl,
+        broonie@kernel.org, jay.dolan@accesio.com, jhentges@accesio.com,
+        linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quarium@gmail.com,
+        Michael Walle <michael@walle.cc>
+Subject: Re: [PATCH v4 2/3] gpio: pcie-idio-24: Migrate to the regmap API
+Date:   Mon,  6 Mar 2023 15:33:09 +0100
+Message-Id: <20230306143309.758690-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <b96429c66e7caca05d9fb93805e11650fdbad312.1678106722.git.william.gray@linaro.org>
+References: <b96429c66e7caca05d9fb93805e11650fdbad312.1678106722.git.william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -56,64 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VirtIO-GPU got a new config option for disabling KMS. There were two
-problems left unnoticed during review when the new option was added:
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver.
+> 
+> For the PCIe-IDIO-24 series of devices, the following BARs are
+> available:
+> 
+>     BAR[0]: memory mapped PEX8311
+>     BAR[1]: I/O mapped PEX8311
+>     BAR[2]: I/O mapped card registers
+> 
+> There are 24 FET Output lines, 24 Isolated Input lines, and 8 TTL/CMOS
+> lines (which may be configured for either output or input). The GPIO
+> lines are exposed by the following card registers:
+> 
+>     Base +0x0-0x2 (Read/Write): FET Outputs
+>     Base +0xB (Read/Write): TTL/CMOS
+>     Base +0x4-0x6 (Read): Isolated Inputs
+>     Base +0x7 (Read): TTL/CMOS
+> 
+> In order for the device to support interrupts, the PLX PEX8311 internal
+> PCI wire interrupt and local interrupt input must first be enabled.
+> 
+> The following card registers for Change-Of-State may be used:
+> 
+>     Base +0x8-0xA (Read): COS Status Inputs
+>     Base +0x8-0xA (Write): COS Clear Inputs
+>     Base +0xB (Read): COS Status TTL/CMOS
+>     Base +0xB (Write): COS Clear TTL/CMOS
+>     Base +0xE (Read/Write): COS Enable
+> 
+> The COS Enable register is used to enable/disable interrupts and
+> configure the interrupt levels; each bit maps to a group of eight inputs
+> as described below:
+> 
+>     Bit 0: IRQ EN Rising Edge IN0-7
+>     Bit 1: IRQ EN Rising Edge IN8-15
+>     Bit 2: IRQ EN Rising Edge IN16-23
+>     Bit 3: IRQ EN Rising Edge TTL0-7
+>     Bit 4: IRQ EN Falling Edge IN0-7
+>     Bit 5: IRQ EN Falling Edge IN8-15
+>     Bit 6: IRQ EN Falling Edge IN16-23
+>     Bit 7: IRQ EN Falling Edge TTL0-7
+> 
+> An interrupt is asserted when a change-of-state matching the interrupt
+> level configuration respective for a particular group of eight inputs
+> with enabled COS is detected.
+> 
+> The COS Status registers may be read to determine which inputs have
+> changed; if interrupts were enabled, an IRQ will be generated for the
+> set bits in these registers. Writing the value read from the COS Status
+> register back to the respective COS Clear register will clear just those
+> interrupts.
+> 
+> Cc: Arnaud de Turckheim <quarium@gmail.com>
+> Cc: John Hentges <jhentges@accesio.com>
+> Cc: Jay Dolan <jay.dolan@accesio.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
-1. The IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) check in the code was
-inverted, hence KMS was disabled when it should be enabled and vice versa.
+FWIW, the gpio-regmap part looks good:
 
-2. The disabled KMS crashed kernel with a NULL dereference in
-drm_kms_helper_hotplug_event(), which shall not be invoked with a
-disabled KMS.
+Reviewed-by: Michael Walle <michael@walle.cc>
 
-Fix the inverted config option check in the code and skip handling the
-VIRTIO_GPU_EVENT_DISPLAY sent by host when KMS is disabled in guest to fix
-the crash.
-
-Fixes: 72122c69d717 ("drm/virtio: Add option to disable KMS support")
-Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
----
-
-Changelog:
-
-v2: - Moved the "has_edid" under the "num_scanouts" condition, like was
-      suggested by Gerd Hoffmann.
-
- drivers/gpu/drm/virtio/virtgpu_kms.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
-index 874ad6c2621a..15f2519988e7 100644
---- a/drivers/gpu/drm/virtio/virtgpu_kms.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
-@@ -43,11 +43,13 @@ static void virtio_gpu_config_changed_work_func(struct work_struct *work)
- 	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
- 			events_read, &events_read);
- 	if (events_read & VIRTIO_GPU_EVENT_DISPLAY) {
--		if (vgdev->has_edid)
--			virtio_gpu_cmd_get_edids(vgdev);
--		virtio_gpu_cmd_get_display_info(vgdev);
--		virtio_gpu_notify(vgdev);
--		drm_helper_hpd_irq_event(vgdev->ddev);
-+		if (vgdev->num_scanouts) {
-+			if (vgdev->has_edid)
-+				virtio_gpu_cmd_get_edids(vgdev);
-+			virtio_gpu_cmd_get_display_info(vgdev);
-+			virtio_gpu_notify(vgdev);
-+			drm_helper_hpd_irq_event(vgdev->ddev);
-+		}
- 		events_clear |= VIRTIO_GPU_EVENT_DISPLAY;
- 	}
- 	virtio_cwrite_le(vgdev->vdev, struct virtio_gpu_config,
-@@ -224,7 +226,7 @@ int virtio_gpu_init(struct virtio_device *vdev, struct drm_device *dev)
- 	vgdev->num_scanouts = min_t(uint32_t, num_scanouts,
- 				    VIRTIO_GPU_MAX_SCANOUTS);
- 
--	if (IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) || !vgdev->num_scanouts) {
-+	if (!IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) || !vgdev->num_scanouts) {
- 		DRM_INFO("KMS disabled\n");
- 		vgdev->num_scanouts = 0;
- 		vgdev->has_edid = false;
--- 
-2.39.2
-
+-michael
