@@ -2,89 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C66006AD19E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6636AD1B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjCFWd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S230049AbjCFWfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:35:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjCFWdy (ORCPT
+        with ESMTP id S229892AbjCFWfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:33:54 -0500
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D9A830D7;
-        Mon,  6 Mar 2023 14:33:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=2y0NjxrS3Q5GoOlQaWYkv98PUAGadMtF3mRneW7e7Y0=; b=RUTrNJjHjpQbA8gXkilZ5f8RW0
-        5xGQI87mWD6x8uA1kT7h/1FUcSOqQwHYW08hFROzOjwsTaKkir9kSRd3N7pB6HJp9F1LCjaPrUAyv
-        KfmvyXVtfdduBsq0JjZaaGsBYmztGWLFvWRfZ8yBy/YluMfuzPNnVOTUf4N3VjyI5XH2hYt1RrNNo
-        +UcP+B+CzHHXrOhxbCFggJl/Db3Jg1tjp1EqU5puhPItYRA8OQ0SbdrUFNLHMMJCgdE7fhquWd1W9
-        50J0/gCn8Ls//t0NhXQpXNbBdXBVLzMCpoHcIORWYpafKRPZRAAP8F4C8tjeaWTNExJQvknnKM0aM
-        nhfgIiCQ==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pZJOw-000CQj-Nd; Mon, 06 Mar 2023 23:33:50 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1pZJOw-000OXZ-76; Mon, 06 Mar 2023 23:33:50 +0100
-Subject: Re: [PATCH 0/2] Hyperlink fixes for BPF QA documentation
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux BPF <bpf@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-References: <20230228074523.11493-1-bagasdotme@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <fd32d4eb-451e-23cd-d99b-294e99f8cc66@iogearbox.net>
-Date:   Mon, 6 Mar 2023 23:33:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Mon, 6 Mar 2023 17:35:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADF72D76;
+        Mon,  6 Mar 2023 14:35:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F0FEEB80EB9;
+        Mon,  6 Mar 2023 22:35:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E32C433D2;
+        Mon,  6 Mar 2023 22:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678142106;
+        bh=AaKFvPAhK4yNUKY1AwEa3TApIy5qdHabYFMN/Z1jxYs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DtKUhs85+91yUOeihxb6gOzKdl1rkMoYVdtYwI7zGwtFFDeGyXL4prr0/l7muZp/b
+         7Ac9RVU46iJ8TXSUyDHFoNgw4XLHlwNp3mgwysLRV0ubOyKhUeGk3jJXErmQUDRvKq
+         HbvFeGkpNWVIqXQZfBL6erQOoTwwl2RpmdKVKDPagDLDLiyUHAb4LiwjKi8LbuEPPL
+         UWrNuJUdtOfFdxb4l12Y92R9yHrNlzxadMQ8/Q6VQmW5P+7aHQbEfUP3QWmIQutMZe
+         bSVv9TRYF+MCkSTQL4LXMmqW7eAJkOGQ6x1ebovw6Qo78c6rT2HOB4rcO0PcZHyHgX
+         EAG/2yWzXOdzQ==
+Date:   Mon, 6 Mar 2023 22:35:01 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Jesse Taube <mr.bossman075@gmail.com>,
+        linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yimin Gu <ustcymgu@gmail.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Waldemar Brodkorb <wbx@openadk.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v3 1/3] clk: k210: remove an implicit 64-bit division
+Message-ID: <be589843-dfc1-47dc-a488-a4fad645c638@spud>
+References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
+ <20230301002657.352637-2-Mr.Bossman075@gmail.com>
+ <3b0a1481873a2a7c26015fcedcc673b3.sboyd@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230228074523.11493-1-bagasdotme@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26833/Mon Mar  6 09:22:59 2023)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ERan6PsFUqxi69zE"
+Content-Disposition: inline
+In-Reply-To: <3b0a1481873a2a7c26015fcedcc673b3.sboyd@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2/28/23 8:45 AM, Bagas Sanjaya wrote:
-> When the broken link fix for Documentation/bpf/bpf_devel_QA.rst was
-> applied, Daniel Borkmann asked me to also fix some other links in the
-> documentation [1]. So here is the series.
-> 
-> The fixes in the shortlog below should be self-explanatory.
-> 
-> [1]: https://lore.kernel.org/linux-doc/7cd545a2-4a5c-1961-1cf7-cd0f24e41df8@iogearbox.net/
-> 
-> Bagas Sanjaya (2):
->    Documentation: bpf: Do not link to docs.kernel.org for kselftest link
->    Documentation: bpf: Link to submitting-patches.rst for general patch
->      submission info
 
-The series got applied to bpf, thanks!
+--ERan6PsFUqxi69zE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Mar 06, 2023 at 02:31:00PM -0800, Stephen Boyd wrote:
+> Quoting Jesse Taube (2023-02-28 16:26:55)
+> > diff --git a/drivers/clk/clk-k210.c b/drivers/clk/clk-k210.c
+> > index 67a7cb3503c3..4eed667eddaf 100644
+> > --- a/drivers/clk/clk-k210.c
+> > +++ b/drivers/clk/clk-k210.c
+> > @@ -495,7 +495,7 @@ static unsigned long k210_pll_get_rate(struct clk_h=
+w *hw,
+> >         f =3D FIELD_GET(K210_PLL_CLKF, reg) + 1;
+> >         od =3D FIELD_GET(K210_PLL_CLKOD, reg) + 1;
+> > =20
+> > -       return (u64)parent_rate * f / (r * od);
+> > +       return div_u64((u64)parent_rate * f, r * od);
+>=20
+> The equation 'r * od' can't overflow 32-bits, right?
+
+Yah, I checked that when writing the patch. They're 4-bit fields:
+> /*
+>  * PLL control register bits.
+>  */
+> #define K210_PLL_CLKR		GENMASK(3, 0)
+> #define K210_PLL_CLKF		GENMASK(9, 4)
+> #define K210_PLL_CLKOD		GENMASK(13, 10)
+
+Cheers,
+Conor.
+
+
+--ERan6PsFUqxi69zE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAZqlQAKCRB4tDGHoIJi
+0iy3AQDEyhSWt9luWK3hsRaGF9IFqJJ5Zv5go86VrRKa8gRWBAEAsE83tegQ4VhX
+XtAnn+tuUHde9besO1Nnwd7yn9BQ2AE=
+=cLk4
+-----END PGP SIGNATURE-----
+
+--ERan6PsFUqxi69zE--
