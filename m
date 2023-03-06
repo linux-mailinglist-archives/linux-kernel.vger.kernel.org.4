@@ -2,252 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1BC6AB8D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EBC16AB870
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjCFIuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S229651AbjCFIf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjCFIuY (ORCPT
+        with ESMTP id S229457AbjCFIfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:50:24 -0500
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBBB113EF;
-        Mon,  6 Mar 2023 00:50:21 -0800 (PST)
-Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 5675620BAA;
-        Mon,  6 Mar 2023 09:34:51 +0100 (CET)
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] gpio: fxl6408: add I2C GPIO expander driver
-Date:   Mon,  6 Mar 2023 09:34:46 +0100
-Message-Id: <20230306083446.41082-3-francesco@dolcini.it>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230306083446.41082-1-francesco@dolcini.it>
-References: <20230306083446.41082-1-francesco@dolcini.it>
+        Mon, 6 Mar 2023 03:35:24 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AF1C7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:35:22 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id cw28so35154553edb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:35:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678091721;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nN8hnlwfz8+ce8joyQQpCWO6wj7vGVxMm5Tglv40eos=;
+        b=VnukSFaI2Jh72zC5zVTYj6OqsJ67u4W4GvYZ/+lo5hN0TleUBwKvBFgaAVpcCTOLWR
+         IP1m0T99iQvIAJZ236u5NnPGzzmkYdZaoYy85U7LXRuTkzPH3UBsg9THLv4TteSMO1NM
+         fd1Pje1dM4UHon3YSAIEQ9/GS8x6y7EsMNQckV3TYH6aHnWCcrGrvP9+qCDDDz99zHcM
+         60Cxty8vHa96CaZIUMn0swff3BHCaIO4Daux7ub7VHS0eQpXJxIqc1K3Y3n4/pA3RbTY
+         JS3ky6c5Aaesl9FuX0U77MQvc6jhwERWLZS5dTfYLP5UX7S929LgpWJnn5YAmDWQwYkS
+         RJSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678091721;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nN8hnlwfz8+ce8joyQQpCWO6wj7vGVxMm5Tglv40eos=;
+        b=bsMw4+BXF6mxqP3/KB8yqSwABTG4JvgR1Rdz2FY1XTM3Qve60PNQAID4X6QL4uI7sw
+         n4oR7YBIyxRusRCFX9VxSo9AEO9HB9GgFgD9s5dHWP+QHN3LS27VydSjpkJKYAUsxvsq
+         kpZKqjWy35jUmJle1f8AMaPBeJyRjTwnyDPiUdr/11ObbeTtGmATY6PmglNJyB7wZhWK
+         BYRdJQdPWW3GRfuolcdtVsnD5tBlO8mk40ZGMow1TXxqb4yx17d6ezZpHmIjyuzCyb2G
+         FB0HJFzvWwjk0EMmFHEITbkcF9mI9y7kqvLjTbldH1ah1GCF+szApM+72vI7qdTTJwHG
+         S8Sw==
+X-Gm-Message-State: AO0yUKVvUSgmg4zXe6OjKLt1CGuGKtfyTCW9r2p3MkPd/xeePh5qVijU
+        zbtuj6taDOiKixv/xhVi6u4kjg==
+X-Google-Smtp-Source: AK7set81IcxNtGSCYERU2VMxJvO0ODonStu1WSmxu02pH8FU4qAFpYWL2Z4vNdL5gk5ykFDPS0q6qA==
+X-Received: by 2002:aa7:c544:0:b0:4ab:cb8c:932b with SMTP id s4-20020aa7c544000000b004abcb8c932bmr8058861edr.40.1678091721188;
+        Mon, 06 Mar 2023 00:35:21 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
+        by smtp.gmail.com with ESMTPSA id k2-20020a50ce42000000b004bc59951d6fsm4761162edj.57.2023.03.06.00.35.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 00:35:20 -0800 (PST)
+Message-ID: <52fb81e2-0d9b-600d-42af-1405fdd6509b@linaro.org>
+Date:   Mon, 6 Mar 2023 09:35:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 05/15] dt-bindings: soc: amd: amd,pensando-elbasr: Add
+ AMD Pensando SoC System Controller
+Content-Language: en-US
+To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20230306040739.51488-1-blarson@amd.com>
+ <20230306040739.51488-6-blarson@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230306040739.51488-6-blarson@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+On 06/03/2023 05:07, Brad Larson wrote:
+> Support the AMD Pensando SoC Controller which is a SPI connected device
+> providing a miscellaneous set of essential board control/status registers.
+> This device is present in all Pensando SoC based designs.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+> 
+> v10 changes:
+> - Property renamed to amd,pensando-ctrl
+> - Driver is renamed and moved to soc/drivers/amd affecting binding
+> - Delete cs property, driver handles device node creation from parent num-cs
+>   fixing schema reg error in a different way
+> 
+> v9 changes:
+> - Instead of four nodes, one per chip-select, a single
+>   node is used with reset-cells in the parent.
+> - No MFD API is used anymore in the driver so it made
+>   sense to move this to drivers/spi.
+> - This driver is common for all Pensando SoC based designs
+>   so changed the name to pensando-sr.c to not make it Elba
+>   SoC specific.
+> - Added property cs for the chip-select number which is used
+>   by the driver to create /dev/pensr0.<cs>
+> 
+> ---
+>  .../bindings/soc/amd/amd,pensando-ctrl.yaml   | 60 +++++++++++++++++++
+>  1 file changed, 60 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml b/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
+> new file mode 100644
+> index 000000000000..36694077b2e6
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/amd/amd,pensando-ctrl.yaml
 
-Support Fairchild (now ON Semiconductor) fxl6408 which has 8 GPIO lines
-and is controlled by I2C bus.
+Your subject suggests this is pensando-elbasr but you write everywhere
+pensando-ctrl. Confusing. Pick one.
 
-Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
----
- drivers/gpio/Kconfig        |   6 ++
- drivers/gpio/Makefile       |   1 +
- drivers/gpio/gpio-fxl6408.c | 160 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 167 insertions(+)
- create mode 100644 drivers/gpio/gpio-fxl6408.c
+> @@ -0,0 +1,60 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/amd/amd,pensando-ctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: AMD Pensando SoC Controller
+> +
+> +description: |
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 13be729710f2..34ed748dba5c 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1000,6 +1000,12 @@ config GPIO_ADNP
- 	  enough to represent all pins, but the driver will assume a
- 	  register layout for 64 pins (8 registers).
- 
-+config GPIO_FXL6408
-+	tristate "FXL6408 I2C GPIO expander"
-+	select GPIO_REGMAP
-+	help
-+	  GPIO driver for Fairchild Semiconductor FXL6408 GPIO expander
-+
- config GPIO_GW_PLD
- 	tristate "Gateworks PLD GPIO Expander"
- 	depends on OF_GPIO
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index c048ba003367..12027f4c3bee 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -60,6 +60,7 @@ obj-$(CONFIG_GPIO_EP93XX)		+= gpio-ep93xx.o
- obj-$(CONFIG_GPIO_EXAR)			+= gpio-exar.o
- obj-$(CONFIG_GPIO_F7188X)		+= gpio-f7188x.o
- obj-$(CONFIG_GPIO_FTGPIO010)		+= gpio-ftgpio010.o
-+obj-$(CONFIG_GPIO_FXL6408)		+= gpio-fxl6408.o
- obj-$(CONFIG_GPIO_GE_FPGA)		+= gpio-ge.o
- obj-$(CONFIG_GPIO_GPIO_MM)		+= gpio-gpio-mm.o
- obj-$(CONFIG_GPIO_GRGPIO)		+= gpio-grgpio.o
-diff --git a/drivers/gpio/gpio-fxl6408.c b/drivers/gpio/gpio-fxl6408.c
-new file mode 100644
-index 000000000000..7b28b09c7b66
---- /dev/null
-+++ b/drivers/gpio/gpio-fxl6408.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * FXL6408 GPIO driver
-+ *
-+ * Copyright 2023 Toradex
-+ *
-+ * Author: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-+ *
-+ */
-+
-+#include <linux/gpio.h>
-+#include <linux/gpio/regmap.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/of_platform.h>
-+#include <linux/regmap.h>
-+
-+#define FXL6408_REG_DEVICE_ID		0x01
-+#define FXL6408_MF_FAIRCHILD		0b101
-+#define FXL6408_MF_SHIFT		5
-+
-+/* Bits set here indicate that the GPIO is an output. */
-+#define FXL6408_REG_IO_DIR		0x03
-+
-+/* Bits set here, when the corresponding bit of IO_DIR is set, drive
-+ * the output high instead of low.
-+ */
-+#define FXL6408_REG_OUTPUT		0x05
-+
-+/* Bits here make the output High-Z, instead of the OUTPUT value. */
-+#define FXL6408_REG_OUTPUT_HIGH_Z	0x07
-+
-+/* Returns the current status (1 = HIGH) of the input pins. */
-+#define FXL6408_REG_INPUT_STATUS	0x0f
-+
-+#define FXL6408_MAX_REGISTER		0x13
-+
-+#define FXL6408_NGPIO			8
-+
-+static const struct regmap_range rd_range[] = {
-+	{ FXL6408_REG_DEVICE_ID, FXL6408_REG_DEVICE_ID },
-+	{ FXL6408_REG_IO_DIR, FXL6408_REG_OUTPUT },
-+	{ FXL6408_REG_INPUT_STATUS, FXL6408_REG_INPUT_STATUS }
-+};
-+
-+static const struct regmap_range wr_range[] = {
-+	{ FXL6408_REG_DEVICE_ID, FXL6408_REG_DEVICE_ID },
-+	{ FXL6408_REG_IO_DIR, FXL6408_REG_OUTPUT },
-+	{ FXL6408_REG_OUTPUT_HIGH_Z, FXL6408_REG_OUTPUT_HIGH_Z }
-+};
-+
-+static const struct regmap_range volatile_range[] = {
-+	{ FXL6408_REG_DEVICE_ID, FXL6408_REG_DEVICE_ID },
-+	{ FXL6408_REG_INPUT_STATUS, FXL6408_REG_INPUT_STATUS }
-+};
-+
-+static const struct regmap_access_table rd_table = {
-+	.yes_ranges = rd_range,
-+	.n_yes_ranges = ARRAY_SIZE(rd_range)
-+};
-+
-+static const struct regmap_access_table wr_table = {
-+	.yes_ranges = wr_range,
-+	.n_yes_ranges = ARRAY_SIZE(wr_range)
-+};
-+
-+static const struct regmap_access_table volatile_table = {
-+	.yes_ranges = volatile_range,
-+	.n_yes_ranges = ARRAY_SIZE(volatile_range)
-+};
-+
-+static const struct regmap_config regmap = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+
-+	.max_register = FXL6408_MAX_REGISTER,
-+	.wr_table = &wr_table,
-+	.rd_table = &rd_table,
-+	.volatile_table = &volatile_table,
-+
-+	.cache_type = REGCACHE_RBTREE,
-+	.num_reg_defaults_raw = FXL6408_MAX_REGISTER + 1
-+};
-+
-+static int fxl6408_identify(struct device *dev, struct regmap *regmap)
-+{
-+	int val, ret;
-+
-+	ret = regmap_read(regmap, FXL6408_REG_DEVICE_ID, &val);
-+	if (ret) {
-+		dev_err(dev, "error %d reading DEVICE_ID\n", ret);
-+	} else if (val >> FXL6408_MF_SHIFT != FXL6408_MF_FAIRCHILD) {
-+		dev_err(dev, "invalid device id 0x%02x\n", val);
-+		ret = -ENODEV;
-+	}
-+
-+	return ret;
-+}
-+
-+static int fxl6408_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	int ret;
-+	struct gpio_regmap_config gpio_config = {
-+		.parent = dev,
-+		.ngpio = FXL6408_NGPIO,
-+		.reg_dat_base = GPIO_REGMAP_ADDR(FXL6408_REG_INPUT_STATUS),
-+		.reg_set_base = GPIO_REGMAP_ADDR(FXL6408_REG_OUTPUT),
-+		.reg_dir_out_base = GPIO_REGMAP_ADDR(FXL6408_REG_IO_DIR),
-+		.ngpio_per_reg = FXL6408_NGPIO
-+	};
-+	gpio_config.regmap = devm_regmap_init_i2c(client, &regmap);
-+
-+	if (IS_ERR(gpio_config.regmap)) {
-+		dev_err(dev, "failed to allocate register map\n");
-+		return PTR_ERR(gpio_config.regmap);
-+	}
-+
-+	ret = fxl6408_identify(dev, gpio_config.regmap);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable High-Z of outputs, so that our OUTPUT updates
-+	 * actually take effect.
-+	 */
-+	ret = regmap_write(gpio_config.regmap, FXL6408_REG_OUTPUT_HIGH_Z, 0);
-+	if (ret) {
-+		dev_err(dev, "failed to write 'output high Z' register\n");
-+		return ret;
-+	}
-+
-+	return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &gpio_config));
-+}
-+
-+static const __maybe_unused struct of_device_id fxl6408_dt_ids[] = {
-+	{ .compatible = "fcs,fxl6408" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, fxl6408_dt_ids);
-+
-+static const struct i2c_device_id fxl6408_id[] = {
-+	{ "fxl6408", 0 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(i2c, fxl6408_id);
-+
-+static struct i2c_driver fxl6408_driver = {
-+	.driver = {
-+		.name	= "fxl6408",
-+		.of_match_table = fxl6408_dt_ids,
-+	},
-+	.probe_new	= fxl6408_probe,
-+	.id_table	= fxl6408_id,
-+};
-+
-+module_i2c_driver(fxl6408_driver);
-+
-+MODULE_AUTHOR("Emanuele Ghidoli <emanuele.ghidoli@toradex.com>");
-+MODULE_DESCRIPTION("FXL6408 GPIO driver");
-+MODULE_LICENSE("GPL");
--- 
-2.25.1
+No need for |
+
+> +  The AMD Pensando SoC Controller is a SPI connected device with essential
+> +  control/status registers accessed on chip select 0.  This device is present
+> +  in all Pensando SoC based designs.
+> +
+> +maintainers:
+> +  - Brad Larson <blarson@amd.com>
+> +
+> +properties:
+> +  compatible:
+> +    contains:
+
+Drop 'contains'. That's not a correct syntax here.
+
+> +      enum:
+> +        - amd,pensando-ctrl
+> +
+> +  reg:
+> +    minItems: 1
+
+maxItems instead
+
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency: true
+
+Drop, not needed.
+
+> +
+> +required:
+> +  - compatible
+> +  - spi-max-frequency
+> +  - '#reset-cells'
+
+allOf with ref to spi-peripheral-props.yaml
+
+> +
+> +unevaluatedProperties: false
+
+This is not correct without allOf (should be additionalProperties if you
+are not using allOf), which leads you to the missing allOf.
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    spi {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        num-cs = <4>;
+
+Drop num-cs, not important in this context.
+
+> +
+> +        system-controller@0 {
+> +            compatible = "amd,pensando-ctrl";
+> +            reg = <0>;
+> +            spi-max-frequency = <12000000>;
+> +            interrupt-parent = <&porta>;
+> +            interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
+> +            #reset-cells = <1>;
+> +        };
+> +    };
+> +
+> +...
+
+Best regards,
+Krzysztof
 
