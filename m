@@ -2,115 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC7A6ACB17
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E9A6ACB27
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCFRqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:46:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S229535AbjCFRrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjCFRpy (ORCPT
+        with ESMTP id S229684AbjCFRrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:45:54 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D936BDC8;
-        Mon,  6 Mar 2023 09:45:22 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so13910991pjb.3;
-        Mon, 06 Mar 2023 09:45:22 -0800 (PST)
+        Mon, 6 Mar 2023 12:47:39 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C54D6BDF0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:46:58 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id i28so13940696lfv.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 09:46:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678124721;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=F8jEnuaODHkIgm3QXsy3NxYaf9Twek/6N1cAGCi4cq8=;
-        b=gLXj/9ELW4hDPJYzjYYPm7rcW4EBxHVxreG9wJ+ygD2ziX4jcK3Fk77fqWfxfJdCEy
-         UtI8NqCy4w8Sr+gM15dCWcFwCZxK+my98RKUM4DNL80X36xywZF2J+ls+36gXglvw0aw
-         J4maDik894B2wi0/FI5nOAa7bF6dZtl95gZ2QvjJ/7zJiD6kmltlRT28TLq7Engimb56
-         SsU+/JLA+S1P95giqlnpBlycbcmxT6oYT6evAm13H9arBp1kpl4YbORrEwzUkP96tF6v
-         Cgv2dTAt6zXOh/3Wcq9nhlVe6heo3jWjSK/ckJLHWWBUnwgmIzbj8plYzdts7TOtdi+W
-         FpLw==
+        d=linaro.org; s=google; t=1678124796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Iez5Cv7gRrdlfiQeXfEnRiE70CNF7dHomy8QTYT6wEo=;
+        b=LiaIr3yWC4diYGZlpcnjyQ+ysdSZahUuTjd/17VwgHjhQ2vKo/yjtJjkIrSwhs93jp
+         TTz+syci5ZGqSwRxF/FnOvCtBtVfCKCygoC3GNMyhNxqWfY+zb7dlTnQVGK1oWmkZHyh
+         ViDhrxqxQo/hWXWeFOndoOkXCyc64cqOHc5gdSQ/b72cmFglipx3KtTDgZfkk8LnqrvV
+         Expudpi57K7olGzOhxywrk/3yxahcC3H+DOatNTgc2sQKF+GoWTgTQPDk9mikhqqhOJ7
+         mnMEZeTHNk8u0/6H22RdVCeIwjsKKKP0vp4OPaI6Pqf/xAAMvf4emYcmGg69gZRCJmkN
+         Wvsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678124721;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F8jEnuaODHkIgm3QXsy3NxYaf9Twek/6N1cAGCi4cq8=;
-        b=Sui3edHNPqHBbhafU+EW+wWq3gtAIngBSbzNGEjXgXpZYBHWwm6X/JHuutlQZkvp0n
-         f0Niyn+xLM3r4YuMwSrOowRA991CnT/MraGLv/Ff1A03VURxBFKD3iaBhrweCtfBxr5m
-         wiT2DtFSDjMbqEdv82AYVp41gEXo7CiU+XCkZ1L0BhJMdM8wH18BPJD56B2ld+lnUJVe
-         qv6PhXe1OkwiBLE+HvEx2jC7h/jEuqaRBGIDVCBDyZbF80dANhzlU9lQlx6dnaUlqR7G
-         eaYJymgD+LQFDCX+k3OGHT6wQPivZPv/e0ze9HcuzbpmTQN9yr98LP/i1eZJGNx7xdy+
-         hUkA==
-X-Gm-Message-State: AO0yUKVtYq5SUbrzaDxZ303uVJ/LK+kJ0KMM+1tBt3pP6dhmTJTrJDBf
-        OWSf0UnSunxYR4GSVloAnWE=
-X-Google-Smtp-Source: AK7set+KGmAg/YZWyh+KxC/W4tyYr0Aryv8jvoRETy0kJlnidI1W8lj1sOCa4lJP/6kpyiVCRbmEOA==
-X-Received: by 2002:a05:6a20:6aa8:b0:cb:ac6c:13ba with SMTP id bi40-20020a056a206aa800b000cbac6c13bamr10389268pzb.25.1678124720753;
-        Mon, 06 Mar 2023 09:45:20 -0800 (PST)
-Received: from vernon-pc ([49.67.2.142])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa792cf000000b005ac8a51d591sm6516741pfa.21.2023.03.06.09.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 09:45:20 -0800 (PST)
-Date:   Tue, 7 Mar 2023 01:45:13 +0800
-From:   Vernon Yang <vernon2gm@gmail.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     torvalds@linux-foundation.org, tytso@mit.edu, Jason@zx2c4.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
-        james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
-Message-ID: <ZAYmqVmeYdDPVpLZ@vernon-pc>
-References: <20230306160651.2016767-1-vernon2gm@gmail.com>
- <20230306160651.2016767-6-vernon2gm@gmail.com>
- <ZAYXJ2E+JHcp2kD/@yury-laptop>
+        d=1e100.net; s=20210112; t=1678124796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Iez5Cv7gRrdlfiQeXfEnRiE70CNF7dHomy8QTYT6wEo=;
+        b=3qUrZkoYnm7Xp5wC1jvXOAwFgta2nYUEDVqfIUjyC1swDuEhGT2CpsYUODVuzMHgeW
+         8bO2G09sg60jffmrpc7VAkD8ciRDrbzsFJW5kwyCBemfqNi4JVLRR71391HAhTmdGSsF
+         Pkv8l/7qJsil9DgLkD62IprSOBWObvAhadvEK0UxyvZ2Si92OeqUeMgc30phbvh8gZeG
+         tjIs1ibPVMquFdHlEzPuOneHpOPUeTeIzUl08vAZ61x1jWDA55gBJRdgzhckg4QTOM0n
+         fn2Ts4pxj48vYBHRRWoxS5iA6hbMCtFRHVaYd8+W2zh8X9h3BjBzemmSrw1eHAQ2DHw8
+         +PdQ==
+X-Gm-Message-State: AO0yUKXTwhY3yPd1PutL8jFtnDpq4jGmlcEERkLmWyOGQORMIroE04ki
+        5yj4/YLN2ob7hOkGzUG4gI3u9A==
+X-Google-Smtp-Source: AK7set+Lxi8EIh3U2avNhydgx1vaJcqiER4wWgnpUdfUG6sGjE275HO3WpMmXUh/efUsfXGRAdU1tA==
+X-Received: by 2002:ac2:5dd6:0:b0:4dd:ad4c:74b6 with SMTP id x22-20020ac25dd6000000b004ddad4c74b6mr3291459lfq.1.1678124796333;
+        Mon, 06 Mar 2023 09:46:36 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id q8-20020ac246e8000000b004b6efcb7bb5sm1717494lfo.169.2023.03.06.09.46.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 09:46:35 -0800 (PST)
+Message-ID: <32c77f79-e2c2-d4fe-7c17-2d8ae97cfdcd@linaro.org>
+Date:   Mon, 6 Mar 2023 18:46:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAYXJ2E+JHcp2kD/@yury-laptop>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm64: dts: qcom: sdm845-oneplus-common: add Hall sensor
+Content-Language: en-US
+To:     Gergo Koteles <soyer@irl.hu>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230306174147.185239-1-soyer@irl.hu>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230306174147.185239-1-soyer@irl.hu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 08:39:03AM -0800, Yury Norov wrote:
-> On Tue, Mar 07, 2023 at 12:06:51AM +0800, Vernon Yang wrote:
-> > After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
-> > optimizations"), the cpumask size is divided into three different case,
-> > so fix comment of cpumask_xxx correctly.
-> >
-> > Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
-> > ---
-> >  include/linux/cpumask.h | 46 ++++++++++++++++++++---------------------
-> >  1 file changed, 23 insertions(+), 23 deletions(-)
-> >
-> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> > index 8fbe76607965..248bdb1c50dc 100644
-> > --- a/include/linux/cpumask.h
-> > +++ b/include/linux/cpumask.h
-> > @@ -155,7 +155,7 @@ static __always_inline unsigned int cpumask_check(unsigned int cpu)
-> >   * cpumask_first - get the first cpu in a cpumask
-> >   * @srcp: the cpumask pointer
-> >   *
-> > - * Returns >= nr_cpu_ids if no cpus set.
-> > + * Returns >= small_cpumask_bits if no cpus set.
->
-> There's no such thing like small_cpumask_bits. Here and everywhere,
-> nr_cpu_ids must be used.
->
-> Actually, before 596ff4a09b89 nr_cpumask_bits was deprecated, and it
-> must be like that for all users even now.
->
-> nr_cpumask_bits must be considered as internal cpumask parameter and
-> never referenced outside of cpumask code.
 
-OK, I remove this path for next version.
 
->
-> Thansk,
-> Yury
+On 6.03.2023 18:41, Gergo Koteles wrote:
+> Enable the Hall effect sensor (flip cover) for OnePlus 6/6T.
+> The GPIO is mapped to SW_LID events as in msm8916, msm8994,
+> msm8998 devices.
+> 
+> Signed-off-by: Gergo Koteles <soyer@irl.hu>
+> ---
+One fun thing I discovered is that if suspend is broken for whatever
+reason and you get a magnet close to a device with it mapped to SW_LID,
+you'll essentially get a hang or a reboot lol
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  .../boot/dts/qcom/sdm845-oneplus-common.dtsi  | 25 +++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> index 64638ea94db7..b01542d79ae2 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-oneplus-common.dtsi
+> @@ -29,6 +29,23 @@ chosen {
+>  		stdout-path = "serial0:115200n8";
+>  	};
+>  
+> +	gpio-hall-sensor {
+> +		compatible = "gpio-keys";
+> +		label = "Hall effect sensor";
+> +
+> +		pinctrl-0 = <&hall_sensor_default>;
+> +		pinctrl-names = "default";
+> +
+> +		event-hall-sensor {
+> +			gpios = <&tlmm 124 GPIO_ACTIVE_LOW>;
+> +			label = "Hall Effect Sensor";
+> +			linux,input-type = <EV_SW>;
+> +			linux,code = <SW_LID>;
+> +			linux,can-disable;
+> +			wakeup-source;
+> +		};
+> +	};
+> +
+>  	gpio-keys {
+>  		compatible = "gpio-keys";
+>  		label = "Volume keys";
+> @@ -753,6 +770,14 @@ &usb_1_hsphy {
+>  &tlmm {
+>  	gpio-reserved-ranges = <0 4>, <81 4>;
+>  
+> +	hall_sensor_default: hall-sensor-default-state {
+> +		pins = "gpio124";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +		input-enable;
+> +	};
+> +
+>  	tri_state_key_default: tri-state-key-default-state {
+>  		pins = "gpio40", "gpio42", "gpio26";
+>  		function = "gpio";
