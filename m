@@ -2,177 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD42F6ABEFB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A47156ABEFD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:03:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCFMDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        id S229803AbjCFMDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:03:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCFMDJ (ORCPT
+        with ESMTP id S229710AbjCFMDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:03:09 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4171B306;
-        Mon,  6 Mar 2023 04:03:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678104188; x=1709640188;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1mL4e/xUak5PVuwnTqWGIvoCVk6E+88xbDwsqxlcMrs=;
-  b=FL85yAVVYz0nYwDK5cZWpAEf3FElNR8zG7BBjt0AX7I9ndiBKUAN9adT
-   oh2QMh2U9V9f1K30oRF4wQzCPf5HNDPfuf2NLdYOxSIPwDjjTbpOeLj7I
-   ApKOKOrId/dpGCYIwPRcPbUXvdDiLBi+lq27Y8dTyd89/yk9ZCl/a4OsC
-   JdmSpVXVPYceuzOyY+9uzdCQhZ1nIPVZe3GUJn/gaI9jQB30otB9KVww2
-   LKoX2TOXibAtSZjwunXUAEtH/XPGDW9hvIS9XwKdFj/gpNLMz+KeyP3ra
-   CqRW4mxB0Rk40PmGGzMXvvU1FQsNJW7vkmjd+SzA/3d4sQYJzs1cccPqt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="315195781"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="315195781"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:03:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="708626116"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="708626116"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 06 Mar 2023 04:02:58 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZ9YN-00GKx1-0x;
-        Mon, 06 Mar 2023 14:02:55 +0200
-Date:   Mon, 6 Mar 2023 14:02:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        chrome-platform@lists.linux.dev,
-        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
-        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
-        Hsin-Yi Wang <hsinyi@chromium.org>, devicetree@vger.kernel.org,
-        Allen Chen <allen.chen@ite.com.tw>,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Stephen Boyd <swboyd@chromium.org>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v13 10/10] drm/bridge: it6505: Register Type C mode
- switches
-Message-ID: <ZAXWbkq4oLfrWUR7@smile.fi.intel.com>
-References: <20230303143350.815623-1-treapking@chromium.org>
- <20230303143350.815623-11-treapking@chromium.org>
+        Mon, 6 Mar 2023 07:03:34 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B6F91E5CD;
+        Mon,  6 Mar 2023 04:03:32 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8DxWNmT1gVkA80IAA--.16689S3;
+        Mon, 06 Mar 2023 20:03:31 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxyr2R1gVks5BMAA--.2932S3;
+        Mon, 06 Mar 2023 20:03:29 +0800 (CST)
+Message-ID: <029a5993-b993-ab73-0a14-0df9b0ddf3da@loongson.cn>
+Date:   Mon, 6 Mar 2023 20:03:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303143350.815623-11-treapking@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH V3] LoongArch: Provide kernel fpu functions
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <20230306095934.609589-1-chenhuacai@loongson.cn>
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <20230306095934.609589-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bxyr2R1gVks5BMAA--.2932S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxAF1fCF1rKrWDCw4DWr1ftFb_yoW5Zry3pF
+        ZIkFs5GrZ5Cr92v3sxJa4j9r98Jw4kGw1ag3W3GFyrAF4jgF1DWr4vqr9rXFyjva18K3y0
+        qFn5K39xK3WDJwUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOiSdUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 10:33:50PM +0800, Pin-yen Lin wrote:
-> Register USB Type-C mode switches when the "mode-switch" property and
-> relevant port are available in Device Tree. Configure the "lane_swap"
-> state based on the entered alternate mode for a specific Type-C
-> connector, which ends up updating the lane swap registers of the it6505
-> chip.
 
-...
 
-> +	it6505->port_data = devm_kcalloc(dev, switch_desc->num_typec_switches,
-> +					 sizeof(struct it6505_typec_port_data),
-> +					 GFP_KERNEL);
-
-> +
-
-Same, no need for a blank line here.
-
-> +	if (!it6505->port_data) {
-> +		ret = -ENOMEM;
-> +		goto unregister_mux;
-> +	}
-
-...
-
-> +		it6505->port_data[i].lane_swap = (dp_lanes[0] / 2 == 1);
-
-' % 2 == 0' ?
-
-...
-
-Wouldn't be better to have
-
-	ret = PTR_ERR_OR_ZERO(extcon);
-
-here and amend the following accordingly?
-
->  	if (PTR_ERR(extcon) == -EPROBE_DEFER)
->  		return -EPROBE_DEFER;
->  	if (IS_ERR(extcon)) {
-> -		dev_err(dev, "can not get extcon device!");
-> -		return PTR_ERR(extcon);
-> +		if (PTR_ERR(extcon) != -ENODEV)
-> +			dev_warn(dev, "Cannot get extcon device: %ld\n",
-> +				 PTR_ERR(extcon));
-> +		it6505->extcon = NULL;
-> +	} else {
-> +		it6505->extcon = extcon;
->  	}
+在 2023/3/6 17:59, Huacai Chen 写道:
+> Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
+> to use fpu. They can be used by some other kernel components, e.g., the
+> AMDGPU graphic driver for DCN.
+Since kernel is compiled with -msoft-float, I guess hw fpu will not be
+used in kernel by present:). However it is deserved to try.
+> 
+> Reported-by: WANG Xuerui <kernel@xen0n.name>
+> Tested-by: WANG Xuerui <kernel@xen0n.name>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+> V2: Use non-GPL exports and update commit messages.
+> V3: Add spaces for coding style.
+> 
+>  arch/loongarch/include/asm/fpu.h |  3 +++
+>  arch/loongarch/kernel/Makefile   |  2 +-
+>  arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
+>  3 files changed, 45 insertions(+), 1 deletion(-)
+>  create mode 100644 arch/loongarch/kernel/kfpu.c
+> 
+> diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
+> index 358b254d9c1d..192f8e35d912 100644
+> --- a/arch/loongarch/include/asm/fpu.h
+> +++ b/arch/loongarch/include/asm/fpu.h
+> @@ -21,6 +21,9 @@
 >  
-> -	it6505->extcon = extcon;
-> +	init_completion(&it6505->mux_register);
-> +	ret = it6505_register_typec_switches(dev, it6505);
-> +	if (ret) {
-> +		if (ret != -ENODEV)
-> +			dev_warn(dev, "Didn't register Type-C switches, err: %d\n",
-> +				 ret);
-> +		if (!it6505->extcon) {
-> +			dev_err(dev, "Both extcon and typec-switch are not registered.\n");
-> +			return -EINVAL;
-> +		}
-> +	}
+>  struct sigcontext;
+>  
+> +extern void kernel_fpu_begin(void);
+> +extern void kernel_fpu_end(void);
+> +
+>  extern void _init_fpu(unsigned int);
+>  extern void _save_fp(struct loongarch_fpu *);
+>  extern void _restore_fp(struct loongarch_fpu *);
+> diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
+> index 78d4e3384305..9a72d91cd104 100644
+> --- a/arch/loongarch/kernel/Makefile
+> +++ b/arch/loongarch/kernel/Makefile
+> @@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
+>  obj-$(CONFIG_ACPI)		+= acpi.o
+>  obj-$(CONFIG_EFI) 		+= efi.o
+>  
+> -obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
+> +obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
+>  
+>  obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
+>  
+> diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
+> new file mode 100644
+> index 000000000000..cd2a18fecdcc
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/kfpu.c
+> @@ -0,0 +1,41 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 Loongson Technology Corporation Limited
+> + */
+> +
+> +#include <linux/cpu.h>
+> +#include <linux/init.h>
+> +#include <asm/fpu.h>
+> +#include <asm/smp.h>
+> +
+> +static DEFINE_PER_CPU(bool, in_kernel_fpu);
+> +
+> +void kernel_fpu_begin(void)
+> +{
+> +	if (this_cpu_read(in_kernel_fpu))
+> +		return;
+> +
+> +	preempt_disable();
+> +	this_cpu_write(in_kernel_fpu, true);
+> +
+> +	if (!is_fpu_owner())
+> +		enable_fpu();
+> +	else
+> +		_save_fp(&current->thread.fpu);
+Do we need initialize fcsr rather than using random fcsr value
+of other processes? There may be fpu exception enabled by
+other tasks.
 
-
-Perhaps
-
-	if (ret != -ENODEV)
-		dev_warn(dev, "Didn't register Type-C switches, err: %d\n", ret);
-
-	if (ret && !it6505->extcon) {
-		dev_err(dev, "Both extcon and typec-switch are not registered.\n");
-		return ret;
-	}
-
-?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Regards
+Bibo,mao
+> +}
+> +EXPORT_SYMBOL(kernel_fpu_begin);
+> +
+> +void kernel_fpu_end(void)
+> +{
+> +	if (!this_cpu_read(in_kernel_fpu))
+> +		return;
+> +
+> +	if (!is_fpu_owner())
+> +		disable_fpu();
+> +	else
+> +		_restore_fp(&current->thread.fpu);
+> +
+> +	this_cpu_write(in_kernel_fpu, false);
+> +	preempt_enable();
+> +}
+> +EXPORT_SYMBOL(kernel_fpu_end);
 
