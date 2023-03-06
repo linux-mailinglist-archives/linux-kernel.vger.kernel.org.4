@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203476AB879
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D956AB87B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:38:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjCFIiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S229947AbjCFIiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:38:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCFIiH (ORCPT
+        with ESMTP id S229844AbjCFIiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:38:07 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9945C7DB9
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:38:05 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id h14so7918684wru.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:38:05 -0800 (PST)
+        Mon, 6 Mar 2023 03:38:09 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630637EFB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:38:06 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso7596226wmq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:38:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678091884;
+        d=linaro.org; s=google; t=1678091885;
         h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yScVezbYDWz1/PWiaNDGxXrxcWymv3H9xhefZxRIETg=;
-        b=rCHD0Qe9siBIsahEHG0UCvqKu6ETf/q9a+33Gnl6jehVinsrovgwnQBADb2uqsDU3f
-         vKKRMkYXe9UarHSQ8MBmd3/MOhhBwnL3d65taEkJAukGSCne2n9DhN+UKhORTbe9qiHJ
-         rhBh88kEHhmg2/g6wjyj51kfc0hq+KZGJH7zvY7VYSJptxYfnq7kVP8/BDd7OO7hmqes
-         ZTp5LMZ5KSN6AdqaOqlEURRV8b17MVPWqHjCqrnYrMI9/y/sX+QALl7uBo/RKCSfdLL5
-         iT71Cm5yC8RH2j6AY+VFvEtwYklgtPJ0xB2M5CSMkTiS6hw+ecKTQ2FgMsciGDqG6ZVF
-         stig==
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NBn8YOHpxIfsYVyC9NKPdmAQvu8dSftWMYkzf80yjII=;
+        b=W5ml6sum57UIXTAX+I+A6X3qRi6NnIb34wqMkiVjr0JqSBycww3tEpf5jjrQ3q7Fzl
+         ZPMte+96aaRvGFd+38kFRgGbeShWJGfwXeEdo+eRV/vJzMUz25l04JpBjIq7LflIqer6
+         mQzV/aUA6HBAGzLwmZ5UK1yIH5vmESbMpIzb0NIDdpBjr+xHCrl4kk4xpilPdCHC1E+t
+         bpji6/DG3NB5B3TagNg09I3pAY8yozf4p/eIda7pujQx64PMNLAxoD9un8ZIxFCim0Y7
+         NxGjrY+zaZt0p3mFyBY3tKHCqTj0/cgImKQ5clOI0jTdBCXC5IgBEUyLeFf4kotNprnV
+         KNPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678091884;
+        d=1e100.net; s=20210112; t=1678091885;
         h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yScVezbYDWz1/PWiaNDGxXrxcWymv3H9xhefZxRIETg=;
-        b=E5FzjzfLnpr28vW9IfUBhyfXgb0xt6TT5rIThyO4nkdcLWEZ40yLlaIxHPidO0zTJw
-         HpBsuYBk8PbAoQY2LCmkqtCwQ3t9lc1WtXA7KDSflOSUitmkm1VVdYLi9zoeNTnHEUjd
-         8tBKG4/OW/w9Y2Rzq0hWtUXKscRZBPxSinkswvx0DuHrWNZ0vGrGXojfskCwMwji6lxS
-         a5pOGv25drDXKWsqGdGosnCp8CDbH1+jKSTj7nuqkBM7yoo5W7rMTVdbTwKKkIgLHCO0
-         DkBgDJTAU+AFljJDUr7VJqrTg4XzUQVSxK3dWU9pz8xQ95HjR5PuN8K9KbDDIBfhlLg/
-         6gnA==
-X-Gm-Message-State: AO0yUKV8x1KGkOEAaEotQ8vENQ/Irq7wgmsVKAjisouqf3T2wxpIyj0W
-        fg0O6dXgRrAnQGuMT+sXgjQcnA==
-X-Google-Smtp-Source: AK7set8vfhN1fgMLRWrhruNGd8B/tShsgSyB3bFMD1pOorhvfnF83jaWjT0VckULYL2rLfOEJCE7mw==
-X-Received: by 2002:adf:edc8:0:b0:2c7:adb:db9 with SMTP id v8-20020adfedc8000000b002c70adb0db9mr6221870wro.63.1678091884080;
+        bh=NBn8YOHpxIfsYVyC9NKPdmAQvu8dSftWMYkzf80yjII=;
+        b=frmU9oQY9uX1mj/ddoyfVJEu85w86U6EI/EVej8fyfBO+RAKx78hg43vMdfmeePfxX
+         3aLlL8+gx6mGehFkbYdQG/fUY9w7q0dETWJcQzCfeoeCCZlBUwESWw177BuK+y8yjRTo
+         qr7c6NUUmTsP4F5YzsloT8KixgI1BFSjf+Lf6T9lVOsxtRwVbD0SmXYDyA7ljtsaXg0u
+         3f2p382xy6TUfJ49D0e77KOAo+vxTurxb9/5ToCla7aKEeT4TZRjpNmI89HQbctvZj0a
+         7xJgQM7JdRv7gwrvFqNQKRT6n8HIMEMbirSgBhu5+xNC9zkH0419XpQFExIMjlul23jn
+         U1vA==
+X-Gm-Message-State: AO0yUKWeZG0eJaa/EvE2DwpWEGGUpj6dPzo0YuEctyzjJUnzWDQXb0LF
+        gHHe2gJlOBv/S+sdczd4iAQL2w==
+X-Google-Smtp-Source: AK7set/5NtPMS9Adn1TyO9ajOxORLX91lowOP5e2ZAeZ0AY5dK2cmFRB765KQsI8Ua/Zauf+x5EFFg==
+X-Received: by 2002:a05:600c:470a:b0:3eb:3843:9f31 with SMTP id v10-20020a05600c470a00b003eb38439f31mr8678171wmo.10.1678091884891;
         Mon, 06 Mar 2023 00:38:04 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003eb0d6f48f3sm14184064wmn.27.2023.03.06.00.38.03
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003eb0d6f48f3sm14184064wmn.27.2023.03.06.00.38.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 00:38:03 -0800 (PST)
+        Mon, 06 Mar 2023 00:38:04 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Christian Hewitt <christianshewitt@gmail.com>,
-        Yuntian Zhang <yt@radxa.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230207-b4-amlogic-bindings-fixups-v2-v1-0-93b7e50286e7@linaro.org>
-References: <20230207-b4-amlogic-bindings-fixups-v2-v1-0-93b7e50286e7@linaro.org>
-Subject: Re: [PATCH 0/8] arm64: meson: bunch of DT fixes, take 2
-Message-Id: <167809188325.8899.9049191801315125808.b4-ty@linaro.org>
-Date:   Mon, 06 Mar 2023 09:38:03 +0100
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <20230305134512.1596572-1-christianshewitt@gmail.com>
+References: <20230305134512.1596572-1-christianshewitt@gmail.com>
+Subject: Re: [PATCH v2 0/2] arm64: amlogic: Add initial support for BPI-M2S
+ variants
+Message-Id: <167809188415.8899.9019667584179852304.b4-ty@linaro.org>
+Date:   Mon, 06 Mar 2023 09:38:04 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -81,31 +80,23 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On Tue, 07 Feb 2023 16:07:53 +0100, Neil Armstrong wrote:
-> This is a bunch of fixes against the current applied and reviewed bindings.
+On Sun, 05 Mar 2023 13:45:10 +0000, Christian Hewitt wrote:
+> Add support for the BananaPi M2S which ships in two board variants with
+> the Amlogic S922X or A311D chipset. Schematics for the board are not
+> currently available from Sinovoip so the device-tree is largely derived
+> from the Khadas VIM3 (also S922X/A311D) and other recent BPI boards that
+> have public documentation. The device-tree also supports the RTL8822CS
+> WiFi/BT module. This is optional so the nodes must be enabled though an
+> overlay or fdtput.
 > 
-> More DT fixes will be needed when full dt-schema conversion is done.
-> 
-> 
+> [...]
 
 Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.4/arm64-dt)
 
-[1/8] arm64: dts: amlogic: meson-sm1-bananapi: correct usb-hub hog node name
-      https://git.kernel.org/amlogic/c/f88f3dcbb145a0133292d5c9d8da5935a36c8914
-[2/8] arm64: dts: amlogic: meson-gxm-s912-libretech-pc: add simple connector node in fusb302 node
-      https://git.kernel.org/amlogic/c/d7ff22a6ec9dd154d027d6bc6b4f172c22f8c00d
-[3/8] arm64: dts: amlogic: meson-axg-jethome-jethub-j1xx: remove invalid #gpio-cells in onewire node
-      https://git.kernel.org/amlogic/c/bd47319f999e6055124a2b4d2a0da495d52759c3
-[4/8] arm64: dts: amlogic: meson-g12b-radxa-zero2: fix pwm clock names
-      https://git.kernel.org/amlogic/c/db217e84d0a3f4183ea5b6d5929e55b73128fcb2
-[5/8] arm64: dts: amlogic: meson-g12b-odroid-go-ultra: rename keypad-gpio pinctrl node
-      https://git.kernel.org/amlogic/c/50e7d712144e7246f4ad5ce0f8577aa09cd09bc6
-[6/8] arm64: dts: amlogic: meson-s4: fix apb4 bus node name
-      https://git.kernel.org/amlogic/c/d1e336eef1f4834bae0a54f203e9f74aa040726d
-[7/8] arm64: dts: amlogic: meson-sm1: use correct enable-gpios
-      https://git.kernel.org/amlogic/c/4bddf79acdc7ef15f8b913e8ef7861461b235df2
-[8/8] arm64: dts: amlogic: meson-gxm-s912-libretech-pc: remove unused pinctrl-names from phy node
-      https://git.kernel.org/amlogic/c/739e93e254e4797a29bdf397c10111a50a970734
+[1/2] dt-bindings: arm: amlogic: add support for BananaPi M2S variants
+      https://git.kernel.org/amlogic/c/0e1598a112f2e270bdd5771bb821f12852c548ac
+[2/2] arm64: dts: meson: add support for BananaPi M2S variants
+      https://git.kernel.org/amlogic/c/14e14723d2f58964f13e825738d01f62a8629e90
 
 These changes has been applied on the intermediate git tree [1].
 
