@@ -2,135 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FF06ACBFD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9446ACC01
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjCFSHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41554 "EHLO
+        id S229636AbjCFSIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 13:08:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjCFSHV (ORCPT
+        with ESMTP id S231255AbjCFSHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:07:21 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084B738EBD
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:06:58 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id q8-20020a92ca48000000b00320ed437f04so1478606ilo.19
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 10:06:57 -0800 (PST)
+        Mon, 6 Mar 2023 13:07:35 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A28C5653E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:07:06 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id s3-20020a632c03000000b0050300a8089aso2290727pgs.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 10:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678126024;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JA2EgeVYcyNXZR8/KWzNk5f1zFVex1Q8EEVzCLntUOA=;
+        b=rXu2UX2MOZP+K3v2/DxFczkA+dm8M/6zxin+DO5Kb0/VO32jJNZrPL8XX3I1DPQpM2
+         j6/g2xBCW/fkHFXIqUtuWpuODX8Fek9Usf9NX99lLmb2bJ1Dh67HXGdzPSr3y4TiGtto
+         73c5nMk+VpndALe3Ho3j7m4idk6qVeIw24gCvlQSI7JjdKbaHT/6zJ2w+CSklhBdJVVm
+         Qu6l3lcvX7qhopT3pII/kqRmie6i+hWvSDajaUugvttH+zyxLnA/W8f+BeH5EBaODmIv
+         MS3ep1cgJS1GhCFxpvakPdEXO0fkD2HDLZu3lif0bWkK2aqYA75/WyePlDmpu2LCMNgu
+         JwBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678126007;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N3DAy+sdSVNClvpG+8Cs/sO3zSoJDfrh7pwNO1Id96E=;
-        b=ariioi6uUyjEnG8p7jxG2+IqItHVlpdpnx+nBapxh2FGxGPFIYIIjlOaxptfzK4hJN
-         rfJ7kjftJOboetEUY8R6/31gP2OR3Ihb/jWauwxdQGiSFlh5foL4oj5rBDqJgsHMY67S
-         QIXgsyabRQ9JgU0n3CiOjKV3b92uDDFY1u4/VmDTZcHZyOIQVW4yqRP6B7LEhpZO8cAL
-         rdjBztxLglOOAV0yIGYetI6SRrLOc33lCgl8E0teq3ufjki2QdyWk4NMUOBfpVn4eF36
-         2svE7b/UnFIde1QHefqMOvc0YKhxTcwSHUXLdEOb14bs851IZbckkdWTSGrsa6ZUWziJ
-         L7YA==
-X-Gm-Message-State: AO0yUKWEwd30iwOZHE/wcIsLHOOOUfF9Ijgw7gygvbiJmyxJCi+XM/9F
-        766eNsR5ugRTQ/juCnzmfvPGlE8mH46TpQVOjr2uhdXFbMnd
-X-Google-Smtp-Source: AK7set+zfNYG60Jyp4hBAP4Ka6VLriaoIZU7jsN0JHSuzoN6XeDMkLKnp8Yq/1C/WlAakdedqzGjToMp3ckefmL8yXZoSLo4N3MS
-MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:13e3:b0:313:cc98:7eee with SMTP id
- w3-20020a056e0213e300b00313cc987eeemr5587306ilj.1.1678126007257; Mon, 06 Mar
- 2023 10:06:47 -0800 (PST)
-Date:   Mon, 06 Mar 2023 10:06:47 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008d128e05f63f28d5@google.com>
-Subject: [syzbot] [fs?] WARNING in schedstat_start
-From:   syzbot <syzbot+184ec1dbe951014904b3@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678126024;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JA2EgeVYcyNXZR8/KWzNk5f1zFVex1Q8EEVzCLntUOA=;
+        b=CJDu/HmUIMcINzjUdjc6JZFwg0epw2bYTn05lmlDFQGpX10aD0OXK9ond4jQjkBWuC
+         0IxPiDBjZP67EenUM/lvQkZD7H9ydpY5HKfzr3iYovrQaeHnzqaFyHJytv5HVgED+XVs
+         R3KypMQ+ZBWFYMmgfAnYkW4RapUzaml1m3W9/FLx6wP68dcLO63OT9X5EfM6WXrB4P8n
+         01V+vTlFtNoe/9Au67SEJVVdfFqy4tfk2BRVGgpyPLoKIQU+S7lienFFZh1yZPAlxpbf
+         xC1kswdJws36NEAVAHRvoc2PGq+3/6m7tUlETfGGGz2qM/glbbsW/yC/mr9DcuBNy/Xg
+         iNkA==
+X-Gm-Message-State: AO0yUKWDNk12GHFzW51NMFqWZwuTP3rJcYS83a8zC9fMg1yaqU23jr+e
+        azOUFO94xlGi8I9cTCSSTdbr9T6Ch9k=
+X-Google-Smtp-Source: AK7set/wZSLfN5IYkXdKkBDVF3PBR8UcsgLP68t/Rsa/CD2eXmsoy++FKZDj/g278452ffHBdZtch+0ohks=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:bd81:b0:19a:b98f:46a0 with SMTP id
+ q1-20020a170902bd8100b0019ab98f46a0mr6811419pls.0.1678126024254; Mon, 06 Mar
+ 2023 10:07:04 -0800 (PST)
+Date:   Mon, 6 Mar 2023 10:07:02 -0800
+In-Reply-To: <d26b0ae9-bc72-3cfd-4428-d7760524c218@grsecurity.net>
+Mime-Version: 1.0
+References: <20230201194604.11135-1-minipli@grsecurity.net> <d26b0ae9-bc72-3cfd-4428-d7760524c218@grsecurity.net>
+Message-ID: <ZAYrxvX3gGhHZ4/A@google.com>
+Subject: Re: [PATCH v3 0/6] KVM: MMU: performance tweaks for heavy CR0.WP users
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Mar 06, 2023, Mathias Krause wrote:
+> On 01.02.23 20:45, Mathias Krause wrote:
+> > Mathias Krause (5):
+> >   KVM: VMX: Avoid retpoline call for control register caused exits
+> >   KVM: x86: Do not unload MMU roots when only toggling CR0.WP
+> >   KVM: x86: Make use of kvm_read_cr*_bits() when testing bits
+> >   KVM: x86/mmu: Fix comment typo
+> >   KVM: VMX: Make CR0.WP a guest owned bit
+> > 
+> > Paolo Bonzini (1):
+> >   KVM: x86/mmu: Avoid indirect call for get_cr3
+> > 
+> >  arch/x86/kvm/kvm_cache_regs.h   |  3 ++-
+> >  arch/x86/kvm/mmu/mmu.c          | 31 ++++++++++++++++++++-----------
+> >  arch/x86/kvm/mmu/paging_tmpl.h  |  2 +-
+> >  arch/x86/kvm/mmu/spte.c         |  2 +-
+> >  arch/x86/kvm/pmu.c              |  4 ++--
+> >  arch/x86/kvm/vmx/capabilities.h |  1 +
+> >  arch/x86/kvm/vmx/nested.c       |  4 ++--
+> >  arch/x86/kvm/vmx/vmx.c          | 15 ++++++++++++---
+> >  arch/x86/kvm/vmx/vmx.h          |  8 ++++++++
+> >  arch/x86/kvm/x86.c              |  9 +++++++++
+> >  10 files changed, 58 insertions(+), 21 deletions(-)
+> 
+> Ping!
+> 
+> Anything I can do to help getting this series reviewed and hopefully merged?
 
-syzbot found the following issue on:
+I'm slowly getting there...
 
-HEAD commit:    fe15c26ee26e Linux 6.3-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=17eda014c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=184ec1dbe951014904b3
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12ef5932c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16981670c80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+184ec1dbe951014904b3@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5944 at include/linux/cpumask.h:143 schedstat_start+0x1a0/0x20c kernel/sched/stats.c:206
-Modules linked in:
-CPU: 0 PID: 5944 Comm: syz-executor219 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : cpu_max_bits_warn kernel/sched/stats.c:206 [inline]
-pc : cpumask_check include/linux/cpumask.h:150 [inline]
-pc : cpumask_next include/linux/cpumask.h:212 [inline]
-pc : schedstat_start+0x1a0/0x20c kernel/sched/stats.c:196
-lr : seq_read_iter+0x378/0xc44 fs/seq_file.c:225
-sp : ffff80001e4e7980
-x29: ffff80001e4e7990 x28: ffff0000d49ea1f0 x27: 1fffe0001a93d43e
-x26: ffff0000d49ea140 x25: dfff800000000000 x24: 0000000000000007
-x23: ffff800015cdd558 x22: 1fffe0001a93d42a x21: dfff800000000000
-x20: ffff800015cdd000 x19: ffff0000d49ea150 x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80000826e470 x15: 0000000000000000
-x14: 1ffff00002b9c0b2 x13: dfff800000000000 x12: 0000000000000001
-x11: 1ffff00002b9baab x10: 0000000000000002 x9 : ffff800008af6624
-x8 : 0000000000000009 x7 : ffff800008af63c8 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff80000830ba14
-x2 : ffff0000d14c1b40 x1 : ffff0000d49ea150 x0 : ffff0000d49ea128
-Call trace:
- schedstat_start+0x1a0/0x20c kernel/sched/stats.c:206
- seq_read_iter+0x378/0xc44 fs/seq_file.c:225
- proc_reg_read_iter+0x18c/0x2bc fs/proc/inode.c:305
- call_read_iter include/linux/fs.h:1845 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x5bc/0x8ac fs/read_write.c:470
- ksys_read+0x15c/0x26c fs/read_write.c:613
- __do_sys_read fs/read_write.c:623 [inline]
- __se_sys_read fs/read_write.c:621 [inline]
- __arm64_sys_read+0x7c/0x90 fs/read_write.c:621
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-irq event stamp: 11872
-hardirqs last  enabled at (11871): [<ffff800008064fd4>] local_daif_restore arch/arm64/include/asm/daifflags.h:75 [inline]
-hardirqs last  enabled at (11871): [<ffff800008064fd4>] el0_svc_common+0x9c/0x258 arch/arm64/kernel/syscall.c:107
-hardirqs last disabled at (11872): [<ffff80001245e098>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
-softirqs last  enabled at (11864): [<ffff800008020ec0>] softirq_handle_end kernel/softirq.c:414 [inline]
-softirqs last  enabled at (11864): [<ffff800008020ec0>] __do_softirq+0xd64/0xfbc kernel/softirq.c:600
-softirqs last disabled at (11859): [<ffff80000802b524>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+https://lore.kernel.org/kvm/Y%2Fk+n6HqfLNmmmtM@google.com
