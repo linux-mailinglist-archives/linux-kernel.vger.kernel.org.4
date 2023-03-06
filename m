@@ -2,173 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B98F6AB447
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 999306AB44D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:25:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjCFBVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 20:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
+        id S229579AbjCFBY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 20:24:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjCFBVe (ORCPT
+        with ESMTP id S229484AbjCFBY4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 20:21:34 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D12C64D
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 17:21:31 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id k23so6629880ybk.13
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 17:21:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t4EaRQ3PQLnaSbIzJ1xDrG/yiuAekyCN/l27BB6BVow=;
-        b=hng/kQMZutgEdyE/gzZW30gqgQ7LhVkUP++nEdIxm37bN7/TPqJpom5c9XZhaF3KC3
-         C65H1wvNutb3l5fwFHyYHsqQAf+OoAgW8AAmWiweaxAbQWCCDuLArB73Wtifyx7rIi0X
-         GtV6s26Fvb2bfmz2QF9XXBCnfCA+TXvz8+/5yLs2b1gJGCgRvzZS9zrdLRwNZwxo9EGB
-         J4NZ1Y/lzgYfkpoQ1SZabVD3GOCw0vIfOZfN8lUwwKW0e77Xcn13T6TPNDscFNd2xWWA
-         BiFSyTmzY/GahaEP2InsRI+5MWzJ1B3eBOC/CdeuydrgLVpbtgOa8YkOF/pFrY+5btI/
-         2mNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t4EaRQ3PQLnaSbIzJ1xDrG/yiuAekyCN/l27BB6BVow=;
-        b=4o8EyvmTVaMPRc3uQ0bEARxqXWdj7Fg281aCg2RdI+4xxBBFCaD90hESIrRWTqutAu
-         zefD/6eB/cIy4tV1KccYASPq2faugNsdAoqyBnlFxhpctMd4DIAOb7KiC24Zy0oCyWxx
-         brTBdta9k3qV9/kIDx5NrUp4hKUyESm1hmVuqdc+2TS0IaqI/xUWpQ3XSH/5bHve8xDP
-         6htLMG/ZHtvmBzAORwmvuy5KNFkDkdWb4lcTP54Z7NxOSPzIP6VK8C+U0w+nRc3YjJjc
-         Q7ucCwmDh6at1TUYdkgLHEl3YvAtSaxuTfPqGc2/hQz4Z0gaMt1GnSgLamXeN38GS46o
-         G7QA==
-X-Gm-Message-State: AO0yUKVQC9kdrQVyaViG7DkZLdsw9kn1rQz+mjLj46qEl+pfJKRc+wjk
-        ySr1gnFURliTDtlvKzSKTHrdZQjr37ZK9fD4gXi3K+XE0dWQLwO9C1M=
-X-Google-Smtp-Source: AK7set/GU8d4vjOxKd9fbYvSIG9uMb8Ul4SqQMbcOJrl45wmlirEe13RLR166rNZVHUvwShRO6tBgScmojzDuTIO1CU=
-X-Received: by 2002:a25:9b48:0:b0:a8a:a652:2a69 with SMTP id
- u8-20020a259b48000000b00a8aa6522a69mr4075875ybo.10.1678065690998; Sun, 05 Mar
- 2023 17:21:30 -0800 (PST)
+        Sun, 5 Mar 2023 20:24:56 -0500
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99661EB70
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 17:24:55 -0800 (PST)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 3261OaYh027380-3261OaYk027380
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 6 Mar 2023 09:24:41 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: loongson: fix memory leak in loongson2_guts_probe/remove
+Date:   Mon,  6 Mar 2023 09:22:00 +0800
+Message-Id: <20230306012201.242413-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org> <20230303-topic-rpmcc_sleep-v1-3-d9cfaf9b27a7@linaro.org>
-In-Reply-To: <20230303-topic-rpmcc_sleep-v1-3-d9cfaf9b27a7@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 6 Mar 2023 03:21:24 +0200
-Message-ID: <CAA8EJpp6cxY5+L28qsTeXCmA31e4dv21u1Tz9SquAugaV+EqfQ@mail.gmail.com>
-Subject: Re: [PATCH RFT 03/20] clk: qcom: smd-rpm: Add support for keepalive votes
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 4 Mar 2023 at 15:27, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
-> Some bus clock should always have a minimum (19.2 MHz) vote cast on
-> them, otherwise the platform will fall apart, hang and reboot.
->
-> Add support for specifying which clocks should be kept alive and
-> always keep a vote on XO_A to make sure the clock tree doesn't
-> collapse. This removes the need to keep a maximum vote that was
-> previously guaranteed by clk_smd_rpm_handoff.
->
-> This commit is a combination of existing (not-exactly-upstream) work
-> by Taniya Das, Shawn Guo and myself.
->
-> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
-> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/clk/qcom/clk-smd-rpm.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-> index cce7daa97c1e..8e017c575361 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -4,6 +4,7 @@
->   * Copyright (c) 2014, The Linux Foundation. All rights reserved.
->   */
->
-> +#include <linux/clk.h>
->  #include <linux/clk-provider.h>
->  #include <linux/err.h>
->  #include <linux/export.h>
-> @@ -178,6 +179,8 @@ struct clk_smd_rpm_req {
->  struct rpm_smd_clk_desc {
->         struct clk_smd_rpm **clks;
->         size_t num_clks;
-> +       struct clk_hw **keepalive_clks;
-> +       size_t num_keepalive_clks;
->  };
->
->  static DEFINE_MUTEX(rpm_smd_clk_lock);
-> @@ -1278,6 +1281,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->         struct qcom_smd_rpm *rpm;
->         struct clk_smd_rpm **rpm_smd_clks;
->         const struct rpm_smd_clk_desc *desc;
-> +       struct clk_hw **keepalive_clks;
->
->         rpm = dev_get_drvdata(pdev->dev.parent);
->         if (!rpm) {
-> @@ -1291,6 +1295,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->
->         rpm_smd_clks = desc->clks;
->         num_clks = desc->num_clks;
-> +       keepalive_clks = desc->keepalive_clks;
->
->         for (i = 0; i < num_clks; i++) {
->                 if (!rpm_smd_clks[i])
-> @@ -1321,6 +1326,24 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->         if (ret)
->                 goto err;
->
-> +       /* Leave a permanent active vote on clocks that require it. */
-> +       for (i = 0; i < desc->num_keepalive_clks; i++) {
-> +               if (WARN_ON(!keepalive_clks[i]))
-> +                       continue;
-> +
-> +               ret = clk_prepare_enable(keepalive_clks[i]->clk);
-> +               if (ret)
-> +                       return ret;
+drivers/soc/loongson/loongson2_guts.c:150 loongson2_guts_probe()
+warn: 'guts->regs' from ioremap() not released on lines: 131,135,139,143.
 
-Would it be better to use CLK_IS_CRITICAL instead? Using the existing
-API has a bonus that it is more visible compared to the ad-hoc
-solutions.
+Fix this by invoking iounmap() in the error handling code and the remove
+function.
 
-> +
-> +               ret = clk_set_rate(keepalive_clks[i]->clk, 19200000);
+Note that, this patch is not tested due to the loongson architecture.
 
-Don't we also need to provide a determine_rate() that will not allow
-one to set clock frequency below 19.2 MHz?
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+ drivers/soc/loongson/loongson2_guts.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       /* Keep an active vote on CXO in case no other driver votes for it. */
-> +       if (rpm_smd_clks[RPM_SMD_XO_A_CLK_SRC])
-> +               return clk_prepare_enable(rpm_smd_clks[RPM_SMD_XO_A_CLK_SRC]->hw.clk);
-> +
->         return 0;
->  err:
->         dev_err(&pdev->dev, "Error registering SMD clock driver (%d)\n", ret);
+diff --git a/drivers/soc/loongson/loongson2_guts.c b/drivers/soc/loongson/loongson2_guts.c
+index bace4bc8e03b..ba330adb555c 100644
+--- a/drivers/soc/loongson/loongson2_guts.c
++++ b/drivers/soc/loongson/loongson2_guts.c
+@@ -98,6 +98,7 @@ static int loongson2_guts_probe(struct platform_device *pdev)
+ 	const struct loongson2_soc_die_attr *soc_die;
+ 	const char *machine;
+ 	u32 svr;
++	int rc = -ENOMEM;
+ 
+ 	/* Initialize guts */
+ 	guts = devm_kzalloc(dev, sizeof(*guts), GFP_KERNEL);
+@@ -128,19 +129,21 @@ static int loongson2_guts_probe(struct platform_device *pdev)
+ 		soc_dev_attr.family = devm_kasprintf(dev, GFP_KERNEL, "Loongson");
+ 	}
+ 	if (!soc_dev_attr.family)
+-		return -ENOMEM;
++		goto iounmap;
+ 	soc_dev_attr.soc_id = devm_kasprintf(dev, GFP_KERNEL,
+ 					     "svr:0x%08x", svr);
+ 	if (!soc_dev_attr.soc_id)
+-		return -ENOMEM;
++		goto iounmap;
+ 	soc_dev_attr.revision = devm_kasprintf(dev, GFP_KERNEL, "%d.%d",
+ 					       (svr >>  4) & 0xf, svr & 0xf);
+ 	if (!soc_dev_attr.revision)
+-		return -ENOMEM;
++		goto iounmap;
+ 
+ 	soc_dev = soc_device_register(&soc_dev_attr);
+-	if (IS_ERR(soc_dev))
+-		return PTR_ERR(soc_dev);
++	if (IS_ERR(soc_dev)) {
++		rc = PTR_ERR(soc_dev);
++		goto iounmap;
++	}
+ 
+ 	pr_info("Machine: %s\n", soc_dev_attr.machine);
+ 	pr_info("SoC family: %s\n", soc_dev_attr.family);
+@@ -148,11 +151,16 @@ static int loongson2_guts_probe(struct platform_device *pdev)
+ 		soc_dev_attr.soc_id, soc_dev_attr.revision);
+ 
+ 	return 0;
++
++iounmap:
++	iounmap(guts->regs);
++	return rc;
+ }
+ 
+ static int loongson2_guts_remove(struct platform_device *dev)
+ {
+ 	soc_device_unregister(soc_dev);
++	iounmap(guts->regs);
+ 
+ 	return 0;
+ }
+-- 
+2.39.2
 
-
-I have mixed feelings towards this patch (and the rest of the
-patchset). It looks to me like we are trying to patch an issue of the
-interconnect drivers (or in kernel configuration).
-
-
---
-With best wishes
-Dmitry
