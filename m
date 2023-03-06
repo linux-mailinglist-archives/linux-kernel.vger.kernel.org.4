@@ -2,90 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E912F6ABA36
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 792C06ABA39
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjCFJnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:43:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56308 "EHLO
+        id S230051AbjCFJnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:43:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjCFJnO (ORCPT
+        with ESMTP id S229638AbjCFJnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:43:14 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8E2821A29;
-        Mon,  6 Mar 2023 01:43:10 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D22611FB;
-        Mon,  6 Mar 2023 01:43:53 -0800 (PST)
-Received: from [10.57.52.218] (unknown [10.57.52.218])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9A8A63F885;
-        Mon,  6 Mar 2023 01:43:06 -0800 (PST)
-Message-ID: <650bebf8-3988-05bb-2620-d714a2ec4631@arm.com>
-Date:   Mon, 6 Mar 2023 10:43:03 +0100
+        Mon, 6 Mar 2023 04:43:18 -0500
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7096DB44D;
+        Mon,  6 Mar 2023 01:43:16 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id ay14so32161874edb.11;
+        Mon, 06 Mar 2023 01:43:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pu1rmKeKz2ed6zEvq5/nqsVlZSSb14LZ7R+ktLj7zWo=;
+        b=rGhys7i/vvYUAJLN2NdtWSpIxKfnextQvHS25iwmvv9ZpczI4Mz5RnZWEG+3Hjj/Hv
+         70co3Bty7uHmOVKDSExO9LdlXGIrzQraMVI6UpC0M3JSZIdyPxk4aQWRQQ9uHK0qJCDR
+         06DtJBRrWYQt3CJpAnR0fWCwq7/grT08debBFFg8gm96Vz/RXXtZl/atEUABv9JxrB/g
+         3AgSneE9qvAq1QuUVWM4WDLGR9HC2PDFZrqs7qLzSVBl2vZ+uQIXOHUaX/RJiPCDiAF3
+         6hQE7dmAa54rHJiodmfNgeqX+x9eZV6dp7LVkULsUkQsNYEfr3N27/OrNbbpd8VPLRwU
+         kmLg==
+X-Gm-Message-State: AO0yUKWZP+0C2rTmoeBPvh23R5B2K/WeOhpMMBdJamC55GbSSzLtvEIc
+        ZtAUbGbyQ3wD4fVprUkxSzNh1/k+zQdcog==
+X-Google-Smtp-Source: AK7set9t9Kt9gObUCcl+ZVJIw4DSQC2kmQkad89NJXmR7mZ1UThEg2xQM1b5/sxVc2KmOgWHrcoMMQ==
+X-Received: by 2002:a17:907:20aa:b0:878:814d:bc99 with SMTP id pw10-20020a17090720aa00b00878814dbc99mr9967952ejb.66.1678095794967;
+        Mon, 06 Mar 2023 01:43:14 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id r29-20020a50d69d000000b004af70c546dasm4803460edi.87.2023.03.06.01.43.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 01:43:14 -0800 (PST)
+Message-ID: <cd278972-77c5-2118-0a47-327aa7406ec1@kernel.org>
+Date:   Mon, 6 Mar 2023 10:43:13 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3] sched/topology: Remove EM_MAX_COMPLEXITY limit
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ionela.Voinescu@arm.com, qperret@google.com,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20221121094336.3250917-1-pierre.gondois@arm.com>
- <81d99fba-ce38-a9a4-4b80-aa3e2cc6f3c6@arm.com>
- <66cfa719-6055-a521-6146-f629b7d0e446@arm.com>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] tty: serial: fsl_lpuart: fix race on RX DMA shutdown
 Content-Language: en-US
-In-Reply-To: <66cfa719-6055-a521-6146-f629b7d0e446@arm.com>
+To:     "A. Sverdlin" <alexander.sverdlin@siemens.com>,
+        linux-serial@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20230306090011.80725-1-alexander.sverdlin@siemens.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20230306090011.80725-1-alexander.sverdlin@siemens.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Peter,
-Just a remainder in case this was forgotten,
-Regards,
-Pierre
-
-On 2/1/23 17:16, Pierre Gondois wrote:
-> Hello Peter,
-> Please let me know if there are additional modifications required,
-> Regards,
-> Pierre
+On 06. 03. 23, 10:00, A. Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 > 
-> On 11/30/22 18:11, Dietmar Eggemann wrote:
->> On 21/11/2022 10:43, Pierre Gondois wrote:
->>> From: Pierre Gondois <Pierre.Gondois@arm.com>
->>
->> [...]
->>
->>> Signed-off-by: Pierre Gondois <Pierre.Gondois@arm.com>
->>> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
->>> ---
->>>
->>> Notes:
->>>       v2:
->>>        - Fix complexity computation in the commit message. [Dietmar]
->>>        - Use correct/latest function names. [Ionela]
->>>        - Added Rb from Lukasz.
->>>       v3:
->>>        - Keep paragraph 6.3 in sched-energy.rst with just a reference to
->>>          EM_MAX_NUM_CPUS, reference EM_MAX_NUM_CPUS in the commit message.
->>>          [Dietmar]
->>
->> Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+>  From time to time DMA completion can come in the middle of DMA shutdown:
+> 
+> <process ctx>:				<IRQ>:
+> lpuart32_shutdown()
+>    lpuart_dma_shutdown()
+>      del_timer_sync()
+> 					lpuart_dma_rx_complete()
+> 					  lpuart_copy_rx_to_tty()
+> 					    mod_timer()
+>      lpuart_dma_rx_free()
+> 
+> When the timer fires a bit later, sport->dma_rx_desc is NULL:
+> 
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000004
+> pc : lpuart_copy_rx_to_tty+0xcc/0x5bc
+> lr : lpuart_timer_func+0x1c/0x2c
+> Call trace:
+>   lpuart_copy_rx_to_tty
+>   lpuart_timer_func
+>   call_timer_fn
+>   __run_timers.part.0
+>   run_timer_softirq
+>   __do_softirq
+>   __irq_exit_rcu
+>   irq_exit
+>   handle_domain_irq
+>   gic_handle_irq
+>   call_on_irq_stack
+>   do_interrupt_handler
+>   ...
+> 
+> To fix this fold del_timer_sync() into lpuart_dma_rx_free() after
+> dmaengine_terminate_sync() to make sure timer will not be re-started in
+> lpuart_copy_rx_to_tty() <= lpuart_dma_rx_complete().
+> 
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+
+This should have some Fixes: tag, I believe.
+
+> ---
+>   drivers/tty/serial/fsl_lpuart.c | 11 +++--------
+>   1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+> index e945f41b93d43..47c267ee22e04 100644
+> --- a/drivers/tty/serial/fsl_lpuart.c
+> +++ b/drivers/tty/serial/fsl_lpuart.c
+> @@ -1354,6 +1354,7 @@ static void lpuart_dma_rx_free(struct uart_port *port)
+>   	struct dma_chan *chan = sport->dma_rx_chan;
+>   
+>   	dmaengine_terminate_sync(chan);
+
+Maybe I'm missing something (I haven't looked into the code), but what 
+happens if the timer ticks here? Won't the dmaengine be restarted there?
+
+> +	del_timer_sync(&sport->lpuart_timer);
+>   	dma_unmap_sg(chan->device->dev, &sport->rx_sgl, 1, DMA_FROM_DEVICE);
+>   	kfree(sport->rx_ring.buf);
+>   	sport->rx_ring.tail = 0;
+
+
+-- 
+js
+suse labs
+
