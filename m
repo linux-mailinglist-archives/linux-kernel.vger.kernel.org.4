@@ -2,143 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152196AC46F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CF16AC880
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbjCFPJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:09:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
+        id S229993AbjCFQpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjCFPJl (ORCPT
+        with ESMTP id S230299AbjCFQoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:09:41 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D085822A24
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:09:25 -0800 (PST)
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 528D03F22C
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:09:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678111783;
-        bh=f2v5CEMXX3gXYzLE99k6iR0CRvXpbrxSSolJwoueXz0=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=gy4eaVoWe+pMUO0IEjp4ENz74sKrnlfW1KKUKCkiBP8exMDjBbACax3TtbhWOoGkH
-         Elp2SxguW/r2WU6Dy9R8PscK2ZY/EkbwoNuWgITw2hMyt5EezifoY8MAZXQA/c3KyC
-         4Gs7Ge1ZUVAjph9T1et97Mhv3HreJL8HpzUJg2cjcrzWMMeoNqJnp1GMC25NINkujJ
-         6jOb3eeWOzD8WfHtAIxkHaCaddYjjDQZa/nObndMMGJyYKoiXDzgfOk+83Z23Wvrfo
-         dMHmI8lRqMCuvt0dTLDnr3nM5yqmkqXbZqGtZPuIDjub/k3JbIoreNKrXxg+/3dGgE
-         WHioAhdPIe5/A==
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-536d63d17dbso104146657b3.22
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:09:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678111782;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f2v5CEMXX3gXYzLE99k6iR0CRvXpbrxSSolJwoueXz0=;
-        b=y3qdbzarwOfPsYT8hn3HFhoLEKUxZ5wwiEchVs6qXzwP27/uhmlMGyuyAWxo6Jf31V
-         ZaeZlvaMBLQrdOYjkweaLQBymthm+4XvGFHq40cAFDMnZJUBv26HIu6kei0j+ixr59U6
-         dckeWxetq38KHO2oSJxLg65HDrCxg8BP6LtcZ6Gl8pfTNCGAjPqUDpohatUT5mfoG5Lz
-         tSXIBFrhcbNpcCPEqCW+t/bnSqPrSFzpFta4GC2LJiwfz9Q5rFu4iMF9aoeVkLGZextO
-         dNRDTYgm6StCbnOHWP8CO3FFi5ZUa65O5sKAPXvclvMs/32gSyyHQV1RqnYHGkvXrbux
-         mXOw==
-X-Gm-Message-State: AO0yUKVSC/5xs8FtjRSAmqlnOb9Ko72sppWT6jRpSw+w6FcF8dhVGtDV
-        aazPiiDvUbwStcTd/Ym31pvZCmdVuNBzTKoRsv5Z3sQTzXcGBLCwdt7mU5jxTVmOKBY74toHhZr
-        60PGeOtwdNnrUGYb+b6vLV2CIvUwpEkSe8FIiz7iG0M7GHz9VtfVzdU8mGw==
-X-Received: by 2002:a81:af52:0:b0:52e:b48f:7349 with SMTP id x18-20020a81af52000000b0052eb48f7349mr6964031ywj.6.1678111782228;
-        Mon, 06 Mar 2023 06:09:42 -0800 (PST)
-X-Google-Smtp-Source: AK7set/qGKtb7f/W60UbxpJV4lHpxUt88fYIdqGi3qnpEpEAIFHYbXk+SL7tIS3T0MF+znhipcG5v3sWI+bgGQWdtDc=
-X-Received: by 2002:a81:af52:0:b0:52e:b48f:7349 with SMTP id
- x18-20020a81af52000000b0052eb48f7349mr6964020ywj.6.1678111782030; Mon, 06 Mar
- 2023 06:09:42 -0800 (PST)
+        Mon, 6 Mar 2023 11:44:14 -0500
+X-Greylist: delayed 7525 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 08:43:49 PST
+Received: from 14.mo550.mail-out.ovh.net (14.mo550.mail-out.ovh.net [178.32.97.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256753BD92
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:43:49 -0800 (PST)
+Received: from director5.ghost.mail-out.ovh.net (unknown [10.109.143.183])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 9F7F8230AB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:23:51 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-dqffs (unknown [10.110.103.233])
+        by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id E3EF11FD28;
+        Mon,  6 Mar 2023 14:23:50 +0000 (UTC)
+Received: from RCM-web1.webmail.mail.ovh.net ([176.31.238.120])
+        by ghost-submission-6684bf9d7b-dqffs with ESMTPSA
+        id GltaNXb3BWSE4wAALXMDEQ
+        (envelope-from <rafal@milecki.pl>); Mon, 06 Mar 2023 14:23:50 +0000
 MIME-Version: 1.0
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
- <20230220193754.470330-8-aleksandr.mikhalitsyn@canonical.com> <381a19bb-d17e-b48b-8259-6287dbe170df@fastmail.fm>
-In-Reply-To: <381a19bb-d17e-b48b-8259-6287dbe170df@fastmail.fm>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Mon, 6 Mar 2023 15:09:31 +0100
-Message-ID: <CAEivzxf8HKs2FJwTohzGVcb0TRNy9QJbEALC3dni3zx+tOb9Gg@mail.gmail.com>
-Subject: Re: [RFC PATCH 7/9] fuse: add fuse device ioctl(FUSE_DEV_IOC_REINIT)
-To:     Bernd Schubert <bernd.schubert@fastmail.fm>
-Cc:     mszeredi@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Mon, 06 Mar 2023 15:23:50 +0100
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 0/8] nvmem: Let layout drivers be modules
+In-Reply-To: <20230306151829.57c689b4@xps-13>
+References: <20230301152239.531194-1-miquel.raynal@bootlin.com>
+ <ee7923a8b5fa8358e6805d20df7d8049@walle.cc> <20230306143528.7407fda5@xps-13>
+ <73a04afaf658292c05ef27117c60b21d@milecki.pl>
+ <20230306151829.57c689b4@xps-13>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <0b94d38a25f5d8ea70f228213ba14fa4@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 17831721252273499120
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -85
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtkedgfeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegfrhhlucfvnfffucdludehmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepjedvlefguedthfefleehgeeftdeludeluedvgfeffeevhfevtdehteejteefheegnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffedpudejiedrfedurddvfeekrdduvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheehtddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 8:26=E2=80=AFPM Bernd Schubert
-<bernd.schubert@fastmail.fm> wrote:
->
->
->
-> On 2/20/23 20:37, Alexander Mikhalitsyn wrote:
-> > This ioctl aborts fuse connection and then reinitializes it,
-> > sends FUSE_INIT request to allow a new userspace daemon
-> > to pick up the fuse connection.
-> >
-> > Cc: Miklos Szeredi <mszeredi@redhat.com>
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > Cc: Amir Goldstein <amir73il@gmail.com>
-> > Cc: St=C3=83=C2=A9phane Graber <stgraber@ubuntu.com>
-> > Cc: Seth Forshee <sforshee@kernel.org>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: Andrei Vagin <avagin@gmail.com>
-> > Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> > Cc: linux-fsdevel@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: criu@openvz.org
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
-om>
-> > ---
-> >   fs/fuse/dev.c             | 132 +++++++++++++++++++++++++++++++++++++=
-+
-> >   include/uapi/linux/fuse.h |   1 +
-> >   2 files changed, 133 insertions(+)
-> >
-> > diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
-> > index 737764c2295e..0f53ffd63957 100644
-> > --- a/fs/fuse/dev.c
-> > +++ b/fs/fuse/dev.c
-> > @@ -2187,6 +2187,112 @@ void fuse_abort_conn(struct fuse_conn *fc)
-> >   }
-> >   EXPORT_SYMBOL_GPL(fuse_abort_conn);
-> >
-> > +static int fuse_reinit_conn(struct fuse_conn *fc)
-> > +{
-> > +     struct fuse_iqueue *fiq =3D &fc->iq;
-> > +     struct fuse_dev *fud;
-> > +     unsigned int i;
-> > +
-> > +     if (fc->conn_gen + 1 < fc->conn_gen)
-> > +             return -EOVERFLOW;
-> > +
-> > +     fuse_abort_conn(fc);
-> > +     fuse_wait_aborted(fc);
->
-> Shouldn't this also try to flush all data first?
+On 2023-03-06 15:18, Miquel Raynal wrote:
+> Hi Rafał,
+> 
+> rafal@milecki.pl wrote on Mon, 06 Mar 2023 14:57:03 +0100:
+> 
+>> On 2023-03-06 14:35, Miquel Raynal wrote:
+>> > Hi Michael,
+>> >
+>> > michael@walle.cc wrote on Mon, 06 Mar 2023 14:01:34 +0100:
+>> >
+>> >> > Miquel Raynal (8):
+>> >> >   of: Fix modalias string generation
+>> >> >   of: Change of_device_get_modalias() main argument
+>> >> >   of: Create an of_device_request_module() receiving an OF node
+>> >> >   nvmem: core: Fix error path ordering
+>> >> >   nvmem: core: Handle the absence of expected layouts
+>> >> >   nvmem: core: Request layout modules loading
+>> >> >   nvmem: layouts: sl28vpd: Convert layout driver into a module
+>> >> >   nvmem: layouts: onie-tlv: Convert layout driver into a module
+>> >> >> With the fixes series [1] applied:
+>> >
+>> > Thanks for the series! Looks good to me. I believe both series can live
+>> > in separate tress, any reason why we would like to avoid this? I am > keen
+>> > to apply [1] into the mtd tree rather soon.
+>> 
+>> Given past events with nvmem patches I'm against that.
+>> 
+>> Let's wait for Srinivas to collect pending patches, let them spend a
+>> moment in linux-next maybe, ask Srinivas to send them to Greg early if
+>> he can. That way maybe you can merge Greg's branch (assuming he 
+>> doesn't
+>> rebase).
+> 
+> Just to be on the same page, we're talking about the mtd core fixups to
+> handle correctly probe deferrals in the nvmem side.
+> 
+> Applying mtd patches then nvmem patches is totally fine in this order.
+> Applying nvmem patches and then mtd patches creates a range of commits
+> where some otp devices might have troubles probing if:
+> - a layout driver is used
+> - the driver is compiled as a module
+> - the driver is also not installed in an initramfs
+> 
+> I was actually asking out loud whether we should care about this
+> commit range given the unlikelihood that someone would have troubles
+> with this while bisecting a linux-next kernel.
+> 
+> So getting an immutable tag from Greg would not help. The opposite
+> might make sense though, and involves that I apply [1] to mtd/next
+> rather soon anyway, I guess?
 
-I think we should. Thanks for pointing to that!
-
-I've read all your comments and I'll prepare -v2 series soon.
-
-Thanks a lot, Bernd!
-
->
+The problem IIUC is nvmem.git / for-next containing broken code after
+adding nvmem stuff. That is unless Srinivas takes your patches in some
+way. Hopefully not by waiting for 6.4-rc1.
