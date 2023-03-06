@@ -2,319 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672B36ACEBE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:01:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87576ACEC7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:01:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjCFUBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 15:01:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
+        id S230187AbjCFUBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 15:01:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbjCFUBG (ORCPT
+        with ESMTP id S230144AbjCFUBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 15:01:06 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A80C2410B;
-        Mon,  6 Mar 2023 12:00:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678132840; x=1709668840;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=CRdF0Nkx+b/muGGcWZtuKc0UsZkRBH9ke4J5QaHxNnA=;
-  b=c4RGzCqSVlCNF74H5vgOMrhA6o6mxSqfux66a6kwhZZOTKYGCQJolkrG
-   Wd1FrGwGIERg4hO3kRHuZG3Y3a4DG6Umcm4ic4PLbhik8po9lk8S5E1tz
-   TY9pOpIY8OVYKM1FNppkTFrV/b8eSiDOKxHq7eFS2fgQ3umIltagZO9mt
-   cO93ijUV5Vg79FvMMKEiPjHy2iYYlxSJn7EGGYT3yU670I6t42YvHOcuN
-   KO/ec/1Yvb1+b3gZMtWNV8HAz3I0DPEEAf4xHPis4yVNpgNFLOqWykK4L
-   Yi8LLVJ+GPTqF+/9UCocFMkfWXA+eFJPWWVcpeIG6UtT4fBgKnerOY92p
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="319488287"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="319488287"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 12:00:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="626274597"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="626274597"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 06 Mar 2023 12:00:32 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZH0Z-0000ar-1d;
-        Mon, 06 Mar 2023 20:00:31 +0000
-Date:   Tue, 7 Mar 2023 04:00:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
-        paulus@samba.org, benh@kernel.crashing.org, linux@armlinux.org.uk,
-        pjones@redhat.com, timur@kernel.org, adaplas@gmail.com,
-        s.hauer@pengutronix.de, shawnguo@kernel.org, mbroemme@libmpq.org,
-        thomas@winischhofer.net, James.Bottomley@hansenpartnership.com,
-        spock@gentoo.org, sudipm.mukherjee@gmail.com,
-        teddy.wang@siliconmotion.com, geert+renesas@glider.be,
-        corbet@lwn.net
-Cc:     oe-kbuild-all@lists.linux.dev, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH 29/99] fbdev/grvga: Parse option string with struct
- option_iter
-Message-ID: <202303070324.h15vDbVS-lkp@intel.com>
-References: <20230306160016.4459-30-tzimmermann@suse.de>
+        Mon, 6 Mar 2023 15:01:14 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3EC67024;
+        Mon,  6 Mar 2023 12:00:56 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so14280355pjb.3;
+        Mon, 06 Mar 2023 12:00:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678132856;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uXR1hBuNmG/TwC91AeVvsW1UVH/MwkAfhUSEnuvNaoY=;
+        b=o6hZefnQYEnFw3COvoTdyyoXo9Zv4P0LTShB301lkw0/gGr+x1ou0XeYCSdcXXLXoz
+         Ie/lwSIsRhh9vBh4c56fFPeCbh1Mg/u0f+SLHuOsNnA01L3iQxuD6tKvCodPDyUeqcUA
+         ipzyAtvRXWR1nR5U0W8m7xh6fPIYtpAYIZVYRkCJb0GTxixFtDSEeec8W6O4TIR9SFvb
+         8TyLwk+heXtYmzhntJcZ54SphmylZPrikYFa1PRdJ8V5j+VefclzJKcG1hcN/EBRiJ2z
+         A5LjdstbOHhVHAVRXA7o2dTcBNuVBc27QoVtU1tjX+Yepbtmilj428R4Os2Xd6WiLWnA
+         Of4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678132856;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uXR1hBuNmG/TwC91AeVvsW1UVH/MwkAfhUSEnuvNaoY=;
+        b=aXlIsS33Jjsuul+qMNL2sbI/Xqukq2wbEWP7Zdwtlj7bv64XyL7zxFEoY23RZ0YQor
+         Bqbh5zVr8LntGonP2exW1FvIEe3AwE9XlYZmNS8BKWTAWJs46K5D88Cz1tVysYW6l+vP
+         FlMoMohxRfMxV4J+TUf+f7Bz1HpG6jA9mHubAYpMaJGTADnDWXZk6nHVD+RgpSfy8wnl
+         /+/YGrN5IjCieKDYZ32gkewHxI34PwOi60E7Fm7h+ZsDbXdaNQooMMjB7VEGiEr6rL0+
+         lQojxCgDm1YNLkaokb9PWqj3WmVVVML7lZp7/PlVkSmU5avaYieldMHSE8tJs0W+SvaY
+         B+Qw==
+X-Gm-Message-State: AO0yUKXAbIFP23mAPtL3C28xLpxvoISrBRzI+Kq+PG803rUuLclFekw1
+        m8OB/pmYca24tx4TYBNZYeUG77vaa6Wk3reLCVE=
+X-Google-Smtp-Source: AK7set/DxZtiZhO+z+A0Is7yokDniYYkETavBEcleYa7IPSvIEQBIV7zty9Y+UWe1CWFM73JZ5CBgh34wQSFC4iK+eg=
+X-Received: by 2002:a17:90a:5993:b0:233:b520:1544 with SMTP id
+ l19-20020a17090a599300b00233b5201544mr6625621pji.0.1678132856231; Mon, 06 Mar
+ 2023 12:00:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306160016.4459-30-tzimmermann@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com> <20230306172109.595464-10-amit.kumar-mahapatra@amd.com>
+In-Reply-To: <20230306172109.595464-10-amit.kumar-mahapatra@amd.com>
+From:   Jonas Gorski <jonas.gorski@gmail.com>
+Date:   Mon, 6 Mar 2023 21:00:44 +0100
+Message-ID: <CAOiHx=nmsAh3ADL3s0eZKpEZJqCB_POi=8YjfxrHYLEbjRfwHg@mail.gmail.com>
+Subject: Re: [PATCH V5 09/15] spi: Add stacked and parallel memories support
+ in SPI core
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     broonie@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, jic23@kernel.org, tudor.ambarus@microchip.com,
+        pratyush@kernel.org, Sanju.Mehta@amd.com,
+        chin-ting_kuo@aspeedtech.com, clg@kaod.org, kdasu.kdev@gmail.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        eajames@linux.ibm.com, olteanv@gmail.com, han.xu@nxp.com,
+        john.garry@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        narmstrong@baylibre.com, khilman@baylibre.com,
+        matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        krzysztof.kozlowski@linaro.org, andi@etezian.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
+        oss@buserror.net, windhl@126.com, yangyingliang@huawei.com,
+        william.zhang@broadcom.com, kursad.oney@broadcom.com,
+        anand.gore@broadcom.com, rafal@milecki.pl, git@amd.com,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        joel@jms.id.au, andrew@aj.id.au, radu_nicolae.pirea@upb.ro,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        michael@walle.cc, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
+        amitrkcian2002@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+Hi,
 
-I love your patch! Perhaps something to improve:
+On Mon, 6 Mar 2023 at 18:26, Amit Kumar Mahapatra
+<amit.kumar-mahapatra@amd.com> wrote:
+>
+> For supporting multiple CS the SPI device need to be aware of all the CS
+> values. So, the "chip_select" member in the spi_device structure is now an
+> array that holds all the CS values.
+>
+> spi_device structure now has a "cs_index_mask" member. This acts as an
+> index to the chip_select array. If nth bit of spi->cs_index_mask is set
+> then the driver would assert spi->chip_select[n].
+>
+> In parallel mode all the chip selects are asserted/de-asserted
+> simultaneously and each byte of data is stored in both devices, the even
+> bits in one, the odd bits in the other. The split is automatically handled
+> by the GQSPI controller. The GQSPI controller supports a maximum of two
+> flashes connected in parallel mode. A "multi-cs-cap" flag is added in the
+> spi controntroller data, through ctlr->multi-cs-cap the spi core will make
+> sure that the controller is capable of handling multiple chip selects at
+> once.
+>
+> For supporting multiple CS via GPIO the cs_gpiod member of the spi_device
+> structure is now an array that holds the gpio descriptor for each
+> chipselect.
+>
+> Multi CS support using GPIO is not tested due to unavailability of
+> necessary hardware setup.
+>
+> Signed-off-by: Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+> ---
+>  drivers/spi/spi.c       | 213 +++++++++++++++++++++++++++-------------
+>  include/linux/spi/spi.h |  34 +++++--
+>  2 files changed, 173 insertions(+), 74 deletions(-)
+>
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> index 5866bf5813a4..8ec7f58fa111 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -613,7 +613,8 @@ static int spi_dev_check(struct device *dev, void *data)
+>         struct spi_device *new_spi = data;
+>
+>         if (spi->controller == new_spi->controller &&
+> -           spi_get_chipselect(spi, 0) == spi_get_chipselect(new_spi, 0))
+> +           spi_get_chipselect(spi, 0) == spi_get_chipselect(new_spi, 0) &&
+> +           spi_get_chipselect(spi, 1) == spi_get_chipselect(new_spi, 1))
+>                 return -EBUSY;
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on staging/staging-testing staging/staging-next staging/staging-linus linus/master v6.3-rc1 next-20230306]
-[cannot apply to deller-parisc/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This will only reject new devices if both chip selects are identical,
+but not if they only share one, e.g. CS 1 + 2 vs 1 + 3, or 1 + 2 vs
+only 2, or if the order is different (1 + 2 vs 2 + 1 - haven't read
+the code too close to know if this is allowed/possible).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Zimmermann/lib-Add-option-iterator/20230307-000524
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230306160016.4459-30-tzimmermann%40suse.de
-patch subject: [PATCH 29/99] fbdev/grvga: Parse option string with struct option_iter
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230307/202303070324.h15vDbVS-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0d11862a5c27c6992c00d209c68a7c014f27165a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Thomas-Zimmermann/lib-Add-option-iterator/20230307-000524
-        git checkout 0d11862a5c27c6992c00d209c68a7c014f27165a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/video/fbdev/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303070324.h15vDbVS-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/video/fbdev/grvga.c: In function 'grvga_probe':
->> drivers/video/fbdev/grvga.c:363:48: warning: passing argument 1 of 'grvga_parse_custom' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     363 |                         if (grvga_parse_custom(this_opt, &info->var) < 0) {
-         |                                                ^~~~~~~~
-   drivers/video/fbdev/grvga.c:266:37: note: expected 'char *' but argument is of type 'const char *'
-     266 | static int grvga_parse_custom(char *options,
-         |                               ~~~~~~^~~~~~~
-
-
-vim +363 drivers/video/fbdev/grvga.c
-
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  327  
-48c68c4f1b5424 drivers/video/grvga.c       Greg Kroah-Hartman        2012-12-21  328  static int grvga_probe(struct platform_device *dev)
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  329  {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  330  	struct fb_info *info;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  331  	int retval = -ENOMEM;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  332  	unsigned long virtual_start;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  333  	unsigned long grvga_fix_addr = 0;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  334  	unsigned long physical_start = 0;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  335  	unsigned long grvga_mem_size = 0;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  336  	struct grvga_par *par = NULL;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  337  	char *options = NULL, *mode_opt = NULL;
-0d11862a5c27c6 drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  338  	struct option_iter iter;
-0d11862a5c27c6 drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  339  	const char *this_opt;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  340  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  341  	info = framebuffer_alloc(sizeof(struct grvga_par), &dev->dev);
-0adcdbcb179624 drivers/video/fbdev/grvga.c Bartlomiej Zolnierkiewicz 2019-06-28  342  	if (!info)
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  343  		return -ENOMEM;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  344  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  345  	/* Expecting: "grvga: modestring, [addr:<framebuffer physical address>], [size:<framebuffer size>]
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  346  	 *
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  347  	 * If modestring is custom:<custom mode string> we parse the string which then contains all videoparameters
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  348  	 * If address is left out, we allocate memory,
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  349  	 * if size is left out we only allocate enough to support the given mode.
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  350  	 */
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  351  	if (fb_get_options("grvga", &options)) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  352  		retval = -ENODEV;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  353  		goto free_fb;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  354  	}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  355  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  356  	if (!options || !*options)
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  357  		options =  "640x480-8@60";
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  358  
-0d11862a5c27c6 drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  359  	option_iter_init(&iter, options);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  360  
-0d11862a5c27c6 drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  361  	while (option_iter_next(&iter, this_opt)) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  362  		if (!strncmp(this_opt, "custom", 6)) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05 @363  			if (grvga_parse_custom(this_opt, &info->var) < 0) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  364  				dev_err(&dev->dev, "Failed to parse custom mode (%s).\n", this_opt);
-0d11862a5c27c6 drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  365  				option_iter_release(&iter);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  366  				retval = -EINVAL;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  367  				goto free_fb;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  368  			}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  369  		} else if (!strncmp(this_opt, "addr", 4))
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  370  			grvga_fix_addr = simple_strtoul(this_opt + 5, NULL, 16);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  371  		else if (!strncmp(this_opt, "size", 4))
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  372  			grvga_mem_size = simple_strtoul(this_opt + 5, NULL, 0);
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  373  		else {
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  374  			static char mode_option_buf[256];
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  375  			int ret;
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  376  
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  377  			ret = snprintf(mode_option_buf, sizeof(mode_option_buf), "%s", this_opt);
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  378  			if (WARN(ret < 0,
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  379  				 "grlib-svgactrl: ignoring invalid option, ret=%d\n",
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  380  				 ret))
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  381  				continue;
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  382  			if (WARN(ret >= sizeof(mode_option_buf),
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  383  				 "grlib-svgactrl: option too long\n"))
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  384  				continue;
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  385  			mode_opt = mode_option_buf;
-cdc70347167d9a drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  386  		}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  387  	}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  388  
-0d11862a5c27c6 drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  389  	option_iter_release(&iter);
-0d11862a5c27c6 drivers/video/fbdev/grvga.c Thomas Zimmermann         2023-03-06  390  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  391  	par = info->par;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  392  	info->fbops = &grvga_ops;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  393  	info->fix = grvga_fix;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  394  	info->pseudo_palette = par->color_palette;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  395  	info->flags = FBINFO_DEFAULT | FBINFO_PARTIAL_PAN_OK | FBINFO_HWACCEL_YPAN;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  396  	info->fix.smem_len = grvga_mem_size;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  397  
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  398  	if (!devm_request_mem_region(&dev->dev, dev->resource[0].start,
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  399  		    resource_size(&dev->resource[0]), "grlib-svgactrl regs")) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  400  		dev_err(&dev->dev, "registers already mapped\n");
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  401  		retval = -EBUSY;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  402  		goto free_fb;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  403  	}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  404  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  405  	par->regs = of_ioremap(&dev->resource[0], 0,
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  406  			       resource_size(&dev->resource[0]),
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  407  			       "grlib-svgactrl regs");
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  408  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  409  	if (!par->regs) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  410  		dev_err(&dev->dev, "failed to map registers\n");
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  411  		retval = -ENOMEM;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  412  		goto free_fb;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  413  	}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  414  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  415  	retval = fb_alloc_cmap(&info->cmap, 256, 0);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  416  	if (retval < 0) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  417  		dev_err(&dev->dev, "failed to allocate mem with fb_alloc_cmap\n");
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  418  		retval = -ENOMEM;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  419  		goto unmap_regs;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  420  	}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  421  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  422  	if (mode_opt) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  423  		retval = fb_find_mode(&info->var, info, mode_opt,
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  424  				      grvga_modedb, sizeof(grvga_modedb), &grvga_modedb[0], 8);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  425  		if (!retval || retval == 4) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  426  			retval = -EINVAL;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  427  			goto dealloc_cmap;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  428  		}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  429  	}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  430  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  431  	if (!grvga_mem_size)
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  432  		grvga_mem_size = info->var.xres_virtual * info->var.yres_virtual * info->var.bits_per_pixel/8;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  433  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  434  	if (grvga_fix_addr) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  435  		/* Got framebuffer base address from argument list */
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  436  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  437  		physical_start = grvga_fix_addr;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  438  
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  439  		if (!devm_request_mem_region(&dev->dev, physical_start,
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  440  					     grvga_mem_size, dev->name)) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  441  			dev_err(&dev->dev, "failed to request memory region\n");
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  442  			retval = -ENOMEM;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  443  			goto dealloc_cmap;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  444  		}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  445  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  446  		virtual_start = (unsigned long) ioremap(physical_start, grvga_mem_size);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  447  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  448  		if (!virtual_start) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  449  			dev_err(&dev->dev, "error mapping framebuffer memory\n");
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  450  			retval = -ENOMEM;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  451  			goto dealloc_cmap;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  452  		}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  453  	} else {	/* Allocate frambuffer memory */
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  454  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  455  		unsigned long page;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  456  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  457  		virtual_start = (unsigned long) __get_free_pages(GFP_DMA,
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  458  								 get_order(grvga_mem_size));
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  459  		if (!virtual_start) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  460  			dev_err(&dev->dev,
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  461  				"unable to allocate framebuffer memory (%lu bytes)\n",
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  462  				grvga_mem_size);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  463  			retval = -ENOMEM;
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  464  			goto dealloc_cmap;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  465  		}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  466  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  467  		physical_start = dma_map_single(&dev->dev, (void *)virtual_start, grvga_mem_size, DMA_TO_DEVICE);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  468  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  469  		/* Set page reserved so that mmap will work. This is necessary
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  470  		 * since we'll be remapping normal memory.
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  471  		 */
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  472  		for (page = virtual_start;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  473  		     page < PAGE_ALIGN(virtual_start + grvga_mem_size);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  474  		     page += PAGE_SIZE) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  475  			SetPageReserved(virt_to_page(page));
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  476  		}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  477  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  478  		par->fb_alloced = 1;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  479  	}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  480  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  481  	memset((unsigned long *) virtual_start, 0, grvga_mem_size);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  482  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  483  	info->screen_base = (char __iomem *) virtual_start;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  484  	info->fix.smem_start = physical_start;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  485  	info->fix.smem_len   = grvga_mem_size;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  486  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  487  	dev_set_drvdata(&dev->dev, info);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  488  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  489  	dev_info(&dev->dev,
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  490  		 "Aeroflex Gaisler framebuffer device (fb%d), %dx%d-%d, using %luK of video memory @ %p\n",
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  491  		 info->node, info->var.xres, info->var.yres, info->var.bits_per_pixel,
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  492  		 grvga_mem_size >> 10, info->screen_base);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  493  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  494  	retval = register_framebuffer(info);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  495  	if (retval < 0) {
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  496  		dev_err(&dev->dev, "failed to register framebuffer\n");
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  497  		goto free_mem;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  498  	}
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  499  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  500  	__raw_writel(physical_start, &par->regs->fb_pos);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  501  	__raw_writel(__raw_readl(&par->regs->status) | 1,  /* Enable framebuffer */
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  502  		     &par->regs->status);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  503  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  504  	return 0;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  505  
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  506  free_mem:
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  507  	if (grvga_fix_addr)
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  508  		iounmap((void *)virtual_start);
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  509  	else
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  510  		kfree((void *)virtual_start);
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  511  dealloc_cmap:
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  512  	fb_dealloc_cmap(&info->cmap);
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  513  unmap_regs:
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  514  	of_iounmap(&dev->resource[0], par->regs,
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  515  		   resource_size(&dev->resource[0]));
-42eb317f7d089f drivers/video/grvga.c       Emil Goode                2012-06-26  516  free_fb:
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  517  	framebuffer_release(info);
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  518  
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  519  	return retval;
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  520  }
-a4b8f97a8fdeb9 drivers/video/grvga.c       Kristoffer Glembo         2011-07-05  521  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Regards,
+Jonas
