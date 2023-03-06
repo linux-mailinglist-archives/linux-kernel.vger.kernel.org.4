@@ -2,125 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE166ABA50
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:48:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F116ABA4D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:48:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjCFJsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:48:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35002 "EHLO
+        id S229905AbjCFJsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:48:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjCFJsa (ORCPT
+        with ESMTP id S229658AbjCFJsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:48:30 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F9ECDCA;
-        Mon,  6 Mar 2023 01:48:27 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3269lukv076419;
-        Mon, 6 Mar 2023 03:47:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678096076;
-        bh=1l5RxV9XXK7LPgaTQnjkhWmfaEwBS91fYlY2tG0yIYE=;
-        h=From:To:CC:Subject:Date;
-        b=oGeOPZgrr0OgbfFuoDjjjzEOq2ZLK8OI+k9BC/fB4iwMylAV0j+WztoD5+p26q029
-         IRvWCod5tLhrgOLFmnHmaadnjdJ5t5HFDCnQKt/mbZVlV3+1BFRNywA12uBBaX7XKn
-         pNbCUsYf9B2ifVtPZGNDoK+BzQ8xkya/NpNpeFBo=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3269luVJ094158
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Mar 2023 03:47:56 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
- Mar 2023 03:47:55 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 6 Mar 2023 03:47:55 -0600
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3269lpUM019816;
-        Mon, 6 Mar 2023 03:47:51 -0600
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <linux@armlinux.org.uk>, <pabeni@redhat.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <nsekhar@ti.com>,
-        <rogerq@kernel.org>
-CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH net-next] dt-bindings: net: ti: k3-am654-cpsw-nuss: Document Serdes PHY
-Date:   Mon, 6 Mar 2023 15:17:50 +0530
-Message-ID: <20230306094750.159657-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Mar 2023 04:48:05 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A01BDDE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:48:03 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id l24so5966538uac.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:48:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678096083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w8Rl9HyT7TpndADVzqj77QvMSEz2A6z3RnfLp60/OTA=;
+        b=mMbeKf/dd3hiLv5nabQcmzL03ke8mho4TlYvtp6dZsNvOghcZX9aKJ9XRvnOTPRut/
+         7e4rdPNtgcS2erMwo3lZIf1PRzs2Ca32C+Uob0eO0l+VtfWwYdV5pOYMroiy6s056M6e
+         N0Iu6jX712QQ8KIdMJu+0ieGIgiqSJxx6rAnJeYCSLlj64wn8EhImXkbxxwfgyCA8OAH
+         MdKA80HgQypjmvmPLrmHUmYYb0QhVNRhu6AdnXcHFx+rHV8Ve4Xyf30L2GetK6FxZWnr
+         lrIZR3RNvi1Sf9IfgRK1+dikcKV4MZ8K3bG2+IVH85e4ie4o88QdGGMyughTrN6aXrK7
+         q5jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678096083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w8Rl9HyT7TpndADVzqj77QvMSEz2A6z3RnfLp60/OTA=;
+        b=dHiwkQr+aGDy9o1wekewoNkCuJQ1CxyIbG0Cku4hr+V3Xu0stDWpVIyj/sFO/kyuuz
+         buF6fOVmMKmAu/HISYH8a+o58+FX74huLAbyFT5XUFVhhGB5oHuw2M/WarkcV/OXmI5I
+         emph6i8Tsj1s0eUnwMS5QRSnVB0CY3d9SMyJRTagdg6iAjQ6Aj4frjL9PD9giTNMOJO7
+         yGyCdAycn6YTJt9EpLTJ8z2Hlr1yEXh/p2WagxMiqmSMPDvDYfmngixQe2QNh6BsX/jk
+         0B5YBReKFndABHUPBfMJJvpYUDUxgfHUv+tOd7jTMR8EdaKCftOclnrDbSfi+iO37jnm
+         0/LQ==
+X-Gm-Message-State: AO0yUKVhuJIEjTFs3zbbysW8ilT0wjgGtLbZFcDdfqh9WlPRQd2XkW2A
+        bQXg7pDYUJi71IOw9jjsUawOlbEcnNrME2fb/Bs1Ww==
+X-Google-Smtp-Source: AK7set/rBe1gA9kJJoLlrDhasNu5WdztZSp7EzW+PxAmySgwXg12yLzxkUiXD5ZHXa70uMMd/HTAsW/Yme3qGANR1i4=
+X-Received: by 2002:a1f:38d6:0:b0:401:a4bf:210d with SMTP id
+ f205-20020a1f38d6000000b00401a4bf210dmr6260158vka.1.1678096082971; Mon, 06
+ Mar 2023 01:48:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224150811.80316-1-nick.alcock@oracle.com> <20230224150811.80316-2-nick.alcock@oracle.com>
+In-Reply-To: <20230224150811.80316-2-nick.alcock@oracle.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Mar 2023 10:47:52 +0100
+Message-ID: <CAMRc=Mem2mra+4gUcGCvAhWoFpVwB8qBDZxmtgcfxkZ0-JcMiA@mail.gmail.com>
+Subject: Re: [PATCH 01/27] gpio: remove MODULE_LICENSE in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update bindings to include Serdes PHY as an optional PHY, in addition to
-the existing CPSW MAC's PHY. The CPSW MAC's PHY is required while the
-Serdes PHY is optional. The Serdes PHY handle has to be provided only
-when the Serdes is being configured in a Single-Link protocol. Using the
-name "serdes-phy" to represent the Serdes PHY handle, the am65-cpsw-nuss
-driver can obtain the Serdes PHY and request the Serdes to be
-configured.
+On Fri, Feb 24, 2023 at 4:08=E2=80=AFPM Nick Alcock <nick.alcock@oracle.com=
+> wrote:
+>
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
+Applied, thanks!
 
-Hello,
-
-This patch corresponds to the Serdes PHY bindings that were missed out in
-the series at:
-Link: https://lore.kernel.org/r/20230104103432.1126403-1-s-vadapalli@ti.com/
-This was pointed out at:
-https://lore.kernel.org/r/CAMuHMdW5atq-FuLEL3htuE3t2uO86anLL3zeY7n1RqqMP_rH1g@mail.gmail.com/
-
- .../bindings/net/ti,k3-am654-cpsw-nuss.yaml   | 21 +++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-index 900063411a20..fab7df437dcc 100644
---- a/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-+++ b/Documentation/devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml
-@@ -126,8 +126,25 @@ properties:
-             description: CPSW port number
- 
-           phys:
--            maxItems: 1
--            description: phandle on phy-gmii-sel PHY
-+            minItems: 1
-+            maxItems: 2
-+            description:
-+              phandle(s) on CPSW MAC's PHY (Required) and the Serdes
-+              PHY (Optional). phandle to the Serdes PHY is required
-+              when the Serdes has to be configured in Single-Link
-+              configuration.
-+
-+          phy-names:
-+            oneOf:
-+              - items:
-+                  - const: mac-phy
-+                  - const: serdes-phy
-+              - items:
-+                  - const: mac-phy
-+            description:
-+              Identifiers for the CPSW MAC's PHY and the Serdes PHY.
-+              CPSW MAC's PHY is required and therefore "mac-phy" is
-+              required, while "serdes-phy" is optional.
- 
-           label:
-             description: label associated with this port
--- 
-2.25.1
-
+Bart
