@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587946ACEA5
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1BFC6ACEA4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:56:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjCFT4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S230052AbjCFT4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:56:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjCFT4G (ORCPT
+        with ESMTP id S230227AbjCFTzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:56:06 -0500
+        Mon, 6 Mar 2023 14:55:51 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DD96A047;
-        Mon,  6 Mar 2023 11:55:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730AE7585A;
+        Mon,  6 Mar 2023 11:55:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678132546; x=1709668546;
+  t=1678132545; x=1709668545;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=uanU4QaIMKCYnVoRuj1LvDKlEUvFT3OubkE3zS0A1GQ=;
-  b=AXwMHazS3PNUp6GHomch8z6bRBb+8YkVRL4dNibvlqQvY6O/rKh0N7x9
-   PzKn99ZUfoNuilMyc6Ou88SrOBZ6/JjF11wKpch3aWo5uaapJf4DydnJ/
-   6pJBGEF+RjCbGm9nc7aGouBT6yELNYJRfsDzsTPPCkudh+JJTUibhAvfE
-   5++dzkSXBzjAODfo8bXP0DcqupESS4ahlUjpm4vK3GfxHnTHXbvMpDJHP
-   XqE3PmZE7PmccWUtSDElFgBSH90XSCrXQnDYBd028758ITZUXoi6tIXO1
-   KRkFRC+H6WTu0GPoVtofYJBs1FMWmKkFLlb/uxSvMfcD8lZdyhQ03FCOv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="333129019"
+  bh=5nB1Cjf4Z6soJzkyRCy4W4jPVtCrh+QSwebJoZzzTHU=;
+  b=FwAUEpaSGExn5eC9NtNZP3rmPDDCbVPRnA04unX4cNxt6BF+5RgMmS/z
+   aiVpd8KAoipbYjLJik9KfdN3CmOVc1jYc5ImuP5Fk678lXXam+r4WWEAX
+   7TKec04RhLFu2TAdzhjKoegcM/iwGCDDeuH1UsraB2E+jzp38k5DZY+oL
+   MLOL31JGoUgrUoL6vlenYMUddU8eWDPmOhB7vo8ncU/lhJ8rIT+CKFWVL
+   iKpXoDUA0T8hFBWKwjjk/3+i1qRD+lu69DdEqvFf2y+qnO1BUR/aTrayO
+   1lDU/6dgau1OcfrDFpwgDm38tX0QjH76sP+79YdqYmztuPj6aVgPSzgJ8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="333129031"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="333129019"
+   d="scan'208";a="333129031"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 11:55:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745185198"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745185197"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="745185198"
+   d="scan'208";a="745185197"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga004.fm.intel.com with ESMTP; 06 Mar 2023 11:55:34 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id CE4C8609; Mon,  6 Mar 2023 21:56:12 +0200 (EET)
+        id D96A063E; Mon,  6 Mar 2023 21:56:12 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         <sathyanarayanan.kuppuswamy@linux.intel.com>,
         Nandor Han <nandor.han@ge.com>,
         Semi Malinen <semi.malinen@ge.com>
-Subject: [PATCH v1 13/16] gpio: wcove: Utilize helpers from string_choices.h
-Date:   Mon,  6 Mar 2023 21:55:53 +0200
-Message-Id: <20230306195556.55475-14-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 14/16] gpio: wm831x: Utilize helpers from string_choices.h
+Date:   Mon,  6 Mar 2023 21:55:54 +0200
+Message-Id: <20230306195556.55475-15-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
 References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
@@ -85,48 +85,34 @@ There are a few helpers available to convert a boolean variable
 to the dedicated string literals depending on the application.
 Use them in the driver.
 
-While at, utilize specifier field for padding the strings where
-it's required.
-
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpio-wcove.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ drivers/gpio/gpio-wm831x.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpio/gpio-wcove.c b/drivers/gpio/gpio-wcove.c
-index c18b6b47384f..8d30fd04dede 100644
---- a/drivers/gpio/gpio-wcove.c
-+++ b/drivers/gpio/gpio-wcove.c
+diff --git a/drivers/gpio/gpio-wm831x.c b/drivers/gpio/gpio-wm831x.c
+index 7eaf8a28638c..5456485ce801 100644
+--- a/drivers/gpio/gpio-wm831x.c
++++ b/drivers/gpio/gpio-wm831x.c
 @@ -15,6 +15,7 @@
+ #include <linux/mfd/core.h>
  #include <linux/platform_device.h>
- #include <linux/regmap.h>
  #include <linux/seq_file.h>
 +#include <linux/string_choices.h>
  
- /*
-  * Whiskey Cove PMIC has 13 physical GPIO pins divided into 3 banks:
-@@ -391,14 +392,14 @@ static void wcove_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
- 			break;
- 		}
+ #include <linux/mfd/wm831x/core.h>
+ #include <linux/mfd/wm831x/pdata.h>
+@@ -229,8 +230,8 @@ static void wm831x_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
  
--		seq_printf(s, " gpio-%-2d %s %s %s %s ctlo=%2x,%s %s\n",
--			   gpio, ctlo & CTLO_DIR_OUT ? "out" : "in ",
--			   ctli & 0x1 ? "hi" : "lo",
--			   ctli & CTLI_INTCNT_NE ? "fall" : "    ",
--			   ctli & CTLI_INTCNT_PE ? "rise" : "    ",
-+		seq_printf(s, " gpio-%-2d %-3.3s %-2.2s %-4.4s %-4.4s ctlo=%2x,%-6.6s %s\n",
-+			   gpio, str_out_in(ctlo & CTLO_DIR_OUT),
-+			   str_hi_lo(ctli & BIT(0)),
-+			   ctli & CTLI_INTCNT_NE ? "fall" : "",
-+			   ctli & CTLI_INTCNT_PE ? "rise" : "",
- 			   ctlo,
--			   irq_mask & mask ? "mask  " : "unmask",
--			   irq_status & mask ? "pending" : "       ");
-+			   irq_mask & mask ? "mask" : "unmask",
-+			   irq_status & mask ? "pending" : "");
- 	}
- }
- 
+ 		seq_printf(s, " %s %s %s %s%s\n"
+ 			   "                                  %s%s (0x%4x)\n",
+-			   reg & WM831X_GPN_DIR ? "in" : "out",
+-			   wm831x_gpio_get(chip, i) ? "high" : "low",
++			   str_in_out(reg & WM831X_GPN_DIR),
++			   str_high_low(wm831x_gpio_get(chip, i)),
+ 			   pull,
+ 			   powerdomain,
+ 			   reg & WM831X_GPN_POL ? "" : " inverted",
 -- 
 2.39.1
 
