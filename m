@@ -2,149 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30EF6AC3F3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2556AC3ED
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:52:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjCFOwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:52:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57750 "EHLO
+        id S229825AbjCFOwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjCFOwU (ORCPT
+        with ESMTP id S229806AbjCFOwA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:52:20 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2132.outbound.protection.outlook.com [40.107.237.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1965F2ED7F;
-        Mon,  6 Mar 2023 06:51:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J88Nev2SkUgLD+7GP5mYdS/2/ZLkMRTqsmCfMaZ48RJfeuGlhgUxRbsxUg/ERiuGxxT1dgivZP6z9cSmOOSAyMVRyg/CEGEUd2zG1s+ayHl2HQbjKscb5ZKj0yTsXDr5fX+cprdcdLTEmo7Bzsz/xCrg2YFixZyO3IeRlpQQkdxGVguTU9akxWb4Zb36GVm7+vuFtFPHibJtKRzKBFAbu3ARfR4sgpodhNLbmHX0UfQQ7+YWb73Uvy0IDc31eJJ6IpZPulEFuX87OMJkyhviJLygqQomwWsygMshqzSf5FgrJtJpI1yrxwL7uhZwpRq7ynm2W0hIOdV+9LcDvUQCrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jn6wrcAXYpv8ZDRycNqkZ3/grMt3Emgff2ADvQaaxfQ=;
- b=ZlctktvGTq/TQYF5r2PHaWtU0itAW+IU6gTLs3wP794kn3rhUyxfVD4whUbEkvBGkZPx5JffAlR61lFP1BSC1FbVQ8FAjlcN5qHl8Xa1UsuNgQ998LvX9WyFpVy8W+xbircMYPBSIeie52yfgwVOcfegyZhtvKYL3+ISzeGNS4l7POeNRXbfz3ZpvQyumW3vVaFehscLdmf+OIJETTZlLFHyJ7Di6RB7rcCWVAYkerrAyPfscQYwGQYUNqNKCquf4/jujLuGN4XzTiJIwERQTIgXwSfTYE3sXLpmz1hnkB+SNuK6zbs+/D3ILzoIs4LaeQfxs0dps6HA5wdPz3us8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Mon, 6 Mar 2023 09:52:00 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33F6AA;
+        Mon,  6 Mar 2023 06:51:38 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id n2so13034736lfb.12;
+        Mon, 06 Mar 2023 06:51:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jn6wrcAXYpv8ZDRycNqkZ3/grMt3Emgff2ADvQaaxfQ=;
- b=febUlOMfmzNWD5i5el58uc9AlEaR0Eyq/eZ2qNwNBwneD9YbdO9tBbEjPVm2N0/w/pydP6EA8KhY4aPyXypXk0G6PBbbV1bij1078zHoE73TLDR4E3y8iaFgm+nerFyFq+NjqvkKFlfHpWSWwFkJz8Q40+Z3CeYX6cMEBpfe/+E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB6140.namprd13.prod.outlook.com (2603:10b6:510:2bc::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Mon, 6 Mar
- 2023 14:51:42 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%3]) with mapi id 15.20.6156.028; Mon, 6 Mar 2023
- 14:51:41 +0000
-Date:   Mon, 6 Mar 2023 15:51:28 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH v2 net-next] udp: introduce __sk_mem_schedule() usage
-Message-ID: <ZAX98D91HvKrJBCO@corigine.com>
-References: <20230306115745.87401-1-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306115745.87401-1-kerneljasonxing@gmail.com>
-X-ClientProxiedBy: AM8P189CA0009.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:218::14) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20210112; t=1678114295;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5c+7FnHrIhi+nzncPlqGKgsZZ8Eb6JEqACGpgvAOqy4=;
+        b=EypR4CU/Cu41sOh9JLsnIN7yJQ3FCrRU5w74rKDtnumTEWm94z75XmSHx/dxW/jdpm
+         BmCKq8ALREeTRfNsAMCjs1+fj1Aj5RM/I679I71gCRgDbZBP2UPzKkW7scKHmmlJOVzk
+         p+1hVqvOfpvYKJFcoSseQtjL6wBLwIyVxKOkfRFi9I4d50RqVso2WsgPdb2nrkUWKEnL
+         Glvs25PLjQ0fsTjIX+60Pe1lS6kBQPwrerWTPnOQhmKJZEa5/YBbr9fy0WEqpxIf3TWV
+         NLWYu8QHLd0F2IqfiQZH2Ctd+Yq2W8M+HMrMUbN3xKaN7UjqKjT9ma3sOE9V/0N/gzbW
+         PV4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678114295;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5c+7FnHrIhi+nzncPlqGKgsZZ8Eb6JEqACGpgvAOqy4=;
+        b=fwEvR0oRxFO7wDNoQVDI+cz5coTzGgitQ3hi92FwvIhAniovXHYXnEu6VIwjMn37rh
+         RXsy/Z/UfLiC3zZa/cyBeySrr8H0fGot48mrOX8Cr009ExkDqGZPeciYRGziN+vDDHMv
+         MWJVyeShK6leKqeqswHmcdoVv+DvjsJltZr5UZU5E64TH712/ycJqxSW9SnmsA8La+Hx
+         vt7eMgMW3kQrarwcUGs/6p87Co89K/X4exSHgCUBgqttTALl4Jh+KoDE9OfqE57F4nzB
+         J692ItqwvFqieE+CxGgHuxyPLZCN6Kbeq4l1XHrb2CcSTb/4goaGQtIQT8PlQeu/fGrT
+         w/vA==
+X-Gm-Message-State: AO0yUKU2u2D8by/LADWe8Qr9ooa2GfOSsR+VI8r1nyew4KY8mGrTv7Yq
+        o2sQSj9Bbgxxx60joKW6Rlg=
+X-Google-Smtp-Source: AK7set+wNClpKRpski9MKQKw/az3bYzoccb7jDpWom0HO52lCm3FZbI5VfdPmasZc1j6laoNnn5jKg==
+X-Received: by 2002:ac2:5df6:0:b0:4d8:5232:21c0 with SMTP id z22-20020ac25df6000000b004d8523221c0mr2702951lfq.30.1678114295441;
+        Mon, 06 Mar 2023 06:51:35 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id b14-20020ac2562e000000b004dafe604c2esm1669963lff.211.2023.03.06.06.51.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 06:51:34 -0800 (PST)
+Date:   Mon, 6 Mar 2023 17:51:32 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v5 1/4] dmaengine: dw-edma: Rename dw_edma_core_ops
+ structure to dw_edma_plat_ops
+Message-ID: <20230306145132.wqzq7f6gsluqgp25@mobilestation>
+References: <20230303124642.5519-1-cai.huoqing@linux.dev>
+ <20230303124642.5519-2-cai.huoqing@linux.dev>
+ <20230303165125.fuymevji2jkybmbl@mobilestation>
+ <ZAXrSq1A8O7e55F6@chq-MS-7D45>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6140:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd36e6b4-5f0f-49d7-28ae-08db1e524c0d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NOEGzOhC4Opx1iGchD5ThmAORYvRAjCNU6ckpK+oY/mWUEN1UH71opM2YMG0YClJTx7/oJSF5+PuvrnM66yHnPDK2blAa613cRuUrUUwipMTAUVoOGlt6bGANQntJ95Mx/VBhqN5WRsQeSxCQX7tPmmvH8exfoQ0Oj3spNpq4rRUOUtJDpBTBIjUfDaip82VduyKngQq3qTviLpRZoKQ1NxusADpQW69uuO1mYETg2OWwtTd/6lRQabrYpg2r+5d9UtabX38ZqVMo6J0p1Q87U2ZegTxXsvVg3KsMKTUtpAQRlraJNRuR7J/b3GjVAeg8wEXLJ59DdAfGzpXgbLEnrFI2lXhlgaT5e4YxY8EbTp+YR8+4wIMmVnTXpOdls6tU0akqW50qOmY2TC3T1jdqwdldHslEhigocCC5T1ohIxaCia3xGa1bb05QpJEPmE7cHrCagDg7qhyZ81Lu2dlVCAMxDcNEc15BcIDc6ZfdLnQj5EsbLrI9NQ5Q9mew5lVe3fi4AHB4FWALdgXWtwXx/8ZwM9ywTAp4SwNFj5LtkVSbwOBDOKdldCxmZcuIEjkDuICNRuwJVAOfH8dl29ETHz8oNeK/uo0yr90wsrgfnLEn/wW9sMUK0ZAxKKZQ6CuoNDVwf0Fwq9FZflx0+r9Q22nfXojSLKiRR+lqJ0z1plvLPUH3fBUuD/ty2nEHzQy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(346002)(376002)(39840400004)(366004)(451199018)(6506007)(6512007)(6486002)(966005)(6666004)(36756003)(83380400001)(86362001)(38100700002)(186003)(2616005)(41300700001)(66946007)(66556008)(66476007)(8676002)(4326008)(6916009)(2906002)(8936002)(44832011)(5660300002)(7416002)(478600001)(316002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dYwfMedUrknaE2btRhKvADiRFzeoTrMWDLuePRCGDscjSW11ZKETHb3yMzdd?=
- =?us-ascii?Q?gcOxu/94TEFXuZ0aABmcXVJo952sqizqsPn+J5rXp87WorXo9BKxb42k6SyV?=
- =?us-ascii?Q?jgj00Y2PVeC2VpeUl8hb3tN81StFAjq8nDroH7j826Unk1iYffWDdaAW9OKV?=
- =?us-ascii?Q?MpxA9eg6dYaymzHPBlj9rduFSTzc0oLsbSZo3yxxq7y9ng0W4xeiS6U6S53a?=
- =?us-ascii?Q?X0WEed1dMN+OEHTE7MEFdF3OKEYdQBE0fXaLbh8Ca1Dd9i7ujQKYxxaYP3CZ?=
- =?us-ascii?Q?XYdpZEjO++wkuywZ37k6dNF0mMrUe4Qly6J9RL0mzMeDfceknp+Xd60q5BR9?=
- =?us-ascii?Q?L+ugz+72nLtQkHGWWHxGOdMPSxJtI6NZlamqFY4M4H7o6CXzHGNlk3JSRAyO?=
- =?us-ascii?Q?TF0QUDY9Hy8XRRckOO3mYzKf7DVaL877EY4nfyd7Z/L49s72G07xC/bcdsQt?=
- =?us-ascii?Q?A47224hZfstAqZHM30slyS3aBbVGElEELEv/d/FOZWbNEVgOba5WLrIgULvZ?=
- =?us-ascii?Q?3TXFR/cC9khGjpuDz+IqUSI2eKN3sk51aW+zUkkp3PTvJnubKlhCOdFSLjht?=
- =?us-ascii?Q?ORF7xaoXNO1jKmG6KgJmmJt5oQRl8Blsj7FKIsXA2HGVmQcNwPW6F+RqbEtI?=
- =?us-ascii?Q?fRYuXfullN21Gwr/MJVM6XvqtkWy8aFSdeBrJCuIAHoydigvquFRVOEOuWmN?=
- =?us-ascii?Q?qmk7OjAAXM53ppKy0pOkDbe7HXCu1b8fvVu4Hn/XcHL64ATayy2benJmEKCj?=
- =?us-ascii?Q?N8DM9q4U0ABPM/Vz9KkalFtWAZjtIHOiAlM4fkJFaIyarcQtg+7K9wkfRhri?=
- =?us-ascii?Q?QjDXNAy3X5LI6S+jH3DCebDvCesIz94U2T1dsT68x0QbmPPE30MYesz7/9LU?=
- =?us-ascii?Q?xcd8DSpzd0s52406Avb7Yg3pHsDSKhuKMq83MLcHfRrknYionOYguiRg3j6T?=
- =?us-ascii?Q?r5vcDAg8k0J/6jXN2bKLMcPIW/ZeN+gy7KDwjXB6UmTrtI1QRwr32MYvFhdN?=
- =?us-ascii?Q?ehMzZiSEk3hqqz8CkAvBUjGR6ZRH08YRfS5Xxd6wgCyrv4FcKOF/+sWO+grk?=
- =?us-ascii?Q?ScH6EQQRL+xkFrHa+OfLBPOA9XJ8iS47613RJ19vRJdLORNCLEGJ9QbKlifg?=
- =?us-ascii?Q?NHRaE9QZDX6ySeL+mKwUXkBCdobpm82z31P6yyuTmOXAgG5GK4MjqpjyFHBx?=
- =?us-ascii?Q?8CJ/KdOX5U1DEfGlNvdk+H+acJ4zPF5Q1THXOSIhc4gfpywVrSCGyrXEpZhU?=
- =?us-ascii?Q?pLXj2VVsWQfU3X+L07AivmyzEXjcOIW1dkmfJZeugOZdiEAEVYVXZ8Bx+vL0?=
- =?us-ascii?Q?H6EaH7/Rnifx3znpJKLyBsO157/qVmM4ur+R0PEqUpmCa7UcVdNXsJH3DtPE?=
- =?us-ascii?Q?2a+XxphLOrsr6zobmq2Xc+OndNZR3Mb08Cjrt4+pSLUB4uOjQkkZdVdPPNzQ?=
- =?us-ascii?Q?daff/5tS1g+3+0pOAsmRlqshFdfX1Th6Saj0C8xwqU58ONbTzfLKP0gq2dW+?=
- =?us-ascii?Q?wDQdwbQjRAOkRrctYy5ZDj31Oj6fHxmjSeAIdlm9L7yFarl1lDFNXRjpMtk9?=
- =?us-ascii?Q?uxRkI7vIbz7Xzp65Djxi+OTpDEiahfyT667/trbaCSumlW6kdYbJ69HU38eU?=
- =?us-ascii?Q?y2HR4WdlDxVhdU5LvfzSZO0lWmS5Yi9bhRBy7/TmXmSWBfiCG2dIAIJn7whr?=
- =?us-ascii?Q?w5g1Dg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd36e6b4-5f0f-49d7-28ae-08db1e524c0d
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2023 14:51:41.7326
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9Urr+5FV5NJXHBi6Fca9yUWLv0jsYtewhwgz6KEmbzeY+9/W4F2q8lmrHMumC4cAV0pU+VpHVrijenruSK3/6AzGWq6y3zPO2Dp9c+haInI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6140
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZAXrSq1A8O7e55F6@chq-MS-7D45>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 07:57:45PM +0800, Jason Xing wrote:
-> From: Jason Xing <kernelxing@tencent.com>
+On Mon, Mar 06, 2023 at 09:31:54PM +0800, Cai Huoqing wrote:
+> On 03 3月 23 19:51:25, Serge Semin wrote:
+> > On Fri, Mar 03, 2023 at 08:46:31PM +0800, Cai Huoqing wrote:
+> > > From: Cai huoqing <cai.huoqing@linux.dev>
+> > > 
+> > 
+> > > Rename dw_edma_core_ops structure to dw_edma_plat_ops, the ops is platform
+> > > specific operations: the DMA device environment configs like IRQs,
+> > > address translation, etc.
+> > > 
+> > > The dw_edma_plat_ops name was supposed to refer to the platform which
+> > > the DW eDMA engine is embedded to, like PCIe end-point (accessible via
+> > > the PCIe bus) or a PCIe root port (directly accessible by CPU).
+> > > Needless to say that for them the IRQ-vector and PCI-addresses are
+> > > differently determined. The suggested name has a connection with the
+> > > kernel platform device only as a private case of the eDMA/hDMA embedded
+> > > into the DW PCI Root ports, though basically it was supposed to refer to
+> > > any platform in which the DMA hardware lives.
+> > > 
+> > > Anyway the renaming was necessary to distinguish two types of
+> > > the implementation callbacks:
+> > > 1. DW eDMA/hDMA IP-core specific operations: device-specific CSR
+> > > setups in one or another aspect of the DMA-engine initialization.
+> > > 2. DW eDMA/hDMA platform specific operations: the DMA device
+> > > environment configs like IRQs, address translation, etc.
+> > > 
+> > > dw_edma_core_ops is supposed to be used for the case 1, and
+> > > dw_edma_plat_ops - for the case 2.
+> > 
+> > This text was my explanation to Bjorn of why the renaming was
+> > necessary. The patch log has a bit different context so I would
+> > change it to something like this:
+> > 
+> > "The dw_edma_core_ops structure contains a set of the operations:
+> > device IRQ numbers getter, CPU/PCI address translation. Based on the
+> > functions semantics the structure name "dw_edma_plat_ops" looks more
+> > descriptive since indeed the operations are platform-specific. The
+> > "dw_edma_core_ops" name shall be used for a structure with the IP-core
+> > specific set of callbacks in order to abstract out DW eDMA and DW HDMA
+> > setups. Such structure will be added in one of the next commit in the
+> > framework of the set of changes adding the DW HDMA device support."
+> OK
 > 
-> Keep the accounting schema consistent across different protocols
-> with __sk_mem_schedule(). Besides, it adjusts a little bit on how
-> to calculate forward allocated memory compared to before. After
-> applied this patch, we could avoid receive path scheduling extra
-> amount of memory.
-> 
-> Link: https://lore.kernel.org/lkml/20230221110344.82818-1-kerneljasonxing@gmail.com/
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> ---
-> V2:
-> 1) change the title and body message
-> 2) use __sk_mem_schedule() instead suggested by Paolo Abeni
-> ---
->  net/ipv4/udp.c | 31 ++++++++++++++++++-------------
->  1 file changed, 18 insertions(+), 13 deletions(-)
-> 
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index 9592fe3e444a..21c99087110d 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -1531,10 +1531,23 @@ static void busylock_release(spinlock_t *busy)
->  		spin_unlock(busy);
->  }
->  
-> +static inline int udp_rmem_schedule(struct sock *sk, int size)
+> > 
+> > > 
+> > > Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
+> > > ---
+> > >   v4->v5:
+> > >     1.Revert the instance dw_edma_pcie_core_ops
+> > >     2.Move the change EDMA_MF_HDMA_NATIVE to patch[3/4] 
+> > > 
+> > >   v4 link:
+> > >   https://lore.kernel.org/lkml/20230221034656.14476-2-cai.huoqing@linux.dev/
+> > >  
+> > >  drivers/dma/dw-edma/dw-edma-pcie.c           | 2 +-
+> > >  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+> > >  include/linux/dma/edma.h                     | 4 ++--
+> > >  3 files changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
+> > > index 2b40f2b44f5e..190b32d8016d 100644
+> > > --- a/drivers/dma/dw-edma/dw-edma-pcie.c
+> > > +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
+> > > @@ -109,7 +109,7 @@ static u64 dw_edma_pcie_address(struct device *dev, phys_addr_t cpu_addr)
+> > >  	return region.start;
+> > >  }
+> > >  
+> > 
+> > > -static const struct dw_edma_core_ops dw_edma_pcie_core_ops = {
+> > > +static const struct dw_edma_plat_ops dw_edma_pcie_core_ops = {
+> > 
+> > Please carefully note my comment to v4. I asked to add the prefix
+> > specific to the local naming convention:
+> > 
+> > -static const struct dw_edma_core_ops dw_edma_pcie_core_ops = {
+> > +static const struct dw_edma_plat_ops dw_edma_pcie_plat_ops = {
+> > 
+> > But besides of adding the correct prefix you changed the suffix to the
+> > improper one. Please get it back so the instance name would be
+> > "dw_edma_pcie_plat_ops".
 
-nit: I think it's best to drop the inline keyword and
-     let the compiler figure that out.
+> Do you mean ditto
+> -	chip->ops = &dw_edma_pcie_core_ops;
+> +	chip->ops = &dw_edma_pcie_plat_ops;
+
+Yes, please.
+
+-Serge(y)
+
+> 
+> > 
+> > -Serge(y)
+> > 
+> > >  	.irq_vector = dw_edma_pcie_irq_vector,
+> > >  	.pci_address = dw_edma_pcie_address,
+> > >  };
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> > > index 53a16b8b6ac2..44e90b71d429 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> > > @@ -828,7 +828,7 @@ static int dw_pcie_edma_irq_vector(struct device *dev, unsigned int nr)
+> > >  	return platform_get_irq_byname_optional(pdev, name);
+> > >  }
+> > >  
+> > > -static struct dw_edma_core_ops dw_pcie_edma_ops = {
+> > > +static struct dw_edma_plat_ops dw_pcie_edma_ops = {
+> > >  	.irq_vector = dw_pcie_edma_irq_vector,
+> > >  };
+> > >  
+> > > diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> > > index d2638d9259dc..ed401c965a87 100644
+> > > --- a/include/linux/dma/edma.h
+> > > +++ b/include/linux/dma/edma.h
+> > > @@ -40,7 +40,7 @@ struct dw_edma_region {
+> > >   *			iATU windows. That will be done by the controller
+> > >   *			automatically.
+> > >   */
+> > > -struct dw_edma_core_ops {
+> > > +struct dw_edma_plat_ops {
+> > >  	int (*irq_vector)(struct device *dev, unsigned int nr);
+> > >  	u64 (*pci_address)(struct device *dev, phys_addr_t cpu_addr);
+> > >  };
+> > > @@ -80,7 +80,7 @@ enum dw_edma_chip_flags {
+> > >  struct dw_edma_chip {
+> > >  	struct device		*dev;
+> > >  	int			nr_irqs;
+> > > -	const struct dw_edma_core_ops   *ops;
+> > > +	const struct dw_edma_plat_ops	*ops;
+> > >  	u32			flags;
+> > >  
+> > >  	void __iomem		*reg_base;
+> > > -- 
+> > > 2.34.1
+> > > 
