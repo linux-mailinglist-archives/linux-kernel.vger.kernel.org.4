@@ -2,101 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4CE6AB8FA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6D06AB904
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjCFI67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33968 "EHLO
+        id S229680AbjCFJAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:00:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjCFI6y (ORCPT
+        with ESMTP id S229557AbjCFJAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:58:54 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807B412BF7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:58:35 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id ay14so31666442edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:58:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678093115;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qax62+Ek+98BjcfFBzDht0kDLSEKv3DkEE9gZpZsrKw=;
-        b=KnMl6Li/TvvidwiidEc3hQr/LFaEWlZpB0CExOUcrC3GR4XHZFgzeuMCa/b+/OwcLo
-         9N/5/j4+z2oJ65eC4Z7692mE+uMFROAZypFz5ajFuNyOW0jVeLEGFLLjiUcRyAiniHBI
-         IhR6fGOPtrh28nqIdV9nMXfPy7I5sze7udh/H0cuBR+5X/VoeFm0Lx3z7/L4VLq8PObD
-         VoxAh6G+ZGZbu3Lxf8lQRuwUYhNRmqtmdCsqZrtP1E2vJv/o173zi/MJ5o2kXJtFR+lE
-         W97Qbv0fVPnkXnY5p3T/s0j2X7K+EbfdAHshEauk/S6mh0g87fwZ5qDeBm43V8CjfSkX
-         PI9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678093115;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qax62+Ek+98BjcfFBzDht0kDLSEKv3DkEE9gZpZsrKw=;
-        b=2B0o0r5GcTEL6/ZGWTiEVLNoLfGomjvZ4+2W3hz2I3AfJK2/ca+noz2QC0uTYMwG/S
-         CUJGDAsxBSd+XbuBnzH4xyrVuFcM1i53+nbU7uvxVjG0GzDdK7VZLURtQdIeTmmfQ43N
-         8A1zUyFsfs6tQ4m6DHPr+2LDXTP6KQsKHqAqNT/lK/5KSZZHWc0Fhu/nIWt2sE80TRB0
-         hRCUs+4jdb2zJKZdsez/Ta5BO9hBM4lQ8Q21AyG5OGXpScD0c3QAJlKbvM5p6+evwk2P
-         CaL06xGT7k7hKuxuv6tGQD5cbDemTONKhbHfEd6PK59N8JSaSmpDMkpYc+8DGOFYSWX8
-         wW3A==
-X-Gm-Message-State: AO0yUKU3wDrP21Im4STqUcQ0c8wNufAEC3doDLLE8jxk6HYcMglm4xAa
-        NalT2ejcXCtKxGjUQxE1gnXxXg==
-X-Google-Smtp-Source: AK7set9p7B2EXwGRzK3tQA+hkA+tlIfV2D0L5YBCvz6MVJJeXyzr+RLTECAnVLpRF0B3jK9oPxzckQ==
-X-Received: by 2002:aa7:d910:0:b0:4ad:7c44:35fc with SMTP id a16-20020aa7d910000000b004ad7c4435fcmr8567769edr.6.1678093115026;
-        Mon, 06 Mar 2023 00:58:35 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
-        by smtp.gmail.com with ESMTPSA id v12-20020a170906338c00b008ba9e67ea4asm4300598eja.133.2023.03.06.00.58.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 00:58:34 -0800 (PST)
-Message-ID: <79c44d5b-c7ab-8a40-c17f-adf72f92a8ab@linaro.org>
-Date:   Mon, 6 Mar 2023 09:58:33 +0100
+        Mon, 6 Mar 2023 04:00:19 -0500
+Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FBBD3C14
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:00:17 -0800 (PST)
+Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 202303060900142a43b2a92db8f82103
+        for <linux-kernel@vger.kernel.org>;
+        Mon, 06 Mar 2023 10:00:14 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=alexander.sverdlin@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=pIZj8+zdp8ZkWBypoawgPOIV+bNHdnfVxMzVLAvkRvo=;
+ b=QHcpR46b0lgdpqR4RkuOwCPQFLP2NDPEfi9rXnCyFKcI4WkkLWSNIEXuOfnjgwMAv0gZFo
+ kYEj8z0wAhiZrWzZ5ID38i1YTGC56mZZo5CXAU4GfJII9EwebnaRJGqz6NBmsZ7LQRFC+xwd
+ U4795NN0Y3oXLasr8qEQM11ApcotY=;
+From:   "A. Sverdlin" <alexander.sverdlin@siemens.com>
+To:     linux-serial@vger.kernel.org
+Cc:     Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH] tty: serial: fsl_lpuart: fix race on RX DMA shutdown
+Date:   Mon,  6 Mar 2023 10:00:11 +0100
+Message-Id: <20230306090011.80725-1-alexander.sverdlin@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 03/15] dt-bindings: sram: qcom,imem: document SM6375 IMEM
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303-topic-sm6375_features0_dts-v1-0-8c8d94fba6f0@linaro.org>
- <20230303-topic-sm6375_features0_dts-v1-3-8c8d94fba6f0@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230303-topic-sm6375_features0_dts-v1-3-8c8d94fba6f0@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-456497:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2023 22:58, Konrad Dybcio wrote:
-> Add a compatible for SM6375 IMEM.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  Documentation/devicetree/bindings/sram/qcom,imem.yaml | 1 +
+From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
+From time to time DMA completion can come in the middle of DMA shutdown:
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+<process ctx>:				<IRQ>:
+lpuart32_shutdown()
+  lpuart_dma_shutdown()
+    del_timer_sync()
+					lpuart_dma_rx_complete()
+					  lpuart_copy_rx_to_tty()
+					    mod_timer()
+    lpuart_dma_rx_free()
 
-Best regards,
-Krzysztof
+When the timer fires a bit later, sport->dma_rx_desc is NULL:
+
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000004
+pc : lpuart_copy_rx_to_tty+0xcc/0x5bc
+lr : lpuart_timer_func+0x1c/0x2c
+Call trace:
+ lpuart_copy_rx_to_tty
+ lpuart_timer_func
+ call_timer_fn
+ __run_timers.part.0
+ run_timer_softirq
+ __do_softirq
+ __irq_exit_rcu
+ irq_exit
+ handle_domain_irq
+ gic_handle_irq
+ call_on_irq_stack
+ do_interrupt_handler
+ ...
+
+To fix this fold del_timer_sync() into lpuart_dma_rx_free() after
+dmaengine_terminate_sync() to make sure timer will not be re-started in
+lpuart_copy_rx_to_tty() <= lpuart_dma_rx_complete().
+
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+---
+ drivers/tty/serial/fsl_lpuart.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index e945f41b93d43..47c267ee22e04 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -1354,6 +1354,7 @@ static void lpuart_dma_rx_free(struct uart_port *port)
+ 	struct dma_chan *chan = sport->dma_rx_chan;
+ 
+ 	dmaengine_terminate_sync(chan);
++	del_timer_sync(&sport->lpuart_timer);
+ 	dma_unmap_sg(chan->device->dev, &sport->rx_sgl, 1, DMA_FROM_DEVICE);
+ 	kfree(sport->rx_ring.buf);
+ 	sport->rx_ring.tail = 0;
+@@ -1813,7 +1814,6 @@ static int lpuart32_startup(struct uart_port *port)
+ static void lpuart_dma_shutdown(struct lpuart_port *sport)
+ {
+ 	if (sport->lpuart_dma_rx_use) {
+-		del_timer_sync(&sport->lpuart_timer);
+ 		lpuart_dma_rx_free(&sport->port);
+ 		sport->lpuart_dma_rx_use = false;
+ 	}
+@@ -1973,10 +1973,8 @@ lpuart_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	 * Since timer function acqures sport->port.lock, need to stop before
+ 	 * acquring same lock because otherwise del_timer_sync() can deadlock.
+ 	 */
+-	if (old && sport->lpuart_dma_rx_use) {
+-		del_timer_sync(&sport->lpuart_timer);
++	if (old && sport->lpuart_dma_rx_use)
+ 		lpuart_dma_rx_free(&sport->port);
+-	}
+ 
+ 	spin_lock_irqsave(&sport->port.lock, flags);
+ 
+@@ -2210,10 +2208,8 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	 * Since timer function acqures sport->port.lock, need to stop before
+ 	 * acquring same lock because otherwise del_timer_sync() can deadlock.
+ 	 */
+-	if (old && sport->lpuart_dma_rx_use) {
+-		del_timer_sync(&sport->lpuart_timer);
++	if (old && sport->lpuart_dma_rx_use)
+ 		lpuart_dma_rx_free(&sport->port);
+-	}
+ 
+ 	spin_lock_irqsave(&sport->port.lock, flags);
+ 
+@@ -3014,7 +3010,6 @@ static int lpuart_suspend(struct device *dev)
+ 			 * cannot resume as expected, hence gracefully release the
+ 			 * Rx DMA path before suspend and start Rx DMA path on resume.
+ 			 */
+-			del_timer_sync(&sport->lpuart_timer);
+ 			lpuart_dma_rx_free(&sport->port);
+ 
+ 			/* Disable Rx DMA to use UART port as wakeup source */
+-- 
+2.34.1
 
