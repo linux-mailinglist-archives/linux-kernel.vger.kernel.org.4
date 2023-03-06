@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3D96ACB10
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:45:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC7A6ACB17
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjCFRp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:45:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        id S229590AbjCFRqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:46:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjCFRpt (ORCPT
+        with ESMTP id S229685AbjCFRpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:45:49 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1006BDC7
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:45:14 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id m25-20020a6bea19000000b0074cc271437bso5677609ioc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 09:45:14 -0800 (PST)
+        Mon, 6 Mar 2023 12:45:54 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D936BDC8;
+        Mon,  6 Mar 2023 09:45:22 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so13910991pjb.3;
+        Mon, 06 Mar 2023 09:45:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678124721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F8jEnuaODHkIgm3QXsy3NxYaf9Twek/6N1cAGCi4cq8=;
+        b=gLXj/9ELW4hDPJYzjYYPm7rcW4EBxHVxreG9wJ+ygD2ziX4jcK3Fk77fqWfxfJdCEy
+         UtI8NqCy4w8Sr+gM15dCWcFwCZxK+my98RKUM4DNL80X36xywZF2J+ls+36gXglvw0aw
+         J4maDik894B2wi0/FI5nOAa7bF6dZtl95gZ2QvjJ/7zJiD6kmltlRT28TLq7Engimb56
+         SsU+/JLA+S1P95giqlnpBlycbcmxT6oYT6evAm13H9arBp1kpl4YbORrEwzUkP96tF6v
+         Cgv2dTAt6zXOh/3Wcq9nhlVe6heo3jWjSK/ckJLHWWBUnwgmIzbj8plYzdts7TOtdi+W
+         FpLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678124678;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DvGwBPTQ7j4fKwRJaqe9v0f7Zi4TnEYXY8bTeBecqR4=;
-        b=qABDHIwQVC8PoS6QGw+I2vMRJTo46HyXSH4+9dJyC9pFZAhVprBm9eMOpzib1dbS6v
-         iyX/ODBDUvEuMTA5lXTyv29BXRALj30QIT0F3sV+WeYkgYiLe2mcKPiV3S1eVSw7+HKp
-         xUSH0Gu2mP0Hr4m/zTFwmyHBB/XFwErV1X7VkV0jUx7KUvNKEL5/dWAlQ7LvF5/rXHeG
-         ObxXBUyWsP2JMhymhKMWOhZ3+GJQaB3gPGSpv/3ytpKx6SHP/bNcA6PjTJ/ZoNP0cmcO
-         ReVPR42xzlOxx6NVddbG7063kt4a84ovdh4/yrezWqs66VQfScKnZr1a0zop+2ALPixI
-         bFvw==
-X-Gm-Message-State: AO0yUKV0lQ6qC1xMz/iveNYtfxiXRbICuswP2IomBHT17I1J/z7lYa8V
-        sFoHey5aww5OnMQF3cmPlI/yAsxdIHHj4WY4cZ8+gSbeUuM+
-X-Google-Smtp-Source: AK7set/whmgHHHaEz+dxLemDH8Mpf08oeUidi88EJ9qB9lD9fwWkfeSEUBp++VkaZXUH9HZ/AUSU8/JXgqqMcKH2YuOR5QMsZ8vn
+        d=1e100.net; s=20210112; t=1678124721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F8jEnuaODHkIgm3QXsy3NxYaf9Twek/6N1cAGCi4cq8=;
+        b=Sui3edHNPqHBbhafU+EW+wWq3gtAIngBSbzNGEjXgXpZYBHWwm6X/JHuutlQZkvp0n
+         f0Niyn+xLM3r4YuMwSrOowRA991CnT/MraGLv/Ff1A03VURxBFKD3iaBhrweCtfBxr5m
+         wiT2DtFSDjMbqEdv82AYVp41gEXo7CiU+XCkZ1L0BhJMdM8wH18BPJD56B2ld+lnUJVe
+         qv6PhXe1OkwiBLE+HvEx2jC7h/jEuqaRBGIDVCBDyZbF80dANhzlU9lQlx6dnaUlqR7G
+         eaYJymgD+LQFDCX+k3OGHT6wQPivZPv/e0ze9HcuzbpmTQN9yr98LP/i1eZJGNx7xdy+
+         hUkA==
+X-Gm-Message-State: AO0yUKVtYq5SUbrzaDxZ303uVJ/LK+kJ0KMM+1tBt3pP6dhmTJTrJDBf
+        OWSf0UnSunxYR4GSVloAnWE=
+X-Google-Smtp-Source: AK7set+KGmAg/YZWyh+KxC/W4tyYr0Aryv8jvoRETy0kJlnidI1W8lj1sOCa4lJP/6kpyiVCRbmEOA==
+X-Received: by 2002:a05:6a20:6aa8:b0:cb:ac6c:13ba with SMTP id bi40-20020a056a206aa800b000cbac6c13bamr10389268pzb.25.1678124720753;
+        Mon, 06 Mar 2023 09:45:20 -0800 (PST)
+Received: from vernon-pc ([49.67.2.142])
+        by smtp.gmail.com with ESMTPSA id k15-20020aa792cf000000b005ac8a51d591sm6516741pfa.21.2023.03.06.09.45.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 09:45:20 -0800 (PST)
+Date:   Tue, 7 Mar 2023 01:45:13 +0800
+From:   Vernon Yang <vernon2gm@gmail.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     torvalds@linux-foundation.org, tytso@mit.edu, Jason@zx2c4.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com,
+        linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
+Message-ID: <ZAYmqVmeYdDPVpLZ@vernon-pc>
+References: <20230306160651.2016767-1-vernon2gm@gmail.com>
+ <20230306160651.2016767-6-vernon2gm@gmail.com>
+ <ZAYXJ2E+JHcp2kD/@yury-laptop>
 MIME-Version: 1.0
-X-Received: by 2002:a02:95cd:0:b0:3c5:15d2:9a1c with SMTP id
- b71-20020a0295cd000000b003c515d29a1cmr5734944jai.2.1678124678137; Mon, 06 Mar
- 2023 09:44:38 -0800 (PST)
-Date:   Mon, 06 Mar 2023 09:44:38 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005451a705f63ed952@google.com>
-Subject: [syzbot] [hfs?] kernel BUG in hfsplus_bnode_unhash
-From:   syzbot <syzbot+65f654e7ff6234bf771f@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAYXJ2E+JHcp2kD/@yury-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Mar 06, 2023 at 08:39:03AM -0800, Yury Norov wrote:
+> On Tue, Mar 07, 2023 at 12:06:51AM +0800, Vernon Yang wrote:
+> > After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
+> > optimizations"), the cpumask size is divided into three different case,
+> > so fix comment of cpumask_xxx correctly.
+> >
+> > Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
+> > ---
+> >  include/linux/cpumask.h | 46 ++++++++++++++++++++---------------------
+> >  1 file changed, 23 insertions(+), 23 deletions(-)
+> >
+> > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> > index 8fbe76607965..248bdb1c50dc 100644
+> > --- a/include/linux/cpumask.h
+> > +++ b/include/linux/cpumask.h
+> > @@ -155,7 +155,7 @@ static __always_inline unsigned int cpumask_check(unsigned int cpu)
+> >   * cpumask_first - get the first cpu in a cpumask
+> >   * @srcp: the cpumask pointer
+> >   *
+> > - * Returns >= nr_cpu_ids if no cpus set.
+> > + * Returns >= small_cpumask_bits if no cpus set.
+>
+> There's no such thing like small_cpumask_bits. Here and everywhere,
+> nr_cpu_ids must be used.
+>
+> Actually, before 596ff4a09b89 nr_cpumask_bits was deprecated, and it
+> must be like that for all users even now.
+>
+> nr_cpumask_bits must be considered as internal cpumask parameter and
+> never referenced outside of cpumask code.
 
-syzbot found the following issue on:
+OK, I remove this path for next version.
 
-HEAD commit:    0988a0ea7919 Merge tag 'for-v6.3-part2' of git://git.kerne..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17ee96e4c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ff98a3b3c1aed3ab
-dashboard link: https://syzkaller.appspot.com/bug?extid=65f654e7ff6234bf771f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+65f654e7ff6234bf771f@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/hfsplus/bnode.c:461!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 100 Comm: kswapd0 Not tainted 6.2.0-syzkaller-13467-g0988a0ea7919 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-RIP: 0010:hfsplus_bnode_unhash+0xf7/0x1e0 fs/hfsplus/bnode.c:461
-Code: 2b e8 fd e7 34 ff 48 8d 6b 20 48 89 e8 48 c1 e8 03 42 80 3c 28 00 0f 85 b3 00 00 00 48 8b 5b 20 48 85 db 75 d2 e8 d9 e7 34 ff <0f> 0b e8 d2 e7 34 ff e8 cd e7 34 ff 49 8d 7c 24 20 48 b8 00 00 00
-RSP: 0018:ffffc90001587348 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8880160f0100 RSI: ffffffff824f32d7 RDI: ffff88802a310120
-RBP: ffff88802a310000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff888029372a00
-R13: 0000000000000000 R14: ffffea00009f81c0 R15: 0000000000001000
-FS:  0000000000000000(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f7fd8638528 CR3: 0000000071e75000 CR4: 0000000000150ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- hfsplus_release_folio+0x285/0x5f0 fs/hfsplus/inode.c:102
- filemap_release_folio+0x13f/0x1b0 mm/filemap.c:4121
- shrink_folio_list+0x1fe3/0x3c80 mm/vmscan.c:2010
- evict_folios+0x794/0x1940 mm/vmscan.c:5121
- try_to_shrink_lruvec+0x82c/0xb90 mm/vmscan.c:5297
- shrink_one+0x46b/0x810 mm/vmscan.c:5341
- shrink_many mm/vmscan.c:5394 [inline]
- lru_gen_shrink_node mm/vmscan.c:5511 [inline]
- shrink_node+0x2064/0x35f0 mm/vmscan.c:6459
- kswapd_shrink_node mm/vmscan.c:7262 [inline]
- balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7452
- kswapd+0x70b/0x1000 mm/vmscan.c:7712
- kthread+0x2e8/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:hfsplus_bnode_unhash+0xf7/0x1e0 fs/hfsplus/bnode.c:461
-Code: 2b e8 fd e7 34 ff 48 8d 6b 20 48 89 e8 48 c1 e8 03 42 80 3c 28 00 0f 85 b3 00 00 00 48 8b 5b 20 48 85 db 75 d2 e8 d9 e7 34 ff <0f> 0b e8 d2 e7 34 ff e8 cd e7 34 ff 49 8d 7c 24 20 48 b8 00 00 00
-RSP: 0018:ffffc90001587348 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff8880160f0100 RSI: ffffffff824f32d7 RDI: ffff88802a310120
-RBP: ffff88802a310000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff888029372a00
-R13: 0000000000000000 R14: ffffea00009f81c0 R15: 0000000000001000
-FS:  0000000000000000(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f7fd8638528 CR3: 0000000071e75000 CR4: 0000000000150ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> Thansk,
+> Yury
