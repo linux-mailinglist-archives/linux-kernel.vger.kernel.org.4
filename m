@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387906AC5BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D304E6AC5B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:43:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjCFPnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:43:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47382 "EHLO
+        id S230499AbjCFPm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbjCFPnC (ORCPT
+        with ESMTP id S230151AbjCFPmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:43:02 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B9A7DB3;
-        Mon,  6 Mar 2023 07:42:29 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id d7so10918678qtr.12;
-        Mon, 06 Mar 2023 07:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678117341;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kK+Z862YESi30yZiQZC0bVwPclz8DCYbgAA/NRofcVQ=;
-        b=MQT4Hnfv44YHIOGxCsajlC63JnDzxTzHLtNuHQ/4uiD559rPdzNVrnv4Px3cAWbxDT
-         mINlBKvoJaziRxF2qQ48A+vB+8zsxIWkAgcnn431o0fdeuq+YmC8FrPglq91Yb0DDBkJ
-         WCLdr+wil1dX/B6cEeylUBOsYJhZePeAW3jZ1aJkQWk2cbXPdeqFFkZtLAxMl1FEsIxI
-         ZOYN/pszFbWfajWHX+xyZoGuf9/U9Vv9ybClKwIRhxirENLM5KmkGZl7e3gna1SBvxIm
-         JgGvX3aNy1f0bzrfeRrAG0+mzAEsXE05Es60AK0gbwyXOMMURS2NJzZ+Y2ZsdTWsYAeT
-         IXVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678117341;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kK+Z862YESi30yZiQZC0bVwPclz8DCYbgAA/NRofcVQ=;
-        b=nSD3VAJ9vUEZI5uvgdVezT/lIJ/19CbVTJiMwH3eEF5O5//x2noDWoosRlMMP/Bghh
-         m7U/IDoY5zOk6bJu8qEKSTfZs0zct3gJxQ5l7nXe6fR+KAB97Bx8oNgtBfJwQsbiEows
-         sg3NfQTrfL6DotTD+jOI024VluFfvX+XGKfCkQtGr/Pki9vv9LZAy9ILT5xOIVrPMpnW
-         y2kRviZbhersIZD8KmUsmDp3oQbLZhqreTWxAGywkws288sLiL84f3FwC1KqQkfffm//
-         51gTRLCu8Tq780p7xB9whl8k1moxSE6JYOJbB3Mgxd/jwzDdPf1XRtex48Gznl+IG2Dg
-         YAfw==
-X-Gm-Message-State: AO0yUKXhIM+pV8g3MVjD88pABSU+FVWh33dgO3+lIS2W6nPV6h1JWcEC
-        HbIAjzXJ6SsqpVxwdm39g+I=
-X-Google-Smtp-Source: AK7set9H0BTWMzOhU3KF9k6OdGcn73zqo6lyLsqmCFPYgOIf9YsSnu6km3TTtQCJGL4RAvTZa3gmwA==
-X-Received: by 2002:ac8:7d95:0:b0:3bd:48:70a3 with SMTP id c21-20020ac87d95000000b003bd004870a3mr19059103qtd.1.1678117341520;
-        Mon, 06 Mar 2023 07:42:21 -0800 (PST)
-Received: from MSI-FindNS.localdomain ([107.191.40.138])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05620a121300b007424376ca4bsm7618400qkj.18.2023.03.06.07.42.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 07:42:21 -0800 (PST)
-From:   Yue Zhao <findns94@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     roman.gushchin@linux.dev, hannes@cmpxchg.org, mhocko@kernel.org,
-        shakeelb@google.com, muchun.song@linux.dev, willy@infradead.org,
-        linux-mm@kvack.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tangyeechou@gmail.com,
-        Yue Zhao <findns94@gmail.com>
-Subject: [PATCH v2, 4/4] mm, memcg: Prevent memory.soft_limit_in_bytes load/store tearing
-Date:   Mon,  6 Mar 2023 23:41:38 +0800
-Message-Id: <20230306154138.3775-5-findns94@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230306154138.3775-1-findns94@gmail.com>
-References: <20230306154138.3775-1-findns94@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 6 Mar 2023 10:42:51 -0500
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC351FCC;
+        Mon,  6 Mar 2023 07:42:15 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B37C4240009;
+        Mon,  6 Mar 2023 15:41:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678117328;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4+e/cUqhhX/VA/vt11SGpFMg3F+XphXS1/Hro38i4j0=;
+        b=Y7pgUr7QHXRIZk9xlTpsJCwpUTN6J93viTIZPEPSAu5ZhECKJ2jOfMP9JFBqxLQNuei34Z
+        tKLWB7FoAqSYE1PTY6ROhpqYUfgTlToyScGeKDgIVmUER65rZTwF9S1kKKWTu/P2Wrno5b
+        fjLhWcgMRzdMyJCOtqls3mPQbmf6lgBIJJzqhScg+Vc5VY+ufSUGvRYmuaHL/vScl+JD+h
+        5iPYWJhDzoQX5TLjFPLfFYWP8nErrdcYz0KDIE1sjeJcH67gkRx79N2SEaiVlz/MkMJK4L
+        UwV37a+dm/zpn1w7yGKYoqjcPjwxlcQ7wOcVaX2spOpnPyfxvvOgD5jlmJbnAg==
+Date:   Mon, 6 Mar 2023 16:41:58 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Li Yang <leoyang.li@nxp.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v6 01/10] dt-bindings: soc: fsl: cpm_qe: Add TSA
+ controller
+Message-ID: <20230306164158.767e6420@bootlin.com>
+In-Reply-To: <20230226174833.GA76710-robh@kernel.org>
+References: <20230217145645.1768659-1-herve.codina@bootlin.com>
+        <20230217145645.1768659-2-herve.codina@bootlin.com>
+        <20230226174833.GA76710-robh@kernel.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The knob for cgroup v1 memory controller: memory.soft_limit_in_bytes
-is not protected by any locking so it can be modified while it is used.
-This is not an actual problem because races are unlikely.
-But it is better to use READ_ONCE/WRITE_ONCE to prevent compiler from
-doing anything funky.
+Hi Rob,
+On Sun, 26 Feb 2023 11:48:33 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-The access of memcg->soft_limit is lockless,
-so it can be concurrently set at the same time as we are
-trying to read it.
+[...]
+> > +  '#size-cells':
+> > +    const: 0
+> > +
+> > +  '#fsl,serial-cells': =20
+>=20
+> #foo-cells is for when there are differing foo providers which need=20
+> different number of cells. That's not the case here.
+>=20
 
-Signed-off-by: Yue Zhao <findns94@gmail.com>
----
- mm/memcontrol.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Ok, I will remove the #fsl,serial-cells property on the next iteration.
 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 26605b2f51b1..20566f59bbcb 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3728,7 +3728,7 @@ static u64 mem_cgroup_read_u64(struct cgroup_subsys_state *css,
- 	case RES_FAILCNT:
- 		return counter->failcnt;
- 	case RES_SOFT_LIMIT:
--		return (u64)memcg->soft_limit * PAGE_SIZE;
-+		return (u64)READ_ONCE(memcg->soft_limit) * PAGE_SIZE;
- 	default:
- 		BUG();
- 	}
-@@ -3870,7 +3870,7 @@ static ssize_t mem_cgroup_write(struct kernfs_open_file *of,
- 		if (IS_ENABLED(CONFIG_PREEMPT_RT)) {
- 			ret = -EOPNOTSUPP;
- 		} else {
--			memcg->soft_limit = nr_pages;
-+			WRITE_ONCE(memcg->soft_limit, nr_pages);
- 			ret = 0;
- 		}
- 		break;
--- 
-2.17.1
+On the next series iteration, I will also remove the #fsl,chan-cells proper=
+ty
+present later on a patch related to the QMC binding. The #fsl,chan-cells ne=
+eds
+to be removed exactly for the same reason.
 
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    const: 1
+> > +    description:
+> > +      TSA consumers that use a phandle to TSA need to pass the serial =
+identifier
+> > +      with this phandle (defined in dt-bindings/soc/fsl,tsa.h).
+> > +      For instance "fsl,tsa-serial =3D <&tsa FSL_CPM_TSA_SCC4>;". =20
+
+Thanks for the review.
+Herv=C3=A9
