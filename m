@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654106AB7C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:58:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE0D6AB7D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjCFH6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 02:58:10 -0500
+        id S229901AbjCFH63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 02:58:29 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjCFH5l (ORCPT
+        with ESMTP id S229819AbjCFH5l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Mar 2023 02:57:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEBE1A97F;
-        Sun,  5 Mar 2023 23:57:39 -0800 (PST)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A52B1F903;
+        Sun,  5 Mar 2023 23:57:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0618E60C4D;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7764460C6F;
         Mon,  6 Mar 2023 07:57:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BA6DC4167C;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78246C4FF06;
         Mon,  6 Mar 2023 07:57:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678089457;
-        bh=RCTg24MLEmr2jGeawpxyl1buhok9BfoO0aD1ft1g/Ws=;
+        bh=a3kuHjgYNyulLZAsEDFoN+UatIjlAmI+HwT51CVFQPY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tNRQRCrt0yf0Fb/9C8V2AvnTVPmAuKgFHhPO8PKjFbot1TpJ6j+PIaAt+ZzhSi5tp
-         PYnbG832OoZrzHqCmCZKRIBkZqT7+ZGFvSFhOV6m+puaKi38jk4M+otlyGq9pxNLdw
-         G+VMwTA/pzp7cnUz9I0TgCXzDfCvO2jUJ/4nvHAYa2X/GxOMF/qjKNzESZM1gw/tvh
-         glgLg9lwqBe7z9yxjzg4Lw496JU+kRh87MIIEhvMQ0scGWP99giGJcEdvxLRMjVXtt
-         bWQ0c/2wamREbUdTIGPnGz9u7TUvv4G4quraopVpIxnadDyVyP+GFcPWJZoDG+3g0K
-         dV6+V5pIBsIpA==
+        b=nCrGJEX21WXgcEsGAk4UFHACAs4RlkJw1HpncMmUmsbc89kHB6gA8p6ve9V+R0SXS
+         nbdYLPsPtWWVHGRD4xMXnWkddnVD+GefeSJhWh0kjvLhV7igS0oaOZTJUsADKQnizE
+         JBLjdwMO/QSJHMvlMa9qFuOP6amlCqLPtcCsaj7o7e50+kVjErPAkW7UMgfWfiiiJ9
+         Hbb0EiHc/vLTvOkb5U2bp95rGC7vOYP2gB51Ps+M9zjbWXeVXeJzsCYoH+Y5Gubmes
+         8AC4buwsCi7bUG7Xw0Hj5pkhdo4JXVwLB6SRUmNmsmvnIucW3oQSvJafugKh+FmNTP
+         xvmzLcbitTCLg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1pZ5jd-0000iv-M6; Mon, 06 Mar 2023 08:58:17 +0100
+        id 1pZ5jd-0000iy-PL; Mon, 06 Mar 2023 08:58:17 +0100
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Georgi Djakov <djakov@kernel.org>
 Cc:     "Shawn Guo" <shawnguo@kernel.org>,
@@ -55,16 +55,16 @@ Cc:     "Shawn Guo" <shawnguo@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH v2 22/23] interconnect: drop unused icc_get() interface
-Date:   Mon,  6 Mar 2023 08:56:50 +0100
-Message-Id: <20230306075651.2449-23-johan+linaro@kernel.org>
+Subject: [PATCH v2 23/23] interconnect: drop unused icc_link_destroy() interface
+Date:   Mon,  6 Mar 2023 08:56:51 +0100
+Message-Id: <20230306075651.2449-24-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230306075651.2449-1-johan+linaro@kernel.org>
 References: <20230306075651.2449-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,122 +72,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The icc_get() interface can be used to lookup an interconnect path based
-on global node ids. There has never been any users of this interface and
-all lookups are currently done from the devicetree.
+Now that the link array is deallocated when destroying nodes and the
+explicit link removal has been dropped from the exynos driver there are
+no further users of and no need for the icc_link_destroy() interface.
 
-Remove the unused icc_get() interface.
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/interconnect/core.c  | 52 ++----------------------------------
- include/linux/interconnect.h |  8 ------
- 2 files changed, 2 insertions(+), 58 deletions(-)
+ drivers/interconnect/core.c           | 46 ---------------------------
+ include/linux/interconnect-provider.h |  6 ----
+ 2 files changed, 52 deletions(-)
 
 diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index ebefd263ac4b..fd12f109c05e 100644
+index fd12f109c05e..6315d4256ac1 100644
 --- a/drivers/interconnect/core.c
 +++ b/drivers/interconnect/core.c
-@@ -588,7 +588,7 @@ EXPORT_SYMBOL_GPL(icc_set_tag);
- 
- /**
-  * icc_get_name() - Get name of the icc path
-- * @path: reference to the path returned by icc_get()
-+ * @path: interconnect path
-  *
-  * This function is used by an interconnect consumer to get the name of the icc
-  * path.
-@@ -606,7 +606,7 @@ EXPORT_SYMBOL_GPL(icc_get_name);
- 
- /**
-  * icc_set_bw() - set bandwidth constraints on an interconnect path
-- * @path: reference to the path returned by icc_get()
-+ * @path: interconnect path
-  * @avg_bw: average bandwidth in kilobytes per second
-  * @peak_bw: peak bandwidth in kilobytes per second
-  *
-@@ -705,54 +705,6 @@ int icc_disable(struct icc_path *path)
+@@ -862,52 +862,6 @@ int icc_link_create(struct icc_node *node, const int dst_id)
  }
- EXPORT_SYMBOL_GPL(icc_disable);
+ EXPORT_SYMBOL_GPL(icc_link_create);
  
 -/**
-- * icc_get() - return a handle for path between two endpoints
-- * @dev: the device requesting the path
-- * @src_id: source device port id
-- * @dst_id: destination device port id
+- * icc_link_destroy() - destroy a link between two nodes
+- * @src: pointer to source node
+- * @dst: pointer to destination node
 - *
-- * This function will search for a path between two endpoints and return an
-- * icc_path handle on success. Use icc_put() to release
-- * constraints when they are not needed anymore.
-- * If the interconnect API is disabled, NULL is returned and the consumer
-- * drivers will still build. Drivers are free to handle this specifically,
-- * but they don't have to.
-- *
-- * Return: icc_path pointer on success, ERR_PTR() on error or NULL if the
-- * interconnect API is disabled.
+- * Return: 0 on success, or an error code otherwise
 - */
--struct icc_path *icc_get(struct device *dev, const int src_id, const int dst_id)
+-int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
 -{
--	struct icc_node *src, *dst;
--	struct icc_path *path = ERR_PTR(-EPROBE_DEFER);
+-	struct icc_node **new;
+-	size_t slot;
+-	int ret = 0;
+-
+-	if (IS_ERR_OR_NULL(src))
+-		return -EINVAL;
+-
+-	if (IS_ERR_OR_NULL(dst))
+-		return -EINVAL;
 -
 -	mutex_lock(&icc_lock);
 -
--	src = node_find(src_id);
--	if (!src)
--		goto out;
+-	for (slot = 0; slot < src->num_links; slot++)
+-		if (src->links[slot] == dst)
+-			break;
 -
--	dst = node_find(dst_id);
--	if (!dst)
--		goto out;
--
--	path = path_find(dev, src, dst);
--	if (IS_ERR(path)) {
--		dev_err(dev, "%s: invalid path=%ld\n", __func__, PTR_ERR(path));
+-	if (WARN_ON(slot == src->num_links)) {
+-		ret = -ENXIO;
 -		goto out;
 -	}
 -
--	path->name = kasprintf(GFP_KERNEL, "%s-%s", src->name, dst->name);
--	if (!path->name) {
--		kfree(path);
--		path = ERR_PTR(-ENOMEM);
--	}
+-	src->links[slot] = src->links[--src->num_links];
+-
+-	new = krealloc(src->links, src->num_links * sizeof(*src->links),
+-		       GFP_KERNEL);
+-	if (new)
+-		src->links = new;
+-	else
+-		ret = -ENOMEM;
+-
 -out:
 -	mutex_unlock(&icc_lock);
--	return path;
+-
+-	return ret;
 -}
--EXPORT_SYMBOL_GPL(icc_get);
+-EXPORT_SYMBOL_GPL(icc_link_destroy);
 -
  /**
-  * icc_put() - release the reference to the icc_path
-  * @path: interconnect path
-diff --git a/include/linux/interconnect.h b/include/linux/interconnect.h
-index 2b0e784ba771..97ac253df62c 100644
---- a/include/linux/interconnect.h
-+++ b/include/linux/interconnect.h
-@@ -40,8 +40,6 @@ struct icc_bulk_data {
+  * icc_node_add() - add interconnect node to interconnect provider
+  * @node: pointer to the interconnect node
+diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+index b9af9016a95e..e6d8aca6886d 100644
+--- a/include/linux/interconnect-provider.h
++++ b/include/linux/interconnect-provider.h
+@@ -118,7 +118,6 @@ int icc_std_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+ struct icc_node *icc_node_create(int id);
+ void icc_node_destroy(int id);
+ int icc_link_create(struct icc_node *node, const int dst_id);
+-int icc_link_destroy(struct icc_node *src, struct icc_node *dst);
+ void icc_node_add(struct icc_node *node, struct icc_provider *provider);
+ void icc_node_del(struct icc_node *node);
+ int icc_nodes_remove(struct icc_provider *provider);
+@@ -150,11 +149,6 @@ static inline int icc_link_create(struct icc_node *node, const int dst_id)
+ 	return -ENOTSUPP;
+ }
  
- #if IS_ENABLED(CONFIG_INTERCONNECT)
- 
--struct icc_path *icc_get(struct device *dev, const int src_id,
--			 const int dst_id);
- struct icc_path *of_icc_get(struct device *dev, const char *name);
- struct icc_path *devm_of_icc_get(struct device *dev, const char *name);
- int devm_of_icc_bulk_get(struct device *dev, int num_paths, struct icc_bulk_data *paths);
-@@ -61,12 +59,6 @@ void icc_bulk_disable(int num_paths, const struct icc_bulk_data *paths);
- 
- #else
- 
--static inline struct icc_path *icc_get(struct device *dev, const int src_id,
--				       const int dst_id)
+-static inline int icc_link_destroy(struct icc_node *src, struct icc_node *dst)
 -{
--	return NULL;
+-	return -ENOTSUPP;
 -}
 -
- static inline struct icc_path *of_icc_get(struct device *dev,
- 					  const char *name)
+ static inline void icc_node_add(struct icc_node *node, struct icc_provider *provider)
  {
+ }
 -- 
 2.39.2
 
