@@ -2,94 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E2D6ACF02
+	by mail.lfdr.de (Postfix) with ESMTP id E02656ACF03
 	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCFUTQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Mar 2023 15:19:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjCFUTN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229798AbjCFUTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 6 Mar 2023 15:19:13 -0500
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B1F36471;
-        Mon,  6 Mar 2023 12:19:12 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id m4so7519033qvq.3;
-        Mon, 06 Mar 2023 12:19:11 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229484AbjCFUTL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Mar 2023 15:19:11 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E4136471;
+        Mon,  6 Mar 2023 12:19:10 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id cw28so43791671edb.5;
+        Mon, 06 Mar 2023 12:19:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678133949;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5X1DrGT/RW1/r+Y1HGheUCUnfXToPi6qBpvnHsE+fKY=;
+        b=KwWvKclEUngSB3nCut/ygs51cOep20WW/PM6mVMbVZXU4Jq3uV9+8XJ7ifEeag9BOp
+         N9ZqWkEr8ULNgEe4uTwk41dQM0cdtf4lBv9rwMmCmPO1dslhJGEmysV/Vp7wE9BG8XLp
+         RL/5cwv64oNboXwBVBBUQObpvv+Em1yepOS/wJjy8TSpCiN2clXjuXBqTUei8h/kxdOd
+         OllmhYEvTQXL4jIkUCwHVkPzVBcDMNa02KliH2dNm8f/1SyAIdAsJPcb+Aip6UUNmoE3
+         9ebRHY6JmtjrONDS3qQduWBtHriIzGnc+rWRQP6MP6btnwVQCFgmQvgB8/DlH+I8WGQg
+         xtRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678133951;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IcreaCNrPDrsgbWu66UDBX9xNQSed4tnrRouXbHrbGA=;
-        b=F50ku4Zl5mbG/MD2CE8JKyZM2H5vmlDwTOCI/4YI/SfCjj+cBiK6V9bE48sr6DVNd6
-         LUXC7wJ0JnYo990WL4/0Uc9yKEiJK1N/lqbyCLqArJCL9Flox5GpaL4Nw4eQ9liPKwTe
-         vVQZXce+hywJD5MRu3IBysNO+tbZqlIECZciXQMZM/nE4FDxPktJxhtSyOcOIDmuXPmm
-         BXUCErzohBsfcNQIrkEws5VaoGjkhnjkepyBwof0Ze8rOdeF01n3VSjXV2j7Ki8xbpEB
-         gOiL7IMUUA7Vsox9uB+uuMtMNMDL6WjFQY8CH2UlrY33Xdspuqq2YpzoXwgqSdFrgGaT
-         6Gfg==
-X-Gm-Message-State: AO0yUKVAm//b8dSfDgst5uUGR0+jMcHRqswgfsTTXqqyUNTRsUGLvn3s
-        p2AlD1wlcWcDJN4X9PwbJgYuMIb56BFXgw==
-X-Google-Smtp-Source: AK7set+ABH5/m7EEz75lu6ayOsyvOG2+9UZR7vf7AS0aZ0Q/0cbpVOKRvisG1CcUFDZSj2SD/1agVg==
-X-Received: by 2002:a05:6214:19e8:b0:56e:9ab5:cd9f with SMTP id q8-20020a05621419e800b0056e9ab5cd9fmr19918410qvc.39.1678133950990;
-        Mon, 06 Mar 2023 12:19:10 -0800 (PST)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id v1-20020a379301000000b0073b4a55a2d1sm8119617qkd.124.2023.03.06.12.19.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 12:19:10 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id v13so9488744ybu.0;
-        Mon, 06 Mar 2023 12:19:10 -0800 (PST)
-X-Received: by 2002:a25:d6d8:0:b0:8ed:3426:8a69 with SMTP id
- n207-20020a25d6d8000000b008ed34268a69mr10055836ybg.1.1678133949861; Mon, 06
- Mar 2023 12:19:09 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678133949;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5X1DrGT/RW1/r+Y1HGheUCUnfXToPi6qBpvnHsE+fKY=;
+        b=bsZVMfrOKnF/n7XrMhF6h37ykQWyVXRlZPuqm3Aa96h+ryIWew8rzICrIckYNHXefi
+         O3uA5jL3Bd7Zm1eJ2CpFNcuM42LoV69WOItg799X7ikwuyaQDCbp5kkU4/J4sGZNR+Bx
+         eiEd7TiTF3WlMgOMlTKJw9J4JgLLx99u3gHH6ttZdLebYFsV5KP/c5I+HXMaloUF84cC
+         feLuY96kYxAVhIZLrAH5i7OMZKKsdx/mPz7dY+CdNTfAswpU/5EZeOdz7WZUQ7Ks9bjZ
+         28/dtikb3SMrpbjq9GD1tl1RhrFwY9VkwlWoHmawqlqYTgBh7XU4fLQOTZ96oe35r5M5
+         iUXQ==
+X-Gm-Message-State: AO0yUKXIsIsu0RoOragLSWtJ1k7iX2JOJrmKxfVuPEKVOAAOpf81nKfe
+        Qj7EV1vxZDSRnvw1OxQ28Kc=
+X-Google-Smtp-Source: AK7set/BFRz4eNs5vXIC0za8DuHe0GFhkdvMDwTsUhlweCkvilsfm48w3UUydiQdzAItTNdw5vmLLA==
+X-Received: by 2002:a17:907:a0d5:b0:8b1:319c:c29e with SMTP id hw21-20020a170907a0d500b008b1319cc29emr15022639ejc.74.1678133948607;
+        Mon, 06 Mar 2023 12:19:08 -0800 (PST)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id n6-20020a17090673c600b008c607dd7cefsm5027776ejl.79.2023.03.06.12.19.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 12:19:08 -0800 (PST)
+Date:   Mon, 6 Mar 2023 22:19:05 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>,
+        Richard van Schagen <richard@routerhints.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [RFC PATCH net] net: dsa: mt7530: move PLL setup out of port 6
+ pad configuration
+Message-ID: <20230306201905.yothcuxokzlk3mcq@skbuf>
+References: <20230304125453.53476-1-arinc.unal@arinc9.com>
+ <20230304125453.53476-1-arinc.unal@arinc9.com>
+ <20230306154552.26o6sbwf3rfekcyz@skbuf>
+ <65f84ef3-8f72-d823-e6f9-44d33a953697@arinc9.com>
 MIME-Version: 1.0
-References: <CAMuHMdUKo_Sf7TjKzcNDa8Ve+6QrK+P8nSQrSQ=6LTRmcBKNww@mail.gmail.com>
- <CAHk-=wiAxtKyxs6BPEzirrXw1kXJ-7ZyGpgOrbzhmC=ud-6jBA@mail.gmail.com>
-In-Reply-To: <CAHk-=wiAxtKyxs6BPEzirrXw1kXJ-7ZyGpgOrbzhmC=ud-6jBA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Mar 2023 21:18:58 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUMbbQM5-1M=OkGzWZ2cKJsOu6t1tJotL9jUChRH-ErXA@mail.gmail.com>
-Message-ID: <CAMuHMdUMbbQM5-1M=OkGzWZ2cKJsOu6t1tJotL9jUChRH-ErXA@mail.gmail.com>
-Subject: Re: cpumask: re-introduce constant-sized cpumask optimizations
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <65f84ef3-8f72-d823-e6f9-44d33a953697@arinc9.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Mon, Mar 06, 2023 at 08:03:54PM +0300, Arınç ÜNAL wrote:
+> Looking at the Wikipedia page for Media-independent interface [0], the data
+> interface must be clocked at 125 MHz for gigabit MIIs, which I believe what
+> the "PLL" here refers to. trgmii needs higher frequency in some cases so if
+> both CPU ports are enabled, the table would be:
+> 
+>     priv->p5_interface        priv->p6_interface       ncpo1 value
+>         gmii                     rgmii                     125MHz
+>         mii                      rgmii                     125MHz
+>         rgmii                    rgmii                     125MHz
+>         gmii                     trgmii                    125-250MHz
+>         mii                      trgmii                    125-250MHz
+>         rgmii                    trgmii                    125-250MHz
+> 
+> [0] https://en.wikipedia.org/wiki/Media-independent_interface#GMII
 
-On Mon, Mar 6, 2023 at 8:19 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Mon, Mar 6, 2023 at 3:20 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > Your final commit 596ff4a09b898179 ("cpumask: re-introduce
-> > constant-sized cpumask optimizations") in v6.3-rc1 introduced a
-> > regression.  During Debian userspace startup, the kernel crashes with:
->
-> I'm pretty sure the attached patch should fix it. If you can confirm,
-> that would be lovely.
+Wikipedia will only tell you what the frequency of the interface signals
+needs to be. That is useful to keep in mind, but without information from
+the datasheet regarding what the SoC's clock distribution tree looks like,
+it's hard to know how that interface clock is derived from internal PLLs
+and ultimately from the oscillators. I was hoping that was the kind of
+information you could provide. The manuals I have access to, through charity,
+don't say anything on that front.
 
-Thanks, works fine again!
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Since I don't know what I'm commenting on, I'll stop commenting any further.
 
-Gr{oetje,eeting}s,
+> > right now, you let the p6_interface logic overwrite the ncpo1 selected
+> > by the p5_interface logic like crazy, and it's not clear to me that this
+> > is what you want.
+> 
+> This seems to be fine as p6 sets the frequency either the same or higher.
 
-                        Geert
+(...)
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> This looks much better, thanks a lot! The only missing part is setting the
+> PLL frequency when only port 5 is enabled.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+True. Although with the limited information I have, I'm not sure that
+the ncpo1 value written into CORE_PLL_GROUP5 is needed by port5 either
+way. The fact that you claim port5 works when ncpo1 ranges from 125 to
+250 MHz tells me that it's either very tolerant of the ncpo1 value
+(through mechanisms unknown to me), or simply unaffected by it (more
+likely ATM). Since I don't have any details regarding the value, I'd
+just like to treat the configuration procedure as plain code, and not
+make any changes until there's a proof that they're needed.
+
+> I'll test it regardless.
+
+Thanks.
