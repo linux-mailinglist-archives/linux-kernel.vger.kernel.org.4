@@ -2,142 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF3C06ACA99
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:35:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F656ACAD1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjCFRfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S229493AbjCFRkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:40:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCFRfK (ORCPT
+        with ESMTP id S229830AbjCFRkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:35:10 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4B167020;
-        Mon,  6 Mar 2023 09:34:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678124078; x=1709660078;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DUxKUZFXlH9ieOprWzSIsATKqQ+Kr3d5N+BZv+HPjN8=;
-  b=ZqrftcwLR2/7ATmkjnbaGMN59LPlwGoRli0v+/esKl79PSjxrbBO/qx9
-   JMPi5NUx7h10bGnaRBZ5PF7n/ONWFE7a50ItEB/N/9MROtKLsgkJRPGqa
-   ZwvZ9ylx/NxZxufPQpVxgUyFdQDrkFj2n1CpMhyf84DDlpBTaoUZnBbpw
-   oYQ7t44ISEXUEjS0jvq40Q/Wboq3xHkjxvUVzgm0n/i8ilmrQDqsd0x6J
-   C4Cn1eUKB8bBKCT3OmnFi4yQLXwr4CrhMzzlWysI+6ZsA3kAWLLU2rJPy
-   vwr+NrTLpVdOVZm65LXKfFftxaVIDC01EgdXN8w8NJTdDHf5xAIJJphk1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="363240590"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="363240590"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 09:32:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745155575"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="745155575"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 09:32:36 -0800
-Date:   Mon, 6 Mar 2023 09:36:26 -0800
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH 1/4] iommu/vt-d: Implement set device pasid op for
- default domain
-Message-ID: <20230306093626.31c1573e@jacob-builder>
-In-Reply-To: <ZAXjVaucrkEvrfsw@nvidia.com>
-References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
-        <20230302005959.2695267-2-jacob.jun.pan@linux.intel.com>
-        <ZAXjVaucrkEvrfsw@nvidia.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 6 Mar 2023 12:40:36 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ACE6A1D0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:39:53 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 331F31FDDD;
+        Mon,  6 Mar 2023 17:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678124291; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CjsdVtOT19sgmnwLtBgOV0bQr30Doz68iTxFvJb7MVY=;
+        b=iKZM4a3kjBj5igyGY9nYaFFnSsecXkdh5ETnei0KWtPfemR/f5AArLWkAJ4+Lg4TtIE0kl
+        vUB6kadcOXfROHaa35OTTCCy1yWNEWmcg/Ms2e1M8gjrIm2RrgNQ1GNa7ht1TCwke30eAw
+        1FfzsnYou26QuH3TIZzqY+mDnTm1v1U=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1443D13513;
+        Mon,  6 Mar 2023 17:38:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yRV7AQMlBmStdwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 06 Mar 2023 17:38:11 +0000
+Date:   Mon, 6 Mar 2023 18:38:10 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] mm, vmalloc: fix high order __GFP_NOFAIL allocations
+Message-ID: <ZAYlAvZ/e52/XSLi@dhcp22.suse.cz>
+References: <20230305053035.1911-1-hsiangkao@linux.alibaba.com>
+ <ZAWbjIJCarmxGa8k@dhcp22.suse.cz>
+ <ZAXZMz0n+CpWPVqy@pc636>
+ <ZAXynvdNqcI0f6Us@dhcp22.suse.cz>
+ <6452176f-4c17-8e09-8561-c659cbea4014@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6452176f-4c17-8e09-8561-c659cbea4014@suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-On Mon, 6 Mar 2023 08:57:57 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Wed, Mar 01, 2023 at 04:59:56PM -0800, Jacob Pan wrote:
-> > On VT-d platforms, legacy DMA requests without PASID use device=E2=80=
-=99s
-> > default domain, where RID_PASID is always attached. Device drivers
-> > can then use the DMA API for all in-kernel DMA on the RID.
-> >=20
-> > Ideally, devices capable of using ENQCMDS can also transparently use the
-> > default domain, consequently DMA API. However, VT-d architecture
-> > dictates that the PASID used by ENQCMDS must be different from the
-> > RID_PASID value.
-> >=20
-> > To provide support for transparent use of DMA API with non-RID_PASID
-> > value, this patch implements the set_dev_pasid() function for the
-> > default domain. The idea is that device drivers wishing to use ENQCMDS
-> > to submit work on buffers mapped by DMA API will call
-> > iommu_attach_device_pasid() beforehand.
-> >=20
-> > Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > ---
-> >  drivers/iommu/intel/iommu.c | 32 ++++++++++++++++++++++++++++++++
-> >  1 file changed, 32 insertions(+)
-> >=20
-> > diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-> > index 10f657828d3a..a0cb3bc851ac 100644
-> > --- a/drivers/iommu/intel/iommu.c
-> > +++ b/drivers/iommu/intel/iommu.c
-> > @@ -4665,6 +4665,10 @@ static void intel_iommu_remove_dev_pasid(struct
-> > device *dev, ioasid_t pasid) case IOMMU_DOMAIN_SVA:
-> >  			intel_svm_remove_dev_pasid(dev, pasid);
-> >  			break;
-> > +		case IOMMU_DOMAIN_DMA:
-> > +		case IOMMU_DOMAIN_DMA_FQ:
-> > +		case IOMMU_DOMAIN_IDENTITY: =20
->=20
-> Why do we need this switch statement anyhow?
-For DMA API pasid, there is nothing special just let it fall through and
-call=20
-	intel_pasid_tear_down_entry(iommu, dev, pasid, false);
-
-> Something seems to have
-> gone wrong here.. SVM shouldn't be special,=20
-I think all the trouble is caused by  the asymmetrical setup of
-iommu_op.remove_dev_pasid() and iommu_domain_ops.set_dev_pasid()
-Perhaps, we should "demote" remove_dev_pasid to iommu_domain_ops then we
-don't have to check SVA specific things.
-
-> and why does this call intel_pasid_tear_down_entry() twice on the SVA
-> path?
-Good catch, that seems to be unnecessary.
-
-> It seems like all this is doing is flushing the PRI queue.
-> A domain should have a dedicated flag unrelated to the type if it is
-> using PRI and all PRI using domains should have the PRI queue flushed
-> here, using the same code as flushing the PRI for a RID attachment.
-Yes, or if the teardown op is domain-specific, then it works too?
-
-
-Thanks,
-
-Jacob
+Thanks. Here is an incremental diff
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index bef6cf2b4d46..b01295672a31 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -2938,7 +2938,7 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+ 		/*
+ 		 * Higher order nofail allocations are really expensive and
+ 		 * potentially dangerous (pre-mature OOM, disruptive reclaim
+-		 * and compaction etc.
++		 * and compaction etc).
+ 		 */
+ 		alloc_gfp &= ~__GFP_NOFAIL;
+ 		nofail = true;
+@@ -2965,7 +2965,7 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+ 
+ 		/*
+ 		 * Higher order allocations must be able to be treated as
+-		 * indepdenent small pages by callers (as they can with
++		 * independent small pages by callers (as they can with
+ 		 * small-page vmallocs). Some drivers do their own refcounting
+ 		 * on vmalloc_to_page() pages, some use page->mapping,
+ 		 * page->lru, etc.
+-- 
+Michal Hocko
+SUSE Labs
