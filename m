@@ -2,170 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7974F6ABD58
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434986ABD32
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjCFKuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:50:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59368 "EHLO
+        id S229861AbjCFKsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:48:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjCFKuY (ORCPT
+        with ESMTP id S229558AbjCFKsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:50:24 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B586725B90
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:50:00 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2F8125C0249;
-        Mon,  6 Mar 2023 05:50:00 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 06 Mar 2023 05:50:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1678099800; x=1678186200; bh=6eoGrQcwaexD/rm/MylmiHZat3xXP2tZ2Cn
-        2eZX6KLc=; b=iWwoIK+Z+MAXcB42fJPUnXOrPmUVRsSsvaQ5o4S1ofnAvAMVLXI
-        yer0cQxnO3Xq2n9nJGrqQLvysRa4WPisnrm1w+xnPCyhll3wRR56ZIJNBlYBftF1
-        8Ziq/tky6E/091IQpE8xVtplQThFfYhBPQZp1KgEZ9aXPCeesq9hJbrFVn3HuocH
-        Vgqkyx0usD/g8dRLj3VoHKCRuzoX9RmD2A9glSbpGH/sVy2N8NeqNkhXyGJI7ADh
-        sCDXivC6bd68wO/YYSYuLG9IDbi9g6+eYiUBhO1h3J4cGP6sLfvPaXwwpNKWaXAE
-        P4EDkEEitmGSdvn2u8zNOQYqK8SuEQcdV4g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1678099800; x=1678186200; bh=6eoGrQcwaexD/rm/MylmiHZat3xXP2tZ2Cn
-        2eZX6KLc=; b=owOq8F45Wm7DCoZANWJ/CTsic5e33gBtWihR2HMrpUoXcKxXquH
-        1m6ST8zX8yPzqWJGd7I1R4u2eDdE9DgNOKdV+mqcFygVP5eLWKalIZJxkkWoE/vr
-        jwtjBeq8xAd8qUje0p1Cj4uUZD5TD2e/XtAy0XkAB3d7kOn0FEHh3FsX6tMyEULj
-        JZZlJ1IR16IZV1PtS/QihuAigGRgcbU2EUm+bh3nAio6YSaNo7df5Bt7tlSk4xcE
-        Y5cDYsbnn894ED62rK+zXhkIohL7kNg3N0NBuNTduBPhKvsyQTcvlu8N7FRj7rW1
-        VHDvSb++oGf7wzByN6vyGGe00AEGe0ReoaA==
-X-ME-Sender: <xms:WMUFZIiTjsntbwDXM45qzz-KERx3vGvRYnyuqj6jUL_dGNadfJLvDA>
-    <xme:WMUFZBAdlyOEAOmWaZPxhD2JcxVYW4_kZInP0RqDkc4w1gqN_txs7ukj78BDSV_yy
-    DRgAitMVDntCtz6AtE>
-X-ME-Received: <xmr:WMUFZAEYlI2k7Hmk3k1eVVWIwi3TH5y7e6u9GgxKJhj-6L5Nm14KjxD4MqgM24UJloZDLKXWT-0mMMmyKdBaky1NufILR50>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtiedgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepvedvleeijeegvdekffehkeehieelhfeggfffheetkeeuledvtdeuffeh
-    teeltdffnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:WMUFZJSKbplh-79F17VofHv5V0sKGfSK0au6hNthEPAUDE29yOyulQ>
-    <xmx:WMUFZFy9RfmX6UpPz2wbXm6rWonICCuGjP3A528tF4HJ355eUVe3Mw>
-    <xmx:WMUFZH7kiKS1L_SLIa8YP4QQy-bmSTUZSKg7bOBV1jcGDfJYtyK9qw>
-    <xmx:WMUFZGq7NJcyW6Nprf5U_jahyZVz-FRXOUvS-UGhSQzQVbUj38ujFQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 6 Mar 2023 05:49:59 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Mon, 06 Mar 2023 11:46:50 +0100
-Subject: [PATCH v3 9/9] drm/vc4: hdmi: Add BT.2020 Support
+        Mon, 6 Mar 2023 05:48:13 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2795FA5EE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:48:11 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id bi9so12142026lfb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:48:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678099689;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=73e/WG+VtnrvX7x6kSatJeWNroVFqRjNmAN7uDkkbYI=;
+        b=c2eyF0FmWZnLgG5KJrO1gdMI2S/wuSRsTcqMUQh3arsVFLq+jgl7cDW9he/r9UrzcW
+         a7D0fd77BJT+baZzFb/kBL5IYeYGUiBOFR5wqwVq1TtVaLveRhcvAZmWo6FXZiYme/Ao
+         o4Yf5AU5gZlVrloFyAk2UrZkfCURcR3VX7+TpnSmkD1KxNBlZMriN9wdFnFH3l4dQl69
+         2LDS+rk3CMRjqHCYmiUcNcJbEG3H+/ZUtnBYYM9dHMk2wzABj8wY36SCd9zpxRCrbYun
+         e2HzsWyK5x1XTQacDrlVJcFATAmZmDZhmDx0Na96zEDHhf4dJbfJz/jWOBJVDei5BRLi
+         5ZRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678099689;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=73e/WG+VtnrvX7x6kSatJeWNroVFqRjNmAN7uDkkbYI=;
+        b=wfs/VRAVYg9Dh6Yh9sspnMxCBjI4vgunGNBBFxb4gT6SmA7Zv+GVxjJ+1CBCIeJLt0
+         YPZYQjeL65RZGqvkOIMER+qrgKc6fj8ValfAnzwo3sg0W2qxQ4UOwkC4+X9eATPhJyIO
+         vRdjEUyU2EmriFe2Tg1Q5v37Cp5DhT9QfMfDsNDM0oRcBvQg170r3twtVWk+OWPBkRsk
+         bxiSRc4zL2xzYKI+UhrJrsEXMlLMmWzYHymp9zNEaIQqNdyIsMf++uD359pfwEFAu8a2
+         zFh24L/qL0a0kLyWI5OTeHeXcxmRpmXFNTI7Op+Qp5fcHlVuaqS8Er170T4DhwPpe22T
+         lJOg==
+X-Gm-Message-State: AO0yUKVBQVyU0LtOn0V+t281hnLUYBGSr4QsA8t7lUeZg+Ny5CaTkCf0
+        JzwbkndDy16jcmyKXZhxcHyIuA==
+X-Google-Smtp-Source: AK7set8bgSRTuS7uzz0ybq7yYc0bzPK3ua9+Yn3qHHr3aDONVkRQFF8o09aTDtfA09P9fmalm999Dg==
+X-Received: by 2002:ac2:4886:0:b0:4dd:9fd8:3a36 with SMTP id x6-20020ac24886000000b004dd9fd83a36mr2987227lfc.1.1678099689400;
+        Mon, 06 Mar 2023 02:48:09 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id s17-20020ac25fb1000000b004cc82b70809sm1587399lfe.150.2023.03.06.02.48.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 02:48:09 -0800 (PST)
+Message-ID: <353565dd-6802-b0a5-c5d6-3833d3c9eb4f@linaro.org>
+Date:   Mon, 6 Mar 2023 11:48:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/11] arm64: dts: qcom: drop incorrect cell-index from
+ SPMI
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230305125954.209559-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230305125954.209559-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221207-rpi-hdmi-improvements-v3-9-bdd54f66884e@cerno.tech>
-References: <20221207-rpi-hdmi-improvements-v3-0-bdd54f66884e@cerno.tech>
-In-Reply-To: <20221207-rpi-hdmi-improvements-v3-0-bdd54f66884e@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2176; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=p7y74BMTOFXpAKXaHOFAbcxdR3Y3fjhhLH8Fd1pRb58=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDCmsR2YYXjt/JMr59aTIlJhnU9iDPte5qiRnX1uboXGkX/Fn
- 4H3/jlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAEwkpozhn+4MtX97TWNv7nn+mrtaKd
- ho+Vv7hdPdQ4wn+/Y6J6hZFDIyLJ6yMG7d8v86doqWEWu3l79RffepiWNZ7Jln3H+1xLJSOQA=
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-Even though we report that we support the BT.2020 Colorspace, we were
-always using the BT.709 conversion matrices. Let's add the BT.2020 ones.
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/gpu/drm/vc4/vc4_hdmi.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+On 5.03.2023 13:59, Krzysztof Kozlowski wrote:
+> The SPMI controller (PMIC Arbiter)) does not use nor allow 'cell-index'
+> property:
+> 
+>   sm8150-microsoft-surface-duo.dtb: spmi@c440000: Unevaluated properties are not allowed ('cell-index' was unexpected)
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
-index ad38cac3d1b9..2787284e60ea 100644
---- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-+++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-@@ -1303,6 +1303,37 @@ static const u16 vc5_hdmi_csc_full_rgb_to_yuv_bt709[2][3][4] = {
- 	},
- };
- 
-+/*
-+ * Conversion between Full Range RGB and YUV using the BT.2020 Colorspace
-+ *
-+ * Matrices are signed 2p13 fixed point, with signed 9p6 offsets
-+ */
-+static const u16 vc5_hdmi_csc_full_rgb_to_yuv_bt2020[2][3][4] = {
-+	{
-+		/*
-+		 * Full Range
-+		 *
-+		 * [  0.262700  0.678000  0.059300  0   ]
-+		 * [ -0.139630 -0.360370  0.500000  128 ]
-+		 * [  0.500000 -0.459786 -0.040214  128 ]
-+		 */
-+		{ 0x0868, 0x15b2, 0x01e6, 0x0000 },
-+		{ 0xfb89, 0xf479, 0x1000, 0x2000 },
-+		{ 0x1000, 0xf14a, 0xfeb8, 0x2000 },
-+	},
-+	{
-+		/* Limited Range
-+		 *
-+		 * [  0.224732  0.580008  0.050729  16  ]
-+		 * [ -0.122176 -0.315324  0.437500  128 ]
-+		 * [  0.437500 -0.402312 -0.035188  128 ]
-+		 */
-+		{ 0x082f, 0x1012, 0x031f, 0x0400 },
-+		{ 0xfb48, 0xf6ba, 0x0e00, 0x2000 },
-+		{ 0x0e00, 0xf448, 0xfdba, 0x2000 },
-+	},
-+};
-+
- static void vc5_hdmi_set_csc_coeffs(struct vc4_hdmi *vc4_hdmi,
- 				    const u16 coeffs[3][4])
- {
-@@ -1348,6 +1379,13 @@ static const u16
- 	case DRM_MODE_COLORIMETRY_RGB_WIDE_FIXED:
- 	case DRM_MODE_COLORIMETRY_RGB_WIDE_FLOAT:
- 		return vc5_hdmi_csc_full_rgb_to_yuv_bt709[limited];
-+
-+	case DRM_MODE_COLORIMETRY_BT2020_CYCC:
-+	case DRM_MODE_COLORIMETRY_BT2020_YCC:
-+	case DRM_MODE_COLORIMETRY_BT2020_RGB:
-+	case DRM_MODE_COLORIMETRY_DCI_P3_RGB_D65:
-+	case DRM_MODE_COLORIMETRY_DCI_P3_RGB_THEATER:
-+		return vc5_hdmi_csc_full_rgb_to_yuv_bt2020[limited];
- 	}
- }
- 
-
--- 
-2.39.2
-
+Konrad
+>  arch/arm64/boot/dts/qcom/ipq8074.dtsi | 1 -
+>  arch/arm64/boot/dts/qcom/msm8976.dtsi | 1 -
+>  arch/arm64/boot/dts/qcom/msm8998.dtsi | 1 -
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi  | 1 -
+>  arch/arm64/boot/dts/qcom/sdm630.dtsi  | 1 -
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi  | 1 -
+>  arch/arm64/boot/dts/qcom/sm6125.dtsi  | 1 -
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi  | 1 -
+>  8 files changed, 8 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> index 62d05d740646..f769e63c955c 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+> @@ -397,7 +397,6 @@ spmi_bus: spmi@200f000 {
+>  			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+> -			cell-index = <0>;
+>  		};
+>  
+>  		sdhc_1: mmc@7824900 {
+> diff --git a/arch/arm64/boot/dts/qcom/msm8976.dtsi b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> index 2d360d05aa5e..712f80fc865c 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8976.dtsi
+> @@ -809,7 +809,6 @@ spmi_bus: spmi@200f000 {
+>  			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+> -			cell-index = <0>;
+>  		};
+>  
+>  		sdhc_1: mmc@7824000 {
+> diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> index adf7258b3269..d450fe69fe33 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+> @@ -1993,7 +1993,6 @@ spmi_bus: spmi@800f000 {
+>  			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+> -			cell-index = <0>;
+>  		};
+>  
+>  		usb3: usb@a8f8800 {
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index ebfa21e9ed8a..51bb0a2f25ef 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -3280,7 +3280,6 @@ spmi_bus: spmi@c440000 {
+>  			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+> -			cell-index = <0>;
+>  		};
+>  
+>  		sram@146aa000 {
+> diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> index 5827cda270a0..72d9a12b5e9c 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+> @@ -1189,7 +1189,6 @@ spmi_bus: spmi@800f000 {
+>  			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+> -			cell-index = <0>;
+>  		};
+>  
+>  		usb3: usb@a8f8800 {
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 479859bd8ab3..dc43e438b64a 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -4924,7 +4924,6 @@ spmi_bus: spmi@c440000 {
+>  			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+> -			cell-index = <0>;
+>  		};
+>  
+>  		sram@146bf000 {
+> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> index 65033227718a..fd577eb705f8 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+> @@ -1134,7 +1134,6 @@ spmi_bus: spmi@1c40000 {
+>  			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+> -			cell-index = <0>;
+>  		};
+>  
+>  		apps_smmu: iommu@c600000 {
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> index fd20096cfc6e..f89abf131e01 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> @@ -3935,7 +3935,6 @@ spmi_bus: spmi@c440000 {
+>  			#size-cells = <0>;
+>  			interrupt-controller;
+>  			#interrupt-cells = <4>;
+> -			cell-index = <0>;
+>  		};
+>  
+>  		apps_smmu: iommu@15000000 {
