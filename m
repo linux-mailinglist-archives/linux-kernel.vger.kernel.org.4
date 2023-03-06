@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F9B6ABFF4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2836ABFF8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjCFMzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:55:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S230339AbjCFMze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:55:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjCFMzA (ORCPT
+        with ESMTP id S230323AbjCFMzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:55:00 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E151627997;
-        Mon,  6 Mar 2023 04:54:58 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3266Onw0005660;
-        Mon, 6 Mar 2023 12:54:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ID1Aw0POcPiJYnmPMoPY5hNF8NWcGrTSf2bKzTdrMWw=;
- b=mxYHx62T9CpMVoHQaBGI648c78ETGA5T9Qw/DG5lo+4OqETi7NhFzEpLaT4XckrhiSgM
- nLv3kL2ZGVVfa9vMdkk44hd3Jmr3ilwuUv12Mrh1y/KbgMfs7U/ZYvUYVRAY6tgfwKBK
- rWZcTbkVBuDBGSmNBF7VWmn2Vk2FGGOKduAAi8D7nWVMnO4W47tvuoWFLLb/prQRX9HB
- GwLWcjYVyUWbRpmjTm9E+g1Mf0mboisD0y4v1Kln84ktSfxdCSj0tZk2sfn31PHhZRKS
- LzjAoTY8hvEQWHd8/y2rdmKxZqoAFirr5+7G6JsFYGB72BPWsk+w60XzYFJRtKZSHgoF WA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p41javqcw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 12:54:52 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 326CspKq016306
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Mar 2023 12:54:51 GMT
-Received: from [10.204.79.110] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
- 04:54:50 -0800
-Message-ID: <9f3a25be-723c-3be0-94bd-820707c80656@quicinc.com>
-Date:   Mon, 6 Mar 2023 18:24:46 +0530
+        Mon, 6 Mar 2023 07:55:32 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B932C2B630;
+        Mon,  6 Mar 2023 04:55:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678107331; x=1709643331;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N3bME327kRn6eVQW6WyWwP3Z0p6q478WVPYcFPJ0SGs=;
+  b=HDjENVuzDlLt+G+QD2xqhjq4Mr4NQb94Wk4NgXNB3YCZf0W6IejkorMT
+   JolnqNR0zu5VrTr6pydbU3NtIEpIiOf+5Tszw5jbSFHOmiNdlZI66AZD4
+   cs0Dz4h0oQPXP2Y7UMhvyR6PUjbAo8pYJogdh7ZfRCK9Ql3uzDLGb+HRp
+   PBddTWbGkEkExpEPHqY03UiNYlJ4/nymXiNkibn0FxEH6JuwbmNscd9sO
+   mK2ty7m45i00Lx/LNECenW3GD5ol4AYWlYlYwOPI+Hgi7lepnIeICLsxc
+   7/P0gbmd1eI7of9+AhaVN0WetmduqrBPToNqyPDsuz9lfD7zFxdyWhL7p
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="319372315"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="319372315"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:55:31 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="765208080"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="765208080"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Mar 2023 04:55:28 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pZAND-00GMCg-0G;
+        Mon, 06 Mar 2023 14:55:27 +0200
+Date:   Mon, 6 Mar 2023 14:55:26 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>, Rijo-john.Thomas@amd.com,
+        Thomas.Lendacky@amd.com, herbert@gondor.apana.org.au,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 9/9] i2c: designware: Add support for AMDI0020 ACPI ID
+Message-ID: <ZAXiviOdddEK/Pak@smile.fi.intel.com>
+References: <20230303165050.2918-1-mario.limonciello@amd.com>
+ <20230303165050.2918-10-mario.limonciello@amd.com>
+ <ZAXWzMFBjo57UUa+@smile.fi.intel.com>
+ <0a872110-3f38-0744-17f1-74de3e78f84d@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] rcu: Fix rcu_torture_read ftrace event
-Content-Language: en-US
-To:     Douglas RAILLARD <douglas.raillard@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "open list:TRACING" <linux-kernel@vger.kernel.org>,
-        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
-References: <20230306122744.236790-1-douglas.raillard@arm.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230306122744.236790-1-douglas.raillard@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gSHaOnuuUK9-kf2zkUNPDWzC9dJDc5mp
-X-Proofpoint-GUID: gSHaOnuuUK9-kf2zkUNPDWzC9dJDc5mp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_05,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- malwarescore=0 adultscore=0 spamscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=820 suspectscore=0 phishscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060113
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0a872110-3f38-0744-17f1-74de3e78f84d@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 06, 2023 at 02:28:05PM +0200, Jarkko Nikula wrote:
+> On 3/6/23 14:04, Andy Shevchenko wrote:
+> > On Fri, Mar 03, 2023 at 10:50:47AM -0600, Mario Limonciello wrote:
+> > > Cezanne and Skyrim have the same PSP hardware but use a different
+> > > protocol to negotiate I2C arbitration. To disambiguate this going
+> > > forward introduce a new ACPI ID to represent the protocol that utilizes
+> > > a doorbell.
+
+...
+
+> > > -	if (boot_cpu_data.x86 == 25 && boot_cpu_data.x86_model == 80)
+> > 
+> > Ah, in this form it's getting better than I thought!
+> > 
+> These removed lines were added by previous patch. I think a bit too short
+> lived if the same patchset adds and then removes lines?
+
+That what I have missed. Okay, coming to square 1, i.e. dropping CPU ID
+completely from the series.
+
+Note, for testing purposes you may always add a HACK patch at the end of the
+series, marking it respectively. So, people may test it all and maintainer
+apply w/o unneeded tail.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On 3/6/2023 5:57 PM, Douglas RAILLARD wrote:
-> From: Douglas Raillard <douglas.raillard@arm.com>
-> 
-> Fix the rcutorturename field so that its size is correctly reported in
-> the text format embedded in trace.dat files. As it stands, it is
-> reported as being of size 1:
-> 
->      field:char rcutorturename[8];   offset:8;       size:1; signed:0;
-> 
-> Signed-off-by: Douglas Raillard <douglas.raillard@arm.com>
-> ---
->   include/trace/events/rcu.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/trace/events/rcu.h b/include/trace/events/rcu.h
-> index 90b2fb0292cb..012fa0d171b2 100644
-> --- a/include/trace/events/rcu.h
-> +++ b/include/trace/events/rcu.h
-> @@ -768,7 +768,7 @@ TRACE_EVENT_RCU(rcu_torture_read,
->   	TP_ARGS(rcutorturename, rhp, secs, c_old, c),
->   
->   	TP_STRUCT__entry(
-> -		__field(char, rcutorturename[RCUTORTURENAME_LEN])
-> +		__array(char, rcutorturename, RCUTORTURENAME_LEN)
-
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
-
--Mukesh
-
->   		__field(struct rcu_head *, rhp)
->   		__field(unsigned long, secs)
->   		__field(unsigned long, c_old)
