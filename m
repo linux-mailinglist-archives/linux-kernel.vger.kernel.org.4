@@ -2,136 +2,335 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D436AC34C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFC66AC28D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCFOcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S231207AbjCFOKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjCFObz (ORCPT
+        with ESMTP id S231345AbjCFOJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:31:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741CC31E18
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:30:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678112952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y1f7BkqHsqYuuBJD//EQRq+OWvr3phzSas2ytUULbFM=;
-        b=f8g6fPE9zuzjIftmE2knvIpeJWNstZeDEe04nd/3gdy/U1/bGrTwDmljKbwqFFfQ9E/FEc
-        iGOgyZUtpgVPGP5m2FCo+K57FgcFbL/1rQZZ66eJue47/BByoLvwh2VnG5VMfJtLPQVOKP
-        j65ncYsQxjn0eHf5Zq2SMQD0tNUPCHo=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-232-cpRk2oe3P_i3sL6_s_SYAA-1; Mon, 06 Mar 2023 09:07:29 -0500
-X-MC-Unique: cpRk2oe3P_i3sL6_s_SYAA-1
-Received: by mail-wr1-f71.google.com with SMTP id r14-20020a0560001b8e00b002cdb76f7e80so1513907wru.19
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:07:29 -0800 (PST)
+        Mon, 6 Mar 2023 09:09:22 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 417B665B4;
+        Mon,  6 Mar 2023 06:07:57 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso5374791ota.1;
+        Mon, 06 Mar 2023 06:07:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678111664;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gtOpygRybRdTgryIFngZaRO49/uV1PlMUt6BGCDduIA=;
+        b=GwOipbKq7AzZLovFhdCldB570JfDMW5z8v/OcUY/hVyl4bcuwX/4Y7hPIgAmjLNfQJ
+         nBEF2xG6Xzs5G9ZCE/6XFUJ9dwIXrigoL9D8Q5+un1AMIV3R1f44Z/AeJ+mI1zOCUkza
+         fiZ6hMopIeoKBHe/1AhfPQD3Nq2wmXiMXysVAoZBC9CZcZPM9zqB/+TnLy2tQVrv4mii
+         gil7J/3NfXQ+HUvnx0JLVPbv4goaDAmcrzIZS14P3JhEc8LsF02Sjnkpxb/3g1Lz/oXe
+         S10DM13WigY4nmIiR5sH3hHAJn/+gf99esve4YTTE1YGDNegIlsPKSB6va8bkmGs2xJs
+         3oDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678111648;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y1f7BkqHsqYuuBJD//EQRq+OWvr3phzSas2ytUULbFM=;
-        b=Pb/R6jVuXPHOD7BO0NbhOiTmxnbwo/i72bnCZNi6e6pn9S95bI1e/Xoz0Jiz0GalGv
-         ExHppVIqmYizv+PtQltVFCg0I+M1EcLqSevMOC/iQT49QrsdLbwsUZsq0VCJXxfMW4SN
-         NEGK1grHNRSVdASeLTtufelXwYDLuT7Pre/Mu4Gup3TeuXiMoi3W9V/LPMasJxwehkfs
-         YO46r4hCLfXb6NT88AN2vZbNSvCmcAlj56vGIBLqibnqvR727QGDfa4Qt5UHc1pO67Yk
-         k0BRMgBT2MskHU2bUOFHIAMskL6k5aoriNAjOyLtDPrij4+y7msXpX0M24fcjWEE120c
-         MJZg==
-X-Gm-Message-State: AO0yUKX7A2Vjc23M4GZ7Rj1L+vk0NK/OrPOij9B/XVT3nDbrk55NXBN0
-        6Y29Cur2+2BS5VjbWbWhqY7S6gDEZzL8r22lGzfTl/zq4h4M1DmLIxUtG9Mbs8iXeqewdWgqPXB
-        FlE0pRdsZ0AOgMy7UZ1RM85IA
-X-Received: by 2002:a5d:634f:0:b0:2bf:f4f7:be9c with SMTP id b15-20020a5d634f000000b002bff4f7be9cmr6987957wrw.14.1678111648532;
-        Mon, 06 Mar 2023 06:07:28 -0800 (PST)
-X-Google-Smtp-Source: AK7set9zQx0DQ7OFEY5rXzIBR9BgwoqiDbJm4GwjhVCPZ3OJTonv+Bu/TB7sGcLdUCIOC1uneLB/IQ==
-X-Received: by 2002:a5d:634f:0:b0:2bf:f4f7:be9c with SMTP id b15-20020a5d634f000000b002bff4f7be9cmr6987936wrw.14.1678111648145;
-        Mon, 06 Mar 2023 06:07:28 -0800 (PST)
-Received: from ?IPV6:2003:cb:c704:3500:b8a3:191c:eae:cc05? (p200300cbc7043500b8a3191c0eaecc05.dip0.t-ipconnect.de. [2003:cb:c704:3500:b8a3:191c:eae:cc05])
-        by smtp.gmail.com with ESMTPSA id u8-20020a5d4688000000b002c5544b3a69sm10081903wrq.89.2023.03.06.06.07.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 06:07:27 -0800 (PST)
-Message-ID: <7161f75e-9f40-f881-84b8-1eaaec0b0e3f@redhat.com>
-Date:   Mon, 6 Mar 2023 15:07:26 +0100
+        d=1e100.net; s=20210112; t=1678111664;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gtOpygRybRdTgryIFngZaRO49/uV1PlMUt6BGCDduIA=;
+        b=PzrB7tRH3Inr4RLbFib5CZwZyHdMxyO6ijHhG6DYaPSyhVv1IC/88tWjnNyykPyKnq
+         jSlNEOl1W2ml6iaMN0BBe3SarQc6/ZbIIDT+xuO0G4UQ8aOP9N4mjg/XGfhxEDfo5kBS
+         0xiWjL21dzdHei4sTN3BzvWGM4Qy/Gf4HhZcSSyX6Wa6sRbpZLtiKfRuVAtsdHy9gIh7
+         125cV0o6NvM898mVendMzAZsRoQMy6TOInJDcCkCuyLqeSALZ0LO+s8C21L9JbzxE5aj
+         7hNNlGhWrJ7qtGd3nhMjsVFfhkXRrEKZLcoUbZqBLgBwjISDD+VR5IWMKD3L1TdvdkQr
+         v7WA==
+X-Gm-Message-State: AO0yUKXNobViv13g3PVFcYJJzuF4PSJuXHd/KjygKjpw1kRJ8ZX4DYoF
+        0n/VGFdQHZ+w1bgrqsKMToV0FsFGmfGut4ffac4=
+X-Google-Smtp-Source: AK7set/KCnaWsNZQY8Vo3wwDI8I9RVvXKdkU0ZmSZlhpP4gSrDFP3rxyVuwxZ5C+PG6ym4BH6FBPS3rqQKNIkZf8jSk=
+X-Received: by 2002:a05:6830:2464:b0:693:d8a3:1f15 with SMTP id
+ x36-20020a056830246400b00693d8a31f15mr3284470otr.6.1678111663787; Mon, 06 Mar
+ 2023 06:07:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] powerpc/mm: fix mmap_lock bad unlock
-Content-Language: en-US
-To:     Laurent Dufour <ldufour@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, Sachin Sant <sachinp@linux.ibm.com>,
-        Suren Baghdasaryan <surenb@google.com>
-References: <20230306135520.4222-1-ldufour@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230306135520.4222-1-ldufour@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230303002850.51858-1-arinc.unal@arinc9.com> <20230303002850.51858-6-arinc.unal@arinc9.com>
+ <CAMhs-H-VGjP32AZc2cuY=Co4iqx8xPtvjr+hMg-haMMFaQzzsg@mail.gmail.com>
+ <CAMhs-H8OsG-SEWigimG3fT-SGjZruH-7tnjff198Z2qhb0O=yA@mail.gmail.com>
+ <2106f6d0-63cc-4656-1e52-19640994fb43@arinc9.com> <CAMhs-H869pR6CzaWfvf44w-ak+0OCyxnMEEU4kWYpw=C14ShsQ@mail.gmail.com>
+ <fc6dc970-5bae-1c27-9473-8c9d90ac79a1@arinc9.com>
+In-Reply-To: <fc6dc970-5bae-1c27-9473-8c9d90ac79a1@arinc9.com>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Mon, 6 Mar 2023 15:07:31 +0100
+Message-ID: <CAMhs-H_SryQqCZ3mB_VsO20ZSvKCMR5V9E7wrt+a-kbcqQxsWQ@mail.gmail.com>
+Subject: Re: [PATCH 05/20] pinctrl: ralink: move to mediatek as mtmips
+To:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.03.23 14:55, Laurent Dufour wrote:
-> When page fault is tried holding the per VMA lock, bad_access_pkey() and
-> bad_access() should not be called because it is assuming the mmap_lock is
-> held.
-> In the case a bad access is detected, fall back to the default path,
-> grabbing the mmap_lock to handle the fault and report the error.
-> 
-> Fixes: 169db3bb4609 ("powerc/mm: try VMA lock-based page fault handling first")
-> Reported-by: Sachin Sant <sachinp@linux.ibm.com>
-> Link: https://lore.kernel.org/linux-mm/842502FB-F99C-417C-9648-A37D0ECDC9CE@linux.ibm.com
-> Cc: Suren Baghdasaryan <surenb@google.com>
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
-> ---
->   arch/powerpc/mm/fault.c | 8 ++------
->   1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/powerpc/mm/fault.c b/arch/powerpc/mm/fault.c
-> index c7ae86b04b8a..e191b3ebd8d6 100644
-> --- a/arch/powerpc/mm/fault.c
-> +++ b/arch/powerpc/mm/fault.c
-> @@ -479,17 +479,13 @@ static int ___do_page_fault(struct pt_regs *regs, unsigned long address,
->   
->   	if (unlikely(access_pkey_error(is_write, is_exec,
->   				       (error_code & DSISR_KEYFAULT), vma))) {
-> -		int rc = bad_access_pkey(regs, address, vma);
-> -
->   		vma_end_read(vma);
-> -		return rc;
-> +		goto lock_mmap;
->   	}
->   
->   	if (unlikely(access_error(is_write, is_exec, vma))) {
-> -		int rc = bad_access(regs, address);
-> -
->   		vma_end_read(vma);
-> -		return rc;
-> +		goto lock_mmap;
->   	}
->   
->   	fault = handle_mm_fault(vma, address, flags | FAULT_FLAG_VMA_LOCK, regs);
+On Fri, Mar 3, 2023 at 3:18 PM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9=
+.com> wrote:
+>
+> Heyo,
+>
+> On 3.03.2023 13:57, Sergio Paracuellos wrote:
+> > Hi Ar=C4=B1n=C3=A7,
+> >
+> > On Fri, Mar 3, 2023 at 9:16 AM Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@ar=
+inc9.com> wrote:
+> >>
+> >> Hey Sergio,
+> >>
+> >> On 3.03.2023 09:34, Sergio Paracuellos wrote:
+> >>> On Fri, Mar 3, 2023 at 7:17 AM Sergio Paracuellos
+> >>> <sergio.paracuellos@gmail.com> wrote:
+> >>>>
+> >>>>    Hi Ar=C4=B1n=C3=A7,
+> >>>>
+> >>>> On Fri, Mar 3, 2023 at 1:30 AM <arinc9.unal@gmail.com> wrote:
+> >>>>>
+> >>>>> From: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >>>>>
+> >>>>> This platform from Ralink was acquired by MediaTek in 2011. Then, M=
+ediaTek
+> >>>>> introduced new SoCs which utilise this platform. Move the driver to
+> >>>>> mediatek pinctrl directory. Rename the ralink core driver to mtmips=
+.
+> >>>>>
+> >>>>> Signed-off-by: Ar=C4=B1n=C3=A7 =C3=9CNAL <arinc.unal@arinc9.com>
+> >>>>> ---
+> >>>>>    drivers/pinctrl/Kconfig                       |  1 -
+> >>>>>    drivers/pinctrl/Makefile                      |  1 -
+> >>>>>    drivers/pinctrl/mediatek/Kconfig              | 51 ++++++++++-
+> >>>>>    drivers/pinctrl/mediatek/Makefile             | 63 +++++++------
+> >>>>>    .../{ralink =3D> mediatek}/pinctrl-mt7620.c     | 34 +++----
+> >>>>>    .../{ralink =3D> mediatek}/pinctrl-mt7621.c     | 30 +++----
+> >>>>>    .../{ralink =3D> mediatek}/pinctrl-mt76x8.c     | 60 ++++++-----=
+--
+> >>>>>    .../pinctrl-mtmips.c}                         | 90 +++++++++----=
+------
+> >>>>>    .../pinctrl-mtmips.h}                         | 16 ++--
+> >>>>>    .../{ralink =3D> mediatek}/pinctrl-rt2880.c     | 20 ++---
+> >>>>>    .../{ralink =3D> mediatek}/pinctrl-rt305x.c     | 44 ++++-----
+> >>>>>    .../{ralink =3D> mediatek}/pinctrl-rt3883.c     | 28 +++---
+> >>>>>    drivers/pinctrl/ralink/Kconfig                | 40 ---------
+> >>>>>    drivers/pinctrl/ralink/Makefile               |  9 --
+> >>>>>    14 files changed, 246 insertions(+), 241 deletions(-)
+> >>>>>    rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt7620.c (=
+81%)
+> >>>>>    rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt7621.c (=
+80%)
+> >>>>>    rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-mt76x8.c (=
+81%)
+> >>>>>    rename drivers/pinctrl/{ralink/pinctrl-ralink.c =3D> mediatek/pi=
+nctrl-mtmips.c} (74%)
+> >>>>>    rename drivers/pinctrl/{ralink/pinctrl-ralink.h =3D> mediatek/pi=
+nctrl-mtmips.h} (75%)
+> >>>>>    rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt2880.c (=
+71%)
+> >>>>>    rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt305x.c (=
+75%)
+> >>>>>    rename drivers/pinctrl/{ralink =3D> mediatek}/pinctrl-rt3883.c (=
+80%)
+> >>>>>    delete mode 100644 drivers/pinctrl/ralink/Kconfig
+> >>>>>    delete mode 100644 drivers/pinctrl/ralink/Makefile
+> >>>>>
+> >>>>> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+> >>>>> index dcb53c4a9584..8a6012770640 100644
+> >>>>> --- a/drivers/pinctrl/Kconfig
+> >>>>> +++ b/drivers/pinctrl/Kconfig
+> >>>>> @@ -537,7 +537,6 @@ source "drivers/pinctrl/nomadik/Kconfig"
+> >>>>>    source "drivers/pinctrl/nuvoton/Kconfig"
+> >>>>>    source "drivers/pinctrl/pxa/Kconfig"
+> >>>>>    source "drivers/pinctrl/qcom/Kconfig"
+> >>>>> -source "drivers/pinctrl/ralink/Kconfig"
+> >>>>>    source "drivers/pinctrl/renesas/Kconfig"
+> >>>>>    source "drivers/pinctrl/samsung/Kconfig"
+> >>>>>    source "drivers/pinctrl/spear/Kconfig"
+> >>>>> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+> >>>>> index d5939840bb2a..ada6ed1d4e91 100644
+> >>>>> --- a/drivers/pinctrl/Makefile
+> >>>>> +++ b/drivers/pinctrl/Makefile
+> >>>>> @@ -66,7 +66,6 @@ obj-y                         +=3D nomadik/
+> >>>>>    obj-y                          +=3D nuvoton/
+> >>>>>    obj-$(CONFIG_PINCTRL_PXA)      +=3D pxa/
+> >>>>>    obj-$(CONFIG_ARCH_QCOM)                +=3D qcom/
+> >>>>> -obj-$(CONFIG_PINCTRL_RALINK)   +=3D ralink/
+> >>>>>    obj-$(CONFIG_PINCTRL_RENESAS)  +=3D renesas/
+> >>>>>    obj-$(CONFIG_PINCTRL_SAMSUNG)  +=3D samsung/
+> >>>>>    obj-$(CONFIG_PINCTRL_SPEAR)    +=3D spear/
+> >>>>> diff --git a/drivers/pinctrl/mediatek/Kconfig b/drivers/pinctrl/med=
+iatek/Kconfig
+> >>>>> index a71874fed3d6..2eeb55010563 100644
+> >>>>> --- a/drivers/pinctrl/mediatek/Kconfig
+> >>>>> +++ b/drivers/pinctrl/mediatek/Kconfig
+> >>>>> @@ -1,6 +1,6 @@
+> >>>>>    # SPDX-License-Identifier: GPL-2.0-only
+> >>>>>    menu "MediaTek pinctrl drivers"
+> >>>>> -       depends on ARCH_MEDIATEK || COMPILE_TEST
+> >>>>> +       depends on ARCH_MEDIATEK || RALINK || COMPILE_TEST
+> >>>>>
+> >>>>>    config EINT_MTK
+> >>>>>           tristate "MediaTek External Interrupt Support"
+> >>>>> @@ -22,6 +22,12 @@ config PINCTRL_MTK
+> >>>>>    config PINCTRL_MTK_V2
+> >>>>>           tristate
+> >>>>>
+> >>>>> +config PINCTRL_MTK_MTMIPS
+> >>>>> +       bool
+> >>>>> +       depends on RALINK
+> >>>>> +       select PINMUX
+> >>>>> +       select GENERIC_PINCONF
+> >>>>> +
+> >>>>>    config PINCTRL_MTK_MOORE
+> >>>>>           bool
+> >>>>>           depends on OF
+> >>>>> @@ -43,6 +49,49 @@ config PINCTRL_MTK_PARIS
+> >>>>>           select OF_GPIO
+> >>>>>           select PINCTRL_MTK_V2
+> >>>>>
+> >>>>> +# For MIPS SoCs
+> >>>>> +config PINCTRL_MT7620
+> >>>>> +       bool "MediaTek MT7620 pin control"
+> >>>>> +       depends on SOC_MT7620 || COMPILE_TEST
+> >>>>> +       depends on RALINK
+> >>>>> +       default SOC_MT7620
+> >>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>> +
+> >>>>> +config PINCTRL_MT7621
+> >>>>> +       bool "MediaTek MT7621 pin control"
+> >>>>> +       depends on SOC_MT7621 || COMPILE_TEST
+> >>>>> +       depends on RALINK
+> >>>>> +       default SOC_MT7621
+> >>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>> +
+> >>>>> +config PINCTRL_MT76X8
+> >>>>> +       bool "MediaTek MT76X8 pin control"
+> >>>>> +       depends on SOC_MT7620 || COMPILE_TEST
+> >>>>> +       depends on RALINK
+> >>>>> +       default SOC_MT7620
+> >>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>> +
+> >>>>> +config PINCTRL_RT2880
+> >>>>> +       bool "Ralink RT2880 pin control"
+> >>>>> +       depends on SOC_RT288X || COMPILE_TEST
+> >>>>> +       depends on RALINK
+> >>>>> +       default SOC_RT288X
+> >>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>> +
+> >>>>> +config PINCTRL_RT305X
+> >>>>> +       bool "Ralink RT305X pin control"
+> >>>>> +       depends on SOC_RT305X || COMPILE_TEST
+> >>>>> +       depends on RALINK
+> >>>>> +       default SOC_RT305X
+> >>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>> +
+> >>>>> +config PINCTRL_RT3883
+> >>>>> +       bool "Ralink RT3883 pin control"
+> >>>>> +       depends on SOC_RT3883 || COMPILE_TEST
+> >>>>> +       depends on RALINK
+> >>>>> +       default SOC_RT3883
+> >>>>> +       select PINCTRL_MTK_MTMIPS
+> >>>>> +
+> >>>>
+> >>>> I am not a Kconfig expert at all but...
+> >>>>
+> >>>> Should not all of these be depends on SOC_XXX || (COMPILE_TEST &&
+> >>>> RALINK) and avoid the " depends on RALINK" next line in all of them?
+> >>
+> >> This seems to do the same thing but I'm following the "either change
+> >> them all or fit into the crowd" ideology.
+> >>
+> >>>>
+> >>>> Just asking since we have yet arch read and write register operation=
+s
+> >>>> in pinctrl common ralink code. Having in this way, when we address
+> >>>> this arch thing  in the next series just removing the "&& RALINK" pa=
+rt
+> >>>> makes the review pretty obvious.
+> >>
+> >> You'd have to change RALINK with OF since we're still depending on tha=
+t.
+> >> RALINK selects OF by default so it's currently a hidden dependency.
+> >>
+> >>>>
+> >>>> Other than that, changes look good to me.
+> >>>
+> >>> I think "depends on SOC_XXX || (COMPILE_TEST && MIPS)" would work als=
+o
+> >>> and might be more accurate for compile testing targets.
+> >
+> > Are you sure? SOC_XXX here is already being enabled only if RALINK is
+> > already enabled, right? [0]
+>
+> I'm not sure who's your reply to, or what it's about here.
 
-IIUC, that commit is neither upstream not in mm-stable -- it's unstable. 
-Maybe raise that as a review comment in reply to the original patch, so 
-we can easily connect the dots and squash it into the original, 
-problematic patch that is still under review.
+Bad insertion between lines, sorry :). I was just trying to explain to
+you that SOC_RTXX ralink stuff is only available when RALINK is
+already selected.
 
--- 
-Thanks,
+>
+> >
+> >>
+> >> This is not OK in both cases. If the driver is dependent on Ralink
+> >> architecture code, choosing any other MIPS platform will make the driv=
+er
+> >> available to compile, which will fail.
+> >
+> > SOC_XXX is already dependent on RALINK for real uses but the driver is
+> > going to be selected for other MIPS platforms only for COMPILE_TEST
+> > targets. Ideally drivers should be arch agnostic so can be selected
+> > for any single arch build. Now we have arch dependent read and write
+> > calls in the code, so you need the right headers to be properly found
+> > to be able to compile testing. I think MIPS is enough dependency here
+> > to properly find them. But if not, this should be (COMPILE_TEST &&
+> > RALINK)
+>
+> I expect below to work without requiring the MIPS option.
+>
+> ifeq ($(CONFIG_COMPILE_TEST),y)
+> CFLAGS_pinctrl-mtmips.o         +=3D -I$(srctree)/arch/mips/include
+> endif
 
-David / dhildenb
+Yes, this will work but won't be necessary at all when we get rid of
+ralink arch dependent code in the next series.
 
+>
+> >
+> >>
+> >> If the driver is independent of Ralink architecture code, you're
+> >> limiting the driver to be compiled only when a MIPS platform is select=
+ed.
+> >
+> > So... how are you planning to allow compile testing of the driver in
+> > any single arch when we get rid of all the arch dependent code? If you
+> > make everything dependent on RALINK you cannot.
+>
+> I intend to make it dependent on OF, not RALINK.
+
+Ok, I see, thanks for clarification.
+
+>
+> Ar=C4=B1n=C3=A7
+
+Best regards,
+    Sergio Paracuellos
