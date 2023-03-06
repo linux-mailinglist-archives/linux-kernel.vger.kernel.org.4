@@ -2,66 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A72A6ACFD0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE3C16ACFD4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjCFVGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
+        id S229685AbjCFVI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjCFVG1 (ORCPT
+        with ESMTP id S229559AbjCFVIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:06:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA9B4FA9C;
-        Mon,  6 Mar 2023 13:06:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3A3F60A10;
-        Mon,  6 Mar 2023 21:06:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E8FC433D2;
-        Mon,  6 Mar 2023 21:06:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678136779;
-        bh=idi/6s5Qo9QDBdVMI12wKo77YC0Au3UM5k9rnmjlsKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jadhch3R6vjQ+nSfoA7Uwab3TYTynSl6yBMobTbxxx6m/03OWG9QugHFMZ4oeq/p9
-         677UGJFLAPZN5A5yAggWck4JZfPvZmwgYBaa5B4LRBVQAjopUy9Qq0os5fW71fwZuY
-         D5jAPnNOtvbi0GUxZ8FZqCPeF+1mT9VS9NMxv0inkqkPkSf2Zhy36NDRo4fM7h7UPN
-         5SXmsxCytFSw7VpK6OiVeGdt61CVLt8dms+iGw4gCb1gKj4tmRsdL5EYySh/zK0LKS
-         vGQpvv3COzj4Pt4AE3OruZHCsHCALMVcrIYy8YEkriYV+6dLIZsMB32fIeSnhl3d2c
-         7DZ+wW9B2jVPQ==
-Date:   Mon, 6 Mar 2023 21:06:13 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        'Conor Dooley ' <conor.dooley@microchip.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V3 16/20] clocksource/timer-riscv: Add ACPI support
-Message-ID: <567aac52-8b84-47a9-9faf-b27ff1a1963e@spud>
-References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
- <20230303133647.845095-17-sunilvl@ventanamicro.com>
+        Mon, 6 Mar 2023 16:08:25 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798743BDB7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:08:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Myq4oW0FNya1g2HlnuWwn+aBlWwPfsZwgZBVa+Mj0+Y=;
+  b=GAEXEMtJ/xd8nOEm5BB5kwL43wnEqTOGdjLCknmWLCcLqM7qJBbXVQKe
+   uDppI9NsCl3E5825UEm1okaRRKCsP/PXjzRGk9UeYU0aJrfz3IrmAgj2z
+   m5Oy7wzaDsVvI6Rdq7wMQjCZlh+DM12eWq7e86YLt3r+SHRJqyjP7TLFB
+   0=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,238,1673910000"; 
+   d="scan'208";a="95740869"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 22:08:19 +0100
+Date:   Mon, 6 Mar 2023 22:08:21 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: alignment should match opening
+ parenthesis in axis-fifo.c
+In-Reply-To: <ZAZSmPpB6fcozGa4@khadija-virtual-machine>
+Message-ID: <alpine.DEB.2.22.394.2303062202500.3050@hadrien>
+References: <ZAZSmPpB6fcozGa4@khadija-virtual-machine>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="KUsNw6CACrWxwcHM"
-Content-Disposition: inline
-In-Reply-To: <20230303133647.845095-17-sunilvl@ventanamicro.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,73 +53,54 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---KUsNw6CACrWxwcHM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 03, 2023 at 07:06:43PM +0530, Sunil V L wrote:
-> Initialize the timer driver based on RHCT table on ACPI based
-> platforms.
->=20
-> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+On Tue, 7 Mar 2023, Khadija Kamran wrote:
 
-The SBI spec allows for implementations where the timer cannot wake the
-cpu. You previously said "We have plans to add a flag in RHCT. But that
-still needs approval.", so could you please convert this to a more
-concrete wording and put the explanation for why this is missing into
-the commit message?
+> In file drivers/staging/axis-fifo/axis-fifo.c the alignment did not match the opening parenthesis. So, a few tabs were added to match the alignment to exactly where the parenthesis started.
 
-Cheers,
-Conor.
+Hello Khadija,
 
+Thanks for plunging in and being the first participant!
+
+However, there are a number of issues with the proposed patch.
+
+1.  The log message should be at most around 70 characters wide.  You have
+one long line.
+
+2.  The log message should be written in the imperative.  Instead of "a
+few tabs were added", ay "add a few tabs".
+
+3.  I'm not sure that it is worth creating a very long line to respect the
+rule about (.  On the other hand, the way the code is written at the
+moment seems to be very misleading, because the third argument to
+wait_event_interruptible_timeout is written as though it is the second
+argument to ioread32.  So you can adjust the argument list of
+wait_event_interruptible_timeout so that at least all of the arguments
+that are not on the same line as the function call are lined up.
+
+julia
+
+>
+> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
 > ---
->  drivers/clocksource/timer-riscv.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
->=20
-> diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/time=
-r-riscv.c
-> index cecc4662293b..da3071b387eb 100644
-> --- a/drivers/clocksource/timer-riscv.c
-> +++ b/drivers/clocksource/timer-riscv.c
-> @@ -10,6 +10,7 @@
-> =20
->  #define pr_fmt(fmt) "riscv-timer: " fmt
-> =20
-> +#include <linux/acpi.h>
->  #include <linux/clocksource.h>
->  #include <linux/clockchips.h>
->  #include <linux/cpu.h>
-> @@ -207,3 +208,13 @@ static int __init riscv_timer_init_dt(struct device_=
-node *n)
->  }
-> =20
->  TIMER_OF_DECLARE(riscv_timer, "riscv", riscv_timer_init_dt);
-> +
-> +#ifdef CONFIG_ACPI
-> +static int __init riscv_timer_acpi_init(struct acpi_table_header *table)
-> +{
-> +	return riscv_timer_init_common();
-> +}
-> +
-> +TIMER_ACPI_DECLARE(aclint_mtimer, ACPI_SIG_RHCT, riscv_timer_acpi_init);
-> +
-> +#endif
-> --=20
+>  drivers/staging/axis-fifo/axis-fifo.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
+> index dfd2b357f484..6e959224add0 100644
+> --- a/drivers/staging/axis-fifo/axis-fifo.c
+> +++ b/drivers/staging/axis-fifo/axis-fifo.c
+> @@ -383,7 +383,7 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
+>  		 */
+>  		mutex_lock(&fifo->read_lock);
+>  		ret = wait_event_interruptible_timeout(fifo->read_queue,
+> -			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+> +						       ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+>  				 (read_timeout >= 0) ?
+>  				  msecs_to_jiffies(read_timeout) :
+>  				  MAX_SCHEDULE_TIMEOUT);
+> --
 > 2.34.1
->=20
-
---KUsNw6CACrWxwcHM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAZVxQAKCRB4tDGHoIJi
-0ghAAP4lpF2feMoFrQxas6vkJHXKFiI7ARMvhKONsSV8xUNn7wEAkI8McxF1J2fl
-c4aLJfk6KJvLtcvGqjczoc+H9X2Rfw0=
-=A6TU
------END PGP SIGNATURE-----
-
---KUsNw6CACrWxwcHM--
+>
+>
+>
