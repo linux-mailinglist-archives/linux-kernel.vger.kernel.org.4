@@ -2,69 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BEDE6ACC3B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:16:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B016ACC35
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCFSQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:16:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S230078AbjCFSOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 13:14:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230228AbjCFSPz (ORCPT
+        with ESMTP id S231206AbjCFSOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:15:55 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364366423A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:15:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678126523; x=1709662523;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QBKCuwRTWEWe9JLzCDJ0AOkPJXI0vK4swr9jbHIDC0o=;
-  b=i7oRaHVQxuf/WL7+0lZJboXg/PBQANfNEurwHmjm2mg+CeFPQhwMKxfV
-   qMwEZY2kSbF1lnTbFn4cypkeXMoSM62eMfjs2rIUnifDIkoFLCVVWxRpr
-   fC/5LEBx7+tAUoPhGfn73y+Zh7+wSvi5J8/uBrL4yh3iJT8shRnp/8fvW
-   FZXFBnSoasl0QtIm/HLR4NUkC9SdkACZ9UJjHxhKd9P6Zjm24kVkh+vwO
-   jRb647J/yE+Kji2pXhBtiL7RocsvP9AXdgaO/Rr/zofnKXrVnAz/KQ948
-   eSNOW4CxLYs5UVwgorWb8oAmgpYB9dSlqWVprLSN/0IQP+5D6a59Uaz62
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="421907852"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="421907852"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 10:12:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="669547209"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="669547209"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.218.82])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 10:12:48 -0800
-Message-ID: <a316176e-35ce-38da-8054-cda7fd2e2a0a@intel.com>
-Date:   Mon, 6 Mar 2023 20:12:43 +0200
+        Mon, 6 Mar 2023 13:14:14 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B83634F60;
+        Mon,  6 Mar 2023 10:13:33 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so14058274pjh.0;
+        Mon, 06 Mar 2023 10:13:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678126412;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nVDRLydRone1J93o9oyayT1ixn2USWzwJPhyrHw1GAs=;
+        b=K0ohwVvtpaqIM1ff7KNQ9iqtOS8LvwFVSwAlfsHNWS+XjLRUXy+7LqEMHc6UcjJooC
+         FXfafhU/B3oMyaN3xDuDn75iDeDIkapf8UmM5Ftc2Nlx2D+6wSo/5OKDbsQyvGp3xaaj
+         /lFsvPnIJSQu3+SzJMD6Svu5gzZvneVauDck+s0/+HezZ6a3r8VUUtZoxrz4bey7u6Jq
+         KjC5m8XXbsrDJD7zTOh0IXffYxdKDgw+0gSOuHO5Hpl0PK/XIUSd6iVQ8JHdD9Q2O+e6
+         cYJs0DaF4TwIsYLLVBx5k16xkzyxKmRl3WziS2Q+dqrKfFNMB8zdfO8XP5/SByNcBQ+S
+         Jtfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678126412;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nVDRLydRone1J93o9oyayT1ixn2USWzwJPhyrHw1GAs=;
+        b=vQ0IhA6r6DC7PvoUxNSgrUpBAGxZ0B7opExWoxufviE6iJCC+UqVsrwmx8QI4Z8ag8
+         DQBbZyvNtipFLe2jGfLCWJMWNPUyShFpMbdnENYHz+IveHQQ88jHzbARnDmOJ8GwczGE
+         QzkOGjEyZejJMXRavsVVf0Z03ZS9LyxKLTCouUhA8Ick9RWAd9/owqkle24UjCasGWqQ
+         pbZBaBIK/livyVMexZhbi3+M/c9/U1TTw2/4sbv3m5hN3YnUSlHyZ0M0q3yGOfIgF6VK
+         +jOzTU/oXqxrJjTA+gJj6mTP6/DNGOcZTYq4FJ7lTJ8ncfqQwC6vG/fJo0evsplMb0v4
+         bY1g==
+X-Gm-Message-State: AO0yUKX5wj82POwt1wogaLk4S0ZTpUsYzmEYlPgqCSylgMmeh0W0gFjH
+        Nbivex2Wekp95pA9pyfgHH4=
+X-Google-Smtp-Source: AK7set8JSu5HH2SYYBQFO2nNfsP5nq/yMAXfZHaMuGcyFct+Bv6s3IpIB0hslTUQT9wBsrFGbwUhWg==
+X-Received: by 2002:a17:90b:3812:b0:237:b702:49ac with SMTP id mq18-20020a17090b381200b00237b70249acmr12565429pjb.17.1678126412292;
+        Mon, 06 Mar 2023 10:13:32 -0800 (PST)
+Received: from vernon-pc ([49.67.2.142])
+        by smtp.gmail.com with ESMTPSA id p26-20020a634f5a000000b00502e6c22c42sm6628207pgl.59.2023.03.06.10.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 10:13:32 -0800 (PST)
+Date:   Tue, 7 Mar 2023 02:13:25 +0800
+From:   Vernon Yang <vernon2gm@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     tytso@mit.edu, Jason@zx2c4.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
+Message-ID: <ZAYtRcbMeRUQFUw/@vernon-pc>
+References: <20230306160651.2016767-1-vernon2gm@gmail.com>
+ <20230306160651.2016767-6-vernon2gm@gmail.com>
+ <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH 1/1] perf tools: Add Adrian Hunter to MAINTAINERS as a
- reviewer
-Content-Language: en-US
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <ZAYosCjlzO9plAYO@kernel.org>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <ZAYosCjlzO9plAYO@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,43 +81,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/03/23 19:53, Arnaldo Carvalho de Melo wrote:
-> Please ack :-)
-> 
-> --
-> 
-> Adrian is the main author of the Intel PT codebase and has been
-> reviewing perf tooling patches consistently for a long time, so lets
-> reflect that in the MAINTAINERS file so that contributors add him to the
-> CC list in patch submissions.
-> 
-> Cc: Adrian Hunter <adrian.hunter@intel.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Link: https://lore.kernel.org/lkml/
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+On Mon, Mar 06, 2023 at 09:29:10AM -0800, Linus Torvalds wrote:
+> On Mon, Mar 6, 2023 at 8:07 AM Vernon Yang <vernon2gm@gmail.com> wrote:
+> >
+> > After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
+> > optimizations"), the cpumask size is divided into three different case,
+> > so fix comment of cpumask_xxx correctly.
+>
+> No no.
+>
+> Those three cases are meant to be entirely internal optimizations.
+> They are literally just "preferred sizes".
+>
+> The correct thing to do is always that
+>
+>    * Returns >= nr_cpu_ids if no cpus set.
+>
+> because nr_cpu_ids is always the *smallest* of the access sizes.
+>
+> That's exactly why it's a ">=". The CPU mask stuff has always
+> historically potentially used a different size than the actual
+> nr_cpu_ids, in that it could do word-sized scans even when the machine
+> might only have a smaller set of CPUs.
+>
+> So the whole "small" vs "large" should be seen entirely internal to
+> cpumask.h. We should not expose it outside (sadly, that already
+> happened with "nr_cpumask_size", which also was that kind of thing.
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+I also just see nr_cpumask_size exposed to outside, so... Sorry.
 
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 66b5d5a51d5b1110..8e46fa10a631e4d6 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16425,6 +16425,7 @@ R:	Alexander Shishkin <alexander.shishkin@linux.intel.com>
->  R:	Jiri Olsa <jolsa@kernel.org>
->  R:	Namhyung Kim <namhyung@kernel.org>
->  R:	Ian Rogers <irogers@google.com>
-> +R:	Adrian Hunter <adrian.hunter@intel.com>
->  L:	linux-perf-users@vger.kernel.org
->  L:	linux-kernel@vger.kernel.org
->  S:	Supported
+>
+> So no, this patch is wrong. If anything, the comments should be strengthened.
+>
+> Of course, right now Guenter seems to be reporting a problem with that
+> optimization, so unless I figure out what is going on I'll just need
+> to revert it anyway.
 
+Yes, cause is the cpumask_next() calls find_next_bit(..., size, ...), and
+find_next_bit(..., size, ...) if no bits are set, returns @size.
+
+@size was a nr_cpumask_bits variable before, now it is small_cpumask_bits, and
+when NR_CPUS < = BITS_PER_LONG, small_cpumask_bits is a macro, which is
+replaced with NR_CPUS at compile, so only the NR_CPUS is returned when it no
+further cpus set.
+
+But before nr_cpumask_bits variable, it was read while running, and it was
+mutable.
+
+The random.c try_to_generate_entropy() to get first cpu by
+`if (cpu == nr_cpumask_bits)`, but cpumask_next() alway return NR_CPUS,
+nr_cpumask_bits is nr_cpu_ids, so pass NR_CPUS to add_timer_on(),
+
+>
+>                 Linus
+>
+>                 Linus
