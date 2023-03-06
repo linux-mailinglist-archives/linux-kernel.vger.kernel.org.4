@@ -2,150 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75AD6AC491
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45C6F6AC48E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjCFPOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:14:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
+        id S230262AbjCFPN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:13:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjCFPN5 (ORCPT
+        with ESMTP id S229770AbjCFPN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:13:57 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE49420044;
+        Mon, 6 Mar 2023 10:13:56 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D90C17CEA;
         Mon,  6 Mar 2023 07:13:55 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326DhlLI007269;
-        Mon, 6 Mar 2023 15:13:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=T7/SMlEP0i5jF/rvaqPXk10U51jTGqVEFpIxRO9I11c=;
- b=krjunMrpMXWTnhiuFqxlzVbaAAj8nabbHzjh6Top6IZFTAGguIbItWR8uQpVnoO9oBOR
- PGCDZWPDig27oQjg8iVzggLLi5W/anTblc1Ex2rPj3IEXAHnhJnCPUhgg9b3sOHrmnj/
- 83KEruNVxMe+Q/SkfrEcwbyg8jQtcmoCJe3h7kVeXoVMyJNkosecOKX1NiO/Re1LlogX
- 2SoR421IJhRkHbVT6GdL4StmCl1gTTIG8dQqQCgrF7fVA0PtbHepmg8hm+NYp9THfuQr
- ocOiqmXHN7Qh2Mi++BNMprFPj3h+XXkTdJqXoxxIO4S5thr9EOudfqrMvYv1PnhFz9F8 4g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p418754pn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 15:13:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 326FDlUq009046
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Mar 2023 15:13:47 GMT
-Received: from [10.216.34.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
- 07:13:41 -0800
-Message-ID: <06fc09a3-d17f-e35e-3622-1773b9fda83d@quicinc.com>
-Date:   Mon, 6 Mar 2023 20:43:36 +0530
+Received: by mail-pl1-x62e.google.com with SMTP id u5so10683777plq.7;
+        Mon, 06 Mar 2023 07:13:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678115635;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X+nNvkpchLnkczpLTpflAGsHRqbPoVTogqo6z26wUpc=;
+        b=ZAGV4qjoYCFHUsT/wTse6RdqonU9M5Y3OySZtLssotwpHfww6fM4l99wINL+U4KJYb
+         32aHGMQDZtywW0NcrYAE3XBshXsrv/9Y46O7bomQbuIY2NaY6HaHa/OI2DkEXzsdZXAZ
+         p8iKNF3TAvUxJWRJs1zkgyGjQBHGkXYBK3eRPCRGSR36n5Pv2sXyiMcvZHMz1PmVaL69
+         zQq5hmNcDyse24S7gMuQmQ29A421Lv5DQlKAflqg6hXEaius6udaqPhW42AtjJIWfFb3
+         BwPgZeUubbWbQTWWm80CHkr+WVqMAh9gLRbPnaJo/R42PXXuuR9+eGoSQiTe42B5ITKs
+         bkpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678115635;
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X+nNvkpchLnkczpLTpflAGsHRqbPoVTogqo6z26wUpc=;
+        b=hWecRgKowKnSK8lk2Ku9MUtQR2t5mIBQfJWqv8tkCvSqItJvCzQiKJZgqQk8M3hRch
+         WQUg9h0JnZTaa3UbHML7oyefBs3naxYEl0wFQQ6ccj7g9vaNWZGGNHOu0SmtQOTEXQl0
+         GDivK0HzcPdlvfPolv5/pSD7cgE4bKGS0XqtEQV7x/X+D9Lgv5/DkMQHj87V+6nI2HQW
+         L4IqiYVYGcGmE6xcxhJ19v7QGHqPJ+/YN8R6lMkzqkXy3Eb0hPMHa1m9FogiclRvuZnL
+         yvoVMHOIjRgnw7c1ENdpe0YjRyB2Mi3pnNwmCM6pbcFjXEREg6KX1WSGLPHcvakR8qSH
+         Dd9A==
+X-Gm-Message-State: AO0yUKUSzpXdv2W+UPnSi9cqDIU78zio0TEQKe5kx3gANWBoxd79v58V
+        /FjKJrSU0pXZ14bJvMvK6SI=
+X-Google-Smtp-Source: AK7set/pABW2A3R+yvmnZ+uVbbg7070C3b+GZe8dZfCUVbk0PnIwHWKumbiX+5I9+Y03RK/sa9ifsQ==
+X-Received: by 2002:a05:6a21:3385:b0:cd:238f:4f4b with SMTP id yy5-20020a056a21338500b000cd238f4f4bmr12367948pzb.23.1678115634642;
+        Mon, 06 Mar 2023 07:13:54 -0800 (PST)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id e14-20020a63d94e000000b0050362744b63sm6211900pgj.90.2023.03.06.07.13.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 07:13:54 -0800 (PST)
+Message-ID: <38cb9f23-a56a-f420-5942-0bfeb620306e@gmail.com>
+Date:   Tue, 7 Mar 2023 00:13:50 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH 3/6] ARM: dts: qcom: sdx65: Add support for PCIe PHY
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+To:     carlos.bilbao@amd.com
+Cc:     corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sergio.collado@gmail.com,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20230306134420.30210-1-carlos.bilbao@amd.com>
+Subject: Re: [PATCH] docs/sp_SP: Add process deprecated translation
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mani@kernel.org>,
-        <lpieralisi@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>,
-        <manivannan.sadhasivam@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>
-References: <1678080302-29691-1-git-send-email-quic_rohiagar@quicinc.com>
- <1678080302-29691-4-git-send-email-quic_rohiagar@quicinc.com>
- <302654ee-3ecb-2274-af1a-9b58f7d0f49d@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <302654ee-3ecb-2274-af1a-9b58f7d0f49d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ZNIl0H3pFIGMXuFexQ6qRYOHuDETHXFO
-X-Proofpoint-ORIG-GUID: ZNIl0H3pFIGMXuFexQ6qRYOHuDETHXFO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 mlxlogscore=999 bulkscore=0 suspectscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060134
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20230306134420.30210-1-carlos.bilbao@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Carlos,
 
-On 3/6/2023 2:11 PM, Dmitry Baryshkov wrote:
-> On 06/03/2023 07:24, Rohit Agarwal wrote:
->> Add devicetree support for PCIe PHY used in SDX65 platform. This PHY is
->> used by the PCIe EP controller.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   arch/arm/boot/dts/qcom-sdx65.dtsi | 32 
->> ++++++++++++++++++++++++++++++++
->>   1 file changed, 32 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/qcom-sdx65.dtsi 
->> b/arch/arm/boot/dts/qcom-sdx65.dtsi
->> index b073e0c..246290d 100644
->> --- a/arch/arm/boot/dts/qcom-sdx65.dtsi
->> +++ b/arch/arm/boot/dts/qcom-sdx65.dtsi
->> @@ -292,6 +292,38 @@
->>               status = "disabled";
->>           };
->>   +        pcie0_phy: phy@1c07000 {
->> +            compatible = "qcom,sdx65-qmp-pcie-phy";
->> +            reg = <0x01c07000 0x1e4>;
->> +            #address-cells = <1>;
->> +            #size-cells = <1>;
->> +            ranges;
->> +            clocks = <&gcc GCC_PCIE_AUX_PHY_CLK_SRC>,
->> +                 <&gcc GCC_PCIE_CFG_AHB_CLK>,
->> +                 <&gcc GCC_PCIE_0_CLKREF_EN>,
->> +                 <&gcc GCC_PCIE_RCHNG_PHY_CLK>;
->> +            clock-names = "aux", "cfg_ahb", "ref", "refgen";
->> +
->> +            resets = <&gcc GCC_PCIE_PHY_BCR>;
->> +            reset-names = "phy";
->> +            assigned-clocks = <&gcc GCC_PCIE_RCHNG_PHY_CLK>;
->> +            assigned-clock-rates = <100000000>;
->> +            status = "disabled";
->> +
->> +            pcie0_lane: lanes@1c06000 {
->
-> Please use new style bindings found in qcom,sc8280xp-qmp-pcie-phy.yaml
+Minor nits in the Subject and Sob area.
 
-Sure, Will update it the bindings and this.
+On Mon, 6 Mar 2023 07:44:20 -0600, Carlos Bilbao wrote:
+> Subject: [PATCH] docs/sp_SP: Add process deprecated translation
 
-Thanks,
-Rohit.
->
->> +                reg = <0x01c06000 0xf0>, /* tx0 */
->> +                      <0x01c06200 0x2f0>, /* rx0 */
->> +                      <0x01c07200 0x1e8>, /* pcs */
->> +                      <0x01c06800 0xf0>, /* tx1 */
->> +                      <0x01c06a00 0x2f0>, /* rx1 */
->> +                      <0x01c07400 0xc00>; /* pcs_misc */
->> +                clocks = <&gcc GCC_PCIE_PIPE_CLK>;
->> +                clock-names = "pipe0";
->> +                #phy-cells = <0>;
->> +                clock-output-names = "pcie_pipe_clk";
->> +            };
->> +        };
->> +
->>           tcsr_mutex: hwlock@1f40000 {
->>               compatible = "qcom,tcsr-mutex";
->>               reg = <0x01f40000 0x40000>;
->
+This summary looks ambiguous to me.
+
+Maybe
+
+   docs/sp_SP: Add translation of process/deprecated 
+
+??
+
+> Translate Documentation/process/deprecated.rst into Spanish.
+> 
+> Co-developed-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> Signed-off-by: Sergio Gonzalez <sergio.collado@gmail.com>
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+
+To me, Co-developed-by: from the author of the patch looks
+strange, because it is obvious the author did some development on
+the patch.
+
+Which is your intent:
+
+   Author: Carlos
+   Co-developer: Sergio
+
+, or
+
+   Author: Sergio
+   Co-developer: Carlos
+
+???
+
+        Thanks, Akira
+
+> ---
+>  .../translations/sp_SP/process/deprecated.rst | 381 ++++++++++++++++++
+>  .../translations/sp_SP/process/index.rst      |   1 +
+>  2 files changed, 382 insertions(+)
+>  create mode 100644 Documentation/translations/sp_SP/process/deprecated.rst
+[...]
