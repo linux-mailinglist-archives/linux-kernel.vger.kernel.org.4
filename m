@@ -2,122 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1116ABAA3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1AA66ABAAB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjCFKDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:03:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
+        id S230221AbjCFKEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:04:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFKDv (ORCPT
+        with ESMTP id S230203AbjCFKEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:03:51 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6E735A1
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:03:49 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id m10so8575357vso.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:03:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678097029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SPzr8oFiB9fNElzzDfAoV9vrNYHk5FKfy7JJ4PIAqSE=;
-        b=2RNNu9YkiQ9SLv1yzu0hlw6ycMPTC+jRGdK9O0mV15wx4zfDdLYJ6qq6IyXMjFC2ui
-         RWQNlI0cF75KIRly7kP8H5zxL2Ufsr4KKlbw7MW4tu2lCQEWY3i0F2OTZXl2D9RlLkfD
-         2jRrUv7v+b2vtrK7k/xAwCOMkyJdgxkEfPwkqdoSsmD/skVJPXlkXDFU4vRi+5UTH2kh
-         nJy1mOaur2/OrTCMRw0YO11n+wUwiJ69YXhyRCbQmQAYDP1xmfrzCDaq+iFZlMez8kF5
-         xDlF5OMkj2IsPpyf355iA28pzlByuWb0IlHXeRMWhe6Twio8NJIj67ZBvgesIwjPc9jD
-         OixA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678097029;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SPzr8oFiB9fNElzzDfAoV9vrNYHk5FKfy7JJ4PIAqSE=;
-        b=A6AaNpgqMl1lwgAi82GQT0wypYF+9HEhe4PFP1aWtNrrqbbupuvAI1w8ZtUoWqV0MU
-         2DSD26MRptxQHlOZvvndCTTmZ2sQwE6pAMmvolSVhhl7BqIKPuGa+9s5ZSpNNlgRC8/p
-         oGTrskpTrQolMLRS5GO40bnM6b0YkkF+i+eTBfeU0dPhsG+fy/wrIuTHz/jzN/5LsNRn
-         Ntkqy7dNLa4lkVOqyk+uTpPqXLAJCs0q3Xq2lUr7rPckjW/KK446AV5aDLqKOA7FG1e+
-         10nVHwphUgU9w52s/H3u+2PsdS58E8U5zS9C6Gb4lW8DNCb/uGT2Yib2L7k17JpBLCvx
-         fwzA==
-X-Gm-Message-State: AO0yUKUXpgRJTT4r83jtvJ1acmmZg723nRm+xxFz0HRwxPDiVcl9WP4A
-        yesZ5DWJre9actpjBcW/lP2AykY9i6feWCdfJSHY0MDBVq5jzTW7
-X-Google-Smtp-Source: AK7set/J3QEIzca9ZeSGAD0EnY2yePNuRBAoapV1qPXPpS6dkGzXCjbp2NA254SLfkJPBXsK4Fu6CuDo2QzsnXATQIE=
-X-Received: by 2002:a67:ec4f:0:b0:411:c9c5:59ae with SMTP id
- z15-20020a67ec4f000000b00411c9c559aemr6817085vso.5.1678097028919; Mon, 06 Mar
- 2023 02:03:48 -0800 (PST)
+        Mon, 6 Mar 2023 05:04:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFF113D47;
+        Mon,  6 Mar 2023 02:04:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A4C3B80D79;
+        Mon,  6 Mar 2023 10:04:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E76EC433EF;
+        Mon,  6 Mar 2023 10:04:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678097045;
+        bh=0dZ/AGhesVMOcpXu9QNoFHle+VLwx5bsjvRGoXHadQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CM2W3088GWcrcFboIQkQjyKJWU0wS8m6Bk7LOxSKBtS9n67YjsybHsTSgOYPyxjyi
+         x7lzRNEZH8qAXEOjUTuQrGa3yfHQ9L+hYfOLlEj0j++ltQtsz1faajHnnbmYeaDqkM
+         sYB6p5xjTT6WgrCEsfalRAUxH9pZGSSBjSpjkaAFdT8CfMsXbbGpyoZta5bdzLL1Yf
+         oljhxFxNR0bCU7WgS+bmh2iKz6+MXnn07WQhYYRk2XpnBJyoOzX3XNhYg36gCF+alW
+         Poz/fcAYt94uYeaGb4b35jjRbGqLyI35Kaoq0aaTADLuJ0EicXXiS7Y9e9NYsvaOop
+         Bc0v1Ir+t2YbQ==
+Date:   Mon, 6 Mar 2023 10:04:00 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, pavel@ucw.cz,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Eckert.Florian@googlemail.com
+Subject: Re: [PATCH v7 2/2] trigger: ledtrig-tty: add additional modes
+Message-ID: <20230306100400.GF9667@google.com>
+References: <20230222083335.847655-1-fe@dev.tdt.de>
+ <20230222083335.847655-3-fe@dev.tdt.de>
+ <20230303141139.GP2420672@google.com>
+ <be7c90cf-4c65-1cf0-3001-8706415c3d34@kernel.org>
+ <20230306090456.GA9667@google.com>
+ <1faade8f-d5e6-fd60-bd60-22e3b79c5ba4@kernel.org>
 MIME-Version: 1.0
-References: <20230226205319.1013332-1-dario.binacchi@amarulasolutions.com>
-In-Reply-To: <20230226205319.1013332-1-dario.binacchi@amarulasolutions.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Mar 2023 11:03:38 +0100
-Message-ID: <CAMRc=MdoMPROUVeu3m9Jx+-5deRMC9jm+zbGBQ=OdHaLApmJ-g@mail.gmail.com>
-Subject: Re: [PATCH] gpio: mxc: use dynamic allocation of base
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1faade8f-d5e6-fd60-bd60-22e3b79c5ba4@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 9:53=E2=80=AFPM Dario Binacchi
-<dario.binacchi@amarulasolutions.com> wrote:
->
-> Since commit 502df79b860563d7 ("gpiolib: Warn on drivers still using stat=
-ic
-> gpiobase allocation"), one or more warnings are printed during boot on
-> systems where static allocation of GPIO base is used:
->
-> [    1.611480] gpio gpiochip0: Static allocation of GPIO base is deprecat=
-ed, use dynamic allocation.
-> [    1.622893] gpio gpiochip1: Static allocation of GPIO base is deprecat=
-ed, use dynamic allocation.
-> [    1.633272] gpio gpiochip2: Static allocation of GPIO base is deprecat=
-ed, use dynamic allocation.
-> [    1.643388] gpio gpiochip3: Static allocation of GPIO base is deprecat=
-ed, use dynamic allocation.
-> [    1.653474] gpio gpiochip4: Static allocation of GPIO base is deprecat=
-ed, use dynamic allocation.
->
-> So let's follow the suggestion and use dynamic allocation.
->
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->
->  drivers/gpio/gpio-mxc.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-mxc.c b/drivers/gpio/gpio-mxc.c
-> index 9d0cec4b82a3..abc129a88a62 100644
-> --- a/drivers/gpio/gpio-mxc.c
-> +++ b/drivers/gpio/gpio-mxc.c
-> @@ -462,8 +462,7 @@ static int mxc_gpio_probe(struct platform_device *pde=
-v)
->         port->gc.request =3D gpiochip_generic_request;
->         port->gc.free =3D gpiochip_generic_free;
->         port->gc.to_irq =3D mxc_gpio_to_irq;
-> -       port->gc.base =3D (pdev->id < 0) ? of_alias_get_id(np, "gpio") * =
-32 :
-> -                                            pdev->id * 32;
-> +       port->gc.base =3D -1;
->
->         err =3D devm_gpiochip_add_data(&pdev->dev, &port->gc, port);
->         if (err)
-> --
-> 2.32.0
->
+On Mon, 06 Mar 2023, Jiri Slaby wrote:
 
-Linus,
+> On 06. 03. 23, 10:04, Lee Jones wrote:
+> > On Mon, 06 Mar 2023, Jiri Slaby wrote:
+> > 
+> > > On 03. 03. 23, 15:11, Lee Jones wrote:
+> > > > On Wed, 22 Feb 2023, Florian Eckert wrote:
+> > > > > @@ -113,21 +207,38 @@ static void ledtrig_tty_work(struct work_struct *work)
+> > > > >    		trigger_data->tty = tty;
+> > > > >    	}
+> > > > > -	ret = tty_get_icount(trigger_data->tty, &icount);
+> > > > > -	if (ret) {
+> > > > > -		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
+> > > > > -		mutex_unlock(&trigger_data->mutex);
+> > > > > -		return;
+> > > > > -	}
+> > > > > -
+> > > > > -	if (icount.rx != trigger_data->rx ||
+> > > > > -	    icount.tx != trigger_data->tx) {
+> > > > > -		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+> > > > > -
+> > > > > -		trigger_data->rx = icount.rx;
+> > > > > -		trigger_data->tx = icount.tx;
+> > > > > -	} else {
+> > > > > -		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
+> > > > > +	switch (trigger_data->mode) {
+> > > > > +	case TTY_LED_CTS:
+> > > > > +		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
+> > > > > +		break;
+> > > > > +	case TTY_LED_DSR:
+> > > > > +		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
+> > > > > +		break;
+> > > > > +	case TTY_LED_CAR:
+> > > > > +		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
+> > > > > +		break;
+> > > > > +	case TTY_LED_RNG:
+> > > > > +		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
+> > > > > +		break;
+> > > > > +	case TTY_LED_CNT:
+> > > > 
+> > > > I believe this requires a 'fall-through' statement.
+> > > 
+> > > I don't think this is the case. Isn't fallthrough required only in cases
+> > > when there is at least one statement, i.e. a block?
+> > 
+> > There's no mention of this caveat in the document.
+> > 
+> > To my untrained eyes, the rule looks fairly explicit, starting with "All".
+> > 
+> > "
+> >    All switch/case blocks must end in one of:
+> > 
+> >    * break;
+> >    * fallthrough;
+> >    * continue;
+> >    * goto <label>;
+> >    * return [expression];
+> > "
+> > 
+> > If you're aware of something I'm not, please consider updating the doc.
+> 
+> The magic word in the above is "block", IMO. A block is defined for me as a
+> list of declarations and/or statements. Which is not the case in the above
+> (i.e. in sequential "case"s).
+> 
+> Furthermore, the gcc docs specifically say about fallthrough attribute:
+> It can only be used in a switch statement (the compiler will issue an error
+> otherwise), after a preceding statement and before a logically succeeding
+> case label, or user-defined label.
+> 
+> While "case X:" is technically a (label) statement, I don't think they were
+> thinking of it as such here due to following "succeeding case label" in the
+> text.
+> 
+> So checking with the code, gcc indeed skips those
+> (should_warn_for_implicit_fallthrough()):
+>   /* Skip all immediately following labels.  */
+>   while (!gsi_end_p (gsi)
+>          && (gimple_code (gsi_stmt (gsi)) == GIMPLE_LABEL
+>              || gimple_code (gsi_stmt (gsi)) == GIMPLE_PREDICT))
+>     gsi_next_nondebug (&gsi);
+> 
+> 
+> Apart from that, fallthrough only makes the code harder to read:
+> 
+> case X:
+> case Y:
+> case Z:
+> default:
+>   do_something();
+> 
+> VS
+> 
+> case X:
+>   fallthrough;
+> case Y:
+>   fallthrough;
+> case Z:
+>   fallthrough;
+> default:
+>   do_something();
+> 
+> The first one is a clear win, IMO, and it's pretty clear that it falls
+> through on purpose. And even for compiler -- it shall not produce a warning
+> in that case.
 
-I'm afraid we'll need to do something about this warning, because
-we're getting the same patch for like 4th time already...
+Works for me.  Thanks for the clear explanation, Jiri and Uwe.
 
-Bart
+And yes Uwe, it would be good if we could make that clearer in the doc.
+
+-- 
+Lee Jones [李琼斯]
