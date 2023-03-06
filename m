@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6626ACE98
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 587946ACEA5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCFTz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57264 "EHLO
+        id S230370AbjCFT4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjCFTzl (ORCPT
+        with ESMTP id S230296AbjCFT4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:55:41 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E898D59427;
-        Mon,  6 Mar 2023 11:55:39 -0800 (PST)
+        Mon, 6 Mar 2023 14:56:06 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DD96A047;
+        Mon,  6 Mar 2023 11:55:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678132540; x=1709668540;
+  t=1678132546; x=1709668546;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=EDvZyVrBDVc7Nwzs9i+qoHy3DJw3++NSTTOOF+lSAxI=;
-  b=elBBbmFOveSrjoKIlVza1kPML3XJ5AJUUtkLgfZNLpnRkRuHjhVbfdJe
-   rQctpexiGsmUo6FV68vzAAFz6RyIULnAlT5M8Zg2MhcfaMA9aS43upntQ
-   abIg7o/rcOYiGhqQwSgc2y04OZyYbp9IykiEbWtxG1sjthg04FHkw8QNE
-   d3LxlNLJgFxLi0/gAHzpDCqTF5IvPdfm7gbKl+QAHeV+Xq4t0mDfi0Gip
-   gLLfI45hSwTDMeksA80JlY3Cy/wXS5PMP4e7JFqj/sJlh2buhUNuNo+uu
-   9Y8M0YwrtogbtbwZY5uwW+mwkRuD3ga5XZt3wO7ooqHIOMAUQBHXNi2JJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400483922"
+  bh=uanU4QaIMKCYnVoRuj1LvDKlEUvFT3OubkE3zS0A1GQ=;
+  b=AXwMHazS3PNUp6GHomch8z6bRBb+8YkVRL4dNibvlqQvY6O/rKh0N7x9
+   PzKn99ZUfoNuilMyc6Ou88SrOBZ6/JjF11wKpch3aWo5uaapJf4DydnJ/
+   6pJBGEF+RjCbGm9nc7aGouBT6yELNYJRfsDzsTPPCkudh+JJTUibhAvfE
+   5++dzkSXBzjAODfo8bXP0DcqupESS4ahlUjpm4vK3GfxHnTHXbvMpDJHP
+   XqE3PmZE7PmccWUtSDElFgBSH90XSCrXQnDYBd028758ITZUXoi6tIXO1
+   KRkFRC+H6WTu0GPoVtofYJBs1FMWmKkFLlb/uxSvMfcD8lZdyhQ03FCOv
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="333129019"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="400483922"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 11:55:39 -0800
+   d="scan'208";a="333129019"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 11:55:40 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="1005549582"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745185198"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="1005549582"
+   d="scan'208";a="745185198"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Mar 2023 11:55:34 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 06 Mar 2023 11:55:34 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id C33FB5F8; Mon,  6 Mar 2023 21:56:12 +0200 (EET)
+        id CE4C8609; Mon,  6 Mar 2023 21:56:12 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
@@ -64,18 +64,17 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         <sathyanarayanan.kuppuswamy@linux.intel.com>,
         Nandor Han <nandor.han@ge.com>,
         Semi Malinen <semi.malinen@ge.com>
-Subject: [PATCH v1 12/16] gpio: stmpe: Utilize helpers from string_choices.h
-Date:   Mon,  6 Mar 2023 21:55:52 +0200
-Message-Id: <20230306195556.55475-13-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 13/16] gpio: wcove: Utilize helpers from string_choices.h
+Date:   Mon,  6 Mar 2023 21:55:53 +0200
+Message-Id: <20230306195556.55475-14-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
 References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,64 +90,43 @@ it's required.
 
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpio-stmpe.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ drivers/gpio/gpio-wcove.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/gpio/gpio-stmpe.c b/drivers/gpio/gpio-stmpe.c
-index 0fa4f0a93378..ca8a98b252c2 100644
---- a/drivers/gpio/gpio-stmpe.c
-+++ b/drivers/gpio/gpio-stmpe.c
-@@ -14,6 +14,7 @@
- #include <linux/mfd/stmpe.h>
+diff --git a/drivers/gpio/gpio-wcove.c b/drivers/gpio/gpio-wcove.c
+index c18b6b47384f..8d30fd04dede 100644
+--- a/drivers/gpio/gpio-wcove.c
++++ b/drivers/gpio/gpio-wcove.c
+@@ -15,6 +15,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
  #include <linux/seq_file.h>
- #include <linux/bitops.h>
 +#include <linux/string_choices.h>
  
  /*
-  * These registers are modified under the irq bus lock and cached to avoid
-@@ -264,12 +265,12 @@ static void stmpe_dbg_show_one(struct seq_file *s,
- 	ret = stmpe_reg_read(stmpe, dir_reg);
- 	if (ret < 0)
- 		return;
--	dir = !!(ret & mask);
+  * Whiskey Cove PMIC has 13 physical GPIO pins divided into 3 banks:
+@@ -391,14 +392,14 @@ static void wcove_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip)
+ 			break;
+ 		}
  
-+	dir = !!(ret & mask);
-+	seq_printf(s, " gpio-%-3d (%-20.20s) %-3.3s %-2.2s ", gpio,
-+		   label ?: "(none)", str_out_in(dir), str_hi_lo(val));
- 	if (dir) {
--		seq_printf(s, " gpio-%-3d (%-20.20s) out %s",
--			   gpio, label ?: "(none)",
--			   val ? "hi" : "lo");
-+		seq_putc(s, '\n');
- 	} else {
- 		u8 edge_det_reg;
- 		u8 rise_reg;
-@@ -336,11 +337,9 @@ static void stmpe_dbg_show_one(struct seq_file *s,
- 			return;
- 		irqen = !!(ret & mask);
- 
--		seq_printf(s, " gpio-%-3d (%-20.20s) in  %s %13s %13s %25s %25s",
--			   gpio, label ?: "(none)",
--			   val ? "hi" : "lo",
-+		seq_printf(s, "%13s IRQ-%9s %25s %25s\n",
- 			   edge_det_values[edge_det],
--			   irqen ? "IRQ-enabled" : "IRQ-disabled",
-+			   str_enabled_disabled(irqen),
- 			   rise_values[rise],
- 			   fall_values[fall]);
+-		seq_printf(s, " gpio-%-2d %s %s %s %s ctlo=%2x,%s %s\n",
+-			   gpio, ctlo & CTLO_DIR_OUT ? "out" : "in ",
+-			   ctli & 0x1 ? "hi" : "lo",
+-			   ctli & CTLI_INTCNT_NE ? "fall" : "    ",
+-			   ctli & CTLI_INTCNT_PE ? "rise" : "    ",
++		seq_printf(s, " gpio-%-2d %-3.3s %-2.2s %-4.4s %-4.4s ctlo=%2x,%-6.6s %s\n",
++			   gpio, str_out_in(ctlo & CTLO_DIR_OUT),
++			   str_hi_lo(ctli & BIT(0)),
++			   ctli & CTLI_INTCNT_NE ? "fall" : "",
++			   ctli & CTLI_INTCNT_PE ? "rise" : "",
+ 			   ctlo,
+-			   irq_mask & mask ? "mask  " : "unmask",
+-			   irq_status & mask ? "pending" : "       ");
++			   irq_mask & mask ? "mask" : "unmask",
++			   irq_status & mask ? "pending" : "");
  	}
-@@ -351,10 +350,8 @@ static void stmpe_dbg_show(struct seq_file *s, struct gpio_chip *gc)
- 	unsigned i;
- 	unsigned gpio = gc->base;
- 
--	for (i = 0; i < gc->ngpio; i++, gpio++) {
-+	for (i = 0; i < gc->ngpio; i++, gpio++)
- 		stmpe_dbg_show_one(s, gc, i, gpio);
--		seq_putc(s, '\n');
--	}
  }
  
- static struct irq_chip stmpe_gpio_irq_chip = {
 -- 
 2.39.1
 
