@@ -2,90 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF636ABD1B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9F66ABD17
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjCFKmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50600 "EHLO
+        id S229754AbjCFKmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:42:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCFKmK (ORCPT
+        with ESMTP id S229660AbjCFKl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:42:10 -0500
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAD3231D3;
-        Mon,  6 Mar 2023 02:42:08 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4PVZfD12JMz9xHLw;
-        Mon,  6 Mar 2023 18:32:52 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBnNl1qwwVkfKt0AQ--.17696S2;
-        Mon, 06 Mar 2023 11:41:54 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH] evm: Complete description of evm_inode_setattr()
-Date:   Mon,  6 Mar 2023 11:40:36 +0100
-Message-Id: <20230306104036.1298529-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Mar 2023 05:41:59 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0469A21952
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:41:58 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id k14so12079563lfj.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:41:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678099316;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UtGyFjMba2vD+o9VEguBzTeoj5lcH/jCRJ6HlWhk6po=;
+        b=abQx6ixfVe5Ge/gSGl4euqcpeS7vB20UMBBRIjktg+iwopa2FEMHibQhrn+mqfhVdn
+         0MJ/8I6Xn+5LNSgmOmtmzPWLCO3Nj0U0LrjVqKn12VSPGBGKQW7CxA5CY4VvNKBLtZ2v
+         8cmPfneks/W8Zftqzx0/1Q4JGQysdEkicmBdWoHKt5bxS/DF0vrBAhD9D/06QQf7rQsD
+         WxdRp1hfX/uoP4qJIygC/i0kw79ryXEQmb175oNrai1Pl+eZ9Hfd6dl3ulRVi1HUOUGO
+         9RdfVe9755jhmA/9sIWDrino63KvhbDulAYFXSd9nKYNXLQLRherzzATRdvzNrFIT2e4
+         7U1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678099316;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UtGyFjMba2vD+o9VEguBzTeoj5lcH/jCRJ6HlWhk6po=;
+        b=wprYFklQwHUn4KeZvZjTojarlNVJxKCo/9CF8GYxevAPrFwymkVQRKcBHMLolgPdm8
+         Oaf5os1VUrCtKkdBFkrcWoBBSI4eis6x/S3JjmLhajHmA+n5CVzwFj/ZcLCpioHJ4ouD
+         DjuGx0MwUFj6FH3qb06I2z5OwbqNAOJQ9rGvjaNXtVl2pG7EloB//xnIncSsbOeeAwot
+         AJgSRQgeo8BKipNwLZ3AIdNcrZKnRW3Uck8LjMGvGdqnqBVLBOCKaD/2jg8RBE5PzEHj
+         bUfxsQu+W9Bb3gtajPHmvp62wK4R1RQ5U0ZH4RST7Z22sNae7gytiRbSmqEA2EHF2kMM
+         x86g==
+X-Gm-Message-State: AO0yUKVstdP+Fo1dnqudqUoMREUu948u5iCGeAa4JtgczpweHb3lvYOP
+        I5ETY+144Jd08IJp+KOIAu6P/g==
+X-Google-Smtp-Source: AK7set9VkKMivXkoQaPsj+ssRO23hx0/3CpPaUt9KsxFgsxvODgiw0DZtsENRHQx350mkpjl+wCDpg==
+X-Received: by 2002:ac2:5587:0:b0:4dc:833b:5241 with SMTP id v7-20020ac25587000000b004dc833b5241mr2706071lfg.20.1678099315540;
+        Mon, 06 Mar 2023 02:41:55 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id b14-20020a056512218e00b004dc4b00a1eesm1582671lft.261.2023.03.06.02.41.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 02:41:55 -0800 (PST)
+Message-ID: <86c98c57-08a7-20b3-2346-803b497d562a@linaro.org>
+Date:   Mon, 6 Mar 2023 11:41:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBnNl1qwwVkfKt0AQ--.17696S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Gw1kJr4ruFW3XFyUWrW7Jwb_yoWkZrcE9F
-        WkZr4UWr4kXFs3Z34jkF4SvrWkWr1rJrn3K3srK39rZ345G3Z3XF4kXryfX348XrWUJrZr
-        uasIyryag347WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUboAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
-        bVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-        AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-        42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr
-        1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07UGYL9UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAIBF1jj4Y8rgAAsr
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] soc: qcom: llcc: Add configuration data for SM7150
+Content-Language: en-US
+To:     Danila Tikhonov <danila@jiaxyga.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        andersson@kernel.org, abel.vesa@linaro.org,
+        rishabhb@codeaurora.org, saiprakash.ranjan@codeaurora.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230305202627.402386-1-danila@jiaxyga.com>
+ <20230305202627.402386-3-danila@jiaxyga.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230305202627.402386-3-danila@jiaxyga.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add the description for missing parameters of evm_inode_setattr() to
-avoid the warning arising with W=n compile option.
 
-Fixes: 817b54aa45db ("evm: add evm_inode_setattr to prevent updating an invalid security.evm")
-Fixes: c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- security/integrity/evm/evm_main.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 5.03.2023 21:26, Danila Tikhonov wrote:
+> Add LLCC configuration data for SM7150 SoC.
+> 
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> ---
+I checked the msm-4.14 data, everything lgtm
 
-diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-index cf24c525558..b1c2197473a 100644
---- a/security/integrity/evm/evm_main.c
-+++ b/security/integrity/evm/evm_main.c
-@@ -795,7 +795,9 @@ static int evm_attr_change(struct mnt_idmap *idmap,
- 
- /**
-  * evm_inode_setattr - prevent updating an invalid EVM extended attribute
-+ * @idmap: idmap of the mount
-  * @dentry: pointer to the affected dentry
-+ * @attr: iattr structure containing the new file attributes
-  *
-  * Permit update of file attributes when files have a valid EVM signature,
-  * except in the case of them having an immutable portable signature.
--- 
-2.25.1
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  drivers/soc/qcom/llcc-qcom.c | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+> index 23ce2f78c4ed..0ed8cd4f66da 100644
+> --- a/drivers/soc/qcom/llcc-qcom.c
+> +++ b/drivers/soc/qcom/llcc-qcom.c
+> @@ -227,6 +227,14 @@ static const struct llcc_slice_config sm6350_data[] =  {
+>  	{ LLCC_MODPE,    29,  64, 1, 1, 0xFFF, 0x0, 0, 0, 0, 0, 1, 0 },
+>  };
+>  
+> +static const struct llcc_slice_config sm7150_data[] =  {
+> +	{ LLCC_CPUSS,    1,  512, 1, 0, 0xF, 0x0, 0, 0, 0, 1, 1 },
+> +	{ LLCC_MDM,      8,  128, 2, 0, 0xF, 0x0, 0, 0, 0, 1, 0 },
+> +	{ LLCC_GPUHTW,   11, 256, 1, 1, 0xF, 0x0, 0, 0, 0, 1, 0 },
+> +	{ LLCC_GPU,      12, 256, 1, 1, 0xF, 0x0, 0, 0, 0, 1, 0 },
+> +	{ LLCC_NPU,      23, 512, 1, 0, 0xF, 0x0, 0, 0, 0, 1, 0 },
+> +};
+> +
+>  static const struct llcc_slice_config sm8150_data[] =  {
+>  	{  LLCC_CPUSS,    1, 3072, 1, 1, 0xFFF, 0x0,   0, 0, 0, 1, 1 },
+>  	{  LLCC_VIDSC0,   2, 512,  2, 1, 0xFFF, 0x0,   0, 0, 0, 1, 0 },
+> @@ -464,6 +472,14 @@ static const struct qcom_llcc_config sm6350_cfg = {
+>  	.edac_reg_offset = &llcc_v1_edac_reg_offset,
+>  };
+>  
+> +static const struct qcom_llcc_config sm7150_cfg = {
+> +	.sct_data       = sm7150_data,
+> +	.size           = ARRAY_SIZE(sm7150_data),
+> +	.need_llcc_cfg	= true,
+> +	.reg_offset	= llcc_v1_reg_offset,
+> +	.edac_reg_offset = &llcc_v1_edac_reg_offset,
+> +};
+> +
+>  static const struct qcom_llcc_config sm8150_cfg = {
+>  	.sct_data       = sm8150_data,
+>  	.size           = ARRAY_SIZE(sm8150_data),
+> @@ -1022,6 +1038,7 @@ static const struct of_device_id qcom_llcc_of_match[] = {
+>  	{ .compatible = "qcom,sc8280xp-llcc", .data = &sc8280xp_cfg },
+>  	{ .compatible = "qcom,sdm845-llcc", .data = &sdm845_cfg },
+>  	{ .compatible = "qcom,sm6350-llcc", .data = &sm6350_cfg },
+> +	{ .compatible = "qcom,sm7150-llcc", .data = &sm7150_cfg },
+>  	{ .compatible = "qcom,sm8150-llcc", .data = &sm8150_cfg },
+>  	{ .compatible = "qcom,sm8250-llcc", .data = &sm8250_cfg },
+>  	{ .compatible = "qcom,sm8350-llcc", .data = &sm8350_cfg },
