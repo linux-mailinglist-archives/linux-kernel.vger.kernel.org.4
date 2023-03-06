@@ -2,89 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752DD6ACF64
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:45:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8506ACF68
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:46:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjCFUpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 15:45:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
+        id S229937AbjCFUqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 15:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjCFUpj (ORCPT
+        with ESMTP id S229579AbjCFUqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 15:45:39 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8366513B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 12:45:37 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id ay14so40361039edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 12:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678135535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=euPDw9xX5ZNQ+1jvrQuq5hNCSBxgvLUEg2aMsYlQrV0=;
-        b=MLiNXMkTK3oTY2FUOAkJmLgTu7+iuVMcQQEDaFU/WVqI92jWu9wpn9N/OVHKG3v46m
-         0Hl8sHJYs+qumbLhDBCuRjYf7d2dg1RsilInBNrOzZ5HgkYOX+/Yi2fO2/afOWLkKSEe
-         a5+SvY3lXHBC3aN7KiFPQCOqFdvD50StgH3Ac=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678135535;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=euPDw9xX5ZNQ+1jvrQuq5hNCSBxgvLUEg2aMsYlQrV0=;
-        b=WiKmUblQCnmAgaPo+buKUsmeKO3U3Kmlm9qKrDYh6zeGzKvh36HsiDsx6zmlno98sU
-         p5H3vHnzlzpjksdEJWIjc1edetSeMM0j4Ov0DznTtGQZroxKMKQUEhBm7g0S79JCWT16
-         DkgCZH+Tqu0lVcD2I8HdDRm2i73qbEE5IezkjYHCnaSMpzZO7CGbnHhgW/uVv/5wuNpe
-         cnXRhrpp3zsyF2wRpC5zDPvSCc9ROeweFMHmKjTrGu9xRRQqSmeyAPuHu5pXcOFMqw/v
-         KKMlmZZwRjw5BY8huJJ6anGIucdXeFd/BhEdc6hpKIdsf4ySS12+Cq+GCYil7iZ54ZHt
-         gs/Q==
-X-Gm-Message-State: AO0yUKXNX79RWmNOSSNlILonMDAS6svqLIeVgbQ2+4KhQpEKFj692FnA
-        G42rFUFG57FPg4vxQC3MiVF+2Pu4AmsAppqsvizwIjRC
-X-Google-Smtp-Source: AK7set+ugJFkJ/r6xkSaV8drQo6e3CpWZHnp3xlv5urlXEqC8J4es2rjbWzODOPk74IfjAucpTSkGg==
-X-Received: by 2002:a17:906:b882:b0:8b2:3e72:1022 with SMTP id hb2-20020a170906b88200b008b23e721022mr11623569ejb.29.1678135535520;
-        Mon, 06 Mar 2023 12:45:35 -0800 (PST)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id hy3-20020a1709068a6300b008e57b5e0ce9sm5021323ejc.108.2023.03.06.12.45.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 12:45:35 -0800 (PST)
-Received: by mail-ed1-f47.google.com with SMTP id ay14so40360801edb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 12:45:34 -0800 (PST)
-X-Received: by 2002:a17:906:398a:b0:877:747e:f076 with SMTP id
- h10-20020a170906398a00b00877747ef076mr5456305eje.0.1678135534613; Mon, 06 Mar
- 2023 12:45:34 -0800 (PST)
+        Mon, 6 Mar 2023 15:46:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E514C6E4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 12:46:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24F2FB810CF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 20:46:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF0F0C433D2;
+        Mon,  6 Mar 2023 20:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678135603;
+        bh=6a4ictEgwFqzep70FKcRKHnanGrxuqikBJymadz16M4=;
+        h=From:Date:Subject:To:Cc:From;
+        b=JVWCl24M4jVZ3/XF7wyeXi9c7jlXuc16XU+4BbwtEcemTSmrboIdIogsAFf05dmWb
+         GIcdvUnK1YqA7bHYQBkSqcsrQCuA8OOxyrChIzdNrVK6OYAcEwnkpgHD5tJ3+6X77l
+         GunjOL/sZaCrfwzaIHFTqiFIFumktSaPLw7Az0D5ojChxUpjDTobPDvKi938HBxNNO
+         /fCKS/iq10UPgEpvKzYkBXJdl84v0qz5tGflO39Oxz0LOfcMHBFOADMXQBweb9doB+
+         4Xvr4PN/5xD5DfXP8euhkq4nAIwTx9U1noN8vQon8nKRQnDDDMKcm+nitoA13RfVQY
+         DdC9tifHkUrZQ==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Mon, 06 Mar 2023 20:46:18 +0000
+Subject: [PATCH] arm64/sysreg: Convert HW[RW]TR_EL2 to automatic generation
 MIME-Version: 1.0
-References: <20230306152204.49836-1-andriy.shevchenko@linux.intel.com> <ZAZDvtjsjxrbbEeA@smile.fi.intel.com>
-In-Reply-To: <ZAZDvtjsjxrbbEeA@smile.fi.intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Mar 2023 12:45:18 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgQEuzVkSOWZ1gPOysniURWvmbUkFVP6GSU52FmBrZSVA@mail.gmail.com>
-Message-ID: <CAHk-=wgQEuzVkSOWZ1gPOysniURWvmbUkFVP6GSU52FmBrZSVA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] cpumask: Fix typo nr_cpumask_size --> nr_cpumask_bits
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230306-arm64-fgt-reg-gen-v1-1-95bc0c97cfed@kernel.org>
+X-B4-Tracking: v=1; b=H4sIABlRBmQC/x2NQQqDMBAAvyJ7diEm1kK/Ih42uhv3YCobKQXx7
+ 409zsAwJxQ25QKv5gTjjxZ95wpd28C8Uk6MulQG73xwwQ1Itg09SjrQOGHijFH8MzxYqF8Eahe
+ pMEajPK93eWz7bXdj0e//NE7X9QOnj9bAeQAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bd1bf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3400; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=6a4ictEgwFqzep70FKcRKHnanGrxuqikBJymadz16M4=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBlExIpFfNWJNWHB7K9QIvlrL2znZH8XFz/nAW/2S
+ 6YifdtKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAZRMQAKCRAk1otyXVSH0DVqCA
+ CC+sUGrWzfH6tOWNUAOxRz1eneEjEb1j/Em2XCWwRkp1ZMddn86H6B0D5H8CoJJs5B+FGeXzvjhlP2
+ O6gg6QYDnp8MjtUVkpnCX+mjCxkDtPZhDR7rBe6QRDvtypou8IeOs0h6JvdXP8rSFMCd8t0vTaH5+/
+ Cd54hEOkI72UkWsvXgNdGLOBnRsHAIqhA05h53CdUv+aNfYVPsZw479Btj6QrZoVYwyQxvO34hQ1A8
+ AqeY0xzSwsuOph9AyCOvFizvwhs9piNs8pAe1HEHjEEtCfZbP5TfDepePrXMHmvv7rY77mpid2FiBz
+ IlOh1kJaEtkBHoX7tEKtHVoFeMNKz0
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 11:49=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> In another thread we still mention this. Interesting...
-> what did I miss?
+Convert the fine grained traps read and write control registers to
+automatic generation as per DDI0601 2022-12. No functional changes.
 
-You didn't miss anything, your typo fix is correct, and the same typo
-just exists in that other thread too. For all the same reasons for the
-original typo (possibly together with some cut-and-paste from said
-comment).
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/include/asm/sysreg.h |  8 -----
+ arch/arm64/tools/sysreg         | 75 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 75 insertions(+), 8 deletions(-)
 
-         Linus
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index 9e3ecba3c4e6..e5ca9ece1606 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -419,8 +419,6 @@
+ #define SYS_MDCR_EL2			sys_reg(3, 4, 1, 1, 1)
+ #define SYS_CPTR_EL2			sys_reg(3, 4, 1, 1, 2)
+ #define SYS_HSTR_EL2			sys_reg(3, 4, 1, 1, 3)
+-#define SYS_HFGRTR_EL2			sys_reg(3, 4, 1, 1, 4)
+-#define SYS_HFGWTR_EL2			sys_reg(3, 4, 1, 1, 5)
+ #define SYS_HFGITR_EL2			sys_reg(3, 4, 1, 1, 6)
+ #define SYS_HACR_EL2			sys_reg(3, 4, 1, 1, 7)
+ 
+@@ -758,12 +756,6 @@
+ #define ICH_VTR_TDS_SHIFT	19
+ #define ICH_VTR_TDS_MASK	(1 << ICH_VTR_TDS_SHIFT)
+ 
+-/* HFG[WR]TR_EL2 bit definitions */
+-#define HFGxTR_EL2_nTPIDR2_EL0_SHIFT	55
+-#define HFGxTR_EL2_nTPIDR2_EL0_MASK	BIT_MASK(HFGxTR_EL2_nTPIDR2_EL0_SHIFT)
+-#define HFGxTR_EL2_nSMPRI_EL1_SHIFT	54
+-#define HFGxTR_EL2_nSMPRI_EL1_MASK	BIT_MASK(HFGxTR_EL2_nSMPRI_EL1_SHIFT)
+-
+ #define ARM64_FEATURE_FIELD_BITS	4
+ 
+ /* Defined for compatibility only, do not add new users. */
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index dd5a9c7e310f..cbf8c7ed633f 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -1866,6 +1866,81 @@ Field	1	ZA
+ Field	0	SM
+ EndSysreg
+ 
++SysregFields	HFGxTR_EL2
++Field	63	nAMIAIR2_EL1
++Field	62	nMAIR2_EL1
++Field	61	nS2POR_EL1
++Field	60	nPOR_EL1
++Field	59	nPOR_EL0
++Field	58	nPIR_EL1
++Field	57	nPIR_EL0
++Field	56	nRCWMASK_EL1
++Field	55	nTPIDR2_EL0
++Field	54	nSMPRI_EL1
++Field	53	nGCS_EL1
++Field	52	nGCS_EL0
++Res0	51
++Field	50	nACCDATA_EL1
++Field	49	ERXADDR_EL1
++Field	48	EXRPFGCDN_EL1
++Field	47	EXPFGCTL_EL1
++Field	46	EXPFGF_EL1
++Field	45	ERXMISCn_EL1
++Field	44	ERXSTATUS_EL1
++Field	43	ERXCTLR_EL1
++Field	42	ERXFR_EL1
++Field	41	ERRSELR_EL1
++Field	40	ERRIDR_EL1
++Field	39	ICC_IGRPENn_EL1
++Field	38	VBAR_EL1
++Field	37	TTBR1_EL1
++Field	36	TTBR0_EL1
++Field	35	TPIDR_EL0
++Field	34	TPIDRRO_EL0
++Field	33	TPIDR_EL1
++Field	32	TCR_EL1
++Field	31	SCTXNUM_EL0
++Field	30	SCTXNUM_EL1
++Field	29	SCTLR_EL1
++Field	28	REVIDR_EL1
++Field	27	PAR_EL1
++Field	26	MPIDR_EL1
++Field	25	MIDR_EL1
++Field	24	MAIR_EL1
++Field	23	LORSA_EL1
++Field	22	LORN_EL1
++Field	21	LORID_EL1
++Field	20	LOREA_EL1
++Field	19	LORC_EL1
++Field	18	ISR_EL1
++Field	17	FAR_EL1
++Field	16	ESR_EL1
++Field	15	DCZID_EL0
++Field	14	CTR_EL0
++Field	13	CSSELR_EL1
++Field	12	CPACR_EL1
++Field	11	CONTEXTIDR_EL1
++Field	10	CLIDR_EL1
++Field	9	CCSIDR_EL1
++Field	8	APIBKey
++Field	7	APIAKey
++Field	6	APGAKey
++Field	5	APDBKey
++Field	4	APDAKey
++Field	3	AMAIR_EL1
++Field	2	AIDR_EL1
++Field	1	AFSR1_EL1
++Field	0	AFSR0_EL1
++EndSysregFields
++
++Sysreg HFGRTR_EL2	3	4	1	1	4
++Fields	HFGxTR_EL2
++EndSysreg
++
++Sysreg HFGWTR_EL2	3	4	1	1	5
++Fields	HFGxTR_EL2
++EndSysreg
++
+ Sysreg	ZCR_EL2	3	4	1	2	0
+ Fields	ZCR_ELx
+ EndSysreg
+
+---
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+change-id: 20230306-arm64-fgt-reg-gen-bf2735efa4df
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
