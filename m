@@ -2,102 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382266ACC8C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 870766AC963
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCFS27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:28:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
+        id S230196AbjCFRJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:09:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjCFS26 (ORCPT
+        with ESMTP id S229886AbjCFRJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:28:58 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B9B34317;
-        Mon,  6 Mar 2023 10:28:37 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326F229r032225;
-        Mon, 6 Mar 2023 16:52:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=Qmb+wAuWZ++BAHNyIHrpxJlNwrEdwiaNpMW6hsm+jrw=;
- b=sOAHNLdpoGmHSyZ2ajlW8OMzQL1sJcQo7ANDzBbtQd0g7G96kNVjczG7NCCQESssGZre
- QTfAzkE/dCo2xP5PpLYADBej8T2wQm9FStizxJeKWUCPB/YbeluWzj96++LVjabxvtGt
- nhJ7FL3G5CcXud70UFbxzjmEnqIZTHAVOU9no82QzjVqPACCB2ITpbU7NfyV++BaDbze
- NurjUilf7GPeOx5/JRwvhmCP6O9IzLBy1AQBF7kCEsAscReZDrnNrsEuYd3v1/Jisszj
- nN6vdhVKeb2wgPkv3IhbpEW9DZk1wT7UHs3VtLDh9FNh08bTh2uyM7Vv7QP/PK+B0MwD bA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4x1humsk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 16:52:16 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326GfkIZ023728;
-        Mon, 6 Mar 2023 16:52:15 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4x1hums0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 16:52:15 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326Fwjux017270;
-        Mon, 6 Mar 2023 16:52:14 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3p41ak9s46-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 16:52:14 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326GqDSw64487822
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 16:52:13 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4E32D5805C;
-        Mon,  6 Mar 2023 16:52:13 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6542B5805E;
-        Mon,  6 Mar 2023 16:52:09 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 16:52:09 +0000 (GMT)
-Message-ID: <297a6bd8-fd91-bdf1-1c45-ebbc0a424711@linux.ibm.com>
-Date:   Mon, 6 Mar 2023 11:52:08 -0500
+        Mon, 6 Mar 2023 12:09:20 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 331783B673;
+        Mon,  6 Mar 2023 09:08:27 -0800 (PST)
+Received: from [192.168.254.32] (unknown [47.187.203.192])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E36D620BBF92;
+        Mon,  6 Mar 2023 08:52:09 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E36D620BBF92
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678121530;
+        bh=sVOn/vcPfOqwuN4KZzT/D2YzwVerqFmDVpeOIxrv9dc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fU0wypCRqWz3wIXknA/RYCcVWWyzaHutzCMOyjyl+CX4nLXJLAjZV7We+/G0FncMR
+         dOOdjrkBO9SWpF/ul4tBjl1vhIrkHZ9ycS5sL8vTGl3bCkNZkG3mR2FJyp6/Ju3qEE
+         xbMut7amOsTsiytyHR+OeQ6kkxWjTY1oAJMeAvrY=
+Message-ID: <56308235-3893-75ac-a19f-497cc203c520@linux.microsoft.com>
+Date:   Mon, 6 Mar 2023 10:52:09 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 02/28] ima: Align ima_post_path_mknod() definition with
- LSM infrastructure
+Subject: Re: [RFC PATCH v3 19/22] arm64: unwinder: Add a reliability check in
+ the unwinder based on ORC
 Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
- <20230303181842.1087717-3-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230303181842.1087717-3-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Suraj Jitindar Singh <sjitindarsingh@gmail.com>
+Cc:     poimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
+        mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
+ <20230202074036.507249-1-madvenka@linux.microsoft.com>
+ <20230202074036.507249-20-madvenka@linux.microsoft.com>
+ <88ab8c8348373e5c7c90c985dd92b5e06f32b16b.camel@gmail.com>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <88ab8c8348373e5c7c90c985dd92b5e06f32b16b.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ch7eh3n3M6hNzFx4iV-VKLQYvZxCHWC-
-X-Proofpoint-ORIG-GUID: nBfLHMSSXtcL4sth2LFlHrHwraCz-G7O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_09,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=968 spamscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1015 adultscore=0 phishscore=0 mlxscore=0 bulkscore=0
- impostorscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303060142
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -106,28 +60,132 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 3/3/23 13:18, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 2/22/23 22:07, Suraj Jitindar Singh wrote:
+> On Thu, 2023-02-02 at 01:40 -0600, madvenka@linux.microsoft.com wrote:
+>> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+>>
+>> Introduce a reliability flag in struct unwind_state. This will be set
+>> to
+>> false if the PC does not have a valid ORC or if the frame pointer
+>> computed
+>> from the ORC does not match the actual frame pointer.
+>>
+>> Now that the unwinder can validate the frame pointer, introduce
+>> arch_stack_walk_reliable().
+>>
+>> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com
+>>>
+>> ---
+>>  arch/arm64/include/asm/stacktrace/common.h |  15 ++
+>>  arch/arm64/kernel/stacktrace.c             | 167
+>> ++++++++++++++++++++-
+>>  2 files changed, 175 insertions(+), 7 deletions(-)
+>>
 > 
-> Change ima_post_path_mknod() definition, so that it can be registered as
-> implementation of the path_post_mknod hook.
+> [snip]
+>  
+>> -static void notrace unwind(struct unwind_state *state,
+>> +static int notrace unwind(struct unwind_state *state, bool
+>> need_reliable,
+>>  			   stack_trace_consume_fn consume_entry, void
+>> *cookie)
+>>  {
+>> -	while (1) {
+>> -		int ret;
+>> +	int ret = 0;
+>>  
+>> +	while (1) {
+>> +		if (need_reliable && !state->reliable)
+>> +			return -EINVAL;
+>>  		if (!consume_entry(cookie, state->pc))
+>>  			break;
+>>  		ret = unwind_next(state);
+>> +		if (need_reliable && !ret)
+>> +			unwind_check_reliable(state);
+>>  		if (ret < 0)
+>>  			break;
+>>  	}
+>> +	return ret;
 > 
-> Also, make sure that ima_post_path_mknod() is executed only if
-> (mode & S_IFMT) is equal to zero or S_IFREG.
+> nit:
 > 
-> Add this check to take into account the different placement of the
-> path_post_mknod hook (to be introduced) in do_mknodat(). Since the new hook
-> will be placed after the switch(), the check ensures that
-> ima_post_path_mknod() is invoked as originally intended when it is
-> registered as implementation of path_post_mknod.
+> I think you're looking more for comments on the approach and the
+> correctness of these patches, but from an initial read I'm still
+> putting it all together in my head. So this comment is on the coding
+> style.
+> 
+> The above loop seems to check the current reliability state, then
+> unwind a frame then check the reliability, and then break based of
+> something which couldn't have been updated by the line immediately
+> above. I propose something like:
+> 
+> unwind(...) {
+> 	ret = 0;
+> 
+> 	while (!ret) {
+> 		if (need_reliable) {
+> 			unwind_check_reliable(state);
+> 			if (!state->reliable)
+> 				return -EINVAL;
+> 		}
+> 		if (!consume_entry(cookie, state->pc))
+> 			return -EINVAL;
+> 		ret = unwind_next(state);
+> 	}
+> 
+> 	return ret;
+> }
+> 
+> This also removes the need for the call to unwind_check_reliable()
+> before the first unwind() below in arch_stack_walk_reliable().
+> 
 
-                 case 0: case S_IFREG:    <---- this here
-                         error = vfs_create(mnt_userns, path.dentry->d_inode,
-                                            dentry, mode, true);
-                         if (!error)
-                                 ima_post_path_mknod(mnt_userns, dentry);
+OK. Suggestion sounds reasonable. Will do.
 
+Madhavan
+
+> - Suraj
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+>>  }
+>>  NOKPROBE_SYMBOL(unwind);
+>>  
+>> @@ -216,5 +337,37 @@ noinline notrace void
+>> arch_stack_walk(stack_trace_consume_fn consume_entry,
+>>  		unwind_init_from_task(&state, task);
+>>  	}
+>>  
+>> -	unwind(&state, consume_entry, cookie);
+>> +	unwind(&state, false, consume_entry, cookie);
+>> +}
+>> +
+>> +noinline notrace int arch_stack_walk_reliable(
+>> +				stack_trace_consume_fn consume_entry,
+>> +				void *cookie, struct task_struct *task)
+>> +{
+>> +	struct stack_info stacks[] = {
+>> +		stackinfo_get_task(task),
+>> +		STACKINFO_CPU(irq),
+>> +#if defined(CONFIG_VMAP_STACK)
+>> +		STACKINFO_CPU(overflow),
+>> +#endif
+>> +#if defined(CONFIG_VMAP_STACK) && defined(CONFIG_ARM_SDE_INTERFACE)
+>> +		STACKINFO_SDEI(normal),
+>> +		STACKINFO_SDEI(critical),
+>> +#endif
+>> +	};
+>> +	struct unwind_state state = {
+>> +		.stacks = stacks,
+>> +		.nr_stacks = ARRAY_SIZE(stacks),
+>> +	};
+>> +	int ret;
+>> +
+>> +	if (task == current)
+>> +		unwind_init_from_caller(&state);
+>> +	else
+>> +		unwind_init_from_task(&state, task);
+>> +	unwind_check_reliable(&state);
+>> +
+>> +	ret = unwind(&state, true, consume_entry, cookie);
+>> +
+>> +	return ret == -ENOENT ? 0 : -EINVAL;
+>>  }
