@@ -2,88 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24CE6AC1D2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6626AC1D4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:50:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjCFNuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:50:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S229829AbjCFNuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjCFNt4 (ORCPT
+        with ESMTP id S229639AbjCFNuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:49:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438C45582;
-        Mon,  6 Mar 2023 05:49:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C725360F06;
-        Mon,  6 Mar 2023 13:49:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C75AC433EF;
-        Mon,  6 Mar 2023 13:49:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678110594;
-        bh=nBD2Xp8SETidcWqV6Sq9OLyZ3TFTr8gYyUqKe18Rt9A=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=U9gN1YDF+h09i16MEiZisnPStanjPEUTbGK+0eqvkzUNHLdKj5hpDJWvQIn8DQ0QA
-         Pcye6bJLcfnwitw4a28yjdGoi81Vqwrt5JRst+099SbF4/oelzTG4pxt8oRpYERYv+
-         GV/xC206CxBrqzkZQhwpX8t5t5lg0vpcoULQVcnqeQ6xiHd8PACT5HdW6SYgnvNp+o
-         yEfWESMgQS0gZRecJd2CeshTNqH3sdmBBUmvyWfOiWODCtXp3IhNj5188MacedjKx/
-         zeYdFtUl3gyIOER2Iee4t+yLAkndqM+toRemWVO37l2oHIgObmng3y2xco4bFMglQ7
-         MdoQ9jNrNaRYw==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Bastian Germann <bage@debian.org>
-Cc:     toke@toke.dk, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] wifi: ath9k: Remove Qwest/Actiontec 802AIN ID
-References: <20230305210245.9831-1-bage@debian.org>
-        <20230306125041.2221-1-bage@debian.org> <87wn3uowov.fsf@kernel.org>
-        <f73bd7ce-dd44-cd10-8727-38f8cf6354bd@debian.org>
-Date:   Mon, 06 Mar 2023 15:49:47 +0200
-In-Reply-To: <f73bd7ce-dd44-cd10-8727-38f8cf6354bd@debian.org> (Bastian
-        Germann's message of "Mon, 6 Mar 2023 14:36:02 +0100")
-Message-ID: <87sfeioupw.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Mon, 6 Mar 2023 08:50:00 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AB43C3D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:49:58 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id l1so8836689wry.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678110597;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=4jttNTsMYo3hO4zmFRMt6lMJ/dsTxQ98EZIAfYPHck8=;
+        b=RcC4brTzUz+W2jOBplkTuiwHCsvXSckMpm3gt81QtV+tuX4kXk+sEpyAhEsrvyBtij
+         yUSrw7I/kxyny+vei8JMAVj7HVC4qZW8KO5hme8Bl9s0HrsbpUqvnqSEipDou/xPap9c
+         HRrdFu38BjYUFG1fDNbQBds/ndtGpZmPyNGuFz09POQcGf+IMi7Y5yVTq2yK62WxhW/d
+         EGVA1y+ONOCTQsStRAu/y+vVqQAXJQRQ6HIGEeVDuDgHp1KUE86hoj/bqiQglpYQ96Ll
+         +T7OIE/t1/qze9yeUjFBMwGQ3lsJPL/T2daCLccXlh/XrqXh6c2HRo3GGNYdOQM8Ik/0
+         loVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678110597;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4jttNTsMYo3hO4zmFRMt6lMJ/dsTxQ98EZIAfYPHck8=;
+        b=2yUQPorfCMs9z/64/5sm3oeSOmaQTSIcRDp/s/NRfk2AFKJlGPZ/QqW6BaJpzAZKj+
+         rx3AyxnjICNJHiLTAVTel77IerBlSMz0i0veOex6IK8iuzbhjCkw8tb/SivjOvJKDxAQ
+         9cMjZzDh6PSqQk1s+1PFRoBXAOCLjHn8HQtzFyRJFbk17viGfgDQSGUXIdg1Td8TN7HN
+         Aqe4BgIEunLDVm9g3RGXbhmSDwWK+5zDHyXRXcMQ2hfmPCUmNxMKz8YqGY+UaY+Nplgi
+         82f4LAMOB5QzWdNm4PLpfAVEPWODi1vPfx1oCBurTr+7rJfDPhgeoPX2mKZYxumTXExd
+         WneA==
+X-Gm-Message-State: AO0yUKXnkeFvw3Dg7yRK3/RbDQ+fx0wpsaz3fAvu53K1EnGgiYYuzJ5n
+        edXeOh+f5nXFvHPQZr7wdefceg==
+X-Google-Smtp-Source: AK7set83efNzzJIPdS6ZaS0rm2KQxwFZZmA9X2pC+KVtPznDTxzOM6N0acKc02PI/7R7IdprelQF0A==
+X-Received: by 2002:a5d:62c3:0:b0:2c5:5237:3b21 with SMTP id o3-20020a5d62c3000000b002c552373b21mr7941779wrv.69.1678110596959;
+        Mon, 06 Mar 2023 05:49:56 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:cd23:1024:19b6:1a10? ([2a01:e0a:982:cbb0:cd23:1024:19b6:1a10])
+        by smtp.gmail.com with ESMTPSA id j29-20020a5d6e5d000000b002c59f18674asm9902098wrz.22.2023.03.06.05.49.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 05:49:56 -0800 (PST)
+Message-ID: <2d9e01df-0047-98bc-f1e7-fa860d92c254@linaro.org>
+Date:   Mon, 6 Mar 2023 14:49:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v1 1/3] meson: pinctrl: use CONFIG_PINCTRL_A1 with
+ CONFIG_ARM
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Alexey Romanov <avromanov@sberdevices.ru>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru
+References: <20230222115020.55867-1-avromanov@sberdevices.ru>
+ <20230222115020.55867-2-avromanov@sberdevices.ru>
+ <CACRpkdbWubk3A3qYuYqDc4OBGP6T7TaKwFeW17CwAzPvttk=WQ@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CACRpkdbWubk3A3qYuYqDc4OBGP6T7TaKwFeW17CwAzPvttk=WQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bastian Germann <bage@debian.org> writes:
+Hi Linus,
 
-> Am 06.03.23 um 14:07 schrieb Kalle Valo:
->> Bastian Germann <bage@debian.org> writes:
+On 06/03/2023 14:45, Linus Walleij wrote:
+> On Wed, Feb 22, 2023 at 12:50 PM Alexey Romanov
+> <avromanov@sberdevices.ru> wrote:
+> 
+>> Tested A1 pinctrl support for ARM and it works.
 >>
->>> The USB device 1668:1200 is Qwest/Actiontec 802AIN which is also
->>> correctly claimed to be supported by carl9170.
->>>
->>> Supposedly, the successor 802AIN2 which has an ath9k compatible chip
->>> whose USB ID (unknown) could be inserted instead.
->>>
->>> Drop the ID from the wrong driver.
->>>
->>> Signed-off-by: Bastian Germann <bage@debian.org>
->>
->> Thanks, I see this patch now.
->>
->> I guess there's a bug report somewhere, do you have a link?
->
-> No, I happened to find this by chance while packaging the ath9k and
-> carl9170 firmware for Debian,
-> which have the ID represented in an XML format:
-> https://salsa.debian.org/debian/open-ath9k-htc-firmware/-/blob/master/debian/firmware-ath9k-htc.metainfo.xml
+>> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+> 
+> This patch applied to the pinctrl tree for v6.4.
 
-Do you mind if we add this (without the link) to the commit log? It's
-good to always document the background of the patch.
+Erf, this serie is something we would avoid, so no need to apply it for v6.4
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+> 
+> Have you considered also adding || COMPILE_TEST?
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+It would be great to have || COMPILE_TEST for sure
+
+Neil
+
+> 
+> Or does that break builds?
+> 
+> Yours,
+> Linus Walleij
+
