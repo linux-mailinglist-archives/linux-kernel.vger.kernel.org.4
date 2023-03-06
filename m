@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED7D6AC9A8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8606ACAC9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjCFRUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
+        id S229817AbjCFRi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjCFRUP (ORCPT
+        with ESMTP id S229618AbjCFRi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:20:15 -0500
-Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 405743C37
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:19:51 -0800 (PST)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Mon, 6 Mar
- 2023 19:07:14 +0300
-Received: from localhost (10.0.253.157) by Ex16-01.fintech.ru (10.0.10.18)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Mon, 6 Mar 2023
- 19:07:13 +0300
-From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-To:     Dave Hansen <dave.hansen@linux.intel.com>
-CC:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
-Subject: [PATCH v2] x86/mm: Fix use of uninitialized buffer in sme_enable()
-Date:   Mon, 6 Mar 2023 08:06:56 -0800
-Message-ID: <20230306160656.14844-1-n.zhandarovich@fintech.ru>
-X-Mailer: git-send-email 2.25.1
+        Mon, 6 Mar 2023 12:38:56 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278DA66D28;
+        Mon,  6 Mar 2023 09:38:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FA866102A;
+        Mon,  6 Mar 2023 16:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4EC0C433EF;
+        Mon,  6 Mar 2023 16:09:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678118944;
+        bh=+uB7D1gwrBQ8/0Era4Cxa/LZ06zO3DpKV4QfZb0Dfug=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bbJqmerTmVbHwb+bJzKgtxIiT+sVvc/Zs7PuTNgBt9hsoaa9uM1MKDPSa5FPt7Wva
+         YoZ6q1ThDQ764DoX6GExQ8WxY39xTy1yk2qHe9Of6HC/KyrVjOp0PpMjSNrENXfOay
+         5kx4n69Jv4NdDEENm77Jy205wOT4RS0GD20pHAqTOHqYdOQRzsira9uoDTS78+X9gv
+         8P3dI2elnyk3j5FOeTEoRYmdzTLvkNaF2K/IvhL2Y3zxuNNjHqQP/LWEEVgZiFLPkH
+         0szMqP4+dD9YHGgG4STS3XZt/cLakker2p5Q5sevSOeceKIzSKz6VhmyygACvoCqEm
+         aF4NHHE5OnTKg==
+Message-ID: <6247adab-2004-5159-69ca-9e1dd30f4c38@kernel.org>
+Date:   Mon, 6 Mar 2023 17:09:00 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.253.157]
-X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 1/2] dt-bindings: iio: adc: adding dt-bindings for
+ PAC193X
+Content-Language: en-US
+To:     Marius.Cristea@microchip.com, jic23@kernel.org
+Cc:     devicetree@vger.kernel.org, lars@metafoo.de,
+        linux-iio@vger.kernel.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230220123232.413029-1-marius.cristea@microchip.com>
+ <20230220123232.413029-2-marius.cristea@microchip.com>
+ <c38afa67-d24f-0390-f18a-81bee15b7eca@kernel.org>
+ <20230225171723.15e822ec@jic23-huawei>
+ <2f1a14522a7a8d46e3b037a285af4c3dd9b17cbc.camel@microchip.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <2f1a14522a7a8d46e3b037a285af4c3dd9b17cbc.camel@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cmdline_find_option() may fail before doing any initialization of
-buffer array. This may lead to unpredictable results when the same
-buffer is used later in calls to strncmp() function.
-Fix the issue by returning early if cmdline_find_option() returns -1.
+On 06/03/2023 14:53, Marius.Cristea@microchip.com wrote:
+> 
+> Hi Jonathan,
+> 
+>    Thank you so much! I'm happy to contribute to IIO.
+> 
+> I will remove some section because I agree with the propose solution.
+> For the rest I will comment below..
+> 
+> 
+> 
+> On Sat, 2023-02-25 at 17:17 +0000, Jonathan Cameron wrote:
+>>>> +
+>>>> +  microchip,samp-rate:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +    description: Sampling rate for all device's channels.
+>>>
+>>> What are the units? rate is usually in hz, which should be
+>>> expressed in
+>>> unit suffix (property name)]
+>>
+>> It's unusual for sampling rate to be a property of the hardware and
+>> hence
+>> suitable for DT binding. Normally we make this a userspace control
+>> instead.
+>> If there is a reason for doing it from DT, that wants to be mentioned
+>> here.
+>>
+> 
+> Here I could change it into the datarate (as in
+> iio/adc/ti,ads1015.yaml). The units are samples per second. My
+> intention was to be alingned with the datasheet.
+> 
+> My intention was to let the user configure the sample rate as soon as
+> posile during the startup (the PAC device's own power consumtion will
+> increase with the sampling rate - default the chip will start with the
+> maximum samples per second).
 
-Found by Linux Verification Center (linuxtesting.org) with static analysis
-tool SVACE.
+Then maybe the default should be just lowest rate and user will adjust
+it further? Since this is user-space knob, why this should be even
+configurable per board?
 
-Fixes: aca20d546214 ("x86/mm: Add support to make use of Secure Memory Encryption")
-Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
----
-v2: per Borislav Petkov's <bp@alien8.de> remarks:
-- return early if cmdline_find_options() fails with -1 instead of zeroing out
-buffer;
-- use correct Fixes: commit hash
 
- arch/x86/mm/mem_encrypt_identity.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Best regards,
+Krzysztof
 
-diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-index 88cccd65029d..c6efcf559d88 100644
---- a/arch/x86/mm/mem_encrypt_identity.c
-+++ b/arch/x86/mm/mem_encrypt_identity.c
-@@ -600,7 +600,8 @@ void __init sme_enable(struct boot_params *bp)
- 	cmdline_ptr = (const char *)((u64)bp->hdr.cmd_line_ptr |
- 				     ((u64)bp->ext_cmd_line_ptr << 32));
- 
--	cmdline_find_option(cmdline_ptr, cmdline_arg, buffer, sizeof(buffer));
-+	if (cmdline_find_option(cmdline_ptr, cmdline_arg, buffer, sizeof(buffer)) < 0)
-+		return;
- 
- 	if (!strncmp(buffer, cmdline_on, sizeof(buffer)))
- 		sme_me_mask = me_mask;
