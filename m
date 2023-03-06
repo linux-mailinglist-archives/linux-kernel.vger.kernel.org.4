@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A35F6AC309
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E81636AC3AC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjCFOVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
+        id S231182AbjCFOp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:45:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231617AbjCFOUV (ORCPT
+        with ESMTP id S230113AbjCFOps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:20:21 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB768A61
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:19:29 -0800 (PST)
+        Mon, 6 Mar 2023 09:45:48 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604495B9F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:45:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
-        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Xz7dL2tcnPT6ww6dXBhPnkI2dUM8QaQFf+4VBLsgKss=; b=WbbkGE3kA9CEMDoY7iWLv8LRxj
-        8VLWzwhdYPKhqDA2EeHvBBgyKGhtaeqRnQr+yZ8E6ILGKV950+Jh81aPZm7ATs20i7+hQHCyhHWLU
-        IL45M6i0+82G35n+5LT0/ZVIw7rWAMNSurUpRpuwpCmebPZQOkfqL8u2TXk+HDfeoZOutFPh0jil3
-        6Ax+40Ffr05BlpJmlMEgn9j+J6/QgyXLVL1tbFNstaZUmzWJhtusDEnx78r1FigM68tMldvAaBu/7
-        NQFvxTZqCMEupJgAK33qmR6q7AJ/FWoRHYtEekIo4/UDg/hSaGBurYrX8TL93ildpK87KsgiIgGz7
-        6ftM4S3w==;
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
+        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To;
+        bh=sMJx6b/CxL1Su3B8XIuAOsNn/3tYb0QvTWKkBLS2Aaw=; b=Eyhjj0kQppj99/M6scwljF1Ci9
+        8Za4R/qWyEibkfq1nLAm4uHdW5E/l2jOoGyu2/FGYqS7PAXcb5c/PS8r7IWOoTjAP4nrACrpkDzDq
+        R8NeObnb2aPiQJhuySIt7p2qoshmduNZnHPcY9cIK8OfLcdk5qdcCbUb07+UZCd5OitI/jl29/0w+
+        saoW2cuK2xV03csyIpXt2ITuXcRlBoGEU1XSKOsj7g5L6PQOPv8rfSBezgKe2QtfYrALrcBGOD8VV
+        M+f6RIyjJ8mBiPpfzBFVwXwO8MeDJpfaXtcuyocyOgDg0fXB0NRLPzPvqgWklrWSF7PeGvi1MG8YE
+        II0C8Lcw==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZBe5-005P2M-Iu; Mon, 06 Mar 2023 14:16:58 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pZBe6-00GhOv-09;
+        Mon, 06 Mar 2023 14:16:58 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 08881300137;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0D96B300487;
         Mon,  6 Mar 2023 15:16:55 +0100 (CET)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id E55AB2130D7A2; Mon,  6 Mar 2023 15:16:54 +0100 (CET)
-Message-ID: <20230306132521.968182689@infradead.org>
+        id E9E7E23BC8E2B; Mon,  6 Mar 2023 15:16:54 +0100 (CET)
+Message-ID: <20230306141502.269897544@infradead.org>
 User-Agent: quilt/0.66
-Date:   Mon, 06 Mar 2023 14:25:21 +0100
+Date:   Mon, 06 Mar 2023 14:25:22 +0100
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     mingo@kernel.org, vincent.guittot@linaro.org
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
@@ -49,8 +50,11 @@ Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
         joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
         yu.c.chen@intel.com, youssefesmat@chromium.org,
-        joel@joelfernandes.org
-Subject: [PATCH 00/10] sched: EEVDF using latency-nice
+        joel@joelfernandes.org, Parth Shah <parth@linux.ibm.com>
+Subject: [PATCH 01/10] sched: Introduce latency-nice as a per-task attribute
+References: <20230306132521.968182689@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -60,59 +64,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+From: Parth Shah <parth@linux.ibm.com>
 
-Ever since looking at the latency-nice patches, I've wondered if EEVDF would
-not make more sense, and I did point Vincent at some older patches I had for
-that (which is here his augmented rbtree thing comes from).
+Latency-nice indicates the latency requirements of a task with respect
+to the other tasks in the system. The value of the attribute can be within
+the range of [-20, 19] both inclusive to be in-line with the values just
+like task nice values.
 
-Also, since I really dislike the dual tree, I also figured we could dynamically
-switch between an augmented tree and not (and while I have code for that,
-that's not included in this posting because with the current results I don't
-think we actually need this).
+latency_nice = -20 indicates the task to have the least latency as
+compared to the tasks having latency_nice = +19.
 
-Anyway, since I'm somewhat under the weather, I spend last week desperately
-trying to connect a small cluster of neurons in defiance of the snot overlord
-and bring back the EEVDF patches from the dark crypts where they'd been
-gathering cobwebs for the past 13 odd years.
+The latency_nice may affect only the CFS SCHED_CLASS by getting
+latency requirements from the userspace.
 
-By friday they worked well enough, and this morning (because obviously I forgot
-the weekend is ideal to run benchmarks) I ran a bunch of hackbenck, netperf,
-tbench and sysbench -- there's a bunch of wins and losses, but nothing that
-indicates a total fail.
+Additionally, add debugging bits for newly added latency_nice attribute.
 
-( in fact, some of the schbench results seem to indicate EEVDF schedules a lot
-  more consistent than CFS and has a bunch of latency wins )
+[rebase, move defines in sched/prio.h]
+Signed-off-by: Parth Shah <parth@linux.ibm.com>
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Link: https://lkml.kernel.org/r/20230224093454.956298-3-vincent.guittot@linaro.org
+---
+ include/linux/sched.h      |  1 +
+ include/linux/sched/prio.h | 18 ++++++++++++++++++
+ kernel/sched/debug.c       |  1 +
+ 3 files changed, 20 insertions(+)
 
-( hackbench also doesn't show the augmented tree and generally more expensive
-  pick to be a loss, in fact it shows a slight win here )
-
-
-  hackbech load + cyclictest --policy other results:
-
-
-			EEVDF			 CFS
-
-		# Min Latencies: 00053
-  LNICE(19)	# Avg Latencies: 04350
-		# Max Latencies: 76019
-
-		# Min Latencies: 00052		00053
-  LNICE(0)	# Avg Latencies: 00690		00687
-		# Max Latencies: 14145		13913
-
-		# Min Latencies: 00019
-  LNICE(-19)	# Avg Latencies: 00261
-		# Max Latencies: 05642
-
-
-The nice -19 numbers aren't as pretty as Vincent's, but at the end I was going
-cross-eyed from staring at tree prints and I just couldn't figure out where it
-was going side-ways.
-
-There's definitely more benchmarking/tweaking to be done (0-day already
-reported a stress-ng loss), but if we can pull this off we can delete a whole
-much of icky heuristics code. EEVDF is a much better defined policy than what
-we currently have.
+Index: linux-2.6/include/linux/sched.h
+===================================================================
+--- linux-2.6.orig/include/linux/sched.h
++++ linux-2.6/include/linux/sched.h
+@@ -784,6 +784,7 @@ struct task_struct {
+ 	int				static_prio;
+ 	int				normal_prio;
+ 	unsigned int			rt_priority;
++	int				latency_nice;
+ 
+ 	struct sched_entity		se;
+ 	struct sched_rt_entity		rt;
+Index: linux-2.6/include/linux/sched/prio.h
+===================================================================
+--- linux-2.6.orig/include/linux/sched/prio.h
++++ linux-2.6/include/linux/sched/prio.h
+@@ -42,4 +42,22 @@ static inline long rlimit_to_nice(long p
+ 	return (MAX_NICE - prio + 1);
+ }
+ 
++/*
++ * Latency nice is meant to provide scheduler hints about the relative
++ * latency requirements of a task with respect to other tasks.
++ * Thus a task with latency_nice == 19 can be hinted as the task with no
++ * latency requirements, in contrast to the task with latency_nice == -20
++ * which should be given priority in terms of lower latency.
++ */
++#define MAX_LATENCY_NICE	19
++#define MIN_LATENCY_NICE	-20
++
++#define LATENCY_NICE_WIDTH	\
++	(MAX_LATENCY_NICE - MIN_LATENCY_NICE + 1)
++
++/*
++ * Default tasks should be treated as a task with latency_nice = 0.
++ */
++#define DEFAULT_LATENCY_NICE	0
++
+ #endif /* _LINUX_SCHED_PRIO_H */
+Index: linux-2.6/kernel/sched/debug.c
+===================================================================
+--- linux-2.6.orig/kernel/sched/debug.c
++++ linux-2.6/kernel/sched/debug.c
+@@ -1043,6 +1043,7 @@ void proc_sched_show_task(struct task_st
+ #endif
+ 	P(policy);
+ 	P(prio);
++	P(latency_nice);
+ 	if (task_has_dl_policy(p)) {
+ 		P(dl.runtime);
+ 		P(dl.deadline);
 
 
