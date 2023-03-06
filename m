@@ -2,72 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C076ACCD6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:42:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CA16ACCDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:43:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjCFSm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S229943AbjCFSn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 13:43:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjCFSm2 (ORCPT
+        with ESMTP id S229634AbjCFSn0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:42:28 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D51A65116
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:42:27 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-536af432ee5so202017967b3.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 10:42:26 -0800 (PST)
+        Mon, 6 Mar 2023 13:43:26 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558D52E0FB;
+        Mon,  6 Mar 2023 10:43:25 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id p26so6282597wmc.4;
+        Mon, 06 Mar 2023 10:43:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678128146;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ngEGOQ5LH5Ca87/RzyGzlZeBinyJ/MngnZ8MYK7ebfA=;
-        b=OkT4Bj9Z0TehomdKv19DYXF35jcxaz6UKe9zC/6aAKXVfCe/IsKqN7paabT+Ug9qKg
-         zxtbbvQ18j1OIA/hGzpOboQ8nrgaWyMHudXYhyFGFky0Kk+3B1T/Z32HHqnVWmCpPou/
-         YiiGegPoI65A293D9hI70EDBfbLxv8J6IZADCiEyrNCC2E/PTWpUmQuCCWetGNOyQt5Z
-         xpGxeNWEe0iLSwy2+xaiO5qi/R+JJZg1WIYWlTWnCSBHTQdi73hk+tIfLDsKYvvc+GYh
-         yWs1ok3/XLu/v3bvdjodgikz/Wdzh0Rc6fAhLaPiuBrBEvvHys94++syqIdBfK976igf
-         Wc4g==
+        d=gmail.com; s=20210112; t=1678128204;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9howz/MYIxQFOTkjG2sZpdC7yu6HSX7t+4kJG+A428w=;
+        b=RnYzgl5WppeBICyY1Qmu1aiUrbPL0PnHOWQqqLHOo6Oa8WlLlBB3H8ipoPvJsND8NL
+         +AqUgw+/V2JVJ4I0dnK1gAaYDtM2lcMCjU4fLKUOLyagYv63UPbPk6yL4a0qbbic3uVl
+         wgf4ldWVweQlmgN6hGD9PKYh37kyyh4VBQDIn6jbuhVMlqq+GRv8Z79RNhjO28JEhcxQ
+         pZSYbgJHyVerQBR13/kqTrDp/MOUt4XB2kVkeF3hcMdt5HK2R3MNxxlsNkWV60PM8PS8
+         zRqtwE3CLnmu+UOlA7BiWYRMep8EbKDTd7hTdT8ENLJo1ib46CIXo4GcSWOz9KtKcEwn
+         Ammw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678128146;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ngEGOQ5LH5Ca87/RzyGzlZeBinyJ/MngnZ8MYK7ebfA=;
-        b=chSH8uVLaVufFvcW15v7sr7IaehUOdIJfC1DX62FXWwULzvWjQ97JHG4b1PYya6aMP
-         wAkiXCBUMXPCnQHvnCbGtWcNnpe1HBbB2qkIYK7Zei8qZjahS3FoSOigYIpZNlw1vp4u
-         mYAAg6AinAvDr7aJwQ2pWPs5qK6Y0TARkIigxRJd3q1FgT9EwXPcsWB6vpLkVYN8NrrV
-         0nzLvZlkCaEP2EOEdANQwAwCqXZra02hQ/I1PkVaWSy42b3O9w8nN0WPyBJm8N4uOftr
-         OPRzOM6+b4pYlAAMeQ0HiB6XsAIinq+9efO0m+dwSQRLfKbhXhZXmBwcRUcXW3bo8pn/
-         7wzQ==
-X-Gm-Message-State: AO0yUKUUnlYJg31PoQaor/jvyved9+jAHEpKtVquQEM2XPe+e79LEdeH
-        Mr7VWLo1KaPLGUBUZVpJpUxlnUZgnsiIaWM9t5G1iQ==
-X-Google-Smtp-Source: AK7set8M00ZKGa/Z6gExCxHwgZnLO9Ec15wOR2BKAuJ7UZnHwr8H2R46yNYEtvxgXLd0/fKqQyxPpIlndMTCwGkWl/g=
-X-Received: by 2002:a81:4422:0:b0:534:eef8:caa9 with SMTP id
- r34-20020a814422000000b00534eef8caa9mr7040273ywa.8.1678128145947; Mon, 06 Mar
- 2023 10:42:25 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678128204;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9howz/MYIxQFOTkjG2sZpdC7yu6HSX7t+4kJG+A428w=;
+        b=bts/DOMgHdrXGYTRUfWEQdNIBnZZDqeC70h+ZNYBRYcPIa2FDwBO325sJ5O2aukYp2
+         otTzdVXdsxB0VlfVtQzOeO4mHdrVQBlzXh8z1Ix1mMykBJRqdgwYXvsqeG7MBUwmeViy
+         WpYaRowH0fIb7s3TIX14w8WBaAXe0UPm6/iwvsmSipPoEVVgPkDDLvp3K2k9Vir3HLlj
+         xIPYQPrZXLQbEO+K1Aq4fl00CB/Oy1maMqS1nZCaGgUbwey1X6dgu9nwyMK4kWDQIARC
+         x6qPErYHtZQpSp0vdAGTD3dvyeL4ocnO7qbBQSu7N2m/aIhAMyJsaGLRCEnJYfd3caUg
+         0GKQ==
+X-Gm-Message-State: AO0yUKX00Cj6f22maIWASb8uYsnWr2V3vQSurPjGo/mDoYz10N+8hplT
+        BTMm+tuMsYvhjBF0XsRwt+c=
+X-Google-Smtp-Source: AK7set9ocXY79rQCq8kdmSs3rFvVpcdzSuqw0hZ/yLMPPrZfSYmrWzRcwSyRFmjA6ou8n26+wR5neA==
+X-Received: by 2002:a05:600c:4f87:b0:3ea:d610:f059 with SMTP id n7-20020a05600c4f8700b003ead610f059mr11280986wmq.4.1678128203504;
+        Mon, 06 Mar 2023 10:43:23 -0800 (PST)
+Received: from Ansuel-xps. (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05600c35d200b003dfe549da4fsm15761153wmq.18.2023.03.06.10.43.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 10:43:22 -0800 (PST)
+Message-ID: <6406344a.050a0220.693b3.6689@mx.google.com>
+X-Google-Original-Message-ID: <ZAY0SzbzIgRH1oBa@Ansuel-xps.>
+Date:   Mon, 6 Mar 2023 19:43:23 +0100
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        John Crispin <john@phrozen.org>, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Arun.Ramadoss@microchip.com
+Subject: Re: [PATCH v8 00/13] Adds support for PHY LEDs with offload triggers
+References: <20230216013230.22978-1-ansuelsmth@gmail.com>
+ <Y++PdVq+DlzdotMq@lunn.ch>
+ <Y/YubNUBvQ5fBjtG@google.com>
 MIME-Version: 1.0
-References: <20230204014547.583711-1-vipinsh@google.com>
-In-Reply-To: <20230204014547.583711-1-vipinsh@google.com>
-From:   Vipin Sharma <vipinsh@google.com>
-Date:   Mon, 6 Mar 2023 10:41:50 -0800
-Message-ID: <CAHVum0dHKAxqm3zk7zCdmY=BTFZYyOS-nGqH4WbYcuoVXDqjWw@mail.gmail.com>
-Subject: Re: [Patch v2 0/4] Common KVM exit reason test assertions and exit
- reason sync
-To:     seanjc@google.com, pbonzini@redhat.com, maz@kernel.org,
-        james.morse@arm.com, suzuki.poulose@arm.com,
-        oliver.upton@linux.dev, yuzenghui@huawei.com,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com
-Cc:     dmatlack@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/YubNUBvQ5fBjtG@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,44 +94,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 3, 2023 at 5:45=E2=80=AFPM Vipin Sharma <vipinsh@google.com> wr=
-ote:
->
-> Hi,
->
-> This patch seris is extracted from
-> https://lore.kernel.org/lkml/20221212183720.4062037-1-vipinsh@google.com/
-> series.
->
-> Specifically, patch 12 is taken out from there and now expanded in to
-> this series.
->
-> This patch series contains following changes:
->
-> Patch 1 & 2:
->   Make a macro to clean up all KVM exit reason test assertion.
->
->   There are few places where explicit run->exit_reason are used but they
->   cannot be replaced with current macro.
->
->   I used following command KVM selftests directory and changed each
->   occurrence:
->     grep "run->exit_reason" -nir ./
->
-> Patch 3:
->   This is from Sean Christopherson. Adding a macro to generate KVM
->   exit strings.
->
-> Patch 4:
->   Sync KVM_EXIT_* reasons to sefltests. Many reasons are not present in
->   selftest code.
->
-> v2:
-> - Improve test assert message.
-> - Add macro to generate KVM_EXIT_* reason strings.
-> - Update selftests KVM_EXIT_ reasons to latest version.
->
-> v1: https://lore.kernel.org/lkml/20221212183720.4062037-13-vipinsh@google=
-.com/
+On Wed, Feb 22, 2023 at 03:02:04PM +0000, Lee Jones wrote:
+> On Fri, 17 Feb 2023, Andrew Lunn wrote:
+> 
+> > On Thu, Feb 16, 2023 at 02:32:17AM +0100, Christian Marangi wrote:
+> > > This is another attempt on adding this feature on LEDs, hoping this is
+> > > the right time and someone finally notice this.
+> > 
+> > Hi Christian
+> > 
+> > Thanks for keeping working on this.
+> > 
+> > I want to review it, and maybe implement LED support in a PHY
+> > driver. But i'm busy with reworking EEE at the moment.
+> > 
+> > The merge window is about to open, so patches are not going to be
+> > accepted for the next two weeks. So i will take a look within that
+> > time and give you feedback.
+> 
+> Thanks Andrew.  If Pavel is still unavailable to conduct reviews, I'm
+> going to need all the help I can get with complex submissions such as
+> these.
+> 
 
-Any update/feedback on this series?
+Hi Lee,
+thanks for stepping in. Just wanted to tell you I got some message with
+Andrew to make this thing less problematic and to dry/make it more
+review friendly.
+
+We decided on pushing this in 3 step:
+1. Propose most basic things for some switch and some PHY. (brightness
+and blink_set support only, already supported by LED core)
+2. A small series that should be just a cleanup for the netdev trigger
+3. Support for hw_control in the most possible clean and way with small
+patch to they are not hard to track and understand the concept of this
+feature.
+
+I'm starting with the step 1 and sending some of my patch and Andrew
+patch to add basic support and I will add you and LED mailing list in
+Cc.
+
+Again thanks for starting checking this and feel free to ask any
+question about this to me also privately, I'm very open to any help.
+
+-- 
+	Ansuel
