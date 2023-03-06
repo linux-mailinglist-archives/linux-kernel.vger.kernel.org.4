@@ -2,241 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11EA6AB654
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:31:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DF16AB658
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjCFGby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 01:31:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45882 "EHLO
+        id S229483AbjCFGfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 01:35:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFGbu (ORCPT
+        with ESMTP id S229457AbjCFGfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 01:31:50 -0500
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2068.outbound.protection.outlook.com [40.107.247.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F4A1689A;
-        Sun,  5 Mar 2023 22:31:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=topic.nl; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rqZ1ofKJK/JX4432vpsOKp1gxQZpBiqJSWM5dVfF06w=;
- b=dk+k5tnca3tedYuanjtXgQDCVCTy1Mlk6+NmUS5EefntAFFY33MVQ39L7BxLzQCiWr5Szd8gH9Ds+ONUdVweJAC+cCt4clsevnepTOCuTTqNossVlvbPqdKsHl/zE1hfv9BRdSM5oVkH4y6N69PoY+FpCtwVzSgscGoZ7FZnDULDqh8OJrz0fTcAo4R2j9zYwlHOXWHAvyhF0SHVXPvqSm8DLl7WPY45nGk5xPi5Zn5jmvYqBRqn1oLKOM+lf+k4aecdHZGyyXZZz9h09e0Lf3yN4Gm3RfQKU3KqtWpEeR9qhc/VHFEz+Pgw4XH13UmsuWmZnmlAjO+OIGRddIuVVw==
-Received: from GV3P280CA0047.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:9::15) by
- PAXPR04MB8475.eurprd04.prod.outlook.com (2603:10a6:102:1de::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Mon, 6 Mar
- 2023 06:31:42 +0000
-Received: from HE1EUR01FT027.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:150:9:cafe::50) by GV3P280CA0047.outlook.office365.com
- (2603:10a6:150:9::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28 via Frontend
- Transport; Mon, 6 Mar 2023 06:31:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 13.93.42.39)
- smtp.mailfrom=topicproducts.com; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=topic.nl;
-Received-SPF: Pass (protection.outlook.com: domain of topicproducts.com
- designates 13.93.42.39 as permitted sender) receiver=protection.outlook.com;
- client-ip=13.93.42.39; helo=westeu12-emailsignatures-cloud.codetwo.com; pr=C
-Received: from westeu12-emailsignatures-cloud.codetwo.com (13.93.42.39) by
- HE1EUR01FT027.mail.protection.outlook.com (10.152.0.161) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.13 via Frontend Transport; Mon, 6 Mar 2023 06:31:41 +0000
-Received: from EUR03-VI1-obe.outbound.protection.outlook.com (104.47.30.109) by westeu12-emailsignatures-cloud.codetwo.com with CodeTwo SMTP Server (TLS12) via SMTP; Mon, 06 Mar 2023 06:31:40 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Us0tiDNgsQR8iMbm6UsyTCJKSsDbbG7V2ZYJ8DsihdtHK1PxWWTzjJ81Sekk24OvvlXq0hNfbquP1+ax6Z5vNgaKmWIQ1LWKeGIXFyyC25ER5hSxib3UBspy0AY4Pl3UDiSnZquyj1v35ynVh9EEYL5T79UAOSZNdImYsrma7s1XP5T0xCdU/G3n7DCBJQ7cG7wOoyEP6pasYlylaiWejONRbu2mEeA1vzztn6H9bOrTBH1BuwUFGZ55mi11+lNjTWDsOYnyGZHpiZt+XYh1oSWDRyJKp1V4iGu13sG37ps5ySqsrtSMus2lHBQb11fcb3ZU/Z+n5BhXq5xfsS1qzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6YivThwGbBpYsM42yUyEJQHrU01PkIdsWXHkBv6T5h4=;
- b=M3JKqrpK949lQ8NgB0lNcrlaSszQvViBJhA0BD4pzcoExSN/B/IZNdfgwLZ6v1t1WH71Q+9xZbedTsDwnkHFN8R/vT2gKozKS7qEIN5WLM7G24rdFloC6Pwz8tPJhuxoNz4pPAMzZGGUxhzhnPdi/qVmsc8EDwYcuIbhPfCrTkgSVb+sszvdpVG3kg9GJqMnzNi0XNnQlCwGnVS8Boan4zQfsstpPIpXtBweki3i6+zscgNc3o6p78nb6rCnoetNdHxdP2eSyB5o9lv2dARU+gCh1fHrHJfg4pVklw3H1ZWmD+XEsKxwvxk0G8ZTdT0IkftyWyLDvTD+y8i87xOF2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=topicproducts.com; dmarc=pass action=none header.from=topic.nl;
- dkim=pass header.d=topic.nl; arc=none
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=topic.nl;
-Received: from DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
- by DB9PR04MB9702.eurprd04.prod.outlook.com (2603:10a6:10:301::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.27; Mon, 6 Mar
- 2023 06:31:38 +0000
-Received: from DB8PR04MB6523.eurprd04.prod.outlook.com
- ([fe80::a7e7:768:5a54:777a]) by DB8PR04MB6523.eurprd04.prod.outlook.com
- ([fe80::a7e7:768:5a54:777a%7]) with mapi id 15.20.6156.028; Mon, 6 Mar 2023
- 06:31:38 +0000
-Message-ID: <ceb4f367-b910-578a-24bc-7c222e2f0b0f@topic.nl>
-Date:   Mon, 6 Mar 2023 07:31:36 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-From:   Mike Looijmans <mike.looijmans@topic.nl>
-Subject: Re: [PATCH v3 2/2] iio: adc: Add TI ADS1100 and ADS1000
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Cosmin Tanislav <demonsingur@gmail.com>,
-        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20230228063151.17598-1-mike.looijmans@topic.nl>
- <20230228063151.17598-2-mike.looijmans@topic.nl>
- <20230304175751.2daae308@jic23-huawei>
- <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.1e5d3371-10e4-4627-b16c-6b250afbb522@emailsignatures365.codetwo.com>
-Organization: Topic
-In-Reply-To: <20230304175751.2daae308@jic23-huawei>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: AM0PR03CA0045.eurprd03.prod.outlook.com (2603:10a6:208::22)
- To DB8PR04MB6523.eurprd04.prod.outlook.com (2603:10a6:10:10f::26)
+        Mon, 6 Mar 2023 01:35:13 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 071D6DBF4
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 22:34:33 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id ec29so3217838edb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 22:34:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=grsecurity.net; s=grsec;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hJUTGqXMGW6Cvfi0ywOK0Ci1yU/jQFhAT6zE35M7ZeQ=;
+        b=e48TI2ZvHI5FBKmp0u2PF06+IlS2gtAApcfcYqn5Kw9NSfKcduGBkxQkMGKyd7YfSZ
+         a1SnidYMaFHBqZiLaWQLQDVVu/Ig2HOnd5jNQYRk5s6NGn7swquLiraIU2zQ5ro6Mjus
+         AVUEtvkcycFPdDHJG+oZTEprW32XBeDU9eInwnQAvmDPry5owUwuXdjrX6ahHMpQRUmD
+         2/COP9+gjmHybbeeq6SPbmRUMP6Q7qzIlaurKCAuyB32+7KCGOYg2zHE+R3pWm8VXiiH
+         dAIPVyo3k8PtXL4OnySogb+pBOpHWIG4gNz8tRu8dnc14/lVUH9LgoGP67PWnN57pqpM
+         rufA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hJUTGqXMGW6Cvfi0ywOK0Ci1yU/jQFhAT6zE35M7ZeQ=;
+        b=4cgIlvrLA+v12aN8vL9MQSsMOTU+Ct9Nenbp92hCu8f8jBIVQ/T+OHWxqZxxWQQeYl
+         cQ/r4Na4kJLLMdGcL+mM1S6FLPv9A68wAmhq3DBHaQ8ghZTsMvgLPni2+QxUdRbKMeM3
+         YdL/x+07lqXu7qAbyd1Z5OZr2UJCvjFuXMGWHhddmNcI1NBjwZajhU6SgE2QfHNPrhui
+         JPb2PBOM8t48IvcxEqMflqrmZE7n6b81hTU5BIjgCnq7sEm/F51DHN0vc5l89EuJUAas
+         i1YKhCnZExx8uybWaK2NzdbIM+G19+LqsLoGOMMTupG7ek1Tax1KP6gnkkDkp1Ck1Tmj
+         l+AA==
+X-Gm-Message-State: AO0yUKW4ciynAqMwP1WCpQd8XAKFv+nImVPrne4cN9CfSn6XxtHRqAXC
+        jk1dVm/aQoCsC06FJvrb1alYyQ==
+X-Google-Smtp-Source: AK7set8uKaGDlcX6Op9yv25E1smVg63HCTHMfb5vyBrLcyhP28O7rbqqRACkDd3RiPVzFWhhqUrpNQ==
+X-Received: by 2002:a17:906:e98:b0:901:33f9:a3cc with SMTP id p24-20020a1709060e9800b0090133f9a3ccmr9730568ejf.68.1678084471410;
+        Sun, 05 Mar 2023 22:34:31 -0800 (PST)
+Received: from ?IPV6:2003:f6:af24:3c00:ae50:581:dd3c:8873? (p200300f6af243c00ae500581dd3c8873.dip0.t-ipconnect.de. [2003:f6:af24:3c00:ae50:581:dd3c:8873])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170906040800b008bda61ff999sm4125308eja.130.2023.03.05.22.34.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Mar 2023 22:34:30 -0800 (PST)
+Message-ID: <d26b0ae9-bc72-3cfd-4428-d7760524c218@grsecurity.net>
+Date:   Mon, 6 Mar 2023 07:34:35 +0100
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB8PR04MB6523:EE_|DB9PR04MB9702:EE_|HE1EUR01FT027:EE_|PAXPR04MB8475:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4eb81749-ad46-412e-ade6-08db1e0c72fb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: a/pxdho9NBFj+L2SS/8Y/wY5R5+xAlbCqJZF3hZlFYjBJKnRUmF3mxT84hLAMCezGiLjMYbrMolqB+uVqWzUlAgWHsxa1AAgc8MQ/79BupVsx03mbaksIOQWl6ikQcOoCY3bKfod5fcOWFrl1X9uBeg7XWL4SuZ4bJayubnbrZVTf1UlcAw5nb/ZoOCo9DNm0rb+95MlIxeecaQeaJDsGehpGbZPLQrOt37QJKcUT8fFaKS5zTxPjlaZeVN4FiBGg8vttm8cbITd5y6hnoBLH660BRjcnFnm9xYiu6LeTmW4tBIFwWcmCCx6/elmCNl4dNi9+Bh7YyzkoGfZmz+O7mElkEcmtmINNYKXTugy9M2y4Rb45bgnb2SJ2UpEqeHgidZvQnR4MHC1OdXInUz5VZpqBg1bPNXGwUxa8lv7ZOmAPPkdmzDhc16dG7lZuNEX3Ryu9kHV7JR25jYSU+JvXOytTUq93HLEVi5bjwzm7pF8kDgJkqXxq8eIqy/V6bttaDSvYvoNwaVsNN0wdppyKe2JA4QhXy3zETE/ANNrtBDVJPmy8rpNDYFPFyY+3MHRuVNh/VxC1J4eXIbzxc4IUrTx2JvlAEV0WlsteIoilwltzK4OhAj2mWaZcqkV/L21Aaa5VYqnkz+mCNj88Ye0ztqbp818DrzqoeFkjj3nYFsynVNjVSYXqhJ8GM8g41oS1YLvZZzuFOqOOhsAPPLCLWlVz2xAYgyZxSMaYy8mBPhOAn6KzWBJ/nuO34BN1kOCxxxLKIRGQjCVSgzQLETjnw==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6523.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39830400003)(346002)(376002)(136003)(366004)(396003)(451199018)(31686004)(54906003)(36756003)(6486002)(42882007)(316002)(31696002)(83380400001)(186003)(2906002)(44832011)(5660300002)(8936002)(66556008)(66946007)(6916009)(4326008)(8676002)(41300700001)(478600001)(6506007)(26005)(6512007)(53546011)(66476007)(2616005)(7416002)(52116002)(36916002)(83170400001)(38100700002)(38350700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9702
-X-CodeTwo-MessageID: fd528e66-bfd8-4a5d-b2d3-1b5eff61c4bd.20230306063140@westeu12-emailsignatures-cloud.codetwo.com
-X-CodeTwoProcessed: true
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: HE1EUR01FT027.eop-EUR01.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 3fc02a5a-664d-43c9-f278-08db1e0c7084
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: adxxWCMTQSPd2TqISB/gyx9AHvVgqLxXwV1oyBNObuf3Cp5spl71OCg+xECm4aAfazbNkbSk8Rl6ExWNhb1eiNVnpkS+PmUwr22XutXKN+HbZgoQN19LS7sRkOpyotkmiyVoqeCSLwhhveK/IGux8c1s/PXoYFjq021gduWORb6jHR0lLnAv0z9DYiK4Ak8WeyOoe4fdDZnxbAb7b0k8jsaCCri326nIcXuK2MgAanelY3ZVqs8khdaYlK8kjW7NfWN3XX60a6IKqOIR0gDkJPReUqpqdpjUBC6d1g/mlzqiXIQYnxGMuoGjTd5AhUN8J2oFb/13TJmp5/jGaBXNfpAGQJ8QFdaJo7bVe84+bFszU+kiQWGQepJyGsSH3hj50n4ZqKXJAx+A9gS9oYBd1AAT/qTjgrfJKqMa9cNmiYK+60EPQte4W8ziVq0nFWHBofRLMQFNOefiy3TJtT6OH8RoK/rWHIabksf+OkthFiy7eNfyJg8N9056TgIa4dWzSgdTyDXq3hAWINfbB56UkHXBoD4ZEpMvpQKuDapx9H+jUqz9sldcNO4Uzw+LQqfDAEoTHOvT17du0vEVbqJGBxKHDomDGlyc2+ieEcfokWIubh3v1sjZSAuDgvJfmG14WdjUh6ON+WFUI1U8FnHtqKudlG27WMFO1+Ao2qEt5KmabrJF2iF2x6QYblIpwIOz
-X-Forefront-Antispam-Report: CIP:13.93.42.39;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:westeu12-emailsignatures-cloud.codetwo.com;PTR:westeu12-emailsignatures-cloud.codetwo.com;CAT:NONE;SFS:(13230025)(4636009)(39830400003)(136003)(346002)(396003)(376002)(451199018)(36840700001)(46966006)(186003)(7636003)(7596003)(356005)(83170400001)(8936002)(36860700001)(4326008)(6916009)(8676002)(41300700001)(44832011)(2906002)(70586007)(70206006)(5660300002)(7416002)(47076005)(36916002)(478600001)(2616005)(53546011)(6512007)(6506007)(26005)(336012)(6486002)(42882007)(316002)(54906003)(36756003)(40480700001)(82310400005)(31696002)(15974865002)(83380400001)(31686004)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: topic.nl
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2023 06:31:41.6688
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4eb81749-ad46-412e-ade6-08db1e0c72fb
-X-MS-Exchange-CrossTenant-Id: 449607a5-3517-482d-8d16-41dd868cbda3
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=449607a5-3517-482d-8d16-41dd868cbda3;Ip=[13.93.42.39];Helo=[westeu12-emailsignatures-cloud.codetwo.com]
-X-MS-Exchange-CrossTenant-AuthSource: HE1EUR01FT027.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8475
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 0/6] KVM: MMU: performance tweaks for heavy CR0.WP
+ users
+Content-Language: en-US, de-DE
+To:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <20230201194604.11135-1-minipli@grsecurity.net>
+From:   Mathias Krause <minipli@grsecurity.net>
+In-Reply-To: <20230201194604.11135-1-minipli@grsecurity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01.02.23 20:45, Mathias Krause wrote:
+> v2: https://lore.kernel.org/kvm/20230118145030.40845-1-minipli@grsecurity.net/
+> 
+> This series is a resurrection of the missing pieces of Paolo's previous
+> attempt[1] to avoid needless MMU roots unloading. The performance gap
+> between TDP and legacy MMU is still existent, especially noticeable under
+> grsecurity which implements kernel W^X by toggling CR0.WP, which happens
+> very frequently.
+> 
+> Patches 1-13 and 17 of the old series had been merged, but, unfortunately,
+> the remaining parts never saw a v3. I therefore took care of these, took
+> Sean's feedback into account[2] and simplified the whole approach to just
+> handle the case we care most about explicitly.
+> 
+> Patch 1 is a v3 of [3], addressing Sean's feedback.
+> 
+> Patch 2 is specifically useful for grsecurity, as handle_cr() is by far
+> *the* top vmexit reason.
+> 
+> Patch 3 is the most important one, as it skips unloading the MMU roots for
+> CR0.WP toggling.
+> 
+> Sean was suggesting another change on top of v2 of this series, to skip
+> intercepting CR0.WP writes completely for VMX[4]. That turned out to be
+> yet another performance boost and is implemenmted in patch 6.
+> 
+> While patches 1 and 2 bring small performance improvements already, the
+> big gains come from patches 3 and 6.
+> 
+> I used 'ssdd 10 50000' from rt-tests[5] as a micro-benchmark, running on a
+> grsecurity L1 VM. Below table shows the results (runtime in seconds, lower
+> is better):
+> 
+>                          legacy     TDP    shadow
+>     kvm.git/queue        11.55s   13.91s    75.2s
+>     + patches 1-3         7.32s    7.31s    74.6s
+>     + patches 4-6         4.89s    4.89s    73.4s
+> 
+> This series builds on top of kvm.git/queue, namely commit de60733246ff
+> ("Merge branch 'kvm-hw-enable-refactor' into HEAD").
+> 
+> Patches 1-3 didn't change from v2, beside minor changlog mangling.
+> 
+> Patches 4-6 are new to v3.
+> 
+> Thanks,
+> Mathias
+> 
+> [1] https://lore.kernel.org/kvm/20220217210340.312449-1-pbonzini@redhat.com/
+> [2] https://lore.kernel.org/kvm/YhATewkkO%2Fl4P9UN@google.com/
+> [3] https://lore.kernel.org/kvm/YhAB1d1%2FnQbx6yvk@google.com/
+> [4] https://lore.kernel.org/kvm/Y8cTMnyBzNdO5dY3@google.com/
+> [5] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
+> 
+> Mathias Krause (5):
+>   KVM: VMX: Avoid retpoline call for control register caused exits
+>   KVM: x86: Do not unload MMU roots when only toggling CR0.WP
+>   KVM: x86: Make use of kvm_read_cr*_bits() when testing bits
+>   KVM: x86/mmu: Fix comment typo
+>   KVM: VMX: Make CR0.WP a guest owned bit
+> 
+> Paolo Bonzini (1):
+>   KVM: x86/mmu: Avoid indirect call for get_cr3
+> 
+>  arch/x86/kvm/kvm_cache_regs.h   |  3 ++-
+>  arch/x86/kvm/mmu/mmu.c          | 31 ++++++++++++++++++++-----------
+>  arch/x86/kvm/mmu/paging_tmpl.h  |  2 +-
+>  arch/x86/kvm/mmu/spte.c         |  2 +-
+>  arch/x86/kvm/pmu.c              |  4 ++--
+>  arch/x86/kvm/vmx/capabilities.h |  1 +
+>  arch/x86/kvm/vmx/nested.c       |  4 ++--
+>  arch/x86/kvm/vmx/vmx.c          | 15 ++++++++++++---
+>  arch/x86/kvm/vmx/vmx.h          |  8 ++++++++
+>  arch/x86/kvm/x86.c              |  9 +++++++++
+>  10 files changed, 58 insertions(+), 21 deletions(-)
 
-Met vriendelijke groet / kind regards,=0A=
-=0A=
-Mike Looijmans=0A=
-System Expert=0A=
-=0A=
-=0A=
-TOPIC Embedded Products B.V.=0A=
-Materiaalweg 4, 5681 RJ Best=0A=
-The Netherlands=0A=
-=0A=
-T: +31 (0) 499 33 69 69=0A=
-E: mike.looijmans@topicproducts.com=0A=
-W: www.topic.nl=0A=
-=0A=
-Please consider the environment before printing this e-mail=0A=
-On 04-03-2023 18:57, Jonathan Cameron wrote:
-> On Tue, 28 Feb 2023 07:31:51 +0100
-> Mike Looijmans <mike.looijmans@topic.nl> wrote:
->
->> The ADS1100 is a 16-bit ADC (at 8 samples per second).
->> The ADS1000 is similar, but has a fixed data rate.
->>
->> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
-> Hi Mike,
->
-> A few minor things + one request for a test as trying to chase a possible
-> ref count overflow around the runtime_pm was giving me a enough of a head=
-ache
-> that it's easier to ask you just to poke it and see.  If it doesn't fail =
-as
-> I expect I'll take a closer look!
+Ping!
 
-Will do, but it may take a few days to get access to the hardware again.=20
-I'll report on that later.
+Anything I can do to help getting this series reviewed and hopefully merged?
 
->> +static int ads1100_set_scale(struct ads1100_data *data, int val, int va=
-l2)
->> +{
->> +	int microvolts;
->> +	int gain;
->> +	int i;
->> +
->> +	/* With Vdd between 2.7 and 5V, the scale is always below 1 */
->> +	if (val)
->> +		return -EINVAL;
->> +
->> +	microvolts =3D regulator_get_voltage(data->reg_vdd);
->> +	/* Calculate: gain =3D ((microvolts / 1000) / (val2 / 1000000)) >> 15 =
-*/
->> +	gain =3D ((microvolts + BIT(14)) >> 15) * 1000 / val2;
->> +
->> +	for (i =3D 0; i < 4; i++) {
->> +		if (BIT(i) =3D=3D gain) {
->> +			ads1100_set_config_bits(data, ADS1100_PGA_MASK, i);
->> +			return 0;
->> +		}
->> +	}
-> Andy's suggestion of something like..
-> 	if (!gain)
-> 		return -EINVAL;
-> 	i =3D ffs(gain);
-> 	if (i >=3D 4 || BIT(i) !=3D gain)
-> 		return -EINVAL;
->
-> 	ads...
->
-> Is perhaps nicer than the loop.
-
-Yes, takes out a loop.
-
-
->
->> +static void ads1100_disable_continuous(void *data)
->> +{
->> +	ads1100_set_config_bits(data, ADS1100_CFG_SC, ADS1100_SINGLESHOT);
->> +}
->> +
->> +static int ads1100_probe(struct i2c_client *client)
->> +{
->> +	struct iio_dev *indio_dev;
->> +	struct ads1100_data *data;
->> +	struct device *dev =3D &client->dev;
->> +	int ret;
->> +
->> +	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*data));
->> +	if (!indio_dev)
->> +		return -ENOMEM;
->> +
->> +	data =3D iio_priv(indio_dev);
->> +	i2c_set_clientdata(client, indio_dev);
-> You can avoid the slightly nasty mix of i2c_set_clientdata vs dev_get_drv=
-data()
-> below by taking advantage of the fact you have a local dev pointer.
->
-> 	dev_set_drvdata(dev, indio_dev);
-> and no confusing mix is left.  Of course it's doing the same thing but to=
- my
-> mind slightly nicer to use the same one.
-
-Since I don't need indio_dev anywhere, I might as well say this directly:
-
-dev_set_drvdata(dev, data);
-
-(Only the pm_ routines use this)
-
-> ...
->
-
---=20
-Mike Looijmans
-
+Thanks,
+Mathias
