@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613F76ACE9C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6AE6ACE99
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjCFT4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
+        id S230263AbjCFT4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:56:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCFTzr (ORCPT
+        with ESMTP id S230168AbjCFTzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:55:47 -0500
+        Mon, 6 Mar 2023 14:55:41 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CE96BC3E;
-        Mon,  6 Mar 2023 11:55:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0980E65118;
+        Mon,  6 Mar 2023 11:55:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678132542; x=1709668542;
+  t=1678132541; x=1709668541;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QkJilS+dwGD4FvKKeEiSHbIXGMw2cebK2jx0ihhp9MY=;
-  b=bQFBSjbA1O63VyFiqxH+Re8QDSlT8fBH1nIv+NjCSeX3c394RVIDXOj9
-   lfWEuPhedLMWHaqz8+yhckHMBLWfhMc94a6owa0Uo8udgbNjk0Sbh1Lt9
-   i9l5u2uZHfAIwidDQ/rE8td+O8Hvs06k08smCKSMyW26o/k9AXB8xFhA0
-   9kTSnK0iDEPzUHCTzRM0jXUcHjN6LXtWMVBxDDq0pIVoQpTRYlNfZqVbH
-   ikQWHLAUNQgHFozG+P8LvC9s6B743/CdrYJEinirOzE28xmjFlDzHzmr2
-   Y300ZykWeRbIDXOiGTgn5xJfssBV/5dadz2OJNkSqFKvU4oxrfsJURh94
+  bh=89ohLboU1a/2JdE0Dw4HbVrvYKShu90dTe4vbBA2XKY=;
+  b=DaT3ANVONlrbjp1EzScXqyEpFCqBwVhuB/axhzLXc/DJpR0xF4epipTa
+   hxgxR5V3ckFe+g72FDAtXOZTVlnlXnVE2rfQBuWCiKOwrNca1SkyS+P86
+   KSq/4tIP0ZWk3om27DojiOipmEBhzDx1Uk2+Qx5KX4omOKsUlp4DKd5yY
+   6y2BBu5xt7nJGRhI6sj9YRlS4xACrcFGrGGzcOBVth4M2j7WH/x4r55u9
+   EbNVivj/sGWUo2ZX0hICmk2ecxGPDoVPt+zhQlrSLZTtYP0ZlGMoKNhku
+   d+mWVXtEEQP+PA2yj11Mp56CibJ3bUZAYwAqlIYtnC+/DYqFW3U2APNB+
    g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="333128974"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="333128953"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="333128974"
+   d="scan'208";a="333128953"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 11:55:39 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745185191"
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745185190"
 X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="745185191"
+   d="scan'208";a="745185190"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga004.fm.intel.com with ESMTP; 06 Mar 2023 11:55:34 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 95E3959E; Mon,  6 Mar 2023 21:56:12 +0200 (EET)
+        id A15835A7; Mon,  6 Mar 2023 21:56:12 +0200 (EET)
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
@@ -64,9 +64,9 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
         <sathyanarayanan.kuppuswamy@linux.intel.com>,
         Nandor Han <nandor.han@ge.com>,
         Semi Malinen <semi.malinen@ge.com>
-Subject: [PATCH v1 08/16] gpio: crystalcove: Utilize helpers from string_choices.h
-Date:   Mon,  6 Mar 2023 21:55:48 +0200
-Message-Id: <20230306195556.55475-9-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 09/16] gpio: grgpio: Utilize helpers from string_choices.h
+Date:   Mon,  6 Mar 2023 21:55:49 +0200
+Message-Id: <20230306195556.55475-10-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
 References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
@@ -85,50 +85,32 @@ There are a few helpers available to convert a boolean variable
 to the dedicated string literals depending on the application.
 Use them in the driver.
 
-While at, utilize specifier field for padding the strings where
-it's required.
-
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/gpio/gpio-crystalcove.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+ drivers/gpio/gpio-grgpio.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-crystalcove.c b/drivers/gpio/gpio-crystalcove.c
-index 1ee62cd58582..56d628b18397 100644
---- a/drivers/gpio/gpio-crystalcove.c
-+++ b/drivers/gpio/gpio-crystalcove.c
-@@ -15,6 +15,7 @@
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/seq_file.h>
+diff --git a/drivers/gpio/gpio-grgpio.c b/drivers/gpio/gpio-grgpio.c
+index bea0e32c195d..ccd942109f6a 100644
+--- a/drivers/gpio/gpio-grgpio.c
++++ b/drivers/gpio/gpio-grgpio.c
+@@ -30,6 +30,7 @@
+ #include <linux/irq.h>
+ #include <linux/irqdomain.h>
+ #include <linux/bitops.h>
 +#include <linux/string_choices.h>
- #include <linux/types.h>
  
- #define CRYSTALCOVE_GPIO_NUM	16
-@@ -315,15 +316,15 @@ static void crystalcove_gpio_dbg_show(struct seq_file *s, struct gpio_chip *chip
- 			    &irq);
+ #define GRGPIO_MAX_NGPIO 32
  
- 		offset = gpio % 8;
--		seq_printf(s, " gpio-%-2d %s %s %s %s ctlo=%2x,%s %s %s\n",
--			   gpio, ctlo & CTLO_DIR_OUT ? "out" : "in ",
--			   ctli & 0x1 ? "hi" : "lo",
--			   ctli & CTLI_INTCNT_NE ? "fall" : "    ",
--			   ctli & CTLI_INTCNT_PE ? "rise" : "    ",
-+		seq_printf(s, " gpio-%-2d %-3.3s %-2.2s %-4.4s %-4.4s ctlo=%2x,%-9.9s %-9.9s %s\n",
-+			   gpio, str_out_in(ctlo & CTLO_DIR_OUT),
-+			   str_hi_lo(ctli & BIT(0)),
-+			   ctli & CTLI_INTCNT_NE ? "fall" : "",
-+			   ctli & CTLI_INTCNT_PE ? "rise" : "",
- 			   ctlo,
--			   mirqs0 & BIT(offset) ? "s0 mask  " : "s0 unmask",
--			   mirqsx & BIT(offset) ? "sx mask  " : "sx unmask",
--			   irq & BIT(offset) ? "pending" : "       ");
-+			   mirqs0 & BIT(offset) ? "s0 mask" : "s0 unmask",
-+			   mirqsx & BIT(offset) ? "sx mask" : "sx unmask",
-+			   irq & BIT(offset) ? "pending" : "");
+@@ -426,7 +427,7 @@ static int grgpio_probe(struct platform_device *ofdev)
  	}
- }
  
+ 	dev_info(&ofdev->dev, "regs=0x%p, base=%d, ngpio=%d, irqs=%s\n",
+-		 priv->regs, gc->base, gc->ngpio, priv->domain ? "on" : "off");
++		 priv->regs, gc->base, gc->ngpio, str_on_off(priv->domain));
+ 
+ 	return 0;
+ }
 -- 
 2.39.1
 
