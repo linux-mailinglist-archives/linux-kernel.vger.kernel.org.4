@@ -2,73 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414986ABEF1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD42F6ABEFB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCFMBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        id S229776AbjCFMDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:03:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbjCFMBi (ORCPT
+        with ESMTP id S229486AbjCFMDJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:01:38 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E85B1F915
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:01:36 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1pZ9X3-00016l-Sj; Mon, 06 Mar 2023 13:01:33 +0100
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1pZ9X2-0004hV-FY; Mon, 06 Mar 2023 13:01:32 +0100
-Date:   Mon, 6 Mar 2023 13:01:32 +0100
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Mon, 6 Mar 2023 07:03:09 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4171B306;
+        Mon,  6 Mar 2023 04:03:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678104188; x=1709640188;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1mL4e/xUak5PVuwnTqWGIvoCVk6E+88xbDwsqxlcMrs=;
+  b=FL85yAVVYz0nYwDK5cZWpAEf3FElNR8zG7BBjt0AX7I9ndiBKUAN9adT
+   oh2QMh2U9V9f1K30oRF4wQzCPf5HNDPfuf2NLdYOxSIPwDjjTbpOeLj7I
+   ApKOKOrId/dpGCYIwPRcPbUXvdDiLBi+lq27Y8dTyd89/yk9ZCl/a4OsC
+   JdmSpVXVPYceuzOyY+9uzdCQhZ1nIPVZe3GUJn/gaI9jQB30otB9KVww2
+   LKoX2TOXibAtSZjwunXUAEtH/XPGDW9hvIS9XwKdFj/gpNLMz+KeyP3ra
+   CqRW4mxB0Rk40PmGGzMXvvU1FQsNJW7vkmjd+SzA/3d4sQYJzs1cccPqt
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="315195781"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="315195781"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 04:03:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="708626116"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="708626116"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 06 Mar 2023 04:02:58 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pZ9YN-00GKx1-0x;
+        Mon, 06 Mar 2023 14:02:55 +0200
+Date:   Mon, 6 Mar 2023 14:02:54 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] misc: sram: Improve and simplify clk handling
-Message-ID: <20230306120132.GA15995@pengutronix.de>
-References: <20230302091251.1852454-1-u.kleine-koenig@pengutronix.de>
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        chrome-platform@lists.linux.dev,
+        =?iso-8859-1?Q?N=EDcolas_F_=2E_R_=2E_A_=2E?= Prado 
+        <nfraprado@collabora.com>, Marek Vasut <marex@denx.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>, devicetree@vger.kernel.org,
+        Allen Chen <allen.chen@ite.com.tw>,
+        dri-devel@lists.freedesktop.org,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Stephen Boyd <swboyd@chromium.org>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v13 10/10] drm/bridge: it6505: Register Type C mode
+ switches
+Message-ID: <ZAXWbkq4oLfrWUR7@smile.fi.intel.com>
+References: <20230303143350.815623-1-treapking@chromium.org>
+ <20230303143350.815623-11-treapking@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230302091251.1852454-1-u.kleine-koenig@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230303143350.815623-11-treapking@chromium.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 10:12:51AM +0100, Uwe Kleine-König wrote:
-> The current code tries to get an associated clk, ignores any errors in the
-> process and if there is a clock enables it unconditionally for the whole
-> lifetime of the sram device.
-> 
-> Instead use an "optional" variant of devm_clk_get() which handles the case
-> where no clk is needed for the sram device and do proper error handling
-> for the remaining error cases. Also use an "enabled" variant of
-> devm_clk_get() to simplify. With that .probe() is the only function using
-> struct sram_dev::clk, so it can be replaced by a local variable.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Fri, Mar 03, 2023 at 10:33:50PM +0800, Pin-yen Lin wrote:
+> Register USB Type-C mode switches when the "mode-switch" property and
+> relevant port are available in Device Tree. Configure the "lane_swap"
+> state based on the entered alternate mode for a specific Type-C
+> connector, which ends up updating the lane swap registers of the it6505
+> chip.
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+...
 
-regards
-Philipp
+> +	it6505->port_data = devm_kcalloc(dev, switch_desc->num_typec_switches,
+> +					 sizeof(struct it6505_typec_port_data),
+> +					 GFP_KERNEL);
+
+> +
+
+Same, no need for a blank line here.
+
+> +	if (!it6505->port_data) {
+> +		ret = -ENOMEM;
+> +		goto unregister_mux;
+> +	}
+
+...
+
+> +		it6505->port_data[i].lane_swap = (dp_lanes[0] / 2 == 1);
+
+' % 2 == 0' ?
+
+...
+
+Wouldn't be better to have
+
+	ret = PTR_ERR_OR_ZERO(extcon);
+
+here and amend the following accordingly?
+
+>  	if (PTR_ERR(extcon) == -EPROBE_DEFER)
+>  		return -EPROBE_DEFER;
+>  	if (IS_ERR(extcon)) {
+> -		dev_err(dev, "can not get extcon device!");
+> -		return PTR_ERR(extcon);
+> +		if (PTR_ERR(extcon) != -ENODEV)
+> +			dev_warn(dev, "Cannot get extcon device: %ld\n",
+> +				 PTR_ERR(extcon));
+> +		it6505->extcon = NULL;
+> +	} else {
+> +		it6505->extcon = extcon;
+>  	}
+>  
+> -	it6505->extcon = extcon;
+> +	init_completion(&it6505->mux_register);
+> +	ret = it6505_register_typec_switches(dev, it6505);
+> +	if (ret) {
+> +		if (ret != -ENODEV)
+> +			dev_warn(dev, "Didn't register Type-C switches, err: %d\n",
+> +				 ret);
+> +		if (!it6505->extcon) {
+> +			dev_err(dev, "Both extcon and typec-switch are not registered.\n");
+> +			return -EINVAL;
+> +		}
+> +	}
+
+
+Perhaps
+
+	if (ret != -ENODEV)
+		dev_warn(dev, "Didn't register Type-C switches, err: %d\n", ret);
+
+	if (ret && !it6505->extcon) {
+		dev_err(dev, "Both extcon and typec-switch are not registered.\n");
+		return ret;
+	}
+
+?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
