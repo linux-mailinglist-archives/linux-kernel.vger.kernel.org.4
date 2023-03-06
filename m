@@ -2,139 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7976ABA1E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20656ABA29
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:41:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjCFJkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:40:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
+        id S230111AbjCFJli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjCFJki (ORCPT
+        with ESMTP id S229613AbjCFJld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:40:38 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE8D211C4;
-        Mon,  6 Mar 2023 01:40:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678095634; x=1709631634;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rphgjThJSOFuhdwVeYanC8RljvKmVnf55cP66GTrCs4=;
-  b=FVRoBHs8rBe1+b+pvGf30uyF9GqY/Kt0PEkWi7VCUYOghQ9ICNcRkGad
-   KcTjJM32/Df2kb5R/InJmcHHXF96e622dCHD7zc4CJ8o89VtV/zAMTqFe
-   upTR8eeUMlH280fK2/o7wl9yjcMRznt3A0faI9AVLQSv2BAwc7+4ly8VZ
-   q1YXPfaHiWGOWMW8EXTl7BlhWPqN16O2vy0G7Tw6BjrAublqC20x5SsbO
-   5MQQYzNLX29kaupnmYYghXe3dSl6GjxOQpsiA1G/XDN9IirTXL8CrpbOC
-   lZLhXpw96nhLtgeayBuALp3rA3KbSDwqW83wyprl/SUw1GwRZ4MT1rJey
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="337029572"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="337029572"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 01:40:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="819244668"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="819244668"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 06 Mar 2023 01:40:29 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 06 Mar 2023 11:40:28 +0200
-Date:   Mon, 6 Mar 2023 11:40:28 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1 4/4] driver core: Delete
- fw_devlink_purge_absent_suppliers()
-Message-ID: <ZAW1DF76eULAzNvt@kuha.fi.intel.com>
-References: <20230301214952.2190757-1-saravanak@google.com>
- <20230301214952.2190757-5-saravanak@google.com>
+        Mon, 6 Mar 2023 04:41:33 -0500
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07B4233ED;
+        Mon,  6 Mar 2023 01:41:28 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=0443564136=fe@dev.tdt.de>)
+        id 1pZ7LO-000MJY-7a; Mon, 06 Mar 2023 10:41:22 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1pZ7LN-000QiD-CT; Mon, 06 Mar 2023 10:41:21 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id DE7F4240049;
+        Mon,  6 Mar 2023 10:41:20 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 55196240040;
+        Mon,  6 Mar 2023 10:41:20 +0100 (CET)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+        by mail.dev.tdt.de (Postfix) with ESMTPSA id C593620E0D;
+        Mon,  6 Mar 2023 10:41:19 +0100 (CET)
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     u.kleine-koenig@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, pavel@ucw.cz, lee@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Eckert.Florian@googlemail.com
+Subject: [PATCH v8 0/3] leds: ledtrig-tty: add tty_led_mode xtension
+Date:   Mon,  6 Mar 2023 10:41:10 +0100
+Message-ID: <20230306094113.273988-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301214952.2190757-5-saravanak@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+Content-Transfer-Encoding: quoted-printable
+X-purgate-type: clean
+X-purgate: clean
+X-purgate-ID: 151534::1678095682-2D6EF8D8-3A23565D/0/0
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 01:49:51PM -0800, Saravana Kannan wrote:
-> After recent changes to fw_devlink that ended with commit 4a032827daa8
-> ("of: property: Simplify of_link_to_phandle()"), fw_devlink no longer
-> cares about the "compatible" property and figures out the correct struct
-> device at runtime.
-> 
-> So, there's no need for any driver or framework to call
-> fw_devlink_purge_absent_suppliers() anymore and we can delete it.
-> 
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+Hello,
 
-FWIW:
+here commes v8 of this series to add additional tty_led_modes.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+v8:
+Changes compared to the v7 patchset with
+20230222083335.847655-1-fe@dev.tdt.de are.
 
-> ---
->  drivers/base/core.c    | 16 ----------------
->  include/linux/fwnode.h |  1 -
->  2 files changed, 17 deletions(-)
-> 
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 6878dfcbf0d6..46364c4d1983 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -186,22 +186,6 @@ void fwnode_links_purge(struct fwnode_handle *fwnode)
->  	fwnode_links_purge_consumers(fwnode);
->  }
->  
-> -void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
-> -{
-> -	struct fwnode_handle *child;
-> -
-> -	/* Don't purge consumer links of an added child */
-> -	if (fwnode->dev)
-> -		return;
-> -
-> -	fwnode->flags |= FWNODE_FLAG_NOT_DEVICE;
-> -	fwnode_links_purge_consumers(fwnode);
-> -
-> -	fwnode_for_each_available_child_node(fwnode, child)
-> -		fw_devlink_purge_absent_suppliers(child);
-> -}
-> -EXPORT_SYMBOL_GPL(fw_devlink_purge_absent_suppliers);
-> -
->  /**
->   * __fwnode_links_move_consumers - Move consumer from @from to @to fwnode_handle
->   * @from: move consumers away from this fwnode
-> diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
-> index 5700451b300f..63972c863fcd 100644
-> --- a/include/linux/fwnode.h
-> +++ b/include/linux/fwnode.h
-> @@ -210,6 +210,5 @@ static inline void fwnode_dev_initialized(struct fwnode_handle *fwnode,
->  extern bool fw_devlink_is_strict(void);
->  int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup);
->  void fwnode_links_purge(struct fwnode_handle *fwnode);
-> -void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
->  
->  #endif
-> -- 
-> 2.39.2.722.g9855ee24e9-goog
+* Update 'Documentation/ABI/testing/sysfs-class-led-trigger-tty'
+  with the suggested changes.
+* Use a meaningfull name for the Rx/Tx enum.
+* Do not use C++ comments style
 
--- 
-heikki
+Add a new patch 'ledtrig-tty-fix-brightness-set' to fix an issue with
+LEDs that are connected via GPIOs to the SOC with the device driver
+'leds-gpio'. In my view, the wrong function is being used here. LEDs
+that do not need and do not have a delayed call do not work with the
+current implementation. Therefore, the 'led_set_brightness_nosleep'
+function must be used.
+
+
+v7:
+Changes compared to the v5 patchset with
+20230222075539.484878-1-fe@dev.tdt.de are.
+
+Addressed review comments by Jiri Slaby are:
+
+Thanks for the hint with the command 'make htmldocs SPHINXDIRS=3D"admin-g=
+uide"'.
+Unfortunately, I did not know that. I have now verified it also in the
+browser. In my opinion, the list is now also displayed correctly in
+the documentation.
+
+
+v6:
+Changes compared to the v5 patchset with
+20230221081901.15557-1-fe@dev.tdt.de are.
+
+Addressed review comments by kernel test robot are:
+
+* fix Documentation/ABI/testing/sysfs-class-led-trigger-tty:9:
+  WARNING: Unexpected indentation.
+* fix Documentation/ABI/testing/sysfs-class-led-trigger-tty:9:
+  WARNING: Block quote ends without a blank line; unexpected unindent.
+
+Thanks to Jiri Slaby, who gave me the crucial hint of what I need to fix,
+to possibly make the 'Kernel test robot' happy.
+
+
+v5:
+Changes compared to the v4 patchset with
+20230220152038.3877596-1-fe@dev.tdt.de are.
+
+Sorry for the inconvenience, but I sent the wrong patch for
+ledtrig-tty.c in v4. The v5 patchset now includes all the changes I
+specified in the v4 patchset.
+
+
+v4:
+Changes compared to the v3 patchset with
+20230220093739.320478-1-fe@dev.tdt.de are.
+
+Addressed review comments by Jiri Slaby are:
+
+ledtrig-tty.c:
+- Do not use __TTY_LED_MAX pattern us instead __TTY_LED_LAST =3D TTY_LED_=
+RNG
+- Move declartion and assignment into one singel line
+- Use __TTY_LED_LAST pattern, to simplify tty_mode_show and
+  tty_mode_store handling
+
+
+v3:
+Changes compared to the v2 patchset with
+20230217094403.1574468-1-fe@dev.tdt.de are.
+
+Addressed review comments by Greg K-H are:
+
+tty.h:
+- Fix first comment line and remark -%ENOTTY for the new function
+  'tty_get_mget' to make a proper kernel doc.
+- Add the return value -%ENOTTY again, I thought it was no longer needed.
+
+
+v2:
+Changes compared to the initial patchset with
+20230213140638.620206-1-fe@dev.tdt.de are.
+
+Addressed review comments by Jiri Slaby are:
+
+tty.h:
+- Fix compilation error because of wrong rebaseing
+- Remove empty lines
+- Use new 'tty_get_mget' in 'tty_tiocmget'
+
+ledtrig-tty.c:
+- Update commit description
+- Use enum for tty_led_mod in struct ledtrig_tty_date
+- Rename sysfs file from 'mode' to 'tty_led_mode'
+- Change tty_led_mode show function to use loop instead of switch/case
+- Change tty_led_mode store function to use loop instead of switch/case
+- Check return value of function tty_get_mget
+
+Florian Eckert (3):
+  tty: new helper function tty_get_mget
+  trigger: ledtrig-tty: add additional modes
+  ledtrig-tty: call correct brightness set function
+
+ .../ABI/testing/sysfs-class-led-trigger-tty   |  18 +++
+ drivers/leds/trigger/ledtrig-tty.c            | 145 ++++++++++++++++--
+ drivers/tty/tty_io.c                          |  28 +++-
+ include/linux/tty.h                           |   1 +
+ 4 files changed, 171 insertions(+), 21 deletions(-)
+
+--=20
+2.30.2
+
