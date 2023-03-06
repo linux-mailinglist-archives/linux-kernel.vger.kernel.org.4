@@ -2,292 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11AD6AC625
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FD96AC60B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjCFQAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
+        id S230002AbjCFP7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230217AbjCFQA2 (ORCPT
+        with ESMTP id S230215AbjCFP6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:00:28 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A872410D;
-        Mon,  6 Mar 2023 08:00:25 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7F5FD1FDE7;
-        Mon,  6 Mar 2023 16:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678118424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=R9E343hTmVMkaYF9j4EIzcOLH/Va29Qgqy6eESAuotI=;
-        b=OUREKcInXmanxs2PAF8o4DAvPOX/O4raO5rAwJJOzNY834dqRLTJdZkwoSocpXmLDyN0E+
-        vCtmK3HZy6nW2phvDJIpSiuO56Ukf6DC1tbq8xz7QD6LQu0nfSD4sfaTG7kRrcGh81906l
-        fLlv4i/qanJ2BY1ierWbbrjzbMIYf90=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678118424;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=R9E343hTmVMkaYF9j4EIzcOLH/Va29Qgqy6eESAuotI=;
-        b=s1Yu90c+fAavjp6B0NjVSLZz3hTMwwHUkdiskHSPi9V+dY/D9ZOdaKMUxGnqrVbvkMGJmo
-        2KkYxhrJeAZiKnAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2AF5F13513;
-        Mon,  6 Mar 2023 16:00:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ZiizCRgOBmQ/PwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 06 Mar 2023 16:00:24 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     deller@gmx.de, paulus@samba.org, benh@kernel.crashing.org,
-        linux@armlinux.org.uk, pjones@redhat.com, timur@kernel.org,
-        adaplas@gmail.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
-        mbroemme@libmpq.org, thomas@winischhofer.net,
-        James.Bottomley@HansenPartnership.com, spock@gentoo.org,
-        sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        geert+renesas@glider.be, corbet@lwn.net
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH 00/99] fbdev: Fix memory leak in option parsing
-Date:   Mon,  6 Mar 2023 16:58:37 +0100
-Message-Id: <20230306160016.4459-1-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.39.2
+        Mon, 6 Mar 2023 10:58:48 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2080.outbound.protection.outlook.com [40.107.95.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93257211C2;
+        Mon,  6 Mar 2023 07:58:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I4KK/ulWZY7dOWdpcYj8QVpWWnUXaOWaOC8qsH63LcSr+yq7nJdeN/AKgzwchnm+15Xe68zPuhEOTQpkA/GSoz+KvAHNi9C8Xz5W7Km5T2ZGlSnWUcruLNw+Ohk5UjZ74K/m0MRAcOg/DWVSFVAg3XtvVdQWdfzi5m0DeBucGCBqkjCNFtoZmhnJld0XaHXhcw6zbxI1oPi++L7WKZDqZBdhNtuRGlTnV5NrOaodOnDWsb6bt8n2IZVKD4QtAAi4FgIUAtJ8pffUXzccQIDf48Pgg3hIylvYLim9KdDIbNVjOixTLrDqmBixQ4bxuSM4h8mMqQYYUZGa0vVC3viPNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HdKyKNemNXuFMxaOPYy2UxalAxI9Y4j8dgoIJRlLF/I=;
+ b=jT7gyxZoF1EMWQEIO5deNCyEcbsEShf16wEhLBX6av7IMOjqmzVYIIUXQ3zj1qc99a5ksfXMAiWYQpCrVMnapZ51HXsr5ZpPTsJ3w2/JGY34SpqaPdFkg/CmdOVayU04twMjK7WxylElHSo+A3SnxlNNU3xtw6yxNMfoF2VdSdNwl4JPq6SrOK27PDBSbg9ANbMpUI+aFXExwF0cScNXV+DfsmOcHVoRTArVY4BBBRDnOMrmLi7NiaMec6RjDx0gxZKIxhnY62vDOpwb55wRBxdSpMu0ZGeLeLcC7exS6Y8I1Tgr8w2F0tyAg6dntyuATPZupjnuns3fXs46tICAFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HdKyKNemNXuFMxaOPYy2UxalAxI9Y4j8dgoIJRlLF/I=;
+ b=X1iJ7S06bx5P2XK4cot+0eZzFl9Sq2m/Gjh2zvp101g7CRhaRiPlTdgu7s6Jp9Cl+Qv9kd269XQewX1XtX+iGrpR/2KXEKNJo8fRFTmP+m7BsWuf1yLlUMJXOPeaQMokTAPdpE2TGBtRq1cbdUrfB9wMfLPKCr6Tm4A59ac+ipq2S5lTvMDfifIDbhOqyfKDhZMGQhsIv/HbwILxM+Qc11wua5HTWYul6nlomiLkUEDWUpluIV4JJ3QCEM+p+xzAtV4OaR5/bDFT3kqq3jqPsxpEggCIbGMwc/wUN8guCiGm34CBp5mYVbDZIb2tNmY0BnK1OAI2rt/fHG6cUXTD7w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ CY8PR12MB8195.namprd12.prod.outlook.com (2603:10b6:930:77::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.28; Mon, 6 Mar 2023 15:58:44 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::5464:997b:389:4b07]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::5464:997b:389:4b07%8]) with mapi id 15.20.6156.028; Mon, 6 Mar 2023
+ 15:58:44 +0000
+Message-ID: <3c1354b2-831e-d523-a539-904135fe34f4@nvidia.com>
+Date:   Mon, 6 Mar 2023 15:58:38 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] soc/tegra: cbb: remove linux/version.h
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230303130346.2062989-1-usama.anjum@collabora.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20230303130346.2062989-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P265CA0073.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2bd::6) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|CY8PR12MB8195:EE_
+X-MS-Office365-Filtering-Correlation-Id: c5f40f67-fd30-4fd9-4fac-08db1e5ba9f9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wB21IPeWv1XM2PGbxXOy0eIQ3PpxPjnGQMeGsLEyj9s7Mshj9csAXFrWGDocMhC1Y02QHU3uG43OxALuMYbIPKr++3zCC2KZj0xsElelg/oSBPC+PpteUpqAmhn6dLtu1S50UYTjAwpZgOPEOqwJFB9puxzqKJ7Qtfh2LF3E+WttzkngNeCuCJ/vlfWbrdYm+YNHSUTAV3dr2lZDUSkTSnhXgUsHaldA48vJNI7N8pBPVzqkaLh9ygdmXjo86KUCKdocpUwxLJuKewkHEaz4MMxZSim+U2eR8cN304gi0sBdckbDXrSnE3F7GHQaugQryqhfBhdCLlbXLJuQlfmHHIVY/AvmM6z2UdO+D1b7SM/e/S1uiwni3hqKa3nu5hqF/4IPz38RhWzXuha0nlEpOhOj4BiZSQGGK36HRH/AgXPU56YHaGcZGcQ2x+iDbFKMKLYP9EUfehK2/Y14lT8h5Kz2pvUZ39piUFzxQDogHTETwAisl2EfEKm0LwJb76RM7J2S3ssSXfRLfllHQaLzMTLJfgxkqPrsfppdzKcR9/iq6Vt0Wcy3PDzDFrwgbDj35b6bpTlRlmQlMaNFPqISiJjMa0VGGvtyNIxSbXh6e5EGCVxOpZo+mWjEa3CpKcYJ7rj9kCpcGTfbPkm38Q0cAKCii8A2r+qoI/CRMubd3LW8RK0W1daoD5lWsllJUh1Z6Q1aPnbRbeCtvHEP53eRu9bs/fSAb8N9O6iaD4J51tk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(366004)(136003)(346002)(376002)(451199018)(6506007)(6512007)(53546011)(6486002)(6666004)(36756003)(83380400001)(31696002)(86362001)(38100700002)(186003)(2616005)(41300700001)(66946007)(66556008)(4326008)(8676002)(2906002)(66476007)(8936002)(31686004)(5660300002)(316002)(110136005)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VjJxeDhwaTdyeXFGbThTSXowK21QdDlHM3A2N0hYbG9kR0QxSzJpR0dNVnYw?=
+ =?utf-8?B?Q2pRS1kxbVM0V1pUc3NjdXdUMWswTmJuMzljOXN4d0FyMUZneGl6RFZLQS9q?=
+ =?utf-8?B?OVRLajR1NGozS2Yvd041U3h3Q1V3dzZjRjVmWmVqL1JCd1RXY1VlUmQ0RHZB?=
+ =?utf-8?B?MUF0VUJvcUt2TTB2OWIvaHNIWkJWTlN4cUIxNnIrYWpNVk5jRlQ2Q2xQZ1dO?=
+ =?utf-8?B?ZlpWSWVTYmpmdnQ4UXNaL0FNS3ViRkhsV1haSG1RWkZnS2hxb1FpMWhQeGZG?=
+ =?utf-8?B?d3VGRHhqS3BvMUZhUDdGS2ZocTJidGt5eENqWUN2blU5dDR6WmFHMmxnMmh1?=
+ =?utf-8?B?UnZqZXcxZ2ZsZFlxdGd2c3lOZXhQUHU5ME0rUndyR202WWxEL0lCSVlGUXFP?=
+ =?utf-8?B?Z0x4OHBOTkUyMGVuaDNHMG5iRm5YRUZLcTd2bm95MzJETEM4MjVkdGdRejd6?=
+ =?utf-8?B?aGFPYXBkeVBsTzFWSzZ5MktPNXh2VkU2TXYybjF2R3Z0aFpFYlRSM05Jczh6?=
+ =?utf-8?B?Um9sMllpQmlPcVh0UmdmVFF2bm5uTFlxalpILzNOUFlXcHRVL20xaDNIenRZ?=
+ =?utf-8?B?ODdRV3ZjRVRINktUbHFwTzBhZ0hXa0owWFpOanpCODRuVWtvMkh4Y2tsQzhX?=
+ =?utf-8?B?cmpsaHI4bUtyVzY2dnJXWTlYaXArUE5BaVg2TEg1YktTS2ZLeWppdHVjczRT?=
+ =?utf-8?B?UUZNdytLbXhpcUVPMW1oZFZHR0FQNWdwbTZGUGtGRHgrT3JWWnR1aXZsQ3E2?=
+ =?utf-8?B?V3BKUTMwVVNYcmlLUThqS2tQRmpSbkZxY3d3dlBNeWNQNnd6djZ1NXVuRW5x?=
+ =?utf-8?B?ZUJqSHFhby90L29LamprRkR5Z3VrRStIOWJtVXZwU3VTRTMvWDc2N2RFaGRa?=
+ =?utf-8?B?OVgxblJHaWtWK3JYUXFNRU94alZTaUp1anFjaGlwR3Bodld0V3p2Vy9LWEhv?=
+ =?utf-8?B?Q3prODRnUmo5MEVaNkMyUUI0SXlLOTIydWRmaTVzMk1CcXpzdVlpZVpNaEhZ?=
+ =?utf-8?B?NExQU1pQbFJVQ0tyeENKR0RlQWdSdmR3MXoxeGhOcU83anJtTjVFOTdwSTN5?=
+ =?utf-8?B?djhvOGtCN2ZOSEZ6ZU9Fa2YyMjhqOTVkNVlRcFljWTA2b3ZHbzdWdVdXSEJQ?=
+ =?utf-8?B?eHVURXFmVWVIOGdHYXNjcS9qa3BQVkdtalRKSDVYYWJxMlErcStnNkNmYytX?=
+ =?utf-8?B?em8xdlhHbXAyQldCeHVwYmRweTB3Ulp4NXliNUk0YWppdjlya0ZaT2gzZHd1?=
+ =?utf-8?B?RjZkL0hDbE1QWWswd0UxdzRZL29UQ3RWODZkOHd2RHdrekNoWGhUTkFzSnJS?=
+ =?utf-8?B?NHN4a05lQisreXBIc3lVUWwrcG5XQm0xZFVENWdDNE1reTFveGFhanIyS25J?=
+ =?utf-8?B?S21sYVprTmJtQkVKTWhtenZIMVRzeHBrTlVVL1AwZ3lFTkdMOC8wVDBCeU9K?=
+ =?utf-8?B?RTdndW93VGp3V0h4QXpZZkN6YVdxYmtIZ1VaUVhHZkNxREhITzU0dURIc2lX?=
+ =?utf-8?B?enEvbmUwdnE0UEx2bFUzdmtFTkxwTTl2ZmVpVlZQOXR0NmlrU3pucVAvMHdX?=
+ =?utf-8?B?UkNJc0cyQXo1eTZPcVlzbUt6dEgrblZ4SzlGTnpPa3Z6akRXZGtMSk1jd3Zr?=
+ =?utf-8?B?eGJsUXNzM3dFRTJ2SUQ0eDdkbTc3Ny8vWlJYak9ra1dweDQ3V1gzSDNqZDJT?=
+ =?utf-8?B?S3BkTjlwcUNHOFowTzRJTEhQclFWcWFWZFJpUEVOS1BNZjk0eWMybTlVR3ZJ?=
+ =?utf-8?B?ZFB3ZXdBZlU2VURSUEVtakszY2lzY2JlZjVQdEliL0RTNE5Nam82TGJ4aTJS?=
+ =?utf-8?B?eVFQbGo3TEJGRElLSmRycUFBdnIrbEZDNk0ydzZSNUE0eEtqRWo1UWg5WlU5?=
+ =?utf-8?B?QXdsRVVpQ1p5eDd6eXFHYkI4cnRhYWl6bjdHR2J0dXZmTUFZa3lnbWNYZ0tG?=
+ =?utf-8?B?YVBtOXZPRXIwekZlUXBqbVd0MURsNlo3QWlQNG9XOGFScnVXYTdISHNwc0h6?=
+ =?utf-8?B?a2xWajhZTGpjM0RySlQxNi9VUm1MVnFLY1FsMlh2OS9NZTlOMGhCVHUycDFE?=
+ =?utf-8?B?MHNvRU9xWlA0TmtXamVWSnhLK0Q3MWtYK1dLTnc0a2wyWWVBTVVHb2tnN0gw?=
+ =?utf-8?B?aThHYTBzUGdEdXZOUjZBSTh2ekxDSk0vcDM1WmtQZ0pCMGxZcUZOQlJEdFkw?=
+ =?utf-8?B?LzZCek52aFJydnZEM0hNcExWQmxGa3pWSXI1Z2RGV2NZSUdjeXJQbVpMUDJr?=
+ =?utf-8?B?ejhFdDhHMWRoK2hKWFdJVHBvU1lRPT0=?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5f40f67-fd30-4fd9-4fac-08db1e5ba9f9
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2023 15:58:44.8114
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7w3irN1toy3DD96yOEagZMwse4evES/KHkJQ16ax4mS65kYdhsSb+pm6FZscq5/x1c+jh/YkCN7mjuXmPj0Inw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8195
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce struct option_iter and helpers to parse command-line
-options with comma-separated key-value pairs. Then convert fbdev
-drivers to the new interface. Fixes a memory leak in the parsing of
-the video= option.
 
-Before commit 73ce73c30ba9 ("fbdev: Transfer video= option strings to
-caller; clarify ownership"), a call to fb_get_options() either
-returned an internal string or a duplicated string; hence ownership of
-the string's memory buffer was not well defined, but depended on how
-users specified the video= option on the kernel command line. For
-global settings, the caller owned the returned memory and for per-driver
-settings, fb_get_options() owned the memory. As calling drivers were
-unable to detect the case, the memory was leaked.
+On 03/03/2023 13:03, Muhammad Usama Anjum wrote:
+> make versioncheck reports the following:
+> ./drivers/soc/tegra/cbb/tegra-cbb.c: 19 linux/version.h not needed.
+> ./drivers/soc/tegra/cbb/tegra194-cbb.c: 26 linux/version.h not needed.
+> ./drivers/soc/tegra/cbb/tegra234-cbb.c: 27 linux/version.h not needed.
+> 
+> So remove linux/version.h from these files.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   drivers/soc/tegra/cbb/tegra-cbb.c    | 1 -
+>   drivers/soc/tegra/cbb/tegra194-cbb.c | 1 -
+>   drivers/soc/tegra/cbb/tegra234-cbb.c | 1 -
+>   3 files changed, 3 deletions(-)
+> 
+> diff --git a/drivers/soc/tegra/cbb/tegra-cbb.c b/drivers/soc/tegra/cbb/tegra-cbb.c
+> index a8566b9dd8de..bd96204a68ee 100644
+> --- a/drivers/soc/tegra/cbb/tegra-cbb.c
+> +++ b/drivers/soc/tegra/cbb/tegra-cbb.c
+> @@ -16,7 +16,6 @@
+>   #include <linux/of_address.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/ioport.h>
+> -#include <linux/version.h>
+>   #include <soc/tegra/fuse.h>
+>   #include <soc/tegra/tegra-cbb.h>
+>   
+> diff --git a/drivers/soc/tegra/cbb/tegra194-cbb.c b/drivers/soc/tegra/cbb/tegra194-cbb.c
+> index d4112b683f00..a05fc2caff3b 100644
+> --- a/drivers/soc/tegra/cbb/tegra194-cbb.c
+> +++ b/drivers/soc/tegra/cbb/tegra194-cbb.c
+> @@ -23,7 +23,6 @@
+>   #include <linux/of_address.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/ioport.h>
+> -#include <linux/version.h>
+>   #include <soc/tegra/fuse.h>
+>   #include <soc/tegra/tegra-cbb.h>
+>   
+> diff --git a/drivers/soc/tegra/cbb/tegra234-cbb.c b/drivers/soc/tegra/cbb/tegra234-cbb.c
+> index f33d094e5ea6..e23e8acfd7c7 100644
+> --- a/drivers/soc/tegra/cbb/tegra234-cbb.c
+> +++ b/drivers/soc/tegra/cbb/tegra234-cbb.c
+> @@ -24,7 +24,6 @@
+>   #include <linux/of_address.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/ioport.h>
+> -#include <linux/version.h>
+>   #include <soc/tegra/fuse.h>
+>   #include <soc/tegra/tegra-cbb.h>
+>   
 
-Commit 73ce73c30ba9 ("fbdev: Transfer video= option strings to caller;
-clarify ownership") changed sematics to caller-owned strings. Drivers
-still leaked the memory, but at least ownership was clear.
+Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 
-This patchset fixes the memory leak and changes string ownership back
-to fb_get_options(). Patch 1 introduces struct option_iter and a few
-helpers. The interface takes an option string, such as video=, in the
-common form value1,key2:value2,value3 etc and returns the individial
-comma-separated pairs. Various modules use this pattern, so the code
-is located under lib/.
-
-Patches 2 to 98 go through fbdev drivers and convert them to the new
-interface. This often requires a number of cleanups. A driver would
-typically refer to the option string's video mode. Such strings are now
-copied to driver-allocated memory so that drivers don't refer directly
-to the option string's memory. The option iterator then replaces manual
-parsing loops based on strsep(",").
-
-Patch 99 finally changes the ownership of the option string to be
-internal to fb_get_option(); thereby fixing the memory leak. The option
-iterator holds its own copy of the string and is not affected by the
-change.
-
-Most fbdev drivers only support to parse option strings if they are
-built-in. I assume that's because of the original fuzzy semantics of
-fb_get_options(). A later patchset could change the driver to respect
-video= settings in any configuration.
-
-Thomas Zimmermann (99):
-  lib: Add option iterator
-  fbdev/68328fb: Remove trailing whitespaces
-  fbdev/68328fb: Remove unused option string
-  fbdev/acornfb: Only init fb_info once
-  fbdev/acornfb: Parse option string with struct option_iter
-  fbdev/amifb: Duplicate video-mode option string
-  fbdev/amifb: Parse option string with struct option_iter
-  fbdev/arkfb: Duplicate video-mode option string
-  fbdev/atafb: Duplicate video-mode option string
-  fbdev/atafb: Parse option string with struct option_iter
-  fbdev/aty: Duplicate video-mode option string
-  fbdev/aty: Parse option string with struct option_iter
-  fbdev/au1100fb: Parse option string with struct option_iter
-  fbdev/au1200fb: Parse option string with struct option_iter
-  fbdev/cirrusfb: Duplicate video-mode option string
-  fbdev/cirrusfb: Parse option string with struct option_iter
-  fbdev/controlfb: Remove trailing whitespaces
-  fbdev/controlfb: Parse option string with struct option_iter
-  fbdev/cyber2000fb: Parse option string with struct option_iter
-  fbdev/efifb: Parse option string with struct option_iter
-  fbdev/fm2fb: Parse option string with struct option_iter
-  fbdev/fsl-diu-fb: Duplicate video-mode option string
-  fbdev/fsl-diu-fb: Parse option string with struct option_iter
-  fbdev/gbefb: Duplicate video-mode option string
-  fbdev/gbefb: Parse option string with struct option_iter
-  fbdev/geode: Duplicate video-mode option string
-  fbdev/geode: Parse option string with struct option_iter
-  fbdev/grvga: Duplicate video-mode option string
-  fbdev/grvga: Parse option string with struct option_iter
-  fbdev/gxt4500: Duplicate video-mode option string
-  fbdev/hyperv_fb: Duplicate video-mode option string
-  fbdev/i740fb: Duplicate video-mode option string
-  fbdev/i740fb: Parse option string with struct option_iter
-  fbdev/i810: Duplicate video-mode option string
-  fbdev/i810: Parse option string with struct option_iter
-  fbdev/imsttfb: Parse option string with struct option_iter
-  fbdev/intelfb: Duplicate video-mode option string
-  fbdev/intelfb: Parse option string with struct option_iter
-  fbdev/imxfb: Duplicate video-mode option string
-  fbdev/imxfb: Parse option string with struct option_iter
-  fbdev/kyrofb: Duplicate video-mode option string
-  fbdev/kyrofb: Parse option string with struct option_iter
-  fbdev/macfb: Remove trailing whitespaces
-  fbdev/macfb: Parse option string with struct option_iter
-  fbdev/matroxfb: Parse option string with struct option_iter
-  fbdev/mx3fb: Duplicate video-mode option string
-  fbdev/mx3fb: Parse option string with struct option_iter
-  fbdev/neofb: Duplicate video-mode option string
-  fbdev/neofb: Parse option string with struct option_iter
-  fbdev/nvidiafb: Duplicate video-mode option string
-  fbdev/nvidiafb: Parse option string with struct option_iter
-  fbdev/ocfb: Duplicate video-mode option string
-  fbdev/ocfb: Parse option string with struct option_iter
-  fbdev/omapfb: Parse option string with struct option_iter
-  fbdev/platinumfb: Remove trailing whitespaces
-  fbdev/platinumfb: Parse option string with struct option_iter
-  fbdev/pm2fb: Duplicate video-mode option string
-  fbdev/pm2fb: Parse option string with struct option_iter
-  fbdev/pm3fb: Duplicate video-mode option string
-  fbdev/pm3fb: Parse option string with struct option_iter
-  fbdev/ps3fb: Duplicate video-mode option string
-  fbdev/ps3fb: Parse option string with struct option_iter
-  fbdev/pvr2fb: Duplicate video-mode option string
-  fbdev/pvr2fb: Parse option string with struct option_iter
-  fbdev/pxafb: Parse option string with struct option_iter
-  fbdev/rivafb: Duplicate video-mode option string
-  fbdev/rivafb: Parse option string with struct option_iter
-  fbdev/s3fb: Duplicate video-mode option string
-  fbdev/s3fb: Parse option string with struct option_iter
-  fbdev/savagefb: Duplicate video-mode option string
-  fbdev/savagefb: Parse option string with struct option_iter
-  fbdev/sisfb: Constify mode string
-  fbdev/sisfb: Parse option string with struct option_iter
-  fbdev/skeletonfb: Parse option string with struct option_iter
-  fbdev/sm712fb: Duplicate video-mode option string
-  fbdev/sstfb: Duplicate video-mode option string
-  fbdev/sstfb: Parse option string with struct option_iter
-  fbdev/stifb: Remove trailing whitespaces
-  fbdev/sti: Constify option string
-  fbdev/tdfxfb: Duplicate video-mode option string
-  fbdev/tdfxfb: Parse option string with struct option_iter
-  fbdev/tgafb: Duplicate video-mode option string
-  fbdev/tgafb: Parse option string with struct option_iter
-  fbdev/tmiofb: Remove unused option string
-  fbdev/tridentfb: Duplicate video-mode option string
-  fbdev/tridentfb: Parse option string with struct option_iter
-  fbdev/uvesafb: Duplicate video-mode option string
-  fbdev/uvesafb: Parse option string with struct option_iter
-  fbdev/valkyriefb: Remove trailing whitespaces
-  fbdev/valkyriefb: Parse option string with struct option_iter
-  fbdev/vermilion: Remove unused option string
-  fbdev/vesafb: Parse option string with struct option_iter
-  fbdev/vfb: Remove trailing whitespaces
-  fbdev/vfb: Duplicate video-mode option string
-  fbdev/vfb: Parse option string with struct option_iter
-  fbdev/viafb: Parse option string with struct option_iter
-  fbdev/vt8623fb: Duplicate video-mode option string
-  staging/sm750fb: Parse option string with struct option_iter
-  fbdev: Constify option strings
-
- Documentation/core-api/kernel-api.rst        |   9 ++
- drivers/staging/sm750fb/sm750.c              |  45 +++---
- drivers/video/fbdev/68328fb.c                |  24 +--
- drivers/video/fbdev/acornfb.c                |  25 ++-
- drivers/video/fbdev/amifb.c                  |  30 ++--
- drivers/video/fbdev/arkfb.c                  |  15 +-
- drivers/video/fbdev/atafb.c                  |  25 ++-
- drivers/video/fbdev/aty/aty128fb.c           |  28 +++-
- drivers/video/fbdev/aty/atyfb_base.c         |  29 +++-
- drivers/video/fbdev/aty/radeon_base.c        |  32 ++--
- drivers/video/fbdev/au1100fb.c               |  13 +-
- drivers/video/fbdev/au1200fb.c               |  15 +-
- drivers/video/fbdev/cirrusfb.c               |  37 +++--
- drivers/video/fbdev/controlfb.c              |  49 +++---
- drivers/video/fbdev/core/fb_cmdline.c        |  13 +-
- drivers/video/fbdev/core/modedb.c            |   8 +-
- drivers/video/fbdev/cyber2000fb.c            |  19 +--
- drivers/video/fbdev/efifb.c                  |  48 +++---
- drivers/video/fbdev/ep93xx-fb.c              |   2 +-
- drivers/video/fbdev/fm2fb.c                  |  16 +-
- drivers/video/fbdev/fsl-diu-fb.c             |  30 ++--
- drivers/video/fbdev/gbefb.c                  |  25 +--
- drivers/video/fbdev/geode/gx1fb_core.c       |  18 +--
- drivers/video/fbdev/geode/gxfb_core.c        |  25 +--
- drivers/video/fbdev/geode/lxfb_core.c        |  29 ++--
- drivers/video/fbdev/grvga.c                  |  32 +++-
- drivers/video/fbdev/gxt4500.c                |  18 ++-
- drivers/video/fbdev/hyperv_fb.c              |  18 ++-
- drivers/video/fbdev/i740fb.c                 |  32 ++--
- drivers/video/fbdev/i810/i810_main.c         |  30 +++-
- drivers/video/fbdev/imsttfb.c                |  18 ++-
- drivers/video/fbdev/imxfb.c                  |  23 ++-
- drivers/video/fbdev/intelfb/intelfbdrv.c     |  29 +++-
- drivers/video/fbdev/kyro/fbdev.c             |  27 ++--
- drivers/video/fbdev/macfb.c                  |  28 ++--
- drivers/video/fbdev/matrox/matroxfb_base.c   |  21 +--
- drivers/video/fbdev/mx3fb.c                  |  27 +++-
- drivers/video/fbdev/neofb.c                  |  32 ++--
- drivers/video/fbdev/nvidia/nvidia.c          |  32 ++--
- drivers/video/fbdev/ocfb.c                   |  25 ++-
- drivers/video/fbdev/omap/omapfb_main.c       |  15 +-
- drivers/video/fbdev/platinumfb.c             |  46 +++---
- drivers/video/fbdev/pm2fb.c                  |  31 ++--
- drivers/video/fbdev/pm3fb.c                  |  33 ++--
- drivers/video/fbdev/ps3fb.c                  |  32 ++--
- drivers/video/fbdev/pvr2fb.c                 |  29 ++--
- drivers/video/fbdev/pxafb.c                  |  20 ++-
- drivers/video/fbdev/riva/fbdev.c             |  32 ++--
- drivers/video/fbdev/s3fb.c                   |  33 ++--
- drivers/video/fbdev/savage/savagefb_driver.c |  26 ++-
- drivers/video/fbdev/sis/sis_main.c           |  26 +--
- drivers/video/fbdev/skeletonfb.c             |  17 +-
- drivers/video/fbdev/sm712fb.c                |  19 ++-
- drivers/video/fbdev/sstfb.c                  |  31 ++--
- drivers/video/fbdev/stifb.c                  | 162 +++++++++----------
- drivers/video/fbdev/tdfxfb.c                 |  27 ++--
- drivers/video/fbdev/tgafb.c                  |  35 ++--
- drivers/video/fbdev/tmiofb.c                 |  24 +--
- drivers/video/fbdev/tridentfb.c              |  33 ++--
- drivers/video/fbdev/uvesafb.c                |  27 ++--
- drivers/video/fbdev/valkyriefb.c             |  32 ++--
- drivers/video/fbdev/vermilion/vermilion.c    |   7 +-
- drivers/video/fbdev/vesafb.c                 |  18 ++-
- drivers/video/fbdev/vfb.c                    |  41 +++--
- drivers/video/fbdev/via/viafbdev.c           |  17 +-
- drivers/video/fbdev/vt8623fb.c               |  16 +-
- include/linux/cmdline.h                      |  29 ++++
- include/linux/fb.h                           |   2 +-
- lib/Makefile                                 |   2 +-
- lib/cmdline_iter.c                           |  97 +++++++++++
- 70 files changed, 1252 insertions(+), 708 deletions(-)
- create mode 100644 include/linux/cmdline.h
- create mode 100644 lib/cmdline_iter.c
+Thanks
+Jon
 
 -- 
-2.39.2
-
+nvpublic
