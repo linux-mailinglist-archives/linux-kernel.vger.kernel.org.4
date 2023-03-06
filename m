@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737F26AC0B2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 845BA6AC1D5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCFNVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:21:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59804 "EHLO
+        id S229717AbjCFNu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjCFNVm (ORCPT
+        with ESMTP id S229587AbjCFNu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:21:42 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA162E0E8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:21:17 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PVfNR0TQZz4f3knk
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 21:21:11 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP4 (Coremail) with SMTP id gCh0CgD3rLDH6AVkOFVrEw--.46662S4;
-        Mon, 06 Mar 2023 21:21:13 +0800 (CST)
-From:   Hou Tao <houtao@huaweicloud.com>
-To:     dm-devel@redhat.com
-Cc:     Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Ignat Korchagin <ignat@cloudflare.com>,
-        linux-kernel@vger.kernel.org, houtao1@huawei.com
-Subject: [PATCH] dm crypt: initialize tasklet in crypt_io_init()
-Date:   Mon,  6 Mar 2023 21:49:30 +0800
-Message-Id: <20230306134930.2878660-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+        Mon, 6 Mar 2023 08:50:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8B02D6F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:49:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678110577;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8cP7M7fJa+CiXjUaB/Z/GeLdvX1vVsRhtfliOYgNW40=;
+        b=RQdyC697M75posHTSa8s4Mf6VkQx/1sZ85SPOh/opPAOyvPMtf8iRyjNXmePg2/eGx5wIV
+        /l8PhJZR8+iimOmrlUk3QrjWKpH+IL3V75LDS7tMIMQ21Mo4EKsmhVQfsazD78vlj2yZTC
+        kMouzEj7tR4rVCpAvCTSnx7gdtCYlg0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-384-W-_i396-MNaxrssePkJW2A-1; Mon, 06 Mar 2023 08:49:36 -0500
+X-MC-Unique: W-_i396-MNaxrssePkJW2A-1
+Received: by mail-wm1-f69.google.com with SMTP id e22-20020a05600c219600b003e000facbb1so6761131wme.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:49:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678110575;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8cP7M7fJa+CiXjUaB/Z/GeLdvX1vVsRhtfliOYgNW40=;
+        b=lEJburE1H9xob8y/nomV7iLl6JTkOxKGK29A4WwB3Jb4gJF16t9RteJYpzn7zs245m
+         OFPBbrrEMNAKByYlIKCa/rKv0F0WKAGIm3j+H4Pn2uu1bPzMvSEcNraPwHMxcRB7uKsK
+         o+Tz1Kkpy2S5giisF8nWBiGEUqDuHz1n4V3Jo/MSxg4w5gWGmIWblSDWYf8H/z1kav6M
+         Xt3UD77ZQG7gBJwoTpyp+BN4oFzEu5t1XvHjMiL26jiBoby79k6FXjglOCmqfgV5nymY
+         7/xav0uK8QTDisvdpMg0qm0IlISflARbvI8/uADfryvPkVLPio8BWayHE8dSs/ZYL6Qa
+         TBow==
+X-Gm-Message-State: AO0yUKWMT4DixsTifbNMUiHE2lRTH8vWpDE+UziUXrgEZvqdrVT+x+Fh
+        zPU8FsfFHyjlaq1GAo1HA2U7kiqXxcHmPKGtiAPY7G8sL4wx/A0XdD/CkTMB3bavfLp4oMA6tq8
+        Fs0tBpbE6XrGayMtBnPtddCE9
+X-Received: by 2002:a05:600c:a05:b0:3dc:42d2:aee4 with SMTP id z5-20020a05600c0a0500b003dc42d2aee4mr8471198wmp.25.1678110575712;
+        Mon, 06 Mar 2023 05:49:35 -0800 (PST)
+X-Google-Smtp-Source: AK7set/V0qYAHNZZr8AnPKR/CcJ+o9o9/kovvogYCJVbCzpbcLU9tlAyaT2cAzLtC+FSfpsmzbHjqQ==
+X-Received: by 2002:a05:600c:a05:b0:3dc:42d2:aee4 with SMTP id z5-20020a05600c0a0500b003dc42d2aee4mr8471179wmp.25.1678110575407;
+        Mon, 06 Mar 2023 05:49:35 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:3500:b8a3:191c:eae:cc05? (p200300cbc7043500b8a3191c0eaecc05.dip0.t-ipconnect.de. [2003:cb:c704:3500:b8a3:191c:eae:cc05])
+        by smtp.gmail.com with ESMTPSA id z1-20020adff1c1000000b002c70c99db74sm9950215wro.86.2023.03.06.05.49.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 05:49:35 -0800 (PST)
+Message-ID: <df3997ed-a844-597b-fbb1-154caad78543@redhat.com>
+Date:   Mon, 6 Mar 2023 14:49:34 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3rLDH6AVkOFVrEw--.46662S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw45ZrW7Zry8Zr4kJrWDurg_yoW8Aw1fpF
-        W3G3yFyrWrJF47K34Ut3W8CryY9rn7KrW3Cr43C34j9F129F9YgFy2v3y0vF45AFZ5X3W3
-        ZFWkta45CF1DArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
-        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBI
-        daVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm: remove redundant check in handle_mm_fault
+Content-Language: en-US
+To:     Haifeng Xu <haifeng.xu@shopee.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230306024959.131468-1-haifeng.xu@shopee.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230306024959.131468-1-haifeng.xu@shopee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hou Tao <houtao1@huawei.com>
+On 06.03.23 03:49, Haifeng Xu wrote:
+> mem_cgroup_oom_synchronize() has checked whether current memcg_in_oom is
+> set or not, so remove the check in handle_mm_fault().
 
-When neither no_read_workqueue nor no_write_workqueue are enabled,
-tasklet_trylock() in crypt_dec_pending() may still return false due to
-an uninitialized state, and dm-crypt will do io completion in io_queue
-instead of current context unnecessarily.
+"mem_cgroup_oom_synchronize() will returned immediately if memcg_in_oom 
+is not set, so remove the check from handle_mm_fault()".
 
-Fix it by initializing io->tasklet in crypt_io_init().
+However, that requires now always an indirect function call -- do we 
+care about dropping that optimization?
 
-Fixes: 8e14f610159d ("dm crypt: do not call bio_endio() from the dm-crypt tasklet")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- drivers/md/dm-crypt.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index 3aeeb8f2802f..caee6ce3b79f 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -238,6 +238,7 @@ static void crypt_endio(struct bio *clone);
- static void kcryptd_queue_crypt(struct dm_crypt_io *io);
- static struct scatterlist *crypt_get_sg_data(struct crypt_config *cc,
- 					     struct scatterlist *sg);
-+static void kcryptd_crypt_tasklet(unsigned long work);
- 
- static bool crypt_integrity_aead(struct crypt_config *cc);
- 
-@@ -1725,6 +1726,7 @@ static void crypt_io_init(struct dm_crypt_io *io, struct crypt_config *cc,
- 	io->sector = sector;
- 	io->error = 0;
- 	io->ctx.r.req = NULL;
-+	tasklet_init(&io->tasklet, kcryptd_crypt_tasklet, (unsigned long)&io->work);
- 	io->integrity_metadata = NULL;
- 	io->integrity_metadata_from_pool = false;
- 	atomic_set(&io->io_pending, 0);
-@@ -2226,7 +2228,6 @@ static void kcryptd_queue_crypt(struct dm_crypt_io *io)
- 		 * it is being executed with irqs disabled.
- 		 */
- 		if (in_hardirq() || irqs_disabled()) {
--			tasklet_init(&io->tasklet, kcryptd_crypt_tasklet, (unsigned long)&io->work);
- 			tasklet_schedule(&io->tasklet);
- 			return;
- 		}
 -- 
-2.29.2
+Thanks,
+
+David / dhildenb
 
