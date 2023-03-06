@@ -2,511 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A636AC2AA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05876AC262
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:08:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjCFOLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:11:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S230301AbjCFOI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:08:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjCFOLH (ORCPT
+        with ESMTP id S230447AbjCFOH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:11:07 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C047D32E46;
-        Mon,  6 Mar 2023 06:09:16 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C9F226602EE4;
-        Mon,  6 Mar 2023 14:07:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678111634;
-        bh=6RsoMSUKbuFrGrHciY1yya3bkWjwkg0jDVxNFiChlXE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ql8K0O0VM80+SmLYFl8vdq0AUHzNZFEVXGoMu93raV+fIP4Q2c22uhMmqq5Kr/y87
-         WETtj0jLpnymKnKkX7QvRrkvyAWx8lEYO6SnjkpDU2MNNSw6acyR/X+lw/reLwr4Wq
-         NJ9x6P2MvrYxb+tZ/nR5LomFAemurIqmeTXjhYXnVEIe0mSyFcXMjWZmsuL8M7Psgn
-         qI9e67EAs0RF/h/XB6hYqwFB4OucRx/u5ZLnKO6Ttxbbx701Rg6iDpC4L7TQ3xiHOj
-         mjU/J7fAVU2xytJQkeq0utOGh4h0hjBobDG09qiCGC2gZ+oRR3GQKPvxMRWCS4mt4z
-         FzOwVTznlUwzA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH v6 54/54] clk: mediatek: mt8135: Convert to simple probe and enable module build
-Date:   Mon,  6 Mar 2023 15:05:43 +0100
-Message-Id: <20230306140543.1813621-55-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230306140543.1813621-1-angelogioacchino.delregno@collabora.com>
-References: <20230306140543.1813621-1-angelogioacchino.delregno@collabora.com>
+        Mon, 6 Mar 2023 09:07:29 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 643B130B3B;
+        Mon,  6 Mar 2023 06:07:00 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id ay14so35330667edb.11;
+        Mon, 06 Mar 2023 06:07:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678111614;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=o18xGJE6G8VHczzh6g7gWOmbuvdeK4kZly98pWL+YIw=;
+        b=C0tZblsfBKXEXQDTu8AQ9okK72sV10Lj8fUtLen79rRP162xxFh6V80y/fOLsZOrUv
+         aoHDmPA98fa7ofgjq51pzVJXdPhbXcsL+3o/Egcy+vVjkBNCHrmE34+KmNrJ9c+T5Car
+         9SXz+jiEPcvaA5xQh9c4we0yljrlzp1hOyOfSWz8cTULp39u9LDkl5UFX7twglzQ2ZU9
+         fz0guwViJopyltAnAlI7qp2/xEjcMR747eZRmaup6GdwysFtxXnizbSBhCiKgms6zLsd
+         b+fI1SmKu/TCP67OfLycQjoNzE52FjLw9erjJDvSLxELYiucZuxcC64xU8X56wu3Efuf
+         ycjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678111614;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o18xGJE6G8VHczzh6g7gWOmbuvdeK4kZly98pWL+YIw=;
+        b=324OduprLAn3PteELvKxJeB8r1hUb/M0T+fV+a+uLkmQ6zO/P+ZPK0muwN6cPDsvPD
+         MQh0Swqc1N4HXNm+7Lf6AcoIfuReZYySF/haQCXNjggSXU0tKpIWy+yLqv8hrBD+pYWf
+         DN+MVUEXDCS5fLvYpY/xN81wg/bvmi65YaxF4fd9Etcw/hKbEpW6Ql+/OzvIYGHUto24
+         ycD4XjpobMt2xRx1gprCxlUcDrDkDzWUS/6Kp5l8nRxeEyrCOVOydO7puP1dNGXywhSn
+         WuQN0hvBnzvXWEe5j2O4Tu/zCu2jV6NohVbr9Xa4gMcE/gloSiKrlI1NIUs+BgjE9fli
+         8mIw==
+X-Gm-Message-State: AO0yUKVD/3kz0CsCUkrxX1rU0Nsx8lp6V9lwKYshb5fVCO+/ewyBD0p3
+        dMoQy52jc+tfrbHXaylB4bs=
+X-Google-Smtp-Source: AK7set+o8V/2NfbY3mB0VxCHYW8A5t6Xr5+22VYb8HihbEy/mp9ayI8JgmGQ1ZnL5Zz08T0vy4QP6g==
+X-Received: by 2002:a17:906:ceca:b0:8c0:386e:6693 with SMTP id si10-20020a170906ceca00b008c0386e6693mr10149194ejb.63.1678111614021;
+        Mon, 06 Mar 2023 06:06:54 -0800 (PST)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id le16-20020a170907171000b008da6a37de1bsm4711947ejc.10.2023.03.06.06.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 06:06:53 -0800 (PST)
+Date:   Mon, 6 Mar 2023 16:06:51 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Woojung Huh <woojung.huh@microchip.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: add ETS Qdisc
+ support for KSZ9477 series
+Message-ID: <20230306140651.kqayqatlrccfky2b@skbuf>
+References: <20230306124940.865233-1-o.rempel@pengutronix.de>
+ <20230306124940.865233-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306124940.865233-2-o.rempel@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the MT8135 clock drivers to platform_driver using the common
-simple probe mechanism; special note goes to the introduction of
-dummy clocks with ID 0 (where 0 is the first entry of a clock array)
-for each clock controller: this was necessary because of a mistake
-in the bindings for all MT8135 clock controllers, where the first
-clock has ID 1 (hence, array would start from element 1) instead of
-zero.
+Hi Oleksij,
 
-Now that all of the MT8135 clock drivers (including apmixedsys) can
-be compiled as modules, change the COMMON_CLK_MT8135 configuration
-option to tristate to enable module build.
+On Mon, Mar 06, 2023 at 01:49:40PM +0100, Oleksij Rempel wrote:
+> Add ETS Qdisc support for KSZ9477 of switches. Current implementation is
+> limited to strict priority mode.
+> 
+> Tested on KSZ8563R with following configuration:
+> tc qdisc replace dev lan2 root handle 1: ets strict 4 \
+>   priomap 3 3 2 2 1 1 0 0
+> ip link add link lan2 name v1 type vlan id 1 \
+>   egress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
+> 
+> and patched iperf3 version:
+> https://github.com/esnet/iperf/pull/1476
+> iperf3 -c 172.17.0.1 -b100M  -l1472 -t100 -u -R --sock-prio 2
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/net/dsa/microchip/ksz_common.c | 178 +++++++++++++++++++++++++
+>  drivers/net/dsa/microchip/ksz_common.h |  12 ++
+>  2 files changed, 190 insertions(+)
+> 
+> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+> index ae05fe0b0a81..f32ad39c1d8d 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.c
+> +++ b/drivers/net/dsa/microchip/ksz_common.c
+> @@ -3172,12 +3172,190 @@ static int ksz_setup_tc_cbs(struct dsa_switch *ds, int port,
+>  				 MTI_SHAPING_SRP);
+>  }
+>  
+> +static int ksz_ets_band_to_queue(struct tc_ets_qopt_offload_replace_params *p,
+> +				 int band)
+> +{
+> +	/* Compared to queues, bands prioritize packets differently. In strict
+> +	 * priority mode, the lowest priority is assigned to Queue 0 while the
+> +	 * highest priority is given to Band 0.
+> +	 */
+> +	return p->bands - 1 - band;
+> +}
+> +
+> +static int ksz_queue_set_strict(struct ksz_device *dev, int port, int queue)
+> +{
+> +	int ret;
+> +
+> +	/* In order to ensure proper prioritization, it is necessary to set the
+> +	 * rate limit for the related queue to zero. Otherwise strict priority
+> +	 * mode will not work.
+> +	 */
+> +	ret = ksz_pwrite8(dev, port, KSZ9477_REG_PORT_OUT_RATE_0 + queue,
+> +			  KSZ9477_OUT_RATE_NO_LIMIT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ksz_pwrite32(dev, port, REG_PORT_MTI_QUEUE_INDEX__4, queue);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ksz_setup_tc_mode(dev, port, MTI_SCHEDULE_STRICT_PRIO,
+> +				 MTI_SHAPING_OFF);
+> +}
+> +
+> +static int ksz_queue_set_wrr(struct ksz_device *dev, int port, int queue,
+> +			     int weight)
+> +{
+> +	int ret;
+> +
+> +	/* In order to ensure proper prioritization, it is necessary to set the
+> +	 * rate limit for the related queue to zero. Otherwise weighted round
+> +	 * robin mode will not work.
+> +	 */
+> +	ret = ksz_pwrite8(dev, port, KSZ9477_REG_PORT_OUT_RATE_0 + queue,
+> +			  KSZ9477_OUT_RATE_NO_LIMIT);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ksz_pwrite32(dev, port, REG_PORT_MTI_QUEUE_INDEX__4, queue);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ksz_setup_tc_mode(dev, port, MTI_SCHEDULE_WRR,
+> +				MTI_SHAPING_OFF);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return ksz_pwrite8(dev, port, KSZ9477_PORT_MTI_QUEUE_CTRL_1, weight);
+> +}
+> +
+> +static int ksz_tc_ets_add(struct ksz_device *dev, int port,
+> +			  struct tc_ets_qopt_offload_replace_params *p)
+> +{
+> +	int ret, band, tc_prio;
+> +	u32 queue_map = 0;
+> +
+> +	/* Configure queue scheduling mode for all bands. Currently only strict
+> +	 * prio mode is supported.
+> +	 */
+> +	for (band = 0; band < p->bands; band++) {
+> +		int queue = ksz_ets_band_to_queue(p, band);
+> +
+> +		ret = ksz_queue_set_strict(dev, port, queue);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	/* Configure the mapping between traffic classes and queues. Note:
+> +	 * priomap variable support 16 traffic classes, but the chip can handle
+> +	 * only 8 classes.
+> +	 */
+> +	for (tc_prio = 0; tc_prio < ARRAY_SIZE(p->priomap); tc_prio++) {
+> +		int queue;
+> +
+> +		if (tc_prio > KSZ9477_MAX_TC_PRIO)
+> +			break;
+> +
+> +		queue = ksz_ets_band_to_queue(p, p->priomap[tc_prio]);
+> +		queue_map |= queue << (tc_prio * KSZ9477_PORT_TC_MAP_S);
+> +	}
+> +
+> +	return ksz_pwrite32(dev, port, KSZ9477_PORT_MRI_TC_MAP__4, queue_map);
+> +}
+> +
+> +static int ksz_tc_ets_del(struct ksz_device *dev, int port)
+> +{
+> +	int ret, queue;
+> +
+> +	/* To restore the default chip configuration, set all queues to use the
+> +	 * WRR scheduler with a weight of 1.
+> +	 */
+> +	for (queue = 0; queue < dev->info->num_tx_queues; queue++) {
+> +		ret = ksz_queue_set_wrr(dev, port, queue,
+> +					KSZ9477_DEFAULT_WRR_WEIGHT);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	/* Revert the queue mapping for TC-priority to its default setting on
+> +	 * the chip.
+> +	 */
+> +	return ksz_pwrite32(dev, port, KSZ9477_PORT_MRI_TC_MAP__4,
+> +			    KSZ9477_DEFAULT_TC_MAP);
+> +}
+> +
+> +static int ksz_tc_ets_validate(struct ksz_device *dev, int port,
+> +			       struct tc_ets_qopt_offload_replace_params *p)
+> +{
+> +	int band;
+> +
+> +	/* Since it is not feasible to share one port among multiple qdisc,
+> +	 * the user must configure all available queues appropriately.
+> +	 */
+> +	if (p->bands != dev->info->num_tx_queues) {
+> +		dev_err(dev->dev, "Not supported amount of bands. It should be %d\n",
+> +			dev->info->num_tx_queues);
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	for (band = 0; band < p->bands; ++band) {
+> +		/* The KSZ switches utilize a weighted round robin configuration
+> +		 * where a certain number of packets can be transmitted from a
+> +		 * queue before the next queue is serviced. For more information
+> +		 * on this, refer to section 5.2.8.4 of the KSZ8565R
+> +		 * documentation on the Port Transmit Queue Control 1 Register.
+> +		 * However, the current ETS Qdisc implementation (as of February
+> +		 * 2023) assigns a weight to each queue based on the number of
+> +		 * bytes or extrapolated bandwidth in percentages. Since this
+> +		 * differs from the KSZ switches' method and we don't want to
+> +		 * fake support by converting bytes to packets, we have decided
+> +		 * to return an error instead.
+> +		 */
+> +		if (p->quanta[band]) {
+> +			dev_err(dev->dev, "Quanta/weights configuration is not supported.\n");
+> +			return -EOPNOTSUPP;
+> +		}
 
-While at it, also remove the __initconst annotation from all of the
-clock arrays as they are not only used during init anymore, but also
-during runtime.
+So what does the user gain using tc-ets over tc-mqprio? That has a way
+to set up strict prioritization and prio:tc maps as well, and to my
+knowledge mqprio is vastly more popular in non-DCB setups than tc-ets.
+The only thing is that with mqprio, AFAIK, the round robin between TXQs
+belonging to the same traffic class is not weighted.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/clk/mediatek/Kconfig      |   2 +-
- drivers/clk/mediatek/clk-mt8135.c | 176 +++++++++++++-----------------
- 2 files changed, 76 insertions(+), 102 deletions(-)
-
-diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
-index 02093996ccc3..7a12aefb1d0b 100644
---- a/drivers/clk/mediatek/Kconfig
-+++ b/drivers/clk/mediatek/Kconfig
-@@ -423,7 +423,7 @@ config COMMON_CLK_MT7986_ETHSYS
- 	  required on MediaTek MT7986 SoC.
- 
- config COMMON_CLK_MT8135
--	bool "Clock driver for MediaTek MT8135"
-+	tristate "Clock driver for MediaTek MT8135"
- 	depends on (ARCH_MEDIATEK && ARM) || COMPILE_TEST
- 	select COMMON_CLK_MEDIATEK
- 	default ARCH_MEDIATEK && ARM
-diff --git a/drivers/clk/mediatek/clk-mt8135.c b/drivers/clk/mediatek/clk-mt8135.c
-index 8785d58cb3a5..084e48a554c2 100644
---- a/drivers/clk/mediatek/clk-mt8135.c
-+++ b/drivers/clk/mediatek/clk-mt8135.c
-@@ -5,8 +5,10 @@
-  */
- 
- #include <linux/clk.h>
-+#include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-+#include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/mfd/syscon.h>
- #include <dt-bindings/clock/mt8135-clk.h>
-@@ -17,7 +19,8 @@
- 
- static DEFINE_SPINLOCK(mt8135_clk_lock);
- 
--static const struct mtk_fixed_factor top_divs[] __initconst = {
-+static const struct mtk_fixed_factor top_divs[] = {
-+	FACTOR(CLK_DUMMY, "top_divs_dummy", "clk_null", 1, 1),
- 	FACTOR(CLK_TOP_DSI0_LNTC_DSICLK, "dsi0_lntc_dsiclk", "clk_null", 1, 1),
- 	FACTOR(CLK_TOP_HDMITX_CLKDIG_CTS, "hdmitx_clkdig_cts", "clk_null", 1, 1),
- 	FACTOR(CLK_TOP_CLKPH_MCK, "clkph_mck", "clk_null", 1, 1),
-@@ -98,7 +101,7 @@ static const struct mtk_fixed_factor top_divs[] __initconst = {
- 	FACTOR(CLK_TOP_MEMPLL_MCK_D4, "mempll_mck_d4", "clkph_mck", 1, 4),
- };
- 
--static const char * const axi_parents[] __initconst = {
-+static const char * const axi_parents[] = {
- 	"clk26m",
- 	"syspll_d3",
- 	"syspll_d4",
-@@ -108,7 +111,7 @@ static const char * const axi_parents[] __initconst = {
- 	"syspll_d3p5"
- };
- 
--static const char * const smi_parents[] __initconst = {
-+static const char * const smi_parents[] = {
- 	"clk26m",
- 	"clkph_mck",
- 	"syspll_d2p5",
-@@ -126,7 +129,7 @@ static const char * const smi_parents[] __initconst = {
- 	"lvdspll"
- };
- 
--static const char * const mfg_parents[] __initconst = {
-+static const char * const mfg_parents[] = {
- 	"clk26m",
- 	"univpll1_d4",
- 	"syspll_d2",
-@@ -142,13 +145,13 @@ static const char * const mfg_parents[] __initconst = {
- 	"mmpll_d7"
- };
- 
--static const char * const irda_parents[] __initconst = {
-+static const char * const irda_parents[] = {
- 	"clk26m",
- 	"univpll2_d8",
- 	"univpll1_d6"
- };
- 
--static const char * const cam_parents[] __initconst = {
-+static const char * const cam_parents[] = {
- 	"clk26m",
- 	"syspll_d3",
- 	"syspll_d3p5",
-@@ -159,13 +162,13 @@ static const char * const cam_parents[] __initconst = {
- 	"univpll1_d4"
- };
- 
--static const char * const aud_intbus_parents[] __initconst = {
-+static const char * const aud_intbus_parents[] = {
- 	"clk26m",
- 	"syspll_d6",
- 	"univpll_d10"
- };
- 
--static const char * const jpg_parents[] __initconst = {
-+static const char * const jpg_parents[] = {
- 	"clk26m",
- 	"syspll_d5",
- 	"syspll_d4",
-@@ -175,7 +178,7 @@ static const char * const jpg_parents[] __initconst = {
- 	"univpll_d5"
- };
- 
--static const char * const disp_parents[] __initconst = {
-+static const char * const disp_parents[] = {
- 	"clk26m",
- 	"syspll_d3p5",
- 	"syspll_d3",
-@@ -186,7 +189,7 @@ static const char * const disp_parents[] __initconst = {
- 	"vdecpll"
- };
- 
--static const char * const msdc30_parents[] __initconst = {
-+static const char * const msdc30_parents[] = {
- 	"clk26m",
- 	"syspll_d6",
- 	"syspll_d5",
-@@ -195,13 +198,13 @@ static const char * const msdc30_parents[] __initconst = {
- 	"msdcpll"
- };
- 
--static const char * const usb20_parents[] __initconst = {
-+static const char * const usb20_parents[] = {
- 	"clk26m",
- 	"univpll2_d6",
- 	"univpll1_d10"
- };
- 
--static const char * const venc_parents[] __initconst = {
-+static const char * const venc_parents[] = {
- 	"clk26m",
- 	"syspll_d3",
- 	"syspll_d8",
-@@ -212,7 +215,7 @@ static const char * const venc_parents[] __initconst = {
- 	"mmpll_d6"
- };
- 
--static const char * const spi_parents[] __initconst = {
-+static const char * const spi_parents[] = {
- 	"clk26m",
- 	"syspll_d6",
- 	"syspll_d8",
-@@ -221,17 +224,17 @@ static const char * const spi_parents[] __initconst = {
- 	"univpll1_d8"
- };
- 
--static const char * const uart_parents[] __initconst = {
-+static const char * const uart_parents[] = {
- 	"clk26m",
- 	"univpll2_d8"
- };
- 
--static const char * const mem_parents[] __initconst = {
-+static const char * const mem_parents[] = {
- 	"clk26m",
- 	"clkph_mck"
- };
- 
--static const char * const camtg_parents[] __initconst = {
-+static const char * const camtg_parents[] = {
- 	"clk26m",
- 	"univpll_d26",
- 	"univpll1_d6",
-@@ -239,12 +242,12 @@ static const char * const camtg_parents[] __initconst = {
- 	"syspll_d8"
- };
- 
--static const char * const audio_parents[] __initconst = {
-+static const char * const audio_parents[] = {
- 	"clk26m",
- 	"syspll_d24"
- };
- 
--static const char * const fix_parents[] __initconst = {
-+static const char * const fix_parents[] = {
- 	"rtc32k",
- 	"clk26m",
- 	"univpll_d5",
-@@ -255,7 +258,7 @@ static const char * const fix_parents[] __initconst = {
- 	"univpll1_d8"
- };
- 
--static const char * const vdec_parents[] __initconst = {
-+static const char * const vdec_parents[] = {
- 	"clk26m",
- 	"vdecpll",
- 	"clkph_mck",
-@@ -274,13 +277,13 @@ static const char * const vdec_parents[] __initconst = {
- 	"lvdspll"
- };
- 
--static const char * const ddrphycfg_parents[] __initconst = {
-+static const char * const ddrphycfg_parents[] = {
- 	"clk26m",
- 	"axi_sel",
- 	"syspll_d12"
- };
- 
--static const char * const dpilvds_parents[] __initconst = {
-+static const char * const dpilvds_parents[] = {
- 	"clk26m",
- 	"lvdspll",
- 	"lvdspll_d2",
-@@ -288,7 +291,7 @@ static const char * const dpilvds_parents[] __initconst = {
- 	"lvdspll_d8"
- };
- 
--static const char * const pmicspi_parents[] __initconst = {
-+static const char * const pmicspi_parents[] = {
- 	"clk26m",
- 	"univpll2_d6",
- 	"syspll_d8",
-@@ -299,14 +302,14 @@ static const char * const pmicspi_parents[] __initconst = {
- 	"syspll_d24"
- };
- 
--static const char * const smi_mfg_as_parents[] __initconst = {
-+static const char * const smi_mfg_as_parents[] = {
- 	"clk26m",
- 	"smi_sel",
- 	"mfg_sel",
- 	"mem_sel"
- };
- 
--static const char * const gcpu_parents[] __initconst = {
-+static const char * const gcpu_parents[] = {
- 	"clk26m",
- 	"syspll_d4",
- 	"univpll_d7",
-@@ -314,14 +317,14 @@ static const char * const gcpu_parents[] __initconst = {
- 	"syspll_d6"
- };
- 
--static const char * const dpi1_parents[] __initconst = {
-+static const char * const dpi1_parents[] = {
- 	"clk26m",
- 	"tvhdmi_h_ck",
- 	"tvhdmi_d2",
- 	"tvhdmi_d4"
- };
- 
--static const char * const cci_parents[] __initconst = {
-+static const char * const cci_parents[] = {
- 	"clk26m",
- 	"mainpll_537p3m",
- 	"univpll_d3",
-@@ -330,7 +333,7 @@ static const char * const cci_parents[] __initconst = {
- 	"syspll_d5"
- };
- 
--static const char * const apll_parents[] __initconst = {
-+static const char * const apll_parents[] = {
- 	"clk26m",
- 	"apll_ck",
- 	"apll_d4",
-@@ -339,14 +342,14 @@ static const char * const apll_parents[] __initconst = {
- 	"apll_d24"
- };
- 
--static const char * const hdmipll_parents[] __initconst = {
-+static const char * const hdmipll_parents[] = {
- 	"clk26m",
- 	"hdmitx_clkdig_cts",
- 	"hdmitx_clkdig_d2",
- 	"hdmitx_clkdig_d3"
- };
- 
--static const struct mtk_composite top_muxes[] __initconst = {
-+static const struct mtk_composite top_muxes[] = {
- 	/* CLK_CFG_0 */
- 	MUX_GATE(CLK_TOP_AXI_SEL, "axi_sel", axi_parents,
- 		0x0140, 0, 3, INVALID_MUX_GATE_BIT),
-@@ -406,7 +409,8 @@ static const struct mtk_gate_regs infra_cg_regs = {
- 	GATE_MTK_FLAGS(_id, _name, _parent, &infra_cg_regs, _shift,	\
- 		       &mtk_clk_gate_ops_setclr, CLK_IS_CRITICAL)
- 
--static const struct mtk_gate infra_clks[] __initconst = {
-+static const struct mtk_gate infra_clks[] = {
-+	GATE_DUMMY(CLK_DUMMY, "infra_dummy"),
- 	GATE_ICG(CLK_INFRA_PMIC_WRAP, "pmic_wrap_ck", "axi_sel", 23),
- 	GATE_ICG(CLK_INFRA_PMICSPI, "pmicspi_ck", "pmicspi_sel", 22),
- 	GATE_ICG(CLK_INFRA_CCIF1_AP_CTRL, "ccif1_ap_ctrl", "axi_sel", 21),
-@@ -440,7 +444,8 @@ static const struct mtk_gate_regs peri1_cg_regs = {
- #define GATE_PERI1(_id, _name, _parent, _shift)	\
- 	GATE_MTK(_id, _name, _parent, &peri1_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
- 
--static const struct mtk_gate peri_gates[] __initconst = {
-+static const struct mtk_gate peri_gates[] = {
-+	GATE_DUMMY(CLK_DUMMY, "peri_dummy"),
- 	/* PERI0 */
- 	GATE_PERI0(CLK_PERI_I2C5, "i2c5_ck", "axi_sel", 31),
- 	GATE_PERI0(CLK_PERI_I2C4, "i2c4_ck", "axi_sel", 30),
-@@ -486,12 +491,12 @@ static const struct mtk_gate peri_gates[] __initconst = {
- 	GATE_PERI1(CLK_PERI_I2C6, "i2c6_ck", "axi_sel", 0),
- };
- 
--static const char * const uart_ck_sel_parents[] __initconst = {
-+static const char * const uart_ck_sel_parents[] = {
- 	"clk26m",
- 	"uart_sel",
- };
- 
--static const struct mtk_composite peri_clks[] __initconst = {
-+static const struct mtk_composite peri_clks[] = {
- 	MUX(CLK_PERI_UART0_SEL, "uart0_ck_sel", uart_ck_sel_parents, 0x40c, 0, 1),
- 	MUX(CLK_PERI_UART1_SEL, "uart1_ck_sel", uart_ck_sel_parents, 0x40c, 1, 1),
- 	MUX(CLK_PERI_UART2_SEL, "uart2_ck_sel", uart_ck_sel_parents, 0x40c, 2, 1),
-@@ -516,77 +521,46 @@ static const struct mtk_clk_rst_desc clk_rst_desc[] = {
- 	}
- };
- 
--static void __init mtk_topckgen_init(struct device_node *node)
--{
--	struct clk_hw_onecell_data *clk_data;
--	void __iomem *base;
--	int r;
--
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return;
--	}
-+static const struct mtk_clk_desc infra_desc = {
-+	.clks = infra_clks,
-+	.num_clks = ARRAY_SIZE(infra_clks),
-+	.rst_desc = &clk_rst_desc[0],
-+};
- 
--	clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
--
--	mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), clk_data);
--	mtk_clk_register_composites(NULL, top_muxes,
--				    ARRAY_SIZE(top_muxes), base,
--				    &mt8135_clk_lock, clk_data);
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--	if (r)
--		pr_err("%s(): could not register clock provider: %d\n",
--			__func__, r);
--}
--CLK_OF_DECLARE(mtk_topckgen, "mediatek,mt8135-topckgen", mtk_topckgen_init);
--
--static void __init mtk_infrasys_init(struct device_node *node)
--{
--	struct clk_hw_onecell_data *clk_data;
--	int r;
--
--	clk_data = mtk_alloc_clk_data(CLK_INFRA_NR_CLK);
--
--	mtk_clk_register_gates(NULL, node, infra_clks,
--			       ARRAY_SIZE(infra_clks), clk_data);
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--	if (r)
--		pr_err("%s(): could not register clock provider: %d\n",
--			__func__, r);
--
--	mtk_register_reset_controller(node, &clk_rst_desc[0]);
--}
--CLK_OF_DECLARE(mtk_infrasys, "mediatek,mt8135-infracfg", mtk_infrasys_init);
--
--static void __init mtk_pericfg_init(struct device_node *node)
--{
--	struct clk_hw_onecell_data *clk_data;
--	int r;
--	void __iomem *base;
--
--	base = of_iomap(node, 0);
--	if (!base) {
--		pr_err("%s(): ioremap failed\n", __func__);
--		return;
--	}
-+static const struct mtk_clk_desc peri_desc = {
-+	.clks = peri_gates,
-+	.num_clks = ARRAY_SIZE(peri_gates),
-+	.composite_clks = peri_clks,
-+	.num_composite_clks = ARRAY_SIZE(peri_clks),
-+	.clk_lock = &mt8135_clk_lock,
-+	.rst_desc = &clk_rst_desc[1],
-+};
- 
--	clk_data = mtk_alloc_clk_data(CLK_PERI_NR_CLK);
-+static const struct mtk_clk_desc topck_desc = {
-+	.factor_clks = top_divs,
-+	.num_factor_clks = ARRAY_SIZE(top_divs),
-+	.composite_clks = top_muxes,
-+	.num_composite_clks = ARRAY_SIZE(top_muxes),
-+	.clk_lock = &mt8135_clk_lock,
-+};
- 
--	mtk_clk_register_gates(NULL, node, peri_gates,
--			       ARRAY_SIZE(peri_gates), clk_data);
--	mtk_clk_register_composites(NULL, peri_clks,
--				    ARRAY_SIZE(peri_clks), base,
--				    &mt8135_clk_lock, clk_data);
-+static const struct of_device_id of_match_clk_mt8135[] = {
-+	{ .compatible = "mediatek,mt8135-infracfg", .data = &infra_desc },
-+	{ .compatible = "mediatek,mt8135-pericfg", .data = &peri_desc },
-+	{ .compatible = "mediatek,mt8135-topckgen", .data = &topck_desc },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, of_match_clk_mt8135);
- 
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--	if (r)
--		pr_err("%s(): could not register clock provider: %d\n",
--			__func__, r);
-+static struct platform_driver clk_mt8135_drv = {
-+	.driver = {
-+		.name = "clk-mt8135",
-+		.of_match_table = of_match_clk_mt8135,
-+	},
-+	.probe = mtk_clk_simple_probe,
-+	.remove = mtk_clk_simple_remove,
-+};
-+module_platform_driver(clk_mt8135_drv);
- 
--	mtk_register_reset_controller(node, &clk_rst_desc[1]);
--}
--CLK_OF_DECLARE(mtk_pericfg, "mediatek,mt8135-pericfg", mtk_pericfg_init);
-+MODULE_DESCRIPTION("MediaTek MT8135 clocks driver");
- MODULE_LICENSE("GPL");
--- 
-2.39.2
-
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int ksz_tc_setup_qdisc_ets(struct dsa_switch *ds, int port,
+> +				  struct tc_ets_qopt_offload *qopt)
+> +{
+> +	struct ksz_device *dev = ds->priv;
+> +	int ret;
+> +
+> +	if (qopt->parent != TC_H_ROOT) {
+> +		dev_err(dev->dev, "Parent should be \"root\"\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	switch (qopt->command) {
+> +	case TC_ETS_REPLACE:
+> +		ret = ksz_tc_ets_validate(dev, port, &qopt->replace_params);
+> +		if (ret)
+> +			return ret;
+> +
+> +		return ksz_tc_ets_add(dev, port, &qopt->replace_params);
+> +	case TC_ETS_DESTROY:
+> +		return ksz_tc_ets_del(dev, port);
+> +	case TC_ETS_STATS:
+> +	case TC_ETS_GRAFT:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return -EOPNOTSUPP;
+> +}
+> +
+>  static int ksz_setup_tc(struct dsa_switch *ds, int port,
+>  			enum tc_setup_type type, void *type_data)
+>  {
+>  	switch (type) {
+>  	case TC_SETUP_QDISC_CBS:
+>  		return ksz_setup_tc_cbs(ds, port, type_data);
+> +	case TC_SETUP_QDISC_ETS:
+> +		return ksz_tc_setup_qdisc_ets(ds, port, type_data);
+>  	default:
+>  		return -EOPNOTSUPP;
+>  	}
+> diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+> index f53834bbe896..7618a4714e06 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.h
+> +++ b/drivers/net/dsa/microchip/ksz_common.h
+> @@ -657,6 +657,15 @@ static inline int is_lan937x(struct ksz_device *dev)
+>  #define KSZ8_LEGAL_PACKET_SIZE		1518
+>  #define KSZ9477_MAX_FRAME_SIZE		9000
+>  
+> +#define KSZ9477_REG_PORT_OUT_RATE_0	0x0420
+> +#define KSZ9477_OUT_RATE_NO_LIMIT	0
+> +
+> +#define KSZ9477_PORT_MRI_TC_MAP__4	0x0808
+> +#define KSZ9477_DEFAULT_TC_MAP		0x33221100
+> +
+> +#define KSZ9477_PORT_TC_MAP_S		4
+> +#define KSZ9477_MAX_TC_PRIO		7
+> +
+>  /* CBS related registers */
+>  #define REG_PORT_MTI_QUEUE_INDEX__4	0x0900
+>  
+> @@ -670,6 +679,9 @@ static inline int is_lan937x(struct ksz_device *dev)
+>  #define MTI_SHAPING_SRP			1
+>  #define MTI_SHAPING_TIME_AWARE		2
+>  
+> +#define KSZ9477_PORT_MTI_QUEUE_CTRL_1	0x0915
+> +#define KSZ9477_DEFAULT_WRR_WEIGHT	1
+> +
+>  #define REG_PORT_MTI_HI_WATER_MARK	0x0916
+>  #define REG_PORT_MTI_LO_WATER_MARK	0x0918
+>  
+> -- 
+> 2.30.2
+> 
