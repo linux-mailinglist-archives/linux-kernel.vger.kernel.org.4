@@ -2,149 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2162A6AB84A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:30:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B5D6AB852
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjCFIaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:30:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
+        id S229919AbjCFIbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjCFI34 (ORCPT
+        with ESMTP id S229790AbjCFIbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:29:56 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB26BB94
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:29:53 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id cw28so35094880edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:29:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678091392;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CGOEmaNiGGbc7L01BirDqpWOsXPNFEUnsDXX5oXZKD0=;
-        b=lYA8d4n5q3CvWYp9VCtKFvChADNU0XNfiO1TRzPCRAbGiuZ0Zm3urX8c0q89LiLBXy
-         jSlbxv0ITZV2ZbFiDQ6U0bkpsQ0Uad8cwU10kzwHnrgYbtokv5s2Urwx+kcScuCkLpty
-         Sav+Xqu0psOcZTL+WB+FO3X1xxnjsfI1pVT3AscDJ7p8XbZ6jU3hModd49k7EdFiV1P2
-         7Kf3K9d5BfdRY+XXuMLOpxtAkZFmWoU3t/ojZeextEwOvlOfOxteFpHHYs4+TzgkYasA
-         P9GgT3s+2xCEyGcNDKU7LTYsxbuyebaNhcInWYW1swJ9h4Ddg4L3cLY28A64pM32C+iD
-         TxYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678091392;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CGOEmaNiGGbc7L01BirDqpWOsXPNFEUnsDXX5oXZKD0=;
-        b=KPGcB30YgQkfrLHVdFjP8r1RT5BEtvN2iw/dFVIij020tecRifm1YWpErMkOf6hhMx
-         +o/G/dh6SspRXs8F4hoYV794Cw+labijvWayUS4IcJKWwv1s/Ie0MQ53RTChWqiuLQ3i
-         57bqP188zaZDqWE8yspMGIzKTJ4jnKQJ1fNLr+c4y+LMvmkSkOGSBnSu74dr9c2ZHKoh
-         ydUXSNBPduMr9kqnSX32mR9oQ4s/Gw//KAqImdJY1pNEE1abegJnCBVQyyQrkHBjPts6
-         DDXYvVj+J6C36iiKO55KI0T/DbDvqaCI7Jpa4xCIWYimHj31yXcq+uoWzgRE6jPtHp6O
-         Vg2Q==
-X-Gm-Message-State: AO0yUKUDgOKUyfDN0ErEN2+3+kESJZz6XnQVU53dpwHRst0KJNuR1Vfe
-        9xmnTst0dA/i0mrB+r/lBDNvTw==
-X-Google-Smtp-Source: AK7set9Rt/mceRfZItcu0lyJvR3AEI+TwG4140OrkenXDQ5rRvMtEVEEDO6b88AMzw1Nmhy+0qthMw==
-X-Received: by 2002:a17:906:b007:b0:8aa:c038:974c with SMTP id v7-20020a170906b00700b008aac038974cmr9617550ejy.54.1678091392390;
-        Mon, 06 Mar 2023 00:29:52 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
-        by smtp.gmail.com with ESMTPSA id mb3-20020a170906eb0300b008e772c97db6sm4211562ejb.128.2023.03.06.00.29.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 00:29:52 -0800 (PST)
-Message-ID: <7dca5cec-5b7b-a3d6-e165-47a5fa26b73a@linaro.org>
-Date:   Mon, 6 Mar 2023 09:29:49 +0100
+        Mon, 6 Mar 2023 03:31:38 -0500
+Received: from msg-2.mailo.com (msg-2.mailo.com [213.182.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA1B20695
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:31:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1678091484; bh=Z19aTZpc2+qXkbvxrT61U2B6qSK+x6gCTrJeS9vjx4s=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=UWJOFNw3hDEUTy5Sm5Ix8pibMT/qB88tq1g3w7yNHQe/uxR78njM4MoX+cLafbFk7
+         VZ95rTDWpsPrLlkXVZY+h4dZUstVnuewwoa2wj8WtFK3SfMx4cUX3TiZtqDP4uEFzm
+         8Po0oaos4UqNkY3fMNTZA1aeM7GTJe9UrW2iRkzU=
+Received: by b221-5.in.mailobj.net [192.168.90.25] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Mon,  6 Mar 2023 09:31:24 +0100 (CET)
+X-EA-Auth: UiJYxm9oWcsUCfEOM2Sqn5R+/Jsc6BXXj7fAwVUjLeyP1HR1f4NwXnuKrPKQYZa6q4k8XpgRwxP9qCvBIPc2fJZ0rhwiyaoP
+Date:   Mon, 6 Mar 2023 14:01:10 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Forest Bond <forest@alittletooquiet.net>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] staging: vt6655: Macro with braces issue change to
+ inline function
+Message-ID: <ZAWkzuCF9GaqnnaJ@ubun2204.myguest.virtualbox.org>
+References: <3cb45313-209a-8190-12f8-6a2d49e4173b@wanadoo.fr>
+ <Y+A+HF1vDeRIqye5@combine-ThinkPad-S1-Yoga>
+ <Y+DL3O5lcMyZ/aNR@kroah.com>
+ <Y+H9BT8Am4Ik2ZDA@combine-ThinkPad-S1-Yoga>
+ <Y+IJgxF52lpgk0RC@ubun2204.myguest.virtualbox.org>
+ <ZAVxo6WHGu3kO1nl@combine-ThinkPad-S1-Yoga>
+ <ZAV7xvr3BCqByjy6@ubun2204.myguest.virtualbox.org>
+ <ZAWAyyNt0rgrpA1l@combine-ThinkPad-S1-Yoga>
+ <ZAWPk12Fz0gxaqzB@ubun2204.myguest.virtualbox.org>
+ <ZAWa5NpBHrPhaNWA@combine-ThinkPad-S1-Yoga>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v10 03/15] dt-bindings: spi: cdns: Add compatible for AMD
- Pensando Elba SoC
-Content-Language: en-US
-To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
-        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
-        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
-        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
-        devicetree@vger.kernel.org
-References: <20230306040739.51488-1-blarson@amd.com>
- <20230306040739.51488-4-blarson@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230306040739.51488-4-blarson@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAWa5NpBHrPhaNWA@combine-ThinkPad-S1-Yoga>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2023 05:07, Brad Larson wrote:
-> Document the cadence qspi controller compatible for AMD Pensando
-> Elba SoC boards.  The Elba qspi fifo size is 1024.
+On Mon, Mar 06, 2023 at 08:48:52AM +0100, Guru Mehar Rachaputi wrote:
+> On Mon, Mar 06, 2023 at 12:30:35PM +0530, Deepak R Varma wrote:
+> > On Mon, Mar 06, 2023 at 06:57:31AM +0100, Guru Mehar Rachaputi wrote:
+> > > On Mon, Mar 06, 2023 at 11:06:06AM +0530, Deepak R Varma wrote:
+> > > > On Mon, Mar 06, 2023 at 05:52:51AM +0100, Guru Mehar Rachaputi wrote:
+> > > > > On Tue, Feb 07, 2023 at 01:49:15PM +0530, Deepak R Varma wrote:
+> > > > > 
+> > > > > Hej Deepak,
+> > > > > 
+> > > > > I have a problem in sending patchset through mutt.
+> > > > > I have been trying sending to my own mail address but it won't work.
+> > > > 
+> > > > This could be because of mutt configuration. There are some additional checks if
+> > > > you are trying to use mutt with gmail. Search over google or lore old posts to
+> > > > know more about it. The important aspect is to configure and test mutt well
+> > > > before you use it for sending out patches.
+> > > > 
+> > > > > 
+> > > > > When sending patchset I think we should use "In-Reply-To" flag and
+> > > > > include "Message-ID" to which we want this to be in series to. I tried
+> > > > > both "git send-email" feature and mutt "forwarding feature".
+> > > > 
+> > > > I have not used "git send-email", so can't help you there. But mutt has worked
+> > > > very well for me. Ensure you are reading and following the instructions from
+> > > > this page well: https://kernelnewbies.org/Outreachyfirstpatch
+> > > >
+> > > 
+> > > So for example from these patches: 0.patch, 1.patch
+> > > how to use "mutt -H" to send patches in one thread?
+> > > 
+> > > if first one is: mutt -H 0.patch
+> > > then should second one be: mutt -H 1.patch In-Reply-To: Message-ID?
+> > 
+> > Try this out by sending to yourself and you will know :)
+> > 
+> > There is a section "Using git format-patch to send patchsets" in the link I sent
+> > in my last email. Please read that.
+> > 
+> > Deepak.
+> >
 > 
-> Signed-off-by: Brad Larson <blarson@amd.com>
-> ---
+> I tried it and it won't work.
+> My question itself was how to use mutt to send patchset? which is not
+> clear on the site.
 > 
-> v10 changes:
-> - Fix cdns,fifo-depth, only amd,pensando-elba-qspi is 1024 bytes
+> I have no problem in sending one single patch through mutt.
 > 
-> v9 changes:
-> - Add 1024 to cdns,fifo-depth property to resolve dtbs_check error
+> To be more clear:
+> https://lore.kernel.org/lkml/cover.1666299151.git.drv@mailo.com/
+> at above link, you submitted patchset.
 > 
-> ---
->  .../bindings/spi/cdns,qspi-nor.yaml           | 30 +++++++++++++++++--
->  1 file changed, 28 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> index 5c01db128be0..18e4bc04f091 100644
-> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
-> @@ -20,11 +20,39 @@ allOf:
->        required:
->          - power-domains
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          enum:
-> +            - amd,pensando-elba-qspi
-> +    then:
-> +      properties:
-> +        cdns,fifo-depth:
-> +          enum: [ 128, 256, 1024 ]
-> +          default: 1024
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: amd,pensando-elba-qspi
+> How to send this series using mutt?
+> If I use "mutt -H x.patch" for every patch file they are seperate emails
+> in my inbox.
 
-This does not make any sense. You have two ifs for the same.
+The following command creates cover letter and patches as a threads
 
-> +    then:
-> +      properties:
-> +        cdns,fifo-depth:
-> +          enum: [ 128, 256, 1024 ]
-> +          default: 1024
-> +    else:
-> +      properties:
-> +        cdns,fifo-depth:
-> +          enum: [ 128, 256 ]
-> +          default: 128
-> +
-Best regards,
-Krzysztof
+git format-patch -o /tmp/ --cover-letter -n --thread=shallow commitIDx^..commitIDy
+
+Send cover-letter and patches with mutt -H XXXXX command
+
+Note: Cover letter us optional. If you do not have one, the patches will still
+be threaded.
+
+HTH
+Deepak.
+
+
+
+
+> 
+> > > 
+> > > 
+> > > > > 
+> > > > > Another issue is, how to attach patch file from inside mutt(for example: 
+> > > > > "mutt -H x.patch" from command line is used to extract header and body of a 
+> > > > > mail in mutt)?
+> > > > 
+> > > > Why do you want to do that?
+> > > > Build a patch file using "git format-patch" and then use "mutt -H" to send the
+> > > > patch. Both the commands work directly from the command line. If there is a need 
+> > > > for any additional attachments in support of your patch [configs, logs, trace as
+> > > > evidence, test outcomes etc], you can attach those from within the "mutt -H"
+> > > > execution context.
+> > > > 
+> > > > I suggest testing mutt well before you start sending any patches out by sending
+> > > > the patches to yourself. Do not use any kernel mailing list for testing.
+> > > > 
+> > > > 
+> > > > Regards,
+> > > > Deepak.
+> > > > 
+> > > > > 
+> > > > > 
+> > > > > -- 
+> > > > > Thanks & Regards,
+> > > > > Guru
+> > > > > 
+> > > > 
+> > > > 
+> > > 
+> > > -- 
+> > > Thanks & Regards,
+> > > Guru
+> > > 
+> > 
+> > 
+> 
+> -- 
+> Thanks & Regards,
+> Guru
+> 
+
 
