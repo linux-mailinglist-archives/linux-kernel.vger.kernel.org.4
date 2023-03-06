@@ -2,121 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9C46AB6CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFD66AB6D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjCFHMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 02:12:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S229591AbjCFHNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 02:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCFHMW (ORCPT
+        with ESMTP id S229450AbjCFHNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 02:12:22 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 334BBAD1B;
-        Sun,  5 Mar 2023 23:12:21 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3267Bc41005636;
-        Mon, 6 Mar 2023 08:11:38 +0100
-Date:   Mon, 6 Mar 2023 08:11:38 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Vegard Nossum <vegard.nossum@oracle.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Jiri Kosina <jkosina@suse.cz>,
-        Solar Designer <solar@openwall.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Subject: Re: [PATCH v3 0/7] Documentation/security-bugs: overhaul
-Message-ID: <ZAWSKrbaQ6nm3qNe@1wt.eu>
-References: <20230305220010.20895-1-vegard.nossum@oracle.com>
+        Mon, 6 Mar 2023 02:13:46 -0500
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BF2AD3D;
+        Sun,  5 Mar 2023 23:13:44 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=0443564136=fe@dev.tdt.de>)
+        id 1pZ52Q-000MKE-GB; Mon, 06 Mar 2023 08:13:38 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1pZ52P-000MJm-Fi; Mon, 06 Mar 2023 08:13:37 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id ED503240049;
+        Mon,  6 Mar 2023 08:13:36 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 5BC8E240040;
+        Mon,  6 Mar 2023 08:13:36 +0100 (CET)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id D65D82D022;
+        Mon,  6 Mar 2023 08:13:35 +0100 (CET)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230305220010.20895-1-vegard.nossum@oracle.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 06 Mar 2023 08:13:35 +0100
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Lee Jones <lee@kernel.org>, u.kleine-koenig@pengutronix.de,
+        gregkh@linuxfoundation.org, pavel@ucw.cz,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        Eckert.Florian@googlemail.com
+Subject: Re: [PATCH v7 2/2] trigger: ledtrig-tty: add additional modes
+In-Reply-To: <be7c90cf-4c65-1cf0-3001-8706415c3d34@kernel.org>
+References: <20230222083335.847655-1-fe@dev.tdt.de>
+ <20230222083335.847655-3-fe@dev.tdt.de>
+ <20230303141139.GP2420672@google.com>
+ <be7c90cf-4c65-1cf0-3001-8706415c3d34@kernel.org>
+Message-ID: <4e8661601efcdcf8b5a42de8c80ac7d8@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-purgate-ID: 151534::1678086818-C3FE6839-286E5715/0/0
+X-purgate: clean
+X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vegard,
 
-first, thanks for doing this work.
 
-On Sun, Mar 05, 2023 at 11:00:03PM +0100, Vegard Nossum wrote:
-> Probably the easiest way to see the end result of this series is to view the
-> rendered HTML which I've put here:
-> https://vegard.github.io/security-v3/Documentation/output/process/security-bugs.html
+On 2023-03-06 07:57, Jiri Slaby wrote:
+> On 03. 03. 23, 15:11, Lee Jones wrote:
+>> On Wed, 22 Feb 2023, Florian Eckert wrote:
+>>> @@ -113,21 +207,38 @@ static void ledtrig_tty_work(struct work_struct 
+>>> *work)
+>>>   		trigger_data->tty = tty;
+>>>   	}
+>>>   -	ret = tty_get_icount(trigger_data->tty, &icount);
+>>> -	if (ret) {
+>>> -		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped 
+>>> polling\n");
+>>> -		mutex_unlock(&trigger_data->mutex);
+>>> -		return;
+>>> -	}
+>>> -
+>>> -	if (icount.rx != trigger_data->rx ||
+>>> -	    icount.tx != trigger_data->tx) {
+>>> -		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
+>>> -
+>>> -		trigger_data->rx = icount.rx;
+>>> -		trigger_data->tx = icount.tx;
+>>> -	} else {
+>>> -		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
+>>> +	switch (trigger_data->mode) {
+>>> +	case TTY_LED_CTS:
+>>> +		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
+>>> +		break;
+>>> +	case TTY_LED_DSR:
+>>> +		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
+>>> +		break;
+>>> +	case TTY_LED_CAR:
+>>> +		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
+>>> +		break;
+>>> +	case TTY_LED_RNG:
+>>> +		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
+>>> +		break;
+>>> +	case TTY_LED_CNT:
+>> 
+>> I believe this requires a 'fall-through' statement.
+> 
+> I don't think this is the case. Isn't fallthrough required only in
+> cases when there is at least one statement, i.e. a block?
 
-I'm seeing a few points that could be improved but I don't have much to
-propose right now, I'll just enumerate issues we've faced in the past or
-that continue to pop up from time to time and that require extra effort
-from the team:
+Jiri thanks for the advice
 
-  - I'm not seeing anywhere that the security list is *exclusively*
-    for kernel issues. That might explain why about once a week or so
-    we receive messages like "there's a bug in that userland tool" or
-    "we've found an XSS issue on your website". It's written that kernel
-    bugs should be reported to the security list but I think we should
-    strengthen that by adding "This list is exclusively used for Linux
-    kernel security reports, please do not report issues affecting any
-    other component there".
+I also understood that I only need the /* Fall through */ comment if I 
+also have at least one statement.
+Which is not the case there. So I would say that fits.
 
-  - we always need to be able to describe the nature of a bug in the
-    commit message so that if the patch is found to cause a regression,
-    its purpose can at least be understood and argumented. It happened
-    at least once that we were requested not to explain the details
-    because a paper was about to be issued, and that's not acceptable
-    at all because it means that it becomes very complicated to have
-    public discussions about possible forthcoming issues. I think that
-    after the paragraph suggesting that the details of an issue or its
-    exploit code might not always be published, it could be useful to
-    mention something along the fact that the reporter shall not
-    request the security team to withhold technical details about the
-    issue as long as it doesn't represent an imminent danger.
+For all other things, I am in the process of fixing that and sending a 
+v8 patchset.
 
-  - it's quite frequent that reporters post from dummy addresses,
-    looking like randomly generated ones (we even had one looking
-    like a smiley). It doesn't help to communicate with them at all.
-    I can understand how some working as consultants for a customer
-    would want to avoid disclosing a particular relation between their
-    finding and their customer, but at least they should indicate how
-    they should be called. I.e. "call me Margarett" is not difficult
-    and simplifies exchanges when the address is "69236836@example.com".
-    And often we see at the end that they're willing to provide a real
-    name to be credited for the finding, so most likely starting with
-    this real name could be easier.
-
-  - it's more a discussion for the list itself, but the wording continues
-    to make one think that the reporter should expect the list members to
-    develop a patch, while in practise the first thing that's asked is
-    "since you've studied the problem well, do you happen to have a patch?".
-    And it happened a few times that in response we got "oops sorry, I
-    analysed it wrong, there's no issue there". I think the text should
-    emphasize more on encouraging submitters to complete their work with
-    a patch proposal (that's also helpful to confirm an analysis). And
-    conversely I think that reports for non-immediately exploitable issues
-    that are found by code analyzers (and almost always come without a
-    patch) should not be sent to this list and should be discussed and
-    addressed publicly instead. It's more efficient and allows more
-    knowledgeable participants to have their say on the root cause of
-    the problem and its possible solutions. That's of course not always
-    the case, but common sense should prevail here.
-
-Thanks,
-Willy
+> 
+>> Documentation/process/deprecated.rst
+>> 
+>>> +	default:
+>>> +		ret = tty_get_icount(trigger_data->tty, &icount);
+>>> +		if (ret) {
+>>> +			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped 
+>>> polling\n");
+>>> +			mutex_unlock(&trigger_data->mutex);
+>>> +			return;
+>>> +		}
+>>> +
