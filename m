@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8B86AB453
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7326D6AB452
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjCFB0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 20:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        id S229702AbjCFB0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 20:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCFB0m (ORCPT
+        with ESMTP id S229484AbjCFB0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 20:26:42 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C78113523;
-        Sun,  5 Mar 2023 17:26:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678066001; x=1709602001;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=SYiWV6H9JK7F7vaGe6QefXnmtObmczypmjB7wdKdQiI=;
-  b=V6mZ0pHE7rUBLzbLq16ESR7umxMMGL6Lcct96+AeoHRSi8o+mpFnTnlJ
-   EOXrC+1aaB4H5xCJrZt3CKaW0lleq/SNN73MyemonvgDbUk5hl09NoEh5
-   emdPQDKOQK5X89Ss72Vz8h+bQo5sOK2pAKvr1iVRd1+PQz6mBS4IA2QIQ
-   Ljhb+Sdyl3VpdFVKnzLL96jedQS9yHImdLyZd/vhAJr1tkMW8fwftJlsO
-   ttilcqZaSQL/SMbIY28+aiF8dnbTeHbG/BJrh7SWakOfPMCQTseEunzwx
-   G89AkON6q8+NiN/xVgaxyy9qcWPvYsnvAx061KSB/aEnMLFj2UUrxZto4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="400269683"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="400269683"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 17:26:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="850121767"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="850121767"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 17:26:38 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] hotfixes for 6.3-rc1
-References: <20230304131528.4645d19a2ab897fb7518159e@linux-foundation.org>
-        <CAHk-=wj9guryjifHyr26w73ta+kNeoHtGde682Z5N6OSjKu4UQ@mail.gmail.com>
-        <20230304152058.de91bf7abf424383ce31d500@linux-foundation.org>
-        <CAHk-=wiHX2NQiVH8uQZ_U8vB=qnzmQHauGAqAkC=4ZWp95ya8w@mail.gmail.com>
-Date:   Mon, 06 Mar 2023 09:25:06 +0800
-In-Reply-To: <CAHk-=wiHX2NQiVH8uQZ_U8vB=qnzmQHauGAqAkC=4ZWp95ya8w@mail.gmail.com>
-        (Linus Torvalds's message of "Sat, 4 Mar 2023 15:37:11 -0800")
-Message-ID: <87jzzu7jt9.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 5 Mar 2023 20:26:35 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEE8F97C;
+        Sun,  5 Mar 2023 17:26:33 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVLTS4DTLz9tLG;
+        Mon,  6 Mar 2023 09:24:28 +0800 (CST)
+Received: from [10.67.110.218] (10.67.110.218) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 6 Mar 2023 09:26:31 +0800
+Message-ID: <acc08af9-fdb3-5451-5c53-44784982fe2a@huawei.com>
+Date:   Mon, 6 Mar 2023 09:26:31 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 5.15] usb: dwc3: dwc3-qcom: Add missing
+ platform_device_put() in dwc3_qcom_acpi_register_core
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <balbi@kernel.org>,
+        <lee.jones@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230303023439.774616-1-zhengyejian1@huawei.com>
+ <ZAIW9mkHpKKQyIK+@kroah.com>
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+In-Reply-To: <ZAIW9mkHpKKQyIK+@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.218]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,29 +54,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Linus,
-
-Linus Torvalds <torvalds@linux-foundation.org> writes:
-
-> On Sat, Mar 4, 2023 at 3:21=E2=80=AFPM Andrew Morton <akpm@linux-foundati=
-on.org> wrote:
+On 2023/3/3 23:49, Greg KH wrote:
+> On Fri, Mar 03, 2023 at 10:34:39AM +0800, Zheng Yejian wrote:
+>> From: Miaoqian Lin <linmq006@gmail.com>
 >>
->> Ah. Ying did it this way:
->
-> Yeah, I saw that patch flying past, but I actually think that it only
-> silences the warning almost by mistake. There's nothing fundamental in
-> there that a compiler wouldn't just follow across two assignments, and
-> it just happens to now not trigger any more.
->
-> Assigning to a union entry is a more fundamental operation in that
-> respect. Not that the compiler still doesn't see that it's assigning a
-> value that in the end is not really type compatible, so a different
-> version of gcc could still warn, but at that point I feel like it's
-> more of an actual compiler bug than just "oh, the compiler didn't
-> happen to follow the cast through a temporary".
+>> commit fa0ef93868a6062babe1144df2807a8b1d4924d2 upstream.
+>>
+>> Add the missing platform_device_put() before return from
+>> dwc3_qcom_acpi_register_core in the error handling case.
+>>
+>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>> Link: https://lore.kernel.org/r/20211231113641.31474-1-linmq006@gmail.com
+>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> CVE: CVE-2023-22995
+> 
+> That is a bogus CVE, please go revoke it.
 
-Yes.  Your fix is much better.  This can be used for
-__page_set_anon_rmap() family too to make the code look better?
+Agree. I see this CVE and its fixes information from NVD,
+so try to backport this patch to fix it:
+Link: https://nvd.nist.gov/vuln/detail/CVE-2023-22995
 
-Best Regards,
-Huang, Ying
+Then should I just remove the "CVE: " field and send a v2 patch?
+Or you mean "revoke" the CVE from NVD? I actually don't know how
+to do that :(
+
+> 
+> thanks,
+> 
+> greg k-h
