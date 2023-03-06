@@ -2,96 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C78D86AB8B3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 747156AB8BD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbjCFIqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49710 "EHLO
+        id S229590AbjCFIrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:47:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCFIqC (ORCPT
+        with ESMTP id S229600AbjCFIrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:46:02 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F3593
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:45:59 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id e13so7904001wro.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678092358;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KGgblINf1oSUrHE7vG5UT+0t4KWItuliO8YSeFEQXWY=;
-        b=iOJyqICbzCSAVKWpCfc6JpA9YbSYbxHXP4R5jAPaCHCsvueoKbxUQMlYCWgeLcrbge
-         Hncqgks31sxch5hNeBQqK7AENqtXDM8PGlZ6cTh5f86NaLzbFiqGx4WSupKawRwdp6E2
-         f8ODmJ9eqUvR9KcceYLmgQz+4kdBCnjeNtq8Pj2ANL44gtk/vn07L4AESDHjmP5tuf6k
-         0UKHXzk3KhV2mjSzwr9B+s8L7CkUKxmRrJCCeuyriS+00MWf7nCScqtTnrGZUU4Tebs2
-         kxXFmIBLzAkg3p36h37mkHUvEwyIlIw3C1/VsQkbr/ALxDPLFn6quZUHHuZZWCKu9XWP
-         vsEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678092358;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KGgblINf1oSUrHE7vG5UT+0t4KWItuliO8YSeFEQXWY=;
-        b=2otwt90YAeUko07PWFmdeGBTnVJOS0nixCbKpmf/1kppdT0snTkFU3EFZ+5Ush6IMB
-         4DswolF9GIa3sdC7LWrSKnRUS53KMNqVeQEvwYWl6uZeZjrEvWdkevYbXFbPWsUQ88Wb
-         zYTYds2QzZMicL7reX5F2diU6lDvZrWZ404fLGpXURAXlaFY+2ofQoXRw8FDB5Pxu27W
-         l6bQEAyIfFtf2etfVLqqfoV2zgsRGwm4lXdRXkxPrC+kUXV0TUThBsBiJQTpIQrtLrhU
-         VhfhO0iz/u/yZNNIwd4xrwqS8WaIMDgGc5rZ9q1vMcm5LnOQxthQFXvWYVAQKpbMvRws
-         elAA==
-X-Gm-Message-State: AO0yUKW+VMTRYmzVB6HcKjl8/SOHZMoW+zeDqeyXe6sxZGJEj2hDQ6Rw
-        KfjAdd+S5YuNBb/QE5UXSHcCag==
-X-Google-Smtp-Source: AK7set/Gb8DdX2nE0tkhozoqEePJKzDSd7X/y8H/U/U9bI2QOtXMyKO3rmaLpFPIItSL5DQyJNdN7A==
-X-Received: by 2002:a5d:5407:0:b0:2c6:676c:4af with SMTP id g7-20020a5d5407000000b002c6676c04afmr5664040wrv.36.1678092358179;
-        Mon, 06 Mar 2023 00:45:58 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id h18-20020a5d4312000000b002c7107ce17fsm9345093wrq.3.2023.03.06.00.45.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 00:45:57 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Da Xue <da@lessconfused.com>,
-        Carlo Caione <ccaione@baylibre.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230210-relax_dmt_limits-v2-1-318913f08121@baylibre.com>
-References: <20230210-relax_dmt_limits-v2-1-318913f08121@baylibre.com>
-Subject: Re: [PATCH v2] drm/meson/meson_venc: Relax the supported mode
- checks
-Message-Id: <167809235742.23820.6915365420027351819.b4-ty@linaro.org>
-Date:   Mon, 06 Mar 2023 09:45:57 +0100
+        Mon, 6 Mar 2023 03:47:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7616259EC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678092409;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vSd8hwHPbmWReXdvpQsZ0BwbyP6BUUMBochFuTwRaSI=;
+        b=Z5UzqyrdNuLHXYKFgTR+1L1jf9bCb254Gqyxo9Adl6EbwuplEOmF/1Gw2frSmvzgiqi/1d
+        f7zeXthEWhRxPl0Uy3+veZU9ER6jJl+jEpgyXYrOmDbINPux2NKyusGg0iYNNlENvX3Euq
+        pNnG8dA3bjrYo8n3Smdjvk00AnTQPeU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-100-LYVAfDgZPR-21MvuG0sNlw-1; Mon, 06 Mar 2023 03:46:44 -0500
+X-MC-Unique: LYVAfDgZPR-21MvuG0sNlw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2893E802C18;
+        Mon,  6 Mar 2023 08:46:43 +0000 (UTC)
+Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 20EFAC16029;
+        Mon,  6 Mar 2023 08:46:41 +0000 (UTC)
+Date:   Mon, 6 Mar 2023 16:46:38 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] mips: add <asm-generic/io.h> including
+Message-ID: <ZAWobtBuBYBng6s+@MiWiFi-R3L-srv>
+References: <20230303102817.212148-1-bhe@redhat.com>
+ <20230303102817.212148-2-bhe@redhat.com>
+ <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Mon, 13 Feb 2023 10:32:09 +0100, Carlo Caione wrote:
-> Relax a bit the supported modes list by including also 480x1920 and
-> 400x1280. This was actually tested on real hardware and it works
-> correctly.
+On 03/03/23 at 01:40pm, Arnd Bergmann wrote:
+> On Fri, Mar 3, 2023, at 11:28, Baoquan He wrote:
+> > With the adding, some default ioremap_xx methods defined in
+> > asm-generic/io.h can be used. E.g the default ioremap_uc() returning
+> > NULL.
+> >
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Cc: Helge Deller <deller@gmx.de>
+> > Cc: Serge Semin <fancer.lancer@gmail.com>
+> > Cc: Florian Fainelli <f.fainelli@gmail.com>
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > Cc: linux-mips@vger.kernel.org
 > 
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 > 
+> I think this is all good. I had look at what cleanups we could do as
+> follow-ups:
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next-fixes)
+Thanks a lot for careful reviewing and great suggestions.
 
-[1/1] drm/meson/meson_venc: Relax the supported mode checks
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=bf458e5b139894234444e4f88500616a8398b719
+> 
+> > +#define phys_to_virt phys_to_virt
+> >  static inline void * phys_to_virt(unsigned long address)
+> >  {
+> >  	return __va(address);
+> 
+> This is the same as the asm-generic version, so the mips definition
+> is no longer needed.
 
--- 
-Neil
+Agree, I can clean this up with a followup patch.
+
+> 
+> > @@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
+> >  __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
+> >  #endif
+> > 
+> > +#define readb readb
+> > +#define readw readw
+> > +#define readl readl
+> > +#define writeb writeb
+> > +#define writew writew
+> > +#define writel writel
+> > +
+> > +#ifdef CONFIG_64BIT
+> > +#define readq readq
+> > +#define writeq writeq
+> > +#define __raw_readq __raw_readq
+> > +#define __raw_writeq __raw_writeq
+> > +#endif
+> > +
+> > +#define __raw_readb __raw_readb
+> > +#define __raw_readw __raw_readw
+> > +#define __raw_readl __raw_readl
+> > +#define __raw_writeb __raw_writeb
+> > +#define __raw_writew __raw_writew
+> > +#define __raw_writel __raw_writel
+> 
+> The mips code defines the __raw variants with slightly different
+> semantics on both barriers and byteswap, which makes it impractical
+> to share any of the above.				
+> 
+> > +#define memset_io memset_io
+> >  static inline void memset_io(volatile void __iomem *addr, unsigned 
+> > char val, int count)
+> >  {
+> >  	memset((void __force *) addr, val, count);
+> >  }
+> > +#define memcpy_fromio memcpy_fromio
+> >  static inline void memcpy_fromio(void *dst, const volatile void 
+> > __iomem *src, int count)
+> >  {
+> >  	memcpy(dst, (void __force *) src, count);
+> >  }
+> > +#define memcpy_toio memcpy_toio
+> 
+> These are again the same as the generic version
+
+OK, can remove this with the above change.
 
