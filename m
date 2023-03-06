@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF0C6ABE0E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5997E6ABE10
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjCFLVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
+        id S229976AbjCFLVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:21:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjCFLVs (ORCPT
+        with ESMTP id S229591AbjCFLVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:21:48 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2283A23DB8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:21:46 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id r18so8428849wrx.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:21:46 -0800 (PST)
+        Mon, 6 Mar 2023 06:21:49 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CCD241F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:21:47 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id l25so8425097wrb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:21:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1678101704;
+        d=isovalent.com; s=google; t=1678101706;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mBCO1ODrSOtxrm7KI3FciI/Fd2EO5bZOq9SR2Pr2KQs=;
-        b=BHYFzYZCBN/WwySXcXoOsvWDvZuykM3KJj49UVHX585BEhnVT6uFntD7YDYyg9OEzV
-         SkaDKGPp9C4dR2uHh+bK/oO7bVHG5hkzbLkWVNGwume7IyiF7OkmB3dj/CZ3mBdt40cp
-         nhq2gi/vmqHsFceeJpQi57UdAUw376YLxhVPyVCDv20ycgH0cfOxK8WlUh8/YmZ/Yh9Y
-         nGt8v/JM+glzwW9MAiqxe6BiTnBlD2FSMoFxXkSiZGd9BO6ighR+B+qwPWlZrDaXK5im
-         DgokeZxMgKJtBHT8+IrjwqBzRNuM1y/6pIpC6tTrCFaJjp/Sn168hi887SDBfFAzsGxK
-         HmUg==
+        bh=mFoPMccumpB7Jg6MG/+Y9XEhQvfr9CtFnuJx3l1V4DE=;
+        b=d8mXmXI3nA2pSmxPOcpNa0FlSQv089G1qG8NhyBEUzH7S6WGN7qoymBEwZFuPSe6b+
+         2x2/EwY+qEWka9m1n7nfmP/FNT3edecUvZnVWcEcHXCyJa3r6RX/lybe6q3lZC0eWLyY
+         awsfaHqKxSUwmGhYEM840o56zqy6r11AmjU1759Ax849jgoCSXJn+9FNzQaCGDp5P6SZ
+         sZytn+bo3cwrKmLZDo1CAYSuzhuoZQBPbDydT7zLK1KA4zapzlKfoFu6PCwd9/HZZlIW
+         QVl+vfpLVJ0z+aWko6MBsTeluzPvma1unkilApssCEN+jWPhoVzQalLL40z1dVusXSgd
+         aD8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678101704;
+        d=1e100.net; s=20210112; t=1678101706;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mBCO1ODrSOtxrm7KI3FciI/Fd2EO5bZOq9SR2Pr2KQs=;
-        b=AuRHjTaxnQDb1+arprkuBFpttzPXYa0e74j1zNKzUS9BQzTfo5HaRkf62ZEirjXC00
-         FS/h4hYKQfl7eXxUtEypQajTl8sI3QIQ2FxZ3jiNtLMGi570DQ0H+KVTem3y++gjV0MK
-         JREVD5xMWmGAVQuajZICJ8houuyEKYaXuzlSdsyrYzxDplS9wLVFt3Lih2zudpWXFybI
-         uD3uuvA/ABau/Ff4iwrnP69/Mvz8UEcf9kX6BRN6evuLVmyOfSWmGKakFDbEi0Z3oWmh
-         +Lcmkxs9gs3urPJb9D2pL3kmpayQj1KlvwyxGyTh+HUinxyR47xMkF0jA7aOPWvtQ02C
-         e69Q==
-X-Gm-Message-State: AO0yUKWzCVTAfU7jPB52EQICazg/OwzxDsDapWyO8q4hd007RDktHbNI
-        +lfynQ5YLmPeMwLxFNzkpbRAuw==
-X-Google-Smtp-Source: AK7set8mXG3+3H8+RgzvRZ5+qigNreyqYeglB2EGN54BzTZcMhoZWLZOtmy7YS41mGMFjVfX7yCwow==
-X-Received: by 2002:a05:6000:1373:b0:2cc:4ed1:f84f with SMTP id q19-20020a056000137300b002cc4ed1f84fmr6132117wrz.53.1678101704623;
-        Mon, 06 Mar 2023 03:21:44 -0800 (PST)
+        bh=mFoPMccumpB7Jg6MG/+Y9XEhQvfr9CtFnuJx3l1V4DE=;
+        b=TJcQhai7hzt4OcScu5SfXnU31OdXA+PpcafkRFelU/7qLQNb9QYRFfvde6ODSq0Kwd
+         m7W14qUQA+qrPZ5iyP9jNEZ3fQGz+I7Spz4RlSEO7BHSmjg5Kkj9Tg2nKO1YJ3yEunmx
+         qPClMOcbF/qYJ9jX65M6oIKqulpgO5kJNAGt2WWVU5/O5BiU8BP17xjAecZnfLhskL1Y
+         bEkru4gfMouQii5Is+vbYQhPypRB0W8WvvzHN+fepM3JEW530fOonTBoan/6cjiQVL4m
+         LTwhE2jS2d/kGxIcIPRdifOZrFtVnyC+aGYuBkSHQLz5bRkQV2WxPdQoMpGvDrFvlS9E
+         BG/A==
+X-Gm-Message-State: AO0yUKXQICflWlbf3gfsHp98BZN2WuDPXVeA0IDVVAzc+jAwYPfAvgm6
+        OUXnEudjMaEpSycFoA1ZGW+gpg==
+X-Google-Smtp-Source: AK7set+Zu3b69i/KACJqyI3EmGDipLz+Du2Ldc2ipOzZBaSMCZeO6VIhMXQkvi9mRGC2wHk5+jm3nQ==
+X-Received: by 2002:a05:6000:1109:b0:2c9:9147:a710 with SMTP id z9-20020a056000110900b002c99147a710mr6968458wrw.43.1678101706049;
+        Mon, 06 Mar 2023 03:21:46 -0800 (PST)
 Received: from tpx1.lan (f.c.7.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff::7cf])
-        by smtp.gmail.com with ESMTPSA id j4-20020adfff84000000b002cda9aa1dc1sm9604854wrr.111.2023.03.06.03.21.43
+        by smtp.gmail.com with ESMTPSA id j4-20020adfff84000000b002cda9aa1dc1sm9604854wrr.111.2023.03.06.03.21.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 03:21:44 -0800 (PST)
+        Mon, 06 Mar 2023 03:21:45 -0800 (PST)
 From:   Lorenz Bauer <lorenz.bauer@isovalent.com>
 X-Google-Original-From: Lorenz Bauer <lmb@isovalent.com>
-To:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Cc:     Lorenz Bauer <lmb@isovalent.com>, Martin KaFai Lau <kafai@fb.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 1/2] btf: fix resolving BTF_KIND_VAR after ARRAY, STRUCT, UNION, PTR
-Date:   Mon,  6 Mar 2023 11:21:37 +0000
-Message-Id: <20230306112138.155352-2-lmb@isovalent.com>
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc:     Lorenz Bauer <lmb@isovalent.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v2 2/2] selftests/bpf: check that modifier resolves after pointer
+Date:   Mon,  6 Mar 2023 11:21:38 +0000
+Message-Id: <20230306112138.155352-3-lmb@isovalent.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230306112138.155352-1-lmb@isovalent.com>
 References: <20230306112138.155352-1-lmb@isovalent.com>
@@ -80,89 +81,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-btf_datasec_resolve contains a bug that causes the following BTF
-to fail loading:
+Add a regression test that ensures that a VAR pointing at a
+modifier which follows a PTR (or STRUCT or ARRAY) is resolved
+correctly by the datasec validator.
 
-    [1] DATASEC a size=2 vlen=2
-        type_id=4 offset=0 size=1
-        type_id=7 offset=1 size=1
-    [2] INT (anon) size=1 bits_offset=0 nr_bits=8 encoding=(none)
-    [3] PTR (anon) type_id=2
-    [4] VAR a type_id=3 linkage=0
-    [5] INT (anon) size=1 bits_offset=0 nr_bits=8 encoding=(none)
-    [6] TYPEDEF td type_id=5
-    [7] VAR b type_id=6 linkage=0
-
-This error message is printed during btf_check_all_types:
-
-    [1] DATASEC a size=2 vlen=2
-        type_id=7 offset=1 size=1 Invalid type
-
-By tracing btf_*_resolve we can pinpoint the problem:
-
-    btf_datasec_resolve(depth: 1, type_id: 1, mode: RESOLVE_TBD) = 0
-        btf_var_resolve(depth: 2, type_id: 4, mode: RESOLVE_TBD) = 0
-            btf_ptr_resolve(depth: 3, type_id: 3, mode: RESOLVE_PTR) = 0
-        btf_var_resolve(depth: 2, type_id: 4, mode: RESOLVE_PTR) = 0
-    btf_datasec_resolve(depth: 1, type_id: 1, mode: RESOLVE_PTR) = -22
-
-The last invocation of btf_datasec_resolve should invoke btf_var_resolve
-by means of env_stack_push, instead it returns EINVAL. The reason is that
-env_stack_push is never executed for the second VAR.
-
-    if (!env_type_is_resolve_sink(env, var_type) &&
-        !env_type_is_resolved(env, var_type_id)) {
-        env_stack_set_next_member(env, i + 1);
-        return env_stack_push(env, var_type, var_type_id);
-    }
-
-env_type_is_resolve_sink() changes its behaviour based on resolve_mode.
-For RESOLVE_PTR, we can simplify the if condition to the following:
-
-    (btf_type_is_modifier() || btf_type_is_ptr) && !env_type_is_resolved()
-
-Since we're dealing with a VAR the clause evaluates to false. This is
-not sufficient to trigger the bug however. The log output and EINVAL
-are only generated if btf_type_id_size() fails.
-
-    if (!btf_type_id_size(btf, &type_id, &type_size)) {
-        btf_verifier_log_vsi(env, v->t, vsi, "Invalid type");
-        return -EINVAL;
-    }
-
-Most types are sized, so for example a VAR referring to an INT is not a
-problem. The bug is only triggered if a VAR points at a modifier. Since
-we skipped btf_var_resolve that modifier was also never resolved, which
-means that btf_resolved_type_id returns 0 aka VOID for the modifier.
-This in turn causes btf_type_id_size to return NULL, triggering EINVAL.
-
-To summarise, the following conditions are necessary:
-
-- VAR pointing at PTR, STRUCT, UNION or ARRAY
-- Followed by a VAR pointing at TYPEDEF, VOLATILE, CONST, RESTRICT or
-  TYPE_TAG
-
-The fix is to reset resolve_mode to RESOLVE_TBD before attempting to
-resolve a VAR from a DATASEC.
-
-Fixes: 1dc92851849c ("bpf: kernel side support for BTF Var and DataSec")
 Signed-off-by: Lorenz Bauer <lmb@isovalent.com>
 ---
- kernel/bpf/btf.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 28 ++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index fa22ec79ac0e..73780748404c 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4569,6 +4569,7 @@ static int btf_datasec_resolve(struct btf_verifier_env *env,
- 	struct btf *btf = env->btf;
- 	u16 i;
- 
-+	env->resolve_mode = RESOLVE_TBD;
- 	for_each_vsi_from(i, v->next_member, v->t, vsi) {
- 		u32 var_type_id = vsi->type, type_id, type_size = 0;
- 		const struct btf_type *var_type = btf_type_by_id(env->btf,
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index cbb600be943d..210d643fda6c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -879,6 +879,34 @@ static struct btf_raw_test raw_tests[] = {
+ 	.btf_load_err = true,
+ 	.err_str = "Invalid elem",
+ },
++{
++	.descr = "var after datasec, ptr followed by modifier",
++	.raw_types = {
++		/* .bss section */				/* [1] */
++		BTF_TYPE_ENC(NAME_TBD, BTF_INFO_ENC(BTF_KIND_DATASEC, 0, 2),
++			sizeof(void*)+4),
++		BTF_VAR_SECINFO_ENC(4, 0, sizeof(void*)),
++		BTF_VAR_SECINFO_ENC(6, sizeof(void*), 4),
++		/* int */					/* [2] */
++		BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),
++		/* int* */					/* [3] */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 2),
++		BTF_VAR_ENC(NAME_TBD, 3, 0),			/* [4] */
++		/* const int */					/* [5] */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_CONST, 0, 0), 2),
++		BTF_VAR_ENC(NAME_TBD, 5, 0),			/* [6] */
++		BTF_END_RAW,
++	},
++	.str_sec = "\0a\0b\0c\0",
++	.str_sec_size = sizeof("\0a\0b\0c\0"),
++	.map_type = BPF_MAP_TYPE_ARRAY,
++	.map_name = ".bss",
++	.key_size = sizeof(int),
++	.value_size = sizeof(void*)+4,
++	.key_type_id = 0,
++	.value_type_id = 1,
++	.max_entries = 1,
++},
+ /* Test member exceeds the size of struct.
+  *
+  * struct A {
 -- 
 2.39.2
 
