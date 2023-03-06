@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972CD6AC4DE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A216AC4E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjCFP15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S229953AbjCFP2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjCFP1s (ORCPT
+        with ESMTP id S229846AbjCFP1w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:27:48 -0500
+        Mon, 6 Mar 2023 10:27:52 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77F50311E6;
-        Mon,  6 Mar 2023 07:27:40 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C48F3301A8;
+        Mon,  6 Mar 2023 07:27:43 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B6B213D5;
-        Mon,  6 Mar 2023 07:28:23 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E68521424;
+        Mon,  6 Mar 2023 07:28:26 -0800 (PST)
 Received: from e127643.broadband (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 90B593F71A;
-        Mon,  6 Mar 2023 07:27:37 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E3A703F71A;
+        Mon,  6 Mar 2023 07:27:40 -0800 (PST)
 From:   James Clark <james.clark@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     James Clark <james.clark@arm.com>,
@@ -39,9 +39,9 @@ Cc:     James Clark <james.clark@arm.com>,
         linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH 1/4] devres: Provide krealloc_array
-Date:   Mon,  6 Mar 2023 15:27:20 +0000
-Message-Id: <20230306152723.3090195-2-james.clark@arm.com>
+Subject: [PATCH 2/4] hwmon: pmbus: Use devm_krealloc_array
+Date:   Mon,  6 Mar 2023 15:27:21 +0000
+Message-Id: <20230306152723.3090195-3-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230306152723.3090195-1-james.clark@arm.com>
 References: <20230306152723.3090195-1-james.clark@arm.com>
@@ -55,48 +55,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no krealloc_array equivalent in devres. Users would have to
-do their own multiplication overflow check so provide one.
+Now that it exists, use it instead of doing the multiplication manually.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- Documentation/driver-api/driver-model/devres.rst |  1 +
- include/linux/device.h                           | 10 ++++++++++
- 2 files changed, 11 insertions(+)
+ drivers/hwmon/pmbus/pmbus_core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-index 4249eb4239e0..8be086b3f829 100644
---- a/Documentation/driver-api/driver-model/devres.rst
-+++ b/Documentation/driver-api/driver-model/devres.rst
-@@ -364,6 +364,7 @@ MEM
-   devm_kmalloc_array()
-   devm_kmemdup()
-   devm_krealloc()
-+  devm_krealloc_array()
-   devm_kstrdup()
-   devm_kstrdup_const()
-   devm_kvasprintf()
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 1508e637bb26..0dd5956c8516 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -223,6 +223,16 @@ static inline void *devm_kcalloc(struct device *dev,
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 95e95783972a..e7bee25a3706 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1190,9 +1190,9 @@ static int pmbus_add_attribute(struct pmbus_data *data, struct attribute *attr)
  {
- 	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
- }
-+static inline __realloc_size(3, 4) void * __must_check
-+devm_krealloc_array(struct device *dev, void *p, size_t new_n, size_t new_size, gfp_t flags)
-+{
-+	size_t bytes;
-+
-+	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
-+		return NULL;
-+	return devm_krealloc(dev, p, bytes, flags);
-+}
-+
- void devm_kfree(struct device *dev, const void *p);
- char *devm_kstrdup(struct device *dev, const char *s, gfp_t gfp) __malloc;
- const char *devm_kstrdup_const(struct device *dev, const char *s, gfp_t gfp);
+ 	if (data->num_attributes >= data->max_attributes - 1) {
+ 		int new_max_attrs = data->max_attributes + PMBUS_ATTR_ALLOC_SIZE;
+-		void *new_attrs = devm_krealloc(data->dev, data->group.attrs,
+-						new_max_attrs * sizeof(void *),
+-						GFP_KERNEL);
++		void *new_attrs = devm_krealloc_array(data->dev, data->group.attrs,
++						      new_max_attrs, sizeof(void *),
++						      GFP_KERNEL);
+ 		if (!new_attrs)
+ 			return -ENOMEM;
+ 		data->group.attrs = new_attrs;
 -- 
 2.34.1
 
