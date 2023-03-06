@@ -2,130 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADD96AC7D0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC886AC89D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbjCFQYM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Mar 2023 11:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S231151AbjCFQrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:47:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCFQXd (ORCPT
+        with ESMTP id S230337AbjCFQqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:23:33 -0500
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE81772A5;
-        Mon,  6 Mar 2023 08:22:12 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id bk32so7441131oib.10;
-        Mon, 06 Mar 2023 08:22:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678119639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mupyAyevtyw777NCln3ZN8/0+T6wpA1bTYPrDt/CRuI=;
-        b=50QnuEUqBeNHikUseouP2vP/iBZsEM3nKIY5nIfU9YrzAmk3nQMxQnJ/xMXcVsDnD9
-         pYGjqSvmn85stmeHSqIKoq0sobzFFcuO+YKwNHNId/WV1+ruC2UQHpj/vvl0WMUD2XvO
-         j8EDdKCBwpmSSGTyXigy4fFpztXdA4oLXF3vmyhcMDjiP6Ow4453EthNSe8OYKj+3zcY
-         QE/FoOyFWT1WcAOu/5nXbXtciT6oUn7I7/ERp+aOtvnJ3serULj1+2cyfKTrEvIiI4iw
-         GGE+PZu5PDedyCe3WVY9DVkA/VigB8PBBz91cEXFXa0aB2mW8AYCvyQnbW6JX1ta+DCE
-         etfQ==
-X-Gm-Message-State: AO0yUKVyVOUtws71wsvX+RRqaYi14mG0+2sT4sn0UrtBXR8VjtSnuRQO
-        iMFUUFnUYdbO1wwZaXN6gJESVmpZylDF5Q==
-X-Google-Smtp-Source: AK7set8UAU+KItRxBGyr0qHHIdmVXj93pjZrIF0CuNssDBoZeFJ2wK0HnNJ/jyFKqt77s8rJEDCVHw==
-X-Received: by 2002:a05:6808:b2a:b0:37f:acda:9668 with SMTP id t10-20020a0568080b2a00b0037facda9668mr6432393oij.12.1678119638904;
-        Mon, 06 Mar 2023 08:20:38 -0800 (PST)
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com. [209.85.160.47])
-        by smtp.gmail.com with ESMTPSA id r64-20020acac143000000b0037834b1a20bsm4171130oif.0.2023.03.06.08.20.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 08:20:38 -0800 (PST)
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-17671fb717cso10427795fac.8;
-        Mon, 06 Mar 2023 08:20:38 -0800 (PST)
-X-Received: by 2002:a5b:18e:0:b0:967:f8b2:7a42 with SMTP id
- r14-20020a5b018e000000b00967f8b27a42mr5167551ybl.7.1678119226571; Mon, 06 Mar
- 2023 08:13:46 -0800 (PST)
+        Mon, 6 Mar 2023 11:46:48 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97603E09E;
+        Mon,  6 Mar 2023 08:45:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1678119250; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=r0oJisPmVmiGhfBOquIsvykEt6GuagiLlQN3/aghpdIAGN6xOQzmJJS77ZXM68sjkY
+    I8wZnax46XbT9eUc+4dfK/xGTaaRA3GQJtWIIITRmKeFKY307FaFst3ZqiNsdmJ3zgzs
+    oKXiI4sRa7ndWY6qIsTTXT8agFnhT2ThvN590G1irEy0/zh8mlHXlwoj4xfvM2v3+J5B
+    mlOZHmCGiwmmtJZ9GjKtNYgfGZH+LYsye3l4dbqkScNDujxbPHkea2B7XJleJ+lhRlHF
+    qDEWhmWVJG+rashB/PMmNwvkqTx9fA/pjJQTelfWz2NGSJOzqzb5CEIUIvMKRsh0a3Ib
+    XXZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1678119250;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=E5MgXFLGzXqV3kZmdi0um2+BJZgLBqfV9CY4BZsWLcI=;
+    b=oJKShJQQjwd41p6Hkl3y02zdklHVMxlsNG2nS3axF1McBpSRf+5kQLNyEJ1wC1rW2c
+    Sue1UdycnksjwLZJ4+34rQn7BHYB9gCkBpXHtr3nAZ71lsaDwohImCnq7s+nWdjYGJxX
+    +pj8SPm8g7byQ+V95NEE9eQUBGT/R6Pzw/JOaNWLBSyVUYfaJmi2u0fiuhSeVWzWrqxh
+    BH5fABJ8aTN6D2Z61gJ5HM401Y+Azdh2R5b/GQx6fXsg+GzBY7kgQcPb95pJ6htKAZyq
+    xWwUv3MurZZwcOpmErASNJYuf4ITZ7fLljVVvLrktI4qDWTBKCBVU5FMhj1npV5Lo2Ct
+    cdMQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1678119250;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=E5MgXFLGzXqV3kZmdi0um2+BJZgLBqfV9CY4BZsWLcI=;
+    b=YGr2At5ociglkixjIGpZr9H4tKF7PQcOrsKysdzF+u/wz1H/1QQdImdpI/nwF8IQyT
+    9X2m4U8BHBwnk32YdA3JkmI3bh3/j19WQi2Y57lFWupj0lrFnMdDR8u4AsabVWr3Ia4Q
+    Ie6GkaXJ4yfzpId/2FbxeY1S28SWKI/DPuQxlxclOapv9oDISyTmEO9Ax4/QBvgQbIgJ
+    1eN65wualCMaDkLWDd3ZT2wA9zfK77e7H1l5HIl089k9vbv4n69knWXQSUpicJ2JMnhO
+    z1dZsZpbpPIPDLVAvWjsTMldwIfZ+mnCS6RB/LDLea6t9Y4YNZGnd76Nllk90OTRSSbi
+    Qq6A==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKjXrKw8/qY="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.3.0 AUTH)
+    with ESMTPSA id jba5bez26GE9Jsp
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 6 Mar 2023 17:14:09 +0100 (CET)
+Date:   Mon, 6 Mar 2023 17:14:08 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v7 5/5] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
+Message-ID: <ZAYRUIg0SwKOnBGx@gerhold.net>
+References: <20230223153655.262783-1-bryan.odonoghue@linaro.org>
+ <20230223153655.262783-6-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-References: <20230306160016.4459-1-tzimmermann@suse.de> <20230306160016.4459-12-tzimmermann@suse.de>
-In-Reply-To: <20230306160016.4459-12-tzimmermann@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Mar 2023 17:13:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVDr19p3GtR4n_hJAtc_RX+VJwVfU1Mzvtka9er+WS8bg@mail.gmail.com>
-Message-ID: <CAMuHMdVDr19p3GtR4n_hJAtc_RX+VJwVfU1Mzvtka9er+WS8bg@mail.gmail.com>
-Subject: Re: [PATCH 11/99] fbdev/aty: Duplicate video-mode option string
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, paulus@samba.org, benh@kernel.crashing.org,
-        linux@armlinux.org.uk, pjones@redhat.com, timur@kernel.org,
-        adaplas@gmail.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
-        mbroemme@libmpq.org, thomas@winischhofer.net,
-        James.Bottomley@hansenpartnership.com, spock@gentoo.org,
-        sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        geert+renesas@glider.be, corbet@lwn.net,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230223153655.262783-6-bryan.odonoghue@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
-
-Thanks for your patch!
-
-On Mon, Mar 6, 2023 at 5:00 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Assume that the driver does not own the option string or its substrings
-> and hence duplicate the option string for the video mode. The driver only
-> parses the option string once as part of module initialization, so use
-> a static buffer to store the duplicated mode option. Linux automatically
-> frees the memory upon releasing the module.
-
-Are you sure about that?
-All of this code is inside "#ifndef MODULE".
-In the aty128fb case, the function is not marked __init.
-Enabling these 3 drivers adds 3x256 bytes of static buffer, more
-if you enable more fbdev drivers.
-
-> Done in preparation of switching the driver to struct option_iter and
-> constifying the option string.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-
-> --- a/drivers/video/fbdev/aty/aty128fb.c
-> +++ b/drivers/video/fbdev/aty/aty128fb.c
-> @@ -1723,7 +1723,17 @@ static int aty128fb_setup(char *options)
->                         continue;
->                 }
->  #endif /* CONFIG_PPC_PMAC */
-> -               mode_option = this_opt;
-> +               {
-> +                       static char mode_option_buf[256];
-> +                       int ret;
+On Thu, Feb 23, 2023 at 03:36:55PM +0000, Bryan O'Donoghue wrote:
+> Add a basic booting DTS for the Sony Xperia M4 Aqua aka "tulip".
+> 
+> Tulip is paired with:
+> 
+> - wcn3660
+> - smb1360 battery charger
+> - 720p Truly NT35521 Panel
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../qcom/msm8939-sony-xperia-kanuti-tulip.dts | 457 ++++++++++++++++++
+>  2 files changed, 458 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 2983e83a19061..81a38d46deba5 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -29,6 +29,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-sony-xperia-kanuti-tulip.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> new file mode 100644
+> index 0000000000000..c646fada11a5a
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> @@ -0,0 +1,457 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022-2023, Bryan O'Donoghue.
+> + *
+> + */
 > +
-> +                       ret = snprintf(mode_option_buf, sizeof(mode_option_buf), "%s", this_opt);
-> +                       if (WARN(ret < 0, "aty128: ignoring invalid option, ret=%d\n", ret))
-> +                               continue;
-> +                       if (WARN(ret >= sizeof(mode_option_buf), "aty128fb: option too long\n"))
-> +                               continue;
-> +                       mode_option = mode_option_buf;
-> +               }
->         }
->         return 0;
->  }
-eturn 0;
->  }
+> +/dts-v1/;
+> +
+> +#include "msm8939.dtsi"
+> +#include "msm8939-pm8916.dtsi"
+> +#include <dt-bindings/arm/qcom,ids.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> +
+> +/ {
+> +	model = "Sony Xperia M4 Aqua";
+> +	compatible = "sony,kanuti-tulip", "qcom,msm8939";
+> +
+> +	qcom,board-id = <8 0>;
 
-Gr{oetje,eeting}s,
+Could use QCOM_BOARD_ID_MTP instead of 8 for more clarity here.
 
-                        Geert
+> [...]
+> +&dsi0 {
+> +	status = "okay";
+> +
+> +	panel@0 {
+> +		compatible = "sony,tulip-truly-nt35521";
+> +		reg = <0>;
+> +		positive5-supply = <&vreg_positive5_reg>;
+> +		negative5-supply = <&vreg_negative5_reg>;
+> +		reset-gpios = <&tlmm 25 GPIO_ACTIVE_LOW>;
+> +		enable-gpios = <&tlmm 10 GPIO_ACTIVE_LOW>;
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Have you tested this? While this matches the (likely incorrect)
+bindings, as far as I can tell the Linux tulip-truly-nt35521 driver
+wants "backlight-gpios" instead of "enable-gpios". And it's not an
+optional GPIO so I don't quite understand how the existing driver could
+probe successfully with what you have here.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> +
+> +		ports {
+> +			port {
+> +				panel_in: endpoint {
+> +					remote-endpoint = <&dsi0_out>;
+> +				};
+> +			};
+> +		};
+> +
+> +	};
+> +};
+> +
+> [...]
+> +&tlmm {
+> +	ak8963_default: ak8963-default-state {
+> +		pins = "gpio69";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	ak8963_sleep: ak8963-sleep-state {
+> +		pins = "gpio69";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	/* Ambient light and proximity sensor apds9930 and apds9900 */
+> +	apds99xx_default: apds99xx-default-state {
+> +		pins = "gpio113";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	apds99xx_sleep: apds99xx-sleep-state {
+> +		pins = "gpio113";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cam_sensor_flash_default: cam-sensor-flash-default-state {
+> +		pins = "gpio98", "gpio97";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cci1_default: cci1-default-state {
+> +		pins = "gpio31", "gpio32";
+> +		function = "cci_i2c";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cdc_ext_spk_pa_active: cdc-ext-spk-pa-on-state {
+> +		pins = "gpio0";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		output-low;
+> +	};
+> +
+> +	cdc_ext_spk_pa_sus: cdc-ext-spk-pa-off-state {
+> +		pins = "gpio0";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cdc_slim_lines_act: lines-on-state {
+> +		pins = "gpio63";
+> +		function = "cdc_pdm0";
+> +		drive-strength = <8>;
+> +		output-high;
+> +	};
+> +
+> +	cdc_slim_lines_sus: lines-off-state {
+> +		pins = "gpio63";
+> +		function = "cdc_pdm0";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	cross_conn_det_act: lines-on-state {
+> +		pins = "gpio120";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <8>;
+> +		output-low;
+> +	};
+> +
+> +	cross_conn_det_sus: lines-off-state {
+> +		pins = "gpio120";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ext_buck_vsel: vsel0-state {
+> +		pins = "gpio111";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ext_cdc_tlmm_lines_act: tlmm-lines-on-state {
+> +		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <8>;
+> +	};
+> +
+> +	ext_cdc_tlmm_lines_sus: tlmm-lines-off-state {
+> +		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	gpio_key_suspend: gpio-key-suspend-state {
+> +		pins = "gpio107", "gpio108", "gpio109";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	negative5_reg_default: negative5-reg-default-state {
+> +		pins = "gpio17";
+> +		function = "gpio";
+> +		output-low;
+> +	};
+> +
+> +	positive5_reg_default: positive5-reg-default-state {
+> +		pins = "gpio114";
+> +		function = "gpio";
+> +		output-low;
+> +	};
+> +
+> +	/* Gyroscope and accelerometer sensor combo */
+> +	mpu6050_default: mpu6050-default-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	mpu6050_sleep: mpu6050-sleep-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	nfc_disable_active: nfc-disable-active-state {
+> +		pins = "gpio20";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nfc_disable_suspend: nfc-disable-suspend-state {
+> +		pins = "gpio20";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nfc_int_active: nfc-int-active-state {
+> +		pins = "gpio21";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nfc_int_suspend: nfc-int-suspend-state {
+> +		pins = "gpio21";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nt35521_te_default: nt35521-te-default-state {
+> +		pins = "gpio24";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	nt35521_backlight: nt35521-backlight-default-state {
+> +		pins = "gpio10";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <6>;
+> +	};
+> +
+> +	smb_int: smb-int-default-state {
+> +		pins = "gpio62";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ts_int_active: ts-int-active-state {
+> +		pins = "gpio13";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <16>;
+> +	};
+> +
+> +	ts_int_suspend: ts-int-suspend-state {
+> +		pins = "gpio13";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ts_reset_active: ts-reset-active-state {
+> +		pins = "gpio12";
+> +		function = "gpio";
+> +		bias-pull-up;
+> +		drive-strength = <16>;
+> +	};
+> +
+> +	ts_reset_suspend: ts-reset-suspend-state {
+> +		pins = "gpio12";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ts_release: ts-release-default-state {
+> +		pins = "gpio13", "gpio12";
+> +		function = "gpio";
+> +		bias-pull-down;
+> +		drive-strength = <2>;
+> +	};
+> +
+
+There are *a lot* of unused pinctrl entries here. If you don't reference
+them anywhere (by referencing them via label) they just waste space in
+the device tree. The GPIOs will still remain unconfigured.
+
+Please save them locally for later usage and only keep the used entries.
+This will ease review of upcoming patches since these are better
+understandable together with the actual device node making use of them.
+
+Thanks,
+Stephan
