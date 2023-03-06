@@ -2,85 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570716ACC26
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEDE6ACC3B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjCFSNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 13:13:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S229716AbjCFSQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 13:16:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjCFSNR (ORCPT
+        with ESMTP id S230228AbjCFSPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:13:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3386E684;
-        Mon,  6 Mar 2023 10:12:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1A7C6106E;
-        Mon,  6 Mar 2023 18:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F52C433D2;
-        Mon,  6 Mar 2023 18:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678126356;
-        bh=iySKmJ2aWJ/TsVLFiMQb56CpiMGPq3mQumEWAGlMXX8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IcCI3f17HnlxnVSWclCOnPr1C9yWyov/hgwRiShE4z+60/AoCWYrf6oBO0EF9KCe/
-         8ilkXVOh5xmEvsA7aOQBOaXMR+i7M9deOJdSghsBUm0MC/Wrhyd8E50Ku0GT3zLF0/
-         QxPCjGeKIA3DBqboIiWQDQJn0DZ5aD1XX9uZNjLJt+DxNJPT1+UFZOQ/c7w0miDNkc
-         4CbBbsPbD7hmGeCvqXvXPE3D2imL7v/23lusMs7dMlMiqya6XRX1m8TGwAL2JVF+vK
-         xM/ZRMSsfzBmuS5ypV7+n8lS6LJCM0TReCCxQp1cjcGw0LZSdH+VvL5iFcXdCXZWkc
-         xE+fxYBsuuS/w==
-Date:   Mon, 6 Mar 2023 10:12:34 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>, rbradford@rivosinc.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] virtio-net: Fix probe of virtio-net on kvmtool
-Message-ID: <20230306101234.08da367d@kernel.org>
-In-Reply-To: <20230305045249-mutt-send-email-mst@kernel.org>
-References: <20230223-virtio-net-kvmtool-v3-1-e038660624de@rivosinc.com>
-        <20230301093054-mutt-send-email-mst@kernel.org>
-        <CACGkMEsG10CWigz+S6JgSVK8XfbpT=L=30hZ8LDvohtaanAiZQ@mail.gmail.com>
-        <20230302044806-mutt-send-email-mst@kernel.org>
-        <20230303164603.7b35a76f@kernel.org>
-        <20230305045249-mutt-send-email-mst@kernel.org>
+        Mon, 6 Mar 2023 13:15:55 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364366423A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:15:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678126523; x=1709662523;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QBKCuwRTWEWe9JLzCDJ0AOkPJXI0vK4swr9jbHIDC0o=;
+  b=i7oRaHVQxuf/WL7+0lZJboXg/PBQANfNEurwHmjm2mg+CeFPQhwMKxfV
+   qMwEZY2kSbF1lnTbFn4cypkeXMoSM62eMfjs2rIUnifDIkoFLCVVWxRpr
+   fC/5LEBx7+tAUoPhGfn73y+Zh7+wSvi5J8/uBrL4yh3iJT8shRnp/8fvW
+   FZXFBnSoasl0QtIm/HLR4NUkC9SdkACZ9UJjHxhKd9P6Zjm24kVkh+vwO
+   jRb647J/yE+Kji2pXhBtiL7RocsvP9AXdgaO/Rr/zofnKXrVnAz/KQ948
+   eSNOW4CxLYs5UVwgorWb8oAmgpYB9dSlqWVprLSN/0IQP+5D6a59Uaz62
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="421907852"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="421907852"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 10:12:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="669547209"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="669547209"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.218.82])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 10:12:48 -0800
+Message-ID: <a316176e-35ce-38da-8054-cda7fd2e2a0a@intel.com>
+Date:   Mon, 6 Mar 2023 20:12:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH 1/1] perf tools: Add Adrian Hunter to MAINTAINERS as a
+ reviewer
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <ZAYosCjlzO9plAYO@kernel.org>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <ZAYosCjlzO9plAYO@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 5 Mar 2023 04:53:58 -0500 Michael S. Tsirkin wrote:
-> > > yes what we do work according to code.  So the documentation is wrong then?  
-> > 
-> > It's definitely incomplete but which part are you saying is wrong?  
+On 6/03/23 19:53, Arnaldo Carvalho de Melo wrote:
+> Please ack :-)
 > 
-> So it says:
->   2. netdev->features set contains features which are currently enabled
->      for a device.
+> --
 > 
-> ok so far.
-> But this part:
+> Adrian is the main author of the Intel PT codebase and has been
+> reviewing perf tooling patches consistently for a long time, so lets
+> reflect that in the MAINTAINERS file so that contributors add him to the
+> CC list in patch submissions.
 > 
->   This should be changed only by network core or in
->      error paths of ndo_set_features callback.
-> 
-> seems to say virtio should not touch netdev->features, no?
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Ian Rogers <irogers@google.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Link: https://lore.kernel.org/lkml/
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-Oh, I see, yes. We should add a mention of ndo_fix_features there,
-and perhaps "see Part II for more information"?.
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-The sentence reads like someone was trying to make sure drivers don't
-silently change features without calling netdev_update_features().
+> ---
+>  MAINTAINERS | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 66b5d5a51d5b1110..8e46fa10a631e4d6 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16425,6 +16425,7 @@ R:	Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>  R:	Jiri Olsa <jolsa@kernel.org>
+>  R:	Namhyung Kim <namhyung@kernel.org>
+>  R:	Ian Rogers <irogers@google.com>
+> +R:	Adrian Hunter <adrian.hunter@intel.com>
+>  L:	linux-perf-users@vger.kernel.org
+>  L:	linux-kernel@vger.kernel.org
+>  S:	Supported
+
