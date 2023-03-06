@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B6F6AD0D8
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF096AD0DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjCFVvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:51:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        id S229834AbjCFVwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:52:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCFVvS (ORCPT
+        with ESMTP id S229996AbjCFVwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:51:18 -0500
+        Mon, 6 Mar 2023 16:52:09 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4B867836;
-        Mon,  6 Mar 2023 13:51:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6766907E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:52:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B574260C8F;
-        Mon,  6 Mar 2023 21:51:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A272EC433D2;
-        Mon,  6 Mar 2023 21:51:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B9BED60F58
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 21:52:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFDA2C4339B;
+        Mon,  6 Mar 2023 21:52:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678139475;
-        bh=ZrJmhyMhkUzjCOjMoKs2veezt+FJkmiy4IanCPeTgjk=;
+        s=k20201202; t=1678139521;
+        bh=kO0Keh//hnfQf8ULbQJWCH8cX47nO17LVIchs+as6WU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FrdQhuBdaJwRseYaFYQvhZbNqmWMvL6JcWBgGrru0xtmfApoh9bVgDL91QyYtJu46
-         H0oW9+6Gb41u6zMft3CmOoGewTA/b511tB3pw+UFtseZhnAqGvLzrt540ZdkhRiX2Z
-         /A9jIQE3w/wZ/L7NHoa7CpXtnJf76tVy0GG5k2vGsDJT/jkLk4W2i7VrLHSZzae8dq
-         0dyXmg+0+BvTiMSGvNIsWIjKWXQtTgJYxbQ+92QO/94c4TZD2PS/IzkWFhz/mUqKLo
-         nOVVL59sstJYGawKikg5TZhc7C97QX0pzqe7PKg2o8jrSmz8QZcsfArVqle3tjmRNU
-         x6ME9yGFkfgpQ==
-Date:   Mon, 6 Mar 2023 21:51:09 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Sunil V L <sunilvl@ventanamicro.com>
-Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        'Conor Dooley ' <conor.dooley@microchip.com>,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
-Message-ID: <16007014-c5f2-4b07-baec-e19952236aa5@spud>
-References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+        b=YB3IQJ2xZiXWlJSkxMXIgc658PghDmAlpzfen7DzM6yBsYExhqY7DYF741alTyqRi
+         KoPeGZ99XE2t7ZQc86cJfnpXmQA1hXLiuPz7WTQlIlP4wOcdQt5E0W6w3kaXBUT7B3
+         +lEo80rezUP/7mpU9wFNdmaHAsoayTfEF8ZOxCiWohBBmYwHS4Ot/BbRd1q8O7nnMZ
+         KG1uuMAqQeaLZzkPiydzMLscJT+QCRpFb5TUrZvoh9t+dQseK0sjZulbHoO3DWsw7P
+         cxdKlQoMJ34cWpBofSl6UBH5qO9e6E+74Bp72zlQP5+C8VQDWAp0c8C8MGiMtPAgs+
+         oXVxtLf7w8ZDg==
+Date:   Mon, 6 Mar 2023 13:51:59 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Yonggil Song <yonggil.song@samsung.com>
+Cc:     Chao Yu <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "daehojeong@google.com" <daehojeong@google.com>,
+        Seokhwan Kim <sukka.kim@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>
+Subject: Re: [PATCH v2] f2fs: fix uninitialized skipped_gc_rwsem
+Message-ID: <ZAZgf4sbh14sVZMp@google.com>
+References: <CGME20230215024850epcms2p22be2cc864d82b44f31c19a7ef28770b6@epcms2p7>
+ <20230216071350epcms2p7b3f5f37b168b634ec7a7ba8555fd0b49@epcms2p7>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="27Tfh9qw3tZtvGh2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+In-Reply-To: <20230216071350epcms2p7b3f5f37b168b634ec7a7ba8555fd0b49@epcms2p7>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,307 +59,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 02/16, Yonggil Song wrote:
+> When f2fs skipped a gc round during victim migration, there was a bug which
+> would skip all upcoming gc rounds unconditionally because skipped_gc_rwsem
+> was not initialized. It fixes the bug by correctly initializing the
+> skipped_gc_rwsem inside the gc loop.
+> 
+> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
 
---27Tfh9qw3tZtvGh2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied with the below fix.
 
-Hey Sunil,
+Fixes: 6f8d4455060d ("f2fs: avoid fi->i_gc_rwsem[WRITE] lock in f2fs_gc"
 
-On Fri, Mar 03, 2023 at 07:06:27PM +0530, Sunil V L wrote:
-> This patch series enables the basic ACPI infrastructure for RISC-V.
-> Supporting external interrupt controllers is in progress and hence it is
-> tested using poll based HVC SBI console and RAM disk.
->=20
-> The first patch in this series is one of the patch from Jisheng's
-> series [1] which is not merged yet. This patch is required to support
-> ACPI since efi_init() which gets called before sbi_init() can enable
-> static branches and hits a panic.
->=20
-> Patch 2 and 3 are ACPICA patches which are not merged into acpica yet
-> but a PR is raised already.
->=20
-> Below are two ECRs approved by ASWG.
-> RINTC - https://drive.google.com/file/d/1R6k4MshhN3WTT-hwqAquu5nX6xSEqK2l=
-/view
-> RHCT - https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR-tia/=
-view
->=20
-> The series depends on Anup's IPI improvement series [2].
->=20
-> [1] https://lore.kernel.org/all/20220821140918.3613-1-jszhang@kernel.org/
-> [2] https://lore.kernel.org/lkml/20230103141221.772261-7-apatel@ventanami=
-cro.com/T/
-
-Building a clang-15 allmodconfig (I didn't try gcc) with this series, and
-Anup's IPI bits, results in a broken build, due to failings in cmpxchg:
-
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-        while (unlikely((ret =3D cmpxchg(&c->value, old, new)) !=3D old)) {
-                               ^
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-/stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error:=
- call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BU=
-G failed
-/stuff/linux/include/linux/atomic/atomic-instrumented.h:1916:2: note: expan=
-ded from macro 'cmpxchg'
-        arch_cmpxchg(__ai_ptr, __VA_ARGS__); \
-        ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:344:23: note: expanded from m=
-acro 'arch_cmpxchg'
-        (__typeof__(*(ptr))) __cmpxchg((ptr),                           \
-                             ^
-/stuff/linux/arch/riscv/include/asm/cmpxchg.h:335:3: note: expanded from ma=
-cro '__cmpxchg'
-                BUILD_BUG();                                            \
-                ^
-note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=3D0 =
-to see all)
-/stuff/linux/include/linux/compiler_types.h:385:2: note: expanded from macr=
-o '_compiletime_assert'
-        __compiletime_assert(condition, msg, prefix, suffix)
-        ^
-/stuff/linux/include/linux/compiler_types.h:378:4: note: expanded from macr=
-o '__compiletime_assert'
-                        prefix ## suffix();                             \
-                        ^
-<scratch space>:69:1: note: expanded from here
-__compiletime_assert_335
-^
-9 errors generated.
-
---27Tfh9qw3tZtvGh2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAZgTQAKCRB4tDGHoIJi
-0uBUAPwNyD6kqs6UahOkel8ihw22Ieds7rMpfQendImfuHvc+gD+N829uA3Fy+uc
-i1UvPIQcaMWNUL2BVc8u+oJ4lyYh9Qc=
-=APgi
------END PGP SIGNATURE-----
-
---27Tfh9qw3tZtvGh2--
+> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+> 
+> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+> index b22f49a6f128..81d326abaac1 100644
+> --- a/fs/f2fs/gc.c
+> +++ b/fs/f2fs/gc.c
+> @@ -1786,8 +1786,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>  				prefree_segments(sbi));
+>  
+>  	cpc.reason = __get_cp_reason(sbi);
+> -	sbi->skipped_gc_rwsem = 0;
+>  gc_more:
+> +	sbi->skipped_gc_rwsem = 0;
+>  	if (unlikely(!(sbi->sb->s_flags & SB_ACTIVE))) {
+>  		ret = -EINVAL;
+>  		goto stop;
+> -- 
+> 2.34.1
