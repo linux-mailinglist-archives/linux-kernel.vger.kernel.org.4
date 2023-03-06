@@ -2,85 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5D86AB969
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:13:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF1B86AB96A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjCFJNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:13:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
+        id S229579AbjCFJNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCFJNR (ORCPT
+        with ESMTP id S229746AbjCFJNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:13:17 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96612A27D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:13:16 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id o12so35461528edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678093995;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PnHL5h6qkSujzp3h/BFB5agr3fvMuSC0tzihY+nqGSI=;
-        b=BPS5bOWWlYZiucIVPSe9mnoQJw31wcrfqMYZ27Ip9gtW9a1U28i/eEAJFJf9hqT5An
-         BVPaiOQz0sENJXALXJiQX/C8ESdzD4NAATPh1Eb0XBsqQPXj65Eu2kpUkKBGP8soneva
-         ZRiqnPt8BDEKZYVbW5ZNT0xIlj/qT5gYCGDlSdDJNPOd5WiuRRDSIUqw4YhZEdwzKMQq
-         I/Ymd1RiuONjwyac6Y6UW/dd8h09/sJAhPtTCLcap2wMbN6Pf4/L6wi+2B0r30/hkZTG
-         yl2JNMwKYYaMdJFgyyJ44SFrCkA7NI1LPmFckgF6QR8yBzOEssHnbsUD+ii32MIrJdCX
-         f3hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678093995;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PnHL5h6qkSujzp3h/BFB5agr3fvMuSC0tzihY+nqGSI=;
-        b=Cuw7saow+rqvau8mE5DQKi/nTrMDjHcJgbop2i2UWdlazlEbOMQCr59Q6rL5bv2Lue
-         a6cTGPFzAaK1aXJ0R4IMjDzBEFe3hMobI31bSeU8QfEDriSImsjOgYxzEjAZamAvYXXy
-         24yg6/bR0rVu6G8bnuuzxEmWNXyrhfX2nuIaps2mvNiu73NSZU/dROi2bik5tTcorcj+
-         4uD4Ohy/CgDbo96mSqG5Y9+/I5L9KzyEKZvmz/MDgoFeBm1zMU7aJS/wgA/Wn5o/C0D1
-         ms/2YFYkPJhi1QWN9z4DLIa+y44l+OXTUbKIEg3q4J3YztXdq7RYaWSXPc4xp3iwLaj8
-         Wr3Q==
-X-Gm-Message-State: AO0yUKVWjBlJPW+Mvz0bGoWcR1CJkQwfdfntDWRKg2aFBV+eZScPxsAO
-        p1YK16y4HUQbXwHaAMAxfvo=
-X-Google-Smtp-Source: AK7set93IVoMpLRC9HC2fzLXLSa69y6NBNULpgplajkcYjaYvTkH35a89MdScye9feryf3dzTBORHw==
-X-Received: by 2002:a17:907:3f23:b0:84d:4e4f:1f85 with SMTP id hq35-20020a1709073f2300b0084d4e4f1f85mr13755196ejc.59.1678093995252;
-        Mon, 06 Mar 2023 01:13:15 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id c15-20020a170906170f00b008c6c47f59c1sm4244971eje.48.2023.03.06.01.13.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 01:13:14 -0800 (PST)
-Date:   Mon, 6 Mar 2023 12:13:11 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Philipp Hortmann <philipp.g.hortmann@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] staging: rtl8192e: Remove empty Array
- Rtl8192PciERadioD_Array
-Message-ID: <7dba1dd0-3ae2-4566-a4dd-57b1f896d475@kili.mountain>
-References: <cover.1678051460.git.philipp.g.hortmann@gmail.com>
- <e8842422d34fd19592047ad821c0dbe2eb4bcdc9.1678051461.git.philipp.g.hortmann@gmail.com>
+        Mon, 6 Mar 2023 04:13:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8692C175
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:13:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C721B80D23
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:13:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBAEBC433EF;
+        Mon,  6 Mar 2023 09:13:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678094016;
+        bh=md9GsAhD/crhfHfoprueAwoMTeTZuqf04A2dnFJvqLE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=yrD6jI7ykXwFH2wPsY67rDDDuT69YC4D+f57rPAVI+3wzR/v9iypOEtEp2mEj/rUO
+         f+Ai2JZsrJF4Q80HeImEEDzP8wiszasG2cuN6iVifeZn5wFFJZSBtdx3vh0XN0Er4k
+         s28lSlzJ+aeOcTBF2xe8bhKGONFJVwHIN/BpM0Q0=
+Date:   Mon, 6 Mar 2023 10:13:33 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v4] mtd: spi-nor: fix memory leak when using
+ debugfs_lookup()
+Message-ID: <ZAWuvRHVVV3hTm0e@kroah.com>
+References: <20230208160230.2179905-1-gregkh@linuxfoundation.org>
+ <f60870dee13900252e0b13fb2f5f05b5@walle.cc>
+ <ZAWNtv0g6vmADGnb@kroah.com>
+ <20230306093336.523832b0@xps-13>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e8842422d34fd19592047ad821c0dbe2eb4bcdc9.1678051461.git.philipp.g.hortmann@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230306093336.523832b0@xps-13>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 05, 2023 at 11:33:18PM +0100, Philipp Hortmann wrote:
-> Remove empty array Rtl8192PciERadioD_Array and the code where it is used
-> because it is dead code.
+On Mon, Mar 06, 2023 at 09:33:36AM +0100, Miquel Raynal wrote:
+> Hi Greg,
 > 
-> Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+> gregkh@linuxfoundation.org wrote on Mon, 6 Mar 2023 07:52:38 +0100:
+> 
+> > On Wed, Feb 08, 2023 at 05:15:41PM +0100, Michael Walle wrote:
+> > > Am 2023-02-08 17:02, schrieb Greg Kroah-Hartman:  
+> > > > When calling debugfs_lookup() the result must have dput() called on it,
+> > > > otherwise the memory will leak over time.  To solve this, remove the
+> > > > lookup and create the directory on the first device found, and then
+> > > > remove it when the module is unloaded.
+> > > > 
+> > > > Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
+> > > > Cc: Pratyush Yadav <pratyush@kernel.org>
+> > > > Cc: Michael Walle <michael@walle.cc>
+> > > > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> > > > Cc: Richard Weinberger <richard@nod.at>
+> > > > Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> > > > Cc: linux-mtd@lists.infradead.org
+> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>  
+> > > 
+> > > Reviewed-by: Michael Walle <michael@walle.cc>
+> > > 
+> > > one nit below I didn't notice earlier, no need to send a new
+> > > patch version just for that.
+> > > 
+> > > ..
+> > >   
+> > > > +void spi_nor_debugfs_shutdown(void)
+> > > > +{
+> > > > +	if (rootdir)
+> > > > +		debugfs_remove(rootdir);  
+> > > 
+> > > debugfs_remove() already has a check for NULL.
+> > >   
+> > 
+> > Ah, good catch, I merged this in when I applied it to my tree, thanks!
+> 
+> Any reasons why you did apply this patch to your tree? It is a spi-nor
+> fix, I would have expected it to go through mtd.
 
-Same comments as for the earlier commit.
+It's been sitting around for a month, I assumed it was lost, so I picked
+it up.  I can revert it if you don't want me to take it for 6.3-final
+through my driver core tree.
 
-regards,
-dan carpenter
+thanks,
 
+greg k-h
