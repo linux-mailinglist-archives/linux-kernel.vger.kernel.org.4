@@ -2,73 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1B96ABF46
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6322F6ABF49
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjCFMPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S230153AbjCFMP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:15:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjCFMPD (ORCPT
+        with ESMTP id S229846AbjCFMP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:15:03 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D20C2749A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:14:48 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id d36so9265990lfv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 04:14:48 -0800 (PST)
+        Mon, 6 Mar 2023 07:15:56 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A45E520579;
+        Mon,  6 Mar 2023 04:15:53 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id g3so37728421eda.1;
+        Mon, 06 Mar 2023 04:15:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678104886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lDgbGDQMjYNNdIj2GXwPS1VlBs4ZeaosIAUC97tjICg=;
-        b=hvrLxvqzZIdeFQHhSWe0oyHuYd0eK+GJn8Pv7BCcjvlFgVDJqeHG7SF7j/SB9oVRXj
-         w3/aDlLEGe2eSwLUQ9ocGmhzEDbjaua4QYXSf1WoDUTFsGOi4+LSIg/8eZsLqoysNS1j
-         ZJxCoqevilHx43Rex5H3ATW8IUkOx83kv8U5CSnvfv3aFlxPlNG60tG9CND2cG6NOj+b
-         65KHr7ip73EG+03tQcQ108aD9RV9RABg8sBKe7YOQa1OPfe+dZ05Jj3ArfmVtSIzmEIV
-         lQzoDmYx/Xmo4th2uoEgajS85UL3nrBaPh1YuZDcnt4Vi61DR8NShiKo84yiYFXKR4bF
-         Pt5Q==
+        d=gmail.com; s=20210112; t=1678104952;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1g4AYGzxTWyuARpoPesNpg8EiVTXYK4wwkJzSL4nXXs=;
+        b=bNBYn1TnRcdbUj1TqpxVf5w4INnvEjSqvJATHZL3viiCgAe5kp/1aYJV3tXUZ+I8YT
+         0vCWGQuC16ynAcvcZnRa5hfRn/jz/QCFUY6K7Zrww2DOxPQLM9RLS3vqxXuG8Yc26yPz
+         o2IVbERznLqdY8VE1LgEKZh+B5AfNg7DwIjDcTKTy1k9Or5yOIV3cCyZ9Dr6vQ993zDC
+         CEZBUuUoHmV8iNhBwIuy9wsE5KyOBmLoNeECjwtbZQ1S03Of68bWqzXkOCIsZJBdYaHe
+         JoZGH+txs9zp+P6QinTeqi9DThGgPfkNutBu2p20LjJsTtWbv0J12Z2H/1D48xXogVHp
+         Buuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678104886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lDgbGDQMjYNNdIj2GXwPS1VlBs4ZeaosIAUC97tjICg=;
-        b=cqaiZ5bpl6Lbs2a898BuKr7QPZGZguF1tNMpQSVxWO1WRISvexyR7noJ/IsSL+u7KJ
-         yKUy7Axub5KkcvilkAMQzOCKrj3Q1pX97iWceCyayq56RlCuG9DSJXwRbHeqvbHUzJGi
-         AM6qYnmOaCmgjmDXrAPiPwvmkrHyQUkXqs2YHn5Uvktvp7a2fzS3R4asPtjU2OvKXQZL
-         18MXoa4E0FCys/j91bz5xri+oGNb8MgGq6AcItstH+PBR34FLJG5uIa8Dm7fwyRAOXFc
-         Ar1KQjLSKZTBEG5p/YXWOcDKraVtJ0qdnvFt4gTMejvQwbyaWJIQpTnJw4c8Im54kTK0
-         o3cA==
-X-Gm-Message-State: AO0yUKVgBgVTEAk8Ooci9VpsGis7V9UTynbctbQFC/63JGy4oBUm7hjT
-        PTTPls2KRKsH1vmD2NnYA6A=
-X-Google-Smtp-Source: AK7set9nGlGcM9Vr7UqiFYQTqnQkLiSMt3lOGsDKRFfHi/0nksyJv7OH0ToAvt4MTv8TarDmqFl0UQ==
-X-Received: by 2002:ac2:593b:0:b0:4a4:68b7:deab with SMTP id v27-20020ac2593b000000b004a468b7deabmr2654882lfi.7.1678104886486;
-        Mon, 06 Mar 2023 04:14:46 -0800 (PST)
-Received: from pc636 (host-90-235-0-207.mobileonline.telia.com. [90.235.0.207])
-        by smtp.gmail.com with ESMTPSA id b23-20020ac25637000000b004d5ae3f5e9bsm1597412lff.130.2023.03.06.04.14.45
+        d=1e100.net; s=20210112; t=1678104952;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1g4AYGzxTWyuARpoPesNpg8EiVTXYK4wwkJzSL4nXXs=;
+        b=ii+iQLNpl5fM09H1cyJDPB1T7L7EeT6aWQ06KmtGD9vA2BrS9CO6XTri2dyOgt4G2F
+         Ry6gg6prR66X5IXpHjjWKryk0NA0vphv6dmxKZK0ULWlwTga3v2isIdQaPyUwR9BY6Sc
+         1VFIDgsXBn5mm1tRfrSa0SyUhetCUjTIw9828IE1bU6h+Ut+tvOuwBQwDMM8ZqpaNrt2
+         qciDSXGtAXaT6Hg0MNXylcNGieNnxdFbcCMH2/lvmSu4+CuqD/tGPhDpXOW0/gVyLlx4
+         /0FmYPqRzIEcbqZmREVnUg/Dgb40/i27Dbby7L6LJovifxemOWAvssu98lEszsrC2Qqm
+         BVsA==
+X-Gm-Message-State: AO0yUKW5c+nqmPIjHAU9FIlne8I/YerxopT8foFJn2fxe7ddcXocvMWO
+        hmjbDNiucn6BICscn01ctOM=
+X-Google-Smtp-Source: AK7set83ncGukr5k9XtPEBkCv42ZvOmeZIY23CtKgfOVZ1N4PNDRl2X2UQy2myUkpOZpI/aknFckcQ==
+X-Received: by 2002:a17:907:c689:b0:914:4164:658a with SMTP id ue9-20020a170907c68900b009144164658amr506482ejc.42.1678104952142;
+        Mon, 06 Mar 2023 04:15:52 -0800 (PST)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id o13-20020a1709062e8d00b008e22978b98bsm4525453eji.61.2023.03.06.04.15.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 04:14:46 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 6 Mar 2023 13:14:43 +0100
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>, Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Uladzislau Rezki <urezki@gmail.com>
-Subject: Re: [PATCH] mm/page_alloc: avoid high-order page allocation warn
- with __GFP_NOFAIL
-Message-ID: <ZAXZMz0n+CpWPVqy@pc636>
-References: <20230305053035.1911-1-hsiangkao@linux.alibaba.com>
- <ZAWbjIJCarmxGa8k@dhcp22.suse.cz>
+        Mon, 06 Mar 2023 04:15:51 -0800 (PST)
+Date:   Mon, 6 Mar 2023 14:15:48 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
+        arinc9.unal@gmail.com, frank-w@public-files.de
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: fix RX data corruption
+ issue
+Message-ID: <20230306121548.k33fgu7adg44zruu@skbuf>
+References: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
+ <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZAWbjIJCarmxGa8k@dhcp22.suse.cz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
+ <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,113 +96,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 08:51:40AM +0100, Michal Hocko wrote:
-> [Cc couple of more people recently involved with vmalloc code]
+On Sat, Mar 04, 2023 at 01:43:20PM +0000, Daniel Golle wrote:
+> Fix data corruption issue with SerDes connected PHYs operating at 1.25
+> Gbps speed where we could previously observe about 30% packet loss while
+> the bad packet counter was increasing.
 > 
-> On Sun 05-03-23 13:30:35, Gao Xiang wrote:
-> > My knowledge of this is somewhat limited, however, since vmalloc already
-> > supported __GFP_NOFAIL in commit 9376130c390a ("mm/vmalloc: add
-> > support for __GFP_NOFAIL").  __GFP_NOFAIL could trigger the following
-> > stack and allocate high-order pages when CONFIG_HAVE_ARCH_HUGE_VMALLOC
-> > is enabled:
-> > 
-> >  __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
-> >  alloc_pages+0x1aa/0x270 mm/mempolicy.c:2286
-> >  vm_area_alloc_pages mm/vmalloc.c:2989 [inline]
-> >
-> >  __vmalloc_area_node mm/vmalloc.c:3057 [inline]
-> >  __vmalloc_node_range+0x978/0x13c0 mm/vmalloc.c:3227
-> >  kvmalloc_node+0x156/0x1a0 mm/util.c:606
-> >  kvmalloc include/linux/slab.h:737 [inline]
-> >  kvmalloc_array include/linux/slab.h:755 [inline]
-> >  kvcalloc include/linux/slab.h:760 [inline]
-> >  (codebase: Linux 6.2-rc2)
-> > 
-> > Don't warn such cases since high-order pages with __GFP_NOFAIL is
-> > somewhat legel.
+> As almost all boards with MediaTek MT7622 or MT7986 use either the MT7531
+> switch IC operating at 3.125Gbps SerDes rate or single-port PHYs using
+> rate-adaptation to 2500Base-X mode, this issue only got exposed now when
+> we started trying to use SFP modules operating with 1.25 Gbps with the
+> BananaPi R3 board.
 > 
-> OK, this is definitely a bug and it seems my 9376130c390a was
-> incomplete because it hasn't covered the high order case. Not sure how
-> that happened but removing the warning is not the right thing to do
-> here. The higher order allocation is an optimization rather than a must.
-> So it is perfectly fine to fail that allocation and retry rather than
-> go into a very expensive and potentially impossible higher order
-> allocation that must not fail.
->
+> The fix is to set bit 12 which disables the RX FIFO clear function when
+> setting up MAC MCR, MediaTek SDK did the same change stating:
+> "If without this patch, kernel might receive invalid packets that are
+> corrupted by GMAC."[1]
 > 
-> The proper fix should look like this unless I am missing something. I
-> would appreciate another pair of eyes on this because I am not fully
-> familiar with the high order optimization part much.
+> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/d8a2975939a12686c4a95c40db21efdc3f821f63
 > 
-> Thanks!
-> --- 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index ef910bf349e1..a8aa2765618a 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -2883,6 +2883,8 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
->  		unsigned int order, unsigned int nr_pages, struct page **pages)
->  {
->  	unsigned int nr_allocated = 0;
-> +	gfp_t alloc_gfp = gfp;
-> +	bool nofail = false;
->  	struct page *page;
->  	int i;
->  
-> @@ -2931,20 +2933,30 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
->  			if (nr != nr_pages_request)
->  				break;
->  		}
-> +	} else {
-> +		alloc_gfp &= ~__GFP_NOFAIL;
-> +		nofail = true;
->  	}
->  
->  	/* High-order pages or fallback path if "bulk" fails. */
-> -
->  	while (nr_allocated < nr_pages) {
->  		if (fatal_signal_pending(current))
->  			break;
->  
->  		if (nid == NUMA_NO_NODE)
-> -			page = alloc_pages(gfp, order);
-> +			page = alloc_pages(alloc_gfp, order);
->  		else
-> -			page = alloc_pages_node(nid, gfp, order);
-> -		if (unlikely(!page))
-> -			break;
-> +			page = alloc_pages_node(nid, alloc_gfp, order);
-> +		if (unlikely(!page)) {
-> +			if (!nofail)
-> +				break;
-> +
-> +			/* fall back to the zero order allocations */
-> +			alloc_gfp |= __GFP_NOFAIL;
-> +			order = 0;
-> +			continue;
-> +		}
-> +
->  		/*
->  		 * Higher order allocations must be able to be treated as
->  		 * indepdenent small pages by callers (as they can with
+> Fixes: 42c03844e93d ("net-next: mediatek: add support for MediaTek MT7622 SoC")
+> Tested-by: Bjørn Mork <bjorn@mork.no>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
 
-Some questions:
+I don't see something particularly controversial with this change.
 
-1. Could you please add a comment why you want the bulk_gfp without the __GFP_NOFAIL(bulk path)?
-2. Could you please add a comment why a high order pages do not want __GFP_NOFAIL? You have already explained.
-3. Looking at the patch:
-
-<snip>
-+       } else {
-+               alloc_gfp &= ~__GFP_NOFAIL;
-+               nofail = true;
-<snip>
-
-if user does not want to go with __GFP_NOFAIL flag why you force it in
-case a high order allocation fails and you switch to 0 order allocations? 
-(for high order-pages scenario you always use __GFP_NOFAIL in the order-0 recovery path).
-
-Thanks!
-
---
-Uladzislau Rezki
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
