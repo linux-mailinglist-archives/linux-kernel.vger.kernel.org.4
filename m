@@ -2,194 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA3856AC442
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7B756AC445
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjCFPBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:01:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        id S230369AbjCFPCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:02:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbjCFPBQ (ORCPT
+        with ESMTP id S230015AbjCFPCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:01:16 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6692FCCC;
-        Mon,  6 Mar 2023 07:01:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Mar 2023 10:02:12 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17582202B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:02:08 -0800 (PST)
+Received: from arch-x395 (unknown [IPv6:2a00:5f00:102:0:9d43:3ed5:ed77:842c])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D020260FC6;
-        Mon,  6 Mar 2023 15:01:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D21C4339B;
-        Mon,  6 Mar 2023 15:01:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678114869;
-        bh=QnaL793fLV7vfvFBBVpMTU+ONTzfUG7XKVZMMdedEBQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=BP9XLDsWka8dwZirqHYx9N3GMqiVry9LtAiJVaevzTOf1NX4sD4WZRaTFZuqRF8ti
-         b7irTN5OAy8uxAlMIfJilu8u3qfJyISGrn1NqM/tYVEqyiy5WSaDWVFNScwcRTmXx6
-         a5UGTn2G791Oids8vxVawWAw+lvjO8FNe2MD/bTG0iWr9vYNsyweH50BFLiDS1a1du
-         ywN2TWJJhEySSo/nTpig10jVhWDBCDGdek3+t32kSCce9Uh/SMIPp3AUGF6KNKZVQ4
-         fAd5lNC17l0GTlIXn/UuKxL+15bVK4jHREoreClsKJt7yFlnVpeI4XWdPv+47UtB10
-         gatxxKtMZHiLg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B04145C00F1; Mon,  6 Mar 2023 07:01:08 -0800 (PST)
-Date:   Mon, 6 Mar 2023 07:01:08 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 13/13] rcu/kvfree: Eliminate k[v]free_rcu() single
- argument macro
-Message-ID: <20230306150108.GT1301832@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <ZAR//FKO4syzapk6@pc636>
- <D8B84631-860B-41CF-8311-88E220C7254F@joelfernandes.org>
- <20230305180524.GL1301832@paulmck-ThinkPad-P17-Gen-1>
- <20230306144948.GA3280216@google.com>
+        (Authenticated sender: evelikov)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2D3F066018CA;
+        Mon,  6 Mar 2023 15:02:07 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678114927;
+        bh=imc7oHqxvqxmLW9aTXCorptkFhxj+2tr9Tu9ZKVTavw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=groQjaUtdb/65JFBoX/newBNJf6RZiLTnniV1HgrEVt/7ws5kseQ3iOK1Fj+ERPLx
+         x1fU3fpNkJJRzwtiZ4AzaNiyX3ym2cUUUSYEmilOzDBQyLgX1CFlFLKGKja1wwimkB
+         sBuTWTMabbMaLGDyiYBB8BM0mkscOGODDxzYmBn0uN44i93mfqW/9eo1XEArHEQ6DN
+         BMLoPVedLiJDUk7E7yC4O9L47jgR2uNSjxG/Q8o6OCxECZ88jClZCF+BjCQzbhsjDb
+         QRP/r4U5/Ri/zKsVP/4mjPBQW0HusZMZqlLc5U17HEvzz3T8HU6cDkey/r+HB/I2Ys
+         PaZuDjusywNEw==
+Date:   Mon, 6 Mar 2023 15:02:04 +0000
+From:   Emil Velikov <emil.velikov@collabora.com>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>, Rob Clark <robdclark@gmail.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Ryan Neph <ryanneph@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@redhat.com>, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2] drm/virtio: Fix handling CONFIG_DRM_VIRTIO_GPU_KMS
+ option
+Message-ID: <ZAYAbIXlLLkNCB6f@arch-x395>
+References: <20230306143234.1561759-1-dmitry.osipenko@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230306144948.GA3280216@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306143234.1561759-1-dmitry.osipenko@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 02:49:48PM +0000, Joel Fernandes wrote:
-> On Sun, Mar 05, 2023 at 10:05:24AM -0800, Paul E. McKenney wrote:
-> > On Sun, Mar 05, 2023 at 07:56:33AM -0500, Joel Fernandes wrote:
-> > > 
-> > > 
-> > > > On Mar 5, 2023, at 6:41 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > > 
-> > > > ﻿
-> > > >> 
-> > > >>>> On Mar 5, 2023, at 5:29 AM, Joel Fernandes <joel@joelfernandes.org> wrote:
-> > > >>> 
-> > > >>> ﻿Hi, All,
-> > > >>> 
-> > > >>>> On Wed, Feb 1, 2023 at 10:11 AM Uladzislau Rezki (Sony)
-> > > >>>> <urezki@gmail.com> wrote:
-> > > >>>> 
-> > > >>>> For a single argument invocations a new kfree_rcu_mightsleep()
-> > > >>>> and kvfree_rcu_mightsleep() macroses are used. This is done in
-> > > >>>> order to prevent users from calling a single argument from
-> > > >>>> atomic contexts as "_mightsleep" prefix signals that it can
-> > > >>>> schedule().
-> > > >>>> 
-> > > >>> 
-> > > >>> Since this commit in -dev branch [1] suggests more users still need
-> > > >>> conversion, let us drop this single patch for 6.4 and move the rest of
-> > > >>> the series forward? Let me know if you disagree.
-> > > >>> https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=dev&id=9bf5e3a2626ed474d080f695007541b6ecd6e60b
-> > > >>> 
-> > > >>> All -- please supply Ack/Review tags for patches 1-12.
-> > > >> 
-> > > >> Or put another way, what is the transition plan for these remaining users?
-> > > >> 
-> > > >> I am getting on a plane right now but I can research which users are remaining later.
-> > > >> 
-> > > > I am not sure. I think we can cover it on the meeting.
-> > > 
-> > > Cool, thanks.
-> > 
-> > My current plan is as follows:
-> > 
-> > 1.	Addition of kvfree_rcu_mightsleep() went into v6.3.
-> > 
-> > 2.	After creating branches, I send out the series, including 12/12.
-> > 	The -rcu tree's "dev" branch continues to have a revert to avoid
-> > 	breaking -next until we achieve clean -next and clean "dev"
-> > 	branch.
-> > 
-> > 3.	Any conversion patches that get maintainer acks go into v6.4.
-> > 	Along with a checkpatch error, as Joel notes below.
-> > 
-> > 4.	There are periodic checks for new code using the single-argument
-> > 	forms of kfree_rcu() and kvfree_rcu().	Patches are produced
-> > 	for them, or responses to the patches introducing them, as
-> > 	appropriate.  A coccinelle script might be helpful, perhaps
-> > 	even as part of kernel test robot or similar.
-> > 
-> > 5.	The -rcu tree's "dev" branch will revert to unclean from time
-> > 	to time as maintainers choose to take conversion patches into
-> > 	their own trees.
-> > 
-> > 6.	Once mainline is clean, we push 12/12 into the next merge
-> > 	window.
+On 2023/03/06, Dmitry Osipenko wrote:
+> VirtIO-GPU got a new config option for disabling KMS. There were two
+> problems left unnoticed during review when the new option was added:
 > 
-> Since in theory, mainline could also be after 6.4-rc1, I am assuming next merge
-> window could also mean 6.5 right? But yes, agreed.
-
-I would rather not waste Linus's time with a separate pull request for
-this.  It is after all not a regression.  ;-)
-
-> > 7.	We then evaluate whether further cleanups are needed.
-> > 
-> > > > My feeling is
-> > > > that, we introduced "_mightsleep" macros first and after that try to
-> > > > convert users.
-> > 
-> > > One stopgap could be to add a checkpatch error if anyone tries to use old API,
-> > > and then in the meanwhile convert all users.
-> > > Though, that requires people listening to checkpatch complaints.
-> > 
-> > Every person who listens is that much less hassle.  It doesn't have to
-> > be perfect.  ;-)
+> 1. The IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) check in the code was
+> inverted, hence KMS was disabled when it should be enabled and vice versa.
 > 
-> The below checkpatch change can catch at least simple single-arg uses (i.e.
-> not having compound expressions inside of k[v]free_rcu() args). I will submit
-> a proper patch to it which we can include in this set.
+> 2. The disabled KMS crashed kernel with a NULL dereference in
+> drm_kms_helper_hotplug_event(), which shall not be invoked with a
+> disabled KMS.
 > 
-> Thoughts?
+> Fix the inverted config option check in the code and skip handling the
+> VIRTIO_GPU_EVENT_DISPLAY sent by host when KMS is disabled in guest to fix
+> the crash.
+> 
+> Fixes: 72122c69d717 ("drm/virtio: Add option to disable KMS support")
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 > ---
->  scripts/checkpatch.pl | 9 +++++++++
->  1 file changed, 9 insertions(+)
 > 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 78cc595b98ce..fc73786064b3 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -6362,6 +6362,15 @@ sub process {
->  			}
->  		}
->  
-> +# check for soon-to-be-deprecated single-argument k[v]free_rcu() API
-> +		if ($line =~ /\bk[v]?free_rcu\s*\([^(]+\)/) {
-> +			if ($line =~ /\bk[v]?free_rcu\s*\([^,]+\)/) {
-> +				ERROR("DEPRECATED_API",
-> +				      "Single-argument k[v]free_rcu() API is deprecated, please pass an rcu_head object." . $herecurr);
-
-Nice!
-
-But could you please also tell them what to use instead?  Sure, they
-could look it up, but if it tells them directly, they are less likely
-to ignore it.
-
-							Thanx, Paul
-
-> +			}
-> +		}
-> +
-> +
->  # check for unnecessary "Out of Memory" messages
->  		if ($line =~ /^\+.*\b$logFunctions\s*\(/ &&
->  		    $prevline =~ /^[ \+]\s*if\s*\(\s*(\!\s*|NULL\s*==\s*)?($Lval)(\s*==\s*NULL\s*)?\s*\)/ &&
-> -- 
-> 2.40.0.rc0.216.gc4246ad0f0-goog
+> Changelog:
 > 
+> v2: - Moved the "has_edid" under the "num_scanouts" condition, like was
+>       suggested by Gerd Hoffmann.
+> 
+
+Hi Dmitry, I think there's more than one piece like that in the driver.
+
+>  drivers/gpu/drm/virtio/virtgpu_kms.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
+> index 874ad6c2621a..15f2519988e7 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_kms.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
+> @@ -43,11 +43,13 @@ static void virtio_gpu_config_changed_work_func(struct work_struct *work)
+>  	virtio_cread_le(vgdev->vdev, struct virtio_gpu_config,
+>  			events_read, &events_read);
+>  	if (events_read & VIRTIO_GPU_EVENT_DISPLAY) {
+> -		if (vgdev->has_edid)
+> -			virtio_gpu_cmd_get_edids(vgdev);
+> -		virtio_gpu_cmd_get_display_info(vgdev);
+> -		virtio_gpu_notify(vgdev);
+> -		drm_helper_hpd_irq_event(vgdev->ddev);
+> +		if (vgdev->num_scanouts) {
+> +			if (vgdev->has_edid)
+> +				virtio_gpu_cmd_get_edids(vgdev);
+
+Worth doing the same thing in virtio_gpu_init()? Aka move the has_edid
+&& get_edids within the num_scanouts if block.
+
+HTH
+Emil
