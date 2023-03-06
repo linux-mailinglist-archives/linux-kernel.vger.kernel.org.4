@@ -2,87 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221876AB53D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 05:01:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A17186AB542
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 05:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjCFEBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 23:01:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S229554AbjCFEE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 23:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCFEAp (ORCPT
+        with ESMTP id S229780AbjCFEED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 23:00:45 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDACF96B;
-        Sun,  5 Mar 2023 20:00:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=4t2RLEMOsre3ySkVA5U3MuOSvkfzSwor9mXcBDVP6m8=; b=5GRK/yLBS4EPjws3juTTRzDRhv
-        dAuhi0vmDk9xa6gXodg55Ao2NH+REXeVtDSM42qVtc8KRFxRInZuwQdfjzIlQuwEfhuIp8DWbOAX9
-        ONpVxumYj7x+7V1kbxIrzm4qMR3Zszep1/nkMrpOVL9B/EyxiC6n1cbQZhYzN6FpZRypK7dFEQcgC
-        WTIqUll/wOUdNHP0Hm0O6WiGC+WdZV9Rnn577rwvpicwfJ9DFfVfLA2k4/6ycGJenU3T431WUthEB
-        X9G4TlfEPOJMCptTuWc7ogINplSUtpOkKtxS8d1cK03RjhotwJSQ9P2l6CTkhuvXssUbTGyJFJeo4
-        3cqJF0lw==;
-Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZ21j-00B9yD-3q; Mon, 06 Mar 2023 04:00:43 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        stable@vger.kernel.org
-Subject: [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not enabled
-Date:   Sun,  5 Mar 2023 20:00:37 -0800
-Message-Id: <20230306040037.20350-8-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230306040037.20350-1-rdunlap@infradead.org>
-References: <20230306040037.20350-1-rdunlap@infradead.org>
+        Sun, 5 Mar 2023 23:04:03 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C5FF962;
+        Sun,  5 Mar 2023 20:03:28 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVQ0t3Q17z4x5Z;
+        Mon,  6 Mar 2023 15:03:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678075406;
+        bh=3Fw9r8Bh63Ba8N9qM+IhwoWrq20FtDVAseOfA+BLBzg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fLDske/DQlN9ndKgI3QKk9GteyUov1KIjfuXDhJdZyAPepEpW3ZUWosfn/VscaCzq
+         RiIZS+CyU9EoZWb2iVkuGAg90hHgvjl9Xq1VQTz6Pxwuln5EDg3Ijxh8TW5tHnxI3H
+         XmogstaavwRGJhD8NT2ItZuD9yB+UfMdevIltpxjEombz+FJM8vcvnCtDc9h4PkQ/V
+         1ABd62fA1WbGkNDq8EIwT6VTQzuPpFno/WT7gJKF+x+H5/ww5skY8ycoTp0apxvIig
+         PIfOZMaNZ8X/MLW7z8dfs0KvGITennxhLW3nhv7bLj6MmpKaW9xfvhBijTp52Zywr1
+         9fIcNERolUPTQ==
+Date:   Mon, 6 Mar 2023 15:03:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: removal of the trivial tree
+Message-ID: <20230306150325.128cc443@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/NAZQ7hZAw0+v01Eg3u3iPcU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a build error in mcount.S when CONFIG_PRINTK is not enabled.
-Fixes this build error:
+--Sig_/NAZQ7hZAw0+v01Eg3u3iPcU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-sh2-linux-ld: arch/sh/lib/mcount.o: in function `stack_panic':
-(.text+0xec): undefined reference to `dump_stack'
+Hi all,
 
-Fixes: e460ab27b6c3 ("sh: Fix up stack overflow check with ftrace disabled.")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: Rich Felker <dalias@libc.org>
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: stable@vger.kernel.org
----
-v2: add PRINTK to STACK_DEBUG dependency (thanks, Geert)
-v3: skipped
-v4: refresh & resend
+I forgot that the trivial tree had been dropped by its maintainer
+in commit
 
- arch/sh/Kconfig.debug |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  081c8919b02b ("Documentation: remove trivial tree")
 
-diff -- a/arch/sh/Kconfig.debug b/arch/sh/Kconfig.debug
---- a/arch/sh/Kconfig.debug
-+++ b/arch/sh/Kconfig.debug
-@@ -15,7 +15,7 @@ config SH_STANDARD_BIOS
- 
- config STACK_DEBUG
- 	bool "Check for stack overflows"
--	depends on DEBUG_KERNEL
-+	depends on DEBUG_KERNEL && PRINTK
- 	help
- 	  This option will cause messages to be printed if free stack space
- 	  drops below a certain limit. Saying Y here will add overhead to
+so I will remove it from linux-next now.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NAZQ7hZAw0+v01Eg3u3iPcU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQFZg0ACgkQAVBC80lX
+0Gyi8Af+ItGyoEffys3GMsZhAnK+1cOyoJ5g1ZdK7tIJ2Ss+83Sw2cXRPqNmfO0n
+KrNvKUE25rYyox0Zr7WJp6QPjrYNmkcqBDSMJXap2dsJ3l0qJuWS2pDiqeMBvnsL
+jjtL25wMGFLD5HIiW4mphQFkop7uPzuf42nLgc7vIAaVKbQqud1KIeCn6EFVxQTK
+pvG05QDSSKUWw5zV+qsZ2O6dd8RZ6rwOzHHFc3wMva5NJy448TmZnfdSBHdAvx8O
+j9mYxOXdmW6/deqBTd7dp8rMaMawDLvShtvK+b9nvttqMJxLJQGzVub56Hn2/unZ
+uoeHY3+6paIcVEsLYW0Dq1fqC+lAPA==
+=bXJB
+-----END PGP SIGNATURE-----
+
+--Sig_/NAZQ7hZAw0+v01Eg3u3iPcU--
