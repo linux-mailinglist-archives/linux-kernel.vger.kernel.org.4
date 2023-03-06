@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9472F6AB9BC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F82F6AB9C4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCFJ0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
+        id S229883AbjCFJ1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjCFJ0i (ORCPT
+        with ESMTP id S229813AbjCFJ1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:26:38 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10BF22A37
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:26:36 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id d6so5105312pgu.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:26:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SS5KiEBdkP84BGnQ6/5iOZyFdcXCMIgjAhJqxheFdVI=;
-        b=d28/xHamOitQpZI06o1t4Ge+zIRvobCMdI0yI0+Vry5PjTWFGNK3IM3UifTwS1Xir6
-         x1EVy8lAg9qZrc6XEpcFA6LL/9B3Gc6EVUMfe8v/OTEp4R3mivUuLYo30RNSYcqeuHR8
-         dhMsLKYXeV0ACqDnCzn2gtogIrgU/NQRGX/rHN98Hf3k0Y2s+2C2V2Peypkx/RajU4xx
-         WOvu3ggXaNBNfqYJ8cmaEMIntVQt4mQ6xs8LiWDS1TO0ZI8tK4kkx236WsQjufgldx0R
-         ISRynRVpppTkvO+yinoBie/PBPd/MxEYI0hv07DO9lpL2Wh40a23C3gDjPx7625EjdEI
-         8dtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SS5KiEBdkP84BGnQ6/5iOZyFdcXCMIgjAhJqxheFdVI=;
-        b=VVbdQfWeg1NAoUEYx7dQaK5V6tqJ+zaWw5InFN/wi6BZ1dhWxEhPi50thmOpHTiQ3r
-         /uPDcqqmA7QT2ygx23HwpsZ6kbE4xKR1NI+9RXXo7GBmEFyhRGxSbCxFUuVstBdG0KLu
-         enumJR1sOpygKpk+Xenb4cHKIhuQgtk98h/2LgsyupTzAQ53lX426KCTSWnDI2cGPIvB
-         h/dwY+YBKSLbZeSVBJJR/q8q5CzwQSRVL0J5WA1JZ2ZFow37LN2iaUxRzYehwAfs49Ai
-         8Mo0Iqy65Uv0xKEbJ01FULwALNwoz4lvM53FuBSDyCUWAJ32DwNuyPqkBSHpy3+kBC09
-         bXFQ==
-X-Gm-Message-State: AO0yUKVUxIGUKhQSehF52r6DasAwQqBqp6LnFoX8fxwL0K3FQ/Q8uf5p
-        hj4b5i6F+BnNWLkwdPILdWC5iDTj0ZENG0K6AvPIIw==
-X-Google-Smtp-Source: AK7set+EdoU4t0koGp9e1iwTWyveiUQh4Hb09pO2tFf0b2WbA+GUc5zOS8yZftzyYu4SEpJPLaNU9CpTPPFT+zfr70Q=
-X-Received: by 2002:a63:135f:0:b0:503:130c:aca2 with SMTP id
- 31-20020a63135f000000b00503130caca2mr4667186pgt.5.1678094796217; Mon, 06 Mar
- 2023 01:26:36 -0800 (PST)
+        Mon, 6 Mar 2023 04:27:07 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D947B227A2
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:27:05 -0800 (PST)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3266sjZ2003171;
+        Mon, 6 Mar 2023 03:26:53 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=ijoY0cAbKV1Yi6yBy5gj8C+z3x9rq5z5KsnmtjtmXUE=;
+ b=DpUW7tkBAyuVbuCN6NZciQlN/dUM10aE/Ei98jWy7AdpheJVZ1NtnQDr/fk2aAIfqYFQ
+ qinypZuQaU7a7uspV7yspS/Xa8ULkH6KYsucuPmMnL+ZSJ9ikuACsStDAguU5m90BxtK
+ LtazGLwOGvZVG/IiF4yNwgjzUtdGlyXitLa/YWQ6nCtVBJhcwwfI5uAjh2BzlkggOBET
+ tejFfcPLXJlR06LUAu/Q3y8YFcDTXYu5LTPqXgUuHJov/bBVowKp0JLIBLcnXouwLRMi
+ btDcw6xypNuHJ56A0gJ6DFNolqCik6PEwcaGAcC/m+XvFqxcVJcAqZ+yzRVl9sFKsZez lA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3p439tabwk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 03:26:53 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 6 Mar
+ 2023 03:26:52 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Mon, 6 Mar 2023 03:26:52 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 18BCD11D3;
+        Mon,  6 Mar 2023 09:26:52 +0000 (UTC)
+Date:   Mon, 6 Mar 2023 09:26:52 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Vlad Karpovich <vkarpovi@opensource.cirrus.com>
+CC:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+Subject: Re: [PATCH v2 4/5] ASoC: cs35l45: DSP Support
+Message-ID: <20230306092652.GP68926@ediswmail.ad.cirrus.com>
+References: <20230303192151.2437221-1-vkarpovi@opensource.cirrus.com>
+ <20230303192151.2437221-4-vkarpovi@opensource.cirrus.com>
 MIME-Version: 1.0
-References: <20230302123440.1193507-1-lmb@isovalent.com> <2eb84f6e-d316-1a72-18ae-56b9cda97f8b@linux.dev>
-In-Reply-To: <2eb84f6e-d316-1a72-18ae-56b9cda97f8b@linux.dev>
-From:   Lorenz Bauer <lorenz.bauer@isovalent.com>
-Date:   Mon, 6 Mar 2023 09:26:25 +0000
-Message-ID: <CAN+4W8hX4V+VTMFjE-1WUVrpHoh1G_e07cTArL5W4AKwVNr0_w@mail.gmail.com>
-Subject: Re: [PATCH] btf: fix resolving BTF_KIND_VAR after ARRAY, STRUCT,
- UNION, PTR
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Lorenz Bauer <lmb@isovalent.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230303192151.2437221-4-vkarpovi@opensource.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: u6TL_NqWZk8T0ATfLPsOJ8WtEENrHZ7l
+X-Proofpoint-ORIG-GUID: u6TL_NqWZk8T0ATfLPsOJ8WtEENrHZ7l
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 3, 2023 at 12:16=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> lgtm. Could it be moved out of the for loop?
+On Fri, Mar 03, 2023 at 01:21:50PM -0600, Vlad Karpovich wrote:
+> From: "Vlad.Karpovich" <vkarpovi@opensource.cirrus.com>
+> 
+> The CS35L45 digital core incorporates one programmable DSP block,
+> capable of running a wide range of audio enhancement and speaker
+> and battery protection functions.
+> 
+> Signed-off-by: Vlad Karpovich <vkarpovi@opensource.cirrus.com>
+> ---
+> +#define CS35L45_DAC_MUX_ROUTE(name) \
+> +	{ name" Source", "ASP_RX1",	"ASP_RX1" }, \
+> +	{ name" Source", "ASP_RX2",	"ASP_RX2" }, \
+> +	{ name" Source", "DSP_TX1",	"DSP1" }, \
+> +	{ name" Source", "DSP_TX2",	"DSP1" }
+> +
+> +
 
-Yeah, that is possible I think, since we can only trigger the problem if
+Minor nit, double blank line here.
 
-    return env_stack_push()
+But otherwise looks pretty good to me:
 
-Is executed. I'll send a v2.
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-> Please add the test case described in the commit message to the prog_test=
-s/btf.c.
-
-Good point, I'll send this as a separate commit. Backporting patches
-doesn't work well in my experience.
-
-Thanks for your review!
-Lorenz
+Thanks,
+Charles
