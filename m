@@ -2,165 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFC96ABA7A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D30BC6ABA7F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:57:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjCFJys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:54:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
+        id S229846AbjCFJ5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjCFJym (ORCPT
+        with ESMTP id S229565AbjCFJ5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:54:42 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB64221A27
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:54:40 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id h3so8934369lja.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:54:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678096479;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kIlgMgx4GC7LDA70SAaD5cK7DGGQZmITxjE2Ge49+kU=;
-        b=vdcts+WbobnyEDJbIN+wXxsZ2qfWdS/GOfLuCC/rmeMZRDAJ7d10ljd1wrvy3CU0y1
-         L+3QGxMvJgVySq27pa2cK5WaUkrVDw9dj10+7BNqlH3d16ZMcNYgWTI6GfxDXfYgn3VT
-         fW0i3qo98cher9ZorHaXHIZdcSBTpV8WRSVb9kvp69ahi113hV9jP2yTLqzqHs1OyD/X
-         Ii+eDuH7WT450rLNSPvlVPtdpwaVXOkxKkBlicyoDFUmpKfHLgWEhSLzbBf7+0Av6nTK
-         JoSY5HNu0NKiDerIuqw4BjQe+jo2KA1xdpX7h3hs3ICMua9Gt1ulDialSjG/xxJf72qK
-         siog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678096479;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kIlgMgx4GC7LDA70SAaD5cK7DGGQZmITxjE2Ge49+kU=;
-        b=dCvwenrQ/xVVoa5J1yg8XIH5VTxqOfqUuG/Kg0WCu73fmbN2jvdDfW5/+kEhvh3ImL
-         oGWalHYQk2cwmKtq5vq2+nKyvT80Y+5X1l22svkpXnfERH+CXcWnB9BdguLa1VVbajUs
-         uYIPSkCuOuD16eY2nmKPrQvHeS/TuT71g+TAqSkmCC1mpg1UALHsDYF7RYqjtQz53C9i
-         heemb9SBI91rTnugWlxwBbJE0s0+35Gusw6OwFZfpZo02oV8tpp4uYFmRdgD6L9j+ajt
-         4fmTGjyyt62EMXJ+uhAJtI8NUaq6VI9ojhb3VTq9/8d/rxgy/OzJ8EF+Laj4dZEt5HzB
-         xDxA==
-X-Gm-Message-State: AO0yUKWE9qAtU2KjyD+8IoI6TI4dGKSf9OOU0RI2y8sjG9+y5JgvyN6l
-        cSQzSifzp+45PJhv4DL2ScenZw==
-X-Google-Smtp-Source: AK7set/qlPIMi2iBv9G4/ehNBJuY1m0NOP6QMZ7s6Vyfmdsj4JIY0n1S+2F1igceddstYxcbPL9PeQ==
-X-Received: by 2002:a2e:7308:0:b0:293:4e6d:9194 with SMTP id o8-20020a2e7308000000b002934e6d9194mr2733124ljc.24.1678096479180;
-        Mon, 06 Mar 2023 01:54:39 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id u28-20020a2ea17c000000b002946a078ad6sm1629709ljl.125.2023.03.06.01.54.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 01:54:38 -0800 (PST)
-Message-ID: <bd4caf3d-3994-da96-2d3f-175d429136d1@linaro.org>
-Date:   Mon, 6 Mar 2023 10:54:37 +0100
+        Mon, 6 Mar 2023 04:57:01 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9877123862
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:56:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678096619; x=1709632619;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+NM2BD74xBBPV/J+Yymsh+jtxeVrSe3LBZNp5rHQZZ8=;
+  b=h1OYfA2R+nX42ihvO58f2safBTXwHNxDm3lhcw8+JF5NmWVYPuvoSQ3A
+   UL3tEy0wdvdNDbe74TsMlrbHFkaBljQU7JcqC85EdbMYuzfVapL1J1Jct
+   s6v6WOFyOZLK5c1lMlLV0Tjn9q7DH95huMQqxT+ZrIf2/pZPRR5PSujiU
+   7YmMOByQyB418rKpj0U4o9BSwGFYRBN1O61Mpl34mx8khyvOYruXibVTq
+   3SfEcwuMTI9Z2+0CuYGA+PNd54tHkat5QhIgi7CgMeXJnF9T1eKRwUghe
+   5b+m5zdq3AdX98qZquaTcm3Nf87ei6rjQKervGCnM9dpy8sMWi2OnE99g
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="315175700"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="315175700"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 01:56:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="786158388"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="786158388"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 06 Mar 2023 01:56:57 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZ7aT-0000E1-03;
+        Mon, 06 Mar 2023 09:56:57 +0000
+Date:   Mon, 6 Mar 2023 17:56:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marco Elver <elver@google.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>
+Subject: drivers/acpi/apei/erst.c:792:9: sparse: sparse: incorrect type in
+ argument 1 (different address spaces)
+Message-ID: <202303061720.BJQPtAIi-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/3] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
- global registers
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org>
- <20230304-topic-ddr_bwmon-v1-1-e563837dc7d1@linaro.org>
- <0e74ad9a-2333-ea9e-b569-1bf8c965b217@linaro.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <0e74ad9a-2333-ea9e-b569-1bf8c965b217@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+commit: 4ec4190be4cf9cc3e0ccaf5f155a5f9066d18950 kasan, x86: don't rename memintrinsics in uninstrumented files
+date:   3 days ago
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20230306/202303061720.BJQPtAIi-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ec4190be4cf9cc3e0ccaf5f155a5f9066d18950
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 4ec4190be4cf9cc3e0ccaf5f155a5f9066d18950
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/apei/
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303061720.BJQPtAIi-lkp@intel.com/
 
-On 5.03.2023 15:52, Krzysztof Kozlowski wrote:
-> On 04/03/2023 16:39, Konrad Dybcio wrote:
->> The BWMON has two sets of registers: one for handling the monitor itself
->> and one called "global", which we didn't care about before, as on newer
->> SoCs it was made contiguous with (but not the same as) the monitor's
->> register range. Describe it.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../bindings/interconnect/qcom,msm8998-bwmon.yaml  | 28 ++++++++++++++++++----
->>  1 file changed, 24 insertions(+), 4 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->> index 12a0d3ecbabb..6dd0cb0a1f43 100644
->> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->> @@ -49,9 +49,13 @@ properties:
->>      type: object
->>  
->>    reg:
->> -    # BWMON v4 (currently described) and BWMON v5 use one register address
->> -    # space.  BWMON v2 uses two register spaces - not yet described.
->> -    maxItems: 1
->> +    # BWMON v5 uses one register address space, v1-v4 use one or two.
->> +    minItems: 1
->> +    maxItems: 2
->> +
->> +  reg-names:
->> +    minItems: 1
->> +    maxItems: 2
->>  
->>  required:
->>    - compatible
->> @@ -63,6 +67,21 @@ required:
->>  
->>  additionalProperties: false
->>  
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          const: qcom,msm8998-bwmon
->> +    then:
->> +      properties:
->> +        reg:
->> +          minItems: 2
->> +
->> +        reg-names:
->> +          items:
->> +            - const: monitor
->> +            - const: global
-> 
-> else:
->   reg:
->     maxItems: 1
-> 
-> and either disallow reg-names or move it to the top-level.
-Disallowing makes more sense in this case imo, will do.
+sparse warnings: (new ones prefixed by >>)
+   drivers/acpi/apei/erst.c:272:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *src @@     got void [noderef] __iomem * @@
+   drivers/acpi/apei/erst.c:272:13: sparse:     expected void *src
+   drivers/acpi/apei/erst.c:272:13: sparse:     got void [noderef] __iomem *
+   drivers/acpi/apei/erst.c:275:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *dst @@     got void [noderef] __iomem * @@
+   drivers/acpi/apei/erst.c:275:13: sparse:     expected void *dst
+   drivers/acpi/apei/erst.c:275:13: sparse:     got void [noderef] __iomem *
+   drivers/acpi/apei/erst.c:277:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *src @@
+   drivers/acpi/apei/erst.c:277:25: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/acpi/apei/erst.c:277:25: sparse:     got void *src
+   drivers/acpi/apei/erst.c:283:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *src @@
+   drivers/acpi/apei/erst.c:283:17: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/acpi/apei/erst.c:283:17: sparse:     got void *src
+   drivers/acpi/apei/erst.c:284:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got void *dst @@
+   drivers/acpi/apei/erst.c:284:17: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/acpi/apei/erst.c:284:17: sparse:     got void *dst
+>> drivers/acpi/apei/erst.c:792:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [toplevel] vaddr @@
+   drivers/acpi/apei/erst.c:792:9: sparse:     expected void const *
+   drivers/acpi/apei/erst.c:792:9: sparse:     got void [noderef] __iomem *static [toplevel] vaddr
+>> drivers/acpi/apei/erst.c:792:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [toplevel] vaddr @@
+   drivers/acpi/apei/erst.c:792:9: sparse:     expected void const *
+   drivers/acpi/apei/erst.c:792:9: sparse:     got void [noderef] __iomem *static [toplevel] vaddr
+>> drivers/acpi/apei/erst.c:792:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got void [noderef] __iomem *static [toplevel] vaddr @@
+   drivers/acpi/apei/erst.c:792:9: sparse:     expected void *p
+   drivers/acpi/apei/erst.c:792:9: sparse:     got void [noderef] __iomem *static [toplevel] vaddr
+   drivers/acpi/apei/erst.c:793:20: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cper_record_header *rcd_erange @@     got void [noderef] __iomem *static [toplevel] vaddr @@
+   drivers/acpi/apei/erst.c:793:20: sparse:     expected struct cper_record_header *rcd_erange
+   drivers/acpi/apei/erst.c:793:20: sparse:     got void [noderef] __iomem *static [toplevel] vaddr
+   drivers/acpi/apei/erst.c:830:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cper_record_header *rcd_tmp @@     got void [noderef] __iomem * @@
+   drivers/acpi/apei/erst.c:830:17: sparse:     expected struct cper_record_header *rcd_tmp
+   drivers/acpi/apei/erst.c:830:17: sparse:     got void [noderef] __iomem *
 
-> 
->> +
->>  examples:
->>    - |
->>      #include <dt-bindings/interconnect/qcom,sdm845.h>
->> @@ -70,7 +89,8 @@ examples:
->>  
->>      pmu@1436400 {
->>          compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
->> -        reg = <0x01436400 0x600>;
->> +        reg = <0x01436400 0x600>, <0x01436300 0x200>;
-> 
-> That's not correct for sdm845. It's only one address space for sdm845.
-Ack, leftover from an old version again..
+vim +792 drivers/acpi/apei/erst.c
 
-Konrad
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+a08f82d08053fb Huang Ying 2010-05-18  766  
+a08f82d08053fb Huang Ying 2010-05-18  767  int erst_write(const struct cper_record_header *record)
+a08f82d08053fb Huang Ying 2010-05-18  768  {
+a08f82d08053fb Huang Ying 2010-05-18  769  	int rc;
+a08f82d08053fb Huang Ying 2010-05-18  770  	unsigned long flags;
+a08f82d08053fb Huang Ying 2010-05-18  771  	struct cper_record_header *rcd_erange;
+a08f82d08053fb Huang Ying 2010-05-18  772  
+a08f82d08053fb Huang Ying 2010-05-18  773  	if (erst_disable)
+a08f82d08053fb Huang Ying 2010-05-18  774  		return -ENODEV;
+a08f82d08053fb Huang Ying 2010-05-18  775  
+a08f82d08053fb Huang Ying 2010-05-18  776  	if (memcmp(record->signature, CPER_SIG_RECORD, CPER_SIG_SIZE))
+a08f82d08053fb Huang Ying 2010-05-18  777  		return -EINVAL;
+a08f82d08053fb Huang Ying 2010-05-18  778  
+a08f82d08053fb Huang Ying 2010-05-18  779  	if (erst_erange.attr & ERST_RANGE_NVRAM) {
+3b38bb5f7f0635 Huang Ying 2010-12-02  780  		if (!raw_spin_trylock_irqsave(&erst_lock, flags))
+a08f82d08053fb Huang Ying 2010-05-18  781  			return -EBUSY;
+a08f82d08053fb Huang Ying 2010-05-18  782  		rc = __erst_write_to_nvram(record);
+3b38bb5f7f0635 Huang Ying 2010-12-02  783  		raw_spin_unlock_irqrestore(&erst_lock, flags);
+a08f82d08053fb Huang Ying 2010-05-18  784  		return rc;
+a08f82d08053fb Huang Ying 2010-05-18  785  	}
+a08f82d08053fb Huang Ying 2010-05-18  786  
+a08f82d08053fb Huang Ying 2010-05-18  787  	if (record->record_length > erst_erange.size)
+a08f82d08053fb Huang Ying 2010-05-18  788  		return -EINVAL;
+a08f82d08053fb Huang Ying 2010-05-18  789  
+3b38bb5f7f0635 Huang Ying 2010-12-02  790  	if (!raw_spin_trylock_irqsave(&erst_lock, flags))
+a08f82d08053fb Huang Ying 2010-05-18  791  		return -EBUSY;
+a08f82d08053fb Huang Ying 2010-05-18 @792  	memcpy(erst_erange.vaddr, record, record->record_length);
+a08f82d08053fb Huang Ying 2010-05-18  793  	rcd_erange = erst_erange.vaddr;
+a08f82d08053fb Huang Ying 2010-05-18  794  	/* signature for serialization system */
+a08f82d08053fb Huang Ying 2010-05-18  795  	memcpy(&rcd_erange->persistence_information, "ER", 2);
+a08f82d08053fb Huang Ying 2010-05-18  796  
+a08f82d08053fb Huang Ying 2010-05-18  797  	rc = __erst_write_to_storage(0);
+3b38bb5f7f0635 Huang Ying 2010-12-02  798  	raw_spin_unlock_irqrestore(&erst_lock, flags);
+a08f82d08053fb Huang Ying 2010-05-18  799  
+a08f82d08053fb Huang Ying 2010-05-18  800  	return rc;
+a08f82d08053fb Huang Ying 2010-05-18  801  }
+a08f82d08053fb Huang Ying 2010-05-18  802  EXPORT_SYMBOL_GPL(erst_write);
+a08f82d08053fb Huang Ying 2010-05-18  803  
+
+:::::: The code at line 792 was first introduced by commit
+:::::: a08f82d08053fb6e3aa3635c2c26456d96337c8b ACPI, APEI, Error Record Serialization Table (ERST) support
+
+:::::: TO: Huang Ying <ying.huang@intel.com>
+:::::: CC: Len Brown <len.brown@intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
