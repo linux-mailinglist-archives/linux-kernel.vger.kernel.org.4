@@ -2,213 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECFE6AD1BB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAED06AD1BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:38:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjCFWhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:37:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38046 "EHLO
+        id S230121AbjCFWia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:38:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjCFWhe (ORCPT
+        with ESMTP id S230088AbjCFWiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:37:34 -0500
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F2772B05
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:37:31 -0800 (PST)
-Received: from localhost (88-113-24-128.elisa-laajakaista.fi [88.113.24.128])
-        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-        id 79ca04d7-bc6f-11ed-a9de-005056bdf889;
-        Tue, 07 Mar 2023 00:37:29 +0200 (EET)
-From:   andy.shevchenko@gmail.com
-Date:   Tue, 7 Mar 2023 00:37:28 +0200
-To:     Asmaa Mnebhi <asmaa@nvidia.com>
-Cc:     andy.shevchenko@gmail.com, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] gpio: mmio: handle "ngpios" properly in bgpio_init()
-Message-ID: <ZAZrKPw38ERSbzXg@surfacebook>
-References: <20230306211237.14876-1-asmaa@nvidia.com>
+        Mon, 6 Mar 2023 17:38:23 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BBD43903;
+        Mon,  6 Mar 2023 14:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=8pMcsd5zsIOHP2arWm7jYscL1z+fEnP4qax0CfOy3r4=; b=PnxSE/Dk3QLU+/mO+vdwos9hVX
+        4RWt7WgP6zW0lX1R1VqwqVpS7t0HMBgJOWs5aRbkAB+v8RsRInvlLTop6DwSIwYmL3AIRoq57o6iq
+        r4GMIu0UwGyb/pHAX9uJJscdqU63acW31/osv0zO2qhyLGJIcSpk6a2Epci8QdXC282zp78Jq0aQN
+        4/qvwgU8EEEsDBEvyc1n9OIxZb1pbQC1dFuuPV+8ue1vBv0LfUlv49mnPXtlxTjHa465y7OsnpyWa
+        eDduJRuBoC7SApYMKR+AaQv1reBLM/++f3SDd8eg/iqVgmBS44TeeOrdvgOXjCGmqZ54h55uKPM3i
+        JRhK7Rew==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZJSe-00FJDM-SF; Mon, 06 Mar 2023 22:37:41 +0000
+Message-ID: <570edde0-cfea-f560-fe83-6077f4f221e5@infradead.org>
+Date:   Mon, 6 Mar 2023 14:37:39 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306211237.14876-1-asmaa@nvidia.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/99] lib: Add option iterator
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
+        paulus@samba.org, benh@kernel.crashing.org, linux@armlinux.org.uk,
+        pjones@redhat.com, timur@kernel.org, adaplas@gmail.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org, mbroemme@libmpq.org,
+        thomas@winischhofer.net, James.Bottomley@HansenPartnership.com,
+        spock@gentoo.org, sudipm.mukherjee@gmail.com,
+        teddy.wang@siliconmotion.com, geert+renesas@glider.be,
+        corbet@lwn.net
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230306160016.4459-1-tzimmermann@suse.de>
+ <20230306160016.4459-2-tzimmermann@suse.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230306160016.4459-2-tzimmermann@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Mar 06, 2023 at 04:12:37PM -0500, Asmaa Mnebhi kirjoitti:
-> bgpio_init() uses "sz" argument to populate ngpio, which is not
-> accurate. Instead, read the "ngpios" property from the DT and if it
-> doesn't exist, use the "sz" argument. With this change, drivers no
-> longer need to overwrite the ngpio variable after calling bgpio_init().
+Hi,
 
-Thank you!
-
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-Sorry it took a bit longer for us to settle on this.
-
-> Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
+On 3/6/23 07:58, Thomas Zimmermann wrote:
+> Add struct option_iter and helpers that walk over individual options
+> of an option string. Add documentation.
+> 
+> Kernel parameters often have the format of
+> 
+>   param=opt1,opt2:val,opt3
+> 
+> where the option string contains a number of comma-separated options.
+> Drivers usually use strsep() in a loop to extract individual options
+> from the string. Each call to strsep() modifies the given string, so
+> callers have to duplicate kernel parameters that are to be parsed
+> multiple times.
+> 
+> The new struct option_iter and its helpers wrap this code behind a
+> clean interface. Drivers can iterate over the options without having
+> to know the details of the option-string format. The iterator handles
+> string memory internally without modifying the original options.
+> 
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
 > ---
->  drivers/gpio/gpio-mmio.c |  9 +++++-
->  drivers/gpio/gpiolib.c   | 68 ++++++++++++++++++++++------------------
->  drivers/gpio/gpiolib.h   |  1 +
->  3 files changed, 46 insertions(+), 32 deletions(-)
+>  Documentation/core-api/kernel-api.rst |  9 +++
+>  include/linux/cmdline.h               | 29 ++++++++
+>  lib/Makefile                          |  2 +-
+>  lib/cmdline_iter.c                    | 97 +++++++++++++++++++++++++++
+>  4 files changed, 136 insertions(+), 1 deletion(-)
+>  create mode 100644 include/linux/cmdline.h
+>  create mode 100644 lib/cmdline_iter.c
 > 
-> diff --git a/drivers/gpio/gpio-mmio.c b/drivers/gpio/gpio-mmio.c
-> index d9dff3dc92ae..b52a3dd511ca 100644
-> --- a/drivers/gpio/gpio-mmio.c
-> +++ b/drivers/gpio/gpio-mmio.c
-> @@ -60,6 +60,8 @@ o        `                     ~~~~\___/~~~~    ` controller in FPGA is ,.`
->  #include <linux/of.h>
->  #include <linux/of_device.h>
+> diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
+> index 62f961610773..cdc7ba8decf9 100644
+> --- a/Documentation/core-api/kernel-api.rst
+> +++ b/Documentation/core-api/kernel-api.rst
+> @@ -93,9 +93,18 @@ Bitmap Operations
+>  Command-line Parsing
+>  --------------------
 >  
-> +#include "gpiolib.h"
+> +.. kernel-doc:: lib/cmdline_iter.c
+> +   :doc: overview
 > +
->  static void bgpio_write8(void __iomem *reg, unsigned long data)
->  {
->  	writeb(data, reg);
-> @@ -614,10 +616,15 @@ int bgpio_init(struct gpio_chip *gc, struct device *dev,
->  	gc->parent = dev;
->  	gc->label = dev_name(dev);
->  	gc->base = -1;
-> -	gc->ngpio = gc->bgpio_bits;
->  	gc->request = bgpio_request;
->  	gc->be_bits = !!(flags & BGPIOF_BIG_ENDIAN);
+>  .. kernel-doc:: lib/cmdline.c
+>     :export:
 >  
-> +	ret = gpiochip_get_ngpios(gc, dev);
-> +	if (ret)
-> +		gc->ngpio = gc->bgpio_bits;
-> +	else
-> +		gc->bgpio_bits = round_up(gc->ngpio, 8);
+> +.. kernel-doc:: lib/cmdline_iter.c
+> +   :export:
 > +
->  	ret = bgpio_setup_io(gc, dat, set, clr, flags);
->  	if (ret)
->  		return ret;
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 939c776b9488..1964ec64e356 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -647,6 +647,40 @@ static void gpiochip_setup_devs(void)
->  	}
->  }
+> +.. kernel-doc:: include/linux/cmdline.h
+> +   :internal:
+> +
+>  Sorting
+>  -------
 >  
-> +int gpiochip_get_ngpios(struct gpio_chip *gc, struct device *dev)
+> diff --git a/include/linux/cmdline.h b/include/linux/cmdline.h
+> new file mode 100644
+> index 000000000000..5d7e648e98a5
+> --- /dev/null
+> +++ b/include/linux/cmdline.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +
+> +#ifndef LINUX_CMDLINE_H
+> +#define LINUX_CMDLINE_H
+> +
+> +/**
+> + * struct option_iter - Iterates over string of kernel or module options
+> + */
+> +struct option_iter {
+> +	char *optbuf;
+> +	char *next_opt;
+> +};
+> +
+> +void option_iter_init(struct option_iter *iter, const char *options);
+> +void option_iter_release(struct option_iter *iter);
+> +const char *option_iter_incr(struct option_iter *iter);
+> +
+> +/**
+> + * option_iter_next - Loop condition to move over options
+> + * @iter_:	the iterator
+> + * @opt_:	the name of the option variable
+> + *
+> + * Iterates over option strings as part of a while loop and
+> + * stores the current option in opt_.
+> + */
+> +#define option_iter_next(iter_, opt_) \
+> +	(((opt_) = option_iter_incr(iter_)) != NULL)
+> +
+> +#endif
+
+> diff --git a/lib/cmdline_iter.c b/lib/cmdline_iter.c
+> new file mode 100644
+> index 000000000000..d9371dfea08b
+> --- /dev/null
+> +++ b/lib/cmdline_iter.c
+> @@ -0,0 +1,97 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +#include <linux/cmdline.h>
+> +#include <linux/export.h>
+> +#include <linux/slab.h>
+> +
+> +/**
+> + * DOC: overview
+> + *
+> + * A kernel parameter's option string can contain multiple comma-separated
+> + * options. Modules can parse an option string with struct &option_iter and
+> + * its helpers. After obtaining the string, initialize and instance of the
+
+                                                          an instance
+
+> + * option iterator and loop iver its content as show below.
+
+                               over
+
+> + *
+> + * .. code-block:: c
+> + *
+> + *	const char *options = ...; // provided option string
+> + *
+> + *	struct option_iter iter;
+> + *	const char *opt;
+> + *
+> + *	option_iter_init(&iter, options);
+> + *
+> + *	while (option_iter_next(&iter, &opt)) {
+> + *		if (!strcmp(opt, "foo"))
+> + *			...
+> + *		else (strcmp(opt, "bar"))
+> + *			...
+> + *		else
+> + *			pr_warn("unknown option %s\n", opt);
+> + *	}
+> + *
+> + *	option_iter_release(&iter);
+> + *
+> + * The call to option_iter_init() initializes the iterator instance
+> + * from the option string. The while loop walks over the individual
+> + * options in the sting and returns each in the second argument. The
+> + * returned memory is owned by the iterator instance and callers may
+> + * not modify or free it. The call to option_iter_release() frees all
+> + * resources of the iterator. This process does not modify the original
+> + * option string. If the option string contains an empty option (i.e.,
+> + * two commas next to each other), option_iter_next() skips the empty
+> + * option automatically.
+
+Is that latter skipping over a ",," automatically something that you have
+observed as needed?
+I can imagine a driver or module wanting to know that an empty string
+was entered (i.e., ",,").
+
+> + */
+> +
+> +/**
+> + * option_iter_init - Initializes an option iterator
+> + * @iter:	the iterator to initialize
+> + * @options:	the options string
+> + */
+> +void option_iter_init(struct option_iter *iter, const char *options)
 > +{
-> +	u32 ngpios = gc->ngpio;
-> +	int ret;
-> +
-> +	if (ngpios == 0) {
-> +		ret = device_property_read_u32(dev, "ngpios", &ngpios);
-> +		if (ret == -ENODATA)
-> +			/*
-> +			 * -ENODATA means that there is no property found and
-> +			 * we want to issue the error message to the user.
-> +			 * Besides that, we want to return different error code
-> +			 * to state that supplied value is not valid.
-> +			 */
-> +			ngpios = 0;
-> +		else if (ret)
-> +			return ret;
-> +
-> +		gc->ngpio = ngpios;
-> +	}
-> +
-> +	if (gc->ngpio == 0) {
-> +		chip_err(gc, "tried to insert a GPIO chip with zero lines\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (gc->ngpio > FASTPATH_NGPIO)
-> +		chip_warn(gc, "line cnt %u is greater than fast path cnt %u\n",
-> +			gc->ngpio, FASTPATH_NGPIO);
-> +
-> +	return 0;
+> +	if (options && *options)
+> +		iter->optbuf = kstrdup(options, GFP_KERNEL); // can be NULL
+> +	else
+> +		iter->optbuf = NULL;
+> +	iter->next_opt = iter->optbuf;
 > +}
-> +EXPORT_SYMBOL_GPL(gpiochip_get_ngpios);
+> +EXPORT_SYMBOL(option_iter_init);
 > +
->  int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->  			       struct lock_class_key *lock_key,
->  			       struct lock_class_key *request_key)
-> @@ -655,7 +689,6 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->  	struct gpio_device *gdev;
->  	unsigned long flags;
->  	unsigned int i;
-> -	u32 ngpios = 0;
->  	int base = 0;
->  	int ret = 0;
->  
-> @@ -704,36 +737,9 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->  	else
->  		gdev->owner = THIS_MODULE;
->  
-> -	/*
-> -	 * Try the device properties if the driver didn't supply the number
-> -	 * of GPIO lines.
-> -	 */
-> -	ngpios = gc->ngpio;
-> -	if (ngpios == 0) {
-> -		ret = device_property_read_u32(&gdev->dev, "ngpios", &ngpios);
-> -		if (ret == -ENODATA)
-> -			/*
-> -			 * -ENODATA means that there is no property found and
-> -			 * we want to issue the error message to the user.
-> -			 * Besides that, we want to return different error code
-> -			 * to state that supplied value is not valid.
-> -			 */
-> -			ngpios = 0;
-> -		else if (ret)
-> -			goto err_free_dev_name;
-> -
-> -		gc->ngpio = ngpios;
-> -	}
-> -
-> -	if (gc->ngpio == 0) {
-> -		chip_err(gc, "tried to insert a GPIO chip with zero lines\n");
-> -		ret = -EINVAL;
-> +	ret = gpiochip_get_ngpios(gc, &gdev->dev);
-> +	if (ret)
->  		goto err_free_dev_name;
-> -	}
-> -
-> -	if (gc->ngpio > FASTPATH_NGPIO)
-> -		chip_warn(gc, "line cnt %u is greater than fast path cnt %u\n",
-> -			  gc->ngpio, FASTPATH_NGPIO);
->  
->  	gdev->descs = kcalloc(gc->ngpio, sizeof(*gdev->descs), GFP_KERNEL);
->  	if (!gdev->descs) {
-> @@ -903,7 +909,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
->  	/* failures here can mean systems won't boot... */
->  	if (ret != -EPROBE_DEFER) {
->  		pr_err("%s: GPIOs %d..%d (%s) failed to register, %d\n", __func__,
-> -		       base, base + (int)ngpios - 1,
-> +		       base, base + (int)gc->ngpio - 1,
->  		       gc->label ? : "generic", ret);
->  	}
->  	return ret;
-> diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
-> index b3c2db6eba80..c38cbf1b753b 100644
-> --- a/drivers/gpio/gpiolib.h
-> +++ b/drivers/gpio/gpiolib.h
-> @@ -207,6 +207,7 @@ int gpiod_configure_flags(struct gpio_desc *desc, const char *con_id,
->  int gpio_set_debounce_timeout(struct gpio_desc *desc, unsigned int debounce);
->  int gpiod_hog(struct gpio_desc *desc, const char *name,
->  		unsigned long lflags, enum gpiod_flags dflags);
-> +int gpiochip_get_ngpios(struct gpio_chip *gc, struct device *dev);
->  
->  /*
->   * Return the GPIO number of the passed descriptor relative to its chip
-> -- 
-> 2.30.1
-> 
+> +/**
+> + * option_iter_release - Releases an option iterator's resources
+> + * @iter:	the iterator
+> + */
+> +void option_iter_release(struct option_iter *iter)
+> +{
+> +	kfree(iter->optbuf);
+> +	iter->next_opt = NULL;
+> +}
+> +EXPORT_SYMBOL(option_iter_release);
+> +
+> +/**
+> + * option_iter_incr - Return current option and advance to the next
+> + * @iter:	the iterator
+> + *
+> + * Returns:
+
+ * Return:
+matches kernel-doc notation documentation.
+
+> + * The current option string, or NULL if there are no more options.
+> + */
+> +const char *option_iter_incr(struct option_iter *iter)
+> +{
+> +	char *opt;
+> +
+> +	if (!iter->next_opt) { // can be OK if kstrdup failed
+> +		if (iter->optbuf) // iter has already been released; logic error
+> +			pr_err("Incrementing option iterator without string\n");
+> +		return NULL;
+> +	}
+> +
+> +	do {
+> +		opt = strsep(&iter->next_opt, ",");
+> +		if (!opt)
+> +			return NULL;
+> +	} while (!*opt); // found empty option string, try next
+> +
+> +	return opt;
+> +}
+> +EXPORT_SYMBOL(option_iter_incr);
+
+Looks useful. Thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+~Randy
