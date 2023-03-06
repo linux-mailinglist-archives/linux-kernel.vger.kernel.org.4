@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677DA6AC3AF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:46:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8866F6AC3BF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbjCFOqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:46:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S230119AbjCFOsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:48:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbjCFOqG (ORCPT
+        with ESMTP id S230145AbjCFOsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:46:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC50D2E82E;
-        Mon,  6 Mar 2023 06:45:47 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326Dhvrw008525;
-        Mon, 6 Mar 2023 14:45:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=nXxBYvYmKxouMcZlkVJQl/q1L/EByDXUxEAwhrEUQUQ=;
- b=hblBiYtYJwFsffDcBNpxEbGD6da685ozODZUHTyf/q5QR+TU3TfWGoXEfrnOHbnKh/SJ
- nFzFLpGm/CBwMXGBjUE3KMIbxy5q4T6lVB0xbxiUD2xBw08QIfKiDCgKAHrzwMpkX8I3
- 9Pz1mUPAGU0+HPEbWVtTsmhoftS4i4ciNp2ZX2LDi8VbuHcO62YWM96fsrIs+okw7QEq
- 2zxSJK958GeTPG8YALvMyl2HBauIFnIDsvzwncnu/dPNyEPhblMHa04mEiPvGEfrCOyF
- XQoxzMjIQHIre5uOlwkwY2Hg79QsTQD1+x+VX7RYw9sFpfGb8rYPUx5m1OQpfzLLRm2a 4g== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p419d50au-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 14:45:29 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 326EjOON014501;
-        Mon, 6 Mar 2023 14:45:24 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3p4fft5hxu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 06 Mar 2023 14:45:24 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326EjOji014495;
-        Mon, 6 Mar 2023 14:45:24 GMT
-Received: from mdalam-linux.qualcomm.com (mdalam-linux.qualcomm.com [10.201.2.71])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 326EjOKM014494;
-        Mon, 06 Mar 2023 14:45:24 +0000
-Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
-        id 291C312010CA; Mon,  6 Mar 2023 20:15:23 +0530 (IST)
-From:   Md Sadre Alam <quic_mdalam@quicinc.com>
-To:     loic.poulain@linaro.org, rfoss@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
-        quic_varada@quicinc.com, quic_mdalam@quicinc.com
-Subject: [PATCH 3/5] i2c: qcom-cci:Use devm_platform_get_and_ioremap_resource()
-Date:   Mon,  6 Mar 2023 20:15:22 +0530
-Message-Id: <20230306144522.15699-1-quic_mdalam@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: tEIPnkK23uXSScqfu_5DGPFAF-EPwQYy
-X-Proofpoint-GUID: tEIPnkK23uXSScqfu_5DGPFAF-EPwQYy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
- clxscore=1011 suspectscore=0 mlxlogscore=749 adultscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060130
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Mon, 6 Mar 2023 09:48:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2835E1986
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:47:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678114005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ePnoIICLAgX5+yYDBioH0vdLJ6br42cKaUY5oT5Uciw=;
+        b=Iijr6J1yVDJFdXagEsoBUptSQ7bsMddbGYbDNUzbx7DJSBBjpO0c86A841zIkIZfYKI1he
+        siSm1B+jTZkt8EtaigTRk/yYP/iykkDZRHp9rcz0LBqPeEf6a8DWEF0P3DpSrSFI6GejFi
+        A7lUEXAolhl1v90tBSa5Ixo2pcSgUUo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-343-su8vUQvyPQKmkMm2FULrTQ-1; Mon, 06 Mar 2023 09:46:43 -0500
+X-MC-Unique: su8vUQvyPQKmkMm2FULrTQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D50B229AA39C;
+        Mon,  6 Mar 2023 14:46:42 +0000 (UTC)
+Received: from sirius.home.kraxel.org (unknown [10.39.192.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 87CDE1410DD9;
+        Mon,  6 Mar 2023 14:46:42 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id 05829180062C; Mon,  6 Mar 2023 15:46:40 +0100 (CET)
+Date:   Mon, 6 Mar 2023 15:46:40 +0100
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Ryan Neph <ryanneph@chromium.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        David Airlie <airlied@redhat.com>, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2] drm/virtio: Fix handling CONFIG_DRM_VIRTIO_GPU_KMS
+ option
+Message-ID: <20230306144640.ta7jca5iabg66uoy@sirius.home.kraxel.org>
+References: <20230306143234.1561759-1-dmitry.osipenko@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306143234.1561759-1-dmitry.osipenko@collabora.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +69,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+On Mon, Mar 06, 2023 at 05:32:34PM +0300, Dmitry Osipenko wrote:
+> VirtIO-GPU got a new config option for disabling KMS. There were two
+> problems left unnoticed during review when the new option was added:
+> 
+> 1. The IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) check in the code was
+> inverted, hence KMS was disabled when it should be enabled and vice versa.
+> 
+> 2. The disabled KMS crashed kernel with a NULL dereference in
+> drm_kms_helper_hotplug_event(), which shall not be invoked with a
+> disabled KMS.
+> 
+> Fix the inverted config option check in the code and skip handling the
+> VIRTIO_GPU_EVENT_DISPLAY sent by host when KMS is disabled in guest to fix
+> the crash.
+> 
+> Fixes: 72122c69d717 ("drm/virtio: Add option to disable KMS support")
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+> ---
+> 
+> Changelog:
+> 
+> v2: - Moved the "has_edid" under the "num_scanouts" condition, like was
+>       suggested by Gerd Hoffmann.
 
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
----
- drivers/i2c/busses/i2c-qcom-cci.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-qcom-cci.c
-index 01358472680c..ed70bc1e4926 100644
---- a/drivers/i2c/busses/i2c-qcom-cci.c
-+++ b/drivers/i2c/busses/i2c-qcom-cci.c
-@@ -581,8 +581,7 @@ static int cci_probe(struct platform_device *pdev)
- 
- 	/* Memory */
- 
--	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	cci->base = devm_ioremap_resource(dev, r);
-+	cci->base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
- 	if (IS_ERR(cci->base))
- 		return PTR_ERR(cci->base);
- 
--- 
-2.17.1
+Acked-by: Gerd Hoffmann <kraxel@redhat.com>
 
