@@ -2,104 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D746AC0D9
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 853436AC0E0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjCFN1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37552 "EHLO
+        id S231139AbjCFN2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjCFN1U (ORCPT
+        with ESMTP id S230281AbjCFN2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:27:20 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C912CFDB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:27:18 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id m5so6384477uae.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:27:18 -0800 (PST)
+        Mon, 6 Mar 2023 08:28:15 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9018A24A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:28:14 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id v27so9077102vsa.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:28:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678109238;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678109294;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7uMYoG5gt/tHm6sieDe35y2+2ZMf8+X/ZXBI1Ip8XME=;
-        b=lnJbZyBQ1pjxSzk8duyKbVS5VadOBX9vFp3NvssZYVP0FS8t8zWX9aoRZFXkhIbXAV
-         HiCOZrmCdWQvVWBMHG4jkACPp+jDNfY/KYJD7g9rj3T+KdaiFinwynvt0NwuGESk3YlX
-         lq9oZe0h1t4iNDne4vW+gNEAqAoqCcmS+JGVI6DmjCPCBXBKW5L3HC0qwtT2+SWLHSLM
-         zQuvQDVCFPhm9nLCpc8UtWpw6UYY9dy6uTVKQdjhVYSoDYizPdGa8NsnsOfmKnyUFuKL
-         0HGJYSyXKs1qzDMHAb1rONA3ezGdp9ObZeK9jOHgcOGKGI9UTWWga8WfQ6ywejtaGkZt
-         jo+A==
+        bh=j35GhvY7E7mzlkVrpReZp4vmk4NhI+cSNe2C9lnbMoM=;
+        b=Cp7BGW2N/LitFxqVU0zIZGZILOHZKB5Hvtr9iEjBuWniKsqU1k02YRbolBhvP7HDQE
+         vs5qjVYboTS6hRewp+GpDsbFnjRJ9jobZGRo/yVj3spASRMY0GKBKayHcvFYtX/JceVv
+         4PS5emrLyPMC5w3TOFoJreAcdbY4izRJg3OnoMb9uzXp1TnKANHVSydfPEN8cQbqI+Yr
+         +5UIItPm1lXasKejcowYm6yRQ6ReQapZEjFhEpHVuPxoQyZwzNZJzr9OxlFR32FaozlP
+         x0xbQcO0TxBT8qmhhqFr1Q2ohLXWKsWOxlZkRuBU3RunlIdeu7xSBhiFnxe0OtTwU+8E
+         4bVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678109238;
+        d=1e100.net; s=20210112; t=1678109294;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7uMYoG5gt/tHm6sieDe35y2+2ZMf8+X/ZXBI1Ip8XME=;
-        b=z4HroQ8RVCxslvOiL5Jn9vmY4ZGWpPps8w49se35jVbQ+RBqAXI+9K9OpE4A/mmDml
-         Af18VtlkVct2rsyBN7zzPzGP/kC6IGB8MbyMuSNDLEkTKhFYdEeLhvey/i0TGI+LTRJP
-         ZtjS7WGGxqcsk9M84Wpg7lLPs4BheS+u6OZ9+FBeZJAxaFYLz7ZCJXv94BD2tKmpO7E2
-         DjnyZoqwhhezF/HpwMjJuIv+XOtDkbPF3NlW0T4pF2iiCg109BbTs08dH63nDWFTqzmJ
-         SRg0xKm9CEbgld1D3JOYL8cG4wOKSNnWngfHtLtGPZCZ76a4w36+LjKESoPKakOIuXxe
-         8GVg==
-X-Gm-Message-State: AO0yUKVp3clDMnzmqjBxmloCbosbXt4gRzPHlFFcr75xIObhgsQMXgNP
-        yLPpUmvzTwRYM8qXkkjrYRZkhqGWEbx35SFS0ZB88Q==
-X-Google-Smtp-Source: AK7set8HzRghz6cpJ32KM3ORISHaeVG+xP4GaClXIjSSAFyQ5RIZcxeMnW59LyZlNV+yTszpqKwb7mvve14Yal5IWQY=
-X-Received: by 2002:ab0:4a12:0:b0:68a:8f33:9567 with SMTP id
- q18-20020ab04a12000000b0068a8f339567mr6537481uae.2.1678109237930; Mon, 06 Mar
- 2023 05:27:17 -0800 (PST)
+        bh=j35GhvY7E7mzlkVrpReZp4vmk4NhI+cSNe2C9lnbMoM=;
+        b=f5xeARoXeAqd/jUv7xighHN0PHys1SjRLeIZjanw21tPCWEnU3USdi0gVmFLWv2BpH
+         WnnOiqDoo0o4S+OeD9Y2PIkdchJ55N1VQC5kzv48ZzN99VXFFcFQ5ztKh+FVm0urcJRr
+         dfmZwBLUkU5caBbTnZNmod/vIIn6cQDGa8y/fOK1EBrDH6HhBivNK0gMMH4K9EqUQJiC
+         lxSN+yXo1DCGe/E5FQLi6UchlB5mNWtLBeCVbhjpN/sMPKnJiShzhC5v+mQG6Nc4HAWZ
+         KaizXpZiiPgpEAtzhyeQEncf47buIZGVj0bciIln97VL/5lSerNYCoTRjxiwa7AqoIXT
+         Y9Dw==
+X-Gm-Message-State: AO0yUKWFtr1abS2+BGh86+7KoYPwn0nQJEj1oWGPTD9aSf6URTLXBe6k
+        oUqa8uKDRGff6c4nUNSYAjzdtw6yBCoMO2RnHrIvwA==
+X-Google-Smtp-Source: AK7set8kNbHwEPOA1Fk3J4jAhX7ozG8BFymribiYfNd6DXqK9NHPT2EhYPXCEenbaKo/fN1CQBSrkfPcKfIiS92DHQ4=
+X-Received: by 2002:a67:7305:0:b0:411:c666:583b with SMTP id
+ o5-20020a677305000000b00411c666583bmr7328571vsc.5.1678109293921; Mon, 06 Mar
+ 2023 05:28:13 -0800 (PST)
 MIME-Version: 1.0
-References: <20230209095753.447347-1-brgl@bgdev.pl>
-In-Reply-To: <20230209095753.447347-1-brgl@bgdev.pl>
+References: <20230216125257.112300-1-brgl@bgdev.pl>
+In-Reply-To: <20230216125257.112300-1-brgl@bgdev.pl>
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Mar 2023 14:27:07 +0100
-Message-ID: <CAMRc=MfAMF6OaCsKAKj6GqhX=Zift9dVDgtK80Djocawb5u3fA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] arm: qcom: sa8775p: add socinfo support
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        devicetree@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+Date:   Mon, 6 Mar 2023 14:28:03 +0100
+Message-ID: <CAMRc=MeBCuJ6eiAVXmHkpHz6KsogdcaPym5nabncmebpJR75FA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] arm64: dts: qcom: sa8775p-ride: enable relevant
+ QUPv3 IPs
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 9, 2023 at 10:57=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
+On Thu, Feb 16, 2023 at 1:53=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
  wrote:
 >
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 >
-> This series adds support for qcom-socinfo for SA8775P SoCs.
+> This enables the QUPv3 interfaces that are exposed on the sa8775p-ride
+> board: I2C, SPI and the Bluetooth and GNSS UART ports.
+>
+> v2 -> v3:
+> - fix the interrupt number for uart12
+> - replace underscores with hyphens in DT node names (although make dtbs_c=
+heck
+>   does not raise warnings about this)
+> - rearrange the commits so that they're more fine-grained with separate
+>   patches for adding nodes to dtsi and enabling them for the board
 >
 > v1 -> v2:
-> - fix ordering of socinfo defines
-> - fix the commit subject line for patch 2/3
-> - collect the Ack from Krzysztof
+> - uart17 is the Bluetooth port, not GNSS
+> - add uart12 for GNSS too in that case
 >
-> Bartosz Golaszewski (3):
->   soc: qcom: smem: update max processor count
->   dt-bindings: arm: qcom: add the SoC ID for SA8775P
->   soc: qcom: socinfo: add support for SA8775P
+> Bartosz Golaszewski (9):
+>   arm64: dts: qcom: sa8775p: add the QUPv3 #2 node
+>   arm64: dts: qcom: sa8775p-ride: enable QUPv3 #2
+>   arm64: dts: qcom: sa8775p: add the i2c18 node
+>   arm64: dts: qcom: sa8775p-ride: enable i2c18
+>   arm64: dts: qcom: sa8775p: add the spi16 node
+>   arm64: dts: qcom: sa8775p-ride: enable the SPI node
+>   arm64: dts: qcom: sa8775p: add high-speed UART nodes
+>   arm64: dts: qcom: sa8775p-ride: enable the GNSS UART port
+>   arm64: dts: qcom: sa8775p-ride: enable the BT UART port
 >
->  drivers/soc/qcom/smem.c            | 2 +-
->  drivers/soc/qcom/socinfo.c         | 1 +
->  include/dt-bindings/arm/qcom,ids.h | 1 +
->  3 files changed, 3 insertions(+), 1 deletion(-)
+>  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 100 ++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi     |  86 +++++++++++++++++++
+>  2 files changed, 186 insertions(+)
 >
 > --
 > 2.37.2
 >
 
-Bjorn,
+Konrad, Krzysztof et al,
 
-Looks like this is ready to go, so gentle ping.
+It's been over two weeks, could you please take a look and let me know
+if this is good to go?
 
-Bart
+Thanks,
+Bartosz
