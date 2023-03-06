@@ -2,138 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FEA6ACE5F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1956ACE6B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjCFTo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
+        id S230126AbjCFTqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjCFToI (ORCPT
+        with ESMTP id S230146AbjCFTqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:44:08 -0500
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF7C10A84
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:43:53 -0800 (PST)
-Received: by mail-oo1-xc2f.google.com with SMTP id b10-20020a4aba0a000000b005200c0d4a2aso1701745oop.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 11:43:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678131832;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+V0EwO6G1+NsdivbbBORAc/NjBVd2whnpDLZ9uwuBOk=;
-        b=juILeSvhI3iZefJOGuCghopgkpsqHTNjDpBpW6JVxi7WAJO9X8Oj4gLL7cJyR44plp
-         y1JS3glWd1n7a4QTfeAtmJZLrQywzHkCsHHTrZJl6SWA5UYBIz5+S2wskKCt6cYzMf/+
-         f4FbrkGQNsJMfD9ORGRRij4MiKH7JDmwE/OUBj1IJZYFBVN8cOCMuWpR+S53Mi8hpxJp
-         yoFCtZRDSyPQCPGHbXHGLvgj89XexGfCt3PvRbFwORx9QZ6GQ5uMZ4njSQQAJBJB5UTd
-         n0i2HJMBILwzcZAkwLzWCvnUxW9FwVjIZBoc/k1VhnWxLQI2FeF0o6jCT/MvENm2P1lO
-         VfSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678131832;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+V0EwO6G1+NsdivbbBORAc/NjBVd2whnpDLZ9uwuBOk=;
-        b=Sy+PCNh68W+5H/0EOj9tHPQYVK3Fug2HIqMO2uqU4YETSieYvK/spQyIoEC3RpSyHm
-         TL9e9AKqbRqlkb7zm+649eXER+Op2+7LGV1ZcOFkVcbeRcqXZu2RbNokNdn5SDc8IdBh
-         mPzLp6lWWhVwq1ysmtVKSikRT1vW2gjoc44Q2wMzaDirFofy/yAS1+ZrSdi6V7OdEWnn
-         0kZvjDkTnN6/aYBep+7yDMaOVce+CpBg0LRwikx+cQ4gv9UGykr7m42YvbwdqqpVtqoz
-         jSqblD5ZHFTHH1undKP388fPW3P07wbUdXIcRrAxlIsGZnWhpIlEn0b5z96tTIxxDTUk
-         rbbQ==
-X-Gm-Message-State: AO0yUKVWTIr7YksY8K2UkD/DKRMQc6208KizNlzmRR3RsQEmqjlI5T9/
-        0M0/PfilYDv3NPGemx33YbtLtHh4oT4ubd48gl3wzCoh
-X-Google-Smtp-Source: AK7set+F1eBn2tH3xXCaADaUGLCEOerW5DQ8sfH/ykuSI5jUceMP5bufdOfeyBYPtE74msssSZw48JCEClvCBVRq6as=
-X-Received: by 2002:a4a:3c1c:0:b0:525:2f4d:54a3 with SMTP id
- d28-20020a4a3c1c000000b005252f4d54a3mr4767571ooa.0.1678131832162; Mon, 06 Mar
- 2023 11:43:52 -0800 (PST)
+        Mon, 6 Mar 2023 14:46:19 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBA74C29;
+        Mon,  6 Mar 2023 11:46:15 -0800 (PST)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326JHNBG024357;
+        Mon, 6 Mar 2023 19:45:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=FX+IFbE0ww/sohan/gFdmJVjorKhB/Ioyds8Q7icbJI=;
+ b=lAjfiH44YCyG6sKxvfeKrcin8u5oDtnnJQS54ES1j9On3tJHTy+aydiW0l8+LoxuQsC/
+ Am6ZeHtKQsA2Qg/IvkJ0pExHj536NI5dm2jD0uxRqKbPRNUA1SMpz0t0ZLQUlbeBNkPI
+ JKnA2HCPBKSeZ0nO7Z6eLNO3xiWZSFMg5wktMlU4deCLPecGYgt4ongUTgW9f8yQMspg
+ rLMW9juB7bDQJ5vf0HdDE72PNStEs9BVBqZiUwpJXQjF21i9XlzgV67XurQsDpdJeL7j
+ A/r+jPpSdobHxOHGmiMZaA94ly350tTWkQUqg8y2tJIOiE5EjJzlBbfn1eQWOqdSrLnK /A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p5p6xgm66-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:45:54 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326JK4vT008519;
+        Mon, 6 Mar 2023 19:45:52 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p5p6xgm5v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:45:52 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326J276S017282;
+        Mon, 6 Mar 2023 19:45:52 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3p41akanws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:45:51 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326JjoHS36634910
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Mar 2023 19:45:50 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BD7ED5805D;
+        Mon,  6 Mar 2023 19:45:50 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7B9B958043;
+        Mon,  6 Mar 2023 19:45:49 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Mar 2023 19:45:49 +0000 (GMT)
+Message-ID: <cb76da88-c5c3-d7ca-59e9-a427faf73ddd@linux.ibm.com>
+Date:   Mon, 6 Mar 2023 14:45:49 -0500
 MIME-Version: 1.0
-References: <20230305125226.1953574-1-trix@redhat.com>
-In-Reply-To: <20230305125226.1953574-1-trix@redhat.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 6 Mar 2023 14:43:41 -0500
-Message-ID: <CADnq5_MYjVbNA5yJ2mOCgGut6d1kEaNA_U0ZvjEqD=adjn9hPA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: change several dcn30 variables
- storage-class-specifier to static
-To:     Tom Rix <trix@redhat.com>
-Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, jiapeng.chong@linux.alibaba.com,
-        aurabindo.pillai@amd.com, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 20/28] security: Introduce inode_post_set_acl hook
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+ <20230303181842.1087717-21-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230303181842.1087717-21-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pMS76I5j8_o5O3TGueGd4ennj0VFBiB_
+X-Proofpoint-ORIG-GUID: Z4Ko6SqqL5giXG3ySAw6QhuLXH1MW3W4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_12,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ impostorscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501
+ suspectscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060171
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
 
-Alex
 
-On Sun, Mar 5, 2023 at 7:52 AM Tom Rix <trix@redhat.com> wrote:
->
-> smatch reports these similar problems in dcn30
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_dwb.c:223:25:
->   warning: symbol 'dcn30_dwbc_funcs' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_mmhubbub.c:214:28:
->   warning: symbol 'dcn30_mmhubbub_funcs' was not declared. Should it be static?
-> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn30/dcn30_mpc.c:1402:24:
->   warning: symbol 'dcn30_mpc_funcs' was not declared. Should it be static?
->
-> All of these are only used in their definition file, so they should be static
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On 3/3/23 13:18, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> the inode_post_set_acl hook.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 > ---
->  drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c      | 2 +-
->  drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c | 2 +-
->  drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c      | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c
-> index f14f69616692..0d98918bf0fc 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_dwb.c
-> @@ -220,7 +220,7 @@ void dwb3_set_denorm(struct dwbc *dwbc, struct dc_dwb_params *params)
->  }
->
->
-> -const struct dwbc_funcs dcn30_dwbc_funcs = {
-> +static const struct dwbc_funcs dcn30_dwbc_funcs = {
->         .get_caps               = dwb3_get_caps,
->         .enable                 = dwb3_enable,
->         .disable                = dwb3_disable,
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c
-> index 7a93eff183d9..6f2a0d5d963b 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mmhubbub.c
-> @@ -211,7 +211,7 @@ static void mmhubbub3_config_mcif_arb(struct mcif_wb *mcif_wb,
->         REG_UPDATE(MCIF_WB_ARBITRATION_CONTROL, MCIF_WB_CLIENT_ARBITRATION_SLICE,  params->arbitration_slice);
->  }
->
-> -const struct mcif_wb_funcs dcn30_mmhubbub_funcs = {
-> +static const struct mcif_wb_funcs dcn30_mmhubbub_funcs = {
->         .warmup_mcif            = mmhubbub3_warmup_mcif,
->         .enable_mcif            = mmhubbub2_enable_mcif,
->         .disable_mcif           = mmhubbub2_disable_mcif,
-> diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c
-> index ad1c1b703874..6cf40c1332bc 100644
-> --- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c
-> +++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_mpc.c
-> @@ -1399,7 +1399,7 @@ static void mpc3_set_mpc_mem_lp_mode(struct mpc *mpc)
->         }
->  }
->
-> -const struct mpc_funcs dcn30_mpc_funcs = {
-> +static const struct mpc_funcs dcn30_mpc_funcs = {
->         .read_mpcc_state = mpc1_read_mpcc_state,
->         .insert_plane = mpc1_insert_plane,
->         .remove_mpcc = mpc1_remove_mpcc,
-> --
-> 2.27.0
->
+>   fs/posix_acl.c                |  1 +
+>   include/linux/lsm_hook_defs.h |  2 ++
+>   include/linux/security.h      |  7 +++++++
+>   security/security.c           | 17 +++++++++++++++++
+>   4 files changed, 27 insertions(+)
+> 
+> diff --git a/fs/posix_acl.c b/fs/posix_acl.c
+> index 5a76fb35923..acddf2dff4c 100644
+> --- a/fs/posix_acl.c
+> +++ b/fs/posix_acl.c
+> @@ -1102,6 +1102,7 @@ int vfs_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+>   		error = -EOPNOTSUPP;
+>   	if (!error) {
+>   		fsnotify_xattr(dentry);
+> +		security_inode_post_set_acl(dentry, acl_name, kacl);
+>   		evm_inode_post_set_acl(dentry, acl_name, kacl);
+>   	}
+>   
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index 5dc2a7c3d9a..9a3e14db0af 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -156,6 +156,8 @@ LSM_HOOK(void, LSM_RET_VOID, inode_post_removexattr, struct dentry *dentry,
+>   	 const char *name)
+>   LSM_HOOK(int, 0, inode_set_acl, struct mnt_idmap *idmap,
+>   	 struct dentry *dentry, const char *acl_name, struct posix_acl *kacl)
+> +LSM_HOOK(void, LSM_RET_VOID, inode_post_set_acl, struct dentry *dentry,
+> +	 const char *acl_name, struct posix_acl *kacl)
+>   LSM_HOOK(int, 0, inode_get_acl, struct mnt_idmap *idmap,
+>   	 struct dentry *dentry, const char *acl_name)
+>   LSM_HOOK(int, 0, inode_remove_acl, struct mnt_idmap *idmap,
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index b3e201404dc..b0691bf7237 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -366,6 +366,8 @@ int security_inode_setxattr(struct mnt_idmap *idmap,
+>   int security_inode_set_acl(struct mnt_idmap *idmap,
+>   			   struct dentry *dentry, const char *acl_name,
+>   			   struct posix_acl *kacl);
+> +void security_inode_post_set_acl(struct dentry *dentry, const char *acl_name,
+> +				 struct posix_acl *kacl);
+>   int security_inode_get_acl(struct mnt_idmap *idmap,
+>   			   struct dentry *dentry, const char *acl_name);
+>   int security_inode_remove_acl(struct mnt_idmap *idmap,
+> @@ -893,6 +895,11 @@ static inline int security_inode_set_acl(struct mnt_idmap *idmap,
+>   	return 0;
+>   }
+>   
+> +static inline void security_inode_post_set_acl(struct dentry *dentry,
+> +					       const char *acl_name,
+> +					       struct posix_acl *kacl)
+> +{ }
+> +
+>   static inline int security_inode_get_acl(struct mnt_idmap *idmap,
+>   					 struct dentry *dentry,
+>   					 const char *acl_name)
+> diff --git a/security/security.c b/security/security.c
+> index 8883082b686..fc11d70bb02 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2310,6 +2310,23 @@ int security_inode_set_acl(struct mnt_idmap *idmap,
+>   	return evm_inode_set_acl(idmap, dentry, acl_name, kacl);
+>   }
+>   
+> +/**
+> + * security_inode_post_set_acl() - Update inode sec after set_acl operation
+
+'sec' because 'security' doesn't let this fit into 80 characters for the line?
+
+Update inode security after set_acl op     :-/
+Update inode security after set_acl()      :-)
+
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
