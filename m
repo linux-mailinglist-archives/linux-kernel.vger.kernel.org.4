@@ -2,147 +2,505 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFD96ACAAB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5616ACABE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbjCFRfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:35:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S230391AbjCFRgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjCFRff (ORCPT
+        with ESMTP id S230425AbjCFRg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:35:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9386A1F0;
-        Mon,  6 Mar 2023 09:35:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 27F39B8105F;
-        Mon,  6 Mar 2023 17:33:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4725C433EF;
-        Mon,  6 Mar 2023 17:32:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678123997;
-        bh=oCRV/O5q3R94VDA67eta1+j60LSWpLxWhmxqrzbP2FY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tzMRw/rwKmj16OdXkTBYsEPVgFatAfUN3LJ33ZBFVzmWPChI0zegxz8a6lrSnpVNM
-         a5WWAe2HioVWJtIPc/ttoZWVvhbbsyNHioBhNIQsfUp41fNu7Bsn12CrCVulbshfh3
-         xaVbonUnnhiN36hPDyYZX/yUWExunxxxGCl97t7m1BbXS8j1Pcd3ba2pmytwNFlcuo
-         A4JumTBBP3xhvGiEXHq6D5gvgXZpJRCL48CblfxVMHFohHME3UQpdMcaz7KQ0rX6Bi
-         zb4ahU89uF20dlnC+V+KW34/XFSen5uQSXFbDSnNjd2h/1S6Rp+UFmOkj5NVaXulLq
-         RxBBn71VZ8v1A==
-Date:   Mon, 6 Mar 2023 17:32:49 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
-Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        jic23@kernel.org, tudor.ambarus@microchip.com, pratyush@kernel.org,
-        Sanju.Mehta@amd.com, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
-        kdasu.kdev@gmail.com, f.fainelli@gmail.com, rjui@broadcom.com,
-        sbranden@broadcom.com, eajames@linux.ibm.com, olteanv@gmail.com,
-        han.xu@nxp.com, john.garry@huawei.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, narmstrong@baylibre.com,
-        khilman@baylibre.com, matthias.bgg@gmail.com, haibo.chen@nxp.com,
-        linus.walleij@linaro.org, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
-        krzysztof.kozlowski@linaro.org, andi@etezian.org,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
-        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
-        kvalo@kernel.org, james.schulman@cirrus.com,
-        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
-        rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
-        oss@buserror.net, windhl@126.com, yangyingliang@huawei.com,
-        william.zhang@broadcom.com, kursad.oney@broadcom.com,
-        jonas.gorski@gmail.com, anand.gore@broadcom.com, rafal@milecki.pl,
-        git@amd.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
-        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
-        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
-        venture@google.com, yuenn@google.com, benjaminfair@google.com,
-        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
-        alim.akhtar@samsung.com, ldewangan@nvidia.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
-        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
-        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-mtd@lists.infradead.org, lars@metafoo.de,
-        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
-        michael@walle.cc, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
-        amitrkcian2002@gmail.com, Dhruva Gole <d-gole@ti.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>
-Subject: Re: [PATCH V5 01/15] spi: Replace all spi->chip_select and
- spi->cs_gpiod references with function call
-Message-ID: <479f5b1e-6ac1-47c7-9f5b-4080e0c77c16@sirena.org.uk>
-References: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com>
- <20230306172109.595464-2-amit.kumar-mahapatra@amd.com>
+        Mon, 6 Mar 2023 12:36:28 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E61176A1DE;
+        Mon,  6 Mar 2023 09:35:48 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id t14so10491654ljd.5;
+        Mon, 06 Mar 2023 09:35:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678124080;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YNbWnb9fLhufznPrTCujm0OjCR86yff8zEINR9/66Jg=;
+        b=CCFi8E6XdEWAkbx/5iJUDNojUY+3dy3mwXOpLptH+w5LOZIbQ9pS42/9KCj14S7/LT
+         /gJe9a5ZTEMXinKJuVpQ+z4kr7JavyiJjrRY8GhPfv/B3Y2w2UvQ1GidbNPdIJO12Y1w
+         hbVqAzWH1lxz0cuZEndnPWyjdhu5UBv1fks9VqmFe7sOGMZuntrwQsXQvnzdNNAamuBa
+         KHvtROUSJx0OvOe3BMwFuv0Xbrl74qR1GfUUaKWxXjl8AzacTKCq/HPHOpiRe/Sne+BR
+         J7i3oIa+hibwY77PAoGM8U75cJl6/KfbIgQbSJxMlAu9JzY27p1e+gU7igKBh02Y8ab1
+         tJpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678124080;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YNbWnb9fLhufznPrTCujm0OjCR86yff8zEINR9/66Jg=;
+        b=zQmGYISc6WPie0ZWetAwna0m1kl1vl0NTDWu2wZhF+7hUYNiWQxiiZSK0+pHeQtsay
+         kVjb3l9kYZjtG4x+r+sRuVVcLCKfuuFQdZS3LLKsyZiyDQmkQOeFTxu2UgREvsb/UyBR
+         XEJYd9CK9J4u90tNXqzNjk4pgfeEu3qlJuOT76AV4SFPSUTZbpcwUq4T0EkeA+narzk7
+         NYAjI7BnEuRQ1ZhTGRKP+puMhxYfBVvj5jsF03dG+/pK5cwdb03GRf+tR0h9ETD0pdB7
+         rYnyp2TbFuTW7UcXzi3mqM64OiV8pafsBKFI0W8/nH52rV1QPXrrn6+OMqx/BPHLlEgN
+         KHLg==
+X-Gm-Message-State: AO0yUKW/8z49rkZwiHTxPJPGcHHzw8pxV7RTInumacwnDNVfUSgQi6B8
+        Oh1TIyfK5aXrzWe8LG+R6RE=
+X-Google-Smtp-Source: AK7set9gnNxS2zX2GuCCqoY4IvMKgf6MFW3wKPgqhT4pU292X7/ZfK4Ti8bCLicVaw8R/CLQGSVgEg==
+X-Received: by 2002:a2e:be9e:0:b0:295:8bea:99a2 with SMTP id a30-20020a2ebe9e000000b002958bea99a2mr4565495ljr.1.1678124080368;
+        Mon, 06 Mar 2023 09:34:40 -0800 (PST)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id k16-20020a2ea270000000b002947028ae7csm1818432ljm.72.2023.03.06.09.34.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 09:34:40 -0800 (PST)
+Date:   Mon, 6 Mar 2023 19:34:39 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH 16/28] arm64: RME: Allow populating initial contents
+Message-ID: <20230306193439.000048f2@gmail.com>
+In-Reply-To: <20230127112932.38045-17-steven.price@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        <20230127112932.38045-1-steven.price@arm.com>
+        <20230127112932.38045-17-steven.price@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="1RpCo94WkIg3XG9u"
-Content-Disposition: inline
-In-Reply-To: <20230306172109.595464-2-amit.kumar-mahapatra@amd.com>
-X-Cookie: teamwork, n.:
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 27 Jan 2023 11:29:20 +0000
+Steven Price <steven.price@arm.com> wrote:
 
---1RpCo94WkIg3XG9u
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The VMM needs to populate the realm with some data before starting (e.g.
+> a kernel and initrd). This is measured by the RMM and used as part of
+> the attestation later on.
+> 
+> Signed-off-by: Steven Price <steven.price@arm.com>
+> ---
+>  arch/arm64/kvm/rme.c | 366 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 366 insertions(+)
+> 
+> diff --git a/arch/arm64/kvm/rme.c b/arch/arm64/kvm/rme.c
+> index 16e0bfea98b1..3405b43e1421 100644
+> --- a/arch/arm64/kvm/rme.c
+> +++ b/arch/arm64/kvm/rme.c
+> @@ -4,6 +4,7 @@
+>   */
+>  
+>  #include <linux/kvm_host.h>
+> +#include <linux/hugetlb.h>
+>  
+>  #include <asm/kvm_emulate.h>
+>  #include <asm/kvm_mmu.h>
+> @@ -426,6 +427,359 @@ void kvm_realm_unmap_range(struct kvm *kvm, unsigned long ipa, u64 size)
+>  	}
+>  }
+>  
+> +static int realm_create_protected_data_page(struct realm *realm,
+> +					    unsigned long ipa,
+> +					    struct page *dst_page,
+> +					    struct page *tmp_page)
+> +{
+> +	phys_addr_t dst_phys, tmp_phys;
+> +	int ret;
+> +
+> +	copy_page(page_address(tmp_page), page_address(dst_page));
+> +
+> +	dst_phys = page_to_phys(dst_page);
+> +	tmp_phys = page_to_phys(tmp_page);
+> +
+> +	if (rmi_granule_delegate(dst_phys))
+> +		return -ENXIO;
+> +
+> +	ret = rmi_data_create(dst_phys, virt_to_phys(realm->rd), ipa, tmp_phys,
+> +			      RMI_MEASURE_CONTENT);
+> +
+> +	if (RMI_RETURN_STATUS(ret) == RMI_ERROR_RTT) {
+> +		/* Create missing RTTs and retry */
+> +		int level = RMI_RETURN_INDEX(ret);
+> +
+> +		ret = realm_create_rtt_levels(realm, ipa, level,
+> +					      RME_RTT_MAX_LEVEL, NULL);
+> +		if (ret)
+> +			goto err;
+> +
+> +		ret = rmi_data_create(dst_phys, virt_to_phys(realm->rd), ipa,
+> +				      tmp_phys, RMI_MEASURE_CONTENT);
+> +	}
+> +
+> +	if (ret)
+> +		goto err;
+> +
+> +	return 0;
+> +
+> +err:
+> +	if (WARN_ON(rmi_granule_undelegate(dst_phys))) {
+> +		/* Page can't be returned to NS world so is lost */
+> +		get_page(dst_page);
+> +	}
+> +	return -ENXIO;
+> +}
+> +
+> +static int fold_rtt(phys_addr_t rd, unsigned long addr, int level,
+> +		    struct realm *realm)
+> +{
+> +	struct rtt_entry rtt;
+> +	phys_addr_t rtt_addr;
+> +
+> +	if (rmi_rtt_read_entry(rd, addr, level, &rtt))
+> +		return -ENXIO;
+> +
+> +	if (rtt.state != RMI_TABLE)
+> +		return -EINVAL;
+> +
+> +	rtt_addr = rmi_rtt_get_phys(&rtt);
+> +	if (rmi_rtt_fold(rtt_addr, rd, addr, level + 1))
+> +		return -ENXIO;
+> +
+> +	free_delegated_page(realm, rtt_addr);
+> +
+> +	return 0;
+> +}
+> +
+> +int realm_map_protected(struct realm *realm,
+> +			unsigned long hva,
+> +			unsigned long base_ipa,
+> +			struct page *dst_page,
+> +			unsigned long map_size,
+> +			struct kvm_mmu_memory_cache *memcache)
+> +{
+> +	phys_addr_t dst_phys = page_to_phys(dst_page);
+> +	phys_addr_t rd = virt_to_phys(realm->rd);
+> +	unsigned long phys = dst_phys;
+> +	unsigned long ipa = base_ipa;
+> +	unsigned long size;
+> +	int map_level;
+> +	int ret = 0;
+> +
+> +	if (WARN_ON(!IS_ALIGNED(ipa, map_size)))
+> +		return -EINVAL;
+> +
+> +	switch (map_size) {
+> +	case PAGE_SIZE:
+> +		map_level = 3;
+> +		break;
+> +	case RME_L2_BLOCK_SIZE:
+> +		map_level = 2;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (map_level < RME_RTT_MAX_LEVEL) {
+> +		/*
+> +		 * A temporary RTT is needed during the map, precreate it,
+> +		 * however if there is an error (e.g. missing parent tables)
+> +		 * this will be handled below.
+> +		 */
+> +		realm_create_rtt_levels(realm, ipa, map_level,
+> +					RME_RTT_MAX_LEVEL, memcache);
+> +	}
+> +
+> +	for (size = 0; size < map_size; size += PAGE_SIZE) {
+> +		if (rmi_granule_delegate(phys)) {
+> +			struct rtt_entry rtt;
+> +
+> +			/*
+> +			 * It's possible we raced with another VCPU on the same
+> +			 * fault. If the entry exists and matches then exit
+> +			 * early and assume the other VCPU will handle the
+> +			 * mapping.
+> +			 */
+> +			if (rmi_rtt_read_entry(rd, ipa, RME_RTT_MAX_LEVEL, &rtt))
+> +				goto err;
+> +
+> +			// FIXME: For a block mapping this could race at level
+> +			// 2 or 3...
+> +			if (WARN_ON((rtt.walk_level != RME_RTT_MAX_LEVEL ||
+> +				     rtt.state != RMI_ASSIGNED ||
+> +				     rtt.desc != phys))) {
+> +				goto err;
+> +			}
+> +
+> +			return 0;
+> +		}
+> +
+> +		ret = rmi_data_create_unknown(phys, rd, ipa);
+> +
+> +		if (RMI_RETURN_STATUS(ret) == RMI_ERROR_RTT) {
+> +			/* Create missing RTTs and retry */
+> +			int level = RMI_RETURN_INDEX(ret);
+> +
+> +			ret = realm_create_rtt_levels(realm, ipa, level,
+> +						      RME_RTT_MAX_LEVEL,
+> +						      memcache);
+> +			WARN_ON(ret);
+> +			if (ret)
+> +				goto err_undelegate;
+> +
+> +			ret = rmi_data_create_unknown(phys, rd, ipa);
+> +		}
+> +		WARN_ON(ret);
+> +
+> +		if (ret)
+> +			goto err_undelegate;
+> +
+> +		phys += PAGE_SIZE;
+> +		ipa += PAGE_SIZE;
+> +	}
+> +
+> +	if (map_size == RME_L2_BLOCK_SIZE)
+> +		ret = fold_rtt(rd, base_ipa, map_level, realm);
+> +	if (WARN_ON(ret))
+> +		goto err;
+> +
+> +	return 0;
+> +
+> +err_undelegate:
+> +	if (WARN_ON(rmi_granule_undelegate(phys))) {
+> +		/* Page can't be returned to NS world so is lost */
+> +		get_page(phys_to_page(phys));
+> +	}
+> +err:
+> +	while (size > 0) {
+> +		phys -= PAGE_SIZE;
+> +		size -= PAGE_SIZE;
+> +		ipa -= PAGE_SIZE;
+> +
+> +		rmi_data_destroy(rd, ipa);
+> +
+> +		if (WARN_ON(rmi_granule_undelegate(phys))) {
+> +			/* Page can't be returned to NS world so is lost */
+> +			get_page(phys_to_page(phys));
+> +		}
+> +	}
+> +	return -ENXIO;
+> +}
+> +
 
-On Mon, Mar 06, 2023 at 10:50:55PM +0530, Amit Kumar Mahapatra wrote:
-> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
-> members of struct spi_device to be an array. But changing the type of these
-> members to array would break the spi driver functionality. To make the
-> transition smoother introduced four new APIs to get/set the
-> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
-> spi->cs_gpiod references with get or set API calls.
-> While adding multi-cs support in further patches the chip_select & cs_gpiod
-> members of the spi_device structure would be converted to arrays & the
-> "idx" parameter of the APIs would be used as array index i.e.,
-> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
+There seems no caller to the function above. Better move it to the related
+patch.
 
-This doesn't apply against current code, there was a rework of the
-mpc512x-psc driver.  Please check and resend.
+> +static int populate_par_region(struct kvm *kvm,
+> +			       phys_addr_t ipa_base,
+> +			       phys_addr_t ipa_end)
+> +{
+> +	struct realm *realm = &kvm->arch.realm;
+> +	struct kvm_memory_slot *memslot;
+> +	gfn_t base_gfn, end_gfn;
+> +	int idx;
+> +	phys_addr_t ipa;
+> +	int ret = 0;
+> +	struct page *tmp_page;
+> +	phys_addr_t rd = virt_to_phys(realm->rd);
+> +
+> +	base_gfn = gpa_to_gfn(ipa_base);
+> +	end_gfn = gpa_to_gfn(ipa_end);
+> +
+> +	idx = srcu_read_lock(&kvm->srcu);
+> +	memslot = gfn_to_memslot(kvm, base_gfn);
+> +	if (!memslot) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	/* We require the region to be contained within a single memslot */
+> +	if (memslot->base_gfn + memslot->npages < end_gfn) {
+> +		ret = -EINVAL;
+> +		goto out;
+> +	}
+> +
+> +	tmp_page = alloc_page(GFP_KERNEL);
+> +	if (!tmp_page) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	mmap_read_lock(current->mm);
+> +
+> +	ipa = ipa_base;
+> +
+> +	while (ipa < ipa_end) {
+> +		struct vm_area_struct *vma;
+> +		unsigned long map_size;
+> +		unsigned int vma_shift;
+> +		unsigned long offset;
+> +		unsigned long hva;
+> +		struct page *page;
+> +		kvm_pfn_t pfn;
+> +		int level;
+> +
+> +		hva = gfn_to_hva_memslot(memslot, gpa_to_gfn(ipa));
+> +		vma = vma_lookup(current->mm, hva);
+> +		if (!vma) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		if (is_vm_hugetlb_page(vma))
+> +			vma_shift = huge_page_shift(hstate_vma(vma));
+> +		else
+> +			vma_shift = PAGE_SHIFT;
+> +
+> +		map_size = 1 << vma_shift;
+> +
+> +		/*
+> +		 * FIXME: This causes over mapping, but there's no good
+> +		 * solution here with the ABI as it stands
+> +		 */
+> +		ipa = ALIGN_DOWN(ipa, map_size);
+> +
+> +		switch (map_size) {
+> +		case RME_L2_BLOCK_SIZE:
+> +			level = 2;
+> +			break;
+> +		case PAGE_SIZE:
+> +			level = 3;
+> +			break;
+> +		default:
+> +			WARN_ONCE(1, "Unsupport vma_shift %d", vma_shift);
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		pfn = gfn_to_pfn_memslot(memslot, gpa_to_gfn(ipa));
+> +
+> +		if (is_error_pfn(pfn)) {
+> +			ret = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		ret = rmi_rtt_init_ripas(rd, ipa, level);
+> +		if (RMI_RETURN_STATUS(ret) == RMI_ERROR_RTT) {
+> +			ret = realm_create_rtt_levels(realm, ipa,
+> +						      RMI_RETURN_INDEX(ret),
+> +						      level, NULL);
+> +			if (ret)
+> +				break;
+> +			ret = rmi_rtt_init_ripas(rd, ipa, level);
+> +			if (ret) {
+> +				ret = -ENXIO;
+> +				break;
+> +			}
+> +		}
+> +
+> +		if (level < RME_RTT_MAX_LEVEL) {
+> +			/*
+> +			 * A temporary RTT is needed during the map, precreate
+> +			 * it, however if there is an error (e.g. missing
+> +			 * parent tables) this will be handled in the
+> +			 * realm_create_protected_data_page() call.
+> +			 */
+> +			realm_create_rtt_levels(realm, ipa, level,
+> +						RME_RTT_MAX_LEVEL, NULL);
+> +		}
+> +
+> +		page = pfn_to_page(pfn);
+> +
+> +		for (offset = 0; offset < map_size && !ret;
+> +		     offset += PAGE_SIZE, page++) {
+> +			phys_addr_t page_ipa = ipa + offset;
+> +
+> +			ret = realm_create_protected_data_page(realm, page_ipa,
+> +							       page, tmp_page);
+> +		}
+> +		if (ret)
+> +			goto err_release_pfn;
+> +
+> +		if (level == 2) {
+> +			ret = fold_rtt(rd, ipa, level, realm);
+> +			if (ret)
+> +				goto err_release_pfn;
+> +		}
+> +
+> +		ipa += map_size;
 
---1RpCo94WkIg3XG9u
-Content-Type: application/pgp-signature; name="signature.asc"
+> +		kvm_set_pfn_accessed(pfn);
+> +		kvm_set_pfn_dirty(pfn);
 
------BEGIN PGP SIGNATURE-----
+kvm_release_pfn_dirty() has already called kvm_set_pfn_{accessed, dirty}().
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQGI8AACgkQJNaLcl1U
-h9CIEwf/aZyH3WWgY7CUVh9W2WlSP5NnJGsbwRuFubTTP3ObZz0pCsJEwP8mAwdf
-wpWZ2t/nCcibXSVknqIW+r7FPrfknmY5nJ9jal+WTp/hkYYJeVEebOg9nMUX+Nwh
-fycQjw6AcKBn6mbRNf2c9ZVSKOpTnKNHFCdGSAfVWdMclSNADYerewze+WELEn9D
-6YoQTAPR4B1PBZUkwpAympwP8+SR1wFKzN2dmCVFQSWgYJ834b4wWLD9eZFMrjEN
-gf4+dIPQkjxzNMIErUCqVkaf/wgPkCAIjb2p1cWKU2b3IOG6di49DMsuImObYUAJ
-8cVDQ8KP5PGcINenovKCKWd1awBmtw==
-=ppxH
------END PGP SIGNATURE-----
+> +		kvm_release_pfn_dirty(pfn);
+> +err_release_pfn:
+> +		if (ret) {
+> +			kvm_release_pfn_clean(pfn);
+> +			break;
+> +		}
+> +	}
+> +
+> +	mmap_read_unlock(current->mm);
+> +	__free_page(tmp_page);
+> +
+> +out:
+> +	srcu_read_unlock(&kvm->srcu, idx);
+> +	return ret;
+> +}
+> +
+> +static int kvm_populate_realm(struct kvm *kvm,
+> +			      struct kvm_cap_arm_rme_populate_realm_args *args)
+> +{
+> +	phys_addr_t ipa_base, ipa_end;
+> +
 
---1RpCo94WkIg3XG9u--
+Check kvm_is_realm(kvm) here or in the kvm_realm_enable_cap().
+
+> +	if (kvm_realm_state(kvm) != REALM_STATE_NEW)
+> +		return -EBUSY;
+
+Maybe -EINVAL? The realm hasn't been created (RMI_REALM_CREATE is not called
+yet). The userspace shouldn't reach this path.
+
+> +
+> +	if (!IS_ALIGNED(args->populate_ipa_base, PAGE_SIZE) ||
+> +	    !IS_ALIGNED(args->populate_ipa_size, PAGE_SIZE))
+> +		return -EINVAL;
+> +
+> +	ipa_base = args->populate_ipa_base;
+> +	ipa_end = ipa_base + args->populate_ipa_size;
+> +
+> +	if (ipa_end < ipa_base)
+> +		return -EINVAL;
+> +
+> +	return populate_par_region(kvm, ipa_base, ipa_end);
+> +}
+> +
+>  static int set_ipa_state(struct kvm_vcpu *vcpu,
+>  			 unsigned long ipa,
+>  			 unsigned long end,
+> @@ -748,6 +1102,18 @@ int kvm_realm_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
+>  		r = kvm_init_ipa_range_realm(kvm, &args);
+>  		break;
+>  	}
+> +	case KVM_CAP_ARM_RME_POPULATE_REALM: {
+> +		struct kvm_cap_arm_rme_populate_realm_args args;
+> +		void __user *argp = u64_to_user_ptr(cap->args[1]);
+> +
+> +		if (copy_from_user(&args, argp, sizeof(args))) {
+> +			r = -EFAULT;
+> +			break;
+> +		}
+> +
+> +		r = kvm_populate_realm(kvm, &args);
+> +		break;
+> +	}
+>  	default:
+>  		r = -EINVAL;
+>  		break;
+
