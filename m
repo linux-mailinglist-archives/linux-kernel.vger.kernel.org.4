@@ -2,206 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AEF6AC06F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:10:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5CA6AC073
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjCFNKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:10:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
+        id S229808AbjCFNLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230519AbjCFNKv (ORCPT
+        with ESMTP id S231128AbjCFNLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:10:51 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3103D2C650
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:10:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C90EE12FC;
-        Mon,  6 Mar 2023 05:11:22 -0800 (PST)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DE5A3F885;
-        Mon,  6 Mar 2023 05:10:38 -0800 (PST)
-Date:   Mon, 6 Mar 2023 13:10:37 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v3 08/10] sched/topology: Remove SHARED_CHILD from
- ASYM_PACKING
-Message-ID: <ZAXmTT0bG4qf+HKN@arm.com>
-References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
- <20230207045838.11243-9-ricardo.neri-calderon@linux.intel.com>
- <ZAHaMKH7C0sVIjXX@arm.com>
- <20230305190811.GA4352@ranerica-svr.sc.intel.com>
+        Mon, 6 Mar 2023 08:11:18 -0500
+Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E52029160;
+        Mon,  6 Mar 2023 05:11:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=metrotek.ru; s=mail;
+        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
+         references;
+        bh=0lPKYqp5KzpJCaV63cbjBO6MIb6dz7vOpMZcld4bLPA=;
+        b=AB+AqP1S71ese3cohv4aD3rBSZFL6cfSKrfRGIT0mp+BUC8V7TkKL7CU9wEBjB8hefaWTL61AEzJN
+         fllf3YKhScKnM9XqHrn9ZIIDOonSvt1J7lXHJPluQ0h9n1Fbd7J1k5zq3w0pMy1NVypFjZvPKEaCDa
+         GTYgOI3FrYKy2J864FFZHWu6cYCkS8SZDhcwb5M6LlCYSmp15BMaQbRp0JWY6JL7d5bau/vH1SICpf
+         YZdCXRrnrZ8LUFAKOjinKwDcnYkswVobcFpO6RiJh9l1pj+SZZ+Qvc+ol/lvbEBbXflXSIZFlA7pgQ
+         RPprw28j9oMxXOBVeNwjn2uXiJ3WKVw==
+X-Kerio-Anti-Spam:  Build: [Engines: 2.17.1.1470, Stamp: 3], Multi: [Enabled, t: (0.000012,0.008337)], BW: [Enabled, t: (0.000031,0.000001)], RTDA: [Enabled, t: (0.085092), Hit: No, Details: v2.48.0; Id: 15.q69xp.1gqrgnj4l.7b1; mclb], total: 0(700)
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLACK autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: 
+X-Footer: bWV0cm90ZWsucnU=
+Received: from x260 ([78.37.166.219])
+        (authenticated user i.bornyakov@metrotek.ru)
+        by mail.pr-group.ru with ESMTPSA
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
+        Mon, 6 Mar 2023 16:10:46 +0300
+Date:   Mon, 6 Mar 2023 16:10:40 +0300
+From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
+To:     linux-imx@nxp.com
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH RESEND] bus: imx-weim: fix branch condition evaluates to
+ a garbage value
+Message-ID: <20230306131040.f6757retj5utp6lf@x260>
+References: <20230306060505.11657-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230305190811.GA4352@ranerica-svr.sc.intel.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306060505.11657-1-i.bornyakov@metrotek.ru>
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+On Mon, Mar 06, 2023 at 09:05:05AM +0300, Ivan Bornyakov wrote:
+> If bus type is other than imx50_weim_devtype and have no child devices,
+> variable 'ret' in function weim_parse_dt() will not be initialized, but
+> will be used as branch condition and return value. Fix this by
+> initializing 'ret' with 0.
+> 
+> This was discovered with help of clang-analyzer, but the situation is
+> quite possible in real life.
+> 
+> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
+> Cc: stable@vger.kernel.org
 
-On Sunday 05 Mar 2023 at 11:08:11 (-0800), Ricardo Neri wrote:
-> On Fri, Mar 03, 2023 at 11:29:52AM +0000, Ionela Voinescu wrote:
-> > Hi Ricardo,
-> 
-> Hi Ionela!
-> 
-> > 
-> > On Monday 06 Feb 2023 at 20:58:36 (-0800), Ricardo Neri wrote:
-> > > Only x86 and Power7 use ASYM_PACKING. They use it differently.
-> > > 
-> > > Power7 has cores of equal priority, but the SMT siblings of a core have
-> > > different priorities. Parent scheduling domains do not need (nor have) the
-> > > ASYM_PACKING flag. SHARED_CHILD is not needed. Using SHARED_PARENT would
-> > > cause the topology debug code to complain.
-> > > 
-> > > X86 has cores of different priority, but all the SMT siblings of the core
-> > > have equal priority. It needs ASYM_PACKING at the MC level, but not at the
-> > > SMT level (it also needs it at upper levels if they have scheduling groups
-> > > of different priority). Removing ASYM_PACKING from the SMT domain causes
-> > > the topology debug code to complain.
-> > > 
-> > > Remove SHARED_CHILD for now. We still need a topology check that satisfies
-> > > both architectures.
-> > > 
-> > > Cc: Ben Segall <bsegall@google.com>
-> > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > > Cc: Len Brown <len.brown@intel.com>
-> > > Cc: Mel Gorman <mgorman@suse.de>
-> > > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > > Cc: Valentin Schneider <vschneid@redhat.com>
-> > > Cc: x86@kernel.org
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Suggested-by: Valentin Schneider <vschneid@redhat.com>
-> > > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > > ---
-> > > Changes since v2:
-> > >  * Introduced this patch.
-> > > 
-> > > Changes since v1:
-> > >  * N/A
-> > > ---
-> > >  include/linux/sched/sd_flags.h | 5 +----
-> > >  1 file changed, 1 insertion(+), 4 deletions(-)
-> > > 
-> > > diff --git a/include/linux/sched/sd_flags.h b/include/linux/sched/sd_flags.h
-> > > index 57bde66d95f7..800238854ba5 100644
-> > > --- a/include/linux/sched/sd_flags.h
-> > > +++ b/include/linux/sched/sd_flags.h
-> > > @@ -132,12 +132,9 @@ SD_FLAG(SD_SERIALIZE, SDF_SHARED_PARENT | SDF_NEEDS_GROUPS)
-> > >  /*
-> > >   * Place busy tasks earlier in the domain
-> > >   *
-> > > - * SHARED_CHILD: Usually set on the SMT level. Technically could be set further
-> > > - *               up, but currently assumed to be set from the base domain
-> > > - *               upwards (see update_top_cache_domain()).
-> > >   * NEEDS_GROUPS: Load balancing flag.
-> > >   */
-> > > -SD_FLAG(SD_ASYM_PACKING, SDF_SHARED_CHILD | SDF_NEEDS_GROUPS)
-> > > +SD_FLAG(SD_ASYM_PACKING,  SDF_NEEDS_GROUPS)
-> > 
-> > While this silences the warning one would have gotten when removing
-> > SD_ASYM_PACKING from SMT level, it will still result in sd_asym_packing
-> > being NULL for these systems, which breaks nohz balance. That is because
-> > highest_flag_domain() still stops searching at the first level without
-> > the flag set, in this case SMT, even if levels above have the flag set.
-> 
-> You are absolutely right! This how this whole discussion started. It
-> slipped my mind.
-> 
-> > 
-> > Maybe highest_flag_domain() should be changed to take into account the
-> > metadata flags?
-> 
-> What about the patch below? Search will stop if the flag has
-> SDF_SHARED_CHILD as it does today. Otherwise it will search all the
-> domains.
-> 
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1773,6 +1773,12 @@ queue_balance_callback(struct rq *rq,
->  	for (__sd = rcu_dereference_check_sched_domain(cpu_rq(cpu)->sd); \
->  			__sd; __sd = __sd->parent)
->  
-> +#define SD_FLAG(name, mflags) (name * !!((mflags) & SDF_SHARED_CHILD)) |
-> +static const unsigned int SD_SHARED_CHILD_MASK =
-> +#include <linux/sched/sd_flags.h>
-> +0;
-> +#undef SD_FLAG
-> +
->  /**
->   * highest_flag_domain - Return highest sched_domain containing flag.
->   * @cpu:	The CPU whose highest level of sched domain is to
-> @@ -1781,15 +1787,19 @@ queue_balance_callback(struct rq *rq,
->   *		for the given CPU.
->   *
->   * Returns the highest sched_domain of a CPU which contains the given flag.
-> - */
-> +*/
-  ^^^
-  likely an unintended change
->  static inline struct sched_domain *highest_flag_domain(int cpu, int flag)
->  {
->  	struct sched_domain *sd, *hsd = NULL;
->  
->  	for_each_domain(cpu, sd) {
-> -		if (!(sd->flags & flag))
-> +		if (sd->flags & flag) {
-> +			hsd = sd;
-> +			continue;
-> +		}
-> +
+Fixes: 52c47b63412b ("bus: imx-weim: improve error handling upon child probe-failure")
 
-There might be room for a comment here:
-                /*
-		 * If the flag is not set and is known to be shared with lower
-		 * domains, stop the search, as it won't be found further up.
-		 */
-> +		if (flag & SD_SHARED_CHILD_MASK)
->  			break;
-> -		hsd = sd;
->  	}
->  
->  	return hsd;
+Is it OK, or should I post v2 with "Fixes:" tag?
 
-It looks nice and sane to me - I've not compiled or tested it :).
-
-Thanks,
-Ionela.
-
+> ---
+>  drivers/bus/imx-weim.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > 
-> > Thanks,
-> > Ionela.
-> > 
-> > >  
-> > >  /*
-> > >   * Prefer to place tasks in a sibling domain
-> > > -- 
-> > > 2.25.1
-> > > 
-> > > 
+> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> index 828c66bbaa67..55d917bd1f3f 100644
+> --- a/drivers/bus/imx-weim.c
+> +++ b/drivers/bus/imx-weim.c
+> @@ -204,8 +204,8 @@ static int weim_parse_dt(struct platform_device *pdev)
+>  	const struct of_device_id *of_id = of_match_device(weim_id_table,
+>  							   &pdev->dev);
+>  	const struct imx_weim_devtype *devtype = of_id->data;
+> +	int ret = 0, have_child = 0;
+>  	struct device_node *child;
+> -	int ret, have_child = 0;
+>  	struct weim_priv *priv;
+>  	void __iomem *base;
+>  	u32 reg;
+> -- 
+> 2.39.2
+> 
+
