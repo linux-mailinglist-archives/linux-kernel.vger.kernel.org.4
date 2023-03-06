@@ -2,145 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6696ABA14
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:39:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE4D6ABA13
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:39:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjCFJjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:39:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S229968AbjCFJjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjCFJjo (ORCPT
+        with ESMTP id S229524AbjCFJjk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:39:44 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4064A211DE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:39:41 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id m5so5948815uae.11
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:39:41 -0800 (PST)
+        Mon, 6 Mar 2023 04:39:40 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC31231FD
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:39:37 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso4793277wmo.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:39:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678095580;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EG4fYlpMlkVYz3KkfqTU8Qlmp6+wB13r9lUMK+XkXD0=;
-        b=aGmb2xBNNCIunGeDl9p7uscsTgiuO1Q8udjIOerQ5AtqIC/QLR0Wa6xi/zpiP1mfXU
-         841m5SKCVKYvBcOME9xiLpz7wXvqzX+5tDMtIqIp6/yd2QGdmbfkSZ0pp8KHlQptuFMO
-         wjyjkzDX7mpfRrY4xWscFNTnz4Q+Bu1i8H/leRauyP3v5YDCVlc5D7nJe48dvF/bOn4i
-         QzqBukZn5lSAXeW6byC5i7/tTYL16Gvq8443z1U93byxXGKgNfYdWcAz+7tJhp1KQG6/
-         AHyFpe6/P5HJRZ9WBZdwRr3cjqsuzSAIOpXgER9y4ivMhw4ZbiH5I+CKiALPec9YZ+zf
-         ARaA==
+        d=linaro.org; s=google; t=1678095576;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=40VqwZdEe396hnC8YGU9F90+ZA2jbCFRQN93aV3XtXw=;
+        b=QdfS0evwYqN16uiYZJspo9C1gthxHrsyJRYArFwYHH+xD4DiREALp8tIywQ3ozcx1D
+         WZ9vyCgJcFT663XhBotfdR6lI5yqyur8JeiXcIvzNEN3NNta3pYjCaDd//GZChhl41GJ
+         czRhiNv1KkIwWTaKpEtmOY9lduW6LZMNQooAeoIiuFeb/DAyyaKV8iD423kQtMC6vhMq
+         dX5U6uF5hw0Q+zvDd4PVSbaGvYFCuWk9I8YMg300+rCgBoQwpGSDU1f+FcgZlBkzWrhK
+         U4mu9s8m08BHM7dmMY4rz4V2BvcJtskUmuzbKi5/EdpBoIpZh66+O3WobYovTF15oKhg
+         MSoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678095580;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EG4fYlpMlkVYz3KkfqTU8Qlmp6+wB13r9lUMK+XkXD0=;
-        b=DsNBqaDJcA+zVSJc87XP0LRvh2navG+cLeRHrr39V3fFaBh9ZR3U5QJwhrWatzvn5l
-         u4t/su4Lt/ivCuzsrFOlwSaF7UnnUNkYj7+QoCvvTRktO/pWEGOSXbtTWc8MktyE7RhA
-         PcyOkmgpSIC8oFQcLJZSjPpXNJElDf239jMLiB9os4wo1m5ToZ5fbbFVPZNflooH6Cj/
-         BGh4pGuHm5lTmzw5XRCfwX0N1wNlgrRumQx4uh4N/7bniO2TSHW0+aleYVDRi3SRI5jP
-         RFlC0PE/3yErY/sq/G2iRiegP/3W++XJOko9BvFyDnbT/HFfQIsP6dRpALBXZ/AWlHkZ
-         I95g==
-X-Gm-Message-State: AO0yUKX4JEGnlxl66Qhhne1ytsV5f4HPuoZ0fhmganr0iWoO4ytJt/Sw
-        ojkRz5CyBed+4GQt+q+E3bFP4LP5/FNG03YQFSUC9AhOR7DDT5eg
-X-Google-Smtp-Source: AK7set9u32uo6jrigMFm0tYwWs6u6fKLZKYVnAgovZrS1Q70HbqXU/8l9eDzZI+y+OWVGtClmC8X+d621sscPTLhmHc=
-X-Received: by 2002:a1f:2dcb:0:b0:401:42e5:6d2e with SMTP id
- t194-20020a1f2dcb000000b0040142e56d2emr6159927vkt.1.1678095580318; Mon, 06
- Mar 2023 01:39:40 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678095576;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=40VqwZdEe396hnC8YGU9F90+ZA2jbCFRQN93aV3XtXw=;
+        b=CTvgaZmcrNZxWHGWqzPTENuUhCRbjAVeMgwyGyURz5XjjE8bIjRymmf7VY1RdJYbrR
+         agTnr6WWtn5A4mJtsc2Zv2QtRPr/42o2rT7hyChXBjqrd8iqNJdyJjZ2Z5nbDPHlIXBC
+         wExQ9ok403SDfF+poz7Y7l1pDZE9Ge/Mem4ebsRp0h+Th7SnCFUT7FfaU6qkyumkUAF8
+         0USCW6IACDUUtD8t9k9Bod/6FxHJo7gK7St2KgUy4gxeZCUPZD09cZMyI7xMVn0pnUvm
+         kPjkeBYe6BxMVZQ1yGflIRCwlDBHOTD6QD5NSNjIh9jn55MLFB+2ouCjCeW+CtdfOkVt
+         0z4Q==
+X-Gm-Message-State: AO0yUKVk8TTZDCdyjcggEJSHyjP49Wta1Jn1hS/H8NyjgjLTC2fEuBWz
+        Nxf0B/19KjHnNyB+Cy+XpSMwdg==
+X-Google-Smtp-Source: AK7set88tTQGfzgyp+f/Btf9rlYPAuQT4JZr7E7rU0NltENebbxLf5HU1LaYA94GQ11/fk6/XQTYEQ==
+X-Received: by 2002:a05:600c:3c9d:b0:3eb:4150:a476 with SMTP id bg29-20020a05600c3c9d00b003eb4150a476mr8451832wmb.0.1678095575788;
+        Mon, 06 Mar 2023 01:39:35 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u32-20020a05600c4d2000b003dc522dd25esm9503954wmp.30.2023.03.06.01.39.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 01:39:35 -0800 (PST)
+Date:   Mon, 6 Mar 2023 11:39:33 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 13/23] interconnect: qcom: sm8550: fix registration
+ race
+Message-ID: <ZAW01RH/gLwlueoT@linaro.org>
+References: <20230306075651.2449-1-johan+linaro@kernel.org>
+ <20230306075651.2449-14-johan+linaro@kernel.org>
+ <ZAWsUrlrOfmmNBy3@linaro.org>
+ <ZAWzqtWt5yBlYpQU@hovoldconsulting.com>
 MIME-Version: 1.0
-References: <20230302125215.214014-1-keguang.zhang@gmail.com> <20230302125215.214014-5-keguang.zhang@gmail.com>
-In-Reply-To: <20230302125215.214014-5-keguang.zhang@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Mar 2023 10:39:29 +0100
-Message-ID: <CAMRc=McLt2+NJhmzFRuKF5LWMOqyZa-Y-eH7Ecx2ZiMHsTf1ag@mail.gmail.com>
-Subject: Re: [PATCH v2 4/5] gpio: loongson1: Add DT support
-To:     Keguang Zhang <keguang.zhang@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAWzqtWt5yBlYpQU@hovoldconsulting.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 1:53=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail.c=
-om> wrote:
->
-> This patch adds DT support for Loongson-1 GPIO driver.
->
-> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> ---
-> V1 -> V2: Let gpiolib parse ngpios property
->           Remove unnecessary alias id parsing
->           Remove superfluous initialization done by bgpio_init()
->           Add MODULE_DEVICE_TABLE()
->           Other minor fixes
-> ---
->  drivers/gpio/gpio-loongson1.c | 19 ++++++++++++++++---
->  1 file changed, 16 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.=
-c
-> index 3ac9e49e7efb..94ac0ccb450f 100644
-> --- a/drivers/gpio/gpio-loongson1.c
-> +++ b/drivers/gpio/gpio-loongson1.c
-> @@ -68,25 +68,38 @@ static int ls1x_gpio_probe(struct platform_device *pd=
-ev)
->         ls1x_gc->gc.owner =3D THIS_MODULE;
->         ls1x_gc->gc.request =3D ls1x_gpio_request;
->         ls1x_gc->gc.free =3D ls1x_gpio_free;
-> -       ls1x_gc->gc.base =3D pdev->id * 32;
-> +       /*
-> +        * Clear ngpio to let gpiolib get the correct number
-> +        * by reading ngpios property
-> +        */
-> +       ls1x_gc->gc.ngpio =3D 0;
->
+On 23-03-06 10:34:34, Johan Hovold wrote:
+> On Mon, Mar 06, 2023 at 11:03:14AM +0200, Abel Vesa wrote:
+> > On 23-03-06 08:56:41, Johan Hovold wrote:
+> > > The current interconnect provider registration interface is inherently
+> > > racy as nodes are not added until the after adding the provider. This
+> > > can specifically cause racing DT lookups to fail.
+> > > 
+> > > Switch to using the new API where the provider is not registered until
+> > > after it has been fully initialised.
+> > > 
+> > > Fixes: e6f0d6a30f73 ("interconnect: qcom: Add SM8550 interconnect provider driver")
+> > > Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+> > > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > 
+> > Any changes since v1 or is it just a resend? 
+> 
+> Please see the cover letter:
+> 
+> 	https://lore.kernel.org/lkml/20230306075651.2449-1-johan+linaro@kernel.org/
+> 
+> Only the first patch of the series was updated in v2.
 
-Who could have set it before and why would this information need to be
-unconditionally discarded?
+Right, my bad. Though I wasn't CC'ed on that as well.
 
-Bart
-
->         ret =3D devm_gpiochip_add_data(dev, &ls1x_gc->gc, ls1x_gc);
->         if (ret)
->                 goto err;
->
->         platform_set_drvdata(pdev, ls1x_gc);
-> -       dev_info(dev, "Loongson1 GPIO driver registered\n");
-> +
-> +       dev_info(dev, "GPIO controller registered with %d pins\n",
-> +                ls1x_gc->gc.ngpio);
->
->         return 0;
->  err:
-> -       dev_err(dev, "failed to register GPIO device\n");
-> +       dev_err(dev, "failed to register GPIO controller\n");
->         return ret;
->  }
->
-> +static const struct of_device_id ls1x_gpio_dt_ids[] =3D {
-> +       { .compatible =3D "loongson,ls1x-gpio" },
-> +       { /* sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, ls1x_gpio_dt_ids);
-> +
->  static struct platform_driver ls1x_gpio_driver =3D {
->         .probe  =3D ls1x_gpio_probe,
->         .driver =3D {
->                 .name   =3D "ls1x-gpio",
-> +               .of_match_table =3D ls1x_gpio_dt_ids,
->         },
->  };
->
-> --
-> 2.34.1
->
+> 
+> Johan
