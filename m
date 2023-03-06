@@ -2,110 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981A06AD13C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:12:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A57846ACFC6
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjCFWMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S230075AbjCFVE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:04:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjCFWMF (ORCPT
+        with ESMTP id S229988AbjCFVEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:12:05 -0500
-X-Greylist: delayed 16699 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 14:12:03 PST
-Received: from 11.mo583.mail-out.ovh.net (11.mo583.mail-out.ovh.net [46.105.47.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B676E3A86A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:12:03 -0800 (PST)
-Received: from director1.ghost.mail-out.ovh.net (unknown [10.108.1.240])
-        by mo583.mail-out.ovh.net (Postfix) with ESMTP id 3C200253DC
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:06:36 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-mkdzr (unknown [10.110.208.100])
-        by director1.ghost.mail-out.ovh.net (Postfix) with ESMTPS id DD95C1FE62;
-        Mon,  6 Mar 2023 14:06:35 +0000 (UTC)
-Received: from RCM-web1.webmail.mail.ovh.net ([176.31.238.120])
-        by ghost-submission-6684bf9d7b-mkdzr with ESMTPSA
-        id d61TLmvzBWTgkQoAZ9SXKg
-        (envelope-from <rafal@milecki.pl>); Mon, 06 Mar 2023 14:06:35 +0000
+        Mon, 6 Mar 2023 16:04:21 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E24D67017;
+        Mon,  6 Mar 2023 13:03:58 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id a9so11877057plh.11;
+        Mon, 06 Mar 2023 13:03:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678136637;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z+JZSTuFczC5mo7PEY3yBvoy/91ay9ZlZhiG7/0/jdU=;
+        b=J0G/0FbeicKyFQgCtYlOOk4T3oRqyNdGAmPLsHhC+AQzhfqNm09l3mAHs8IQpeDEK5
+         tXW5R82OI7u7bhUdeK8PTTb/Xa9tmNRW7An5ryNY/VlLVIorS/f6VDFNRkHmqPkgNexd
+         2V3nsdCrTizVcd32Nzq54QHft2pumYH/7g99jp8KyqObk62dxUAhMUOvzYwk4eHeaqYi
+         mFS8sQLnUlwEgOfm+7KQW3KulkPpElt6qFYGnOKeiXEHNGxbOKze1nQsgpi92CJ1qwSo
+         3KKUgdfecQl+4WpkS+onsXDqnrl4hRx53yIXhebFwMkVPogmwvrypbhF/nK3UGyGfLIU
+         dnAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678136637;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z+JZSTuFczC5mo7PEY3yBvoy/91ay9ZlZhiG7/0/jdU=;
+        b=I2qoBWXpa7O4XHvL+4BqWsTXf61fQc0nTX5d8q86t1XaYhxWqccn3O+xWMmQt3dQPJ
+         AClu9wxJEvO+10BjZT+VwnxwHajmVzyimSSHAISOGECMw8ArPTz/Pn9Y9ZDmsxgSm1DE
+         tUk/T3aElUkjFkAwMXuNbHaiLDdgg3cVkLrPf4CJ28HwTyVX8+jAXPA3MyXfJwTB+8L1
+         sA1CpIXHr+YNnEOHCRpzlokix/nKt4f4WnSov/UASoreOH2zlglqnLOYC26Vu3NJFkSj
+         4gTkLskhH8ZnO6IsGOkh+dOH1J+6CYxax9k06Et2szm0vwDNBRzsxY22qHPIyWagX62Z
+         1g6g==
+X-Gm-Message-State: AO0yUKX5lWfXzIA0Vl7rtvkn0ZuRLACTgXcawkLpDzcZgd2exl7xoMua
+        OLpkUIrgdrVfSdyYJIfFRD0=
+X-Google-Smtp-Source: AK7set9bJ+RZpctLL9LNRn8+W3MRhstsXchoF/02mRPZgh29TAeFmlavfd29dFchZTN62FY8teR5EQ==
+X-Received: by 2002:a05:6a20:394f:b0:bc:8254:ddff with SMTP id r15-20020a056a20394f00b000bc8254ddffmr15220080pzg.1.1678136637715;
+        Mon, 06 Mar 2023 13:03:57 -0800 (PST)
+Received: from vernon-pc.. ([49.67.2.142])
+        by smtp.gmail.com with ESMTPSA id 3-20020aa79143000000b005810c4286d6sm6706760pfi.0.2023.03.06.13.03.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 13:03:57 -0800 (PST)
+From:   Vernon Yang <vernon2gm@gmail.com>
+To:     torvalds@linux-foundation.org, tytso@mit.edu, Jason@zx2c4.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com
+Cc:     linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Vernon Yang <vernon2gm@gmail.com>
+Subject: [PATCH v2 4/4] scsi: lpfc: fix lpfc_nvmet_setup_io_context() if no further cpus set
+Date:   Tue,  7 Mar 2023 05:03:12 +0800
+Message-Id: <20230306210312.2614988-5-vernon2gm@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230306210312.2614988-1-vernon2gm@gmail.com>
+References: <20230306210312.2614988-1-vernon2gm@gmail.com>
 MIME-Version: 1.0
-Date:   Mon, 06 Mar 2023 15:06:35 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 0/8] nvmem: Let layout drivers be modules
-In-Reply-To: <d46241e139b7a1e96705402a42f9bf31@walle.cc>
-References: <20230301152239.531194-1-miquel.raynal@bootlin.com>
- <ee7923a8b5fa8358e6805d20df7d8049@walle.cc> <20230306143528.7407fda5@xps-13>
- <73a04afaf658292c05ef27117c60b21d@milecki.pl>
- <d46241e139b7a1e96705402a42f9bf31@walle.cc>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <75856a2c7099bad906e6b0c5475a3b7e@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 17540394650260122608
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtkedgfeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegfrhhlucfvnfffucdludehmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepudeivdethfeuffegtedukeeutedvtdffleeuuefhleffffekledugeelgffgleeunecuffhomhgrihhnpehrvggsrghsvgdrmhhhnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffedpudejiedrfedurddvfeekrdduvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekfedpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-06 15:03, Michael Walle wrote:
-> Am 2023-03-06 14:57, schrieb Rafał Miłecki:
->> On 2023-03-06 14:35, Miquel Raynal wrote:
->>> Hi Michael,
->>> 
->>> michael@walle.cc wrote on Mon, 06 Mar 2023 14:01:34 +0100:
->>> 
->>>> > Miquel Raynal (8):
->>>> >   of: Fix modalias string generation
->>>> >   of: Change of_device_get_modalias() main argument
->>>> >   of: Create an of_device_request_module() receiving an OF node
->>>> >   nvmem: core: Fix error path ordering
->>>> >   nvmem: core: Handle the absence of expected layouts
->>>> >   nvmem: core: Request layout modules loading
->>>> >   nvmem: layouts: sl28vpd: Convert layout driver into a module
->>>> >   nvmem: layouts: onie-tlv: Convert layout driver into a module
->>>> 
->>>> With the fixes series [1] applied:
->>> 
->>> Thanks for the series! Looks good to me. I believe both series can 
->>> live
->>> in separate tress, any reason why we would like to avoid this? I am 
->>> keen
->>> to apply [1] into the mtd tree rather soon.
->> 
->> Given past events with nvmem patches I'm against that.
->> 
->> Let's wait for Srinivas to collect pending patches, let them spend a
->> moment in linux-next maybe, ask Srinivas to send them to Greg early if
->> he can. That way maybe you can merge Greg's branch (assuming he 
->> doesn't
->> rebase).
-> 
-> Mh? None of these fixes have anything to do with nvmem (except maybe 
-> patch
-> 4/4). The bugs were just discovered while I was testing this series. 
-> But
-> OTOH they are kind of a prerequisite for this series. So what are you
-> suggesting here?
+When cpumask_next() the return value is greater than or equal to
+nr_cpu_ids, it indicates invalid.
 
-I'm sorry, I didn't realize you are commenting on linked mtd series.
-I thought you want to take nvmem patches series over mtd tree ;) My
-bad.
+Before commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
+optimizations"), when cpumask_next() returned an invalid cpu, the driver
+used the judgment equal to nr_cpu_ids to indicate the invalid cpu, so it
+happened to work normally, but this is the wrong approach.
+
+After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
+optimizations"), these incorrect practices actively buggy, so fix it to
+correctly.
+
+Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_nvmet.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
+index 7517dd55fe91..3ae7f330f827 100644
+--- a/drivers/scsi/lpfc/lpfc_nvmet.c
++++ b/drivers/scsi/lpfc/lpfc_nvmet.c
+@@ -1621,7 +1621,7 @@ lpfc_nvmet_setup_io_context(struct lpfc_hba *phba)
+ 			continue;
+ 		}
+ 		cpu = cpumask_next(cpu, cpu_present_mask);
+-		if (cpu == nr_cpu_ids)
++		if (cpu >= nr_cpu_ids)
+ 			cpu = cpumask_first(cpu_present_mask);
+ 
+ 	}
+-- 
+2.34.1
+
