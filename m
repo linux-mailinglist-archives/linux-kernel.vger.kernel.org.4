@@ -2,190 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870766AC963
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 239C36AC921
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCFRJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
+        id S229652AbjCFRFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:05:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjCFRJU (ORCPT
+        with ESMTP id S229638AbjCFRFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:09:20 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 331783B673;
-        Mon,  6 Mar 2023 09:08:27 -0800 (PST)
-Received: from [192.168.254.32] (unknown [47.187.203.192])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E36D620BBF92;
-        Mon,  6 Mar 2023 08:52:09 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E36D620BBF92
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1678121530;
-        bh=sVOn/vcPfOqwuN4KZzT/D2YzwVerqFmDVpeOIxrv9dc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fU0wypCRqWz3wIXknA/RYCcVWWyzaHutzCMOyjyl+CX4nLXJLAjZV7We+/G0FncMR
-         dOOdjrkBO9SWpF/ul4tBjl1vhIrkHZ9ycS5sL8vTGl3bCkNZkG3mR2FJyp6/Ju3qEE
-         xbMut7amOsTsiytyHR+OeQ6kkxWjTY1oAJMeAvrY=
-Message-ID: <56308235-3893-75ac-a19f-497cc203c520@linux.microsoft.com>
-Date:   Mon, 6 Mar 2023 10:52:09 -0600
+        Mon, 6 Mar 2023 12:05:08 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B669B2ED68
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:04:54 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4PVl585sV4z1S5Jk
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:53:16 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:mime-version:x-mailer:message-id:date
+        :subject:to:from; s=dkim; t=1678121595; x=1678985596; bh=uK+glyg
+        nD/QeqUlfo72/hfCeJTh8hcZKk6WDctNDr6Q=; b=Uc/a6QY7umjVEboke7vdoUC
+        lglh1jfnRERZtQfSDpVrV7554GvCX7PZNfAwKpIU8hHn5kgwixeMyxbIvOW1opFH
+        P0F74jTa3NRKT9UYU8n2EAPE5XKiub42lhBt/oLpr8En3mytHR2tsBLO8oa+k5UU
+        Kde8hq603tp4EKe3pp/kYLap7HbcVNeiy0qVmxasjb+QQc9khEzhFFpnrgwBptLU
+        tDHeCzor4RphAR2bf1XyJB5Z0erGCLLbKovIZzLvGklldbuncWv2k4DW8pOoByIJ
+        jkvUNQoRlVKcFZds7G5Ij0LZYbIAFOgWge+nTEEzuhFMoUjv//n7OEPVXt9tRUA=
+        =
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id jbkwMr60AvGw for <linux-kernel@vger.kernel.org>;
+        Mon,  6 Mar 2023 11:53:15 -0500 (EST)
+Received: from dorothy.. (unknown [186.105.8.42])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4PVl4p1NzFz1S4vb;
+        Mon,  6 Mar 2023 11:52:57 -0500 (EST)
+From:   Lux Aliaga <they@mint.lgbt>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org, keescook@chromium.org,
+        tony.luck@intel.com, gpiccoli@igalia.com
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org
+Subject: 
+Date:   Mon,  6 Mar 2023 13:52:39 -0300
+Message-Id: <20230306165246.14782-1-they@mint.lgbt>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v3 19/22] arm64: unwinder: Add a reliability check in
- the unwinder based on ORC
-Content-Language: en-US
-To:     Suraj Jitindar Singh <sjitindarsingh@gmail.com>
-Cc:     poimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
-        mark.rutland@arm.com, broonie@kernel.org, nobuta.keiya@fujitsu.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <0337266cf19f4c98388e3f6d09f590d9de258dc7>
- <20230202074036.507249-1-madvenka@linux.microsoft.com>
- <20230202074036.507249-20-madvenka@linux.microsoft.com>
- <88ab8c8348373e5c7c90c985dd92b5e06f32b16b.camel@gmail.com>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <88ab8c8348373e5c7c90c985dd92b5e06f32b16b.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Introduce Universal Flash Storage support on SM6125 and add support for t=
+he Xiaomi Mi A3 based on the former platform.
+
+Changes since v6:
+- Add struct for v3-660 UFS PHY offsets and modify sm6115 UFS PHY to use =
+it
+- Set ufs_mem_phy reg size to 0xdb8 in sm6125.dtsi
+- Drop "#address-cells" and "#size-cells" properties on reserved-memory n=
+ode in xiaomi-laurel-sprout dts
+- Move "status" last on &pon_resin node in xiaomi-laurel-sprout dts
+- Modify "&pm6125_gpio" pointer to "&pm6125_gpios" in xiaomi-laurel-sprou=
+t dts
+
+v6: https://lore.kernel.org/linux-devicetree/20230108195336.388349-1-they=
+@mint.lgbt/
+v5: https://lore.kernel.org/linux-devicetree/20221231222420.75233-2-they@=
+mint.lgbt/
 
 
-On 2/22/23 22:07, Suraj Jitindar Singh wrote:
-> On Thu, 2023-02-02 at 01:40 -0600, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> Introduce a reliability flag in struct unwind_state. This will be set
->> to
->> false if the PC does not have a valid ORC or if the frame pointer
->> computed
->> from the ORC does not match the actual frame pointer.
->>
->> Now that the unwinder can validate the frame pointer, introduce
->> arch_stack_walk_reliable().
->>
->> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com
->>>
->> ---
->>  arch/arm64/include/asm/stacktrace/common.h |  15 ++
->>  arch/arm64/kernel/stacktrace.c             | 167
->> ++++++++++++++++++++-
->>  2 files changed, 175 insertions(+), 7 deletions(-)
->>
-> 
-> [snip]
->  
->> -static void notrace unwind(struct unwind_state *state,
->> +static int notrace unwind(struct unwind_state *state, bool
->> need_reliable,
->>  			   stack_trace_consume_fn consume_entry, void
->> *cookie)
->>  {
->> -	while (1) {
->> -		int ret;
->> +	int ret = 0;
->>  
->> +	while (1) {
->> +		if (need_reliable && !state->reliable)
->> +			return -EINVAL;
->>  		if (!consume_entry(cookie, state->pc))
->>  			break;
->>  		ret = unwind_next(state);
->> +		if (need_reliable && !ret)
->> +			unwind_check_reliable(state);
->>  		if (ret < 0)
->>  			break;
->>  	}
->> +	return ret;
-> 
-> nit:
-> 
-> I think you're looking more for comments on the approach and the
-> correctness of these patches, but from an initial read I'm still
-> putting it all together in my head. So this comment is on the coding
-> style.
-> 
-> The above loop seems to check the current reliability state, then
-> unwind a frame then check the reliability, and then break based of
-> something which couldn't have been updated by the line immediately
-> above. I propose something like:
-> 
-> unwind(...) {
-> 	ret = 0;
-> 
-> 	while (!ret) {
-> 		if (need_reliable) {
-> 			unwind_check_reliable(state);
-> 			if (!state->reliable)
-> 				return -EINVAL;
-> 		}
-> 		if (!consume_entry(cookie, state->pc))
-> 			return -EINVAL;
-> 		ret = unwind_next(state);
-> 	}
-> 
-> 	return ret;
-> }
-> 
-> This also removes the need for the call to unwind_check_reliable()
-> before the first unwind() below in arch_stack_walk_reliable().
-> 
 
-OK. Suggestion sounds reasonable. Will do.
-
-Madhavan
-
-> - Suraj
-> 
->>  }
->>  NOKPROBE_SYMBOL(unwind);
->>  
->> @@ -216,5 +337,37 @@ noinline notrace void
->> arch_stack_walk(stack_trace_consume_fn consume_entry,
->>  		unwind_init_from_task(&state, task);
->>  	}
->>  
->> -	unwind(&state, consume_entry, cookie);
->> +	unwind(&state, false, consume_entry, cookie);
->> +}
->> +
->> +noinline notrace int arch_stack_walk_reliable(
->> +				stack_trace_consume_fn consume_entry,
->> +				void *cookie, struct task_struct *task)
->> +{
->> +	struct stack_info stacks[] = {
->> +		stackinfo_get_task(task),
->> +		STACKINFO_CPU(irq),
->> +#if defined(CONFIG_VMAP_STACK)
->> +		STACKINFO_CPU(overflow),
->> +#endif
->> +#if defined(CONFIG_VMAP_STACK) && defined(CONFIG_ARM_SDE_INTERFACE)
->> +		STACKINFO_SDEI(normal),
->> +		STACKINFO_SDEI(critical),
->> +#endif
->> +	};
->> +	struct unwind_state state = {
->> +		.stacks = stacks,
->> +		.nr_stacks = ARRAY_SIZE(stacks),
->> +	};
->> +	int ret;
->> +
->> +	if (task == current)
->> +		unwind_init_from_caller(&state);
->> +	else
->> +		unwind_init_from_task(&state, task);
->> +	unwind_check_reliable(&state);
->> +
->> +	ret = unwind(&state, true, consume_entry, cookie);
->> +
->> +	return ret == -ENOENT ? 0 : -EINVAL;
->>  }
