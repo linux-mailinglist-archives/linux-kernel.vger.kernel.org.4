@@ -2,105 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CDEE6AB63B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5976AB63E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCFGHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 01:07:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
+        id S229685AbjCFGIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 01:08:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCFGHm (ORCPT
+        with ESMTP id S229587AbjCFGIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 01:07:42 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E54D53A;
-        Sun,  5 Mar 2023 22:07:41 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Mon, 6 Mar 2023 01:08:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2B010D8;
+        Sun,  5 Mar 2023 22:08:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PVSmB5TSFz8R045;
-        Mon,  6 Mar 2023 14:07:38 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.97.17])
-        by mse-fl2.zte.com.cn with SMTP id 32667VdM030718;
-        Mon, 6 Mar 2023 14:07:31 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Mon, 6 Mar 2023 14:07:33 +0800 (CST)
-Date:   Mon, 6 Mar 2023 14:07:33 +0800 (CST)
-X-Zmail-TransId: 2af9640583252cc16a09
-X-Mailer: Zmail v1.0
-Message-ID: <202303061407332798543@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <mcgrof@kernel.org>
-Cc:     <keescook@chromium.org>, <yzaikin@google.com>,
-        <akpm@linux-foundation.org>, <linmiaohe@huawei.com>,
-        <chi.minghao@zte.com.cn>, <linux-kernel@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>
-Subject: =?UTF-8?B?W1BBVENIIFYyIDEvMl0gc3lzY3RsOiBMaW1pdCB0aGUgdmFsdWUgb2YgaW50ZXJmYWNlIGNvbXBhY3RfbWVtb3J5?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 32667VdM030718
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6405832A.001 by FangMail milter!
-X-FangMail-Envelope: 1678082858/4PVSmB5TSFz8R045/6405832A.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6405832A.001/4PVSmB5TSFz8R045
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00AA5B80B6F;
+        Mon,  6 Mar 2023 06:08:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A7AC433D2;
+        Mon,  6 Mar 2023 06:08:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678082919;
+        bh=8Jp8UCQPas78u8DZ/4U8fa02zm3CaAUvefFTeXP5s40=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RZaW1+7PzYnP+W22z+/Et5Bww+5+GN+RNXLYCrgcX9qh1ze7K8c/sHbA6cTHQ5ZE5
+         S9VezqX/Qpd8gPLMBjG/ReiF0GABTLMEpqJqucR2RYcr4NS01r/D8TmM2/N1ogqdEZ
+         t93Sekzf1MVhLdy+QnnqrJP3TtYqdsWAyTN2Z5ts=
+Date:   Mon, 6 Mar 2023 07:08:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vegard Nossum <vegard.nossum@oracle.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Jiri Kosina <jkosina@suse.cz>,
+        Solar Designer <solar@openwall.com>,
+        Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>,
+        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Subject: Re: [PATCH v3 4/7] Documentation/security-bugs: add linux-distros
+ and oss-security sections
+Message-ID: <ZAWDZdNAIq8yk86Y@kroah.com>
+References: <20230305220010.20895-1-vegard.nossum@oracle.com>
+ <20230305220010.20895-5-vegard.nossum@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230305220010.20895-5-vegard.nossum@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Sun, Mar 05, 2023 at 11:00:07PM +0100, Vegard Nossum wrote:
+> The existing information about CVE assignment requests and coordinated
+> disclosure fits much better in these new sections, since that's what these
+> lists are for.
+> 
+> Keep just a reminder in the security list section.
+> 
+> Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
+> ---
+>  Documentation/process/security-bugs.rst | 92 ++++++++++++++++++-------
+>  1 file changed, 67 insertions(+), 25 deletions(-)
+> 
+> diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
+> index fb156d146c42..2dd6569a7abb 100644
+> --- a/Documentation/process/security-bugs.rst
+> +++ b/Documentation/process/security-bugs.rst
+> @@ -31,6 +31,10 @@ be released without consent from the reporter unless it has already been
+>  made public.  Reporters are encouraged to propose patches, participate in the
+>  discussions of a fix, and test patches.
+>  
+> +The security team does not assign CVEs, nor does it require them for reports
+> +or fixes.  CVEs may be requested when the issue is reported to the
+> +linux-distros list.
 
-In Documentation/admin-guide/sysctl/vm.rst:109 say: when 1 is written
-to the file, all zones are compacted such that free memory is available
-in contiguous blocks where possible.
-So limit the value of interface compact_memory to 1.
+Note, this kind of implies that the security team would be the one whom
+you request a CVE from.  We can't do that, nor do we ever even want to
+deal with that for obvious reasons.  Also, who is to say that CVEs are
+even anything anyone should be messing with in the first place given how
+much they are abused and irrelevant most of the time?
 
-Link: https://lore.kernel.org/all/ZAJwoXJCzfk1WIBx@bombadil.infradead.org/
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+So I would just keep a big "The kernel developer community does not deal
+with CVEs at all.  If you want one for your résumé/CV, please contact
+MITRE directly at your own risk." type of warning in the document and
+leave it at that.
 
----
- include/linux/compaction.h | 1 +
- kernel/sysctl.c            | 4 +++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+thanks,
 
-diff --git a/include/linux/compaction.h b/include/linux/compaction.h
-index 52a9ff65faee..caa24e33eeb1 100644
---- a/include/linux/compaction.h
-+++ b/include/linux/compaction.h
-@@ -81,6 +81,7 @@ static inline unsigned long compact_gap(unsigned int order)
- }
-
- #ifdef CONFIG_COMPACTION
-+extern int sysctl_compact_memory;
- extern unsigned int sysctl_compaction_proactiveness;
- extern int sysctl_compaction_handler(struct ctl_table *table, int write,
- 			void *buffer, size_t *length, loff_t *ppos);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index c14552a662ae..67f70952f71a 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2192,10 +2192,12 @@ static struct ctl_table vm_table[] = {
- #ifdef CONFIG_COMPACTION
- 	{
- 		.procname	= "compact_memory",
--		.data		= NULL,
-+		.data		= &sysctl_compact_memory,
- 		.maxlen		= sizeof(int),
- 		.mode		= 0200,
- 		.proc_handler	= sysctl_compaction_handler,
-+		.extra1		= SYSCTL_ONE,
-+		.extra2		= SYSCTL_ONE,
- 	},
- 	{
- 		.procname	= "compaction_proactiveness",
--- 
-2.25.1
+greg k-h
