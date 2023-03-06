@@ -2,128 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262276AC0F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50FB6AC133
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjCFNah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42418 "EHLO
+        id S231201AbjCFNdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:33:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjCFNa1 (ORCPT
+        with ESMTP id S231334AbjCFNc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:30:27 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AB62A6F2;
-        Mon,  6 Mar 2023 05:30:22 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id g3so38643498eda.1;
-        Mon, 06 Mar 2023 05:30:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678109420;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WlUIZeGKWllbgJ8I0debpUyJbB/h2BZZK7zfLl+T+sw=;
-        b=JDGDyESZLrKV4bbADwCK/CkVk5mWHbYgn45N/lZG4Fh9dy1jtaa8LDP1uPSM1maEvg
-         mv+JoSG/l1iq5uQb/jLx4vpTMu4lDwWKVrjlSmQpaZbKV1CdPMenpq6fNee0KgYBf2ds
-         lvNORzWfPyu9OQNj8I+NRVPeqVSLmhn9v0K5dtqRJlTXIGfwmNQ7X717POL3QkCkXbYQ
-         +aa2+2TdC+Xty7f844ZOfQmMUHfZ33N5D+5YmNyHpEpfin2riYM73UwagUQT4Tu/6Oye
-         1gWNtH1lKOa5zEQGcwA7L/tp5I3BU1nWI22XGeBDmRqXDCTKILBcVaytIHs+h5fyrpyW
-         xMig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678109420;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WlUIZeGKWllbgJ8I0debpUyJbB/h2BZZK7zfLl+T+sw=;
-        b=UJLHc4JrtgJqSKM9EBbSXRbcnWNoW6APtrpEEz3Est9edgsjcOdAn99vrvAZEv5TMO
-         G/Nf4JhYugaOnuP06S66ZJTyI1gdTXCfekMCb9FD3RB5Vd7r/DnehGRgK290ArX4s0MT
-         lx8iCyPw4YfI+VdSAZEGGnL8aSoTn/VDYfi19pM4fcFxGMVAkQNLMKuv3CLWtvAuaczc
-         P1q1CA4eDE5U/1nrrRb2Xas5C7GiBnDD0+uJC+ciRye226d65ErJZBjdWVCdlqayUP+z
-         vmhkjtOXtApjmPJAVYs7yPoAmjO7YtrB4l1pJDhMcMhXj9MmnCTjhd4MknTIVwhchOmX
-         WawA==
-X-Gm-Message-State: AO0yUKWd9ny8kVykzU3wIS+ao7mT2GEB/5sCzrlskBgvzbPbv6pEB0um
-        CVjrp9ZuxXtTDBj9zyrx/gLxmRu2Dug=
-X-Google-Smtp-Source: AK7set/G2hQg8fRoZARn35+XEBYXA+yPVfpiIMJpRFYoZgbAOVgnNNIyS7EEMlBAHZZ2ZQEJn1dbZg==
-X-Received: by 2002:aa7:d385:0:b0:4ac:d8a1:7385 with SMTP id x5-20020aa7d385000000b004acd8a17385mr10737354edq.3.1678109420395;
-        Mon, 06 Mar 2023 05:30:20 -0800 (PST)
-Received: from ?IPv6:2003:f6:ef05:8700:853c:3ba5:d710:3c1d? (p200300f6ef058700853c3ba5d7103c1d.dip0.t-ipconnect.de. [2003:f6:ef05:8700:853c:3ba5:d710:3c1d])
-        by smtp.gmail.com with ESMTPSA id t26-20020a508d5a000000b004a9b5c957bfsm5149564edt.77.2023.03.06.05.30.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 05:30:19 -0800 (PST)
-Message-ID: <6e1fe1015235ae7d7eb9ef2526fd64b6d6d628d7.camel@gmail.com>
-Subject: Re: [PATCH] Fix IRQ issue by setting IRQ_DISABLE_UNLAZY flag
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Masahiro Honda <honda@mechatrax.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 06 Mar 2023 14:32:18 +0100
-In-Reply-To: <20230306044737.862-1-honda@mechatrax.com>
-References: <20230306044737.862-1-honda@mechatrax.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Mon, 6 Mar 2023 08:32:56 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617382F78C;
+        Mon,  6 Mar 2023 05:32:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 169EDCE127A;
+        Mon,  6 Mar 2023 13:32:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFD95C433A1;
+        Mon,  6 Mar 2023 13:32:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678109546;
+        bh=r2YevUTaEioy0IiiN4oIORAATS724rvNMW2/rHghHCQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=T25nklooE0ahT7WUzKCeUE4BraSm+vDbPKMRF2OXSEFIP+4lRgO7Wshph58T3JAt3
+         jniU6sOuca3s247kwAySQQkJH//HS4IeA7hnjgcyObifJnRGe2VxXSk4uuHzklwXFP
+         /YUGrbi3SYG2cNwJtRH4DESQD48Yemx5ZkxuYPsjJD+A9qvQtvKQlc/CeX+6XGgKSf
+         ieeoU/3jHTvqm9V3K5lHQYKINzJ2vMrroqmO+XPvZfLkb52ZHTIwFnZwL/Wsw3zTWp
+         YEaJqY6KYe1uutES9F7wKJ4CSW4D0w9bF75y1vd13a95U1JEtBM5yKmPEKYTaI14oP
+         79dlnmO/CpwlQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        William Qiu <william.qiu@starfivetech.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ziv Xu <ziv.xu@starfivetech.com>
+In-Reply-To: <20230302105221.197421-1-william.qiu@starfivetech.com>
+References: <20230302105221.197421-1-william.qiu@starfivetech.com>
+Subject: Re: [PATCH v1 0/2] Add Quad SPI driver for StarFive JH7110 SoC
+Message-Id: <167810954467.76172.7217821282766106312.b4-ty@kernel.org>
+Date:   Mon, 06 Mar 2023 13:32:24 +0000
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-06 at 13:47 +0900, Masahiro Honda wrote:
-> ADC using ad7793.ko, such as AD7794, may read incorrect data.
-> Extra interrupt is pending if the data on DOUT contains a falling
-> edge.
-> Therefore, wait_for_completion_timeout returns immediately.
-> This patch fixes the issue by setting IRQ_DISABLE_UNLAZY flag.
->=20
-> Signed-off-by: Masahiro Honda <honda@mechatrax.com>
-> ---
-> =C2=A0drivers/iio/adc/ad_sigma_delta.c | 1 +
-> =C2=A01 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/iio/adc/ad_sigma_delta.c
-> b/drivers/iio/adc/ad_sigma_delta.c
-> index d8570f620..364051809 100644
-> --- a/drivers/iio/adc/ad_sigma_delta.c
-> +++ b/drivers/iio/adc/ad_sigma_delta.c
-> @@ -584,6 +584,7 @@ static int devm_ad_sd_probe_trigger(struct device
-> *dev, struct iio_dev *indio_de
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0init_completion(&sigma_de=
-lta->completion);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sigma_delta->irq_dis =3D =
-true;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq_set_status_flags(sigma_del=
-ta->spi->irq,
-> IRQ_DISABLE_UNLAZY);
+On Thu, 02 Mar 2023 18:52:19 +0800, William Qiu wrote:
+> This patchset adds initial rudimentary support for the StarFive
+> Quad SPI controller driver. And this driver will be used in
+> StarFive's VisionFive 2 board.The first patch constrain
+> minItems/maxItems of resets for JH7110 QSPI and Patch 2 adds
+> support for StarFive JH7110 QSPI.
+> 
+> The patch series is based on v6.2.
+> 
+> [...]
 
-Hmmm this looks to be a very likely issue for any device having to
-brute force IRQ disabling by disabling the line (disable_irq()). That
-said, I think the commit message can (needs) to be improved. The
-message feels a bit confusing to me. Also, having a reference to
+Applied to
 
-commit e9849777d0e2 ("genirq: Add flag to force mask in
-disable_irq[_nosync]()")=20
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-would be nice to give some background on why this can be an issue.
+Thanks!
 
-Another thing that came to my mind is if the data is totally
-garbage/wrong or is it just some outstanding sample?
+[1/2] dt-bindings: qspi: cdns,qspi-nor: constrain minItems/maxItems of resets
+      commit: 13f1033e07588b7d1151d22d7ee3ca8f16181de7
+[2/2] spi: cadence-quadspi: Add support for StarFive JH7110 QSPI
+      commit: 47fef94afeae2a125607b6b45145594713471320
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Some research on this also seems to point that we should (need?) call
-irq_clear_status_flags(irq, IRQ_DISABLE_UNLAZY) when freeing the IRQ.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-I also wonder if we should keep this out of the library and have a per
-device config? Sure, this won't make anything wrong but it will hurt
-performance. OTOH, even though no one else ever reported this before,
-it looks like this can be an issue for all of the supported sigma delta
-ADCs.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-- Nuno S=C3=A1
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
