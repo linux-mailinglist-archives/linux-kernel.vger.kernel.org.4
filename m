@@ -2,148 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2881C6ABEE3
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:58:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3674A6ABE48
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:36:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCFL6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:58:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48784 "EHLO
+        id S230255AbjCFLgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:36:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjCFL6D (ORCPT
+        with ESMTP id S230262AbjCFLfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:58:03 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0739C4C13;
-        Mon,  6 Mar 2023 03:58:02 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id p20so9948386plw.13;
-        Mon, 06 Mar 2023 03:58:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678103881;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hft+w/AWTpA/oHx8mE1wI0oZbuc9lfki3TKKzp/NdNA=;
-        b=N7/Sujkh6ufAR+6H+b161RlDaaLu9dDxRmwjQEJX1my8jcJLYEIr4xPSpSBEhpMovw
-         FdsO0MXBpWWIBj+5AUOo41QTeh/Wi860oHBnqIJvBkYHc6uaqVPpKiSl07yJZkFDYHcQ
-         n1QIDC/SMxXE4/b1ee4zPgdoby+dBU/9/uVKSH81RGRLRx1/0Yn7F2GR8lzQwx2TJGxZ
-         6UapA8IaXxQvtSUxtmCbxNv6BmWVjxrdUP8G9Wx2sPskf78cHbcozxQAdlSHPGMSZmib
-         MRxs9gF+e4g2ZZz/vA8byA425ih75kwgoGp8jdb0mgXlkU+1kUbV4xPsP0lEgEFvPUhQ
-         TUKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678103881;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Hft+w/AWTpA/oHx8mE1wI0oZbuc9lfki3TKKzp/NdNA=;
-        b=CGlEUbkovdgt/IisV0YHHlhCPh0Smlv1NjVuD7ogzMtM3nMGI+86+vF/dXcf0ZDu4h
-         vp9lke8mzgKgKy5hELR22nWDC7yF4HGrCiNJg6iUXdIPNgmnkFBoADkoiU/j2qo2h1oN
-         zRRAy+J0FH2e4xo65xXXpFSF0rH/Yg6y+Dl2iFxreBQX6YEEyL7ufwSciNEcaSt/l3/U
-         E88FlF/d1g/vU0lTr2b+TOdwkElCfVsP69SWlkWknZw7F3YmUVEm77cSVMY0We24qbeE
-         7IpMUCaGspew2t+modaH3+8zQV8iXhNLhX7GZyK2W2893QnlcqaV6kU8dlBP7idxrmco
-         ALUQ==
-X-Gm-Message-State: AO0yUKU8Ycn5sq97RSNSG6TLUS+SmUuOID1dKVyDHp8JqduBygb3gwRD
-        CAtFQesHWudcD7qnpWonX/M=
-X-Google-Smtp-Source: AK7set/AFZkOnRb5aCA1x9R88r1/NeFmclcksVUWCpHqot6Nff6CildQ66ij5zK3slqZaSGojYn9+A==
-X-Received: by 2002:a17:90b:1b05:b0:237:aa9f:968c with SMTP id nu5-20020a17090b1b0500b00237aa9f968cmr10973012pjb.34.1678103881440;
-        Mon, 06 Mar 2023 03:58:01 -0800 (PST)
-Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id l3-20020a17090add8300b0022335f1dae2sm5887361pjv.22.2023.03.06.03.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 03:58:01 -0800 (PST)
-From:   Jason Xing <kerneljasonxing@gmail.com>
-To:     willemdebruijn.kernel@gmail.com, davem@davemloft.net,
-        dsahern@kernel.org, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kerneljasonxing@gmail.com,
-        Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH v2 net-next] udp: introduce __sk_mem_schedule() usage
-Date:   Mon,  6 Mar 2023 19:57:45 +0800
-Message-Id: <20230306115745.87401-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        Mon, 6 Mar 2023 06:35:54 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6C925BAE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:35:30 -0800 (PST)
+Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PVbzG1DFtznWDW;
+        Mon,  6 Mar 2023 19:32:42 +0800 (CST)
+Received: from localhost.localdomain (10.175.127.227) by
+ kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 6 Mar 2023 19:35:27 +0800
+From:   Zhong Jinghua <zhongjinghua@huawei.com>
+To:     <dennis@kernel.org>, <tj@kernel.org>, <cl@linux.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <zhongjinghua@huawei.com>, <yi.zhang@huawei.com>,
+        <yukuai3@huawei.com>, <chengzhihao1@huawei.com>
+Subject: [PATCH-next v2] scsi: fix use-after-free problem in scsi_remove_target
+Date:   Mon, 6 Mar 2023 19:58:40 +0800
+Message-ID: <20230306115840.3156157-1-zhongjinghua@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600002.china.huawei.com (7.193.23.29)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Xing <kernelxing@tencent.com>
+A use-after-free problem like below:
 
-Keep the accounting schema consistent across different protocols
-with __sk_mem_schedule(). Besides, it adjusts a little bit on how
-to calculate forward allocated memory compared to before. After
-applied this patch, we could avoid receive path scheduling extra
-amount of memory.
+BUG: KASAN: use-after-free in scsi_target_reap+0x6c/0x70
 
-Link: https://lore.kernel.org/lkml/20230221110344.82818-1-kerneljasonxing@gmail.com/
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
+Workqueue: scsi_wq_1 __iscsi_unbind_session [scsi_transport_iscsi]
+Call trace:
+ dump_backtrace+0x0/0x320
+ show_stack+0x24/0x30
+ dump_stack+0xdc/0x128
+ print_address_description+0x68/0x278
+ kasan_report+0x1e4/0x308
+ __asan_report_load4_noabort+0x30/0x40
+ scsi_target_reap+0x6c/0x70
+ scsi_remove_target+0x430/0x640
+ __iscsi_unbind_session+0x164/0x268 [scsi_transport_iscsi]
+ process_one_work+0x67c/0x1350
+ worker_thread+0x370/0xf90
+ kthread+0x2a4/0x320
+ ret_from_fork+0x10/0x18
+
+The problem is caused by a concurrency scenario:
+
+T0: delete target
+// echo 1 > /sys/devices/platform/host1/session1/target1:0:0/1:0:0:1/delete
+T1: logout
+// iscsiadm -m node --logout
+
+T0							T1
+ sdev_store_delete
+  scsi_remove_device
+   device_remove_file
+    __scsi_remove_device
+        					__iscsi_unbind_session
+        					 scsi_remove_target
+						  spin_lock_irqsave
+        					  list_for_each_entry
+     scsi_target_reap
+     // starget->reap_ref 1 -> 0
+     						  kref_get(&starget->reap_ref);
+						  // warn use-after-free.
+						  spin_unlock_irqrestore
+      scsi_target_reap_ref_release
+	scsi_target_destroy
+	... // delete starget
+						  scsi_target_reap
+						  // UAF
+
+When T0 reduces the reference count to 0, but has not been released,
+T1 can still enter list_for_each_entry, and then kref_get reports UAF.
+
+Fix it by using kref_get_unless_zero() to check for a reference count of
+0.
+
+Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
 ---
-V2:
-1) change the title and body message
-2) use __sk_mem_schedule() instead suggested by Paolo Abeni
----
- net/ipv4/udp.c | 31 ++++++++++++++++++-------------
- 1 file changed, 18 insertions(+), 13 deletions(-)
+ v2: commit message: "starget->reaf" -> "starget->reap_ref"
+ comment: "If it is reduced to 0, it means that other processes are releasing it and there is no need to delete it again"
+ ->
+ "If the reference count is already zero, skip this target is safe  because scsi_target_destroy() will wait until the 
+ host lock has been released before freeing starget."
 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index 9592fe3e444a..21c99087110d 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -1531,10 +1531,23 @@ static void busylock_release(spinlock_t *busy)
- 		spin_unlock(busy);
- }
- 
-+static inline int udp_rmem_schedule(struct sock *sk, int size)
-+{
-+	int delta;
+ drivers/scsi/scsi_sysfs.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index e7893835b99a..12e8ed6d55cb 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -1561,7 +1561,16 @@ void scsi_remove_target(struct device *dev)
+ 		    starget->state == STARGET_CREATED_REMOVE)
+ 			continue;
+ 		if (starget->dev.parent == dev || &starget->dev == dev) {
+-			kref_get(&starget->reap_ref);
 +
-+	delta = size - sk->sk_forward_alloc;
-+	if (delta > 0 && !__sk_mem_schedule(sk, delta, SK_MEM_RECV))
-+		return -ENOBUFS;
++			/*
++			 * If the reference count is already zero, skip this
++			 * target is safe  because scsi_target_destroy()
++			 * will wait until the host lock has been released
++			 * before freeing starget.
++			 */
++			if (!kref_get_unless_zero(&starget->reap_ref))
++				continue;
 +
-+	sk->sk_forward_alloc -= size;
-+
-+	return 0;
-+}
-+
- int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
- {
- 	struct sk_buff_head *list = &sk->sk_receive_queue;
--	int rmem, delta, amt, err = -ENOMEM;
-+	int rmem, err = -ENOMEM;
- 	spinlock_t *busy = NULL;
- 	int size;
- 
-@@ -1567,20 +1580,12 @@ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
- 		goto uncharge_drop;
- 
- 	spin_lock(&list->lock);
--	if (size >= sk->sk_forward_alloc) {
--		amt = sk_mem_pages(size);
--		delta = amt << PAGE_SHIFT;
--		if (!__sk_mem_raise_allocated(sk, delta, amt, SK_MEM_RECV)) {
--			err = -ENOBUFS;
--			spin_unlock(&list->lock);
--			goto uncharge_drop;
--		}
--
--		sk->sk_forward_alloc += delta;
-+	err = udp_rmem_schedule(sk, size);
-+	if (err) {
-+		spin_unlock(&list->lock);
-+		goto uncharge_drop;
- 	}
- 
--	sk->sk_forward_alloc -= size;
--
- 	/* no need to setup a destructor, we will explicitly release the
- 	 * forward allocated memory on dequeue
- 	 */
+ 			if (starget->state == STARGET_CREATED)
+ 				starget->state = STARGET_CREATED_REMOVE;
+ 			else
 -- 
-2.37.3
+2.31.1
 
