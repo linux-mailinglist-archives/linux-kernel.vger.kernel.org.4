@@ -2,136 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E833D6ABCF2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A22B6ABAC0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbjCFKdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:33:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S230228AbjCFKGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:06:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbjCFKcs (ORCPT
+        with ESMTP id S230225AbjCFKGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:32:48 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10842274A8
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:32:30 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id h14so8262206wru.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:32:29 -0800 (PST)
+        Mon, 6 Mar 2023 05:06:02 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EFB23D8E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:05:53 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id f16so8981291ljq.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:05:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1678098748;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2S29OAojjkQ3ph5THndb/5w5HMdqHkAEAaj92KxD7KY=;
-        b=xCSHcSRaD2g1+2DbiYWhwBVgmLp88kCObvoul8o22gAShWEWRsDyBUbrABXr5fv65x
-         IGnHDZLJd6mZoZ4c8bkw6btaQ552OPPkQaMMyBEUs4Bc9wvEuBuP3LVKslg1nEKUwpBX
-         lIVGb+vuDvhF0cDTuCVOpyZV5LaEa7T8m8jfkVFpaCwFvyN4Z00Y7x/hHmTHM+tY2ap5
-         RgDlCHiOuFZ5W2OonNpFKfcm5MsZoArntnS/kOhW3H0fDHSI6TVfGt6dIbQVxoFWUZLC
-         VaMyxBHz7iI91g7KCZulrkhxAWoD0odFmgisNlLZZFPdJeVIIAgA47RuWu1Yjzh0KCRf
-         0raw==
+        d=linaro.org; s=google; t=1678097152;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=unOds7GIYyIZeIXCeSmLecqXXZzGvwJd0Rd/RRt4GOY=;
+        b=b6rOn43tg0gOXWQqa0AIS3IHPoJ7L4w6kUyqmeHcbu3ij2H2rn4c18sidaRTCJ2Ri5
+         TDmN6Pwl42m3EzZGgWmgGCr2gWrTttx+XFkBI7RAKXtpwGzj29bWlPq/ppQ1gjapwnre
+         ApK+FwnMnk53R6jnWWLXIe/ec2QMnXoeIHUJZbONBhAnTyXsKH7XIrBEoirum5D5HO5S
+         6WMOZtJ/cKWPmLc+bcwRbweTdw8qw/+0+7QN9AyriJ/DB/oxe/2H2v2tQsg6/6hWpe+D
+         ADLqye33ELEp/3cSmmZSJYjRlqdkld3TWUil8I5NURSao74s5LI7pxJ4EGRpVlK5gfTx
+         nwhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678098748;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2S29OAojjkQ3ph5THndb/5w5HMdqHkAEAaj92KxD7KY=;
-        b=zH1cIYEaqP6ip7G5VmXcXN4mmk6A5ZTyN0N8TPYrrrQOoHX2ZUK1+b6RDc6COyeWLs
-         +eZ5Fghxw5x2aPmiSl62nXQwsDFvtsW/YdNMaRbyYz1A2MxKOLZl6tEh8Kj1hDl5Vv5j
-         Kc9rzKtzdsX13OIZ6V/4yfMjUBZd/SnUQgjjVE4ualS/lXawAtS45D7iDyhCftU1irlu
-         sekxMNWq1ZbThMjXfbJ/v4uBmuNQYul0qi5gxDzenaRtp919+4aM8eJCnmOxBwwtI3HO
-         oBKIQN37S1ikyeLeugGSCVeqbQvV80Lh+xsbjVSWxjibPVRzsOnByd/47yP2u7tgeqgH
-         Uvbw==
-X-Gm-Message-State: AO0yUKU7Mrya4Nyuiuhtw/hIOmB1ahuePKFfuS6ciXBOo75VhtTwFJ0A
-        EjNNyPh1RHdQM8tTDf0piJ4OIw==
-X-Google-Smtp-Source: AK7set9Vv2uSkjazOq+f3rx/CCBKfCShLhiL1+01KwPuVcwWj2ucc2G1h2TzyZEz/iSKDj7DuGgpzw==
-X-Received: by 2002:adf:e70a:0:b0:2c9:e3d:88ca with SMTP id c10-20020adfe70a000000b002c90e3d88camr6289357wrm.67.1678098748535;
-        Mon, 06 Mar 2023 02:32:28 -0800 (PST)
-Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id u18-20020a5d6ad2000000b002c5539171d1sm9217902wrw.41.2023.03.06.02.32.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 02:32:28 -0800 (PST)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-arch@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v5 26/26] riscv: Remove empty <uapi/asm/setup.h>
-Date:   Mon,  6 Mar 2023 11:05:08 +0100
-Message-Id: <20230306100508.1171812-27-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230306100508.1171812-1-alexghiti@rivosinc.com>
-References: <20230306100508.1171812-1-alexghiti@rivosinc.com>
+        d=1e100.net; s=20210112; t=1678097152;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=unOds7GIYyIZeIXCeSmLecqXXZzGvwJd0Rd/RRt4GOY=;
+        b=z93/TsCYA5aiJJHhQuSZHhVNCOCrrPDpGTLDvUHdl+Vx6rw10SpjMdRRrNI2JxvNkv
+         D76IiuU2ujogAM+INsDAmiFH921jpEhzTrk98DYmidclK5Pm2wtAODqA5M83AlNa9IAx
+         zdiklZbGREWz9VxqFbZnq7ZCwWzAanzCQfapf0zPeWPvTbUSCzgrATRgoWziR+wFv0jb
+         IzMSCB3HhqYlC7F3WXMiPSePZJEK7ZOo8v6p+rXxlh6rkPJKrlgc4OSSh6yBFDKZsUv4
+         Jn779dWLF8iAaIvHaBT15+hj4gH0pH9YBBA17lGdIMP07dKpUm4sQtSdcXGn9iH+Afnn
+         QVhQ==
+X-Gm-Message-State: AO0yUKUG7xQEzhmD0hcWToUDYHr92f+8JSjFzqV6xA9dXh8zGSAtyrqJ
+        0HOnCxNVDqVmezuCazMsx9yRRA==
+X-Google-Smtp-Source: AK7set+aZ5TWHcLe9FNsPz4hbcFTUvTYKf/VqiA+AH/AiSSMe2Eqq+EPUWJm/yhcjWI+rHs4fUTQPg==
+X-Received: by 2002:a05:651c:10a4:b0:294:6e44:b6e0 with SMTP id k4-20020a05651c10a400b002946e44b6e0mr2836268ljn.5.1678097152016;
+        Mon, 06 Mar 2023 02:05:52 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id r19-20020a2e9953000000b00293534d9760sm1628381ljj.127.2023.03.06.02.05.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 02:05:51 -0800 (PST)
+Message-ID: <7f1b29f3-35fa-4459-4832-f109d2979382@linaro.org>
+Date:   Mon, 6 Mar 2023 11:05:49 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
+ deprecated compatible
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>
+Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-dsi_fixup-v3-0-b8565944d0e6@linaro.org>
+ <20230304-topic-dsi_fixup-v3-1-b8565944d0e6@linaro.org>
+ <c1a2ba5b-4cd9-362b-5a4e-e95a6bf27b3e@linaro.org>
+ <30798bd2-5805-45e6-92d2-a9df6fb52600@linaro.org>
+ <28561c8b-e9a3-b58e-429a-6dc331ad94e4@linaro.org>
+ <35e19031-877c-329f-3bdd-4f04bc8ccc6f@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <35e19031-877c-329f-3bdd-4f04bc8ccc6f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
- arch/riscv/include/uapi/asm/setup.h | 6 ------
- 1 file changed, 6 deletions(-)
- delete mode 100644 arch/riscv/include/uapi/asm/setup.h
 
-diff --git a/arch/riscv/include/uapi/asm/setup.h b/arch/riscv/include/uapi/asm/setup.h
-deleted file mode 100644
-index 17fcecd4a2f8..000000000000
---- a/arch/riscv/include/uapi/asm/setup.h
-+++ /dev/null
-@@ -1,6 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
--
--#ifndef _UAPI_ASM_RISCV_SETUP_H
--#define _UAPI_ASM_RISCV_SETUP_H
--
--#endif /* _UAPI_ASM_RISCV_SETUP_H */
--- 
-2.37.2
 
+On 4.03.2023 18:53, Bryan O'Donoghue wrote:
+> On 04/03/2023 17:45, Bryan O'Donoghue wrote:
+>> On 04/03/2023 17:35, Konrad Dybcio wrote:
+>>>> you'll see no error. However if you just do this
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/msm8916.dtsi b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+>>>> index 0733c2f4f3798..829fbe05b5713 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/msm8916.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/msm8916.dtsi
+>>>> @@ -1094,8 +1094,7 @@ mdp5_intf1_out: endpoint {
+>>>>                          };
+>>>>
+>>>>                          dsi0: dsi@1a98000 {
+>>>> -                               compatible = "qcom,msm8916-dsi-ctrl",
+>>>> -                                            "qcom,mdss-dsi-ctrl";
+>>>> +                               compatible = "qcom,mdss-dsi-ctrl";
+>>>>                                  reg = <0x01a98000 0x25c>;
+>>>>                                  reg-names = "dsi_ctrl";
+>>>>
+>>>>
+>>>> and run the same test you get
+>>> Yes, correct. It's valid but it's deprecated, so the bindings are
+>>> sane. Keep in mind there's an ABI-like aspect to this.
+>>>
+>>> Konrad
+>>
+>> The _driver_ will still accept "qcom,mdss-dsi-ctrl" which is ABI compliant but, I don't see why the yaml should.
+>>
+>> If you declare a new .dts with only "qcom,mdss-dsi-ctrl", that should throw a yaml check error.
+>>
+>> ---
+>> bod
+> 
+> Actually. I agree with you, I just dislike it.
+If I understand correctly, you are dissatisfied with dt_binding_check
+not even throwing a warning when a deprecated binding is present.. I
+agree, that could be improved..
+
+Konrad
+> 
+> - "qcom,mdss-dsi-ctrl" <- the driver will accept this
+> - "qcom,dsi-ctrl-6g-qcm2290" <- the driver will not accept this
+> 
+> bah
+> 
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
