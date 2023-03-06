@@ -2,59 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B0E6AB432
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:09:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 840A66AB434
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjCFBJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 20:09:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S229685AbjCFBKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 20:10:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCFBJg (ORCPT
+        with ESMTP id S229651AbjCFBKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 20:09:36 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6728B777;
-        Sun,  5 Mar 2023 17:09:34 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVL5s0Xsdz9tC8;
-        Mon,  6 Mar 2023 09:07:29 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 6 Mar
- 2023 09:09:32 +0800
-Subject: Re: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built
- from XDP frames
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230301160315.1022488-1-aleksander.lobakin@intel.com>
- <20230301160315.1022488-2-aleksander.lobakin@intel.com>
- <36d42e20-b33f-5442-0db7-e9f5ef9d0941@huawei.com>
- <dd811304-44ed-0372-8fe7-00c425a453dd@intel.com>
- <7ffbcac4-f4f2-5579-fd55-35813fbd792c@huawei.com>
- <9b5b88da-0d2d-d3f3-6ee1-7e4afc2e329a@intel.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <98aa093a-e772-8882-b0e3-5895fd747e59@huawei.com>
-Date:   Mon, 6 Mar 2023 09:09:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Sun, 5 Mar 2023 20:10:40 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F1ABB9C
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 17:10:38 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PVL6G5K44znWg5;
+        Mon,  6 Mar 2023 09:07:50 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 6 Mar 2023 09:10:36 +0800
+Message-ID: <04645c9e-2188-da5c-30da-4c4694c7283c@huawei.com>
+Date:   Mon, 6 Mar 2023 09:10:35 +0800
 MIME-Version: 1.0
-In-Reply-To: <9b5b88da-0d2d-d3f3-6ee1-7e4afc2e329a@intel.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/3] mm/damon/paddr: minor refactor of damon_pa_young()
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500005.china.huawei.com (7.185.36.74)
+To:     SeongJae Park <sj@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <damon@lists.linux.dev>
+References: <20230303183925.113520-1-sj@kernel.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20230303183925.113520-1-sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -65,74 +50,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/3 21:26, Alexander Lobakin wrote:
-> From: Yunsheng Lin <linyunsheng@huawei.com>
-> Date: Fri, 3 Mar 2023 20:44:24 +0800
-> 
->> On 2023/3/3 19:22, Alexander Lobakin wrote:
->>> From: Yunsheng Lin <linyunsheng@huawei.com>
->>> Date: Thu, 2 Mar 2023 10:30:13 +0800
-> 
-> [...]
-> 
->>> And they are fixed :D
->>> No drivers currently which use Page Pool mix PP pages with non-PP. And
->>
->> The wireless adapter which use Page Pool *does* mix PP pages with
->> non-PP, see below discussion:
->>
->> https://lore.kernel.org/netdev/156f3e120bd0757133cb6bc11b76889637b5e0a6.camel@gmail.com/
-> 
-> Ah right, I remember that (also was fixed).
-> Not that I think it is correct to mix them -- for my PoV, a driver
-> shoule either give *all* its Rx buffers as PP-backed or not use PP at all.
-> 
-> [...]
-> 
->>> As Jesper already pointed out, not having a quick way to check whether
->>> we have to check ::pp_magic at all can decrease performance. So it's
->>> rather a shortcut.
->>
->> When we are freeing a page by updating the _refcount, I think
->> we are already touching the cache of ::pp_magic.
-> 
-> But no page freeing happens before checking for skb->pp_recycle, neither
-> in skb_pp_recycle() (skb_free_head() etc.)[0] nor in skb_frag_unref()[1].
 
-If we move to per page marker, we probably do not need checking
-skb->pp_recycle.
 
-Note both page_pool_return_skb_page() and skb_free_frag() can
-reuse the cache line triggered by per page marker checking if
-the per page marker is in the 'struct page'.
-
+On 2023/3/4 2:39, SeongJae Park wrote:
+> Hi Kefeng,
 > 
->>
->> Anyway, I am not sure checking ::pp_magic is correct when a
->> page will be passing between different subsystem and back to
->> the network stack eventually, checking ::pp_magic may not be
->> correct if this happens.
->>
->> Another way is to use the bottom two bits in bv_page, see:
->> https://www.spinics.net/lists/netdev/msg874099.html
->>
->>>
->>>>
->>>>>  
->>>>>  	/* Allow SKB to reuse area used by xdp_frame */
->>>>>  	xdp_scrub_frame(xdpf);
->>>>>
->>>
->>> Thanks,
->>> Olek
->>> .
->>>
+> On Fri, 3 Mar 2023 16:43:42 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 > 
-> [0] https://elixir.bootlin.com/linux/latest/source/net/core/skbuff.c#L808
-> [1]
-> https://elixir.bootlin.com/linux/latest/source/include/linux/skbuff.h#L3385
+>> Omit three lines by unified folio_put(), and make code more clear.
+>>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>>   mm/damon/paddr.c | 11 ++++-------
+>>   1 file changed, 4 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+>> index 3fda00a0f786..2ef9db0189ca 100644
+>> --- a/mm/damon/paddr.c
+>> +++ b/mm/damon/paddr.c
+>> @@ -130,24 +130,21 @@ static bool damon_pa_young(unsigned long paddr, unsigned long *folio_sz)
+>>   			accessed = false;
+>>   		else
+>>   			accessed = true;
+>> -		folio_put(folio);
+>>   		goto out;
+> 
+> Because you moved 'out' label to not include *folio_sz setting, folio_sz will
+> not set in this case.  It should be set.
+oh, it should be fixed.
+> 
+>>   	}
+>>   
+>>   	need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
+>> -	if (need_lock && !folio_trylock(folio)) {
+>> -		folio_put(folio);
+>> -		return false;
+>> -	}
+>> +	if (need_lock && !folio_trylock(folio))
+>> +		goto out;
+>>   
+>>   	rmap_walk(folio, &rwc);
+>>   
+>>   	if (need_lock)
+>>   		folio_unlock(folio);
+>> -	folio_put(folio);
+>>   
+>> -out:
+>>   	*folio_sz = folio_size(folio);
+>> +out:
+>> +	folio_put(folio);
+> 
+> Before this change, folio_size() is called after folio_put().  Shouldn't it be
+> called before folio_put()?  If so, could we make a separate fix for that first,
+> and then make this change on top of it, so that it can be easily applied to
+> relevant stable kernels?
+> 
+Yes， I could separate it, after folio_put(), the folio could be 
+re-allocated and the folio_size calculation is not right.
 > 
 > Thanks,
-> Olek
-> .
+> SJ
 > 
+>>   	return accessed;
+>>   }
+>>   
+>> -- 
+>> 2.35.3
+>>
+>>
