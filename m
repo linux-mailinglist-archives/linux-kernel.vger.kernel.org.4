@@ -2,144 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B5D6AB9F7
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A0A56ABA04
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjCFJfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:35:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
+        id S230056AbjCFJgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjCFJff (ORCPT
+        with ESMTP id S230058AbjCFJgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:35:35 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2E0BB9A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:35:34 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ7Fe-0002CZ-NM; Mon, 06 Mar 2023 10:35:26 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ7Fd-002DDT-NV; Mon, 06 Mar 2023 10:35:25 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pZ7Fc-002cuf-Ph; Mon, 06 Mar 2023 10:35:24 +0100
-Date:   Mon, 6 Mar 2023 10:35:24 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Florian Eckert <fe@dev.tdt.de>
-Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org, pavel@ucw.cz,
-        lee@kernel.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org, Eckert.Florian@googlemail.com
-Subject: Re: [PATCH v7 2/2] trigger: ledtrig-tty: add additional modes
-Message-ID: <20230306093524.amm7o4ppa7gon4ew@pengutronix.de>
-References: <20230222083335.847655-1-fe@dev.tdt.de>
- <20230222083335.847655-3-fe@dev.tdt.de>
+        Mon, 6 Mar 2023 04:36:10 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C8FBDE3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:36:01 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3265VMOE000378;
+        Mon, 6 Mar 2023 03:35:40 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=AVoa7prKja+G6h0Wnu0l9jqt2+WL1wtrX2iRfjCAD+4=;
+ b=o3Dm5HXF9lJSpFa8tPiMeU0geOH3PahawQjtjsgLjcBAcsK+V4EQJAGP8VIt5MPMjdNY
+ 0BTjh6cr6bwfMAe2vf5SrNeSebSOdg8VdJ08jWTSwxgwPvAT5YU0Jag6DLHnM8VTmMt4
+ somKJXTvzULmnXElIo0kt0XUivzO2A6SH7xuquAOHDmOdh/dnBFEF7rzHsqg/4WGD2zn
+ o6sqTFCmxL0c7Vj7F6/1YmvZVcCEkuwH4Caj84ML0qSnWCDjrztqZxhrDQ9Pib853OZo
+ PDuarwHUvKhb+PRqLPmwuzWGhTnBCdw46e6FDjvwNUDoT3Y1HAYi748dWhBqN90K5gEY UA== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3p44972b9u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 03:35:39 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Mon, 6 Mar
+ 2023 03:35:37 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Mon, 6 Mar 2023 03:35:37 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8CBF5475;
+        Mon,  6 Mar 2023 09:35:37 +0000 (UTC)
+Date:   Mon, 6 Mar 2023 09:35:37 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Vlad Karpovich <vkarpovi@opensource.cirrus.com>
+CC:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
+        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>,
+        Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+Subject: Re: [PATCH v2 5/5] ASoC: cs35l45: Hibernation support
+Message-ID: <20230306093537.GQ68926@ediswmail.ad.cirrus.com>
+References: <20230303192151.2437221-1-vkarpovi@opensource.cirrus.com>
+ <20230303192151.2437221-5-vkarpovi@opensource.cirrus.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="svip3mvpinfoukkq"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230222083335.847655-3-fe@dev.tdt.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230303192151.2437221-5-vkarpovi@opensource.cirrus.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: mi9dECTXyLkzWfg3ymR3pjWPMi52khpf
+X-Proofpoint-ORIG-GUID: mi9dECTXyLkzWfg3ymR3pjWPMi52khpf
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 03, 2023 at 01:21:51PM -0600, Vlad Karpovich wrote:
+> From: "Vlad.Karpovich" <vkarpovi@opensource.cirrus.com>
+> 
+> Adds support for a low-power Hibernation State.
+> In this state, all register contents are lost, but the contents of
+> RAM are retained. In the Hibernation State, only always-on digital
+> functions to support wake-up are enabled.
 
---svip3mvpinfoukkq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah perhaps clarify that this relates to the DSP, something like
+"Add support for a low-power hibernation state for the DSP. In
+this state the DSP RAM contents are maintained, such that
+firmware does not need to be re-downloaded, but the rest of the
+chip's register state is lost."
 
-On Wed, Feb 22, 2023 at 09:33:35AM +0100, Florian Eckert wrote:
-> Add additional modes to trigger the selected LED.
-> The following modes are supported:
->=20
-> Tx/Rx:	Flash LED on data transmission (default)
-> CTS:	DCE Ready to accept data from the DTE.
-> DSR:	DCE is ready to receive and send data.
-> CAR:	DCE is receiving a carrier from a remote DTE.
-> RNG:	DCE has detected an incoming ring signal.
->=20
-> The mode can be changed for example with the following command:
-> echo "CTS" > /sys/class/leds/<led>/mode
->=20
-> This would turn on the LED, when the DTE(modem) signals the DCE that it
-> is ready to accept data.
->=20
-> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
-> ---
->  .../ABI/testing/sysfs-class-led-trigger-tty   |  17 ++
->  drivers/leds/trigger/ledtrig-tty.c            | 145 ++++++++++++++++--
->  2 files changed, 147 insertions(+), 15 deletions(-)
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-led-trigger-tty b/Docu=
-mentation/ABI/testing/sysfs-class-led-trigger-tty
-> index 2bf6b24e781b..1c28e6c61d19 100644
-> --- a/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-> +++ b/Documentation/ABI/testing/sysfs-class-led-trigger-tty
-> @@ -4,3 +4,20 @@ KernelVersion:	5.10
->  Contact:	linux-leds@vger.kernel.org
->  Description:
->  		Specifies the tty device name of the triggering tty
-> +
-> +What:		/sys/class/leds/<led>/mode
-> +Date:		January 2023
-> +KernelVersion:	6.3
-> +Description:
-> +		Specifies the operating to trigger the LED.
-> +		The following operating modes are supported:
-> +
-> +		* Tx/Rx: Flash LED on data transmission (default)
-> +		* CTS:   DCE Ready to accept data from the DTE.
-> +		  LED on if line is high.
-> +		* DSR:   DCE is ready to receive and send data.
-> +		  LED on if line is high.
-> +		* CAR:   DCE has detected a carrier from a remote DTE.
-> +		  LED on if line is high.
-> +		* RNG:   DCE has detected an incoming ring signal.
-> +		  LED on if line is high.
+But rest of it looks good to me:
 
-Something I (still) don't like about this approach is that you cannot
-make the LED flash on TX only (or CAR and DSR). Something like:
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-	led=3D/sys/class/leds/<led>/
-	echo 1 > $led/TX
-	echo 0 > $led/RX
-	echo 1 > $led/CAR
-
-would be a more flexible and IMHO nicer interface. (Maybe with improved
-file names.)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---svip3mvpinfoukkq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQFs9kACgkQwfwUeK3K
-7An5+gf8CoSOdxVO4N/QvSBqybrroQFb5PRh/T6Ud7r/5xd6UhmJjbGZHbWpyvaA
-aWBySQuXPGxh9hlnb57c2BI0q5/hHnpTl8yMy7tPg3pYKGNhVHi+O7b+74szedj1
-IGYfPP16ViEdVlz1nkPLtUNzJd0817jw6nzCQBuFmoiPK3nXyb2LCznYSVWYLcGR
-Y85+HG1NOLOAiGYcXM6qhcC5/WUOhxhV78Ue1Kuwn81FMTYnScj2lYQ4eHYX63nq
-1p1IabLzorNtVKhs4FMce86+SdpBM2m5lcmnJJCAV/m7KFQnBGe9faMAXC4avztb
-Ts4+Uqip8Dcur3EyByxXbkdGmZwtLA==
-=yTDj
------END PGP SIGNATURE-----
-
---svip3mvpinfoukkq--
+Thanks,
+Charles
