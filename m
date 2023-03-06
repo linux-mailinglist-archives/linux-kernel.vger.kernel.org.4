@@ -2,88 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323476AC071
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1776AC079
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjCFNLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
+        id S230516AbjCFNMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:12:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCFNLN (ORCPT
+        with ESMTP id S230048AbjCFNMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:11:13 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E342D167;
-        Mon,  6 Mar 2023 05:10:59 -0800 (PST)
-Received: from [IPV6:2001:861:4a40:8620:49a7:8b15:c488:a958] (unknown [IPv6:2001:861:4a40:8620:49a7:8b15:c488:a958])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gtucker)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C65A16602EB0;
-        Mon,  6 Mar 2023 13:10:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678108258;
-        bh=0tMcyeiNW99YWWVLTGwnfutRuQu8PUN4S9RDqb8qBL0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NIalrTy4J5NhxwbF3U4UfRW8nwtIcJ0VM6B/jZ/jQb6bHIi/XThooH5tX8AWhgJSy
-         xXMSFozLhDQH2ol1lZ4lXjCjRga/wxDn37SmDB9p0yZpJyAR9MYGnxDoB0w4+oBQmR
-         ytj3MIdSQWhKzqM6ypv+vP5F1hReBrmg5R5A2+m2kalPzJC9Ob8ysrW0FYlXwgMBWF
-         KQUfC4WSM1AX/CY//tlKwZs1ePtyTZsC03TTDVJm+ImpQJ0rg3jAxLCoVMpSRSBENw
-         vbxKpjLFa9I9H3guIKIBwOFr53/ER9XxR76ghHqlFyKzNi3/uFMd/ns+63RsLjMmhA
-         jXKpuEcLrcjhw==
-Message-ID: <9bd18c62-d922-992a-a776-a3064d4c2d73@collabora.com>
-Date:   Mon, 6 Mar 2023 14:11:43 +0100
+        Mon, 6 Mar 2023 08:12:32 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A242D28864;
+        Mon,  6 Mar 2023 05:12:24 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id n5so5703078pfv.11;
+        Mon, 06 Mar 2023 05:12:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678108344;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=chQcgXxHy8sAMBkeEVLkeE+vS0UnB7P7m9TpmUAYgjU=;
+        b=VECsWj/dJ7Gi3hX1nZ7G5RUL2FpdJDcCjeTxgwIvVhoopxmeK1XWlpiVL2gWo32pgV
+         Bus+MeUdtNdwZpuGYykilERhtXWCSTuaUeluDdkEF/09p1XiCbR/h6RJBjqDh+SiOZ1f
+         bcyvsOjjdUGBSzOxPpbHSTgpl4CcRDbrbYRadBB4CVxr8S0e45FjFaeScM8FIbBbiMV9
+         5PoEJ9RU+DKI0ipITDxfC+3vBO1/zEjJcgon198mbuxS/61UidS3Ddb81EmSgSQ6GkA0
+         Mf3eWIYh6ggztHVy9c2huuNdxGEzBg7+lfRsGoNK00JwevS9k7pyeau5q58pM/UeeFns
+         a6vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678108344;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=chQcgXxHy8sAMBkeEVLkeE+vS0UnB7P7m9TpmUAYgjU=;
+        b=2BMMUHGufPRyaL0CocpcsQqump9EpGT8eXMc4Cr4Rbx1LkAabSMH9gLXMqh5hVIJWK
+         jJxHgIrP0MgmbCO3T8G08SUl+94p/pFkLCRc4Ml5jux4IMVJCzBBjR3BWpdKKd1KYWDi
+         F1hXfmEWg4L5j2Btpruz7Zql1tUIwZKHk5TjALMXxBiSqNVNek4MudN8pNJhNHHrKw9H
+         O0bhtmwG64dBaSKENtte731GxPO+GH+WMSTxYCTvXhrEhaQGqTme6aenCqzFJU75BB1a
+         tBfo7Zef8EZW44fsrL1PZGp3XD34+xVFjCpG6UPN053xFli3Q5tYKCo88GdpsKqu/Drg
+         RMvQ==
+X-Gm-Message-State: AO0yUKUxlRV9iNuBR9kcTu3I6aJ0cq2aDMdWYh67wukRL9lci/oX/p8C
+        xmoLg054B8vzd8IMinqNvNu0BDccK3I0Nq+Eozw=
+X-Google-Smtp-Source: AK7set+mCeQMqde4uuYrzjd2TmPrO/nbA2kDUGlM3i7YoSBdxGgCGY2af8Lm0ZC3lcEmy4quWaSCylXjFDRMDgymQn8=
+X-Received: by 2002:a63:5a05:0:b0:4fb:b88f:e98a with SMTP id
+ o5-20020a635a05000000b004fbb88fe98amr3813187pgb.7.1678108344147; Mon, 06 Mar
+ 2023 05:12:24 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] selftests: amd-pstate: fix TEST_FILES
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        Doug Smythies <dsmythies@telus.net>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>
-References: <20230204133454.260066-1-guillaume.tucker@collabora.com>
- <ZAGOQznWjSNuhn73@amd.com>
- <3d051308-382f-0f90-41b3-e1ffdd6f11f7@linuxfoundation.org>
-Content-Language: en-US
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-In-Reply-To: <3d051308-382f-0f90-41b3-e1ffdd6f11f7@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230306060505.11657-1-i.bornyakov@metrotek.ru> <20230306131040.f6757retj5utp6lf@x260>
+In-Reply-To: <20230306131040.f6757retj5utp6lf@x260>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 6 Mar 2023 10:12:13 -0300
+Message-ID: <CAOMZO5AH9rO8PSJfeJXRP9t6w7_iSwgy_PQTk0yaHhD54ryAJQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND] bus: imx-weim: fix branch condition evaluates to a
+ garbage value
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     linux-imx@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/2023 21:29, Shuah Khan wrote:
-> On 3/2/23 23:05, Huang Rui wrote:
->> On Sat, Feb 04, 2023 at 09:34:54PM +0800, Guillaume Tucker wrote:
->>> Bring back the Python scripts that were initially added with
->>> TEST_GEN_FILES but now with TEST_FILES to avoid having them deleted
->>> when doing a clean.  Also fix the way the architecture is being
->>> determined as they should also be installed when ARCH=x86_64 is
->>> provided explicitly.  Then also append extra files to TEST_FILES and
->>> TEST_PROGS with += so they don't get discarded.
->>>
->>> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
->>> Fixes: ac527cee87c9 ("selftests: amd-pstate: Don't delete source files via Makefile")
->>> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
->>
->> Acked-by: Huang Rui <ray.huang@amd.com>
->>
-> 
-> Thank you both. I will pick this up for 6.3-rc2
+On Mon, Mar 6, 2023 at 10:10=E2=80=AFAM Ivan Bornyakov <i.bornyakov@metrote=
+k.ru> wrote:
 
-Great, many thanks.
+> Fixes: 52c47b63412b ("bus: imx-weim: improve error handling upon child pr=
+obe-failure")
+>
+> Is it OK, or should I post v2 with "Fixes:" tag?
 
-Guillaume
-
+Please post a v2 with the Fixes tag and my Reviewed-by tag, thanks.
