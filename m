@@ -2,110 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D8D6AC424
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7796AC42A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjCFO5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
+        id S229652AbjCFO6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:58:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjCFO5g (ORCPT
+        with ESMTP id S230041AbjCFO60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:57:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9E732E4E;
-        Mon,  6 Mar 2023 06:57:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AFAC60FFA;
-        Mon,  6 Mar 2023 14:57:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83B87C433D2;
-        Mon,  6 Mar 2023 14:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678114647;
-        bh=9ekaUPu9EVBLlisIqNAVB0GB6wygYnAhWQmwRm9LXmM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=a7NsWO2XDftM665GOkoCuwRWmVfs+2q4QmAdKTGNLoiIxKZPk77eiE/q9Ki8w92b2
-         jMKoizi9GXyy0dBzhIGV/29h1lcYlPej+CvBeh5+hADxd1muU4T/WB9AvzGeYdo5xv
-         EdqMRr+swJLbRZRnDroRaHWnnXzZ0YYI1ES7/NvqRLff9T9nkXz1ZM1NgsEpjyVled
-         HCJNVaYVe29twusxjBRPPSBpJ7GjsVGjGFypLtM0esTqyUAEVchKgurm1IrQ2Skayh
-         A97AznmoI/ce5+q6vtNxWUft7apYU+0zRvR3ppqju/xM0aigV0RMFY0wXkoc08+kzg
-         5DRAR42ew3OdA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2C85A5C00F1; Mon,  6 Mar 2023 06:57:27 -0800 (PST)
-Date:   Mon, 6 Mar 2023 06:57:27 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Jakub Kicinski <kuba@kernel.org>, peterz@infradead.org,
-        jstultz@google.com, edumazet@google.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] softirq: avoid spurious stalls due to need_resched()
-Message-ID: <20230306145727.GS1301832@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230303133143.7b35433f@kernel.org>
- <87r0u3hqtw.ffs@tglx>
- <ZAXVF0tPKLErAkpT@lothringen>
+        Mon, 6 Mar 2023 09:58:26 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D969825975
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:58:06 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id t11so13130167lfr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:58:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678114685;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P9dmdVfpPfuomtp8btAfPBTLpBjzL+Ybdk6lUZ9ubik=;
+        b=TbwiJu/99Wd0ZAHaGNn+wTMxwSZhgCQ28AJLpz32sP77sEr1tiDh1Yw8ySltSrmY0Q
+         vcWpH4fiBh/0mOVbsUSS8KQr9a+GU2/5wLR6DqMz0oLp/2p6mZX8MAai2j2X0r/FjpVt
+         bq2hA42ILrpmqz8fn4TXcJldGFNMXYWdsaBZBMDut7Kc1whj4BtXRg0+yQmgRjaGzFCt
+         aP4/0imZLOws+mMmhhuJPiyh/lqAWAlZSiaPOyfHfenypxJqrQBPBUOhklh00R7xGMtI
+         9bjY25sWFliziN4Scgs0mRBXV0xxb22hGJ6A7G5t88yHjKpyNjFvEo4/F4XEpGIs9ghy
+         Rwpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678114685;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P9dmdVfpPfuomtp8btAfPBTLpBjzL+Ybdk6lUZ9ubik=;
+        b=jauySrXeRBx3fQmIJqA1oLOddJw+dL73pMAvywIH4JT9C12cHwfZ6WYPMETK89ZNae
+         mRl42unTB6TFcOOQEQvJ3cMTDYL2XIaqWcTijbL+g9MI9rRPVNe7ktCKMPcERIPHIWF8
+         3uYRTBgztzqXpeeF+jtjgOOAEdnMoSkX7EDn01rz9KlMEGmfpwTY8krUClj/efYLQCAo
+         WCJo1t2ZjmCpgXa/gHYF75fwn3w4IlCCUm1b8sFLrbsFpwYKRiTpYdc9NT2UTnCsHvhr
+         HEhAClMrhv2WFWtk7GsGx1cVHfpu1vX3Qwt+JydbYO0FKGcWyhW67Bo+L5rQov2Ar6J5
+         lKhQ==
+X-Gm-Message-State: AO0yUKXUb2GZ/0vRFUPH8AbAa3mCAUFvyc69pgvwOvqgOprKMqxTaxHT
+        t7YNE7LK5OWCIfiYGP3zXN/SvA==
+X-Google-Smtp-Source: AK7set//EZ7rm1hSgud7TVG1me0HuI+lFUoVL+7oCXnbgFw948g8rsJyj285b09OpGG0SBEa0owk1A==
+X-Received: by 2002:ac2:55b0:0:b0:4e0:a426:6ddc with SMTP id y16-20020ac255b0000000b004e0a4266ddcmr2627833lfg.0.1678114685164;
+        Mon, 06 Mar 2023 06:58:05 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id v19-20020ac25933000000b004b58500383bsm1656898lfi.272.2023.03.06.06.58.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 06:58:04 -0800 (PST)
+Message-ID: <3fd0d115-9530-50e2-992a-6bad4ca29d57@linaro.org>
+Date:   Mon, 6 Mar 2023 15:58:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAXVF0tPKLErAkpT@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 7/9] arm64: dts: qcom: sa8775p: add high-speed UART
+ nodes
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230216125257.112300-1-brgl@bgdev.pl>
+ <20230216125257.112300-8-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230216125257.112300-8-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 12:57:11PM +0100, Frederic Weisbecker wrote:
-> On Sun, Mar 05, 2023 at 09:43:23PM +0100, Thomas Gleixner wrote:
-> > That said, I have no brilliant solution for that off the top of my head,
-> > but I'm not comfortable with applying more adhoc solutions which are
-> > contrary to the efforts of e.g. the audio folks.
-> > 
-> > I have some vague ideas how to approach that, but I'm traveling all of
-> > next week, so I neither will be reading much email, nor will I have time
-> > to think deeply about softirqs. I'll resume when I'm back.
+
+
+On 16.02.2023 13:52, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> IIUC: the problem is that some (rare?) softirq vector callbacks rely on the
-> fact they can not be interrupted by other local vectors and they rely on
-> that to protect against concurrent per-cpu state access, right?
+> Add two UART nodes that are known to be used by existing development
+> boards with this SoC.
 > 
-> And there is no automatic way to detect those cases otherwise we would have
-> fixed them all with spinlocks already.
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 31 +++++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
 > 
-> So I fear the only (in-)sane idea I could think of is to do it the same way
-> we did with the BKL. Some sort of pushdown: vector callbacks known for having
-> no such subtle interaction can re-enable softirqs.
-> 
-> For example known safe timers (either because they have no such interactions
-> or because they handle them correctly via spinlocks) can carry a
-> TIMER_SOFTIRQ_SAFE flag to tell about that. And RCU callbacks something alike.
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index eda5d107961b..ce5976e36aee 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -489,6 +489,21 @@ &clk_virt SLAVE_QUP_CORE_1 0>,
+>  				operating-points-v2 = <&qup_opp_table_100mhz>;
+>  				status = "disabled";
+>  			};
+> +
+> +			uart12: serial@a94000 {
+> +				compatible = "qcom,geni-uart";
+> +				reg = <0x0 0xa94000 0x0 0x4000>;
+The address part ought to be padded to 8 hex digits
 
-When a given RCU callback causes latency problems, the usual quick fix
-is to have them instead spawn a workqueue, either from the callback or
-via queue_rcu_work().
+> +				interrupts = <GIC_SPI 358 IRQ_TYPE_LEVEL_HIGH>;
+> +				clocks = <&gcc GCC_QUPV3_WRAP1_S5_CLK>;
+> +				clock-names = "se";
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_1 0
+Please use the bindings constants as pointed out in the previous replies.
 
-But yes, this is one of the reasons that jiffies are so popular.  Eric
-batched something like 30 RCU callbacks per costly time check, and you
-would quite possible need similar batching to attain efficiency for
-lightly loaded softirq vectors.  But 30 long-running softirq handlers
-would be too many.
 
-One option is to check the expensive time when either a batch of (say)
-30 completes or when jiffies says too much time has elapsed.
+> +						 &clk_virt SLAVE_QUP_CORE_1 0>,
+> +						<&gem_noc MASTER_APPSS_PROC 0
+> +						 &config_noc SLAVE_QUP_1 0>;
+> +				interconnect-names = "qup-core", "qup-config";
+> +				power-domains = <&rpmhpd SA8775P_CX>;
+> +				status = "disabled";
+> +			};
+>  		};
+>  
+>  		qupv3_id_2: geniqup@8c0000 {
+> @@ -524,6 +539,22 @@ &config_noc SLAVE_QUP_2 0>,
+>  				status = "disabled";
+>  			};
+>  
+> +			uart17: serial@88c000 {
+> +				compatible = "qcom,geni-uart";
+> +				reg = <0x0 0x88c000 0x0 0x4000>;
+Ditto
 
-> Of course this is going to be a tremendous amount of work but it has the
-> advantage of being iterative and it will pay in the long run. Also I'm confident
-> that the hottest places will be handled quickly. And most of them are likely to
-> be in core networking code.
-> 
-> Because I fear no hack will ever fix that otherwise, and we have tried a lot.
+> +				interrupts-extended = <&intc GIC_SPI 585 IRQ_TYPE_LEVEL_HIGH>,
+> +						      <&tlmm 94 IRQ_TYPE_LEVEL_HIGH>;
+> +				clocks = <&gcc GCC_QUPV3_WRAP2_S3_CLK>;
+> +				clock-names = "se";
+> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0
+> +						 &clk_virt SLAVE_QUP_CORE_2 0>,
+Ditto
 
-Indeed, if it was easy within current overall code structure, we would
-have already fixed it.
-
-							Thanx, Paul
+Konrad
+> +						<&gem_noc MASTER_APPSS_PROC 0
+> +						 &config_noc SLAVE_QUP_2 0>;
+> +				interconnect-names = "qup-core", "qup-config";
+> +				power-domains = <&rpmhpd SA8775P_CX>;
+> +				status = "disabled";
+> +			};
+> +
+>  			i2c18: i2c@890000 {
+>  				compatible = "qcom,geni-i2c";
+>  				reg = <0x0 0x890000 0x0 0x4000>;
