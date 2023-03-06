@@ -2,139 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625066AC392
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 425186AC372
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:37:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjCFOmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39398 "EHLO
+        id S231168AbjCFOhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbjCFOmK (ORCPT
+        with ESMTP id S230518AbjCFOg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:42:10 -0500
-Received: from 8.mo561.mail-out.ovh.net (8.mo561.mail-out.ovh.net [87.98.172.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C20523325
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:41:51 -0800 (PST)
-Received: from director5.ghost.mail-out.ovh.net (unknown [10.109.143.136])
-        by mo561.mail-out.ovh.net (Postfix) with ESMTP id D94FF26608
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:34:50 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-c69ts (unknown [10.110.115.217])
-        by director5.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 7145F1FDDB;
-        Mon,  6 Mar 2023 14:34:50 +0000 (UTC)
-Received: from RCM-web1.webmail.mail.ovh.net ([176.31.238.120])
-        by ghost-submission-6684bf9d7b-c69ts with ESMTPSA
-        id CPlUGgr6BWSpMwEA9+Jaug
-        (envelope-from <rafal@milecki.pl>); Mon, 06 Mar 2023 14:34:50 +0000
+        Mon, 6 Mar 2023 09:36:56 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7C433463
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:36:22 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id cy23so39276742edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:36:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678113308;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LVEoV2e9JxxVuffMnk5zPqnGKqMmb25URoKT4WzdzCk=;
+        b=Nb8c7ev2IA1SH4QtZdfFCC04Z7JlwXFJPjlQXUJ5fpBftQR//be8jeOSu5SHL+kgvm
+         vCnaFqF/ib+OYrColMepbohcBy5TPRk1rGv2I2xwLxGdN2vuwQ9iVngc6K18aggLeEeK
+         Pk+ho0abMLBdkujVfEkkrfjWCKLD+ezWMoGjSutLAKJHND8Qv95owevYWs+TxvjKdzzz
+         bn5jSvrNLgA7uhHNTjjVZQ9tqRBwwBV50DvIcgEK6yqiZoKTb352Nd1nmaCg+BhTL/2/
+         hGNxkX82ZmtV0JPMUuP/AeCaG2EEuVW3oYKnkwYlA97m5itILpf9t4pqXMWWYd8T+dfV
+         ZzSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678113308;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LVEoV2e9JxxVuffMnk5zPqnGKqMmb25URoKT4WzdzCk=;
+        b=aO6Vx0f41yTrLKeA6fTPyiMwYMRF23u04/9I8BG4xEMJXE/tUr/OU/xKWCyULXVnIz
+         ar1WDFYnDXXMCZj0fYd7GhWGFwWVhXPSxdbXYlepLxHSoqShYCtpGUzpoRN0ujRm5zzo
+         Up++foa5ti2gc6spB3F88C5OjFp3gqzPuuq9ok837BxM6b78zSfihWCE1HX+ft2Iq8l2
+         Rr3sJy91o5pjHsVIZmOF6JnU1chhSTcJ2dz84ArhI+LenMgAhG4g5WyvE3BBLVTCCwFS
+         GK0cal8OACNV7oU4gNrExFPkGWlXf896FTmlFr0pjdzn3AjYDdsmeieUGu+DhQo9l1kS
+         H7CQ==
+X-Gm-Message-State: AO0yUKVitWM5irQD/CdiCWIlmEhpjcM3kzwym+YF+glilaMNEWhxrneq
+        3p4/LHRKWbIv68GNgKfNpEuMFg==
+X-Google-Smtp-Source: AK7set+4UvM4WeEld9d1MulJogMXnAMeCG6KRrVaYnMJvULGkXtdKx6KbJfIVfvtsaFwQiGlh6VYcQ==
+X-Received: by 2002:a17:907:701:b0:8f3:f976:ac13 with SMTP id xb1-20020a170907070100b008f3f976ac13mr14099986ejb.10.1678113307986;
+        Mon, 06 Mar 2023 06:35:07 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:c1e7:5006:98ac:f57? ([2a02:810d:15c0:828:c1e7:5006:98ac:f57])
+        by smtp.gmail.com with ESMTPSA id uk19-20020a170907ca1300b008cecb8f374asm4634653ejc.0.2023.03.06.06.35.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 06:35:07 -0800 (PST)
+Message-ID: <7cbc24bf-6920-c75f-effc-fd9d827ca324@linaro.org>
+Date:   Mon, 6 Mar 2023 15:35:06 +0100
 MIME-Version: 1.0
-Date:   Mon, 06 Mar 2023 15:34:50 +0100
-From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Michael Walle <michael@walle.cc>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 0/8] nvmem: Let layout drivers be modules
-In-Reply-To: <20230306152954.5b72154f@xps-13>
-References: <20230301152239.531194-1-miquel.raynal@bootlin.com>
- <ee7923a8b5fa8358e6805d20df7d8049@walle.cc> <20230306143528.7407fda5@xps-13>
- <73a04afaf658292c05ef27117c60b21d@milecki.pl>
- <20230306151829.57c689b4@xps-13>
- <0b94d38a25f5d8ea70f228213ba14fa4@milecki.pl>
- <20230306152954.5b72154f@xps-13>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <55aec068346e75008d84587ac2dad40b@milecki.pl>
-X-Sender: rafal@milecki.pl
-X-Originating-IP: 194.187.74.233
-X-Webmail-UserID: rafal@milecki.pl
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 18017213262722804720
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -85
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtkedgfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegfrhhlucfvnfffucdludehmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthekjhdttderjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepjedvlefguedthfefleehgeeftdeludeluedvgfeffeevhfevtdehteejteefheegnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffedpudejiedrfedurddvfeekrdduvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 5/6] clk: samsung: Extract parent clock enabling to
+ common function
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Tomasz Figa <tomasz.figa@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230223041938.22732-1-semen.protsenko@linaro.org>
+ <20230223041938.22732-6-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230223041938.22732-6-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-06 15:29, Miquel Raynal wrote:
-> Hi Rafał,
+On 23/02/2023 05:19, Sam Protsenko wrote:
+> Extract parent clock enabling from exynos_arm64_register_cmu() to
+> dedicated function.
 > 
-> rafal@milecki.pl wrote on Mon, 06 Mar 2023 15:23:50 +0100:
+> Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+> Changes in v3:
+>   - Rebased on top of latest soc/for-next tree
+>   - Added Marek's Acked-by tag
 > 
->> On 2023-03-06 15:18, Miquel Raynal wrote:
->> > Hi Rafał,
->> >
->> > rafal@milecki.pl wrote on Mon, 06 Mar 2023 14:57:03 +0100:
->> >
->> >> On 2023-03-06 14:35, Miquel Raynal wrote:
->> >> > Hi Michael,
->> >> >
->> >> > michael@walle.cc wrote on Mon, 06 Mar 2023 14:01:34 +0100:
->> >> >
->> >> >> > Miquel Raynal (8):
->> >> >> >   of: Fix modalias string generation
->> >> >> >   of: Change of_device_get_modalias() main argument
->> >> >> >   of: Create an of_device_request_module() receiving an OF node
->> >> >> >   nvmem: core: Fix error path ordering
->> >> >> >   nvmem: core: Handle the absence of expected layouts
->> >> >> >   nvmem: core: Request layout modules loading
->> >> >> >   nvmem: layouts: sl28vpd: Convert layout driver into a module
->> >> >> >   nvmem: layouts: onie-tlv: Convert layout driver into a module
->> >> >> >> With the fixes series [1] applied:
->> >> >
->> >> > Thanks for the series! Looks good to me. I believe both series can live
->> >> > in separate tress, any reason why we would like to avoid this? I am > keen
->> >> > to apply [1] into the mtd tree rather soon.
->> >> >> Given past events with nvmem patches I'm against that.
->> >> >> Let's wait for Srinivas to collect pending patches, let them spend a
->> >> moment in linux-next maybe, ask Srinivas to send them to Greg early if
->> >> he can. That way maybe you can merge Greg's branch (assuming he >> doesn't
->> >> rebase).
->> >
->> > Just to be on the same page, we're talking about the mtd core fixups to
->> > handle correctly probe deferrals in the nvmem side.
->> >
->> > Applying mtd patches then nvmem patches is totally fine in this order.
->> > Applying nvmem patches and then mtd patches creates a range of commits
->> > where some otp devices might have troubles probing if:
->> > - a layout driver is used
->> > - the driver is compiled as a module
->> > - the driver is also not installed in an initramfs
->> >
->> > I was actually asking out loud whether we should care about this
->> > commit range given the unlikelihood that someone would have troubles
->> > with this while bisecting a linux-next kernel.
->> >
->> > So getting an immutable tag from Greg would not help. The opposite
->> > might make sense though, and involves that I apply [1] to mtd/next
->> > rather soon anyway, I guess?
->> 
->> The problem IIUC is nvmem.git / for-next containing broken code after
->> adding nvmem stuff. That is unless Srinivas takes your patches in some
->> way. Hopefully not by waiting for 6.4-rc1.
+> Changes in v2:
+>   - Rebased on top of latest soc/for-next tree
+>   - Improved English in kernel doc comment
+>   - Added clk_prepare_enable() return value check
+>   - Added exynos_arm64_enable_bus_clk() check in
+>     exynos_arm64_register_cmu()
+>   - Changed the commit message to reflect code changes
 > 
-> I don't follow. There will be nothing broken after applying the nvmem
-> patches, at least nothing more than today. I will apply the patches
-> provided by Michael, they fix existing issues, nothing related to the
-> nvmem changes. Just, it is easier to trigger these issues with the
-> nvmem series thanks to the probe deferral situations.
+>  drivers/clk/samsung/clk-exynos-arm64.c | 51 ++++++++++++++++++--------
+>  1 file changed, 35 insertions(+), 16 deletions(-)
 > 
-> Both series can live on their own. If required I will produce an
-> immutable tag to Greg.
+> diff --git a/drivers/clk/samsung/clk-exynos-arm64.c b/drivers/clk/samsung/clk-exynos-arm64.c
+> index b921b9a1134a..2aa3f0a5644e 100644
+> --- a/drivers/clk/samsung/clk-exynos-arm64.c
+> +++ b/drivers/clk/samsung/clk-exynos-arm64.c
+> @@ -56,6 +56,37 @@ static void __init exynos_arm64_init_clocks(struct device_node *np,
+>  	iounmap(reg_base);
+>  }
+>  
+> +/**
+> + * exynos_arm64_enable_bus_clk - Enable parent clock of specified CMU
+> + *
+> + * @dev:	Device object; may be NULL if this function is not being
+> + *		called from platform driver probe function
+> + * @np:		CMU device tree node
+> + * @cmu:	CMU data
+> + *
+> + * Keep CMU parent clock running (needed for CMU registers access).
+> + *
+> + * Return: 0 on success or a negative error code on failure.
+> + */
+> +static int __init exynos_arm64_enable_bus_clk(struct device *dev,
+> +		struct device_node *np, const struct samsung_cmu_info *cmu)
+> +{
+> +	struct clk *parent_clk;
+> +
+> +	if (!cmu->clk_name)
+> +		return 0;
+> +
+> +	if (dev)
+> +		parent_clk = clk_get(dev, cmu->clk_name);
+> +	else
+> +		parent_clk = of_clk_get_by_name(np, cmu->clk_name);
+> +
+> +	if (IS_ERR(parent_clk))
+> +		return PTR_ERR(parent_clk);
+> +
+> +	return clk_prepare_enable(parent_clk);
+> +}
+> +
+>  /**
+>   * exynos_arm64_register_cmu - Register specified Exynos CMU domain
+>   * @dev:	Device object; may be NULL if this function is not being
+> @@ -72,23 +103,11 @@ static void __init exynos_arm64_init_clocks(struct device_node *np,
+>  void __init exynos_arm64_register_cmu(struct device *dev,
+>  		struct device_node *np, const struct samsung_cmu_info *cmu)
+>  {
+> -	/* Keep CMU parent clock running (needed for CMU registers access) */
+> -	if (cmu->clk_name) {
+> -		struct clk *parent_clk;
+> -
+> -		if (dev)
+> -			parent_clk = clk_get(dev, cmu->clk_name);
+> -		else
+> -			parent_clk = of_clk_get_by_name(np, cmu->clk_name);
+> -
+> -		if (IS_ERR(parent_clk)) {
+> -			pr_err("%s: could not find bus clock %s; err = %ld\n",
+> -			       __func__, cmu->clk_name, PTR_ERR(parent_clk));
+> -		} else {
+> -			clk_prepare_enable(parent_clk);
+> -		}
+> -	}
+> +	int err;
+>  
+> +	err = exynos_arm64_enable_bus_clk(dev, np, cmu);
+> +	if (err)
+> +		panic("%s: could not enable bus clock\n", __func__);
 
-OK, it's me how didn't follow then.
+The error handling is changed and not equivalent. I would say that we
+could still try to boot even if this failed, so kernel should not panic.
+Maybe the parent clock is enabled by bootloader.
 
-I thought your mtd fixes are needed before applying nvmem stuff.
+Best regards,
+Krzysztof
 
-It sounds OK then.
