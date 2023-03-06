@@ -2,168 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 815706ABFF6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC0C6ABFA0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjCFMzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:55:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54566 "EHLO
+        id S230100AbjCFMgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:36:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230311AbjCFMz3 (ORCPT
+        with ESMTP id S229976AbjCFMgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:55:29 -0500
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 04:55:26 PST
-Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DA72B630;
-        Mon,  6 Mar 2023 04:55:26 -0800 (PST)
-Received: from localhost (unknown [127.0.0.1])
-        by mx.kolabnow.com (Postfix) with ESMTP id 0C66440DA3;
-        Mon,  6 Mar 2023 13:35:57 +0100 (CET)
-Authentication-Results: ext-mx-out003.mykolab.com (amavisd-new);
-        dkim=pass (4096-bit key) reason="pass (just generated, assumed good)"
-        header.d=kolabnow.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kolabnow.com; h=
-        message-id:references:in-reply-to:subject:subject:from:from:date
-        :date:content-transfer-encoding:content-type:content-type
-        :mime-version:received:received:received; s=dkim20160331; t=
-        1678106154; x=1679920555; bh=CldnAGWCUyLWQj0+FhFTF/gQQirraazid4l
-        4YVTfOJ8=; b=w9T3IV/Ww8mnjjLPqOmY3uJru3lYyOeSk+w/VcE55YQ2u9fVOfh
-        MUkvZppkRlu3OT43tqcS1s3ZI8zXZI8B1CuFHGwAwuASJvstpOPu0E9NlB8Z5pmJ
-        R+Fc53gtNu6pJ+phAmn+6flLW1TjUzFT+IKiWNSNwusKGanqAFoQxa9er6JFYdPi
-        6rYt5yadVSfVgsILAgiqYVBGu/lvz8BwhhSbqrkeVfIMUK7tcwGubnLizLPlLpZZ
-        9rAe4fxDL9yX4A52Won7+F6ajcZrnjlhquIe21HXpeb2oSMMGBELciIrdf4Zp6xT
-        SLEpn3BTohYZzSrMxbcR5UDiMmD1IE9RyY3w70G4itvS14p4acW341WIqaQTYY6U
-        VjeiFxWTbbHk0G1hl+SGCES+zhqcut5dVOwwk/Bpt+nxx0JHrNyPSQnK0zt9jGvL
-        l0SLY0GK4ElzwFeEcuJTi4xRMUDlQjyyGmT70NOdDuFk+bIUBGw3m1NWkYthsrkX
-        9syZ8yFdxWkyA+2YFqHkLHcmgmHheltrtVHt2bCkihfbhmhmbrPdtq9rX97t6PMW
-        vSpCZbNfzX05WmGlskHzeJESFCcVyE3GgsCJORS6lwC2up3ir644d/s8TDpg4GLo
-        gZiUmXSFWd30FOIh9dR8aizZqW0j7n33CW48/y1122us2EjY3BoC8PFM=
-X-Virus-Scanned: amavisd-new at mykolab.com
-X-Spam-Score: -1.9
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
-Received: from mx.kolabnow.com ([127.0.0.1])
-        by localhost (ext-mx-out003.mykolab.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xPYFZXUyIZwT; Mon,  6 Mar 2023 13:35:54 +0100 (CET)
-Received: from int-mx001.mykolab.com (unknown [10.9.13.1])
-        by mx.kolabnow.com (Postfix) with ESMTPS id 0450A404DB;
-        Mon,  6 Mar 2023 13:35:32 +0100 (CET)
-Received: from int-subm001.mykolab.com (unknown [10.9.37.1])
-        by int-mx001.mykolab.com (Postfix) with ESMTPS id C755C8AB;
-        Mon,  6 Mar 2023 13:35:31 +0100 (CET)
+        Mon, 6 Mar 2023 07:36:32 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B91E42596D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:36:30 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id h14so8647388wru.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 04:36:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678106189;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c4q5bpu843lZ9fXgZMzu4vosZM9fn7Qexe0ALutwzh0=;
+        b=mI/itH8/YSW7HKGYHfd0EwDMQAWbbDWioZXBPE3R8FKXboUr9t3t/yOQylf0NVAhNj
+         KRx1F5YqYUL25o0Y2pfTALSBVnsCxQ7gCY6KALa1sjIg/eMzBE/jM4cfKL3nJVjxJUZq
+         n3/+5N3LYCoZrqrbmsU4UH4QAo2nc8eLxIGBotZsc6wTvps9tU1pC9HCdVvlxsqr6VtB
+         6kkc/PUJJbbI5GZCDMjknod1aps1A4uormt8MorBz9L/jG4u+Tnacy0geAOvao6WB/ti
+         mwwKyRoki9/cKg2AViXFxhwfhXo1c5DtjykADrANPUyX0CFCp75KTWCjRxsIJ7zoUjOa
+         ogmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678106189;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c4q5bpu843lZ9fXgZMzu4vosZM9fn7Qexe0ALutwzh0=;
+        b=P8DoyZg4e9tHphHPKqB5qIYOD/2lLPF/4Cf2wNg+mOAmi2D68kxKAGRa3rO6OiNkBi
+         rVjXiE8JT0oZYRCtO3aO/rMBZyCAPk/nTnFq4SwgzyuoWidYPxqpRmZklUpHevaryZxC
+         XX7S4ngxkGP6LdjVqGsPN8ILcHsEcGJV/pHtoH6p31tsrp4yZbOklkzcoUDRrbqj+sF7
+         sVuzoS2Q7JbHvmQEiTLffCIjt/HFb8x/gsuvKS6IFGmqXgh3HH3KAEPSi201UWH293iD
+         3UVEx3RTgQUznqSrAl57+spsDHPioyHzi682qvod6hmlH4sbdACziTOfRBHBEIidt3FE
+         IrmQ==
+X-Gm-Message-State: AO0yUKV78eVmZJkdbNOFF84wvka/ZARvBlO1IXyx9iVJ3kA6dbxzXWTp
+        tPdJktcBBnFStv0a4i5fYfzeHw==
+X-Google-Smtp-Source: AK7set+HiFqxGxqUbEePaG1GauuZizw+B+A2wTEHisyvMnLYXeI6P9TLO/3lnKFQqiXalKC4PHuH6w==
+X-Received: by 2002:a5d:6a12:0:b0:2bf:ee7d:5369 with SMTP id m18-20020a5d6a12000000b002bfee7d5369mr6191618wru.59.1678106189165;
+        Mon, 06 Mar 2023 04:36:29 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id k5-20020adfe8c5000000b002c56179d39esm9890545wrn.44.2023.03.06.04.36.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 04:36:28 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <20230306121351.1606360-1-christianshewitt@gmail.com>
+References: <20230306121351.1606360-1-christianshewitt@gmail.com>
+Subject: Re: [PATCH v3 0/3] arm64: dts: meson: gxbb-kii-pro: device-tree
+ updates
+Message-Id: <167810618845.421911.1072624515654199610.b4-ty@linaro.org>
+Date:   Mon, 06 Mar 2023 13:36:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Mon, 06 Mar 2023 13:35:29 +0100
-From:   Federico Vaga <federico.vaga@vaga.pv.it>
-To:     Vegard Nossum <vegard.nossum@oracle.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Jiri Kosina <jkosina@suse.cz>,
-        Solar Designer <solar@openwall.com>,
-        Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Jiri Kosina <jikos@kernel.org>, Alex Shi <alexs@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Hu Haowen <src.res@email.cn>,
-        Tsugikazu Shibata <tshibata@ab.jp.nec.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Jeimi Lee <jamee.lee@samsung.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH v3 1/7] Documentation/security-bugs: move from
- admin-guide/ to process/
-In-Reply-To: <20230305220010.20895-2-vegard.nossum@oracle.com>
-References: <20230305220010.20895-1-vegard.nossum@oracle.com>
- <20230305220010.20895-2-vegard.nossum@oracle.com>
-Message-ID: <b435d859273cc51efb3e0284ba3c9a7e@vaga.pv.it>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-05 23:00, Vegard Nossum wrote:
-> Jiri Kosina, Jonathan Corbet, and Willy Tarreau all expressed a desire
-> to move this document under process/.
-> 
-> Create a new section for security issues in the index and group it with
-> embargoed-hardware-issues.
-> 
-> I'm doing this at the start of the series to make all the subsequent
-> changes show up in 'git blame'.
-> 
-> Existing references were updated using:
-> 
->   git grep -l security-bugs ':!Documentation/translations/' | xargs
-> sed -i 's|admin-guide/security-bugs|process/security-bugs|g'
->   git grep -l security-bugs Documentation/translations/ | xargs sed -i
-> 's|Documentation/admin-guide/security-bugs|Documentation/process/security-bugs|g'
->   git grep -l security-bugs Documentation/translations/ | xargs sed -i
-> '/Original:/s|\.\./admin-guide/security-bugs|\.\./process/security-bugs|g'
-> 
-> Notably, the page is not moved in the translations (due to my lack of
-> knowledge of these languages), but the translations have been updated
-> to point to the new location of the original document where these
-> references exist.
+Hi,
 
-Fine with me (Italian), I will move it later to the right place to 
-reflect
-the English version
+On Mon, 06 Mar 2023 12:13:48 +0000, Christian Hewitt wrote:
+> First we sort nodes in the current dts and remove some blank lines. Then we
+> add the remaining bits needed for Bluetooth to work. And finally we add the
+> AIU audio card to have HDMI and S/PDIF audio output.
+> 
+> Changes since v2:
+> - Rebase on linux-amlogic/for-next
+> 
+> [...]
 
-Acked-by: Federico Vaga <federico.vaga@vaga.pv.it>
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.4/arm64-dt)
 
-> diff --git
-> a/Documentation/translations/it_IT/admin-guide/security-bugs.rst
-> b/Documentation/translations/it_IT/admin-guide/security-bugs.rst
-> index 18a5822c7d9a..20994f4bfa31 100644
-> --- a/Documentation/translations/it_IT/admin-guide/security-bugs.rst
-> +++ b/Documentation/translations/it_IT/admin-guide/security-bugs.rst
-> @@ -1,6 +1,6 @@
->  .. include:: ../disclaimer-ita.rst
-> 
-> -:Original: :ref:`Documentation/admin-guide/security-bugs.rst 
-> <securitybugs>`
-> +:Original: :ref:`Documentation/process/security-bugs.rst 
-> <securitybugs>`
-> 
->  .. _it_securitybugs:
-> 
-> diff --git
-> a/Documentation/translations/it_IT/process/submitting-patches.rst
-> b/Documentation/translations/it_IT/process/submitting-patches.rst
-> index c2cfa0948b2b..167fce813032 100644
-> --- a/Documentation/translations/it_IT/process/submitting-patches.rst
-> +++ b/Documentation/translations/it_IT/process/submitting-patches.rst
-> @@ -272,7 +272,7 @@ embargo potrebbe essere preso in considerazione
-> per dare il tempo alle
->  distribuzioni di prendere la patch e renderla disponibile ai loro 
-> utenti;
->  in questo caso, ovviamente, la patch non dovrebbe essere inviata su 
-> alcuna
->  lista di discussione pubblica. Leggete anche
-> -Documentation/admin-guide/security-bugs.rst.
-> +Documentation/process/security-bugs.rst.
-> 
->  Patch che correggono bachi importanti su un kernel già rilasciato, 
-> dovrebbero
->  essere inviate ai manutentori dei kernel stabili aggiungendo la 
-> seguente riga::
+[1/3] arm64: dts: meson: gxbb-kii-pro: sort and tidy the dts
+      https://git.kernel.org/amlogic/c/815ad625ec4ea5de655f9c02ccf7f65ecf5e6e29
+[2/3] arm64: dts: meson: gxbb-kii-pro: complete the bluetooth node
+      https://git.kernel.org/amlogic/c/dae485f52a65ce939b045cf480c401d434cacf2d
+[3/3] arm64: dts: meson: gxbb-kii-pro: add initial audio support
+      https://git.kernel.org/amlogic/c/914a3aa644cf50947a2dbb97738502ca9f025a10
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.4/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 
 -- 
-Federico Vaga
+Neil
+
