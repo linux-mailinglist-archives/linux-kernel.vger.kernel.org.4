@@ -2,123 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B076AC01C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBEB6AC021
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjCFNBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:01:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
+        id S230466AbjCFNB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjCFNBm (ORCPT
+        with ESMTP id S230460AbjCFNBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:01:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACB52CC77
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:00:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 6 Mar 2023 08:01:46 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829AD2CFC3;
+        Mon,  6 Mar 2023 05:01:09 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1921EB80E12
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:00:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C20D7C4339B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678107649;
-        bh=FR9LK/FP4yvvDZiywDp6V/exeASxzzoZTFmOcIwSeiw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jTY9tL/ibSVrYGppxlmU/dDfEPLZY/0IWLIghhXMrNnAniSRlOHDbBwWj+pxw313N
-         m0ayoR1E8AJyZisnyZ/6U4kvbIo9OlUHvmQi1MOzE29XHTOQNFn3QQfohb8/+tMcms
-         eZ01LjOIBvHRMbjQ9b7raGf39pHKPmwsMrGYuhF0NJBobicU8nc2iTpJOqNe2gpQlU
-         eT21v8TH7sW0X7RX6FLMuGXHOAVkqYc+HoYNMPTRKShO4ueWG9wsJISMIId6GCrT9f
-         zRqRDYTs+yMttk25fKwQbjyyTf75NlnMp5b62KsTPMmDBgizWDw7NwdY/cEL9rFHQA
-         tmxdT0/3/wcjQ==
-Received: by mail-lj1-f181.google.com with SMTP id h9so9534514ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:00:49 -0800 (PST)
-X-Gm-Message-State: AO0yUKVlbtn6p6NoTqZne+DwLDLnnTAOiS33LePSxaOopqvB/QU3ial6
-        e7AZVye5ts1NuaEzHZPYSY7cT0roV8nQl4B5ks0=
-X-Google-Smtp-Source: AK7set+wbDFf+WwDxQQ6bFr3XpFIGU8j1NncOoc1eUk7rNo2LDtS1mTTZu+iIUgGEBSdB7CAmJLHcIaYFFttJVcm6Jg=
-X-Received: by 2002:a2e:b988:0:b0:295:b80a:a953 with SMTP id
- p8-20020a2eb988000000b00295b80aa953mr3111489ljp.2.1678107647856; Mon, 06 Mar
- 2023 05:00:47 -0800 (PST)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B64261EC04DA;
+        Mon,  6 Mar 2023 14:01:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678107667;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=jQayClAk4ZKs945VJGZ1hReCgeNmANEJoJkjlZzhjRM=;
+        b=OLP9wrvnxP3bnofbwvS2TqGT0AU3SW2D5mL7WaFyFNRmzmapRbbEV2jcLh9mbFM5BlvCpA
+        cP5k+tgViv8zFIj65sSl31LsrfXl+HIKmVoU05Y2sKH94/MMBWFtDp2ZwxCY37ADbtpKsn
+        spmTShKfgv4iajAT73UtWOQiNHUruQ4=
+Date:   Mon, 6 Mar 2023 14:01:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v7 22/41] mm/mmap: Add shadow stack pages to memory
+ accounting
+Message-ID: <ZAXkDgmGFYpPoXTg@zn.tnic>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-23-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-References: <1678081915-12599-1-git-send-email-js07.lee@samsung.com>
- <CGME20230306061057epcas1p17def087649be56b75c7830385ff2fb2f@epcas1p1.samsung.com>
- <1678081915-12599-2-git-send-email-js07.lee@samsung.com> <ZAXKHDb4QY1awyRA@shell.armlinux.org.uk>
- <076401d95025$305fb150$911f13f0$@samsung.com> <ZAXcdDBiQ9JVo4pY@shell.armlinux.org.uk>
-In-Reply-To: <ZAXcdDBiQ9JVo4pY@shell.armlinux.org.uk>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 6 Mar 2023 14:00:36 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFESOz-M-93yRDE0LgbDiuFWy20NCwxFdeh75Mmqc1pSg@mail.gmail.com>
-Message-ID: <CAMj1kXFESOz-M-93yRDE0LgbDiuFWy20NCwxFdeh75Mmqc1pSg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm/mm : Report actual image regions in /proc/iomem
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Jungseung Lee <js07.lee@samsung.com>, linus.walleij@linaro.org,
-        amit.kachhap@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, keescook@chromium.org,
-        js07.lee@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230227222957.24501-23-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Mar 2023 at 13:28, Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Mon, Mar 06, 2023 at 09:14:23PM +0900, Jungseung Lee wrote:
-> > Hi, Russell
-> >
-> > > -----Original Message-----
-> > > From: Russell King (Oracle) <linux@armlinux.org.uk>
-> > > Sent: Monday, March 6, 2023 8:10 PM
-> > > To: Jungseung Lee <js07.lee@samsung.com>
-> > > Cc: linus.walleij@linaro.org; amit.kachhap@arm.com; ardb@kernel.org;
-> > > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > > keescook@chromium.org; js07.lee@gmail.com
-> > > Subject: Re: [PATCH 2/2] arm/mm : Report actual image regions in
-> > > /proc/iomem
-> > >
-> > > On Mon, Mar 06, 2023 at 02:51:55PM +0900, Jungseung Lee wrote:
-> > > >  The resource reservations in /proc/iomem made for the kernel image
-> > > > did  not reflect the gaps between text, rodata, and data.
-> > > >  Add the "rodata" resource and update the start/end calculations.
-> > > >
-> > > >  Before :
-> > > > 04000000-2f7fffff : System RAM
-> > > >   04100000-04cfffff : Kernel code
-> > > >   04e00000-05369a27 : Kernel data
-> > > >
-> > > >  After :
-> > > > 04000000-2f7fffff : System RAM
-> > > >   04100000-049fffff : Kernel code
-> > > >   04a00000-04cb2fff : Kernel rodata
-> > > >   04e00000-05369a27 : Kernel data
-> > >
-> > > NAK. This is API, and programs do read and parse this file. It is
-> > > important that this file reports these parameters in a similar way to
-> > > other architectures. Other architectures do not split up the
-> > > individual regions.
-> > >
-> >
-> > Sounds like an important point, but I failed to find which programs use it
-> > as an API. Could you tell me which program uses it as an API?
-> >
-> > In fact, x86 architecture also split up the individual regions in this way.
-> > In addition, most architectures separate the "Kernel bss" area, but arm does
-> > not.
->
-> Take a look at kexec-tools - that certainly does parse /proc/iomem
-> looking for entries such as "Kernel code" and "Kernel data".
->
-> It's fine for an architecture to decide to do something else if it
-> started to do it early on, but not when something has been established
-> for decades.
->
+On Mon, Feb 27, 2023 at 02:29:38PM -0800, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> The x86 Control-flow Enforcement Technology (CET) feature includes a new
+> type of memory called shadow stack. This shadow stack memory has some
+> unusual properties, which requires some core mm changes to function
+> properly.
+> 
+> Account shadow stack pages to stack memory. Do this by adding a
+> VM_SHADOW_STACK check in is_stack_mapping().
 
-Agree with Russell here.
+That last sentence is superfluous.
 
-It would be helpful if you could explain why you think this needs to be changed.
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
