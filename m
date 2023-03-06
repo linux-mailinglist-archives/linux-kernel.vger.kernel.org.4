@@ -2,123 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17536ABD05
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0736D6ABD0B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230490AbjCFKfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
+        id S231280AbjCFKgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbjCFKfk (ORCPT
+        with ESMTP id S231133AbjCFKfu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:35:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265F059E6;
-        Mon,  6 Mar 2023 02:35:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4E0A60DD8;
-        Mon,  6 Mar 2023 10:35:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E768C433EF;
-        Mon,  6 Mar 2023 10:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678098921;
-        bh=SRUfSdNrezRb0O3IdTK2gQ4I8eUwRNj/lM/SpHhJyzk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cFKax5qc9bZgyqF07BqIBQn1IixKmGK6qqgwzTH2dgSKFoMBja6hBio5dlINqRBsc
-         BzKJukhpkk2eKTOaYCa+b4YrEPhGrWl9RRGjUQIb9ehBC6gnleZrd+9S07FwBz8j4T
-         c/nqt3e2MElvmEHSm+tyrh+ztgc+pAzpVK6W3r6g/SK0Hh5cpFSZCh4X5UovUbSQpk
-         pziKnOrP//m34QXp9pJNcPZ81LGA2b6hbOeVxMGqIK3tD7vJzeF75sNzkaVKrwfVel
-         Ps93IE6prRpA2EhMtPg3oXtfK51lg1NAgXKJqhCML1IbLuU4W+/zzyFT+5G1anR4va
-         N6p+c6niGaz+g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1pZ8CH-0001Hm-Ce; Mon, 06 Mar 2023 11:36:01 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] drm/meson: fix missing component unbind on bind errors
-Date:   Mon,  6 Mar 2023 11:35:33 +0100
-Message-Id: <20230306103533.4915-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 6 Mar 2023 05:35:50 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846CB59E6;
+        Mon,  6 Mar 2023 02:35:46 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 449AB24E2E3;
+        Mon,  6 Mar 2023 18:35:45 +0800 (CST)
+Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Mar
+ 2023 18:35:45 +0800
+Received: from [192.168.125.108] (183.27.97.46) by EXMBX071.cuchost.com
+ (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Mar
+ 2023 18:35:44 +0800
+Message-ID: <7c314cc7-0377-ac42-8925-79abc9dcb86f@starfivetech.com>
+Date:   Mon, 6 Mar 2023 18:35:43 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/3] Add JH7110 USB driver support
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+CC:     Emil Renner Berthing <kernel@esmil.dk>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Peter Chen" <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        "Aswath Govindraju" <a-govindraju@ti.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+References: <20230306095212.25840-1-minda.chen@starfivetech.com>
+ <ZAW/DqprkKaop4bg@wendy>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <ZAW/DqprkKaop4bg@wendy>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.46]
+X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX071.cuchost.com
+ (172.16.6.81)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make sure to unbind all subcomponents when binding the aggregate device
-fails.
-
-Fixes: a41e82e6c457 ("drm/meson: Add support for components")
-Cc: stable@vger.kernel.org      # 4.12
-Cc: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
-
-Note that this one has only been compile tested.
-
-Johan
 
 
- drivers/gpu/drm/meson/meson_drv.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/meson/meson_drv.c b/drivers/gpu/drm/meson/meson_drv.c
-index 79bfe3938d3c..7caf937c3c90 100644
---- a/drivers/gpu/drm/meson/meson_drv.c
-+++ b/drivers/gpu/drm/meson/meson_drv.c
-@@ -325,23 +325,23 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
- 
- 	ret = meson_encoder_hdmi_init(priv);
- 	if (ret)
--		goto exit_afbcd;
-+		goto unbind_all;
- 
- 	ret = meson_plane_create(priv);
- 	if (ret)
--		goto exit_afbcd;
-+		goto unbind_all;
- 
- 	ret = meson_overlay_create(priv);
- 	if (ret)
--		goto exit_afbcd;
-+		goto unbind_all;
- 
- 	ret = meson_crtc_create(priv);
- 	if (ret)
--		goto exit_afbcd;
-+		goto unbind_all;
- 
- 	ret = request_irq(priv->vsync_irq, meson_irq, 0, drm->driver->name, drm);
- 	if (ret)
--		goto exit_afbcd;
-+		goto unbind_all;
- 
- 	drm_mode_config_reset(drm);
- 
-@@ -359,6 +359,9 @@ static int meson_drv_bind_master(struct device *dev, bool has_components)
- 
- uninstall_irq:
- 	free_irq(priv->vsync_irq, drm);
-+unbind_all:
-+	if (has_components)
-+		component_unbind_all(drm->dev, drm);
- exit_afbcd:
- 	if (priv->afbcd.ops)
- 		priv->afbcd.ops->exit(priv);
--- 
-2.39.2
-
+On 2023/3/6 18:23, Conor Dooley wrote:
+> Hey Minda!
+> 
+> On Mon, Mar 06, 2023 at 05:52:12PM +0800, Minda Chen wrote:
+>> This patchset adds USB driver for the StarFive JH7110 SoC.
+>> USB work mode is peripheral and using USB 2.0 PHY in VisionFive 2 board.
+>> The patch has been tested on the VisionFive 2 board.
+>> 
+>> This patchset should be applied after the patchset [1] and patch [2]:
+>> [1] https://lore.kernel.org/all/20230221083323.302471-1-xingyu.wu@starfivetech.com/
+>> [2] https://lore.kernel.org/all/20230215113249.47727-4-william.qiu@starfivetech.com/
+>> 
+>> patch 1 is usb phy dt-binding document.
+>> patch 2 is the glue layer of Cadence USB3 and USB phy
+>> setting. USB controller IP is Cadence USB3. 
+>> patch 3 is USB device tree configuration.
+>> 
+>> Minda Chen (3):
+>>   dt-bindings: phy: Add StarFive JH7110 USB dt-binding
+>>   usb: cdns3: add StarFive JH7110 USB glue layer
+>>   dts: usb: add StarFive JH7110 USB dts configuration.
+> 
+> Unfortunately, this patchset hasn't really landed correctly.
+> Usually, in a series, patches are sent as replies to the cover letter.
+> Git's send-email will do this for you if you pass it multiple patches
+> and a cover letter (I do it by passing a directory, eg patches/foo/v1)
+> 
+> It appears that you have sent each patch separately, and to different
+> recipients, which makes this harder to review.
+> Please re-submit this with proper threading (and as v2 ideally, so that
+> Greg's bot doesn't complain).
+> 
+> Thanks,
+> Conor.
+I am sorry about this. I will re-summit this patchset as v2 patch.
