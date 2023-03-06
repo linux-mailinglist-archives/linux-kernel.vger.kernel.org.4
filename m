@@ -2,86 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA37C6AC4AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD536AC4B5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:23:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjCFPV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S229961AbjCFPXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCFPVZ (ORCPT
+        with ESMTP id S230242AbjCFPW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:21:25 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FF42BF3E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:21:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678116085; x=1709652085;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MsmZkjzhshq5GrJn5PqIhozrx6ZauAaghOCW2Gi3s3s=;
-  b=Ft0I4yE4UPqUV4LH5+lumrf8wqnxBEZR6vSVtQI8GzD/T+nI6D12oc49
-   RwiMxcCOTKtQZy98h/j5XxlQO/vNgv8FmTqbAyTrKHXtqSmFRbB0YJGLQ
-   STTidUwx5AcuKFmNemAsOyUd0RYIh31tL3JeaR/UFFcaZD0mDRLPiYyS2
-   P8PM6Zqg7p27vDWsUoHQgYE93iKpQU5aW7FTR1o8JNMsE7gxtBy50Vy1N
-   F+TEDxW/kZrOmjc8uteRR50pe3bRHAAdXm89pZAlyVdrC54XEYNvz57oD
-   Xl2VpA3tTyL3SVGCMXiq+44VR6cADtaUrPnqYxSlrrHHs8XIO16Ykpowc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="315237531"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="315237531"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 07:21:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="626186880"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="626186880"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 06 Mar 2023 07:21:23 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 73FE8143; Mon,  6 Mar 2023 17:22:06 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH v1 1/1] cpumask: Fix typo nr_cpumask_size --> nr_cpumask_bits
-Date:   Mon,  6 Mar 2023 17:22:04 +0200
-Message-Id: <20230306152204.49836-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.1
+        Mon, 6 Mar 2023 10:22:57 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01594492;
+        Mon,  6 Mar 2023 07:22:56 -0800 (PST)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326DMRln006766;
+        Mon, 6 Mar 2023 15:22:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=VrGSBKAj7tyepIvg8dZKxFqM5WTgkddDSp6AIl+WRU0=;
+ b=TaMam++YaBPeuOp9JiTGb79CsjIkc36Dd42YZIpFWJTmPnKi2IC0Zj9IrbgAB0ZfHqiC
+ vcgx4diEAAX1IfZwzEXP+tSP51/JFk0hqwzeUKsuWbQz24y74uRgx7PYKIL/mBjOdSAg
+ 4dNty0YatmrFPW4Lh/BTRkTGwNpNdFNkRT/KHaAXtWvWwplh/CzXI2jwZA5DmSILdX3R
+ zWzGmuaw6LGKkQuPBxaQfr8DtzsYJkqxrQZiRnhahtXWXRanjZyWBWGDZcC2Ejs1tSlY
+ j7l90R0xoxqrIN+TT9BzYhWFl+ySs+3hGP0Hj4k0TXKkWZHP+dzMRc6ECCp0QsTINOkm aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4vp22daj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 15:22:14 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326F4Ao2014642;
+        Mon, 6 Mar 2023 15:22:13 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4vp22d9u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 15:22:13 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326DXWZg023896;
+        Mon, 6 Mar 2023 15:22:12 GMT
+Received: from smtprelay04.dal12v.mail.ibm.com ([9.208.130.102])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p41879a2t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 15:22:12 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay04.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326FMAAP7275098
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Mar 2023 15:22:11 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DB4455805A;
+        Mon,  6 Mar 2023 15:22:10 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9ECBB58052;
+        Mon,  6 Mar 2023 15:22:09 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Mar 2023 15:22:09 +0000 (GMT)
+Message-ID: <6393eb31-5eb3-cb1c-feb7-2ab347703042@linux.ibm.com>
+Date:   Mon, 6 Mar 2023 10:22:09 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 21/28] security: Introduce inode_post_remove_acl hook
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+ <20230303181842.1087717-22-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230303181842.1087717-22-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: AKIv0y4E55QGlCTE3kidZ-FcDxY6BVsp
+X-Proofpoint-GUID: 7VO4QW9BF7pCYWJoql3FFQOMb7x68ZuX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1011 suspectscore=0
+ mlxlogscore=999 mlxscore=0 priorityscore=1501 adultscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303060133
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I think the never used nr_cpumask_size is just a typo,
-hence use existing redefinition that's called nr_cpumask_bits.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- include/linux/cpumask.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index 8fbe76607965..ce8eb7ef2107 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -66,7 +66,7 @@ static inline void set_nr_cpu_ids(unsigned int nr)
-  *
-  * Finally, some operations just want the exact limit, either because
-  * they set bits or just don't have any faster fixed-sized versions. We
-- * call this just 'nr_cpumask_size'.
-+ * call this just 'nr_cpumask_bits'.
-  *
-  * Note that these optional constants are always guaranteed to be at
-  * least as big as 'nr_cpu_ids' itself is, and all our cpumask
--- 
-2.39.1
+On 3/3/23 13:18, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> the inode_post_remove_acl hook.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+
+>   
+> +/**
+> + * security_inode_post_remove_acl() - Update inode sec after remove_acl op
+> + * @idmap: idmap of the mount
+> + * @dentry: file
+> + * @acl_name: acl name
+> + *
+> + * Update inode security field after successful remove_acl operation on @dentry
+> + * in @idmap. The posix acls are identified by @acl_name.
+> + */
+> +void security_inode_post_remove_acl(struct mnt_idmap *idmap,
+> +				    struct dentry *dentry, const char *acl_name)
+> +{
+> +	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+> +		return;
+
+Was that a mistake before that EVM and IMA functions did not filtered out private inodes?
+
+    Stefan
 
