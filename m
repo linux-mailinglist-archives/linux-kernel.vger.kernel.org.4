@@ -2,145 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB92F6AC33A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88B46AC333
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCFO3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46366 "EHLO
+        id S229687AbjCFO1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCFO3e (ORCPT
+        with ESMTP id S229813AbjCFO1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:29:34 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8946A23337;
-        Mon,  6 Mar 2023 06:28:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678112937; x=1709648937;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U3J1RII/pyIAAeKO5LkrYUzx+agFkzmu3CeVXBbAtzk=;
-  b=Pvzb+wTEMKx+H2JgOp5I/Krx/9i+Px/bMa7HICe15dlzyRnp4+dv1aNF
-   bnsuoZJ+jcRqGKNgK7tBd2x3/Vgh3W3YyBxjtbvuQiKxeQN9Y/fBFnG/t
-   +fjEYCc9elIkGBx/tnR3tad5d4PlvN+rHDimtUmW5Mb9gcSmQTNS8TY17
-   xO4g4WyQYKNSOTmsLsNwUV/iwKkmpq1Fj1HIJrSUa1hrrtqL2A8ZNFNEW
-   4SbI4UNLR8i/tQN1ZmOBmqhdIuMk2yBwSaZlLe9yHve2UN9sSkomNivsB
-   yGm2SsWCzcDJh6709TPQyKsxJU4oyufXn7hfsQ1zJZUgV/tFQyThyi2Cj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="363182689"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="363182689"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 06:24:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="653629993"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="653629993"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 06 Mar 2023 06:24:32 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pZBlO-00GTRi-3B;
-        Mon, 06 Mar 2023 16:24:30 +0200
-Date:   Mon, 6 Mar 2023 16:24:30 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org, Arnaud de Turckheim <quarium@gmail.com>,
-        John Hentges <jhentges@accesio.com>,
-        Jay Dolan <jay.dolan@accesio.com>
-Subject: Re: [PATCH v4 2/3] gpio: pcie-idio-24: Migrate to the regmap API
-Message-ID: <ZAX3ntGgO4PjIkxx@smile.fi.intel.com>
-References: <cover.1678106722.git.william.gray@linaro.org>
- <b96429c66e7caca05d9fb93805e11650fdbad312.1678106722.git.william.gray@linaro.org>
+        Mon, 6 Mar 2023 09:27:01 -0500
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAC32A169
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:26:23 -0800 (PST)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-536be69eadfso187169267b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:26:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jp-hosting.net; s=google; t=1678112699;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vUK9dBxwCtJChugErkaN3rhrvTZzDikjig8o6BmvIW4=;
+        b=dCTdhWwE7wZys+dU8bjZbFP+D+JCq2hGURMIO/RrLrTSlTGb3O3etF+80n505aWBhi
+         J5OdRs64Iw/ofmOEcNM+eUTAPfEIGZVTRLugR3Wp7bfnNxxOIRGwtOaq2dP+bE10kNmy
+         xHjNkWUybkJa5dX/A3cDf1BDzfKCW63W6aabRWK2BP3cJG6U8JTFIYVA8pwuR15/Tpai
+         5GPAX2A+Hs8P2MW8aLAMW8MMWDKU2cq1fm1S45lYM8LoyYrGpWzPqOmMtVwy86F/dBiR
+         W+dMlMPq8+rusdgzACYFHlJm2D+wT4pibabooW3BvEbV1oqZzgZxzqSBTR9aVgkE3lHx
+         eSdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678112699;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vUK9dBxwCtJChugErkaN3rhrvTZzDikjig8o6BmvIW4=;
+        b=6Hv+xwlAyEyhhSo71U3ChOUeJK2ESUXmY+FbwWNEqWlxIFQ7gMcLjM34zuXVKYVUMK
+         lMisCZcEMZfLl1PhMdkk+KEvQD0zR+mEPp3fB46mkWhe29/sgkZgJsfxLw1BrHEm95Is
+         4MlDpliDaEN4mzPy5x2gq1fSpH+3Qzan4hwmbcE7IViu+xwTDa+oLPUHgKAi8tnah1Vt
+         h6ftACB7uk8n92h2PkiDwnoVrlsF/qzxUOCXg7YImNyez9Ey6N7BWTOsAHcPMnmyVBOW
+         lq3canJrW3DfFEgoCeDgA0pqAaWIfdGiWyTQAXqgEXzO+jFRbc900ZxGB7zIRxGR3jY1
+         t/ZQ==
+X-Gm-Message-State: AO0yUKUw36NegZ6WAf7C90nl3Oqdydw9d158Qhsf2rYPhstkVEdBbOob
+        IU0rbFO+c5uPQ2yoFMsEuNNiX4Zm7O0Dm1LEv2sRWw==
+X-Google-Smtp-Source: AK7set9yAZCmOPTvAjLTzJqkmaTjtbo2o10dCAPKPnkwQQk4VehVQblEdYfA4IJj16WnQKMN1EKyXqyqbXitfXolMsY=
+X-Received: by 2002:a81:af4e:0:b0:521:db3f:9e27 with SMTP id
+ x14-20020a81af4e000000b00521db3f9e27mr6992638ywj.2.1678112698544; Mon, 06 Mar
+ 2023 06:24:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b96429c66e7caca05d9fb93805e11650fdbad312.1678106722.git.william.gray@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CALDQ5Ny1mbcUSk8pDL6HEq0Cgqze1tidyOeAgVxc5tyZNb+P_g@mail.gmail.com>
+ <ac6d56df-0c1f-ca7c-5d2b-e6ae770518b5@infradead.org>
+In-Reply-To: <ac6d56df-0c1f-ca7c-5d2b-e6ae770518b5@infradead.org>
+From:   James Addison <jay@jp-hosting.net>
+Date:   Mon, 6 Mar 2023 14:24:45 +0000
+Message-ID: <CALDQ5NwGTi3q9B=ezat5H_eLtr1cDuR9j13UtB1-dCK-fxOOPQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND] Documentation: update kernel parameter limit notes
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 07:59:52AM -0500, William Breathitt Gray wrote:
-> The regmap API supports IO port accessors so we can take advantage of
-> regmap abstractions rather than handling access to the device registers
-> directly in the driver.
-> 
-> For the PCIe-IDIO-24 series of devices, the following BARs are
-> available:
-> 
->     BAR[0]: memory mapped PEX8311
->     BAR[1]: I/O mapped PEX8311
->     BAR[2]: I/O mapped card registers
-> 
-> There are 24 FET Output lines, 24 Isolated Input lines, and 8 TTL/CMOS
-> lines (which may be configured for either output or input). The GPIO
-> lines are exposed by the following card registers:
-> 
->     Base +0x0-0x2 (Read/Write): FET Outputs
->     Base +0xB (Read/Write): TTL/CMOS
->     Base +0x4-0x6 (Read): Isolated Inputs
->     Base +0x7 (Read): TTL/CMOS
-> 
-> In order for the device to support interrupts, the PLX PEX8311 internal
-> PCI wire interrupt and local interrupt input must first be enabled.
-> 
-> The following card registers for Change-Of-State may be used:
-> 
->     Base +0x8-0xA (Read): COS Status Inputs
->     Base +0x8-0xA (Write): COS Clear Inputs
->     Base +0xB (Read): COS Status TTL/CMOS
->     Base +0xB (Write): COS Clear TTL/CMOS
->     Base +0xE (Read/Write): COS Enable
-> 
-> The COS Enable register is used to enable/disable interrupts and
-> configure the interrupt levels; each bit maps to a group of eight inputs
-> as described below:
-> 
->     Bit 0: IRQ EN Rising Edge IN0-7
->     Bit 1: IRQ EN Rising Edge IN8-15
->     Bit 2: IRQ EN Rising Edge IN16-23
->     Bit 3: IRQ EN Rising Edge TTL0-7
->     Bit 4: IRQ EN Falling Edge IN0-7
->     Bit 5: IRQ EN Falling Edge IN8-15
->     Bit 6: IRQ EN Falling Edge IN16-23
->     Bit 7: IRQ EN Falling Edge TTL0-7
-> 
-> An interrupt is asserted when a change-of-state matching the interrupt
-> level configuration respective for a particular group of eight inputs
-> with enabled COS is detected.
-> 
-> The COS Status registers may be read to determine which inputs have
-> changed; if interrupts were enabled, an IRQ will be generated for the
-> set bits in these registers. Writing the value read from the COS Status
-> register back to the respective COS Clear register will clear just those
-> interrupts.
+On Sun, 5 Mar 2023 at 23:17, Randy Dunlap <rdunlap@infradead.org> wrote:
+> I looked at this again.  It's not a limit on the number of kernel command line
+> parameters AFAICT.  It's a limit on the number of parameters that are passed to
+> the init process.  Basically any parameter that is not recognized as a kernel
+> parameter OR anything that is after "--" on the kernel command line is put into
+> an array of limited size for passing to the init process.
 
-...
+Ah: that completely explains it, thank you; my testing was inadequete.
 
->  - Add mutex to prevent clobbering the COS_ENABLE register when masking
->    IRQ and setting their type configuration
+I had been testing this using fairly-arbitrary (and therefore unrecognized)
+parameter names, so it is expected and correct that when the number of those
+exceeds MAX_INIT_ARGS, the kernel does not boot.
 
-But this doesn't explain killing the raw spin lock.
-
-I don't understand how is it suppose to work then.
-
-What is this lock for and how IRQ related registers can be updated
-with RT type of kernel?
-
-If mutex is okay, doesn't mean we have to add 'can_sleep = true'?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+For completeness I'll perform similar testing soon using known-parameter names.
