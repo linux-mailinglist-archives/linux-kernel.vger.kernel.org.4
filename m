@@ -2,100 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6486AD2EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:40:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B006F6AD2F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:41:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjCFXkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 18:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        id S229743AbjCFXlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 18:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCFXkF (ORCPT
+        with ESMTP id S229525AbjCFXlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 18:40:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0C44B81B;
-        Mon,  6 Mar 2023 15:40:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C85C660DB9;
-        Mon,  6 Mar 2023 23:40:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B05DAC433EF;
-        Mon,  6 Mar 2023 23:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678146002;
-        bh=eCpOTQ0/Lt5qkPZVS4C+58a7vx2Eo4kKSq/QZthxn48=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SMiGFR90uM34CS5CQ4R/loMuIk3job4bqlLvDhnxURYR0lXYfwWEGz37UzqR1EhuQ
-         qalYsLAwRL47RRobA4rVlfu0z7vV4LERyPyoDIsl4431iLAwD2mrx7KghFHtITU3/Y
-         F1dXJ1/D1EoMBZrczbIL2JB7TFrk/auizjC5g97RV572XYPE6JafiwhR2zxSNGLt6N
-         JAPArJGYUzwunWzUIxPGw8sG6FU81FOBSGpyJ2nrOu75m98dbUe2HWnEtKB5ZedO+5
-         Mqws940ehWrFga9BNoP2JZsE99TFEM/gEGpxoh9e8OgB5gE8BN30euOpHeKbVRm/zm
-         AvCSYtryLHpGg==
-Date:   Mon, 6 Mar 2023 17:40:28 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Manish Chopra <manishc@marvell.com>,
-        Rahul Verma <rahulv@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     GR-Linux-NIC-Dev@marvell.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] netxen_nic: Replace fake flex-array with
- flexible-array member
-Message-ID: <ZAZ57I6WdQEwWh7v@work>
+        Mon, 6 Mar 2023 18:41:14 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAF84FA96;
+        Mon,  6 Mar 2023 15:41:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678146073; x=1709682073;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0QV3lB69qzmHWTtL05fwlUGsbzm0tkLqs6qOyxA/zJk=;
+  b=L1V7lmO55g0uJjRZsJcg54yEPTJNMy1Fq2WoKt4JsawOCwrN6qkPPLTQ
+   qizMCJQlyxX3/+LS6jOl2kjJ9ws9E54c7+QRsZT1mCd3/jC/Q1Y5EcGdT
+   TKQC/pKr7Nw+KBBmZzWuCk2zFaCWoZu5R2XyhSufONhNpscNGiE8eAUN6
+   W34i+R1fjASE/ZLvY3fQ9OG4qlAtHVhJEn0JrwSLnLux5Si6N76sPYGeO
+   DRkYiqQFmnXhJP/jlYhx0cZbA5gMnfoQ+hxU3S8wEEizeGSXtQII6IEaR
+   Rbi9uUTlVE4di0wJGpMl8MEFcCjnC8HCpfYMijtXDFqbtBflygVGbApyG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400535242"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="400535242"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 15:41:12 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="708830232"
+X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
+   d="scan'208";a="708830232"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 15:41:12 -0800
+Date:   Mon, 6 Mar 2023 15:45:04 -0800
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        Joerg Roedel <joro@8bytes.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH 1/4] iommu/vt-d: Implement set device pasid op for
+ default domain
+Message-ID: <20230306154504.04769726@jacob-builder>
+In-Reply-To: <ZAY4zd4OlgSz+puZ@nvidia.com>
+References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
+        <20230302005959.2695267-2-jacob.jun.pan@linux.intel.com>
+        <fad7f28f-b4e8-c1c3-4ca4-a48c5c6d7f4a@linux.intel.com>
+        <BN9PR11MB52762957011E60E935E82CC88CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <2c9115d0-f251-c284-63d6-73714edc96b4@linux.intel.com>
+        <BN9PR11MB527634EA1ED5067D1FC0D7C68CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <7f8983c8-b703-4960-67b5-97f4053329db@linux.intel.com>
+        <BN9PR11MB5276E48AA1680C76A3ED66AD8CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20230306110443.4ca52204@jacob-builder>
+        <ZAY4zd4OlgSz+puZ@nvidia.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays as fake flexible arrays are deprecated and we are
-moving towards adopting C99 flexible-array members instead.
+Hi Jason,
 
-Transform zero-length array into flexible-array member in struct
-nx_cardrsp_rx_ctx_t.
+On Mon, 6 Mar 2023 15:02:37 -0400, Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Address the following warnings found with GCC-13 and
--fstrict-flex-arrays=3 enabled:
-drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c:361:26: warning: array subscript <unknown> is outside array bounds of ‘char[0]’ [-Warray-bounds=]
-drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c:372:25: warning: array subscript <unknown> is outside array bounds of ‘char[0]’ [-Warray-bounds=]
+> On Mon, Mar 06, 2023 at 11:04:43AM -0800, Jacob Pan wrote:
+> 
+> > > and probably this is the right thing to do as in the end DMA type will
+> > > be removed with Jason's cleanup  
+> >
+> > so, let me recap. set_dev_pasid() should make no assumptions of
+> > ordering, i.e. it is equal to iommu_domain_ops.attach_dev().  
+> 
+> Absolutely yes.
+> 
+> You should factor out all the "prepare the domain to be used" code and
+> call it in both places.
+> 
+I think this has been done by Baolu
+https://lore.kernel.org/linux-iommu/20190325013036.18400-1-baolu.lu@linux.intel.com/T/#m8c980357a39dc75dc360ff0f71dc7ebe1e49f9a6
+iommu/vt-d: Move common code out of iommu_attch_device()
+    
+    This part of code could be used by both normal and aux
+    domain specific attach entries. Hence move them into a
+    common function to avoid duplication.
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+set_dev_pasid() will call prepare_domain_attach_device() as well.
 
-Link: https://github.com/KSPP/linux/issues/21
-Link: https://github.com/KSPP/linux/issues/265
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/net/ethernet/qlogic/netxen/netxen_nic.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
 
-diff --git a/drivers/net/ethernet/qlogic/netxen/netxen_nic.h b/drivers/net/ethernet/qlogic/netxen/netxen_nic.h
-index f13fa7396aef..3d36d23df0c6 100644
---- a/drivers/net/ethernet/qlogic/netxen/netxen_nic.h
-+++ b/drivers/net/ethernet/qlogic/netxen/netxen_nic.h
-@@ -854,7 +854,7 @@ typedef struct {
- 	   The following is packed:
- 	   - N cardrsp_rds_rings
- 	   - N cardrs_sds_rings */
--	char data[0];
-+	char data[];
- } nx_cardrsp_rx_ctx_t;
- 
- #define SIZEOF_HOSTRQ_RX(HOSTRQ_RX, rds_rings, sds_rings)	\
--- 
-2.34.1
-
+Jacob
