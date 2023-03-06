@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4C46AD07D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:32:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E806AD0AB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjCFVcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:32:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
+        id S229717AbjCFVhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjCFVcX (ORCPT
+        with ESMTP id S229557AbjCFVhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:32:23 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D0B7D56D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:32:00 -0800 (PST)
-Received: from arch-x395 (cpc92308-cmbg19-2-0-cust99.5-4.cable.virginm.net [82.24.248.100])
+        Mon, 6 Mar 2023 16:37:11 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E26D31E3E;
+        Mon,  6 Mar 2023 13:37:09 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: evelikov)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B50106602F94;
-        Mon,  6 Mar 2023 21:31:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678138319;
-        bh=YrH6bxbNrFtdi0yd6A8KwEnooS8cgezW2ipk9avAKew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cwjWeMJZoEf7ZvlqFl16a0Q/4cgjku3LoIRMX/8kzp5nJwSlgcslyMJSqSIweWwGu
-         dFvX5PPO3o+w3fgkSCG9lM+VSYr4e1h8ZWSO/5dkwZ1OFoCPMrpvMxMc8K32H2P83o
-         KC9m5yOpIY/22TrpXtZCMu+yVp5N/lKWW0TZMAB03rGkleuzGziH7qNhM1/wDrkEUo
-         cg8H5eSGSHsNJYvhqVAjCSgQgGOKpqVqrr8VbY9M7BoxyD4fsPHajbxV1dN5rLpee3
-         mHM2v8u6QZqyu2if/FeY1cHx+waWQgkdotktcrAAezoBU1xdFkp6aKnaZ/JCjjzxDH
-         z8cjW8y4Y4qrw==
-Date:   Mon, 6 Mar 2023 21:31:55 +0000
-From:   Emil Velikov <emil.velikov@collabora.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>, Rob Clark <robdclark@gmail.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@redhat.com>, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v3] drm/virtio: Fix handling CONFIG_DRM_VIRTIO_GPU_KMS
- option
-Message-ID: <ZAZbyyVQMkZq4f6H@arch-x395>
-References: <20230306163916.1595961-1-dmitry.osipenko@collabora.com>
- <0341e228-a1a2-a42a-7b94-3509d17af56c@collabora.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVsNd17wqz4x80;
+        Tue,  7 Mar 2023 08:37:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678138625;
+        bh=r3AVatlEtKngOEy1MVVQV8rLTGTVB8fMDdpZuiNjlYQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b05xY+IPLLR40P1OFpUFe3icgzS4DbcVX2fcuH1ObJtRJaVQL4aarJSlSAOE4PY3f
+         rlPhLKg5LiAApyRUQb9OnRjwUzTGVrlYlsLDZHmNVLGMgQSG+QtOTDVIpNCrpYwFsU
+         9c6TIfEY2IwLxNTjVyeH2tEyvYhAnd0zuFjIX2EJIp5+6x1Q2Ca1hbHdpeR6B/d4S6
+         AuSpMGinQ0SePBfX2jrTtk6/Citn1hc4dljCae9C1R+Efwyvw3XZ6dr44bK5S6Thb9
+         0fjbpAgiYzK/BY8vuen7+BBgfQAykoPFNj9q3jtR/RPz5aXZMlBHxDHy4/rvSkp/z/
+         S2RqLH9eOqMLQ==
+Date:   Tue, 7 Mar 2023 08:37:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the net tree
+Message-ID: <20230307083703.558634a9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0341e228-a1a2-a42a-7b94-3509d17af56c@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/qCBZSmhRet+g2C77uRykZCq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/03/06, Dmitry Osipenko wrote:
-> On 3/6/23 19:39, Dmitry Osipenko wrote:
-> > VirtIO-GPU got a new config option for disabling KMS. There were two
-> > problems left unnoticed during review when the new option was added:
-> > 
-> > 1. The IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) check in the code was
-> > inverted, hence KMS was disabled when it should be enabled and vice versa.
-> > 
-> > 2. The disabled KMS crashed kernel with a NULL dereference in
-> > drm_kms_helper_hotplug_event(), which shall not be invoked with a
-> > disabled KMS.
-> > 
-> > Fix the inverted config option check in the code and skip handling the
-> > VIRTIO_GPU_EVENT_DISPLAY sent by host when KMS is disabled in guest to fix
-> > the crash.
-> > 
-> > Acked-by: Gerd Hoffmann <kraxel@redhat.com>
-> > Fixes: 72122c69d717 ("drm/virtio: Add option to disable KMS support")
-> > Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> > ---
-> 
-> Added r-b from Emil and applied to misc-next
-> 
+--Sig_/qCBZSmhRet+g2C77uRykZCq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-For anyone wondering: I've sent that in private, adding here for posterity
+Hi all,
 
-Reviewed-by: Emil Velikov <emil.velikov@collabora.com>
+Commit
 
--Emil
+  58aac3a2ef41 ("net: phy: smsc: fix link up detection in forced irq mode")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qCBZSmhRet+g2C77uRykZCq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGXP8ACgkQAVBC80lX
+0GzoMggAlKW3DK3RuOD9zynSgqf9RwJdKJ+GO+qLv1Zx7y++FM2P5iBE4b+1hXSh
+p3M4UeGnCrbWlkmSYFH/0cy9eAX3slxBihxer/DjTIFeRPSzF2SI4VHA4/QQ5PC8
+gFVuq3/NdepGPmphY1/zrM7IIi7D0UROLphJEGSFSCutLyW+D61eQ+8qwst7FzMC
+wF2L0yoaB1L5UdgHrsu4G5x5ptB2XzWmP+z5nbLMjBjFqkdtZvo52jh1RXqLiXeb
+SsLFlayOW5tF1kzIKmTtrpfVcjOnYo/1FVidT+/91ZFk2tuTy8TM7J7NYf52sm/h
+y9dEOfAXwLcLCdk8g6PGp4BkLb9xmg==
+=55N4
+-----END PGP SIGNATURE-----
+
+--Sig_/qCBZSmhRet+g2C77uRykZCq--
