@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C3C6ACBFA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66EAF6ACBDD
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 19:03:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjCFSHX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Mar 2023 13:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
+        id S230386AbjCFSDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 13:03:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbjCFSHF (ORCPT
+        with ESMTP id S229972AbjCFSDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 13:07:05 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A431FC4;
-        Mon,  6 Mar 2023 10:06:42 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-17683b570b8so9549212fac.13;
-        Mon, 06 Mar 2023 10:06:42 -0800 (PST)
+        Mon, 6 Mar 2023 13:03:19 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0DA6F618
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 10:02:51 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id k10so18367631edk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 10:02:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1678125766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nHiIbvE8ZF8yskiSHfLDDBQes7IipQHv7U2Dux2wiEU=;
+        b=aS+ztAEvl5rXUV+bl4aUHKg/JjsEs5Q5O8O5esPopXwbfxpYA6cmA8oaxYHNUlU/xv
+         pUDQ2Ag73sCMAC9SLcPIQilnahRnTUpOOhtVRnm6z8j74E8n2sdDsydvWCPi/1J2K4/F
+         Y77RZfSte/kHcjeeE//5gW1NADu31WanG7wgE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678125700;
+        d=1e100.net; s=20210112; t=1678125766;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cTLypR7XgARTJbCy5jf1iSb8cf8N3ZXFx7hGaEE6omA=;
-        b=2eIbzFV3T3fIDqYMSQ83JJQU2+SlXjTxyHMjV40CGFSu1b85LqtNemMxHTa5/ZtBon
-         IIx/pJrGXRFyz8YThxHhIpiW6ybdw+TdfS6/hBfYIQMfzJ2Cruf6Rwj9Ak/bMC31sMpI
-         kZZls3nEKLjt5aepqUVSHLXc+MYqnuUw4b90zNlVNRyzdonBqATsDteaH/nBuhQQTe9E
-         +/G3c4OI3RQI6I0sG3oBqocrk7stwAxQWhER/Id7pvs2izK5KygO4/ZeTWlnCr0Q2mEz
-         SjSoIyB70jaYCFIGqOJSJ7BxvbKRMxF+ojOLMjJ0UVHz75MS/7DKdSR8JHA0wb4G5CWg
-         AkAQ==
-X-Gm-Message-State: AO0yUKUIyII8SoLDDMDsFZHvtZNeu109jZac9qHH0v3LSCbdcevXStdE
-        wWUxl7hSwB/jmdKk1Nrx/nsm63Lz9EnYwA==
-X-Google-Smtp-Source: AK7set/2SJdpIFEa+3IDgzJOc67ijCh1FFNgJgfDShpVt773WWwEzKRmSB1H3oSpYRIsaM9mzzpsJA==
-X-Received: by 2002:a05:6870:e0c6:b0:176:8f34:2609 with SMTP id a6-20020a056870e0c600b001768f342609mr5636400oab.58.1678125700280;
-        Mon, 06 Mar 2023 10:01:40 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id d199-20020ae9efd0000000b007423e52f9d2sm7866627qkg.71.2023.03.06.10.01.39
+        bh=nHiIbvE8ZF8yskiSHfLDDBQes7IipQHv7U2Dux2wiEU=;
+        b=ET9bffh0scazukXBQ1E78YKJFvGm/N8tNaA0AOEAYoxOd084KXc4Uow8w9bruE4lUR
+         3a22pASQQp76r2VmPl4RoszW57RuyJ43kmsgDhDTFBQNozrCu7RBO7I6DCZqokar2+4X
+         /ryYkNBKqlCi2BbD4Zu5K5UwVYHR1iwvyYx2R8bu0atzlhvc+s2bodVpwNLihSSCDtzP
+         bpJER87Nri18ZoEjqNDybCGb3QF3tx8HJO4xbaFsRBnPV/9DrX7fL4w46Y7xi159xsHk
+         KDVmeyRWUgFB2SYwr3TEktvhrsKh883Hk79TeGwmmK5C2mrG3iQs0Pk0nD5nMuOlhuKS
+         61jg==
+X-Gm-Message-State: AO0yUKW/SeksA/HXUdPZs3qYwdtNqumYaDNJw8/NYWz3t8gs9eNEdU1I
+        IbUTHDyJKgP7uQZHY7YJmoIlSOr60M1x297jXJwLpw==
+X-Google-Smtp-Source: AK7set/pitim0BVSYHCcEXMZg4A1GOGgTa8a62ixQxqXdU2Aryxeg3HdpSr6r8Jo6qVPwp4qXXCqAA==
+X-Received: by 2002:aa7:c41a:0:b0:4af:59c0:5a30 with SMTP id j26-20020aa7c41a000000b004af59c05a30mr10916135edq.38.1678125765927;
+        Mon, 06 Mar 2023 10:02:45 -0800 (PST)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id v24-20020a50d598000000b004bfc59042e5sm5435804edi.61.2023.03.06.10.02.44
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 10:01:39 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id x12so9034073ybt.7;
-        Mon, 06 Mar 2023 10:01:39 -0800 (PST)
-X-Received: by 2002:a05:6902:208:b0:a98:bd27:91de with SMTP id
- j8-20020a056902020800b00a98bd2791demr6926193ybs.7.1678125699092; Mon, 06 Mar
- 2023 10:01:39 -0800 (PST)
+        Mon, 06 Mar 2023 10:02:45 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id ec29so11435913edb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 10:02:44 -0800 (PST)
+X-Received: by 2002:a50:9fa8:0:b0:4ae:e5f1:7c50 with SMTP id
+ c37-20020a509fa8000000b004aee5f17c50mr6466912edf.5.1678125764592; Mon, 06 Mar
+ 2023 10:02:44 -0800 (PST)
 MIME-Version: 1.0
-References: <167380196429.10651.4103075913257868035.stgit@bazille.1015granger.net>
- <167380331214.10651.11224254824457738270.stgit@bazille.1015granger.net>
- <1331f5b4-66cb-4afa-4e81-64cf4bc696d@linux-m68k.org> <D157AE63-73DD-4CCE-B43E-AC0D92F35038@oracle.com>
-In-Reply-To: <D157AE63-73DD-4CCE-B43E-AC0D92F35038@oracle.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 6 Mar 2023 19:01:27 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVUMV0grWS7c5N4wCZn+MuN4ysCBqY3zDJjW9q5siBFsQ@mail.gmail.com>
-Message-ID: <CAMuHMdVUMV0grWS7c5N4wCZn+MuN4ysCBqY3zDJjW9q5siBFsQ@mail.gmail.com>
-Subject: Re: [PATCH v2 15/41] SUNRPC: Enable rpcsec_gss_krb5.ko to be built
- without CRYPTO_DES
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Chuck Lever <cel@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Simo Sorce <simo@redhat.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230306160651.2016767-1-vernon2gm@gmail.com> <20230306160651.2016767-6-vernon2gm@gmail.com>
+ <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com> <CAHk-=witXXeQuP9fgs4dDL2Ex0meXQiHJs+3JEfNdaPwngMVEg@mail.gmail.com>
+In-Reply-To: <CAHk-=witXXeQuP9fgs4dDL2Ex0meXQiHJs+3JEfNdaPwngMVEg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 6 Mar 2023 10:02:27 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj5hFp39ZM7fEtmctwkWdHHnx0X7c2j5Z8L+b18jUgcMQ@mail.gmail.com>
+Message-ID: <CAHk-=wj5hFp39ZM7fEtmctwkWdHHnx0X7c2j5Z8L+b18jUgcMQ@mail.gmail.com>
+Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
+To:     Vernon Yang <vernon2gm@gmail.com>
+Cc:     tytso@mit.edu, Jason@zx2c4.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,115 +83,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chuck,
-
-On Mon, Mar 6, 2023 at 5:17 PM Chuck Lever III <chuck.lever@oracle.com> wrote:
-> > On Mar 6, 2023, at 3:16 AM, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Sun, 15 Jan 2023, Chuck Lever wrote:
-> >> From: Chuck Lever <chuck.lever@oracle.com>
-> >>
-> >> Because the DES block cipher has been deprecated by Internet
-> >> standard, highly secure configurations might require that DES
-> >> support be blacklisted or not installed. NFS Kerberos should still
-> >> be able to work correctly with only the AES-based enctypes in that
-> >> situation.
-> >>
-> >> Also note that MIT Kerberos has begun a deprecation process for DES
-> >> encryption types. Their README for 1.19.3 states:
-> >>
-> >>> Beginning with the krb5-1.19 release, a warning will be issued
-> >>> if initial credentials are acquired using the des3-cbc-sha1
-> >>> encryption type.  In future releases, this encryption type will
-> >>> be disabled by default and eventually removed.
-> >>>
-> >>> Beginning with the krb5-1.18 release, single-DES encryption
-> >>> types have been removed.
-> >>
-> >> Aside from the CONFIG option name change, there are two important
-> >> policy changes:
-> >>
-> >> 1. The 'insecure enctype' group is now disabled by default.
-> >>  Distributors have to take action to enable support for deprecated
-> >>  enctypes. Implementation of these enctypes will be removed in a
-> >>  future kernel release.
-> >>
-> >> 2. des3-cbc-sha1 is now considered part of the 'insecure enctype'
-> >>  group, having been deprecated by RFC 8429, and is thus disabled
-> >>  by default
-> >>
-> >> After this patch is applied, SunRPC support can be built with
-> >> Kerberos 5 support but without CRYPTO_DES enabled in the kernel.
-> >> And, when these enctypes are disabled, the Linux kernel's SunRPC
-> >> RPCSEC GSS implementation fully complies with BCP 179 / RFC 6649
-> >> and BCP 218 / RFC 8429.
-> >>
-> >> Tested-by: Scott Mayhew <smayhew@redhat.com>
-> >> Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-> >
-> > Thanks for your patch, which is now commit dfe9a123451a6e73 ("SUNRPC:
-> > Enable rpcsec_gss_krb5.ko to be built without CRYPTO_DES") in v6.3-rc1.
-> >
-> >> --- a/net/sunrpc/Kconfig
-> >> +++ b/net/sunrpc/Kconfig
-> >> @@ -19,10 +19,10 @@ config SUNRPC_SWAP
-> >> config RPCSEC_GSS_KRB5
-> >>      tristate "Secure RPC: Kerberos V mechanism"
-> >>      depends on SUNRPC && CRYPTO
-> >> -    depends on CRYPTO_MD5 && CRYPTO_DES && CRYPTO_CBC && CRYPTO_CTS
-> >> -    depends on CRYPTO_ECB && CRYPTO_HMAC && CRYPTO_SHA1 && CRYPTO_AES
-> >>      default y
-> >>      select SUNRPC_GSS
-> >> +    select CRYPTO_SKCIPHER
-> >> +    select CRYPTO_HASH
-> >>      help
-> >>        Choose Y here to enable Secure RPC using the Kerberos version 5
-> >>        GSS-API mechanism (RFC 1964).
-> >
-> > While updating my defconfigs for v6.3-rc1, I noticed this change has an
-> > interesting side-effect: if any of the CRYPTO_* algorithms were modular
-> > before, RPCSEC_GSS_KRB5 was modular, too.
-> > After this change, RPCSEC_GSS_KRB5 is promoted to builtin.
+On Mon, Mar 6, 2023 at 9:47=E2=80=AFAM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> I'm not following. Which CRYPTO_ options trigger the behavior?
-> On my test system, CONFIG_RPCSEC_GSS_KRB5=m and the CRYPTO stuff
-> is all =y.
-
-On v6.2, "make ARCH=m68k defconfig" gives you
-CONFIG_RPCSEC_GSS_KRB5=m
-On v6.3, it became builtin, due to dropping the dependencies on
-the individual crypto modules.
-
-$ grep -E "CRYPTO_(MD5|DES|CBC|CTS|ECB|HMAC|SHA1|AES)" .config
-CONFIG_CRYPTO_AES=y
-CONFIG_CRYPTO_AES_TI=m
-CONFIG_CRYPTO_DES=m
-CONFIG_CRYPTO_CBC=m
-CONFIG_CRYPTO_CTS=m
-CONFIG_CRYPTO_ECB=m
-CONFIG_CRYPTO_HMAC=m
-CONFIG_CRYPTO_MD5=m
-CONFIG_CRYPTO_SHA1=m
-
-> > This is not necessarily bad in-se, but you might want to be aware of it,
-> > and perhaps change the "default y".
+> The drivers/char/random.c code is very wrong, and does
 >
-> Well that might be there to address the need for GSS to be
-> enabled if NFSv4 support is built. See commit df486a25900f
-> ("NFS: Fix the selection of security flavours in Kconfig")
+>              if (cpu =3D=3D nr_cpumask_bits)
+>                              cpu =3D cpumask_first(&timer_cpus);
 >
-> I'm not claiming I understand exactly how that fix works.
+> which fails miserably exactly because it doesn't use ">=3D".
 
-And that was changed again a little bit later in commit
-e3b2854faabd1043 ("SUNRPC: Fix the SUNRPC Kerberos V RPCSEC_GSS
-module dependencies").
+Turns out this "cpu =3D=3D nr_cpumask_bits" pattern exists in a couple of
+other places too.
 
-Gr{oetje,eeting}s,
+It was always wrong, but it always just happened to work. The lpfc
+SCSI driver in particular seems to *love* this pattern:
 
-                        Geert
+        start_cpu =3D cpumask_next(new_cpu, cpu_present_mask);
+        if (start_cpu =3D=3D nr_cpumask_bits)
+                start_cpu =3D first_cpu;
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+and has repeated it multiple times, all incorrect.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+We do have "cpumask_next_wrap()", and that *seems* to be what the lpcf
+driver actually wants to do.
+
+.. and then we have kernel/sched/fair.c, which is actually not buggy,
+just odd. It uses nr_cpumask_bits too, but it uses it purely for its
+own internal nefarious reasons - it's not actually related to the
+cpumask functions at all, its just used as a "not valid CPU number".
+
+I think that scheduler use is still very *wrong*, but it doesn't look
+actively buggy.
+
+The other cases all look very buggy indeed, but yes, they happened to
+work, and now they don't. So commit 596ff4a09b89 ("cpumask:
+re-introduce constant-sized cpumask optimizations") did break them.
+
+I'd rather fix these bad users than revert, but there does seem to be
+an alarming number of these things, which worries me:
+
+     git grep '=3D=3D nr_cpumask_bits'
+
+and that's just checking for this *exact* thing.
+
+                Linus
