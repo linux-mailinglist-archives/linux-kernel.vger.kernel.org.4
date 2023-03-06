@@ -2,82 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEFE6ABE1E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0700F6ABE22
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjCFL1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S229680AbjCFL2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFL1C (ORCPT
+        with ESMTP id S229457AbjCFL2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:27:02 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFB625E05;
-        Mon,  6 Mar 2023 03:27:00 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326AsMia009533;
-        Mon, 6 Mar 2023 11:26:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vccaepMqKUauOtZKuEm35sHqScVf3ibI9ugbL2S8QQU=;
- b=QVuCH8zU91KSuKi/GagImM1G4XFFfKSrEGfYcj35dhVtyfNelC20FT1cidVp58jazppC
- 2HJFHeKNLcJfs8A89MhMi95KvOsWVJnCxJo3ZXQaRu28P6/VmLSRVB/5oTKO6Pf7YgGT
- T3vFEMMc6BoBsZsQUmIX2Dl1EjoEpNwan94cRFg4GtneegOFyRWwNdN+981ZKH2ahoIc
- DXfBt9WY6Jgkn3iVN3wZ6Y6TsZX9WZlabwkOJoWWzRWI9E2WEz4rRhKTgIZN4GLHgix1
- NvRzZjrsQ/NpJ75jjg7C9W8NcK0x4my/udhuYhCJU3erUxEMjCWNWG8WRQPOkfaW+S6b 1g== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p415acgxw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 11:26:55 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 326BQsJe013801
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Mar 2023 11:26:54 GMT
-Received: from [10.201.3.167] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
- 03:26:51 -0800
-Message-ID: <61e8c730-e46d-728d-d770-f1ead4405d12@quicinc.com>
-Date:   Mon, 6 Mar 2023 16:56:48 +0530
+        Mon, 6 Mar 2023 06:28:07 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AA8720559
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:28:04 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id t14so9241116ljd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:28:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678102083;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=205oYFe4/B3UC/X3qLrV4lWCFSwtZFx9u6zXNGXzdZg=;
+        b=tYxvsHkYitctMbDyn+0brKMs7h03vuc34++qTOgQCEXY0QOltjVFzavue7XOjwIBXz
+         LMKRO0A1xwNSzXZFnd0JnvqMD9VThgr+5mGucoUg14TXX2erPQBCSmP5U3Zv5gOQ65YF
+         aJr59vehRqEcPD2OJICJnlRAOPRS0o8Th0I/W50leAD4actrR0r66yCMpHZfK2W4QnVb
+         y2JpLiJKGSxhNvSnCXnVuO2CI3HaHH25c1zAjGpMDB/IfbeJY8iHeylBZssZHVRrvh0U
+         ZoIK374BF80gQZHCo+SjoxWz2s+K8KggfaBJCFuzAeZ4KmG3/3vlBTh6k7gY99yBx6HI
+         HjEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678102083;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=205oYFe4/B3UC/X3qLrV4lWCFSwtZFx9u6zXNGXzdZg=;
+        b=7T34aTUCal5LcZ6+jtaFX6IpNqc8clWeaTKipj6BbhTiJ6WyMpJegGxLTofpyNNmHH
+         BIxWc93RT1BrJPFqAe1ZQ7YQMG7W7UwXYhEuH7G1+45hQSyPXo2rGs26aYK6zmmNJ1Fs
+         j9lZk5zOFpeQUwSXkfzvO6LDt9wvtYmjIk2kwdLi6ZwrPMbZ99fQJ0Rx7DU5xltI6t26
+         G/GbLBDcFXEF4YFeXqisaFEv9/zw/roZ+ZpE4eRLZh3vWZ0hFr7mkyB2LZzRTSw5O6X3
+         +X+NoDlobJ6/UEFSnEmUVHYClhNtsM6HxaTkKGHZwJbyXOjXmELkA4/atd1zpa/cOAId
+         2OJQ==
+X-Gm-Message-State: AO0yUKUA7dK9NChh7meRFQf04UfiD5W7REHp7kYC9G4NzhaCltyT2KNa
+        Gvunki/5dUghrro3MfcKQT7tFQ==
+X-Google-Smtp-Source: AK7set8aBql9IKQglXdI+C9VtpQK0WdlDEU+pVafNQuJJSo71a5RDLIA3RP28ZVtY1ImqHSRtfjaDw==
+X-Received: by 2002:a2e:86d5:0:b0:295:a932:8e40 with SMTP id n21-20020a2e86d5000000b00295a9328e40mr2943634ljj.17.1678102082812;
+        Mon, 06 Mar 2023 03:28:02 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id c14-20020ac2530e000000b004db51387ad6sm1588681lfh.129.2023.03.06.03.28.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 03:28:02 -0800 (PST)
+Message-ID: <afa95a2d-dbf3-621e-a1ed-fa484d288432@linaro.org>
+Date:   Mon, 6 Mar 2023 12:28:01 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFT 03/20] clk: qcom: smd-rpm: Add support for keepalive
+ votes
 Content-Language: en-US
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
+Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <cover.1677749625.git.quic_varada@quicinc.com>
- <6b8d17006d8ee9a1b0c4df803c1cc7caf53ea3ef.1677749625.git.quic_varada@quicinc.com>
- <CAA8EJprbMybV0o1-436yLhVnnEX6qywrj=JmWDCL5usaH0DXiQ@mail.gmail.com>
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-In-Reply-To: <CAA8EJprbMybV0o1-436yLhVnnEX6qywrj=JmWDCL5usaH0DXiQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+References: <20230303-topic-rpmcc_sleep-v1-0-d9cfaf9b27a7@linaro.org>
+ <20230303-topic-rpmcc_sleep-v1-3-d9cfaf9b27a7@linaro.org>
+ <CAA8EJpp6cxY5+L28qsTeXCmA31e4dv21u1Tz9SquAugaV+EqfQ@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAA8EJpp6cxY5+L28qsTeXCmA31e4dv21u1Tz9SquAugaV+EqfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: b97YULQRoOF9o3faWvakX9gPOEaAKvvz
-X-Proofpoint-ORIG-GUID: b97YULQRoOF9o3faWvakX9gPOEaAKvvz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_04,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- phishscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0 mlxscore=0
- malwarescore=0 spamscore=0 suspectscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060100
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,144 +82,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry,
 
-On 3/2/2023 9:52 PM, Dmitry Baryshkov wrote:
-> On Thu, 2 Mar 2023 at 11:57, Varadarajan Narayanan
-> <quic_varada@quicinc.com> wrote:
->> Add USB phy and controller related nodes
+
+On 6.03.2023 02:21, Dmitry Baryshkov wrote:
+> On Sat, 4 Mar 2023 at 15:27, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >>
->> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>> Some bus clock should always have a minimum (19.2 MHz) vote cast on
+>> them, otherwise the platform will fall apart, hang and reboot.
+>>
+>> Add support for specifying which clocks should be kept alive and
+>> always keep a vote on XO_A to make sure the clock tree doesn't
+>> collapse. This removes the need to keep a maximum vote that was
+>> previously guaranteed by clk_smd_rpm_handoff.
+>>
+>> This commit is a combination of existing (not-exactly-upstream) work
+>> by Taniya Das, Shawn Guo and myself.
+>>
+>> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
+>> Co-developed-by: Taniya Das <quic_tdas@quicinc.com>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 >> ---
->>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 92 +++++++++++++++++++++++++++++++++++
->>   1 file changed, 92 insertions(+)
+>>  drivers/clk/qcom/clk-smd-rpm.c | 23 +++++++++++++++++++++++
+>>  1 file changed, 23 insertions(+)
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> index 2bb4053..319b5bd 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->> @@ -215,6 +215,98 @@
->>                  #size-cells = <1>;
->>                  ranges = <0 0 0 0xffffffff>;
+>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>> index cce7daa97c1e..8e017c575361 100644
+>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>> @@ -4,6 +4,7 @@
+>>   * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+>>   */
 >>
->> +               ssphy_0: ssphy@7D000 {
->> +                       compatible = "qcom,ipq9574-qmp-usb3-phy";
->> +                       reg = <0x7D000 0x1C4>;
->> +                       #clock-cells = <1>;
->> +                       #address-cells = <1>;
->> +                       #size-cells = <1>;
->> +                       ranges;
+>> +#include <linux/clk.h>
+>>  #include <linux/clk-provider.h>
+>>  #include <linux/err.h>
+>>  #include <linux/export.h>
+>> @@ -178,6 +179,8 @@ struct clk_smd_rpm_req {
+>>  struct rpm_smd_clk_desc {
+>>         struct clk_smd_rpm **clks;
+>>         size_t num_clks;
+>> +       struct clk_hw **keepalive_clks;
+>> +       size_t num_keepalive_clks;
+>>  };
+>>
+>>  static DEFINE_MUTEX(rpm_smd_clk_lock);
+>> @@ -1278,6 +1281,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>         struct qcom_smd_rpm *rpm;
+>>         struct clk_smd_rpm **rpm_smd_clks;
+>>         const struct rpm_smd_clk_desc *desc;
+>> +       struct clk_hw **keepalive_clks;
+>>
+>>         rpm = dev_get_drvdata(pdev->dev.parent);
+>>         if (!rpm) {
+>> @@ -1291,6 +1295,7 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>
+>>         rpm_smd_clks = desc->clks;
+>>         num_clks = desc->num_clks;
+>> +       keepalive_clks = desc->keepalive_clks;
+>>
+>>         for (i = 0; i < num_clks; i++) {
+>>                 if (!rpm_smd_clks[i])
+>> @@ -1321,6 +1326,24 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>         if (ret)
+>>                 goto err;
+>>
+>> +       /* Leave a permanent active vote on clocks that require it. */
+>> +       for (i = 0; i < desc->num_keepalive_clks; i++) {
+>> +               if (WARN_ON(!keepalive_clks[i]))
+>> +                       continue;
 >> +
->> +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
->> +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
->> +                       clock-names = "aux", "cfg_ahb";
->> +
->> +                       resets =  <&gcc GCC_USB0_PHY_BCR>,
->> +                                <&gcc GCC_USB3PHY_0_PHY_BCR>;
->> +                       reset-names = "phy","common";
->> +                       status = "disabled";
->> +
->> +                       usb0_ssphy: lane@7D200 {
-> Please use newer style device bindings for new PHYs.
->
->> +                               reg = <0x0007D200 0x130>,       /* Tx */
->> +                                     <0x0007D400 0x200>,       /* Rx */
->> +                                     <0x0007D800 0x1F8>,       /* PCS  */
->> +                                     <0x0007D600 0x044>;       /* PCS misc */
->> +                               #phy-cells = <0>;
->> +                               clocks = <&gcc GCC_USB0_PIPE_CLK>;
->> +                               clock-names = "pipe0";
->> +                               clock-output-names = "gcc_usb0_pipe_clk_src";
-> No, this clock doesn't originate from gcc, so the gcc prefix is incorrect.
->
->> +                       };
->> +               };
->> +
->> +               qusb_phy_0: qusb@7B000 {
->> +                       compatible = "qcom,ipq9574-qusb2-phy";
->> +                       reg = <0x07B000 0x180>;
->> +                       #phy-cells = <0>;
->> +
->> +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
->> +                               <&xo_board_clk>;
->> +                       clock-names = "cfg_ahb", "ref";
->> +
->> +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
->> +                       status = "disabled";
->> +               };
->> +
->> +               usb3: usb3@8A00000 {
-> You know the drill. This node is in the wrong place.
->
->> +                       compatible = "qcom,dwc3";
->> +                       reg = <0x8AF8800 0x400>;
->> +                       #address-cells = <1>;
->> +                       #size-cells = <1>;
->> +                       ranges;
->> +
->> +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
->> +                               <&gcc GCC_ANOC_USB_AXI_CLK>,
->> +                               <&gcc GCC_USB0_MASTER_CLK>,
->> +                               <&gcc GCC_USB0_SLEEP_CLK>,
->> +                               <&gcc GCC_USB0_MOCK_UTMI_CLK>;
->> +
->> +                       clock-names = "sys_noc_axi",
->> +                               "anoc_axi",
->> +                               "master",
->> +                               "sleep",
->> +                               "mock_utmi";
-> Please fix the indentation of the lists.
->
->> +
->> +                       assigned-clocks = <&gcc GCC_SNOC_USB_CLK>,
->> +                                         <&gcc GCC_ANOC_USB_AXI_CLK>,
-> Why do you assign clock rates to the NOC clocks? Should they be set
-> using the interconnect instead?
+>> +               ret = clk_prepare_enable(keepalive_clks[i]->clk);
+>> +               if (ret)
+>> +                       return ret;
+> 
+> Would it be better to use CLK_IS_CRITICAL instead? Using the existing
+> API has a bonus that it is more visible compared to the ad-hoc
+> solutions.
+Yeah, I think that makes sense.
 
-The SNOC and ANOC run at a fixed speed of 350MHz and 342MHz respectively 
-and are not scaled. These clocks are for the interface between the USB 
-block and the SNOC/ANOC. Do we still need to use interconnect?
-
->> +                                         <&gcc GCC_USB0_MASTER_CLK>,
->> +                                         <&gcc GCC_USB0_MOCK_UTMI_CLK>;
->> +                       assigned-clock-rates = <200000000>,
->> +                                              <200000000>,
->> +                                              <200000000>,
->> +                                              <24000000>;
+> 
 >> +
->> +                       resets = <&gcc GCC_USB_BCR>;
->> +                       status = "disabled";
+>> +               ret = clk_set_rate(keepalive_clks[i]->clk, 19200000);
+> 
+> Don't we also need to provide a determine_rate() that will not allow
+> one to set clock frequency below 19.2 MHz?
+Hm, sounds like a good idea..
+
+> 
+>> +               if (ret)
+>> +                       return ret;
+>> +       }
 >> +
->> +                       dwc_0: dwc3@8A00000 {
->> +                               compatible = "snps,dwc3";
->> +                               reg = <0x8A00000 0xcd00>;
->> +                               clock-names = "ref";
->> +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> clocks before clock-names
->
->> +                               interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
->> +                               phys = <&qusb_phy_0>, <&usb0_ssphy>;
->> +                               phy-names = "usb2-phy", "usb3-phy";
->> +                               tx-fifo-resize;
->> +                               snps,dis_ep_cache_eviction;
->> +                               snps,is-utmi-l1-suspend;
->> +                               snps,hird-threshold = /bits/ 8 <0x0>;
->> +                               snps,dis_u2_susphy_quirk;
->> +                               snps,dis_u3_susphy_quirk;
->> +                               snps,quirk-frame-length-adjustment = <0x0A87F0A0>;
->> +                               dr_mode = "host";
->> +                       };
->> +               };
+>> +       /* Keep an active vote on CXO in case no other driver votes for it. */
+>> +       if (rpm_smd_clks[RPM_SMD_XO_A_CLK_SRC])
+>> +               return clk_prepare_enable(rpm_smd_clks[RPM_SMD_XO_A_CLK_SRC]->hw.clk);
 >> +
->>                  pcie0_phy: phy@84000 {
->>                          compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
->>                          reg = <0x00084000 0x1bc>; /* Serdes PLL */
->> --
->> 2.7.4
+>>         return 0;
+>>  err:
+>>         dev_err(&pdev->dev, "Error registering SMD clock driver (%d)\n", ret);
+> 
+> 
+> I have mixed feelings towards this patch (and the rest of the
+> patchset). It looks to me like we are trying to patch an issue of the
+> interconnect drivers (or in kernel configuration).
+Well, as you noticed, this patch tries to address a situation where a
+critical clock could be disabled. The interconnect driver (as per my
+other recent patchset) also has a concept of "keepalive", but:
 
-Will address these and post a new revision.
+1. not very many SoCs already have a functional icc driver
+2. devices with an existing interconnect driver should also be
+   testable without one (through painful ripping out everything-icc
+   from the dts) for regression tracking
 
-Thanks
+Konrad
 
-Varada
-
+> 
+> 
+> --
+> With best wishes
+> Dmitry
