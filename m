@@ -2,131 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7F66AB93B
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:05:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F309D6AB940
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:06:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjCFJFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:05:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S229831AbjCFJGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:06:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCFJFG (ORCPT
+        with ESMTP id S229616AbjCFJGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:05:06 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEE315893;
-        Mon,  6 Mar 2023 01:05:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E811B80C82;
-        Mon,  6 Mar 2023 09:05:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89621C4339E;
-        Mon,  6 Mar 2023 09:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678093501;
-        bh=yBz3gepLbwedgniVR7u8nl2nQvxTL0ay1+6CySTGteE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NH2MI0tBSpN1ITuovfjyeY0P2aeNECg0ranryAE72CAgljq+H3g9st2swl6Hq6VPP
-         KxqdgA5rgugzmpyzgJIEDRT+eKis3uEOr5b10WQ2DTYxWJMXxmYTyT/e7RmIcLYotk
-         fzU+luCmU0qd/E3IP3uFNZ+J5PXFebkE3GEe4O4HVotGTcLHlqRh8E/MuSDh+nJLLv
-         VPPIG3yTmYz8DdBczNRLD1gQoIqjUmpb4l5BIRifNZ4sZ0YYOftAzSqbaW5lm+fadW
-         EP9+UPeZJdoK34rySjFHrwfrMuU+1dv0aHeRkrbm0dXALgWyAouUIqpaIEVkjdj8LF
-         RNv8Z/ebvIp8g==
-Date:   Mon, 6 Mar 2023 09:04:56 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Florian Eckert <fe@dev.tdt.de>, u.kleine-koenig@pengutronix.de,
-        gregkh@linuxfoundation.org, pavel@ucw.cz,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        Eckert.Florian@googlemail.com
-Subject: Re: [PATCH v7 2/2] trigger: ledtrig-tty: add additional modes
-Message-ID: <20230306090456.GA9667@google.com>
-References: <20230222083335.847655-1-fe@dev.tdt.de>
- <20230222083335.847655-3-fe@dev.tdt.de>
- <20230303141139.GP2420672@google.com>
- <be7c90cf-4c65-1cf0-3001-8706415c3d34@kernel.org>
+        Mon, 6 Mar 2023 04:06:47 -0500
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEDC222CC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:06:44 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed50:b745:671d:a946:57fa])
+        by xavier.telenet-ops.be with bizsmtp
+        id Ux6a2900J4LuvSS01x6aeG; Mon, 06 Mar 2023 10:06:42 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pZ6nC-00B4Fr-6Q;
+        Mon, 06 Mar 2023 10:06:34 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pZ6ni-000HC1-5x;
+        Mon, 06 Mar 2023 10:06:34 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] drm/msm/dpu: Fix bit-shifting UB in DPU_HW_VER() macro
+Date:   Mon,  6 Mar 2023 10:06:33 +0100
+Message-Id: <20230306090633.65918-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <be7c90cf-4c65-1cf0-3001-8706415c3d34@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023, Jiri Slaby wrote:
+With gcc-5 and CONFIG_UBSAN_SHIFT=y:
 
-> On 03. 03. 23, 15:11, Lee Jones wrote:
-> > On Wed, 22 Feb 2023, Florian Eckert wrote:
-> > > @@ -113,21 +207,38 @@ static void ledtrig_tty_work(struct work_struct *work)
-> > >   		trigger_data->tty = tty;
-> > >   	}
-> > > -	ret = tty_get_icount(trigger_data->tty, &icount);
-> > > -	if (ret) {
-> > > -		dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
-> > > -		mutex_unlock(&trigger_data->mutex);
-> > > -		return;
-> > > -	}
-> > > -
-> > > -	if (icount.rx != trigger_data->rx ||
-> > > -	    icount.tx != trigger_data->tx) {
-> > > -		led_set_brightness_sync(trigger_data->led_cdev, LED_ON);
-> > > -
-> > > -		trigger_data->rx = icount.rx;
-> > > -		trigger_data->tx = icount.tx;
-> > > -	} else {
-> > > -		led_set_brightness_sync(trigger_data->led_cdev, LED_OFF);
-> > > +	switch (trigger_data->mode) {
-> > > +	case TTY_LED_CTS:
-> > > +		ledtrig_tty_flags(trigger_data, TIOCM_CTS);
-> > > +		break;
-> > > +	case TTY_LED_DSR:
-> > > +		ledtrig_tty_flags(trigger_data, TIOCM_DSR);
-> > > +		break;
-> > > +	case TTY_LED_CAR:
-> > > +		ledtrig_tty_flags(trigger_data, TIOCM_CAR);
-> > > +		break;
-> > > +	case TTY_LED_RNG:
-> > > +		ledtrig_tty_flags(trigger_data, TIOCM_RNG);
-> > > +		break;
-> > > +	case TTY_LED_CNT:
-> > 
-> > I believe this requires a 'fall-through' statement.
-> 
-> I don't think this is the case. Isn't fallthrough required only in cases
-> when there is at least one statement, i.e. a block?
+    drivers/gpu/drm/msm/msm_mdss.c: In function 'msm_mdss_enable':
+    drivers/gpu/drm/msm/msm_mdss.c:296:2: error: case label does not reduce to an integer constant
+      case DPU_HW_VER_800:
+      ^
+    drivers/gpu/drm/msm/msm_mdss.c:299:2: error: case label does not reduce to an integer constant
+      case DPU_HW_VER_810:
+      ^
+    drivers/gpu/drm/msm/msm_mdss.c:300:2: error: case label does not reduce to an integer constant
+      case DPU_HW_VER_900:
+      ^
 
-There's no mention of this caveat in the document.
+This happens because for major revisions 8 or greather, the non-sign bit
+of the major revision number is shifted into bit 31 of a signed integer,
+which is undefined behavior.
 
-To my untrained eyes, the rule looks fairly explicit, starting with "All".
+Fix this by casting the major revision number to unsigned int.
 
-"
-  All switch/case blocks must end in one of:
+Fixes: efcd0107727c4f04 ("drm/msm/dpu: add support for SM8550")
+Fixes: 4a352c2fc15aec1e ("drm/msm/dpu: Introduce SC8280XP")
+Fixes: 100d7ef6995d1f86 ("drm/msm/dpu: add support for SM8450")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-  * break;
-  * fallthrough;
-  * continue;
-  * goto <label>;
-  * return [expression];
-"
-
-If you're aware of something I'm not, please consider updating the doc.
-
-> > Documentation/process/deprecated.rst
-> > 
-> > > +	default:
-> > > +		ret = tty_get_icount(trigger_data->tty, &icount);
-> > > +		if (ret) {
-> > > +			dev_info(trigger_data->tty->dev, "Failed to get icount, stopped polling\n");
-> > > +			mutex_unlock(&trigger_data->mutex);
-> > > +			return;
-> > > +		}
-> > > +
-
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+index ddab9caebb18c40d..bbd3cbdd77956c5d 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+@@ -19,8 +19,9 @@
+  */
+ #define MAX_BLOCKS    12
+ 
+-#define DPU_HW_VER(MAJOR, MINOR, STEP) (((MAJOR & 0xF) << 28)    |\
+-		((MINOR & 0xFFF) << 16)  |\
++#define DPU_HW_VER(MAJOR, MINOR, STEP)			\
++		((((unsigned int)MAJOR & 0xF) << 28) |	\
++		((MINOR & 0xFFF) << 16) |		\
+ 		(STEP & 0xFFFF))
+ 
+ #define DPU_HW_MAJOR(rev)		((rev) >> 28)
 -- 
-Lee Jones [李琼斯]
+2.34.1
+
