@@ -2,116 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880246AC920
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA146ACA97
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCFREO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43218 "EHLO
+        id S229816AbjCFRee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjCFRD7 (ORCPT
+        with ESMTP id S230252AbjCFRea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:03:59 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D30923124;
-        Mon,  6 Mar 2023 09:03:37 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326Grmul027816;
-        Mon, 6 Mar 2023 17:02:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=KPCMa3xGDqA9/gK9Kt2t9XQ9VytdIS2jEALlqjrjcP0=;
- b=gXfYEVPkrbYZ+LcRO9jO4YKAn1TwnsLibloKp+GATjpeJAYBM7TNMzWtJm2X5tDTiRuN
- aPbv60HLiit7+uFyW5d6QXuFErt5ZTtiqEvcdUae/7xWRUOc4qjM4NqzuNzTqey/tjEp
- fdnRe8B5FrTuyR+BqGFhrunazdxEqlXPQFFbaJqo1e4/9bbFW0P26t0MDHRIObtCJVzn
- E1EifAfC9QNPttqbswMZ+WsYHJNx7kKBx6ksBY3ACreu3QHz6Wds65thEhMRUNjUIMyp
- Ebc/nzhV4hKaI77VUfHcKj9A8/OabKyDi8F8Xb0Ygs3KTW2VdAi5LMpT4Zg2Spll/ANa hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4u1jpwdp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 17:02:27 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326GsGo9029436;
-        Mon, 6 Mar 2023 17:02:27 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4u1jpwcx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 17:02:27 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326G2rb5008228;
-        Mon, 6 Mar 2023 17:02:25 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3p417vpayt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 17:02:25 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326H2OsZ46727596
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 17:02:24 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D23CC58062;
-        Mon,  6 Mar 2023 17:02:23 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9286D58052;
-        Mon,  6 Mar 2023 17:02:22 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 17:02:22 +0000 (GMT)
-Message-ID: <4069e144-538f-4016-d533-f3cd4df4a0c8@linux.ibm.com>
-Date:   Mon, 6 Mar 2023 12:02:22 -0500
+        Mon, 6 Mar 2023 12:34:30 -0500
+X-Greylist: delayed 7243 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 06 Mar 2023 09:33:34 PST
+Received: from 7.mo584.mail-out.ovh.net (7.mo584.mail-out.ovh.net [178.33.253.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CEC6512A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:33:34 -0800 (PST)
+Received: from director6.ghost.mail-out.ovh.net (unknown [10.108.16.60])
+        by mo584.mail-out.ovh.net (Postfix) with ESMTP id C1D0A203EC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:57:04 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-rwjg5 (unknown [10.111.208.12])
+        by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id B83A11FE4F;
+        Mon,  6 Mar 2023 13:57:03 +0000 (UTC)
+Received: from RCM-web1.webmail.mail.ovh.net ([176.31.238.120])
+        by ghost-submission-6684bf9d7b-rwjg5 with ESMTPSA
+        id w0dOKi/xBWTm2wAAQBpMMw
+        (envelope-from <rafal@milecki.pl>); Mon, 06 Mar 2023 13:57:03 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 10/28] evm: Align evm_inode_post_setxattr() definition
- with LSM infrastructure
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
- <20230303181842.1087717-11-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230303181842.1087717-11-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Mon, 06 Mar 2023 14:57:03 +0100
+From:   =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Robert Marko <robert.marko@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 0/8] nvmem: Let layout drivers be modules
+In-Reply-To: <20230306143528.7407fda5@xps-13>
+References: <20230301152239.531194-1-miquel.raynal@bootlin.com>
+ <ee7923a8b5fa8358e6805d20df7d8049@walle.cc> <20230306143528.7407fda5@xps-13>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <73a04afaf658292c05ef27117c60b21d@milecki.pl>
+X-Sender: rafal@milecki.pl
+X-Originating-IP: 194.187.74.233
+X-Webmail-UserID: rafal@milecki.pl
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: TurPWf2ubwF2whMizIvNIea40dRuM-bw
-X-Proofpoint-ORIG-GUID: 07kOg67IvyU8v80JGqxUzNcCIReBR1w_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_10,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=986
- malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060151
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Ovh-Tracer-Id: 17379390966063803376
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -85
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtkedgvdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegfrhhlucfvnfffucdludehmdenucfjughrpeggfffhvfevufgjfhgfkfigihgtgfesthejjhdttdervdenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepteehleefgfejuddtiedvuddvtefhhfehudelgfegiedtjeduhfekteejkeeijefgnecukfhppeduvdejrddtrddtrddupdduleegrddukeejrdejgedrvdeffedpudejiedrfedurddvfeekrdduvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekgedpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/3/23 13:18, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 2023-03-06 14:35, Miquel Raynal wrote:
+> Hi Michael,
 > 
-> Change evm_inode_post_setxattr() definition, so that it can be registered
-> as implementation of the inode_post_setxattr hook.
+> michael@walle.cc wrote on Mon, 06 Mar 2023 14:01:34 +0100:
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+>> > Miquel Raynal (8):
+>> >   of: Fix modalias string generation
+>> >   of: Change of_device_get_modalias() main argument
+>> >   of: Create an of_device_request_module() receiving an OF node
+>> >   nvmem: core: Fix error path ordering
+>> >   nvmem: core: Handle the absence of expected layouts
+>> >   nvmem: core: Request layout modules loading
+>> >   nvmem: layouts: sl28vpd: Convert layout driver into a module
+>> >   nvmem: layouts: onie-tlv: Convert layout driver into a module
+>> 
+>> With the fixes series [1] applied:
+> 
+> Thanks for the series! Looks good to me. I believe both series can live
+> in separate tress, any reason why we would like to avoid this? I am 
+> keen
+> to apply [1] into the mtd tree rather soon.
 
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+Given past events with nvmem patches I'm against that.
+
+Let's wait for Srinivas to collect pending patches, let them spend a
+moment in linux-next maybe, ask Srinivas to send them to Greg early if
+he can. That way maybe you can merge Greg's branch (assuming he doesn't
+rebase).
