@@ -2,151 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF556ACD76
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A4456ACD79
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjCFTDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:03:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
+        id S229876AbjCFTDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjCFTC6 (ORCPT
+        with ESMTP id S229684AbjCFTDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:02:58 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D8730D8;
-        Mon,  6 Mar 2023 11:02:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fz2hEZcz4e40UiD7kGdxpzIVtFNjU/+YLcvar5hpxohMRxVFkXpaSpXRvuUjPW3IcLT/n+G+baN0AaHRdIrdFhsdmQ9fYvshcPNmM2z9yntSzCqRdzoV5blWJ1T51qkCZYLDpRuDYY3jVEF7act+ydyW/biJl970Yz2rE5A9LaCGJQBn/E6ze71P9w263ogtl4+TFkRVvW+gKHOJlDb5WKmrSs9lfQsayPDWJAQm1wlWL/Pp8L03nrCAnw/BvUoR62aq0uAG053Ex0V0+ZE1QKLMs/69zwu3PBP5jqVMnva5tWKUCVBc9MTTjNhWL/2nEcid8MlmRpCelLYskfGo1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9VwGSXCRYRMTRKGmmzb3tF/TdMHteW2ZJ6la1YPDHZs=;
- b=MeFbhhAZkkfCUkjVW9/kXDNnSaBcbjGcwyecmMI/01+oclilVWPkjadZe36sAHEkk9x5N8Q1Pf59JoAgTDT8MCWBnpniAiufvwNJgcYTjXb1OTgfiFEcWPsqa2rC/yUbOfvdd3OYglaz7gAkj/Q2xZc9ULJWEP4cMQwewtNjpg2pr4rzdU7n8WPUiuhEpXhH8dIompbvOwDXGYWEKKvF36sPC9kOlADKeVSqDQ9BpcyCdxv9ooAahKEeLGhX6YpAut0UU4+zkn+KHBDfHlItd4HDJWzfLFLgr9n47G4z54nYhJA78bxq4Nt5KTCFWpAeV/NSbppVG0WmQo5M5rkuig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9VwGSXCRYRMTRKGmmzb3tF/TdMHteW2ZJ6la1YPDHZs=;
- b=pl178hZU6yh6kS1rymE6zFA9z08kQbMAI/ftw6jmMktXr3tww2+N/g9+fSSgwezrpjyKGxMmeRzJyTQ9Q9uZdSeaLtVSRF0VYSR+q5KIhp5HSzav3XIFpJmJ2D47V+a1XU/rLeLviuDS9nFXh2vt98ATzwqft30OgsQpZl/6QysPLZgWH/fv5XHFA/9e1NzfAvnNH4f4I4wXVbFk0sMYHb7DQYjDaB8o7PWTvRDQkY3w5w3uJsw5iuHhNCvBJx6KaIQ9UqqWREhqm0puNEkCIhv6GkQjyCmmG5An59bTuj+v8btQGDKkwamQJBqHv2bDNhyNhRSlQvYNDygtGbT0yw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA0PR12MB8839.namprd12.prod.outlook.com (2603:10b6:208:493::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Mon, 6 Mar
- 2023 19:02:38 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3cb3:2fce:5c8f:82ee%4]) with mapi id 15.20.6156.027; Mon, 6 Mar 2023
- 19:02:38 +0000
-Date:   Mon, 6 Mar 2023 15:02:37 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: Re: [PATCH 1/4] iommu/vt-d: Implement set device pasid op for
- default domain
-Message-ID: <ZAY4zd4OlgSz+puZ@nvidia.com>
-References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
- <20230302005959.2695267-2-jacob.jun.pan@linux.intel.com>
- <fad7f28f-b4e8-c1c3-4ca4-a48c5c6d7f4a@linux.intel.com>
- <BN9PR11MB52762957011E60E935E82CC88CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <2c9115d0-f251-c284-63d6-73714edc96b4@linux.intel.com>
- <BN9PR11MB527634EA1ED5067D1FC0D7C68CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <7f8983c8-b703-4960-67b5-97f4053329db@linux.intel.com>
- <BN9PR11MB5276E48AA1680C76A3ED66AD8CB39@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20230306110443.4ca52204@jacob-builder>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306110443.4ca52204@jacob-builder>
-X-ClientProxiedBy: BL0PR02CA0107.namprd02.prod.outlook.com
- (2603:10b6:208:51::48) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 6 Mar 2023 14:03:47 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A9A4235
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:03:24 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id i3so11528938plg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 11:03:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678129404;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HeJ1uPFJYxGrKc+vEdEMet5BZVVGoOk2aZO1vPhKqJs=;
+        b=hXEBO2Ybz2dof8vZ5c3rZ2zsPma2nq4q+RKluQUOEgVg81DIieDjl7SjOlxiX1oggE
+         x/G68l3qgaiJ5KIxOQetbCqdi8iIttwccQF0SED9mQ2tPklW2INTtEIOmcrSUf5pk4x+
+         xDQ7WJNzr9Bpew2QFdvumhcq5KVJHmaZFk+sM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678129404;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HeJ1uPFJYxGrKc+vEdEMet5BZVVGoOk2aZO1vPhKqJs=;
+        b=cR+X225YrcyXuA8W6f8YtJzsGJac+DYCyygaDUBZFcyTdOU65Jf3yxt3lqlxrMtdXO
+         PFyy88/dkwWfMx3F6wBRy+Jv5NfsJ5gGA+7HkRyyDtDSD3I7WJ7kcyt/JV4YdJQAlWT/
+         I2Vzx30Kj3u3Y4lr7aEJFMF+X5t14pzBPn3uwjhxS1An9gbTazxb2E+UkMzgzUAFfTs6
+         3I8RGNOlXt8KHQjn+YmzTmAKciWAA3f8Stlc0JfUShFmhwPre4u3HbvNodtSegVac+HR
+         iFqVvqzKMZJ1L5rjuTxmy6Gfdhr/rNSyLPOTRvKh/VhRhusg5oMsVIrmBjwf1JF+sE/L
+         EkUQ==
+X-Gm-Message-State: AO0yUKXBCllDMZzRzsVdt7gax1s5zr2JppuSLWy0O7j2NvR+kTG62emt
+        /tBFQK4AxHZA/GUWGvlGSJP6I/uA1RfCxk4W4+s=
+X-Google-Smtp-Source: AK7set9R/oC4VHAV6f3JmgxyDfwt3pYvc9xXu5DyVyLC20qofNBzId6BVs8yNYdlTvBOd5XS0x2qSw==
+X-Received: by 2002:a05:6a20:7b22:b0:cf:71ee:6328 with SMTP id s34-20020a056a207b2200b000cf71ee6328mr4557627pzh.8.1678129403615;
+        Mon, 06 Mar 2023 11:03:23 -0800 (PST)
+Received: from wafflehead.lan ([47.144.140.44])
+        by smtp.gmail.com with ESMTPSA id r7-20020a634407000000b005038291e5cbsm6583515pga.35.2023.03.06.11.03.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 11:03:23 -0800 (PST)
+From:   Jeffrey Kardatzke <jkardatzke@chromium.org>
+X-Google-Original-From: Jeffrey Kardatzke <jkardatzke@google.com>
+To:     op-tee@lists.trustedfirmware.org
+Cc:     Jeffrey Kardatzke <jkardatzke@google.com>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4] tee: optee: Add SMC for loading OP-TEE image
+Date:   Mon,  6 Mar 2023 11:03:19 -0800
+Message-Id: <20230306110311.v4.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA0PR12MB8839:EE_
-X-MS-Office365-Filtering-Correlation-Id: 431a9748-c23b-438d-ff76-08db1e755ac9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YxYfk+SHEMryo0DL4VH7wfB7BnYiHE6Hz1KT23wIbnsAPy9vxbmsDtmzQKwSuU6eaiNMsK/UOMGSVdBD/cr65PFdNxH89ZDgAfvMQBjKWiSgIUuusvyfF6L/4o8xj8ZdhAielXNPvMXe6aMeqNbQ17P1q9U1yuq0KcL+ZKN8slLBfOilWqjN2etAv6v1/6cY/8Vy8P2bBoXn9J8oRTu/NkhgoqtTNATZm9oVrIjGxHgLYAObQEe/pXIuxeqqOAxYbWu0u9xy7vjM8KNfacpxqq1GY8bMB6PXhr8WVRrqcV11z7mxUifuC+94RYSIR61KLB5w3dHFQjudJXTWJPYjf3rXRAW9rwUycXN/IPolUZT6tKmgfxeZsp/ZLMPCPoDxTv1qOSo7zqpAB8OQR8nJAznxvMVvsiSrGWCgY2M5W8cGomy67tRJqQv1Jg5webndG0sVmLyC4PzXnDGv+kpOCqBEPmzrE9l28mkFFfP2cIpCC+P9p6LkvV2FEHe1Xfr9BRVpVU2m2wogprDSAdJRN2SN6mML/umXM4UgXvN3WfLYG0JAUSJQkYm1rO8q26UsIKuhSNakLVfG9km0xcDCwpuZM8B84pq4opJ7V/U5kXvqieP1+e2MP3VTjI1416CoygRN98S88AebzHOOkivWNHFRZtKx9D+ZmeUBGsXegoqpVCKs5fn+Snzxg+casWZQ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(366004)(136003)(376002)(39860400002)(451199018)(54906003)(316002)(6506007)(6512007)(26005)(2616005)(36756003)(83380400001)(186003)(41300700001)(2906002)(66476007)(66556008)(66946007)(86362001)(478600001)(5660300002)(7416002)(4744005)(6916009)(4326008)(8936002)(8676002)(6486002)(38100700002)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LnmYawWr+ZhCGVL9RAiJKXwn0d9AurRF4kpmWRt3OZClMlsoIA7N1XhComQU?=
- =?us-ascii?Q?ArA9WoT603uligjQCM9A51q6k+yFcuJEZJjzoOhGkGR5cAL7FcbJmnLrLqEl?=
- =?us-ascii?Q?+glqLeNPBhr+G/nMFqWN7P0Ld9k8kfD1MFmKlLpAJeIjTkcKlwvyfXY1sxcd?=
- =?us-ascii?Q?+Z3x5pE0XucbR5zIsPKLBx/q/l6AwpRDIAXzbYHolpYOAY159qorETwN9UzD?=
- =?us-ascii?Q?D+U3izr4kFDJFGpJvuoXAtsrNe8Kp9cgPrXYnLojxKIxr2f8Wzc3SBLD6nxp?=
- =?us-ascii?Q?gSsnjWcrpwbF4yMSQyjSyFHVPRDa8GmUbDLyIlkAFUXmEN8D/9ZFT0zG8pNg?=
- =?us-ascii?Q?Ze/+D+fCXulO/XT7U8kEuvPaZo6xSr9t2gVIQtaKKO6+ZWXGImMzvYPHvMAL?=
- =?us-ascii?Q?JxdVvxaM5ITkFVNvVMsIFjrPkfh7F9F93vIxkREc0WKOHkGR4dp5OZEZulNg?=
- =?us-ascii?Q?xletFP0aFZqNhqCZdqCW5BlAjcz3KSXlYRAeED5AlxVjvHrol5Aryttyg5Fd?=
- =?us-ascii?Q?AxU1Hwo4hrupx0mLwoqVaxbVfsvsvQ+BmmNhMRJVZvo1bQg/6EecG/fTHJOZ?=
- =?us-ascii?Q?7IPtNqCp4LgrH0OgPz7js8y+xqF99RIOx092qnl9511HXkhACXTa/sx7IDNP?=
- =?us-ascii?Q?NWXFUCZobtf0Lb/rKvQDH2IQu443QCe9eLgnIaFMYf4nppGDpEsWnjhRDCRa?=
- =?us-ascii?Q?+vhx921DJZTICKrIlbdamIJ03AU9Vq3/LyyQ5zJilNHc6aFQ05fHAITiQYmu?=
- =?us-ascii?Q?9wCs04iujnvhTxWOUdR/g5oVWNIjC6jlA9HqmZVrWbZDJQI5rH1DLybZmUlJ?=
- =?us-ascii?Q?Ue48/thyWv1WP0i/c/1vMmHThWR8BZXY5bQlaO92Wpl2InGW0FaqSdjJiOka?=
- =?us-ascii?Q?zN2de0fEGLfpPPXN59yta7gmyaIfZ/hVgtg9D1AhB0MVdaf/gycm5cIxJp9Z?=
- =?us-ascii?Q?+RCur0vP0R+7KvjSaUIFy/55Ld/H48vZyzLELRA0iAw+JnGDNvkU3LfkhDaX?=
- =?us-ascii?Q?1D8cX3S4OT71zWLZfiaxlM5+k5xyLaT2TSZbKmbPvTJq2ogZGxsv2ZhIAtvp?=
- =?us-ascii?Q?xEeYJpfO6/GMdl4/q2w+JkOw2dfCDOgv8Dc1pWj3vTUYARvMaJb5oZX6Rm6B?=
- =?us-ascii?Q?UKtNw3PRtNI9gl7s9SBgpEBCx3UysJBvkTQK9bbGB5TMtH7DIr/d+1u2XzAq?=
- =?us-ascii?Q?ub9wuqhS4mFIT0wFPr7vRL18/jklYHrVF978+XwkcilHVnRQe76huL/crovN?=
- =?us-ascii?Q?ECfOwgsF6dEiZDHLugLnK1bRfGyKOA1m8fi+4rg7zbwfUnxWiZ397C0V7eWy?=
- =?us-ascii?Q?ITqklZqTUFq2W+x4BFMlLqsuCe5vypLIosZ58oIZkjPRJSUjb+mvX6fCmCOx?=
- =?us-ascii?Q?RX+QDWX8+8tM+9lbtfYpO2p0yyRvvwQAKTBEA7tmIl0VZXUXbHGm/XNH5NVr?=
- =?us-ascii?Q?IWgBSIJOeWL4XISaN4Hx4pW49DfqyuSKtF9842puZlslVqVcpT1P1LO/NC+h?=
- =?us-ascii?Q?UfInK8Sczry0C7OtPnxkmov1as7VDetes/iiN3mK3i7fszD7AhhEIkpHos9G?=
- =?us-ascii?Q?9kVzYciP1/wMooY7UNnuuUlGL1p9NstUAHA+Ve82?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 431a9748-c23b-438d-ff76-08db1e755ac9
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Mar 2023 19:02:38.8319
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: brGa1lmyANxQY/YuEMQXiG5/SjLcVE2h4zxkf6t8OaGslwTaT82mhAn4GR1LOL9S
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8839
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 11:04:43AM -0800, Jacob Pan wrote:
+Adds an SMC call that will pass an OP-TEE binary image to EL3 and
+instruct it to load it as the BL32 payload. This works in conjunction
+with a feature added to Trusted Firmware for ARMv8 and above
+architectures that supports this.
 
-> > and probably this is the right thing to do as in the end DMA type will
-> > be removed with Jason's cleanup
->
-> so, let me recap. set_dev_pasid() should make no assumptions of
-> ordering, i.e. it is equal to iommu_domain_ops.attach_dev().
+The main purpose of this change is to facilitate updating the OP-TEE
+component on devices via a rootfs change rather than having to do a
+firmware update. Further details are linked to in the Kconfig file.
 
-Absolutely yes.
+Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org>
+Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
+---
 
-You should factor out all the "prepare the domain to be used" code and
-call it in both places.
+Changes in v4:
+- Update commit message
+- Added more documentation
+- Renamed config option, added ARM64 dependency
 
-Jason
+Changes in v3:
+- Removed state tracking for driver reload
+- Check UID of service to verify it needs image load
+
+Changes in v2:
+- Fixed compile issue when feature is disabled
+- Addressed minor comments
+- Added state tracking for driver reload
+
+ drivers/tee/optee/Kconfig     | 13 +++++
+ drivers/tee/optee/optee_msg.h | 12 +++++
+ drivers/tee/optee/optee_smc.h | 24 +++++++++
+ drivers/tee/optee/smc_abi.c   | 96 +++++++++++++++++++++++++++++++++++
+ 4 files changed, 145 insertions(+)
+
+diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/optee/Kconfig
+index f121c224e682..733f2dd41c28 100644
+--- a/drivers/tee/optee/Kconfig
++++ b/drivers/tee/optee/Kconfig
+@@ -7,3 +7,16 @@ config OPTEE
+ 	help
+ 	  This implements the OP-TEE Trusted Execution Environment (TEE)
+ 	  driver.
++
++config OPTEE_NONSECURE_LOAD_IMAGE
++	bool "Load OP-TEE image as firmware"
++	default n
++	depends on OPTEE && ARM64
++	help
++	  This loads the BL32 image for OP-TEE as firmware when the driver is probed.
++	  This returns -EPROBE_DEFER until the firmware is loadable from the
++	  filesystem which is determined by checking the system_state until it is in
++	  SYSTEM_RUNNING. This also requires enabling the corresponding option in
++	  Trusted Firmware for Arm. The documentation there explains the security
++	  threat associated with enabling this as well as mitigations.
++	  https://trustedfirmware-a.readthedocs.io/en/latest/threat_model/threat_model.html
+diff --git a/drivers/tee/optee/optee_msg.h b/drivers/tee/optee/optee_msg.h
+index 70e9cc2ee96b..e8840a82b983 100644
+--- a/drivers/tee/optee/optee_msg.h
++++ b/drivers/tee/optee/optee_msg.h
+@@ -241,11 +241,23 @@ struct optee_msg_arg {
+  * 384fb3e0-e7f8-11e3-af63-0002a5d5c51b.
+  * Represented in 4 32-bit words in OPTEE_MSG_UID_0, OPTEE_MSG_UID_1,
+  * OPTEE_MSG_UID_2, OPTEE_MSG_UID_3.
++ *
++ * In the case where the OP-TEE image is loaded by the kernel, this will
++ * initially return an alternate UID to reflect that we are communicating with
++ * the TF-A image loading service at that time instead of OP-TEE. That UID is:
++ * a3fbeab1-1246-315d-c7c4-06b9c03cbea4.
++ * Represented in 4 32-bit words in OPTEE_MSG_IMAGE_LOAD_UID_0,
++ * OPTEE_MSG_IMAGE_LOAD_UID_1, OPTEE_MSG_IMAGE_LOAD_UID_2,
++ * OPTEE_MSG_IMAGE_LOAD_UID_3.
+  */
+ #define OPTEE_MSG_UID_0			0x384fb3e0
+ #define OPTEE_MSG_UID_1			0xe7f811e3
+ #define OPTEE_MSG_UID_2			0xaf630002
+ #define OPTEE_MSG_UID_3			0xa5d5c51b
++#define OPTEE_MSG_IMAGE_LOAD_UID_0	0xa3fbeab1
++#define OPTEE_MSG_IMAGE_LOAD_UID_1	0x1246315d
++#define OPTEE_MSG_IMAGE_LOAD_UID_2	0xc7c406b9
++#define OPTEE_MSG_IMAGE_LOAD_UID_3	0xc03cbea4
+ #define OPTEE_MSG_FUNCID_CALLS_UID	0xFF01
+ 
+ /*
+diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+index 73b5e7760d10..7d9fa426505b 100644
+--- a/drivers/tee/optee/optee_smc.h
++++ b/drivers/tee/optee/optee_smc.h
+@@ -104,6 +104,30 @@ struct optee_smc_call_get_os_revision_result {
+ 	unsigned long reserved1;
+ };
+ 
++/*
++ * Load Trusted OS from optee/tee.bin in the Linux firmware.
++ *
++ * WARNING: Use this cautiously as it could lead to insecure loading of the
++ * Trusted OS.
++ * This SMC instructs EL3 to load a binary and execute it as the Trusted OS.
++ *
++ * Call register usage:
++ * a0 SMC Function ID, OPTEE_SMC_CALL_LOAD_IMAGE
++ * a1 Upper 32bit of a 64bit size for the payload
++ * a2 Lower 32bit of a 64bit size for the payload
++ * a3 Upper 32bit of the physical address for the payload
++ * a4 Lower 32bit of the physical address for the payload
++ *
++ * The payload is in the OP-TEE image format.
++ *
++ * Returns result in a0, 0 on success and an error code otherwise.
++ */
++#define OPTEE_SMC_FUNCID_LOAD_IMAGE 2
++#define OPTEE_SMC_CALL_LOAD_IMAGE \
++	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, ARM_SMCCC_SMC_32, \
++			   ARM_SMCCC_OWNER_TRUSTED_OS_END, \
++			   OPTEE_SMC_FUNCID_LOAD_IMAGE)
++
+ /*
+  * Call with struct optee_msg_arg as argument
+  *
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index a1c1fa1a9c28..76a7f6b5b338 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -8,9 +8,11 @@
+ 
+ #include <linux/arm-smccc.h>
+ #include <linux/errno.h>
++#include <linux/firmware.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/irqdomain.h>
++#include <linux/kernel.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -1149,6 +1151,22 @@ static bool optee_msg_api_uid_is_optee_api(optee_invoke_fn *invoke_fn)
+ 	return false;
+ }
+ 
++#ifdef CONFIG_OPTEE_NONSECURE_LOAD_IMAGE
++static bool optee_msg_api_uid_is_optee_image_load(optee_invoke_fn *invoke_fn)
++{
++	struct arm_smccc_res res;
++
++	invoke_fn(OPTEE_SMC_CALLS_UID, 0, 0, 0, 0, 0, 0, 0, &res);
++
++	if (res.a0 == OPTEE_MSG_IMAGE_LOAD_UID_0 &&
++	   res.a1 == OPTEE_MSG_IMAGE_LOAD_UID_1 &&
++	   res.a2 == OPTEE_MSG_IMAGE_LOAD_UID_2 &&
++	   res.a3 == OPTEE_MSG_IMAGE_LOAD_UID_3)
++		return true;
++	return false;
++}
++#endif
++
+ static void optee_msg_get_os_revision(optee_invoke_fn *invoke_fn)
+ {
+ 	union {
+@@ -1354,6 +1372,80 @@ static void optee_shutdown(struct platform_device *pdev)
+ 		optee_disable_shm_cache(optee);
+ }
+ 
++#ifdef CONFIG_OPTEE_NONSECURE_LOAD_IMAGE
++
++#define OPTEE_FW_IMAGE "optee/tee.bin"
++
++static int optee_load_fw(struct platform_device *pdev,
++			 optee_invoke_fn *invoke_fn)
++{
++	const struct firmware *fw = NULL;
++	struct arm_smccc_res res;
++	phys_addr_t data_pa;
++	u8 *data_buf = NULL;
++	u64 data_size;
++	u32 data_pa_high, data_pa_low;
++	u32 data_size_high, data_size_low;
++	int rc;
++
++	if (!optee_msg_api_uid_is_optee_image_load(invoke_fn))
++		return 0;
++
++	rc = request_firmware(&fw, OPTEE_FW_IMAGE, &pdev->dev);
++	if (rc) {
++		/*
++		 * The firmware in the rootfs will not be accessible until we
++		 * are in the SYSTEM_RUNNING state, so return EPROBE_DEFER until
++		 * that point.
++		 */
++		if (system_state < SYSTEM_RUNNING)
++			return -EPROBE_DEFER;
++		goto fw_err;
++	}
++
++	data_size = fw->size;
++	/*
++	 * This uses the GFP_DMA flag to ensure we are allocated memory in the
++	 * 32-bit space since TF-A cannot map memory beyond the 32-bit boundary.
++	 */
++	data_buf = kmalloc(fw->size, GFP_KERNEL | GFP_DMA);
++	if (!data_buf) {
++		rc = -ENOMEM;
++		goto fw_err;
++	}
++	memcpy(data_buf, fw->data, fw->size);
++	data_pa = virt_to_phys(data_buf);
++	reg_pair_from_64(&data_pa_high, &data_pa_low, data_pa);
++	reg_pair_from_64(&data_size_high, &data_size_low, data_size);
++	goto fw_load;
++
++fw_err:
++	pr_warn("image loading failed\n");
++	data_pa_high = data_pa_low = data_size_high = data_size_low = 0;
++
++fw_load:
++	/*
++	 * Always invoke the SMC, even if loading the image fails, to indicate
++	 * to EL3 that we have passed the point where it should allow invoking
++	 * this SMC.
++	 */
++	invoke_fn(OPTEE_SMC_CALL_LOAD_IMAGE, data_size_high, data_size_low,
++		  data_pa_high, data_pa_low, 0, 0, 0, &res);
++	if (!rc)
++		rc = res.a0;
++	if (fw)
++		release_firmware(fw);
++	kfree(data_buf);
++
++	return rc;
++}
++#else
++static inline int optee_load_fw(struct platform_device *__unused1,
++		optee_invoke_fn *__unused2) {
++	return 0;
++}
++#endif
++
+ static int optee_probe(struct platform_device *pdev)
+ {
+ 	optee_invoke_fn *invoke_fn;
+@@ -1372,6 +1464,10 @@ static int optee_probe(struct platform_device *pdev)
+ 	if (IS_ERR(invoke_fn))
+ 		return PTR_ERR(invoke_fn);
+ 
++	rc = optee_load_fw(pdev, invoke_fn);
++	if (rc)
++		return rc;
++
+ 	if (!optee_msg_api_uid_is_optee_api(invoke_fn)) {
+ 		pr_warn("api uid mismatch\n");
+ 		return -EINVAL;
+-- 
+2.40.0.rc0.216.gc4246ad0f0-goog
+
