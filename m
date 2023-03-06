@@ -2,281 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556136AC2C0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1AA6AC2D3
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjCFOOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:14:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        id S230051AbjCFOQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:16:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCFONp (ORCPT
+        with ESMTP id S229818AbjCFOOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:13:45 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CB932E6E;
-        Mon,  6 Mar 2023 06:11:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678111899; x=1709647899;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6rNsW7Qj0oSOBhMO4RNwYTgDdY+PHO8xRFZGKx1OsTE=;
-  b=NAzHW6yBEj+Ho2WV4Rz8f4gbWcbg3VyiU7aDZojecKFhaEkw24MvEX/J
-   w2rl0e8olHdi5N9yXXxqNpQWczrYrhPcODxb+VJZGPvEonHTvHH1i1jby
-   BY3qeOcoYydY15X/uYwzhRkElI+PAbA7q12oKX2CCTU/efcRCL6Mi0Ga6
-   ERhmJC8dnpto+CFIPvv0Wea9RuIEnnVz8Ho0/J/hldR0zuIIF21l3RhU4
-   +dnEssymnnMyKRuF9CkH7TWQ+Rr+Nxw9fAFI8Ma57MtLcZd2ro3SIkVHs
-   e6KINwlD8joBlZzlZGq2j3OItYMFZg0LCaeE9kIDA9WDHjLWG43WfnIy1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="315956867"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="315956867"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 06:10:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="745068146"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="745068146"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga004.fm.intel.com with ESMTP; 06 Mar 2023 06:10:18 -0800
-Received: from [10.251.28.138] (kliang2-mobl1.ccr.corp.intel.com [10.251.28.138])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 1865C58097C;
-        Mon,  6 Mar 2023 06:10:15 -0800 (PST)
-Message-ID: <4c411516-6c6b-8fc4-c520-909b28c21d75@linux.intel.com>
-Date:   Mon, 6 Mar 2023 09:10:14 -0500
+        Mon, 6 Mar 2023 09:14:37 -0500
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DED2CFFD
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:12:48 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-536bf92b55cso185204127b3.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:12:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678111838;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2fFPV3S+fNPRg5F4+BxgnVsec4VIMQRpi6fgWcdHiVA=;
+        b=FIGf5h3w/Z08HcXuh3X1ZpHZHrFPPW41yGGIFmWyf+Aohi+qnbhHYbiBwbqPGyQBn9
+         NXXqtx1HjjBkgxE5rJKm5VPbdFqmjg0Go3gPxH1GrQgcYKwWxmu3ELxR1K1jmkI7hmiM
+         qhgnQ32O2QZyqap+kNQg+E3+2PdmASMpKke7V7bFtyJ78t7xmrtHX0+UHJFKNTHk6olf
+         sU8hO5smfzr/u+n25yU+8CUEX85DC6SHhqCy2+ijdGO5Gk5f/ksH6Z4g26UrvbSDi38P
+         lZ6HGPMchyt1o6b7gijDWXGKu93xj4/hFm65Ta8rLR1ybK3Xu9mlsHMU6V7E3YoDdXV6
+         3+iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678111838;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2fFPV3S+fNPRg5F4+BxgnVsec4VIMQRpi6fgWcdHiVA=;
+        b=cqrBvoj7JID/nsFAvnga1hPiN3UqbhD3S+x6YhYo1bA6TKDFW0H3rfPMaO7fZER7Uw
+         /8W54eiOoZmWsCJm8ZbK40xUxF8fciLGTcHKT/pia/GkT8g/q4+N0K1mdPXfzzelATYW
+         EqTF1WohPZ44sZloODfuZ1/AS4buOEGGmAbCTQWHaSKwVuEMacR9fenu+/n2r+fY3TN4
+         73dSJTBCcWmNe5bu1SLH7i9QpJC1J96Kku6hI4c2to7XvbrShOerpR07am69GLwxDn/n
+         +SuQZvWWlcS1U7vdZ0erZmwyPczlPuzTxNVhI0POJpB1RmZIPzpE/HdOe7CzGKdbEgcV
+         ZzBg==
+X-Gm-Message-State: AO0yUKWxKaY4nkY1ou5IESsu4MiZs/QG2iF7ooP3rCZCKbnfpp6VqPIl
+        +/VSU9bzMJmAJvLc20u3c6dkczuC2en/ChRSwPVjVA==
+X-Google-Smtp-Source: AK7set+L8XveTCLOf7uzdZIqX6Ru0O9dDIwJQAPpsGqfycSP5D3nLqQMy0RuH1oMg349JgrwV1dtktPyLhpIbNIwnno=
+X-Received: by 2002:a81:4317:0:b0:52e:dddf:82b9 with SMTP id
+ q23-20020a814317000000b0052edddf82b9mr6925941ywa.10.1678111837757; Mon, 06
+ Mar 2023 06:10:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 03/10] perf record: Early auxtrace initialization
- before event parsing
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>
-References: <20230302212531.1043318-1-irogers@google.com>
- <20230302212531.1043318-4-irogers@google.com>
- <2aed81ff-2d28-3af5-0657-16ee69705c03@linux.intel.com>
- <4473367b-38e1-7c15-3937-a077d68410b7@intel.com>
- <9788f0f1-087f-7f0b-048a-0146afe1f632@intel.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <9788f0f1-087f-7f0b-048a-0146afe1f632@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224133129.887203-1-eblanc@baylibre.com> <20230224133129.887203-3-eblanc@baylibre.com>
+In-Reply-To: <20230224133129.887203-3-eblanc@baylibre.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Mar 2023 15:10:26 +0100
+Message-ID: <CACRpkdYck+=3sUKQbg2j=KMfv_FEiofFxHpDsXgFo=p2uMYfEQ@mail.gmail.com>
+Subject: Re: [PATCH INTERNAL v1 2/3] pinctrl: tps6594: add for TPS6594 PMIC
+To:     Esteban Blanc <eblanc@baylibre.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        jpanis@baylibre.com, jneanne@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Esteban,
 
+thanks for your patch!
 
-On 2023-03-06 4:31 a.m., Adrian Hunter wrote:
-> On 5/03/23 10:32, Adrian Hunter wrote:
->> On 3/03/23 18:40, Liang, Kan wrote:
->>>
->>>
->>> On 2023-03-02 4:25 p.m., Ian Rogers wrote:
->>>> This allows event parsing to use the evsel__is_aux_event function,
->>>> which is important when determining event grouping.
->>>>
->>>> Signed-off-by: Ian Rogers <irogers@google.com>
->>>> ---
->>>>  tools/perf/arch/x86/util/auxtrace.c | 17 +++++++++++++----
->>>>  tools/perf/builtin-record.c         |  6 ++++++
->>>>  tools/perf/util/auxtrace.h          |  2 ++
->>>>  3 files changed, 21 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/tools/perf/arch/x86/util/auxtrace.c b/tools/perf/arch/x86/util/auxtrace.c
->>>> index 3da506e13f49..de1e4842ea2e 100644
->>>> --- a/tools/perf/arch/x86/util/auxtrace.c
->>>> +++ b/tools/perf/arch/x86/util/auxtrace.c
->>>> @@ -15,6 +15,19 @@
->>>>  #include "../../../util/intel-bts.h"
->>>>  #include "../../../util/evlist.h"
->>>>  
->>>> +void auxtrace__early_init(void)
->>>> +{
->>>> +	struct perf_pmu *intel_pt_pmu;
->>>> +	struct perf_pmu *intel_bts_pmu;
->>>> +
->>>> +	intel_pt_pmu = perf_pmu__find(INTEL_PT_PMU_NAME);
->>>> +	if (intel_pt_pmu)
->>>> +		intel_pt_pmu->auxtrace = true;
->>>> +	intel_bts_pmu = perf_pmu__find(INTEL_BTS_PMU_NAME);
->>>> +	if (intel_bts_pmu)
->>>> +		intel_bts_pmu->auxtrace = true;
->>>> +}
->>>> +
->>>>  static
->>>>  struct auxtrace_record *auxtrace_record__init_intel(struct evlist *evlist,
->>>>  						    int *err)
->>>> @@ -26,11 +39,7 @@ struct auxtrace_record *auxtrace_record__init_intel(struct evlist *evlist,
->>>>  	bool found_bts = false;
->>>>  
->>>>  	intel_pt_pmu = perf_pmu__find(INTEL_PT_PMU_NAME);
->>>> -	if (intel_pt_pmu)
->>>> -		intel_pt_pmu->auxtrace = true;
->>>>  	intel_bts_pmu = perf_pmu__find(INTEL_BTS_PMU_NAME);
->>>> -	if (intel_bts_pmu)
->>>> -		intel_bts_pmu->auxtrace = true;
->>>>  
->>>>  	evlist__for_each_entry(evlist, evsel) {
->>>>  		if (intel_pt_pmu && evsel->core.attr.type == intel_pt_pmu->type)
->>>> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
->>>> index 8374117e66f6..a0870c076dc0 100644
->>>> --- a/tools/perf/builtin-record.c
->>>> +++ b/tools/perf/builtin-record.c
->>>> @@ -3940,6 +3940,10 @@ static int record__init_thread_masks(struct record *rec)
->>>>  	return ret;
->>>>  }
->>>>  
->>>> +__weak void auxtrace__early_init(void)
->>>> +{
->>>> +}
->>>> +
->>>>  int cmd_record(int argc, const char **argv)
->>>>  {
->>>>  	int err;
->>>> @@ -3985,6 +3989,8 @@ int cmd_record(int argc, const char **argv)
->>>>  	if (err)
->>>>  		return err;
->>>>  
->>>> +	auxtrace__early_init();
->>>
->>> So the auxtrace__early_init() will be unconditionally invoked even there
->>> is no PT or BTS events, right?
->>>
->>> Maybe we should move the auxtrace__early_init() to evsel__is_aux_event()
->>> and cache the value. The initialization will only be invoked when it's
->>> required.
->>
->> Although perf_pmu__find() will be called unconditionally via
->> record__auxtrace_init() anyway.
-> 
-> However auxtrace__early_init() is before parsing 'verbose' so
-> debug prints don't work anymore.
-> 
-> How about this instead:
+On Fri, Feb 24, 2023 at 2:31 PM Esteban Blanc <eblanc@baylibre.com> wrote:
 
-Yes, I think it should be a better place to initialize them.
+> TI TPS6594 PMIC has 11 GPIOs which can be used for different
+> functions
+>
+> This add a pinctrl and pinmux drivers in order to use those functions
+>
+> Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
 
-Thanks,
-Kan
-> 
-> diff --git a/tools/perf/arch/x86/util/auxtrace.c
-> b/tools/perf/arch/x86/util/auxtrace.c
-> index 3da506e13f49d..330d03216b0e6 100644
-> --- a/tools/perf/arch/x86/util/auxtrace.c
-> +++ b/tools/perf/arch/x86/util/auxtrace.c
-> @@ -26,11 +26,7 @@ struct auxtrace_record
-> *auxtrace_record__init_intel(struct evlist *evlist,
->  	bool found_bts = false;
-> 
->  	intel_pt_pmu = perf_pmu__find(INTEL_PT_PMU_NAME);
-> -	if (intel_pt_pmu)
-> -		intel_pt_pmu->auxtrace = true;
->  	intel_bts_pmu = perf_pmu__find(INTEL_BTS_PMU_NAME);
-> -	if (intel_bts_pmu)
-> -		intel_bts_pmu->auxtrace = true;
-> 
->  	evlist__for_each_entry(evlist, evsel) {
->  		if (intel_pt_pmu && evsel->core.attr.type == intel_pt_pmu->type)
-> diff --git a/tools/perf/arch/x86/util/pmu.c b/tools/perf/arch/x86/util/pmu.c
-> index 358340b342431..f73b80dcd8bdc 100644
-> --- a/tools/perf/arch/x86/util/pmu.c
-> +++ b/tools/perf/arch/x86/util/pmu.c
-> @@ -27,10 +27,14 @@ static bool cached_list;
->  struct perf_event_attr *perf_pmu__get_default_config(struct perf_pmu
-> *pmu __maybe_unused)
->  {
->  #ifdef HAVE_AUXTRACE_SUPPORT
-> -	if (!strcmp(pmu->name, INTEL_PT_PMU_NAME))
-> +	if (!strcmp(pmu->name, INTEL_PT_PMU_NAME)) {
-> +		pmu->auxtrace = true;
->  		return intel_pt_pmu_default_config(pmu);
-> -	if (!strcmp(pmu->name, INTEL_BTS_PMU_NAME))
-> +	}
-> +	if (!strcmp(pmu->name, INTEL_BTS_PMU_NAME)) {
-> +		pmu->auxtrace = true;
->  		pmu->selectable = true;
-> +	}
->  #endif
->  	return NULL;
->  }
-> 
-> 
-> 
->>
->>> Something as below (not tested.)
->>>
->>> +void auxtrace__init(void)
->>> +{
->>> +	struct perf_pmu *intel_pt_pmu;
->>> +	struct perf_pmu *intel_bts_pmu;
->>> +	static bool cached;
->>> +
->>> +	if (cached)
->>> +		return;
->>> +	intel_pt_pmu = perf_pmu__find(INTEL_PT_PMU_NAME);
->>> +	if (intel_pt_pmu)
->>> +		intel_pt_pmu->auxtrace = true;
->>> +	intel_bts_pmu = perf_pmu__find(INTEL_BTS_PMU_NAME);
->>> +	if (intel_bts_pmu)
->>> +		intel_bts_pmu->auxtrace = true;
->>> +}
->>>
->>> bool evsel__is_aux_event(struct evsel *evsel)
->>> {
->>> 	struct perf_pmu *pmu = evsel__find_pmu(evsel);
->>> +	auxtrace__init();
->>> 	return pmu && pmu->auxtrace;
->>> }
->>>
->>>
->>>
->>> Thanks,
->>> Kan
->>>
->>>> +
->>>>  	argc = parse_options(argc, argv, record_options, record_usage,
->>>>  			    PARSE_OPT_STOP_AT_NON_OPTION);
->>>>  	if (quiet)
->>>> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
->>>> index 29eb82dff574..49a86aa6ac94 100644
->>>> --- a/tools/perf/util/auxtrace.h
->>>> +++ b/tools/perf/util/auxtrace.h
->>>> @@ -457,6 +457,8 @@ struct addr_filters {
->>>>  
->>>>  struct auxtrace_cache;
->>>>  
->>>> +void auxtrace__early_init(void);
->>>> +
->>>>  #ifdef HAVE_AUXTRACE_SUPPORT
->>>>  
->>>>  u64 compat_auxtrace_mmap__read_head(struct auxtrace_mmap *mm);
->>
-> 
+> +config PINCTRL_TPS6594
+> +       tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
+> +       depends on MFD_TPS6594
+
+I would add:
+
+default MFD_TPS6594
+
+so you always get this as module or built in along with the MFD.
+Otherwise Kconfig gets complicated and tedious for users.
+
+> +       select PINMUX
+> +       select GPIOLIB
+> +       help
+> +         This driver supports the GPIO for the TPS6594 PMICs.
+> +         chip family.
+
+(...)
+> +#define DEBUG
+
+Don't put this in production code.
+
+Look in drivers/pinctrl/Kconfig.
+
+config DEBUG_PINCTRL
+        bool "Debug PINCTRL calls"
+        depends on DEBUG_KERNEL
+        help
+          Say Y here to add some extra checks and diagnostics to PINCTRL calls.
+
+Look in drivers/pinctrl/Makefile:
+
+subdir-ccflags-$(CONFIG_DEBUG_PINCTRL)  += -DDEBUG
+
+Nifty eh? :D
+
+> +static const struct tps6594_pinctrl_function pinctrl_functions[] = {
+(...)
+> +       { "scl_i2c2-cs_spi", TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION,
+> +         (const char *[]){ "GPIO0", "GPIO1" }, 2 },
+
+Ow this is starting to look hairy.
+
+Is there some better way to get here?
+
+Other than this the code looks very nice.
+
+Yours,
+Linus Walleij
