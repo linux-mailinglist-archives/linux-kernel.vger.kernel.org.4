@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6276AB726
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8046AB725
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjCFHfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 02:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjCFHfD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S229788AbjCFHfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 6 Mar 2023 02:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229535AbjCFHfA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 6 Mar 2023 02:35:00 -0500
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37322EB63
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:35:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1A2E388
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:34:59 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pZ5N2-0008Ot-6m; Mon, 06 Mar 2023 08:34:56 +0100
+        id 1pZ5N2-0008Ou-ND; Mon, 06 Mar 2023 08:34:56 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pZ5N1-002C0p-Iz; Mon, 06 Mar 2023 08:34:55 +0100
+        id 1pZ5N1-002C0t-Sx; Mon, 06 Mar 2023 08:34:55 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pZ5N0-002bap-Ts; Mon, 06 Mar 2023 08:34:54 +0100
+        id 1pZ5N1-002bas-4i; Mon, 06 Mar 2023 08:34:55 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH 1/3] spmi: hisi-spmi-controller: Convert to platform remove callback returning void
-Date:   Mon,  6 Mar 2023 08:34:44 +0100
-Message-Id: <20230306073446.2194048-2-u.kleine-koenig@pengutronix.de>
+To:     Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@pengutronix.de
+Subject: [PATCH 2/3] spmi: mtk-pmif: Convert to platform remove callback returning void
+Date:   Mon,  6 Mar 2023 08:34:45 +0100
+Message-Id: <20230306073446.2194048-3-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230306073446.2194048-1-u.kleine-koenig@pengutronix.de>
 References: <20230306073446.2194048-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1769; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=x46iUoVgDIkav2eWjEW3fVwWqvRPWVkTe9JpC8hEs6g=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBZeKumnzDEGS3cNKpPSgFIsbr4ESrKdUuOXs/ wj2cK5zxUaJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAWXigAKCRDB/BR4rcrs CaeNCACNimmydFtC9/L6aAebZ10gGzFctSiRYpMUXHe6JH2e9I6Ol6C/p0Ijg4HjV1NAYeud/A0 9UQWbay91553sz82s8dXIQaJ5bLBYFgVMThRG6JupwkhpF+b4Tiyt7iSocLK6dMqPKut3Vs+JDt pifCSelGFKjbCAcSPqtLi2uSSuBKwowm+xutjSH6SoGjCQgJfEuPg/3qPoWXRmQUoVfk9j1a1Gh L2em8drjYf1bnOC5zOwlMorTI2sAClCBaz1ToIdH7gvs9vFWyPMg8WxtcoD9PQGKrZ8fAYudzrK Q8tjIgpWXxvGg3rVV+vDQaE7AVmPHDspR7NrCVOvU7b8m8mS
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1827; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=5a+AWwYSnblGSgN1CjlLhD5ySXt5UsbCdNXjzOaMDCo=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkBZeNw+Op0YHpL7jeNZglJdgk4+HUUAM9Syky4 ZopRHF9SD6JATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZAWXjQAKCRDB/BR4rcrs CRFuB/4rWilHuRqmsO6Tvne6ucKbjyP6e/oEpCNTWXJi4wAQWy/PA01KR1+U4isqwbFlNKhj7MA 6ZzMRG7JvPk4LMS2YiKoyNCMTsBpibuaptG5ltsCFYUQ+/3PMyp7E9Kcgpec516fuIzGQFHEfRK D+pFr7HQCuxvrtD/bq/M72MaWx3efZecUWPJPYKYSJnoBAuN5hrdJtme7HPk2F6+jZcTIysvkh1 P7gklleW9mNP1MRoeLgwiR4D246K8biZWLVsck6rihhzWDwyqWHpH6Jvsmk7TNtVcPPM6BBNzKm RQcw6r/w9FU222K3hwnXdWfUtd618Wppjt7aJInqUfWyDP45
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -68,37 +71,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/spmi/hisi-spmi-controller.c | 5 ++---
+ drivers/spmi/spmi-mtk-pmif.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/spmi/hisi-spmi-controller.c b/drivers/spmi/hisi-spmi-controller.c
-index 5bd23262abd6..9cbd473487cb 100644
---- a/drivers/spmi/hisi-spmi-controller.c
-+++ b/drivers/spmi/hisi-spmi-controller.c
-@@ -324,13 +324,12 @@ static int spmi_controller_probe(struct platform_device *pdev)
- 	return ret;
+diff --git a/drivers/spmi/spmi-mtk-pmif.c b/drivers/spmi/spmi-mtk-pmif.c
+index ad511f2c3324..fbcb3921e70c 100644
+--- a/drivers/spmi/spmi-mtk-pmif.c
++++ b/drivers/spmi/spmi-mtk-pmif.c
+@@ -503,7 +503,7 @@ static int mtk_spmi_probe(struct platform_device *pdev)
+ 	return err;
  }
  
--static int spmi_del_controller(struct platform_device *pdev)
-+static void spmi_del_controller(struct platform_device *pdev)
+-static int mtk_spmi_remove(struct platform_device *pdev)
++static void mtk_spmi_remove(struct platform_device *pdev)
  {
  	struct spmi_controller *ctrl = platform_get_drvdata(pdev);
- 
+ 	struct pmif *arb = spmi_controller_get_drvdata(ctrl);
+@@ -511,7 +511,6 @@ static int mtk_spmi_remove(struct platform_device *pdev)
+ 	clk_bulk_disable_unprepare(arb->nclks, arb->clks);
  	spmi_controller_remove(ctrl);
  	spmi_controller_put(ctrl);
 -	return 0;
  }
  
- static const struct of_device_id spmi_controller_match_table[] = {
-@@ -343,7 +342,7 @@ MODULE_DEVICE_TABLE(of, spmi_controller_match_table);
+ static const struct of_device_id mtk_spmi_match_table[] = {
+@@ -533,7 +532,7 @@ static struct platform_driver mtk_spmi_driver = {
+ 		.of_match_table = of_match_ptr(mtk_spmi_match_table),
+ 	},
+ 	.probe		= mtk_spmi_probe,
+-	.remove		= mtk_spmi_remove,
++	.remove_new	= mtk_spmi_remove,
+ };
+ module_platform_driver(mtk_spmi_driver);
  
- static struct platform_driver spmi_controller_driver = {
- 	.probe		= spmi_controller_probe,
--	.remove		= spmi_del_controller,
-+	.remove_new	= spmi_del_controller,
- 	.driver		= {
- 		.name	= "hisi_spmi_controller",
- 		.of_match_table = spmi_controller_match_table,
 -- 
 2.39.1
 
