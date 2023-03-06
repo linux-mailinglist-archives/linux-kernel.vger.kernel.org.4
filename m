@@ -2,416 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05656AC4C1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:24:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F686AC4C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjCFPYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:24:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S229888AbjCFPZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:25:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjCFPY3 (ORCPT
+        with ESMTP id S229718AbjCFPZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:24:29 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D1E2F7BB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:24:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678116267; x=1709652267;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=bdSqi2NeHlZo3J7V1S4De4LLVWUq1/8kZ1zsPv5FQRc=;
-  b=JS3F2zk4Pvq3SzteuWY+83daG1ZlMhH+u47SODQUdSZ2VZSLbItNWEkl
-   e4eg5mT2OwZMlprVOzN2WCEYxxruo+wBNmneV+I5x42ZINbZvdxDftVbu
-   9SwD3v7f+FLUMNlNZG6wIv0CxB+ncVVIpUVz/okPrE4mvkhBY1bSPmITd
-   J3OkGw9x+5xeYzoQOyor1TsXVw53aQCw894okPXJ6DPIUFmh20ssMhYbp
-   hDWngn67dZ1IPXRSVUwqDS3q5sqYHtxYyps+CmbTL+9ljh2i8IREj6cDK
-   a058uXc0bJNscI5B31RhQp5e05LPTBgMzXNHGnHsgIkRdRybxMB3MpdHe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="398159837"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="398159837"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 07:24:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="676193593"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="676193593"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 06 Mar 2023 07:24:25 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZChM-0000QF-1d;
-        Mon, 06 Mar 2023 15:24:24 +0000
-Date:   Mon, 6 Mar 2023 23:23:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: arch/alpha/include/asm/jensen.h:187:21: warning: no previous
- prototype for 'jensen_inq'
-Message-ID: <202303062355.WksNaCoK-lkp@intel.com>
+        Mon, 6 Mar 2023 10:25:55 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF6D2F7BB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:25:53 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id j3so5913130wms.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 07:25:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678116352;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4M5EShhmBFcxGCEVKdfTzXS4LcKaSaPPMq/FXQBqpRY=;
+        b=rJc0ZmWlRsislesjGL/TkmWEjmzmC0aj+usOVImE2SGezdIOLdByoUGSgz5mseeIeg
+         G4+WoxAq/rA2gHbTtQP9RgGHR3QxenX03pIIWJKNsUydyH0hGrXGL39A/0n4tq+iorCH
+         pIWDOrWuID5Do6J9I5RRcfYiwXvzaAVFmYqWnajGg97ySn7gTO+ses+RAdtl6NE7YiFf
+         tzHO34Zi01bqNFN7V7bUB5lOB897U1X7xzx5kyoLjQupoqvC+Hta/3IjrLRYLFk7PAmz
+         491iCP118gNV7xBbNEsktjf1HA0xVweJhYFKoR7pd0fYqTaZVV6i6pjL4xEB3EqefZBp
+         BLVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678116352;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4M5EShhmBFcxGCEVKdfTzXS4LcKaSaPPMq/FXQBqpRY=;
+        b=xduIAXeEyOE8impEIEyDb8gf7ByJPHeXJPjxGVcku1tZwtY8JpdgiZwSxMKH/eObWa
+         C55pKRiWhDSOqOudJT9s1wsSNg++lmoKbHZOLw3MmYBlLxwGiq2FUKoOxOzEhCIcPSBf
+         Y0UkgvaOPSThKawunqh/h/U0BV0bWBrLqmWmHW7t/XIo2Bv5TzMZ8U90dPEabgqBRSte
+         oIAw3Y+wsU+/FOEa8TdSZC/KYVsBUbkSOPIg7LNF9YUZNwTkrVFPhKm/smTHtbKibR1w
+         0meC9VkScallifyOG1NOdizssSNGh75M+yw+GjdLz9xIqAyUbp077SsF/G38VqRr3fHo
+         CfbQ==
+X-Gm-Message-State: AO0yUKWK5I9Ub+xXZUhrr/ouEWeWzWqZNh/UgLRoYUsGs7Ez6CkJSRgs
+        RLrKqA7HYn/e1ZuzAGSpRnW+6k3UTyXM+rbylZA=
+X-Google-Smtp-Source: AK7set8gtdgb5xFxUcPdEhKc20fGna/uDLX920yNR6Jzf7oVQ93NP0gO6L91ddBHqGZ1mW4lsscUmw==
+X-Received: by 2002:a05:600c:450d:b0:3d9:f769:2115 with SMTP id t13-20020a05600c450d00b003d9f7692115mr10152722wmo.26.1678116352022;
+        Mon, 06 Mar 2023 07:25:52 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id s19-20020a05600c45d300b003df7b40f99fsm15508874wmo.11.2023.03.06.07.25.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 07:25:51 -0800 (PST)
+Message-ID: <a041186e-fd7d-0bd2-eb67-8e6000b50c32@linaro.org>
+Date:   Mon, 6 Mar 2023 15:25:50 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 2/5] arm64: dts: qcom: Add msm8939 SoC
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+References: <20230223153655.262783-1-bryan.odonoghue@linaro.org>
+ <20230223153655.262783-3-bryan.odonoghue@linaro.org>
+ <ZAYA4cdlpIfjdqt2@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <ZAYA4cdlpIfjdqt2@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On 06/03/2023 15:04, Stephan Gerhold wrote:
+> Hi Bryan,
+> 
+> Thanks for making the changes. I only have some minor nitpicks now:
 
-FYI, the error/warning still remains.
+>> +
+>> +			tsens_base1: base1@a0 {
+>> +				reg = <0xa0 0x1>;
+>> +				bits = <0 8>;
+>> +			};
+>> +
+>> +			tsens_s5_p1: s5-p1@a1 {
+>> +				reg = <0xa1 0x1>;
+>> +				bits = <0 6>;
+>> +			};
+>> [...]
+>> +		tsens: thermal-sensor@4a9000 {
+>> +			compatible = "qcom,msm8939-tsens", "qcom,tsens-v0_1";
+>> +			reg = <0x004a9000 0x1000>, /* TM */
+>> +			      <0x004a8000 0x1000>; /* SROT */
+>> +			nvmem-cells = <&tsens_mode>,
+>> +				      <&tsens_base1>, <&tsens_base2>,
+>> +				      <&tsens_s0_p1>, <&tsens_s0_p2>,
+>> +				      <&tsens_s1_p1>, <&tsens_s1_p2>,
+>> +				      <&tsens_s2_p1>, <&tsens_s2_p2>,
+>> +				      <&tsens_s3_p1>, <&tsens_s3_p2>,
+>> +				      <&tsens_s4_p1>, <&tsens_s4_p2>,
+>> +				      <&tsens_s4_p1>, <&tsens_s4_p2>,
+>> +				      <&tsens_s5_p1>, <&tsens_s5_p2>,
+>> +				      <&tsens_s6_p1>, <&tsens_s6_p2>,
+>> +				      <&tsens_s7_p1>, <&tsens_s7_p2>,
+>> +				      <&tsens_s8_p1>, <&tsens_s8_p2>;
+>> +			nvmem-cell-names = "mode",
+>> +					   "base1", "base2",
+>> +					   "s0_p1", "s0_p2",
+>> +					   "s1_p1", "s1_p2",
+>> +					   "s2_p1", "s2_p2",
+>> +					   "s3_p1", "s3_p2",
+>> +					   "s4_p1", "s4_p2",
+>> +					   "s4_p1", "s4_p2",
+> 
+> s4_p1/p2 are specified twice, is this on purpose or accidental?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-commit: e19d4ebc536dadb607fe305fdaf48218d3e32d7c alpha: add full ioread64/iowrite64 implementation
-date:   5 months ago
-config: alpha-defconfig (https://download.01.org/0day-ci/archive/20230306/202303062355.WksNaCoK-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e19d4ebc536dadb607fe305fdaf48218d3e32d7c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout e19d4ebc536dadb607fe305fdaf48218d3e32d7c
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash arch/alpha/kernel/
+On purpose I believe.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303062355.WksNaCoK-lkp@intel.com/
+@Dmitry ?
 
-All warnings (new ones prefixed by >>):
+> 
+>> +					   "s5_p1", "s5_p2",
+>> +					   "s6_p1", "s6_p2",
+>> +					   "s7_p1", "s7_p2",
+>> +					   "s8_p1", "s8_p2";
+>> +			#qcom,sensors = <9>;
+>> +			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-names = "uplow";
+>> +			#thermal-sensor-cells = <1>;
+>> +		};
+>> [...]
+>> +		usb: usb@78d9000 {
+>> +			compatible = "qcom,ci-hdrc";
+>> +			reg = <0x078d9000 0x200>,
+>> +			      <0x078d9200 0x200>;
+>> +			interrupts = <GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+>> +			clocks = <&gcc GCC_USB_HS_AHB_CLK>,
+>> +				 <&gcc GCC_USB_HS_SYSTEM_CLK>;
+>> +			clock-names = "iface", "core";
+>> +			assigned-clocks = <&gcc GCC_USB_HS_SYSTEM_CLK>;
+>> +			assigned-clock-rates = <80000000>;
+>> +			resets = <&gcc GCC_USB_HS_BCR>;
+>> +			reset-names = "core";
+>> +			#reset-cells = <1>;
+>> +			phy_type = "ulpi";
+>> +			dr_mode = "otg";
+> 
+> Please add
+> 
+> 			hnp-disable;
+> 			srp-disable;
+> 			adp-disable;
+> 
+> here for consistency with msm8916.dtsi. These are needed for correct
+> behavior if you enable CONFIG_USB_OTG_FSM, see commit bfd5d21abcd5c
+> ("arm64: dts: qcom: msm8916: Move common USB properties to msm8916.dtsi")
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bfd5d21abcd5c7941ad79b594f5f42e27496eb28
+> 
 
-   In file included from arch/alpha/kernel/sys_jensen.c:12:
-   arch/alpha/include/asm/jensen.h:92:22: warning: no previous prototype for 'jensen_set_hae' [-Wmissing-prototypes]
-      92 | __EXTERN_INLINE void jensen_set_hae(unsigned long addr)
-         |                      ^~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:115:30: warning: no previous prototype for 'jensen_local_inb' [-Wmissing-prototypes]
-     115 | __EXTERN_INLINE unsigned int jensen_local_inb(unsigned long addr)
-         |                              ^~~~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:120:22: warning: no previous prototype for 'jensen_local_outb' [-Wmissing-prototypes]
-     120 | __EXTERN_INLINE void jensen_local_outb(u8 b, unsigned long addr)
-         |                      ^~~~~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:126:30: warning: no previous prototype for 'jensen_bus_inb' [-Wmissing-prototypes]
-     126 | __EXTERN_INLINE unsigned int jensen_bus_inb(unsigned long addr)
-         |                              ^~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:135:22: warning: no previous prototype for 'jensen_bus_outb' [-Wmissing-prototypes]
-     135 | __EXTERN_INLINE void jensen_bus_outb(u8 b, unsigned long addr)
-         |                      ^~~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:155:20: warning: no previous prototype for 'jensen_inb' [-Wmissing-prototypes]
-     155 | __EXTERN_INLINE u8 jensen_inb(unsigned long addr)
-         |                    ^~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:163:22: warning: no previous prototype for 'jensen_outb' [-Wmissing-prototypes]
-     163 | __EXTERN_INLINE void jensen_outb(u8 b, unsigned long addr)
-         |                      ^~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:171:21: warning: no previous prototype for 'jensen_inw' [-Wmissing-prototypes]
-     171 | __EXTERN_INLINE u16 jensen_inw(unsigned long addr)
-         |                     ^~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:181:21: warning: no previous prototype for 'jensen_inl' [-Wmissing-prototypes]
-     181 | __EXTERN_INLINE u32 jensen_inl(unsigned long addr)
-         |                     ^~~~~~~~~~
->> arch/alpha/include/asm/jensen.h:187:21: warning: no previous prototype for 'jensen_inq' [-Wmissing-prototypes]
-     187 | __EXTERN_INLINE u64 jensen_inq(unsigned long addr)
-         |                     ^~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:193:22: warning: no previous prototype for 'jensen_outw' [-Wmissing-prototypes]
-     193 | __EXTERN_INLINE void jensen_outw(u16 b, unsigned long addr)
-         |                      ^~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:200:22: warning: no previous prototype for 'jensen_outl' [-Wmissing-prototypes]
-     200 | __EXTERN_INLINE void jensen_outl(u32 b, unsigned long addr)
-         |                      ^~~~~~~~~~~
->> arch/alpha/include/asm/jensen.h:207:22: warning: no previous prototype for 'jensen_outq' [-Wmissing-prototypes]
-     207 | __EXTERN_INLINE void jensen_outq(u64 b, unsigned long addr)
-         |                      ^~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:218:20: warning: no previous prototype for 'jensen_readb' [-Wmissing-prototypes]
-     218 | __EXTERN_INLINE u8 jensen_readb(const volatile void __iomem *xaddr)
-         |                    ^~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:230:21: warning: no previous prototype for 'jensen_readw' [-Wmissing-prototypes]
-     230 | __EXTERN_INLINE u16 jensen_readw(const volatile void __iomem *xaddr)
-         |                     ^~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:242:21: warning: no previous prototype for 'jensen_readl' [-Wmissing-prototypes]
-     242 | __EXTERN_INLINE u32 jensen_readl(const volatile void __iomem *xaddr)
-         |                     ^~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:250:21: warning: no previous prototype for 'jensen_readq' [-Wmissing-prototypes]
-     250 | __EXTERN_INLINE u64 jensen_readq(const volatile void __iomem *xaddr)
-         |                     ^~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:263:22: warning: no previous prototype for 'jensen_writeb' [-Wmissing-prototypes]
-     263 | __EXTERN_INLINE void jensen_writeb(u8 b, volatile void __iomem *xaddr)
-         |                      ^~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:271:22: warning: no previous prototype for 'jensen_writew' [-Wmissing-prototypes]
-     271 | __EXTERN_INLINE void jensen_writew(u16 b, volatile void __iomem *xaddr)
-         |                      ^~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:279:22: warning: no previous prototype for 'jensen_writel' [-Wmissing-prototypes]
-     279 | __EXTERN_INLINE void jensen_writel(u32 b, volatile void __iomem *xaddr)
-         |                      ^~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:287:22: warning: no previous prototype for 'jensen_writeq' [-Wmissing-prototypes]
-     287 | __EXTERN_INLINE void jensen_writeq(u64 b, volatile void __iomem *xaddr)
-         |                      ^~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:297:31: warning: no previous prototype for 'jensen_ioportmap' [-Wmissing-prototypes]
-     297 | __EXTERN_INLINE void __iomem *jensen_ioportmap(unsigned long addr)
-         |                               ^~~~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:302:31: warning: no previous prototype for 'jensen_ioremap' [-Wmissing-prototypes]
-     302 | __EXTERN_INLINE void __iomem *jensen_ioremap(unsigned long addr,
-         |                               ^~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:308:21: warning: no previous prototype for 'jensen_is_ioaddr' [-Wmissing-prototypes]
-     308 | __EXTERN_INLINE int jensen_is_ioaddr(unsigned long addr)
-         |                     ^~~~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:313:21: warning: no previous prototype for 'jensen_is_mmio' [-Wmissing-prototypes]
-     313 | __EXTERN_INLINE int jensen_is_mmio(const volatile void __iomem *addr)
-         |                     ^~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:322:23: warning: no previous prototype for 'jensen_ioread8' [-Wmissing-prototypes]
-     322 | __EXTERN_INLINE u##NS jensen_ioread##NS(const void __iomem *xaddr)      \
-         |                       ^~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:337:1: note: in expansion of macro 'IOPORT'
-     337 | IOPORT(b, 8)
-         | ^~~~~~
-   arch/alpha/include/asm/jensen.h:329:22: warning: no previous prototype for 'jensen_iowrite8' [-Wmissing-prototypes]
-     329 | __EXTERN_INLINE void jensen_iowrite##NS(u##NS b, void __iomem *xaddr)   \
-         |                      ^~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:337:1: note: in expansion of macro 'IOPORT'
-     337 | IOPORT(b, 8)
-         | ^~~~~~
-   arch/alpha/include/asm/jensen.h:322:23: warning: no previous prototype for 'jensen_ioread16' [-Wmissing-prototypes]
-     322 | __EXTERN_INLINE u##NS jensen_ioread##NS(const void __iomem *xaddr)      \
-         |                       ^~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:338:1: note: in expansion of macro 'IOPORT'
-     338 | IOPORT(w, 16)
-         | ^~~~~~
-   arch/alpha/include/asm/jensen.h:329:22: warning: no previous prototype for 'jensen_iowrite16' [-Wmissing-prototypes]
-     329 | __EXTERN_INLINE void jensen_iowrite##NS(u##NS b, void __iomem *xaddr)   \
-         |                      ^~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:338:1: note: in expansion of macro 'IOPORT'
-     338 | IOPORT(w, 16)
-         | ^~~~~~
-   arch/alpha/include/asm/jensen.h:322:23: warning: no previous prototype for 'jensen_ioread32' [-Wmissing-prototypes]
-     322 | __EXTERN_INLINE u##NS jensen_ioread##NS(const void __iomem *xaddr)      \
-         |                       ^~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:339:1: note: in expansion of macro 'IOPORT'
-     339 | IOPORT(l, 32)
-         | ^~~~~~
-   arch/alpha/include/asm/jensen.h:329:22: warning: no previous prototype for 'jensen_iowrite32' [-Wmissing-prototypes]
-     329 | __EXTERN_INLINE void jensen_iowrite##NS(u##NS b, void __iomem *xaddr)   \
-         |                      ^~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:339:1: note: in expansion of macro 'IOPORT'
-     339 | IOPORT(l, 32)
-         | ^~~~~~
->> arch/alpha/include/asm/jensen.h:322:23: warning: no previous prototype for 'jensen_ioread64' [-Wmissing-prototypes]
-     322 | __EXTERN_INLINE u##NS jensen_ioread##NS(const void __iomem *xaddr)      \
-         |                       ^~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:340:1: note: in expansion of macro 'IOPORT'
-     340 | IOPORT(q, 64)
-         | ^~~~~~
->> arch/alpha/include/asm/jensen.h:329:22: warning: no previous prototype for 'jensen_iowrite64' [-Wmissing-prototypes]
-     329 | __EXTERN_INLINE void jensen_iowrite##NS(u##NS b, void __iomem *xaddr)   \
-         |                      ^~~~~~~~~~~~~~
-   arch/alpha/include/asm/jensen.h:340:1: note: in expansion of macro 'IOPORT'
-     340 | IOPORT(q, 64)
-         | ^~~~~~
-   In file included from arch/alpha/kernel/sys_jensen.c:11:
-   arch/alpha/include/asm/jensen.h:348:33: warning: no previous prototype for 'jensen_iounmap' [-Wmissing-prototypes]
-     348 | #define __IO_PREFIX             jensen
-         |                                 ^~~~~~
-   arch/alpha/include/asm/io.h:137:25: note: in definition of macro '_IO_CONCAT'
-     137 | #define _IO_CONCAT(a,b) a ## _ ## b
-         |                         ^
-   arch/alpha/include/asm/io_trivial.h:141:22: note: in expansion of macro 'IO_CONCAT'
-     141 | __EXTERN_INLINE void IO_CONCAT(__IO_PREFIX,iounmap)(volatile void __iomem *a)
-         |                      ^~~~~~~~~
-   arch/alpha/include/asm/io_trivial.h:141:32: note: in expansion of macro '__IO_PREFIX'
-     141 | __EXTERN_INLINE void IO_CONCAT(__IO_PREFIX,iounmap)(volatile void __iomem *a)
-         |                                ^~~~~~~~~~~
+Hmm, I haven't noticed any problems with OTG - then again, I'm looking 
+at my kernel config and +# CONFIG_USB_OTG_FSM is not set
 
 
-vim +/jensen_inq +187 arch/alpha/include/asm/jensen.h
-
-   162	
- > 163	__EXTERN_INLINE void jensen_outb(u8 b, unsigned long addr)
-   164	{
-   165		if (jensen_is_local(addr))
-   166			jensen_local_outb(b, addr);
-   167		else
-   168			jensen_bus_outb(b, addr);
-   169	}
-   170	
-   171	__EXTERN_INLINE u16 jensen_inw(unsigned long addr)
-   172	{
-   173		long result;
-   174	
-   175		jensen_set_hae(0);
-   176		result = *(volatile int *) ((addr << 7) + EISA_IO + 0x20);
-   177		result >>= (addr & 3) * 8;
-   178		return 0xffffUL & result;
-   179	}
-   180	
-   181	__EXTERN_INLINE u32 jensen_inl(unsigned long addr)
-   182	{
-   183		jensen_set_hae(0);
-   184		return *(vuip) ((addr << 7) + EISA_IO + 0x60);
-   185	}
-   186	
- > 187	__EXTERN_INLINE u64 jensen_inq(unsigned long addr)
-   188	{
-   189		jensen_set_hae(0);
-   190		return *(vulp) ((addr << 7) + EISA_IO + 0x60);
-   191	}
-   192	
-   193	__EXTERN_INLINE void jensen_outw(u16 b, unsigned long addr)
-   194	{
-   195		jensen_set_hae(0);
-   196		*(vuip) ((addr << 7) + EISA_IO + 0x20) = b * 0x00010001;
-   197		mb();
-   198	}
-   199	
-   200	__EXTERN_INLINE void jensen_outl(u32 b, unsigned long addr)
-   201	{
-   202		jensen_set_hae(0);
-   203		*(vuip) ((addr << 7) + EISA_IO + 0x60) = b;
-   204		mb();
-   205	}
-   206	
- > 207	__EXTERN_INLINE void jensen_outq(u64 b, unsigned long addr)
-   208	{
-   209		jensen_set_hae(0);
-   210		*(vulp) ((addr << 7) + EISA_IO + 0x60) = b;
-   211		mb();
-   212	}
-   213	
-   214	/*
-   215	 * Memory functions.
-   216	 */
-   217	
-   218	__EXTERN_INLINE u8 jensen_readb(const volatile void __iomem *xaddr)
-   219	{
-   220		unsigned long addr = (unsigned long) xaddr;
-   221		long result;
-   222	
-   223		jensen_set_hae(addr);
-   224		addr &= JENSEN_HAE_MASK;
-   225		result = *(volatile int *) ((addr << 7) + EISA_MEM + 0x00);
-   226		result >>= (addr & 3) * 8;
-   227		return 0xffUL & result;
-   228	}
-   229	
-   230	__EXTERN_INLINE u16 jensen_readw(const volatile void __iomem *xaddr)
-   231	{
-   232		unsigned long addr = (unsigned long) xaddr;
-   233		long result;
-   234	
-   235		jensen_set_hae(addr);
-   236		addr &= JENSEN_HAE_MASK;
-   237		result = *(volatile int *) ((addr << 7) + EISA_MEM + 0x20);
-   238		result >>= (addr & 3) * 8;
-   239		return 0xffffUL & result;
-   240	}
-   241	
-   242	__EXTERN_INLINE u32 jensen_readl(const volatile void __iomem *xaddr)
-   243	{
-   244		unsigned long addr = (unsigned long) xaddr;
-   245		jensen_set_hae(addr);
-   246		addr &= JENSEN_HAE_MASK;
-   247		return *(vuip) ((addr << 7) + EISA_MEM + 0x60);
-   248	}
-   249	
-   250	__EXTERN_INLINE u64 jensen_readq(const volatile void __iomem *xaddr)
-   251	{
-   252		unsigned long addr = (unsigned long) xaddr;
-   253		unsigned long r0, r1;
-   254	
-   255		jensen_set_hae(addr);
-   256		addr &= JENSEN_HAE_MASK;
-   257		addr = (addr << 7) + EISA_MEM + 0x60;
-   258		r0 = *(vuip) (addr);
-   259		r1 = *(vuip) (addr + (4 << 7));
-   260		return r1 << 32 | r0;
-   261	}
-   262	
-   263	__EXTERN_INLINE void jensen_writeb(u8 b, volatile void __iomem *xaddr)
-   264	{
-   265		unsigned long addr = (unsigned long) xaddr;
-   266		jensen_set_hae(addr);
-   267		addr &= JENSEN_HAE_MASK;
-   268		*(vuip) ((addr << 7) + EISA_MEM + 0x00) = b * 0x01010101;
-   269	}
-   270	
-   271	__EXTERN_INLINE void jensen_writew(u16 b, volatile void __iomem *xaddr)
-   272	{
-   273		unsigned long addr = (unsigned long) xaddr;
-   274		jensen_set_hae(addr);
-   275		addr &= JENSEN_HAE_MASK;
-   276		*(vuip) ((addr << 7) + EISA_MEM + 0x20) = b * 0x00010001;
-   277	}
-   278	
-   279	__EXTERN_INLINE void jensen_writel(u32 b, volatile void __iomem *xaddr)
-   280	{
-   281		unsigned long addr = (unsigned long) xaddr;
-   282		jensen_set_hae(addr);
-   283		addr &= JENSEN_HAE_MASK;
-   284		*(vuip) ((addr << 7) + EISA_MEM + 0x60) = b;
-   285	}
-   286	
-   287	__EXTERN_INLINE void jensen_writeq(u64 b, volatile void __iomem *xaddr)
-   288	{
-   289		unsigned long addr = (unsigned long) xaddr;
-   290		jensen_set_hae(addr);
-   291		addr &= JENSEN_HAE_MASK;
-   292		addr = (addr << 7) + EISA_MEM + 0x60;
-   293		*(vuip) (addr) = b;
-   294		*(vuip) (addr + (4 << 7)) = b >> 32;
-   295	}
-   296	
-   297	__EXTERN_INLINE void __iomem *jensen_ioportmap(unsigned long addr)
-   298	{
-   299		return (void __iomem *)addr;
-   300	}
-   301	
-   302	__EXTERN_INLINE void __iomem *jensen_ioremap(unsigned long addr,
-   303						     unsigned long size)
-   304	{
-   305		return (void __iomem *)(addr + 0x100000000ul);
-   306	}
-   307	
-   308	__EXTERN_INLINE int jensen_is_ioaddr(unsigned long addr)
-   309	{
-   310		return (long)addr >= 0;
-   311	}
-   312	
-   313	__EXTERN_INLINE int jensen_is_mmio(const volatile void __iomem *addr)
-   314	{
-   315		return (unsigned long)addr >= 0x100000000ul;
-   316	}
-   317	
-   318	/* New-style ioread interface.  All the routines are so ugly for Jensen
-   319	   that it doesn't make sense to merge them.  */
-   320	
-   321	#define IOPORT(OS, NS)							\
- > 322	__EXTERN_INLINE u##NS jensen_ioread##NS(const void __iomem *xaddr)	\
-   323	{									\
-   324		if (jensen_is_mmio(xaddr))					\
-   325			return jensen_read##OS(xaddr - 0x100000000ul);		\
-   326		else								\
-   327			return jensen_in##OS((unsigned long)xaddr);		\
-   328	}									\
- > 329	__EXTERN_INLINE void jensen_iowrite##NS(u##NS b, void __iomem *xaddr)	\
-   330	{									\
-   331		if (jensen_is_mmio(xaddr))					\
-   332			jensen_write##OS(b, xaddr - 0x100000000ul);		\
-   333		else								\
-   334			jensen_out##OS(b, (unsigned long)xaddr);		\
-   335	}
-   336	
-   337	IOPORT(b, 8)
-   338	IOPORT(w, 16)
- > 339	IOPORT(l, 32)
-   340	IOPORT(q, 64)
-   341	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
