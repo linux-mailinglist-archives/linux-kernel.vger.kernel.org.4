@@ -2,117 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0F86AB849
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2162A6AB84A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjCFI36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:29:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58162 "EHLO
+        id S229912AbjCFIaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCFI3z (ORCPT
+        with ESMTP id S229832AbjCFI34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:29:55 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B623BDD8;
-        Mon,  6 Mar 2023 00:29:53 -0800 (PST)
-Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVWsv59tFzKpsP;
-        Mon,  6 Mar 2023 16:27:47 +0800 (CST)
-Received: from [10.174.178.159] (10.174.178.159) by
- kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 6 Mar 2023 16:29:17 +0800
-Message-ID: <02189eaa-1964-3fa6-6a06-16d248a3d80d@huawei.com>
-Date:   Mon, 6 Mar 2023 16:29:16 +0800
+        Mon, 6 Mar 2023 03:29:56 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB26BB94
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:29:53 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id cw28so35094880edb.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:29:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678091392;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CGOEmaNiGGbc7L01BirDqpWOsXPNFEUnsDXX5oXZKD0=;
+        b=lYA8d4n5q3CvWYp9VCtKFvChADNU0XNfiO1TRzPCRAbGiuZ0Zm3urX8c0q89LiLBXy
+         jSlbxv0ITZV2ZbFiDQ6U0bkpsQ0Uad8cwU10kzwHnrgYbtokv5s2Urwx+kcScuCkLpty
+         Sav+Xqu0psOcZTL+WB+FO3X1xxnjsfI1pVT3AscDJ7p8XbZ6jU3hModd49k7EdFiV1P2
+         7Kf3K9d5BfdRY+XXuMLOpxtAkZFmWoU3t/ojZeextEwOvlOfOxteFpHHYs4+TzgkYasA
+         P9GgT3s+2xCEyGcNDKU7LTYsxbuyebaNhcInWYW1swJ9h4Ddg4L3cLY28A64pM32C+iD
+         TxYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678091392;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CGOEmaNiGGbc7L01BirDqpWOsXPNFEUnsDXX5oXZKD0=;
+        b=KPGcB30YgQkfrLHVdFjP8r1RT5BEtvN2iw/dFVIij020tecRifm1YWpErMkOf6hhMx
+         +o/G/dh6SspRXs8F4hoYV794Cw+labijvWayUS4IcJKWwv1s/Ie0MQ53RTChWqiuLQ3i
+         57bqP188zaZDqWE8yspMGIzKTJ4jnKQJ1fNLr+c4y+LMvmkSkOGSBnSu74dr9c2ZHKoh
+         ydUXSNBPduMr9kqnSX32mR9oQ4s/Gw//KAqImdJY1pNEE1abegJnCBVQyyQrkHBjPts6
+         DDXYvVj+J6C36iiKO55KI0T/DbDvqaCI7Jpa4xCIWYimHj31yXcq+uoWzgRE6jPtHp6O
+         Vg2Q==
+X-Gm-Message-State: AO0yUKUDgOKUyfDN0ErEN2+3+kESJZz6XnQVU53dpwHRst0KJNuR1Vfe
+        9xmnTst0dA/i0mrB+r/lBDNvTw==
+X-Google-Smtp-Source: AK7set9Rt/mceRfZItcu0lyJvR3AEI+TwG4140OrkenXDQ5rRvMtEVEEDO6b88AMzw1Nmhy+0qthMw==
+X-Received: by 2002:a17:906:b007:b0:8aa:c038:974c with SMTP id v7-20020a170906b00700b008aac038974cmr9617550ejy.54.1678091392390;
+        Mon, 06 Mar 2023 00:29:52 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
+        by smtp.gmail.com with ESMTPSA id mb3-20020a170906eb0300b008e772c97db6sm4211562ejb.128.2023.03.06.00.29.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 00:29:52 -0800 (PST)
+Message-ID: <7dca5cec-5b7b-a3d6-e165-47a5fa26b73a@linaro.org>
+Date:   Mon, 6 Mar 2023 09:29:49 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH-next] scsi: fix use-after-free problem in
- scsi_remove_target
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Zhong Jinghua <zhongjinghua@huaweicloud.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>
-References: <20230213034321.3261114-1-zhongjinghua@huaweicloud.com>
- <5cf19e69-b851-abe9-9496-bbba33109404@acm.org>
-From:   zhongjinghua <zhongjinghua@huawei.com>
-In-Reply-To: <5cf19e69-b851-abe9-9496-bbba33109404@acm.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.159]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600002.china.huawei.com (7.193.23.29)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 03/15] dt-bindings: spi: cdns: Add compatible for AMD
+ Pensando Elba SoC
+Content-Language: en-US
+To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20230306040739.51488-1-blarson@amd.com>
+ <20230306040739.51488-4-blarson@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230306040739.51488-4-blarson@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/03/2023 05:07, Brad Larson wrote:
+> Document the cadence qspi controller compatible for AMD Pensando
+> Elba SoC boards.  The Elba qspi fifo size is 1024.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> ---
+> 
+> v10 changes:
+> - Fix cdns,fifo-depth, only amd,pensando-elba-qspi is 1024 bytes
+> 
+> v9 changes:
+> - Add 1024 to cdns,fifo-depth property to resolve dtbs_check error
+> 
+> ---
+>  .../bindings/spi/cdns,qspi-nor.yaml           | 30 +++++++++++++++++--
+>  1 file changed, 28 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> index 5c01db128be0..18e4bc04f091 100644
+> --- a/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> +++ b/Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml
+> @@ -20,11 +20,39 @@ allOf:
+>        required:
+>          - power-domains
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - amd,pensando-elba-qspi
+> +    then:
+> +      properties:
+> +        cdns,fifo-depth:
+> +          enum: [ 128, 256, 1024 ]
+> +          default: 1024
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: amd,pensando-elba-qspi
 
-在 2023/3/2 3:46, Bart Van Assche 写道:
-> On 2/12/23 19:43, Zhong Jinghua wrote:
->> T0                            T1
->>   sdev_store_delete
->>    scsi_remove_device
->>     device_remove_file
->>      __scsi_remove_device
->>                              __iscsi_unbind_session
->>                               scsi_remove_target
->>                           spin_lock_irqsave
->>                                list_for_each_entry
->>       scsi_target_reap // starget->reaf 1 -> 0
->
-> What is "reaf"? Did you perhaps want to write "reap_ref"?
-Yes, I will modify late.
->
->> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
->> index e7893835b99a..0ad357ff4c59 100644
->> --- a/drivers/scsi/scsi_sysfs.c
->> +++ b/drivers/scsi/scsi_sysfs.c
->> @@ -1561,7 +1561,17 @@ void scsi_remove_target(struct device *dev)
->>               starget->state == STARGET_CREATED_REMOVE)
->>               continue;
->>           if (starget->dev.parent == dev || &starget->dev == dev) {
->> -            kref_get(&starget->reap_ref);
->> +
->> +            /*
->> +             * If starget->reap_ref is reduced to 0, it means
->> +             * that other processes are releasing it and
->> +             * there is no need to delete it again
->> +             */
->> +            if (!kref_get_unless_zero(&starget->reap_ref)) {
->> +                spin_unlock_irqrestore(shost->host_lock, flags);
->> +                goto restart;
->> +            }
->> +
->>               if (starget->state == STARGET_CREATED)
->>                   starget->state = STARGET_CREATED_REMOVE;
->>               else
->
-> The above comment should be made more clear, e.g. as follows: "If the 
-> reference count is already zero, skip this target. Calling 
-> kref_get_unless_zero() if the reference count is zero is safe because 
-> scsi_target_destroy() will wait until the host lock has been released 
-> before freeing starget."
+This does not make any sense. You have two ifs for the same.
 
-Agree. Thanks for your e.g.
-
-I will send the v2 late.
-
->
-> Otherwise this patch looks fine to me.
->
-> Thanks,
->
-> Bart.
->
->
-Thanks,
-
-Jinghua
+> +    then:
+> +      properties:
+> +        cdns,fifo-depth:
+> +          enum: [ 128, 256, 1024 ]
+> +          default: 1024
+> +    else:
+> +      properties:
+> +        cdns,fifo-depth:
+> +          enum: [ 128, 256 ]
+> +          default: 128
+> +
+Best regards,
+Krzysztof
 
