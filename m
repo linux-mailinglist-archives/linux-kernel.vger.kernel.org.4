@@ -2,155 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D36B06AC8FF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B946AC8CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230424AbjCFRBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:01:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S229798AbjCFQzp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjCFRBb (ORCPT
+        with ESMTP id S229871AbjCFQzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:01:31 -0500
-Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA99457F4
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:01:13 -0800 (PST)
-Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
-        by amity.mint.lgbt (Postfix) with ESMTP id 4PVl5s25Ryz1S5KN
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:53:53 -0500 (EST)
-Authentication-Results: amity.mint.lgbt (amavisd-new);
-        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
-        header.d=mint.lgbt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
-        content-transfer-encoding:mime-version:references:in-reply-to
-        :x-mailer:message-id:date:subject:to:from; s=dkim; t=1678121632;
-         x=1678985633; bh=7xRNWZDL/30mtu3WxKxjUXO6ZS/+UYamjJhFWwATyYA=; b=
-        lPfFY5pXnLHpXBhxCVGxkgHUfN5z5doLiyiZ7zwinj5+ldD4ag0i18FQIxxY0qnm
-        HbcDuUGTrzEvHHDaAy93hyLT3brBM4m028hanVEFfpHPYhqLsf76aMsukJ1N8FS6
-        oAzJ1hLR8lwJ8lRIgWbQpcTs5SbHqauBnajn86CWWx/LHHnn6IigDc7MVF5DQKmV
-        fiOPflcn4+VinwhNgi3L5GhBHzjOR8wPuTtKPfw1ODVU0Rhm53CHOAsuVpZ041t3
-        4/Qzlrwaa2sTW6ZQKlyxRaF1G5n7M4WBfF2OARNxsUfWqOMJrUgMemdQqYVBNYG2
-        nQm6frKjjBslUWQJd+uypA==
-X-Virus-Scanned: amavisd-new at amity.mint.lgbt
-Received: from amity.mint.lgbt ([127.0.0.1])
-        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xc27L_oDN-Fj for <linux-kernel@vger.kernel.org>;
-        Mon,  6 Mar 2023 11:53:52 -0500 (EST)
-Received: from dorothy.. (unknown [186.105.8.42])
-        by amity.mint.lgbt (Postfix) with ESMTPSA id 4PVl5d05V6z1S5JW;
-        Mon,  6 Mar 2023 11:53:40 -0500 (EST)
-From:   Lux Aliaga <they@mint.lgbt>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, bvanassche@acm.org, keescook@chromium.org,
-        tony.luck@intel.com, gpiccoli@igalia.com
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
-        phone-devel@vger.kernel.org, martin.botka@somainline.org,
-        marijn.suijten@somainline.org, Lux Aliaga <they@mint.lgbt>
-Subject: [PATCH v7 4/6] arm64: dts: qcom: sm6125: Add UFS nodes
-Date:   Mon,  6 Mar 2023 13:52:43 -0300
-Message-Id: <20230306165246.14782-5-they@mint.lgbt>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230306165246.14782-1-they@mint.lgbt>
-References: <20230306165246.14782-1-they@mint.lgbt>
+        Mon, 6 Mar 2023 11:55:42 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD16497DA;
+        Mon,  6 Mar 2023 08:55:14 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso5692734ota.1;
+        Mon, 06 Mar 2023 08:55:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678121648;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OOfn1AerasUS9ICTw0rEuQ9lCFS4+7nv1OQbmZdEVCo=;
+        b=EOaVCRsHqgl2uqGltPzu8aonWC2uhbJ0E6jehzJi9EN22aq8u+BWmjtcLhHr5QK58f
+         KJOPqayFFAolBQLLc6ZBv8qsupHxbnID78JLn8/0zCPAEEUzqKb6l7Cq5cNPxnFWMUgs
+         R9t1boZhO+J9BBbc7eM+GTk7Zl5WnyZUvwwwHR2QKp7KylnOuV1cb7I8ECP+oiDj4Gk0
+         mIYsoE589sCGTvRupXowE/MKnA+llI7Pdj8I8BFbKzsP9x/khxBNjVjgN8/y7AhyZjwQ
+         oaC+Th4DHAUw2fnOjP3OuWB0b1Sgjk+fgI5DBRJwZVLsVvF4glFH8rvwiy/SDxL5/oGA
+         jeTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678121648;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OOfn1AerasUS9ICTw0rEuQ9lCFS4+7nv1OQbmZdEVCo=;
+        b=5GKHe7wS79NDjGJOVJnm68dLwu7AUnCwWg5NaaapGLChU1INL5hmmX8p4CMdghxuAv
+         QOvIFhlSb5Tj9Sgi90WiAMspuCrgE8h3ZWfnUPhCa10WnXjD07ZPBiZDumB4g1f4weDR
+         Y3FLv9p6qMSZaT5PK8vkzxpuy949tsKVWyf10QgtjBA0mOLSFl1DYKXcIS0vpiO7m0Nl
+         uNgiGmw5mnnaPkemmvLprmpAg7H9pU419tELKNZzebNQIjCHsl2Qlc4pnGCHvZI+Yrum
+         YPnbNc0OJoJW4BBbayWI5+4JdyyI1zjrTN5t3RzihXK9oLNTI0qelCu9BHMxjeFvUHVm
+         PMVQ==
+X-Gm-Message-State: AO0yUKWpIXjvhQrfPK5x3ek0ThUC4wROOYjnivfAF6giCOMgsYi5nz+1
+        g0O0OED01Z/4MfX0CvVka/k=
+X-Google-Smtp-Source: AK7set9lCHqv4JZ0R5pBNzoiQy05SJNmnktQ6CARvZPrtVMzchG+owZd5TdIHMVxjPQP6P5u4j7SxQ==
+X-Received: by 2002:a05:6830:3142:b0:68d:bd4d:f4b7 with SMTP id c2-20020a056830314200b0068dbd4df4b7mr6193198ots.21.1678121648416;
+        Mon, 06 Mar 2023 08:54:08 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id z10-20020a9d468a000000b0069452b2aa2dsm3633661ote.50.2023.03.06.08.54.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 08:54:07 -0800 (PST)
+Date:   Mon, 6 Mar 2023 08:54:06 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Vernon Yang <vernon2gm@gmail.com>, torvalds@linux-foundation.org,
+        tytso@mit.edu, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, linux-kernel@vger.kernel.org,
+        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
+Message-ID: <ZAYartD+NsF1JxlH@yury-laptop>
+References: <20230306160651.2016767-1-vernon2gm@gmail.com>
+ <20230306160651.2016767-6-vernon2gm@gmail.com>
+ <ZAYXJ2E+JHcp2kD/@yury-laptop>
+ <CAHmME9r_JXNCVVCNxZRQkafA=eOOu5k0+AweRDor3tNu283bdg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHmME9r_JXNCVVCNxZRQkafA=eOOu5k0+AweRDor3tNu283bdg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds a UFS host controller node and its corresponding PHY to
-the sm6125 platform.
+On Mon, Mar 06, 2023 at 05:44:41PM +0100, Jason A. Donenfeld wrote:
+> On Mon, Mar 6, 2023 at 5:39 PM Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > On Tue, Mar 07, 2023 at 12:06:51AM +0800, Vernon Yang wrote:
+> > > After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
+> > > optimizations"), the cpumask size is divided into three different case,
+> > > so fix comment of cpumask_xxx correctly.
+> > >
+> > > Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
+> > > ---
+> > >  include/linux/cpumask.h | 46 ++++++++++++++++++++---------------------
+> > >  1 file changed, 23 insertions(+), 23 deletions(-)
+> > >
+> > > diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+> > > index 8fbe76607965..248bdb1c50dc 100644
+> > > --- a/include/linux/cpumask.h
+> > > +++ b/include/linux/cpumask.h
+> > > @@ -155,7 +155,7 @@ static __always_inline unsigned int cpumask_check(unsigned int cpu)
+> > >   * cpumask_first - get the first cpu in a cpumask
+> > >   * @srcp: the cpumask pointer
+> > >   *
+> > > - * Returns >= nr_cpu_ids if no cpus set.
+> > > + * Returns >= small_cpumask_bits if no cpus set.
+> >
+> > There's no such thing like small_cpumask_bits. Here and everywhere,
+> > nr_cpu_ids must be used.
+> >
+> > Actually, before 596ff4a09b89 nr_cpumask_bits was deprecated, and it
+> > must be like that for all users even now.
+> >
+> > nr_cpumask_bits must be considered as internal cpumask parameter and
+> > never referenced outside of cpumask code.
+> 
+> What's the right thing I should do, then, for wireguard's usage and
+> for random.c's usage? It sounds like you object to this patchset, but
+> if the problem is real, it sounds like I should at least fix the two
+> cases I maintain. What's the right check?
 
-Signed-off-by: Lux Aliaga <they@mint.lgbt>
----
- arch/arm64/boot/dts/qcom/sm6125.dtsi | 62 ++++++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+Everywhere outside of cpumasks internals use (cpu < nr_cpu_ids) to
+check if the cpu is in a valid range, like:
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/q=
-com/sm6125.dtsi
-index df5453fcf2b9..7384d88f44cc 100644
---- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
-@@ -511,6 +511,68 @@ sdhc_2: mmc@4784000 {
- 			status =3D "disabled";
- 		};
-=20
-+		ufs_mem_hc: ufs@4804000 {
-+			compatible =3D "qcom,sm6125-ufshc", "qcom,ufshc", "jedec,ufs-2.0";
-+			reg =3D <0x04804000 0x3000>, <0x04810000 0x8000>;
-+			reg-names =3D "std", "ice";
-+			interrupts =3D <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			clocks =3D <&gcc GCC_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_UFS_PHY_AHB_CLK>,
-+				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
-+				 <&rpmcc RPM_SMD_XO_CLK_SRC>,
-+				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
-+				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
-+				 <&gcc GCC_UFS_PHY_ICE_CORE_CLK>;
-+			clock-names =3D "core_clk",
-+				      "bus_aggr_clk",
-+				      "iface_clk",
-+				      "core_clk_unipro",
-+				      "ref_clk",
-+				      "tx_lane0_sync_clk",
-+				      "rx_lane0_sync_clk",
-+				      "ice_core_clk";
-+			freq-table-hz =3D <50000000 240000000>,
-+					<0 0>,
-+					<0 0>,
-+					<37500000 150000000>,
-+					<0 0>,
-+					<0 0>,
-+					<0 0>,
-+					<75000000 300000000>;
-+
-+			resets =3D <&gcc GCC_UFS_PHY_BCR>;
-+			reset-names =3D "rst";
-+			#reset-cells =3D <1>;
-+
-+			phys =3D <&ufs_mem_phy>;
-+			phy-names =3D "ufsphy";
-+
-+			lanes-per-direction =3D <1>;
-+
-+			iommus =3D <&apps_smmu 0x200 0x0>;
-+
-+			status =3D "disabled";
-+		};
-+
-+		ufs_mem_phy: phy@4807000 {
-+			compatible =3D "qcom,sm6125-qmp-ufs-phy";
-+			reg =3D <0x04807000 0xdb8>;
-+
-+			clocks =3D <&gcc GCC_UFS_MEM_CLKREF_CLK>, <&gcc GCC_UFS_PHY_PHY_AUX_C=
-LK>;
-+			clock-names =3D "ref", "ref_aux";
-+
-+			resets =3D <&ufs_mem_hc 0>;
-+			reset-names =3D "ufsphy";
-+
-+			power-domains =3D <&gcc UFS_PHY_GDSC>;
-+
-+			#phy-cells =3D <0>;
-+
-+			status =3D "disabled";
-+		};
-+
- 		gpi_dma0: dma-controller@4a00000 {
- 			compatible =3D "qcom,sm6125-gpi-dma", "qcom,sdm845-gpi-dma";
- 			reg =3D <0x04a00000 0x60000>;
---=20
-2.39.2
+cpu = cpumask_first(cpus);
+if (cpu >= nr_cpu_ids)
+        pr_err("There's no cpus");
+ 
 
