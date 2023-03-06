@@ -2,160 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DD96AB6C4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:08:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E006AB6C0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 08:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjCFHIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 02:08:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S229568AbjCFHE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 02:04:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCFHIJ (ORCPT
+        with ESMTP id S229457AbjCFHE4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 02:08:09 -0500
-Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2109683C5;
-        Sun,  5 Mar 2023 23:08:08 -0800 (PST)
-Received: by mail-ua1-x935.google.com with SMTP id s13so5721334uac.8;
-        Sun, 05 Mar 2023 23:08:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678086487;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nPMxN+7aE/eDgv+4Gb5i0j4P3VUwS4IPF/CTWOVkNGM=;
-        b=fRqNtYdlEv5fZLps4+majz9AHPvYvaic55g6HWsHiSVAZEXMVAJDabsuU/LqlyVeP/
-         hsEtEHVTr4KYsp2ukX7V8C9wftrW2ezKkjejJ5zYnIx6EUXhmzSak6cc9zbDLVuWGw+w
-         aYMUl45VSDS2yK43KQQjQcFOfHZWmS/YRhegzgj57/aok9eNxJ5HPmsqLQo9HC2Lprfv
-         hBmZ7qGyCA/ozA609V2Wfu/bpUH7KIB5VIJiSZLZFCCmwNaAaf+ZxUEWkiaMdfxDeVwo
-         Gruje/oXyYq09WgSjdXJ7q4KzSNywnN4UvI+/Mei7XCB6X6aUzDRWwVYOoVzt+VC6pl6
-         FXDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678086487;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nPMxN+7aE/eDgv+4Gb5i0j4P3VUwS4IPF/CTWOVkNGM=;
-        b=UAIs0hGXDFALvUFTcRPwtQ53kSEiKsb4tQZ7ttpgJrrx62YhF8n1vuy9UcNvhyCxWo
-         cQOwRBDYrKuJOdLbG7JmOrJRRg+7GzjAFN+PmNx+H+354x4D5rRmkODR9xt9T2nhW9Q1
-         uN+K8vD9yo7FLAqfptsYgXBLgcU1zq/HS42rs4+MUNkCnO6TmrbhegZ2di8/WXvJq4mI
-         lvoPggAQwzL+qFFMY8GGIl9oF00fZcXky0GwoBl+bbdbPVeTWlnNvy7zOKNJye+ZpEoP
-         zkgue7yatrqRRc/uHVym68bPagiQ20BJERVj/QhPR1WoF0ncZQepNFWaCKFoHTbKl8Oc
-         AOTg==
-X-Gm-Message-State: AO0yUKUFquDoIQAQcGoZlt0Fz55v/KLHZ3cROUqEUviTOwUw/P78wOZk
-        zKB+N/jmE6B6T+abrYzZkkY8wf75PPBJg373kds=
-X-Google-Smtp-Source: AK7set9TZcmB2GVYH/FuARKwCQ91BhrjHIj87pIyDTLjCNWkpaFUIFsb0UDJvdVN9GedqoFrpAIpEhchJ1R+9EV49oc=
-X-Received: by 2002:a1f:38d6:0:b0:401:a4bf:210d with SMTP id
- f205-20020a1f38d6000000b00401a4bf210dmr6044664vka.1.1678086487119; Sun, 05
- Mar 2023 23:08:07 -0800 (PST)
+        Mon, 6 Mar 2023 02:04:56 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E41EC5B
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 23:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678086296; x=1709622296;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HiBWe+mJWZoyI7lP9Om4uKfOcDtMjzEydEnd2XZv7rw=;
+  b=EpoCwYJzV6pmz8/cg51Kojoh+GlwXPQEcsw2BB4hLUpT1JddRHpgTHju
+   gPSNy8VQ0EQtE6OZo1txk2mPI3367zUggTZni56IeNrfOaqxGHt1WVOdB
+   WHjMlq3UELzNX7xRdlgr+ORuvK3HiyOnU8tU4ismFqsfz++IO58MAY4Wo
+   x8LEInoT82sLVASga0vRcvPbAIAuzulujaOzF8ssyYKs83fc/Bv+bBw6X
+   DSGCU1vyrxUHqR+O48z5qvByZImwyWGzabCdoEZrnp4yg6alOcp+VxJm3
+   ngRSqwnhv+B4PyAmwKYefWzsHu39hoWNAyD3vmVZzRGSFQHnlCHQ+I4Vc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="315882209"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="315882209"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 23:04:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="850197278"
+X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
+   d="scan'208";a="850197278"
+Received: from zq-optiplex-7090.bj.intel.com ([10.238.156.129])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 23:04:52 -0800
+From:   Zqiang <qiang1.zhang@intel.com>
+To:     mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
+        juri.lelli@redhat.com
+Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, qiang1.zhang@intel.com
+Subject: [PATCH] sched/fair: Make hrtimer callback execute in the hard interrupt context
+Date:   Mon,  6 Mar 2023 15:09:38 +0800
+Message-Id: <20230306070938.3099273-1-qiang1.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230306060446.414986-1-chunyan.zhang@unisoc.com> <fecb3d5c-86b7-f052-6cba-f92b45714665@linaro.org>
-In-Reply-To: <fecb3d5c-86b7-f052-6cba-f92b45714665@linaro.org>
-From:   Chunyan Zhang <zhang.lyra@gmail.com>
-Date:   Mon, 6 Mar 2023 15:07:31 +0800
-Message-ID: <CAAfSe-tE1kTZCUeC6bPQLrxDR1WEASatc8VXr1G5x_RhzGm6Yw@mail.gmail.com>
-Subject: Re: [PATCH V3] arm64: dts: sprd: Add support for Unisoc's UMS512
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Mar 2023 at 14:43, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 06/03/2023 07:04, Chunyan Zhang wrote:
-> > Add basic support for Unisoc's UMS512, with this patch,
-> > the board ums512-1h10 can run into console.
-> >
-> > Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
-> > ---
-> > Changes since V2:
-> > * Removed redundant gpio.h from ums512-1h10.dts
-> >
-> > Changes since v1:
-> > * Addressed comments:
-> >   - Removed earlycon bootargs;
-> >   - Moved up gic reg as second property;
-> >   - Moved two sdio nodes under to the apb bus node;
-> >   - Renamed node name of all fixed clocks;
-> >   - Fixed warnings reported by dtbs_check.
->
-> Please always mention  under --- why you do not send a binding for new
-> board compatible.
+The scheduler related hrtimers callback will be executed in softirqd
+context for PREEMPT_RT enabled kernel, this commit therefore mark
+hrtimers as harded even on PREEMPT_RT enabled kernels, there is no
+functional change.
 
-Ok, I will address.
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+---
+ kernel/sched/fair.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
->
-> > ---
-> >  arch/arm64/boot/dts/sprd/Makefile        |   3 +-
-> >  arch/arm64/boot/dts/sprd/ums512-1h10.dts |  61 ++
-> >  arch/arm64/boot/dts/sprd/ums512.dtsi     | 911 +++++++++++++++++++++++
-> >  3 files changed, 974 insertions(+), 1 deletion(-)
-> >  create mode 100644 arch/arm64/boot/dts/sprd/ums512-1h10.dts
-> >  create mode 100644 arch/arm64/boot/dts/sprd/ums512.dtsi
-> >
->
-> (...)
->                 };
-> > +
-> > +             apb@70000000 {
-> > +                     compatible = "simple-bus";
-> > +                     #address-cells = <1>;
-> > +                     #size-cells = <1>;
-> > +                     ranges = <0 0x0 0x70000000 0x10000000>;
-> > +
-> > +                     uart0: serial@0 {
-> > +                             compatible = "sprd,ums512-uart",
-> > +                                          "sprd,sc9836-uart";
-> > +                             reg = <0x0 0x100>;
-> > +                             interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
-> > +                             clocks = <&ext_26m>;
-> > +                             status = "disabled";
-> > +                     };
-> > +
-> > +                     uart1: serial@100000 {
-> > +                             compatible = "sprd,ums512-uart",
-> > +                                          "sprd,sc9836-uart";
-> > +                             reg = <0x100000 0x100>;
-> > +                             interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
-> > +                             clocks = <&ext_26m>;
-> > +                             status = "disabled";
-> > +                     };
-> > +
-> > +                     sdio0: sdio@1100000 {
->
-> Isn't the node name required to be "mmc"?
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index c36aa54ae071..98c48d144089 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -5610,7 +5610,7 @@ static void start_cfs_slack_bandwidth(struct cfs_bandwidth *cfs_b)
+ 
+ 	hrtimer_start(&cfs_b->slack_timer,
+ 			ns_to_ktime(cfs_bandwidth_slack_period),
+-			HRTIMER_MODE_REL);
++			HRTIMER_MODE_REL_HARD);
+ }
+ 
+ /* we know any runtime found here is valid as update_curr() precedes return */
+@@ -5813,9 +5813,9 @@ void init_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
+ 	cfs_b->burst = 0;
+ 
+ 	INIT_LIST_HEAD(&cfs_b->throttled_cfs_rq);
+-	hrtimer_init(&cfs_b->period_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED);
++	hrtimer_init(&cfs_b->period_timer, CLOCK_MONOTONIC, HRTIMER_MODE_ABS_PINNED_HARD);
+ 	cfs_b->period_timer.function = sched_cfs_period_timer;
+-	hrtimer_init(&cfs_b->slack_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	hrtimer_init(&cfs_b->slack_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_HARD);
+ 	cfs_b->slack_timer.function = sched_cfs_slack_timer;
+ 	cfs_b->slack_started = false;
+ }
+@@ -5835,7 +5835,7 @@ void start_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
+ 
+ 	cfs_b->period_active = 1;
+ 	hrtimer_forward_now(&cfs_b->period_timer, cfs_b->period);
+-	hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED);
++	hrtimer_start_expires(&cfs_b->period_timer, HRTIMER_MODE_ABS_PINNED_HARD);
+ }
+ 
+ static void destroy_cfs_bandwidth(struct cfs_bandwidth *cfs_b)
+-- 
+2.25.1
 
-Yes, I agree.
-
->
-> > +                             compatible = "sprd,sdhci-r11";
-> > +                             reg = <0x1100000 0x1000>;
-> > +                             interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
-> > +                             clock-names = "sdio", "enable";
-> > +                             clocks = <&ap_clk CLK_SDIO0_2X>,
-> > +                                      <&apapb_gate CLK_SDIO0_EB>;
-> > +                             assigned-clocks = <&ap_clk CLK_SDIO0_2X>;
-> > +                             assigned-clock-parents = <&pll1 CLK_RPLL>;
-> > +                             status = "disabled";
-> > +                     };
-> > +
-> > +                     sdio3: sdio@1400000 {
->
-> Same problem.
-
-Thanks for the review,
-Chunyan
