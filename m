@@ -2,137 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA27F6AB5C6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 05:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B306AB5CF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 06:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjCFExC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 23:53:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44012 "EHLO
+        id S229662AbjCFFCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 00:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCFEw7 (ORCPT
+        with ESMTP id S229568AbjCFFCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 23:52:59 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE4D1FD4
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 20:52:55 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id bi9so11103624lfb.2
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 20:52:55 -0800 (PST)
+        Mon, 6 Mar 2023 00:02:16 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7D9E390
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 21:02:14 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-176d93cd0daso754898fac.4
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 21:02:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678078373;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bIKcuXaJtu9JPlsmlDrsee9SwufGBzc6NChAPOq/9sM=;
-        b=qsO/L2EfzQ+zk4Wf+LFY92Yl8ubRwp8n0WGHpk32ZoiwYd+CCUlWJOeHRoVFXyMHGr
-         XlHMvlzq4i3mrFa/ptdVuZhJqSfXhWGlUDPQwswBT4NuTYpnnBFDsswYqyhTCu+CNSv6
-         YpGLjgtKKACY94BCcAdNimHLWvVn9MBkzDVSHNwt/WxZ43WhDqYYG27ubnRVYe8gl14Y
-         6z461L9c40AcczFQZga1yg+yyb3emrdIEIlK54dH3IX67unSEEpykNjBlWEkEn3YZ4kj
-         WswTD5zqt+oy6N5z9bwYlRmBisLarxmdzbsLS4jo4h/6U8Ffn29o4zX811g58NzLAC/A
-         dvOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678078373;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bIKcuXaJtu9JPlsmlDrsee9SwufGBzc6NChAPOq/9sM=;
-        b=pBPTxs9I4mTkOBXLMio+36tYoASFhQmt0ni5l2OuWp9gsOMS0ul7OSERHO87pmnJM6
-         UjmFFwTLR1XnWzWhty+OpYw16/psTMuSLoaUgP+KUTr6evfxjxYNFi2WqHRlYQQ0z8VW
-         vtLMWRfL5RIVZjHbMhG0GrBSYyhoG5E5yvDu/bLfaKmuN4TQ2AehVkvKSaz3+o0kDB4e
-         koUJ0/KKKTRulSOWMY0deDnHv8OkzDoIVPTU7jruoUBvmryVjaUgXA7EGNEagCTcrq6J
-         PONRehZl4d/0EIPCbSfxAhsJbGUZGs9ptUNHK9nw5eK+6zGum4AogVoz4TMbVSfOjS5L
-         kJdQ==
-X-Gm-Message-State: AO0yUKUtwHFjYIEEZTJDG+IZw5btKx7OTYWeTd3SjmhYJuIY63EknZ9y
-        5t5Xo7PYxzec1vojg9tUUnY=
-X-Google-Smtp-Source: AK7set/vP4+Z1tMqzZfYIzwRxTr5IHthrmMgqhRH7gMWkSo4e+UBJjz0g0k5gXRR4orAcukkRETuKA==
-X-Received: by 2002:ac2:5969:0:b0:4d8:65c5:8684 with SMTP id h9-20020ac25969000000b004d865c58684mr3041043lfp.58.1678078373487;
-        Sun, 05 Mar 2023 20:52:53 -0800 (PST)
-Received: from combine-ThinkPad-S1-Yoga (c-8ff371d5.879159-0-69706f6e6c79.bbcust.telenor.se. [213.113.243.143])
-        by smtp.gmail.com with ESMTPSA id m17-20020a195211000000b004d57fc74f2csm1470982lfb.266.2023.03.05.20.52.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Mar 2023 20:52:53 -0800 (PST)
-Date:   Mon, 6 Mar 2023 05:52:51 +0100
-From:   Guru Mehar Rachaputi <gurumeharrachaputi@gmail.com>
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Forest Bond <forest@alittletooquiet.net>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: vt6655: Macro with braces issue change to
- inline function
-Message-ID: <ZAVxo6WHGu3kO1nl@combine-ThinkPad-S1-Yoga>
-References: <Y9/xXHvOAwfqoDxn@combine-ThinkPad-S1-Yoga>
- <3cb45313-209a-8190-12f8-6a2d49e4173b@wanadoo.fr>
- <Y+A+HF1vDeRIqye5@combine-ThinkPad-S1-Yoga>
- <Y+DL3O5lcMyZ/aNR@kroah.com>
- <Y+H9BT8Am4Ik2ZDA@combine-ThinkPad-S1-Yoga>
- <Y+IJgxF52lpgk0RC@ubun2204.myguest.virtualbox.org>
+        bh=O+YN0F1HdMnuHar7bYxgXcUl3w2yvmhyQJ80J9Xov3w=;
+        b=ItWJGW7lsr7wbvnu6ME9BwD1nZQZvcD9vVlnblE6VBHFjy8ReTooeadcSJqmr30ff6
+         0AOY1Cy4AJwN0EBENh4JBC2yMq3NoPCByA7sPNrmJznVewgLrsDnWCsIHWmoacYGN7yV
+         3mMYseYZ9J/Zyepqu4YMQvo4JUm6bRzWHkDPTd0/KkVJSOvTztbaKEs/12Z31xeo7gge
+         Xe2nhDVhe9vtY8QSuxANt19DcUkfwVkcBRavmrRXwBqaPG9hmNatOUYRZ7IBUBhzErTT
+         dNuC9O6vpABj4ZbYv7W2ubYRbmHmk8m+ZU3IA7lreTzBCULLqqsfQcXpP0YKThYZWiRf
+         v1Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O+YN0F1HdMnuHar7bYxgXcUl3w2yvmhyQJ80J9Xov3w=;
+        b=jNo2f8MIT16SM8rgtWk71JI7CXQlw4N/Ss85WZkATYr62EcAWplY2cnT2zot3WOmvm
+         yNoj8Orb3sHzdhIUEmRlNJTViW5yQKlSdVFULGKWJHzrorxn0541fMP0+8Hoi+67uDYJ
+         7Czt3DNJDhwGOtJYI8tkLwq/YG+uW3I6Nw1eHvqMkRIwma+aTie1QSdXxCAdxBuVxSjE
+         XDElwYP642NKIrFH3HU0b64feVP7vC2kTh5G4dXCHBnznPumPB6k/rxcvXGQOcAADzU4
+         ikHzGf57+9CncrMqbcvm9uYenCr+gVtO9yF8Avz50gf3Y1zXK7Wk0YMHpc8ituTcKHYD
+         T7Kg==
+X-Gm-Message-State: AO0yUKVPQCGqCa8Q+hianGvyfHPebl0ZR5UJGhbF09DidOxmzVhKWA1S
+        t7MVQuehtFCECP4A7rbLTkkuAnd7lmBgQm4tAuBtzw==
+X-Google-Smtp-Source: AK7set/9iaPE1Eoe9S7cRkBeIC+gf9mbqi0d7/xhCAKDgJI1/mpRmwm0jwRInDR61SswWXR9KP7wakxA0qSFMhi470E=
+X-Received: by 2002:a05:6870:1a97:b0:16e:ddc:2d41 with SMTP id
+ ef23-20020a0568701a9700b0016e0ddc2d41mr3175791oab.6.1678078933888; Sun, 05
+ Mar 2023 21:02:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+IJgxF52lpgk0RC@ubun2204.myguest.virtualbox.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230125143503.1015424-1-bero@baylibre.com> <20230125143503.1015424-10-bero@baylibre.com>
+ <8c348b39-67f3-9210-1929-8b2f093be24c@baylibre.com> <Y/XenZUmT7Nh2qGP@kroah.com>
+In-Reply-To: <Y/XenZUmT7Nh2qGP@kroah.com>
+From:   =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+Date:   Mon, 6 Mar 2023 06:02:03 +0100
+Message-ID: <CAP2ifjPvsvPyF56=YXrc9Ti6ZSLOxEXbMCOP-Qa4ZSempfod=g@mail.gmail.com>
+Subject: Re: [PATCH v9 9/9] arm64: dts: mediatek: Initial mt8365-evk support
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, lee@kernel.org, linus.walleij@linaro.org,
+        matthias.bgg@gmail.com, daniel.lezcano@linaro.org,
+        chunfeng.yun@mediatek.com, angelogioacchino.delregno@collabora.com,
+        nfraprado@collabora.com, allen-kh.cheng@mediatek.com,
+        sean.wang@mediatek.com, zhiyong.tao@mediatek.com,
+        khilman@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 07, 2023 at 01:49:15PM +0530, Deepak R Varma wrote:
-> On Tue, Feb 07, 2023 at 08:25:57AM +0100, Guru Mehar Rachaputi wrote:
-> > On Mon, Feb 06, 2023 at 10:43:56AM +0100, Greg Kroah-Hartman wrote:
-> > > On Mon, Feb 06, 2023 at 12:39:08AM +0100, Guru Mehar Rachaputi wrote:
-> > > good luck!
-> > > 
-> > > greg k-h
-> > 
-> > Thanks for taking time.
-> > 
-> > If my understanding is correct, every version of the patch should
-> > include all the patches/patchfiles and it should explain what happened in each
-> > version(in decrement order) through a coverletter. Please correct me otherwise.
-> 
-> Hi Guru,
-> Other than the cover letter, each individual patch should also include the patch
-> version history in the descending order. If a specific patch(es) that is/are
-> part of a patch-set, did not have any change, we should still increment its
-> version and record "none" as the change in current version for such patches.
-> 
-> However, from the patch-set, any patches that are acked, do not need to be
-> resent along with other patches that are still under revision. But do mentioned
-> about such accepted/acked patches in the cover letter.
-> 
-> Hope this helps.
-> 
-> Thanks,
-> deepak.
-> 
-> > 
-> > I do refer "first patch submission" and above is my current
-> > understanding.
-> > 
-> > -- 
-> > Thanks & Regards,
-> > Guru
-> > 
-> 
-> 
+Hi,
 
-Hej Deepak,
+On Wed, Feb 22, 2023 at 10:21=E2=80=AFAM Greg KH <gregkh@linuxfoundation.or=
+g> wrote:
+>
+> On Wed, Feb 22, 2023 at 09:17:39AM +0100, Alexandre Mergnat wrote:
+> > Hi Matthias,
+> >
+> > This is a gentle ping to know if you can take this patch please.
+> > Sorry for the double mail, I screwed up the first send.
+>
+> It's the middle of the merge window, we can't take _ANYTHING_ now.
+> Please wait until after 6.3-rc1 is out.
 
-I have a problem in sending patchset through mutt.
-I have been trying sending to my own mail address but it won't work.
+Now that 6.3-rc1 is out, can we try to get this patch merged? All the
+i350 driver patches are waiting for this to land.
 
-When sending patchset I think we should use "In-Reply-To" flag and
-include "Message-ID" to which we want this to be in series to. I tried
-both "git send-email" feature and mutt "forwarding feature".
-
-Another issue is, how to attach patch file from inside mutt(for example: 
-"mutt -H x.patch" from command line is used to extract header and body of a 
-mail in mutt)?
-
-
--- 
-Thanks & Regards,
-Guru
+ttyl
+bero
