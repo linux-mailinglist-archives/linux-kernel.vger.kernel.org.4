@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E3486AC760
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4B86AC767
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbjCFQMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:12:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54532 "EHLO
+        id S231523AbjCFQMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbjCFQL5 (ORCPT
+        with ESMTP id S229874AbjCFQMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:11:57 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF268532AD
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:08:34 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id k17so4225696iob.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 08:08:34 -0800 (PST)
+        Mon, 6 Mar 2023 11:12:09 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D337252B1;
+        Mon,  6 Mar 2023 08:08:55 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id i3so10911059plg.6;
+        Mon, 06 Mar 2023 08:08:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1678118803;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e7dAgDboD1nwP5+XX6Gpi6cj6HuqQDphe3J0S8kZqwA=;
-        b=cmwkGk0sfDxLR0/c/zD8q+CxEYBkWnqe2zJi29SN0wR76WgMhwakXUaUDgl+/ibRRX
-         ybb2Glc9vdkT/k60sZoh/0wLZ3lRUumuJxyopfVdDHEJ+Qx0jnEkS92eZO3JvSRRAeCP
-         B+TDlfkL84dD5TD1LRW6wSEU+RnRARQbRa9OU=
+        d=gmail.com; s=20210112; t=1678118821;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bGjJeP+v7EwPoYJLnQF7j3pQ+Q0I3C16zMfTP7kU+5M=;
+        b=aL5SNB72UDHwQv4qnw//unrBnNllZbNrRzanaYxUy9W/JDkLcplqqM4aKE+ujoOOIf
+         fCY0pUo4O+SAIPvsI7vvghKZooDezOQjbEmJ41PSZKr8Kfg7UN/FRkMDeiX7mKJfW491
+         vosst0R8Q0TqDuSVHw633qpocZ151nfLDA5zhkXJCZq/6d3K5ANsQs2+/Vfwh8bAwBWi
+         X+mMdUcUJ5v55broppBqyrsJ9Exa60kJdAxzcP/Q2/3G+0RtYQS9D9GGH8F3+YqJfpHV
+         cZMMAzqhY8hy2BhSdOvH/CSDuodP6pGaa/SxItwCN+SvENwLK7tZK9OdpSyVUo0uRvmH
+         aang==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678118803;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e7dAgDboD1nwP5+XX6Gpi6cj6HuqQDphe3J0S8kZqwA=;
-        b=s5/J6/C56ARgsGhoXCAoa7hoQOXJMfxdKWujXQTC/S99COFbvzYIp58G6BPVxcWj0T
-         YFvs0hETR23j9wsFzvP99KGejYJ+epTymtWY4GiLY5YHRW4HlP6jFjIZY8peTIEqGl1C
-         oK2JVdrDA93SdUYrY3D9q3NhpfYP+IL19l4qwQREaS3OK3T9/TCQtz9P7vAnmp32QxnC
-         qQ66ysVlzpwQe/ScvTosKnxvX8gB2IxI91QKFfPkP7lUaOAzeeXLhOwj1bqjhxehKMy4
-         qvMutVgweMYXNnCnjokhe7XMiA5KSjGmCBZK27juiAg7PkUG/7o86MfNI1o7p4TsFfh0
-         9wxA==
-X-Gm-Message-State: AO0yUKUYL/xjSL5MLB68LnsfhjtEgbnlWz2qQhAYuPl8lyqyDqnJBLQl
-        jPc0DZ66uJ1sJ9N1+m51Ovdw8g==
-X-Google-Smtp-Source: AK7set/5wMHvgBGYNORNTLIQc8lg5UH9pESn3evMck0I8U2TUY+aFX1R4Mnp6ivgn4D8wf8+cM17Hw==
-X-Received: by 2002:a6b:5a0e:0:b0:72c:f57a:a37b with SMTP id o14-20020a6b5a0e000000b0072cf57aa37bmr6270225iob.2.1678118802712;
-        Mon, 06 Mar 2023 08:06:42 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y6-20020a6bc406000000b00743fe29dd56sm3442423ioa.4.2023.03.06.08.06.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 08:06:42 -0800 (PST)
-Message-ID: <9a0e7062-2d16-3743-ffb6-a6b56bfbbd20@linuxfoundation.org>
-Date:   Mon, 6 Mar 2023 09:06:41 -0700
+        d=1e100.net; s=20210112; t=1678118821;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bGjJeP+v7EwPoYJLnQF7j3pQ+Q0I3C16zMfTP7kU+5M=;
+        b=RJPvYBGNGa4t5/tcOIrzKHIYb7x5EVdoQNy+td9hfquE+RsrjJmB+QpdhSWmTVcHks
+         kQWHG3rgUoA3Mfm29qnNtTuXNtIyJz1JC8sTS5xKf+3GwKP3ZXjVZm54qZZNJftox9Et
+         BpeZYMWp2hYiG4Vs00Aq3Ae13w3RvqfvsZQMPiyHpb5MvK6o3RgBMiG2izOK6pLjDUU9
+         UXQ38P7YYFjqWpIMtUrJ8HiB3l3do/KPv8yLlMo+MdtnbbpOuUtqDkoVllWzSYR5ACV/
+         /NPFrkedq82p6Zl3CcXpk/zQUiMmE6bdgrnhTuli2PJmyU5VNcxgV2Lrt5tfGz+/k0gM
+         bhaA==
+X-Gm-Message-State: AO0yUKWdE8VmTRFI2sKwPaCMUqPnvhgwqjEWVAAlKiubm0JUkXlptkan
+        zZM4Dv9nAyynQFd+m2kIbbo=
+X-Google-Smtp-Source: AK7set+c3m5DDFKg/kkMDhXjx6ZzAhMuAS2jyN4DU0O1mVKmvqcaXJPmOUVoNzoxKTsUwdrUm7FwEw==
+X-Received: by 2002:a05:6a20:1443:b0:d0:15c9:4e68 with SMTP id a3-20020a056a20144300b000d015c94e68mr760681pzi.62.1678118821142;
+        Mon, 06 Mar 2023 08:07:01 -0800 (PST)
+Received: from vernon-pc.. ([49.67.2.142])
+        by smtp.gmail.com with ESMTPSA id u6-20020aa78386000000b005d35695a66csm6465318pfm.137.2023.03.06.08.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 08:07:00 -0800 (PST)
+From:   Vernon Yang <vernon2gm@gmail.com>
+To:     torvalds@linux-foundation.org, tytso@mit.edu, Jason@zx2c4.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com
+Cc:     linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Vernon Yang <vernon2gm@gmail.com>
+Subject: [PATCH 0/5] fix call cpumask_next() if no further cpus set
+Date:   Tue,  7 Mar 2023 00:06:46 +0800
+Message-Id: <20230306160651.2016767-1-vernon2gm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] selftests/kmod: increase the kmod timeout from 45 to
- 165
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.de, tianfei.zhang@intel.com,
-        russell.h.weight@intel.com, keescook@chromium.org,
-        tweek@google.com, a.manzanares@samsung.com, dave@stgolabs.net,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230206234344.2433950-1-mcgrof@kernel.org>
- <20230206234344.2433950-2-mcgrof@kernel.org>
- <b094dc23-a96d-93c4-a350-8fb92476f431@linuxfoundation.org>
- <Y/0xx0cedxlRMKpH@bombadil.infradead.org>
- <537d3d3d-9ecc-bdd9-f703-708f6826d1f2@linuxfoundation.org>
- <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZAJrFvIDj98C9SkD@bombadil.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,100 +75,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/3/23 14:48, Luis Chamberlain wrote:
-> On Fri, Mar 03, 2023 at 01:35:10PM -0700, Shuah Khan wrote:
->> On 2/27/23 15:42, Luis Chamberlain wrote:
->>> On Mon, Feb 27, 2023 at 03:32:50PM -0700, Shuah Khan wrote:
->>>> On 2/6/23 16:43, Luis Chamberlain wrote:
->>>>> The default sefltests timeout is 45 seconds. If you run the kmod
->>>>> selftests on your own with say:
->>>>>
->>>>> ./tools/testings/selftests/kmod.sh
->>>>>
->>>>> Then the default timeout won't be in effect.
->>>>>
->>>>> I've never ran kmod selftests using the generic make wrapper
->>>>> (./tools/testing/selftests/run_kselftest.sh -s) util now
->>>>> that I have support for it on kdevops [0]. And with that the
->>>>> test is limitted to the default timeout which we quickly run
->>>>> into. Bump this up to what I see is required on 8GiB / 8 vcpu
->>>>> libvirt q35 guest as can be easily created now with kdevops.
->>>>>
->>>>> To run selftests with kdevops:
->>>>>
->>>>> make menuconfig # enable dedicated selftests and kmod test
->>>>> make
->>>>> make bringup
->>>>> make linux
->>>>> make selftests-kmod
->>>>>
->>>>> This ends up taking about 280 seconds now, give or take add
->>>>> 50 seconds more more and we end up with 350. Document the
->>>>> rationale.
->>>>>
->>>>> [0] https://github.com/linux-kdevops/kdevops
->>>>> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
->>>>> ---
->>>>>     tools/testing/selftests/kmod/settings | 4 ++++
->>>>>     1 file changed, 4 insertions(+)
->>>>>     create mode 100644 tools/testing/selftests/kmod/settings
->>>>>
->>>>> diff --git a/tools/testing/selftests/kmod/settings b/tools/testing/selftests/kmod/settings
->>>>> new file mode 100644
->>>>> index 000000000000..6fca0f1a4594
->>>>> --- /dev/null
->>>>> +++ b/tools/testing/selftests/kmod/settings
->>>>> @@ -0,0 +1,4 @@
->>>>> +# measured from a manual run:
->>>>> +# time ./tools/testing/selftests/kmod/kmod.sh
->>>>> +# Then add ~50 seconds more gracetime.
->>>>> +timeout=350
->>>>
->>>> Adding timeouts like this for individual tests increases the overall kselftest
->>>> run-time. I am not in favor of adding timeouts.
->>>>
->>>> We have to find a better way to do this.
->>>
->>> Well if folks don't have this the test will fail, and so a false
->>> positive. If the goal is to have a low time timeout for "do not run
->>> tests past this time and do not fail if we stopped the test" then
->>> that seems to be likely one way to go and each test may need to be
->>> modified to not fail fatally in case of a special signal.
->>>
->>
->> We are finding more and more that timeout values are requiring
->> tweaks. I am in favor of coming up a way to exit the test with
->> a timeout condition.
-> 
-> OK so do we use the existing timeout as a "optional, I don't want my
-> test to take longer than this" or "if this test takes longer than
-> this amount this is a fatal issue"?
+Hello,
 
-It isn't a fatal issue. So I wouldn't call it one. I would add a
-message saying test timed out.
+I updated the Linux kernel to commit fe15c26ee26e ("Linux 6.3-rc1")
+and found that when the system boots to systemd ranom initialization,
+panic, as follows:
 
-One way to handle this is:
-- Add a test run-time option and have user tune it as needed.
+[    3.607299] BUG: unable to handle page fault for address: 000000000001cc43
+[    3.607558] #PF: supervisor read access in kernel mode
+[    3.607704] #PF: error_code(0x0000) - not-present page
+[    3.607704] PGD 0 P4D 0
+[    3.607704] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[    3.607704] CPU: 1 PID: 1 Comm: systemd Not tainted 6.3.0-rc1 #50
+[    3.607704] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+[    3.607704] RIP: 0010:_raw_spin_lock+0x12/0x30
+[    3.607704] Code: 84 00 00 00 00 00 66 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 65 ff 05 dd de 1e 7e 31 c0 ba 01 00 00 00 <f0> 0f b1 17 75 05 c3 cc cc cc cc 89 c6 e9 9c 00 00 00 6
+[    3.607704] RSP: 0018:ffffc90000013d50 EFLAGS: 00000002
+[    3.607704] RAX: 0000000000000000 RBX: 0000000000000040 RCX: 0000000000000002
+[    3.607704] RDX: 0000000000000001 RSI: 0000000000000246 RDI: 000000000001cc43
+[    3.607704] RBP: ffffc90000013dc8 R08: 00000000d6fbd601 R09: 0000000065abc912
+[    3.607704] R10: 00000000ba93b167 R11: 000000007bb5d0bf R12: 000000000001cc43
+[    3.607704] R13: 000000000001cc43 R14: 0000000000000003 R15: 0000000000000003
+[    3.607704] FS:  00007fbd4911b400(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
+[    3.607704] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    3.607704] CR2: 000000000001cc43 CR3: 0000000003b42000 CR4: 00000000000006e0
+[    3.607704] Call Trace:
+[    3.607704]  <TASK>
+[    3.607704]  add_timer_on+0x80/0x130
+[    3.607704]  try_to_generate_entropy+0x246/0x270
+[    3.607704]  ? do_filp_open+0xb1/0x160
+[    3.607704]  ? __pfx_entropy_timer+0x10/0x10
+[    3.607704]  ? inode_security+0x1d/0x60
+[    3.607704]  urandom_read_iter+0x23/0x90
+[    3.607704]  vfs_read+0x203/0x2d0
+[    3.607704]  ksys_read+0x5e/0xe0
+[    3.607704]  do_syscall_64+0x3f/0x90
+[    3.607704]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[    3.607704] RIP: 0033:0x7fbd49a25992
+[    3.607704] Code: c0 e9 b2 fe ff ff 50 48 8d 3d fa b2 0c 00 e8 c5 1d 02 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75 10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 4
+[    3.607704] RSP: 002b:00007ffea3fe8318 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[    3.607704] RAX: ffffffffffffffda RBX: 0000000000000010 RCX: 00007fbd49a25992
+[    3.607704] RDX: 0000000000000010 RSI: 00007ffea3fe83a0 RDI: 000000000000000c
+[    3.607704] RBP: 000000000000000c R08: 3983c6a57a866072 R09: c736ebfbeb917d7e
+[    3.607704] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[    3.607704] R13: 0000000000000001 R14: 00007ffea3fe83a0 R15: 00005609e5454ea8
+[    3.607704]  </TASK>
+[    3.607704] Modules linked in:
+[    3.607704] CR2: 000000000001cc43
+[    3.607704] ---[ end trace 0000000000000000 ]---
+[    3.607704] RIP: 0010:_raw_spin_lock+0x12/0x30
+[    3.607704] Code: 84 00 00 00 00 00 66 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 65 ff 05 dd de 1e 7e 31 c0 ba 01 00 00 00 <f0> 0f b1 17 75 05 c3 cc cc cc cc 89 c6 e9 9c 00 00 00 6
+[    3.607704] RSP: 0018:ffffc90000013d50 EFLAGS: 00000002
+[    3.607704] RAX: 0000000000000000 RBX: 0000000000000040 RCX: 0000000000000002
+[    3.607704] RDX: 0000000000000001 RSI: 0000000000000246 RDI: 000000000001cc43
+[    3.607704] RBP: ffffc90000013dc8 R08: 00000000d6fbd601 R09: 0000000065abc912
+[    3.607704] R10: 00000000ba93b167 R11: 000000007bb5d0bf R12: 000000000001cc43
+[    3.607704] R13: 000000000001cc43 R14: 0000000000000003 R15: 0000000000000003
+[    3.607704] FS:  00007fbd4911b400(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
+[    3.607704] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    3.607704] CR2: 000000000001cc43 CR3: 0000000003b42000 CR4: 00000000000006e0
+[    3.607704] note: systemd[1] exited with irqs disabled
+[    3.618556] note: systemd[1] exited with preempt_count 2
+[    3.618991] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000009
+[    3.619797] Kernel Offset: disabled
+[    3.619798] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000009 ]---
 
-Make the timeout an option so users can set it based on their
-environments.
 
-> 
-> I ask because right now we can't override it even with an environment
-> variable. If we had such support we can let test runners (like kdevops)
-> use selftests with its own set of qualified / verified timeouts for the
-> VMs it uses.
-> 
-> For instance, Iw ant to soon start asking 0day to enable my kdevops
-> 0-day tests for the subsystems I maintain, but I can't do that yet as
-> the timeout is not correct.
+Analysis add_timer_on() found that the parameter cpu is equal to 64, which
+feels strange, because qemu only specifies two CPUs, continues to look up,
+and finds that the parameter cpu is obtained by
+try_to_generate_entropy() -> cpumask_next().
 
-This test isn't part of the default run, so day has to run this as a
-special case and it would make prefect sense to provide a tunable
-timeout option.
+Then use git bisect to find the bug, and find that it was introduced by
+commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask optimizations"),
+carefully analyzing the cpumask_next() modification record, I found that
+nr_cpumask_bits modified to small_cpumask_bits, and when NR_CPUS <= BITS_PER_LONG,
+small_cpumask_bits is a macro and before nr_cpumask_bits is a variable-sized.
 
-thanks,
--- Shuah
-> 
->    Luis
+look for find_next_bit() If no bits are set, returns @size, I seem to
+understand the cause of the problem.
+
+I fixed this bug by make `if (cpu == nr_cpumask_bits)` to `if (cpu >= nr_cpumask_bits)`
+
+At the same time I think about this situation, maybe there are the same errors
+elsewhere, check it, sure enough, there are, quite a few.
+
+The patch "random:xxx" has been verified, it is valid, the other three fixes
+have not been verified, because I do not have an environment, but they
+principle are same, so also submitted at the same time, if someone helps to
+verify, thanks you very much.
+
+If there is anything error, please tell me, thanks.
+
+Vernon Yang (5):
+  random: fix try_to_generate_entropy() if no further cpus set
+  wireguard: fix wg_cpumask_choose_online() if no further cpus set
+  scsi: lpfc: fix lpfc_cpu_affinity_check() if no further cpus set
+  scsi: lpfc: fix lpfc_nvmet_setup_io_context() if no further cpus set
+  cpumask: fix comment of cpumask_xxx
+
+ drivers/char/random.c            |  2 +-
+ drivers/net/wireguard/queueing.h |  2 +-
+ drivers/scsi/lpfc/lpfc_init.c    | 14 +++++-----
+ drivers/scsi/lpfc/lpfc_nvmet.c   |  2 +-
+ include/linux/cpumask.h          | 46 ++++++++++++++++----------------
+ 5 files changed, 33 insertions(+), 33 deletions(-)
+
+--
+2.34.1
 
