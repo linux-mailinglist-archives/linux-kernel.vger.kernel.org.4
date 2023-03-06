@@ -2,380 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2388C6ABF5E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FDA6ABF60
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjCFMVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:21:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46770 "EHLO
+        id S229870AbjCFMYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 07:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjCFMVv (ORCPT
+        with ESMTP id S229574AbjCFMYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:21:51 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06CA828D18
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:21:48 -0800 (PST)
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6171D3F592
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 12:21:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678105306;
-        bh=TboJUQovpzYek2i/102139Iu9Lsvq8CTk2LnpuwQcnA=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=rE+uz6oAfGWePwRWt79RRYMXyJ6EuMYdPCldJM9pE+neErwMspaF2bN5b9dQwU22Q
-         TxlYt2hQZiVODeKASY+YVm1iOiGBY9jBjH6zF2olKoZWDogdeZVUPJFg3+PFX6NZcm
-         RBAsBToyy2uRavd5MwgMIaS7rMi9Mv4ICfSfscdsMDL44fwJQe67hn4OqyHJqRv0ND
-         b5+b13ZvTXebLO0db2FAwPBLXKMHC/oZJDXskmTQM98vw95oota2bwyHzhoCNx7A+n
-         OcOQKP+J/+M1PFLWOjLykd8MMtiwJNA4YOU7w9NpHSf6wuIv0KcpRlP85aE2pu7CRc
-         FgmiwEy5fSLjg==
-Received: by mail-qt1-f200.google.com with SMTP id o10-20020a05622a138a00b003bfdabf3b89so5087583qtk.13
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 04:21:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678105305;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TboJUQovpzYek2i/102139Iu9Lsvq8CTk2LnpuwQcnA=;
-        b=1I0NJ8C61k7H0c1Id5+TDDrsMloLqSHTRWoknr7QfL8j2yNGy/UwCqswgB4L6ehIhR
-         Vo8fUC5lGc0Ow8Uv1rzfu3d+fYtEO/8vhrBVshTpMGCz3hIolqiBS+EGpfCqsZmh0x2Y
-         YQnNHV8vfBN+v+a/AHi3D+uFlXpz0MzdIEJvpZ+XriiD1KtCFPFggUnsrBGS3TmMnspl
-         OTblSV6l5G3d8/XHOCJam68WNVl5FNTGMZR7gBNVUdL3HkOtsrGWb7DhlO9zx76ppMxR
-         1XbrgUm1fQWSeuCir+fss9El6k2Jc/GgrEb7tId7X8p/DWtdIr3VIxHyVTVtiYgwgvnN
-         q++w==
-X-Gm-Message-State: AO0yUKWt+XvalnCInBJ+ENHavBQkqmrNSueIpwc4I29lGYr4/0PA0vXi
-        chk5Tzmdkf5J4h64CqrIBxbG753MDME7Z21bgJZ5LwlT5y3w67KegpHg1IHT2Xsm6+QfO4xK/k8
-        89fI7T3fncrSBY/NgLpmPUoCXXPjpGh49cXqWzuAUbG3y60+ufwNQeWOPrQ==
-X-Received: by 2002:a05:620a:345:b0:742:8868:bfd1 with SMTP id t5-20020a05620a034500b007428868bfd1mr2971478qkm.7.1678105305311;
-        Mon, 06 Mar 2023 04:21:45 -0800 (PST)
-X-Google-Smtp-Source: AK7set9Vw5rBc6mLgwpTZTAf3+5BrpTtyf8wanj2WdfYa0M+VT2N5xbJD14UzKOOfiJF4q/25FmdvUA1+auZ35RIdsw=
-X-Received: by 2002:a05:620a:345:b0:742:8868:bfd1 with SMTP id
- t5-20020a05620a034500b007428868bfd1mr2971463qkm.7.1678105305017; Mon, 06 Mar
- 2023 04:21:45 -0800 (PST)
+        Mon, 6 Mar 2023 07:24:38 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614601F48F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:24:37 -0800 (PST)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326A4N0c032086;
+        Mon, 6 Mar 2023 12:24:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=TKo4EniFyUQ9UcC9ptHSFwojy0uYD8MjopG2PyaQYZE=;
+ b=ijwThBVXNjGbogoIGaFmGas03Rah9wXP0E+AjOAfNM7GkIqSEyJFC14l/h6R+HpsXJpc
+ LVa+44eP0pQBISJRD8KeqU5Hpn75KpGJ73c5uuBSC88kPhG2uytmITaGZWi5YavaOFzJ
+ 2Srl9r4Q9YRS+gTLGyc/xAR6w8NfAT+k5syL3V0Py3nr05/u/8/U634Wx9l7OzDvJ0Fp
+ tueVPTWTaS4nKYKFGjPUuFdLiEgC+apJ5fJXjTfzyGQ0qyuUmFdsNPIeQhMXN1EMhYbN
+ /O/ryb9lo1YxjAWBgJQxZwnAIEM2vuH4FFIq/EVddtbS8NLjGRTbVQ0z6CTApbPoXAZJ 5g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4u1jfgyj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 12:24:27 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326BnQCW022896;
+        Mon, 6 Mar 2023 12:24:26 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4u1jfgxx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 12:24:25 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326BPUd6006237;
+        Mon, 6 Mar 2023 12:24:23 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3p418ctpdu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 12:24:23 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326COKl859441514
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Mar 2023 12:24:20 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F24232004D;
+        Mon,  6 Mar 2023 12:24:19 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD02F20040;
+        Mon,  6 Mar 2023 12:24:17 +0000 (GMT)
+Received: from li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com (unknown [9.109.216.99])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Mon,  6 Mar 2023 12:24:17 +0000 (GMT)
+Date:   Mon, 6 Mar 2023 17:54:15 +0530
+From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arch/powerpc/kvm: kvmppc_hv_entry: remove r4 argument
+Message-ID: <ZAXbb9shzU+6l0wh@li-a450e7cc-27df-11b2-a85c-b5a9ac31e8ef.ibm.com>
+References: <20230220052355.109033-1-kconsul@linux.vnet.ibm.com>
+ <20230220052355.109033-3-kconsul@linux.vnet.ibm.com>
 MIME-Version: 1.0
-References: <20230303085928.4535-1-samin.guo@starfivetech.com>
- <20230303085928.4535-7-samin.guo@starfivetech.com> <CAJM55Z_Ze3mD4UVtUFTRYN_n6WnobcFB5evgYZi9zBRNR2dU4w@mail.gmail.com>
- <9c9bd26c-b548-1011-9025-ae95107551ba@starfivetech.com>
-In-Reply-To: <9c9bd26c-b548-1011-9025-ae95107551ba@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Mon, 6 Mar 2023 13:21:28 +0100
-Message-ID: <CAJM55Z-=MKnBb02exLbpsbSTMLs=Ttwr4hM2Ck5wDLKagJ+3rg@mail.gmail.com>
-Subject: Re: [PATCH v5 06/12] net: stmmac: Add glue layer for StarFive JH7110 SoC
-To:     Guo Samin <samin.guo@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230220052355.109033-3-kconsul@linux.vnet.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FQXufYaLm8jNx6O2KAyuTTxb16rR77nS
+X-Proofpoint-ORIG-GUID: 0QUjFn2q0seyNg8pxknah_alctjC9P_F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_05,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ malwarescore=0 suspectscore=0 priorityscore=1501 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060106
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Mar 2023 at 08:16, Guo Samin <samin.guo@starfivetech.com> wrote:
-> =E5=9C=A8 2023/3/4 0:18:20, Emil Renner Berthing =E5=86=99=E9=81=93:
-> > On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wro=
-te:
-> >> This adds StarFive dwmac driver support on the StarFive JH7110 SoC.
-> >>
-> >> Co-developed-by: Emil Renner Berthing <kernel@esmil.dk>
-> >> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> >> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-> >> ---
-> >>  MAINTAINERS                                   |   1 +
-> >>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
-> >>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
-> >>  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 125 +++++++++++++++++=
-+
-> >>  4 files changed, 139 insertions(+)
-> >>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive=
-.c
-> >>
-> >> diff --git a/MAINTAINERS b/MAINTAINERS
-> >> index 4e236b7c7fd2..91a4f190c827 100644
-> >> --- a/MAINTAINERS
-> >> +++ b/MAINTAINERS
-> >> @@ -19916,6 +19916,7 @@ STARFIVE DWMAC GLUE LAYER
-> >>  M:     Emil Renner Berthing <kernel@esmil.dk>
-> >>  M:     Samin Guo <samin.guo@starfivetech.com>
-> >>  S:     Maintained
-> >> +F:     Documentation/devicetree/bindings/net/dwmac-starfive.c
-> >>  F:     Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.ya=
-ml
-> >>
-> >>  STARFIVE JH71X0 CLOCK DRIVERS
-> >> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net=
-/ethernet/stmicro/stmmac/Kconfig
-> >> index f77511fe4e87..47fbccef9d04 100644
-> >> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> >> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-> >> @@ -165,6 +165,18 @@ config DWMAC_SOCFPGA
-> >>           for the stmmac device driver. This driver is used for
-> >>           arria5 and cyclone5 FPGA SoCs.
-> >>
-> >> +config DWMAC_STARFIVE
-> >> +       tristate "StarFive dwmac support"
-> >> +       depends on OF  && (ARCH_STARFIVE || COMPILE_TEST)
-> >
-> > There is an extra space between "OF" and "&&" here.
-> >
-> will drop it
-> >
-> >> +       depends on STMMAC_ETH
-> >
-> > It's not visible in this patch context, but this whole config option
-> > is surrounded by "if STMMAC_ETH" and "if STMMAC_PLATFORM", so "depends
-> > on STMMAC_ETH" should not be needed.
-> >
-> will drop it.
-> >> +       default ARCH_STARFIVE
-> >
-> > This driver is not required to boot the JH7110, so we should just
-> > default to building it as a module. Eg.
-> > default m if ARCH_STARFIVE
->
-> Yes, this driver is not required to boot the JH7110, but the network is a=
- very basic module,
-> it seems that other dwmac-platforms have been compiled into the kernel in=
-stead of modules.
+Hi,
 
-Right, but the defconfig should work on as many platforms as possible,
-so if we build in every "basic" module for every platform the kernel
-will be huge and waste a lot of memory on drivers that will never be
-used.
+On 2023-02-20 10:53:55, Kautuk Consul wrote:
+> kvmppc_hv_entry is called from only 2 locations within
+> book3s_hv_rmhandlers.S. Both of those locations set r4
+> as HSTATE_KVM_VCPU(r13) before calling kvmppc_hv_entry.
+> So, shift the r4 load instruction to kvmppc_hv_entry and
+> thus modify the calling convention of this function.
+> 
 
-Also even if this driver was built in the gmac0 would still not work
-until the driver for the AON CRG is loaded, which also defaults to m
-for the same reasons.
+I am posting v2 of this patch-set now.
+I have tested this on POWER8 and it works fine.
+Can anyone review the v2 for this patch ? 
+I didn't receive any review comments for this patch.
 
-> >
-> >> +       help
-> >> +         Support for ethernet controllers on StarFive RISC-V SoCs
-> >> +
-> >> +         This selects the StarFive platform specific glue layer suppo=
-rt for
-> >> +         the stmmac device driver. This driver is used for StarFive J=
-H7110
-> >> +         ethernet controller.
-> >> +
-> >>  config DWMAC_STI
-> >>         tristate "STi GMAC support"
-> >>         default ARCH_STI
-> >> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/ne=
-t/ethernet/stmicro/stmmac/Makefile
-> >> index 057e4bab5c08..8738fdbb4b2d 100644
-> >> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
-> >> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
-> >> @@ -23,6 +23,7 @@ obj-$(CONFIG_DWMAC_OXNAS)     +=3D dwmac-oxnas.o
-> >>  obj-$(CONFIG_DWMAC_QCOM_ETHQOS)        +=3D dwmac-qcom-ethqos.o
-> >>  obj-$(CONFIG_DWMAC_ROCKCHIP)   +=3D dwmac-rk.o
-> >>  obj-$(CONFIG_DWMAC_SOCFPGA)    +=3D dwmac-altr-socfpga.o
-> >> +obj-$(CONFIG_DWMAC_STARFIVE)   +=3D dwmac-starfive.o
-> >>  obj-$(CONFIG_DWMAC_STI)                +=3D dwmac-sti.o
-> >>  obj-$(CONFIG_DWMAC_STM32)      +=3D dwmac-stm32.o
-> >>  obj-$(CONFIG_DWMAC_SUNXI)      +=3D dwmac-sunxi.o
-> >> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/dr=
-ivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-> >> new file mode 100644
-> >> index 000000000000..566378306f67
-> >> --- /dev/null
-> >> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-> >> @@ -0,0 +1,125 @@
-> >> +// SPDX-License-Identifier: GPL-2.0+
-> >> +/*
-> >> + * StarFive DWMAC platform driver
-> >> + *
-> >> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> >> + * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-> >
-> > Sorry, after looking at my old git branches where this started as a
-> > driver for the JH7100 this should really be
-> > * Copyright (C) 2021 Emil Renner Berthing <kernel@esmil.dk>
-> > * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> >
-> OK, It should be.
-> >> + */
-> >> +
-> >> +#include <linux/of_device.h>
-> >> +
-> >> +#include "stmmac_platform.h"
-> >> +
-> >> +struct starfive_dwmac {
-> >> +       struct device *dev;
-> >> +       struct clk *clk_tx;
-> >> +       struct clk *clk_gtx;
-> >
-> > This pointer is only set, but never read. Please remove it.
-> >>
-> >> +       bool tx_use_rgmii_rxin_clk;
-> >> +};
-> >> +
-> >> +static void starfive_eth_fix_mac_speed(void *priv, unsigned int speed=
-)
-> >
-> > This should be starfive_dwmac_fix_mac_speed for consistency.
-> >
-> Sorry=EF=BC=8CI missed this, will fix next version.
-> >> +{
-> >> +       struct starfive_dwmac *dwmac =3D priv;
-> >> +       unsigned long rate;
-> >> +       int err;
-> >> +
-> >> +       /* Generally, the rgmii_tx clock is provided by the internal c=
-lock,
-> >> +        * which needs to match the corresponding clock frequency acco=
-rding
-> >> +        * to different speeds. If the rgmii_tx clock is provided by t=
-he
-> >> +        * external rgmii_rxin, there is no need to configure the cloc=
-k
-> >> +        * internally, because rgmii_rxin will be adaptively adjusted.
-> >> +        */
-> >> +       if (dwmac->tx_use_rgmii_rxin_clk)
-> >> +               return;
-> >
-> > If this function is only needed in certain situations, why not just
-> > set the plat_dat->fix_mac_speed callback when it is needed?
-> >
-> Sounds good idea.
-> >> +       switch (speed) {
-> >> +       case SPEED_1000:
-> >> +               rate =3D 125000000;
-> >> +               break;
-> >> +       case SPEED_100:
-> >> +               rate =3D 25000000;
-> >> +               break;
-> >> +       case SPEED_10:
-> >> +               rate =3D 2500000;
-> >> +               break;
-> >> +       default:
-> >> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
-> >> +               break;
-> >> +       }
-> >> +
-> >> +       err =3D clk_set_rate(dwmac->clk_tx, rate);
-> >> +       if (err)
-> >> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", rat=
-e);
-> >> +}
-> >> +
-> >> +static int starfive_dwmac_probe(struct platform_device *pdev)
-> >> +{
-> >> +       struct plat_stmmacenet_data *plat_dat;
-> >> +       struct stmmac_resources stmmac_res;
-> >> +       struct starfive_dwmac *dwmac;
-> >> +       int err;
-> >> +
-> >> +       err =3D stmmac_get_platform_resources(pdev, &stmmac_res);
-> >> +       if (err)
-> >> +               return err;
-> >> +
-> >> +       plat_dat =3D stmmac_probe_config_dt(pdev, stmmac_res.mac);
-> >> +       if (IS_ERR(plat_dat)) {
-> >> +               dev_err(&pdev->dev, "dt configuration failed\n");
-> >> +               return PTR_ERR(plat_dat);
-> >> +       }
-> >> +
-> >> +       dwmac =3D devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL)=
-;
-> >> +       if (!dwmac)
-> >> +               return -ENOMEM;
-> >> +
-> >> +       dwmac->clk_tx =3D devm_clk_get_enabled(&pdev->dev, "tx");
-> >> +       if (IS_ERR(dwmac->clk_tx))
-> >> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx=
-),
-> >> +                                   "error getting tx clock\n");
-> >> +
-> >> +       dwmac->clk_gtx =3D devm_clk_get_enabled(&pdev->dev, "gtx");
-> >> +       if (IS_ERR(dwmac->clk_gtx))
-> >> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gt=
-x),
-> >> +                                   "error getting gtx clock\n");
-> >> +
-> >> +       if (device_property_read_bool(&pdev->dev, "starfive,tx-use-rgm=
-ii-clk"))
-> >> +               dwmac->tx_use_rgmii_rxin_clk =3D true;
-> >> +
-> >> +       dwmac->dev =3D &pdev->dev;
-> >> +       plat_dat->fix_mac_speed =3D starfive_eth_fix_mac_speed;
-> >
-> > Eg.:
-> > if (!device_property_read_bool(&pdev->dev, "starfive,tx_use_rgmii_clk")=
-)
-> >   plat_dat->fix_mac_speed =3D starfive_dwmac_fix_mac_speed;
-> >
-> Good idea, so we can remove flag 'tx_use_rgmii_rxin_clk' in struct starfi=
-ve_dwmac.
-> >> +       plat_dat->init =3D NULL;
-
-Btw. plat_dat is initialized by kzalloc in stmmac_probe_config_dt and
-I can't seem to find anything that sets plat_dat->init, so I think
-this is redundant.
-
-> >> +       plat_dat->bsp_priv =3D dwmac;
-> >> +       plat_dat->dma_cfg->dche =3D true;
-> >> +
-> >> +       err =3D stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
-> >> +       if (err) {
-> >> +               stmmac_remove_config_dt(pdev, plat_dat);
-> >> +               return err;
-> >> +       }
-> >> +
-> >> +       return 0;
-> >> +}
-> >> +
-> >> +static const struct of_device_id starfive_dwmac_match[] =3D {
-> >> +       { .compatible =3D "starfive,jh7110-dwmac" },
-> >> +       { /* sentinel */ }
-> >> +};
-> >> +MODULE_DEVICE_TABLE(of, starfive_dwmac_match);
-> >> +
-> >> +static struct platform_driver starfive_dwmac_driver =3D {
-> >> +       .probe  =3D starfive_dwmac_probe,
-> >> +       .remove =3D stmmac_pltfr_remove,
-> >> +       .driver =3D {
-> >> +               .name =3D "starfive-dwmac",
-> >> +               .pm =3D &stmmac_pltfr_pm_ops,
-> >> +               .of_match_table =3D starfive_dwmac_match,
-> >> +       },
-> >> +};
-> >> +module_platform_driver(starfive_dwmac_driver);
-> >> +
-> >> +MODULE_LICENSE("GPL");
-> >> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
-> >> +MODULE_AUTHOR("Emil Renner Berthing <kernel@esmil.dk>");
-> >> +MODULE_AUTHOR("Samin Guo <samin.guo@starfivetech.com>");
-> >> --
-> >> 2.17.1
-> >>
-> >>
-> >> _______________________________________________
-> >> linux-riscv mailing list
-> >> linux-riscv@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> Best regards,
-> Samin
->
-> --
-> Best regards,
-> Samin
+> Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+> ---
+>  arch/powerpc/kvm/book3s_hv_rmhandlers.S | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> index 7e063fde7adc..922667b09168 100644
+> --- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> +++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+> @@ -85,7 +85,7 @@ _GLOBAL_TOC(kvmppc_hv_entry_trampoline)
+>  	RFI_TO_KERNEL
+> 
+>  kvmppc_call_hv_entry:
+> -	ld	r4, HSTATE_KVM_VCPU(r13)
+> +	/* Enter guest. */
+>  	bl	kvmppc_hv_entry
+> 
+>  	/* Back from guest - restore host state and return to caller */
+> @@ -352,9 +352,7 @@ kvm_secondary_got_guest:
+>  	mtspr	SPRN_LDBAR, r0
+>  	isync
+>  63:
+> -	/* Order load of vcpu after load of vcore */
+> -	lwsync
+> -	ld	r4, HSTATE_KVM_VCPU(r13)
+> +	/* Enter guest. */
+>  	bl	kvmppc_hv_entry
+> 
+>  	/* Back from the guest, go back to nap */
+> @@ -506,7 +504,6 @@ kvmppc_hv_entry:
+> 
+>  	/* Required state:
+>  	 *
+> -	 * R4 = vcpu pointer (or NULL)
+>  	 * MSR = ~IR|DR
+>  	 * R13 = PACA
+>  	 * R1 = host R1
+> @@ -524,6 +521,8 @@ kvmppc_hv_entry:
+>  	li	r6, KVM_GUEST_MODE_HOST_HV
+>  	stb	r6, HSTATE_IN_GUEST(r13)
+> 
+> +	ld	r4, HSTATE_KVM_VCPU(r13)
+> +
+>  #ifdef CONFIG_KVM_BOOK3S_HV_P8_TIMING
+>  	/* Store initial timestamp */
+>  	cmpdi	r4, 0
+> -- 
+> 2.31.1
+> 
