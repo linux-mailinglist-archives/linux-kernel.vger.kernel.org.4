@@ -2,138 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95D1A6AB4FA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 04:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9156AB4FC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 04:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbjCFDNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 22:13:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36250 "EHLO
+        id S229710AbjCFDNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 22:13:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbjCFDNM (ORCPT
+        with ESMTP id S229590AbjCFDNi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 22:13:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781008688;
-        Sun,  5 Mar 2023 19:13:11 -0800 (PST)
+        Sun, 5 Mar 2023 22:13:38 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806878A78;
+        Sun,  5 Mar 2023 19:13:37 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC1E5B80B0E;
-        Mon,  6 Mar 2023 03:13:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBEEAC433EF;
-        Mon,  6 Mar 2023 03:13:05 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, linux-arch@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2] LoongArch: Provide kernel fpu functions
-Date:   Mon,  6 Mar 2023 11:12:58 +0800
-Message-Id: <20230306031258.99230-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
-MIME-Version: 1.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BDE760B67;
+        Mon,  6 Mar 2023 03:13:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465C3C4339B;
+        Mon,  6 Mar 2023 03:13:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1678072416;
+        bh=1id7DTe/+f1dfmJRxlDDt09X978sszhSG5u3A0Kl24M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=wlpYsNDyAbe3C10L1svZunLISycVuUMzPZqCuIvTAcE2FvKN9KK89jCXG21vWTlha
+         u5yf+InUGGpCVdBu6Pr4Z3eTCbs3ojhn+xwo1vxbpyXFyDFPW4Xr5hyfljGL6t2WZH
+         B8xCibrHxRJoMkMhLg1qqAqh+HC7KbrpOlubT9KY=
+Date:   Sun, 5 Mar 2023 19:13:35 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Suren Baghdasaryan <surenb@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm tree
+Message-Id: <20230305191335.fee8e6aa285b0ca771cab9dd@linux-foundation.org>
+In-Reply-To: <20230306135447.2c657f48@canb.auug.org.au>
+References: <20230306135447.2c657f48@canb.auug.org.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide kernel_fpu_begin()/kernel_fpu_end() to allow the kernel itself
-to use fpu. They can be used by some other kernel components, e.g., the
-AMDGPU graphic driver for DCN.
+On Mon, 6 Mar 2023 13:54:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Reported-by: WANG Xuerui<kernel@xen0n.name>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Hi all,
+> 
+> After merging the mm tree, today's linux-next build (various) failed
+> like this:
+> 
+> mm/khugepaged.c:1702:9: error: implicit declaration of function ‘vma_try_start_write’; did you mean ‘vma_start_write’? [-Werror=implicit-function-declaration]
+> 
+> Caused by commit
+> 
+>   92e3612279f9 ("mm/khugepaged: fix vm_lock/i_mmap_rwsem inversion in retract_page_tables")
+> 
+> The definition of vma_try_start_write() is protected by
+> CONFIG_PER_VMA_LOCK, but its use is not.
+
+Thanks.  Suren has a fix, but I haven't pushed it out yet :(
+
+
+From: Suren Baghdasaryan <surenb@google.com>
+Subject: txt-mm-khugepaged-write-lock-vma-while-collapsing-a-huge-page-fix-fix
+Date: Sat, 4 Mar 2023 15:24:15 -0800
+
+I missed vma_try_start_write() definition for CONFIG_PER_VMA_LOCK=n
+configuration.
+
+Link: https://lkml.kernel.org/r/CAJuCfpFjWhtzRE1X=J+_JjgJzNKhq-=JT8yTBSTHthwp0pqWZw@mail.gmail.com
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
-V2: Use non-GPL exports and update commit messages.
 
- arch/loongarch/include/asm/fpu.h |  3 +++
- arch/loongarch/kernel/Makefile   |  2 +-
- arch/loongarch/kernel/kfpu.c     | 41 ++++++++++++++++++++++++++++++++
- 3 files changed, 45 insertions(+), 1 deletion(-)
- create mode 100644 arch/loongarch/kernel/kfpu.c
 
-diff --git a/arch/loongarch/include/asm/fpu.h b/arch/loongarch/include/asm/fpu.h
-index 358b254d9c1d..192f8e35d912 100644
---- a/arch/loongarch/include/asm/fpu.h
-+++ b/arch/loongarch/include/asm/fpu.h
-@@ -21,6 +21,9 @@
+--- a/include/linux/mm.h~mm-khugepaged-write-lock-vma-while-collapsing-a-huge-page-fix-fix
++++ a/include/linux/mm.h
+@@ -717,6 +717,8 @@ static inline bool vma_start_read(struct
+ 		{ return false; }
+ static inline void vma_end_read(struct vm_area_struct *vma) {}
+ static inline void vma_start_write(struct vm_area_struct *vma) {}
++static inline bool vma_try_start_write(struct vm_area_struct *vma)
++		{ return true; }
+ static inline void vma_assert_write_locked(struct vm_area_struct *vma) {}
  
- struct sigcontext;
- 
-+extern void kernel_fpu_begin(void);
-+extern void kernel_fpu_end(void);
-+
- extern void _init_fpu(unsigned int);
- extern void _save_fp(struct loongarch_fpu *);
- extern void _restore_fp(struct loongarch_fpu *);
-diff --git a/arch/loongarch/kernel/Makefile b/arch/loongarch/kernel/Makefile
-index 78d4e3384305..9a72d91cd104 100644
---- a/arch/loongarch/kernel/Makefile
-+++ b/arch/loongarch/kernel/Makefile
-@@ -13,7 +13,7 @@ obj-y		+= head.o cpu-probe.o cacheinfo.o env.o setup.o entry.o genex.o \
- obj-$(CONFIG_ACPI)		+= acpi.o
- obj-$(CONFIG_EFI) 		+= efi.o
- 
--obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
-+obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o kfpu.o
- 
- obj-$(CONFIG_ARCH_STRICT_ALIGN)	+= unaligned.o
- 
-diff --git a/arch/loongarch/kernel/kfpu.c b/arch/loongarch/kernel/kfpu.c
-new file mode 100644
-index 000000000000..cd2a18fecdcc
---- /dev/null
-+++ b/arch/loongarch/kernel/kfpu.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#include <linux/cpu.h>
-+#include <linux/init.h>
-+#include <asm/fpu.h>
-+#include <asm/smp.h>
-+
-+static DEFINE_PER_CPU(bool, in_kernel_fpu);
-+
-+void kernel_fpu_begin(void)
-+{
-+	if(this_cpu_read(in_kernel_fpu))
-+		return;
-+
-+	preempt_disable();
-+	this_cpu_write(in_kernel_fpu, true);
-+
-+	if (!is_fpu_owner())
-+		enable_fpu();
-+	else
-+		_save_fp(&current->thread.fpu);
-+}
-+EXPORT_SYMBOL(kernel_fpu_begin);
-+
-+void kernel_fpu_end(void)
-+{
-+	if(!this_cpu_read(in_kernel_fpu))
-+		return;
-+
-+	if (!is_fpu_owner())
-+		disable_fpu();
-+	else
-+		_restore_fp(&current->thread.fpu);
-+
-+	this_cpu_write(in_kernel_fpu, false);
-+	preempt_enable();
-+}
-+EXPORT_SYMBOL(kernel_fpu_end);
--- 
-2.39.1
+ #endif /* CONFIG_PER_VMA_LOCK */
+_
 
