@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF39F6AB4DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 04:03:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB9D6AB4DB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 04:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCFDDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 22:03:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        id S229624AbjCFDEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 22:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjCFDDt (ORCPT
+        with ESMTP id S229543AbjCFDEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 22:03:49 -0500
+        Sun, 5 Mar 2023 22:04:06 -0500
 Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C904A24B
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 19:03:42 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id oj5so8370532pjb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 19:03:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB8E9757
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 19:03:52 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id oj5so8370807pjb.5
+        for <linux-kernel@vger.kernel.org>; Sun, 05 Mar 2023 19:03:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678071822;
+        d=gmail.com; s=20210112; t=1678071832;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KOC/FNu2kgiTh2xy+eQd0EULhBRFBbwS09u1PSCaics=;
-        b=NaKYVckZLYfiEuAigzcP2ETDA+KCnwCeEG6JErjf5qgu7EvyJy413kzlsIjrrmFzwB
-         TIMrVi28isX3LNq1vvN8kZtZv772oFypAlZ7V2rmarNnARWhk/O32RHBNeAY38G4pjLf
-         mfogJfCiYVCDZ6szaAOYjF/PBNoCcpkYyCRiPwbqyGxeNhjak22jX5BYnpyFrg9F966K
-         eVFGlYDCvp/OlbnBgWUGbnn9L+jhQpxcHWsL0Wew/SDtoNrqBHZMlGn906K6whpqUEGd
-         8annz1k4T1diofzyCnJvehBAZY1p1l+QOSiPrVJq6BtFBmT0AtmiHJR3WssGA6z4qWeZ
-         2hgQ==
+        bh=uajbUQnIewe2JrUK08Rp36GBFla2nyzidVlnhov4v/M=;
+        b=WZrdj+Isk4V/hOXFfckOgIgGy2pe/UdwvvkYcjTx/ES3KpvHXYilLIihzQhVPAkbWK
+         lRifRyBwzy0RYLjGmoSGWipsoXivSfkd9bF9QBKrG78Wg/xlcl5BTzQov+qetNjMIlxZ
+         AFTwx1JskAjmAv824RVbHx5NE8menYuABnFqROV9p/yVqcha8fdwsZjGqSQGzfHCM7kp
+         W8kjUxAmlWqI0aQsNB7ixF0CFaB3WxCH8HAkPk7p22i0bWO9wSoXtCp7ISf1Wosqf9MS
+         8keWuJWbTGBuk5y9Dvf96qEB16dNVJEFH4c48AELbRLjqOBB5xM/HIMaV/BC2xwUlkaM
+         Ur9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678071822;
+        d=1e100.net; s=20210112; t=1678071832;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KOC/FNu2kgiTh2xy+eQd0EULhBRFBbwS09u1PSCaics=;
-        b=0oP7CwJVaLt5i6UGspEfrJYDYbCglO26B4pwJb6bka6OcdF8ouBdH476XUfBhLvw30
-         cmbOxSWTGAPLdTsjFgGYk5Gty7auUgMKaMGe5EUDGHLhyfWyQgHpMz/p3JMa8ija4eBw
-         MMSJRavlv9TZYrbdVRsKMicp+DYy8id3d14dZoyBgm+e6AAiTnV/TjAfE+bSXYEheh3f
-         DGeYKPTg2jOZw2PAWybyvqgyhUva237hmsatjEsu4cy4MlEc7Yla6ffkHg/kOvNFVRXr
-         NOBHepSVtmbk6i203aurZ49Oj3QtPuKB1XlRwrwM2OZvNfjtuQmB+wTB9iA8uWDxQ6LO
-         u/Hg==
-X-Gm-Message-State: AO0yUKXVHx+1uMHZeEJUTWjtAgrxuPtSb/LAcPvZH/cOb0W54Jt2S43Y
-        FeO+I+j09zmUEs+scwQSFM6+byy8yw==
-X-Google-Smtp-Source: AK7set9pFHfjgHVn9nJVc+fD+gdveI9XYNbDTQrxdQyJRmLKk2YuM3aJ0xZd+cpaGIwqbkF6D36UKQ==
-X-Received: by 2002:a17:902:c40a:b0:19a:5958:15e7 with SMTP id k10-20020a170902c40a00b0019a595815e7mr10254558plk.15.1678071822090;
-        Sun, 05 Mar 2023 19:03:42 -0800 (PST)
+        bh=uajbUQnIewe2JrUK08Rp36GBFla2nyzidVlnhov4v/M=;
+        b=4yxjt45fQHNC3BaOKk6qy37vZ8p6ockI7vEhoIxjBXwKCV0DmvtmqOXh5kpFnYJjXZ
+         LUxuixTZrfrFJ05HLBbVIz504N3XbKg0IXQPun9jBN7do9joIEyWDBZlLrQ2O+D69A3z
+         RgM/egEDqt/a1k6h2bH61UpPH6BcoyMhXZfRPwLeMfImA8iOVafRL8mbpynCSN4hMdLd
+         N9hwVEdxNLktul1cvRGoTsHM/eM4Y92fOLoJQamxfk4XxAWhzwGjq9S1TOrOutTScIvW
+         +T9dpm7HyOOuXrFY3c2PxNTfuOIdiZgxNlG/TKA6thD9PvBmxTEU2fn42fCe9dC+t12D
+         JQQA==
+X-Gm-Message-State: AO0yUKWP8Z+NtngYI8MKjs411K4Q5b9nusO1uVvzp0lssQXxW60Z/TYf
+        C6oL4Ak6gDoaINxSo6o9OQ==
+X-Google-Smtp-Source: AK7set8hmMUrNWIc99n8GyLvy/rglRTI9XgR+b/60jnclG8T/yq3ZeWruKe+7SgPeOeOv8u/sIa7qA==
+X-Received: by 2002:a17:903:244c:b0:19e:3b41:1828 with SMTP id l12-20020a170903244c00b0019e3b411828mr10432774pls.22.1678071832295;
+        Sun, 05 Mar 2023 19:03:52 -0800 (PST)
 Received: from piliu.users.ipa.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id jy16-20020a17090342d000b0019719f752c5sm5410439plb.59.2023.03.05.19.03.39
+        by smtp.gmail.com with ESMTPSA id jy16-20020a17090342d000b0019719f752c5sm5410439plb.59.2023.03.05.19.03.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Mar 2023 19:03:41 -0800 (PST)
+        Sun, 05 Mar 2023 19:03:51 -0800 (PST)
 From:   Pingfan Liu <kernelfans@gmail.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Pingfan Liu <kernelfans@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
         Ard Biesheuvel <ardb@kernel.org>, kexec@lists.infradead.org
-Subject: [PATCH 4/6] lib/decompress: Keep decompress routines based on selection
-Date:   Mon,  6 Mar 2023 11:03:03 +0800
-Message-Id: <20230306030305.15595-5-kernelfans@gmail.com>
+Subject: [PATCH 6/6] init/Kconfig: Select decompressing method if compressing kernel
+Date:   Mon,  6 Mar 2023 11:03:05 +0800
+Message-Id: <20230306030305.15595-7-kernelfans@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230306030305.15595-1-kernelfans@gmail.com>
 References: <20230306030305.15595-1-kernelfans@gmail.com>
@@ -72,76 +79,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At present, many decompressing routines in lib/decompress*.c are in
-__section(".init.text"). But they are required to decompress the kernel
-image when kexec file load compressed kernel.
+If choosing an EFI_ZBOOT image, the corresponding decompressing method
+should be selected so that kexec can load that zboot image.
 
-To solve this issue, define 'INIT' conditional based on the macro
-CONFIG_HAVE_KEXEC_DECOMPRESS. Also make lib/decompress.c adopt this way.
+This can be achieved when "Kernel compression mode" is determined.
 
 Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Ard Biesheuvel <ardb@kernel.org>
 Cc: kexec@lists.infradead.org
 To: linux-kernel@vger.kernel.org
 ---
- include/linux/decompress/mm.h | 9 ++++++++-
- lib/decompress.c              | 5 +++--
- 2 files changed, 11 insertions(+), 3 deletions(-)
+ init/Kconfig | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/linux/decompress/mm.h b/include/linux/decompress/mm.h
-index 9192986b1a73..33d8fd13a5c6 100644
---- a/include/linux/decompress/mm.h
-+++ b/include/linux/decompress/mm.h
-@@ -92,11 +92,18 @@ MALLOC_VISIBLE void free(void *where)
- #define large_malloc(a) vmalloc(a)
- #define large_free(a) vfree(a)
- 
--#define INIT __init
- #define STATIC
- 
- #include <linux/init.h>
- 
-+#ifndef CONFIG_HAVE_KEXEC_DECOMPRESS
-+#define INIT __init
-+#else
-+#define INIT
-+#undef __initconst
-+#define __initconst
-+#endif
-+
- #endif /* STATIC */
- 
- #endif /* DECOMPR_MM_H */
-diff --git a/lib/decompress.c b/lib/decompress.c
-index 8dd6f87e885f..33f097fe4b51 100644
---- a/lib/decompress.c
-+++ b/lib/decompress.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/decompress/generic.h>
-+#include <linux/decompress/mm.h>
- 
- #include <linux/decompress/bunzip2.h>
- #include <linux/decompress/unlzma.h>
-@@ -60,7 +61,7 @@ static const struct compress_format compressed_formats[] __initconst = {
- 	{ {0, 0}, NULL, NULL }
- };
- 
--decompress_fn __init decompress_method(const unsigned char *inbuf, long len,
-+decompress_fn INIT decompress_method(const unsigned char *inbuf, long len,
- 				const char **name)
- {
- 	const struct compress_format *cf;
-@@ -83,7 +84,7 @@ decompress_fn __init decompress_method(const unsigned char *inbuf, long len,
- 	return cf->decompressor;
- }
- 
--decompress_fn __init decompress_method_by_name(const unsigned char *name)
-+decompress_fn INIT decompress_method_by_name(const unsigned char *name)
- {
- 	const struct compress_format *cf;
- 
+diff --git a/init/Kconfig b/init/Kconfig
+index 44e90b28a30f..046724208645 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -269,6 +269,7 @@ choice
+ config KERNEL_GZIP
+ 	bool "Gzip"
+ 	depends on HAVE_KERNEL_GZIP
++	select KEXEC_DECOMPRESS_GZIP if KEXEC_FILE && EFI_ZBOOT
+ 	help
+ 	  The old and tried gzip compression. It provides a good balance
+ 	  between compression ratio and decompression speed.
+@@ -276,6 +277,7 @@ config KERNEL_GZIP
+ config KERNEL_BZIP2
+ 	bool "Bzip2"
+ 	depends on HAVE_KERNEL_BZIP2
++	select KEXEC_DECOMPRESS_BZIP2 if KEXEC_FILE && EFI_ZBOOT
+ 	help
+ 	  Its compression ratio and speed is intermediate.
+ 	  Decompression speed is slowest among the choices.  The kernel
+@@ -286,6 +288,7 @@ config KERNEL_BZIP2
+ config KERNEL_LZMA
+ 	bool "LZMA"
+ 	depends on HAVE_KERNEL_LZMA
++	select KEXEC_DECOMPRESS_LZMA if KEXEC_FILE && EFI_ZBOOT
+ 	help
+ 	  This compression algorithm's ratio is best.  Decompression speed
+ 	  is between gzip and bzip2.  Compression is slowest.
+@@ -294,6 +297,7 @@ config KERNEL_LZMA
+ config KERNEL_XZ
+ 	bool "XZ"
+ 	depends on HAVE_KERNEL_XZ
++	select KEXEC_DECOMPRESS_XZ if KEXEC_FILE && EFI_ZBOOT
+ 	help
+ 	  XZ uses the LZMA2 algorithm and instruction set specific
+ 	  BCJ filters which can improve compression ratio of executable
+@@ -309,6 +313,7 @@ config KERNEL_XZ
+ config KERNEL_LZO
+ 	bool "LZO"
+ 	depends on HAVE_KERNEL_LZO
++	select KEXEC_DECOMPRESS_LZO if KEXEC_FILE && EFI_ZBOOT
+ 	help
+ 	  Its compression ratio is the poorest among the choices. The kernel
+ 	  size is about 10% bigger than gzip; however its speed
+@@ -317,6 +322,7 @@ config KERNEL_LZO
+ config KERNEL_LZ4
+ 	bool "LZ4"
+ 	depends on HAVE_KERNEL_LZ4
++	select KEXEC_DECOMPRESS_LZ4 if KEXEC_FILE && EFI_ZBOOT
+ 	help
+ 	  LZ4 is an LZ77-type compressor with a fixed, byte-oriented encoding.
+ 	  A preliminary version of LZ4 de/compression tool is available at
+@@ -329,6 +335,7 @@ config KERNEL_LZ4
+ config KERNEL_ZSTD
+ 	bool "ZSTD"
+ 	depends on HAVE_KERNEL_ZSTD
++	select KEXEC_DECOMPRESS_ZSTD if KEXEC_FILE && EFI_ZBOOT
+ 	help
+ 	  ZSTD is a compression algorithm targeting intermediate compression
+ 	  with fast decompression speed. It will compress better than GZIP and
 -- 
 2.31.1
 
