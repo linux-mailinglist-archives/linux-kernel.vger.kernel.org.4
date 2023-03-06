@@ -2,169 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B706ABB4A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DAE6ABCBF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbjCFKMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:12:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S231256AbjCFKa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:30:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbjCFKMc (ORCPT
+        with ESMTP id S231207AbjCFKa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:12:32 -0500
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963672411E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:11:59 -0800 (PST)
-Received: by mail-ua1-x92c.google.com with SMTP id s13so6012581uac.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:11:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678097497;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HE+8pibrc6sLOKZ/p+IAeXF6PtsUcHKof8qicDz0pEE=;
-        b=1Xa11x5NG/+5EyXyponCNpY/iT7IEHh+nUQqcH8K+W7kCOGp0w9zNaM7TzvrMD18qj
-         gJlZkk6qYQ2usHpKSIsppIoPoDuWS9dws5PDyPsTmhpdMzfBHhg2PDd1RkxFFeyppuq4
-         sBDDeCbdsuzm0DEzrP96snc4lBjVeAEhMisjN0O5odGZWfd/2SY9GbsIGFxuBJ0pICSA
-         d2g3zRNoOCDcfn6VlHBUwe88IeuNGxGz8zVjhqaTL3ypTHLC5plbDrsnP3NfYgVAoIxa
-         8NGR5q0Wfjt4ED/Tb7gwN557uIuSm1kNDDQ+N8/MNvgue7eahTXix45U7uIcfSBlcqWh
-         sm3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678097497;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HE+8pibrc6sLOKZ/p+IAeXF6PtsUcHKof8qicDz0pEE=;
-        b=Lh48D8DmmBOIwl53vfBnSTq99qfgDN8ANahrOdDnAUrskk/lptl+cG4AIGViN0T8Vu
-         gJZW9RP5K3ir+uvQ5iBlgZCNuB2X1v5D3bqN7TePAdmkdvwVdfSoVjsSaMdp747kdGAK
-         XPK564fSDREkLBOvPdPZFqRXaHbV2c4acP4rqGb8c5JWl5LiLZb628W/1JZGm6iOi2et
-         S3qMvPHq+GCN2GtH7EfGD6K94UWuzAng+jFHbLnxeKKkCHNM7pNn9aTGt43a2VQikWkl
-         AnP88JUyNss2q5bqi+Oz9g+h8Sq9LYjg1LnmtF9XNEI4zJ/PzQQRVrtrxWlMzrXXEH59
-         Fm4g==
-X-Gm-Message-State: AO0yUKUTQlo+0+APlKscdSSj5eYUIO/uadtuhg7/OCehq8252pSKA8+R
-        eeGRSGMJSkLWivFeNs80c6BQLYAfbyNXAG5ZGZc7kg==
-X-Google-Smtp-Source: AK7set/lNdPUCm9R6eAxbdwnbS9gYophK34alp7Zmw1mmE64hhaEUGnNRtwu5ZwMBRd5w6pA2mTOot12HagE90NaJoI=
-X-Received: by 2002:a1f:914a:0:b0:401:4007:10c4 with SMTP id
- t71-20020a1f914a000000b00401400710c4mr6539107vkd.1.1678097497106; Mon, 06 Mar
- 2023 02:11:37 -0800 (PST)
+        Mon, 6 Mar 2023 05:30:29 -0500
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3362365B;
+        Mon,  6 Mar 2023 02:29:59 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+        by relay.expurgate.net with smtp (Exim 4.92)
+        (envelope-from <prvs=0443564136=fe@dev.tdt.de>)
+        id 1pZ7pZ-0008Sa-Ue; Mon, 06 Mar 2023 11:12:33 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+        by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <fe@dev.tdt.de>)
+        id 1pZ7pZ-000KIO-5R; Mon, 06 Mar 2023 11:12:33 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+        by securemail.tdt.de (Postfix) with ESMTP id B9CB8240049;
+        Mon,  6 Mar 2023 11:12:32 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+        by securemail.tdt.de (Postfix) with ESMTP id 30F6D240040;
+        Mon,  6 Mar 2023 11:12:32 +0100 (CET)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+        by mail.dev.tdt.de (Postfix) with ESMTP id E542B20806;
+        Mon,  6 Mar 2023 11:12:31 +0100 (CET)
 MIME-Version: 1.0
-References: <cover.1677515341.git.william.gray@linaro.org> <bd501b4b5ff88da24d467f75e8c71b4e0e6f21e2.1677515341.git.william.gray@linaro.org>
-In-Reply-To: <bd501b4b5ff88da24d467f75e8c71b4e0e6f21e2.1677515341.git.william.gray@linaro.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Mar 2023 11:11:26 +0100
-Message-ID: <CAMRc=MdkkO4DpdLJA4SkEbAFFrdDtfZBOtLFPmkTBnSMDz=gCQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] regmap-irq: Add no_status support
-To:     broonie@kernel.org
-Cc:     linus.walleij@linaro.org, andriy.shevchenko@linux.intel.com,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 06 Mar 2023 11:12:31 +0100
+From:   Florian Eckert <fe@dev.tdt.de>
+To:     =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org, pavel@ucw.cz,
+        lee@kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, Eckert.Florian@googlemail.com
+Subject: Re: [PATCH v7 2/2] trigger: ledtrig-tty: add additional modes
+In-Reply-To: <20230306093524.amm7o4ppa7gon4ew@pengutronix.de>
+References: <20230222083335.847655-1-fe@dev.tdt.de>
+ <20230222083335.847655-3-fe@dev.tdt.de>
+ <20230306093524.amm7o4ppa7gon4ew@pengutronix.de>
+Message-ID: <706dcb23af15223489dd7d0d34f5a64c@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-purgate: clean
+X-purgate-ID: 151534::1678097553-AA6876AC-A6198408/0/0
+X-purgate-type: clean
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 5:54=E2=80=AFPM William Breathitt Gray
-<william.gray@linaro.org> wrote:
->
-> Some devices lack status registers, yet expect to handle interrupts.
-> Introduce a no_status flag to indicate such a configuration, where
-> rather than read a status register to verify, all interrupts received
-> are assumed to be active.
->
-> Cc: Mark Brown <broonie@kernel.org>
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-> ---
-> Changes in v2:
->  - Utilize memset32() to set status_buf for no_status case
->  - Utilize GENMASK() to generate status_buf mask
->  - Move no_status kernel doc line under runtime_pm line
->
->  drivers/base/regmap/regmap-irq.c | 22 +++++++++++++++-------
->  include/linux/regmap.h           |  2 ++
->  2 files changed, 17 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regma=
-p-irq.c
-> index a8f185430a07..290e26664a21 100644
-> --- a/drivers/base/regmap/regmap-irq.c
-> +++ b/drivers/base/regmap/regmap-irq.c
-> @@ -437,7 +437,10 @@ static irqreturn_t regmap_irq_thread(int irq, void *=
-d)
->          * possible in order to reduce the I/O overheads.
->          */
->
-> -       if (chip->num_main_regs) {
-> +       if (chip->no_status) {
-> +               /* no status register so default to all active */
-> +               memset32(data->status_buf, GENMASK(31, 0), chip->num_regs=
-);
-> +       } else if (chip->num_main_regs) {
->                 unsigned int max_main_bits;
->                 unsigned long size;
->
-> @@ -967,12 +970,17 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle=
- *fwnode,
->                         continue;
->
->                 /* Ack masked but set interrupts */
-> -               reg =3D d->get_irq_reg(d, d->chip->status_base, i);
-> -               ret =3D regmap_read(map, reg, &d->status_buf[i]);
-> -               if (ret !=3D 0) {
-> -                       dev_err(map->dev, "Failed to read IRQ status: %d\=
-n",
-> -                               ret);
-> -                       goto err_alloc;
-> +               if (d->chip->no_status) {
-> +                       /* no status register so default to all active */
-> +                       d->status_buf[i] =3D GENMASK(31, 0);
-> +               } else {
-> +                       reg =3D d->get_irq_reg(d, d->chip->status_base, i=
-);
-> +                       ret =3D regmap_read(map, reg, &d->status_buf[i]);
-> +                       if (ret !=3D 0) {
-> +                               dev_err(map->dev, "Failed to read IRQ sta=
-tus: %d\n",
-> +                                       ret);
-> +                               goto err_alloc;
-> +                       }
->                 }
->
->                 if (chip->status_invert)
-> diff --git a/include/linux/regmap.h b/include/linux/regmap.h
-> index a3bc695bcca0..c6d80d4e73de 100644
-> --- a/include/linux/regmap.h
-> +++ b/include/linux/regmap.h
-> @@ -1564,6 +1564,7 @@ struct regmap_irq_chip_data;
->   *                   the need for a @sub_reg_offsets table.
->   * @status_invert: Inverted status register: cleared bits are active int=
-errupts.
->   * @runtime_pm:  Hold a runtime PM lock on the device when accessing it.
-> + * @no_status: No status register: all interrupts assumed generated by d=
-evice.
->   *
->   * @num_regs:    Number of registers in each control bank.
->   * @irqs:        Descriptors for individual IRQs.  Interrupt numbers are
-> @@ -1630,6 +1631,7 @@ struct regmap_irq_chip {
->         unsigned int clear_on_unmask:1;
->         unsigned int not_fixed_stride:1;
->         unsigned int status_invert:1;
-> +       unsigned int no_status:1;
->
->         int num_regs;
->
-> --
-> 2.39.2
->
+Hello Uwe,
 
-Mark,
+>> +		  LED on if line is high.
+>> +		* RNG:   DCE has detected an incoming ring signal.
+>> +		  LED on if line is high.
+> 
+> Something I (still) don't like about this approach is that you cannot
+> make the LED flash on TX only (or CAR and DSR). Something like:
+> 
+> 	led=/sys/class/leds/<led>/
+> 	echo 1 > $led/TX
+> 	echo 0 > $led/RX
+> 	echo 1 > $led/CAR
+> 
+> would be a more flexible and IMHO nicer interface. (Maybe with improved
+> file names.)
 
-If this looks good to you, could you Ack it so that I can take it
-through the GPIO tree?
+The question is whether it makes sense to combine several states on one
+LED. We can add TTY_LED_RX or TTY_LED_TX to meet your requirements.
+The only led trigger I know that combines multiple states is 
+ledtrig-netdev.
 
-Bart
+If so, I can only imagine that we handle it the same way as with
+ledtrig-netdev. For the states CTS/DSR/CAR/RNG, the LED goes on or off
+and when data is transmitted (rx/tx), the LED flashes.
+
+I have personally have a usecase where I need to indicate whether
+I am getting CTS from the mode or not.
+
+If that's how we want to do it, then I can only imagine that:
+
+led=/sys/class/leds/<led>/
+  	echo 1 > $led/rx
+  	echo 0 > $led/tx
+  	echo <CTS|DSR|CAR|RNG> > $led/tty_led_mode
+
+I think it only makes sense to always display only one mode
+
+This are "CTS|DSR|CAR|RNG".
+
+
+Personally, I think
+it complicates things because the LED shows several states.
+
+Best regards
+Florian
