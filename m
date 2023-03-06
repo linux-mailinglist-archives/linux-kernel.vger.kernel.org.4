@@ -2,149 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3C36AC086
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:15:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A49CA6AC088
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjCFNPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S231185AbjCFNPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:15:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjCFNO6 (ORCPT
+        with ESMTP id S231182AbjCFNPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:14:58 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B272E0D5
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:14:15 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id x12so8003468ybt.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:14:15 -0800 (PST)
+        Mon, 6 Mar 2023 08:15:06 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7462A153
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:14:45 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id c200so3115992qke.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:14:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678108455;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sjrCU8dfwt2r52mtNocw9w9eS+r3p5I80G2XWIYONwo=;
-        b=imkXfalDXcbd10QyjB+ndurA7z/hros2mKvpPj+lajBxpK6l2mtOWPDMjulcfDSG89
-         crCR8HVY6dBSwt7NVI3bOt+C2Sieo7BRVTCr4+H3hKkjNf3S6ln9WStozd7Kuv1oNJhe
-         N+THPGLK9MWrG9CeSWXXIJxfW2pwgeJNBDIopflzJJJlj6OoubbnBHQ8nEba/EeI76dZ
-         V2eaEoPOTKjg5UFYk2KFzJPDnpdauXGNAeJsSXeW5i045uPT+5Mix3RIqc1v55+LDY7H
-         86RIM/qNIfL1v92hDWXybUJlTfaI17VDaUTlz0ODnx/fc8sIbJdsULEqZM0cuR994xc+
-         wUDg==
+        d=google.com; s=20210112; t=1678108484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mu1V5ydNYkFDja9gdo3UxaY36KT+L6ksIVYOziOfEH0=;
+        b=Zg0iww3a8X07I7zja7X2Z/1w7BTxHzwiipcx8eKAE+ud/I7+zn5DKwF2RK5i45ff4b
+         ZCHKQ1KStc5u1SBIV2oOvtCvqPltjRbQGAWay+K/7uyPoqRgjy3w2tLISDubgjwOMffv
+         ozivGHiVjMcgs0+UySNatd1yvKIBvZsoCVcbb9Z0tgra0h5rAvV+oTWxIqKf3gOZB8T+
+         ZqbDh64YmnUSJxZzLS/IHzHofSPnJfolJztEPo+72qpxPrf4K8Tr3TRedljSmgymDCrd
+         G0q+m3QfsjSIWjvK20V7ykPndCZ2CR15XlIs7mdyjAg0P8fmNTB8GhEDmkXMqTNHc5cF
+         q8SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678108455;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sjrCU8dfwt2r52mtNocw9w9eS+r3p5I80G2XWIYONwo=;
-        b=uo9WqogwXRWcmKp6cLjTkdz3t6jl3N+5qHPg44QF7iQzlRH5KCHfb1oLoRLycya8li
-         8811t3kZYdWwlE8OqqoqTeSxegMDQnxOZfhIk9pmxFDkyszEDqdqTNhIa6nL6RDZKdO6
-         1B5+V3G1MNDqQd/aiYMA+pSaLeTACkGasehKDYhOjPs6pJUaFjmgB1Bv/j17pcvNYssL
-         3KVm8uyiO245w6Hwcz/KeraZP6QunLLNZ9lqDuuW+P2nFS2ezL0MGcyuDWY/boIHTpPt
-         NL9vk69D6DuXNoCWe3qqOiQBUfehRm0b+MQaYS4p6cLrG+x4hd3cNQ1M0LC4Dsi9b5nB
-         SElQ==
-X-Gm-Message-State: AO0yUKXJSMHnTUpGMjD7yFdGtDmqbImMcAsudVqCg4yr4DS/MSwtHPCY
-        GPIKZzWoq9SDwJcvX3fF+MwhmKT/izhUHmH2KGkFFQ==
-X-Google-Smtp-Source: AK7set/9eXofjnPoXZfw7UlW58CMp0dIpumH5qKagGWd2A1jVBQssoZ5W4hJK0gzmJ5RZgIOkmp/e1aK3WLMpy2vXoE=
-X-Received: by 2002:a5b:b84:0:b0:ab8:1ed9:cfd2 with SMTP id
- l4-20020a5b0b84000000b00ab81ed9cfd2mr6441002ybq.5.1678108455003; Mon, 06 Mar
- 2023 05:14:15 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678108484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mu1V5ydNYkFDja9gdo3UxaY36KT+L6ksIVYOziOfEH0=;
+        b=DlQTc71NhGf6O5rIYaOJDicdAr/I/HDZKX0n/7zGn9Y7X5u3ohb2Cm/G3n4AbYjUBA
+         O6tGFhk+7XwLnha+P22mxj2z++ALebiraY7XWrBZNmjjfzCfZ9wInk/YGXrlJI8nCs+w
+         tiD8aQnJlJaqEsLPxDWe6Whtp30Y5hbFRutHR88fNUz+zCRWmVZeC6mMwKPcEypwARCx
+         hnMG2DQEIpaJoCpux9zH1jxGnp9hYUxwRK14M9sWRQDtdVj8VdaKg5Rh2eFj3HKfmAA2
+         gQzT8mFYu9m+4vMT3V+TGSwmBmkOfUQEFUg/MyRxnhtI9uspJLU9pZK6DAWKi5R+pBwP
+         S8hA==
+X-Gm-Message-State: AO0yUKV1YVKCHzw5ExwpGpZ+zKDVMvCxJyxYgDFE+T7vowutnDI+ZMxF
+        /RDKe8/Oca9rNSC5mHSj+loJuGakVgxg0+KbC2JbGg==
+X-Google-Smtp-Source: AK7set8p1hfwjvvTXq5qSX5pqDJS+IK44rIirgoCh1bQeivRW10smgiuXSd46WXqa5rbfo4xpluWs5n12+eKReFmwow=
+X-Received: by 2002:a05:620a:125c:b0:741:e175:ade7 with SMTP id
+ a28-20020a05620a125c00b00741e175ade7mr2238933qkl.0.1678108484490; Mon, 06 Mar
+ 2023 05:14:44 -0800 (PST)
 MIME-Version: 1.0
-References: <3eeaa940-9d40-5e33-bc36-c9b0449ded9f@gmail.com> <774d712d-bcdf-677a-2d9c-a49ed829e965@gmail.com>
-In-Reply-To: <774d712d-bcdf-677a-2d9c-a49ed829e965@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 6 Mar 2023 14:14:03 +0100
-Message-ID: <CACRpkdbkKgPnkop5V0Diw5goZ9Km4mHXD7=7sb_Nj8k1UtMTvA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/7] dt-bindings: gpio: rockchip,gpio-bank: add unique
- hardware GPIO ID
-To:     Johan Jonker <jbx6244@gmail.com>
-Cc:     brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230113175459.14825-1-james.morse@arm.com> <20230113175459.14825-10-james.morse@arm.com>
+ <CALPaoCg4T52ju5XJC-BVX-EuZUtc67LruWbgyH5s8CoiEwOUPw@mail.gmail.com> <c3ca6d66-e58c-8ace-e88e-45ded5de836f@arm.com>
+In-Reply-To: <c3ca6d66-e58c-8ace-e88e-45ded5de836f@arm.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Mon, 6 Mar 2023 14:14:33 +0100
+Message-ID: <CALPaoCik0j7ATCv-He5HWVqbL+3njpqO1fhF5FQJO7qqT1zR3w@mail.gmail.com>
+Subject: Re: [PATCH v2 09/18] x86/resctrl: Allow resctrl_arch_rmid_read() to sleep
+To:     James Morse <james.morse@arm.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 23, 2023 at 8:46 PM Johan Jonker <jbx6244@gmail.com> wrote:
+Hi James,
 
-> Add a unique hardware GPIO ID to the Rockchip GPIO nodes with
-> the "rockchip,gpio-controller" property to be independent from aliases
-> and probe order. "gpio-ranges" can't be used for that, because there is
-> no semantic restrictions on how they are set up.
+On Mon, Mar 6, 2023 at 12:34=E2=80=AFPM James Morse <james.morse@arm.com> w=
+rote:
+> On 23/01/2023 15:33, Peter Newman wrote:
+> > On Fri, Jan 13, 2023 at 6:56 PM James Morse <james.morse@arm.com> wrote=
+:
+> >> MPAM's cache occupancy counters can take a little while to settle once
+> >> the monitor has been configured. The maximum settling time is describe=
+d
+> >> to the driver via a firmware table. The value could be large enough
+> >> that it makes sense to sleep.
+> >
+> > Would it be easier to return an error when reading the occupancy count
+> > too soon after configuration? On Intel it is already normal for counter
+> > reads to fail on newly-allocated RMIDs.
 >
-> Signed-off-by: Johan Jonker <jbx6244@gmail.com>
-> ---
+> For x86, you have as many counters as there are RMIDs, so there is no iss=
+ue just accessing
+> the counter.
+
+I should have said AMD instead of Intel, because their implementations
+have far fewer counters than RMIDs.
+
 >
-> See discussion:
-> https://lore.kernel.org/u-boot/CACRpkdZx8EaSFLeh4vruRsdC+Sx_ieBiKmuE7t37zhiYqtS3WQ@mail.gmail.com/
-> ---
->  .../devicetree/bindings/gpio/rockchip,gpio-bank.yaml        | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> index 2e9a5179c..39ac41e9d 100644
-> --- a/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/rockchip,gpio-bank.yaml
-> @@ -52,6 +52,12 @@ properties:
->
->    gpio-line-names: true
->
-> +  rockchip,gpio-controller:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    maximum: 8
-> +    description:
-> +      Unique hardware GPIO ID.
+> With MPAM there may be as few as 1 monitor for the CSU (cache storage uti=
+lisation)
+> counter, which needs to be multiplexed between different PARTID to find t=
+he cache
+> occupancy (This works for CSU because its a stable count, it doesn't work=
+ for the
+> bandwidth monitors)
+> On such a platform the monitor needs to be allocated and programmed befor=
+e it reads a
+> value for a particular PARTID/CLOSID. If you had two threads trying to re=
+ad the same
+> counter, they could interleave perfectly to prevent either thread managin=
+g to read a value.
+> The 'not ready' time is advertised in a firmware table, and the driver wi=
+ll wait at most
+> that long before giving up and returning an error.
 
-So we need to discuss this with the Device Tree people because if this is needed
-it need to be motivated in terms of "any operating system needs this".
+Likewise, on AMD, a repeating sequence of tasks which are LRU in terms
+of counter -> RMID allocation could prevent RMID event reads from ever
+returning a value.
 
-Very similar precedents exist:
+The main difference I see with MPAM is that software allocates the
+counters instead of hardware, but the overall behavior sounds the same.
 
-pinctrl/renesas,rzg2l-poeg.yaml
+The part I object to is introducing the wait to the counter read because
+existing software already expects an immediate error when reading a
+counter too soon. To produce accurate data, these readings are usually
+read at intervals of multiple seconds.
 
-  renesas,poeg-id:
-    $ref: /schemas/types.yaml#/definitions/uint32
-    enum: [ 0, 1, 2, 3 ]
-    description: |
-      POEG group index. Valid values are:
-        <0> : POEG group A
-        <1> : POEG group B
-        <2> : POEG group C
-        <3> : POEG group D
+Instead, when configuring a counter, could you use the firmware table
+value to compute the time when the counter will next be valid and return
+errors on read requests received before that?
 
-pinctrl/st,stm32-pinctrl.yaml
-
-      st,bank-name:
-        description:
-          Should be a name string for this bank as specified in the datasheet.
-        $ref: "/schemas/types.yaml#/definitions/string"
-        enum:
-          - GPIOA
-          - GPIOB
-          - GPIOC
-          - GPIOD
-          - GPIOE
-          - GPIOF
-          - GPIOG
-          - GPIOH
-          - GPIOI
-          - GPIOJ
-          - GPIOK
-          - GPIOZ
-
-I don't know how the above properties are used in practice, but any creative
-driver writer can use them exactly as you intend to do with this, so we need to
-figure out if this is something all operating systems actually need or
-whether we
-should let driver authors just keep smuggling it in under the radar as
-is already
-happening.
-
-Yours,
-Linus Walleij
+-Peter
