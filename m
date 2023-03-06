@@ -2,94 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7536AC0EE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BBF6AC10A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjCFNaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
+        id S231187AbjCFNbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbjCFNaF (ORCPT
+        with ESMTP id S229927AbjCFNbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:30:05 -0500
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7295279B1;
-        Mon,  6 Mar 2023 05:30:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1678109398; bh=lITNNvdtYsjqw5lqa0YQTU4ptGEenKZNcLXWw4qTE18=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UftSwTS/34MZUF5jcucRs9JAODbvtXjZnYKG3wnjL2eA/0G+Trvz/pyAtOOwPazT8
-         hgUBUygRbBGWCehovcnTlyPn9cPwh5HBb4X4UfZ1LvogFyWjfPxyyV5VjtX1eIUY7E
-         SbFp/zITanIah/9KbAdbkTHNMgB9bMprJ9n1Oyq4=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Mon, 6 Mar 2023 08:31:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEF72E80F;
+        Mon,  6 Mar 2023 05:31:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 7EE0560B18;
-        Mon,  6 Mar 2023 21:29:58 +0800 (CST)
-Message-ID: <fbbd1e3d-6554-0d09-eba1-9e432e05746f@xen0n.name>
-Date:   Mon, 6 Mar 2023 21:29:58 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEEF560F09;
+        Mon,  6 Mar 2023 13:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0819FC433EF;
+        Mon,  6 Mar 2023 13:31:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678109506;
+        bh=n4vaoJypBj3ZnWOSr2/6ylu1yP0IfC9GLrLhygb790c=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=aNtuJJnY+2dUoUEevCcSGoR07uQjisGPJXDnw6+kOmA1iOd8khRlmgL5LGMuPca0/
+         dTFzP9/v76YbRn+S94AAHQoalLL86WBptYI8NhOyngZIjCgFufmoDCbXft8sEAW159
+         Vp71lQBEo44MT6gA2XFm6ewD5blb0GRGTpWUD3OcpmsbAo29kkj5CmJ2bmW+ppd8rf
+         d82y5DTgy+GxpGVD7NnBED4cq16EmyOdq53WeT/c6nDZbEnkqiPLGvX0iOHYzYiDKw
+         66JQZ++0QmDAFlX+nsZLG3c/9RsnEIHinD0SdkWHj4BUWxvRS4UgEo93sWG0AO4xq6
+         2U5EKzICKSgJQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        - <patches@opensource.cirrus.com>,
+        Adrien Grassein <adrien.grassein@gmail.com>,
+        Randy Li <ayaka@soulik.info>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230217150627.779764-1-krzysztof.kozlowski@linaro.org>
+References: <20230217150627.779764-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: (subset) [PATCH 1/3] ASoC: dt-bindings: wlf,wm8960: Convert to
+ dtschema
+Message-Id: <167810950275.75807.2993006253194931204.b4-ty@kernel.org>
+Date:   Mon, 06 Mar 2023 13:31:42 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] LoongArch: Provide kernel fpu functions
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Xi Ruoyao <xry111@xry111.site>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "loongson-kernel@lists.loongnix.cn" 
-        <loongson-kernel@lists.loongnix.cn>
-References: <20230305052818.4030447-1-chenhuacai@loongson.cn>
- <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name>
- <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
- <58cc7e6d19628757d6d8dc192d07876288f6077e.camel@xry111.site>
- <CAAhV-H7vv+AE-7kDf7YpU6_f_dTNxKKoRSHC6vA4aBHOVyMRAQ@mail.gmail.com>
- <65d890c8-9c37-070c-f5c6-db26ab8cfe54@xen0n.name>
- <50dd43063e244fa9a4d025873c862331@AcuMS.aculab.com>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <50dd43063e244fa9a4d025873c862331@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/6 20:53, David Laight wrote:
-> ...
->> Also, if the old world is taken into consideration (which we normally
->> have the luxury of not having to do so), consider Ruoyao's case where a
->> commercial partner of Loongson wants to do this with the vendor kernel,
->> but the symbols are exported GPL -- in this case I doubt the GPL marking
->> will remain, thus creating inconsistency between upstream and vendor
->> kernels, and community distros are going to complain loudly about the
->> need to patch things. It's probably best to avoid all of this upfront.
+On Fri, 17 Feb 2023 16:06:25 +0100, Krzysztof Kozlowski wrote:
+> Convert the Wolfson WM8960 audio codecs bindings to DT schema.
 > 
-> It is pretty easy to load a non-GPL module into a distro-built
-> kernel and call GPL-only functions.
-> (And without doing horrid things with kallsyms.)
-> As soon as you actually need to do one, adding others isn't a problem.
+> Changes against original binding:
+> 1. Document clocks and clock-names - already present in DTS and used
+>    by Linux driver.
+> 
+> 
+> [...]
 
-Hmm, do you mean patching the kernel downstream to remove the license 
-checks, or something like that? I remember the so-called "GPL condom" 
-trick was banned some time earlier, in commit 262e6ae7081df ("modules: 
-inherit TAINT_PROPRIETARY_MODULE"). For now I can't think of a way that 
-would allow such reference...
+Applied to
 
--- 
-WANG "xen0n" Xuerui
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+Thanks!
+
+[1/3] ASoC: dt-bindings: wlf,wm8960: Convert to dtschema
+      commit: af5932fc58d351d3908d0a732ccabaef088311a0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
