@@ -2,155 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 747156AB8BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C426AB8B9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCFIrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:47:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50476 "EHLO
+        id S229557AbjCFIra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:47:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCFIrg (ORCPT
+        with ESMTP id S229486AbjCFIr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:47:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7616259EC
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:46:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678092409;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vSd8hwHPbmWReXdvpQsZ0BwbyP6BUUMBochFuTwRaSI=;
-        b=Z5UzqyrdNuLHXYKFgTR+1L1jf9bCb254Gqyxo9Adl6EbwuplEOmF/1Gw2frSmvzgiqi/1d
-        f7zeXthEWhRxPl0Uy3+veZU9ER6jJl+jEpgyXYrOmDbINPux2NKyusGg0iYNNlENvX3Euq
-        pNnG8dA3bjrYo8n3Smdjvk00AnTQPeU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-100-LYVAfDgZPR-21MvuG0sNlw-1; Mon, 06 Mar 2023 03:46:44 -0500
-X-MC-Unique: LYVAfDgZPR-21MvuG0sNlw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2893E802C18;
-        Mon,  6 Mar 2023 08:46:43 +0000 (UTC)
-Received: from localhost (ovpn-12-63.pek2.redhat.com [10.72.12.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 20EFAC16029;
-        Mon,  6 Mar 2023 08:46:41 +0000 (UTC)
-Date:   Mon, 6 Mar 2023 16:46:38 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mips: add <asm-generic/io.h> including
-Message-ID: <ZAWobtBuBYBng6s+@MiWiFi-R3L-srv>
-References: <20230303102817.212148-1-bhe@redhat.com>
- <20230303102817.212148-2-bhe@redhat.com>
- <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
+        Mon, 6 Mar 2023 03:47:28 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBCF1730;
+        Mon,  6 Mar 2023 00:47:26 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso8161130pjs.3;
+        Mon, 06 Mar 2023 00:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678092446;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sw+u88CIvLshV3uZHn5DskiZdXl3Zpyvzll3UI7l8as=;
+        b=QpM+v0x1AR8FhAvYr5NUHb0/TwmxmJOzJFySfMS0ydxvt7Qo9ox0CAyulCSxgskvc4
+         T+xRS39eng1C5dPXxYEaEqOT2Q0544n3X+RglcOz8oSsvWYUgFEWMFRy1R7vkqGLm5Go
+         K66xfe9Cssq7HMpTPpGd5Pi9LDICEQVwL6nLX+c/rx2plCsei+m9m/rsQexKO7IAs0/H
+         H+imdMrev6wKmEDjeAMbCr0IqhB+ocqLUSraie0KxtUzQhjflUll6+/t0J7FE35R9v3q
+         0ugcimv0Y7A9I2Ma1FU+TWeQvcVZHJqcU+aw0ASfMAbqqtO7t0Sd9gUkp2lGVKQMIrWg
+         UA1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678092446;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sw+u88CIvLshV3uZHn5DskiZdXl3Zpyvzll3UI7l8as=;
+        b=4pc4nR6YqYxKjqypLV6mPrxJzKalc4Y85CTBOEvPdBlUi0MHnPGpVPPGmxGcjVowXh
+         t1QWSYjbSk9NQ0FWbHe49yAvRxjfIA2P8WReJW6pQEF1vOHJ36lRQxOsNxo3FU5Q8VA9
+         ijbIzq5tW9t4CZLeyAcRxmF6cRgjcDeMJb2EjRV8NtxStElUbmCzGxq7VGHHNEXcPaY3
+         Ia/OLDuK/BCwY3xSX1qSHnyH1tf3LtWx/9HeFuUQ4uBa7HfCOlIwi/nW8OSJgUPdrVey
+         gWV4dSVI0vKUV6/vKlXwn8SD4cIIYk/kgQdyIxpYuS7AlK0WV7Jelr6BLagppKsHc1US
+         Kknw==
+X-Gm-Message-State: AO0yUKVblDVaepeiTsORLig6W6AomFJL+egIgNHGJ2OnBjps11xTmeQz
+        w9+ZmDWyt6AyKcaHCjm7dr0=
+X-Google-Smtp-Source: AK7set/v4KFy6iQBNYgAoH+i77Z/k04zNTwCKhp4NtSkb9ooQ3aMcSyaRIDnPVeyMM0Tffh17jMkjQ==
+X-Received: by 2002:a17:902:b709:b0:19d:1f36:fc54 with SMTP id d9-20020a170902b70900b0019d1f36fc54mr9027711pls.65.1678092446266;
+        Mon, 06 Mar 2023 00:47:26 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-82.three.co.id. [180.214.233.82])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902c14c00b0017f5ad327casm6090173plj.103.2023.03.06.00.47.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 00:47:25 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 863911062DC; Mon,  6 Mar 2023 15:47:21 +0700 (WIB)
+Date:   Mon, 6 Mar 2023 15:47:21 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Willy Tarreau <w@1wt.eu>, Vegard Nossum <vegard.nossum@oracle.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        Jiri Kosina <jkosina@suse.cz>,
+        Solar Designer <solar@openwall.com>,
+        Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Laura Abbott <labbott@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
+Subject: Re: [PATCH v3 0/7] Documentation/security-bugs: overhaul
+Message-ID: <ZAWomdmSXViNAZVb@debian.me>
+References: <20230305220010.20895-1-vegard.nossum@oracle.com>
+ <ZAWSKrbaQ6nm3qNe@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zceAUshRmOuzbKJ1"
 Content-Disposition: inline
-In-Reply-To: <a845b6b3-9f5f-4328-8c69-bbd4dd17caee@app.fastmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZAWSKrbaQ6nm3qNe@1wt.eu>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/03/23 at 01:40pm, Arnd Bergmann wrote:
-> On Fri, Mar 3, 2023, at 11:28, Baoquan He wrote:
-> > With the adding, some default ioremap_xx methods defined in
-> > asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-> > NULL.
-> >
-> > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Cc: Helge Deller <deller@gmx.de>
-> > Cc: Serge Semin <fancer.lancer@gmail.com>
-> > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> > Cc: linux-mips@vger.kernel.org
-> 
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> I think this is all good. I had look at what cleanups we could do as
-> follow-ups:
 
-Thanks a lot for careful reviewing and great suggestions.
+--zceAUshRmOuzbKJ1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> > +#define phys_to_virt phys_to_virt
-> >  static inline void * phys_to_virt(unsigned long address)
-> >  {
-> >  	return __va(address);
-> 
-> This is the same as the asm-generic version, so the mips definition
-> is no longer needed.
+On Mon, Mar 06, 2023 at 08:11:38AM +0100, Willy Tarreau wrote:
+>   - I'm not seeing anywhere that the security list is *exclusively*
+>     for kernel issues. That might explain why about once a week or so
+>     we receive messages like "there's a bug in that userland tool" or
+>     "we've found an XSS issue on your website". It's written that kernel
+>     bugs should be reported to the security list but I think we should
+>     strengthen that by adding "This list is exclusively used for Linux
+>     kernel security reports, please do not report issues affecting any
+>     other component there".
 
-Agree, I can clean this up with a followup patch.
+I think the wording would be "Please report security bugs against Linux
+kernel to security@kernel.org list. Security bugs against userspace
+applications should be reported to appropriate channels for affected
+applications instead."
 
-> 
-> > @@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
-> >  __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
-> >  #endif
-> > 
-> > +#define readb readb
-> > +#define readw readw
-> > +#define readl readl
-> > +#define writeb writeb
-> > +#define writew writew
-> > +#define writel writel
-> > +
-> > +#ifdef CONFIG_64BIT
-> > +#define readq readq
-> > +#define writeq writeq
-> > +#define __raw_readq __raw_readq
-> > +#define __raw_writeq __raw_writeq
-> > +#endif
-> > +
-> > +#define __raw_readb __raw_readb
-> > +#define __raw_readw __raw_readw
-> > +#define __raw_readl __raw_readl
-> > +#define __raw_writeb __raw_writeb
-> > +#define __raw_writew __raw_writew
-> > +#define __raw_writel __raw_writel
-> 
-> The mips code defines the __raw variants with slightly different
-> semantics on both barriers and byteswap, which makes it impractical
-> to share any of the above.				
-> 
-> > +#define memset_io memset_io
-> >  static inline void memset_io(volatile void __iomem *addr, unsigned 
-> > char val, int count)
-> >  {
-> >  	memset((void __force *) addr, val, count);
-> >  }
-> > +#define memcpy_fromio memcpy_fromio
-> >  static inline void memcpy_fromio(void *dst, const volatile void 
-> > __iomem *src, int count)
-> >  {
-> >  	memcpy(dst, (void __force *) src, count);
-> >  }
-> > +#define memcpy_toio memcpy_toio
-> 
-> These are again the same as the generic version
+>   - it's quite frequent that reporters post from dummy addresses,
+>     looking like randomly generated ones (we even had one looking
+>     like a smiley). It doesn't help to communicate with them at all.
+>     I can understand how some working as consultants for a customer
+>     would want to avoid disclosing a particular relation between their
+>     finding and their customer, but at least they should indicate how
+>     they should be called. I.e. "call me Margarett" is not difficult
+>     and simplifies exchanges when the address is "69236836@example.com".
+>     And often we see at the end that they're willing to provide a real
+>     name to be credited for the finding, so most likely starting with
+>     this real name could be easier.
+>=20
 
-OK, can remove this with the above change.
+Something like temporary addresses (=C3=A0 la maildrop or mail.gw)?
 
+>   - it's more a discussion for the list itself, but the wording continues
+>     to make one think that the reporter should expect the list members to
+>     develop a patch, while in practise the first thing that's asked is
+>     "since you've studied the problem well, do you happen to have a patch=
+?".
+>     And it happened a few times that in response we got "oops sorry, I
+>     analysed it wrong, there's no issue there". I think the text should
+>     emphasize more on encouraging submitters to complete their work with
+>     a patch proposal (that's also helpful to confirm an analysis). And
+>     conversely I think that reports for non-immediately exploitable issues
+>     that are found by code analyzers (and almost always come without a
+>     patch) should not be sent to this list and should be discussed and
+>     addressed publicly instead. It's more efficient and allows more
+>     knowledgeable participants to have their say on the root cause of
+>     the problem and its possible solutions. That's of course not always
+>     the case, but common sense should prevail here.
+
+I think the wording would be "It is preferrable to have a proposed patch
+for the bug you report. See
+Documentation/process/submitting-patches.rst for details on how to
+submit patches."
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--zceAUshRmOuzbKJ1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAWokAAKCRD2uYlJVVFO
+o9SmAQDXqKfUMtvoPN0EctIKZn/ChfDIPRaZXC0RT8ks/mP5bQEApYSU/FyiuwMP
+20tXQfnUHRyPPEPWLccOutliHGA7jgU=
+=cMrJ
+-----END PGP SIGNATURE-----
+
+--zceAUshRmOuzbKJ1--
