@@ -2,116 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DAB6ACE16
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659C06ACE1A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjCFT3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:29:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
+        id S229698AbjCFTaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjCFT3k (ORCPT
+        with ESMTP id S230027AbjCFT3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:29:40 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F436BC3B;
-        Mon,  6 Mar 2023 11:29:34 -0800 (PST)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326IsZAR030213;
-        Mon, 6 Mar 2023 19:29:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=QiwtY/MsbEuXcvC0HPyz1t0cx1EplYQFBRBWI44uD/U=;
- b=V8sxUXJ+8NxLqBSvRkZoXuSJeSccCXmzO7tbbZ74gPYwSc9H5Q8EEwl1cspg5OQfTAK/
- vzhi8NUSXtL5U4faywf/OVTGrYO0ODri8ykLKfsrNrQtT8cXxeqb3oCThqvcOWXLs+H2
- Pts9A+6Hsf4baIVA3MhAMgGJ02NDXYopb3VYwstKAPYzrNQq6/RZd0gKfCH6N7MchzZH
- AulC4PO+MVkbCsOUC6dBe7SvLJ1achTc6kQxwl3ll5HfqZv+kDfI4spIQJVXxQM73SOE
- SVLALxeV1WlrM3hvAqebODC9fBHDyXoh/rbq5Mh6L5k33CB22mbKD8Vl5IQDkiN16/4P IA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p513ewjdf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 19:29:15 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326JPGw0032888;
-        Mon, 6 Mar 2023 19:29:15 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p513ewjd5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 19:29:14 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326GLRuL020435;
-        Mon, 6 Mar 2023 19:29:14 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3p419k6wad-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 19:29:14 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326JTDKV65405356
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 19:29:13 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E04595805B;
-        Mon,  6 Mar 2023 19:29:12 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AF24658059;
-        Mon,  6 Mar 2023 19:29:10 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 19:29:10 +0000 (GMT)
-Message-ID: <c844967a-8051-4d27-fd07-8098496fc338@linux.ibm.com>
-Date:   Mon, 6 Mar 2023 14:29:10 -0500
+        Mon, 6 Mar 2023 14:29:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68583B842;
+        Mon,  6 Mar 2023 11:29:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5ED33B810D2;
+        Mon,  6 Mar 2023 19:29:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85ADC4339B;
+        Mon,  6 Mar 2023 19:29:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678130984;
+        bh=l4MJr1TuX+4CCg+Fz89fjWptfEHFzh6hDhxPWHE0w9I=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=GYRyvIx0PepOT+7XUYww0ldfMO0kxDbmFzp67+l00Gcu/th8IDz0ArKmbJnGbBBi6
+         b7sBgti4nMycI755KD2VIQ0UJViiVDeOFByGF+wfLvriQXapn76WgSrOk5l8UbVe+B
+         iQA+/0BTlI4R2yFDpemjeYg/u37m34KGEl8Ld+oHZCCYjMp8bS5U0c8NtnEtxC2I3w
+         F1LHjTKWGMGpv3ihdOa/qZY7q7nJmpzbd0jNOs7pSRQDQvMj3Wdp1eEd3wHNWi4GU6
+         5nT+25ddMRqqdUMB7pXC+JOT2cqtmmhX0IFIiR6anSXy9QraQlcMho5g4tlTZ4aO19
+         A1aK8/JG9BNsw==
+Message-ID: <50e9af28f2f245f18cb426904fb6eec5.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 18/28] security: Introduce path_post_mknod hook
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
- <20230303181842.1087717-19-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230303181842.1087717-19-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Oe0tYZvO8AIeeoTP3783-iSbqqQ8FlDV
-X-Proofpoint-GUID: 7cNE8YnpB_9WtZKMBCR2hZRhFRGbD8uV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_12,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- bulkscore=0 spamscore=0 adultscore=0 malwarescore=0 clxscore=1015
- suspectscore=0 mlxlogscore=955 phishscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060168
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230222121453.91915-13-nick.alcock@oracle.com>
+References: <20230222121453.91915-1-nick.alcock@oracle.com> <20230222121453.91915-13-nick.alcock@oracle.com>
+Subject: Re: [PATCH 12/27] kbuild, clk: remove MODULE_LICENSE in non-modules
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org
+To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
+Date:   Mon, 06 Mar 2023 11:29:41 -0800
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Nick Alcock (2023-02-22 04:14:38)
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>=20
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>=20
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Michael Turquette <mturquette@baylibre.com>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: linux-clk@vger.kernel.org
+> ---
 
-
-On 3/3/23 13:18, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
-> the path_post_mknod hook.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-
-Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-
+Applied to clk-fixes
