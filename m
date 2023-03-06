@@ -2,91 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4AF6ACEB1
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9836ACEB4
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjCFT7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S229638AbjCFUAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 15:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFT7K (ORCPT
+        with ESMTP id S230341AbjCFT7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:59:10 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8131F65070;
-        Mon,  6 Mar 2023 11:58:42 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id c3so11930321qtc.8;
-        Mon, 06 Mar 2023 11:58:42 -0800 (PST)
+        Mon, 6 Mar 2023 14:59:54 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B44679B3E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:59:29 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id s11so43520393edy.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 11:59:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678132676;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fcear7SkG9TmnSwIELIrY7+1NyaOV8lflIIPHX2QmK8=;
-        b=WGjLRckl281DCVlHPpmlzGIN/jVrcmhh5kKLciScBCHtk+amtS/6/t4urkFbS2pA3u
-         07on6PPWceK62oGnAqS7/+v+401JZJqNJB6BdVuRObXwOoLqfl/JVBiS3yGP51CqW/I2
-         ZzY9hwn6PSoKgV9iNYZxZFMSZzetb4rtzLQfN2JTeg1+Qx7gM3TGDUHVJZSGANu/w4jH
-         iksTOHuImXCj/V+tdhzbNGhmbtBhx2OHYXc15vI4VBYpk63ZJUcJcsVc4tdP3AN64uKj
-         +mtBCAYTktuAa1f+p5xWuDHFdvrZgW8nv3WFaZtNsQiGVn6q/UPkrSr6DRxIlRcr30Iz
-         JWkA==
+        d=linux-foundation.org; s=google; t=1678132768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i1XTDsCbaUwAZiPAaRhe5A3Pa5A5jC7TGlivcSDkX8s=;
+        b=hDTeK8ppPk4RSELh5/QrBizlL3R8ylnpJU0J+2w3OfoBo02rzZ2tWyFLHgqHhv4nce
+         xO90scHZeg0EJeYHtRXM8pppazS8MkKkMS+GeVRgLdX+7JxMzJYvUyPo9POH59VNICDz
+         BcYxgaa8UvCh48ZbkDASsu0f4urdh86FGnTUY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678132676;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fcear7SkG9TmnSwIELIrY7+1NyaOV8lflIIPHX2QmK8=;
-        b=QPtgW46JgV6plpKS+39nbUAEaWZMwRUupjOw66CwXrVPowrKFzJkOU57tLFtIyww2T
-         oh7y09NbUqDAJbUSKRcczMWLXmbvKAImdow0yNEYXmv0njV2Rqm/7g9fCJesgxOibot0
-         +khq14Yqk0X8oPFfy3dsyAFs16nwn7rv/LApk9bIaZ8QbXsLKoSlrUU2ri9XYFgEiPTH
-         5uMgWnYXzEHrN9deUz5CfSbGkcAMdswPg8G/1rMS8lbTXyiP0SlNnG8muBDkszCJmDJ9
-         nxK8EYAnp4qjVSeUtk0h7sEej4v3xEfklVThARe2xF4+KzAbI/FxlFslvbQudhlpgKY/
-         9UrQ==
-X-Gm-Message-State: AO0yUKUPhTk+flBUzK9pimDGBrAVijV9VBTidWRWluZNpzhb+qq1ZlVo
-        ybPxHPbIUwsETpNrDbMj6xE=
-X-Google-Smtp-Source: AK7set/670uYwxALTojyHbMIdyaecZVHhjNJyQIIeA/qSS1xpmTRM60vLEXXjINc/dPl+ojNjtYx/g==
-X-Received: by 2002:ac8:4904:0:b0:3ba:2b4:7b39 with SMTP id e4-20020ac84904000000b003ba02b47b39mr13795686qtq.46.1678132676348;
-        Mon, 06 Mar 2023 11:57:56 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id x8-20020ac87008000000b003b868cdc689sm8203872qtm.5.2023.03.06.11.57.52
+        d=1e100.net; s=20210112; t=1678132768;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=i1XTDsCbaUwAZiPAaRhe5A3Pa5A5jC7TGlivcSDkX8s=;
+        b=wKfccg54Gb5cUTbM+T7bk5rVMB3QbxN1BV+QfWowrMNeUOILFBTC2MB5D1l6yhbHx0
+         fTl8N7tQpbapE60PjFj9GX9ocULGMU3uVlFOtVparwP6WEWzYAhDt6SVyXjWkJVsbmYE
+         ugRXg0jiM39w9d5oAyDLVTnCha71M1IVmltg+lTybocrwVYc/2N6w4qFfcwYEAFb1DOr
+         jSxRN6bNMTpsHEMhOAMUDckGn0i0d/xG2cEKDrmuarwU1eO2R/R3AdqohR8La5Z3OaQP
+         JXY1ZFRHP/puNv4LVgUtfmhdy13OKW/k2/mkdY+TmzfgKXk/i/nq5bR49BdLsU84898z
+         1y7w==
+X-Gm-Message-State: AO0yUKW+ZxaeiKcd5FkGZeKl+62TB7lT3NBDIocZv68kg1YsmKjRPghT
+        x9Qhk/I0SwoeT13/EfgvUFI5korGzMcADTMzr+UH7lZf
+X-Google-Smtp-Source: AK7set9WqycN9rmNoq1Ug8AO+Dn50ImUh9hw9sSgTWQeWlLwyGgd4U5a9h6oJ6KU6QinQ5TO197IyQ==
+X-Received: by 2002:a17:906:1405:b0:870:baa6:6762 with SMTP id p5-20020a170906140500b00870baa66762mr12526883ejc.14.1678132767782;
+        Mon, 06 Mar 2023 11:59:27 -0800 (PST)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id bo6-20020a170906d04600b008eb5877a221sm4973304ejb.75.2023.03.06.11.59.26
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 11:57:55 -0800 (PST)
-Message-ID: <738a5705-74eb-d339-60ee-6f18a08822a8@gmail.com>
-Date:   Mon, 6 Mar 2023 11:57:50 -0800
+        Mon, 06 Mar 2023 11:59:27 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id i34so43540423eda.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 11:59:26 -0800 (PST)
+X-Received: by 2002:a17:906:d041:b0:877:747d:4a82 with SMTP id
+ bo1-20020a170906d04100b00877747d4a82mr5861816ejb.0.1678132766519; Mon, 06 Mar
+ 2023 11:59:26 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 07/16] gpio: brcmstb: Utilize helpers from
- string_choices.h
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pwm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        patches@opensource.cirrus.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Doug Berger <opendmb@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Nandor Han <nandor.han@ge.com>,
-        Semi Malinen <semi.malinen@ge.com>
-References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
- <20230306195556.55475-8-andriy.shevchenko@linux.intel.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230306195556.55475-8-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <74178f6a-22b1-42f0-aed7-98ef5ad8a690@roeck-us.net>
+In-Reply-To: <74178f6a-22b1-42f0-aed7-98ef5ad8a690@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 6 Mar 2023 11:59:09 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wizRZCQr7MXzaarTHsxCtJ+KYmmUFS31xydxSwU4uGz-g@mail.gmail.com>
+Message-ID: <CAHk-=wizRZCQr7MXzaarTHsxCtJ+KYmmUFS31xydxSwU4uGz-g@mail.gmail.com>
+Subject: Re: Linux 6.3-rc1
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,13 +75,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/6/23 11:55, Andy Shevchenko wrote:
-> There are a few helpers available to convert a boolean variable
-> to the dedicated string literals depending on the application.
-> Use them in the driver.
->  > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Mon, Mar 6, 2023 at 11:53=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> With the patch below applied on top of v6.3-rc1, the crashes are gone:
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Thanks for reporting and testing. I think the only one that people hit
+in practice was the random.c one, but the others were certainly bugs
+too.
 
+I'll commit those things asap since this clearly hits people much too easil=
+y.
+
+The lpfc driver should probably be cleaned up, but I'm going to commit
+that minimal fix rather than worry about cleanup of some driver for
+hardware I've never seen..
+
+             Linus
