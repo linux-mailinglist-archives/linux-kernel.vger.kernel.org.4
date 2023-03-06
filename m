@@ -2,135 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10F26AC415
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F886AC41C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:56:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjCFO4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:56:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S230120AbjCFO4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:56:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjCFO4K (ORCPT
+        with ESMTP id S230085AbjCFO4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:56:10 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB7F23113
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:55:54 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id h9so9936833ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:55:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678114553;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wu38Rlz1IR8mP8Nh89bkjpaZ5IUcMWkU7u2ELQQVG30=;
-        b=vLNiWB2TjOEZ7dTr0ZUeRcrfok4M+fWLoIO/LRZxQuM7JUjo438Et2X6mrr2sVXHkV
-         7AQg2kC9qLS2UEwm5dwGoNabrB7ywfmZKn2dzlp90mvv73aXtUHNsFJ2SU60oddWJVnf
-         zOpdA0mmpkIheIp5QYPErdWgZCf9u2X0d/KKPWpfc1e/ENnggncDkj8QeDDM0sQ3dcPw
-         GTNZhlNdpqvKIhxYqjmib2+iIF7vYw/oaTIwkWDxUs/rnheLZVr4Hkh1Mezpwywl5OwZ
-         onTMxE8qAgyTZflMO0K/f5l7vAE3+IcOlV+wmq/Wgl6doazCjLIppyyHPUZRy5c5eqWF
-         hOaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678114553;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wu38Rlz1IR8mP8Nh89bkjpaZ5IUcMWkU7u2ELQQVG30=;
-        b=WRABXTZwKdPLRFdmswaSx6FihLZDryomtJguiOQZMsfuPfYKfgxC3oqfy6jIQJnxLc
-         gLkeaR3m86SXttEt0ctrFWoTouuhJ3vZUaDdStskeJ77dnjeH8gBZ7C3hNLtDMLCkEk/
-         B1MUC/uvGp7RiAEkUDrpQK1PUXSG2XVHdMNnxGZd+pXn/rKIoSBMv+pdrk7vNrZl1wbL
-         LHVhtih6ZwF8BhmQ7KeuT8yd8YTXRogHQMg+uFlNN2fQm1b4MtUI3VSc/BQbU5l8+nVX
-         MOGZBM9fU/s4Hgsr2OJMLNtBFOj0dl2dRrhXKHObhxKoXSEv9Ryu20G9SoEQCYfHSuLQ
-         yNfA==
-X-Gm-Message-State: AO0yUKXSMuefIgetEM3XKtU+1U44rcuxcwW+kak3uUxRo1W2Xp2DYhnC
-        e6kcgJ17x0abwRvMr08sE90oMA==
-X-Google-Smtp-Source: AK7set+zCCAQSv/7gWaOmaO60uh020Go1KTzmRq9dd1DswrXdeuN8hM/zQThERIWy1lyNq10IKpe8A==
-X-Received: by 2002:a2e:7006:0:b0:294:6a83:fb28 with SMTP id l6-20020a2e7006000000b002946a83fb28mr3407870ljc.41.1678114552732;
-        Mon, 06 Mar 2023 06:55:52 -0800 (PST)
-Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id g4-20020a2e9e44000000b00295b1b6e063sm1753050ljk.34.2023.03.06.06.55.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 06:55:52 -0800 (PST)
-Message-ID: <e171b997-258d-7f16-944d-9ece468be1ef@linaro.org>
-Date:   Mon, 6 Mar 2023 15:55:51 +0100
+        Mon, 6 Mar 2023 09:56:38 -0500
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75956CA29;
+        Mon,  6 Mar 2023 06:56:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1678114559; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=msY3Rd6XS3xqaxJl4LGanNjzLlMn4D8qSKys/ZRSpHDX9wFeRnbb2SWGgB1VYyQmaFcq+xB13R8jkUAiwHgQ+g5I0/T+ib1w2bUiMIwNwCxM8pOehbDfH7Mfym5+yPm8Mto8OoBxubperIwcEpq9oSgmIDpcxx/MyshGz2JZY3I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1678114559; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=9nd+k8XAgPSgixGUgbvKDnLLladecVQNt6nXtFJIVZE=; 
+        b=kOGm43Rs2U1fNoz+m4m2WUtxQVDAT0YRuzmw8Owd9FW1Wnyo6hAL8bW5kaoAIwtMLDZ0bjasdubyK6UknMqw2WvTkM7BIlwlL3ECKT7HAQ/bUJMw4gHhF2uAb7N0I0G8FAM95sW7Me1grGlJErpLHA6cTJqwTVRzqJdG3652LcY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678114559;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=9nd+k8XAgPSgixGUgbvKDnLLladecVQNt6nXtFJIVZE=;
+        b=VA12CC+3jMsU/u8aqp6hpuRoil8nuXF/2ajC2F1arRIzefc4vtLnfnuLu33Z63Et
+        vbfT1meJmQ2UdQ9qZKlSEb1HishyAySPdOVp/LlxD4VjI7BMeP/qhzXCEBM1HYXlyQM
+        DF9nCGtgVgx1lSgqr/wK2qJUP9eCxho9M4FzsBeA=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1678114557969142.92607754783864; Mon, 6 Mar 2023 06:55:57 -0800 (PST)
+Message-ID: <486ebf30-dde3-b77d-c292-ba7605313273@arinc9.com>
+Date:   Mon, 6 Mar 2023 17:55:51 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 5/9] arm64: dts: qcom: sa8775p: add the spi16 node
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 00/20] pinctrl: ralink: fix ABI, improve driver, move to
+ mediatek, improve dt-bindings
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+References: <20230303002850.51858-1-arinc.unal@arinc9.com>
+ <CACRpkdayVLTT0x6hfnwvL-Atafkj8PRw5uwe7Wic3jtn+X-axA@mail.gmail.com>
 Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230216125257.112300-1-brgl@bgdev.pl>
- <20230216125257.112300-6-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230216125257.112300-6-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <CACRpkdayVLTT0x6hfnwvL-Atafkj8PRw5uwe7Wic3jtn+X-axA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 16.02.2023 13:52, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 6.03.2023 16:50, Linus Walleij wrote:
+> On Fri, Mar 3, 2023 at 1:29 AM <arinc9.unal@gmail.com> wrote:
 > 
-> Add the SPI controller node for the interface exposed on the sa8775p-ride
-> development board.
+>> [PATCH 00/20] pinctrl: ralink: fix ABI, improve driver, move to mediatek, improve dt-bindings
+>>
+>> This is an ambitious effort I've been wanting to do for months.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
+> Good with ambitions :)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> index 4666e5341922..eda5d107961b 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-> @@ -503,6 +503,27 @@ qupv3_id_2: geniqup@8c0000 {
->  			iommus = <&apps_smmu 0x5a3 0x0>;
->  			status = "disabled";
->  
-> +			spi16: spi@888000 {
-> +				compatible = "qcom,geni-spi";
-> +				reg = <0x0 0x888000 0x0 0x4000>;
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-Meh, I sorta frown upon placing it here but it's been like that
-everywhere else.. If nobody else complains, I won't either.
+> As long as Sergio is on board and can test the changes and as long
+> as the DT maintainers do not explicitly disapprove, I'm game to merge
+> this.
 
-> +				interrupts = <GIC_SPI 584 IRQ_TYPE_LEVEL_HIGH>;
-> +				clocks = <&gcc GCC_QUPV3_WRAP2_S2_CLK>;
-> +				clock-names = "se";
-> +				interconnects = <&clk_virt MASTER_QUP_CORE_2 0
-#include <dt-bindings/interconnect/qcom,icc.h>
+Cheers.
 
-0 -> QCOM_ICC_TAG_ALWAYS
+> 
+> I guess you will respin on top of v6.3-rc1 when the first round of
+> non-RFC feedback is collected.
 
-Konrad
-> +						 &clk_virt SLAVE_QUP_CORE_2 0>,
-> +						<&gem_noc MASTER_APPSS_PROC 0
-> +						 &config_noc SLAVE_QUP_2 0>,
-> +						<&aggre2_noc MASTER_QUP_2 0
-> +						 &mc_virt SLAVE_EBI1 0>;
-> +				interconnect-names = "qup-core",
-> +						     "qup-config",
-> +						     "qup-memory";
-> +				power-domains = <&rpmhpd SA8775P_CX>;
-> +				status = "disabled";
-> +			};
-> +
->  			i2c18: i2c@890000 {
->  				compatible = "qcom,geni-i2c";
->  				reg = <0x0 0x890000 0x0 0x4000>;
+Sure, if it's necessary. Once I get feedback, I'll rebase it to your 
+linusw/linux-pinctrl.git for-next tree, see if it needs manual changes. 
+I'll let you know.
+
+Arınç
