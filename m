@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EE46AB8D6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:53:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB896AB8DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbjCFIxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56824 "EHLO
+        id S229835AbjCFIy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:54:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCFIx3 (ORCPT
+        with ESMTP id S229755AbjCFIyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:53:29 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F2D93D9
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:53:27 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id h9so8820820ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:53:27 -0800 (PST)
+        Mon, 6 Mar 2023 03:54:55 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF6715CB7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:54:54 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id ay14so31627560edb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 00:54:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678092806;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKGnj2LWVcfOTDaOSxybdZGGw5kYROUNKfFjgkTuOvg=;
-        b=fDUyHbQQokUXfw+im+2/kj2w6w+GTsDUijcfvXUW0P/cPAe2YIdzvckqjEaTe4BMB0
-         eHdgDcP9jaBX1w1Zw1sJhf4zgouT7mhUuB/Tj57teFxaiHvULcVMAoGIdT580BbXFCpg
-         DhYTHBtbYTWwDvyOpO5EziVU+0jCVUE0POIiNbEKzuh8inhJAhXVze+DlJ16kZw7f0Re
-         TgeGJk9sJR84rCkAUT80HfHB33+5cBcBfN1P3Y4dkS6PE2C/ycVljFKeFtugSHy14c26
-         blj2igqllymVwwE9KrawC/aEgMNdsKJGK8JjANyXaNmexIk2I1OZsL2b7q8Cg5dVtx8u
-         skyw==
+        d=linaro.org; s=google; t=1678092893;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aLAhqnNFboMZ3Xspb0HEH0L2QkUdVCAZTGMLZDTo/AI=;
+        b=jczTpg4zXHb1ZQneDL/piIaCwC5Mr18d9VYx8iHeFhWIhnuV4wlFycQOhptE/+OUf5
+         rmR4fXrJzuHTIxI5k2HLJ2iQY/r1ZomAhCjBOL7w2vVguAg/NuPpOuBqyQoLUGaKOSqa
+         10uGpZ8NjOstj/WxKtZ700TO0vzwyX66VvCmxiF7VC4yforcMxQ96jDi7Po7n+8u5o9n
+         iAR0l28grFRon15ZCjmeDxZoqaR6psgehevlGDPfG9gFJkg6dqQsk4nd0Fm+zPJExFX6
+         QbrXxWa08Os3KE0V6eIoyAXU7PzanR95PNpvXtD8Oz1Nvv3R3oTI2G898drqhtt7hRsP
+         wbVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678092806;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wKGnj2LWVcfOTDaOSxybdZGGw5kYROUNKfFjgkTuOvg=;
-        b=QgbhW1ZuIjCGRP628j7U9NTsovXbKu5CYKZaFiQ2wjc3iY10sTFOBLs0XBBm3lwbVF
-         b8fZ1zHGaFOQzcvqiq+EVlu42UhjgZ5HoTxRAh7Nq0zzRWdk4Phqqlfk0M4TulKoT1Vo
-         zoPz5SumTlX/nRjeuChHPTwngGB9MVLe5q27wMJxXAeTClaviZdbssgdxgm+jvwtIuBL
-         xE3SNL+Raq37r4ELHVcUxfjPsrQlMKEayjptMhNL7RGQys2UaUQvxfEWg/eS6qgiy+c5
-         vxRqbet61VQjStawr9HxUpe5fXk2nkCfaa0UZ6bAwHDzWY6P+D4QjCg3+98Osd9VN73e
-         GF9Q==
-X-Gm-Message-State: AO0yUKWr8y2GDEo6iMXkyw9hDtuFlcuuf2+CO7lZHtdWeN6uO7diWkGA
-        rmDV5m7q/9a0tkJgw7m1evV0rL4uo1ErOIFefrnEDw==
-X-Google-Smtp-Source: AK7set+O61X6BiXVbsYSVxrx7gaMiIRRL1Nm9ZG3DeVEwCnJcHQwkiJtMmdxdB+y0fdGlkBY9XGFm85cu2UWqeEbxKI=
-X-Received: by 2002:a05:651c:124e:b0:295:945d:b382 with SMTP id
- h14-20020a05651c124e00b00295945db382mr2985593ljh.4.1678092806079; Mon, 06 Mar
- 2023 00:53:26 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678092893;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aLAhqnNFboMZ3Xspb0HEH0L2QkUdVCAZTGMLZDTo/AI=;
+        b=Yi1/EErWK1cISjkwOhnOl+Ti3rm1Qbkvp7P7/oHB3bIyTkgy8gp/buKwgN6032fkQ2
+         rfrEbBNWSxygnJj5Vj3oRZh38ReuEQf5AtK9qUez2ArNaDesyVpAQKA/vNZoMjPksc8U
+         XKoC26hep66o1sT0IxW+mBrX+0wB1m8bQBOAtGibYgyRcp7KkQqOh+60+vswwc0Jzo6k
+         xLNtPraZtEwXF8rzuN/9zqpQ1Io3oZW52eciexORg7jnDQhsUqcjmBdlnymlZLM4o4QM
+         h+GcIqmPezDJEIsPgj6Q2JxgOIeonXgTGSnIW8BsB30XEcqlM9MhIrHOJsfG775duA1P
+         RjKQ==
+X-Gm-Message-State: AO0yUKVzLAXbgQWHu3m7Az9/rbtNuM/UQls9LTb6ePcT96x2NQdWcPzc
+        9A6EMmdNHVynyFYZvu/GxgeZUA==
+X-Google-Smtp-Source: AK7set/zYZbv8I8sb/J/hGNNCCXKArT9QRhK0vtY2AqjURZK5qxhyca6vR86eJgWBZt8MJTCfklSWg==
+X-Received: by 2002:a17:906:32d9:b0:8aa:bf4e:7b2c with SMTP id k25-20020a17090632d900b008aabf4e7b2cmr10892941ejk.21.1678092893196;
+        Mon, 06 Mar 2023 00:54:53 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:d85d:5a4b:9830:fcfe? ([2a02:810d:15c0:828:d85d:5a4b:9830:fcfe])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170906640500b008be0b7242d5sm4317499ejm.90.2023.03.06.00.54.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 00:54:52 -0800 (PST)
+Message-ID: <67d51c44-7599-39d2-9616-573e07194550@linaro.org>
+Date:   Mon, 6 Mar 2023 09:54:50 +0100
 MIME-Version: 1.0
-References: <cover.1674217480.git.linux@leemhuis.info> <bb5dfd55ea2026303ab2296f4a6df3da7dd64006.1674217480.git.linux@leemhuis.info>
- <20230301204602.5e9bf3c0@kernel.org> <ff62632d-7558-a86c-5541-a54de6e107e7@leemhuis.info>
- <20230301214023.610a9feb@kernel.org> <CACT4Y+bxUA1v14y0SGC887er5Nif3ZEanjO_m=K4WBwyNfmZHA@mail.gmail.com>
- <17fdf6f1-60ab-bfde-afc8-5afef6cc797b@leemhuis.info> <CACT4Y+Zm3d9jqK=R-E4xTihEUNdahagPyMPcinWowx8RABawrw@mail.gmail.com>
- <3275c17f-1a62-4e4a-4a5b-06b34098f8d2@leemhuis.info> <20230302181010.859456e24e8aaf0990b0dead@linux-foundation.org>
-In-Reply-To: <20230302181010.859456e24e8aaf0990b0dead@linux-foundation.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 6 Mar 2023 09:53:13 +0100
-Message-ID: <CACT4Y+brH-ygxHYzstC9dgFcQ=NnYgE48E4j+csE3JqH4FaM5w@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] checkpatch: warn when Reported-by: is not followed
- by Link:
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joe Perches <joe@perches.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=C3=A4ch?= <kai@dev.carbon-project.org>,
-        linux-kernel@vger.kernel.org, Aleksandr Nogikh <nogikh@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: display/msm: dsi-controller-main: Fix
+ deprecated compatible
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-dsi_fixup-v3-0-b8565944d0e6@linaro.org>
+ <20230304-topic-dsi_fixup-v3-1-b8565944d0e6@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230304-topic-dsi_fixup-v3-1-b8565944d0e6@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Mar 2023 at 03:10, Andrew Morton <akpm@linux-foundation.org> wrote:
-> > > We can parse out our hash from any tag, but the problem is that the
-> > > current email api we use, does not allow to specify Message-ID before
-> > > sending, so we don't know it when generating the text.
-> > > We don't even know it after sending, the API is super simple:
-> > > https://pkg.go.dev/google.golang.org/appengine/mail
-> > > So we don't know what the lore link will be...
-> >
-> > That's... unfortunate, as from my understanding of things that would be
-> > the most important "Link:" to have in any patches that fix issues report
-> > by syzbot. But well, that's how it is for now. In that case I'd vote for
-> > this:
-> >
-> > Reported-by: syzbot@syzkaller.appspotmail.com
-> > Link: https://syzkaller.appspot.com/b/cafecafecaca0cafecafe
->
-> As you previously mentioned, patch preparers should also include
-> the lore link so any followup discussion is easily located.
+On 04/03/2023 16:55, Konrad Dybcio wrote:
+> The point of the previous cleanup was to disallow "qcom,mdss-dsi-ctrl"
+> alone. This however didn't quite work out and the property became
 
-If the link we need to include is to lore, then we don't need to
-change the current syzbot Reported-by, right? Instead of asking 3
-tags, we can ask only for:
+s/property/compatible/
 
-Reported-by: syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/cafecafecaca0cafecafe@google.com/
+> undocumented instead of deprecated. Fix that.
 
-But as I mentioned we can't provide the lore link at the moment, we
-can only add a text to ask to include it.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This also means that checkpatch does not need special casing for syzbot.
+
+Best regards,
+Krzysztof
+
