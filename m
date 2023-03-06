@@ -2,148 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80FB6AC93A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C686ACB14
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjCFRGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:06:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45614 "EHLO
+        id S230328AbjCFRqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:46:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231147AbjCFRE6 (ORCPT
+        with ESMTP id S229590AbjCFRpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:04:58 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3612311E87;
-        Mon,  6 Mar 2023 09:04:28 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326EnIID033571;
-        Mon, 6 Mar 2023 16:11:08 GMT
+        Mon, 6 Mar 2023 12:45:51 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954DD3A871;
+        Mon,  6 Mar 2023 09:45:17 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326FqQlW005341;
+        Mon, 6 Mar 2023 16:16:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-transfer-encoding
- : mime-version; s=pp1; bh=kX3Vl11fgpbcRT2Yp+QxdfAbvT5CTTbsQ0eGJvC1rnw=;
- b=PXjgH1WFDfIXChS/16nUtkMTB/EPU2ugQyozjnkeTt8Su5pUrupHvXedF8/619FYq9EI
- 7wbchx6yj6dukTaNhNuu5QeifHlDaCGVejMiLVEdq1RZ0sQH2iJwGPIznkMBCNwutqGU
- o8n1PVgxqco0KsTx3Lae+s6wjo/b4kbdWPBlw002hbFf62oA5q12iFlIsPEISE22Kbe8
- UPzHXmymwtkU9L1owt7D/HroFt6DDQCdNoWjhOX9ED21dB/xkuQbYoqnuLQmuepQLc02
- qD9440jdBl07uy181tkYOZUer8Hd/Loqbnqoh/VegHXHvnNsQrkTL7gv6A0C8c3HyTv8 7g== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4uaen8s1-1
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=BTJFZUSxiEWggn1zMTH9DiLoAKpycnCu/7ed6LXGAvk=;
+ b=qgIC+66xyQksuyboaCTNGdaBk1/QigzHYhhF4+0tJh4kTCDJG8Jgg5PxZuOe5ZNaaCaZ
+ 890Iq6HqEAjbgUfkOXy5qj7LIinS5Mhlkteqk18rRyJ9lyM7fJ+MeNIWSrRGTePRH+xk
+ AOhcX94RqcLxx/42kIivrrd/v6n33QotwUDd8kw0kXSq47sI5PbUnw3f461cITYiPn9V
+ dUREg6rswV9PZVTOaizAEA9/iwmmvQHttTsY23CU7XDw76mpNJJcRpFE/6OmsEGho0bl
+ mXaqZ6a5N7qu+hjk146cD1KDeIHditdAK26vK4kn7hMjRZL3EkspibjkjZ2V1zn3+3bT yA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p50n48eac-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 16:11:08 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326G5VvF028682;
-        Mon, 6 Mar 2023 16:11:06 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3p419v62wd-1
+        Mon, 06 Mar 2023 16:16:19 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326Bw5Lc029579;
+        Mon, 6 Mar 2023 16:16:18 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p50n48e9e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 16:11:06 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326GB55k26214786
+        Mon, 06 Mar 2023 16:16:18 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3265XPh5030498;
+        Mon, 6 Mar 2023 16:16:16 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3p417q2by5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 16:16:16 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326GGCjG38142264
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 6 Mar 2023 16:11:05 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A8E0E5805B;
-        Mon,  6 Mar 2023 16:11:05 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D659358059;
-        Mon,  6 Mar 2023 16:11:03 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.108.29])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon,  6 Mar 2023 16:11:03 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mhiramat@kernel.org, alistair@popple.id.au, joel@jms.id.au,
-        jk@ozlabs.org, andrew@aj.id.au, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, eajames@linux.ibm.com
-Subject: [PATCH v8 3/8] dt-bindings: fsi: Document the IBM I2C Responder virtual FSI master
-Date:   Mon,  6 Mar 2023 10:10:51 -0600
-Message-Id: <20230306161057.44017-4-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230306161057.44017-1-eajames@linux.ibm.com>
-References: <20230306161057.44017-1-eajames@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xJ0syAcowyawIz15vC5s6ijXnxe2CwxZ
-X-Proofpoint-ORIG-GUID: xJ0syAcowyawIz15vC5s6ijXnxe2CwxZ
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 6 Mar 2023 16:16:13 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C811420049;
+        Mon,  6 Mar 2023 16:16:12 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A9EC20040;
+        Mon,  6 Mar 2023 16:16:12 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Mar 2023 16:16:12 +0000 (GMT)
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-mips <linux-mips@vger.kernel.org>,
+        linux-power <linuxppc-dev@lists.ozlabs.org>,
+        linux-x86 <x86@kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>
+Subject: [PATCH] mm: add PTE pointer parameter to flush_tlb_fix_spurious_fault()
+Date:   Mon,  6 Mar 2023 17:15:48 +0100
+Message-Id: <20230306161548.661740-1-gerald.schaefer@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8La9G2yLPVsHgQLa6GKGur7yIvPNIJqC
+X-Proofpoint-GUID: DeAjCU7ZGi5ehOrbeAqu-0KrsMqfJwxv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_09,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1015
- phishscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501
- suspectscore=0 spamscore=0 mlxscore=0 impostorscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060142
+ definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 bulkscore=0 phishscore=0 priorityscore=1501 clxscore=1011
+ impostorscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303060142
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The I2C Responder translates I2C commands to CFAM or SCOM operations,
-effectively implementing an FSI master.
+s390 can do more fine-grained handling of spurious TLB protection faults,
+when there also is the PTE pointer available.
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
-Reviewed-by: Andrew Jeffery <andrew@aj.id.au>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Therefore, pass on the PTE pointer to flush_tlb_fix_spurious_fault() as
+an additional parameter.
+
+This will add no functional change to other architectures, but those with
+private flush_tlb_fix_spurious_fault() implementations need to be made
+aware of the new parameter.
+
+Reviewed-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 ---
- .../bindings/fsi/ibm,i2cr-fsi-master.yaml     | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml
+ arch/arm64/include/asm/pgtable.h              |  2 +-
+ arch/mips/include/asm/pgtable.h               |  3 ++-
+ arch/powerpc/include/asm/book3s/64/tlbflush.h |  3 ++-
+ arch/s390/include/asm/pgtable.h               | 12 +++++++-----
+ arch/x86/include/asm/pgtable.h                |  2 +-
+ include/linux/pgtable.h                       |  2 +-
+ mm/memory.c                                   |  3 ++-
+ mm/pgtable-generic.c                          |  2 +-
+ 8 files changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml b/Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml
-new file mode 100644
-index 000000000000..442cecdc57cb
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fsi/ibm,i2cr-fsi-master.yaml
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fsi/ibm,i2cr-fsi-master.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: IBM I2C Responder virtual FSI master
-+
-+maintainers:
-+  - Eddie James <eajames@linux.ibm.com>
-+
-+description: |
-+  The I2C Responder (I2CR) is a an I2C device that's connected to an FSI CFAM
-+  (see fsi.txt). The I2CR translates I2C bus operations to FSI CFAM reads and
-+  writes or SCOM operations, thereby acting as an FSI master.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ibm,i2cr-fsi-master
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      i2cr@20 {
-+        compatible = "ibm,i2cr-fsi-master";
-+        reg = <0x20>;
-+      };
-+    };
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index b6ba466e2e8a..0bd18de9fd97 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -57,7 +57,7 @@ static inline bool arch_thp_swp_supported(void)
+  * fault on one CPU which has been handled concurrently by another CPU
+  * does not need to perform additional invalidation.
+  */
+-#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
++#define flush_tlb_fix_spurious_fault(vma, address, ptep) do { } while (0)
+ 
+ /*
+  * ZERO_PAGE is a global shared page that is always zero: used
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 791389bf3c12..574fa14ac8b2 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -469,7 +469,8 @@ static inline pgprot_t pgprot_writecombine(pgprot_t _prot)
+ }
+ 
+ static inline void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
+-						unsigned long address)
++						unsigned long address,
++						pte_t *ptep)
+ {
+ }
+ 
+diff --git a/arch/powerpc/include/asm/book3s/64/tlbflush.h b/arch/powerpc/include/asm/book3s/64/tlbflush.h
+index 2bbc0fcce04a..ff7f0ee179e5 100644
+--- a/arch/powerpc/include/asm/book3s/64/tlbflush.h
++++ b/arch/powerpc/include/asm/book3s/64/tlbflush.h
+@@ -121,7 +121,8 @@ static inline void flush_tlb_page(struct vm_area_struct *vma,
+ 
+ #define flush_tlb_fix_spurious_fault flush_tlb_fix_spurious_fault
+ static inline void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
+-						unsigned long address)
++						unsigned long address,
++						pte_t *ptep)
+ {
+ 	/*
+ 	 * Book3S 64 does not require spurious fault flushes because the PTE
+diff --git a/arch/s390/include/asm/pgtable.h b/arch/s390/include/asm/pgtable.h
+index 2c70b4d1263d..c1f6b46ec555 100644
+--- a/arch/s390/include/asm/pgtable.h
++++ b/arch/s390/include/asm/pgtable.h
+@@ -1239,7 +1239,8 @@ static inline int pte_allow_rdp(pte_t old, pte_t new)
+ }
+ 
+ static inline void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
+-						unsigned long address)
++						unsigned long address,
++						pte_t *ptep)
+ {
+ 	/*
+ 	 * RDP might not have propagated the PTE protection reset to all CPUs,
+@@ -1247,11 +1248,12 @@ static inline void flush_tlb_fix_spurious_fault(struct vm_area_struct *vma,
+ 	 * NOTE: This will also be called when a racing pagetable update on
+ 	 * another thread already installed the correct PTE. Both cases cannot
+ 	 * really be distinguished.
+-	 * Therefore, only do the local TLB flush when RDP can be used, to avoid
+-	 * unnecessary overhead.
++	 * Therefore, only do the local TLB flush when RDP can be used, and the
++	 * PTE does not have _PAGE_PROTECT set, to avoid unnecessary overhead.
++	 * A local RDP can be used to do the flush.
+ 	 */
+-	if (MACHINE_HAS_RDP)
+-		asm volatile("ptlb" : : : "memory");
++	if (MACHINE_HAS_RDP && !(pte_val(*ptep) & _PAGE_PROTECT))
++		__ptep_rdp(address, ptep, 0, 0, 1);
+ }
+ #define flush_tlb_fix_spurious_fault flush_tlb_fix_spurious_fault
+ 
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index 7425f32e5293..15ae4d6ba476 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1097,7 +1097,7 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm,
+ 	clear_bit(_PAGE_BIT_RW, (unsigned long *)&ptep->pte);
+ }
+ 
+-#define flush_tlb_fix_spurious_fault(vma, address) do { } while (0)
++#define flush_tlb_fix_spurious_fault(vma, address, ptep) do { } while (0)
+ 
+ #define mk_pmd(page, pgprot)   pfn_pmd(page_to_pfn(page), (pgprot))
+ 
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 9dc936bc77d1..c5a51481bbb9 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -817,7 +817,7 @@ static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
+ #endif
+ 
+ #ifndef flush_tlb_fix_spurious_fault
+-#define flush_tlb_fix_spurious_fault(vma, address) flush_tlb_page(vma, address)
++#define flush_tlb_fix_spurious_fault(vma, address, ptep) flush_tlb_page(vma, address)
+ #endif
+ 
+ /*
+diff --git a/mm/memory.c b/mm/memory.c
+index 0adf23ea5416..7ca7951adcf5 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4956,7 +4956,8 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+ 		 * with threads.
+ 		 */
+ 		if (vmf->flags & FAULT_FLAG_WRITE)
+-			flush_tlb_fix_spurious_fault(vmf->vma, vmf->address);
++			flush_tlb_fix_spurious_fault(vmf->vma, vmf->address,
++						     vmf->pte);
+ 	}
+ unlock:
+ 	pte_unmap_unlock(vmf->pte, vmf->ptl);
+diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+index 90ab721a12a8..d2fc52bffafc 100644
+--- a/mm/pgtable-generic.c
++++ b/mm/pgtable-generic.c
+@@ -69,7 +69,7 @@ int ptep_set_access_flags(struct vm_area_struct *vma,
+ 	int changed = !pte_same(*ptep, entry);
+ 	if (changed) {
+ 		set_pte_at(vma->vm_mm, address, ptep, entry);
+-		flush_tlb_fix_spurious_fault(vma, address);
++		flush_tlb_fix_spurious_fault(vma, address, ptep);
+ 	}
+ 	return changed;
+ }
 -- 
-2.31.1
+2.37.2
 
