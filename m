@@ -2,61 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1F76AC249
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FEBA6AC23C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjCFOG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:06:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        id S229995AbjCFOGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:06:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjCFOGr (ORCPT
+        with ESMTP id S229663AbjCFOGC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:06:47 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C04E305F4;
-        Mon,  6 Mar 2023 06:06:19 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C302D6602F94;
-        Mon,  6 Mar 2023 14:05:59 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678111561;
-        bh=kz8iQ8boEjR7HQUIv+oQzyLcyfamnjk7DLLHgHxBzAk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ltj5HTzUZ46snb4AdvzLHbzOzS0R/MlChk8aLhbLsvETotctwYV1f/AP9GahhwQG4
-         DY0zZDU45Z2v5BCwnkXppZLUsYhF9RAp5b/MmUkpT0dnLw9IjU/AguHWdAg5ck8Ng7
-         a66OjIwBnf9mm+udnVhkTShPTnAC0GVDC31tQAj/CopsONBpWm4rmZbXTewyOTi3TD
-         lKF34b1+T6GQs8/graMw9GjotsT3CtUo9xoV3b1Qw1l10cKDDjes7gNS/ZYX9QZPUk
-         VMOE4f26rqFKUpcBEv56cgisV5EuEj3U3CaRwn0wSpcmWCY6I0IZ/6ND+ygZXhQ9kD
-         B7V+Jkw3mX/WQ==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org,
-        johnson.wang@mediatek.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, daniel@makrotopia.org,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH v6 08/54] clk: mediatek: mt2712: Move apmixedsys clock driver to its own file
-Date:   Mon,  6 Mar 2023 15:04:57 +0100
-Message-Id: <20230306140543.1813621-9-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230306140543.1813621-1-angelogioacchino.delregno@collabora.com>
-References: <20230306140543.1813621-1-angelogioacchino.delregno@collabora.com>
+        Mon, 6 Mar 2023 09:06:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B96D25BB0
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:05:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678111503;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MpjQI4eZNUyy1a8d8ToFfb8eUyexksQgeyNW7lbutB0=;
+        b=Xz8NXAgbsxxpnlqfXXJlA30md+H8ysAPiwoeLXv3gORGnWdQbdqbnNDjr1D9WVfIbF2WTI
+        CAS+xSaycmZuzbKvyjaWZVELg4DpaSzdZYLQc7EC+D2TJrGg8ZSW4D2Z8qp9EBLTgIbJR3
+        F9eQWdB315kU9CCUMQVI6/9NjUMwElE=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-86-nRMqiSTUPMuokcpJShebRg-1; Mon, 06 Mar 2023 09:05:00 -0500
+X-MC-Unique: nRMqiSTUPMuokcpJShebRg-1
+Received: by mail-wm1-f71.google.com with SMTP id j32-20020a05600c1c2000b003e9bdf02c9fso6788269wms.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:04:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678111499;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MpjQI4eZNUyy1a8d8ToFfb8eUyexksQgeyNW7lbutB0=;
+        b=QR0AY9wv0TVPB/0UXdsm7jMf2p3jjP2cyNo0XXW8NoHNHOYYzFuZ0I6w8QSrrBFUuH
+         5EPSpbPZIfpmTD6s+4d11UAQq9n0etNHaPlvaZppx+LENEJgYTORzWWPIaZoEmOmbxld
+         sHwU8AaYk60fAMhfFtvNnY5QvaASRwYwZyWFSjQJZbK+01sVrwaeH8bfHHcVqoeVcL/g
+         hePTdqwAmPfUx33yTnEsF7Fgpx7y/08pzuNSVxDCEShZ1x4dkgcNKfaFTQoLkwlrjSPT
+         J49O95ficVDQb1y8Qr/4vyU8sguRWS5WAmkCzbs3qmkpQ/Ox+8fc1Rf4jgtRTqiKVmpn
+         2Bmw==
+X-Gm-Message-State: AO0yUKWpRCFhSiZx8E4u2U4wGrtRDtH2X0crVe5QJ3TvZ/MhTdVVy0eo
+        3N+jBzeqixiNfQFBSoWVTkotYeAO7vz4q9rucjkr8sjm2YhX1Okokg4zDCEn0nLXqcQCz8w2oLX
+        nINMgc4935cn1sYcXtqK2jK9pvqooASVY
+X-Received: by 2002:a05:600c:1990:b0:3e2:20c7:6553 with SMTP id t16-20020a05600c199000b003e220c76553mr9340866wmq.13.1678111498923;
+        Mon, 06 Mar 2023 06:04:58 -0800 (PST)
+X-Google-Smtp-Source: AK7set9t/0QaqgG9LAMjdWr1ncqogSGh8xkuI6ju2p3ppfz/c1knl1GVMAO3FPLfnnJj9dP9HbPRUA==
+X-Received: by 2002:a05:600c:1990:b0:3e2:20c7:6553 with SMTP id t16-20020a05600c199000b003e220c76553mr9340820wmq.13.1678111498605;
+        Mon, 06 Mar 2023 06:04:58 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:3500:b8a3:191c:eae:cc05? (p200300cbc7043500b8a3191c0eaecc05.dip0.t-ipconnect.de. [2003:cb:c704:3500:b8a3:191c:eae:cc05])
+        by smtp.gmail.com with ESMTPSA id y33-20020a05600c342100b003e21f20b646sm10432673wmp.21.2023.03.06.06.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 06:04:58 -0800 (PST)
+Message-ID: <efae0531-7f72-a78c-07c9-82879adf5666@redhat.com>
+Date:   Mon, 6 Mar 2023 15:04:57 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 5/6] shmem: update documentation
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, hughd@google.com,
+        akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org
+Cc:     linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230302232758.888157-1-mcgrof@kernel.org>
+ <20230302232758.888157-6-mcgrof@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230302232758.888157-6-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,397 +87,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The only clock driver that does not support mtk_clk_simple_probe() is
-apmixedsys: in preparation for enabling module build of non-critical
-mt2712 clocks, move this to its own file.
-While at it, also fix some indentation issues in the PLLs table.
+On 03.03.23 00:27, Luis Chamberlain wrote:
+> Update the docs to reflect a bit better why some folks prefer tmpfs
+> over ramfs and clarify a bit more about the difference between brd
+> ramdisks.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>   Documentation/filesystems/tmpfs.rst | 27 +++++++++++++++++++--------
+>   1 file changed, 19 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/filesystems/tmpfs.rst b/Documentation/filesystems/tmpfs.rst
+> index 0408c245785e..e77ebdacadd0 100644
+> --- a/Documentation/filesystems/tmpfs.rst
+> +++ b/Documentation/filesystems/tmpfs.rst
+> @@ -13,14 +13,25 @@ everything stored therein is lost.
+>   
+>   tmpfs puts everything into the kernel internal caches and grows and
+>   shrinks to accommodate the files it contains and is able to swap
+> -unneeded pages out to swap space. It has maximum size limits which can
+> -be adjusted on the fly via 'mount -o remount ...'
+> -
+> -If you compare it to ramfs (which was the template to create tmpfs)
+> -you gain swapping and limit checking. Another similar thing is the RAM
+> -disk (/dev/ram*), which simulates a fixed size hard disk in physical
+> -RAM, where you have to create an ordinary filesystem on top. Ramdisks
+> -cannot swap and you do not have the possibility to resize them.
+> +unneeded pages out to swap space.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/clk/mediatek/Makefile                |   2 +-
- drivers/clk/mediatek/clk-mt2712-apmixedsys.c | 153 +++++++++++++++++
- drivers/clk/mediatek/clk-mt2712.c            | 164 -------------------
- 3 files changed, 154 insertions(+), 165 deletions(-)
- create mode 100644 drivers/clk/mediatek/clk-mt2712-apmixedsys.c
+I suppose, in contrast to ramfs, tmpfs also supports THP. Maybe worth 
+adding as well.
 
-diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
-index e5d018270ed0..9ba8f666221c 100644
---- a/drivers/clk/mediatek/Makefile
-+++ b/drivers/clk/mediatek/Makefile
-@@ -38,7 +38,7 @@ obj-$(CONFIG_COMMON_CLK_MT2701_HIFSYS) += clk-mt2701-hif.o
- obj-$(CONFIG_COMMON_CLK_MT2701_IMGSYS) += clk-mt2701-img.o
- obj-$(CONFIG_COMMON_CLK_MT2701_MMSYS) += clk-mt2701-mm.o
- obj-$(CONFIG_COMMON_CLK_MT2701_VDECSYS) += clk-mt2701-vdec.o
--obj-$(CONFIG_COMMON_CLK_MT2712) += clk-mt2712.o
-+obj-$(CONFIG_COMMON_CLK_MT2712) += clk-mt2712-apmixedsys.o clk-mt2712.o
- obj-$(CONFIG_COMMON_CLK_MT2712_BDPSYS) += clk-mt2712-bdp.o
- obj-$(CONFIG_COMMON_CLK_MT2712_IMGSYS) += clk-mt2712-img.o
- obj-$(CONFIG_COMMON_CLK_MT2712_JPGDECSYS) += clk-mt2712-jpgdec.o
-diff --git a/drivers/clk/mediatek/clk-mt2712-apmixedsys.c b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
-new file mode 100644
-index 000000000000..1e1a8272a4ac
---- /dev/null
-+++ b/drivers/clk/mediatek/clk-mt2712-apmixedsys.c
-@@ -0,0 +1,153 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2017 MediaTek Inc.
-+ *                    Weiyi Lu <weiyi.lu@mediatek.com>
-+ * Copyright (c) 2023 Collabora Ltd.
-+ *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-+ */
-+#include <linux/clk.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+#include "clk-pll.h"
-+#include "clk-mtk.h"
-+
-+#include <dt-bindings/clock/mt2712-clk.h>
-+
-+#define MT2712_PLL_FMAX		(3000UL * MHZ)
-+
-+#define CON0_MT2712_RST_BAR	BIT(24)
-+
-+#define PLL_B(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits,	\
-+			_pd_reg, _pd_shift, _tuner_reg, _tuner_en_reg,	\
-+			_tuner_en_bit, _pcw_reg, _pcw_shift,		\
-+			_div_table) {					\
-+		.id = _id,						\
-+		.name = _name,						\
-+		.reg = _reg,						\
-+		.pwr_reg = _pwr_reg,					\
-+		.en_mask = _en_mask,					\
-+		.flags = _flags,					\
-+		.rst_bar_mask = CON0_MT2712_RST_BAR,			\
-+		.fmax = MT2712_PLL_FMAX,				\
-+		.pcwbits = _pcwbits,					\
-+		.pd_reg = _pd_reg,					\
-+		.pd_shift = _pd_shift,					\
-+		.tuner_reg = _tuner_reg,				\
-+		.tuner_en_reg = _tuner_en_reg,				\
-+		.tuner_en_bit = _tuner_en_bit,				\
-+		.pcw_reg = _pcw_reg,					\
-+		.pcw_shift = _pcw_shift,				\
-+		.div_table = _div_table,				\
-+	}
-+
-+#define PLL(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits,	\
-+			_pd_reg, _pd_shift, _tuner_reg, _tuner_en_reg,	\
-+			_tuner_en_bit, _pcw_reg, _pcw_shift)		\
-+		PLL_B(_id, _name, _reg, _pwr_reg, _en_mask, _flags,	\
-+			_pcwbits, _pd_reg, _pd_shift, _tuner_reg,	\
-+			_tuner_en_reg, _tuner_en_bit, _pcw_reg,		\
-+			_pcw_shift, NULL)
-+
-+static const struct mtk_pll_div_table armca35pll_div_table[] = {
-+	{ .div = 0, .freq = MT2712_PLL_FMAX },
-+	{ .div = 1, .freq = 1202500000 },
-+	{ .div = 2, .freq = 500500000 },
-+	{ .div = 3, .freq = 315250000 },
-+	{ .div = 4, .freq = 157625000 },
-+	{ /* sentinel */ }
-+};
-+
-+static const struct mtk_pll_div_table armca72pll_div_table[] = {
-+	{ .div = 0, .freq = MT2712_PLL_FMAX },
-+	{ .div = 1, .freq = 994500000 },
-+	{ .div = 2, .freq = 520000000 },
-+	{ .div = 3, .freq = 315250000 },
-+	{ .div = 4, .freq = 157625000 },
-+	{ /* sentinel */ }
-+};
-+
-+static const struct mtk_pll_div_table mmpll_div_table[] = {
-+	{ .div = 0, .freq = MT2712_PLL_FMAX },
-+	{ .div = 1, .freq = 1001000000 },
-+	{ .div = 2, .freq = 601250000 },
-+	{ .div = 3, .freq = 250250000 },
-+	{ .div = 4, .freq = 125125000 },
-+	{ /* sentinel */ }
-+};
-+
-+static const struct mtk_pll_data plls[] = {
-+	PLL(CLK_APMIXED_MAINPLL, "mainpll", 0x0230, 0x023C, 0xf0000100,
-+	    HAVE_RST_BAR, 31, 0x0230, 4, 0, 0, 0, 0x0234, 0),
-+	PLL(CLK_APMIXED_UNIVPLL, "univpll", 0x0240, 0x024C, 0xfe000100,
-+	    HAVE_RST_BAR, 31, 0x0240, 4, 0, 0, 0, 0x0244, 0),
-+	PLL(CLK_APMIXED_VCODECPLL, "vcodecpll", 0x0320, 0x032C, 0xc0000100,
-+	    0, 31, 0x0320, 4, 0, 0, 0, 0x0324, 0),
-+	PLL(CLK_APMIXED_VENCPLL, "vencpll", 0x0280, 0x028C, 0x00000100,
-+	    0, 31, 0x0280, 4, 0, 0, 0, 0x0284, 0),
-+	PLL(CLK_APMIXED_APLL1, "apll1", 0x0330, 0x0340, 0x00000100,
-+	    0, 31, 0x0330, 4, 0x0338, 0x0014, 0, 0x0334, 0),
-+	PLL(CLK_APMIXED_APLL2, "apll2", 0x0350, 0x0360, 0x00000100,
-+	    0, 31, 0x0350, 4, 0x0358, 0x0014, 1, 0x0354, 0),
-+	PLL(CLK_APMIXED_LVDSPLL, "lvdspll", 0x0370, 0x037c, 0x00000100,
-+	    0, 31, 0x0370, 4, 0, 0, 0, 0x0374, 0),
-+	PLL(CLK_APMIXED_LVDSPLL2, "lvdspll2", 0x0390, 0x039C, 0x00000100,
-+	    0, 31, 0x0390, 4, 0, 0, 0, 0x0394, 0),
-+	PLL(CLK_APMIXED_MSDCPLL, "msdcpll", 0x0270, 0x027C, 0x00000100,
-+	    0, 31, 0x0270, 4, 0, 0, 0, 0x0274, 0),
-+	PLL(CLK_APMIXED_MSDCPLL2, "msdcpll2", 0x0410, 0x041C, 0x00000100,
-+	    0, 31, 0x0410, 4, 0, 0, 0, 0x0414, 0),
-+	PLL(CLK_APMIXED_TVDPLL, "tvdpll", 0x0290, 0x029C, 0xc0000100,
-+	    0, 31, 0x0290, 4, 0, 0, 0, 0x0294, 0),
-+	PLL_B(CLK_APMIXED_MMPLL, "mmpll", 0x0250, 0x0260, 0x00000100,
-+	      0, 31, 0x0250, 4, 0, 0, 0, 0x0254, 0, mmpll_div_table),
-+	PLL_B(CLK_APMIXED_ARMCA35PLL, "armca35pll", 0x0100, 0x0110, 0xf0000100,
-+	      HAVE_RST_BAR, 31, 0x0100, 4, 0, 0, 0, 0x0104, 0, armca35pll_div_table),
-+	PLL_B(CLK_APMIXED_ARMCA72PLL, "armca72pll", 0x0210, 0x0220, 0x00000100,
-+	      0, 31, 0x0210, 4, 0, 0, 0, 0x0214, 0, armca72pll_div_table),
-+	PLL(CLK_APMIXED_ETHERPLL, "etherpll", 0x0300, 0x030C, 0xc0000100,
-+	    0, 31, 0x0300, 4, 0, 0, 0, 0x0304, 0),
-+};
-+
-+static int clk_mt2712_apmixed_probe(struct platform_device *pdev)
-+{
-+	struct clk_hw_onecell_data *clk_data;
-+	int r;
-+	struct device_node *node = pdev->dev.of_node;
-+
-+	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-+	if (!clk_data)
-+		return -ENOMEM;
-+
-+	r = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
-+	if (r)
-+		goto free_clk_data;
-+
-+	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
-+	if (r) {
-+		dev_err(&pdev->dev, "Cannot register clock provider: %d\n", r);
-+		goto unregister_plls;
-+	}
-+
-+	return 0;
-+
-+unregister_plls:
-+	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-+free_clk_data:
-+	mtk_free_clk_data(clk_data);
-+	return r;
-+}
-+
-+static const struct of_device_id of_match_clk_mt2712_apmixed[] = {
-+	{ .compatible = "mediatek,mt2712-apmixedsys" },
-+	{ /* sentinel */ }
-+};
-+
-+static struct platform_driver clk_mt2712_apmixed_drv = {
-+	.probe = clk_mt2712_apmixed_probe,
-+	.driver = {
-+		.name = "clk-mt2712-apmixed",
-+		.of_match_table = of_match_clk_mt2712_apmixed,
-+	},
-+};
-+builtin_platform_driver(clk_mt2712_apmixed_drv)
-diff --git a/drivers/clk/mediatek/clk-mt2712.c b/drivers/clk/mediatek/clk-mt2712.c
-index 8aa361f0fa13..c5fd76d1b9df 100644
---- a/drivers/clk/mediatek/clk-mt2712.c
-+++ b/drivers/clk/mediatek/clk-mt2712.c
-@@ -14,7 +14,6 @@
- #include <linux/slab.h>
- 
- #include "clk-gate.h"
--#include "clk-pll.h"
- #include "clk-mtk.h"
- 
- #include <dt-bindings/clock/mt2712-clk.h>
-@@ -971,101 +970,6 @@ static const struct mtk_gate peri_clks[] = {
- 	GATE_PERI2(CLK_PERI_MSDC30_3_QTR_EN, "per_msdc30_3_q", "mem_sel", 7),
- };
- 
--#define MT2712_PLL_FMAX		(3000UL * MHZ)
--
--#define CON0_MT2712_RST_BAR	BIT(24)
--
--#define PLL_B(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits,	\
--			_pd_reg, _pd_shift, _tuner_reg, _tuner_en_reg,	\
--			_tuner_en_bit, _pcw_reg, _pcw_shift,		\
--			_div_table) {					\
--		.id = _id,						\
--		.name = _name,						\
--		.reg = _reg,						\
--		.pwr_reg = _pwr_reg,					\
--		.en_mask = _en_mask,					\
--		.flags = _flags,					\
--		.rst_bar_mask = CON0_MT2712_RST_BAR,			\
--		.fmax = MT2712_PLL_FMAX,				\
--		.pcwbits = _pcwbits,					\
--		.pd_reg = _pd_reg,					\
--		.pd_shift = _pd_shift,					\
--		.tuner_reg = _tuner_reg,				\
--		.tuner_en_reg = _tuner_en_reg,				\
--		.tuner_en_bit = _tuner_en_bit,				\
--		.pcw_reg = _pcw_reg,					\
--		.pcw_shift = _pcw_shift,				\
--		.div_table = _div_table,				\
--	}
--
--#define PLL(_id, _name, _reg, _pwr_reg, _en_mask, _flags, _pcwbits,	\
--			_pd_reg, _pd_shift, _tuner_reg, _tuner_en_reg,	\
--			_tuner_en_bit, _pcw_reg, _pcw_shift)		\
--		PLL_B(_id, _name, _reg, _pwr_reg, _en_mask, _flags,	\
--			_pcwbits, _pd_reg, _pd_shift, _tuner_reg,	\
--			_tuner_en_reg, _tuner_en_bit, _pcw_reg,		\
--			_pcw_shift, NULL)
--
--static const struct mtk_pll_div_table armca35pll_div_table[] = {
--	{ .div = 0, .freq = MT2712_PLL_FMAX },
--	{ .div = 1, .freq = 1202500000 },
--	{ .div = 2, .freq = 500500000 },
--	{ .div = 3, .freq = 315250000 },
--	{ .div = 4, .freq = 157625000 },
--	{ } /* sentinel */
--};
--
--static const struct mtk_pll_div_table armca72pll_div_table[] = {
--	{ .div = 0, .freq = MT2712_PLL_FMAX },
--	{ .div = 1, .freq = 994500000 },
--	{ .div = 2, .freq = 520000000 },
--	{ .div = 3, .freq = 315250000 },
--	{ .div = 4, .freq = 157625000 },
--	{ } /* sentinel */
--};
--
--static const struct mtk_pll_div_table mmpll_div_table[] = {
--	{ .div = 0, .freq = MT2712_PLL_FMAX },
--	{ .div = 1, .freq = 1001000000 },
--	{ .div = 2, .freq = 601250000 },
--	{ .div = 3, .freq = 250250000 },
--	{ .div = 4, .freq = 125125000 },
--	{ } /* sentinel */
--};
--
--static const struct mtk_pll_data plls[] = {
--	PLL(CLK_APMIXED_MAINPLL, "mainpll", 0x0230, 0x023C, 0xf0000100,
--	    HAVE_RST_BAR, 31, 0x0230, 4, 0, 0, 0, 0x0234, 0),
--	PLL(CLK_APMIXED_UNIVPLL, "univpll", 0x0240, 0x024C, 0xfe000100,
--	    HAVE_RST_BAR, 31, 0x0240, 4, 0, 0, 0, 0x0244, 0),
--	PLL(CLK_APMIXED_VCODECPLL, "vcodecpll", 0x0320, 0x032C, 0xc0000100,
--	    0, 31, 0x0320, 4, 0, 0, 0, 0x0324, 0),
--	PLL(CLK_APMIXED_VENCPLL, "vencpll", 0x0280, 0x028C, 0x00000100,
--	    0, 31, 0x0280, 4, 0, 0, 0, 0x0284, 0),
--	PLL(CLK_APMIXED_APLL1, "apll1", 0x0330, 0x0340, 0x00000100,
--	    0, 31, 0x0330, 4, 0x0338, 0x0014, 0, 0x0334, 0),
--	PLL(CLK_APMIXED_APLL2, "apll2", 0x0350, 0x0360, 0x00000100,
--	    0, 31, 0x0350, 4, 0x0358, 0x0014, 1, 0x0354, 0),
--	PLL(CLK_APMIXED_LVDSPLL, "lvdspll", 0x0370, 0x037c, 0x00000100,
--	    0, 31, 0x0370, 4, 0, 0, 0, 0x0374, 0),
--	PLL(CLK_APMIXED_LVDSPLL2, "lvdspll2", 0x0390, 0x039C, 0x00000100,
--	    0, 31, 0x0390, 4, 0, 0, 0, 0x0394, 0),
--	PLL(CLK_APMIXED_MSDCPLL, "msdcpll", 0x0270, 0x027C, 0x00000100,
--	    0, 31, 0x0270, 4, 0, 0, 0, 0x0274, 0),
--	PLL(CLK_APMIXED_MSDCPLL2, "msdcpll2", 0x0410, 0x041C, 0x00000100,
--	    0, 31, 0x0410, 4, 0, 0, 0, 0x0414, 0),
--	PLL(CLK_APMIXED_TVDPLL, "tvdpll", 0x0290, 0x029C, 0xc0000100,
--	    0, 31, 0x0290, 4, 0, 0, 0, 0x0294, 0),
--	PLL_B(CLK_APMIXED_MMPLL, "mmpll", 0x0250, 0x0260, 0x00000100,
--	    0, 31, 0x0250, 4, 0, 0, 0, 0x0254, 0, mmpll_div_table),
--	PLL_B(CLK_APMIXED_ARMCA35PLL, "armca35pll", 0x0100, 0x0110, 0xf0000100,
--	      HAVE_RST_BAR, 31, 0x0100, 4, 0, 0, 0, 0x0104, 0, armca35pll_div_table),
--	PLL_B(CLK_APMIXED_ARMCA72PLL, "armca72pll", 0x0210, 0x0220, 0x00000100,
--	      0, 31, 0x0210, 4, 0, 0, 0, 0x0214, 0, armca72pll_div_table),
--	PLL(CLK_APMIXED_ETHERPLL, "etherpll", 0x0300, 0x030C, 0xc0000100,
--	    0, 31, 0x0300, 4, 0, 0, 0, 0x0304, 0),
--};
--
- static u16 infrasys_rst_ofs[] = { 0x30, 0x34, };
- static u16 pericfg_rst_ofs[] = { 0x0, 0x4, };
- 
-@@ -1084,35 +988,6 @@ static const struct mtk_clk_rst_desc clk_rst_desc[] = {
- 	},
- };
- 
--static int clk_mt2712_apmixed_probe(struct platform_device *pdev)
--{
--	struct clk_hw_onecell_data *clk_data;
--	int r;
--	struct device_node *node = pdev->dev.of_node;
--
--	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
--	if (!clk_data)
--		return -ENOMEM;
--
--	r = mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
--	if (r)
--		goto free_clk_data;
--
--	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, clk_data);
--	if (r) {
--		dev_err(&pdev->dev, "Cannot register clock provider: %d\n", r);
--		goto unregister_plls;
--	}
--
--	return 0;
--
--unregister_plls:
--	mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
--free_clk_data:
--	mtk_free_clk_data(clk_data);
--	return r;
--}
--
- static const struct mtk_clk_desc topck_desc = {
- 	.clks = top_clks,
- 	.num_clks = ARRAY_SIZE(top_clks),
-@@ -1133,33 +1008,6 @@ static const struct mtk_clk_desc mcu_desc = {
- 	.clk_lock = &mt2712_clk_lock,
- };
- 
--static const struct of_device_id of_match_clk_mt2712[] = {
--	{
--		.compatible = "mediatek,mt2712-apmixedsys",
--		.data = clk_mt2712_apmixed_probe,
--	}, {
--		/* sentinel */
--	}
--};
--
--static int clk_mt2712_probe(struct platform_device *pdev)
--{
--	int (*clk_probe)(struct platform_device *);
--	int r;
--
--	clk_probe = of_device_get_match_data(&pdev->dev);
--	if (!clk_probe)
--		return -EINVAL;
--
--	r = clk_probe(pdev);
--	if (r != 0)
--		dev_err(&pdev->dev,
--			"could not register clock provider: %s: %d\n",
--			pdev->name, r);
--
--	return r;
--}
--
- static const struct mtk_clk_desc infra_desc = {
- 	.clks = infra_clks,
- 	.num_clks = ARRAY_SIZE(infra_clks),
-@@ -1189,20 +1037,8 @@ static struct platform_driver clk_mt2712_simple_drv = {
- 	},
- };
- 
--static struct platform_driver clk_mt2712_drv = {
--	.probe = clk_mt2712_probe,
--	.driver = {
--		.name = "clk-mt2712",
--		.of_match_table = of_match_clk_mt2712,
--	},
--};
--
- static int __init clk_mt2712_init(void)
- {
--	int ret = platform_driver_register(&clk_mt2712_drv);
--
--	if (ret)
--		return ret;
- 	return platform_driver_register(&clk_mt2712_simple_drv);
- }
- 
+Reviewed-by: David Hildenbrand <david@redhat.com>
+
 -- 
-2.39.2
+Thanks,
+
+David / dhildenb
 
