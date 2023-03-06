@@ -2,119 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8828A6AC35E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F230C6AC318
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjCFOeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:34:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S230007AbjCFOV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:21:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjCFOeF (ORCPT
+        with ESMTP id S229946AbjCFOVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:34:05 -0500
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92D82A15F;
-        Mon,  6 Mar 2023 06:33:18 -0800 (PST)
-Received: from relay2-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::222])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 08DD1C9079;
-        Mon,  6 Mar 2023 14:20:33 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 72F3140007;
-        Mon,  6 Mar 2023 14:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678112311;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cQMPVgcFTy/Q4j9fnpHklSpnWa3lhC60q1SMkTSain8=;
-        b=OM/O1gwxOk+2qmvXGeInvI30SlgTahnGgFQA/ABfG7tFB438IKBji0LkO2N0Nip6LE708Z
-        sYJeC6ZF+A+zmqCvZE4bEUZrdFryPaAPDS+Dyr/Aiu35Lhe/2+W1BU7kYDDmEfb7ne8ML7
-        ywft1Guav3tZ34DG1zqMHH2ntqFaRmXRlM4oj7ExoAN8C2GxI497qI9abRksJf+MQzgqtR
-        HpoXKqGal62A5qJs3EO7X8/MZNmmlBFmxmXOn/kyF0s4fAG4T+oNmE4cP8f502r/+QzBNZ
-        FuxMQ+Il9dz3EDgEUyixGc+hRLfCobJ2xO6jpKbf+fvprml8InG+w4YakExiwg==
-Date:   Mon, 6 Mar 2023 15:18:29 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Michael Walle <michael@walle.cc>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 0/8] nvmem: Let layout drivers be modules
-Message-ID: <20230306151829.57c689b4@xps-13>
-In-Reply-To: <73a04afaf658292c05ef27117c60b21d@milecki.pl>
-References: <20230301152239.531194-1-miquel.raynal@bootlin.com>
-        <ee7923a8b5fa8358e6805d20df7d8049@walle.cc>
-        <20230306143528.7407fda5@xps-13>
-        <73a04afaf658292c05ef27117c60b21d@milecki.pl>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 6 Mar 2023 09:21:34 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E189572A6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:20:09 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id i6so8229154ybu.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:20:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678112332;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BSuWilkYCJFsV7IY3WrT2Gn2CfcAm+FHoFIi1EIJdfw=;
+        b=CrCSn/hY/Pn3OIYiTzzC8GJtvWpUB9dzR3nWq6D52TKPxspzM5n1Pdvl94fz/mx87C
+         m/1PEAwns2uSZyTOG8Mnyneu/EZmd8VLZU4KePObsSanw1hntLXEjaQMug6t1K8iIqdi
+         fnmq9fsgDrAH/Mx+DTyy/d/YbQ+kgBGOpM3sBH4bjH0uOJ58CQp1p9K5g9rEUYBW9oxP
+         DNwRhsNDFEw1ax6MCVyH3XbsNlUbvTFVOugDAwBLZSNkFL3Xitr2RedlbUajuyUHAgj8
+         delve7oZI+VqEg28RCSoYlORT3B2T+RZ+RpsvG2tRn7VRyOBt1moQJmyx4IIr1xzcPkb
+         8I5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678112332;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BSuWilkYCJFsV7IY3WrT2Gn2CfcAm+FHoFIi1EIJdfw=;
+        b=lyFcw/hD7/Nh1swdYC/iHc6mDhJGu1ATHGrhyEzXAKLq1DgAwFtW8dv+InZCYjOVGR
+         FpJq/7W5yBqBfuLi7NLCNr19jMON7QzEgbop+M3E+Doilcu4NO8hsSYfGhB+l+7a895L
+         p/o/MC2HQpDkiWyA/WwkQ0GLQDGNTdwm+YSbqta4Yx6mMaaLQswXb416bBSGq8G6FsA2
+         RT8XdeLw/6yBDb1UaneDS0UCbYaS0LX34MG3Kva+1+uN1Q9G2N3C07UPL0sXa455+Gk1
+         TLXSLPNLv8qGrFJ0fa0JTVkgb3tHfQ1sUx9zpQXwVBO5rcTK38n/oWebHYv/3oAUOq8e
+         Of1A==
+X-Gm-Message-State: AO0yUKUUeQkdv+Mt/NQUHOfHJEQnJ7wdRnJr6fl8naGWQaqJQhya7bkg
+        j9amqBxXIv0uJ/E31Z3eEMQyAJwxqLLNg+BaIOe642XttDwv6iMk
+X-Google-Smtp-Source: AK7set8SLvtaEIzMFs/ct9lUoE90JnY9UNlhBsKArcGXEzrP5gpzowNx3909XhZ7n3C1qDJEkWxKzgtuWVYK6UiyEsg=
+X-Received: by 2002:a5b:b84:0:b0:ab8:1ed9:cfd2 with SMTP id
+ l4-20020a5b0b84000000b00ab81ed9cfd2mr6552182ybq.5.1678112332336; Mon, 06 Mar
+ 2023 06:18:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20230206203720.1177718-1-horatiu.vultur@microchip.com>
+In-Reply-To: <20230206203720.1177718-1-horatiu.vultur@microchip.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Mar 2023 15:18:40 +0100
+Message-ID: <CACRpkdZsWFJEU7xoc-r+tBkD2TzRTW34x3RbeqMEqrRfq6A7YA@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: ocelot: Fix alt mode for ocelot
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexandre.belloni@bootlin.com, andy.shevchenko@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafa=C5=82,
+On Mon, Feb 6, 2023 at 9:37 PM Horatiu Vultur
+<horatiu.vultur@microchip.com> wrote:
 
-rafal@milecki.pl wrote on Mon, 06 Mar 2023 14:57:03 +0100:
+> In case the driver was trying to set an alternate mode for gpio
+> 0 or 32 then the mode was not set correctly. The reason is that
+> there is computation error inside the function ocelot_pinmux_set_mux
+> because in this case it was trying to shift to left by -1.
+> Fix this by actually shifting the function bits and not the position.
+>
+> Fixes: 4b36082e2e09 ("pinctrl: ocelot: fix pinmuxing for pins after 31")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-> On 2023-03-06 14:35, Miquel Raynal wrote:
-> > Hi Michael,
-> >=20
-> > michael@walle.cc wrote on Mon, 06 Mar 2023 14:01:34 +0100:
-> >  =20
-> >> > Miquel Raynal (8):
-> >> >   of: Fix modalias string generation
-> >> >   of: Change of_device_get_modalias() main argument
-> >> >   of: Create an of_device_request_module() receiving an OF node
-> >> >   nvmem: core: Fix error path ordering
-> >> >   nvmem: core: Handle the absence of expected layouts
-> >> >   nvmem: core: Request layout modules loading
-> >> >   nvmem: layouts: sl28vpd: Convert layout driver into a module
-> >> >   nvmem: layouts: onie-tlv: Convert layout driver into a module =20
-> >> >> With the fixes series [1] applied: =20
-> >=20
-> > Thanks for the series! Looks good to me. I believe both series can live
-> > in separate tress, any reason why we would like to avoid this? I am > k=
-een
-> > to apply [1] into the mtd tree rather soon. =20
->=20
-> Given past events with nvmem patches I'm against that.
->=20
-> Let's wait for Srinivas to collect pending patches, let them spend a
-> moment in linux-next maybe, ask Srinivas to send them to Greg early if
-> he can. That way maybe you can merge Greg's branch (assuming he doesn't
-> rebase).
+Patch applied for fixes.
 
-Just to be on the same page, we're talking about the mtd core fixups to
-handle correctly probe deferrals in the nvmem side.
-
-Applying mtd patches then nvmem patches is totally fine in this order.
-Applying nvmem patches and then mtd patches creates a range of commits
-where some otp devices might have troubles probing if:
-- a layout driver is used
-- the driver is compiled as a module
-- the driver is also not installed in an initramfs
-
-I was actually asking out loud whether we should care about this
-commit range given the unlikelihood that someone would have troubles
-with this while bisecting a linux-next kernel.
-
-So getting an immutable tag from Greg would not help. The opposite
-might make sense though, and involves that I apply [1] to mtd/next
-rather soon anyway, I guess?
-
-Thanks,
-Miqu=C3=A8l
+Yours,
+Linus Walleij
