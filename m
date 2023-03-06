@@ -2,94 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1CE6ACE0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DAB6ACE16
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:29:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229823AbjCFT3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:29:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S229580AbjCFT3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCFT3A (ORCPT
+        with ESMTP id S229789AbjCFT3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:29:00 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0969D125A2;
-        Mon,  6 Mar 2023 11:28:59 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id y144so9277386yby.12;
-        Mon, 06 Mar 2023 11:28:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678130938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ttfPrW0GRQ9nbvMrVtjoiB2Knz31FGcqjmMbmblOGw=;
-        b=SU2Xcpc8fy/jDn5Hq/sgA44RX6PMSz8Z/CGlbTyvJvLrVhvSx8x2b1d6eRLg5UuFBZ
-         9eVJz2MI5oZX+kbqnjMoreoLj9gtAXJEVmsGQH9WiYH5SIAaxVOwcUykaRPeUNNBY40Z
-         p6N5Gg6h45DIpjQLit8V41JA6snJWQUyo8I+WomncvbRMQ/Q1RKTSADQcVgXWYMWXW3U
-         BANkIPKJO9EOekb2ftXDbgdEMXarRb//A/+hqBYV49Ckk/3AGLVxvnH3CoiHh7ycyQEx
-         DZ0cS4Sn1p/f5m7wcYMPv3Iio7GI4kQP1JdUN7MUomAf4xMjU4WiVFbT47UReR3zYTHi
-         Sgsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678130938;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ttfPrW0GRQ9nbvMrVtjoiB2Knz31FGcqjmMbmblOGw=;
-        b=uLZ2qf01ynt09ym2sNSmLLOcWHDSDOJbODL4GILkO8ahxV2F8A5IzL1L4OEBJQL6HH
-         o1qjvis7KXB1qIvEsEmquAFzvyC8MllT6xCZOwXrVYypa1EMeevZBeLW+CXuwqf5Sc4P
-         IqHEe9KwcpRmMPB+yxNSTOvokYuc4gLJfS9Ed/SqxCR0MBtG11lLzBlGGwLVH7Km/ZeC
-         g1OFeNDwARZm5MeIXV+v1wqjtOqzF8AIxSzL1bYcDgaO+2UrB3CzdT2q2O1SVbgSS3tr
-         kYgcmJM36d/uir2fbJ2jtaeRXQ14NOKEMUEY10poXgQxM6v8PtZiZ0EnhJEgLBO3iI/d
-         NQ3w==
-X-Gm-Message-State: AO0yUKX3OpUVByA53EsMhm5oQ7a9rqVWpmF9KXHCdRFKoNHB7aTalOWD
-        R/niFg/b3iIM4FjFvLhFdFcUjWaAbHI1L+MG9o4=
-X-Google-Smtp-Source: AK7set+Md8UTQSh/AP0LixVNnGi65tvY4YYP3IbXzgyvl8DJUVpm6e49kNmGaSXZTytFJEf4T12wESB3k1aIa0rjZuI=
-X-Received: by 2002:a5b:191:0:b0:a6f:b921:cded with SMTP id
- r17-20020a5b0191000000b00a6fb921cdedmr5516798ybl.2.1678130938238; Mon, 06 Mar
- 2023 11:28:58 -0800 (PST)
+        Mon, 6 Mar 2023 14:29:40 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F436BC3B;
+        Mon,  6 Mar 2023 11:29:34 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326IsZAR030213;
+        Mon, 6 Mar 2023 19:29:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=QiwtY/MsbEuXcvC0HPyz1t0cx1EplYQFBRBWI44uD/U=;
+ b=V8sxUXJ+8NxLqBSvRkZoXuSJeSccCXmzO7tbbZ74gPYwSc9H5Q8EEwl1cspg5OQfTAK/
+ vzhi8NUSXtL5U4faywf/OVTGrYO0ODri8ykLKfsrNrQtT8cXxeqb3oCThqvcOWXLs+H2
+ Pts9A+6Hsf4baIVA3MhAMgGJ02NDXYopb3VYwstKAPYzrNQq6/RZd0gKfCH6N7MchzZH
+ AulC4PO+MVkbCsOUC6dBe7SvLJ1achTc6kQxwl3ll5HfqZv+kDfI4spIQJVXxQM73SOE
+ SVLALxeV1WlrM3hvAqebODC9fBHDyXoh/rbq5Mh6L5k33CB22mbKD8Vl5IQDkiN16/4P IA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p513ewjdf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:29:15 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326JPGw0032888;
+        Mon, 6 Mar 2023 19:29:15 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p513ewjd5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:29:14 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326GLRuL020435;
+        Mon, 6 Mar 2023 19:29:14 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3p419k6wad-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 19:29:14 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 326JTDKV65405356
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 6 Mar 2023 19:29:13 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E04595805B;
+        Mon,  6 Mar 2023 19:29:12 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AF24658059;
+        Mon,  6 Mar 2023 19:29:10 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Mon,  6 Mar 2023 19:29:10 +0000 (GMT)
+Message-ID: <c844967a-8051-4d27-fd07-8098496fc338@linux.ibm.com>
+Date:   Mon, 6 Mar 2023 14:29:10 -0500
 MIME-Version: 1.0
-References: <CANiq72ndkF0JM1kV=ewnO4uGirDowHDGLkhvjQgtLnuPEk_hTQ@mail.gmail.com>
- <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
-In-Reply-To: <mhng-a7ada57e-543c-434b-a4f3-4fbda9238eb0@palmer-ri-x1c9a>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 6 Mar 2023 20:28:47 +0100
-Message-ID: <CANiq72=hvS6KxxkLocFOrU4E4pNi=y4OuJLm3iSiPGmi5B178Q@mail.gmail.com>
-Subject: Re: [RFC 0/2] RISC-V: enable rust
-To:     gary@garyguo.net, Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, Conor Dooley <conor@kernel.org>,
-        ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com,
-        boqun.feng@gmail.com, bjorn3_gh@protonmail.com, corbet@lwn.net,
-        Paul Walmsley <paul.walmsley@sifive.com>, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com,
-        rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 18/28] security: Introduce path_post_mknod hook
+Content-Language: en-US
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+ <20230303181842.1087717-19-roberto.sassu@huaweicloud.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <20230303181842.1087717-19-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Oe0tYZvO8AIeeoTP3783-iSbqqQ8FlDV
+X-Proofpoint-GUID: 7cNE8YnpB_9WtZKMBCR2hZRhFRGbD8uV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_12,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ bulkscore=0 spamscore=0 adultscore=0 malwarescore=0 clxscore=1015
+ suspectscore=0 mlxlogscore=955 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060168
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 8:18=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com> =
-wrote:
->
-> It's time for the next release.  IIUC there were some authorship issues
-> here, did you guys want to re-spin this with those sorted out?  I can
-> give it a shot if you want, but I'm probably as likely to screw it up as
-> anyone else...
 
-No problem on my side, and either way is fine! Thanks!
 
-I think what is important is that Gary is aware and agrees.
+On 3/3/23 13:18, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> the path_post_mknod hook.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Gary: do you prefer to be the main author or the `Co-developed-by` author h=
-ere?
+Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
 
-Cheers,
-Miguel
