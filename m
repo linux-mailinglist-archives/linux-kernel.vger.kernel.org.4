@@ -2,145 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D786AC205
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225056AC20C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjCFN6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:58:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
+        id S230189AbjCFOAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:00:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjCFN57 (ORCPT
+        with ESMTP id S230166AbjCFOAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:57:59 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8E7449B
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:57:55 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id t15so8901968wrz.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:57:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678111074;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1EoLUuBr64ri9Y94yjd26dmmu4IbZltPwpImALUreU=;
-        b=PeOw80iYd9tp/JQfc6pX1uwoERV/YGNa6GxEY9RMum5+mpx348WzhUfKezkq9P3g7X
-         Mqs57h8I+f2F5Rrql2OpV+CDlkD27qFqfNpHQH/tHEPIswZ5UetMmypq0zGc8o2ioHYC
-         gEGXy2Gkj8tJCrJVQFv17yI+DetRocDl7vxh0nFE0VLBd8DS7B4jtsc/rAOgHEN4J6qA
-         XwPZiQTbSyCfGNpMsp/IAS76fnZdS/hRhPiq/vrkgwUdBdNp8DdzCVRAfH0St/iDoD42
-         KKkPN4N2qe1mHeIp2LFMqPTZa94icaH9Gveim0LmCj1Aj7zqq24S3iyCqDzSiklWLcTJ
-         p3eg==
+        Mon, 6 Mar 2023 09:00:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA2C1980
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:59:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678111153;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FZbNQdV4FYPtOj26Ts0Bv5UjRK7OPjSiZogSK8fE+7o=;
+        b=AWiGjZq1+TmhLriS63ybf2nWXrhJ6lfAUcDkMm1v0Yrc66NFt0SIUPNyQt+bvozKjGMqqV
+        1GU2NzaDaPsm0EB1y1hwWNRuTUyOvP4cvy3RT4KJDY/KkThfDPkJA1AuRj/TVqOy7LAFS+
+        ICBECsHhyu5/v0g+m8bjRX6/fB59zE8=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-76-FikKV0xFOgGD7jpWfp2mcA-1; Mon, 06 Mar 2023 08:59:11 -0500
+X-MC-Unique: FikKV0xFOgGD7jpWfp2mcA-1
+Received: by mail-wr1-f70.google.com with SMTP id c30-20020adfa31e000000b002c59b266371so1493628wrb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:59:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678111074;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P1EoLUuBr64ri9Y94yjd26dmmu4IbZltPwpImALUreU=;
-        b=6U3Fd4vFPZmXtWOF1tH69ivSpNIW4EBm1OR+18lGs6HhsYO/rUCIpdfdFUIhSDOqIC
-         8f0rtOfNrPilp3o8+jgwTCRJKDzMs3ols05Blv8FyX5DQDZFWx1molnDmLpXOTvV5iU5
-         SgoIVXIrnikDahZPZuGiExvvBk42FwIeOxCvqjCBRKbEyrl1+hfAgnT2cJh+K2XeGe/b
-         IU35fQqI3QPtlxpICr+0xolWfvgoBv/Ei8zxK062x6AsUXxfFO6evFG3Z90rYdTpCJ7O
-         c+1h/n6OFf0luRXIqQ6UFqoQBPTaxEbWqcp48YZHbKOBaA+H3GHswbwj0z6pkI2JG5Az
-         qyiQ==
-X-Gm-Message-State: AO0yUKWIGoPhvbfgpHPJL3KrM3Fr/hnG8utnQlbve+m7aErKZmkWzr03
-        B6JBAtDjhz7r2lvSWCsGakMD4w==
-X-Google-Smtp-Source: AK7set/ThLdaGeyDxzUSTUcgVYoCng2a28njZtarQGUr197RpgLQFxyiGrv7EXzG2Np+FD1wrIGwrQ==
-X-Received: by 2002:a5d:4563:0:b0:2cd:8a2e:14e with SMTP id a3-20020a5d4563000000b002cd8a2e014emr7980239wrc.34.1678111073807;
-        Mon, 06 Mar 2023 05:57:53 -0800 (PST)
-Received: from linaro.org ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id f2-20020adfdb42000000b002c54fb024b2sm9822092wrj.61.2023.03.06.05.57.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 05:57:53 -0800 (PST)
-Date:   Mon, 6 Mar 2023 15:57:52 +0200
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v3] soc: qcom: llcc: Fix slice configuration values for
- SC8280XP
-Message-ID: <ZAXxYPZ/zarxcsNF@linaro.org>
-References: <20230219165701.2557446-1-abel.vesa@linaro.org>
- <ZAXkIHOom26DlVx0@hovoldconsulting.com>
+        d=1e100.net; s=20210112; t=1678111150;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FZbNQdV4FYPtOj26Ts0Bv5UjRK7OPjSiZogSK8fE+7o=;
+        b=ya20Vi5c8y7lpAAjvL1uSkgdgTt9ugzzCncL1CWTSXKfIefWlBrMHdTW37MB50J6Xl
+         k0iUgyuiHY+RwTqZWoLduaa/M/LPI6Y8J7TuOTJ32MzBKwihAQx4QvpY8Jnpy40sk+W7
+         LxPNfryf1q9nz6xiP19aFIOTyNYEi0kFab1rpJ4k9oFJpmd9mrBoNGqJBVGY3DuP0e62
+         G3NAezhzbHXcow3zEfALe3LVi448VBRjRsqUQMf/Y9U2OsbXi2xxfL83ZaOWtZ0FrPtn
+         7HsQvanbVDTuhlFQy9bvsxl1LUej8T03uwkdRYWtXvSvEL9MFAYLDSvr+jMmD6RC6OA5
+         KpAA==
+X-Gm-Message-State: AO0yUKXbaisHAD53N93YmOwHYr8aJ/BJGVrF+oOP6PULongDsClrpOv1
+        KQ8a5Twa08/SX8Wtq8waovQnc0IV0IMQTZNcwCLEw7w3ON1rS0VcrZ55892WrVeeiii/jgMh5VC
+        U3hhE2acgZ8SMK+JURaJW++g3
+X-Received: by 2002:adf:e492:0:b0:2c9:2292:3f8c with SMTP id i18-20020adfe492000000b002c922923f8cmr6261738wrm.40.1678111150729;
+        Mon, 06 Mar 2023 05:59:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set8URRo+VuPTwIZlwc9T6VPu4ZprYZJyIpKlbhlSQMnlagDn+3h3JtXbhdydJHdnUOAOO+l24g==
+X-Received: by 2002:adf:e492:0:b0:2c9:2292:3f8c with SMTP id i18-20020adfe492000000b002c922923f8cmr6261721wrm.40.1678111150407;
+        Mon, 06 Mar 2023 05:59:10 -0800 (PST)
+Received: from ?IPV6:2003:cb:c704:3500:b8a3:191c:eae:cc05? (p200300cbc7043500b8a3191c0eaecc05.dip0.t-ipconnect.de. [2003:cb:c704:3500:b8a3:191c:eae:cc05])
+        by smtp.gmail.com with ESMTPSA id o16-20020a056000011000b002c703d59fa7sm9956231wrx.12.2023.03.06.05.59.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 05:59:10 -0800 (PST)
+Message-ID: <f4b32f05-6396-329b-4bc8-18d4af244279@redhat.com>
+Date:   Mon, 6 Mar 2023 14:59:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAXkIHOom26DlVx0@hovoldconsulting.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/6] shmem: remove check for folio lock on writepage()
+Content-Language: en-US
+To:     Luis Chamberlain <mcgrof@kernel.org>, hughd@google.com,
+        akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org
+Cc:     linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
+        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
+        keescook@chromium.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230302232758.888157-1-mcgrof@kernel.org>
+ <20230302232758.888157-2-mcgrof@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230302232758.888157-2-mcgrof@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23-03-06 14:01:20, Johan Hovold wrote:
-> On Sun, Feb 19, 2023 at 06:57:01PM +0200, Abel Vesa wrote:
-> > The slice IDs for CVPFW, CPUSS1 and CPUWHT currently overflow the 32bit
-> > LLCC config registers. Fix that by using the slice ID values taken from
-> > the latest LLCC SC table.
+On 03.03.23 00:27, Luis Chamberlain wrote:
+> Matthew notes we should not need to check the folio lock
+> on the writepage() callback so remove it. This sanity check
+> has been lingering since linux-history days. We remove this
+> as we tidy up the writepage() callback to make things a bit
+> clearer.
 > 
-> This still doesn't really explain what the impact of this bug is (e.g.
-> for people doing backports), but I guess this will do.
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>   mm/shmem.c | 1 -
+>   1 file changed, 1 deletion(-)
 > 
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 1af85259b6fc..7fff1a3af092 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -1354,7 +1354,6 @@ static int shmem_writepage(struct page *page, struct writeback_control *wbc)
+>   		folio_clear_dirty(folio);
+>   	}
+>   
+> -	BUG_ON(!folio_test_locked(folio));
+>   	mapping = folio->mapping;
+>   	index = folio->index;
+>   	inode = mapping->host;
 
-Sent a v4 here:
-https://lore.kernel.org/all/20230306135527.509796-1-abel.vesa@linaro.org/
 
-> > Fixes: ec69dfbdc426 ("soc: qcom: llcc: Add sc8180x and sc8280xp configurations")
-> > Cc: stable@vger.kernel.org	# 5.19+
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > Tested-by: Juerg Haefliger <juerg.haefliger@canonical.com>
-> > Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> > Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+It's still required IIUC. At least for split_huge_page() and 
+setting/clearing some page flags in there.
 
-Added your R-b tag.
+At least split_huge_page() also contains a
+	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
 
-Thanks.
+So it's probably reasonable to remove this unconditional sanity check 
+here; removing BUG_ON's is always nice.
 
-> 
-> > ---
-> > 
-> > The v2 is here:
-> > https://lore.kernel.org/all/20230127144724.1292580-1-abel.vesa@linaro.org/
-> > 
-> > Changes since v2:
-> >  * specifically mentioned the 3 slice IDs that are being fixed and
-> >    what is happening without this patch
-> >  * added stabke Cc line
-> >  * added Juerg's T-b tag
-> >  * added Sai's R-b tag
-> >  * added Konrad's A-b tag
-> > 
-> > Changes since v1:
-> >  * dropped the LLCC_GPU and LLCC_WRCACHE max_cap changes
-> >  * took the new values from documentatio this time rather than
-> >    downstream kernel
-> > 
-> >  drivers/soc/qcom/llcc-qcom.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-> > index 23ce2f78c4ed..26efe12012a0 100644
-> > --- a/drivers/soc/qcom/llcc-qcom.c
-> > +++ b/drivers/soc/qcom/llcc-qcom.c
-> > @@ -191,9 +191,9 @@ static const struct llcc_slice_config sc8280xp_data[] = {
-> >  	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> >  	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
-> >  	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> > -	{ LLCC_CVPFW,    32, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > -	{ LLCC_CPUSS1,   33, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > -	{ LLCC_CPUHWT,   36, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> > +	{ LLCC_CVPFW,    17, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > +	{ LLCC_CPUSS1,   3, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
-> > +	{ LLCC_CPUHWT,   5, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
-> >  };
-> >  
-> >  static const struct llcc_slice_config sdm845_data[] =  {
+Acked-by: David Hildenbrand <david@redhat.com>
+
+-- 
+Thanks,
+
+David / dhildenb
+
