@@ -2,119 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF696ACF39
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B286ACE0F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:29:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjCFUbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 15:31:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S229896AbjCFT33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:29:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCFUbu (ORCPT
+        with ESMTP id S229758AbjCFT32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 15:31:50 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9085646082
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 12:31:48 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 326GphOg077387;
-        Mon, 6 Mar 2023 10:51:43 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678121503;
-        bh=ph7tv8RlCVDGBwJJVB5s/5P21YkzOhXtmfn1KwSVtY4=;
-        h=From:To:CC:Subject:Date;
-        b=PkXM7HPUnWgtDX8nGWWEu8j+wuUfFSA9U4DUTZTH6Re4QiSa3Q9bkGURdASBOLNzz
-         JS8QLabNBx41vcf+pgpkx56JiHw8D0P34/lTAUilNOlHlP/zdaRdgt6NbTOR4sGt3T
-         5Z0jtLNWOA23JREvcXqXQMYOngqQWLgHvngILfDk=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 326GphnA127700
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Mar 2023 10:51:43 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
- Mar 2023 10:51:43 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 6 Mar 2023 10:51:43 -0600
-Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 326GphfX013025;
-        Mon, 6 Mar 2023 10:51:43 -0600
-From:   Andrew Davis <afd@ti.com>
-To:     Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <jstultz@google.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>
-CC:     Andrew Davis <afd@ti.com>
-Subject: [PATCH v3] dma-buf: cma_heap: Check for device max segment size when attaching
-Date:   Mon, 6 Mar 2023 10:51:43 -0600
-Message-ID: <20230306165143.1671-1-afd@ti.com>
+        Mon, 6 Mar 2023 14:29:28 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B553165046
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:29:16 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4PVlQm5zyFz1S5JW
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 12:08:32 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:mime-version:x-mailer:message-id:date
+        :subject:to:from; s=dkim; t=1678122511; x=1678986512; bh=Cp0Pj3r
+        +o2NETU+8hKdAUsF77CSSWrab0rX6wePh+5w=; b=ycjXMdalEBc39Wr2qWrRfS6
+        ICUh45mzBKfMp4GOiXmyGGogv4S70CNnd2gyTxxTw2rchfYe9rxwgRcliEp33UMA
+        osq6BrXjx+dByZb0kwdMX964nxEPrkxAPb9mYfcV4daMh1FTw1Viewue5cI7Nc52
+        00NjsjWRGiOXaGKXrjYzcKskGlV/TuIcWN6ZosBHZ5fiRaCBpp4Cl+qzDmKewR56
+        mAQZTA4RA0SLEUb4ovZq9MPMx9o4kCgbMEF2keVNl9AmtZ+fsiDDpCKhoUeYjVbV
+        svqjwQErytf1rNuRv0r4cbRWacctW1PLB9IsH/cNLTDlcEP76YZVPZN7323K+NQ=
+        =
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id aiRkuyNeBkvW for <linux-kernel@vger.kernel.org>;
+        Mon,  6 Mar 2023 12:08:31 -0500 (EST)
+Received: from dorothy.. (unknown [186.105.8.42])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4PVlQZ50bjz1S4vb;
+        Mon,  6 Mar 2023 12:08:22 -0500 (EST)
+From:   Lux Aliaga <they@mint.lgbt>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, bvanassche@acm.org, keescook@chromium.org,
+        tony.luck@intel.com, gpiccoli@igalia.com
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org
+Subject: [PATCH v7 0/6] arm64: dts: qcom: sm6125: UFS and xiaomi-laurel-sprout support
+Date:   Mon,  6 Mar 2023 14:08:10 -0300
+Message-Id: <20230306170817.3806-1-they@mint.lgbt>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Although there is usually not such a limitation (and when there is it is
-often only because the driver forgot to change the super small default),
-it is still correct here to break scatterlist element into chunks of
-dma_max_mapping_size().
+Introduce Universal Flash Storage support on SM6125 and add support for t=
+he Xiaomi Mi A3 based on the former platform.
 
-This might cause some issues for users with misbehaving drivers. If
-bisecting has landed you on this commit, make sure your drivers both set
-dma_set_max_seg_size() and are checking for contiguousness correctly.
+Changes since v6:
+- Add struct for v3-660 UFS PHY offsets and replace the v5 offsets in sm6=
+115 UFS PHY config to these
+- Set ufs_mem_phy reg size to 0xdb8 in sm6125.dtsi
+- Drop "#address-cells" and "#size-cells" properties on reserved-memory n=
+ode in xiaomi-laurel-sprout dts
+- Move "status" last on &pon_resin node in xiaomi-laurel-sprout dts
+- Modify "&pm6125_gpio" pointer to "&pm6125_gpios" in xiaomi-laurel-sprou=
+t dts
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
+v6: https://lore.kernel.org/linux-devicetree/20230108195336.388349-1-they=
+@mint.lgbt/
+v5: https://lore.kernel.org/linux-devicetree/20221231222420.75233-2-they@=
+mint.lgbt/
 
-Changes from v2:
- - Rebase v6.3-rc1
 
-Changes from v1:
- - Fixed mixed declarations and code warning
-
- drivers/dma-buf/heaps/cma_heap.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/dma-buf/heaps/cma_heap.c b/drivers/dma-buf/heaps/cma_heap.c
-index 1131fb943992..579261a46fa3 100644
---- a/drivers/dma-buf/heaps/cma_heap.c
-+++ b/drivers/dma-buf/heaps/cma_heap.c
-@@ -53,16 +53,18 @@ static int cma_heap_attach(struct dma_buf *dmabuf,
- {
- 	struct cma_heap_buffer *buffer = dmabuf->priv;
- 	struct dma_heap_attachment *a;
-+	size_t max_segment;
- 	int ret;
- 
- 	a = kzalloc(sizeof(*a), GFP_KERNEL);
- 	if (!a)
- 		return -ENOMEM;
- 
--	ret = sg_alloc_table_from_pages(&a->table, buffer->pages,
--					buffer->pagecount, 0,
--					buffer->pagecount << PAGE_SHIFT,
--					GFP_KERNEL);
-+	max_segment = dma_get_max_seg_size(attachment->dev);
-+	ret = sg_alloc_table_from_pages_segment(&a->table, buffer->pages,
-+						buffer->pagecount, 0,
-+						buffer->pagecount << PAGE_SHIFT,
-+						max_segment, GFP_KERNEL);
- 	if (ret) {
- 		kfree(a);
- 		return ret;
--- 
-2.39.2
 
