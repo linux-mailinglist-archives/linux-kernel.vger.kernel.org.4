@@ -2,60 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BEA6AC5E2
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF77A6AC5EC
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjCFPt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58480 "EHLO
+        id S230288AbjCFPwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:52:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjCFPtZ (ORCPT
+        with ESMTP id S229545AbjCFPwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:49:25 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A2C7DAB;
-        Mon,  6 Mar 2023 07:49:21 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PVjfs0qMcz67Nm9;
-        Mon,  6 Mar 2023 23:48:53 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 6 Mar
- 2023 15:49:18 +0000
-Date:   Mon, 6 Mar 2023 15:49:17 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Dave Jiang <dave.jiang@intel.com>, Fan Ni <fan.ni@samsung.com>,
-        "alison.schofield@intel.com" <alison.schofield@intel.com>,
-        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
-        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
-        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        Adam Manzanares <a.manzanares@samsung.com>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cxl/hdm: Fix hdm decoder init by adding COMMIT field
- check
-Message-ID: <20230306154917.0000075e@Huawei.com>
-In-Reply-To: <640218e217c80_5a3fc2947@iweiny-mobl.notmuch>
-References: <CGME20230228224029uscas1p1e2fb92a8a595f80fa2985b452899d785@uscas1p1.samsung.com>
-        <20230228224014.1402545-1-fan.ni@samsung.com>
-        <346a8225-609e-0188-ec8a-4abe8d271a09@intel.com>
-        <20230302062305.GA1444578@bgt-140510-bm03>
-        <e10b60ab-f666-8124-eb8f-6a2da6c0f989@intel.com>
-        <20230303143605.0000159a@Huawei.com>
-        <640218e217c80_5a3fc2947@iweiny-mobl.notmuch>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 6 Mar 2023 10:52:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4671133469
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:51:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678117888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q86XLZ7Q4ZHp1CUGcCN/NjLhC2ggJRWLx1s//bOcLDM=;
+        b=IDGY3v4CGTQZ5idFWVW87EHcy0lVva+Ckm1QP33JE4zD1o0xlMWDuXOwOCDMlbt0PLkbsw
+        cuVE2g+sX2EJtbLsfVEBTjN60pf/ea00y0B1DV8muqwcvqkb291HZ7z4hWMKGOsuizk4Rt
+        32ElIB+cwlfCStYB3uVtvK3uVAFrA3w=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-329-WRxup-aaMqKbaiL72PuJ1Q-1; Mon, 06 Mar 2023 10:51:27 -0500
+X-MC-Unique: WRxup-aaMqKbaiL72PuJ1Q-1
+Received: by mail-qt1-f200.google.com with SMTP id b7-20020ac85407000000b003bfb9cff263so5332717qtq.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 07:51:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678117886;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q86XLZ7Q4ZHp1CUGcCN/NjLhC2ggJRWLx1s//bOcLDM=;
+        b=sCMcy8oEhlNO6TtiIxUGAUfOSOOJqLO3y/mHltyoZRlL8PqsaaEkVJztD+JBi/k88S
+         XKc3GWf5gCuNqMSwlDjcJYpJOnK3taa1AUIBPm+VgkP3cwkVX8SZYQfbhL5KDB/CLT6w
+         Fs8lppOq7gtD61/4yKGLbwvrY5mpVbaN/40r7gg4XJMdn52ySepqbr3O70+Z91DOCYcO
+         4scSeqY7KF0IRkHk7UR1kH3KVyYncRPA4OcHYHpz57MEQtQtWsbNdpp/XOeXueKpqoSK
+         FX2w+zESA2zq4VyXpIxLW4RVoU0JIuVnlmjukvMRtMvomrHdiEgVd3WQC32IzZYiotZJ
+         N3DA==
+X-Gm-Message-State: AO0yUKU273idak+t5o2A1V6fuwTDvgYzggwBgHVyfSH5MMWzhJtoSm78
+        /8VJ1swt4zrxM73NWV/mZK3RxN/NxxNdofigPBLFqRIcAInKthEz2vSoYQLQrLl1OkDzg19sNhY
+        ct2VVdD6GGdTBc7tp9ZK9F6np
+X-Received: by 2002:a05:622a:c:b0:3b9:bc8c:c207 with SMTP id x12-20020a05622a000c00b003b9bc8cc207mr26969670qtw.18.1678117886719;
+        Mon, 06 Mar 2023 07:51:26 -0800 (PST)
+X-Google-Smtp-Source: AK7set8J+A3R80v+MVqfE2WCygPas52Ry5LmPSFlnPMQvzMyOQV6nh5+6ZCsftO+pkisfBFlvJJ58Q==
+X-Received: by 2002:a05:622a:c:b0:3b9:bc8c:c207 with SMTP id x12-20020a05622a000c00b003b9bc8cc207mr26969642qtw.18.1678117886394;
+        Mon, 06 Mar 2023 07:51:26 -0800 (PST)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id q17-20020ac84111000000b003bfa52112f9sm7805681qtl.4.2023.03.06.07.51.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 07:51:25 -0800 (PST)
+Date:   Mon, 6 Mar 2023 16:51:21 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v2 2/4] virtio/vsock: remove all data from sk_buff
+Message-ID: <20230306155121.7xwxzgxtle7qjbnc@sgarzare-redhat>
+References: <a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru>
+ <dfadea17-a91e-105f-c213-a73f9731c8bd@sberdevices.ru>
+ <20230306120857.6flftb3fftmsceyl@sgarzare-redhat>
+ <b18e3b13-3386-e9ee-c817-59588e6d5fb6@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <b18e3b13-3386-e9ee-c817-59588e6d5fb6@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,95 +87,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Mar 2023 07:57:22 -0800
-Ira Weiny <ira.weiny@intel.com> wrote:
+On Mon, Mar 06, 2023 at 06:31:22PM +0300, Arseniy Krasnov wrote:
+>
+>
+>On 06.03.2023 15:08, Stefano Garzarella wrote:
+>> On Sun, Mar 05, 2023 at 11:07:37PM +0300, Arseniy Krasnov wrote:
+>>> In case of SOCK_SEQPACKET all sk_buffs are used once - after read some
+>>> data from it, it will be removed, so user will never read rest of the
+>>> data. Thus we need to update credit parameters of the socket like whole
+>>> sk_buff is read - so call 'skb_pull()' for the whole buffer.
+>>>
+>>> Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>> net/vmw_vsock/virtio_transport_common.c | 2 +-
+>>> 1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> Maybe we could avoid this patch if we directly use pkt_len as I
+>> suggested in the previous patch.
+>Hm, may be we can avoid calling 'skb_pull()' here if 'virtio_transport_dec_rx_pkt()'
+>will use integer argument?
 
-> Jonathan Cameron wrote:
-> > On Thu, 2 Mar 2023 08:36:59 -0700
-> > Dave Jiang <dave.jiang@intel.com> wrote:
-> >   
-> > > On 3/1/23 11:23 PM, Fan Ni wrote:  
-> > > > On Wed, Mar 01, 2023 at 11:54:08AM -0700, Dave Jiang wrote:    
-> > > >>    
-> > > > Hi Dave,
-> > > > Thanks for looking into this.    
-> > > >>
-> > > >> On 2/28/23 3:40 PM, Fan Ni wrote:    
-> > > >>> Add COMMIT field check aside with existing COMMITTED field check during
-> > > >>> hdm decoder initialization to avoid a system crash during module removal
-> > > >>> after destroying a region which leaves the COMMIT field being reset while
-> > > >>> the COMMITTED field still being set.    
-> > > >>
-> > > >> Hi Fan. Are you seeing this issue on qemu emulation or hardware? The    
-> > > > I run into the issue with qemu emulation.    
-> > > >> situation does not make sense to me. If we clear the COMMIT bit, then the
-> > > >> COMMITTED bit should be cleared by the hardware shortly after right?    
-> > > > 
-> > > >  From the spec, I cannot find any statement saying clearing the COMMIT bit
-> > > > will automatically clear the COMMITTED. If I have not missed the statement in
-> > > > the spec, I assume we should not make the assumption that it will be
-> > > > cleared automatically for real hardware. But you may be right, leaving the
-> > > > COMMITTED bit set can potentially cause some issue? Need to check more.    
-> > > 
-> > > I have not been able to find direct verbiage that indicates this either. 
-> > > However, logically it would make sense. Otherwise, the COMMITTED field 
-> > > never clears and prevents reprogramming of the HDM decoders. The current 
-> > > QEMU implementation is creating a situation where the HDM decoder is 
-> > > always active after COMMIT bit is set the first time, regardless whether 
-> > > COMMIT field has been cleared later on during a teardown. It does sound 
-> > > like a bug with QEMU emulation currently.  
-> > 
-> > I agree that one sane interpretation is that unsetting commit should result in
-> > the decoder being deactivated and hence the commit bit dropping.  However
-> > I'm not sure that's the only sane interpretation.
-> > 
-> > There is no verbage that I'm aware of that says the committed bit being
-> > set means that the current register values are in use.  It simply says that
-> > when the commit bit was set, the HDM decoder was successfully committed
-> > (using registers as set at that time).  There is a specific statement about
-> > not changing the registers whilst checks are in progress, but those checks
-> > are only required if lock on commit is set, so it doesn't cover this case.
-> > 
-> > Wonderfully there isn't actually anything says what a commit transition to 0
-> > means.  Does that result in the decoder become uncommitted, or does that only
-> > happen when the next 0 to 1 transition happens?
-> > 
-> > The only stuff we have is what happens when lock on commit = 1, which isn't
-> > the case here.
-> > 
-> > So is there another valid implementation? I think yes.
-> > In some implementations, there will be a complex state machine that is
-> > triggered when commit is set.  That will then write some entirely invisible
-> > internal state for decode logic based on the contents of the registers.
-> > As such, once it's set committed, it typically won't look at the registers
-> > again until another commit 0->1 transition happens.
-> > At that point the
-> > committed bit drops and raised again once the commit state machine finishes
-> > (given QEMU doesn't emulate that delay the upshot is if you set commit then
-> > check committed it will be set ;)  
-> 
-> I'm only barely following along so I wanted to make sure I understand...
-> 
-> Are you saying that at the instant commit 0->1 happens hardware will clear
-> commited to 0 so that software can later check for commited vs error not
-> commited?
+Yep, exactly!
 
-yup.  That's what you'd see in such an implementation.
+>Just call 'virtio_transport_dec_rx_pkt(skb->len)'. skb
 
-> 
-> Ira
-> 
-> > 
-> > In that implementation the commit 1->0 transition is an irrelevance and
-> > it won't change the committed bit state.
-> > 
-> > So whilst the QEMU code is doing the less obvious implementation, I think
-> > the spec still allows it.  I don't mind QEMU changing to the more obvious
-> > one though if someone wants to send a patch.
-> > 
-> > Jonathan
-> >   
-> 
-> [...]
-> 
+It depends on how we call virtio_transport_inc_rx_pkt(). If we use
+hdr->len there I would use the same to avoid confusion. Plus that's the
+value the other peer sent us, so definitely the right value to increase
+fwd_cnt with. But if skb->len always reflects it, then that's fine.
+
+>is never returned to queue to read it again, so i think may be there is no sense for
+>extra call 'skb_pull'?
+
+Right!
+
+Thanks,
+Stefano
 
