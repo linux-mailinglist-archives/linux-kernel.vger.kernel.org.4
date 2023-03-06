@@ -2,118 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C786ABA0D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6696ABA14
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 10:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbjCFJjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 04:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49632 "EHLO
+        id S230085AbjCFJjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 04:39:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCFJjT (ORCPT
+        with ESMTP id S230041AbjCFJjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 04:39:19 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996E8231FB;
-        Mon,  6 Mar 2023 01:39:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678095558; x=1709631558;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H0vudKCEv+648TR8R5/Nekbb3fSSrqwQNldZiKE3Fq8=;
-  b=mag4xD1tPpQnqf9K7kFqS6Ns1PB7p92jxVFw1+8vV4egy/5h/SzNnIRQ
-   bdVclnDxymYB92mg/CoX8/XrZHN7XobXK6mimaEv8PCFq+56D5xK0ZZ/x
-   3WR83AW970a3M/NT4jhjNh1sb17LyLfz0urkLLTk0dehrZA0eVRr7KAK2
-   uaFxDchhWKRC3KrMKPwF0Nfl437o8O7eE26mW4VJe6Rb2B1h4euQuUzp0
-   UFEe/ijCyWf3Kg6eLK6pucDQxUcH/Xvg3gFoN7V+yKH9Qgceq5qZ/TxUH
-   bTLjAF3AXu9s+/UYmm5ZHoa/H/avFAlaLYJGCkoQfpX4pzeWMr7hBsnFJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="337029375"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="337029375"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 01:39:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="819244394"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="819244394"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 06 Mar 2023 01:39:13 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 06 Mar 2023 11:39:12 +0200
-Date:   Mon, 6 Mar 2023 11:39:12 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Yongqin Liu <yongqin.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] usb: typec: tipd: Remove use of
- fw_devlink_purge_absent_suppliers()
-Message-ID: <ZAW0wNt634Ipja+A@kuha.fi.intel.com>
-References: <20230301214952.2190757-1-saravanak@google.com>
- <20230301214952.2190757-3-saravanak@google.com>
+        Mon, 6 Mar 2023 04:39:44 -0500
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4064A211DE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:39:41 -0800 (PST)
+Received: by mail-ua1-x92d.google.com with SMTP id m5so5948815uae.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 01:39:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678095580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EG4fYlpMlkVYz3KkfqTU8Qlmp6+wB13r9lUMK+XkXD0=;
+        b=aGmb2xBNNCIunGeDl9p7uscsTgiuO1Q8udjIOerQ5AtqIC/QLR0Wa6xi/zpiP1mfXU
+         841m5SKCVKYvBcOME9xiLpz7wXvqzX+5tDMtIqIp6/yd2QGdmbfkSZ0pp8KHlQptuFMO
+         wjyjkzDX7mpfRrY4xWscFNTnz4Q+Bu1i8H/leRauyP3v5YDCVlc5D7nJe48dvF/bOn4i
+         QzqBukZn5lSAXeW6byC5i7/tTYL16Gvq8443z1U93byxXGKgNfYdWcAz+7tJhp1KQG6/
+         AHyFpe6/P5HJRZ9WBZdwRr3cjqsuzSAIOpXgER9y4ivMhw4ZbiH5I+CKiALPec9YZ+zf
+         ARaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678095580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EG4fYlpMlkVYz3KkfqTU8Qlmp6+wB13r9lUMK+XkXD0=;
+        b=DsNBqaDJcA+zVSJc87XP0LRvh2navG+cLeRHrr39V3fFaBh9ZR3U5QJwhrWatzvn5l
+         u4t/su4Lt/ivCuzsrFOlwSaF7UnnUNkYj7+QoCvvTRktO/pWEGOSXbtTWc8MktyE7RhA
+         PcyOkmgpSIC8oFQcLJZSjPpXNJElDf239jMLiB9os4wo1m5ToZ5fbbFVPZNflooH6Cj/
+         BGh4pGuHm5lTmzw5XRCfwX0N1wNlgrRumQx4uh4N/7bniO2TSHW0+aleYVDRi3SRI5jP
+         RFlC0PE/3yErY/sq/G2iRiegP/3W++XJOko9BvFyDnbT/HFfQIsP6dRpALBXZ/AWlHkZ
+         I95g==
+X-Gm-Message-State: AO0yUKX4JEGnlxl66Qhhne1ytsV5f4HPuoZ0fhmganr0iWoO4ytJt/Sw
+        ojkRz5CyBed+4GQt+q+E3bFP4LP5/FNG03YQFSUC9AhOR7DDT5eg
+X-Google-Smtp-Source: AK7set9u32uo6jrigMFm0tYwWs6u6fKLZKYVnAgovZrS1Q70HbqXU/8l9eDzZI+y+OWVGtClmC8X+d621sscPTLhmHc=
+X-Received: by 2002:a1f:2dcb:0:b0:401:42e5:6d2e with SMTP id
+ t194-20020a1f2dcb000000b0040142e56d2emr6159927vkt.1.1678095580318; Mon, 06
+ Mar 2023 01:39:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230301214952.2190757-3-saravanak@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302125215.214014-1-keguang.zhang@gmail.com> <20230302125215.214014-5-keguang.zhang@gmail.com>
+In-Reply-To: <20230302125215.214014-5-keguang.zhang@gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 6 Mar 2023 10:39:29 +0100
+Message-ID: <CAMRc=McLt2+NJhmzFRuKF5LWMOqyZa-Y-eH7Ecx2ZiMHsTf1ag@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] gpio: loongson1: Add DT support
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 01, 2023 at 01:49:49PM -0800, Saravana Kannan wrote:
-> After recent changes to fw_devlink that ended with commit 4a032827daa8
-> ("of: property: Simplify of_link_to_phandle()"), fw_devlink no longer
-> cares about the "compatible" property and figures out the correct struct
-> device at runtime. So, we no longer need to call
-> fw_devlink_purge_absent_suppliers().
-> 
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+On Thu, Mar 2, 2023 at 1:53=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail.c=
+om> wrote:
+>
+> This patch adds DT support for Loongson-1 GPIO driver.
+>
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 > ---
->  drivers/usb/typec/tipd/core.c | 9 ---------
->  1 file changed, 9 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 485b90c13078..92401622bc4e 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -764,16 +764,7 @@ static int tps6598x_probe(struct i2c_client *client)
->  	if (ret < 0)
->  		goto err_clear_mask;
->  
-> -	/*
-> -	 * This fwnode has a "compatible" property, but is never populated as a
-> -	 * struct device. Instead we simply parse it to read the properties.
-> -	 * This breaks fw_devlink=on. To maintain backward compatibility
-> -	 * with existing DT files, we work around this by deleting any
-> -	 * fwnode_links to/from this fwnode.
-> -	 */
->  	fwnode = device_get_named_child_node(&client->dev, "connector");
-> -	if (fwnode)
-> -		fw_devlink_purge_absent_suppliers(fwnode);
->  
->  	tps->role_sw = fwnode_usb_role_switch_get(fwnode);
->  	if (IS_ERR(tps->role_sw)) {
-> -- 
-> 2.39.2.722.g9855ee24e9-goog
+> V1 -> V2: Let gpiolib parse ngpios property
+>           Remove unnecessary alias id parsing
+>           Remove superfluous initialization done by bgpio_init()
+>           Add MODULE_DEVICE_TABLE()
+>           Other minor fixes
+> ---
+>  drivers/gpio/gpio-loongson1.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson1.=
+c
+> index 3ac9e49e7efb..94ac0ccb450f 100644
+> --- a/drivers/gpio/gpio-loongson1.c
+> +++ b/drivers/gpio/gpio-loongson1.c
+> @@ -68,25 +68,38 @@ static int ls1x_gpio_probe(struct platform_device *pd=
+ev)
+>         ls1x_gc->gc.owner =3D THIS_MODULE;
+>         ls1x_gc->gc.request =3D ls1x_gpio_request;
+>         ls1x_gc->gc.free =3D ls1x_gpio_free;
+> -       ls1x_gc->gc.base =3D pdev->id * 32;
+> +       /*
+> +        * Clear ngpio to let gpiolib get the correct number
+> +        * by reading ngpios property
+> +        */
+> +       ls1x_gc->gc.ngpio =3D 0;
+>
 
--- 
-heikki
+Who could have set it before and why would this information need to be
+unconditionally discarded?
+
+Bart
+
+>         ret =3D devm_gpiochip_add_data(dev, &ls1x_gc->gc, ls1x_gc);
+>         if (ret)
+>                 goto err;
+>
+>         platform_set_drvdata(pdev, ls1x_gc);
+> -       dev_info(dev, "Loongson1 GPIO driver registered\n");
+> +
+> +       dev_info(dev, "GPIO controller registered with %d pins\n",
+> +                ls1x_gc->gc.ngpio);
+>
+>         return 0;
+>  err:
+> -       dev_err(dev, "failed to register GPIO device\n");
+> +       dev_err(dev, "failed to register GPIO controller\n");
+>         return ret;
+>  }
+>
+> +static const struct of_device_id ls1x_gpio_dt_ids[] =3D {
+> +       { .compatible =3D "loongson,ls1x-gpio" },
+> +       { /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ls1x_gpio_dt_ids);
+> +
+>  static struct platform_driver ls1x_gpio_driver =3D {
+>         .probe  =3D ls1x_gpio_probe,
+>         .driver =3D {
+>                 .name   =3D "ls1x-gpio",
+> +               .of_match_table =3D ls1x_gpio_dt_ids,
+>         },
+>  };
+>
+> --
+> 2.34.1
+>
