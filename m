@@ -2,161 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436EA6AC5AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:40:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF946AC5B0
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjCFPkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:40:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
+        id S230101AbjCFPmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:42:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjCFPjk (ORCPT
+        with ESMTP id S229705AbjCFPmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:39:40 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777DF36476;
-        Mon,  6 Mar 2023 07:39:04 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id i28so13382576lfv.0;
-        Mon, 06 Mar 2023 07:39:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678117072;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5hDMsqcdGIfiCOVeyjU4Ba4iMqQn+GOWjCwhWYk6SdI=;
-        b=cg1/O1TWCoAT+12txvkiPpk8WOQTLsVbbyntUVywAm++PWVMzFM4JjQRWDOUOYRScg
-         pvFU352A9exDJyfmr6d8LqJgbi0luBH+enT3u31nc54Hmh05vWYHCkSSe7oGk7lmhxyE
-         gQSPcdZk5nGsoTod4x/9xM1gvrso7kjeMYYHWi2P08jqU+eAbw3oqFZsorHQ0S/CRtHA
-         d+foYcEAUnenuImuL8oP9UXM5FRNCKBTKRUghgv+c1d+jCyNJQcf5Z8sqJZPTHfcasad
-         gO4Za/039IiZBBKhDDxAJK9l/nUdtBwyQUaEdwEM3X27LHjxursB5jxdMGtDxQkwzSHu
-         Mqpw==
+        Mon, 6 Mar 2023 10:42:08 -0500
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E167367DD;
+        Mon,  6 Mar 2023 07:41:39 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so8501649wms.2;
+        Mon, 06 Mar 2023 07:41:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678117072;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5hDMsqcdGIfiCOVeyjU4Ba4iMqQn+GOWjCwhWYk6SdI=;
-        b=t7icR6ihNyHtWLDcUjxeHNRlMJYHk0yT1ktqNZZ+HBZgr1LFWgPSl+1bMw96U8YifU
-         CxX6DXaKJV5Q7lXOc+qRFLH2/Lcqjup29vdDr0X2jWIIrJ+86/lDclQ5SvrUs7MN3Ds4
-         nqC10Kkjrjscps7ZO9CYMLNApOh1t/F/SLjHSQRwlBi6/lZbqY3rm6Cgvee7Jb3txtQF
-         ovZ2g/sCQKJyHOtRupPY8CkEBfGBxWaRJ7770vSqFEjFDzS1QIaIP/avVojq9C9OHaQF
-         ymcCBHwbKuQBK+9mdERt5WJmajgJoDjJWQWuGilit5HxeedeHZt6EL9i4Z8ET4zMauU4
-         GXvA==
-X-Gm-Message-State: AO0yUKVhYeCloZz5/CWFzY4wp2LwE1HVU0AbrlsIYzw6HVNaRBYuPQCt
-        uqCXT15dx44+wuN2GuSCphw=
-X-Google-Smtp-Source: AK7set/mMWXfBFsiLU1XkaTiImOSmqnWmfXifYoeEmJfJYsfZbSf6DihYHx9KRJq7C6ZcNvQWlxpEQ==
-X-Received: by 2002:a19:f011:0:b0:4cb:3a60:65c9 with SMTP id p17-20020a19f011000000b004cb3a6065c9mr2589865lfc.2.1678117072501;
-        Mon, 06 Mar 2023 07:37:52 -0800 (PST)
-Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
-        by smtp.gmail.com with ESMTPSA id g22-20020ac25396000000b004cb14fa604csm1680397lfh.262.2023.03.06.07.37.52
+        d=1e100.net; s=20210112; t=1678117260;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pnptPmBeBG9/UpqmcXci6KGnzjUxqow5ngyjB6yqkjU=;
+        b=S6TTFchSGE1RPZnaGW6J0Lo0qqNJiHMukCvA7QLeIYQNuzErlRyHq/Qsao79U6pGoB
+         bWlJehgdc80K6GWLFOoBTHfz7Yz9Neve2la0YlC26POD+/5dGamHO2yubkbymJY5gdwl
+         1IUvwNjrxx5NcX0E6D8L3hrc9Gszwt+CcBfYMwz2qGC0f0cB2zlCB4BQYEhvAKr692wC
+         rzFc7Kr7Ul4nd/RSDWnAYY7gFUnSTgTGwyh1HOkbn8MjTzHJZjcq68Bw8N3Cp0NVrwGj
+         vHgvYkrVExnEYO+6u3Bfy72eImod/mp30xHn2hrGssUD6yp/ytULX2M2rMn+jYLlzkM+
+         5uuA==
+X-Gm-Message-State: AO0yUKXdaB8NWDGkPbGf1Bz38fzUmPNepAWCW7OBCd8L3coQ3lD8uljD
+        2PxB5k+jECB11dy5Rkk9B3E=
+X-Google-Smtp-Source: AK7set8VddkFcebK6rvUAY6JclpJQVJN8hLTX5/40ay/phMPQNmyWd5Vma+DwvuCAodpWPsU67obQw==
+X-Received: by 2002:a05:600c:3504:b0:3ea:e677:5017 with SMTP id h4-20020a05600c350400b003eae6775017mr9794612wmq.8.1678117259721;
+        Mon, 06 Mar 2023 07:40:59 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id he5-20020a05600c540500b003e2058a7109sm14214668wmb.14.2023.03.06.07.40.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 07:37:52 -0800 (PST)
-Date:   Mon, 6 Mar 2023 17:37:51 +0200
-From:   Zhi Wang <zhi.wang.linux@gmail.com>
-To:     Steven Price <steven.price@arm.com>
-Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Joey Gouly <joey.gouly@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Christoffer Dall <christoffer.dall@arm.com>,
-        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
-Subject: Re: [RFC PATCH 15/28] KVM: arm64: Handle realm MMIO emulation
-Message-ID: <20230306173751.000026d4@gmail.com>
-In-Reply-To: <20230127112932.38045-16-steven.price@arm.com>
-References: <20230127112248.136810-1-suzuki.poulose@arm.com>
-        <20230127112932.38045-1-steven.price@arm.com>
-        <20230127112932.38045-16-steven.price@arm.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Mon, 06 Mar 2023 07:40:59 -0800 (PST)
+Date:   Mon, 6 Mar 2023 15:40:54 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [PATCH] hv/hv_kvp_daemon: Add support for keyfile config based
+ connection profile in NM
+Message-ID: <ZAYJhm9fVAgCtTiC@liuwe-devbox-debian-v2>
+References: <1677133334-6958-1-git-send-email-shradhagupta@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1677133334-6958-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 11:29:19 +0000
-Steven Price <steven.price@arm.com> wrote:
+On Wed, Feb 22, 2023 at 10:22:14PM -0800, Shradha Gupta wrote:
+> As communicated in BZ <2122115>, ifcfg config file support in
 
-> MMIO emulation for a realm cannot be done directly with the VM's
-> registers as they are protected from the host. However the RMM interface
-> provides a structure member for providing the read/written value and
+What is BZ <2122115>? I guess that's Red Hat's bugzilla?
 
-More details would be better for helping the review. I can only see the
-emulated mmio value from the device model (kvmtool or kvm_io_bus) is put into
-the GPRS[0] of the RecEntry object. But the rest of the flow is missing.
+I don't think this is useful information for the commit message, since
+the community cannot access that ticket.
 
-I guess RMM copies the value in the RecEntry.GPRS[0] to the target GPR in the
-guest context in RMI_REC_ENTER when seeing RMI_EMULATED_MMIO. This is for
-the guest MMIO read path.
+> NetworkManger is deprecated. This patch provides support for the
+> new keyfile config format for connection profiles in NetworkManager.
+> The patch modifies the hv_kvp_daemon code to generate the new network
+> configuration in keyfile format(.ini-style format) instead of ifcfg
+> format.
 
-How about the MMIO write path? I don't see where the RecExit.GPRS[0] is loaded
-to a varible and returned to the userspace.
+Okay, so the wire protocol for the KVP daemon is not changed. It is just
+the intermediate file format that's changed.
 
-> we can transfer this to the appropriate VCPU's register entry and then
-> depend on the generic MMIO handling code in KVM.
+> This configuration is stored in a temp file which is further translated
+> using the hv_set_ifconfig.sh script. This script is implemented by
+> individual distros based on the network management commands supported.
+> For example, RHEL's implementation could be found here:
+> https://gitlab.com/redhat/centos-stream/src/hyperv-daemons/-/blob/c9s/hv_set_ifconfig.sh
+> Debian's implementation could be found here:
+> https://github.com/endlessm/linux/blob/master/debian/cloud-tools/hv_set_ifconfig
 > 
-> Signed-off-by: Steven Price <steven.price@arm.com>
-> ---
->  arch/arm64/kvm/mmio.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> The next part of this support is to inform the Distro vendors to
+> modify these implementations to consume the new configuration format.
 > 
-> diff --git a/arch/arm64/kvm/mmio.c b/arch/arm64/kvm/mmio.c
-> index 3dd38a151d2a..c4879fa3a8d3 100644
-> --- a/arch/arm64/kvm/mmio.c
-> +++ b/arch/arm64/kvm/mmio.c
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/kvm_host.h>
->  #include <asm/kvm_emulate.h>
-> +#include <asm/rmi_smc.h>
->  #include <trace/events/kvm.h>
->  
->  #include "trace.h"
-> @@ -109,6 +110,9 @@ int kvm_handle_mmio_return(struct kvm_vcpu *vcpu)
->  			       &data);
->  		data = vcpu_data_host_to_guest(vcpu, data, len);
->  		vcpu_set_reg(vcpu, kvm_vcpu_dabt_get_rd(vcpu), data);
-> +
-> +		if (vcpu_is_rec(vcpu))
-> +			vcpu->arch.rec.run->entry.gprs[0] = data;
 
-I think the guest context is maintained by RMM (while KVM can only touch
-Rec{Entry, Exit} object) so that guest context in the legacy VHE mode is
-unused.
+I guess they will figure out the format has changed when they upgrade to
+a new kernel?
 
-If yes, I guess here is should be:
-
-if (unlikely(vcpu_is_rec(vcpu)))
-	vcpu->arch.rec.run->entry.gprs[0] = data;
-else
-	vcpu_set_reg(vcpu, kvm_vcpu_dabt_get_rd(vcpu), data);
-
->  	}
->  
->  	/*
-> @@ -179,6 +183,9 @@ int io_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa)
->  	run->mmio.len		= len;
->  	vcpu->mmio_needed	= 1;
->  
-> +	if (vcpu_is_rec(vcpu))
-> +		vcpu->arch.rec.run->entry.flags |= RMI_EMULATED_MMIO;
-> +
-
-Wouldn't it be better to set this in the kvm_handle_mmio_return where the MMIO
-read emulation has been surely successful?
-
->  	if (!ret) {
->  		/* We handled the access successfully in the kernel. */
->  		if (!is_write)
-
+Thanks,
+Wei.
