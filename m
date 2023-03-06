@@ -2,125 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187E26AD2FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 582616AD2FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjCFXqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 18:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
+        id S229720AbjCFXsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 18:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjCFXqU (ORCPT
+        with ESMTP id S229483AbjCFXsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 18:46:20 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A887532A5;
-        Mon,  6 Mar 2023 15:46:18 -0800 (PST)
-Received: from [192.168.1.90] (unknown [188.24.156.231])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BA6B6602F5E;
-        Mon,  6 Mar 2023 23:46:15 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678146376;
-        bh=NEoWyHe0xORmwmkapLJCDAiOtq7Nhqyrhrxnf11E9X0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=b7wEyD48eZrqKBBwbQBZGMDDqMv7sy8/YQfCNfrJlB94wRymvBrK30IppzEUOccJg
-         EMi7WAao0h0YenfHKwuoTwA8eKHToT6ZoBkyjppspncS+qBobyyuBUoZUeZOoRRVGd
-         nleQJwIJCrxzdyMzcLGeVhykAaNIffgea13u3HiWF4LH0iBCQxDMvEGRDwLi8dKk2z
-         w+OXPZ3X29oxw7AM+9ZNaJCEWrQIHsq1/2F2mQYo6Q6+OyK3MBXR8iR9SplMEntAP9
-         yl4y5mQIqv0cNpHkh5jEFW/QGk+m7o/9PSs6iyFhQN9eaLlYyuIyaguPanA4/nNbR5
-         5FXdYSDVr4gKg==
-Message-ID: <243aebb3-70d8-3d83-cb8f-bd1e67e6707e@collabora.com>
-Date:   Tue, 7 Mar 2023 01:46:12 +0200
+        Mon, 6 Mar 2023 18:48:11 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963252ED7F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 15:48:08 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id d6so6628200pgu.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 15:48:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678146488;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=h3kkgg9fvW84t4TwLFt0X1S06pfPd/zAbyRMZdL/mL8=;
+        b=aANztpaAr4HagG84ZHDlR9fWP07UAofgO/cRUUbIzExKpx5u2uLQJID6cHtCUpScjP
+         Qq7WwEOVZsQzp/yUDYTCSrYIm102wDb8xU18xDo5KiZTb6GdVlIAfj0GUr1FEtg/JO2i
+         HBx+zE78JUcenfWTVTY+BUAGXHR/YehXkQP24Br+US1apjvAD1HoTAWtdtfttxMCULmV
+         RWHFGqIa2Y0GApYO/mPpgP/qxnI8Hp2oIicVp5DKlhuB/Q7cXlcOStws94DWhOC5Agd0
+         UOw04TlA5PCE3WIbx5gDGgIcKadkD7XyDsmj2/j8orbQMWZIB6t0lTtIIM1gQgqg4wsr
+         vVoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678146488;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h3kkgg9fvW84t4TwLFt0X1S06pfPd/zAbyRMZdL/mL8=;
+        b=t9ImwO7mLpZM+dPWzI/oNLzNU9onzPaIyqGdYFoa67uCZO1QYRgvk/23F2iBff6YDd
+         QeR3e82BlWBdsccPpCm0VGEYBHjBGaMO85aa0GmH0oQWsK223+DyLdv/8l1fcGWvyuLJ
+         ivbVU4/GoTLfSvdjOa0nJT5+nkBaRAk+5DLL6vheJhF12qssds/sEFaGHTjErMPeYiJ1
+         vPL+kqww+Wo4u5K1Tkx4HBU7xBPNWaKn662XjZ5Ko0Rqhe9noB5z7PXNSddIWtJfQ0DI
+         /8ByUq6mlBW7rgJrsdhiidPUspPdPXuvGQ26dMHgJmEhFtnDUPKiixU37dST4MOZVBmn
+         FBxg==
+X-Gm-Message-State: AO0yUKVy5kucAVoWWpMM9Iz9I/V60LfcN9ZXuZzIpJwXCSWVg8zTqHxJ
+        uglmUId4b56/vo4BZ0+IUFz1tXgfDCZyLuqUs4isUg==
+X-Google-Smtp-Source: AK7set+vAfWX9ZIid0tGfwy4xAfCKD4BGmpA0o9O7v4ol+4wj+rB16NMXMXewUOK31R/IlO+jqnFcWsHoaCcgk8QyHA=
+X-Received: by 2002:a62:ce49:0:b0:5a8:ac30:80bf with SMTP id
+ y70-20020a62ce49000000b005a8ac3080bfmr5501983pfg.6.1678146487961; Mon, 06 Mar
+ 2023 15:48:07 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 03/12] soc: sifive: ccache: Add StarFive JH7100 support
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-References: <20230211031821.976408-1-cristian.ciocaltea@collabora.com>
- <20230211031821.976408-4-cristian.ciocaltea@collabora.com>
- <b969cf86-d5df-462a-982b-c5b67f97c3d6@spud>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <b969cf86-d5df-462a-982b-c5b67f97c3d6@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230223041938.22732-1-semen.protsenko@linaro.org>
+ <20230223041938.22732-6-semen.protsenko@linaro.org> <7cbc24bf-6920-c75f-effc-fd9d827ca324@linaro.org>
+In-Reply-To: <7cbc24bf-6920-c75f-effc-fd9d827ca324@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Mon, 6 Mar 2023 17:47:56 -0600
+Message-ID: <CAPLW+4md2BTVecTfNx0ATG4LXy-Q+4Bgb7z8GGizv4aBJ8od_g@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] clk: samsung: Extract parent clock enabling to
+ common function
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/23 01:32, Conor Dooley wrote:
-> On Sat, Feb 11, 2023 at 05:18:12AM +0200, Cristian Ciocaltea wrote:
->> From: Emil Renner Berthing <kernel@esmil.dk>
->>
->> This adds support for the StarFive JH7100 SoC which also feature this
->> SiFive cache controller.
->>
->> Unfortunately the interrupt for uncorrected data is broken on the JH7100
->> and fires continuously, so add a quirk to not register a handler for it.
->>
->> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> [drop JH7110, rework Kconfig]
->> Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-> 
-> This driver doesn't really do very much of anything as things stand, so
-> I don't see really see all that much value in picking it up right now,
-> since the non-coherent bits aren't usable yet.
-> 
->> ---
->>   drivers/soc/sifive/Kconfig         |  1 +
->>   drivers/soc/sifive/sifive_ccache.c | 11 ++++++++++-
->>   2 files changed, 11 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
->> index e86870be34c9..867cf16273a4 100644
->> --- a/drivers/soc/sifive/Kconfig
->> +++ b/drivers/soc/sifive/Kconfig
->> @@ -4,6 +4,7 @@ if SOC_SIFIVE || SOC_STARFIVE
->>   
->>   config SIFIVE_CCACHE
->>   	bool "Sifive Composable Cache controller"
->> +	default SOC_STARFIVE
-> 
-> I don't think this should have a default set w/ the support that this
-> patch brings in. Perhaps later we should be doing defaulting, but not at
-> this point in the series.
+On Mon, 6 Mar 2023 at 08:35, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 23/02/2023 05:19, Sam Protsenko wrote:
+> > Extract parent clock enabling from exynos_arm64_register_cmu() to
+> > dedicated function.
+> >
+> > Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> > Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> > ---
+> > Changes in v3:
+> >   - Rebased on top of latest soc/for-next tree
+> >   - Added Marek's Acked-by tag
+> >
+> > Changes in v2:
+> >   - Rebased on top of latest soc/for-next tree
+> >   - Improved English in kernel doc comment
+> >   - Added clk_prepare_enable() return value check
+> >   - Added exynos_arm64_enable_bus_clk() check in
+> >     exynos_arm64_register_cmu()
+> >   - Changed the commit message to reflect code changes
+> >
+> >  drivers/clk/samsung/clk-exynos-arm64.c | 51 ++++++++++++++++++--------
+> >  1 file changed, 35 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/clk/samsung/clk-exynos-arm64.c b/drivers/clk/samsung/clk-exynos-arm64.c
+> > index b921b9a1134a..2aa3f0a5644e 100644
+> > --- a/drivers/clk/samsung/clk-exynos-arm64.c
+> > +++ b/drivers/clk/samsung/clk-exynos-arm64.c
+> > @@ -56,6 +56,37 @@ static void __init exynos_arm64_init_clocks(struct device_node *np,
+> >       iounmap(reg_base);
+> >  }
+> >
+> > +/**
+> > + * exynos_arm64_enable_bus_clk - Enable parent clock of specified CMU
+> > + *
+> > + * @dev:     Device object; may be NULL if this function is not being
+> > + *           called from platform driver probe function
+> > + * @np:              CMU device tree node
+> > + * @cmu:     CMU data
+> > + *
+> > + * Keep CMU parent clock running (needed for CMU registers access).
+> > + *
+> > + * Return: 0 on success or a negative error code on failure.
+> > + */
+> > +static int __init exynos_arm64_enable_bus_clk(struct device *dev,
+> > +             struct device_node *np, const struct samsung_cmu_info *cmu)
+> > +{
+> > +     struct clk *parent_clk;
+> > +
+> > +     if (!cmu->clk_name)
+> > +             return 0;
+> > +
+> > +     if (dev)
+> > +             parent_clk = clk_get(dev, cmu->clk_name);
+> > +     else
+> > +             parent_clk = of_clk_get_by_name(np, cmu->clk_name);
+> > +
+> > +     if (IS_ERR(parent_clk))
+> > +             return PTR_ERR(parent_clk);
+> > +
+> > +     return clk_prepare_enable(parent_clk);
+> > +}
+> > +
+> >  /**
+> >   * exynos_arm64_register_cmu - Register specified Exynos CMU domain
+> >   * @dev:     Device object; may be NULL if this function is not being
+> > @@ -72,23 +103,11 @@ static void __init exynos_arm64_init_clocks(struct device_node *np,
+> >  void __init exynos_arm64_register_cmu(struct device *dev,
+> >               struct device_node *np, const struct samsung_cmu_info *cmu)
+> >  {
+> > -     /* Keep CMU parent clock running (needed for CMU registers access) */
+> > -     if (cmu->clk_name) {
+> > -             struct clk *parent_clk;
+> > -
+> > -             if (dev)
+> > -                     parent_clk = clk_get(dev, cmu->clk_name);
+> > -             else
+> > -                     parent_clk = of_clk_get_by_name(np, cmu->clk_name);
+> > -
+> > -             if (IS_ERR(parent_clk)) {
+> > -                     pr_err("%s: could not find bus clock %s; err = %ld\n",
+> > -                            __func__, cmu->clk_name, PTR_ERR(parent_clk));
+> > -             } else {
+> > -                     clk_prepare_enable(parent_clk);
+> > -             }
+> > -     }
+> > +     int err;
+> >
+> > +     err = exynos_arm64_enable_bus_clk(dev, np, cmu);
+> > +     if (err)
+> > +             panic("%s: could not enable bus clock\n", __func__);
+>
+> The error handling is changed and not equivalent. I would say that we
+> could still try to boot even if this failed, so kernel should not panic.
+> Maybe the parent clock is enabled by bootloader.
+>
 
-I will handle this is v2 as soon as the non-coherency stuff is ready.
+Agreed, I've probably overlooked that one when making all the
+refactoring. The same stands for the patch #6. Will rework and send
+out those two separately soon, as the rest of patches you already
+applied.
 
-> Other than that, this is fine by me:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Thanks!
 
-Thanks for reviewing,
-Cristian
-
-> Thanks,
-> Conor.
+> Best regards,
+> Krzysztof
+>
