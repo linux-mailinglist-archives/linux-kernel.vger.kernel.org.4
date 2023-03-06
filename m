@@ -2,126 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF77A6AC5EC
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98B56AC5E9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:51:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjCFPwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 10:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60346 "EHLO
+        id S230153AbjCFPvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:51:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCFPwT (ORCPT
+        with ESMTP id S229784AbjCFPvk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 10:52:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4671133469
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:51:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678117888;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q86XLZ7Q4ZHp1CUGcCN/NjLhC2ggJRWLx1s//bOcLDM=;
-        b=IDGY3v4CGTQZ5idFWVW87EHcy0lVva+Ckm1QP33JE4zD1o0xlMWDuXOwOCDMlbt0PLkbsw
-        cuVE2g+sX2EJtbLsfVEBTjN60pf/ea00y0B1DV8muqwcvqkb291HZ7z4hWMKGOsuizk4Rt
-        32ElIB+cwlfCStYB3uVtvK3uVAFrA3w=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-329-WRxup-aaMqKbaiL72PuJ1Q-1; Mon, 06 Mar 2023 10:51:27 -0500
-X-MC-Unique: WRxup-aaMqKbaiL72PuJ1Q-1
-Received: by mail-qt1-f200.google.com with SMTP id b7-20020ac85407000000b003bfb9cff263so5332717qtq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 07:51:27 -0800 (PST)
+        Mon, 6 Mar 2023 10:51:40 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E84736692
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 07:51:37 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id cy23so40382299edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 07:51:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678117896;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t5WKaU91nJ+P694TRYOMgx3cq+DGCFPwL6ikgUxC3C8=;
+        b=ESjcJLj063dMnQZWJplGSMwup2iaf+HjpoquiqJhkDgqe+Bwe6KLmnVVMs75iGiqRx
+         Vr7OqpYnid1HjGlasFK+9AhAlB5S4IHdRaeE/MWdSmSHDascJfwiIIieyVNjC3qXv56F
+         cbaFPprTTejA/Ub9UwI0JUHkt+6AktbMoISxFB9Dm4DzWvxl/s9nj4l1nVolAUlQNaeq
+         NRcq0O1+qSCYXKjQcUioybt/B+ExBG9Qdq+9ayEOYY0NnfidFsmtP6dFJ6uZ7ch/mSL7
+         W5subhoHbAsx1NXexaN2YeqvF7Fv6QOC7RFeQQlenvKCZcVsvUJCf9r/K/FrhKb2+BS0
+         yyFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678117886;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q86XLZ7Q4ZHp1CUGcCN/NjLhC2ggJRWLx1s//bOcLDM=;
-        b=sCMcy8oEhlNO6TtiIxUGAUfOSOOJqLO3y/mHltyoZRlL8PqsaaEkVJztD+JBi/k88S
-         XKc3GWf5gCuNqMSwlDjcJYpJOnK3taa1AUIBPm+VgkP3cwkVX8SZYQfbhL5KDB/CLT6w
-         Fs8lppOq7gtD61/4yKGLbwvrY5mpVbaN/40r7gg4XJMdn52ySepqbr3O70+Z91DOCYcO
-         4scSeqY7KF0IRkHk7UR1kH3KVyYncRPA4OcHYHpz57MEQtQtWsbNdpp/XOeXueKpqoSK
-         FX2w+zESA2zq4VyXpIxLW4RVoU0JIuVnlmjukvMRtMvomrHdiEgVd3WQC32IzZYiotZJ
-         N3DA==
-X-Gm-Message-State: AO0yUKU273idak+t5o2A1V6fuwTDvgYzggwBgHVyfSH5MMWzhJtoSm78
-        /8VJ1swt4zrxM73NWV/mZK3RxN/NxxNdofigPBLFqRIcAInKthEz2vSoYQLQrLl1OkDzg19sNhY
-        ct2VVdD6GGdTBc7tp9ZK9F6np
-X-Received: by 2002:a05:622a:c:b0:3b9:bc8c:c207 with SMTP id x12-20020a05622a000c00b003b9bc8cc207mr26969670qtw.18.1678117886719;
-        Mon, 06 Mar 2023 07:51:26 -0800 (PST)
-X-Google-Smtp-Source: AK7set8J+A3R80v+MVqfE2WCygPas52Ry5LmPSFlnPMQvzMyOQV6nh5+6ZCsftO+pkisfBFlvJJ58Q==
-X-Received: by 2002:a05:622a:c:b0:3b9:bc8c:c207 with SMTP id x12-20020a05622a000c00b003b9bc8cc207mr26969642qtw.18.1678117886394;
-        Mon, 06 Mar 2023 07:51:26 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id q17-20020ac84111000000b003bfa52112f9sm7805681qtl.4.2023.03.06.07.51.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 07:51:25 -0800 (PST)
-Date:   Mon, 6 Mar 2023 16:51:21 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v2 2/4] virtio/vsock: remove all data from sk_buff
-Message-ID: <20230306155121.7xwxzgxtle7qjbnc@sgarzare-redhat>
-References: <a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru>
- <dfadea17-a91e-105f-c213-a73f9731c8bd@sberdevices.ru>
- <20230306120857.6flftb3fftmsceyl@sgarzare-redhat>
- <b18e3b13-3386-e9ee-c817-59588e6d5fb6@sberdevices.ru>
+        d=1e100.net; s=20210112; t=1678117896;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t5WKaU91nJ+P694TRYOMgx3cq+DGCFPwL6ikgUxC3C8=;
+        b=N0S5Fxy8qCG1Ed01g+YXD8jhCYae7iNiWrq5RuaKA87ntpFg3JflV0zmqGK1ffadFW
+         p6zFDe3cBVQgNjiO5WGr9SMjnbjHa62l2M+Qex7Y75/MEdbuKpVIbsm5y6IP31piNJr9
+         57k+qS2MRtq47XxKNh0zrtBpqWiGKo4PP0Xc++VekshqrlkntDpHoUZm581wFbj3om+e
+         SV7AFQ/MUk0CIa2LVUVos1IkFTI2nqjA8qS/6FRvN9P840b0hFcQVRYqAyJ4Dzjdx/NJ
+         MLI1x5fOriyH+QdkMK7nSX5v3eOD9PVVAb2qf584ftZM82nOucYoJuaqDCy6vlzSZw5a
+         L9+Q==
+X-Gm-Message-State: AO0yUKWcLsDM4148jVXVJyXX6snAHGxbgX+HMqdiQgbU/NjltNXSF2ne
+        ItRuFfh/csWhuYecR1Yf66fnbQ==
+X-Google-Smtp-Source: AK7set9lwg+x+76RsWJ6nVbbLxkGydKTP4r6kdOcHarLbeeJ9W9GJHfsJJMd5ctUdgw3OxunMd+uEA==
+X-Received: by 2002:aa7:c2d4:0:b0:4ae:eab6:9ff8 with SMTP id m20-20020aa7c2d4000000b004aeeab69ff8mr11998310edp.13.1678117896054;
+        Mon, 06 Mar 2023 07:51:36 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:c1e7:5006:98ac:f57? ([2a02:810d:15c0:828:c1e7:5006:98ac:f57])
+        by smtp.gmail.com with ESMTPSA id n26-20020a50c21a000000b004a27046b7a7sm5320836edf.73.2023.03.06.07.51.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 07:51:35 -0800 (PST)
+Message-ID: <48c8a0cf-08dc-a831-33ef-3b8e32eef2d3@linaro.org>
+Date:   Mon, 6 Mar 2023 16:51:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <b18e3b13-3386-e9ee-c817-59588e6d5fb6@sberdevices.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 0/6] clk: samsung: exynos850: Add missing clocks for PM
+Content-Language: en-US
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Chanho Park <chanho61.park@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+References: <20230223042133.26551-1-semen.protsenko@linaro.org>
+ <167811290503.11716.15730246749418548221.b4-ty@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <167811290503.11716.15730246749418548221.b4-ty@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 06:31:22PM +0300, Arseniy Krasnov wrote:
->
->
->On 06.03.2023 15:08, Stefano Garzarella wrote:
->> On Sun, Mar 05, 2023 at 11:07:37PM +0300, Arseniy Krasnov wrote:
->>> In case of SOCK_SEQPACKET all sk_buffs are used once - after read some
->>> data from it, it will be removed, so user will never read rest of the
->>> data. Thus we need to update credit parameters of the socket like whole
->>> sk_buff is read - so call 'skb_pull()' for the whole buffer.
->>>
->>> Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
->>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->>> ---
->>> net/vmw_vsock/virtio_transport_common.c | 2 +-
->>> 1 file changed, 1 insertion(+), 1 deletion(-)
+On 06/03/2023 15:28, Krzysztof Kozlowski wrote:
+> On Wed, 22 Feb 2023 22:21:27 -0600, Sam Protsenko wrote:
+>> As a part of preparation for PM enablement in Exynos850 clock driver,
+>> this patch series implements CMU_G3D, and also main gate clocks for AUD
+>> and HSI CMUs. The series brings corresponding changes to bindings, the
+>> driver and SoC dts file.
 >>
->> Maybe we could avoid this patch if we directly use pkt_len as I
->> suggested in the previous patch.
->Hm, may be we can avoid calling 'skb_pull()' here if 'virtio_transport_dec_rx_pkt()'
->will use integer argument?
+>> Changes in v2:
+>>   - Rebased all patches on top of the most recent soc/for-next tree
+>>   - Added A-b and R-b tags
+>>   - Minor fixes
+>>
+>> [...]
+> 
+> Applied, thanks!
+> 
+> [1/6] dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
+>       https://git.kernel.org/krzk/linux/c/067ba1605806e52118bb598afb357718df9f0e19
+> [2/6] dt-bindings: clock: exynos850: Add AUD and HSI main gate clocks
+>       https://git.kernel.org/krzk/linux/c/e289665ed0d6df9fca3ebc128f1232d305e4600b
+> [3/6] clk: samsung: clk-pll: Implement pll0818x PLL type
+>       https://git.kernel.org/krzk/linux/c/a6feedab8ab9a9e4483deb0bcc87919d92c88b7e
+> [4/6] clk: samsung: exynos850: Implement CMU_G3D domain
+>       https://git.kernel.org/krzk/linux/c/c5704a56893b4e77e434597c7c53d878bb3073b0
+> [5/6] clk: samsung: exynos850: Add AUD and HSI main gate clocks
+>       https://git.kernel.org/krzk/linux/c/d8d12e0d079aff4b1d8079a0a55944c0596f1d67
+> [6/6] arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
+>       https://git.kernel.org/krzk/linux/c/ad8f6ad9a4f219950df65731a8ff91baa022c4b0
 
-Yep, exactly!
+And builds are broken. Please mention in cover letter or commit
+dependencies and ordering...
 
->Just call 'virtio_transport_dec_rx_pkt(skb->len)'. skb
-
-It depends on how we call virtio_transport_inc_rx_pkt(). If we use
-hdr->len there I would use the same to avoid confusion. Plus that's the
-value the other peer sent us, so definitely the right value to increase
-fwd_cnt with. But if skb->len always reflects it, then that's fine.
-
->is never returned to queue to read it again, so i think may be there is no sense for
->extra call 'skb_pull'?
-
-Right!
-
-Thanks,
-Stefano
+Best regards,
+Krzysztof
 
