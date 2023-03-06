@@ -2,89 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C840A6ABE01
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:19:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A30626ABE06
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjCFLTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:19:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S230113AbjCFLVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:21:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjCFLTh (ORCPT
+        with ESMTP id S230021AbjCFLUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:19:37 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E93914995;
-        Mon,  6 Mar 2023 03:19:36 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id fa28so5474800pfb.12;
-        Mon, 06 Mar 2023 03:19:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678101576;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bFCElgfs/QgIK9T0+cfVbpNA53kfeis4CLHg1GVIGsg=;
-        b=RM+NAR/av/nWO+TxpY4YWm437b2P1NkyMUJSNCR0cQYRcAw/jYeC0vB7t46tpc2Xjj
-         l+pqnlTMqBBprSW/o8rLjWKrVGxj5lngOi8k3l7YTI/eMBlfh1EehSsurnt1+lfFq63i
-         vHMp9JJYsVywl03/y+FCOGWUDnhBt0qHlAgOWqqs54I4IuwaVxUvHQM1wMt4+F9IOzv/
-         cGDZrHL6u5nlF8PJgkbYimeLWijSBFknZSkgFN/HGmpIjXpL89rFQuJ/FvVjVJKV4QB6
-         pQKg6QQdIY6OeQepD0Ryq56T//oBkK1tPvRiNAir2BKNKp/3S2Cpmgv4nXnzH6NV5Qn9
-         CTfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678101576;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bFCElgfs/QgIK9T0+cfVbpNA53kfeis4CLHg1GVIGsg=;
-        b=MNR2QxJCKszBxHrgkvBV3NMnM9my0bJ7Gx/Q0FvLV+3gEQYCFZFyS4Z0Ixq3SR1/Fp
-         oBjCH6bgCiFLUV/YtYpThMCdswS+/6cby8gkV2k1agvCtPdVBbndawewomaXxXOJIGrD
-         9xKcRteVndTPo6/VVlUpCCiXSmPIL7ncQ7JXHzOcyQcCNbbYLllGhtMHf+QdFAzGkIRw
-         4MzEM+L+Imd+zIkUVa4q23UfL+LwFIEA6KcFdGZ5CZSW3aZ6HH0h0NevkmOxuz0+m6Az
-         /6TFekNr1RXNjhQA2wOKY0bLM4960CIOtmfWQ2hfAa+XedERYs4bMK2I10qeBgH4/XIO
-         t4sw==
-X-Gm-Message-State: AO0yUKXTrHvwdmdsg/7mIGDTvOfv+bKSxTr7dYzIPwtXodP91hTdYk9S
-        ftaYGSm0NjGBPh5/SnHEpYgkDydZ9yaQpVznV44=
-X-Google-Smtp-Source: AK7set/4eWGzcQIyqd1DW2t0+log2GXUXOZ3POkzbF3KhtN1fYJUj+NpaFt2wIJcRtd0sSFMZFht7Uk0w22k3FPuwOI=
-X-Received: by 2002:a63:7453:0:b0:503:bb5:4cec with SMTP id
- e19-20020a637453000000b005030bb54cecmr3747518pgn.7.1678101576020; Mon, 06 Mar
- 2023 03:19:36 -0800 (PST)
+        Mon, 6 Mar 2023 06:20:55 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C3325942;
+        Mon,  6 Mar 2023 03:20:51 -0800 (PST)
+Received: from localhost.localdomain (1.general.phlin.uk.vpn [10.172.194.38])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 875363F261;
+        Mon,  6 Mar 2023 11:20:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678101644;
+        bh=sOYKKn1+ndyAa3vO5ercVplZyfjuZNClfnktikXiNHU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=JHMVzPV5PZwFc2kbK8EgXw2fPBoMOFiagVNhuLcpU3Oa/IPS/k7yPiztmHeDM0sFh
+         c93H4sTXEM5SC+B2tWVzKNqRjvT+p5oJcird3YQUGg3dQ0tUzRZg18tzvB9Q/h2l7c
+         npNoEeVl/df1+skwdOUkgXGOyBw4d8+30Ll8Ehm9s8p+FU/m3q0/Kp/QBtdMcxEEUi
+         W9YJxyFdaFzQtcANo372Uf9aiGQG4moQekP089Y3OJz4RfQRJd7+7rH55r3i8HS9uc
+         x10QZFI86KX8UW6kh1wlWCMzIuSh4qdRIdrbCKETMm4NzPuA6dr+0CKi/tULgXT48Q
+         5NutbcNe6aIgw==
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     idosch@mellanox.com, danieller@mellanox.com, petrm@mellanox.com,
+        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, po-hsu.lin@canonical.com
+Subject: [PATCH] selftests: net: devlink_port_split.py: skip test if no suitable device available
+Date:   Mon,  6 Mar 2023 19:19:59 +0800
+Message-Id: <20230306111959.429680-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230306060505.11657-1-i.bornyakov@metrotek.ru>
-In-Reply-To: <20230306060505.11657-1-i.bornyakov@metrotek.ru>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 6 Mar 2023 08:19:25 -0300
-Message-ID: <CAOMZO5DxXTUPHz-1crnr5McE40kW-we1b3pms5zn0UCvsnb82A@mail.gmail.com>
-Subject: Re: [PATCH RESEND] bus: imx-weim: fix branch condition evaluates to a
- garbage value
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     linux-imx@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 3:05=E2=80=AFAM Ivan Bornyakov <i.bornyakov@metrotek=
-.ru> wrote:
->
-> If bus type is other than imx50_weim_devtype and have no child devices,
-> variable 'ret' in function weim_parse_dt() will not be initialized, but
-> will be used as branch condition and return value. Fix this by
-> initializing 'ret' with 0.
->
-> This was discovered with help of clang-analyzer, but the situation is
-> quite possible in real life.
->
-> Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-> Cc: stable@vger.kernel.org
+The `devlink -j dev show` command output may not contain the "flavour"
+key, for example:
+  $ devlink -j dev show
+  {"dev":{"pci/0001:00:00.0":{},"pci/0002:00:00.0":{}}}
 
-Please add a Fixes tag here.
+This will cause a KeyError exception. Fix this by checking the key
+existence first.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Also, if max lanes is 0 the port splitting won't be tested at all.
+but the script will end normally and thus causing a false-negative
+test result.
+
+Use a test_ran flag to determine if these tests were skipped and
+return KSFT_SKIP accordingly.
+
+Link: https://bugs.launchpad.net/bugs/1937133
+Fixes: f3348a82e727 ("selftests: net: Add port split test")
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/devlink_port_split.py | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/testing/selftests/net/devlink_port_split.py
+index 2b5d6ff..462f3df 100755
+--- a/tools/testing/selftests/net/devlink_port_split.py
++++ b/tools/testing/selftests/net/devlink_port_split.py
+@@ -61,7 +61,7 @@ class devlink_ports(object):
+ 
+         for port in ports:
+             if dev in port:
+-                if ports[port]['flavour'] == 'physical':
++                if 'flavour' in ports[port] and ports[port]['flavour'] == 'physical':
+                     arr.append(Port(bus_info=port, name=ports[port]['netdev']))
+ 
+         return arr
+@@ -231,6 +231,7 @@ def make_parser():
+ 
+ 
+ def main(cmdline=None):
++    test_ran = False
+     parser = make_parser()
+     args = parser.parse_args(cmdline)
+ 
+@@ -277,6 +278,11 @@ def main(cmdline=None):
+                 split_splittable_port(port, lane, max_lanes, dev)
+ 
+                 lane //= 2
++        test_ran = True
++
++    if not test_ran:
++        print("No suitable device for the test, test skipped")
++        sys.exit(KSFT_SKIP)
+ 
+ 
+ if __name__ == "__main__":
+-- 
+2.7.4
+
