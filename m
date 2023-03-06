@@ -2,97 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD0F6AD185
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE2F66AD18A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCFW3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56768 "EHLO
+        id S229718AbjCFWam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:30:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCFW3X (ORCPT
+        with ESMTP id S229483AbjCFWak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 17:29:23 -0500
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A2C38004;
-        Mon,  6 Mar 2023 14:29:22 -0800 (PST)
-Received: by mail-yb1-f174.google.com with SMTP id k23so9742871ybk.13;
-        Mon, 06 Mar 2023 14:29:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678141761;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j6f12142LyUCXv1wqTPt0K0jlFaLpVhCgvJtjTz/YcU=;
-        b=FfNTDfUX3CBYUOV8HvY7XXLbJ2YFAGR1ccW9M2jx+/E6lMKSWe91IaCJBUq1O1fBfn
-         HajwIKMrPsONsezDckGguMmiP5+ge4Qv/J8UbMPSy51wP2zVRjlddncLVx89MITus0BS
-         NoIa0lB1pd8NJR9Pyc9I4VFz6tv8eGOGCTsI76cg2txiOYkAoTOPxcgMgy0G5q3ZbbI/
-         Q4iFb0L7ZToU5VRgvcz92RG7mQmEZxBMaOqLMoEk88PVc4682HqKlkEwgSkj9EwGaU1i
-         RxiOfrc6UJe6SDU2XbQyXnhGi1yxEwZ0gVed7FSFq6xu8GvowAZJEymWtcockN2cbLwi
-         KDeg==
-X-Gm-Message-State: AO0yUKWpzNpjBvI1kgBGT94vDM3psYjUoEypII0PrMw7Z1fesiGelXUN
-        T9rM10oEcmZZpkMnf3eo3yFJgvWcVTMzsw6lBIA=
-X-Google-Smtp-Source: AK7set88+PSiio1FR30WjpA0FzgWVtcBYUiBeYMk+qIe2UpKOodB7VmxKHlJgejXUbTRigoHd4hCL7LcyOK8DKkYluw=
-X-Received: by 2002:a25:b206:0:b0:8bd:4ab5:18f4 with SMTP id
- i6-20020a25b206000000b008bd4ab518f4mr10239475ybj.6.1678141761302; Mon, 06 Mar
- 2023 14:29:21 -0800 (PST)
+        Mon, 6 Mar 2023 17:30:40 -0500
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1FFC4A1EC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 14:30:38 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 326MUNhp052700;
+        Mon, 6 Mar 2023 16:30:23 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678141823;
+        bh=oiJ924q/QZp5Phdfe3T7YiQFP+wbldkIbyadg4ySWRY=;
+        h=From:To:CC:Subject:Date;
+        b=OZWklo7WHNHXnK6x85VxvcjZukzPCQZ4/cazT3mBG8J3Sih0v4ZGhTL28/KMbvz59
+         EXTKAVwS+mSBOHn2HP2sSfES7kUaiMj0vIlc8AK2txGQFW+a+rPVdvVQg8sjde/4hv
+         V7dQWkOmD3EEl+NZBSKbs0FS18Vu4umS15TkOxUg=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 326MUNAb024015
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 6 Mar 2023 16:30:23 -0600
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
+ Mar 2023 16:30:22 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 6 Mar 2023 16:30:22 -0600
+Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 326MUMjU014052;
+        Mon, 6 Mar 2023 16:30:22 -0600
+From:   Andrew Davis <afd@ti.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>
+Subject: [PATCH] arm64: defconfig: Enable TI SA2UL support
+Date:   Mon, 6 Mar 2023 16:30:22 -0600
+Message-ID: <20230306223022.23757-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230302092109.367-1-ravi.bangoria@amd.com> <20230302092109.367-2-ravi.bangoria@amd.com>
- <CAM9d7cjEvjcYwjA+HfsDHKDX8FGZCECTZ8vDMPHBUSqfQSCOfA@mail.gmail.com> <c5f1c3c2-6de3-a40d-9cf0-c1c7638acfc3@amd.com>
-In-Reply-To: <c5f1c3c2-6de3-a40d-9cf0-c1c7638acfc3@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 6 Mar 2023 14:29:10 -0800
-Message-ID: <CAM9d7ch9OsFz9N71QG5DOyygctK+bVAFGQByUGAvy=d29rzWZg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] perf/ibs: Fix interface via core pmu events
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     peterz@infradead.org, eranian@google.com, acme@kernel.org,
-        mark.rutland@arm.com, jolsa@kernel.org, irogers@google.com,
-        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, santosh.shukla@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 9:54 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
-> Hi Namhyung,
->
-> >> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> >> index a5a51dfdd622..c3f59d937280 100644
-> >> --- a/kernel/events/core.c
-> >> +++ b/kernel/events/core.c
-> >> @@ -11633,9 +11633,13 @@ static struct pmu *perf_init_event(struct perf_event *event)
-> >>                         goto fail;
-> >>
-> >>                 ret = perf_try_init_event(pmu, event);
-> >> -               if (ret == -ENOENT && event->attr.type != type && !extended_type) {
-> >> -                       type = event->attr.type;
-> >> -                       goto again;
-> >> +               if (ret == -ENOENT) {
-> >> +                       if (event->attr.type != type && !extended_type) {
-> >> +                               type = event->attr.type;
-> >> +                               goto again;
-> >> +                       }
-> >> +                       if (pmu->capabilities & PERF_PMU_CAP_FORWARD_EVENT)
-> >> +                               goto try_all;
-> >
-> > Wouldn't it be better to use a different error code to indicate
-> > it's about precise_ip (or forwarding in general)?  Otherwise
-> > other invalid config might cause the forwarding unnecessarily..
->
-> That would make things easier and we might not need this new capability.
-> Most appropriate error codes seems ENOENT, EOPNOTSUPP and EINVAL but all
-> are already used for other purposes. Any other suggestions?
+TI K3 devices include an SA2UL security accelerator engine for crypto
+offload. Enable this module.
 
-Maybe we can have more liberty for the error code since
-it's not returned to the user.  How about ESRCH, EIO or ENXIO?
+Signed-off-by: Andrew Davis <afd@ti.com>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Namhyung
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 7790ee42c68a..98b5738bdbb7 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1440,6 +1440,7 @@ CONFIG_CRYPTO_DEV_HISI_SEC2=m
+ CONFIG_CRYPTO_DEV_HISI_ZIP=m
+ CONFIG_CRYPTO_DEV_HISI_HPRE=m
+ CONFIG_CRYPTO_DEV_HISI_TRNG=m
++CONFIG_CRYPTO_DEV_SA2UL=m
+ CONFIG_DMA_RESTRICTED_POOL=y
+ CONFIG_CMA_SIZE_MBYTES=32
+ CONFIG_PRINTK_TIME=y
+-- 
+2.39.2
+
