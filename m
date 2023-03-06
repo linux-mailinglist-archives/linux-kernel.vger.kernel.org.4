@@ -2,120 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DCE6ACA68
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4966ACA7F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjCFRac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:30:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34744 "EHLO
+        id S230077AbjCFRbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231166AbjCFRaO (ORCPT
+        with ESMTP id S229667AbjCFRbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:30:14 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3B96700F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:29:38 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id cw28so41883048edb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 09:29:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678123771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hyTtB/4llIx7xJW4yBF6B/aJvNGYAxGhl43lVEfQF64=;
-        b=FQsHP01JWW59RwAk38+Q/kxXTDHxilylSztx59oelvW6wAt5oVrlY5/SQnx7fQocXB
-         CP8GDvujVsLUxEqmCJlRIrgc08LVXYP//hgawsxldM/X8Q+lGRcdMB+l4p9Z91BxxN86
-         aOqcDoHeseNaW1vdtqMXYz1g6d+5R4vj32iXA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678123771;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hyTtB/4llIx7xJW4yBF6B/aJvNGYAxGhl43lVEfQF64=;
-        b=u5y9SkYP6wBJfvvMlRAnGU8Mr5DuqlBmbg5lMPLVzlFjmaHEZg0Z+cMHWZHPgH4DGi
-         ZXlSug11hzJPxuVgDvUVqGKCr5eFGRZ4jYqAF+absByyOD8O1+Ssan/oS/fL2A24Rkpi
-         3e+BPm/+UpSBYuw+BgO0i0+DuzRjMeslSpHhlE6SAf/D30WJUAIMukw9JVjbXUg/Pk40
-         8yhXqki7aiFHk/ESzGNFYOFynoCVv6O5QJON4/HUiW9A4aPKORCRG48zr69ksnBa1B9Q
-         54IlzQyYKhkEZvS3XA15NOJ1JcVJT1BH4nAUDE5Ex9qXHTc5OwMLKoWKDQ2QAeAMvMFf
-         TW/g==
-X-Gm-Message-State: AO0yUKXmJy59R7dNHo47ZVjqw01NIM1m7cOLNPZVw+xcPTNUf1BL7m6x
-        17MMnXCQa5+hSFGVbZ/HzpJOq4RrrIJrj/1dwTirQw==
-X-Google-Smtp-Source: AK7set+bGLR29eK5UhoZFXlKl6yQPJCjCzZVIbkP9C8X6Vwsh4TTQhqSoClstjHYoNjHS0wJCjY10A==
-X-Received: by 2002:a05:6402:350:b0:4c0:eab4:af12 with SMTP id r16-20020a056402035000b004c0eab4af12mr10197979edw.12.1678123771284;
-        Mon, 06 Mar 2023 09:29:31 -0800 (PST)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id q2-20020a1709060e4200b009140707b475sm598429eji.33.2023.03.06.09.29.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 09:29:29 -0800 (PST)
-Received: by mail-ed1-f46.google.com with SMTP id u9so41954201edd.2
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 09:29:28 -0800 (PST)
-X-Received: by 2002:a17:906:4997:b0:877:7480:c75d with SMTP id
- p23-20020a170906499700b008777480c75dmr5644673eju.0.1678123768103; Mon, 06 Mar
- 2023 09:29:28 -0800 (PST)
+        Mon, 6 Mar 2023 12:31:22 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A738A54
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:30:39 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id B1FFC21C5B;
+        Mon,  6 Mar 2023 17:29:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678123774; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x2wJ/1+qCv7YJhFivtXnn5Inza/T/kAvFe4cwUGE/7M=;
+        b=jfDfCOyJy1ndJDHGQIejrU8vCh7aokmH29RLQCXz/jl890atMS2KY6sTEhqV4Yckagg0bq
+        PS9XH+mp84EQV1Bp6Jfk2EvP76nXPDa1zWtkrWwQz5ZKRcXw7dsgPxJMA5YK4wY0jWU9F/
+        r/1w2r76fhQQ5T0ziaQka6JoReF2wLY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678123774;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x2wJ/1+qCv7YJhFivtXnn5Inza/T/kAvFe4cwUGE/7M=;
+        b=TuxUQJJJqSUaCGEdVCeXRRPvro8cH6NkICIu/rAz6JOQxhRwuqoXqM1Sw99mW9DAn31GN+
+        tui4w0zlhUozh0AA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8217213A66;
+        Mon,  6 Mar 2023 17:29:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oVXAHv4iBmRScwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 06 Mar 2023 17:29:34 +0000
+Message-ID: <6452176f-4c17-8e09-8561-c659cbea4014@suse.cz>
+Date:   Mon, 6 Mar 2023 18:29:52 +0100
 MIME-Version: 1.0
-References: <20230306160651.2016767-1-vernon2gm@gmail.com> <20230306160651.2016767-6-vernon2gm@gmail.com>
-In-Reply-To: <20230306160651.2016767-6-vernon2gm@gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 Mar 2023 09:29:10 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com>
-Message-ID: <CAHk-=whVnaTBt2Xm-A+8SMc5-q5CuZBDU6rUZ8yC8GoAnbTBvw@mail.gmail.com>
-Subject: Re: [PATCH 5/5] cpumask: fix comment of cpumask_xxx
-To:     Vernon Yang <vernon2gm@gmail.com>
-Cc:     tytso@mit.edu, Jason@zx2c4.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, linux-kernel@vger.kernel.org,
-        wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm, vmalloc: fix high order __GFP_NOFAIL allocations
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>, Uladzislau Rezki <urezki@gmail.com>
+Cc:     Gao Xiang <hsiangkao@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>
+References: <20230305053035.1911-1-hsiangkao@linux.alibaba.com>
+ <ZAWbjIJCarmxGa8k@dhcp22.suse.cz> <ZAXZMz0n+CpWPVqy@pc636>
+ <ZAXynvdNqcI0f6Us@dhcp22.suse.cz>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <ZAXynvdNqcI0f6Us@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 8:07=E2=80=AFAM Vernon Yang <vernon2gm@gmail.com> wr=
-ote:
->
-> After commit 596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask
-> optimizations"), the cpumask size is divided into three different case,
-> so fix comment of cpumask_xxx correctly.
+On 3/6/23 15:03, Michal Hocko wrote:
 
-No no.
+> --- 
+> From 3ccfaa15bf2587b8998c129533a0404fedf5a484 Mon Sep 17 00:00:00 2001
+> From: Michal Hocko <mhocko@suse.com>
+> Date: Mon, 6 Mar 2023 09:15:17 +0100
+> Subject: [PATCH] mm, vmalloc: fix high order __GFP_NOFAIL allocations
+> 
+> Gao Xiang has reported that the page allocator complains about high
+> order __GFP_NOFAIL request coming from the vmalloc core:
+> 
+>  __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
+>  alloc_pages+0x1aa/0x270 mm/mempolicy.c:2286
+>  vm_area_alloc_pages mm/vmalloc.c:2989 [inline]
+>  __vmalloc_area_node mm/vmalloc.c:3057 [inline]
+>  __vmalloc_node_range+0x978/0x13c0 mm/vmalloc.c:3227
+>  kvmalloc_node+0x156/0x1a0 mm/util.c:606
+>  kvmalloc include/linux/slab.h:737 [inline]
+>  kvmalloc_array include/linux/slab.h:755 [inline]
+>  kvcalloc include/linux/slab.h:760 [inline]
+> 
+> it seems that I have completely missed high order allocation backing
+> vmalloc areas case when implementing __GFP_NOFAIL support. This means
+> that [k]vmalloc at al. can allocate higher order allocations with
+> __GFP_NOFAIL which can trigger OOM killer for non-costly orders easily
+> or cause a lot of reclaim/compaction activity if those requests cannot
+> be satisfied.
+> 
+> Fix the issue by falling back to zero order allocations for __GFP_NOFAIL
+> requests if the high order request fails.
+> 
+> Fixes: 9376130c390a ("mm/vmalloc: add support for __GFP_NOFAIL")
+> Reported-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> Signed-off-by: Michal Hocko <mhocko@suse.com>
 
-Those three cases are meant to be entirely internal optimizations.
-They are literally just "preferred sizes".
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-The correct thing to do is always that
+> ---
+>  mm/vmalloc.c | 28 +++++++++++++++++++++++-----
+>  1 file changed, 23 insertions(+), 5 deletions(-)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index ef910bf349e1..bef6cf2b4d46 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2883,6 +2883,8 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+>  		unsigned int order, unsigned int nr_pages, struct page **pages)
+>  {
+>  	unsigned int nr_allocated = 0;
+> +	gfp_t alloc_gfp = gfp;
+> +	bool nofail = false;
+>  	struct page *page;
+>  	int i;
+>  
+> @@ -2893,6 +2895,7 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+>  	 * more permissive.
+>  	 */
+>  	if (!order) {
+> +		/* bulk allocator doesn't support nofail req. officially */
+>  		gfp_t bulk_gfp = gfp & ~__GFP_NOFAIL;
+>  
+>  		while (nr_allocated < nr_pages) {
+> @@ -2931,20 +2934,35 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+>  			if (nr != nr_pages_request)
+>  				break;
+>  		}
+> +	} else if (gfp & __GFP_NOFAIL) {
+> +		/*
+> +		 * Higher order nofail allocations are really expensive and
+> +		 * potentially dangerous (pre-mature OOM, disruptive reclaim
+> +		 * and compaction etc.
 
-   * Returns >=3D nr_cpu_ids if no cpus set.
+				      ^ unclosed parenthesis
 
-because nr_cpu_ids is always the *smallest* of the access sizes.
+> +		 */
+> +		alloc_gfp &= ~__GFP_NOFAIL;
+> +		nofail = true;
+>  	}
+>  
+>  	/* High-order pages or fallback path if "bulk" fails. */
+> -
+>  	while (nr_allocated < nr_pages) {
+>  		if (fatal_signal_pending(current))
+>  			break;
+>  
+>  		if (nid == NUMA_NO_NODE)
+> -			page = alloc_pages(gfp, order);
+> +			page = alloc_pages(alloc_gfp, order);
+>  		else
+> -			page = alloc_pages_node(nid, gfp, order);
+> -		if (unlikely(!page))
+> -			break;
+> +			page = alloc_pages_node(nid, alloc_gfp, order);
+> +		if (unlikely(!page)) {
+> +			if (!nofail)
+> +				break;
+> +
+> +			/* fall back to the zero order allocations */
+> +			alloc_gfp |= __GFP_NOFAIL;
+> +			order = 0;
+> +			continue;
+> +		}
+> +
+>  		/*
+>  		 * Higher order allocations must be able to be treated as
+>  		 * indepdenent small pages by callers (as they can with
 
-That's exactly why it's a ">=3D". The CPU mask stuff has always
-historically potentially used a different size than the actual
-nr_cpu_ids, in that it could do word-sized scans even when the machine
-might only have a smaller set of CPUs.
-
-So the whole "small" vs "large" should be seen entirely internal to
-cpumask.h. We should not expose it outside (sadly, that already
-happened with "nr_cpumask_size", which also was that kind of thing.
-
-So no, this patch is wrong. If anything, the comments should be strengthene=
-d.
-
-Of course, right now Guenter seems to be reporting a problem with that
-optimization, so unless I figure out what is going on I'll just need
-to revert it anyway.
-
-                Linus
-
-                Linus
+		   ^ while at it the typo could also be fixed
