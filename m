@@ -2,122 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AA66ACDDB
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBF26ACDDF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjCFTSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:18:46 -0500
+        id S229709AbjCFTTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:19:25 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbjCFTSZ (ORCPT
+        with ESMTP id S230132AbjCFTTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:18:25 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3111FC5
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 11:18:23 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id j11so23588641edq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 11:18:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1678130302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WbDbkrtYIaj4h/JEt+PGK5ggFWdbYGJfSSTneNQay2I=;
-        b=j/07IYjSLrbP9Eed2enqYxlX9HMGoSoiQUuwQx9dFVyPpB3YRAMSeLD9HaWSLpNvYu
-         rdpyWP6BteBn7g2st0KtOpwue3ypCyVyHqL7KkagjXQ/Xleg57j0JY3rvKcf8dI7ME4z
-         /dfVGyjtzWyQ7xEi+8locFLvagSsTZ6wt9YqU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678130302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WbDbkrtYIaj4h/JEt+PGK5ggFWdbYGJfSSTneNQay2I=;
-        b=7wV+vz5JvhaHs9W9qeHuN5lOcxbobJPjITONaFYSZ4yFhMS9umzLPIKC7bN6UoHnlg
-         JrRKsru9UDFkWfVHyGpkXZXUWtwKeF7HB4gkOmelW2czxdXBcJQIFxrxnRLXsyw8ud7W
-         8LFNSVwbk7d0PId6rEcTaaRM1waQQQG+KapUmpwCY/CjJKi5RQxC/+ZeFeypYkB0heJm
-         BF+2ApMG6vG8uBBQthVoTtV6OHRjzGp7yCswEiBzbp7g+YphqMiadV7SsgmwUtZeOkAW
-         ANJrQIlT4JxHueI1B4q60Db97GVBkpx57ZTlxR5dpKaG3MzbpJVJBc+T9tSrSVGn+Bd/
-         bacg==
-X-Gm-Message-State: AO0yUKXDVo9teJU8q14EHrgNYWxKTbnqFbzD9Jkp88omDRkTnEDwbxF/
-        S3LYsGM14VT/SBIZ0ReEqr6w4cuY6En5Yf3YhoYrTA==
-X-Google-Smtp-Source: AK7set9r6F6+ciMT23z4zIyc6eSsWKiXVPrmgrbAFXs3L+sQF77q3SaEIRL9LWHOYyUh2e/b+JTXgVDt4xSUBnGetuA=
-X-Received: by 2002:a17:906:edac:b0:8f3:9ee9:f1e2 with SMTP id
- sa12-20020a170906edac00b008f39ee9f1e2mr5847569ejb.5.1678130301984; Mon, 06
- Mar 2023 11:18:21 -0800 (PST)
+        Mon, 6 Mar 2023 14:19:12 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A3E46C6B4;
+        Mon,  6 Mar 2023 11:18:54 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326HSxkL019565;
+        Mon, 6 Mar 2023 19:18:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=R0FC7S7XViyQ2hmVARJlnKVtSo6GEEVdDFw0OUgx8vA=;
+ b=SRs9kPFj5N2Y1l2fMtjO6ly44K0h2ioVxXo3JzzvXwbOmiU9Cpn0app2twBwtL3zJ/Rt
+ EAhHuh0Ny5iVYux6v3xS/xm+944jpEZpRFpZeY7PqEsFIlto5nEdP/kLK0JtDpi4Fpth
+ WJq6G3dWegbfezAxbYcXddkIbJM6ZIkNFUs+wqfs6G0gAjwBlPB1HKTR42Dfe5yfOiR0
+ xQepaZlIcsWmM6M8/zInMWYh927MnJwniBofEQVQTwbQEC0YkxGSp9cLHx24VxepeBcU
+ MJBv7HRTFAMLHL+uqEhNF5bM5IW0UCn0r8FS6nA2ea3zr38+2w0nEhqdmAKFbtmA7yaB oA== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p417cbrcy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Mar 2023 19:18:30 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 326HX0Ok029280;
+        Mon, 6 Mar 2023 19:18:29 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3p4u1dxcba-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Mar 2023 19:18:29 +0000
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326JFwKZ000582;
+        Mon, 6 Mar 2023 19:18:28 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3p4u1dxca8-1;
+        Mon, 06 Mar 2023 19:18:28 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     error27@gmail.com,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harry Morris <harrymorris12@gmail.com>,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH next] ca8210: Fix unsigned mac_len comparison with zero in ca8210_skb_tx()
+Date:   Mon,  6 Mar 2023 11:18:24 -0800
+Message-Id: <20230306191824.4115839-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com>
- <CAJfpegvQyD-+EL2DdVWmyKF8odYWj4kAONyRf6VH_h4JCTu=vg@mail.gmail.com> <CAEivzxdX28JhA+DY92nTGn56kmMgdeT9WX__j7NU3QHpg+wcdQ@mail.gmail.com>
-In-Reply-To: <CAEivzxdX28JhA+DY92nTGn56kmMgdeT9WX__j7NU3QHpg+wcdQ@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 6 Mar 2023 20:18:11 +0100
-Message-ID: <CAJfpeguYO9J=np5vxH+HjCSAxn=8fcQRhh_-BVadTt86zWfkpQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/9] fuse: API for Checkpoint/Restore
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     mszeredi@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org, flyingpeng@tencent.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_12,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303060170
+X-Proofpoint-GUID: lqGlXhDw3PAOtAL1SHOcRMeTZe_LygDw
+X-Proofpoint-ORIG-GUID: lqGlXhDw3PAOtAL1SHOcRMeTZe_LygDw
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Mar 2023 at 17:44, Aleksandr Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> On Mon, Mar 6, 2023 at 5:15=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu>=
- wrote:
+mac_len is of type unsigned, which can never be less than zero.
 
-> > Apparently all of the added mechanisms (REINIT, BM_REVAL, conn_gen)
-> > are crash recovery related, and not useful for C/R.  Why is this being
-> > advertised as a precursor for CRIU support?
->
-> It's because I'm doing this with CRIU in mind too, I think it's a good
-> way to make a universal interface
-> which can address not only the recovery case but also the C/R, cause
-> in some sense it's a close problem.
+	mac_len = ieee802154_hdr_peek_addrs(skb, &header);
+	if (mac_len < 0)
+		return mac_len;
 
-That's what I'm wondering about...
+Change this to type int as ieee802154_hdr_peek_addrs() can return negative
+integers, this is found by static analysis with smatch.
 
-Crash recovery is about restoring (or at least regenerating) state in
-the userspace server.
+Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+Only compile tested.
+---
+ drivers/net/ieee802154/ca8210.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-In CRIU restoring the state of the userspace server is a solved
-problem, the issue is restoring state in the kernel part of fuse.  In
-a sense it's the exact opposite problem that crash recovery is doing.
+diff --git a/drivers/net/ieee802154/ca8210.c b/drivers/net/ieee802154/ca8210.c
+index 0b0c6c0764fe..d0b5129439ed 100644
+--- a/drivers/net/ieee802154/ca8210.c
++++ b/drivers/net/ieee802154/ca8210.c
+@@ -1902,10 +1902,9 @@ static int ca8210_skb_tx(
+ 	struct ca8210_priv  *priv
+ )
+ {
+-	int status;
+ 	struct ieee802154_hdr header = { };
+ 	struct secspec secspec;
+-	unsigned int mac_len;
++	int mac_len, status;
+ 
+ 	dev_dbg(&priv->spi->dev, "%s called\n", __func__);
+ 
+-- 
+2.38.1
 
-> But of course, Checkpoint/Restore is a way more trickier. But before
-> doing all the work with CRIU PoC,
-> I wanted to consult with you and folks if there are any serious
-> objections to this interface/feature or, conversely,
-> if there is someone else who is interested in it.
->
-> Now about interfaces REINIT, BM_REVAL.
->
-> I think it will be useful for CRIU case, but probably I need to extend
-> it a little bit, as I mentioned earlier in the cover letter:
-> > >* "fake" daemon has to reply to FUSE_INIT request from the kernel and =
-initialize fuse connection somehow.
-> > > This setup can be not consistent with the original daemon (protocol v=
-ersion, daemon capabilities/settings
-> > > like no_open, no_flush, readahead, and so on).
->
-> So, after the "fake" demon has done its job during CRIU restore, we
-> need to replace it with the actual demon from
-> the dumpee tree and performing REINIT looks like a sanner way.
-
-I don't get it.  How does REINIT help with switching to the real daemon?
-
-Thanks,
-Miklos
