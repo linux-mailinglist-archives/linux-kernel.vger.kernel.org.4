@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C176ABEEF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FAFD6ABE5B
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCFMB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:01:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S230293AbjCFLid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:38:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCFMBY (ORCPT
+        with ESMTP id S230256AbjCFLib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:01:24 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C591F915
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:01:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ic3DZ0sZlZGVPgvKXhJ/FaiYe4dpwzrLhdBXuxj9WKM=; b=uyrdBCZ19E2q9MpH/HJNfz2aSB
-        MkATUkp3Bj+lwLbwF81PaZY/FQ1W3UadG++tGheEPBgHc7Ou+jYSFV87/gXJjemBrg+9rnN+IZVhb
-        XvFTG1a2fcHxcuJagXl2ETvrGpPCxfGvAQH8gmld8Jz1+Spe3tjuADdgDZnJj+/3lP4mNoQcY8ztE
-        JUJ9Ne2vCUZtgSEcK8CulmrduCf+zEkb0/ByFZmbTRHMWB/aGF/v5wxiAjmlWV89UhYPUi+tV7GWf
-        H509S1I7ruY+Hq5QI4aA+7Y691rfYgRVQlU9gdk8VdPQsV2dXkIMQDgVYFFRbwcEKt/IGr1aaRfQP
-        OLQq/5yw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZ9Wd-005JbG-Ah; Mon, 06 Mar 2023 12:01:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 676E1300328;
-        Mon,  6 Mar 2023 13:01:06 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4A0DD23B586C3; Mon,  6 Mar 2023 13:01:06 +0100 (CET)
-Date:   Mon, 6 Mar 2023 13:01:06 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Stephane Eranian <eranian@google.com>
-Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com,
-        reinette.chatre@intel.com, fenghua.yu@intel.com,
-        peternewman@google.com, bp@suse.de, james.morse@arm.com,
-        babu.moger@amd.com, ananth.narayan@amd.com, vschneid@redhat.com,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in
- __resctrl_sched_in
-Message-ID: <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
-References: <20230303231133.1486085-1-eranian@google.com>
+        Mon, 6 Mar 2023 06:38:31 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8D61993;
+        Mon,  6 Mar 2023 03:38:17 -0800 (PST)
+Received: from kwepemm600002.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PVc5Z4NNTz1gwqh;
+        Mon,  6 Mar 2023 19:38:10 +0800 (CST)
+Received: from localhost.localdomain (10.175.127.227) by
+ kwepemm600002.china.huawei.com (7.193.23.29) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 6 Mar 2023 19:38:15 +0800
+From:   Zhong Jinghua <zhongjinghua@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhongjinghua@huawei.com>, <yi.zhang@huawei.com>,
+        <yukuai3@huawei.com>
+Subject: [PATCH-next v2] scsi: fix use-after-free problem in scsi_remove_target
+Date:   Mon, 6 Mar 2023 20:01:28 +0800
+Message-ID: <20230306120128.3158269-1-zhongjinghua@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303231133.1486085-1-eranian@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600002.china.huawei.com (7.193.23.29)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 03:11:33PM -0800, Stephane Eranian wrote:
+A use-after-free problem like below:
 
-> The problem is located in the __resctrl_sched_in() routine which rewrites
-> the active closid via the PQR_ASSOC register. Because this is an expensive
-> operation, the kernel only does it when the context switch involves tasks
-> with different CLOSID. And to check that, it needs to access the current
-> task's closid field using current->closid. current is actually a macro
-> that reads the per-cpu variable pcpu_hot.current_task.
-> 
-> After an investigation by compiler experts, the problem has been tracked down
-> to the usage of the get_current() macro in the __resctrl_sched_in() code and
-> in particular the per-cpu macro:
-> 
-> static __always_inline struct task_struct *get_current(void)
-> {
->         return this_cpu_read_stable(pcpu_hot.current_task);
-> }
-> 
-> And as per percpu.h:
-> 
-> /*
->  * this_cpu_read() makes gcc load the percpu variable every time it is
->  * accessed while this_cpu_read_stable() allows the value to be cached.
->  * this_cpu_read_stable() is more efficient and can be used if its value
->  * is guaranteed to be valid across cpus.  The current users include
->  * get_current() and get_thread_info() both of which are actually
->  * per-thread variables implemented as per-cpu variables and thus
->  * stable for the duration of the respective task.
->  */
-> 
-> The _stable version of the macro allows the value to be cached, meaning it
-> does not force a reload.
+BUG: KASAN: use-after-free in scsi_target_reap+0x6c/0x70
 
-Right, so afaict the difference between this_cpu_read() and
-this_cpu_read_stable() is the volatile qualifier.
+Workqueue: scsi_wq_1 __iscsi_unbind_session [scsi_transport_iscsi]
+Call trace:
+ dump_backtrace+0x0/0x320
+ show_stack+0x24/0x30
+ dump_stack+0xdc/0x128
+ print_address_description+0x68/0x278
+ kasan_report+0x1e4/0x308
+ __asan_report_load4_noabort+0x30/0x40
+ scsi_target_reap+0x6c/0x70
+ scsi_remove_target+0x430/0x640
+ __iscsi_unbind_session+0x164/0x268 [scsi_transport_iscsi]
+ process_one_work+0x67c/0x1350
+ worker_thread+0x370/0xf90
+ kthread+0x2a4/0x320
+ ret_from_fork+0x10/0x18
 
-this_cpu_read() is asm volatile(), while this_cpu_read_stable() and
-raw_cpu_read() are both an unqualified asm().
+The problem is caused by a concurrency scenario:
 
-Now, afaiu we're inlining all of this into __switch_to(), which has
-raw_cpu_write(pcpu_hot.current_task, next_p).
+T0: delete target
+// echo 1 > /sys/devices/platform/host1/session1/target1:0:0/1:0:0:1/delete
+T1: logout
+// iscsiadm -m node --logout
 
-And I suppose what the compiler is doing is lifting the 'current' load
-over that store, but how is it allowed that? I thought C was supposed to
-have PO consistency, That raw_cpu_write() should be seen as a store to
-to pcpu_hot.current_task, why can it lift a load over the store?
+T0							T1
+ sdev_store_delete
+  scsi_remove_device
+   device_remove_file
+    __scsi_remove_device
+        					__iscsi_unbind_session
+        					 scsi_remove_target
+						  spin_lock_irqsave
+        					  list_for_each_entry
+     scsi_target_reap
+     // starget->reap_ref 1 -> 0
+     						  kref_get(&starget->reap_ref);
+						  // warn use-after-free.
+						  spin_unlock_irqrestore
+      scsi_target_reap_ref_release
+	scsi_target_destroy
+	... // delete starget
+						  scsi_target_reap
+						  // UAF
 
-Specifically, percpu_to_op() has a "+m" output constaint while
-percpu_stable_op() has a "p" input constraint on the same address.
+When T0 reduces the reference count to 0, but has not been released,
+T1 can still enter list_for_each_entry, and then kref_get reports UAF.
 
-Compiler folks help?
+Fix it by using kref_get_unless_zero() to check for a reference count of
+0.
+
+Signed-off-by: Zhong Jinghua <zhongjinghua@huawei.com>
+---
+ v2: commit message: "starget->reaf" -> "starget->reap_ref"
+ comment: "If it is reduced to 0, it means that other processes are releasing it and there is no need to delete it again"
+ ->
+ "If the reference count is already zero, skip this target is safe  because scsi_target_destroy() will wait until the 
+ host lock has been released before freeing starget."
+
+ drivers/scsi/scsi_sysfs.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index e7893835b99a..12e8ed6d55cb 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -1561,7 +1561,16 @@ void scsi_remove_target(struct device *dev)
+ 		    starget->state == STARGET_CREATED_REMOVE)
+ 			continue;
+ 		if (starget->dev.parent == dev || &starget->dev == dev) {
+-			kref_get(&starget->reap_ref);
++
++			/*
++			 * If the reference count is already zero, skip this
++			 * target is safe  because scsi_target_destroy()
++			 * will wait until the host lock has been released
++			 * before freeing starget.
++			 */
++			if (!kref_get_unless_zero(&starget->reap_ref))
++				continue;
++
+ 			if (starget->state == STARGET_CREATED)
+ 				starget->state = STARGET_CREATED_REMOVE;
+ 			else
+-- 
+2.31.1
+
