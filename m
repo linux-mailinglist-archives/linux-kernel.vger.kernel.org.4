@@ -2,188 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AB46AB7E4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:04:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495916AB7E5
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 09:04:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjCFIEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 03:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
+        id S229836AbjCFIEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 03:04:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjCFIEG (ORCPT
+        with ESMTP id S229816AbjCFIEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 03:04:06 -0500
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ACB4C18;
-        Mon,  6 Mar 2023 00:03:43 -0800 (PST)
-Received: by mail-ed1-f44.google.com with SMTP id a25so35068892edb.0;
-        Mon, 06 Mar 2023 00:03:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=83wzMZDza94KzRdG9ihv12wmiVlHYRIDlbhLRowmSAw=;
-        b=NoYiJejnzoloQ2z2TSC/wM21iRq2BlaSq4X93repMOHXD+DcK1FjLBLHOuEHZrvUq2
-         KIKvYFaOyQV8voJ90yvboEgLA9IJB0lbZCkeeVZ4xYtTdHywKKIkwn0u/CmFXX7w4wFL
-         rdICuzvHofJrRe/OYcjoJYrcoh68EDK2BLcjDa3fNk5WgZbco3RRBHiBS9W3yBVVw3fz
-         JgW9iiBGzQeAVd5KSJT74jTQit3kiat/yVx7WdGogRJ2HOjmg217MaIbmRL/jtBhMRLu
-         1dWrxOzXCmDhyeK01vCUQ7BZuMSnLYPLEc0oLU6L7dncInRykai4k60vhBbnmtLYyE1d
-         eG3g==
-X-Gm-Message-State: AO0yUKUKiV2+k8DIXyjxq46xwNw5uC8Ta00F2oYxHI8Nw6hS/BKS2m4w
-        Xi4FjYT0Ejj5Tmoprzrz81/xLCuEB2xKlw==
-X-Google-Smtp-Source: AK7set+KX0I+SESEOXUeE7xIsnVvh8ozH7/v3/FI16dEFBlyuDwrxD5H4VuQj/OzQtB3gGVxkV/1xg==
-X-Received: by 2002:a17:907:a0d5:b0:8b1:319c:c29e with SMTP id hw21-20020a170907a0d500b008b1319cc29emr12397792ejc.74.1678089817808;
-        Mon, 06 Mar 2023 00:03:37 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id e7-20020a170906c00700b008cff300cf47sm4184241ejz.72.2023.03.06.00.03.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 00:03:37 -0800 (PST)
-Message-ID: <c91c458e-58d0-f13a-9adb-a48a19f82107@kernel.org>
-Date:   Mon, 6 Mar 2023 09:03:36 +0100
+        Mon, 6 Mar 2023 03:04:09 -0500
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7D38A54
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 00:03:44 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VdCw8xX_1678089820;
+Received: from 30.97.49.22(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VdCw8xX_1678089820)
+          by smtp.aliyun-inc.com;
+          Mon, 06 Mar 2023 16:03:41 +0800
+Message-ID: <ca2bb7fb-5cae-e399-f8a9-3a5d0fa913f0@linux.alibaba.com>
+Date:   Mon, 6 Mar 2023 16:03:39 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Michal Sekletar <msekleta@redhat.com>, gregkh@linuxfoundation.org
-Cc:     arozansk@redhat.com, shuah@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20230303133606.227934-1-msekleta@redhat.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH 1/2] tty: tty_io: update timestamps on all device nodes
-In-Reply-To: <20230303133606.227934-1-msekleta@redhat.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [PATCH] mm/page_alloc: avoid high-order page allocation warn with
+ __GFP_NOFAIL
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>, Baoquan He <bhe@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Uladzislau Rezki <urezki@gmail.com>
+References: <20230305053035.1911-1-hsiangkao@linux.alibaba.com>
+ <ZAWbjIJCarmxGa8k@dhcp22.suse.cz>
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <ZAWbjIJCarmxGa8k@dhcp22.suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03. 03. 23, 14:36, Michal Sekletar wrote:
-> User space applications watch for timestamp changes on character device
-> files in order to determine idle time of a given terminal session. For
-> example, "w" program uses this information to populate the IDLE column
-> of its output [1]. Similarly, systemd-logind has optional feature where
-> it uses atime of the tty character device to determine if there was
-> activity on the terminal associated with the logind's session object. If
-> there was no activity for a configured period of time then logind will
-> terminate such session [2].
+
+
+On 2023/3/6 15:51, Michal Hocko wrote:
+> [Cc couple of more people recently involved with vmalloc code]
 > 
-> Now, usually (e.g. bash running on the terminal) the use of the terminal
-> will update timestamps (atime and mtime) on the corresponding terminal
-> character device. However, if access to the terminal, e.g. /dev/pts/0,
-> is performed through magic character device /dev/tty then such access
-> obviously changes the state of the terminal, however timestamps on the
-> device that correspond to the terminal (/dev/pts/0) are not updated.
+> On Sun 05-03-23 13:30:35, Gao Xiang wrote:
+>> My knowledge of this is somewhat limited, however, since vmalloc already
+>> supported __GFP_NOFAIL in commit 9376130c390a ("mm/vmalloc: add
+>> support for __GFP_NOFAIL").  __GFP_NOFAIL could trigger the following
+>> stack and allocate high-order pages when CONFIG_HAVE_ARCH_HUGE_VMALLOC
+>> is enabled:
+>>
+>>   __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
+>>   alloc_pages+0x1aa/0x270 mm/mempolicy.c:2286
+>>   vm_area_alloc_pages mm/vmalloc.c:2989 [inline]
+>>
+>>   __vmalloc_area_node mm/vmalloc.c:3057 [inline]
+>>   __vmalloc_node_range+0x978/0x13c0 mm/vmalloc.c:3227
+>>   kvmalloc_node+0x156/0x1a0 mm/util.c:606
+>>   kvmalloc include/linux/slab.h:737 [inline]
+>>   kvmalloc_array include/linux/slab.h:755 [inline]
+>>   kvcalloc include/linux/slab.h:760 [inline]
+>>   (codebase: Linux 6.2-rc2)
+>>
+>> Don't warn such cases since high-order pages with __GFP_NOFAIL is
+>> somewhat legel.
 > 
-> This patch makes sure that we update timestamps on *all* character
-> devices that correspond to the given tty, because outside observers (w,
-> systemd-logind) are maybe checking these timestamps. Obviously, they can
-> not check timestamps on /dev/tty as that has per-process meaning.
+> OK, this is definitely a bug and it seems my 9376130c390a was
+> incomplete because it hasn't covered the high order case. Not sure how
+> that happened but removing the warning is not the right thing to do
+> here. The higher order allocation is an optimization rather than a must.
+> So it is perfectly fine to fail that allocation and retry rather than
+> go into a very expensive and potentially impossible higher order
+> allocation that must not fail.
 > 
-> [1] https://gitlab.com/procps-ng/procps/-/blob/v4.0.0/w.c#L286
-> [2] https://github.com/systemd/systemd/blob/v252/NEWS#L477
+> The proper fix should look like this unless I am missing something. I
+> would appreciate another pair of eyes on this because I am not fully
+> familiar with the high order optimization part much.
+
+I'm fine with the fix. Although I'm not familiar with such vmalloc
+allocation, I thought about this possibility as well.
+
+The original issue was:
+https://lore.kernel.org/r/0000000000007796bd05f1852ec2@google.com
+
+which I used kvcalloc with __GFP_NOFAIL but it warned, and I made
+a fix (which now seems wrong) to use kcalloc() but it now warns
+the same:
+https://lore.kernel.org/r/00000000000072eb6505f376dd4b@google.com
+
+And I then realized it's a bug in kvmalloc() with __GFP_NOFAIL...
+
+Thanks,
+Gao Xiang
+
 > 
-> Signed-off-by: Michal Sekletar <msekleta@redhat.com>
+> Thanks!
 > ---
->   drivers/tty/tty_io.c | 32 +++++++++++++++++++++-----------
->   1 file changed, 21 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/tty/tty_io.c b/drivers/tty/tty_io.c
-> index 36fb945fdad4..48e0148b0f3e 100644
-> --- a/drivers/tty/tty_io.c
-> +++ b/drivers/tty/tty_io.c
-> @@ -101,6 +101,7 @@
->   #include <linux/compat.h>
->   #include <linux/uaccess.h>
->   #include <linux/termios_internal.h>
-> +#include <linux/fs.h>
->   
->   #include <linux/kbd_kern.h>
->   #include <linux/vt_kern.h>
-> @@ -811,18 +812,27 @@ void start_tty(struct tty_struct *tty)
->   }
->   EXPORT_SYMBOL(start_tty);
->   
-> -static void tty_update_time(struct timespec64 *time)
-> +static void tty_update_time(struct tty_struct *tty, int tstamp)
-
-Why not enum file_time_flags then?
-
-And "tstamp" sounds weird for what it is. It should be something like 
-"time" or "time_flag". Or make it simply "bool mtime". And call it with 
-true/false.
-
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index ef910bf349e1..a8aa2765618a 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2883,6 +2883,8 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+>   		unsigned int order, unsigned int nr_pages, struct page **pages)
 >   {
-> +	struct tty_file_private *priv;
->   	time64_t sec = ktime_get_real_seconds();
-
-Likely should be switched to have a reverse xmas tree.
-
+>   	unsigned int nr_allocated = 0;
+> +	gfp_t alloc_gfp = gfp;
+> +	bool nofail = false;
+>   	struct page *page;
+>   	int i;
 >   
-> -	/*
-> -	 * We only care if the two values differ in anything other than the
-> -	 * lower three bits (i.e every 8 seconds).  If so, then we can update
-> -	 * the time of the tty device, otherwise it could be construded as a
-> -	 * security leak to let userspace know the exact timing of the tty.
-> -	 */
-> -	if ((sec ^ time->tv_sec) & ~7)
-> -		time->tv_sec = sec;
-> +	spin_lock(&tty->files_lock);
-
-Note: this should be fine wrt write lock. Have you tried running w/ 
-lockdep enabled?
-
-> +	list_for_each_entry(priv, &tty->tty_files, list) {
-> +		struct file *filp = priv->file;
-
-I think you can inline the above ^^ to the bellow vv.
-
-> +		struct inode *inode = file_inode(filp);
-> +		struct timespec64 *time = tstamp == S_MTIME ? &inode->i_mtime : &inode->i_atime;
-
-So you'd have:
-struct inode *inode = file_inode(priv->file);
-struct timespec64 *time = mtime ? &inode->i_mtime : &inode->i_atime;
-
+> @@ -2931,20 +2933,30 @@ vm_area_alloc_pages(gfp_t gfp, int nid,
+>   			if (nr != nr_pages_request)
+>   				break;
+>   		}
+> +	} else {
+> +		alloc_gfp &= ~__GFP_NOFAIL;
+> +		nofail = true;
+>   	}
+>   
+>   	/* High-order pages or fallback path if "bulk" fails. */
+> -
+>   	while (nr_allocated < nr_pages) {
+>   		if (fatal_signal_pending(current))
+>   			break;
+>   
+>   		if (nid == NUMA_NO_NODE)
+> -			page = alloc_pages(gfp, order);
+> +			page = alloc_pages(alloc_gfp, order);
+>   		else
+> -			page = alloc_pages_node(nid, gfp, order);
+> -		if (unlikely(!page))
+> -			break;
+> +			page = alloc_pages_node(nid, alloc_gfp, order);
+> +		if (unlikely(!page)) {
+> +			if (!nofail)
+> +				break;
 > +
-> +		/*
-> +		 * We only care if the two values differ in anything other than the
-> +		 * lower three bits (i.e every 8 seconds).  If so, then we can update
-> +		 * the time of the tty device, otherwise it could be construded as a
-> +		 * security leak to let userspace know the exact timing of the tty.
-> +		 */
-> +		if ((sec ^ time->tv_sec) & ~7)
-> +			time->tv_sec = sec;
-> +	}
-> +	spin_unlock(&tty->files_lock);
->   }
->   
->   /*
-> @@ -928,7 +938,7 @@ static ssize_t tty_read(struct kiocb *iocb, struct iov_iter *to)
->   	tty_ldisc_deref(ld);
->   
->   	if (i > 0)
-> -		tty_update_time(&inode->i_atime);
-> +		tty_update_time(tty, S_ATIME);
->   
->   	return i;
->   }
-> @@ -1036,7 +1046,7 @@ static inline ssize_t do_tty_write(
->   		cond_resched();
->   	}
->   	if (written) {
-> -		tty_update_time(&file_inode(file)->i_mtime);
-> +		tty_update_time(tty, S_MTIME);
->   		ret = written;
->   	}
->   out:
-
--- 
-js
-suse labs
-
+> +			/* fall back to the zero order allocations */
+> +			alloc_gfp |= __GFP_NOFAIL;
+> +			order = 0;
+> +			continue;
+> +		}
+> +
+>   		/*
+>   		 * Higher order allocations must be able to be treated as
+>   		 * indepdenent small pages by callers (as they can with
