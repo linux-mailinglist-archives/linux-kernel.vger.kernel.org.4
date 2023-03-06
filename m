@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8866F6AC3BF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCB36AC43C
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 16:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCFOsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S230445AbjCFPAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 10:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjCFOsL (ORCPT
+        with ESMTP id S230408AbjCFPAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:48:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2835E1986
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:47:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678114005;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ePnoIICLAgX5+yYDBioH0vdLJ6br42cKaUY5oT5Uciw=;
-        b=Iijr6J1yVDJFdXagEsoBUptSQ7bsMddbGYbDNUzbx7DJSBBjpO0c86A841zIkIZfYKI1he
-        siSm1B+jTZkt8EtaigTRk/yYP/iykkDZRHp9rcz0LBqPeEf6a8DWEF0P3DpSrSFI6GejFi
-        A7lUEXAolhl1v90tBSa5Ixo2pcSgUUo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-343-su8vUQvyPQKmkMm2FULrTQ-1; Mon, 06 Mar 2023 09:46:43 -0500
-X-MC-Unique: su8vUQvyPQKmkMm2FULrTQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D50B229AA39C;
-        Mon,  6 Mar 2023 14:46:42 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.23])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 87CDE1410DD9;
-        Mon,  6 Mar 2023 14:46:42 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 05829180062C; Mon,  6 Mar 2023 15:46:40 +0100 (CET)
-Date:   Mon, 6 Mar 2023 15:46:40 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Ryan Neph <ryanneph@chromium.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Airlie <airlied@redhat.com>, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2] drm/virtio: Fix handling CONFIG_DRM_VIRTIO_GPU_KMS
- option
-Message-ID: <20230306144640.ta7jca5iabg66uoy@sirius.home.kraxel.org>
-References: <20230306143234.1561759-1-dmitry.osipenko@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306143234.1561759-1-dmitry.osipenko@collabora.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 6 Mar 2023 10:00:11 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC052A9B6;
+        Mon,  6 Mar 2023 07:00:07 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3266RFn2000531;
+        Mon, 6 Mar 2023 14:46:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=5JRGOQbm0JBuLxYt4MzA6HybTg38jSMU6E2GDw++4aI=;
+ b=YvcQA/w0B4Eh5GEtqz1bFrzdyRybeccuvt7or/616AUwSXvc/Amkmx7z16nh+ZMEH31j
+ ahZKViNqmJuhXjGVofKRGcQ8II/Q4a/UwuBhrCcVd1zjaMsk5J61zjv8+pPoY/IYMfSD
+ BLoiELGjaDdL2pelJC4fR1E32upGn5zW2PiOq6V2AQlU9mqrKKsFcB9awm3fOG8/niHi
+ IeVIJ25M7TVK9eiXhov3z36vlnxaHDKUbNViO3OOnJ5RnYDS6uGcAiP45OlbN3ezMUOe
+ AO8zYMEfqQeUFJiDTFCMAboZ+FkcxU7w1BfXHmUjTo/N4bKlkD5yAdQmSgrAvA302t9B Tw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p417d4y1p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 06 Mar 2023 14:46:46 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 326EkheE017348;
+        Mon, 6 Mar 2023 14:46:43 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3p4fft5j33-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 06 Mar 2023 14:46:43 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 326EfjQG011965;
+        Mon, 6 Mar 2023 14:46:43 GMT
+Received: from mdalam-linux.qualcomm.com (mdalam-linux.qualcomm.com [10.201.2.71])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 326EkhVT017343;
+        Mon, 06 Mar 2023 14:46:43 +0000
+Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
+        id 51EE712010CA; Mon,  6 Mar 2023 20:16:42 +0530 (IST)
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+To:     andersson@kernel.org, agross@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
+        quic_varada@quicinc.com, quic_mdalam@quicinc.com
+Subject: [PATCH 4/5] pinctrl: qcom: Use devm_platform_get_and_ioremap_resource()
+Date:   Mon,  6 Mar 2023 20:16:41 +0530
+Message-Id: <20230306144641.21955-1-quic_mdalam@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: IYc9OB0druSbGCCo8z-rf0Daqc6MsuQj
+X-Proofpoint-ORIG-GUID: IYc9OB0druSbGCCo8z-rf0Daqc6MsuQj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_08,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 bulkscore=0 mlxlogscore=656
+ phishscore=0 clxscore=1011 adultscore=0 priorityscore=1501 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303060130
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 05:32:34PM +0300, Dmitry Osipenko wrote:
-> VirtIO-GPU got a new config option for disabling KMS. There were two
-> problems left unnoticed during review when the new option was added:
-> 
-> 1. The IS_ENABLED(CONFIG_DRM_VIRTIO_GPU_KMS) check in the code was
-> inverted, hence KMS was disabled when it should be enabled and vice versa.
-> 
-> 2. The disabled KMS crashed kernel with a NULL dereference in
-> drm_kms_helper_hotplug_event(), which shall not be invoked with a
-> disabled KMS.
-> 
-> Fix the inverted config option check in the code and skip handling the
-> VIRTIO_GPU_EVENT_DISPLAY sent by host when KMS is disabled in guest to fix
-> the crash.
-> 
-> Fixes: 72122c69d717 ("drm/virtio: Add option to disable KMS support")
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> ---
-> 
-> Changelog:
-> 
-> v2: - Moved the "has_edid" under the "num_scanouts" condition, like was
->       suggested by Gerd Hoffmann.
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Acked-by: Gerd Hoffmann <kraxel@redhat.com>
+Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+---
+ drivers/pinctrl/qcom/pinctrl-msm.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/pinctrl/qcom/pinctrl-msm.c b/drivers/pinctrl/qcom/pinctrl-msm.c
+index daeb79a9a602..e25e7b5cdda2 100644
+--- a/drivers/pinctrl/qcom/pinctrl-msm.c
++++ b/drivers/pinctrl/qcom/pinctrl-msm.c
+@@ -1480,8 +1480,7 @@ int msm_pinctrl_probe(struct platform_device *pdev,
+ 				return PTR_ERR(pctrl->regs[i]);
+ 		}
+ 	} else {
+-		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-		pctrl->regs[0] = devm_ioremap_resource(&pdev->dev, res);
++		pctrl->regs[0] = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 		if (IS_ERR(pctrl->regs[0]))
+ 			return PTR_ERR(pctrl->regs[0]);
+ 
+-- 
+2.17.1
 
