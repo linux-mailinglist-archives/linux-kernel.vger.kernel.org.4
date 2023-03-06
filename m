@@ -2,57 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3645A6ACE1D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4380C6ACE1F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 20:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjCFTaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 14:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S229784AbjCFTas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 14:30:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCFTaM (ORCPT
+        with ESMTP id S229743AbjCFTap (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 14:30:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13706E6A8;
-        Mon,  6 Mar 2023 11:30:02 -0800 (PST)
+        Mon, 6 Mar 2023 14:30:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B81F38004;
+        Mon,  6 Mar 2023 11:30:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30323B810CB;
-        Mon,  6 Mar 2023 19:30:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD916C433D2;
-        Mon,  6 Mar 2023 19:29:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE972B810C6;
+        Mon,  6 Mar 2023 19:30:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54BB4C433D2;
+        Mon,  6 Mar 2023 19:30:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678131000;
-        bh=hCveUPTHfPlfd4ckjlJ+h3qtXYHgC0QYnx+BbTyXMjI=;
+        s=k20201202; t=1678131038;
+        bh=y2LTQiZFTAycrk7HmfcrNSsVpGXsaOa8A/dbm5J1ayY=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=LrhrxY/V1SwrNdgraCO6Bs1NZMyDpSOsvOEZ+opYk8NgYUYkAjV0zyInHnQ3lrP5k
-         X2tGx75cKEQ+zzNKBHmI//i0VIznb6u2ACEq+815kVC8ZWZssS/r/dEaP3DxqCQnMX
-         JUt0ERw2LjVEvXtaoTaZsaj5y+ncmgBsNbtNdzlcMIs/OmkJCnw2E+sE87Firfr+hM
-         maTOtEW6p77FT8CfM/1L4yIWAzysbpxFOjiv+gD2aKdFnm+bMWK2ncJe98jDEgtmEW
-         toRRq/TQ3aRRnCL+qMKKiwkbIzCHC1wuPzIPbncBP+csjE1TxmGuIAiUABxm6VgHdw
-         tqb2JHsPbBZzA==
-Message-ID: <b9aa323e25fa083d78be6dcfbf7dd727.sboyd@kernel.org>
+        b=Ie3nQYJsv+RzZ1NZ+BDULCYZn8GB/e9JROMtiMVzWYrNPU1zpVkQi5HJLmBZAdqPL
+         iuM97EkjQUaMZjHzeUJJ7NzfkzOKvZRFae8oHDZTI6YLC6iLb4pM410EteMs9qm9vH
+         pQLsVPoMgEYO8QA3uAvE77q8jUy+z/9MnGoTxoaj8aRtr7Epgz8iCMjqx4hblPQE0X
+         MMfoeZ8PF6aPtPgUhpuS5hySkAfBvuoiQRjw2b2o0axcB5ZgJDF7HNzrg9Xsa0QiDr
+         yvTLF16iw6j/kdZBSfALao4x57KdH7CkiU8UhvcVCgohJb5lSD0nFh0PAXXqFv6HPz
+         QGs/OxX2cbXBw==
+Message-ID: <d97ab14301c65d775cd69c1efebedb37.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230222121453.91915-12-nick.alcock@oracle.com>
-References: <20230222121453.91915-1-nick.alcock@oracle.com> <20230222121453.91915-12-nick.alcock@oracle.com>
-Subject: Re: [PATCH 11/27] kbuild, clk: bcm2835: remove MODULE_LICENSE in non-modules
+In-Reply-To: <20230226053953.4681-3-rdunlap@infradead.org>
+References: <20230226053953.4681-1-rdunlap@infradead.org> <20230226053953.4681-3-rdunlap@infradead.org>
+Subject: Re: [PATCH 2/8] clk: HI655X: select REGMAP instead of depending on it
 From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Riku Voipio <riku.voipio@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-clk@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
-Date:   Mon, 06 Mar 2023 11:29:57 -0800
+        linux-clk@vger.kernel.org
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Date:   Mon, 06 Mar 2023 11:30:36 -0800
 User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,31 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Nick Alcock (2023-02-22 04:14:37)
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
+Quoting Randy Dunlap (2023-02-25 21:39:47)
+> REGMAP is a hidden (not user visible) symbol. Users cannot set it
+> directly thru "make *config", so drivers should select it instead of
+> depending on it if they need it.
 >=20
-> So remove it in the files in this commit, none of which can be built as
-> modules.
+> Consistently using "select" or "depends on" can also help reduce
+> Kconfig circular dependency issues.
 >=20
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Michael Turquette <mturquette@baylibre.com>
+> Therefore, change the use of "depends on REGMAP" to "select REGMAP".
+>=20
+> Fixes: 3a49afb84ca0 ("clk: enable hi655x common clk automatically")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Riku Voipio <riku.voipio@linaro.org>
 > Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Ray Jui <rjui@broadcom.com>
-> Cc: Scott Branden <sbranden@broadcom.com>
+> Cc: Michael Turquette <mturquette@baylibre.com>
 > Cc: linux-clk@vger.kernel.org
-> Cc: linux-rpi-kernel@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
 > ---
 
 Applied to clk-fixes
