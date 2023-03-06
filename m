@@ -2,50 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAF46AD030
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FAA46AD03D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjCFV1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:27:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S229988AbjCFV2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 16:28:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjCFV1d (ORCPT
+        with ESMTP id S229669AbjCFV2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:27:33 -0500
+        Mon, 6 Mar 2023 16:28:06 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5E438002
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:27:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137A22057B;
+        Mon,  6 Mar 2023 13:28:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3639B8111A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 21:27:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE034C433D2;
-        Mon,  6 Mar 2023 21:27:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8056B81135;
+        Mon,  6 Mar 2023 21:28:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA102C433A1;
+        Mon,  6 Mar 2023 21:27:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678138049;
-        bh=HAyqRJPBWOYhe525mNCiGvfIZWlnvzCu67PTvEwxrx0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z+FgstKIsqpFyF8cCJ1tHZ8P2KfFgHyOC2aeedEKRm8Pl4ga1i/uZYxLXoN6wm9mi
-         2K0y04/Gizq8hYjyImUPZd+nby8pCQrrj10Sz/zacUwMteS10Dt6VuZLFDzfM9TPCR
-         yon0HovIsuKzq5uFzKjGSMoxJf95SiDv+1J3/qpAiKtT3ipsdATLwDAxFplyu85lpB
-         8olBSf4iMCiN3w0bWk7h/D4Go4XJDDPjHSIfEwPS5/0d8xOPOGL6GAnJ1RXPlsq+BJ
-         406mwdWhQxm6QuKXKZZTcA5yEzvgwU4++mtMQTvYyG6Q01/SLW0XFnktsTve+aA6+q
-         U2J/9K+4WANMQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     SeongJae Park <sj@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, damon@lists.linux.dev
-Subject: Re: [PATCH v2 2/3] mm/damon/paddr: minor refactor of damon_pa_young()
-Date:   Mon,  6 Mar 2023 21:27:27 +0000
-Message-Id: <20230306212727.303846-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <202ac11d-3692-69bf-3984-627c1b9f9d38@huawei.com>
-References: 
+        s=k20201202; t=1678138079;
+        bh=OPscq8j4gixbBXyx4rYRiqcOtug0pajWX+t3LwK0uPE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PsQMxWTNyqmjmOyLA6f4aBxEbqjXLjGnQvTHUoE4f6zTvuB0TEbKKoow7O0Bl6lqg
+         gYnqSQeBrO1rJ29HWmn+yvMly1eyD9pru67Ei5XhYPhftQR6cu4eDx5Y2uE63s5KIt
+         s3zsZ4FOYFUkiy7gTDlGyR2DhiXrF2ddTXSUbWfDk94k+YWjCuHsJXdkT6LOyMmw3/
+         OBMkdU9AXHfmpJlFP0bcKZdHq+IuioXEaW+oivplUHjLiBGkJeMjuBmdvu2rgkgh5Q
+         WG7SALFgV1PPXh9MrSvGscl5OUXQrlqRl1aL8dYkfSYDeEvI72A6J1sMyBNHxpS7Fw
+         LxAw7Z0FF0jTA==
+Date:   Mon, 6 Mar 2023 21:27:32 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        jic23@kernel.org, tudor.ambarus@microchip.com, pratyush@kernel.org,
+        Sanju.Mehta@amd.com, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
+        kdasu.kdev@gmail.com, f.fainelli@gmail.com, rjui@broadcom.com,
+        sbranden@broadcom.com, eajames@linux.ibm.com, olteanv@gmail.com,
+        han.xu@nxp.com, john.garry@huawei.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, narmstrong@baylibre.com,
+        khilman@baylibre.com, matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        krzysztof.kozlowski@linaro.org, andi@etezian.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
+        oss@buserror.net, windhl@126.com, yangyingliang@huawei.com,
+        william.zhang@broadcom.com, kursad.oney@broadcom.com,
+        jonas.gorski@gmail.com, anand.gore@broadcom.com, rafal@milecki.pl,
+        git@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        michael@walle.cc, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
+        amitrkcian2002@gmail.com, Dhruva Gole <d-gole@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+Subject: Re: [PATCH V5 01/15] spi: Replace all spi->chip_select and
+ spi->cs_gpiod references with function call
+Message-ID: <00684da3-520f-459d-b6bd-55e728e93ebf@sirena.org.uk>
+References: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com>
+ <20230306172109.595464-2-amit.kumar-mahapatra@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="RfYQ7lwbbyjtjTUN"
+Content-Disposition: inline
+In-Reply-To: <20230306172109.595464-2-amit.kumar-mahapatra@amd.com>
+X-Cookie: teamwork, n.:
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,94 +110,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kefeng,
 
-On Mon, 6 Mar 2023 09:56:49 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+--RfYQ7lwbbyjtjTUN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> 
-> On 2023/3/6 9:10, Kefeng Wang wrote:
-> > 
-> > 
-> > On 2023/3/4 2:39, SeongJae Park wrote:
-> >> Hi Kefeng,
-> >>
-> >> On Fri, 3 Mar 2023 16:43:42 +0800 Kefeng Wang 
-> >> <wangkefeng.wang@huawei.com> wrote:
-> >>
-> >>> Omit three lines by unified folio_put(), and make code more clear.
-> >>>
-> >>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> >>> ---
-> >>>   mm/damon/paddr.c | 11 ++++-------
-> >>>   1 file changed, 4 insertions(+), 7 deletions(-)
-> >>>
-> >>> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
-> >>> index 3fda00a0f786..2ef9db0189ca 100644
-> >>> --- a/mm/damon/paddr.c
-> >>> +++ b/mm/damon/paddr.c
-> >>> @@ -130,24 +130,21 @@ static bool damon_pa_young(unsigned long paddr, 
-> >>> unsigned long *folio_sz)
-> >>>               accessed = false;
-> >>>           else
-> >>>               accessed = true;
-> >>> -        folio_put(folio);
-> >>>           goto out;
-> >>
-> >> Because you moved 'out' label to not include *folio_sz setting, 
-> >> folio_sz will
-> >> not set in this case.  It should be set.
-> > oh, it should be fixed.
-> >>
-> >>>       }
-> >>>       need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
-> >>> -    if (need_lock && !folio_trylock(folio)) {
-> >>> -        folio_put(folio);
-> >>> -        return false;
-> >>> -    }
-> 
-> Hi SJ,  apart from above issue, it looks that this branch need the 
-> folio_size() setting, right?
+On Mon, Mar 06, 2023 at 10:50:55PM +0530, Amit Kumar Mahapatra wrote:
 
-folio_sz is effectively used by caller of damon_pa_young() only if this
-function returns true, so this branch doesn't need to set folio_sz.
+>  drivers/spi/spi-omap-100k.c       |  2 +-
 
+This is also not against -rc1, this file was removed in bcace9c4c9270292
+("spi: remove omap 100K driver").
 
-Thanks,
-SJ
+--RfYQ7lwbbyjtjTUN
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Thanks
-> 
-> >>> +    if (need_lock && !folio_trylock(folio))
-> >>> +        goto out;
-> >>>       rmap_walk(folio, &rwc);
-> >>>       if (need_lock)
-> >>>           folio_unlock(folio);
-> >>> -    folio_put(folio);
-> >>> -out:
-> >>>       *folio_sz = folio_size(folio);
-> >>> +out:
-> >>> +    folio_put(folio);
-> >>
-> >> Before this change, folio_size() is called after folio_put().  
-> >> Shouldn't it be
-> >> called before folio_put()?  If so, could we make a separate fix for 
-> >> that first,
-> >> and then make this change on top of it, so that it can be easily 
-> >> applied to
-> >> relevant stable kernels?
-> >>
-> > Yes， I could separate it, after folio_put(), the folio could be 
-> > re-allocated and the folio_size calculation is not right.
-> >>
-> >> Thanks,
-> >> SJ
-> >>
-> >>>       return accessed;
-> >>>   }
-> >>> -- 
-> >>> 2.35.3
-> >>>
-> >>>
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQGWsMACgkQJNaLcl1U
+h9C7Fwf+MqZVyi3PlI6YIKPDaaFyWnmjZtweIjxd+4E2eEmTZq9MbcCHS/W56cUk
+TPWusPOjIa33XHC376rZpTYGqNTRjvOo8UwttJFAFQFbtMNui8BfC1bnrROwoyUE
+AxcOxhCAi3r1P0nRIkS126TepySOo1qXD1gf6YUQydf6/iDxzq7VddVjfqtt3dPF
+6rnt0G5xA5O0Z75Kc76h4ePCX7kXMqJhJSaJf7HFcGwD2P5HIeRcRyucD2q4Ddnr
+KzkdziV90/s6X7Q9cfiA620jfm8jVdqqN3yC+JX/L2Iu8kpeefFFgD49yG2aMtxv
+zgXP6uMpvQm5g7F9e/wo/JMWhjfh8g==
+=uJRe
+-----END PGP SIGNATURE-----
+
+--RfYQ7lwbbyjtjTUN--
