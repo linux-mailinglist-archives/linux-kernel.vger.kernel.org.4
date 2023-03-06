@@ -2,79 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5420A6ACB2F
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB296ACB55
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:52:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjCFRsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:48:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
+        id S229542AbjCFRwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFRsi (ORCPT
+        with ESMTP id S229494AbjCFRwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:48:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1D53430B;
-        Mon,  6 Mar 2023 09:48:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 6 Mar 2023 12:52:43 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D5C6A9FC;
+        Mon,  6 Mar 2023 09:52:14 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DCFC61048;
-        Mon,  6 Mar 2023 17:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C157EC4339B;
-        Mon,  6 Mar 2023 17:46:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678124819;
-        bh=2xAqNTwrDq2LIIw4+r+fHmkupi82Qi06RmkBf/KDGw8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=F3d+6PemnsnEXRzXxdpfM+0fl9NG55ehEN2AGgFJLXKRu8jywGX8MMdFvu2vU+csi
-         v5MB2ixaNbkmC/gyVabzDzB7Gn7gZsZn6s+W+lLf9qDZCeloQD0mHzEQUPcCHDeHyJ
-         6L2WvvUOi5arbnSwbhnt6JR/bnIriSaxc9oXkthN3I28asRtICWqL/myJZEApY9B66
-         iTyz4HMwqYiCE3EguNkMDPmhbrTkXq83n86pvHRRCxXhXyCtEXWVLNFeF921imGBmg
-         8nsuRxFGIvRCKSgfu3wbLgrVCUFUXZF360Eapzo0Ywi1LKkie53BAET6uqBhodxiI3
-         jlYAw8ZGWHnWQ==
-Date:   Mon, 6 Mar 2023 09:46:57 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Gene Chen <gene_chen@richtek.com>, linux-leds@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH v4 11/11] net: dsa: hellcreek: Get rid of custom
- led_init_default_state_get()
-Message-ID: <20230306094657.6f1190d2@kernel.org>
-In-Reply-To: <ZAYMvVR+6eQ9qjAk@smile.fi.intel.com>
-References: <20230103131256.33894-1-andriy.shevchenko@linux.intel.com>
-        <20230103131256.33894-12-andriy.shevchenko@linux.intel.com>
-        <ZAYMvVR+6eQ9qjAk@smile.fi.intel.com>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2D91A1FDDD;
+        Mon,  6 Mar 2023 17:47:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678124825; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yyo0XeW7H32v2n33gFS+jMOXmRmlgHGjCX1E7zeS1w0=;
+        b=R5OU+pfkoKfQA+ShDkrA2Ab/7GQX8V5UAbQDog+dOafDsBbUj/UFcnZ9pk4PuaqeDlUO+f
+        oEJZK3fuTgGttOPw1FFsK2b1lsEmqtpmRJraKGUb4fXL/rOpwohtJYV8v2U74LbuU0qxLx
+        7GQOmS+j6Iq/Ip1rqQ6QQwJHu958cZ8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0F44013513;
+        Mon,  6 Mar 2023 17:47:05 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rL6vARknBmSSfAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 06 Mar 2023 17:47:05 +0000
+Date:   Mon, 6 Mar 2023 18:47:04 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yue Zhao <findns94@gmail.com>
+Cc:     akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        hannes@cmpxchg.org, shakeelb@google.com, muchun.song@linux.dev,
+        willy@infradead.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, tangyeechou@gmail.com
+Subject: Re: [PATCH v2, 1/4] mm, memcg: Prevent memory.oom.group load/store
+ tearing
+Message-ID: <ZAYnGK8mXjxmarDm@dhcp22.suse.cz>
+References: <20230306154138.3775-1-findns94@gmail.com>
+ <20230306154138.3775-2-findns94@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306154138.3775-2-findns94@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Mar 2023 17:54:37 +0200 Andy Shevchenko wrote:
-> On Tue, Jan 03, 2023 at 03:12:56PM +0200, Andy Shevchenko wrote:
-> > LED core provides a helper to parse default state from firmware node.
-> > Use it instead of custom implementation.  
+On Mon 06-03-23 23:41:35, Yue Zhao wrote:
+> The knob for cgroup v2 memory controller: memory.oom.group
+> is not protected by any locking so it can be modified while it is used.
+> This is not an actual problem because races are unlikely (the knob is
+> usually configured long before any workloads hits actual memcg oom)
+> but it is better to use READ_ONCE/WRITE_ONCE to prevent compiler from
+> doing anything funky.
 > 
-> Jakub, if you are okay with thi, it may be applied now
-> (Lee hadn't taken it in via LEDS subsystem for v6.3-rc1).
+> The access of memcg->oom_group is lockless, so it can be
+> concurrently set at the same time as we are trying to read it.
+> 
+> Signed-off-by: Yue Zhao <findns94@gmail.com>
 
-Just patch 11 into net-next? SG, but could you repost?
-I'd have to manually pick it out of the series.
+Acked-by: Michal Hocko <mhocko@suse.com>
+Thanks!
+
+> ---
+>  mm/memcontrol.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 5abffe6f8389..06821e5f7604 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -2067,7 +2067,7 @@ struct mem_cgroup *mem_cgroup_get_oom_group(struct task_struct *victim,
+>  	 * highest-level memory cgroup with oom.group set.
+>  	 */
+>  	for (; memcg; memcg = parent_mem_cgroup(memcg)) {
+> -		if (memcg->oom_group)
+> +		if (READ_ONCE(memcg->oom_group))
+>  			oom_group = memcg;
+>  
+>  		if (memcg == oom_domain)
+> @@ -6623,7 +6623,7 @@ static int memory_oom_group_show(struct seq_file *m, void *v)
+>  {
+>  	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
+>  
+> -	seq_printf(m, "%d\n", memcg->oom_group);
+> +	seq_printf(m, "%d\n", READ_ONCE(memcg->oom_group));
+>  
+>  	return 0;
+>  }
+> @@ -6645,7 +6645,7 @@ static ssize_t memory_oom_group_write(struct kernfs_open_file *of,
+>  	if (oom_group != 0 && oom_group != 1)
+>  		return -EINVAL;
+>  
+> -	memcg->oom_group = oom_group;
+> +	WRITE_ONCE(memcg->oom_group, oom_group);
+>  
+>  	return nbytes;
+>  }
+> -- 
+> 2.17.1
+
+-- 
+Michal Hocko
+SUSE Labs
