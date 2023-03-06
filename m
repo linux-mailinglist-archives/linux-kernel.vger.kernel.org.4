@@ -2,104 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 879606AC202
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D786AC205
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCFN5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:57:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S230138AbjCFN6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjCFN5h (ORCPT
+        with ESMTP id S230117AbjCFN57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:57:37 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CB9301AB
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:57:36 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id m4so6641893qvq.3
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:57:36 -0800 (PST)
+        Mon, 6 Mar 2023 08:57:59 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8E7449B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:57:55 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id t15so8901968wrz.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:57:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1678111056;
+        d=linaro.org; s=google; t=1678111074;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GmA2ePEzRRQc73jhPODT2wkiXWYmm8Zye+szvA29uao=;
-        b=UAuT69Iva6Y5Q9vXW0yORioDG50uwICCfsAQ6iCSfwASQGzx7S8/SDEbtX7HL9mEC1
-         kXFA69dsqd9CspV6FwZo3lIxi6RBUh87k+8tHWBH42RFsB4XN2Ez+t64v5pMgYtJZk76
-         Obdkhfslj6+yvs4i8rQmo9hw7meTTH+/2dHTFayd7Kbq17LhNVYxb+AK5sIG2h+5DRk3
-         DmAzGrWcr2oBerZlBcYaOgrKFfy0yBHanZoZ3Ao2d+H4W7ZbVAAWxg+tje2jsXceibom
-         epuEWVgCQFuzdjpamjKA/Xt9ySnszKl8vu/Lphd167yCtPki4r8QfdLW8FBoPj9lm5t6
-         X6AA==
+        bh=P1EoLUuBr64ri9Y94yjd26dmmu4IbZltPwpImALUreU=;
+        b=PeOw80iYd9tp/JQfc6pX1uwoERV/YGNa6GxEY9RMum5+mpx348WzhUfKezkq9P3g7X
+         Mqs57h8I+f2F5Rrql2OpV+CDlkD27qFqfNpHQH/tHEPIswZ5UetMmypq0zGc8o2ioHYC
+         gEGXy2Gkj8tJCrJVQFv17yI+DetRocDl7vxh0nFE0VLBd8DS7B4jtsc/rAOgHEN4J6qA
+         XwPZiQTbSyCfGNpMsp/IAS76fnZdS/hRhPiq/vrkgwUdBdNp8DdzCVRAfH0St/iDoD42
+         KKkPN4N2qe1mHeIp2LFMqPTZa94icaH9Gveim0LmCj1Aj7zqq24S3iyCqDzSiklWLcTJ
+         p3eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678111056;
+        d=1e100.net; s=20210112; t=1678111074;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GmA2ePEzRRQc73jhPODT2wkiXWYmm8Zye+szvA29uao=;
-        b=YrCSLKX4KNP9tZNC1INWSqNnBX/Ge5NyN6cr5K9Wdrt/yOkqP7g2Hm/Az1fPjlH1SB
-         4Y7EsAPCYaaWdznz35SkbQBMD6en+3ETTLlZQaDjGB5+sELAYqQY48uCzlwcyBFCkHtO
-         g5qjfUNrEwCVs1CUy4/ndT3VBT4p7jBkm5TPuMLYMrCUlTVLY4o/unju2PgrMt6BG24N
-         VdYcRK4gXTTg+aJS12C7Fbd3Mb0sk3pIO0kG1Q5PsU0tEgc2Oxli1JqnV5u0lc2v3+TA
-         1XkeLq+2V4w0qk4GkNoD34MTPC/JaocAo0cWST709jfqLWOvfZasmgmAF3O9b3NE2AK+
-         dejw==
-X-Gm-Message-State: AO0yUKUKlE7OWTbm6Ef4BtybpkqogWCAYDntBAFAX51bMPtl/97jb95l
-        cZACH/MWmAxokQv/+ztrvN/duQ==
-X-Google-Smtp-Source: AK7set+xu3a5y5TdFxFDxJnv0QKElNGgr/wZ8g0z/9UIRGa/GPpvhPKo8/RjGkS7BQXZrFfmFpoewg==
-X-Received: by 2002:a05:6214:5089:b0:56f:8ef:693 with SMTP id kk9-20020a056214508900b0056f08ef0693mr18088668qvb.0.1678111055926;
-        Mon, 06 Mar 2023 05:57:35 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05620a121300b007424376ca4bsm7456920qkj.18.2023.03.06.05.57.34
+        bh=P1EoLUuBr64ri9Y94yjd26dmmu4IbZltPwpImALUreU=;
+        b=6U3Fd4vFPZmXtWOF1tH69ivSpNIW4EBm1OR+18lGs6HhsYO/rUCIpdfdFUIhSDOqIC
+         8f0rtOfNrPilp3o8+jgwTCRJKDzMs3ols05Blv8FyX5DQDZFWx1molnDmLpXOTvV5iU5
+         SgoIVXIrnikDahZPZuGiExvvBk42FwIeOxCvqjCBRKbEyrl1+hfAgnT2cJh+K2XeGe/b
+         IU35fQqI3QPtlxpICr+0xolWfvgoBv/Ei8zxK062x6AsUXxfFO6evFG3Z90rYdTpCJ7O
+         c+1h/n6OFf0luRXIqQ6UFqoQBPTaxEbWqcp48YZHbKOBaA+H3GHswbwj0z6pkI2JG5Az
+         qyiQ==
+X-Gm-Message-State: AO0yUKWIGoPhvbfgpHPJL3KrM3Fr/hnG8utnQlbve+m7aErKZmkWzr03
+        B6JBAtDjhz7r2lvSWCsGakMD4w==
+X-Google-Smtp-Source: AK7set/ThLdaGeyDxzUSTUcgVYoCng2a28njZtarQGUr197RpgLQFxyiGrv7EXzG2Np+FD1wrIGwrQ==
+X-Received: by 2002:a5d:4563:0:b0:2cd:8a2e:14e with SMTP id a3-20020a5d4563000000b002cd8a2e014emr7980239wrc.34.1678111073807;
+        Mon, 06 Mar 2023 05:57:53 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id f2-20020adfdb42000000b002c54fb024b2sm9822092wrj.61.2023.03.06.05.57.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 05:57:34 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1pZBLK-00CcHk-6V;
-        Mon, 06 Mar 2023 09:57:34 -0400
-Date:   Mon, 6 Mar 2023 09:57:34 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     "K V P, Satyanarayana" <satyanarayana.k.v.p@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alex.williamson@redhat.com, cohuck@redhat.com
-Subject: Re: [PATCH] vfio/pci: Add DVSEC PCI Extended Config Capability to
- user visible list.
-Message-ID: <ZAXxTiWU489dDssW@ziepe.ca>
-References: <20230303055426.2299006-1-satyanarayana.k.v.p@intel.com>
+        Mon, 06 Mar 2023 05:57:53 -0800 (PST)
+Date:   Mon, 6 Mar 2023 15:57:52 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v3] soc: qcom: llcc: Fix slice configuration values for
+ SC8280XP
+Message-ID: <ZAXxYPZ/zarxcsNF@linaro.org>
+References: <20230219165701.2557446-1-abel.vesa@linaro.org>
+ <ZAXkIHOom26DlVx0@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230303055426.2299006-1-satyanarayana.k.v.p@intel.com>
+In-Reply-To: <ZAXkIHOom26DlVx0@hovoldconsulting.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 05:54:26AM +0000, K V P, Satyanarayana wrote:
-> Intel Platform Monitoring Technology (PMT) support is indicated by presence
-> of an Intel defined PCIe Designated Vendor Specific Extended Capabilities
-> (DVSEC) structure with a PMT specific ID.However DVSEC structures may also
-> be used by Intel to indicate support for other features. The Out Of Band Management
-> Services Module (OOBMSM) uses DVSEC to enumerate several features, including PMT.
+On 23-03-06 14:01:20, Johan Hovold wrote:
+> On Sun, Feb 19, 2023 at 06:57:01PM +0200, Abel Vesa wrote:
+> > The slice IDs for CVPFW, CPUSS1 and CPUWHT currently overflow the 32bit
+> > LLCC config registers. Fix that by using the slice ID values taken from
+> > the latest LLCC SC table.
 > 
-> The current VFIO driver does not pass DVSEC capabilities to virtual machine (VM)
-> which makes intel_vsec driver not to work in the VM. This series adds DVSEC
-> capability to user visible list to allow its use with VFIO.
+> This still doesn't really explain what the impact of this bug is (e.g.
+> for people doing backports), but I guess this will do.
 > 
-> Signed-off-by: K V P Satyanarayana <satyanarayana.k.v.p@intel.com>
-> ---
->  drivers/vfio/pci/vfio_pci_config.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
 
-Wasn't the IDXD/SIOV team proposing to use the fact that DVSEC doesn't
-propogate to indicate that IMS doesn't work?
+Sent a v4 here:
+https://lore.kernel.org/all/20230306135527.509796-1-abel.vesa@linaro.org/
 
-Did this plan get abandoned? It seems at odds with this patch.
+> > Fixes: ec69dfbdc426 ("soc: qcom: llcc: Add sc8180x and sc8280xp configurations")
+> > Cc: stable@vger.kernel.org	# 5.19+
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > Tested-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+> > Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+> > Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
 
-Why would you use a "Platform Monitoring Technology" device with VFIO
-anyhow?
+Added your R-b tag.
 
-Honestly I'm a bit reluctant to allow arbitary config space, some of
-the stuff people put there can be dangerous.
+Thanks.
 
-Jason
+> 
+> > ---
+> > 
+> > The v2 is here:
+> > https://lore.kernel.org/all/20230127144724.1292580-1-abel.vesa@linaro.org/
+> > 
+> > Changes since v2:
+> >  * specifically mentioned the 3 slice IDs that are being fixed and
+> >    what is happening without this patch
+> >  * added stabke Cc line
+> >  * added Juerg's T-b tag
+> >  * added Sai's R-b tag
+> >  * added Konrad's A-b tag
+> > 
+> > Changes since v1:
+> >  * dropped the LLCC_GPU and LLCC_WRCACHE max_cap changes
+> >  * took the new values from documentatio this time rather than
+> >    downstream kernel
+> > 
+> >  drivers/soc/qcom/llcc-qcom.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+> > index 23ce2f78c4ed..26efe12012a0 100644
+> > --- a/drivers/soc/qcom/llcc-qcom.c
+> > +++ b/drivers/soc/qcom/llcc-qcom.c
+> > @@ -191,9 +191,9 @@ static const struct llcc_slice_config sc8280xp_data[] = {
+> >  	{ LLCC_CVP,      28, 512,  3, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+> >  	{ LLCC_APTCM,    30, 1024, 3, 1, 0x0,   0x1, 1, 0, 0, 1, 0, 0 },
+> >  	{ LLCC_WRCACHE,  31, 1024, 1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+> > -	{ LLCC_CVPFW,    32, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+> > -	{ LLCC_CPUSS1,   33, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+> > -	{ LLCC_CPUHWT,   36, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+> > +	{ LLCC_CVPFW,    17, 512,  1, 0, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+> > +	{ LLCC_CPUSS1,   3, 2048, 1, 1, 0xfff, 0x0, 0, 0, 0, 1, 0, 0 },
+> > +	{ LLCC_CPUHWT,   5, 512,  1, 1, 0xfff, 0x0, 0, 0, 0, 0, 1, 0 },
+> >  };
+> >  
+> >  static const struct llcc_slice_config sdm845_data[] =  {
