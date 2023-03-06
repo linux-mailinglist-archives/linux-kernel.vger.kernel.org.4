@@ -2,200 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4EF36AC9E6
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 983046AC989
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjCFRYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S230002AbjCFRNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjCFRYa (ORCPT
+        with ESMTP id S229842AbjCFRNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:24:30 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2976421285
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:23:56 -0800 (PST)
-Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A25823F59A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 16:44:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678121077;
-        bh=N4pZqm54gYdFBwXOZFEaxtEajFYJlONCrwosIbU2uiM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=QE96Uuq1TatICmI/zZqfP0tZPaQgYNQaZaCqZ8JuL/NXJCe8ESyPMUskOae87l80A
-         zmLphKrushBO5KyBrM/anLrTHySzInggQenKZ0Yjal7B9R97HVyIZi7z2vPWW+O+xV
-         pc+OlwUKZiaHPh01C77u3PYQO+qd6K/gej7IZnumKU/zmYx3XawMKI8S7zIdXzcdNE
-         e3Os+PPih4XsYrvecFiL+PrnpiZkQnUPPLD/eb37En/zl3sjPiYfxShRxqs+XKM8Bx
-         ovKrUDLCYA32ii5d/L00uyji9zr0Z6cpJvMWWnylneT6NjbCKUyDyNZHJmf16nGAIv
-         lrlyT4IGJovZg==
-Received: by mail-yb1-f198.google.com with SMTP id l24-20020a25b318000000b007eba3f8e3baso10915180ybj.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 08:44:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678121076;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N4pZqm54gYdFBwXOZFEaxtEajFYJlONCrwosIbU2uiM=;
-        b=f/ndfGEmJ/i8C8U4ZI1gF8AEyM0UUWkbezZEE8iwY2+lVEtvJH4fCBhlvGT+gonruM
-         V6WcCM3lka2aYwjQ1AozE00HMEZz2R46tWXum6l6mtN2cGaqvxnYmdolPpf7CxGJWIxI
-         Fq5ocgx81hLT4e6G8QxpvdYpv4onqSfD44Vx6JX9mbBuuza18psPxFyIQ/HIEYP6C70e
-         sn88Y4+5RV6cN7TLAv4027kBl3ZF2fHXa0LdlE5mRWV2o7TXR3YqebKTbqhmT++lnIXy
-         7IisMMJRW29ynSMgXdCI1eJ96Xb3wEDfg5p1Q+q7togoHe0uDXgeCWzGcUnNKwII4FQa
-         NhPA==
-X-Gm-Message-State: AO0yUKXIbjx+77oK+aAoBr1SQubaeK5GOztCP2V+J2hMN5SBVgFftjG6
-        56oOjoR1fgG21W49Mhv4r+R+2ShyPbYOg3Wy51gQSzAF8t48S5kggWo+fYKo224fSmivDpITjUC
-        cJbwUdCqjmvRZsCibh/Ee1+j31LDD0Z9DpowR386IXuDXZfUuEG/f6OZHZg==
-X-Received: by 2002:a81:a9c8:0:b0:52e:e8b1:d51e with SMTP id g191-20020a81a9c8000000b0052ee8b1d51emr7465363ywh.1.1678121076341;
-        Mon, 06 Mar 2023 08:44:36 -0800 (PST)
-X-Google-Smtp-Source: AK7set9t9XdHrJtxVtH0ONr/3NYE6bRrCkF4ZonnKvX7muAawmENQQ11spvKR6dxbZNlzl+jdmOZ61w3k/mqwDTQT0c=
-X-Received: by 2002:a81:a9c8:0:b0:52e:e8b1:d51e with SMTP id
- g191-20020a81a9c8000000b0052ee8b1d51emr7465342ywh.1.1678121076070; Mon, 06
- Mar 2023 08:44:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20230220193754.470330-1-aleksandr.mikhalitsyn@canonical.com> <CAJfpegvQyD-+EL2DdVWmyKF8odYWj4kAONyRf6VH_h4JCTu=vg@mail.gmail.com>
-In-Reply-To: <CAJfpegvQyD-+EL2DdVWmyKF8odYWj4kAONyRf6VH_h4JCTu=vg@mail.gmail.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Mon, 6 Mar 2023 17:44:25 +0100
-Message-ID: <CAEivzxdX28JhA+DY92nTGn56kmMgdeT9WX__j7NU3QHpg+wcdQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/9] fuse: API for Checkpoint/Restore
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     mszeredi@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Amir Goldstein <amir73il@gmail.com>,
-        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
-        Seth Forshee <sforshee@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        criu@openvz.org, flyingpeng@tencent.com
+        Mon, 6 Mar 2023 12:13:44 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E011F2FCF9;
+        Mon,  6 Mar 2023 09:13:17 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PVkrT6B2Qz9v7HC;
+        Tue,  7 Mar 2023 00:42:17 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwCncFfRGQZkRM51AQ--.18145S2;
+        Mon, 06 Mar 2023 17:50:38 +0100 (CET)
+Message-ID: <ebd9c87f809e586ccd1647171f9f940ce195b03d.camel@huaweicloud.com>
+Subject: Re: [PATCH 21/28] security: Introduce inode_post_remove_acl hook
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        chuck.lever@oracle.com, jlayton@kernel.org, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Mon, 06 Mar 2023 17:50:22 +0100
+In-Reply-To: <2dcc460c-73ff-d468-0c43-63ccbe0c4f9e@linux.ibm.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+         <20230303181842.1087717-22-roberto.sassu@huaweicloud.com>
+         <6393eb31-5eb3-cb1c-feb7-2ab347703042@linux.ibm.com>
+         <7bde74e6e5ccf24b2a2bd9dc2bbfcae5c424eac7.camel@huaweicloud.com>
+         <2dcc460c-73ff-d468-0c43-63ccbe0c4f9e@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwCncFfRGQZkRM51AQ--.18145S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WrWDCF1UGw1rGw47Cr1rZwb_yoW8ArW8pF
+        47K3WYkr4vqry7Gr1xta18W3s29rWfWry7Z3Z8uryUXFnYyrnFgryfu3W5uFyrGrnFkF1F
+        qa15ZF1fZ345ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAIBF1jj4pAMgAAsE
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 5:15=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu> w=
-rote:
->
-> On Mon, 20 Feb 2023 at 20:38, Alexander Mikhalitsyn
-> <aleksandr.mikhalitsyn@canonical.com> wrote:
-> >
-> > Hello everyone,
-> >
-> > It would be great to hear your comments regarding this proof-of-concept=
- Checkpoint/Restore API for FUSE.
-> >
-> > Support of FUSE C/R is a challenging task for CRIU [1]. Last year I've =
-given a brief talk on LPC 2022
-> > about how we handle files C/R in CRIU and which blockers we have for FU=
-SE filesystems. [2]
-> >
-> > The main problem for CRIU is that we have to restore mount namespaces a=
-nd memory mappings before the process tree.
-> > It means that when CRIU is performing mount of fuse filesystem it can't=
- use the original FUSE daemon from the
-> > restorable process tree, but instead use a "fake daemon".
-> >
-> > This leads to many other technical problems:
-> > * "fake" daemon has to reply to FUSE_INIT request from the kernel and i=
-nitialize fuse connection somehow.
-> > This setup can be not consistent with the original daemon (protocol ver=
-sion, daemon capabilities/settings
-> > like no_open, no_flush, readahead, and so on).
-> > * each fuse request has a unique ID. It could confuse userspace if this=
- unique ID sequence was reset.
-> >
-> > We can workaround some issues and implement fragile and limited support=
- of FUSE in CRIU but it doesn't make any sense, IMHO.
-> > Btw, I've enumerated only CRIU restore-stage problems there. The dump s=
-tage is another story...
-> >
-> > My proposal is not only about CRIU. The same interface can be useful fo=
-r FUSE mounts recovery after daemon crashes.
-> > LXC project uses LXCFS [3] as a procfs/cgroupfs/sysfs emulation layer f=
-or containers. We are using a scheme when
-> > one LXCFS daemon handles all the work for all the containers and we use=
- bindmounts to overmount particular
-> > files/directories in procfs/cgroupfs/sysfs. If this single daemon crash=
-es for some reason we are in trouble,
-> > because we have to restart all the containers (fuse bindmounts become i=
-nvalid after the crash).
-> > The solution is fairly easy:
-> > allow somehow to reinitialize the existing fuse connection and replace =
-the daemon on the fly
-> > This case is a little bit simpler than CRIU cause we don't need to care=
- about the previously opened files
-> > and other stuff, we are only interested in mounts.
-> >
-> > Current PoC implementation was developed and tested with this "recovery=
- case".
-> > Right now I only have LXCFS patched and have nothing for CRIU. But I wa=
-nted to discuss this idea before going forward with CRIU.
->
+On Mon, 2023-03-06 at 11:16 -0500, Stefan Berger wrote:
+> 
+> On 3/6/23 10:34, Roberto Sassu wrote:
+> > On Mon, 2023-03-06 at 10:22 -0500, Stefan Berger wrote:
+> > > On 3/3/23 13:18, Roberto Sassu wrote:
+> > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > 
+> > > > In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> > > > the inode_post_remove_acl hook.
+> > > > 
+> > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > ---
+> > > >    
+> > > > +/**
+> > > > + * security_inode_post_remove_acl() - Update inode sec after remove_acl op
+> > > > + * @idmap: idmap of the mount
+> > > > + * @dentry: file
+> > > > + * @acl_name: acl name
+> > > > + *
+> > > > + * Update inode security field after successful remove_acl operation on @dentry
+> > > > + * in @idmap. The posix acls are identified by @acl_name.
+> > > > + */
+> > > > +void security_inode_post_remove_acl(struct mnt_idmap *idmap,
+> > > > +				    struct dentry *dentry, const char *acl_name)
+> > > > +{
+> > > > +	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+> > > > +		return;
+> > > 
+> > > Was that a mistake before that EVM and IMA functions did not filtered out private inodes?
+> > 
+> > Looks like that. At least for hooks that are not called from
+> > security.c.
+> 
+> It seems like that all security_* functions are filtering on private inodes. Anonymous inodes have them and some filesystem set the S_PRIVATE flag. So it may not make a difference fro IMA and EVM then.
 
-Hi Miklos,
+Currently, what it would happen is that the HMAC would be updated
+without check, since the check function is usually in security.c
+(skipped) and the post elsewhere.
 
-> Apparently all of the added mechanisms (REINIT, BM_REVAL, conn_gen)
-> are crash recovery related, and not useful for C/R.  Why is this being
-> advertised as a precursor for CRIU support?
+With this patch set, also the post function would not be executed for
+private inodes. Maybe, it is worth mentioning it in the next version.
 
-It's because I'm doing this with CRIU in mind too, I think it's a good
-way to make a universal interface
-which can address not only the recovery case but also the C/R, cause
-in some sense it's a close problem.
-But of course, Checkpoint/Restore is a way more trickier. But before
-doing all the work with CRIU PoC,
-I wanted to consult with you and folks if there are any serious
-objections to this interface/feature or, conversely,
-if there is someone else who is interested in it.
+Thanks
 
-Now about interfaces REINIT, BM_REVAL.
+Roberto
 
-I think it will be useful for CRIU case, but probably I need to extend
-it a little bit, as I mentioned earlier in the cover letter:
-> >* "fake" daemon has to reply to FUSE_INIT request from the kernel and in=
-itialize fuse connection somehow.
-> > This setup can be not consistent with the original daemon (protocol ver=
-sion, daemon capabilities/settings
-> > like no_open, no_flush, readahead, and so on).
-
-So, after the "fake" demon has done its job during CRIU restore, we
-need to replace it with the actual demon from
-the dumpee tree and performing REINIT looks like a sanner way.
-
-The next point is that if we use REINIT during CRIU restore, then we
-automatically need to have BM_REINIT too,
-otherwise all restored bind mounts become invalid.
-
-Conn generation is not a problem for CRIU if we are not exposing it to
-the userspace. It's just a technical thing to distinguish
-old and new inodes/struct file's.
-
->
-> BTW here's some earlier attempt at partial recovery, which might be inter=
-esting:
->
->   https://lore.kernel.org/all/CAPm50a+j8UL9g3UwpRsye5e+a=3DM0Hy7Tf1FdfwOr=
-UUBWMyosNg@mail.gmail.com/
-
-Oh, that's interesting. Thanks for mentioning this! And the most
-interesting thing is that Peng Hao mentioned LXCFS as a use case :-)
-
-Added Peng Hao to CC
-
-Kind regards,
-Alex
-
->
-> Thanks,
-> Miklos
