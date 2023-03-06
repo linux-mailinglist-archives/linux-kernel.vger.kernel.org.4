@@ -2,261 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5FF6AC897
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9346AC84D
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 17:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjCFQql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 11:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S230006AbjCFQis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 11:38:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbjCFQoq (ORCPT
+        with ESMTP id S230028AbjCFQhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 11:44:46 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351223E0BD;
-        Mon,  6 Mar 2023 08:44:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678121052; x=1709657052;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QVUG5pYfIfodoRxXWSPA3x0woex1T7VrzLO0WLb6X9k=;
-  b=gim7WJQGLwSCKuz3rSui8ITDySSqIJ1UTbEar0vu4w8y33il9yWXB/7k
-   JNdgMK1k7MiIkdsWoVFwyUzee8F4AP2MU8XYi5/k2cox2Ci1/zJl1bYAf
-   pvAiy/V/3WibtDSzWhsKGwWMM0/v4Ff3NUw6bMe2E6M40RYvQoG7teqsI
-   k7jkGa9HSDglA6sc/MeG1Id6oq3YkUiT5bC6wpEY2TskUgMjhPjdghB0T
-   wn2YkOML7k2DvaZ5P0zVGU6bokPB3Ecu0JZn3JXaIuYRAuMGWQuyLATc7
-   GjbzBBBQnDeLnvakDILWsY4r21dq0U0fsFj1i4PWVvm/z/YmplWnoRoG7
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="398181191"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="398181191"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2023 08:32:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="669504567"
-X-IronPort-AV: E=Sophos;i="5.98,238,1673942400"; 
-   d="scan'208";a="669504567"
-Received: from fyu1.sc.intel.com ([172.25.103.126])
-  by orsmga007.jf.intel.com with ESMTP; 06 Mar 2023 08:31:59 -0800
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Vinod Koul" <vkoul@kernel.org>,
-        "Dave Jiang" <dave.jiang@intel.com>
-Cc:     dmaengine@vger.kernel.org,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Tony Zhu <tony.zhu@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v2 16/16] dmaengine: idxd: add per wq PRS disable
-Date:   Mon,  6 Mar 2023 08:31:38 -0800
-Message-Id: <20230306163138.587484-17-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230306163138.587484-1-fenghua.yu@intel.com>
-References: <20230306163138.587484-1-fenghua.yu@intel.com>
+        Mon, 6 Mar 2023 11:37:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1640B410A9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 08:35:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678120504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8gChhWa5+pV9cvva7KKeCwxEw+kt5hxoG0ztKCrLbRE=;
+        b=Ecxh7HjTlmpjSP+r2T058X2l2otz6koqr/ebem0PJ9W/B8NsVyUllFRfbci2yjsTOSLf9a
+        HlXF4K9ITZe6jSzY3XaK9morIxklujf1VDYsaLlqWkjXK6fALpolimN4OvYHOlWu0SSA56
+        rIozv5FPI1tFEAHDN8H8pjBThvWSLPA=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-479-xAeRr96XNX6SiROa8aY1Yg-1; Mon, 06 Mar 2023 11:31:52 -0500
+X-MC-Unique: xAeRr96XNX6SiROa8aY1Yg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 583BE3850545;
+        Mon,  6 Mar 2023 16:31:50 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.80])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 62FB140C10FA;
+        Mon,  6 Mar 2023 16:31:42 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     szabolcs.nagy@arm.com
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>, "nd@arm.com" <nd@arm.com>
+Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
+ description
+References: <Y/9fdYQ8Cd0GI+8C@arm.com>
+        <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
+        <df8ef3a9e5139655a223589c16a68393ab3f6d1d.camel@intel.com>
+        <ZADQISkczejfgdoS@arm.com>
+        <9714f724b53b04fdf69302c6850885f5dfbf3af5.camel@intel.com>
+        <ZAYS6CHuZ0MiFvmE@arm.com>
+Date:   Mon, 06 Mar 2023 17:31:40 +0100
+In-Reply-To: <ZAYS6CHuZ0MiFvmE@arm.com> (szabolcs's message of "Mon, 6 Mar
+        2023 16:20:56 +0000")
+Message-ID: <87wn3tsuxf.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Jiang <dave.jiang@intel.com>
+* szabolcs:
 
-Add sysfs knob for per wq Page Request Service disable. This knob
-disables PRS support for the specific wq. When this bit is set,
-it also overrides the wq's block on fault enabling.
+> syscall overhead in case of frequent stack trace collection can be
+> avoided by caching (in tls) when ssp falls within the thread shadow
+> stack bounds. otherwise caching does not work as the shadow stack may
+> be reused (alt shadow stack or ucontext case).
 
-Tested-by: Tony Zhu <tony.zhu@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
----
- .../ABI/stable/sysfs-driver-dma-idxd          | 10 ++++
- drivers/dma/idxd/device.c                     |  6 +-
- drivers/dma/idxd/idxd.h                       |  1 +
- drivers/dma/idxd/registers.h                  |  5 +-
- drivers/dma/idxd/sysfs.c                      | 57 ++++++++++++++++++-
- 5 files changed, 74 insertions(+), 5 deletions(-)
+Do we need to perform the system call at each page boundary only?  That
+should reduce overhead to the degree that it should not matter.
 
-diff --git a/Documentation/ABI/stable/sysfs-driver-dma-idxd b/Documentation/ABI/stable/sysfs-driver-dma-idxd
-index 5d0df57f5298..534b7a3d59fc 100644
---- a/Documentation/ABI/stable/sysfs-driver-dma-idxd
-+++ b/Documentation/ABI/stable/sysfs-driver-dma-idxd
-@@ -235,6 +235,16 @@ Contact:	dmaengine@vger.kernel.org
- Description:	Indicate whether ATS disable is turned on for the workqueue.
- 		0 indicates ATS is on, and 1 indicates ATS is off for the workqueue.
- 
-+What:		/sys/bus/dsa/devices/wq<m>.<n>/prs_disable
-+Date:		Sept 14, 2022
-+KernelVersion: 6.4.0
-+Contact:	dmaengine@vger.kernel.org
-+Description:	Controls whether PRS disable is turned on for the workqueue.
-+		0 indicates PRS is on, and 1 indicates PRS is off for the
-+		workqueue. This option overrides block_on_fault attribute
-+		if set. It's visible only on platforms that support the
-+		capability.
-+
- What:		/sys/bus/dsa/devices/wq<m>.<n>/occupancy
- Date		May 25, 2021
- KernelVersion:	5.14.0
-diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-index fd97b2b58734..3c80b9681c72 100644
---- a/drivers/dma/idxd/device.c
-+++ b/drivers/dma/idxd/device.c
-@@ -967,12 +967,16 @@ static int idxd_wq_config_write(struct idxd_wq *wq)
- 	wq->wqcfg->priority = wq->priority;
- 
- 	if (idxd->hw.gen_cap.block_on_fault &&
--	    test_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags))
-+	    test_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags) &&
-+	    !test_bit(WQ_FLAG_PRS_DISABLE, &wq->flags))
- 		wq->wqcfg->bof = 1;
- 
- 	if (idxd->hw.wq_cap.wq_ats_support)
- 		wq->wqcfg->wq_ats_disable = test_bit(WQ_FLAG_ATS_DISABLE, &wq->flags);
- 
-+	if (idxd->hw.wq_cap.wq_prs_support)
-+		wq->wqcfg->wq_prs_disable = test_bit(WQ_FLAG_PRS_DISABLE, &wq->flags);
-+
- 	/* bytes 12-15 */
- 	wq->wqcfg->max_xfer_shift = ilog2(wq->max_xfer_bytes);
- 	idxd_wqcfg_set_max_batch_shift(idxd->data->type, wq->wqcfg, ilog2(wq->max_batch_size));
-diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-index b5d7ef611bae..3a20e4933d07 100644
---- a/drivers/dma/idxd/idxd.h
-+++ b/drivers/dma/idxd/idxd.h
-@@ -143,6 +143,7 @@ enum idxd_wq_flag {
- 	WQ_FLAG_DEDICATED = 0,
- 	WQ_FLAG_BLOCK_ON_FAULT,
- 	WQ_FLAG_ATS_DISABLE,
-+	WQ_FLAG_PRS_DISABLE,
- };
- 
- enum idxd_wq_type {
-diff --git a/drivers/dma/idxd/registers.h b/drivers/dma/idxd/registers.h
-index 9f3959d001b6..7b54a3939ea1 100644
---- a/drivers/dma/idxd/registers.h
-+++ b/drivers/dma/idxd/registers.h
-@@ -59,7 +59,8 @@ union wq_cap_reg {
- 		u64 occupancy:1;
- 		u64 occupancy_int:1;
- 		u64 op_config:1;
--		u64 rsvd3:9;
-+		u64 wq_prs_support:1;
-+		u64 rsvd4:8;
- 	};
- 	u64 bits;
- } __packed;
-@@ -371,7 +372,7 @@ union wqcfg {
- 		u32 mode:1;	/* shared or dedicated */
- 		u32 bof:1;	/* block on fault */
- 		u32 wq_ats_disable:1;
--		u32 rsvd2:1;
-+		u32 wq_prs_disable:1;
- 		u32 priority:4;
- 		u32 pasid:20;
- 		u32 pasid_en:1;
-diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
-index 465d2e7627e4..293739ac5596 100644
---- a/drivers/dma/idxd/sysfs.c
-+++ b/drivers/dma/idxd/sysfs.c
-@@ -822,10 +822,14 @@ static ssize_t wq_block_on_fault_store(struct device *dev,
- 	if (rc < 0)
- 		return rc;
- 
--	if (bof)
-+	if (bof) {
-+		if (test_bit(WQ_FLAG_PRS_DISABLE, &wq->flags))
-+			return -EOPNOTSUPP;
-+
- 		set_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags);
--	else
-+	} else {
- 		clear_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags);
-+	}
- 
- 	return count;
- }
-@@ -1109,6 +1113,44 @@ static ssize_t wq_ats_disable_store(struct device *dev, struct device_attribute
- static struct device_attribute dev_attr_wq_ats_disable =
- 		__ATTR(ats_disable, 0644, wq_ats_disable_show, wq_ats_disable_store);
- 
-+static ssize_t wq_prs_disable_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct idxd_wq *wq = confdev_to_wq(dev);
-+
-+	return sysfs_emit(buf, "%u\n", test_bit(WQ_FLAG_PRS_DISABLE, &wq->flags));
-+}
-+
-+static ssize_t wq_prs_disable_store(struct device *dev, struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	struct idxd_wq *wq = confdev_to_wq(dev);
-+	struct idxd_device *idxd = wq->idxd;
-+	bool prs_dis;
-+	int rc;
-+
-+	if (wq->state != IDXD_WQ_DISABLED)
-+		return -EPERM;
-+
-+	if (!idxd->hw.wq_cap.wq_prs_support)
-+		return -EOPNOTSUPP;
-+
-+	rc = kstrtobool(buf, &prs_dis);
-+	if (rc < 0)
-+		return rc;
-+
-+	if (prs_dis) {
-+		set_bit(WQ_FLAG_PRS_DISABLE, &wq->flags);
-+		/* when PRS is disabled, BOF needs to be off as well */
-+		clear_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags);
-+	} else {
-+		clear_bit(WQ_FLAG_PRS_DISABLE, &wq->flags);
-+	}
-+	return count;
-+}
-+
-+static struct device_attribute dev_attr_wq_prs_disable =
-+		__ATTR(prs_disable, 0644, wq_prs_disable_show, wq_prs_disable_store);
-+
- static ssize_t wq_occupancy_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	struct idxd_wq *wq = confdev_to_wq(dev);
-@@ -1239,6 +1281,7 @@ static struct attribute *idxd_wq_attributes[] = {
- 	&dev_attr_wq_max_transfer_size.attr,
- 	&dev_attr_wq_max_batch_size.attr,
- 	&dev_attr_wq_ats_disable.attr,
-+	&dev_attr_wq_prs_disable.attr,
- 	&dev_attr_wq_occupancy.attr,
- 	&dev_attr_wq_enqcmds_retries.attr,
- 	&dev_attr_wq_op_config.attr,
-@@ -1260,6 +1303,13 @@ static bool idxd_wq_attr_max_batch_size_invisible(struct attribute *attr,
- 	       idxd->data->type == IDXD_TYPE_IAX;
- }
- 
-+static bool idxd_wq_attr_wq_prs_disable_invisible(struct attribute *attr,
-+						  struct idxd_device *idxd)
-+{
-+	return attr == &dev_attr_wq_prs_disable.attr &&
-+	       !idxd->hw.wq_cap.wq_prs_support;
-+}
-+
- static umode_t idxd_wq_attr_visible(struct kobject *kobj,
- 				    struct attribute *attr, int n)
- {
-@@ -1273,6 +1323,9 @@ static umode_t idxd_wq_attr_visible(struct kobject *kobj,
- 	if (idxd_wq_attr_max_batch_size_invisible(attr, idxd))
- 		return 0;
- 
-+	if (idxd_wq_attr_wq_prs_disable_invisible(attr, idxd))
-+		return 0;
-+
- 	return attr->mode;
- }
- 
--- 
-2.37.1
+> unfortunately i don't know if syscall overhead is actually a problem
+> (probably not) or if backtrace across signal handlers need to work
+> with alt shadow stack (i guess it should work for crash reporting).
+
+Ideally, we would implement the backtrace function (in glibc) as just a
+shadow stack copy.  But this needs to follow the chain of alternate
+stacks, and it may also need some form of markup for signal handler
+frames (which need program counter adjustment to reflect that a
+*non-signal* frame is conceptually nested within the previous
+instruction, and not the function the return address points to).  But I
+think we can add support for this incrementally.
+
+I assume there is no desire at all on the kernel side that sigaltstack
+transparently allocates the shadow stack?  Because there is no
+deallocation function today for sigaltstack?
+
+Thanks,
+Florian
 
