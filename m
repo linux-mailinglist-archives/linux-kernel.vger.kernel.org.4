@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76776AC949
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72FA56AC967
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjCFRHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S229888AbjCFRKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:10:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCFRHa (ORCPT
+        with ESMTP id S230405AbjCFRJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:07:30 -0500
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1DA410BA;
-        Mon,  6 Mar 2023 09:06:57 -0800 (PST)
+        Mon, 6 Mar 2023 12:09:29 -0500
+Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AC76426E;
+        Mon,  6 Mar 2023 09:08:37 -0800 (PST)
 Received: from relay1-d.mail.gandi.net (unknown [217.70.183.193])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 674B5C3988;
-        Mon,  6 Mar 2023 16:19:02 +0000 (UTC)
+        by mslow1.mail.gandi.net (Postfix) with ESMTP id 786C5CCB67;
+        Mon,  6 Mar 2023 16:20:36 +0000 (UTC)
 Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id 76FE5240014;
-        Mon,  6 Mar 2023 16:18:18 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPA id 4888F240018;
+        Mon,  6 Mar 2023 16:18:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678119502;
+        t=1678119514;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/nlprenBg5iqK2v9en/Tyjgk9ugk7HcEW+YZA+BTTYg=;
-        b=G6hBBgYHQA8YT9J9tu6JtTEhegy5byDUMa2gAleEZyINPCNa+9uatw5zowELIfw4P5RVxI
-        1SqQNW8z0S44BvdZ66cuXpjwpR6Y+CBnlSFpfygamqqgZL8hVidTMZ06ajxlovc/Qsv6DO
-        G5CK3e8BT8+2GQsAZwbPIeSoJ8Zj7+q6lsmhbXiviTZu/BeyyY2oynxgtC5vtcu0Sd0iD0
-        oD1N9AZ4Oay+qIgGa64Br96aKDN+sJe3cdepLR9duPvRcyfZHin2J5e7SSZEJx7XGiXou2
-        uv8RzOOD1GhRvqqSe7KcP76TaFlN4Ml7q8vUA/CQZtXu57kELJwAV05wa7VFrw==
+        bh=CDMQMYGjukRJF5+xivOnEDRyle6JY5AB8vWZa0N3RRY=;
+        b=BbNUmpOslOYyib//IPtgbKZKneVqOqwJUcP+jFj2eWQVB7Gw7xhll9BNaUr7NL2gCWM+4a
+        aFG5zBo/eHAi6DliHuY1so6A8/71hN8nijf2cxc/ULiR45vSCXAgnHim71vrEJ+yaj/5DF
+        yXdnO61bb1N9fYJD4KCo/5eNg9Y0wD6otoZI0+GBYPGI9sGxqEvoT4WrmbEeU9yjJkBGKO
+        AA2/xaHcRvjoRJj4TCorPCBVoBQnTl3q457Wj59vEPl8YclyX/a6SxPYgxZqUsXLQitpaZ
+        CU/Kvg2yKTjSaW9UE8Kp66SbzW3/Ph5IcbKsU6xuTU3dIIdVPo84/wbPA2YZmA==
 From:   Herve Codina <herve.codina@bootlin.com>
 To:     Herve Codina <herve.codina@bootlin.com>,
         Li Yang <leoyang.li@nxp.com>, Rob Herring <robh+dt@kernel.org>,
@@ -52,204 +52,820 @@ To:     Herve Codina <herve.codina@bootlin.com>,
 Cc:     linuxppc-dev@lists.ozlabs.org,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v7 05/10] dt-bindings: soc: fsl: cpm_qe: Add QMC controller
-Date:   Mon,  6 Mar 2023 17:17:49 +0100
-Message-Id: <20230306161754.89146-6-herve.codina@bootlin.com>
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v7 09/10] ASoC: fsl: Add support for QMC audio
+Date:   Mon,  6 Mar 2023 17:17:53 +0100
+Message-Id: <20230306161754.89146-10-herve.codina@bootlin.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230306161754.89146-1-herve.codina@bootlin.com>
 References: <20230306161754.89146-1-herve.codina@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the QMC (QUICC Multichannel Controller) available in
-some PowerQUICC SoC such as MPC885 or MPC866.
+The QMC audio is an ASoC component which provides DAIs that use the QMC
+(QUICC Multichannel Controller) to transfer the audio data.
+
+It provides as many DAIs as the number of QMC channels it references.
 
 Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- .../soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml      | 162 ++++++++++++++++++
- 1 file changed, 162 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
+ sound/soc/fsl/Kconfig         |   9 +
+ sound/soc/fsl/Makefile        |   2 +
+ sound/soc/fsl/fsl_qmc_audio.c | 735 ++++++++++++++++++++++++++++++++++
+ 3 files changed, 746 insertions(+)
+ create mode 100644 sound/soc/fsl/fsl_qmc_audio.c
 
-diff --git a/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
+diff --git a/sound/soc/fsl/Kconfig b/sound/soc/fsl/Kconfig
+index 614eceda6b9e..17db29c25d96 100644
+--- a/sound/soc/fsl/Kconfig
++++ b/sound/soc/fsl/Kconfig
+@@ -172,6 +172,15 @@ config SND_MPC52xx_DMA
+ config SND_SOC_POWERPC_DMA
+ 	tristate
+ 
++config SND_SOC_POWERPC_QMC_AUDIO
++	tristate "QMC ALSA SoC support"
++	depends on CPM_QMC
++	help
++	  ALSA SoC Audio support using the Freescale QUICC Multichannel
++	  Controller (QMC).
++	  Say Y or M if you want to add support for SoC audio using Freescale
++	  QMC.
++
+ comment "SoC Audio support for Freescale PPC boards:"
+ 
+ config SND_SOC_MPC8610_HPCD
+diff --git a/sound/soc/fsl/Makefile b/sound/soc/fsl/Makefile
+index b54beb1a66fa..8db7e97d0bd5 100644
+--- a/sound/soc/fsl/Makefile
++++ b/sound/soc/fsl/Makefile
+@@ -28,6 +28,7 @@ snd-soc-fsl-easrc-objs := fsl_easrc.o
+ snd-soc-fsl-xcvr-objs := fsl_xcvr.o
+ snd-soc-fsl-aud2htx-objs := fsl_aud2htx.o
+ snd-soc-fsl-rpmsg-objs := fsl_rpmsg.o
++snd-soc-fsl-qmc-audio-objs := fsl_qmc_audio.o
+ 
+ obj-$(CONFIG_SND_SOC_FSL_AUDMIX) += snd-soc-fsl-audmix.o
+ obj-$(CONFIG_SND_SOC_FSL_ASOC_CARD) += snd-soc-fsl-asoc-card.o
+@@ -44,6 +45,7 @@ obj-$(CONFIG_SND_SOC_POWERPC_DMA) += snd-soc-fsl-dma.o
+ obj-$(CONFIG_SND_SOC_FSL_XCVR) += snd-soc-fsl-xcvr.o
+ obj-$(CONFIG_SND_SOC_FSL_AUD2HTX) += snd-soc-fsl-aud2htx.o
+ obj-$(CONFIG_SND_SOC_FSL_RPMSG) += snd-soc-fsl-rpmsg.o
++obj-$(CONFIG_SND_SOC_POWERPC_QMC_AUDIO) += snd-soc-fsl-qmc-audio.o
+ 
+ # MPC5200 Platform Support
+ obj-$(CONFIG_SND_MPC52xx_DMA) += mpc5200_dma.o
+diff --git a/sound/soc/fsl/fsl_qmc_audio.c b/sound/soc/fsl/fsl_qmc_audio.c
 new file mode 100644
-index 000000000000..ec888f48cac8
+index 000000000000..7cbb8e4758cc
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml
-@@ -0,0 +1,162 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/soc/fsl/cpm_qe/fsl,cpm1-scc-qmc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/sound/soc/fsl/fsl_qmc_audio.c
+@@ -0,0 +1,735 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * ALSA SoC using the QUICC Multichannel Controller (QMC)
++ *
++ * Copyright 2022 CS GROUP France
++ *
++ * Author: Herve Codina <herve.codina@bootlin.com>
++ */
 +
-+title: PowerQUICC CPM QUICC Multichannel Controller (QMC)
++#include <linux/dma-mapping.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/platform_device.h>
++#include <linux/slab.h>
++#include <soc/fsl/qe/qmc.h>
++#include <sound/pcm_params.h>
++#include <sound/soc.h>
 +
-+maintainers:
-+  - Herve Codina <herve.codina@bootlin.com>
++struct qmc_dai {
++	char *name;
++	int id;
++	struct device *dev;
++	struct qmc_chan *qmc_chan;
++	unsigned int nb_tx_ts;
++	unsigned int nb_rx_ts;
++};
 +
-+description:
-+  The QMC (QUICC Multichannel Controller) emulates up to 64 channels within one
-+  serial controller using the same TDM physical interface routed from TSA.
++struct qmc_audio {
++	struct device *dev;
++	unsigned int num_dais;
++	struct qmc_dai *dais;
++	struct snd_soc_dai_driver *dai_drivers;
++};
 +
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - fsl,mpc885-scc-qmc
-+          - fsl,mpc866-scc-qmc
-+      - const: fsl,cpm1-scc-qmc
++struct qmc_dai_prtd {
++	struct qmc_dai *qmc_dai;
++	dma_addr_t dma_buffer_start;
++	dma_addr_t period_ptr_submitted;
++	dma_addr_t period_ptr_ended;
++	dma_addr_t dma_buffer_end;
++	size_t period_size;
++	struct snd_pcm_substream *substream;
++};
 +
-+  reg:
-+    items:
-+      - description: SCC (Serial communication controller) register base
-+      - description: SCC parameter ram base
-+      - description: Dual port ram base
++static int qmc_audio_pcm_construct(struct snd_soc_component *component,
++				   struct snd_soc_pcm_runtime *rtd)
++{
++	struct snd_card *card = rtd->card->snd_card;
++	int ret;
 +
-+  reg-names:
-+    items:
-+      - const: scc_regs
-+      - const: scc_pram
-+      - const: dpram
++	ret = dma_coerce_mask_and_coherent(card->dev, DMA_BIT_MASK(32));
++	if (ret)
++		return ret;
 +
-+  interrupts:
-+    maxItems: 1
-+    description: SCC interrupt line in the CPM interrupt controller
++	snd_pcm_set_managed_buffer_all(rtd->pcm, SNDRV_DMA_TYPE_DEV, card->dev,
++				       64*1024, 64*1024);
++	return 0;
++}
 +
-+  fsl,tsa-serial:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      - items:
-+          - description: phandle to TSA node
-+          - enum: [1, 2, 3]
-+            description: |
-+              TSA serial interface (dt-bindings/soc/cpm1-fsl,tsa.h defines these
-+              values)
-+               - 1: SCC2
-+               - 2: SCC3
-+               - 3: SCC4
-+    description:
-+      Should be a phandle/number pair. The phandle to TSA node and the TSA
-+      serial interface to use.
++static int qmc_audio_pcm_hw_params(struct snd_soc_component *component,
++				   struct snd_pcm_substream *substream,
++				   struct snd_pcm_hw_params *params)
++{
++	struct snd_pcm_runtime *runtime = substream->runtime;
++	struct qmc_dai_prtd *prtd = substream->runtime->private_data;
 +
-+  '#address-cells':
-+    const: 1
++	prtd->dma_buffer_start = runtime->dma_addr;
++	prtd->dma_buffer_end = runtime->dma_addr + params_buffer_bytes(params);
++	prtd->period_size = params_period_bytes(params);
++	prtd->period_ptr_submitted = prtd->dma_buffer_start;
++	prtd->period_ptr_ended = prtd->dma_buffer_start;
++	prtd->substream = substream;
 +
-+  '#size-cells':
-+    const: 0
++	return 0;
++}
 +
-+patternProperties:
-+  '^channel@([0-9]|[1-5][0-9]|6[0-3])$':
-+    description:
-+      A channel managed by this controller
-+    type: object
++static void qmc_audio_pcm_write_complete(void *context)
++{
++	struct qmc_dai_prtd *prtd = context;
++	int ret;
 +
-+    properties:
-+      reg:
-+        minimum: 0
-+        maximum: 63
-+        description:
-+          The channel number
++	prtd->period_ptr_ended += prtd->period_size;
++	if (prtd->period_ptr_ended >= prtd->dma_buffer_end)
++		prtd->period_ptr_ended = prtd->dma_buffer_start;
 +
-+      fsl,operational-mode:
-+        $ref: /schemas/types.yaml#/definitions/string
-+        enum: [transparent, hdlc]
-+        default: transparent
-+        description: |
-+          The channel operational mode
-+            - hdlc: The channel handles HDLC frames
-+            - transparent: The channel handles raw data without any processing
++	prtd->period_ptr_submitted += prtd->period_size;
++	if (prtd->period_ptr_submitted >= prtd->dma_buffer_end)
++		prtd->period_ptr_submitted = prtd->dma_buffer_start;
 +
-+      fsl,reverse-data:
-+        $ref: /schemas/types.yaml#/definitions/flag
-+        description:
-+          The bit order as seen on the channels is reversed,
-+          transmitting/receiving the MSB of each octet first.
-+          This flag is used only in 'transparent' mode.
++	ret = qmc_chan_write_submit(prtd->qmc_dai->qmc_chan,
++		prtd->period_ptr_submitted, prtd->period_size,
++		qmc_audio_pcm_write_complete, prtd);
++	if (ret) {
++		dev_err(prtd->qmc_dai->dev, "write_submit failed %d\n",
++			ret);
++	}
 +
-+      fsl,tx-ts-mask:
-+        $ref: /schemas/types.yaml#/definitions/uint64
-+        description:
-+          Channel assigned Tx time-slots within the Tx time-slots routed by the
-+          TSA to this cell.
++	snd_pcm_period_elapsed(prtd->substream);
++}
 +
-+      fsl,rx-ts-mask:
-+        $ref: /schemas/types.yaml#/definitions/uint64
-+        description:
-+          Channel assigned Rx time-slots within the Rx time-slots routed by the
-+          TSA to this cell.
++static void qmc_audio_pcm_read_complete(void *context, size_t length)
++{
++	struct qmc_dai_prtd *prtd = context;
++	int ret;
 +
-+    required:
-+      - reg
-+      - fsl,tx-ts-mask
-+      - fsl,rx-ts-mask
++	if (length != prtd->period_size) {
++		dev_err(prtd->qmc_dai->dev, "read complete length = %zu, exp %zu\n",
++			length, prtd->period_size);
++	}
 +
-+required:
-+  - compatible
-+  - reg
-+  - reg-names
-+  - interrupts
-+  - fsl,tsa-serial
-+  - '#address-cells'
-+  - '#size-cells'
++	prtd->period_ptr_ended += prtd->period_size;
++	if (prtd->period_ptr_ended >= prtd->dma_buffer_end)
++		prtd->period_ptr_ended = prtd->dma_buffer_start;
 +
-+additionalProperties: false
++	prtd->period_ptr_submitted += prtd->period_size;
++	if (prtd->period_ptr_submitted >= prtd->dma_buffer_end)
++		prtd->period_ptr_submitted = prtd->dma_buffer_start;
 +
-+examples:
-+  - |
-+    #include <dt-bindings/soc/cpm1-fsl,tsa.h>
++	ret = qmc_chan_read_submit(prtd->qmc_dai->qmc_chan,
++		prtd->period_ptr_submitted, prtd->period_size,
++		qmc_audio_pcm_read_complete, prtd);
++	if (ret) {
++		dev_err(prtd->qmc_dai->dev, "read_submit failed %d\n",
++			ret);
++	}
 +
-+    qmc@a60 {
-+        compatible = "fsl,mpc885-scc-qmc", "fsl,cpm1-scc-qmc";
-+        reg = <0xa60 0x20>,
-+              <0x3f00 0xc0>,
-+              <0x2000 0x1000>;
-+        reg-names = "scc_regs", "scc_pram", "dpram";
-+        interrupts = <27>;
-+        interrupt-parent = <&CPM_PIC>;
++	snd_pcm_period_elapsed(prtd->substream);
++}
 +
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++static int qmc_audio_pcm_trigger(struct snd_soc_component *component,
++				 struct snd_pcm_substream *substream, int cmd)
++{
++	struct qmc_dai_prtd *prtd = substream->runtime->private_data;
++	int ret;
 +
-+        fsl,tsa-serial = <&tsa FSL_CPM_TSA_SCC4>;
++	if (!prtd->qmc_dai) {
++		dev_err(component->dev, "qmc_dai is not set\n");
++		return -EINVAL;
++	}
 +
-+        channel@16 {
-+            /* Ch16 : First 4 even TS from all routed from TSA */
-+            reg = <16>;
-+            fsl,mode = "transparent";
-+            fsl,reverse-data;
-+            fsl,tx-ts-mask = <0x00000000 0x000000aa>;
-+            fsl,rx-ts-mask = <0x00000000 0x000000aa>;
-+        };
++	switch (cmd) {
++	case SNDRV_PCM_TRIGGER_START:
++		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
++			/* Submit first chunk ... */
++			ret = qmc_chan_write_submit(prtd->qmc_dai->qmc_chan,
++				prtd->period_ptr_submitted, prtd->period_size,
++				qmc_audio_pcm_write_complete, prtd);
++			if (ret) {
++				dev_err(component->dev, "write_submit failed %d\n",
++					ret);
++				return ret;
++			}
 +
-+        channel@17 {
-+            /* Ch17 : First 4 odd TS from all routed from TSA */
-+            reg = <17>;
-+            fsl,mode = "transparent";
-+            fsl,reverse-data;
-+            fsl,tx-ts-mask = <0x00000000 0x00000055>;
-+            fsl,rx-ts-mask = <0x00000000 0x00000055>;
-+        };
++			/* ... prepare next one ... */
++			prtd->period_ptr_submitted += prtd->period_size;
++			if (prtd->period_ptr_submitted >= prtd->dma_buffer_end)
++				prtd->period_ptr_submitted = prtd->dma_buffer_start;
 +
-+        channel@19 {
-+            /* Ch19 : 8 TS (TS 8..15) from all routed from TSA */
-+            reg = <19>;
-+            fsl,mode = "hdlc";
-+            fsl,tx-ts-mask = <0x00000000 0x0000ff00>;
-+            fsl,rx-ts-mask = <0x00000000 0x0000ff00>;
-+        };
-+    };
++			/* ... and send it */
++			ret = qmc_chan_write_submit(prtd->qmc_dai->qmc_chan,
++				prtd->period_ptr_submitted, prtd->period_size,
++				qmc_audio_pcm_write_complete, prtd);
++			if (ret) {
++				dev_err(component->dev, "write_submit failed %d\n",
++					ret);
++				return ret;
++			}
++		} else {
++			/* Submit first chunk ... */
++			ret = qmc_chan_read_submit(prtd->qmc_dai->qmc_chan,
++				prtd->period_ptr_submitted, prtd->period_size,
++				qmc_audio_pcm_read_complete, prtd);
++			if (ret) {
++				dev_err(component->dev, "read_submit failed %d\n",
++					ret);
++				return ret;
++			}
++
++			/* ... prepare next one ... */
++			prtd->period_ptr_submitted += prtd->period_size;
++			if (prtd->period_ptr_submitted >= prtd->dma_buffer_end)
++				prtd->period_ptr_submitted = prtd->dma_buffer_start;
++
++			/* ... and send it */
++			ret = qmc_chan_read_submit(prtd->qmc_dai->qmc_chan,
++				prtd->period_ptr_submitted, prtd->period_size,
++				qmc_audio_pcm_read_complete, prtd);
++			if (ret) {
++				dev_err(component->dev, "write_submit failed %d\n",
++					ret);
++				return ret;
++			}
++		}
++		break;
++
++	case SNDRV_PCM_TRIGGER_RESUME:
++	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
++		break;
++
++	case SNDRV_PCM_TRIGGER_STOP:
++	case SNDRV_PCM_TRIGGER_SUSPEND:
++	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static snd_pcm_uframes_t qmc_audio_pcm_pointer(struct snd_soc_component *component,
++					       struct snd_pcm_substream *substream)
++{
++	struct qmc_dai_prtd *prtd = substream->runtime->private_data;
++
++	return bytes_to_frames(substream->runtime,
++			       prtd->period_ptr_ended - prtd->dma_buffer_start);
++}
++
++static int qmc_audio_of_xlate_dai_name(struct snd_soc_component *component,
++					const struct of_phandle_args *args,
++					const char **dai_name)
++{
++	struct qmc_audio *qmc_audio = dev_get_drvdata(component->dev);
++	struct snd_soc_dai_driver *dai_driver;
++	int id = args->args[0];
++	int i;
++
++	for (i = 0; i  < qmc_audio->num_dais; i++) {
++		dai_driver = qmc_audio->dai_drivers + i;
++		if (dai_driver->id == id) {
++			*dai_name = dai_driver->name;
++			return 0;
++		}
++	}
++
++	return -EINVAL;
++}
++
++static const struct snd_pcm_hardware qmc_audio_pcm_hardware = {
++	.info			= SNDRV_PCM_INFO_MMAP |
++				  SNDRV_PCM_INFO_MMAP_VALID |
++				  SNDRV_PCM_INFO_INTERLEAVED |
++				  SNDRV_PCM_INFO_PAUSE,
++	.period_bytes_min	= 32,
++	.period_bytes_max	= 64*1024,
++	.periods_min		= 2,
++	.periods_max		= 2*1024,
++	.buffer_bytes_max	= 64*1024,
++};
++
++static int qmc_audio_pcm_open(struct snd_soc_component *component,
++			      struct snd_pcm_substream *substream)
++{
++	struct snd_pcm_runtime *runtime = substream->runtime;
++	struct qmc_dai_prtd *prtd;
++	int ret;
++
++	snd_soc_set_runtime_hwparams(substream, &qmc_audio_pcm_hardware);
++
++	/* ensure that buffer size is a multiple of period size */
++	ret = snd_pcm_hw_constraint_integer(runtime, SNDRV_PCM_HW_PARAM_PERIODS);
++	if (ret < 0)
++		return ret;
++
++	prtd = kzalloc(sizeof(*prtd), GFP_KERNEL);
++	if (prtd == NULL)
++		return -ENOMEM;
++
++	runtime->private_data = prtd;
++
++	return 0;
++}
++
++static int qmc_audio_pcm_close(struct snd_soc_component *component,
++			       struct snd_pcm_substream *substream)
++{
++	struct qmc_dai_prtd *prtd = substream->runtime->private_data;
++
++	kfree(prtd);
++	return 0;
++}
++
++static const struct snd_soc_component_driver qmc_audio_soc_platform = {
++	.open			= qmc_audio_pcm_open,
++	.close			= qmc_audio_pcm_close,
++	.hw_params		= qmc_audio_pcm_hw_params,
++	.trigger		= qmc_audio_pcm_trigger,
++	.pointer		= qmc_audio_pcm_pointer,
++	.pcm_construct		= qmc_audio_pcm_construct,
++	.of_xlate_dai_name	= qmc_audio_of_xlate_dai_name,
++};
++
++static unsigned int qmc_dai_get_index(struct snd_soc_dai *dai)
++{
++	struct qmc_audio *qmc_audio = snd_soc_dai_get_drvdata(dai);
++
++	return dai->driver - qmc_audio->dai_drivers;
++}
++
++static struct qmc_dai *qmc_dai_get_data(struct snd_soc_dai *dai)
++{
++	struct qmc_audio *qmc_audio = snd_soc_dai_get_drvdata(dai);
++	unsigned int index;
++
++	index = qmc_dai_get_index(dai);
++	if (index > qmc_audio->num_dais)
++		return NULL;
++
++	return qmc_audio->dais + index;
++}
++
++/*
++ * The constraints for format/channel is to match with the number of 8bit
++ * time-slots available.
++ */
++static int qmc_dai_hw_rule_channels_by_format(struct qmc_dai *qmc_dai,
++					      struct snd_pcm_hw_params *params,
++					      unsigned int nb_ts)
++{
++	struct snd_interval *c = hw_param_interval(params, SNDRV_PCM_HW_PARAM_CHANNELS);
++	snd_pcm_format_t format = params_format(params);
++	struct snd_interval ch = {0};
++
++	switch (snd_pcm_format_physical_width(format)) {
++	case 8:
++		ch.max = nb_ts;
++		break;
++	case 16:
++		ch.max = nb_ts/2;
++		break;
++	case 32:
++		ch.max = nb_ts/4;
++		break;
++	case 64:
++		ch.max = nb_ts/8;
++		break;
++	default:
++		dev_err(qmc_dai->dev, "format physical width %u not supported\n",
++			snd_pcm_format_physical_width(format));
++		return -EINVAL;
++	}
++
++	ch.min = ch.max ? 1 : 0;
++
++	return snd_interval_refine(c, &ch);
++}
++
++static int qmc_dai_hw_rule_playback_channels_by_format(struct snd_pcm_hw_params *params,
++						       struct snd_pcm_hw_rule *rule)
++{
++	struct qmc_dai *qmc_dai = rule->private;
++
++	return qmc_dai_hw_rule_channels_by_format(qmc_dai, params, qmc_dai->nb_tx_ts);
++}
++
++static int qmc_dai_hw_rule_capture_channels_by_format(
++			struct snd_pcm_hw_params *params,
++			struct snd_pcm_hw_rule *rule)
++{
++	struct qmc_dai *qmc_dai = rule->private;
++
++	return qmc_dai_hw_rule_channels_by_format(qmc_dai, params, qmc_dai->nb_rx_ts);
++}
++
++static int qmc_dai_hw_rule_format_by_channels(struct qmc_dai *qmc_dai,
++					      struct snd_pcm_hw_params *params,
++					      unsigned int nb_ts)
++{
++	struct snd_mask *f_old = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
++	unsigned int channels = params_channels(params);
++	unsigned int slot_width;
++	struct snd_mask f_new;
++	unsigned int i;
++
++	if (!channels || channels > nb_ts) {
++		dev_err(qmc_dai->dev, "channels %u not supported\n",
++			nb_ts);
++		return -EINVAL;
++	}
++
++	slot_width = (nb_ts / channels) * 8;
++
++	snd_mask_none(&f_new);
++	for (i = 0; i <= SNDRV_PCM_FORMAT_LAST; i++) {
++		if (snd_mask_test(f_old, i)) {
++			if (snd_pcm_format_physical_width(i) <= slot_width)
++				snd_mask_set(&f_new, i);
++		}
++	}
++
++	return snd_mask_refine(f_old, &f_new);
++}
++
++static int qmc_dai_hw_rule_playback_format_by_channels(
++			struct snd_pcm_hw_params *params,
++			struct snd_pcm_hw_rule *rule)
++{
++	struct qmc_dai *qmc_dai = rule->private;
++
++	return qmc_dai_hw_rule_format_by_channels(qmc_dai, params, qmc_dai->nb_tx_ts);
++}
++
++static int qmc_dai_hw_rule_capture_format_by_channels(
++			struct snd_pcm_hw_params *params,
++			struct snd_pcm_hw_rule *rule)
++{
++	struct qmc_dai *qmc_dai = rule->private;
++
++	return qmc_dai_hw_rule_format_by_channels(qmc_dai, params, qmc_dai->nb_rx_ts);
++}
++
++static int qmc_dai_startup(struct snd_pcm_substream *substream,
++			     struct snd_soc_dai *dai)
++{
++	struct qmc_dai_prtd *prtd = substream->runtime->private_data;
++	snd_pcm_hw_rule_func_t hw_rule_channels_by_format;
++	snd_pcm_hw_rule_func_t hw_rule_format_by_channels;
++	struct qmc_dai *qmc_dai;
++	unsigned int frame_bits;
++	int ret;
++
++	qmc_dai = qmc_dai_get_data(dai);
++	if (!qmc_dai) {
++		dev_err(dai->dev, "Invalid dai\n");
++		return -EINVAL;
++	}
++
++	prtd->qmc_dai = qmc_dai;
++
++	if (substream->stream == SNDRV_PCM_STREAM_CAPTURE) {
++		hw_rule_channels_by_format = qmc_dai_hw_rule_capture_channels_by_format;
++		hw_rule_format_by_channels = qmc_dai_hw_rule_capture_format_by_channels;
++		frame_bits = qmc_dai->nb_rx_ts * 8;
++	} else {
++		hw_rule_channels_by_format = qmc_dai_hw_rule_playback_channels_by_format;
++		hw_rule_format_by_channels = qmc_dai_hw_rule_playback_format_by_channels;
++		frame_bits = qmc_dai->nb_tx_ts * 8;
++	}
++
++	ret = snd_pcm_hw_rule_add(substream->runtime, 0, SNDRV_PCM_HW_PARAM_CHANNELS,
++				  hw_rule_channels_by_format, qmc_dai,
++				  SNDRV_PCM_HW_PARAM_FORMAT, -1);
++	if (ret) {
++		dev_err(dai->dev, "Failed to add channels rule (%d)\n", ret);
++		return ret;
++	}
++
++	ret = snd_pcm_hw_rule_add(substream->runtime, 0,  SNDRV_PCM_HW_PARAM_FORMAT,
++				  hw_rule_format_by_channels, qmc_dai,
++				  SNDRV_PCM_HW_PARAM_CHANNELS, -1);
++	if (ret) {
++		dev_err(dai->dev, "Failed to add format rule (%d)\n", ret);
++		return ret;
++	}
++
++	ret = snd_pcm_hw_constraint_single(substream->runtime,
++					   SNDRV_PCM_HW_PARAM_FRAME_BITS,
++					   frame_bits);
++	if (ret < 0) {
++		dev_err(dai->dev, "Failed to add frame_bits constraint (%d)\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int qmc_dai_hw_params(struct snd_pcm_substream *substream,
++			     struct snd_pcm_hw_params *params,
++			     struct snd_soc_dai *dai)
++{
++	struct qmc_chan_param chan_param = {0};
++	struct qmc_dai *qmc_dai;
++	int ret;
++
++	qmc_dai = qmc_dai_get_data(dai);
++	if (!qmc_dai) {
++		dev_err(dai->dev, "Invalid dai\n");
++		return -EINVAL;
++	}
++
++	if (substream->stream == SNDRV_PCM_STREAM_CAPTURE) {
++		chan_param.mode = QMC_TRANSPARENT;
++		chan_param.transp.max_rx_buf_size = params_period_bytes(params);
++		ret = qmc_chan_set_param(qmc_dai->qmc_chan, &chan_param);
++		if (ret) {
++			dev_err(dai->dev, "set param failed %d\n",
++				ret);
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int qmc_dai_trigger(struct snd_pcm_substream *substream, int cmd,
++			   struct snd_soc_dai *dai)
++{
++	struct qmc_dai *qmc_dai;
++	int direction;
++	int ret;
++
++	qmc_dai = qmc_dai_get_data(dai);
++	if (!qmc_dai) {
++		dev_err(dai->dev, "Invalid dai\n");
++		return -EINVAL;
++	}
++
++	direction = (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) ?
++		    QMC_CHAN_WRITE : QMC_CHAN_READ;
++
++	switch (cmd) {
++	case SNDRV_PCM_TRIGGER_START:
++	case SNDRV_PCM_TRIGGER_RESUME:
++	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
++		ret = qmc_chan_start(qmc_dai->qmc_chan, direction);
++		if (ret)
++			return ret;
++		break;
++
++	case SNDRV_PCM_TRIGGER_STOP:
++		ret = qmc_chan_stop(qmc_dai->qmc_chan, direction);
++		if (ret)
++			return ret;
++		ret = qmc_chan_reset(qmc_dai->qmc_chan, direction);
++		if (ret)
++			return ret;
++		break;
++
++	case SNDRV_PCM_TRIGGER_SUSPEND:
++	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
++		ret = qmc_chan_stop(qmc_dai->qmc_chan, direction);
++		if (ret)
++			return ret;
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
++static const struct snd_soc_dai_ops qmc_dai_ops = {
++	.startup	= qmc_dai_startup,
++	.trigger	= qmc_dai_trigger,
++	.hw_params	= qmc_dai_hw_params,
++};
++
++static u64 qmc_audio_formats(u8 nb_ts)
++{
++	u64 formats;
++	unsigned int chan_width;
++	unsigned int format_width;
++	int i;
++
++	if (!nb_ts)
++		return 0;
++
++	formats = 0;
++	chan_width = nb_ts * 8;
++	for (i = 0; i <= SNDRV_PCM_FORMAT_LAST; i++) {
++		/*
++		 * Support format other than little-endian (ie big-endian or
++		 * without endianness such as 8bit formats)
++		 */
++		if (snd_pcm_format_little_endian(i) == 1)
++			continue;
++
++		/* Support physical width multiple of 8bit */
++		format_width = snd_pcm_format_physical_width(i);
++		if (format_width == 0 || format_width % 8)
++			continue;
++
++		/*
++		 * And support physical width that can fit N times in the
++		 * channel
++		 */
++		if (format_width > chan_width || chan_width % format_width)
++			continue;
++
++		formats |= (1ULL << i);
++	}
++	return formats;
++}
++
++static int qmc_audio_dai_parse(struct qmc_audio *qmc_audio, struct device_node *np,
++	struct qmc_dai *qmc_dai, struct snd_soc_dai_driver *qmc_soc_dai_driver)
++{
++	struct qmc_chan_info info;
++	u32 val;
++	int ret;
++
++	qmc_dai->dev = qmc_audio->dev;
++
++	ret = of_property_read_u32(np, "reg", &val);
++	if (ret) {
++		dev_err(qmc_audio->dev, "%pOF: failed to read reg\n", np);
++		return ret;
++	}
++	qmc_dai->id = val;
++
++	qmc_dai->name = devm_kasprintf(qmc_audio->dev, GFP_KERNEL, "%s.%d",
++				       np->parent->name, qmc_dai->id);
++
++	qmc_dai->qmc_chan = devm_qmc_chan_get_byphandle(qmc_audio->dev, np,
++							"fsl,qmc-chan");
++	if (IS_ERR(qmc_dai->qmc_chan)) {
++		ret = PTR_ERR(qmc_dai->qmc_chan);
++		return dev_err_probe(qmc_audio->dev, ret,
++				     "dai %d get QMC channel failed\n", qmc_dai->id);
++	}
++
++	qmc_soc_dai_driver->id = qmc_dai->id;
++	qmc_soc_dai_driver->name = qmc_dai->name;
++
++	ret = qmc_chan_get_info(qmc_dai->qmc_chan, &info);
++	if (ret) {
++		dev_err(qmc_audio->dev, "dai %d get QMC channel info failed %d\n",
++			qmc_dai->id, ret);
++		return ret;
++	}
++	dev_info(qmc_audio->dev, "dai %d QMC channel mode %d, nb_tx_ts %u, nb_rx_ts %u\n",
++		 qmc_dai->id, info.mode, info.nb_tx_ts, info.nb_rx_ts);
++
++	if (info.mode != QMC_TRANSPARENT) {
++		dev_err(qmc_audio->dev, "dai %d QMC chan mode %d is not QMC_TRANSPARENT\n",
++			qmc_dai->id, info.mode);
++		return -EINVAL;
++	}
++	qmc_dai->nb_tx_ts = info.nb_tx_ts;
++	qmc_dai->nb_rx_ts = info.nb_rx_ts;
++
++	qmc_soc_dai_driver->playback.channels_min = 0;
++	qmc_soc_dai_driver->playback.channels_max = 0;
++	if (qmc_dai->nb_tx_ts) {
++		qmc_soc_dai_driver->playback.channels_min = 1;
++		qmc_soc_dai_driver->playback.channels_max = qmc_dai->nb_tx_ts;
++	}
++	qmc_soc_dai_driver->playback.formats = qmc_audio_formats(qmc_dai->nb_tx_ts);
++
++	qmc_soc_dai_driver->capture.channels_min = 0;
++	qmc_soc_dai_driver->capture.channels_max = 0;
++	if (qmc_dai->nb_rx_ts) {
++		qmc_soc_dai_driver->capture.channels_min = 1;
++		qmc_soc_dai_driver->capture.channels_max = qmc_dai->nb_rx_ts;
++	}
++	qmc_soc_dai_driver->capture.formats = qmc_audio_formats(qmc_dai->nb_rx_ts);
++
++	qmc_soc_dai_driver->playback.rates = snd_pcm_rate_to_rate_bit(info.tx_fs_rate);
++	qmc_soc_dai_driver->playback.rate_min = info.tx_fs_rate;
++	qmc_soc_dai_driver->playback.rate_max = info.tx_fs_rate;
++	qmc_soc_dai_driver->capture.rates = snd_pcm_rate_to_rate_bit(info.rx_fs_rate);
++	qmc_soc_dai_driver->capture.rate_min = info.rx_fs_rate;
++	qmc_soc_dai_driver->capture.rate_max = info.rx_fs_rate;
++
++	qmc_soc_dai_driver->ops = &qmc_dai_ops;
++
++	return 0;
++}
++
++static int qmc_audio_probe(struct platform_device *pdev)
++{
++	struct device_node *np = pdev->dev.of_node;
++	struct qmc_audio *qmc_audio;
++	struct device_node *child;
++	unsigned int i;
++	int ret;
++
++	qmc_audio = devm_kzalloc(&pdev->dev, sizeof(*qmc_audio), GFP_KERNEL);
++	if (!qmc_audio)
++		return -ENOMEM;
++
++	qmc_audio->dev = &pdev->dev;
++
++	qmc_audio->num_dais = of_get_available_child_count(np);
++	if (qmc_audio->num_dais) {
++		qmc_audio->dais = devm_kcalloc(&pdev->dev, qmc_audio->num_dais,
++					       sizeof(*qmc_audio->dais),
++					       GFP_KERNEL);
++		if (!qmc_audio->dais)
++			return -ENOMEM;
++
++		qmc_audio->dai_drivers = devm_kcalloc(&pdev->dev, qmc_audio->num_dais,
++						      sizeof(*qmc_audio->dai_drivers),
++						      GFP_KERNEL);
++		if (!qmc_audio->dai_drivers)
++			return -ENOMEM;
++	}
++
++	i = 0;
++	for_each_available_child_of_node(np, child) {
++		ret = qmc_audio_dai_parse(qmc_audio, child,
++					  qmc_audio->dais + i,
++					  qmc_audio->dai_drivers + i);
++		if (ret) {
++			of_node_put(child);
++			return ret;
++		}
++		i++;
++	}
++
++
++	platform_set_drvdata(pdev, qmc_audio);
++
++	ret = devm_snd_soc_register_component(qmc_audio->dev,
++					      &qmc_audio_soc_platform,
++					      qmc_audio->dai_drivers,
++					      qmc_audio->num_dais);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++static const struct of_device_id qmc_audio_id_table[] = {
++	{ .compatible = "fsl,qmc-audio" },
++	{} /* sentinel */
++};
++MODULE_DEVICE_TABLE(of, qmc_audio_id_table);
++
++static struct platform_driver qmc_audio_driver = {
++	.driver = {
++		.name = "fsl-qmc-audio",
++		.of_match_table = of_match_ptr(qmc_audio_id_table),
++	},
++	.probe = qmc_audio_probe,
++};
++module_platform_driver(qmc_audio_driver);
++
++MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
++MODULE_DESCRIPTION("CPM/QE QMC audio driver");
++MODULE_LICENSE("GPL");
 -- 
 2.39.2
 
