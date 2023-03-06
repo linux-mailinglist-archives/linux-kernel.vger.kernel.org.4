@@ -2,144 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07F06AC03A
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:05:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A221E6AC03E
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjCFNEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
+        id S230481AbjCFNFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:05:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjCFNEt (ORCPT
+        with ESMTP id S230408AbjCFNFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:04:49 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2698840E3
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:04:48 -0800 (PST)
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 6 Mar 2023 08:05:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7502C656;
+        Mon,  6 Mar 2023 05:05:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5F4A8412FE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:04:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678107886;
-        bh=GVtu8wUlTQmI/OH1YDjpwQxG8xUfKX4sW1hVlYeaYkE=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=pI4/S8RFRYIf5W0exo1m34g1YuaYb7Pno5haYLyCM9FbZs6TmcxDWOXQj2sXfuFAy
-         376KG/sCnbSwMl+monifDBRosYxj4WEN99v6B1cVs3jfQBtK0t0Snu3PNwbIG26Bem
-         VY+x/gSNPcH7F2qp5v1G2+DrU1D3XcTUdf2eNLm1zpGB/gq5XJ94OHjSb4Ayx79ygE
-         obx+hLD0dB7f4iWOyas9YkYFyH0nS8un5CzbcZER05kevl7Ihbwo/RYEpyYtU1jyFc
-         M+/aJAtTV8gWcWhBjrgtsOIORASouANwXINxumoqu7T378Lftt3thPQ5UbmYc1etXc
-         EOAnn6ueAU64Q==
-Received: by mail-qv1-f69.google.com with SMTP id l13-20020ad44d0d000000b004c74bbb0affso5404669qvl.21
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:04:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678107884;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GVtu8wUlTQmI/OH1YDjpwQxG8xUfKX4sW1hVlYeaYkE=;
-        b=493FklqUeENiDc8Nx9nHNOaKmxAK0swgW53aSu07G5wKnnBqIJq/03metNDJKhHmJh
-         hIgk5ZXByuoBnceCxvmqC1QqwPGoPZ48fh7wcMJPDjxRI2XLPcnxm5JrDXgO8rBRo10O
-         +Hz1P53elHLheFArpHAn661NMOL8OQYm9xROKiOH7EFqQA2B9Mc2I0OC1A27F/eLxl+J
-         fUv0m6xwlpclrDryNTz9+0MK0Q1u2jRfkxSrJUo/j1s/Tu2zumv99NsEH9F6SBsu9ld9
-         tzBqjfkTUvpQfFsriwksPOkIMf4RUoNP3L6bOdi2CaCuf7uS/G5MXKsQHkxTFQSr+u+2
-         sPbA==
-X-Gm-Message-State: AO0yUKXDzXbYJD2c49HjTdZzPgPwWBre410qnanRdB2hSl3lydiZ6RX1
-        O2r3fv4sCicj+KZ6OnjEI+po/iS87HsQxngXbkYAy12teJ36cR8imb4HyPG8QA14KlWkO8QmOlf
-        LO9nMgTI2k25Fp0YlkNoxg609OhU8TO+Nt+2nPgQFNe3Ulrlbzv0PAuaAHQ==
-X-Received: by 2002:a05:6214:18c4:b0:56e:9089:a447 with SMTP id cy4-20020a05621418c400b0056e9089a447mr2646918qvb.0.1678107884407;
-        Mon, 06 Mar 2023 05:04:44 -0800 (PST)
-X-Google-Smtp-Source: AK7set8y6a5SSW6hPw+GDXCh+fqXFJP9UdQM/IWboALvjPkMRMhCZDeVIkVx5ql1CNUP6/Ugh0IafMD5qUh9dXlK4Pc=
-X-Received: by 2002:a05:6214:18c4:b0:56e:9089:a447 with SMTP id
- cy4-20020a05621418c400b0056e9089a447mr2646908qvb.0.1678107884159; Mon, 06 Mar
- 2023 05:04:44 -0800 (PST)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CED4BB80DA9;
+        Mon,  6 Mar 2023 13:05:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 611D1C433D2;
+        Mon,  6 Mar 2023 13:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678107906;
+        bh=OmU8l36xufyDkaO9yoRR1VAuUSrBSxNw7CTRX3T1zAc=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=TIOAWS2yZAMhm5gM3FjHwBpnqcfNmstb1sm/7d62iOOb8xvjAqgDlwWOW0qxCQVru
+         KVB+cTvg41NwKfEyidHR4qXBdSxrmfZAjnXXt1PubhMb8ZdXMzwi3fWquWzqpJ12SP
+         XUnv5ocWunPLxcYKV+6iHXM0Kj05Tml1Oua3hsaMEHZrbhsPwS11zAHOLONSL55M8I
+         jJl2OnSLDeuuqCG4H1xxRxg8d+4TY6YSKrwUXT4QBjw9y0TWhS/x4oyq4hpZGGvdx0
+         TEoiJJtVkWKInAmf1Sp8sx96z/vC6ClW5gQuUlLkrCrGyMYbirewUm2iHzEmFwehn9
+         wcHexJUYOni2Q==
+From:   Mark Brown <broonie@kernel.org>
+To:     heiko@sntech.de, Lizhe <sensor1010@163.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230226065125.14086-1-sensor1010@163.com>
+References: <20230226065125.14086-1-sensor1010@163.com>
+Subject: Re: [PATCH v1] drivers/spi-rockchip.c : Use
+ devm_platform_get_and_ioremap_resource makes code better
+Message-Id: <167810790510.67440.1015244482940855027.b4-ty@kernel.org>
+Date:   Mon, 06 Mar 2023 13:05:05 +0000
 MIME-Version: 1.0
-References: <20230303085928.4535-1-samin.guo@starfivetech.com> <20230303085928.4535-13-samin.guo@starfivetech.com>
-In-Reply-To: <20230303085928.4535-13-samin.guo@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Mon, 6 Mar 2023 14:04:28 +0100
-Message-ID: <CAJM55Z-WpxJUshAa_gN5GD+mMp1VaxPbnF6AV-ua0HzsFWsB6w@mail.gmail.com>
-Subject: Re: [PATCH v5 12/12] riscv: dts: starfive: visionfive 2: Enable gmac
- device tree node
-To:     Samin Guo <samin.guo@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bd1bf
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wrote:
-> From: Yanhong Wang <yanhong.wang@starfivetech.com>
->
-> Update gmac device tree node status to okay.
->
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-> ---
->  .../dts/starfive/jh7110-starfive-visionfive-2.dtsi     | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> index c2aa8946a0f1..d1c409f40014 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-> @@ -12,6 +12,8 @@
->  / {
->         aliases {
->                 serial0 = &uart0;
-> +               ethernet0 = &gmac0;
-> +               ethernet1 = &gmac1;
+On Sun, 26 Feb 2023 14:51:25 +0800, Lizhe wrote:
+> use devm_platform_get_and_ioremap replace platform_get_resource()
+> and devm_ioremap_resource()
+> 
+> 
 
-Please sort these alphabetically.
+Applied to
 
->                 i2c0 = &i2c0;
->                 i2c2 = &i2c2;
->                 i2c5 = &i2c5;
-> @@ -92,6 +94,14 @@
->         status = "okay";
->  };
->
-> +&gmac0 {
-> +       status = "okay";
-> +};
-> +
-> +&gmac1 {
-> +       status = "okay";
-> +};
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Since you'll need to add to the gmac0 and gmac1 nodes in the board
-specific files too and it's only one line, consider just dropping this
-here and add the status = "okay" there instead.
+Thanks!
 
->  &i2c0 {
->         clock-frequency = <100000>;
->         i2c-sda-hold-time-ns = <300>;
-> --
-> 2.17.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+[1/1] drivers/spi-rockchip.c : Use devm_platform_get_and_ioremap_resource makes code better
+      commit: d447fa6564788af2b8729f66157e1220ecf6d136
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
