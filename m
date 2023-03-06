@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6626AC1D4
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A276AC1D9
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:51:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjCFNuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 08:50:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
+        id S229843AbjCFNvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCFNuA (ORCPT
+        with ESMTP id S229587AbjCFNvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 08:50:00 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AB43C3D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:49:58 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id l1so8836689wry.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:49:58 -0800 (PST)
+        Mon, 6 Mar 2023 08:51:13 -0500
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0425FD4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:50:52 -0800 (PST)
+Received: by mail-yb1-xb36.google.com with SMTP id t39so8150307ybi.3
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:50:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678110597;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4jttNTsMYo3hO4zmFRMt6lMJ/dsTxQ98EZIAfYPHck8=;
-        b=RcC4brTzUz+W2jOBplkTuiwHCsvXSckMpm3gt81QtV+tuX4kXk+sEpyAhEsrvyBtij
-         yUSrw7I/kxyny+vei8JMAVj7HVC4qZW8KO5hme8Bl9s0HrsbpUqvnqSEipDou/xPap9c
-         HRrdFu38BjYUFG1fDNbQBds/ndtGpZmPyNGuFz09POQcGf+IMi7Y5yVTq2yK62WxhW/d
-         EGVA1y+ONOCTQsStRAu/y+vVqQAXJQRQ6HIGEeVDuDgHp1KUE86hoj/bqiQglpYQ96Ll
-         +T7OIE/t1/qze9yeUjFBMwGQ3lsJPL/T2daCLccXlh/XrqXh6c2HRo3GGNYdOQM8Ik/0
-         loVA==
+        d=linaro.org; s=google; t=1678110651;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtBLJgimyjUZrCTww2/nWMue86SQPNFkXsRzufY3H1M=;
+        b=nc9A9BUpW53D5PqzzSiCD8QKIAcg5XrB2jR86Oy0dZxkV4hhjo5VfvM2uduB61dLDj
+         g1SWXSUkXv8D8/jIa0Tafirdeu18wsaUUswPJgyWhU6GsO93pQgfnAnD/rB+IwPzhgeC
+         JwkneIEmHW06XTirUjlEhyQrl+SL1XhlkX8/Yhad7MsPn2T9W2bbozKPGCRugTkPUjR3
+         84KyRdnWPXCnLw2rTL6UAIKarmZ01/1pruEe3yXmsVmrbUAP468DhAVef1Ie/9PblIiz
+         4EepnkIsybOmCNCc8g8kg1hRc6/2uKnlTnZ+aMC0pBc5JnR7kN1LVV1dBWB9jM1FqU58
+         txLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678110597;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678110651;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4jttNTsMYo3hO4zmFRMt6lMJ/dsTxQ98EZIAfYPHck8=;
-        b=2yUQPorfCMs9z/64/5sm3oeSOmaQTSIcRDp/s/NRfk2AFKJlGPZ/QqW6BaJpzAZKj+
-         rx3AyxnjICNJHiLTAVTel77IerBlSMz0i0veOex6IK8iuzbhjCkw8tb/SivjOvJKDxAQ
-         9cMjZzDh6PSqQk1s+1PFRoBXAOCLjHn8HQtzFyRJFbk17viGfgDQSGUXIdg1Td8TN7HN
-         Aqe4BgIEunLDVm9g3RGXbhmSDwWK+5zDHyXRXcMQ2hfmPCUmNxMKz8YqGY+UaY+Nplgi
-         82f4LAMOB5QzWdNm4PLpfAVEPWODi1vPfx1oCBurTr+7rJfDPhgeoPX2mKZYxumTXExd
-         WneA==
-X-Gm-Message-State: AO0yUKXnkeFvw3Dg7yRK3/RbDQ+fx0wpsaz3fAvu53K1EnGgiYYuzJ5n
-        edXeOh+f5nXFvHPQZr7wdefceg==
-X-Google-Smtp-Source: AK7set83efNzzJIPdS6ZaS0rm2KQxwFZZmA9X2pC+KVtPznDTxzOM6N0acKc02PI/7R7IdprelQF0A==
-X-Received: by 2002:a5d:62c3:0:b0:2c5:5237:3b21 with SMTP id o3-20020a5d62c3000000b002c552373b21mr7941779wrv.69.1678110596959;
-        Mon, 06 Mar 2023 05:49:56 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:cd23:1024:19b6:1a10? ([2a01:e0a:982:cbb0:cd23:1024:19b6:1a10])
-        by smtp.gmail.com with ESMTPSA id j29-20020a5d6e5d000000b002c59f18674asm9902098wrz.22.2023.03.06.05.49.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 05:49:56 -0800 (PST)
-Message-ID: <2d9e01df-0047-98bc-f1e7-fa860d92c254@linaro.org>
-Date:   Mon, 6 Mar 2023 14:49:55 +0100
+        bh=qtBLJgimyjUZrCTww2/nWMue86SQPNFkXsRzufY3H1M=;
+        b=aWoSXjoy5RrtJwf66c60hxpIdPVzNn9xasyv1F+VuUzHx0nz9OW/IaV+XN05Kjr030
+         zJN3A20GaQSepANbUTu24x2WlowtPKm0yxTc4FbHX9WXrUQJhbMaVJM0pKMnpkdMNzVz
+         fuMY1+JWHClCzAcGaVNYjB3v7ZrMaHDMWDxHal6Tp+sDUwp4m+FiArqt8Vu00gCExhhj
+         HkGnjLcgNr3wj/+K0cgLndsxcJjNdxUZRtC5p+R3E8CE+FWHVbOoogkypsntoqOPlB1x
+         1Jw19DB9Lr1LkWgYVl8jnUMzPnG6Nlh09NZSkBRf5M7UQZY0TSCqKdRxAaIx1LKaMNod
+         OMpg==
+X-Gm-Message-State: AO0yUKU5mllEf0j552peEfAG9pv9NHSXRzJBAL4viea1/9Nve2jGUHnD
+        A+6mwm1JjcJ9OewOJ/F7FeIDrQRz2h7LjJikeLaTmA==
+X-Google-Smtp-Source: AK7set8JTNHF8MypTSPIeonQB8cYtk4+/oxJ7RhvaeapmVYTL7Epb5DAM67FQFkpGywXUdj7a90T61UM6PiJJ3f86BU=
+X-Received: by 2002:a5b:384:0:b0:a65:8cd3:fc4 with SMTP id k4-20020a5b0384000000b00a658cd30fc4mr6353160ybp.5.1678110651682;
+ Mon, 06 Mar 2023 05:50:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v1 1/3] meson: pinctrl: use CONFIG_PINCTRL_A1 with
- CONFIG_ARM
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Alexey Romanov <avromanov@sberdevices.ru>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru
-References: <20230222115020.55867-1-avromanov@sberdevices.ru>
- <20230222115020.55867-2-avromanov@sberdevices.ru>
- <CACRpkdbWubk3A3qYuYqDc4OBGP6T7TaKwFeW17CwAzPvttk=WQ@mail.gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <CACRpkdbWubk3A3qYuYqDc4OBGP6T7TaKwFeW17CwAzPvttk=WQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20230303002850.51858-1-arinc.unal@arinc9.com>
+In-Reply-To: <20230303002850.51858-1-arinc.unal@arinc9.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 6 Mar 2023 14:50:40 +0100
+Message-ID: <CACRpkdayVLTT0x6hfnwvL-Atafkj8PRw5uwe7Wic3jtn+X-axA@mail.gmail.com>
+Subject: Re: [PATCH 00/20] pinctrl: ralink: fix ABI, improve driver, move to
+ mediatek, improve dt-bindings
+To:     arinc9.unal@gmail.com
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, Mar 3, 2023 at 1:29 AM <arinc9.unal@gmail.com> wrote:
 
-On 06/03/2023 14:45, Linus Walleij wrote:
-> On Wed, Feb 22, 2023 at 12:50 PM Alexey Romanov
-> <avromanov@sberdevices.ru> wrote:
-> 
->> Tested A1 pinctrl support for ARM and it works.
->>
->> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
-> 
-> This patch applied to the pinctrl tree for v6.4.
+> [PATCH 00/20] pinctrl: ralink: fix ABI, improve driver, move to mediatek, improve dt-bindings
+>
+> This is an ambitious effort I've been wanting to do for months.
 
-Erf, this serie is something we would avoid, so no need to apply it for v6.4
+Good with ambitions :)
 
-> 
-> Have you considered also adding || COMPILE_TEST?
+As long as Sergio is on board and can test the changes and as long
+as the DT maintainers do not explicitly disapprove, I'm game to merge
+this.
 
-It would be great to have || COMPILE_TEST for sure
+I guess you will respin on top of v6.3-rc1 when the first round of
+non-RFC feedback is collected.
 
-Neil
-
-> 
-> Or does that break builds?
-> 
-> Yours,
-> Linus Walleij
-
+Yours,
+Linus Walleij
