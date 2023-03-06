@@ -2,127 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28F026ABDAD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0770E6ABDAE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjCFLGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:06:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
+        id S230011AbjCFLG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCFLGI (ORCPT
+        with ESMTP id S230075AbjCFLGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:06:08 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998311ADEE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:06:02 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 8821920012;
-        Mon,  6 Mar 2023 11:05:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678100760;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8qb2Hdhx8UQsFd5rz53oW2MFWr/yNsB2YoLuzM6NAUc=;
-        b=K1u1OcRQwV8LvxFRdcaUP/g/B7X2Lt3wheEs3GfvkdCyh60rK59o2R0fEuox/Vlp5QpI6w
-        ixVxsim2gtA/Sh3gaJ+riNqIOLCRAGceNKGZJkV+yE1aGB7NSQJiU1GIFHrLkUGA+iY6Pb
-        eHcQmrLvSyKQ51NgA3ej2nRt6N+5xVxiKkS0ieKyUM01Qm/j2MCgH84a1xLCmfFBSLLR6P
-        UtZQjV3WrsFX8uODL9kq52mgiK7gkA7cg873WNNRn0aiOPItSs/K7SOyyrv6TyjoGIcsMK
-        4VDQn8bBiy45LFugqvhU/VfoZ9La6HbQrM6KdYt3bvvbiN5tQ1Q0vh171dNnLw==
-Date:   Mon, 6 Mar 2023 12:05:58 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Michael Walle <michael@walle.cc>, linux-kernel@vger.kernel.org,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v4] mtd: spi-nor: fix memory leak when using
- debugfs_lookup()
-Message-ID: <20230306120558.00f614fb@xps-13>
-In-Reply-To: <ZAWuvRHVVV3hTm0e@kroah.com>
-References: <20230208160230.2179905-1-gregkh@linuxfoundation.org>
-        <f60870dee13900252e0b13fb2f5f05b5@walle.cc>
-        <ZAWNtv0g6vmADGnb@kroah.com>
-        <20230306093336.523832b0@xps-13>
-        <ZAWuvRHVVV3hTm0e@kroah.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 6 Mar 2023 06:06:24 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A0823851
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:06:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6+2f3w3qpSci3gVKHyFWRQcLrRTY51VgoSMXT3tTuOI=; b=TtS5a+0/C37z+jl+vgVW7Gy/S8
+        jwVoyB8rRNThETM1HU0RWHyCTEVAv/US9tT+8tJhjh6lLnPEE8ciV/l0qOPknSSAf0iL99oCBbGgI
+        4iLpwdKhfejWuePBUiVUli+NQIOJGc0Bvkek8kWOOuyFlPU0H4M5W9ITxA4llp/JPWS71keFtuFea
+        z7KdgIIpIU5iiFXSHtXqIGpAv5esj54iH9RvZuxMt46D+kvy1NhnaS7fzVo/5tXhXRuwh5nUyX7BT
+        pOhGJfz1Mhsj8bcfMhp+wXcW74S21zC6t/VG1i4SJn1od0V1bMK6utnC/AHwI62cprRkh73yVQMVC
+        wHnp4wzQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56512)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pZ8fR-0005YT-6N; Mon, 06 Mar 2023 11:06:09 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pZ8fN-0000Pp-Nx; Mon, 06 Mar 2023 11:06:05 +0000
+Date:   Mon, 6 Mar 2023 11:06:05 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jungseung Lee <js07.lee@samsung.com>
+Cc:     linus.walleij@linaro.org, amit.kachhap@arm.com, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        keescook@chromium.org, js07.lee@gmail.com
+Subject: Re: [PATCH 1/2] arm/mm : omit [_text, _stext) from kernel code region
+Message-ID: <ZAXJHbHAhD42o36F@shell.armlinux.org.uk>
+References: <CGME20230306061055epcas1p1f7718c46c10f84845e086f9ce9f9a41f@epcas1p1.samsung.com>
+ <1678081915-12599-1-git-send-email-js07.lee@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1678081915-12599-1-git-send-email-js07.lee@samsung.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Mon, Mar 06, 2023 at 02:51:54PM +0900, Jungseung Lee wrote:
+> The resource reservations in /proc/iomem made for the kernel code did
+> not reflect the gaps between pagetable and text.
+> 
+> In particular, if the CONFIG_STRICT_KERNEL_RWX option is turned on,
+> the wrong area is shown as the kernel code area.
+> 
+> Fix it by removing [_text, _stext) from kernel code region.
+> 
+> Before:
+> 04000000-2f7fffff : System RAM
+>   04008000-04cfffff : Kernel code
+>   04e00000-05369a27 : Kernel data
+> 
+> After :
+> 04000000-2f7fffff : System RAM
+>   04100000-04cfffff : Kernel code
+>   04e00000-05369a27 : Kernel data
 
-gregkh@linuxfoundation.org wrote on Mon, 6 Mar 2023 10:13:33 +0100:
+And why do you think this is correct? Isn't the head text, which
+isn't discarded and is located at 0x04008000, still part of kernel
+code?
 
-> On Mon, Mar 06, 2023 at 09:33:36AM +0100, Miquel Raynal wrote:
-> > Hi Greg,
-> >=20
-> > gregkh@linuxfoundation.org wrote on Mon, 6 Mar 2023 07:52:38 +0100:
-> >  =20
-> > > On Wed, Feb 08, 2023 at 05:15:41PM +0100, Michael Walle wrote: =20
-> > > > Am 2023-02-08 17:02, schrieb Greg Kroah-Hartman:   =20
-> > > > > When calling debugfs_lookup() the result must have dput() called =
-on it,
-> > > > > otherwise the memory will leak over time.  To solve this, remove =
-the
-> > > > > lookup and create the directory on the first device found, and th=
-en
-> > > > > remove it when the module is unloaded.
-> > > > >=20
-> > > > > Cc: Tudor Ambarus <tudor.ambarus@microchip.com>
-> > > > > Cc: Pratyush Yadav <pratyush@kernel.org>
-> > > > > Cc: Michael Walle <michael@walle.cc>
-> > > > > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> > > > > Cc: Richard Weinberger <richard@nod.at>
-> > > > > Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> > > > > Cc: linux-mtd@lists.infradead.org
-> > > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>   =
-=20
-> > > >=20
-> > > > Reviewed-by: Michael Walle <michael@walle.cc>
-> > > >=20
-> > > > one nit below I didn't notice earlier, no need to send a new
-> > > > patch version just for that.
-> > > >=20
-> > > > ..
-> > > >    =20
-> > > > > +void spi_nor_debugfs_shutdown(void)
-> > > > > +{
-> > > > > +	if (rootdir)
-> > > > > +		debugfs_remove(rootdir);   =20
-> > > >=20
-> > > > debugfs_remove() already has a check for NULL.
-> > > >    =20
-> > >=20
-> > > Ah, good catch, I merged this in when I applied it to my tree, thanks=
-! =20
-> >=20
-> > Any reasons why you did apply this patch to your tree? It is a spi-nor
-> > fix, I would have expected it to go through mtd. =20
->=20
-> It's been sitting around for a month, I assumed it was lost, so I picked
-> it up.
-
-Sorry if it took too long, the merge window also happened during that
-time, we are collecting patches now that 6.3-rc1 has been released.
-Next time don't hesitate to ping first ;-)
-
-> I can revert it if you don't want me to take it for 6.3-final
-> through my driver core tree.
-
-I'll let spi-nor maintainers decide what they prefer.
-
-Thanks,
-Miqu=C3=A8l
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
