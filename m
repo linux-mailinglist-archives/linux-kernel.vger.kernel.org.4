@@ -2,81 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0608F6AB666
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:37:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9BB6AB663
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 07:37:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbjCFGhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 01:37:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
+        id S229715AbjCFGhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 01:37:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCFGhk (ORCPT
+        with ESMTP id S229706AbjCFGhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 01:37:40 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86B9710258;
-        Sun,  5 Mar 2023 22:37:36 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3266ZYuN005406;
-        Mon, 6 Mar 2023 07:35:34 +0100
-Date:   Mon, 6 Mar 2023 07:35:34 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vegard Nossum <vegard.nossum@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Jiri Kosina <jkosina@suse.cz>,
-        Solar Designer <solar@openwall.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Mon, 6 Mar 2023 01:37:13 -0500
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 505F3D515;
+        Sun,  5 Mar 2023 22:37:12 -0800 (PST)
+Received: from toolbox.int.toradex.com ([213.55.225.231]) by
+ mrelay.perfora.net (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id
+ 0MDiGW-1pnxup1YiM-00HA0v; Mon, 06 Mar 2023 07:36:58 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-media@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, kernel@pengutronix.de,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Subject: Re: [PATCH v3 0/7] Documentation/security-bugs: overhaul
-Message-ID: <ZAWJtvfnFWEjsIXd@1wt.eu>
-References: <20230305220010.20895-1-vegard.nossum@oracle.com>
- <ZAWB5kwcG9IpWvE/@kroah.com>
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] media: i2c: ov5640: Implement get_mbus_config
+Date:   Mon,  6 Mar 2023 07:36:49 +0100
+Message-Id: <20230306063649.7387-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAWB5kwcG9IpWvE/@kroah.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:U5q3Uzpu7O0mLu2MHa+N3aU6TzuolB/G+0u48wmiI71QRmt2rVf
+ FczmGewXuqOKGed/nKo1KZ0J6qv5fd+KkgfrzwUo91Vgh9Kf5PHIc9LsN+w2aXa7O2rffBz
+ JgrVqoqiicTp5h93slLp1cWuS4WklL4Cyk3s+S3jJG4EauW8phOjVQGT3Oqj8nXiunH+yX8
+ rjWvYEsfMixgdU0ulIbgg==
+UI-OutboundReport: notjunk:1;M01:P0:HAgWnUUvlSQ=;rNGwRX+DE7mdzFWkYDWnNzmB04t
+ DMCyQorcQaqeXoHS+pUB0eU8cCI443lUMQe8PXHqFCyigfH2gAXnXkwJgQjkkkoD8fp0IZpKl
+ 7bYd7WIox/bTR2j1VQBqkWmslysUTQEVjptJZzs6zwC33QcI4T9zP45dp8p+A5/vwl2ljRaTM
+ 1LEW8Cf8nutrikxEhwkjRYG1jpTUJMY8y2/c4qHYprDEKbi/VBPB7USLZYtnwE4CvJxwvVGUc
+ kfewNPIaQCOlUj6oCEsqHpSm1XhxM2tmWp/I7Mbc+vp4237j9r35GtLnirCiozm6/IA0GNj91
+ ZbuBuUhsFPCuExSerxjA0yjPXM3xAPC65RVopEoX6Ck07lv8IITBlGeyvEjGQnNJmhSpxOqIJ
+ Atz66QBuKNs4jwVi/23PUKY4ox0CPqmVq8dsooOBnFatozwTVEKM7lM/HB5IFq6z8FmjJpmif
+ vEq/BTlpavkAm8T1U4vV2tV+dumB7JCGipxZmtlSeqqIntLKw+8SQnPTxrEO3VgfflC3yho/k
+ /+VXIsoysjkySoevlWL0Rndds2jSCjZVAZBMmcEWNFI4AjsFh1tdeoEMSTh9hcrZG7ITR0+DH
+ V9J++LJKsa3TvAfbQH0PDshm6VnXMXn1LbcUZS2JsDFkJu7Yv0rsbEhno0TayQ6ok1iO02W+X
+ 3Oo/FabfSTXxx6zROhIrPdmXiBAhNYFGjvupZRzH5Q==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 07:02:14AM +0100, Greg Kroah-Hartman wrote:
-> Secondly, and the bigger one, I think we should just drop all of the
-> references to linux-distros and oss-security entirely, as those are
-> groups that are outside of our control and interaction and have
-> different rules that we might not agree with.  They also just a tiny
-> subset of Linux users and companies and as such do not really reflect
-> the majority of where Linux is used anymore.
+From: Aishwarya Kothari <aishwarya.kothari@toradex.com>
 
-I'm wondering if instead they shouldn't just be mentioned as a warning
-about the risk of leak or forced disclosure. We know that reporters may
-find the address from various places, including various sites that may
-enumerate the long list of potential contacts, and not just this doc.
-It can be useful to have just a paragraph warning about the fact that
-oss-sec is public and that linux-distros has this strict disclosure
-policy without consideration for the availability of a fix, in order
-to warn them to only contact such lists once the fix is available and
-tested if they want to, but never before. Anything we can do to help
-serious reporters (i.e. those who are really embarrassed with a bug,
-not those who seek a Curiculum Vitae Enhancer) should be done. It's
-always a stressful moment to report a security issue on a project,
-you always fear that you might be doing an irreversible mistake, so
-whatever info we can pass about the risks (or lack of) should be
-welcome I guess.
+Implement the introduced get_mbus_config operation to report the
+config of the MIPI CSI-2, BT.656 and Parallel interface.
 
-Willy
+Signed-off-by: Aishwarya Kothari <aishwarya.kothari@toradex.com>
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+
+---
+
+Changes in v2:
+- Take care of MIPI CSI-2, BT.656 and Parallel interface as
+  pointed out by Jacopo. Thanks!
+
+ drivers/media/i2c/ov5640.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+index 1536649b9e90..43373416fcba 100644
+--- a/drivers/media/i2c/ov5640.c
++++ b/drivers/media/i2c/ov5640.c
+@@ -3774,6 +3774,24 @@ static int ov5640_init_cfg(struct v4l2_subdev *sd,
+ 	return 0;
+ }
+ 
++static int ov5640_get_mbus_config(struct v4l2_subdev *sd,
++				   unsigned int pad,
++				   struct v4l2_mbus_config *cfg)
++{
++	struct ov5640_dev *sensor = to_ov5640_dev(sd);
++
++	cfg->type = sensor->ep.bus_type;
++	if (ov5640_is_csi2(sensor)) {
++		cfg->bus.mipi_csi2.num_data_lanes =
++			sensor->ep.bus.mipi_csi2.num_data_lanes;
++		cfg->bus.mipi_csi2.flags = sensor->ep.bus.mipi_csi2.flags;
++	} else {
++		cfg->bus.parallel.flags = sensor->ep.bus.parallel.flags;
++	}
++
++	return 0;
++}
++
+ static const struct v4l2_subdev_core_ops ov5640_core_ops = {
+ 	.log_status = v4l2_ctrl_subdev_log_status,
+ 	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
+@@ -3794,6 +3812,7 @@ static const struct v4l2_subdev_pad_ops ov5640_pad_ops = {
+ 	.get_selection = ov5640_get_selection,
+ 	.enum_frame_size = ov5640_enum_frame_size,
+ 	.enum_frame_interval = ov5640_enum_frame_interval,
++	.get_mbus_config = ov5640_get_mbus_config,
+ };
+ 
+ static const struct v4l2_subdev_ops ov5640_subdev_ops = {
+-- 
+2.36.1
+
