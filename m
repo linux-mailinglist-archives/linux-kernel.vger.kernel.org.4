@@ -2,120 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0EC6ACA96
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFD96ACAAB
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjCFReV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:34:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
+        id S230436AbjCFRfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:35:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjCFReR (ORCPT
+        with ESMTP id S230381AbjCFRff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:34:17 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D1547417;
-        Mon,  6 Mar 2023 09:33:28 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-17671fb717cso10683271fac.8;
-        Mon, 06 Mar 2023 09:33:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678123886;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GI1EgHIOtlBLUeCcar5f/nKm4Ohv4KoqJIyioLv7Plw=;
-        b=bs67hZom2A5C+RBJixeEP8/kGS74ZxBt/uzt1ow+rvzGVPuh52yc2vjS9UYD2dNHaw
-         pRY4mLdJgW4Emq7HwPyPwQ1hLH/+DXo9l+nD0MUrBd+lD4FYD95cFyr08BSLV/jgN+As
-         REHmISvm7W4dLl6UbNWkB0Bdo5uKHj5TdY3VwR7EidhBJN2IgbWvRZYWD93Ynm0UtaX0
-         tKCKs7L05WIV2QNoBwBsFzTiSKez7fAHQ/vDJUv7qH/ZJsi6RSvBSxnCppkpGOJz+OFD
-         ou2enfiC2VFRHvU847bDKoFbT3ZRtFE+iWXKpQpyIW03QDJut0n17pGPKHvojyOgThq/
-         /Rlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678123886;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GI1EgHIOtlBLUeCcar5f/nKm4Ohv4KoqJIyioLv7Plw=;
-        b=35OmJgIyl2nARe1O8QXkDxzaNGAKgb4MUS+cY0/7OxKdTVDeAEGg5UgnHIFC1aoS5P
-         TzalxQJ3TeNDGdKajJP9Vcd4PHCUiFh9KbQDlN8fInfc9lGNedvRLtDmUjCrDM2rETNa
-         3ZO1vMLiLizTMwhZVoIMWZZT/tsFlEnV4bofO66PQ2dKc4CRBYvkiq+dbHpaDtZIN2PP
-         mi9dd1Kq0Pgqxfi5runoNORp2ANQ7Jo3R8uC9OElxcmpsrK7klgL8q+Q7fBe7jin9H8+
-         ZCwjGoQMctumpyb8ZLctUWAF2LV6ifkoAaFOxkSMfHyRaVPE3h33oW0TaLswU8qDKuOf
-         rcaQ==
-X-Gm-Message-State: AO0yUKXgQt7RXrl2Qm53RfwjFXfU4NIzOSdBZ/eTcF6Kxe0sJQL7rOa7
-        0py1a8lTlPALxwrPIfGElWg=
-X-Google-Smtp-Source: AK7set/OA1jz5f4e9DGjALJv/VYkdpvhhLitri/pqlbDkEx3wl75SQvhysK5esFweGTkygnPnv7mNg==
-X-Received: by 2002:a05:6870:5250:b0:16e:800:9e05 with SMTP id o16-20020a056870525000b0016e08009e05mr8800530oai.12.1678123885984;
-        Mon, 06 Mar 2023 09:31:25 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s27-20020a05683004db00b00684c5211c58sm4325456otd.60.2023.03.06.09.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 09:31:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 6 Mar 2023 09:31:24 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        patches@opensource.cirrus.com, linux-watchdog@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 3/3] watchdog: wm8350: Simplify using
- devm_watchdog_register_device()
-Message-ID: <84cd135f-118e-4c61-8a80-0cd93159d106@roeck-us.net>
-References: <20230306170901.2232323-1-u.kleine-koenig@pengutronix.de>
- <20230306170901.2232323-4-u.kleine-koenig@pengutronix.de>
+        Mon, 6 Mar 2023 12:35:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC9386A1F0;
+        Mon,  6 Mar 2023 09:35:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27F39B8105F;
+        Mon,  6 Mar 2023 17:33:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4725C433EF;
+        Mon,  6 Mar 2023 17:32:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678123997;
+        bh=oCRV/O5q3R94VDA67eta1+j60LSWpLxWhmxqrzbP2FY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tzMRw/rwKmj16OdXkTBYsEPVgFatAfUN3LJ33ZBFVzmWPChI0zegxz8a6lrSnpVNM
+         a5WWAe2HioVWJtIPc/ttoZWVvhbbsyNHioBhNIQsfUp41fNu7Bsn12CrCVulbshfh3
+         xaVbonUnnhiN36hPDyYZX/yUWExunxxxGCl97t7m1BbXS8j1Pcd3ba2pmytwNFlcuo
+         A4JumTBBP3xhvGiEXHq6D5gvgXZpJRCL48CblfxVMHFohHME3UQpdMcaz7KQ0rX6Bi
+         zb4ahU89uF20dlnC+V+KW34/XFSen5uQSXFbDSnNjd2h/1S6Rp+UFmOkj5NVaXulLq
+         RxBBn71VZ8v1A==
+Date:   Mon, 6 Mar 2023 17:32:49 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        jic23@kernel.org, tudor.ambarus@microchip.com, pratyush@kernel.org,
+        Sanju.Mehta@amd.com, chin-ting_kuo@aspeedtech.com, clg@kaod.org,
+        kdasu.kdev@gmail.com, f.fainelli@gmail.com, rjui@broadcom.com,
+        sbranden@broadcom.com, eajames@linux.ibm.com, olteanv@gmail.com,
+        han.xu@nxp.com, john.garry@huawei.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, narmstrong@baylibre.com,
+        khilman@baylibre.com, matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org, heiko@sntech.de,
+        krzysztof.kozlowski@linaro.org, andi@etezian.org,
+        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
+        oss@buserror.net, windhl@126.com, yangyingliang@huawei.com,
+        william.zhang@broadcom.com, kursad.oney@broadcom.com,
+        jonas.gorski@gmail.com, anand.gore@broadcom.com, rafal@milecki.pl,
+        git@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        michael@walle.cc, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
+        amitrkcian2002@gmail.com, Dhruva Gole <d-gole@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+Subject: Re: [PATCH V5 01/15] spi: Replace all spi->chip_select and
+ spi->cs_gpiod references with function call
+Message-ID: <479f5b1e-6ac1-47c7-9f5b-4080e0c77c16@sirena.org.uk>
+References: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com>
+ <20230306172109.595464-2-amit.kumar-mahapatra@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1RpCo94WkIg3XG9u"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230306170901.2232323-4-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230306172109.595464-2-amit.kumar-mahapatra@amd.com>
+X-Cookie: teamwork, n.:
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 06:09:01PM +0100, Uwe Kleine-König wrote:
-> This allows to drop the .remove() function as it only exists to
-> unregister the watchdog device which is now done in a callback
-> registered by devm_watchdog_register_device().
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+--1RpCo94WkIg3XG9u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> ---
->  drivers/watchdog/wm8350_wdt.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/drivers/watchdog/wm8350_wdt.c b/drivers/watchdog/wm8350_wdt.c
-> index 33c62d51f00a..911ad64460a6 100644
-> --- a/drivers/watchdog/wm8350_wdt.c
-> +++ b/drivers/watchdog/wm8350_wdt.c
-> @@ -153,18 +153,11 @@ static int wm8350_wdt_probe(struct platform_device *pdev)
->  	/* Default to 4s timeout */
->  	wm8350_wdt_set_timeout(&wm8350_wdt, 4);
->  
-> -	return watchdog_register_device(&wm8350_wdt);
-> -}
-> -
-> -static int wm8350_wdt_remove(struct platform_device *pdev)
-> -{
-> -	watchdog_unregister_device(&wm8350_wdt);
-> -	return 0;
-> +	return devm_watchdog_register_device(&wm8350_wdt);
->  }
->  
->  static struct platform_driver wm8350_wdt_driver = {
->  	.probe = wm8350_wdt_probe,
-> -	.remove = wm8350_wdt_remove,
->  	.driver = {
->  		.name = "wm8350-wdt",
->  	},
-> -- 
-> 2.39.1
-> 
+On Mon, Mar 06, 2023 at 10:50:55PM +0530, Amit Kumar Mahapatra wrote:
+> Supporting multi-cs in spi drivers would require the chip_select & cs_gpiod
+> members of struct spi_device to be an array. But changing the type of these
+> members to array would break the spi driver functionality. To make the
+> transition smoother introduced four new APIs to get/set the
+> spi->chip_select & spi->cs_gpiod and replaced all spi->chip_select and
+> spi->cs_gpiod references with get or set API calls.
+> While adding multi-cs support in further patches the chip_select & cs_gpiod
+> members of the spi_device structure would be converted to arrays & the
+> "idx" parameter of the APIs would be used as array index i.e.,
+> spi->chip_select[idx] & spi->cs_gpiod[idx] respectively.
+
+This doesn't apply against current code, there was a rework of the
+mpc512x-psc driver.  Please check and resend.
+
+--1RpCo94WkIg3XG9u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQGI8AACgkQJNaLcl1U
+h9CIEwf/aZyH3WWgY7CUVh9W2WlSP5NnJGsbwRuFubTTP3ObZz0pCsJEwP8mAwdf
+wpWZ2t/nCcibXSVknqIW+r7FPrfknmY5nJ9jal+WTp/hkYYJeVEebOg9nMUX+Nwh
+fycQjw6AcKBn6mbRNf2c9ZVSKOpTnKNHFCdGSAfVWdMclSNADYerewze+WELEn9D
+6YoQTAPR4B1PBZUkwpAympwP8+SR1wFKzN2dmCVFQSWgYJ834b4wWLD9eZFMrjEN
+gf4+dIPQkjxzNMIErUCqVkaf/wgPkCAIjb2p1cWKU2b3IOG6di49DMsuImObYUAJ
+8cVDQ8KP5PGcINenovKCKWd1awBmtw==
+=ppxH
+-----END PGP SIGNATURE-----
+
+--1RpCo94WkIg3XG9u--
