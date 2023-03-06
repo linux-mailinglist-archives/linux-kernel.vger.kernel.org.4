@@ -2,180 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2716AB45C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 577CF6AB46A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:54:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjCFBlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 20:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S229621AbjCFByY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 20:54:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCFBlt (ORCPT
+        with ESMTP id S229562AbjCFByV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 20:41:49 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEFE113CD;
-        Sun,  5 Mar 2023 17:41:47 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVLsK5LjHz4x5Z;
-        Mon,  6 Mar 2023 12:41:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678066901;
-        bh=H1Pi6MUM1GOz6ht/UylKRvESYru/TTexAZ9vRNwF/34=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P2QjKTxnQ211QkBV5sVI3d+90pp4Ud07nl2KC0IgJPK0WVnYov65jbcaj8gQareKp
-         BZQQSvQrBInSGMShKjW583IOsXnsxLD3FLzA5KNjstxWdb6LQggZ/XW8ikcux21bEw
-         MGYBsbxdZi7xPcvS/4b7oomluPVnT1KxpGcwUItplvasylgK+zyf2XgNI5Fdcm7+N4
-         a7IYx0qkbjdQTlzwRM8pNDS4T3A3ygRZs9iPq3Ub9WGtw4jsOZM6SUOmVLYfFjMmtY
-         zmJEypCQT/h5CeErqaiQtjAO/sHqtvDzkU/uERQpKuksWOKSFHHZWkVF2rBaGh8PoJ
-         3QUKKtrWjPS2w==
-Date:   Mon, 6 Mar 2023 12:41:40 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: stats (Was: Linux 6.3-rc1)
-Message-ID: <20230306124140.48324254@canb.auug.org.au>
-In-Reply-To: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
-References: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Rl9__J4XXUlGLF9qh=41=AY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 5 Mar 2023 20:54:21 -0500
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3260CB74A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 17:54:19 -0800 (PST)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230306015415epoutp0170240eba42f9ce4e0b5f12bee9dddec4~JsaRWMb3j0203202032epoutp01B
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 01:54:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230306015415epoutp0170240eba42f9ce4e0b5f12bee9dddec4~JsaRWMb3j0203202032epoutp01B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1678067655;
+        bh=mJxdAUSREaShX8DFcolRF1CTxDCXGUzkG0FBk9MUzLE=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=MZwREKSRLcFG+3oQhZ18wXAOQXGqnDOZOpeaQdN+VFp1rr9OvAE+B0ATtRvRUFps+
+         aS9auZMwuRgLuULjKvC9R5uxqpLGIEsq99gOHdRIXz2h2OyY/rXdVWvMagY6tFHaem
+         aNnFOLQs3KnGSTB0L7IXB0g5pPZxZ4aFopH47Wms=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20230306015415epcas2p48b5dd3cb926655134760454c32937ce2~JsaQ2RIOG2100121001epcas2p4R;
+        Mon,  6 Mar 2023 01:54:15 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.100]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4PVM7p4Mtwz4x9QD; Mon,  6 Mar
+        2023 01:54:14 +0000 (GMT)
+Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        AB.51.61927.5C745046; Mon,  6 Mar 2023 10:54:13 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+        20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a~JsaPPhEka0846908469epcas2p3J;
+        Mon,  6 Mar 2023 01:54:13 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230306015413epsmtrp21fa4b2a6f718957f6c580df5ccd5995f~JsaPOxz9c2845028450epsmtrp2d;
+        Mon,  6 Mar 2023 01:54:13 +0000 (GMT)
+X-AuditID: b6c32a45-e942ca800001f1e7-74-640547c56c07
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        93.08.18071.5C745046; Mon,  6 Mar 2023 10:54:13 +0900 (KST)
+Received: from localhost.localdomain (unknown [10.229.9.51]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230306015413epsmtip28258ff89ad99ffc419c1afbac00231c5~JsaO-NCCp0452104521epsmtip23;
+        Mon,  6 Mar 2023 01:54:13 +0000 (GMT)
+From:   Jaewon Kim <jaewon02.kim@samsung.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jaewon Kim <jaewon02.kim@samsung.com>
+Subject: [PATCH] spi: s3c64xx: add no_cs description
+Date:   Mon,  6 Mar 2023 10:42:39 +0900
+Message-Id: <20230306014239.80570-1-jaewon02.kim@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrEKsWRmVeSWpSXmKPExsWy7bCmue5Rd9YUg4NXlS0ezNvGZrH4x3Mm
+        ix0NR1gt9r7eym6x6fE1VovLu+awWcw4v4/JovHjTXYHDo/rSz4xe9y5tofNY/OSeo++LasY
+        PT5vkgtgjcq2yUhNTEktUkjNS85PycxLt1XyDo53jjc1MzDUNbS0MFdSyEvMTbVVcvEJ0HXL
+        zAE6RUmhLDGnFCgUkFhcrKRvZ1OUX1qSqpCRX1xiq5RakJJTYF6gV5yYW1yal66Xl1piZWhg
+        YGQKVJiQnbHvZBNrwT62ioNnwhsY97N2MXJySAiYSPy50MbSxcjFISSwg1Gib+05RpCEkMAn
+        RokTnVkQiW+MEp/XnGaE6VjfcI4dIrGXUeL+JpAOEOcjo8TidzPZQKrYBLQlvq9fzAqSEBFo
+        YJRovjyVDcRhFljPKLHuwhcmkCphoFknVx5hAbFZBFQl/m/aygxi8wrYSlzu38ECsU9eYvWG
+        A8wgzRICm9gl7rTuYYJIuEhMfPcU6ihhiVfHt7BD2FISn9/tZYOwsyXap/+BerVC4uKG2VBx
+        Y4lZz9qBejmALtKUWL9LH8SUEFCWOHILbC2zAJ9Ex+G/7BBhXomONiGIRjWJ+1PPQQ2RkZh0
+        ZCXUMR4Sp/53sYGUCwnESmzZnzCBUXYWwvgFjIyrGMVSC4pz01OLjQoM4XGUnJ+7iRGcuLRc
+        dzBOfvtB7xAjEwfjIUYJDmYlEV6eUpYUId6UxMqq1KL8+KLSnNTiQ4ymwNCayCwlmpwPTJ15
+        JfGGJpYGJmZmhuZGpgbmSuK80rYnk4UE0hNLUrNTUwtSi2D6mDg4pRqYXJv0DDv3akga7hHV
+        q76y5L7YD+8daZYHzi4W/VRq9nHWFlPPS2n9ch0GnWsnSbzfeHDxQmODKYabdgipW//q+Sr+
+        cmayTa47X/l615NPNkla1TyxuPZtd2TqJXd/p99LD/A8meL4Z3Pb2Z1Tr9mF/o2Xuh5gZXXJ
+        bKmOwubJGmWxoX+3fbOf0b7wq/PLl2HK3maMRyMO94sX7RBUPJWS+LbU4crzafbNpdpNcmVm
+        wXe5pj8MqnVcnnq/LZArO6Yq++HS5S4hORvtZsvrV1hph3Xl7vquxpOb1HAj87OOfFLkOt4k
+        t2lHHL96f2lin9t/ReydlO2maY+sOTguvqheuVBSOv2PccplHUsfhSdKLMUZiYZazEXFiQC/
+        VJ3T5QMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphluLIzCtJLcpLzFFi42LZdlhJXveoO2uKwcXXnBYP5m1js1j84zmT
+        xY6GI6wWe19vZbfY9Pgaq8XlXXPYLGac38dk0fjxJrsDh8f1JZ+YPe5c28PmsXlJvUffllWM
+        Hp83yQWwRnHZpKTmZJalFunbJXBl7DvZxFqwj63i4JnwBsb9rF2MnBwSAiYS6xvOsXcxcnEI
+        CexmlDiy/BQLREJGYvmzPjYIW1jifssRVoii94wSuxY/YwRJsAloS3xfvxgsISLQxChx41wv
+        M4jDLLCZUaL9/DmwHcJAO06uPAI2lkVAVeL/pq3MIDavgK3E5f4dUOvkJVZvOMA8gZFnASPD
+        KkbJ1ILi3PTcYsMCw7zUcr3ixNzi0rx0veT83E2M4IDS0tzBuH3VB71DjEwcjIcYJTiYlUR4
+        eUpZUoR4UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgSTZeLglGpgSr11
+        +800OR2Xfsl39q3Nzh3ul3gT9U63Md5/slVMZ7naqeO3woUS5H49Yms3Dv8c2W++t1Tb7827
+        dZt4uRMy+ip2rLbM8pS+FzivqYy19GGOFWPxvfPKTr+vfjpY9/3Wye1nEha+ebkw7WvHBPVL
+        WxeEmucrcW0P/7U9bvJcyyVz8lXeSnqG358sN+fT1D9/NyR3zr3MsZd7+4NfQq6yp+y7ypoM
+        2HoXKXR+Y0qxPPxnZ0oP66xH05cfnfpPa94C71WyEfynrnhlf5JW9jOdckxza9DligRR3fa/
+        jy51yn2t9l/FGFJ2OVIja8915SXyMxSYfy+MEbG1X5byclmb39ewWNkfUgunufebWcxKV2Ip
+        zkg01GIuKk4EAL3mhwWXAgAA
+X-CMS-MailID: 20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a
+References: <CGME20230306015413epcas2p371356e4008af6978cdadb5b859d8be2a@epcas2p3.samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Rl9__J4XXUlGLF9qh=41=AY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This patch adds missing variable no_cs descriptions.
 
-Hi all,
+Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
+---
+ include/linux/platform_data/spi-s3c64xx.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-As usual, the executive friendly graph is at
-http://neuling.org/linux-next-size.html :-)
+diff --git a/include/linux/platform_data/spi-s3c64xx.h b/include/linux/platform_data/spi-s3c64xx.h
+index 5df1ace6d2c9..3101152ce449 100644
+--- a/include/linux/platform_data/spi-s3c64xx.h
++++ b/include/linux/platform_data/spi-s3c64xx.h
+@@ -29,6 +29,7 @@ struct s3c64xx_spi_csinfo {
+  * struct s3c64xx_spi_info - SPI Controller defining structure
+  * @src_clk_nr: Clock source index for the CLK_CFG[SPI_CLKSEL] field.
+  * @num_cs: Number of CS this controller emulates.
++ * @no_cs: Used when CS line is not connected.
+  * @cfg_gpio: Configure pins for this SPI controller.
+  */
+ struct s3c64xx_spi_info {
+-- 
+2.17.1
 
-(No merge commits counted, next-20230220 was the first linux-next after
-the merge window opened.)
-
-Commits in v6.3-rc1 (relative to v6.2):            12717
-Commits in next-20230220:                          12390
-Commits with the same SHA1:                        11749
-Commits with the same patch_id:                      317 (1)
-Commits with the same subject line:                   12 (1)
-
-(1) not counting those in the lines above.
-
-So commits in -rc1 that were in next-20230220:     12078 94%
-
-Some breakdown of the list of extra commits (relative to next-20230220)
-in -rc1:
-
-Top ten first word of commit summary:
-
-     66 net
-     43 drm
-     32 scsi
-     28 cifs
-     25 asoc
-     24 dt-bindings
-     19 risc-v
-     18 alpha
-     17 rtc
-     17 riscv
-
-Top ten authors:
-
-     19 dhowells@redhat.com
-     16 viro@zeniv.linux.org.uk
-     15 miquel.raynal@bootlin.com
-     14 atishp@rivosinc.com
-     12 edumazet@google.com
-     12 broonie@kernel.org
-      8 paulb@nvidia.com
-      8 arnd@arndb.de
-      7 vladimir.oltean@nxp.com
-      7 torvalds@linux-foundation.org
-
-Top ten commiters:
-
-     44 davem@davemloft.net
-     36 kuba@kernel.org
-     34 stfrench@microsoft.com
-     33 alexander.deucher@amd.com
-     32 martin.petersen@oracle.com
-     32 broonie@kernel.org
-     23 palmer@rivosinc.com
-     21 pabeni@redhat.com
-     21 alexandre.belloni@bootlin.com
-     20 stefan@datenfreihafen.org
-
-There are also 312 commits in next-20230220 that didn't make it into
-v6.3-rc1.
-
-Top ten first word of commit summary:
-
-     37 fs
-     29 habanalabs
-     22 nvmem
-     17 arm
-     13 btrfs
-     12 dmapool
-     11 dt-bindings
-     10 virtio_ring
-     10 soc
-     10 iio
-
-Top ten authors:
-
-     16 almaz.alexandrovich@paragon-software.com
-     15 krzysztof.kozlowski@linaro.org
-     14 arnd@arndb.de
-     11 michael@walle.cc
-     11 dhowells@redhat.com
-     10 xuanzhuo@linux.alibaba.com
-      8 xu.xin16@zte.com.cn
-      8 kbusch@kernel.org
-      7 josef@toxicpanda.com
-      7 ericvh@kernel.org
-
-Top ten commiters:
-
-     32 srinivas.kandagatla@linaro.org
-     32 almaz.alexandrovich@paragon-software.com
-     30 akpm@linux-foundation.org
-     29 ogabbay@kernel.org
-     16 krzysztof.kozlowski@linaro.org
-     14 jonathan.cameron@huawei.com
-     13 dsterba@suse.com
-     12 mst@redhat.com
-     12 dhowells@redhat.com
-     10 yilun.xu@intel.com
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Rl9__J4XXUlGLF9qh=41=AY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQFRNUACgkQAVBC80lX
-0Gy9Vgf8CMxlyP2bv3YhC4yPqDIeL3ElTXAVi+NH2nvbENsSJyVGjUzDiM1dIQjg
-eyaHcz+dC7CUWpln8eZgG+R1a62FqHDU7MGcwauW0q84IRLLQkAaKpl6xN+Xxzxp
-uWJ453hGFvRRSUeyq2TbBksU1PnaMlPQgegchRa/Vdw1UqxXbakXEgmPOhW7qOMa
-I9HvjO1MOs3VaJN5AAfsKdeBj20qKM8Iwy6nX9c8mnLE4dOSxl7MWlMNI6XzO0Mi
-W6e95dFZ5MSjS17/QG/DAyIqgk9yAaM5Br65yNNEclkHLZIcgfDMqK3hYLJvo3BK
-Jq/QvG90fQ39ShyQY2NkOitEWZOSrg==
-=2Uma
------END PGP SIGNATURE-----
-
---Sig_/Rl9__J4XXUlGLF9qh=41=AY--
