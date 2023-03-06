@@ -2,75 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168D66ABE3D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405916ABE38
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 12:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230055AbjCFLeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 06:34:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50868 "EHLO
+        id S229985AbjCFLeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 06:34:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjCFLeb (ORCPT
+        with ESMTP id S229936AbjCFLeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 06:34:31 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE40A25E1E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:34:26 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id h11so8450066wrm.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 03:34:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678102465;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=kcFkvrShXbF2CFhK0/oJaKpo0rIrr4/wjiECE0Ry774=;
-        b=w1ITZjrGW/QOH32dwqCBDCxbtVTjziYE7WXm8LKh5W3RyN04hODHg58PYm+qGhBm98
-         ZX94ZnRvLkMhEHtTk4PGs8bNgjdjz4+8wRevETdd5TCQnCtxpDm9W9sxjiz+nhwhJIv9
-         jvhqKHdo4nikaFKjxUUgaYRH0kynXpx9QB8OvqEroBhhGNvyPp2Ga45vNO6R0WzwiPDQ
-         WHop+Pb18kIW5pYCmdtGfjjreG3LJaVE6oYvg5JY6g9H+Rfs1WM2SK87tkQb3EPm1Du5
-         /hJVZOH8gm0+OnikKifQFmUQGjbgH65+mGDLmjJuuMMQtuLciIVqOpDbaiaBFTrMrcRi
-         m1bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678102465;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kcFkvrShXbF2CFhK0/oJaKpo0rIrr4/wjiECE0Ry774=;
-        b=sX94qwCq9XIXDH4KBT1s2q98SSeDJbxZnffceVAXhGEQSBTW3Wr8bAYWmy2qas/y5z
-         kbl97ZBpCfAZovBfDmGCUQOnGSTw3eQt+7cLU0iSmlOe0KVbiIB/rNOGYDL8Dy3PRglO
-         EsHwUInDhdQICuurB5ArW+wk7F2hNWmon0FoobCnTyby3ZE5MiaCVy+BpzAALpRYmTVF
-         PeOpZ222WyWswUsK2pKR2vc0edXbADAOoznrGFrj+VH8L3Q9YuX0UyYnKzyUmGQZdQ2/
-         x7lXNd38JiB9bUc6hdRjhy9FGsTYJ6yvkxNTMkcUsvDsAhaUeEo+7yaL5Uho3bH7vBJ8
-         5plg==
-X-Gm-Message-State: AO0yUKWRfmT6xSAHEKd6gt625sOtbFP1G9QWMMGQjdE8/V0KaBcav0yj
-        TkxKX5/CmA8TanGXEovA1vbnx4aQ7Oz61zYFi6g=
-X-Google-Smtp-Source: AK7set9UafAXr/9TyjNLehZsI8q6PEwZzOGc97MEuj36r9xw0jHrushT4+jS9PqptIjPrV+Y8RSHyg==
-X-Received: by 2002:adf:eb87:0:b0:2ce:43c3:2fd with SMTP id t7-20020adfeb87000000b002ce43c302fdmr7064354wrn.4.1678102464886;
-        Mon, 06 Mar 2023 03:34:24 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id e13-20020adff34d000000b002c53cc7504csm9525832wrp.78.2023.03.06.03.34.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 03:34:24 -0800 (PST)
-References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
- <20230301183759.16163-4-ddrokosov@sberdevices.ru>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        neil.armstrong@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com
-Cc:     jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v9 3/5] dt-bindings: clock: meson: add A1 PLL clock
- controller bindings
-Date:   Mon, 06 Mar 2023 12:33:48 +0100
-In-reply-to: <20230301183759.16163-4-ddrokosov@sberdevices.ru>
-Message-ID: <1jmt4qazb3.fsf@starbuckisacylon.baylibre.com>
+        Mon, 6 Mar 2023 06:34:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33BED252B7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 03:34:00 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 53C7312FC;
+        Mon,  6 Mar 2023 03:34:43 -0800 (PST)
+Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 884DB3F5A1;
+        Mon,  6 Mar 2023 03:33:57 -0800 (PST)
+Message-ID: <c3ca6d66-e58c-8ace-e88e-45ded5de836f@arm.com>
+Date:   Mon, 6 Mar 2023 11:33:54 +0000
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 09/18] x86/resctrl: Allow resctrl_arch_rmid_read() to
+ sleep
+Content-Language: en-GB
+To:     Peter Newman <peternewman@google.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>
+References: <20230113175459.14825-1-james.morse@arm.com>
+ <20230113175459.14825-10-james.morse@arm.com>
+ <CALPaoCg4T52ju5XJC-BVX-EuZUtc67LruWbgyH5s8CoiEwOUPw@mail.gmail.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <CALPaoCg4T52ju5XJC-BVX-EuZUtc67LruWbgyH5s8CoiEwOUPw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,128 +60,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Peter,
 
-On Wed 01 Mar 2023 at 21:37, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+On 23/01/2023 15:33, Peter Newman wrote:
+> On Fri, Jan 13, 2023 at 6:56 PM James Morse <james.morse@arm.com> wrote:
+>> MPAM's cache occupancy counters can take a little while to settle once
+>> the monitor has been configured. The maximum settling time is described
+>> to the driver via a firmware table. The value could be large enough
+>> that it makes sense to sleep.
+> 
+> Would it be easier to return an error when reading the occupancy count
+> too soon after configuration? On Intel it is already normal for counter
+> reads to fail on newly-allocated RMIDs.
 
-> Add the documentation for Amlogic A1 PLL clock driver, and A1 PLL
-> clock controller bindings.
-> Also include new A1 clock controller dt bindings to MAINTAINERS.
->
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+For x86, you have as many counters as there are RMIDs, so there is no issue just accessing
+the counter.
 
-patch order is wrong.
-Bindings before drivers please.
+With MPAM there may be as few as 1 monitor for the CSU (cache storage utilisation)
+counter, which needs to be multiplexed between different PARTID to find the cache
+occupancy (This works for CSU because its a stable count, it doesn't work for the
+bandwidth monitors)
+On such a platform the monitor needs to be allocated and programmed before it reads a
+value for a particular PARTID/CLOSID. If you had two threads trying to read the same
+counter, they could interleave perfectly to prevent either thread managing to read a value.
+The 'not ready' time is advertised in a firmware table, and the driver will wait at most
+that long before giving up and returning an error.
 
-> ---
->  .../bindings/clock/amlogic,a1-pll-clkc.yaml   | 59 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  include/dt-bindings/clock/a1-pll-clkc.h       | 20 +++++++
->  3 files changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
->  create mode 100644 include/dt-bindings/clock/a1-pll-clkc.h
->
-> diff --git a/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> new file mode 100644
-> index 000000000000..8bd2c948df86
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/clock/amlogic,a1-pll-clkc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Amlogic Meson A/C serials PLL Clock Control Unit
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +  - Jerome Brunet <jbrunet@baylibre.com>
-> +  - Jian Hu <jian.hu@jian.hu.com>
-> +  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> +
-> +properties:
-> +  compatible:
-> +    const: amlogic,a1-pll-clkc
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: input fixpll_in
-> +      - description: input hifipll_in
-> +
-> +  clock-names:
-> +    items:
-> +      - const: fixpll_in
-> +      - const: hifipll_in
-> +
-> +required:
-> +  - compatible
-> +  - '#clock-cells'
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/a1-clkc.h>
-> +    apb {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        clock-controller@7c80 {
-> +            compatible = "amlogic,a1-pll-clkc";
-> +            reg = <0 0x7c80 0 0x18c>;
-> +            #clock-cells = <1>;
-> +            clocks = <&clkc_periphs CLKID_FIXPLL_IN>,
-> +                     <&clkc_periphs CLKID_HIFIPLL_IN>;
-> +            clock-names = "fixpll_in", "hifipll_in";
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 39ff1a717625..8438bc9bd636 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -1895,6 +1895,7 @@ L:	linux-amlogic@lists.infradead.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/clock/amlogic*
->  F:	drivers/clk/meson/
-> +F:	include/dt-bindings/clock/a1*
->  F:	include/dt-bindings/clock/gxbb*
->  F:	include/dt-bindings/clock/meson*
->  
-> diff --git a/include/dt-bindings/clock/a1-pll-clkc.h b/include/dt-bindings/clock/a1-pll-clkc.h
-> new file mode 100644
-> index 000000000000..3a559518c6e6
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/a1-pll-clkc.h
-> @@ -0,0 +1,20 @@
-> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
-> +/*
-> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-> + * Author: Jian Hu <jian.hu@amlogic.com>
-> + *
-> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
-> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> + */
-> +
-> +#ifndef __A1_PLL_CLKC_H
-> +#define __A1_PLL_CLKC_H
-> +
-> +#define CLKID_FIXED_PLL		1
-> +#define CLKID_FCLK_DIV2		6
-> +#define CLKID_FCLK_DIV3		7
-> +#define CLKID_FCLK_DIV5		8
-> +#define CLKID_FCLK_DIV7		9
-> +#define CLKID_HIFI_PLL		10
-> +
-> +#endif /* __A1_PLL_CLKC_H */
+Clearly 1 monitor is a corner case, and I hope no-one ever builds that. But if there are
+fewer monitors than there are PARTID*PMG you get the same problem, (you just need more
+threads reading the counters)
 
+
+Thanks,
+
+James
