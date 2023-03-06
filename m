@@ -2,103 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071406AD0EF
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 22:58:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109F16AD0F7
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbjCFV6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 16:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53314 "EHLO
+        id S229736AbjCFWAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCFV6i (ORCPT
+        with ESMTP id S229701AbjCFWAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 16:58:38 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC3D2FCCF;
-        Mon,  6 Mar 2023 13:58:36 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 6 Mar 2023 17:00:23 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FC5A3CE0F;
+        Mon,  6 Mar 2023 14:00:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVssQ73pyz4wgq;
-        Tue,  7 Mar 2023 08:58:34 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678139915;
-        bh=AadnS7GsdyT0/Y78V0exWved253jyT4b8fjmwNe2RTo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W2JBYWnmgBFu7OO42fSwU2EljnHcbtsloekSQpWeBW4rL8N7XKaFfbuOjsAHibbqF
-         Ocs7jS0QqQxwv64TbRfxoirO+AWPdhaPFsPuJFjyAivrrFY8Mr3/D2ipFJpxHCvLR6
-         WjssXKJuyIB8ve/Elc/UuvT+hPpINuUv3opikR6CzyZRT6ep1fkgLjRgYTwkceH+Oe
-         837Jc6lIv4xpDFDapKU6gDZlHReLrwjwbAbL/GDW0vzMp/d8e70FJjeiAZvxGL2AbW
-         Vv9gyNhhkCFzMfM6R/e/1JTdepC/tOQnAs2qfgQVqu3D4WCGylPXDGMlBJLYgeWBwq
-         5EQtcB3UDi7fg==
-Date:   Tue, 7 Mar 2023 08:58:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Marcelo Tosatti <mtosatti@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm tree
-Message-ID: <20230307085834.209cce60@canb.auug.org.au>
-In-Reply-To: <20230306115256.1da8983d@canb.auug.org.au>
-References: <20230306115256.1da8983d@canb.auug.org.au>
+        by sin.source.kernel.org (Postfix) with ESMTPS id DFC5DCE17D5;
+        Mon,  6 Mar 2023 22:00:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 16414C433D2;
+        Mon,  6 Mar 2023 22:00:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678140019;
+        bh=E6ffbDOM6Vr/OgGspczlxERJkY+WFlvEdjkFwcftpQw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=rJN7rE4aaA9TioixAKhoHBb0CRiUTciC7N+X1m/02PBt2jFveDXLnIZHimDmEvoaH
+         M+nYJ/U4OEv9zj90vsCZxFNz75yXAik2pFDDBHAAs+lMHofqm53pC3AYzccfzPe3wH
+         xVyowdOpBCCzP28EFeD/zrEhY1dyxU4ub+DPdZmW+FtcQqW/MTJ/t7i4nHvSA85JGu
+         XhI7iGrnchipdCguLUrUEZYf32EbZz7tvFC7ATwdHQIaRwPHBHx2QyX6/Pdw2oGTx0
+         uD2DJ6Gds57vozeHolfcot6qZtJPzyPxDXICBdukeEMpSiAeI4pYbO6bIPd7S0jaWI
+         AP2Ac3CQwxx+A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E83CDE68C35;
+        Mon,  6 Mar 2023 22:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/raMsRNbibNbQjvqq4SfZ7Ss";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: fix RX data corruption issue
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167814001894.23313.3204096836474065574.git-patchwork-notify@kernel.org>
+Date:   Mon, 06 Mar 2023 22:00:18 +0000
+References: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
+In-Reply-To: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, hkallweit1@gmail.com, lorenzo@kernel.org,
+        Mark-MC.Lee@mediatek.com, john@phrozen.org, nbd@nbd.name,
+        angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
+        dqfext@gmail.com, Landen.Chao@mediatek.com, sean.wang@mediatek.com,
+        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
+        davem@davemloft.net, olteanv@gmail.com, f.fainelli@gmail.com,
+        andrew@lunn.ch, vladimir.oltean@nxp.com, bjorn@mork.no
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/raMsRNbibNbQjvqq4SfZ7Ss
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello:
 
-Hi all,
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 6 Mar 2023 11:52:56 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->=20
-> After merging the mm tree, today's linux-next build (sparc64 defconfig)
-> failed like this:
->=20
-> sparc64-linux-ld: mm/vmstat.o: in function `cpu_vm_stats_fold':
-> vmstat.c:(.text+0x2a18): undefined reference to `__xchg_called_with_bad_p=
-ointer'
-> sparc64-linux-ld: vmstat.c:(.text+0x2a98): undefined reference to `__xchg=
-_called_with_bad_pointer'
->=20
-> Caused by commit
->=20
->   676a3befc9ba ("mm/vmstat: use xchg in cpu_vm_stats_fold")
->=20
-> Sparc does not support xchg() on 8 bit variables.
->=20
-> I have reverted the above commit (and the 2 following ones) for today.
+On Sat, 4 Mar 2023 13:43:20 +0000 you wrote:
+> Fix data corruption issue with SerDes connected PHYs operating at 1.25
+> Gbps speed where we could previously observe about 30% packet loss while
+> the bad packet counter was increasing.
+> 
+> As almost all boards with MediaTek MT7622 or MT7986 use either the MT7531
+> switch IC operating at 3.125Gbps SerDes rate or single-port PHYs using
+> rate-adaptation to 2500Base-X mode, this issue only got exposed now when
+> we started trying to use SFP modules operating with 1.25 Gbps with the
+> BananaPi R3 board.
+> 
+> [...]
 
-I have used the supplied patch instead of these reverts today.
+Here is the summary with links:
+  - [net] net: ethernet: mtk_eth_soc: fix RX data corruption issue
+    https://git.kernel.org/netdev/net/c/193250ace270
 
---=20
-Cheers,
-Stephen Rothwell
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
---Sig_/raMsRNbibNbQjvqq4SfZ7Ss
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGYgoACgkQAVBC80lX
-0Gw5PAgAmh3stKWkIF9cI2TcAKOZOowOAjtz/hH5tN/Spt7Qgf5Tb4ebPuMJVDMu
-kLYkJV8BTZW1xJSKR3E2SdgAb9T6BCjQvT74ofs5mpkueFiK9iewbQrH/RSeOVZY
-rW/Bhz72e863s9vz3ul7HinMfLOCdDiUXWVcOMad/u1SI87P7T16tAjqY26cXK1y
-DlCOOtdwsTQvOTgoLsc9OdrhdV0rGIh4K7lTkJFSZa/azNs0EM8507pPaAOfJpr6
-Q349iebyA3IQy8yINNILBXSNDiXJLY0WnrvXGJOIFQRlqR/2C2U70pxukdJpmHlB
-6Y6QcZcRB+hHFOjSOdEX1wt4EZa79Q==
-=uXdo
------END PGP SIGNATURE-----
-
---Sig_/raMsRNbibNbQjvqq4SfZ7Ss--
