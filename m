@@ -2,193 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BEF6AC3DA
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 623156AC3DE
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 15:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjCFOud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 09:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54642 "EHLO
+        id S231271AbjCFOun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 09:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbjCFOuW (ORCPT
+        with ESMTP id S231185AbjCFOu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 09:50:22 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D4D2716
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 06:49:55 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id r5so10738987qtp.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 06:49:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678114190;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=CRWs2EFCPuBMPKV81kaTXM8CT+AT1P7bsl0h2Aecgew=;
-        b=qc3iLB4VuhZnZ6itNutIAclg/fR/X2D3ZMlruWowvT6We1OxrMRBq4iTOlWiftfrOr
-         s8+5x5T7UNgaAcV6r0r16Fghl15tKgjFmdjjOq0vTX8ISy5oo403LT5OOC7t4TIN0oyt
-         biKyavNw79axnKL8oS+1PbwgMBtw8At1eq0yo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678114190;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CRWs2EFCPuBMPKV81kaTXM8CT+AT1P7bsl0h2Aecgew=;
-        b=OAryjLe8tZ5BvUM4dcya6RSb3zUkfeKjDokDrX0Eh7JAQjmD8n1sN2o3EwOJTpuX+U
-         IWbnR3u68R3krYzkPDuRswpjaZ0xXOK+GEt6fbHDRHwOvNiFUnmQ8wrpbBdRixewm0er
-         sR77qx+ImXma/YSEDYhIODZ0RG5dFTtywXJbdYF8jjWuNxtgsf2wVFShYwBYN53XBW5d
-         5XQvZ8BIbQXutN1lly1hRcmBNF+6l8R55xe4hlgz9/jVveb3IxFjF1lKTX95Ixz6O+We
-         IgnzoPzBbiA1pevzaY57xnxkrJYPfqkqzOobaCXeIcd1p9tl7JBqEnm2UAAqPf0+rBz9
-         SGLA==
-X-Gm-Message-State: AO0yUKV/yVv47FyhretY4oyUWuPeNCMoL9wVG6eSiLKci58//Vj2gi9Z
-        D53EulOTM6NtmwS9e87Qx6YfaQ==
-X-Google-Smtp-Source: AK7set9Sw1c226vsFw+2m8ajyGEeRUjI4xT7GzUOBssiEMMvCLSo6OgyjC4l5BQEtTvt73srCs1lvw==
-X-Received: by 2002:a05:622a:1443:b0:3bf:d4c3:365d with SMTP id v3-20020a05622a144300b003bfd4c3365dmr18743306qtx.14.1678114189869;
-        Mon, 06 Mar 2023 06:49:49 -0800 (PST)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id w25-20020a05620a129900b0073ba211e765sm7548983qki.19.2023.03.06.06.49.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 06:49:48 -0800 (PST)
-Date:   Mon, 6 Mar 2023 14:49:48 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 13/13] rcu/kvfree: Eliminate k[v]free_rcu() single
- argument macro
-Message-ID: <20230306144948.GA3280216@google.com>
-References: <ZAR//FKO4syzapk6@pc636>
- <D8B84631-860B-41CF-8311-88E220C7254F@joelfernandes.org>
- <20230305180524.GL1301832@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 6 Mar 2023 09:50:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152BB28841;
+        Mon,  6 Mar 2023 06:50:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6AF9B80EAB;
+        Mon,  6 Mar 2023 14:49:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8651EC433D2;
+        Mon,  6 Mar 2023 14:49:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678114190;
+        bh=TE0W+LaMhDGxS/vr7StqcQQsX7jPg1CK3evY/RWpwVk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=RFbnWAly9D67z4evYHgo1ae0juUFrCYym8+73f1ySC7zFrLxbpIKET/CrQ/cWTGwa
+         8TkBJpDMp+NAAWR93IyulbespqFMv4n4OgDc4RZZq02NhmMxEcikCgDrpqyU/ffzij
+         hV3RaS2RY6+IyNNIFac2FNEBp1dofxM9R4u7+ONWVCw5TYxyIOKyIpX8Vy6He479lo
+         zzfa0v8VFxZqWjlXCwi7Rg5KQEjddniak6QmEx+/IvJf/SO/4vzMGIxtWDmycNCbaX
+         lWGSypoOVV4JU6laz8uHQ8COqHI2j8YZdr59bgiogRTBd1WethO9PO6E1QunwIY884
+         hZC0DR/CbSnxg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2A8125C00F1; Mon,  6 Mar 2023 06:49:50 -0800 (PST)
+Date:   Mon, 6 Mar 2023 06:49:50 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "urezki@gmail.com" <urezki@gmail.com>
+Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
+Message-ID: <20230306144950.GR1301832@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230303213851.2090365-1-joel@joelfernandes.org>
+ <20230304010251.GD1301832@paulmck-ThinkPad-P17-Gen-1>
+ <IA1PR11MB617141A98ADB1F301FCA07E589B69@IA1PR11MB6171.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230305180524.GL1301832@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <IA1PR11MB617141A98ADB1F301FCA07E589B69@IA1PR11MB6171.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 05, 2023 at 10:05:24AM -0800, Paul E. McKenney wrote:
-> On Sun, Mar 05, 2023 at 07:56:33AM -0500, Joel Fernandes wrote:
+On Mon, Mar 06, 2023 at 08:24:44AM +0000, Zhuo, Qiuxu wrote:
+> > From: Paul E. McKenney <paulmck@kernel.org>
+> > [...]
+> > > Qiuxu also noted impressive boot-time improvements with earlier
+> > > version of patch. An excerpt from the data he shared:
+> > >
+> > > 1) Testing environment:
+> > >     OS            : CentOS Stream 8 (non-RT OS)
+> > >     Kernel     : v6.2
+> > >     Machine : Intel Cascade Lake server (2 sockets, each with 44 logical
+> > threads)
+> > >     Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=2,sockets=2,
+> > > …
+> > >
+> > > 2) OS boot time definition:
+> > >     The time from the start of the kernel boot to the shell command line
+> > >     prompt is shown from the console. [ Different people may have
+> > >     different OS boot time definitions. ]
+> > >
+> > > 3) Measurement method (very rough method):
+> > >     A timer in the kernel periodically prints the boot time every 100ms.
+> > >     As soon as the shell command line prompt is shown from the console,
+> > >     we record the boot time printed by the timer, then the printed boot
+> > >     time is the OS boot time.
+> > >
+> > > 4) Measured OS boot time (in seconds)
+> > >    a) Measured 10 times w/o this patch:
+> > >         8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
+> > >         The average OS boot time was: ~8.7s
+> > >
+> > >    b) Measure 10 times w/ this patch:
+> > >         8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
+> > >         The average OS boot time was: ~8.3s.
 > > 
+> > Unfortunately, given that a's average is within one standard deviation of b's
+> > average, this is most definitely not statistically significant.
+> > Especially given only ten measurements for each case -- you need *at*
+> > *least* 24, preferably more.  Especially in this case, where you don't really
+> > know what the underlying distribution is.
+> 
+> Thank you so much Paul for the detailed comments on the measured data.
+> 
+> I'm curious how did you figure out the number 24 that we at *least* need.
+> This can guide me on whether the number of samples is enough for 
+> future testing ;-).
+
+It is a rough rule of thumb.  For more details and accuracy, study up
+on the Student's t-test and related statistical tests.
+
+Of course, this all assumes that the data fits a normal distribution.
+
+> I did another 48 measurements (2x of 24) for each case 
+> (w/o and w/ Joel's v2 patch) as below. 
+> All the testing configurations for the new testing
+> are the same as before.
+> 
+> a) Measured 48 times w/o v2 patch (in seconds):
+>     8.4, 8.8, 9.2, 9.0, 8.3, 9.6, 8.8, 9.4,
+>     8.7, 9.2, 8.3, 9.4, 8.4, 9.6, 8.5, 8.8,
+>     8.8, 8.9, 9.3, 9.2, 8.6, 9.7, 9.2, 8.8,
+>     8.7, 9.0, 9.1, 9.5, 8.6, 8.9, 9.1, 8.6,
+>     8.2, 9.1, 8.8, 9.2, 9.1, 8.9, 8.4, 9.0,
+>     9.8, 9.8, 8.7, 8.8, 9.1, 9.5, 9.5, 8.7
+>     The average OS boot time was: ~9.0s
+
+The range is 8.2 through 9.8.
+
+> b) Measure 48 times w/ v2 patch (in seconds):
+>     7.7, 8.6, 8.1, 7.8, 8.2, 8.2, 8.8, 8.2,
+>     9.8, 8.0, 9.2, 8.8, 9.2, 8.5, 8.4, 9.2,
+>     8.5, 8.3, 8.1, 8.3, 8.6, 7.9, 8.3, 8.3,
+>     8.6, 8.9, 8.0, 8.5, 8.4, 8.6, 8.7, 8.0,
+>     8.8, 8.8, 9.1, 7.9, 9.7, 7.9, 8.2, 7.8,
+>     8.1, 8.5, 8.6, 8.4, 9.2, 8.6, 9.6, 8.3,
+>     The average OS boot time was: ~8.5s
+
+The range is 7.7 through 9.8.
+
+There is again significant overlap, so it is again unclear that you have
+a statistically significant difference.  So could you please calculate
+the standard deviations?
+
+> @Joel Fernandes (Google), you may replace my old data with the above 
+> new data in your commit message.
+> 
+> > But we can apply the binomial distribution instead of the usual normal
+> > distribution.  First, let's sort and take the medians:
 > > 
-> > > On Mar 5, 2023, at 6:41 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > 
-> > > ﻿
-> > >> 
-> > >>>> On Mar 5, 2023, at 5:29 AM, Joel Fernandes <joel@joelfernandes.org> wrote:
-> > >>> 
-> > >>> ﻿Hi, All,
-> > >>> 
-> > >>>> On Wed, Feb 1, 2023 at 10:11 AM Uladzislau Rezki (Sony)
-> > >>>> <urezki@gmail.com> wrote:
-> > >>>> 
-> > >>>> For a single argument invocations a new kfree_rcu_mightsleep()
-> > >>>> and kvfree_rcu_mightsleep() macroses are used. This is done in
-> > >>>> order to prevent users from calling a single argument from
-> > >>>> atomic contexts as "_mightsleep" prefix signals that it can
-> > >>>> schedule().
-> > >>>> 
-> > >>> 
-> > >>> Since this commit in -dev branch [1] suggests more users still need
-> > >>> conversion, let us drop this single patch for 6.4 and move the rest of
-> > >>> the series forward? Let me know if you disagree.
-> > >>> https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?h=dev&id=9bf5e3a2626ed474d080f695007541b6ecd6e60b
-> > >>> 
-> > >>> All -- please supply Ack/Review tags for patches 1-12.
-> > >> 
-> > >> Or put another way, what is the transition plan for these remaining users?
-> > >> 
-> > >> I am getting on a plane right now but I can research which users are remaining later.
-> > >> 
-> > > I am not sure. I think we can cover it on the meeting.
+> > a: 8.2 8.3 8.4 8.6 8.7 8.7 8.8 8.8 9.0 9.3  Median: 8.7
+> > b: 7.6 7.8 8.2 8.2 8.2 8.2 8.4 8.5 8.7 9.3  Median: 8.2
 > > 
-> > Cool, thanks.
+> > 8/10 of a's data points are greater than 0.1 more than b's median and 8/10
+> > of b's data points are less than 0.1 less than a's median.
+> > What are the odds that this happens by random chance?
+> > 
+> > This is given by sum_0^2 (0.5^10 * binomial(10,i)), which is about 0.055.
 > 
-> My current plan is as follows:
-> 
-> 1.	Addition of kvfree_rcu_mightsleep() went into v6.3.
-> 
-> 2.	After creating branches, I send out the series, including 12/12.
-> 	The -rcu tree's "dev" branch continues to have a revert to avoid
-> 	breaking -next until we achieve clean -next and clean "dev"
-> 	branch.
-> 
-> 3.	Any conversion patches that get maintainer acks go into v6.4.
-> 	Along with a checkpatch error, as Joel notes below.
-> 
-> 4.	There are periodic checks for new code using the single-argument
-> 	forms of kfree_rcu() and kvfree_rcu().	Patches are produced
-> 	for them, or responses to the patches introducing them, as
-> 	appropriate.  A coccinelle script might be helpful, perhaps
-> 	even as part of kernel test robot or similar.
-> 
-> 5.	The -rcu tree's "dev" branch will revert to unclean from time
-> 	to time as maintainers choose to take conversion patches into
-> 	their own trees.
-> 
-> 6.	Once mainline is clean, we push 12/12 into the next merge
-> 	window.
+> What's the meaning of 0.5 here? Was it the probability (we assume?) that 
+> each time b's data point failed (or didn't satisfy) "less than 0.1 less than 
+> a's median"?
 
-Since in theory, mainline could also be after 6.4-rc1, I am assuming next merge
-window could also mean 6.5 right? But yes, agreed.
+The meaning of 0.5 is the probability of a given data point being on one
+side or the other of the corresponding distribution's median.  This of
+course assumes that the median of the measured data matches that of the
+corresponding distribution, though the fact that the median is also a
+mode of both of the old data sets gives some hope.
 
-> 7.	We then evaluate whether further cleanups are needed.
+The meaning of the 0.1 is the smallest difference that the data could
+measure.  I could have instead chosen 0.0 and asked if there was likely
+some (perhaps tiny) difference, but instead, I chose to ask if there
+was likely some small but meaningful difference.  It is better to choose
+the desired difference before measuring the data.
+
+Why don't you try applying this approach to the new data?  You will need
+the general binomial formula.
+
+							Thanx, Paul
+
+> > This is not quite 95% confidence, so not hugely convincing, but it is at least
+> > close.  Not that this is the confidence that (b) is 100ms faster than (a), not
+> > just that (b) is faster than (a).
+> > 
+> > Not sure that this really carries its weight, but in contrast to the usual
+> > statistics based on the normal distribution, it does suggest at least a little
+> > improvement.  On the other hand, anyone who has carefully studied
+> > nonparametric statistics probably jumped out of the boat several paragraphs
+> > ago.  ;-)
+> > 
+> > A few more questions interspersed below.
+> > 
+> > 							Thanx, Paul
+> > 
+> > > Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 > 
-> > > My feeling is
-> > > that, we introduced "_mightsleep" macros first and after that try to
-> > > convert users.
-> 
-> > One stopgap could be to add a checkpatch error if anyone tries to use old API,
-> > and then in the meanwhile convert all users.
-> > Though, that requires people listening to checkpatch complaints.
-> 
-> Every person who listens is that much less hassle.  It doesn't have to
-> be perfect.  ;-)
-
-The below checkpatch change can catch at least simple single-arg uses (i.e.
-not having compound expressions inside of k[v]free_rcu() args). I will submit
-a proper patch to it which we can include in this set.
-
-Thoughts?
----
- scripts/checkpatch.pl | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 78cc595b98ce..fc73786064b3 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -6362,6 +6362,15 @@ sub process {
- 			}
- 		}
- 
-+# check for soon-to-be-deprecated single-argument k[v]free_rcu() API
-+		if ($line =~ /\bk[v]?free_rcu\s*\([^(]+\)/) {
-+			if ($line =~ /\bk[v]?free_rcu\s*\([^,]+\)/) {
-+				ERROR("DEPRECATED_API",
-+				      "Single-argument k[v]free_rcu() API is deprecated, please pass an rcu_head object." . $herecurr);
-+			}
-+		}
-+
-+
- # check for unnecessary "Out of Memory" messages
- 		if ($line =~ /^\+.*\b$logFunctions\s*\(/ &&
- 		    $prevline =~ /^[ \+]\s*if\s*\(\s*(\!\s*|NULL\s*==\s*)?($Lval)(\s*==\s*NULL\s*)?\s*\)/ &&
--- 
-2.40.0.rc0.216.gc4246ad0f0-goog
-
