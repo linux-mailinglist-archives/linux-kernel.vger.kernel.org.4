@@ -2,52 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336A26ACB20
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:46:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3D96ACB10
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjCFRqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S230231AbjCFRp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjCFRqc (ORCPT
+        with ESMTP id S230316AbjCFRpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:46:32 -0500
-Received: from mail-il1-x146.google.com (mail-il1-x146.google.com [IPv6:2607:f8b0:4864:20::146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B539B3A871
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:45:58 -0800 (PST)
-Received: by mail-il1-x146.google.com with SMTP id k13-20020a056e021a8d00b0031bae68b383so4548324ilv.18
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 09:45:58 -0800 (PST)
+        Mon, 6 Mar 2023 12:45:49 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1006BDC7
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 09:45:14 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id m25-20020a6bea19000000b0074cc271437bso5677609ioc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 09:45:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1678124678;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GxC+zrdwXsUzP44JUUIxQpsBssHdZyrJhaBghz1c1gU=;
-        b=ZzhCD41CewOgYg5+zNQYuyB+7y/73uCDupRViTjICdur1Swk67IFyCVcJ9a2VkhyMu
-         pcVwcQfp6r9mUCembsN1a7CyUSDUrdvkFYIeSiZ8WWltCmxkWYBI1zydFTdpyE1Tx59P
-         LDO1b+Sp49vFqt7FajXE/jGgqwJHsL5jPSKp2Wpiaajp5RfPO7YwT5lfdFHpYgZ8/8cV
-         KxibdnTs1sLJ+EKCXA0RsLCIzKAMri1mvYZsORXsDmfQmgzIHQa07jtYFU9vKrRr5IbG
-         qtqSnKuJJVetLuBeW6n7lKSDiEkL0qYBrlAwdUS4HuXV6RVc+Fwcy+cF/UnpJ5NnCb6e
-         JkEg==
-X-Gm-Message-State: AO0yUKUY2yQ2CC3XsB6JMU2lEyDfKQ339pbnJfv8AD5T9kQn4EkWmnJ1
-        s7ENKXnzQXhgkq8c1dmox79BAv080R1Woda0H67gmX+w4+ol
-X-Google-Smtp-Source: AK7set8D7ryF6B/fTcEs0INTehKt1eBhyExL24efZlk2flFqqijq2W7GcIB19I/LaZV8Aqr2GE5pch7I9igSwSclUbhQ67mupoNx
+        bh=DvGwBPTQ7j4fKwRJaqe9v0f7Zi4TnEYXY8bTeBecqR4=;
+        b=qABDHIwQVC8PoS6QGw+I2vMRJTo46HyXSH4+9dJyC9pFZAhVprBm9eMOpzib1dbS6v
+         iyX/ODBDUvEuMTA5lXTyv29BXRALj30QIT0F3sV+WeYkgYiLe2mcKPiV3S1eVSw7+HKp
+         xUSH0Gu2mP0Hr4m/zTFwmyHBB/XFwErV1X7VkV0jUx7KUvNKEL5/dWAlQ7LvF5/rXHeG
+         ObxXBUyWsP2JMhymhKMWOhZ3+GJQaB3gPGSpv/3ytpKx6SHP/bNcA6PjTJ/ZoNP0cmcO
+         ReVPR42xzlOxx6NVddbG7063kt4a84ovdh4/yrezWqs66VQfScKnZr1a0zop+2ALPixI
+         bFvw==
+X-Gm-Message-State: AO0yUKV0lQ6qC1xMz/iveNYtfxiXRbICuswP2IomBHT17I1J/z7lYa8V
+        sFoHey5aww5OnMQF3cmPlI/yAsxdIHHj4WY4cZ8+gSbeUuM+
+X-Google-Smtp-Source: AK7set/whmgHHHaEz+dxLemDH8Mpf08oeUidi88EJ9qB9lD9fwWkfeSEUBp++VkaZXUH9HZ/AUSU8/JXgqqMcKH2YuOR5QMsZ8vn
 MIME-Version: 1.0
-X-Received: by 2002:a6b:c894:0:b0:74d:4df6:2530 with SMTP id
- y142-20020a6bc894000000b0074d4df62530mr7982376iof.2.1678124677897; Mon, 06
- Mar 2023 09:44:37 -0800 (PST)
-Date:   Mon, 06 Mar 2023 09:44:37 -0800
+X-Received: by 2002:a02:95cd:0:b0:3c5:15d2:9a1c with SMTP id
+ b71-20020a0295cd000000b003c515d29a1cmr5734944jai.2.1678124678137; Mon, 06 Mar
+ 2023 09:44:38 -0800 (PST)
+Date:   Mon, 06 Mar 2023 09:44:38 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000050a49105f63ed997@google.com>
-Subject: [syzbot] [cluster?] general protection fault in gfs2_dump_glock (2)
-From:   syzbot <syzbot+427fed3295e9a7e887f2@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rpeterso@redhat.com, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000005451a705f63ed952@google.com>
+Subject: [syzbot] [hfs?] kernel BUG in hfsplus_bnode_unhash
+From:   syzbot <syzbot+65f654e7ff6234bf771f@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,77 +57,68 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    f915322fe014 Merge tag 'v6.3-p2' of git://git.kernel.org/p..
+HEAD commit:    0988a0ea7919 Merge tag 'for-v6.3-part2' of git://git.kerne..
 git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16f297b0c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=dc0f7cfe5b32efe2
-dashboard link: https://syzkaller.appspot.com/bug?extid=427fed3295e9a7e887f2
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11a8b9bcc80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11955f54c80000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17ee96e4c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ff98a3b3c1aed3ab
+dashboard link: https://syzkaller.appspot.com/bug?extid=65f654e7ff6234bf771f
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ad716bf3cfc2/disk-f915322f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/3dda0fefb7a2/vmlinux-f915322f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/009b2977ab37/bzImage-f915322f.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/6c7bfd847dac/mount_2.gz
+Unfortunately, I don't have any reproducer for this issue yet.
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+427fed3295e9a7e887f2@syzkaller.appspotmail.com
+Reported-by: syzbot+65f654e7ff6234bf771f@syzkaller.appspotmail.com
 
-gfs2: fsid=syz:syz.0:  H: s:SH f:H e:0 p:6113 [syz-executor409] __gfs2_lookup+0xa4/0x270 fs/gfs2/inode.c:888
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in gfs2_dump_glock+0x14b3/0x1ad0
-Read of size 8 at addr ffffc90005957720 by task syz-executor409/6095
-
-CPU: 0 PID: 6095 Comm: syz-executor409 Not tainted 6.2.0-syzkaller-13563-gf915322fe014 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+------------[ cut here ]------------
+kernel BUG at fs/hfsplus/bnode.c:461!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 100 Comm: kswapd0 Not tainted 6.2.0-syzkaller-13467-g0988a0ea7919 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+RIP: 0010:hfsplus_bnode_unhash+0xf7/0x1e0 fs/hfsplus/bnode.c:461
+Code: 2b e8 fd e7 34 ff 48 8d 6b 20 48 89 e8 48 c1 e8 03 42 80 3c 28 00 0f 85 b3 00 00 00 48 8b 5b 20 48 85 db 75 d2 e8 d9 e7 34 ff <0f> 0b e8 d2 e7 34 ff e8 cd e7 34 ff 49 8d 7c 24 20 48 b8 00 00 00
+RSP: 0018:ffffc90001587348 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff8880160f0100 RSI: ffffffff824f32d7 RDI: ffff88802a310120
+RBP: ffff88802a310000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888029372a00
+R13: 0000000000000000 R14: ffffea00009f81c0 R15: 0000000000001000
+FS:  0000000000000000(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7fd8638528 CR3: 0000000071e75000 CR4: 0000000000150ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:319 [inline]
- print_report+0x163/0x540 mm/kasan/report.c:430
- kasan_report+0x176/0x1b0 mm/kasan/report.c:536
- gfs2_dump_glock+0x14b3/0x1ad0
- gfs2_consist_inode_i+0xf5/0x110 fs/gfs2/util.c:465
- gfs2_dirent_scan+0x512/0x640 fs/gfs2/dir.c:602
- gfs2_dirent_search+0x30e/0x8c0 fs/gfs2/dir.c:850
- gfs2_dir_search+0xb2/0x2f0 fs/gfs2/dir.c:1650
- gfs2_lookupi+0x460/0x5d0 fs/gfs2/inode.c:332
- __gfs2_lookup+0xa4/0x270 fs/gfs2/inode.c:888
- gfs2_atomic_open+0x9e/0x230 fs/gfs2/inode.c:1292
- atomic_open fs/namei.c:3279 [inline]
- lookup_open fs/namei.c:3387 [inline]
- open_last_lookups fs/namei.c:3484 [inline]
- path_openat+0x103c/0x3170 fs/namei.c:3712
- do_filp_open+0x234/0x490 fs/namei.c:3742
- do_sys_openat2+0x13f/0x500 fs/open.c:1348
- do_sys_open fs/open.c:1364 [inline]
- __do_sys_open fs/open.c:1372 [inline]
- __se_sys_open fs/open.c:1368 [inline]
- __x64_sys_open+0x225/0x270 fs/open.c:1368
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff0f3f00b39
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 91 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ff0f3ea4208 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007ff0f3f90788 RCX: 00007ff0f3f00b39
-RDX: 0000000000000008 RSI: 0000000000000002 RDI: 0000000020000280
-RBP: 00007ff0f3f90780 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ff0f3f9078c
-R13: 00007fffdfd2a3af R14: 00007ff0f3ea4300 R15: 0000000000022000
+ hfsplus_release_folio+0x285/0x5f0 fs/hfsplus/inode.c:102
+ filemap_release_folio+0x13f/0x1b0 mm/filemap.c:4121
+ shrink_folio_list+0x1fe3/0x3c80 mm/vmscan.c:2010
+ evict_folios+0x794/0x1940 mm/vmscan.c:5121
+ try_to_shrink_lruvec+0x82c/0xb90 mm/vmscan.c:5297
+ shrink_one+0x46b/0x810 mm/vmscan.c:5341
+ shrink_many mm/vmscan.c:5394 [inline]
+ lru_gen_shrink_node mm/vmscan.c:5511 [inline]
+ shrink_node+0x2064/0x35f0 mm/vmscan.c:6459
+ kswapd_shrink_node mm/vmscan.c:7262 [inline]
+ balance_pgdat+0xa02/0x1ac0 mm/vmscan.c:7452
+ kswapd+0x70b/0x1000 mm/vmscan.c:7712
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
  </TASK>
-
-Memory state around the buggy address:
- ffffc90005957600: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90005957680: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90005957700: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                               ^
- ffffc90005957780: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90005957800: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:hfsplus_bnode_unhash+0xf7/0x1e0 fs/hfsplus/bnode.c:461
+Code: 2b e8 fd e7 34 ff 48 8d 6b 20 48 89 e8 48 c1 e8 03 42 80 3c 28 00 0f 85 b3 00 00 00 48 8b 5b 20 48 85 db 75 d2 e8 d9 e7 34 ff <0f> 0b e8 d2 e7 34 ff e8 cd e7 34 ff 49 8d 7c 24 20 48 b8 00 00 00
+RSP: 0018:ffffc90001587348 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff8880160f0100 RSI: ffffffff824f32d7 RDI: ffff88802a310120
+RBP: ffff88802a310000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888029372a00
+R13: 0000000000000000 R14: ffffea00009f81c0 R15: 0000000000001000
+FS:  0000000000000000(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7fd8638528 CR3: 0000000071e75000 CR4: 0000000000150ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
 ---
@@ -138,5 +128,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this issue. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
