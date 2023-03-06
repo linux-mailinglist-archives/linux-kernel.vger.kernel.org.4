@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CB26ACA92
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D2F6ACA94
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 18:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjCFRdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 12:33:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40658 "EHLO
+        id S229981AbjCFReS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 12:34:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjCFRdd (ORCPT
+        with ESMTP id S229888AbjCFReP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 12:33:33 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6246E69CF7;
-        Mon,  6 Mar 2023 09:32:38 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id t22so7618673oiw.12;
-        Mon, 06 Mar 2023 09:32:38 -0800 (PST)
+        Mon, 6 Mar 2023 12:34:15 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2366C23300;
+        Mon,  6 Mar 2023 09:33:17 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id r5so11426564qtp.4;
+        Mon, 06 Mar 2023 09:33:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678123873;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        d=gmail.com; s=20210112; t=1678123889;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=jU1OOkRe9SQAzExqSarRKsrqG7UQRcNhBjXmNaUsVSE=;
-        b=HpEkioNg+nYs4nYGdyfWvxU2hqEPwEZvGGoPQe5HWao7HZin5g6zrdI1+Ld/kU9nI/
-         ps5pw9yOBOdu6OwT7TBAdosEL5ZoL5aqepdYvUZ/kcaLJcvyGGUAMv69eEXY2U+rpoop
-         6ZvlyPT3w/Hfu+NOmfdAIP2FYNkU+GXn3PAOIAb6Gfac2YSOZ0tKuJ+2Q9Frww3woxOD
-         yiOSoa6f980yh6CcGforY8JXExuX7ja9T7UrOoYa3KiIw/y3PVDP9gfbF5TcD5761qDb
-         8tDfGPjiJyY4owvCnYyOpxZcj/QjG2thSq1x1yiXai6fVbaSGs+kgNL8DFcQuMsS91ui
-         M60Q==
+        bh=UANncWrkqP0wGFe9cfk0F5rdhQoiGsROa82g/rlru+8=;
+        b=F3KF8af5PGId9V+MeGxLK9IkmQO1mIopPtxpp0Cj9HK7tZtVtCgYLD9APuqgHoNAkd
+         LCkPgPvE/rfQ2kNWJIPqVOZHjIPXofx2p+o/BIBi4dblyVurxuxhXpg4btCDPT0lZHl+
+         mxKl5QV1Imslhuh4tYbfpGjMpTl4RQVNSCcgLSJj4rnaoGnodEsMWCOSCGstQX/LQXXX
+         xgmaQ2JMM+L2Lkp+C5b1tJl5Ogde2n/vHerzVNSBbP5AZhaBVCDhZsnxlvehGfCRGnUH
+         Mwr/6qjzH0in8bkTp/k57hPHsp+50UOsXA2Z82EYpe4eQActGWSPbUAB19TU+oxxiZKY
+         3xIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678123873;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        d=1e100.net; s=20210112; t=1678123889;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jU1OOkRe9SQAzExqSarRKsrqG7UQRcNhBjXmNaUsVSE=;
-        b=jdN+OykdJe6qdMLVsBAvtjGk+sBscmAfi45dXP03Eg9pJxHG4JyA3xxOo3nQAvwUP+
-         5VORHOzQU8URH9TbA6CFYPznX7PDMX4QyeVIx1esPnEyxREv+qH3ZBXfIv7e89CJIPTm
-         5fFKwXxcoVwKa6CZRszJv6T1Ztoaqhyv6XtwEevG8zk/arfMjVd7pom9mMMorhn0pbZj
-         wNFggo+VjHc5uvvPHLVreLEfi/ndlBvTdFIbHHljDC2T/cb0JG9vOKZJSFC6WBgT92aY
-         CZAZjXgrCXvlHaH/X1CYWYPQuWT+ipENtaxu8vyOmZxHPCrT06k1WnzF5i8RpfbUkZFl
-         Ca9A==
-X-Gm-Message-State: AO0yUKWSw3TPaBdgC+8Iz10dAjHIS0ZzxoIDgr0ifKpiMtmjSL79mY1h
-        ESuhlQEUY7UNP6/hW8XK73M=
-X-Google-Smtp-Source: AK7set+IyP8l4CzxJssq1QDLPD6sqKYN/VotOb0/7twUScSaSrz2BnBD5vIo4IdmYn8pi7/uZz2k0w==
-X-Received: by 2002:a05:6808:274a:b0:383:f91b:cf5 with SMTP id eh10-20020a056808274a00b00383f91b0cf5mr4841179oib.53.1678123873520;
-        Mon, 06 Mar 2023 09:31:13 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w2-20020aca6202000000b00383bfd8a184sm4209950oib.25.2023.03.06.09.31.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 09:31:13 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 6 Mar 2023 09:31:11 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 2/3] watchdog: rn5t618: Simplify using
- devm_watchdog_register_device()
-Message-ID: <c029adf2-7f7e-452f-bc35-b2ecbf0d3128@roeck-us.net>
-References: <20230306170901.2232323-1-u.kleine-koenig@pengutronix.de>
- <20230306170901.2232323-3-u.kleine-koenig@pengutronix.de>
+        bh=UANncWrkqP0wGFe9cfk0F5rdhQoiGsROa82g/rlru+8=;
+        b=GWFmxx0dnkeRoR7bz5OuucNnVRRpCJ/lgPXA1jO6rjyW++yF0sJmV/6ofTawdOJHOY
+         2mlq+fc3cwX5PgEwNZdK9WHjyi7yic4lOH/hFOzSsZzqVsvN5kwEjmar9jEVh5qdiCf0
+         NoQyR74Zpjc9nENw8Ot7jn67hmqVR++hO92pKzyMIUabbnZUUYqrc2SFnWa25D24Cv6E
+         PnB0tJLSC4URy638BaKQDpWEfqRS4Vz6iOC86SrXXtNjq+1xCqw5grjSrknNQK6WnZVH
+         xNIL8O2nZcG2knY5D+WDe0TPDrVAIOZa7kXIzbQqJgJb8ORZxQc8EyFtgKk0riyyRZ+v
+         UWQg==
+X-Gm-Message-State: AO0yUKUToXkOLnTUwvuRgfRewoM1VzM5UzpssrNf70AIF2bOefYxMfaN
+        4H/BzVlJLj3QdXEbY9lWaxs=
+X-Google-Smtp-Source: AK7set+VZBNwYL+15nzYCtkcQxPb2Q4aV6IuGCCvMgWgtV7HdOQJDIB4fptSsUiZ6Iq1D8M3TJi6VQ==
+X-Received: by 2002:ac8:4904:0:b0:3bd:15d4:ff65 with SMTP id e4-20020ac84904000000b003bd15d4ff65mr13033343qtq.40.1678123889116;
+        Mon, 06 Mar 2023 09:31:29 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id a18-20020ac84352000000b003bfaff2a6b9sm7971848qtn.10.2023.03.06.09.31.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 09:31:28 -0800 (PST)
+Message-ID: <2f8622b7-b5a3-241c-5f69-9d1a48e36e56@gmail.com>
+Date:   Mon, 6 Mar 2023 09:31:24 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: fix RX data corruption
+ issue
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     =?UTF-8?Q?Bj=c3=b8rn_Mork?= <bjorn@mork.no>
+References: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <138da2735f92c8b6f8578ec2e5a794ee515b665f.1677937317.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230306170901.2232323-3-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,46 +95,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 06:09:00PM +0100, Uwe Kleine-König wrote:
-> This allows to drop the .remove() function as it only exists to
-> unregister the watchdog device which is now done in a callback
-> registered by devm_watchdog_register_device().
+On 3/4/23 05:43, Daniel Golle wrote:
+> Fix data corruption issue with SerDes connected PHYs operating at 1.25
+> Gbps speed where we could previously observe about 30% packet loss while
+> the bad packet counter was increasing.
 > 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> As almost all boards with MediaTek MT7622 or MT7986 use either the MT7531
+> switch IC operating at 3.125Gbps SerDes rate or single-port PHYs using
+> rate-adaptation to 2500Base-X mode, this issue only got exposed now when
+> we started trying to use SFP modules operating with 1.25 Gbps with the
+> BananaPi R3 board.
+> 
+> The fix is to set bit 12 which disables the RX FIFO clear function when
+> setting up MAC MCR, MediaTek SDK did the same change stating:
+> "If without this patch, kernel might receive invalid packets that are
+> corrupted by GMAC."[1]
+> 
+> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/d8a2975939a12686c4a95c40db21efdc3f821f63
+> 
+> Fixes: 42c03844e93d ("net-next: mediatek: add support for MediaTek MT7622 SoC")
+> Tested-by: BjÃ¸rn Mork <bjorn@mork.no>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-> ---
->  drivers/watchdog/rn5t618_wdt.c | 12 +-----------
->  1 file changed, 1 insertion(+), 11 deletions(-)
-> 
-> diff --git a/drivers/watchdog/rn5t618_wdt.c b/drivers/watchdog/rn5t618_wdt.c
-> index 40d8ebd8c0ac..c0aee627ff3b 100644
-> --- a/drivers/watchdog/rn5t618_wdt.c
-> +++ b/drivers/watchdog/rn5t618_wdt.c
-> @@ -178,21 +178,11 @@ static int rn5t618_wdt_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, wdt);
->  
-> -	return watchdog_register_device(&wdt->wdt_dev);
-> -}
-> -
-> -static int rn5t618_wdt_remove(struct platform_device *pdev)
-> -{
-> -	struct rn5t618_wdt *wdt = platform_get_drvdata(pdev);
-> -
-> -	watchdog_unregister_device(&wdt->wdt_dev);
-> -
-> -	return 0;
-> +	return devm_watchdog_register_device(&wdt->wdt_dev);
->  }
->  
->  static struct platform_driver rn5t618_wdt_driver = {
->  	.probe = rn5t618_wdt_probe,
-> -	.remove = rn5t618_wdt_remove,
->  	.driver = {
->  		.name	= DRIVER_NAME,
->  	},
-> -- 
-> 2.39.1
-> 
