@@ -2,93 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFCB6AB46D
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AD66AB472
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 02:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbjCFBzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 20:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S229656AbjCFB4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 20:56:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCFBzn (ORCPT
+        with ESMTP id S229540AbjCFB4x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 20:55:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFFEEB6A;
-        Sun,  5 Mar 2023 17:55:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0D13B80159;
-        Mon,  6 Mar 2023 01:55:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 778DEC433D2;
-        Mon,  6 Mar 2023 01:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678067739;
-        bh=LFOlhZwjqco3To24PwT/bnjj85QY4nt/PP/0xwPn7vk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jmjgia47Nm0V2fMUC+HcgRaq5jaoDN1qK8kVi9874X3ogjTjxrzkxsqc+h4D3rArt
-         eigsRC6bbzSQLeoWETlqr735jtOdMW8DQAwymL/dEsP9IRPn45wYvy7K5MkykDk+Cn
-         9vH5fgnDsZIWyxDd+ptU0fxqBFMWgQLRVvkhur3eVMAxjLQd0Xu8B/E3EvVXJHa3vB
-         Yxqw61NI9Ac72tsDlFAIpRmsoHvrDeYMr1FMtzmRFHXMna6kEeuWyRQBdTkdz9+ZhZ
-         seYzvxO+jNDl6DZCtW6FfJeRGtHdA/+iMDGuEIuoBAz6hXftxoTvLcUM5SoPQcZrxy
-         oFQ9gtjSLNBEQ==
-Received: by mail-ed1-f42.google.com with SMTP id da10so32578057edb.3;
-        Sun, 05 Mar 2023 17:55:39 -0800 (PST)
-X-Gm-Message-State: AO0yUKUQm5gdd3NHEzFgTvML7a7sYPif15Vre7EbYxBqnl0j00dEycIG
-        1K7JHDIxrMQnrUAOnDsHG/M/WZ+Qy3YsoMWVGzM=
-X-Google-Smtp-Source: AK7set/D4BiQAR9m/qKto9etEw32s+atfviVn8FEBBDjd8K4N5zPu71rK44UGSm5NsriVjlfyEepBpjGXTI+b+9MgxU=
-X-Received: by 2002:a17:906:274f:b0:877:7480:c561 with SMTP id
- a15-20020a170906274f00b008777480c561mr4377647ejd.1.1678067737750; Sun, 05 Mar
- 2023 17:55:37 -0800 (PST)
+        Sun, 5 Mar 2023 20:56:53 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3626412F3A
+        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 17:56:52 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PVM9x6XcjzrSKd;
+        Mon,  6 Mar 2023 09:56:05 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 6 Mar 2023 09:56:49 +0800
+Message-ID: <202ac11d-3692-69bf-3984-627c1b9f9d38@huawei.com>
+Date:   Mon, 6 Mar 2023 09:56:49 +0800
 MIME-Version: 1.0
-References: <20230305052818.4030447-1-chenhuacai@loongson.cn>
- <48f508aa-ab40-7032-a68d-90d8986afb2f@xen0n.name> <CAAhV-H55QUrkYYR1Lbj=zbquiz3frX2dNAH23fAuN6eCOUddNA@mail.gmail.com>
- <58cc7e6d19628757d6d8dc192d07876288f6077e.camel@xry111.site>
-In-Reply-To: <58cc7e6d19628757d6d8dc192d07876288f6077e.camel@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 6 Mar 2023 09:55:27 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7vv+AE-7kDf7YpU6_f_dTNxKKoRSHC6vA4aBHOVyMRAQ@mail.gmail.com>
-Message-ID: <CAAhV-H7vv+AE-7kDf7YpU6_f_dTNxKKoRSHC6vA4aBHOVyMRAQ@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Provide kernel fpu functions
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/3] mm/damon/paddr: minor refactor of damon_pa_young()
+Content-Language: en-US
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     SeongJae Park <sj@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <damon@lists.linux.dev>
+References: <20230303183925.113520-1-sj@kernel.org>
+ <04645c9e-2188-da5c-30da-4c4694c7283c@huawei.com>
+In-Reply-To: <04645c9e-2188-da5c-30da-4c4694c7283c@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 5, 2023 at 9:28=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrote=
-:
->
-> On Sun, 2023-03-05 at 20:18 +0800, Huacai Chen wrote:
-> > > Might be good to provide some explanation in the commit message as to
-> > > why the pair of helpers should be GPL-only. Do they touch state burie=
-d
-> > > deep enough to make any downstream user a "derivative work"? Or are t=
-he
-> > > annotation inspired by arch/x86?
-> > Yes, just inspired by arch/x86, and I don't think these symbols should
-> > be used by non-GPL modules.
->
-> Hmm, what if one of your partners wish to provide a proprietary GPU
-> driver using the FPU like this way?  As a FLOSS developer I'd say "don't
-> do that, make your driver GPL".  But for Loongson there may be a
-> commercial issue.
-So use EXPORT_SYMBOL can make life easier?
 
-Huacai
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
+
+On 2023/3/6 9:10, Kefeng Wang wrote:
+> 
+> 
+> On 2023/3/4 2:39, SeongJae Park wrote:
+>> Hi Kefeng,
+>>
+>> On Fri, 3 Mar 2023 16:43:42 +0800 Kefeng Wang 
+>> <wangkefeng.wang@huawei.com> wrote:
+>>
+>>> Omit three lines by unified folio_put(), and make code more clear.
+>>>
+>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>>> ---
+>>>   mm/damon/paddr.c | 11 ++++-------
+>>>   1 file changed, 4 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+>>> index 3fda00a0f786..2ef9db0189ca 100644
+>>> --- a/mm/damon/paddr.c
+>>> +++ b/mm/damon/paddr.c
+>>> @@ -130,24 +130,21 @@ static bool damon_pa_young(unsigned long paddr, 
+>>> unsigned long *folio_sz)
+>>>               accessed = false;
+>>>           else
+>>>               accessed = true;
+>>> -        folio_put(folio);
+>>>           goto out;
+>>
+>> Because you moved 'out' label to not include *folio_sz setting, 
+>> folio_sz will
+>> not set in this case.  It should be set.
+> oh, it should be fixed.
+>>
+>>>       }
+>>>       need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
+>>> -    if (need_lock && !folio_trylock(folio)) {
+>>> -        folio_put(folio);
+>>> -        return false;
+>>> -    }
+
+Hi SJ,  apart from above issue, it looks that this branch need the 
+folio_size() setting, right?
+
+Thanks
+
+>>> +    if (need_lock && !folio_trylock(folio))
+>>> +        goto out;
+>>>       rmap_walk(folio, &rwc);
+>>>       if (need_lock)
+>>>           folio_unlock(folio);
+>>> -    folio_put(folio);
+>>> -out:
+>>>       *folio_sz = folio_size(folio);
+>>> +out:
+>>> +    folio_put(folio);
+>>
+>> Before this change, folio_size() is called after folio_put().  
+>> Shouldn't it be
+>> called before folio_put()?  If so, could we make a separate fix for 
+>> that first,
+>> and then make this change on top of it, so that it can be easily 
+>> applied to
+>> relevant stable kernels?
+>>
+> Yes， I could separate it, after folio_put(), the folio could be 
+> re-allocated and the folio_size calculation is not right.
+>>
+>> Thanks,
+>> SJ
+>>
+>>>       return accessed;
+>>>   }
+>>> -- 
+>>> 2.35.3
+>>>
+>>>
