@@ -2,183 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86606ABFFE
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 13:57:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07F06AC03A
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 14:05:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjCFM5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 07:57:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
+        id S230444AbjCFNEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 08:04:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjCFM5F (ORCPT
+        with ESMTP id S230504AbjCFNEt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 07:57:05 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373FF2BEEE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 04:57:04 -0800 (PST)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PVdpB29njzKq4F;
-        Mon,  6 Mar 2023 20:54:58 +0800 (CST)
-Received: from huawei.com (10.67.174.191) by dggpeml500018.china.huawei.com
- (7.185.36.186) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 6 Mar
- 2023 20:57:01 +0800
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <rkagan@amazon.de>, <zhangqiao22@huawei.com>
-Subject: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-Date:   Mon, 6 Mar 2023 21:24:18 +0800
-Message-ID: <20230306132418.50389-1-zhangqiao22@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 6 Mar 2023 08:04:49 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2698840E3
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 05:04:48 -0800 (PST)
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5F4A8412FE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 13:04:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678107886;
+        bh=GVtu8wUlTQmI/OH1YDjpwQxG8xUfKX4sW1hVlYeaYkE=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=pI4/S8RFRYIf5W0exo1m34g1YuaYb7Pno5haYLyCM9FbZs6TmcxDWOXQj2sXfuFAy
+         376KG/sCnbSwMl+monifDBRosYxj4WEN99v6B1cVs3jfQBtK0t0Snu3PNwbIG26Bem
+         VY+x/gSNPcH7F2qp5v1G2+DrU1D3XcTUdf2eNLm1zpGB/gq5XJ94OHjSb4Ayx79ygE
+         obx+hLD0dB7f4iWOyas9YkYFyH0nS8un5CzbcZER05kevl7Ihbwo/RYEpyYtU1jyFc
+         M+/aJAtTV8gWcWhBjrgtsOIORASouANwXINxumoqu7T378Lftt3thPQ5UbmYc1etXc
+         EOAnn6ueAU64Q==
+Received: by mail-qv1-f69.google.com with SMTP id l13-20020ad44d0d000000b004c74bbb0affso5404669qvl.21
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 05:04:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678107884;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GVtu8wUlTQmI/OH1YDjpwQxG8xUfKX4sW1hVlYeaYkE=;
+        b=493FklqUeENiDc8Nx9nHNOaKmxAK0swgW53aSu07G5wKnnBqIJq/03metNDJKhHmJh
+         hIgk5ZXByuoBnceCxvmqC1QqwPGoPZ48fh7wcMJPDjxRI2XLPcnxm5JrDXgO8rBRo10O
+         +Hz1P53elHLheFArpHAn661NMOL8OQYm9xROKiOH7EFqQA2B9Mc2I0OC1A27F/eLxl+J
+         fUv0m6xwlpclrDryNTz9+0MK0Q1u2jRfkxSrJUo/j1s/Tu2zumv99NsEH9F6SBsu9ld9
+         tzBqjfkTUvpQfFsriwksPOkIMf4RUoNP3L6bOdi2CaCuf7uS/G5MXKsQHkxTFQSr+u+2
+         sPbA==
+X-Gm-Message-State: AO0yUKXDzXbYJD2c49HjTdZzPgPwWBre410qnanRdB2hSl3lydiZ6RX1
+        O2r3fv4sCicj+KZ6OnjEI+po/iS87HsQxngXbkYAy12teJ36cR8imb4HyPG8QA14KlWkO8QmOlf
+        LO9nMgTI2k25Fp0YlkNoxg609OhU8TO+Nt+2nPgQFNe3Ulrlbzv0PAuaAHQ==
+X-Received: by 2002:a05:6214:18c4:b0:56e:9089:a447 with SMTP id cy4-20020a05621418c400b0056e9089a447mr2646918qvb.0.1678107884407;
+        Mon, 06 Mar 2023 05:04:44 -0800 (PST)
+X-Google-Smtp-Source: AK7set8y6a5SSW6hPw+GDXCh+fqXFJP9UdQM/IWboALvjPkMRMhCZDeVIkVx5ql1CNUP6/Ugh0IafMD5qUh9dXlK4Pc=
+X-Received: by 2002:a05:6214:18c4:b0:56e:9089:a447 with SMTP id
+ cy4-20020a05621418c400b0056e9089a447mr2646908qvb.0.1678107884159; Mon, 06 Mar
+ 2023 05:04:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.191]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230303085928.4535-1-samin.guo@starfivetech.com> <20230303085928.4535-13-samin.guo@starfivetech.com>
+In-Reply-To: <20230303085928.4535-13-samin.guo@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Mon, 6 Mar 2023 14:04:28 +0100
+Message-ID: <CAJM55Z-WpxJUshAa_gN5GD+mMp1VaxPbnF6AV-ua0HzsFWsB6w@mail.gmail.com>
+Subject: Re: [PATCH v5 12/12] riscv: dts: starfive: visionfive 2: Enable gmac
+ device tree node
+To:     Samin Guo <samin.guo@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
-entity being placed") fix an overflowing bug, but ignore
-a case that se->exec_start is reset after a migration.
+On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wrote:
+> From: Yanhong Wang <yanhong.wang@starfivetech.com>
+>
+> Update gmac device tree node status to okay.
+>
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> ---
+>  .../dts/starfive/jh7110-starfive-visionfive-2.dtsi     | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> index c2aa8946a0f1..d1c409f40014 100644
+> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> @@ -12,6 +12,8 @@
+>  / {
+>         aliases {
+>                 serial0 = &uart0;
+> +               ethernet0 = &gmac0;
+> +               ethernet1 = &gmac1;
 
-For fixing this case, we reset the vruntime of a long
-sleeping task in migrate_task_rq_fair().
+Please sort these alphabetically.
 
-Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
-Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
----
+>                 i2c0 = &i2c0;
+>                 i2c2 = &i2c2;
+>                 i2c5 = &i2c5;
+> @@ -92,6 +94,14 @@
+>         status = "okay";
+>  };
+>
+> +&gmac0 {
+> +       status = "okay";
+> +};
+> +
+> +&gmac1 {
+> +       status = "okay";
+> +};
 
-v1 -> v2:
-- fix some typos and update comments
-- reformat the patch
+Since you'll need to add to the gmac0 and gmac1 nodes in the board
+specific files too and it's only one line, consider just dropping this
+here and add the status = "okay" there instead.
 
----
- kernel/sched/fair.c | 76 ++++++++++++++++++++++++++++++++-------------
- 1 file changed, 55 insertions(+), 21 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 7a1b1f855b96..74c9918ffe76 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4648,11 +4648,45 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
- #endif
- }
- 
-+static inline bool entity_is_long_sleep(struct sched_entity *se)
-+{
-+	struct cfs_rq *cfs_rq;
-+	u64 sleep_time;
-+
-+	if (se->exec_start == 0)
-+		return false;
-+
-+	cfs_rq = cfs_rq_of(se);
-+	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-+	if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
-+		return true;
-+
-+	return false;
-+}
-+
-+static inline u64 sched_sleeper_credit(struct sched_entity *se)
-+{
-+	unsigned long thresh;
-+
-+	if (se_is_idle(se))
-+		thresh = sysctl_sched_min_granularity;
-+	else
-+		thresh = sysctl_sched_latency;
-+
-+	/*
-+	 * Halve their sleep time's effect, to allow
-+	 * for a gentler effect of sleepers:
-+	 */
-+	if (sched_feat(GENTLE_FAIR_SLEEPERS))
-+		thresh >>= 1;
-+
-+	return thresh;
-+}
-+
- static void
- place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- {
- 	u64 vruntime = cfs_rq->min_vruntime;
--	u64 sleep_time;
- 
- 	/*
- 	 * The 'current' period is already promised to the current tasks,
-@@ -4664,23 +4698,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- 		vruntime += sched_vslice(cfs_rq, se);
- 
- 	/* sleeps up to a single latency don't count. */
--	if (!initial) {
--		unsigned long thresh;
--
--		if (se_is_idle(se))
--			thresh = sysctl_sched_min_granularity;
--		else
--			thresh = sysctl_sched_latency;
--
--		/*
--		 * Halve their sleep time's effect, to allow
--		 * for a gentler effect of sleepers:
--		 */
--		if (sched_feat(GENTLE_FAIR_SLEEPERS))
--			thresh >>= 1;
--
--		vruntime -= thresh;
--	}
-+	if (!initial)
-+		vruntime -= sched_sleeper_credit(se);
- 
- 	/*
- 	 * Pull vruntime of the entity being placed to the base level of
-@@ -4689,8 +4708,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- 	 * the base as it may be too far off and the comparison may get
- 	 * inversed due to s64 overflow.
- 	 */
--	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
--	if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
-+	if (entity_is_long_sleep(se))
- 		se->vruntime = vruntime;
- 	else
- 		se->vruntime = max_vruntime(se->vruntime, vruntime);
-@@ -7635,7 +7653,23 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 	if (READ_ONCE(p->__state) == TASK_WAKING) {
- 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
- 
--		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-+		/*
-+		 * We determine whether a task sleeps for long by checking
-+		 * se->exec_start, and if it is, we sanitize its vruntime at
-+		 * place_entity(). However, after a migration, this detection
-+		 * method fails due to se->exec_start being reset.
-+		 *
-+		 * For fixing this case, we add the same check here. For a task
-+		 * which has slept for a long time, its vruntime should be reset
-+		 * to cfs_rq->min_vruntime with a sleep credit. Because waking
-+		 * task's vruntime will be added to cfs_rq->min_vruntime when
-+		 * enqueue, we only need to reset the se->vruntime of waking task
-+		 * to a credit here.
-+		 */
-+		if (entity_is_long_sleep(se))
-+			se->vruntime = -sched_sleeper_credit(se);
-+		else
-+			se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
- 	}
- 
- 	if (!task_on_rq_migrating(p)) {
--- 
-2.17.1
-
+>  &i2c0 {
+>         clock-frequency = <100000>;
+>         i2c-sda-hold-time-ns = <300>;
+> --
+> 2.17.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
