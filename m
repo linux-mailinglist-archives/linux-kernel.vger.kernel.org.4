@@ -2,159 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EEF6ACEDD
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 499656ACEE2
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 21:10:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjCFUGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 15:06:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S230332AbjCFUKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 15:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjCFUGS (ORCPT
+        with ESMTP id S230218AbjCFUKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 15:06:18 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087FC74334;
-        Mon,  6 Mar 2023 12:06:12 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 326He8ZH002484;
-        Mon, 6 Mar 2023 20:06:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=9vJWmm8MxUmkFCvg8hWCRyR+rVKxw+Jb3hxc5UOhDdw=;
- b=A3LmlLbJ0ZYii83RfytQIVP4FdyEyLgi0OhTKFhvTuP6KBmBF97RZH7oCEiUb1nh/ABB
- gnDuuYNyUrf+Cv7sAp26FFHfQsuieEMhGqLJ4yunKOLqKykpCfccayfSWaTmjBtx0Oaz
- fJZHZX7FoMyNeS3EY9AIQyhH2N0Sshg4OOUf0dGtrfop77Er6C30cpih6Z5/gjjY7rka
- eVmKGr94aZsy7IdMwwcGfGM7VqX3zxDDdF7/GJTD8CPBxhMNp9BhezYeanOay0jYY6cb
- FZOlQ91qFdUiJVVjDh4RrBQKIVIkkArpeRj1KwLhSxUDibIt6jkk/JMQUCn2gc6sQ0+e cw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p415hwwdy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 06 Mar 2023 20:06:10 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 326K69Va021723
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 6 Mar 2023 20:06:09 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 6 Mar 2023 12:06:09 -0800
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v5] usb: dwc3: gadget: Add 1ms delay after end transfer command without IOC
-Date:   Mon, 6 Mar 2023 12:05:57 -0800
-Message-ID: <20230306200557.29387-1-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 6 Mar 2023 15:10:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AB04AFF9
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 12:09:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678133370;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TktQ7QJRxbBjz+L1F60GxDGA9dvv+g9tZaNVQ0g9JWA=;
+        b=VqrvHAkQcfJTzGmXrEyX7QYKQeW/VGUYaIPWtD/+3uTkIrXjNwSK8IsVY71C99T/bvQ+bb
+        y8g1k7Wo5qZF84TYXwilNf/v0DajUaSBJVdXKIgqGkUNkhlX4b00capGXkJiTy576pvL1w
+        5n1SIhYYP6yVOCV3mCjy4H/rK0ztj5A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-659-Bza0R6gzPryCu47XHWAv5Q-1; Mon, 06 Mar 2023 15:09:26 -0500
+X-MC-Unique: Bza0R6gzPryCu47XHWAv5Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B5E18027FD;
+        Mon,  6 Mar 2023 20:09:26 +0000 (UTC)
+Received: from llong.com (dhcp-17-153.bos.redhat.com [10.18.17.153])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AE4B240C83B6;
+        Mon,  6 Mar 2023 20:09:25 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH 0/5] cgroup/cpuset: Miscellaneous updates
+Date:   Mon,  6 Mar 2023 15:08:44 -0500
+Message-Id: <20230306200849.376804-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hwM4MS4WYmgYBGVl13_X816I1ASkOLEq
-X-Proofpoint-GUID: hwM4MS4WYmgYBGVl13_X816I1ASkOLEq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_13,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- adultscore=0 mlxlogscore=615 suspectscore=0 spamscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303060175
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, there was a 100uS delay inserted after issuing an end transfer
-command for specific controller revisions.  This was due to the fact that
-there was a GUCTL2 bit field which enabled synchronous completion of the
-end transfer command once the CMDACT bit was cleared in the DEPCMD
-register.  Since this bit does not exist for all controller revisions and
-the current implementation heavily relies on utizling the EndTransfer
-command completion interrupt, add the delay back in for uses where the
-interrupt on completion bit is not set, and increase the duration to 1ms
-for the controller to complete the command.
+This patch series includes miscellaneous update to the cpuset and its
+testing code.
 
-An issue was seen where the USB request buffer was unmapped while the DWC3
-controller was still accessing the TRB.  However, it was confirmed that the
-end transfer command was successfully submitted. (no end transfer timeout)
-In situations, such as dwc3_gadget_soft_disconnect() and
-__dwc3_gadget_ep_disable(), the dwc3_remove_request() is utilized, which
-will issue the end transfer command, and follow up with
-dwc3_gadget_giveback().  At least for the USB ep disable path, it is
-required for any pending and started requests to be completed and returned
-to the function driver in the same context of the disable call.  Without
-the GUCTL2 bit, it is not ensured that the end transfer is completed before
-the buffers are unmapped.
+Patch 2 is actually a follow-up of commit 3fb906e7fabb ("cgroup/cpuset:
+Don't filter offline CPUs in cpuset_cpus_allowed() for top cpuset tasks").
 
-Fixes: cf2f8b63f7f1 ("usb: dwc3: gadget: Remove END_TRANSFER delay")
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
-Changes in v5:
-- Updated commit text with more details
-- Added fixes tag
+Patches 3-4 are for handling corner cases when dealing with
+task_cpu_possible_mask().
 
-Changes in v4:
-- Updated DWC3 revision check logic to look for !DWC3 based IP (ie DWC32 and
-DWC31 variants)
-- Fixed incorrect delay reference in comments
+Waiman Long (5):
+  cgroup/cpuset: Skip task update if hotplug doesn't affect current
+    cpuset
+  cgroup/cpuset: Include offline CPUs when tasks' cpumasks in top_cpuset
+    are updated
+  cgroup/cpuset: Find another usable CPU if none found in current cpuset
+  cgroup/cpuset: Add CONFIG_DEBUG_CPUSETS config for cpuset testing
+  cgroup/cpuset: Minor updates to test_cpuset_prs.sh
 
-Changes in v3:
-- Fixed subject title and modified commit text to reference the new 1ms
-delay
+ init/Kconfig                                  |   5 +
+ kernel/cgroup/cpuset.c                        | 155 +++++++++++++++++-
+ .../selftests/cgroup/test_cpuset_prs.sh       |  25 +--
+ 3 files changed, 165 insertions(+), 20 deletions(-)
 
-Changes in v2:
-- Increase delay value to 1ms
-- Make this applicable to DWC32 revisions as well
+-- 
+2.31.1
 
- drivers/usb/dwc3/gadget.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 3c63fa97a680..cf5b4f49c3ed 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1699,6 +1699,7 @@ static int __dwc3_gadget_get_frame(struct dwc3 *dwc)
-  */
- static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool interrupt)
- {
-+	struct dwc3 *dwc = dep->dwc;
- 	struct dwc3_gadget_ep_cmd_params params;
- 	u32 cmd;
- 	int ret;
-@@ -1722,10 +1723,13 @@ static int __dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force, bool int
- 	WARN_ON_ONCE(ret);
- 	dep->resource_index = 0;
- 
--	if (!interrupt)
-+	if (!interrupt) {
-+		if (!DWC3_IP_IS(DWC3) || DWC3_VER_IS_PRIOR(DWC3, 310A))
-+			mdelay(1);
- 		dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
--	else if (!ret)
-+	} else if (!ret) {
- 		dep->flags |= DWC3_EP_END_TRANSFER_PENDING;
-+	}
- 
- 	dep->flags &= ~DWC3_EP_DELAY_STOP;
- 	return ret;
-@@ -3774,7 +3778,11 @@ void dwc3_stop_active_transfer(struct dwc3_ep *dep, bool force,
- 	 * enabled, the EndTransfer command will have completed upon
- 	 * returning from this function.
- 	 *
--	 * This mode is NOT available on the DWC_usb31 IP.
-+	 * This mode is NOT available on the DWC_usb31 IP.  In this
-+	 * case, if the IOC bit is not set, then delay by 1ms
-+	 * after issuing the EndTransfer command.  This allows for the
-+	 * controller to handle the command completely before DWC3
-+	 * remove requests attempts to unmap USB request buffers.
- 	 */
- 
- 	__dwc3_stop_active_transfer(dep, force, interrupt);
