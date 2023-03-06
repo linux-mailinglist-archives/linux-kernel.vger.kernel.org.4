@@ -2,110 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100B96ABB9E
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4546ABBAF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 11:20:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231150AbjCFKSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 05:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
+        id S230358AbjCFKTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 05:19:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjCFKRy (ORCPT
+        with ESMTP id S230382AbjCFKTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 05:17:54 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D509C222E9
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:17:29 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id v48so6042873uad.6
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:17:29 -0800 (PST)
+        Mon, 6 Mar 2023 05:19:30 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A3025979
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 02:19:08 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id y14so9058747ljq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 02:19:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678097849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XKtYenUqtd6VLS14GJrUPd5L2ue++xHl4Zvl1BOmIFU=;
-        b=WnA1PDe7IO9i9LNud6CZrnh3mgBD12jgBwRQDB6tfNWrXF9y28VFhW+Flxl/4gNY4e
-         e0TWsqMvgW8RM72Js22NYwfVvtYMLdzmNCYbt8D51secquUaetoU8bYZp4zxkqOEmQcj
-         +8+7zJfzSKuQ7EdEZeTYMcNcE5nO3ShTa0zbkuc3uQGfkguTecW4Lgb18lL6i1GYsSbh
-         8qqE8Fbgqmd11uYDkfwQbbyDr9JYjCgazgIzJjasSucop9ttnlbGajizf5/2Hp0oJpiM
-         zxGgRYswZoJucJz+iPdixZkTEEmOjN7tWBs0Fvw3De6nnit/Bm9dqp7luej92qXu51vJ
-         fmqg==
+        d=linaro.org; s=google; t=1678097946;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sBPw0rQ1KHnBVHCMwgN148s0j1A+T76NoGZG/pqJxXg=;
+        b=mgUeRaZXfqos8jF+M8PG7iqQCB/QSoc4/PdekT8nfIRY3eB96bM+IVp5jFKYylP0KW
+         oyBgYeCJ0rVuZfLOWSmSw78p5NHyICI25/njxNo8Jwm4+MgrXJz+tdtWSdJ/hmCKsdQK
+         aq2YnSScpMbSankxblgDsLZZ9ojAQ5qEP21krONy1Ej0F4bSEvri47nxSrQHWq9U5xty
+         Cg0dewqfRKpvKBnjUikbiaznfby4ejo7B8FZF827ivPGHV1puwqRDeg+n0Jgny3y73w8
+         +be3FNFp83RUl8vGRLxoTCmcoUc8UoQLjk/qg3kUh5EJpadOc35dix5GdPeKiZDfJRh6
+         YBpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678097849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XKtYenUqtd6VLS14GJrUPd5L2ue++xHl4Zvl1BOmIFU=;
-        b=gNHFCS8b/prYUKX791OlqMPcN1iohA7SosgmLXx4k6oFAnDlET77r7ZZ40SH8HIBhn
-         /J6PPZP+Sm7b+0suTWltgtHIXE7jcl/ZN8Hv2nUk83Tmlq8E9qNYicXmyakXoOkepISr
-         b9pqST3OscF0K4042Q5cvzm3wow/ZHirGInUZ9ze9lb223lenee5/mLtSyGTZuSJeQ13
-         N5+gfyFurcQpkv7fzv2h1PNzA+Q64/9yycXEqQZ91O48Qn94JTxUOnyyUkHkaA+lngLT
-         nziIoDitNBjFhPCS8t2IGIiyfC9lRiZ8Z5tWuEKOjap2GJn5HFKqCYMI7TmhsySVV3qX
-         ktuA==
-X-Gm-Message-State: AO0yUKUWNTEcsZiKNRBNkpTCzZXeoC2JQc0yL7pzC5mhYzEYVx0llRir
-        wmLwBhbZ5nuI2728VWnFbgagkHHC/Shi1bawgFgduOXajQaUyQTB
-X-Google-Smtp-Source: AK7set/X1gbAlXGfd9w/+La9Un/k7BbX9YRtJU9/AJdwxyPogFCGtQifMzZmGZ0sqrTFpoLiV/EVM8Bh5GgzffrAR7o=
-X-Received: by 2002:a1f:1888:0:b0:401:8c72:4cf4 with SMTP id
- 130-20020a1f1888000000b004018c724cf4mr6487877vky.1.1678097848924; Mon, 06 Mar
- 2023 02:17:28 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678097946;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sBPw0rQ1KHnBVHCMwgN148s0j1A+T76NoGZG/pqJxXg=;
+        b=uBwmCqtfeMlpMn1KT5hBrjMVnCeQQF78RFEIpH2KkhAzdENWYSAsb0bGSK0Ogkxn/h
+         kHX3O2lKJEf8a/2TQOy+DpS1DRLtrnE2QIelsDlk6TrU+oGKp0U6ZuXxA++w1cbjshgQ
+         uAeLH+Yda7hhaRJ0v+Zi5bLBZYgylXPX7lOnmhARRwraDdjizWLQ9LOtu7XEBaAWeG0O
+         9rgUO4Sa5cRChz7ecaltVcqsgtJygbF44mMih3QbpKaFU8jqTC6H3ivMPVGKK1EdGYcR
+         G1ff/wkKRAyBYA9lw4L1kj2EbfmYkYIrQUWpJR+sZWR/hlvilT6E29PvRQcczBesg19s
+         +I4Q==
+X-Gm-Message-State: AO0yUKWHVKvzi89LdeIJ2HqLvoj2Co0a9JswxakgbyFtWtGtUAxZogUU
+        RpLt6duXw39Np0LlAGlfDAhRRQ==
+X-Google-Smtp-Source: AK7set8eQ42jEM8H4wun5gv6a2vRMqhWZNbcyF4RkJ4/shjL2KDi75U+oW+ealICR4rfD2HlXuRWAA==
+X-Received: by 2002:a2e:91cf:0:b0:295:8c04:8205 with SMTP id u15-20020a2e91cf000000b002958c048205mr3229095ljg.41.1678097946259;
+        Mon, 06 Mar 2023 02:19:06 -0800 (PST)
+Received: from [192.168.1.101] (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id u10-20020ac251ca000000b004b4b600c093sm1592568lfm.92.2023.03.06.02.19.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 02:19:05 -0800 (PST)
+Message-ID: <069ef490-6d50-2e1a-ea01-3c40f829b7fe@linaro.org>
+Date:   Mon, 6 Mar 2023 11:19:04 +0100
 MIME-Version: 1.0
-References: <20230226053953.4681-1-rdunlap@infradead.org> <20230226053953.4681-4-rdunlap@infradead.org>
-In-Reply-To: <20230226053953.4681-4-rdunlap@infradead.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 6 Mar 2023 11:17:18 +0100
-Message-ID: <CAMRc=McJk4QE_hbjKzPcVTdfOAqT+jcfCenwdPzds8CqRYVtZw@mail.gmail.com>
-Subject: Re: [PATCH 3/8] gpio: GPIO_REGMAP: select REGMAP instead of depending
- on it
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] soc: qcom: rmtfs: handle optional qcom,vmid correctly
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230305-rmtfs-vmid-fix-v1-0-6a7206081602@z3ntu.xyz>
+ <20230305-rmtfs-vmid-fix-v1-2-6a7206081602@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230305-rmtfs-vmid-fix-v1-2-6a7206081602@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Feb 26, 2023 at 6:40=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
-> REGMAP is a hidden (not user visible) symbol. Users cannot set it
-> directly thru "make *config", so drivers should select it instead of
-> depending on it if they need it.
->
-> Consistently using "select" or "depends on" can also help reduce
-> Kconfig circular dependency issues.
->
-> Therefore, change the use of "depends on REGMAP" to "select REGMAP".
->
-> Fixes: ebe363197e52 ("gpio: add a reusable generic gpio_chip using regmap=
-")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Michael Walle <michael@walle.cc>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: linux-gpio@vger.kernel.org
+
+
+On 5.03.2023 11:32, Luca Weiss wrote:
+> Older platforms don't have qcom,vmid set
+Ugh, "evolution" :P
+
+, handle -EINVAL return value
+> correctly. And since num_vmids is passed to of_property_read_u32_array
+> later we should make sure it has a sane value before continuing.
+> 
+> Fixes: e656cd0bcf3d ("soc: qcom: rmtfs: Optionally map RMTFS to more VMs")
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->  drivers/gpio/Kconfig |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff -- a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -100,7 +100,7 @@ config GPIO_GENERIC
->         tristate
->
->  config GPIO_REGMAP
-> -       depends on REGMAP
-> +       select REGMAP
->         tristate
->
->  # put drivers in the right section, in alphabetical order
+This needs to be sanctioned by bindings, (i.e. if !oldplatform
+require qcom,vmid), as without this property new ones will simply
+lock up..
 
-Queued for fixes, thanks!
+But this change is correct on its own
 
-Bart
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  drivers/soc/qcom/rmtfs_mem.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/qcom/rmtfs_mem.c b/drivers/soc/qcom/rmtfs_mem.c
+> index 218397ab0c36f..fb6e4def8c78b 100644
+> --- a/drivers/soc/qcom/rmtfs_mem.c
+> +++ b/drivers/soc/qcom/rmtfs_mem.c
+> @@ -229,7 +229,10 @@ static int qcom_rmtfs_mem_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	num_vmids = of_property_count_u32_elems(node, "qcom,vmid");
+> -	if (num_vmids < 0) {
+> +	if (num_vmids == -EINVAL) {
+> +		/* qcom,vmid is optional */
+> +		num_vmids = 0;
+> +	} else if (num_vmids < 0) {
+>  		dev_err(&pdev->dev, "failed to count qcom,vmid elements: %d\n", num_vmids);
+>  		goto remove_cdev;
+>  	} else if (num_vmids > NUM_MAX_VMIDS) {
+> 
