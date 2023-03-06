@@ -2,112 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6636AD1B0
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401546AD1AF
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 23:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbjCFWfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 17:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S230044AbjCFWfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 17:35:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjCFWfJ (ORCPT
+        with ESMTP id S229486AbjCFWfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 6 Mar 2023 17:35:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADF72D76;
-        Mon,  6 Mar 2023 14:35:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9927D2D56;
+        Mon,  6 Mar 2023 14:35:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0FEEB80EB9;
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 405FE21A4B;
         Mon,  6 Mar 2023 22:35:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E32C433D2;
-        Mon,  6 Mar 2023 22:35:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678142106;
-        bh=AaKFvPAhK4yNUKY1AwEa3TApIy5qdHabYFMN/Z1jxYs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DtKUhs85+91yUOeihxb6gOzKdl1rkMoYVdtYwI7zGwtFFDeGyXL4prr0/l7muZp/b
-         7Ac9RVU46iJ8TXSUyDHFoNgw4XLHlwNp3mgwysLRV0ubOyKhUeGk3jJXErmQUDRvKq
-         HbvFeGkpNWVIqXQZfBL6erQOoTwwl2RpmdKVKDPagDLDLiyUHAb4LiwjKi8LbuEPPL
-         UWrNuJUdtOfFdxb4l12Y92R9yHrNlzxadMQ8/Q6VQmW5P+7aHQbEfUP3QWmIQutMZe
-         bSVv9TRYF+MCkSTQL4LXMmqW7eAJkOGQ6x1ebovw6Qo78c6rT2HOB4rcO0PcZHyHgX
-         EAG/2yWzXOdzQ==
-Date:   Mon, 6 Mar 2023 22:35:01 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Jesse Taube <mr.bossman075@gmail.com>,
-        linux-riscv@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yimin Gu <ustcymgu@gmail.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Waldemar Brodkorb <wbx@openadk.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 1/3] clk: k210: remove an implicit 64-bit division
-Message-ID: <be589843-dfc1-47dc-a488-a4fad645c638@spud>
-References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
- <20230301002657.352637-2-Mr.Bossman075@gmail.com>
- <3b0a1481873a2a7c26015fcedcc673b3.sboyd@kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678142107; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4CnI7z+MNChd5BPK0qQbVcdiTxmqCnVztBhXbgFMk6w=;
+        b=zYl9ahF2kFJNefvIQCkPOvNsCIP6Hepv9MCS4qySWngEB6VDAbO1TOQ5qaA3x6joQogoBi
+        b2ebElKQSsKPR1zOMo6Sy1f//kkCrduhNyyvpBckhKJqWW8RCe4Aqpsq/4VHnhWpjy1FiM
+        bevbVUwWe8HjUuZiRJLL/Cx2FO7hq+M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678142107;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4CnI7z+MNChd5BPK0qQbVcdiTxmqCnVztBhXbgFMk6w=;
+        b=Xk7J+ybSrP/MqD1XmOP6lx+Lz/UTWIliEMjg6GQcRpapZYkDE7BKvK4/TUg7RawawTEUvK
+        Acj+75iBOhIhsTAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 32E9513513;
+        Mon,  6 Mar 2023 22:35:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fnbeNphqBmSACgAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 06 Mar 2023 22:35:04 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ERan6PsFUqxi69zE"
-Content-Disposition: inline
-In-Reply-To: <3b0a1481873a2a7c26015fcedcc673b3.sboyd@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Song Liu" <song@kernel.org>
+Cc:     "Linux regressions mailing list" <regressions@lists.linux.dev>,
+        Jes.Sorensen@gmail.com, "linux-raid" <linux-raid@vger.kernel.org>,
+        "LKML" <linux-kernel@vger.kernel.org>,
+        "Nikolay Kichukov" <hijacker@oldum.net>
+Subject: Re: [regression] Bug 217074 - upgrading to kernel 6.1.12 from 5.15.x
+ can no longer assemble software raid0
+In-reply-to: <CAPhsuW64R2ze1AYZhEmQcGf0cKBjjX=4EZZowD+=Cr=VPg1QYg@mail.gmail.com>
+References: <a13cd3b5-cc41-bf2f-c8ac-e031ad0d5dd7@leemhuis.info>,
+ <CAPhsuW7ZWthh0PZt71hQh1_51C0yMSpOqWYJKc_+VzzTmW_r5A@mail.gmail.com>,
+ <167805126796.8008.3635368722810568057@noble.neil.brown.name>,
+ <CAPhsuW64R2ze1AYZhEmQcGf0cKBjjX=4EZZowD+=Cr=VPg1QYg@mail.gmail.com>
+Date:   Tue, 07 Mar 2023 09:35:01 +1100
+Message-id: <167814210165.8008.4497120634222267375@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---ERan6PsFUqxi69zE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Mar 06, 2023 at 02:31:00PM -0800, Stephen Boyd wrote:
-> Quoting Jesse Taube (2023-02-28 16:26:55)
-> > diff --git a/drivers/clk/clk-k210.c b/drivers/clk/clk-k210.c
-> > index 67a7cb3503c3..4eed667eddaf 100644
-> > --- a/drivers/clk/clk-k210.c
-> > +++ b/drivers/clk/clk-k210.c
-> > @@ -495,7 +495,7 @@ static unsigned long k210_pll_get_rate(struct clk_h=
-w *hw,
-> >         f =3D FIELD_GET(K210_PLL_CLKF, reg) + 1;
-> >         od =3D FIELD_GET(K210_PLL_CLKOD, reg) + 1;
-> > =20
-> > -       return (u64)parent_rate * f / (r * od);
-> > +       return div_u64((u64)parent_rate * f, r * od);
+On Tue, 07 Mar 2023, Song Liu wrote:
+> On Sun, Mar 5, 2023 at 1:21=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
+> >
+> > On Sat, 04 Mar 2023, Song Liu wrote:
+> > > + Jes.
+> > >
+> > > It appeared to me that we can assemble the array if we have any of the
+> > > following:
+> > > 1. Enable CONFIG_BLOCK_LEGACY_AUTOLOAD;
+> > > 2. Have a valid /etc/mdadm.conf;
+> > > 3. Update mdadm to handle this case. (I tried some ugly hacks, which wo=
+rked but
+> > >     weren't clean).
+> > >
+> > > Since we eventually would like to get rid of CONFIG_BLOCK_LEGACY_AUTOLO=
+AD, I
+> > > think we need mdadm to handle this properly. But the logistics might
+> > > be complicated, as
+> > > mdadm are shipped separately.
+> > >
+> > > Jes, what do you think about this? AFAICT, we need to update the logic =
+in
+> > > mdopen.c:create_mddev().
+> >
+> > mdadm already handles this, but only if
+> >    CREATE names=3Dyes
+> > is present in /etc/mdadm.conf
+> >
+> > Maybe we should flip the default for the next mdadm release, and patch
+> > the kernel (with a stable backport) to select BLOCK_LEGACY_AUTOLOAD if
+> > BLK_DEV_MD=3Dm
+> > Then revert that - say - 6 months after the new mdadm is released.
 >=20
-> The equation 'r * od' can't overflow 32-bits, right?
+> I like this idea. I guess we also need to select BLOCK_LEGACY_AUTOLOAD
+> if BLK_DEV_MD=3Dy?
 
-Yah, I checked that when writing the patch. They're 4-bit fields:
-> /*
->  * PLL control register bits.
->  */
-> #define K210_PLL_CLKR		GENMASK(3, 0)
-> #define K210_PLL_CLKF		GENMASK(9, 4)
-> #define K210_PLL_CLKOD		GENMASK(13, 10)
+Yes of course - sorry.
 
-Cheers,
-Conor.
+Something like the following.
+
+Thanks,
+NeilBrown
 
 
---ERan6PsFUqxi69zE
-Content-Type: application/pgp-signature; name="signature.asc"
+From: NeilBrown <neilb@suse.de>
+Subject: md: select BLOCK_LEGACY_AUTOLOAD
 
------BEGIN PGP SIGNATURE-----
+When BLOCK_LEGACY_AUTOLOAD is not enable, mdadm is not able to
+activate new arrays unless "CREATE names=3Dyes" appears in
+mdadm.conf
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAZqlQAKCRB4tDGHoIJi
-0iy3AQDEyhSWt9luWK3hsRaGF9IFqJJ5Zv5go86VrRKa8gRWBAEAsE83tegQ4VhX
-XtAnn+tuUHde9besO1Nnwd7yn9BQ2AE=
-=cLk4
------END PGP SIGNATURE-----
+As this is a regression we need to always enable BLOCK_LEGACY_AUTOLOAD
+for when MD is selected - at least until mdadm is updated and the
+updates widely available.
 
---ERan6PsFUqxi69zE--
+Fixes: fbdee71bb5d8 ("block: deprecate autoloading based on dev_t")
+Signed-off-by: NeilBrown <neilb@suse.de>
+
+diff --git a/drivers/md/Kconfig b/drivers/md/Kconfig
+index 998a5cfdbc4e..662d219c39bf 100644
+--- a/drivers/md/Kconfig
++++ b/drivers/md/Kconfig
+@@ -16,6 +16,10 @@ if MD
+
+ config BLK_DEV_MD
+ 	tristate "RAID support"
+ 	select BLOCK_HOLDER_DEPRECATED if SYSFS
++	# BLOCK_LEGACY_AUTOLOAD requirement should be removed
++	# after relevant mdadm enhancements - to make "names=3Dyes"
++	# the default - are widely available.
++	select BLOCK_LEGACY_AUTOLOAD
+ 	help
+ 	  This driver lets you combine several hard disk partitions into one
+ 	  logical block device. This can be used to simply append one
+
+
