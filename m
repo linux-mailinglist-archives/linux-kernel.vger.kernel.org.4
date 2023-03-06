@@ -2,97 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DE36AB50C
-	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 04:25:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52186AB50F
+	for <lists+linux-kernel@lfdr.de>; Mon,  6 Mar 2023 04:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjCFDZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 5 Mar 2023 22:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45090 "EHLO
+        id S229794AbjCFDaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 5 Mar 2023 22:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCFDZB (ORCPT
+        with ESMTP id S229457AbjCFD37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 5 Mar 2023 22:25:01 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A727AB7
-        for <linux-kernel@vger.kernel.org>; Sun,  5 Mar 2023 19:25:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678073100; x=1709609100;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Bk5ohMEFJX5YFe6UJx3PARN2811h8aoxEOXB9eThpc0=;
-  b=V7ZbHRyGYp1kVM2h4nzktslfydzS7TAN3TsEARDXJReJ09nSzLvR36AH
-   ZSEh9po1wOPZ6fobF6UfIP431sIOetFXz4EeSm5VFNy9OLDnSsjpiMD/o
-   hcgLeR/S1Y/0HhNhlKmoZx2SurWFvlPBW888Oi6P0Dm6PbFNoH8fYN8KC
-   rn3sHTewIYUnemN/Ep+P+2SXZhGqQiymkWkJXAbLqW0pXL+xK8o1FX5mD
-   Cz7gQzHf2AxvBRjUW4hVsxAsRss/KYNLx26YF+hXV/Un2QPTbCN6p1AWZ
-   e18lsCiqTtiuSPnt9vYjwnrJXIcKTXCtlNP4JRywCg2FHDN6/PmB7JaXI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="323770157"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="323770157"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2023 19:25:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10640"; a="765075563"
-X-IronPort-AV: E=Sophos;i="5.98,236,1673942400"; 
-   d="scan'208";a="765075563"
-Received: from lkp-server01.sh.intel.com (HELO 776573491cc5) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 05 Mar 2023 19:24:59 -0800
-Received: from kbuild by 776573491cc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZ1T8-0003HS-18;
-        Mon, 06 Mar 2023 03:24:58 +0000
-Date:   Mon, 6 Mar 2023 11:24:02 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: xtensa-linux-ld: section .Level2InterruptVector.text VMA
- [0000000000000180,0000000000000193] overlaps section .data VMA
- [0000000000000000,00000000002eeb0f]
-Message-ID: <202303061133.6YKlFR4B-lkp@intel.com>
+        Sun, 5 Mar 2023 22:29:59 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237F7EF9C;
+        Sun,  5 Mar 2023 19:29:58 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id ADF7324E194;
+        Mon,  6 Mar 2023 11:29:50 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Mar
+ 2023 11:29:50 +0800
+Received: from [192.168.125.110] (183.27.97.46) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 6 Mar
+ 2023 11:29:49 +0800
+Message-ID: <ae6ddeeb-81d3-81e5-c6ab-5d728007817d@starfivetech.com>
+Date:   Mon, 6 Mar 2023 11:29:48 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v4 00/19] Basic clock, reset & device tree support for
+ StarFive JH7110 RISC-V SoC
+Content-Language: en-US
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, Stephen Boyd <sboyd@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+ <ZAJFpKlXPM+riuSa@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <ZAJFpKlXPM+riuSa@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.46]
+X-ClientProxiedBy: EXCAS063.cuchost.com (172.16.6.23) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+On Fri, 3 Mar 2023 20:08:20 +0100, Tommaso Merciai wrote:
+> Hello Hal,
+> I start to play with jh7110-starfive-visionfive-2-v1.3b I have collect
+> your series [3]. Now I'm trying to boot the image with the following
+> cmds:
+> 
+> setenv bootfile vmlinuz;
+> setenv fileaddr a0000000;
+> setenv fdtcontroladdr 0xffffffffffffffff;
+> setenv ipaddr 10.0.0.100;
+> setenv serverip 10.0.0.1;
+> setenv kernel_comp_addr_r 0xb0000000;
+> setenv kernel_comp_size 0x10000000;
+> tftpboot ${fdt_addr_r} jh7110-starfive-visionfive-2-v1.3b.dtb;
+> tftpboot ${kernel_addr_r} Image.gz;
+> run chipa_set_linux;
+> booti ${kernel_addr_r} - ${fdt_addr_r}
+> 
+> 
+> This the result:
+> 
+> Bytes transferred = 109443584 (685fa00 hex)
+> StarFive # run chipa_set_linux;
+> StarFive # printenv file
+>   fileaddr filesize
+> StarFive # printenv filesize
+> filesize=685fa00
+> StarFive # booti ${kernel_addr_r} - ${fdt_addr_r}
+>    Uncompressing Kernel Image
+> ## Flattened Device Tree blob at 46000000
+>    Booting using the fdt blob at 0x46000000
+>    Using Device Tree in place at 0000000046000000, end 0000000046005c14
+> 
+> Starting kernel ...
+> 
+> clk u5_dw_i2c_clk_core already disabled
+> clk u5_dw_i2c_clk_apb already disabled
+> 
+> ---------------------------------------------
+> 
+> I'm missing something? Any hints?
+> Many thanks in advance! :)
 
-FYI, the error/warning still remains.
+You can try the instructions at the link [1]. The branch [1] is
+based on v2 of this series, so you need to change the dtb name
+to "jh7110-starfive-visionfive-2-v1.3b.dtb" when using tftpboot.
+I will send v5 and update it to [1] this week.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-commit: c20e1117d9aa22c558646a1060ddd1dd042fb107 xtensa: add kernel ABI selection to Kconfig
-date:   12 months ago
-config: xtensa-randconfig-r016-20230306 (https://download.01.org/0day-ci/archive/20230306/202303061133.6YKlFR4B-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c20e1117d9aa22c558646a1060ddd1dd042fb107
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c20e1117d9aa22c558646a1060ddd1dd042fb107
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
+[1] https://github.com/starfive-tech/linux/tree/JH7110_VisionFive2_upstream
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303061133.6YKlFR4B-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> xtensa-linux-ld: section .Level2InterruptVector.text VMA [0000000000000180,0000000000000193] overlaps section .data VMA [0000000000000000,00000000002eeb0f]
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+Hal
