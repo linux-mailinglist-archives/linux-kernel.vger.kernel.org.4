@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77326AF652
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF20F6AF6F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbjCGUBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S230401AbjCGUwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbjCGUAh (ORCPT
+        with ESMTP id S229682AbjCGUwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:00:37 -0500
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3447685;
-        Tue,  7 Mar 2023 11:58:01 -0800 (PST)
-Received: from dslb-188-097-045-043.188.097.pools.vodafone-ip.de ([188.97.45.43] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1pZdRR-0008QZ-4e; Tue, 07 Mar 2023 20:57:45 +0100
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Jes Sorensen <Jes.Sorensen@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Martin Kaiser <martin@kaiser.cx>, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] wifi: rtl8xxxu: use module_usb_driver
-Date:   Tue,  7 Mar 2023 20:57:17 +0100
-Message-Id: <20230307195718.168021-1-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
+        Tue, 7 Mar 2023 15:52:23 -0500
+X-Greylist: delayed 3184 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 12:52:20 PST
+Received: from mx07lb.world4you.com (mx07lb.world4you.com [81.19.149.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926144740B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:52:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=engleder-embedded.com; s=dkim11; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=U36lwBlxgIjpgF0QC643OH5pbbYkdV7o3GLoTtG1dK8=; b=lxJKFF1PJr5zBJdQOZGJURSwQJ
+        59MLdTsF+oGOro9iuccCOyGb4v+JvWFiuY1MKVMG1VdgLXktgDXtIf0x+Xytt7PL9/oicupFNqQNK
+        Iy48TPWTJW+auabERbJ84a0mzaUftnzOARIsggye+tcI5igT4Huo7JnfRoB28iNk1OXc=;
+Received: from [88.117.63.48] (helo=[10.0.0.160])
+        by mx07lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <gerhard@engleder-embedded.com>)
+        id 1pZdSi-0002o1-1c; Tue, 07 Mar 2023 20:59:04 +0100
+Message-ID: <bfd215e7-fbf2-b579-0370-cff9f24a3dc9@engleder-embedded.com>
+Date:   Tue, 7 Mar 2023 20:59:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] checkpatch: Ignore ETHTOOL_LINK_MODE_ enum values
+To:     Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     apw@canonical.com, dwaipayanray1@gmail.com, lukas.bulwahn@gmail.com
+References: <20230104201524.28078-1-gerhard@engleder-embedded.com>
+ <435e1e0fd256bc2e58f0abe1255d9f13a786ca11.camel@perches.com>
+Content-Language: en-US
+From:   Gerhard Engleder <gerhard@engleder-embedded.com>
+In-Reply-To: <435e1e0fd256bc2e58f0abe1255d9f13a786ca11.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AV-Do-Run: Yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can use the module_usb_driver macro instead of open-coding the driver's
-init and exit functions. This is simpler and saves some lines of code.
-Other realtek wireless drivers use module_usb_driver as well.
+On 05.01.23 23:24, Joe Perches wrote:
+> On Wed, 2023-01-04 at 21:15 +0100, Gerhard Engleder wrote:
+>> Since commit 4104a20646 enum values like
+>> ETHTOOL_LINK_MODE_Asym_Pause_BIT are ignored. But there are other enums
+>> like ETHTOOL_LINK_MODE_1000baseT_Full_BIT, which are not ignored
+>> because of the not matching '1000baseT' substring.
+>>
+>> Add regex to match all ETHTOOL_LINK_MODE enums.
+> []
+>> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> []
+>> @@ -5783,6 +5783,8 @@ sub process {
+>>   			    $var !~ /^(?:[A-Z]+_){1,5}[A-Z]{1,3}[a-z]/ &&
+>>   #Ignore Page<foo> variants
+>>   			    $var !~ /^(?:Clear|Set|TestClear|TestSet|)Page[A-Z]/ &&
+>> +#Ignore ETHTOOL_LINK_MODE_<foo> variants
+>> +			    $var !~ /^ETHTOOL_LINK_MODE_/ &&
+>>   #Ignore SI style variants like nS, mV and dB
+>>   #(ie: max_uV, regulator_min_uA_show, RANGE_mA_VALUE)
+>>   			    $var !~ /^(?:[a-z0-9_]*|[A-Z0-9_]*)?_?[a-z][A-Z](?:_[a-z0-9_]+|_[A-Z0-9_]+)?$/ &&
+> 
+> These ETHTOOL enums also exist but are caught by the SI style variants test
+> 
+> ETHTOOL_A_CABLE_PULSE_mV
+> ETHTOOL_A_CABLE_AMPLITUDE_mV
+> 
+> So I guess it's OK.  Thanks.
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
----
- .../wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 20 +------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+Did I miss to do something to get this merged? Shall I post it again?
 
-diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-index e619ed21fbfe..58dbad9a14c2 100644
---- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-+++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
-@@ -7455,24 +7455,6 @@ static struct usb_driver rtl8xxxu_driver = {
- 	.disable_hub_initiated_lpm = 1,
- };
- 
--static int __init rtl8xxxu_module_init(void)
--{
--	int res;
--
--	res = usb_register(&rtl8xxxu_driver);
--	if (res < 0)
--		pr_err(DRIVER_NAME ": usb_register() failed (%i)\n", res);
--
--	return res;
--}
--
--static void __exit rtl8xxxu_module_exit(void)
--{
--	usb_deregister(&rtl8xxxu_driver);
--}
--
--
- MODULE_DEVICE_TABLE(usb, dev_table);
- 
--module_init(rtl8xxxu_module_init);
--module_exit(rtl8xxxu_module_exit);
-+module_usb_driver(rtl8xxxu_driver);
--- 
-2.30.2
-
+Gerhard
