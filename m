@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834B86AE754
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC746AE74D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjCGQx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:53:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
+        id S230023AbjCGQxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:53:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjCGQwz (ORCPT
+        with ESMTP id S231450AbjCGQwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:52:55 -0500
+        Tue, 7 Mar 2023 11:52:37 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DE699D6A;
-        Tue,  7 Mar 2023 08:48:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CD3888A6;
+        Tue,  7 Mar 2023 08:48:35 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95236B8198B;
-        Tue,  7 Mar 2023 16:48:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5525C433A1;
-        Tue,  7 Mar 2023 16:48:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 194C2B8198E;
+        Tue,  7 Mar 2023 16:48:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39A8C433EF;
+        Tue,  7 Mar 2023 16:48:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678207704;
-        bh=BQDWbacKIj0sZ5ntfqrCn223xIsx3mwq66IH9bAzQME=;
+        s=k20201202; t=1678207706;
+        bh=GXI4lu3ZaljEq1OXKcXQrt5Ny7mGmhM/pubQG7ezf6I=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=JAogVIjjgiyqT4oIPiknavi9S+d0WhXKnvu4afiFSxI70MnlfmwiecVZ0CTYDUXjH
-         vyVKzvyBQO3/6b9skUTUwrBHhP1uCUvmyUdZM/+128tAD196mqYI8Z2SntYR2AEKc3
-         mK/JPK7Wj8PPo/oc21D79y3njLVB523cywRhqXdDHNtpSv1fGQ5iDP301rXNf3bOz0
-         19MbIJBq+h83dbXoJbdZ4FpVl2ALmosjnvi1mQd3Zr6rd6FPV5aQx7XKUyRWXEVZQE
-         bi282tqpPcfXRw1hKYGXfxcgCockvU9yAQo2V0kCkiXQ27ihILsOPyEmSDnQNSz7cj
-         Ec2xEeGyszjxw==
+        b=Nx/5zTlkQHg9uB0G6bvU+EdULhBArcMMcJEAtGSs8nDbI2J7YAAwyieXj5UQokFWM
+         b0qd074nXE0Lr9yhqzWU+L6+FO4+K5/c7eUC7jTArChRcP2RHY8GlvMZ+HIfi+E51D
+         Cx8puH2tIVpaB+c/nSIXVinO673GbSg57DvxjKT3lZ2DP5zYu2tOQ8CFsdvR5rDLS4
+         zFja9bXfVxiXIhgOKt19tda0V5B5lvY66QFl1/tLJVEUHklmKo3GO++d+tYlvwwckj
+         ibBbQYtw4GtoHvQwz+qYQljCWtFiZCK0iZMVIyLPVA4fVfx2XoolYMc5OMqeSUzzVk
+         WI6LHRi3xiB6A==
 From:   Mark Brown <broonie@kernel.org>
-To:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        William Zhang <william.zhang@broadcom.com>
-Cc:     joel.peshkin@broadcom.com, dregan@mail.com, jonas.gorski@gmail.com,
-        dan.beygelman@broadcom.com, f.fainelli@gmail.com,
-        anand.gore@broadcom.com, kursad.oney@broadcom.com,
-        tomer.yacoby@broadcom.com, kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230307012004.414502-1-william.zhang@broadcom.com>
-References: <20230307012004.414502-1-william.zhang@broadcom.com>
-Subject: Re: [PATCH] spi: Fix cocci warnings
-Message-Id: <167820770115.97370.5301180632243342942.b4-ty@kernel.org>
-Date:   Tue, 07 Mar 2023 16:48:21 +0000
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc:     quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
+        quic_varada@quicinc.com
+In-Reply-To: <20230306144404.15517-1-quic_mdalam@quicinc.com>
+References: <20230306144404.15517-1-quic_mdalam@quicinc.com>
+Subject: Re: (subset) [PATCH 2/5] spi: qup: Use
+ devm_platform_get_and_ioremap_resource()
+Message-Id: <167820770450.97370.6271727230451860246.b4-ty@kernel.org>
+Date:   Tue, 07 Mar 2023 16:48:24 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -59,15 +58,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023 17:20:04 -0800, William Zhang wrote:
-> cocci reported warning: !A || A && B is equivalent to !A || B. This fix
-> simplified the condition check to !A || B.
+On Mon, 06 Mar 2023 20:14:04 +0530, Md Sadre Alam wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 > 
-> Fixes: 76a85704cb91 ("spi: spi-mem: Allow controller supporting mem_ops without exec_op")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202303010051.HrHWSr9y-lkp@intel.com/
 > 
-> [...]
 
 Applied to
 
@@ -75,8 +71,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: Fix cocci warnings
-      commit: 20064c47f63e995216e0dfb0a6ea37b653ed534c
+[2/5] spi: qup: Use devm_platform_get_and_ioremap_resource()
+      commit: dc2eb79496322d5f4790d38776c487bf7aa69be3
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
