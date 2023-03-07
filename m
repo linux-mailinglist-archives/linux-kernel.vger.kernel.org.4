@@ -2,93 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF956ADB58
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709A76ADA8A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjCGKEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:04:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S229799AbjCGJlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:41:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjCGKEg (ORCPT
+        with ESMTP id S229718AbjCGJlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:04:36 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB7B42BC4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:04:33 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZUBA-0005Gr-6M; Tue, 07 Mar 2023 11:04:20 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZSrl-0004DT-O5; Tue, 07 Mar 2023 09:40:13 +0100
-Date:   Tue, 7 Mar 2023 09:40:13 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] net: asix: fix modprobe "sysfs: cannot create duplicate
- filename"
-Message-ID: <20230307084013.GE11936@pengutronix.de>
-References: <20230307005028.2065800-1-grundler@chromium.org>
- <84094771-7f98-0d8d-fe79-7c22e15a602d@gmail.com>
- <CANEJEGsYkxsbCj5O-O=QN8O0MEB-WY6FRJO6GFR0qt2sp4J8SA@mail.gmail.com>
+        Tue, 7 Mar 2023 04:41:15 -0500
+X-Greylist: delayed 1811 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 01:41:12 PST
+Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 40F174FF1C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:41:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KImqK
+        5nEPPgYeY4hktI2AGPAI+mlkHUTNmsY0A04dxQ=; b=RhIFI3vKCAvpoUObTXnXZ
+        iecpcNGNoguAdVVLYvIrR8ErIb8xAVB6yDoZcAjdW+ASG3IP7LfnxbKwgj2cJkxY
+        Q590jlBcsbxOa19RugU4wA09sah43pEdBJmJhr+ItccD6nIDCts2vhrjj5sHQoLo
+        ZxQwRMuXHnpqtJM+VG589o=
+Received: from localhost.localdomain (unknown [113.91.40.179])
+        by zwqz-smtp-mta-g4-1 (Coremail) with SMTP id _____wBXNNkC_wZkgKzZAg--.44696S2;
+        Tue, 07 Mar 2023 17:08:20 +0800 (CST)
+From:   Xujun Leng <lengxujun2007@126.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Xujun Leng <lengxujun2007@126.com>
+Subject: [PATCH] mm: fix potential invalid pointer dereference in kmemdup()
+Date:   Tue,  7 Mar 2023 17:03:58 +0800
+Message-Id: <20230307090358.21346-1-lengxujun2007@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CANEJEGsYkxsbCj5O-O=QN8O0MEB-WY6FRJO6GFR0qt2sp4J8SA@mail.gmail.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wBXNNkC_wZkgKzZAg--.44696S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruw1rur47Ar1DXrWxuFyUZFb_yoWxKrg_X3
+        yrKryqvr45CFs7JayYvr47WrnIg3ykurW0ga4aqas3Ar98Cw40gayvvFZ8X39xCr18Wrs2
+        k39Fvw1DGrnFkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_NeOPUUUUU==
+X-Originating-IP: [113.91.40.179]
+X-CM-SenderInfo: pohqw5hxmx0jqqqxqiyswou0bp/1tbiaQUrd1pEIwjs8gAAsb
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Grant,
+If kmemdup() was called with src == NULL, then memcpy() source address
+is fatal, and if kmemdup() was called with len == 0, kmalloc_track_caller()
+will return ZERO_SIZE_PTR to variable p, then memcpy() destination address
+is fatal. Both 2 cases will cause an invalid pointer dereference.
 
-On Mon, Mar 06, 2023 at 10:22:06PM -0800, Grant Grundler wrote:
-...
-> [dropping Aton Lundin <glance@...> since it's bouncing ... and
-> replying in "text only"]
-> > Should we have a Fixes: tag here? One more question below
-> 
-> I have no idea which change/patch caused this problem. I'm happy to
-> add whatever Fixes: tag folks suggest.
-> 
-> Looking at git blame, looks like the devm_mdiobus_* usage was
-> introduced with e532a096be0e5:
-> 
-> commit e532a096be0e5e570b383e71d4560e7f04384e0f
-> Author: Oleksij Rempel <linux@rempel-privat.de>
-> Date:   Mon Jun 7 10:27:23 2021 +0200
-> 
->     net: usb: asix: ax88772: add phylib support
+Signed-off-by: Xujun Leng <lengxujun2007@126.com>
+---
+ mm/util.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Yes, this is the right commit.
-
-Regards,
-Oleksij
+diff --git a/mm/util.c b/mm/util.c
+index dd12b9531ac4..d1a3b3d2988e 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -128,6 +128,9 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
+ {
+ 	void *p;
+ 
++	if (!src || len == 0)
++		return NULL;
++
+ 	p = kmalloc_track_caller(len, gfp);
+ 	if (p)
+ 		memcpy(p, src, len);
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+
