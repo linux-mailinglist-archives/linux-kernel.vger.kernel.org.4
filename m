@@ -2,210 +2,446 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7366ADFBA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B6B66ADFFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjCGNFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39458 "EHLO
+        id S230450AbjCGNHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjCGNFJ (ORCPT
+        with ESMTP id S230283AbjCGNGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:05:09 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on061e.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::61e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A114D4C14;
-        Tue,  7 Mar 2023 05:04:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l9wjEM+BXrUgXzeL253Oh7TI6xqk/bvmsEcrcAgBCpk=;
- b=V/e049aKAUKOrFUy30U1Q1anGILL6BshMPbJWUsHeHPD/wZpeVMglOff/0BNKebpTxWgBlo02O5zso7z4HDSBq3l1dnqa5DJZObScfHnIcRWkW2P+judEb4eO3WjihI7e2bXR861FDUDxakshkHXsFKCPK3Z7G+wdGU1zypn3NM=
-Received: from DU2PR04CA0269.eurprd04.prod.outlook.com (2603:10a6:10:28e::34)
- by GVXPR08MB7701.eurprd08.prod.outlook.com (2603:10a6:150:6d::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
- 2023 13:04:10 +0000
-Received: from DBAEUR03FT030.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:28e:cafe::33) by DU2PR04CA0269.outlook.office365.com
- (2603:10a6:10:28e::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29 via Frontend
- Transport; Tue, 7 Mar 2023 13:04:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT030.mail.protection.outlook.com (100.127.142.197) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.29 via Frontend Transport; Tue, 7 Mar 2023 13:04:10 +0000
-Received: ("Tessian outbound b29c0599cbc9:v135"); Tue, 07 Mar 2023 13:04:09 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: fbf96094be138c9e
-X-CR-MTA-TID: 64aa7808
-Received: from d596103510da.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 38AF58CA-0745-4C11-A8B7-2E631332AA62.1;
-        Tue, 07 Mar 2023 13:04:03 +0000
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id d596103510da.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 07 Mar 2023 13:04:03 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ThZSGarOVjX4SzRmJMrnGUz7SRLJhq6/vJBMqvTon6mZJ479zg0GXFhlyXpyV92XWavns5aiYa/cVS1/y+Vr1gONCgvybeLgVHDrUvm51SJktZZPuRSNIItET3PaHGrYOTKYZGg7B0Vkmht1KwT4TAH2KkOkTNQ9VMwlcX7rPONPRSGnzcY8YbKNGd7020poOKxNmccG4rKWNFLGOSv1E66t+7WOfY8p8UuKX36WJuAWpa/88dEKF+hrqHxdimtnwPUwjDM6nmMBIkSjYer5qbTJD1YrCU3M8fVptJcT5nnFXiredXlcsk+02TfGauklz5rdCF8nVFNrmzwXpynKaA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l9wjEM+BXrUgXzeL253Oh7TI6xqk/bvmsEcrcAgBCpk=;
- b=V3MuoKc6YawCHfzUg096Bq0yP32wQ6DygRFG+L2Gp3PpFc3IdoXBKxGBveHTEBuK+cnxpVoyBJU32DMe8zBR/bVhLdYuwl/mhPBd+T93AsH+hRNJL8i5B2PWIqFfpBjYKrH3OYZO0uFJWdsLgmjj0o17+R/zBOtLqzeZiu3GxErEiHg7SfDrk+zTUsMp7VRiUAqnQWfC1eQrWEAS13P66KGUtUupDhJOFszZJ9iqi2WTOj4UBlw4+//x9pKQwYaZ3U7qo3lublJHUtlgSOzSXihMrOzrjSDV05BwPWR0AlJAPY8RO7hsQzcijqrBNYYAKZ3cSvgV7XH3Xet8pI51tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l9wjEM+BXrUgXzeL253Oh7TI6xqk/bvmsEcrcAgBCpk=;
- b=V/e049aKAUKOrFUy30U1Q1anGILL6BshMPbJWUsHeHPD/wZpeVMglOff/0BNKebpTxWgBlo02O5zso7z4HDSBq3l1dnqa5DJZObScfHnIcRWkW2P+judEb4eO3WjihI7e2bXR861FDUDxakshkHXsFKCPK3Z7G+wdGU1zypn3NM=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by DU2PR08MB10105.eurprd08.prod.outlook.com (2603:10a6:10:46c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.23; Tue, 7 Mar
- 2023 13:03:57 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 13:03:57 +0000
-Date:   Tue, 7 Mar 2023 13:03:41 +0000
-From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>, "nd@arm.com" <nd@arm.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <ZAc2LQEfvRLCknQQ@arm.com>
-References: <Y/9fdYQ8Cd0GI+8C@arm.com>
- <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
- <df8ef3a9e5139655a223589c16a68393ab3f6d1d.camel@intel.com>
- <ZADQISkczejfgdoS@arm.com>
- <9714f724b53b04fdf69302c6850885f5dfbf3af5.camel@intel.com>
- <ZAYS6CHuZ0MiFvmE@arm.com>
- <87wn3tsuxf.fsf@oldenburg.str.redhat.com>
- <a205aed2171a0a463e3bb7179e8dd63bd4012e7e.camel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <a205aed2171a0a463e3bb7179e8dd63bd4012e7e.camel@intel.com>
-X-ClientProxiedBy: LO3P265CA0016.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:bb::21) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        Tue, 7 Mar 2023 08:06:40 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D947D7FD55;
+        Tue,  7 Mar 2023 05:05:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678194334; x=1709730334;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=PUmzVQVQ6pvtvVbLWFjoKZUzVjGXKVYo/VQ9ySfy9/w=;
+  b=CD/3n9c+++23zxOj33XF50qvThkkRPDGdIO0csgD4grlwWyf5+NS3Kq4
+   kO+sG7Zv8QWwK35LF5fn3a0QojvQ4YYHjOjZwWB4zlCv/4mWYbtO4SG/9
+   q4lzkVYptGed2bq9h1iLHwdYDCKvOHZ3RQqtNEkFC5FNjur1EJa4xpEAn
+   Qjx3yRb71ZbF8QVdp3rbyLyJ9odVoVWcpQOBrSEyM4T/z+6nwzoj3h1KE
+   q57dWhu7XjlUURYjp4ScZAiQzSuNm2kn53UHlm5eg9hpTv0Jh1XOlS1S/
+   1367UgCGuDyIqEE10MxRyn3ZZotgtG8URLJ7MLAZry4Xr+d/LloprnaAP
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400666376"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="400666376"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 05:04:03 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="800383620"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="800383620"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.218.236])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 05:03:58 -0800
+Message-ID: <0c4afcfb-fe9a-89ac-16aa-57ce0d2a70bc@intel.com>
+Date:   Tue, 7 Mar 2023 15:03:54 +0200
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DU2PR08MB10105:EE_|DBAEUR03FT030:EE_|GVXPR08MB7701:EE_
-X-MS-Office365-Filtering-Correlation-Id: a00dce6e-e15f-4c84-cdd7-08db1f0c711c
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: yYGPmxYeNWEoRIdcLQmOVQM2uEI9HDgORbZGJjKq06OUzn4QbVUOVIQBNfS4nHH//FmkCH6nbcmW4r5RPY9MijUDEupQ0kXG3vq3DxeTLzrWq6YTIOKpkREvia8ceja5h9NRy81yur4Dnkw8qj+UPC7tWKcWeA6vLpBG4OO4jJMFCn09Wyvs5cBD0sxYZOEVlhZvjNu3eJOfJzc3IbZYsFXgqETu9/atAkvRbe+xNFUjMFdm+AsqSUOWrgZWEhyWueQ3R7QjssOuqnBggySQhP2vLA7lB9c095Kl3Nw99IyZvOGrrre9QKnrjTe7QadSLwuNh7RJvfhKxLcfncWI9OLOiIAumTsBDe66vSea+Bcw4YytwggNa418mUnail7KNpmntQd1VJeF1bC7RpiVzctZRSEO1vMgPBV93iUi6i3IbMW3V3V56uiOMAEwjqE4exUMe0Krq5DiI7Db3/+M5g7fmWq2o+5XTxPED24V11WjpHxXa4ff1PvsocIKKuSv20ALAXodQobAdd9tEkz9aduLiQyzksTZMwtd8W9RcQ8ywjJ9uvcldSjuMgsQGy6fCFN9hoVg2PkK+Q6r0F94li04BLSRVeWZ8ho7NWqYm/s8pBA50xcFoa3ZhT2Ps7Oaw66Vuzji50waUYv9vK45Sw==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(376002)(346002)(366004)(39860400002)(451199018)(66899018)(478600001)(83380400001)(6666004)(36756003)(110136005)(54906003)(316002)(38100700002)(186003)(6512007)(26005)(6486002)(6506007)(66556008)(2906002)(2616005)(5660300002)(7406005)(7416002)(8936002)(4326008)(41300700001)(66476007)(66946007)(86362001)(8676002);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR08MB10105
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT030.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 9d5f05ba-a605-456f-a355-08db1f0c6889
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mpaxp6nTJm470b0iVppdp750omS7rsC78wDkULbC+h1FkGjdiytBVUy29rxsBjWVnYjLV9uc9dC6K4iF7P3Sf2F197oPHGH3GLeWtOIW7K91jX4aSrRmJa6kHFlcfG611ILw8adfL5i0Bxxlvg6SFt0i/srNUPBBMKb2zLN2AMkmHFf49DdIh0JZ5DKUOAhv/enHrR8Yh0vV2GLZSDaTwadlIw3cWA7gimVVAug5HVbvuJZeEn0eoRtnyz4SpagTu3EJaOuyw7AiGE2+dz3aIRGtwnC/HOjR9IOvxA9+7iTtCl4atOAqhueHcIJ1UPT/H58jKZIaoGCqe76HDecrTRROkwsXPA9PYblVgXa76svcQThPdeHhUbBJ8meDEvXV5BS1gJABkS860MuEPuxSism49mau3tiD9d0Ss0IoTdT1emqPwKXQDz9IebZRZKJxDdw7TP9ZyHzy2iCwBDEnlRzIwr9O0gWfHE0/63kQsWOy6DCiN2SEiVEU3hLzyjP6RBvmq6xlFTgLVd3O2tV4trFGer/SKcIk7HE0mvkpLXnIO11oDaybGjUYxjblOOsj8YDHUorJncJcSeUvLhj94z2VKyKIEGaiy2jSz54EbwivdOJ/UWZfmp+Le14pqanoIp/+B7gr3xln6dLJj6gtpX1GR7Vo+Diluysd1M5ruBEbe4c/syOcnrVjo++8obbyTFgvX1C0Sown+V0LJNko+Q==
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199018)(40470700004)(46966006)(36840700001)(83380400001)(336012)(82310400005)(2906002)(2616005)(47076005)(66899018)(450100002)(70206006)(4326008)(8676002)(5660300002)(36860700001)(26005)(186003)(70586007)(41300700001)(81166007)(8936002)(36756003)(6666004)(107886003)(82740400003)(478600001)(6486002)(40480700001)(356005)(40460700003)(54906003)(6512007)(6506007)(316002)(110136005)(86362001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 13:04:10.0682
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a00dce6e-e15f-4c84-cdd7-08db1f0c711c
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT030.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB7701
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH 2/8] perf bpf filter: Implement event sample filtering
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+References: <20230222230141.1729048-1-namhyung@kernel.org>
+ <20230222230141.1729048-3-namhyung@kernel.org>
+Content-Language: en-US
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230222230141.1729048-3-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 03/06/2023 18:08, Edgecombe, Rick P wrote:
-> On Mon, 2023-03-06 at 17:31 +0100, Florian Weimer wrote:
-> > I assume there is no desire at all on the kernel side that
-> > sigaltstack
-> > transparently allocates the shadow stack?  
+On 23/02/23 01:01, Namhyung Kim wrote:
+> The BPF program will be attached to a perf_event and be triggered when
+> it overflows.  It'd iterate the filters map and compare the sample
+> value according to the expression.  If any of them fails, the sample
+> would be dropped.
 > 
-> It could have some nice benefit for some apps, so I did look into it.
+> Also it needs to have the corresponding sample data for the expression
+> so it compares data->sample_flags with the given value.  To access the
+> sample data, it uses the bpf_cast_to_kern_ctx() kfunc which was added
+> in v6.2 kernel.
 > 
-> > Because there is no
-> > deallocation function today for sigaltstack?
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/Makefile.perf                     |   2 +-
+>  tools/perf/util/bpf-filter.c                 |  64 ++++++++++
+>  tools/perf/util/bpf-filter.h                 |  24 ++--
+>  tools/perf/util/bpf_skel/sample-filter.h     |  24 ++++
+>  tools/perf/util/bpf_skel/sample_filter.bpf.c | 126 +++++++++++++++++++
+>  tools/perf/util/evsel.h                      |   7 +-
+>  6 files changed, 235 insertions(+), 12 deletions(-)
+>  create mode 100644 tools/perf/util/bpf_skel/sample-filter.h
+>  create mode 100644 tools/perf/util/bpf_skel/sample_filter.bpf.c
 > 
-> Yea, this is why we can't do it transparently. There was some
-> discussion up the thread on this.
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index bac9272682b7..474af4adea95 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -1047,7 +1047,7 @@ SKELETONS := $(SKEL_OUT)/bpf_prog_profiler.skel.h
+>  SKELETONS += $(SKEL_OUT)/bperf_leader.skel.h $(SKEL_OUT)/bperf_follower.skel.h
+>  SKELETONS += $(SKEL_OUT)/bperf_cgroup.skel.h $(SKEL_OUT)/func_latency.skel.h
+>  SKELETONS += $(SKEL_OUT)/off_cpu.skel.h $(SKEL_OUT)/lock_contention.skel.h
+> -SKELETONS += $(SKEL_OUT)/kwork_trace.skel.h
+> +SKELETONS += $(SKEL_OUT)/kwork_trace.skel.h $(SKEL_OUT)/sample_filter.skel.h
+>  
+>  $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_OUTPUT) $(LIBSYMBOL_OUTPUT):
+>  	$(Q)$(MKDIR) -p $@
+> diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
+> index 6b1148fcfb0e..e1b1a5343bad 100644
+> --- a/tools/perf/util/bpf-filter.c
+> +++ b/tools/perf/util/bpf-filter.c
+> @@ -1,10 +1,74 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <stdlib.h>
+>  
+> +#include <bpf/bpf.h>
+> +#include <linux/err.h>
+> +#include <internal/xyarray.h>
+> +
+> +#include "util/debug.h"
+> +#include "util/evsel.h"
+> +
+>  #include "util/bpf-filter.h"
+>  #include "util/bpf-filter-flex.h"
+>  #include "util/bpf-filter-bison.h"
+>  
+> +#include "bpf_skel/sample-filter.h"
+> +#include "bpf_skel/sample_filter.skel.h"
+> +
+> +#define FD(e, x, y) (*(int *)xyarray__entry(e->core.fd, x, y))
+> +
+> +int perf_bpf_filter__prepare(struct evsel *evsel)
+> +{
+> +	int i, x, y, fd;
+> +	struct sample_filter_bpf *skel;
+> +	struct bpf_program *prog;
+> +	struct bpf_link *link;
+> +	struct perf_bpf_filter_expr *expr;
+> +
+> +	skel = sample_filter_bpf__open_and_load();
+> +	if (!skel) {
+> +		pr_err("Failed to load perf sample-filter BPF skeleton\n");
+> +		return -1;
+> +	}
+> +
+> +	i = 0;
+> +	fd = bpf_map__fd(skel->maps.filters);
+> +	list_for_each_entry(expr, &evsel->bpf_filters, list) {
+> +		struct perf_bpf_filter_entry entry = {
+> +			.op = expr->op,
+> +			.flags = expr->sample_flags,
+> +			.value = expr->val,
+> +		};
+> +		bpf_map_update_elem(fd, &i, &entry, BPF_ANY);
+> +		i++;
+> +	}
+> +
+> +	prog = skel->progs.perf_sample_filter;
+> +	for (x = 0; x < xyarray__max_x(evsel->core.fd); x++) {
+> +		for (y = 0; y < xyarray__max_y(evsel->core.fd); y++) {
+> +			link = bpf_program__attach_perf_event(prog, FD(evsel, x, y));
+> +			if (IS_ERR(link)) {
+> +				pr_err("Failed to attach perf sample-filter program\n");
+> +				return PTR_ERR(link);
+> +			}
+> +		}
+> +	}
+> +	evsel->bpf_skel = skel;
+> +	return 0;
+> +}
+> +
+> +int perf_bpf_filter__destroy(struct evsel *evsel)
+> +{
+> +	struct perf_bpf_filter_expr *expr, *tmp;
+> +
+> +	list_for_each_entry_safe(expr, tmp, &evsel->bpf_filters, list) {
+> +		list_del(&expr->list);
+> +		free(expr);
+> +	}
+> +	sample_filter_bpf__destroy(evsel->bpf_skel);
+> +	return 0;
+> +}
+> +
+>  struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
+>  						       enum perf_bpf_filter_op op,
+>  						       unsigned long val)
+> diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
+> index fd5b1164a322..6077930073f9 100644
+> --- a/tools/perf/util/bpf-filter.h
+> +++ b/tools/perf/util/bpf-filter.h
+> @@ -4,15 +4,7 @@
+>  
+>  #include <linux/list.h>
+>  
+> -enum perf_bpf_filter_op {
+> -	PBF_OP_EQ,
+> -	PBF_OP_NEQ,
+> -	PBF_OP_GT,
+> -	PBF_OP_GE,
+> -	PBF_OP_LT,
+> -	PBF_OP_LE,
+> -	PBF_OP_AND,
+> -};
+> +#include "bpf_skel/sample-filter.h"
+>  
+>  struct perf_bpf_filter_expr {
+>  	struct list_head list;
+> @@ -21,16 +13,30 @@ struct perf_bpf_filter_expr {
+>  	unsigned long val;
+>  };
+>  
+> +struct evsel;
+> +
+>  #ifdef HAVE_BPF_SKEL
+>  struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
+>  						       enum perf_bpf_filter_op op,
+>  						       unsigned long val);
+>  int perf_bpf_filter__parse(struct list_head *expr_head, const char *str);
+> +int perf_bpf_filter__prepare(struct evsel *evsel);
+> +int perf_bpf_filter__destroy(struct evsel *evsel);
+> +
+>  #else /* !HAVE_BPF_SKEL */
+> +
+>  static inline int perf_bpf_filter__parse(struct list_head *expr_head __maybe_unused,
+>  					 const char *str __maybe_unused)
+>  {
+>  	return -ENOSYS;
 
-changing/disabling the alt stack is not valid while a handler is
-executing on it. if we don't allow jumping out and back to an
-alt stack (swapcontext) then there can be only one alt stack
-live per thread and change/disable can do the shadow stack free.
+Any reason for ENOSYS instead of say EOPNOTSUPP?
 
-if jump back is allowed (linux even makes it race-free with
-SS_AUTODISARM) then the life-time of alt stack is extended
-beyond change/disable (jump back to an unregistered alt stack).
+>  }
+> +static inline int perf_bpf_filter__prepare(struct evsel *evsel)
 
-to support jump back to an alt stack the requirements are
+Needs  __maybe_unused on the parameters
 
-1) user has to manage an alt shadow stack together with the alt
-   stack (requies user code change, not just libc).
+> +{
+> +	return -ENOSYS;
+> +}
+> +static inline int perf_bpf_filter__destroy(struct evsel *evsel)
 
-2) kernel has to push a restore token on the thread shadow stack
-   on signal entry (at least in case of alt shadow stack, and
-   deal with corner cases around shadow stack overflow).
+Needs  __maybe_unused on the parameters
+
+> +{
+> +	return -ENOSYS;
+> +}
+>  #endif /* HAVE_BPF_SKEL*/
+>  #endif /* PERF_UTIL_BPF_FILTER_H */
+> \ No newline at end of file
+> diff --git a/tools/perf/util/bpf_skel/sample-filter.h b/tools/perf/util/bpf_skel/sample-filter.h
+> new file mode 100644
+> index 000000000000..862060bfda14
+> --- /dev/null
+> +++ b/tools/perf/util/bpf_skel/sample-filter.h
+> @@ -0,0 +1,24 @@
+> +#ifndef PERF_UTIL_BPF_SKEL_SAMPLE_FILTER_H
+> +#define PERF_UTIL_BPF_SKEL_SAMPLE_FILTER_H
+> +
+> +#define MAX_FILTERS  32
+> +
+> +/* supported filter operations */
+> +enum perf_bpf_filter_op {
+> +	PBF_OP_EQ,
+> +	PBF_OP_NEQ,
+> +	PBF_OP_GT,
+> +	PBF_OP_GE,
+> +	PBF_OP_LT,
+> +	PBF_OP_LE,
+> +	PBF_OP_AND
+> +};
+> +
+> +/* BPF map entry for filtering */
+> +struct perf_bpf_filter_entry {
+> +	enum perf_bpf_filter_op op;
+> +	__u64 flags;
+> +	__u64 value;
+> +};
+> +
+> +#endif /* PERF_UTIL_BPF_SKEL_SAMPLE_FILTER_H */
+> \ No newline at end of file
+> diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+> new file mode 100644
+> index 000000000000..c07256279c3e
+> --- /dev/null
+> +++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
+> @@ -0,0 +1,126 @@
+> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +// Copyright (c) 2023 Google
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_core_read.h>
+> +
+> +#include "sample-filter.h"
+> +
+> +/* BPF map that will be filled by user space */
+> +struct filters {
+> +	__uint(type, BPF_MAP_TYPE_ARRAY);
+> +	__type(key, int);
+> +	__type(value, struct perf_bpf_filter_entry);
+> +	__uint(max_entries, MAX_FILTERS);
+> +} filters SEC(".maps");
+> +
+> +int dropped;
+> +
+> +void *bpf_cast_to_kern_ctx(void *) __ksym;
+> +
+> +/* new kernel perf_sample_data definition */
+> +struct perf_sample_data___new {
+> +	__u64 sample_flags;
+> +} __attribute__((preserve_access_index));
+> +
+> +/* helper function to return the given perf sample data */
+> +static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
+> +				    struct perf_bpf_filter_entry *entry)
+> +{
+> +	struct perf_sample_data___new *data = (void *)kctx->data;
+> +
+> +	if (!bpf_core_field_exists(data->sample_flags) ||
+> +	    (data->sample_flags & entry->flags) == 0)
+> +		return 0;
+> +
+> +	switch (entry->flags) {
+> +	case PERF_SAMPLE_IP:
+> +		return kctx->data->ip;
+> +	case PERF_SAMPLE_ID:
+> +		return kctx->data->id;
+> +	case PERF_SAMPLE_TID:
+> +		return kctx->data->tid_entry.tid;
+> +	case PERF_SAMPLE_CPU:
+> +		return kctx->data->cpu_entry.cpu;
+> +	case PERF_SAMPLE_TIME:
+> +		return kctx->data->time;
+> +	case PERF_SAMPLE_ADDR:
+> +		return kctx->data->addr;
+> +	case PERF_SAMPLE_PERIOD:
+> +		return kctx->data->period;
+> +	case PERF_SAMPLE_TRANSACTION:
+> +		return kctx->data->txn;
+> +	case PERF_SAMPLE_WEIGHT:
+> +		return kctx->data->weight.full;
+> +	case PERF_SAMPLE_PHYS_ADDR:
+> +		return kctx->data->phys_addr;
+> +	case PERF_SAMPLE_CODE_PAGE_SIZE:
+> +		return kctx->data->code_page_size;
+> +	case PERF_SAMPLE_DATA_PAGE_SIZE:
+> +		return kctx->data->data_page_size;
+> +	default:
+> +		break;
+> +	}
+> +	return 0;
+> +}
+> +
+> +/* BPF program to be called from perf event overflow handler */
+> +SEC("perf_event")
+> +int perf_sample_filter(void *ctx)
+> +{
+> +	struct bpf_perf_event_data_kern *kctx;
+> +	struct perf_bpf_filter_entry *entry;
+> +	__u64 sample_data;
+> +	int i;
+> +
+> +	kctx = bpf_cast_to_kern_ctx(ctx);
+> +
+> +	for (i = 0; i < MAX_FILTERS; i++) {
+> +		int key = i; /* needed for verifier :( */
+> +
+> +		entry = bpf_map_lookup_elem(&filters, &key);
+> +		if (entry == NULL)
+> +			break;
+> +		sample_data = perf_get_sample(kctx, entry);
+> +
+> +		switch (entry->op) {
+> +		case PBF_OP_EQ:
+> +			if (!(sample_data == entry->value))
+> +				goto drop;
+> +			break;
+> +		case PBF_OP_NEQ:
+> +			if (!(sample_data != entry->value))
+> +				goto drop;
+> +			break;
+> +		case PBF_OP_GT:
+> +			if (!(sample_data > entry->value))
+> +				goto drop;
+> +			break;
+> +		case PBF_OP_GE:
+> +			if (!(sample_data >= entry->value))
+> +				goto drop;
+> +			break;
+> +		case PBF_OP_LT:
+> +			if (!(sample_data < entry->value))
+> +				goto drop;
+> +			break;
+> +		case PBF_OP_LE:
+> +			if (!(sample_data <= entry->value))
+> +				goto drop;
+> +			break;
+> +		case PBF_OP_AND:
+> +			if (!(sample_data & entry->value))
+> +				goto drop;
+> +			break;
+> +		}
+> +	}
+> +	/* generate sample data */
+> +	return 1;
+> +
+> +drop:
+> +	__sync_fetch_and_add(&dropped, 1);
+> +	return 0;
+> +}
+> +
+> +char LICENSE[] SEC("license") = "Dual BSD/GPL";
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 24cb807ef6ce..6845642485ec 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -151,8 +151,10 @@ struct evsel {
+>  	 */
+>  	struct bpf_counter_ops	*bpf_counter_ops;
+>  
+> -	/* for perf-stat -b */
+> -	struct list_head	bpf_counter_list;
+> +	union {
+> +		struct list_head	bpf_counter_list; /* for perf-stat -b */
+> +		struct list_head	bpf_filters; /* for perf-record --filter */
+> +	};
+>  
+>  	/* for perf-stat --use-bpf */
+>  	int			bperf_leader_prog_fd;
+> @@ -160,6 +162,7 @@ struct evsel {
+>  	union {
+>  		struct bperf_leader_bpf *leader_skel;
+>  		struct bperf_follower_bpf *follower_skel;
+> +		void *bpf_skel;
+>  	};
+>  	unsigned long		open_flags;
+>  	int			precise_ip_original;
+
