@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7243D6AF98F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E12356AF9A1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231932AbjCGWti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:49:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S229698AbjCGW4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:56:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCGWrt (ORCPT
+        with ESMTP id S229870AbjCGWy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:47:49 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC65EC4B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:46:51 -0800 (PST)
+        Tue, 7 Mar 2023 17:54:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A66B78B5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:50:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678229210;
+        s=mimecast20190719; t=1678229352;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=D+lMV0jdd+rVbHQRucIl145VMEMkgnli2TmhEhYF6aE=;
-        b=TdMHeLXkisv4dd0NrMsLT/nMZqOr5/MXBu6epDuDLpWVoBwPn62uj5ZKV6q4G/dkT10e7Q
-        mcD/ts5wpNd9AjvhKs9n/Zjgg9WNP42JCM7yrhiLTTzjAXju9acJ8cYIQueRW2IKhWWcGr
-        QmgUsE9sQQC5MyQ//Jwa1sVLpNrmA0A=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=jpiPjWQVLrWJQByXN7/QqMdv5LfiV5aMULGXTdQqSWA=;
+        b=bNADT/NS1vCHM4ejLbz7j+ccDTaEEuH/fMAxk9gKPuLCYi1lcML3JXFYcXKpNYQGv518hn
+        eQ9pDd5IUYIol+Dn656AspkfKif3G5AAqSuDqF1JoC1nV/+/kKeqggERkms6acDFsjwq03
+        Tec5FUcY7wnyAzKTW/fcKrx+VFTL2kg=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-620-u0yUpsyRPHytXsVtAwoUzg-1; Tue, 07 Mar 2023 17:46:47 -0500
-X-MC-Unique: u0yUpsyRPHytXsVtAwoUzg-1
-Received: by mail-qk1-f199.google.com with SMTP id z23-20020a05620a101700b0073b328e7d17so8263945qkj.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:46:47 -0800 (PST)
+ us-mta-593-uBA5tdMHMjGhizclHQWW3w-1; Tue, 07 Mar 2023 17:49:11 -0500
+X-MC-Unique: uBA5tdMHMjGhizclHQWW3w-1
+Received: by mail-qt1-f198.google.com with SMTP id z1-20020ac87ca1000000b003ba2a2c50f9so8044418qtv.23
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:49:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678229207;
+        d=1e100.net; s=20210112; t=1678229350;
         h=mime-version:user-agent:content-transfer-encoding:organization
          :references:in-reply-to:date:cc:to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D+lMV0jdd+rVbHQRucIl145VMEMkgnli2TmhEhYF6aE=;
-        b=HqlqZ5Ks/7x0Y4gi2ZbwxokotQ9kwxpF/4opCF9usJctF3SX/KG4pCsqvZCwyRrEVW
-         ZODsnZP/8LEKS3a1YnOE3HFFe3McQoMOUTpo40AJqUEYJbKjuyoIbnzge3lCiNnU+TWa
-         EzB69AWQI88MT1hkjN5uquV2IRrA1QZsNADRR22jRCUjHs45SopRPbRHm3+ox9N+XoVO
-         hDS3x9BGMXNjbXvjI0TBT1hsTdJplQRgQI4xtM/ycQQaS+mbmBtpSlLsvbActNzOaDaG
-         WrSg1oNE6Nbx+da6OCi+b9mD1nVJe3PrU4R+nNSa6amFbdLF1Xi5G61Y+i9HKK/isNwI
-         T5Zg==
-X-Gm-Message-State: AO0yUKVNeVSrnrS6BVnsXqU1PsiIfOC+Fy265Rtq+R+NvdoPciYEdNrl
-        6HrlMPqnLQ7byC2a2kp2n2nO0mUB6tZmAJbn6kyCEv/pNXYd/5dgft0iuXny/iRGEJ9ci7lRa+G
-        tXzkKh2iL1efFnMlNWFAtBLem
-X-Received: by 2002:a05:622a:24c:b0:3bf:d07e:ee17 with SMTP id c12-20020a05622a024c00b003bfd07eee17mr27703404qtx.39.1678229207433;
-        Tue, 07 Mar 2023 14:46:47 -0800 (PST)
-X-Google-Smtp-Source: AK7set8P1yL5WfXGleyVYacQ3ibXaMhN21P0MtcWzIXGgZJYC6emze48ZF0Sor8oqXZOxb/jcDhmSA==
-X-Received: by 2002:a05:622a:24c:b0:3bf:d07e:ee17 with SMTP id c12-20020a05622a024c00b003bfd07eee17mr27703371qtx.39.1678229207119;
-        Tue, 07 Mar 2023 14:46:47 -0800 (PST)
+        bh=jpiPjWQVLrWJQByXN7/QqMdv5LfiV5aMULGXTdQqSWA=;
+        b=7Wy2Lo9xnif7TK4SvY1igQ1rZe1sOLbXMLvtAkUug+qT/O/sMViwrXezumi8s6JeZB
+         rOyrC7Z7Dj5q+H3fxKz9if7zC6BNh26ynBudy7vHf5JFDMMZfgixDKA8Q2fcMpbfvy+j
+         WeKKJgYU799vu5y8+M5bAkmeg+UFhFIQesYgXhUw7Z1mXraY77tJTpa2qp3C0Atk+Lg0
+         itakAs7GN7F7LoRkUyNT+XqSaP+xn3sdUkmtyT4uMWLvX/nvziU9UvKDhIhqO45d5wxr
+         yIu6pujE3IVjKbdjZ/tzMhkXmAjynAUQljuXpgFi9xXLBXs8y/UoK0TuSjzegWJHyi3q
+         2bQQ==
+X-Gm-Message-State: AO0yUKXFfaNI+5cYj1+OsT6zrHqLMcAVmkjmqBuzd3mjZAJGRQVw+23c
+        4L84Tk7RwlhTHS6T0/H/t5Umnor9GyfdkcyUJ3d6dBUZKkGDqeM3kS4sxXgKlMcu93iFnm5e871
+        R3mnThg75xi2nEH5f/Zad9O/D
+X-Received: by 2002:a05:622a:15c6:b0:3bf:e39f:a9aa with SMTP id d6-20020a05622a15c600b003bfe39fa9aamr29975760qty.27.1678229350745;
+        Tue, 07 Mar 2023 14:49:10 -0800 (PST)
+X-Google-Smtp-Source: AK7set8D0kt0w8UWfWFSmc8IGR59KwpNAYdDZegDL5U+4w/82o/iSmt73NW03WYqKFasWTrX/rU/LA==
+X-Received: by 2002:a05:622a:15c6:b0:3bf:e39f:a9aa with SMTP id d6-20020a05622a15c600b003bfe39fa9aamr29975745qty.27.1678229350506;
+        Tue, 07 Mar 2023 14:49:10 -0800 (PST)
 Received: from ?IPv6:2600:4040:5c68:6800::feb? ([2600:4040:5c68:6800::feb])
-        by smtp.gmail.com with ESMTPSA id w19-20020ac843d3000000b003bfbf3afe51sm10369764qtn.93.2023.03.07.14.46.46
+        by smtp.gmail.com with ESMTPSA id 191-20020a370cc8000000b007416c11ea03sm10364394qkm.26.2023.03.07.14.49.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 14:46:46 -0800 (PST)
-Message-ID: <160cbdb25510df6f2e3194c6dd4a2c47a4ee70b7.camel@redhat.com>
-Subject: Re: [PATCH 0/2] drm/nouveau: avoid usage of list iterator after loop
+        Tue, 07 Mar 2023 14:49:09 -0800 (PST)
+Message-ID: <361fb10adaa1cb3ff5360cbb0e36a3c1e99fe3e8.camel@redhat.com>
+Subject: Re: [PATCH 1/2] drm/nouveau/device: avoid usage of list iterator
+ after loop
 From:   Lyude Paul <lyude@redhat.com>
 To:     Jakob Koschel <jkl820.git@gmail.com>,
         Ben Skeggs <bskeggs@redhat.com>,
@@ -69,10 +70,10 @@ Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
         Pietro Borrello <borrello@diag.uniroma1.it>,
         Cristiano Giuffrida <c.giuffrida@vu.nl>,
         "Bos, H.J." <h.j.bos@vu.nl>
-Date:   Tue, 07 Mar 2023 17:46:45 -0500
-In-Reply-To: <2732d141a82c0f9410d001fe656d30c5e32311de.camel@redhat.com>
+Date:   Tue, 07 Mar 2023 17:49:08 -0500
+In-Reply-To: <20230301-drm-nouveau-avoid-iter-after-loop-v1-1-0702ec23f970@gmail.com>
 References: <20230301-drm-nouveau-avoid-iter-after-loop-v1-0-0702ec23f970@gmail.com>
-         <2732d141a82c0f9410d001fe656d30c5e32311de.camel@redhat.com>
+         <20230301-drm-nouveau-avoid-iter-after-loop-v1-1-0702ec23f970@gmail.com>
 Organization: Red Hat Inc.
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
@@ -88,47 +89,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually hm, dim is warning me about this and making me realize there's
-probably a better way to handle this, going to revoke the previous r-b I ga=
-ve
-and respond inline
+On Wed, 2023-03-01 at 18:25 +0100, Jakob Koschel wrote:
+> If potentially no valid element is found, 'pstate' would contain an
+> invalid pointer past the iterator loop. To ensure 'pstate' is always
+> valid, we only set it if the correct element was found. That allows
+> adding a BUG_ON in case the code works incorrectly, exposing currently
+> undetectable potential bugs.
+>=20
+> Additionally, Linus proposed to avoid any use of the list iterator
+> variable after the loop, in the attempt to move the list iterator
+> variable declaration into the marcro to avoid any potential misuse after
+> the loop [1].
+>=20
+> Link: https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5SqXP=
+wr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c b/drivers/=
+gpu/drm/nouveau/nvkm/engine/device/ctrl.c
+> index ce774579c89d..7c9dd91e98ee 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c
+> @@ -72,7 +72,7 @@ nvkm_control_mthd_pstate_attr(struct nvkm_control *ctrl=
+, void *data, u32 size)
+>  	} *args =3D data;
+>  	struct nvkm_clk *clk =3D ctrl->device->clk;
+>  	const struct nvkm_domain *domain;
+> -	struct nvkm_pstate *pstate;
+> +	struct nvkm_pstate *pstate =3D NULL, *iter;
+>  	struct nvkm_cstate *cstate;
+>  	int i =3D 0, j =3D -1;
+>  	u32 lo, hi;
+> @@ -103,11 +103,14 @@ nvkm_control_mthd_pstate_attr(struct nvkm_control *=
+ctrl, void *data, u32 size)
+>  		return -EINVAL;
+> =20
+>  	if (args->v0.state !=3D NVIF_CONTROL_PSTATE_ATTR_V0_STATE_CURRENT) {
+> -		list_for_each_entry(pstate, &clk->states, head) {
+> -			if (i++ =3D=3D args->v0.state)
+> +		list_for_each_entry(iter, &clk->states, head) {
+> +			if (i++ =3D=3D args->v0.state) {
+> +				pstate =3D iter;
+>  				break;
+> +			}
+>  		}
+> =20
+> +		BUG_ON(!pstate);
 
-On Tue, 2023-03-07 at 17:43 -0500, Lyude Paul wrote:
-> Reviewed-by: Lyude Paul <lyude@redhat.com>
->=20
-> Will push upstream in just a moment
->=20
-> On Wed, 2023-03-01 at 18:25 +0100, Jakob Koschel wrote:
-> > This patch set includes two instances where the list iterator variable
-> > 'pstate' is implicitly assumed to be valid after the iterator loop.
-> > While in pratice that is most likely the case (if
-> > 'pstatei'/'args->v0.state' is <=3D the elements in clk->states), we sho=
-uld
-> > explicitly only allow 'pstate' to always point to correct 'nvkm_pstate'
-> > structs.
-> >=20
-> > That allows catching potential bugs with BUG_ON(!pstate) that otherwise
-> > would be completely undetectable.
-> >=20
-> > It also helps the greater mission to hopefully move the list iterator
-> > variable into the iterating macro directly [1].
-> >=20
-> > Link: https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5Sq=
-XPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> > Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
-> > ---
-> > Jakob Koschel (2):
-> >       drm/nouveau/device: avoid usage of list iterator after loop
-> >       drm/nouveau/clk: avoid usage of list iterator after loop
-> >=20
-> >  drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c | 9 ++++++---
-> >  drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c    | 9 ++++++---
-> >  2 files changed, 12 insertions(+), 6 deletions(-)
-> > ---
-> > base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
-> > change-id: 20230301-drm-nouveau-avoid-iter-after-loop-4bff97166efa
-> >=20
-> > Best regards,
+Let's replace this with
+
+		if (WARN_ON_ONCE(!pstate))
+			return -EINVAL;
+
+>  		lo =3D pstate->base.domain[domain->name];
+>  		hi =3D lo;
+>  		list_for_each_entry(cstate, &pstate->list, head) {
 >=20
 
 --=20
