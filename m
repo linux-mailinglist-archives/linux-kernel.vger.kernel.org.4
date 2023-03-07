@@ -2,197 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2A66ADB5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:05:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D62C36ADB64
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjCGKFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:05:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
+        id S229667AbjCGKHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 05:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjCGKF1 (ORCPT
+        with ESMTP id S229691AbjCGKH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:05:27 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A893D62B64
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:05:13 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id g19so8454905ual.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 02:05:13 -0800 (PST)
+        Tue, 7 Mar 2023 05:07:28 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA4539290
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:07:25 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso6855167wmo.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 02:07:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678183512;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZJQteWRnYzXph7B/Yag6wboM2N2GJr+YfQg8dgWg9fg=;
-        b=i8YkSnXonegkW6NuzrPQBnddeL5AYYykbpX7rf6mfB8qYXCajrksSX8+6x4H5APR+w
-         CyNC62BEdd3IYiqGt744W8UizLpcEOdhUiDZRYh/JcwTFH6rlLqr7g9s07erwqZcY7dp
-         q/F4VRUtobYOSrlJ7QIQWS6hZAgJzvST7krsB060SCJMGqiX21BS0uo1RLBt3V0qA+Cf
-         WT23cEsgXMPi/eZrq57WQU3qNvc/9+1vGZmbtzjWxUWi/VDuq4oxgV+Sg408FcGFZxpi
-         ft4GnPZVeN7MdoezfV5rJKQ0+V0oxD6qCplcauC3YCrpheLCf/aDfQi/OCF/2Gopx5U0
-         RQqA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678183643;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a99hADv24Oq3ePO/xWvEGujHuLCx8t+cyBnnFpp72io=;
+        b=YSCUIcYocqMFAD+dkwuethgWjxG3R4uzFSWinK5RLr140QsCU9/Oe0rM5ZuaIhjjlZ
+         vLkeaHOAcmuKVZ4jiUMD6z4xU/D3k31VgNAqaDG+ftVlNyRfytFVYE88oMwdz55UYkBc
+         dPHaWmbI2+Hci/kGAvHYh+JEYcRcAsKBFMw9R3Q6xBp344epu5ycicCpYVNC11FzxRkg
+         p+jb84OS2IF1+c1CY4XRBPNlCfoRoKIRoG9g2Km1pCYxgJDzkCVrjTIY1tKh404zn5mH
+         mK7095HXFummUmioTMTIU0ZAMdx8D10VtV94aJ4rOQ1hih7MrXGvayUUYd6vLKQXjpgV
+         mqKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678183512;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZJQteWRnYzXph7B/Yag6wboM2N2GJr+YfQg8dgWg9fg=;
-        b=0+wgM5AEuqUaIHoFz1HL3NJsCphLAo4I8LJzODG3M3xHOzq8rRaWsJvS1Yl6n9INvl
-         a97Ql8LAOh7Lf2Veoc5fh0WErepbAwUBXRWAyznYY7VoDrWBc/DXE737qvl2NtfackWn
-         V4R7mngeGNaoJB4QcV+65IFQ2SafEkg3sRV6HSwQ/7XfDeVejKSBv5lQ77YebZ17p5Ur
-         i7/HFFitjMOccS98mG6SJ6qlakqY30aOGhandriLZpH9uCTY8FvN6ya8jTAf7u/7n++m
-         OPAcjpvbYnbvphlu0X7e0mrU2+IC3qunu31yUG0sYlI7y97quziCGlOdddmM8N54zF1v
-         xK/w==
-X-Gm-Message-State: AO0yUKVMWM0Vp5uP53jpIEFkfwj19OQo2rTd3mZrKk0/+QUbwFMZcUwY
-        rdo8bTLoouyiUn1C3l7ObHHnW22sqEr+sCxUH4ugqA==
-X-Google-Smtp-Source: AK7set8c+gLtppl3OV34UlpT2NVSBrBDOXjbBL6Qoi5a7s9uQCdvDonXutxUCPmrYcSLhl/Eg4gal+XbsMwFV15tygk=
-X-Received: by 2002:a1f:e483:0:b0:406:3e8d:92c8 with SMTP id
- b125-20020a1fe483000000b004063e8d92c8mr8898453vkh.1.1678183512529; Tue, 07
- Mar 2023 02:05:12 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678183643;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a99hADv24Oq3ePO/xWvEGujHuLCx8t+cyBnnFpp72io=;
+        b=woqFwpW7tVK2t9emJE8ilDeSAIOfQws3M7YDKjEyX6xLsNcNwSH+BtHaPkv5X+YjnZ
+         toMrDbOMnkWx0T69irhvUnTRQ4Ck5GVkqXNMRrCC87UQJ72hvpZGYRxsfNTShkpomgTa
+         SDlx+jIJcqZZ/55G262JpJcuvPiwc7Sz9Wpzi1XH1wbWp4tydmE06wEMbwsxV5uTBCf2
+         vOuUN2phnb84xdvf4ixo/qUy+KVHgxCbSAkRkGYOJdgeZ4z9WGywZDLqX1fKQnecMrfj
+         nkEKWDtWJW/5PEoFW7da6rOcv2JlHHZYpZOda/MwWRlk1PpLZLoHTIOfY2Uz20MHlp8z
+         0D+w==
+X-Gm-Message-State: AO0yUKUnrJvgKtaMFkLBCeU6FCfIUVC9cOoaHeI/0m0pt8mGdm0txLEU
+        vdoJ6k29riKa5wZDyvrl1uvtlT5wQwoQrd0H+Fw=
+X-Google-Smtp-Source: AK7set9LisboRMIbelSbZwB9/xid+f7oLBqZmrU5e7MBZwglzYbYVjzgLLCrOA+yg2thby9TmUO7ZQ==
+X-Received: by 2002:a05:600c:4448:b0:3dc:18de:b20d with SMTP id v8-20020a05600c444800b003dc18deb20dmr12895539wmn.33.1678183643561;
+        Tue, 07 Mar 2023 02:07:23 -0800 (PST)
+Received: from [127.0.1.1] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id i16-20020a05600c355000b003dc4480df80sm18026288wmq.34.2023.03.07.02.07.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 02:07:23 -0800 (PST)
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 07 Mar 2023 11:07:14 +0100
+Subject: [PATCH v4] dt-bindings: display: mediatek: clean unnecessary item
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 7 Mar 2023 15:35:01 +0530
-Message-ID: <CA+G9fYuJJySMY_6oLx_R_ebX9wDkwTLbDW7f7_CqF9UgFhSajg@mail.gmail.com>
-Subject: ftrace_regression01: qemu-i386: EIP: vm_area_free: Kernel panic - not
- syncing: Fatal exception in interrupt
-To:     linux-clk <linux-clk@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org, linux-trace-kernel@vger.kernel.org,
-        LTP List <ltp@lists.linux.it>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230306-ccorr-binding-fix-v4-0-117daea88efb@baylibre.com>
+To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        David Airlie <airlied@gmail.com>
+Cc:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2628; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=G42YvKxkrZJb/teIAV/+HSCiQBvvc6k4e2mWKdkwM3Y=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkBwzaI++vi8o18d0x4WW7CSZlcGaJz7zBjybAHxbD
+ 0V0R9veJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZAcM2gAKCRArRkmdfjHUReLqD/
+ 4pmKEEHsKgsyphpRf2jTAS+qD61DtVytoGOcCZ4giSLMXJY928D5l57zSrlei1a8RnOoIlg1DGp5r4
+ iPALGAhEz2FBWrvEb83xeukIb+2xHJiYXEmrNjh92YYVp4RuvlMBecTQHkElypf9zdRIOaerymRzgA
+ 98zV6VxYjO3A5Gqxm/G8YQVSvCFHBtWktRpco3h505EFQ40A6UilfZ14lqK+GhmZj07ueoaU8Mmo8D
+ vn0yK59187hXXJqO2RdZ2P7zUtuJlq1we1SxMueoI+7EAOoQneokgl3UtJ722DUsYXpKzkcDeB5/lb
+ /d6i1Cud3Xm2+RrpV2lKkbD3Yn8y/ycGJ5cOQGHFoApUCFhaxBiuOcfSscyoWvx+o8MN+9sCndHWin
+ IqS5fZjGZ8Fez0VV4HicvFI/IXwsieGUAnV+LEJ06FVHTjN005Y8sDnbqqJlYCZcPa2VKv7ijuWaCy
+ CzXs2P0a5mG0AOvR0mVFvn4DkW27zkRa6B0lcbe/rOPF0ELOTwHKyhUVWeqftAcmubptyOn+LJGxGh
+ qNLzvBb3pZoNxVNp/K4Izf97hQ4+VFHgrOnyojV9D70keC/+sIdcXuB+u4XYEgBz9PQTx01SjvA8ny
+ aAYYnop6rMjZIaoqrfxd2Zo2YfFPwqQAOrP3T7kJxtnPJloGNVPirysHrzHQ==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following kernel panic noticed While running LTP tracing tests on
-qemu-i386.
+The item which have the mediatek,mt8192-disp-ccorr as const compatible
+already exist above. Merge all compatibles which have the same fallback
+under the same item.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+Fix MTK color correction binding
 
+The fallback compatible has been duplicated in the 137272ef1b0f commit.
 
-[    0.000000] Linux version 6.3.0-rc1 (tuxmake@tuxmake) (Debian clang
-version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.41),
-Debian LLD 16.0.0) #1 SMP PREEMPT_DYNAMIC @1678136838
-...
-LTP tracing tests
-Running tests.......
-<6>[   35.957375] traps: systemd-network[287] trap invalid opcode
-ip:b7d99bef sp:bfcf8e20 error:0 in
-libsystemd-shared-250.so[b7c33000+1c0000]
-<6>[   39.887678] traps: systemd-network[330] trap invalid opcode
-ip:b7db0bef sp:bfb6ab00 error:0 in
-libsystemd-shared-250.so[b7c4a000+1c0000]
-<4>[   41.883172] clocksource: timekeeping watchdog on CPU0: Marking
-clocksource 'tsc' as unstable because the skew is too large:
-<4>[   41.885195] clocksource:                       'acpi_pm'
-wd_nsec: 633206175 wd_now: 13fe92 wd_last: f168b4 mask: ffffff
-<4>[   41.886363] clocksource:                       'tsc' cs_nsec:
-5320282620 cs_now: 1cbab6bece cs_last: 19231a48ea mask:
-ffffffffffffffff
-<4>[   41.887503] clocksource:                       Clocksource 'tsc'
-skewed 4687076445 ns (4687 ms) over watchdog 'acpi_pm' interval of
-633206175 ns (633 ms)
-<4>[   41.888583] clocksource:                       'tsc' is current
-clocksource.
-<6>[   41.889615] tsc: Marking TSC unstable due to clocksource watchdog
-<4>[   41.894933] TSC found unstable after boot, most likely due to
-broken BIOS. Use 'tsc=unstable'.
-<6>[   41.895623] sched_clock: Marking unstable (41348265135,
-546543322)<-(41919545028, -24729054)
-<4>[   41.905093] clocksource: Checking clocksource tsc
-synchronization from CPU 1 to CPUs 0.
-<6>[   41.921496] clocksource: Switched to clocksource acpi_pm
-<47>[   42.122074] systemd-journald[108]: Successfully sent stream
-file descriptor to service manager.
+To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+To: Philipp Zabel <p.zabel@pengutronix.de>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+Changes in v4:
+- Reword commit title and message.
+- Link to v3: https://lore.kernel.org/r/20230306-ccorr-binding-fix-v3-0-7877613a35cb@baylibre.com
 
-ftrace_regression01 1 TPASS: Finished running the test
+Changes in v3:
+- Re-order compatible.
+- Link to v2: https://lore.kernel.org/r/20230306-ccorr-binding-fix-v2-0-4822939a837d@baylibre.com
 
-<4>[   43.795642] int3: 0000 [#1] PREEMPT SMP
-<4>[   43.795642] CPU: 0 PID: 331 Comm: systemd-network Not tainted 6.3.0-rc1 #1
-<4>[   43.795642] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-BIOS 1.14.0-2 04/01/2014
-<4>[   43.795642] EIP: vm_area_free+0x1/0x20
-<4>[   43.795642] Code: e5 85 1d 00 85 c0 74 14 b9 11 00 00 00 89 c7
-f3 a5 89 c1 83 c1 24 89 48 24 89 48 28 5e 5f 5d c3 90 90 90 90 90 90
-90 90 90 3e <8d> 74 26 00 55 89 e5 89 c2 a1 ac 99 82 d3 e8 fc 8f 1d 00
-5d c3 90
-<4>[   43.795642] EAX: c243bab0 EBX: c243bab0 ECX: 00000000 EDX: c23cb9c0
-<4>[   43.795642] ESI: 00000000 EDI: 000001c0 EBP: c25c1e24 ESP: c25c1dd0
-<4>[   43.795642] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00000246
-<4>[   43.795642] CR0: 80050033 CR2: 081d764c CR3: 02ce1000 CR4: 000006d0
-<4>[   43.795642] Call Trace:
-<4>[   43.795642]  ? do_vmi_align_munmap+0x26e/0x380
-<4>[   43.795642]  mmap_region+0x26e/0x880
-<4>[   43.795642]  ? arch_ftrace_ops_list_func+0x20/0x1a0
-<4>[   43.795642]  ? ftrace_call+0x5/0x13
-<4>[   43.795642]  do_mmap+0x33f/0x4b0
-<4>[   43.795642]  ? do_mmap+0x3f6/0x4b0
-<4>[   43.795642]  vm_mmap_pgoff+0x9b/0x120
-<4>[   43.795642]  ksys_mmap_pgoff+0x15d/0x1b0
-<4>[   43.795642]  __ia32_sys_mmap_pgoff+0x21/0x30
-<4>[   43.795642]  do_int80_syscall_32+0x39/0x74
-<4>[   43.795642]  entry_INT80_32+0xf0/0xf0
-<4>[   43.795642] EIP: 0xb7f7d9c1
-<4>[   43.795642] Code: c3 8d b4 26 00 00 00 00 90 8b 5c 24 08 01 c3
-8b 6c 2b 40 89 2f eb b6 66 90 f3 0f 1e fb 53 57 55 8b 1f 8b 6f 08 8b
-7f 04 cd 80 <5d> 5f 5b c3 66 90 66 90 66 90 66 90 66 90 90 f3 0f 1e fb
-e8 5a 00
-<4>[   43.795642] EAX: ffffffda EBX: b7c94000 ECX: 001c0000 EDX: 00000005
-<4>[   43.795642] ESI: 00000812 EDI: 00000004 EBP: 0000003b ESP: bff393e0
-<4>[   43.795642] DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 007b EFLAGS: 00000202
-<4>[   43.795642] Modules linked in:
-<4>[   43.795642]  \
- ---[ end trace 0000000000000000 ]---
-<4>[   43.795642] EIP: vm_area_free+0x1/0x20
-<4>[   43.795642] Code: e5 85 1d 00 85 c0 74 14 b9 11 00 00 00 89 c7
-f3 a5 89 c1 83 c1 24 89 48 24 89 48 28 5e 5f 5d c3 90 90 90 90 90 90
-90 90 90 3e <8d> 74 26 00 55 89 e5 89 c2 a1 ac 99 82 d3 e8 fc 8f 1d 00
-5d c3 90
-<4>[   43.795642] EAX: c243bab0 EBX: c243bab0 ECX: 00000000 EDX: c23cb9c0
-<4>[   43.795642] ESI: 00000000 EDI: 000001c0 EBP: c25c1e24 ESP: c25c1dd0
-<4>[   43.795642] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00000246
-<4>[   43.795642] CR0: 80050033 CR2: 081d764c CR3: 02ce1000 CR4: 000006d0
-<0>[   43.795642] Kernel panic - not syncing: Fatal exception in interrupt
-<0>[   43.795642] Kernel Offset: disabled
+Changes in v2:
+- Fix commit title.
+- Link to v1: https://lore.kernel.org/r/20230306-ccorr-binding-fix-v1-0-177d81d60c69@baylibre.com
+---
+ .../devicetree/bindings/display/mediatek/mediatek,ccorr.yaml         | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-test log:
------
-  - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.3-rc1-2-g8ca09d5fa354/testrun/15298979/suite/log-parser-test/test/check-kernel-panic/log
-  - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.3-rc1-2-g8ca09d5fa354/testrun/15298979/suite/log-parser-test/tests/
+diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
+index b04820c95b22..bda86e6857f5 100644
+--- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
++++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
+@@ -27,13 +27,10 @@ properties:
+           - const: mediatek,mt8192-disp-ccorr
+       - items:
+           - enum:
++              - mediatek,mt8186-disp-ccorr
+               - mediatek,mt8188-disp-ccorr
+               - mediatek,mt8195-disp-ccorr
+           - const: mediatek,mt8192-disp-ccorr
+-      - items:
+-          - enum:
+-              - mediatek,mt8186-disp-ccorr
+-          - const: mediatek,mt8192-disp-ccorr
+ 
+   reg:
+     maxItems: 1
 
+---
+base-commit: add072536971d7ce891fde3cdbf68c55e7cfa95a
+change-id: 20230306-ccorr-binding-fix-718c6d725088
 
-steps to reproduce:
---------------
-# To install tuxrun on your system globally:
-# sudo pip3 install -U tuxrun==0.37.2
-#
-# See https://tuxrun.org/ for complete documentation.
-
-tuxrun  \
- --runtime podman  \
- --device qemu-i386  \
- --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2MemUurDShqDi3xoAvTknd2dbfd/bzImage
- \
- --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2MemUurDShqDi3xoAvTknd2dbfd/modules.tar.xz
- \
- --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2MV9clY6B5uyK3SNAIPgiO5gCoP/images/intel-core2-32/lkft-tux-image-intel-core2-32-20230303113918.rootfs.ext4.gz
- \
- --parameters SKIPFILE=skipfile-lkft.yaml  \
- --parameters SHARD_NUMBER=4  \
- --parameters SHARD_INDEX=1  \
- --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f  \
- --tests ltp-tracing  \
- --timeouts boot=15 ltp-tracing=30
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
