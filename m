@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1968C6AE1DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B336AE1DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjCGOLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:11:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
+        id S231319AbjCGOLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:11:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjCGOJp (ORCPT
+        with ESMTP id S230464AbjCGOJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Mar 2023 09:09:45 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516EB93874
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:08:24 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3A3867E8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:08:23 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83C90B818F9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:07:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 442E9C433A1;
-        Tue,  7 Mar 2023 14:07:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00B44B81900
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D53C4339C;
+        Tue,  7 Mar 2023 14:07:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678198063;
-        bh=LGPwuGUBE9+D2Ri4mVTa9KzwPrnmKSHtWXBpjrEGvfU=;
+        s=k20201202; t=1678198065;
+        bh=L2+rgVx2iv3hRHUq+qUrb8b1wtfayhr80bZIYC3PNSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RwzOzBuuV/wfG5j8QfOfX32RG0eTjM+i2oreD47PIfD3xfe6B8MWngtR5XRC0GzhU
-         5B6cc0APiUj0c+EvQfL1dcFT3tOVcKBJYt3xBd1LA5qKWqjel9ddOwaK9TSr8dlq9S
-         bsQ3ieraqDDj+gClYHPuEXhJ+65Ka1BJ+jAIgphsLHMYA8v1ABeGYMWCoL0H3YLJ+E
-         pphixn4kEPbe/FsBnLjFah7Q4mhll9rULdSHzJhLssrLHSGIe8OZgvk4udC32738SE
-         Gg84NPJJAs94/bytiFf1AoJ+9oQni2qFHObKbvekDheKuCwdKbb5vkqWlnU3hMz6w+
-         GSwxrNUkJcohA==
+        b=PJ9rvgoQ6qhXJ4fKL6aSQ01F1mlWPTmSefIFRcnR0S2mgH6H8MNK+FpAtc5ePuJ3+
+         J2QWqeGt5WfyHS9hj5PT7WM0Tl55bnifu1Xo+uBdIY3+ezR62S1Oh71BPFPbayM3yl
+         mpvoQKS1QSlVN1g0JY+1Hb3j2O2NNT3AaLLU6fcnympJeMAAD/BFuuy6RQvIFvbnzd
+         n3OfigaUPVNVBsKsq5iPvgKFNfyD1f4adD8RLVY50/37J5n7H0H2DZ8kfnUZUO8OPP
+         wtWRkx27kpV+03nBbdhjkuV4s40ya6wfXdegS7BxmITuocuBKc+zmw4WzTSvydevsG
+         TNP9VeQ3fpc6A==
 From:   Ard Biesheuvel <ardb@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -42,102 +42,208 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         Ryan Roberts <ryan.roberts@arm.com>,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Kees Cook <keescook@chromium.org>
-Subject: [PATCH v3 27/60] arm64: head: Run feature override detection before mapping the kernel
-Date:   Tue,  7 Mar 2023 15:04:49 +0100
-Message-Id: <20230307140522.2311461-28-ardb@kernel.org>
+Subject: [PATCH v3 28/60] arm64: head: move dynamic shadow call stack patching into early C runtime
+Date:   Tue,  7 Mar 2023 15:04:50 +0100
+Message-Id: <20230307140522.2311461-29-ardb@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307140522.2311461-1-ardb@kernel.org>
 References: <20230307140522.2311461-1-ardb@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2825; i=ardb@kernel.org; h=from:subject; bh=LGPwuGUBE9+D2Ri4mVTa9KzwPrnmKSHtWXBpjrEGvfU=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdxenLuW+3y64XPmd4dOOZjIxXtH5B38riC5cW7E5d2 HJqu9zEjlIWBjEOBlkxRRaB2X/f7Tw9UarWeZYszBxWJpAhDFycAjCRlfMY/qd5fVJ2i2BfrprU flVk2TPP4nqFYv73WeI1mbu/zDo7M53hv7vjEWPNV49u3VqyxGqfzLQvKRcjL7fvvH9USoevqpN RiBMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6238; i=ardb@kernel.org; h=from:subject; bh=L2+rgVx2iv3hRHUq+qUrb8b1wtfayhr80bZIYC3PNSI=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdxTV+VVgVc1Z3lq6egMSRSVf/ikxRfed15eDkroZVf nlbJh3uKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABPZxcbI0HOl7lb6mnN5++5c i98i+G3eg5BfCuGMP6edP3NihoSCvCbDP82Y7eUOT7ZYFM7bbdu49TdPntLq/a3h8cvUQ3c4KCv P4gAA
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To permit the feature overrides to be taken into account before the
-KASLR init code runs and the kernel mapping is created, move the
-detection code to an earlier stage in the boot.
+Once we update the early kernel mapping code to only map the kernel once
+with the right permissions, we can no longer perform code patching via
+this mapping.
 
-In a subsequent patch, this will be taken advantage of by merging the
-preliminary and permanent mappings of the kernel text and data into a
-single one that gets created and relocated before start_kernel() is
-called.
+So move this code to an earlier stage of the boot, right after applying
+the relocations.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/arm64/kernel/head.S        | 17 +++++++++--------
- arch/arm64/kernel/vmlinux.lds.S |  4 +---
- 2 files changed, 10 insertions(+), 11 deletions(-)
+ arch/arm64/include/asm/scs.h           |  2 +-
+ arch/arm64/kernel/Makefile             |  2 --
+ arch/arm64/kernel/head.S               |  8 +++---
+ arch/arm64/kernel/module.c             |  2 +-
+ arch/arm64/kernel/pi/Makefile          | 10 +++++---
+ arch/arm64/kernel/{ => pi}/patch-scs.c | 26 ++++++++++----------
+ 6 files changed, 26 insertions(+), 24 deletions(-)
 
+diff --git a/arch/arm64/include/asm/scs.h b/arch/arm64/include/asm/scs.h
+index 13df982a080805e6..bcf8ad574807b82c 100644
+--- a/arch/arm64/include/asm/scs.h
++++ b/arch/arm64/include/asm/scs.h
+@@ -72,7 +72,7 @@ static inline void dynamic_scs_init(void)
+ static inline void dynamic_scs_init(void) {}
+ #endif
+ 
+-int scs_patch(const u8 eh_frame[], int size);
++int __pi_scs_patch(const u8 eh_frame[], int size);
+ 
+ #endif /* __ASSEMBLY __ */
+ 
+diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
+index 4f1fcaebafcfe077..bae6194df6a50479 100644
+--- a/arch/arm64/kernel/Makefile
++++ b/arch/arm64/kernel/Makefile
+@@ -72,8 +72,6 @@ obj-$(CONFIG_ARM64_PTR_AUTH)		+= pointer_auth.o
+ obj-$(CONFIG_ARM64_MTE)			+= mte.o
+ obj-y					+= vdso-wrap.o
+ obj-$(CONFIG_COMPAT_VDSO)		+= vdso32-wrap.o
+-obj-$(CONFIG_UNWIND_PATCH_PAC_INTO_SCS)	+= patch-scs.o
+-CFLAGS_patch-scs.o			+= -mbranch-protection=none
+ 
+ # Force dependency (vdso*-wrap.S includes vdso.so through incbin)
+ $(obj)/vdso-wrap.o: $(obj)/vdso/vdso.so
 diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-index ade0cb99c8a83a3d..0a345898a12939af 100644
+index 0a345898a12939af..70ad180eed364906 100644
 --- a/arch/arm64/kernel/head.S
 +++ b/arch/arm64/kernel/head.S
-@@ -375,9 +375,9 @@ SYM_FUNC_START_LOCAL(create_idmap)
- 
- 	map_memory x0, x1, x3, x6, x7, x3, IDMAP_PGD_ORDER, x10, x11, x12, x13, x14, EXTRA_SHIFT
- 
--	/* Remap BSS and the kernel page tables r/w in the ID map */
-+	/* Remap [.init].data, BSS and the kernel page tables r/w in the ID map */
- 	adrp	x1, _text
--	adrp	x2, __bss_start
-+	adrp	x2, __initdata_begin
- 	adrp	x3, _end
- 	bic	x4, x2, #SWAPPER_BLOCK_SIZE - 1
- 	mov	x5, SWAPPER_RW_MMUFLAGS
-@@ -491,9 +491,6 @@ SYM_FUNC_START_LOCAL(__primary_switched)
+@@ -490,9 +490,6 @@ SYM_FUNC_START_LOCAL(__primary_switched)
+ #endif
  #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
  	bl	kasan_early_init
- #endif
--	mov	x0, x20				// pass the full boot status
--	mov	x1, x22				// pass the low FDT mapping
--	bl	__pi_init_feature_override	// Parse cpu feature overrides
- #ifdef CONFIG_UNWIND_PATCH_PAC_INTO_SCS
- 	bl	scs_patch_vmlinux
- #endif
-@@ -770,12 +767,16 @@ SYM_FUNC_START_LOCAL(__primary_switch)
- 	bl	__pi_memset
- 	dsb	ishst				// Make zero page visible to PTW
- 
--#ifdef CONFIG_RELOCATABLE
--	adrp	x23, KERNEL_START
--	and	x23, x23, MIN_KIMG_ALIGN - 1
- 	adrp	x1, early_init_stack
- 	mov	sp, x1
- 	mov	x29, xzr
-+	mov	x0, x20				// pass the full boot status
-+	mov	x1, x22				// pass the low FDT mapping
-+	bl	__pi_init_feature_override	// Parse cpu feature overrides
-+
-+#ifdef CONFIG_RELOCATABLE
-+	adrp	x23, KERNEL_START
-+	and	x23, x23, MIN_KIMG_ALIGN - 1
- #ifdef CONFIG_RANDOMIZE_BASE
- 	mov	x0, x22
- 	bl	__pi_kaslr_early_init
-diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
-index ec24b1e70d606ec8..6c79ad2945749260 100644
---- a/arch/arm64/kernel/vmlinux.lds.S
-+++ b/arch/arm64/kernel/vmlinux.lds.S
-@@ -318,10 +318,8 @@ SECTIONS
- 	init_pg_dir = .;
- 	. += INIT_DIR_SIZE;
- 	init_pg_end = .;
--#ifdef CONFIG_RELOCATABLE
--	. += SZ_4K;		/* stack for the early relocation code */
-+	. += SZ_4K;		/* stack for the early C runtime */
- 	early_init_stack = .;
 -#endif
+-#ifdef CONFIG_UNWIND_PATCH_PAC_INTO_SCS
+-	bl	scs_patch_vmlinux
+ #endif
+ 	mov	x0, x20
+ 	bl	finalise_el2			// Prefer VHE if possible
+@@ -792,6 +789,11 @@ SYM_FUNC_START_LOCAL(__primary_switch)
+ #ifdef CONFIG_RELOCATABLE
+ 	mov	x0, x23
+ 	bl	__pi_relocate_kernel
++#endif
++#ifdef CONFIG_UNWIND_PATCH_PAC_INTO_SCS
++	ldr	x0, =__eh_frame_start
++	ldr	x1, =__eh_frame_end
++	bl	__pi_scs_patch_vmlinux
+ #endif
+ 	ldr	x8, =__primary_switched
+ 	adrp	x0, KERNEL_START		// __pa(KERNEL_START)
+diff --git a/arch/arm64/kernel/module.c b/arch/arm64/kernel/module.c
+index 5af4975caeb58ff7..9df01fce6ed528a0 100644
+--- a/arch/arm64/kernel/module.c
++++ b/arch/arm64/kernel/module.c
+@@ -516,7 +516,7 @@ int module_finalize(const Elf_Ehdr *hdr,
+ 	if (scs_is_dynamic()) {
+ 		s = find_section(hdr, sechdrs, ".init.eh_frame");
+ 		if (s)
+-			scs_patch((void *)s->sh_addr, s->sh_size);
++			__pi_scs_patch((void *)s->sh_addr, s->sh_size);
+ 	}
  
- 	. = ALIGN(SEGMENT_ALIGN);
- 	__pecoff_data_size = ABSOLUTE(. - __initdata_begin);
+ 	return module_init_ftrace_plt(hdr, sechdrs, me);
+diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makefile
+index 7f6dfce893c3b88f..a8b302245f15326a 100644
+--- a/arch/arm64/kernel/pi/Makefile
++++ b/arch/arm64/kernel/pi/Makefile
+@@ -38,7 +38,9 @@ $(obj)/lib-%.pi.o: OBJCOPYFLAGS += --prefix-alloc-sections=.init
+ $(obj)/lib-%.o: $(srctree)/lib/%.c FORCE
+ 	$(call if_changed_rule,cc_o_c)
+ 
+-obj-y				:= idreg-override.pi.o lib-fdt.pi.o lib-fdt_ro.pi.o
+-obj-$(CONFIG_RELOCATABLE)	+= relocate.pi.o
+-obj-$(CONFIG_RANDOMIZE_BASE)	+= kaslr_early.pi.o
+-extra-y				:= $(patsubst %.pi.o,%.o,$(obj-y))
++obj-y					:= idreg-override.pi.o \
++					   lib-fdt.pi.o lib-fdt_ro.pi.o
++obj-$(CONFIG_RELOCATABLE)		+= relocate.pi.o
++obj-$(CONFIG_RANDOMIZE_BASE)		+= kaslr_early.pi.o
++obj-$(CONFIG_UNWIND_PATCH_PAC_INTO_SCS)	+= patch-scs.pi.o
++extra-y					:= $(patsubst %.pi.o,%.o,$(obj-y))
+diff --git a/arch/arm64/kernel/patch-scs.c b/arch/arm64/kernel/pi/patch-scs.c
+similarity index 91%
+rename from arch/arm64/kernel/patch-scs.c
+rename to arch/arm64/kernel/pi/patch-scs.c
+index a1fe4b4ff5917670..c65ef40d1e6b6b30 100644
+--- a/arch/arm64/kernel/patch-scs.c
++++ b/arch/arm64/kernel/pi/patch-scs.c
+@@ -4,14 +4,11 @@
+  * Author: Ard Biesheuvel <ardb@google.com>
+  */
+ 
+-#include <linux/bug.h>
+ #include <linux/errno.h>
+ #include <linux/init.h>
+ #include <linux/linkage.h>
+-#include <linux/printk.h>
+ #include <linux/types.h>
+ 
+-#include <asm/cacheflush.h>
+ #include <asm/scs.h>
+ 
+ //
+@@ -81,7 +78,11 @@ static void __always_inline scs_patch_loc(u64 loc)
+ 		 */
+ 		return;
+ 	}
+-	dcache_clean_pou(loc, loc + sizeof(u32));
++	if (IS_ENABLED(CONFIG_ARM64_WORKAROUND_CLEAN_CACHE))
++		asm("dc civac, %0" :: "r"(loc));
++	else
++		asm(ALTERNATIVE("dc cvau, %0", "nop", ARM64_HAS_CACHE_IDC)
++		    :: "r"(loc));
+ }
+ 
+ /*
+@@ -128,10 +129,10 @@ struct eh_frame {
+ 	};
+ };
+ 
+-static int noinstr scs_handle_fde_frame(const struct eh_frame *frame,
+-					bool fde_has_augmentation_data,
+-					int code_alignment_factor,
+-					bool dry_run)
++static int scs_handle_fde_frame(const struct eh_frame *frame,
++				bool fde_has_augmentation_data,
++				int code_alignment_factor,
++				bool dry_run)
+ {
+ 	int size = frame->size - offsetof(struct eh_frame, opcodes) + 4;
+ 	u64 loc = (u64)offset_to_ptr(&frame->initial_loc);
+@@ -198,14 +199,13 @@ static int noinstr scs_handle_fde_frame(const struct eh_frame *frame,
+ 			break;
+ 
+ 		default:
+-			pr_err("unhandled opcode: %02x in FDE frame %lx\n", opcode[-1], (uintptr_t)frame);
+ 			return -ENOEXEC;
+ 		}
+ 	}
+ 	return 0;
+ }
+ 
+-int noinstr scs_patch(const u8 eh_frame[], int size)
++int scs_patch(const u8 eh_frame[], int size)
+ {
+ 	const u8 *p = eh_frame;
+ 
+@@ -251,12 +251,12 @@ int noinstr scs_patch(const u8 eh_frame[], int size)
+ 	return 0;
+ }
+ 
+-asmlinkage void __init scs_patch_vmlinux(void)
++asmlinkage void __init scs_patch_vmlinux(const u8 start[], const u8 end[])
+ {
+ 	if (!should_patch_pac_into_scs())
+ 		return;
+ 
+-	WARN_ON(scs_patch(__eh_frame_start, __eh_frame_end - __eh_frame_start));
+-	icache_inval_all_pou();
++	scs_patch(start, end - start);
++	asm("ic ialluis");
+ 	isb();
+ }
 -- 
 2.39.2
 
