@@ -2,109 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 004B66AE00A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3376AE10E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjCGNKi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 08:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
+        id S230134AbjCGNrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbjCGNKP (ORCPT
+        with ESMTP id S231140AbjCGNrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:10:15 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16293BDB1;
-        Tue,  7 Mar 2023 05:08:47 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id a25so52183560edb.0;
-        Tue, 07 Mar 2023 05:08:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678194403;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1f7ClQ084fvZPUTez1OLGUFLY9xreFNlpUR04n4znpo=;
-        b=4dO6NSrd2NEMvvBJd9E4Y11kSxUnfRGfPXHx0hcwLrzgQmw7uQGw+Meorfma4UYHCX
-         RMCcjAPIMN6oCorlvofnU0XqXVmHiO57xG5lE/QQYlSpAOcDt6gbMgEmvSnaOOEgZRei
-         7ojtBiLkjL6MLKLZtaIeeWXHgZ3REWCd9YmUW3ufW5yPQdLH+Vd395B7RkGtxWhoI4yH
-         AyU7dcQg1tr3AB2jQbtcBM/g/uxsbyNAehhnof4HporuGfsCFLSXXNsBa1Wdb+8gsZLq
-         nEgIaXrcGSbC6I7HWfnRPXU1eUfWjTNFtzFvtGrOStMyDazgeZUGHroyuTTZGSQXuaMF
-         ujkg==
-X-Gm-Message-State: AO0yUKVLUDjweqW5cVosxzAsf7ZTbd1/AGKkQSW/6aQBUUKH6yt0LozJ
-        fW2XoRP02Akkpb6OV6fysu/6ILqXlZoKYVa89rM=
-X-Google-Smtp-Source: AK7set/6UtZuMIhw4X4hNyGs7b7oDhwrVNtfIeRgKApGBdGrAm2TuHb/nT8hMSOb99IZT95kml+9lST8vgfhgAZe0Lo=
-X-Received: by 2002:a50:9b56:0:b0:4ae:e5db:abfb with SMTP id
- a22-20020a509b56000000b004aee5dbabfbmr7984861edj.3.1678194402638; Tue, 07 Mar
- 2023 05:06:42 -0800 (PST)
+        Tue, 7 Mar 2023 08:47:13 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F6F457D7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:46:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/ZUL4SqqmaOxKlf1ru+8s6qC7jG5qUR0NgbBL+e+eaM=; b=OJ6ynBw58SSxOFbjwnKa6PJBpr
+        54frsiromkwstPjpRCQqwQlEedari2c/32rae3qdQ9KQCZm93VD9P5lAmXcSVCl2qss8/6s0J1LBm
+        2MLJahU7GNH+8GbhRNQJ3kLbgvqsbx4/NpueTL9Fx4XSiHuGWiLNl21vKEpNUMwAM3Mdvv0kjwEXo
+        dNnsbCsvHVkAhxsE1g31vjxF+A/LAEFDYK6JcsvniawM3f3x7R8/TNq/FbWPdOyeP2AKOR/KWr5tQ
+        PL4RV5BDuJckiVcgk22Ea+XxOlfH1zW2/dfy3lgCIXiRGOHxqG7Zgjl03UwYyDX5x3xi34Q5MDAXb
+        xSJwKlYA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pZX2x-00H31f-31;
+        Tue, 07 Mar 2023 13:08:04 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A8DA130030B;
+        Tue,  7 Mar 2023 14:08:00 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8FD0021F8E080; Tue,  7 Mar 2023 14:08:00 +0100 (CET)
+Date:   Tue, 7 Mar 2023 14:08:00 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@kernel.org, linux-kernel@vger.kernel.org,
+        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, corbet@lwn.net, qyousef@layalina.io,
+        chris.hyser@oracle.com, patrick.bellasi@matbug.net, pjt@google.com,
+        pavel@ucw.cz, qperret@google.com, tim.c.chen@linux.intel.com,
+        joshdon@google.com, timj@gnu.org, kprateek.nayak@amd.com,
+        yu.c.chen@intel.com, youssefesmat@chromium.org,
+        joel@joelfernandes.org
+Subject: Re: [PATCH 00/10] sched: EEVDF using latency-nice
+Message-ID: <20230307130800.GD2017917@hirez.programming.kicks-ass.net>
+References: <20230306132521.968182689@infradead.org>
+ <CAKfTPtA9DYJ5=VYGpS_XBzzmvgJeYcmmG261A1cby_sT7kHdYg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230304074107.59083-1-shawn.guo@linaro.org>
-In-Reply-To: <20230304074107.59083-1-shawn.guo@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Mar 2023 14:06:31 +0100
-Message-ID: <CAJZ5v0h9=vZwENELK+w7HnTTsayaNb1D7wnBgjsXvgopc_t-cA@mail.gmail.com>
-Subject: Re: [PATCH RESEND] cpuidle: psci: Iterate backwards over list in psci_pd_remove()
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtA9DYJ5=VYGpS_XBzzmvgJeYcmmG261A1cby_sT7kHdYg@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED,URI_DOTEDU autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 4, 2023 at 8:41 AM Shawn Guo <shawn.guo@linaro.org> wrote:
->
-> In case that psci_pd_init_topology() fails for some reason,
-> psci_pd_remove() will be responsible for deleting provider and removing
-> genpd from psci_pd_providers list.  There will be a failure when removing
-> the cluster PD, because the cpu (child) PDs haven't been removed.
->
-> [    0.050232] CPUidle PSCI: init PM domain cpu0
-> [    0.050278] CPUidle PSCI: init PM domain cpu1
-> [    0.050329] CPUidle PSCI: init PM domain cpu2
-> [    0.050370] CPUidle PSCI: init PM domain cpu3
-> [    0.050422] CPUidle PSCI: init PM domain cpu-cluster0
-> [    0.050475] PM: genpd_remove: unable to remove cpu-cluster0
-> [    0.051412] PM: genpd_remove: removed cpu3
-> [    0.051449] PM: genpd_remove: removed cpu2
-> [    0.051499] PM: genpd_remove: removed cpu1
-> [    0.051546] PM: genpd_remove: removed cpu0
->
-> Fix the problem by iterating the provider list reversely, so that parent
-> PD gets removed after child's PDs like below.
->
-> [    0.029052] CPUidle PSCI: init PM domain cpu0
-> [    0.029076] CPUidle PSCI: init PM domain cpu1
-> [    0.029103] CPUidle PSCI: init PM domain cpu2
-> [    0.029124] CPUidle PSCI: init PM domain cpu3
-> [    0.029151] CPUidle PSCI: init PM domain cpu-cluster0
-> [    0.029647] PM: genpd_remove: removed cpu0
-> [    0.029666] PM: genpd_remove: removed cpu1
-> [    0.029690] PM: genpd_remove: removed cpu2
-> [    0.029714] PM: genpd_remove: removed cpu3
-> [    0.029738] PM: genpd_remove: removed cpu-cluster0
->
-> Fixes: a65a397f2451 ("cpuidle: psci: Add support for PM domains by using genpd")
+On Tue, Mar 07, 2023 at 11:27:37AM +0100, Vincent Guittot wrote:
+> On Mon, 6 Mar 2023 at 15:17, Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > Hi!
+> >
+> > Ever since looking at the latency-nice patches, I've wondered if EEVDF would
+> > not make more sense, and I did point Vincent at some older patches I had for
+> > that (which is here his augmented rbtree thing comes from).
+> >
+> > Also, since I really dislike the dual tree, I also figured we could dynamically
+> > switch between an augmented tree and not (and while I have code for that,
+> > that's not included in this posting because with the current results I don't
+> > think we actually need this).
+> >
+> > Anyway, since I'm somewhat under the weather, I spend last week desperately
+> > trying to connect a small cluster of neurons in defiance of the snot overlord
+> > and bring back the EEVDF patches from the dark crypts where they'd been
+> > gathering cobwebs for the past 13 odd years.
+> 
+> I haven't studied your patchset in detail yet but at a 1st glance this
+> seems to be a major rework on the cfs task placement and the latency
+> is just an add-on on top of moving to the EEVDF scheduling.
 
-So I guess there should be Cc: stable for 5.10 and later?
+It completely reworks the base scheduler, placement, preemption, picking
+-- everything. The only thing they have in common is that they're both a
+virtual time based scheduler.
 
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> ---
-> Hi Rafael,
->
-> This is a resend of the patch [1].  Could you help pick it up or let me
-> know if there is anything need to be improved, thanks!
+The big advantage I see is that EEVDF is fairly well known and studied,
+and a much better defined scheduler than WFQ. Specifically, where WFQ is
+only well defined in how much time is given to any task (bandwidth), but
+says nothing about how that is distributed in time. That is, there is no
+native preemption condition/constraint etc. -- all that code we have is
+random heuristics mostly.
 
-Is this regarded as 6.3-rc material, or can it wait for 6.4?
+The WF2Q/EEVDF class of schedulers otoh *do* define all that. There is a
+lot less wiggle room as a result. The avg_vruntime / placement stuff I
+did is fundamental to how it controls bandwidth distribution and
+guarantees the WFQ subset. Specifically, by limiting the pick to that
+subset of tasks that has positive lag (owed time), it guarantees this
+fairness -- but that means we need a working measure of lag.
+
+Similarly, since the whole 'when' thing is well defined in order to
+provide the additional latency goals of these schedulers, placement is
+crucial. Things like sleeper bonus is fundamentally incompatible with
+latency guarantees -- both affect the 'when'.
+
+
+Initial EEVDF paper is here:
+
+https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=805acf7726282721504c8f00575d91ebfd750564
+
+It contains a few 'mistakes' and oversights, but those should not
+matter.
+
+Anyway, I'm still struggling to make complete sense of what you did --
+will continue to stare at that.
+
+
