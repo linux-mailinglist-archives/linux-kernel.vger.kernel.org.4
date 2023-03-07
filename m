@@ -2,130 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1906AF2A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:54:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC146AF2F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbjCGSye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:54:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
+        id S233551AbjCGS55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 13:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbjCGSyH (ORCPT
+        with ESMTP id S233519AbjCGS5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:54:07 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218389AFE5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:42:03 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id b16so5771787iof.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:42:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678214519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VIBoIM/MahzmKHcLNphJUdBT59zK6GNgrma5w7fsSlM=;
-        b=RSDaAUvJWdX/pgYCQD9V62BikNMQtSk4X+T8iCz13FrSmzG8etaoNw+evqN5EpGvwq
-         A3kS3pRnZHrG0Y5rgBHrGQqy9s7dpWwDTXU3PJjJkoZrMlhYEeLVn1ZCJxuBMW0Ct4Uu
-         3ojVYRwF9Q5Lf4yMbgwCqvKRi+0J2C4+iPcIQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678214519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VIBoIM/MahzmKHcLNphJUdBT59zK6GNgrma5w7fsSlM=;
-        b=aFfG2jkk1nFLZRLkIgao4EEFFwfsXS//+Z8/v1ngxywCQXXHOW69x4Rb1wxBNhC43A
-         eYOu/kp33FsTjnu1LvfE6CuATjjSa7DdKF3qYC4A20cPR7Ks2eiTb2iXeHnqguiDXeAU
-         jCOdArgQN9VHtvheWHh9T4LbvCOZcP/T77ZpdT0HSzt1JMbWInNBUJcczHEWYXUW4DjL
-         0zJMJT249CeY60JUgzxlPCqieLYUUbagzJrsUwrhMfffnnGbNhLNFNT6OqwGk61/FQFn
-         vxbcW5D82qcAglJNJ+yxC6CVChZNAG6ZaOZJQuB8n9xKx4ehHhrT69nXFNKTlCu1U+dw
-         q7Iw==
-X-Gm-Message-State: AO0yUKWT44FVTqz2oySXqAOTZdYzX3Rh+0YSgBtGtiwdheIJJcYauVUq
-        oisFrAXpjEy6I+LIJ8UnW7F+yQxW8iWKEVc7c8I=
-X-Google-Smtp-Source: AK7set8iCYFDCOdz8c1g0x8gZpbGeR670sH3FzT5i9jaOB+HFPEkC271/zqDsuef0kHZ2u2Wi/fxRQ==
-X-Received: by 2002:a6b:d802:0:b0:74c:ae72:5b9a with SMTP id y2-20020a6bd802000000b0074cae725b9amr9083055iob.4.1678214519201;
-        Tue, 07 Mar 2023 10:41:59 -0800 (PST)
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com. [209.85.166.169])
-        by smtp.gmail.com with ESMTPSA id b13-20020a5d894d000000b00734d27b267dsm4315781iot.17.2023.03.07.10.41.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 10:41:58 -0800 (PST)
-Received: by mail-il1-f169.google.com with SMTP id h7so4863161ila.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:41:58 -0800 (PST)
-X-Received: by 2002:a05:6e02:928:b0:317:fc57:d2f7 with SMTP id
- o8-20020a056e02092800b00317fc57d2f7mr7437142ilt.6.1678214517983; Tue, 07 Mar
- 2023 10:41:57 -0800 (PST)
+        Tue, 7 Mar 2023 13:57:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DCBB6D36;
+        Tue,  7 Mar 2023 10:45:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F68AB819CB;
+        Tue,  7 Mar 2023 18:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2A7C433D2;
+        Tue,  7 Mar 2023 18:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678214681;
+        bh=98GSn9Nd5lbsZB8GQDRpBCln3pvxy2GNE1Kh/iUgG4E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ci9N7xCRe3wAWKGx/fHN59ZdShHG3aGjM0ECdLco4W7QTTaolajEJDHRwxvUfIbl2
+         JEdttpeYOYKITpWFhrQ8yqGYNxjMeIspbBV7yKxPZAQK3I5HeeJEKokX3QBFsITDmW
+         9V8fMq3OnQktdbltjtKV1bfjg11yg2ZQvNHVgB9RuKE1fSY7Orgz/DmJeDCIadnSAi
+         Rrp5S+qhFFAb7qkLDwhwzqdlBSZHO5aIyprEzfJ3x0t2e4euG1/C/Vp9wBJ17qEr/w
+         iHo/7rodCX7H5a6n6XPg12/FabuzP9TBNbJ4Nww8tewlRAbmb1il3mvTUy2TpzQyHC
+         3DzJX5Sv83O4w==
+Date:   Tue, 7 Mar 2023 18:44:35 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        'Conor Dooley ' <conor.dooley@microchip.com>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
+Message-ID: <a9823561-2e32-49e8-b6c9-73e4b8f8cf8d@spud>
+References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+ <16007014-c5f2-4b07-baec-e19952236aa5@spud>
+ <ZAbGSA6F0kfv9YYw@sunil-laptop>
+ <E7FB4927-1FE6-435A-914E-9615C2AD9D34@kernel.org>
 MIME-Version: 1.0
-References: <20230307164405.14218-1-johan+linaro@kernel.org> <20230307164405.14218-4-johan+linaro@kernel.org>
-In-Reply-To: <20230307164405.14218-4-johan+linaro@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 7 Mar 2023 10:41:46 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VR5oCThAuc29Bum-VHQUcH_H+s4nr55YpJk1aYaqZKTQ@mail.gmail.com>
-Message-ID: <CAD=FV=VR5oCThAuc29Bum-VHQUcH_H+s4nr55YpJk1aYaqZKTQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] serial: qcom-geni: fix mapping of empty DMA buffer
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Syeh4y7IR+Jnz+iK"
+Content-Disposition: inline
+In-Reply-To: <E7FB4927-1FE6-435A-914E-9615C2AD9D34@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, Mar 7, 2023 at 8:43=E2=80=AFAM Johan Hovold <johan+linaro@kernel.or=
-g> wrote:
->
-> Make sure that there is data in the ring buffer before trying to set up
-> a zero-length DMA transfer.
->
-> This specifically fixes the following warning when unmapping the empty
-> buffer on the sc8280xp-crd:
->
->    WARNING: CPU: 0 PID: 138 at drivers/iommu/dma-iommu.c:1046 iommu_dma_u=
-nmap_page+0xbc/0xd8
->    ...
->    Call trace:
->     iommu_dma_unmap_page+0xbc/0xd8
->     dma_unmap_page_attrs+0x30/0x1c8
->     geni_se_tx_dma_unprep+0x28/0x38
->     qcom_geni_serial_isr+0x358/0x75c
->
-> Fixes: 2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for seri=
-al engine DMA")
-> Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/q=
-com_geni_serial.c
-> index 2aa3872e6283..9871225b2f9b 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -631,6 +631,9 @@ static void qcom_geni_serial_start_tx_dma(struct uart=
-_port *uport)
->         if (port->tx_dma_addr)
->                 return;
->
-> +       if (uart_circ_empty(xmit))
-> +               return;
+--Syeh4y7IR+Jnz+iK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I guess you could remove the uart_circ_empty() test in
-qcom_geni_serial_handle_tx_dma() now? In any case, with or without
-that:
+On Tue, Mar 07, 2023 at 06:13:22AM +0000, Conor Dooley wrote:
+>=20
+>=20
+> On 7 March 2023 05:06:16 GMT, Sunil V L <sunilvl@ventanamicro.com> wrote:
+> >On Mon, Mar 06, 2023 at 09:51:09PM +0000, Conor Dooley wrote:
+> >> Hey Sunil,
+> >>=20
+> >> On Fri, Mar 03, 2023 at 07:06:27PM +0530, Sunil V L wrote:
+> >> > This patch series enables the basic ACPI infrastructure for RISC-V.
+> >> > Supporting external interrupt controllers is in progress and hence i=
+t is
+> >> > tested using poll based HVC SBI console and RAM disk.
+> >> >=20
+> >> > The first patch in this series is one of the patch from Jisheng's
+> >> > series [1] which is not merged yet. This patch is required to support
+> >> > ACPI since efi_init() which gets called before sbi_init() can enable
+> >> > static branches and hits a panic.
+> >> >=20
+> >> > Patch 2 and 3 are ACPICA patches which are not merged into acpica yet
+> >> > but a PR is raised already.
+> >> >=20
+> >> > Below are two ECRs approved by ASWG.
+> >> > RINTC - https://drive.google.com/file/d/1R6k4MshhN3WTT-hwqAquu5nX6xS=
+EqK2l/view
+> >> > RHCT - https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR=
+-tia/view
+> >> >=20
+> >> > The series depends on Anup's IPI improvement series [2].
+> >> >=20
+> >> > [1] https://lore.kernel.org/all/20220821140918.3613-1-jszhang@kernel=
+=2Eorg/
+> >> > [2] https://lore.kernel.org/lkml/20230103141221.772261-7-apatel@vent=
+anamicro.com/T/
+> >>=20
+> >> Building a clang-15 allmodconfig (I didn't try gcc) with this series, =
+and
+> >> Anup's IPI bits, results in a broken build, due to failings in cmpxchg:
+> >>=20
+> >> /stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: e=
+rror: call to __compiletime_assert_335 declared with 'error' attribute: BUI=
+LD_BUG failed
+> >>         while (unlikely((ret =3D cmpxchg(&c->value, old, new)) !=3D ol=
+d)) {
+> >>                                ^
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > I am able to build without any of these issues using clang-15. I am
+> > wondering whether the base is proper. I had rebased on top of the master
+> > and couple of patches from IPI series were already merged in the master.
+> >=20
+> > Do you mind verifying with my branch
+> > https://github.com/vlsunil/linux/commits/acpi_b1_us_review_ipi17_V3?
+>=20
+> I can check that later I suppose.
+
+That's broken too.
+
+> > Or if you could provide me your branch details, I can look further.
+>=20
+> 6.3-rc1, with both series applied, sans Anups applied patches.
+
+I've pushed my stuff here, but unlikely that it makes any odds since
+your branch experiences the same build issue.
+https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/ borked-acp=
+i-surface
+
+My build commands are wrapped in a script, but it's an LLVM=3D1
+allmodconfig run w/ clang-15(.0.7) etc.
+
+Chees,
+Conor.
+
+--Syeh4y7IR+Jnz+iK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAeGEwAKCRB4tDGHoIJi
+0pBJAQC6eUPL8agYJlDStZNq2bNTc9yH0rw+9QH9WnR5mdEIxwD+Ikx1pSDTQT/o
+2vHNHYLroiHM+zN28aBpih7YsooWjQI=
+=4gdL
+-----END PGP SIGNATURE-----
+
+--Syeh4y7IR+Jnz+iK--
