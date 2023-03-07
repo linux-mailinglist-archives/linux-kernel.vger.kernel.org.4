@@ -2,86 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF166AF863
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:17:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75B56AF869
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:17:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjCGWRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S230051AbjCGWRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:17:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjCGWRj (ORCPT
+        with ESMTP id S230082AbjCGWRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:17:39 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A275AAA73D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:17:37 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id z11so9054286pfh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:17:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678227457;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MZPDIXIYKXniSn7Cewj9Ohui8u8k77FZgGbBf+MYE2I=;
-        b=H564rYcr021ZaO8vXlD0OPJNwRxXvsmm/vqUrqRtpwiFQvN40keui/j6Bp3KmULdu0
-         ivF+sTy4V6jvb6d37Mz5mve8tFjbJKLWl5yMUyEVgpSK1EcV63guC/PFNzt+wwIT798o
-         WqdQoR3xShV1oG19aLBwWl/pXw4vKAwK9izs0QOL6MyM6i2SEA9H6wcRRCDyVzSNu6tI
-         HBPukjF+XFb10s4toX3I8sppLqirPA5S7hSYGqsWOioAHyTdu1xTh7tiFAfi2YImRMms
-         V74ZL12YdBf/AQet8JvGIrBeausWDblgLUn0+XRaTe5HAGxvBBcQqG8kXpTe00SfoBWk
-         582g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678227457;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MZPDIXIYKXniSn7Cewj9Ohui8u8k77FZgGbBf+MYE2I=;
-        b=SbMvYjLUDgcGhssfmaaaiB4Z4CrCUy6zsGdo2/LMmBKbybCNUk/njW5aX0l8J3xpjC
-         CsC8VcPk0vKBP5YPsDTzSuJHxQT7+E++Wt12kd6g+odbXi5NlX7Hu/dkBsydflsEurIG
-         7Ip5bF73uTcQ/fxM7cbSxulqEdINjQ0VbxSmVGiZy/xp6rtnixNV3e9SH6hecX5VYJg3
-         +e1v4NQxH8H295QpsiWi0A/s7tHTXhjluAmxrQ8NIp1tUTCqVGBP91tQsmCvyYSN0Wmt
-         5mE+oR9E58y3NfsutHs+4mX839707gFW2bovkgeL3It0AkgDBnd4IUkWvmQw2IQn6Ad+
-         qnyA==
-X-Gm-Message-State: AO0yUKWo65zAFn/MUSaVaPI3JCGcaXeZt7WAfqzUbSU1MhmWoquBKZU0
-        PvkAx6toZ2fCCyGZNQcjb4F59jwn3GfCRFEA+Fhlzw==
-X-Google-Smtp-Source: AK7set8bTAGAzcozR0mHlx2H4rby0W+fDsvyU0VDW8yH6kyQ72u7VVUu/0hrchLg1UOauYaAFQgZM89VmNF8LcPa1WU=
-X-Received: by 2002:a62:870e:0:b0:5a9:c954:563e with SMTP id
- i14-20020a62870e000000b005a9c954563emr6678943pfe.6.1678227456770; Tue, 07 Mar
- 2023 14:17:36 -0800 (PST)
+        Tue, 7 Mar 2023 17:17:50 -0500
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2836DABB23;
+        Tue,  7 Mar 2023 14:17:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:MIME-Version
+        :Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=8rjXBuE+gHixTw4Z4jUm3aIm4vdeoaR8G/ycbzRuTz4=; b=a/kvWzbde+BQp3M0cSltAqAOKh
+        yxmQljXZatg73eCssyfN7JPGbB+e0J9ZKDK7EjDknacFeKpB4ZlkLUgztE6f+/GW8uf6qWdl9SA89
+        oLdiKX3LqFzKtNpyN8AhZt0RBeL+jL3pSnvymlpPP0/95hDZ3FTRHiZl4hEa/VGy2pym8+X7VDSzq
+        WbPA8hNrliNEk4LPq+kWVZaG/DCWaFZl9kWJGby6Poj3jBFMW9udOokGYam93c5vXjwJiGZbIwPsK
+        f1ih8qzTBx2T5pPoNSWShv92InejXU0MSm0LWcN+Ll3m9wyVbVxmGoW2PrVWpe1qka/WCUVgh42lu
+        HD1OUjrg==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <bage@debian.org>)
+        id 1pZfcq-0034fC-Gf; Tue, 07 Mar 2023 22:17:40 +0000
+From:   Bastian Germann <bage@debian.org>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Bastian Germann <bage@debian.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v6 0/2] Bluetooth: btrtl: add support for the RTL8723CS
+Date:   Tue,  7 Mar 2023 23:17:29 +0100
+Message-Id: <20230307221732.3391-1-bage@debian.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230206221428.2125324-1-qyousef@layalina.io> <CA+khW7i_Sc0M4FXzojmQ5PSfkPwk6AdcbN9j0gDXZ9FsOMQAwA@mail.gmail.com>
- <f3a99500-e51c-032f-a0c6-01763f0a5be6@redhat.com> <CA+khW7iWAn6bbXdkJX1Lt4dWUsN6o4KqVQ8OFTs0B+VTtVjBkw@mail.gmail.com>
- <1f2cf8ea-a9d7-5245-0f69-eb8be9f64afc@redhat.com>
-In-Reply-To: <1f2cf8ea-a9d7-5245-0f69-eb8be9f64afc@redhat.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 7 Mar 2023 14:17:25 -0800
-Message-ID: <CA+khW7jQg6x_j70eARVF0eemP0txU_K9Lc=5kfBmU_KxsfbK2w@mail.gmail.com>
-Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on suspend-resume
-To:     Waiman Long <longman@redhat.com>
-Cc:     Qais Yousef <qyousef@layalina.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Debian-User: bage
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,83 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 1:13=E2=80=AFPM Waiman Long <longman@redhat.com> wro=
-te:
->
-> On 3/7/23 16:06, Hao Luo wrote:
-> > On Tue, Mar 7, 2023 at 12:09=E2=80=AFPM Waiman Long <longman@redhat.com=
-> wrote:
-> >> On 3/7/23 14:56, Hao Luo wrote:
-> >>> On Mon, Feb 6, 2023 at 2:15=E2=80=AFPM Qais Yousef <qyousef@layalina.=
-io> wrote:
-> >>>> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounti=
-ng information")
-> >>>> enabled rebuilding root domain on cpuset and hotplug operations to
-> >>>> correct deadline accounting.
-> >>>>
-> >>>> Rebuilding root domain is a slow operation and we see 10+ of ms dela=
-ys
-> >>>> on suspend-resume because of that (worst case captures 20ms which
-> >>>> happens often).
-> >>>>
-> >>>> Since nothing is expected to change on suspend-resume operation; ski=
-p
-> >>>> rebuilding the root domains to regain the some of the time lost.
-> >>>>
-> >>>> Achieve this by refactoring the code to pass whether dl accoutning n=
-eeds
-> >>>> an update to rebuild_sched_domains(). And while at it, rename
-> >>>> rebuild_root_domains() to update_dl_rd_accounting() which I believe =
-is
-> >>>> a more representative name since we are not really rebuilding the ro=
-ot
-> >>>> domains, but rather updating dl accounting at the root domain.
-> >>>>
-> >>>> Some users of rebuild_sched_domains() will skip dl accounting update
-> >>>> now:
-> >>>>
-> >>>>           * Update sched domains when relaxing the domain level in c=
-puset
-> >>>>             which only impacts searching level in load balance
-> >>>>           * update sched domains when cpufreq governor changes and w=
-e need
-> >>>>             to create the perf domains
-> >>>>
-> >>>> Users in arch/x86 and arch/s390 are left with the old behavior.
-> >>>>
-> >>>> Debugged-by: Rick Yiu <rickyiu@google.com>
-> >>>> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> >>>> ---
-> >>> Hi Qais,
-> >>>
-> >>> Thank you for reporting this. We observed the same issue in our
-> >>> production environment. Rebuild_root_domains() is also called under
-> >>> cpuset_write_resmask, which handles writing to cpuset.cpus. Under
-> >>> production workloads, on a 4.15 kernel, we observed the median latenc=
-y
-> >>> of writing cpuset.cpus at 3ms, p99 at 7ms. Now the median becomes
-> >>> 60ms, p99 at >100ms. Writing cpuset.cpus is a fairly frequent and
-> >>> critical path in production, but blindly traversing every task in the
-> >>> system is not scalable. And its cost is really unnecessary for users
-> >>> who don't use deadline tasks at all.
-> >> The rebuild_root_domains() function shouldn't be called when updating
-> >> cpuset.cpus unless it is a partition root. Is it?
-> >>
-> > I think it's because we were using the legacy hierarchy. I'm not
-> > familiar with cpuset partition though.
->
-> In legacy hierarchy, changing cpuset.cpus shouldn't lead to the calling
-> of rebuild_root_domains() unless you play with cpuset.sched_load_balance
-> file by changing it to 0 in the right cpusets. If you are touching
-> cpuset.sched_load_balance, you shouldn't change cpuset.cpus that often.
->
+Pinebook uses RTL8723CS for WiFi and bluetooth. Unfortunately, RTL8723CS
+has broken BT-4.1 support, so it requires a quirk.
 
-Actually, I think it's the opposite. If I understand the code
-correctly[1], it looks like rebuild_root_domains is called when
-LOAD_BALANCE _is_ set and sched_load_balance is 1 by default. Is that
-condition a bug?
+Add a quirk and wire up 8723CS support in btrtl.
+I was asked for a btmon output without the quirk;
+however, using the chip without the quirk ends up in a bad state with
+"Opcode 0x c77 failed: -56" (HCI_OP_READ_SYNC_TRAIN_PARAMS) on training.
+A btmon output with the quirk active was already sent by Vasily.
 
-I don't think we updated cpuset.sched_load_balance.
+v1 of this series was sent in July 2020 by Vasily Khoruzhick.
+I have tested it to work on the Pinebook.
 
-[1] https://github.com/torvalds/linux/blob/master/kernel/cgroup/cpuset.c#L1=
-677
+Changelog:
+v2:
+   * Rebase
+   * Add uart-has-rtscts to device tree as requested by reviewer
+v3:
+   * Drop the device tree as it was split out and is already integrated.
+   * Rename the quirk as requested by reviewer Marcel Holtmann
+v4:
+   * Use skb_pull_data as requested by reviewer Luiz Augusto von Dentz
+v5:
+   * Make use of skb_pull_data's length check
+v6:
+   * Warn on active quirk
+
+Vasily Khoruzhick (2):
+  Bluetooth: Add new quirk for broken local ext features page 2
+  Bluetooth: btrtl: add support for the RTL8723CS
+
+ drivers/bluetooth/btrtl.c   | 120 ++++++++++++++++++++++++++++++++++--
+ drivers/bluetooth/btrtl.h   |   5 ++
+ drivers/bluetooth/hci_h5.c  |   4 ++
+ include/net/bluetooth/hci.h |   7 +++
+ net/bluetooth/hci_event.c   |   9 ++-
+ 5 files changed, 139 insertions(+), 6 deletions(-)
+
+-- 
+2.39.2
+
