@@ -2,129 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF506AD8AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 765D96AD8B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCGIGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:06:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S229944AbjCGIIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjCGIGf (ORCPT
+        with ESMTP id S229905AbjCGIIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:06:35 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB2588DB0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:06:26 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso9822173wmq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:06:26 -0800 (PST)
+        Tue, 7 Mar 2023 03:08:13 -0500
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C878A3BF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:07:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678176385;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wlixcmRPU0kwlxyRa6XJ1Wvf4b87DZOdNPk167ILrOo=;
-        b=he6cKusNCUpkvICX9VIckGy2epdvPViwko/K7fRoU5NihoUHmLgLPMeeh2w/Zz3jrh
-         /GlaAAxI5qDtv3W5/Jf43SezLl5FaSNnS9V8OZI8j+nw9zYh+UAQy47tH/mUNa8KXAsi
-         6VT/fSI4f9wwXxHzc79DQhVAumzXWp7XgiQiNN0S/LaofJgq951JLwgUbhCZySVnO1cl
-         o4/dtStSWUIQWH/orQI/LnfwjFCq7iGbsrlYWPx/fmzNXErTi31vKGx3W/wnCzzbl7ub
-         9BS9uhbdAcWHvpPFfB2ruYbTBI2Q/GkodWJh6QVauTmxHF7xN2xftPvNPF/1dAFoJefj
-         xBhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678176385;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wlixcmRPU0kwlxyRa6XJ1Wvf4b87DZOdNPk167ILrOo=;
-        b=BMCt4a+9KE+s8sKpRZUlHvSbcy1qSSIQ3J1xXoCkMQOtjwvg73pE4VkSWRa0Sfd7HE
-         4UHkkjKPukI8jbbL5+u7aRcXcOqMVJ+Shrf+BPdltEQyBnz9Xr1xTqcNVOOwFgsmmk3Y
-         8lsJwDz4dMhuI0nmq9a0wxtBljpn1bPWPEHUch0MwV6ZIYSr/k7AD/EzSI4bvar2IXP7
-         kLJwkKTNmCkXJXFHI4I5dMyJVXDWdRgIblh6An9jFYZ5adKd/U7upVJ+FCJF//IXxBDC
-         2zAhcZCRgxns+eToydpViaaBX/Iw9ITU4fT3SklkqiLRerbcpRpD2UQEieyaHTYx+iBy
-         geRw==
-X-Gm-Message-State: AO0yUKVS6lpQDrD0BsY2PiRzT1MMgp5dd/eUXZhsyZXDjYIsts9VzQKl
-        JOj+i+7iklliKaZu1SaiH5HN9w==
-X-Google-Smtp-Source: AK7set9/dRT/dzFhPvrICG4vwvaMfeiVpFBx/GhL+4bReBNVsMts2vq/bj2VLCXRaf4cWgBN6DcMlA==
-X-Received: by 2002:a05:600c:3b9b:b0:3eb:3998:36f1 with SMTP id n27-20020a05600c3b9b00b003eb399836f1mr12408519wms.41.1678176385065;
-        Tue, 07 Mar 2023 00:06:25 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id s17-20020adfea91000000b002c6e8cb612fsm11671889wrm.92.2023.03.07.00.06.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 00:06:24 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Christian Hewitt <christianshewitt@gmail.com>
-In-Reply-To: <20230303-topic-amlogic-upstream-bpi-cm4-v2-0-2ecfde76fc4d@linaro.org>
-References: <20230303-topic-amlogic-upstream-bpi-cm4-v2-0-2ecfde76fc4d@linaro.org>
-Subject: Re: [PATCH v2 0/2] arm64: amlogic: Add initial support for BPI-CM4
- module with BPI-CM4IO baseboard
-Message-Id: <167817638406.768652.1431202103503389441.b4-ty@linaro.org>
-Date:   Tue, 07 Mar 2023 09:06:24 +0100
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Q1RR8vW0ctHNiAqd/s3rypbjxDCVNCdhzrnrBsLgxtk=;
+  b=JSJWTiSXj+cpxY9CfuycYgZaiVOM6GSjclaUSVNgFTexl1Td+VMnIJb6
+   Uq4wZXcI9WYX9Aof/ZIVvrTqr/Wj2I5u07+C6NPYFyWeBKkxzZhaT4R6O
+   fIyNtPj+h4XTYXunOhyEQrctSCLMnGOvkOCCyZip32bBLBYf1k1+2gGII
+   A=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,240,1673910000"; 
+   d="scan'208";a="49412312"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 09:07:38 +0100
+Date:   Tue, 7 Mar 2023 09:07:37 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Dan Carpenter <error27@gmail.com>
+cc:     Khadija <kamrankhadijadj@gmail.com>, outreachy@lists.linux.dev,
+        linux-staging@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: alignment should match opening
+ parenthesis in axis-fifo.c
+In-Reply-To: <78d1ea82-ef18-42b2-8a8e-27ee3c7ad55f@kili.mountain>
+Message-ID: <aebfe9ab-3fec-d718-6e7-1cddac2b20a4@inria.fr>
+References: <ZAZSmPpB6fcozGa4@khadija-virtual-machine> <alpine.DEB.2.22.394.2303062202500.3050@hadrien> <CACcTnM5GR0ZM5WBaL+BDEK_0QJGr6h2t4tnsnjerHta_nq6Tmg@mail.gmail.com> <ab0fd80-22c-d982-2f4-6fa5f43f858@inria.fr>
+ <78d1ea82-ef18-42b2-8a8e-27ee3c7ad55f@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
+Content-Type: multipart/mixed; boundary="8323329-1614340543-1678176457=:3785"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Mon, 06 Mar 2023 09:31:37 +0100, Neil Armstrong wrote:
-> Add support for both the BananaPi BPI-CM4 module and the BananaPi
-> baseboard which is comnpatible with the RaspberryPi CM4IO baseboard.
-> 
-> The BananaPi BPI-CM4 module follows the CM4 specifications at [1],
-> but with a single HDMI port and a since DSI output.
-> 
-> The current CM4IO baseboard DT should work fine on the Raspberry CM4
-> baseboard and other derivatives baseboards, but proper DT should
-> be written for other baseboards.
-> 
-> [...]
+--8323329-1614340543-1678176457=:3785
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.4/arm64-dt)
 
-[1/2] dt-bindings: arm: amlogic: Document the boards with the BPI-CM4 connected
-      https://git.kernel.org/amlogic/c/92c0b261c294f12e329976a6d4ef72651e8f07f2
-[2/2] arm64: dts: amlogic: Add initial support for BPI-CM4 module with BPI-CM4IO baseboard
-      https://git.kernel.org/amlogic/c/0262f2736978b1763363224698f47112a148dab0
 
-These changes has been applied on the intermediate git tree [1].
+On Tue, 7 Mar 2023, Dan Carpenter wrote:
 
-The v6.4/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
+> On Tue, Mar 07, 2023 at 08:49:55AM +0100, Julia Lawall wrote:
+> >
+> >
+> > On Tue, 7 Mar 2023, Khadija wrote:
+> >
+> > > Hey Julia! Thank you for the feedback. I will make the following changes and
+> > > resend the patch:
+> > > 1. Correct the patch description that is right under the subject line (make
+> > > it precise and imperative) and make sure that it does not have more than 70
+> > > characters per line.
+> > > 2. Adjust all the arguments of wait_event_interruptible_timeout so that they
+> > > are lined up. All of them should begin right under ( .
+> >
+> > The problem here is that the ( is really far to the right.  My opinion is
+> > that the position of the second argument (ie the first one that is on a
+> > line of its own) is ok in this case.  So you can leave that one where it
+> > is and line up the other one.
+> >
+>
+> I kind of like lining things up like this.  I think if you can't align
+> things with the parens, then it's nice to at least use two tabs.  It's
+> not kernel style or anyone's style explicitly, but I kind of like it.
+>
+> It doesn't make checkpatch happy.
+>
+> I guess I probably wouldn't bother sending this patch.  To controversial.
+> I'd just move on to something else.  It's not like there is a shortage
+> of stuff to do.  One idea in this file is that you could use
+> sysfs_emit() in sysfs_read() and get rid of char tmp[32]; buffer.
 
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
+Dan, the problem is not that the argument is to the left of the (
 
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
+The problem is that the last argument is indented exactly as though it
+were an argument of the second argument.  But it's not.  You have to count
+the parentheses to see that.  It's very misleading.
 
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
+julia
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
--- 
-Neil
-
+>
+> regards,
+> dan carpenter
+>
+> diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
+> index dfd2b357f484..0bf180cf44a6 100644
+> --- a/drivers/staging/axis-fifo/axis-fifo.c
+> +++ b/drivers/staging/axis-fifo/axis-fifo.c
+> @@ -383,10 +383,10 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
+>  		 */
+>  		mutex_lock(&fifo->read_lock);
+>  		ret = wait_event_interruptible_timeout(fifo->read_queue,
+> -			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+> -				 (read_timeout >= 0) ?
+> -				  msecs_to_jiffies(read_timeout) :
+> -				  MAX_SCHEDULE_TIMEOUT);
+> +				ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+> +				(read_timeout >= 0) ?
+> +					msecs_to_jiffies(read_timeout) :
+> +					MAX_SCHEDULE_TIMEOUT);
+>
+>  		if (ret <= 0) {
+>  			if (ret == 0) {
+>
+--8323329-1614340543-1678176457=:3785--
