@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2226AE9E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E0D6AE9F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbjCGR2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:28:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
+        id S231578AbjCGR3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjCGR22 (ORCPT
+        with ESMTP id S229994AbjCGR3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:28:28 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4E592BF8;
-        Tue,  7 Mar 2023 09:23:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=QHT/sG0tYulDZEME/nn3zcV5E2UMMP9YFJ4HsO7eksE=; b=R9mJRGhBfgne9uXqvIkX2WD+GD
-        KO7oz4+1AytsOFkoyGXhgypFjm2TisPXHT6A1nCOHW3N8/pzqqjU8KPSbz0sWw6q76vmpC7WHxy7q
-        fwW6/sJqxCDjbXXMac1iddOx1HugH8ftYMLYHVVhQngQjQgSxq7uNF1rIAmp1aOMZ2Tk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pZb2C-006gjT-9p; Tue, 07 Mar 2023 18:23:32 +0100
-Date:   Tue, 7 Mar 2023 18:23:32 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH net-next] net: mdio: Add netlink interface
-Message-ID: <ae66193e-db1e-4883-bda1-2be5312630df@lunn.ch>
-References: <20230306204517.1953122-1-sean.anderson@seco.com>
- <7a02294e-bf50-4399-9e68-1235ba24a381@lunn.ch>
- <f947e5e2-770e-4b12-67ae-8abf5866e250@seco.com>
+        Tue, 7 Mar 2023 12:29:00 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B0D97FD0;
+        Tue,  7 Mar 2023 09:24:03 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 0AE282D3;
+        Tue,  7 Mar 2023 17:24:02 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0AE282D3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1678209843; bh=nP6YO86jhXCaevYKimI6MIho94hrU18up/Swr6sKn10=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=gHUG/ArDIUIsgAEysxyiO1cUKun99iCP9pp4PRuR/cTtR0SjeNP9G1wtdocftX/QG
+         lpXqe+xIHK9LJRTqlrJH/XcykxC2hZaisLN/OIMajOa3IN6mDimTzifqIjIx4XShhK
+         B+rxjPcVDEWZeQQ2w7ME3DvX1TQfQsW9J6df6/BtSaFrBsl8x8QCYgTru+nf1iHhDh
+         ykfotDM/I8C8RmKgvW6zuVrQ1mEoiN2MBo5dxU3czSAshu7Kk3PP+odlBkqRjYuePj
+         8PaVKuNAlkCJI37V0VF6pD4yJxf6MOed1iykAR2m8Z6tG7OehwIUa2oJGa7Nj6RcEp
+         GJvuI3yMdrnlw==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Glenn Washburn <development@efficientek.com>
+Cc:     Glenn Washburn <development@efficientek.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Tobin C. Harding" <tobin@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs: Correct missing "d_" prefix for dentry_operations
+ member d_weak_revalidate
+In-Reply-To: <20230227184042.2375235-1-development@efficientek.com>
+References: <20230227184042.2375235-1-development@efficientek.com>
+Date:   Tue, 07 Mar 2023 10:24:02 -0700
+Message-ID: <87ttywo4p9.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f947e5e2-770e-4b12-67ae-8abf5866e250@seco.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,73 +54,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Yes, and I should probably have commented on this in the commit message.
-> IMO the things you listed are... iffy but unlikely to cause a
-> malfunction.
+Glenn Washburn <development@efficientek.com> writes:
 
-You consider a missed interrupt not a malfunction?
+> The details for struct dentry_operations member d_weak_revalidate is
+> missing a "d_" prefix.
+>
+> Fixes: af96c1e304f7 (docs: filesystems: vfs: Convert vfs.txt to RST)
+> Signed-off-by: Glenn Washburn <development@efficientek.com>
+> ---
+>  Documentation/filesystems/vfs.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >> +
-> >> +	for (insn = xfer->prog, pc = 0;
-> >> +	     pc < xfer->prog_len;
-> >> +	     insn = &xfer->prog[++pc]) {
-> >> +		if (time_after(jiffies, timeout)) {
-> >> +			ret = -ETIMEDOUT;
-> >> +			break;
-> >> +		}
-> >> +
-> >> +		switch ((enum mdio_nl_op)insn->op) {
-> >> +		case MDIO_NL_OP_READ:
-> >> +			phy_id = __arg_ri(insn->arg0, regs);
-> >> +			prtad = mdio_phy_id_prtad(phy_id);
-> >> +			devad = mdio_phy_id_devad(phy_id);
-> >> +			reg = __arg_ri(insn->arg1, regs);
-> >> +
-> >> +			if (mdio_phy_id_is_c45(phy_id))
-> >> +				ret = __mdiobus_c45_read(xfer->mdio, prtad,
-> >> +							 devad, reg);
-> >> +			else
-> >> +				ret = __mdiobus_read(xfer->mdio, phy_id, reg);
-> > 
-> > The application should say if it want to do C22 or C45.
-> 
-> The phy_id comes from the application. So it sets MDIO_PHY_ID_C45 if it wants
-> to use C45.
+Applied, thanks.
 
-Ah, i misunderstood what mdio_phy_id_is_c45() does.
+Checkpatch whined about that Fixes line (missing the quotes around the
+patch subject), which caused me to go back and look.  Sure enough, the
+RST conversion introduced that error...so I fixed Fixes.
 
-Anyway, i don't like MDIO_PHY_ID_C45, it has been pretty much removed
-everywhere with the refactoring of MDIO drivers to export read and
-read_c45 etc. PHY drivers also don't use it, they use c22 or c45
-specific methods. So i would prefer an additional attribute. That also
-opens up the possibility of adding C45 over C22.
-
-> As Russell noted, this is dangerous in the general case.
-
-And Russell also agreed this whole module is dangerous in general.
-Once you accept it is dangerous, its a debug tool only, why not allow
-playing with a bit more fire? You could at least poke around the MDIO
-bus structures and see if a PHY has been found, and it not, block C45
-over C22.
-
-> >> +			if (mdio_phy_id_is_c45(phy_id))
-> >> +				ret = __mdiobus_c45_write(xfer->mdio, prtad,
-> >> +							  devad, reg, val
-> >> +			else
-> >> +				ret = __mdiobus_write(xfer->mdio, dev, reg,
-> >> +						      val);
-> >> +#else
-> >> +			ret = -EPERM;
-> > 
-> > EPERM is odd, EOPNOTSUPP would be better. EPERM suggests you can run
-> > it as root and it should work.
-> 
-> Well, EPERM is what you get when trying to write a 444 file, which is
-> effectively what we're enforcing here.
-
-Does it change to 644 when write is enabled? But netlink does not even
-use file access permissions. I would probably trap this earlier, where
-you have a extack instance you can return a meaningful error message
-string.
-
-     Andrew
+jon
