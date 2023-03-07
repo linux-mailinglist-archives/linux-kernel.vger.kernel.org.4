@@ -2,73 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4307D6ADEE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA50C6ADEF1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:41:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjCGMi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:38:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S229716AbjCGMlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:41:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjCGMiX (ORCPT
+        with ESMTP id S229535AbjCGMlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:38:23 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BBB15C95;
-        Tue,  7 Mar 2023 04:38:22 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id e82so11189483ybh.9;
-        Tue, 07 Mar 2023 04:38:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678192701;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aSEz68o1z40ANsWKStxDZUpJi38UlOaVVt3jRhWQlTQ=;
-        b=ZgdedfeR9XfwFISvOChCkRiLiJgbEJy4cje9O6hYrmaW0SGUWGTmK1lVGYNlo4Khnd
-         t7DJ34nDMfS3q1qe/RgtSE5PiI1BAoSvctwVyM7wBV0uG4Tm24eDfK5JvD99O9voqqZj
-         NQYSXagTcTZoBotIl2SbYSpG9FUuDYjoa+LFm9VVSGgFH+tEgATKDDwRkWkKsGq1tQ9x
-         AVHbnVpejGCLMUYhW9ba6KyuI55tD7k7JXGxilHmr1h6p7p0GcPN0JXJPsJ6AOmlfzj5
-         O7JyGdMPN0arFY+BbeJraOhaAfNZCgoYODN3wvTTtneWhplBxSfkkOv8NjEgyFD9/waU
-         CWfw==
+        Tue, 7 Mar 2023 07:41:17 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9B777C97
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:41:15 -0800 (PST)
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4490A3F22C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:41:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678192874;
+        bh=5dcTMuGM5x4jDH9Im/Ajb398saoasYhP635I/igmqgk=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=v2cqN46i9petUMuigMupNOqBkrHmWpHYjx2G/VUo+hTUjY1MaXsuExKaahSKcwXAb
+         orL08nSz9TQRX9ZHwp/kbx4F3dgx1ugY+UZTyFK2CdZ/j1g6ed4yurMpAmJ/86zrWw
+         4ZP/JwzM2ZTa9JZZeJkglR4IrskpU8+Im03uutuHn7iyif9WtX99NdEtdxZLbUxOSD
+         uCXrkxG8zXIY5rnOJ80vry2dTmPpsxmg3S27BK4HE2lp5XHiG106m+9wKn+tDhwCmf
+         Q0SZXv1if8PQOmfVsil6sOphyhJXYOwTxL0H0Yez7jla62VXbAUfUtOB8SfbxnWvEV
+         1Svf6SzWe3KtA==
+Received: by mail-qk1-f198.google.com with SMTP id 8-20020a370508000000b00724fd33cb3eso7284541qkf.14
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:41:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678192701;
+        d=1e100.net; s=20210112; t=1678192873;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aSEz68o1z40ANsWKStxDZUpJi38UlOaVVt3jRhWQlTQ=;
-        b=V2/sYb1fgZG2armTQSsFuz7XLR+Gj32szJwaC27/7i3UbyFnlcwWU5YvMN9RGygLOi
-         c563aRAca+RRIBDlIS+H9msZiB4sviTn/Bz8mWsMjsds9t7fAanZ7QIzKM/jDpUk8a1M
-         yCzo6fQ/AYzrXRgYYFdyXjWXbV7/0DaS1s9mUYXRoSrdyDbJK/ys1xLgIS96nrnR2Z23
-         9KcIRyb5MroKrhaMxIgZtgaL24W6bLYJTlx+O45qiXvluBg0BAb/vEA9aGk2IFv+erT5
-         N/rWmSurAEIxKQdDw0H0wd2J+dzGhy8CnM3tTGaR5+wldlLDPwP7Z9WWbAeXMc/tkO9g
-         wDlA==
-X-Gm-Message-State: AO0yUKULqoEChMklO+7cIEtW2hKbBWGJ3dKFg+cC9zv3YgN5nMB6gD2z
-        AS+3f8Hri071P7AwlSsB0QPtQxVtyVJkOvzG+ME=
-X-Google-Smtp-Source: AK7set/bjVOF/tcpsafQHUq1w74UFeRGrrHxn7lfm3hF282Xi2cyHm24ApJe9havtvrj4+UV8yGabi5SE3jarS9Tezc=
-X-Received: by 2002:a5b:5d0:0:b0:a48:6236:1be4 with SMTP id
- w16-20020a5b05d0000000b00a4862361be4mr8605519ybp.2.1678192701704; Tue, 07 Mar
- 2023 04:38:21 -0800 (PST)
+        bh=5dcTMuGM5x4jDH9Im/Ajb398saoasYhP635I/igmqgk=;
+        b=D9uRIZqWTAUb4nhOuq/J+xkzWV+k6ebCOe+BxgizWuzm8RBYSZoBfsJPwP6rMXxfla
+         O9Izk32B6HgXxCmXsinzYb8UDR2hjA9tedSDad18F+H+ekx3ZErxzXquG6Oz7bTYNXG+
+         /QNK/WjMT7hY/WwkPG6Ab3HB8h90nj/oq3akQabzZZe3wee+avu+fKaT9aV+XTyYJ3Ov
+         uIcIRocxmd6aUoA9N/khzub+aFBTOf3tJRvU/U8tGQH1/clJW25pd0m11Y20qY/YaHhu
+         OJ7z9IjefRwzYeKGkqX4KAvoMO2zJslB+J0p5tzguTb3m++dx/InkZubdE6OaeOSR/su
+         5Eog==
+X-Gm-Message-State: AO0yUKXubO0t6kvfnfBBiI+PZ/pymL1B9bVG/3/b+NKk5TvdVo+u0iUy
+        DDHKaOT65E3pxkFlPi9a6M0PhFe/136EbTdh9zjqCOK/ix6XviM/iQveTnFt56w2TfdC6U7rtW+
+        7hpPwdO7O5alENXoNxSEQanAhVsKduSZuFjGFQfYskBK9EzhoQ5Z80vgzCw==
+X-Received: by 2002:aed:27db:0:b0:3bf:da0f:ed90 with SMTP id m27-20020aed27db000000b003bfda0fed90mr3748941qtg.3.1678192873204;
+        Tue, 07 Mar 2023 04:41:13 -0800 (PST)
+X-Google-Smtp-Source: AK7set8chedSpyZZZaRafGT1LOeApVeMpQZ0D8sGlhCw7bUyERGfB8dVAwY0F0nD/btENIxFCgHxqoI2YFpwPG379FA=
+X-Received: by 2002:aed:27db:0:b0:3bf:da0f:ed90 with SMTP id
+ m27-20020aed27db000000b003bfda0fed90mr3748935qtg.3.1678192872885; Tue, 07 Mar
+ 2023 04:41:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20230307120736.75492-1-nmi@metaspace.dk>
-In-Reply-To: <20230307120736.75492-1-nmi@metaspace.dk>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 7 Mar 2023 13:38:10 +0100
-Message-ID: <CANiq72mvL3f-MZiZiZp-uZDQGCnYJ9yFh_QTWrTMUkUdiXdm=Q@mail.gmail.com>
-Subject: Re: [PATCH] scripts: rust-analyzer: Skip crate module directories
-To:     Asahi Lina <lina@asahilina.net>,
-        Andreas Hindborg <nmi@metaspace.dk>
-Cc:     rust-for-linux@vger.kernel.org,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20230303085928.4535-1-samin.guo@starfivetech.com>
+ <20230303085928.4535-12-samin.guo@starfivetech.com> <CAJM55Z_8m42vfoPDicTP18S6Z1ZXYbFeS1edTjzYVB3Kq2xFeQ@mail.gmail.com>
+ <8bd8654e-4bba-c718-4b17-5291e70f05fe@starfivetech.com>
+In-Reply-To: <8bd8654e-4bba-c718-4b17-5291e70f05fe@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Tue, 7 Mar 2023 13:40:56 +0100
+Message-ID: <CAJM55Z8-65ENJHfSUOTd+FSNx2b-mYF1L64CKT+Gez2jK3Qr2Q@mail.gmail.com>
+Subject: Re: [PATCH v5 11/12] riscv: dts: starfive: visionfive-2-v1.2a: Add
+ gmac+phy's delay configuration
+To:     Guo Samin <samin.guo@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,30 +92,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 1:08=E2=80=AFPM Andreas Hindborg <nmi@metaspace.dk> =
-wrote:
+On Tue, 7 Mar 2023 at 02:43, Guo Samin <samin.guo@starfivetech.com> wrote:
+> =E5=9C=A8 2023/3/6 21:00:19, Emil Renner Berthing =E5=86=99=E9=81=93:
+> > On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wro=
+te:
+> >> v1.2A gmac0 uses motorcomm YT8531(rgmii-id) PHY, and needs delay
+> >> configurations.
+> >>
+> >> v1.2A gmac1 uses motorcomm YT8512(rmii) PHY, and needs to
+> >> switch rx and rx to external clock sources.
+> >>
+> >> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> >> ---
+> >>  .../starfive/jh7110-starfive-visionfive-2-v1.2a.dts | 13 ++++++++++++=
++
+> >>  1 file changed, 13 insertions(+)
+> >>
+> >> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2=
+-v1.2a.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2=
+a.dts
+> >> index 4af3300f3cf3..205a13d8c8b1 100644
+> >> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.=
+dts
+> >> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.=
+dts
+> >> @@ -11,3 +11,16 @@
+> >>         model =3D "StarFive VisionFive 2 v1.2A";
+> >>         compatible =3D "starfive,visionfive-2-v1.2a", "starfive,jh7110=
+";
+> >>  };
+> >> +
+> >> +&gmac1 {
+> >> +       phy-mode =3D "rmii";
+> >> +       assigned-clocks =3D <&syscrg JH7110_SYSCLK_GMAC1_TX>,
+> >> +                         <&syscrg JH7110_SYSCLK_GMAC1_RX>;
+> >> +       assigned-clock-parents =3D <&syscrg JH7110_SYSCLK_GMAC1_RMII_R=
+TX>,
+> >> +                                <&syscrg JH7110_SYSCLK_GMAC1_RMII_RTX=
+>;
+> >> +};
+> >> +
+> >> +&phy0 {
+> >> +       rx-internal-delay-ps =3D <1900>;
+> >> +       tx-internal-delay-ps =3D <1350>;
+> >> +};
+> >
+> > Here you're not specifying the internal delays for phy1 which means it
+> > defaults to 1950ps for both rx and tx. Is that right or did you mean
+> > to set them to 0 like the v1.3b phy1?
 >
-> When generating rust-analyzer configuration, skip module directories.
+> Hi, emil, usually, only 1000M (rgmii) needs to configure the delay, and 1=
+00M(rmii) does not.
 
-This is https://github.com/Rust-for-Linux/linux/pull/883, also handled
-by Vinay's patch
-https://lore.kernel.org/rust-for-linux/20230118160220.776302-1-varmavinaym@=
-gmail.com/.
+Ah, I see.
 
-Lina's approach is arguably a bit more idiomatic in Python in that it
-is usually encouraged to follow the "Easier to ask for forgiveness
-than permission" approach.
+> > Also your u-boot seems to set what the linux phy driver calls
+> > motorcomm,keep-pll-enabled and motorcomm,auto-sleep-disabled for all
+> > the phys. Did you leave those out on purpose?
+>
+> Hi, Emil, We did configure motorcomm,auto-sleep-disabled for yt8512 in ub=
+oot,
+> but Yutai upstream's Linux driver only yt8521/yt8531 supports this proper=
+ty.
 
-Lina, would you like to submit yours? Or do you prefer a `Link: ` /
-`Reported-by: ` / `Co-developed-by: ` here?
+I'm confused. Is Yutai also Frank Sae? Because he is the one who added
+support for the yt8531 upstream.
 
-> If `driver_mod` is a module of the crate `driver`, the directory `driver_=
-mod`
-> may not contain `Makefile`, and `generate_rust_analyzer.py` will fail.
+> Yt8512 is a Generic PHY driver and does not support the configuration of
+> motorcomm,auto-sleep-disabled and motorcomm,keep-pll-enabled.
 
-By the way, note that in the kernel crate we are avoiding `mod.rs`
-files, instead using `name.rs` in the parent folder, in other to make
-it easier to find the files. I will add a note about it in the docs.
+Right phy1 of the 1.2a might use a different phy, but I'm also talking
+about phy0 and the v1.3b which does use the yt8531 right?
 
-Cheers,
-Miguel
+> And without configuring these two attributes, vf2-1.2a gmac1 also works n=
+ormally.
+
+Yes, but what I'm worried about is that it only works because u-boot
+initialises the PHYs and ethernet may stop working if you're using a
+different bootloader or Linux gains support for resetting the PHYs
+before use.
+
+>
+> Best regards,
+> Samin
+> >
+> >> --
+> >> 2.17.1
+> >>
+> >>
+> >> _______________________________________________
+> >> linux-riscv mailing list
+> >> linux-riscv@lists.infradead.org
+> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>
+> --
+> Best regards,
+> Samin
