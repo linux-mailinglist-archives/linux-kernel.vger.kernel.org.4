@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883676AE0D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAB96AE0D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjCGNiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
+        id S231260AbjCGNi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:38:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbjCGNiH (ORCPT
+        with ESMTP id S231135AbjCGNiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:38:07 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A76A31E00
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:38:04 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id l1so12102797wry.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:38:04 -0800 (PST)
+        Tue, 7 Mar 2023 08:38:12 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F73392A8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:38:05 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id l1so12102861wry.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:38:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678196282;
+        d=linaro.org; s=google; t=1678196283;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XIQnAKa+Qd5OpVdv8Ipf7C/Ypn0D8rKAisdiD5QMAh0=;
-        b=G4uhG+HEW8aKELDM9Sy8xcuArFEvPYHxeEkSAvAihRjKNrflmzusgFYLdZ6+RHVh5B
-         NsN7nMiaQntRZ+1FEkyXzfHyTK8hS1ErM8pzN1kbfdkpSaDi4q6nj29PUGEPD+IPtrfs
-         XIEDDn9ou1+JxDIwPIYD6WYKTwmJgij/up31knXXFZrb4YPWBMvTUBVU/UwOKtQUVfnm
-         CreZ6KCGIcrnAb8Uuiop6VJzNyzydlhSZZ3Z6jHM6Di6BKWfsIs6poNUHrlABfLSUoDM
-         0dQafcbtghCvErUNVZ1FA+pke96IeRx1/xbNiBSA8/FhHP9VV3fJSVmIHpYHxfLVyl1F
-         4mmg==
+        bh=U8j4bJo1oZVc8oVRbgCLsTpymyaRowPacMWUlyxZyaA=;
+        b=M+pDCn8yf+ZYz0M24b8vuev3cxkgCkT7t7+FWsP48E+EBPLbO5oHJz69sm7CpRRzI5
+         AbnzlqXMTSAOfze4yP5pEmF32IuLZlR6+gD7hlbfmmUnyv0leh8ayItqNRRnlP+53C2G
+         8QTKBOXoL58ihGEEdQ6Bsf3u6rw7kdWeRLBIXjWmRTsvYK8o/eq9yjjN7h5ekGP683EC
+         CeHNoPRdbqxR9ILWERajpgbyg00Ks/UIKBwyX1KBbhWa+XC46HIKevd/tajORB43bXNC
+         h3hGnrEI0h1kpKk9FhviJyB5pULyEUQu+AQRZyCDbsV+w7Grvv71nwL8I8ZX1XVYCnvs
+         YLOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678196282;
+        d=1e100.net; s=20210112; t=1678196283;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XIQnAKa+Qd5OpVdv8Ipf7C/Ypn0D8rKAisdiD5QMAh0=;
-        b=dasrvmFQdkKA5FDd9HOydWkKrETRjZTYLoJQ82QdXQCUrXWDwaEeOuYR0LccMaCA/F
-         ZyBwDyjiuGm0v+0fAaXFWueCpt9fg+QAhVSa6ENOHQDbQvy1YcY0C/VPFMnmOJb0qBgW
-         jXOlqk/Gw11zuJn3+OwUmBED/01riqSOjuZ9r92XRsNRmWqIFUPTixt8Doi7cbG3qQVa
-         kgPwoxYsgZ0JePkcJODJ0FoJoITWpsrEvs77C1/g5F/Mnu4FTqdv5goPO/XhBWkngmCr
-         QZ1kHQiZS+baWo5g7qNSTTZ6Tt2QerVK/kWg9YpXJGa5yLa6+WQBrqCU48jge+eJcS7j
-         hm1Q==
-X-Gm-Message-State: AO0yUKXqvaoHIn0jgWwI/CW8biQX1hg5uIFjVdiyzYgnf95RQUJsb+JC
-        2A+3LVtO23dhTkoyjpucPMQk+A==
-X-Google-Smtp-Source: AK7set8fFI/JB2Jnnf1mxMvT9ESytvP5zxJQvQvFS2t55nzmCv96eO4scnTxq1vQ75sdSG/Kt0TaFg==
-X-Received: by 2002:a5d:4810:0:b0:2cb:c66d:6ac1 with SMTP id l16-20020a5d4810000000b002cbc66d6ac1mr8681462wrq.3.1678196282682;
-        Tue, 07 Mar 2023 05:38:02 -0800 (PST)
+        bh=U8j4bJo1oZVc8oVRbgCLsTpymyaRowPacMWUlyxZyaA=;
+        b=oCdOHmY69G31pdkYC/MXE1YEyYk+HP/1yQzZ236hIpgrIHvUwDvrQ3M8ja2dcduk2k
+         37+EXNmZ6C6q24JmyErkaXtat9NJpLg2d7V2nLwyEUDkPukptioIf7EMlIcF2S4eFMEl
+         XWuxoJ4ABOZYFPWRFcxZPO8ZzKEu+jLky2MWMsoHcjiosZIV1JWAUACd/GvzIyAP01Wo
+         dMFSlk85nV735Ni3ZXl78ZdAenYsT5mVH4QRU/BdAL8hDGukCHfSi1FXhniX0HplVRkE
+         zKyfN/wz6KogyZU27l8iwn/fKiatcSxW236UJHtitftPMvZjH10C7djRqqkiUL6bXARn
+         TCAw==
+X-Gm-Message-State: AO0yUKW0wIuibZTE7typwtwOmLClbOS8oPY9kSPVbQnI+nhCtVYMbKW+
+        NJsnrCWPIyJ1MNY3M8klKJUfAAphMwz/fGHFsRs=
+X-Google-Smtp-Source: AK7set+uCREgdZyDrbl/tbTOC9EGTEAhWUZhLQ2zomC+C7qdM8BhdSDTWRbvqdAJqphUshGOdOlnBg==
+X-Received: by 2002:adf:df04:0:b0:2c7:1dc4:5c4e with SMTP id y4-20020adfdf04000000b002c71dc45c4emr10251708wrl.32.1678196283559;
+        Tue, 07 Mar 2023 05:38:03 -0800 (PST)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5ab9:1ac6:870d:35c])
-        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b002c55de1c72bsm12311477wrr.62.2023.03.07.05.38.01
+        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b002c55de1c72bsm12311477wrr.62.2023.03.07.05.38.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 05:38:02 -0800 (PST)
+        Tue, 07 Mar 2023 05:38:03 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     rui.zhang@intel.com, amitk@kernel.org,
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 08/11] thermal/of: Unexport unused OF functions
-Date:   Tue,  7 Mar 2023 14:37:32 +0100
-Message-Id: <20230307133735.90772-9-daniel.lezcano@linaro.org>
+Subject: [PATCH v1 09/11] thermal/core: Add a linked device parameter
+Date:   Tue,  7 Mar 2023 14:37:33 +0100
+Message-Id: <20230307133735.90772-10-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230307133735.90772-1-daniel.lezcano@linaro.org>
 References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
@@ -73,99 +73,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functions thermal_of_zone_register() and
-thermal_of_zone_unregister() are no longer needed from the drivers as
-the devm_ variant is always used.
+Some drivers want to create a link from the thermal zone to the device
+sysfs entry and vice versa. That is the case of the APCI driver.
 
-Make them static in the C file and remove their declaration from thermal.h
+Having a backpointer from the device to the thermal zone sounds akward
+as we can have the same device instantiating multiple thermal zones so
+there will be a conflict while creating the second link with the same
+name. Moreover, the userspace has enough information to build the
+dependency from the thermal zone device link without having this cyclic
+link from the device to thermal zone.
+
+Anyway, everything in its time.
+
+This change allows to create a these cyclic links tz <-> device as
+ACPI does and will allow to remove the code in the ACPI driver.
+
+The limitation of this change is there can be only a 1:1 relationship
+between the device and the thermal zone, otherwise the 'thermal_zone'
+link name will conflict with the previous link with the same name.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/thermal_of.c |  8 +++-----
- include/linux/thermal.h      | 17 -----------------
- 2 files changed, 3 insertions(+), 22 deletions(-)
+ drivers/thermal/thermal_core.c | 16 ++++++++++++++++
+ include/linux/thermal.h        |  7 +++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index ff4d12ef51bc..6fb14e521197 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -439,7 +439,7 @@ static int thermal_of_unbind(struct thermal_zone_device *tz,
-  *
-  * @tz: a pointer to the thermal zone structure
-  */
--void thermal_of_zone_unregister(struct thermal_zone_device *tz)
-+static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
- {
- 	struct thermal_trip *trips = tz->trips;
- 	struct thermal_zone_params *tzp = tz->tzp;
-@@ -451,7 +451,6 @@ void thermal_of_zone_unregister(struct thermal_zone_device *tz)
- 	kfree(tzp);
- 	kfree(ops);
- }
--EXPORT_SYMBOL_GPL(thermal_of_zone_unregister);
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index cec72c6673a5..ca91189bc441 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1340,6 +1340,18 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+ 	list_add_tail(&tz->node, &thermal_tz_list);
+ 	mutex_unlock(&thermal_list_lock);
  
- /**
-  * thermal_of_zone_register - Register a thermal zone with device node
-@@ -473,8 +472,8 @@ EXPORT_SYMBOL_GPL(thermal_of_zone_unregister);
-  *	- ENOMEM: if one structure can not be allocated
-  *	- Other negative errors are returned by the underlying called functions
-  */
--struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
--						     const struct thermal_zone_device_ops *ops)
-+static struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-+							    const struct thermal_zone_device_ops *ops)
- {
- 	struct thermal_zone_device *tz;
- 	struct thermal_trip *trips;
-@@ -550,7 +549,6 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
++	if (tzp && tzp->linked_dev) {
++		result = sysfs_create_link(&tzp->linked_dev->kobj,
++					   &tz->device.kobj, "thermal_zone");
++		if (result)
++			goto out_list_del;
++
++		result = sysfs_create_link(&tz->device.kobj,
++					   &tzp->linked_dev->kobj, "device");
++		if (result)
++			goto out_del_link;
++	}
++
+ 	/* Bind cooling devices for this zone */
+ 	bind_tz(tz);
  
- 	return ERR_PTR(ret);
- }
--EXPORT_SYMBOL_GPL(thermal_of_zone_register);
+@@ -1354,6 +1366,10 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
  
- static void devm_thermal_of_zone_release(struct device *dev, void *res)
- {
+ 	return tz;
+ 
++out_del_link:
++	sysfs_remove_link(&tz->device.kobj, "thermal_zone");
++out_list_del:
++	list_del(&tz->node);
+ unregister:
+ 	device_del(&tz->device);
+ release_device:
 diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index eb80cee4f64f..8cdf94cdc5ff 100644
+index 8cdf94cdc5ff..f60d7edf1e5d 100644
 --- a/include/linux/thermal.h
 +++ b/include/linux/thermal.h
-@@ -297,25 +297,12 @@ struct thermal_zone_params {
+@@ -256,6 +256,13 @@ struct thermal_zone_params {
+ 	int num_tbps;	/* Number of tbp entries */
+ 	struct thermal_bind_params *tbp;
  
- /* Function declarations */
- #ifdef CONFIG_THERMAL_OF
--struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
--						     const struct thermal_zone_device_ops *ops);
--
- struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id, void *data,
- 							  const struct thermal_zone_device_ops *ops);
- 
--void thermal_of_zone_unregister(struct thermal_zone_device *tz);
--
- void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz);
- 
--void thermal_of_zone_unregister(struct thermal_zone_device *tz);
--
- #else
--static inline
--struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
--						     const struct thermal_zone_device_ops *ops)
--{
--	return ERR_PTR(-ENOTSUPP);
--}
- 
- static inline
- struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id, void *data,
-@@ -324,10 +311,6 @@ struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, in
- 	return ERR_PTR(-ENOTSUPP);
- }
- 
--static inline void thermal_of_zone_unregister(struct thermal_zone_device *tz)
--{
--}
--
- static inline void devm_thermal_of_zone_unregister(struct device *dev,
- 						   struct thermal_zone_device *tz)
- {
++	/*
++	 * @linked_dev: Add a cross link from the device to the
++	 * thermal zone and vice versa. They will be named
++	 * respectively 'device' and 'thermal_zone'
++	 */
++	struct device *linked_dev;
++
+ 	/*
+ 	 * Sustainable power (heat) that this thermal zone can dissipate in
+ 	 * mW
 -- 
 2.34.1
 
