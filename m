@@ -2,137 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356E16AE05A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8836AE00F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjCGNW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
+        id S230262AbjCGNLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:11:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbjCGNV4 (ORCPT
+        with ESMTP id S230232AbjCGNLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:21:56 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FF65371B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:20:54 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id x6so13145416ljq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:20:54 -0800 (PST)
+        Tue, 7 Mar 2023 08:11:24 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DD37695;
+        Tue,  7 Mar 2023 05:10:00 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id u5so13943538plq.7;
+        Tue, 07 Mar 2023 05:10:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678195248;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0H4gObxdQ+mOmyRZ48tf+jNmOkAMeowq3zSEb8rTm3s=;
-        b=cjlQtaKz68FJmD4XN5Gv/luv6Wgc6ItcBoqaCs4jCuOBCTI0AEqnYfNawzeY1aeMyh
-         6QrqiR2XPYtb6yl3exrpmzmit9+qB//gu+ESO1oh3eFsy0RjZtt9lm8xGGITQuua+vON
-         kp1D/vOVFxIoUnpjij/FnR/DAk30gu2ATzty9Fvl/B/YZWphsgK/7x8ib8Eyo/c7Crmj
-         QusXxYBeycdOyYQza9e6e4Xh9Fxq5K+DAbC/FAEWtqRFpsqnobSBimILihGSxkn4/32u
-         JEwNxf+Oo0C7BS4fj+HVxi6lGnO5XJU8zHhPLfYf7jCd6imI11lWwzm9BETJT82M1e6F
-         X7jg==
+        d=gmail.com; s=20210112; t=1678194542;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDSasO/7mKvPMuHhaJ5dSUZlltLYrJQeoPhaTJiDZfs=;
+        b=bmSSIW9KtOuI5eNLrnjoEZACB3ezrROssS5D2oU29FxEC+Rq/PHZCCckVcDHs3bLPK
+         m8ZKz6PCvzZlRkhAIpwYYkr2wdRk0Ni6V3SMiz434xU0AzLdLP6FlI5F3Kz91p7Xqay1
+         sFtr39ki8xM3n7OsY0BEmvQcdmIThIo0InXm6Vj5sSBisBybeBB1cdYhy6TL+jT1jgIO
+         4BYIAIDC/QXhMxtIIrEECSZZK87cS4q8YNJFOqbqtgn54SbIYBkJD2c8bzStIKMiAIpF
+         NMlFx9AH8ZWf/7ARyOcvmzmbcEyGI7RZ4KQ8VKGxZOmyLxtNwZs3pwr8fPUT7jmhXz2s
+         x6Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678195248;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678194542;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0H4gObxdQ+mOmyRZ48tf+jNmOkAMeowq3zSEb8rTm3s=;
-        b=I5ciHDL7QvUPBYiB3vUNVpcdyCo0DCcst8b8bBxt0kV4Ieay/Ue4IToZF4kCIUdpBA
-         W/VSNSZnnUfV0oQ9Ms86gK2yEJfLEhPczXdcwAnK24M3mXicO4xrFtY6fHkqKkyjOMlS
-         c/ZwtLXPa/STtGwEtrYcQmKV5CdVRYxEvxfapMRr1yO1UgqlvHuXnm6jBbF4x1NnDCd8
-         QeXxdIa46lszyMmLvTXmKlem3oeu9Kjtbvbax955YcwysBtrOwsyn9j+q4ItvL9vDcy+
-         asIE3QVx62cVJISp1PU5XCdWq+91RNttBBnoepllFhVy5k9WLgHqbR5xDBoNezZzR5Vc
-         Za4g==
-X-Gm-Message-State: AO0yUKUWMuZpnwdv+Z9EVpI/2lQOMDsplWkXJcOO/185VVxcczdAxDIz
-        skM1VQG2CQ52qfcf/T4y/w/J1XALO74fAAHqJHiLpyZkdfibhQ==
-X-Google-Smtp-Source: AK7set8On51hFY5EMJqzaAfq4DClXN2Ola7zRyZMV/cyYK6ih6joRk10LpP+H0J9sqp8G7DkNxIXuc/TwiHLOpc4RRI=
-X-Received: by 2002:a17:906:164e:b0:877:747c:9745 with SMTP id
- n14-20020a170906164e00b00877747c9745mr6500287ejd.8.1678194516506; Tue, 07 Mar
- 2023 05:08:36 -0800 (PST)
+        bh=KDSasO/7mKvPMuHhaJ5dSUZlltLYrJQeoPhaTJiDZfs=;
+        b=jp4uuS8+kGnKPo1dyLzq/5/737KOIIBlMBBmixH4pVjcme3uvMa5wlvxqlWeGHsduo
+         LZbiHF2Ktn9LrTYCIJ2rU8jKaAdpQvhIXYiS799v53QzHbPrH6P0AGfiLJ1hhQFTRJyi
+         Q/sHRtOlXT9uiV9ipCIE65aBKXXQwyp1S3C4mnFajrwWCpSOcJJU9YeB0mMFoa3DmVSV
+         eRpvUqi1L6k3xsaURbtez4hhuFryThFZoGQc+rbGIk0QI84wU1NHPKP1Y5O84CxG7b7I
+         2w8EonCJKTA+TAyXaZhFVjaLGQKBR66hFH/C68MpghzsgrIQhjOcBD3ezmEBsr9Dgnn2
+         fUxw==
+X-Gm-Message-State: AO0yUKUE30HC4XKaCge7Y1zmUQWJfTo1VwYnwCt+YvuHKuDDFZxNAeir
+        epCjWvmt7Ma8+v+I5fk0JcM=
+X-Google-Smtp-Source: AK7set/JbNt04raG3T5qoVOvWKW76KyCmnFyRTKZHkRGaWCu6DgctSZ48iDM0sCCnRF/zxEwnu0qcQ==
+X-Received: by 2002:a17:903:22c1:b0:19e:ba2c:27ec with SMTP id y1-20020a17090322c100b0019eba2c27ecmr10944767plg.11.1678194542116;
+        Tue, 07 Mar 2023 05:09:02 -0800 (PST)
+Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
+        by smtp.gmail.com with ESMTPSA id y2-20020a170902ed4200b0019b0afc24e8sm8396190plb.250.2023.03.07.05.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 05:09:01 -0800 (PST)
+From:   harperchen <harperchen1110@gmail.com>
+To:     deller@gmx.de
+Cc:     javierm@redhat.com, tzimmermann@suse.de,
+        wsa+renesas@sang-engineering.com, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        harperchen <harperchen1110@gmail.com>
+Subject: [PATCH] fbdev: tgafb: Fix potential divide by zero
+Date:   Tue,  7 Mar 2023 13:08:56 +0000
+Message-Id: <20230307130856.2295182-1-harperchen1110@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a17:907:787:b0:871:871e:d0e1 with HTTP; Tue, 7 Mar 2023
- 05:08:36 -0800 (PST)
-Reply-To: capitalfunding0@aol.com
-From:   Capital Funding Team <wallerpeterx11@gmail.com>
-Date:   Tue, 7 Mar 2023 08:08:36 -0500
-Message-ID: <CAAJHenB3tX9Nb=d90xs0tgPeu_75DQM16zN1MwWeP3U5M3a23w@mail.gmail.com>
-Subject: On Loans & Investments
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 0.9984]
-        * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:232 listed in]
-        [list.dnswl.org]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [wallerpeterx11[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [wallerpeterx11[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [capitalfunding0[at]aol.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hello,
+fb_set_var would by called when user invokes ioctl with cmd
+FBIOPUT_VSCREENINFO. User-provided data would finally reach
+tgafb_check_var. In case var->pixclock is assigned to zero,
+divide by zero would occur when checking whether reciprocal
+of var->pixclock is too high.
 
-Thank you for acceptance.
-Do you/your company need an investor and/or Loan to expand your
-Company?. CFG has  project funding program on a long tems & short term
-conditions at a very low rate of 2% p.a
-ROI for a 10 to 15 years period with an option of early repayment
-without penalty.
-CFG sectors of Interest includes: Oil & Gas, Agriculture, Health,
-Aviation, Tourism, Retail, Real Estate, Construction, IT &
-Communications, Technology, Education, Energy, Engineering, Utilities,
-Telecom, Mining, renewable energy, maritime and shipping and includes
-any other business  enterprise  that is profitable with a high
-interest yielding rate.
-For over 5 years, We have been a pioneer in the private lending market
-- helping customers get loans when they need it.=E2=80=93 regardless of the=
-ir
-credit, age or country of Domicile..
+Similar crashes have happened in other fbdev drivers. There
+is no check and modification on var->pixclock along the call
+chain to tgafb_check_var. We believe it could also be triggered
+in driver tgafb from user site.
 
-We are one of the leading foreign Financial Institutions serving large nati=
-onal
-and multinational corporations in the World  through its Global &
-Fiduciary Financingm Banking & Markets, Global Business Payments &
-Wealth Management business lines. We focus on delivering superior
-advice and services to help our
-clients and communities thrive =E2=80=93 for every future.
+Signed-off-by: harperchen <harperchen1110@gmail.com>
+---
+ drivers/video/fbdev/tgafb.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-We are a full scope corporate finance advisory firm We assist clients
-raise debt & equity capital, especially in emerging markets. Our
-company has helped hundreds of companies gain access to capital/Loans.
-At CFGI we understand that all the talk of inflation, Covid 19,Russia
-war on Ukraine & rising interest rates can lead to some sleepless
-nights. That=E2=80=99s why we wanted to reach out.
-Send an email for more details info@capitalfundingr.com
+diff --git a/drivers/video/fbdev/tgafb.c b/drivers/video/fbdev/tgafb.c
+index 14d37c49633c..b44004880f0d 100644
+--- a/drivers/video/fbdev/tgafb.c
++++ b/drivers/video/fbdev/tgafb.c
+@@ -173,6 +173,9 @@ tgafb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
+ {
+ 	struct tga_par *par = (struct tga_par *)info->par;
+ 
++	if (!var->pixclock)
++		return -EINVAL;
++
+ 	if (par->tga_type == TGA_TYPE_8PLANE) {
+ 		if (var->bits_per_pixel != 8)
+ 			return -EINVAL;
+-- 
+2.25.1
 
-Abdul Williams RutoCustomer Service
-
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
