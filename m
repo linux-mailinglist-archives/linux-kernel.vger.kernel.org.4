@@ -2,140 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA64C6ADCAC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A0A6ADCC0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:02:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCGK6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S230311AbjCGLCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:02:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjCGK5h (ORCPT
+        with ESMTP id S230215AbjCGLBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:57:37 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80DC757D2C;
-        Tue,  7 Mar 2023 02:57:35 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dx_5eeGAdkF1MJAA--.12142S3;
-        Tue, 07 Mar 2023 18:57:34 +0800 (CST)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxtOWdGAdk1vFNAA--.36843S2;
-        Tue, 07 Mar 2023 18:57:33 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Xuerui Wang <kernel@xen0n.name>, linux-efi@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH] efistub: LoongArch: Reimplement kernel_entry_address()
-Date:   Tue,  7 Mar 2023 18:57:33 +0800
-Message-Id: <1678186653-27659-1-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-X-CM-TRANSID: AQAAf8BxtOWdGAdk1vFNAA--.36843S2
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXryftw1rCrWkXr48Xw1kZrb_yoW5Aw47pa
-        s0yrsxCF4ft3yfCaykAw15uFy5X3Z7KFyagF9Fk34F93W3XF1DZrWFgr98WFyDZ3y0q3ya
-        qr1YyFnFk3WUJw7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
-        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
-        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm
-        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
-        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-        GVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
-        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r
-        4UYxBIdaVFxhVjvjDU0xZFpf9x07jYSoJUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 7 Mar 2023 06:01:23 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E1C73AFC;
+        Tue,  7 Mar 2023 02:58:54 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id o12so50483099edb.9;
+        Tue, 07 Mar 2023 02:58:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678186698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tLQHemRIXRE4FrIg6JDLewKbHFCJRHBj5gtISGj6+Lk=;
+        b=aU3b0QfFtNND0Irkk/Mc18zoqOmiezu9rIcyeh4HVIuUkcZjXjhTNUzykoPV18OnTs
+         gi5a53S9vy/d+rotfmbKzGXLgiMn4312e0IJ2YsV3H3bhnuNAvFugA552nfFkt12o5Es
+         XdaftS00MXt5ymcJm1gESWyuhoMTRpisCOFmvzCbrGHPvayGiizIE9s5cYdfM/oumXaB
+         h/dav8wUa68z+iu3eohWb1NV6aptQZT3ZRMryfW5y7Kd1OydeiTjuBUrbrUIuRbgtCKJ
+         g4Bq904pxhTLWZVfey5ElxXyxBDHL8p59uU9HPWw/gspI9FGhrTZGN4jp4e5UnM1/r5x
+         +iCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678186698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tLQHemRIXRE4FrIg6JDLewKbHFCJRHBj5gtISGj6+Lk=;
+        b=uwgHvGqskkx8QaFmuCO70+myrNE7f+tTQhdcThvfGD9MHR6KAXCtxNi8Jzr2jCehpu
+         p7gg/zRUgNGkhnBne1UmQRjIGCruSu1ODK8WRaWDnOH2HNSieuVOeMOZ7pc3hBYiM3mO
+         apF11RPsfvfnUr+7xyB7dQCF9HjkWfJIXIfspV66ueJ6ae8sX48mPDl980PZJxh1elXN
+         U0eODp3o0p74Il3dtnd4I0OoF/V/WyG0e5Mt9ssw8q2nraUcUgdjXACHhEcnNrre0pDv
+         E0cX1qIfp1OyHIfCRHDThV5gcA8O/TuhcoC/BneeaNRPiRNoi7LO0bEPD8ZHICX3jcQa
+         Iaig==
+X-Gm-Message-State: AO0yUKUwnFScWsB4pRKV3nhoOFO9v15b/826bvJQaEBFXz2nOM0LMaDc
+        RQ8H1eTFAN66zkm8FNOM8U0zDpi4mr75iZhryVo=
+X-Google-Smtp-Source: AK7set/wDNUrNS4Lkg0oycNkwpaiZjj0SnAa4fQgceS30Sq51ZBWEWmjKvP54F+a3R1s+oLjaWc/fU/1EA9M08vNswU=
+X-Received: by 2002:a50:8a9d:0:b0:4bc:5de1:ee5 with SMTP id
+ j29-20020a508a9d000000b004bc5de10ee5mr7666471edj.2.1678186698578; Tue, 07 Mar
+ 2023 02:58:18 -0800 (PST)
+MIME-Version: 1.0
+References: <20230307074038.17391-1-lukas.bulwahn@gmail.com>
+ <20230307100350.1c0af7b9@xps-13> <1e321754-5bdd-4019-8524-2222ee369502@app.fastmail.com>
+ <20230307113846.5dab6e66@xps-13>
+In-Reply-To: <20230307113846.5dab6e66@xps-13>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Tue, 7 Mar 2023 11:58:07 +0100
+Message-ID: <CAKXUXMwn8wLBtTru74Mo4D=X6gA-M3b3Zin0L_ugtN9-R2L7-A@mail.gmail.com>
+Subject: Re: [PATCH] mtd: parsers: remove reference to config MTD_NAND_TMIO
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When EFI_KIMG_PREFERRED_ADDRESS is not equal to PHYS_LINK_KADDR, we
-should not jump to the link address but the actual load address, so
-fix the processing of kernel_entry_address().
+On Tue, Mar 7, 2023 at 11:38=E2=80=AFAM Miquel Raynal <miquel.raynal@bootli=
+n.com> wrote:
+>
+> Hi Arnd,
+>
+> arnd@arndb.de wrote on Tue, 07 Mar 2023 11:26:48 +0100:
+>
+> > On Tue, Mar 7, 2023, at 10:03, Miquel Raynal wrote:
+> > > Hi Lukas,
+> > >
+> > > lukas.bulwahn@gmail.com wrote on Tue,  7 Mar 2023 08:40:38 +0100:
+> > >
+> > >> Commit 568494db6809 ("mtd: remove tmio_nand driver") removes the con=
+fig
+> > >> MTD_NAND_TMIO and its corresponding driver.
+> > >>
+> > >> Remove the reference in MTD_SHARPSL_PARTS to that removed config.
+> > >>
+> > >> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > >> ---
+> > >> Arnd, please ack.
+> > >> Miquel, please pick this minor non-urgent patch on top of the commit=
+ above.
+> > >
+> > > Actually I guess the SHARPSL driver is not selectable right now, so
+> > > this should be sent as part of my next fixes PR.
+> >
+> > I don't see why not, it just depends on 'ARCH_PXA||COMPILE_TEST' and
+> > should work fine with CONFIG_MACH_SPITZ PDAs.
+>
+> Sorry, I overlooked the diff, indeed there is nothing broken, so I'll
+> queue it to nand/next. I thought MTD_SHARPSL_PARTS was not selectable
+> anymore without COMPILE_TEST, which would have been problematic.
+>
+> Fixes tag still welcome though :)
+>
 
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
----
-- EFI_KIMG_PREFERRED_ADDRESS = PHYS_LINK_KADDR:
-/ # cat /proc/iomem 
-00000000-0fffffff : System RAM
-  00000000-001fffff : Reserved
-  00200000-0113ffff : Kernel code
-  01140000-01a0e5ff : Kernel data
-  01a0e600-01b0b337 : Kernel bss
+Arnd's commit is not broken. It does what Arnd writes in his commit
+message what it should do.
 
-- EFI_KIMG_PREFERRED_ADDRESS = PHYS_LINK_KADDR + 0x4000000 (Enable CONFIG_RELOCATABLE):
- # cat /proc/iomem 
-00000000-0fffffff : System RAM
-  00000000-041fffff : Reserved
-  04200000-0513ffff : Kernel code
-  05140000-05a0e5ff : Kernel data
-  05a0e600-05b0b337 : Kernel bss
+And this patch is just a clean-up that removes references, but it is
+just "stylistic" and reduces the complexity of Kconfig dependency
+definitions for non-existing config symbols. I do not see that this
+patch fixes Arnd's patch. It is just a clean-up with a reference to
+Arnd's patch to understand why this clean up can be done now.
 
- arch/loongarch/include/asm/efi.h              |  2 --
- drivers/firmware/efi/libstub/loongarch-stub.c |  7 -------
- drivers/firmware/efi/libstub/loongarch.c      | 14 ++++++++++++--
- 3 files changed, 12 insertions(+), 11 deletions(-)
+If you REALLY want the Fixes: tag, I can sure add it. But, I do not
+claim that I am fixing anything here; nothing was broken in the first
+place. The reference to the commit of interest is in the commit
+message, and anyone can follow or extract the information if they are
+interested.
 
-diff --git a/arch/loongarch/include/asm/efi.h b/arch/loongarch/include/asm/efi.h
-index 091897d40b03..eddc8e79b3fa 100644
---- a/arch/loongarch/include/asm/efi.h
-+++ b/arch/loongarch/include/asm/efi.h
-@@ -32,6 +32,4 @@ static inline unsigned long efi_get_kimg_min_align(void)
- 
- #define EFI_KIMG_PREFERRED_ADDRESS	PHYSADDR(VMLINUX_LOAD_ADDRESS)
- 
--unsigned long kernel_entry_address(void);
--
- #endif /* _ASM_LOONGARCH_EFI_H */
-diff --git a/drivers/firmware/efi/libstub/loongarch-stub.c b/drivers/firmware/efi/libstub/loongarch-stub.c
-index eee7ed43cdfb..71d178f87274 100644
---- a/drivers/firmware/efi/libstub/loongarch-stub.c
-+++ b/drivers/firmware/efi/libstub/loongarch-stub.c
-@@ -44,10 +44,3 @@ efi_status_t handle_kernel_image(unsigned long *image_addr,
- 
- 	return status;
- }
--
--unsigned long kernel_entry_address(void)
--{
--	unsigned long base = (unsigned long)&kernel_offset - kernel_offset;
--
--	return (unsigned long)&kernel_entry - base + VMLINUX_LOAD_ADDRESS;
--}
-diff --git a/drivers/firmware/efi/libstub/loongarch.c b/drivers/firmware/efi/libstub/loongarch.c
-index 807cba2693fc..79fa16a765ce 100644
---- a/drivers/firmware/efi/libstub/loongarch.c
-+++ b/drivers/firmware/efi/libstub/loongarch.c
-@@ -37,9 +37,19 @@ static efi_status_t exit_boot_func(struct efi_boot_memmap *map, void *priv)
- 	return EFI_SUCCESS;
- }
- 
--unsigned long __weak kernel_entry_address(void)
-+/*
-+ * Get the offset of EFI_KIMG_PREFERRED_ADDRESS relative to the physical
-+ * link address.
-+ */
-+static long get_kernel_offset(void)
-+{
-+	return EFI_KIMG_PREFERRED_ADDRESS - PHYS_LINK_KADDR;
-+}
-+
-+unsigned long kernel_entry_address(void)
- {
--	return *(unsigned long *)(PHYSADDR(VMLINUX_LOAD_ADDRESS) + 8);
-+	return *(unsigned long *)(EFI_KIMG_PREFERRED_ADDRESS + 8) +
-+		get_kernel_offset();
- }
- 
- efi_status_t efi_boot_kernel(void *handle, efi_loaded_image_t *image,
--- 
-2.37.3
+So, please keep this patch in the queue for nand/next.
 
+Lukas
+
+> Thanks,
+> Miqu=C3=A8l
