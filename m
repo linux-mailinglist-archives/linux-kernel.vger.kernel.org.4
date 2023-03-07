@@ -2,101 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02F86AD599
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 04:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC2F6AD59E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 04:21:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjCGDUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 22:20:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S230045AbjCGDVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 22:21:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjCGDUS (ORCPT
+        with ESMTP id S230042AbjCGDVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 22:20:18 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17405868A
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 19:20:15 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id q31-20020a17090a17a200b0023750b69614so10657464pja.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 19:20:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shopee.com; s=shopee.com; t=1678159214;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7fxxnRhDuO7Ys+K4s57yszbFoRf4ztzBuG5QcJ/0FD4=;
-        b=EMbz1ctztmPUvdbZPA2uJIMRn7teZTdcsfUEzUi3t6M4+05hP7/8mVDgWQ2ff02HVn
-         OQhuU2EqgvOgEskuEovItUaDq5uXuAIA56CjOBs+0ah4tk5LkcC0htl2iQOvsasi0VBz
-         SI6DsrS20s3Jz6j2Lg2ywbH7hxBuG5XwrNymoUuqIKeojcwDc1khJPQUwtunyGDE+DZU
-         QFR+o7BrXVL1lpjJFWePPe1ykU4+tE1et2zhF0gpsst9O9WJleDfcR9nJ2gAAz4Tnnr+
-         L96j7JSg6qw64T2SpdVPagRECn5weuIc1FcEL0gdxbaMXXn03r9Tn4H6jo9V+1njY5dC
-         +jrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678159214;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7fxxnRhDuO7Ys+K4s57yszbFoRf4ztzBuG5QcJ/0FD4=;
-        b=uHuHaY+gp1ZnLVKOJfusmTrV0aiGDd7iYTK6HtSU49uL4aiSoN4JwHSty57jSHqrlo
-         6SyvvMq2nXqb9KNxZJ+RXtPdnpm3reLWqAA67BBi9pyNYHFD5HCC6v3/giJYLRbCh+3V
-         QomlPmG24/CfMHU9V5bqKdMghOyz/TKNsz0NVyrroyNY4bJA2s75mQIAlWVMnO95d5va
-         O41uul7cV/BWc6+g0BLkvBcR9/5iJzd/SVmXpXLmYF5JiIP0LbrpNcUodCv9jznjeqFE
-         yci7jFP3JsyIYsD32F0STQy52AexIZUByoMvXwqXE2KxHcpxNrKOzBcKURR2fujJXGTM
-         bwKA==
-X-Gm-Message-State: AO0yUKUokZjXRFO57btZEtC45OO4cnxg1bg7pNPgkwJJeY2C6p5bey6c
-        6l6ZQZoDfbd6vfXPWNrr3FQGmbiBRhvIxmv0CUU=
-X-Google-Smtp-Source: AK7set+LwCg1AubccRkdobphpPfAUZQxKqQOMurMIZ8yDBA5RBE6hmJRYXtorjhQwKZUnJnSQDQk6Q==
-X-Received: by 2002:a17:902:c94c:b0:19b:33c0:4091 with SMTP id i12-20020a170902c94c00b0019b33c04091mr17654674pla.52.1678159214455;
-        Mon, 06 Mar 2023 19:20:14 -0800 (PST)
-Received: from [10.54.24.141] ([143.92.118.3])
-        by smtp.gmail.com with ESMTPSA id jz6-20020a170903430600b0019ab3308554sm7388794plb.85.2023.03.06.19.20.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 19:20:14 -0800 (PST)
-Message-ID: <4b2b0132-eb6f-d0a9-e6bb-6b23d3cbcd48@shopee.com>
-Date:   Tue, 7 Mar 2023 11:20:10 +0800
+        Mon, 6 Mar 2023 22:21:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127984D288;
+        Mon,  6 Mar 2023 19:21:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7841D611D6;
+        Tue,  7 Mar 2023 03:21:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6C9C433D2;
+        Tue,  7 Mar 2023 03:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678159297;
+        bh=NVWgD7aFXujXu7eEUoaNZK6PuCiU87JxjbqI4Lm93A8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=X7sVVNKC7HiLCVeX1mpJR297LGcfNYe9H5F7tZ37epbZKwS5GmuZEVoJrW+ifEdef
+         n9jemjBH2Lkd1Xbce9EJEPvGipfX0FfKUcsH0+Bs6MIKmZsCqtIru++fgMozMBADVa
+         S+o2cV9u/vbWMFkpMNmRrZfWVwmq24DhdsiqC3A7Ju45h7MBQKJglK31Vx/jcZioJT
+         kfscz9l06riZkS4kTdKDK39k37k1taULm6SmRHHpiCdjxzIIYzrYSFy8NNTW3ZIJ6c
+         8JWq1RCeQ0IEk1LJc1rfIC6Fi/hRL1c0UeymdQwDEXxxGgdJ4iXUioQ/9sloJqqqiQ
+         VVumtwhQ3+Gww==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-176b90e14a9so6186570fac.9;
+        Mon, 06 Mar 2023 19:21:37 -0800 (PST)
+X-Gm-Message-State: AO0yUKUsn76Z9AfVSG+WJrpBIgk2A407s223BnbhWWK74ammJT6uwcK8
+        5qmuf8mp14tHB0ZDP054HDqP1thCkVOml5YBJlk=
+X-Google-Smtp-Source: AK7set/Qf8fCMizgzBV6L0aw8HE6nxThKei/zMSFQcMSytpehDxWqkC38Riq6oawPUBiz/kK9Z332YEpozJfSwf3vlE=
+X-Received: by 2002:a05:6871:6a81:b0:176:3e60:3269 with SMTP id
+ zf1-20020a0568716a8100b001763e603269mr4455683oab.8.1678159297130; Mon, 06 Mar
+ 2023 19:21:37 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] mm: remove redundant check in handle_mm_fault
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230306024959.131468-1-haifeng.xu@shopee.com>
- <df3997ed-a844-597b-fbb1-154caad78543@redhat.com>
- <354360d5-dce6-a11c-ee61-d41e615bfa05@shopee.com>
- <ZAamFX/hq6Y/iNJb@casper.infradead.org>
-From:   Haifeng Xu <haifeng.xu@shopee.com>
-In-Reply-To: <ZAamFX/hq6Y/iNJb@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230305232536.19528-1-bage@linutronix.de> <20230305232536.19528-2-bage@linutronix.de>
+In-Reply-To: <20230305232536.19528-2-bage@linutronix.de>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 7 Mar 2023 12:21:00 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARnkOyusNFZsE9Hj9cg=TWJtv1By8e4UPCso92Wn=jgEQ@mail.gmail.com>
+Message-ID: <CAK7LNARnkOyusNFZsE9Hj9cg=TWJtv1By8e4UPCso92Wn=jgEQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kbuild: deb-pkg: default dpkg-buildpackage --build
+To:     Bastian Germann <bage@linutronix.de>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 6, 2023 at 8:25=E2=80=AFAM Bastian Germann <bage@linutronix.de>=
+ wrote:
+>
+> deb-pkg's dpkg-buildpackage invocation was added --build=3Dsource,binary
+> recently. Before, it relied on the default, which is
+> --build=3Dsource,binary,all and makes no difference for the built package=
+s
+> as there is no "Arch: all" package.
 
 
-On 2023/3/7 10:48, Matthew Wilcox wrote:
-> On Tue, Mar 07, 2023 at 10:36:55AM +0800, Haifeng Xu wrote:
->> On 2023/3/6 21:49, David Hildenbrand wrote:
->>> On 06.03.23 03:49, Haifeng Xu wrote:
->>>> mem_cgroup_oom_synchronize() has checked whether current memcg_in_oom is
->>>> set or not, so remove the check in handle_mm_fault().
->>>
->>> "mem_cgroup_oom_synchronize() will returned immediately if memcg_in_oom is not set, so remove the check from handle_mm_fault()".
->>>
->>> However, that requires now always an indirect function call -- do we care about dropping that optimization?
->>>
->>>
->>
->> If memcg_in_oom is set, we will check it twice, one is from handle_mm_fault(), the other is from mem_cgroup_oom_synchronize(). That seems a bit redundant.
->>
->> if memcg_in_oom is not set, mem_cgroup_oom_synchronize() returns directly. Though it's an indirect function call, but the time spent can be negligible 
->> compare to the whole mm user falut preocess. And that won't cause stack overflow error.
-> 
-> I suggest you measure it.
+Is this paragraph true?
 
-Ok, I'll make a simple test.
+--build=3Dsource,binary,all sounds strange because
+'all' is contained in 'binary'.
+
+
+
+According to dpkb-buildpackage(1),
+
+ binary =3D any,all
+
+ full =3D source,binary =3D source,any,all  (default)
+
+
+--build=3Dsource,binary would build everything
+even if there were 'Arch: all'.
+
+
+
+
+
+The code change is fine.
+My plan was to use --build=3Dsource,binary later,
+but I could not finish the entire work in the last cycle.
+
+
+
+
+> However, the explicit --build eliminates overriding it via DPKG_FLAGS,
+> which used to fill the gap of generating only a source package without
+> building it.
+>
+> Recover the old, default behavior.
+>
+> Fixes: 7bf4582d7aad ("kbuild: deb-pkg: create source package without clea=
+ning")
+> Signed-off-by: Bastian Germann <bage@linutronix.de>
+> ---
+>  scripts/Makefile.package | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+> index b941e6341b36..fe1721915a59 100644
+> --- a/scripts/Makefile.package
+> +++ b/scripts/Makefile.package
+> @@ -120,7 +120,7 @@ debian-orig: linux.tar.gz debian
+>  PHONY +=3D deb-pkg
+>  deb-pkg: debian-orig
+>         +dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) =
+$(DPKG_FLAGS) \
+> -               --build=3Dsource,binary -nc -us -uc
+> +               -nc -us -uc
+>
+>  PHONY +=3D bindeb-pkg
+>  bindeb-pkg: debian
+> --
+> 2.39.2
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
