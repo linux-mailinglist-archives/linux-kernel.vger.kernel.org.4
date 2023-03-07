@@ -2,92 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE1D6AD474
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 03:12:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B86D96AD477
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 03:13:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjCGCMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 21:12:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S229742AbjCGCN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 21:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjCGCMO (ORCPT
+        with ESMTP id S229486AbjCGCN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 21:12:14 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D063A846
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 18:12:12 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PVzTz68WSz4f3jYq
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:12:07 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-        by APP4 (Coremail) with SMTP id gCh0CgCHOa12nQZks2uNEw--.20984S2;
-        Tue, 07 Mar 2023 10:12:09 +0800 (CST)
-Subject: Re: dm crypt: initialize tasklet in crypt_io_init()
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     dm-devel@redhat.com, Alasdair Kergon <agk@redhat.com>,
-        Ignat Korchagin <ignat@cloudflare.com>,
-        linux-kernel@vger.kernel.org, houtao1@huawei.com
-References: <20230306134930.2878660-1-houtao@huaweicloud.com>
- <ZAY/o9ew9AtrCLE5@redhat.com>
-From:   Hou Tao <houtao@huaweicloud.com>
-Message-ID: <e9b61952-98a8-6e3b-2d85-6aaf07208a7b@huaweicloud.com>
-Date:   Tue, 7 Mar 2023 10:12:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 6 Mar 2023 21:13:26 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3492537F05
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 18:13:26 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id n42-20020a056602342a00b0074cde755b99so6469752ioz.16
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 18:13:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678155205;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6cVsYx/OrAmI0jd28DDkFuFm5fdW/PDwxzkcSRRP6iM=;
+        b=LvS9o5uGDiBSdKquHA8exWpfFEI0JtZtknWbznAim6sg4GQHM1uOR6m14sGcqAVT0M
+         kdeJEk0kwv3QOhjzSfP5Kl+4eYlBmUMKbjAUuhbO5qCyKi+K0WEuOfVbSwqy2WDB8rLn
+         xL2jxcIAkuP/FSue/viYvN1iKj3+q+9hLCvcE1bbRLC3eGH/YMIbz38fAPNfew48hQ6S
+         XIbhDHjTE6O8fSna9hGLz5lvLIr2JFM6GpSRfI1HotQUHdGXzpHYxQCOUcmZvsyjmPgn
+         iiZQj18RMbSOqsW/LrQU/oGI3kLzcHJ35Dm1aXmJwC/bL0XSZjr+rrIluYVKnHS4EpuC
+         C4Sg==
+X-Gm-Message-State: AO0yUKVKXGfvFfxNYtLTEfr2PpTlcrNyKp4kY4nIriU7ZdL8g2+aMsAh
+        w20O1fLX3IHmkU4gKrdyAJTSpob7VtPGleSKj0f98zvY1Uk8
+X-Google-Smtp-Source: AK7set8X/JX2ziwEZw/0ZRbNOr5QEv3gOivvnA6bS4D4fu6up9U7t+TXq9KKSFfHpTj6VUpcSROUfr0Jed52qgdjUavbhLKV08qO
 MIME-Version: 1.0
-In-Reply-To: <ZAY/o9ew9AtrCLE5@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-CM-TRANSID: gCh0CgCHOa12nQZks2uNEw--.20984S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Wr13Gr4fGr4xAFWkKr45KFg_yoWDKFXE9a
-        1FgFyxGw409Fn7tF1qyr43Jr93Xa1kJa1DKrWUX3y7Kr93Z39Yq3ZY9ryfC3W8Za4ayF9x
-        ursIvasFvw1qgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbzAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzsqWUUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:13f4:b0:313:fa72:d9aa with SMTP id
+ w20-20020a056e0213f400b00313fa72d9aamr6498598ilj.0.1678155205548; Mon, 06 Mar
+ 2023 18:13:25 -0800 (PST)
+Date:   Mon, 06 Mar 2023 18:13:25 -0800
+In-Reply-To: <20230307014933.1882-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e7a56505f645f4e7@google.com>
+Subject: Re: [syzbot] [hfs?] kernel BUG in __block_write_full_page
+From:   syzbot <syzbot+3aa7a6b7eb0d5536abaf@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-On 3/7/2023 3:31 AM, Mike Snitzer wrote:
-> On Mon, Mar 06 2023 at  8:49P -0500,
-> Hou Tao <houtao@huaweicloud.com> wrote:
->
->> From: Hou Tao <houtao1@huawei.com>
->>
->> When neither no_read_workqueue nor no_write_workqueue are enabled,
->> tasklet_trylock() in crypt_dec_pending() may still return false due to
->> an uninitialized state, and dm-crypt will do io completion in io_queue
->> instead of current context unnecessarily.
-> Have you actually experienced this?
-Yes. I had written a bpftrace script to check the completion context of
-blkdev_bio_end_io_simple() when doing direct io read on dm-crypt device. The
-expected context should be unbound workers of crypt_queue, but sometimes the
-context is the bound worker of io_queue.
->
->> Fix it by initializing io->tasklet in crypt_io_init().
-> Really would rather avoid always calling tasklet_init(). But I can
-> optimize it away with a later patch.
-My first though was "io->tasklet.state = 0", but it may be fragile because it
-operated on the internal status of tasklet, so I switch to tasklet_init().
->
-> Mike
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
+Reported-and-tested-by: syzbot+3aa7a6b7eb0d5536abaf@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         b01fe98d Merge tag 'i2c-for-6.3-rc1-part2' of git://gi..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=15fa2884c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dc0f7cfe5b32efe2
+dashboard link: https://syzkaller.appspot.com/bug?extid=3aa7a6b7eb0d5536abaf
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=147eadbcc80000
+
+Note: testing is done by a robot and is best-effort only.
