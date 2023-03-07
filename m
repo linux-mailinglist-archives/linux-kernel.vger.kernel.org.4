@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A5A6AF91A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:43:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FE96AF915
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231327AbjCGWnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
+        id S229997AbjCGWmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:42:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjCGWmg (ORCPT
+        with ESMTP id S231575AbjCGWmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:42:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F2559407;
-        Tue,  7 Mar 2023 14:41:56 -0800 (PST)
+        Tue, 7 Mar 2023 17:42:09 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8328E067;
+        Tue,  7 Mar 2023 14:41:34 -0800 (PST)
 Date:   Tue, 07 Mar 2023 22:41:30 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678228890;
+        s=2020; t=1678228891;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fNE135kfip+/55i0Uctu9VE1eiRjfeodH4xQSM4wxck=;
-        b=AP0qFDjqhVNIt/H65GJ8kqa3v+coTqM73tPhB++rb9PWWh0CCL0IWpZ+sYZ+ylw648E8jN
-        bm4FUkbUeggQMn2lNhpBgh7HG3rgzEvTP05KrHnXRyeKkpiJnp4/eKPiAbK8NdqPxUNlE8
-        PCYMiakXn3IEh2bEnLntVfr/Mnkny1nxDLKg1VV95BjstOHzqLFLqGJYwRKO/TLvGyBD2Y
-        RLNyl++UjQ5Wg2KzeA0c1ZhMPDO+eWnFrkreey2zY86XO95y9TVvDXsR9Q/Gw8F8bSRPFt
-        D+bQrdXQlGNKQDf+/nrDf0WPhbjWC5t/+p+LNej6I00ACFQRbSf25QngwR/zYg==
+        bh=5Xiq36lhSlNiseP0WTmMpu68gwuLw9OrGsva/Do0jn4=;
+        b=ldaN9TcITf4hIAJ7xEz12w+jU30flaYXGCExiBTRExzmPrZ/UFfueItvZCjWbDAhx5RyEt
+        /fQL10hkqC+XP1kRJptGWkhkrsV3ca8yWBxCfaJ20J3gAOmf8T3doHEXLwoNUqVxdYunlQ
+        xkgjtZ734Ef/kqK1NFZJOb0klOBZN5u0L/1fONRNgCVaxhf4uEi0ut6smcOdymUVBzCqqe
+        GS7RvVkWH8y+EbhygC+FuA7sdzytPSSXoCcOfJw0R6Wa2GpbimWj819QtFCYlCRsf+jSNs
+        IkfgqG7EZvR1zrFaig7aWT5pjdy6/iSWf2/qqp4xB9fTNQSvEgd+btaDXoK4/Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678228890;
+        s=2020e; t=1678228891;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=fNE135kfip+/55i0Uctu9VE1eiRjfeodH4xQSM4wxck=;
-        b=I/3uVJJD/bfgPvbsvQNtMLWYFu4V4sBMMWXJnnbOuJCNuLnxlalNAZEdllijS6zFXo35vb
-        IFN8A+4eonmo+4Cg==
-From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+        bh=5Xiq36lhSlNiseP0WTmMpu68gwuLw9OrGsva/Do0jn4=;
+        b=V6dR8z9obSteUh/NbbQrC0dgxSVsmvajF/8qbrcXyPwkqYSPMCPmp/B2MREh3wosJkpEI3
+        R0p7yICuer/T0SAg==
+From:   "tip-bot2 for Terry Bowman" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] tools/x86/kcpuid: Dump the CPUID function in detailed view
-Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Terry Bowman <terry.bowman@amd.com>,
+Subject: [tip: x86/misc] tools/x86/kcpuid: Update AMD leaf Fn80000001
+Cc:     Terry Bowman <terry.bowman@amd.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
         Feng Tang <feng.tang@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230206141832.4162264-4-terry.bowman@amd.com>
-References: <20230206141832.4162264-4-terry.bowman@amd.com>
+In-Reply-To: <20230206141832.4162264-3-terry.bowman@amd.com>
+References: <20230206141832.4162264-3-terry.bowman@amd.com>
 MIME-Version: 1.0
-Message-ID: <167822889002.5837.2464794663329420874.tip-bot2@tip-bot2>
+Message-ID: <167822889065.5837.6609204421153241300.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,106 +67,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/misc branch of tip:
 
-Commit-ID:     cd3ad6619517cda3a055d864a85cebbd434dba9a
-Gitweb:        https://git.kernel.org/tip/cd3ad6619517cda3a055d864a85cebbd434dba9a
-Author:        Borislav Petkov (AMD) <bp@alien8.de>
-AuthorDate:    Mon, 06 Feb 2023 08:18:32 -06:00
+Commit-ID:     ce22e4346ff5c2f2ce6b6a43b16d336c5c6df245
+Gitweb:        https://git.kernel.org/tip/ce22e4346ff5c2f2ce6b6a43b16d336c5c6df245
+Author:        Terry Bowman <terry.bowman@amd.com>
+AuthorDate:    Mon, 06 Feb 2023 08:18:31 -06:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 07 Mar 2023 23:35:44 +01:00
+CommitterDate: Tue, 07 Mar 2023 23:29:07 +01:00
 
-tools/x86/kcpuid: Dump the CPUID function in detailed view
+tools/x86/kcpuid: Update AMD leaf Fn80000001
 
-Sometimes it is useful to know which CPUID leaf contains the fields so
-add it to -d output so that it looks like this:
+Add missing features to sub-leafs EAX, ECX, and EDX of 'Extended
+Processor Signature and Feature Bits' leaf Fn80000001.
 
-  CPUID_0x8000001e_ECX[0x0]:
-           extended_apic_id       : 0x8           - Extended APIC ID
-           core_id                : 0x4           - Identifies the logical core ID
-           threads_per_core       : 0x1           - The number of threads per core is threads_per_core + 1
-           node_id                : 0x0           - Node ID
-           nodes_per_processor    : 0x0           - Nodes per processor { 0: 1 node, else reserved }
-
-  CPUID_0x8000001f_ECX[0x0]:
-           sme                 -  Secure Memory Encryption
-
-...
-
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
 Reviewed-by: Feng Tang <feng.tang@intel.com>
-Link: https://lore.kernel.org/r/20230206141832.4162264-4-terry.bowman@amd.com
+Link: https://lore.kernel.org/r/20230206141832.4162264-3-terry.bowman@amd.com
 ---
- tools/arch/x86/kcpuid/kcpuid.c | 32 +++++++++++++++++++++++++-------
- 1 file changed, 25 insertions(+), 7 deletions(-)
+ tools/arch/x86/kcpuid/cpuid.csv | 57 ++++++++++++++++++++++++++++++--
+ 1 file changed, 54 insertions(+), 3 deletions(-)
 
-diff --git a/tools/arch/x86/kcpuid/kcpuid.c b/tools/arch/x86/kcpuid/kcpuid.c
-index dae7551..416f5b3 100644
---- a/tools/arch/x86/kcpuid/kcpuid.c
-+++ b/tools/arch/x86/kcpuid/kcpuid.c
-@@ -33,7 +33,7 @@ struct reg_desc {
- 	struct bits_desc descs[32];
- };
+diff --git a/tools/arch/x86/kcpuid/cpuid.csv b/tools/arch/x86/kcpuid/cpuid.csv
+index 9914bdf..e0c25b7 100644
+--- a/tools/arch/x86/kcpuid/cpuid.csv
++++ b/tools/arch/x86/kcpuid/cpuid.csv
+@@ -340,19 +340,70 @@
+ # According to SDM
+ # 40000000H - 4FFFFFFFH is invalid range
  
--enum {
-+enum cpuid_reg {
- 	R_EAX = 0,
- 	R_EBX,
- 	R_ECX,
-@@ -41,6 +41,10 @@ enum {
- 	NR_REGS
- };
+-
+ # Leaf 80000001H
+ # Extended Processor Signature and Feature Bits
  
-+static const char * const reg_names[] = {
-+	"EAX", "EBX", "ECX", "EDX",
-+};
++0x80000001,    0,  EAX,  27:20, extfamily, Extended family
++0x80000001,    0,  EAX,  19:16, extmodel, Extended model
++0x80000001,    0,  EAX,   11:8, basefamily, Description of Family
++0x80000001,    0,  EAX,   11:8, basemodel, Model numbers vary with product
++0x80000001,    0,  EAX,    3:0, stepping, Processor stepping (revision) for a specific model
 +
- struct subleaf {
- 	u32 index;
- 	u32 sub;
-@@ -428,12 +432,18 @@ static void parse_text(void)
- 
- 
- /* Decode every eax/ebx/ecx/edx */
--static void decode_bits(u32 value, struct reg_desc *rdesc)
-+static void decode_bits(u32 value, struct reg_desc *rdesc, enum cpuid_reg reg)
- {
- 	struct bits_desc *bdesc;
- 	int start, end, i;
- 	u32 mask;
- 
-+	if (!rdesc->nr) {
-+		if (show_details)
-+			printf("\t %s: 0x%08x\n", reg_names[reg], value);
-+		return;
-+	}
++0x80000001,    0,  EBX,  31:28, pkgtype, Specifies the package type
 +
- 	for (i = 0; i < rdesc->nr; i++) {
- 		bdesc = &rdesc->descs[i];
- 
-@@ -468,13 +478,21 @@ static void show_leaf(struct subleaf *leaf)
- 	if (!leaf)
- 		return;
- 
--	if (show_raw)
-+	if (show_raw) {
- 		leaf_print_raw(leaf);
-+	} else {
-+		if (show_details)
-+			printf("CPUID_0x%x_ECX[0x%x]:\n",
-+				leaf->index, leaf->sub);
-+	}
+ 0x80000001,    0,  ECX,      0, lahf_lm, LAHF/SAHF available in 64-bit mode
++0x80000001,    0,  ECX,      1, cmplegacy, Core multi-processing legacy mode
++0x80000001,    0,  ECX,      2, svm, Indicates support for: VMRUN, VMLOAD, VMSAVE, CLGI, VMMCALL, and INVLPGA
++0x80000001,    0,  ECX,      3, extapicspace, Extended APIC register space
++0x80000001,    0,  ECX,      4, altmovecr8, Indicates support for LOCK MOV CR0 means MOV CR8
+ 0x80000001,    0,  ECX,      5, lzcnt, LZCNT
++0x80000001,    0,  ECX,      6, sse4a, EXTRQ, INSERTQ, MOVNTSS, and MOVNTSD instruction support
++0x80000001,    0,  ECX,      7, misalignsse, Misaligned SSE Mode
+ 0x80000001,    0,  ECX,      8, prefetchw, PREFETCHW
+-
++0x80000001,    0,  ECX,      9, osvw, OS Visible Work-around support
++0x80000001,    0,  ECX,     10, ibs, Instruction Based Sampling
++0x80000001,    0,  ECX,     11, xop, Extended operation support
++0x80000001,    0,  ECX,     12, skinit, SKINIT and STGI support
++0x80000001,    0,  ECX,     13, wdt, Watchdog timer support
++0x80000001,    0,  ECX,     15, lwp, Lightweight profiling support
++0x80000001,    0,  ECX,     16, fma4, Four-operand FMA instruction support
++0x80000001,    0,  ECX,     17, tce, Translation cache extension
++0x80000001,    0,  ECX,     22, TopologyExtensions, Indicates support for Core::X86::Cpuid::CachePropEax0 and Core::X86::Cpuid::ExtApicId
++0x80000001,    0,  ECX,     23, perfctrextcore, Indicates support for Core::X86::Msr::PERF_CTL0 - 5 and Core::X86::Msr::PERF_CTR
++0x80000001,    0,  ECX,     24, perfctrextdf, Indicates support for Core::X86::Msr::DF_PERF_CTL and Core::X86::Msr::DF_PERF_CTR
++0x80000001,    0,  ECX,     26, databreakpointextension, Indicates data breakpoint support for Core::X86::Msr::DR0_ADDR_MASK, Core::X86::Msr::DR1_ADDR_MASK, Core::X86::Msr::DR2_ADDR_MASK and Core::X86::Msr::DR3_ADDR_MASK
++0x80000001,    0,  ECX,     27, perftsc, Performance time-stamp counter supported
++0x80000001,    0,  ECX,     28, perfctrextllc, Indicates support for L3 performance counter extensions
++0x80000001,    0,  ECX,     29, mwaitextended, MWAITX and MONITORX capability is supported
++0x80000001,    0,  ECX,     30, admskextn, Indicates support for address mask extension (to 32 bits and to all 4 DRs) for instruction breakpoints
 +
-+	decode_bits(leaf->eax, &leaf->info[R_EAX], R_EAX);
-+	decode_bits(leaf->ebx, &leaf->info[R_EBX], R_EBX);
-+	decode_bits(leaf->ecx, &leaf->info[R_ECX], R_ECX);
-+	decode_bits(leaf->edx, &leaf->info[R_EDX], R_EDX);
++0x80000001,    0,  EDX,      0, fpu, x87 floating point unit on-chip
++0x80000001,    0,  EDX,      1, vme, Virtual-mode enhancements
++0x80000001,    0,  EDX,      2, de, Debugging extensions, IO breakpoints, CR4.DE
++0x80000001,    0,  EDX,      3, pse, Page-size extensions (4 MB pages)
++0x80000001,    0,  EDX,      4, tsc, Time stamp counter, RDTSC/RDTSCP instructions, CR4.TSD
++0x80000001,    0,  EDX,      5, msr, Model-specific registers (MSRs), with RDMSR and WRMSR instructions
++0x80000001,    0,  EDX,      6, pae, Physical-address extensions (PAE)
++0x80000001,    0,  EDX,      7, mce, Machine Check Exception, CR4.MCE
++0x80000001,    0,  EDX,      8, cmpxchg8b, CMPXCHG8B instruction
++0x80000001,    0,  EDX,      9, apic, advanced programmable interrupt controller (APIC) exists and is enabled
+ 0x80000001,    0,  EDX,     11, sysret, SYSCALL/SYSRET supported
++0x80000001,    0,  EDX,     12, mtrr, Memory-type range registers
++0x80000001,    0,  EDX,     13, pge, Page global extension, CR4.PGE
++0x80000001,    0,  EDX,     14, mca, Machine check architecture, MCG_CAP
++0x80000001,    0,  EDX,     15, cmov, Conditional move instructions, CMOV, FCOMI, FCMOV
++0x80000001,    0,  EDX,     16, pat, Page attribute table
++0x80000001,    0,  EDX,     17, pse36, Page-size extensions
+ 0x80000001,    0,  EDX,     20, exec_dis, Execute Disable Bit available
++0x80000001,    0,  EDX,     22, mmxext, AMD extensions to MMX instructions
++0x80000001,    0,  EDX,     23, mmx, MMX instructions
++0x80000001,    0,  EDX,     24, fxsr, FXSAVE and FXRSTOR instructions
++0x80000001,    0,  EDX,     25, ffxsr, FXSAVE and FXRSTOR instruction optimizations
+ 0x80000001,    0,  EDX,     26, 1gb_page, 1GB page supported
+ 0x80000001,    0,  EDX,     27, rdtscp, RDTSCP and IA32_TSC_AUX are available
+-#0x80000001,    0,  EDX,     29, 64b, 64b Architecture supported
++0x80000001,    0,  EDX,     29, lm, 64b Architecture supported
++0x80000001,    0,  EDX,     30, threednowext, AMD extensions to 3DNow! instructions
++0x80000001,    0,  EDX,     31, threednow, 3DNow! instructions
  
--	decode_bits(leaf->eax, &leaf->info[R_EAX]);
--	decode_bits(leaf->ebx, &leaf->info[R_EBX]);
--	decode_bits(leaf->ecx, &leaf->info[R_ECX]);
--	decode_bits(leaf->edx, &leaf->info[R_EDX]);
-+	if (!show_raw && show_details)
-+		printf("\n");
- }
- 
- static void show_func(struct cpuid_func *func)
+ # Leaf 80000002H/80000003H/80000004H
+ # Processor Brand String
