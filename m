@@ -2,317 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CB86AD69C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E0936AD69F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjCGE6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 23:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S230326AbjCGE6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 23:58:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjCGE6d (ORCPT
+        with ESMTP id S230311AbjCGE6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 23:58:33 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8090D34333;
-        Mon,  6 Mar 2023 20:58:29 -0800 (PST)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3274vsKS065528;
-        Mon, 6 Mar 2023 22:57:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678165074;
-        bh=nVLfv1pht9lV4ARBLhJxKopJa8+Mpr5Jx0LHAfUS/+U=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=gd4GVk1bs/nm6Ij0vx+dbm+P4b1Vrowj12e+31Gzpeg9Mx8/6zawdsmlLNNQrWHVW
-         hmvMqB2ZBMhaDEUcVqaygRTS9l61S1kpknO+mmjY8lQ8laLgfBiUe8aVg++YYZTRCO
-         pqWRrbIvzBKaIvByUGwU8W8wo778JD9w6Kl4XmVw=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3274vsa3016099
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 6 Mar 2023 22:57:54 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 6
- Mar 2023 22:57:54 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 6 Mar 2023 22:57:54 -0600
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3274vmdq119234;
-        Mon, 6 Mar 2023 22:57:48 -0600
-Message-ID: <43df3c2c-d0d0-f2b8-cf8b-8a2453ca43b4@ti.com>
-Date:   Tue, 7 Mar 2023 10:27:47 +0530
+        Mon, 6 Mar 2023 23:58:42 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8723A844;
+        Mon,  6 Mar 2023 20:58:40 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3274K9mO029171;
+        Tue, 7 Mar 2023 04:58:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vFjE5xOnMxVr7p3UiclRPXyqsU9qOGNnIi+3kPQ1UJc=;
+ b=mfd0nOA+TwkHBhK5aZypywWXqTgX0sfUGUhpkdQz81ph8q7Fh4/vWz5OodkL5DpSHcGJ
+ KFB1IWhd6na1Oxsfatg77t2VEh+LMFA789VLx0YZECTC+pue8gIe0E7rBthpm3MP0xtU
+ 3nyyKBNCI9IN+Kp3f7ZYgD46wm2AzPsOfC1lL9Dpi43ohKTagk3vnzAL5cGaRvnEZ3Na
+ CEPa6RWy0EpujbHF/IXf2PxG5e2JMpojlgfQP3VfN0u8pVfWa4PsDv54ER+uEY824aQ4
+ wlCzY168YgoeN2BgJpXvGm0OE+YEJyxXbTSphzUzZ19n/8LVAYc8FXjJCsSaAmoejBGV 8Q== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5x5c81wk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 04:58:05 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3274w39i011614
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Mar 2023 04:58:03 GMT
+Received: from [10.50.8.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
+ 20:57:58 -0800
+Message-ID: <a93a16ec-2e56-1d0b-c326-25f490d8f5b5@quicinc.com>
+Date:   Tue, 7 Mar 2023 10:27:54 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [PATCH v5 1/2] dt-bindings: net: Add ICSSG
- Ethernet
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: Re: [PATCH 07/18] media: venus: core: Assign registers based on VPU
+ version
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dikshita Agarwal <dikshita@codeaurora.org>,
+        Mansur Alisha Shaik <mansur@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>
+CC:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        <linux-media@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Vikash Garodia" <vgarodia@codeaurora.org>
+References: <20230228-topic-venus-v1-0-58c2c88384e9@linaro.org>
+ <20230228-topic-venus-v1-7-58c2c88384e9@linaro.org>
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, MD Danish Anwar <danishanwar@ti.com>
-CC:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, <andrew@lunn.ch>,
-        <nm@ti.com>, <ssantosh@kernel.org>, <srk@ti.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230210114957.2667963-1-danishanwar@ti.com>
- <20230210114957.2667963-2-danishanwar@ti.com>
- <20230210192001.GB2923614-robh@kernel.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <20230210192001.GB2923614-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20230228-topic-venus-v1-7-58c2c88384e9@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: OXgYLx-no7SvEyF_4F2i-TjGuwa8TpYM
+X-Proofpoint-GUID: OXgYLx-no7SvEyF_4F2i-TjGuwa8TpYM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
+ phishscore=0 suspectscore=0 clxscore=1015 adultscore=0 malwarescore=0
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070043
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
 
-On 11/02/23 00:50, Rob Herring wrote:
-> On Fri, Feb 10, 2023 at 05:19:56PM +0530, MD Danish Anwar wrote:
->> From: Puranjay Mohan <p-mohan@ti.com>
->>
->> Add a YAML binding document for the ICSSG Programmable real time unit
->> based Ethernet hardware. The ICSSG driver uses the PRU and PRUSS consumer
->> APIs to interface the PRUs and load/run the firmware for supporting
->> ethernet functionality.
->>
->> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->> Signed-off-by: Md Danish Anwar <danishanwar@ti.com>
->> ---
->>  .../bindings/net/ti,icssg-prueth.yaml         | 184 ++++++++++++++++++
->>  1 file changed, 184 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->> new file mode 100644
->> index 000000000000..8b860f29ecc0
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/ti,icssg-prueth.yaml
->> @@ -0,0 +1,184 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/net/ti,icssg-prueth.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Texas Instruments ICSSG PRUSS Ethernet
->> +
->> +maintainers:
->> +  - Md Danish Anwar <danishanwar@ti.com>
->> +
->> +description:
->> +  Ethernet based on the Programmable Real-Time
->> +  Unit and Industrial Communication Subsystem.
-> 
-> Odd line wrap length. It should be 80 chars.
-> 
+On 2/28/2023 8:54 PM, Konrad Dybcio wrote:
+> IRIS2(_1) has a different register map compared to other HFI6XX-
+> using VPUs. Take care of it.
+>
+> Signed-off-by: Konrad Dybcio<konrad.dybcio@linaro.org>
+> ---
+>   drivers/media/platform/qcom/venus/core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
+> index c13436d58ed3..bdc14acc8399 100644
+> --- a/drivers/media/platform/qcom/venus/core.c
+> +++ b/drivers/media/platform/qcom/venus/core.c
+> @@ -246,7 +246,7 @@ static int venus_enumerate_codecs(struct venus_core *core, u32 type)
+>   
+>   static void venus_assign_register_offsets(struct venus_core *core)
+>   {
+> -	if (IS_V6(core)) {
+> +	if (IS_IRIS2(core) || IS_IRIS2_1(core)) {
+>   		core->vbif_base = core->base + VBIF_BASE;
+>   		core->cpu_base = core->base + CPU_BASE_V6;
+>   		core->cpu_cs_base = core->base + CPU_CS_BASE_V6;
 
-Sure, I will modify it.
+AR50_LITE also should be added here, as I see you have added the same to 
+places where we are using V6 based registers.
 
->> +
->> +allOf:
->> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - ti,am654-icssg-prueth  # for AM65x SoC family
->> +
->> +  ti,sram:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      phandle to MSMC SRAM node
-> 
-> I believe we have a standard 'sram' property to point to SRAM nodes 
-> assuming this is just mmio-sram or similar.
-> 
+if the base addresses are not assigned here properly. the register 
+writing at other places will be wrong, ex: patch 05/18
 
-Yes, we have standard 'sram' property but Krzysztof had asked me to make the
-sram property vendor specific in last revision of this series.
+Thanks,
 
->> +
->> +  dmas:
->> +    maxItems: 10
->> +
->> +  dma-names:
->> +    items:
->> +      - const: tx0-0
->> +      - const: tx0-1
->> +      - const: tx0-2
->> +      - const: tx0-3
->> +      - const: tx1-0
->> +      - const: tx1-1
->> +      - const: tx1-2
->> +      - const: tx1-3
->> +      - const: rx0
->> +      - const: rx1
->> +
->> +  ti,mii-g-rt:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description: |
->> +      phandle to MII_G_RT module's syscon regmap.
->> +
->> +  ti,mii-rt:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description: |
->> +      phandle to MII_RT module's syscon regmap
->> +
->> +  interrupts:
->> +    maxItems: 2
->> +    description: |
-> 
-> Don't need '|'
-> 
+Dikshita
 
-Sure, I will drop this.
-
->> +      Interrupt specifiers to TX timestamp IRQ.
->> +
->> +  interrupt-names:
->> +    items:
->> +      - const: tx_ts0
->> +      - const: tx_ts1
->> +
->> +  ethernet-ports:
->> +    type: object
->> +    additionalProperties: false
->> +
->> +    properties:
->> +      '#address-cells':
->> +        const: 1
->> +      '#size-cells':
->> +        const: 0
->> +
->> +    patternProperties:
->> +      ^port@[0-1]$:
->> +        type: object
->> +        description: ICSSG PRUETH external ports
->> +        $ref: ethernet-controller.yaml#
->> +        unevaluatedProperties: false
->> +
->> +        properties:
->> +          reg:
->> +            items:
->> +              - enum: [0, 1]
->> +            description: ICSSG PRUETH port number
->> +
->> +          interrupts:
->> +            maxItems: 1
->> +
->> +          ti,syscon-rgmii-delay:
->> +            items:
->> +              - items:
->> +                  - description: phandle to system controller node
->> +                  - description: The offset to ICSSG control register
->> +            $ref: /schemas/types.yaml#/definitions/phandle-array
->> +            description:
->> +              phandle to system controller node and register offset
->> +              to ICSSG control register for RGMII transmit delay
->> +
->> +        required:
->> +          - reg
->> +    anyOf:
->> +      - required:
->> +          - port@0
->> +      - required:
->> +          - port@1
->> +
->> +required:
->> +  - compatible
->> +  - ti,sram
->> +  - dmas
->> +  - dma-names
->> +  - ethernet-ports
->> +  - ti,mii-g-rt
->> +  - interrupts
->> +  - interrupt-names
->> +
->> +unevaluatedProperties: false
->> +
->> +examples:
->> +  - |
->> +    /* Example k3-am654 base board SR2.0, dual-emac */
->> +    pruss2_eth: ethernet {
->> +        compatible = "ti,am654-icssg-prueth";
->> +        pinctrl-names = "default";
->> +        pinctrl-0 = <&icssg2_rgmii_pins_default>;
->> +        ti,sram = <&msmc_ram>;
->> +
->> +        ti,prus = <&pru2_0>, <&rtu2_0>, <&tx_pru2_0>,
->> +                  <&pru2_1>, <&rtu2_1>, <&tx_pru2_1>;
->> +        firmware-name = "ti-pruss/am65x-pru0-prueth-fw.elf",
->> +                        "ti-pruss/am65x-rtu0-prueth-fw.elf",
->> +                        "ti-pruss/am65x-txpru0-prueth-fw.elf",
->> +                        "ti-pruss/am65x-pru1-prueth-fw.elf",
->> +                        "ti-pruss/am65x-rtu1-prueth-fw.elf",
->> +                        "ti-pruss/am65x-txpru1-prueth-fw.elf";
->> +        ti,pruss-gp-mux-sel = <2>,      /* MII mode */
->> +                              <2>,
->> +                              <2>,
->> +                              <2>,      /* MII mode */
->> +                              <2>,
->> +                              <2>;
->> +        dmas = <&main_udmap 0xc300>, /* egress slice 0 */
->> +               <&main_udmap 0xc301>, /* egress slice 0 */
->> +               <&main_udmap 0xc302>, /* egress slice 0 */
->> +               <&main_udmap 0xc303>, /* egress slice 0 */
->> +               <&main_udmap 0xc304>, /* egress slice 1 */
->> +               <&main_udmap 0xc305>, /* egress slice 1 */
->> +               <&main_udmap 0xc306>, /* egress slice 1 */
->> +               <&main_udmap 0xc307>, /* egress slice 1 */
->> +               <&main_udmap 0x4300>, /* ingress slice 0 */
->> +               <&main_udmap 0x4301>; /* ingress slice 1 */
->> +        dma-names = "tx0-0", "tx0-1", "tx0-2", "tx0-3",
->> +                    "tx1-0", "tx1-1", "tx1-2", "tx1-3",
->> +                    "rx0", "rx1";
->> +        ti,mii-g-rt = <&icssg2_mii_g_rt>;
->> +        interrupt-parent = <&icssg2_intc>;
->> +        interrupts = <24 0 2>, <25 1 3>;
->> +        interrupt-names = "tx_ts0", "tx_ts1";
->> +        ethernet-ports {
->> +            #address-cells = <1>;
->> +            #size-cells = <0>;
->> +            pruss2_emac0: port@0 {
->> +                reg = <0>;
->> +                phy-handle = <&pruss2_eth0_phy>;
->> +                phy-mode = "rgmii-id";
->> +                interrupts-extended = <&icssg2_intc 24>;
->> +                ti,syscon-rgmii-delay = <&scm_conf 0x4120>;
->> +                /* Filled in by bootloader */
->> +                local-mac-address = [00 00 00 00 00 00];
->> +            };
->> +
->> +            pruss2_emac1: port@1 {
->> +                reg = <1>;
->> +                phy-handle = <&pruss2_eth1_phy>;
->> +                phy-mode = "rgmii-id";
->> +                interrupts-extended = <&icssg2_intc 25>;
->> +                ti,syscon-rgmii-delay = <&scm_conf 0x4124>;
->> +                /* Filled in by bootloader */
->> +                local-mac-address = [00 00 00 00 00 00];
->> +            };
->> +        };
->> +    };
->> -- 
->> 2.25.1
->>
-
--- 
-Thanks and Regards,
-Danish.
