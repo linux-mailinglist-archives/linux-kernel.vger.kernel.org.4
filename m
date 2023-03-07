@@ -2,161 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 541936AD9B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:58:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3276AD9B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjCGI6M convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 03:58:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S230149AbjCGI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjCGI6G (ORCPT
+        with ESMTP id S230117AbjCGI6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:58:06 -0500
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8F23771E;
-        Tue,  7 Mar 2023 00:58:05 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id s12so13549834qtq.11;
-        Tue, 07 Mar 2023 00:58:05 -0800 (PST)
+        Tue, 7 Mar 2023 03:58:05 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9858A32534
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:58:03 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id ay14so45637027edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:58:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678179482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZVTfPiVagOZL90gtIf96Yys0KYhqSZTVjW5Vb21u5PM=;
+        b=lMOa5uVEs630Vnh6L/HLw1O+7z304xtCXQWssdZJSHBtS4gIfwMxoSXq/0Zgf/xUbN
+         PN1HG2FZxjcmO345RxD5HR4grPkXWhRsqUFgr+JvkV6aWU72WtqZAe/ZZCkkq+sgsB7p
+         fx4vQxO+UJweosWCMiYvgAzNM1YfAP9OG9zO3yJvtLyT4cA1G0ud0lgINu7+Gbm+/6Gd
+         qa1h8WDwJJGEWNAxdRiEPORgRxXprK2YQflKCXc3dUfIcRoueho+UxtOkW3L/SOLWnrD
+         xkMAvbpKIcDVZqMHPIrVJJMNjpMaPY96d0ICAOMq8opK6t40l4RJ4EO05Fmv0hpF3O3g
+         axKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678179484;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mf9D3mYUVq4IaTZ5HVptNWacWozv4toT5Gz07corxFA=;
-        b=ffk8EL3sdG3VkZS4APfVKnR1CQhIwPL4WP4Erd7vZGYROWwQ9tn9AVwTiDRTHU7H8U
-         wAMsBrCv+RDC4GfNZsL5Pi5RQrehG0Ae7mdCzFFwq2lEHgQE3+ymTVMXwthTR9glLwHg
-         c0kAm7FKDwRlDpN6LRFQo4HkB9i1azj809KykryHmhdKAysOfonVeLDN0kAvCMWc1Y3X
-         jkREM067RfpJVqV6afj6Dit2gvF2ZB/ofiHa+Lxoz+5H4IfOXoAF4h/yrzbkmFb4R5hi
-         89yX76BEA6LU2HttPxUT9Gxix/SfQ0Ih56kYol5ViD/AcV7AUyDiQQvD/QL5MNX0jYqg
-         kdOg==
-X-Gm-Message-State: AO0yUKV2kRwD5r1no58T6oOCfmoNR1eYhfrH1asARSdWYXrQH+QtqQ05
-        MklvnsMudyRzkZin7d5Gx577XBRpzLU2Yw==
-X-Google-Smtp-Source: AK7set9Px7/QAsJmiwp0nMg/ie2mPRbur1K0kO39/K80fBbviaq8CX7/UPNZ5bZvWwyhOQIWd/Fzxw==
-X-Received: by 2002:a05:622a:348:b0:3bf:dc2e:ce3f with SMTP id r8-20020a05622a034800b003bfdc2ece3fmr18741653qtw.16.1678179484426;
-        Tue, 07 Mar 2023 00:58:04 -0800 (PST)
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
-        by smtp.gmail.com with ESMTPSA id q28-20020a05620a2a5c00b007422fd3009esm9267355qkp.20.2023.03.07.00.58.03
+        d=1e100.net; s=20210112; t=1678179482;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZVTfPiVagOZL90gtIf96Yys0KYhqSZTVjW5Vb21u5PM=;
+        b=AagRIfGBZGBABafYOQWOi59wWaNJKXY82G6CEpVupv84XHLpEnIvaU63/USFj2R8Ms
+         Kv/HIRsFtqbuXSpWC+mJT5c0ouBhTDOIL62H8ju/Gw4zHZO5lrvka3XEkh4avO2RDt1a
+         qo4xZc2bT9RkKV15KxZ2OzrsNVUKTxjoK4EYrTNT8QyM0VRzx2jx8F5gH/NOP6p38YAm
+         19qCu3x36w8lbxd6S8zpTgdqloKnNCtZw3URhHZ+4HwxPApJilg5z8em/PKT0MQP+UN0
+         8zKeydHIqBt0HMCttKI6IyK7Ukh4h3Ws3Vzw9OgLOWfrHeZk5HZOXZYfhV9syHqd2ASO
+         WtfA==
+X-Gm-Message-State: AO0yUKXXjEA5D81DlOiB3+3NMD7046W3JQg9fXmrYU4LmbT/2CpvWibo
+        vxxRpOCRsqZsrMltrR3hRiTsrw==
+X-Google-Smtp-Source: AK7set9i6XN8jLMfyZaebyCVBR+PyyIEq6PPzmiHj6R2qI1SLS1ib+ru7uB7rd79hwfISF1aZfF07Q==
+X-Received: by 2002:aa7:d7c3:0:b0:4af:5aa1:6e58 with SMTP id e3-20020aa7d7c3000000b004af5aa16e58mr13274064eds.21.1678179482002;
+        Tue, 07 Mar 2023 00:58:02 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:5310:35c7:6f9e:2cd3? ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
+        by smtp.gmail.com with ESMTPSA id o22-20020a509b16000000b004c4eed3fe20sm6364807edi.5.2023.03.07.00.58.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 00:58:03 -0800 (PST)
-Received: by mail-yb1-f177.google.com with SMTP id k199so10695679ybf.4;
-        Tue, 07 Mar 2023 00:58:03 -0800 (PST)
-X-Received: by 2002:a5b:542:0:b0:a67:c976:c910 with SMTP id
- r2-20020a5b0542000000b00a67c976c910mr6389341ybp.7.1678179482859; Tue, 07 Mar
- 2023 00:58:02 -0800 (PST)
+        Tue, 07 Mar 2023 00:58:01 -0800 (PST)
+Message-ID: <63dbbda7-a444-8dac-6399-45e305652155@linaro.org>
+Date:   Tue, 7 Mar 2023 09:58:00 +0100
 MIME-Version: 1.0
-References: <20230306160016.4459-1-tzimmermann@suse.de> <CAMuHMdU5AwE0pK=ppip4J81ByEye+jmvff1s8saeEuWZWZiqPw@mail.gmail.com>
- <c560dd1c-03ac-1aa7-f3ac-2a2d9f411505@suse.de>
-In-Reply-To: <c560dd1c-03ac-1aa7-f3ac-2a2d9f411505@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 Mar 2023 09:57:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUWRwN7Ks1ougy81Lh=NKLD+y04Xr6O+Ee+3k5Z4QH2Rg@mail.gmail.com>
-Message-ID: <CAMuHMdUWRwN7Ks1ougy81Lh=NKLD+y04Xr6O+Ee+3k5Z4QH2Rg@mail.gmail.com>
-Subject: Re: [PATCH 00/99] fbdev: Fix memory leak in option parsing
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, paulus@samba.org, benh@kernel.crashing.org,
-        linux@armlinux.org.uk, pjones@redhat.com, timur@kernel.org,
-        adaplas@gmail.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
-        mbroemme@libmpq.org, thomas@winischhofer.net,
-        James.Bottomley@hansenpartnership.com, sudipm.mukherjee@gmail.com,
-        teddy.wang@siliconmotion.com, corbet@lwn.net,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [PATCH v5 1/2] dt-bindings: net: Add ICSSG
+ Ethernet
+Content-Language: en-US
+To:     Md Danish Anwar <a0501179@ti.com>, Rob Herring <robh@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>
+Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>, andrew@lunn.ch, nm@ti.com,
+        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230210114957.2667963-1-danishanwar@ti.com>
+ <20230210114957.2667963-2-danishanwar@ti.com>
+ <20230210192001.GB2923614-robh@kernel.org>
+ <43df3c2c-d0d0-f2b8-cf8b-8a2453ca43b4@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <43df3c2c-d0d0-f2b8-cf8b-8a2453ca43b4@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On 07/03/2023 05:57, Md Danish Anwar wrote:
+>>> +allOf:
+>>> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - ti,am654-icssg-prueth  # for AM65x SoC family
+>>> +
+>>> +  ti,sram:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description:
+>>> +      phandle to MSMC SRAM node
+>>
+>> I believe we have a standard 'sram' property to point to SRAM nodes 
+>> assuming this is just mmio-sram or similar.
+>>
+> 
+> Yes, we have standard 'sram' property but Krzysztof had asked me to make the
+> sram property vendor specific in last revision of this series.
 
-On Tue, Mar 7, 2023 at 9:23 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 07.03.23 um 08:53 schrieb Geert Uytterhoeven:
-> > On Mon, Mar 6, 2023 at 5:00 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> >> Introduce struct option_iter and helpers to parse command-line
-> >> options with comma-separated key-value pairs. Then convert fbdev
-> >> drivers to the new interface. Fixes a memory leak in the parsing of
-> >> the video= option.
-> >>
-> >> Before commit 73ce73c30ba9 ("fbdev: Transfer video= option strings to
-> >> caller; clarify ownership"), a call to fb_get_options() either
-> >> returned an internal string or a duplicated string; hence ownership of
-> >> the string's memory buffer was not well defined, but depended on how
-> >> users specified the video= option on the kernel command line. For
-> >> global settings, the caller owned the returned memory and for per-driver
-> >> settings, fb_get_options() owned the memory. As calling drivers were
-> >> unable to detect the case, the memory was leaked.
-> >>
-> >> Commit 73ce73c30ba9 ("fbdev: Transfer video= option strings to caller;
-> >> clarify ownership") changed sematics to caller-owned strings. Drivers
-> >> still leaked the memory, but at least ownership was clear.
-> >>
-> >> This patchset fixes the memory leak and changes string ownership back
-> >> to fb_get_options(). Patch 1 introduces struct option_iter and a few
-> >> helpers. The interface takes an option string, such as video=, in the
-> >> common form value1,key2:value2,value3 etc and returns the individial
-> >> comma-separated pairs. Various modules use this pattern, so the code
-> >> is located under lib/.
-> >>
-> >> Patches 2 to 98 go through fbdev drivers and convert them to the new
-> >> interface. This often requires a number of cleanups. A driver would
-> >> typically refer to the option string's video mode. Such strings are now
-> >> copied to driver-allocated memory so that drivers don't refer directly
-> >> to the option string's memory. The option iterator then replaces manual
-> >> parsing loops based on strsep(",").
-> >
-> > Thanks for your series!
-> >
-> > Unfortunately I cannot say I'm thrilled about this: you are replacing
-> > a single small dynamic memory leak by 36 larger static memory leaks.
->
-> That's fair enough.
->
-> > Am I missing something?
->
-> The current size of the videomode buffers is ridiculously large. I just
-> needed something that could hold the string. A long mode description
-> might look like
->
->    1920x1080MR-32@120ime
->
-> which has 21 characters. 32-byte buffers would probably be more than enough.
+Sorry about that. I missed that we already have a 'sram'. The question
+remains whether this is a phandle to MMIO SRAM or similar (sram.yaml).
 
-But there are a few exceptions...
+Best regards,
+Krzysztof
 
-> I think it should also be possible to do a simple kstrdup() on the given
-> videomode string and free the copy in the module's _fini function.
-
-That sounds like the sanest approach to me.
-
-> That also brings up the question of these MODULE ifdefs. Almost all of
-> the fbdev drivers only parse the command-line option if they are not
-> build as a module. Do you know why? Because of the awkward semantics of
-> the old fb_get_options()?
-
-That's just historical: to get to see anything on the console (on
-the graphics hardware without VGA text mode that fbdev was originally
-developed for), you needed to have your main fbdev driver builtin.
-Drivers for secondary displays could be loadable modules, and using
-fbset for those offered more flexibility than a module parameter.
-
-> I think this should be changed so that they
-> always respect the video= parameter.
-
-I agree that makes sense.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
