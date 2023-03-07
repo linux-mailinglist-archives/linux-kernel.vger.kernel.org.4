@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D335C6AD8BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF506AD8AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjCGIIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:08:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
+        id S229616AbjCGIGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjCGIIZ (ORCPT
+        with ESMTP id S229768AbjCGIGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:08:25 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CB226B2;
-        Tue,  7 Mar 2023 00:07:52 -0800 (PST)
-X-UUID: 2400960cbcbf11ed945fc101203acc17-20230307
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Xcl0geET81WYNBRHKToCqUUKoHCvhorE98xJYXCbui4=;
-        b=e7f+gbNQJEVMn52asKShIb4jvRrjO2mZpnHHYUVeFnk2JHfjv1FTc1M3nvNZSNxqvVMXvjz3CtRgdqk9lXwh2vgFwiSOuyVhfnXAa2QLdkpnJuW1pTOqgDyju1DTpREwsUZrHg7cankd0H3rU5JOTdO97wq41mWg3GNy6QRfA/4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:075c8cbe-3d27-40a9-87d4-d7320c5ef510,IP:0,U
-        RL:0,TC:0,Content:-20,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-20
-X-CID-META: VersionHash:25b5999,CLOUDID:34d69327-564d-42d9-9875-7c868ee415ec,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:1,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: 2400960cbcbf11ed945fc101203acc17-20230307
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-        (envelope-from <yong.wu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 704658285; Tue, 07 Mar 2023 16:07:44 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 7 Mar 2023 16:07:42 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 7 Mar 2023 16:07:42 +0800
-From:   Yong Wu <yong.wu@mediatek.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Robin Murphy <robin.murphy@arm.com>,
+        Tue, 7 Mar 2023 03:06:35 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB2588DB0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:06:26 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso9822173wmq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:06:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678176385;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wlixcmRPU0kwlxyRa6XJ1Wvf4b87DZOdNPk167ILrOo=;
+        b=he6cKusNCUpkvICX9VIckGy2epdvPViwko/K7fRoU5NihoUHmLgLPMeeh2w/Zz3jrh
+         /GlaAAxI5qDtv3W5/Jf43SezLl5FaSNnS9V8OZI8j+nw9zYh+UAQy47tH/mUNa8KXAsi
+         6VT/fSI4f9wwXxHzc79DQhVAumzXWp7XgiQiNN0S/LaofJgq951JLwgUbhCZySVnO1cl
+         o4/dtStSWUIQWH/orQI/LnfwjFCq7iGbsrlYWPx/fmzNXErTi31vKGx3W/wnCzzbl7ub
+         9BS9uhbdAcWHvpPFfB2ruYbTBI2Q/GkodWJh6QVauTmxHF7xN2xftPvNPF/1dAFoJefj
+         xBhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678176385;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wlixcmRPU0kwlxyRa6XJ1Wvf4b87DZOdNPk167ILrOo=;
+        b=BMCt4a+9KE+s8sKpRZUlHvSbcy1qSSIQ3J1xXoCkMQOtjwvg73pE4VkSWRa0Sfd7HE
+         4UHkkjKPukI8jbbL5+u7aRcXcOqMVJ+Shrf+BPdltEQyBnz9Xr1xTqcNVOOwFgsmmk3Y
+         8lsJwDz4dMhuI0nmq9a0wxtBljpn1bPWPEHUch0MwV6ZIYSr/k7AD/EzSI4bvar2IXP7
+         kLJwkKTNmCkXJXFHI4I5dMyJVXDWdRgIblh6An9jFYZ5adKd/U7upVJ+FCJF//IXxBDC
+         2zAhcZCRgxns+eToydpViaaBX/Iw9ITU4fT3SklkqiLRerbcpRpD2UQEieyaHTYx+iBy
+         geRw==
+X-Gm-Message-State: AO0yUKVS6lpQDrD0BsY2PiRzT1MMgp5dd/eUXZhsyZXDjYIsts9VzQKl
+        JOj+i+7iklliKaZu1SaiH5HN9w==
+X-Google-Smtp-Source: AK7set9/dRT/dzFhPvrICG4vwvaMfeiVpFBx/GhL+4bReBNVsMts2vq/bj2VLCXRaf4cWgBN6DcMlA==
+X-Received: by 2002:a05:600c:3b9b:b0:3eb:3998:36f1 with SMTP id n27-20020a05600c3b9b00b003eb399836f1mr12408519wms.41.1678176385065;
+        Tue, 07 Mar 2023 00:06:25 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id s17-20020adfea91000000b002c6e8cb612fsm11671889wrm.92.2023.03.07.00.06.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 00:06:24 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <iommu@lists.linux.dev>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <mingyuan.ma@mediatek.com>,
-        <yf.wang@mediatek.com>, <jianjiao.zeng@mediatek.com>,
-        <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>
-Subject: [PATCH v8 7/7] iommu/mediatek: mt8188: Add iova_region_larb_msk
-Date:   Tue, 7 Mar 2023 16:05:55 +0800
-Message-ID: <20230307080555.14399-8-yong.wu@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230307080555.14399-1-yong.wu@mediatek.com>
-References: <20230307080555.14399-1-yong.wu@mediatek.com>
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Christian Hewitt <christianshewitt@gmail.com>
+In-Reply-To: <20230303-topic-amlogic-upstream-bpi-cm4-v2-0-2ecfde76fc4d@linaro.org>
+References: <20230303-topic-amlogic-upstream-bpi-cm4-v2-0-2ecfde76fc4d@linaro.org>
+Subject: Re: [PATCH v2 0/2] arm64: amlogic: Add initial support for BPI-CM4
+ module with BPI-CM4IO baseboard
+Message-Id: <167817638406.768652.1431202103503389441.b4-ty@linaro.org>
+Date:   Tue, 07 Mar 2023 09:06:24 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add iova_region_larb_msk for mt8188. We separate the 16GB iova regions
-by each device's larbid/portid.
-Refer to include/dt-bindings/memory/mediatek,mt8188-memory-port.h
+Hi,
 
-Note: larb19(21) as commented in that h above, it means larb19 while its SW
-index is 21.
+On Mon, 06 Mar 2023 09:31:37 +0100, Neil Armstrong wrote:
+> Add support for both the BananaPi BPI-CM4 module and the BananaPi
+> baseboard which is comnpatible with the RaspberryPi CM4IO baseboard.
+> 
+> The BananaPi BPI-CM4 module follows the CM4 specifications at [1],
+> but with a single HDMI port and a since DSI output.
+> 
+> The current CM4IO baseboard DT should work fine on the Raspberry CM4
+> baseboard and other derivatives baseboards, but proper DT should
+> be written for other baseboards.
+> 
+> [...]
 
-Signed-off-by: Yong Wu <yong.wu@mediatek.com>
----
- drivers/iommu/mtk_iommu.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.4/arm64-dt)
 
-diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index c56f0f121be8..9ccdcf1aba2d 100644
---- a/drivers/iommu/mtk_iommu.c
-+++ b/drivers/iommu/mtk_iommu.c
-@@ -1603,6 +1603,20 @@ static const struct mtk_iommu_plat_data mt8188_data_infra = {
- 	.iova_region_nr   = ARRAY_SIZE(single_domain),
- };
- 
-+static const u32 mt8188_larb_region_msk[MT8192_MULTI_REGION_NR_MAX][MTK_LARB_NR_MAX] = {
-+	[0] = {~0, ~0, ~0, ~0},               /* Region0: all ports for larb0/1/2/3 */
-+	[1] = {0, 0, 0, 0, 0, 0, 0, 0,
-+	       0, 0, 0, 0, 0, 0, 0, 0,
-+	       0, 0, 0, 0, 0, ~0, ~0, ~0},    /* Region1: larb19(21)/21(22)/23 */
-+	[2] = {0, 0, 0, 0, ~0, ~0, ~0, ~0,    /* Region2: the other larbs. */
-+	       ~0, ~0, ~0, ~0, ~0, ~0, ~0, ~0,
-+	       ~0, ~0, ~0, ~0, ~0, 0, 0, 0,
-+	       0, ~0},
-+	[3] = {0},
-+	[4] = {[24] = BIT(0) | BIT(1)},       /* Only larb27(24) port0/1 */
-+	[5] = {[24] = BIT(2) | BIT(3)},       /* Only larb27(24) port2/3 */
-+};
-+
- static const struct mtk_iommu_plat_data mt8188_data_vdo = {
- 	.m4u_plat       = M4U_MT8188,
- 	.flags          = HAS_BCLK | HAS_SUB_COMM_3BITS | OUT_ORDER_WR_EN |
-@@ -1614,6 +1628,7 @@ static const struct mtk_iommu_plat_data mt8188_data_vdo = {
- 	.banks_enable   = {true},
- 	.iova_region    = mt8192_multi_dom,
- 	.iova_region_nr = ARRAY_SIZE(mt8192_multi_dom),
-+	.iova_region_larb_msk = mt8188_larb_region_msk,
- 	.larbid_remap   = {{2}, {0}, {21}, {0}, {19}, {9, 10,
- 			   11 /* 11a */, 25 /* 11c */},
- 			   {13, 0, 29 /* 16b */, 30 /* 17b */, 0}, {5}},
-@@ -1630,6 +1645,7 @@ static const struct mtk_iommu_plat_data mt8188_data_vpp = {
- 	.banks_enable   = {true},
- 	.iova_region    = mt8192_multi_dom,
- 	.iova_region_nr = ARRAY_SIZE(mt8192_multi_dom),
-+	.iova_region_larb_msk = mt8188_larb_region_msk,
- 	.larbid_remap   = {{1}, {3}, {23}, {7}, {MTK_INVALID_LARBID},
- 			   {12, 15, 24 /* 11b */}, {14, MTK_INVALID_LARBID,
- 			   16 /* 16a */, 17 /* 17a */, MTK_INVALID_LARBID,
+[1/2] dt-bindings: arm: amlogic: Document the boards with the BPI-CM4 connected
+      https://git.kernel.org/amlogic/c/92c0b261c294f12e329976a6d4ef72651e8f07f2
+[2/2] arm64: dts: amlogic: Add initial support for BPI-CM4 module with BPI-CM4IO baseboard
+      https://git.kernel.org/amlogic/c/0262f2736978b1763363224698f47112a148dab0
+
+These changes has been applied on the intermediate git tree [1].
+
+The v6.4/arm64-dt branch will then be sent via a formal Pull Request to the Linux SoC maintainers
+for inclusion in their intermediate git branches in order to be sent to Linus during
+the next merge window, or sooner if it's a set of fixes.
+
+In the cases of fixes, those will be merged in the current release candidate
+kernel and as soon they appear on the Linux master branch they will be
+backported to the previous Stable and Long-Stable kernels [2].
+
+The intermediate git branches are merged daily in the linux-next tree [3],
+people are encouraged testing these pre-release kernels and report issues on the
+relevant mailing-lists.
+
+If problems are discovered on those changes, please submit a signed-off-by revert
+patch followed by a corrective changeset.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
 -- 
-2.25.1
+Neil
 
