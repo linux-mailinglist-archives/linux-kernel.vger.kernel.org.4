@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5283F6AE697
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9816C6AE68E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:31:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbjCGQbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:31:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
+        id S230420AbjCGQbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:31:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjCGQbK (ORCPT
+        with ESMTP id S230014AbjCGQbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Mar 2023 11:31:10 -0500
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A52D81CE9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:31:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68DC81CD9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:31:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=r8NJlSYVQC97KP
-        ANJwbJ5dxBfAnx+TEcfLLwOb6eoh8=; b=E1ggGJn6imOYD6aNKrT5pHezz7nQYY
-        F/QCUUzkEtJQmHsQNNP1FWrwomOKs4rLXAtuDRntfKowCo0o5qpP2wy69oDqVkUK
-        ClgyzVJudK/4BUgZnr8d+uwDsWMf6WWIRgdNLjGJkR2s62vSY9qsxa5nZJeNxVlu
-        9i8e7q0916XJs=
-Received: (qmail 751936 invoked from network); 7 Mar 2023 17:31:03 +0100
+        :mime-version:content-type:content-transfer-encoding; s=k1; bh=K
+        SmFdOPKLYCNJfgM7xNMVh9zw+j6Ry9MBKk15S61PCk=; b=QoFqkIOdij8DrVq4M
+        B12B1L6LVsd0RXz4z9JgR8m9f8RPeKHcwpu+ILuQdUzWBgEwpR2wQPBPMGh62OVn
+        csP6BIRhBcdYCH78xmZf5vba1Dh0JnU9I0aFQ3h8LA1HjWjY0TnVER2u5chWm5JR
+        v+2Q5G+uIAnx5gpZaOY2euP8dk=
+Received: (qmail 751963 invoked from network); 7 Mar 2023 17:31:03 +0100
 Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Mar 2023 17:31:03 +0100
-X-UD-Smtp-Session: l3s3148p1@lYsB8FH2RI0gAQnoAFQ+AGEn9EY5VOxJ
+X-UD-Smtp-Session: l3s3148p1@wTYM8FH2To0gAQnoAFQ+AGEn9EY5VOxJ
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-renesas-soc@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 02/11] drm: rcar-du: remove R-Car H3 ES1.* workarounds
-Date:   Tue,  7 Mar 2023 17:30:30 +0100
-Message-Id: <20230307163041.3815-3-wsa+renesas@sang-engineering.com>
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 03/11] media: rcar-vin: remove R-Car H3 ES1.* handling
+Date:   Tue,  7 Mar 2023 17:30:31 +0100
+Message-Id: <20230307163041.3815-4-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
 References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,190 +59,87 @@ needed a lot of quirks and workarounds. These become a maintenance
 burden now, so our development group decided to remove upstream support
 and disable booting for this SoC. Public users only have ES2 onwards.
 
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
 Please apply individually per subsystem. There are no dependencies and the SoC
 doesn't boot anymore since v6.3-rc1.
 
- drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 37 ++------------------
- drivers/gpu/drm/rcar-du/rcar_du_drv.c  | 48 --------------------------
- drivers/gpu/drm/rcar-du/rcar_du_drv.h  |  2 --
- drivers/gpu/drm/rcar-du/rcar_du_regs.h |  3 +-
- 4 files changed, 4 insertions(+), 86 deletions(-)
+ .../platform/renesas/rcar-vin/rcar-core.c     | 36 -------------------
+ 1 file changed, 36 deletions(-)
 
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-index 008e172ed43b..84411c452e30 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
-@@ -223,20 +223,6 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
- 		 * DU channels that have a display PLL can't use the internal
- 		 * system clock, and have no internal clock divider.
- 		 */
--
--		/*
--		 * The H3 ES1.x exhibits dot clock duty cycle stability issues.
--		 * We can work around them by configuring the DPLL to twice the
--		 * desired frequency, coupled with a /2 post-divider. Restrict
--		 * the workaround to H3 ES1.x as ES2.0 and all other SoCs have
--		 * no post-divider when a display PLL is present (as shown by
--		 * the workaround breaking HDMI output on M3-W during testing).
--		 */
--		if (rcdu->info->quirks & RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY) {
--			target *= 2;
--			div = 1;
--		}
--
- 		extclk = clk_get_rate(rcrtc->extclock);
- 		rcar_du_dpll_divider(rcrtc, &dpll, extclk, target);
- 
-@@ -245,30 +231,13 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
- 		       | DPLLCR_N(dpll.n) | DPLLCR_M(dpll.m)
- 		       | DPLLCR_STBY;
- 
--		if (rcrtc->index == 1) {
-+		if (rcrtc->index == 1)
- 			dpllcr |= DPLLCR_PLCS1
- 			       |  DPLLCR_INCS_DOTCLKIN1;
--		} else {
--			dpllcr |= DPLLCR_PLCS0_PLL
-+		else
-+			dpllcr |= DPLLCR_PLCS0
- 			       |  DPLLCR_INCS_DOTCLKIN0;
- 
--			/*
--			 * On ES2.x we have a single mux controlled via bit 21,
--			 * which selects between DCLKIN source (bit 21 = 0) and
--			 * a PLL source (bit 21 = 1), where the PLL is always
--			 * PLL1.
--			 *
--			 * On ES1.x we have an additional mux, controlled
--			 * via bit 20, for choosing between PLL0 (bit 20 = 0)
--			 * and PLL1 (bit 20 = 1). We always want to use PLL1,
--			 * so on ES1.x, in addition to setting bit 21, we need
--			 * to set the bit 20.
--			 */
--
--			if (rcdu->info->quirks & RCAR_DU_QUIRK_H3_ES1_PLL)
--				dpllcr |= DPLLCR_PLCS0_H3ES1X_PLL1;
--		}
--
- 		rcar_du_group_write(rcrtc->group, DPLLCR, dpllcr);
- 
- 		escr = ESCR_DCLKSEL_DCLKIN | div;
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-index b9a94c5260e9..1ffde19cb87f 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-@@ -16,7 +16,6 @@
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-core.c b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
+index 5e53d6b7036c..ac8f2126540b 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-core.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-core.c
+@@ -17,7 +17,6 @@
  #include <linux/platform_device.h>
- #include <linux/pm.h>
+ #include <linux/pm_runtime.h>
  #include <linux/slab.h>
 -#include <linux/sys_soc.h>
- #include <linux/wait.h>
  
- #include <drm/drm_atomic_helper.h>
-@@ -387,43 +386,6 @@ static const struct rcar_du_device_info rcar_du_r8a7795_info = {
- 	.dpll_mask =  BIT(2) | BIT(1),
+ #include <media/v4l2-async.h>
+ #include <media/v4l2-fwnode.h>
+@@ -1183,24 +1182,6 @@ static const struct rvin_info rcar_info_r8a7795 = {
+ 	.scaler = rvin_scaler_gen3,
  };
  
--static const struct rcar_du_device_info rcar_du_r8a7795_es1_info = {
--	.gen = 3,
--	.features = RCAR_DU_FEATURE_CRTC_IRQ
--		  | RCAR_DU_FEATURE_CRTC_CLOCK
--		  | RCAR_DU_FEATURE_VSP1_SOURCE
--		  | RCAR_DU_FEATURE_INTERLACED
--		  | RCAR_DU_FEATURE_TVM_SYNC,
--	.quirks = RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY
--		| RCAR_DU_QUIRK_H3_ES1_PLL,
--	.channels_mask = BIT(3) | BIT(2) | BIT(1) | BIT(0),
--	.routes = {
--		/*
--		 * R8A7795 has one RGB output, two HDMI outputs and one
--		 * LVDS output.
--		 */
--		[RCAR_DU_OUTPUT_DPAD0] = {
--			.possible_crtcs = BIT(3),
--			.port = 0,
--		},
--		[RCAR_DU_OUTPUT_HDMI0] = {
--			.possible_crtcs = BIT(1),
--			.port = 1,
--		},
--		[RCAR_DU_OUTPUT_HDMI1] = {
--			.possible_crtcs = BIT(2),
--			.port = 2,
--		},
--		[RCAR_DU_OUTPUT_LVDS0] = {
--			.possible_crtcs = BIT(0),
--			.port = 3,
--		},
+-static const struct rvin_group_route rcar_info_r8a7795es1_routes[] = {
+-	{ .master = 0, .csi = RVIN_CSI20, .chsel = 0x04 },
+-	{ .master = 0, .csi = RVIN_CSI21, .chsel = 0x05 },
+-	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
+-	{ .master = 4, .csi = RVIN_CSI20, .chsel = 0x04 },
+-	{ .master = 4, .csi = RVIN_CSI21, .chsel = 0x05 },
+-	{ .master = 4, .csi = RVIN_CSI41, .chsel = 0x03 },
+-	{ /* Sentinel */ }
+-};
+-
+-static const struct rvin_info rcar_info_r8a7795es1 = {
+-	.model = RCAR_GEN3,
+-	.use_mc = true,
+-	.max_width = 4096,
+-	.max_height = 4096,
+-	.routes = rcar_info_r8a7795es1_routes,
+-};
+-
+ static const struct rvin_group_route rcar_info_r8a7796_routes[] = {
+ 	{ .master = 0, .csi = RVIN_CSI20, .chsel = 0x04 },
+ 	{ .master = 0, .csi = RVIN_CSI40, .chsel = 0x03 },
+@@ -1372,17 +1353,8 @@ static const struct of_device_id rvin_of_id_table[] = {
+ };
+ MODULE_DEVICE_TABLE(of, rvin_of_id_table);
+ 
+-static const struct soc_device_attribute r8a7795es1[] = {
+-	{
+-		.soc_id = "r8a7795", .revision = "ES1.*",
+-		.data = &rcar_info_r8a7795es1,
 -	},
--	.num_lvds = 1,
--	.num_rpf = 5,
--	.dpll_mask =  BIT(2) | BIT(1),
+-	{ /* Sentinel */ }
 -};
 -
- static const struct rcar_du_device_info rcar_du_r8a7796_info = {
- 	.gen = 3,
- 	.features = RCAR_DU_FEATURE_CRTC_IRQ
-@@ -614,11 +576,6 @@ static const struct of_device_id rcar_du_of_table[] = {
- 
- MODULE_DEVICE_TABLE(of, rcar_du_of_table);
- 
--static const struct soc_device_attribute rcar_du_soc_table[] = {
--	{ .soc_id = "r8a7795", .revision = "ES1.*", .data = &rcar_du_r8a7795_es1_info },
--	{ /* sentinel */ }
--};
--
- const char *rcar_du_output_name(enum rcar_du_output output)
+ static int rcar_vin_probe(struct platform_device *pdev)
  {
- 	static const char * const names[] = {
-@@ -707,7 +664,6 @@ static void rcar_du_shutdown(struct platform_device *pdev)
+-	const struct soc_device_attribute *attr;
+ 	struct rvin_dev *vin;
+ 	int irq, ret;
  
- static int rcar_du_probe(struct platform_device *pdev)
- {
--	const struct soc_device_attribute *soc_attr;
- 	struct rcar_du_device *rcdu;
- 	unsigned int mask;
- 	int ret;
-@@ -725,10 +681,6 @@ static int rcar_du_probe(struct platform_device *pdev)
+@@ -1394,14 +1366,6 @@ static int rcar_vin_probe(struct platform_device *pdev)
+ 	vin->info = of_device_get_match_data(&pdev->dev);
+ 	vin->alpha = 0xff;
  
- 	rcdu->info = of_device_get_match_data(rcdu->dev);
- 
--	soc_attr = soc_device_match(rcar_du_soc_table);
--	if (soc_attr)
--		rcdu->info = soc_attr->data;
+-	/*
+-	 * Special care is needed on r8a7795 ES1.x since it
+-	 * uses different routing than r8a7795 ES2.0.
+-	 */
+-	attr = soc_device_match(r8a7795es1);
+-	if (attr)
+-		vin->info = attr->data;
 -
- 	platform_set_drvdata(pdev, rcdu);
- 
- 	/* I/O resources */
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.h b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
-index acc3673fefe1..5cfa2bb7ad93 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_drv.h
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.h
-@@ -34,8 +34,6 @@ struct rcar_du_device;
- #define RCAR_DU_FEATURE_NO_BLENDING	BIT(5)	/* PnMR.SPIM does not have ALP nor EOR bits */
- 
- #define RCAR_DU_QUIRK_ALIGN_128B	BIT(0)	/* Align pitches to 128 bytes */
--#define RCAR_DU_QUIRK_H3_ES1_PCLK_STABILITY BIT(1)	/* H3 ES1 has pclk stability issue */
--#define RCAR_DU_QUIRK_H3_ES1_PLL	BIT(2)	/* H3 ES1 PLL setup differs from non-ES1 */
- 
- enum rcar_du_output {
- 	RCAR_DU_OUTPUT_DPAD0,
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_regs.h b/drivers/gpu/drm/rcar-du/rcar_du_regs.h
-index 789ae9285108..288eff12b2b1 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_regs.h
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_regs.h
-@@ -283,8 +283,7 @@
- #define DPLLCR			0x20044
- #define DPLLCR_CODE		(0x95 << 24)
- #define DPLLCR_PLCS1		(1 << 23)
--#define DPLLCR_PLCS0_PLL	(1 << 21)
--#define DPLLCR_PLCS0_H3ES1X_PLL1	(1 << 20)
-+#define DPLLCR_PLCS0		(1 << 21)
- #define DPLLCR_CLKE		(1 << 18)
- #define DPLLCR_FDPLL(n)		((n) << 12)
- #define DPLLCR_N(n)		((n) << 5)
+ 	vin->base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(vin->base))
+ 		return PTR_ERR(vin->base);
 -- 
 2.35.1
 
