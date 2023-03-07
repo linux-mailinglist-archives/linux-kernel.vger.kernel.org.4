@@ -2,209 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2996AD6CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F29416AD6E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjCGFc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 00:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S229955AbjCGFiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 00:38:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjCGFc5 (ORCPT
+        with ESMTP id S229527AbjCGFiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 00:32:57 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1382D7D
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 21:32:54 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id m6so15651518lfq.5
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 21:32:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678167173;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U+hoIWbYaHKn+jXxJFShlyzgyWQZXEqFyUdN31BS+ow=;
-        b=QxVrRKuw+Vhq1UaNtIwVtPEhQ0dYsjqf8eV2dFZeG0nSPFsyRW3ctmKiu/V9AeyD0+
-         wu5DTGMmWYx5CKpc+mEk700WHgFjEzyrj7M9A4nM6usVle4vBhIx31AiTaAadMYrB5+u
-         TGD5v9xVz+NYEYAIzyNmRlrpIllfE4gwq+nsc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678167173;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U+hoIWbYaHKn+jXxJFShlyzgyWQZXEqFyUdN31BS+ow=;
-        b=n7WnWaBnK29yhbhFzJzv0FIwzg81bzPz8k9+e9bs4yRt0jyRPczwZtVrb+CIs8U++W
-         G8gtUWs2wZXdSIclesOk6lNs8vS+P926uMm9FJawtGEm6hhPBy/U2SiW56zyLbuw39Qb
-         +X9oQajW9iuyUEHQhrMGOy2CJHD20Z1KHEu4cpOsfLA1CbiY6mry+9ieDzaGGBaqf8F7
-         zBsHM6qveRR6FiG+kocpsEjN2jEZMAMc3UnypSblc2kmqR5Pf0Bc+CUJNEppOfAtzJmR
-         ECLo1BTyefOBDdTAf9FkwHuFshCYH8w8VtmmcuPYOausBBaGioFM5YGw8anHdLn5zfU0
-         8vow==
-X-Gm-Message-State: AO0yUKV2QocvS4iyKqfiJwDnmmGFKv/ROEmTXJNyP8F6WOUqOS9VUipw
-        4Jmlntp0r25JvY/tfii1b+TZhVn4KqtY0VvGt2nkNg==
-X-Google-Smtp-Source: AK7set9nuJxu/QeD4Zon6yI0dNi/RPi/rmEoSdQV9+KgJ3VsUP4rBA4yHXiH6/oC6o6yqwVpXHDR7YcuZGQI2nyxKCs=
-X-Received: by 2002:a05:6512:24f:b0:4dd:fd4e:5a21 with SMTP id
- b15-20020a056512024f00b004ddfd4e5a21mr3969019lfo.11.1678167172717; Mon, 06
- Mar 2023 21:32:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20230307030457.3499834-1-joel@joelfernandes.org>
- <753b72f5ecd03f94511495a333eb192c5fc42087.camel@perches.com>
- <CAEXW_YRYnikDRTQXwrTpTsQ1r-32FRPABj_Viu+X6Qr7EWqh4g@mail.gmail.com>
- <802731d7bf187573a9084cb23196c096be81b5e1.camel@perches.com>
- <20230307044104.GA3532764@google.com> <497c07579fb51ed6f0b8a72471017b4dec258e9e.camel@perches.com>
- <CAEXW_YQt976k6tRJBoYy=S-CpacgB+MpMr-H=TEtZBaP=CPwnQ@mail.gmail.com> <912474d3804791ef5757a44bae6ab72701e15bc3.camel@perches.com>
-In-Reply-To: <912474d3804791ef5757a44bae6ab72701e15bc3.camel@perches.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 7 Mar 2023 00:32:40 -0500
-Message-ID: <CAEXW_YQbSySm++iXeXn7uMdGVatCKo88L5WXecL2=WkJg7XDEg@mail.gmail.com>
-Subject: Re: [PATCH] checkpatch: Error out if deprecated RCU API used
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
-        Uladzislau Rezki <urezki@gmail.com>
+        Tue, 7 Mar 2023 00:38:08 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185092E0C6;
+        Mon,  6 Mar 2023 21:38:06 -0800 (PST)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327418ls032457;
+        Tue, 7 Mar 2023 05:37:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=VoBTceaYt9JCGmcdLxZJw8x/bOhn6s3tw9JaQeRiKy0=;
+ b=j/N1ga2KFROODXy2i4nxPXv1sYnepvLBfco1bHXAvBSpYycFXi7j/Vq1rWPpHXlVQkPl
+ e/J6FgyGVlbbWhYNyMSpXKZ0AjFcY3PZ5/fyZNTajflPvgayUCBWDBkDUKf5+jbJxDCC
+ OjWDaz82NaudEQimaavTl+dJj1F/daAelRMdIs9tIjgm8/U/qycRSjr2GazGRI2fLN6Y
+ WDZsHaWWQUVF3LjaaQgzNkjm/yOvliMtCjec7n08TGxrYCJv9o+KCORezY6zGXFZmehT
+ GpjcNk8ncrvq3cDPDI+/J/2bVpPWRE+pFCmSYn/1eQ86Hw9DLq7cBd57UPWNS/X9GyDX 3A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4wswvcra-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 05:37:55 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3275UMpr029385;
+        Tue, 7 Mar 2023 05:37:54 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4wswvcqw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 05:37:54 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 326Lld6m011365;
+        Tue, 7 Mar 2023 05:37:52 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3p418v2xsf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 05:37:52 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3275bo4W58720734
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Mar 2023 05:37:50 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 673FC20043;
+        Tue,  7 Mar 2023 05:37:50 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DAD6120040;
+        Tue,  7 Mar 2023 05:37:49 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  7 Mar 2023 05:37:49 +0000 (GMT)
+Received: from [10.61.2.107] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 28A2460235;
+        Tue,  7 Mar 2023 16:37:48 +1100 (AEDT)
+Message-ID: <eb19afda911f4868ec6ff194738afcfe7050d5c1.camel@linux.ibm.com>
+Subject: Re: [RFC PATCH 04/13] powerpc/dexcr: Support userspace ROP
+ protection
+From:   Benjamin Gray <bgray@linux.ibm.com>
+To:     Nicholas Piggin <npiggin@gmail.com>, linuxppc-dev@lists.ozlabs.org
+Cc:     ajd@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, cmr@bluescreens.de
+Date:   Tue, 07 Mar 2023 16:37:47 +1100
+In-Reply-To: <CQZW0SBFI6QM.3FW6O6LJ0PVS1@bobo>
+References: <20221128024458.46121-1-bgray@linux.ibm.com>
+         <20221128024458.46121-5-bgray@linux.ibm.com>
+         <CQZW0SBFI6QM.3FW6O6LJ0PVS1@bobo>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 2JSq7H7t-gkreVYe1Rk65jyRWOcElRP_
+X-Proofpoint-GUID: khednyvDzsNf_GUNhkpbdt17rekD4YC5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
+ mlxlogscore=834 spamscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070050
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 12:22=E2=80=AFAM Joe Perches <joe@perches.com> wrote=
-:
->
-> On Tue, 2023-03-07 at 00:11 -0500, Joel Fernandes wrote:
->
-> > Do you mind sharing which tree you are looking at? I checked both
-> > 6.3-rc1 and linux-next.
-> >
-> > Your grep returned:
-> >
-> > kernel/trace/trace_osnoise.c:   kvfree_rcu(inst);
-> > kernel/trace/trace_probe.c:     kvfree_rcu(link);
-> > lib/test_vmalloc.c:             kvfree_rcu(p);
-> > mm/list_lru.c:   * We need kvfree_rcu() here. And the walking of the li=
-st
-> > net/core/pktgen.c:      /* Don't need rcu_barrier() due to use of kfree=
-_rcu() */
-> > net/core/sysctl_net_core.c:
-> > kvfree_rcu(orig_sock_table);
-> > net/core/sysctl_net_core.c:                             kfree_rcu(cur);
-> > net/mac802154/scan.c:   kfree_rcu(request);
-> > net/mac802154/scan.c:   kfree_rcu(request);
->
-> rather old.  I'm not subscribed and haven't been following much.
->
-> Add linux-next specific files for 20230217
+On Tue, 2023-03-07 at 15:05 +1000, Nicholas Piggin wrote:
+> I think it is not quite per-process? I don't actually know how the
+> user
+> toolchain side is put together, but I'm thinking we can not give it a
+> new
+> salt on fork(), but we could on exec(). I think we could actually
+> give
+> each thread their own salt within a process too, right?
 
-I am surprised though why you don't see the usage in trace_osnoise.c
-though because that was added in 2021 (see diff below).
-
-Anyway, I take it you are Ok with the checkpatch patch. If so, do
-provide your Ack tag in advance. We can push from our side only if
-needed. There is a chance that we may not need it if we are successful
-in having made the conversions to the "good API" in time for the next
-merge window.
-
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index 7520d43aed55..4719a848bf17 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -138,8 +138,7 @@ static void osnoise_unregister_instance(struct
-trace_array *tr)
-        if (!found)
-                return;
-
--       synchronize_rcu();
--       kfree(inst);
-+       kvfree_rcu(inst);
- }
-
- /*
-
-
->
-> Updating to today's next:
->
-> Add linux-next specific files for 20230307
->
-> I get several instances:
->
-> $ git grep -P '\bkv?free_rcu\s*\(' -- '*.[ch]' | grep -v -P 'kv?free_rcu\=
-s*\([^,]+,.*\)'
-> drivers/block/drbd/drbd_nl.c:   kvfree_rcu(old_disk_conf);
-> drivers/block/drbd/drbd_nl.c:   kvfree_rcu(old_net_conf);
-> drivers/block/drbd/drbd_nl.c:           kvfree_rcu(old_disk_conf);
-> drivers/block/drbd/drbd_receiver.c:     kvfree_rcu(old_net_conf);
-> drivers/block/drbd/drbd_receiver.c:                     kvfree_rcu(old_di=
-sk_conf);
-> drivers/block/drbd/drbd_state.c:                kvfree_rcu(old_conf);
-> drivers/infiniband/core/device.c:               kfree_rcu(container_of(de=
-v->port_data, struct ib_port_data_rcu,
-> drivers/infiniband/core/rdma_core.c:     * kfree_rcu(). However the objec=
-t may still have been released and
-> drivers/infiniband/sw/rxe/rxe_mr.c:     kfree_rcu(mr);
-> drivers/misc/vmw_vmci/vmci_context.c:           kvfree_rcu(notifier);
-> drivers/misc/vmw_vmci/vmci_event.c:     kvfree_rcu(s);
-> drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c:       kfree_rcu=
-(int_port);
-> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c:      kfree_rcu=
-(tx_sa);
-> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c:      kfree_rcu=
-(rx_sc);
-> drivers/target/target_core_configfs.c:                   * callbacks to c=
-omplete post kfree_rcu(), before allowing
-> fs/ext4/super.c:                                kfree_rcu(qname);
-> include/linux/rcupdate.h: *     kvfree_rcu(ptr);
-> include/linux/rcupdate.h:#define kvfree_rcu(...) KVFREE_GET_MACRO(__VA_AR=
-GS__,          \
-> include/linux/rcutiny.h:        // kvfree_rcu(one_arg) call.
-> include/rdma/ib_verbs.h:        struct rcu_head         rcu;            /=
-* kfree_rcu() overhead */
-> include/scsi/scsi_device.h: * @rcu: For kfree_rcu().
-> kernel/rcu/rcuscale.c:          pr_alert("CONFIG_RCU_LAZY is disabled, fa=
-lling back to kfree_rcu() for delayed RCU kfree'ing\n");
-> kernel/rcu/tree.c: * struct kvfree_rcu_bulk_data - single block to store =
-kvfree_rcu() pointers
-> kernel/rcu/tree.c: * @records: Array of the kvfree_rcu() pointers
-> kernel/rcu/tree.c: * struct kfree_rcu_cpu_work - single batch of kfree_rc=
-u() requests
-> kernel/rcu/tree.c: * @head_free: List of kfree_rcu() objects waiting for =
-a grace period
-> kernel/rcu/tree.c: * @bulk_head_free: Bulk-List of kvfree_rcu() objects w=
-aiting for a grace period
-> kernel/rcu/tree.c: * struct kfree_rcu_cpu - batch up kfree_rcu() requests=
- for RCU grace period
-> kernel/rcu/tree.c: * @head: List of kfree_rcu() objects not yet waiting f=
-or a grace period
-> kernel/rcu/tree.c: * @bulk_head: Bulk-List of kvfree_rcu() objects not ye=
-t waiting for a grace period
-> kernel/rcu/tree.c: * @krw_arr: Array of batches of kfree_rcu() objects wa=
-iting for a grace period
-> kernel/rcu/tree.c:       * double-argument of kvfree_rcu().  This happens=
- when the
-> kernel/rcu/tree.c: * reduce the number of grace periods during heavy kfre=
-e_rcu()/kvfree_rcu() load.
-> kernel/rcu/tree.c:              // Probable double kfree_rcu(), just leak=
-.
-> kernel/trace/trace_osnoise.c:   kvfree_rcu(inst);
-> kernel/trace/trace_probe.c:     kvfree_rcu(link);
-> net/core/pktgen.c:      /* Don't need rcu_barrier() due to use of kfree_r=
-cu() */
-> net/core/sysctl_net_core.c:                             kvfree_rcu(orig_s=
-ock_table);
-> net/core/sysctl_net_core.c:                             kfree_rcu(cur);
->
+Yeah, the error case is we return further than we called in a given
+execution context. A forked child may return after the fork, meaning it
+needs the same key as the parent for the hashchk to work. Exec can get
+a new key because we can't return with any existing hashes. I haven't
+seen enough of kernel thread support to know if/how we can give threads
+their own key. I believe they go through the fork() call that copies
+the parent key currently.
