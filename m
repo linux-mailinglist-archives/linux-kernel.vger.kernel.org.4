@@ -2,162 +2,629 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9266AF747
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C440A6AF74B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:13:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjCGVLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:11:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S230420AbjCGVNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:13:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjCGVLk (ORCPT
+        with ESMTP id S231283AbjCGVNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:11:40 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C372A569C;
-        Tue,  7 Mar 2023 13:11:39 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id cw28so57813377edb.5;
-        Tue, 07 Mar 2023 13:11:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678223498;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D7ov6pYeEeAnC4WjtGYJ+7a7E67wYcuVz+STN09ArGQ=;
-        b=andqcNwwE0JH3KXBTdQIeQnZtCDZGmvUOLKZeWezHPNz/d9EyxQ0meZVYdNskQOCE4
-         OGkiz8O6Rh61bpXF1xP2tij4lZTn89FaGXVX/QtGc/qeHOKnIuQO907IRzpjcbTkn6Y+
-         SYfyvaIibhOImy9jIz20vwoZWxro29iDkTL8oZh/9AgHY+94xO92xyYrnRsC7rRzhQ0u
-         hKOVoudXLwnNHBJSiHu1KOHMkS8YbFTigjokVHaK8lT1tHbnSvPv7slQwtilq560aaYr
-         BVuvjhTL2EtRQJbg/D7PifWw0t3PBYfigocu7dl9PZrOMhGfZUJcUHXC5eH2X4TrWn0A
-         1Siw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678223498;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D7ov6pYeEeAnC4WjtGYJ+7a7E67wYcuVz+STN09ArGQ=;
-        b=SL5ENtcsy288bg0JqkTmp4rrOjj/EdJGvKQny+JYD51j9Q7ocV4qCSqSM6z7Qnx0Kr
-         e3L1cvp7tUz+RNC2B2njLg7OhtqHDgkmzqvh2z8sn/IDKihKT0QdM5TeXeml/T5GZXJ2
-         Ip33upCv7F/CU84euuYFBEBYNAPTOKdTW4YZQC+bG9N3Y8yW1FiBF8FZ53JoWi6TEXDb
-         fb/oVIdGmhQww2VjCsntH+xYimVSimAHQqOpNR9Y1+K3//ImGGmhP4Tra5bdfvbXAw4Y
-         MdieKuXuCqaBgsh063sJKHhzum+XewCNjdRHDmOhR15+kQT0tupPYXWRPSddRa/Uw7SG
-         XpCw==
-X-Gm-Message-State: AO0yUKXpzpw3P43Bzm/daYSOC2ifX+qhQ6ppHz/OMtXY5MRAWbnsi3Rt
-        2nyMZXCh1KhUKoJf4PM1qVDO8bkxWHEw/Q==
-X-Google-Smtp-Source: AK7set+d4vEwUS7GQnnRZ0BiFkORJTho0ZAG3I0T6KrLrq2DtpEmxc9+lIGv0K/8rlT5clBWiY+hdQ==
-X-Received: by 2002:aa7:dccb:0:b0:4ac:b4f3:b8a7 with SMTP id w11-20020aa7dccb000000b004acb4f3b8a7mr11156786edu.7.1678223497523;
-        Tue, 07 Mar 2023 13:11:37 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id m17-20020a50c191000000b004e7ffb7db11sm3048165edf.76.2023.03.07.13.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 13:11:37 -0800 (PST)
-Date:   Tue, 7 Mar 2023 23:11:34 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: add ETS Qdisc
- support for KSZ9477 series
-Message-ID: <20230307211134.ref5gwbv52jd473r@skbuf>
-References: <20230306124940.865233-1-o.rempel@pengutronix.de>
- <20230306124940.865233-2-o.rempel@pengutronix.de>
- <20230306140651.kqayqatlrccfky2b@skbuf>
- <20230306163542.GB11936@pengutronix.de>
- <20230307164614.jy2mzxvk3xgc4z7b@skbuf>
- <20230307182732.GA1692@pengutronix.de>
- <20230307185734.x2lv4j3ml3fzfzoy@skbuf>
- <20230307195250.GB1692@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307195250.GB1692@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 7 Mar 2023 16:13:06 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F7E361B6;
+        Tue,  7 Mar 2023 13:12:59 -0800 (PST)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4D161205761D;
+        Tue,  7 Mar 2023 13:12:58 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4D161205761D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678223578;
+        bh=dYeJBUm+62LbVH/TwEJPH+Yx+ibf1CptKPR71VNhxOQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=suqYlAtkuI5VehsOHjm5RLxMVpoq5bPGZ2xA+igvdcbdCU2eD2XCuchTdoAq9E3qM
+         5sERgL6eEjlMLE2E1xZDhycAuKC3gbuDBlASPb2/yeFwz56pbj/8YpFbdhYP5Z2O6u
+         vUcTX/EIvs8Hy7qnG3QlAuCSUch7VKpmBHireqBc=
+From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
+To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     virtualization@lists.linux-foundation.org, mikelley@microsoft.com,
+        kys@microsoft.com, wei.liu@kernel.org, vkuznets@redhat.com
+Subject: [RFC PATCH] hyperv-tlfs: Change shared HV_REGISTER_* defines to HV_SYNTHETIC_REG_*
+Date:   Tue,  7 Mar 2023 13:12:50 -0800
+Message-Id: <1678223570-25242-1-git-send-email-nunodasneves@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 08:52:50PM +0100, Oleksij Rempel wrote:
-> > > One more question is, what is actual expected behavior of mqprio if max_rate
-> > > option is used? In my case, if max_rate is set to a queue (even to max value),
-> > > then strict priority TSA will not work:
-> > > queue0---max rate 100Mbit/s---\
-> > >                                |---100Mbit/s---
-> > > queue1---max rate 100Mbit/s---/
-> > > 
-> > > in this example both streams will get 49Mbit/s. My expectation of strict prio
-> > > is that queue1 should get 100Mbit/s and queue 0Mbit/s
-> > 
-> > I don't understand this. Have you already implemented mqprio offloading
-> > and this is what you observe?
-> 
-> Ack.
-> 
-> > max_rate is an option per traffic class. Are queue0 and queue1 mapped to
-> > the same traffic class in your example, or are they not?
-> 
-> They are separate TCs. It is not possible to assign multiple TXQs to on TC on
-> KSZ.
-> 
-> > Could you show the full ommand you ran?
-> 
-> tc qdisc add dev lan2 parent root handle 100 mqprio num_tc 4 map 0 1 2 3
-> queues 1@0 1@1 1@2 1@3  hw 1 mode channel shaper bw_rlimit max_rate
-> 70Mbit 70Mbit 70Mbit 70Mbit
-> 
-> lan2 is bridged with lan1 and lan3. Egress traffic on lan2 is from lan1 and lan3.
-> For testing I use 2 iperf3 instances with different PCP values in the VLAN tag.
-> Classification is done by HW (currently not configurable from user space)
+In x86 hyperv-tlfs, HV_REGISTER_ prefix is used to indicate MSRs
+accessed via rdmsrl/wrmsrl. But in ARM64, HV_REGISTER_ instead indicates
+VP registers accessed via get/set vp registers hypercall.
 
-Hmm, I still don't understand the question. First of all you changed the
-data between messages - first you talk about max_rate 100 Mbps and then
-you specify max_rate 70Mbit per traffic class. Possibly also the link
-speeds are changed between the 2 examples. What is the link speed of the
-egress port in the 2 examples?
+This is due to HV_REGISTER_* names being used by hv_set/get_register,
+with the arch-specific version delegating to the appropriate mechanism.
 
-The question is phrased as "what is the actual expected behavior" - that
-would be easy - the traffic classes corresponding to the 2 TXQs are rate
-limited to no more than 100 Mbps each. When the total sum of bandwidth
-consumptions exceeds the capacity of the link is when you'll start
-seeing prioritization effects.
+The problem is, using prefix HV_REGISTER_ for MSRs will conflict with
+VP registers when they are introduced for x86 in future.
 
-If the question is why this doesn't happen in your case and they get
-equal bandwidths instead (assuming you do create congestion), I don't know;
-I have seen neither your implementation nor am I familiar with the
-hardware. However, there are a few things I've noticed which might be of
-help:
+This patch solves the issue by:
 
-- the fact that you get 50-50 bandwidth allocation sounds an awful lot
-  to me as if the TXQs are still operating in WRR mode and not in strict
-  priority mode.
+1. Defining all the x86 MSRs with a consistent prefix: HV_X64_MSR_.
+   This is so HV_REGISTER_ can be reserved for VP registers.
 
-- the KSZ9477 datasheet says that rate limiting is per port, and not per
-  queue, unless Switch MAC Control 5 Register bit 3 (Queue Based Egress
-  Rate Limit Enable) is set.
+2. Change the non-arch-specific alias used by hv_set/get_register to
+   HV_SYNTHETIC_REG.
 
-- maybe you simply failed to convert the rates properly between the unit
-  of measurement passed by iproute2 to the unit of measurement expected
-  by hw. Here's a random comment from the ice driver:
+Signed-off-by: Nuno Das Neves <nudasnev@microsoft.com>
+---
+ arch/arm64/include/asm/hyperv-tlfs.h |  25 +++++
+ arch/x86/include/asm/hyperv-tlfs.h   | 137 +++++++++++++--------------
+ arch/x86/include/asm/mshyperv.h      |   8 +-
+ arch/x86/kernel/cpu/mshyperv.c       |  22 ++---
+ drivers/clocksource/hyperv_timer.c   |  24 ++---
+ drivers/hv/hv.c                      |  32 +++----
+ drivers/hv/hv_common.c               |   4 +-
+ drivers/hv/vmbus_drv.c               |  14 +--
+ include/asm-generic/mshyperv.h       |   2 +-
+ 9 files changed, 146 insertions(+), 122 deletions(-)
 
-		/* TC command takes input in K/N/Gbps or K/M/Gbit etc but
-		 * converts the bandwidth rate limit into Bytes/s when
-		 * passing it down to the driver. So convert input bandwidth
-		 * from Bytes/s to Kbps
-		 */
+diff --git a/arch/arm64/include/asm/hyperv-tlfs.h b/arch/arm64/include/asm/hyperv-tlfs.h
+index bc6c7ac934a1..474025eb3d7e 100644
+--- a/arch/arm64/include/asm/hyperv-tlfs.h
++++ b/arch/arm64/include/asm/hyperv-tlfs.h
+@@ -64,6 +64,31 @@
+ #define HV_REGISTER_STIMER0_CONFIG	0x000B0000
+ #define HV_REGISTER_STIMER0_COUNT	0x000B0001
+ 
++/*
++ * To support non-arch-specific code calling hv_set/get_register:
++ * - On x86, HV_SYNTHETIC_REG_ indicates an MSR accessed via rdmsrl/wrmsrl
++ * - On ARM, HV_SYNTHETIC_REG_ indicates a VP register accessed via hypercall
++ */
++#define HV_SYNTHETIC_REG_VP_INDEX		(HV_REGISTER_VP_INDEX)
++#define HV_SYNTHETIC_REG_TIME_REF_COUNT		(HV_REGISTER_TIME_REF_COUNT)
++#define HV_SYNTHETIC_REG_REFERENCE_TSC		(HV_REGISTER_REFERENCE_TSC)
++
++#define HV_SYNTHETIC_REG_STIMER0_CONFIG		(HV_REGISTER_STIMER0_CONFIG)
++#define HV_SYNTHETIC_REG_STIMER0_COUNT		(HV_REGISTER_STIMER0_COUNT)
++
++#define HV_SYNTHETIC_REG_SCONTROL		(HV_REGISTER_SCONTROL)
++#define HV_SYNTHETIC_REG_SIEFP			(HV_REGISTER_SIEFP)
++#define HV_SYNTHETIC_REG_SIMP			(HV_REGISTER_SIMP)
++#define HV_SYNTHETIC_REG_EOM			(HV_REGISTER_EOM)
++#define HV_SYNTHETIC_REG_SINT0			(HV_REGISTER_SINT0)
++
++#define HV_SYNTHETIC_REG_CRASH_P0		(HV_REGISTER_CRASH_P0)
++#define HV_SYNTHETIC_REG_CRASH_P1		(HV_REGISTER_CRASH_P1)
++#define HV_SYNTHETIC_REG_CRASH_P2		(HV_REGISTER_CRASH_P2)
++#define HV_SYNTHETIC_REG_CRASH_P3		(HV_REGISTER_CRASH_P3)
++#define HV_SYNTHETIC_REG_CRASH_P4		(HV_REGISTER_CRASH_P4)
++#define HV_SYNTHETIC_REG_CRASH_CTL		(HV_REGISTER_CRASH_CTL)
++
+ union hv_msi_entry {
+ 	u64 as_uint64[2];
+ 	struct {
+diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+index 566ac26239ba..0dbb0218d0fa 100644
+--- a/arch/x86/include/asm/hyperv-tlfs.h
++++ b/arch/x86/include/asm/hyperv-tlfs.h
+@@ -178,7 +178,7 @@ enum hv_isolation_type {
+ #define HV_X64_MSR_HYPERCALL			0x40000001
+ 
+ /* MSR used to provide vcpu index */
+-#define HV_REGISTER_VP_INDEX			0x40000002
++#define HV_X64_MSR_VP_INDEX			0x40000002
+ 
+ /* MSR used to reset the guest OS. */
+ #define HV_X64_MSR_RESET			0x40000003
+@@ -187,10 +187,10 @@ enum hv_isolation_type {
+ #define HV_X64_MSR_VP_RUNTIME			0x40000010
+ 
+ /* MSR used to read the per-partition time reference counter */
+-#define HV_REGISTER_TIME_REF_COUNT		0x40000020
++#define HV_X64_MSR_TIME_REF_COUNT		0x40000020
+ 
+ /* A partition's reference time stamp counter (TSC) page */
+-#define HV_REGISTER_REFERENCE_TSC		0x40000021
++#define HV_X64_MSR_REFERENCE_TSC		0x40000021
+ 
+ /* MSR used to retrieve the TSC frequency */
+ #define HV_X64_MSR_TSC_FREQUENCY		0x40000022
+@@ -205,61 +205,61 @@ enum hv_isolation_type {
+ #define HV_X64_MSR_VP_ASSIST_PAGE		0x40000073
+ 
+ /* Define synthetic interrupt controller model specific registers. */
+-#define HV_REGISTER_SCONTROL			0x40000080
+-#define HV_REGISTER_SVERSION			0x40000081
+-#define HV_REGISTER_SIEFP			0x40000082
+-#define HV_REGISTER_SIMP			0x40000083
+-#define HV_REGISTER_EOM				0x40000084
+-#define HV_REGISTER_SINT0			0x40000090
+-#define HV_REGISTER_SINT1			0x40000091
+-#define HV_REGISTER_SINT2			0x40000092
+-#define HV_REGISTER_SINT3			0x40000093
+-#define HV_REGISTER_SINT4			0x40000094
+-#define HV_REGISTER_SINT5			0x40000095
+-#define HV_REGISTER_SINT6			0x40000096
+-#define HV_REGISTER_SINT7			0x40000097
+-#define HV_REGISTER_SINT8			0x40000098
+-#define HV_REGISTER_SINT9			0x40000099
+-#define HV_REGISTER_SINT10			0x4000009A
+-#define HV_REGISTER_SINT11			0x4000009B
+-#define HV_REGISTER_SINT12			0x4000009C
+-#define HV_REGISTER_SINT13			0x4000009D
+-#define HV_REGISTER_SINT14			0x4000009E
+-#define HV_REGISTER_SINT15			0x4000009F
++#define HV_X64_MSR_SCONTROL			0x40000080
++#define HV_X64_MSR_SVERSION			0x40000081
++#define HV_X64_MSR_SIEFP			0x40000082
++#define HV_X64_MSR_SIMP				0x40000083
++#define HV_X64_MSR_EOM				0x40000084
++#define HV_X64_MSR_SINT0			0x40000090
++#define HV_X64_MSR_SINT1			0x40000091
++#define HV_X64_MSR_SINT2			0x40000092
++#define HV_X64_MSR_SINT3			0x40000093
++#define HV_X64_MSR_SINT4			0x40000094
++#define HV_X64_MSR_SINT5			0x40000095
++#define HV_X64_MSR_SINT6			0x40000096
++#define HV_X64_MSR_SINT7			0x40000097
++#define HV_X64_MSR_SINT8			0x40000098
++#define HV_X64_MSR_SINT9			0x40000099
++#define HV_X64_MSR_SINT10			0x4000009A
++#define HV_X64_MSR_SINT11			0x4000009B
++#define HV_X64_MSR_SINT12			0x4000009C
++#define HV_X64_MSR_SINT13			0x4000009D
++#define HV_X64_MSR_SINT14			0x4000009E
++#define HV_X64_MSR_SINT15			0x4000009F
+ 
+ /*
+  * Define synthetic interrupt controller model specific registers for
+  * nested hypervisor.
+  */
+-#define HV_REGISTER_NESTED_SCONTROL            0x40001080
+-#define HV_REGISTER_NESTED_SVERSION            0x40001081
+-#define HV_REGISTER_NESTED_SIEFP               0x40001082
+-#define HV_REGISTER_NESTED_SIMP                0x40001083
+-#define HV_REGISTER_NESTED_EOM                 0x40001084
+-#define HV_REGISTER_NESTED_SINT0               0x40001090
++#define HV_X64_MSR_NESTED_SCONTROL		0x40001080
++#define HV_X64_MSR_NESTED_SVERSION		0x40001081
++#define HV_X64_MSR_NESTED_SIEFP			0x40001082
++#define HV_X64_MSR_NESTED_SIMP			0x40001083
++#define HV_X64_MSR_NESTED_EOM			0x40001084
++#define HV_X64_MSR_NESTED_SINT0			0x40001090
+ 
+ /*
+  * Synthetic Timer MSRs. Four timers per vcpu.
+  */
+-#define HV_REGISTER_STIMER0_CONFIG		0x400000B0
+-#define HV_REGISTER_STIMER0_COUNT		0x400000B1
+-#define HV_REGISTER_STIMER1_CONFIG		0x400000B2
+-#define HV_REGISTER_STIMER1_COUNT		0x400000B3
+-#define HV_REGISTER_STIMER2_CONFIG		0x400000B4
+-#define HV_REGISTER_STIMER2_COUNT		0x400000B5
+-#define HV_REGISTER_STIMER3_CONFIG		0x400000B6
+-#define HV_REGISTER_STIMER3_COUNT		0x400000B7
++#define HV_X64_MSR_STIMER0_CONFIG		0x400000B0
++#define HV_X64_MSR_STIMER0_COUNT		0x400000B1
++#define HV_X64_MSR_STIMER1_CONFIG		0x400000B2
++#define HV_X64_MSR_STIMER1_COUNT		0x400000B3
++#define HV_X64_MSR_STIMER2_CONFIG		0x400000B4
++#define HV_X64_MSR_STIMER2_COUNT		0x400000B5
++#define HV_X64_MSR_STIMER3_CONFIG		0x400000B6
++#define HV_X64_MSR_STIMER3_COUNT		0x400000B7
+ 
+ /* Hyper-V guest idle MSR */
+ #define HV_X64_MSR_GUEST_IDLE			0x400000F0
+ 
+ /* Hyper-V guest crash notification MSR's */
+-#define HV_REGISTER_CRASH_P0			0x40000100
+-#define HV_REGISTER_CRASH_P1			0x40000101
+-#define HV_REGISTER_CRASH_P2			0x40000102
+-#define HV_REGISTER_CRASH_P3			0x40000103
+-#define HV_REGISTER_CRASH_P4			0x40000104
+-#define HV_REGISTER_CRASH_CTL			0x40000105
++#define HV_X64_MSR_CRASH_P0			0x40000100
++#define HV_X64_MSR_CRASH_P1			0x40000101
++#define HV_X64_MSR_CRASH_P2			0x40000102
++#define HV_X64_MSR_CRASH_P3			0x40000103
++#define HV_X64_MSR_CRASH_P4			0x40000104
++#define HV_X64_MSR_CRASH_CTL			0x40000105
+ 
+ /* TSC emulation after migration */
+ #define HV_X64_MSR_REENLIGHTENMENT_CONTROL	0x40000106
+@@ -269,31 +269,30 @@ enum hv_isolation_type {
+ /* TSC invariant control */
+ #define HV_X64_MSR_TSC_INVARIANT_CONTROL	0x40000118
+ 
+-/* Register name aliases for temporary compatibility */
+-#define HV_X64_MSR_STIMER0_COUNT	HV_REGISTER_STIMER0_COUNT
+-#define HV_X64_MSR_STIMER0_CONFIG	HV_REGISTER_STIMER0_CONFIG
+-#define HV_X64_MSR_STIMER1_COUNT	HV_REGISTER_STIMER1_COUNT
+-#define HV_X64_MSR_STIMER1_CONFIG	HV_REGISTER_STIMER1_CONFIG
+-#define HV_X64_MSR_STIMER2_COUNT	HV_REGISTER_STIMER2_COUNT
+-#define HV_X64_MSR_STIMER2_CONFIG	HV_REGISTER_STIMER2_CONFIG
+-#define HV_X64_MSR_STIMER3_COUNT	HV_REGISTER_STIMER3_COUNT
+-#define HV_X64_MSR_STIMER3_CONFIG	HV_REGISTER_STIMER3_CONFIG
+-#define HV_X64_MSR_SCONTROL		HV_REGISTER_SCONTROL
+-#define HV_X64_MSR_SVERSION		HV_REGISTER_SVERSION
+-#define HV_X64_MSR_SIMP			HV_REGISTER_SIMP
+-#define HV_X64_MSR_SIEFP		HV_REGISTER_SIEFP
+-#define HV_X64_MSR_VP_INDEX		HV_REGISTER_VP_INDEX
+-#define HV_X64_MSR_EOM			HV_REGISTER_EOM
+-#define HV_X64_MSR_SINT0		HV_REGISTER_SINT0
+-#define HV_X64_MSR_SINT15		HV_REGISTER_SINT15
+-#define HV_X64_MSR_CRASH_P0		HV_REGISTER_CRASH_P0
+-#define HV_X64_MSR_CRASH_P1		HV_REGISTER_CRASH_P1
+-#define HV_X64_MSR_CRASH_P2		HV_REGISTER_CRASH_P2
+-#define HV_X64_MSR_CRASH_P3		HV_REGISTER_CRASH_P3
+-#define HV_X64_MSR_CRASH_P4		HV_REGISTER_CRASH_P4
+-#define HV_X64_MSR_CRASH_CTL		HV_REGISTER_CRASH_CTL
+-#define HV_X64_MSR_TIME_REF_COUNT	HV_REGISTER_TIME_REF_COUNT
+-#define HV_X64_MSR_REFERENCE_TSC	HV_REGISTER_REFERENCE_TSC
++/*
++ * To support non-arch-specific code calling hv_set/get_register:
++ * - On x86, HV_SYNTHETIC_REG_ indicates an MSR accessed via rdmsrl/wrmsrl
++ * - On ARM, HV_SYNTHETIC_REG_ indicates a VP register accessed via hypercall
++ */
++#define HV_SYNTHETIC_REG_VP_INDEX		(HV_X64_MSR_VP_INDEX)
++#define HV_SYNTHETIC_REG_TIME_REF_COUNT		(HV_X64_MSR_TIME_REF_COUNT)
++#define HV_SYNTHETIC_REG_REFERENCE_TSC		(HV_X64_MSR_REFERENCE_TSC)
++
++#define HV_SYNTHETIC_REG_STIMER0_CONFIG		(HV_X64_MSR_STIMER0_CONFIG)
++#define HV_SYNTHETIC_REG_STIMER0_COUNT		(HV_X64_MSR_STIMER0_COUNT)
++
++#define HV_SYNTHETIC_REG_SCONTROL		(HV_X64_MSR_SCONTROL)
++#define HV_SYNTHETIC_REG_SIEFP			(HV_X64_MSR_SIEFP)
++#define HV_SYNTHETIC_REG_SIMP			(HV_X64_MSR_SIMP)
++#define HV_SYNTHETIC_REG_EOM			(HV_X64_MSR_EOM)
++#define HV_SYNTHETIC_REG_SINT0			(HV_X64_MSR_SINT0)
++
++#define HV_SYNTHETIC_REG_CRASH_P0		(HV_X64_MSR_CRASH_P0)
++#define HV_SYNTHETIC_REG_CRASH_P1		(HV_X64_MSR_CRASH_P1)
++#define HV_SYNTHETIC_REG_CRASH_P2		(HV_X64_MSR_CRASH_P2)
++#define HV_SYNTHETIC_REG_CRASH_P3		(HV_X64_MSR_CRASH_P3)
++#define HV_SYNTHETIC_REG_CRASH_P4		(HV_X64_MSR_CRASH_P4)
++#define HV_SYNTHETIC_REG_CRASH_CTL		(HV_X64_MSR_CRASH_CTL)
+ 
+ /* Hyper-V memory host visibility */
+ enum hv_mem_host_visibility {
+diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+index 4c4c0ec3b62e..1afa77ab9a04 100644
+--- a/arch/x86/include/asm/mshyperv.h
++++ b/arch/x86/include/asm/mshyperv.h
+@@ -224,14 +224,14 @@ extern bool hv_isolation_type_snp(void);
+ 
+ static inline bool hv_is_synic_reg(unsigned int reg)
+ {
+-	return (reg >= HV_REGISTER_SCONTROL) &&
+-	       (reg <= HV_REGISTER_SINT15);
++	return (reg >= HV_X64_MSR_SCONTROL) &&
++	       (reg <= HV_X64_MSR_SINT15);
+ }
+ 
+ static inline bool hv_is_sint_reg(unsigned int reg)
+ {
+-	return (reg >= HV_REGISTER_SINT0) &&
+-	       (reg <= HV_REGISTER_SINT15);
++	return (reg >= HV_X64_MSR_SINT0) &&
++	       (reg <= HV_X64_MSR_SINT15);
+ }
+ 
+ u64 hv_get_register(unsigned int reg);
+diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+index f924a76c6923..7140ee32d7be 100644
+--- a/arch/x86/kernel/cpu/mshyperv.c
++++ b/arch/x86/kernel/cpu/mshyperv.c
+@@ -45,19 +45,19 @@ struct ms_hyperv_info ms_hyperv;
+ static inline unsigned int hv_get_nested_reg(unsigned int reg)
+ {
+ 	if (hv_is_sint_reg(reg))
+-		return reg - HV_REGISTER_SINT0 + HV_REGISTER_NESTED_SINT0;
++		return reg - HV_X64_MSR_SINT0 + HV_X64_MSR_NESTED_SINT0;
+ 
+ 	switch (reg) {
+-	case HV_REGISTER_SIMP:
+-		return HV_REGISTER_NESTED_SIMP;
+-	case HV_REGISTER_SIEFP:
+-		return HV_REGISTER_NESTED_SIEFP;
+-	case HV_REGISTER_SVERSION:
+-		return HV_REGISTER_NESTED_SVERSION;
+-	case HV_REGISTER_SCONTROL:
+-		return HV_REGISTER_NESTED_SCONTROL;
+-	case HV_REGISTER_EOM:
+-		return HV_REGISTER_NESTED_EOM;
++	case HV_X64_MSR_SIMP:
++		return HV_X64_MSR_NESTED_SIMP;
++	case HV_X64_MSR_SIEFP:
++		return HV_X64_MSR_NESTED_SIEFP;
++	case HV_X64_MSR_SVERSION:
++		return HV_X64_MSR_NESTED_SVERSION;
++	case HV_X64_MSR_SCONTROL:
++		return HV_X64_MSR_NESTED_SCONTROL;
++	case HV_X64_MSR_EOM:
++		return HV_X64_MSR_NESTED_EOM;
+ 	default:
+ 		return reg;
+ 	}
+diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
+index c0cef92b12b8..0ab3fbca34c7 100644
+--- a/drivers/clocksource/hyperv_timer.c
++++ b/drivers/clocksource/hyperv_timer.c
+@@ -81,14 +81,14 @@ static int hv_ce_set_next_event(unsigned long delta,
+ 
+ 	current_tick = hv_read_reference_counter();
+ 	current_tick += delta;
+-	hv_set_register(HV_REGISTER_STIMER0_COUNT, current_tick);
++	hv_set_register(HV_SYNTHETIC_REG_STIMER0_COUNT, current_tick);
+ 	return 0;
+ }
+ 
+ static int hv_ce_shutdown(struct clock_event_device *evt)
+ {
+-	hv_set_register(HV_REGISTER_STIMER0_COUNT, 0);
+-	hv_set_register(HV_REGISTER_STIMER0_CONFIG, 0);
++	hv_set_register(HV_SYNTHETIC_REG_STIMER0_COUNT, 0);
++	hv_set_register(HV_SYNTHETIC_REG_STIMER0_CONFIG, 0);
+ 	if (direct_mode_enabled && stimer0_irq >= 0)
+ 		disable_percpu_irq(stimer0_irq);
+ 
+@@ -119,7 +119,7 @@ static int hv_ce_set_oneshot(struct clock_event_device *evt)
+ 		timer_cfg.direct_mode = 0;
+ 		timer_cfg.sintx = stimer0_message_sint;
+ 	}
+-	hv_set_register(HV_REGISTER_STIMER0_CONFIG, timer_cfg.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_STIMER0_CONFIG, timer_cfg.as_uint64);
+ 	return 0;
+ }
+ 
+@@ -387,7 +387,7 @@ static u64 notrace read_hv_clock_tsc(void)
+ 	u64 current_tick = hv_read_tsc_page(hv_get_tsc_page());
+ 
+ 	if (current_tick == U64_MAX)
+-		current_tick = hv_get_register(HV_REGISTER_TIME_REF_COUNT);
++		current_tick = hv_get_register(HV_SYNTHETIC_REG_TIME_REF_COUNT);
+ 
+ 	return current_tick;
+ }
+@@ -408,9 +408,9 @@ static void suspend_hv_clock_tsc(struct clocksource *arg)
+ 	union hv_reference_tsc_msr tsc_msr;
+ 
+ 	/* Disable the TSC page */
+-	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_REFERENCE_TSC);
+ 	tsc_msr.enable = 0;
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_REFERENCE_TSC, tsc_msr.as_uint64);
+ }
+ 
+ 
+@@ -419,10 +419,10 @@ static void resume_hv_clock_tsc(struct clocksource *arg)
+ 	union hv_reference_tsc_msr tsc_msr;
+ 
+ 	/* Re-enable the TSC page */
+-	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_REFERENCE_TSC);
+ 	tsc_msr.enable = 1;
+ 	tsc_msr.pfn = tsc_pfn;
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_REFERENCE_TSC, tsc_msr.as_uint64);
+ }
+ 
+ #ifdef HAVE_VDSO_CLOCKMODE_HVCLOCK
+@@ -456,7 +456,7 @@ static u64 notrace read_hv_clock_msr(void)
+ 	 * is set to 0 when the partition is created and is incremented in
+ 	 * 100 nanosecond units.
+ 	 */
+-	return hv_get_register(HV_REGISTER_TIME_REF_COUNT);
++	return hv_get_register(HV_SYNTHETIC_REG_TIME_REF_COUNT);
+ }
+ 
+ static u64 notrace read_hv_clock_msr_cs(struct clocksource *arg)
+@@ -543,14 +543,14 @@ static bool __init hv_init_tsc_clocksource(void)
+ 	 * thus TSC clocksource will work even without the real TSC page
+ 	 * mapped.
+ 	 */
+-	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
++	tsc_msr.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_REFERENCE_TSC);
+ 	if (hv_root_partition)
+ 		tsc_pfn = tsc_msr.pfn;
+ 	else
+ 		tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
+ 	tsc_msr.enable = 1;
+ 	tsc_msr.pfn = tsc_pfn;
+-	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_REFERENCE_TSC, tsc_msr.as_uint64);
+ 
+ 	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
+ 
+diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
+index 8b0dd8e5244d..319f21205a9c 100644
+--- a/drivers/hv/hv.c
++++ b/drivers/hv/hv.c
+@@ -213,7 +213,7 @@ void hv_synic_enable_regs(unsigned int cpu)
+ 	union hv_synic_scontrol sctrl;
+ 
+ 	/* Setup the Synic's message page */
+-	simp.as_uint64 = hv_get_register(HV_REGISTER_SIMP);
++	simp.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_SIMP);
+ 	simp.simp_enabled = 1;
+ 
+ 	if (hv_isolation_type_snp() || hv_root_partition) {
+@@ -227,10 +227,10 @@ void hv_synic_enable_regs(unsigned int cpu)
+ 			>> HV_HYP_PAGE_SHIFT;
+ 	}
+ 
+-	hv_set_register(HV_REGISTER_SIMP, simp.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_SIMP, simp.as_uint64);
+ 
+ 	/* Setup the Synic's event page */
+-	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
++	siefp.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_SIEFP);
+ 	siefp.siefp_enabled = 1;
+ 
+ 	if (hv_isolation_type_snp() || hv_root_partition) {
+@@ -245,12 +245,12 @@ void hv_synic_enable_regs(unsigned int cpu)
+ 			>> HV_HYP_PAGE_SHIFT;
+ 	}
+ 
+-	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_SIEFP, siefp.as_uint64);
+ 
+ 	/* Setup the shared SINT. */
+ 	if (vmbus_irq != -1)
+ 		enable_percpu_irq(vmbus_irq, 0);
+-	shared_sint.as_uint64 = hv_get_register(HV_REGISTER_SINT0 +
++	shared_sint.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_SINT0 +
+ 					VMBUS_MESSAGE_SINT);
+ 
+ 	shared_sint.vector = vmbus_interrupt;
+@@ -266,14 +266,14 @@ void hv_synic_enable_regs(unsigned int cpu)
+ #else
+ 	shared_sint.auto_eoi = 0;
+ #endif
+-	hv_set_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT,
++	hv_set_register(HV_SYNTHETIC_REG_SINT0 + VMBUS_MESSAGE_SINT,
+ 				shared_sint.as_uint64);
+ 
+ 	/* Enable the global synic bit */
+-	sctrl.as_uint64 = hv_get_register(HV_REGISTER_SCONTROL);
++	sctrl.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_SCONTROL);
+ 	sctrl.enable = 1;
+ 
+-	hv_set_register(HV_REGISTER_SCONTROL, sctrl.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_SCONTROL, sctrl.as_uint64);
+ }
+ 
+ int hv_synic_init(unsigned int cpu)
+@@ -297,17 +297,17 @@ void hv_synic_disable_regs(unsigned int cpu)
+ 	union hv_synic_siefp siefp;
+ 	union hv_synic_scontrol sctrl;
+ 
+-	shared_sint.as_uint64 = hv_get_register(HV_REGISTER_SINT0 +
++	shared_sint.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_SINT0 +
+ 					VMBUS_MESSAGE_SINT);
+ 
+ 	shared_sint.masked = 1;
+ 
+ 	/* Need to correctly cleanup in the case of SMP!!! */
+ 	/* Disable the interrupt */
+-	hv_set_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT,
++	hv_set_register(HV_SYNTHETIC_REG_SINT0 + VMBUS_MESSAGE_SINT,
+ 				shared_sint.as_uint64);
+ 
+-	simp.as_uint64 = hv_get_register(HV_REGISTER_SIMP);
++	simp.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_SIMP);
+ 	/*
+ 	 * In Isolation VM, sim and sief pages are allocated by
+ 	 * paravisor. These pages also will be used by kdump
+@@ -322,9 +322,9 @@ void hv_synic_disable_regs(unsigned int cpu)
+ 		simp.base_simp_gpa = 0;
+ 	}
+ 
+-	hv_set_register(HV_REGISTER_SIMP, simp.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_SIMP, simp.as_uint64);
+ 
+-	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
++	siefp.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_SIEFP);
+ 	siefp.siefp_enabled = 0;
+ 
+ 	if (hv_isolation_type_snp() || hv_root_partition) {
+@@ -334,12 +334,12 @@ void hv_synic_disable_regs(unsigned int cpu)
+ 		siefp.base_siefp_gpa = 0;
+ 	}
+ 
+-	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_SIEFP, siefp.as_uint64);
+ 
+ 	/* Disable the global synic bit */
+-	sctrl.as_uint64 = hv_get_register(HV_REGISTER_SCONTROL);
++	sctrl.as_uint64 = hv_get_register(HV_SYNTHETIC_REG_SCONTROL);
+ 	sctrl.enable = 0;
+-	hv_set_register(HV_REGISTER_SCONTROL, sctrl.as_uint64);
++	hv_set_register(HV_SYNTHETIC_REG_SCONTROL, sctrl.as_uint64);
+ 
+ 	if (vmbus_irq != -1)
+ 		disable_percpu_irq(vmbus_irq);
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index 52a6f89ccdbd..77a68f16bc6e 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -142,7 +142,7 @@ int hv_common_cpu_init(unsigned int cpu)
+ 		*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+ 	}
+ 
+-	msr_vp_index = hv_get_register(HV_REGISTER_VP_INDEX);
++	msr_vp_index = hv_get_register(HV_SYNTHETIC_REG_VP_INDEX);
+ 
+ 	hv_vp_index[cpu] = msr_vp_index;
+ 
+@@ -246,7 +246,7 @@ EXPORT_SYMBOL_GPL(hv_is_hibernation_supported);
+  */
+ static u64 __hv_read_ref_counter(void)
+ {
+-	return hv_get_register(HV_REGISTER_TIME_REF_COUNT);
++	return hv_get_register(HV_SYNTHETIC_REG_TIME_REF_COUNT);
+ }
+ 
+ u64 (*hv_read_reference_counter)(void) = __hv_read_ref_counter;
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index 1901556efe79..9ca8a7b73b81 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -1405,17 +1405,17 @@ static void hv_kmsg_dump(struct kmsg_dumper *dumper,
+ 	 * contain the size of the panic data in that page. Rest of the
+ 	 * registers are no-op when the NOTIFY_MSG flag is set.
+ 	 */
+-	hv_set_register(HV_REGISTER_CRASH_P0, 0);
+-	hv_set_register(HV_REGISTER_CRASH_P1, 0);
+-	hv_set_register(HV_REGISTER_CRASH_P2, 0);
+-	hv_set_register(HV_REGISTER_CRASH_P3, virt_to_phys(hv_panic_page));
+-	hv_set_register(HV_REGISTER_CRASH_P4, bytes_written);
++	hv_set_register(HV_SYNTHETIC_REG_CRASH_P0, 0);
++	hv_set_register(HV_SYNTHETIC_REG_CRASH_P1, 0);
++	hv_set_register(HV_SYNTHETIC_REG_CRASH_P2, 0);
++	hv_set_register(HV_SYNTHETIC_REG_CRASH_P3, virt_to_phys(hv_panic_page));
++	hv_set_register(HV_SYNTHETIC_REG_CRASH_P4, bytes_written);
+ 
+ 	/*
+ 	 * Let Hyper-V know there is crash data available along with
+ 	 * the panic message.
+ 	 */
+-	hv_set_register(HV_REGISTER_CRASH_CTL,
++	hv_set_register(HV_SYNTHETIC_REG_CRASH_CTL,
+ 	       (HV_CRASH_CTL_CRASH_NOTIFY | HV_CRASH_CTL_CRASH_NOTIFY_MSG));
+ }
+ 
+@@ -1555,7 +1555,7 @@ static int vmbus_bus_init(void)
+ 		 * Register for panic kmsg callback only if the right
+ 		 * capability is supported by the hypervisor.
+ 		 */
+-		hyperv_crash_ctl = hv_get_register(HV_REGISTER_CRASH_CTL);
++		hyperv_crash_ctl = hv_get_register(HV_SYNTHETIC_REG_CRASH_CTL);
+ 		if (hyperv_crash_ctl & HV_CRASH_CTL_CRASH_NOTIFY_MSG)
+ 			hv_kmsg_dump_register();
+ 
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 8845a2eca339..76bf968d77a8 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -147,7 +147,7 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
+ 		 * possibly deliver another msg from the
+ 		 * hypervisor
+ 		 */
+-		hv_set_register(HV_REGISTER_EOM, 0);
++		hv_set_register(HV_SYNTHETIC_REG_EOM, 0);
+ 	}
+ }
+ 
+-- 
+2.25.1
 
-("TC command" means iproute2, the conversion is in the "get_rate64()" function)
-
-> > sorry for the quick response, need to go right now
-> 
-> No proble. Have fun.
-
-There wasn't anything funny to do, I had to rush to do some shopping
-before the grocery stores closed.
