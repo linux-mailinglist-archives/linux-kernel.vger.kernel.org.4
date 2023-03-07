@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD4F6ADF34
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F2F6ADF35
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:54:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjCGMyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
+        id S229843AbjCGMy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjCGMyG (ORCPT
+        with ESMTP id S229849AbjCGMyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:54:06 -0500
+        Tue, 7 Mar 2023 07:54:22 -0500
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3867BA07
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:53:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42FF7C3EB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:54:07 -0800 (PST)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5CBAE1FE17;
-        Tue,  7 Mar 2023 12:53:57 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTP id 587EE1FE17;
+        Tue,  7 Mar 2023 12:54:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678193637; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1678193646; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3JARIyfWo8qN+9AW3WtqI4/OEagRB48TyS0ZSkdX1OU=;
-        b=YHyu9sKh0MJ+bpA+YOZOy6hRq7KtK5fqt7zEKno9SBbjn3/BobqeFnCjJ1I50igzvtW+Aa
-        oNoJJCCGFVV7p4MIF/n+jU5zU1/2ZAi6EdfCTEwFCI4J+qXPHJo9ks/UnXdOczBdTnAIKO
-        0JXJsX+ECxB9/4Qhu5EXhmpZDOnhWyY=
+        bh=SEEJsz5Y768xUJTZNnwAVmHB0wJgO+in0ShoOU4pSwI=;
+        b=BANYSDRqqt476XlRqvf3FDx0EiZbCNC26CEkMJNdE/Co36Cw3vWv7m3GyGeZTz/6pnNDG2
+        oIgrizrrOLKxcOVFAA93i6bN776ylu/6HNEQ+5teyFr+FrWGFGyMP5xebMXHyPEL7GGbml
+        hyJU2U4d3v+VhQIC0Of2FB0so9nUVtM=
 Received: from alley.suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
-        by relay2.suse.de (Postfix) with ESMTP id 0AB342C141;
-        Tue,  7 Mar 2023 12:53:57 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id F14892C142;
+        Tue,  7 Mar 2023 12:54:05 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Tejun Heo <tj@kernel.org>
 Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
         Michal Koutny <mkoutny@suse.com>, linux-kernel@vger.kernel.org,
         Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 1/5] workqueue: Fix hung time report of worker pools
-Date:   Tue,  7 Mar 2023 13:53:31 +0100
-Message-Id: <20230307125335.28805-2-pmladek@suse.com>
+Subject: [PATCH v2 2/5] workqueue: Warn when a new worker could not be created
+Date:   Tue,  7 Mar 2023 13:53:32 +0100
+Message-Id: <20230307125335.28805-3-pmladek@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230307125335.28805-1-pmladek@suse.com>
 References: <20230307125335.28805-1-pmladek@suse.com>
@@ -52,63 +52,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The workqueue watchdog prints a warning when there is no progress in
-a worker pool. Where the progress means that the pool started processing
-a pending work item.
+The workqueue watchdog reports a lockup when there was not any progress
+in the worker pool for a long time. The progress means that a pending
+work item starts being proceed.
 
-Note that it is perfectly fine to process work items much longer.
-The progress should be guaranteed by waking up or creating idle
-workers.
+The progress is guaranteed by using idle workers or creating new workers
+for pending work items.
 
-show_one_worker_pool() prints state of non-idle worker pool. It shows
-a delay since the last pool->watchdog_ts.
+There are several reasons why a new worker could not be created:
 
-The timestamp is updated when a first pending work is queued in
-__queue_work(). Also it is updated when a work is dequeued for
-processing in worker_thread() and rescuer_thread().
+   + there is not enough memory
 
-The delay is misleading when there is no pending work item. In this
-case it shows how long the last work item is being proceed. Show
-zero instead. There is no stall if there is no pending work.
+   + there is no free pool ID (IDR API)
 
-Fixes: 82607adcf9cdf40fb7b ("workqueue: implement lockup detector")
+   + the system reached PID limit
+
+   + the process creating the new worker was interrupted
+
+   + the last idle worker (manager) has not been scheduled for a long
+     time. It was not able to even start creating the kthread.
+
+None of these failures is reported at the moment. The only clue is that
+show_one_worker_pool() prints that there is a manager. It is the last
+idle worker that is responsible for creating a new one. But it is not
+clear if create_worker() is failing and why.
+
+Make the debugging easier by printing errors in create_worker().
+
+The error code is important, especially from kthread_create_on_node().
+It helps to distinguish the various reasons. For example, reaching
+memory limit (-ENOMEM), other system limits (-EAGAIN), or process
+interrupted (-EINTR).
+
+Use pr_once() to avoid repeating the same error every CREATE_COOLDOWN
+for each stuck worker pool.
+
+Ratelimited printk() might be better. It would help to know if the problem
+remains. It would be more clear if the create_worker() errors and workqueue
+stalls are related. Also old messages might get lost when the internal log
+buffer is full. The problem is that printk() might touch the watchdog.
+For example, see touch_nmi_watchdog() in serial8250_console_write().
+It would require synchronization of the begin and length of the ratelimit
+interval with the workqueue watchdog. Otherwise, the error messages
+might break the watchdog. This does not look worth the complexity.
+
 Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- kernel/workqueue.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ kernel/workqueue.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index b8b541caed48..2be9b0ecf22c 100644
+index 2be9b0ecf22c..36ad9a4d65e4 100644
 --- a/kernel/workqueue.c
 +++ b/kernel/workqueue.c
-@@ -5002,10 +5002,16 @@ static void show_one_worker_pool(struct worker_pool *pool)
- 	struct worker *worker;
- 	bool first = true;
- 	unsigned long flags;
-+	unsigned long hung = 0;
+@@ -1938,12 +1938,17 @@ static struct worker *create_worker(struct worker_pool *pool)
  
- 	raw_spin_lock_irqsave(&pool->lock, flags);
- 	if (pool->nr_workers == pool->nr_idle)
- 		goto next_pool;
-+
-+	/* How long the first pending work is waiting for a worker. */
-+	if (!list_empty(&pool->worklist))
-+		hung = jiffies_to_msecs(jiffies - pool->watchdog_ts) / 1000;
-+
- 	/*
- 	 * Defer printing to avoid deadlocks in console drivers that
- 	 * queue work while holding locks also taken in their write
-@@ -5014,9 +5020,7 @@ static void show_one_worker_pool(struct worker_pool *pool)
- 	printk_deferred_enter();
- 	pr_info("pool %d:", pool->id);
- 	pr_cont_pool_info(pool);
--	pr_cont(" hung=%us workers=%d",
--		jiffies_to_msecs(jiffies - pool->watchdog_ts) / 1000,
--		pool->nr_workers);
-+	pr_cont(" hung=%lus workers=%d", hung, pool->nr_workers);
- 	if (pool->manager)
- 		pr_cont(" manager: %d",
- 			task_pid_nr(pool->manager->task));
+ 	/* ID is needed to determine kthread name */
+ 	id = ida_alloc(&pool->worker_ida, GFP_KERNEL);
+-	if (id < 0)
++	if (id < 0) {
++		pr_err_once("workqueue: Failed to allocate a worker ID: %pe\n",
++			    ERR_PTR(id));
+ 		return NULL;
++	}
+ 
+ 	worker = alloc_worker(pool->node);
+-	if (!worker)
++	if (!worker) {
++		pr_err_once("workqueue: Failed to allocate a worker\n");
+ 		goto fail;
++	}
+ 
+ 	worker->id = id;
+ 
+@@ -1955,8 +1960,11 @@ static struct worker *create_worker(struct worker_pool *pool)
+ 
+ 	worker->task = kthread_create_on_node(worker_thread, worker, pool->node,
+ 					      "kworker/%s", id_buf);
+-	if (IS_ERR(worker->task))
++	if (IS_ERR(worker->task)) {
++		pr_err_once("workqueue: Failed to create a worker thread: %pe",
++			    worker->task);
+ 		goto fail;
++	}
+ 
+ 	set_user_nice(worker->task, pool->attrs->nice);
+ 	kthread_bind_mask(worker->task, pool->attrs->cpumask);
 -- 
 2.35.3
 
