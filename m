@@ -2,87 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D026E6ADBDC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C723E6ADBE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjCGK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S230432AbjCGK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 05:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjCGK1C (ORCPT
+        with ESMTP id S230261AbjCGK1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:27:02 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0740584BD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:26:46 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id f13so11861300vsg.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 02:26:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678184806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yAifdSfv0qu9/9RmW88ObONMsIk5lXQf5X6sr56a9BE=;
-        b=HJP2dq5eXMi9C5VywdM47zJbV2wVa0N9nsZp/eflBdCu8ikIWZJM5r3y3UGBH1Dlgg
-         ovaGRHIAavdwMr2Qq7xZieDNL2aXPJBNp1mqtE5DwSN4Gt7Tu1IBjw7nTVEj8ylkFhJI
-         G3qzV/86brm1FEBBhZbPlFtVo43BQKrW+Gx+o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678184806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yAifdSfv0qu9/9RmW88ObONMsIk5lXQf5X6sr56a9BE=;
-        b=eoUujCCMm89jsNdKNUID2dqjwY6Id6hNA9pihgapHoWpPfg4Gx9dzHOJ3AKemaYlRd
-         FhAeo+oy+NL/36MvYDzNxj8kRmMMEn6hST59cHIG3RYOSytMFTMpTiBxWvdIRt89eW3G
-         NMCwlAhU3zr5K2ZOLSgEDm2J+LfWi6ow0yaMcEd0/hTTvqBtT2szUeLE0wV3jJz91dEH
-         cz1nODpyDTCykj5vdsBTKXthzwhpGbkMeV00hhxUg6LVT16QM/K/4UbNTxDwFPeJP0B8
-         L7nCGoxs35nPg8Kh3ujAEdYeeBWfcu6/8crskSXyO4vvQoArv0ilGQEm05K099cUOypj
-         m7qw==
-X-Gm-Message-State: AO0yUKVDj20Bk5dAqBLWOItsQYedYKEplBPE4+Fn4289CEqanQ/b3eyb
-        zSwNXoOsjrHe4o9YRsCCeAEHHQrffK04rQoLd3MOfg==
-X-Google-Smtp-Source: AK7set+cFs1AwNyjrHfT4eFsJP6dSFO3pQ1xfcD0fVPi5XjmERq9rViR6hefLiK6x6lPDIOISJKm9Sftmn5yEh7+j64=
-X-Received: by 2002:a67:e2c7:0:b0:412:2f46:4073 with SMTP id
- i7-20020a67e2c7000000b004122f464073mr8848432vsm.3.1678184806025; Tue, 07 Mar
- 2023 02:26:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20230228102704.708150-1-angelogioacchino.delregno@collabora.com> <20230228102704.708150-5-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230228102704.708150-5-angelogioacchino.delregno@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 7 Mar 2023 18:26:35 +0800
-Message-ID: <CAGXv+5FcnLYZnWGtngkj2y0mozPopT=16X2rApFqNhRYxfMjPw@mail.gmail.com>
-Subject: Re: [PATCH v4 05/12] dt-bindings: gpu: mali-bifrost: Add new MT8183 compatible
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
-        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
-        robh@kernel.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 7 Mar 2023 05:27:15 -0500
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206165293B;
+        Tue,  7 Mar 2023 02:27:12 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id ACA0F5C00BC;
+        Tue,  7 Mar 2023 05:27:10 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 07 Mar 2023 05:27:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678184830; x=1678271230; bh=Nm
+        HqRYp6yAhcV+Ytb7Zr7mo9BQW3Ju//Dis9Km0g2bU=; b=I6tr/SD1k/QYr+50AB
+        vtg3dpmKpdrwM/G3hisW7VApCJAOWluC4SdJo9PrvAvXkLMiyBuhjaldqDxjLcJf
+        7JqJl24f/7cY1xoCeWbg7rX1PeLYQoKXPWxPWGTeun7GvmfBvJIYwwk5fmD3VaRO
+        HLGwGgGxHrAQB6Vg1AcfDCx7TAKREphqDowTwztFUUuZ0Ri+VN1EL6mn+P2j+Osv
+        q/M6Stigr9DvnLw/s3TkArp0AyMgfdc2Lzb+8pFf9hKMD/uEGc+zP5b0zDdGkmbq
+        8mBEQeNyvO4BcpPhs9ajBcv+CbFksjE4+eM2dcr4nIqyJbFtSG9inILcOdAYi/w2
+        VMYA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678184830; x=1678271230; bh=NmHqRYp6yAhcV
+        +Ytb7Zr7mo9BQW3Ju//Dis9Km0g2bU=; b=RURfB6xdSPXr+nTbpgaI7KnNi2xdN
+        z5HD0/slt182A0H5TDhwsgA84EQZ4npIV+mTBtSfpg1t6bnCfqNNgyH+X6YsyOLr
+        wse4JlYq1v+7LdLWr57kp6Wlj8M0YmRxszU+0mU0EKyAEYNzqeCn9EltxLcsuORx
+        oB5iJvA9uszy5ju23iP2LDBY0si2n0sWcs6lXRm9stD++ASKDMrCbqKKoYZg4Tbj
+        7elhGJ1hjzoSoKsB6jx/VK+24D5OAIhG5vf0yG+2Kh8N/k2rxXRIZ32oMKgYyV6S
+        PFEJZjXmgsx19C9v+e4/gVmiRW4S7yLvA88tXhevYAltQ0Ki7Wy2Z0cmg==
+X-ME-Sender: <xms:fhEHZGiHao4MkUIu6IrXHkxP8PCZYL1ZJxtKNTJum07Vxvt6EN0I1Q>
+    <xme:fhEHZHAz2aT2iQGw7HCx3sYWAL2B7SoXMdw0THu77Xy7VG-jSha-OFYT7bQeq1aC6
+    8d1iSLAmRlFic9W4Io>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddutddguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:fhEHZOHeUdc9HfHJ-JaUu4qa2CkngOjaOY75JiCRNrg7lHXzg9SUVA>
+    <xmx:fhEHZPR3aRaYMy9g05Ef2vx7LScYY_tzWnrJwtIiLBgYi-LKGXlyxw>
+    <xmx:fhEHZDwP4bUU_tz8pnvUedHyToDWTfLNKGSI2fPzAtribmqwPatBwA>
+    <xmx:fhEHZFvo_IzbvEsOogY7XPVWFzevDGFCKIgMiaR0ZM1xhMUy1z_j0g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 293CEB60086; Tue,  7 Mar 2023 05:27:10 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
+Mime-Version: 1.0
+Message-Id: <1e321754-5bdd-4019-8524-2222ee369502@app.fastmail.com>
+In-Reply-To: <20230307100350.1c0af7b9@xps-13>
+References: <20230307074038.17391-1-lukas.bulwahn@gmail.com>
+ <20230307100350.1c0af7b9@xps-13>
+Date:   Tue, 07 Mar 2023 11:26:48 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
+Cc:     "Richard Weinberger" <richard@nod.at>,
+        "Vignesh Raghavendra" <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: parsers: remove reference to config MTD_NAND_TMIO
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 6:27=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Tue, Mar 7, 2023, at 10:03, Miquel Raynal wrote:
+> Hi Lukas,
 >
-> Since new platform data was required in Panfrost for getting GPU DVFS
-> finally working on MediaTek SoCs, add a new "mediatek,mt8183b-mali"
-> compatible.
+> lukas.bulwahn@gmail.com wrote on Tue,  7 Mar 2023 08:40:38 +0100:
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+>> Commit 568494db6809 ("mtd: remove tmio_nand driver") removes the config
+>> MTD_NAND_TMIO and its corresponding driver.
+>> 
+>> Remove the reference in MTD_SHARPSL_PARTS to that removed config.
+>> 
+>> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+>> ---
+>> Arnd, please ack.
+>> Miquel, please pick this minor non-urgent patch on top of the commit above.
+>
+> Actually I guess the SHARPSL driver is not selectable right now, so
+> this should be sent as part of my next fixes PR.
 
-Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-  with `make dt_binding_check` and `make dtbs_check`
+I don't see why not, it just depends on 'ARCH_PXA||COMPILE_TEST' and
+should work fine with CONFIG_MACH_SPITZ PDAs.
+
+     Arnd
