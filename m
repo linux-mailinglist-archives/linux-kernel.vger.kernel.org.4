@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C723E6ADBE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9076ADBDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjCGK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:28:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
+        id S230431AbjCGK2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 05:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjCGK1P (ORCPT
+        with ESMTP id S229794AbjCGK1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:27:15 -0500
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206165293B;
-        Tue,  7 Mar 2023 02:27:12 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id ACA0F5C00BC;
-        Tue,  7 Mar 2023 05:27:10 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 07 Mar 2023 05:27:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678184830; x=1678271230; bh=Nm
-        HqRYp6yAhcV+Ytb7Zr7mo9BQW3Ju//Dis9Km0g2bU=; b=I6tr/SD1k/QYr+50AB
-        vtg3dpmKpdrwM/G3hisW7VApCJAOWluC4SdJo9PrvAvXkLMiyBuhjaldqDxjLcJf
-        7JqJl24f/7cY1xoCeWbg7rX1PeLYQoKXPWxPWGTeun7GvmfBvJIYwwk5fmD3VaRO
-        HLGwGgGxHrAQB6Vg1AcfDCx7TAKREphqDowTwztFUUuZ0Ri+VN1EL6mn+P2j+Osv
-        q/M6Stigr9DvnLw/s3TkArp0AyMgfdc2Lzb+8pFf9hKMD/uEGc+zP5b0zDdGkmbq
-        8mBEQeNyvO4BcpPhs9ajBcv+CbFksjE4+eM2dcr4nIqyJbFtSG9inILcOdAYi/w2
-        VMYA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678184830; x=1678271230; bh=NmHqRYp6yAhcV
-        +Ytb7Zr7mo9BQW3Ju//Dis9Km0g2bU=; b=RURfB6xdSPXr+nTbpgaI7KnNi2xdN
-        z5HD0/slt182A0H5TDhwsgA84EQZ4npIV+mTBtSfpg1t6bnCfqNNgyH+X6YsyOLr
-        wse4JlYq1v+7LdLWr57kp6Wlj8M0YmRxszU+0mU0EKyAEYNzqeCn9EltxLcsuORx
-        oB5iJvA9uszy5ju23iP2LDBY0si2n0sWcs6lXRm9stD++ASKDMrCbqKKoYZg4Tbj
-        7elhGJ1hjzoSoKsB6jx/VK+24D5OAIhG5vf0yG+2Kh8N/k2rxXRIZ32oMKgYyV6S
-        PFEJZjXmgsx19C9v+e4/gVmiRW4S7yLvA88tXhevYAltQ0Ki7Wy2Z0cmg==
-X-ME-Sender: <xms:fhEHZGiHao4MkUIu6IrXHkxP8PCZYL1ZJxtKNTJum07Vxvt6EN0I1Q>
-    <xme:fhEHZHAz2aT2iQGw7HCx3sYWAL2B7SoXMdw0THu77Xy7VG-jSha-OFYT7bQeq1aC6
-    8d1iSLAmRlFic9W4Io>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddutddguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:fhEHZOHeUdc9HfHJ-JaUu4qa2CkngOjaOY75JiCRNrg7lHXzg9SUVA>
-    <xmx:fhEHZPR3aRaYMy9g05Ef2vx7LScYY_tzWnrJwtIiLBgYi-LKGXlyxw>
-    <xmx:fhEHZDwP4bUU_tz8pnvUedHyToDWTfLNKGSI2fPzAtribmqwPatBwA>
-    <xmx:fhEHZFvo_IzbvEsOogY7XPVWFzevDGFCKIgMiaR0ZM1xhMUy1z_j0g>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 293CEB60086; Tue,  7 Mar 2023 05:27:10 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
-Mime-Version: 1.0
-Message-Id: <1e321754-5bdd-4019-8524-2222ee369502@app.fastmail.com>
-In-Reply-To: <20230307100350.1c0af7b9@xps-13>
-References: <20230307074038.17391-1-lukas.bulwahn@gmail.com>
- <20230307100350.1c0af7b9@xps-13>
-Date:   Tue, 07 Mar 2023 11:26:48 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        "Lukas Bulwahn" <lukas.bulwahn@gmail.com>
-Cc:     "Richard Weinberger" <richard@nod.at>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: parsers: remove reference to config MTD_NAND_TMIO
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 7 Mar 2023 05:27:14 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CF65291D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:27:10 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id g19so8489868ual.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 02:27:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678184830;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0lIP6QMCX3nExnse1kF0X/k89ASNhvKrsoqP0TvYGno=;
+        b=YA/vWYLL+KxXY1sPwdyBi7xdV37GzpA+yMEtwec/IcVfnN/Y7OW+zTmdCExJKPTKep
+         sUHs6wFhVeM9+EKCrehvRB00bEadA1Lrrw1+brNUyvsK8bbk1z5r7CfTtHvTCt9fE1J2
+         p7N36WMUM8nENpwHPcSzU+hfddZn7hAto9rDg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678184830;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0lIP6QMCX3nExnse1kF0X/k89ASNhvKrsoqP0TvYGno=;
+        b=x7diTYvm7Dw9eMfvCNs3/M3K7rlEofdsZkse+cIbImjO6eJUDiDGbNsscfpPIJVkRA
+         cDfVJdkNUFUijS9nONNN8Mc5BgZuJIUCCYhkXKgFh78KJI6BG+YPjT3h8EwIPITAUKB+
+         QI7eYo4WA2q8JtaVgSLZcLcs23VTrPjmT81e8WGK38/5fgRwlLI3igDsDNwLhZUo/p1v
+         3UiYIog4fC4oTir5h6iYHVbuZ0xaG/MouCRHa+FZ61cMzOWdbRNLW3x1PuCusqBSYufz
+         gCGC4xqxoCUqTOhaWy7pt0+g62if/pRmEGld4D5Qq1Z3smhe5nuaeu3zItgg4jSD+NUB
+         +4LA==
+X-Gm-Message-State: AO0yUKWsN+WH7RDDUNd8eQMn3BSQYkR3O9CkIYTjHZX5T8jqzZawaKgH
+        lxQSxfgjiGZ26r/3fl0MARZCdeKwjrsPfRao/Ylwlg==
+X-Google-Smtp-Source: AK7set819ohzAaSDe0nZOxCmCgvs/Q8sYI8nIk6xQMEmrLHEWghxcsfgqRisZu1xB8xnfMWgTnPegQm6O/nqzaXnSRw=
+X-Received: by 2002:ab0:4714:0:b0:68b:90f4:1d8c with SMTP id
+ h20-20020ab04714000000b0068b90f41d8cmr3434006uac.1.1678184830022; Tue, 07 Mar
+ 2023 02:27:10 -0800 (PST)
+MIME-Version: 1.0
+References: <20230228102704.708150-1-angelogioacchino.delregno@collabora.com> <20230228102704.708150-4-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230228102704.708150-4-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 7 Mar 2023 18:26:59 +0800
+Message-ID: <CAGXv+5E6EzucKFUOp1i0CgKh4tmaVMC-MV3FgjtgqmbhbB3_zg@mail.gmail.com>
+Subject: Re: [PATCH v4 04/12] dt-bindings: gpu: mali-bifrost: Add sub-schema
+ for MT8192's power domains
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, steven.price@arm.com,
+        alyssa.rosenzweig@collabora.com, matthias.bgg@gmail.com,
+        robh@kernel.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023, at 10:03, Miquel Raynal wrote:
-> Hi Lukas,
+On Tue, Feb 28, 2023 at 6:27=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> lukas.bulwahn@gmail.com wrote on Tue,  7 Mar 2023 08:40:38 +0100:
+> MediaTek MT8192 (and similar) needs five power domains for the
+> Mali GPU and no sram-supply: change the binding to allow so by
+> also introducing power-domain-names in the generic binding;
+> while at it, also disallow the newly introduced power-domain-names
+> for all non-MediaTek bindings.
 >
->> Commit 568494db6809 ("mtd: remove tmio_nand driver") removes the config
->> MTD_NAND_TMIO and its corresponding driver.
->> 
->> Remove the reference in MTD_SHARPSL_PARTS to that removed config.
->> 
->> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
->> ---
->> Arnd, please ack.
->> Miquel, please pick this minor non-urgent patch on top of the commit above.
->
-> Actually I guess the SHARPSL driver is not selectable right now, so
-> this should be sent as part of my next fixes PR.
+> Fixes: 5d82e74a97c2 ("dt-bindings: Add compatible for Mali Valhall (JM)")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 
-I don't see why not, it just depends on 'ARCH_PXA||COMPILE_TEST' and
-should work fine with CONFIG_MACH_SPITZ PDAs.
-
-     Arnd
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+  with `make dt_binding_check` and `make dtbs_check`
