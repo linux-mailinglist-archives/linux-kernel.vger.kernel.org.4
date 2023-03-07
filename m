@@ -2,95 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3DF6AD8DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F04B6AD8E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:13:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjCGIMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:12:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
+        id S229870AbjCGINL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:13:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjCGIMH (ORCPT
+        with ESMTP id S229734AbjCGINI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:12:07 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10212CFEA
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:11:39 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id x3so48836333edb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:11:39 -0800 (PST)
+        Tue, 7 Mar 2023 03:13:08 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1102F1CF7A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:13:07 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id s11so48931891edy.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:13:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678176698;
+        d=linaro.org; s=google; t=1678176785;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+gmLTaMxh+UgKG/kflrxb/f3sNJaZcDEgaX2MESY0eU=;
-        b=q3PBcvB1zvsXE87gITbF/SzJQLo4Xx88B32/Tmw3dv2IrNfQYd8YbzJyVUtxwcFMDx
-         rDtF1kRD/J5rUZPOvdQrEAbExMBQTrNf0mRJwrTD4e0RYlDjbmuEVLPhc59kpXOuBguq
-         NyTY2kmk766MwbnpQMj2RcnYDPRvYilXFFVXrGGXa6GA9A20SUrpFbYn5+sC/xnzSEjE
-         FKhWGUqha329de9TWzywrqVay3P5xsD6TFOP7FdCGyCFWBqV4svNe0CvcyDUW8zR9Ieu
-         GkyggizmmZfQzDjfqt/w1nTLu3jfwmjXH29xP1JazPuuDhlWLd974oZW9quGhCvR2Jt1
-         hokg==
+        bh=Ebi9MqJM2rLRf0HSN4orh6m6hlkXC3F34t4OkD8rs5Y=;
+        b=T/8LQ56A+DCv2G/Yqt6nlZ7Ong4A4WqREAUMpClvksBr0tW6ClJVjDxxYzAmHjeWiw
+         puIZz+WKU/rUOHPvNuEQBeld2exBzfEgQ/sJFQ6MbTemwQeXjuoklaO1kSKmLR2EZ4Lx
+         wC8HU/R+kBQBYje7LI2oq6g4KifmQnVARlQ7S6mjZdUFlIfa2KUyJJphSMZaxJSTNFeB
+         +nK5UoF1lItnTCv0sK63mCq8qiOSAw+fJRRIgE7h2RKv8wDyU9zHW90bTUhLGp00m7kp
+         8Utac6QY6gxH8qOQEjoDlrg7Aa0Q1rWabkw1kHbdzT8Mf+UI6UKSDb18U0CysscMIq2X
+         BiXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678176698;
+        d=1e100.net; s=20210112; t=1678176785;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+gmLTaMxh+UgKG/kflrxb/f3sNJaZcDEgaX2MESY0eU=;
-        b=gejW7WrbAXazJYA3iVjMogQAkziyDOH0kTdR8J7o8YFjuXvrJnfeBHrUowuMDAtABC
-         9s0j2BvOe1LRX9wrkjiRwXWuZ6aLlYkSqzAH2B8azVOtBfd9BPPT5ih342h9oGLuU2kY
-         5VTwVteWosjEt56AcYVcM97k57MvVQCrM9bJro5h9gN5lKl6sqFYxBtb0PLMe/v4h0OD
-         us2JMWM3oJdNyQ5VhaqEjJ3RM+4670aZUKsiXlfRf32jgua2PtSSpP2nh6JcIMgawEub
-         wMwyzDXW2eZ8Z3WVI+Q97w4PCJ4QmMLBT/lmNwGs3pSJ8RfMzqKGK+iQGu71E1GYoi+3
-         b4zA==
-X-Gm-Message-State: AO0yUKWZDll3EJPs0/YfSvEZMGh2mFq14PsiUu7CgsKBJzux7Qi8ih+x
-        9k/r9U71XLF085P+NL8FG3eQ7w==
-X-Google-Smtp-Source: AK7set8K0X83pfhJzpDlAHKtkhFREUYDfeXRLHVhI+OBX7UgwhDddxevyD4fRlkYHGhDqm65b0Wfbw==
-X-Received: by 2002:a50:ed18:0:b0:4af:7bdc:1891 with SMTP id j24-20020a50ed18000000b004af7bdc1891mr12995254eds.11.1678176698410;
-        Tue, 07 Mar 2023 00:11:38 -0800 (PST)
+        bh=Ebi9MqJM2rLRf0HSN4orh6m6hlkXC3F34t4OkD8rs5Y=;
+        b=eXH5p+Scwu9K5LsD2t+JaazZKoGoqVcfMWgnm8LQR4ODEAmP4GDgRMqxMt6/30ipW8
+         fyDHN9XZ7R+R1N0lMtDPxj5Cd/YSEcQplLhGeahmOY6o22FhsZkXwgEI6GZ33Xk7fC+r
+         Mx+E8jwVUjEihK1h+ptMMsdR0vhWlZ7gQ0J3pEgq0E0fp0cZcmUx+gf8WBZvs6gOGFCa
+         gxpEHb3KYngvNNHAmgumQQRBLjbaaLMzZW20WiGsyT4txPz2suV2Z0L0qEb3n0x9eXDL
+         +zb94LobueYsAyVd22W9WYWdBfsv/PhWe8ZWKBekEDbq6gW2Rd0rmdNuKofMMnyF3r03
+         BjYQ==
+X-Gm-Message-State: AO0yUKW0ymzBXC6agdOMbQWK84oJxk32ZMawA+7JYOIPkysaZSxNTS28
+        7USMtSLJ0ewqQCW2sJ/UaEb2Xw==
+X-Google-Smtp-Source: AK7set+/dBFG4ZgrEGv+wZafXcyEgE0rxM7bbP+OzMVJLXtuh4vHOX5WFn5lvpAatboWhU1FUB804w==
+X-Received: by 2002:a17:907:8b16:b0:8b1:2e7c:df49 with SMTP id sz22-20020a1709078b1600b008b12e7cdf49mr15401797ejc.7.1678176785582;
+        Tue, 07 Mar 2023 00:13:05 -0800 (PST)
 Received: from ?IPV6:2a02:810d:15c0:828:5310:35c7:6f9e:2cd3? ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
-        by smtp.gmail.com with ESMTPSA id u2-20020a50d502000000b004c0057b478bsm6341543edi.34.2023.03.07.00.11.37
+        by smtp.gmail.com with ESMTPSA id h25-20020a1709063b5900b008d0dbf15b8bsm5693956ejf.212.2023.03.07.00.13.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 00:11:38 -0800 (PST)
-Message-ID: <d33145c3-e985-4d3c-a08c-6a249a8dc463@linaro.org>
-Date:   Tue, 7 Mar 2023 09:11:36 +0100
+        Tue, 07 Mar 2023 00:13:05 -0800 (PST)
+Message-ID: <a6425bde-5b6d-2fb2-2396-a35677b19e8f@linaro.org>
+Date:   Tue, 7 Mar 2023 09:13:04 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
- AST2600-i2cv2
+Subject: Re: [PATCH v4] dt-bindings: ata: Add UniPhier controller binding
 Content-Language: en-US
-To:     Ryan Chen <ryan_chen@aspeedtech.com>, Wolfram Sang <wsa@kernel.org>
-Cc:     Joel Stanley <joel@jms.id.au>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
-References: <20230226031321.3126756-1-ryan_chen@aspeedtech.com>
- <20230226031321.3126756-2-ryan_chen@aspeedtech.com>
- <53090449-58c9-bc03-56df-aa8ae93c0c26@linaro.org>
- <SEZPR06MB52699DEB2255EB54F35C2A59F2AD9@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <fc20a2d1-e2f9-c22b-dcdf-153cb527eea8@linaro.org>
- <SEZPR06MB526902637624A97D7DFB8523F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <c41ee6b5-ddb4-1253-de54-a295b3bab2cc@linaro.org>
- <SEZPR06MB5269E7B8785B3CB56A63A916F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <a3615fe7-aa2a-53e9-2732-ba4512b9369d@linaro.org>
- <SEZPR06MB5269E7B070B239F8E349C427F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <c5cf6e0a-05dc-dff7-6218-df0984d1ba47@linaro.org>
- <SEZPR06MB5269CB53B51B89C3CA039442F2B09@SEZPR06MB5269.apcprd06.prod.outlook.com>
- <e59fe30a-75d1-eb59-52a3-014fe3c961a6@linaro.org>
- <SEZPR06MB5269B541150855BF0DABFACFF2B69@SEZPR06MB5269.apcprd06.prod.outlook.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230222155906.19403-1-hayashi.kunihiko@socionext.com>
+ <9d36818f-3ce3-0fb6-1a3e-85e3879af08c@opensource.wdc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SEZPR06MB5269B541150855BF0DABFACFF2B69@SEZPR06MB5269.apcprd06.prod.outlook.com>
+In-Reply-To: <9d36818f-3ce3-0fb6-1a3e-85e3879af08c@opensource.wdc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
@@ -101,157 +81,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2023 01:48, Ryan Chen wrote:
-> Hello Krzysztof,
+On 06/03/2023 02:22, Damien Le Moal wrote:
+> On 2/23/23 00:59, Kunihiko Hayashi wrote:
+>> Add UniPhier SATA controller compatible string to the platform binding.
+>> This controller needs three reset controls for Pro4 SoC, or two reset
+>> controls for PXs2 and PXs3 SoCs.
+>>
+>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 > 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Sunday, March 5, 2023 5:49 PM
->> To: Ryan Chen <ryan_chen@aspeedtech.com>; Wolfram Sang
->> <wsa@kernel.org>
->> Cc: Joel Stanley <joel@jms.id.au>; Brendan Higgins
->> <brendan.higgins@linux.dev>; Krzysztof Kozlowski
->> <krzysztof.kozlowski+dt@linaro.org>; Andrew Jeffery <andrew@aj.id.au>;
->> devicetree@vger.kernel.org; Philipp Zabel <p.zabel@pengutronix.de>; Rob
->> Herring <robh+dt@kernel.org>; Benjamin Herrenschmidt
->> <benh@kernel.crashing.org>; linux-aspeed@lists.ozlabs.org;
->> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
->> openbmc@lists.ozlabs.org; linux-i2c@vger.kernel.org
->> Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for AST2600-i2cv2
->>
->> On 04/03/2023 02:33, Ryan Chen wrote:
->>> Hello Krzysztof,
->>>
->>>> -----Original Message-----
->>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Sent: Friday, March 3, 2023 6:41 PM
->>>> To: Ryan Chen <ryan_chen@aspeedtech.com>; Wolfram Sang
->>>> <wsa@kernel.org>
->>>> Cc: Joel Stanley <joel@jms.id.au>; Brendan Higgins
->>>> <brendan.higgins@linux.dev>; Krzysztof Kozlowski
->>>> <krzysztof.kozlowski+dt@linaro.org>; Andrew Jeffery
->>>> <andrew@aj.id.au>; devicetree@vger.kernel.org; Philipp Zabel
->>>> <p.zabel@pengutronix.de>; Rob Herring <robh+dt@kernel.org>; Benjamin
->>>> Herrenschmidt <benh@kernel.crashing.org>;
->>>> linux-aspeed@lists.ozlabs.org; linux-arm-kernel@lists.infradead.org;
->>>> linux-kernel@vger.kernel.org; openbmc@lists.ozlabs.org;
->>>> linux-i2c@vger.kernel.org
->>>> Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
->>>> AST2600-i2cv2
->>>>
->>>> On 03/03/2023 11:16, Ryan Chen wrote:
->>>>>>>>>>> aspeed,timout properites:
->>>>>>>>>>> For example I2C controller as slave mode, and suddenly
->>>>>> disconnected.
->>>>>>>>>>> Slave state machine will keep waiting for master clock in for
->>>>>>>>>>> rx/tx
->>>>>>>> transmit.
->>>>>>>>>>> So it need timeout setting to enable timeout unlock controller
->> state.
->>>>>>>>>>> And in another side. In Master side also need avoid suddenly
->>>>>>>>>>> slave
->>>>>>>>>> miss(un-plug), Master will timeout and release the SDA/SCL.
->>>>>>>>>>>
->>>>>>>>>>> Do you mean add those description into ore aspeed,timout
->>>>>>>>>>> properites
->>>>>>>>>> description?
->>>>>>>>>>
->>>>>>>>>> You are describing here one particular feature you want to
->>>>>>>>>> enable in the driver which looks non-scalable and more
->>>>>>>>>> difficult to
->>>>>> configure/use.
->>>>>>>>>> What I was looking for is to describe the actual configuration
->>>>>>>>>> you have
->>>>>> (e.g.
->>>>>>>>>> multi-master) which leads to enable or disable such feature in
->>>>>>>>>> your
->>>>>>>> hardware.
->>>>>>>>>> Especially that bool value does not scale later to actual
->>>>>>>>>> timeout values in time (ms)...
->>>>>>>>>>
->>>>>>>>>> I don't know I2C that much, but I wonder - why this should be
->>>>>>>>>> specific to Aspeed I2C and no other I2C controllers implement it?
->>>>>>>>>> IOW, this looks quite generic and every I2C controller should
->>>>>>>>>> have it. Adding it specific to Aspeed suggests that either we
->>>>>>>>>> miss a generic property or this should not be in DT at all
->>>>>>>>>> (because no one else has
->>>>>>>> it...).
->>>>>>>>>>
->>>>>>>>>> Also I wonder, why you wouldn't enable timeout always...
->>>>>>>>>>
->>>>>>>>>> +Cc Wolfram,
->>>>>>>>>> Maybe you know whether bool "timeout" property for one
->>>>>>>>>> controller makes sense? Why we do not have it for all controllers?
->>>>>>>>>>
->>>>>>>>> Because, i2c bus didn’t specific timeout.
->>>>>>>>> But SMBus defines a clock low time-out, TIMEOUT of 35 ms.
->>>>>>>>>
->>>>>>>>> It have definition in SMBus specification.
->>>>>>>>> http://smbus.org/specs/SMBus_3_1_20180319.pdf
->>>>>>>>> You can check Page 18, Note3 that have timeout description.
->>>>>>>>
->>>>>>>> Then you have already property for this - "smbus"?
->>>>>>> To be a property "smbus", that would be a big topic, I saw fsl i2c
->>>>>>> also have this.
->>>>>>> https://github.com/torvalds/linux/blob/master/Documentation/device
->>>>>>> tr
->>>>>>> ee
->>>>>>> /bindings/i2c/i2c-mpc.yaml#L43-L47
->>>>>>> So, I just think the "timeout" property.
->>>>>>
->>>>>> Yeah and this is the only place. It also differs because it allows
->>>>>> actual timeout values.
->>>>> Thanks, So can I still keep the property "aspeed,timeout" here?
->>>>> It is the only place.
->>>>
->>>> No, because none of my concerns above are addressed.
->>>>
->>> Thanks, I realize your concerns.
->>>
->>> So, I modify it like i2c-mpc.yaml
->>> https://github.com/torvalds/linux/blob/master/Documentation/devicetree
->>> /bindings/i2c/i2c-mpc.yaml#L43-L47
->>>
->>>   aspeed,timeout:
->>>     $ref: /schemas/types.yaml#/definitions/uint32
->>>     description: |
->>>       I2C bus timeout in microseconds
->>> Is this way acceptable?
->>
->> So, let's repeat my last questions:
->>
->> 1. Why you wouldn't enable timeout always...
->>
->> You wrote:
->>> http://smbus.org/specs/SMBus_3_1_20180319.pdf
->>> You can check Page 18, Note3 that have timeout description.
->>
->> which indicates you should always use timeout, doesn't it?
+> Rob,
 > 
-> Yes, if board design the bus is connected with SMBUS device, it should enable.
-> But in my previous statement, the board design is two multi-master devices connected each other. 
-
-For which you have the property, thus case is solved, isn't it? You want
-timeout always except for multi-master?
-
-> And both device is transfer with MCTP protocol. 
-> That will not SMBUS protocol. 
-> They need have timeout that prevent unexpected un-plug.
-> I do the study with smbus in Linux, that will different slave call back. Compare with smbus slave and mctp slave.
-> So in this scenario, that is only enable for timeout. 
-
-And the driver knows which protocol it is going to talk and such choice
-should not be in DT.
-
->  
->> 2. Why we do not have it for all controllers with SMBus v3? Why this one is
->> special?
+> Are you OK with this patch ? I can take it for 6.4.
 > 
-> Not all bus is connected with smbus. Most are i2c device connected in board.
-> That will be specific statement for each bus.
 
-That's not the answer to my question. Why other controllers which can be
-connected to I2C or SMBus devices do not need this property?
+You got Review (which includes also "Ack"), what are you missing here?
 
 Best regards,
 Krzysztof
