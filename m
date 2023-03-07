@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78B96AD622
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2125D6AD617
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjCGERQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 23:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S229545AbjCGERV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 23:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjCGERH (ORCPT
+        with ESMTP id S229923AbjCGERJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 23:17:07 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3275328A;
-        Mon,  6 Mar 2023 20:17:07 -0800 (PST)
+        Mon, 6 Mar 2023 23:17:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967EF5328A;
+        Mon,  6 Mar 2023 20:17:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B6B3BB80BA0;
-        Tue,  7 Mar 2023 04:17:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA1B2C433A0;
-        Tue,  7 Mar 2023 04:17:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4678B81613;
+        Tue,  7 Mar 2023 04:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE29EC433EF;
+        Tue,  7 Mar 2023 04:17:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678162624;
-        bh=E0VFhdTMfMES0QIejpeQT7Bl4k+8EEwaft3lnVN1UPg=;
+        s=k20201202; t=1678162625;
+        bh=X2mu4QLPFyIf9GnMC2MlfaO80bGeCQmDWyEqMjyg8OE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kfyf4NpscZnzM0CiDJs7JQffErHqmM9DF63GY+/1+kvR9NWvz9CbIqzhWxKTeBPK1
-         Mmzjo+7AYaErakb9gZRbsFixBDMX5Zz8dGZFvKuqgWC6P+otXtv1JScsTW6dQ8roZD
-         UhScj/sZ7rgM0Bpb43yXhS+JkEvJAp2adDscu0KmGJYB7Ue3kgxo27+zMjcxEA7XN5
-         Bg22B1j0wXZJXx9afu3YI/Q9dtA3+qrdNkG57BSWWmJlRegTPyxN8dBmjpEHhY1o8s
-         TyMt9ReUGnHrxOWc99+tJVRf70M12yr8hHmQPqp3BOEWhhITh7qyunHOKs86vKsOkP
-         YvHNU4Mi1i56Q==
+        b=hZJ5j3TsxkQoA1KAK6+3RwE9YQ34VrsREShGYB2WXSNNWDK87KTu/4hQIjcgI89kO
+         tbPF6NnFM9jxhgl18UD47eYdzPw69jJsfcLNwiauFr147UXbiHFNdYguMQ/hnZE3mW
+         8buH3bkAeJM/zjWwct/5PXwD84Wk+DejhETYupl05XNAdiYpbaBhSCn6LaCMLKIrwV
+         AgxCcprGoeqMsswOfvRW6F55G3ClGsUMjjBlK9CArZqOMvvTxnX7+0FqKkDDY4qKCH
+         YeRQDDx3npkARaPZuUj6CckjR7ZAX7q2tvdk4iFQtKKJU0lLXS2dDf9DPNJtksjQQ6
+         NuEs62OFyleAQ==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+To:     agross@kernel.org, linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     marijn.suijten@somainline.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-kernel@vger.kernel.org, Luca Weiss <luca@z3ntu.xyz>,
         Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Yang Xiwen <forbidden405@foxmail.com>,
-        devicetree@vger.kernel.org
-Cc:     Nikita Travkin <nikita@trvn.ru>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Jaime Breva <jbreva@nayarsystems.com>
-Subject: Re: [PATCH] arm64: dts: qcom: msm8916-ufi: Fix sim card selection pinctrl
-Date:   Mon,  6 Mar 2023 20:20:27 -0800
-Message-Id: <167816282864.1458033.10898681034642002351.b4-ty@kernel.org>
+        Conor Dooley <conor.dooley@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH 1/2] dt-bindings: arm: Add Cortex-A715 and X3
+Date:   Mon,  6 Mar 2023 20:20:28 -0800
+Message-Id: <167816282864.1458033.9946003182900300090.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <tencent_7036BCA256055D05F8C49D86DF7F0E2D1A05@qq.com>
-References: <tencent_7036BCA256055D05F8C49D86DF7F0E2D1A05@qq.com>
+In-Reply-To: <20230216110803.3945747-1-konrad.dybcio@linaro.org>
+References: <20230216110803.3945747-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,21 +60,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Mar 2023 16:53:50 +0800, Yang Xiwen wrote:
-> The previous commit mistakenly introduced sim_ctrl_default as pinctrl,
-> this is incorrect, the interface for sim card selection varies between
-> different devices and should not be placed in the dtsi.
+On Thu, 16 Feb 2023 12:08:02 +0100, Konrad Dybcio wrote:
+> Add compatibles for the Cortex-A715 and X3 cores found in some
+> recent flagship designs.
 > 
-> This commit selects external SIM card slot for ufi001c as default.
-> uf896 selects the correct SIM card slot automatically, thus does not need
-> this pinctrl node.
 > 
-> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: msm8916-ufi: Fix sim card selection pinctrl
-      commit: eaba416688f4f074ea3bf2ef975c9e2dbb06712b
+[2/2] arm64: dts: qcom: sm8550: Use correct CPU compatibles
+      commit: 27072f2ffb29283b9a44d878204c86c08d86b37f
 
 Best regards,
 -- 
