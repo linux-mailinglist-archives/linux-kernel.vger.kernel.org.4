@@ -2,115 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F5B6ADE43
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9EF6ADE4B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjCGMDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
+        id S231337AbjCGMGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:06:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbjCGMDI (ORCPT
+        with ESMTP id S230285AbjCGMGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:03:08 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E02615145
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678190586; x=1709726586;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=IzPr3HWNoxgcitMvR8OqYS4FQkMYF9l8gGmcg8xPKwo=;
-  b=IsoUUaYmmi3saQgh4KT012GC8+ZNliXR/sxAE7DBsvQoBGwmAushctzo
-   nmYeHz0EP9/OvqhtCgfsDmmR/sO2G/Sdvyf6tTgr0nC5rOEH48oofWOSr
-   cwv94N9AGdDJdB5csNSEBBl/mwgaUHMTpoanrTQUKGOh1MKjvcNwH+WnN
-   kFJkheWfgPVK3AzFvrHNGFK2CKdV6C/cU32HlUWWCVogfq57AOaRNK8y6
-   /o9hoolUMcWX1LhYZOTBP74J4GlAPfesVnXLVcKtQO3izBTi/xszGmZkw
-   tEqzJKfGaZ/cGh846EP46NjRPCjRuaX7uyN08ZMUYWCu/eUm3npLeXUAg
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="324137869"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="324137869"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 04:03:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="626511902"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="626511902"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Mar 2023 04:03:03 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZW22-0001HB-2n;
-        Tue, 07 Mar 2023 12:03:02 +0000
-Date:   Tue, 7 Mar 2023 20:02:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bean Huo <beanhuo@micron.com>
-Subject: drivers/ufs/host/ufs-hisi.c:561:34: warning: 'ufs_hisi_of_match'
- defined but not used
-Message-ID: <202303071951.urH1A5m6-lkp@intel.com>
+        Tue, 7 Mar 2023 07:06:31 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3575434C3B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:05:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678190746;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=OV3TXQN7O8oKayamqJhsqwDR10DSkew1hqIvq2D1i/8=;
+        b=ZqFqcVEApvQIf9f4l+H4wLxvGCCrFXOHKzLna6LcXdpKFc0bMGcMiI84HITlfYo7Mlb5CN
+        NtkQDr41Ixin13lBrsdWixAyUgpQ1J2QTNzAcBMXx8bCK+v6BRi4Mfa0QzKz7Na6BEcsp1
+        Qmlbm5oV1lsrIkNDAKy7aWPvewB3STA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-199-Jf3khm7oP1qc-96GI0Io5w-1; Tue, 07 Mar 2023 07:05:43 -0500
+X-MC-Unique: Jf3khm7oP1qc-96GI0Io5w-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 979DA18F0242;
+        Tue,  7 Mar 2023 12:05:42 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.195.222])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EF3952166B26;
+        Tue,  7 Mar 2023 12:05:40 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andy@kernel.org>, Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Aditya Garg <gargaditya08@live.com>,
+        platform-driver-x86@vger.kernel.org,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] backlight: apple_bl: Use acpi_video_get_backlight_type()
+Date:   Tue,  7 Mar 2023 13:05:40 +0100
+Message-Id: <20230307120540.389920-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bart,
+On some MacBooks both the apple_bl and the apple-gmux backlight drivers
+may be able to export a /sys/class/backlight device.
 
-First bad commit (maybe != root cause):
+To avoid having 2 backlight devices for one LCD panel until now
+the apple-gmux driver has been calling apple_bl_unregister() to move
+the apple_bl backlight device out of the way when it loads.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8ca09d5fa3549d142c2080a72a4c70ce389163cd
-commit: dd11376b9f1b73aca3f8c6eb541486bbb6996f05 scsi: ufs: Split the drivers/scsi/ufs directory
-date:   10 months ago
-config: x86_64-buildonly-randconfig-r003-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071951.urH1A5m6-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd11376b9f1b73aca3f8c6eb541486bbb6996f05
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout dd11376b9f1b73aca3f8c6eb541486bbb6996f05
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/ufs/host/
+Similar problems exist on other x86 laptops and all backlight drivers
+which may be used on x86 laptops have moved to using
+acpi_video_get_backlight_type() to determine whether they should load
+or not.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303071951.urH1A5m6-lkp@intel.com/
+Switch apple_bl to this model too, so that it is consistent with all
+the other x86 backlight drivers.
 
-All warnings (new ones prefixed by >>):
+Besides code-simplification and consistency this has 2 other benefits:
 
->> drivers/ufs/host/ufs-hisi.c:561:34: warning: 'ufs_hisi_of_match' defined but not used [-Wunused-const-variable=]
-     561 | static const struct of_device_id ufs_hisi_of_match[] = {
-         |                                  ^~~~~~~~~~~~~~~~~
+1) It removes a race during boot where userspace will briefly see
+   an apple_bl backlight and then have it disappear again, leading to e.g.:
+   https://bbs.archlinux.org/viewtopic.php?id=269920
 
+2) This allows user to switch between the drivers by passing
+   acpi_backlight=apple_gmux or acpi_backlight=vendor on the kernel
+   commandline.
 
-vim +/ufs_hisi_of_match +561 drivers/ufs/host/ufs-hisi.c
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+A note to the backlight class / subsystem maintainers, this change
+applies on top of a similar patch for drivers/platform/x86/apple-gmux.c
+which makes that driver use acpi_video_get_backlight_type(). See:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  560  
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05 @561  static const struct of_device_id ufs_hisi_of_match[] = {
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  562  	{ .compatible = "hisilicon,hi3660-ufs", .data = &ufs_hba_hi3660_vops },
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  563  	{ .compatible = "hisilicon,hi3670-ufs", .data = &ufs_hba_hi3670_vops },
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  564  	{},
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  565  };
-653fcb07d95eda drivers/scsi/ufs/ufs-hisi.c Manivannan Sadhasivam 2019-01-05  566  
+I believe it is easiest to also merge this patch through
+the platform-drivers-x86 tree, may I please have your Ack for this ?
+---
+ drivers/platform/x86/Kconfig       |  1 -
+ drivers/platform/x86/apple-gmux.c  | 11 -----------
+ drivers/video/backlight/Kconfig    |  1 +
+ drivers/video/backlight/apple_bl.c | 31 ++++++++++--------------------
+ include/linux/apple_bl.h           | 27 --------------------------
+ 5 files changed, 11 insertions(+), 60 deletions(-)
+ delete mode 100644 include/linux/apple_bl.h
 
-:::::: The code at line 561 was first introduced by commit
-:::::: 653fcb07d95eda58b72a5e715230b582c4d6d69e scsi: ufs: Add HI3670 SoC UFS driver support
-
-:::::: TO: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-:::::: CC: Martin K. Petersen <martin.petersen@oracle.com>
-
+diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+index d2619e7025c7..aa8df8d4aee9 100644
+--- a/drivers/platform/x86/Kconfig
++++ b/drivers/platform/x86/Kconfig
+@@ -206,7 +206,6 @@ config APPLE_GMUX
+ 	depends on ACPI && PCI
+ 	depends on PNP
+ 	depends on BACKLIGHT_CLASS_DEVICE
+-	depends on BACKLIGHT_APPLE=n || BACKLIGHT_APPLE
+ 	help
+ 	  This driver provides support for the gmux device found on many
+ 	  Apple laptops, which controls the display mux for the hybrid
+diff --git a/drivers/platform/x86/apple-gmux.c b/drivers/platform/x86/apple-gmux.c
+index 787cf2a7e268..f490565e1ed1 100644
+--- a/drivers/platform/x86/apple-gmux.c
++++ b/drivers/platform/x86/apple-gmux.c
+@@ -16,7 +16,6 @@
+ #include <linux/backlight.h>
+ #include <linux/acpi.h>
+ #include <linux/pnp.h>
+-#include <linux/apple_bl.h>
+ #include <linux/apple-gmux.h>
+ #include <linux/slab.h>
+ #include <linux/delay.h>
+@@ -884,14 +883,6 @@ static int gmux_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
+ 		gmux_data->bdev = bdev;
+ 		bdev->props.brightness = gmux_get_brightness(bdev);
+ 		backlight_update_status(bdev);
+-
+-		/*
+-		 * The backlight situation on Macs is complicated. If the gmux is
+-		 * present it's the best choice, because it always works for
+-		 * backlight control and supports more levels than other options.
+-		 * Disable the other backlight choices.
+-		 */
+-		apple_bl_unregister();
+ 	}
+ 
+ 	gmux_data->power_state = VGA_SWITCHEROO_ON;
+@@ -1008,8 +999,6 @@ static void gmux_remove(struct pnp_dev *pnp)
+ 		release_region(gmux_data->iostart, gmux_data->iolen);
+ 	apple_gmux_data = NULL;
+ 	kfree(gmux_data);
+-
+-	apple_bl_register();
+ }
+ 
+ static const struct pnp_device_id gmux_device_ids[] = {
+diff --git a/drivers/video/backlight/Kconfig b/drivers/video/backlight/Kconfig
+index 4c33e971c0f0..51387b1ef012 100644
+--- a/drivers/video/backlight/Kconfig
++++ b/drivers/video/backlight/Kconfig
+@@ -285,6 +285,7 @@ config BACKLIGHT_MT6370
+ config BACKLIGHT_APPLE
+ 	tristate "Apple Backlight Driver"
+ 	depends on X86 && ACPI
++	depends on ACPI_VIDEO=n || ACPI_VIDEO
+ 	help
+ 	  If you have an Intel-based Apple say Y to enable a driver for its
+ 	  backlight.
+diff --git a/drivers/video/backlight/apple_bl.c b/drivers/video/backlight/apple_bl.c
+index e9e7acb577bf..aaa824437a2a 100644
+--- a/drivers/video/backlight/apple_bl.c
++++ b/drivers/video/backlight/apple_bl.c
+@@ -24,7 +24,7 @@
+ #include <linux/pci.h>
+ #include <linux/acpi.h>
+ #include <linux/atomic.h>
+-#include <linux/apple_bl.h>
++#include <acpi/video.h>
+ 
+ static struct backlight_device *apple_backlight_device;
+ 
+@@ -215,32 +215,21 @@ static struct acpi_driver apple_bl_driver = {
+ 	},
+ };
+ 
+-static atomic_t apple_bl_registered = ATOMIC_INIT(0);
+-
+-int apple_bl_register(void)
+-{
+-	if (atomic_xchg(&apple_bl_registered, 1) == 0)
+-		return acpi_bus_register_driver(&apple_bl_driver);
+-
+-	return 0;
+-}
+-EXPORT_SYMBOL_GPL(apple_bl_register);
+-
+-void apple_bl_unregister(void)
+-{
+-	if (atomic_xchg(&apple_bl_registered, 0) == 1)
+-		acpi_bus_unregister_driver(&apple_bl_driver);
+-}
+-EXPORT_SYMBOL_GPL(apple_bl_unregister);
+-
+ static int __init apple_bl_init(void)
+ {
+-	return apple_bl_register();
++	/*
++	 * Use ACPI video detection code to see if this driver should register
++	 * or if another driver, e.g. the apple-gmux driver should be used.
++	 */
++	if (acpi_video_get_backlight_type() != acpi_backlight_vendor)
++		return -ENODEV;
++
++	return acpi_bus_register_driver(&apple_bl_driver);
+ }
+ 
+ static void __exit apple_bl_exit(void)
+ {
+-	apple_bl_unregister();
++	acpi_bus_unregister_driver(&apple_bl_driver);
+ }
+ 
+ module_init(apple_bl_init);
+diff --git a/include/linux/apple_bl.h b/include/linux/apple_bl.h
+deleted file mode 100644
+index 445af2e3cc21..000000000000
+--- a/include/linux/apple_bl.h
++++ /dev/null
+@@ -1,27 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * apple_bl exported symbols
+- */
+-
+-#ifndef _LINUX_APPLE_BL_H
+-#define _LINUX_APPLE_BL_H
+-
+-#if defined(CONFIG_BACKLIGHT_APPLE) || defined(CONFIG_BACKLIGHT_APPLE_MODULE)
+-
+-extern int apple_bl_register(void);
+-extern void apple_bl_unregister(void);
+-
+-#else /* !CONFIG_BACKLIGHT_APPLE */
+-
+-static inline int apple_bl_register(void)
+-{
+-	return 0;
+-}
+-
+-static inline void apple_bl_unregister(void)
+-{
+-}
+-
+-#endif /* !CONFIG_BACKLIGHT_APPLE */
+-
+-#endif /* _LINUX_APPLE_BL_H */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.1
+
