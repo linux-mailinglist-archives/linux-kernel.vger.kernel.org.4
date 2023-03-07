@@ -2,228 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C96A86AE5AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2AC6AE58F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:57:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjCGP7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:59:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
+        id S230184AbjCGP5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:57:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjCGP6y (ORCPT
+        with ESMTP id S231644AbjCGP4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:58:54 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE1D94F63;
-        Tue,  7 Mar 2023 07:57:15 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pZZge-0001w6-1U;
-        Tue, 07 Mar 2023 16:57:12 +0100
-Date:   Tue, 7 Mar 2023 15:55:35 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH v12 16/18] net: ethernet: mtk_eth_soc: rely on num_devs and
- remove MTK_MAC_COUNT
-Message-ID: <20b8cc6b73e6d6d842543dea420b4dc4b8cc105e.1678201958.git.daniel@makrotopia.org>
-References: <cover.1678201958.git.daniel@makrotopia.org>
+        Tue, 7 Mar 2023 10:56:13 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA63C9270B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:55:46 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id h14so12619458wru.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:55:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678204545;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PRjk8VOppnGqzOz7XErLSEL3dWYMpgLTb6kuNQ17jK8=;
+        b=eZrAbeN4kKHrj/W0DHIGzXlvGANWW+5yMvHLqz3FFmu6qH7AU6P+SItcRoa7rfBPDm
+         xdLgqEe/47cGXLKlgqRqoxlD0V4sjR8fHv5jDSJo/cS4f5W50o33s8Ykpc5VoyWcEEMH
+         AqG5Rl1u4TeRXnnxCGZ5q33dhoMQANbSoDjzTZIHtSy+r53aEZIVo+wpqtHAq8iDF74L
+         0vx8wQdFLpqCmqHGJRESnN4NxQ7j82BItCzmjQunVI6umHiIqTtG/loLmjvPUsmD0CzL
+         1zkLZ2LroIsxvaydN65lm0WfPcedfi6BeVpUSWbn3SegwmpCkbdsEZV+gNoO2ibQjCmQ
+         u+pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678204545;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PRjk8VOppnGqzOz7XErLSEL3dWYMpgLTb6kuNQ17jK8=;
+        b=McxrNvyzeUi1JpKMeB5O7j7XNnaZko71XODs0oNMKlP4gFlsat+3DfC3uxz7WYN8Cw
+         9N48+3APk9soJfDwteWPnLpk/NYTVXUsu0ZSrWaiYPpv19JsgDgyRanbG5XtgFLdJG4f
+         2nYacVsuaoeDNiyEeteFGHnIyhxSyHxsONRf4fKmGZhJr/PWrvrFXlEUDMAsKu6wxO9S
+         xyIUKLh0yI9E+NKrfQ8XwWjPQqXQHFceSAB8BIuz+xw7/iSnWAVULsJadt7wSNxJJAx2
+         U/N+CYnRG4XN2e39FZ+UFLCSWjderaeZLhoG2qegDcXyul5qlcphfoeOZ972g+A7m7cC
+         SlFg==
+X-Gm-Message-State: AO0yUKWTqL+T8ntZWjSqhg02H9b++Jw1gU6s0IwDi3Ma+wBOJ4qR+Z+m
+        06SBIXWS+e/6HRZmqQzfbDYJOw==
+X-Google-Smtp-Source: AK7set/N/5BkOLByxbmUAWxPDJR0jyVXI564X6f26/BBqGzsj0yvuKvIsK2Ppkj/Voswj+bqthK4HQ==
+X-Received: by 2002:a5d:6148:0:b0:2c5:5335:73f3 with SMTP id y8-20020a5d6148000000b002c5533573f3mr14139460wrt.34.1678204545343;
+        Tue, 07 Mar 2023 07:55:45 -0800 (PST)
+Received: from localhost.localdomain ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05600c450e00b003e1fee8baacsm18115389wmo.25.2023.03.07.07.55.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 07:55:44 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     agross@kernel.org, andersson@kernel.org, gregkh@linuxfoundation.org
+Cc:     konrad.dybcio@linaro.org, jirislaby@kernel.org,
+        bartosz.golaszewski@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH 1/2] tty: serial: qcom-geni-serial: check correct dma address before unprep
+Date:   Tue,  7 Mar 2023 15:55:41 +0000
+Message-Id: <20230307155543.31021-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1678201958.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+looks like there was a typo while checking validatity of tx_dma_addr, the
+code was checking rx instead of tx.
+This can potentially lead to memory leak, this patch fixes the typo.
 
-Get rid of MTK_MAC_COUNT since it is a duplicated of eth->soc->num_devs.
-
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Fixes: 2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for serial engine DMA")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 30 ++++++++++-----------
- drivers/net/ethernet/mediatek/mtk_eth_soc.h |  1 -
- 2 files changed, 15 insertions(+), 16 deletions(-)
+ drivers/tty/serial/qcom_geni_serial.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index c858f21f603c..1f802330ff13 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -988,7 +988,7 @@ static void mtk_stats_update(struct mtk_eth *eth)
- {
- 	int i;
- 
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		if (!eth->mac[i] || !eth->mac[i]->hw_stats)
- 			continue;
- 		if (spin_trylock(&eth->mac[i]->hw_stats->stats_lock)) {
-@@ -1493,7 +1493,7 @@ static int mtk_queue_stopped(struct mtk_eth *eth)
- {
- 	int i;
- 
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		if (!eth->netdev[i])
- 			continue;
- 		if (netif_queue_stopped(eth->netdev[i]))
-@@ -1507,7 +1507,7 @@ static void mtk_wake_queue(struct mtk_eth *eth)
- {
- 	int i;
- 
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		if (!eth->netdev[i])
- 			continue;
- 		netif_tx_wake_all_queues(eth->netdev[i]);
-@@ -1968,7 +1968,7 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 			 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
- 			mac = RX_DMA_GET_SPORT(trxd.rxd4) - 1;
- 
--		if (unlikely(mac < 0 || mac >= MTK_MAC_COUNT ||
-+		if (unlikely(mac < 0 || mac >= eth->soc->num_devs ||
- 			     !eth->netdev[mac]))
- 			goto release_desc;
- 
-@@ -2948,7 +2948,7 @@ static int mtk_set_features(struct net_device *dev, netdev_features_t features)
- 		MTK_CDMP_EG_CTRL);
- 
- 	/* sync features with other MAC */
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		if (!eth->netdev[i] || eth->netdev[i] == dev)
- 			continue;
- 		eth->netdev[i]->features &= ~NETIF_F_HW_VLAN_CTAG_RX;
-@@ -3038,7 +3038,7 @@ static void mtk_dma_free(struct mtk_eth *eth)
- 	const struct mtk_soc_data *soc = eth->soc;
- 	int i;
- 
--	for (i = 0; i < MTK_MAC_COUNT; i++)
-+	for (i = 0; i < soc->num_devs; i++)
- 		if (eth->netdev[i])
- 			netdev_reset_queue(eth->netdev[i]);
- 	if (eth->scratch_ring) {
-@@ -3192,7 +3192,7 @@ static void mtk_gdm_config(struct mtk_eth *eth, u32 config)
- 	if (MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628))
+diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+index d69592e5e2ec..5972b5c317d3 100644
+--- a/drivers/tty/serial/qcom_geni_serial.c
++++ b/drivers/tty/serial/qcom_geni_serial.c
+@@ -596,7 +596,7 @@ static void qcom_geni_serial_stop_tx_dma(struct uart_port *uport)
+ 	if (!qcom_geni_serial_main_active(uport))
  		return;
  
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		u32 val = mtk_r32(eth, MTK_GDMA_FWD_CFG(i));
- 
- 		/* default setup the forward port to send frame to PDMA */
-@@ -3796,7 +3796,7 @@ static int mtk_hw_init(struct mtk_eth *eth, bool reset)
- 	 * up with the more appropriate value when mtk_mac_config call is being
- 	 * invoked.
- 	 */
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		struct net_device *dev = eth->netdev[i];
- 
- 		mtk_w32(eth, MAC_MCR_FORCE_LINK_DOWN, MTK_MAC_MCR(i));
-@@ -4002,7 +4002,7 @@ static void mtk_pending_work(struct work_struct *work)
- 	mtk_prepare_for_reset(eth);
- 
- 	/* stop all devices to make sure that dma is properly shut down */
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		if (!eth->netdev[i] || !netif_running(eth->netdev[i]))
- 			continue;
- 
-@@ -4018,7 +4018,7 @@ static void mtk_pending_work(struct work_struct *work)
- 	mtk_hw_init(eth, true);
- 
- 	/* restart DMA and enable IRQs */
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		if (!test_bit(i, &restart))
- 			continue;
- 
-@@ -4046,7 +4046,7 @@ static int mtk_free_dev(struct mtk_eth *eth)
- {
- 	int i;
- 
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		if (!eth->netdev[i])
- 			continue;
- 		free_netdev(eth->netdev[i]);
-@@ -4065,7 +4065,7 @@ static int mtk_unreg_dev(struct mtk_eth *eth)
- {
- 	int i;
- 
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		struct mtk_mac *mac;
- 		if (!eth->netdev[i])
- 			continue;
-@@ -4370,7 +4370,7 @@ static int mtk_add_mac(struct mtk_eth *eth, struct device_node *np)
- 	}
- 
- 	id = be32_to_cpup(_id);
--	if (id >= MTK_MAC_COUNT) {
-+	if (id >= eth->soc->num_devs) {
- 		dev_err(eth->dev, "%d is not a valid mac id\n", id);
- 		return -EINVAL;
- 	}
-@@ -4506,7 +4506,7 @@ void mtk_eth_set_dma_device(struct mtk_eth *eth, struct device *dma_dev)
- 
- 	rtnl_lock();
- 
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		dev = eth->netdev[i];
- 
- 		if (!dev || !(dev->flags & IFF_UP))
-@@ -4830,7 +4830,7 @@ static int mtk_remove(struct platform_device *pdev)
- 	int i;
- 
- 	/* stop all devices to make sure that dma is properly shut down */
--	for (i = 0; i < MTK_MAC_COUNT; i++) {
-+	for (i = 0; i < eth->soc->num_devs; i++) {
- 		if (!eth->netdev[i])
- 			continue;
- 		mtk_stop(eth->netdev[i]);
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index f0c38c856cd0..8c5f72603604 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -33,7 +33,6 @@
- #define MTK_TX_DMA_BUF_LEN_V2	0xffff
- #define MTK_QDMA_RING_SIZE	2048
- #define MTK_DMA_SIZE		512
--#define MTK_MAC_COUNT		2
- #define MTK_RX_ETH_HLEN		(ETH_HLEN + ETH_FCS_LEN)
- #define MTK_RX_HLEN		(NET_SKB_PAD + MTK_RX_ETH_HLEN + NET_IP_ALIGN)
- #define MTK_DMA_DUMMY_DESC	0xffffffff
+-	if (port->rx_dma_addr) {
++	if (port->tx_dma_addr) {
+ 		geni_se_tx_dma_unprep(&port->se, port->tx_dma_addr,
+ 				      port->tx_remaining);
+ 		port->tx_dma_addr = 0;
 -- 
-2.39.2
+2.21.0
 
