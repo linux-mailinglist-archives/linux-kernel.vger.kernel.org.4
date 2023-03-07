@@ -2,90 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB446AD375
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AEA6AD377
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjCGAtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 19:49:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S229628AbjCGAuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 19:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjCGAtC (ORCPT
+        with ESMTP id S229557AbjCGAug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 19:49:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416C832E4D;
-        Mon,  6 Mar 2023 16:49:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFF9FB81201;
-        Tue,  7 Mar 2023 00:48:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 805A1C433EF;
-        Tue,  7 Mar 2023 00:48:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678150138;
-        bh=zQIEMnEBtNLscoBzoZrW13CYG48psh/0hSKscCNvEQI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BoSkQJyOAuQAbEdPtt9KI0jx3jogk0TeILp/i9CmU/ARmQxR4JepdbtAp1USgmpwg
-         kvw/9Q3OO4pZE+7zyViBl3bx2fV3YHsC3UDNJqM5MQmwaKLDDhC35YbTq2Ds7XMJ8A
-         8feUN195WkQuz94VJxDLRWSzRljW6F9hv4S+2Za5/foBrlHj6nqhZVPKUblGzzyMgJ
-         IKskGioZNpG8ow+rh8uDur5Fk7gD2avyM5J9Qp4kxAKFLrsy9ytDBlXN85G3ekIk3K
-         GiKhCVTr9wW1APyvE3BoZ8WlCIJQIrSb6ll88GVYa+rAD3XckooymuyDlYoXubY5bV
-         HbZ4pbJoz0R8Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 600A0E4FC50;
-        Tue,  7 Mar 2023 00:48:58 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 6 Mar 2023 19:50:36 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25FC3B876
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 16:50:35 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id g6-20020a056830308600b0068d4b30536aso6356585ots.9
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 16:50:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678150235;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DIVEt5mzMQh+SQM5E0MwkZynQfyDVg1kmB9o93x8Uf0=;
+        b=fpPKF4sFqdiFmMxkYspjx/BTyWfLJ4paQR++GOkkvNC9fNN6CDWgajgPKif6MzMpGo
+         P0tC49EKCTgLlk/FH92PgIm9hcaK/NjYTPLAc9iwd6ItO9OuAj6Lto/HqyqNIBc+6eYl
+         CHAn5AUqVcfnwskOp/L1cZWDOXNrynEH4sIs0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678150235;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DIVEt5mzMQh+SQM5E0MwkZynQfyDVg1kmB9o93x8Uf0=;
+        b=4FUNoq/ZM3Znlho6sR3trLQP5XAQZnU8nO+jf2LIimejw4GlQrWbIs4H1fDD6YT0xh
+         nESooAxDtPmGX3adRle+F8mwr6Fy3CWj/QxJqNO/Um123XoeaJm1K4aOkgjV2ZJGRP6d
+         rVDdVFOZXbULsmYlPCVCVtXwNOxVciMLjJ+E2ex6fDMEVCcpO6QKO7wwhrwiGxpJIGWI
+         ooaWdgQBBdUfhyCiujkvpM5SNxn/ph8EZnkoZ6hwRYoWP/uGkbByH73mX+fmTyHNTYOi
+         EyKffw3g4HRjyld6HGsGWMKRepAeJ+RaiMiP/lFzJ2U0/VYIKSerXlB9w23v7r7aiwCV
+         p1Eg==
+X-Gm-Message-State: AO0yUKXfcKtAk7bL2mmP44QFM+mpEVAQGA/eNcAFrRkVfh/70sW7ydla
+        V1NPKF8itvUFJzHChXtGcPn9jA==
+X-Google-Smtp-Source: AK7set92mm/4LBZrltp+qanqEW3SJNLtNBk738SJlyNOplLE8lgmv6wQwuHB3Huz+aahHkuXmk5nuw==
+X-Received: by 2002:a9d:7149:0:b0:694:1185:c7bd with SMTP id y9-20020a9d7149000000b006941185c7bdmr5251553otj.29.1678150234943;
+        Mon, 06 Mar 2023 16:50:34 -0800 (PST)
+Received: from grundler-glapstation.lan ([70.134.62.80])
+        by smtp.gmail.com with ESMTPSA id l18-20020a9d7092000000b00693cb03e7e2sm4725373otj.81.2023.03.06.16.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 16:50:34 -0800 (PST)
+From:   Grant Grundler <grundler@chromium.org>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Anton Lundin <glance@acc.umu.se>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Grant Grundler <grundler@chromium.org>
+Subject: [PATCH] net: asix: fix modprobe "sysfs: cannot create duplicate filename"
+Date:   Mon,  6 Mar 2023 16:50:28 -0800
+Message-Id: <20230307005028.2065800-1-grundler@chromium.org>
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 02/10] cpuidle, riscv: Push RCU-idle into driver
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167815013838.19612.5396346808460094460.git-patchwork-notify@kernel.org>
-Date:   Tue, 07 Mar 2023 00:48:58 +0000
-References: <20230303092347.4825-3-cheng-jui.wang@mediatek.com>
-In-Reply-To: <20230303092347.4825-3-cheng-jui.wang@mediatek.com>
-To:     Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
-Cc:     linux-riscv@lists.infradead.org, stable@vger.kernel.org,
-        anup@brainfault.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, matthias.bgg@gmail.com,
-        peterz@infradead.org, mingo@kernel.org, surenb@google.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+"modprobe asix ; rmmod asix ; modprobe asix" fails with:
+   sysfs: cannot create duplicate filename \
+   	'/devices/virtual/mdio_bus/usb-003:004'
 
-This series was applied to riscv/linux.git (fixes)
-by Ingo Molnar <mingo@kernel.org>:
+Issue was originally reported by Anton Lundin on 2022-06-22 14:16 UTC:
+   https://lore.kernel.org/netdev/20220623063649.GD23685@pengutronix.de/T/
 
-On Fri, 3 Mar 2023 17:23:24 +0800 you wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
-> 
-> commit 8e9ab9e8da1eae61fdff35690d998eaf8cd527dc upstream.
-> 
-> Doing RCU-idle outside the driver, only to then temporarily enable it
-> again, at least twice, before going idle is suboptimal.
-> 
-> [...]
+Chrome OS team hit the same issue in Feb, 2023 when trying to find
+work arounds for other issues with AX88172 devices.
 
-Here is the summary with links:
-  - [02/10] cpuidle, riscv: Push RCU-idle into driver
-    https://git.kernel.org/riscv/c/8e9ab9e8da1e
-  - [10/10] cpuidle: Fix ct_idle_*() usage
-    (no matching commit)
+The use of devm_mdiobus_register() with usbnet devices results in the
+MDIO data being associated with the USB device. When the asix driver
+is unloaded, the USB device continues to exist and the corresponding
+"mdiobus_unregister()" is NOT called until the USB device is unplugged
+or unauthorized. So the next "modprobe asix" will fail because the MDIO
+phy sysfs attributes still exist.
 
-You are awesome, thank you!
+The 'easy' (from a design PoV) fix is to use the non-devm variants of
+mdiobus_* functions and explicitly manage this use in the asix_bind
+and asix_unbind function calls. I've not explored trying to fix usbnet
+initialization so devm_* stuff will work.
+
+Reported-by: Anton Lundin <glance@acc.umu.se>
+Tested-by: Eizan Miyamoto <eizan@chromium.org>
+Signed-off-by: Grant Grundler <grundler@chromium.org>
+---
+ drivers/net/usb/asix_devices.c | 32 ++++++++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 30e87389aefa1..f0a87b933062a 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -640,8 +640,9 @@ static int asix_resume(struct usb_interface *intf)
+ static int ax88772_init_mdio(struct usbnet *dev)
+ {
+ 	struct asix_common_private *priv = dev->driver_priv;
++	int ret;
+ 
+-	priv->mdio = devm_mdiobus_alloc(&dev->udev->dev);
++	priv->mdio = mdiobus_alloc();
+ 	if (!priv->mdio)
+ 		return -ENOMEM;
+ 
+@@ -653,7 +654,27 @@ static int ax88772_init_mdio(struct usbnet *dev)
+ 	snprintf(priv->mdio->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
+ 		 dev->udev->bus->busnum, dev->udev->devnum);
+ 
+-	return devm_mdiobus_register(&dev->udev->dev, priv->mdio);
++	ret = mdiobus_register(priv->mdio);
++	if (ret) {
++		netdev_err(dev->net, "Could not register MDIO bus (err %d)\n", ret);
++		goto mdio_regerr;
++	}
++
++	priv->phydev = mdiobus_get_phy(priv->mdio, priv->phy_addr);
++	if (priv->phydev)
++		return 0;
++
++	netdev_err(dev->net, "Could not find PHY\n");
++	mdiobus_unregister(priv->mdio);
++mdio_regerr:
++	mdiobus_free(priv->mdio);
++	return ret;
++}
++
++static void ax88772_release_mdio(struct asix_common_private *priv)
++{
++	mdiobus_unregister(priv->mdio);
++	mdiobus_free(priv->mdio);
+ }
+ 
+ static int ax88772_init_phy(struct usbnet *dev)
+@@ -661,12 +682,6 @@ static int ax88772_init_phy(struct usbnet *dev)
+ 	struct asix_common_private *priv = dev->driver_priv;
+ 	int ret;
+ 
+-	priv->phydev = mdiobus_get_phy(priv->mdio, priv->phy_addr);
+-	if (!priv->phydev) {
+-		netdev_err(dev->net, "Could not find PHY\n");
+-		return -ENODEV;
+-	}
+-
+ 	ret = phy_connect_direct(dev->net, priv->phydev, &asix_adjust_link,
+ 				 PHY_INTERFACE_MODE_INTERNAL);
+ 	if (ret) {
+@@ -805,6 +820,7 @@ static void ax88772_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 	struct asix_common_private *priv = dev->driver_priv;
+ 
+ 	phy_disconnect(priv->phydev);
++	ax88772_release_mdio(priv);
+ 	asix_rx_fixup_common_free(dev->driver_priv);
+ }
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
