@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8FE6AD3C4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C3E6AD3C7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbjCGBTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 20:19:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
+        id S229868AbjCGBUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 20:20:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjCGBTu (ORCPT
+        with ESMTP id S229680AbjCGBUr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:19:50 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F802A6DF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:19:44 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id y10so7086877pfi.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:19:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678151984;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XlvRoDOZGkFFgyhD/mAoM2l807X5W3icksKBlwcwVSw=;
-        b=QInKjmq1d/lftVQQm3th9Xnc9fmHpsAazEnocQ1JESHI8/EHInm050AJuFFRaHY10m
-         ohkGhMwSBZENGVjd97tBBfwhB8GwQoCyj7YgC4WAcDqaujdeRIlnwLU98cHu1pkCkjoA
-         Yn1jRMWpPHTd0U4EIJLiTQ4iKqrIOD1tMAQZKNFI1rnkucCttBvcGXGWSRh4QqKBQAKF
-         df51ZCR6fxjvrJ+f2l254vk7RSNii9/N+X9HlgcpOkIJymtRVu0ErufD9BUtoiBBEqGU
-         oInYp9F5TxJAV0DGVmNo5vy55b+Xtismbdjmym/uV0oCnSQnQcWM1WLeainoOjxfh7Re
-         0WnA==
+        Mon, 6 Mar 2023 20:20:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1592B367EE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:20:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678152000;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8qrw2gr+qx7DWb3UAvdR/mcFIQhqsDgcX3EEuLph/d4=;
+        b=YGeRZmkt7KTnmfz0mjbJg7dpkGGflmQPQEwP2U3RoDgEjIjwDq0sLFrNl/L7jawKbGyXou
+        V/6djRUqTh2s2HMDxNwPuIjMLaHKe3raP6r1IJM8xkLeV0l0KetebFhABURHHI+jCl+WuW
+        jnYMOIKpJfBAGU5cG3HgDeHdp2u2vX4=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-552-qDVqU_rcMJGf3_973YsV-Q-1; Mon, 06 Mar 2023 20:19:59 -0500
+X-MC-Unique: qDVqU_rcMJGf3_973YsV-Q-1
+Received: by mail-qv1-f70.google.com with SMTP id d27-20020a0caa1b000000b00572765a687cso6619884qvb.19
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:19:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678151984;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XlvRoDOZGkFFgyhD/mAoM2l807X5W3icksKBlwcwVSw=;
-        b=dJkyXtHct82Z33seGME7lJOuw86kMXm9wDWDJzTCehSCDymi9scMVOYCiKTo2yu7qp
-         VaWohKZ1dzk6DXZ/2Ae3hMca0PW2/MVGvm23/klLJe2jqPvIYUB9R1Ic/Pd4KiEbV+x2
-         hHTWFtJFJFf7zbGoiUEJMocRXuFZTseUVKj8SO3gJHsZ4wYiFSaYbueVD2muQzUNg8cm
-         qKFbRcCqSOAQ/3/qfjOSmKN6QQiQFmdcdAHIuDFaJTUYeYIreGpnvfUiqi6rxkrk941t
-         miIwpOxVte+Mg+srezzwwdPgyh7fWnAViXz+gkhsO1UOMpFkZBPiG0x9On/bmdEaCKTn
-         A4Kg==
-X-Gm-Message-State: AO0yUKVTbQxyvKQgnZ3GRvoMwAO4M68TcxEKUjIahHFyRjte/TevawpF
-        4GvJrS8D5yE5kN5rHp35HCB402t8CGtLwVCzGopoZA==
-X-Google-Smtp-Source: AK7set/8/oT7jPhV0zxjPPXpQxyJk5AbN05kjN+U/CvY4iejQ8uOmh0pRiMH5vHPQJuCpzoyHo13sQlQyXOv4EyoHrU=
-X-Received: by 2002:a63:7356:0:b0:4fc:a80e:e6ec with SMTP id
- d22-20020a637356000000b004fca80ee6ecmr4270561pgn.5.1678151983944; Mon, 06 Mar
- 2023 17:19:43 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678151999;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8qrw2gr+qx7DWb3UAvdR/mcFIQhqsDgcX3EEuLph/d4=;
+        b=3UDI4DwQqfM69eK5hWlLQ+D9m3+BGzAjZSCi1gPEde2UmPwWLQcUQgLmWzchcughqx
+         8+hH38np0xDKyZKEwvbHhJ5vj0A7ZEJBwnElSZrincLVfabD1l3ktT7lloR7gtqi7hgm
+         btnvVoPRDIMNcfwzXHQmpgAOrP1LWfKNYHprurvVz0bybw71f3GSI3YyWZSviinWv4rW
+         mL0TsPLp0zvlBK9E/QiqnLfRjbfdovhZXIhj968BDd00e99GLCrwIOHyEbgotb4CrHGQ
+         wzPFaFCB3E4TiIK05QAYA91/rIgI9mQnAa4fbfIxLGxgatQwHrS2f5m72XVsC+V51NSh
+         RFaw==
+X-Gm-Message-State: AO0yUKVaUyaOLWelCF3jAYtiFbMfmw3z0jIJ3lc2ldrJs1ydLLEAwoM7
+        aGWp880OU0YpQMfcnjLdYlFvNG/DAf+c5dU/ufTbVykyPrWkAsSYA12jNaOi9Hd5x6gLWD7zmda
+        JtRfGl1fyUVVvhOtEEvSQL94q
+X-Received: by 2002:ac8:7d12:0:b0:3bf:d71e:5b08 with SMTP id g18-20020ac87d12000000b003bfd71e5b08mr25643225qtb.3.1678151999073;
+        Mon, 06 Mar 2023 17:19:59 -0800 (PST)
+X-Google-Smtp-Source: AK7set+YPHN/ncr0Du5Ek2aNycnO04K6K6elfomWX85YMAJoHPLqYfwEiEIk3YRAWh/HHoBKpUm+sw==
+X-Received: by 2002:ac8:7d12:0:b0:3bf:d71e:5b08 with SMTP id g18-20020ac87d12000000b003bfd71e5b08mr25643186qtb.3.1678151998762;
+        Mon, 06 Mar 2023 17:19:58 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05622a038b00b003bd0f0b26b0sm8855311qtx.77.2023.03.06.17.19.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 17:19:58 -0800 (PST)
+Date:   Mon, 6 Mar 2023 20:19:56 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
+        James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 4/5] mm: userfaultfd: don't separate addr + len
+ arguments
+Message-ID: <ZAaRPCntR94hGBL2@x1n>
+References: <20230306225024.264858-1-axelrasmussen@google.com>
+ <20230306225024.264858-5-axelrasmussen@google.com>
 MIME-Version: 1.0
-References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-11-rananta@google.com>
-In-Reply-To: <20230215010717.3612794-11-rananta@google.com>
-From:   Reiji Watanabe <reijiw@google.com>
-Date:   Mon, 6 Mar 2023 17:19:27 -0800
-Message-ID: <CAAeT=FyCQxhhFqhfWbFQB9uAcUxmktRa3SC_Yfne2f_MEeXOJw@mail.gmail.com>
-Subject: Re: [REPOST PATCH 10/16] selftests: KVM: aarch64: Add KVM EVTYPE
- filter PMU test
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
-        Ricardo Koller <ricarkol@google.com>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230306225024.264858-5-axelrasmussen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,209 +89,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raghu,
-
-On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
-<rananta@google.com> wrote:
->
-> KVM doest't allow the guests to modify the filter types
-> such counting events in nonsecure/secure-EL2, EL3, and
-> so on. Validate the same by force-configuring the bits
-> in PMXEVTYPER_EL0, PMEVTYPERn_EL0, and PMCCFILTR_EL0
-> registers.
->
-> The test extends further by trying to create an event
-> for counting only in EL2 and validates if the counter
-> is not progressing.
->
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+On Mon, Mar 06, 2023 at 02:50:23PM -0800, Axel Rasmussen wrote:
+> We have a lot of functions which take an address + length pair,
+> currently passed as separate arguments. However, in our userspace API we
+> already have struct uffdio_range, which is exactly this pair, and this
+> is what we get from userspace when ioctls are called.
+> 
+> Instead of splitting the struct up into two separate arguments, just
+> plumb the struct through to the functions which use it (once we get to
+> the mfill_atomic_pte level, we're dealing with single (huge)pages, so we
+> don't need both parts).
+> 
+> Relatedly, for waking, just re-use this existing structure instead of
+> defining a new "struct uffdio_wake_range".
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 > ---
->  .../testing/selftests/kvm/aarch64/vpmu_test.c | 85 +++++++++++++++++++
->  1 file changed, 85 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/test=
-ing/selftests/kvm/aarch64/vpmu_test.c
-> index 3dfb770b538e9..5c166df245589 100644
-> --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
-> +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
-> @@ -15,6 +15,10 @@
->   * of allowing or denying the events. The guest validates it by
->   * checking if it's able to count only the events that are allowed.
->   *
-> + * 3. KVM doesn't allow the guest to count the events attributed with
-> + * higher exception levels (EL2, EL3). Verify this functionality by
-> + * configuring and trying to count the events for EL2 in the guest.
-> + *
->   * Copyright (c) 2022 Google LLC.
->   *
->   */
-> @@ -23,6 +27,7 @@
->  #include <test_util.h>
->  #include <vgic.h>
->  #include <asm/perf_event.h>
-> +#include <linux/arm-smccc.h>
->  #include <linux/bitfield.h>
->  #include <linux/bitmap.h>
->
-> @@ -259,6 +264,7 @@ struct vpmu_vm {
->  enum test_stage {
->         TEST_STAGE_COUNTER_ACCESS =3D 1,
->         TEST_STAGE_KVM_EVENT_FILTER,
-> +       TEST_STAGE_KVM_EVTYPE_FILTER,
+>  fs/userfaultfd.c              | 107 +++++++++++++---------------------
+>  include/linux/userfaultfd_k.h |  17 +++---
+>  mm/userfaultfd.c              |  92 ++++++++++++++---------------
+>  3 files changed, 96 insertions(+), 120 deletions(-)
+> 
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index b8e328123b71..984b63b0fc75 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -95,11 +95,6 @@ struct userfaultfd_wait_queue {
+>  	bool waken;
 >  };
->
->  struct guest_data {
-> @@ -678,6 +684,70 @@ static void guest_event_filter_test(unsigned long *p=
-mu_filter)
->         }
->  }
->
-> +static void guest_evtype_filter_test(void)
-> +{
-> +       int i;
-> +       struct pmc_accessor *acc;
-> +       uint64_t typer, cnt;
-> +       struct arm_smccc_res res;
-> +
-> +       pmu_enable();
-> +
-> +       /*
-> +        * KVM blocks the guests from creating events for counting in Sec=
-ure/Non-Secure Hyp (EL2),
-> +        * Monitor (EL3), and Multithreading configuration. It applies th=
-e mask
-> +        * ARMV8_PMU_EVTYPE_MASK against guest accesses to PMXEVTYPER_EL0=
-, PMEVTYPERn_EL0,
-> +        * and PMCCFILTR_EL0 registers to prevent this. Check if KVM hono=
-rs this using all possible
-> +        * ways to configure the EVTYPER.
-> +        */
+>  
+> -struct userfaultfd_wake_range {
+> -	unsigned long start;
+> -	unsigned long len;
+> -};
 
-I would prefer to break long lines into multiple lines for these comments
-(or other comments in these patches), as "Linux kernel coding style"
-suggests.
----
-[https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-=
-long-lines-and-strings]
+Would there still be a difference on e.g. 32 bits systems?
 
-The preferred limit on the length of a single line is 80 columns.
+[...]
 
-Statements longer than 80 columns should be broken into sensible
-chunks, unless exceeding 80 columns significantly increases
-readability and does not hide information.
----
-
-> +       for (i =3D 0; i < ARRAY_SIZE(pmc_accessors); i++) {
-> +               acc =3D &pmc_accessors[i];
-> +
-> +               /* Set all filter bits (31-24), readback, and check again=
-st the mask */
-> +               acc->write_typer(0, 0xff000000);
-> +               typer =3D acc->read_typer(0);
-> +
-> +               GUEST_ASSERT_2((typer | ARMV8_PMU_EVTYPE_EVENT) =3D=3D AR=
-MV8_PMU_EVTYPE_MASK,
-> +                               typer | ARMV8_PMU_EVTYPE_EVENT, ARMV8_PMU=
-_EVTYPE_MASK);
-
-It appears that bits[29:26] don't have to be zero depending on
-feature availability to the guest (Those bits needs to be zero
-only when relevant features are not available on the guest).
-So, the expected value must be changed depending on the feature
-availability if the test checks those bits.
-I have the same comment for the cycle counter.
-
-> +
-> +               /*
-> +                * Regardless of ARMV8_PMU_EVTYPE_MASK, KVM sets perf att=
-r.exclude_hv
-> +                * to not count NS-EL2 events. Verify this functionality =
-by configuring
-> +                * a NS-EL2 event, for which the couunt shouldn't increme=
-nt.
-> +                */
-> +               typer =3D ARMV8_PMUV3_PERFCTR_INST_RETIRED;
-> +               typer |=3D ARMV8_PMU_INCLUDE_EL2 | ARMV8_PMU_EXCLUDE_EL1 =
-| ARMV8_PMU_EXCLUDE_EL0;
-> +               acc->write_typer(0, typer);
-> +               acc->write_cntr(0, 0);
-> +               enable_counter(0);
-> +
-> +               /* Issue a hypercall to enter EL2 and return */
-> +               memset(&res, 0, sizeof(res));
-> +               smccc_hvc(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0, 0, 0, 0, 0,=
- &res);
-> +
-> +               cnt =3D acc->read_cntr(0);
-> +               GUEST_ASSERT_3(cnt =3D=3D 0, cnt, typer, i);
-> +       }
-> +
-> +       /* Check the same sequence for the Cycle counter */
-> +       write_pmccfiltr(0xff000000);
-> +       typer =3D read_pmccfiltr();
-> +       GUEST_ASSERT_2((typer | ARMV8_PMU_EVTYPE_EVENT) =3D=3D ARMV8_PMU_=
-EVTYPE_MASK,
-> +                               typer | ARMV8_PMU_EVTYPE_EVENT, ARMV8_PMU=
-_EVTYPE_MASK);
-> +
-> +       typer =3D ARMV8_PMU_INCLUDE_EL2 | ARMV8_PMU_EXCLUDE_EL1 | ARMV8_P=
-MU_EXCLUDE_EL0;
-> +       write_pmccfiltr(typer);
-> +       reset_cycle_counter();
-> +       enable_cycle_counter();
-> +
-> +       /* Issue a hypercall to enter EL2 and return */
-> +       memset(&res, 0, sizeof(res));
-> +       smccc_hvc(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0, 0, 0, 0, 0, &res);
-> +
-> +       cnt =3D read_cycle_counter();
-
-Perhaps it's worth considering having the helpers for PMC registers
-(e.g. write_cntr()) accepting the cycle counter as the index=3D=3D31
-to simplify the test code implementation ?
-
-Thank you,
-Reiji
-
-> +       GUEST_ASSERT_2(cnt =3D=3D 0, cnt, typer);
-> +}
-> +
->  static void guest_code(void)
+>  static __always_inline int validate_range(struct mm_struct *mm,
+> -					  __u64 start, __u64 len)
+> +					  const struct uffdio_range *range)
 >  {
->         switch (guest_data.test_stage) {
-> @@ -687,6 +757,9 @@ static void guest_code(void)
->         case TEST_STAGE_KVM_EVENT_FILTER:
->                 guest_event_filter_test(guest_data.pmu_filter);
->                 break;
-> +       case TEST_STAGE_KVM_EVTYPE_FILTER:
-> +               guest_evtype_filter_test();
-> +               break;
->         default:
->                 GUEST_ASSERT_1(0, guest_data.test_stage);
->         }
-> @@ -1014,10 +1087,22 @@ static void run_kvm_event_filter_test(void)
->         run_kvm_event_filter_error_tests();
+>  	__u64 task_size = mm->task_size;
+>  
+> -	if (start & ~PAGE_MASK)
+> +	if (range->start & ~PAGE_MASK)
+>  		return -EINVAL;
+> -	if (len & ~PAGE_MASK)
+> +	if (range->len & ~PAGE_MASK)
+>  		return -EINVAL;
+> -	if (!len)
+> +	if (!range->len)
+>  		return -EINVAL;
+> -	if (start < mmap_min_addr)
+> +	if (range->start < mmap_min_addr)
+>  		return -EINVAL;
+> -	if (start >= task_size)
+> +	if (range->start >= task_size)
+>  		return -EINVAL;
+> -	if (len > task_size - start)
+> +	if (range->len > task_size - range->start)
+>  		return -EINVAL;
+>  	return 0;
 >  }
->
-> +static void run_kvm_evtype_filter_test(void)
-> +{
-> +       struct vpmu_vm *vpmu_vm;
-> +
-> +       guest_data.test_stage =3D TEST_STAGE_KVM_EVTYPE_FILTER;
-> +
-> +       vpmu_vm =3D create_vpmu_vm(guest_code, NULL);
-> +       run_vcpu(vpmu_vm->vcpu);
-> +       destroy_vpmu_vm(vpmu_vm);
-> +}
-> +
->  static void run_tests(uint64_t pmcr_n)
->  {
->         run_counter_access_tests(pmcr_n);
->         run_kvm_event_filter_test();
-> +       run_kvm_evtype_filter_test();
->  }
->
->  /*
-> --
-> 2.39.1.581.gbfd45094c4-goog
->
+
+Personally I don't like a lot on such a change. :( It avoids one parameter
+being passed over but it can add a lot indirections.
+
+Do you strongly suggest this?  Shall we move on without this so to not
+block the last patch (which I assume is the one you're looking for)?
+
+Thanks,
+
+-- 
+Peter Xu
+
