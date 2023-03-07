@@ -2,282 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EE26AE617
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:16:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFFD6AE62B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:18:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCGQQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45904 "EHLO
+        id S229687AbjCGQSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:18:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCGQQc (ORCPT
+        with ESMTP id S230079AbjCGQRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:16:32 -0500
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02hn2239.outbound.protection.outlook.com [52.100.201.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354226B5FC;
-        Tue,  7 Mar 2023 08:16:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l+0X2WfBCuGMRSAJBueAj4U7UjJIcKo53YXg3W2MHAw=;
- b=kocCyicpbiEXrSGbOWA11KT4HTKm51ImDvKz3+MwhOrvDOo14+ZriNxwSBTvv1icmU2GyehkG41DP/CgqiHPKgGs1wVxOdqHnD3Obu2dY28RnQzRO1SMXFxGLrLe4AHr31A3pwkLV5vJpb61pjy7XfOdKH1m/8T39X5+aoujFd1XNQZ7LNxCwMzplFeV11YifGmB32HYLll0H/SfmwkQhaO2YycWDAgFF2Zslgn0vEnnJjeBWK1R67bWHi6hDEJIkVdW6IUgw/HBYaKw8FyqJuAdK/6ZW6JK40EuN/jvfza6+Vh41vHQZA0J3kbPLiTuF7Tng1muEo/VqapGqF4Q+w==
-Received: from FR0P281CA0073.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:1e::13)
- by PAVPR03MB9137.eurprd03.prod.outlook.com (2603:10a6:102:328::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 16:16:26 +0000
-Received: from VI1EUR05FT062.eop-eur05.prod.protection.outlook.com
- (2603:10a6:d10:1e:cafe::24) by FR0P281CA0073.outlook.office365.com
- (2603:10a6:d10:1e::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.15 via Frontend
- Transport; Tue, 7 Mar 2023 16:16:26 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 20.160.56.80)
- smtp.mailfrom=seco.com; dkim=pass (signature was verified)
- header.d=seco.com;dmarc=pass action=none header.from=seco.com;
-Received-SPF: Fail (protection.outlook.com: domain of seco.com does not
- designate 20.160.56.80 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.160.56.80; helo=inpost-eu.tmcas.trendmicro.com;
-Received: from inpost-eu.tmcas.trendmicro.com (20.160.56.80) by
- VI1EUR05FT062.mail.protection.outlook.com (10.233.243.189) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 16:16:26 +0000
-Received: from outmta (unknown [192.168.82.133])
-        by inpost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id 3A5522008026E;
-        Tue,  7 Mar 2023 16:16:26 +0000 (UTC)
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (unknown [104.47.51.176])
-        by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id 1E3AC20080075;
-        Tue,  7 Mar 2023 16:08:04 +0000 (UTC)
+        Tue, 7 Mar 2023 11:17:51 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2C88889A;
+        Tue,  7 Mar 2023 08:17:44 -0800 (PST)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327FkUB0023561;
+        Tue, 7 Mar 2023 16:17:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=e3pAQn8G/8o92/hXaSer4SORAE+oWEq8UvZOMfliD3c=;
+ b=yWfAlil/ScUJlI0wC+Ch/gWSWl/xbOaUmjBzILVucRM24SLwNzczCOX6y5tEXcqlWlLS
+ rE1ZzZSANkVQWqhUHcGZHYMfkHVllvL+L7w2/TX/6QeY33K2zYbt7zDdAiJEnWiyu+vA
+ 9i/YoV3zorO2Snu/e+pervEPKIxHFNQjYWneT6U56kIaxGq9k1tTIsJ0Dyiw6kHBePxa
+ BPZ/A6JzOwttjenycnpRvmcvKeO5mk1eu8faToUzQZXTy6QZ8R8e5KW5+wBJNylS0tHo
+ roP6nWAAJ0bfKuGbSS5wDeERXF9ivCFatdBRUorFTMcdKYAQbw0AbZnmYMx1v1OFIrdf zw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p416wnxeh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Mar 2023 16:17:02 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 327FNZxf026621;
+        Tue, 7 Mar 2023 16:17:00 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2175.outbound.protection.outlook.com [104.47.55.175])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3p4u1f82kb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Mar 2023 16:17:00 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JZep7mKQ8nF1RUyXZJ/rIRkTyopz8UvYNTMaChxg0UEIXZB/aaJK/VbZlWX8U2j6aMHxp6WOrMe3W0f4PH7rnOtmWx4Up+TcnXXNqcENkqW3AujN8gngCmJcaftmSDGqX7oYWEjqJVA2SlA32+bttk1fHWVisADOHMtHv2X15LskPzGTM3TMsKBnhKGRxJcbLJ82ACQQ3nBWNAc8pGaCX++2P9mGpUSRYSpT7iEJ+7IepBN1zFyD/b1noeE+TmxAwPbzZ+tXh28oUqcuMUcsr/Ei9Oq94bN2YNnA44W9rESOQQ8I6Mv1ZEA8POdwxmZGp+a9RhjCkYq5VEzgiw2NnQ==
+ b=B6sAQMveUljwsJa+mA96ht+DmtaLYQIuo6aoitigKYPyTh/8xUFJEnrSDFo46B232Jyz+orZAzM6g2NyRVljk5yjMOjRL4Nawt8ze6v5vl+oJQwVl6ezB//lbaQIVx8JSVQCkZAk/qGYb+tgcpO5yI75xInm5TdLj8sqQ5cv0DiFxfGFRD5bd8gwSoroSeatuooeUHlRyhgaEwdVDe7pcr4b/wW4W8AVudD55jnnyLWzm+RnjqwxmtbpL+K2ZqFgtGS+MfkWMXyZESz4q5ozh+TSInYsbsUyq92cYtRPLIbYgupXOhBXfGQJ7raEZW5vzlsDg3t9ovIXCjqICDeIbg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l+0X2WfBCuGMRSAJBueAj4U7UjJIcKo53YXg3W2MHAw=;
- b=d2fIpL/69fNEcoW7jGSlHcjaYIM4dzwfo7P3HlF3WSeMc6yC6QiZLreu9RavzepPqbGoy6DqJ7U9R0yx6Fakcr4wqmo3slt8nfOrMnuaHAOJafGFK+A6Ekh5XxthntJ4YGbzXIS4OAVXZRmiWgbGRTlHYILX9GeO74I16T5+RLcwhg5ZICn5P1yNHDj+qlqkHIZHEC3yiSawlfaLSTb3sPDkWF0fot1AbPDjTu02qKfRYXnzs74enxWEX8UUsp1mxKub1rRR+rKIbUZHxaQcsZ/L2PIVQoWWwW38qwSUcbKisdC4E3K9RSyeJS4uL4dD6CctV8exFCXA1hV4zznI4Q==
+ bh=e3pAQn8G/8o92/hXaSer4SORAE+oWEq8UvZOMfliD3c=;
+ b=m7XqEIxc1CzloNWVB/40hfq/xl78o/MDZrOUcAkOYNSdNzz7hDFdNOe/KAtFTLzRoCJkgvqR9NITNVKm0A7R9SpmnLN7NWnw+Sb198zTnLKGIsft8BJ9+QgzgjWOy/s69OF93BfZR18NtOLEkJpt5rgfLNKYd+c5aDIYEtiw682kt8FPCSuK8hqhRwZ0qktDeCjM6toM4BZ6XHejpPa+cXP0cZo+XhPZJERCauieRmcYIY4s3Md44u3ylym07amZqfFKcVTvwtQWPX/B/Og9itJXRjbhl4DRTBJskIbL2cKhOZibZjnln2qg3uSr5Fhb0QKBHhRVrJ+uo/Qm0KmjfQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l+0X2WfBCuGMRSAJBueAj4U7UjJIcKo53YXg3W2MHAw=;
- b=kocCyicpbiEXrSGbOWA11KT4HTKm51ImDvKz3+MwhOrvDOo14+ZriNxwSBTvv1icmU2GyehkG41DP/CgqiHPKgGs1wVxOdqHnD3Obu2dY28RnQzRO1SMXFxGLrLe4AHr31A3pwkLV5vJpb61pjy7XfOdKH1m/8T39X5+aoujFd1XNQZ7LNxCwMzplFeV11YifGmB32HYLll0H/SfmwkQhaO2YycWDAgFF2Zslgn0vEnnJjeBWK1R67bWHi6hDEJIkVdW6IUgw/HBYaKw8FyqJuAdK/6ZW6JK40EuN/jvfza6+Vh41vHQZA0J3kbPLiTuF7Tng1muEo/VqapGqF4Q+w==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com (2603:10a6:10:3dd::13)
- by PA4PR03MB7423.eurprd03.prod.outlook.com (2603:10a6:102:10c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 16:16:16 +0000
-Received: from DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::dbcf:1089:3242:614e]) by DB9PR03MB8847.eurprd03.prod.outlook.com
- ([fe80::dbcf:1089:3242:614e%5]) with mapi id 15.20.6156.027; Tue, 7 Mar 2023
- 16:16:16 +0000
-Message-ID: <f947e5e2-770e-4b12-67ae-8abf5866e250@seco.com>
-Date:   Tue, 7 Mar 2023 11:16:11 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH net-next] net: mdio: Add netlink interface
+ bh=e3pAQn8G/8o92/hXaSer4SORAE+oWEq8UvZOMfliD3c=;
+ b=Vr3fsHqrQ8pMvs6LsNbnl324qbotY1Lwefp3Lm3f8+nRLmcRaEsclgOfI8/fKgmsq5wp9WSBgECX347QrEn2N+bSsqSlsDrl1JgarB8+MShhFqqV0BgLTIFwtfwiVzrAhpv1KMRDky3gdyLDiuwBokYwz7YFGhN+ksiy6v3qW0U=
+Received: from DM6PR10MB3001.namprd10.prod.outlook.com (2603:10b6:5:69::23) by
+ DM4PR10MB7474.namprd10.prod.outlook.com (2603:10b6:8:18b::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.28; Tue, 7 Mar 2023 16:16:59 +0000
+Received: from DM6PR10MB3001.namprd10.prod.outlook.com
+ ([fe80::e7b4:258a:2ada:db1d]) by DM6PR10MB3001.namprd10.prod.outlook.com
+ ([fe80::e7b4:258a:2ada:db1d%4]) with mapi id 15.20.6156.028; Tue, 7 Mar 2023
+ 16:16:59 +0000
+Message-ID: <3a302f40-2c2c-daa2-4281-39b1ff7e90ea@oracle.com>
+Date:   Tue, 7 Mar 2023 21:46:43 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 5/5] cgroup/cpuset: Minor updates to test_cpuset_prs.sh
 Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Jakub Kicinski <kuba@kernel.org>
-References: <20230306204517.1953122-1-sean.anderson@seco.com>
- <7a02294e-bf50-4399-9e68-1235ba24a381@lunn.ch>
-From:   Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <7a02294e-bf50-4399-9e68-1235ba24a381@lunn.ch>
+To:     Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230306200849.376804-1-longman@redhat.com>
+ <20230306200849.376804-6-longman@redhat.com>
+From:   Kamalesh Babulal <kamalesh.babulal@oracle.com>
+In-Reply-To: <20230306200849.376804-6-longman@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0222.namprd13.prod.outlook.com
- (2603:10b6:208:2bf::17) To DB9PR03MB8847.eurprd03.prod.outlook.com
- (2603:10a6:10:3dd::13)
+X-ClientProxiedBy: TYCP286CA0028.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:263::15) To DM6PR10MB3001.namprd10.prod.outlook.com
+ (2603:10b6:5:69::23)
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR03MB8847:EE_|PA4PR03MB7423:EE_|VI1EUR05FT062:EE_|PAVPR03MB9137:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0951d575-0e1d-48c3-a4a7-08db1f274d73
-X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3001:EE_|DM4PR10MB7474:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6f90b812-a183-4bf0-f3e8-08db1f27604d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: BxM/zSz9uyD+FQ1E4i+L5PmMHJXH1esybroYvvTf5Wop7n+IYrCklDkZCNoI/aaXMPrWa8ZCH28+IXzjpBqBGOZGhkhIJN0s6ew+2nsuqmxhoyFA8oVW8wiuV6n6zUF3e6vn/bz8XexWyYHxar9fuo+/K5hCgxjHCO65i1EHj6RiyDj3JSIWxV8n960JbqETyfnyz4L/X6v6KVyIARvqnNFsNX5aJihGCcQ1ABDLeKPu0E0B+SoFboCcmGk2jjbgF4zrHnhjWCFhg6XhE11XyfWEwhTFRKFodChpncm4PAdVfHc96XC/TdvmKDHiRKb10V4Fcow4PXag08bcVx8EEK9kpkEXjDvbYMeUV6BJ2Fw3l2HjizZfjf6jgeRJBDh6PpxVUm2/83LO6ASLGpebEIRSa3fEwlyrVPH1ScYC/Cn23CwxHIx8Fc3+TtUn39ngeWHz/XFziYp+a4+ittoiPxy0QWSSwrW64tnYGZYX5Q15WYFdHluX6lev3cdzGYRLD/BCHxfmT0tymF69tuwMDvImvAUhoPhcSj0U3NG7dAZDdsD6uPzQdhEI7K7jKuufOvqkS6fuguFA+1nZrFFaJ0KCj22zFKxdVEYmNYenfm6c2LjH4Oq/ux6XZmEEyT70EgN2GGM3Btvf6wQ/zzuqmZxWxC+zQIF7UUCCSgeKsPXpOvIsPUI9c3OshzfdpsYiTMuWfNVm0KxZr7v0KjqxUjEwdeTE1TDxCx5MaN9CQXoZEsMCMyc6NzFiPTinZTW3f6tLxSLCRMQ2oOYtD7hB+Q==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR03MB8847.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(136003)(376002)(39850400004)(366004)(346002)(451199018)(31686004)(2906002)(2616005)(83380400001)(44832011)(26005)(4326008)(66556008)(66946007)(66476007)(8676002)(6916009)(7416002)(5660300002)(186003)(6512007)(41300700001)(6506007)(53546011)(36756003)(6666004)(38100700002)(38350700002)(8936002)(478600001)(6486002)(52116002)(31696002)(54906003)(86362001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR03MB7423
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VI1EUR05FT062.eop-eur05.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 0a83d339-e9fc-4a95-ca9f-08db1f274752
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zpTaXNT33aYcI3SvdBRKO1nAlknaMURgqjNtJA4MuF8kFyUhYK5LA7WGr95auL4h6aaKM/tT9NliTDD+DaNokxpppOx/QxBHKEVk8zjotxL35mR9E/TXxgMFN/VQoLv540cktvfxEashp2VsFPEFWfp8wWcl9A2zpj9PEWXj3Jlb7FagWC/sEwodjUZbJRVXuxy++cn3Hab5D9qZE5nS1VG0hoSp/AE41esVqSKQt3AsaNn9WU+LURnogl1na2mIhYslUaLBg+iOf82HA9USk1fcJHygVvjLVMgvEkP535tFACqnAN/V/uwXylmyUSceQhNoSrdx+HYnEWE+CykhRGYpWmei+IINiy0sDzWGkQGPqcMVT0QPwUf6ginuxaS28gi4gjUpG/NkTMSc377xDqYKCowXoJ+KHeRjdLcTvRiajh805FeGps0phBlLUwVoIz7+WT+po+Zj8hTZsrMKOFPrAwgin3o3HZ06YDSrZC7xfx7B4GAHpPX2KMkPqavgaTgy1G1TNxjzC52+FmRhPPAwhCFCvGYi2iBS1dN+0Rgbn3on+1HcB6zSnFR53by2jtf4wf7KFMY83JFwA+rJ5zS1ZqiY8gjNtWEO5wgwA+qz+tmDXBGXQhZFowTKk7rOCSKVgHpN85Hhe42PmgrwF4pyWwbKgz/a5Mt4uh8sUimwdrtAPzP4XFSs3sKXrPeBrjHWcHtib0CSsTRx/0Tt8bCe0+ypyS7Z9g1lE9Q81U1j98gClBCyqplE8PVWpDYNkr34y5vKrvnNCR9FiPbDmHnldtgKVECtWzH7qaAhliuSYHaY1Os0zBxAs6nn+Opi2fComOM3of9D4Zte627UP0Ma19IKqxAD0CaGWGSbGM0=
-X-Forefront-Antispam-Report: CIP:20.160.56.80;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:inpost-eu.tmcas.trendmicro.com;PTR:inpost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230025)(136003)(376002)(39850400004)(396003)(346002)(5400799012)(451199018)(36840700001)(40470700004)(46966006)(36860700001)(34070700002)(7596003)(34020700004)(7636003)(86362001)(31696002)(356005)(70206006)(5660300002)(6666004)(36756003)(7416002)(44832011)(2906002)(82740400003)(4326008)(6916009)(8676002)(8936002)(70586007)(41300700001)(40480700001)(82310400005)(40460700003)(2616005)(26005)(53546011)(336012)(186003)(83380400001)(47076005)(316002)(6512007)(54906003)(6506007)(478600001)(31686004)(6486002)(43740500002)(45980500001)(12100799021);DIR:OUT;SFP:1501;
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 16:16:26.5729
+X-Microsoft-Antispam-Message-Info: NJJY8cgsECIA5xwAEsT+bxiUonm3qMRKh4TCQBO+ADGY/3PyijcaeMjHj4QTHjkTtPQ09EbOp7/F13wz/yq10wHvCJ6U63cO7e1ZCoCqSk3Fl2xutKDUpQ5dSRocR1kck8RO0HUTywHElUlrvlRKbadeb5XeuDcQVJPFeKoCn930LaQtUNjBuGQWVdt4xM6KjQLmyP8amvsMSZEgve/aqfVT8T5urEnzxkHUSbawhFWPwHq1S5/p88PqduC4EV6LdrgQywP0i04WJH9oZCZ8iICpMuS02/aftLyOnNvhsEyZIBrjPgN/ElEqKSB91uCNqnMdirZag/yABTctqimPQ6H/ELYaZos+EOJgvEJxSRljN+o2U7zZPt6mCJelYJTBE+9ZL9o0PvnflBzSuy00BqVstxUc4GI5qlxnuagEVOgITIhDLN0zQFXJTjvSHfbRyJaoxz/Iyh0sdrsGkLsR0zyM8vpPDMlIWcAsyctVQJVy06SPmTTd9JyID45liC+UsS4xzJtRDBTNqU1yWPL6eobU7+DVnmjVh0icgVNV6OYCP5zL+upRiIcshNfcUJOJlFidyRYRfXkWkWWNIPvkq3VtGGkIaiaWMphZtslNUWIKrmyzUazVNdLNDYSKsNGwMOaxB7cKHVRKztWiTxLYGRZdbqFeGOYT4yF7ejLZoXdDNF4ZwUGPCNNe+hfD8j6Mcu14jJSpU0Iu7QCGmem+VHj2SexMJuPjuCl1QMrk2pc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB3001.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(136003)(39860400002)(346002)(366004)(451199018)(7416002)(2616005)(6666004)(5660300002)(41300700001)(36756003)(54906003)(31696002)(110136005)(316002)(83380400001)(86362001)(66476007)(478600001)(8676002)(4326008)(66556008)(8936002)(66946007)(6486002)(44832011)(31686004)(2906002)(15650500001)(38100700002)(6512007)(186003)(26005)(4744005)(6506007)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d0R6SHphUGYrWHMwV2R5cUxlV1JsSHphRSt3eUtjUDB5OFJSRGtCT1hsWkVE?=
+ =?utf-8?B?S08wVEN0QVljSTRMS3NnSjU4QmZHU2kyeFBHMzFPYXhNeldGd3R4cXUxeU5P?=
+ =?utf-8?B?OXRnTnk3N1R0R2JheGtnalFnMkw2RkYrQys4dCtOUmRCWUJSbmNIaEVhOVdo?=
+ =?utf-8?B?VkFlcXpjNjFnVlRRNW4ramRNK2I2SVZJWEYrWGZKREVxbmNsU1FBa1lXeUVF?=
+ =?utf-8?B?a1QvWVJlZEduRytkYXdvSUtSVys2aVNUMTFmYUZJcmNEZnB3dHBtczBHSlc4?=
+ =?utf-8?B?S2xOVEpxdlRsU215akd4bnN0Q0tubWNlaDErVEMzZ0M1WldlYSttN0pQWUNJ?=
+ =?utf-8?B?Zm0wYi9rTVU5bTBwM0lnRVp4OG4vZEI4ZFl2Q3dKaEIzZzkzZVZGbEJLTXd1?=
+ =?utf-8?B?WHF2NmlEazZpQTZZSWV5eVFPTWRvYnliL2cyU0ppM21Zb2kxajZHa3EwaTBI?=
+ =?utf-8?B?akVOdUh6UWR0SXE5dkI2ZGZFSjZROFhxTW5QRHpiblZNMnlZaHdPYS9YSXVY?=
+ =?utf-8?B?eXNOWnp6NzlTKzVJcnJ6aFc1dEZuNEpaNTNTZnVDMXljNTJWeXc4WWJOK3Z3?=
+ =?utf-8?B?RWowTUVsQy9rbjQ5YkpTTkpqOE5ka3ZSbkI2NEdhY01FTUlGWkRVa21ZWis5?=
+ =?utf-8?B?MWxXc2VTN0hKWlZKT3cwRzlhUE9oRFNNTWY5Z2xZUEJBMWNjcVZwa0pxSXFr?=
+ =?utf-8?B?NXBCb0kzcnFTa1JFZDBneGJzTUxseEpLcVBqVTdLM040SmdhRzA1NGMyUVlU?=
+ =?utf-8?B?MU1yQkZud05wYjVJVFg3alJhQXg4WEtmSzk1ZkxRcmtjamtBTlpLWGJMalNq?=
+ =?utf-8?B?dkRLaG4wbHFuc2Z2OVh0ZEJNeE1OQVRVWEFOQjJya3QwQmIzSWo1ckFkNERt?=
+ =?utf-8?B?cTl5cy9UN3FDODZSbkVwRUtqMXBsNldEZ281WWxGcithY0dwLzRxYktlNHFh?=
+ =?utf-8?B?QnJFUnA3SUFVNHdYR0FEbVQvbzZoTDBFc1BqWEhFWXZMZWtPVGZpUGptV1B2?=
+ =?utf-8?B?R2RTZ090SnBIMTU4eEpSWCtRUi9MbGtIc2JtZ3ZYcmdtcmZCZHlqVnNCdzUw?=
+ =?utf-8?B?MHFra2E5ZmZvZU1oZUFtSlg2U2YwMSt1UkQvdGVuR2llS0RyQzlWcmM1aFVN?=
+ =?utf-8?B?dWI5MjZNWjVYUFZCcEZ0MzRwdjlHY0E1TlF4UFBhTVUrRE1SYzlWWDlnc2p1?=
+ =?utf-8?B?bk9TbjVhU0o0ZU9kcTZkQnBDMWMxZ2ZTcDFIazZUbmVsMXA4WURDZkRxWmVE?=
+ =?utf-8?B?QWR2UHBRQnVCVDFxdUtJUkNSOGlkdlowOUlVU0RkcHhHYVljNkxGU2hUdkJ0?=
+ =?utf-8?B?NUdHdTFNMzdEcmVZSG92QTZoVlZobkloTWI3cTJIUGRxYXd0L2hsMzI1ZWdt?=
+ =?utf-8?B?ZHlJNVZSa1NNUHZHVGdEUm82YUxsQ3RkNTMvZytHQmVJQ2UrVjNqckNHcjBY?=
+ =?utf-8?B?NHVnblZTTzR4ZDVZODJTYXdqdHJ3cWJrUFlMTnJGVzJ3eG9CVHFsZ0xMMXUy?=
+ =?utf-8?B?OE5hdnRTSllGYWZHeWFUWFZmMUtIeFVwdG4rbzZidUJwNlRSQWxHNmNlVGhX?=
+ =?utf-8?B?Y0dzMjRJMHFJdncxWFczNDRMOFIyQVpkaS9WRHdOU0xweHBzcnIrUnEvclZU?=
+ =?utf-8?B?YnZVY0ZaNzIrbU5RY2RmRm00TnRrUk5TTk9DZUJ4TllpV2dhVFhuTENnSlN2?=
+ =?utf-8?B?MEJxTy9kQ3ZKTS9nc2VYUStuU0xYNmZrWENvRjFja09NaXFTcGkwSXFPT3RT?=
+ =?utf-8?B?bnVlRFBtUXQ1NTNabk8rdm16YjBZSGFMZnZqN3JuNndnQ1FNRjFlc0VrZVFW?=
+ =?utf-8?B?N2tlRkRNYjNSZFdPUmdLS1g2RkI3YVNvMFJPUWtVSmk1UWREalRHaGZLRDZW?=
+ =?utf-8?B?K2xkMUFmRks0Z3NYdWw1YURhTm5jRDJwTlBQSGlCNUFreVMxVDdQUGU4LzVl?=
+ =?utf-8?B?UENXZXY1dW0yS3pCOUR5bTZjbmxzazdyVXZoYURIQ3U4anpHSnhtckR0bFlM?=
+ =?utf-8?B?REtOdHJtcEZWK2xva1F2OFg5U2J4VFk3dWdiYjJwTTB2ME5QZUw5RFJQZDNm?=
+ =?utf-8?B?dTBrdWo0cXdXWEpZVlhmYW00RW9WWkZHdjhscy9XeTlZeEJoeDFJWjVGR1lT?=
+ =?utf-8?B?QTF2aU9xalRRaERZS1lUWUFzaUxzSjFpZytHVytDNHJSVnA3MElmS1FPelpU?=
+ =?utf-8?B?a1E9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: EXw1TkqMoHgMJbt1zTpNZPOesCpwUZfbsCjIv119SsrLAsrKGsZPNhxhJZkRqywni8I+VAyG/8O/SVX3tq0ixW+TBxFy1gkoOvHgYIEqjM62+D+xGXINXCbkkgGqJe4U9HPnTmLH3QYpl3kzbxWv1XiFUpR3/vu7nK1w3FsS4IHnaTpcC9FKE5pxLBLLxwlm8Ly/Kwfbg1LO5AbRJLWVIUUlejPkX+uhvsrJGiABJ/avRSnJlELENs5CFDPcXWnpEjpEnGZ7eb6ybwjufbMkmAaU180cRit+PnIbROG3OsPhDIZ7IMfOg776inrYcCrqD+L8vRIiagYpBs1nUrUHkFF+zGfog5WG8gYdCQqHQ17NLNWlwopgtOz8dUGSm+SpxYB7wNaNqVHr29angox0VWW1tEASNqauAEx6AWU07cYIdtA7GIeDaKHneKqX+Iln7aj2RtXiwibNVaYcgYDsfXrUlD/4Me4R7quDI/S9OKHRcZDOACgD+k8pwwnq+ldyb4ZW7MW5uuC9TrVBhUhSIbrt1YzcARkdCLuZTdWP8oXSzfbzLN9XyGk7UlItuzCMbhz+ecGlTOPrviMTYlTOUhzTi+94Ws3dXGfaHRp+7v7ZOyrzcaImAFWRFqdnZULMuXOxWw/9N4LsB/kXOEChSfu43M2Dfqfp7b+Thy6mTgFka1ed1v5x6WuFhuJM9BhgOrgd0hE9ebHsnLgzyyw9FcUa7O/fAvRSvjfpKyMrJA1pwULaFkKeJKcAsupW5F+Rjnp3vwgpqopIrDRU7n1kFegZUGPLnrjU2TzH6QAoobxFf5uxqAqZCLZk1+I3B+qiTWfoR4vUpng1VzDIDeQM9I4L9pd0gkXvwar3k2ieeSPoXFjLwpURExWe9wdwh3UgIrbT1pFtDcpOptA7CV3TWfJvI2D/sZcL2tDNKBH9yic=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6f90b812-a183-4bf0-f3e8-08db1f27604d
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB3001.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 16:16:58.9526
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0951d575-0e1d-48c3-a4a7-08db1f274d73
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.80];Helo=[inpost-eu.tmcas.trendmicro.com]
-X-MS-Exchange-CrossTenant-AuthSource: VI1EUR05FT062.eop-eur05.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR03MB9137
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OR7utJgDrm/jHtRfIms8ix3gsm95wGyu11NFKkfzmL/rdgOTWMBmCvRf54tWk+tU+OxiSCTfnYdYgEEX8hU75jtMfZSjuHqSAFNyCsmSlbg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB7474
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_11,2023-03-07_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 mlxlogscore=901 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303070146
+X-Proofpoint-GUID: ky2CsnxKFHqv-mHivfwCUE9iO47d_S15
+X-Proofpoint-ORIG-GUID: ky2CsnxKFHqv-mHivfwCUE9iO47d_S15
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/23 09:22, Andrew Lunn wrote:
->> To prevent userspace phy drivers, writes are disabled by default, and can
->> only be enabled by editing the source. This is the same strategy used by
->> regmap for debugfs writes. Unfortunately, this disallows several useful
->> features, including
->> 
->> - Register writes (obviously)
->> - C45-over-C22
+
+On 3/7/23 01:38, Waiman Long wrote:
+> This patch makes the following minor updates to the cpuset partition
+> testing script test_cpuset_prs.sh.
 > 
-> You could add C45-over-C22 as another op.
+>  - Remove online_cpus function call as it will be called anyway on exit
+>    in cleanup.
+>  - Make the enabling of sched/verbose debugfs flag conditional on the
+>    "-v" verbose option and set DELAY_FACTOR to 2 in this case as cpuset
+>    partition operations are likely to be slowed down by enabling that.
 > 
-> This tool is dangerous, even in its read only mode, just like the
-> IOCTL interface. Interrupt status registers are often clear on read,
-> so you can loose interrupts. Statistics counters are sometimes clear
-> on read. BMSR link bit is also latching, so a read of it could mean
-> you miss link events, etc. Adding C45-over-C22 is just as dangerous,
-> you can mess up MDIO switches which use the registers for other
-> things, but by deciding to use this tool you have decided to take the
-> risk of blowing your foot off.
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-Yes, and I should probably have commented on this in the commit message.
-IMO the things you listed are... iffy but unlikely to cause a
-malfunction. Tainting on read would be fine, since it is certainly
-possible to imagine hardware which would malfunction on read. I suppose
-regmap gets away with this by sticking the whole thing in debugfs.
+Reviewed-by: Kamalesh Babulal <kamalesh.babulal@oracle.com>
 
->> - Atomic access to paged registers
->> - Better MDIO emulation for e.g. QEMU
->> 
->> However, the read-only interface remains broadly useful for debugging.
-> 
-> I would say it is broadly useful for PHYs. But not Ethernet switches,
-> when in read only mode. 
-> 
->> +static int mdio_nl_open(struct mdio_nl_xfer *xfer);
->> +static int mdio_nl_close(struct mdio_nl_xfer *xfer, bool last, int xerr);
-> 
-> I guess i never did a proper review of this code before, due to not
-> liking the concept....
-> 
-> Move the code around so these are not needed, unless there are
-> functions which are mutually recursive.
-
-They do indeed call each other (although by my analysis no recursion
-results). The forward declaration of mdio_nl_open is unnecessary, so I
-will rearrange things to avoid that.
-
->> +static inline u16 *__arg_r(u32 arg, u16 *regs)
->> +{
->> +	WARN_ON_ONCE(arg >> 16 != MDIO_NL_ARG_REG);
->> +
->> +	return &regs[arg & 0x7];
->> +}
-> 
-> No inline functions in C files. Leave the compiler to decide.
-
-OK
-
->> +static int mdio_nl_eval(struct mdio_nl_xfer *xfer)
->> +{
->> +	struct mdio_nl_insn *insn;
->> +	unsigned long timeout;
->> +	u16 regs[8] = { 0 };
->> +	int pc, ret = 0;
->> +	int phy_id, reg, prtad, devad, val;
->> +
->> +	timeout = jiffies + msecs_to_jiffies(xfer->timeout_ms);
->> +
->> +	mutex_lock(&xfer->mdio->mdio_lock);
-> 
-> Should timeout be set inside the lock, for when you have two
-> applications running in parallel and each take a while?
-
-That seems reasonable.
-
->> +
->> +	for (insn = xfer->prog, pc = 0;
->> +	     pc < xfer->prog_len;
->> +	     insn = &xfer->prog[++pc]) {
->> +		if (time_after(jiffies, timeout)) {
->> +			ret = -ETIMEDOUT;
->> +			break;
->> +		}
->> +
->> +		switch ((enum mdio_nl_op)insn->op) {
->> +		case MDIO_NL_OP_READ:
->> +			phy_id = __arg_ri(insn->arg0, regs);
->> +			prtad = mdio_phy_id_prtad(phy_id);
->> +			devad = mdio_phy_id_devad(phy_id);
->> +			reg = __arg_ri(insn->arg1, regs);
->> +
->> +			if (mdio_phy_id_is_c45(phy_id))
->> +				ret = __mdiobus_c45_read(xfer->mdio, prtad,
->> +							 devad, reg);
->> +			else
->> +				ret = __mdiobus_read(xfer->mdio, phy_id, reg);
-> 
-> The application should say if it want to do C22 or C45.
-
-The phy_id comes from the application. So it sets MDIO_PHY_ID_C45 if it wants
-to use C45.
-
-> As you said in
-> the cover note, the ioctl interface is limiting when there is no PHY,
-> so you are artificially adding the same restriction here.
-
-I don't follow.
-
-> Also, you
-> might want to do C45 on a C22 PHY, e.g. to access EEE registers. Plus
-> you could consider adding C45 over C22 here.
-
-As Russell noted, this is dangerous in the general case.
-
->> +
->> +			if (ret < 0)
->> +				goto exit;
->> +			*__arg_r(insn->arg2, regs) = ret;
->> +			ret = 0;
->> +			break;
->> +
->> +		case MDIO_NL_OP_WRITE:
->> +			phy_id = __arg_ri(insn->arg0, regs);
->> +			prtad = mdio_phy_id_prtad(phy_id);
->> +			devad = mdio_phy_id_devad(phy_id);
->> +			reg = __arg_ri(insn->arg1, regs);
->> +			val = __arg_ri(insn->arg2, regs);
->> +
->> +#ifdef MDIO_NETLINK_ALLOW_WRITE
->> +			add_taint(TAINT_USER, LOCKDEP_STILL_OK);
-> 
-> I don't know, but maybe taint on read as well.
-> 
->> +			if (mdio_phy_id_is_c45(phy_id))
->> +				ret = __mdiobus_c45_write(xfer->mdio, prtad,
->> +							  devad, reg, val
->> +			else
->> +				ret = __mdiobus_write(xfer->mdio, dev, reg,
->> +						      val);
->> +#else
->> +			ret = -EPERM;
-> 
-> EPERM is odd, EOPNOTSUPP would be better. EPERM suggests you can run
-> it as root and it should work.
-
-Well, EPERM is what you get when trying to write a 444 file, which is
-effectively what we're enforcing here.
-
---Sean
