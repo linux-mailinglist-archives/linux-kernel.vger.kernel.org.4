@@ -2,214 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5156AE3E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F39D46AE3F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCGPGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:06:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        id S230463AbjCGPIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:08:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjCGPFm (ORCPT
+        with ESMTP id S229978AbjCGPH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:05:42 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4919C8C0D7;
-        Tue,  7 Mar 2023 06:59:44 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id z10so7740391pgr.8;
-        Tue, 07 Mar 2023 06:59:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678201184;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UNHKxNT0c5JC0gPj8eQAxc4/vh0SceOoVMKlv96e3CE=;
-        b=KUOmHD41UyLUET01uAguKq9lIpNeVGT+6YWm0lrLNXVWQ5okoY4rWa1FiMGKT2Rj44
-         0o8kaMb979rpYjEUsgrhmfC6hh5yr3Qgq/KoMgC2enCe2oWHohtOBsrKpGXysvOTvSoK
-         kFbItxEcRxvage51y7RyYkaIdmdKApWpIXIBPL8i38OjkVhqidf8Bx92F8gn4IFed5yz
-         +3bipw/8nq98xaqtZqGl4w3GR08TgNUSQ0EB0TDj5E3W9hT8cTHkhD60sB2KCtsHTtwU
-         B1sazMCEacCEeDBlzVM3N0vzvT5GNyGX6ggez2Q/CNgNda04HnH+d6Ko8PoIzi6GjtUK
-         ABxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678201184;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UNHKxNT0c5JC0gPj8eQAxc4/vh0SceOoVMKlv96e3CE=;
-        b=ExgdTSu6Pt5SEI3IIo07+r8vZTMscFH8YYS2f1YY2hM79OLSHbg9SSBDI21QOfyMhe
-         N8vLfOHoVeEC7kBFfYcgR9zYMrE4UZTa49063uRxQJmDWQvKeyf6hFE1plBoc2ZqG22G
-         1B7WNiYuMfW2EIrq9jkxiOjNo5oPZSWcgyX+74zCFXG6u5HqCqOZ2ZF18Aghi20FMZzp
-         0gzVn6G9mYQfjwFPqsqDNxxUxaVnFTp3g3FFMXkxRO7gKp64XsW6xGxRE5CUSa+FN2LG
-         ZQOKQouK6su7PpNNu16tMwRSpfskqWVbtnP50AcUmuEGM3W8L5oO2dupDSTnJ01LjoRS
-         NmSA==
-X-Gm-Message-State: AO0yUKVVyql0GGRr22QtApIx5BevRymcCKBPnnKHxgdUTnw1ZltOZMjL
-        5tmG5me9gMlTURkws/uEcBRqPW8AZPPK8o9FEfM=
-X-Google-Smtp-Source: AK7set/WOQxv8H/7aV+F946wAXqf7ORNX6U+xFFccQrhIqEOQdhoG7L7xRrbc2tm4bdT5SrOksNQ6CSe3plvbg/RNCA=
-X-Received: by 2002:a62:8245:0:b0:590:3182:9341 with SMTP id
- w66-20020a628245000000b0059031829341mr6135030pfd.0.1678201183659; Tue, 07 Mar
- 2023 06:59:43 -0800 (PST)
+        Tue, 7 Mar 2023 10:07:58 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8F994755;
+        Tue,  7 Mar 2023 07:01:37 -0800 (PST)
+Received: from localhost.localdomain (1.general.phlin.uk.vpn [10.172.194.38])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 5FABC41ABE;
+        Tue,  7 Mar 2023 15:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678201277;
+        bh=Tktkkrpcs3rSHZyoHsHQYEN7vp4v2hInvSY2NkAVAZ8=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=YEqiMoqSGXa5WR4yWutTRqV1u1RHpO5RjhhR/aEpBnzSg1e01EnSibDyiHOuTSNd6
+         /mUdCu/1Y52GGupLdEnX1iSFxXPuKUVnIYMgRZLxDb8CYgSrRZz1VLCditKb5q95u1
+         7YdPBF/Gi3LIvfNwh5gAT/bs2CD6HpidH4DqQgrDfqWzNAkAk5XRn3ow2Xf7WYh6xC
+         nXnR5No1eD3p/H0M9fc2/irHCFQuE6WwJubCK5WMzYOw59Gf/oxzg7yKYnoncXGrfq
+         ru3dsUMUK5vDYLVSqE/OzRegxwaPXGYprB6mK1Ab731QSQUNIBYkSykhUOrNZSEWKe
+         Cv5tNENRvvASg==
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     idosch@mellanox.com, danieller@mellanox.com, petrm@mellanox.com,
+        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, po-hsu.lin@canonical.com
+Subject: [PATCHv2] selftests: net: devlink_port_split.py: skip test if no suitable device available
+Date:   Tue,  7 Mar 2023 23:00:30 +0800
+Message-Id: <20230307150030.527726-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230306062633.200427-1-zyytlz.wz@163.com> <CAJedcCzeVwwi9SkkwouFXUAVhF-tKF4dkqsFqVQwszSwY1SJ0A@mail.gmail.com>
-In-Reply-To: <CAJedcCzeVwwi9SkkwouFXUAVhF-tKF4dkqsFqVQwszSwY1SJ0A@mail.gmail.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Tue, 7 Mar 2023 22:59:31 +0800
-Message-ID: <CAJedcCwf4st_KBxYA1dTNT3TNpyyZ_5-2o0oBP7h6kQt7Nzv3Q@mail.gmail.com>
-Subject: Re: [RESEND PATCH] media: mtk-jpeg: Fix use after free bug due to
- uncanceled work
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     mchehab@kernel.org, bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The timer function was inited in mtk_jpeg_probe with
-mtk_jpeg_job_timeout_work function.
-And the worker is started in mtk_jpeg_dec_device_run.
-There are two functions (mtk_jpeg_enc_irq and mtk_jpeg_dec_irq) which
-may cancel the worker.
-They are used as IRQ handler function which is saved as function
-pointer in a variable.
-In mtk_jpeg_probe, they are registered by devm_request_irq:
+The `devlink -j port show` command output may not contain the "flavour"
+key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
+iproute2-5.15.0:
+  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
+           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
+           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
+           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
 
-ret =3D devm_request_irq(&pdev->dev,
-               jpeg_irq,
-               jpeg->variant->irq_handler,
-               0,
-               pdev->name, jpeg);
-    if (ret) {
-      dev_err(&pdev->dev, "Failed to request jpeg_irq %d (%d)\n",
-        jpeg_irq, ret);
-      return ret;
-    }
+This will cause a KeyError exception.
 
-However, if we remove the module without triigering the irq, the
-worker will never be removed.
+Create a validate_devlink_output() to check for this "flavour" from
+devlink command output to avoid this KeyError exception. Also let
+it handle the check for `devlink -j dev show` output in main().
 
-As for the schedule, mtk_jpeg_dec_device_run and
-mtk_jpeg_enc_device_run will start the worker.
-The schedule invoking is quite complicated. As far as I know, the
-invoking chain is as follows:
+Apart from this, if the test was not started because of any reason
+(e.g. "lanes" does not exist, max lanes is 0 or the flavour of the
+designated device is not "physical" and etc.) The script will still
+return 0 and thus causing a false-negative test result.
 
-v4l2_m2m_init->v4l2_m2m_device_run_work->v4l2_m2m_try_run
+Use a test_ran flag to determine if these tests were skipped and
+return KSFT_SKIP to make it more clear.
 
-the v4l2_m2m_device_run_work is also a worker which is inited in
-v4l2_m2m_init and started in
-v4l2_m2m_schedule_next_job.
+V2: factor out the skip logic from main(), update commit message and
+    skip reasons accordingly.
+Link: https://bugs.launchpad.net/bugs/1937133
+Fixes: f3348a82e727 ("selftests: net: Add port split test")
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/devlink_port_split.py | 36 +++++++++++++++++++----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
-Before calling remove function, the  mtk_jpeg_release was invoked to
-release the related resource.
+diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/testing/selftests/net/devlink_port_split.py
+index 2b5d6ff..749606c 100755
+--- a/tools/testing/selftests/net/devlink_port_split.py
++++ b/tools/testing/selftests/net/devlink_port_split.py
+@@ -59,6 +59,8 @@ class devlink_ports(object):
+         assert stderr == ""
+         ports = json.loads(stdout)['port']
+ 
++        validate_devlink_output(ports, 'flavour')
++
+         for port in ports:
+             if dev in port:
+                 if ports[port]['flavour'] == 'physical':
+@@ -220,6 +222,27 @@ def split_splittable_port(port, k, lanes, dev):
+     unsplit(port.bus_info)
+ 
+ 
++def validate_devlink_output(devlink_data, target_property=None):
++    """
++    Determine if test should be skipped by checking:
++      1. devlink_data contains values
++      2. The target_property exist in devlink_data
++    """
++    skip_reason = None
++    if any(devlink_data.values()):
++        if target_property:
++            skip_reason = "{} not found in devlink output, test skipped".format(target_property)
++            for key in devlink_data:
++                if target_property in devlink_data[key]:
++                    skip_reason = None
++    else:
++        skip_reason = 'devlink output is empty, test skipped'
++
++    if skip_reason:
++        print(skip_reason)
++        sys.exit(KSFT_SKIP)
++
++
+ def make_parser():
+     parser = argparse.ArgumentParser(description='A test for port splitting.')
+     parser.add_argument('--dev',
+@@ -231,6 +254,7 @@ def make_parser():
+ 
+ 
+ def main(cmdline=None):
++    test_ran = False
+     parser = make_parser()
+     args = parser.parse_args(cmdline)
+ 
+@@ -240,12 +264,9 @@ def main(cmdline=None):
+         stdout, stderr = run_command(cmd)
+         assert stderr == ""
+ 
++        validate_devlink_output(json.loads(stdout))
+         devs = json.loads(stdout)['dev']
+-        if devs:
+-            dev = list(devs.keys())[0]
+-        else:
+-            print("no devlink device was found, test skipped")
+-            sys.exit(KSFT_SKIP)
++        dev = list(devs.keys())[0]
+ 
+     cmd = "devlink dev show %s" % dev
+     stdout, stderr = run_command(cmd)
+@@ -277,6 +298,11 @@ def main(cmdline=None):
+                 split_splittable_port(port, lane, max_lanes, dev)
+ 
+                 lane //= 2
++        test_ran = True
++
++    if not test_ran:
++        print("Test not started, no suitable device for the test")
++        sys.exit(KSFT_SKIP)
+ 
+ 
+ if __name__ == "__main__":
+-- 
+2.7.4
 
-v4l2_m2m_cancel_job will cancel the job by calling
-m2m_dev->m2m_ops->job_abort(m2m_ctx->priv).
-
-But this will only cancel the current queue by
-list_del(&m2m_dev->curr_ctx->queue);
-
-I think this can not cancel the posted task mentioned before. So I
-think if mtk_jpeg_job_timeout_work
-
-is working on, and use jpeg->m2m_dev after freeing it in
-mtk_jpeg_remove, it wll cause UAF bug.
-
-static int mtk_jpeg_release(struct file *file)
-{
-  struct mtk_jpeg_dev *jpeg =3D video_drvdata(file);
-  struct mtk_jpeg_ctx *ctx =3D mtk_jpeg_fh_to_ctx(file->private_data);
-
-  mutex_lock(&jpeg->lock);
-  v4l2_ctrl_handler_free(&ctx->ctrl_hdl);
-  [1] v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-  v4l2_fh_del(&ctx->fh);
-  v4l2_fh_exit(&ctx->fh);
-  kfree(ctx);
-  mutex_unlock(&jpeg->lock);
-  return 0;
-}
-
-void v4l2_m2m_ctx_release(struct v4l2_m2m_ctx *m2m_ctx)
-{
-  /* wait until the current context is dequeued from job_queue */
-  [2] v4l2_m2m_cancel_job(m2m_ctx);
-
-  vb2_queue_release(&m2m_ctx->cap_q_ctx.q);
-  vb2_queue_release(&m2m_ctx->out_q_ctx.q);
-
-  kfree(m2m_ctx);
-}
-
-Note that, all of this is static analysis, which may be false positive.
-Feel free to tell me if there is something I've missed.
-
-Regard,
-Zheng
-
-Zheng Hacker <hackerzheng666@gmail.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=887=
-=E6=97=A5=E5=91=A8=E4=BA=8C 17:27=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi,
->
-> Is there anyone who can help with this? I can provide more details
-> like invoking chain if needed.
->
-> Thanks,
-> Zheng
->
-> Zheng Wang <zyytlz.wz@163.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=886=E6=97=A5=
-=E5=91=A8=E4=B8=80 14:28=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
-> > mtk_jpeg_job_timeout_work. Then mtk_jpeg_dec_device_run
-> > and mtk_jpeg_enc_device_run may be called to start the
-> > work.
-> > If we remove the module which will call mtk_jpeg_remove
-> > to make cleanup, there may be a unfinished work. The
-> > possible sequence is as follows, which will cause a
-> > typical UAF bug.
-> >
-> > Fix it by canceling the work before cleanup in the mtk_jpeg_remove
-> >
-> > CPU0                  CPU1
-> >
-> >                     |mtk_jpeg_job_timeout_work
-> > mtk_jpeg_remove     |
-> >   v4l2_m2m_release  |
-> >     kfree(m2m_dev); |
-> >                     |
-> >                     | v4l2_m2m_get_curr_priv
-> >                     |   m2m_dev->curr_ctx //use
-> >
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> >  drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/dri=
-vers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-> > index 969516a940ba..364513e7897e 100644
-> > --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-> > +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-> > @@ -1793,7 +1793,7 @@ static int mtk_jpeg_probe(struct platform_device =
-*pdev)
-> >  static int mtk_jpeg_remove(struct platform_device *pdev)
-> >  {
-> >         struct mtk_jpeg_dev *jpeg =3D platform_get_drvdata(pdev);
-> > -
-> > +       cancel_delayed_work(&jpeg->job_timeout_work);
-> >         pm_runtime_disable(&pdev->dev);
-> >         video_unregister_device(jpeg->vdev);
-> >         v4l2_m2m_release(jpeg->m2m_dev);
-> > --
-> > 2.25.1
-> >
