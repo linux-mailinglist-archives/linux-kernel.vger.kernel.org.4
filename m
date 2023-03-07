@@ -2,124 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC4E6AE11C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C01616AE121
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjCGNsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47234 "EHLO
+        id S230205AbjCGNtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:49:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjCGNr0 (ORCPT
+        with ESMTP id S230166AbjCGNsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:47:26 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618CB838A3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:46:43 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso10446568wmq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678196801;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HzSPP7tKpmDgMygbv6FfzcwtKqtIWlRKr/CY2KHoGGA=;
-        b=Z7ODCrFGa6AJ0GtvhIqso5qyFzfQ8NsAQww90erwC3wSHzob3XEBgT8+zkwqAAORlW
-         ZZ8Mt2vbk9KeWXzHXDWyAvj+6nFDZ9x/8qZZmAMKci64xOmal08AK8sJXsrFg/BgJ39h
-         d9ct/pBRpECWYRlubAPXty4ThI7dXf91+0nq32uzEMwN3oqa/0B71B8fAMdakcpatp2u
-         Y6m9prXwx6kg5mYWnjSq1RjTpicRxTvKQbkX7TwYVTJExKScvio6GZ8p01yks0k99Biy
-         vLHKnJoTXbfg7bluVCIeZtuX6aqdr4MK0R8LgJxiA0PizJgGpBySg+8a3O3QYTJ78uMY
-         ckCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678196801;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HzSPP7tKpmDgMygbv6FfzcwtKqtIWlRKr/CY2KHoGGA=;
-        b=N0QeToudzUpaYy3WrXHNNBKbV4mUtLCkFx75yOCkLnLbSXcLQOxt7v+Vpk9EQ+KTe+
-         TNbu2tXoNmtuynZwCnFOAUBeDoABkIfJqToojSCow0RRUFrQuh/oZQO2yBlw82CZ1sHs
-         p0d4wkkb4s2FngqhajJZ+8HOtfLWkYRwlYfbLbF+W8N/iOX8RwSfvg77r35lb+qdRr8Y
-         HvZid/hwOfccyayvmJXRbbsox5cRlYRk7S9ZVovvvMycPcp4Ipa3XCZmX9ex7wM4buzg
-         HzenaNqujtKhBCgsGl4lr4qFp/747dTQc+IrSvfc88Zwq8sISgIEJNxj3JADYds9J4SZ
-         uBkg==
-X-Gm-Message-State: AO0yUKXP7JuWgsWNSk5mx0WN7zJBmA/N+iHY9HtXuHSpSedbGdkiaQs8
-        QwOjYqGf8/ij73vq+Y/+wbwIftjvZ3suikvBUyQ=
-X-Google-Smtp-Source: AK7set9A80XTJaBJRZGJ0NFVW6xppDxlmeTE+Ac0G8GrQqsRd4V/lXRbnCKr6tsJrhN0QVT2zxdufQ==
-X-Received: by 2002:a05:600c:474c:b0:3eb:2de8:b74e with SMTP id w12-20020a05600c474c00b003eb2de8b74emr13385054wmo.27.1678196801725;
-        Tue, 07 Mar 2023 05:46:41 -0800 (PST)
-Received: from [127.0.1.1] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.googlemail.com with ESMTPSA id o13-20020a5d670d000000b002c8476dde7asm12657607wru.114.2023.03.07.05.46.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 05:46:41 -0800 (PST)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Tue, 07 Mar 2023 14:46:31 +0100
-Subject: [PATCH 6/6] arm64: dts: mediatek: add iommu support for mt8365 SoC
+        Tue, 7 Mar 2023 08:48:45 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 147F983895;
+        Tue,  7 Mar 2023 05:47:42 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 327DlSLh050148;
+        Tue, 7 Mar 2023 07:47:28 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678196848;
+        bh=SK8LF2YieqOxb+9pM44sEMrLQlozFKt0sw/cyRAA+iI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=QQhWtqZdIDFiFzNDNMrMeDAGi27SgzEZtI5fwCKnOdpAzPKItEhkltRgluimtGD7z
+         vusQZx9+HtzOUaTq7S/htD3mP9aQS1VbZeTDJT61VJKNgx3uSifa+AuhG1Bz7GIsUs
+         d2HbZBUMz1oE6w+aN/OvBCS15IiWniYnv1hdHwBY=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 327DlSBO068610
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Mar 2023 07:47:28 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 7
+ Mar 2023 07:47:28 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 7 Mar 2023 07:47:28 -0600
+Received: from [10.250.174.229] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 327DlNEC081802;
+        Tue, 7 Mar 2023 07:47:24 -0600
+Message-ID: <d6ef0ff1-f8db-c945-99c2-268cded9da8c@ti.com>
+Date:   Tue, 7 Mar 2023 19:17:23 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230207-iommu-support-v1-6-4f0c81fd52c1@baylibre.com>
-References: <20230207-iommu-support-v1-0-4f0c81fd52c1@baylibre.com>
-In-Reply-To: <20230207-iommu-support-v1-0-4f0c81fd52c1@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=969; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=r7GkCkHYdd12Bt7dFmR03rMsJTMhNcidJ4FTEsGU2Yk=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkB0A7CDFByNdlviQNt8kE2Cw9wrh0z75ZvZpOdikX
- kFOxAUGJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZAdAOwAKCRArRkmdfjHURYKWD/
- 94UAAbnpoF14YAwi4BJcFcufFpJmrKQxWeHQnzyW4ELK2wbH5OUOcak4XA4TcLSl6Re4TlCu8DQt4w
- UFvzMALTpLAF1FHEXQ+Z4bQJ5Ejcg6vsv3EJogtvguC/TBwl6AsJdrEU5QBaULWNdOJ+zRsGAW+Nmy
- PXDGOcIhPUFMoEU1TOoQiLhECf6n+/JXr+lUskFw5+nSnUtNmW7UgB80CHgbkhznncOdoVaGhSO2n7
- 8XIVHMWUyfrcNOCUElq+HzYFjo66T9Mc/EyoEgBFdKJA6kxzfOnigv5SxTRGhYa5wOLp/8aQhUVNdw
- bGzseWg8NbAas+ViGqwB4J/+BKCvLLWbFcmccTg6WZ+L2MeLqO6iLwMrz7ejVOIhVawn9nMvU0OUjY
- MYDM0V/qS/OMaeD3Ecj5NRBKWIKD2H5tkgVg5NFEBPsVrqx/85DLfIQzNuTorMzniJTzlxFy5a8JO6
- h1uV90ov460FnvMbPkuEiBrtrCyNdVHM+TGtlifHNIVevMZL6u9pwBsjLQspfH5giaiRzj4XvmijZW
- SeulrzQrnKx0FUUV7r0ATeH1BZmuQeSakFevKCi7cUoxxZldlKL7h5FO5m9CqUmA1BZgtknWttAIEv
- JFgNMvi/ylZqDx4vPPib+Yq//xdlLY1pMP7xolKZYzFf03OxSA7+OKiWiVcA==
-X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
- fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 06/11] thermal/drivers/ti: Use fixed update interval
+Content-Language: en-US
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, <rafael@kernel.org>
+CC:     <rui.zhang@intel.com>, <amitk@kernel.org>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+ <20230307133735.90772-7-daniel.lezcano@linaro.org>
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <20230307133735.90772-7-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add iommu support in the SoC DTS using the 4 local arbiters (LARBs)
 
-Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
----
- arch/arm64/boot/dts/mediatek/mt8365.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-index db0b897f58bb..c713471c59dc 100644
---- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
-@@ -456,6 +456,14 @@ sysirq: interrupt-controller@10200a80 {
- 			reg = <0 0x10200a80 0 0x20>;
- 		};
- 
-+		iommu: iommu@10205000 {
-+			compatible = "mediatek,mt8365-m4u";
-+			reg = <0 0x10205000 0 0x1000>;
-+			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_LOW>;
-+			mediatek,larbs = <&larb0>, <&larb1>, <&larb2>, <&larb3>;
-+			#iommu-cells = <1>;
-+		};
-+
- 		infracfg_nao: infracfg@1020e000 {
- 			compatible = "mediatek,mt8365-infracfg", "syscon";
- 			reg = <0 0x1020e000 0 0x1000>;
+On 3/7/2023 7:07 PM, Daniel Lezcano wrote:
+> Currently the TI thermal driver sets the sensor update interval based
+> on the polling of the thermal zone. In order to get the polling rate,
+> the code inspects the thermal zone device strcuture internals, thus
+> breaking the self-encapsulation of the thermal framework core
+> framework.
+> 
+> On the other side, we see the common polling rates set in the device
+> tree for the platforms using this driver are 500 or 1000 ms.
+> 
+> Setting the polling rate to 250 ms would be far enough to cover the
+> combination we found in the device tree.
+> 
+> Instead of accessing the thermal zone device structure polling rate,
+> let's use a common update interval of 250 ms for the driver.
 
--- 
-b4 0.10.1
+Thanks for the patch.
+
+Acked-by: Keerthy <j-keerthy@ti.com>
+
+> 
+> Cc: Keerthy <j-keerthy@ti.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>   drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> index 0c8914017c18..430c4b43151f 100644
+> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> @@ -23,6 +23,8 @@
+>   #include "ti-bandgap.h"
+>   #include "../thermal_hwmon.h"
+>   
+> +#define TI_BANDGAP_UPDATE_INTERVAL_MS 250
+> +
+>   /* common data structures */
+>   struct ti_thermal_data {
+>   	struct cpufreq_policy *policy;
+> @@ -159,7 +161,6 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>   			     char *domain)
+>   {
+>   	struct ti_thermal_data *data;
+> -	int interval;
+>   
+>   	data = ti_bandgap_get_sensor_data(bgp, id);
+>   
+> @@ -177,10 +178,9 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>   		return PTR_ERR(data->ti_thermal);
+>   	}
+>   
+> -	interval = jiffies_to_msecs(data->ti_thermal->polling_delay_jiffies);
+> -
+>   	ti_bandgap_set_sensor_data(bgp, id, data);
+> -	ti_bandgap_write_update_interval(bgp, data->sensor_id, interval);
+> +	ti_bandgap_write_update_interval(bgp, data->sensor_id,
+> +					 TI_BANDGAP_UPDATE_INTERVAL_MS);
+>   
+>   	if (devm_thermal_add_hwmon_sysfs(bgp->dev, data->ti_thermal))
+>   		dev_warn(bgp->dev, "failed to add hwmon sysfs attributes\n");
