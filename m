@@ -2,43 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558E56AE69C
+	by mail.lfdr.de (Postfix) with ESMTP id A0FDC6AE69D
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbjCGQcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
+        id S231156AbjCGQcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjCGQbd (ORCPT
+        with ESMTP id S230172AbjCGQbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:31:33 -0500
+        Tue, 7 Mar 2023 11:31:34 -0500
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E6F867F5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:31:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A22867FF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:31:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=GpZGDUwUsE0ds3
-        5pzFLaSmr9UzqZGY5gVr/k+4eStUI=; b=d8U3ZjUdS2Nw+DeBbeC04ON8UrepdH
-        YdMmmpWc+wEMSdxPTDCRtV/+gV+d1IXrtqFEIAHk2TsR2FKaPX06lQCnuoA9QmwN
-        bPbSwtm1Ll0zjXq8c/bm0K94IvQWEiN2IE8Zvw6XnCH0cfdDejo3Y78WIC/YRyNW
-        +SvV5BjoxHBik=
-Received: (qmail 752076 invoked from network); 7 Mar 2023 17:31:06 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Mar 2023 17:31:06 +0100
-X-UD-Smtp-Session: l3s3148p1@b+848FH2dI0gAQnoAFQ+AGEn9EY5VOxJ
+        :mime-version:content-transfer-encoding; s=k1; bh=/K+5ZHq3qxSf+u
+        vMlu2Mbiy40EGhHX9fwgqPWBWOR8I=; b=bXVpGEvcPTMHGGn12V34q06RQqS/TJ
+        MSkDKcNVIhNZGp7VZjENZqlGZICMjLAgfjIKNchkI9GePBemruUWSrM+vofyci+n
+        b3iCFgHU4k7Vor6ZOMq4EWTXI6xjoJImlsPOWXkNpZqK/w6J6an/8HkMAIvd3pwc
+        NZDsuJLSKxJho=
+Received: (qmail 752100 invoked from network); 7 Mar 2023 17:31:07 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Mar 2023 17:31:07 +0100
+X-UD-Smtp-Session: l3s3148p1@lJ5E8FH2go0gAQnoAFQ+AGEn9EY5VOxJ
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-renesas-soc@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 07/11] ravb: remove R-Car H3 ES1.* handling
-Date:   Tue,  7 Mar 2023 17:30:35 +0100
-Message-Id: <20230307163041.3815-8-wsa+renesas@sang-engineering.com>
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 08/11] mmc: renesas_sdhi: remove R-Car H3 ES1.* handling
+Date:   Tue,  7 Mar 2023 17:30:36 +0100
+Message-Id: <20230307163041.3815-9-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
 References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
@@ -66,49 +62,37 @@ Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Please apply individually per subsystem. There are no dependencies and the SoC
 doesn't boot anymore since v6.3-rc1.
 
- drivers/net/ethernet/renesas/ravb_main.c | 15 ---------------
- 1 file changed, 15 deletions(-)
+ drivers/mmc/host/renesas_sdhi_internal_dmac.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/renesas/ravb_main.c b/drivers/net/ethernet/renesas/ravb_main.c
-index 0f54849a3823..b81f0d8dfda8 100644
---- a/drivers/net/ethernet/renesas/ravb_main.c
-+++ b/drivers/net/ethernet/renesas/ravb_main.c
-@@ -28,7 +28,6 @@
- #include <linux/pm_runtime.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
--#include <linux/sys_soc.h>
- #include <linux/reset.h>
- #include <linux/math64.h>
+diff --git a/drivers/mmc/host/renesas_sdhi_internal_dmac.c b/drivers/mmc/host/renesas_sdhi_internal_dmac.c
+index f38003f6b1ca..9ab813903b2c 100644
+--- a/drivers/mmc/host/renesas_sdhi_internal_dmac.c
++++ b/drivers/mmc/host/renesas_sdhi_internal_dmac.c
+@@ -72,11 +72,10 @@ enum renesas_sdhi_dma_cookie {
  
-@@ -1390,11 +1389,6 @@ static void ravb_adjust_link(struct net_device *ndev)
- 		phy_print_status(phydev);
- }
+ static unsigned long global_flags;
+ /*
+- * Workaround for avoiding to use RX DMAC by multiple channels.
+- * On R-Car H3 ES1.* and M3-W ES1.0, when multiple SDHI channels use
+- * RX DMAC simultaneously, sometimes hundreds of bytes data are not
+- * stored into the system memory even if the DMAC interrupt happened.
+- * So, this driver then uses one RX DMAC channel only.
++ * Workaround for avoiding to use RX DMAC by multiple channels. On R-Car M3-W
++ * ES1.0, when multiple SDHI channels use RX DMAC simultaneously, sometimes
++ * hundreds of data bytes are not stored into the system memory even if the
++ * DMAC interrupt happened. So, this driver then uses one RX DMAC channel only.
+  */
+ #define SDHI_INTERNAL_DMAC_RX_IN_USE	0
  
--static const struct soc_device_attribute r8a7795es10[] = {
--	{ .soc_id = "r8a7795", .revision = "ES1.0", },
--	{ /* sentinel */ }
--};
--
- /* PHY init function */
- static int ravb_phy_init(struct net_device *ndev)
- {
-@@ -1434,15 +1428,6 @@ static int ravb_phy_init(struct net_device *ndev)
- 		goto err_deregister_fixed_link;
- 	}
- 
--	/* This driver only support 10/100Mbit speeds on R-Car H3 ES1.0
--	 * at this time.
--	 */
--	if (soc_device_match(r8a7795es10)) {
--		phy_set_max_speed(phydev, SPEED_100);
--
--		netdev_info(ndev, "limited PHY to 100Mbit/s\n");
--	}
--
- 	if (!info->half_duplex) {
- 		/* 10BASE, Pause and Asym Pause is not supported */
- 		phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_10baseT_Half_BIT);
+@@ -222,7 +221,6 @@ static const struct renesas_sdhi_quirks sdhi_quirks_r9a09g011 = {
+  */
+ static const struct soc_device_attribute sdhi_quirks_match[]  = {
+ 	{ .soc_id = "r8a774a1", .revision = "ES1.[012]", .data = &sdhi_quirks_4tap_nohs400 },
+-	{ .soc_id = "r8a7795", .revision = "ES1.*", .data = &sdhi_quirks_4tap_nohs400_one_rx },
+ 	{ .soc_id = "r8a7795", .revision = "ES2.0", .data = &sdhi_quirks_4tap },
+ 	{ .soc_id = "r8a7796", .revision = "ES1.0", .data = &sdhi_quirks_4tap_nohs400_one_rx },
+ 	{ .soc_id = "r8a7796", .revision = "ES1.[12]", .data = &sdhi_quirks_4tap_nohs400 },
 -- 
 2.35.1
 
