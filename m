@@ -2,99 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 675D76AEEB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6FC46AEF0A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232565AbjCGSOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:14:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56964 "EHLO
+        id S230513AbjCGSTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 13:19:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232488AbjCGSOT (ORCPT
+        with ESMTP id S232642AbjCGSTR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:14:19 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C352DA8C70;
-        Tue,  7 Mar 2023 10:09:51 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 327I9hk1013901;
-        Tue, 7 Mar 2023 12:09:43 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678212583;
-        bh=ph2Figx56FATStGHNkxc7u4pO/c/ka4E9KIZKF5CNag=;
-        h=From:To:CC:Subject:Date;
-        b=LgWY0qnnFSsaRswI3N2D0dULwwBvijGiz0S6YXEs4VY3hPizADZAg1+YekIsh8g0y
-         mQRjBEvBDyUKDnzqAe2eS7z7EbaQpqzorCe86TaXPO3CMsaYafGZBgJtFZdIlQcPjT
-         6McZS8XjQL5fdovs7F0rii2y0npyFSx/0DfMDG4U=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 327I9hW6124469
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 7 Mar 2023 12:09:43 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 7
- Mar 2023 12:09:42 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 7 Mar 2023 12:09:42 -0600
-Received: from ula0226330.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 327I9gFI025285;
-        Tue, 7 Mar 2023 12:09:42 -0600
-From:   Andrew Davis <afd@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis <afd@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-j721e-sk: Remove firmware-name override for R5F
-Date:   Tue, 7 Mar 2023 12:09:42 -0600
-Message-ID: <20230307180942.2719-1-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 7 Mar 2023 13:19:17 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2519CBF3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:13:39 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id k199so12319548ybf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:13:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678212818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sH8Wy2Ph761evbKn3y8LG62Tu+KFGePC7gyj4o8USOA=;
+        b=UP+9D9GXzLCgcmXQGGP3q3C7u1PkefkqLS6Z1ClEa+/CqKo0BvvfXz/JK/Q5wudRSn
+         1yp2x3C8D6SoTMFYgu48Iiw0jbJTYQ+FdXJI5zrU2mZouLp25QtUpORoSQxRMiLFiS3W
+         oqykigITON7KiL+ujyvz4/10HWi1gjPYtlHzM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678212818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sH8Wy2Ph761evbKn3y8LG62Tu+KFGePC7gyj4o8USOA=;
+        b=GWPlP2VXxWOgH2hHUdu+nu7cxJItat8kjAZHyPmw44WFmItikoZECrgyiB8rKLYIEH
+         d9cqyUrEgrrB/bFarK0xAOwuugTIWZ9E1uMqmi1Wt/FItk53y3aqnPrTCaUGPXDycRnR
+         GFGbTlI7ZmXGvZkREf7U37g2aJSxDXJbrinPOcNk5bSENmlUMH4slwPM3fqT+DcaJhbn
+         pIliraTT718OAVPgCmD2dSZa1xlpQob/fy5sVE7Wk1D7cErLy625fITti+rILCFa6W+v
+         mv2w42LZRSPv6TXn5OXOpMXxFta/Jy0P5cJlSt5NmB07s6ra9lPaccnSHD0e+QcfnH7c
+         uWgw==
+X-Gm-Message-State: AO0yUKU6qak+uYwS59eAKQOG+3+b3lkuPhpul0DJt3V6eYz+yaI0f2d9
+        ysGrwoZycVZVxfldSWnoNE1BEpeiKC5PyDqOmDpHsg==
+X-Google-Smtp-Source: AK7set+Aj6jA4kMXw9p7vsPELm43cnWFvS3/a2HCzpZ8bHXDixnTNPk0vbZEYb6n4LPrlpMnjWEsZHLzSPRMqZ5bTx8=
+X-Received: by 2002:a25:fe04:0:b0:b1a:64ba:9c9b with SMTP id
+ k4-20020a25fe04000000b00b1a64ba9c9bmr1170204ybe.1.1678212818267; Tue, 07 Mar
+ 2023 10:13:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230307005028.2065800-1-grundler@chromium.org>
+ <84094771-7f98-0d8d-fe79-7c22e15a602d@gmail.com> <CANEJEGvM_xLrSSjrgKLh_xP+BrFFT+afDQhG8BOdgHPf7eR4gQ@mail.gmail.com>
+ <20230307102931.GA25631@wunner.de>
+In-Reply-To: <20230307102931.GA25631@wunner.de>
+From:   Grant Grundler <grundler@chromium.org>
+Date:   Tue, 7 Mar 2023 10:13:26 -0800
+Message-ID: <CANEJEGv44GeY=qWiVTJx6tkL-fxs=7vT8uzGm9nPsGirwVBGVQ@mail.gmail.com>
+Subject: Re: [PATCH] net: asix: fix modprobe "sysfs: cannot create duplicate filename"
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Grant Grundler <grundler@chromium.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Anton Lundin <glance@acc.umu.se>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The firmware name for this core should stay as the default name
-"j7-main-r5f0_0-fw". This is expected to by a symlink to the actual
-firmware file. If one wants to use a different firmware they should
-change where the symlink points. This is usually achieved with
-an update-alternative or other distro specific selection mechanisms.
+On Tue, Mar 7, 2023 at 2:29=E2=80=AFAM Lukas Wunner <lukas@wunner.de> wrote=
+:
+>
+> On Mon, Mar 06, 2023 at 10:10:09PM -0800, Grant Grundler wrote:
+> > On Mon, Mar 6, 2023 at 7:46???PM Florian Fainelli <f.fainelli@gmail.com=
+> wrote:
+> > > On 3/6/2023 4:50 PM, Grant Grundler wrote:
+> > > > +     priv->phydev =3D mdiobus_get_phy(priv->mdio, priv->phy_addr);
+> > > > +     if (priv->phydev)
+> > > > +             return 0;
+> > >
+> > > This was in ax88772_init_phy() before, why is this being moved here n=
+ow?
+> >
+> > Because other drivers I looked at (e.g. tg3 and r8169) do all the mdiob=
+us_*
+> > calls in one function and I wanted to have some "symmetry"
+> > with ax88772_release_mdio() function I added below.
+>
+> I'd suggest moving this cleanup to a separate commit so that you keep
+> the fix itself as small as possible and thus minimize the potential of
+> introducing regressions in stable kernels that will receive the fix.
 
-The actual selection is policy and does not belong in DT.
-Remove this name override.
+Ok - will do.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 4 ----
- 1 file changed, 4 deletions(-)
+> Also, per convention please use the if-clause to catch the error case,
+> not the success case.  It doesn't matter if you need two or three more
+> lines, readability is more important IMO.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index 4640d280c85c..f650a7fd66b4 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -687,10 +687,6 @@ &wkup_gpio1 {
- 	status = "disabled";
- };
- 
--&main_r5fss0_core0{
--	firmware-name = "pdk-ipc/ipc_echo_test_mcu2_0_release_strip.xer5f";
--};
--
- &usb_serdes_mux {
- 	idle-states = <1>, <1>; /* USB0 to SERDES3, USB1 to SERDES2 */
- };
--- 
-2.39.2
+Sure. No problem. The code I wrote seemed easier to read but I'm
+familiar with the convention and have no objection to that.
 
+I'll add the Fixes: tag as well (thanks for confirming Oleksij!)
+
+cheers,
+grant
+
+>
+> Thanks,
+>
+> Lukas
