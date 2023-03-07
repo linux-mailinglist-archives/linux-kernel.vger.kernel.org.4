@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3D16AD61B
+	by mail.lfdr.de (Postfix) with ESMTP id 486896AD618
 	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjCGERd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 23:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
+        id S230206AbjCGERh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 23:17:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCGERO (ORCPT
+        with ESMTP id S229953AbjCGERP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 23:17:14 -0500
+        Mon, 6 Mar 2023 23:17:15 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFC957083;
-        Mon,  6 Mar 2023 20:17:12 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544DD5F229;
+        Mon,  6 Mar 2023 20:17:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 56E80CE1A9B;
-        Tue,  7 Mar 2023 04:17:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13335C4339C;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 39A9BCE1A9E;
+        Tue,  7 Mar 2023 04:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB2ADC433EF;
         Tue,  7 Mar 2023 04:17:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678162629;
-        bh=mgVdaHhefJP4rIOoui8FKWRblgZ1hKnLBJUMiBZ0re8=;
+        s=k20201202; t=1678162630;
+        bh=S+MzeQ8JVIY+y1oz0pRCgLjiBpJbSV9Scm25NkoH3qE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VHkHyO3f9aoL7u+UkrO4ZuRn5nxnIdw6nsmBJSt4n3T0C3dCuJPzKmW0tf5lWs6+n
-         14NI/19+Wr4+CSdKzJ1iPIJRr7A5ZbRdOAncGzE4qhJIcNL8jVSDEC0FkXZAbN4pDN
-         aCQimU6cA3awg64+grHqAlYMN/r/rt5HxzkPeHkBDHWJwxVQ1HbN2chqEFpfWXl9Rm
-         IKxLvZvGV5uwA6OnezbvTU+ijr8RBCXEmUNOH8aMKVpfO+xAc5+zkfAepHIaHtDunl
-         HngIgD/DtKdGXgFX1KeNroNXzblkvKVLvHPuzg9uMoRZ9VIcO4q2iPBJbhe5zk/mrU
-         6+l9ujbSww3ig==
+        b=kaDDze3hfD+GyJEzV3Rsd26nJfmLEo+Xt06D994o0UPn495CjZTkOOKANAGpcjpQI
+         0xqodr0TcQCFXUrNvo5ZdELOn4cVN/72bk7pMuihZ31/gmj2SH7G8SPBUQz/dyHBDg
+         7pDvvc4lWsCA9p8Ank2NXMlS36aw2Iq1qJLNfrjeofO1K5P3qG56MqnUDnCwILZzv/
+         WOzSt9rVHhtEw+lKbzr8T6hqNfb98gJ+4q1l3CjEgxMsLfTrhKZuCPfZ1B+oX+qkiC
+         88F0sXfMAZS0KbCG6JtmLfaQ10nuMISdbDbwMKb/JZ3qaCF06Hoj4aDVNZ2Lic/DBc
+         wzfx9mI0TykoA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     robh+dt@kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     Steev Klimaszewski <steev@kali.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc8280xp: Add label property to vadc channel nodes
-Date:   Mon,  6 Mar 2023 20:20:33 -0800
-Message-Id: <167816282863.1458033.17181990811796338430.b4-ty@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     stable@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        srinivas.kandagatla@linaro.org, quic_vkamble@quicinc.com,
+        konrad.dybcio@linaro.org, bhupesh.sharma@linaro.org
+Subject: Re: [PATCH] arm64: dts: qcom: sm8150: Fix the iommu mask used for PCIe controllers
+Date:   Mon,  6 Mar 2023 20:20:34 -0800
+Message-Id: <167816282863.1458033.10186697320414777088.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230211052415.14581-1-manivannan.sadhasivam@linaro.org>
-References: <20230211052415.14581-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230224080045.6577-1-manivannan.sadhasivam@linaro.org>
+References: <20230224080045.6577-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,21 +57,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Feb 2023 10:54:15 +0530, Manivannan Sadhasivam wrote:
-> For uniquely identifying the vadc channels, label property has to be used.
-> The initial commit adding vadc support assumed that the driver will use the
-> unit address along with the node name to identify the channels. But this
-> assumption is now broken by,
-> commit 701c875aded8 ("iio: adc: qcom-spmi-adc5: Fix the channel name") that
-> stripped unit address from channel names. This results in probe failure of
-> the vadc driver:
+On Fri, 24 Feb 2023 13:30:45 +0530, Manivannan Sadhasivam wrote:
+> The iommu mask should be 0x3f as per Qualcomm internal documentation.
+> Without the correct mask, the PCIe transactions from the endpoint will
+> result in SMMU faults. Hence, fix it!
 > 
-> [...]
+> 
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sc8280xp: Add label property to vadc channel nodes
-      commit: 8013295662f55696e5953ef14c31ba03721adf8f
+[1/1] arm64: dts: qcom: sm8150: Fix the iommu mask used for PCIe controllers
+      commit: 672a58fc7c477e59981653a11241566870fff852
 
 Best regards,
 -- 
