@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516546AF146
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EAA6AEC61
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232778AbjCGSl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51304 "EHLO
+        id S231193AbjCGRyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:54:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233088AbjCGSle (ORCPT
+        with ESMTP id S230466AbjCGRyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:41:34 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB7FB329E;
-        Tue,  7 Mar 2023 10:32:13 -0800 (PST)
+        Tue, 7 Mar 2023 12:54:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE46994F68;
+        Tue,  7 Mar 2023 09:49:07 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5B41B8199A;
-        Tue,  7 Mar 2023 18:31:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB51BC433EF;
-        Tue,  7 Mar 2023 18:31:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95DBA6150C;
+        Tue,  7 Mar 2023 17:49:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E30BC433D2;
+        Tue,  7 Mar 2023 17:49:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678213887;
-        bh=eZhh6BSFQ1k6BW1csQ0X36HHVeHgWxg0M5U+VtotJqY=;
+        s=korg; t=1678211346;
+        bh=+M1gEsg3qEIv515pBeyxMHFtrxXp6A5XzXwfNBlR9Zo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xPQ09NJwiGTfbVouSOI96LYXp5y1gNSVE+/2JjcJVk6gfdLpA0SnDlXk3qehBljwQ
-         D4bZBbAAsrDF7myMOy+1WUCzEoYMf8LmSJ0GFjGUpH6AgUVRRtVkyXFIywPOdq5Md3
-         /SSd5SbexvYhjbiFghLDUwWpxYrooAutcyJAbr2s=
+        b=ayuyW1a4AeqVn0puUPO6lGfTmriye8wkvkSK/4ASJXZ2qIEmGn6HekvZQAG/7k6YZ
+         dIsNSaw+GpGqPPFFpU9VRkr2Ri2LjM9h6eisnnTRQ/zULEBCzRMUxPDKC6mow/Dy4m
+         EjN46CuHUGtZwbFDXrSfDRTAwAN6hT6+hlxfYGUg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Karan Tilak Kumar <kartilak@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.1 634/885] scsi: snic: Fix memory leak with using debugfs_lookup()
-Date:   Tue,  7 Mar 2023 17:59:28 +0100
-Message-Id: <20230307170029.727556491@linuxfoundation.org>
+        patches@lists.linux.dev, Andy Nguyen <theflow@google.com>,
+        Thomas Lendacky <thomas.lendacky@amd.com>,
+        Peter Gonda <pgonda@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 6.2 0833/1001] KVM: SVM: Fix potential overflow in SEVs send|receive_update_data()
+Date:   Tue,  7 Mar 2023 18:00:05 +0100
+Message-Id: <20230307170057.940444308@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307170001.594919529@linuxfoundation.org>
-References: <20230307170001.594919529@linuxfoundation.org>
+In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
+References: <20230307170022.094103862@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,44 +59,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+From: Peter Gonda <pgonda@google.com>
 
-[ Upstream commit ad0e4e2fab928477f74d742e6e77d79245d3d3e7 ]
+commit f94f053aa3a5d6ff17951870483d9eb9e13de2e2 upstream.
 
-When calling debugfs_lookup() the result must have dput() called on it,
-otherwise the memory will leak over time.  To make things simpler, just
-call debugfs_lookup_and_remove() instead which handles all of the logic at
-once.
+KVM_SEV_SEND_UPDATE_DATA and KVM_SEV_RECEIVE_UPDATE_DATA have an integer
+overflow issue. Params.guest_len and offset are both 32 bits wide, with a
+large params.guest_len the check to confirm a page boundary is not
+crossed can falsely pass:
 
-Link: https://lore.kernel.org/r/20230202141009.2290380-1-gregkh@linuxfoundation.org
-Cc: Karan Tilak Kumar <kartilak@cisco.com>
-Cc: Sesidhar Baddela <sebaddel@cisco.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
+    /* Check if we are crossing the page boundary *
+    offset = params.guest_uaddr & (PAGE_SIZE - 1);
+    if ((params.guest_len + offset > PAGE_SIZE))
+
+Add an additional check to confirm that params.guest_len itself is not
+greater than PAGE_SIZE.
+
+Note, this isn't a security concern as overflow can happen if and only if
+params.guest_len is greater than 0xfffff000, and the FW spec says these
+commands fail with lengths greater than 16KB, i.e. the PSP will detect
+KVM's goof.
+
+Fixes: 15fb7de1a7f5 ("KVM: SVM: Add KVM_SEV_RECEIVE_UPDATE_DATA command")
+Fixes: d3d1af85e2c7 ("KVM: SVM: Add KVM_SEND_UPDATE_DATA command")
+Reported-by: Andy Nguyen <theflow@google.com>
+Suggested-by: Thomas Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Peter Gonda <pgonda@google.com>
+Cc: David Rientjes <rientjes@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org
+Cc: stable@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lore.kernel.org/r/20230207171354.4012821-1-pgonda@google.com
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/snic/snic_debugfs.c | 4 ++--
+ arch/x86/kvm/svm/sev.c |    4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/snic/snic_debugfs.c b/drivers/scsi/snic/snic_debugfs.c
-index 57bdc3ba49d9c..9dd975b36b5bd 100644
---- a/drivers/scsi/snic/snic_debugfs.c
-+++ b/drivers/scsi/snic/snic_debugfs.c
-@@ -437,6 +437,6 @@ void snic_trc_debugfs_init(void)
- void
- snic_trc_debugfs_term(void)
- {
--	debugfs_remove(debugfs_lookup(TRC_FILE, snic_glob->trc_root));
--	debugfs_remove(debugfs_lookup(TRC_ENABLE_FILE, snic_glob->trc_root));
-+	debugfs_lookup_and_remove(TRC_FILE, snic_glob->trc_root);
-+	debugfs_lookup_and_remove(TRC_ENABLE_FILE, snic_glob->trc_root);
- }
--- 
-2.39.2
-
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -1293,7 +1293,7 @@ static int sev_send_update_data(struct k
+ 
+ 	/* Check if we are crossing the page boundary */
+ 	offset = params.guest_uaddr & (PAGE_SIZE - 1);
+-	if ((params.guest_len + offset > PAGE_SIZE))
++	if (params.guest_len > PAGE_SIZE || (params.guest_len + offset) > PAGE_SIZE)
+ 		return -EINVAL;
+ 
+ 	/* Pin guest memory */
+@@ -1473,7 +1473,7 @@ static int sev_receive_update_data(struc
+ 
+ 	/* Check if we are crossing the page boundary */
+ 	offset = params.guest_uaddr & (PAGE_SIZE - 1);
+-	if ((params.guest_len + offset > PAGE_SIZE))
++	if (params.guest_len > PAGE_SIZE || (params.guest_len + offset) > PAGE_SIZE)
+ 		return -EINVAL;
+ 
+ 	hdr = psp_copy_user_blob(params.hdr_uaddr, params.hdr_len);
 
 
