@@ -2,144 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60E2B6ADE0B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:53:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B15C6ADE0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjCGLx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:53:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
+        id S230199AbjCGLye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbjCGLw6 (ORCPT
+        with ESMTP id S231386AbjCGLyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:52:58 -0500
-X-Greylist: delayed 2532 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 03:52:00 PST
-Received: from smtp-190f.mail.infomaniak.ch (smtp-190f.mail.infomaniak.ch [185.125.25.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F57977CB0;
-        Tue,  7 Mar 2023 03:52:00 -0800 (PST)
-Received: from smtp-2-0001.mail.infomaniak.ch (unknown [10.5.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PWDM31h7BzMrFwl;
-        Tue,  7 Mar 2023 12:51:59 +0100 (CET)
-Received: from unknown by smtp-2-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4PWDM22dYdzMsF6X;
-        Tue,  7 Mar 2023 12:51:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1678189919;
-        bh=YjJ2ef/Ze47sRCjE2utSzfwweH1a5iYf+bp9+hpT4Qg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Zgq0jNMwJbNWonPM8m/71Cmj4/aQeBI7fJ7vW+bEvXmkzyVrWPkG3kSIm0ixYBdJR
-         gw5H0S3Hsg0WGtnbrM5sPA1rRch+J30rqA6oamyA08NsmjB8MRA2F5JuURLp6t7qgH
-         LSo27o8Y3j2phFXIPmw/fBWKcJzTbz28EKwmIl4M=
-Message-ID: <405ff748-dea0-794b-fa58-18b0a4703587@digikod.net>
-Date:   Tue, 7 Mar 2023 12:51:57 +0100
+        Tue, 7 Mar 2023 06:54:09 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3180F3B216;
+        Tue,  7 Mar 2023 03:53:15 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id ay14so47398275edb.11;
+        Tue, 07 Mar 2023 03:53:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678189993;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5NkdPSyehjwKYmLvWLkyPWmKGiOtGMMxDEWqdtEMk4c=;
+        b=LcKQCUjPJ5xurUOVBzKyRhj8aqcwhIcfMTHS9lGxeOcBwLG1U1JDGb4Tg+XVjhTzIW
+         UKv+8jh1Cz9RTgdECginimU7MDFDcDChE5NEjrw7cY8eAIsMKFOK1Z3901fobBpWRBb4
+         XZpHQWgKsTbwo2zgAQh3Dz1VzDixUIz8JsrxElQkTP2wlNTW7yiINhoA/Fu47mihEKmG
+         fP6IZBbiL181Om71kvgQfEiMpynLaist+GWtMyw17tGZiPTn5Osc4sO1EXpGoJNahbzD
+         R+Drld/kn5WmdA4Iy7S5gLCvJiVflR+8diTTuWfOk3PIcfly67iBCcvuV1aBuTGMFHiF
+         jFeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678189993;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5NkdPSyehjwKYmLvWLkyPWmKGiOtGMMxDEWqdtEMk4c=;
+        b=P58EDZoVGSm9ixStjvwT60Ee7J1OvYr4/B0tm3g5BafeMp3ubjqyTRQkzB62OyD9ar
+         sc/UucZTQ5PtcPE8fgZQf7fiRdIJ9vaBcVZ4/v7BP38f7fUhraxHohi4tbopaBbWJ46M
+         IEIj2Maa+phkQlXkjRpHPI+TlY2sCMHn/XF+bZmSxo5x9/kIt/yKLiQS6RoZ+Kz3S2R6
+         j7fHLWT8cXiQBPvQN299A/dkRvEbeTQ+hCzkU7Rzh1tR7tzK6RwyOVqvzj1J7H5RnqtC
+         w9ov+69VDJ+x72jekc1h08qWG7kChwqOu0o3mVrk+xkPwEmEnYJs4w9xV55f9rudKxZN
+         i3GQ==
+X-Gm-Message-State: AO0yUKW3rS9Cv2JPQ5LN4aHjQKCMGO8Pp4g3heSEPMHutzxFwjWxKwct
+        GEu0Tj/eXw20mscR9LK7T0M=
+X-Google-Smtp-Source: AK7set9QlVQN6PT52JS2bYSSrKReY8tkz33LHDy5O0ZVgpczcuJmrynGdrhAh9fM2uNmqgyvfhPnjQ==
+X-Received: by 2002:aa7:c396:0:b0:4bc:f925:5dbe with SMTP id k22-20020aa7c396000000b004bcf9255dbemr12560259edq.42.1678189993725;
+        Tue, 07 Mar 2023 03:53:13 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id s30-20020a508d1e000000b004c5d1a15bd5sm2586002eds.69.2023.03.07.03.53.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 03:53:13 -0800 (PST)
+Date:   Tue, 7 Mar 2023 14:53:04 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>, oe-kbuild@lists.linux.dev,
+        lkp@intel.com
+Cc:     Hillf Danton <hdanton@sina.com>,
+        Masami Ichikawa <masami.ichikawa@miraclelinux.com>,
+        cip-dev <cip-dev@lists.cip-project.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, lwn@lwn.net, smatch@vger.kernel.org
+Subject: Re: Who is looking at CVEs to prevent them?
+Message-ID: <6d1ad8e9-2bec-4cd4-b4dd-595c88855274@kili.mountain>
+References: <CAODzB9qjdhQkZ+tALHpDLHoK7GAf8Uybfzp8mxXt=Dwnn_0RjA@mail.gmail.com>
+ <20230307110029.1947-1-hdanton@sina.com>
+ <b27c7950-873a-f0e9-d7b4-322bb941a11f@suse.cz>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v6 04/11] LSM: syscalls for current process attributes
-Content-Language: en-US
-To:     Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org
-References: <20230222200838.8149-1-casey@schaufler-ca.com>
- <20230222200838.8149-5-casey@schaufler-ca.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20230222200838.8149-5-casey@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b27c7950-873a-f0e9-d7b4-322bb941a11f@suse.cz>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 07, 2023 at 12:42:03PM +0100, Vlastimil Babka wrote:
+> Why do you keep adding linux-mm to the Cc list of random threads that are
+> not about MM?
 
-On 22/02/2023 21:08, Casey Schaufler wrote:
-> Create a system call lsm_get_self_attr() to provide the security
-> module maintained attributes of the current process.
-> Create a system call lsm_set_self_attr() to set a security
-> module maintained attribute of the current process.
-> Historically these attributes have been exposed to user space via
-> entries in procfs under /proc/self/attr.
-> 
-> The attribute value is provided in a lsm_ctx structure. The structure
-> identifys the size of the attribute, and the attribute value. The format
-> of the attribute value is defined by the security module. A flags field
-> is included for LSM specific information. It is currently unused and must
-> be 0. The total size of the data, including the lsm_ctx structure and any
-> padding, is maintained as well.
-> 
-> struct lsm_ctx {
->          __u64   id;
->          __u64   flags;
->          __u64   len;
->          __u64   ctx_len;
->          __u8    ctx[];
-> };
-> 
-> Two new LSM hooks are used to interface with the LSMs.
-> security_getselfattr() collects the lsm_ctx values from the
-> LSMs that support the hook, accounting for space requirements.
-> security_setselfattr() identifies which LSM the attribute is
-> intended for and passes it along.
-> 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> ---
->   Documentation/userspace-api/lsm.rst |  15 ++++
->   include/linux/lsm_hook_defs.h       |   4 ++
->   include/linux/lsm_hooks.h           |   9 +++
->   include/linux/security.h            |  19 +++++
->   include/linux/syscalls.h            |   4 ++
->   include/uapi/linux/lsm.h            |  33 +++++++++
->   kernel/sys_ni.c                     |   4 ++
->   security/Makefile                   |   1 +
->   security/lsm_syscalls.c             | 104 ++++++++++++++++++++++++++++
->   security/security.c                 |  82 ++++++++++++++++++++++
->   10 files changed, 275 insertions(+)
->   create mode 100644 security/lsm_syscalls.c
-> 
+That's kbuild-bot stuff.  The kbuild-bot generates those emails and I
+just look them over and hit send.
 
-[...]
+I don't why the kbuild bot CCs linux-mm either...  Let me ask the devs
+about that.  A lot of the -mm warning are correct but just the CC list
+is weird.
 
-> +/**
-> + * security_setselfattr - Set an LSM attribute on the current process.
-> + * @attr: which attribute to return
-> + * @ctx: the user-space source for the information
-> + * @size: the size of the data
-> + *
-> + * Set an LSM attribute for the current process. The LSM, attribute
-> + * and new value are included in @ctx.
-> + *
-> + * Returns 0 on seccess, an LSM specific value on failure.
-> + */
-> +int security_setselfattr(u64 __user attr, struct lsm_ctx __user *ctx,
-> +			 size_t __user size)
-> +{
-> +	struct security_hook_list *hp;
-> +	struct lsm_ctx lctx;
-> +
-> +	if (size < sizeof(*ctx))
+The kbuild-bot stuff is really nice for me.  The kbuild-bot doesn't use
+the cross function DB so everything is local to the function and easy to
+review.
 
-If the lsm_ctx struct could grow in the future, we should check the size 
-of the struct to the last field for compatibility reasons, see 
-Landlock's copy_min_struct_from_user().
+regards,
+dan carpenter
 
 
-> +		return -EINVAL;
-> +	if (copy_from_user(&lctx, ctx, sizeof(*ctx)))
-> +		return -EFAULT;
-> +
-> +	hlist_for_each_entry(hp, &security_hook_heads.setselfattr, list)
-> +		if ((hp->lsmid->id) == lctx.id)
-> +			return hp->hook.setselfattr(attr, ctx, size);
-> +
-> +	return LSM_RET_DEFAULT(setselfattr);
-> +}
-> +
->   int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
->   			 char **value)
->   {
