@@ -2,164 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E7906AD3D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:30:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069EE6AD44E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjCGB34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 20:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S229830AbjCGBzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 20:55:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjCGB3u (ORCPT
+        with ESMTP id S229484AbjCGBzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:29:50 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE60637F17;
-        Mon,  6 Mar 2023 17:29:47 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PVyY24J9cz4f3jYl;
-        Tue,  7 Mar 2023 09:29:42 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgBH9CGFkwZk1RTkEQ--.45801S6;
-        Tue, 07 Mar 2023 09:29:44 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
-        Ye Bin <yebin10@huawei.com>,
-        syzbot+d30838395804afc2fa6f@syzkaller.appspotmail.com
-Subject: [PATCH v4 2/2] ext4: fix WARNING in ext4_update_inline_data
-Date:   Tue,  7 Mar 2023 09:52:53 +0800
-Message-Id: <20230307015253.2232062-3-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230307015253.2232062-1-yebin@huaweicloud.com>
-References: <20230307015253.2232062-1-yebin@huaweicloud.com>
+        Mon, 6 Mar 2023 20:55:03 -0500
+Received: from CY4PR02CU007-vft-obe.outbound.protection.outlook.com (mail-westcentralusazon11011004.outbound.protection.outlook.com [40.93.199.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76214109C;
+        Mon,  6 Mar 2023 17:55:01 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tt1+Ky4M+MQmI4vZs3IMMBYeZb1i0Yban4f78LWZAtYmu6KxLlfBgGM8hGteVNLI1LlgR2lDrnynk35SfgRYdrPx+rbvCb2/eltH9wBC1Gg/9qonpx/6on/6ImIYC+RSw5mrEHn9i3EdgyAPifFu9OSWuVtbrd63w0tXgE6HsmcuMDRYApCtydBAG85wQ0MZoNU3NAniQoMzCDkzM7DZMKfVY4ZTr2P3ist1eelCU2p4in8tNjNMoFFyrGU8xAYSW3jt0M62ZESdfPNrKo3xeblb95IQqEffJqCkws74XDnOrDveHHMrGYeRHO6RWGTmvuaZH8zqd+yPErYSh/7koQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nTx9fZ28aEdvNCT70kIxoJYZqvUxe0TeIYYdP0lp+Kw=;
+ b=LWczsd1eUYTIjLBZyn9V8q7O22ZIVi96DsOTIHx/tTMjifdkUFUSF1rfpjgK+B7McBofOTy8On4xEdPzchopQeUZtGmvoPHIiXtmYh7g41C5aFg9OfRHcdQU4h15QB9SK9ibTcgLCEJP72bCMWgWFHTP6OEAKLjh6ouS93ozNtaZ8sJmB85mpd7SG3hFsrTjxo94xmOkPyI8DXxNwHHCSn4deBvuwViIysyjNPbFToD6bRhMdkPGLbO7xa4sFcz6jtYMHfDmLCBsDv+iIKTHZ/N7hvrBKGo+2TZC5/XBlsBd7SbPaeW3oDya0hbcKsOR3d1uhsentPCTE1d0+hry0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nTx9fZ28aEdvNCT70kIxoJYZqvUxe0TeIYYdP0lp+Kw=;
+ b=hQSSCMsBSKr+kkQotv9oJSLyQyxk6+zK59yPI76LGJU98uaSWW4br1sK4SS4GZ39jmYJdmIuQEjZuOA2BVmF11ToZ+Kkv5vhq+P/k17H6XIAnAIld2HJ3clHXomYhDS6nAM8e5sucxJhai0YM/9AI4pk+5Nc6rlZHp/Zs8rFO5g=
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
+ by CH3PR05MB9809.namprd05.prod.outlook.com (2603:10b6:610:126::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
+ 2023 01:54:59 +0000
+Received: from BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::e9bd:ef2f:b71:8084]) by BY3PR05MB8531.namprd05.prod.outlook.com
+ ([fe80::e9bd:ef2f:b71:8084%3]) with mapi id 15.20.6156.028; Tue, 7 Mar 2023
+ 01:54:59 +0000
+From:   Nadav Amit <namit@vmware.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        James Houghton <jthoughton@google.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v3 3/5] mm: userfaultfd: combine 'mode' and 'wp_copy'
+ arguments
+Thread-Topic: [PATCH v3 3/5] mm: userfaultfd: combine 'mode' and 'wp_copy'
+ arguments
+Thread-Index: AQHZUH4WbMp2mEvwVk211rdYxr1H5q7ujpwA
+Date:   Tue, 7 Mar 2023 01:54:59 +0000
+Message-ID: <0F14FF60-BE23-4946-B5BA-3786251ACB5D@vmware.com>
+References: <20230306225024.264858-1-axelrasmussen@google.com>
+ <20230306225024.264858-4-axelrasmussen@google.com>
+In-Reply-To: <20230306225024.264858-4-axelrasmussen@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.400.51.1.1)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY3PR05MB8531:EE_|CH3PR05MB9809:EE_
+x-ms-office365-filtering-correlation-id: 4ecf5abd-54ea-489e-bb1a-08db1eaef542
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0/vmcAi8NZiUaBMN0qsE8oYIJ98t0FYAa5KhYsN5gff7rvjYN7D2K+9d/CN++F3hbAu+k18uIYQ32GzGcjokW2+MuFp42I2uBZ/bWo96cu2n5dsBQkirNHd6sMBLZcRS2ewjtYqPnK3pZTGjhvHP8MhDHHutb2uQcXdLys7OjkjyFcOGzLB2hUfLVaHOy77c+db/mhPSUdE6tuHZ8oZBEvhPUaxpHFXEJRUpPQ8hDsk8Q9BmvL7Yp+U+TmL9HqfUTC1fj740VOCCmhWngqBcFR18nvSSiLWhoEZzEei34KgQUMdRueSc7e4orzSmMd96y7XQ+2dc2SBX/EH50/Dh4ipJOzhpJSB0Wic572haO1BvtqSGB6ks/Uw9Wyeb6Qjk4Wl0dV6+8SQ1k2LVxNfVrSvTOhmLRIwBrseU4dcWpT+joqVn9IqHuyjtJ0pASoPYC+1Tq1Ulj00gMooyOcWwjoCr5V9siyBgQZ7lk/NCLnxUjck00WkCiaaQhUz03BdouzlOV0PxRYAa8mk/g5oo1msB2NR0JKyqgP7KPJ6zip1xYP/7vnjstAg1bSwnJp7aJgpET6/MagbYOpdOcUnnuWdTaxq2hZZz7NTXDQPMvw/aUMyr+DCOqGDux9ICmoVjkrz1IatAxjAM32Di68zxLuvcMSDnkhh1u3nHcCPeKpSNdloG6ihwGiuSQTM/it1Ao8Hoa8OJc1J3IBt2g+SOWuhB2YkbC/RJ+IW1D7uGjjRomnMxFYg8qhcr+Vi0BJKVQZFApj6w9swtTR6MlSTv7eps6WBYVeEOwiOWsoo+IAc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(136003)(346002)(39860400002)(366004)(451199018)(36756003)(33656002)(4326008)(76116006)(66446008)(7416002)(41300700001)(66556008)(8676002)(8936002)(6916009)(64756008)(4744005)(2906002)(5660300002)(66946007)(38070700005)(86362001)(122000001)(66476007)(38100700002)(71200400001)(6486002)(478600001)(54906003)(316002)(6512007)(6506007)(186003)(2616005)(53546011)(26005)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cERFTkpkUFBFMnZwb05UL0VuSTI5d2syVElNRGowUUhJT1JmNkFHSHlwMnQv?=
+ =?utf-8?B?K2dxeDgyb3pabXdFSlZhYnNQcTV6UTd6RUVJSGVJZ1NNQVNUSU9YOVdFdWVw?=
+ =?utf-8?B?Mng0MVQydlBLUHd6Sm56aTA5Y2RSUVhzb0w2bGZ3enNCQmk1MmduVVdVWG5o?=
+ =?utf-8?B?bUpabkhlV04zcFh2Vmc5L1orRDc4RjZNZ3lBL1UvVXJNeTBTVTVvRTZIWGRi?=
+ =?utf-8?B?RCtWWFJKM3lndXF0NExxa2hlc1JnMnJQckRCQlZVelkrZldWcFVUQ1VRMG1N?=
+ =?utf-8?B?VnFvekJtRkRlRmkrWlZIeFBCYTdoK2V5UmRmb0U0M3BUQU85bHQwTDErbHFl?=
+ =?utf-8?B?Y3FEMll6b0NUdklrYnpvekljNVdXWmJsVzNPdGJDeHQ1QlRhQmIwQ0hlamF4?=
+ =?utf-8?B?ZUJ3NE9hR3d6Vi8wdjl3U0pheWNHdnVydWJDRDJxL2NiYng1T1RNV3JYNU9p?=
+ =?utf-8?B?ZTNETEpTVTVqWUY5YmpYcXJGbmptWUFqOEhkRWRhOEt3Uk9oLzRKUzZ4UWVU?=
+ =?utf-8?B?aDMvTGhEMWpqcnJBZ1pMWHBLMDJhU1B1K0VRbDhmWjZkdTQyVTExWXVDN055?=
+ =?utf-8?B?blcwcWkxM1hxMzFMdzlwc3FhYUN2QnlVTjdJN3ZnLzhvc3JheTdPTUZTVFAx?=
+ =?utf-8?B?NGQvYWVnTVZiWHJOMzVwZ3NzS0FrWmpUY0k3WEMvZFFwOU1xclRFVlNwRG5l?=
+ =?utf-8?B?S1p5NDBvaGRMcE1RLzQ2ZUYyQlZrS0MrNmN2K0FEbys4NGRJN0VaMkJtV2lM?=
+ =?utf-8?B?cUlGMXlhWmRHS2pkRW9EeTl4MXpzZ0NYdFBUN05TcGV2c1VTZ1g1a0JrSHhp?=
+ =?utf-8?B?U2NlVmtMQzNDcVhJU3Y3djUvbVV2dGw1VW1kSlB1eVQ0VWp0MHplM3ZMNXVk?=
+ =?utf-8?B?Uk9jSWZKOHFQTmlRT0pQdUFpU0FuTTNPVmtRMHBSakQvU1EzbHBXVUpoNnAr?=
+ =?utf-8?B?VkQ1VU5FdWJDYUYyU09mL2ZVK0ZXdU9odHM5aTFJcGJiWEl6NkxscG9MNGUx?=
+ =?utf-8?B?N0lHMnJMNW13cDhkeFZtR0xMRHJ0L1FFWU9vaExJd3UzcW1WWXo0WWpGbHcz?=
+ =?utf-8?B?b0VhVU1VK3Z6cHZ0YXNBczZHYWtITnVoNEJTMmt3L0ZGaDR1czdKTzdXeEtz?=
+ =?utf-8?B?OGoyTHlJRnBwRzA0Zy9SKzl1aE5sVlBKZk1sNW51Zllja2xMUFFGWWdNQzV4?=
+ =?utf-8?B?NlEraERWM0Rtd2lVenF0bjRMUFcyK3hiTXJVUWNiRXBYODRmNWdZZ0FBSEtI?=
+ =?utf-8?B?dWdNc0g4YnBCSWczNlNVUnRJUGdkL0drQ3FoTGN3aVdTRWR4UmFOYUNmYVNG?=
+ =?utf-8?B?TnlmcHJZT3ErQ1kxdzhlcXhHV1ZBRVVpc2VaZXFxdDBIUnJFM1R5cFpiRllo?=
+ =?utf-8?B?dVpuTXRmaTVlZEFyZ2pUNUNJd1o5NG1rYmNKaWx2TFltRGlGaFMxcjhJTFd6?=
+ =?utf-8?B?cXROaVBMSWJVUms4d2NrK2MzWHpFc25RdUVtWFBuTkxUdVl1NU85VjAzOGx1?=
+ =?utf-8?B?SE81WFExMW0ySlRQMWFwdVY0aTFSNUtVaWlUZjcrYkEyWGRuMzY0MWxCSEN0?=
+ =?utf-8?B?ell3R2tPemwycFhVdUg5aWlrZzkrcVU0aThGa2FvSS9EdU1aSGFuK1lNazA0?=
+ =?utf-8?B?NHBpREp6VHdFYklUbUV3RWllejgzbmlZUnFZdUJCNndCUXNoV0cxWld6bURw?=
+ =?utf-8?B?YTdKdUwyMk56emNDYy9tSll2ZTdBSVF1VTZCSWxIU29vVUd5RktQbHlDL05a?=
+ =?utf-8?B?Y0YvaHBUOUp1dFJrVUs1MEZ2L1h1RUp0RXdzUkNtY0ppcEFhNHJCMHNzMk1y?=
+ =?utf-8?B?WTlzNnJjR3ZtZERQS1hXaVZNUDFUdGZJc09LMVA1UG1QQnR2N29DRGVaUEFo?=
+ =?utf-8?B?cFYwb2FvMnNVYzdSU3VVRmtYb2dJVGxZRDR1TDhjVTZPVm56allEcjFmdFIy?=
+ =?utf-8?B?TnprWnJwSytScS9zSXhObWtTclBtaVBQRDl1L0xVcVlPNEhacTZTbVhtRXNX?=
+ =?utf-8?B?MkRxMGxLMURId1JSYkNRci9VYmhXMzhQczJ1dXF5Z1l3djlkSVpTVkxjU3FF?=
+ =?utf-8?B?R0pMWDh1TFRRV0JVR0czaFNhL1FOUlExMWw5cWFkY3FzeHd2bEQzMkVBRjVp?=
+ =?utf-8?Q?emuNmFM+UpInijZKjHnbinXIC?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <574C7084E945584DAF037365D2734AF5@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgBH9CGFkwZk1RTkEQ--.45801S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrWxZw4DCryDXw4fGw15urg_yoWrKw1DpF
-        WrGr1UGr48XFyUCFWxAr17ArW5Ww13CF4UJrZ7Wr4DZFyUtw1IgFyrtF13JFyUtrsYkry2
-        qF98t340gr15GaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvGb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-        Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-        17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjxU2_MaUUUUU
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ecf5abd-54ea-489e-bb1a-08db1eaef542
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2023 01:54:59.0678
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fVx5ZWjxtvvq5UyD7zaLIr+oCkOmaa4xEKmeEKHAyUMe9zpzg5VDf68PkyHsz1+kXTw4naTDCdaf0Ommb/fDCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR05MB9809
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
-
-Syzbot found the following issue:
-EXT4-fs (loop0): mounted filesystem 00000000-0000-0000-0000-000000000000 without journal. Quota mode: none.
-fscrypt: AES-256-CTS-CBC using implementation "cts-cbc-aes-aesni"
-fscrypt: AES-256-XTS using implementation "xts-aes-aesni"
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5071 at mm/page_alloc.c:5525 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
-Modules linked in:
-CPU: 1 PID: 5071 Comm: syz-executor263 Not tainted 6.2.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5525
-RSP: 0018:ffffc90003c2f1c0 EFLAGS: 00010246
-RAX: ffffc90003c2f220 RBX: 0000000000000014 RCX: 0000000000000000
-RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003c2f248
-RBP: ffffc90003c2f2d8 R08: dffffc0000000000 R09: ffffc90003c2f220
-R10: fffff52000785e49 R11: 1ffff92000785e44 R12: 0000000000040d40
-R13: 1ffff92000785e40 R14: dffffc0000000000 R15: 1ffff92000785e3c
-FS:  0000555556c0d300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f95d5e04138 CR3: 00000000793aa000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __alloc_pages_node include/linux/gfp.h:237 [inline]
- alloc_pages_node include/linux/gfp.h:260 [inline]
- __kmalloc_large_node+0x95/0x1e0 mm/slab_common.c:1113
- __do_kmalloc_node mm/slab_common.c:956 [inline]
- __kmalloc+0xfe/0x190 mm/slab_common.c:981
- kmalloc include/linux/slab.h:584 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- ext4_update_inline_data+0x236/0x6b0 fs/ext4/inline.c:346
- ext4_update_inline_dir fs/ext4/inline.c:1115 [inline]
- ext4_try_add_inline_entry+0x328/0x990 fs/ext4/inline.c:1307
- ext4_add_entry+0x5a4/0xeb0 fs/ext4/namei.c:2385
- ext4_add_nondir+0x96/0x260 fs/ext4/namei.c:2772
- ext4_create+0x36c/0x560 fs/ext4/namei.c:2817
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12ac/0x2dd0 fs/namei.c:3711
- do_filp_open+0x264/0x4f0 fs/namei.c:3741
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_openat fs/open.c:1342 [inline]
- __se_sys_openat fs/open.c:1337 [inline]
- __x64_sys_openat+0x243/0x290 fs/open.c:1337
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Above issue happens as follows:
-ext4_iget
-   ext4_find_inline_data_nolock ->i_inline_off=164 i_inline_size=60
-ext4_try_add_inline_entry
-   __ext4_mark_inode_dirty
-      ext4_expand_extra_isize_ea ->i_extra_isize=32 s_want_extra_isize=44
-         ext4_xattr_shift_entries
-	 ->after shift i_inline_off is incorrect, actually is change to 176
-ext4_try_add_inline_entry
-  ext4_update_inline_dir
-    get_max_inline_xattr_value_size
-      if (EXT4_I(inode)->i_inline_off)
-	entry = (struct ext4_xattr_entry *)((void *)raw_inode +
-			EXT4_I(inode)->i_inline_off);
-        free += EXT4_XATTR_SIZE(le32_to_cpu(entry->e_value_size));
-	->As entry is incorrect, then 'free' may be negative
-   ext4_update_inline_data
-      value = kzalloc(len, GFP_NOFS);
-      -> len is unsigned int, maybe very large, then trigger warning when
-         'kzalloc()'
-To resolve above issue there's need to update 'i_inline_off' after
-'ext4_xattr_shift_entries()'. At here we do not need to set
-EXT4_STATE_MAY_INLINE_DATA flag. As if do mark inode dirty we already set
-this flag if need. If we set EXT4_STATE_MAY_INLINE_DATA flag may lead to
-BUG_ON in ext4_writepages().
-
-Reported-by: syzbot+d30838395804afc2fa6f@syzkaller.appspotmail.com
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
- fs/ext4/xattr.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-index 62f2ec599218..767454d74cd6 100644
---- a/fs/ext4/xattr.c
-+++ b/fs/ext4/xattr.c
-@@ -2852,6 +2852,9 @@ int ext4_expand_extra_isize_ea(struct inode *inode, int new_extra_isize,
- 			(void *)header, total_ino);
- 	EXT4_I(inode)->i_extra_isize = new_extra_isize;
- 
-+	if (ext4_has_inline_data(inode))
-+		error = ext4_find_inline_data_nolock(inode);
-+
- cleanup:
- 	if (error && (mnt_count != le16_to_cpu(sbi->s_es->s_mnt_count))) {
- 		ext4_warning(inode->i_sb, "Unable to expand inode %lu. Delete some EAs or run e2fsck.",
--- 
-2.31.1
-
+RXhjbHVkaW5nIFBldGVy4oCZcyBjb21tZW50cywgTEdUTS4gDQoNCj4gT24gTWFyIDYsIDIwMjMs
+IGF0IDI6NTAgUE0sIEF4ZWwgUmFzbXVzc2VuIDxheGVscmFzbXVzc2VuQGdvb2dsZS5jb20+IHdy
+b3RlOg0KPiANCj4gQEAgLTEzMSw4ICsxMzEsOCBAQCBzdGF0aWMgaW50IG1maWxsX2F0b21pY19w
+dGVfY29weShwbWRfdCAqZHN0X3BtZCwNCj4gCQkJCSBzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKmRz
+dF92bWEsDQo+IAkJCQkgdW5zaWduZWQgbG9uZyBkc3RfYWRkciwNCj4gCQkJCSB1bnNpZ25lZCBs
+b25nIHNyY19hZGRyLA0KPiAtCQkJCSBzdHJ1Y3QgcGFnZSAqKnBhZ2VwLA0KPiAtCQkJCSBib29s
+IHdwX2NvcHkpDQo+ICsJCQkJIHVmZmRfZmxhZ3NfdCBmbGFncywNCj4gKwkJCQkgc3RydWN0IHBh
+Z2UgKipwYWdlcCkNCg0KWWV0LCBpdCB3b3VsZCBiZSBuaWNlIGlmIHdlIGNhbiBiZSBjb25zaXN0
+ZW50IG9uIHdoZXRoZXIgcGFnZXAgcHJlY2VkZXMNCmZsYWdzIG9yIG5vdCAoaXTigJlzIHRoZSBv
+dGhlciB3YXkgYXJvdW5kIGluIHNobWVtX21maWxsX2F0b21pY19wdGUoKSkuDQoNCg==
