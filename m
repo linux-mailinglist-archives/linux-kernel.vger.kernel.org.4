@@ -2,287 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7756AE5A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DE26AE5AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231652AbjCGP66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S231326AbjCGP7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231643AbjCGP54 (ORCPT
+        with ESMTP id S231633AbjCGP6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:57:56 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E968F8EA27;
-        Tue,  7 Mar 2023 07:56:51 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1pZZgH-0001ue-1A;
-        Tue, 07 Mar 2023 16:56:49 +0100
-Date:   Tue, 7 Mar 2023 15:55:13 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: [PATCH net-next v12 14/18] net: ethernet: mtk_eth_soc: add
- MTK_NETSYS_V1 capability bit
-Message-ID: <e60efc0ca068723a9299107294376665eade3845.1678201958.git.daniel@makrotopia.org>
-References: <cover.1678201958.git.daniel@makrotopia.org>
+        Tue, 7 Mar 2023 10:58:16 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46E19477D;
+        Tue,  7 Mar 2023 07:57:04 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso12268393pjs.3;
+        Tue, 07 Mar 2023 07:57:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678204624;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0+WhmNvyuzqlExpYYh7Rlrgluvlj6y0oW+rTW+VkZB4=;
+        b=V3sin0IBOGbhGIEs2LKhORy9EQaehgDvid40b0dvoHNQIGRt3VoQbCI2S9S9rOaGlm
+         HxJPN7egTgZ/7NXm/vw2EhjYFCX2YJvgUFSrJsHXMebXyu6+c6LU1d+kOzs9t3M9G7hI
+         yr3t1Iieh0+wp0w3ijKHszJA3CMU06cha6l9doSi3v3CgqkksAGBJ1PnzjZ5vsM0UADQ
+         0iIi75xFhx4H0+sSfBLMON6QHUW8UDLayK3nxcMssCPVPLxHG1/SREpaAyfbr+CFBVIs
+         ghyBxTAZaVWUO2/WaxrPupGd+0wIA4h/582X+QDFHgSxSVA0MzjKrwB6WRBcd/NEGpL2
+         uAsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678204624;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0+WhmNvyuzqlExpYYh7Rlrgluvlj6y0oW+rTW+VkZB4=;
+        b=zBGS6pdFc7nlE8J0L1tod8OxtcpX3pq62T2TEOeb/vj4eKQn9DB4DXl2aEdQZx+HEf
+         5lSKfYp4Z16Yc0kcsdrDAGT1IxtqHhfa5ARHF6f/BB44AOrKWv+Wh1s5ZmwawZQilQf6
+         c2z9eC60gZtJry/DHaNXjbQUC+8qFPSq5/fUGD4yXsCg3+NGGrQcX7NTzjJcbhJE47L9
+         3s9nXQYuqa+BOe1FWL3suOTFK97uy3kOJNrYrgWS8HCF2CFNv35lV8tTmvRRi3uIJXuO
+         +G/2Bh8e9qR4RptjWqOs0Ger0tGH/4sbkOLO3BH1K79sGwoE+RnW+iuAMq95FAAY1dzT
+         yaHA==
+X-Gm-Message-State: AO0yUKWdiCo40c6bhanjBj96cgNDTSvyEBUSqfLmU8iU05hGTl0UKNaT
+        4v53iETDvCMgHEXAzCClT+CQpK0gwDVMZQ==
+X-Google-Smtp-Source: AK7set+yZM9Dwc6FqtYsJowtfxw9gQp79YeaxR3WXOXCIzmggTmF27wy9SYGXc/IWDYEO869x99FJA==
+X-Received: by 2002:a17:90a:6485:b0:237:461c:b44d with SMTP id h5-20020a17090a648500b00237461cb44dmr15265856pjj.46.1678204624100;
+        Tue, 07 Mar 2023 07:57:04 -0800 (PST)
+Received: from nvrarch.lan ([218.186.180.226])
+        by smtp.gmail.com with ESMTPSA id v9-20020a17090ae98900b00233afe09177sm9405070pjy.8.2023.03.07.07.57.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 07:57:03 -0800 (PST)
+From:   Vinay Varma <varmavinaym@gmail.com>
+Cc:     masahiroy@kernel.org, alicef@alicef.me,
+        Vinay Varma <varmavinaym@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org
+Subject: [PATCH v4] scripts: `make rust-analyzer` for out-of-tree modules
+Date:   Tue,  7 Mar 2023 23:55:22 +0800
+Message-Id: <20230307155521.241104-1-varmavinaym@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307144233.205819-1-varmavinaym@gmail.com>
+References: <20230307144233.205819-1-varmavinaym@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1678201958.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lorenzo Bianconi <lorenzo@kernel.org>
+Adds support for out-of-tree rust modules to use the `rust-analyzer`
+make target to generate the rust-project.json file.
 
-Introduce MTK_NETSYS_V1 bit in the device capabilities for
-MT7621/MT7622/MT7623/MT7628/MT7629 SoCs.
-Use !MTK_NETSYS_V1 instead of MTK_NETSYS_V2 in the driver codebase.
-This is a preliminary patch to introduce support for MT7988 SoC.
+The change involves adding an optional parameter `external_src` to the
+`generate_rust_analyzer.py` which expects the path to the out-of-tree
+module's source directory. When this parameter is passed, I have chosen
+not to add the non-core modules (samples and drivers) into the result
+since these are not expected to be used in third party modules. Related
+changes are also made to the Makefile and rust/Makefile allowing the
+`rust-analyzer` target to be used for out-of-tree modules as well.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+Link: https://github.com/Rust-for-Linux/linux/pull/914
+Link: https://github.com/Rust-for-Linux/rust-out-of-tree-module/pull/2
+
+Signed-off-by: Vinay Varma <varmavinaym@gmail.com>
 ---
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 30 +++++++-------
- drivers/net/ethernet/mediatek/mtk_eth_soc.h | 45 ++++++++++++---------
- 2 files changed, 41 insertions(+), 34 deletions(-)
+ Makefile                          | 11 +++++-----
+ rust/Makefile                     |  6 ++++--
+ scripts/generate_rust_analyzer.py | 36 +++++++++++++++++++------------
+ 3 files changed, 32 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index 817951718681..e34065e17446 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -683,7 +683,7 @@ static void mtk_set_queue_speed(struct mtk_eth *eth, unsigned int idx,
- 	      FIELD_PREP(MTK_QTX_SCH_MIN_RATE_MAN, 1) |
- 	      FIELD_PREP(MTK_QTX_SCH_MIN_RATE_EXP, 4) |
- 	      MTK_QTX_SCH_LEAKY_BUCKET_SIZE;
--	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-+	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1))
- 		val |= MTK_QTX_SCH_LEAKY_BUCKET_EN;
+diff --git a/Makefile b/Makefile
+index 3f6628780eb2..ee7b61dc6075 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1860,11 +1860,6 @@ rustfmt:
+ rustfmtcheck: rustfmt_flags = --check
+ rustfmtcheck: rustfmt
  
- 	if (IS_ENABLED(CONFIG_SOC_MT7621)) {
-@@ -1062,7 +1062,7 @@ static bool mtk_rx_get_desc(struct mtk_eth *eth, struct mtk_rx_dma_v2 *rxd,
- 	rxd->rxd1 = READ_ONCE(dma_rxd->rxd1);
- 	rxd->rxd3 = READ_ONCE(dma_rxd->rxd3);
- 	rxd->rxd4 = READ_ONCE(dma_rxd->rxd4);
--	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1)) {
- 		rxd->rxd5 = READ_ONCE(dma_rxd->rxd5);
- 		rxd->rxd6 = READ_ONCE(dma_rxd->rxd6);
- 	}
-@@ -1120,7 +1120,7 @@ static int mtk_init_fq_dma(struct mtk_eth *eth)
- 
- 		txd->txd3 = TX_DMA_PLEN0(MTK_QDMA_PAGE_SIZE);
- 		txd->txd4 = 0;
--		if (MTK_HAS_CAPS(soc->caps, MTK_NETSYS_V2)) {
-+		if (!MTK_HAS_CAPS(soc->caps, MTK_NETSYS_V1)) {
- 			txd->txd5 = 0;
- 			txd->txd6 = 0;
- 			txd->txd7 = 0;
-@@ -1311,7 +1311,7 @@ static void mtk_tx_set_dma_desc(struct net_device *dev, void *txd,
- 	struct mtk_mac *mac = netdev_priv(dev);
- 	struct mtk_eth *eth = mac->hw;
- 
--	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-+	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1))
- 		mtk_tx_set_dma_desc_v2(dev, txd, info);
- 	else
- 		mtk_tx_set_dma_desc_v1(dev, txd, info);
-@@ -1962,7 +1962,7 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 			break;
- 
- 		/* find out which mac the packet come from. values start at 1 */
--		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-+		if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1))
- 			mac = RX_DMA_GET_SPORT_V2(trxd.rxd5) - 1;
- 		else if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
- 			 !(trxd.rxd4 & RX_DMA_SPECIAL_TAG))
-@@ -2058,7 +2058,7 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 		skb->dev = netdev;
- 		bytes += skb->len;
- 
--		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+		if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1)) {
- 			reason = FIELD_GET(MTK_RXD5_PPE_CPU_REASON, trxd.rxd5);
- 			hash = trxd.rxd5 & MTK_RXD5_FOE_ENTRY;
- 			if (hash != MTK_RXD5_FOE_ENTRY)
-@@ -2084,7 +2084,7 @@ static int mtk_poll_rx(struct napi_struct *napi, int budget,
- 			mtk_ppe_check_skb(eth->ppe[0], skb, hash);
- 
- 		if (netdev->features & NETIF_F_HW_VLAN_CTAG_RX) {
--			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+			if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1)) {
- 				if (trxd.rxd3 & RX_DMA_VTAG_V2) {
- 					vlan_proto = RX_DMA_VPID(trxd.rxd4);
- 					vlan_tci = RX_DMA_VID(trxd.rxd4);
-@@ -2409,7 +2409,7 @@ static int mtk_tx_alloc(struct mtk_eth *eth)
- 		txd->txd2 = next_ptr;
- 		txd->txd3 = TX_DMA_LS0 | TX_DMA_OWNER_CPU;
- 		txd->txd4 = 0;
--		if (MTK_HAS_CAPS(soc->caps, MTK_NETSYS_V2)) {
-+		if (!MTK_HAS_CAPS(soc->caps, MTK_NETSYS_V1)) {
- 			txd->txd5 = 0;
- 			txd->txd6 = 0;
- 			txd->txd7 = 0;
-@@ -2462,7 +2462,7 @@ static int mtk_tx_alloc(struct mtk_eth *eth)
- 			      FIELD_PREP(MTK_QTX_SCH_MIN_RATE_MAN, 1) |
- 			      FIELD_PREP(MTK_QTX_SCH_MIN_RATE_EXP, 4) |
- 			      MTK_QTX_SCH_LEAKY_BUCKET_SIZE;
--			if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-+			if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1))
- 				val |= MTK_QTX_SCH_LEAKY_BUCKET_EN;
- 			mtk_w32(eth, val, soc->reg_map->qdma.qtx_sch + ofs);
- 			ofs += MTK_QTX_OFFSET;
-@@ -2598,7 +2598,7 @@ static int mtk_rx_alloc(struct mtk_eth *eth, int ring_no, int rx_flag)
- 
- 		rxd->rxd3 = 0;
- 		rxd->rxd4 = 0;
--		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+		if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1)) {
- 			rxd->rxd5 = 0;
- 			rxd->rxd6 = 0;
- 			rxd->rxd7 = 0;
-@@ -3164,7 +3164,7 @@ static int mtk_start_dma(struct mtk_eth *eth)
- 		       MTK_TX_BT_32DWORDS | MTK_NDP_CO_PRO |
- 		       MTK_RX_2B_OFFSET | MTK_TX_WB_DDONE;
- 
--		if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-+		if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1))
- 			val |= MTK_MUTLI_CNT | MTK_RESV_BUF |
- 			       MTK_WCOMP_EN | MTK_DMAD_WR_WDONE |
- 			       MTK_CHK_DDONE_EN | MTK_LEAKY_BUCKET_EN;
-@@ -3567,7 +3567,7 @@ static void mtk_hw_reset(struct mtk_eth *eth)
- {
- 	u32 val;
- 
--	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1)) {
- 		regmap_write(eth->ethsys, ETHSYS_FE_RST_CHK_IDLE_EN, 0);
- 		val = RSTCTRL_PPE0_V2;
- 	} else {
-@@ -3579,7 +3579,7 @@ static void mtk_hw_reset(struct mtk_eth *eth)
- 
- 	ethsys_reset(eth, RSTCTRL_ETH | RSTCTRL_FE | val);
- 
--	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2))
-+	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1))
- 		regmap_write(eth->ethsys, ETHSYS_FE_RST_CHK_IDLE_EN,
- 			     0x3ffffff);
- }
-@@ -3775,7 +3775,7 @@ static int mtk_hw_init(struct mtk_eth *eth, bool reset)
- 	else
- 		mtk_hw_reset(eth);
- 
--	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1)) {
- 		/* Set FE to PDMAv2 if necessary */
- 		val = mtk_r32(eth, MTK_FE_GLO_MISC);
- 		mtk_w32(eth,  val | BIT(4), MTK_FE_GLO_MISC);
-@@ -3812,7 +3812,7 @@ static int mtk_hw_init(struct mtk_eth *eth, bool reset)
- 	 */
- 	val = mtk_r32(eth, MTK_CDMQ_IG_CTRL);
- 	mtk_w32(eth, val | MTK_CDMQ_STAG_EN, MTK_CDMQ_IG_CTRL);
--	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V2)) {
-+	if (MTK_HAS_CAPS(eth->soc->caps, MTK_NETSYS_V1)) {
- 		val = mtk_r32(eth, MTK_CDMP_IG_CTRL);
- 		mtk_w32(eth, val | MTK_CDMP_STAG_EN, MTK_CDMP_IG_CTRL);
- 	}
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.h b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-index 3dfa880da41a..cb3cdf0b38d5 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-@@ -820,6 +820,7 @@ enum mkt_eth_capabilities {
- 	MTK_SHARED_INT_BIT,
- 	MTK_TRGMII_MT7621_CLK_BIT,
- 	MTK_QDMA_BIT,
-+	MTK_NETSYS_V1_BIT,
- 	MTK_NETSYS_V2_BIT,
- 	MTK_SOC_MT7628_BIT,
- 	MTK_RSTCTRL_PPE1_BIT,
-@@ -855,6 +856,7 @@ enum mkt_eth_capabilities {
- #define MTK_SHARED_INT		BIT(MTK_SHARED_INT_BIT)
- #define MTK_TRGMII_MT7621_CLK	BIT(MTK_TRGMII_MT7621_CLK_BIT)
- #define MTK_QDMA		BIT(MTK_QDMA_BIT)
-+#define MTK_NETSYS_V1		BIT(MTK_NETSYS_V1_BIT)
- #define MTK_NETSYS_V2		BIT(MTK_NETSYS_V2_BIT)
- #define MTK_SOC_MT7628		BIT(MTK_SOC_MT7628_BIT)
- #define MTK_RSTCTRL_PPE1	BIT(MTK_RSTCTRL_PPE1_BIT)
-@@ -911,25 +913,30 @@ enum mkt_eth_capabilities {
- 
- #define MTK_HAS_CAPS(caps, _x)		(((caps) & (_x)) == (_x))
- 
--#define MT7621_CAPS  (MTK_GMAC1_RGMII | MTK_GMAC1_TRGMII | \
--		      MTK_GMAC2_RGMII | MTK_SHARED_INT | \
--		      MTK_TRGMII_MT7621_CLK | MTK_QDMA)
+-# IDE support targets
+-PHONY += rust-analyzer
+-rust-analyzer:
+-	$(Q)$(MAKE) $(build)=rust $@
 -
--#define MT7622_CAPS  (MTK_GMAC1_RGMII | MTK_GMAC1_SGMII | MTK_GMAC2_RGMII | \
--		      MTK_GMAC2_SGMII | MTK_GDM1_ESW | \
--		      MTK_MUX_GDM1_TO_GMAC1_ESW | \
--		      MTK_MUX_GMAC1_GMAC2_TO_SGMII_RGMII | MTK_QDMA)
--
--#define MT7623_CAPS  (MTK_GMAC1_RGMII | MTK_GMAC1_TRGMII | MTK_GMAC2_RGMII | \
--		      MTK_QDMA)
--
--#define MT7628_CAPS  (MTK_SHARED_INT | MTK_SOC_MT7628)
--
--#define MT7629_CAPS  (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII | MTK_GMAC2_GEPHY | \
--		      MTK_GDM1_ESW | MTK_MUX_GDM1_TO_GMAC1_ESW | \
--		      MTK_MUX_GMAC2_GMAC0_TO_GEPHY | \
--		      MTK_MUX_U3_GMAC2_TO_QPHY | \
--		      MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA)
-+#define MT7621_CAPS  (MTK_GMAC1_RGMII | MTK_GMAC1_TRGMII |	\
-+		      MTK_GMAC2_RGMII | MTK_SHARED_INT |	\
-+		      MTK_TRGMII_MT7621_CLK | MTK_QDMA |	\
-+		      MTK_NETSYS_V1)
-+
-+#define MT7622_CAPS  (MTK_GMAC1_RGMII | MTK_GMAC1_SGMII |	\
-+		      MTK_GMAC2_RGMII | MTK_GMAC2_SGMII |	\
-+		      MTK_GDM1_ESW | MTK_MUX_GDM1_TO_GMAC1_ESW |\
-+		      MTK_MUX_GMAC1_GMAC2_TO_SGMII_RGMII |	\
-+		      MTK_QDMA | MTK_NETSYS_V1)
-+
-+#define MT7623_CAPS  (MTK_GMAC1_RGMII | MTK_GMAC1_TRGMII |	\
-+		      MTK_GMAC2_RGMII | MTK_QDMA |		\
-+		      MTK_NETSYS_V1)
-+
-+#define MT7628_CAPS  (MTK_SHARED_INT | MTK_SOC_MT7628 |		\
-+		      MTK_NETSYS_V1)
-+
-+#define MT7629_CAPS  (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII |	\
-+		      MTK_GMAC2_GEPHY | MTK_GDM1_ESW |		\
-+		      MTK_MUX_GMAC2_GMAC0_TO_GEPHY | MTK_QDMA |	\
-+		      MTK_MUX_U3_GMAC2_TO_QPHY | MTK_NETSYS_V1 |\
-+		      MTK_MUX_GDM1_TO_GMAC1_ESW |		\
-+		      MTK_MUX_GMAC12_TO_GEPHY_SGMII)
+ # Misc
+ # ---------------------------------------------------------------------------
  
- #define MT7981_CAPS  (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII | MTK_GMAC2_GEPHY | \
- 		      MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA | \
+@@ -1917,6 +1912,7 @@ help:
+ 	@echo  '  modules         - default target, build the module(s)'
+ 	@echo  '  modules_install - install the module'
+ 	@echo  '  clean           - remove generated files in module directory only'
++	@echo  '  rust-analyzer	  - generate rust-project.json rust-analyzer support file'
+ 	@echo  ''
+ 
+ endif # KBUILD_EXTMOD
+@@ -2053,6 +2049,11 @@ quiet_cmd_tags = GEN     $@
+ tags TAGS cscope gtags: FORCE
+ 	$(call cmd,tags)
+ 
++# IDE support targets
++PHONY += rust-analyzer
++rust-analyzer:
++	$(Q)$(MAKE) $(build)=rust $@
++
+ # Script to generate missing namespace dependencies
+ # ---------------------------------------------------------------------------
+ 
+diff --git a/rust/Makefile b/rust/Makefile
+index 8f598a904f38..41c1435cd8d4 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -389,8 +389,10 @@ quiet_cmd_rustc_library = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) L
+ 	$(if $(rustc_objcopy),;$(OBJCOPY) $(rustc_objcopy) $@)
+ 
+ rust-analyzer:
+-	$(Q)$(srctree)/scripts/generate_rust_analyzer.py $(srctree) $(objtree) \
+-		$(RUST_LIB_SRC) > $(objtree)/rust-project.json
++	$(Q)$(srctree)/scripts/generate_rust_analyzer.py \
++		$(abs_srctree) $(abs_objtree) \
++		$(RUST_LIB_SRC) $(KBUILD_EXTMOD) > \
++		$(if $(KBUILD_EXTMOD),$(extmod_prefix),$(objtree))/rust-project.json
+ 
+ $(obj)/core.o: private skip_clippy = 1
+ $(obj)/core.o: private skip_flags = -Dunreachable_pub
+diff --git a/scripts/generate_rust_analyzer.py b/scripts/generate_rust_analyzer.py
+index ecc7ea9a4dcf..7a1a958b1f8a 100755
+--- a/scripts/generate_rust_analyzer.py
++++ b/scripts/generate_rust_analyzer.py
+@@ -6,10 +6,11 @@
+ import argparse
+ import json
+ import logging
++import os
+ import pathlib
+ import sys
+ 
+-def generate_crates(srctree, objtree, sysroot_src):
++def generate_crates(srctree, objtree, sysroot_src, external_src):
+     # Generate the configuration list.
+     cfg = []
+     with open(objtree / "include" / "generated" / "rustc_cfg") as fd:
+@@ -65,7 +66,7 @@ def generate_crates(srctree, objtree, sysroot_src):
+         [],
+         is_proc_macro=True,
+     )
+-    crates[-1]["proc_macro_dylib_path"] = "rust/libmacros.so"
++    crates[-1]["proc_macro_dylib_path"] = f"{objtree}/rust/libmacros.so"
+ 
+     append_crate(
+         "build_error",
+@@ -95,25 +96,31 @@ def generate_crates(srctree, objtree, sysroot_src):
+         "exclude_dirs": [],
+     }
+ 
++    def is_root_crate(build_file, target):
++        return os.path.exists(build_file) and target in open(build_file).read()
++
+     # Then, the rest outside of `rust/`.
+     #
+     # We explicitly mention the top-level folders we want to cover.
+-    for folder in ("samples", "drivers"):
+-        for path in (srctree / folder).rglob("*.rs"):
++    extra_dirs = map(lambda dir: srctree / dir, ("samples", "drivers"))
++    if external_src is not None:
++        extra_dirs = [external_src]
++    for folder in extra_dirs:
++        for path in folder.rglob("*.rs"):
+             logging.info("Checking %s", path)
+             name = path.name.replace(".rs", "")
+ 
+             # Skip those that are not crate roots.
+-            if f"{name}.o" not in open(path.parent / "Makefile").read():
+-                continue
++            if is_root_crate(path.parent / "Makefile", f"{name}.o") or \
++               is_root_crate(path.parent / "Kbuild", f"{name}.o"):
+ 
+-            logging.info("Adding %s", name)
+-            append_crate(
+-                name,
+-                path,
+-                ["core", "alloc", "kernel"],
+-                cfg=cfg,
+-            )
++                logging.info("Adding %s", name)
++                append_crate(
++                    name,
++                    path,
++                    ["core", "alloc", "kernel"],
++                    cfg=cfg,
++                )
+ 
+     return crates
+ 
+@@ -123,6 +130,7 @@ def main():
+     parser.add_argument("srctree", type=pathlib.Path)
+     parser.add_argument("objtree", type=pathlib.Path)
+     parser.add_argument("sysroot_src", type=pathlib.Path)
++    parser.add_argument("exttree", type=pathlib.Path, nargs="?")
+     args = parser.parse_args()
+ 
+     logging.basicConfig(
+@@ -131,7 +139,7 @@ def main():
+     )
+ 
+     rust_project = {
+-        "crates": generate_crates(args.srctree, args.objtree, args.sysroot_src),
++        "crates": generate_crates(args.srctree, args.objtree, args.sysroot_src, args.exttree),
+         "sysroot_src": str(args.sysroot_src),
+     }
+ 
 -- 
 2.39.2
 
