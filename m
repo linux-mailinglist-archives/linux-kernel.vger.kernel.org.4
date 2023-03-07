@@ -2,175 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B766AD93A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7466AD947
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjCGIZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S229549AbjCGIbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:31:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjCGIZB (ORCPT
+        with ESMTP id S229646AbjCGIbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:25:01 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9972ED61;
-        Tue,  7 Mar 2023 00:24:59 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 09E8F21A3A;
-        Tue,  7 Mar 2023 08:24:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678177498; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aJjCMR/7W7W6fsxhbPmeCPoCzzj8LVhiJpZUXqYpJHg=;
-        b=jxNaHdRIuxKgQUO69Tn/RhntQcsEEvE8OdmsJmCL4SbQF7hSm0czRn+bJ7QMM3V54uVeUe
-        5Kd+He9KwFanfdzrMKqX862RG8riZ/EkwQwuC+LHiSruevZSNQ/N02AZa900ji32NZNWBJ
-        FqUtseevIc6KWMVnbnHarWa3ydCjXrs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678177498;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aJjCMR/7W7W6fsxhbPmeCPoCzzj8LVhiJpZUXqYpJHg=;
-        b=S/6yXrAGSF+9++abVia5koz3DUC4779UWgL4gVHGJu1LfbfAKNIxPtUu59d54BVX9G/bjP
-        DXyUCyFaJkkOMWBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA3161341F;
-        Tue,  7 Mar 2023 08:24:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id i1RNKNn0BmRZFgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 07 Mar 2023 08:24:57 +0000
-Message-ID: <c6d2e7db-f728-c867-2f14-528895e99927@suse.de>
-Date:   Tue, 7 Mar 2023 09:24:57 +0100
+        Tue, 7 Mar 2023 03:31:10 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B949E4B824
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:31:05 -0800 (PST)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PW7rq1FCbzKq79;
+        Tue,  7 Mar 2023 16:28:59 +0800 (CST)
+Received: from mdc.huawei.com (10.175.112.208) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 7 Mar 2023 16:31:03 +0800
+From:   Chen Jun <chenjun102@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <cl@linux.com>, <penberg@kernel.org>, <rientjes@google.com>,
+        <iamjoonsoo.kim@lge.com>, <akpm@linux-foundation.org>,
+        <vbabka@suse.cz>
+CC:     <xuqiang36@huawei.com>, <chenjun102@huawei.com>
+Subject: [RFC] mm/slub: Reduce memory consumption in extreme scenarios
+Date:   Tue, 7 Mar 2023 08:28:11 +0000
+Message-ID: <20230307082811.120774-1-chenjun102@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 11/99] fbdev/aty: Duplicate video-mode option string
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     deller@gmx.de, paulus@samba.org, benh@kernel.crashing.org,
-        linux@armlinux.org.uk, pjones@redhat.com, timur@kernel.org,
-        adaplas@gmail.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
-        mbroemme@libmpq.org, thomas@winischhofer.net,
-        James.Bottomley@hansenpartnership.com, spock@gentoo.org,
-        sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
-        geert+renesas@glider.be, corbet@lwn.net,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230306160016.4459-1-tzimmermann@suse.de>
- <20230306160016.4459-12-tzimmermann@suse.de>
- <CAMuHMdVDr19p3GtR4n_hJAtc_RX+VJwVfU1Mzvtka9er+WS8bg@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAMuHMdVDr19p3GtR4n_hJAtc_RX+VJwVfU1Mzvtka9er+WS8bg@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------fVN03Z44mY6detn63Uep34gh"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------fVN03Z44mY6detn63Uep34gh
-Content-Type: multipart/mixed; boundary="------------njgFiRo1LRq96NsWAc32i50R";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: deller@gmx.de, paulus@samba.org, benh@kernel.crashing.org,
- linux@armlinux.org.uk, pjones@redhat.com, timur@kernel.org,
- adaplas@gmail.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
- mbroemme@libmpq.org, thomas@winischhofer.net,
- James.Bottomley@hansenpartnership.com, spock@gentoo.org,
- sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
- geert+renesas@glider.be, corbet@lwn.net, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Message-ID: <c6d2e7db-f728-c867-2f14-528895e99927@suse.de>
-Subject: Re: [PATCH 11/99] fbdev/aty: Duplicate video-mode option string
-References: <20230306160016.4459-1-tzimmermann@suse.de>
- <20230306160016.4459-12-tzimmermann@suse.de>
- <CAMuHMdVDr19p3GtR4n_hJAtc_RX+VJwVfU1Mzvtka9er+WS8bg@mail.gmail.com>
-In-Reply-To: <CAMuHMdVDr19p3GtR4n_hJAtc_RX+VJwVfU1Mzvtka9er+WS8bg@mail.gmail.com>
+If call kmalloc_node with NO __GFP_THISNODE and node[A] with no memory.
+Slub will alloc a slub page which is not belong to A, and put the page
+to kmem_cache_node[page_to_nid(page)]. The page can not be reused
+at next calling, because NULL will be get from get_partical().
+That make kmalloc_node consume more memory.
 
---------------njgFiRo1LRq96NsWAc32i50R
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On qemu with 4 numas and each numa has 1G memory, Write a test ko
+to call kmalloc_node(196, 0xd20c0, 3) for 5 * 1024 * 1024 times.
 
-SGkNCg0KQW0gMDYuMDMuMjMgdW0gMTc6MTMgc2NocmllYiBHZWVydCBVeXR0ZXJob2V2ZW46
-DQo+IEhpIFRob21hcywNCj4gDQo+IFRoYW5rcyBmb3IgeW91ciBwYXRjaCENCj4gDQo+IE9u
-IE1vbiwgTWFyIDYsIDIwMjMgYXQgNTowMOKAr1BNIFRob21hcyBaaW1tZXJtYW5uIDx0emlt
-bWVybWFubkBzdXNlLmRlPiB3cm90ZToNCj4+IEFzc3VtZSB0aGF0IHRoZSBkcml2ZXIgZG9l
-cyBub3Qgb3duIHRoZSBvcHRpb24gc3RyaW5nIG9yIGl0cyBzdWJzdHJpbmdzDQo+PiBhbmQg
-aGVuY2UgZHVwbGljYXRlIHRoZSBvcHRpb24gc3RyaW5nIGZvciB0aGUgdmlkZW8gbW9kZS4g
-VGhlIGRyaXZlciBvbmx5DQo+PiBwYXJzZXMgdGhlIG9wdGlvbiBzdHJpbmcgb25jZSBhcyBw
-YXJ0IG9mIG1vZHVsZSBpbml0aWFsaXphdGlvbiwgc28gdXNlDQo+PiBhIHN0YXRpYyBidWZm
-ZXIgdG8gc3RvcmUgdGhlIGR1cGxpY2F0ZWQgbW9kZSBvcHRpb24uIExpbnV4IGF1dG9tYXRp
-Y2FsbHkNCj4+IGZyZWVzIHRoZSBtZW1vcnkgdXBvbiByZWxlYXNpbmcgdGhlIG1vZHVsZS4N
-Cj4gDQo+IEFyZSB5b3Ugc3VyZSBhYm91dCB0aGF0Pw0KPiBBbGwgb2YgdGhpcyBjb2RlIGlz
-IGluc2lkZSAiI2lmbmRlZiBNT0RVTEUiLg0KPiBJbiB0aGUgYXR5MTI4ZmIgY2FzZSwgdGhl
-IGZ1bmN0aW9uIGlzIG5vdCBtYXJrZWQgX19pbml0Lg0KPiBFbmFibGluZyB0aGVzZSAzIGRy
-aXZlcnMgYWRkcyAzeDI1NiBieXRlcyBvZiBzdGF0aWMgYnVmZmVyLCBtb3JlDQo+IGlmIHlv
-dSBlbmFibGUgbW9yZSBmYmRldiBkcml2ZXJzLg0KDQpSaWdodC4gUGxlYXNlIHNlZSBteSBy
-ZXBseSB0byBbMDAvOTldLg0KDQo+IA0KPj4gRG9uZSBpbiBwcmVwYXJhdGlvbiBvZiBzd2l0
-Y2hpbmcgdGhlIGRyaXZlciB0byBzdHJ1Y3Qgb3B0aW9uX2l0ZXIgYW5kDQo+PiBjb25zdGlm
-eWluZyB0aGUgb3B0aW9uIHN0cmluZy4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBUaG9tYXMg
-WmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCj4gDQo+PiAtLS0gYS9kcml2ZXJz
-L3ZpZGVvL2ZiZGV2L2F0eS9hdHkxMjhmYi5jDQo+PiArKysgYi9kcml2ZXJzL3ZpZGVvL2Zi
-ZGV2L2F0eS9hdHkxMjhmYi5jDQo+PiBAQCAtMTcyMyw3ICsxNzIzLDE3IEBAIHN0YXRpYyBp
-bnQgYXR5MTI4ZmJfc2V0dXAoY2hhciAqb3B0aW9ucykNCj4+ICAgICAgICAgICAgICAgICAg
-ICAgICAgICBjb250aW51ZTsNCj4+ICAgICAgICAgICAgICAgICAgfQ0KPj4gICAjZW5kaWYg
-LyogQ09ORklHX1BQQ19QTUFDICovDQo+PiAtICAgICAgICAgICAgICAgbW9kZV9vcHRpb24g
-PSB0aGlzX29wdDsNCj4+ICsgICAgICAgICAgICAgICB7DQo+PiArICAgICAgICAgICAgICAg
-ICAgICAgICBzdGF0aWMgY2hhciBtb2RlX29wdGlvbl9idWZbMjU2XTsNCj4+ICsgICAgICAg
-ICAgICAgICAgICAgICAgIGludCByZXQ7DQo+PiArDQo+PiArICAgICAgICAgICAgICAgICAg
-ICAgICByZXQgPSBzbnByaW50Zihtb2RlX29wdGlvbl9idWYsIHNpemVvZihtb2RlX29wdGlv
-bl9idWYpLCAiJXMiLCB0aGlzX29wdCk7DQo+PiArICAgICAgICAgICAgICAgICAgICAgICBp
-ZiAoV0FSTihyZXQgPCAwLCAiYXR5MTI4OiBpZ25vcmluZyBpbnZhbGlkIG9wdGlvbiwgcmV0
-PSVkXG4iLCByZXQpKQ0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250
-aW51ZTsNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgIGlmIChXQVJOKHJldCA+PSBzaXpl
-b2YobW9kZV9vcHRpb25fYnVmKSwgImF0eTEyOGZiOiBvcHRpb24gdG9vIGxvbmdcbiIpKQ0K
-Pj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjb250aW51ZTsNCj4+ICsgICAg
-ICAgICAgICAgICAgICAgICAgIG1vZGVfb3B0aW9uID0gbW9kZV9vcHRpb25fYnVmOw0KPj4g
-KyAgICAgICAgICAgICAgIH0NCj4+ICAgICAgICAgIH0NCj4+ICAgICAgICAgIHJldHVybiAw
-Ow0KPj4gICB9DQo+IGV0dXJuIDA7DQo+PiAgIH0NCj4gDQo+IEdye29ldGplLGVldGluZ31z
-LA0KPiANCj4gICAgICAgICAgICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0KDQotLSANClRo
-b21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3
-YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJu
-YmVyZywgR2VybWFueQ0KKEhSQiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bD
-vGhyZXI6IEl2byBUb3Rldg0K
+cat /proc/slabinfo shows:
+kmalloc-256       4302317 15151808    256   32    2 : tunables..
 
---------------njgFiRo1LRq96NsWAc32i50R--
+the total objects is much more then active objects.
 
---------------fVN03Z44mY6detn63Uep34gh
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+After this patch, cat /prac/slubinfo shows:
+kmalloc-256       5244950 5245088    256   32    2 : tunables..
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Chen Jun <chenjun102@huawei.com>
+---
+ mm/slub.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQG9NkFAwAAAAAACgkQlh/E3EQov+A1
-rxAAwDtvCmNWSogCnBKo7P+vbnHZdaKaHvcKpdY0yNu5N8m3s/KJqXNKv4T5vUeQxSHdMgcTLr7Y
-//6angohv9ejGjcbiF/pk55ryZIoJZ9qU1VHg/jiUS4mMyzyHDR9W5xY+27UhBC9Se3BwlN9Swcs
-c+Q/oR3TL3e7dHagZDcgbf4INDlYYoQUj8yFu9AVw7yIRtUgYliMVU5sC9b2eBEIkH/fbVMvgE9o
-MQYvyI46ZlzUxF6ZrtvuLyYHQL85hkl84HZKE5eldrjPv/rXdZcYKWuPDJRBYdzUdjWFBoJbuIPB
-fDx9EMduOvm7WYeIscA/4tbgGcPtDLlAmQwFx4gn9wJ61oJeqsqn2U9gY2zxr9/FHX0iyBabXWxG
-OoeCo6E0q+7hXb4HGUAaL5gMpf3vkYzta308HTQOfUI3idlmdiFwOp4WjEjPzHOYsr6GHUhtximI
-dZP5Dho2R3WMJADi7viz8QmHJWVrtEgXFwDMhxlHQwU7xvnsXTFrA8HI0fHJ4sYcyLE/Hme/RH4s
-Iv07Ja9OIM4yaIgpwzJsy/EEva/ySNdPgiADmGMlEp7kNDLOyMS1K/Y9zIzbCblZbTvetexSc3l4
-DftnC5XQ+rPYa25KHWjBcIg0DsSe4yZQMxfZySLHqfY8M2fzOuJZHDDOC999Qt714ehCKlUuPSBj
-7Qo=
-=gUgK
------END PGP SIGNATURE-----
+diff --git a/mm/slub.c b/mm/slub.c
+index 39327e98fce3..c0090a5de54e 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -2384,7 +2384,7 @@ static void *get_partial(struct kmem_cache *s, int node, struct partial_context
+ 		searchnode = numa_mem_id();
+ 
+ 	object = get_partial_node(s, get_node(s, searchnode), pc);
+-	if (object || node != NUMA_NO_NODE)
++	if (object || (node != NUMA_NO_NODE && (pc->flags & __GFP_THISNODE)))
+ 		return object;
+ 
+ 	return get_any_partial(s, pc);
+@@ -3069,6 +3069,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ 	struct slab *slab;
+ 	unsigned long flags;
+ 	struct partial_context pc;
++	int try_thisndoe = 0;
+ 
+ 	stat(s, ALLOC_SLOWPATH);
+ 
+@@ -3181,8 +3182,12 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ 	}
+ 
+ new_objects:
+-
+ 	pc.flags = gfpflags;
++
++	/* Try to get page from specific node even if __GFP_THISNODE is not set */
++	if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode)
++			pc.flags |= __GFP_THISNODE;
++
+ 	pc.slab = &slab;
+ 	pc.orig_size = orig_size;
+ 	freelist = get_partial(s, node, &pc);
+@@ -3190,10 +3195,16 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ 		goto check_new_slab;
+ 
+ 	slub_put_cpu_ptr(s->cpu_slab);
+-	slab = new_slab(s, gfpflags, node);
++	slab = new_slab(s, pc.flags, node);
+ 	c = slub_get_cpu_ptr(s->cpu_slab);
+ 
+ 	if (unlikely(!slab)) {
++		/* Try to get page from any other node */
++		if (node != NUMA_NO_NODE && !(gfpflags & __GFP_THISNODE) && try_thisnode) {
++			try_thisnode = 0;
++			goto new_objects;
++		}
++
+ 		slab_out_of_memory(s, gfpflags, node);
+ 		return NULL;
+ 	}
+-- 
+2.17.1
 
---------------fVN03Z44mY6detn63Uep34gh--
