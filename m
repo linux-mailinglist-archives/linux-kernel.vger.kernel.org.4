@@ -2,359 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8336AD686
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:46:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42C46AD689
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjCGEq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 23:46:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
+        id S230025AbjCGErh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 23:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjCGEqx (ORCPT
+        with ESMTP id S230211AbjCGEre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 23:46:53 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB496C696;
-        Mon,  6 Mar 2023 20:46:11 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id a2so12878571plm.4;
-        Mon, 06 Mar 2023 20:46:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678164328;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7nQXlj8ZF5e19XF2bWoBX4hZUgDJ1cP2r6TZC9HO7nY=;
-        b=XAZPC4p1tJ4PczD8l0f9yhjuLov17PLNhBTheG5oWKZUhHLQVRsxKSxJWJ5QryY6Cx
-         7Fojvx42BE+CxaKVoDNPKpq7JBiXx9x0MMIA4sjyRFgrR4ZieTlMVIULVH2roUNoi4s3
-         xu48dkcs/YRuCDEUwFxvEeXGg9u2SN+aR2SXgMEcPMqn3xqgpITXdE9bwe8S2Pmt2c+e
-         GYXnQTBQXnYhKFGkHF6pPwXV8ukYS7l0Ut78RtY3vuQ+Df50r3PTA1pCSi9SEwnbL7Qc
-         SicU5Y8IhvxjTnSrr4m0ZF0vkyev1+dSDWDmw4i9ezJ/MB0EaTAJXpO33wc9MrZoHTb3
-         1NPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678164328;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7nQXlj8ZF5e19XF2bWoBX4hZUgDJ1cP2r6TZC9HO7nY=;
-        b=MNDWVu8kqBMMQYSa4bRnbajudJiq3ebgguSPaEtbC0tTneDFJnTxXS95Q1iN8203WI
-         Pf5A+bTTsIPirUvTGERo5UK/1aWe2dUg3OdeaCusQ+uze5PZdhWv60JYzqRoULKkw4P0
-         XW1qmzJ21bgaZTLBiygqjx0D5mRTsp4zSDW0Ur1ZS2VckPjOjV/7KUfMw5TaZgAYVA+R
-         EiBqs2auVfAjbhHIneRGGk6H3n5tdSFnf5JH1eCPrq7aaL1YelRfFJdZLE0Bc/Zfc3mx
-         hXmSl4w5V/voljdFhqAMA4bd5V85HU1FT0lV+gDd6TW4IjhUZQJD+8bIpRUjM08A5qO/
-         /ZKQ==
-X-Gm-Message-State: AO0yUKUhY/VtyKsUfk8CG4PyTS6oeef/21gZYQ60fpT6zMzR0UR5wgEb
-        lxHRrJyX4hsR5v7aeaEXusuKn0Gcak0=
-X-Google-Smtp-Source: AK7set8A3yisZUmoSf9ivTflaiWUyVfl92KZVoXYnmMwPaWx1YPPDYxuk1t4LMEyS2q3THyQqV3KKg==
-X-Received: by 2002:a05:6a20:3caa:b0:af:7233:5bfc with SMTP id b42-20020a056a203caa00b000af72335bfcmr14454761pzj.8.1678164327957;
-        Mon, 06 Mar 2023 20:45:27 -0800 (PST)
-Received: from localhost ([203.220.77.23])
-        by smtp.gmail.com with ESMTPSA id a4-20020aa78644000000b005a8ba70315bsm7039621pfo.6.2023.03.06.20.45.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 20:45:27 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 07 Mar 2023 14:45:22 +1000
-Message-Id: <CQZVLQQBO6K9.2A71BY640ZH5P@bobo>
-Cc:     <ajd@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <cmr@bluescreens.de>
-Subject: Re: [RFC PATCH 02/13] powerpc: Add initial Dynamic Execution
- Control Register (DEXCR) support
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Benjamin Gray" <bgray@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>
-X-Mailer: aerc 0.13.0
-References: <20221128024458.46121-1-bgray@linux.ibm.com>
- <20221128024458.46121-3-bgray@linux.ibm.com>
-In-Reply-To: <20221128024458.46121-3-bgray@linux.ibm.com>
+        Mon, 6 Mar 2023 23:47:34 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7227337F3E;
+        Mon,  6 Mar 2023 20:47:11 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3272TPTg011713;
+        Tue, 7 Mar 2023 04:46:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=DKvqvzb5WzxlmzYw8eEdTTMow8wfzTGqnqd88w9RdPQ=;
+ b=AWPH2CqvNANYZlAmFyh/l7tPJ4CU1yTBqCuOvoA9V+4CXMCG4GXrIsDgDoZ/ukukGXku
+ TZ8dkIn+PxnsMpTK2cIBdxuECevnYgwPE7I7V7eu2HAFFIg4VN+VG7vgagvFWM9YT3hg
+ uGZ6HS6QVECq3OSYUublYgOpWTSB+jguxYmBfCiiRpgfNRzWwqNA6gkfllJiRrtM4RPj
+ mYYI4EDex4i70YlXUKoPiFgpizTLxuF3WSHLACWhYIYmvfS5wS+ZN2wRZiA/VwaAUhdY
+ g/MllHEX9uc6kyJNBM1aw041GVeXy3OPrE8xuNb/ARjlaD5O69Olf7nMGPd3d370SXGa 1A== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5rqjrr8y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 04:46:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3274k1Mj020082
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Mar 2023 04:46:01 GMT
+Received: from [10.50.8.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
+ 20:45:55 -0800
+Message-ID: <3d0315fa-14ca-dc34-81ae-467d9ed5133d@quicinc.com>
+Date:   Tue, 7 Mar 2023 10:15:45 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] media: venus: dec: Fix capture formats enumeration order
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Jordan Crouse <jorcrous@amazon.com>
+CC:     <linux-kernel@vger.kernel.org>, Albert Esteve <aesteve@redhat.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Sergio Lopez <slp@redhat.com>,
+        Enric Balletbo i Serra <eballetb@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>
+References: <20230210081835.2054482-1-javierm@redhat.com>
+ <20230303220918.qr5ydbin3nye3qtz@amazon.com>
+ <87h6uydwel.fsf@minerva.mail-host-address-is-not-set>
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+In-Reply-To: <87h6uydwel.fsf@minerva.mail-host-address-is-not-set>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 0bLYU3qYMLhLGdt-CXXjJfU1If5MXsqK
+X-Proofpoint-GUID: 0bLYU3qYMLhLGdt-CXXjJfU1If5MXsqK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ priorityscore=1501 clxscore=1011 lowpriorityscore=0 adultscore=0
+ mlxscore=0 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070042
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Nov 28, 2022 at 12:44 PM AEST, Benjamin Gray wrote:
-> ISA 3.1B introduces the Dynamic Execution Control Register (DEXCR). It
-> is a per-cpu register that allows control over various CPU behaviours
-> including branch hint usage, indirect branch speculation, and
-> hashst/hashchk support.
+
+On 3/6/2023 3:38 PM, Javier Martinez Canillas wrote:
+> Jordan Crouse <jorcrous@amazon.com> writes:
 >
-> Though introduced in 3.1B, no CPUs using 3.1 were released, so
-> CPU_FTR_ARCH_31 is used to determine support for the register itself.
-> Support for each DEXCR bit (aspect) is reported separately by the
-> firmware.
+> Hello Jordan,
 >
-> Add various definitions and basic support for the DEXCR in the kernel.
-> Right now it just initialises and maintains the DEXCR on process
-> creation/swap, and clears it in reset_sprs().
+>> On Fri, Feb 10, 2023 at 09:18:35AM +0100, Javier Martinez Canillas wrote:
+>>> Commit 9593126dae3e ("media: venus: Add a handling of QC08C compressed
+>>> format") and commit cef92b14e653 ("media: venus: Add a handling of QC10C
+>>> compressed format") added support for the QC08C and QC10C compressed
+>>> formats respectively.
+>>>
+>>> But these also caused a regression, because the new formats where added
+>>> at the beginning of the vdec_formats[] array and the vdec_inst_init()
+>>> function sets the default format output and capture using fixed indexes
+>>> of that array:
+>>>
+>>> static void vdec_inst_init(struct venus_inst *inst)
+>>> {
+>>> ...
+>>> 	inst->fmt_out = &vdec_formats[8];
+>>> 	inst->fmt_cap = &vdec_formats[0];
+>>> ...
+>>> }
+>>>
+>>> Since now V4L2_PIX_FMT_NV12 is not the first entry in the array anymore,
+>>> the default capture format is not set to that as it was done before.
+>>>
+>>> Both commits changed the first index to keep inst->fmt_out default format
+>>> set to V4L2_PIX_FMT_H264, but did not update the latter to keep .fmt_out
+>>> default format set to V4L2_PIX_FMT_NV12.
+>>>
+>>> Rather than updating the index to the current V4L2_PIX_FMT_NV12 position,
+>>> let's reorder the entries so that this format is the first entry again.
+>>>
+>>> This would also make VIDIOC_ENUM_FMT report the V4L2_PIX_FMT_NV12 format
+>>> with an index 0 as it did before the QC08C and QC10C formats were added.
+>>>
+>>> Fixes: 9593126dae3e ("media: venus: Add a handling of QC08C compressed format")
+>>> Fixes: cef92b14e653 ("media: venus: Add a handling of QC10C compressed format")
+>>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+>> I just came across this issue independently and can confirm this patch fixes
+>> the GStreamer V4L2 decoder on QRB5165.
+>>
+>> Tested-by: Jordan Crouse <jorcrous@amazon.com>
+>>
+> Thanks for testing it!
 >
+> Stanimir, can we please get this for v6.3 as well?
 
-A couple of comments below, but it looks good:
+Hi Javier, Jordan
 
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+Could you please explain what regression/issue you see with patch?
 
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
-> ---
->  arch/powerpc/include/asm/book3s/64/kexec.h |  3 +++
->  arch/powerpc/include/asm/cputable.h        |  8 ++++++-
->  arch/powerpc/include/asm/processor.h       | 13 +++++++++++
->  arch/powerpc/include/asm/reg.h             |  6 ++++++
->  arch/powerpc/kernel/Makefile               |  1 +
->  arch/powerpc/kernel/dexcr.c                | 25 ++++++++++++++++++++++
->  arch/powerpc/kernel/dt_cpu_ftrs.c          |  4 ++++
->  arch/powerpc/kernel/process.c              | 13 ++++++++++-
->  arch/powerpc/kernel/prom.c                 |  4 ++++
->  9 files changed, 75 insertions(+), 2 deletions(-)
->  create mode 100644 arch/powerpc/kernel/dexcr.c
->
-> diff --git a/arch/powerpc/include/asm/book3s/64/kexec.h b/arch/powerpc/in=
-clude/asm/book3s/64/kexec.h
-> index d4b9d476ecba..563baf94a962 100644
-> --- a/arch/powerpc/include/asm/book3s/64/kexec.h
-> +++ b/arch/powerpc/include/asm/book3s/64/kexec.h
-> @@ -21,6 +21,9 @@ static inline void reset_sprs(void)
->  			plpar_set_ciabr(0);
->  	}
-> =20
-> +	if (cpu_has_feature(CPU_FTR_ARCH_31))
-> +		mtspr(SPRN_DEXCR, 0);
-> +
->  	/*  Do we need isync()? We are going via a kexec reset */
->  	isync();
->  }
-> diff --git a/arch/powerpc/include/asm/cputable.h b/arch/powerpc/include/a=
-sm/cputable.h
-> index 757dbded11dc..03bc192f2d8b 100644
-> --- a/arch/powerpc/include/asm/cputable.h
-> +++ b/arch/powerpc/include/asm/cputable.h
-> @@ -192,6 +192,10 @@ static inline void cpu_feature_keys_init(void) { }
->  #define CPU_FTR_P9_RADIX_PREFETCH_BUG	LONG_ASM_CONST(0x0002000000000000)
->  #define CPU_FTR_ARCH_31			LONG_ASM_CONST(0x0004000000000000)
->  #define CPU_FTR_DAWR1			LONG_ASM_CONST(0x0008000000000000)
-> +#define CPU_FTR_DEXCR_SBHE		LONG_ASM_CONST(0x0010000000000000)
-> +#define CPU_FTR_DEXCR_IBRTPD		LONG_ASM_CONST(0x0020000000000000)
-> +#define CPU_FTR_DEXCR_SRAPD		LONG_ASM_CONST(0x0040000000000000)
-> +#define CPU_FTR_DEXCR_NPHIE		LONG_ASM_CONST(0x0080000000000000)
+venus hardware supports QC08C which provides better performance hence 
+driver is publishing it as preferred color format.
 
-We potentially don't need to use CPU_FTR bits for each of these. We
-only really want them to use instruction patching and make feature
-tests fast. But we have been a bit liberal with using them and they
-are kind of tied into cpu feature parsing code so maybe it's easier
-to go with them for now.
-
-> =20
->  #ifndef __ASSEMBLY__
-> =20
-> @@ -451,7 +455,9 @@ static inline void cpu_feature_keys_init(void) { }
->  	    CPU_FTR_CFAR | CPU_FTR_HVMODE | CPU_FTR_VMX_COPY | \
->  	    CPU_FTR_DBELL | CPU_FTR_HAS_PPR | CPU_FTR_ARCH_207S | \
->  	    CPU_FTR_ARCH_300 | CPU_FTR_ARCH_31 | \
-> -	    CPU_FTR_DAWR | CPU_FTR_DAWR1)
-> +	    CPU_FTR_DAWR | CPU_FTR_DAWR1 | \
-> +	    CPU_FTR_DEXCR_SBHE | CPU_FTR_DEXCR_IBRTPD | CPU_FTR_DEXCR_SRAPD | \
-> +	    CPU_FTR_DEXCR_NPHIE)
->  #define CPU_FTRS_CELL	(CPU_FTR_LWSYNC | \
->  	    CPU_FTR_PPCAS_ARCH_V2 | CPU_FTR_CTRL | \
->  	    CPU_FTR_ALTIVEC_COMP | CPU_FTR_MMCRA | CPU_FTR_SMT | \
-> diff --git a/arch/powerpc/include/asm/processor.h b/arch/powerpc/include/=
-asm/processor.h
-> index 631802999d59..0a8a793b8b8b 100644
-> --- a/arch/powerpc/include/asm/processor.h
-> +++ b/arch/powerpc/include/asm/processor.h
-> @@ -446,6 +446,19 @@ int exit_vmx_usercopy(void);
->  int enter_vmx_ops(void);
->  void *exit_vmx_ops(void *dest);
-> =20
-> +#ifdef CONFIG_PPC_BOOK3S_64
-> +
-> +unsigned long get_thread_dexcr(struct thread_struct const *t);
-> +
-> +#else
-> +
-> +static inline unsigned long get_thread_dexcr(struct thread_struct const =
-*t)
-> +{
-> +	return 0;
-> +}
-> +
-> +#endif /* CONFIG_PPC_BOOK3S_64 */
-> +
->  #endif /* __KERNEL__ */
->  #endif /* __ASSEMBLY__ */
->  #endif /* _ASM_POWERPC_PROCESSOR_H */
-> diff --git a/arch/powerpc/include/asm/reg.h b/arch/powerpc/include/asm/re=
-g.h
-> index 1e8b2e04e626..cdd1f174c399 100644
-> --- a/arch/powerpc/include/asm/reg.h
-> +++ b/arch/powerpc/include/asm/reg.h
-> @@ -385,6 +385,12 @@
->  #define SPRN_HSRR0	0x13A	/* Hypervisor Save/Restore 0 */
->  #define SPRN_HSRR1	0x13B	/* Hypervisor Save/Restore 1 */
->  #define SPRN_ASDR	0x330	/* Access segment descriptor register */
-> +#define SPRN_DEXCR	0x33C	/* Dynamic execution control register */
-> +#define   DEXCR_PRO_MASK(aspect)	__MASK(63 - (32 + (aspect)))	/* Aspect =
-number to problem state aspect mask */
-
-I think PR is a better shorthand for problem state than PRO. It's just
-more commonly used.
-
-We also have PPC_BIT and PPC_BITMASK, _BIT being used for single-bit
-mask. So this could be -
-
-#define DEXCR_PR_BIT(aspect) PPC_BIT(32 + (aspect))
-
-Or maybe DEXCR_PR_ASPECT_BIT.
-
-> +#define   DEXCR_PRO_SBHE		DEXCR_PRO_MASK(0)	/* Speculative Branch Hint E=
-nable */
-> +#define   DEXCR_PRO_IBRTPD		DEXCR_PRO_MASK(3)	/* Indirect Branch Recurre=
-nt Target Prediction Disable */
-> +#define   DEXCR_PRO_SRAPD		DEXCR_PRO_MASK(4)	/* Subroutine Return Addres=
-s Prediction Disable */
-> +#define   DEXCR_PRO_NPHIE		DEXCR_PRO_MASK(5)	/* Non-Privileged Hash Inst=
-ruction Enable */
->  #define SPRN_IC		0x350	/* Virtual Instruction Count */
->  #define SPRN_VTB	0x351	/* Virtual Time Base */
->  #define SPRN_LDBAR	0x352	/* LD Base Address Register */
-> diff --git a/arch/powerpc/kernel/Makefile b/arch/powerpc/kernel/Makefile
-> index 9b6146056e48..b112315cfdc2 100644
-> --- a/arch/powerpc/kernel/Makefile
-> +++ b/arch/powerpc/kernel/Makefile
-> @@ -79,6 +79,7 @@ obj-$(CONFIG_VDSO32)		+=3D vdso32_wrapper.o
->  obj-$(CONFIG_PPC_WATCHDOG)	+=3D watchdog.o
->  obj-$(CONFIG_HAVE_HW_BREAKPOINT)	+=3D hw_breakpoint.o
->  obj-$(CONFIG_PPC_DAWR)		+=3D dawr.o
-> +obj-$(CONFIG_PPC_BOOK3S_64)	+=3D dexcr.o
->  obj-$(CONFIG_PPC_BOOK3S_64)	+=3D cpu_setup_ppc970.o cpu_setup_pa6t.o
->  obj-$(CONFIG_PPC_BOOK3S_64)	+=3D cpu_setup_power.o
->  obj-$(CONFIG_PPC_BOOK3S_64)	+=3D mce.o mce_power.o
-> diff --git a/arch/powerpc/kernel/dexcr.c b/arch/powerpc/kernel/dexcr.c
-> new file mode 100644
-> index 000000000000..32a0a69ff638
-> --- /dev/null
-> +++ b/arch/powerpc/kernel/dexcr.c
-> @@ -0,0 +1,25 @@
-> +#include <linux/cache.h>
-> +#include <linux/init.h>
-> +
-> +#include <asm/cpu_has_feature.h>
-> +#include <asm/cputable.h>
-> +#include <asm/processor.h>
-> +#include <asm/reg.h>
-> +
-> +#define DEFAULT_DEXCR	0
-> +
-> +static int __init dexcr_init(void)
-> +{
-> +	if (!early_cpu_has_feature(CPU_FTR_ARCH_31))
-> +		return 0;
-> +
-> +	mtspr(SPRN_DEXCR, DEFAULT_DEXCR);
-> +
-> +	return 0;
-> +}
-> +early_initcall(dexcr_init);
-> +
-> +unsigned long get_thread_dexcr(struct thread_struct const *t)
-> +{
-> +	return DEFAULT_DEXCR;
-> +}
-> diff --git a/arch/powerpc/kernel/dt_cpu_ftrs.c b/arch/powerpc/kernel/dt_c=
-pu_ftrs.c
-> index c3fb9fdf5bd7..896a48211a37 100644
-> --- a/arch/powerpc/kernel/dt_cpu_ftrs.c
-> +++ b/arch/powerpc/kernel/dt_cpu_ftrs.c
-> @@ -661,6 +661,10 @@ static struct dt_cpu_feature_match __initdata
->  	{"prefix-instructions", feat_enable, 0},
->  	{"matrix-multiply-assist", feat_enable_mma, 0},
->  	{"debug-facilities-v31", feat_enable, CPU_FTR_DAWR1},
-> +	{"dexcr-speculative-branch-hint-enable", feat_enable, CPU_FTR_DEXCR_SBH=
-E},
-> +	{"dexcr-indirect-branch-recurrent-target-prediction-disable", feat_enab=
-le, CPU_FTR_DEXCR_IBRTPD},
-> +	{"dexcr-subroutine-return-address-prediction-disable", feat_enable, CPU=
-_FTR_DEXCR_SRAPD},
-> +	{"dexcr-non-privileged-hash-instruction-enable", feat_enable, CPU_FTR_D=
-EXCR_NPHIE},
->  };
-> =20
->  static bool __initdata using_dt_cpu_ftrs;
-> diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.=
-c
-> index 67da147fe34d..17d26f652b80 100644
-> --- a/arch/powerpc/kernel/process.c
-> +++ b/arch/powerpc/kernel/process.c
-> @@ -1228,6 +1228,13 @@ static inline void restore_sprs(struct thread_stru=
-ct *old_thread,
->  	if (cpu_has_feature(CPU_FTR_P9_TIDR) &&
->  	    old_thread->tidr !=3D new_thread->tidr)
->  		mtspr(SPRN_TIDR, new_thread->tidr);
-> +
-> +	if (cpu_has_feature(CPU_FTR_ARCH_31)) {
-> +		unsigned long new_dexcr =3D get_thread_dexcr(new_thread);
-> +
-> +		if (new_dexcr !=3D get_thread_dexcr(old_thread))
-> +			mtspr(SPRN_DEXCR, new_dexcr);
-> +	}
->  #endif
-> =20
->  }
-> @@ -1802,7 +1809,7 @@ int copy_thread(struct task_struct *p, const struct=
- kernel_clone_args *args)
-> =20
->  	setup_ksp_vsid(p, sp);
-> =20
-> -#ifdef CONFIG_PPC64=20
-> +#ifdef CONFIG_PPC64
->  	if (cpu_has_feature(CPU_FTR_DSCR)) {
->  		p->thread.dscr_inherit =3D current->thread.dscr_inherit;
->  		p->thread.dscr =3D mfspr(SPRN_DSCR);
-> @@ -1939,6 +1946,10 @@ void start_thread(struct pt_regs *regs, unsigned l=
-ong start, unsigned long sp)
->  	current->thread.tm_tfiar =3D 0;
->  	current->thread.load_tm =3D 0;
->  #endif /* CONFIG_PPC_TRANSACTIONAL_MEM */
-> +#ifdef CONFIG_PPC_BOOK3S_64
-> +	if (cpu_has_feature(CPU_FTR_ARCH_31))
-> +		mtspr(SPRN_DEXCR, get_thread_dexcr(&current->thread));
-> +#endif /* CONFIG_PPC_BOOK3S_64 */
-
-You possibly don't need the ifdef here because CPU_FTR_ARCH_31 should
-fold away. Some of the others do because they're using open-coded
-access to struct members, but if you're using accessor functions to
-get and set such things, there may be no need to.
-
-I think my preference is for your style.
+if client doesn't support this or want to use any other format, they can 
+set the desired format with s_fmt.
 
 Thanks,
-Nick
 
->  }
->  EXPORT_SYMBOL(start_thread);
-> =20
-> diff --git a/arch/powerpc/kernel/prom.c b/arch/powerpc/kernel/prom.c
-> index 1eed87d954ba..eff250e1ae9a 100644
-> --- a/arch/powerpc/kernel/prom.c
-> +++ b/arch/powerpc/kernel/prom.c
-> @@ -180,6 +180,10 @@ static struct ibm_feature ibm_pa_features[] __initda=
-ta =3D {
->  	  .cpu_user_ftrs2 =3D PPC_FEATURE2_HTM_COMP | PPC_FEATURE2_HTM_NOSC_COM=
-P },
-> =20
->  	{ .pabyte =3D 64, .pabit =3D 0, .cpu_features =3D CPU_FTR_DAWR1 },
-> +	{ .pabyte =3D 68, .pabit =3D 0, .cpu_features =3D CPU_FTR_DEXCR_SBHE },
-> +	{ .pabyte =3D 68, .pabit =3D 3, .cpu_features =3D CPU_FTR_DEXCR_IBRTPD =
-},
-> +	{ .pabyte =3D 68, .pabit =3D 4, .cpu_features =3D CPU_FTR_DEXCR_SRAPD }=
-,
-> +	{ .pabyte =3D 68, .pabit =3D 5, .cpu_features =3D CPU_FTR_DEXCR_NPHIE }=
-,
->  };
-> =20
->  /*
-> --=20
-> 2.38.1
+Dikshita
 
