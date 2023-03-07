@@ -2,192 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C886AD7AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 07:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16C916AD770
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 07:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbjCGGvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 01:51:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
+        id S230424AbjCGGcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 01:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCGGvu (ORCPT
+        with ESMTP id S230240AbjCGGcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 01:51:50 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CF33D92A;
-        Mon,  6 Mar 2023 22:51:47 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3276D57k005863;
-        Tue, 7 Mar 2023 06:25:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rM6zguBVXsB3XNdAh9usqRuz5Y1YHBBEctXnhNh/dlM=;
- b=Q0ANWGCLDWmJ56njnXZdeF+74WOkTwZq8KhCzEXj/aT40z4qejp003pDLnkTuTvztPO6
- zFre/16QrQOo5Rub8tDeFRHW3NcGPIvCH/ioypT/HQkF7ykJpKSbPQuaVG0B+/agNkkr
- TWXHPxI+SsFyjkvdwulj1tQO+B5kdAV7/fr7h4/jc+Yg58TQ/r0zJQ3P2MRpINLkHn0X
- CsoHmf58y38rKz3D8L+nMKbqIHEUQrree9gEo9ze0Ro+DS+nYgPekebqgIDjZTRrT/ZA
- ub8qhum1tSM+BEz6SwSrfBos0TVSkElIFY4aBObwwIv/6Ig1cZ6sBhNSyPet0Wmm8R/Z Hg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p419d72a2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 06:25:25 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3276POAa024631
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Mar 2023 06:25:24 GMT
-Received: from [10.201.3.167] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
- 22:25:16 -0800
-Message-ID: <b758ac38-27f5-3664-c454-aa0f43592c1b@quicinc.com>
-Date:   Tue, 7 Mar 2023 11:55:13 +0530
+        Tue, 7 Mar 2023 01:32:04 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879E7515C3;
+        Mon,  6 Mar 2023 22:32:03 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id EA5675C0524;
+        Tue,  7 Mar 2023 01:32:01 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 07 Mar 2023 01:32:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678170721; x=1678257121; bh=JN
+        NUYCnkXweyF5D43Jgpx00DAkQIyN+bBZ5xRNByPbw=; b=hhC07T/R3EcIqvvwgO
+        QgpfqL8WBEBf4nvuFx34osznklLBKLAzpQRIOEL+pjc6KAOYl25YJZy7LNZx+fIT
+        LkBCkN/2NKD0H0lZdPB7Siv4lqR4UJBuBge1UWxg/quaS8PFzpFh6KnKpg938wiF
+        Em+A2HJwJErcaD4cf1Z4Wcxmc3xY/139QhlqriyXNHoXt3CnIYLfH92fwxigt4qW
+        bQ2o/hJ2RnbG69FrqaP1pATivKG7ai2B1eur3MrqmjL9i6wprpuUcbXXafDdSVGs
+        4Piip54pS18Xtjmw5DhDzxyvJDLfooSD/tddcDTTkkJ2fvwozZt0NDd8zbDhYg/u
+        65jg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1678170721; x=1678257121; bh=JNNUYCnkXweyF
+        5D43Jgpx00DAkQIyN+bBZ5xRNByPbw=; b=QDZLX95UdgLVEslW0xYtV+fttAPGN
+        pxAu+ELUXUjEqA7PmylTWA8p9v7gCaE1w8HZkpFv1uDcQWMPURjy9efLCJPzhzwu
+        qAjx0MM/yEpkmCi5VReRx7WHICBjSiBl2j6i5JT+pHwxVVI7dYvN/0iZll7clzUZ
+        xaiH0Vf287lClgl2e7kEx0+qvPE58kSDRYMniThImwcVMpSHW46JBcIGEqKJ6lwK
+        M2uGlGVMFKe4OhIHE4odNB0oyO/jkD3GDcir/cS0HWd/+w00SxeKtlgUnCmF2tK+
+        k82QGaCPzw6qfHcJxovUmxUPq8WCCBiEzzRY+Atw5EhEJ8lUtJr/vFCWw==
+X-ME-Sender: <xms:YdoGZFOXkndFfI5XOZFCmdJ5cdIOCD__XgyRTR4ErHYWesOS5b7saw>
+    <xme:YdoGZH8c2V9cE9HRgExBqRYkE_DKmncD0AJVayykqSlscoh1QLVYlPqv4nYKTsIcH
+    ybwpLEoB86H4g>
+X-ME-Received: <xmr:YdoGZESUfz2BblFIIwVNvXr6Oaw0wjVssx83xH8xJf0Dt11sFYmXHN9nTlAnKIBnOPqsEBTu9C-EuAcbQk57RRwN6EFWu_CBTrERfA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtledgleehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
+    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:YdoGZBulGrpwWISrH1cW0HeoeqV_SSkLDOG_4aDr-_BiSEtnm1b6Jw>
+    <xmx:YdoGZNdS1gjoz1FyuA5FJJDeC-c9-t21gLTJP-PaPPiaNr6nXngX3g>
+    <xmx:YdoGZN0LyaJpe3pr09wxqCQOmuNHVzpxvyz3Vrsuk5z2g6QzWoWDTQ>
+    <xmx:YdoGZE4QxZSdpo13LKkesvkqnzRyBnpsdoJunUp8Q4W1WpECTY-Ovg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 7 Mar 2023 01:32:00 -0500 (EST)
+Date:   Tue, 7 Mar 2023 07:31:57 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: runtime warning after merge of the driver-core tree
+Message-ID: <ZAbaXeEKfUJY+hYx@kroah.com>
+References: <20230307134313.1b2aa555@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 10/11] arm64: dts: qcom: ipq5018: Add MP03.5-c1 board
- support
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
-        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-11-git-send-email-quic_mmanikan@quicinc.com>
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-In-Reply-To: <1678164097-13247-11-git-send-email-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: j3n-Il8pOTDk6VJRLfxCZMDFAgLir89Q
-X-Proofpoint-GUID: j3n-Il8pOTDk6VJRLfxCZMDFAgLir89Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_01,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 malwarescore=0 impostorscore=0 priorityscore=1501
- clxscore=1015 suspectscore=0 mlxlogscore=999 adultscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070057
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307134313.1b2aa555@canb.auug.org.au>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 07, 2023 at 01:43:13PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the driver-core tree, today's linux-next qemu boot
+> (powerpc pseries_le_defconfig) produced this boot time warning:
+> 
+> HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
+> sysfs: cannot create duplicate filename '//block'
 
-On 3/7/2023 10:11 AM, Manikanta Mylavarapu wrote:
-> Add initial device tree support for the MP03.5-C1 board.
->
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/Makefile             |  1 +
->   .../arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts | 64 +++++++++++++++++++
->   2 files changed, 65 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts
->
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index b77a95e97a56..10d1eafe57e4 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -4,6 +4,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= ipq5018-mp03.1-c2.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq5018-mp03.5-c1.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts b/arch/arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts
-> new file mode 100644
-> index 000000000000..51ddd7367ac6
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts
-> @@ -0,0 +1,64 @@
-> +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
-> +/*
-> + * IPQ5018 CP01 board device tree source
-MP03??
-> + *
-> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+That is odd.  What type of userspace are you running this with?  And is
+there a pointer to the .config anywhere?  No one should be needing this
+old config option anymore, but maybe I messed something up in removing
+it...
 
-Update the year
+thanks,
 
--Varada
-
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "ipq5018.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. IPQ5018/AP-MP03.5-C1";
-> +	compatible = "qcom,ipq5018-mp03.5-c1", "qcom,ipq5018";
-> +
-> +	aliases {
-> +		serial0 = &blsp1_uart1;
-> +	};
-> +
-> +	chosen {
-> +		bootargs = "console=ttyMSM0,115200,n8 rw init=/init swiotlb=1 coherent_pool=2M";
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +};
-> +
-> +&tlmm {
-> +	blsp0_uart_pins: uart_pins {
-> +		pins = "gpio20", "gpio21";
-> +		function = "blsp0_uart0";
-> +		bias-disable;
-> +	};
-> +};
-> +
-> +&blsp1_uart1 {
-> +	pinctrl-0 = <&blsp0_uart_pins>;
-> +	pinctrl-names = "default";
-> +	status = "ok";
-> +};
-> +
-> +&q6v5_wcss {
-> +	q6_wcss_pd1: remoteproc_pd1 {
-> +		interrupts-extended = <&wcss_smp2p_in 8 0>,
-> +				<&wcss_smp2p_in 9 0>,
-> +				<&wcss_smp2p_in 12 0>,
-> +				<&wcss_smp2p_in 11 0>;
-> +		interrupt-names = "fatal",
-> +				"ready",
-> +				"spawn-ack",
-> +				"stop-ack";
-> +		qcom,smem-states = <&wcss_smp2p_out 8>,
-> +				<&wcss_smp2p_out 9>,
-> +				<&wcss_smp2p_out 10>;
-> +		qcom,smem-state-names = "shutdown",
-> +					"stop",
-> +					"spawn";
-> +	};
-> +	q6_wcss_pd2: remoteproc_pd2 {
-> +		status = "okay";
-> +	};
-> +
-> +	q6_wcss_pd3: remoteproc_pd3 {
-> +		status = "okay";
-> +	};
-> +};
+greg k-h
