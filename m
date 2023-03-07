@@ -2,200 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFA46ADE7B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D48B6ADD19
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:17:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbjCGMPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S230381AbjCGLRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbjCGMO0 (ORCPT
+        with ESMTP id S231225AbjCGLQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:14:26 -0500
-X-Greylist: delayed 3548 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 04:13:58 PST
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EBC574F7;
-        Tue,  7 Mar 2023 04:13:58 -0800 (PST)
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327AuefI014715;
-        Tue, 7 Mar 2023 03:14:39 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=proofpoint;
- bh=fERc8RWwMiP+NDVgv63jR70T8e65VOOHP0arhzoWfSM=;
- b=d4VGDu/Z/4EUK2EBJPWRmFjni6TnjAxKi4aVGIC7p9pYrXyvZCT+Qw2+/+OVoKD2FkX0
- +PyL7J//sclsVjDmLkyX6UZrN5xYd2R+sEGkJ/dx2Tz8WBj3MIjtd3KVTNRdzSP5m+KA
- +urY4UpYls/2CnosJNxze96LXwsUbqAoTnMrymaTMqKN/sJcq1MUoG3QmDuRi/0d3WKs
- mDNl0e1WRVtl6GbC6N0Iv5PAuva6DN9tfhOJ/BYG+6gIrUXdi5QHmsQIPUWRde/usbzJ
- YvGe7ylgBWj6g3RKo/YUL8jBGVQLHq7JrvmZMirsb+sWhqy8McJBdJjPfRInUnLo/b3W /Q== 
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2168.outbound.protection.outlook.com [104.47.57.168])
-        by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3p43e1abj2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 03:14:38 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fO5JvgZIcnHXJlCRWoXWpjlOSAefQgG5UiC11DTKAj1emSJdkOVp18eL2uSnGXR5Q3ZXrFtHDtDHe9/D/52VuKTGITlagfTZAhrUx934LGADyzOGhypHotra3HnOqtXSYl0ImdfLqV03r5Z/esZmQtmj+1ijH4bgoDL1wuNYIXfmuhUt2OWpoY6R1XDdcjOx/MrLD7ZtpxshdwbpqhdN6f7bNV+jT3LJfTPb1AuEZSTmBpkKL0DZCWxmCMwT+jJxhN/iZ8aVjnYdZsaZoLD1bZTX26kzkyNSLm5hvzy6XDkz63OCzQsrjhimQn9ipCQZ1iaGOk16v0ed1Tv8g06jQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fERc8RWwMiP+NDVgv63jR70T8e65VOOHP0arhzoWfSM=;
- b=FhRWGt12reaq3/vd0yLXpXKgy42it4YlZVvNH2beb3F+gD3Qd95Uf5v2hryaHUhYuqKJg4/iCUPISK8HF1GAkUToLXV5X80v3hpL9pL6Ib2HEgnSY6Re9hnhyjKBHZp+EW8ScgL157iVt3LBmgPI3FoSc76Y2shHjAeNx8oPFzPj+Tn+rzMgu7ofIMTZgQCidNhaXXZP4qTz00O91etK1rnqLCPVEdv2lMSASNGjNEYQYVxnT5jlePVVONBGejiSKE+hocII+rmd95TmEgIu6kPuQtYwUC3ZvWt07MaHmfZvU3sotfTuzVPGlRZOfQNXt5qEzDY/poZ/SFq9KlP8Qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.147) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fERc8RWwMiP+NDVgv63jR70T8e65VOOHP0arhzoWfSM=;
- b=rD/z68vJxDe3us7xU+HWcryuxfYZhloLT4lwpXd7Juem8C5jhQqGKuwVBgvRjs/hRk4Yg3SwtFs05gOeQ+ZR15B7N/ndrIHvoYvDhpBstXkpKl1VtKA3293J29StuentFO7rpijjlx8YCqcovFjjLN2MI3FhEy1Fc9RbGGk/etc=
-Received: from BN9PR03CA0915.namprd03.prod.outlook.com (2603:10b6:408:107::20)
- by CH0PR07MB8329.namprd07.prod.outlook.com (2603:10b6:610:c7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 11:14:35 +0000
-Received: from BN8NAM12FT105.eop-nam12.prod.protection.outlook.com
- (2603:10b6:408:107:cafe::54) by BN9PR03CA0915.outlook.office365.com
- (2603:10b6:408:107::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28 via Frontend
- Transport; Tue, 7 Mar 2023 11:14:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.147)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.147 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.147; helo=sjmaillnx1.cadence.com; pr=C
-Received: from sjmaillnx1.cadence.com (158.140.1.147) by
- BN8NAM12FT105.mail.protection.outlook.com (10.13.182.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.15 via Frontend Transport; Tue, 7 Mar 2023 11:14:34 +0000
-Received: from maileu4.global.cadence.com (eudvw-maileu4.cadence.com [10.160.110.201])
-        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 327BEV36017915
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Mar 2023 03:14:32 -0800
-Received: from maileu5.global.cadence.com (10.160.110.202) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 7 Mar 2023 12:14:30 +0100
-Received: from eu-cn02.cadence.com (10.160.89.185) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24 via Frontend Transport; Tue, 7 Mar 2023 12:14:30 +0100
-Received: from eu-cn02.cadence.com (localhost.localdomain [127.0.0.1])
-        by eu-cn02.cadence.com (8.14.7/8.14.7) with ESMTP id 327BEUqs376208;
-        Tue, 7 Mar 2023 06:14:30 -0500
-Received: (from pawell@localhost)
-        by eu-cn02.cadence.com (8.14.7/8.14.7/Submit) id 327BETPr376196;
-        Tue, 7 Mar 2023 06:14:29 -0500
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <pawell@cadence.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdnsp: Fixes issue with redundant Status Stage
-Date:   Tue, 7 Mar 2023 06:14:20 -0500
-Message-ID: <20230307111420.376056-1-pawell@cadence.com>
-X-Mailer: git-send-email 2.30.0
+        Tue, 7 Mar 2023 06:16:33 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B60977CA0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 03:14:55 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id z5so12758054ljc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 03:14:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678187693;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yT7vGhUXWJk9HYJN6I+M8kwXMyH9EI24q/vmlgWv3m8=;
+        b=CR/0+YSacYaMRbzWtuZLaj7mlcFerMdCQTGypTHtRsDDH/7zP+jryAMCIGgtkZj1nB
+         cp7IWqzXNdM6M0RUuwFnjx7g5YHlc6Bg6zv898iLDdEVsw837xpoJufcrRzh2KRdJoW0
+         lhx+4qSdJ6+YDj8o2nMSp+dhubOcpK4u9izJvnZ1nEcqm7DY9rnMRqxQUzGrPdobjKCP
+         zWWDFDIdU/6ma2QAo137K5aeIYiLvPZU2SyvRK5CeuIEWnnU41t67WruJXecCVyXSbXw
+         d081WmAqY29Ia63TpYuTJ1TkoswHKWmnk3oVq4/+AnAojdz7L0jDHV31Hxtthf4HCP7T
+         5CZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678187693;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yT7vGhUXWJk9HYJN6I+M8kwXMyH9EI24q/vmlgWv3m8=;
+        b=kLF32ntC/H56eT2W0NYI3y87ubPd3er7gF6HdBJf2/b8n5YIAUTGMVIq5ViYkCwry1
+         6RgZHR+yRqU6Ap+/parUM66ErtpsOng+YxGRgGs7qm4sI1hBWifYtCKZpn0y+k392F/B
+         sHgaI12kJaJ6q3cBJiWXeCNT+7kEtgukBUz4FzgrczCzmKV3ohl/WwLRwJCT6yeQ7nm0
+         uZGHKfhKveK//wl66qXhgbxiPHb2Ez3wEJ/5KhRfFs9dvtOtdXKV3o428Rbokx5Rk3MC
+         /3wyZjwJti4wR7KJ+iorr+EkcVD73lduOzTWSPBa98UvEScpPS1UBUJNZcJ+9R4v8lEo
+         xJ6g==
+X-Gm-Message-State: AO0yUKUOiGPAGbyWbMeyRt8MANDJf2Mc0nVUTbQZ4gUAc6T8Lj2ByG3n
+        HmxlBB1h1l1pa5FR009ScapVDw==
+X-Google-Smtp-Source: AK7set/Wz0Rx9XUBw7YxwDmwy1KllOxzRErdeKK9Kj5JqFHHN2PNAGXEpEi5nSFHpUfQzppg5PLKFA==
+X-Received: by 2002:a2e:710b:0:b0:295:a969:d225 with SMTP id m11-20020a2e710b000000b00295a969d225mr3924432ljc.1.1678187693642;
+        Tue, 07 Mar 2023 03:14:53 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id 198-20020a2e05cf000000b00295a02569ebsm2167222ljf.124.2023.03.07.03.14.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 03:14:53 -0800 (PST)
+Message-ID: <22970751-8bc0-9cbd-eec1-cbc92f0b4ea7@linaro.org>
+Date:   Tue, 7 Mar 2023 12:14:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu4.global.cadence.com
-X-OrganizationHeadersPreserved: maileu4.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM12FT105:EE_|CH0PR07MB8329:EE_
-X-MS-Office365-Filtering-Correlation-Id: 839ae856-5fc0-419f-19da-08db1efd21da
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rDweJ/fW8PXAdmqYqte0RrHU7hGXHZ1VKhMAYpi7bSUBsRETTjXhlfBhhhdRQlVBuZbCtt9/5ni4o0jqaM4bKe8IDxnIFhQ+0c63FFsrqNAhHQlPkF7aNdw9LJD+l9zo79lbDRy50/hG4/IoM/0V6l9X1RMsupB1Wpe5uOoYDpM19yPI8x3Bq7xVvrHij0pJJ10IvoC2U2A/yZ0hGRFfeQkljN/anCdwDwrggwARD/b6QwSuXSp3wvO37eSRMo92XzPYzL13wR+vlV7TQn+9k25PJVq1fGdUavfz3OJGQirbwzmn75jCTw+UMMcrrQY95DDNB/sqmUq4E1HBi0xTO5KhgeuFjyFtu3aScAQbIBgC9tJOTpUc+KEWHqDlp9lCfg2AWgcAC2FmO27NtVPmbuuzwshsHkBFEQItA2sfSLxo+uy0Ew7BbjRBnWzm9VHUyoSEjknfmANngzyNx/2dNjPg2uNouE3WJG2xebizONG5FsgDooJKdB4NYFku6rSRfOTtH8m+pS8QQWeC1i2Jf8zpVs9KDAcGxU0jeuY7Os4B1RePix+t7TLwLLRctyTDsmA1LkFtCFDV6q3Q1sdj3s0XRDjEj1hpV9BeKNr3WT2Xwxhzn+dpEwGrMmGvk25YsmsLTktu6rL4koZWayMiDBeF15u+JA/lAZUfSOLxxAGtB8VSu5QkZgmnhJdC8kvA/XokfrH3qrCwOlZ1ymfkpQ==
-X-Forefront-Antispam-Report: CIP:158.140.1.147;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx1.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(346002)(39860400002)(36092001)(451199018)(36840700001)(40470700004)(46966006)(41300700001)(70206006)(70586007)(2906002)(8676002)(6916009)(86362001)(4326008)(82310400005)(54906003)(36860700001)(42186006)(356005)(83380400001)(82740400003)(186003)(316002)(8936002)(7636003)(1076003)(26005)(478600001)(2616005)(36756003)(5660300002)(336012)(426003)(47076005)(40480700001)(6666004)(40460700003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 11:14:34.4839
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 839ae856-5fc0-419f-19da-08db1efd21da
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.147];Helo=[sjmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM12FT105.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR07MB8329
-X-Proofpoint-GUID: lUzkVsaeL284cpsnfSqXHwdLzLPAlwnM
-X-Proofpoint-ORIG-GUID: lUzkVsaeL284cpsnfSqXHwdLzLPAlwnM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_05,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
- lowpriorityscore=0 mlxlogscore=706 priorityscore=1501 malwarescore=0
- phishscore=0 mlxscore=0 bulkscore=0 impostorscore=0 spamscore=0
- adultscore=0 suspectscore=0 clxscore=1011 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303070101
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 8/9] dt-bindings: display/msm: dsi-controller-main: Add
+ SM6115
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230213121012.1768296-1-konrad.dybcio@linaro.org>
+ <20230213121012.1768296-9-konrad.dybcio@linaro.org>
+ <bcb5c17f-da78-9d68-66eb-b620ee583602@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <bcb5c17f-da78-9d68-66eb-b620ee583602@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases, driver trees to send Status Stage twice.
-The first one from upper layer of gadget usb subsystem and
-second time from controller driver.
-This patch fixes this issue and remove tricky handling of
-SET_INTERFACE from controller driver which is no longer
-needed.
 
-cc: <stable@vger.kernel.org>
-Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/cdnsp-ep0.c | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
 
-diff --git a/drivers/usb/cdns3/cdnsp-ep0.c b/drivers/usb/cdns3/cdnsp-ep0.c
-index 9b8325f82499..d63d5d92f255 100644
---- a/drivers/usb/cdns3/cdnsp-ep0.c
-+++ b/drivers/usb/cdns3/cdnsp-ep0.c
-@@ -403,20 +403,6 @@ static int cdnsp_ep0_std_request(struct cdnsp_device *pdev,
- 	case USB_REQ_SET_ISOCH_DELAY:
- 		ret = cdnsp_ep0_set_isoch_delay(pdev, ctrl);
- 		break;
--	case USB_REQ_SET_INTERFACE:
--		/*
--		 * Add request into pending list to block sending status stage
--		 * by libcomposite.
--		 */
--		list_add_tail(&pdev->ep0_preq.list,
--			      &pdev->ep0_preq.pep->pending_list);
--
--		ret = cdnsp_ep0_delegate_req(pdev, ctrl);
--		if (ret == -EBUSY)
--			ret = 0;
--
--		list_del(&pdev->ep0_preq.list);
--		break;
- 	default:
- 		ret = cdnsp_ep0_delegate_req(pdev, ctrl);
- 		break;
-@@ -474,9 +460,6 @@ void cdnsp_setup_analyze(struct cdnsp_device *pdev)
- 	else
- 		ret = cdnsp_ep0_delegate_req(pdev, ctrl);
- 
--	if (!len)
--		pdev->ep0_stage = CDNSP_STATUS_STAGE;
--
- 	if (ret == USB_GADGET_DELAYED_STATUS) {
- 		trace_cdnsp_ep0_status_stage("delayed");
- 		return;
-@@ -484,6 +467,6 @@ void cdnsp_setup_analyze(struct cdnsp_device *pdev)
- out:
- 	if (ret < 0)
- 		cdnsp_ep0_stall(pdev);
--	else if (pdev->ep0_stage == CDNSP_STATUS_STAGE)
-+	else if (!len && pdev->ep0_stage != CDNSP_STATUS_STAGE)
- 		cdnsp_status_stage(pdev);
- }
--- 
-2.25.1
+On 7.03.2023 10:17, Krzysztof Kozlowski wrote:
+> On 13/02/2023 13:10, Konrad Dybcio wrote:
+>> Add a compatible for the DSI on SM6115.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  .../devicetree/bindings/display/msm/dsi-controller-main.yaml    | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> index 2494817c1bd6..f195530ae964 100644
+>> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+>> @@ -25,6 +25,7 @@ properties:
+>>                - qcom,sc7280-dsi-ctrl
+>>                - qcom,sdm660-dsi-ctrl
+>>                - qcom,sdm845-dsi-ctrl
+>> +              - qcom,sm6115-dsi-ctrl
+> 
+> This looks incomplete. You also need to add it to MDSS binding.
+https://lore.kernel.org/linux-arm-msm/145066db-5723-6baa-237d-7c2b8fd476d9@linaro.org/
 
+Does this.. but I guess I'll resend this as one series, as it only
+makes sense.
+
+Konrad
+> 
+> Best regards,
+> Krzysztof
+> 
