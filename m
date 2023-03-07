@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E776AFB01
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A429F6AFACE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjCHAWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:22:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
+        id S229830AbjCGX4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 18:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjCHAWi (ORCPT
+        with ESMTP id S229497AbjCGX4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:22:38 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4CCAFB8B;
-        Tue,  7 Mar 2023 16:22:33 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id l1so15024322pjt.2;
-        Tue, 07 Mar 2023 16:22:33 -0800 (PST)
+        Tue, 7 Mar 2023 18:56:50 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F894DE23
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 15:56:48 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id v101so13155697ybi.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 15:56:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678234953;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=35Won8zMWVVfPTEvhn2MxcVhR7a/DGVFntbhUz0/4yw=;
-        b=fIpSwKd2OegJR409d02lXFRB+ZwhOyO+8Qbrkm5cJPg4Bop5P+9uNq4LillBqDYNEj
-         AUefz91QTTsnh8pYk3xdsYjpMqlS/ceg3z2GyzreXnzl9eIF67e2hDG9ilDVwpT42LAx
-         EMcpl5mZdzrwvN3qzbCKEIAe9gVaNy29wzl657wpSk3dLTSjT7mc+Mb7yzSFwSuxgeZe
-         QqsnBYrMIo08xiZ1psrckYPqLFAzMTtpYQGbE7za4TF9rtQXay6nyJZdz07DFjMxoeeb
-         vVmaveiFeEjmBEaGcpIBQTxW7tWR/1AzhgccPWMuuz2eiyOzCW3hoIz36nNHL2oASfRC
-         +sxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678234953;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=skydio.com; s=google; t=1678233407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=35Won8zMWVVfPTEvhn2MxcVhR7a/DGVFntbhUz0/4yw=;
-        b=IxUBbcP1PVLU2seWaRMsVEsRoCFBQLJN4ejv5V1nWcBKXTu3UWZRiO8yvVzNChFYbN
-         OCORqNLMo6lSbpQIzha449bgOp0lIy3dto+v0Ilrxhl4G/yuBOXkL/i9xViuOL4yGpig
-         TuZhZhev/AO6ndA/U8rCXMw/wtGIsDV01tTTessOXacfs3TBMOlLJ2KMhi/Sum+lBWQz
-         4gRVWOce2tB20SZHN4eRagNlr6csqIIWyxPQI9lbhO/VjLmca1kv3qA/Ccwh//R2Qgf1
-         +5IhpBRuqduBOICK1An62whmvp8uW0nF1XOf9LOlZk9mVV8lpIr56jAliylOFzfE1j0J
-         kALg==
-X-Gm-Message-State: AO0yUKW8cm8JgJqZgAs1F08WIcpUs+s5nHODj5TRTHoixL8gLMTN+E2D
-        38+t73sBkXg8IEo8IKa4drw=
-X-Google-Smtp-Source: AK7set+OU+ZArKrJvYHh6kIMnL/wqiCiVHWQeGVEMq11+eDuOJCa5624lHFNshLCgAWUXNZhBrn1MQ==
-X-Received: by 2002:a17:90b:4c0a:b0:22c:aaaf:8dd9 with SMTP id na10-20020a17090b4c0a00b0022caaaf8dd9mr17003966pjb.47.1678234952980;
-        Tue, 07 Mar 2023 16:22:32 -0800 (PST)
-Received: from localhost (ec2-52-9-159-93.us-west-1.compute.amazonaws.com. [52.9.159.93])
-        by smtp.gmail.com with ESMTPSA id c21-20020a17090a8d1500b002347475e71fsm8085968pjo.14.2023.03.07.16.22.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 16:22:32 -0800 (PST)
-Date:   Tue, 7 Mar 2023 23:53:17 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, oxffffaa@gmail.com,
-        Eric Dumazet <edumazet@google.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>, kernel@sberdevices.ru,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [RFC PATCH v2 2/4] virtio/vsock: remove all data from sk_buff
-Message-ID: <ZAfObcosX5PlS4Lf@bullseye>
-References: <a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru>
- <dfadea17-a91e-105f-c213-a73f9731c8bd@sberdevices.ru>
- <20230306120857.6flftb3fftmsceyl@sgarzare-redhat>
- <b18e3b13-3386-e9ee-c817-59588e6d5fb6@sberdevices.ru>
- <20230306155121.7xwxzgxtle7qjbnc@sgarzare-redhat>
- <9b882d45-3d9d-c44d-a172-f23fff54962b@sberdevices.ru>
- <20230306161852.4s7qf4qm3fnwjck7@sgarzare-redhat>
+        bh=NfsBSwCHMjd2D1yfsbv/LxSXTus51yaMyRMEi0ePSs4=;
+        b=SSdx+9t5qHYZ8OwZVOWk1/JBecjTsZigjWb/LpeJ+EwdW07bIt62rzIW6VhfKsgAfG
+         5Vs76dww4R++N1QmpR1OhTTvYN8MJCoaP8m0Htc52ohNjRELuNVXF37JZWYNzPPAEqJh
+         mMJs9mKS33k2J2E62+e4w25RdJDxuMRhdb1qI8JEWA426LhK+d31QIcXlAF5L4NSkXHc
+         ZwRngxMMxuyRK63IIfuDhmkNesF3P4d0OyIyZsjwoobpcGCh8JadJV7hDe90JidoOdfF
+         pK+1og6vYY9Yyxak9mp5nLxcGymqJL3EgAXyZTulQGNaaU6JCb76HjmysC0ruJQCGoz2
+         2K0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678233407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NfsBSwCHMjd2D1yfsbv/LxSXTus51yaMyRMEi0ePSs4=;
+        b=ya/U7iXLxld21hCxtA1YR2R9lswRTpAwh44Fn2T7skohzzokjRG/cOnoWEM6TEp8WV
+         zds/6HljWWp2hoY8i6y6IO+r5ZmDiJ8H/Ca0LTqr1XoVmMAytIr+04thnscCDFzKP+cv
+         cS9BzjR+Rm+tl98J7Hl0O1eccPg+kpHngiowi8YqO4nx1+HZ0qxrn9h7s+RDKshKWdWU
+         fh1MXt3LTHmyfLQ6LumK4ey5BAC9jk7qpbIgXF6mI/ZOZDFupaMFyDOevCEmCX9t0tZE
+         VdnbGsYe8UBxcYaQXDPIIsif72f7g5GoGaRhcEd4t3LpSXC/uNqCleixnU0zeYJNfcr7
+         CcVg==
+X-Gm-Message-State: AO0yUKVMb5JZRHp4lWw8op+KJggUPkzhYIHojWw6+8JVpUdM3ojyX+2g
+        Q2cQ0xqo0EEiW5Wwcrc6UfQO9UgoXrB3T3fNMpntMw==
+X-Google-Smtp-Source: AK7set8NqGueL2UTzSZtZCmHa2STOP7CneLLiBBAx6oCLwtJhXt6q9h2NUbjKwrrCZ4k/LyPGVsntEzWFz+HbzFCU3o=
+X-Received: by 2002:a5b:bc6:0:b0:a0d:8150:be04 with SMTP id
+ c6-20020a5b0bc6000000b00a0d8150be04mr7922852ybr.13.1678233407457; Tue, 07 Mar
+ 2023 15:56:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306161852.4s7qf4qm3fnwjck7@sgarzare-redhat>
+References: <20230307220525.54895-1-Jerry@skydio.com> <167822825917.8008.11050193827453206272@noble.neil.brown.name>
+ <CAMKO5Cv1Uh1rSFQ0cR1kfA88iXXHP5RMO-euU15Xrn2i93J5rg@mail.gmail.com> <167823124256.8008.4738010782615192469@noble.neil.brown.name>
+In-Reply-To: <167823124256.8008.4738010782615192469@noble.neil.brown.name>
+From:   Jerry Zhang <jerry@skydio.com>
+Date:   Tue, 7 Mar 2023 15:56:37 -0800
+Message-ID: <CAMKO5CvuWxrzshJrUJGwiMApN_L6yL-qck0fvizvBUs2Z7PU-g@mail.gmail.com>
+Subject: Re: [PATCH] sunrpc: Fix incorrect parsing of expiry time
+To:     NeilBrown <neilb@suse.de>
+Cc:     embedded@skydio.com, Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        "J. Bruce Fields" <bfields@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,60 +74,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 05:18:52PM +0100, Stefano Garzarella wrote:
-> On Mon, Mar 06, 2023 at 07:00:10PM +0300, Arseniy Krasnov wrote:
-> > 
-> > 
-> > On 06.03.2023 18:51, Stefano Garzarella wrote:
-> > > On Mon, Mar 06, 2023 at 06:31:22PM +0300, Arseniy Krasnov wrote:
-> > > > 
-> > > > 
-> > > > On 06.03.2023 15:08, Stefano Garzarella wrote:
-> > > > > On Sun, Mar 05, 2023 at 11:07:37PM +0300, Arseniy Krasnov wrote:
-> > > > > > In case of SOCK_SEQPACKET all sk_buffs are used once - after read some
-> > > > > > data from it, it will be removed, so user will never read rest of the
-> > > > > > data. Thus we need to update credit parameters of the socket like whole
-> > > > > > sk_buff is read - so call 'skb_pull()' for the whole buffer.
-> > > > > > 
-> > > > > > Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-> > > > > > Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> > > > > > ---
-> > > > > > net/vmw_vsock/virtio_transport_common.c | 2 +-
-> > > > > > 1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > 
-> > > > > Maybe we could avoid this patch if we directly use pkt_len as I
-> > > > > suggested in the previous patch.
-> > > > Hm, may be we can avoid calling 'skb_pull()' here if 'virtio_transport_dec_rx_pkt()'
-> > > > will use integer argument?
-> > > 
-> > > Yep, exactly!
-> > > 
-> > > > Just call 'virtio_transport_dec_rx_pkt(skb->len)'. skb
-> > > 
-> > > It depends on how we call virtio_transport_inc_rx_pkt(). If we use
-> > > hdr->len there I would use the same to avoid confusion. Plus that's the
-> > > value the other peer sent us, so definitely the right value to increase
-> > > fwd_cnt with. But if skb->len always reflects it, then that's fine.
-> > i've checked 'virtio_transport_rx_work()', it calls 'virtio_vsock_skb_rx_put()' which
-> > sets 'skb->len'. Value is used from header, so seems 'skb->len' == 'hdr->len' in this
-> > case.
-> 
-> Thank you for checking it.
-> 
-> However, I still think it is better to use `hdr->len` (we have to assign it
-> to `pkt_len` anyway, as in the proposal I sent for patch 1), otherwise we
-> have to go every time to check if skb_* functions touch skb->len.
-> 
-> E.g. skb_pull() decrease skb->len, so I'm not sure we can call
-> virtio_transport_dec_rx_pkt(skb->len) if we don't remove `skb_pull(skb,
-> bytes_to_copy);` inside the loop.
-> 
+On Tue, Mar 7, 2023 at 3:20=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
+>
+> On Wed, 08 Mar 2023, Jerry Zhang wrote:
+> > On Tue, Mar 7, 2023 at 2:31=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
+> > >
+> > > On Wed, 08 Mar 2023, Jerry Zhang wrote:
+> > > > The expiry time field is mean to be expressed in seconds since boot=
+.
+> > >
+> > > Correct.
+> > >
+> > > > The get_expiry() function parses a relative time value in seconds.
+> > >
+> > > Incorrect.  It parses and absoulte wall-clock time.
+> > I'm not familiar with the source of truth for this info. Is there a
+> > specification of some sort?
+> >
+> > For reference, we were seeing writes to
+> > /proc/net/rpc/nfsd.export/channel randomly fail with EINVAL despite
+> > usually succeeding with the same invocation. Upon investigation this
+> > was the string that exportfs was writing "-test-client- /path/to/mount
+> >  3 0 65534 65534 0". "3" was the value for expiry in this message,
+> > which led me to conclude that this is a relative field. If it isn't,
+> > perhaps this is a bug in userspace nfs tools?
+>
+> The above information is very useful.  This sort of detail should always
+> be included with a bug report, or a patch proposing to fix a bug.
+>
+> The intent of that "3" is to be a time in the past.  We don't want the
+> -test-client- entry to be added to the cache, but we want a failure
+> message if the path cannot be exported.  So we set a time in the past as
+> the expiry time.
+> Using 0 is awkward as it often has special meaning, so I chose '3'.
+>
+> >
+> > The failure in this was if nfs-server starts exactly 3s after bootup,
+> > boot.tv_sec would be 3 and thus get_expiry() returns 0, causing a
+> > failure to be returned.
+>
+> I don't understand this. getboottime64() doesn't report time since boot.
+> It reports the time when the system booted.  It only changes when the
+> system time is deliberately changed.
+Ok I misinterpreted what this function does.
+> At boot, it presumably reports 0.  As soon as some tool (e.g. systemd or
+> ntpdate) determines what the current time it and calls settimeofday() or
+> a similar function, the system time is changed, and the boot-time is
+> changed by the same amount.  Typically this will make it well over 1
+> billion (for anything booted this century).
+> So for the boot time to report as '3', something would need to set the
+> current time to a moment early in January 1970.  I'd be surprised if
+> anything is doing that.
+I see the discrepency now -- our system is actually an embedded
+platform without an RTC. So it thinks that it is "1970" every time it
+boots up, at least until it connects to the internet or similar, which
+it may or may not ever do. We use NFS to share mountpoints between 2
+linux systems on our board connected via usb-ethernet. The fact that
+it allows simultaneous access gives it an advantage over other
+protocols like mass storage.
 
-I think it does make reasoning about the bytes accounting easier if it
-is based off of the non-mutating hdr->len.
+Its likely that the code is working as intended then, it just didn't
+take our particular usecase into account.
 
-Especially if vsock does ever support tunneling (e.g., through
-virtio-net) or some future feature that makes the skb->len more dynamic.
+>
+> How much tracing have you done?  Have you printed out the value of
+> boot.tv_sec and confirmed that it is '3' or have you only deduced it
+> from other evidence.
+> Exactly what firm evidence do you have?
+Sure I've added this simple debug print with the necessary info
 
-Best,
-Bobby
+diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
+index 15422c951fd1..5af49198b162 100644
+--- a/fs/nfsd/export.c
++++ b/fs/nfsd/export.c
+@@ -528,10 +528,12 @@ static int svc_export_parse(struct cache_detail
+*cd, char *mesg, int mlen)
+        int len;
+        int err;
+        struct auth_domain *dom =3D NULL;
+        struct svc_export exp =3D {}, *expp;
+        int an_int;
++       struct timespec64 boot;
++       char* orig_mesg =3D mesg;
+
+        if (mesg[mlen-1] !=3D '\n')
+                return -EINVAL;
+        mesg[mlen-1] =3D 0;
+
+@@ -564,10 +566,12 @@ static int svc_export_parse(struct cache_detail
+*cd, char *mesg, int mlen)
+        exp.ex_devid_map =3D NULL;
+
+        /* expiry */
+        err =3D -EINVAL;
+        exp.h.expiry_time =3D get_expiry(&mesg);
++       getboottime64(&boot);
++       printk("mesg is '%s' expiry is %lld and boot_s is %lld\n",
+orig_mesg, exp.h.expiry_time, boot.tv_sec);
+        if (exp.h.expiry_time =3D=3D 0)
+                goto out3;
+
+        /* flags */
+        err =3D get_int(&mesg, &an_int);
+
+and the output is
+
+[   14.093506] mesg is '-test-client- /path/to/mount  3 8192 65534
+65534 0' expiry is 0 and boot_s is 3
+
+which largely confirms the info above.
+
+Do you think we'd be able to handle this case cleanly?
+>
+> Thanks,
+> NeilBrown
+>
