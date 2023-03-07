@@ -2,110 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3086AE73E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D20F6AE744
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjCGQuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:50:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S230153AbjCGQwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:52:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjCGQuP (ORCPT
+        with ESMTP id S229748AbjCGQvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:50:15 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A39A1C7C3;
-        Tue,  7 Mar 2023 08:46:18 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id x3so54783514edb.10;
-        Tue, 07 Mar 2023 08:46:18 -0800 (PST)
+        Tue, 7 Mar 2023 11:51:49 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB3A96C3F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:47:44 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id 82so12038641ybn.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:47:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678207577;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lCQLafUFpzWLJx8KexQbZ8Qy7pPXK3DUhwYLkEaM5eg=;
-        b=c7y39P3Jo0qiiNOCoF5i7KloIinPyZze3nzQTUbD/BPgcesZmIRtu1WlQ9Fy/5gil4
-         Wq1WtZd/mZ/FL6bCVnT3KYHAtmqIAxFzn2NE1ttUkjEoAh+JCQHvnL0vLLNiNWBk0z9G
-         ioggTb3e3g08WJjb6fSXu7tnqQxjDtlBXZ2p8hjvShXYlRUsF5gKWpOFKmw2AE5U912r
-         ss8FYDvrHNfADL/PjiGRCDEAN3Ltsex3Y2UvUFww6GY1iboQPTYOqEuLaaeffBxKlNtz
-         /bPJJMSKCcQHAburvk3He3ZCP0xu/QrsRkEawO1356DS5FXVxgGyCivP/HFYcGJt0Die
-         ialw==
+        d=linaro.org; s=google; t=1678207658;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1+b420gW8EvDq5mtxL/dde8yBN+aFEeDMlpeU8M2B68=;
+        b=q05+e5MmNr1ul7D03tP0p/MXc7tVHR0I5rxWn95iyrvA/T40k2SwqSDbakgBJOQKsp
+         ONN27cqeFoXTX4CY/MbLXSWMHDRrx9p/lMgSrsqpHzv5hDJ0caPXi++whsuXqyo3rgGx
+         oZaIoVXKHQ7l1nqhjnQ3zublfIiNuIuH2NpZzT8V2PGdzN1RXzZSflhTtxBFdJHMW22r
+         NyKZxc5hhjRc4zFj1nP1htgUlBcA2gWCu4S7OsCn0gONMKYMdsCPhBXQb/FDZgu27EHS
+         Ja6ACCUqVq/j0oX7gR/BLiSjklR8o6FtdbVklsVre7D1D/FjDBj/k6NiIQQWIZW2Sd0B
+         nrhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678207577;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lCQLafUFpzWLJx8KexQbZ8Qy7pPXK3DUhwYLkEaM5eg=;
-        b=lUMq4Pcj7RGK8DVs3jB9pshsfluE2W/paqegG6SXwBEwABSZ8SUXx2GRQFtEb2rJA3
-         yv882I/g7DrN8xtgc4QN9Swwn+gpneKWpdCoOGh7Z+5DvOH2882FKEebR3FW4t17VMZ/
-         JsN3EObnS0U8ltpjWrIRQF3XntgWoDd+hSjS82Wl/wY37+tSPb9ptGTIh9eWYiCOUMIB
-         lv0MueTKERGJdTGRfPcBuUy3NyosEM1qtetmA8qKNuSFocObJ/J75puNFNuiW1IdkRoo
-         it5vGS/jug5XLMHG02AfGNIt1z1mYfzQOn2llIDFHde8kaglEnnnqmpbRNkFxYdxuRcg
-         qTqg==
-X-Gm-Message-State: AO0yUKX5OFz5aSpVMeUDH0eqYPjoOzqzbtpwxfxyxNYL/wP4MeZrHTji
-        P2jp8m5vh2+mz2ZBHodOib0=
-X-Google-Smtp-Source: AK7set88xB0AHfoC6FlCb9wG7FkCaQJ3eCIm+eIoGVQpzsTabFALtHa6izr9b1rLQhog/iNugXd5+Q==
-X-Received: by 2002:a17:906:9744:b0:885:fee4:69ee with SMTP id o4-20020a170906974400b00885fee469eemr17339261ejy.59.1678207576708;
-        Tue, 07 Mar 2023 08:46:16 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id v5-20020a1709063bc500b008c327bef167sm6311004ejf.7.2023.03.07.08.46.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 08:46:16 -0800 (PST)
-Date:   Tue, 7 Mar 2023 18:46:14 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: add ETS Qdisc
- support for KSZ9477 series
-Message-ID: <20230307164614.jy2mzxvk3xgc4z7b@skbuf>
-References: <20230306124940.865233-1-o.rempel@pengutronix.de>
- <20230306124940.865233-2-o.rempel@pengutronix.de>
- <20230306140651.kqayqatlrccfky2b@skbuf>
- <20230306163542.GB11936@pengutronix.de>
+        d=1e100.net; s=20210112; t=1678207658;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1+b420gW8EvDq5mtxL/dde8yBN+aFEeDMlpeU8M2B68=;
+        b=zwigk1Utr4V1R6S+KiJmYMvclpJyzFZAFq2boH1yJQG8KLbCeNbkDA12pcRZzosy4G
+         nnh2XnVwZa42URCF5CtysuEBLvY1mVlgZHEEAZml+DQFzjbf3lcA833ZLu9sMKNvnR1K
+         ysRU2s+7tSxEp9FKtU2P4PD+fzjg7XH+8d92wM+Qzre6cT97KN113K0tUYj8R8G94O8O
+         ijmwlMUdsPp973K/2gp5hr7nRy+ERl4ZRdPqZ3UwL+5PX4IEesKEaSS3wv4wVcxOiA5k
+         ZLHusmk0yE4OdNEXxkSPfWKL8WMyE2GDGUDeg8MdrwionJcbXv+9B1XCENIncVhP4vqk
+         XlQg==
+X-Gm-Message-State: AO0yUKX7WJ3fcYhWGU5ZxmNy6BeGLS//IIf7iX8IpY6CCdfW39IYOWNf
+        QyRv8y2ieUUtgicnE8lwPLWKVuI3HXWaRqMWxMsKeA==
+X-Google-Smtp-Source: AK7set9ITIlXcKiPBX7mIBhFoF8sgK/EPHcgfTAk/YTpopZ8SEIfEN0OooNEuok6S589ITq05t0K4xgaMQpkW2PNIdA=
+X-Received: by 2002:a5b:e92:0:b0:ab8:1ed9:cfc9 with SMTP id
+ z18-20020a5b0e92000000b00ab81ed9cfc9mr8920750ybr.6.1678207658437; Tue, 07 Mar
+ 2023 08:47:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306163542.GB11936@pengutronix.de>
+References: <20230307164405.14218-1-johan+linaro@kernel.org> <CACMJSes3usJUvCsrMBR_9dDGCbo2y7JqA8-B5mP28H2Cjg-v6A@mail.gmail.com>
+In-Reply-To: <CACMJSes3usJUvCsrMBR_9dDGCbo2y7JqA8-B5mP28H2Cjg-v6A@mail.gmail.com>
+From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date:   Tue, 7 Mar 2023 17:47:27 +0100
+Message-ID: <CACMJSesztZbB53QPaiLg+GKghJ-8MbiS60t8CbN_m8Wcph3-9g@mail.gmail.com>
+Subject: Re: [PATCH 0/4] serial: qcom-geni: fix console shutdown hang
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 05:35:42PM +0100, Oleksij Rempel wrote:
-> > So what does the user gain using tc-ets over tc-mqprio? That has a way
-> > to set up strict prioritization and prio:tc maps as well, and to my
-> > knowledge mqprio is vastly more popular in non-DCB setups than tc-ets.
-> > The only thing is that with mqprio, AFAIK, the round robin between TXQs
-> > belonging to the same traffic class is not weighted.
-> 
-> Do mqprio already supports strict prio mode? net-next was not supporting
-> this back for two weeks. I do not care what to use, my motivation was based on
-> following points:
-> - tc-ets supports strict prio. mqprio need to be extended to do this
-> - tc-ets refers to IEEE 802.1Q specification, so i feel safe
->   and do not need to invent new things.
-> - mqprio automatically creates software queues, but it seems to not
->   provide any advantage for a typical bridged DSA setup. For example
->   i can use queue mapping only for traffic from CPU to external DSA port
->   but can't use multi queue advantages of CPU MAC for same traffic  (do I'm
->   missing something). For bridged traffic i'll need to use HW offloading any
->   way.
+On Tue, 7 Mar 2023 at 17:44, Bartosz Golaszewski
+<bartosz.golaszewski@linaro.org> wrote:
+>
+> On Tue, 7 Mar 2023 at 17:43, Johan Hovold <johan+linaro@kernel.org> wrote:
+> >
+> > This series fixes some of the fallout after a recent series adding
+> > support for DMA transfers to the Qualcomm geni serial driver.
+> >
+> > Most importantly it fixes a hang during reboot when using a serial
+> > console and the getty is stopped during reboot.
+> >
+> > Doug just posted an equivalent fix here:
+> >
+> >         https://lore.kernel.org/lkml/20230307073155.1.Iaab0159b8d268060a0e131ebb27125af4750ef99@changeid
+> >
+> > but the commit message only mentions the regression with respect to
+> > kgdb, which is not as widely used serial consoles generally, so I
+> > figured I'd post my version for completeness.
+> >
+> > Either version of that fix should address the immediate regression, but
+> > fixing the underlying problems which have been there since the driver
+> > was first merged is going to be a bit more involved.
+> >
+> > The rest of the series fixes a few bugs in the new DMA support that I
+> > found while investigating the console regression.
+> >
+> > Johan
+> >
+> >
+> > Johan Hovold (4):
+> >   serial: qcom-geni: fix console shutdown hang
+> >   serial: qcom-geni: fix DMA mapping leak on shutdown
+> >   serial: qcom-geni: fix mapping of empty DMA buffer
+> >   serial: qcom-geni: drop bogus uart_write_wakeup()
+> >
+> >  drivers/tty/serial/qcom_geni_serial.c | 11 +++++++----
+> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> >
+> > --
+> > 2.39.2
+> >
+>
+> Hey Johan,
+>
+> Douglas and Srini beat you to these fixes but thanks!
+>
+> Bart
 
-Sorry, my inbox is a mess and I forgot to respond to this.
-What do you mean tc-mqprio doesn't support strict priority? Strict
-priority between traffic classes is what it *does* (the "prio" in the name),
-although without hardware offload, the prioritization isn't enforced anywhere.
-Perhaps I'm misunderstanding what you mean?
+Nevermind, I read your other message now. And also patch 3/4 looks right.
 
-For strict prioritization using multi-queue on the DSA master you should
-be able to set up a separate Qdisc.
+Bart
