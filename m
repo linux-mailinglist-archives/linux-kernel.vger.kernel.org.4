@@ -2,129 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301CB6AE8B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F356AE8ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjCGRSg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:18:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59404 "EHLO
+        id S231307AbjCGRT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:19:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjCGRSM (ORCPT
+        with ESMTP id S231272AbjCGRSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:18:12 -0500
-Received: from sonic303-27.consmr.mail.ne1.yahoo.com (sonic303-27.consmr.mail.ne1.yahoo.com [66.163.188.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED0D9477A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 09:13:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678209231; bh=uZ18eq+KE68358mnuCeXuV/vvinw/K9wC8rXpWJAgzk=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=qaYOAVMkNAhDXRUxJTW3PR09BRTcrumaZY3Wvw7wYaRO9eCqp+5O3z2vPiIJQG/tWRHdqviP0mbfDameMyttUyIrYdqz57/SpvBzBbZqskPhVtS2VlJkvl+zl5kz1g/dt3QqauEVjtmILHhWVyakTCRVrksgb7uYgFgeVED+C8jkvGsRvLseReNV9STO0HLBo8Uc8uLaF7C9JFzyJCiSo06QFuW8eFfNgJ8H7vfToJQ+ScZLVUn2kbAguftwM7iXM0X5bw2HjBn3/xXCn7NroESNYTOY11TPKLFSz4wUH5P/iKIVP95PcnoSzHma2Onz29Z+m6n+EiP4bN/DYxxmQA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678209231; bh=A/nx8p+cIlbaC8I2Bkszlxcodwtw8xUlfc5U+zY12nc=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=gEU/AG9mCqnzgqnsu3xuw97uj+6zIzy5+4eyNL4V6MHBxW9cJ2oQDpRom6V7UuVVT/iOf88IWAHzAAZTz9qKkxW/+CQzGHjLCv4P6EFDfm609wHtaVUD92geATK8dW363yoGkDnoIdUjS5vXfA+HFnhBomitm5ZZ+5f546qPR4amuH/aEhoWrksVC67YBDY4nPlLpc7sr2+s94cGjkvwwUQxB1cBuJOSYTberY2B8t5bnpuS8e1KeVocnw1vOzAV5O5bmlu58Ie/9DGfMM4SGWulTpj0f3U2T0D2f2bC22gLTSOQbFVQM4s3N2SkOgvETkT1aIuzGAeFmvMXPXjUFQ==
-X-YMail-OSG: M6R9XRwVM1k_DWJCIKAtsK7u_P4H8o7YVo4CwYeFAwgscohJglT4atCq1JQL2Ia
- HJGMHOf43FBzIbNQAd4CGEMBnJ9BC0sRbL7UZIEuarkscSrST2m03P8V3wnN8kFyDrWjGro1.O6e
- xWJcXoujpmyYTXY4swhxnRjLpjKDcNIzIO.GPSgByH6vFrGTURTlfvhiFuh8fDUYYWC76L6tXVEs
- I9qIgGyXsiUSU4CTuThbMA.pZ5o4jRtRrNvmHyPLFigMloH.5kPftgllcHGgQCY7Up9vYBmubs_q
- Szqemma6RC9.nPfe8EwOzCeK6h1z.Yz2KpUNLXsp6qGS5jLoa8dEvdktQ1OB1FYJS34dp2ibCbWR
- kvShQa7eFr1Ovrdcr40gDsUmIfilbd.c4TEDFSrcI_zoMgc_srG.b7boOJFX2JHPFagAxPAhKKYT
- _wEMRNbRa1C_YWjpZo.knQTdg8R.SUInN87BGOSaKXwYxIEXhc80WYGFArvNyK4gED3R6GiBHUEv
- 3gfMUpmbZrgzivjZmB03MHFJJ1w6JGdB3GTAwgnf4haXLO8P.FXD4FfFBg51mfaz9V88mLrFl3tz
- afAjyOeE5TeaGMVv44bB3oA0sPn0H8thvag_RzIBA8HgYk.Os.P0DDibH80B7yDJWCyWG_hSurtr
- 21lUUwxDDxg_CRVZgoNI_U6.NS4sO5Ls1Ik3RXRk_Gddrkeat5gT4MNo_zXxs0ahi935zhNo4LdL
- sdVmQaq_pGAtACWCBzg.yIix0qGZb1YAeh6iQLBHftl.8nq3yqtHEXcGz50DgGw2qv9Za52Y05NL
- 4UjLILbfpoTAoqIPOqfU.M15uIHdl4MIhpauUrPQk7VLaXGdchAt18_vEI8kQqMfaZIIez5vNK7H
- huLYLb0UrkS.lqi6jkG15plpoJtfIZpsgkl8OsYfmnooX1RwxruZAwplcF_kw_rtqzNDo_rXdIiz
- yuhjszoDtlN6MwO_LrhdZGtFAuSEfvYmcxajAyp2fD_Gm2qNUTM81mM9_rjuPpfUFcxitt1Zwt3N
- X8eDkWG5fBzTQDn__6snY97jxR_qY6_UBfupu8Z4dDpBk2W8kdqgiZtBpB1eqxP3WIkrG.YNnKGY
- gX5AiJiREWGJBOv7DnPHycMHpeVR7LuIHz7ZWh2F.SDFF3BwBMyBv8AhhXFN7hlJS.ASGoG410pm
- HcRHxqg57v7Sn6_kPANGVoNPqg_2nBmYy1yu.wqyTFOx5G2jtWY8POB1fmxkiJ2WwYIWVg3zEcTA
- BWU.GUZmfv9xBavgPTBHhufTIyfS5wJHf53x4EkB0QF87oJQYwaZ7HPD0rrvkynI7BZh7.ZQ38n0
- SpJKh98PI7.dp2r9cHxjWKejm7cyBmwVUyUC_lvpy_Q5qzVCfj9rC3rGuCmFTpPohvTocJMphd5A
- mPYJ0I3eLdCuqM1E8Ssg.60gYsW743Tdxg3kN3coPEANxOSsiU1j55UTdO8wKtA7QncSL1Rtx5tY
- FnCcwRpoGt49kQ2aD1_UUOnUGhGyBqJljN3W05PKuoemC41jsF9OETZ0mdwIQhkv82ZXCfWnMn1U
- mZlfJU9IIpsDx8sij8uNk9.cvnI07rcDy.FJop8uCFr4dPBDt.7HwlpotlZviKH079x48fZza3QT
- ZHmYvEgjg2QvdajaW0xNNpiJr_SLK5Qwcmpa.s2pQOTRx_g9IUv0SG6wfJXyARSQrhNSMlMuB4Vk
- KL18L8jhHI0BdTsv9uQNQ.mGNhphfAHkApCTJ_3oumuMqr79pxEadlS28QosMTvQiCBg9BCwcnFU
- xP267eXvqlLgNilToA4EiGmWGaORW4btt7P3zi7rKQzvB0EqACMC3THjx3UTi9nQOxHR2lRyL9bb
- 1WZunhUBtmCqCQpmBnYh05ewUoqLeBnTkkq4AUYXG2XGrSDWQe6oQNPnGU2GR7JgTvJbkSbN9R8s
- D4ennHpg_Alzg3bWR7YCyKPgFFike0Gbgdkehi6NmD4cTT6HlGjwHESb5uvueLp0.cy.zHjvXKdS
- y2Judqid.xrBFu23tKH4p.7ilLgn9PRc_0eWppv0yf9ZaovPNPdU.VdYBn4lxPV6TT_l9xSq4obp
- vd.vJ8U275ant3VAOZNlJ6H2dV79hay8RNMWXpU9SbTmPHZfND7ix6c_dd8taCtHgppQWH0apUBV
- iEScS_a7f1b2iq2.sCna_cJ.8FmWrv6hgEInUTnPrcpNt9MBWAu0d65XPDV3s.9IzDUj5eraVFJt
- I33TMPZunmfZn3_giq3DAfJJPuxni0LnBp5b0DlnLVMfRsTZhkb_ys1L9VPpaaPk5NeOpwJm1.ma
- Fms7WXQ4n9HibJ1kg9UM-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ne1.yahoo.com with HTTP; Tue, 7 Mar 2023 17:13:51 +0000
-Received: by hermes--production-ne1-7688d778d7-l5k5m (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2ada3e063c3db3053feeb0e87bb880c6;
-          Tue, 07 Mar 2023 17:13:49 +0000 (UTC)
-Message-ID: <c5a11d40-9081-dfad-3d5a-7d46ba764dd5@schaufler-ca.com>
-Date:   Tue, 7 Mar 2023 09:13:48 -0800
+        Tue, 7 Mar 2023 12:18:53 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63BD97FCA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 09:14:26 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id ec29so24400071edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 09:14:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=eitmlabs-org.20210112.gappssmtp.com; s=20210112; t=1678209265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uwDUxJcDJcMxnTkL2V+YwQldX6E+/2r615N9qnjsQ5k=;
+        b=loV6EpaQge6cTIm0ELzvl+6/bRyrJcc6FOYdFs0TRbxcEZGfB54dpAEyz14LRrDp50
+         P4H64uZoqdhR0rZE2NHKOe0NtYGy7ifOi/XD8e15TdxPvtPrIvHtR9+5xSssfxZiv1N0
+         EXIkf3Egrn1M8zOzQYhhfhKBFlqIhOZe1gSVeRAaZ+9fS4wJgL8XgqlNCXbiwGv6Hzcr
+         m/CrckAS/z3o1tWyQyDSo0Zh+ASo6JuCnqud7J2RSwVzwI69IIHm7axl8kSorq+ws5pg
+         uFqX9/V2NfyADasJ19Uzd3txoFCkMHnUxJEngMSTpmZ/XJ8mRyERbi4fEGqBWb6k9Khs
+         MEJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678209265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uwDUxJcDJcMxnTkL2V+YwQldX6E+/2r615N9qnjsQ5k=;
+        b=l4vnu2uezCYdlU+xdt/wF4XHHztsWGGJJ0hcf1Bctb+VXZ+otXkCqZcsqdI7cXORbX
+         TnUrqaVYigCvMfirC+lnn7HSqhyD1IBU45V52UcIzQYeDYJetO1icaPwLyGGL1c3rZOE
+         WEUyoiBESxkICgcMTRDAczljdyHkzjMNnJjFwlIEOI0LRRfm5ekGgoVVcE5z9/7kEdWb
+         +Na3wmg4MO6C5oBEh1u2Myctq5hVqO5bGEwyBp6yv11LpYZU3I/OAm3Ig4uvm26wQhEu
+         Tv9UckI8tWrH2R6tAwiNmlsAY03rCSIAB+9deHQlfDmkis02hsPjR9r+ZznpQNxosFS1
+         37Ow==
+X-Gm-Message-State: AO0yUKWXD5KHSu0XERhzMPt6F1OvQ6pMognBqYwkNaR2Hi4j1WJK4Hl7
+        nWmQGtNFoCahu4+Go6m5kJxgPwPhiAls7GJj3YHYNw==
+X-Google-Smtp-Source: AK7set/GhvrPLHOVoQw/QGOLf9lH9Ub7ISmxaTsewUUiP9pF0QT7WJRKuFmAjXI6QVFX7jksBphHX/IUgB80KGDUkME=
+X-Received: by 2002:a17:906:fcb9:b0:883:ba3b:eb94 with SMTP id
+ qw25-20020a170906fcb900b00883ba3beb94mr7566442ejb.3.1678209265306; Tue, 07
+ Mar 2023 09:14:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v6 04/11] LSM: syscalls for current process attributes
-Content-Language: en-US
-To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
-        paul@paul-moore.com, linux-security-module@vger.kernel.org
-Cc:     jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, casey@schaufler-ca.com
-References: <20230222200838.8149-1-casey@schaufler-ca.com>
- <20230222200838.8149-5-casey@schaufler-ca.com>
- <83b6310f-6101-2cdf-ec41-b850fe66b1c2@digikod.net>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <83b6310f-6101-2cdf-ec41-b850fe66b1c2@digikod.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.21284 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+ <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
+ <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
+ <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
+ <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
+ <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
+ <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
+ <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
+ <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
+ <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
+ <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com>
+ <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
+ <CALKgVmdqircMjn+iEuta5a7v5rROmYGXmQ0VJtzcCQnZYbJX6w@mail.gmail.com>
+ <CALKgVmfZdVnqMAW81T12sD5ZLTO0fp-oADp-WradW5O=PBjp1Q@mail.gmail.com> <CAJfpeguKVzCyUraDQPGw6vdQFfPwTCuZv0JkMxNA69AiRib3kg@mail.gmail.com>
+In-Reply-To: <CAJfpeguKVzCyUraDQPGw6vdQFfPwTCuZv0JkMxNA69AiRib3kg@mail.gmail.com>
+Reply-To: jonathan@eitm.org
+From:   Jonathan Katz <jkatz@eitmlabs.org>
+Date:   Tue, 7 Mar 2023 09:14:08 -0800
+Message-ID: <CALKgVmcC1VUV_gJVq70n--omMJZUb4HSh_FqvLTHgNBc+HCLFQ@mail.gmail.com>
+Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
+ missing in lower/upper fs
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     jonathan@eitm.org,
+        =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/2023 3:56 AM, Mickaël Salaün wrote:
-> Let's say an LSM need to pass a file descriptor instead of a text
-> value. Would that be possible or would it need to use another interface?
+On Tue, Mar 7, 2023 at 12:38=E2=80=AFAM Miklos Szeredi <miklos@szeredi.hu> =
+wrote:
+>
+> On Tue, 7 Mar 2023 at 02:12, Jonathan Katz <jkatz@eitmlabs.org> wrote:
+> >
+> > Hi all,
+> >
+> > In pursuing this issue, I downloaded the kernel source to see if I
+> > could debug it further.  In so doing, it looks like Christian's patch
+> > was never committed to the main source tree (sorry if my terminology
+> > is wrong).  This is up to and including the 6.3-rc1.  I could also
+> > find no mention of the fix in the log.
+> >
+> > I am trying to manually apply this patch now, but, I am wondering if
+> > there was some reason that it was not applied (e.g. it introduces some
+> > instability?)?
+>
+> It's fixing the bug in the wrong place, i.e. it's checking for an
+> -ENOSYS return from vfs_fileattr_get(), but that return value is not
+> valid at that point.
+>
+> The right way to fix this bug is to prevent -ENOSYS from being
+> returned in the first place.
+>
+> Commit 02c0cab8e734 ("fuse: ioctl: translate ENOSYS") fixes one of
+> those bugs, but of course it's possible that I missed something in
+> that fix.
+>
+> Can you please first verify that an upstream kernel (>v6.0) can also
+> reproduce this issue?
 
-You could use this interface. LSM_ATTR_MAGICFD would have a
-ctx_len = sizeof(fd) and the value in ctx. The underlying
-plumbing is another matter entirely. It's likely you'd need
-to provide more information in the ctx than the fd, but I
-couldn't say what it would be, and I won't speculate.
+Got ya.  that makes a lot of sense, thank you.
 
-I would not advocate such a use, as I am not now nor have
-ever been a fan of passed file descriptors.
+I have confirmed that I continue to get the error with 6.2 .
+quick summary of the lowerdir:
+   server ---- NFS(ro) ---- > client "/nfs"
+   client "/nfs" --- bindfs(uidmap) --- > client "/lower"
+
+
+
+
+
 
 >
+> Thanks,
+> Miklos
 >
-> On 22/02/2023 21:08, Casey Schaufler wrote:
->> Create a system call lsm_get_self_attr() to provide the security
->> module maintained attributes of the current process.
->> Create a system call lsm_set_self_attr() to set a security
->> module maintained attribute of the current process.
->> Historically these attributes have been exposed to user space via
->> entries in procfs under /proc/self/attr.
->>
->> The attribute value is provided in a lsm_ctx structure. The structure
->> identifys the size of the attribute, and the attribute value. The format
->> of the attribute value is defined by the security module. A flags field
->> is included for LSM specific information. It is currently unused and
->> must
->> be 0. The total size of the data, including the lsm_ctx structure and
->> any
->> padding, is maintained as well.
->>
->> struct lsm_ctx {
->>          __u64   id;
->>          __u64   flags;
->>          __u64   len;
->>          __u64   ctx_len;
->>          __u8    ctx[];
->> };
->>
->> Two new LSM hooks are used to interface with the LSMs.
->> security_getselfattr() collects the lsm_ctx values from the
->> LSMs that support the hook, accounting for space requirements.
->> security_setselfattr() identifies which LSM the attribute is
->> intended for and passes it along.
+>
+>
+> >
+> > Thank you,
+> > Jonathan
+> >
+> >
+> >
+> > On Thu, Feb 23, 2023 at 3:11=E2=80=AFPM Jonathan Katz <jkatz@eitmlabs.o=
+rg> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > Problem persists with me with 6.2.0
+> > > # mainline --install-latest
+> > > # reboot
+> > >
+> > > # uname -r
+> > > 6.2.0-060200-generic
+> > >
+> > >
+> > > Representative log messages when mounting:
+> > > Feb 23 22:50:43 instance-20220314-1510-fileserver-for-overlay kernel:
+> > > [   44.641683] overlayfs: null uuid detected in lower fs '/', falling
+> > > back to xino=3Doff,index=3Doff,nfs_export=3Doff.
+> > >
+> > >
+> > >
+> > > Representative log messages when accessing files:
+> > > eb 23 23:06:31 instance-20220314-1510-fileserver-for-overlay kernel: =
+[
+> > >  992.505357] overlayfs: failed to retrieve lower fileattr (8020
+> > > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1=
+722.d/Storage.mcf_idx,
+> > > err=3D-38)
+> > > Feb 23 23:06:32 instance-20220314-1510-fileserver-for-overlay kernel:
+> > > [  993.523712] overlayfs: failed to retrieve lower fileattr (8020
+> > > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1=
+722.d/Storage.mcf_idx,
+> > > err=3D-38)
+> > >
+> > >
+> > > On Mon, Jan 30, 2023 at 11:27 AM Jonathan Katz <jkatz@eitmlabs.org> w=
+rote:
+> > > >
+> > > > On Thu, Jan 26, 2023 at 5:26 AM Miklos Szeredi <miklos@szeredi.hu> =
+wrote:
+> > > > >
+> > > > > On Wed, 18 Jan 2023 at 04:41, Jonathan Katz <jkatz@eitmlabs.org> =
+wrote:
+> > > > >
+> > > > > > I believe that I am still having issues occur within Ubuntu 22.=
+10 with
+> > > > > > the 5.19 version of the kernel that might be associated with th=
+is
+> > > > > > discussion.  I apologize up front for any faux pas I make in wr=
+iting
+> > > > > > this email.
+> > > > >
+> > > > > No need to apologize.   The fix in question went into v6.0 of the
+> > > > > upstream kernel.  So apparently it's still missing from the distr=
+o you
+> > > > > are using.
+> > > >
+> > > > Thank you for the reply! ---  I have upgraded the Kernel and it sti=
+ll
+> > > > seems to be throwing errors.  Details follow:
+> > > >
+> > > > Distro: Ubuntu 22.10.
+> > > > Upgraded kernel using mainline (mainline --install-latest)
+> > > >
+> > > > # uname -a
+> > > > Linux instance-20220314-1510-fileserver-for-overlay
+> > > > 6.1.8-060108-generic #202301240742 SMP PREEMPT_DYNAMIC Tue Jan 24
+> > > > 08:13:53 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+> > > >
+> > > > On mount I still get the following notice in syslog (representative=
+):
+> > > > Jan 30 19:11:46 instance-20220314-1510-fileserver-for-overlay kerne=
+l:
+> > > > [   71.613334] overlayfs: null uuid detected in lower fs '/', falli=
+ng
+> > > > back to xino=3Doff,index=3Doff,nfs_export=3Doff.
+> > > >
+> > > > And on access (via samba) I still see the following errors in the
+> > > > syslog (representative):
+> > > > Jan 30 19:19:34 instance-20220314-1510-fileserver-for-overlay kerne=
+l:
+> > > > [  539.181858] overlayfs: failed to retrieve lower fileattr (8020
+> > > > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg=
+-1722.d/Storage.mcf_idx,
+> > > > err=3D-38)
+> > > >
+> > > > And on the Windows client, the software still fails with the same s=
+ymptomology.
+> > > >
+> > > >
+> > > >
+> > > >
+> > > > >
+> > > > > > An example error from our syslog:
+> > > > > >
+> > > > > > kernel: [2702258.538549] overlayfs: failed to retrieve lower fi=
+leattr
+> > > > > > (8020 MeOHH2O
+> > > > > > RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-172=
+2.d/analysis.tsf,
+> > > > > > err=3D-38)
+> > > > >
+> > > > > Yep, looks like the same bug.
+> > > > >
+> > > > > Thanks,
+> > > > > Miklos
