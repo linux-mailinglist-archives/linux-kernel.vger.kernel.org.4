@@ -2,138 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119076AF68F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:19:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708656AF693
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjCGUTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S231430AbjCGUVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbjCGUTq (ORCPT
+        with ESMTP id S230043AbjCGUVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:19:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9606FA335F;
-        Tue,  7 Mar 2023 12:19:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25E5F6150F;
-        Tue,  7 Mar 2023 20:19:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407A4C433EF;
-        Tue,  7 Mar 2023 20:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678220383;
-        bh=JhW+CKgprn/5vnbwF0QA+NnQDPTQhLj/c4UBg/8yxPk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YFxNGlyn4QVoU6HXZqH7YyAEouQy/MFc6lZ7P7+na9ABVqOtL9vDfeDSMnUxCfPTy
-         6PiC6yQIry+/VbX5cYlhfsY8h3R3L7HcSAhkCTg7wqGh/K6hPwc/fAm875+NWTKCMU
-         j0IWChWorooJths53e7XTjhXcltUl3wxGtXEeYQI2JY+F/jUVMMpbLhERSFQm4tR6s
-         iV4UlAmgEy4pef9vILeluh0z8Syb9SMeiQ5C6jF4enPbJzGfpcLk3Kw9sjhbCdxcxO
-         qxgYnyVoIgtJ21OiJxPkuE+bEQzmxhWUwcqzjt7HnROkn7+Qv0tDv93hEekdv9CPAp
-         S9hB2i0dFCVTA==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>
-Cc:     linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH] fpga: dfl-pci: Drop redundant pci_enable_pcie_error_reporting()
-Date:   Tue,  7 Mar 2023 14:19:37 -0600
-Message-Id: <20230307201937.880084-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 7 Mar 2023 15:21:49 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC421A3B4F;
+        Tue,  7 Mar 2023 12:21:48 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-536bf92b55cso265429537b3.12;
+        Tue, 07 Mar 2023 12:21:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678220508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p+IY8UzAM/RZ3TeWbW0ubM4NqyIzYaaPyJwWrG0C17g=;
+        b=o3XBQrg0E7Gu4Bfj1UMKOqzr+iqyEw8RAolsQ0y0e9rP5fT6Ko80YcyP4xerW3tVy2
+         uXftt5CH6v5UNl5a5kGaIGmV8RHWqX5zdXXKYop5T61DkG+3qC/ueohmOU4CbyDQkfq3
+         5BmOVQCR3+QizmQhtYB8KgJ9Wi/R/dwAx+lQ2Ci81vxj800rVHtLcWP2AlA6+beu/D7e
+         kn1JuRPQOCWTCPY7sWHQp00cP9+fXCDJc2PK5yUE3Kytzk39Cfzx4lLa34iqNy04afwa
+         9/Uc8StrmKVSvZjXNfkWUvcCeA54MwgD7xk/iD6KiIa2Ue5EQD6sF1/NT1VH+54ynche
+         /LDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678220508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p+IY8UzAM/RZ3TeWbW0ubM4NqyIzYaaPyJwWrG0C17g=;
+        b=VPa73ucpziHbF38DJMoeGQ4HSQRieiHspOkiYuDIG2TROaaA67rZ3s5sPRcCO0437p
+         dPQR0lher3SI2Ka+AVR0kI40SPWOtRvJDUUh8XCHKds12/xt5seInWTILBrxonMFJoqW
+         qsF5R8S3CgABf/8BBrCTslrpmWxbwBC2Qmnfgf0zIfophDcoGdx0lmtVjEJTuZjti6hU
+         XIi3snfCV69iP2iZJEdBUZ/6qBjqdW+5a/4Vrnekhyd3PiZLtsEd8n0E5VCUk/H+466z
+         slq/9UzXunnw3tydaP5HvStOb0xWE+sYSDe1KJCHWOrsuebfTGTQjNYYy6GykEGv4xw1
+         RrNA==
+X-Gm-Message-State: AO0yUKXMc31hdCLoW2KmVOt5GSfLyOmlfcX2qoDmZTqhp8d0E864HQt1
+        nN0/ju1PTIRWyTtAoqixfO4+qxBNwtgkyGpqW/A=
+X-Google-Smtp-Source: AK7set8WHeDUH2QzZ+qXXUTEET93/pMiobKm119Tu1NVq9tGU/rw9YM9TSLJVmG610ERzpj35YEYE8yjCa4xNbbiPjM=
+X-Received: by 2002:a81:ad24:0:b0:52e:bb2d:2841 with SMTP id
+ l36-20020a81ad24000000b0052ebb2d2841mr9465097ywh.10.1678220508034; Tue, 07
+ Mar 2023 12:21:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230224-rust-error-v1-0-f8f9a9a87303@asahilina.net>
+ <20230224-rust-error-v1-1-f8f9a9a87303@asahilina.net> <20230225221405.62e989c8.gary@garyguo.net>
+ <CANiq72kOb9mbh4HQzH40Ey+Rax3vREsd0Nf2O0apjDpsboE6vQ@mail.gmail.com>
+In-Reply-To: <CANiq72kOb9mbh4HQzH40Ey+Rax3vREsd0Nf2O0apjDpsboE6vQ@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 7 Mar 2023 21:21:37 +0100
+Message-ID: <CANiq72=jWZS+UGx20XcdpRSWxG_CBhmB7Xyib8SCeCFYZdf4aQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] rust: error: Add Error::to_ptr()
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Fox Chen <foxhlchen@gmail.com>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+On Sun, Feb 26, 2023 at 3:26=E2=80=AFPM Miguel Ojeda
+<miguel.ojeda.sandonis@gmail.com> wrote:
+>
+> But I don't want to block the rest of the work on this, which may need
+> some extra/parallel discussion, so let's keep the helper for the time
+> being. That way we can also do that change independently and justify
+> the change showing the difference in performance/text, if any, in the
+> commit message.
 
-pci_enable_pcie_error_reporting() enables the device to send ERR_*
-Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
-native"), the PCI core does this for all devices during enumeration, so the
-driver doesn't need to do it itself.
+Opened https://github.com/Rust-for-Linux/linux/issues/984 to help to
+remember it.
 
-Remove the redundant pci_enable_pcie_error_reporting() call from the
-driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
-from the driver .remove() path.
-
-Note that this only controls ERR_* Messages from the device.  An ERR_*
-Message may cause the Root Port to generate an interrupt, depending on the
-AER Root Error Command register managed by the AER service driver.
-
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- drivers/fpga/dfl-pci.c | 20 ++++++--------------
- 1 file changed, 6 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/fpga/dfl-pci.c b/drivers/fpga/dfl-pci.c
-index 0914e7328b1a..1bc04378118c 100644
---- a/drivers/fpga/dfl-pci.c
-+++ b/drivers/fpga/dfl-pci.c
-@@ -21,7 +21,6 @@
- #include <linux/module.h>
- #include <linux/stddef.h>
- #include <linux/errno.h>
--#include <linux/aer.h>
- 
- #include "dfl.h"
- 
-@@ -376,10 +375,6 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
- 		return ret;
- 	}
- 
--	ret = pci_enable_pcie_error_reporting(pcidev);
--	if (ret && ret != -EINVAL)
--		dev_info(&pcidev->dev, "PCIE AER unavailable %d.\n", ret);
--
- 	pci_set_master(pcidev);
- 
- 	ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(64));
-@@ -387,24 +382,22 @@ int cci_pci_probe(struct pci_dev *pcidev, const struct pci_device_id *pcidevid)
- 		ret = dma_set_mask_and_coherent(&pcidev->dev, DMA_BIT_MASK(32));
- 	if (ret) {
- 		dev_err(&pcidev->dev, "No suitable DMA support available.\n");
--		goto disable_error_report_exit;
-+		return ret;
- 	}
- 
- 	ret = cci_init_drvdata(pcidev);
- 	if (ret) {
- 		dev_err(&pcidev->dev, "Fail to init drvdata %d.\n", ret);
--		goto disable_error_report_exit;
-+		return ret;
- 	}
- 
- 	ret = cci_enumerate_feature_devs(pcidev);
--	if (!ret)
-+	if (ret) {
-+		dev_err(&pcidev->dev, "enumeration failure %d.\n", ret);
- 		return ret;
-+	}
- 
--	dev_err(&pcidev->dev, "enumeration failure %d.\n", ret);
--
--disable_error_report_exit:
--	pci_disable_pcie_error_reporting(pcidev);
--	return ret;
-+	return 0;
- }
- 
- static int cci_pci_sriov_configure(struct pci_dev *pcidev, int num_vfs)
-@@ -448,7 +441,6 @@ static void cci_pci_remove(struct pci_dev *pcidev)
- 		cci_pci_sriov_configure(pcidev, 0);
- 
- 	cci_remove_feature_devs(pcidev);
--	pci_disable_pcie_error_reporting(pcidev);
- }
- 
- static struct pci_driver cci_pci_driver = {
--- 
-2.25.1
-
+Cheers,
+Miguel
