@@ -2,358 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAEED6AF5B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A716AF5B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:32:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbjCGT3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:29:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36440 "EHLO
+        id S234120AbjCGTcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:32:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjCGT3P (ORCPT
+        with ESMTP id S234046AbjCGTcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:29:15 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C0DB6906
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 11:14:50 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-176e43eb199so6066200fac.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 11:14:50 -0800 (PST)
+        Tue, 7 Mar 2023 14:32:00 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9223ABAED7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 11:17:48 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bx12so13200239wrb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 11:17:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=usp.br; s=usp-google; t=1678216486;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fOmFgPIp3hsAGCIR1UQk10Ns785Ii9Fwxb0/rzbOnLo=;
-        b=UHWjvJrMrIq+eRFMDFQf/pbjkYRjQ5yIARLh2yEmCdtaNGcHLlx6+jNP/96jqtlcNu
-         1j8k7mMQLlpdSkJo6raWWeII1vbtUI420xR57K6e2JLGGT36jbw8KV41JX0NDhXnGExL
-         PW7m0uKtf7Lcgevzhv8pzMwCf9K9vYXJ3IzgrVAhWg0CoyPdIE8SqiniN+qeKqt/vKrk
-         2E35u4Tl84WThv32YiJHu4HxVjmfUQJREY4P0k14fIrauow8hDvIuTsizqM88lTV09q/
-         KWpjOc15QAqjvTjhwnC1ch/b1YVwgKfbR0eGMXI9gVO4lzY3a4MviKCZQrW5WSb/yRiz
-         ojzQ==
+        d=fungible.com; s=google; t=1678216667;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7A/wHf8rLFLg2M6IudGVUnZF3qCIETvLpC0EZVBRNmU=;
+        b=fbuZjhtEie3YMm0sAWYQLqW+T7mrDWApDa9oij8qxYaFfka02AFnpeLytiBV++lb0c
+         m3oU/7xQo9srAoCU/3W6b/DeSRbDmcigZYBBsKE57Oj7hjI6n5fFeVnuUW6r60h1X1iE
+         5UnBtd5y0flkQSSpBs+gbepm4aH3LKsRKvvuo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678216486;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fOmFgPIp3hsAGCIR1UQk10Ns785Ii9Fwxb0/rzbOnLo=;
-        b=D2VG+gXgoI4zVQEKA5s9Tgwdhcxfsz1cVy75vYxybg8SpTdARjXZxdDh67st48PWWd
-         VpRPGKl6WxCYEYc2lpeSkGbcHKNpBG+9X5zHUOpizJ7cUroo3TXsonVUqOsJnUvpcpWb
-         A4x8wQo3xyrUNEBBcRG6qb0Xqj8spSCmL18Sj7HpeurqeGzZgbMhlB1Cm3KGJoFZ2aSj
-         kGc9Q4mF74ySuOn6kTSpnNtQQvXNcn4a4l2kh4ZmMm+2Lhyo4G/HOkeE+8d/fg9JKCQD
-         rhNVqdlIy/RYDXRFsnkYMm6AZ+nudYBSdvyLQLVhbLYsvHwHpBgYfCKjQzcntEA6ezRZ
-         kuUA==
-X-Gm-Message-State: AO0yUKUUjRu/0tGK5bEzcmIg5tGCwWXYZ3mpufJt1l8mWz4ADb8vCXUr
-        ykFkSOlaqTHMuMOVpF1WO7+xrw==
-X-Google-Smtp-Source: AK7set8bM251vzn1Z7Yw0sjF24Yg41uoEcJULEUsr7v+wss7hrx/n1mS+3lgmuhxIJdiztwFJDE4XQ==
-X-Received: by 2002:a05:6870:9724:b0:16d:e3ce:a701 with SMTP id n36-20020a056870972400b0016de3cea701mr10537874oaq.35.1678216486652;
-        Tue, 07 Mar 2023 11:14:46 -0800 (PST)
-Received: from localhost.localdomain ([2804:14c:63:8ae3:4d1f:9fc2:9fe6:c88e])
-        by smtp.gmail.com with ESMTPSA id f5-20020a056870d30500b001724742cfcesm5341794oag.38.2023.03.07.11.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 11:14:46 -0800 (PST)
-From:   David Tadokoro <davidbtadokoro@usp.br>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch
-Cc:     David Tadokoro <davidbtadokoro@usp.br>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amd/display: add prefix to amdgpu_dm_crtc.h functions
-Date:   Tue,  7 Mar 2023 16:14:17 -0300
-Message-Id: <20230307191417.150823-1-davidbtadokoro@usp.br>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1678216667;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7A/wHf8rLFLg2M6IudGVUnZF3qCIETvLpC0EZVBRNmU=;
+        b=rsd12Bx6ljBL166iWJuN2CvgiQwHAnEyxwvJM1PtKkuClNNkpaADWaL0RFA0b1JkN7
+         exVQL0OTT8Bijw0QNCQQxCgtzWKVV6/bt6Lpu0M3DT5J15uc6k9YtFk0OomVx62TOdEA
+         0GgwaWeVmqi31xAaY15rllfNOf5XeNF4RZ0OlkHCBfx8SEBvMQU48QGZ1D6aEWTY3xpp
+         /+zJ3fuieB4L9AGTHnTNQWSM/F0lnp582AkmTSiHw+vSmAOdANmYgVk68FJNlX1btNNQ
+         DMkRQmmAmtzNPgFWTziyYp221S6X7oIXCMRgFvjTaEyeAe/oFw32f0zxPmwaryTFpoNS
+         0WUg==
+X-Gm-Message-State: AO0yUKU/GiYbE4hGeepG+EknCGTILvhPAHHLj1yvUhIbQOdL4UwzFT/d
+        xEDK8MRVZkhptdci94H0foen81SHsLgtL9gVYlhkLQ==
+X-Google-Smtp-Source: AK7set9pgNSz7WH116QGTVpuvH9rjQzc7tPS0bI7v+40cc8sKDEUJVnhglebu2IaIhjlnqCYt+AaMKua+KTFvwbsAc4=
+X-Received: by 2002:a5d:660f:0:b0:2c7:d7c:7c4 with SMTP id n15-20020a5d660f000000b002c70d7c07c4mr3389807wru.6.1678216667042;
+ Tue, 07 Mar 2023 11:17:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230307181940.868828-1-helgaas@kernel.org> <20230307181940.868828-8-helgaas@kernel.org>
+In-Reply-To: <20230307181940.868828-8-helgaas@kernel.org>
+From:   Dimitris Michailidis <d.michailidis@fungible.com>
+Date:   Tue, 7 Mar 2023 11:17:33 -0800
+Message-ID: <CAOkoqZkAHOUODq8yWvmcchDWQLB0zwPQ-0SjAsgWNn9eGWyWTw@mail.gmail.com>
+Subject: Re: [PATCH 07/28] net/fungible: Drop redundant pci_enable_pcie_error_reporting()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Dimitris Michailidis <dmichail@fungible.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some amdgpu_dm_crtc.h functions didn't have names that indicated where
-they were declared.
+On Tue, Mar 7, 2023 at 10:20=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
+>
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> pci_enable_pcie_error_reporting() enables the device to send ERR_*
+> Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER =
+is
+> native"), the PCI core does this for all devices during enumeration, so t=
+he
+> driver doesn't need to do it itself.
+>
+> Remove the redundant pci_enable_pcie_error_reporting() call from the
+> driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
+> from the driver .remove() path.
+>
+> Note that this only controls ERR_* Messages from the device.  An ERR_*
+> Message may cause the Root Port to generate an interrupt, depending on th=
+e
+> AER Root Error Command register managed by the AER service driver.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Dimitris Michailidis <dmichail@fungible.com>
 
-To better filter results in debug tools like ftrace, prefix these
-functions with 'amdgpu_dm_crtc_'.
+Acked-by: Dimitris Michailidis <dmichail@fungible.com>
 
-Signed-off-by: David Tadokoro <davidbtadokoro@usp.br>
----
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 32 +++++++++----------
- .../amd/display/amdgpu_dm/amdgpu_dm_crtc.c    | 26 +++++++--------
- .../amd/display/amdgpu_dm/amdgpu_dm_crtc.h    | 14 ++++----
- 3 files changed, 36 insertions(+), 36 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index b472931cb7ca..b3e874589617 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -342,7 +342,7 @@ static inline bool is_dc_timing_adjust_needed(struct dm_crtc_state *old_state,
- {
- 	if (new_state->freesync_config.state ==  VRR_STATE_ACTIVE_FIXED)
- 		return true;
--	else if (amdgpu_dm_vrr_active(old_state) != amdgpu_dm_vrr_active(new_state))
-+	else if (amdgpu_dm_crtc_vrr_active(old_state) != amdgpu_dm_crtc_vrr_active(new_state))
- 		return true;
- 	else
- 		return false;
-@@ -436,7 +436,7 @@ static void dm_pflip_high_irq(void *interrupt_params)
- 
- 	WARN_ON(!e);
- 
--	vrr_active = amdgpu_dm_vrr_active_irq(amdgpu_crtc);
-+	vrr_active = amdgpu_dm_crtc_vrr_active_irq(amdgpu_crtc);
- 
- 	/* Fixed refresh rate, or VRR scanout position outside front-porch? */
- 	if (!vrr_active ||
-@@ -510,7 +510,7 @@ static void dm_vupdate_high_irq(void *interrupt_params)
- 	acrtc = get_crtc_by_otg_inst(adev, irq_params->irq_src - IRQ_TYPE_VUPDATE);
- 
- 	if (acrtc) {
--		vrr_active = amdgpu_dm_vrr_active_irq(acrtc);
-+		vrr_active = amdgpu_dm_crtc_vrr_active_irq(acrtc);
- 		drm_dev = acrtc->base.dev;
- 		vblank = &drm_dev->vblank[acrtc->base.index];
- 		previous_timestamp = atomic64_read(&irq_params->previous_timestamp);
-@@ -534,7 +534,7 @@ static void dm_vupdate_high_irq(void *interrupt_params)
- 		 * if a pageflip happened inside front-porch.
- 		 */
- 		if (vrr_active) {
--			dm_crtc_handle_vblank(acrtc);
-+			amdgpu_dm_crtc_handle_vblank(acrtc);
- 
- 			/* BTR processing for pre-DCE12 ASICs */
- 			if (acrtc->dm_irq_params.stream &&
-@@ -574,7 +574,7 @@ static void dm_crtc_high_irq(void *interrupt_params)
- 	if (!acrtc)
- 		return;
- 
--	vrr_active = amdgpu_dm_vrr_active_irq(acrtc);
-+	vrr_active = amdgpu_dm_crtc_vrr_active_irq(acrtc);
- 
- 	DC_LOG_VBLANK("crtc:%d, vupdate-vrr:%d, planes:%d\n", acrtc->crtc_id,
- 		      vrr_active, acrtc->dm_irq_params.active_planes);
-@@ -586,7 +586,7 @@ static void dm_crtc_high_irq(void *interrupt_params)
- 	 * to dm_vupdate_high_irq after end of front-porch.
- 	 */
- 	if (!vrr_active)
--		dm_crtc_handle_vblank(acrtc);
-+		amdgpu_dm_crtc_handle_vblank(acrtc);
- 
- 	/**
- 	 * Following stuff must happen at start of vblank, for crc
-@@ -2483,11 +2483,11 @@ static void dm_gpureset_toggle_interrupts(struct amdgpu_device *adev,
- 					 enable ? "enable" : "disable");
- 
- 			if (enable) {
--				rc = dm_enable_vblank(&acrtc->base);
-+				rc = amdgpu_dm_crtc_enable_vblank(&acrtc->base);
- 				if (rc)
- 					DRM_WARN("Failed to enable vblank interrupts\n");
- 			} else {
--				dm_disable_vblank(&acrtc->base);
-+				amdgpu_dm_crtc_disable_vblank(&acrtc->base);
- 			}
- 
- 		}
-@@ -7746,7 +7746,7 @@ static void update_freesync_state_on_stream(
- 			&vrr_params);
- 
- 		if (adev->family < AMDGPU_FAMILY_AI &&
--		    amdgpu_dm_vrr_active(new_crtc_state)) {
-+		    amdgpu_dm_crtc_vrr_active(new_crtc_state)) {
- 			mod_freesync_handle_v_update(dm->freesync_module,
- 						     new_stream, &vrr_params);
- 
-@@ -7864,8 +7864,8 @@ static void update_stream_irq_parameters(
- static void amdgpu_dm_handle_vrr_transition(struct dm_crtc_state *old_state,
- 					    struct dm_crtc_state *new_state)
- {
--	bool old_vrr_active = amdgpu_dm_vrr_active(old_state);
--	bool new_vrr_active = amdgpu_dm_vrr_active(new_state);
-+	bool old_vrr_active = amdgpu_dm_crtc_vrr_active(old_state);
-+	bool new_vrr_active = amdgpu_dm_crtc_vrr_active(new_state);
- 
- 	if (!old_vrr_active && new_vrr_active) {
- 		/* Transition VRR inactive -> active:
-@@ -7876,7 +7876,7 @@ static void amdgpu_dm_handle_vrr_transition(struct dm_crtc_state *old_state,
- 		 * We also need vupdate irq for the actual core vblank handling
- 		 * at end of vblank.
- 		 */
--		WARN_ON(dm_set_vupdate_irq(new_state->base.crtc, true) != 0);
-+		WARN_ON(amdgpu_dm_crtc_set_vupdate_irq(new_state->base.crtc, true) != 0);
- 		WARN_ON(drm_crtc_vblank_get(new_state->base.crtc) != 0);
- 		DRM_DEBUG_DRIVER("%s: crtc=%u VRR off->on: Get vblank ref\n",
- 				 __func__, new_state->base.crtc->base.id);
-@@ -7884,7 +7884,7 @@ static void amdgpu_dm_handle_vrr_transition(struct dm_crtc_state *old_state,
- 		/* Transition VRR active -> inactive:
- 		 * Allow vblank irq disable again for fixed refresh rate.
- 		 */
--		WARN_ON(dm_set_vupdate_irq(new_state->base.crtc, false) != 0);
-+		WARN_ON(amdgpu_dm_crtc_set_vupdate_irq(new_state->base.crtc, false) != 0);
- 		drm_crtc_vblank_put(new_state->base.crtc);
- 		DRM_DEBUG_DRIVER("%s: crtc=%u VRR on->off: Drop vblank ref\n",
- 				 __func__, new_state->base.crtc->base.id);
-@@ -7926,7 +7926,7 @@ static void amdgpu_dm_commit_planes(struct drm_atomic_state *state,
- 	int planes_count = 0, vpos, hpos;
- 	unsigned long flags;
- 	u32 target_vblank, last_flip_vblank;
--	bool vrr_active = amdgpu_dm_vrr_active(acrtc_state);
-+	bool vrr_active = amdgpu_dm_crtc_vrr_active(acrtc_state);
- 	bool cursor_update = false;
- 	bool pflip_present = false;
- 	bool dirty_rects_changed = false;
-@@ -8476,7 +8476,7 @@ static void amdgpu_dm_atomic_commit_tail(struct drm_atomic_state *state)
- 		 * aconnector as needed
- 		 */
- 
--		if (modeset_required(new_crtc_state, dm_new_crtc_state->stream, dm_old_crtc_state->stream)) {
-+		if (amdgpu_dm_crtc_modeset_required(new_crtc_state, dm_new_crtc_state->stream, dm_old_crtc_state->stream)) {
- 
- 			DRM_DEBUG_ATOMIC("Atomic commit: SET crtc id %d: [%p]\n", acrtc->crtc_id, acrtc);
- 
-@@ -9301,7 +9301,7 @@ static int dm_update_crtc_state(struct amdgpu_display_manager *dm,
- 		if (modereset_required(new_crtc_state))
- 			goto skip_modeset;
- 
--		if (modeset_required(new_crtc_state, new_stream,
-+		if (amdgpu_dm_crtc_modeset_required(new_crtc_state, new_stream,
- 				     dm_old_crtc_state->stream)) {
- 
- 			WARN_ON(dm_new_crtc_state->stream);
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-index dc4f37240beb..1d924dc51a3e 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.c
-@@ -34,7 +34,7 @@
- #include "amdgpu_dm_trace.h"
- #include "amdgpu_dm_debugfs.h"
- 
--void dm_crtc_handle_vblank(struct amdgpu_crtc *acrtc)
-+void amdgpu_dm_crtc_handle_vblank(struct amdgpu_crtc *acrtc)
- {
- 	struct drm_crtc *crtc = &acrtc->base;
- 	struct drm_device *dev = crtc->dev;
-@@ -54,14 +54,14 @@ void dm_crtc_handle_vblank(struct amdgpu_crtc *acrtc)
- 	spin_unlock_irqrestore(&dev->event_lock, flags);
- }
- 
--bool modeset_required(struct drm_crtc_state *crtc_state,
-+bool amdgpu_dm_crtc_modeset_required(struct drm_crtc_state *crtc_state,
- 			     struct dc_stream_state *new_stream,
- 			     struct dc_stream_state *old_stream)
- {
- 	return crtc_state->active && drm_atomic_crtc_needs_modeset(crtc_state);
- }
- 
--bool amdgpu_dm_vrr_active_irq(struct amdgpu_crtc *acrtc)
-+bool amdgpu_dm_crtc_vrr_active_irq(struct amdgpu_crtc *acrtc)
- 
- {
- 	return acrtc->dm_irq_params.freesync_config.state ==
-@@ -70,7 +70,7 @@ bool amdgpu_dm_vrr_active_irq(struct amdgpu_crtc *acrtc)
- 		       VRR_STATE_ACTIVE_FIXED;
- }
- 
--int dm_set_vupdate_irq(struct drm_crtc *crtc, bool enable)
-+int amdgpu_dm_crtc_set_vupdate_irq(struct drm_crtc *crtc, bool enable)
- {
- 	enum dc_irq_source irq_source;
- 	struct amdgpu_crtc *acrtc = to_amdgpu_crtc(crtc);
-@@ -89,7 +89,7 @@ int dm_set_vupdate_irq(struct drm_crtc *crtc, bool enable)
- 	return rc;
- }
- 
--bool amdgpu_dm_vrr_active(struct dm_crtc_state *dm_state)
-+bool amdgpu_dm_crtc_vrr_active(struct dm_crtc_state *dm_state)
- {
- 	return dm_state->freesync_config.state == VRR_STATE_ACTIVE_VARIABLE ||
- 	       dm_state->freesync_config.state == VRR_STATE_ACTIVE_FIXED;
-@@ -159,11 +159,11 @@ static inline int dm_set_vblank(struct drm_crtc *crtc, bool enable)
- 
- 	if (enable) {
- 		/* vblank irq on -> Only need vupdate irq in vrr mode */
--		if (amdgpu_dm_vrr_active(acrtc_state))
--			rc = dm_set_vupdate_irq(crtc, true);
-+		if (amdgpu_dm_crtc_vrr_active(acrtc_state))
-+			rc = amdgpu_dm_crtc_set_vupdate_irq(crtc, true);
- 	} else {
- 		/* vblank irq off -> vupdate irq off */
--		rc = dm_set_vupdate_irq(crtc, false);
-+		rc = amdgpu_dm_crtc_set_vupdate_irq(crtc, false);
- 	}
- 
- 	if (rc)
-@@ -199,12 +199,12 @@ static inline int dm_set_vblank(struct drm_crtc *crtc, bool enable)
- 	return 0;
- }
- 
--int dm_enable_vblank(struct drm_crtc *crtc)
-+int amdgpu_dm_crtc_enable_vblank(struct drm_crtc *crtc)
- {
- 	return dm_set_vblank(crtc, true);
- }
- 
--void dm_disable_vblank(struct drm_crtc *crtc)
-+void amdgpu_dm_crtc_disable_vblank(struct drm_crtc *crtc)
- {
- 	dm_set_vblank(crtc, false);
- }
-@@ -300,8 +300,8 @@ static const struct drm_crtc_funcs amdgpu_dm_crtc_funcs = {
- 	.verify_crc_source = amdgpu_dm_crtc_verify_crc_source,
- 	.get_crc_sources = amdgpu_dm_crtc_get_crc_sources,
- 	.get_vblank_counter = amdgpu_get_vblank_counter_kms,
--	.enable_vblank = dm_enable_vblank,
--	.disable_vblank = dm_disable_vblank,
-+	.enable_vblank = amdgpu_dm_crtc_enable_vblank,
-+	.disable_vblank = amdgpu_dm_crtc_disable_vblank,
- 	.get_vblank_timestamp = drm_crtc_vblank_helper_get_vblank_timestamp,
- #if defined(CONFIG_DEBUG_FS)
- 	.late_register = amdgpu_dm_crtc_late_register,
-@@ -381,7 +381,7 @@ static int dm_crtc_helper_atomic_check(struct drm_crtc *crtc,
- 	dm_update_crtc_active_planes(crtc, crtc_state);
- 
- 	if (WARN_ON(unlikely(!dm_crtc_state->stream &&
--			modeset_required(crtc_state, NULL, dm_crtc_state->stream)))) {
-+			amdgpu_dm_crtc_modeset_required(crtc_state, NULL, dm_crtc_state->stream)))) {
- 		return ret;
- 	}
- 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.h b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.h
-index 1ac8692354cf..17e948753f59 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.h
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_crtc.h
-@@ -27,21 +27,21 @@
- #ifndef __AMDGPU_DM_CRTC_H__
- #define __AMDGPU_DM_CRTC_H__
- 
--void dm_crtc_handle_vblank(struct amdgpu_crtc *acrtc);
-+void amdgpu_dm_crtc_handle_vblank(struct amdgpu_crtc *acrtc);
- 
--bool modeset_required(struct drm_crtc_state *crtc_state,
-+bool amdgpu_dm_crtc_modeset_required(struct drm_crtc_state *crtc_state,
- 		      struct dc_stream_state *new_stream,
- 		      struct dc_stream_state *old_stream);
- 
--int dm_set_vupdate_irq(struct drm_crtc *crtc, bool enable);
-+int amdgpu_dm_crtc_set_vupdate_irq(struct drm_crtc *crtc, bool enable);
- 
--bool amdgpu_dm_vrr_active_irq(struct amdgpu_crtc *acrtc);
-+bool amdgpu_dm_crtc_vrr_active_irq(struct amdgpu_crtc *acrtc);
- 
--bool amdgpu_dm_vrr_active(struct dm_crtc_state *dm_state);
-+bool amdgpu_dm_crtc_vrr_active(struct dm_crtc_state *dm_state);
- 
--int dm_enable_vblank(struct drm_crtc *crtc);
-+int amdgpu_dm_crtc_enable_vblank(struct drm_crtc *crtc);
- 
--void dm_disable_vblank(struct drm_crtc *crtc);
-+void amdgpu_dm_crtc_disable_vblank(struct drm_crtc *crtc);
- 
- int amdgpu_dm_crtc_init(struct amdgpu_display_manager *dm,
- 			struct drm_plane *plane,
--- 
-2.39.2
-
+> ---
+>  drivers/net/ethernet/fungible/funcore/fun_dev.c | 5 -----
+>  1 file changed, 5 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/fungible/funcore/fun_dev.c b/drivers/ne=
+t/ethernet/fungible/funcore/fun_dev.c
+> index fb5120d90f26..3680f83feba2 100644
+> --- a/drivers/net/ethernet/fungible/funcore/fun_dev.c
+> +++ b/drivers/net/ethernet/fungible/funcore/fun_dev.c
+> @@ -1,6 +1,5 @@
+>  // SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
+>
+> -#include <linux/aer.h>
+>  #include <linux/bitmap.h>
+>  #include <linux/delay.h>
+>  #include <linux/interrupt.h>
+> @@ -748,7 +747,6 @@ void fun_dev_disable(struct fun_dev *fdev)
+>         pci_free_irq_vectors(pdev);
+>
+>         pci_clear_master(pdev);
+> -       pci_disable_pcie_error_reporting(pdev);
+>         pci_disable_device(pdev);
+>
+>         fun_unmap_bars(fdev);
+> @@ -781,8 +779,6 @@ int fun_dev_enable(struct fun_dev *fdev, struct pci_d=
+ev *pdev,
+>                 goto unmap;
+>         }
+>
+> -       pci_enable_pcie_error_reporting(pdev);
+> -
+>         rc =3D sanitize_dev(fdev);
+>         if (rc)
+>                 goto disable_dev;
+> @@ -830,7 +826,6 @@ int fun_dev_enable(struct fun_dev *fdev, struct pci_d=
+ev *pdev,
+>  free_irqs:
+>         pci_free_irq_vectors(pdev);
+>  disable_dev:
+> -       pci_disable_pcie_error_reporting(pdev);
+>         pci_disable_device(pdev);
+>  unmap:
+>         fun_unmap_bars(fdev);
+> --
+> 2.25.1
+>
