@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DD66AE1C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ABD56AE1C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjCGOIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S230370AbjCGOJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:09:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjCGOIM (ORCPT
+        with ESMTP id S229960AbjCGOIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:08:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF4285A4C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:07:27 -0800 (PST)
+        Tue, 7 Mar 2023 09:08:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFC385A7D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:07:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BB7B61453
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:07:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B308C4339C;
-        Tue,  7 Mar 2023 14:07:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5802FB818F8
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:07:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 090FFC433EF;
+        Tue,  7 Mar 2023 14:07:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678198041;
-        bh=VdvMqNl4JSt5SmirAQSento60Ayr11cxcKTY8Dzuwjc=;
+        s=k20201202; t=1678198044;
+        bh=W8RSmb13M0UD0uiBw0YgqdVpB2dNrJMQsA88S6nGwfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fP2ted0R9U/fUqsNQvWqEs27N/xb5x7NJ/nMlSTGL/QA7FezlBjpNvyK44mZsySyz
-         /er95ikyQsAh3q5bM+6HjENLnCJkMZkh1M9mxeLidLx/sUhdcIO5jMeRX0f6wDGg7/
-         TnZX3zm4HPnT8gB+Q5BaZehllTf7Jf5xnOZGJoxPtHgYN+5mHz0RYt2ea8aO+u65Zs
-         Eov+QoD3vNrBWy1phH/z0Kc5TubMmTZ3WENb0wgiljV840iyvDKbetLCSMp6Jljx8r
-         Qd0N2X0FejaNEbwzp31B9BVPV66O1rUQoBO7Ck5XyzSXi5Jwfc15XBv2qXSAg5baM2
-         2UzUpl4DbAQAw==
+        b=hNoGrTgRatEitvHDZe6dRhngMdqkE6TSYrZjyagRu+CAcui5laeM+yXG/3f+WrBvp
+         WQZMTMHzssBRfJPVj3QphBI89sgkH+aG1IViRKaijZDAtmxOaGjlb/E9uSmdiLyUBo
+         3Olj7MpO8msdIObHe08BXSkBuXxvwToUZHEP1mKF+0kxphwIz6Hc4ztqLpp+4JtEa3
+         i6TBJGPSjI6/WzBhMhiHRFzXcuAfNYC61Kuqcn3FFwKPUa4psBthXOGsR2Y5Ol8//t
+         ErctYB2JSTwRcGPQxwjYKC55bXg6ZbE3NNKByy7VK3SjNhr410n6y2wuu0JGLyeKYe
+         kQv178eK2cxSQ==
 From:   Ard Biesheuvel <ardb@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -42,18 +42,18 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         Ryan Roberts <ryan.roberts@arm.com>,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Kees Cook <keescook@chromium.org>
-Subject: [PATCH v3 18/60] arm64: idreg-override: Prepare for place relative reloc patching
-Date:   Tue,  7 Mar 2023 15:04:40 +0100
-Message-Id: <20230307140522.2311461-19-ardb@kernel.org>
+Subject: [PATCH v3 19/60] arm64: idreg-override: Avoid parameq() and parameqn()
+Date:   Tue,  7 Mar 2023 15:04:41 +0100
+Message-Id: <20230307140522.2311461-20-ardb@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307140522.2311461-1-ardb@kernel.org>
 References: <20230307140522.2311461-1-ardb@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7371; i=ardb@kernel.org; h=from:subject; bh=VdvMqNl4JSt5SmirAQSento60Ayr11cxcKTY8Dzuwjc=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdRestC9O/ad8POB/+d0bZ7zdX7Y4FN5c9XXpNYLlex IWfthfjOkpZGMQ4GGTFFFkEZv99t/P0RKla51myMHNYmUCGMHBxCsBE/pxg+Ke2XL7kg7St14oj l0Ssj82ck2N4q3oGxzJuzZU3+AwNrvcw/M9ZpnpW+Osl8w25TyaY59WVfe27M9uj8/PDiJjUlFu CNiwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2747; i=ardb@kernel.org; h=from:subject; bh=W8RSmb13M0UD0uiBw0YgqdVpB2dNrJMQsA88S6nGwfI=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdRUuPQUKqZkZ5qO2sVS/OHP6ds+f3ui9rTm63bdcuv lu0XOl5RwkLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZiIdAzD9xDHX3EvDX+a9a9+ smtG0QQrI+FdWiFT/36+Xf+V5bq0OSPD2wPhcfoB8a7fDSa9Edxy9KlML5/fE8/fi6aJbf1gerK VHQA=
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,238 +61,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ID reg override handling code uses a rather elaborate data structure
-that relies on statically initialized absolute address values in pointer
-fields. This means that this code cannot run until relocation fixups
-have been applied, and this is unfortunate, because it means we cannot
-discover overrides for KASLR or LVA/LPA without creating the kernel
-mapping and performing the relocations first.
+The only way parameq() and parameqn() deviate from the ordinary string
+and memory routines is that they ignore the difference between dashes
+and underscores.
 
-This can be solved by switching to place-relative relocations, which can
-be applied by the linker at build time. This means some additional
-arithmetic is required when dereferencing these pointers, as we can no
-longer dereference the pointer members directly.
+Since we copy each command line argument into a buffer before passing it
+to parameq() and parameqn() numerous times, let's just convert all
+dashes to underscores just once, and update the alias array accordingly.
 
-So let's implement this for idreg-override.c in a preliminary way, i.e.,
-convert all the references in code to use a special accessor that
-produces the correct absolute value at runtime.
-
-To preserve the strong type checking for the static initializers, use
-union types for representing the hybrid quantities.
+This also helps reduce the dependency on kernel APIs that are no longer
+available once we move this code into the early mini C runtime.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/arm64/kernel/idreg-override.c | 98 +++++++++++++-------
- 1 file changed, 65 insertions(+), 33 deletions(-)
+ arch/arm64/kernel/idreg-override.c | 26 ++++++++++++--------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
 
 diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
-index b6e90ee6857eb758..fc9ed722621412bf 100644
+index fc9ed722621412bf..23bbbc37ac24ba09 100644
 --- a/arch/arm64/kernel/idreg-override.c
 +++ b/arch/arm64/kernel/idreg-override.c
-@@ -21,14 +21,32 @@
+@@ -182,8 +182,8 @@ static const struct {
+ 	char	alias[FTR_ALIAS_NAME_LEN];
+ 	char	feature[FTR_ALIAS_OPTION_LEN];
+ } aliases[] __initconst = {
+-	{ "kvm-arm.mode=nvhe",		"id_aa64mmfr1.vh=0" },
+-	{ "kvm-arm.mode=protected",	"id_aa64mmfr1.vh=0" },
++	{ "kvm_arm.mode=nvhe",		"id_aa64mmfr1.vh=0" },
++	{ "kvm_arm.mode=protected",	"id_aa64mmfr1.vh=0" },
+ 	{ "arm64.nosve",		"id_aa64pfr0.sve=0 id_aa64pfr1.sme=0" },
+ 	{ "arm64.nosme",		"id_aa64pfr1.sme=0" },
+ 	{ "arm64.nobti",		"id_aa64pfr1.bt=0" },
+@@ -204,7 +204,7 @@ static int __init find_field(const char *cmdline,
+ 	len = snprintf(opt, ARRAY_SIZE(opt), "%s.%s=",
+ 		       reg->name, reg->fields[f].name);
  
- static u64 __boot_status __initdata;
+-	if (!parameqn(cmdline, opt, len))
++	if (memcmp(cmdline, opt, len))
+ 		return -1;
  
-+// temporary __prel64 related definitions
-+// to be removed when this code is moved under pi/
+ 	return kstrtou64(cmdline + len, 0, v);
+@@ -261,23 +261,29 @@ static __init void __parse_cmdline(const char *cmdline, bool parse_aliases)
+ 
+ 		cmdline = skip_spaces(cmdline);
+ 
+-		for (len = 0; cmdline[len] && !isspace(cmdline[len]); len++);
++		/* terminate on "--" appearing on the command line by itself */
++		if (cmdline[0] == '-' && cmdline[1] == '-' && isspace(cmdline[2]))
++			return;
 +
-+#define __prel64_initconst	__initconst
-+
-+typedef void *prel64_t;
-+
-+static void *prel64_to_pointer(const prel64_t *p)
-+{
-+	return *p;
-+}
-+
- struct ftr_set_desc {
- 	char 				name[FTR_DESC_NAME_LEN];
--	struct arm64_ftr_override	*override;
-+	union {
-+		struct arm64_ftr_override *override;
-+		prel64_t		override_prel;
-+	};
- 	struct {
- 		char			name[FTR_DESC_FIELD_LEN];
- 		u8			shift;
- 		u8			width;
--		bool			(*filter)(u64 val);
-+		union {
-+			bool		(*filter)(u64 val);
-+			prel64_t	filter_prel;
-+		};
- 	} 				fields[];
- };
- 
-@@ -46,7 +64,7 @@ static bool __init mmfr1_vh_filter(u64 val)
- 		 val == 0);
- }
- 
--static const struct ftr_set_desc mmfr1 __initconst = {
-+static const struct ftr_set_desc mmfr1 __prel64_initconst = {
- 	.name		= "id_aa64mmfr1",
- 	.override	= &id_aa64mmfr1_override,
- 	.fields		= {
-@@ -70,7 +88,7 @@ static bool __init pfr0_sve_filter(u64 val)
- 	return true;
- }
- 
--static const struct ftr_set_desc pfr0 __initconst = {
-+static const struct ftr_set_desc pfr0 __prel64_initconst = {
- 	.name		= "id_aa64pfr0",
- 	.override	= &id_aa64pfr0_override,
- 	.fields		= {
-@@ -94,7 +112,7 @@ static bool __init pfr1_sme_filter(u64 val)
- 	return true;
- }
- 
--static const struct ftr_set_desc pfr1 __initconst = {
-+static const struct ftr_set_desc pfr1 __prel64_initconst = {
- 	.name		= "id_aa64pfr1",
- 	.override	= &id_aa64pfr1_override,
- 	.fields		= {
-@@ -105,7 +123,7 @@ static const struct ftr_set_desc pfr1 __initconst = {
- 	},
- };
- 
--static const struct ftr_set_desc isar1 __initconst = {
-+static const struct ftr_set_desc isar1 __prel64_initconst = {
- 	.name		= "id_aa64isar1",
- 	.override	= &id_aa64isar1_override,
- 	.fields		= {
-@@ -117,7 +135,7 @@ static const struct ftr_set_desc isar1 __initconst = {
- 	},
- };
- 
--static const struct ftr_set_desc isar2 __initconst = {
-+static const struct ftr_set_desc isar2 __prel64_initconst = {
- 	.name		= "id_aa64isar2",
- 	.override	= &id_aa64isar2_override,
- 	.fields		= {
-@@ -127,7 +145,7 @@ static const struct ftr_set_desc isar2 __initconst = {
- 	},
- };
- 
--static const struct ftr_set_desc smfr0 __initconst = {
-+static const struct ftr_set_desc smfr0 __prel64_initconst = {
- 	.name		= "id_aa64smfr0",
- 	.override	= &id_aa64smfr0_override,
- 	.fields		= {
-@@ -138,7 +156,7 @@ static const struct ftr_set_desc smfr0 __initconst = {
- 	},
- };
- 
--static const struct ftr_set_desc sw_features __initconst = {
-+static const struct ftr_set_desc sw_features __prel64_initconst = {
- 	.name		= "arm64_sw",
- 	.override	= &arm64_sw_feature_override,
- 	.fields		= {
-@@ -147,14 +165,17 @@ static const struct ftr_set_desc sw_features __initconst = {
- 	},
- };
- 
--static const struct ftr_set_desc * const regs[] __initconst = {
--	&mmfr1,
--	&pfr0,
--	&pfr1,
--	&isar1,
--	&isar2,
--	&smfr0,
--	&sw_features,
-+static const union {
-+	const struct ftr_set_desc	*reg;
-+	prel64_t			reg_prel;
-+} regs[] __prel64_initconst = {
-+	{ .reg = &mmfr1		},
-+	{ .reg = &pfr0 		},
-+	{ .reg = &pfr1 		},
-+	{ .reg = &isar1		},
-+	{ .reg = &isar2		},
-+	{ .reg = &smfr0		},
-+	{ .reg = &sw_features	},
- };
- 
- static const struct {
-@@ -194,15 +215,20 @@ static void __init match_options(const char *cmdline)
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(regs); i++) {
-+		const struct ftr_set_desc *reg = prel64_to_pointer(&regs[i].reg_prel);
-+		struct arm64_ftr_override *override;
- 		int f;
- 
--		for (f = 0; strlen(regs[i]->fields[f].name); f++) {
--			u64 shift = regs[i]->fields[f].shift;
--			u64 width = regs[i]->fields[f].width ?: 4;
-+		override = prel64_to_pointer(&reg->override_prel);
-+
-+		for (f = 0; strlen(reg->fields[f].name); f++) {
-+			u64 shift = reg->fields[f].shift;
-+			u64 width = reg->fields[f].width ?: 4;
- 			u64 mask = GENMASK_ULL(shift + width - 1, shift);
-+			bool (*filter)(u64 val);
- 			u64 v;
- 
--			if (find_field(cmdline, regs[i], f, &v))
-+			if (find_field(cmdline, reg, f, &v))
- 				continue;
- 
- 			/*
-@@ -210,16 +236,16 @@ static void __init match_options(const char *cmdline)
- 			 * it by setting the value to the all-ones while
- 			 * clearing the mask... Yes, this is fragile.
- 			 */
--			if (regs[i]->fields[f].filter &&
--			    !regs[i]->fields[f].filter(v)) {
--				regs[i]->override->val  |= mask;
--				regs[i]->override->mask &= ~mask;
-+			filter = prel64_to_pointer(&reg->fields[f].filter_prel);
-+			if (filter && !filter(v)) {
-+				override->val  |= mask;
-+				override->mask &= ~mask;
- 				continue;
- 			}
- 
--			regs[i]->override->val  &= ~mask;
--			regs[i]->override->val  |= (v << shift) & mask;
--			regs[i]->override->mask |= mask;
-+			override->val  &= ~mask;
-+			override->val  |= (v << shift) & mask;
-+			override->mask |= mask;
- 
++		for (len = 0; cmdline[len] && !isspace(cmdline[len]); len++) {
++			if (len >= sizeof(buf) - 1)
++				break;
++			if (cmdline[len] == '-')
++				buf[len] = '_';
++			else
++				buf[len] = cmdline[len];
++		}
+ 		if (!len)
  			return;
- 		}
-@@ -293,11 +319,16 @@ void init_feature_override(u64 boot_status);
  
- asmlinkage void __init init_feature_override(u64 boot_status)
- {
-+	struct arm64_ftr_override *override;
-+	const struct ftr_set_desc *reg;
- 	int i;
+-		len = min(len, ARRAY_SIZE(buf) - 1);
+-		strncpy(buf, cmdline, len);
+ 		buf[len] = 0;
  
- 	for (i = 0; i < ARRAY_SIZE(regs); i++) {
--		regs[i]->override->val  = 0;
--		regs[i]->override->mask = 0;
-+		reg = prel64_to_pointer(&regs[i].reg_prel);
-+		override = prel64_to_pointer(&reg->override_prel);
-+
-+		override->val  = 0;
-+		override->mask = 0;
- 	}
+-		if (strcmp(buf, "--") == 0)
+-			return;
+-
+ 		cmdline += len;
  
- 	__boot_status = boot_status;
-@@ -305,8 +336,9 @@ asmlinkage void __init init_feature_override(u64 boot_status)
- 	parse_cmdline();
+ 		match_options(buf);
  
- 	for (i = 0; i < ARRAY_SIZE(regs); i++) {
--		dcache_clean_inval_poc((unsigned long)regs[i]->override,
--				       (unsigned long)regs[i]->override +
--				       sizeof(*regs[i]->override));
-+		reg = prel64_to_pointer(&regs[i].reg_prel);
-+		override = prel64_to_pointer(&reg->override_prel);
-+		dcache_clean_inval_poc((unsigned long)override,
-+				       (unsigned long)(override + 1));
- 	}
+ 		for (i = 0; parse_aliases && i < ARRAY_SIZE(aliases); i++)
+-			if (parameq(buf, aliases[i].alias))
++			if (!memcmp(buf, aliases[i].alias, len + 1))
+ 				__parse_cmdline(aliases[i].feature, false);
+ 	} while (1);
  }
 -- 
 2.39.2
