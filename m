@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A827C6ADC36
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:44:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA4F6ADCBC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:01:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbjCGKoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
+        id S230156AbjCGLBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:01:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjCGKoE (ORCPT
+        with ESMTP id S230079AbjCGLAp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:44:04 -0500
-X-Greylist: delayed 510 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 02:43:52 PST
-Received: from mx3.securetransport.de (mx3.securetransport.de [IPv6:2a01:4f8:c0c:92be::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A97529E15
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:43:51 -0800 (PST)
+        Tue, 7 Mar 2023 06:00:45 -0500
+X-Greylist: delayed 464 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 02:58:11 PST
+Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9CA142CC4A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:58:10 -0800 (PST)
 Received: from mail.dh-electronics.com (unknown [77.24.89.57])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx3.securetransport.de (Postfix) with ESMTPSA id CF0B65DEFB;
-        Tue,  7 Mar 2023 11:34:39 +0100 (CET)
+        by mx4.securetransport.de (Postfix) with ESMTPSA id C7D6E720310;
+        Tue,  7 Mar 2023 11:49:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1678185281;
-        bh=e18blKUa7OBzC9WaR72XsgEr84GBNJMFVfJwbubVpek=;
+        s=dhelectronicscom; t=1678186185;
+        bh=if3EhqbPCLkgMUpVzpv3YjH7FwRgcdH7oO1eRXFDAaQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=fPRZr/Fq9TjbB87gP6deY0O0144l09h6EaDkxSQ3N64XTZ8YheXkSgn4nfv9tJjCW
-         yZcoGeMCPPam7Zsv9ScrqsKsvsxhfMmAU3K8s5U0dHhj1iqP5y9VGBmiW8sDyLk0jm
-         3fvF8kLzs6HppGgbb6qsVaZJ7wcAgSKV949q3soVjOCMWzkbldKa2bRrkJIvTR+6Ji
-         oyeKY4KbDxxUSTtZkwT1hq/fFaYrrfhdmcjLrenypR0HaZlr7NWegFnP9e9tMxHbfQ
-         hofsPFeCO7Ubvq3vQ/TeLnqwby8x++L1cl8FxqrSJYcwqTyTaA+6LiK6a2rBhplyeU
-         61CqIMzoJuHDQ==
+        b=AFPThZoMbRDPxECluatb4AGjxDxBRmG5za2uqT3uFRLBZWNOzM8qfuhjjG8BTDOmf
+         EGhwTI1RHfWCYoGkH1qvrgRi6iflUwPTd4DtPO5OpDbdoIJNBpVGJvvy+JWPoIcbi9
+         BHJBgjyVFNlfcanTcWJazu/yf/jnbXr2wM9SgEF8rM8fDys4N1pW2ZL5ANCzJuLoA9
+         M7jzLbT3XDbaHrp+US7JhpzFkNG+I+p67Sw5ly5ypUczR5PpoTf0CK52AgIqKtc7jM
+         TmMaxVrwAdIkuhQUht6SJHShKootCA495rO9Sxpxj4/uiy5G/E2mncE5+VBfRZRRom
+         h4JYBpFujHWgQ==
 Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
  DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 7 Mar 2023 11:19:25 +0100
+ 15.2.1118.25; Tue, 7 Mar 2023 11:19:26 +0100
 Received: from localhost.localdomain (172.16.51.16) by
  DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -43,14 +43,13 @@ From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
 To:     <linux-arm-kernel@lists.infradead.org>
 CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
         "Support Opensource" <support.opensource@diasemi.com>,
-        Lee Jones <lee@kernel.org>,
-        "Adam Thomson" <Adam.Thomson.Opensource@diasemi.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, Marek Vasut <marex@denx.de>,
         <kernel@dh-electronics.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH V3 2/3] mfd: da9062: Remove IRQ requirement
-Date:   Tue, 7 Mar 2023 11:18:12 +0100
-Message-ID: <20230307101813.77267-2-cniedermaier@dh-electronics.com>
+Subject: [PATCH V3 3/3] regulator: da9062: Make the use of IRQ optional
+Date:   Tue, 7 Mar 2023 11:18:13 +0100
+Message-ID: <20230307101813.77267-3-cniedermaier@dh-electronics.com>
 X-Mailer: git-send-email 2.11.0
 X-klartext: yes
 In-Reply-To: <20230307101813.77267-1-cniedermaier@dh-electronics.com>
@@ -66,14 +65,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch removes the requirement for an IRQ, because for the core
-functionality IRQ isn't needed. So this makes the DA9061/62 chip
-usable for designs which haven't connected the IRQ pin.
+This patch makes the use of IRQ optional to make the DA9061/62 usable
+for designs that don't have the IRQ pin connected, because the regulator
+is usable without IRQ.
 
 Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Acked-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: Adam Ward <DLG-Adam.Ward.opensource@dm.renesas.com>
 ---
 Cc: Support Opensource <support.opensource@diasemi.com>
-Cc: Lee Jones <lee@kernel.org>
 Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>
 Cc: Mark Brown <broonie@kernel.org>
@@ -83,164 +83,30 @@ Cc: linux-kernel@vger.kernel.org
 To: linux-arm-kernel@lists.infradead.org
 ---
 V2: - Rebase on current next 20230209
-    - Add Lee Jones to Cc list
+    - Add Reviewed-by and Acked-by tags
 V3: - Rebase on current next 20230307
-    - Use macro MFD_CELL_OF
-    - Refactoring the code for use without IRQ
 ---
- drivers/mfd/da9062-core.c | 84 +++++++++++++++++++++++++++++++----------------
- 1 file changed, 55 insertions(+), 29 deletions(-)
+ drivers/regulator/da9062-regulator.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/da9062-core.c b/drivers/mfd/da9062-core.c
-index 9418c58c2b06..d073d5f106ec 100644
---- a/drivers/mfd/da9062-core.c
-+++ b/drivers/mfd/da9062-core.c
-@@ -181,7 +181,7 @@ static const struct resource da9061_onkey_resources[] = {
- 	DEFINE_RES_IRQ_NAMED(DA9061_IRQ_ONKEY, "ONKEY"),
- };
- 
--static const struct mfd_cell da9061_devs[] = {
-+static const struct mfd_cell da9061_devs_irq[] = {
- 	MFD_CELL_OF("da9061-core", da9061_core_resources, NULL, 0, 0,
- 		    NULL),
- 	MFD_CELL_OF("da9062-regulators", da9061_regulators_resources, NULL, 0, 0,
-@@ -194,6 +194,14 @@ static const struct mfd_cell da9061_devs[] = {
- 		    "dlg,da9061-onkey"),
- };
- 
-+static const struct mfd_cell da9061_devs_noirq[] = {
-+	MFD_CELL_OF("da9061-core", NULL, NULL, 0, 0, NULL),
-+	MFD_CELL_OF("da9062-regulators", NULL, NULL, 0, 0, NULL),
-+	MFD_CELL_OF("da9061-watchdog", NULL, NULL, 0, 0, "dlg,da9061-watchdog"),
-+	MFD_CELL_OF("da9061-thermal", NULL, NULL, 0, 0, "dlg,da9061-thermal"),
-+	MFD_CELL_OF("da9061-onkey", NULL, NULL, 0, 0, "dlg,da9061-onkey"),
-+};
-+
- static const struct resource da9062_core_resources[] = {
- 	DEFINE_RES_NAMED(DA9062_IRQ_VDD_WARN, 1, "VDD_WARN", IORESOURCE_IRQ),
- };
-@@ -227,7 +235,7 @@ static const struct resource da9062_gpio_resources[] = {
- 	DEFINE_RES_NAMED(DA9062_IRQ_GPI4, 1, "GPI4", IORESOURCE_IRQ),
- };
- 
--static const struct mfd_cell da9062_devs[] = {
-+static const struct mfd_cell da9062_devs_irq[] = {
- 	MFD_CELL_OF("da9062-core", da9062_core_resources, NULL, 0, 0,
- 		    NULL),
- 	MFD_CELL_OF("da9062-regulators", da9062_regulators_resources, NULL, 0, 0,
-@@ -244,6 +252,16 @@ static const struct mfd_cell da9062_devs[] = {
- 		    "dlg,da9062-gpio"),
- };
- 
-+static const struct mfd_cell da9062_devs_noirq[] = {
-+	MFD_CELL_OF("da9062-core", NULL, NULL, 0, 0, NULL),
-+	MFD_CELL_OF("da9062-regulators", NULL, NULL, 0, 0, NULL),
-+	MFD_CELL_OF("da9062-watchdog", NULL, NULL, 0, 0, "dlg,da9062-watchdog"),
-+	MFD_CELL_OF("da9062-thermal", NULL, NULL, 0, 0, "dlg,da9062-thermal"),
-+	MFD_CELL_OF("da9062-rtc", NULL, NULL, 0, 0, "dlg,da9062-rtc"),
-+	MFD_CELL_OF("da9062-onkey", NULL, NULL, 0, 0, "dlg,da9062-onkey"),
-+	MFD_CELL_OF("da9062-gpio", NULL, NULL, 0, 0, "dlg,da9062-gpio"),
-+};
-+
- static int da9062_clear_fault_log(struct da9062 *chip)
- {
- 	int ret;
-@@ -581,7 +599,7 @@ static int da9062_i2c_probe(struct i2c_client *i2c)
- {
- 	const struct i2c_device_id *id = i2c_client_get_device_id(i2c);
- 	struct da9062 *chip;
--	unsigned int irq_base;
-+	unsigned int irq_base = 0;
- 	const struct mfd_cell *cell;
- 	const struct regmap_irq_chip *irq_chip;
- 	const struct regmap_config *config;
-@@ -601,22 +619,16 @@ static int da9062_i2c_probe(struct i2c_client *i2c)
- 	i2c_set_clientdata(i2c, chip);
- 	chip->dev = &i2c->dev;
- 
--	if (!i2c->irq) {
--		dev_err(chip->dev, "No IRQ configured\n");
--		return -EINVAL;
--	}
--
-+	/* Start with a base configuration without IRQ */
- 	switch (chip->chip_type) {
- 	case COMPAT_TYPE_DA9061:
--		cell = da9061_devs;
--		cell_num = ARRAY_SIZE(da9061_devs);
--		irq_chip = &da9061_irq_chip;
-+		cell = da9061_devs_noirq;
-+		cell_num = ARRAY_SIZE(da9061_devs_noirq);
- 		config = &da9061_regmap_config;
- 		break;
- 	case COMPAT_TYPE_DA9062:
--		cell = da9062_devs;
--		cell_num = ARRAY_SIZE(da9062_devs);
--		irq_chip = &da9062_irq_chip;
-+		cell = da9062_devs_noirq;
-+		cell_num = ARRAY_SIZE(da9062_devs_noirq);
- 		config = &da9062_regmap_config;
- 		break;
- 	default:
-@@ -651,29 +663,43 @@ static int da9062_i2c_probe(struct i2c_client *i2c)
- 	if (ret)
- 		return ret;
- 
--	ret = da9062_configure_irq_type(chip, i2c->irq, &trigger_type);
--	if (ret < 0) {
--		dev_err(chip->dev, "Failed to configure IRQ type\n");
--		return ret;
--	}
-+	/* If IRQ is available, reconfigure it accordingly */
-+	if (i2c->irq) {
-+		if (chip->chip_type == COMPAT_TYPE_DA9061) {
-+			cell = da9061_devs_irq;
-+			cell_num = ARRAY_SIZE(da9061_devs_irq);
-+			irq_chip = &da9061_irq_chip;
-+		} else {
-+			cell = da9062_devs_irq;
-+			cell_num = ARRAY_SIZE(da9062_devs_irq);
-+			irq_chip = &da9062_irq_chip;
-+		}
- 
--	ret = regmap_add_irq_chip(chip->regmap, i2c->irq,
--			trigger_type | IRQF_SHARED | IRQF_ONESHOT,
--			-1, irq_chip, &chip->regmap_irq);
--	if (ret) {
--		dev_err(chip->dev, "Failed to request IRQ %d: %d\n",
--			i2c->irq, ret);
--		return ret;
--	}
-+		ret = da9062_configure_irq_type(chip, i2c->irq, &trigger_type);
-+		if (ret < 0) {
-+			dev_err(chip->dev, "Failed to configure IRQ type\n");
-+			return ret;
-+		}
- 
--	irq_base = regmap_irq_chip_get_base(chip->regmap_irq);
-+		ret = regmap_add_irq_chip(chip->regmap, i2c->irq,
-+					  trigger_type | IRQF_SHARED | IRQF_ONESHOT,
-+					  -1, irq_chip, &chip->regmap_irq);
-+		if (ret) {
-+			dev_err(chip->dev, "Failed to request IRQ %d: %d\n",
-+				i2c->irq, ret);
-+			return ret;
-+		}
-+
-+		irq_base = regmap_irq_chip_get_base(chip->regmap_irq);
-+	}
- 
- 	ret = mfd_add_devices(chip->dev, PLATFORM_DEVID_NONE, cell,
- 			      cell_num, NULL, irq_base,
- 			      NULL);
- 	if (ret) {
- 		dev_err(chip->dev, "Cannot register child devices\n");
--		regmap_del_irq_chip(i2c->irq, chip->regmap_irq);
-+		if (i2c->irq)
-+			regmap_del_irq_chip(i2c->irq, chip->regmap_irq);
- 		return ret;
+diff --git a/drivers/regulator/da9062-regulator.c b/drivers/regulator/da9062-regulator.c
+index 1a6324001027..653e1844dd61 100644
+--- a/drivers/regulator/da9062-regulator.c
++++ b/drivers/regulator/da9062-regulator.c
+@@ -1012,10 +1012,9 @@ static int da9062_regulator_probe(struct platform_device *pdev)
  	}
  
+ 	/* LDOs overcurrent event support */
+-	irq = platform_get_irq_byname(pdev, "LDO_LIM");
+-	if (irq < 0)
+-		return irq;
+-	regulators->irq_ldo_lim = irq;
++	regulators->irq_ldo_lim = platform_get_irq_byname_optional(pdev, "LDO_LIM");
++	if (regulators->irq_ldo_lim < 0)
++		return 0;
+ 
+ 	ret = devm_request_threaded_irq(&pdev->dev, irq,
+ 					NULL, da9062_ldo_lim_event,
 -- 
 2.11.0
 
