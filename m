@@ -2,330 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADAD6AE60E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210176AE614
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:15:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjCGQNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:13:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39722 "EHLO
+        id S229709AbjCGQPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCGQNc (ORCPT
+        with ESMTP id S229483AbjCGQPE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:13:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5CF113D40
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:12:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678205555;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oo9Ql82WQk+WwZEhSCLKfZVtCnkfKktd5ammh9bPW10=;
-        b=Ir4I4QI+OkdWk01fj0D7vyG1vy8qJraoGJ2zilUANt8bflcNfl88Bw+qi3P/XTm3lygWM7
-        8OHi2TbaEgLwVqwWbG56GZ485FEY1h8HtZt7AcTOP2+AnWXV7aWvYnJvFL1Pp731lFoFzW
-        ssnSkluHqK4XfEw80ntqs2Y2RVo1PVk=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-16-BAgkaVz2PtCwNdEThR1DBA-1; Tue, 07 Mar 2023 11:11:20 -0500
-X-MC-Unique: BAgkaVz2PtCwNdEThR1DBA-1
-Received: by mail-wm1-f71.google.com with SMTP id r7-20020a05600c35c700b003eb3f2c4fb4so5145406wmq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:11:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678205469;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oo9Ql82WQk+WwZEhSCLKfZVtCnkfKktd5ammh9bPW10=;
-        b=JVs1LBIjMXuTypafUONSVbNrcej5AoQ/scoYm5tdpl8HGpCUKa0qRZjp72XC4jb82v
-         dXha1+u3FpQ2cEwvlbj4wCQIpdtibZ+75Gs4Cz48I8uA1tihjKZW+7JR1RDS/J5g/nNI
-         IwmEzzLwt8vIOrNEtH+C3oT/cchJrtR/3P0+Dcv3atBOB6z0TsndeUb+HQnFyFiAE91n
-         1xDrYg6jo7400NRIv0Klo77cEEVmiNv+1X8hPUqWFtcnwvlBSzFUuu4JQTAYqAtJxc93
-         F2HbgU3ADC3KXEpp8x1G0xS8dRpZEhDhRz1yBx6tjRTRHG2b/lN0ppynTHkdHrAkszCY
-         BiRg==
-X-Gm-Message-State: AO0yUKWKOaNTL1DpyqJJk2hlFYxPg5cK8nhhE17FZLGwqIkL9BZ4dMiA
-        Eri4l1GlQP7GdjUN0bJL2kYuwViCS6rU2/Ghozr+CfHPURSB+/6W0e14MaUqvNxhNcYr85udGeI
-        71tfFH8QjvZoP3YuyD06mSFGT
-X-Received: by 2002:a5d:658b:0:b0:2c9:79f4:101f with SMTP id q11-20020a5d658b000000b002c979f4101fmr10742123wru.34.1678205468787;
-        Tue, 07 Mar 2023 08:11:08 -0800 (PST)
-X-Google-Smtp-Source: AK7set83og5nEYla97Fnw+XisXoZwVed2N+iJd6f789nKsBveRVprqXqIQ2BzzXK+rD9vLm4ROQKXw==
-X-Received: by 2002:a5d:658b:0:b0:2c9:79f4:101f with SMTP id q11-20020a5d658b000000b002c979f4101fmr10742101wru.34.1678205468396;
-        Tue, 07 Mar 2023 08:11:08 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:a100:e20:41da:c49b:8974? (p200300cbc707a1000e2041dac49b8974.dip0.t-ipconnect.de. [2003:cb:c707:a100:e20:41da:c49b:8974])
-        by smtp.gmail.com with ESMTPSA id d18-20020a5d6452000000b002c71dd1109fsm12715822wrw.47.2023.03.07.08.11.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 08:11:07 -0800 (PST)
-Message-ID: <94be7b9f-c33e-c6dc-4132-6cb78f7c0624@redhat.com>
-Date:   Tue, 7 Mar 2023 17:11:07 +0100
+        Tue, 7 Mar 2023 11:15:04 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2068.outbound.protection.outlook.com [40.107.21.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C222385A;
+        Tue,  7 Mar 2023 08:15:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B4KtjZDyZlKujHLmcdWN/rS7zSpAo6XoQeFzKkVFJAc=;
+ b=zO6/kS4/CK129z+xWF7Istrs6MUTijaEqknnPijNbt7oiKhYU/8Fz9QKDgD3MC70ukuyu0diRRUCAVZnyu9LghST47rs/rRUA1rb7lZZ7FXlIg0WITsDaNmi3I4yK460jBpunKSskEoBIpT0CzlkUoh0gS6Qswvp7ErycgT4eps=
+Received: from DU2PR04CA0178.eurprd04.prod.outlook.com (2603:10a6:10:2b0::33)
+ by PAWPR08MB9996.eurprd08.prod.outlook.com (2603:10a6:102:35a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
+ 2023 16:14:37 +0000
+Received: from DBAEUR03FT018.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:2b0:cafe::7c) by DU2PR04CA0178.outlook.office365.com
+ (2603:10a6:10:2b0::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29 via Frontend
+ Transport; Tue, 7 Mar 2023 16:14:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DBAEUR03FT018.mail.protection.outlook.com (100.127.142.74) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6156.28 via Frontend Transport; Tue, 7 Mar 2023 16:14:37 +0000
+Received: ("Tessian outbound c2bcb4c18c29:v135"); Tue, 07 Mar 2023 16:14:36 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 256eb6345820ee5d
+X-CR-MTA-TID: 64aa7808
+Received: from f2cc540fe456.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 96E998F2-AD56-48E6-9BBA-BD17A57EB5E1.1;
+        Tue, 07 Mar 2023 16:14:29 +0000
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id f2cc540fe456.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Tue, 07 Mar 2023 16:14:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NotXR3ZRN/Sh3ulSeVcEyzB/x9Gl5grT/tODXVvhh06rCcNCA2l7zbuTsPSf11gaLGf0+xyr9Ne/oCvXZKQY3i16S1ibPE50yEOxRNXM52hwL5gp/8Hrf6J4WC1hyYbs6DKXrkxOTO+IsGWhb3hO2aRFlK5WgidnpnJP5rbZEGPultmBT/eLvXaftnDrKtCWZj2sWqUQgZYZqPBoqEfoNvkg4RTzVcZBqTFFiUHp2nw+Kwj3Y4Oy6cpYW+J9pXfvYLaN6IoPd/z6pRHCQY+s4mo3c5PZYAeHrNs3NWcUDvZvizPhKpNwwz0YSGtBaLun2Z8s0MIsVbojdCts6lfERA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B4KtjZDyZlKujHLmcdWN/rS7zSpAo6XoQeFzKkVFJAc=;
+ b=ZH7NPDSeTF1/5nwwghUBc054qaBMBzGJuQAtwx5g21VOvGyN8tFvciieIYP/9t49RUvnr7ds67SOrturi9FLIk7lQizgd1QOLGu00FNFnheUEQLdKHfN5Dk6KWISQLL5frvVjh7BEHgFnzKcMTbTSnaokIWilXDhi4TYj+RX+DvJ/lnoo0x2tmFqYSZPQ1tcu+ML2YBIxf7oWhMz1ZssS4Kqr25PWBL7i7IHeH69qvpmvY00hraVKvaMRIWGc9MPSuci8dbnZOJOgf3dPbTFn7TWcjmZKljX1TBGQvgWX7pJU+DPrDkkA8oBcOac1TTNMEuIUvhTqy93mNzq2EKOkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B4KtjZDyZlKujHLmcdWN/rS7zSpAo6XoQeFzKkVFJAc=;
+ b=zO6/kS4/CK129z+xWF7Istrs6MUTijaEqknnPijNbt7oiKhYU/8Fz9QKDgD3MC70ukuyu0diRRUCAVZnyu9LghST47rs/rRUA1rb7lZZ7FXlIg0WITsDaNmi3I4yK460jBpunKSskEoBIpT0CzlkUoh0gS6Qswvp7ErycgT4eps=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by AS2PR08MB8748.eurprd08.prod.outlook.com (2603:10a6:20b:544::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
+ 2023 16:14:26 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e3d1:5a4:db0c:43cc]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::e3d1:5a4:db0c:43cc%6]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
+ 16:14:26 +0000
+Date:   Tue, 7 Mar 2023 16:14:09 +0000
+From:   Szabolcs Nagy <szabolcs.nagy@arm.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rppt@kernel.org" <rppt@kernel.org>, "nd@arm.com" <nd@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Subject: Re: [PATCH v7 01/41] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <ZAdi0dc+6Jmq36Mn@arm.com>
+References: <Y/9fdYQ8Cd0GI+8C@arm.com>
+ <636de4a28a42a082f182e940fbd8e63ea23895cc.camel@intel.com>
+ <df8ef3a9e5139655a223589c16a68393ab3f6d1d.camel@intel.com>
+ <ZADQISkczejfgdoS@arm.com>
+ <9714f724b53b04fdf69302c6850885f5dfbf3af5.camel@intel.com>
+ <ZAYS6CHuZ0MiFvmE@arm.com>
+ <87wn3tsuxf.fsf@oldenburg.str.redhat.com>
+ <a205aed2171a0a463e3bb7179e8dd63bd4012e7e.camel@intel.com>
+ <ZAc2LQEfvRLCknQQ@arm.com>
+ <87ilfcoe59.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87ilfcoe59.fsf@oldenburg.str.redhat.com>
+X-ClientProxiedBy: LO4P302CA0006.GBRP302.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c2::12) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230306213925.617814-1-peterx@redhat.com>
- <20230306213925.617814-2-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 1/2] mm/uffd: UFFD_FEATURE_WP_UNPOPULATED
-In-Reply-To: <20230306213925.617814-2-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AS2PR08MB8748:EE_|DBAEUR03FT018:EE_|PAWPR08MB9996:EE_
+X-MS-Office365-Filtering-Correlation-Id: 15acc6e2-902d-4032-cc33-08db1f270c23
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: ZoGkrQKyiHlpR6HILptdzrXZOvO6wBpB4iPjAKzfaEk4OkzFmWydJrWpdwuuAe0jGELcEp5S3cZNzO3ZVo7fZV2ZWXGMs6IsAVvNh6sa9idPTqT3XabBUTF3CmTdGahwJE72Fo9ia4JS3pThmK2Jebt7gI1+18LXHfZNGYpk6N5A2OSF7y9AC6MMd/aVyw8a4uoaxcd4oZ03t9WWTnSpyOkTDC4mz6/Kq5UkALik29YMJ/7JFB2HjT+AUyr86UelBzWtpg/enh4FlWPuAEqgxF8HW+RxP2gvvCOwKZ8KH1gMGlzD1wErlCeuG4j65W3Pi2q9iCI9KoAjdIYLCaJw8YSgT4hQ2YBUwESMQd0u5vrdl8ipLn010BWUaJm3N4UfYOFE/RoJ0CVZ7i3Sr8/KfqWLVJULe17a70FJgW2pE75h7uU3l3A4GF9+sIMSwGFdHTUAn5bM2B3sNRrzdKBsmtfwktoBiIpB9odKhnDxELdj/iTQ9DdvUw1/ApwTWtFoX7Fd3r0yQGL7R1JUbwjQqNkM0lqvp7bEnBqDiik5v42l6HaRIYa56vny2dP+Xm408RUk2EPmLSHXHYHAheoL6ew5OJ+pRc7C0qzWGU3BSizCHR/NvyskDZAVWiB8CKJ1RW2ZPQWr2SaxoLSDdPs3dFCVRAPqpSajTzZ9NNMCg+SWtGXFZZtu7enJqvaq1jKS
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(376002)(346002)(39860400002)(396003)(451199018)(38100700002)(86362001)(8936002)(66946007)(36756003)(44832011)(7406005)(7416002)(2906002)(5660300002)(6916009)(4326008)(8676002)(66556008)(41300700001)(66476007)(186003)(26005)(83380400001)(2616005)(316002)(478600001)(6506007)(6512007)(54906003)(6486002)(6666004)(66899018)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8748
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT018.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: 981bc13e-6a83-4eb4-b9e6-08db1f270547
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Kbj7XkX55rflYWRArwwhq+3k+i9T4+O+V8IKHEnujqhcQBl+L60zprP3z4joltGkjsn7l3Qw4eFsRHuH2jolv3w7u5gH5VF+IgWBdW0+im216MKnaXgfyCe0wMGYAU3iwHpHG8oDVk4+p8BK/fo4ZkgeOvRD64h88py+XD50LX3JEKVd9kJBFIOwTJCU7dj9izY3vW5d0KKX+jQumA8t55th5aH28KL8exgOMhuPFCprobJh54OdRPvWrFWrqq+PTuURJI4pIlFT05lHscmsaa9aCVll1ttP//rGrK4kSQO2agAmHCzzy4m8gKEslneB61kQXmoapVR1XTN/S2cPOIzdXpMYrfVTYYqGF3xu6A92ywsC7UBeFB5NN0i4LmlTEVXP2fRYKzU6tmdoUqTS18Q3MffN9NEhW0uNFaOgdG1effP+hI2MNp/ZTjjwnw2YkyQo/4Hoj9jjrr+S5HTyQFv/59lkT71cdo7AU0yNIrUKVubsb36FoSRKs3hHkt6Gib+gmf350j53zDEOJ0YVY8U+qHc8Yj1DdNuVOE1Z/IRRVL/hYZbSRbq+3qJb5x7k4hYXmvk42jkKUvCn1tNz+aFzdC8SgzQcP7tAHgWf3sXv5WaIFBXbVZsiurV88up9P2w13OTaPx1Qd4AM0+wbNCb6Mme/2crdOoCJonDMiaH7ymSEy6iaXYsfQNfCm+lG7jYGQmCKW4dMLJjGE4Ngi6aacrzuraxz9AlHx82RA5Q=
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(136003)(376002)(39860400002)(451199018)(40470700004)(46966006)(36840700001)(66899018)(82310400005)(36860700001)(82740400003)(47076005)(83380400001)(36756003)(107886003)(478600001)(81166007)(54906003)(316002)(356005)(5660300002)(336012)(6512007)(6486002)(2616005)(6666004)(40460700003)(41300700001)(26005)(186003)(6506007)(450100002)(44832011)(2906002)(6862004)(70586007)(70206006)(8936002)(4326008)(40480700001)(8676002)(86362001)(67856001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 16:14:37.0759
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15acc6e2-902d-4032-cc33-08db1f270c23
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT018.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR08MB9996
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.03.23 22:39, Peter Xu wrote:
-
-Note that I wodnered for a second if we'd call it 
-"UFFD_FEATURE_WP_MISSING" instead (similar to the definition of MISSING 
-uffd that triggers when we have nothing mapped).
-
-Just a thought.
-
-[...]
-
-> With WP_UNPOPUATED, application like QEMU can avoid pre-read faults all the
-> memory before wr-protect during taking a live snapshot.  Quotting from
-> Muhammad's test result here [3] based on a simple program [4]:
+The 03/07/2023 15:00, Florian Weimer wrote:
+> * szabolcs:
 > 
->    (1) With huge page disabled
->    echo madvise > /sys/kernel/mm/transparent_hugepage/enabled
->    ./uffd_wp_perf
->    Test DEFAULT: 4
->    Test PRE-READ: 1111453 (pre-fault 1101011)
->    Test MADVISE: 278276 (pre-fault 266378)
->    Test WP-UNPOPULATE: 11712
+> > changing/disabling the alt stack is not valid while a handler is
+> > executing on it. if we don't allow jumping out and back to an
+> > alt stack (swapcontext) then there can be only one alt stack
+> > live per thread and change/disable can do the shadow stack free.
+> >
+> > if jump back is allowed (linux even makes it race-free with
+> > SS_AUTODISARM) then the life-time of alt stack is extended
+> > beyond change/disable (jump back to an unregistered alt stack).
+> >
+> > to support jump back to an alt stack the requirements are
+> >
+> > 1) user has to manage an alt shadow stack together with the alt
+> >    stack (requies user code change, not just libc).
+> >
+> > 2) kernel has to push a restore token on the thread shadow stack
+> >    on signal entry (at least in case of alt shadow stack, and
+> >    deal with corner cases around shadow stack overflow).
 > 
->    (2) With Huge page enabled
->    echo always > /sys/kernel/mm/transparent_hugepage/enabled
->    ./uffd_wp_perf
->    Test DEFAULT: 4
->    Test PRE-READ: 22521 (pre-fault 22348)
->    Test MADVISE: 4909 (pre-fault 4743)
->    Test WP-UNPOPULATE: 14448
-> 
-> There'll be a great perf boost for no-thp case, while for thp enabled with
-> extreme case of all-thp-zero WP_UNPOPULATED can be slower than MADVISE, but
-> that's low possibility in reality, also the overhead was not reduced but
-> postponed until a follow up write on any huge zero thp, so potentitially it
+> We need to have a story for stackful coroutine switching as well, not
+> just for sigaltstack.  I hope that we can use OpenJDK (Project Loom) and
+> QEMU as guinea pigs.  If we have something that works for both,
+> hopefully that covers a broad range of scenarios.  Userspace
+> coordination can eventually be handled by glibc; we can deallocate
+> alternate stacks on thread exit fairly easily (at least compared to the
+> current stack 8-).
 
-s/potentitially/potentially/
+for stackful coroutines we just need a way to
 
-> is faster by making the follow up writes slower.
+- allocate a shadow stack with a restore token on it.
 
-What I realized, interrestingly not only the writes, but also the reads. 
-In case of background snapshots we'll be reading all VM memory I think 
-... but we could optimize in QEMU by consulting the pagemap if there is 
-anything mapped at all, and not read zeros in that case [an optimization 
-brought up several times already].
+- switch to a target shadow stack with a restore token on it,
+  while leaving behind a restore token on the old shadow stack.
 
-I am not sure yet if we want to change the QEMU implementation. But 
-anyhow, that's a different discussion.
+this is supported via map_shadow_stack syscall and the
+rstoressp, saveprevssp instruction pair.
 
-> 
-> [1] https://lore.kernel.org/all/20210401092226.102804-4-andrey.gruzdev@virtuozzo.com/
-> [2] https://lore.kernel.org/all/Y+v2HJ8+3i%2FKzDBu@x1n/
-> [3] https://lore.kernel.org/all/d0eb0a13-16dc-1ac1-653a-78b7273781e3@collabora.com/
-> [4] https://github.com/xzpeter/clibs/blob/master/uffd-test/uffd-wp-perf.c
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   fs/userfaultfd.c                 | 14 ++++++++
->   include/linux/mm_inline.h        |  6 ++++
->   include/linux/userfaultfd_k.h    |  6 ++++
->   include/uapi/linux/userfaultfd.h | 10 +++++-
->   mm/memory.c                      | 56 ++++++++++++++++++++++--------
->   mm/mprotect.c                    | 59 ++++++++++++++++++++++++++------
->   6 files changed, 126 insertions(+), 25 deletions(-)
+otoh there can be many alt shadow stacks per thread alive if
+we allow jump back (only one of them registered at a time) in
+fact they can be jumped to even from another thread, so their
+life-time is not tied to the thread (at least if we allow
+swapcontext across threads) so i think the libc cannot manage
+the alt shadow stacks, only user code can in the general case.
 
-[...]
+and in case a signal runs on an alt shadow stack, the restore
+token can only be placed by the kernel on the old shadow stack.
 
->   
-> +static vm_fault_t handle_pte_missing(struct vm_fault *vmf)
-> +{
-> +	if (vma_is_anonymous(vmf->vma))
-> +		return do_anonymous_page(vmf);
-> +	else
-> +		return do_fault(vmf);
-> +}
-> +
->   /*
->    * This is actually a page-missing access, but with uffd-wp special pte
->    * installed.  It means this pte was wr-protected before being unmapped.
-> @@ -3634,11 +3664,10 @@ static vm_fault_t pte_marker_handle_uffd_wp(struct vm_fault *vmf)
->   	 * Just in case there're leftover special ptes even after the region
->   	 * got unregistered - we can simply clear them.
->   	 */
-> -	if (unlikely(!userfaultfd_wp(vmf->vma) || vma_is_anonymous(vmf->vma)))
-> +	if (unlikely(!userfaultfd_wp(vmf->vma)))
->   		return pte_marker_clear(vmf);
->   
-> -	/* do_fault() can handle pte markers too like none pte */
-> -	return do_fault(vmf);
-> +	return handle_pte_missing(vmf);
->   }
->   
->   static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
-> @@ -4008,6 +4037,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->    */
->   static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->   {
-> +	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
->   	struct vm_area_struct *vma = vmf->vma;
->   	struct folio *folio;
->   	vm_fault_t ret = 0;
-> @@ -4041,7 +4071,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->   						vma->vm_page_prot));
->   		vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
->   				vmf->address, &vmf->ptl);
-> -		if (!pte_none(*vmf->pte)) {
-> +		if (vmf_pte_changed(vmf)) {
->   			update_mmu_tlb(vma, vmf->address, vmf->pte);
->   			goto unlock;
->   		}
-> @@ -4081,7 +4111,7 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->   
->   	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, vmf->address,
->   			&vmf->ptl);
-> -	if (!pte_none(*vmf->pte)) {
-> +	if (vmf_pte_changed(vmf)) {
->   		update_mmu_tlb(vma, vmf->address, vmf->pte);
->   		goto release;
->   	}
-> @@ -4101,6 +4131,8 @@ static vm_fault_t do_anonymous_page(struct vm_fault *vmf)
->   	folio_add_new_anon_rmap(folio, vma, vmf->address);
->   	folio_add_lru_vma(folio, vma);
->   setpte:
-> +	if (uffd_wp)
-> +		entry = pte_mkuffd_wp(entry);
->   	set_pte_at(vma->vm_mm, vmf->address, vmf->pte, entry);
->   
->   	/* No need to invalidate - it was non-present before */
-> @@ -4268,7 +4300,7 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
->   void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
->   {
->   	struct vm_area_struct *vma = vmf->vma;
-> -	bool uffd_wp = pte_marker_uffd_wp(vmf->orig_pte);
-> +	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
->   	bool write = vmf->flags & FAULT_FLAG_WRITE;
->   	bool prefault = vmf->address != addr;
->   	pte_t entry;
-> @@ -4915,12 +4947,8 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
->   		}
->   	}
->   
-> -	if (!vmf->pte) {
-> -		if (vma_is_anonymous(vmf->vma))
-> -			return do_anonymous_page(vmf);
-> -		else
-> -			return do_fault(vmf);
-> -	}
-> +	if (!vmf->pte)
-> +		return handle_pte_missing(vmf);
-
-It would better blend in if it would be called "do_pte_missing()".
-
->   
->   	if (!pte_present(vmf->orig_pte))
->   		return do_swap_page(vmf);
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index 231929f119d9..6a2df93158ee 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -276,7 +276,16 @@ static long change_pte_range(struct mmu_gather *tlb,
->   		} else {
->   			/* It must be an none page, or what else?.. */
->   			WARN_ON_ONCE(!pte_none(oldpte));
-> -			if (unlikely(uffd_wp && !vma_is_anonymous(vma))) {
-> +
-> +			/*
-> +			 * Nobody plays with any none ptes besides
-> +			 * userfaultfd when applying the protections.
-> +			 */
-> +			if (likely(!uffd_wp))
-> +				continue;
-> +
-> +			if (!vma_is_anonymous(vma) ||
-> +			    userfaultfd_wp_unpopulated(vma)) {
-
-I think it would make sense to replace all 3 instances of this check by 
-a new function (userfaultfd_wp_use_markers() ? ) and move some doc from 
-pgtable_populate_needed() in there.
-
->   				/*
->   				 * For file-backed mem, we need to be able to
->   				 * wr-protect a none pte, because even if the
-> @@ -320,23 +329,53 @@ static inline int pmd_none_or_clear_bad_unless_trans_huge(pmd_t *pmd)
->   	return 0;
->   }
->   
-> -/* Return true if we're uffd wr-protecting file-backed memory, or false */
-> +/*
-> + * Return true if we want to split huge thps in change protection
-> + * procedure, false otherwise.
-> + */
->   static inline bool
-> -uffd_wp_protect_file(struct vm_area_struct *vma, unsigned long cp_flags)
-> +pgtable_split_needed(struct vm_area_struct *vma, unsigned long cp_flags)
->   {
-> +	/*
-> +	 * pte markers only resides in pte level, if we need pte markers,
-> +	 * we need to split.  We cannot wr-protect shmem thp because file
-> +	 * thp is handled differently when split by erasing the pmd so far.
-> +	 */
->   	return (cp_flags & MM_CP_UFFD_WP) && !vma_is_anonymous(vma);
->   }
->   
->   /*
-> - * If wr-protecting the range for file-backed, populate pgtable for the case
-> - * when pgtable is empty but page cache exists.  When {pte|pmd|...}_alloc()
-> - * failed we treat it the same way as pgtable allocation failures during
-> - * page faults by kicking OOM and returning error.
-> + * Return true if we want to populate pgtables in change protection
-> + * procedure, false otherwise
-> + */
-> +static inline bool
-> +pgtable_populate_needed(struct vm_area_struct *vma, unsigned long cp_flags)
-> +{
-> +	/* If not within ioctl(UFFDIO_WRITEPROTECT), then don't bother */
-> +	if (!(cp_flags & MM_CP_UFFD_WP))
-> +		return false;
-> +
-> +	/* Either if this is file-based, we need it for pte markers */
-> +	if (!vma_is_anonymous(vma))
-> +		return true;
-> +
-> +	/*
-> +	 * Or anonymous, we only need this if WP_ZEROPAGE enabled (to
-> +	 * install zero pages).
-
-s/WP_ZEROPAGE/WP_UNPOPULATED/
-
-> +	 */
-> +	return userfaultfd_wp_unpopulated(vma);
-> +}
-> +
-
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+thanks.
