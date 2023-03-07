@@ -2,100 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECCE6AD35E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02FF16AD360
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:33:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCGAbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 19:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
+        id S229862AbjCGAdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 19:33:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCGAbf (ORCPT
+        with ESMTP id S229734AbjCGAdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 19:31:35 -0500
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324E46C1A3;
-        Mon,  6 Mar 2023 16:31:35 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id l18so12808550qtp.1;
-        Mon, 06 Mar 2023 16:31:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678149094;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3OcxBWi+fVPcj6LdXeac5WEwf/t01OSULuob77wgPfk=;
-        b=YR0KwaaBJA1hGXLSZTGyWJ533Jw/LtfGeqKUCa6BkRF42fBEKLBNZHEAZ+U68FzxTh
-         cJAJUHB7mxZiwFewO/gPTHhUz7X2rfcC1w38up2x+SCgam+5cBYfcFeC9U+2qJ6EAiSa
-         EjUCd02FnxMpTgM3diqQbLL0jlW9tf/24lOdpRHaY6aBaz9pQtuT+QHCfafw1ASoe61l
-         wzlpfc0GbxEy1OiNnKagcUf0KYwVw0f/yDjIx7PjnWVMzmCDCiOU6MxQEQ+yVgvmz1OJ
-         eAeKCNUS0+IpDgwjCDrykg2ts1zNDucwKf6qB3mhNPWyPzjzpx8e6SQLMYoE1LTdLJ2c
-         g7Aw==
-X-Gm-Message-State: AO0yUKXBG1IhnBzi63KJMiCsfDoymBbzOCqqe+krUKL94Y0anT5vxzNq
-        8krHWf9gjPmWS/ukOy/97g==
-X-Google-Smtp-Source: AK7set8fUnjreVZQ0144g6g2i5wEN0n+GrJKJ96YTx91SjVQkoi4tSAg2pTObyRW7ccAlKfX+Zxpdw==
-X-Received: by 2002:ac8:5c08:0:b0:3b9:bc8c:c1f9 with SMTP id i8-20020ac85c08000000b003b9bc8cc1f9mr29744892qti.4.1678149094187;
-        Mon, 06 Mar 2023 16:31:34 -0800 (PST)
-Received: from robh_at_kernel.org (adsl-72-50-3-187.prtc.net. [72.50.3.187])
-        by smtp.gmail.com with ESMTPSA id a4-20020a379804000000b007417affecdcsm8643332qke.69.2023.03.06.16.31.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 16:31:33 -0800 (PST)
-Received: (nullmailer pid 6585 invoked by uid 1000);
-        Tue, 07 Mar 2023 00:31:32 -0000
-Date:   Mon, 6 Mar 2023 18:31:32 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        devicetree@vger.kernel.org,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@axis.com>
-Subject: Re: [PATCH] virt-pci: add platform bus support
-Message-ID: <20230307003132.GA6366-robh@kernel.org>
-References: <20230127-uml-pci-platform-v1-1-ec6b45d2829f@axis.com>
- <d3f6d627290bb1a6a1fcfdfd5fad915578453e02.camel@sipsolutions.net>
- <Y+t6qXBxLqf/+eQM@axis.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y+t6qXBxLqf/+eQM@axis.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Mon, 6 Mar 2023 19:33:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFA725E1A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 16:33:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8E376CE17E5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:33:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69BDDC4339B;
+        Tue,  7 Mar 2023 00:33:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678149219;
+        bh=CQyIIQ48jrKQnJU6vpZckUaiFwZea9y+X7afskhGcU8=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=owMys9rR0NiUedicRb9HSulV+t7EDtKToYsEJR23tXOTteGA4Y6sxnVvK5ha2gZTI
+         gURGWzj35nNq1kHdEK/mxhG8wWpBTtp6s7u/gz7R4wTr5OBNytY12q6ZTww/FgUKa7
+         +cT3kVBxLruL/jHs4y51UwcUhOMv9Flu3gS0Hir1Nkg2mPCPFzjtOPenpQMFeGWLgy
+         rT8cDzU4l3jNoHWbk4P3S5nDzS2y5iYO6EclB/jn9t0PBTzp1OGLzSsYEw29oiZb6i
+         twz8SsQ6Q/RCtLiOJuBP2V/tZHUzna3VvLK0KZO2MPDGmYPqqFIjmTQ0uPhD3+dyKM
+         7hGA/xBLc5p5Q==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 41B7327C0054;
+        Mon,  6 Mar 2023 19:33:38 -0500 (EST)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Mon, 06 Mar 2023 19:33:38 -0500
+X-ME-Sender: <xms:YYYGZM7f2OhIUJVnDAJX3e5KC7vltxWnS_gUYRr1tu1B2wduzHpyVg>
+    <xme:YYYGZN56SDuMdUDS1ezU8_U64Ha1sn3Sv-QutbNr6yvCC9jlLtC9oRKGlzJd_pOxN
+    rZF2GNerctwOWO_ASU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtledgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
+    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:YoYGZLccSBxI88JnYpHDX2b6WdWa_E0ye2KKvpzixDqxbaB8Y-YRMg>
+    <xmx:YoYGZBIQGESdlImi8Erj_tRTCnNZVQDqC6QVqxs9RGuQC87XHqsUhA>
+    <xmx:YoYGZALIikUyF4s-hVVf9E1ZL-Hr6Oo6G6iYhL1GclDCaaBso6a9cw>
+    <xmx:YoYGZHUTMgxZt34V01FwDNQZxHP6h1zr07eYMuwa8tItF_ehBnRpYw>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id E33EC31A0063; Mon,  6 Mar 2023 19:33:37 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
+Mime-Version: 1.0
+Message-Id: <5454ba91-c7f8-49fc-af76-ebb85d20742a@app.fastmail.com>
+In-Reply-To: <ZAG5fvRl4Z+3vGfS@linux.ibm.com>
+References: <20210601075354.5149-2-rppt@kernel.org>
+ <162274330352.29796.17521974349959809425.tip-bot2@tip-bot2>
+ <7d344756-aec4-4df2-9427-da742ef9ce6b@app.fastmail.com>
+ <ZAG5fvRl4Z+3vGfS@linux.ibm.com>
+Date:   Mon, 06 Mar 2023 16:33:16 -0800
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Mike Rapoport" <rppt@linux.ibm.com>
+Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Borislav Petkov" <bp@suse.de>, "Hugh Dickins" <hughd@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Subject: Re: [tip: x86/urgent] x86/setup: Always reserve the first 1M of RAM
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 01:12:25PM +0100, Vincent Whitchurch wrote:
-> On Mon, Feb 13, 2023 at 06:54:49PM +0100, Johannes Berg wrote:
-> > On Fri, 2023-01-27 at 15:30 +0100, Vincent Whitchurch wrote:
-> > > My first approach to getting platform drivers working on UML was by
-> > > adding a minimal PCI-to-platform bridge driver, which worked without
-> > > modifications to virt-pci, but that got shot down:
-> > > 
-> > >  https://lore.kernel.org/lkml/20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com/
-> > 
-> > Reading through that ... OK that isn't fun either :-)
-> > 
-> > Sounds like there's a use case for something else though, but the PCI
-> > IDs issue also makes that thorny.
+On Fri, Mar 3, 2023, at 1:10 AM, Mike Rapoport wrote:
+> Hi Andy,
+>
+> On Wed, Mar 01, 2023 at 07:51:43PM -0800, Andy Lutomirski wrote:
+>> On Thu, Jun 3, 2021, at 11:01 AM, tip-bot2 for Mike Rapoport wrote:
+>> >
+>> > x86/setup: Always reserve the first 1M of RAM
+>> >
+>
+> ...
+>
+>> +       /*
+>> +        * Unconditionally reserve the entire fisrt 1M, see comment in
+>> +        * setup_arch().
+>> +        */
+>> +       memblock_reserve(0, SZ_1M);
+>> 
+>> 
+>> But this runs even if we just failed to allocate a trampoline on the
+>> first try, again dooming the kernel to panic.
+>> 
+>> I real the commit message and the linked bug, and I'm having trouble
+>> finding evidence of anything actually fixed by this patch.  Can we just
+>> revert it?  If not, it would be nice to get a fixup patch that genuinely
+>> cleans this up -- the whole structure of the code (first, try to allocate
+>> trampoline, then free boot services, then try again) isn't really
+>> conducive to a model where we *don't* free boot services < 1M.
 > 
-> Yes, Greg was initially totally opposed to the idea of putting platform
-> devices under PCI devices, but in his latest email he seemed to
-> allow it in some cases.  It's still unclear if he'd be OK with a
-> "virtual PCI-to-platform bridge" though.  And yes, adding platform
-> devices support like in this patch removes one layer and also eliminates
-> the disadvantage of having to wait for user space to specify a PCI ID
-> for the bridge device.
+> Currently, the second attempt to set_real_mode_mem() in
+> efi_free_boot_services() does not allocate from memblock anyway but reuses
+> memory freed from EFI services. Could be that failure to boot caused by
+> another failing reservation?
 
-Like I said in that thread, we have multiple usecases needing something 
-similar for non-discoverable MMIO devices behind a PCI device. And I 
-convinced Greg a platform device was okay, so please continue that path.
+I'm not actually sure what's wrong per se.  Certainly efi=debug will utterly break my quirk, but other than that, I would have expected it to still work on a more careful reading.
 
-I'm adding you to the thread of other usecases.
+Anyway, I have a fixup series that works in a VM that i'll test in a bit.
 
-Rob
+> 
+>> Discovered by my delightful laptop, which does not boot with this patch applied.
+>
+> Do you have early_printk() visible? 
+
+Yes, but I haven't found a smoking gun yet.
+
+> 
+>> --Andy
+>
+> -- 
+> Sincerely yours,
+> Mike.
