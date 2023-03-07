@@ -2,143 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E9C6AF7FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:49:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E016C6AF7FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231594AbjCGVtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:49:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        id S231530AbjCGVuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:50:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbjCGVtG (ORCPT
+        with ESMTP id S230074AbjCGVuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:49:06 -0500
-Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5150A99273
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:49:00 -0800 (PST)
-Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
-        by amity.mint.lgbt (Postfix) with ESMTP id 4PWTbt57zjz1S5Jx
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:48:57 -0500 (EST)
-Authentication-Results: amity.mint.lgbt (amavisd-new);
-        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
-        header.d=mint.lgbt
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
-        content-transfer-encoding:content-type:in-reply-to:from
-        :references:to:content-language:subject:user-agent:mime-version
-        :date:message-id; s=dkim; t=1678225735; x=1679089736; bh=LBDNRan
-        2Cd8nNBtnj8IHxtHFO6mc9pcFTMtM8qGwz6s=; b=X2z9Dsayhu4KWlNcB7whmXg
-        zKTUxyqY5o8Wv3jPrV1MVZPidmzBNHjcw6ieAS+0Jp+mFTMSXmQru2rnjvPal3F/
-        zQ/l0txh/kZBvWXTlED2861cz5kQj62mGQdXSH6hEKIfg98h1tHdX9X6KUQ+oSgR
-        Ksf1eG1t2y9rQ6fa0Q+XXLs8I//ScK/VBoT1qceeBg7U19KegpGz8qUH3bHOj+fx
-        /ytN7tiukSQ2mSKfASvDSbRQeBW5gV7zgboi8+JfqZBj+c4CRmc/3EuQOT2uyydy
-        gSjv+Sk7V3CHEscktNAtyBUk/8WNx0YWMXQfodu1B7+6Vcw//pIuvS8UwumnhEQ=
-        =
-X-Virus-Scanned: amavisd-new at amity.mint.lgbt
-Received: from amity.mint.lgbt ([127.0.0.1])
-        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WnoXMmLpM4pm for <linux-kernel@vger.kernel.org>;
-        Tue,  7 Mar 2023 16:48:55 -0500 (EST)
-Received: from [192.168.1.90] (unknown [186.105.8.42])
-        by amity.mint.lgbt (Postfix) with ESMTPSA id 4PWTbS4Kjkz1S4yx;
-        Tue,  7 Mar 2023 16:48:35 -0500 (EST)
-Message-ID: <18156dee-4fd2-80e5-b04d-c96c267fb615@mint.lgbt>
-Date:   Tue, 7 Mar 2023 18:48:30 -0300
+        Tue, 7 Mar 2023 16:50:11 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B3856164;
+        Tue,  7 Mar 2023 13:50:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678225810; x=1709761810;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=77dMKDKBCqeHL/BHmh65e59P0A/ZjNveCWI4JDmFEZA=;
+  b=UUX5VioKVRc7gcShTU24XxcSbgLSi7qhevbpwWXnhyaLufUdFZ2O6OX6
+   XbEewKsn0HyCURKQnPkILVhaQ6ZuV4IN27rQT0S0i/krxt1sjBLPh0phL
+   4muuRTcVGoI/fglUON+x0L5LeGEFFAw5HwG9lbPVBJqMAmytOnYnZU4ew
+   rODVeIH1XerNfMX+LyuvGX67816nLznZdHx84daK/0e+LcZ3sq1qygYOZ
+   br4BVI1VLdAzWTG8lK7V10atv7EVEc4G3DVJWMZ41+zao+HjlGD+67W8D
+   h4OoHYYLlw9vVM9Tv1C2gdxq2xpKzxSaZZrWaSujZ/kE98qm/OlvoLXXY
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="333455340"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="333455340"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:50:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="670082995"
+X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
+   d="scan'208";a="670082995"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.116.173]) ([10.212.116.173])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:50:09 -0800
+Message-ID: <18a73c95-53da-9acb-9e10-0e6095e7dd31@intel.com>
+Date:   Tue, 7 Mar 2023 14:50:08 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 1/6] dt-bindings: ufs: qcom: Add SM6125 compatible
- string
-Content-Language: en-US, es-CL
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
-        bvanassche@acm.org, keescook@chromium.org, tony.luck@intel.com,
-        gpiccoli@igalia.com
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
-        phone-devel@vger.kernel.org, martin.botka@somainline.org,
-        marijn.suijten@somainline.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230306165246.14782-1-they@mint.lgbt>
- <20230306165246.14782-2-they@mint.lgbt>
- <4670ddae-6b01-1e5c-b0ed-1f2f498a4f66@mint.lgbt>
- <dfd1d81e-76a0-f8eb-e529-9f8ea1e927b6@linaro.org>
-From:   Lux Aliaga <they@mint.lgbt>
-In-Reply-To: <dfd1d81e-76a0-f8eb-e529-9f8ea1e927b6@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.0
+Subject: Re: [PATCH] dmaengine: ioat: use PCI core macros for PCIe Capability
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20230307214615.887354-1-helgaas@kernel.org>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230307214615.887354-1-helgaas@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/6/2023 14:09, Konrad Dybcio wrote:
 
->
-> On 6.03.2023 18:01, Lux Aliaga wrote:
->> On 06/03/2023 13:52, Lux Aliaga wrote:
->>> Document the compatible for UFS found on the SM6125.
->>>
->>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
->>> Reviewed-by: Martin Botka <martin.botka@somainline.org>
->>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>>  =C2=A0 Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
->>>  =C2=A0 1 file changed, 2 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Do=
-cumentation/devicetree/bindings/ufs/qcom,ufs.yaml
->>> index b517d76215e3..42422f3471b3 100644
->>> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
->>> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
->>> @@ -29,6 +29,7 @@ properties:
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
- qcom,sc8280xp-ufshc
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
- qcom,sdm845-ufshc
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
- qcom,sm6115-ufshc
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - qcom,sm6125=
--ufshc
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
- qcom,sm6350-ufshc
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
- qcom,sm8150-ufshc
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
- qcom,sm8250-ufshc
->>> @@ -185,6 +186,7 @@ allOf:
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 c=
-ontains:
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 enum:
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 - qcom,sm6115-ufshc
->>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 - qcom,sm6125-ufshc
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 then:
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
->>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks:
->> I have to apologize. I worked on a changelog for this patchset but I s=
-kipped the subject header, therefore it didn't send, and as I realized th=
-is I interrupted the process, leaving the patchset incomplete. I'll retry=
- sending it, this time correctly.
-> Happens, next time resend it with a RESEND prefix, e.g. [RESEND PATCH 1=
-/2]
->
-> Konrad
 
-Thank you! Will take this into consideration for the future. I received=20
-this email after I resent the patchset, so that's why I didn't add the=20
-prefix.
+On 3/7/23 2:46 PM, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> The PCIe Capability is defined by the PCIe spec, so use the PCI_EXP_DEVCTL
+> macros defined by the PCI core instead of defining copies in IOAT.  This
+> makes it easier to find all uses of the PCIe Device Control register.  No
+> functional change intended.
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
---=20
-Lux Aliaga
-https://nixgoat.me/
+Acked-by: Dave Jiang <dave.jiang@intel.com>
 
+> ---
+>   drivers/dma/ioat/init.c      | 6 +++---
+>   drivers/dma/ioat/registers.h | 7 -------
+>   2 files changed, 3 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/dma/ioat/init.c b/drivers/dma/ioat/init.c
+> index 5d707ff63554..fa7c0f9aa61d 100644
+> --- a/drivers/dma/ioat/init.c
+> +++ b/drivers/dma/ioat/init.c
+> @@ -1191,13 +1191,13 @@ static int ioat3_dma_probe(struct ioatdma_device *ioat_dma, int dca)
+>   		ioat_dma->dca = ioat_dca_init(pdev, ioat_dma->reg_base);
+>   
+>   	/* disable relaxed ordering */
+> -	err = pcie_capability_read_word(pdev, IOAT_DEVCTRL_OFFSET, &val16);
+> +	err = pcie_capability_read_word(pdev, PCI_EXP_DEVCTL, &val16);
+>   	if (err)
+>   		return pcibios_err_to_errno(err);
+>   
+>   	/* clear relaxed ordering enable */
+> -	val16 &= ~IOAT_DEVCTRL_ROE;
+> -	err = pcie_capability_write_word(pdev, IOAT_DEVCTRL_OFFSET, val16);
+> +	val16 &= ~PCI_EXP_DEVCTL_RELAX_EN;
+> +	err = pcie_capability_write_word(pdev, PCI_EXP_DEVCTL, val16);
+>   	if (err)
+>   		return pcibios_err_to_errno(err);
+>   
+> diff --git a/drivers/dma/ioat/registers.h b/drivers/dma/ioat/registers.h
+> index f55a5f92f185..54cf0ad39887 100644
+> --- a/drivers/dma/ioat/registers.h
+> +++ b/drivers/dma/ioat/registers.h
+> @@ -14,13 +14,6 @@
+>   #define IOAT_PCI_CHANERR_INT_OFFSET		0x180
+>   #define IOAT_PCI_CHANERRMASK_INT_OFFSET		0x184
+>   
+> -/* PCIe config registers */
+> -
+> -/* EXPCAPID + N */
+> -#define IOAT_DEVCTRL_OFFSET			0x8
+> -/* relaxed ordering enable */
+> -#define IOAT_DEVCTRL_ROE			0x10
+> -
+>   /* MMIO Device Registers */
+>   #define IOAT_CHANCNT_OFFSET			0x00	/*  8-bit */
+>   
