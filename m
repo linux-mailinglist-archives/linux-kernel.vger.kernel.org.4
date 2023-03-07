@@ -2,96 +2,329 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 061586AD700
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3E86AD73D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 07:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjCGFyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 00:54:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S230433AbjCGGU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 01:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjCGFx6 (ORCPT
+        with ESMTP id S229869AbjCGGUY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 00:53:58 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64ED32CC4;
-        Mon,  6 Mar 2023 21:53:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4PW4Pq2Xtwz4f3jJ2;
-        Tue,  7 Mar 2023 13:53:51 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgCnUiBv0QZk79DuEQ--.5436S6;
-        Tue, 07 Mar 2023 13:53:53 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
-        Ye Bin <yebin10@huawei.com>
-Subject: [PATCH v5 2/2] ext4: make sure fs error flag setted before clear journal error
-Date:   Tue,  7 Mar 2023 14:17:03 +0800
-Message-Id: <20230307061703.245965-3-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230307061703.245965-1-yebin@huaweicloud.com>
-References: <20230307061703.245965-1-yebin@huaweicloud.com>
+        Tue, 7 Mar 2023 01:20:24 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FA4367EC;
+        Mon,  6 Mar 2023 22:20:22 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id EF19D24E2F7;
+        Tue,  7 Mar 2023 14:20:14 +0800 (CST)
+Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 14:20:14 +0800
+Received: from [192.168.60.139] (180.164.60.184) by EXMBX073.cuchost.com
+ (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 14:20:14 +0800
+Message-ID: <15e1d04d-5667-5780-f93b-c4a0a85ef774@starfivetech.com>
+Date:   Tue, 7 Mar 2023 14:20:14 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgCnUiBv0QZk79DuEQ--.5436S6
-X-Coremail-Antispam: 1UD129KBjvdXoWrtryDXF13GrW7XryxXryrZwb_yoWkZrcEq3
-        yxAan5WrsxAw1xK3WrCan8Ww1vvws2vF1rXasayFn8uryDXa4kCa4DWr93urn8urWrK398
-        JF17ZF1fKFykXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbV8YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r15M2
-        8IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
-        021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
-        4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-        0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-        JVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x07jeWlkUUUUU=
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 01/11] media: dt-bindings: starfive,jh7110-camss: add
+ binding document
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <changhuang.liang@starfivetech.com>
+References: <20230302091921.43309-1-jack.zhu@starfivetech.com>
+ <20230302091921.43309-2-jack.zhu@starfivetech.com>
+ <10e4ac1e-5c4d-4d6d-53e6-fbc1142940f9@linaro.org>
+Content-Language: en-US
+From:   Jack Zhu <jack.zhu@starfivetech.com>
+In-Reply-To: <10e4ac1e-5c4d-4d6d-53e6-fbc1142940f9@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [180.164.60.184]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX073.cuchost.com
+ (172.16.6.83)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
 
-Now, jounral error number maybe cleared even though ext4_commit_super()
-failed. This may lead to error flag miss, then fsck will miss to check
-file system deeply.
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
----
- fs/ext4/super.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 2023/3/3 16:34, Krzysztof Kozlowski wrote:
+> On 02/03/2023 10:19, jack.zhu wrote:
+>> Add DT binding document for Starfive Camera subsystem driver
+>> 
+>> Signed-off-by: jack.zhu <jack.zhu@starfivetech.com>
+>> ---
+>>  .../bindings/media/starfive,jh7110-camss.yaml | 150 ++++++++++++++++++
+>>  1 file changed, 150 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>> new file mode 100644
+>> index 000000000000..9a34944ca0ab
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/media/starfive,jh7110-camss.yaml
+>> @@ -0,0 +1,150 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +
+>> +%YAML 1.2
+>> +---
+>> +$id: "http://devicetree.org/schemas/media/starfive,jh7110-camss.yaml#"
+>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> 
+> Drop quotes from both.
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index dfa31eea1346..bf52b8a50717 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -6166,11 +6166,13 @@ static int ext4_clear_journal_err(struct super_block *sb,
- 		errstr = ext4_decode_error(sb, j_errno, nbuf);
- 		ext4_warning(sb, "Filesystem error recorded "
- 			     "from previous mount: %s", errstr);
--		ext4_warning(sb, "Marking fs in need of filesystem check.");
- 
- 		EXT4_SB(sb)->s_mount_state |= EXT4_ERROR_FS;
- 		es->s_state |= cpu_to_le16(EXT4_ERROR_FS);
--		ext4_commit_super(sb);
-+		j_errno = ext4_commit_super(sb);
-+		if (j_errno)
-+			return j_errno;
-+		ext4_warning(sb, "Marked fs in need of filesystem check.");
- 
- 		jbd2_journal_clear_err(journal);
- 		jbd2_journal_update_sb_errno(journal);
--- 
-2.31.1
+OK, I will fix it in V2 version.
 
+> 
+>> +
+>> +title: Starfive SoC CAMSS ISP
+>> +
+>> +maintainers:
+>> +  - Jack Zhu <jack.zhu@starfivetech.com>
+>> +  - Changhuang Liang <changhuang.liang@starfivetech.com>
+>> +
+>> +description: |
+> 
+> No need for '|'
+
+OK, I will fix it.
+
+> 
+>> +  The Starfive CAMSS ISP is a Camera interface for Starfive JH7110 SoC.It
+>> +  consists of a VIN controller(Video In Controller, a top-level control until)
+>> +  and a ISP.
+> 
+> "an ISP", I think
+
+I will revise it.
+
+> 
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: starfive,jh7110-camss
+>> +
+>> +  reg:
+>> +    minItems: 2
+> 
+> Drop minItems, no need.
+
+OK, I will drop it.
+
+> 
+>> +    maxItems: 2
+>> +
+>> +  reg-names:
+>> +    items:
+>> +      - const: syscon
+>> +      - const: isp
+>> +
+>> +  clocks:
+>> +    minItems: 7
+> 
+> Drop mintems
+
+I will drop it.
+
+> 
+>> +    maxItems: 7
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: clk_apb_func
+>> +      - const: clk_wrapper_clk_c
+>> +      - const: clk_dvp_inv
+>> +      - const: clk_axiwr
+>> +      - const: clk_mipi_rx0_pxl
+>> +      - const: clk_ispcore_2x
+>> +      - const: clk_isp_axi
+> 
+> Drop "clk" prefix
+
+I will drop it.
+
+> 
+>> +
+>> +  resets:
+>> +    minItems: 6
+> 
+> Drop
+
+I will drop it.
+
+> 
+>> +    maxItems: 6
+>> +
+>> +  reset-names:
+>> +    items:
+>> +      - const: rst_wrapper_p
+> 
+> Drop rst prefix
+
+OK, will fix it.
+
+> 
+>> +      - const: rst_wrapper_c
+>> +      - const: rst_axird
+>> +      - const: rst_axiwr
+>> +      - const: rst_isp_top_n
+>> +      - const: rst_isp_top_axi
+>> +
+>> +  power-domains:
+>> +    items:
+>> +      - description: JH7110 PD ISP - ISP Power Domain Switch Controller.
+> 
+> Drop redundant pieces, e.g. "PD ISP"
+
+OK, will fix it.
+
+> 
+>> +
+>> +  interrupts:
+>> +    minItems: 4
+> 
+> Drop
+
+OK, will drop it.
+
+> 
+>> +    maxItems: 4
+>> +
+>> +  ports:
+>> +    $ref: /schemas/graph.yaml#/properties/ports
+>> +
+>> +    properties:
+>> +      port@1:
+> 
+> And what about port@0?
+
+port@0 is reserved for DVP sensor, although it is not supported yet.
+
+> 
+>> +        $ref: /schemas/graph.yaml#/$defs/port-base
+>> +        unevaluatedProperties: false
+>> +        description:
+>> +          Input port for receiving CSI data.
+>> +
+>> +        properties:
+>> +          endpoint@1:
+> 
+> Hm, do you have more than one endpoint in this port? Why unit address?
+
+OK, I will change it to "endpoint:"
+
+> 
+>> +            $ref: video-interfaces.yaml#
+>> +            unevaluatedProperties: false
+>> +
+>> +    required:
+>> +      - port@1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - reg-names
+>> +  - clocks
+>> +  - clock-names
+>> +  - resets
+>> +  - reset-names
+>> +  - power-domains
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +
+> 
+> Drop blank line
+
+I will drop it.
+
+> 
+>> +    stfcamss: camss@19840000 {
+> 
+> isp@
+
+I will alter it.
+
+> 
+>> +        compatible = "starfive,jh7110-camss";
+>> +        reg = <0x19840000 0x10000>,
+>> +            <0x19870000 0x30000>;
+> 
+> All this looks misaligned
+>> +        reg-names = "syscon", "isp";
+>> +        clocks = <&ispcrg 0>,
+>> +            <&ispcrg 13>,
+> 
+> Looks even worse...
+
+I will fix it.
+
+> 
+>> +            <&ispcrg 2>,
+>> +            <&ispcrg 12>,
+>> +            <&ispcrg 1>,
+>> +            <&syscrg 51>,
+>> +            <&syscrg 52>;
+>> +        clock-names = "clk_apb_func",
+>> +            "clk_wrapper_clk_c",
+>> +            "clk_dvp_inv",
+>> +            "clk_axiwr",
+>> +            "clk_mipi_rx0_pxl",
+>> +            "clk_ispcore_2x",
+>> +            "clk_isp_axi";
+>> +        resets = <&ispcrg 0>,
+>> +            <&ispcrg 1>,
+>> +            <&ispcrg 10>,
+>> +            <&ispcrg 11>,
+>> +            <&syscrg 41>,
+>> +            <&syscrg 42>;
+>> +        reset-names = "rst_wrapper_p",
+>> +            "rst_wrapper_c",
+>> +            "rst_axird",
+>> +            "rst_axiwr",
+>> +            "rst_isp_top_n",
+>> +            "rst_isp_top_axi";
+>> +        power-domains = <&pwrc 5>;
+>> +        interrupts = <92>, <87>, <88>, <90>;
+>> +
+>> +        ports {
+>> +            #address-cells = <1>;
+>> +            #size-cells = <0>;
+>> +
+>> +            port@1 {
+>> +                reg = <1>;
+>> +                #address-cells = <1>;
+>> +                #size-cells = <0>;
+>> +
+>> +                vin_from_csi2rx: endpoint@1 {
+>> +                    reg = <1>;
+>> +                    remote-endpoint = <&csi2rx_to_vin>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+> 
+> Best regards,
+> Krzysztof
+> 
