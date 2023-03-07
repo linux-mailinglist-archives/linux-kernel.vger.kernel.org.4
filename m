@@ -2,90 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B536AF259
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1906AF2A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:54:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233316AbjCGSwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:52:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        id S233486AbjCGSye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 13:54:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbjCGSwM (ORCPT
+        with ESMTP id S231854AbjCGSyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:52:12 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD5DABB26
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:40:39 -0800 (PST)
-Received: from [192.168.2.57] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8FF316602081;
-        Tue,  7 Mar 2023 18:40:33 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678214435;
-        bh=kzZgEsXwj2D2bZ03kYGGGhV7+F4z+DUuitiRMuVlXeU=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=JlISTHDejcbW8NV11WI1CuuJHLAVvg86nvzAHQUnlx9smrgfeepdwDLIw0neniFTj
-         emP0FJY2JL2TzcVvPfCzr8ZFaO8OKtdRunCfJqGnzvjcVtlpJOFpp8cuheQ3OXbzs6
-         V9N9BGpBN92sIZ5uNWI4YJ4/DiI7W4V2oIfJiVv4IMxBJ0nz/99Y24G/9+vtGd//4h
-         oHtYSSKuxJeE9dlu7sBJepgBb2EYDmj094VB+dW7MFHpyPsVV8TsXvI120JVWipihx
-         SyeAWoZl+XKIvkfD1SZPrtLr9ERswBo4rWgvIPsyPPghPQ5vX8vjAvTRTxDOmrIXNu
-         7MxWNPThh9UeQ==
-Message-ID: <a49fb815-1f02-e8c1-fd8e-128f3b43e490@collabora.com>
-Date:   Tue, 7 Mar 2023 21:40:30 +0300
+        Tue, 7 Mar 2023 13:54:07 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218389AFE5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:42:03 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id b16so5771787iof.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:42:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678214519;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VIBoIM/MahzmKHcLNphJUdBT59zK6GNgrma5w7fsSlM=;
+        b=RSDaAUvJWdX/pgYCQD9V62BikNMQtSk4X+T8iCz13FrSmzG8etaoNw+evqN5EpGvwq
+         A3kS3pRnZHrG0Y5rgBHrGQqy9s7dpWwDTXU3PJjJkoZrMlhYEeLVn1ZCJxuBMW0Ct4Uu
+         3ojVYRwF9Q5Lf4yMbgwCqvKRi+0J2C4+iPcIQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678214519;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VIBoIM/MahzmKHcLNphJUdBT59zK6GNgrma5w7fsSlM=;
+        b=aFfG2jkk1nFLZRLkIgao4EEFFwfsXS//+Z8/v1ngxywCQXXHOW69x4Rb1wxBNhC43A
+         eYOu/kp33FsTjnu1LvfE6CuATjjSa7DdKF3qYC4A20cPR7Ks2eiTb2iXeHnqguiDXeAU
+         jCOdArgQN9VHtvheWHh9T4LbvCOZcP/T77ZpdT0HSzt1JMbWInNBUJcczHEWYXUW4DjL
+         0zJMJT249CeY60JUgzxlPCqieLYUUbagzJrsUwrhMfffnnGbNhLNFNT6OqwGk61/FQFn
+         vxbcW5D82qcAglJNJ+yxC6CVChZNAG6ZaOZJQuB8n9xKx4ehHhrT69nXFNKTlCu1U+dw
+         q7Iw==
+X-Gm-Message-State: AO0yUKWT44FVTqz2oySXqAOTZdYzX3Rh+0YSgBtGtiwdheIJJcYauVUq
+        oisFrAXpjEy6I+LIJ8UnW7F+yQxW8iWKEVc7c8I=
+X-Google-Smtp-Source: AK7set8iCYFDCOdz8c1g0x8gZpbGeR670sH3FzT5i9jaOB+HFPEkC271/zqDsuef0kHZ2u2Wi/fxRQ==
+X-Received: by 2002:a6b:d802:0:b0:74c:ae72:5b9a with SMTP id y2-20020a6bd802000000b0074cae725b9amr9083055iob.4.1678214519201;
+        Tue, 07 Mar 2023 10:41:59 -0800 (PST)
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com. [209.85.166.169])
+        by smtp.gmail.com with ESMTPSA id b13-20020a5d894d000000b00734d27b267dsm4315781iot.17.2023.03.07.10.41.58
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 10:41:58 -0800 (PST)
+Received: by mail-il1-f169.google.com with SMTP id h7so4863161ila.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:41:58 -0800 (PST)
+X-Received: by 2002:a05:6e02:928:b0:317:fc57:d2f7 with SMTP id
+ o8-20020a056e02092800b00317fc57d2f7mr7437142ilt.6.1678214517983; Tue, 07 Mar
+ 2023 10:41:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v12 10/11] drm/virtio: Support memory shrinking
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     intel-gfx@lists.freedesktop.org, kernel@collabora.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-References: <20230305221011.1404672-1-dmitry.osipenko@collabora.com>
- <20230305221011.1404672-11-dmitry.osipenko@collabora.com>
- <3afbc965-4117-7d45-9a8f-b726c04d1b0c@suse.de>
- <66ddf54c-8396-2eb4-49ae-da479a997219@collabora.com>
-In-Reply-To: <66ddf54c-8396-2eb4-49ae-da479a997219@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307164405.14218-1-johan+linaro@kernel.org> <20230307164405.14218-4-johan+linaro@kernel.org>
+In-Reply-To: <20230307164405.14218-4-johan+linaro@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 7 Mar 2023 10:41:46 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VR5oCThAuc29Bum-VHQUcH_H+s4nr55YpJk1aYaqZKTQ@mail.gmail.com>
+Message-ID: <CAD=FV=VR5oCThAuc29Bum-VHQUcH_H+s4nr55YpJk1aYaqZKTQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] serial: qcom-geni: fix mapping of empty DMA buffer
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/23 21:25, Dmitry Osipenko wrote:
->> Not really a problem with this patchset, but having such branches looks
->> like a bug in the driver's GEM design. Whatever your GEM object needs or
->> does, it should be hidden in the implementation. Why is virtio doing this?
-> There is another "VRAM" VirtIO-GPU BO type that doesn't implement the
-> pin/unpin callbacks. Perhaps another option was to add the callbacks.
+Hi,
 
-Although, the pin/unpin are optional. So yes, there was no need for the
-extra branch, good catch.
+On Tue, Mar 7, 2023 at 8:43=E2=80=AFAM Johan Hovold <johan+linaro@kernel.or=
+g> wrote:
+>
+> Make sure that there is data in the ring buffer before trying to set up
+> a zero-length DMA transfer.
+>
+> This specifically fixes the following warning when unmapping the empty
+> buffer on the sc8280xp-crd:
+>
+>    WARNING: CPU: 0 PID: 138 at drivers/iommu/dma-iommu.c:1046 iommu_dma_u=
+nmap_page+0xbc/0xd8
+>    ...
+>    Call trace:
+>     iommu_dma_unmap_page+0xbc/0xd8
+>     dma_unmap_page_attrs+0x30/0x1c8
+>     geni_se_tx_dma_unprep+0x28/0x38
+>     qcom_geni_serial_isr+0x358/0x75c
+>
+> Fixes: 2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for seri=
+al engine DMA")
+> Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/q=
+com_geni_serial.c
+> index 2aa3872e6283..9871225b2f9b 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -631,6 +631,9 @@ static void qcom_geni_serial_start_tx_dma(struct uart=
+_port *uport)
+>         if (port->tx_dma_addr)
+>                 return;
+>
+> +       if (uart_circ_empty(xmit))
+> +               return;
 
--- 
-Best regards,
-Dmitry
+I guess you could remove the uart_circ_empty() test in
+qcom_geni_serial_handle_tx_dma() now? In any case, with or without
+that:
 
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
