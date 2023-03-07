@@ -2,134 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B296AF870
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9126AF874
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjCGWT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:19:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44438 "EHLO
+        id S230514AbjCGWT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:19:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjCGWTY (ORCPT
+        with ESMTP id S231651AbjCGWTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:19:24 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85241A0299
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:18:39 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-53916ab0c6bso271616957b3.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:18:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678227517;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E3DiUR/GgkhgxD2cosHQ9gtTM4EkXnRYU9WOulYy+fI=;
-        b=uXQ6pTKn/U2liBv6xoaR1ke+Sh9LHgFqCMu07bxAsguGWrsAegY7rzgPRxpIpb4qk6
-         CeaBMbGxoMqpib1QGU73lov1dIR23psWLel2MCzUxJaZzgBIdTc0lfm8f3qzBa5tXEha
-         Ly643bvs3Uvtalj9HSi95RwxbLGj093nxULaG4RcPU14sWRsrl6O8AotxZse7oyej7JH
-         QgbrLNWKIXF9+RbNS4CYW0E9U5GV/QysiawP03KpoWHaeMvdLjPAZCNCVYrc2g4RGEJm
-         t5oVl86KKmdHuwGtV0voKm148Bah5/B8uANQH8WPfsqr/nQD3Bym6YK3CYL5SSIPMD9D
-         dOGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678227517;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E3DiUR/GgkhgxD2cosHQ9gtTM4EkXnRYU9WOulYy+fI=;
-        b=NlKnoUNZIvzkgSKR74nelXEecv3t9ZRwiTdMiWKQIJHIt4vyihYFoGlZDfsZ3rr9fE
-         EdhfjauUko3TDN3gqECJRK4oNBVFOLdA2d1O7OX9bwOcRylcite7DlYBDeK5qut2rUTk
-         C/GDSuYxxii8QJmB5kr56LZ3Z6uRdvyDZ4hNkFnYb0ADeVvlHl1iPnadvBaOIsPiSWXN
-         gytKDMcpuZaGAH7qUDUPZBCs4goRWzLBOcOpxc0BOL0b8bDWVjkpPKjuKFPJX+89ZMQ/
-         R9WA4zX8mw0UBUmndfM3SF+xUI6aRnvC7/K0TFUy9nLUmyJK5XOrGWB4I/tVrOtBguky
-         FQcg==
-X-Gm-Message-State: AO0yUKWijBMEN8znC3fFVTwZtSP987kJIYbeuYhpi0yB1arhGKvDpwSY
-        RDiilQfMG+hJgZNJF4Q0SmxYdyIdvC56+QHEY9itAQ==
-X-Google-Smtp-Source: AK7set/SYnYyFvNE6h8dqT6SwfI0vZ82td/XxR+z0aS3Qpc3Vvvm8bzcKrJkYNLWOiue2Fju36euDI5bybr7bBVpeHE=
-X-Received: by 2002:a81:ad24:0:b0:52e:bb2d:2841 with SMTP id
- l36-20020a81ad24000000b0052ebb2d2841mr9656902ywh.10.1678227516874; Tue, 07
- Mar 2023 14:18:36 -0800 (PST)
+        Tue, 7 Mar 2023 17:19:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277BAABAFB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:19:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D95B3B81A97
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 22:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E86C433D2;
+        Tue,  7 Mar 2023 22:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678227569;
+        bh=rrPIFN04EuAC4IeL0TmLIQZouRY6FS4wg2SIBZvu21s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Aut3bq/66FmIfOWjqK2a17RWmCKI0/ZywJXK/smFQB0vT7Kt0Q4yJsffYtvqInyRc
+         MoBy2alj87cFoyxKqRp6H6RukMPxJFVkqe9biND6LCrDU+X0Joxk2rHVRlBH0JIdw+
+         EI63ebrAEwa+0rKvN4IUCdJl/WW677RPtgqB54Mh/S4daZM6JaXGnyni103tvv1O00
+         FiEXPyH00XZuV+vRM+uV+tsGJqkjtt2POJUOKN2FT5j60EYKiHK3WJLKIAqgmg+4Tm
+         b6+9oVJYqyUXcYTdt2YWjgp1/hJMzZT90xvLZTqJpf2s1WXesjAgLgW9ngiP7pQXJr
+         VIBC6gCl9tfSg==
+Date:   Tue, 7 Mar 2023 16:19:28 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH] misc: alcor_pci: Use PCI core to manage ASPM instead of
+ open-coding
+Message-ID: <20230307221928.GA890635@bhelgaas>
 MIME-Version: 1.0
-References: <20230217-topic-lenovo-panel-v2-0-2e2c64729330@linaro.org> <20230217-topic-lenovo-panel-v2-2-2e2c64729330@linaro.org>
-In-Reply-To: <20230217-topic-lenovo-panel-v2-2-2e2c64729330@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 7 Mar 2023 23:18:25 +0100
-Message-ID: <CACRpkdZ8RvFrieWXhx1WGO71M10H0-b3WbDXM7=xnngX7uWT6Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] gpu/drm/panel: Add Lenovo NT36523W BOE panel
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jianhua Lu <lujianhua000@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, phone-devel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307213816.886308-1-helgaas@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 2:26=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro.=
-org> wrote:
+[Sorry, Greg, fat-fingered your address the first time at
+https://lore.kernel.org/all/20230307213816.886308-1-helgaas@kernel.org/]
 
-> Introduce support for the BOE panel with a NT36523W touch/driver IC
-> found on some Lenovo Tab P11 devices. It's a 2000x1200, 24bit RGB
-> MIPI DSI panel with integrated DCS-controlled backlight (that expects
-> big-endian communication).
->
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-I will think this is some variant of the Novatek NT36523 display
-controller packaged up with Lenovo electronics until proven how
-wrong I am.
-
-I will listen to reason if it can be demonstrated that NT36523 and
-NT36523W are considerably different and need very different
-drivers, but I seriously doubt it. (For reasons see below.)
-
->  drivers/gpu/drm/panel/panel-lenovo-nt36523w-boe.c | 747 ++++++++++++++++=
-++++++
-
-We usually share code with different displays using the
-same display controller, so panel-novatek-nt36523.c should
-be used as name.
-
-> +config DRM_PANEL_LENOVO_NT36523W_BOE
-> +       tristate "Lenovo NT36523W BOE panel"
-
-Name it after the display controller like the other examples
-in the Kconfig, DRM_PANEL_NOVATEK_NT36523
-
-> +       mipi_dsi_dcs_write_seq(dsi, 0xff, 0x20);
-> +       mipi_dsi_dcs_write_seq(dsi, 0xfb, 0x01);
-> +       mipi_dsi_dcs_write_seq(dsi, 0x05, 0xd9);
-> +       mipi_dsi_dcs_write_seq(dsi, 0x07, 0x78);
-> +       mipi_dsi_dcs_write_seq(dsi, 0x08, 0x5a);
-> +       mipi_dsi_dcs_write_seq(dsi, 0x0d, 0x63);
-> +       mipi_dsi_dcs_write_seq(dsi, 0x0e, 0x91);
-> +       mipi_dsi_dcs_write_seq(dsi, 0x0f, 0x73);
-> +       mipi_dsi_dcs_write_seq(dsi, 0x95, 0xeb);
-> +       mipi_dsi_dcs_write_seq(dsi, 0x96, 0xeb);
-> +       mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PARTIAL_ROWS, 0x11);
-
-I think it looks very similar to Jianhua:s driver:
-https://lore.kernel.org/lkml/20230220121258.10727-1-lujianhua000@gmail.com/=
-T/
-
-Can't you just add this special magic sequence into
-that driver instead?
-
-Would it help if we merge Jianhua's driver first so you can patch on
-top of it?
-
-Yours,
-Linus Walleij
+On Tue, Mar 07, 2023 at 03:38:16PM -0600, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+> 
+> "priv->ext_config_dev_aspm" was never set to a non-zero value.  Therefore,
+> alcor_pci_aspm_ctrl(priv, 1) did nothing, and alcor_pci_aspm_ctrl(priv, 0)
+> always disabled ASPM in the device and the upstream bridge.
+> 
+> The driver disabled ASPM in alcor_pci_probe() and alcor_resume(), so it's
+> possible the device doesn't work well when ASPM is enabled.
+> 
+> Remove all the ASPM-related code and replace the alcor_pci_aspm_ctrl(0)
+> calls with pci_disable_link_state(pdev, PCIE_LINK_STATE_L0S |
+> PCIE_LINK_STATE_L1), which asks the PCI core to disable ASPM.
+> 
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/misc/cardreader/alcor_pci.c | 144 +---------------------------
+>  include/linux/alcor_pci.h           |   7 --
+>  2 files changed, 4 insertions(+), 147 deletions(-)
+> 
+> diff --git a/drivers/misc/cardreader/alcor_pci.c b/drivers/misc/cardreader/alcor_pci.c
+> index 9080f9f150a2..5b637171c46c 100644
+> --- a/drivers/misc/cardreader/alcor_pci.c
+> +++ b/drivers/misc/cardreader/alcor_pci.c
+> @@ -95,137 +95,6 @@ u32 alcor_read32be(struct alcor_pci_priv *priv, unsigned int addr)
+>  }
+>  EXPORT_SYMBOL_GPL(alcor_read32be);
+>  
+> -static int alcor_pci_find_cap_offset(struct alcor_pci_priv *priv,
+> -				     struct pci_dev *pci)
+> -{
+> -	int where;
+> -	u8 val8;
+> -	u32 val32;
+> -
+> -	where = ALCOR_CAP_START_OFFSET;
+> -	pci_read_config_byte(pci, where, &val8);
+> -	if (!val8)
+> -		return 0;
+> -
+> -	where = (int)val8;
+> -	while (1) {
+> -		pci_read_config_dword(pci, where, &val32);
+> -		if (val32 == 0xffffffff) {
+> -			dev_dbg(priv->dev, "find_cap_offset invalid value %x.\n",
+> -				val32);
+> -			return 0;
+> -		}
+> -
+> -		if ((val32 & 0xff) == 0x10) {
+> -			dev_dbg(priv->dev, "pcie cap offset: %x\n", where);
+> -			return where;
+> -		}
+> -
+> -		if ((val32 & 0xff00) == 0x00) {
+> -			dev_dbg(priv->dev, "pci_find_cap_offset invalid value %x.\n",
+> -				val32);
+> -			break;
+> -		}
+> -		where = (int)((val32 >> 8) & 0xff);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static void alcor_pci_init_check_aspm(struct alcor_pci_priv *priv)
+> -{
+> -	struct pci_dev *pci;
+> -	int where;
+> -	u32 val32;
+> -
+> -	priv->pdev_cap_off    = alcor_pci_find_cap_offset(priv, priv->pdev);
+> -	/*
+> -	 * A device might be attached to root complex directly and
+> -	 * priv->parent_pdev will be NULL. In this case we don't check its
+> -	 * capability and disable ASPM completely.
+> -	 */
+> -	if (priv->parent_pdev)
+> -		priv->parent_cap_off = alcor_pci_find_cap_offset(priv,
+> -							 priv->parent_pdev);
+> -
+> -	if ((priv->pdev_cap_off == 0) || (priv->parent_cap_off == 0)) {
+> -		dev_dbg(priv->dev, "pci_cap_off: %x, parent_cap_off: %x\n",
+> -			priv->pdev_cap_off, priv->parent_cap_off);
+> -		return;
+> -	}
+> -
+> -	/* link capability */
+> -	pci   = priv->pdev;
+> -	where = priv->pdev_cap_off + ALCOR_PCIE_LINK_CAP_OFFSET;
+> -	pci_read_config_dword(pci, where, &val32);
+> -	priv->pdev_aspm_cap = (u8)(val32 >> 10) & 0x03;
+> -
+> -	pci   = priv->parent_pdev;
+> -	where = priv->parent_cap_off + ALCOR_PCIE_LINK_CAP_OFFSET;
+> -	pci_read_config_dword(pci, where, &val32);
+> -	priv->parent_aspm_cap = (u8)(val32 >> 10) & 0x03;
+> -
+> -	if (priv->pdev_aspm_cap != priv->parent_aspm_cap) {
+> -		u8 aspm_cap;
+> -
+> -		dev_dbg(priv->dev, "pdev_aspm_cap: %x, parent_aspm_cap: %x\n",
+> -			priv->pdev_aspm_cap, priv->parent_aspm_cap);
+> -		aspm_cap = priv->pdev_aspm_cap & priv->parent_aspm_cap;
+> -		priv->pdev_aspm_cap    = aspm_cap;
+> -		priv->parent_aspm_cap = aspm_cap;
+> -	}
+> -
+> -	dev_dbg(priv->dev, "ext_config_dev_aspm: %x, pdev_aspm_cap: %x\n",
+> -		priv->ext_config_dev_aspm, priv->pdev_aspm_cap);
+> -	priv->ext_config_dev_aspm &= priv->pdev_aspm_cap;
+> -}
+> -
+> -static void alcor_pci_aspm_ctrl(struct alcor_pci_priv *priv, u8 aspm_enable)
+> -{
+> -	struct pci_dev *pci;
+> -	u8 aspm_ctrl, i;
+> -	int where;
+> -	u32 val32;
+> -
+> -	if ((!priv->pdev_cap_off) || (!priv->parent_cap_off)) {
+> -		dev_dbg(priv->dev, "pci_cap_off: %x, parent_cap_off: %x\n",
+> -			priv->pdev_cap_off, priv->parent_cap_off);
+> -		return;
+> -	}
+> -
+> -	if (!priv->pdev_aspm_cap)
+> -		return;
+> -
+> -	aspm_ctrl = 0;
+> -	if (aspm_enable) {
+> -		aspm_ctrl = priv->ext_config_dev_aspm;
+> -
+> -		if (!aspm_ctrl) {
+> -			dev_dbg(priv->dev, "aspm_ctrl == 0\n");
+> -			return;
+> -		}
+> -	}
+> -
+> -	for (i = 0; i < 2; i++) {
+> -
+> -		if (i) {
+> -			pci   = priv->parent_pdev;
+> -			where = priv->parent_cap_off
+> -				+ ALCOR_PCIE_LINK_CTRL_OFFSET;
+> -		} else {
+> -			pci   = priv->pdev;
+> -			where = priv->pdev_cap_off
+> -				+ ALCOR_PCIE_LINK_CTRL_OFFSET;
+> -		}
+> -
+> -		pci_read_config_dword(pci, where, &val32);
+> -		val32 &= (~0x03);
+> -		val32 |= (aspm_ctrl & priv->pdev_aspm_cap);
+> -		pci_write_config_byte(pci, where, (u8)val32);
+> -	}
+> -
+> -}
+> -
+>  static inline void alcor_mask_sd_irqs(struct alcor_pci_priv *priv)
+>  {
+>  	alcor_write32(priv, 0, AU6601_REG_INT_ENABLE);
+> @@ -308,7 +177,6 @@ static int alcor_pci_probe(struct pci_dev *pdev,
+>  
+>  	pci_set_master(pdev);
+>  	pci_set_drvdata(pdev, priv);
+> -	alcor_pci_init_check_aspm(priv);
+>  
+>  	for (i = 0; i < ARRAY_SIZE(alcor_pci_cells); i++) {
+>  		alcor_pci_cells[i].platform_data = priv;
+> @@ -319,7 +187,7 @@ static int alcor_pci_probe(struct pci_dev *pdev,
+>  	if (ret < 0)
+>  		goto error_clear_drvdata;
+>  
+> -	alcor_pci_aspm_ctrl(priv, 0);
+> +	pci_disable_link_state(pdev, PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
+>  
+>  	return 0;
+>  
+> @@ -339,8 +207,6 @@ static void alcor_pci_remove(struct pci_dev *pdev)
+>  
+>  	priv = pci_get_drvdata(pdev);
+>  
+> -	alcor_pci_aspm_ctrl(priv, 1);
+> -
+>  	mfd_remove_devices(&pdev->dev);
+>  
+>  	ida_free(&alcor_pci_idr, priv->id);
+> @@ -353,18 +219,16 @@ static void alcor_pci_remove(struct pci_dev *pdev)
+>  #ifdef CONFIG_PM_SLEEP
+>  static int alcor_suspend(struct device *dev)
+>  {
+> -	struct alcor_pci_priv *priv = dev_get_drvdata(dev);
+> -
+> -	alcor_pci_aspm_ctrl(priv, 1);
+>  	return 0;
+>  }
+>  
+>  static int alcor_resume(struct device *dev)
+>  {
+> -
+>  	struct alcor_pci_priv *priv = dev_get_drvdata(dev);
+>  
+> -	alcor_pci_aspm_ctrl(priv, 0);
+> +	pci_disable_link_state(priv->pdev,
+> +			       PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
+> +
+>  	return 0;
+>  }
+>  #endif /* CONFIG_PM_SLEEP */
+> diff --git a/include/linux/alcor_pci.h b/include/linux/alcor_pci.h
+> index 8274ed525e9f..c4a0b23846d8 100644
+> --- a/include/linux/alcor_pci.h
+> +++ b/include/linux/alcor_pci.h
+> @@ -268,13 +268,6 @@ struct alcor_pci_priv {
+>  	unsigned long id; /* idr id */
+>  
+>  	struct alcor_dev_cfg	*cfg;
+> -
+> -	/* PCI ASPM related vars */
+> -	int pdev_cap_off;
+> -	u8  pdev_aspm_cap;
+> -	int parent_cap_off;
+> -	u8  parent_aspm_cap;
+> -	u8 ext_config_dev_aspm;
+>  };
+>  
+>  void alcor_write8(struct alcor_pci_priv *priv, u8 val, unsigned int addr);
+> -- 
+> 2.25.1
+> 
