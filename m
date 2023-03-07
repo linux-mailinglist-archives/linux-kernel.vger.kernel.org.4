@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17246AD4A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 03:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 642A36AD4A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 03:26:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbjCGCZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 21:25:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S229565AbjCGCZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 21:25:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjCGCZI (ORCPT
+        with ESMTP id S229484AbjCGCZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 21:25:08 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0A53018E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 18:24:58 -0800 (PST)
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BFBF53F11A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:24:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678155896;
-        bh=YLunr5J1c1bIAsAVRp+OmMD+b/lWN8gWAq4G89jVn0A=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=VHjTCScvqE49wejrMD3nheUqIMta/3CKw7ZqLuUX/D13g0itrLoHmi2IxZeFXcblF
-         OC2CYtBigV5PD4+fUQAlqhuf4BQX6jQFbAxBk6ue7Lqk7n9Bb/d1X7POKM8Z+f66Zf
-         w6cEhIY2zAOLtAJ6xcJME0I+sqQw46X4KIEydoC9eTlm2UJTKcMU2Xa7pDqo4vZRjc
-         uwlZrlMnswMAgR1ujtgOR9uwARtv/xJR5hHDZvvLiCwc6eSj1coecGi6yO/B3TFZ5E
-         RAr8vAELOCeZN1pXOEWPB8ccGFleGR03ARNHPpK+bCxA6hMJgr/Z5BbL0ZWN+9A69g
-         IdBZdI6i42F7g==
-Received: by mail-ot1-f69.google.com with SMTP id v30-20020a056830091e00b0069445a671b6so5162676ott.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 18:24:56 -0800 (PST)
+        Mon, 6 Mar 2023 21:25:57 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649F72B610;
+        Mon,  6 Mar 2023 18:25:56 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id cy23so46639078edb.12;
+        Mon, 06 Mar 2023 18:25:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678155955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F0OImnvXE30615yFSuU+y0WJr5V6M6GufdN6hNO0u+w=;
+        b=GA/poEVIJpqg9rZCv1nR1OdPgVEmWhihBKyk4ktwDG7wRth7vr3pbbqtGKZ4B8OM2k
+         mss/Lg5SQT2cAkM3X6gTF23ihfLs5QBHlbct2bS6OGLomyN3WgNILv1VjOk5F6e18I+4
+         NktHDWxmjgLoHhl1QoPu+6Ih2l5X812sEfEQI1FsgN4Jt3qpIQ0KE2Si+eGo7UkTsnf0
+         BgCGQWBqTJlJu4thgwezefgxtxPc1ZVCJBMD5/MOQOqDBpPbQIsgFqxKy8PnjVJ1q3gN
+         83HMbgMgbE/p1yE+I583c2TAeeQoBDzfqPsc6WdnlF1/p5d9TRVw9nrerhSl4jYXfXZW
+         jsHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678155895;
+        d=1e100.net; s=20210112; t=1678155955;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YLunr5J1c1bIAsAVRp+OmMD+b/lWN8gWAq4G89jVn0A=;
-        b=A1ywPsJxfguLct2CyVED5qVCLUYEQddZKvPMOPNLghnyb3KiGqpL/UQjsLSG6qlX9M
-         5JtuOnRLKhmkYwtkU/SEyWZQpqO43eeHIypDOkGwc5xVwMo+261WF6I8hCv3efDzC7L6
-         Er9LHcIutRJ5xC54dVVATS6+3jHXSP/4m2fS0znIP0SZJIWkoGusSENVIbijLjxo/ds8
-         9+km39rTjc8EtB2DxWNlbYQZgtbonkDwtXjMNZP/uLOp4GVjye/9RwrbBhFDq24Zuhkv
-         oRRlTh+IOyxOx5Qm1hDvy3dk9l0tlgGAUIMD7mXNJjokkP19t2cpSsaUPxRF0WgqdQO0
-         TjoQ==
-X-Gm-Message-State: AO0yUKXArXMxWmqW0J7Pd8OFr01WISdwVHVADY8vPjtZtfLDPim5r6D0
-        OKqMU9KN5nUGJxEKRkkFWgBVac38d61dFS9oYABmNm2ymZo6Lh9sqoPt6WYPKVfBc8jLeJDwiQJ
-        HGG41sD3lcYTnebs22eSnJm0MFAihfCH5MpzMkJ3ajdFkrCGC/Nt7xQ86
-X-Received: by 2002:a05:6870:7703:b0:176:6a34:52a3 with SMTP id dw3-20020a056870770300b001766a3452a3mr4458215oab.1.1678155895651;
-        Mon, 06 Mar 2023 18:24:55 -0800 (PST)
-X-Google-Smtp-Source: AK7set8dNGzH+2+FXQMV7z43aszo63H5jBjXcdILWUXcwc3QbZH6PYy4VQmDlL7eSfcZAOgNG5EsmD02ZM2ApU6hYsA=
-X-Received: by 2002:a05:6870:7703:b0:176:6a34:52a3 with SMTP id
- dw3-20020a056870770300b001766a3452a3mr4458205oab.1.1678155895347; Mon, 06 Mar
- 2023 18:24:55 -0800 (PST)
+        bh=F0OImnvXE30615yFSuU+y0WJr5V6M6GufdN6hNO0u+w=;
+        b=Q4asiuWC53fvxSMqUyD8uxKEQqxOt9TSApy/m0LCTtmjvph78A5AG8hByTJhWxBqDF
+         uObe/KQSYLqQ7q/A01qhn+TuMtr5D7eu3mNeD6Vodu8/BebFaSu87hv4QsY0Ta/ICGdO
+         vImmyLWn5pOEVB/ngDVJxoYNrhYu/BpSj/7MxX+O5Tkv9fd/GCoEgMayfYn9E/ssID/t
+         ms5S639AauGi3bkznzEDzz3vdQVDUaxE3wk3ncjhVWRMWKO52U2bR4jaRUNRyRtwBjQk
+         p9NdcsT6zo4PfkwzzWn+JsfoW7aM314kRKJefaC3YHxFqAp+N4KyPO9jWE8xeyh45MKs
+         Wk0A==
+X-Gm-Message-State: AO0yUKVAi+hcGS6anyyWLA3ZkSFRlTe6s8KJmIVnTpTMohBvqv0ZuS9r
+        YCXAbb8tlZJoX6HPrW8yirjkoJoPo09abtXDpNQuUnJwzA8g1Q==
+X-Google-Smtp-Source: AK7set+PYNQzrC6X2koOkFfG0i+Qn9+Vzwd9lMtQbr7M5T3BqoE41n8B1xNT7+UMARRkuXT3BRnH1+t8blqPKPACn3g=
+X-Received: by 2002:a17:906:6d55:b0:8d0:2c55:1aa with SMTP id
+ a21-20020a1709066d5500b008d02c5501aamr5726180ejt.0.1678155954763; Mon, 06 Mar
+ 2023 18:25:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20230306111959.429680-1-po-hsu.lin@canonical.com> <20230306103316.3224383e@kernel.org>
-In-Reply-To: <20230306103316.3224383e@kernel.org>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Tue, 7 Mar 2023 10:24:25 +0800
-Message-ID: <CAMy_GT89khdMOCeSxqGx_hh+samb0BabbrQrY6nd9uA3xNS4Cg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: net: devlink_port_split.py: skip test if no
- suitable device available
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, idosch@mellanox.com,
-        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
-        pabeni@redhat.com, edumazet@google.com, davem@davemloft.net
+References: <20230302125215.214014-1-keguang.zhang@gmail.com>
+ <20230302125215.214014-2-keguang.zhang@gmail.com> <CAMRc=Me=Yrr5BuRaMd4r91URzmdYHWUvVGvLL9YFuZPaV0WYFA@mail.gmail.com>
+In-Reply-To: <CAMRc=Me=Yrr5BuRaMd4r91URzmdYHWUvVGvLL9YFuZPaV0WYFA@mail.gmail.com>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Tue, 7 Mar 2023 10:25:38 +0800
+Message-ID: <CAJhJPsVf8EvFc9N8eMtc8Qu2BhODv7PzZm9C5ePR+GdTFiAY1w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] gpio: loongson1: Convert to SPDX identifier
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +73,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 2:33=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
-te:
+On Mon, Mar 6, 2023 at 5:29=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
+wrote:
 >
-> On Mon,  6 Mar 2023 19:19:59 +0800 Po-Hsu Lin wrote:
-> > The `devlink -j dev show` command output may not contain the "flavour"
-> > key, for example:
-> >   $ devlink -j dev show
-> >   {"dev":{"pci/0001:00:00.0":{},"pci/0002:00:00.0":{}}}
+> On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail=
+.com> wrote:
+> >
+> > Use SPDX-License-Identifier instead of the license text and
+> > update the author information.
+> >
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+> > V1 -> V2: Keep GPLv2, just convert to SPDX identifier
+> > ---
+> >  drivers/gpio/gpio-loongson1.c | 9 +++------
+> >  1 file changed, 3 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson=
+1.c
+> > index 5d90b3bc5a25..8862c9ea0d41 100644
+> > --- a/drivers/gpio/gpio-loongson1.c
+> > +++ b/drivers/gpio/gpio-loongson1.c
+> > @@ -1,11 +1,8 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> >  /*
+> >   * GPIO Driver for Loongson 1 SoC
+> >   *
+> > - * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com>
+> > - *
+> > - * This file is licensed under the terms of the GNU General Public
+> > - * License version 2. This program is licensed "as is" without any
+> > - * warranty of any kind, whether express or implied.
+> > + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
+> >   */
+> >
+> >  #include <linux/module.h>
+> > @@ -90,6 +87,6 @@ static struct platform_driver ls1x_gpio_driver =3D {
+> >
+> >  module_platform_driver(ls1x_gpio_driver);
+> >
+> > -MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
 >
-> It's not dev that's supposed to have the flavor, it's port.
->
->   devlink -j port show
-Ah yes, it's using output from this command, thanks for catching this.
+> Why are you removing credits of the old author?
+Kelvin Cheung and Keguang Zhang are the same person.
+This change is to keep pace with the related entry of MAINTAINERS.
 
 >
-> Are you running with old kernel or old user space?
-> Flavor is not an optional attribute.
-This was from a s390x LPAR instance with Ubuntu 22.10 (5.19.0-37-generic)
-iproute2-5.15.0
-
-$ devlink -j port show
-{"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},"pci/0001:00=
-:00.0/2":{"type":"eth","netdev":"ens301d1"},"pci/0002:00:00.0/1":{"type":"e=
-th","netdev":"ens317"},"pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d=
-1"}}}
-
+> Bart
 >
-> > This will cause a KeyError exception. Fix this by checking the key
-> > existence first.
+> > +MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
+> >  MODULE_DESCRIPTION("Loongson1 GPIO driver");
+> >  MODULE_LICENSE("GPL");
+> > --
+> > 2.34.1
 > >
-> > Also, if max lanes is 0 the port splitting won't be tested at all.
-> > but the script will end normally and thus causing a false-negative
-> > test result.
-> >
-> > Use a test_ran flag to determine if these tests were skipped and
-> > return KSFT_SKIP accordingly.
-> >
-> > Link: https://bugs.launchpad.net/bugs/1937133
-> > Fixes: f3348a82e727 ("selftests: net: Add port split test")
-> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
->
-> Could you factor out the existing skipping logic from main()
-> (the code under "if not dev:") and add the test for flavors
-> to the same function? It'll be a bit more code but cleaner
-> result IMHO.
-Sure, will do with V2.
-Thanks!
+
+
+
+--=20
+Best regards,
+
+Kelvin Cheung
