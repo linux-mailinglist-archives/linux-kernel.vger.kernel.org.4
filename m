@@ -2,76 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCC56AF649
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B87E6AF64C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjCGT7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
+        id S231273AbjCGUAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbjCGT7C (ORCPT
+        with ESMTP id S230404AbjCGUAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:59:02 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9B824493;
-        Tue,  7 Mar 2023 11:55:39 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id k23so12555885ybk.13;
-        Tue, 07 Mar 2023 11:55:39 -0800 (PST)
+        Tue, 7 Mar 2023 15:00:02 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85993A4017
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 11:57:04 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id fd25so8844192pfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 11:57:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678218938;
+        d=google.com; s=20210112; t=1678219021;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W0IZLqmZy0tkE3D6dehIaOZJMQhJ6wIO1l7RgkyXBKU=;
-        b=P1sOOl+jOSGV2KvhWDTm43KAlEkQoK1UU4EX0jCulOuurJF0V1C7CQ02KMaGUqTw9X
-         QZKqqhQXAIeC9WFvTnpXfeJVdEDypFi1ohEtENR9FUFx1uQLLf6fmHpydoUTAfAY4ho+
-         Kri4JCyuykgvVY0sp3gqvrf1lKz/Vlp16qkwU2/n9IDp0gqun48Bsir6i6iW3xa+nRUo
-         EfpjSr7lZlWuyRRp1tvBgpfyoGfBFgYKhA1HCd4eDaZBUtR0H+U/DTkQpmSikp35L3i1
-         KTLziDNysQ6CLpKJHuAfc1hVcxXQIuUodvQ6BuDM3pxJ35VK0gIAUAbhWn+9OPqwmABW
-         TyMg==
+        bh=z6rHvMXIA4AIeoeeLB3IEmq2VgMRhSF8AcuEoI2eaFM=;
+        b=SmNn57DznzxCb2rHg2w5G6Wwu/VPVRbuMuzsj3JJwTLtowa/di0sdFh1lEY9hWkppW
+         LMr00m0niYjTp/NvBBkbJDOAlVIDAqss+BlUgBmBNzR2q1y65S4H6CYNtQsAbPkz3JEs
+         4IyhoCYe3flWXhSppj+HxxmjRzkmPhS9KlWoBpuvpS8R+xqxWAFTHoGmluamtIyFgD5q
+         hOz4F3ItjvnWDQKUPQJYQp3+ENL+/lNa721um/fr07NWJQXHgmW73D8fKogveNrll7P6
+         FKYjXIuoyZEh7p9ba8nDIqqXWuyRAwK0JEejeJFx/4toCtxF0SeyxXSLwLaxNxb0TSgX
+         Cg9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678218938;
+        d=1e100.net; s=20210112; t=1678219021;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W0IZLqmZy0tkE3D6dehIaOZJMQhJ6wIO1l7RgkyXBKU=;
-        b=XbLh1k92vvcYqn2EEN71PPVfsySCpUmZ3v3HrAlHrJh/nE9ETktZ5HbpMIHZbAvZU8
-         lpD1vaTuDERUfyOSZZ0iDhOqjlcj05KED46de2V05Fn/zGvN+eLwYAFpmLtw1uixsYpO
-         zsX2kkZARV5LmpOT79zT06XRrcfuwlkdgo3eW6zgn5XEuJBRsWQSG4qcl3tpkobAkb+b
-         +IvSpbuE6IRb6/vQXkOat/Ao40zV+bEvm2qNupTYrqasauf8BxX7cfZPHIPqIuGmlGtA
-         +BHuW0MkoYLgaiykJRSW7Akp+QIU1JPocWDUu6T9oLdoEe951BKVeIJhwkZ6Kddnq4ot
-         C5Dw==
-X-Gm-Message-State: AO0yUKWgtP9Q5rEx5KPjw0Dhk9ce2udNiu7XMi4FFntui2ksF22m6mty
-        FkC9mi8PwWnaxposekb4ct8sVxMX47HNPZEutow=
-X-Google-Smtp-Source: AK7set9q7Fr5lAcQ+rUn/aXjIXW/u94G5SLO1K/+kqdRhPEJFxECPOa51JwvvrUobgAJvlH9+sSBCHaRLK4iCfY53Yg=
-X-Received: by 2002:a05:6902:4c2:b0:a36:3875:564a with SMTP id
- v2-20020a05690204c200b00a363875564amr9258448ybs.2.1678218938404; Tue, 07 Mar
- 2023 11:55:38 -0800 (PST)
+        bh=z6rHvMXIA4AIeoeeLB3IEmq2VgMRhSF8AcuEoI2eaFM=;
+        b=ww+IYA9K2yBXsYx6ZO7gJfCG84dyBhAsjspV5g/hQ9MIbe7bzBTrz2J8jDJ0cUtyhy
+         RDEc6UuznomXj7NNfG+El3SdjyT8oqOfFo7vG3KxSaYHLsZbsr24uuRtAudz2wYc57on
+         iYH7AM41TolqjiIUXFbiPXly7H3dycPT0o59SfjpHaODoCw0bAmTwlX2q6rb43jhabFo
+         hHawgs5jTjQv1/qu2/AsxCWCmHm2BJOBF/NmsXvSvOYr07zhZKk6E+nVjlw7+bRWgq0E
+         TXNkchwQc1I0zB3o1URQSGqlQ8Am8RTnMHSG/Xhn87cpuWbLaOoITmMWxfT8DvJ7meSJ
+         x0rg==
+X-Gm-Message-State: AO0yUKVi+4dCva64cbYKFoI70UZj0HwmZ9JG8aKLJDAAuTVLKpWAfs/X
+        mbGQVOPFkeBtRR69B8+QB8Bmy43Qjkl0kLB0mlqubA==
+X-Google-Smtp-Source: AK7set9asmjLkxmVz+rrzfq5No/evYVmU8HTu/DQCTbPNSDJM0gnFub0whJn1YEHSWfr8/3Hp1h0mXIrbuC/QXV8LGE=
+X-Received: by 2002:a62:f801:0:b0:5eb:e0e0:d650 with SMTP id
+ d1-20020a62f801000000b005ebe0e0d650mr6505410pfh.6.1678219020640; Tue, 07 Mar
+ 2023 11:57:00 -0800 (PST)
 MIME-Version: 1.0
-References: <CANiq72k4cOEOykgUhgqaXPC7xhX2EoC8c4sr1oFEhKMfEdi=wA@mail.gmail.com>
- <20230121052507.885734-1-varmavinaym@gmail.com> <CAK7LNAT1p=ykc1yruvzRiYthCAuXNcLq9461Mdgz95Z39_MYxQ@mail.gmail.com>
- <ZAdYIMYAwsOwErIl@nvrarch>
-In-Reply-To: <ZAdYIMYAwsOwErIl@nvrarch>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 7 Mar 2023 20:55:27 +0100
-Message-ID: <CANiq72=mg3LEdqaiy+4VDn67-C++Fyz21gefns_EvgUwGfPCTQ@mail.gmail.com>
-Subject: Re: [PATCH v2] scripts: `make rust-analyzer` for out-of-tree modules
-To:     Vinay Varma <varmavinaym@gmail.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>, alicef@alicef.me,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rust-for-linux@vger.kernel.org
+References: <20230206221428.2125324-1-qyousef@layalina.io>
+In-Reply-To: <20230206221428.2125324-1-qyousef@layalina.io>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 7 Mar 2023 11:56:49 -0800
+Message-ID: <CA+khW7i_Sc0M4FXzojmQ5PSfkPwk6AdcbN9j0gDXZ9FsOMQAwA@mail.gmail.com>
+Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on suspend-resume
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Waiman Long <longman@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
+        x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,27 +87,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 4:28=E2=80=AFPM Vinay Varma <varmavinaym@gmail.com> =
-wrote:
+On Mon, Feb 6, 2023 at 2:15=E2=80=AFPM Qais Yousef <qyousef@layalina.io> wr=
+ote:
 >
-> Sorry, got caught up with another project and lost track of this thread.
-> I have updated the patch and replied to some of the threads inline.
+> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting in=
+formation")
+> enabled rebuilding root domain on cpuset and hotplug operations to
+> correct deadline accounting.
+>
+> Rebuilding root domain is a slow operation and we see 10+ of ms delays
+> on suspend-resume because of that (worst case captures 20ms which
+> happens often).
+>
+> Since nothing is expected to change on suspend-resume operation; skip
+> rebuilding the root domains to regain the some of the time lost.
+>
+> Achieve this by refactoring the code to pass whether dl accoutning needs
+> an update to rebuild_sched_domains(). And while at it, rename
+> rebuild_root_domains() to update_dl_rd_accounting() which I believe is
+> a more representative name since we are not really rebuilding the root
+> domains, but rather updating dl accounting at the root domain.
+>
+> Some users of rebuild_sched_domains() will skip dl accounting update
+> now:
+>
+>         * Update sched domains when relaxing the domain level in cpuset
+>           which only impacts searching level in load balance
+>         * update sched domains when cpufreq governor changes and we need
+>           to create the perf domains
+>
+> Users in arch/x86 and arch/s390 are left with the old behavior.
+>
+> Debugged-by: Rick Yiu <rickyiu@google.com>
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> ---
 
-No problem -- thanks!
+Hi Qais,
 
-Note that we may need a rebase after
-https://lore.kernel.org/rust-for-linux/20230307120736.75492-1-nmi@metaspace=
-.dk/
-(or equivalent) lands in `rust-fixes`. So perhaps wait for that, then
-rebase (especially if we go with the EAFP style), and then others may
-want to give it a spin for a re-test.
+Thank you for reporting this. We observed the same issue in our
+production environment. Rebuild_root_domains() is also called under
+cpuset_write_resmask, which handles writing to cpuset.cpus. Under
+production workloads, on a 4.15 kernel, we observed the median latency
+of writing cpuset.cpus at 3ms, p99 at 7ms. Now the median becomes
+60ms, p99 at >100ms. Writing cpuset.cpus is a fairly frequent and
+critical path in production, but blindly traversing every task in the
+system is not scalable. And its cost is really unnecessary for users
+who don't use deadline tasks at all.
 
-When you rebase, please consider putting `f"{name}.o"` inside the
-function to avoid repetition, and perhaps consider inverting the
-condition to avoid indenting the file further (and reducing the diff).
-It makes the "Skip ..." comment more understandable (otherwise, you
-may want to change the comment to "Only process ..." or similar
-instead of using "Skip ...").
+>
+> The better solution that was discussed before is to not iterate through e=
+very
+> task in the system and let cpuset track when dl tasks are added to it and=
+ do
+> smarter iteration. ATM even if there are no dl tasks in the system we'll
+> blindly go through every task in the hierarchy to update nothing.
+>
 
-Cheers,
-Miguel
+Great idea. This works. I tried this solution. With that, 98% of
+cpuset.cpu writes are now within 7ms. Though there are still long
+tails, they are caused by another issue, irrelevant to
+rebuild_root_domains().
+
+Your suggestion of update_dl_rd_accounting() also makes sense to me.
+
+Hao
