@@ -2,57 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D5D6AE16F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:54:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0946AE179
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCGNyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:54:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        id S230255AbjCGNzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:55:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbjCGNyP (ORCPT
+        with ESMTP id S230287AbjCGNyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:54:15 -0500
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5B05597
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:54:11 -0800 (PST)
-Received: from localhost (36-226-179-130.dynamic-ip.hinet.net [36.226.179.130])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id DCFDF3F0E1;
-        Tue,  7 Mar 2023 13:54:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678197249;
-        bh=xPBz9N8CBbExdFLBr+cIY26Ubw3p0nhKguR8fCGx6Bo=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=sxPyZqxYpvT5V/SvqJs4re/xSBdUyBZjgTlqgWOX+6X3VjN7EUHd3OI4AuJGcAel8
-         yzoxJdYCcnW+QyCJtr2ekZr0NNc33/vq1WtGHTdNvcJaSqjJBxYQsgUy4kvPmSt9uz
-         RMxYOikwxBm1oyVUUcpGz+oUnDemv2dq7cD1i749VKUr6FlfHmIIP/wQfqEhd4Utoa
-         flJwo8L3PACFbYZwaOV3Lnv4CtWTg6bXWve17VCc9l6ElotDfNAWS8rprTR55DPDtc
-         LEVXqkW57kpE/2V21BJnd+eSKOWG7Be2MuZzr4XNr184cE6xywcM9In5vAXjvusogD
-         7HCqhyWxg7oZQ==
-From:   Jeremy Szu <jeremy.szu@canonical.com>
-To:     tiwai@suse.com
-Cc:     Jeremy Szu <jeremy.szu@canonical.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Tim Crawford <tcrawford@system76.com>,
-        Andy Chi <andy.chi@canonical.com>,
-        Meng Tang <tangmeng@uniontech.com>,
-        Philipp Jungkamp <p.jungkamp@gmx.net>,
-        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
-        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
-        Yuchi Yang <yangyuchi66@gmail.com>,
-        alsa-devel@alsa-project.org (moderated list:SOUND),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] ALSA: hda/realtek: fix speaker, mute/micmute LEDs not work on a HP platform
-Date:   Tue,  7 Mar 2023 21:53:16 +0800
-Message-Id: <20230307135317.37621-1-jeremy.szu@canonical.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 7 Mar 2023 08:54:52 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03ED82728
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:54:46 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id m6so17162212lfq.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:54:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678197284;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aPmjHWuFuv6F58SfS5GxDfQIhMMuuYwG2pBnFif7yZ0=;
+        b=srAh3UY2X3KYEtRhNoUJNsIrQDH4MKtAoQSMWOyGQ9+J9yhh6E1rNbNOegLd2Xy9qO
+         iOcikU8KOQLt4BePPYM2r6pDvf9DUjhTjTp/Vpl7+RNgpGldmQPgGFO8VYDrUQaQ/Bor
+         4lElfdkPTR31BgJO+cm2Hy1HdwhJvGpnnMIyDI7aCQ8h0/eHgYFLPK19weJyCk5RKf42
+         BJ24ZBBU+ZBGz9wX6LyMKKuhasggHPa5SqbCIh2naFmay6qtL803A7QVfuAEuA89Az5z
+         Xta002DhwcEhIatRtC8tL24u7YpJ2ZxqJixKXndSwTuNS5uK/vom3SF90yba8fSStgI0
+         u6dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678197284;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPmjHWuFuv6F58SfS5GxDfQIhMMuuYwG2pBnFif7yZ0=;
+        b=GHYDk8+hCFij6CCmhIfrTiVp0xyESCQxbpRUnIn0d+p+GTtn866HY6TojT0AWJznPP
+         v+2YHRyC/eVrTGiXmP48S9fXZtL3CdIxipQUIOct234Q8QkMhJM2p8OpVQ5UguY4V8FO
+         tA06OGAbgaMLtGVnIVBbu0EfbPjabED3SrgCc92p9Hd8IyurMDd3WjJQlDTPFQkMQtIX
+         U4cqhMPh8jA3+gffVswMExGVovYkzxNundx4jTe8Nqr8xuutciNqlgp1MzIQJ7PtgNou
+         0PyJFebFjSuP8dhRlgGeriTzMQi/hbUtTAr6dnYcmVvSs3B0qFWoadvh8380iL6kPGsy
+         uWtQ==
+X-Gm-Message-State: AO0yUKWWoIPDytxyLCQ3wCtNQeNwbWnHqj6gsIZaPmfplrqZNTuGSaSH
+        G7itYvVHyZw0sGRQMzXRcSfs+g==
+X-Google-Smtp-Source: AK7set+rcXfy6mfYYqPaxyRmMJjEFrUAW5fRIvhtFGjTsQMKNImU//9d5pU6vay7STdcZ6FJNJgaHg==
+X-Received: by 2002:ac2:46c8:0:b0:4e0:6e01:7ebe with SMTP id p8-20020ac246c8000000b004e06e017ebemr4171993lfo.36.1678197284220;
+        Tue, 07 Mar 2023 05:54:44 -0800 (PST)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id q9-20020ac25149000000b004dda74eccafsm2054843lfd.68.2023.03.07.05.54.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 05:54:43 -0800 (PST)
+Message-ID: <b3d3a70a-6f6b-e7ff-cf0c-cb0093212a3b@linaro.org>
+Date:   Tue, 7 Mar 2023 15:54:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v14 00/14] Add PSR support for eDP
+Content-Language: en-GB
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     linux-kernel@vger.kernel.org, robdclark@gmail.com,
+        dianders@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_khsieh@quicinc.com,
+        quic_vproddut@quicinc.com, quic_bjorande@quicinc.com,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
+References: <1677774797-31063-1-git-send-email-quic_vpolimer@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1677774797-31063-1-git-send-email-quic_vpolimer@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,26 +84,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a HP platform needs ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED quirk to
-make mic-mute/audio-mute/speaker working.
+David, Daniel & other drm maintainers,
 
-Signed-off-by: Jeremy Szu <jeremy.szu@canonical.com>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+On 02/03/2023 18:33, Vinod Polimera wrote:
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 3c629f4ae080..5d530b489c48 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9447,6 +9447,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x103c, 0x8b8a, "HP", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8b8b, "HP", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8b8d, "HP", ALC236_FIXUP_HP_GPIO_LED),
-+	SND_PCI_QUIRK(0x103c, 0x8b8f, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8b92, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x103c, 0x8bf0, "HP", ALC236_FIXUP_HP_GPIO_LED),
- 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
+[skipped the changelog]
+
+> Vinod Polimera (14):
+>    drm: add helper functions to retrieve old and new crtc
+>    drm/bridge: use atomic enable/disable callbacks for panel bridge
+>    drm/bridge: add psr support for panel bridge callbacks
+
+The first three patches are generic. How do we merge this series? I 
+think these three patches should be merged into an immutable branch at 
+drm-misc (or any other drm tree), which we can then merge into msm-next. 
+What do you think?
+
+>    drm/msm/disp/dpu: check for crtc enable rather than crtc active to
+>      release shared resources
+>    drm/msm/disp/dpu: get timing engine status from intf status register
+>    drm/msm/disp/dpu: wait for extra vsync till timing engine status is
+>      disabled
+>    drm/msm/disp/dpu: reset the datapath after timing engine disable
+>    drm/msm/dp: use atomic callbacks for DP bridge ops
+>    drm/msm/dp: Add basic PSR support for eDP
+>    drm/msm/dp: use the eDP bridge ops to validate eDP modes
+>    drm/msm/disp/dpu: use atomic enable/disable callbacks for encoder
+>      functions
+>    drm/msm/disp/dpu: add PSR support for eDP interface in dpu driver
+>    drm/msm/disp/dpu: update dpu_enc crtc state on crtc enable/disable
+>      during self refresh
+>    drm/msm/dp: set self refresh aware based on psr support
+> 
+>   drivers/gpu/drm/bridge/panel.c                     |  68 +++++++-
+>   drivers/gpu/drm/drm_atomic.c                       |  60 +++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c           |  40 ++++-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  26 +++-
+>   .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_vid.c   |  22 +++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   3 +-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  12 +-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        |   8 +-
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   2 +-
+>   drivers/gpu/drm/msm/dp/dp_catalog.c                |  80 ++++++++++
+>   drivers/gpu/drm/msm/dp/dp_catalog.h                |   4 +
+>   drivers/gpu/drm/msm/dp/dp_ctrl.c                   |  80 ++++++++++
+>   drivers/gpu/drm/msm/dp/dp_ctrl.h                   |   3 +
+>   drivers/gpu/drm/msm/dp/dp_display.c                |  36 +++--
+>   drivers/gpu/drm/msm/dp/dp_display.h                |   2 +
+>   drivers/gpu/drm/msm/dp/dp_drm.c                    | 173 ++++++++++++++++++++-
+>   drivers/gpu/drm/msm/dp/dp_drm.h                    |   9 +-
+>   drivers/gpu/drm/msm/dp/dp_link.c                   |  36 +++++
+>   drivers/gpu/drm/msm/dp/dp_panel.c                  |  22 +++
+>   drivers/gpu/drm/msm/dp/dp_panel.h                  |   6 +
+>   drivers/gpu/drm/msm/dp/dp_reg.h                    |  27 ++++
+>   include/drm/drm_atomic.h                           |   7 +
+>   22 files changed, 683 insertions(+), 43 deletions(-)
+> 
+
 -- 
-2.38.1
+With best wishes
+Dmitry
 
