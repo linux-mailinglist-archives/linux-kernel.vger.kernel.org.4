@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03A816AD753
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 07:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A77956AD754
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 07:23:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbjCGGXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 01:23:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
+        id S230492AbjCGGXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 01:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbjCGGXi (ORCPT
+        with ESMTP id S230461AbjCGGXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 01:23:38 -0500
+        Tue, 7 Mar 2023 01:23:44 -0500
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 819A5B469;
-        Mon,  6 Mar 2023 22:23:32 -0800 (PST)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3276Fcui002777;
-        Tue, 7 Mar 2023 06:23:09 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCC66E89;
+        Mon,  6 Mar 2023 22:23:41 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3276ENjT030277;
+        Tue, 7 Mar 2023 06:23:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=I9vAV7t/Oy+1Jz4lubj0Pxq5DOaUmbmSY8lOuwdUcmQ=;
- b=oNEjqWi7N1XMpE+AGCQLXsBHRzv2zuplyHfVhvmGkYf1FkzpGb5a+1EczQkwZzv6k9+j
- XGkDTB5SxiksiUKvd/Lyo90LVlNMKu9BZe1dPrHcNXPp8HkOpDMY6FpU/+TeqeU52/nz
- oC+YW8BnDZHKAyLSbsFPyv94+m7FvzNIsBc5RD4hmQ7ZcW5n9gB/3KigMBxh+0ejK0iI
- VXVfPADyYEkEuTe7f1fPCtWzmjT/7rfUAQnb1OdAHzqLiO6o7XY61QWwGj7TaKumG0Bn
- 9RayKniLGHjORGi4F1/avo2Un+4MQfIi/Fpizoi24pb6p4NfA426ziJP6nexgt+XaBdl gQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p418774ej-1
+ bh=PtI5qZ4SoG1uZMPr/FQ7pJp6mkwaQJd7V8vsm2HSumo=;
+ b=p6UeyVEThRd8++eRfApmpKJnvUn+kkSTUhLShGrXw26WeGVZzcpxebc4BYE1I9exNwyY
+ dmWDpwgzcWc5CRhlZTl4yjuQ+y/TwCJq/IBYF6TooCMkiFtIzs29/f4h6w2I56/QbfkB
+ 12qZaCBVUOmTUyLmOHJ8xeJpT2WA/Wt+yTaAQrw9lzQ/wPOrOT8fLFZR4U9N6Eyl9O5y
+ TRP9IF6DGnHOkmMVTsWoBfk9zQiryupDRwKYUUh8nLXYamo9VzmX3lfhsuWONtsI8SI5
+ 6CgTjEYbYSLVQwQa1KiLEKWhkOlvM0v1gyXb0iXYIXMUfcgLYAkVIzIlJ92xjRVMi15V tw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p417eq0ye-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 06:23:09 +0000
+        Tue, 07 Mar 2023 06:23:16 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3276N8CU001810
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3276NFLl022627
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Mar 2023 06:23:08 GMT
+        Tue, 7 Mar 2023 06:23:16 GMT
 Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 6 Mar 2023 22:23:01 -0800
+ 15.2.986.41; Mon, 6 Mar 2023 22:23:08 -0800
 From:   Kathiravan T <quic_kathirav@quicinc.com>
 To:     <agross@kernel.org>, <andersson@kernel.org>,
         <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ To:     <agross@kernel.org>, <andersson@kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-clk@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
 CC:     Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH V6 2/9] clk: qcom: Add STROMER PLUS PLL type for IPQ5332
-Date:   Tue, 7 Mar 2023 11:52:25 +0530
-Message-ID: <20230307062232.4889-3-quic_kathirav@quicinc.com>
+Subject: [PATCH V6 3/9] dt-bindings: clock: Add Qualcomm IPQ5332 GCC
+Date:   Tue, 7 Mar 2023 11:52:26 +0530
+Message-ID: <20230307062232.4889-4-quic_kathirav@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230307062232.4889-1-quic_kathirav@quicinc.com>
 References: <20230307062232.4889-1-quic_kathirav@quicinc.com>
@@ -64,85 +64,481 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 0H7n_IouHcFdYo6KF1omWzlbnWv5BlHm
-X-Proofpoint-ORIG-GUID: 0H7n_IouHcFdYo6KF1omWzlbnWv5BlHm
+X-Proofpoint-ORIG-GUID: UACh_tClqgo24tA8RWaK69mTz7fwTx6f
+X-Proofpoint-GUID: UACh_tClqgo24tA8RWaK69mTz7fwTx6f
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-07_01,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
- priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0
- malwarescore=0 mlxlogscore=830 bulkscore=0 suspectscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070056
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 malwarescore=0 priorityscore=1501
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2212070000 definitions=main-2303070056
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the support for stromer plus pll, which is found on the IPQ5332
-SoCs. Programming sequence is same as the stromer pll, so we can re-use
-the same.
+Add binding for the Qualcomm IPQ5332 Global Clock Controller.
 
-Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
 ---
 Changes in V6:
 	- No changes
 
 Changes in V5:
-	- No changes
+	- Dropped the clock-names, as suggested by Bjorn in IPQ9574
+	  series
+	- Made Bjorn as Maintainer
 
 Changes in V4:
-	- No changes
+	- Pick up the R-b tag
 
 Changes in V3:
-	- No changes
+	- Actually I missed to remove the clocks in V2 which are
+	  supposed to
+	  be removed. In V3 I have removed those and they are
+	  GCC_APSS_AHB_CLK, GCC_APSS_AHB_CLK_SRC, GCC_APSS_AXI_CLK
+	- For the same, didn't add the Reviewed-By tags from Stephen and
+	  Krzysztof
 
 Changes in V2:
-	- Added the Reviewed-by tag
+	- property 'clocks' is marked required
+	- Renamed the include file name to match with compatible
 
- drivers/clk/qcom/clk-alpha-pll.c | 11 +++++++++++
- drivers/clk/qcom/clk-alpha-pll.h |  1 +
- 2 files changed, 12 insertions(+)
+ .../bindings/clock/qcom,ipq5332-gcc.yaml      |  53 +++
+ include/dt-bindings/clock/qcom,ipq5332-gcc.h  | 356 ++++++++++++++++++
+ 2 files changed, 409 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml
+ create mode 100644 include/dt-bindings/clock/qcom,ipq5332-gcc.h
 
-diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
-index 14f9436b62fc..b9f6535a7ba7 100644
---- a/drivers/clk/qcom/clk-alpha-pll.c
-+++ b/drivers/clk/qcom/clk-alpha-pll.c
-@@ -216,6 +216,17 @@ const u8 clk_alpha_pll_regs[][PLL_OFF_MAX_REGS] = {
- 		[PLL_OFF_TEST_CTL_U] = 0x34,
- 		[PLL_OFF_STATUS] = 0x28,
- 	},
-+	[CLK_ALPHA_PLL_TYPE_STROMER_PLUS] =  {
-+		[PLL_OFF_L_VAL] = 0x04,
-+		[PLL_OFF_USER_CTL] = 0x08,
-+		[PLL_OFF_USER_CTL_U] = 0x0c,
-+		[PLL_OFF_CONFIG_CTL] = 0x10,
-+		[PLL_OFF_TEST_CTL] = 0x14,
-+		[PLL_OFF_TEST_CTL_U] = 0x18,
-+		[PLL_OFF_STATUS] = 0x1c,
-+		[PLL_OFF_ALPHA_VAL] = 0x24,
-+		[PLL_OFF_ALPHA_VAL_U] = 0x28,
-+	},
- };
- EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
- 
-diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
-index ff25c7f7b43e..d07b17186b90 100644
---- a/drivers/clk/qcom/clk-alpha-pll.h
-+++ b/drivers/clk/qcom/clk-alpha-pll.h
-@@ -27,6 +27,7 @@ enum {
- 	CLK_ALPHA_PLL_TYPE_DEFAULT_EVO,
- 	CLK_ALPHA_PLL_TYPE_BRAMMO_EVO,
- 	CLK_ALPHA_PLL_TYPE_STROMER,
-+	CLK_ALPHA_PLL_TYPE_STROMER_PLUS,
- 	CLK_ALPHA_PLL_TYPE_MAX,
- };
- 
+diff --git a/Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml
+new file mode 100644
+index 000000000000..718fe0625424
+--- /dev/null
++++ b/Documentation/devicetree/bindings/clock/qcom,ipq5332-gcc.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/clock/qcom,ipq5332-gcc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Global Clock & Reset Controller on IPQ5332
++
++maintainers:
++  - Bjorn Andersson <andersson@kernel.org>
++
++description: |
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on IPQ5332.
++
++  See also:: include/dt-bindings/clock/qcom,gcc-ipq5332.h
++
++allOf:
++  - $ref: qcom,gcc.yaml#
++
++properties:
++  compatible:
++    const: qcom,ipq5332-gcc
++
++  clocks:
++    items:
++      - description: Board XO clock source
++      - description: Sleep clock source
++      - description: PCIE 2lane PHY pipe clock source
++      - description: PCIE 2lane x1 PHY pipe clock source (For second lane)
++      - description: USB PCIE wrapper pipe clock source
++
++required:
++  - compatible
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    clock-controller@1800000 {
++      compatible = "qcom,ipq5332-gcc";
++      reg = <0x01800000 0x80000>;
++      clocks = <&xo_board>,
++               <&sleep_clk>,
++               <&pcie_2lane_phy_pipe_clk>,
++               <&pcie_2lane_phy_pipe_clk_x1>,
++               <&usb_pcie_wrapper_pipe_clk>;
++      #clock-cells = <1>;
++      #power-domain-cells = <1>;
++      #reset-cells = <1>;
++    };
++...
+diff --git a/include/dt-bindings/clock/qcom,ipq5332-gcc.h b/include/dt-bindings/clock/qcom,ipq5332-gcc.h
+new file mode 100644
+index 000000000000..8a405a0a96d0
+--- /dev/null
++++ b/include/dt-bindings/clock/qcom,ipq5332-gcc.h
+@@ -0,0 +1,356 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
++
++#ifndef _DT_BINDINGS_CLK_QCOM_GCC_IPQ5332_H
++#define _DT_BINDINGS_CLK_QCOM_GCC_IPQ5332_H
++
++#define GPLL0_MAIN					0
++#define GPLL0						1
++#define GPLL2_MAIN					2
++#define GPLL2						3
++#define GPLL4_MAIN					4
++#define GPLL4						5
++#define GCC_ADSS_PWM_CLK				6
++#define GCC_ADSS_PWM_CLK_SRC				7
++#define GCC_AHB_CLK					8
++#define GCC_APSS_AXI_CLK_SRC				9
++#define GCC_BLSP1_AHB_CLK				10
++#define GCC_BLSP1_QUP1_I2C_APPS_CLK			11
++#define GCC_BLSP1_QUP1_SPI_APPS_CLK			12
++#define GCC_BLSP1_QUP1_SPI_APPS_CLK_SRC			13
++#define GCC_BLSP1_QUP2_I2C_APPS_CLK			14
++#define GCC_BLSP1_QUP2_SPI_APPS_CLK			15
++#define GCC_BLSP1_QUP2_SPI_APPS_CLK_SRC			16
++#define GCC_BLSP1_QUP3_I2C_APPS_CLK			17
++#define GCC_BLSP1_QUP3_SPI_APPS_CLK			18
++#define GCC_BLSP1_QUP3_SPI_APPS_CLK_SRC			19
++#define GCC_BLSP1_SLEEP_CLK				20
++#define GCC_BLSP1_UART1_APPS_CLK			21
++#define GCC_BLSP1_UART1_APPS_CLK_SRC			22
++#define GCC_BLSP1_UART2_APPS_CLK			23
++#define GCC_BLSP1_UART2_APPS_CLK_SRC			24
++#define GCC_BLSP1_UART3_APPS_CLK			25
++#define GCC_BLSP1_UART3_APPS_CLK_SRC			26
++#define GCC_CE_AHB_CLK					27
++#define GCC_CE_AXI_CLK					28
++#define GCC_CE_PCNOC_AHB_CLK				29
++#define GCC_CMN_12GPLL_AHB_CLK				30
++#define GCC_CMN_12GPLL_APU_CLK				31
++#define GCC_CMN_12GPLL_SYS_CLK				32
++#define GCC_GP1_CLK					33
++#define GCC_GP1_CLK_SRC					34
++#define GCC_GP2_CLK					35
++#define GCC_GP2_CLK_SRC					36
++#define GCC_LPASS_CORE_AXIM_CLK				37
++#define GCC_LPASS_SWAY_CLK				38
++#define GCC_LPASS_SWAY_CLK_SRC				39
++#define GCC_MDIO_AHB_CLK				40
++#define GCC_MDIO_SLAVE_AHB_CLK				41
++#define GCC_MEM_NOC_Q6_AXI_CLK				42
++#define GCC_MEM_NOC_TS_CLK				43
++#define GCC_NSS_TS_CLK					44
++#define GCC_NSS_TS_CLK_SRC				45
++#define GCC_NSSCC_CLK					46
++#define GCC_NSSCFG_CLK					47
++#define GCC_NSSNOC_ATB_CLK				48
++#define GCC_NSSNOC_NSSCC_CLK				49
++#define GCC_NSSNOC_QOSGEN_REF_CLK			50
++#define GCC_NSSNOC_SNOC_1_CLK				51
++#define GCC_NSSNOC_SNOC_CLK				52
++#define GCC_NSSNOC_TIMEOUT_REF_CLK			53
++#define GCC_NSSNOC_XO_DCD_CLK				54
++#define GCC_PCIE3X1_0_AHB_CLK				55
++#define GCC_PCIE3X1_0_AUX_CLK				56
++#define GCC_PCIE3X1_0_AXI_CLK_SRC			57
++#define GCC_PCIE3X1_0_AXI_M_CLK				58
++#define GCC_PCIE3X1_0_AXI_S_BRIDGE_CLK			59
++#define GCC_PCIE3X1_0_AXI_S_CLK				60
++#define GCC_PCIE3X1_0_PIPE_CLK				61
++#define GCC_PCIE3X1_0_RCHG_CLK				62
++#define GCC_PCIE3X1_0_RCHG_CLK_SRC			63
++#define GCC_PCIE3X1_1_AHB_CLK				64
++#define GCC_PCIE3X1_1_AUX_CLK				65
++#define GCC_PCIE3X1_1_AXI_CLK_SRC			66
++#define GCC_PCIE3X1_1_AXI_M_CLK				67
++#define GCC_PCIE3X1_1_AXI_S_BRIDGE_CLK			68
++#define GCC_PCIE3X1_1_AXI_S_CLK				69
++#define GCC_PCIE3X1_1_PIPE_CLK				70
++#define GCC_PCIE3X1_1_RCHG_CLK				71
++#define GCC_PCIE3X1_1_RCHG_CLK_SRC			72
++#define GCC_PCIE3X1_PHY_AHB_CLK				73
++#define GCC_PCIE3X2_AHB_CLK				74
++#define GCC_PCIE3X2_AUX_CLK				75
++#define GCC_PCIE3X2_AXI_M_CLK				76
++#define GCC_PCIE3X2_AXI_M_CLK_SRC			77
++#define GCC_PCIE3X2_AXI_S_BRIDGE_CLK			78
++#define GCC_PCIE3X2_AXI_S_CLK				79
++#define GCC_PCIE3X2_AXI_S_CLK_SRC			80
++#define GCC_PCIE3X2_PHY_AHB_CLK				81
++#define GCC_PCIE3X2_PIPE_CLK				82
++#define GCC_PCIE3X2_RCHG_CLK				83
++#define GCC_PCIE3X2_RCHG_CLK_SRC			84
++#define GCC_PCIE_AUX_CLK_SRC				85
++#define GCC_PCNOC_AT_CLK				86
++#define GCC_PCNOC_BFDCD_CLK_SRC				87
++#define GCC_PCNOC_LPASS_CLK				88
++#define GCC_PRNG_AHB_CLK				89
++#define GCC_Q6_AHB_CLK					90
++#define GCC_Q6_AHB_S_CLK				91
++#define GCC_Q6_AXIM_CLK					92
++#define GCC_Q6_AXIM_CLK_SRC				93
++#define GCC_Q6_AXIS_CLK					94
++#define GCC_Q6_TSCTR_1TO2_CLK				95
++#define GCC_Q6SS_ATBM_CLK				96
++#define GCC_Q6SS_PCLKDBG_CLK				97
++#define GCC_Q6SS_TRIG_CLK				98
++#define GCC_QDSS_AT_CLK					99
++#define GCC_QDSS_AT_CLK_SRC				100
++#define GCC_QDSS_CFG_AHB_CLK				101
++#define GCC_QDSS_DAP_AHB_CLK				102
++#define GCC_QDSS_DAP_CLK				103
++#define GCC_QDSS_DAP_DIV_CLK_SRC			104
++#define GCC_QDSS_ETR_USB_CLK				105
++#define GCC_QDSS_EUD_AT_CLK				106
++#define GCC_QDSS_TSCTR_CLK_SRC				107
++#define GCC_QPIC_AHB_CLK				108
++#define GCC_QPIC_CLK					109
++#define GCC_QPIC_IO_MACRO_CLK				110
++#define GCC_QPIC_IO_MACRO_CLK_SRC			111
++#define GCC_QPIC_SLEEP_CLK				112
++#define GCC_SDCC1_AHB_CLK				113
++#define GCC_SDCC1_APPS_CLK				114
++#define GCC_SDCC1_APPS_CLK_SRC				115
++#define GCC_SLEEP_CLK_SRC				116
++#define GCC_SNOC_LPASS_CFG_CLK				117
++#define GCC_SNOC_NSSNOC_1_CLK				118
++#define GCC_SNOC_NSSNOC_CLK				119
++#define GCC_SNOC_PCIE3_1LANE_1_M_CLK			120
++#define GCC_SNOC_PCIE3_1LANE_1_S_CLK			121
++#define GCC_SNOC_PCIE3_1LANE_M_CLK			122
++#define GCC_SNOC_PCIE3_1LANE_S_CLK			123
++#define GCC_SNOC_PCIE3_2LANE_M_CLK			124
++#define GCC_SNOC_PCIE3_2LANE_S_CLK			125
++#define GCC_SNOC_USB_CLK				126
++#define GCC_SYS_NOC_AT_CLK				127
++#define GCC_SYS_NOC_WCSS_AHB_CLK			128
++#define GCC_SYSTEM_NOC_BFDCD_CLK_SRC			129
++#define GCC_UNIPHY0_AHB_CLK				130
++#define GCC_UNIPHY0_SYS_CLK				131
++#define GCC_UNIPHY1_AHB_CLK				132
++#define GCC_UNIPHY1_SYS_CLK				133
++#define GCC_UNIPHY_SYS_CLK_SRC				134
++#define GCC_USB0_AUX_CLK				135
++#define GCC_USB0_AUX_CLK_SRC				136
++#define GCC_USB0_EUD_AT_CLK				137
++#define GCC_USB0_LFPS_CLK				138
++#define GCC_USB0_LFPS_CLK_SRC				139
++#define GCC_USB0_MASTER_CLK				140
++#define GCC_USB0_MASTER_CLK_SRC				141
++#define GCC_USB0_MOCK_UTMI_CLK				142
++#define GCC_USB0_MOCK_UTMI_CLK_SRC			143
++#define GCC_USB0_MOCK_UTMI_DIV_CLK_SRC			144
++#define GCC_USB0_PHY_CFG_AHB_CLK			145
++#define GCC_USB0_PIPE_CLK				146
++#define GCC_USB0_SLEEP_CLK				147
++#define GCC_WCSS_AHB_CLK_SRC				148
++#define GCC_WCSS_AXIM_CLK				149
++#define GCC_WCSS_AXIS_CLK				150
++#define GCC_WCSS_DBG_IFC_APB_BDG_CLK			151
++#define GCC_WCSS_DBG_IFC_APB_CLK			152
++#define GCC_WCSS_DBG_IFC_ATB_BDG_CLK			153
++#define GCC_WCSS_DBG_IFC_ATB_CLK			154
++#define GCC_WCSS_DBG_IFC_NTS_BDG_CLK			155
++#define GCC_WCSS_DBG_IFC_NTS_CLK			156
++#define GCC_WCSS_ECAHB_CLK				157
++#define GCC_WCSS_MST_ASYNC_BDG_CLK			158
++#define GCC_WCSS_SLV_ASYNC_BDG_CLK			159
++#define GCC_XO_CLK					160
++#define GCC_XO_CLK_SRC					161
++#define GCC_XO_DIV4_CLK					162
++#define GCC_IM_SLEEP_CLK				163
++#define GCC_NSSNOC_PCNOC_1_CLK				164
++#define GCC_MEM_NOC_AHB_CLK				165
++#define GCC_MEM_NOC_APSS_AXI_CLK			166
++#define GCC_SNOC_QOSGEN_EXTREF_DIV_CLK_SRC		167
++#define GCC_MEM_NOC_QOSGEN_EXTREF_CLK			168
++#define GCC_PCIE3X2_PIPE_CLK_SRC			169
++#define GCC_PCIE3X1_0_PIPE_CLK_SRC			170
++#define GCC_PCIE3X1_1_PIPE_CLK_SRC			171
++#define GCC_USB0_PIPE_CLK_SRC				172
++
++#define GCC_ADSS_BCR					0
++#define GCC_ADSS_PWM_CLK_ARES				1
++#define GCC_AHB_CLK_ARES				2
++#define GCC_APC0_VOLTAGE_DROOP_DETECTOR_BCR		3
++#define GCC_APC0_VOLTAGE_DROOP_DETECTOR_GPLL0_CLK_ARES	4
++#define GCC_APSS_AHB_CLK_ARES				5
++#define GCC_APSS_AXI_CLK_ARES				6
++#define GCC_BLSP1_AHB_CLK_ARES				7
++#define GCC_BLSP1_BCR					8
++#define GCC_BLSP1_QUP1_BCR				9
++#define GCC_BLSP1_QUP1_I2C_APPS_CLK_ARES		10
++#define GCC_BLSP1_QUP1_SPI_APPS_CLK_ARES		11
++#define GCC_BLSP1_QUP2_BCR				12
++#define GCC_BLSP1_QUP2_I2C_APPS_CLK_ARES		13
++#define GCC_BLSP1_QUP2_SPI_APPS_CLK_ARES		14
++#define GCC_BLSP1_QUP3_BCR				15
++#define GCC_BLSP1_QUP3_I2C_APPS_CLK_ARES		16
++#define GCC_BLSP1_QUP3_SPI_APPS_CLK_ARES		17
++#define GCC_BLSP1_SLEEP_CLK_ARES			18
++#define GCC_BLSP1_UART1_APPS_CLK_ARES			19
++#define GCC_BLSP1_UART1_BCR				20
++#define GCC_BLSP1_UART2_APPS_CLK_ARES			21
++#define GCC_BLSP1_UART2_BCR				22
++#define GCC_BLSP1_UART3_APPS_CLK_ARES			23
++#define GCC_BLSP1_UART3_BCR				24
++#define GCC_CE_BCR					25
++#define GCC_CMN_BLK_BCR					26
++#define GCC_CMN_LDO0_BCR				27
++#define GCC_CMN_LDO1_BCR				28
++#define GCC_DCC_BCR					29
++#define GCC_GP1_CLK_ARES				30
++#define GCC_GP2_CLK_ARES				31
++#define GCC_LPASS_BCR					32
++#define GCC_LPASS_CORE_AXIM_CLK_ARES			33
++#define GCC_LPASS_SWAY_CLK_ARES				34
++#define GCC_MDIOM_BCR					35
++#define GCC_MDIOS_BCR					36
++#define GCC_NSS_BCR					37
++#define GCC_NSS_TS_CLK_ARES				38
++#define GCC_NSSCC_CLK_ARES				39
++#define GCC_NSSCFG_CLK_ARES				40
++#define GCC_NSSNOC_ATB_CLK_ARES				41
++#define GCC_NSSNOC_NSSCC_CLK_ARES			42
++#define GCC_NSSNOC_QOSGEN_REF_CLK_ARES			43
++#define GCC_NSSNOC_SNOC_1_CLK_ARES			44
++#define GCC_NSSNOC_SNOC_CLK_ARES			45
++#define GCC_NSSNOC_TIMEOUT_REF_CLK_ARES			46
++#define GCC_NSSNOC_XO_DCD_CLK_ARES			47
++#define GCC_PCIE3X1_0_AHB_CLK_ARES			48
++#define GCC_PCIE3X1_0_AUX_CLK_ARES			49
++#define GCC_PCIE3X1_0_AXI_M_CLK_ARES			50
++#define GCC_PCIE3X1_0_AXI_S_BRIDGE_CLK_ARES		51
++#define GCC_PCIE3X1_0_AXI_S_CLK_ARES			52
++#define GCC_PCIE3X1_0_BCR				53
++#define GCC_PCIE3X1_0_LINK_DOWN_BCR			54
++#define GCC_PCIE3X1_0_PHY_BCR				55
++#define GCC_PCIE3X1_0_PHY_PHY_BCR			56
++#define GCC_PCIE3X1_1_AHB_CLK_ARES			57
++#define GCC_PCIE3X1_1_AUX_CLK_ARES			58
++#define GCC_PCIE3X1_1_AXI_M_CLK_ARES			59
++#define GCC_PCIE3X1_1_AXI_S_BRIDGE_CLK_ARES		60
++#define GCC_PCIE3X1_1_AXI_S_CLK_ARES			61
++#define GCC_PCIE3X1_1_BCR				62
++#define GCC_PCIE3X1_1_LINK_DOWN_BCR			63
++#define GCC_PCIE3X1_1_PHY_BCR				64
++#define GCC_PCIE3X1_1_PHY_PHY_BCR			65
++#define GCC_PCIE3X1_PHY_AHB_CLK_ARES			66
++#define GCC_PCIE3X2_AHB_CLK_ARES			67
++#define GCC_PCIE3X2_AUX_CLK_ARES			68
++#define GCC_PCIE3X2_AXI_M_CLK_ARES			69
++#define GCC_PCIE3X2_AXI_S_BRIDGE_CLK_ARES		70
++#define GCC_PCIE3X2_AXI_S_CLK_ARES			71
++#define GCC_PCIE3X2_BCR					72
++#define GCC_PCIE3X2_LINK_DOWN_BCR			73
++#define GCC_PCIE3X2_PHY_AHB_CLK_ARES			74
++#define GCC_PCIE3X2_PHY_BCR				75
++#define GCC_PCIE3X2PHY_PHY_BCR				76
++#define GCC_PCNOC_BCR					77
++#define GCC_PCNOC_LPASS_CLK_ARES			78
++#define GCC_PRNG_AHB_CLK_ARES				79
++#define GCC_PRNG_BCR					80
++#define GCC_Q6_AHB_CLK_ARES				81
++#define GCC_Q6_AHB_S_CLK_ARES				82
++#define GCC_Q6_AXIM_CLK_ARES				83
++#define GCC_Q6_AXIS_CLK_ARES				84
++#define GCC_Q6_TSCTR_1TO2_CLK_ARES			85
++#define GCC_Q6SS_ATBM_CLK_ARES				86
++#define GCC_Q6SS_PCLKDBG_CLK_ARES			87
++#define GCC_Q6SS_TRIG_CLK_ARES				88
++#define GCC_QDSS_APB2JTAG_CLK_ARES			89
++#define GCC_QDSS_AT_CLK_ARES				90
++#define GCC_QDSS_BCR					91
++#define GCC_QDSS_CFG_AHB_CLK_ARES			92
++#define GCC_QDSS_DAP_AHB_CLK_ARES			93
++#define GCC_QDSS_DAP_CLK_ARES				94
++#define GCC_QDSS_ETR_USB_CLK_ARES			95
++#define GCC_QDSS_EUD_AT_CLK_ARES			96
++#define GCC_QDSS_STM_CLK_ARES				97
++#define GCC_QDSS_TRACECLKIN_CLK_ARES			98
++#define GCC_QDSS_TS_CLK_ARES				99
++#define GCC_QDSS_TSCTR_DIV16_CLK_ARES			100
++#define GCC_QDSS_TSCTR_DIV2_CLK_ARES			101
++#define GCC_QDSS_TSCTR_DIV3_CLK_ARES			102
++#define GCC_QDSS_TSCTR_DIV4_CLK_ARES			103
++#define GCC_QDSS_TSCTR_DIV8_CLK_ARES			104
++#define GCC_QPIC_AHB_CLK_ARES				105
++#define GCC_QPIC_CLK_ARES				106
++#define GCC_QPIC_BCR					107
++#define GCC_QPIC_IO_MACRO_CLK_ARES			108
++#define GCC_QPIC_SLEEP_CLK_ARES				109
++#define GCC_QUSB2_0_PHY_BCR				110
++#define GCC_SDCC1_AHB_CLK_ARES				111
++#define GCC_SDCC1_APPS_CLK_ARES				112
++#define GCC_SDCC_BCR					113
++#define GCC_SNOC_BCR					114
++#define GCC_SNOC_LPASS_CFG_CLK_ARES			115
++#define GCC_SNOC_NSSNOC_1_CLK_ARES			116
++#define GCC_SNOC_NSSNOC_CLK_ARES			117
++#define GCC_SYS_NOC_QDSS_STM_AXI_CLK_ARES		118
++#define GCC_SYS_NOC_WCSS_AHB_CLK_ARES			119
++#define GCC_UNIPHY0_AHB_CLK_ARES			120
++#define GCC_UNIPHY0_BCR					121
++#define GCC_UNIPHY0_SYS_CLK_ARES			122
++#define GCC_UNIPHY1_AHB_CLK_ARES			123
++#define GCC_UNIPHY1_BCR					124
++#define GCC_UNIPHY1_SYS_CLK_ARES			125
++#define GCC_USB0_AUX_CLK_ARES				126
++#define GCC_USB0_EUD_AT_CLK_ARES			127
++#define GCC_USB0_LFPS_CLK_ARES				128
++#define GCC_USB0_MASTER_CLK_ARES			129
++#define GCC_USB0_MOCK_UTMI_CLK_ARES			130
++#define GCC_USB0_PHY_BCR				131
++#define GCC_USB0_PHY_CFG_AHB_CLK_ARES			132
++#define GCC_USB0_SLEEP_CLK_ARES				133
++#define GCC_USB3PHY_0_PHY_BCR				134
++#define GCC_USB_BCR					135
++#define GCC_WCSS_AXIM_CLK_ARES				136
++#define GCC_WCSS_AXIS_CLK_ARES				137
++#define GCC_WCSS_BCR					138
++#define GCC_WCSS_DBG_IFC_APB_BDG_CLK_ARES		139
++#define GCC_WCSS_DBG_IFC_APB_CLK_ARES			140
++#define GCC_WCSS_DBG_IFC_ATB_BDG_CLK_ARES		141
++#define GCC_WCSS_DBG_IFC_ATB_CLK_ARES			142
++#define GCC_WCSS_DBG_IFC_NTS_BDG_CLK_ARES		143
++#define GCC_WCSS_DBG_IFC_NTS_CLK_ARES			144
++#define GCC_WCSS_ECAHB_CLK_ARES				145
++#define GCC_WCSS_MST_ASYNC_BDG_CLK_ARES			146
++#define GCC_WCSS_Q6_BCR					147
++#define GCC_WCSS_SLV_ASYNC_BDG_CLK_ARES			148
++#define GCC_XO_CLK_ARES					149
++#define GCC_XO_DIV4_CLK_ARES				150
++#define GCC_Q6SS_DBG_ARES				151
++#define GCC_WCSS_DBG_BDG_ARES				152
++#define GCC_WCSS_DBG_ARES				153
++#define GCC_WCSS_AXI_S_ARES				154
++#define GCC_WCSS_AXI_M_ARES				155
++#define GCC_WCSSAON_ARES				156
++#define GCC_PCIE3X2_PIPE_ARES				157
++#define GCC_PCIE3X2_CORE_STICKY_ARES			158
++#define GCC_PCIE3X2_AXI_S_STICKY_ARES			159
++#define GCC_PCIE3X2_AXI_M_STICKY_ARES			160
++#define GCC_PCIE3X1_0_PIPE_ARES				161
++#define GCC_PCIE3X1_0_CORE_STICKY_ARES			162
++#define GCC_PCIE3X1_0_AXI_S_STICKY_ARES			163
++#define GCC_PCIE3X1_0_AXI_M_STICKY_ARES			164
++#define GCC_PCIE3X1_1_PIPE_ARES				165
++#define GCC_PCIE3X1_1_CORE_STICKY_ARES			166
++#define GCC_PCIE3X1_1_AXI_S_STICKY_ARES			167
++#define GCC_PCIE3X1_1_AXI_M_STICKY_ARES			168
++#define GCC_IM_SLEEP_CLK_ARES				169
++#define GCC_NSSNOC_PCNOC_1_CLK_ARES			170
++#define GCC_UNIPHY0_XPCS_ARES				171
++#define GCC_UNIPHY1_XPCS_ARES				172
++#endif
 -- 
 2.17.1
 
