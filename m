@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB736AE3B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7306AE3B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjCGPCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38338 "EHLO
+        id S230064AbjCGPDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:03:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjCGPC0 (ORCPT
+        with ESMTP id S229558AbjCGPCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:02:26 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75AC92BD1;
-        Tue,  7 Mar 2023 06:50:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=52aUlbvng8ZlSp5SHAYvGoE7nONOcBEC7hFRcVN2iRc=; b=FyDOP/6Gvkyu/VtmHz7xOyXh6N
-        AVAQjso/fCR2NkcrGWG/0WXOBz2EEl6kBfShcAPGNFrDbwOeNQ6r9ffrXQ70EEpKKwVfvwwYMz8Lv
-        lY5O/DBsba4+5xTophqwCMhXFI7jqU0skSMLxFWo88r/q10zC15tNK8Gxb+XY8BZ73MOCaXqE58zA
-        YLuBQriaWisGZl0bKkeIzQZrT66uDV1OeIjP2cN48k8gR8ga2Nv7KTl1XKZgdp+py0B+AoV3xGxxt
-        jsvjv3M85Rn9A0G/M0ems4WJIL/TDxVxXKM6H9idA8wTH+VHcdGpgTJkxGqzI3TuVaW3dNrcp/nZQ
-        nb6hlXLQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:47312)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pZYeD-0000Ym-So; Tue, 07 Mar 2023 14:50:37 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pZYeC-0001c8-3F; Tue, 07 Mar 2023 14:50:36 +0000
-Date:   Tue, 7 Mar 2023 14:50:36 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Sean Anderson <sean.anderson@seco.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Tobias Waldekranz <tobias@waldekranz.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [PATCH net-next] net: mdio: Add netlink interface
-Message-ID: <ZAdPPAL549lg1uFG@shell.armlinux.org.uk>
-References: <20230306204517.1953122-1-sean.anderson@seco.com>
- <7a02294e-bf50-4399-9e68-1235ba24a381@lunn.ch>
+        Tue, 7 Mar 2023 10:02:36 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9702396F1F;
+        Tue,  7 Mar 2023 06:51:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678200666; x=1709736666;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=r1dUJcozr+fM3DQbaDzTE4BCBoXoBC1lE+oOBvXW+R4=;
+  b=J4c/HHDWUouew4Xjiu+9psA5YMUIcsgHjSe87EdxH3ZGlm5LFgB5mf/M
+   AaKIO8sB3rIj1+FyCBo3NIsN9ndpG0gZ2O0kC5I3/JrXr3zIwjqAdkx3c
+   TpiHhe4zQjJe5CjixVtYL6Ct/OKH2zv/MqWlVrijD3LNm4cNv5ypHa3T8
+   IUSlthpcIBdbxaYZSjUWRWRQNTbkDkOWivTm+B7tekLySO5ktvMlYfC0T
+   5U48CDKwdy4jnX+QSdqM0NJBA5nWSmOk3h06BuRAiRMA31emx1Z4tFv2Y
+   l95TApfLGF1BesYKGhXToSrxt1hc0PYYuXqiIPQqCIcnioCeYxDFJqbLI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422138508"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="422138508"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 06:50:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="819774602"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="819774602"
+Received: from suchetam-mobl.amr.corp.intel.com ([10.212.53.59])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 06:50:48 -0800
+Message-ID: <20a26cbe5404c420722f8dd39cf52ba7bb89bb9c.camel@linux.intel.com>
+Subject: Re: [PATCH 01/16] dmaengine: idxd: add wq driver name support for
+ accel-config user tool
+From:   Tom Zanussi <tom.zanussi@linux.intel.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>, herbert@gondor.apana.org.au,
+        davem@davemloft.net, vkoul@kernel.org
+Cc:     dave.jiang@intel.com, tony.luck@intel.com,
+        wajdi.k.feghali@intel.com, james.guilford@intel.com,
+        kanchana.p.sridhar@intel.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
+Date:   Tue, 07 Mar 2023 08:50:47 -0600
+In-Reply-To: <c44caf95-6fe5-c336-e47e-d624e9c27054@intel.com>
+References: <20230306185226.26483-1-tom.zanussi@linux.intel.com>
+         <20230306185226.26483-2-tom.zanussi@linux.intel.com>
+         <c44caf95-6fe5-c336-e47e-d624e9c27054@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7a02294e-bf50-4399-9e68-1235ba24a381@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,32 +67,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 03:22:46PM +0100, Andrew Lunn wrote:
-> > +		switch ((enum mdio_nl_op)insn->op) {
-> > +		case MDIO_NL_OP_READ:
-> > +			phy_id = __arg_ri(insn->arg0, regs);
-> > +			prtad = mdio_phy_id_prtad(phy_id);
-> > +			devad = mdio_phy_id_devad(phy_id);
-> > +			reg = __arg_ri(insn->arg1, regs);
-> > +
-> > +			if (mdio_phy_id_is_c45(phy_id))
-> > +				ret = __mdiobus_c45_read(xfer->mdio, prtad,
-> > +							 devad, reg);
-> > +			else
-> > +				ret = __mdiobus_read(xfer->mdio, phy_id, reg);
-> 
-> The application should say if it want to do C22 or C45. As you said in
-> the cover note, the ioctl interface is limiting when there is no PHY,
-> so you are artificially adding the same restriction here. Also, you
-> might want to do C45 on a C22 PHY, e.g. to access EEE registers. Plus
-> you could consider adding C45 over C22 here.
+SGkgRmVuZ2h1YSwKCk9uIFR1ZSwgMjAyMy0wMy0wNyBhdCAwNTo0MyAtMDgwMCwgRmVuZ2h1YSBZ
+dSB3cm90ZToKPiBIaSwgVG9tLAo+IAo+IE9uIDMvNi8yMyAxMDo1MiwgVG9tIFphbnVzc2kgd3Jv
+dGU6Cj4gPiBGcm9tOiBEYXZlIEppYW5nIDxkYXZlLmppYW5nQGludGVsLmNvbT4KPiA+IAo+ID4g
+V2l0aCB0aGUgcG9zc2liaWxpdHkgb2YgbXVsdGlwbGUgd3EgZHJpdmVycyB0aGF0IGNhbiBiZSBi
+b3VuZCB0bwo+ID4gdGhlIHdxLAo+ID4gdGhlIHVzZXIgY29uZmlnIHRvb2wgYWNjZWwtY29uZmln
+IG5lZWRzIGEgd2F5IHRvIGtub3cgd2hpY2ggd3EKPiA+IGRyaXZlciB0bwo+ID4gYmluZCB0byB0
+aGUgd3EuIEludHJvZHVjZSBwZXIgd3EgZHJpdmVyX25hbWUgc3lzZnMgYXR0cmlidXRlIHdoZXJl
+Cj4gPiB0aGUgdXNlcgo+ID4gY2FuIGluZGljYXRlIHRoZSBkcml2ZXIgdG8gYmUgYm91bmQgdG8g
+dGhlIHdxLiBUaGlzIGFsbG93cyBhY2NlbC0KPiA+IGNvbmZpZyB0bwo+ID4ganVzdCBiaW5kIHRv
+IHRoZSBkcml2ZXIgdXNpbmcgd3EtPmRyaXZlcl9uYW1lLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5
+OiBEYXZlIEppYW5nIDxkYXZlLmppYW5nQGludGVsLmNvbT4KPiA+IFNpZ25lZC1vZmYtYnk6IFRv
+bSBaYW51c3NpIDx0b20uemFudXNzaUBsaW51eC5pbnRlbC5jb20+Cj4gPiAtLS0KPiA+IMKgIC4u
+Li9BQkkvc3RhYmxlL3N5c2ZzLWRyaXZlci1kbWEtaWR4ZMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAg
+NiArKysrCj4gPiDCoCBkcml2ZXJzL2RtYS9pZHhkL2NkZXYuY8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCA4ICsrKysrKwo+ID4gwqAgZHJpdmVycy9kbWEv
+aWR4ZC9kbWEuY8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+fMKgIDYgKysrKwo+ID4gwqAgZHJpdmVycy9kbWEvaWR4ZC9pZHhkLmjCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgNyArKysrKwo+ID4gwqAgZHJpdmVycy9k
+bWEvaWR4ZC9zeXNmcy5jwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IHwgMjgKPiA+ICsrKysrKysrKysrKysrKysrKysKPiA+IMKgIGluY2x1ZGUvdWFwaS9saW51eC9p
+ZHhkLmjCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHzCoCAxICsKPiA+
+IMKgIDYgZmlsZXMgY2hhbmdlZCwgNTYgaW5zZXJ0aW9ucygrKQo+ID4gCj4gPiBkaWZmIC0tZ2l0
+IGEvRG9jdW1lbnRhdGlvbi9BQkkvc3RhYmxlL3N5c2ZzLWRyaXZlci1kbWEtaWR4ZAo+ID4gYi9E
+b2N1bWVudGF0aW9uL0FCSS9zdGFibGUvc3lzZnMtZHJpdmVyLWRtYS1pZHhkCj4gPiBpbmRleCAz
+YmVjYzlhODJiZGYuLmU5YTM3ZTA2NDE5MyAxMDA2NDQKPiA+IC0tLSBhL0RvY3VtZW50YXRpb24v
+QUJJL3N0YWJsZS9zeXNmcy1kcml2ZXItZG1hLWlkeGQKPiA+ICsrKyBiL0RvY3VtZW50YXRpb24v
+QUJJL3N0YWJsZS9zeXNmcy1kcml2ZXItZG1hLWlkeGQKPiA+IEBAIC0yNDQsNiArMjQ0LDEyIEBA
+IERlc2NyaXB0aW9uOsKgwqDCoMKgwqDCoMKgU2hvd3MgdGhlIG9wZXJhdGlvbgo+ID4gY2FwYWJp
+bGl0eSBiaXRzIGRpc3BsYXllZCBpbiBiaXRtYXAgZm9ybWF0Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoGNvcnJlbGF0ZXMgdG8gdGhlIG9wZXJhdGlvbnMgYWxsb3dlZC4gSXQn
+cyB2aXNpYmxlCj4gPiBvbmx5Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoG9u
+IHBsYXRmb3JtcyB0aGF0IHN1cHBvcnQgdGhlIGNhcGFiaWxpdHkuCj4gPiDCoCAKPiA+ICtXaGF0
+OsKgwqDCoMKgwqDCoMKgwqDCoMKgL3N5cy9idXMvZHNhL2RldmljZXMvd3E8bT4uPG4+L2RyaXZl
+cl9uYW1lCj4gPiArRGF0ZTrCoMKgwqDCoMKgwqDCoMKgwqDCoEZlYiAyMywgMjAyMwo+ID4gK0tl
+cm5lbFZlcnNpb246wqA2LjMuMAo+IAo+IE5lZWQgdG8gY2hhbmdlIHRvIDYuNC4wLiBUaGlzIHNl
+cmllcyB3b24ndCBiZSBpbiA2LjMuMC4KCk9LLCB3aWxsIGNoYW5nZSB0byA2LjQuMC4KClRoYW5r
+cywKClRvbQoKPiAKPiA+ICtDb250YWN0OsKgwqDCoMKgwqDCoMKgZG1hZW5naW5lQHZnZXIua2Vy
+bmVsLm9yZwo+ID4gK0Rlc2NyaXB0aW9uOsKgwqDCoE5hbWUgb2YgZHJpdmVyIHRvIGJlIGJvdW5k
+ZWQgdG8gdGhlIHdxLgo+ID4gKwo+IAo+IFRoYW5rcy4KPiAKPiAtRmVuZ2h1YQoK
 
-Remembering of course that C45-over-C22 on a device that isn't a PHY
-could end up causing havoc, but then if you are using this interface,
-you already have the gun pointing at your foot... and if you go and
-try C45-over-C22 to scan a MDIO bus, you'd definitely be pulling the
-trigger too.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
