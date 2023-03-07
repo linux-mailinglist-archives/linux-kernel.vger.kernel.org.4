@@ -2,89 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5C96AD3C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045696AD3CC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCGBUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 20:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S229875AbjCGBVc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 6 Mar 2023 20:21:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbjCGBUc (ORCPT
+        with ESMTP id S229663AbjCGBVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:20:32 -0500
-Received: from relay.smtp-ext.broadcom.com (lpdvsmtp09.broadcom.com [192.19.166.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5879A2ED7A;
-        Mon,  6 Mar 2023 17:20:23 -0800 (PST)
-Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.75.146.107])
-        by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id C12FDC0000EA;
-        Mon,  6 Mar 2023 17:20:22 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com C12FDC0000EA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-        s=dkimrelay; t=1678152022;
-        bh=0d1f6kwQz4ouYMBgT7ij+utdVrqCzXLV7v6Nz90LLUM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=vU0r0m+tgr/rrasOPhmb906Er8Plv2muT9DzxawnpLZXeN91PpYWo1rJFRKBy8/FM
-         abDmRXKyFUaeUY6D9W4wkC86eHuRFFTEkvCn1ttxEd49ZnmiyxmA+L6e3t29+wEZwQ
-         46iMZf5T5AspnAiiuBhdtwRC7fWZGzidVvaEDuIY=
-Received: from bcacpedev-irv-3.lvn.broadcom.net (bcacpedev-irv-3.lvn.broadcom.net [10.75.138.105])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPS id B399118041CAC6;
-        Mon,  6 Mar 2023 17:20:22 -0800 (PST)
-Received: by bcacpedev-irv-3.lvn.broadcom.net (Postfix, from userid 28376)
-        id 9A162101C1F; Mon,  6 Mar 2023 17:20:22 -0800 (PST)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Linux SPI List <linux-spi@vger.kernel.org>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>
-Cc:     joel.peshkin@broadcom.com, dregan@mail.com, jonas.gorski@gmail.com,
-        dan.beygelman@broadcom.com, f.fainelli@gmail.com,
-        anand.gore@broadcom.com, kursad.oney@broadcom.com,
-        tomer.yacoby@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        kernel test robot <lkp@intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: Fix cocci warnings
-Date:   Mon,  6 Mar 2023 17:20:04 -0800
-Message-Id: <20230307012004.414502-1-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 6 Mar 2023 20:21:30 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DC943457;
+        Mon,  6 Mar 2023 17:21:17 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id B737C24E21B;
+        Tue,  7 Mar 2023 09:21:10 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 09:21:10 +0800
+Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 09:21:09 +0800
+Message-ID: <99a9eccd-2886-832f-07e6-4ba620c522b5@starfivetech.com>
+Date:   Tue, 7 Mar 2023 09:21:07 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 12/12] riscv: dts: starfive: visionfive 2: Enable gmac
+ device tree node
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+References: <20230303085928.4535-1-samin.guo@starfivetech.com>
+ <20230303085928.4535-13-samin.guo@starfivetech.com>
+ <CAJM55Z-WpxJUshAa_gN5GD+mMp1VaxPbnF6AV-ua0HzsFWsB6w@mail.gmail.com>
+From:   Guo Samin <samin.guo@starfivetech.com>
+In-Reply-To: <CAJM55Z-WpxJUshAa_gN5GD+mMp1VaxPbnF6AV-ua0HzsFWsB6w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cocci reported warning: !A || A && B is equivalent to !A || B. This fix
-simplified the condition check to !A || B.
 
-Fixes: 76a85704cb91 ("spi: spi-mem: Allow controller supporting mem_ops without exec_op")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/oe-kbuild-all/202303010051.HrHWSr9y-lkp@intel.com/
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
+在 2023/3/6 21:04:28, Emil Renner Berthing 写道:
+> On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wrote:
+>> From: Yanhong Wang <yanhong.wang@starfivetech.com>
+>>
+>> Update gmac device tree node status to okay.
+>>
+>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+>> ---
+>>  .../dts/starfive/jh7110-starfive-visionfive-2.dtsi     | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index c2aa8946a0f1..d1c409f40014 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -12,6 +12,8 @@
+>>  / {
+>>         aliases {
+>>                 serial0 = &uart0;
+>> +               ethernet0 = &gmac0;
+>> +               ethernet1 = &gmac1;
+> 
+> Please sort these alphabetically.
+Thanks, will fix.
+> 
+>>                 i2c0 = &i2c0;
+>>                 i2c2 = &i2c2;
+>>                 i2c5 = &i2c5;
+>> @@ -92,6 +94,14 @@
+>>         status = "okay";
+>>  };
+>>
+>> +&gmac0 {
+>> +       status = "okay";
+>> +};
+>> +
+>> +&gmac1 {
+>> +       status = "okay";
+>> +};
+> 
+> Since you'll need to add to the gmac0 and gmac1 nodes in the board
+> specific files too and it's only one line, consider just dropping this
+> here and add the status = "okay" there instead.
+> 
+According to Andrew's suggestion, can I put the nodes of mdio and phy here?
+>>  &i2c0 {
+>>         clock-frequency = <100000>;
+>>         i2c-sda-hold-time-ns = <300>;
+>> --
+>> 2.17.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
----
-
- drivers/spi/spi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 798030c0c5ce..503eb04826e7 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3076,7 +3076,7 @@ static int spi_controller_check_ops(struct spi_controller *ctlr)
- 	 * If ->mem_ops or ->mem_ops->exec_op is NULL, we request that at least
- 	 * one of the ->transfer_xxx() method be implemented.
- 	 */
--	if (!ctlr->mem_ops || (ctlr->mem_ops && !ctlr->mem_ops->exec_op)) {
-+	if (!ctlr->mem_ops || !ctlr->mem_ops->exec_op) {
- 		if (!ctlr->transfer && !ctlr->transfer_one &&
- 		   !ctlr->transfer_one_message) {
- 			return -EINVAL;
+Best regards,
+Samin
 -- 
-2.37.3
-
+Best regards,
+Samin
