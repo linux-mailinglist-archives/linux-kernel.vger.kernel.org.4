@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E0C6AE659
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6156AE65C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:23:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjCGQXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:23:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52522 "EHLO
+        id S230465AbjCGQXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjCGQW6 (ORCPT
+        with ESMTP id S230501AbjCGQXL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:22:58 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BF796F11
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:21:42 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id a2so14689850plm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:21:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678206102;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aZW/sYcgeScv36c2plv2l3bkIDFvWqv1ycv2OTy2PNg=;
-        b=edt6IhO0qzK5wsldkFU5bv7EPtMo0RrP9eBViIDG+o1hSvwuYoBqZiCRHyc3Ax3+mF
-         ZUGVF/xqcpYmmxQ7k+fDUOxCpr2LAEROmaMGpVkjCvfQRgNRoYBNJvoEnWifoBz42UJQ
-         22nOIR9Ryg2zywi89tBjLLfSjtXcCLk2iSVAZu1VrUKB/Z9/wTrUacOs5PkhAuEkxYFM
-         lF9Jqqsjz9p7Qj/nE8YdySZLTos95ob34ZHcdoOHiDaa/NeOpHUumLG1j2/Kbt9VSlxt
-         mXpg/ssQ4zmybltW7RWi3RrHzukiNUFfAjuB23Bsz2WOUbqmzr12Hq4qF/1jHsbCCMMS
-         2xfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678206102;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aZW/sYcgeScv36c2plv2l3bkIDFvWqv1ycv2OTy2PNg=;
-        b=Ctl3Ppey14Hl7lBQBswrWfVYt0tK3g/skZVfkgK+fS9WQ/VrJ6mBBZi/f1PIr30/1s
-         +cld7C4lzvlHxM6eoE3a0vMH6dDlR1W6/UEpWcuewGCRsHB9N4ddnioI0ibDvQLuDX5u
-         +txRZthHlkMQSHYYp+ekB9NhkpglWrLXOOuKiWdgpZ5Wcw3FH2iY4P+SNB8P009Xuc3Z
-         0BjpGbchb1qiNjGbeHnhVBUOwpI51rGZIgehgO6zs6KBPF5QyBLmWv1ifX6URFhPfcZB
-         YUl8sALEqXfBhoRTuuAE7cXPNqBdKYiB7InCwo7Ok4fE2QJEl5Pi+nTRWBIQndeOr2vy
-         RFVQ==
-X-Gm-Message-State: AO0yUKVAgjcmwDTfAcjSHOspnWwo4nr69vc5lFppyS1MBmfrLvihhH2O
-        sKpmtw417ac3WCOAOcDK1mPkLA==
-X-Google-Smtp-Source: AK7set8SZlEiUpANRG//nIum65vpMuLKhkCKV29bggbyROIzBcLlLPduZjI3qR+lwDwtTi+3XvUPRg==
-X-Received: by 2002:a05:6a20:1616:b0:c7:1821:1b7d with SMTP id l22-20020a056a20161600b000c718211b7dmr19270370pzj.2.1678206102409;
-        Tue, 07 Mar 2023 08:21:42 -0800 (PST)
-Received: from [10.200.8.102] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id h3-20020a63c003000000b00502f1540c4asm8017387pgg.81.2023.03.07.08.21.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 08:21:42 -0800 (PST)
-Message-ID: <b8b2294c-c0aa-c4e9-10e1-f991799b4f02@bytedance.com>
-Date:   Wed, 8 Mar 2023 00:21:37 +0800
+        Tue, 7 Mar 2023 11:23:11 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA0E984D4
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:22:10 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 327GLbqL008143
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Mar 2023 11:21:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678206101; bh=4xLfWNCnwB2PMtjvFaRAm2NjePMCi1bw8Qrqvq4gr4A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=QoyxfzNkqBvOoIw2DVStpr8dmTJruYjOcSMuXTvFTXhaKk9PyiABDe8YsAF1TOkJm
+         hDc6K31AAYLY+teoeQDQeJbW3ruEcFTA+6DCnMXxEq+3RAz80qDRZbrKCtTX9JJ1Sq
+         ODv5m4lAOWppczv8vcFo3+LY/z8QvbhahCCuvsFUzRiXowZgzO2XiVat2yV+PPtXRi
+         Z+d3rKmfVQapQ3JXdfjHWbe+j0VT+7eAwkffrTBg36r2JK596U7lZ/qtvFl0LD2ZrF
+         c02vWya7ZGvkJviDWnQQ415iIWFZfCY5jSgOYu6wTuHqxo3+v7oQjie7SXATTLbvwr
+         X6iVgsaPnUIyg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 0FE4F15C3441; Tue,  7 Mar 2023 11:21:37 -0500 (EST)
+Date:   Tue, 7 Mar 2023 11:21:37 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Stephen Rothwell <sfr@rothwell.id.au>
+Cc:     Jan Kara <jack@suse.cz>, Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        ext4 Development <linux-ext4@vger.kernel.org>
+Subject: Re: The state of ext4 tree merging (was Re: Linux 6.3-rc1)
+Message-ID: <20230307162137.GB960946@mit.edu>
+References: <CAHk-=wgr1D8hb75Z+nn+4LXUnosp0HM+gP+YJEcEav1DgTC=Cw@mail.gmail.com>
+ <ZAVbZJSyOdF0BxAJ@debian.me>
+ <20230306124134.hmeuvjhihs4ubpmz@quack3>
+ <20230307090203.56c41488@oak.ozlabs.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] maple_tree: Fix mas_skip_node() end slot detection
-To:     Snild Dolkow <snild@sony.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     Stable@vger.kernel.org, maple-tree@lists.infradead.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230303021540.1056603-1-Liam.Howlett@oracle.com>
- <cec2dec7-818a-b32c-3ad4-8b23fc1351f3@bytedance.com>
- <73971153-b46e-0332-aa4a-0dbe0a59fd22@sony.com>
- <d0d2f9f9-4ad0-65f8-96e7-39decbb6ac54@bytedance.com>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <d0d2f9f9-4ad0-65f8-96e7-39decbb6ac54@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307090203.56c41488@oak.ozlabs.ibm.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry I forgot to post the link, here it is:
-https://lore.kernel.org/lkml/20230307160340.57074-1-zhangpeng.00@bytedance.com/
+On Tue, Mar 07, 2023 at 09:02:03AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 6 Mar 2023 13:41:34 +0100 Jan Kara <jack@suse.cz> wrote:
+> >
+> > To be fair, the data=journal cleanups got held back only partially due to
+> > the merge issues. Another problem is that they somehow make problems with
+> > filesystem freezing in data=journal mode more frequent and we wanted to
+> > understand (and hopefully fix) that. Of course if Ted could look into this
+> > earlier or I could earlier debug these issues, we could have merged the
+> > cleanups but that's always the case that you have to prioritize and these
+> > cleanups don't have that high priority...
+> 
+> In that case, it would be nice (for me at least) if the ext4 tree was
+> now reset to be v6.3-rc1 i.e. get rid of the duplicate commits and the
+> new stuff that is still being worked on.
+
+What duplicate commits?  As far as I know there aren't any.  My normal
+practice is to send a secondary push to fix a few bug fixes targetted
+for upcoming release (in this case, 6.3), and then I'll reset to -rc2
+or -rc3 for patches that are targetted for the next merge window (in
+this case, 6.4).
+
+The data=writeback patches was dropped from dev before the pull
+request, and won't show up on dev until they are ready for Linus.
+
+Cheers,
+
+						- Ted
