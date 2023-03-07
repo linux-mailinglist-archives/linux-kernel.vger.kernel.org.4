@@ -2,73 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8F66AD6EA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80ED6AD6F0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:42:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjCGFlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 00:41:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
+        id S230273AbjCGFm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 00:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCGFlA (ORCPT
+        with ESMTP id S229570AbjCGFmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 00:41:00 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A306C185;
-        Mon,  6 Mar 2023 21:40:59 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id ky4so12971709plb.3;
-        Mon, 06 Mar 2023 21:40:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678167659;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vGv6GHE27MGSVflQtDHPfQYBafwMHw6AkZ/7Wt1ZWkE=;
-        b=h5OMMYCzFXuGXQtnbN+6XKj3cOqI6u2244jsCBx9DvFfWe1prwRzjjrcW8h5mZUVsl
-         QmtkU7oAEqBmOVOf3By0/ENqG1da+qEjKw8kw4fgSFHoLvJVa6DQugYcc9U1yI7SWEei
-         dMGMlInHwzV4GzSN4SL1CfwaI/eEAMNxQDJc1IpuhmCs5Utn8Msj9OaxrYrV8cOsSDBu
-         mFPn77jHctXK2An5AlqFoAmLNBFbtLbfDQ6by1EiYLIHXqj2e6SaNEoN+KTAXlLI2K+J
-         PpXm8GsCqN4MGUjTEHSTiSJ1nvf4ZuYjpl7O+me1lna4SRlB1kKl3UKnrGkxrhUzS9wa
-         fpKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678167659;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vGv6GHE27MGSVflQtDHPfQYBafwMHw6AkZ/7Wt1ZWkE=;
-        b=2TZ/2gHgDX19c8oo2yZZm1ajCJR/aN+ohsfJR5w0qM5ChF+3UfqXTaXhX8RNtfraSW
-         ll3pKhX+erJSnxF0HnSF+uYQ4CqSmHk5nNo2nf0aWNUscx9Syb51iT8GQ4JMapfRvuKQ
-         zqWVUkyN2ur9t5TDd7NhuJUDhUTI99hpsuegu5liTPHacnz4pezXK3dHbxrD6+w90bEc
-         ip8PMtaJmKFst+kKJMAb4c+jj0cral1aplUHa7bp/lXAhEXWEqXcbIKLpksuc4zIPIK4
-         gDAovLCdeM9XVtvSHtxpVi7oDaC/fFaYlsqoGGR+QKgLfWU74eS6Zt7Ro9M3bqVnBC/P
-         4qNg==
-X-Gm-Message-State: AO0yUKWTz2CAv0qwMaSGeEjqeUxKN3mZWl4dCPt9QfZuA6uz3CRt02fH
-        gAVrOmPs3TiFOSZY//niLWH4epSY51Q=
-X-Google-Smtp-Source: AK7set8VC3fm3ZkdCGJzVjZzCmrjLdp7cGedega8vr5ALkoyI34URjaCfZ8FcGpRnpm9rseLgW0qhQ==
-X-Received: by 2002:a17:902:d381:b0:19c:d537:754 with SMTP id e1-20020a170902d38100b0019cd5370754mr12496238pld.56.1678167659064;
-        Mon, 06 Mar 2023 21:40:59 -0800 (PST)
-Received: from localhost ([203.220.77.23])
-        by smtp.gmail.com with ESMTPSA id e7-20020a170902cf4700b0019adfb96084sm7615183plg.36.2023.03.06.21.40.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 21:40:57 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 07 Mar 2023 15:40:53 +1000
-Message-Id: <CQZWS8VFIL3Q.G9POORQXDKE0@bobo>
-Cc:     <ajd@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <cmr@bluescreens.de>
-Subject: Re: [RFC PATCH 13/13] Documentation: Document PowerPC kernel DEXCR
- interface
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Benjamin Gray" <bgray@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>
-X-Mailer: aerc 0.13.0
-References: <20221128024458.46121-1-bgray@linux.ibm.com>
- <20221128024458.46121-14-bgray@linux.ibm.com>
-In-Reply-To: <20221128024458.46121-14-bgray@linux.ibm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 7 Mar 2023 00:42:53 -0500
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B5E6C1A5;
+        Mon,  6 Mar 2023 21:42:50 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VdJyV4n_1678167700;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VdJyV4n_1678167700)
+          by smtp.aliyun-inc.com;
+          Tue, 07 Mar 2023 13:42:48 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     ajit.khaparde@broadcom.com
+Cc:     sriharsha.basavapatna@broadcom.com, somnath.kotur@broadcom.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] emulex/benet: clean up some inconsistent indenting
+Date:   Tue,  7 Mar 2023 13:41:38 +0800
+Message-Id: <20230307054138.21632-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,21 +43,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Nov 28, 2022 at 12:44 PM AEST, Benjamin Gray wrote:
-> Describe the DEXCR and document how to interact with it via the
-> prctl and sysctl interfaces.
+No functional modification involved.
 
-Oh you've got the docs here, sorry. Thanks for that. I don't know enough
-yet to give much useful feedback on the API. I think at least all the
-mechanism stuff up to the prctl API looks pretty straightfoward so would
-like to get that merged if we can.
+drivers/net/ethernet/emulex/benet/be_cmds.c:1120 be_cmd_pmac_add() warn: inconsistent indenting.
 
-Might need a bit more time and discussion on the API. Interestingly
-because the hashchk aspect is architectural, we may not be able to
-necessarily sanely enable that, because if it was disabled to start
-out with, our callchain up to the prctl call I think would have no
-return hashes set so we'd immediately fail on our first return.
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4396
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ drivers/net/ethernet/emulex/benet/be_cmds.c | 27 +++++++++++----------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
-Thanks,
-Nick
+diff --git a/drivers/net/ethernet/emulex/benet/be_cmds.c b/drivers/net/ethernet/emulex/benet/be_cmds.c
+index 08ec84cd21c0..61adcebeef01 100644
+--- a/drivers/net/ethernet/emulex/benet/be_cmds.c
++++ b/drivers/net/ethernet/emulex/benet/be_cmds.c
+@@ -135,7 +135,8 @@ static int be_mcc_notify(struct be_adapter *adapter)
+ 
+ /* To check if valid bit is set, check the entire word as we don't know
+  * the endianness of the data (old entry is host endian while a new entry is
+- * little endian) */
++ * little endian)
++ */
+ static inline bool be_mcc_compl_is_new(struct be_mcc_compl *compl)
+ {
+ 	u32 flags;
+@@ -248,7 +249,8 @@ static int be_mcc_compl_process(struct be_adapter *adapter,
+ 	u8 opcode = 0, subsystem = 0;
+ 
+ 	/* Just swap the status to host endian; mcc tag is opaquely copied
+-	 * from mcc_wrb */
++	 * from mcc_wrb
++	 */
+ 	be_dws_le_to_cpu(compl, 4);
+ 
+ 	base_status = base_status(compl->status);
+@@ -657,8 +659,7 @@ static int be_mbox_db_ready_wait(struct be_adapter *adapter, void __iomem *db)
+ 	return 0;
+ }
+ 
+-/*
+- * Insert the mailbox address into the doorbell in two steps
++/* Insert the mailbox address into the doorbell in two steps
+  * Polls on the mbox doorbell till a command completion (or a timeout) occurs
+  */
+ static int be_mbox_notify_wait(struct be_adapter *adapter)
+@@ -802,7 +803,7 @@ static void be_wrb_cmd_hdr_prepare(struct be_cmd_req_hdr *req_hdr,
+ 	req_hdr->subsystem = subsystem;
+ 	req_hdr->request_length = cpu_to_le32(cmd_len - sizeof(*req_hdr));
+ 	req_hdr->version = 0;
+-	fill_wrb_tags(wrb, (ulong) req_hdr);
++	fill_wrb_tags(wrb, (ulong)req_hdr);
+ 	wrb->payload_length = cmd_len;
+ 	if (mem) {
+ 		wrb->embedded |= (1 & MCC_WRB_SGE_CNT_MASK) <<
+@@ -832,8 +833,8 @@ static void be_cmd_page_addrs_prepare(struct phys_addr *pages, u32 max_pages,
+ static inline struct be_mcc_wrb *wrb_from_mbox(struct be_adapter *adapter)
+ {
+ 	struct be_dma_mem *mbox_mem = &adapter->mbox_mem;
+-	struct be_mcc_wrb *wrb
+-		= &((struct be_mcc_mailbox *)(mbox_mem->va))->wrb;
++	struct be_mcc_wrb *wrb = &((struct be_mcc_mailbox *)(mbox_mem->va))->wrb;
++
+ 	memset(wrb, 0, sizeof(*wrb));
+ 	return wrb;
+ }
+@@ -896,7 +897,7 @@ static struct be_mcc_wrb *be_cmd_copy(struct be_adapter *adapter,
+ 
+ 	memcpy(dest_wrb, wrb, sizeof(*wrb));
+ 	if (wrb->embedded & cpu_to_le32(MCC_WRB_EMBEDDED_MASK))
+-		fill_wrb_tags(dest_wrb, (ulong) embedded_payload(wrb));
++		fill_wrb_tags(dest_wrb, (ulong)embedded_payload(wrb));
+ 
+ 	return dest_wrb;
+ }
+@@ -1114,7 +1115,7 @@ int be_cmd_pmac_add(struct be_adapter *adapter, const u8 *mac_addr,
+ err:
+ 	mutex_unlock(&adapter->mcc_lock);
+ 
+-	 if (base_status(status) == MCC_STATUS_UNAUTHORIZED_REQUEST)
++	if (base_status(status) == MCC_STATUS_UNAUTHORIZED_REQUEST)
+ 		status = -EPERM;
+ 
+ 	return status;
+@@ -1803,7 +1804,7 @@ int be_cmd_get_fat_dump(struct be_adapter *adapter, u32 buf_len, void *buf)
+ 
+ 	total_size = buf_len;
+ 
+-	get_fat_cmd.size = sizeof(struct be_cmd_req_get_fat) + 60*1024;
++	get_fat_cmd.size = sizeof(struct be_cmd_req_get_fat) + 60 * 1024;
+ 	get_fat_cmd.va = dma_alloc_coherent(&adapter->pdev->dev,
+ 					    get_fat_cmd.size,
+ 					    &get_fat_cmd.dma, GFP_ATOMIC);
+@@ -1813,7 +1814,7 @@ int be_cmd_get_fat_dump(struct be_adapter *adapter, u32 buf_len, void *buf)
+ 	mutex_lock(&adapter->mcc_lock);
+ 
+ 	while (total_size) {
+-		buf_size = min(total_size, (u32)60*1024);
++		buf_size = min(total_size, (u32)60 * 1024);
+ 		total_size -= buf_size;
+ 
+ 		wrb = wrb_from_mccq(adapter);
+@@ -3362,7 +3363,7 @@ int be_cmd_ddr_dma_test(struct be_adapter *adapter, u64 pattern,
+ 	req->pattern = cpu_to_le64(pattern);
+ 	req->byte_count = cpu_to_le32(byte_cnt);
+ 	for (i = 0; i < byte_cnt; i++) {
+-		req->snd_buff[i] = (u8)(pattern >> (j*8));
++		req->snd_buff[i] = (u8)(pattern >> (j * 8));
+ 		j++;
+ 		if (j > 7)
+ 			j = 0;
+@@ -3846,7 +3847,7 @@ int be_cmd_set_mac_list(struct be_adapter *adapter, u8 *mac_array,
+ 	req->hdr.domain = domain;
+ 	req->mac_count = mac_count;
+ 	if (mac_count)
+-		memcpy(req->mac, mac_array, ETH_ALEN*mac_count);
++		memcpy(req->mac, mac_array, ETH_ALEN * mac_count);
+ 
+ 	status = be_mcc_notify_wait(adapter);
+ 
+-- 
+2.20.1.7.g153144c
 
