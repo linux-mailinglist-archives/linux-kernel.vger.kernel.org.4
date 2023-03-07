@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5BA6AD86B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B966AD870
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbjCGHrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 02:47:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S230387AbjCGHrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 02:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230263AbjCGHrQ (ORCPT
+        with ESMTP id S230207AbjCGHrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 02:47:16 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0045E3D097
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:47:14 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id cy23so48588931edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 23:47:14 -0800 (PST)
+        Tue, 7 Mar 2023 02:47:49 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB7C3D0B4
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:47:48 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id x3so48632352edb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 23:47:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678175233;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VmfI+nHnkEqaAvjTBCYnN1twlAqQaJgDbBXTUdXeeFQ=;
-        b=iu9fwHUW9JYA8hvS/oUJwEd4kEhdZsTVk6arW6P3La/Jgtxm2pkPWh1oX+8H2for8e
-         zmIJPmBNj2h5olU7KH69L2bPb2H6LSOFEBfXqoetxQ4h7iRKLeEFbcuGn17PgyG8YzqJ
-         CSTqVdyHp19RcgJ8PkbRAiq4tPHdpbqjt7Bwuw2TRDcez45jRYIkNtHh6OpPO+0juO4Q
-         GvxATuyVzfKTXaP/BkWMKzH9vDF57/LQyR04ZFmKg1aIYn2XJEucO1/Wu4p/BaUKNJBm
-         oV5fSOZLad6Uh/v+WtL4ugD7BxYara4n0qp/Nf6quOkSsctVBdcUJfs6eq/SItnovS1g
-         /i5A==
+        d=linaro.org; s=google; t=1678175266;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V3DhLATozJtMgPvFoqUY3SKZwNKda35qxdXt7pVBes0=;
+        b=AgOVd2Jshcd1P7nVmgyija6vx3o4lu2Tdx2fffUGqAq3MYn+VgEEfYyq2Whc1krruW
+         Ln1eakWHebJ0xe9w9thitxiPhbglfl/+FiRGEyo/MCCJnxT2g6izAsD8L7lAysP1uB4V
+         i6K7Y0x8DHKld88eP/aSJX3esPf7J974Rdqdf2cvpBqn09v6yFs9lIwrb+QKjfrH6m70
+         0NclLOuens30RbfFu5CSnZgOjl61uecmgNbfJmzy1jhg/A82nc/4WIjwQ2zuJEBymP7R
+         UfzAdP/oixccp/fq54xXc4E0TetwJmYI7kJKEhKM+2sbXvwHvS3llimIj2NIF9SCx3qA
+         AHvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678175233;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VmfI+nHnkEqaAvjTBCYnN1twlAqQaJgDbBXTUdXeeFQ=;
-        b=MuRidYszf6P53Iz6WoOOVDKnyRv0l5zBPwTFZyBfT4d6Fxv4CE6gY3fe2aE4jknb6J
-         AQ2uHbGYePduDR25vgx0SuURhYt+eqSGDX+RoRHaMkpRy3boHk7yVbULwQaHEGl7EUsK
-         BCSgBG9sC4d9rR1RveMIHrZKmYfYZNhRt/H+fuKv3+TBp58OA5EUoyi1nzESEYnaKqAR
-         +m6r2qLqUurCIcRr2P7cKtFQKdYBu6lYV8TYXBl9tFm/AvWd6YD/o9gM3vQkpi2FVPS7
-         /kyFfuADFZlXEb409LLhCDlBUi6kRBCSEmfl8wbvZGMg9daLm7sJn6bpk86GYhc3/4Hh
-         CZvw==
-X-Gm-Message-State: AO0yUKUwk/UksEhcXGtjSmHvxOpwlpWPGrvqpMztf3eVovidKGXa3vua
-        Ym9eGhpb+Edp7TZoe+dwIoBDUwoiGaPcjLjrFB0=
-X-Google-Smtp-Source: AK7set8O4IoTTFwYSdQW8lhVj/770uCuSaTe+CetkZL4C7EpKVXb0/fviq7hgLA5AbL7mIIUBlFvvg==
-X-Received: by 2002:a17:906:af18:b0:8aa:c155:9233 with SMTP id lx24-20020a170906af1800b008aac1559233mr13332907ejb.26.1678175233466;
-        Mon, 06 Mar 2023 23:47:13 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:5310:35c7:6f9e:2cd3? ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
-        by smtp.gmail.com with ESMTPSA id y26-20020a170906071a00b008b2714f4d8asm5646123ejb.181.2023.03.06.23.47.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 23:47:13 -0800 (PST)
-Message-ID: <3a27febc-4d4e-1cfd-45dc-6ade4f25ca13@linaro.org>
-Date:   Tue, 7 Mar 2023 08:47:11 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 0/6] clk: samsung: exynos850: Add missing clocks for PM
-Content-Language: en-US
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanho Park <chanho61.park@samsung.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        David Virag <virag.david003@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <20230223042133.26551-1-semen.protsenko@linaro.org>
- <167811290503.11716.15730246749418548221.b4-ty@linaro.org>
- <48c8a0cf-08dc-a831-33ef-3b8e32eef2d3@linaro.org>
- <CAPLW+4=9Vwxd4upa3j_cKtRrNyyx_XCz+TgOOziMguEonbHb0g@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1678175266;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V3DhLATozJtMgPvFoqUY3SKZwNKda35qxdXt7pVBes0=;
+        b=44cS5XzlL8dmH1dwuxGlpqN7PzkOkV8Mqb/xQY5924ST2tOQYgpobjH0C1DGwkEvjK
+         bV0lcmDzXLvcjK8qEvIafVBjJW/nqddSWanjepR0aD1sPHtHz1WqFx4iFq+W63k1cxGI
+         Tv7ArftSokfRYLdICu49aNG87rkh/jOnRaneu4iWHbRaWorRr+NIZKiBxBSeJGneHfCx
+         AGZgu6tqyVFYFEIFRfrmT0vgd9bbOUUm8y6DFAqOBriMGUodaPFrPh+CJqhOVtTNRsR4
+         ewYHjwGwKP8640lThWJAQFyUqxYh5nOjDgYb3tBqafjZFn/x6dX5/zXugYpDyiQLNzTN
+         GcJw==
+X-Gm-Message-State: AO0yUKVUGWkDuCeInpV6aTHuS72Ox32PTV3YBZ5wxmCp6AWtmdoRRewM
+        RvbzgMwobDq90HnK/48S4T9jFw==
+X-Google-Smtp-Source: AK7set9DV8c6V+0UvF/rPKB+JoZu2W8Fux9M3UTl8ASI9Ub72eM9wV6VrNXRM1/ge4sXzaw7R1WJpg==
+X-Received: by 2002:a17:907:a4c:b0:8b1:3d15:1e2c with SMTP id be12-20020a1709070a4c00b008b13d151e2cmr17935319ejc.9.1678175266708;
+        Mon, 06 Mar 2023 23:47:46 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
+        by smtp.gmail.com with ESMTPSA id bl15-20020a170906c24f00b008d83ad86fe8sm5672808ejb.59.2023.03.06.23.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 23:47:46 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPLW+4=9Vwxd4upa3j_cKtRrNyyx_XCz+TgOOziMguEonbHb0g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>, linux-clk@vger.kernel.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        David Virag <virag.david003@gmail.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Chanho Park <chanho61.park@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 0/3] clk: samsung: Add PM support for ARM64 Exynos chips
+Date:   Tue,  7 Mar 2023 08:47:42 +0100
+Message-Id: <167817525834.15038.16744450666463613247.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230307002423.24454-1-semen.protsenko@linaro.org>
+References: <20230307002423.24454-1-semen.protsenko@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2023 19:55, Sam Protsenko wrote:
-> On Mon, 6 Mar 2023 at 09:51, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 06/03/2023 15:28, Krzysztof Kozlowski wrote:
->>> On Wed, 22 Feb 2023 22:21:27 -0600, Sam Protsenko wrote:
->>>> As a part of preparation for PM enablement in Exynos850 clock driver,
->>>> this patch series implements CMU_G3D, and also main gate clocks for AUD
->>>> and HSI CMUs. The series brings corresponding changes to bindings, the
->>>> driver and SoC dts file.
->>>>
->>>> Changes in v2:
->>>>   - Rebased all patches on top of the most recent soc/for-next tree
->>>>   - Added A-b and R-b tags
->>>>   - Minor fixes
->>>>
->>>> [...]
->>>
->>> Applied, thanks!
->>>
->>> [1/6] dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
->>>       https://git.kernel.org/krzk/linux/c/067ba1605806e52118bb598afb357718df9f0e19
->>> [2/6] dt-bindings: clock: exynos850: Add AUD and HSI main gate clocks
->>>       https://git.kernel.org/krzk/linux/c/e289665ed0d6df9fca3ebc128f1232d305e4600b
->>> [3/6] clk: samsung: clk-pll: Implement pll0818x PLL type
->>>       https://git.kernel.org/krzk/linux/c/a6feedab8ab9a9e4483deb0bcc87919d92c88b7e
->>> [4/6] clk: samsung: exynos850: Implement CMU_G3D domain
->>>       https://git.kernel.org/krzk/linux/c/c5704a56893b4e77e434597c7c53d878bb3073b0
->>> [5/6] clk: samsung: exynos850: Add AUD and HSI main gate clocks
->>>       https://git.kernel.org/krzk/linux/c/d8d12e0d079aff4b1d8079a0a55944c0596f1d67
->>> [6/6] arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
->>>       https://git.kernel.org/krzk/linux/c/ad8f6ad9a4f219950df65731a8ff91baa022c4b0
->>
->> And builds are broken. Please mention in cover letter or commit
->> dependencies and ordering...
->>
+On Mon, 6 Mar 2023 18:24:20 -0600, Sam Protsenko wrote:
+> In order to prepare for PM enablement in clk-exynos850, common PM code
+> was extracted from clk-exynos5433 to clk-exynos-arm64. Also some related
+> cleanups were done prior to that. More specifically:
 > 
-> Just checked all most recent commits on your for-next and next/clk
-> branches. Seem to build fine for me. AFAIR I checked all patches in
-> that series, and I guess there shouldn't be any issues if you apply
-> those in the same order they are numbered inside the series. Or you
-> mean you have some clash between different series? Anyways, I'm glad
-> to help, but I'd need more details on where exactly the problem is (or
-> maybe you already fixed it?).
+>   - patches #1..2: cleanups
+>   - patch #3: PM code extraction
+> 
+> [...]
 
-The builds were failing after I applied everything to respective
-branches (so DTS separate). I did not notice that your DTS and driver
-(both) depend on bindings header constant. This requires special
-handling. It actually always required, because it was going through
-different trees. Now it goes through my tree, but I still need to handle
-it. I reworked the branches and force-pushed, thus you did not see the
-exact issue.
+Applied, thanks!
+
+[1/3] clk: samsung: Extract clocks registration to common function
+      https://git.kernel.org/krzk/linux/c/bed76f697a9adda26c40ce4a064f371d54e71331
+[2/3] clk: samsung: Extract parent clock enabling to common function
+      https://git.kernel.org/krzk/linux/c/454e8d296ce4267ca1728bf4f6fe6d41eabe080e
+[3/3] clk: samsung: exynos5433: Extract PM support to common ARM64 layer
+      https://git.kernel.org/krzk/linux/c/f05dc20243163d0218bbb258b6461681865cff5c
 
 Best regards,
-Krzysztof
-
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
