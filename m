@@ -2,70 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CF9C6ADE4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54C36ADE73
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbjCGMII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S231436AbjCGML1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:11:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjCGMIF (ORCPT
+        with ESMTP id S231546AbjCGMKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:08:05 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A018B37F28
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:08:03 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id az36so7611939wmb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:08:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1678190882;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N8+KuBNUOvMkQ5tG78D1gymPnKoB/geR+L27cmc6zCU=;
-        b=JZiHCHIFrKxIz+YAYok47ojhjGpd5HwreP81Bh/lztS9vQDw3MXjwvGiui7nRTyoaQ
-         PRCXJJ2z/aVQNYI+CoywYgwTyaUqJY1EX433/qaD0v6YMv0OzGDgneR3iiLpl3zWZltx
-         S5EWYYG6935vjVpUmlqFRQwVVtx3wvWt+dXqrm50NxWKMSp5GKqKQtwjDA2Sbuc2aqyZ
-         AO7mUNqW3+gBhC1eNajMLFKpMMW+TN1wNX9uruW+dxJrI+sTQ41XnkCgmmaDtxINXnE/
-         4SWn6tOI3YOiJb8NRC3tKMAMgJH6khkfYce0wUmpT9PF0zqjG6DW9fzEJKwSSnQRN2XU
-         bI/w==
+        Tue, 7 Mar 2023 07:10:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D015617C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:10:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678191002;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QWv9WBhYUIpz5gRzPBlk7mRJoAlDNXXkwrUoCn79BNo=;
+        b=goY3rzqQEDL8uKJwrFv3XJOsiFuIG53bNmtrzRUOcYKopAArMPveUJUf79kr8sB9qsKRxy
+        iCAWfBhhAlIkCOlrJiw3qXCfxS6QYtoBGUl1kdc+pESxQxcjAVUtz6QbEf+wR9o8d9www4
+        LXGRsSINutJwUtSqN/oLfxsl4oDyxgQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-537-sY83Jr5VN7C2DqoxqP6AYA-1; Tue, 07 Mar 2023 07:10:01 -0500
+X-MC-Unique: sY83Jr5VN7C2DqoxqP6AYA-1
+Received: by mail-ed1-f71.google.com with SMTP id y1-20020a056402358100b004ea439d57b7so6442602edc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:10:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678190882;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N8+KuBNUOvMkQ5tG78D1gymPnKoB/geR+L27cmc6zCU=;
-        b=vuNgYmUmwG7udQ/YI2Unrd+aNhHjx4s+XFMX1v+Aaz9QaJnYFzbywiCGxznGZ/Rtzp
-         hAZ9IAfNUvLlCYrcx+uKApUBBzqhHkayz/9jOqTJAt6h2t1iZSVWPgJgf37rRWwmAylj
-         PJAbSEnVXPBDJsa+7CfSv8kTepv8EWOEQv6a0CH/Pf2PGmrVr0tfHtLJAHmG5tBf3nw8
-         qEqeO5Gni4ZSbiU6pXLGFzGDgSx2ZTucRfCEByRr8hjNDUilOq8sSJTcH3cdnhVZVKP8
-         eCmk0+KLfIQz5u8rbTTzi5WzNrz7YzKVEj86azNUziqhEcZfHKtr4Rb5IsEH88FD43Dr
-         ybig==
-X-Gm-Message-State: AO0yUKUSYFHPok4w1iB4wlwHgX2tuFAbNxjuiRoIcnYAVWxhMIJ0rYeY
-        HX1geY+lw+clAW/1fOgE0fwmMg==
-X-Google-Smtp-Source: AK7set+hqMq9rWHSQEMhQN2UPXAK02r9tnlaaJ7BbiWNYsYRBLpLGNjeQ7ZwOvU5GAKeikPMdf5DBw==
-X-Received: by 2002:a05:600c:4688:b0:3eb:42fc:fb30 with SMTP id p8-20020a05600c468800b003eb42fcfb30mr12992036wmo.32.1678190882157;
-        Tue, 07 Mar 2023 04:08:02 -0800 (PST)
-Received: from localhost ([147.161.155.97])
-        by smtp.gmail.com with ESMTPSA id v38-20020a05600c4da600b003eb68bb61c8sm12351014wmp.3.2023.03.07.04.08.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 04:08:01 -0800 (PST)
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     rust-for-linux@vger.kernel.org
-Cc:     Andreas Hindborg <a.hindborg@samsung.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] scripts: rust-analyzer: Skip crate module directories
-Date:   Tue,  7 Mar 2023 13:07:36 +0100
-Message-Id: <20230307120736.75492-1-nmi@metaspace.dk>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1678191000;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QWv9WBhYUIpz5gRzPBlk7mRJoAlDNXXkwrUoCn79BNo=;
+        b=gG10BAvB3uPvtlR6teIbdD0Wk2QGzIe7IQLE+sxkdF7uswsovA5aaV/7dtl+1lkQ+T
+         yqclqncFsfNkToklorhr3ONqiWnihet2kmfgVBf938LFxykDtHKwMoCa8Om6+q+H8ZAW
+         cNlEunyEMitimFsouBw7nITuN1UxpejzrsPQSrIffzJ7W09Thf3VoTPp+N01wYwVso2V
+         qP5m8eiE2bkVVF518OhNvPw7b6LBTmX80tfpDhDnglnduxSh6iaAceGUDykDBkyVClKH
+         z0p7xIM+7UjRIIN3Mir6RwFDsajobJxa4hL8uiUrZSQ7mE1W1xZCIiTNK7GhRNvvvCOT
+         a7UQ==
+X-Gm-Message-State: AO0yUKVVMWUAcH5he/5SkTk//SjNU50OQDiaoVgTH+LmlXwcLq3QHDSl
+        E4l//cvnsPvpDrGd0j0PWUdXYLlVhHUYaP777t0gtiYSk/dmtirpzI+WjJP3oCTIoAVw+WudP09
+        dtOBOjpynIosiXaMTcPxUq/Ign2xEFeoM
+X-Received: by 2002:a17:907:1b1e:b0:8b2:8876:2a11 with SMTP id mp30-20020a1709071b1e00b008b288762a11mr20080888ejc.28.1678190999882;
+        Tue, 07 Mar 2023 04:09:59 -0800 (PST)
+X-Google-Smtp-Source: AK7set/5w1pSIe+vScpQoTiMyXTIER8TAZdTUQnhrRB4sAANhC+o5yJ9527e45yJ8QAtzWUO1gnpzQ==
+X-Received: by 2002:a17:907:1b1e:b0:8b2:8876:2a11 with SMTP id mp30-20020a1709071b1e00b008b288762a11mr20080867ejc.28.1678190999618;
+        Tue, 07 Mar 2023 04:09:59 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id kv22-20020a17090778d600b008dceec0fd4csm5983434ejc.73.2023.03.07.04.09.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 04:09:59 -0800 (PST)
+Message-ID: <a83d9acd-a2c5-85ce-36dc-c6a8f0e11a66@redhat.com>
+Date:   Tue, 7 Mar 2023 13:09:58 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] platform/x86: dell-laptop: Register ctl-led for
+ speaker-mute
+Content-Language: en-US, nl
+To:     Koba Ko <koba.ko@canonical.com>, Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230306142454.722020-1-koba.ko@canonical.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230306142454.722020-1-koba.ko@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +81,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When generating rust-analyzer configuration, skip module directories. This fixes
-an issue that occur if we have
+Hi,
 
- - drivers/block/driver.rs
- - drivers/block/driver_mod/mod.rs
+On 3/6/23 15:24, Koba Ko wrote:
+> Some platforms have the speaker-mute led and
+> current driver doesn't control it.
+> 
+> If the platform support the control of speaker-mute led, register it
+> 
+> Signed-off-by: Koba Ko <koba.ko@canonical.com>
 
-If `driver_mod` is a module of the crate `driver`, the directory `driver_mod`
-may not contain `Makefile`, and `generate_rust_analyzer.py` will fail.
+Thank you for your patch, one small remark below.
 
-Signed-off-by: Andreas Hindborg <a.hindborg@samsung.com>
----
- scripts/generate_rust_analyzer.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+>  drivers/platform/x86/dell/dell-laptop.c | 43 +++++++++++++++++++++++++
+>  drivers/platform/x86/dell/dell-smbios.h |  2 ++
+>  2 files changed, 45 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x86/dell/dell-laptop.c
+> index 1321687d923ed..38d95bae8e3ab 100644
+> --- a/drivers/platform/x86/dell/dell-laptop.c
+> +++ b/drivers/platform/x86/dell/dell-laptop.c
+> @@ -97,6 +97,7 @@ static struct rfkill *bluetooth_rfkill;
+>  static struct rfkill *wwan_rfkill;
+>  static bool force_rfkill;
+>  static bool micmute_led_registered;
+> +static bool mute_led_registered;
+>  
+>  module_param(force_rfkill, bool, 0444);
+>  MODULE_PARM_DESC(force_rfkill, "enable rfkill on non whitelisted models");
+> @@ -2177,6 +2178,34 @@ static struct led_classdev micmute_led_cdev = {
+>  	.default_trigger = "audio-micmute",
+>  };
+>  
+> +static int mute_led_set(struct led_classdev *led_cdev,
+> +			   enum led_brightness brightness)
+> +{
+> +	struct calling_interface_buffer buffer;
+> +	struct calling_interface_token *token;
+> +	int state = brightness != LED_OFF;
+> +
+> +	if (state == 0)
+> +		token = dell_smbios_find_token(GLOBAL_MUTE_DISABLE);
+> +	else
+> +		token = dell_smbios_find_token(GLOBAL_MUTE_ENABLE);
+> +
+> +	if (!token)
+> +		return -ENODEV;
+> +
+> +	dell_fill_request(&buffer, token->location, token->value, 0, 0);
+> +	dell_send_request(&buffer, CLASS_TOKEN_WRITE, SELECT_TOKEN_STD);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct led_classdev mute_led_cdev = {
+> +	.name = "platform::mute",
+> +	.max_brightness = 1,
+> +	.brightness_set_blocking = mute_led_set,
+> +	.default_trigger = "audio-mute",
+> +};
+> +
+>  static int __init dell_init(void)
+>  {
+>  	struct calling_interface_token *token;
+> @@ -2230,6 +2259,16 @@ static int __init dell_init(void)
+>  		micmute_led_registered = true;
+>  	}
+>  
+> +	if (dell_smbios_find_token(GLOBAL_MUTE_DISABLE) &&
+> +	    dell_smbios_find_token(GLOBAL_MUTE_ENABLE) &&
+> +	    !dell_privacy_has_mic_mute()) {
 
-diff --git a/scripts/generate_rust_analyzer.py b/scripts/generate_rust_analyzer.py
-index ecc7ea9a4dcf..e8c643fb2488 100755
---- a/scripts/generate_rust_analyzer.py
-+++ b/scripts/generate_rust_analyzer.py
-@@ -104,7 +104,7 @@ def generate_crates(srctree, objtree, sysroot_src):
-             name = path.name.replace(".rs", "")
- 
-             # Skip those that are not crate roots.
--            if f"{name}.o" not in open(path.parent / "Makefile").read():
-+            if not (path.parent / "Makefile").is_file() or f"{name}.o" not in open(path.parent / "Makefile").read():
-                 continue
- 
-             logging.info("Adding %s", name)
+Since this is a speaker mute LED and since the Dell hw privacy
+stuff does not deal with the speaker at all, I believe that you
+should drop the "&& !dell_privacy_has_mic_mute()" part of
+the if condition here ?
 
-base-commit: 8c20eb7e6a27b2c493b0bbb435e75cae7135634f
--- 
-2.39.2
+Can you please send a new version with this dropped?
+
+Regards,
+
+Hans
+
+
+> +		mute_led_cdev.brightness = ledtrig_audio_get(LED_AUDIO_MUTE);
+> +		ret = led_classdev_register(&platform_device->dev, &mute_led_cdev);
+> +		if (ret < 0)
+> +			goto fail_led;
+> +		mute_led_registered = true;
+> +	}
+> +
+>  	if (acpi_video_get_backlight_type() != acpi_backlight_vendor)
+>  		return 0;
+>  
+> @@ -2277,6 +2316,8 @@ static int __init dell_init(void)
+>  fail_backlight:
+>  	if (micmute_led_registered)
+>  		led_classdev_unregister(&micmute_led_cdev);
+> +	if (mute_led_registered)
+> +		led_classdev_unregister(&mute_led_cdev);
+>  fail_led:
+>  	dell_cleanup_rfkill();
+>  fail_rfkill:
+> @@ -2299,6 +2340,8 @@ static void __exit dell_exit(void)
+>  	backlight_device_unregister(dell_backlight_device);
+>  	if (micmute_led_registered)
+>  		led_classdev_unregister(&micmute_led_cdev);
+> +	if (mute_led_registered)
+> +		led_classdev_unregister(&mute_led_cdev);
+>  	dell_cleanup_rfkill();
+>  	if (platform_device) {
+>  		platform_device_unregister(platform_device);
+> diff --git a/drivers/platform/x86/dell/dell-smbios.h b/drivers/platform/x86/dell/dell-smbios.h
+> index 75fa8ea0476dc..eb341bf000c67 100644
+> --- a/drivers/platform/x86/dell/dell-smbios.h
+> +++ b/drivers/platform/x86/dell/dell-smbios.h
+> @@ -34,6 +34,8 @@
+>  #define KBD_LED_AUTO_100_TOKEN	0x02F6
+>  #define GLOBAL_MIC_MUTE_ENABLE	0x0364
+>  #define GLOBAL_MIC_MUTE_DISABLE	0x0365
+> +#define GLOBAL_MUTE_ENABLE	0x058C
+> +#define GLOBAL_MUTE_DISABLE	0x058D
+>  
+>  struct notifier_block;
+>  
 
