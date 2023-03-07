@@ -2,136 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BC36ADD88
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CAFF6ADD7E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjCGLfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
+        id S230432AbjCGLdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjCGLeq (ORCPT
+        with ESMTP id S230456AbjCGLdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:34:46 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C7032CE2;
-        Tue,  7 Mar 2023 03:33:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678188824; x=1709724824;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xylpS4dMHvwStOXeEA691mA7Cx1+UtxKNUF6D05Th1k=;
-  b=BYcPsIrrsoLF9jSky3eECHOFdGnIQ8xZJQyLdQoEIfmOuxk65d0t1dRT
-   0sYWHjpfpOGXGTk4uESAIkwhMDZAZCQucRNC/FoZMuJZmsLN+0lAEJVbV
-   wsOsXRlDjV0hiWNFPkm+QPueP+GcxaPSss9atms0QN9X+6za8jSdK68hn
-   2M3hOLed/U2FzO5bWM4+X+wGdAsaHI+YEv/cy1X2fuRVc6boGBDxA2YEb
-   iD9HZ9FBJF2l6k4Fck/1G+2XGELfu9P/k1KRk6DpRK1cKL9s3u6pQKZ9k
-   P9V63GT/1jjcM4zMudYlbCMJJda7JoOGM2Q2ZPgXdraNhaz4TQ3nO1Mgd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="338151866"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="338151866"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 03:33:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="653947214"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="653947214"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 07 Mar 2023 03:33:03 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZVZ0-0001GJ-0s;
-        Tue, 07 Mar 2023 11:33:02 +0000
-Date:   Tue, 7 Mar 2023 19:32:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vipin Sharma <vipinsh@google.com>, seanjc@google.com,
-        pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com
-Cc:     oe-kbuild-all@lists.linux.dev, jmattson@google.com,
-        mizhang@google.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Subject: Re: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU
- page caches globally
-Message-ID: <202303071940.sFeQ4FpU-lkp@intel.com>
-References: <20230306224127.1689967-4-vipinsh@google.com>
+        Tue, 7 Mar 2023 06:33:33 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4148C2721
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 03:32:57 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id j11so31388483edq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 03:32:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678188775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oiDoMgPguVRDoOdt7v+G+rTfGrO+m61olXH7zbIH4gg=;
+        b=iFp6JvQIixohY4/BBzT/zOyLGZW9lW4N2C2yWUC2OhMzjTEu3Q2rLkFueK7BhHkhpf
+         OSQ3hd1hxQILHmcAnZfDBvZTWHDuJZNYAIKttqDqx2t9hGSeFjTV7jC2D2tTNHyJ3C+I
+         X5PUiENl+95h17BecQuYnmoOXoDih9ki7GbJYtaLLWQECljE/jhVEWZZcv60aTorcix8
+         D1HxASlDDsaaPRZ+ObDLYSUIN1BY96zjMhpk6ME2Vi4t1wV/FgzyeqLjGddLFsAsBKv2
+         uhH2cDE8lHfDHET2NX8dF9bLRrskJHahIrAB6dr74e5St23xKdZxQVk6A2Nn8LoCSoMc
+         naHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678188775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oiDoMgPguVRDoOdt7v+G+rTfGrO+m61olXH7zbIH4gg=;
+        b=z3fOIF6ZOSnaHhs4M4xFxhqJp/XHYIPRDcIyfRDLcl817rSqV1ducvq2RMpwxeSySP
+         2NTJiAoraGBHGd6wOixkdoF3okjp4m8RMqzNsAiiljsPF5N47W356lXj8tnCskH5R5X1
+         ww9J1JM8Dws9Htjl9X/x6QeX0ndK/nKuUrk9Q5sUCTFKUGL7tRljYxV4wEAsGM1uMbO7
+         u7pRYuYZ1MpmXAMnV12rQsnGB730W1AIO9ncddlAsgUizRm1dXqrHZYyk+365GO454gZ
+         bfm5C33uygjzM6xFkcqzhye1lM7Us4oRQDC2lDdSUft7VVt25t66PfCAQalNq74qTvnb
+         22Rg==
+X-Gm-Message-State: AO0yUKU3pLJ15fPmzYbt2yxVEwWL0IfG9x/ibfEas6piOBMg+jQywxBO
+        kgkTSqqzWe6Lmi5k1GyXhW8=
+X-Google-Smtp-Source: AK7set807sqE4Ga6zKjwdlnf+kCVQ++djtYpExWIUXBlspClRcIsCv0GxT2HdmAbLY8hXtqDkcAnUw==
+X-Received: by 2002:a17:907:8a10:b0:8f8:7a2b:cc0d with SMTP id sc16-20020a1709078a1000b008f87a2bcc0dmr20457434ejc.47.1678188774897;
+        Tue, 07 Mar 2023 03:32:54 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id rl10-20020a170907216a00b008baeb5c9bdbsm6016886ejb.141.2023.03.07.03.32.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 03:32:54 -0800 (PST)
+Date:   Tue, 7 Mar 2023 14:32:48 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Masami Ichikawa <masami.ichikawa@miraclelinux.com>,
+        cip-dev <cip-dev@lists.cip-project.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, lwn@lwn.net, smatch@ver.kernel.org
+Subject: Re: Who is looking at CVEs to prevent them?
+Message-ID: <4f8e6d29-a60a-47e2-bd7b-8c66bb9ee0dc@kili.mountain>
+References: <CAODzB9qjdhQkZ+tALHpDLHoK7GAf8Uybfzp8mxXt=Dwnn_0RjA@mail.gmail.com>
+ <20230307110029.1947-1-hdanton@sina.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230306224127.1689967-4-vipinsh@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230307110029.1947-1-hdanton@sina.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vipin,
+On Tue, Mar 07, 2023 at 07:00:29PM +0800, Hillf Danton wrote:
+> On 7 Mar 2023 12:51:14 +0300 Dan Carpenter <error27@gmail.com>
+> > On Thu, Jan 19, 2023 at 09:14:53AM +0900, Masami Ichikawa wrote:
+> > > CVE-2023-0210: ksmbd: check nt_len to be at least CIFS_ENCPWD_SIZE in
+> > > ksmbd_decode_ntlmssp_auth_blob
+> > > 
+> > > 5.15, 6.0, and 6.1 were fixed.
+> > > 
+> > > Fixed status
+> > > mainline: [797805d81baa814f76cf7bdab35f86408a79d707]
+> > > stable/5.15: [e32f867b37da7902685c9a106bef819506aa1a92]
+> > > stable/6.0: [1e7ed525c60d8d51daf2700777071cd0dfb6f807]
+> > > stable/6.1: [5e7d97dbae25ab4cb0ac1b1b98aebc4915689a86]
+> > 
+> > Sorry, I have kind of hijacked the cip-dev email list...  I use these
+> > lists to figure out where we are failing.
+> > 
+> > I created a static checker warning for this bug.  I also wrote a blog
+> > stepping through the process:
+> > https://staticthinking.wordpress.com/2023/03/07/triaging-security-bugs/
+> > 
+> > If anyone wants to review the warnings, just email me and I can send
+> > them to you.  I Cc'd LWN because I was going to post the warnings but I
+> > chickened out because that didn't feel like responsible disclosure. The
+> 
+> Given the syzbot reports only in the past three years for instance, the
+> chickenout sounds a bit over reaction.
 
-Thank you for the patch! Perhaps something to improve:
+Yeah.  Really just posting the code and the results seems like the best
+way forward to me too.  That's how syzbot does it and it's the only
+realistic way forward.
 
-[auto build test WARNING on kvm/queue]
-[also build test WARNING on kvmarm/next linus/master v6.3-rc1 next-20230307]
-[cannot apply to mst-vhost/linux-next kvm/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The good thing is that static checker warnings are much easier to
+analyse than syzbot warnings.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vipin-Sharma/KVM-x86-mmu-Change-KVM-mmu-shrinker-to-no-op/20230307-064510
-base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
-patch link:    https://lore.kernel.org/r/20230306224127.1689967-4-vipinsh%40google.com
-patch subject: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU page caches globally
-config: i386-randconfig-a003-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071940.sFeQ4FpU-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/511e837798da25063830276b8a3345c7601c6459
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vipin-Sharma/KVM-x86-mmu-Change-KVM-mmu-shrinker-to-no-op/20230307-064510
-        git checkout 511e837798da25063830276b8a3345c7601c6459
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+> 
+> > instructions for how to find these yourself are kind of right there in
+> > the blog so it's not too hard to generate these results yourself...  I
+> > don't really have enough time to review static checker warnings anymore
+> > but I don't know who wants to do that job now.
+> 
+> If no more than three warnings you will post a week after filtering, feel
+> free to add me to your Cc list, better with the leading [triage smatch
+> warning] on the subject line the same way as the syzbot report.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303071940.sFeQ4FpU-lkp@intel.com/
+I've sent you the complete list just so you can see what there is.
+I want to get out of the filtering business as much as possible.  I want
+more people involved at all stages really.  Writing checks.  Reviewing
+warnings.
 
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/mmu/mmu.c:676: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Caller should hold mutex lock corresponding to cache, if available.
-   arch/x86/kvm/mmu/mmu.c:693: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    * Caller should hold mutex lock corresponding to kvm_mmu_memory_cache, if
-   arch/x86/kvm/mmu/mmu.c:1404: warning: Function parameter or member 'kvm' not described in 'kvm_arch_mmu_enable_log_dirty_pt_masked'
-   arch/x86/kvm/mmu/mmu.c:1404: warning: Function parameter or member 'slot' not described in 'kvm_arch_mmu_enable_log_dirty_pt_masked'
-   arch/x86/kvm/mmu/mmu.c:1404: warning: Function parameter or member 'gfn_offset' not described in 'kvm_arch_mmu_enable_log_dirty_pt_masked'
-   arch/x86/kvm/mmu/mmu.c:1404: warning: Function parameter or member 'mask' not described in 'kvm_arch_mmu_enable_log_dirty_pt_masked'
-
-
-vim +676 arch/x86/kvm/mmu/mmu.c
-
-   674	
-   675	/**
- > 676	 * Caller should hold mutex lock corresponding to cache, if available.
-   677	 */
-   678	static int mmu_topup_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
-   679					     int min)
-   680	{
-   681		int orig_nobjs, r;
-   682	
-   683		orig_nobjs = cache->nobjs;
-   684		r = kvm_mmu_topup_memory_cache(cache, min);
-   685		if (orig_nobjs != cache->nobjs)
-   686			percpu_counter_add(&kvm_total_unused_cached_pages,
-   687					   (cache->nobjs - orig_nobjs));
-   688	
-   689		return r;
-   690	}
-   691	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+regards,
+dan carpenter
