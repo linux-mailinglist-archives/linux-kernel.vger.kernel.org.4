@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52166AE47A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F20A6AE484
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjCGPVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:21:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S230199AbjCGPWa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 10:22:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230484AbjCGPV0 (ORCPT
+        with ESMTP id S230061AbjCGPWF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:21:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5427D0A7;
-        Tue,  7 Mar 2023 07:19:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01AB7B818FF;
-        Tue,  7 Mar 2023 15:18:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D1DC433EF;
-        Tue,  7 Mar 2023 15:18:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678202330;
-        bh=lQZ5rERaQRLgIyK7bi6stqZey4jwiIUgFUF4gu9goyE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uX7gx9S3/Fv3Oe5xX8ftkcdY3CRsMQvYdGZKayDbGX/tXTxj/qovMiYjQN1LAXrad
-         iUtV94FxViEBP86p27LIkgu7rebVu4T7Cm6d9P8a1XKB4f8BW+GLPzD6D1yQ+EDHIp
-         LkjKcDBE9ZDh/Ml4VwVqMAoBMb5zR8sPvMJdayLBaQclOyycxfE7QQxvw6yAYq5vz1
-         g+XRJG9M30q2yfmkgbgtyBUZRth62RzDAim7J3P7RqSBgNLLCLdEqqOtjhcdEl0rQS
-         YELHzd+VS6ttWo/t5bqXF0z2Hn+llnokTPCOFsw83J7yVj2O0FnikSDWrvQo0zHFFl
-         gcq1Ip2dgZfmA==
-Date:   Tue, 7 Mar 2023 20:48:39 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     Manivannan Sadhasivam <mani@kernel.org>, jingoohan1@gmail.com,
-        gustavo.pimentel@synopsys.com, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        Sergey.Semin@baikalelectronics.ru, dmitry.baryshkov@linaro.org,
-        linmq006@gmail.com, ffclaire1224@gmail.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V5 0/3] PCI: designware-ep: Fix DBI access before core
- init
-Message-ID: <20230307151839.GE5599@thinkpad>
-References: <20221013175712.7539-1-vidyas@nvidia.com>
- <20230214130329.GC4981@thinkpad>
- <ccc4b7fe-db07-cddb-2d0b-b6a89d7b1155@nvidia.com>
+        Tue, 7 Mar 2023 10:22:05 -0500
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD003584;
+        Tue,  7 Mar 2023 07:19:50 -0800 (PST)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pZZ5X-000U6x-Rz; Tue, 07 Mar 2023 16:18:51 +0100
+Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pZZ5X-001GRG-Ke; Tue, 07 Mar 2023 16:18:51 +0100
+Message-ID: <04af6ead8bd4ac6680d5dc5024b0c9ef2e422778.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 0/7 v4] sh: various doc, build, init fixes
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>,
+        linux-sh@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 07 Mar 2023 16:18:50 +0100
+In-Reply-To: <20230306040037.20350-1-rdunlap@infradead.org>
+References: <20230306040037.20350-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ccc4b7fe-db07-cddb-2d0b-b6a89d7b1155@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.155.194
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 07:27:54PM +0530, Vidya Sagar wrote:
-> 
-> 
-> On 2/14/2023 6:33 PM, Manivannan Sadhasivam wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > On Thu, Oct 13, 2022 at 11:27:09PM +0530, Vidya Sagar wrote:
-> > > This series attempts to fix the issue with core register (Ex:- DBI) accesses
-> > > causing system hang issues in platforms where there is a dependency on the
-> > > availability of PCIe Reference clock from the host for their core
-> > > initialization.
-> > > This series is verified on Tegra194 & Tegra234 platforms.
-> > > 
-> > > Manivannan, could you please verify on qcom platforms?
-> > > 
-> > 
-> > Vidya, any plan to respin this series? The EPC rework series is now merged for
-> > v6.3.
-> 
-> Yes. I'll send an updated series soon.
-> Currently, I'm observing some regression with linux-next on Tegra platform
-> for endpoint mode. I'll post the patches as soon as that is resolved.
-> 
+Hi Randy!
 
-Ping!
-
-Thanks,
-Mani
-
-> Thanks,
-> Vidya Sagar
+On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
+> All of these patches have been sent previously, anywhere from
+> one to 3 times.  All patches are now called "v4".
 > 
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > V5:
-> > > * Addressed review comments from Bjorn
-> > > * Changed dw_pcie_ep_init_complete() to dw_pcie_ep_init_late()
-> > > * Skipped memory allocation if done already. This is to avoid freeing and then
-> > >    allocating again during PERST# toggles from the host.
-> > > 
-> > > V4:
-> > > * Addressed review comments from Bjorn and Manivannan
-> > > * Added .ep_init_late() ops
-> > > * Added patches to refactor code in qcom and tegra platforms
-> > > 
-> > > Vidya Sagar (3):
-> > >    PCI: designware-ep: Fix DBI access before core init
-> > >    PCI: qcom-ep: Refactor EP initialization completion
-> > >    PCI: tegra194: Refactor EP initialization completion
-> > > 
-> > >   .../pci/controller/dwc/pcie-designware-ep.c   | 125 +++++++++++-------
-> > >   drivers/pci/controller/dwc/pcie-designware.h  |  10 +-
-> > >   drivers/pci/controller/dwc/pcie-qcom-ep.c     |  27 ++--
-> > >   drivers/pci/controller/dwc/pcie-tegra194.c    |   4 +-
-> > >   4 files changed, 97 insertions(+), 69 deletions(-)
-> > > 
-> > > --
-> > > 2.17.1
-> > > 
-> > 
-> > --
-> > மணிவண்ணன் சதாசிவம்
+> This refresh/resend is to assist the new SH maintainer.
+> 
+>  [PATCH 1/7 v4] sh: SH2007: drop the bad URL info
+>  [PATCH 2/7 v4] sh: nmi_debug: fix return value of __setup handler
+>  [PATCH 3/7 v4] sh: init: use OF_EARLY_FLATTREE for early init
+>  [PATCH 4/7 v4] sh: math-emu: fix macro redefined warning
+>  [PATCH 5/7 v4] sh: remove sh5/sh64 last fragments
+>  [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
+>  [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not enabled
+> 
+> diffstat:
+>  Documentation/kbuild/kbuild.rst                           |    1 -
+>  Documentation/scheduler/sched-arch.rst                    |    2 --
+>  Documentation/translations/zh_CN/scheduler/sched-arch.rst |    2 --
+>  arch/sh/Kconfig                                           |    4 ++++
+>  arch/sh/Kconfig.debug                                     |    2 +-
+>  arch/sh/boards/Kconfig                                    |    1 -
+>  arch/sh/kernel/head_32.S                                  |    6 +++---
+>  arch/sh/kernel/nmi_debug.c                                |    4 ++--
+>  arch/sh/kernel/setup.c                                    |    4 ++--
+>  arch/sh/math-emu/sfp-util.h                               |    4 ----
+>  scripts/checkstack.pl                                     |    7 -------
+>  tools/perf/arch/common.c                                  |    2 --
+>  tools/scripts/Makefile.arch                               |    5 -----
+>  tools/testing/selftests/mm/Makefile                       |    2 +-
+>  tools/testing/selftests/mm/run_vmtests.sh                 |    2 +-
+>  15 files changed, 14 insertions(+), 34 deletions(-)
+> 
+> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> Cc: Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>
+> Cc: linux-sh@vger.kernel.org
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: Arnd Bergmann <arnd@arndb.de>
+
+Thanks for these fixes. All changes look good to me and I'm going to test
+them on my SH-7785LCR board on top of 6.3-rc1 and report back. The documentation
+changes obviously won't have any impact in this regard.
+
+Adrian
 
 -- 
-மணிவண்ணன் சதாசிவம்
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
