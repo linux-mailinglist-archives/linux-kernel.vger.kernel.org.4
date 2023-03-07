@@ -2,141 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A9C6AE54D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BB66AE55D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjCGPsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:48:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S229750AbjCGPvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:51:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230509AbjCGPsG (ORCPT
+        with ESMTP id S229624AbjCGPvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:48:06 -0500
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7572885A6F;
-        Tue,  7 Mar 2023 07:47:38 -0800 (PST)
-Received: by mail-pl1-f170.google.com with SMTP id u5so14521575plq.7;
-        Tue, 07 Mar 2023 07:47:38 -0800 (PST)
+        Tue, 7 Mar 2023 10:51:17 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A95448E21
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:51:16 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id e26-20020a9d6e1a000000b00694274b5d3aso7381944otr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:51:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678204276;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=yaCugjNm/G2Z6PUshJITW/CcWRfLta4oMrbycqzUiTw=;
+        b=ofWVW8v5IS/sfA2wpQoe3EPCDzB6NbRGvZfG/XP5+Rgr2hhIxEHlRTtgPHdftwvUmN
+         V+4dLMf0bX3Qtj7+LeSTS1X576ZrS+iOxNml5NFce7UsaBKtgmOeXldVQwZrloheumYa
+         1EnC/9u7bbFYEzYJluPMGfBAALrjxz5dZFVWlf6CgQ9LhKi8qBFy8ZKYIi886g9AZxN5
+         9nQLu/EslJ3R0E+dCly00J/aWgyyhIX06tQgO2UYfML/MMtqNdpr2ArH7ySZ8BDEyn+a
+         LUEqyjRwJ1XQ6sxvxt9xhIn/1hafWFK6DhzqLToSds8v3TVrWzS/N/9aTxREMpitQJ+F
+         911w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678204039;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwziTOWSx5gQIjIikRUH/cZZiINMVMawOuX2ejCg0M8=;
-        b=CRd5KlmPRtJ+3YrdKonwKCa3NsIsek+DDzpfeY4GtPJgZpQWZWS5HOEq01paDyE4Qg
-         6pC++5q0r2qKzOaXM3z04uZBNbyBBn/xjkP/sGnhXuEVwskG56VAw7MLhZf0Yfzx3VeX
-         LoS1WH/JCZMcLjit6KJoc3YXsZd3JNoY6Ro0fFS9EO0ve7E55NpdN0x3qD/GFDjXK9xT
-         TFDnIk7HEsp0I+Mt/N1HugK9qXhL6XyRlfbmMz5/T/u9hdQcBWXrmReodvhFIg362trt
-         nrqSr0kd5gKNBFTXCvPbvCjC1nISa35MyNm+5fKkMXwO2MirAHCczZNd5zZEtEGYcupa
-         P4EA==
-X-Gm-Message-State: AO0yUKWa4ttKxGRCci05X4F2qo79sWZ9dXhqiFLRxo1ckUIBG7YthoM6
-        MNamj/SE6bOeW+/TfpRg3ak=
-X-Google-Smtp-Source: AK7set9bOFD86hVEitetXq7V1awDY1Hh1VJBlAr53BoHItabMvkpg4xM4u+NWEpADacOF/57k82xdQ==
-X-Received: by 2002:a05:6a20:a88f:b0:c3:cc65:165c with SMTP id ca15-20020a056a20a88f00b000c3cc65165cmr12350717pzb.61.1678204038588;
-        Tue, 07 Mar 2023 07:47:18 -0800 (PST)
-Received: from [192.168.132.235] ([63.145.95.70])
-        by smtp.gmail.com with ESMTPSA id v9-20020aa78089000000b005e4d8c6168csm7985460pff.210.2023.03.07.07.47.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 07:47:17 -0800 (PST)
-Message-ID: <8a83ec79-be04-ec5c-f3ef-67f64dc55f12@acm.org>
-Date:   Tue, 7 Mar 2023 07:47:16 -0800
+        d=1e100.net; s=20210112; t=1678204276;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yaCugjNm/G2Z6PUshJITW/CcWRfLta4oMrbycqzUiTw=;
+        b=cwXZwAQ6M0MxnO6F4AzETbIFm+D+DU4GCYgPH0la5L2LFU7shnxmQAtm7WwI3roWtN
+         v0jcIOdUNCOwgoGlAogdynMpb8HVYC3IowK5NpRqgp1dCp+EguOKGjpD1IbtTKrxNy0X
+         JjJuMrATyQc8qadfbmkkWgWCVELgsOsRlsNb+GdERTrhanewX5eqcehuVTcmd6KpQ5ML
+         X4pim5a3GUm/2UQBJUqYD+/iDsbuPCRD0mjwZQkHr8zR3A8sHhFN0rViZL6eOtAOJ6EL
+         5T+NGny/l0ciXfG/jfHcxEC4lCo8kxhePV4IZDLoy4lmtQAPeuJYv6g8csfIFodI7SkB
+         L7TA==
+X-Gm-Message-State: AO0yUKVbgPPekuI2tbQsdClZ0n4fLf152v1kIbsRma7RMCggbzwIrDaq
+        QUZsBfBEAU4/2BeLUAYrPzv1NJZ3OY0=
+X-Google-Smtp-Source: AK7set+4tpOoPJzih4H3Nbev61S29Ht5G6Nq1DQL8Bcj7hhAxFBYuresSasJED2ckXYChGY6Tob/bQ==
+X-Received: by 2002:a9d:17cd:0:b0:670:885e:f8ff with SMTP id j71-20020a9d17cd000000b00670885ef8ffmr6011313otj.8.1678204275839;
+        Tue, 07 Mar 2023 07:51:15 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b26-20020a9d479a000000b0068bcb44e7f5sm5417243otf.68.2023.03.07.07.51.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 07:51:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Support Opensource <support.opensource@diasemi.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        David Rau <David.Rau.opensource@dm.renesas.com>
+Subject: [PATCH] ASoC: da7219: Initialize jack_det_mutex
+Date:   Tue,  7 Mar 2023 07:51:11 -0800
+Message-Id: <20230307155111.1985522-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4] scsi: ufs: core: Add trace event for MCQ
-Content-Language: en-US
-To:     Ziqi Chen <quic_ziqichen@quicinc.com>, quic_asutoshd@quicinc.com,
-        quic_cang@quicinc.com, mani@kernel.org, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        junwoo80.lee@samsung.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
-References: <1677836154-29192-1-git-send-email-quic_ziqichen@quicinc.com>
- <67db2c6b-c3b0-c525-e6a9-2b2fe6c6adbb@acm.org>
- <f80fd91b-3a03-5c38-72c0-cd5c3edb33b8@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <f80fd91b-3a03-5c38-72c0-cd5c3edb33b8@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/6/23 21:53, Ziqi Chen wrote:
-> You are right,  users may hate it if the trace events for legacy mode 
-> and MCQ mode are different. But if I merge them into one event, it will 
-> print much invalid information as we can not add if-else into TP_printk().
-> 
-> (For example:  in SDB legacy mode, you can see such invalid prints " 
-> hqid = 0 , sqt= 0, cqh=0, cqt = 0")
-> 
-> Users may hate these invalid information.
-> 
-> Anyway, I have made new version that merge 2 mode into one event, but 
-> are you sure we really need to use this way? if yes , I can push new 
-> version here.
-> 
-> Or, could you give some suggestions if you have better way.
-> 
-> Below is a piece of new version code , you can preview.
-> 
->      TP_fast_assign(
->          __assign_str(dev_name, dev_name);
->          __entry->str_t = str_t;
->          __entry->tag = tag;
->          __entry->doorbell = doorbell;
->          __entry->hwq_id = hwq? hwq->id: 0;
->          __entry->sq_tail = hwq? hwq->sq_tail_slot: 0;
->          __entry->cq_head = hwq? hwq->cq_head_slot: 0;
->          __entry->cq_tail = hwq? hwq->cq_tail_slot: 0;
->          __entry->transfer_len = transfer_len;
->          __entry->lba = lba;
->          __entry->intr = intr;
->          __entry->opcode = opcode;
->          __entry->group_id = group_id;
->      ),
-> 
->      TP_printk(
->          "%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, 
-> opcode: 0x%x (%s),"
->          "group_id: 0x%x, hqid: %d, sqt: %d, cqh: %d, cqt: %d",
->          show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name), 
-> __entry->tag,
->          __entry->doorbell, __entry->transfer_len, __entry->intr, 
-> __entry->lba,
->          (u32)__entry->opcode, str_opcode(__entry->opcode), 
-> (u32)__entry->group_id,
->          __entry->hwq_id,__entry->sq_tail, __entry->cq_head,  
-> __entry->cq_tail
->      )
+The following traceback is reported if mutex debugging is enabled.
 
-Hi Ziqi,
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 17 at kernel/locking/mutex.c:950 __mutex_lock_common+0x31c/0x11d4
+Modules linked in:
+CPU: 0 PID: 17 Comm: kworker/0:1 Not tainted 5.10.172-lockdep-21846-g849884cfca5a #1 fd2de466502012eb58bc8beb467f07d0b925611f
+Hardware name: MediaTek kakadu rev0/rev1 board (DT)
+Workqueue: events da7219_aad_jack_det_work
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO BTYPE=--)
+pc : __mutex_lock_common+0x31c/0x11d4
+lr : __mutex_lock_common+0x31c/0x11d4
+sp : ffffff80c0317ae0
+x29: ffffff80c0317b50 x28: ffffff80c0317b20
+x27: 0000000000000000 x26: 0000000000000000
+x25: 0000000000000000 x24: 0000000100000000
+x23: ffffffd0121d296c x22: dfffffd000000000
+x21: 0000000000000000 x20: 0000000000000000
+x19: ffffff80c73d7190 x18: 1ffffff018050f52
+x17: 0000000000000000 x16: 0000000000000000
+x15: 0000000000000000 x14: 0000000000000000
+x13: 0000000000000001 x12: 0000000000000001
+x11: 0000000000000000 x10: 0000000000000000
+x9 : 83f0d991da544b00 x8 : 83f0d991da544b00
+x7 : 0000000000000000 x6 : 0000000000000001
+x5 : ffffff80c03176a0 x4 : 0000000000000000
+x3 : ffffffd01067fd78 x2 : 0000000100000000
+x1 : ffffff80c030ba80 x0 : 0000000000000028
+Call trace:
+__mutex_lock_common+0x31c/0x11d4
+mutex_lock_nested+0x98/0xac
+da7219_aad_jack_det_work+0x54/0xf0
+process_one_work+0x6cc/0x19dc
+worker_thread+0x458/0xddc
+kthread+0x2fc/0x370
+ret_from_fork+0x10/0x30
+irq event stamp: 579
+hardirqs last enabled at (579): [<ffffffd012442b30>] exit_to_kernel_mode+0x108/0x138
+hardirqs last disabled at (577): [<ffffffd010001144>] __do_softirq+0x53c/0x125c
+softirqs last enabled at (578): [<ffffffd01009995c>] __irq_exit_rcu+0x264/0x4f4
+softirqs last disabled at (573): [<ffffffd01009995c>] __irq_exit_rcu+0x264/0x4f4
+---[ end trace 26da674636181c40 ]---
 
-Please reply below the original e-mail instead of above. This is 
-expected on Linux kernel mailing lists.
+Initialize the mutex to fix the problem.
 
-Regarding your question: I propose to leave out the sq_tail, cq_head and 
-cq_tail information. That information may be useful for hardware 
-developers but is not useful for other users of the Linux kernel. So the 
-only piece of information that is left that is MCQ-specific is the 
-hardware queue index. I expect that users will be fine to see that 
-information in trace events.
+Cc: David Rau <David.Rau.opensource@dm.renesas.com>
+Fixes: 7fde88eda855 ("ASoC: da7219: Improve the IRQ process to increase the stability")
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+---
+ sound/soc/codecs/da7219-aad.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-How about reporting hardware queue index -1 for legacy mode instead of 
-0? That will allow users to tell the difference between legacy mode and 
-MCQ mode from the trace events.
-
-Thanks,
-
-Bart.
+diff --git a/sound/soc/codecs/da7219-aad.c b/sound/soc/codecs/da7219-aad.c
+index 4a4f09f924bc..e3d398b8f54e 100644
+--- a/sound/soc/codecs/da7219-aad.c
++++ b/sound/soc/codecs/da7219-aad.c
+@@ -968,6 +968,8 @@ int da7219_aad_init(struct snd_soc_component *component)
+ 	INIT_WORK(&da7219_aad->hptest_work, da7219_aad_hptest_work);
+ 	INIT_WORK(&da7219_aad->jack_det_work, da7219_aad_jack_det_work);
+ 
++	mutex_init(&da7219_aad->jack_det_mutex);
++
+ 	ret = request_threaded_irq(da7219_aad->irq, da7219_aad_pre_irq_thread,
+ 				   da7219_aad_irq_thread,
+ 				   IRQF_TRIGGER_LOW | IRQF_ONESHOT,
+-- 
+2.39.2
 
