@@ -2,71 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A52A6ADF03
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CF36ADF04
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjCGMpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
+        id S229699AbjCGMp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCGMpU (ORCPT
+        with ESMTP id S229662AbjCGMpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:45:20 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835BB4D28D;
-        Tue,  7 Mar 2023 04:45:19 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id e82so11208773ybh.9;
-        Tue, 07 Mar 2023 04:45:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678193118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6fe876EcuA+jdmCESHMii/7cG2YSZKquEdS/vIty4+A=;
-        b=ODIJueFdMNGe95gTEbyF5NczLJmY23TtUj51PPOLopdCMmLFgcThOhcAVkvfDnoWal
-         kGcukFh7EtTc0RW08h2lwJk9aOVAolceIRIuOJKABA+/zAdgaUpAp0J6WXyT61J/a/ft
-         tMygDnofeR6ck4paPkOSPfFEJuAPyTXIDnzWEuv74MGISTIw5i3wp84FjjkivYkMTQNV
-         FU0w7dBuB3gmGh574Vs6I2bg7ztdeRTZAVPhfzpAy8Wm7v0N0ZXCBkDy2WwAsC0hnMsQ
-         Jq33qja3vVL9a+IU3LhBjW8TtcIMuTPXr7vEKx28eD2rp6bXV+a/1SMLI9FZ3Nb60QUo
-         VT9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678193118;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6fe876EcuA+jdmCESHMii/7cG2YSZKquEdS/vIty4+A=;
-        b=6n44r0H4VAevPhKEl8J/JUIJduSE0hjVGB9hovq+oiJxmICYT1Qq7rxd3R079/FUve
-         oYR87JL2Zdda0bf7I/Rz2rdRQjBI7m0UyTSji/Xc5s1GD/+gyNTbKT3cQnhL2/7c27ZA
-         MFYiFrkMHS3jTYzcWX2+36y4NltP7XwG8Vj9/simPSHPZMu1rQNNaRc7lyDBVYsryB1n
-         VavQrstQVsMrwGs42VPNvyLBkoprbcydbMibk7WIBajvWKwL2DMHBc89hZazox5XLafM
-         xjrPO9up8hOI1QsTtWnCZX+c0N8v3RwG7plVcvZOxIvZ5AXWiVglD7t5tXiY8sd35O7z
-         2Clg==
-X-Gm-Message-State: AO0yUKW04GYUCBabe/yPe5pJFk/YLFp46tk7ejCrujdvsodPYX0wDqSn
-        yqQfcMzpJdB2NERsn6xuBQK8tmOvdGJ7/JOOvjE=
-X-Google-Smtp-Source: AK7set+4i6X4+McENdJYEtkgtVMIkW1tvDFHTItHQ5/EcD88Yp6L91Q8oXnhMttrnbcAi9OAVXl2NClL+dgdZd9VEek=
-X-Received: by 2002:a25:656:0:b0:a27:3ecc:ffe7 with SMTP id
- 83-20020a250656000000b00a273eccffe7mr11410509ybg.3.1678193118746; Tue, 07 Mar
- 2023 04:45:18 -0800 (PST)
+        Tue, 7 Mar 2023 07:45:45 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B9705DED6
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:45:44 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1D7DA113E;
+        Tue,  7 Mar 2023 04:46:27 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFB743F71A;
+        Tue,  7 Mar 2023 04:45:41 -0800 (PST)
+Message-ID: <1587bdc3-908e-1d63-1d38-019e88ace4df@arm.com>
+Date:   Tue, 7 Mar 2023 13:45:36 +0100
 MIME-Version: 1.0
-References: <20230306220959.240235-1-ojeda@kernel.org> <87ilfcivzf.fsf@metaspace.dk>
-In-Reply-To: <87ilfcivzf.fsf@metaspace.dk>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 7 Mar 2023 13:45:07 +0100
-Message-ID: <CANiq72m_y=eCsJLxRP+bFvhmR5yAVK7=W6Hijb_CozWnL__dQw@mail.gmail.com>
-Subject: Re: [PATCH] docs: rust: point directly to the standalone installers
-To:     Andreas Hindborg <nmi@metaspace.dk>
-Cc:     Miguel Ojeda <ojeda@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+Content-Language: en-US
+To:     Zhang Qiao <zhangqiao22@huawei.com>, linux-kernel@vger.kernel.org
+Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, rkagan@amazon.de
+References: <20230306132418.50389-1-zhangqiao22@huawei.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230306132418.50389-1-zhangqiao22@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,17 +47,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 1:31=E2=80=AFPM Andreas Hindborg <nmi@metaspace.dk> =
-wrote:
->
-> I guess we should remove "or install ``rustup``" from this sentence?
+On 06/03/2023 14:24, Zhang Qiao wrote:
+> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
+> entity being placed") fix an overflowing bug, but ignore
+> a case that se->exec_start is reset after a migration.
+> 
+> For fixing this case, we reset the vruntime of a long
+> sleeping task in migrate_task_rq_fair().
+> 
+> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
 
-Good point -- the page contains installers for `rustup` itself too
-above the URL fragment, but we are pointing directly to the fragment,
-so it can be confusing.
+[...]
 
-I think I will split the sentence and add an extra link to the other
-fragment, since there is one for that too (`#rustup`).
+> @@ -7635,7 +7653,23 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+>  	if (READ_ONCE(p->__state) == TASK_WAKING) {
+>  		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>  
+> -		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+> +		/*
+> +		 * We determine whether a task sleeps for long by checking
+> +		 * se->exec_start, and if it is, we sanitize its vruntime at
+> +		 * place_entity(). However, after a migration, this detection
+> +		 * method fails due to se->exec_start being reset.
+> +		 *
+> +		 * For fixing this case, we add the same check here. For a task
+> +		 * which has slept for a long time, its vruntime should be reset
+> +		 * to cfs_rq->min_vruntime with a sleep credit. Because waking
+> +		 * task's vruntime will be added to cfs_rq->min_vruntime when
 
-Cheers,
-Miguel
+Isn't this the other way around? `vruntime += min_vruntime`
+
+> +		 * enqueue, we only need to reset the se->vruntime of waking task
+> +		 * to a credit here.
+
+You not reset it to credit, you subtract the credit from vruntime ?
+
+I assume this is done to have sleeper credit accounted on both
+(se->vruntime and vruntime) for `se->vruntime =
+max_vruntime(se->vruntime, vruntime)` in place_entity() since
+entity_is_long_sleep(se)=false for a remove wakeup since `se->exec_start=0`.
+
+
+> +		 */
+> +		if (entity_is_long_sleep(se))
+> +			se->vruntime = -sched_sleeper_credit(se);
+> +		else
+> +			se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+
+Not sure I understand this part.
+Don't we have to do `vruntime -= min_vruntime` here for long sleeping
+task as well?
+
+Since we always do the `vruntime += min_vruntime` on the new CPU for a
+remote wakeup.
+
+[...]
