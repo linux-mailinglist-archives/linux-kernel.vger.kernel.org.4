@@ -2,68 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE80E6AEA11
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1491B6AEA31
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:31:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCGRa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60888 "EHLO
+        id S231687AbjCGRba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231235AbjCGRaC (ORCPT
+        with ESMTP id S230491AbjCGRbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:30:02 -0500
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4128C530;
-        Tue,  7 Mar 2023 09:25:18 -0800 (PST)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Tue, 7 Mar 2023 12:31:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6BE69DE19
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 09:26:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 8FD7C2D3;
-        Tue,  7 Mar 2023 17:25:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8FD7C2D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1678209917; bh=MXdgT/weL/sGwELNPyPxwLyYWjuL98nFt25rMpbGw10=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=QenhgGQYPFbxJEAX5UJ0287KfU5iW1wZkZxtA9qx/3TCHQPJEL9UZGF/KdfrALjFu
-         7yMC1FW1q8rqO8y+2ZfhkBdV+LaQTHdnnuvEfpx5WF6RCS/ymJptOurEXpmDnTWgln
-         wsTCyB35LpEA6a992r/rwt0dHKBQquaEljkC38Tykdx8l2t5V9fbKI8Z2ZsaoYfo27
-         CWmLnj8L8n4SH3CvlL6fZkOx4nqr9z5G3bFGB/CwGRXkEqyZmUkY8qf3VzlcKKHp9k
-         p09pg5fUK2yj7hXFzaBqMg5fDxUlVGb22ACoimYBKvoCRa/asNjPlIrz1VAi1Y4heq
-         FMf7hLTgpNH5Q==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: Re: [PATCH 1/2] docs: programming-language: remove mention of the
- Intel compiler
-In-Reply-To: <20230306191712.230658-1-ojeda@kernel.org>
-References: <20230306191712.230658-1-ojeda@kernel.org>
-Date:   Tue, 07 Mar 2023 10:25:16 -0700
-Message-ID: <87pm9ko4n7.fsf@meer.lwn.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 316EFB8199E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 17:26:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA7FCC433EF;
+        Tue,  7 Mar 2023 17:26:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678209987;
+        bh=nwgV6eUM/zcDO8pvJ5vNp+15PxZcUreF4iT5zq90cyc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gWIsFY4/2Qc3yN0FU4YKz2XMwj3gwk/ZzsyI3SgpfNAkzIaWFRSV/baFacoXUHoOs
+         RszngGBJFGqIbUQrIFYf4hXVdR+fHZAq3sBRY2Jh4z262JFZ4eX5flDjzYPOEaRCFk
+         wpS2ygKBb3Nwv9frdeOSOUp3J93DEyjlIS5krJqUYKdP2HxSYidaBr93/LKH8MAiYi
+         HMWIXv08Vu91+AZFvg7x90TJmXOwtn3RdPGX35r6nGoJZJ6xxgK9REdkOV1eVYfkvN
+         1Rm/9KP+S28tQVSHZppbcgd5CM3XmIV8jg0fewWftJ88DDV64KkdZxesnUTsLvRnOc
+         mUAjg8B3Ct3GA==
+Date:   Tue, 7 Mar 2023 09:26:26 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Zhiguo Niu <zhiguo.niu@unisoc.com>
+Subject: Re: [PATCH] f2fs: fix unaligned field offset in 32-bits platform
+Message-ID: <ZAdzwt+DZ0emPd30@google.com>
+References: <20230307151408.58490-1-chao@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307151408.58490-1-chao@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Miguel Ojeda <ojeda@kernel.org> writes:
+Cc'ed stable. Thanks.
 
-> The Intel compiler support has been removed in commit 95207db8166a
-> ("Remove Intel compiler support").
->
-> Thus remove its mention in the Documentation too.
->
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+On 03/07, Chao Yu wrote:
+> F2FS-fs (dm-x): inconsistent rbtree, cur(3470333575168) next(3320009719808)
+> ------------[ cut here ]------------
+> kernel BUG at fs/f2fs/gc.c:602!
+> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM
+> PC is at get_victim_by_default+0x13c0/0x1498
+> LR is at f2fs_check_rb_tree_consistence+0xc4/0xd4
+> ....
+> [<c04d98b0>] (get_victim_by_default) from [<c04d4f44>] (f2fs_gc+0x220/0x6cc)
+> [<c04d4f44>] (f2fs_gc) from [<c04d4780>] (gc_thread_func+0x2ac/0x708)
+> [<c04d4780>] (gc_thread_func) from [<c015c774>] (kthread+0x1a8/0x1b4)
+> [<c015c774>] (kthread) from [<c01010b4>] (ret_from_fork+0x14/0x20)
+> 
+> The reason is there is __packed attribute in struct rb_entry, but there
+> is no __packed attribute in struct victim_entry, so wrong offset of key
+> field will be parsed in struct rb_entry in f2fs_check_rb_tree_consistence,
+> it describes memory layouts of struct rb_entry and struct victim_entry in
+> 32-bits platform as below:
+> 
+> struct rb_entry {
+>    [0] struct rb_node rb_node;
+>        union {
+>            struct {...};
+>   [12]     unsigned long long key;
+>        } __packed;
+> }
+> size of struct rb_entry: 20
+> 
+> struct victim_entry {
+>    [0] struct rb_node rb_node;
+>        union {
+>            struct {...};
+>   [16]     struct victim_info vi;
+>        };
+>   [32] struct list_head list;
+> }
+> size of struct victim_entry: 40
+> 
+> This patch tries to add __packed attribute in below structure:
+> - discard_info, discard_cmd
+> - extent_info, extent_node
+> - victim_info, victim_entry
+> in order to fix this unaligned field offset issue in 32-bits platform.
+> 
+> Fixes: 004b68621897 ("f2fs: use rb-tree to track pending discard commands")
+> Fixes: 13054c548a1c ("f2fs: introduce infra macro and data structure of rb-tree extent cache")
+> Fixes: 093749e296e2 ("f2fs: support age threshold based garbage collection")
+> Signed-off-by: Zhiguo Niu <zhiguo.niu@unisoc.com>
+> Signed-off-by: Chao Yu <chao@kernel.org>
 > ---
->  Documentation/process/programming-language.rst | 5 -----
->  1 file changed, 5 deletions(-)
-
-Both patches applied, thanks.
-
-jon
+>  fs/f2fs/f2fs.h | 6 +++---
+>  fs/f2fs/gc.h   | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index b0ab2062038a..17fa7572ceed 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -349,7 +349,7 @@ struct discard_info {
+>  	block_t lstart;			/* logical start address */
+>  	block_t len;			/* length */
+>  	block_t start;			/* actual start address in dev */
+> -};
+> +} __packed;
+>  
+>  struct discard_cmd {
+>  	struct rb_node rb_node;		/* rb node located in rb-tree */
+> @@ -361,7 +361,7 @@ struct discard_cmd {
+>  		};
+>  		struct discard_info di;	/* discard info */
+>  
+> -	};
+> +	} __packed;
+>  	struct list_head list;		/* command list */
+>  	struct completion wait;		/* compleation */
+>  	struct block_device *bdev;	/* bdev */
+> @@ -660,7 +660,7 @@ struct extent_info {
+>  			unsigned long long last_blocks;
+>  		};
+>  	};
+> -};
+> +} __packed;
+>  
+>  struct extent_node {
+>  	struct rb_node rb_node;		/* rb node located in rb-tree */
+> diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
+> index 15bd1d680f67..304937d9a084 100644
+> --- a/fs/f2fs/gc.h
+> +++ b/fs/f2fs/gc.h
+> @@ -58,7 +58,7 @@ struct gc_inode_list {
+>  struct victim_info {
+>  	unsigned long long mtime;	/* mtime of section */
+>  	unsigned int segno;		/* section No. */
+> -};
+> +} __packed;
+>  
+>  struct victim_entry {
+>  	struct rb_node rb_node;		/* rb node located in rb-tree */
+> @@ -68,7 +68,7 @@ struct victim_entry {
+>  			unsigned int segno;		/* segment No. */
+>  		};
+>  		struct victim_info vi;	/* victim info */
+> -	};
+> +	} __packed;
+>  	struct list_head list;
+>  };
+>  
+> -- 
+> 2.36.1
