@@ -2,221 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF41E6ADF39
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9443A6ADF63
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjCGMy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:54:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S229876AbjCGM7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:59:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjCGMyv (ORCPT
+        with ESMTP id S229972AbjCGM7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:54:51 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3BD360BB
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:54:26 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 1CA4D1FE17;
-        Tue,  7 Mar 2023 12:54:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678193665; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8ot5WhI+pYLPKm66MfFAHddCebeV3Th9lv/jx6sTdo4=;
-        b=UvHQEw7KmbW4QdFxNbaJ65oPOx+c7/QR8YeKPTtdS1Iy/ho0D0pZePY1AGz0i7FkspFwk+
-        ojvNxafFfe5c+k9LkhGm9A+cGvPIMKkBJoMma17e/Y7qlgDXSRrRSsdU9mYim63NTEBpN8
-        f3jO2OmgCqKAZ51DCTLfC3OqQgi82X8=
-Received: from alley.suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
-        by relay2.suse.de (Postfix) with ESMTP id C5ADD2C141;
-        Tue,  7 Mar 2023 12:54:24 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>, linux-kernel@vger.kernel.org,
-        Petr Mladek <pmladek@suse.com>
-Subject: [PATCH v2 5/5] workqueue: Print backtraces from CPUs with hung CPU bound workqueues
-Date:   Tue,  7 Mar 2023 13:53:35 +0100
-Message-Id: <20230307125335.28805-6-pmladek@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230307125335.28805-1-pmladek@suse.com>
-References: <20230307125335.28805-1-pmladek@suse.com>
+        Tue, 7 Mar 2023 07:59:25 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138417B4A1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:58:39 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id p16so7683638wmq.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:58:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1678193918;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n/Cy/OujEvrfcgtxPDuxMYp8s8ng0EOqDDkVszWumlc=;
+        b=TGPUjYNpDx/QPw20JCz5TtjaNYMDyJieQmDNClQ4JrH94qOsexFMclQooJxhwpRc5N
+         B7a49mLYHpVbv9EdfaGhjrYpaSKn+/idY4P5F9dXczgSYrOW1cTZw0v0nfXANfmdOQVT
+         vTa+H5v4C4gvExvz7ZnvYjKvaIvsv8XdBD0Y9FAYZBPBd0sZ7lcu4SdKllVIz4bza2CQ
+         KqM5X/ZCbjpypB7l38jrnSRefjWT6zxDSaimQr5zkW9sK7WHfcsGAlru0RqOREmzv5Ho
+         rIXfsXSJgWk75UrWiJx2u74l2hF4MzKzkv5uQDYW+audTAImBpcily54sNPvCLFtKpwB
+         ly4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678193918;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=n/Cy/OujEvrfcgtxPDuxMYp8s8ng0EOqDDkVszWumlc=;
+        b=p80++qbmj1KgF3rX8kqOmp7P5xMpRlx2ho9G6SB8GIGPuExGVy5DENUmXa5vyNNk/a
+         tSqIrmcgA9rLieO2kP15jbP7UI4k41ruEFDvdyk9gE74QUhT2D6isJ9XzuC+g+IgHe38
+         3OKbGh4mpPKJqRD8ypC04FZFqL9vcsck2sczI2ZEUxUQKfM85UfU+ZqFr0vSDTy60Hcd
+         kyWFjrMGcrkFTRKXV6wTkVuZZIMcfbWrmRv6II2UZR4Hj9HEhW9ycSFe75pNu600A9Bc
+         tBcNNdglYYSSU0vu1uUXtckg9+IJ5K9UGv2eEjdtdr0SDZcSIN1eiVUSQ6ddTqtPYG+1
+         bhyw==
+X-Gm-Message-State: AO0yUKXndE02SkNWXJ3SE+xpzyAK7eL9WomDUOvDclh+LQbHFXih0Yab
+        0pw5Bk7kpUAvqDh/Cm9UiP7oGg==
+X-Google-Smtp-Source: AK7set/D4A4p19IRPCyUevUEJCTN9mTsfWxBu+p9Nnr+gZbVJ/onBxvG4vdlW0zE1acL1wtSjU4lYg==
+X-Received: by 2002:a7b:cc10:0:b0:3eb:3104:efef with SMTP id f16-20020a7bcc10000000b003eb3104efefmr12335752wmh.31.1678193918141;
+        Tue, 07 Mar 2023 04:58:38 -0800 (PST)
+Received: from localhost ([165.225.194.197])
+        by smtp.gmail.com with ESMTPSA id n8-20020a05600c304800b003e21f01c426sm12787712wmh.9.2023.03.07.04.58.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 04:58:37 -0800 (PST)
+References: <20230307120736.75492-1-nmi@metaspace.dk>
+ <CANiq72mvL3f-MZiZiZp-uZDQGCnYJ9yFh_QTWrTMUkUdiXdm=Q@mail.gmail.com>
+User-agent: mu4e 1.9.18; emacs 28.2.50
+From:   Andreas Hindborg <nmi@metaspace.dk>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Asahi Lina <lina@asahilina.net>, rust-for-linux@vger.kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] scripts: rust-analyzer: Skip crate module directories
+Date:   Tue, 07 Mar 2023 13:53:53 +0100
+In-reply-to: <CANiq72mvL3f-MZiZiZp-uZDQGCnYJ9yFh_QTWrTMUkUdiXdm=Q@mail.gmail.com>
+Message-ID: <87edq0iupw.fsf@metaspace.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The workqueue watchdog reports a lockup when there was not any progress
-in the worker pool for a long time. The progress means that a pending
-work item starts being proceed.
 
-Worker pools for unbound workqueues always wake up an idle worker and
-try to process the work immediately. The last idle worker has to create
-new worker first. The stall might happen only when a new worker could
-not be created in which case an error should get printed. Another problem
-might be too high load. In this case, workers are victims of a global
-system problem.
+Miguel Ojeda <miguel.ojeda.sandonis@gmail.com> writes:
 
-Worker pools for CPU bound workqueues are designed for lightweight
-work items that do not need much CPU time. They are proceed one by
-one on a single worker. New worker is used only when a work is sleeping.
-It creates one additional scenario. The stall might happen when
-the CPU-bound workqueue is used for CPU-intensive work.
+> On Tue, Mar 7, 2023 at 1:08=E2=80=AFPM Andreas Hindborg <nmi@metaspace.dk=
+> wrote:
+>>
+>> When generating rust-analyzer configuration, skip module directories.
+>
+> This is https://github.com/Rust-for-Linux/linux/pull/883, also handled
+> by Vinay's patch
+> https://lore.kernel.org/rust-for-linux/20230118160220.776302-1-varmavinay=
+m@gmail.com/.
 
-More precisely, the stall is detected when a CPU-bound worker is in
-the TASK_RUNNING state for too long. In this case, it might be useful
-to see the backtrace from the problematic worker.
+Awesome, three solutions to the same problem =F0=9F=98=85
 
-The information how long a worker is in the running state is not available.
-But the CPU-bound worker pools do not have many workers in the running
-state by definition. And only few pools are typically blocked.
+>
+> Lina's approach is arguably a bit more idiomatic in Python in that it
+> is usually encouraged to follow the "Easier to ask for forgiveness
+> than permission" approach.
+>
+> Lina, would you like to submit yours? Or do you prefer a `Link: ` /
+> `Reported-by: ` / `Co-developed-by: ` here?
+>
+>> If `driver_mod` is a module of the crate `driver`, the directory `driver=
+_mod`
+>> may not contain `Makefile`, and `generate_rust_analyzer.py` will fail.
+>
+> By the way, note that in the kernel crate we are avoiding `mod.rs`
+> files, instead using `name.rs` in the parent folder, in other to make
+> it easier to find the files. I will add a note about it in the docs.
 
-It should be acceptable to print backtraces from all workers in
-TASK_RUNNING state in the stalled worker pools. The number of false
-positives should be very low.
+Thanks for pointing that out :)
 
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
- kernel/workqueue.c | 66 ++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
-
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index cce342defc69..db6be8df5ddc 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -49,6 +49,7 @@
- #include <linux/moduleparam.h>
- #include <linux/uaccess.h>
- #include <linux/sched/isolation.h>
-+#include <linux/sched/debug.h>
- #include <linux/nmi.h>
- #include <linux/kvm_para.h>
- 
-@@ -141,6 +142,8 @@ enum {
-  * WR: wq->mutex protected for writes.  RCU protected for reads.
-  *
-  * MD: wq_mayday_lock protected.
-+ *
-+ * WD: Used internally by the watchdog.
-  */
- 
- /* struct worker is defined in workqueue_internal.h */
-@@ -153,6 +156,7 @@ struct worker_pool {
- 	unsigned int		flags;		/* X: flags */
- 
- 	unsigned long		watchdog_ts;	/* L: watchdog timestamp */
-+	bool			cpu_stall;	/* WD: stalled cpu bound pool */
- 
- 	/*
- 	 * The counter is incremented in a process context on the associated CPU
-@@ -5978,6 +5982,57 @@ static struct timer_list wq_watchdog_timer;
- static unsigned long wq_watchdog_touched = INITIAL_JIFFIES;
- static DEFINE_PER_CPU(unsigned long, wq_watchdog_touched_cpu) = INITIAL_JIFFIES;
- 
-+/*
-+ * Show workers that might prevent the processing of pending work items.
-+ * The only candidates are CPU-bound workers in the running state.
-+ * Pending work items should be handled by another idle worker
-+ * in all other situations.
-+ */
-+static void show_cpu_pool_hog(struct worker_pool *pool)
-+{
-+	struct worker *worker;
-+	unsigned long flags;
-+	int bkt;
-+
-+	raw_spin_lock_irqsave(&pool->lock, flags);
-+
-+	hash_for_each(pool->busy_hash, bkt, worker, hentry) {
-+		if (task_is_running(worker->task)) {
-+			/*
-+			 * Defer printing to avoid deadlocks in console
-+			 * drivers that queue work while holding locks
-+			 * also taken in their write paths.
-+			 */
-+			printk_deferred_enter();
-+
-+			pr_info("pool %d:\n", pool->id);
-+			sched_show_task(worker->task);
-+
-+			printk_deferred_exit();
-+		}
-+	}
-+
-+	raw_spin_unlock_irqrestore(&pool->lock, flags);
-+}
-+
-+static void show_cpu_pools_hogs(void)
-+{
-+	struct worker_pool *pool;
-+	int pi;
-+
-+	pr_info("Showing backtraces of running workers in stalled CPU-bound worker pools:\n");
-+
-+	rcu_read_lock();
-+
-+	for_each_pool(pool, pi) {
-+		if (pool->cpu_stall)
-+			show_cpu_pool_hog(pool);
-+
-+	}
-+
-+	rcu_read_unlock();
-+}
-+
- static void wq_watchdog_reset_touched(void)
- {
- 	int cpu;
-@@ -5991,6 +6046,7 @@ static void wq_watchdog_timer_fn(struct timer_list *unused)
- {
- 	unsigned long thresh = READ_ONCE(wq_watchdog_thresh) * HZ;
- 	bool lockup_detected = false;
-+	bool cpu_pool_stall = false;
- 	unsigned long now = jiffies;
- 	struct worker_pool *pool;
- 	int pi;
-@@ -6003,6 +6059,7 @@ static void wq_watchdog_timer_fn(struct timer_list *unused)
- 	for_each_pool(pool, pi) {
- 		unsigned long pool_ts, touched, ts;
- 
-+		pool->cpu_stall = false;
- 		if (list_empty(&pool->worklist))
- 			continue;
- 
-@@ -6027,11 +6084,17 @@ static void wq_watchdog_timer_fn(struct timer_list *unused)
- 		/* did we stall? */
- 		if (time_after(now, ts + thresh)) {
- 			lockup_detected = true;
-+			if (pool->cpu >= 0) {
-+				pool->cpu_stall = true;
-+				cpu_pool_stall = true;
-+			}
- 			pr_emerg("BUG: workqueue lockup - pool");
- 			pr_cont_pool_info(pool);
- 			pr_cont(" stuck for %us!\n",
- 				jiffies_to_msecs(now - pool_ts) / 1000);
- 		}
-+
-+
- 	}
- 
- 	rcu_read_unlock();
-@@ -6039,6 +6102,9 @@ static void wq_watchdog_timer_fn(struct timer_list *unused)
- 	if (lockup_detected)
- 		show_all_workqueues();
- 
-+	if (cpu_pool_stall)
-+		show_cpu_pools_hogs();
-+
- 	wq_watchdog_reset_touched();
- 	mod_timer(&wq_watchdog_timer, jiffies + thresh);
- }
--- 
-2.35.3
-
+BR Andreas
