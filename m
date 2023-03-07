@@ -2,165 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4EC6AE2A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:35:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 594F06AE34E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbjCGOfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:35:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S231216AbjCGOt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:49:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbjCGOfZ (ORCPT
+        with ESMTP id S231204AbjCGOsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:35:25 -0500
-Received: from mx07-001d1705.pphosted.com (mx07-001d1705.pphosted.com [185.132.183.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB453898F2;
-        Tue,  7 Mar 2023 06:31:15 -0800 (PST)
-Received: from pps.filterd (m0209327.ppops.net [127.0.0.1])
-        by mx08-001d1705.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327E3AYg020073;
-        Tue, 7 Mar 2023 14:30:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : mime-version :
- content-type : content-transfer-encoding; s=S1;
- bh=bTe3483GqQPnAPwIQfWduSqYNTJBWzzu5hFHtzqq9Kk=;
- b=Yd1xVpcxsrGQB+86LBTIzz+8tnaoehdmXkdLXFXYdANVWk8N/ghYGcbDHBuXbnLGgrl5
- BpEX6jaFUz78OUVqmO4bfw97mDYzz80lV05vC6JS2oYiQiVlKhFjMXUSTLQ+ixyz48id
- BSZNcOza9mM218xgZyIa+diu505viNgNpPzuhFfFkX8K9c0kKW8Bm/7ObHeq9iT+fsrB
- BApHzPYeYjr7Ax+sdKQGpnRADM+OWvTSm9uCc+B/o9tgJvYjvsmzeSLUySrypggLHkZq
- elj7n6c9wNaf7Qe1+v7z+EMi2YS3hB3y7WfXr8laB+pHHERupwmbF6ImmMf9YWSrnLC0 ZA== 
-Received: from eur02-vi1-obe.outbound.protection.outlook.com (mail-vi1eur02lp2048.outbound.protection.outlook.com [104.47.11.48])
-        by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3p418njn3w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Mar 2023 14:30:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=j2BgE8vYyYzhV7YV9hT3QDqLeEus9KRfTGITnt+VOPZXcQ/CilUG9PSuMZPh4/nG4h0Zx/b/FFTzDYiRYVa4HrAH68ZCx4WqA57+jdi3aJqaWYU4cPioHFEUyRUDBcngzEE/aeLTpihrPPxEJPeJJrR9yg4oeHYYtsVT6sDZcc9IBt7S9/ERVKfzO1QbA07TgIdVMpPnljBx17JMpa6UFYieHimIyn+eSGytf+qKNyfnESQ9lDqf3QoQsoYaVM/kPuylYVoBWUXMeCDhN2v80oYgBRrCNSk3Mv+6JVBt5E1V/fAvMKRyDAQcZq33Lhu/Klnr1PsHximXIo/+1AZBSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bTe3483GqQPnAPwIQfWduSqYNTJBWzzu5hFHtzqq9Kk=;
- b=dwHoCXKqFCd9bxk0tv4xsb3ycshRwfllsK1/g8/LYi7831diW3dRVlL9aqJ11ze0BgBXNMALamDi41YrLFURt3BIyGWjDHdAuyt2jHi6hHRnZTkaOdexqgzNL+dA4sbBQ1efFHIBdwdGJemgy72uZLhcf+IMsJz/p6GUZtqn1vCLsbkvumLJXqABzclqjBU65dc5yHBhpxia509zopaSKqsOx69Xge5iecLaG7yLnWYmpZnswbehe7oAySWH//hcOi4CPzCy82h4OE3gSY1dkzVVaSP7bR4sLrTOpsm19Dqarra2Eu8w7njYZt1egDB8xHm+eZrChSgs9cunBooPXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-Received: from AM9P193MB1332.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:30d::9)
- by PR3P193MB0604.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:34::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 14:30:26 +0000
-Received: from AM9P193MB1332.EURP193.PROD.OUTLOOK.COM
- ([fe80::b1ea:2de8:5297:f6ab]) by AM9P193MB1332.EURP193.PROD.OUTLOOK.COM
- ([fe80::b1ea:2de8:5297:f6ab%4]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 14:30:26 +0000
-Message-ID: <73971153-b46e-0332-aa4a-0dbe0a59fd22@sony.com>
-Date:   Tue, 7 Mar 2023 15:30:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/2] maple_tree: Fix mas_skip_node() end slot detection
-Content-Language: en-US
-To:     Peng Zhang <zhangpeng.00@bytedance.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     Stable@vger.kernel.org, maple-tree@lists.infradead.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230303021540.1056603-1-Liam.Howlett@oracle.com>
- <cec2dec7-818a-b32c-3ad4-8b23fc1351f3@bytedance.com>
-From:   Snild Dolkow <snild@sony.com>
-In-Reply-To: <cec2dec7-818a-b32c-3ad4-8b23fc1351f3@bytedance.com>
-X-ClientProxiedBy: LO4P265CA0258.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:37c::13) To AM9P193MB1332.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:30d::9)
+        Tue, 7 Mar 2023 09:48:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3969721A01
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:38:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678199791;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=yMscSn7/v7gE6eZusBzcl4tSE2iMOh2pPYNqXPmBjFI=;
+        b=OUohGG/J1AReH1N3f63roppCEHTIvJWMC32erNzd6xvJ/34tMeNdMo1wozUgv3cRhRlEZR
+        Yo5Ws6QW0zLD4xrp3xluty7UxMqmZWi0syRUe3r0uJKkAA/zKfgFMNj0cf4fwj5qPb3Nlh
+        gehnaeNN0oniYDkjYPo8bDxdPQ09meU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-8Xan7_2yOZyL38nkQLtwpw-1; Tue, 07 Mar 2023 09:36:28 -0500
+X-MC-Unique: 8Xan7_2yOZyL38nkQLtwpw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A55D185A794;
+        Tue,  7 Mar 2023 14:36:26 +0000 (UTC)
+Received: from vschneid.remote.csb (unknown [10.33.37.13])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3D43B40CF8EE;
+        Tue,  7 Mar 2023 14:36:21 +0000 (UTC)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH v5 0/7] Generic IPI sending tracepoint
+Date:   Tue,  7 Mar 2023 14:35:51 +0000
+Message-Id: <20230307143558.294354-1-vschneid@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9P193MB1332:EE_|PR3P193MB0604:EE_
-X-MS-Office365-Filtering-Correlation-Id: e1c2c58f-9f27-4aea-0e3a-08db1f187e84
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UAL4XKYidVnyJrVRlAO/9PYdWNHaUb5/xa42iiODXgcdKZwXXGdxkUf6imwV7mnP0Ce6nx5+OEsk/sYAsFYxGXlbyWpRb5PpToPFOYTCGSilOO7lwwBNGpNUBoelPAExNVYQK+c0edCOMSSqKOmFWThJXOuRKMlByFUOBXDlIqTB5itDQ0kfXYRm+8R+OrpewGQFZLB5I3z6e9N9PVWpbath3uVio++xSgQOySLbMLxr+atS3b8XI1p/qnGdt3swzVA/3scO7hmrpY0705jMhv3CXmZiuDmXajufgEPBTMMEzT7/izgsSZENBtdE0zfPSw93G32x3kxDIBxc9Up6qIX6AjHC9OT36wlWvo1bKWUb7lMojzjNFOkWIw3oYZZlZ6pF/tViPu9zmmzjRi34Tk9LE0NIYO7XBDlyy+lx9SQr7ehowRGuJ98wmJ9JoKpS2dySw2htKYNNqGjGZ+ePjhwBVe99dvLq7tSPi7U8J0XIoYF7LyVHlETXAKo1s7lSLiZPHx/gbFvXf1Tdut7DAaNzYl3K89cuNLZe2pSyjLvj5XYOP16vowatrz7n0zE/vPrdu7Z9jvM+n+cUVr8bAzcg61p5agO9p/YHVVzRBlfg5Bz10+gKaWlj06Rzp96n7/vZ5wXGBk+DnrLunmFTxCLgr9AswDyVFdcBkH91mK3SdZH9IQq56kIlAJblJjsHQxarAWH9rvR4tdU9KNFWKv57dVIRXZ+z0G3LsCQa6dQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P193MB1332.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(136003)(376002)(346002)(366004)(451199018)(31686004)(316002)(110136005)(36756003)(31696002)(38100700002)(86362001)(186003)(82960400001)(6512007)(6506007)(53546011)(83380400001)(2616005)(8936002)(5660300002)(478600001)(6486002)(4326008)(41300700001)(2906002)(66946007)(66476007)(66556008)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R3FRQ0lLTjdPd0toUHlybHc2YVlXL3pQM01wY2tkMFMwUk1mWVV6V3BST1Ix?=
- =?utf-8?B?d1lqS3pkSWRWalNHTWFPb2xTN05UZTZ0NE1FT09hNUtvb3hNZVcvZzk2ZC9u?=
- =?utf-8?B?QVg0QUhkN0ZBSW5IOXlvL1dnQjkvZldqS1AzanJGT21IM1ArQmJhcUNPbjJ4?=
- =?utf-8?B?YWxtYU5nTzFoSnd6OHNaeERWcWdFVDVzRlB4Qk5jK2VRSS9QTE9yb2F6Rzls?=
- =?utf-8?B?WGlvdEhtWGlrS0l1NEF5eEhLaTJEWVBTSFFrRjFTY3lBNWdpU3VaeFJ2bVB1?=
- =?utf-8?B?ZWxkN1psNTU5U1NxMTZ1WHR0S1R4UVFkUEN4T3BBN2ovdWt2b0FtR1pOZFlB?=
- =?utf-8?B?clM4NCtRb3dzeGg1b3Z1QnU5T2R6WXR2L2VkWVJWVVI5aXAvM3NzOHdjb0tE?=
- =?utf-8?B?N09NeVV1WHpPTFlTZ1VQS0ZBcDEzY3MvYS9Qc3p1MzhUM1J1d0hRVnZPTkdW?=
- =?utf-8?B?QlJVeUxocTlsd3lETnpiOWRwUHlhM1lFQlptM3ZYUXhEZU5tbWN4cU9ud3Nk?=
- =?utf-8?B?Qnc4T1htM2JpczdJd2pneGY2SUxNOTJ3cmhKeVdLUWxQUGJGejh1NjVhbmk0?=
- =?utf-8?B?dldJemJMa1oxNXJEVkhZRW10SlBNdFNYcnkvekJkQWo5dW5UTVY3enEyTk9j?=
- =?utf-8?B?cCt2cU9LaUx1c0hvNXVKR2wrQXRHSHNvRVhTSXUrbTM5YVlKZ3k2anFLbGs0?=
- =?utf-8?B?VXVjRW5YRlNwNEtTNlFnS0Rob3lhQk9MTElnVEk4SWZKanZIaUtqUE9QdkJi?=
- =?utf-8?B?V0ZJREVVbXpmT2NKWksxL1p4dUc3bWxGU2c4NDlKMTNZSXg1aE9WS3BkbGU2?=
- =?utf-8?B?VmZhdFN1OXRDQW5wcFFmYk9WZVk3WGZldGtrTXFCbkpRODJLbWFWcUVNNkdG?=
- =?utf-8?B?K09WTzF2dlFvdXpvTEJORlJsdXFyOElvL0xJKzN2SFo2MzNOOHVmeGxJcUJo?=
- =?utf-8?B?a1VjTTVwUitnQlpNRzlMYytWS3BSL3U0RXpQV0l4c0o5dmpFTkM3QmY0TEhZ?=
- =?utf-8?B?MWZwZ3FFRHN4ZkVVaVNqRXZRZ3RBejFjdGVEaVVLN2I3alhweDlKSFQ0NnBo?=
- =?utf-8?B?Vy9rOVFtT1FDeG5xaW5iZFV1MmMrT0pHV2tJTHhGeU5mMzhVWmtET2xMMitq?=
- =?utf-8?B?cU5mMUxQV3ptR3UrV0lwTVp4dGx0bzBieEM1V2tVeGIyQlNvSVZwUkZvdWQx?=
- =?utf-8?B?U0NmdUV1KzhRaGE5MlF2Y09GN3VKNmdmNUJWbjA2d2o3QjFVUjRrY3BybzRX?=
- =?utf-8?B?cnZZODZoVW5yQ1FGNWNtbGNnYXF3bnhWVURLRDhuT3JTeHBZdkpISkVGUnhv?=
- =?utf-8?B?U3hzSC9yZ05tczg1b1licmJyeGZSd2hpMHVhTnNtb2x5Si9Zcko1TTlwRC9G?=
- =?utf-8?B?L0VjRDVRY0xKRDR6OHhpN3Y4VDA1MS9QYWh3SnNWeER0NWdOYUJicnZVcGNi?=
- =?utf-8?B?WFRpdDZKTXVJZHNXN3ErSDBLcmVJQWEvOW1vd1Nxb0Z2SjNMWFFxSVFpZ05q?=
- =?utf-8?B?bERNUVRmM0REUTZDL1diRlB4NnVqenVGeW5weVVhT3NxQUhObXRQZ2k3bVY5?=
- =?utf-8?B?YmVPVFl0WGZHeG9PVHNSTEl2VHhXbEZzaDlmYkNIdnQ0MndWRHhwRFp2K2VZ?=
- =?utf-8?B?V2hNWkFlaCtIUmdpMS9uZWl4K0x3RWNzYklOVGZxZDRyWjZuM0w1aEFYdWl2?=
- =?utf-8?B?Z0Y4VVNwVVlleW9MZk1PYUltWGlrc1lMTEhaRHZmMnBiTXBXUDJ5ZkZHd3FV?=
- =?utf-8?B?QmRYR1plbFJIZmY2bC8zRURHT0V4TnZoeDFtN0tKNmdnRktZTXVNSEtxUDVo?=
- =?utf-8?B?aXZlV0U3NjduUFE5VERzTUhTVlIrMVZPZitOcmRacDE0NFk1RCsrZERDQ1FN?=
- =?utf-8?B?bkZKbjNUcW83NUNHVHdWVFNvVExUdG5tRDlzZnVtbXRhVm1NdVNsc1Q3c3RJ?=
- =?utf-8?B?NWQ0V2lHT1YxZVUwdlA3b3ZPYUMyaUc2MGwwNnhSY2NGZmJHbEZzUzFoOVBL?=
- =?utf-8?B?S3kyQ0VORnFiMEI2SVFyeEZvYWp5SngyNlFBN2I3L0ZMcjdRMlliRzNFeU95?=
- =?utf-8?B?QzV6M0lOSDZMQVJwakZoaDNxdkI1ZEdQdUxvN1lLVGhtOXowTG1tKzB2RHlo?=
- =?utf-8?B?QzdDL3YzTjNoc3VzaUpLa25tNHVGZDU3VzcxeXFlU0ZRazhJaExRaDVXV0Rt?=
- =?utf-8?Q?5DM4JjzO4bH4l8921fsFI2o=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?aEJQL1ZnOVhyY2tuMGpEaDZkWVlZVGlpZUJ2MlloUXE0cXh1cmU0WUFhYTVv?=
- =?utf-8?B?ME1oUXFkcmpPZFJqc3Y5SjREQ1J2VS8vQkpTWlBQU0N1K25KMkF0aHpWc2U1?=
- =?utf-8?B?TjlUdDhzZ0o4Vy84cUY5ellmRDBqM2IxYmhCNnA2bU5LSE1zWDMzSWpudEVH?=
- =?utf-8?B?Q1BNNU55S0l2bnVmRGVyWWIwQmVBZmVmK2RnU295UUdBTDNlUkc1MlRNeHNw?=
- =?utf-8?B?QWwxZWl6a1hVbFBLRm9xT1gwaFhSbXl5NW10bmRYV2MrWWFaQXZVVmh5RjZP?=
- =?utf-8?B?TENxcHkzdHRWU0FNYlA0SjJzMzhFNlo1T0k4OUFRemRVS0JOUVoybng3STBR?=
- =?utf-8?B?Qi80dmlPRktqeVM1TU1rTlVPUmlCRFlPZ1JvY3JvRGlPamN3YmZDRUhLZGVP?=
- =?utf-8?B?QlN6dlNIMjlKaWo0clp1ZE9DQUQvSzJaVnk0aEwvSFpPUExXNWhwWDBpL1My?=
- =?utf-8?B?R2pFRGNuT0lGWlJmOFE5RzVXNlArSWl3d0lGR3ZwZ3drME9XbVNnQ0M1eEVu?=
- =?utf-8?B?ZWNZeWZEd0R0Y1NMSUkzbGlJWmUzbEt2TXM1UExyeTFUOERWMU84RlR2eW1k?=
- =?utf-8?B?dkJ1YmN2amxyT2dYNU1mSExibkdxbXZhWjM5SVFjdXRieWpnRVhkbFE1U3Ja?=
- =?utf-8?B?WnVaS3FRUUFyQzFRUUhXWmI0cHd6OFhOVFlTN2VLeDFOalBLN0MvV25vcXFK?=
- =?utf-8?B?WFRjdFJwV0lMSS9qbndJWTlFMytybFZmdDhtVkVKZkRXRXhRSDF5a01LWmc1?=
- =?utf-8?B?aTh3ME43ZHVha081Z0NIRDNTc0gzekFJVnZ6aHUyUkdzeUZURmNUMGp2UjNn?=
- =?utf-8?B?Z0NsSU9rN0JReEVsM2EyeUJVakYxbU9QeExFYTFacEEyNDhzWnR4OEQ2TnVC?=
- =?utf-8?B?NjgzeG9CdFdac3A5cGUvVzBJZ3JVNWNqZDlxUzRTaDJpdmhsNnc1SzBLMUJk?=
- =?utf-8?B?NkJQajVHQXV2RVlNOXlPUGxHcURGaGJCZkQrUlRKSjVFd3Y1MVc5UjF4TERj?=
- =?utf-8?B?aW1GcVNhMTZDMkF3a1RtekZyWG84UjhtaHpFY2ZkcmNIN2lGdGZ4S0lBSHpL?=
- =?utf-8?B?N3lCUXBLZWF4WmtBM0dlOThwWjlseVJZd2RjUndmR0prQTc1djJNd2k5eUx1?=
- =?utf-8?B?ZDZhdnY4MFo1ZHRmdExuUFd3SjQ5ZVBTZWNtcTNmaXdFUGl2RUF5OVJpT0Rh?=
- =?utf-8?B?OU90TnUvb1BHbTQzbmdLaVVvL0R4RnJmUVF0cXk3T0Q2R0xvNWhINjNMcWFa?=
- =?utf-8?B?LzVXQk9pY3M4VGlYVmJqZ2owQXVEL3ZkMVhYMHJxbUxhU1VhZlRNK0hZUjlB?=
- =?utf-8?Q?6TCU9hFYhShi8=3D?=
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1c2c58f-9f27-4aea-0e3a-08db1f187e84
-X-MS-Exchange-CrossTenant-AuthSource: AM9P193MB1332.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 14:30:26.6879
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5DXxZP37GjzVOiy3rfXXgBhC7OBUznAuPP/gNQQLn5V9QwzhVpnwPKx4aEaMhrac
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P193MB0604
-X-Proofpoint-ORIG-GUID: iaxNBPVzBTR9FVzDFr3dtH4F0iLiuR-L
-X-Proofpoint-GUID: iaxNBPVzBTR9FVzDFr3dtH4F0iLiuR-L
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Sony-Outbound-GUID: iaxNBPVzBTR9FVzDFr3dtH4F0iLiuR-L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_08,2023-03-07_01,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -168,50 +81,194 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-07 14:05, Peng Zhang wrote:
-> Hi, Liam,
->> -    } while (slot > slot_count);
->> +    } while (mas->offset >= mas_data_end(mas));
->> -    mas->offset = ++slot;
->> +    mt = mte_node_type(mas->node);
->>       pivots = ma_pivots(mas_mn(mas), mt);
->> -    if (slot > 0)
->> -        mas->min = pivots[slot - 1] + 1;
->> -
->> -    if (slot <= slot_count)
->> -        mas->max = pivots[slot];
->> +    mas->min = pivots[mas->offset] + 1;
->> +    mas->offset++;
->> +    if (mas->offset < mt_slots[mt])
->> +        mas->max = pivots[mas->offset];
-> There is a bug here, the assignment of mas->min and mas->max is wrong.
-> The assignment will make them represent the range of a child node, but 
-> it should represent the range of the current node. After mas_ascend() 
-> returns, mas-min and mas->max already represent the range of the current 
-> node, so we should delete these assignments of mas->min and mas->max.
+Background
+==========
 
+Detecting IPI *reception* is relatively easy, e.g. using
+trace_irq_handler_{entry,exit} or even just function-trace
+flush_smp_call_function_queue() for SMP calls.  
 
-Thanks for your suggestion, Peng. Applying it literally by removing only 
-the min/max assignments:
+Figuring out their *origin*, is trickier as there is no generic tracepoint tied
+to e.g. smp_call_function():
 
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 6fc1ad42b409..9b6e581cf83f 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -5118,10 +5118,7 @@ static inline bool mas_skip_node
+o AFAIA x86 has no tracepoint tied to sending IPIs, only receiving them
+  (cf. trace_call_function{_single}_entry()).
+o arm/arm64 do have trace_ipi_raise(), which gives us the target cpus but also a
+  mostly useless string (smp_calls will all be "Function call interrupts").
+o Other architectures don't seem to have any IPI-sending related tracepoint.  
 
-         mt = mte_node_type(mas->node);
-         pivots = ma_pivots(mas_mn(mas), mt);
--       mas->min = pivots[mas->offset] + 1;
-         mas->offset++;
--       if (mas->offset < mt_slots[mt])
--               mas->max = pivots[mas->offset];
+I believe one reason those tracepoints used by arm/arm64 ended up as they were
+is because these archs used to handle IPIs differently from regular interrupts
+(the IRQ driver would directly invoke an IPI-handling routine), which meant they 
+never showed up in trace_irq_handler_{entry, exit}. The trace_ipi_{entry,exit}
+tracepoints gave a way to trace IPI reception but those have become redundant as
+of: 
 
-         return true;
-  }
+      56afcd3dbd19 ("ARM: Allow IPIs to be handled as normal interrupts")
+      d3afc7f12987 ("arm64: Allow IPIs to be handled as normal interrupts")
 
+which gave IPIs a "proper" handler function used through
+generic_handle_domain_irq(), which makes them show up via
+trace_irq_handler_{entry, exit}.
 
-This allowed my test to pass 100/100 runs. Still in qemu with the test 
-as init, so not really stressed in any way except that specific usecase.
+Changing stuff up
+=================
 
-//Snild
+Per the above, it would make sense to reshuffle trace_ipi_raise() and move it
+into generic code. This also came up during Daniel's talk on Osnoise at the CPU
+isolation MC of LPC 2022 [1]. 
+
+Now, to be useful, such a tracepoint needs to export:
+o targeted CPU(s)
+o calling context
+
+The only way to get the calling context with trace_ipi_raise() is to trigger a
+stack dump, e.g. $(trace-cmd -e ipi* -T echo 42).
+
+This is instead introducing a new tracepoint which exports the relevant context
+(callsite, and requested callback for when the callsite isn't helpful), and is
+usable by all architectures as it sits in generic code. 
+
+Another thing worth mentioning is that depending on the callsite, the _RET_IP_
+fed to the tracepoint is not always useful - generic_exec_single() doesn't tell
+you much about the actual callback being sent via IPI, which is why the new
+tracepoint also has a @callback argument.
+
+Patches
+=======
+
+o Patches 1-5 spread out the tracepoint across relevant sites.
+  Patch 5 ends up sprinkling lots of #include <trace/events/ipi.h> which I'm not
+  the biggest fan of, but is the least horrible solution I've been able to come
+  up with so far.
+  
+o Patch 7 is trying to be smart about tracing the callback associated with the
+  IPI.
+
+This results in having IPI trace events for:
+
+o smp_call_function*()
+o smp_send_reschedule()
+o irq_work_queue*()
+o standalone uses of __smp_call_single_queue()
+
+This is incomplete, just looking at arm64 there's more IPI types that aren't
+covered: 
+
+  IPI_CPU_STOP,
+  IPI_CPU_CRASH_STOP,
+  IPI_TIMER,
+  IPI_WAKEUP,
+
+but apart from IPI_TIMER (cf. tick_broadcast()), those IPIs are both unfrequent
+and accompanied with identifiable interference (stopper or cpuhp threads being
+scheduled). I've added a point in my todolist to handle those in a later series
+for the sake of completeness, but IMO this is ready to use.
+
+Results
+=======
+
+Using a recent enough libtraceevent (1.7.0 and above):
+
+  $ trace-cmd record -e 'ipi:*' hackbench
+  $ trace-cmd report
+	 hackbench-159   [002]   136.973122: ipi_send_cpumask:     cpumask=0 callsite=generic_exec_single+0x33 callback=nohz_csd_func+0x0
+	 hackbench-159   [002]   136.977945: ipi_send_cpumask:     cpumask=0 callsite=generic_exec_single+0x33 callback=nohz_csd_func+0x0
+	 hackbench-159   [002]   136.984576: ipi_send_cpumask:     cpumask=3 callsite=check_preempt_curr+0x37 callback=0x0
+	 hackbench-159   [002]   136.985996: ipi_send_cpumask:     cpumask=0 callsite=generic_exec_single+0x33 callback=nohz_csd_func+0x0
+	 [...]
+
+Links
+=====
+
+[1]: https://youtu.be/5gT57y4OzBM?t=14234
+
+Revisions
+=========
+
+v4: https://lore.kernel.org/lkml/20230119143619.2733236-1-vschneid@redhat.com/
+v3: https://lore.kernel.org/lkml/20221202155817.2102944-1-vschneid@redhat.com/
+v2: https://lore.kernel.org/lkml/20221102182949.3119584-1-vschneid@redhat.com/
+v1: https://lore.kernel.org/lkml/20221007154145.1877054-1-vschneid@redhat.com/
+
+v5 -> v4
+++++++++
+
+o Rebased against 6.3-rc1
+
+v3 -> v4
+++++++++
+
+o Rebased against 6.2-rc4
+  Re-ran my coccinelle scripts for the treewide change; only loongarch needed
+  changes
+o Dropped cpumask trace event field patch (now in 6.2-rc1)
+o Applied RB and Ack tags
+  Ingo, I wasn't sure if you meant to Ack the whole series or just the patch you
+  replied to, so since I didn't want to unlawfully forge any tag I only added
+  the one.
+o Did a small pass on comments and changelogs
+
+v2 -> v3
+++++++++
+
+o Dropped the generic export of smp_send_reschedule(), turned it into a macro
+  and a bunch of imports
+o Dropped the send_call_function_single_ipi() macro madness, split it into sched
+  and smp bits using some of Peter's suggestions
+
+v1 -> v2
+++++++++
+
+o Ditched single-CPU tracepoint
+o Changed tracepoint signature to include callback
+o Changed tracepoint callsite field to void *; the parameter is still UL to save
+  up on casts due to using _RET_IP_.
+o Fixed linking failures due to not exporting smp_send_reschedule()
+
+Valentin Schneider (7):
+  trace: Add trace_ipi_send_cpumask()
+  sched, smp: Trace IPIs sent via send_call_function_single_ipi()
+  smp: Trace IPIs sent via arch_send_call_function_ipi_mask()
+  irq_work: Trace self-IPIs sent via arch_irq_work_raise()
+  treewide: Trace IPIs sent via smp_send_reschedule()
+  smp: reword smp call IPI comment
+  sched, smp: Trace smp callback causing an IPI
+
+ arch/alpha/kernel/smp.c                  |  2 +-
+ arch/arc/kernel/smp.c                    |  2 +-
+ arch/arm/kernel/smp.c                    |  5 +-
+ arch/arm/mach-actions/platsmp.c          |  2 +
+ arch/arm64/kernel/smp.c                  |  3 +-
+ arch/csky/kernel/smp.c                   |  2 +-
+ arch/hexagon/kernel/smp.c                |  2 +-
+ arch/ia64/kernel/smp.c                   |  4 +-
+ arch/loongarch/kernel/smp.c              |  4 +-
+ arch/mips/include/asm/smp.h              |  2 +-
+ arch/mips/kernel/rtlx-cmp.c              |  2 +
+ arch/openrisc/kernel/smp.c               |  2 +-
+ arch/parisc/kernel/smp.c                 |  4 +-
+ arch/powerpc/kernel/smp.c                |  6 +-
+ arch/powerpc/kvm/book3s_hv.c             |  3 +
+ arch/powerpc/platforms/powernv/subcore.c |  2 +
+ arch/riscv/kernel/smp.c                  |  4 +-
+ arch/s390/kernel/smp.c                   |  2 +-
+ arch/sh/kernel/smp.c                     |  2 +-
+ arch/sparc/kernel/smp_32.c               |  2 +-
+ arch/sparc/kernel/smp_64.c               |  2 +-
+ arch/x86/include/asm/smp.h               |  2 +-
+ arch/x86/kvm/svm/svm.c                   |  4 ++
+ arch/x86/kvm/x86.c                       |  2 +
+ arch/xtensa/kernel/smp.c                 |  2 +-
+ include/linux/smp.h                      | 11 +++-
+ include/trace/events/ipi.h               | 22 +++++++
+ kernel/irq_work.c                        | 14 ++++-
+ kernel/sched/core.c                      | 19 ++++--
+ kernel/sched/smp.h                       |  2 +-
+ kernel/smp.c                             | 78 +++++++++++++++++++-----
+ virt/kvm/kvm_main.c                      |  2 +
+ 32 files changed, 164 insertions(+), 53 deletions(-)
+
+--
+2.31.1
+
