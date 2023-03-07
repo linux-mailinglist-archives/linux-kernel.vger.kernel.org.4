@@ -2,125 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5976AF7F1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7E9C6AF7FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231521AbjCGVsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58042 "EHLO
+        id S231594AbjCGVtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:49:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjCGVsY (ORCPT
+        with ESMTP id S231597AbjCGVtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:48:24 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A183793E0E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:48:21 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id a9so15610469plh.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 13:48:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1678225701;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sOfYQC5Wms7nFLMbnCTJxEUtyV2SFvfbKCb8Kcs7zcA=;
-        b=D9b9TY1UnnYGSB7zyK3QEHUXYMFmPnmCZ6NUoUZpQPwqUxRpJkwyi9CgxZCm34fGRd
-         gOAEakDjL4IkU+ar3tjfsxBvWovUGxm5Ijr8HhtJG2bioYGxTyOPQMKhdXLvPWH9RCTF
-         bZvqjp4FRiuaBYeaxK0JpS/o2vGhgYDcD9pY6ulyBfusRXNupF+K2AxpeCTR7OsUz+Jb
-         0TzA6sFwIKcElDFmfY1SuhiKk+CZl4hU1uAEVSzXhY8MsApXJa454UMAlox8HY6DwYtm
-         wA66apI6BqwHvXc24WwGgRkAnS7lJDXSGUiLZjrHwDe+K36XHmsO2JzNJNvF2JjRivdK
-         9pAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678225701;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sOfYQC5Wms7nFLMbnCTJxEUtyV2SFvfbKCb8Kcs7zcA=;
-        b=EC8Z7GNNr6t15VJkw32PCRyDI+Tgzeu//ptRiaSZORyLEVVrdM+hXPKx/h2iUZ2Y8d
-         ihcCOylw7OEkD20qAcEVUT2zPB59ByT2LkaB7igpfMIiDI0Gq22ykVV8kLRj8x/pZN+l
-         jPd6gYN52PoCpz9R7tite/EjdlTAQ6/xV2Ek5Xi2fx3FlflE7Yiwgy3StSILLLvnaZTk
-         blW4+GBCzKZ64bopPKXrvFy8SH0zkHd1KX8Z+oED6ngO92KTxtWF/pTqPwmP/xaBVkNQ
-         SCrKDIsN5YDVV3jMOTy01BUOtsIDMODYQrvQxJFuLeAIQpg1EDERS7EbVmBIFCPnd7HL
-         GbNQ==
-X-Gm-Message-State: AO0yUKXDjHxTTdqsnqk3zTjVQzCA8J8kWpsMe8XrTx7OGzjV00ewdiHN
-        zLUdoONkt7FSjmRCtK8iNm3JjA==
-X-Google-Smtp-Source: AK7set+GSVUL8t2kstOPArFwcKWIRajlkBT610ShNArrVGOJGOk5DsdDySSxduqsq1T9rnAQXWYMtw==
-X-Received: by 2002:a17:90b:4f84:b0:233:ca48:540b with SMTP id qe4-20020a17090b4f8400b00233ca48540bmr16902419pjb.3.1678225700429;
-        Tue, 07 Mar 2023 13:48:20 -0800 (PST)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id z6-20020a17090abd8600b00233b18e6fb3sm7731237pjr.1.2023.03.07.13.48.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 13:48:20 -0800 (PST)
-Date:   Tue, 07 Mar 2023 13:48:20 -0800 (PST)
-X-Google-Original-Date: Tue, 07 Mar 2023 13:47:30 PST (-0800)
-Subject:     Re: [PATCH v2 3/4] riscv: dts: starfive: Add crypto and DMA node for VisionFive 2
-In-Reply-To: <20230130154242.112613-4-jiajie.ho@starfivetech.com>
-CC:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        kernel@esmil.dk, Conor Dooley <conor.dooley@microchip.com>,
-        linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     jiajie.ho@starfivetech.com
-Message-ID: <mhng-c02e5405-6c88-4709-b4b0-80baae83584a@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 7 Mar 2023 16:49:06 -0500
+Received: from amity.mint.lgbt (vmi888983.contaboserver.net [149.102.157.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5150A99273
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:49:00 -0800 (PST)
+Received: from amity.mint.lgbt (mx.mint.lgbt [127.0.0.1])
+        by amity.mint.lgbt (Postfix) with ESMTP id 4PWTbt57zjz1S5Jx
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 16:48:57 -0500 (EST)
+Authentication-Results: amity.mint.lgbt (amavisd-new);
+        dkim=pass (2048-bit key) reason="pass (just generated, assumed good)"
+        header.d=mint.lgbt
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mint.lgbt; h=
+        content-transfer-encoding:content-type:in-reply-to:from
+        :references:to:content-language:subject:user-agent:mime-version
+        :date:message-id; s=dkim; t=1678225735; x=1679089736; bh=LBDNRan
+        2Cd8nNBtnj8IHxtHFO6mc9pcFTMtM8qGwz6s=; b=X2z9Dsayhu4KWlNcB7whmXg
+        zKTUxyqY5o8Wv3jPrV1MVZPidmzBNHjcw6ieAS+0Jp+mFTMSXmQru2rnjvPal3F/
+        zQ/l0txh/kZBvWXTlED2861cz5kQj62mGQdXSH6hEKIfg98h1tHdX9X6KUQ+oSgR
+        Ksf1eG1t2y9rQ6fa0Q+XXLs8I//ScK/VBoT1qceeBg7U19KegpGz8qUH3bHOj+fx
+        /ytN7tiukSQ2mSKfASvDSbRQeBW5gV7zgboi8+JfqZBj+c4CRmc/3EuQOT2uyydy
+        gSjv+Sk7V3CHEscktNAtyBUk/8WNx0YWMXQfodu1B7+6Vcw//pIuvS8UwumnhEQ=
+        =
+X-Virus-Scanned: amavisd-new at amity.mint.lgbt
+Received: from amity.mint.lgbt ([127.0.0.1])
+        by amity.mint.lgbt (amity.mint.lgbt [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id WnoXMmLpM4pm for <linux-kernel@vger.kernel.org>;
+        Tue,  7 Mar 2023 16:48:55 -0500 (EST)
+Received: from [192.168.1.90] (unknown [186.105.8.42])
+        by amity.mint.lgbt (Postfix) with ESMTPSA id 4PWTbS4Kjkz1S4yx;
+        Tue,  7 Mar 2023 16:48:35 -0500 (EST)
+Message-ID: <18156dee-4fd2-80e5-b04d-c96c267fb615@mint.lgbt>
+Date:   Tue, 7 Mar 2023 18:48:30 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v7 1/6] dt-bindings: ufs: qcom: Add SM6125 compatible
+ string
+Content-Language: en-US, es-CL
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, alim.akhtar@samsung.com, avri.altman@wdc.com,
+        bvanassche@acm.org, keescook@chromium.org, tony.luck@intel.com,
+        gpiccoli@igalia.com
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-hardening@vger.kernel.org,
+        phone-devel@vger.kernel.org, martin.botka@somainline.org,
+        marijn.suijten@somainline.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230306165246.14782-1-they@mint.lgbt>
+ <20230306165246.14782-2-they@mint.lgbt>
+ <4670ddae-6b01-1e5c-b0ed-1f2f498a4f66@mint.lgbt>
+ <dfd1d81e-76a0-f8eb-e529-9f8ea1e927b6@linaro.org>
+From:   Lux Aliaga <they@mint.lgbt>
+In-Reply-To: <dfd1d81e-76a0-f8eb-e529-9f8ea1e927b6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 30 Jan 2023 07:42:41 PST (-0800), jiajie.ho@starfivetech.com wrote:
-> Add StarFive cryptographic module and dedicated DMA controller node to
-> VisionFive 2 SoCs.
->
-> Co-developed-by: Huan Feng <huan.feng@starfivetech.com>
-> Signed-off-by: Huan Feng <huan.feng@starfivetech.com>
-> Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
-> ---
->  arch/riscv/boot/dts/starfive/jh7110.dtsi | 27 ++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index 4ac159d79d66..bb134a8a89c9 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -455,5 +455,32 @@ uart5: serial@12020000 {
->  			reg-shift = <2>;
->  			status = "disabled";
->  		};
-> +
-> +		sdma: dma@16008000 {
-> +			compatible = "arm,pl080", "arm,primecell";
-> +			arm,primecell-periphid = <0x00041080>;
-> +			reg = <0x0 0x16008000 0x0 0x4000>;
-> +			interrupts = <29>;
-> +			clocks = <&stgcrg JH7110_STGCLK_SEC_HCLK>,
-> +				 <&stgcrg JH7110_STGCLK_SEC_MISCAHB>;
-> +			clock-names = "hclk", "apb_pclk";
-> +			resets = <&stgcrg JH7110_STGRST_SEC_TOP_HRESETN>;
-> +			lli-bus-interface-ahb1;
-> +			mem-bus-interface-ahb1;
-> +			memcpy-burst-size = <256>;
-> +			memcpy-bus-width = <32>;
-> +			#dma-cells = <2>;
-> +		};
-> +
-> +		crypto: crypto@16000000 {
-> +			compatible = "starfive,jh7110-crypto";
-> +			reg = <0x0 0x16000000 0x0 0x4000>;
-> +			clocks = <&stgcrg JH7110_STGCLK_SEC_HCLK>,
-> +				 <&stgcrg JH7110_STGCLK_SEC_MISCAHB>;
-> +			clock-names = "hclk", "ahb";
-> +			resets = <&stgcrg JH7110_STGRST_SEC_TOP_HRESETN>;
-> +			dmas = <&sdma 1 2>, <&sdma 0 2>;
-> +			dma-names = "tx", "rx";
-> +		};
->  	};
->  };
+On 3/6/2023 14:09, Konrad Dybcio wrote:
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>
+> On 6.03.2023 18:01, Lux Aliaga wrote:
+>> On 06/03/2023 13:52, Lux Aliaga wrote:
+>>> Document the compatible for UFS found on the SM6125.
+>>>
+>>> Signed-off-by: Lux Aliaga <they@mint.lgbt>
+>>> Reviewed-by: Martin Botka <martin.botka@somainline.org>
+>>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>  =C2=A0 Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 2 ++
+>>>  =C2=A0 1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Do=
+cumentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>> index b517d76215e3..42422f3471b3 100644
+>>> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+>>> @@ -29,6 +29,7 @@ properties:
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
+ qcom,sc8280xp-ufshc
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
+ qcom,sdm845-ufshc
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
+ qcom,sm6115-ufshc
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - qcom,sm6125=
+-ufshc
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
+ qcom,sm6350-ufshc
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
+ qcom,sm8150-ufshc
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -=
+ qcom,sm8250-ufshc
+>>> @@ -185,6 +186,7 @@ allOf:
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 c=
+ontains:
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 enum:
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 - qcom,sm6115-ufshc
+>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 - qcom,sm6125-ufshc
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 then:
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 properties:
+>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks:
+>> I have to apologize. I worked on a changelog for this patchset but I s=
+kipped the subject header, therefore it didn't send, and as I realized th=
+is I interrupted the process, leaving the patchset incomplete. I'll retry=
+ sending it, this time correctly.
+> Happens, next time resend it with a RESEND prefix, e.g. [RESEND PATCH 1=
+/2]
+>
+> Konrad
+
+Thank you! Will take this into consideration for the future. I received=20
+this email after I resent the patchset, so that's why I didn't add the=20
+prefix.
+
+--=20
+Lux Aliaga
+https://nixgoat.me/
+
