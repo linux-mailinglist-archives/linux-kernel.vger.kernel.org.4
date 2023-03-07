@@ -2,89 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA50C6ADEF1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE4956ADEF4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCGMlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S229843AbjCGMl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:41:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCGMlR (ORCPT
+        with ESMTP id S229657AbjCGMlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:41:17 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9B777C97
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:41:15 -0800 (PST)
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4490A3F22C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:41:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678192874;
-        bh=5dcTMuGM5x4jDH9Im/Ajb398saoasYhP635I/igmqgk=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=v2cqN46i9petUMuigMupNOqBkrHmWpHYjx2G/VUo+hTUjY1MaXsuExKaahSKcwXAb
-         orL08nSz9TQRX9ZHwp/kbx4F3dgx1ugY+UZTyFK2CdZ/j1g6ed4yurMpAmJ/86zrWw
-         4ZP/JwzM2ZTa9JZZeJkglR4IrskpU8+Im03uutuHn7iyif9WtX99NdEtdxZLbUxOSD
-         uCXrkxG8zXIY5rnOJ80vry2dTmPpsxmg3S27BK4HE2lp5XHiG106m+9wKn+tDhwCmf
-         Q0SZXv1if8PQOmfVsil6sOphyhJXYOwTxL0H0Yez7jla62VXbAUfUtOB8SfbxnWvEV
-         1Svf6SzWe3KtA==
-Received: by mail-qk1-f198.google.com with SMTP id 8-20020a370508000000b00724fd33cb3eso7284541qkf.14
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:41:14 -0800 (PST)
+        Tue, 7 Mar 2023 07:41:19 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C187B980
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:41:17 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id h11so11971792wrm.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:41:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678192875;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=GzFpHewBbWomyUEZaNFYjKbbfeAnvvHjKQLmFN5JziA=;
+        b=pWFdX7+c5EOEOwB2Sus+3hAhRmLvU+gopv2ej+x3B89Rr5abFSju2fpdvdfF1olE/H
+         saEbdPxxjh2MN8qTSMqGIQ31qe2pns/O+l1w+0R2vaEOFikuZu95X8hjc2p6RIQNmPfG
+         tR+y4rmArhNxEqCQ8G5HUXCmTNEcQlnENDIIMLB6Y7CRiH6yJKhZzdikTaQCE1ubEV06
+         q0TI2zzSwCuxHHPo83aNIXT4snctKLaPQMZqKMbrTnDLfAFWpJ3AIyuKymmZ72gac8Jx
+         KBlN8mj6SKdWGCXaDLTfU1iu+5ZGamjKWPXHUpQel60qCT+DHcGb59QfRr+Lrr2ONE5p
+         tPXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678192873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5dcTMuGM5x4jDH9Im/Ajb398saoasYhP635I/igmqgk=;
-        b=D9uRIZqWTAUb4nhOuq/J+xkzWV+k6ebCOe+BxgizWuzm8RBYSZoBfsJPwP6rMXxfla
-         O9Izk32B6HgXxCmXsinzYb8UDR2hjA9tedSDad18F+H+ekx3ZErxzXquG6Oz7bTYNXG+
-         /QNK/WjMT7hY/WwkPG6Ab3HB8h90nj/oq3akQabzZZe3wee+avu+fKaT9aV+XTyYJ3Ov
-         uIcIRocxmd6aUoA9N/khzub+aFBTOf3tJRvU/U8tGQH1/clJW25pd0m11Y20qY/YaHhu
-         OJ7z9IjefRwzYeKGkqX4KAvoMO2zJslB+J0p5tzguTb3m++dx/InkZubdE6OaeOSR/su
-         5Eog==
-X-Gm-Message-State: AO0yUKXubO0t6kvfnfBBiI+PZ/pymL1B9bVG/3/b+NKk5TvdVo+u0iUy
-        DDHKaOT65E3pxkFlPi9a6M0PhFe/136EbTdh9zjqCOK/ix6XviM/iQveTnFt56w2TfdC6U7rtW+
-        7hpPwdO7O5alENXoNxSEQanAhVsKduSZuFjGFQfYskBK9EzhoQ5Z80vgzCw==
-X-Received: by 2002:aed:27db:0:b0:3bf:da0f:ed90 with SMTP id m27-20020aed27db000000b003bfda0fed90mr3748941qtg.3.1678192873204;
-        Tue, 07 Mar 2023 04:41:13 -0800 (PST)
-X-Google-Smtp-Source: AK7set8chedSpyZZZaRafGT1LOeApVeMpQZ0D8sGlhCw7bUyERGfB8dVAwY0F0nD/btENIxFCgHxqoI2YFpwPG379FA=
-X-Received: by 2002:aed:27db:0:b0:3bf:da0f:ed90 with SMTP id
- m27-20020aed27db000000b003bfda0fed90mr3748935qtg.3.1678192872885; Tue, 07 Mar
- 2023 04:41:12 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678192875;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GzFpHewBbWomyUEZaNFYjKbbfeAnvvHjKQLmFN5JziA=;
+        b=vuEvBUp06+XwW3cP+bVKyI3j6PZEFGfKEnNzGGaGNLyZw+WiuIfYSAlF1UGXIwlHLT
+         XVNWxTF6hKGzoWKusVkjSuQH0JyGdQAp0uA0cHrJ1WrClzvxjT7x0AD4fUmUEgXrUGW/
+         2fqe/gevmqRQcQA2GWnOzbXTzLj/giMcvXlAFqb0Px/iRb1+UAF9B5/M8zXCNeEYmQ0s
+         hb7ilYUy+5osD0J79tbj58Ew7HU/30e4BJm9pWuY0XR599N+1E9XPKJSGFZalYmnv/+6
+         mb2YAwiHiMLJhvMfQBJYqytsJRPfMRHWw35V6e/BxX5kN7O/UKxnfW8GiehZgOQJtomj
+         YAcg==
+X-Gm-Message-State: AO0yUKWK8p07CirtzdPeCPqijn2YCdl2ZnVkBEZNsVkMEJddwIwxeLg9
+        vq1CIwU6vzfdhJcvEtEI47SKBQ==
+X-Google-Smtp-Source: AK7set+yUbubaUWq+tSIIrRxwkXYsBygdFKRFVCS2GRN5jvwg7NHL688RW9y5lE7d9soVel3pj1V/g==
+X-Received: by 2002:a05:6000:149:b0:2cb:3deb:c014 with SMTP id r9-20020a056000014900b002cb3debc014mr8783527wrx.28.1678192875604;
+        Tue, 07 Mar 2023 04:41:15 -0800 (PST)
+Received: from [127.0.1.1] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id w9-20020a05600018c900b002c5a1bd5280sm12434670wrq.95.2023.03.07.04.41.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 04:41:15 -0800 (PST)
+Subject: [PATCH v4 0/2] Add MediaTek MT8365 I2C support
 MIME-Version: 1.0
-References: <20230303085928.4535-1-samin.guo@starfivetech.com>
- <20230303085928.4535-12-samin.guo@starfivetech.com> <CAJM55Z_8m42vfoPDicTP18S6Z1ZXYbFeS1edTjzYVB3Kq2xFeQ@mail.gmail.com>
- <8bd8654e-4bba-c718-4b17-5291e70f05fe@starfivetech.com>
-In-Reply-To: <8bd8654e-4bba-c718-4b17-5291e70f05fe@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Tue, 7 Mar 2023 13:40:56 +0100
-Message-ID: <CAJM55Z8-65ENJHfSUOTd+FSNx2b-mYF1L64CKT+Gez2jK3Qr2Q@mail.gmail.com>
-Subject: Re: [PATCH v5 11/12] riscv: dts: starfive: visionfive-2-v1.2a: Add
- gmac+phy's delay configuration
-To:     Guo Samin <samin.guo@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIAOIwB2QC/4XNQQqDMBAF0KuUrJuSjDGxXfUepYskjjWgRhIVRLx7hy5Lqavhf/hvNpYxBczsdt
+ pYwiXkEAcK6nxivrXDC3moKTMQAFIC8H6qCl3yAJ7neRxjmnjjhapqC1qiZTR0NiN3yQ6+pekwdx2V
+ bchTTOvn0SLpPP6ai+SCK4vO+FJ5bdzd2bULLuHFx549SVzgWAFSUHlCpEJTyR9KcawUpNj66pwURt em+VL2fX8DtbpxSEgBAAA=
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+Date:   Tue, 07 Mar 2023 13:41:06 +0100
+Message-Id: <20221122-mt8365-i2c-support-v4-0-885ad3301d5a@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2255; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=ngJR3lDpq2gN4aGwVDBwin795hLgOGEZuPdchMq4YZ0=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkBzDqxV1g5ocgwAedExTzYHgfPI4QlFkE4r5Faz6e
+ TS5VfdCJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZAcw6gAKCRArRkmdfjHURZBXD/
+ 9ph7eGz7u8HMJ+qKPI1mu8b6Hg4hhgoUdPrn5VchtVJAOJxKJi9L5ODgDmvPMYuP8pzEUB4E+qAz7O
+ vxZQK+YoM0vYdQNWwFlZP4LPzRuG0dXvvB5s3J4xSicSMiPHylBAFb0GnDq3/bu1vWcBRWj+MExsRT
+ GKMIkVhAHM8AcWGtBy82Fh02qWXGx5IVr56fVDc5/ZszzwpJHVJstuE9hii1vGmPxkIeIpn4wyNoy5
+ r0wG7zEioS+r9BbIIJQmED/ixkbzyIR0a3p245nYHxtAmxn6ojVp7WJI4oCIm3w7+o1jSuXSBPXgs/
+ WjceUhk8vyNMpTu/6I4NMppqDfIhJvzlh6fH+kAt5nlbUv4ftt/fC+qRmuAKII1Fij8a4EvoWaQaxK
+ QU7CAwYlIF8fVXoX6lTFcYJRDEi85hoQjpZiRWAM6xiN4H77EyXygAEHckMqv/DBOCWqr3vKE4IKeJ
+ VhUwXoJJ0GGxlbmL54ef1W2EwlHM07S6/wlbfv0WwM1Y3Wy2m75aGRGRcFWTHxkrnIrWaL0oGGGlbe
+ PS6SoYax/vjtX9yqV5U8x28J/5ZHqeAca9gBdQOoZFFLX+ZazmQnDR+i1Jsr4jh+hzAOQ5GWDa/r4h
+ os3c4rQ0WIT3iZltM/6KsmQuaFliKt6+ADoICS5wBN5iSPkULW3KUSD85OKA==
+X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
+ fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,99 +97,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Mar 2023 at 02:43, Guo Samin <samin.guo@starfivetech.com> wrote:
-> =E5=9C=A8 2023/3/6 21:00:19, Emil Renner Berthing =E5=86=99=E9=81=93:
-> > On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wro=
-te:
-> >> v1.2A gmac0 uses motorcomm YT8531(rgmii-id) PHY, and needs delay
-> >> configurations.
-> >>
-> >> v1.2A gmac1 uses motorcomm YT8512(rmii) PHY, and needs to
-> >> switch rx and rx to external clock sources.
-> >>
-> >> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-> >> ---
-> >>  .../starfive/jh7110-starfive-visionfive-2-v1.2a.dts | 13 ++++++++++++=
-+
-> >>  1 file changed, 13 insertions(+)
-> >>
-> >> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2=
--v1.2a.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2=
-a.dts
-> >> index 4af3300f3cf3..205a13d8c8b1 100644
-> >> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.=
-dts
-> >> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.=
-dts
-> >> @@ -11,3 +11,16 @@
-> >>         model =3D "StarFive VisionFive 2 v1.2A";
-> >>         compatible =3D "starfive,visionfive-2-v1.2a", "starfive,jh7110=
-";
-> >>  };
-> >> +
-> >> +&gmac1 {
-> >> +       phy-mode =3D "rmii";
-> >> +       assigned-clocks =3D <&syscrg JH7110_SYSCLK_GMAC1_TX>,
-> >> +                         <&syscrg JH7110_SYSCLK_GMAC1_RX>;
-> >> +       assigned-clock-parents =3D <&syscrg JH7110_SYSCLK_GMAC1_RMII_R=
-TX>,
-> >> +                                <&syscrg JH7110_SYSCLK_GMAC1_RMII_RTX=
->;
-> >> +};
-> >> +
-> >> +&phy0 {
-> >> +       rx-internal-delay-ps =3D <1900>;
-> >> +       tx-internal-delay-ps =3D <1350>;
-> >> +};
-> >
-> > Here you're not specifying the internal delays for phy1 which means it
-> > defaults to 1950ps for both rx and tx. Is that right or did you mean
-> > to set them to 0 like the v1.3b phy1?
->
-> Hi, emil, usually, only 1000M (rgmii) needs to configure the delay, and 1=
-00M(rmii) does not.
+Hi,
+This patch series adds I2C support for MT8365-EVK board.
+The I2C-0 is enabled, it can be used through the board pin header,
+as described directly on the PCB.
 
-Ah, I see.
+This series depends to another one which add support for
+MT8365 SoC and EVK board. Link [1]
 
-> > Also your u-boot seems to set what the linux phy driver calls
-> > motorcomm,keep-pll-enabled and motorcomm,auto-sleep-disabled for all
-> > the phys. Did you leave those out on purpose?
->
-> Hi, Emil, We did configure motorcomm,auto-sleep-disabled for yt8512 in ub=
-oot,
-> but Yutai upstream's Linux driver only yt8521/yt8531 supports this proper=
-ty.
+One patch has been cherry-picked from [2], so I've addressed the comment
+and kept the trailer.
 
-I'm confused. Is Yutai also Frank Sae? Because he is the one who added
-support for the yt8531 upstream.
+Regards,
+Alex
 
-> Yt8512 is a Generic PHY driver and does not support the configuration of
-> motorcomm,auto-sleep-disabled and motorcomm,keep-pll-enabled.
+[1]: https://lore.kernel.org/linux-mediatek/20230101220149.3035048-1-bero@baylibre.com/
+[2]: https://lore.kernel.org/all/20220531135026.238475-2-fparent@baylibre.com/
 
-Right phy1 of the 1.2a might use a different phy, but I'm also talking
-about phy0 and the v1.3b which does use the yt8531 right?
+To: Qii Wang <qii.wang@mediatek.com>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: linux-i2c@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mediatek@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Fabien Parent <fparent@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+---
+Changes in v4:
+- Fix some properties order.
+- Remove the useless properties.
+- Link to v3: https://lore.kernel.org/r/20221122-mt8365-i2c-support-v3-0-ad9bb1076d7f@baylibre.com
 
-> And without configuring these two attributes, vf2-1.2a gmac1 also works n=
-ormally.
+Changes in v3:
+- Rebased to v6.3-rc1.
+- Move i2c3 node to be consistent with the SoC address order.
+- Link to v2: https://lore.kernel.org/r/20221122-mt8365-i2c-support-v2-0-e4c7c514e781@baylibre.com
 
-Yes, but what I'm worried about is that it only works because u-boot
-initialises the PHYs and ethernet may stop working if you're using a
-different bootloader or Linux gains support for resetting the PHYs
-before use.
+Changes in v2:
+- Drop the patch which do useless change in i2c-mt65xx.c driver.
+- Change 2 lines compatible/reg in oneline.
+- Link to v1: https://lore.kernel.org/r/20221122-mt8365-i2c-support-v1-0-4aeb7c54c67b@baylibre.com
 
->
-> Best regards,
-> Samin
-> >
-> >> --
-> >> 2.17.1
-> >>
-> >>
-> >> _______________________________________________
-> >> linux-riscv mailing list
-> >> linux-riscv@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
->
-> --
-> Best regards,
-> Samin
+---
+Alexandre Mergnat (2):
+      arm64: dts: mediatek: add i2c support for mt8365 SoC
+      arm64: dts: mediatek: enable i2c0 for mt8365-evk board
+
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 17 ++++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi    | 48 +++++++++++++++++++++++++++++
+ 2 files changed, 65 insertions(+)
+---
+base-commit: 5c6b974d24c21a6aa5d8b524067d7d9bc7fcc4f2
+change-id: 20221122-mt8365-i2c-support-fc048da261ea
+
+Best regards,
+-- 
+Alexandre Mergnat <amergnat@baylibre.com>
