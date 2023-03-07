@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6347C6AD5E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 04:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65216AD5E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 04:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjCGDwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 22:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
+        id S229919AbjCGD4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 22:56:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCGDwf (ORCPT
+        with ESMTP id S229627AbjCGD4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 22:52:35 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE544580D5;
-        Mon,  6 Mar 2023 19:52:32 -0800 (PST)
-Received: from kwepemm600006.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PW1fH1BR2zSkM2;
-        Tue,  7 Mar 2023 11:49:27 +0800 (CST)
+        Mon, 6 Mar 2023 22:56:50 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B0C56519;
+        Mon,  6 Mar 2023 19:56:49 -0800 (PST)
+Received: from kwepemm600006.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PW1lW46QcznWfG;
+        Tue,  7 Mar 2023 11:53:59 +0800 (CST)
 Received: from [10.174.177.30] (10.174.177.30) by
  kwepemm600006.china.huawei.com (7.193.23.105) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 7 Mar 2023 11:51:00 +0800
-Message-ID: <0ec73a83-4965-6f82-1775-1320b525a90f@huawei.com>
-Date:   Tue, 7 Mar 2023 11:50:59 +0800
+ 15.1.2507.21; Tue, 7 Mar 2023 11:56:14 +0800
+Message-ID: <bebc6247-84bf-a4c1-13ec-742aa24f12b4@huawei.com>
+Date:   Tue, 7 Mar 2023 11:56:13 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
@@ -38,7 +38,7 @@ Subject: [PATCH v2] perf top: Fix rare segfault in thread__comm_len()
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.174.177.30]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
  kwepemm600006.china.huawei.com (7.193.23.105)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -48,11 +48,6 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
-
-From f5bf6bd64f1888bbd529fe3e06063f31f2336abc Mon Sep 17 00:00:00 2001
-From: Wenyu Liu <liuwenyu7@huawei.com>
-Date: Thu, 2 Mar 2023 19:16:37 +0800
-Subject: [PATCH] perf top: Fix rare segfault in thread__comm_len()
 
 In thread__comm_len(),strlen() is called outside of the
 thread->comm_lock critical section,which may cause a UAF
