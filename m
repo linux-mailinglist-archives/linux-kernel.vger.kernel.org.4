@@ -2,689 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985FB6AD48E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 03:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C81716AD494
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 03:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjCGCTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 21:19:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47504 "EHLO
+        id S229936AbjCGCVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 21:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjCGCTX (ORCPT
+        with ESMTP id S229983AbjCGCV2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 21:19:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736C369CEA;
-        Mon,  6 Mar 2023 18:19:12 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E08EB611C6;
-        Tue,  7 Mar 2023 02:19:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AD6C433EF;
-        Tue,  7 Mar 2023 02:19:06 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Xuerui Wang <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Ming Wang <wangming01@loongson.cn>
-Subject: [PATCH] tools/perf: Add basic support for LoongArch
-Date:   Tue,  7 Mar 2023 10:18:57 +0800
-Message-Id: <20230307021857.1217951-1-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.39.1
+        Mon, 6 Mar 2023 21:21:28 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2050.outbound.protection.outlook.com [40.107.243.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5FC5708D;
+        Mon,  6 Mar 2023 18:21:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n02kpGzub7fqEEOMyJrrfVjSyzdevkxKR7BhZ66u4JlUj32bKFf9qRRzzKCqxzRZdMl5MjvRATMLUuGfdjx+QsL92dX47CdCxwjlefbavbNDDmJcHs0NCw9RMRoVMgy44/ABvBdy07pX01LlSePl3Mco4yrpW4W+Fzd2x01vr5tuXY1D4vkgrCOHLSAIDRTKDeLQGfkJYr7q3Z16KO9BWVrT2fUd50UxbAcTRtu1Q1T6ayY4+CHPdl1JM+UHJ/mypigFnNy9Hr8C7Lmq00xVpGh+n9r4tw/M3JN6BUG2rbN31/Pvqdu4Mo+kiSsf0vPfHDk/X0KMZZ6SguA4QXYuog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fRcZi4cBpf/AFptEPb7+DhSC6alrPtucbVXwXz5i/LI=;
+ b=TkN1nD4FPwRK8yqHPpPDetTEDL+n/Jk1cjtier5lmqmI/dALLd9a6t53ZWB8os3CIbUx+4lQQImU3fcPjvTzqGLMQXtXJ638BUKdHGUXk4V4SxW7+tgt7Wz0JbNrBAI88XbB+mL5pth/kIsrjTz9DZ861dEzb7EnLOkAxRa6foACuqOD7cfTjf9248hEAKRAP1wFWuJeW6AkBnOSF1lZM+YH24wZWfZMoaKhhK41xElgfMpLR5IvdzX6GDeeb+igOaSLxNTkkY25I12Z/ikUeqV149Uc1WVmfm2aD1BgIkZ0PqlvAd4wVVmUbTNFbyoMUHE8HVzGLn+Z5uNo6EyYRA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fRcZi4cBpf/AFptEPb7+DhSC6alrPtucbVXwXz5i/LI=;
+ b=C/SOsZNrjIzfqJ9CE57rHjHmeBxg0qpNKtCBzLE8WtjutZ//6wZt+SSIDzijXufSdLRbcxyzxg0b9SkLUWpjBQMSs6VS0XW3fQp62cYhc2dS+BVn3sSTT4xMVe2+mHvuXUWseo+Xmufzb8vOdx6rtxWUFKB86biykWRNLiQbY4o=
+Received: from DM6PR08CA0042.namprd08.prod.outlook.com (2603:10b6:5:1e0::16)
+ by SJ1PR12MB6314.namprd12.prod.outlook.com (2603:10b6:a03:457::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
+ 2023 02:21:14 +0000
+Received: from DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1e0:cafe::66) by DM6PR08CA0042.outlook.office365.com
+ (2603:10b6:5:1e0::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28 via Frontend
+ Transport; Tue, 7 Mar 2023 02:21:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT103.mail.protection.outlook.com (10.13.172.75) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 02:21:13 +0000
+Received: from platform-dev1.pensando.io (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 6 Mar 2023 20:20:36 -0600
+From:   Brad Larson <blarson@amd.com>
+To:     <fancer.lancer@gmail.com>
+CC:     <adrian.hunter@intel.com>, <alcooperx@gmail.com>,
+        <andy.shevchenko@gmail.com>, <arnd@arndb.de>, <blarson@amd.com>,
+        <brendan.higgins@linux.dev>, <briannorris@chromium.org>,
+        <brijeshkumar.singh@amd.com>, <broonie@kernel.org>,
+        <catalin.marinas@arm.com>, <davidgow@google.com>,
+        <devicetree@vger.kernel.org>, <gerg@linux-m68k.org>,
+        <gsomlo@gmail.com>, <krzk@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee.jones@linaro.org>,
+        <lee@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <p.yadav@ti.com>,
+        <p.zabel@pengutronix.de>, <piotrs@cadence.com>,
+        <rdunlap@infradead.org>, <robh+dt@kernel.org>,
+        <samuel@sholland.org>, <skhan@linuxfoundation.org>,
+        <suravee.suthikulpanit@amd.com>, <thomas.lendacky@amd.com>,
+        <tonyhuang.sunplus@gmail.com>, <ulf.hansson@linaro.org>,
+        <vaishnav.a@ti.com>, <will@kernel.org>,
+        <yamada.masahiro@socionext.com>
+Subject: Re: [PATCH v10 10/15] spi: dw: Add support for AMD Pensando Elba SoC
+Date:   Mon, 6 Mar 2023 18:20:02 -0800
+Message-ID: <20230307022002.28874-1-blarson@amd.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230306160017.ptd3ogundxvus5zm@mobilestation>
+References: <20230306160017.ptd3ogundxvus5zm@mobilestation>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT103:EE_|SJ1PR12MB6314:EE_
+X-MS-Office365-Filtering-Correlation-Id: ec77ae33-c016-44f3-24c4-08db1eb29fce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vQfKP3DPHarDMTqOYgB4AOPc0OzRTuisxk+RT9zUPShSI+B7Mamd7Sq9YatNu8LO4JQK9XTNfRDXEUKGmHo/sHC9WrPY2+Duu7c2YJQEkffifGy/bNoncOGuglAGtfQESZyTqxWtZD7yAVFg348tvh3xQeE4zfMUmSyCY82WKu6wrN6bFR3LYvD9m/2r7DlS566k14NOwvFYtXp/QDwUT6ZJBrrQshI0uwZyFFSDyGwfoJtuLOuSPzDqTLQ/rFLTQCr0VJRuaofkg0J/3lSJnaIS3FYjKLepZURuzDQmYjECdP/ZJsQVgI3q2/QewfKE0sLvOf8BPVnwwnnhEPCG9FYNiKOi9bza0nl/QS0yhYsnD9cnh45cwa1+1Y7aGargD26LHLduQj9KS/QELTTD9iCMvPyHMIOhIQ6fQ9WWLLdPy6EA9FTpBcZfitKJT41lijTXVs02u+bG9ook3KceL+8FX5cJpZSVgtj7FnC1KnIdPEoBXtrhGfwtsNdSUxF7buqVkmXPA3D1aFdnBI4le766qrx72A59PwBuWkU60fXxlwyOw1N9Vac8hdtC6AqCkksrmUV1WjHUgyL7Qs7wIMX0TicaqDNQHv5l5W+o/DQNkTFieUBcxObAPpUL4h8WuIcmJDDl0IKeyNXGED5XqBiboJMFFYMdptZf1We1AadpOiRB4u5DH6HQbS1UDLgDBm+TiAnkGI0Ulmhnz3PaqdNqoMOHmA4+OsNZezUk81s=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199018)(40470700004)(46966006)(36840700001)(81166007)(82740400003)(36860700001)(356005)(36756003)(4326008)(1076003)(7406005)(2906002)(5660300002)(70586007)(6916009)(41300700001)(70206006)(7416002)(8676002)(8936002)(40480700001)(6666004)(82310400005)(47076005)(336012)(186003)(2616005)(26005)(53546011)(16526019)(83380400001)(40460700003)(426003)(54906003)(316002)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 02:21:13.6218
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ec77ae33-c016-44f3-24c4-08db1eb29fce
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6314
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic support for LoongArch, which is very similar to the MIPS
-version.
+On Mon, Mar 06, 2023 at 16:00, Serge Semin wrote:
+> On Sun, Mar 05, 2023 at 08:07:34PM -0800, Brad Larson wrote:
+>> The AMD Pensando Elba SoC includes a DW apb_ssi v4 controller
+>> with device specific chip-select control.  The Elba SoC
+>> provides four chip-selects where the native DW IP supports
+>> two chip-selects.  The Elba DW_SPI instance has two native
+>> CS signals that are always overridden.
+>> 
+>> Signed-off-by: Brad Larson <blarson@amd.com>
+>> ---
+>> 
+>> v10 changes:
+>> - Delete struct dw_spi_elba, use regmap directly in priv
+>> 
+>> v9 changes:
+>> - Add use of macros GENMASK() and BIT()
+>> - Change ELBA_SPICS_SHIFT() to ELBA_SPICS_OFFSET()
+>> 
+>> ---
+>>  drivers/spi/spi-dw-mmio.c | 65 +++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 65 insertions(+)
+>> 
+>> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+>> index 26c40ea6dd12..2076cb83a11b 100644
+>> --- a/drivers/spi/spi-dw-mmio.c
+>> +++ b/drivers/spi/spi-dw-mmio.c
+>> @@ -53,6 +53,20 @@ struct dw_spi_mscc {
+>>  	void __iomem        *spi_mst; /* Not sparx5 */
+>>  };
+>>  
+>> +/*
+>> + * Elba SoC does not use ssi, pin override is used for cs 0,1 and
+>> + * gpios for cs 2,3 as defined in the device tree.
+>> + *
+>> + * cs:  |       1               0
+>> + * bit: |---3-------2-------1-------0
+>> + *      |  cs1   cs1_ovr   cs0   cs0_ovr
+>> + */
+>> +#define ELBA_SPICS_REG			0x2468
+>> +#define ELBA_SPICS_OFFSET(cs)		((cs) << 1)
+>> +#define ELBA_SPICS_MASK(cs)		(GENMASK(1, 0) << ELBA_SPICS_OFFSET(cs))
+>> +#define ELBA_SPICS_SET(cs, val)		\
+>> +		((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
+>> +
+>>  /*
+>>   * The Designware SPI controller (referred to as master in the documentation)
+>>   * automatically deasserts chip select when the tx fifo is empty. The chip
+>> @@ -237,6 +251,56 @@ static int dw_spi_canaan_k210_init(struct platform_device *pdev,
+>>  	return 0;
+>>  }
+>>  
+>> +static void dw_spi_elba_override_cs(struct regmap *syscon, int cs, int enable)
+>> +{
+>> +	regmap_update_bits(syscon, ELBA_SPICS_REG, ELBA_SPICS_MASK(cs),
+>> +			   ELBA_SPICS_SET(cs, enable));
+>> +}
+>> +
+>> +static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
+>> +{
+>> +	struct dw_spi *dws = spi_master_get_devdata(spi->master);
+>> +	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
+>> +	struct regmap *syscon = dwsmmio->priv;
+>> +	u8 cs;
+>> +
+>> +	cs = spi->chip_select;
+>> +	if (cs < 2)
+>> +		dw_spi_elba_override_cs(syscon, spi->chip_select, enable);
+>> +
+>> +	/*
+>> +	 * The DW SPI controller needs a native CS bit selected to start
+>> +	 * the serial engine.
+>> +	 */
+>> +	spi->chip_select = 0;
+>> +	dw_spi_set_cs(spi, enable);
+>> +	spi->chip_select = cs;
+>> +}
+>> +
+>> +static int dw_spi_elba_init(struct platform_device *pdev,
+>> +			    struct dw_spi_mmio *dwsmmio)
+>> +{
+>> +	const char *syscon_name = "amd,pensando-elba-syscon";
+>
+>> +	struct device_node *np = pdev->dev.of_node;
+>
+> Drop this since it's used only once below. 
+>
 
-Signed-off-by: Ming Wang <wangming01@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- .../loongarch/include/uapi/asm/perf_regs.h    | 40 +++++++++
- .../arch/loongarch/include/uapi/asm/unistd.h  |  9 ++
- tools/perf/Makefile.config                    |  7 ++
- tools/perf/arch/loongarch/Build               |  1 +
- tools/perf/arch/loongarch/Makefile            | 27 ++++++
- .../arch/loongarch/annotate/instructions.c    | 45 ++++++++++
- .../loongarch/entry/syscalls/mksyscalltbl     | 61 +++++++++++++
- .../arch/loongarch/include/dwarf-regs-table.h | 16 ++++
- tools/perf/arch/loongarch/include/perf_regs.h | 88 +++++++++++++++++++
- tools/perf/arch/loongarch/util/Build          |  4 +
- tools/perf/arch/loongarch/util/dwarf-regs.c   | 25 ++++++
- tools/perf/arch/loongarch/util/perf_regs.c    |  6 ++
- .../arch/loongarch/util/unwind-libunwind.c    | 82 +++++++++++++++++
- tools/perf/util/annotate.c                    |  8 ++
- tools/perf/util/dwarf-regs.c                  |  7 ++
- tools/perf/util/env.c                         |  2 +
- tools/perf/util/genelf.h                      |  3 +
- tools/perf/util/syscalltbl.c                  |  4 +
- 18 files changed, 435 insertions(+)
- create mode 100644 tools/arch/loongarch/include/uapi/asm/perf_regs.h
- create mode 100644 tools/arch/loongarch/include/uapi/asm/unistd.h
- create mode 100644 tools/perf/arch/loongarch/Build
- create mode 100644 tools/perf/arch/loongarch/Makefile
- create mode 100644 tools/perf/arch/loongarch/annotate/instructions.c
- create mode 100755 tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
- create mode 100644 tools/perf/arch/loongarch/include/dwarf-regs-table.h
- create mode 100644 tools/perf/arch/loongarch/include/perf_regs.h
- create mode 100644 tools/perf/arch/loongarch/util/Build
- create mode 100644 tools/perf/arch/loongarch/util/dwarf-regs.c
- create mode 100644 tools/perf/arch/loongarch/util/perf_regs.c
- create mode 100644 tools/perf/arch/loongarch/util/unwind-libunwind.c
+Removed
 
-diff --git a/tools/arch/loongarch/include/uapi/asm/perf_regs.h b/tools/arch/loongarch/include/uapi/asm/perf_regs.h
-new file mode 100644
-index 000000000000..9943d418e01d
---- /dev/null
-+++ b/tools/arch/loongarch/include/uapi/asm/perf_regs.h
-@@ -0,0 +1,40 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _ASM_LOONGARCH_PERF_REGS_H
-+#define _ASM_LOONGARCH_PERF_REGS_H
-+
-+enum perf_event_loongarch_regs {
-+	PERF_REG_LOONGARCH_PC,
-+	PERF_REG_LOONGARCH_R1,
-+	PERF_REG_LOONGARCH_R2,
-+	PERF_REG_LOONGARCH_R3,
-+	PERF_REG_LOONGARCH_R4,
-+	PERF_REG_LOONGARCH_R5,
-+	PERF_REG_LOONGARCH_R6,
-+	PERF_REG_LOONGARCH_R7,
-+	PERF_REG_LOONGARCH_R8,
-+	PERF_REG_LOONGARCH_R9,
-+	PERF_REG_LOONGARCH_R10,
-+	PERF_REG_LOONGARCH_R11,
-+	PERF_REG_LOONGARCH_R12,
-+	PERF_REG_LOONGARCH_R13,
-+	PERF_REG_LOONGARCH_R14,
-+	PERF_REG_LOONGARCH_R15,
-+	PERF_REG_LOONGARCH_R16,
-+	PERF_REG_LOONGARCH_R17,
-+	PERF_REG_LOONGARCH_R18,
-+	PERF_REG_LOONGARCH_R19,
-+	PERF_REG_LOONGARCH_R20,
-+	PERF_REG_LOONGARCH_R21,
-+	PERF_REG_LOONGARCH_R22,
-+	PERF_REG_LOONGARCH_R23,
-+	PERF_REG_LOONGARCH_R24,
-+	PERF_REG_LOONGARCH_R25,
-+	PERF_REG_LOONGARCH_R26,
-+	PERF_REG_LOONGARCH_R27,
-+	PERF_REG_LOONGARCH_R28,
-+	PERF_REG_LOONGARCH_R29,
-+	PERF_REG_LOONGARCH_R30,
-+	PERF_REG_LOONGARCH_R31,
-+	PERF_REG_LOONGARCH_MAX = PERF_REG_LOONGARCH_R31 + 1,
-+};
-+#endif /* _ASM_LOONGARCH_PERF_REGS_H */
-diff --git a/tools/arch/loongarch/include/uapi/asm/unistd.h b/tools/arch/loongarch/include/uapi/asm/unistd.h
-new file mode 100644
-index 000000000000..0c743344e92d
---- /dev/null
-+++ b/tools/arch/loongarch/include/uapi/asm/unistd.h
-@@ -0,0 +1,9 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#define __ARCH_WANT_SYS_CLONE
-+#define __ARCH_WANT_SYS_CLONE3
-+
-+#include <asm-generic/unistd.h>
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 3519a0139026..89230ae68721 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -80,6 +80,13 @@ ifeq ($(SRCARCH),arm64)
-   LIBUNWIND_LIBS = -lunwind -lunwind-aarch64
- endif
- 
-+ifeq ($(SRCARCH),loongarch)
-+  NO_PERF_REGS := 0
-+  CFLAGS += -I$(OUTPUT)arch/loongarch/include/generated
-+  CFLAGS += -I$(OUTPUT)../arch/loongarch/include/uapi
-+  LIBUNWIND_LIBS = -lunwind -lunwind-loongarch
-+endif
-+
- ifeq ($(SRCARCH),riscv)
-   NO_PERF_REGS := 0
- endif
-diff --git a/tools/perf/arch/loongarch/Build b/tools/perf/arch/loongarch/Build
-new file mode 100644
-index 000000000000..e4e5f33c84d8
---- /dev/null
-+++ b/tools/perf/arch/loongarch/Build
-@@ -0,0 +1 @@
-+perf-y += util/
-diff --git a/tools/perf/arch/loongarch/Makefile b/tools/perf/arch/loongarch/Makefile
-new file mode 100644
-index 000000000000..1229157b09e1
---- /dev/null
-+++ b/tools/perf/arch/loongarch/Makefile
-@@ -0,0 +1,27 @@
-+# SPDX-License-Identifier: GPL-2.0
-+ifndef NO_DWARF
-+PERF_HAVE_DWARF_REGS := 1
-+endif
-+PERF_HAVE_JITDUMP := 1
-+
-+#
-+# Syscall table generation for perf
-+#
-+
-+out    := $(OUTPUT)arch/loongarch/include/generated/asm
-+header := $(out)/syscalls_64.c
-+incpath := $(srctree)/tools
-+sysdef := $(srctree)/tools/arch/loongarch/include/uapi/asm/unistd.h
-+sysprf := $(srctree)/tools/perf/arch/loongarch/entry/syscalls/
-+systbl := $(sysprf)/mksyscalltbl
-+
-+# Create output directory if not already present
-+_dummy := $(shell [ -d '$(out)' ] || mkdir -p '$(out)')
-+
-+$(header): $(sysdef) $(systbl)
-+	$(Q)$(SHELL) '$(systbl)' '$(CC)' '$(HOSTCC)' $(incpath) $(sysdef) > $@
-+
-+clean::
-+	$(call QUIET_CLEAN, loongarch) $(RM) $(header)
-+
-+archheaders: $(header)
-diff --git a/tools/perf/arch/loongarch/annotate/instructions.c b/tools/perf/arch/loongarch/annotate/instructions.c
-new file mode 100644
-index 000000000000..ab21bf122135
---- /dev/null
-+++ b/tools/perf/arch/loongarch/annotate/instructions.c
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Perf annotate functions.
-+ *
-+ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+ */
-+
-+static
-+struct ins_ops *loongarch__associate_ins_ops(struct arch *arch, const char *name)
-+{
-+	struct ins_ops *ops = NULL;
-+
-+	if (!strncmp(name, "beqz", 4) ||
-+	    !strncmp(name, "bnez", 4) ||
-+	    !strncmp(name, "beq", 3) ||
-+	    !strncmp(name, "bne", 3) ||
-+	    !strncmp(name, "blt", 3) ||
-+	    !strncmp(name, "bge", 3) ||
-+	    !strncmp(name, "bltu", 4) ||
-+	    !strncmp(name, "bgeu", 4) ||
-+	    !strncmp(name, "bl", 2))
-+		ops = &call_ops;
-+	else if (!strncmp(name, "jirl", 4))
-+		ops = &ret_ops;
-+	else if (name[0] == 'b')
-+		ops = &jump_ops;
-+	else
-+		return NULL;
-+
-+	arch__associate_ins_ops(arch, name, ops);
-+
-+	return ops;
-+}
-+
-+static
-+int loongarch__annotate_init(struct arch *arch, char *cpuid __maybe_unused)
-+{
-+	if (!arch->initialized) {
-+		arch->associate_instruction_ops = loongarch__associate_ins_ops;
-+		arch->initialized = true;
-+		arch->objdump.comment_char = '#';
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl b/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
-new file mode 100755
-index 000000000000..c52156f7204d
---- /dev/null
-+++ b/tools/perf/arch/loongarch/entry/syscalls/mksyscalltbl
-@@ -0,0 +1,61 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Generate system call table for perf. Derived from
-+# powerpc script.
-+#
-+# Author(s):  Ming Wang <wangming01@loongson.cn>
-+# Author(s):  Huacai Chen <chenhuacai@loongson.cn>
-+# Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+
-+gcc=$1
-+hostcc=$2
-+incpath=$3
-+input=$4
-+
-+if ! test -r $input; then
-+	echo "Could not read input file" >&2
-+	exit 1
-+fi
-+
-+create_table_from_c()
-+{
-+	local sc nr last_sc
-+
-+	create_table_exe=`mktemp ${TMPDIR:-/tmp}/create-table-XXXXXX`
-+
-+	{
-+
-+	cat <<-_EoHEADER
-+		#include <stdio.h>
-+		#include "$input"
-+		int main(int argc, char *argv[])
-+		{
-+	_EoHEADER
-+
-+	while read sc nr; do
-+		printf "%s\n" "	printf(\"\\t[%d] = \\\"$sc\\\",\\n\", $nr);"
-+		last_sc=$nr
-+	done
-+
-+	printf "%s\n" "	printf(\"#define SYSCALLTBL_LOONGARCH_MAX_ID %d\\n\", $last_sc);"
-+	printf "}\n"
-+
-+	} | $hostcc -I $incpath/include/uapi -o $create_table_exe -x c -
-+
-+	$create_table_exe
-+
-+	rm -f $create_table_exe
-+}
-+
-+create_table()
-+{
-+	echo "static const char *syscalltbl_loongarch[] = {"
-+	create_table_from_c
-+	echo "};"
-+}
-+
-+$gcc -E -dM -x c  -I $incpath/include/uapi $input	       \
-+	|sed -ne 's/^#define __NR_//p' \
-+	|sort -t' ' -k2 -n \
-+	|create_table
-diff --git a/tools/perf/arch/loongarch/include/dwarf-regs-table.h b/tools/perf/arch/loongarch/include/dwarf-regs-table.h
-new file mode 100644
-index 000000000000..4b2291034668
---- /dev/null
-+++ b/tools/perf/arch/loongarch/include/dwarf-regs-table.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * dwarf-regs-table.h : Mapping of DWARF debug register numbers into
-+ * register names.
-+ *
-+ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+ */
-+
-+#ifdef DEFINE_DWARF_REGSTR_TABLE
-+static const char * const loongarch_regstr_tbl[] = {
-+	"$0", "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9",
-+	"$10", "$11", "$12", "$13", "$14", "$15", "$16", "$17", "$18", "$19",
-+	"$20", "$21", "$22", "$23", "$24", "$25", "$26", "$27", "$28", "%29",
-+	"$30", "$31",
-+};
-+#endif
-diff --git a/tools/perf/arch/loongarch/include/perf_regs.h b/tools/perf/arch/loongarch/include/perf_regs.h
-new file mode 100644
-index 000000000000..82d531dcd90f
---- /dev/null
-+++ b/tools/perf/arch/loongarch/include/perf_regs.h
-@@ -0,0 +1,88 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef ARCH_PERF_REGS_H
-+#define ARCH_PERF_REGS_H
-+
-+#include <stdlib.h>
-+#include <linux/types.h>
-+#include <asm/perf_regs.h>
-+
-+#define PERF_REGS_MAX PERF_REG_LOONGARCH_MAX
-+#define PERF_REG_IP PERF_REG_LOONGARCH_PC
-+#define PERF_REG_SP PERF_REG_LOONGARCH_R3
-+
-+#define PERF_REGS_MASK ((1ULL << PERF_REG_LOONGARCH_MAX) - 1)
-+
-+static inline const char *__perf_reg_name(int id)
-+{
-+	switch (id) {
-+	case PERF_REG_LOONGARCH_PC:
-+		return "PC";
-+	case PERF_REG_LOONGARCH_R1:
-+		return "$1";
-+	case PERF_REG_LOONGARCH_R2:
-+		return "$2";
-+	case PERF_REG_LOONGARCH_R3:
-+		return "$3";
-+	case PERF_REG_LOONGARCH_R4:
-+		return "$4";
-+	case PERF_REG_LOONGARCH_R5:
-+		return "$5";
-+	case PERF_REG_LOONGARCH_R6:
-+		return "$6";
-+	case PERF_REG_LOONGARCH_R7:
-+		return "$7";
-+	case PERF_REG_LOONGARCH_R8:
-+		return "$8";
-+	case PERF_REG_LOONGARCH_R9:
-+		return "$9";
-+	case PERF_REG_LOONGARCH_R10:
-+		return "$10";
-+	case PERF_REG_LOONGARCH_R11:
-+		return "$11";
-+	case PERF_REG_LOONGARCH_R12:
-+		return "$12";
-+	case PERF_REG_LOONGARCH_R13:
-+		return "$13";
-+	case PERF_REG_LOONGARCH_R14:
-+		return "$14";
-+	case PERF_REG_LOONGARCH_R15:
-+		return "$15";
-+	case PERF_REG_LOONGARCH_R16:
-+		return "$16";
-+	case PERF_REG_LOONGARCH_R17:
-+		return "$17";
-+	case PERF_REG_LOONGARCH_R18:
-+		return "$18";
-+	case PERF_REG_LOONGARCH_R19:
-+		return "$19";
-+	case PERF_REG_LOONGARCH_R20:
-+		return "$20";
-+	case PERF_REG_LOONGARCH_R21:
-+		return "$21";
-+	case PERF_REG_LOONGARCH_R22:
-+		return "$22";
-+	case PERF_REG_LOONGARCH_R23:
-+		return "$23";
-+	case PERF_REG_LOONGARCH_R24:
-+		return "$24";
-+	case PERF_REG_LOONGARCH_R25:
-+		return "$25";
-+	case PERF_REG_LOONGARCH_R26:
-+		return "$26";
-+	case PERF_REG_LOONGARCH_R27:
-+		return "$27";
-+	case PERF_REG_LOONGARCH_R28:
-+		return "$28";
-+	case PERF_REG_LOONGARCH_R29:
-+		return "$29";
-+	case PERF_REG_LOONGARCH_R30:
-+		return "$30";
-+	case PERF_REG_LOONGARCH_R31:
-+		return "$31";
-+	default:
-+		break;
-+	}
-+	return NULL;
-+}
-+
-+#endif /* ARCH_PERF_REGS_H */
-diff --git a/tools/perf/arch/loongarch/util/Build b/tools/perf/arch/loongarch/util/Build
-new file mode 100644
-index 000000000000..fab48acf21c5
---- /dev/null
-+++ b/tools/perf/arch/loongarch/util/Build
-@@ -0,0 +1,4 @@
-+perf-y += perf_regs.o
-+
-+perf-$(CONFIG_DWARF)     += dwarf-regs.o
-+perf-$(CONFIG_LOCAL_LIBUNWIND) += unwind-libunwind.o
-diff --git a/tools/perf/arch/loongarch/util/dwarf-regs.c b/tools/perf/arch/loongarch/util/dwarf-regs.c
-new file mode 100644
-index 000000000000..7db14897a384
---- /dev/null
-+++ b/tools/perf/arch/loongarch/util/dwarf-regs.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * dwarf-regs.c : Mapping of DWARF debug register numbers into register names.
-+ *
-+ * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-+ *
-+ * Derived from MIPS:
-+ * Copyright (C) 2013 Cavium, Inc.
-+ */
-+
-+#include <stdio.h>
-+#include <dwarf-regs.h>
-+
-+static const char *loongarch_gpr_names[32] = {
-+	"$0", "$1", "$2", "$3", "$4", "$5", "$6", "$7", "$8", "$9",
-+	"$10", "$11", "$12", "$13", "$14", "$15", "$16", "$17", "$18", "$19",
-+	"$20", "$21", "$22", "$23", "$24", "$25", "$26", "$27", "$28", "$29",
-+	"$30", "$31"
-+};
-+
-+const char *get_arch_regstr(unsigned int n)
-+{
-+	n %= 32;
-+	return loongarch_gpr_names[n];
-+}
-diff --git a/tools/perf/arch/loongarch/util/perf_regs.c b/tools/perf/arch/loongarch/util/perf_regs.c
-new file mode 100644
-index 000000000000..2833e101a7c6
---- /dev/null
-+++ b/tools/perf/arch/loongarch/util/perf_regs.c
-@@ -0,0 +1,6 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "../../../util/perf_regs.h"
-+
-+const struct sample_reg sample_reg_masks[] = {
-+	SMPL_REG_END
-+};
-diff --git a/tools/perf/arch/loongarch/util/unwind-libunwind.c b/tools/perf/arch/loongarch/util/unwind-libunwind.c
-new file mode 100644
-index 000000000000..f693167b86ef
---- /dev/null
-+++ b/tools/perf/arch/loongarch/util/unwind-libunwind.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <libunwind.h>
-+#include "perf_regs.h"
-+#include "../../util/unwind.h"
-+#include "util/debug.h"
-+
-+int libunwind__arch_reg_id(int regnum)
-+{
-+	switch (regnum) {
-+	case UNW_LOONGARCH64_R1:
-+		return PERF_REG_LOONGARCH_R1;
-+	case UNW_LOONGARCH64_R2:
-+		return PERF_REG_LOONGARCH_R2;
-+	case UNW_LOONGARCH64_R3:
-+		return PERF_REG_LOONGARCH_R3;
-+	case UNW_LOONGARCH64_R4:
-+		return PERF_REG_LOONGARCH_R4;
-+	case UNW_LOONGARCH64_R5:
-+		return PERF_REG_LOONGARCH_R5;
-+	case UNW_LOONGARCH64_R6:
-+		return PERF_REG_LOONGARCH_R6;
-+	case UNW_LOONGARCH64_R7:
-+		return PERF_REG_LOONGARCH_R7;
-+	case UNW_LOONGARCH64_R8:
-+		return PERF_REG_LOONGARCH_R8;
-+	case UNW_LOONGARCH64_R9:
-+		return PERF_REG_LOONGARCH_R9;
-+	case UNW_LOONGARCH64_R10:
-+		return PERF_REG_LOONGARCH_R10;
-+	case UNW_LOONGARCH64_R11:
-+		return PERF_REG_LOONGARCH_R11;
-+	case UNW_LOONGARCH64_R12:
-+		return PERF_REG_LOONGARCH_R12;
-+	case UNW_LOONGARCH64_R13:
-+		return PERF_REG_LOONGARCH_R13;
-+	case UNW_LOONGARCH64_R14:
-+		return PERF_REG_LOONGARCH_R14;
-+	case UNW_LOONGARCH64_R15:
-+		return PERF_REG_LOONGARCH_R15;
-+	case UNW_LOONGARCH64_R16:
-+		return PERF_REG_LOONGARCH_R16;
-+	case UNW_LOONGARCH64_R17:
-+		return PERF_REG_LOONGARCH_R17;
-+	case UNW_LOONGARCH64_R18:
-+		return PERF_REG_LOONGARCH_R18;
-+	case UNW_LOONGARCH64_R19:
-+		return PERF_REG_LOONGARCH_R19;
-+	case UNW_LOONGARCH64_R20:
-+		return PERF_REG_LOONGARCH_R20;
-+	case UNW_LOONGARCH64_R21:
-+		return PERF_REG_LOONGARCH_R21;
-+	case UNW_LOONGARCH64_R22:
-+		return PERF_REG_LOONGARCH_R22;
-+	case UNW_LOONGARCH64_R23:
-+		return PERF_REG_LOONGARCH_R23;
-+	case UNW_LOONGARCH64_R24:
-+		return PERF_REG_LOONGARCH_R24;
-+	case UNW_LOONGARCH64_R25:
-+		return PERF_REG_LOONGARCH_R25;
-+	case UNW_LOONGARCH64_R26:
-+		return PERF_REG_LOONGARCH_R26;
-+	case UNW_LOONGARCH64_R27:
-+		return PERF_REG_LOONGARCH_R27;
-+	case UNW_LOONGARCH64_R28:
-+		return PERF_REG_LOONGARCH_R28;
-+	case UNW_LOONGARCH64_R29:
-+		return PERF_REG_LOONGARCH_R29;
-+	case UNW_LOONGARCH64_R30:
-+		return PERF_REG_LOONGARCH_R30;
-+	case UNW_LOONGARCH64_R31:
-+		return PERF_REG_LOONGARCH_R31;
-+	case UNW_LOONGARCH64_PC:
-+		return PERF_REG_LOONGARCH_PC;
-+	default:
-+		pr_err("unwind: invalid reg id %d\n", regnum);
-+		return -EINVAL;
-+	}
-+
-+	return -EINVAL;
-+}
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index db475e44f42f..0cc7710f32da 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -149,6 +149,7 @@ static int arch__associate_ins_ops(struct arch* arch, const char *name, struct i
- #include "arch/arm/annotate/instructions.c"
- #include "arch/arm64/annotate/instructions.c"
- #include "arch/csky/annotate/instructions.c"
-+#include "arch/loongarch/annotate/instructions.c"
- #include "arch/mips/annotate/instructions.c"
- #include "arch/x86/annotate/instructions.c"
- #include "arch/powerpc/annotate/instructions.c"
-@@ -211,6 +212,13 @@ static struct arch architectures[] = {
- 			.comment_char = '#',
- 		},
- 	},
-+	{
-+		.name = "loongarch",
-+		.init = loongarch__annotate_init,
-+		.objdump = {
-+			.comment_char = '#',
-+		},
-+	},
- };
- 
- static void ins__delete(struct ins_operands *ops)
-diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
-index 3fa4486742cd..69cfaa5953bf 100644
---- a/tools/perf/util/dwarf-regs.c
-+++ b/tools/perf/util/dwarf-regs.c
-@@ -14,6 +14,10 @@
- #define EM_AARCH64	183  /* ARM 64 bit */
- #endif
- 
-+#ifndef EM_LOONGARCH
-+#define EM_LOONGARCH	258 /* LoongArch */
-+#endif
-+
- /* Define const char * {arch}_register_tbl[] */
- #define DEFINE_DWARF_REGSTR_TABLE
- #include "../arch/x86/include/dwarf-regs-table.h"
-@@ -25,6 +29,7 @@
- #include "../arch/sparc/include/dwarf-regs-table.h"
- #include "../arch/xtensa/include/dwarf-regs-table.h"
- #include "../arch/mips/include/dwarf-regs-table.h"
-+#include "../arch/loongarch/include/dwarf-regs-table.h"
- 
- #define __get_dwarf_regstr(tbl, n) (((n) < ARRAY_SIZE(tbl)) ? (tbl)[(n)] : NULL)
- 
-@@ -56,6 +61,8 @@ const char *get_dwarf_regstr(unsigned int n, unsigned int machine)
- 		return __get_dwarf_regstr(xtensa_regstr_tbl, n);
- 	case EM_MIPS:
- 		return __get_dwarf_regstr(mips_regstr_tbl, n);
-+	case EM_LOONGARCH:
-+		return __get_dwarf_regstr(loongarch_regstr_tbl, n);
- 	default:
- 		pr_err("ELF MACHINE %x is not supported.\n", machine);
- 	}
-diff --git a/tools/perf/util/env.c b/tools/perf/util/env.c
-index 5b8cf6a421a4..0d5d40cb997b 100644
---- a/tools/perf/util/env.c
-+++ b/tools/perf/util/env.c
-@@ -435,6 +435,8 @@ static const char *normalize_arch(char *arch)
- 		return "mips";
- 	if (!strncmp(arch, "sh", 2) && isdigit(arch[2]))
- 		return "sh";
-+	if (!strncmp(arch, "loongarch", 9))
-+		return "loongarch";
- 
- 	return arch;
- }
-diff --git a/tools/perf/util/genelf.h b/tools/perf/util/genelf.h
-index 6af062d1c452..5f18d20ea903 100644
---- a/tools/perf/util/genelf.h
-+++ b/tools/perf/util/genelf.h
-@@ -43,6 +43,9 @@ int jit_add_debug_info(Elf *e, uint64_t code_addr, void *debug, int nr_debug_ent
- #elif defined(__riscv) && __riscv_xlen == 64
- #define GEN_ELF_ARCH	EM_RISCV
- #define GEN_ELF_CLASS	ELFCLASS64
-+#elif defined(__loongarch__)
-+#define GEN_ELF_ARCH	EM_LOONGARCH
-+#define GEN_ELF_CLASS	ELFCLASS64
- #else
- #error "unsupported architecture"
- #endif
-diff --git a/tools/perf/util/syscalltbl.c b/tools/perf/util/syscalltbl.c
-index a2e906858891..313eccef6cb4 100644
---- a/tools/perf/util/syscalltbl.c
-+++ b/tools/perf/util/syscalltbl.c
-@@ -38,6 +38,10 @@ static const char **syscalltbl_native = syscalltbl_arm64;
- #include <asm/syscalls_n64.c>
- const int syscalltbl_native_max_id = SYSCALLTBL_MIPS_N64_MAX_ID;
- static const char **syscalltbl_native = syscalltbl_mips_n64;
-+#elif defined(__loongarch__)
-+#include <asm/syscalls.c>
-+const int syscalltbl_native_max_id = SYSCALLTBL_LOONGARCH_MAX_ID;
-+static const char **syscalltbl_native = syscalltbl_loongarch;
- #endif
- 
- struct syscall {
--- 
-2.39.1
+>> +	struct device_node *node;                                         
 
+Renamed *node to *np
+
+>> +	struct regmap *syscon;                                            
+>> +                                                                       
+>> -	node = of_parse_phandle(np, syscon_name, 0);                      
+>
+>	node = of_parse_phandle(dev_of_node(pdev->dev), syscon_name, 0);
+>
+> +	if (!node)
+>
+>> +		return dev_err_probe(&pdev->dev, -ENODEV, "failed to find %s\n",
+>> +				     syscon_name);
+>
+> Hm, using dev_err_probe() with known error value seems overkill.
+
+Changed to: return -ENODEV
+
+>> +
+>
+>> +	syscon = syscon_node_to_regmap(node);
+>> +	if (IS_ERR(syscon))
+>> +		return dev_err_probe(&pdev->dev, PTR_ERR(syscon),
+>> +				     "syscon regmap lookup failed\n");
+>
+> of_node_put() is missing in the error and success paths.
+
+Result of the above changes are:
+
++       const char *syscon_name = "amd,pensando-elba-syscon";
++       struct device_node *np;
++       struct regmap *syscon;
++
++       np = of_parse_phandle(pdev->dev.of_node, syscon_name, 0);
++       if (!np)
++               return -ENODEV;
++
++       syscon = syscon_node_to_regmap(np);
++       of_node_put(np);
++       if (IS_ERR(syscon))
++               return dev_err_probe(&pdev->dev, PTR_ERR(syscon),
++                                    "syscon regmap lookup failed\n");
+
+Regards,
+Brad
