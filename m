@@ -2,172 +2,630 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002876AE030
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5556AE03D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjCGNSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:18:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59374 "EHLO
+        id S230077AbjCGNUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjCGNRw (ORCPT
+        with ESMTP id S230287AbjCGNTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:17:52 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CEB30D6;
-        Tue,  7 Mar 2023 05:17:05 -0800 (PST)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327CreC9024670;
-        Tue, 7 Mar 2023 13:16:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=RbombY6WkH4lJKT52ssIwQZhPfm3t0xDTCi+53SOjO8=;
- b=oUDBmag/fNc99DbxOXF2cUJlDSqvlIiBi3K1Wwl97aAcpHhFkEXeG3fbh+cFOBvEkLsZ
- 9NecY+RDrmafA214+ggBqp1ycc44xFIPdIyeHygB6OOYAwbhLY1dsa/SUeiluCeALteJ
- RENnydkQ3tldeLtWNO2tMQ1/lu9xQAPnlWOwHCrMrTtEBbMNQYw3IAuCpTVn4VyHvAaw
- fpBR+3sI2+XRzTRzAyK3IQ6vto2o3Bq8xGBVIK3a+HqNJlwCtY4wT2QSu8V3vK4wYH1U
- UtnCC2ZG4EPBkp+3dLd921YQHnpWpCihpql2iqI8ukNrlS16hx1vGZOlxqRtQBa7G1bI Xw== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p65p3gnrj-1
+        Tue, 7 Mar 2023 08:19:25 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6453B5B85;
+        Tue,  7 Mar 2023 05:18:49 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327Bklhu020712;
+        Tue, 7 Mar 2023 13:18:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=nqBhim365t5/zpmvHMndpkKevfyJEPgxBX+jFsRlvDc=;
+ b=L5HzvFLana0Bv0LuhAEUfCdibACGFG8zS4WWIV3rwwrgn71TQymwwRz57u6m8dGWbc0w
+ 2h4s1hoWMCwO933o7Uqb0IoOCYboeFcKTdV7YR4spa9di0nNtetm88Sj8IO2rvS156kM
+ 7rx9/niOTrBj3RnIrMYQWcjheQmES3+Ur95LXzzU1uNjksemXidlktNkxmL+mOO4+eI1
+ szKz2ivnz9Hxa0PMpFXo4CDVcxUn5JrjzLjBSiGIPAlB2ainvcHAUJpMrMnmJjCAvWfQ
+ A6Py+4tvUt/POqG39MQSl+8IpOlPii1spJS4hIBNzz6IYNAVCW3HbXsKvESVMOMLvI02 Uw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5usx1jv1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 13:16:44 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3277vEdi004261;
-        Tue, 7 Mar 2023 13:16:42 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3p41b0ubdf-1
+        Tue, 07 Mar 2023 13:18:11 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 327DIAob000715
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 13:16:42 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 327DGcJL52166954
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Mar 2023 13:16:38 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2F3220043;
-        Tue,  7 Mar 2023 13:16:38 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2BA702004D;
-        Tue,  7 Mar 2023 13:16:38 +0000 (GMT)
-Received: from [9.155.211.163] (unknown [9.155.211.163])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Mar 2023 13:16:38 +0000 (GMT)
-Message-ID: <a5e2178782c862dd3241ce821a471b584b8089a9.camel@linux.ibm.com>
-Subject: Re: [PATCH v7 0/6] iommu/dma: s390 DMA API conversion and optimized
- IOTLB flushing
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Date:   Tue, 07 Mar 2023 14:16:37 +0100
-In-Reply-To: <20230220152222.1818344-1-schnelle@linux.ibm.com>
-References: <20230220152222.1818344-1-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 7 Mar 2023 13:18:10 GMT
+Received: from [10.201.3.182] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 7 Mar 2023
+ 05:18:02 -0800
+Message-ID: <366ed962-dedb-0e88-036d-a1a806d0b589@quicinc.com>
+Date:   Tue, 7 Mar 2023 18:47:51 +0530
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xWZtNCWb1-UDIaAdONcCovIaQpAlqo9V
-X-Proofpoint-ORIG-GUID: xWZtNCWb1-UDIaAdONcCovIaQpAlqo9V
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 08/11] remoteproc: qcom: Add Hexagon based multipd rproc
+ driver
+Content-Language: en-US
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
+        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
+        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_gokulsri@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-9-git-send-email-quic_mmanikan@quicinc.com>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <1678164097-13247-9-git-send-email-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: prbeg8BftcvX2w2bext1j-wghoHyNsZn
+X-Proofpoint-GUID: prbeg8BftcvX2w2bext1j-wghoHyNsZn
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-07_07,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- spamscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 suspectscore=0
- malwarescore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303070118
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070120
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-02-20 at 16:22 +0100, Niklas Schnelle wrote:
-> Hi All,
->=20
-> This patch series converts s390's PCI support from its platform specific =
-DMA
-> API implementation in arch/s390/pci/pci_dma.c to the common DMA IOMMU lay=
-er.
-> The conversion itself is done in patches 3-4 with patch 2 providing the f=
-inal
-> necessary IOMMU driver improvement to handle s390's special IOTLB flush
-> out-of-resource indication in virtualized environments. Patches 1-2 may b=
-e
-> applied independently. The conversion itself only touches the s390 IOMMU =
-driver
-> and s390 arch code moving over remaining functions from the s390 DMA API
-> implementation. No changes to common code are necessary.
->=20
-> After patch 4 the basic conversion is done and on our partitioning machin=
-e
-> hypervisor LPAR performance matches or exceeds the existing code. When ru=
-nning
-> under z/VM or KVM however, performance plummets to about half of the exis=
-ting
-> code due to a much higher rate of IOTLB flushes for unmapped pages. Due t=
-o the
-> hypervisors use of IOTLB flushes to synchronize their shadow tables these=
- are
-> very expensive and minimizing them is key for regaining the performance l=
-oss.
->=20
-> To this end patches 5-6 propose a new, single queue, IOTLB flushing schem=
-e as
-> an alternative to the existing per-CPU flush queues. Introducing an alter=
-native
-> scheme was also suggested by Robin Murphy[1]. In the previous RFC of this
-> conversion Robin suggested reusing more of the existing queuing logic whi=
-ch
-> I incorporated since v2. The single queue mode is introduced in patch
-> 5 together with a new dma_iommu_options struct and tune_dma_iommu callbac=
-k in
-> IOMMU ops which allows IOMMU drivers to switch to a single flush queue.
->=20
-> Then patch 6 enables variable queue sizes using power of 2 queue sizes an=
-d
-> shift/mask to keep performance as close to the existing code as possible.=
- The
-> variable queue size and a variable timeout are added to the dma_iommu_opt=
-ions
-> struct and utilized by s390 in the z/VM and KVM guest cases. As it is
-> implemented in common code the single queue IOTLB flushing scheme can of =
-course
-> be used by other platforms with expensive IOTLB flushes. Particularly
-> virtio-iommu may be a candidate.
->=20
-> In a previous version I verified that the new scheme does work on my x86_=
-64
-> Ryzen workstation by locally modifying iommu_subsys_init() to default to =
-the
-> single queue mode and verifying its use via "/sys/.../iommu_group/type". =
-I did
-> not find problems with an AMD GPU, Intel NIC (with SR-IOV and KVM
-> pass-through), NVMes or any on board peripherals.
->=20
-> As with previous series this is available via my git.kernel.org tree[3] i=
-n the
-> dma_iommu_v7 branch with signed s390_dma_iommu_v7 tag. This version appli=
-es
-> on top of iommu-next to incorporate the ops->set_platform_dma() and GFP
-> changes.
 
-FYI this patch set now applies cleanly (and works) on v6.3-rc1. If need
-be I can resend with Matt's R-b added but other than that I currently
-don't have open TODOs for this so review away.
 
-Thanks,
-Niklas
+On 3/7/2023 10:11 AM, Manikanta Mylavarapu wrote:
+> APSS brings Q6 out of reset and then Q6 brings
+> WCSS block (wifi radio's) out of reset.
+> 
+> 				   ---------------
+> 			      -->  |WiFi 2G radio|
+> 			      |	   --------------
+> 			      |
+> --------	-------	      |
+> | APSS | --->   |QDSP6|  -----|
+> ---------	-------       |
+>                                |
+>        			      |
+> 			      |   --------------
+> 			      --> |WiFi 5G radio|
+> 				  --------------
+> 
+> Problem here is if any radio crashes, subsequently other
+> radio also should crash because Q6 crashed. Let's say
+> 2G radio crashed, Q6 should pass this info to APSS. Only
+> Q6 processor interrupts registered with APSS. Obviously
+> Q6 should crash and raise fatal interrupt to APSS. Due
+> to this 5G radio also crashed. But no issue in 5G radio,
+> because of 2G radio crash 5G radio also impacted.
+> 
+> In multi pd model, this problem is resolved. Here WCSS
+> functionality (WiFi radio's) moved out from Q6 root pd
+> to a separate user pd. Due to this, radio's independently
+> pass their status info to APPS with out crashing Q6. So
+> other radio's won't be impacted.
+> 
+> 						---------
+> 					    	|WiFi    |
+> 					    --> |2G radio|
+> 					    | 	---------
+> ------	Start Q6     		-------     |
+> |    |	------------------>     |     |     |
+> |    |  Start WCSS PD1 (2G)   	|     |	    |
+> |APSS|	----------------------->|QDSP6|-----|
+> |    |	Start WCSS PD1 (5G)	|     |
+> |    |	----------------------->|     |-----|
+> ------		     		-------     |
+> 					    |
+> 					    |	-----------
+> 					    |-->|WiFi	  |
+> 						|5G radio |
+> 						-----------
+> According to linux terminology, here consider Q6 as root
+> i.e it provide all services, WCSS (wifi radio's) as user
+> i.e it uses services provided by root.
+> 
+> Since Q6 root & WCSS user pd's able to communicate with
+> APSS individually, multipd remoteproc driver registers
+> each PD with rproc framework. Here clients (Wifi host drivers)
+> intrested on WCSS PD rproc, so multipd driver start's root
+> pd in the context of WCSS user pd rproc start. Similarly
+> on down path, root pd will be stopped after wcss user pd
+> stopped.
+> 
+> Here WCSS(user) PD is dependent on Q6(root) PD, so first
+> q6 pd should be up before wcss pd. After wcss pd goes down,
+> q6 pd should be turned off.
+> 
+> rproc->ops->start(userpd_rproc) {
+> 	/* Boot root pd rproc */
+> 	rproc_boot(upd_dev->parent);
+> 	---
+> 	/* user pd rproc start sequence */
+> 	---
+> 	---
+> }
+> With this way we ensure that root pd brought up before userpd.
+> 
+> rproc->ops->stop(userpd_rproc) {
+> 	---
+> 	---
+> 	/* user pd rproc stop sequence */
+> 	---
+> 	---
+> 	/* Shutdown root pd rproc */
+> 	rproc_shutdown(upd_dev->parent);
+> }
+> After userpd rproc stops, root pd rproc will be stopped.
+> IPQ5018, IPQ9574 supports multipd remoteproc driver.
+> 
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+>   drivers/firmware/qcom_scm.c            | 114 +++++
+>   drivers/firmware/qcom_scm.h            |   6 +
+>   drivers/remoteproc/Kconfig             |  20 +
+>   drivers/remoteproc/Makefile            |   1 +
+>   drivers/remoteproc/qcom_common.c       |  23 +
+>   drivers/remoteproc/qcom_common.h       |   1 +
+>   drivers/remoteproc/qcom_q6v5.c         |  41 +-
+>   drivers/remoteproc/qcom_q6v5.h         |  15 +-
+>   drivers/remoteproc/qcom_q6v5_adsp.c    |   5 +-
+>   drivers/remoteproc/qcom_q6v5_mpd.c     | 668 +++++++++++++++++++++++++
+>   drivers/remoteproc/qcom_q6v5_mss.c     |   4 +-
+>   drivers/remoteproc/qcom_q6v5_pas.c     |   3 +-
+>   drivers/soc/qcom/mdt_loader.c          | 314 ++++++++++++
+>   include/linux/firmware/qcom/qcom_scm.h |   3 +
+>   include/linux/soc/qcom/mdt_loader.h    |  19 +
+>   15 files changed, 1228 insertions(+), 9 deletions(-)
+>   create mode 100644 drivers/remoteproc/qcom_q6v5_mpd.c
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index d88c5f14bd54..d69560963353 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -654,6 +654,120 @@ int qcom_scm_pas_shutdown(u32 peripheral)
+>   }
+>   EXPORT_SYMBOL(qcom_scm_pas_shutdown);
+>   
+> +/**
+> + * qti_scm_int_radio_powerup - Bring up internal radio userpd
+> + *
+> + * @peripheral:	peripheral id
+> + *
+> + * Return 0 on success.
+> + */
+> +int qti_scm_int_radio_powerup(u32 peripheral)
+> +{
 
+qcom instead and in other places too.
+
+> +	int ret;
+> +	struct qcom_scm_desc desc = {
+> +		.svc = QCOM_SCM_PD_LOAD_SVC_ID,
+> +		.cmd = QCOM_SCM_INT_RAD_PWR_UP_CMD_ID,
+> +		.arginfo = QCOM_SCM_ARGS(1),
+> +		.args[0] = peripheral,
+> +		.owner = ARM_SMCCC_OWNER_SIP,
+> +	};
+> +	struct qcom_scm_res res;
+> +
+> +	ret = qcom_scm_clk_enable();
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = qcom_scm_bw_enable();
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	qcom_scm_bw_disable();
+> +	qcom_scm_clk_disable();
+> +
+> +	return ret ? : res.result[0];
+> +}
+> +EXPORT_SYMBOL(qti_scm_int_radio_powerup);
+> +
+> +/**
+> + * qti_scm_int_radio_powerdown() - Shut down internal radio userpd
+> + *
+> + * @peripheral: peripheral id
+> + *
+> + * Returns 0 on success.
+> + */
+> +int qti_scm_int_radio_powerdown(u32 peripheral)
+> +{
+> +	int ret;
+> +	struct qcom_scm_desc desc = {
+> +		.svc = QCOM_SCM_PD_LOAD_SVC_ID,
+> +		.cmd = QCOM_SCM_INT_RAD_PWR_DN_CMD_ID,
+> +		.arginfo = QCOM_SCM_ARGS(1),
+> +		.args[0] = peripheral,
+> +		.owner = ARM_SMCCC_OWNER_SIP,
+> +	};
+> +	struct qcom_scm_res res;
+> +
+> +	ret = qcom_scm_clk_enable();
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = qcom_scm_bw_enable();
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	qcom_scm_bw_disable();
+> +	qcom_scm_clk_disable();
+> +
+> +	return ret ? : res.result[0];
+> +}
+> +EXPORT_SYMBOL(qti_scm_int_radio_powerdown);
+> +
+> +/**
+> + * qti_scm_pdseg_memcpy_v2() - copy userpd PIL segments data to dma blocks
+> + *
+> + * @peripheral:		peripheral id
+> + * @phno:		program header no
+> + * @dma:		handle of dma region
+> + * @seg_cnt:		no of dma blocks
+> + *
+> + * Returns 0 if trustzone successfully loads userpd PIL segments from dma
+> + * blocks to DDR
+> + */
+> +int qti_scm_pdseg_memcpy_v2(u32 peripheral, int phno, dma_addr_t dma,
+> +			    int seg_cnt)
+> +{
+> +	int ret;
+> +	struct qcom_scm_desc desc = {
+> +		.svc = QCOM_SCM_PD_LOAD_SVC_ID,
+> +		.cmd = QCOM_SCM_PD_LOAD_V2_CMD_ID,
+> +		.arginfo = QCOM_SCM_ARGS(4, QCOM_SCM_VAL, QCOM_SCM_VAL,
+> +						QCOM_SCM_RW, QCOM_SCM_VAL),
+> +		.args[0] = peripheral,
+> +		.args[1] = phno,
+> +		.args[2] = dma,
+> +		.args[3] = seg_cnt,
+> +		.owner = ARM_SMCCC_OWNER_SIP,
+> +	};
+> +	struct qcom_scm_res res;
+> +
+> +	ret = qcom_scm_clk_enable();
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = qcom_scm_bw_enable();
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	qcom_scm_bw_disable();
+> +	qcom_scm_clk_disable();
+> +
+> +	return ret ? : res.result[0];
+> +}
+> +EXPORT_SYMBOL(qti_scm_pdseg_memcpy_v2);
+> +
+
+This patch should be split further.
+btw, this new scm apis should go in as one patch first separately.
+
+>   /**
+>    * qcom_scm_pas_supported() - Check if the peripheral authentication service is
+>    *			      available for the given peripherial
+> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+> index e6e512bd57d1..99e3ab2f1986 100644
+> --- a/drivers/firmware/qcom_scm.h
+> +++ b/drivers/firmware/qcom_scm.h
+> @@ -132,6 +132,12 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
+>   #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
+>   #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
+>   
+> +#define QCOM_SCM_PD_LOAD_SVC_ID			0x2
+> +#define QCOM_SCM_PD_LOAD_CMD_ID			0x16
+> +#define QCOM_SCM_PD_LOAD_V2_CMD_ID		0x19
+> +#define QCOM_SCM_INT_RAD_PWR_UP_CMD_ID		0x17
+> +#define QCOM_SCM_INT_RAD_PWR_DN_CMD_ID		0x18
+> +
+>   #define QCOM_SCM_SVC_WAITQ			0x24
+>   #define QCOM_SCM_WAITQ_RESUME			0x02
+>   #define QCOM_SCM_WAITQ_GET_WQ_CTX		0x03
+> diff --git a/drivers/remoteproc/Kconfig b/drivers/remoteproc/Kconfig
+> index a850e9f486dd..44af5c36f67e 100644
+> --- a/drivers/remoteproc/Kconfig
+> +++ b/drivers/remoteproc/Kconfig
+> @@ -234,6 +234,26 @@ config QCOM_Q6V5_PAS
+>   	  CDSP (Compute DSP), MPSS (Modem Peripheral SubSystem), and
+>   	  SLPI (Sensor Low Power Island).
+>   
+> +config QCOM_Q6V5_MPD
+> +	tristate "Qualcomm Hexagon based MPD model Peripheral Image Loader"
+> +	depends on OF && ARCH_QCOM
+> +	depends on QCOM_SMEM
+> +	depends on RPMSG_QCOM_SMD || RPMSG_QCOM_SMD=n
+> +	depends on RPMSG_QCOM_GLINK_SMEM || RPMSG_QCOM_GLINK_SMEM=n
+> +	depends on QCOM_SYSMON || QCOM_SYSMON=n
+> +	depends on RPMSG_QCOM_GLINK || RPMSG_QCOM_GLINK=n
+> +	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+> +	select MFD_SYSCON
+> +	select QCOM_MDT_LOADER
+> +	select QCOM_PIL_INFO
+> +	select QCOM_Q6V5_COMMON
+> +	select QCOM_RPROC_COMMON
+> +	select QCOM_SCM
+> +	help
+> +	  Say y here to support the Qualcomm Secure Peripheral Image Loader
+> +	  for the Hexagon based MultiPD model remote processors on e.g. IPQ5018.
+> +	  This is trustZone wireless subsystem.
+> +
+>   config QCOM_Q6V5_WCSS
+>   	tristate "Qualcomm Hexagon based WCSS Peripheral Image Loader"
+>   	depends on OF && ARCH_QCOM
+> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+> index 91314a9b43ce..b64051080ec1 100644
+> --- a/drivers/remoteproc/Makefile
+> +++ b/drivers/remoteproc/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_QCOM_PIL_INFO)		+= qcom_pil_info.o
+>   obj-$(CONFIG_QCOM_RPROC_COMMON)		+= qcom_common.o
+>   obj-$(CONFIG_QCOM_Q6V5_COMMON)		+= qcom_q6v5.o
+>   obj-$(CONFIG_QCOM_Q6V5_ADSP)		+= qcom_q6v5_adsp.o
+> +obj-$(CONFIG_QCOM_Q6V5_MPD)		+= qcom_q6v5_mpd.o
+>   obj-$(CONFIG_QCOM_Q6V5_MSS)		+= qcom_q6v5_mss.o
+>   obj-$(CONFIG_QCOM_Q6V5_PAS)		+= qcom_q6v5_pas.o
+>   obj-$(CONFIG_QCOM_Q6V5_WCSS)		+= qcom_q6v5_wcss.o
+> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+> index a0d4238492e9..b72fbda02242 100644
+> --- a/drivers/remoteproc/qcom_common.c
+> +++ b/drivers/remoteproc/qcom_common.c
+> @@ -510,5 +510,28 @@ void qcom_remove_ssr_subdev(struct rproc *rproc, struct qcom_rproc_ssr *ssr)
+>   }
+>   EXPORT_SYMBOL_GPL(qcom_remove_ssr_subdev);
+>   
+> +/**
+> + * qcom_get_pd_asid() - get the pd asid number from DT node
+> + * @node:	device tree node
+> + *
+> + * Returns asid if node name has 'pd' string
+> + */
+> +s8 qcom_get_pd_asid(struct device_node *node)
+> +{
+> +	char *str;
+> +	u8 pd_asid;
+> +
+> +	if (!node)
+> +		return -EINVAL;
+> +
+> +	str = strstr(node->name, "pd");
+> +	if (!str)
+> +		return 0;
+> +
+> +	str += strlen("pd");
+> +	return kstrtos8(str, 10, &pd_asid) ? -EINVAL : pd_asid;
+> +}
+> +EXPORT_SYMBOL(qcom_get_pd_asid);
+> +
+>   MODULE_DESCRIPTION("Qualcomm Remoteproc helper driver");
+>   MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/remoteproc/qcom_common.h b/drivers/remoteproc/qcom_common.h
+> index 9ef4449052a9..9f3fb11224aa 100644
+> --- a/drivers/remoteproc/qcom_common.h
+> +++ b/drivers/remoteproc/qcom_common.h
+> @@ -75,5 +75,6 @@ static inline bool qcom_sysmon_shutdown_acked(struct qcom_sysmon *sysmon)
+>   	return false;
+>   }
+>   #endif
+> +s8 qcom_get_pd_asid(struct device_node *node);
+>   
+>   #endif
+> diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+> index 192c7aa0e39e..b88bf3a8e53b 100644
+> --- a/drivers/remoteproc/qcom_q6v5.c
+> +++ b/drivers/remoteproc/qcom_q6v5.c
+> @@ -118,7 +118,7 @@ static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
+>   	return IRQ_HANDLED;
+>   }
+>   
+> -static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+> +irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+>   {
+>   	struct qcom_q6v5 *q6v5 = data;
+>   	size_t len;
+> @@ -139,7 +139,7 @@ static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+>   	return IRQ_HANDLED;
+>   }
+>   
+> -static irqreturn_t q6v5_ready_interrupt(int irq, void *data)
+> +irqreturn_t q6v5_ready_interrupt(int irq, void *data)
+>   {
+>   	struct qcom_q6v5 *q6v5 = data;
+>   
+> @@ -183,7 +183,16 @@ static irqreturn_t q6v5_handover_interrupt(int irq, void *data)
+>   	return IRQ_HANDLED;
+>   }
+>   
+> -static irqreturn_t q6v5_stop_interrupt(int irq, void *data)
+> +irqreturn_t q6v5_spawn_interrupt(int irq, void *data)
+> +{
+> +	struct qcom_q6v5 *q6v5 = data;
+> +
+> +	complete(&q6v5->spawn_done);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +irqreturn_t q6v5_stop_interrupt(int irq, void *data)
+>   {
+>   	struct qcom_q6v5 *q6v5 = data;
+>   
+> @@ -220,6 +229,28 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon)
+>   }
+>   EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
+>   
+> +/**
+> + * qcom_q6v5_request_spawn() - request the remote processor to spawn
+> + * @q6v5:      reference to qcom_q6v5 context
+> + *
+> + * Return: 0 on success, negative errno on failure
+> + */
+> +int qcom_q6v5_request_spawn(struct qcom_q6v5 *q6v5)
+> +{
+> +	int ret;
+> +
+> +	ret = qcom_smem_state_update_bits(q6v5->spawn_state,
+> +					  BIT(q6v5->spawn_bit), BIT(q6v5->spawn_bit));
+> +
+> +	ret = wait_for_completion_timeout(&q6v5->spawn_done, 5 * HZ);
+> +
+> +	qcom_smem_state_update_bits(q6v5->spawn_state,
+> +				    BIT(q6v5->spawn_bit), 0);
+> +
+> +	return ret == 0 ? -ETIMEDOUT : 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_q6v5_request_spawn);
+> +
+>   /**
+>    * qcom_q6v5_panic() - panic handler to invoke a stop on the remote
+>    * @q6v5:	reference to qcom_q6v5 context
+> @@ -250,7 +281,8 @@ EXPORT_SYMBOL_GPL(qcom_q6v5_panic);
+>    * Return: 0 on success, negative errno on failure
+>    */
+>   int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+> -		   struct rproc *rproc, int crash_reason, const char *load_state,
+> +		   struct rproc *rproc, int remote_id, int crash_reason,
+> +		   const char *load_state,
+>   		   void (*handover)(struct qcom_q6v5 *q6v5))
+>   {
+>   	int ret;
+> @@ -258,6 +290,7 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+>   	q6v5->rproc = rproc;
+>   	q6v5->dev = &pdev->dev;
+>   	q6v5->crash_reason = crash_reason;
+> +	q6v5->remote_id = remote_id;
+>   	q6v5->handover = handover;
+>   
+>   	init_completion(&q6v5->start_done);
+> diff --git a/drivers/remoteproc/qcom_q6v5.h b/drivers/remoteproc/qcom_q6v5.h
+> index 5a859c41896e..d00568339d46 100644
+> --- a/drivers/remoteproc/qcom_q6v5.h
+> +++ b/drivers/remoteproc/qcom_q6v5.h
+> @@ -18,22 +18,29 @@ struct qcom_q6v5 {
+>   
+>   	struct qcom_smem_state *state;
+>   	struct qmp *qmp;
+> +	struct qcom_smem_state *shutdown_state;
+> +	struct qcom_smem_state *spawn_state;
+>   
+>   	struct icc_path *path;
+>   
+>   	unsigned stop_bit;
+> +	unsigned shutdown_bit;
+> +	unsigned spawn_bit;
+>   
+>   	int wdog_irq;
+>   	int fatal_irq;
+>   	int ready_irq;
+>   	int handover_irq;
+>   	int stop_irq;
+> +	int spawn_irq;
+>   
+>   	bool handover_issued;
+>   
+>   	struct completion start_done;
+>   	struct completion stop_done;
+> +	struct completion spawn_done;
+>   
+> +	int remote_id;
+>   	int crash_reason;
+>   
+>   	bool running;
+> @@ -43,14 +50,20 @@ struct qcom_q6v5 {
+>   };
+>   
+>   int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+> -		   struct rproc *rproc, int crash_reason, const char *load_state,
+> +		   struct rproc *rproc, int remote_id, int crash_reason,
+> +		   const char *load_state,
+>   		   void (*handover)(struct qcom_q6v5 *q6v5));
+>   void qcom_q6v5_deinit(struct qcom_q6v5 *q6v5);
+>   
+>   int qcom_q6v5_prepare(struct qcom_q6v5 *q6v5);
+>   int qcom_q6v5_unprepare(struct qcom_q6v5 *q6v5);
+>   int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon);
+> +int qcom_q6v5_request_spawn(struct qcom_q6v5 *q6v5);
+>   int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout);
+>   unsigned long qcom_q6v5_panic(struct qcom_q6v5 *q6v5);
+> +irqreturn_t q6v5_fatal_interrupt(int irq, void *data);
+> +irqreturn_t q6v5_ready_interrupt(int irq, void *data);
+> +irqreturn_t q6v5_spawn_interrupt(int irq, void *data);
+> +irqreturn_t q6v5_stop_interrupt(int irq, void *data);
+
+Even this also you can keep it as a separate preparatory patch to pull
+out the common functions.
+
+>   
+>   #endif
+> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
+> index 08d8dad22ca7..bf8909ad5ff5 100644
+> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+> @@ -733,8 +733,9 @@ static int adsp_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		goto disable_pm;
+>   
+> -	ret = qcom_q6v5_init(&adsp->q6v5, pdev, rproc, desc->crash_reason_smem,
+> -			     desc->load_state, qcom_adsp_pil_handover);
+> +	ret = qcom_q6v5_init(&adsp->q6v5, pdev, rproc, QCOM_SMEM_HOST_ANY,
+> +			     desc->crash_reason_smem, desc->load_state,
+> +			     qcom_adsp_pil_handover);
+>   	if (ret)
+>   		goto disable_pm;
+>   
+> diff --git a/drivers/remoteproc/qcom_q6v5_mpd.c b/drivers/remoteproc/qcom_q6v5_mpd.c
+> new file mode 100644
+> index 000000000000..853aa3bc5859
+> --- /dev/null
+> +++ b/drivers/remoteproc/qcom_q6v5_mpd.c
+> @@ -0,0 +1,668 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2016-2018 Linaro Ltd.
+> + * Copyright (C) 2014 Sony Mobile Communications AB
+> + * Copyright (c) 2012-2018, 2021 The Linux Foundation. All rights reserved.
+> + */
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_reserved_mem.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/soc/qcom/mdt_loader.h>
+> +#include <linux/soc/qcom/smem.h>
+> +#include <linux/soc/qcom/smem_state.h>
+> +#include <linux/firmware/qcom/qcom_scm.h>
+> +#include <linux/interrupt.h>
+
+  Alphabetical order.
+
+Regards,
+  Sricharan
