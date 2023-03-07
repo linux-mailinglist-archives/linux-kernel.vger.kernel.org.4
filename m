@@ -2,74 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DF66AF5C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9869D6AF5C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbjCGTe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:34:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
+        id S233982AbjCGTfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbjCGTej (ORCPT
+        with ESMTP id S234189AbjCGTek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:34:39 -0500
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30714A0F32;
-        Tue,  7 Mar 2023 11:21:32 -0800 (PST)
+        Tue, 7 Mar 2023 14:34:40 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88309D008B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 11:21:37 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9AF451BF205;
-        Tue,  7 Mar 2023 19:21:28 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id AF33EE0002;
+        Tue,  7 Mar 2023 19:21:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678216891;
+        t=1678216896;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RxdKgF0FoJ8o93pAtFh/ei+gKLeFCdS2rikMZuG/uH0=;
-        b=Y2NDczmdy4t+ddy4/B7pcehkSH7NVY7Yh9fCf/HP/QTBG6VfvC2+qeuZiq3PT2TtZEvHrh
-        dNskcRbXB3YfRTcr9S35hQNf/r+GT0yGxphzV8C6QBz8AEZMwu+pCrG0Iz76pPhlLh4/NU
-        ijID7TxI6NhaqnC2BrIwT0cHLsfyX+3HYlmIuNAy8uk5soatKdReOvBmBHRJdzvpSx//zl
-        Fi+wCcmqlJAkGvmbrJfamt7FXMNSsE+KeE+GDXMGbmkccpso6uvHyStZc2gMhlwk6P2cKU
-        icL5Ue1qo6pSFqC7qYd7lafsir/AWK7Y2ZGGCO5DlLAhtkYNfMNiTimhQ42Phg==
+        bh=jiRALHWp1e55wkcvOyL9CF4DO76BHMp1mu0i9xqSDT8=;
+        b=LUwmOwDODq5cIiSeh8c/7f3GcXpTtevBpMqwe5mR0kWLi15eHV4KanB+gV5vxGXrAMxxFd
+        ximCxN7g1beDKseM5NdjfeTCvWiJhNp5j1fjjBXnaCXAVXXgt/KFjjKL8fOn0tnb8KO/Qs
+        Iw3omJ8VBkP33XZ25TFrlAEll7JOMqCMOFLwsUhbt0I6fVmHegVc7oTmDy/XaEeumSI0aA
+        mgVffttYfwEKkC2frA/GRLYNSgRlNsuKYEkxHEIOTdi5JhEd7oYrRnVJu7mGUsu5dOmBsw
+        V4CEbvTdQkl3LqKcNBhdLOHHPX6zROxL3GffnpLLJvwYfHPWjDHDaZmlPcGA2g==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        Liang Yang <liang.yang@amlogic.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mtd@lists.infradead.org
-Subject: Re: [PATCH] mtd: nand: mxic-ecc: Fix mxic_ecc_data_xfer_wait_for_completion() when irq is used
-Date:   Tue,  7 Mar 2023 20:21:27 +0100
-Message-Id: <20230307192127.274869-1-miquel.raynal@bootlin.com>
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [PATCH v4] mtd: rawnand: meson: initialize struct with zeroes
+Date:   Tue,  7 Mar 2023 20:21:33 +0100
+Message-Id: <20230307192133.274898-1-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To:  <beddbc374557e44ceec897e68c4a5d12764ddbb9.1676459308.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20230227102425.793841-1-AVKrasnov@sberdevices.ru>
 References: 
 MIME-Version: 1.0
 X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'75dce6a941e3f16c3b4878c8b2f46d5d07c619ce'
+X-linux-mtd-patch-commit: b'4ce341de6c02d02aba7c78a6447ccfcaa9eeb328'
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-02-15 at 11:08:45 UTC, Christophe JAILLET wrote:
-> wait_for_completion_timeout() and readl_poll_timeout() don't handle their
-> return value the same way.
+On Mon, 2023-02-27 at 10:24:25 UTC, Arseniy Krasnov wrote:
+> This structure must be zeroed, because it's field 'hw->core' is used as
+> 'parent' in 'clk_core_fill_parent_index()', but it will be uninitialized.
+> This happens, because when this struct is not zeroed, pointer 'hw' is
+> "initialized" by garbage, which is valid pointer, but points to some
+> garbage. So 'hw' will be dereferenced, but 'core' contains some random
+> data which will be interpreted as a pointer. The following backtrace is
+> result of dereference of such pointer:
 > 
-> wait_for_completion_timeout() returns 0 on time out (and >0 in all other
-> cases)
-> readl_poll_timeout() returns 0 on success and -ETIMEDOUT upon a timeout.
+> [    1.081319]  __clk_register+0x414/0x820
+> [    1.085113]  devm_clk_register+0x64/0xd0
+> [    1.088995]  meson_nfc_probe+0x258/0x6ec
+> [    1.092875]  platform_probe+0x70/0xf0
+> [    1.096498]  really_probe+0xc8/0x3e0
+> [    1.100034]  __driver_probe_device+0x84/0x190
+> [    1.104346]  driver_probe_device+0x44/0x120
+> [    1.108487]  __driver_attach+0xb4/0x220
+> [    1.112282]  bus_for_each_dev+0x78/0xd0
+> [    1.116077]  driver_attach+0x2c/0x40
+> [    1.119613]  bus_add_driver+0x184/0x240
+> [    1.123408]  driver_register+0x80/0x140
+> [    1.127203]  __platform_driver_register+0x30/0x40
+> [    1.131860]  meson_nfc_driver_init+0x24/0x30
 > 
-> In order for the error handling path to work in both cases, the logic
-> against wait_for_completion_timeout() needs to be inverted.
+> Changelog:
+> v1 -> v2:
+>  * More details in the commit message.
+> v2 -> v3:
+>  * Add 'a' article to "interpreted as a pointer".
+> v3 -> v4:
+>  * Add changelog.
 > 
-> Fixes: 48e6633a9fa2 ("mtd: nand: mxic-ecc: Add Macronix external ECC engine support")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Fixes: 1e4d3ba66888 ("mtd: rawnand: meson: fix the clock")
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
 Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
 
