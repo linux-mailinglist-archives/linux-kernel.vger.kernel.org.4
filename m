@@ -2,152 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405E16ADFFB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:07:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E526AE007
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjCGNHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:07:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        id S230477AbjCGNIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:08:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjCGNFs (ORCPT
+        with ESMTP id S230405AbjCGNHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:05:48 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF627E8A4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:05:19 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id n2so16924624lfb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:05:19 -0800 (PST)
+        Tue, 7 Mar 2023 08:07:47 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC11881CEE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:05:53 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id x11so9419258pln.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:05:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678194302;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/ycp1fOFRcqnvrXtuAswlNcdj2NkXI8qjDu7ztULp4g=;
-        b=QehD1bhYUi9CqVD9QXVP0PtANkHCGauBClYHYYp0hr12HX7h0TkjG6fFMxmn9vm4Fq
-         A0X4es0spCzccWcbPoMxmOrMCNy/A5TG0QfpzMRBydTn0gUeRbHifX49RoaxF28/p4c3
-         3MPzisEdzqQcDpwFKdn1vn0WbPQoyeWfa56aT8dso6OaTuDQ3wnHvEk04IKND9fyVPLy
-         Q6J9Et8+kF3WOl+6mfaK7yqU8cRBEec7+/1TvJLaC+JdzO19/KWv8b2nUAnoD8s5OhEH
-         /FYgtuMbVw+pao3NUpX0jp4lf0kWuC3tKBRndIYTnNOznEgDVQg2LLCkUfoNy87pvt5c
-         k3cQ==
+        d=bytedance.com; s=google; t=1678194352;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t+FdsTGZzqFZqYBTn3Ql+ChMDk8iUlybGRvDY8ZJ9VU=;
+        b=RBo4mnr9UV/76xDxoNtIFvN1XW6fFx1PY1NBiBdZog7bPokCU7XM5kQUk6LQDiqV8U
+         YrWsVdVwtGNZwuuLoYW6ov2pXHIYRzRFDStHthlQfInnIps8GwfB74TucjDdimqbaXWW
+         jICL4WCdizqK/+1J5HKRHPrCGRMxzoIkWYkkUUTQ+oxVF0Ur3093L3wwZ0Q722cllW1B
+         u0rzZ07flKCpWM59XBHvlep+JW4VRVWPp2BtO6W1ZUbEFwqU/rzxSNhpfst5RKm62J/6
+         funSPnYuZXt/hBhouBzzFqflnpGbyAr/NuB79F3VqIawrzBMUqgALdIigjDFBKSL+HRe
+         1SAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678194302;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ycp1fOFRcqnvrXtuAswlNcdj2NkXI8qjDu7ztULp4g=;
-        b=uzMz5R1nYftb+3SoVjKy5rfxqnYT7LS0jiNJkLhCaz5MhM2nG+6TZ98VbYpJSE9mFf
-         6VZS6H+mhFf4xpmkfBAnW1v6T6FNaVZ6/nO77ccmq0a3CMdtaogRuFUNJhhyt2J8KsfG
-         WPbHfpZeRnGjnUBJVO+qbpeuVMY/Ark3wY62QqjdOAIsQCOA4YQq8aqUD82eSyCz+J4t
-         H0BxXiR9tmTEKnn7EI/B7mxZ8OuL8e8pHbxJMyjZlPnFbUjGjFDgxbBYCPWMQcMQmkdD
-         EfMjNwkBi8QDnl0AEZZ9RZibd+L1DXOis22ZwfWwG4oChqLM/fisSD+Q7cNnVvPgAjnU
-         SaXw==
-X-Gm-Message-State: AO0yUKUzBVXl38/t55miX8DgNx4Uv3qwoA+o8d7ym0BKOvVjOCDhO98E
-        C39iTETX8TVHCydoEMvRthgCeA==
-X-Google-Smtp-Source: AK7set93WXjwZmiOBSQIZMB+0eDjPtJOLkR/LAOqDz4vWAPBj9BCaVrg7CvYpdXzX2eFJC+J4/9b9A==
-X-Received: by 2002:a19:760e:0:b0:4df:2c71:57fb with SMTP id c14-20020a19760e000000b004df2c7157fbmr4088445lff.43.1678194302348;
-        Tue, 07 Mar 2023 05:05:02 -0800 (PST)
-Received: from [127.0.1.1] ([85.235.12.219])
-        by smtp.gmail.com with ESMTPSA id w14-20020ac2598e000000b004caf992bba9sm2030548lfn.268.2023.03.07.05.05.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 05:05:01 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 07 Mar 2023 14:04:58 +0100
-Subject: [PATCH v2 16/16] gpio: pcie-idio-24: Convert to immutable irq_chip
+        d=1e100.net; s=20210112; t=1678194352;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=t+FdsTGZzqFZqYBTn3Ql+ChMDk8iUlybGRvDY8ZJ9VU=;
+        b=R2tWnECpkewUik9UXbZCl0Nycb0sOZoHtBXi4GfJ0YTfmezFyezcmCfDJR4+0wIOM9
+         pgPE36Ju1szV9t1ry3y5Y473nrWYSpT8h5aTv+UTtwXgd3481aGJFMypUeXDbiH+PIAU
+         SWiVkue84tjqnut9WWWu2dgVqmxb3rS/Rw6Auy1vOaF3RYccoSnHJBAL9+8YmIe4mKC6
+         BF/wW2ylwGuXAHh5bUTozOc3b+pXKSwbzE6r10t7Ydw8s9JcYJXhvm6rHUDugjsC9F54
+         JXzOyR/et+Z9m6QCEhFcbHsnzycwgG9Py3t0+BC0VC6qipXC0EPEf3NUvVCDbQ3nhTrP
+         U49g==
+X-Gm-Message-State: AO0yUKUZd3iL4yC7fa04U+Xy1XRO98JVq7IbNmPWFJWExsUuv/EE2sfM
+        ugogJxCk0nSluIib6M3R5b2xf3xYn6zRmJCMyIU=
+X-Google-Smtp-Source: AK7set9tOFhM95hUX3pEY5rK2bAommdGqvpRofEUa/4iWeTx414xIKOjt0Uc2cc+J9isMI7He9+sOg==
+X-Received: by 2002:a17:902:d2c9:b0:19a:c4a0:5b1b with SMTP id n9-20020a170902d2c900b0019ac4a05b1bmr19927045plc.1.1678194351908;
+        Tue, 07 Mar 2023 05:05:51 -0800 (PST)
+Received: from [10.200.8.102] ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b00198fb25d09bsm8322729plp.237.2023.03.07.05.05.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 05:05:51 -0800 (PST)
+Message-ID: <cec2dec7-818a-b32c-3ad4-8b23fc1351f3@bytedance.com>
+Date:   Tue, 7 Mar 2023 21:05:46 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] maple_tree: Fix mas_skip_node() end slot detection
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     Stable@vger.kernel.org, maple-tree@lists.infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Snild Dolkow <snild@sony.com>
+References: <20230303021540.1056603-1-Liam.Howlett@oracle.com>
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+In-Reply-To: <20230303021540.1056603-1-Liam.Howlett@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230215-immutable-chips-v2-16-d6b0e3f2d991@linaro.org>
-References: <20230215-immutable-chips-v2-0-d6b0e3f2d991@linaro.org>
-In-Reply-To: <20230215-immutable-chips-v2-0-d6b0e3f2d991@linaro.org>
-To:     Mun Yew Tham <mun.yew.tham@intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Jay Fang <f.fangjian@huawei.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        William Breathitt Gray <william.gray@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>
-X-Mailer: b4 0.12.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the driver to immutable irq-chip with a bit of
-intuition.
+Hi, Liam,
+> mas_skip_node() is used to move the maple state to the node with a
+> higher limit.  It does this by walking up the tree and increasing the
+> slot count.  Since slot count may not be able to be increased, it may
+> need to walk up multiple times to find room to walk right to a higher
+> limit node.  The limit of slots that was being used was the node limit
+> and not the last location of data in the node.  This would cause the
+> maple state to be shifted outside actual data and enter an error state,
+> thus returning -EBUSY.
+> 
+> The result of the incorrect error state means that mas_awalk() would
+> return an error instead of finding the allocation space.
+> 
+> The fix is to use mas_data_end() in mas_skip_node() to detect the nodes
+> data end point and continue walking the tree up until it is safe to move
+> to a node with a higher limit.
+> 
+> mas_skip_node() may also be passed a maple state in an error state from
+> mas_anode_descend() when no allocations are available.  Return on such
+> an error state immediately.
+> 
+> Reported-by: Snild Dolkow <snild@sony.com>
+> Link: https://lore.kernel.org/linux-mm/cb8dc31a-fef2-1d09-f133-e9f7b9f9e77a@sony.com/
+> Cc: <Stable@vger.kernel.org>
+> Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Reviewed-by: Peng Zhang <zhangpeng.00@bytedance.com>
+> ---
+>   lib/maple_tree.c | 25 ++++++++++---------------
+>   1 file changed, 10 insertions(+), 15 deletions(-)
+> 
+> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+> index 2be86368237d..2efe854946d6 100644
+> --- a/lib/maple_tree.c
+> +++ b/lib/maple_tree.c
+> @@ -5188,34 +5188,29 @@ static inline bool mas_rewind_node(struct ma_state *mas)
+>    */
+>   static inline bool mas_skip_node(struct ma_state *mas)
+>   {
+> -	unsigned char slot, slot_count;
+>   	unsigned long *pivots;
+>   	enum maple_type mt;
+>   
+> -	mt = mte_node_type(mas->node);
+> -	slot_count = mt_slots[mt] - 1;
+> +	if (mas_is_err(mas))
+> +		return false;
+> +
+>   	do {
+>   		if (mte_is_root(mas->node)) {
+> -			slot = mas->offset;
+> -			if (slot > slot_count) {
+> +			if (mas->offset >= mas_data_end(mas)) {
+>   				mas_set_err(mas, -EBUSY);
+>   				return false;
+>   			}
+>   		} else {
+>   			mas_ascend(mas);
+> -			slot = mas->offset;
+> -			mt = mte_node_type(mas->node);
+> -			slot_count = mt_slots[mt] - 1;
+>   		}
+> -	} while (slot > slot_count);
+> +	} while (mas->offset >= mas_data_end(mas));
+>   
+> -	mas->offset = ++slot;
+> +	mt = mte_node_type(mas->node);
+>   	pivots = ma_pivots(mas_mn(mas), mt);
+> -	if (slot > 0)
+> -		mas->min = pivots[slot - 1] + 1;
+> -
+> -	if (slot <= slot_count)
+> -		mas->max = pivots[slot];
+> +	mas->min = pivots[mas->offset] + 1;
+> +	mas->offset++;
+> +	if (mas->offset < mt_slots[mt])
+> +		mas->max = pivots[mas->offset];
+There is a bug here, the assignment of mas->min and mas->max is wrong.
+The assignment will make them represent the range of a child node, but 
+it should represent the range of the current node. After mas_ascend() 
+returns, mas-min and mas->max already represent the range of the current 
+node, so we should delete these assignments of mas->min and mas->max.
+>   
+>   	return true;
+>   }
 
-Cc: Marc Zyngier <maz@kernel.org>
-Acked-by: William Breathitt Gray <william.gray@linaro.org>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/gpio/gpio-pcie-idio-24.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/gpio/gpio-pcie-idio-24.c b/drivers/gpio/gpio-pcie-idio-24.c
-index 8a9b98fa418f..ac42150f4009 100644
---- a/drivers/gpio/gpio-pcie-idio-24.c
-+++ b/drivers/gpio/gpio-pcie-idio-24.c
-@@ -396,6 +396,8 @@ static void idio_24_irq_mask(struct irq_data *data)
- 	}
- 
- 	raw_spin_unlock_irqrestore(&idio24gpio->lock, flags);
-+
-+	gpiochip_disable_irq(chip, irqd_to_hwirq(data));
- }
- 
- static void idio_24_irq_unmask(struct irq_data *data)
-@@ -408,6 +410,8 @@ static void idio_24_irq_unmask(struct irq_data *data)
- 	const unsigned long bank_offset = bit_offset / 8;
- 	unsigned char cos_enable_state;
- 
-+	gpiochip_enable_irq(chip, irqd_to_hwirq(data));
-+
- 	raw_spin_lock_irqsave(&idio24gpio->lock, flags);
- 
- 	prev_irq_mask = idio24gpio->irq_mask >> bank_offset * 8;
-@@ -437,12 +441,14 @@ static int idio_24_irq_set_type(struct irq_data *data, unsigned int flow_type)
- 	return 0;
- }
- 
--static struct irq_chip idio_24_irqchip = {
-+static const struct irq_chip idio_24_irqchip = {
- 	.name = "pcie-idio-24",
- 	.irq_ack = idio_24_irq_ack,
- 	.irq_mask = idio_24_irq_mask,
- 	.irq_unmask = idio_24_irq_unmask,
--	.irq_set_type = idio_24_irq_set_type
-+	.irq_set_type = idio_24_irq_set_type,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
- 
- static irqreturn_t idio_24_irq_handler(int irq, void *dev_id)
-@@ -535,7 +541,7 @@ static int idio_24_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	idio24gpio->chip.set_multiple = idio_24_gpio_set_multiple;
- 
- 	girq = &idio24gpio->chip.irq;
--	girq->chip = &idio_24_irqchip;
-+	gpio_irq_chip_set_chip(girq, &idio_24_irqchip);
- 	/* This will let us handle the parent IRQ in the driver */
- 	girq->parent_handler = NULL;
- 	girq->num_parents = 0;
-
--- 
-2.34.1
-
+Sincerely yours,
+Peng.
