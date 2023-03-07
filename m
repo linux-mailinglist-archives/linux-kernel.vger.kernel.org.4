@@ -2,112 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A386AD9C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 061956AD9BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjCGI7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:59:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S230168AbjCGI66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:58:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjCGI7J (ORCPT
+        with ESMTP id S229593AbjCGI6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:59:09 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C23D5CC3E;
-        Tue,  7 Mar 2023 00:59:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678179542; x=1709715542;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3umUm4ahFVMYfF3/FeLculY9PKxRgx3vNRzzbJ6yOzU=;
-  b=TMMvdFMiX5NfeQVBtwrp0c8GuZIbHlGIcxGC0LOT4LO3uL/QeaX42IMC
-   VlgcLevCgk4GUtl9/3GouvZLVaaVOk/I4Lxz9jkX4O3Dxy4BMwzEEeMHO
-   mqSA+v+tAXX4M2erlQRICPo9KaI95R4tbM9/9YjrzS2EWkpyExwAeTXom
-   FdrMorhJJBT1SRa5I/EVNjQ3OkiFEAlY37n/GYSeN3febQLieklXC/9YD
-   fFo5ex8aJvYkLAsaaLoK7SY+gRV3z7/CZRudidqcxPT4SP2DmAkFUroGk
-   YjexWvc3ORMesrTKbDEMBbA4P+5w8S/hIYTQr4cGloRD6PjQYY77DA3am
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400624120"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="400624120"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 00:59:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="626464657"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="626464657"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 07 Mar 2023 00:58:58 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZT9t-00019L-1R;
-        Tue, 07 Mar 2023 08:58:57 +0000
-Date:   Tue, 7 Mar 2023 16:58:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mani@kernel.org, lpieralisi@kernel.org, kw@linux.com,
-        bhelgaas@google.com, manivannan.sadhasivam@linaro.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: Re: [PATCH 6/6] ARM: dts: qcom: sdx65-mtp: Enable PCIe EP
-Message-ID: <202303071612.HZ9bDCp7-lkp@intel.com>
-References: <1678080302-29691-7-git-send-email-quic_rohiagar@quicinc.com>
+        Tue, 7 Mar 2023 03:58:55 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478E7515F7;
+        Tue,  7 Mar 2023 00:58:53 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PW8KD3lV2z9yB6h;
+        Tue,  7 Mar 2023 16:50:08 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwC3gVio_AZktq14AQ--.19560S2;
+        Tue, 07 Mar 2023 09:58:29 +0100 (CET)
+Message-ID: <f604ce5c7a535755a56736395a82220f65bcbc3f.camel@huaweicloud.com>
+Subject: Re: [PATCH 11/28] evm: Complete description of evm_inode_setattr()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Stefan Berger <stefanb@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        chuck.lever@oracle.com, jlayton@kernel.org, zohar@linux.ibm.com,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 07 Mar 2023 09:58:14 +0100
+In-Reply-To: <ecb168e5-e85f-73ee-7bc4-c13d0ea8811e@linux.ibm.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+         <20230303181842.1087717-12-roberto.sassu@huaweicloud.com>
+         <ecb168e5-e85f-73ee-7bc4-c13d0ea8811e@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1678080302-29691-7-git-send-email-quic_rohiagar@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwC3gVio_AZktq14AQ--.19560S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7WrWkJF48Xr4UCFyUAr45GFg_yoW8XF13pa
+        yfKa48Gr4rtry29F98ta1xZa4Sg3y0gryj9398Aw4qyFn8GrnavryIkryrur98Kr18Cr1F
+        ya4av3W3Za15A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFDGOUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAJBF1jj4pFJgACsW
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rohit,
+On Mon, 2023-03-06 at 12:04 -0500, Stefan Berger wrote:
+> 
+> On 3/3/23 13:18, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Add the description for missing parameters of evm_inode_setattr() to
+> > avoid the warning arising with W=n compile option.
+> > 
+> > Fixes: 817b54aa45db ("evm: add evm_inode_setattr to prevent updating an invalid security.evm")
+> > Fixes: c1632a0f1120 ("fs: port ->setattr() to pass mnt_idmap")
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Among the previous patches I think there were 2 fixes like this one you could possibly also split off.
 
-Thank you for the patch! Yet something to improve:
+Didn't find it.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes pci/next pci/for-linus linus/master v6.3-rc1 next-20230306]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rohit-Agarwal/dt-bindings-mfd-qcom-tcsr-Add-compatible-for-sdx65/20230306-132618
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/1678080302-29691-7-git-send-email-quic_rohiagar%40quicinc.com
-patch subject: [PATCH 6/6] ARM: dts: qcom: sdx65-mtp: Enable PCIe EP
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230307/202303071612.HZ9bDCp7-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/51b8272710554bf9cbee6604f73951179e85ffa7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rohit-Agarwal/dt-bindings-mfd-qcom-tcsr-Add-compatible-for-sdx65/20230306-132618
-        git checkout 51b8272710554bf9cbee6604f73951179e85ffa7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Roberto
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303071612.HZ9bDCp7-lkp@intel.com/
+> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
+> > ---
+> >   security/integrity/evm/evm_main.c | 2 ++
+> >   1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> > index 1155a58ae87..8b5c472f78b 100644
+> > --- a/security/integrity/evm/evm_main.c
+> > +++ b/security/integrity/evm/evm_main.c
+> > @@ -798,7 +798,9 @@ static int evm_attr_change(struct mnt_idmap *idmap,
+> >   
+> >   /**
+> >    * evm_inode_setattr - prevent updating an invalid EVM extended attribute
+> > + * @idmap: idmap of the mount
+> >    * @dentry: pointer to the affected dentry
+> > + * @attr: iattr structure containing the new file attributes
+> >    *
+> >    * Permit update of file attributes when files have a valid EVM signature,
+> >    * except in the case of them having an immutable portable signature.
 
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm/boot/dts/qcom-sdx65-mtp.dts:287.1-2 syntax error
-   FATAL ERROR: Unable to parse input tree
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
