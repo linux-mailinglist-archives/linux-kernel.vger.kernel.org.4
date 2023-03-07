@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A35FC6AF074
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:30:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FAF6AF133
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbjCGSag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:30:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S233126AbjCGSlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 13:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjCGS37 (ORCPT
+        with ESMTP id S233112AbjCGSk5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:29:59 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D040ADBC2;
-        Tue,  7 Mar 2023 10:23:31 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id y10so8655903pfi.8;
-        Tue, 07 Mar 2023 10:23:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678213411;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g+U067obUU4UJU2lEOFDwL66pTG82HP6FRLtGVTOl5M=;
-        b=HH+jtkkYKb6ejija9whaj53edit8scZIjTX1rAvAJ2ecKLNFvhC/d9YqoZZ2hQzCHH
-         VtRIY11oEcQG5Jid8043xsvD1ikhTOJ3RqioZTn6IMuxF01twB0kfH8ssQ8k6Jx6hu+Y
-         h78z1g2PRbp5L0Eo93DYbJ5P6VgcohogpqNa+NcpHPG0YM3SFeEF8PUQh0AUBkQ+1z9I
-         17rHhIXV9OSWo4OUl4rKKLe+Jd8YNF8scxeJMEIiz2s+GXDvHSoQA7MftWlSp6Dp1lmJ
-         CqOxoWVMxIPGUcnlp58lTggBSXmTUgcFSMpKsQViK2IlsjjrcTNG9YzNBs5UGz8aoGMC
-         6lsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678213411;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g+U067obUU4UJU2lEOFDwL66pTG82HP6FRLtGVTOl5M=;
-        b=44iUJwHzRAhOu0eS2Gie7MQvZotQhGMQngm3B+sbNOf87vBy68OtxkYkCd17HxMVaZ
-         CWEJ87lMjvNb/WGdQafjQPke0d/bIIJBxq3dC5fV7cgGHSNjVJ4topATg/axNwnJRK5Y
-         Lj9FPdv0buWL7RJJheqgLZTHvjOEwwzTW8D3x9chOLwWyXtvEGG07Xcs0XHWfEP5UUBB
-         cOz0HlIPIV4cRRMY31NZtMEg5RB/tHldyhpYTw+gkAx3YhJXy+wcgpuOWg5N5hqKHsNS
-         2nBE3gq2l0MWBhxLRYL91t5KKSqe9QvZ+MNE5eR0QFHW3zSForX2OuAz5+SCNLwDk6dt
-         +qwA==
-X-Gm-Message-State: AO0yUKUtw/fLUAJDJR9Vh/ql9PtPON8aq2JKE/EutTi5pBW6/Q4scQDs
-        CvZ5KTph2lb31O+7iL/g5jrILVhVb9WyHg==
-X-Google-Smtp-Source: AK7set84L+dfmEYyARYzHxkHL4mjWxSD7qVqL6qwQLFtYM+YjK8261txqNXP+EiyIUcshnBe9Bmckw==
-X-Received: by 2002:a62:f24c:0:b0:5de:a362:ecf1 with SMTP id y12-20020a62f24c000000b005dea362ecf1mr77690pfl.0.1678213411252;
-        Tue, 07 Mar 2023 10:23:31 -0800 (PST)
-Received: from ip-172-31-38-16.us-west-2.compute.internal (ec2-52-37-71-140.us-west-2.compute.amazonaws.com. [52.37.71.140])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa7820f000000b005d4360ed2bbsm8152734pfi.197.2023.03.07.10.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 10:23:30 -0800 (PST)
-Date:   Tue, 7 Mar 2023 18:23:29 +0000
-From:   Alok Tiagi <aloktiagi@gmail.com>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "hch@infradead.org" <hch@infradead.org>,
-        Tycho Andersen <tycho@tycho.pizza>
-Subject: Re: [RFC 2/3] file: allow callers to free the old file descriptor
- after dup2
-Message-ID: <ZAeBIcZvQsB2N7eq@ip-172-31-38-16.us-west-2.compute.internal>
-References: <20230302182207.456311-1-aloktiagi@gmail.com>
- <20230302182207.456311-2-aloktiagi@gmail.com>
- <bef11c18fa234948bcab0316418f04aa@AcuMS.aculab.com>
+        Tue, 7 Mar 2023 13:40:57 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778D59BE28
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:31:39 -0800 (PST)
+Received: from [192.168.2.57] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DD6FB6601F13;
+        Tue,  7 Mar 2023 18:25:16 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678213518;
+        bh=7xmQlQpWEcyC/vbFYJQ2McbYpsrcK7QnlpUA/KHn1Wk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Zrglm6oKYgFbMjueScP15VIhZ1e8VIZcmHTOs1V+uaFq8lqpreoWLJJsP+xhKEn3A
+         CRyP+C1qQvEQ6mqj/+l+9azFbvrvfnJyH8+SvKyEUPUf87kLou7kCF3a61h9eJxZN1
+         M/l7hHHuD+So2fb0bCK8WSiBRG7Q5Clh38oAL71o+WmUHjuxN2wWO5cxxN5UDxfAwZ
+         iW57t6V1ciYldWG38Zc6w9IYwNqSDLtSLDetuB0IOR3YRUXetyjv3RT4WYQlcpLXeO
+         6VZCv6oen7Ex10YDM2i750Mo0Ukwh6JXkacuN6qvMsRp2zOWp9N+06UKMgpo/eiwNt
+         qYPcpTZfu7Zeg==
+Message-ID: <66ddf54c-8396-2eb4-49ae-da479a997219@collabora.com>
+Date:   Tue, 7 Mar 2023 21:25:13 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bef11c18fa234948bcab0316418f04aa@AcuMS.aculab.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v12 10/11] drm/virtio: Support memory shrinking
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Qiang Yu <yuq825@gmail.com>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     intel-gfx@lists.freedesktop.org, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20230305221011.1404672-1-dmitry.osipenko@collabora.com>
+ <20230305221011.1404672-11-dmitry.osipenko@collabora.com>
+ <3afbc965-4117-7d45-9a8f-b726c04d1b0c@suse.de>
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <3afbc965-4117-7d45-9a8f-b726c04d1b0c@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 10:21:11PM +0000, David Laight wrote:
-> From: aloktiagi
-> > Sent: 02 March 2023 18:22
-> > 
-> > Allow callers of do_dup2 to free the old file descriptor in case they need to
-> > make additional operations on it.
+On 3/7/23 13:42, Thomas Zimmermann wrote:
+> Hi
 > 
-> That doesn't read right at all.
+> Am 05.03.23 um 23:10 schrieb Dmitry Osipenko:
+> [...]
+>>         *bo_ptr = bo;
+>> diff --git a/drivers/gpu/drm/virtio/virtgpu_plane.c
+>> b/drivers/gpu/drm/virtio/virtgpu_plane.c
+>> index 4c09e313bebc..3f21512ff153 100644
+>> --- a/drivers/gpu/drm/virtio/virtgpu_plane.c
+>> +++ b/drivers/gpu/drm/virtio/virtgpu_plane.c
+>> @@ -238,20 +238,32 @@ static int virtio_gpu_plane_prepare_fb(struct
+>> drm_plane *plane,
+>>       struct virtio_gpu_device *vgdev = dev->dev_private;
+>>       struct virtio_gpu_framebuffer *vgfb;
+>>       struct virtio_gpu_object *bo;
+>> +    int err;
+>>         if (!new_state->fb)
+>>           return 0;
+>>         vgfb = to_virtio_gpu_framebuffer(new_state->fb);
+>>       bo = gem_to_virtio_gpu_obj(vgfb->base.obj[0]);
+>> -    if (!bo || (plane->type == DRM_PLANE_TYPE_PRIMARY &&
+>> !bo->guest_blob))
+>> +
+>> +    if (virtio_gpu_is_shmem(bo)) {
 > 
-> Whether or not this is a good idea (or can be done differently)
-> the interface is horrid.
-> 
-> >  	if (tofree)
-> > -		filp_close(tofree, files);
-> > +		*fdfile = tofree;
-> 
-> Why not:
-> 
-> 	if (fdfile) [
-> 		*fdfile = tofree;
-> 	} else {
-> 		if (tofree)
-> 			filp_close(tofree, files);
-> 	}
-> 
-> Then existing code just passes NULL and the caller can't 'forget'
-> to intitalise fdfile.
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
+> Not really a problem with this patchset, but having such branches looks
+> like a bug in the driver's GEM design. Whatever your GEM object needs or
+> does, it should be hidden in the implementation. Why is virtio doing this?
 
-thank you for the review, I'll fix it in v2
+There is another "VRAM" VirtIO-GPU BO type that doesn't implement the
+pin/unpin callbacks. Perhaps another option was to add the callbacks.
+
+>> +        err = drm_gem_pin(&bo->base.base);
+> 
+> As the driver uses GEM SHMEM, please call drm_gem_shmem_object_pin()
+> directly and remove patch [09/11]. Same goes for the _unpin call below.
+> 
+> The problem with generic pinning interfaces is that there's no way of
+> specifying where to pin to BO.  The problem is most apparent with TTM,
+> where hardware often has multiple locations were buffer can be placed
+> (VRAM, GART, system memory). So it's really a detail between the driver
+> and the memory manager.
+> 
+> These generic internal GEM interfaces should only be used by DRM core
+> and helpers. Drivers should use their memory manager's interface.
+
+I'll switch to use drm_gem_shmem_object_pin() directly in v13, maybe add
+virtio_gpu_gem_pin() helper for that. Thanks!
+
+-- 
+Best regards,
+Dmitry
+
