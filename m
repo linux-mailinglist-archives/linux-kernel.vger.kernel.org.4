@@ -2,81 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323116AD324
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEAD66AD331
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjCGAH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 19:07:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
+        id S229792AbjCGAMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 19:12:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjCGAH1 (ORCPT
+        with ESMTP id S229490AbjCGAMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 19:07:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6E64FA95
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 16:06:45 -0800 (PST)
+        Mon, 6 Mar 2023 19:12:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC684ECF6
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 16:11:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678147605;
+        s=mimecast20190719; t=1678147884;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kiG8BgPH1QQ43j7yve5gAvlmd9pWIcu5Uac1q0tt6sI=;
-        b=OhcdS/+hw7XnVOFGDIQzVKzjP9T+iDiem5uMImG5HiF0PB5mou8cvfo6xpUF6AOmkWqe3b
-        IdtUIOw85wHtSnZo3JzLccqGKrKc3Xj/7Tk+nJJLPXUEYZLbq0R5sY2Xp4dGThxpKr6egg
-        O6XuejLIg0ghXYGqLODxldK0zI5QClg=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=fOzDuJrDxV1m0d9OGwSp4ESW3MVpzmUb4ORlvJ2wcQA=;
+        b=R6Lsgb1VKZXBvJ+L/QoRN99vlz4vYdocNY3aj0xLhuuIAuma1Cticm/+9mVCQB/QohIBCj
+        ZFzsmbn/D82p+C2UM/pqf2LNsGhuFSwKII1u3HXfDikfY3YTuxpFnrZUVYxe2EsHKZxs2s
+        UZ+M1Gd57rELeLu43TlUrdn3Sqt1ue8=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-648-Jvq7vAApOnaSLsA1wri7rQ-1; Mon, 06 Mar 2023 19:06:44 -0500
-X-MC-Unique: Jvq7vAApOnaSLsA1wri7rQ-1
-Received: by mail-ed1-f72.google.com with SMTP id b7-20020a056402350700b004d2a3d5cd3fso10926846edd.8
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 16:06:43 -0800 (PST)
+ us-mta-33-qhGUmoYtOHq6pctGFHWjOw-1; Mon, 06 Mar 2023 19:11:21 -0500
+X-MC-Unique: qhGUmoYtOHq6pctGFHWjOw-1
+Received: by mail-qt1-f197.google.com with SMTP id ga17-20020a05622a591100b003bfdf586476so6246522qtb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 16:11:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678147602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kiG8BgPH1QQ43j7yve5gAvlmd9pWIcu5Uac1q0tt6sI=;
-        b=e2s098xnPzCQzWd5CdoGP9B+5pAl354XEb+YMGMK5C/6WOWiACIgCIFrfa/kKzk9+O
-         m+p01u5OO5eFcsR4Pwb4ePdoIgCnzTzjAuumlPG1Fo3qrlnpaoutepFzEA2XQ8ADGzQP
-         2nCqS+OTSMNvzC5jTJlaVMTmvygGI2KEMlUmhvf+IQWXSHOrcp+Cg5zIkMLAlLBJAc1F
-         3Lnnd5DJmwwEtdFBP5riDbPzhYPAASUweZlW+RtOASy3Te+uM3yNfnryZtYu1doN0V9D
-         nobrvjrpvY5VpeAX6BhakZ97iJ7e7glVbTK42X3Y84emppcw6npI9IINNlsV8TUKVcMC
-         Hn3w==
-X-Gm-Message-State: AO0yUKW22dBUXxZyhE+wxQRMzC0PqDRX+99dGf5G0p5R7AkAW9ZLyMxH
-        t3rkcPhld3kCeKYrzCVhG2pTYHceiBx28dRkDzPWAf2u8wQrTS4ZKVvGTCmOQzkMC/dMuiS5tbB
-        46AA4mZiFuF0duIIVQenz5sl5Y2WUKTPv8QRGW4D1
-X-Received: by 2002:a17:906:338e:b0:895:58be:963 with SMTP id v14-20020a170906338e00b0089558be0963mr6262945eja.3.1678147602616;
-        Mon, 06 Mar 2023 16:06:42 -0800 (PST)
-X-Google-Smtp-Source: AK7set+tlZyOLrVQtITvkM4aCSQgfCcDyTdnBcxy/a9AwJHlmGApYotDt8QLwad83Q2rJffmtyK+Fiuv9O7gGylkK+s=
-X-Received: by 2002:a17:906:338e:b0:895:58be:963 with SMTP id
- v14-20020a170906338e00b0089558be0963mr6262936eja.3.1678147602324; Mon, 06 Mar
- 2023 16:06:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20230306191824.4115839-1-harshit.m.mogalapalli@oracle.com>
-In-Reply-To: <20230306191824.4115839-1-harshit.m.mogalapalli@oracle.com>
-From:   Alexander Aring <aahringo@redhat.com>
-Date:   Mon, 6 Mar 2023 19:06:31 -0500
-Message-ID: <CAK-6q+iHJouJc2WSuPipC8kieULYg02ipyHaOKDsnj4rT-gcyA@mail.gmail.com>
-Subject: Re: [PATCH next] ca8210: Fix unsigned mac_len comparison with zero in ca8210_skb_tx()
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     error27@gmail.com, Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harry Morris <harrymorris12@gmail.com>,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1678147881;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fOzDuJrDxV1m0d9OGwSp4ESW3MVpzmUb4ORlvJ2wcQA=;
+        b=rvLmHwnuHhTD3IMVRRtqWeCvVNYLhPYSUEY3yVF5iZ+em1up10meQAjWc29YV9Eopd
+         J+ao4gqugA+g0M2/1xDJlLE+cBx2svVxDMvvL1DMvauLR3+WN8HUXZn9HZz3MiFPlxPQ
+         kr9MQXbUFMYdQz7TU2TIb0j7TDjMxiujscm/WlfEs/G3cSuv7Fj8/LmeFS4GgLcBeVLA
+         NWjt8CIQAaUKwmeIzW712SHdSyfIVtk1cf+P2gIPMR6+oAqr1brTW+DDSStdPuIwGJnm
+         rb94tnx/pEndYAuejIfseuar10Ma1JWdut/NWkZ1Fc7a8gik8lPVriV5D0le4upTe9eB
+         /9MQ==
+X-Gm-Message-State: AO0yUKV5a7+mta6h0RTPY4pZwyEthgiGY92WOmdYiE45ORm/dO7XxDTA
+        rvQEwAPf0ABPpTABZTGVgjcYxDT+WCO5yj4FZ6ZVZlEA1bVrfBUgBxahy1zTQHXClNX/ZvCNIsx
+        rE7VD9zjWpZefJTxJVMYlxTsA
+X-Received: by 2002:ac8:5751:0:b0:3b9:bc8c:c1f8 with SMTP id 17-20020ac85751000000b003b9bc8cc1f8mr28359391qtx.3.1678147881102;
+        Mon, 06 Mar 2023 16:11:21 -0800 (PST)
+X-Google-Smtp-Source: AK7set8BM7AUsiRefOt1umMJ4Dth06Cpb8323Q/aybM3/LmMXC+QAMfwEyfV8FMCNIXFRNS5DobkXw==
+X-Received: by 2002:ac8:5751:0:b0:3b9:bc8c:c1f8 with SMTP id 17-20020ac85751000000b003b9bc8cc1f8mr28359368qtx.3.1678147880861;
+        Mon, 06 Mar 2023 16:11:20 -0800 (PST)
+Received: from ?IPv6:2600:4040:5c68:6800::feb? ([2600:4040:5c68:6800::feb])
+        by smtp.gmail.com with ESMTPSA id m190-20020a3758c7000000b006ff8a122a1asm8411153qkb.78.2023.03.06.16.11.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 16:11:20 -0800 (PST)
+Message-ID: <5882bd80983ac04a32676f07622cba7d0e245e55.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/mmu: fix use-after-free bug in
+ nvkm_vmm_pfn_map
+From:   Lyude Paul <lyude@redhat.com>
+To:     Zheng Wang <zyytlz.wz@163.com>, nouveau@lists.freedesktop.org
+Cc:     bskeggs@redhat.com, kherbst@redhat.com, airlied@gmail.com,
+        hackerzheng666@gmail.com, alex000young@gmail.com,
+        security@kernel.org, daniel@ffwll.ch, Julia.Lawall@inria.fr,
         linux-kernel@vger.kernel.org
+Date:   Mon, 06 Mar 2023 19:11:18 -0500
+In-Reply-To: <20221029074654.203153-1-zyytlz.wz@163.com>
+References: <20221029074654.203153-1-zyytlz.wz@163.com>
+Organization: Red Hat Inc.
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,28 +83,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Actually - could you resend this with dri-devel@lists.freedesktop.org added=
+ to
+the cc list just to make patchwork happy?
 
-On Mon, Mar 6, 2023 at 2:20=E2=80=AFPM Harshit Mogalapalli
-<harshit.m.mogalapalli@oracle.com> wrote:
->
-> mac_len is of type unsigned, which can never be less than zero.
->
->         mac_len =3D ieee802154_hdr_peek_addrs(skb, &header);
->         if (mac_len < 0)
->                 return mac_len;
->
-> Change this to type int as ieee802154_hdr_peek_addrs() can return negativ=
-e
-> integers, this is found by static analysis with smatch.
->
-> Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver"=
-)
-> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+On Sat, 2022-10-29 at 15:46 +0800, Zheng Wang wrote:
+> If it failed in kzalloc, vma will be freed in nvkm_vmm_node_merge.
+> The later use of vma will casue use after free.
+>=20
+> Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+> Reported-by: Zhuorao Yang <alex000young@gmail.com>
+>=20
+> Fix it by returning to upper caller as soon as error occurs.
+>=20
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c b/drivers/gpu/=
+drm/nouveau/nvkm/subdev/mmu/vmm.c
+> index ae793f400ba1..04befd28f80b 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> @@ -1272,8 +1272,7 @@ nvkm_vmm_pfn_map(struct nvkm_vmm *vmm, u8 shift, u6=
+4 addr, u64 size, u64 *pfn)
+>  						       page -
+>  						       vmm->func->page, map);
+>  			if (WARN_ON(!tmp)) {
+> -				ret =3D -ENOMEM;
+> -				goto next;
+> +				return -ENOMEM;
+>  			}
+> =20
+>  			if ((tmp->mapped =3D map))
 
-Acked-by: Alexander Aring <aahringo@redhat.com>
-
-sorry, I didn't see that... Thanks for sending this patch.
-
-- Alex
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
