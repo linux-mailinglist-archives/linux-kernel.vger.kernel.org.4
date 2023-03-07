@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A5F6AF391
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0816AF3E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbjCGTGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:06:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49194 "EHLO
+        id S233452AbjCGTLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:11:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233665AbjCGTGK (ORCPT
+        with ESMTP id S233631AbjCGTKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:06:10 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA90C082B;
-        Tue,  7 Mar 2023 10:51:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1678215040; i=frank-w@public-files.de;
-        bh=nWexxL308BH6z9moewgL9uYihCpYFK54dVeZ2PBn3f8=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=tIoGoyJqs2OkjReYZUq7R4DzCHsQfWQztFQt0KYgB3j4czOZiXbqyOTrzPbm6KFVZ
-         liwK94XYdcyqvarEYpALo+sYdLpNoDD9pVUn+Dh2f/9ygzrIXfdxNkH/lIy/5puhO9
-         2PJg2Bme9jBtXursaPmy8+5WeNnFNQPmT4C4sWL0ARLoOegq85fkCjDQ79meY4TSrq
-         HI+AL1OH3onxeqhHLrlfXUHOp2T/BpEUbuXY35JZhegNDwMbdjuzSq93wfFtFP1/+b
-         9L+vkQmVV3sgFqOxjxVubm0L4dOE6IilYta8ILPWjY1ohwOWSj5Bx/NsbHGkQ6gRL0
-         mh9l3rfxnbiYg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.156.24] ([217.61.156.24]) by web-mail.gmx.net
- (3c-app-gmx-bs16.server.lan [172.19.170.68]) (via HTTP); Tue, 7 Mar 2023
- 19:50:40 +0100
+        Tue, 7 Mar 2023 14:10:47 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBA8C8597
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:55:20 -0800 (PST)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327HFKPk002280;
+        Tue, 7 Mar 2023 18:54:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=FkW88o2DovWlh2UEIlYTAwTKA7K+MRCGlcyCOilz1p0=;
+ b=RA+BsyYZd5ir73cngNuaK/qLlUp7clOw4/849+JG8J7Wmino+awYdqmKKIXgCesVROPn
+ 3iThPH2ivH3kKXAd/MqgJ/oBmLsezRgRbeucsHoY8LlieDZFUOwEQg21JHUqyufPOC6w
+ 0LLHQhHhS4yXgyskvVs1lCIMzakkSpOElFqPmJbNjLdAoKqiYzugX3jJuRGJ6H5dkypi
+ Lra0zCfbzrpKAJGth8xNXfnUj7pAMMQMAac9GDWva72rnd29HSAAbmUmLXmtLh/WTsYR
+ vihq95Uk64ZMlzeJySj9AWDRTiwhhh0Es+p5XjUluocuFFaSH+7PVe6YDxp1F/yxUIMo MA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p67wfnj59-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 18:54:25 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 327Ifvfs018468;
+        Tue, 7 Mar 2023 18:54:25 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p67wfnj43-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 18:54:24 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 327Eo5l9005880;
+        Tue, 7 Mar 2023 18:54:22 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3p418cvpd2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 18:54:22 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 327IsKss54002076
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Mar 2023 18:54:20 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE5EF2004E;
+        Tue,  7 Mar 2023 18:54:19 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6097720040;
+        Tue,  7 Mar 2023 18:54:19 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.179.29.172])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Tue,  7 Mar 2023 18:54:19 +0000 (GMT)
+Date:   Tue, 7 Mar 2023 19:51:19 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     <yang.yang29@zte.com.cn>
+Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
+        <jiang.xuexin@zte.com.cn>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
+        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>
+Subject: Re: [PATCH v6 5/6] ksm: add zero_pages_sharing documentation
+Message-ID: <20230307195119.745d0b46@p-imbrenda>
+In-Reply-To: <202302100920429071565@zte.com.cn>
+References: <202302100920429071565@zte.com.cn>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <trinity-19cb78f9-24ee-4cab-a24d-5c431d154e43-1678215039980@3c-app-gmx-bs16>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Aw: [PATCH net-next v12 09/18] net: ethernet: mtk_eth_soc: Fix link
- status for none-SGMII modes
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 7 Mar 2023 19:50:40 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <1590fb0e69f6243ac6a961b16bf7ae7534f46949.1678201958.git.daniel@makrotopia.org>
-References: <cover.1678201958.git.daniel@makrotopia.org>
- <1590fb0e69f6243ac6a961b16bf7ae7534f46949.1678201958.git.daniel@makrotopia.org>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:76gtEPPKbw3oW5Vh9Br7sY/0upYihofaodLeF5Poo1oqibixMOcL2y0Fehhg3y1CanIwj
- i5ak/DrOGWMtDkAYTL930BJHMzxlrPSD2RbFOg1hZRZSQNQhey/uFIOTm3zkeR1tT5latxzmDT+R
- ornMPbIXSbhTma8tYRTXgrgq9yEciDBGKHnfKhUD4rF9mztF2FgFZj88rHLE0511TZGh4Q3XxDfh
- +RLVZaxpaN91URF6IUIDZ9pozauNCiX0MQ/ER24URfXEoXWLDYpb024n4rMKi5LvTM/hpuX4DO1B
- AI=
-UI-OutboundReport: notjunk:1;M01:P0:oYTl1d60MWg=;C4x3bNHaagBMTR7qFsMFz764oFC
- jJLFXAfjjvaBoce70TTO7nh0M+WdDbscQzSasa9/SVoIR72+oR2P1GgL50WxyPdJv7GW3jgSE
- E0BDP8nKyWbC/fgxe09oIJvEUyrxiT9KYQ8r0wW4hVwz0maIvWO4MDymQ8XZpf4jqSmISLh7I
- LtwFvVINAheIPWzHwsDGpwnLrg+fVJnG2EFknNv2X74RfPTyjS2yr7sOm9TlGMFP1wudgMG2E
- +kvs20B3TwakSQUJkYPK7OWbRXk80KyKKYPAbGuhEc3g0S1poZZVKUOjl0aIAc13/xdW0J5F4
- fR2VS8+xWT00FOggTPtn2l9+56qDd3grvNKEqzrWPmgRf0pctgFChlJ7rKiRYsysC2uq+31j3
- m96NS+N0oukLakr9dG1gzJFtk+p9demgwiG9zrU/CpC93y0i2CQktk4BBPHNGBP6Mfj/r1B3Q
- AIfiFJ4OWoywMTZ24UWNgJeY5KnXT1BsdI/iXym4LhpHwD+KOCftR1UXY6OLPxoGYe5U6O63M
- mlZEyG5zqlx+FmopGHsSC28luN0cCQegFCzpmBC1F/FUEa2PODTQrj5NVYxqcLz7xujEjRBcO
- PJ2usGtkhRAKkRZ+zAejstj/9sG2Nc/hLY2fwFyIVoGLBBRjInZFeFElBXD4rJk2CFP48X5Uc
- gxyZLoFkcVG/rIhr2PylXTzTif/AUtcUPTkwT/+tDn3Ros7LXKmvmLqz2ukq7SnhwLhPK4Obs
- OrJRtP4FVmMOnhISR2Z+et3AuEKc+Xwmk06cxMSLQtDiOQDUTxSNF8JcRfcgxmCyrpU0VPwZf
- 2r/3kTJb1FQ+1YQB21okVMcg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: I7_o-mVw1jZiJGmap1zDh5aDhQdCXHWj
+X-Proofpoint-ORIG-GUID: SvKl6EkmaQht5Re9opWMW3J3QiOqk5Ay
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_12,2023-03-07_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ clxscore=1015 malwarescore=0 bulkscore=0 mlxscore=0 suspectscore=0
+ spamscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
+ mlxlogscore=882 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070164
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,21 +94,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Dienstag, 07=2E M=C3=A4rz 2023 um 16:54 Uhr
-> Von: "Daniel Golle" <daniel@makrotopia=2Eorg>
-> Link partner advertised link modes are not reported by the SerDes
-> hardware if not operating in SGMII mode=2E Hence we cannot use
-> phylink_mii_c22_pcs_decode_state() in this case=2E
-> Implement reporting link and an_complete only and use speed according to
-> the interface mode=2E
+On Fri, 10 Feb 2023 09:20:42 +0800 (CST)
+<yang.yang29@zte.com.cn> wrote:
 
-Hi,
+> From: xu xin <xu.xin16@zte.com.cn>
+> 
+> When enabling use_zero_pages, pages_sharing cannot represent how
+> much memory saved indeed. zero_pages_sharing + pages_sharing does.
+> add the description of zero_pages_sharing.
+> 
+> Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
+> Cc: Yang Yang <yang.yang29@zte.com.cn>
+> Cc: Jiang Xuexin <jiang.xuexin@zte.com.cn>
+> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
+> ---
+>  Documentation/admin-guide/mm/ksm.rst | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
+> index fb6ba2002a4b..f160f9487a90 100644
+> --- a/Documentation/admin-guide/mm/ksm.rst
+> +++ b/Documentation/admin-guide/mm/ksm.rst
+> @@ -173,6 +173,13 @@ stable_node_chains
+>          the number of KSM pages that hit the ``max_page_sharing`` limit
+>  stable_node_dups
+>          number of duplicated KSM pages
+> +zero_pages_sharing
+> +        how many empty pages are sharing kernel zero page(s) instead of
 
-have tested Parts 1-12 this on bananapi-r3 (mt7986) with 1G Fiber SFP (no =
-2g5 available yet) on gmac1 and lan4 (mt7531 p5)
+how many empty pages are sharing the kernel zero page(s) instead of
+other user pages as it would happen normally. Only meaningful when
+``use_zero_pages`` is enabled.
 
-Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
+> +        with each other as it would happen normally. Only effective when
+> +        enabling ``use_zero_pages`` knob.
+> +
+> +When enabling ``use_zero_pages``, the sum of ``pages_sharing`` +
 
-Thx Daniel for working on SFP support :)
+When ``use_zero_pages`` is enabled, the sum of ``pages_sharing`` +
 
-regards Frank
+> +``zero_pages_sharing`` represents how much really saved by KSM.
+
+``zero_pages_sharing`` represents the actual number of pages saved
+by KSM.
+
+> 
+>  A high ratio of ``pages_sharing`` to ``pages_shared`` indicates good
+>  sharing, but a high ratio of ``pages_unshared`` to ``pages_sharing``
+
