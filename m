@@ -2,290 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29456AE28A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D4EC6AE2A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjCGOcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:32:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
+        id S231348AbjCGOfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:35:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjCGOcA (ORCPT
+        with ESMTP id S230505AbjCGOfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:32:00 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BADF95271;
-        Tue,  7 Mar 2023 06:27:39 -0800 (PST)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327Bkl7l003106;
-        Tue, 7 Mar 2023 14:27:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=j7xKvhj/h0KWXmpbPPwO4BWkzI/TMB2C0Mvwwx8q8xw=;
- b=ccod04KFNVKnkpmeZlrGIY4LXYL0qXYxsBcGF3VZLJ/mwXv256BQRmCgiLnKjSBmbqIs
- SlXUv15ue/S8+m1vvBR+jHgGXt6HUO+/m5h+krTmJ0BL8GqH/itIw+ijJ6Htc71Ms5MD
- 6RhEmI4+oS7AGov/MSyspxlEOyln8G79JlUiu95T00OJ+NWoFKwiPCEFHsEuT2kReplx
- kGVaLCxinjhgjZ+jiOT1LAUXueK6e0IHyz1fhqza/8WbEjhW/S2AAYzMpHD91ZgA8yXg
- 1X1yr7FTgOQrdd43NrGwpM+XyqSmBZRHLQUA0O3lIAZ5wslqJVpmfhyw6EuRDeJUT7K3 3A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5x5c9ddx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 14:27:35 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 327ERYX8024624
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Mar 2023 14:27:34 GMT
-Received: from [10.50.22.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 7 Mar 2023
- 06:27:25 -0800
-Message-ID: <619878c3-25a8-3875-efc3-3cf1c6bc262e@quicinc.com>
-Date:   Tue, 7 Mar 2023 19:57:20 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 11/11] arm64: dtsi: qcom: ipq9574: Add nodes to bring up
- multipd
+        Tue, 7 Mar 2023 09:35:25 -0500
+Received: from mx07-001d1705.pphosted.com (mx07-001d1705.pphosted.com [185.132.183.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB453898F2;
+        Tue,  7 Mar 2023 06:31:15 -0800 (PST)
+Received: from pps.filterd (m0209327.ppops.net [127.0.0.1])
+        by mx08-001d1705.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327E3AYg020073;
+        Tue, 7 Mar 2023 14:30:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : mime-version :
+ content-type : content-transfer-encoding; s=S1;
+ bh=bTe3483GqQPnAPwIQfWduSqYNTJBWzzu5hFHtzqq9Kk=;
+ b=Yd1xVpcxsrGQB+86LBTIzz+8tnaoehdmXkdLXFXYdANVWk8N/ghYGcbDHBuXbnLGgrl5
+ BpEX6jaFUz78OUVqmO4bfw97mDYzz80lV05vC6JS2oYiQiVlKhFjMXUSTLQ+ixyz48id
+ BSZNcOza9mM218xgZyIa+diu505viNgNpPzuhFfFkX8K9c0kKW8Bm/7ObHeq9iT+fsrB
+ BApHzPYeYjr7Ax+sdKQGpnRADM+OWvTSm9uCc+B/o9tgJvYjvsmzeSLUySrypggLHkZq
+ elj7n6c9wNaf7Qe1+v7z+EMi2YS3hB3y7WfXr8laB+pHHERupwmbF6ImmMf9YWSrnLC0 ZA== 
+Received: from eur02-vi1-obe.outbound.protection.outlook.com (mail-vi1eur02lp2048.outbound.protection.outlook.com [104.47.11.48])
+        by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3p418njn3w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Mar 2023 14:30:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j2BgE8vYyYzhV7YV9hT3QDqLeEus9KRfTGITnt+VOPZXcQ/CilUG9PSuMZPh4/nG4h0Zx/b/FFTzDYiRYVa4HrAH68ZCx4WqA57+jdi3aJqaWYU4cPioHFEUyRUDBcngzEE/aeLTpihrPPxEJPeJJrR9yg4oeHYYtsVT6sDZcc9IBt7S9/ERVKfzO1QbA07TgIdVMpPnljBx17JMpa6UFYieHimIyn+eSGytf+qKNyfnESQ9lDqf3QoQsoYaVM/kPuylYVoBWUXMeCDhN2v80oYgBRrCNSk3Mv+6JVBt5E1V/fAvMKRyDAQcZq33Lhu/Klnr1PsHximXIo/+1AZBSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bTe3483GqQPnAPwIQfWduSqYNTJBWzzu5hFHtzqq9Kk=;
+ b=dwHoCXKqFCd9bxk0tv4xsb3ycshRwfllsK1/g8/LYi7831diW3dRVlL9aqJ11ze0BgBXNMALamDi41YrLFURt3BIyGWjDHdAuyt2jHi6hHRnZTkaOdexqgzNL+dA4sbBQ1efFHIBdwdGJemgy72uZLhcf+IMsJz/p6GUZtqn1vCLsbkvumLJXqABzclqjBU65dc5yHBhpxia509zopaSKqsOx69Xge5iecLaG7yLnWYmpZnswbehe7oAySWH//hcOi4CPzCy82h4OE3gSY1dkzVVaSP7bR4sLrTOpsm19Dqarra2Eu8w7njYZt1egDB8xHm+eZrChSgs9cunBooPXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
+ dkim=pass header.d=sony.com; arc=none
+Received: from AM9P193MB1332.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:30d::9)
+ by PR3P193MB0604.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:34::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
+ 2023 14:30:26 +0000
+Received: from AM9P193MB1332.EURP193.PROD.OUTLOOK.COM
+ ([fe80::b1ea:2de8:5297:f6ab]) by AM9P193MB1332.EURP193.PROD.OUTLOOK.COM
+ ([fe80::b1ea:2de8:5297:f6ab%4]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
+ 14:30:26 +0000
+Message-ID: <73971153-b46e-0332-aa4a-0dbe0a59fd22@sony.com>
+Date:   Tue, 7 Mar 2023 15:30:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] maple_tree: Fix mas_skip_node() end slot detection
 Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
-        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-12-git-send-email-quic_mmanikan@quicinc.com>
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <1678164097-13247-12-git-send-email-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: xpVsCW2n8pMaz-40qwEjMl73u0Xslf4u
-X-Proofpoint-GUID: xpVsCW2n8pMaz-40qwEjMl73u0Xslf4u
+To:     Peng Zhang <zhangpeng.00@bytedance.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     Stable@vger.kernel.org, maple-tree@lists.infradead.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230303021540.1056603-1-Liam.Howlett@oracle.com>
+ <cec2dec7-818a-b32c-3ad4-8b23fc1351f3@bytedance.com>
+From:   Snild Dolkow <snild@sony.com>
+In-Reply-To: <cec2dec7-818a-b32c-3ad4-8b23fc1351f3@bytedance.com>
+X-ClientProxiedBy: LO4P265CA0258.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:37c::13) To AM9P193MB1332.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:30d::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9P193MB1332:EE_|PR3P193MB0604:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1c2c58f-9f27-4aea-0e3a-08db1f187e84
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UAL4XKYidVnyJrVRlAO/9PYdWNHaUb5/xa42iiODXgcdKZwXXGdxkUf6imwV7mnP0Ce6nx5+OEsk/sYAsFYxGXlbyWpRb5PpToPFOYTCGSilOO7lwwBNGpNUBoelPAExNVYQK+c0edCOMSSqKOmFWThJXOuRKMlByFUOBXDlIqTB5itDQ0kfXYRm+8R+OrpewGQFZLB5I3z6e9N9PVWpbath3uVio++xSgQOySLbMLxr+atS3b8XI1p/qnGdt3swzVA/3scO7hmrpY0705jMhv3CXmZiuDmXajufgEPBTMMEzT7/izgsSZENBtdE0zfPSw93G32x3kxDIBxc9Up6qIX6AjHC9OT36wlWvo1bKWUb7lMojzjNFOkWIw3oYZZlZ6pF/tViPu9zmmzjRi34Tk9LE0NIYO7XBDlyy+lx9SQr7ehowRGuJ98wmJ9JoKpS2dySw2htKYNNqGjGZ+ePjhwBVe99dvLq7tSPi7U8J0XIoYF7LyVHlETXAKo1s7lSLiZPHx/gbFvXf1Tdut7DAaNzYl3K89cuNLZe2pSyjLvj5XYOP16vowatrz7n0zE/vPrdu7Z9jvM+n+cUVr8bAzcg61p5agO9p/YHVVzRBlfg5Bz10+gKaWlj06Rzp96n7/vZ5wXGBk+DnrLunmFTxCLgr9AswDyVFdcBkH91mK3SdZH9IQq56kIlAJblJjsHQxarAWH9rvR4tdU9KNFWKv57dVIRXZ+z0G3LsCQa6dQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9P193MB1332.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(136003)(376002)(346002)(366004)(451199018)(31686004)(316002)(110136005)(36756003)(31696002)(38100700002)(86362001)(186003)(82960400001)(6512007)(6506007)(53546011)(83380400001)(2616005)(8936002)(5660300002)(478600001)(6486002)(4326008)(41300700001)(2906002)(66946007)(66476007)(66556008)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R3FRQ0lLTjdPd0toUHlybHc2YVlXL3pQM01wY2tkMFMwUk1mWVV6V3BST1Ix?=
+ =?utf-8?B?d1lqS3pkSWRWalNHTWFPb2xTN05UZTZ0NE1FT09hNUtvb3hNZVcvZzk2ZC9u?=
+ =?utf-8?B?QVg0QUhkN0ZBSW5IOXlvL1dnQjkvZldqS1AzanJGT21IM1ArQmJhcUNPbjJ4?=
+ =?utf-8?B?YWxtYU5nTzFoSnd6OHNaeERWcWdFVDVzRlB4Qk5jK2VRSS9QTE9yb2F6Rzls?=
+ =?utf-8?B?WGlvdEhtWGlrS0l1NEF5eEhLaTJEWVBTSFFrRjFTY3lBNWdpU3VaeFJ2bVB1?=
+ =?utf-8?B?ZWxkN1psNTU5U1NxMTZ1WHR0S1R4UVFkUEN4T3BBN2ovdWt2b0FtR1pOZFlB?=
+ =?utf-8?B?clM4NCtRb3dzeGg1b3Z1QnU5T2R6WXR2L2VkWVJWVVI5aXAvM3NzOHdjb0tE?=
+ =?utf-8?B?N09NeVV1WHpPTFlTZ1VQS0ZBcDEzY3MvYS9Qc3p1MzhUM1J1d0hRVnZPTkdW?=
+ =?utf-8?B?QlJVeUxocTlsd3lETnpiOWRwUHlhM1lFQlptM3ZYUXhEZU5tbWN4cU9ud3Nk?=
+ =?utf-8?B?Qnc4T1htM2JpczdJd2pneGY2SUxNOTJ3cmhKeVdLUWxQUGJGejh1NjVhbmk0?=
+ =?utf-8?B?dldJemJMa1oxNXJEVkhZRW10SlBNdFNYcnkvekJkQWo5dW5UTVY3enEyTk9j?=
+ =?utf-8?B?cCt2cU9LaUx1c0hvNXVKR2wrQXRHSHNvRVhTSXUrbTM5YVlKZ3k2anFLbGs0?=
+ =?utf-8?B?VXVjRW5YRlNwNEtTNlFnS0Rob3lhQk9MTElnVEk4SWZKanZIaUtqUE9QdkJi?=
+ =?utf-8?B?V0ZJREVVbXpmT2NKWksxL1p4dUc3bWxGU2c4NDlKMTNZSXg1aE9WS3BkbGU2?=
+ =?utf-8?B?VmZhdFN1OXRDQW5wcFFmYk9WZVk3WGZldGtrTXFCbkpRODJLbWFWcUVNNkdG?=
+ =?utf-8?B?K09WTzF2dlFvdXpvTEJORlJsdXFyOElvL0xJKzN2SFo2MzNOOHVmeGxJcUJo?=
+ =?utf-8?B?a1VjTTVwUitnQlpNRzlMYytWS3BSL3U0RXpQV0l4c0o5dmpFTkM3QmY0TEhZ?=
+ =?utf-8?B?MWZwZ3FFRHN4ZkVVaVNqRXZRZ3RBejFjdGVEaVVLN2I3alhweDlKSFQ0NnBo?=
+ =?utf-8?B?Vy9rOVFtT1FDeG5xaW5iZFV1MmMrT0pHV2tJTHhGeU5mMzhVWmtET2xMMitq?=
+ =?utf-8?B?cU5mMUxQV3ptR3UrV0lwTVp4dGx0bzBieEM1V2tVeGIyQlNvSVZwUkZvdWQx?=
+ =?utf-8?B?U0NmdUV1KzhRaGE5MlF2Y09GN3VKNmdmNUJWbjA2d2o3QjFVUjRrY3BybzRX?=
+ =?utf-8?B?cnZZODZoVW5yQ1FGNWNtbGNnYXF3bnhWVURLRDhuT3JTeHBZdkpISkVGUnhv?=
+ =?utf-8?B?U3hzSC9yZ05tczg1b1licmJyeGZSd2hpMHVhTnNtb2x5Si9Zcko1TTlwRC9G?=
+ =?utf-8?B?L0VjRDVRY0xKRDR6OHhpN3Y4VDA1MS9QYWh3SnNWeER0NWdOYUJicnZVcGNi?=
+ =?utf-8?B?WFRpdDZKTXVJZHNXN3ErSDBLcmVJQWEvOW1vd1Nxb0Z2SjNMWFFxSVFpZ05q?=
+ =?utf-8?B?bERNUVRmM0REUTZDL1diRlB4NnVqenVGeW5weVVhT3NxQUhObXRQZ2k3bVY5?=
+ =?utf-8?B?YmVPVFl0WGZHeG9PVHNSTEl2VHhXbEZzaDlmYkNIdnQ0MndWRHhwRFp2K2VZ?=
+ =?utf-8?B?V2hNWkFlaCtIUmdpMS9uZWl4K0x3RWNzYklOVGZxZDRyWjZuM0w1aEFYdWl2?=
+ =?utf-8?B?Z0Y4VVNwVVlleW9MZk1PYUltWGlrc1lMTEhaRHZmMnBiTXBXUDJ5ZkZHd3FV?=
+ =?utf-8?B?QmRYR1plbFJIZmY2bC8zRURHT0V4TnZoeDFtN0tKNmdnRktZTXVNSEtxUDVo?=
+ =?utf-8?B?aXZlV0U3NjduUFE5VERzTUhTVlIrMVZPZitOcmRacDE0NFk1RCsrZERDQ1FN?=
+ =?utf-8?B?bkZKbjNUcW83NUNHVHdWVFNvVExUdG5tRDlzZnVtbXRhVm1NdVNsc1Q3c3RJ?=
+ =?utf-8?B?NWQ0V2lHT1YxZVUwdlA3b3ZPYUMyaUc2MGwwNnhSY2NGZmJHbEZzUzFoOVBL?=
+ =?utf-8?B?S3kyQ0VORnFiMEI2SVFyeEZvYWp5SngyNlFBN2I3L0ZMcjdRMlliRzNFeU95?=
+ =?utf-8?B?QzV6M0lOSDZMQVJwakZoaDNxdkI1ZEdQdUxvN1lLVGhtOXowTG1tKzB2RHlo?=
+ =?utf-8?B?QzdDL3YzTjNoc3VzaUpLa25tNHVGZDU3VzcxeXFlU0ZRazhJaExRaDVXV0Rt?=
+ =?utf-8?Q?5DM4JjzO4bH4l8921fsFI2o=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?aEJQL1ZnOVhyY2tuMGpEaDZkWVlZVGlpZUJ2MlloUXE0cXh1cmU0WUFhYTVv?=
+ =?utf-8?B?ME1oUXFkcmpPZFJqc3Y5SjREQ1J2VS8vQkpTWlBQU0N1K25KMkF0aHpWc2U1?=
+ =?utf-8?B?TjlUdDhzZ0o4Vy84cUY5ellmRDBqM2IxYmhCNnA2bU5LSE1zWDMzSWpudEVH?=
+ =?utf-8?B?Q1BNNU55S0l2bnVmRGVyWWIwQmVBZmVmK2RnU295UUdBTDNlUkc1MlRNeHNw?=
+ =?utf-8?B?QWwxZWl6a1hVbFBLRm9xT1gwaFhSbXl5NW10bmRYV2MrWWFaQXZVVmh5RjZP?=
+ =?utf-8?B?TENxcHkzdHRWU0FNYlA0SjJzMzhFNlo1T0k4OUFRemRVS0JOUVoybng3STBR?=
+ =?utf-8?B?Qi80dmlPRktqeVM1TU1rTlVPUmlCRFlPZ1JvY3JvRGlPamN3YmZDRUhLZGVP?=
+ =?utf-8?B?QlN6dlNIMjlKaWo0clp1ZE9DQUQvSzJaVnk0aEwvSFpPUExXNWhwWDBpL1My?=
+ =?utf-8?B?R2pFRGNuT0lGWlJmOFE5RzVXNlArSWl3d0lGR3ZwZ3drME9XbVNnQ0M1eEVu?=
+ =?utf-8?B?ZWNZeWZEd0R0Y1NMSUkzbGlJWmUzbEt2TXM1UExyeTFUOERWMU84RlR2eW1k?=
+ =?utf-8?B?dkJ1YmN2amxyT2dYNU1mSExibkdxbXZhWjM5SVFjdXRieWpnRVhkbFE1U3Ja?=
+ =?utf-8?B?WnVaS3FRUUFyQzFRUUhXWmI0cHd6OFhOVFlTN2VLeDFOalBLN0MvV25vcXFK?=
+ =?utf-8?B?WFRjdFJwV0lMSS9qbndJWTlFMytybFZmdDhtVkVKZkRXRXhRSDF5a01LWmc1?=
+ =?utf-8?B?aTh3ME43ZHVha081Z0NIRDNTc0gzekFJVnZ6aHUyUkdzeUZURmNUMGp2UjNn?=
+ =?utf-8?B?Z0NsSU9rN0JReEVsM2EyeUJVakYxbU9QeExFYTFacEEyNDhzWnR4OEQ2TnVC?=
+ =?utf-8?B?NjgzeG9CdFdac3A5cGUvVzBJZ3JVNWNqZDlxUzRTaDJpdmhsNnc1SzBLMUJk?=
+ =?utf-8?B?NkJQajVHQXV2RVlNOXlPUGxHcURGaGJCZkQrUlRKSjVFd3Y1MVc5UjF4TERj?=
+ =?utf-8?B?aW1GcVNhMTZDMkF3a1RtekZyWG84UjhtaHpFY2ZkcmNIN2lGdGZ4S0lBSHpL?=
+ =?utf-8?B?N3lCUXBLZWF4WmtBM0dlOThwWjlseVJZd2RjUndmR0prQTc1djJNd2k5eUx1?=
+ =?utf-8?B?ZDZhdnY4MFo1ZHRmdExuUFd3SjQ5ZVBTZWNtcTNmaXdFUGl2RUF5OVJpT0Rh?=
+ =?utf-8?B?OU90TnUvb1BHbTQzbmdLaVVvL0R4RnJmUVF0cXk3T0Q2R0xvNWhINjNMcWFa?=
+ =?utf-8?B?LzVXQk9pY3M4VGlYVmJqZ2owQXVEL3ZkMVhYMHJxbUxhU1VhZlRNK0hZUjlB?=
+ =?utf-8?Q?6TCU9hFYhShi8=3D?=
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1c2c58f-9f27-4aea-0e3a-08db1f187e84
+X-MS-Exchange-CrossTenant-AuthSource: AM9P193MB1332.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 14:30:26.6879
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5DXxZP37GjzVOiy3rfXXgBhC7OBUznAuPP/gNQQLn5V9QwzhVpnwPKx4aEaMhrac
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3P193MB0604
+X-Proofpoint-ORIG-GUID: iaxNBPVzBTR9FVzDFr3dtH4F0iLiuR-L
+X-Proofpoint-GUID: iaxNBPVzBTR9FVzDFr3dtH4F0iLiuR-L
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Sony-Outbound-GUID: iaxNBPVzBTR9FVzDFr3dtH4F0iLiuR-L
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-07_08,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=742
- phishscore=0 suspectscore=0 clxscore=1015 adultscore=0 malwarescore=0
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070129
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/7/2023 10:11 AM, Manikanta Mylavarapu wrote:
-> Enable nodes required for multipd remoteproc bring up.
->
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 145 ++++++++++++++++++++++++++
->   1 file changed, 145 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index 2bb4053641da..e0645bc39db4 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -201,6 +201,11 @@ tz_region: tz@4a600000 {
->   			no-map;
->   		};
->   
-> +		q6_region: wcnss@4ab00000 {
-> +			reg = <0x0 0x4ab00000 0x0 0x02b00000>;
-
-
-No need to pad the size
-
-
-> +			no-map;
-> +		};
-> +
->   		smem@4aa00000 {
->   			compatible = "qcom,smem";
->   			reg = <0x0 0x4aa00000 0x0 0x00100000>;
-> @@ -209,6 +214,30 @@ smem@4aa00000 {
->   		};
->   	};
->   
-> +	wcss: wcss-smp2p {
-> +		compatible = "qcom,smp2p";
-> +		qcom,smem = <435>, <428>;
-> +
-> +		interrupt-parent = <&intc>;
-> +		interrupts = <GIC_SPI 322 IRQ_TYPE_EDGE_RISING>;
-> +
-> +		mboxes = <&apcs_glb 9>;
-> +
-> +		qcom,local-pid = <0>;
-> +		qcom,remote-pid = <1>;
-> +
-> +		wcss_smp2p_out: master-kernel {
-> +			qcom,entry-name = "master-kernel";
-> +			#qcom,smem-state-cells = <1>;
-> +		};
-> +
-> +		wcss_smp2p_in: slave-kernel {
-> +			qcom,entry-name = "slave-kernel";
-> +			interrupt-controller;
-> +			#interrupt-cells = <2>;
-> +		};
-> +	};
-> +
->   	soc: soc@0 {
->   		compatible = "simple-bus";
->   		#address-cells = <1>;
-> @@ -829,6 +858,122 @@ IRQ_TYPE_LEVEL_HIGH>, /* int_c */
->   			msi-parent = <&v2m0>;
->   			status = "disabled";
->   		};
-> +
-> +		q6v5_wcss: remoteproc@cd00000 {
-> +			compatible = "qcom,ipq9574-q6-mpd";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-> +			reg = <0x0cd00000 0x4040>;
+On 2023-03-07 14:05, Peng Zhang wrote:
+> Hi, Liam,
+>> -    } while (slot > slot_count);
+>> +    } while (mas->offset >= mas_data_end(mas));
+>> -    mas->offset = ++slot;
+>> +    mt = mte_node_type(mas->node);
+>>       pivots = ma_pivots(mas_mn(mas), mt);
+>> -    if (slot > 0)
+>> -        mas->min = pivots[slot - 1] + 1;
+>> -
+>> -    if (slot <= slot_count)
+>> -        mas->max = pivots[slot];
+>> +    mas->min = pivots[mas->offset] + 1;
+>> +    mas->offset++;
+>> +    if (mas->offset < mt_slots[mt])
+>> +        mas->max = pivots[mas->offset];
+> There is a bug here, the assignment of mas->min and mas->max is wrong.
+> The assignment will make them represent the range of a child node, but 
+> it should represent the range of the current node. After mas_ascend() 
+> returns, mas-min and mas->max already represent the range of the current 
+> node, so we should delete these assignments of mas->min and mas->max.
 
 
-reg should go after compatible
+Thanks for your suggestion, Peng. Applying it literally by removing only 
+the min/max assignments:
+
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index 6fc1ad42b409..9b6e581cf83f 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -5118,10 +5118,7 @@ static inline bool mas_skip_node
+
+         mt = mte_node_type(mas->node);
+         pivots = ma_pivots(mas_mn(mas), mt);
+-       mas->min = pivots[mas->offset] + 1;
+         mas->offset++;
+-       if (mas->offset < mt_slots[mt])
+-               mas->max = pivots[mas->offset];
+
+         return true;
+  }
 
 
-> +			interrupts-extended = <&intc GIC_SPI 325 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wcss_smp2p_in 0 0>,
-> +					      <&wcss_smp2p_in 1 0>,
-> +					      <&wcss_smp2p_in 2 0>,
-> +					      <&wcss_smp2p_in 3 0>;
-> +			interrupt-names = "wdog",
-> +					  "fatal",
-> +					  "ready",
-> +					  "handover",
-> +					  "stop-ack";
-> +
-> +			clocks = <&gcc GCC_ANOC_WCSS_AXI_M_CLK>,
-> +				 <&gcc GCC_WCSS_AHB_S_CLK>,
-> +				 <&gcc GCC_WCSS_ECAHB_CLK>,
-> +				 <&gcc GCC_WCSS_ACMT_CLK>,
-> +				 <&gcc GCC_WCSS_AXI_M_CLK>,
-> +				 <&gcc GCC_Q6_AXIM_CLK>,
-> +				 <&gcc GCC_Q6_AXIM2_CLK>,
-> +				 <&gcc GCC_Q6_AHB_CLK>,
-> +				 <&gcc GCC_Q6_AHB_S_CLK>,
-> +				 <&gcc GCC_Q6SS_BOOT_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_APB_BDG_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_ATB_BDG_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_DAPBUS_BDG_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_NTS_BDG_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_APB_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_ATB_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_DAPBUS_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_NTS_CLK>,
-> +				 <&gcc GCC_Q6_TSCTR_1TO2_CLK>,
-> +				 <&gcc GCC_Q6SS_ATBM_CLK>,
-> +				 <&gcc GCC_Q6SS_PCLKDBG_CLK>,
-> +				 <&gcc GCC_Q6SS_TRIG_CLK>,
-> +				 <&gcc GCC_MEM_NOC_Q6_AXI_CLK>,
-> +				 <&gcc GCC_WCSS_Q6_TBU_CLK>,
-> +				 <&gcc GCC_SYS_NOC_WCSS_AHB_CLK>;
-> +
-> +			clock-names = "anoc_wcss_axi_m",
-> +				      "wcss_ahb_s",
-> +				      "wcss_ecahb",
-> +				      "wcss_acmt",
-> +				      "wcss_axi_m",
-> +				      "q6_axim",
-> +				      "q6_axim2",
-> +				      "q6_ahb",
-> +				      "q6_ahb_s",
-> +				      "q6ss_boot",
-> +				      "dbg-apb-bdg",
-> +				      "dbg-atb-bdg",
-> +				      "dbg-dapbus-bdg",
-> +				      "dbg-nts-bdg",
-> +				      "dbg-apb",
-> +				      "dbg-atb",
-> +				      "dbg-dapbus",
-> +				      "dbg-nts",
-> +				      "q6_tsctr_1to2_clk",
-> +				      "q6ss_atbm_clk",
-> +				      "q6ss_pclkdbg_clk",
-> +				      "q6ss_trig_clk",
-> +				      "mem_noc_q6_axi",
-> +				      "wcss_q6_tbu",
-> +				      "sys_noc_wcss_ahb";
-> +
-> +			assigned-clocks = <&gcc GCC_ANOC_WCSS_AXI_M_CLK>,
-> +				 <&gcc GCC_WCSS_AHB_S_CLK>,
+This allowed my test to pass 100/100 runs. Still in qemu with the test 
+as init, so not really stressed in any way except that specific usecase.
 
-
-please take care of the alignment
-
-
-> +				 <&gcc GCC_WCSS_ECAHB_CLK>,
-> +				 <&gcc GCC_WCSS_ACMT_CLK>,
-> +				 <&gcc GCC_WCSS_AXI_M_CLK>,
-> +				 <&gcc GCC_Q6_AXIM_CLK>,
-> +				 <&gcc GCC_Q6_AXIM2_CLK>,
-> +				 <&gcc GCC_Q6_AHB_CLK>,
-> +				 <&gcc GCC_Q6_AHB_S_CLK>,
-> +				 <&gcc GCC_Q6SS_BOOT_CLK>,
-> +				 <&gcc GCC_MEM_NOC_Q6_AXI_CLK>,
-> +				 <&gcc GCC_WCSS_Q6_TBU_CLK>,
-> +				 <&gcc GCC_SYS_NOC_WCSS_AHB_CLK>;
-> +
-> +			assigned-clock-rates = <266666667>,
-> +						<133333333>,
-
-
-same here
-
-
-> +						<133333333>,
-> +						<133333333>,
-> +						<266666667>,
-> +						<533000000>,
-> +						<342857143>,
-> +						<133333333>,
-> +						<133333333>,
-> +						<342857143>,
-> +						<533000000>,
-> +						<533000000>,
-> +						<133333333>;
-> +
-> +			qcom,smem-states = <&wcss_smp2p_out 0>,
-> +					   <&wcss_smp2p_out 1>;
-> +			qcom,smem-state-names = "shutdown",
-> +						"stop";
-> +
-> +			memory-region = <&q6_region>;
-> +
-> +			glink-edge {
-> +				interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
-> +				label = "rtr";
-> +				qcom,remote-pid = <1>;
-> +				mboxes = <&apcs_glb 8>;
-> +			};
-> +
-> +			q6_wcss_pd1: remoteproc_pd1 {
-> +				compatible = "qcom,ipq9574-wcss-ahb-mpd";
-> +			};
-> +		};
->   	};
->   
->   	rpm-glink {
+//Snild
