@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CBBC6AE1D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775B56AE1DA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCGOKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:10:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S231145AbjCGOLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:11:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjCGOJK (ORCPT
+        with ESMTP id S231166AbjCGOJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:09:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E49457C3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:08:04 -0800 (PST)
+        Tue, 7 Mar 2023 09:09:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4668888A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:08:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D5E0B818F7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:07:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 162C8C433A4;
-        Tue,  7 Mar 2023 14:07:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A2726144B
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783E6C4339C;
+        Tue,  7 Mar 2023 14:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678198068;
-        bh=CV00tA1owwhL5iVLNA3OX5N4V06U/3a14L0hLSw4Z+0=;
+        s=k20201202; t=1678198070;
+        bh=MgAlosplvEwsGH+1fNbCRsUtWRN8yNAPEnQin/pEaZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Apj8QK2LYxIPN6TPi3s8XsZjMjAzSIMpZAn/Ry+HFYLF8mn+L4PwOdncNL7QppMfI
-         /MX112JO4GIYJ0BQNtTObyOHSa5vhXH0hvhLq6UWGgDU8fqINKnxDew4OpG/TFsFAX
-         yQOgf48VJpujIsL7479ZKLJ+1YplyNna4lX22nicC4KaC0gV/6wn5I1GxJuqdIKUM2
-         waJjr1kebV9uS42NBCaCZ9dbI9pc6Skoj6TRNYqWjsJgoAhC/gpGjJQ3LabzCk5xrg
-         HAHIDZ4sYMTysWoMuL2E6cW9h5t0Si7K4i6UfzpcreS8WDb0zxtmdKs5p0qUSItNJi
-         dsGljiMawT+3g==
+        b=qRF8W2LQV8FQJYsf48awPPQKBb2WBFb3V8LC3NgRdG6rMtcklRKsz4b3DhAdSx0kB
+         UieAWGEFDo/F15RpQrialQSBIZ4A/yFGOmOJm5JakllD6YKbAqsrrLsSZF0XxDbzqW
+         h34C0isa4ikt652AMToJIHGXAxYG4gfkj9B6zrMCRUCjHuBXPPWsH+64wuUg/Gfsl2
+         v4pwULIaBv/OF80BI+78CMNC2TmMEQZv/EpggJpA73TQPSIlKnB0iZnBYSsOrcHma/
+         0Zr82T3auhRB2Hi08WyE8YQsqmvroFGOpkwVOyKzLtYGt/as+Jpb9u/FGnkPRToLtu
+         pkYFUxVCAe75A==
 From:   Ard Biesheuvel <ardb@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -42,18 +42,18 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         Ryan Roberts <ryan.roberts@arm.com>,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Kees Cook <keescook@chromium.org>
-Subject: [PATCH v3 29/60] arm64: kaslr: Use feature override instead of parsing the cmdline again
-Date:   Tue,  7 Mar 2023 15:04:51 +0100
-Message-Id: <20230307140522.2311461-30-ardb@kernel.org>
+Subject: [PATCH v3 30/60] arm64: idreg-override: Create a pseudo feature for rodata=off
+Date:   Tue,  7 Mar 2023 15:04:52 +0100
+Message-Id: <20230307140522.2311461-31-ardb@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307140522.2311461-1-ardb@kernel.org>
 References: <20230307140522.2311461-1-ardb@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2065; i=ardb@kernel.org; h=from:subject; bh=CV00tA1owwhL5iVLNA3OX5N4V06U/3a14L0hLSw4Z+0=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdxaM6dNJ0j9fn1VSuNdiv/y/8yulq9uHsxeWfdtwxO dlhYHmyo5SFQYyDQVZMkUVg9t93O09PlKp1niULM4eVCWQIAxenAEzkvTzDP2uZq+s4j4peCPzB sHbatzs7jTKWn111LiPdQO6lkU8Ttx7DT8as1lfHnjkEeJQnzWt8rHG9KujOz9a9G0w/H7o93WP aN14A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1627; i=ardb@kernel.org; h=from:subject; bh=MgAlosplvEwsGH+1fNbCRsUtWRN8yNAPEnQin/pEaZM=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdxeubg3x1yZqWt9NVJ1zmKVvi+f2c1RTpQ2lX0l/IZ t/tZhbqKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABOZ/4rhf+b3hX7sqaL/Rb63 9b8I230r59bsmGvaHmvvWyUlx3/OOsjwP4/v38b9G/xuOedYuxTHsAe813efwa0ZviyLPePWw8j 7nAA=
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,87 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The early kaslr code open codes the detection of 'nokaslr' on the kernel
-command line, and this is no longer necessary now that the feature
-detection code, which also looks for the same string, executes before
-this code.
+Add rodata=off to the set of kernel command line options that is parsed
+early using the CPU feature override detection code, so we can easily
+refer to it when creating the kernel mapping.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/arm64/kernel/pi/kaslr_early.c | 53 +-------------------
- 1 file changed, 1 insertion(+), 52 deletions(-)
+ arch/arm64/include/asm/cpufeature.h   | 1 +
+ arch/arm64/kernel/pi/idreg-override.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/arch/arm64/kernel/pi/kaslr_early.c b/arch/arm64/kernel/pi/kaslr_early.c
-index 167081b30a152d0a..f2305e276ec36803 100644
---- a/arch/arm64/kernel/pi/kaslr_early.c
-+++ b/arch/arm64/kernel/pi/kaslr_early.c
-@@ -16,57 +16,6 @@
- #include <asm/memory.h>
- #include <asm/pgtable.h>
+diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
+index bc10098901808c00..edc7733aa49846b2 100644
+--- a/arch/arm64/include/asm/cpufeature.h
++++ b/arch/arm64/include/asm/cpufeature.h
+@@ -16,6 +16,7 @@
+ #define cpu_feature(x)		KERNEL_HWCAP_ ## x
  
--/* taken from lib/string.c */
--static char *__init __strstr(const char *s1, const char *s2)
--{
--	size_t l1, l2;
--
--	l2 = strlen(s2);
--	if (!l2)
--		return (char *)s1;
--	l1 = strlen(s1);
--	while (l1 >= l2) {
--		l1--;
--		if (!memcmp(s1, s2, l2))
--			return (char *)s1;
--		s1++;
--	}
--	return NULL;
--}
--static bool __init cmdline_contains_nokaslr(const u8 *cmdline)
--{
--	const u8 *str;
--
--	str = __strstr(cmdline, "nokaslr");
--	return str == cmdline || (str > cmdline && *(str - 1) == ' ');
--}
--
--static bool __init is_kaslr_disabled_cmdline(void *fdt)
--{
--	if (!IS_ENABLED(CONFIG_CMDLINE_FORCE)) {
--		int node;
--		const u8 *prop;
--
--		node = fdt_path_offset(fdt, "/chosen");
--		if (node < 0)
--			goto out;
--
--		prop = fdt_getprop(fdt, node, "bootargs", NULL);
--		if (!prop)
--			goto out;
--
--		if (cmdline_contains_nokaslr(prop))
--			return true;
--
--		if (IS_ENABLED(CONFIG_CMDLINE_EXTEND))
--			goto out;
--
--		return false;
--	}
--out:
--	return cmdline_contains_nokaslr(CONFIG_CMDLINE);
--}
--
- static u64 __init get_kaslr_seed(void *fdt)
- {
- 	static char const chosen_str[] __initconst = "chosen";
-@@ -92,7 +41,7 @@ asmlinkage u64 __init kaslr_early_init(void *fdt)
- {
- 	u64 seed, range;
+ #define ARM64_SW_FEATURE_OVERRIDE_NOKASLR	0
++#define ARM64_SW_FEATURE_OVERRIDE_RODATA_OFF	4
  
--	if (is_kaslr_disabled_cmdline(fdt))
-+	if (kaslr_disabled_cmdline())
- 		return 0;
+ #ifndef __ASSEMBLY__
  
- 	seed = get_kaslr_seed(fdt);
+diff --git a/arch/arm64/kernel/pi/idreg-override.c b/arch/arm64/kernel/pi/idreg-override.c
+index 4e76db6eb72c2087..6c547cccaf6a9e9c 100644
+--- a/arch/arm64/kernel/pi/idreg-override.c
++++ b/arch/arm64/kernel/pi/idreg-override.c
+@@ -151,6 +151,7 @@ static const struct ftr_set_desc sw_features __prel64_initconst = {
+ 	.override	= &arm64_sw_feature_override,
+ 	.fields		= {
+ 		FIELD("nokaslr", ARM64_SW_FEATURE_OVERRIDE_NOKASLR, NULL),
++		FIELD("rodataoff", ARM64_SW_FEATURE_OVERRIDE_RODATA_OFF, NULL),
+ 		{}
+ 	},
+ };
+@@ -183,6 +184,7 @@ static const struct {
+ 	  "id_aa64isar2.gpa3=0 id_aa64isar2.apa3=0"	   },
+ 	{ "arm64.nomte",		"id_aa64pfr1.mte=0" },
+ 	{ "nokaslr",			"arm64_sw.nokaslr=1" },
++	{ "rodata=off",			"arm64_sw.rodataoff=1" },
+ };
+ 
+ static int __init parse_hexdigit(const char *p, u64 *v)
 -- 
 2.39.2
 
