@@ -2,129 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E02F6AD9CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:02:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F07A6AD9D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230157AbjCGJCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:02:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44448 "EHLO
+        id S230184AbjCGJD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjCGJCk (ORCPT
+        with ESMTP id S229653AbjCGJD4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:02:40 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2660E50736;
-        Tue,  7 Mar 2023 01:02:39 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C1C4021A16;
-        Tue,  7 Mar 2023 09:02:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678179757; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 7 Mar 2023 04:03:56 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7F032524;
+        Tue,  7 Mar 2023 01:03:54 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 43BCE2000B;
+        Tue,  7 Mar 2023 09:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678179833;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0GWNW+aEY+jTsa8kMVIy+b7YzFxeCuVU3o8GQn5FGEk=;
-        b=ZEUDKUn7O9IistxTZCCYE/zxivovXBfeSeb7VfaFIoqXcz8AooSmphbARyrKAz8in8msUn
-        PlsbyigRP7wxH/+6KLQsz7hOnp+mFi97xJISwfDdWHfvbJaaXQc4Z39FYIXXUlVDeOurZ8
-        pCJIgb9K9ilD1T/pemKESAr9K9JDUSk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678179757;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0GWNW+aEY+jTsa8kMVIy+b7YzFxeCuVU3o8GQn5FGEk=;
-        b=u1OZXv5gFf2fzqDiv09hfyxKXKCZ7X9MVpAGw1Nf3dJryHJtBMBlV3s7DKU+XT3cQppc1J
-        uCa6FCg159wOJrDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9084A13440;
-        Tue,  7 Mar 2023 09:02:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id In41I639BmQqLQAAMHmgww
-        (envelope-from <jack@suse.cz>); Tue, 07 Mar 2023 09:02:37 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E5909A06F3; Tue,  7 Mar 2023 10:02:35 +0100 (CET)
-Date:   Tue, 7 Mar 2023 10:02:35 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, Ye Bin <yebin10@huawei.com>
-Subject: Re: [PATCH v5 1/2] ext4: commit super block if fs record error when
- journal record without error
-Message-ID: <20230307090235.ofr2jjah5komdoas@quack3>
-References: <20230307061703.245965-1-yebin@huaweicloud.com>
- <20230307061703.245965-2-yebin@huaweicloud.com>
+        bh=lWnZbQ74txk8fmZIzwltqIy3VGDLFLIoD4qJMLHcs9Q=;
+        b=AB8OTewy2WxToW9EIlO9ll68NNpEnvsLM6dwAkzbF8VXcC6yG5UIH+cipbDuAO4GocKFib
+        A0XFjscqDG26hgdaKiqFbVTr49wyxAA6AKraiMfuUSDhYiYYIdGYpQvWUErCPRq7NO7BnA
+        pJ1gTAo8o5+so1XRs+iMyIMTxFpED6mPzOnm/6kGALJNIQ6LcNqpKTA9WARgTzaDsJaacH
+        jRvwNJrlxx85yQBQcJ7n3pCF2s1yqlzNLDe7msOrrniDHC2MJRIYwG8o9ojZvcQ+bAjlhK
+        vMixj94XbsAxPSffJqwq2hvINHUo9FkHve5ePUsXZqwLCxgVrIaagJLzxQAvSA==
+Date:   Tue, 7 Mar 2023 10:03:50 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: parsers: remove reference to config MTD_NAND_TMIO
+Message-ID: <20230307100350.1c0af7b9@xps-13>
+In-Reply-To: <20230307074038.17391-1-lukas.bulwahn@gmail.com>
+References: <20230307074038.17391-1-lukas.bulwahn@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307061703.245965-2-yebin@huaweicloud.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 07-03-23 14:17:02, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
-> 
-> Now, 'es->s_state' maybe covered by recover journal. And journal errno
-> maybe not recorded in journal sb as IO error. ext4_update_super() only
-> update error information when 'sbi->s_add_error_count' large than zero.
-> Then 'EXT4_ERROR_FS' flag maybe lost.
-> To solve above issue just recover 'es->s_state' error flag after journal
-> replay like error info.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
+Hi Lukas,
 
-Looks good to me. Feel free to add:
+lukas.bulwahn@gmail.com wrote on Tue,  7 Mar 2023 08:40:38 +0100:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> Commit 568494db6809 ("mtd: remove tmio_nand driver") removes the config
+> MTD_NAND_TMIO and its corresponding driver.
+>=20
+> Remove the reference in MTD_SHARPSL_PARTS to that removed config.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
->  fs/ext4/super.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 88f7b8a88c76..dfa31eea1346 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -5920,6 +5920,7 @@ static int ext4_load_journal(struct super_block *sb,
->  		err = jbd2_journal_wipe(journal, !really_read_only);
->  	if (!err) {
->  		char *save = kmalloc(EXT4_S_ERR_LEN, GFP_KERNEL);
-> +
->  		if (save)
->  			memcpy(save, ((char *) es) +
->  			       EXT4_S_ERR_START, EXT4_S_ERR_LEN);
-> @@ -5928,6 +5929,14 @@ static int ext4_load_journal(struct super_block *sb,
->  			memcpy(((char *) es) + EXT4_S_ERR_START,
->  			       save, EXT4_S_ERR_LEN);
->  		kfree(save);
-> +		es->s_state |= cpu_to_le16(EXT4_SB(sb)->s_mount_state &
-> +					   EXT4_ERROR_FS);
-> +		/* Write out restored error information to the superblock */
-> +		if (!bdev_read_only(sb->s_bdev)) {
-> +			int err2;
-> +			err2 = ext4_commit_super(sb);
-> +			err = err ? : err2;
-> +		}
->  	}
->  
->  	if (err) {
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Arnd, please ack.
+> Miquel, please pick this minor non-urgent patch on top of the commit abov=
+e.
+
+Actually I guess the SHARPSL driver is not selectable right now, so
+this should be sent as part of my next fixes PR. Could you please send
+a v2 with a Fixes: tag?
+
+>=20
+>  drivers/mtd/parsers/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/mtd/parsers/Kconfig b/drivers/mtd/parsers/Kconfig
+> index b20e0c38b517..60738edcd5d5 100644
+> --- a/drivers/mtd/parsers/Kconfig
+> +++ b/drivers/mtd/parsers/Kconfig
+> @@ -149,7 +149,7 @@ config MTD_PARSER_TRX
+> =20
+>  config MTD_SHARPSL_PARTS
+>  	tristate "Sharp SL Series NAND flash partition parser"
+> -	depends on MTD_NAND_SHARPSL || MTD_NAND_TMIO || COMPILE_TEST
+> +	depends on MTD_NAND_SHARPSL || COMPILE_TEST
+>  	help
+>  	  This provides the read-only FTL logic necessary to read the partition
+>  	  table from the NAND flash of Sharp SL Series (Zaurus) and the MTD
+
+
+Thanks,
+Miqu=C3=A8l
