@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9BA6AFA75
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6776AFA76
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjCGXdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 18:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S230023AbjCGXdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 18:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjCGXdU (ORCPT
+        with ESMTP id S229952AbjCGXdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:33:20 -0500
+        Tue, 7 Mar 2023 18:33:23 -0500
 Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C07E4E5EE;
-        Tue,  7 Mar 2023 15:33:18 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id bn17so8610566pgb.10;
-        Tue, 07 Mar 2023 15:33:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327C24ECCA;
+        Tue,  7 Mar 2023 15:33:20 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id s18so8649066pgq.1;
+        Tue, 07 Mar 2023 15:33:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678231998;
+        d=gmail.com; s=20210112; t=1678231999;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZWY3pu1sUBwgULLA58qBvOo9hTklUr6qi9NkTdBlOtc=;
-        b=bJSqVD/jl+PkfJRGjXymRodsOUSYj3io692pFqwOEEBmN/yAOhuW/eykm05mRRzpez
-         7eRAFQNs7W/XWARmnqUowH9nFWuoprQFX9UC3C5wBhyq3440yUjBbKQl57rfeSLejIkv
-         uS+7O6K3qmlh4TJs9uryAEH8yxr9S84AqfKpFZYkJFsAa0SerpNdbBCKUqZ+mWMrDEa3
-         ezOuFCIa/pxWARVOE+OHRuX9oJimyVWeLGPZKs89WaVuz6xxUzG9UOePdx5ShN9BcTLE
-         KPOiOSvwgATBZVpx5nVqw0FBHYQqAR6Ld0zpgnQT5w0JvT+1G0015p2wfQukuimaXQY9
-         ifCQ==
+        bh=CiPCdS7YWLbLvqN+ql4t86Rs7fqQxGYeQIPy6W1tBaw=;
+        b=gTP8xiKt7O/TOcN7c2AuJ2CaxZonWsTkMN399Oq8ErCb5+dGYtbI6auI4R6TiEondz
+         A86R+TLxWMt7CYgwslMP50xyLHQv/fcjJe3AGtJT0vq4Z7gnu0U/62mj7FDQ6vGnO8vY
+         eLk48WuB1l9Rg6C9v0Zl2ri4X+2Rm0GerlgsdRTRtA21TL7isQTDb8Pa+IE+jSsTnwwI
+         OP3bc5BHIXhi4RQBFDnIAmtkRYf5DXHZ5GC50GXAqlwRQ1XDE58cvzhT8vurufYF3fYp
+         5f5Vf+bxUAVLG7Y24gGNr60V8OiFMNHL/Y0QxtIMtcNF0sTY6yreqZ3SfnDDOvXYQI3I
+         8jQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678231998;
+        d=1e100.net; s=20210112; t=1678231999;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ZWY3pu1sUBwgULLA58qBvOo9hTklUr6qi9NkTdBlOtc=;
-        b=yEEb2jPYQyqE+4tqyv2mMZ2LzgThHa2Ibo1Wlz1+uYCrfXaNOWKK3RAykXLtAvEC9r
-         BIjbrB1iBlCrzDrsLB+DTxC5eAl9ENGQmcUhMLBOGfDAp+06K6E6EhcSw3VPRuErKNFC
-         2BYVdjrVudqYcbkHBkSy81NlVz0qw4xoDl2LLBhd6CeY51Mm/hSnw+hlrx30Dz9eRW/t
-         t8HAkfEkuDVMViaIrzvKCJReHEvEUij9XmPRbWojpp4K14vPEmbFxvxdUk7eFBG4j1Kc
-         fLKAPwVEn8fLpVdtGBx29GDonPTme8Wo3WqwchR2ai0uy+2tPY0uxoN0wFEcxW9x5vEu
-         Cqgw==
-X-Gm-Message-State: AO0yUKXkYnITP18Djh/R5kBK7nr0eDJCIfduQJ/ADv9f2kfm/NvcqQsF
-        5dp4gQjBjS86IFBcDaUHa4w=
-X-Google-Smtp-Source: AK7set9rLaCbqxNnlXw1sJRbLyeuvpCGZBY4hj1WshFCtlfJczEMbKp6EoyMzR5lHx1hMTV0rdAiiA==
-X-Received: by 2002:aa7:940b:0:b0:5a8:b705:4dd3 with SMTP id x11-20020aa7940b000000b005a8b7054dd3mr14090118pfo.13.1678231997817;
-        Tue, 07 Mar 2023 15:33:17 -0800 (PST)
+        bh=CiPCdS7YWLbLvqN+ql4t86Rs7fqQxGYeQIPy6W1tBaw=;
+        b=QEZmu34EagLaF4qjwLSHuhiGCGA9bDq/TSpGCIusv28QL62YU5HiRPCWaQ2VaSl83F
+         4a7BQxDy6n9TTrvPsOpV/i09aTGjj5tLu8F89ZycU13wg54ipfXFfV/Hsoc4QfNQjNUm
+         ldSyluDN5cOlkLPaFEAYCmShZ7XJnAEDvP8wxUu8xu6nf2JP/kIShd1KA21BniFK7lio
+         DCYZZQHAAWakhxLlMLXnjEIf6BNOxBVIpqCxqxgUWFPoZ+DlmS32JrAsrc43mjmQnKxs
+         /QJKCqMjR+kRvHRpX5qwa5zFPO/5gKOKsA+yhLlYK8+o7Ma0OfmDFnHZqZXbjiPoRYN9
+         mR4w==
+X-Gm-Message-State: AO0yUKWwU+gyVlC+/JjLcRtsyUO/a9YwnuTykj46nuMm6xZuHSkoWBzr
+        ilGu5XOcBlEFLQMiIW9wRDg=
+X-Google-Smtp-Source: AK7set/j3aXuw30R0wzsqrDuf73erFHyMldCeOgBdA3BHON8T2Q/STYKrIgH6+CI41pnLFXugx/10w==
+X-Received: by 2002:a62:1dd4:0:b0:5d6:138f:5596 with SMTP id d203-20020a621dd4000000b005d6138f5596mr16883881pfd.14.1678231999625;
+        Tue, 07 Mar 2023 15:33:19 -0800 (PST)
 Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:15e8:b801:cd55:a496])
-        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.16
+        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 15:33:17 -0800 (PST)
+        Tue, 07 Mar 2023 15:33:18 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 3/9] perf record: Add BPF event filter support
-Date:   Tue,  7 Mar 2023 15:33:03 -0800
-Message-Id: <20230307233309.3546160-4-namhyung@kernel.org>
+Subject: [PATCH 4/9] perf record: Record dropped sample count
+Date:   Tue,  7 Mar 2023 15:33:04 -0800
+Message-Id: <20230307233309.3546160-5-namhyung@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230307233309.3546160-1-namhyung@kernel.org>
 References: <20230307233309.3546160-1-namhyung@kernel.org>
@@ -78,197 +78,184 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use --filter option to set BPF filter for generic events other than the
-tracepoints or Intel PT.  The BPF program will check the sample data and
-filter according to the expression.
+When it uses bpf filters, event might drop some samples.  It'd be nice
+if it can report how many samples it lost.  As LOST_SAMPLES event can
+carry the similar information, let's use it for bpf filters.
 
-For example, the below is the typical perf record for frequency mode.
-The sample period started from 1 and increased gradually.
-
-$ sudo ./perf record -e cycles true
-$ sudo ./perf script
-       perf-exec 2272336 546683.916875:          1 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
-       perf-exec 2272336 546683.916892:          1 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
-       perf-exec 2272336 546683.916899:          3 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
-       perf-exec 2272336 546683.916905:         17 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
-       perf-exec 2272336 546683.916911:        100 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
-       perf-exec 2272336 546683.916917:        589 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
-       perf-exec 2272336 546683.916924:       3470 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
-       perf-exec 2272336 546683.916930:      20465 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
-            true 2272336 546683.916940:     119873 cycles:  ffffffff8283afdd perf_iterate_ctx+0x2d ([kernel.kallsyms])
-            true 2272336 546683.917003:     461349 cycles:  ffffffff82892517 vma_interval_tree_insert+0x37 ([kernel.kallsyms])
-            true 2272336 546683.917237:     635778 cycles:  ffffffff82a11400 security_mmap_file+0x20 ([kernel.kallsyms])
-
-When you add a BPF filter to get samples having periods greater than 1000,
-the output would look like below:
-
-$ sudo ./perf record -e cycles --filter 'period > 1000' true
-$ sudo ./perf script
-       perf-exec 2273949 546850.708501:       5029 cycles:  ffffffff826f9e25 finish_wait+0x5 ([kernel.kallsyms])
-       perf-exec 2273949 546850.708508:      32409 cycles:  ffffffff826f9e25 finish_wait+0x5 ([kernel.kallsyms])
-       perf-exec 2273949 546850.708526:     143369 cycles:  ffffffff82b4cdbf xas_start+0x5f ([kernel.kallsyms])
-       perf-exec 2273949 546850.708600:     372650 cycles:  ffffffff8286b8f7 __pagevec_lru_add+0x117 ([kernel.kallsyms])
-       perf-exec 2273949 546850.708791:     482953 cycles:  ffffffff829190de __mod_memcg_lruvec_state+0x4e ([kernel.kallsyms])
-            true 2273949 546850.709036:     501985 cycles:  ffffffff828add7c tlb_gather_mmu+0x4c ([kernel.kallsyms])
-            true 2273949 546850.709292:     503065 cycles:      7f2446d97c03 _dl_map_object_deps+0x973 (/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+To indicate it's from BPF filters, add a new misc flag for that and
+do not display cpu load warnings.
 
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/Documentation/perf-record.txt | 15 +++++++++++---
- tools/perf/util/bpf_counter.c            |  3 +--
- tools/perf/util/evlist.c                 | 25 +++++++++++++++++-------
- tools/perf/util/evsel.c                  |  2 ++
- tools/perf/util/parse-events.c           |  8 +++-----
- 5 files changed, 36 insertions(+), 17 deletions(-)
+ tools/lib/perf/include/perf/event.h |  2 ++
+ tools/perf/builtin-record.c         | 38 ++++++++++++++++++-----------
+ tools/perf/util/bpf-filter.c        |  7 ++++++
+ tools/perf/util/bpf-filter.h        |  5 ++++
+ tools/perf/util/session.c           |  3 ++-
+ 5 files changed, 40 insertions(+), 15 deletions(-)
 
-diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-index ff815c2f67e8..9f7b43a3086d 100644
---- a/tools/perf/Documentation/perf-record.txt
-+++ b/tools/perf/Documentation/perf-record.txt
-@@ -119,9 +119,12 @@ OPTIONS
- 	  "perf report" to view group events together.
+diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+index ad47d7b31046..51b9338f4c11 100644
+--- a/tools/lib/perf/include/perf/event.h
++++ b/tools/lib/perf/include/perf/event.h
+@@ -70,6 +70,8 @@ struct perf_record_lost {
+ 	__u64			 lost;
+ };
  
- --filter=<filter>::
--        Event filter. This option should follow an event selector (-e) which
--	selects either tracepoint event(s) or a hardware trace PMU
--	(e.g. Intel PT or CoreSight).
-+	Event filter.  This option should follow an event selector (-e).
-+	If the event is a tracepoint, the filter string will be parsed by
-+	the kernel.  If the event is a hardware trace PMU (e.g. Intel PT
-+	or CoreSight), it'll be processed as an address filter.  Otherwise
-+	it means a general filter using BPF which can be applied for any
-+	kind of event.
- 
- 	- tracepoint filters
- 
-@@ -174,6 +177,12 @@ OPTIONS
- 	within a single mapping.  MMAP events (or /proc/<pid>/maps) can be
- 	examined to determine if that is a possibility.
- 
-+	- bpf filters
++#define PERF_RECORD_MISC_LOST_SAMPLES_BPF (1 << 15)
 +
-+	A BPF filter can access the sample data and make a decision based on the
-+	data.  Users need to set an appropriate sample type to use the BPF
-+	filter.
-+
- 	Multiple filters can be separated with space or comma.
- 
- --exclude-perf::
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index eeee899fcf34..0414385794ee 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -781,8 +781,7 @@ extern struct bpf_counter_ops bperf_cgrp_ops;
- 
- static inline bool bpf_counter_skip(struct evsel *evsel)
- {
--	return list_empty(&evsel->bpf_counter_list) &&
--		evsel->follower_skel == NULL;
-+	return evsel->bpf_counter_ops == NULL;
+ struct perf_record_lost_samples {
+ 	struct perf_event_header header;
+ 	__u64			 lost;
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 8374117e66f6..197e802a150b 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -52,6 +52,7 @@
+ #include "util/pmu-hybrid.h"
+ #include "util/evlist-hybrid.h"
+ #include "util/off_cpu.h"
++#include "util/bpf-filter.h"
+ #include "asm/bug.h"
+ #include "perf.h"
+ #include "cputopo.h"
+@@ -1856,24 +1857,16 @@ record__switch_output(struct record *rec, bool at_exit)
+ 	return fd;
  }
  
- int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd)
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 817df2504a1e..648bddfb8441 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -31,6 +31,7 @@
- #include "util/evlist-hybrid.h"
- #include "util/pmu.h"
- #include "util/sample.h"
-+#include "util/bpf-filter.h"
- #include <signal.h>
- #include <unistd.h>
- #include <sched.h>
-@@ -1086,17 +1087,27 @@ int evlist__apply_filters(struct evlist *evlist, struct evsel **err_evsel)
- 	int err = 0;
+-static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
++static void __record__save_lost_samples(struct record *rec, struct evsel *evsel,
+ 					struct perf_record_lost_samples *lost,
+-					int cpu_idx, int thread_idx)
++					int cpu_idx, int thread_idx, u64 lost_count,
++					u16 misc_flag)
+ {
+-	struct perf_counts_values count;
+ 	struct perf_sample_id *sid;
+ 	struct perf_sample sample = {};
+ 	int id_hdr_size;
  
- 	evlist__for_each_entry(evlist, evsel) {
--		if (evsel->filter == NULL)
--			continue;
--
- 		/*
- 		 * filters only work for tracepoint event, which doesn't have cpu limit.
- 		 * So evlist and evsel should always be same.
- 		 */
--		err = perf_evsel__apply_filter(&evsel->core, evsel->filter);
--		if (err) {
--			*err_evsel = evsel;
--			break;
-+		if (evsel->filter) {
-+			err = perf_evsel__apply_filter(&evsel->core, evsel->filter);
-+			if (err) {
-+				*err_evsel = evsel;
-+				break;
-+			}
-+		}
-+
-+		/*
-+		 * non-tracepoint events can have BPF filters.
-+		 */
-+		if (!list_empty(&evsel->bpf_filters)) {
-+			err = perf_bpf_filter__prepare(evsel);
-+			if (err) {
-+				*err_evsel = evsel;
-+				break;
-+			}
- 		}
- 	}
- 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 51e8ce6edddc..cae624fde026 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -50,6 +50,7 @@
- #include "off_cpu.h"
- #include "../perf-sys.h"
- #include "util/parse-branch-options.h"
-+#include "util/bpf-filter.h"
- #include <internal/xyarray.h>
- #include <internal/lib.h>
- #include <internal/threadmap.h>
-@@ -1494,6 +1495,7 @@ void evsel__exit(struct evsel *evsel)
- 	assert(list_empty(&evsel->core.node));
- 	assert(evsel->evlist == NULL);
- 	bpf_counter__destroy(evsel);
-+	perf_bpf_filter__destroy(evsel);
- 	evsel__free_counts(evsel);
- 	perf_evsel__free_fd(&evsel->core);
- 	perf_evsel__free_id(&evsel->core);
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 0336ff27c15f..4371a2bb2564 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -27,6 +27,7 @@
- #include "perf.h"
- #include "util/parse-events-hybrid.h"
- #include "util/pmu-hybrid.h"
-+#include "util/bpf-filter.h"
- #include "tracepoint.h"
- #include "thread_map.h"
- 
-@@ -2537,11 +2538,8 @@ static int set_filter(struct evsel *evsel, const void *arg)
- 		perf_pmu__scan_file(pmu, "nr_addr_filters",
- 				    "%d", &nr_addr_filters);
- 
--	if (!nr_addr_filters) {
--		fprintf(stderr,
--			"This CPU does not support address filtering\n");
--		return -1;
+-	if (perf_evsel__read(&evsel->core, cpu_idx, thread_idx, &count) < 0) {
+-		pr_err("read LOST count failed\n");
+-		return;
 -	}
-+	if (!nr_addr_filters)
-+		return perf_bpf_filter__parse(&evsel->bpf_filters, str);
+-
+-	if (count.lost == 0)
+-		return;
+-
+-	lost->lost = count.lost;
++	lost->lost = lost_count;
+ 	if (evsel->core.ids) {
+ 		sid = xyarray__entry(evsel->core.sample_id, cpu_idx, thread_idx);
+ 		sample.id = sid->id;
+@@ -1882,6 +1875,7 @@ static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
+ 	id_hdr_size = perf_event__synthesize_id_sample((void *)(lost + 1),
+ 						       evsel->core.attr.sample_type, &sample);
+ 	lost->header.size = sizeof(*lost) + id_hdr_size;
++	lost->header.misc = misc_flag;
+ 	record__write(rec, NULL, lost, lost->header.size);
+ }
  
- 	if (evsel__append_addr_filter(evsel, str) < 0) {
- 		fprintf(stderr,
+@@ -1905,6 +1899,7 @@ static void record__read_lost_samples(struct record *rec)
+ 
+ 	evlist__for_each_entry(session->evlist, evsel) {
+ 		struct xyarray *xy = evsel->core.sample_id;
++		u64 lost_count;
+ 
+ 		if (xy == NULL || evsel->core.fd == NULL)
+ 			continue;
+@@ -1916,12 +1911,27 @@ static void record__read_lost_samples(struct record *rec)
+ 
+ 		for (int x = 0; x < xyarray__max_x(xy); x++) {
+ 			for (int y = 0; y < xyarray__max_y(xy); y++) {
+-				__record__read_lost_samples(rec, evsel, lost, x, y);
++				struct perf_counts_values count;
++
++				if (perf_evsel__read(&evsel->core, x, y, &count) < 0) {
++					pr_err("read LOST count failed\n");
++					goto out;
++				}
++
++				if (count.lost) {
++					__record__save_lost_samples(rec, evsel, lost,
++								    x, y, count.lost, 0);
++				}
+ 			}
+ 		}
++
++		lost_count = perf_bpf_filter__lost_count(evsel);
++		if (lost_count)
++			__record__save_lost_samples(rec, evsel, lost, 0, 0, lost_count,
++						    PERF_RECORD_MISC_LOST_SAMPLES_BPF);
+ 	}
++out:
+ 	free(lost);
+-
+ }
+ 
+ static volatile sig_atomic_t workload_exec_errno;
+diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
+index f20e1bc03778..7bd6f2e41513 100644
+--- a/tools/perf/util/bpf-filter.c
++++ b/tools/perf/util/bpf-filter.c
+@@ -69,6 +69,13 @@ int perf_bpf_filter__destroy(struct evsel *evsel)
+ 	return 0;
+ }
+ 
++u64 perf_bpf_filter__lost_count(struct evsel *evsel)
++{
++	struct sample_filter_bpf *skel = evsel->bpf_skel;
++
++	return skel ? skel->bss->dropped : 0;
++}
++
+ struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
+ 						       enum perf_bpf_filter_op op,
+ 						       unsigned long val)
+diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
+index eb8e1ac43cdf..f0c66764c6d0 100644
+--- a/tools/perf/util/bpf-filter.h
++++ b/tools/perf/util/bpf-filter.h
+@@ -22,6 +22,7 @@ struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flag
+ int perf_bpf_filter__parse(struct list_head *expr_head, const char *str);
+ int perf_bpf_filter__prepare(struct evsel *evsel);
+ int perf_bpf_filter__destroy(struct evsel *evsel);
++u64 perf_bpf_filter__lost_count(struct evsel *evsel);
+ 
+ #else /* !HAVE_BPF_SKEL */
+ 
+@@ -38,5 +39,9 @@ static inline int perf_bpf_filter__destroy(struct evsel *evsel __maybe_unused)
+ {
+ 	return -EOPNOTSUPP;
+ }
++static inline u64 perf_bpf_filter__lost_count(struct evsel *evsel __maybe_unused)
++{
++	return 0;
++}
+ #endif /* HAVE_BPF_SKEL*/
+ #endif /* PERF_UTIL_BPF_FILTER_H */
+diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+index 749d5b5c135b..7d8d057d1772 100644
+--- a/tools/perf/util/session.c
++++ b/tools/perf/util/session.c
+@@ -1582,7 +1582,8 @@ static int machines__deliver_event(struct machines *machines,
+ 			evlist->stats.total_lost += event->lost.lost;
+ 		return tool->lost(tool, event, sample, machine);
+ 	case PERF_RECORD_LOST_SAMPLES:
+-		if (tool->lost_samples == perf_event__process_lost_samples)
++		if (tool->lost_samples == perf_event__process_lost_samples &&
++		    !(event->header.misc & PERF_RECORD_MISC_LOST_SAMPLES_BPF))
+ 			evlist->stats.total_lost_samples += event->lost_samples.lost;
+ 		return tool->lost_samples(tool, event, sample, machine);
+ 	case PERF_RECORD_READ:
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
