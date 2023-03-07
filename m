@@ -2,397 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281846AE2A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E4C6AE26D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:30:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231462AbjCGOeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S229575AbjCGOad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbjCGOdh (ORCPT
+        with ESMTP id S231393AbjCGOaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:33:37 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612E2574F3;
-        Tue,  7 Mar 2023 06:28:49 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 108E3426E8;
-        Tue,  7 Mar 2023 14:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1678199328;
-        bh=K1giKwscy2LOuMZ2AqcEY9ztp05XIoWRr3vQhLNQ3Zg=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=C8Q+7fYXmoCQcs6Av2OYMPTMZIyuSzXfTLkRhGh0NT0PjTClFUXRliaBU7pDr54pc
-         CCRT3Ih84MQr+URhQR/da7Vkr9ohffUpQSUH8C0hElH04mbmcbhXz0otXJgZ0ASq9o
-         brXr4tr0KGx6AtvwOvV+POQhw0i2gEXsCjAA/XoJ3omx5A4mBGFlkW5saWhQv6gXQV
-         OfnYzJWZNqgvnXU/NPf0IOW787Qql2IlX9qU5XarYRbGgX6EDohlAfZ82itsIDS8MC
-         UhRyv2YUrx4OoUxhS6v+tskkGEbPNFm1p6NBDmkfVOXFuJ+PuUK09FwYmrGqF/OgN+
-         dCEpNS3Zn/XGQ==
-From:   Asahi Lina <lina@asahilina.net>
-Date:   Tue, 07 Mar 2023 23:25:42 +0900
-Subject: [PATCH RFC 17/18] rust: macros: Add versions macro
+        Tue, 7 Mar 2023 09:30:03 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179E9867ED
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:25:44 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id x34so13390768pjj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 06:25:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678199143;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0pUswYY3Le5dkGBJavjaTXJzlJxNEqlgltV+DJqXPvw=;
+        b=1LWzC+8UAs6FlIRiLot36g/KgonVVwrjkxPT3vTtd0keATf9iQIzz73sUwUNGBVSQF
+         HqgkM5+FKLO/0Vp1LzIHue8IcBN6CxSECL9mz9Y6BEOKAaiefIxhBXoroLSz5WSi7grS
+         Vr43G55SLD4RB1GTJOQOu4Ca8Yahxit1o0UYmTyE0mv3aFbcfU7VrGbuzAJzh+AS17/H
+         ggA+RKCNBVaBu912vDZOoDv745/bc7A8/NM3XRVn94Lj/szi2JQK7mYoUZ1hz4BdD/kn
+         rTO8uWBUgxnM017VkxPYr1W5mpvceXIURS6LGkWRriF6ZcBMLBDiixV4II1qCCRH0a3B
+         Mcbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678199143;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0pUswYY3Le5dkGBJavjaTXJzlJxNEqlgltV+DJqXPvw=;
+        b=wjH7kmy9MhNLEU0bHfPg1vIu7mnfs1+D8D9Fda+ug9PHRxtv3nGAUI7SamvmVsbpKc
+         FujbIFq9AcNzXh/EbD4Ew+A9i5TzIGC8LpLTdLV5wnbmHe5ibr7I3+J71naFQp24UxLh
+         l5S7y7L3/lZjK+r3eE+8OG3Pt8N7GEdrdNIcYeC2dxBBf2M75o2iplK5H5sj95y4kqxN
+         QLmEl+U0RowExTUb7ds+9+I0UAcVvsBU9aoAH6cr0B7CTGIoS4X2C9J25DUMavCqOr6b
+         u0Bs6DRl7O8QPfwOsXos2yihvZEUIs33PS+o/QbaJhBd7Tm7rClzmxOxkWcd5L/YHE24
+         DF7Q==
+X-Gm-Message-State: AO0yUKVruvZKoeRoxPlbxZLXwP7d9RPYGfk8cGoVabjUuhDSGzXZ+mwO
+        HK5pCvFVy13XKrJCNMPJzz0EFw==
+X-Google-Smtp-Source: AK7set/o5QYXytOiAl3gSKlbOjvNqp2qyoU8SqKy/N5JGMecO0kNZPEAEjXPmKeiPTE4loL+L6eZ7w==
+X-Received: by 2002:a17:903:2304:b0:19e:d6f2:fefd with SMTP id d4-20020a170903230400b0019ed6f2fefdmr4933695plh.0.1678199143345;
+        Tue, 07 Mar 2023 06:25:43 -0800 (PST)
+Received: from [127.0.0.1] ([50.233.106.125])
+        by smtp.gmail.com with ESMTPSA id j14-20020a170903024e00b00198e12c499dsm8469198plh.282.2023.03.07.06.25.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 06:25:43 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     hch@lst.de, jack@suse.cz, julianr@linux.ibm.com,
+        yukuai3@huawei.com, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+In-Reply-To: <20230307105552.1560439-1-yukuai1@huaweicloud.com>
+References: <a3a4351375d51aa5e93e06bba212ba3637665885.camel@linux.ibm.com>
+ <20230307105552.1560439-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH] block: fix wrong mode for blkdev_put() from
+ disk_scan_partitions()
+Message-Id: <167819914263.6301.8573680638025368165.b4-ty@kernel.dk>
+Date:   Tue, 07 Mar 2023 07:25:42 -0700
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230307-rust-drm-v1-17-917ff5bc80a8@asahilina.net>
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
-In-Reply-To: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>,
-        Faith Ekstrand <faith.ekstrand@collabora.com>,
-        Mary <mary@mary.zone>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, rust-for-linux@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-sgx@vger.kernel.org, asahi@lists.linux.dev,
-        Asahi Lina <lina@asahilina.net>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678199192; l=11529;
- i=lina@asahilina.net; s=20230221; h=from:subject:message-id;
- bh=K1giKwscy2LOuMZ2AqcEY9ztp05XIoWRr3vQhLNQ3Zg=;
- b=yTmTdTgnDEPP5bvMtuxBQS8eHVdb5iATCaf0YsmsBIxfZyfyeyRxQS1UEyj404IIncEWIlNcL
- /1Q1SDH60DgB9Omehl/rG5FxK3HalovAA8A3Q7ZfE+MaYw72aFfcD01
-X-Developer-Key: i=lina@asahilina.net; a=ed25519;
- pk=Qn8jZuOtR1m5GaiDfTrAoQ4NE1XoYVZ/wmt5YtXWFC4=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-ebd05
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This macro allows Rust code to build multiple versions of the same code,
-conditionally including certain fields or code segments.
 
-The asahi driver uses this to support multiple GPU types and firmware
-revisions in the same codebase, without duplicating everything.
+On Tue, 07 Mar 2023 18:55:52 +0800, Yu Kuai wrote:
+> If disk_scan_partitions() is called with 'FMODE_EXCL',
+> blkdev_get_by_dev() will be called without 'FMODE_EXCL', however, follow
+> blkdev_put() is still called with 'FMODE_EXCL', which will cause
+> 'bd_holders' counter to leak.
+> 
+> Fix the problem by using the right mode for blkdev_put().
+> 
+> [...]
 
-Signed-off-by: Asahi Lina <lina@asahilina.net>
----
- rust/macros/lib.rs      |   7 ++
- rust/macros/versions.rs | 267 ++++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 274 insertions(+)
+Applied, thanks!
 
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index c1d385e345b9..3ab9bae4ab52 100644
---- a/rust/macros/lib.rs
-+++ b/rust/macros/lib.rs
-@@ -5,6 +5,7 @@
- mod concat_idents;
- mod helpers;
- mod module;
-+mod versions;
- mod vtable;
- 
- use proc_macro::TokenStream;
-@@ -73,6 +74,12 @@ pub fn module(ts: TokenStream) -> TokenStream {
-     module::module(ts)
- }
- 
-+/// Declares multiple variants of a structure or impl code
-+#[proc_macro_attribute]
-+pub fn versions(attr: TokenStream, item: TokenStream) -> TokenStream {
-+    versions::versions(attr, item)
-+}
-+
- /// Declares or implements a vtable trait.
- ///
- /// Linux's use of pure vtables is very close to Rust traits, but they differ
-diff --git a/rust/macros/versions.rs b/rust/macros/versions.rs
-new file mode 100644
-index 000000000000..3bcd5f557289
---- /dev/null
-+++ b/rust/macros/versions.rs
-@@ -0,0 +1,267 @@
-+use proc_macro::{token_stream, Group, Ident, Punct, Spacing, Span, TokenStream, TokenTree};
-+
-+use crate::helpers::{expect_group, expect_punct};
-+
-+fn drop_until_punct(it: &mut impl Iterator<Item = TokenTree>, delimiter: &str) {
-+    let mut depth: isize = 0;
-+    for token in it.by_ref() {
-+        if let TokenTree::Punct(punct) = token {
-+            match punct.as_char() {
-+                '<' => {
-+                    depth += 1;
-+                }
-+                '>' => {
-+                    depth -= 1;
-+                }
-+                _ => {
-+                    if depth == 0 && delimiter.contains(&punct.to_string()) {
-+                        break;
-+                    }
-+                }
-+            }
-+        }
-+    }
-+}
-+
-+struct VersionConfig {
-+    fields: &'static [&'static str],
-+    enums: &'static [&'static [&'static str]],
-+    versions: &'static [&'static [&'static str]],
-+}
-+
-+static AGX_VERSIONS: VersionConfig = VersionConfig {
-+    fields: &["G", "V"],
-+    enums: &[&["G13", "G14"], &["V12_3", "V12_4", "V13_0B4", "V13_2"]],
-+    versions: &[
-+        &["G13", "V12_3"],
-+        &["G14", "V12_4"],
-+        &["G13", "V13_2"],
-+        &["G14", "V13_2"],
-+    ],
-+};
-+
-+fn check_version(config: &VersionConfig, ver: &[usize], it: &mut token_stream::IntoIter) -> bool {
-+    let first = it.next().unwrap();
-+    let val: bool = match &first {
-+        TokenTree::Group(group) => check_version(config, ver, &mut group.stream().into_iter()),
-+        TokenTree::Ident(ident) => {
-+            let key = config
-+                .fields
-+                .iter()
-+                .position(|&r| r == ident.to_string())
-+                .unwrap_or_else(|| panic!("Unknown field {}", ident));
-+            let mut operator = expect_punct(it).to_string();
-+            let mut rhs_token = it.next().unwrap();
-+            if let TokenTree::Punct(punct) = &rhs_token {
-+                operator.extend(std::iter::once(punct.as_char()));
-+                rhs_token = it.next().unwrap();
-+            }
-+            let rhs_name = if let TokenTree::Ident(ident) = &rhs_token {
-+                ident.to_string()
-+            } else {
-+                panic!("Unexpected token {}", ident)
-+            };
-+
-+            let rhs = config.enums[key]
-+                .iter()
-+                .position(|&r| r == rhs_name)
-+                .unwrap_or_else(|| panic!("Unknown value for {}:{}", ident, rhs_name));
-+            let lhs = ver[key];
-+
-+            match operator.as_str() {
-+                "==" => lhs == rhs,
-+                "!=" => lhs != rhs,
-+                ">" => lhs > rhs,
-+                ">=" => lhs >= rhs,
-+                "<" => lhs < rhs,
-+                "<=" => lhs <= rhs,
-+                _ => panic!("Unknown operator {}", operator),
-+            }
-+        }
-+        _ => {
-+            panic!("Unknown token {}", first)
-+        }
-+    };
-+
-+    let boolop = it.next();
-+    match boolop {
-+        Some(TokenTree::Punct(punct)) => {
-+            let right = expect_punct(it).to_string();
-+            if right != punct.to_string() {
-+                panic!("Unexpected op {}{}", punct, right);
-+            }
-+            match punct.as_char() {
-+                '&' => val && check_version(config, ver, it),
-+                '|' => val || check_version(config, ver, it),
-+                _ => panic!("Unexpected op {}{}", right, right),
-+            }
-+        }
-+        Some(a) => panic!("Unexpected op {}", a),
-+        None => val,
-+    }
-+}
-+
-+fn filter_versions(
-+    config: &VersionConfig,
-+    tag: &str,
-+    ver: &[usize],
-+    mut it: &mut token_stream::IntoIter,
-+    is_struct: bool,
-+) -> Vec<TokenTree> {
-+    let mut out = Vec::<TokenTree>::new();
-+
-+    while let Some(token) = it.next() {
-+        let mut tail: Option<TokenTree> = None;
-+        match &token {
-+            TokenTree::Punct(punct) if punct.to_string() == "#" => {
-+                let group = expect_group(it);
-+                let mut grp_it = group.stream().into_iter();
-+                let attr = grp_it.next().unwrap();
-+                match attr {
-+                    TokenTree::Ident(ident) if ident.to_string() == "ver" => {
-+                        if check_version(config, ver, &mut grp_it) {
-+                        } else if is_struct {
-+                            drop_until_punct(&mut it, ",");
-+                        } else {
-+                            let first = it.next().unwrap();
-+                            match &first {
-+                                TokenTree::Group(_) => (),
-+                                _ => {
-+                                    drop_until_punct(&mut it, ",;");
-+                                }
-+                            }
-+                        }
-+                    }
-+                    _ => {
-+                        out.push(token.clone());
-+                        out.push(TokenTree::Group(group.clone()));
-+                    }
-+                }
-+                continue;
-+            }
-+            TokenTree::Punct(punct) if punct.to_string() == ":" => {
-+                let next = it.next();
-+                match next {
-+                    Some(TokenTree::Punct(punct)) if punct.to_string() == ":" => {
-+                        let next = it.next();
-+                        match next {
-+                            Some(TokenTree::Ident(idtag)) if idtag.to_string() == "ver" => {
-+                                let ident = match out.pop() {
-+                                    Some(TokenTree::Ident(ident)) => ident,
-+                                    a => panic!("$ver not following ident: {:?}", a),
-+                                };
-+                                let name = ident.to_string() + tag;
-+                                let new_ident = Ident::new(name.as_str(), ident.span());
-+                                out.push(TokenTree::Ident(new_ident));
-+                                continue;
-+                            }
-+                            Some(a) => {
-+                                out.push(token.clone());
-+                                out.push(token.clone());
-+                                tail = Some(a);
-+                            }
-+                            None => {
-+                                out.push(token.clone());
-+                                out.push(token.clone());
-+                            }
-+                        }
-+                    }
-+                    Some(a) => {
-+                        out.push(token.clone());
-+                        tail = Some(a);
-+                    }
-+                    None => {
-+                        out.push(token.clone());
-+                        continue;
-+                    }
-+                }
-+            }
-+            _ => {
-+                tail = Some(token);
-+            }
-+        }
-+        match &tail {
-+            Some(TokenTree::Group(group)) => {
-+                let new_body =
-+                    filter_versions(config, tag, ver, &mut group.stream().into_iter(), is_struct);
-+                let mut stream = TokenStream::new();
-+                stream.extend(new_body);
-+                let mut filtered_group = Group::new(group.delimiter(), stream);
-+                filtered_group.set_span(group.span());
-+                out.push(TokenTree::Group(filtered_group));
-+            }
-+            Some(token) => {
-+                out.push(token.clone());
-+            }
-+            None => {}
-+        }
-+    }
-+
-+    out
-+}
-+
-+pub(crate) fn versions(attr: TokenStream, item: TokenStream) -> TokenStream {
-+    let config = match attr.to_string().as_str() {
-+        "AGX" => &AGX_VERSIONS,
-+        _ => panic!("Unknown version group {}", attr),
-+    };
-+
-+    let mut it = item.into_iter();
-+    let mut out = TokenStream::new();
-+    let mut body: Vec<TokenTree> = Vec::new();
-+    let mut is_struct = false;
-+
-+    while let Some(token) = it.next() {
-+        match token {
-+            TokenTree::Punct(punct) if punct.to_string() == "#" => {
-+                body.push(TokenTree::Punct(punct));
-+                body.push(it.next().unwrap());
-+            }
-+            TokenTree::Ident(ident)
-+                if ["struct", "enum", "union", "const", "type"]
-+                    .contains(&ident.to_string().as_str()) =>
-+            {
-+                is_struct = ident.to_string() != "const";
-+                body.push(TokenTree::Ident(ident));
-+                body.push(it.next().unwrap());
-+                // This isn't valid syntax in a struct definition, so add it for the user
-+                body.push(TokenTree::Punct(Punct::new(':', Spacing::Joint)));
-+                body.push(TokenTree::Punct(Punct::new(':', Spacing::Alone)));
-+                body.push(TokenTree::Ident(Ident::new("ver", Span::call_site())));
-+                break;
-+            }
-+            TokenTree::Ident(ident) if ident.to_string() == "impl" => {
-+                body.push(TokenTree::Ident(ident));
-+                break;
-+            }
-+            TokenTree::Ident(ident) if ident.to_string() == "fn" => {
-+                body.push(TokenTree::Ident(ident));
-+                break;
-+            }
-+            _ => {
-+                body.push(token);
-+            }
-+        }
-+    }
-+
-+    body.extend(it);
-+
-+    for ver in config.versions {
-+        let tag = ver.join("");
-+        let mut ver_num = Vec::<usize>::new();
-+        for (i, comp) in ver.iter().enumerate() {
-+            let idx = config.enums[i].iter().position(|&r| r == *comp).unwrap();
-+            ver_num.push(idx);
-+        }
-+        let tt = TokenStream::from_iter(body.clone().into_iter());
-+        out.extend(filter_versions(
-+            config,
-+            &tag,
-+            &ver_num,
-+            &mut tt.into_iter(),
-+            is_struct,
-+        ));
-+    }
-+
-+    out
-+}
+[1/1] block: fix wrong mode for blkdev_put() from disk_scan_partitions()
+      commit: 428913bce1e67ccb4dae317fd0332545bf8c9233
 
+Best regards,
 -- 
-2.35.1
+Jens Axboe
+
+
 
