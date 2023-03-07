@@ -2,98 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE226ADB12
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F223E6ADB13
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjCGJx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
+        id S230510AbjCGJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjCGJxm (ORCPT
+        with ESMTP id S230484AbjCGJxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:53:42 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0735474ED;
-        Tue,  7 Mar 2023 01:53:36 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 552CA24E25A;
-        Tue,  7 Mar 2023 17:53:35 +0800 (CST)
-Received: from EXMBX073.cuchost.com (172.16.6.83) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
- 2023 17:53:35 +0800
-Received: from [192.168.60.139] (180.164.60.184) by EXMBX073.cuchost.com
- (172.16.6.83) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
- 2023 17:53:34 +0800
-Message-ID: <0a0fbd68-9398-b6ac-3d78-e8765e4c2af9@starfivetech.com>
-Date:   Tue, 7 Mar 2023 17:53:34 +0800
+        Tue, 7 Mar 2023 04:53:44 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800104DBCC;
+        Tue,  7 Mar 2023 01:53:39 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 367666602FE5;
+        Tue,  7 Mar 2023 09:53:37 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678182818;
+        bh=vOeT3Ma4VCBuwsG6yxTjz0hhW4n6wBQ0pRmiNCigU4Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VcID3wSgiRgGRYsYRldHpyMmkM9q9Iwj7PmDLnNVemLF8K/Q0FQ7c0oOHsxU4K/Hn
+         RE99gklE/DYhCxYx8uHMbbk7HhYWiV6Rqdul73r+xhWoiBucpULpGYxBiLONCuryJq
+         Czj7vMF0sG1gY43EUld5eFbC/CWuj0Yk50H/Hs+ebTiL0AHr6cnQigCJRzqidyC+gL
+         9gpTjtnMciNE2iMejiwJLMhvdlgy+gNxCgW29vcua+X9dAbj4pOcDAGDug2rRzvm07
+         jp72R1UTHATxpR7OQE/gntZ8TYjZipCQCuJzHsH90L8aiCfmvwegMKhsbqnZm4zOu0
+         U7EKfFtV9gOZA==
+Message-ID: <33587fba-566e-38f9-1f27-868133a854f0@collabora.com>
+Date:   Tue, 7 Mar 2023 10:53:34 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v1 06/11] media: starfive: add ISP driver files
+Subject: Re: [PATCH v8 2/7] iommu/mediatek: Set dma_mask for PGTABLE_PA_35_EN
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <changhuang.liang@starfivetech.com>
-References: <20230302091921.43309-1-jack.zhu@starfivetech.com>
- <20230302091921.43309-7-jack.zhu@starfivetech.com>
- <1270c1a6-9e12-3f0b-c90b-f1715ea07f80@linaro.org>
-From:   Jack Zhu <jack.zhu@starfivetech.com>
-In-Reply-To: <1270c1a6-9e12-3f0b-c90b-f1715ea07f80@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, mingyuan.ma@mediatek.com,
+        yf.wang@mediatek.com, jianjiao.zeng@mediatek.com,
+        chengci.xu@mediatek.com, youlin.pei@mediatek.com
+References: <20230307080555.14399-1-yong.wu@mediatek.com>
+ <20230307080555.14399-3-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230307080555.14399-3-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [180.164.60.184]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX073.cuchost.com
- (172.16.6.83)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 07/03/23 09:05, Yong Wu ha scritto:
+> When we enable PGTABLE_PA_35_EN, the PA for pgtable may be 35bits.
+> Thus add dma_mask for it.
+> 
+> Fixes: 301c3ca12576 ("iommu/mediatek: Allow page table PA up to 35bit")
+> Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+
+I would send this patch separately from the MT8188 series, as that's purely a
+(quite important) fix that is not specific to the introduction of MT8188, even
+though that SoC needs that fix.
+
+Regardless of that,
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
-On 2023/3/3 16:45, Krzysztof Kozlowski wrote:
-> On 02/03/2023 10:19, jack.zhu wrote:
->> Add base driver for Starfive Image Signal Processing Unit which
->> handles the data streams from the CSI2 receiver.
->> 
->> Signed-off-by: jack.zhu <jack.zhu@starfivetech.com>
->> ---
->>  drivers/media/platform/starfive/stf_isp.c     | 1079 ++++++++++++++
->>  drivers/media/platform/starfive/stf_isp.h     |  183 +++
->>  .../media/platform/starfive/stf_isp_hw_ops.c  | 1286 +++++++++++++++++
->>  3 files changed, 2548 insertions(+)
->>  create mode 100644 drivers/media/platform/starfive/stf_isp.c
->>  create mode 100644 drivers/media/platform/starfive/stf_isp.h
->>  create mode 100644 drivers/media/platform/starfive/stf_isp_hw_ops.c
-> 
-> 
->> +}
->> +
->> +static int stf_isp_reg_read(struct stf_isp_dev *isp_dev, void *arg)
->> +{
->> +	void __iomem *ispbase = stf_isp_get_ispbase(isp_dev);
->> +	struct isp_reg_param *reg_param = arg;
-> 
-> 
-> Didn't you add now code which does not even build and is not bisectable?
-> 
-
-use patch 11 to build all files in the starfive directory.
-
-> 
-> Best regards,
-> Krzysztof
-> 
