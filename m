@@ -2,166 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D496AD506
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 03:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCF96AD509
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 03:52:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbjCGCul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 21:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55834 "EHLO
+        id S229699AbjCGCwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 21:52:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCGCuj (ORCPT
+        with ESMTP id S229624AbjCGCwU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 21:50:39 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6765951FBA;
-        Mon,  6 Mar 2023 18:50:37 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PW0H838ZVznWPj;
-        Tue,  7 Mar 2023 10:47:48 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 7 Mar
- 2023 10:50:35 +0800
-Subject: Re: [PATCH bpf-next v1 1/2] xdp: recycle Page Pool backed skbs built
- from XDP frames
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230301160315.1022488-1-aleksander.lobakin@intel.com>
- <20230301160315.1022488-2-aleksander.lobakin@intel.com>
- <36d42e20-b33f-5442-0db7-e9f5ef9d0941@huawei.com>
- <dd811304-44ed-0372-8fe7-00c425a453dd@intel.com>
- <7ffbcac4-f4f2-5579-fd55-35813fbd792c@huawei.com>
- <9b5b88da-0d2d-d3f3-6ee1-7e4afc2e329a@intel.com>
- <98aa093a-e772-8882-b0e3-5895fd747e59@huawei.com>
- <0bc28bea-78f5-bcce-2d45-e6f6d1a7ed40@intel.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <605cad27-2bf3-7913-877e-d2870892ecd5@huawei.com>
-Date:   Tue, 7 Mar 2023 10:50:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Mon, 6 Mar 2023 21:52:20 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 350C457D35;
+        Mon,  6 Mar 2023 18:52:19 -0800 (PST)
+Received: from loongson.cn (unknown [112.20.109.241])
+        by gateway (Coremail) with SMTP id _____8AxlF3ipgZkNS0JAA--.11610S3;
+        Tue, 07 Mar 2023 10:52:18 +0800 (CST)
+Received: from [192.168.100.131] (unknown [112.20.109.241])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTL7fpgZkoXlNAA--.4078S3;
+        Tue, 07 Mar 2023 10:52:16 +0800 (CST)
+Message-ID: <06ec3f93-87c6-9b54-734c-b0d9d1419e2b@loongson.cn>
+Date:   Tue, 7 Mar 2023 10:52:15 +0800
 MIME-Version: 1.0
-In-Reply-To: <0bc28bea-78f5-bcce-2d45-e6f6d1a7ed40@intel.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] specification sched-capacity.rst
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     shao_xuehua <1154690388@qq.com>, corbet@lwn.net,
+        leyfoon.tan@starfivetech.com, robh@kernel.org,
+        conor.dooley@microchip.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <tencent_8D5CE32548E3EDDA267776815C3B982C3E08@qq.com>
+From:   Yanteng Si <siyanteng@loongson.cn>
+In-Reply-To: <tencent_8D5CE32548E3EDDA267776815C3B982C3E08@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxTL7fpgZkoXlNAA--.4078S3
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvdXoWrZFy7GF17CFy5Xr1xury8Zrb_yoWDCFcEgw
+        n5GFnYyayDJF1kZ3W3JF1DJrsYvanFk3Wkuw1vq34kJayUuFZ7CryDKa4YkFW3XrZF9F98
+        X3sYqFyrJrnFkjkaLaAFLSUrUUUU0b8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        e7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
+        AFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
+        6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jz5lbUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/6 19:58, Alexander Lobakin wrote:
-> From: Yunsheng Lin <linyunsheng@huawei.com>
-> Date: Mon, 6 Mar 2023 09:09:31 +0800
-> 
->> On 2023/3/3 21:26, Alexander Lobakin wrote:
->>> From: Yunsheng Lin <linyunsheng@huawei.com>
->>> Date: Fri, 3 Mar 2023 20:44:24 +0800
->>>
->>>> On 2023/3/3 19:22, Alexander Lobakin wrote:
->>>>> From: Yunsheng Lin <linyunsheng@huawei.com>
->>>>> Date: Thu, 2 Mar 2023 10:30:13 +0800
->>>
->>> [...]
->>>
->>>>> And they are fixed :D
->>>>> No drivers currently which use Page Pool mix PP pages with non-PP. And
->>>>
->>>> The wireless adapter which use Page Pool *does* mix PP pages with
->>>> non-PP, see below discussion:
->>>>
->>>> https://lore.kernel.org/netdev/156f3e120bd0757133cb6bc11b76889637b5e0a6.camel@gmail.com/
->>>
->>> Ah right, I remember that (also was fixed).
->>> Not that I think it is correct to mix them -- for my PoV, a driver
->>> shoule either give *all* its Rx buffers as PP-backed or not use PP at all.
->>>
->>> [...]
->>>
->>>>> As Jesper already pointed out, not having a quick way to check whether
->>>>> we have to check ::pp_magic at all can decrease performance. So it's
->>>>> rather a shortcut.
->>>>
->>>> When we are freeing a page by updating the _refcount, I think
->>>> we are already touching the cache of ::pp_magic.
->>>
->>> But no page freeing happens before checking for skb->pp_recycle, neither
->>> in skb_pp_recycle() (skb_free_head() etc.)[0] nor in skb_frag_unref()[1].
->>
->> If we move to per page marker, we probably do not need checking
->> skb->pp_recycle.
->>
->> Note both page_pool_return_skb_page() and skb_free_frag() can
->> reuse the cache line triggered by per page marker checking if
->> the per page marker is in the 'struct page'.
-> 
-> Ah, from that perspective. Yes, you're probably right, but would need to
-> be tested anyway. I don't see any open problems with the PP recycling
-> right now on the lists, but someone may try to change it one day.
-> Anyway, this flag is only to do a quick test. We do have
-> sk_buff::pfmemalloc, but this flag doesn't mean every page from this skb
-> was pfmemalloced.
 
-The point seems to be that sk_buff::pfmemalloc allow false positive, which
-means skb->pfmemalloc can be set to true while every page from this skb is
-not pfmemalloced as you mentioned.
+在 3/6/23 16:43, shao_xuehua 写道:
+> Signed-off-by: shao_xuehua <1154690388@qq.com>
+> ---
 
-While skb->pp_recycle can't allow false positive, if that happens, reference
-counting of the page will not be handled properly if pp and non-pp skb shares
-the page as the wireless adapter does.
+Hi xuehua,
 
-> 
->>
->>>
->>>>
->>>> Anyway, I am not sure checking ::pp_magic is correct when a
->>>> page will be passing between different subsystem and back to
->>>> the network stack eventually, checking ::pp_magic may not be
->>>> correct if this happens.
->>>>
->>>> Another way is to use the bottom two bits in bv_page, see:
->>>> https://www.spinics.net/lists/netdev/msg874099.html
->>>>
->>>>>
->>>>>>
->>>>>>>  
->>>>>>>  	/* Allow SKB to reuse area used by xdp_frame */
->>>>>>>  	xdp_scrub_frame(xdpf);
->>>>>>>
->>>>>
->>>>> Thanks,
->>>>> Olek
->>>>> .
->>>>>
->>>
->>> [0] https://elixir.bootlin.com/linux/latest/source/net/core/skbuff.c#L808
->>> [1]
->>> https://elixir.bootlin.com/linux/latest/source/include/linux/skbuff.h#L3385
->>>
->>> Thanks,
->>> Olek
->>> .
->>>
-> 
-> Thanks,
-> Olek
-> 
-> .
-> 
+
+Missing commit message. See 
+<Documentation/translations/zh_CN/process/submitting-patches.rst>
+
+
+Thanks,
+
+Yanteng
+
+>   Documentation/scheduler/sched-capacity.rst | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/scheduler/sched-capacity.rst b/Documentation/scheduler/sched-capacity.rst
+> index 8e2b8538bc2b..6bbdcb10ffa9 100644
+> --- a/Documentation/scheduler/sched-capacity.rst
+> +++ b/Documentation/scheduler/sched-capacity.rst
+> @@ -420,7 +420,7 @@ to a CPU with more capacity than its current one.
+>   
+>   RT task wakeup CPU selection searches for a CPU that satisfies::
+>   
+> -  task_uclamp_min(p) <= capacity(task_cpu(cpu))
+> +  task_uclamp_min(p) <= capacity(task_cpu(p))
+>   
+>   while still following the usual priority constraints. If none of the candidate
+>   CPUs can satisfy this capacity criterion, then strict priority based scheduling
+
