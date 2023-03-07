@@ -2,118 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648986AD3CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B42166AD3CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCGBXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 20:23:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        id S229701AbjCGBW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 20:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbjCGBXN (ORCPT
+        with ESMTP id S229542AbjCGBWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:23:13 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E52252AD
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:23:06 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PVyNW50MbzrS4M;
-        Tue,  7 Mar 2023 09:22:19 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 7 Mar 2023 09:22:33 +0800
-Message-ID: <174e75a4-f03c-a542-5f6a-651abb5dec58@huawei.com>
-Date:   Tue, 7 Mar 2023 09:22:33 +0800
+        Mon, 6 Mar 2023 20:22:54 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081FC29E2F
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:22:52 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id i28so15283786lfv.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:22:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678152170;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v2x8CT0qC69q7YoY7JhCMWzXWvhAS15Aiyex8pxnv7E=;
+        b=RQdubjvBLAVFreilW44I42iQiHFUhj1JbyenLwezjpLlLVlGhy2HWQWxrGj74EeQ7H
+         QcR4HXjUoRM2gjf8O5gXoG93Uar0xzDxgKOuFCz0iyqBToqHIGJSQdI78e2vj9QZLEay
+         QdVnOdJH387WGiXeRRZulzPsl4Dr7xIRsQ11gXmAUoOvvW4G96DN/4lM7UVTuyh6MJz9
+         FIzFUz7cbKkqByIZwefZCb0EyHI62Mw9nTrwjoCDhKUQ/mxEAlkgFRpM3BZ++KEUO4jp
+         6JZEvduDK1Je8SojN76prW4Ln4U2pad5U1w8ND2n9Ez/Co/wvUilJKuarXR1CV+yxDZH
+         Ubpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678152170;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v2x8CT0qC69q7YoY7JhCMWzXWvhAS15Aiyex8pxnv7E=;
+        b=k69erqrnhzUv7GZVNYKXggbgOnmme4LEX4ecf7kNxfZuS/dM7Jz0NlCAUf4fqPpl5d
+         eKmv6g74r386vPeb79/okCfpbvUaKaZq7T3TnV5dy0ghsAyqvAwJIJ7yiaJ4ohy+yD7w
+         nsQrLnSMSGVwwWhF8iz9KMYKmzc0dVbEXyvHnF8rkZJWLRBZTepjIRk4lR69EGRVHINi
+         z/mDbLkF1qLQwgbvrQq4T3KaGbpp+rQ/U4X/3X6vCpHwYAU+wiQ8+ThyZBAw/7teOTPj
+         ZCVyY2F5UAVSvE++SZfItkE/SHCFw1PgGa/MaS3BDSxaii+cChUNKQXrH8T4MJVKxbph
+         t/0A==
+X-Gm-Message-State: AO0yUKWLtyvfjpGjgIcvumLo/+j4t71ICu9JrBB+pS4apXjT71CPunOp
+        FO/bRgSYQqfqnDvuMOLHdPky4j91twou7OfFfRs=
+X-Google-Smtp-Source: AK7set/Wo1Bhvg6d91uy/i9lev8howJuGnZgjPUqpM2a4K9IBOjlWDJyG/BbkIgCqi1LhJ/QsW5k/A==
+X-Received: by 2002:a19:7506:0:b0:4dc:790c:910b with SMTP id y6-20020a197506000000b004dc790c910bmr3198637lfe.20.1678152170215;
+        Mon, 06 Mar 2023 17:22:50 -0800 (PST)
+Received: from localhost.localdomain (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
+        by smtp.gmail.com with ESMTPSA id u28-20020ac2519c000000b004dd7fefd2c8sm1819076lfi.242.2023.03.06.17.22.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 17:22:49 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] firmware: qcom_scm: Add SM6375 compatible
+Date:   Tue,  7 Mar 2023 02:22:47 +0100
+Message-Id: <20230307012247.3655547-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 2/3] mm/damon/paddr: minor refactor of damon_pa_young()
-Content-Language: en-US
-To:     SeongJae Park <sj@kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <damon@lists.linux.dev>
-References: <20230306212727.303846-1-sj@kernel.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20230306212727.303846-1-sj@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While it was introduced in bindings, requiring a core clock, and added
+into the DT, this compatible was apparently forgotten about on the driver
+side of things. Fix it.
 
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/firmware/qcom_scm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On 2023/3/7 5:27, SeongJae Park wrote:
-> Hi Kefeng,
-> 
-> On Mon, 6 Mar 2023 09:56:49 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-> 
->>
->>
->> On 2023/3/6 9:10, Kefeng Wang wrote:
->>>
->>>
->>> On 2023/3/4 2:39, SeongJae Park wrote:
->>>> Hi Kefeng,
->>>>
->>>> On Fri, 3 Mar 2023 16:43:42 +0800 Kefeng Wang
->>>> <wangkefeng.wang@huawei.com> wrote:
->>>>
->>>>> Omit three lines by unified folio_put(), and make code more clear.
->>>>>
->>>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->>>>> ---
->>>>>    mm/damon/paddr.c | 11 ++++-------
->>>>>    1 file changed, 4 insertions(+), 7 deletions(-)
->>>>>
->>>>> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
->>>>> index 3fda00a0f786..2ef9db0189ca 100644
->>>>> --- a/mm/damon/paddr.c
->>>>> +++ b/mm/damon/paddr.c
->>>>> @@ -130,24 +130,21 @@ static bool damon_pa_young(unsigned long paddr,
->>>>> unsigned long *folio_sz)
->>>>>                accessed = false;
->>>>>            else
->>>>>                accessed = true;
->>>>> -        folio_put(folio);
->>>>>            goto out;
->>>>
->>>> Because you moved 'out' label to not include *folio_sz setting,
->>>> folio_sz will
->>>> not set in this case.  It should be set.
->>> oh, it should be fixed.
->>>>
->>>>>        }
->>>>>        need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
->>>>> -    if (need_lock && !folio_trylock(folio)) {
->>>>> -        folio_put(folio);
->>>>> -        return false;
->>>>> -    }
->>
->> Hi SJ,  apart from above issue, it looks that this branch need the
->> folio_size() setting, right?
-> 
-> folio_sz is effectively used by caller of damon_pa_young() only if this
-> function returns true, so this branch doesn't need to set folio_sz.
-
-__damon_pa_check_access() store last_addr, last_accessed and 
-last_folio_sz, even damon_pa_young() return false, the following check 
-still use last_folio_sz,
-
-   ALIGN_DOWN(last_addr, last_folio_sz) == ALIGN_DOWN(r->sampling_addr, 
-last_folio_sz)
-
-but last_folio_sz is not up to date, so I think it need to update, and 
-update last_folio_sz is harmless, which could let's unify the return 
-path, correct me if I am wrong.
-
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index 916a0c2fc903..2e8961c84b68 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -1494,6 +1494,7 @@ static const struct of_device_id qcom_scm_dt_match[] = {
+ 	},
+ 	{ .compatible = "qcom,scm-msm8994" },
+ 	{ .compatible = "qcom,scm-msm8996" },
++	{ .compatible = "qcom,scm-sm6375", .data = (void *)SCM_HAS_CORE_CLK },
+ 	{ .compatible = "qcom,scm" },
+ 	{}
+ };
+-- 
+2.39.2
 
