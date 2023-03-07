@@ -2,84 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9666AD8D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:11:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3DF6AD8DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjCGILz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:11:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        id S230011AbjCGIMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:12:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjCGILw (ORCPT
+        with ESMTP id S229834AbjCGIMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:11:52 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6C410415;
-        Tue,  7 Mar 2023 00:11:27 -0800 (PST)
-X-UUID: a4aa750cbcbf11eda06fc9ecc4dadd91-20230307
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=vgduVIOHUsmEHqgZONx8uKnlTWsJSWncFzmVVWh4R04=;
-        b=WUgWrsYU4kZG7RMZ9IJwuS8qCq51Fpw4yExmwCzaAnoUHzD0KU2FqxETlzf0TBmvSUW/wSI5c9cVoEp0g93LkPH4LNng1BTx99zrer6JxzubRDP117+hayR+CPl08P0H0Ui5B1huk9T+uAbsU+vH7srDenmQ9LFBZ6hf0dCZx38=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:fa58624e-9b59-4247-b325-5e108002f59e,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:-30,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACT
-        ION:release,TS:-55
-X-CID-META: VersionHash:25b5999,CLOUDID:5afd9327-564d-42d9-9875-7c868ee415ec,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:2,IP:nil,UR
-        L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-UUID: a4aa750cbcbf11eda06fc9ecc4dadd91-20230307
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <haozhe.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1325799970; Tue, 07 Mar 2023 16:11:20 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 7 Mar 2023 16:11:19 +0800
-Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 7 Mar 2023 16:11:17 +0800
-From:   <haozhe.chang@mediatek.com>
-To:     M Chetan Kumar <m.chetan.kumar@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
-        Liu Haijun <haijun.liu@mediatek.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        haozhe chang <haozhe.chang@mediatek.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        "open list:INTEL WWAN IOSM DRIVER" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) WWAN CONTROL..." 
-        <linux-remoteproc@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-CC:     <lambert.wang@mediatek.com>, <xiayu.zhang@mediatek.com>,
-        <hua.yang@mediatek.com>
-Subject: [PATCH RESEND net-next] wwan: core: Support slicing in port TX flow of WWAN subsystem
-Date:   Tue, 7 Mar 2023 16:11:04 +0800
-Message-ID: <20230307081113.67746-1-haozhe.chang@mediatek.com>
-X-Mailer: git-send-email 2.17.0
+        Tue, 7 Mar 2023 03:12:07 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10212CFEA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:11:39 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id x3so48836333edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:11:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678176698;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+gmLTaMxh+UgKG/kflrxb/f3sNJaZcDEgaX2MESY0eU=;
+        b=q3PBcvB1zvsXE87gITbF/SzJQLo4Xx88B32/Tmw3dv2IrNfQYd8YbzJyVUtxwcFMDx
+         rDtF1kRD/J5rUZPOvdQrEAbExMBQTrNf0mRJwrTD4e0RYlDjbmuEVLPhc59kpXOuBguq
+         NyTY2kmk766MwbnpQMj2RcnYDPRvYilXFFVXrGGXa6GA9A20SUrpFbYn5+sC/xnzSEjE
+         FKhWGUqha329de9TWzywrqVay3P5xsD6TFOP7FdCGyCFWBqV4svNe0CvcyDUW8zR9Ieu
+         GkyggizmmZfQzDjfqt/w1nTLu3jfwmjXH29xP1JazPuuDhlWLd974oZW9quGhCvR2Jt1
+         hokg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678176698;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+gmLTaMxh+UgKG/kflrxb/f3sNJaZcDEgaX2MESY0eU=;
+        b=gejW7WrbAXazJYA3iVjMogQAkziyDOH0kTdR8J7o8YFjuXvrJnfeBHrUowuMDAtABC
+         9s0j2BvOe1LRX9wrkjiRwXWuZ6aLlYkSqzAH2B8azVOtBfd9BPPT5ih342h9oGLuU2kY
+         5VTwVteWosjEt56AcYVcM97k57MvVQCrM9bJro5h9gN5lKl6sqFYxBtb0PLMe/v4h0OD
+         us2JMWM3oJdNyQ5VhaqEjJ3RM+4670aZUKsiXlfRf32jgua2PtSSpP2nh6JcIMgawEub
+         wMwyzDXW2eZ8Z3WVI+Q97w4PCJ4QmMLBT/lmNwGs3pSJ8RfMzqKGK+iQGu71E1GYoi+3
+         b4zA==
+X-Gm-Message-State: AO0yUKWZDll3EJPs0/YfSvEZMGh2mFq14PsiUu7CgsKBJzux7Qi8ih+x
+        9k/r9U71XLF085P+NL8FG3eQ7w==
+X-Google-Smtp-Source: AK7set8K0X83pfhJzpDlAHKtkhFREUYDfeXRLHVhI+OBX7UgwhDddxevyD4fRlkYHGhDqm65b0Wfbw==
+X-Received: by 2002:a50:ed18:0:b0:4af:7bdc:1891 with SMTP id j24-20020a50ed18000000b004af7bdc1891mr12995254eds.11.1678176698410;
+        Tue, 07 Mar 2023 00:11:38 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:5310:35c7:6f9e:2cd3? ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
+        by smtp.gmail.com with ESMTPSA id u2-20020a50d502000000b004c0057b478bsm6341543edi.34.2023.03.07.00.11.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 00:11:38 -0800 (PST)
+Message-ID: <d33145c3-e985-4d3c-a08c-6a249a8dc463@linaro.org>
+Date:   Tue, 7 Mar 2023 09:11:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
+ AST2600-i2cv2
+Content-Language: en-US
+To:     Ryan Chen <ryan_chen@aspeedtech.com>, Wolfram Sang <wsa@kernel.org>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>
+References: <20230226031321.3126756-1-ryan_chen@aspeedtech.com>
+ <20230226031321.3126756-2-ryan_chen@aspeedtech.com>
+ <53090449-58c9-bc03-56df-aa8ae93c0c26@linaro.org>
+ <SEZPR06MB52699DEB2255EB54F35C2A59F2AD9@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <fc20a2d1-e2f9-c22b-dcdf-153cb527eea8@linaro.org>
+ <SEZPR06MB526902637624A97D7DFB8523F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <c41ee6b5-ddb4-1253-de54-a295b3bab2cc@linaro.org>
+ <SEZPR06MB5269E7B8785B3CB56A63A916F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <a3615fe7-aa2a-53e9-2732-ba4512b9369d@linaro.org>
+ <SEZPR06MB5269E7B070B239F8E349C427F2B39@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <c5cf6e0a-05dc-dff7-6218-df0984d1ba47@linaro.org>
+ <SEZPR06MB5269CB53B51B89C3CA039442F2B09@SEZPR06MB5269.apcprd06.prod.outlook.com>
+ <e59fe30a-75d1-eb59-52a3-014fe3c961a6@linaro.org>
+ <SEZPR06MB5269B541150855BF0DABFACFF2B69@SEZPR06MB5269.apcprd06.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <SEZPR06MB5269B541150855BF0DABFACFF2B69@SEZPR06MB5269.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,337 +101,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: haozhe chang <haozhe.chang@mediatek.com>
+On 06/03/2023 01:48, Ryan Chen wrote:
+> Hello Krzysztof,
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: Sunday, March 5, 2023 5:49 PM
+>> To: Ryan Chen <ryan_chen@aspeedtech.com>; Wolfram Sang
+>> <wsa@kernel.org>
+>> Cc: Joel Stanley <joel@jms.id.au>; Brendan Higgins
+>> <brendan.higgins@linux.dev>; Krzysztof Kozlowski
+>> <krzysztof.kozlowski+dt@linaro.org>; Andrew Jeffery <andrew@aj.id.au>;
+>> devicetree@vger.kernel.org; Philipp Zabel <p.zabel@pengutronix.de>; Rob
+>> Herring <robh+dt@kernel.org>; Benjamin Herrenschmidt
+>> <benh@kernel.crashing.org>; linux-aspeed@lists.ozlabs.org;
+>> linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+>> openbmc@lists.ozlabs.org; linux-i2c@vger.kernel.org
+>> Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for AST2600-i2cv2
+>>
+>> On 04/03/2023 02:33, Ryan Chen wrote:
+>>> Hello Krzysztof,
+>>>
+>>>> -----Original Message-----
+>>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>> Sent: Friday, March 3, 2023 6:41 PM
+>>>> To: Ryan Chen <ryan_chen@aspeedtech.com>; Wolfram Sang
+>>>> <wsa@kernel.org>
+>>>> Cc: Joel Stanley <joel@jms.id.au>; Brendan Higgins
+>>>> <brendan.higgins@linux.dev>; Krzysztof Kozlowski
+>>>> <krzysztof.kozlowski+dt@linaro.org>; Andrew Jeffery
+>>>> <andrew@aj.id.au>; devicetree@vger.kernel.org; Philipp Zabel
+>>>> <p.zabel@pengutronix.de>; Rob Herring <robh+dt@kernel.org>; Benjamin
+>>>> Herrenschmidt <benh@kernel.crashing.org>;
+>>>> linux-aspeed@lists.ozlabs.org; linux-arm-kernel@lists.infradead.org;
+>>>> linux-kernel@vger.kernel.org; openbmc@lists.ozlabs.org;
+>>>> linux-i2c@vger.kernel.org
+>>>> Subject: Re: [PATCH v6 1/2] dt-bindings: i2c: aspeed: support for
+>>>> AST2600-i2cv2
+>>>>
+>>>> On 03/03/2023 11:16, Ryan Chen wrote:
+>>>>>>>>>>> aspeed,timout properites:
+>>>>>>>>>>> For example I2C controller as slave mode, and suddenly
+>>>>>> disconnected.
+>>>>>>>>>>> Slave state machine will keep waiting for master clock in for
+>>>>>>>>>>> rx/tx
+>>>>>>>> transmit.
+>>>>>>>>>>> So it need timeout setting to enable timeout unlock controller
+>> state.
+>>>>>>>>>>> And in another side. In Master side also need avoid suddenly
+>>>>>>>>>>> slave
+>>>>>>>>>> miss(un-plug), Master will timeout and release the SDA/SCL.
+>>>>>>>>>>>
+>>>>>>>>>>> Do you mean add those description into ore aspeed,timout
+>>>>>>>>>>> properites
+>>>>>>>>>> description?
+>>>>>>>>>>
+>>>>>>>>>> You are describing here one particular feature you want to
+>>>>>>>>>> enable in the driver which looks non-scalable and more
+>>>>>>>>>> difficult to
+>>>>>> configure/use.
+>>>>>>>>>> What I was looking for is to describe the actual configuration
+>>>>>>>>>> you have
+>>>>>> (e.g.
+>>>>>>>>>> multi-master) which leads to enable or disable such feature in
+>>>>>>>>>> your
+>>>>>>>> hardware.
+>>>>>>>>>> Especially that bool value does not scale later to actual
+>>>>>>>>>> timeout values in time (ms)...
+>>>>>>>>>>
+>>>>>>>>>> I don't know I2C that much, but I wonder - why this should be
+>>>>>>>>>> specific to Aspeed I2C and no other I2C controllers implement it?
+>>>>>>>>>> IOW, this looks quite generic and every I2C controller should
+>>>>>>>>>> have it. Adding it specific to Aspeed suggests that either we
+>>>>>>>>>> miss a generic property or this should not be in DT at all
+>>>>>>>>>> (because no one else has
+>>>>>>>> it...).
+>>>>>>>>>>
+>>>>>>>>>> Also I wonder, why you wouldn't enable timeout always...
+>>>>>>>>>>
+>>>>>>>>>> +Cc Wolfram,
+>>>>>>>>>> Maybe you know whether bool "timeout" property for one
+>>>>>>>>>> controller makes sense? Why we do not have it for all controllers?
+>>>>>>>>>>
+>>>>>>>>> Because, i2c bus didn’t specific timeout.
+>>>>>>>>> But SMBus defines a clock low time-out, TIMEOUT of 35 ms.
+>>>>>>>>>
+>>>>>>>>> It have definition in SMBus specification.
+>>>>>>>>> http://smbus.org/specs/SMBus_3_1_20180319.pdf
+>>>>>>>>> You can check Page 18, Note3 that have timeout description.
+>>>>>>>>
+>>>>>>>> Then you have already property for this - "smbus"?
+>>>>>>> To be a property "smbus", that would be a big topic, I saw fsl i2c
+>>>>>>> also have this.
+>>>>>>> https://github.com/torvalds/linux/blob/master/Documentation/device
+>>>>>>> tr
+>>>>>>> ee
+>>>>>>> /bindings/i2c/i2c-mpc.yaml#L43-L47
+>>>>>>> So, I just think the "timeout" property.
+>>>>>>
+>>>>>> Yeah and this is the only place. It also differs because it allows
+>>>>>> actual timeout values.
+>>>>> Thanks, So can I still keep the property "aspeed,timeout" here?
+>>>>> It is the only place.
+>>>>
+>>>> No, because none of my concerns above are addressed.
+>>>>
+>>> Thanks, I realize your concerns.
+>>>
+>>> So, I modify it like i2c-mpc.yaml
+>>> https://github.com/torvalds/linux/blob/master/Documentation/devicetree
+>>> /bindings/i2c/i2c-mpc.yaml#L43-L47
+>>>
+>>>   aspeed,timeout:
+>>>     $ref: /schemas/types.yaml#/definitions/uint32
+>>>     description: |
+>>>       I2C bus timeout in microseconds
+>>> Is this way acceptable?
+>>
+>> So, let's repeat my last questions:
+>>
+>> 1. Why you wouldn't enable timeout always...
+>>
+>> You wrote:
+>>> http://smbus.org/specs/SMBus_3_1_20180319.pdf
+>>> You can check Page 18, Note3 that have timeout description.
+>>
+>> which indicates you should always use timeout, doesn't it?
+> 
+> Yes, if board design the bus is connected with SMBUS device, it should enable.
+> But in my previous statement, the board design is two multi-master devices connected each other. 
 
-wwan_port_fops_write inputs the SKB parameter to the TX callback of
-the WWAN device driver. However, the WWAN device (e.g., t7xx) may
-have an MTU less than the size of SKB, causing the TX buffer to be
-sliced and copied once more in the WWAN device driver.
+For which you have the property, thus case is solved, isn't it? You want
+timeout always except for multi-master?
 
-This patch implements the slicing in the WWAN subsystem and gives
-the WWAN devices driver the option to slice(by frag_len) or not. By
-doing so, the additional memory copy is reduced.
+> And both device is transfer with MCTP protocol. 
+> That will not SMBUS protocol. 
+> They need have timeout that prevent unexpected un-plug.
+> I do the study with smbus in Linux, that will different slave call back. Compare with smbus slave and mctp slave.
+> So in this scenario, that is only enable for timeout. 
 
-Meanwhile, this patch gives WWAN devices driver the option to reserve
-headroom in fragments for the device-specific metadata.
+And the driver knows which protocol it is going to talk and such choice
+should not be in DT.
 
-Signed-off-by: haozhe chang <haozhe.chang@mediatek.com>
-Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+>  
+>> 2. Why we do not have it for all controllers with SMBus v3? Why this one is
+>> special?
+> 
+> Not all bus is connected with smbus. Most are i2c device connected in board.
+> That will be specific statement for each bus.
 
----
-Changes in v2
-  -send fragments to device driver by skb frag_list.
+That's not the answer to my question. Why other controllers which can be
+connected to I2C or SMBus devices do not need this property?
 
-Changes in v3
-  -move frag_len and headroom_len setting to wwan_create_port.
-
-Changes in v4
-  -change unreadable parameters to macro definition.
-
-Changes in v5
-  -optimize comments for WWAN_NO_HEADROOM, WWAN_NO_FRAGMENT.
-
-Changes in v6
-  -add reviewer to patch commit.
----
- drivers/net/wwan/iosm/iosm_ipc_port.c  |  3 +-
- drivers/net/wwan/mhi_wwan_ctrl.c       |  3 +-
- drivers/net/wwan/rpmsg_wwan_ctrl.c     |  3 +-
- drivers/net/wwan/t7xx/t7xx_port_wwan.c | 34 +++++++--------
- drivers/net/wwan/wwan_core.c           | 59 ++++++++++++++++++++------
- drivers/net/wwan/wwan_hwsim.c          |  1 +
- drivers/usb/class/cdc-wdm.c            |  3 +-
- include/linux/wwan.h                   | 16 +++++++
- 8 files changed, 87 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/net/wwan/iosm/iosm_ipc_port.c b/drivers/net/wwan/iosm/iosm_ipc_port.c
-index b6d81c627277..7798348f61d0 100644
---- a/drivers/net/wwan/iosm/iosm_ipc_port.c
-+++ b/drivers/net/wwan/iosm/iosm_ipc_port.c
-@@ -63,7 +63,8 @@ struct iosm_cdev *ipc_port_init(struct iosm_imem *ipc_imem,
- 	ipc_port->ipc_imem = ipc_imem;
- 
- 	ipc_port->iosm_port = wwan_create_port(ipc_port->dev, port_type,
--					       &ipc_wwan_ctrl_ops, ipc_port);
-+					       &ipc_wwan_ctrl_ops, WWAN_NO_FRAGMENT,
-+					       WWAN_NO_HEADROOM, ipc_port);
- 
- 	return ipc_port;
- }
-diff --git a/drivers/net/wwan/mhi_wwan_ctrl.c b/drivers/net/wwan/mhi_wwan_ctrl.c
-index f7ca52353f40..c397aa53db5d 100644
---- a/drivers/net/wwan/mhi_wwan_ctrl.c
-+++ b/drivers/net/wwan/mhi_wwan_ctrl.c
-@@ -237,7 +237,8 @@ static int mhi_wwan_ctrl_probe(struct mhi_device *mhi_dev,
- 
- 	/* Register as a wwan port, id->driver_data contains wwan port type */
- 	port = wwan_create_port(&cntrl->mhi_dev->dev, id->driver_data,
--				&wwan_pops, mhiwwan);
-+				&wwan_pops, WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM,
-+				mhiwwan);
- 	if (IS_ERR(port)) {
- 		kfree(mhiwwan);
- 		return PTR_ERR(port);
-diff --git a/drivers/net/wwan/rpmsg_wwan_ctrl.c b/drivers/net/wwan/rpmsg_wwan_ctrl.c
-index 31c24420ab2e..fc6c228b7e1c 100644
---- a/drivers/net/wwan/rpmsg_wwan_ctrl.c
-+++ b/drivers/net/wwan/rpmsg_wwan_ctrl.c
-@@ -129,7 +129,8 @@ static int rpmsg_wwan_ctrl_probe(struct rpmsg_device *rpdev)
- 
- 	/* Register as a wwan port, id.driver_data contains wwan port type */
- 	port = wwan_create_port(parent, rpdev->id.driver_data,
--				&rpmsg_wwan_pops, rpwwan);
-+				&rpmsg_wwan_pops, WWAN_NO_FRAGMENT,
-+				WWAN_NO_HEADROOM, rpwwan);
- 	if (IS_ERR(port))
- 		return PTR_ERR(port);
- 
-diff --git a/drivers/net/wwan/t7xx/t7xx_port_wwan.c b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
-index 33931bfd78fd..b75bb272f861 100644
---- a/drivers/net/wwan/t7xx/t7xx_port_wwan.c
-+++ b/drivers/net/wwan/t7xx/t7xx_port_wwan.c
-@@ -54,13 +54,13 @@ static void t7xx_port_ctrl_stop(struct wwan_port *port)
- static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
- {
- 	struct t7xx_port *port_private = wwan_port_get_drvdata(port);
--	size_t len, offset, chunk_len = 0, txq_mtu = CLDMA_MTU;
- 	const struct t7xx_port_conf *port_conf;
-+	struct sk_buff *cur = skb, *cloned;
- 	struct t7xx_fsm_ctl *ctl;
- 	enum md_state md_state;
-+	int cnt = 0, ret;
- 
--	len = skb->len;
--	if (!len || !port_private->chan_enable)
-+	if (!port_private->chan_enable)
- 		return -EINVAL;
- 
- 	port_conf = port_private->port_conf;
-@@ -72,23 +72,21 @@ static int t7xx_port_ctrl_tx(struct wwan_port *port, struct sk_buff *skb)
- 		return -ENODEV;
- 	}
- 
--	for (offset = 0; offset < len; offset += chunk_len) {
--		struct sk_buff *skb_ccci;
--		int ret;
--
--		chunk_len = min(len - offset, txq_mtu - sizeof(struct ccci_header));
--		skb_ccci = t7xx_port_alloc_skb(chunk_len);
--		if (!skb_ccci)
--			return -ENOMEM;
--
--		skb_put_data(skb_ccci, skb->data + offset, chunk_len);
--		ret = t7xx_port_send_skb(port_private, skb_ccci, 0, 0);
-+	while (cur) {
-+		cloned = skb_clone(cur, GFP_KERNEL);
-+		cloned->len = skb_headlen(cur);
-+		ret = t7xx_port_send_skb(port_private, cloned, 0, 0);
- 		if (ret) {
--			dev_kfree_skb_any(skb_ccci);
-+			dev_kfree_skb(cloned);
- 			dev_err(port_private->dev, "Write error on %s port, %d\n",
- 				port_conf->name, ret);
--			return ret;
-+			return cnt ? cnt + ret : ret;
- 		}
-+		cnt += cur->len;
-+		if (cur == skb)
-+			cur = skb_shinfo(skb)->frag_list;
-+		else
-+			cur = cur->next;
- 	}
- 
- 	dev_kfree_skb(skb);
-@@ -154,13 +152,15 @@ static int t7xx_port_wwan_disable_chl(struct t7xx_port *port)
- static void t7xx_port_wwan_md_state_notify(struct t7xx_port *port, unsigned int state)
- {
- 	const struct t7xx_port_conf *port_conf = port->port_conf;
-+	unsigned int header_len = sizeof(struct ccci_header);
- 
- 	if (state != MD_STATE_READY)
- 		return;
- 
- 	if (!port->wwan_port) {
- 		port->wwan_port = wwan_create_port(port->dev, port_conf->port_type,
--						   &wwan_ops, port);
-+						   &wwan_ops, CLDMA_MTU - header_len,
-+						   header_len, port);
- 		if (IS_ERR(port->wwan_port))
- 			dev_err(port->dev, "Unable to create WWWAN port %s", port_conf->name);
- 	}
-diff --git a/drivers/net/wwan/wwan_core.c b/drivers/net/wwan/wwan_core.c
-index 62e9f7d6c9fe..8d35513bcd4c 100644
---- a/drivers/net/wwan/wwan_core.c
-+++ b/drivers/net/wwan/wwan_core.c
-@@ -67,6 +67,8 @@ struct wwan_device {
-  * @rxq: Buffer inbound queue
-  * @waitqueue: The waitqueue for port fops (read/write/poll)
-  * @data_lock: Port specific data access serialization
-+ * @headroom_len: SKB reserved headroom size
-+ * @frag_len: Length to fragment packet
-  * @at_data: AT port specific data
-  */
- struct wwan_port {
-@@ -79,6 +81,8 @@ struct wwan_port {
- 	struct sk_buff_head rxq;
- 	wait_queue_head_t waitqueue;
- 	struct mutex data_lock;	/* Port specific data access serialization */
-+	size_t headroom_len;
-+	size_t frag_len;
- 	union {
- 		struct {
- 			struct ktermios termios;
-@@ -422,6 +426,8 @@ static int __wwan_port_dev_assign_name(struct wwan_port *port, const char *fmt)
- struct wwan_port *wwan_create_port(struct device *parent,
- 				   enum wwan_port_type type,
- 				   const struct wwan_port_ops *ops,
-+				   size_t frag_len,
-+				   unsigned int headroom_len,
- 				   void *drvdata)
- {
- 	struct wwan_device *wwandev;
-@@ -455,6 +461,8 @@ struct wwan_port *wwan_create_port(struct device *parent,
- 
- 	port->type = type;
- 	port->ops = ops;
-+	port->frag_len = frag_len ? frag_len : SIZE_MAX;
-+	port->headroom_len = headroom_len;
- 	mutex_init(&port->ops_lock);
- 	skb_queue_head_init(&port->rxq);
- 	init_waitqueue_head(&port->waitqueue);
-@@ -698,30 +706,53 @@ static ssize_t wwan_port_fops_read(struct file *filp, char __user *buf,
- static ssize_t wwan_port_fops_write(struct file *filp, const char __user *buf,
- 				    size_t count, loff_t *offp)
- {
-+	struct sk_buff *skb, *head = NULL, *tail = NULL;
- 	struct wwan_port *port = filp->private_data;
--	struct sk_buff *skb;
-+	size_t frag_len, remain = count;
- 	int ret;
- 
- 	ret = wwan_wait_tx(port, !!(filp->f_flags & O_NONBLOCK));
- 	if (ret)
- 		return ret;
- 
--	skb = alloc_skb(count, GFP_KERNEL);
--	if (!skb)
--		return -ENOMEM;
-+	do {
-+		frag_len = min(remain, port->frag_len);
-+		skb = alloc_skb(frag_len + port->headroom_len, GFP_KERNEL);
-+		if (!skb) {
-+			ret = -ENOMEM;
-+			goto freeskb;
-+		}
-+		skb_reserve(skb, port->headroom_len);
-+
-+		if (!head) {
-+			head = skb;
-+		} else if (!tail) {
-+			skb_shinfo(head)->frag_list = skb;
-+			tail = skb;
-+		} else {
-+			tail->next = skb;
-+			tail = skb;
-+		}
- 
--	if (copy_from_user(skb_put(skb, count), buf, count)) {
--		kfree_skb(skb);
--		return -EFAULT;
--	}
-+		if (copy_from_user(skb_put(skb, frag_len), buf + count - remain, frag_len)) {
-+			ret = -EFAULT;
-+			goto freeskb;
-+		}
- 
--	ret = wwan_port_op_tx(port, skb, !!(filp->f_flags & O_NONBLOCK));
--	if (ret) {
--		kfree_skb(skb);
--		return ret;
--	}
-+		if (skb != head) {
-+			head->data_len += skb->len;
-+			head->len += skb->len;
-+			head->truesize += skb->truesize;
-+		}
-+	} while (remain -= frag_len);
-+
-+	ret = wwan_port_op_tx(port, head, !!(filp->f_flags & O_NONBLOCK));
-+	if (!ret)
-+		return count;
- 
--	return count;
-+freeskb:
-+	kfree_skb(head);
-+	return ret;
- }
- 
- static __poll_t wwan_port_fops_poll(struct file *filp, poll_table *wait)
-diff --git a/drivers/net/wwan/wwan_hwsim.c b/drivers/net/wwan/wwan_hwsim.c
-index ff09a8cedf93..7fb54cb51628 100644
---- a/drivers/net/wwan/wwan_hwsim.c
-+++ b/drivers/net/wwan/wwan_hwsim.c
-@@ -205,6 +205,7 @@ static struct wwan_hwsim_port *wwan_hwsim_port_new(struct wwan_hwsim_dev *dev)
- 
- 	port->wwan = wwan_create_port(&dev->dev, WWAN_PORT_AT,
- 				      &wwan_hwsim_port_ops,
-+				      WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM,
- 				      port);
- 	if (IS_ERR(port->wwan)) {
- 		err = PTR_ERR(port->wwan);
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 1f0951be15ab..e0f0bc878bbd 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -929,7 +929,8 @@ static void wdm_wwan_init(struct wdm_device *desc)
- 		return;
- 	}
- 
--	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops, desc);
-+	port = wwan_create_port(&intf->dev, desc->wwanp_type, &wdm_wwan_port_ops,
-+				WWAN_NO_FRAGMENT, WWAN_NO_HEADROOM, desc);
- 	if (IS_ERR(port)) {
- 		dev_err(&intf->dev, "%s: Unable to create WWAN port\n",
- 			dev_name(intf->usb_dev));
-diff --git a/include/linux/wwan.h b/include/linux/wwan.h
-index 5ce2acf444fb..adaf1f4a8652 100644
---- a/include/linux/wwan.h
-+++ b/include/linux/wwan.h
-@@ -62,11 +62,25 @@ struct wwan_port_ops {
- 			    poll_table *wait);
- };
- 
-+/*
-+ * Used to indicate that the WWAN core should not fragment control packages.
-+ */
-+#define WWAN_NO_FRAGMENT	0
-+
-+/*
-+ * Used to indicate that the WWAN core should not reserve headroom in control packages.
-+ */
-+#define WWAN_NO_HEADROOM	0
-+
- /**
-  * wwan_create_port - Add a new WWAN port
-  * @parent: Device to use as parent and shared by all WWAN ports
-  * @type: WWAN port type
-  * @ops: WWAN port operations
-+ * @frag_len: WWAN port TX fragments length, if WWAN_NO_FRAGMENT is set,
-+ *            the WWAN core don't fragment control packages.
-+ * @headroom_len: WWAN port TX fragments reserved headroom length, if WWAN_NO_HEADROOM
-+ *                is set, the WWAN core don't reserve headroom in control packages.
-  * @drvdata: Pointer to caller driver data
-  *
-  * Allocate and register a new WWAN port. The port will be automatically exposed
-@@ -84,6 +98,8 @@ struct wwan_port_ops {
- struct wwan_port *wwan_create_port(struct device *parent,
- 				   enum wwan_port_type type,
- 				   const struct wwan_port_ops *ops,
-+				   size_t frag_len,
-+				   unsigned int headroom_len,
- 				   void *drvdata);
- 
- /**
--- 
-2.17.0
+Best regards,
+Krzysztof
 
