@@ -2,202 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF23E6ADFD7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C81C6AE003
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjCGNFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:05:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
+        id S230501AbjCGNH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbjCGNFb (ORCPT
+        with ESMTP id S230310AbjCGNG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:05:31 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0E37B481
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:05:00 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id r27so16941576lfe.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:05:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678194288;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b0p5EbpuJP6hwcjXoMYtiND4JppiiLVgXD+CFpX3rE4=;
-        b=xFEOAYGuIoPsxPVhSwnYu52ahL7geiD4JVsX78tkiKB0nDxX66O85TkmquqlMnV3Cf
-         KFT9X4bqt5tlWpqJAvS5nYwxT8BHqoEvAJLGm07IPzLBcFnoUfUsxg2mF5Bh7UxTpmcY
-         br0YeIBO98Hp3nNOFbKpVqEqKRqnlIFsR0xn2ggRhWM1OOw0tzyYYawGXjt8jdbc8tP9
-         EJZOC7XmbmHahw2Q/qcEC1YKAtlX49HY9TO16gaaJt6v1uDqU55HClT+gx6G5+/3mLaQ
-         Kb94zbPBynfFJXDzuqWS4ulOsWjA61IsdxelOB/Cc8MSGiAMkj8fP5wzey3fV3vui+RG
-         1pkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678194288;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b0p5EbpuJP6hwcjXoMYtiND4JppiiLVgXD+CFpX3rE4=;
-        b=rrRi9kGUhBHOVG3MLLPJH2eNxD3Pw3EsQg6Uq13TAhGgg1tdhUYoQfiW9KXUsk4Gup
-         doBnV8Q4wG/XFvHELnJWqkv0iizb8fyc62Rg1em9qKBmgPuoD9jJNBKgOUzydLHzIiAi
-         /4tpxpXqfFNetwFCdmewoqP0UuXbeHujGrE70oOLs/mhrAxl2wOoKfj8qz+N98NJsqs7
-         HjyRppzi8pAxVlI0Wr/YqOcWE/JmE4HZkmchg9LWOv/Y8hEeoJq2dJ/WKY3xEfP8+kMN
-         u2GBfEPNIbsgO9Bz/Ivwr9+WaD1L/C9w7kdnk0BhhmNvSbvJoSclMq4i5zECliV0oSyP
-         Ki6g==
-X-Gm-Message-State: AO0yUKV1+xrN+f2YD5iC0/gVQe6uMnL3geiPJb2pZxiFIu/gHjE9bv2x
-        Qun8NTuWdnrtyi1fHatv9FUVag==
-X-Google-Smtp-Source: AK7set80tiqRps6GnP0ry1iYfsh+Gyc80TWyuQ9ZZB6e138GElBWWZ9wf8irKeXrZucKvQPf+SK3Lw==
-X-Received: by 2002:ac2:551d:0:b0:4dd:9a38:fcc with SMTP id j29-20020ac2551d000000b004dd9a380fccmr3973440lfk.63.1678194288471;
-        Tue, 07 Mar 2023 05:04:48 -0800 (PST)
-Received: from [127.0.1.1] ([85.235.12.219])
-        by smtp.gmail.com with ESMTPSA id w14-20020ac2598e000000b004caf992bba9sm2030548lfn.268.2023.03.07.05.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 05:04:48 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 07 Mar 2023 14:04:45 +0100
-Subject: [PATCH v2 03/16] gpio: aspeed: Convert to immutable irq_chip
+        Tue, 7 Mar 2023 08:06:57 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186D37FD56;
+        Tue,  7 Mar 2023 05:05:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678194335; x=1709730335;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=KFg4L7M6IRI6fgqdYWT7p8LpuP1HblpAzdXOjwSB7b0=;
+  b=AlEUqBj3FNX4CpOIV6jn4MBmYj1qrqtRFhPoYDPjvYSJaV0GipAOLy8o
+   O+uUI0vRNus3GKHf2f5MRXKwGC1H9vBcKS4apKK+FKBY3f0NZ0oJevzp0
+   47rRqGpTBfj/62b3n2+ft9dmLxd2X0V+9nPbb409fAKnWSEXyMLBwL4oj
+   9fjXfnUnIJUU1yJJBPI21P68NJa6xHnwgshb5jYgu4Fb4busrIeG9R9gR
+   iRqDkaU68g9//0xxnv0WbXW0mMqLJb61P7Ak2pe+Z5yEN2CQ0aD3zzbCi
+   1dmt6NARJZXcYbbCUcnW3W1PKWShkfceVg54opVMcMO5C8wIAlQ3zC8t2
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="324149157"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="324149157"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 05:04:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="765636950"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="765636950"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.218.236])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 05:04:51 -0800
+Message-ID: <6a99683d-c9fc-8ff7-5a95-8b835a6df6f5@intel.com>
+Date:   Tue, 7 Mar 2023 15:04:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH 4/8] perf record: Record dropped sample count
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+References: <20230222230141.1729048-1-namhyung@kernel.org>
+ <20230222230141.1729048-5-namhyung@kernel.org>
+Content-Language: en-US
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230222230141.1729048-5-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230215-immutable-chips-v2-3-d6b0e3f2d991@linaro.org>
-References: <20230215-immutable-chips-v2-0-d6b0e3f2d991@linaro.org>
-In-Reply-To: <20230215-immutable-chips-v2-0-d6b0e3f2d991@linaro.org>
-To:     Mun Yew Tham <mun.yew.tham@intel.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, Alban Bedel <albeu@free.fr>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Jay Fang <f.fangjian@huawei.com>,
-        Daniel Palmer <daniel@thingy.jp>,
-        Romain Perier <romain.perier@gmail.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        William Breathitt Gray <william.gray@linaro.org>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-omap@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the driver to immutable irq-chip with a bit of
-intuition.
+On 23/02/23 01:01, Namhyung Kim wrote:
+> When it uses bpf filters, event might drop some samples.  It'd be nice
+> if it can report how many samples it lost.  As LOST_SAMPLES event can
+> carry the similar information, let's use it for bpf filters.
+> 
+> To indicate it's from BPF filters, add a new misc flag for that and
+> do not display cpu load warnings.
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/lib/perf/include/perf/event.h |  2 ++
+>  tools/perf/builtin-record.c         | 38 ++++++++++++++++++-----------
+>  tools/perf/util/bpf-filter.c        |  7 ++++++
+>  tools/perf/util/bpf-filter.h        |  5 ++++
+>  tools/perf/util/session.c           |  3 ++-
+>  5 files changed, 40 insertions(+), 15 deletions(-)
+> 
+> diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+> index ad47d7b31046..51b9338f4c11 100644
+> --- a/tools/lib/perf/include/perf/event.h
+> +++ b/tools/lib/perf/include/perf/event.h
+> @@ -70,6 +70,8 @@ struct perf_record_lost {
+>  	__u64			 lost;
+>  };
+>  
+> +#define PERF_RECORD_MISC_LOST_SAMPLES_BPF (1 << 15)
+> +
+>  struct perf_record_lost_samples {
+>  	struct perf_event_header header;
+>  	__u64			 lost;
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 8374117e66f6..197e802a150b 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -52,6 +52,7 @@
+>  #include "util/pmu-hybrid.h"
+>  #include "util/evlist-hybrid.h"
+>  #include "util/off_cpu.h"
+> +#include "util/bpf-filter.h"
+>  #include "asm/bug.h"
+>  #include "perf.h"
+>  #include "cputopo.h"
+> @@ -1856,24 +1857,16 @@ record__switch_output(struct record *rec, bool at_exit)
+>  	return fd;
+>  }
+>  
+> -static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
+> +static void __record__save_lost_samples(struct record *rec, struct evsel *evsel,
+>  					struct perf_record_lost_samples *lost,
+> -					int cpu_idx, int thread_idx)
+> +					int cpu_idx, int thread_idx, u64 lost_count,
+> +					u16 misc_flag)
+>  {
+> -	struct perf_counts_values count;
+>  	struct perf_sample_id *sid;
+>  	struct perf_sample sample = {};
+>  	int id_hdr_size;
+>  
+> -	if (perf_evsel__read(&evsel->core, cpu_idx, thread_idx, &count) < 0) {
+> -		pr_err("read LOST count failed\n");
+> -		return;
+> -	}
+> -
+> -	if (count.lost == 0)
+> -		return;
+> -
+> -	lost->lost = count.lost;
+> +	lost->lost = lost_count;
+>  	if (evsel->core.ids) {
+>  		sid = xyarray__entry(evsel->core.sample_id, cpu_idx, thread_idx);
+>  		sample.id = sid->id;
+> @@ -1882,6 +1875,7 @@ static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
+>  	id_hdr_size = perf_event__synthesize_id_sample((void *)(lost + 1),
+>  						       evsel->core.attr.sample_type, &sample);
+>  	lost->header.size = sizeof(*lost) + id_hdr_size;
+> +	lost->header.misc = misc_flag;
+>  	record__write(rec, NULL, lost, lost->header.size);
+>  }
+>  
+> @@ -1905,6 +1899,7 @@ static void record__read_lost_samples(struct record *rec)
+>  
+>  	evlist__for_each_entry(session->evlist, evsel) {
+>  		struct xyarray *xy = evsel->core.sample_id;
+> +		u64 lost_count;
+>  
+>  		if (xy == NULL || evsel->core.fd == NULL)
+>  			continue;
+> @@ -1916,12 +1911,27 @@ static void record__read_lost_samples(struct record *rec)
+>  
+>  		for (int x = 0; x < xyarray__max_x(xy); x++) {
+>  			for (int y = 0; y < xyarray__max_y(xy); y++) {
+> -				__record__read_lost_samples(rec, evsel, lost, x, y);
+> +				struct perf_counts_values count;
+> +
+> +				if (perf_evsel__read(&evsel->core, x, y, &count) < 0) {
+> +					pr_err("read LOST count failed\n");
+> +					goto out;
+> +				}
+> +
+> +				if (count.lost) {
+> +					__record__save_lost_samples(rec, evsel, lost,
+> +								    x, y, count.lost, 0);
+> +				}
+>  			}
+>  		}
+> +
+> +		lost_count = perf_bpf_filter__lost_count(evsel);
+> +		if (lost_count)
+> +			__record__save_lost_samples(rec, evsel, lost, 0, 0, lost_count,
+> +						    PERF_RECORD_MISC_LOST_SAMPLES_BPF);
+>  	}
+> +out:
+>  	free(lost);
+> -
+>  }
+>  
+>  static volatile sig_atomic_t workload_exec_errno;
+> diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
+> index e1b1a5343bad..660db5ccd3da 100644
+> --- a/tools/perf/util/bpf-filter.c
+> +++ b/tools/perf/util/bpf-filter.c
+> @@ -69,6 +69,13 @@ int perf_bpf_filter__destroy(struct evsel *evsel)
+>  	return 0;
+>  }
+>  
+> +u64 perf_bpf_filter__lost_count(struct evsel *evsel)
+> +{
+> +	struct sample_filter_bpf *skel = evsel->bpf_skel;
+> +
+> +	return skel ? skel->bss->dropped : 0;
+> +}
+> +
+>  struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
+>  						       enum perf_bpf_filter_op op,
+>  						       unsigned long val)
+> diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
+> index 6077930073f9..36b44c8188ab 100644
+> --- a/tools/perf/util/bpf-filter.h
+> +++ b/tools/perf/util/bpf-filter.h
+> @@ -22,6 +22,7 @@ struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flag
+>  int perf_bpf_filter__parse(struct list_head *expr_head, const char *str);
+>  int perf_bpf_filter__prepare(struct evsel *evsel);
+>  int perf_bpf_filter__destroy(struct evsel *evsel);
+> +u64 perf_bpf_filter__lost_count(struct evsel *evsel);
+>  
+>  #else /* !HAVE_BPF_SKEL */
+>  
+> @@ -38,5 +39,9 @@ static inline int perf_bpf_filter__destroy(struct evsel *evsel)
+>  {
+>  	return -ENOSYS;
+>  }
+> +static inline u64 perf_bpf_filter__lost_count(struct evsel *evsel)
 
-Cc: Marc Zyngier <maz@kernel.org>
-Tested-by: Joel Stanley <joel@jms.id.au>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/gpio/gpio-aspeed.c | 44 ++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 38 insertions(+), 6 deletions(-)
+Needs  __maybe_unused on the parameters
 
-diff --git a/drivers/gpio/gpio-aspeed.c b/drivers/gpio/gpio-aspeed.c
-index a94da80d3a95..9c4852de2733 100644
---- a/drivers/gpio/gpio-aspeed.c
-+++ b/drivers/gpio/gpio-aspeed.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/pinctrl/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/seq_file.h>
- #include <linux/spinlock.h>
- #include <linux/string.h>
- 
-@@ -53,7 +54,7 @@ struct aspeed_gpio_config {
-  */
- struct aspeed_gpio {
- 	struct gpio_chip chip;
--	struct irq_chip irqc;
-+	struct device *dev;
- 	raw_spinlock_t lock;
- 	void __iomem *base;
- 	int irq;
-@@ -566,6 +567,10 @@ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
- 
- 	addr = bank_reg(gpio, bank, reg_irq_enable);
- 
-+	/* Unmasking the IRQ */
-+	if (set)
-+		gpiochip_enable_irq(&gpio->chip, irqd_to_hwirq(d));
-+
- 	raw_spin_lock_irqsave(&gpio->lock, flags);
- 	copro = aspeed_gpio_copro_request(gpio, offset);
- 
-@@ -579,6 +584,10 @@ static void aspeed_gpio_irq_set_mask(struct irq_data *d, bool set)
- 	if (copro)
- 		aspeed_gpio_copro_release(gpio, offset);
- 	raw_spin_unlock_irqrestore(&gpio->lock, flags);
-+
-+	/* Masking the IRQ */
-+	if (!set)
-+		gpiochip_disable_irq(&gpio->chip, irqd_to_hwirq(d));
- }
- 
- static void aspeed_gpio_irq_mask(struct irq_data *d)
-@@ -1080,6 +1089,30 @@ int aspeed_gpio_copro_release_gpio(struct gpio_desc *desc)
- }
- EXPORT_SYMBOL_GPL(aspeed_gpio_copro_release_gpio);
- 
-+static void aspeed_gpio_irq_print_chip(struct irq_data *d, struct seq_file *p)
-+{
-+	const struct aspeed_gpio_bank *bank;
-+	struct aspeed_gpio *gpio;
-+	u32 bit;
-+	int rc, offset;
-+
-+	rc = irqd_to_aspeed_gpio_data(d, &gpio, &bank, &bit, &offset);
-+	if (rc)
-+		return;
-+
-+	seq_printf(p, dev_name(gpio->dev));
-+}
-+
-+static const struct irq_chip aspeed_gpio_irq_chip = {
-+	.irq_ack = aspeed_gpio_irq_ack,
-+	.irq_mask = aspeed_gpio_irq_mask,
-+	.irq_unmask = aspeed_gpio_irq_unmask,
-+	.irq_set_type = aspeed_gpio_set_type,
-+	.irq_print_chip = aspeed_gpio_irq_print_chip,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
- /*
-  * Any banks not specified in a struct aspeed_bank_props array are assumed to
-  * have the properties:
-@@ -1149,6 +1182,8 @@ static int __init aspeed_gpio_probe(struct platform_device *pdev)
- 	if (IS_ERR(gpio->base))
- 		return PTR_ERR(gpio->base);
- 
-+	gpio->dev = &pdev->dev;
-+
- 	raw_spin_lock_init(&gpio->lock);
- 
- 	gpio_id = of_match_node(aspeed_gpio_of_table, pdev->dev.of_node);
-@@ -1208,12 +1243,9 @@ static int __init aspeed_gpio_probe(struct platform_device *pdev)
- 
- 		gpio->irq = rc;
- 		girq = &gpio->chip.irq;
--		girq->chip = &gpio->irqc;
-+		gpio_irq_chip_set_chip(girq, &aspeed_gpio_irq_chip);
- 		girq->chip->name = dev_name(&pdev->dev);
--		girq->chip->irq_ack = aspeed_gpio_irq_ack;
--		girq->chip->irq_mask = aspeed_gpio_irq_mask;
--		girq->chip->irq_unmask = aspeed_gpio_irq_unmask;
--		girq->chip->irq_set_type = aspeed_gpio_set_type;
-+
- 		girq->parent_handler = aspeed_gpio_irq_handler;
- 		girq->num_parents = 1;
- 		girq->parents = devm_kcalloc(&pdev->dev, 1,
-
--- 
-2.34.1
+> +{
+> +	return 0;
+> +}
+>  #endif /* HAVE_BPF_SKEL*/
+>  #endif /* PERF_UTIL_BPF_FILTER_H */
+> \ No newline at end of file
+> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+> index 749d5b5c135b..7d8d057d1772 100644
+> --- a/tools/perf/util/session.c
+> +++ b/tools/perf/util/session.c
+> @@ -1582,7 +1582,8 @@ static int machines__deliver_event(struct machines *machines,
+>  			evlist->stats.total_lost += event->lost.lost;
+>  		return tool->lost(tool, event, sample, machine);
+>  	case PERF_RECORD_LOST_SAMPLES:
+> -		if (tool->lost_samples == perf_event__process_lost_samples)
+> +		if (tool->lost_samples == perf_event__process_lost_samples &&
+> +		    !(event->header.misc & PERF_RECORD_MISC_LOST_SAMPLES_BPF))
+>  			evlist->stats.total_lost_samples += event->lost_samples.lost;
+>  		return tool->lost_samples(tool, event, sample, machine);
+>  	case PERF_RECORD_READ:
 
