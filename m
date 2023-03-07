@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A6C6ADDB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAB66ADDBD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjCGLlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:41:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S231361AbjCGLmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjCGLkM (ORCPT
+        with ESMTP id S231355AbjCGLln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:40:12 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2680F7B9BA;
-        Tue,  7 Mar 2023 03:38:43 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id bo22so12881243pjb.4;
-        Tue, 07 Mar 2023 03:38:43 -0800 (PST)
+        Tue, 7 Mar 2023 06:41:43 -0500
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B0B7D093
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 03:39:15 -0800 (PST)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-536b7ffdd34so239300077b3.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 03:39:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678189120;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xBr07fqk3Uu+urBt4c4cihx7vLrlxAn9QH0wdjegu1Y=;
-        b=GMo4EBNY0vAkJ/JhtmzVHgtrvMenDLrTsWOjWmavqeReEFASZqRzme1ecj1Lx9jwRq
-         OISCZB6GCCll9UKXDAkzRoa7XFXmebggK+bCTS0dJIgrWh0wihiGtkjlER9tfkyAg/aP
-         0Fii+h1QQsHzzIlhhQS63AvddxRU9L/Jt3GwzRdGYxrA82q46X1/bNGc4xMTjTLrvHFL
-         ElLZk1BHgIBVpYkjEuEXgh8W5fszrvQwhFn4yqlfqr0xFh9HsGQ29oezPdhCUzsJnKvZ
-         rRR1HBpjX0EE2ed4wS/kFtfIC3y1jyXI6b98WoZVEjrRI3U8RN2X1P6NzbPp9k3qikrX
-         fm2w==
+        d=linaro.org; s=google; t=1678189150;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p2QEPXAzp21Sp6krYXcMnpxNWR2KzEzr6+4RDpVrUlI=;
+        b=MZdIoa/638A2Xrr3aud37732QkFaaI23u93mUrKyx6hNqR+dj0TaQC+E8tBxYlg39i
+         L/nH+SGtV7eGgg/PH796jVppU9Ei/QUJfz6q87mKD5GhxAxOoDPEgO/cZatjxymQzf37
+         42vkTmcghIT1E1yUCpWhoKqAccG+KBBVheQz0Zfzfky2xjIOWnWNtgdtNSm8xyvhMhkK
+         c81jL8WhZzIZytyFxESA5Rk4LOth1GYguzxCQNaJ84tL7NMeJWBTOJzoVEbunqIGtfH8
+         XFURYFjvPIvO1pEdUE6hlmMg6Ibn2XB+FlNLycbR4iPAMi/LBU+Sc2jGQvrVRa1Z5UvN
+         jewg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678189120;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xBr07fqk3Uu+urBt4c4cihx7vLrlxAn9QH0wdjegu1Y=;
-        b=vw3uItXce6GI0zDpoN+qQgZFlt+CvFEJ192U8eyM4VUPND8TdqYW78XaHBDoB0NKN2
-         Bq4OzwtOeKK7sQ/WzecAWp+WYj0a6ay14vgFO3BJKi7GZvgHIIrcXe6o8Bl788sEQRJb
-         kCXfmkiAA0Zkk63RoD551BDdey9h5oooZ5ML4ymlUrmRG86snPvDOWy6aI90lwM8zCrO
-         knOD5OVAGWVwO+WM9anUmqiyuZORI/aZbkabSOVvIRHP2J6sTdFeN30OybhgqcQxvCJo
-         vpZgiPsW59amrRgEbrBugYHUkr9v/FBNBvzyU6YPKk68nDivuw/qTiumIZsniqrdjfZz
-         UPQg==
-X-Gm-Message-State: AO0yUKX89VN1OKttly942LVvWswgyZZji1nJRZMeKRGImQnSaoGtH9JF
-        vZZbqbIEtUiBlS7qnFTKgv8=
-X-Google-Smtp-Source: AK7set/9lXzBGsl5ZgNcAY4YHsv/xUC197l3u42zj/zoTAYetCEmb18q0gmsoz5ALwsd+5Y8+xN83w==
-X-Received: by 2002:a17:902:d50f:b0:19c:d6fe:39c7 with SMTP id b15-20020a170902d50f00b0019cd6fe39c7mr17517044plg.41.1678189119830;
-        Tue, 07 Mar 2023 03:38:39 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id z15-20020a170902d54f00b0019a928a8982sm8255974plf.118.2023.03.07.03.38.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 03:38:38 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: x86/pmu: Disable vPMU if EVENTSEL_GUESTONLY bit doesn't exist
-Date:   Tue,  7 Mar 2023 19:38:19 +0800
-Message-Id: <20230307113819.34089-1-likexu@tencent.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1678189150;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p2QEPXAzp21Sp6krYXcMnpxNWR2KzEzr6+4RDpVrUlI=;
+        b=VZkqfCavqXkTj+IdIeoszigTKscSgQHwJNpcVAE8Gl/zOtsYPZPpYipg80Gp3JMSEE
+         M+wZKnnXJAw1PGVOruX7YeZxDgrTH1DRdfBjkKMSAGviLHpFEZR1UWxXHiRd5xd9nnfH
+         7uyq9JsuGKOKZJi7RSGIZ4OcD9nw5aW//ecAavI1fbR4Y/rsogctXab1yKaN1+ydS9t7
+         2n/Zuqz8yatXFIw7SJ7p46Syofwd1Y49Gcdxmu2GQPweM2PwVA7BHbtTH4AUZWwHQXbB
+         je/Yqf0+p5zO0WDyz5HcQ1RmGAZlC9bjw8u3ls1CtGIUiOIKTBQ0vznx3jqmkX1Kxv5w
+         7Q+A==
+X-Gm-Message-State: AO0yUKUaF76iuZ6HfVbupVLjt6rqRO1DP5RkpZPwJFXev8IcNpy7osmC
+        6zPznz6Pjh22kvzuEbp1CkW0qR3Mff4any4K9/R9PA==
+X-Google-Smtp-Source: AK7set+pIPRCkUCY1DQn3/UnCDXcMdFY3wcXRpn0sqH288ZQWy/jCdAUknswqsGd/FYMEDrTW7d8/OAqi9oBGUQj+6g=
+X-Received: by 2002:a81:b243:0:b0:52e:d380:ab14 with SMTP id
+ q64-20020a81b243000000b0052ed380ab14mr7473835ywh.3.1678189150311; Tue, 07 Mar
+ 2023 03:39:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+ <20230214164135.17039-2-quic_devipriy@quicinc.com> <20230224082332.GA5443@thinkpad>
+ <bd153038-4427-1f11-1941-5f13fec01cf7@quicinc.com> <20230228063358.GA4839@thinkpad>
+ <9BD62D8E-4E14-4269-B72D-C83EF4D43040@linaro.org> <20230303174036.GB6782@thinkpad>
+ <30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com>
+In-Reply-To: <30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 7 Mar 2023 13:38:59 +0200
+Message-ID: <CAA8EJpohnJvFKMc5Ty4CQF65Gt1Kknqsf1B4mFZq4TvW7_dcnw@mail.gmail.com>
+Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific compatible
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+        bhelgaas@google.com, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de, svarbanov@mm-sol.com,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-clk@vger.kernel.org,
+        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,56 +83,229 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
+On Tue, 7 Mar 2023 at 11:45, Devi Priya <quic_devipriy@quicinc.com> wrote:
+>
+>
+>
+> On 3/3/2023 11:10 PM, Manivannan Sadhasivam wrote:
+> > On Fri, Mar 03, 2023 at 05:16:58PM +0200, Dmitry Baryshkov wrote:
+> >> 28 =D1=84=D0=B5=D0=B2=D1=80=D0=B0=D0=BB=D1=8F 2023 =D0=B3. 08:33:58 GM=
+T+02:00, Manivannan Sadhasivam <mani@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5=
+=D1=82:
+> >>> On Tue, Feb 28, 2023 at 10:56:53AM +0530, Devi Priya wrote:
+> >>>>
+> >>>>
+> >>>> On 2/24/2023 1:53 PM, Manivannan Sadhasivam wrote:
+> >>>>> On Tue, Feb 14, 2023 at 10:11:29PM +0530, Devi Priya wrote:
+> >>>>>> Document the compatible for IPQ9574
+> >>>>>>
+> >>>> Hi Mani, Thanks for taking time to review the patch.
+> >>>>>
+> >>>>> You didn't mention about the "msi-parent" property that is being ad=
+ded
+> >>>>> by this patch
+> >>>> Sure, will update the commit message in the next spin
+> >>>>>
+> >>>>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> >>>>>> ---
+> >>>>>>    .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++=
+++++++-
+> >>>>>>    1 file changed, 70 insertions(+), 2 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml =
+b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> >>>>>> index 872817d6d2bd..dabdf2684e2d 100644
+> >>>>>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> >>>>>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+> >>>>>> @@ -26,6 +26,7 @@ properties:
+> >>>>>>              - qcom,pcie-ipq8064-v2
+> >>>>>>              - qcom,pcie-ipq8074
+> >>>>>>              - qcom,pcie-ipq8074-gen3
+> >>>>>> +          - qcom,pcie-ipq9574
+> >>>>>>              - qcom,pcie-msm8996
+> >>>>>>              - qcom,pcie-qcs404
+> >>>>>>              - qcom,pcie-sa8540p
+> >>>>>> @@ -44,11 +45,11 @@ properties:
+> >>>>>>      reg:
+> >>>>>>        minItems: 4
+> >>>>>> -    maxItems: 5
+> >>>>>> +    maxItems: 6
+> >>>>>>      reg-names:
+> >>>>>>        minItems: 4
+> >>>>>> -    maxItems: 5
+> >>>>>> +    maxItems: 6
+> >>>>>>      interrupts:
+> >>>>>>        minItems: 1
+> >>>>>> @@ -105,6 +106,8 @@ properties:
+> >>>>>>        items:
+> >>>>>>          - const: pciephy
+> >>>>>> +  msi-parent: true
+> >>>>>> +
+> >>>>>>      power-domains:
+> >>>>>>        maxItems: 1
+> >>>>>> @@ -173,6 +176,27 @@ allOf:
+> >>>>>>                - const: parf # Qualcomm specific registers
+> >>>>>>                - const: config # PCIe configuration space
+> >>>>>> +  - if:
+> >>>>>> +      properties:
+> >>>>>> +        compatible:
+> >>>>>> +          contains:
+> >>>>>> +            enum:
+> >>>>>> +              - qcom,pcie-ipq9574
+> >>>>>> +    then:
+> >>>>>> +      properties:
+> >>>>>> +        reg:
+> >>>>>> +          minItems: 5
+> >>>>>> +          maxItems: 6
+> >>>>>> +        reg-names:
+> >>>>>> +          minItems: 5
+> >>>>>> +          items:
+> >>>>>> +            - const: dbi # DesignWare PCIe registers
+> >>>>>> +            - const: elbi # External local bus interface register=
+s
+> >>>>>> +            - const: atu # ATU address space
+> >>>>>> +            - const: parf # Qualcomm specific registers
+> >>>>>> +            - const: config # PCIe configuration space
+> >>>>>> +            - const: aggr_noc #PCIe aggr_noc
+> >>>>>
+> >>>>> Why do you need this region unlike other SoCs? Is the driver making=
+ use of it?
+> >>>> We have the aggr_noc region in ipq9574 to achieve higher throughput =
+& to
+> >>>> handle multiple PCIe instances. The driver uses it to rate adapt 1-l=
+ane PCIe
+> >>>> clocks. My bad, missed it. Will add the driver changes in V2.
+> >>>
+> >>> Hmm, this is something new. How can you achieve higher throughput wit=
+h this
+> >>> region? Can you explain more on how it is used?
+> >>
+> >> Based on the name of the region, it looks like it is an interconnect r=
+egion.
+> >>
+> >
+> > Well, we only have BCM based interconnects so far. That's why I was cur=
+ious
+> > about this region and its purpose.
+> For connected PCIe slave devices that are running at frequency lesser
+> than the ANOC frequency (342MHz), the rate adapter of ANOC needs to be
+> configured
+> >
+> >> Devi, if this is the case, then you have to handle it through the inte=
+rconnect driver, rather than poking directly into these registers.
+> >
+> > If that so, it doesn't need to be added in this series itself. I believ=
+e that
+> > without aggr_noc region, the PCIe controller can still function properl=
+y with
+> > reduced performance. But you can add the interconnect support later as =
+a
+> > separate series.
+> Sure, okay. The ANOC runs at a fixed frequency of 342MHz and the
+> interconnect clocks are not scaled. The aggr_noc register is just a
+> magic register for configuring it's rate adapter to ensure no wait
+> cycles are inserted.
 
-Unlike Intel's msr atomic_switch mechanism, AMD supports guest pmu
-basic counter feature by setting the GUESTONLY bit on the host, so the
-presence or absence of this bit determines whether vPMU is emulatable
-(e.g. in nested virtualization). Since on AMD, writing reserved bits of
-EVENTSEL register does not bring #GP, KVM needs to update the global
-enable_pmu value by checking the persistence of this GUESTONLY bit.
+I have been hesitant at some point, but this looks more and more like
+a special kind of interconnect. Please consider moving all the NoC
+stuff into a separate driver implementing the ICC API.
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- arch/x86/kvm/svm/svm.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+>
+> >
+> > Thanks,
+> > Mani
+> >
+> >>
+> >>
+> >>>
+> >>> Thanks,
+> >>> Mani
+> >>>
+> >>>>>
+> >>>>> Thanks,
+> >>>>> Mani
+> >>>>>
+> >>>>>> +
+> >>>>>>      - if:
+> >>>>>>          properties:
+> >>>>>>            compatible:
+> >>>>>> @@ -365,6 +389,39 @@ allOf:
+> >>>>>>                - const: ahb # AHB Reset
+> >>>>>>                - const: axi_m_sticky # AXI Master Sticky reset
+> >>>>>> +  - if:
+> >>>>>> +      properties:
+> >>>>>> +        compatible:
+> >>>>>> +          contains:
+> >>>>>> +            enum:
+> >>>>>> +              - qcom,pcie-ipq9574
+> >>>>>> +    then:
+> >>>>>> +      properties:
+> >>>>>> +        clocks:
+> >>>>>> +          minItems: 6
+> >>>>>> +          maxItems: 6
+> >>>>>> +        clock-names:
+> >>>>>> +          items:
+> >>>>>> +            - const: ahb  # AHB clock
+> >>>>>> +            - const: aux  # Auxiliary clock
+> >>>>>> +            - const: axi_m # AXI Master clock
+> >>>>>> +            - const: axi_s # AXI Slave clock
+> >>>>>> +            - const: axi_bridge # AXI bridge clock
+> >>>>>> +            - const: rchng
+> >>>>>> +        resets:
+> >>>>>> +          minItems: 8
+> >>>>>> +          maxItems: 8
+> >>>>>> +        reset-names:
+> >>>>>> +          items:
+> >>>>>> +            - const: pipe # PIPE reset
+> >>>>>> +            - const: sticky # Core Sticky reset
+> >>>>>> +            - const: axi_s_sticky # AXI Slave Sticky reset
+> >>>>>> +            - const: axi_s # AXI Slave reset
+> >>>>>> +            - const: axi_m_sticky # AXI Master Sticky reset
+> >>>>>> +            - const: axi_m # AXI Master reset
+> >>>>>> +            - const: aux # AUX Reset
+> >>>>>> +            - const: ahb # AHB Reset
+> >>>>>> +
+> >>>>>>      - if:
+> >>>>>>          properties:
+> >>>>>>            compatible:
+> >>>>>> @@ -681,6 +738,16 @@ allOf:
+> >>>>>>            - interconnects
+> >>>>>>            - interconnect-names
+> >>>>>> +  - if:
+> >>>>>> +      properties:
+> >>>>>> +        compatible:
+> >>>>>> +          contains:
+> >>>>>> +            enum:
+> >>>>>> +              - qcom,pcie-ipq9574
+> >>>>>> +    then:
+> >>>>>> +      required:
+> >>>>>> +        - msi-parent
+> >>>>>> +
+> >>>>>>      - if:
+> >>>>>>          not:
+> >>>>>>            properties:
+> >>>>>> @@ -693,6 +760,7 @@ allOf:
+> >>>>>>                    - qcom,pcie-ipq8064v2
+> >>>>>>                    - qcom,pcie-ipq8074
+> >>>>>>                    - qcom,pcie-ipq8074-gen3
+> >>>>>> +                - qcom,pcie-ipq9574
+> >>>>>>                    - qcom,pcie-qcs404
+> >>>>>>        then:
+> >>>>>>          required:
+> >>>>>> --
+> >>>>>> 2.17.1
+> >>>>>>
+> >>>>>
+> >>>> Thanks,
+> >>>> Devi Priya
+> >>>
+> >>
+> >
+> Thanks,
+> Devi Priya
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index dd21e8b1a259..f41d96e638ef 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -4866,6 +4866,16 @@ static __init void svm_adjust_mmio_mask(void)
- 	kvm_mmu_set_mmio_spte_mask(mask, mask, PT_WRITABLE_MASK | PT_USER_MASK);
- }
- 
-+static __init bool pmu_has_guestonly_mode(void)
-+{
-+	u64 value;
-+
-+	wrmsrl(MSR_F15H_PERF_CTL0, AMD64_EVENTSEL_GUESTONLY);
-+	rdmsrl(MSR_F15H_PERF_CTL0, value);
-+
-+	return value == AMD64_EVENTSEL_GUESTONLY;
-+}
-+
- static __init void svm_set_cpu_caps(void)
- {
- 	kvm_set_cpu_caps();
-@@ -4911,8 +4921,11 @@ static __init void svm_set_cpu_caps(void)
- 		kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
- 
- 	/* AMD PMU PERFCTR_CORE CPUID */
--	if (enable_pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
-+	if (enable_pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE) &&
-+	    pmu_has_guestonly_mode())
- 		kvm_cpu_cap_set(X86_FEATURE_PERFCTR_CORE);
-+	else
-+		enable_pmu = false;
- 
- 	/* CPUID 0x8000001F (SME/SEV features) */
- 	sev_set_cpu_caps();
 
-base-commit: 13738a3647368f7f600b30d241779bcd2a3ebbfd
--- 
-2.39.2
 
+--=20
+With best wishes
+Dmitry
