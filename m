@@ -2,198 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1EAE6ADABE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37E1F6ADAC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjCGJo7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:44:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S229812AbjCGJpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230482AbjCGJot (ORCPT
+        with ESMTP id S229815AbjCGJpo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:44:49 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134C84C6DC
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:44:44 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id f23so11733995vsa.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 01:44:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678182283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=//cYdkbYFLjikSLrQMK52LAnpkQRDpOmX2g1yW5gAEM=;
-        b=ECn30YO1MEaRGU7MgUmW3hhEOL9fYlUfG4f1CoC7fkpcA+EPGildLtMtol6XhV6xsa
-         D2V3QeQXyUC8ViK3lLMGs4iWryPCTzni+gFahSbT3qyXkLth7OZm1BgNY4kO6vRUbMus
-         fXJsvX8Z5pgSrZnls4oTHvoruKIoPJpQFxYQc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678182283;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=//cYdkbYFLjikSLrQMK52LAnpkQRDpOmX2g1yW5gAEM=;
-        b=J33HI2QuM70aYdtFKVTdlFtAzY73clmAJhTjYuKpSqw1GJpZ3paShgHBK85pBzZ5gi
-         WO5B2V0DBttEz6mjKfrG4hNDHcpRps/ZORVsTfqNOE2X8G9e584NNhO7DNumGhDmc+VS
-         OBJzWULOAu0mBVhd1l933G5wME2C1fXPMRRKwcE9G10L40Z9wYDi0rgYZ41YYBUGsmon
-         3b3gfmT7mRpCZxM3LYlFJcM+UBGt87NKCBDu23rXKLF1SmthLZNu8cnDbQ2/PfRx3JQe
-         S/uOG7IWzKDn129ggiorgSpbkWl6FIQQF6WpkOyxIM8hIlp9cEUg4ZmrFNfiPl+ciVIj
-         6EeA==
-X-Gm-Message-State: AO0yUKXCqCQ6sMcidg00oc8cW/UU0rRrVIJ9KvjPF9w4NRhqFFaTlQ5H
-        PpNBNrEcKSeZFZRTwTs+BHkJYtek8hDL92U3ypRRgw==
-X-Google-Smtp-Source: AK7set/1eEgQqC8T0I7qSYCA34Qq3DGlXqTOrAUPGOGCAvlEKAqRKkYJEV/Zy1k3IPgIz9XnkV8pcIYHwdVRMHK8Pi4=
-X-Received: by 2002:a67:e3cb:0:b0:421:e25b:3d0c with SMTP id
- k11-20020a67e3cb000000b00421e25b3d0cmr3355189vsm.3.1678182283170; Tue, 07 Mar
- 2023 01:44:43 -0800 (PST)
+        Tue, 7 Mar 2023 04:45:44 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610B839CD3;
+        Tue,  7 Mar 2023 01:45:42 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3277IqHs017882;
+        Tue, 7 Mar 2023 09:45:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Mhno23f9v3er4tDoxC2ORjmssJ3m2pYGBAvzXv7SrWk=;
+ b=oMws0QMgsjJuGR3VfFPkzXW4KYTBIZ8MrowdlxNTo/itd0EjkpyMtYRJg+FGS2IFrO4i
+ s4VWi0z8Kwc2igTmr8XoA8Iel1CdxvAIQ8boVKDLOtwzjulByN7VGl08ebq5J7fn2cG9
+ Y+qB0hTgzLMiUjq23bRLbK+oXLsOLjRoxYIyEkEzhniYVBW9Q/OJRwaAi2N9JWFxCdp6
+ YA0laUVW30A81DhOediRmP6sf1KDipgO2gy+ozbx1nkicUZaUHi2moyKclkKIec6T3bx
+ I03+Hwnratnz5hdXBzWqS5fmPJ5MR7ztzITQx1IsnBJrWhPpG2Y21iNmcaIZGpDitT48 Xg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5wee8vu6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 09:45:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3279jKjN002603
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Mar 2023 09:45:20 GMT
+Received: from [10.216.11.93] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 7 Mar 2023
+ 01:45:11 -0800
+Message-ID: <30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com>
+Date:   Tue, 7 Mar 2023 15:15:08 +0530
 MIME-Version: 1.0
-References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
- <20230301095523.428461-13-angelogioacchino.delregno@collabora.com>
- <CAGXv+5GHdtbheL6wxtDo-szk+=3BGk2z93SBowd4Z=E9XupZkw@mail.gmail.com>
- <5dba27e1-d480-ea24-c1ba-03bb7f77b1b1@collabora.com> <CAGXv+5FwNfZ7TwKVMM5_uAjYQ6ZmhZVFsWREb_da-jxC6EUVJw@mail.gmail.com>
- <CAGXv+5F8A4kLq3y8dE4mrcVb338-afDorWsS5MRBvWVPgiAhEA@mail.gmail.com> <e1b9d901-421c-3509-c92a-c59d49ff2b0d@collabora.com>
-In-Reply-To: <e1b9d901-421c-3509-c92a-c59d49ff2b0d@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 7 Mar 2023 17:44:32 +0800
-Message-ID: <CAGXv+5EcAMmGro9UFLmQvkgcBykS9rsUdF_YsdbRUbtipfEFJA@mail.gmail.com>
-Subject: Re: [PATCH v4 12/19] arm64: dts: mediatek: mt8192-asurada: Couple
- VGPU and VSRAM_OTHER regulators
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Devi Priya <quic_devipriy@quicinc.com>
+Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific
+ compatible
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <svarbanov@mm-sol.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+ <20230214164135.17039-2-quic_devipriy@quicinc.com>
+ <20230224082332.GA5443@thinkpad>
+ <bd153038-4427-1f11-1941-5f13fec01cf7@quicinc.com>
+ <20230228063358.GA4839@thinkpad>
+ <9BD62D8E-4E14-4269-B72D-C83EF4D43040@linaro.org>
+ <20230303174036.GB6782@thinkpad>
+Content-Language: en-US
+In-Reply-To: <20230303174036.GB6782@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: acFhR0WU2dnQYcCltNuR2nn7AUBIs0Ft
+X-Proofpoint-ORIG-GUID: acFhR0WU2dnQYcCltNuR2nn7AUBIs0Ft
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_03,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
+ mlxlogscore=999 priorityscore=1501 phishscore=0 clxscore=1015 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070087
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 5:30=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 07/03/23 10:24, Chen-Yu Tsai ha scritto:
-> > On Fri, Mar 3, 2023 at 12:09=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.or=
-g> wrote:
-> >>
-> >> On Thu, Mar 2, 2023 at 6:17=E2=80=AFPM AngeloGioacchino Del Regno
-> >> <angelogioacchino.delregno@collabora.com> wrote:
-> >>>
-> >>> Il 02/03/23 11:03, Chen-Yu Tsai ha scritto:
-> >>>> On Wed, Mar 1, 2023 at 5:55=E2=80=AFPM AngeloGioacchino Del Regno
-> >>>> <angelogioacchino.delregno@collabora.com> wrote:
-> >>>>>
-> >>>>> Add coupling for these regulators, as VSRAM_OTHER is used to power =
-the
-> >>>>> GPU SRAM, and they have a strict voltage output relation to satisfy=
- in
-> >>>>> order to ensure GPU stable operation.
-> >>>>> While at it, also add voltage constraint overrides for the GPU SRAM
-> >>>>> regulator "mt6359_vsram_others" so that we stay in a safe range of
-> >>>>> 0.75-0.80V.
-> >>>>>
-> >>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregn=
-o@collabora.com>
-> >>>>> ---
-> >>>>>    arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 9 +++++++++
-> >>>>>    1 file changed, 9 insertions(+)
-> >>>>>
-> >>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arc=
-h/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> >>>>> index 8570b78c04a4..f858eca219d7 100644
-> >>>>> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> >>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-> >>>>> @@ -447,6 +447,13 @@ &mt6359_vrf12_ldo_reg {
-> >>>>>           regulator-always-on;
-> >>>>>    };
-> >>>>>
-> >>>>> +&mt6359_vsram_others_ldo_reg {
-> >>>>> +       regulator-min-microvolt =3D <750000>;
-> >>>>> +       regulator-max-microvolt =3D <800000>;
-> >>>>> +       regulator-coupled-with =3D <&mt6315_7_vbuck1>;
-> >>>>> +       regulator-coupled-max-spread =3D <10000>;
-> >>>>
-> >>>> Looking again at the downstream OPP table, it seems there's no volta=
-ge
-> >>>> difference requirement. It only needs V_SRAM >=3D V_GPU. Same applie=
-s to
-> >>>> MT8195. Looks like only MT8183 and MT8186 need V_SRAM - V_GPU >=3D 1=
-0000.
-> >>>
-> >>> On MT8195 we don't need any regulator coupling. There, the GPU-SRAM v=
-oltage
-> >>> is fixed at .. I don't remember, 0.7V? - anyway - MT8195 doesn't need=
- to
-> >>> scale the vsram.
-> >>
-> >> Looks like it's fixed at 0.75V. I guess we're Ok on MT8195.
-> >>
-> >>>>
-> >>>> Would setting max-spread to 0 work? I ask because with both regulato=
-r's
-> >>>> maximum voltage set to 0.8V, there's no way we can reach the highest
-> >>>> OPP.
-> >>>>
-> >>>
-> >>> No that doesn't work. I can raise the Vgpu max voltage to 0.88V to so=
-lve the
-> >>> issue right here and right now, or we can leave it like that and revi=
-sit it
-> >>> later.
-> >>>
-> >>> I would at this point go for setting mt6315_7_vbuck1's max-microvolt =
-to
-> >>> 880000, as this is the maximum recommended voltage for the GPU as per=
- the
-> >>> MT8192 datasheet, it would also make sense as we would be still descr=
-ibing
-> >>> the hardware in a correct manner.
-> >>>
-> >>> What do you think?
-> >>
-> >> If it's just to accommodate the coupler stuff, I say just set the maxi=
-mum
-> >> at the lowest possible setting that satisfies the coupler constraint a=
-nd
-> >> granularity of the regulator. The regulator does 6250 uV steps, so I g=
-uess
-> >> we could set the maximum at 812500 uV, with a comment stating the nomi=
-nal
-> >> voltage of 800000 uV and that the extra 12500 uV is to workaround coup=
-ler
-> >> limitations.
-> >>
-> >> Does that sound OK?
-> >
-> > Even without changing anything, the coupler seems to work OK:
-> >
-> >   vsram_others                     1    1      0  normal   800mV
-> > 0mA   750mV   800mV
-> >      10006000.syscon:power-controller-domain   1
-> >           0mA     0mV     0mV
-> >   Vgpu                             2    2      0  normal   800mV
-> > 0mA   606mV   800mV
-> >      13000000.gpu-mali             1
-> > 0mA   800mV   800mV
-> >      10006000.syscon:power-controller-domain   1
-> >           0mA     0mV     0mV
-> >
-> > Am I missing something?
-> >
->
-> I don't think you are... I may be getting confused by all of the changese=
-ts
-> that I'm pushing at once.
->
-> Hence, is this commit fine as it is?
 
-It works for some reason. Maybe it's a bug in the coupler. Either way I
-think it works, even though the numbers might be a bit off. We can revisit
-it later.
 
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+On 3/3/2023 11:10 PM, Manivannan Sadhasivam wrote:
+> On Fri, Mar 03, 2023 at 05:16:58PM +0200, Dmitry Baryshkov wrote:
+>> 28 февраля 2023 г. 08:33:58 GMT+02:00, Manivannan Sadhasivam <mani@kernel.org> пишет:
+>>> On Tue, Feb 28, 2023 at 10:56:53AM +0530, Devi Priya wrote:
+>>>>
+>>>>
+>>>> On 2/24/2023 1:53 PM, Manivannan Sadhasivam wrote:
+>>>>> On Tue, Feb 14, 2023 at 10:11:29PM +0530, Devi Priya wrote:
+>>>>>> Document the compatible for IPQ9574
+>>>>>>
+>>>> Hi Mani, Thanks for taking time to review the patch.
+>>>>>
+>>>>> You didn't mention about the "msi-parent" property that is being added
+>>>>> by this patch
+>>>> Sure, will update the commit message in the next spin
+>>>>>
+>>>>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>>>>>> ---
+>>>>>>    .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++++++++-
+>>>>>>    1 file changed, 70 insertions(+), 2 deletions(-)
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>>>>>> index 872817d6d2bd..dabdf2684e2d 100644
+>>>>>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>>>>>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
+>>>>>> @@ -26,6 +26,7 @@ properties:
+>>>>>>              - qcom,pcie-ipq8064-v2
+>>>>>>              - qcom,pcie-ipq8074
+>>>>>>              - qcom,pcie-ipq8074-gen3
+>>>>>> +          - qcom,pcie-ipq9574
+>>>>>>              - qcom,pcie-msm8996
+>>>>>>              - qcom,pcie-qcs404
+>>>>>>              - qcom,pcie-sa8540p
+>>>>>> @@ -44,11 +45,11 @@ properties:
+>>>>>>      reg:
+>>>>>>        minItems: 4
+>>>>>> -    maxItems: 5
+>>>>>> +    maxItems: 6
+>>>>>>      reg-names:
+>>>>>>        minItems: 4
+>>>>>> -    maxItems: 5
+>>>>>> +    maxItems: 6
+>>>>>>      interrupts:
+>>>>>>        minItems: 1
+>>>>>> @@ -105,6 +106,8 @@ properties:
+>>>>>>        items:
+>>>>>>          - const: pciephy
+>>>>>> +  msi-parent: true
+>>>>>> +
+>>>>>>      power-domains:
+>>>>>>        maxItems: 1
+>>>>>> @@ -173,6 +176,27 @@ allOf:
+>>>>>>                - const: parf # Qualcomm specific registers
+>>>>>>                - const: config # PCIe configuration space
+>>>>>> +  - if:
+>>>>>> +      properties:
+>>>>>> +        compatible:
+>>>>>> +          contains:
+>>>>>> +            enum:
+>>>>>> +              - qcom,pcie-ipq9574
+>>>>>> +    then:
+>>>>>> +      properties:
+>>>>>> +        reg:
+>>>>>> +          minItems: 5
+>>>>>> +          maxItems: 6
+>>>>>> +        reg-names:
+>>>>>> +          minItems: 5
+>>>>>> +          items:
+>>>>>> +            - const: dbi # DesignWare PCIe registers
+>>>>>> +            - const: elbi # External local bus interface registers
+>>>>>> +            - const: atu # ATU address space
+>>>>>> +            - const: parf # Qualcomm specific registers
+>>>>>> +            - const: config # PCIe configuration space
+>>>>>> +            - const: aggr_noc #PCIe aggr_noc
+>>>>>
+>>>>> Why do you need this region unlike other SoCs? Is the driver making use of it?
+>>>> We have the aggr_noc region in ipq9574 to achieve higher throughput & to
+>>>> handle multiple PCIe instances. The driver uses it to rate adapt 1-lane PCIe
+>>>> clocks. My bad, missed it. Will add the driver changes in V2.
+>>>
+>>> Hmm, this is something new. How can you achieve higher throughput with this
+>>> region? Can you explain more on how it is used?
+>>
+>> Based on the name of the region, it looks like it is an interconnect region.
+>>
+> 
+> Well, we only have BCM based interconnects so far. That's why I was curious
+> about this region and its purpose.
+For connected PCIe slave devices that are running at frequency lesser
+than the ANOC frequency (342MHz), the rate adapter of ANOC needs to be
+configured
+> 
+>> Devi, if this is the case, then you have to handle it through the interconnect driver, rather than poking directly into these registers.
+> 
+> If that so, it doesn't need to be added in this series itself. I believe that
+> without aggr_noc region, the PCIe controller can still function properly with
+> reduced performance. But you can add the interconnect support later as a
+> separate series.
+Sure, okay. The ANOC runs at a fixed frequency of 342MHz and the 
+interconnect clocks are not scaled. The aggr_noc register is just a 
+magic register for configuring it's rate adapter to ensure no wait 
+cycles are inserted.
+
+> 
+> Thanks,
+> Mani
+> 
+>>
+>>
+>>>
+>>> Thanks,
+>>> Mani
+>>>
+>>>>>
+>>>>> Thanks,
+>>>>> Mani
+>>>>>
+>>>>>> +
+>>>>>>      - if:
+>>>>>>          properties:
+>>>>>>            compatible:
+>>>>>> @@ -365,6 +389,39 @@ allOf:
+>>>>>>                - const: ahb # AHB Reset
+>>>>>>                - const: axi_m_sticky # AXI Master Sticky reset
+>>>>>> +  - if:
+>>>>>> +      properties:
+>>>>>> +        compatible:
+>>>>>> +          contains:
+>>>>>> +            enum:
+>>>>>> +              - qcom,pcie-ipq9574
+>>>>>> +    then:
+>>>>>> +      properties:
+>>>>>> +        clocks:
+>>>>>> +          minItems: 6
+>>>>>> +          maxItems: 6
+>>>>>> +        clock-names:
+>>>>>> +          items:
+>>>>>> +            - const: ahb  # AHB clock
+>>>>>> +            - const: aux  # Auxiliary clock
+>>>>>> +            - const: axi_m # AXI Master clock
+>>>>>> +            - const: axi_s # AXI Slave clock
+>>>>>> +            - const: axi_bridge # AXI bridge clock
+>>>>>> +            - const: rchng
+>>>>>> +        resets:
+>>>>>> +          minItems: 8
+>>>>>> +          maxItems: 8
+>>>>>> +        reset-names:
+>>>>>> +          items:
+>>>>>> +            - const: pipe # PIPE reset
+>>>>>> +            - const: sticky # Core Sticky reset
+>>>>>> +            - const: axi_s_sticky # AXI Slave Sticky reset
+>>>>>> +            - const: axi_s # AXI Slave reset
+>>>>>> +            - const: axi_m_sticky # AXI Master Sticky reset
+>>>>>> +            - const: axi_m # AXI Master reset
+>>>>>> +            - const: aux # AUX Reset
+>>>>>> +            - const: ahb # AHB Reset
+>>>>>> +
+>>>>>>      - if:
+>>>>>>          properties:
+>>>>>>            compatible:
+>>>>>> @@ -681,6 +738,16 @@ allOf:
+>>>>>>            - interconnects
+>>>>>>            - interconnect-names
+>>>>>> +  - if:
+>>>>>> +      properties:
+>>>>>> +        compatible:
+>>>>>> +          contains:
+>>>>>> +            enum:
+>>>>>> +              - qcom,pcie-ipq9574
+>>>>>> +    then:
+>>>>>> +      required:
+>>>>>> +        - msi-parent
+>>>>>> +
+>>>>>>      - if:
+>>>>>>          not:
+>>>>>>            properties:
+>>>>>> @@ -693,6 +760,7 @@ allOf:
+>>>>>>                    - qcom,pcie-ipq8064v2
+>>>>>>                    - qcom,pcie-ipq8074
+>>>>>>                    - qcom,pcie-ipq8074-gen3
+>>>>>> +                - qcom,pcie-ipq9574
+>>>>>>                    - qcom,pcie-qcs404
+>>>>>>        then:
+>>>>>>          required:
+>>>>>> -- 
+>>>>>> 2.17.1
+>>>>>>
+>>>>>
+>>>> Thanks,
+>>>> Devi Priya
+>>>
+>>
+> 
+Thanks,
+Devi Priya
