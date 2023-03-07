@@ -2,174 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9026AF696
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7936AF6AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231810AbjCGUV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:21:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S229551AbjCGU1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbjCGUVw (ORCPT
+        with ESMTP id S231518AbjCGU0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:21:52 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2052.outbound.protection.outlook.com [40.107.237.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD113A3B4F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:21:49 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=deRhVZxcBBOS2Qofg6sJNR1jTN5ir6GwMv5Gwjun9W7fGRz3BjycXi/JtNdJ/XdwtSgo3l3KD0LxYwhxPVAWjx38f1Nvf8wZDneB7zcJwUkKRMx0e3OlI1DTXRdYCQ6NtDHH9NL+BKNj0pSdvWywN1jupTD1Q4cpJF0cDnDa6fMyrptdzy4hDQgQ0D+OMNscwIzhlbq2n3y01IIunxd1tFPwObBJL7X/SIG0c6vB8JunQnd2UKBBsnMDm9vKcruq4X7dQv2QYNtSPJip8oaf9BayFkSuNKckBGulSzYiFT4rQJavNrTsAJByGwmKJgruiMlEprFXnVroZVYCU4bB9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QOStgiROp2/BDEWapku3PR2hSSAuBelsV2s6rafvnlY=;
- b=Fng4vt4BsvpAKwRDNL2U05HBBNfz1pS5+/8wUf5wfXTufwwy0o+w+V/HMzOfK5ycRwO625zdeed43Bdm7DC/ulf2tyrTUBt6yBrXJ5VvTiUi9yBPb3tnLqRLOaDIphQf39OShBVW2oqLjKyMXD2DEgwUTnfiXSXS1zrQsrLuI+vT3Bx1gxJXnoFfeFefzzkPqImhvX1GVWcOzrlUzZOpqsytyYrBE6rI46pFQTC1GBzQY9LpxCom3kfd3DCcuTcNc/9RvLVOYfY3r1ttrm2qm+r1JfGFgIg9XyZ/4TkVbuP/a3RziUR725vhaNrezB2/budHI+cg9nK9N/QsD+iKZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QOStgiROp2/BDEWapku3PR2hSSAuBelsV2s6rafvnlY=;
- b=XPcVK9gWMNCjzj3BBddGEumZzdTSarhZWasjUsdjRXpRhc1izYfC6nqMVo1KCInvH6Ohf5mtJPBReeKROIYXdjH2mTLOrgO723IOAJthZr7ocbTTWIDX3WKa1iuxNmbIkUGC0WKK7QSYAYFgmimnLsD04WDt4T5wrpv1lyKpEiQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by PH7PR12MB6418.namprd12.prod.outlook.com (2603:10b6:510:1fe::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 20:21:47 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::e4f3:9509:c6ee:41cb]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::e4f3:9509:c6ee:41cb%3]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 20:21:46 +0000
-Message-ID: <d5a75826-d762-27fc-5820-6826debdecd9@amd.com>
-Date:   Wed, 8 Mar 2023 01:55:39 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V6 8/8] soundwire: amd: add pm_prepare callback and pm ops
- support
-Content-Language: en-US
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        vkoul@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mario.Limonciello@amd.com,
-        amadeuszx.slawinski@linux.intel.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com, claudiu.beznea@microchip.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
- <20230307133135.545952-9-Vijendar.Mukunda@amd.com>
- <4330af6a-ce97-53ed-f675-6d3d0ac8f32f@linux.intel.com>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <4330af6a-ce97-53ed-f675-6d3d0ac8f32f@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0130.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:6::15) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+        Tue, 7 Mar 2023 15:26:39 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE25A729A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:26:33 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id me6-20020a17090b17c600b0023816b0c7ceso17765633pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 12:26:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678220793;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JG+8cn9a3MVqddPtGZw0HBF9LcZFV3ZvoAF8l2EgmNw=;
+        b=IFttrmHhqcHbiZzWKa1r4VsPwlAVg3itHb22qloMoEmGSHkmmYUNDApiyo2dgFrOD/
+         GDghFYH5Y+XSibazMSXaj0UlGQQ00LXjuCWKQXAvDvK8qddwWnj35ij1O1E7cjwN2ESw
+         psNkn+l/g0x/K6mckHzQ9gB/vbPJTeU+tREZX/IpqldJMI890B5mfAyyjzzqqGLd4h7b
+         aZmKRA6xoWpD5fYs+3RWeXO0msvA5wddK9JVm2mPxfDxHbz5WSMcetrSn+PBN27cWwqX
+         Mvl/pDR8cFrYrGJ2QHEW4a+bnZ7eY1GefztpZCi6Jh/Qtel1NAuC5SxSIDFIfh3VkQ3K
+         yqjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678220793;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JG+8cn9a3MVqddPtGZw0HBF9LcZFV3ZvoAF8l2EgmNw=;
+        b=GeVV5iinKKZqYhb1N49horxZGVsjyJgQQYuYEieu5D45rOPTrMXAoqTC2AwxF1GEiL
+         7bLjo7AE1wt/gatke8r0aUMKBCBwNB+g3bETR1E+Upj3ZXUbBtumadG+LXJSepgrVsK+
+         ydFz4lfjyZSOEwwcng7aDDmVkXNOdH83Rcs9cFvE7rwBelksDS+Crl+toNSIEGzAPhHZ
+         IuSxQh4Ad2Mu/2YoDceHDK7kMf7bDmtxLmnySF29FnDt08D9h3JptwHbFWC8SMKkqgWr
+         SmSosixEkHHmNd+pGlCSvEVcLXggoZigMxhBMCVsoaCP/PCgYbezlK80xPro+4mX4wH9
+         eWjQ==
+X-Gm-Message-State: AO0yUKWfgM+CbDs4xx5ulc+REsq04MDEBAwMCUZUGGN2uWSmAOmeVZA0
+        Wzu3MgZb3N/aBZztSZH8Hs+Scg==
+X-Google-Smtp-Source: AK7set92PuRqEs3qZiTmMVNi/aZkDseorWZojXLR5il8j9jB5W6mV+++SVlsIgIFaVBdZh5WyvDf0g==
+X-Received: by 2002:a17:902:b181:b0:19e:bc01:610e with SMTP id s1-20020a170902b18100b0019ebc01610emr8165414plr.33.1678220792962;
+        Tue, 07 Mar 2023 12:26:32 -0800 (PST)
+Received: from p14s ([2604:3d09:148c:c800:e81a:aa4b:a2a8:6904])
+        by smtp.gmail.com with ESMTPSA id lc4-20020a170902fa8400b0019625428cefsm8721568plb.281.2023.03.07.12.26.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 12:26:32 -0800 (PST)
+Date:   Tue, 7 Mar 2023 13:26:29 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Peng Fan <peng.fan@oss.nxp.com>
+Cc:     Iuliana Prodan <iuliana.prodan@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "arnaud.pouliquen@foss.st.com" <arnaud.pouliquen@foss.st.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in DDR
+Message-ID: <20230307202629.GA1693781@p14s>
+References: <20230209063816.2782206-1-peng.fan@oss.nxp.com>
+ <2c4997fa-973c-dee4-9b26-6b38a1ca4540@nxp.com>
+ <DU0PR04MB9417A9B81B86FAC0A477063D88DC9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <73d34c86-7c31-6530-0915-aa470af5d9ca@nxp.com>
+ <20230213175006.GA310433@p14s>
+ <343571ba-faed-35d7-2859-2668391dadb2@oss.nxp.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|PH7PR12MB6418:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9693429b-2206-41fa-a0de-08db1f49931b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sFRGN3kS8NM8JC8YGmJ/DaNMx4uw0Sb7YUT1WfZwlMLlDfqAqdS1piNY584pdo1zg1+QHtH4f1Ipbppx7k1E8FjimthBy0g27gKf63UxS/szFhDaAlmtKZ8yLbQMudySZxzBIe4qBQPLyfksc6eTwZZT6Q1BLl9OOh/0NB1UpxHTFkaGDc9YcIrg9Q/prYDnBDB3x4C8k4+9ENNktS57cwdX31seb0DIYl6W5j3Yl4FFr1X1BmVBqogTaJ29mJbptHiOPaF8jGh906aIgyQRdJYXaIq6Net0QwVq2164pIIfAo5iqIJODAbn100g3Zw7ZViOB2Sc8gIPxEZ+RuhtVLlhPLHVkVMS4QV/I6VsHLOnCCz0t7pp36egSMW5LFG+5ZPJEEHnJifUIQuDFVajRxjpZvtnHIBIxAKUgICsTBkoBFHcH3mann3XA1e0Vbf9SgJhLwSWgVq51i7sGfJwtte03UX4E1YUbEK/1hyVOhdJQS+KjxKqu85ELerTJrNugrDqcOntjbTnvzvqz114v843BfF+SKpmuL1Vd2WadFukWt/Fz8B55hvGU+8DQhNOoOqIshfRMMps+SwASdZq3d8PPYbjVEdP0joB5AMhpAhmPQROWsXkdDWBCYlG59ccVF3L+PUuJpegnBDG3wtLpClhPa1K9Up9qC9IOFndSMtCfYr8pcmt+f0T5tS05u9JIuYN8Fg1X1kNsgm9U8YJA0eRWTX4dszMCMHiKeBAcas=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39860400002)(396003)(376002)(346002)(451199018)(5660300002)(478600001)(186003)(83380400001)(53546011)(6512007)(26005)(6666004)(2616005)(86362001)(31696002)(2906002)(6506007)(6486002)(966005)(36756003)(316002)(66556008)(66476007)(54906003)(38100700002)(4326008)(41300700001)(8676002)(31686004)(8936002)(66946007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NHY2cHRUYnlwbGZ0aEZRL1JGQjBYMWQ0TmF1LzNCQ01BY2V6b0ZPT0s1SEkx?=
- =?utf-8?B?SE1lR3g4eGRRTzI1K2w4ME56RGlXRWw5bjRuUmh4N29DOTkzWDJITDNQYnUv?=
- =?utf-8?B?cERDRjEvSnlRM1dHQUlPMzhkZnpQQlpJUDlnZGNIWjM3U1drRXJlc1VmSzR3?=
- =?utf-8?B?emlmTEE3UGIrVTlYRTRHTXRsd25CSXdzdk1vM2JHUkUvdHNUcnVCSURqejJS?=
- =?utf-8?B?MVZyQ2JvRW9MUjluWDY1elcyQ1l6M3ltWTY2M21HbEpTN0hRZzc4OXN5YU9l?=
- =?utf-8?B?b3BnSFhXQmJPV3ZBQTZSSExaclRVNGk0Rm14Y3hIUWhpYU85Mm5ISGJBVXdj?=
- =?utf-8?B?ejVGNytXTHpkbW5ORDJTUXo4a0xvVHB4a1BJREhSUU5TUldpQ21WSVhhR0JO?=
- =?utf-8?B?R1RqR2pYRnZZR2pEbTFNZktDTGFHb2FqNmdSOVJGc0s1Ny9QNHlrWHFNQW0z?=
- =?utf-8?B?eGRnZUtObWZ5M3ZZMFlkdjFsSjhwYklkdEtJVkJzMTlSNUQ5T1NTUFc3Y3JR?=
- =?utf-8?B?SldNNVJpSU5ZbU1sRVlCS0twV2w2ZHMvWEFZOHo1ZEIrbW9sQTRUTS9ubGdz?=
- =?utf-8?B?dG9xeDViN3JpMC9ZUnRvUVlBak90OUxCRGwya3dJTllUZG9SN1NTQ2xvRCtu?=
- =?utf-8?B?MWdSNVNDUUhUZU5pQlA5Y2JMRlgwYlpFd2VDNW44cHlrck5GZktjdW81Z3lj?=
- =?utf-8?B?eGlmOGt6ZDlkVjVOQm9nbkNyTWVBNHFwMWEvWVBIejhQMm5Rb0NIRUVpekpw?=
- =?utf-8?B?eUVkUTYzd3hZa1QzL3ZScjhvN3FrWW5XY3djR25vOSszZldmNjhiRVJWQmVx?=
- =?utf-8?B?T3RzV2s5UzBaY1VpSHkySXJjQUlMOGZETkY0NkNsM0RiOXpNS3VnYS93UlFS?=
- =?utf-8?B?cVAvZDliYWZwVWVEK3N0K0RxMDVtRmw4eUlXdis1WWNpazNuWU9kRjNPNWdT?=
- =?utf-8?B?MW9aZ0ZGZ1JFbmJIS3BacHpwMyt6QXU0M0ZMOVRPTVNtaERqNlgzZ2ZvQXFE?=
- =?utf-8?B?cTRjMWRTVkU0R0FxbmI2aGpCWHVXTVc0enlucUx3MkR2aVJsRnJoZ0ppQnF6?=
- =?utf-8?B?OUUremk3VmNKejVNZUk4eTBSanJqck5hdlZKYXZ2aUtudWJoOVNXZ1FCUzRn?=
- =?utf-8?B?ekcwZCszRXEwN2lNUjNnRXBWU1dVZlVOaGpIMFlvS1ZwNWxlalhNZzVIeGtB?=
- =?utf-8?B?Q2wvWm5kZkNSNDhuRlJkT0U5Z1Z4MEFDLzk4VkZhUUVZMGROc0QvV3A3K2dY?=
- =?utf-8?B?ZnVUbEtDR0pxYjJsMDlUYzI0eThyRDVkeTEwVDduQi9QVG1DMlpOY3J0SHFQ?=
- =?utf-8?B?MTZZLy9jMTdTcHF5S0pSa2N0MWVxWjk1Um54Sm85OFdBVnA4UlA0aWVpaUoy?=
- =?utf-8?B?SzhCT2RjU29raE00d2FBbTJDRXRTMUdleGFCQmhVa1ZzcWoxTVp4RTFiMjlW?=
- =?utf-8?B?RXVaRWhKNHkzZy9YZVpNc21RK2Z0M0psYVppSFFrZ0pWcFJ3K3dSMVZxc0lo?=
- =?utf-8?B?SS9vM0NlTjFNSzFXWnlndWhzdktGd1d5d3VnRnlIZENVcFRRRU5heDVqdmJq?=
- =?utf-8?B?RFJxTWY3TTJzVGgzQ0t0ZXY2OFR4eWhHWXo3RER3d0F5aXlmNXBjY3lmMW5k?=
- =?utf-8?B?Yy9HRUpPVVRQamFpQkpKUFdTK1FVdUFnYTlHbmgvclQ1OURnQ1VBYXgyeFZZ?=
- =?utf-8?B?Zld1bU9ZRzJXMGw2emhlS2pyWUdBdmxGaDM1VjZtWGZ3WGNXaWgwa2ZSTS9y?=
- =?utf-8?B?VUNJTWZ0U21NUVIxUGJMeXNrUUFISWJkV0loZWhDd043NW90bTFpeGxJVy9l?=
- =?utf-8?B?cUJTNnRBYXp3OEpBM2tSdC9PUjdDdTM3SVlBWjA0d05hV09XRHZ6NnFxSjlC?=
- =?utf-8?B?bm91Q1lFWENWeHJzckNSUXBSU1pGSnhUSzZOYzdDeFM4UVdWMFkxTTNra0tW?=
- =?utf-8?B?YUVmNnJUODM0L243ZUc0K1phUmVKWGVONUx6d1dCbG9hUlZXWE1VU0h5dktZ?=
- =?utf-8?B?ajBZaHM4RWozRmJUbWR3cDZ1bjFZS1I5OEUyMU0yeVJTOUlBRWt5c3hKcWdM?=
- =?utf-8?B?WWpoSEhQRkZJU1JxVEs3VFBBY2VReVZvWHdmNG9IV3hjMlZRWTJUZ2lhSFRm?=
- =?utf-8?Q?rzFObkxAdyyGf4miSELPh6TXJ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9693429b-2206-41fa-a0de-08db1f49931b
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 20:21:46.8097
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gybYq36Pdmmb5uGNtcoM0BNqRTLjcyuM7rC8Kz+rrS06pKM9yhdOCWEpZS6y7PPoc8AeG0VleqxRSvxq4ryGdA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6418
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <343571ba-faed-35d7-2859-2668391dadb2@oss.nxp.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/23 20:58, Pierre-Louis Bossart wrote:
->> +static int amd_resume_child_device(struct device *dev, void *data)
->> +{
->> +	struct sdw_slave *slave = dev_to_sdw_dev(dev);
->> +	int ret;
->> +
->> +	if (!slave->probed) {
->> +		dev_dbg(dev, "skipping device, no probed driver\n");
->> +		return 0;
->> +	}
->> +	if (!slave->dev_num_sticky) {
->> +		dev_dbg(dev, "skipping device, never detected on bus\n");
->> +		return 0;
->> +	}
->> +	if (!pm_runtime_suspended(dev))
->> +		return 0;
->> +	ret = pm_request_resume(dev);
-> I still don't get why the test above was needed. It's racy and brings
-> limited benefits.
-As explained below thread,
+On Sat, Mar 04, 2023 at 03:59:38PM +0800, Peng Fan wrote:
+> 
+> 
+> On 2/14/2023 1:50 AM, Mathieu Poirier wrote:
+> > On Mon, Feb 13, 2023 at 12:15:59PM +0200, Iuliana Prodan wrote:
+> > > On 2/12/2023 9:43 AM, Peng Fan wrote:
+> > > > Hi Iuliana,
+> > > > 
+> > > > > Subject: Re: [PATCH V3 0/6] remoteproc: imx_rproc: support firmware in
+> > > > > DDR
+> > > > > 
+> > > > > 
+> > > > > On 2/9/2023 8:38 AM, Peng Fan (OSS) wrote:
+> > > > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > > > 
+> > > > > > V3:
+> > > > > > 
+> > > > > >     Daniel, Iuliana
+> > > > > > 
+> > > > > >       Please help review this patchset per Mathieu's comments.
+> > > > > > 
+> > > > > >     Thanks,
+> > > > > >     Peng.
+> > > > > > 
+> > > > > >     Move patch 3 in v2 to 1st patch in v3 and add Fixes tag Per Daniel
+> > > > > >     IMX_RPROC_ANY in patch 3 Per Mathieu
+> > > > > >     Update comment and commit log in patch 5, 6.
+> > > > > > 
+> > > > > >     NXP SDK provides ".interrupts" section, but I am not sure how others
+> > > > > >     build the firmware. So I still keep patch 6 as v2, return bootaddr
+> > > > > >     if there is no ".interrupts" section.
+> > > > > > 
+> > > > > > V2:
+> > > > > >     patch 4 is introduced for sparse check warning fix
+> > > > > > 
+> > > > > > This pachset is to support i.MX8M and i.MX93 Cortex-M core firmware
+> > > > > > could be in DDR, not just the default TCM.
+> > > > > > 
+> > > > > > i.MX8M needs stack/pc value be stored in TCML entry address[0,4], the
+> > > > > > initial value could be got from firmware first section ".interrupts".
+> > > > > > i.MX93 is a bit different, it just needs the address of .interrupts
+> > > > > > section. NXP SDK always has .interrupts section.
+> > > > > > 
+> > > > > > So first we need find the .interrupts section from firmware, so patch
+> > > > > > 1 is to reuse the code of find_table to introduce a new API
+> > > > > > rproc_elf_find_shdr to find shdr, the it could reused by i.MX driver.
+> > > > > > 
+> > > > > > Patch 2 is introduce devtype for i.MX8M/93
+> > > > > > 
+> > > > > > Although patch 3 is correct the mapping, but this area was never used
+> > > > > > by NXP SW team, we directly use the DDR region, not the alias region.
+> > > > > > Since this patchset is first to support firmware in DDR, mark this
+> > > > > > patch as a fix does not make much sense.
+> > > > > > 
+> > > > > > patch 4 and 5 is support i.MX8M/93 firmware in DDR with parsing
+> > > > > > .interrupts section. Detailed information in each patch commit message.
+> > > > > > 
+> > > > > > Patches were tested on i.MX8MQ-EVK i.MX8MP-EVK i.MX93-11x11-EVK
+> > > > > If one can build their firmware as they want, then the .interrupt section can
+> > > > > also be called differently.
+> > > > > I don't think is a good idea to base all your implementation on this
+> > > > > assumption.
+> > > > > 
+> > > > > It's clear there's a limitation when linking firmware in DDR, so this should be
+> > > > > well documented so one can compile their firmware and put the needed
+> > > > > section (interrupt as we call it in NXP SDK) always in TCML - independently
+> > > > > where the other section go.
+> > > > Ok, so .interrupt section should be a must in elf file if I understand correctly.
+> > > > 
+> > > > I could add a check in V4 that if .interrupt section is not there, driver will report
+> > > > failure.
+> > > > 
+> > > > How do you think?
+> > > 
+> > > Peng, I stand by my opinion that the limitation of linking firmware in DDR
+> > > should be documented in an Application Note, or maybe there are other
+> > > documents where how to use imx_rproc is explained.
+> > > 
+> > > The implementation based on the .interrupt section is not robust.
+> > > Maybe a user linked his firmware correctly in TCML, but the section is not
+> > > called .interrupt so the firmware loading will work.
+> > > 
+> > > So, instead of using the section name, you should use the address.
+> > 
+> > Can you be more specific on the above?
+> > 
+> > > 
+> > > First, check whether there is a section linked to TCML.
+> > > If there is none, check for section name - as you did.
+> > > If there is no section called .interrupt, give an error message.
+> > 
+> > We have two ways of booting, one that puts the firmware image in the TCML and
+> > another in RAM.  Based on the processor type, the first 8 bytes of the TCML need
+> > to include the address for the stack and PC value.
+> > 
+> > I think the first thing to do is have two different firmware images, one for
+> > i.MX8M and another one for i.MX93.  That should greatly simplify things.
+> 
+> sorry, I not got your points. i.MX8M and i.MX93 are not sharing firmware
 
-https://lore.kernel.org/lkml/acd3a560-1218-9f1d-06ec-19e4d3d4e2c9@amd.com
+Perfect.
 
-Our scenario is multiple peripheral devices are connected
-over the same link.
+> images. i.MX93 M33 has ROM, kicking M33 firmware just requires the
+> address of the .interrupt address which holds stack/pc value.
+> i.MX8M not has ROM, kick M33 firmware requires driver to copy
+> stack/pc into the TCML beginning address.
 
-In our implementation, device_for_each_child() function invokes
-amd_resume_child_device callback for each child.
-When any one of the child device is active, It will break the
-iteration, which results in failure resuming all child devices.
+It's been more than a month since I have looked at this patchset so the details are
+vague in my memory.  That said, there should be one image for the TCML and
+another one for the RAM.  And the image that runs in RAM should have a program
+segment that write the correct information in the first 8 bytes.
 
-If we skip , pm_suspended check , it will not resume all
-peripheral devices when any one of the peripheral device is active.
->
->> +	if (ret < 0)
->> +		dev_err(dev, "pm_request_resume failed: %d\n", ret);
->> +
->> +	return ret;
->> +}
+> 
+> Whether i.MX8M/i.MX93, the NXP released MCU SDK use the section
+> ".interrupt" to hold stack/pc initialization value in the beginning
+> 8 bytes of the section.
+> 
 
+And that is fine.  Simply release another version of the SDK that does the right
+thing.
+
+I suggest to work with Daniel and Iuliana if some details are still unclear.
+Unlike me, they have access to the reference manual and the boot requirements.
+
+
+> > 
+> > Second, there should always be a segment that adds the right information to the
+> > TMCL.  That segment doesn't need a name, it simply have to be part of the
+> > segments that are copied to memory (any kind of memory) so that function
+> > rproc_elf_load_segments() can do its job.
+> > 
+> > That pushes the complexity to the tool that generates the firmware image,
+> > exactly where it should be.
+> 
+> For i.MX8M, yes. For i.MX93, the M33 ROM needs address of storing stack/pc.
+> > 
+> > This is how I think we should solve this problem based on the very limited
+> > information provided with this patchset.  Please let me know if I missed
+> > something and we'll go from there.
+> 
+> I am not sure how to proceed on supporting the current firmware. what should
+> I continue with current patchset?
+> 
+> Thanks,
+> Peng.
+> 
+> > 
+> > > 
+> > > For all the above options please add comments in code, explaining each step.
+> > > 
