@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975066AF5DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE826AF5E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjCGTi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53316 "EHLO
+        id S231727AbjCGTkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:40:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjCGThk (ORCPT
+        with ESMTP id S231646AbjCGTk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:37:40 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C9C95BF2
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 11:25:00 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 809A740004;
-        Tue,  7 Mar 2023 19:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678217099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VrU8J9YB7fQPHk5/ael0OMDOC13vkm1stDSoSG3PYew=;
-        b=ZpDIXDsfovyMckKIWaKBUOnFtR/7vWXdgr6OdQ058XmHA7uNsqGkqtubipCkZX/PivtPZs
-        uA1NMga70CTjP3Bbg6VmBSJheiJ4KVpoYZYUCEwkq6UqDC67SgwL296JN9oSJfMegJpHVc
-        UsV8Jew5yC8Qfif2UggmT1OnCUo3GnHQmI27B2LQ/vt6rvpGywbhphJLdCS0ndmwar57pB
-        a96pmLITt1uUGdi6zW71mhqVLq7HJr5JpJHab1LahtjDzsHE2vTtUsi5R54ykwDOYRmJNy
-        n6dPoP+0fsClzN4mwxeO34mk413Js5N1/6fhKi0qh6aL826oS8r77I4r2pl5ww==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     ye.xingchen@zte.com.cn, miquel.raynal@bootlin.com
-Cc:     richard@nod.at, vigneshr@ti.com, christophe.jaillet@wanadoo.fr,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: =?utf-8?q?=5BPATCH_v2=5D_mtd=3A_rawnand=3A_orion=3A_use_devm=5Fplat?=      =?utf-8?q?form=5Fioremap=5Fresource=28=29?=
-Date:   Tue,  7 Mar 2023 20:24:56 +0100
-Message-Id: <20230307192456.433031-1-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <202302101723563685569@zte.com.cn>
-References: 
+        Tue, 7 Mar 2023 14:40:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE95FCA1C6;
+        Tue,  7 Mar 2023 11:27:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4F5A9B81A0A;
+        Tue,  7 Mar 2023 19:27:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A97B1C433EF;
+        Tue,  7 Mar 2023 19:27:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678217220;
+        bh=fl//Mz2BMlMUuaYh9iAWgaq9WVSvfCauT8FTq4CmvFo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LZCKle3JIhXnCSM6EVoIpBbQlcza7D3FyJW0G/VZeu41o7tRfkC2VNH5k7ZUN3Isd
+         eCcDBxFg6M3gzzjO7yLzLRA7xeXCjjfujc31PZ/FWKparv7Gp0PzgYMfpKs3GcoKj2
+         i1sjAtmgnyPVjGH4objw6ZS/4P6OY9HJLnf1HJeWiC3AvM7MX9hIZncH7r9Sb0IVTb
+         R4Q8iDpnUg4YAtRZ7CjcO6CoziOKpgr6/jbj/S1GdxIxgMHRWgl9Xermb6Tc4/EPjH
+         awifkRtuXHOTy6oLiOYhJPAI9tNsBHNMoNYCIoNPbs4Da2TfrbD9DgDUAsL1JSLNr8
+         nZku5JrLdfwGQ==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>
+Subject: [PATCH 0/2] PCI/AER: Remove redundant Device Control Error Reporting Enable
+Date:   Tue,  7 Mar 2023 13:26:53 -0600
+Message-Id: <20230307192655.874008-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-linux-mtd-patch-notification: thanks
-X-linux-mtd-patch-commit: b'434b8356df416678fb29d21b02bb5755c5f778f0'
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-02-10 at 09:23:56 UTC,  wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_ioremap_resource(), as this is exactly what this
-> function does.
-> 
-> Signed-off-by: Ye Xingchen <ye.xingchen@zte.com.cn>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next, thanks.
+Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"),
+which appeared in v6.0, the PCI core has enabled PCIe error reporting for
+all devices during enumeration.
 
-Miquel
+Remove driver code to do this and remove unnecessary includes of
+<linux/aer.h>.
+
+Bjorn Helgaas (2):
+  dmaengine: ioat: Drop redundant pci_enable_pcie_error_reporting()
+  dmaengine: idxd: Remove unnecessary aer.h include
+
+ drivers/dma/idxd/init.c | 1 -
+ drivers/dma/ioat/init.c | 6 ------
+ 2 files changed, 7 deletions(-)
+
+-- 
+2.25.1
+
