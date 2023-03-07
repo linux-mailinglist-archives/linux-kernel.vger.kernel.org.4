@@ -2,129 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20AF6ADAD9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4389E6ADAE5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjCGJrt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:47:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S231151AbjCGJs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:48:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbjCGJrb (ORCPT
+        with ESMTP id S230501AbjCGJsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:47:31 -0500
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF135BCBC
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:47:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1678182434; x=1709718434;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=XAMMJ4e2XknIezt+JVgJt5gbEedpXSXNtv9cd7WBDBw=;
-  b=ASAi0oNdMuNv2HKV1rT07DmQeQ2NT0LLV9pAO4+0VNXq/7DUMfhSIkrM
-   eX63oqP4ZAcK9TLT7Sa0cNahbNrXVmH8FFo+CprK93/5XPl6GG+Wu0798
-   a93IFFGxDy50bWlZ5ds5V6upVGv5cnjsPqkX/OPVZNmYQrXjPAcJlY+Zp
-   KdFxs8wDa3gVMRwBadS4NdklrLnSfKE+183ieW2LQ2J21pF6v3Q8i8oai
-   DDLbR+SknYTX38QgSv534BJE7kIYQAz2ni6xIHivzKxmVCpkKCYXK2k3Z
-   mVa2zOTrAGIo7NfdypWGPRCdtcPP/dJNaiMSaq9Vr5YFHpO5eS5EU29R0
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,240,1673884800"; 
-   d="scan'208";a="223281642"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Mar 2023 17:47:13 +0800
-IronPort-SDR: 7NRdJk3cZgAqqQfX6qWXh6fnMrtZXkOJXafGJogN72EkyyV6GjzsiHs0NWPtJijLXCIrweogtL
- EDVL6nvjalgZ3x6t4PeDUapUEQiJq2x9wL4rrtpfmSoart0FJMR2HokoZBfWfNcrUa7iTuvhDg
- 99r2PPyEh9WEBpfwIonmw6VqCyt+E6T/bsvWot55/E8kBXW6U/z/gXIqGaQS9p9/vG79xklA18
- GGRE6VITQ5ln6hyBWfaf9wpcMNZM9NarmIGbJ02duIwphsmoQaOJr4Mr9zQluWZzQIvEXyCItA
- LP0=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Mar 2023 01:03:53 -0800
-IronPort-SDR: T/sunW50Uih1xOrPs7+ARIwZdwipFr4ijR9TmmTD+k23Hj+9NJM3CjUg/AkPK6BBgnTJUDivzf
- ITO2sF+/Kk1KpNcrpux0SdWt8aYOrzly3BgZbEAdFlgEPt5o1pqPZbefWdBiHqIvRscommhcsn
- iVdycXZe8Op3vJPOMwuIIpOyVWvYniQBSOGWtRyH0k4KZXTiJysW34dJTrAgodoMT+fi0lrX3q
- c3SYB2HgQbHwOn1AQnfOYO3TGZ23TGbNt4pfypnat6oKD/OATfOp2b38os/oGSD/jnKCAGNYfa
- Wm0=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Mar 2023 01:47:14 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PW9b552r4z1RwtC
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:47:13 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1678182433; x=1680774434; bh=XAMMJ4e2XknIezt+JVgJt5gbEedpXSXNtv9
-        cd7WBDBw=; b=UXMuJYYn3AioJLrlkjbnOI26cljlI3W2+RX5Bq/1jLOdckKLLZ7
-        g9V3OP8FbOCG6vdHUyA9DI6KG9AWydFrGOUalLC/Irw8YmslretYIflsSfcrrK6y
-        tyQQ7vA5ai1UaFdm1Hf30plbp2FISxAPyQaSoKPrt3QSzH1IDONWsqNt/M5foraJ
-        +a1/12gOjMgoS9SFZoGsN72vVNZSh0q1o+U+dm+o5sOMeFzAEMDN1Ne6u+n8bsfN
-        Bn8OLuJN9ftJiv/Z0+BFxAkpvou58vzIbt6kwRteanl08R1jDMscjAsTF5m1LfzT
-        5wswwufDEeEs4nw6oTEN3QX7qK/1JfyI/QQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id xBIXvl9D7OLR for <linux-kernel@vger.kernel.org>;
-        Tue,  7 Mar 2023 01:47:13 -0800 (PST)
-Received: from [10.225.163.63] (unknown [10.225.163.63])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PW9b31JKZz1RvLy;
-        Tue,  7 Mar 2023 01:47:10 -0800 (PST)
-Message-ID: <9e0c0ae6-0059-36dc-7cab-6b7e588c560c@opensource.wdc.com>
-Date:   Tue, 7 Mar 2023 18:47:09 +0900
+        Tue, 7 Mar 2023 04:48:11 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC4854CA4;
+        Tue,  7 Mar 2023 01:47:44 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 75E7B6602FE6;
+        Tue,  7 Mar 2023 09:47:41 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678182462;
+        bh=FIy3VD1GcrwVsZV6x47mkmmqykaahfq9tEgiYJql5Dw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AcS5VvvvocXA1mATfJ1yLsnVJXSonHGJFAjamsq7Df9hwXl8FiLubQx5r1Zc+JBbf
+         y6e6FQ9q8IEdd/qZDiOXUOw7A/YcJczybOx9O+ml3scQNTvyh436KGEoZDzY56oPs9
+         YJz2WhQInhdERkkVE/ub+lAu3+mY8vDuYaS9hgdnBFmyVMHSNGMyFJ6b4z8NzhKsno
+         bNPxNpoHdF2HTwwX7nCGBClWaiEKCXJJOCjkn9zlNWlRxc+fqYQqMfGJANfLlKLOtm
+         Bj2c8X6SoFft0i7NaGYNzWoPlbwGmleC+/+IQAeoGzm7TSfDcH2GtRGpnnTVWpD2p4
+         RVmOFyaIqMwGw==
+Message-ID: <f7453c57-d921-a789-75f6-c837ca50187c@collabora.com>
+Date:   Tue, 7 Mar 2023 10:47:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v4] dt-bindings: ata: Add UniPhier controller binding
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-ide@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230222155906.19403-1-hayashi.kunihiko@socionext.com>
- <9d36818f-3ce3-0fb6-1a3e-85e3879af08c@opensource.wdc.com>
- <a6425bde-5b6d-2fb2-2396-a35677b19e8f@linaro.org>
+Subject: Re: [PATCH v4 12/19] arm64: dts: mediatek: mt8192-asurada: Couple
+ VGPU and VSRAM_OTHER regulators
 Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <a6425bde-5b6d-2fb2-2396-a35677b19e8f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
+ <20230301095523.428461-13-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5GHdtbheL6wxtDo-szk+=3BGk2z93SBowd4Z=E9XupZkw@mail.gmail.com>
+ <5dba27e1-d480-ea24-c1ba-03bb7f77b1b1@collabora.com>
+ <CAGXv+5FwNfZ7TwKVMM5_uAjYQ6ZmhZVFsWREb_da-jxC6EUVJw@mail.gmail.com>
+ <CAGXv+5F8A4kLq3y8dE4mrcVb338-afDorWsS5MRBvWVPgiAhEA@mail.gmail.com>
+ <e1b9d901-421c-3509-c92a-c59d49ff2b0d@collabora.com>
+ <CAGXv+5EcAMmGro9UFLmQvkgcBykS9rsUdF_YsdbRUbtipfEFJA@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5EcAMmGro9UFLmQvkgcBykS9rsUdF_YsdbRUbtipfEFJA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/23 17:13, Krzysztof Kozlowski wrote:
-> On 06/03/2023 02:22, Damien Le Moal wrote:
->> On 2/23/23 00:59, Kunihiko Hayashi wrote:
->>> Add UniPhier SATA controller compatible string to the platform binding.
->>> This controller needs three reset controls for Pro4 SoC, or two reset
->>> controls for PXs2 and PXs3 SoCs.
+Il 07/03/23 10:44, Chen-Yu Tsai ha scritto:
+> On Tue, Mar 7, 2023 at 5:30 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Il 07/03/23 10:24, Chen-Yu Tsai ha scritto:
+>>> On Fri, Mar 3, 2023 at 12:09 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>>>>
+>>>> On Thu, Mar 2, 2023 at 6:17 PM AngeloGioacchino Del Regno
+>>>> <angelogioacchino.delregno@collabora.com> wrote:
+>>>>>
+>>>>> Il 02/03/23 11:03, Chen-Yu Tsai ha scritto:
+>>>>>> On Wed, Mar 1, 2023 at 5:55 PM AngeloGioacchino Del Regno
+>>>>>> <angelogioacchino.delregno@collabora.com> wrote:
+>>>>>>>
+>>>>>>> Add coupling for these regulators, as VSRAM_OTHER is used to power the
+>>>>>>> GPU SRAM, and they have a strict voltage output relation to satisfy in
+>>>>>>> order to ensure GPU stable operation.
+>>>>>>> While at it, also add voltage constraint overrides for the GPU SRAM
+>>>>>>> regulator "mt6359_vsram_others" so that we stay in a safe range of
+>>>>>>> 0.75-0.80V.
+>>>>>>>
+>>>>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>>>>> ---
+>>>>>>>     arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 9 +++++++++
+>>>>>>>     1 file changed, 9 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>>>>>>> index 8570b78c04a4..f858eca219d7 100644
+>>>>>>> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>>>>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>>>>>>> @@ -447,6 +447,13 @@ &mt6359_vrf12_ldo_reg {
+>>>>>>>            regulator-always-on;
+>>>>>>>     };
+>>>>>>>
+>>>>>>> +&mt6359_vsram_others_ldo_reg {
+>>>>>>> +       regulator-min-microvolt = <750000>;
+>>>>>>> +       regulator-max-microvolt = <800000>;
+>>>>>>> +       regulator-coupled-with = <&mt6315_7_vbuck1>;
+>>>>>>> +       regulator-coupled-max-spread = <10000>;
+>>>>>>
+>>>>>> Looking again at the downstream OPP table, it seems there's no voltage
+>>>>>> difference requirement. It only needs V_SRAM >= V_GPU. Same applies to
+>>>>>> MT8195. Looks like only MT8183 and MT8186 need V_SRAM - V_GPU >= 10000.
+>>>>>
+>>>>> On MT8195 we don't need any regulator coupling. There, the GPU-SRAM voltage
+>>>>> is fixed at .. I don't remember, 0.7V? - anyway - MT8195 doesn't need to
+>>>>> scale the vsram.
+>>>>
+>>>> Looks like it's fixed at 0.75V. I guess we're Ok on MT8195.
+>>>>
+>>>>>>
+>>>>>> Would setting max-spread to 0 work? I ask because with both regulator's
+>>>>>> maximum voltage set to 0.8V, there's no way we can reach the highest
+>>>>>> OPP.
+>>>>>>
+>>>>>
+>>>>> No that doesn't work. I can raise the Vgpu max voltage to 0.88V to solve the
+>>>>> issue right here and right now, or we can leave it like that and revisit it
+>>>>> later.
+>>>>>
+>>>>> I would at this point go for setting mt6315_7_vbuck1's max-microvolt to
+>>>>> 880000, as this is the maximum recommended voltage for the GPU as per the
+>>>>> MT8192 datasheet, it would also make sense as we would be still describing
+>>>>> the hardware in a correct manner.
+>>>>>
+>>>>> What do you think?
+>>>>
+>>>> If it's just to accommodate the coupler stuff, I say just set the maximum
+>>>> at the lowest possible setting that satisfies the coupler constraint and
+>>>> granularity of the regulator. The regulator does 6250 uV steps, so I guess
+>>>> we could set the maximum at 812500 uV, with a comment stating the nominal
+>>>> voltage of 800000 uV and that the extra 12500 uV is to workaround coupler
+>>>> limitations.
+>>>>
+>>>> Does that sound OK?
 >>>
->>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>>> Even without changing anything, the coupler seems to work OK:
+>>>
+>>>    vsram_others                     1    1      0  normal   800mV
+>>> 0mA   750mV   800mV
+>>>       10006000.syscon:power-controller-domain   1
+>>>            0mA     0mV     0mV
+>>>    Vgpu                             2    2      0  normal   800mV
+>>> 0mA   606mV   800mV
+>>>       13000000.gpu-mali             1
+>>> 0mA   800mV   800mV
+>>>       10006000.syscon:power-controller-domain   1
+>>>            0mA     0mV     0mV
+>>>
+>>> Am I missing something?
+>>>
 >>
->> Rob,
+>> I don't think you are... I may be getting confused by all of the changesets
+>> that I'm pushing at once.
 >>
->> Are you OK with this patch ? I can take it for 6.4.
->>
+>> Hence, is this commit fine as it is?
 > 
-> You got Review (which includes also "Ack"), what are you missing here?
+> It works for some reason. Maybe it's a bug in the coupler. Either way I
+> think it works, even though the numbers might be a bit off. We can revisit
+> it later.
+> 
+> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Just checking with Rob as he is the DT maintainer. Out of courtesy.
-I will queue that patch then.
 
--- 
-Damien Le Moal
-Western Digital Research
+Thanks!
+
+Angelo
 
