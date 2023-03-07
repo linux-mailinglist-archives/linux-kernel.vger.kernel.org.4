@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5C46AE5DA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:05:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E636AE5DE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjCGQFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
+        id S231317AbjCGQGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbjCGQEw (ORCPT
+        with ESMTP id S231882AbjCGQFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:04:52 -0500
-Received: from mail-4022.proton.ch (mail-4022.proton.ch [185.70.40.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB5A2DE79
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:03:06 -0800 (PST)
-Date:   Tue, 07 Mar 2023 16:02:47 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=atinb.me;
-        s=protonmail; t=1678204981; x=1678464181;
-        bh=JqGwO8iIDiHBUIEFwkqfcDo3Km+A5ml9VJBTDOpaqHM=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=aksGqreqNZ/JdljUicuXGY0uMXeJf7+6DbBRNXsaOYMWiEzQK7AL8Ozo7LRTcRDeR
-         FCij8hQEOKpL7WAhQlZu/ATg2QspNhAhc2cHbrja7A8L60WztJvZACe9jc2l3MJqy7
-         0QJjI+K17gcerC07pDQBeJQlQuhYQx2SHACYM6OfrRfptRFAsspBUT1WuPZ7dOINGC
-         UpLtC+QBhw+Vh1W6HDQhWI6wt8tfOA0fVU/yr26KvE977PgLdOFaq8Ok1B4cKQzxr6
-         ZtApaCK12AQVGOxlFeV2JJnGuJ12Fb+1gPzNVIPJYzM2iEOa7fOu6t4RMLvneM8NBT
-         RRWCThE5JDBEA==
-To:     gregkh@linuxfoundation.org
-From:   Atin Bainada <hi@atinb.me>
-Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org,
-        Atin Bainada <hi@atinb.me>
-Subject: [PATCH] tty: do checkpatch cleanup
-Message-ID: <20230307160232.1029705-1-hi@atinb.me>
-Feedback-ID: 64551405:user:proton
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Tue, 7 Mar 2023 11:05:19 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57144907A7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:03:36 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id i7-20020a626d07000000b005d29737db06so7456490pfc.15
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:03:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678205016;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MtdRNvUrdbSW35Pbg1JV1sS6c88t0x/0o2K8YaL2y8s=;
+        b=HPL1zfpCG9Gg2fXBNJEmDbmuTnm5oxoQaYyzCrR+su2HC5v8YdKSxapt0aBdivlmWp
+         YVqPJ2NxlC9mQHHQNJjkPQIrESHpxkcOtYrT1HtvQGyI9TxK4dVTuKVPwpvdpuDkgUQZ
+         1CEJQ34gdxOEqDMagqB0xhEpEPMWsHGtPRlcQQj2TDitEkkYR8KRjin5En3/udUhkMmJ
+         1ifucZSxXZ9qa37bXbmjNOsVL2D/RfkDN1oqPXz/ZEYKwwzauWOMDm6vGCk0fQ+AWgUo
+         5wMcRf0dXxkqUF2+4Jq0Jv+KsC0NlIZ3sODvpiVcgc/tx4g9fwIXQg18mRKhugM0CsCR
+         1ABA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678205016;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MtdRNvUrdbSW35Pbg1JV1sS6c88t0x/0o2K8YaL2y8s=;
+        b=cXFiB5ne0+wuq/Q0NUUICXw2uvsdCb5x3AYJcyXjcsWKbx/0TulY+hP+DLixgUe7Rj
+         EqZ0ZhOzbz7lE971C0wB3z8ddy3iQ1vSvVeeEx61Ik61YxJCDs5HLlPOVJ/R5fLVszrj
+         oJ40QuaHyktahMxEgcUAnZ7mMbJIAETn1RTfTXpvt3fCr9GONJAcgGEoM2kmpQqMKwgs
+         shWL7GqmRgiYJNHckH9iBA6HMgCkkJUeUQMJgnqo15wXzX95MXBm1AG+5UsWDJaBMwhl
+         WeJjhWOVbr/K1AAPGtZdLWa9U2pcQsFLIgW8Xz+e0fFx1K9S8Oe+MVdHbuMvoTc5V1fI
+         EHxw==
+X-Gm-Message-State: AO0yUKWrwTMBCFxSa3DoexSHKYcR6Lwt7ZhYQz2J9035BtDDY0Kw280h
+        COf3uXRThnBPkbjt9RhtBORuWJWn6RQ=
+X-Google-Smtp-Source: AK7set9zAK91judnO5Y2ew6Tpe/VZozIcObxh6e4aNlWQ7bNVPyBR6SFnGxOkNGmOsrKQddYehv5m70z6ac=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:4503:0:b0:503:a269:33b7 with SMTP id
+ s3-20020a634503000000b00503a26933b7mr5558747pga.8.1678205015797; Tue, 07 Mar
+ 2023 08:03:35 -0800 (PST)
+Date:   Tue, 7 Mar 2023 08:03:34 -0800
+In-Reply-To: <CAD=HUj7P8XmWLVpwB_XABKT7GT1sLPRozmr=guVktOyk9R+3fw@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230127044500.680329-1-stevensd@google.com> <Y9QjquvzoL7kKHWE@google.com>
+ <CAD=HUj7P8XmWLVpwB_XABKT7GT1sLPRozmr=guVktOyk9R+3fw@mail.gmail.com>
+Message-ID: <ZAdgVrkKKUNyLe8M@google.com>
+Subject: Re: [PATCH 0/3] KVM: x86: replace kvm_vcpu_map usage in vmx
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     David Woodhouse <dwmw@amazon.co.uk>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Atin Bainada <hi@atinb.me>
----
- drivers/tty/tty_ioctl.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On Mon, Mar 06, 2023, David Stevens wrote:
+> On Sat, Jan 28, 2023 at 4:19=E2=80=AFAM Sean Christopherson <seanjc@googl=
+e.com> wrote:
+> >
+> > On Fri, Jan 27, 2023, David Stevens wrote:
+> > > From: David Stevens <stevensd@chromium.org>
+> > >
+> > > This series replaces the usage of kvm_vcpu_map in vmx with
+> > > gfn_to_pfn_cache. See [1] for details on why kvm_vcpu_map is broken.
+> > >
+> > > The presence of kvm_vcpu_map blocks another series I would like to
+> > > try to merge [2]. Although I'm not familiar with the internals of vmx=
+,
+> > > I've gone ahead and taken a stab at this cleanup. I've done some manu=
+al
+> > > testing with nested VMs, and KVM selftests pass, but thorough feedbac=
+k
+> > > would be appreciated. Once this cleanup is done, I'll take a look at
+> > > removing kvm_vcpu_map from svm.
+> >
+> > Woot, been waiting for someone to take this one, thanks!  It'll likely =
+be a week
+> > or two until I get 'round to this, but it's definitely something I want=
+ to get
+> > merged sooner than later.
+>=20
+> Sean, will you be able to get to this in the next few weeks?
 
-diff --git a/drivers/tty/tty_ioctl.c b/drivers/tty/tty_ioctl.c
-index 12983ce4e43e..05a4dd0db476 100644
---- a/drivers/tty/tty_ioctl.c
-+++ b/drivers/tty/tty_ioctl.c
-@@ -73,7 +73,7 @@ EXPORT_SYMBOL(tty_chars_in_buffer);
-  *=09the number of bytes written. If no method is provided 2K is always
-  *=09returned and data may be lost as there will be no flow control.
-  */
--
-+
- unsigned int tty_write_room(struct tty_struct *tty)
- {
- =09if (tty->ops->write_room)
-@@ -403,6 +403,7 @@ __weak int kernel_termios_to_user_termio(struct termio =
-__user *termio,
- =09=09=09=09=09=09struct ktermios *termios)
- {
- =09struct termio v;
-+
- =09memset(&v, 0, sizeof(struct termio));
- =09v.c_iflag =3D termios->c_iflag;
- =09v.c_oflag =3D termios->c_oflag;
-@@ -540,6 +541,7 @@ static void copy_termios_locked(struct tty_struct *tty,=
- struct ktermios *kterm)
- static int get_termio(struct tty_struct *tty, struct termio __user *termio=
-)
- {
- =09struct ktermios kterm;
-+
- =09copy_termios(tty, &kterm);
- =09if (kernel_termios_to_user_termio(termio, &kterm))
- =09=09return -EFAULT;
-@@ -919,6 +921,7 @@ static int __tty_perform_flush(struct tty_struct *tty, =
-unsigned long arg)
- int tty_perform_flush(struct tty_struct *tty, unsigned long arg)
- {
- =09struct tty_ldisc *ld;
-+
- =09int retval =3D tty_check_change(tty);
- =09if (retval)
- =09=09return retval;
---
-2.39.2
-
-
+Yes, so long as your definition of "few" means 2-4 ;-)
