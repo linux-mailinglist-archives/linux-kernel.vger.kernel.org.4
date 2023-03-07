@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5C56AE7A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E71976AE7A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjCGQ7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:59:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        id S230026AbjCGQ7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:59:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbjCGQ6J (ORCPT
+        with ESMTP id S230435AbjCGQ6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Mar 2023 11:58:09 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0B2943A1;
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF4D2943A5;
         Tue,  7 Mar 2023 08:54:38 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 327GsXD5127685;
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 327GsXCs094193;
         Tue, 7 Mar 2023 10:54:33 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1678208073;
-        bh=VZPQo90BF4za+2DxTnTfA4rqN5o7cRlXJuablQTN0vI=;
-        h=From:To:CC:Subject:Date;
-        b=U+Jmhvfm3a02KUH7GhfTKexvlwiZYJxz1U9AY25GLVhaisG+AEjBMaZ4DFCnNh6TH
-         LiVdbkVvknuwVRjyuB9YqMWJq1AsJn6JtslAZXLrgj4yJc2SFcvXBXF8Llapj/BYpu
-         uWkFMgzA76cIWaNGHr6G1FITuYNuBaFLcbWh68Yg=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 327GsXaw073156
+        bh=rp24ZeGWZpg4SMuqNbRGr6tdFc0xbZJPtzZjm57ZCIo=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=XmCCnD/lCwgMxN77KmJaSRCTvYegXMqhz1gWR9I8MA7LWFARegn6Guft7KcFW2Ls3
+         nG/7ws2hr2VdMEp/LYCPQTtCUgYFO1Pwc+9J/vEOdtC4zcjKTxqSurO7mwl7PKpozK
+         ID54odEXBbcgkwHcIOSafZpmp5guzw2PNhvcL6Pw=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 327GsXZk052508
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 7 Mar 2023 10:54:33 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 7
- Mar 2023 10:54:32 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 10:54:33 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Tue, 7 Mar 2023 10:54:32 -0600
 Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 327GsWdS084852;
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 327GsWdT084852;
         Tue, 7 Mar 2023 10:54:32 -0600
 From:   Andrew Davis <afd@ti.com>
 To:     Peter Tyser <ptyser@xes-inc.com>,
@@ -47,10 +47,12 @@ To:     Peter Tyser <ptyser@xes-inc.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>
 CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew Davis <afd@ti.com>
-Subject: [PATCH 1/6] gpio: ich: Use devm_gpiochip_add_data() to simplify remove path
-Date:   Tue, 7 Mar 2023 10:54:27 -0600
-Message-ID: <20230307165432.25484-1-afd@ti.com>
+Subject: [PATCH 2/6] gpio: twl4030: Use devm_gpiochip_add_data() to simplify remove path
+Date:   Tue, 7 Mar 2023 10:54:28 -0600
+Message-ID: <20230307165432.25484-2-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307165432.25484-1-afd@ti.com>
+References: <20230307165432.25484-1-afd@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -69,42 +71,53 @@ Use devm version of gpiochip add function to handle removal for us.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/gpio/gpio-ich.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ drivers/gpio/gpio-twl4030.c | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/drivers/gpio/gpio-ich.c b/drivers/gpio/gpio-ich.c
-index 3b31f5e9bf40..0be9285efebc 100644
---- a/drivers/gpio/gpio-ich.c
-+++ b/drivers/gpio/gpio-ich.c
-@@ -457,7 +457,7 @@ static int ichx_gpio_probe(struct platform_device *pdev)
- 
- init:
- 	ichx_gpiolib_setup(&ichx_priv.chip);
--	err = gpiochip_add_data(&ichx_priv.chip, NULL);
-+	err = devm_gpiochip_add_data(dev, &ichx_priv.chip, NULL);
- 	if (err) {
- 		dev_err(dev, "Failed to register GPIOs\n");
- 		return err;
-@@ -469,19 +469,11 @@ static int ichx_gpio_probe(struct platform_device *pdev)
- 	return 0;
+diff --git a/drivers/gpio/gpio-twl4030.c b/drivers/gpio/gpio-twl4030.c
+index c1bb2c3ca6f2..23f58bf3a415 100644
+--- a/drivers/gpio/gpio-twl4030.c
++++ b/drivers/gpio/gpio-twl4030.c
+@@ -492,18 +492,6 @@ static struct twl4030_gpio_platform_data *of_gpio_twl4030(struct device *dev,
+ 	return omap_twl_info;
  }
  
--static int ichx_gpio_remove(struct platform_device *pdev)
+-/* Cannot use as gpio_twl4030_probe() calls us */
+-static int gpio_twl4030_remove(struct platform_device *pdev)
 -{
--	gpiochip_remove(&ichx_priv.chip);
+-	struct gpio_twl4030_priv *priv = platform_get_drvdata(pdev);
 -
+-	gpiochip_remove(&priv->gpio_chip);
+-
+-	/* REVISIT no support yet for deregistering all the IRQs */
+-	WARN_ON(!is_module());
 -	return 0;
 -}
 -
- static struct platform_driver ichx_gpio_driver = {
- 	.driver		= {
- 		.name	= DRV_NAME,
+ static int gpio_twl4030_probe(struct platform_device *pdev)
+ {
+ 	struct twl4030_gpio_platform_data *pdata = dev_get_platdata(&pdev->dev);
+@@ -581,12 +569,9 @@ static int gpio_twl4030_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "could not register gpiochip, %d\n", ret);
+ 		priv->gpio_chip.ngpio = 0;
+-		gpio_twl4030_remove(pdev);
+ 		goto out;
+ 	}
+ 
+-	platform_set_drvdata(pdev, priv);
+-
+ 	if (pdata->setup) {
+ 		int status;
+ 
+@@ -615,7 +600,6 @@ static struct platform_driver gpio_twl4030_driver = {
+ 		.of_match_table = twl_gpio_match,
  	},
- 	.probe		= ichx_gpio_probe,
--	.remove		= ichx_gpio_remove,
+ 	.probe		= gpio_twl4030_probe,
+-	.remove		= gpio_twl4030_remove,
  };
  
- module_platform_driver(ichx_gpio_driver);
+ static int __init gpio_twl4030_init(void)
 -- 
 2.39.2
 
