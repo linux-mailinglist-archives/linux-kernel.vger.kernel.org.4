@@ -2,206 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56FC26AD6A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C10C6AD6AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:06:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjCGFFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 00:05:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50282 "EHLO
+        id S230106AbjCGFGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 00:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCGFFI (ORCPT
+        with ESMTP id S230117AbjCGFG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 00:05:08 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DBA302AF;
-        Mon,  6 Mar 2023 21:05:07 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id x11so8357215pln.12;
-        Mon, 06 Mar 2023 21:05:07 -0800 (PST)
+        Tue, 7 Mar 2023 00:06:27 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102794346E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 21:06:25 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id h8so12866203plf.10
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 21:06:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678165506;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fAr/4rZLY/xW2VZEGvfJ9vcha1fPxJBixn7intPRfv8=;
-        b=WkCNp7TSaFq1NkStkRRYZf/7HaSOKOYxyg90uy+CWLTCGTo10DoEcaclgmrNVAmQGd
-         F0eYRS9Ept+4HdVgZ/Udc7Mu4on10dxvK4uMzKcKkSzWyei6ehYoG3+3UgQX2WiH3h7j
-         99T54plxLO+Yitet0Tq/GTHLecJfBjZQOTS2rX6j6uzXLTDJ1y/E+GMvjSx8L8uRBA/k
-         iokVfgi5827693E05NqR7ZGq7U+qB+N7fajZDPRhRKk8ZrfkY/T1ifewq0t3i9Vv/T5y
-         djXx8rqtqpmGopvsJlT5n9nMYZP7HTFXeU0FpwYbgD/dXmdN7CrqyVA9y1kuTuItMv5h
-         Lw5w==
+        d=ventanamicro.com; s=google; t=1678165584;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ncIZQ84lksEd9kxqzUc4pmHzurSPn3jNUdkAVBVakM=;
+        b=ZDrVtKw9CQtz5i5Rktk/5VuDFClMgI+RB514CO50h6TX40umhQQXF+3Al7jnCCXMPJ
+         hrdzIs41xbHE6KDgEtj/FfBi18Vz5YkbagBEP6N1wmOxeuTjjivdwCKZh2RTzJE6loC/
+         lzhACyYDd0OCcrXkO/T81CHBNKACaz6nsAf6E15zew/yj3OMUhPwVatN5ZAb4hrVTWYV
+         PukVc2HJaWAVSRfl24P98E1EoRxJbXH9KoIQB96TlLPVCFVN7/vgZuRVwQuMwdfUf7zx
+         Es9WWh7t1O9vTOsoSAQUcyz/3cIxhnas9VN7Q9VWGaXwdBAaf6eSR7rTquhMN3wr/6YP
+         skLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678165506;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fAr/4rZLY/xW2VZEGvfJ9vcha1fPxJBixn7intPRfv8=;
-        b=INoBtD4F17Bjoo+sHit7PgStMF8kLv48UA8l2aFs6QPcWcc/obZomX1TObtNlpVZMP
-         fgj3mrqTRvtOkOJ7//OoUMKnrQnbcVly5kCpeZaRSXNmHh3wM6vS5vV/cW0mwE0TPRIt
-         T/IfKnu4MXNOceSKnZadEsszLqoaWqhZeOsdWBJU32uRV4rrLE9ZlcwpWc8XtC3eGYjx
-         p1ljke9Fsv+UZVIywL61lWt9DBFlraJxfzcLgD3Tw5IrLdCvlh1kodoVshbz3lJK9C1U
-         qbjCyXrZa4RvqmbyKC1yEgUj7YnHCG4jec4zy8C1C9Lvhc0gwjf0ZlnjiCw+Y+qa6z3Z
-         YEfw==
-X-Gm-Message-State: AO0yUKXB05F9FoSRKJmnq4nkorra0JFm/M5P4UWye/NAHwkMGKGi+GYP
-        JwTQtlJqP3HSgxk3ZCIsYwg=
-X-Google-Smtp-Source: AK7set9xG2nILH4DDb0/bsgn5KroT2orbcWVxChMuR5XTi8NyBVoYfcVbAvq+8KCW1mCDCO4Kv/knw==
-X-Received: by 2002:a17:903:1d1:b0:19e:6947:3b27 with SMTP id e17-20020a17090301d100b0019e69473b27mr17886346plh.58.1678165506568;
-        Mon, 06 Mar 2023 21:05:06 -0800 (PST)
-Received: from localhost ([203.220.77.23])
-        by smtp.gmail.com with ESMTPSA id e7-20020a170902cf4700b0019adfb96084sm7550173plg.36.2023.03.06.21.05.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 21:05:05 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 07 Mar 2023 15:05:01 +1000
-Message-Id: <CQZW0SBFI6QM.3FW6O6LJ0PVS1@bobo>
-Subject: Re: [RFC PATCH 04/13] powerpc/dexcr: Support userspace ROP
- protection
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Benjamin Gray" <bgray@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>
-Cc:     <ajd@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <cmr@bluescreens.de>
-X-Mailer: aerc 0.13.0
-References: <20221128024458.46121-1-bgray@linux.ibm.com>
- <20221128024458.46121-5-bgray@linux.ibm.com>
-In-Reply-To: <20221128024458.46121-5-bgray@linux.ibm.com>
+        d=1e100.net; s=20210112; t=1678165584;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ncIZQ84lksEd9kxqzUc4pmHzurSPn3jNUdkAVBVakM=;
+        b=1RXMrt25iGBTyUcxN/B91ST3lVazzPlDtn4vsFIQKq95hjUvaCjF+JrDcJ3TcTh1Rl
+         p94SnEpnwehU0Ck6DkvQl2KYYhbQtS9OHDU57kuZalteT1+Y6py02LT/stn974Jw79Xi
+         RTa3Z1QjRwK4Aj+NVixAMydfY5Y0OcI9VO8YYLgeA6dm+bFv4YliPEZx7TRjlnqzol7T
+         9jPeY0R9e2bYssXUD4EK2fSndn6gi/Ir0Zzhj4XFjSKJVF/eg5XjE6Ei6MuzesRNDF51
+         9+wR+Vp9FLjmmwlZanxArybHIQL16ulN45C73K0ujzxL+0gijPbtK68vwIoX0U9PMrw/
+         7mMg==
+X-Gm-Message-State: AO0yUKWIOcDZyf34xUHMtyE1ntItRVGgt5Oj4PfDsazZw0P/QSg750EM
+        cwJ7/G9QLC461zogmFNPi7I7ig==
+X-Google-Smtp-Source: AK7set+lsGeOZJEFKPysrv4y2Wbb94M1eNKlJPEGR3INGjRdcW5GKTB4n9YlJ3volc2UF6gUqL7yYQ==
+X-Received: by 2002:a17:902:f693:b0:19d:e11:32de with SMTP id l19-20020a170902f69300b0019d0e1132demr16517253plg.34.1678165584256;
+        Mon, 06 Mar 2023 21:06:24 -0800 (PST)
+Received: from sunil-laptop ([49.206.8.117])
+        by smtp.gmail.com with ESMTPSA id le3-20020a170902fb0300b0019edf582a95sm470363plb.20.2023.03.06.21.06.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 21:06:23 -0800 (PST)
+Date:   Tue, 7 Mar 2023 10:36:16 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        'Conor Dooley ' <conor.dooley@microchip.com>,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH V3 00/20] Add basic ACPI support for RISC-V
+Message-ID: <ZAbGSA6F0kfv9YYw@sunil-laptop>
+References: <20230303133647.845095-1-sunilvl@ventanamicro.com>
+ <16007014-c5f2-4b07-baec-e19952236aa5@spud>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <16007014-c5f2-4b07-baec-e19952236aa5@spud>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Nov 28, 2022 at 12:44 PM AEST, Benjamin Gray wrote:
-> The ISA 3.1B hashst and hashchk instructions use a per-cpu SPR HASHKEYR
-> to hold a key used in the hash calculation. This key should be different
-> for each process to make it harder for a malicious process to recreate
-> valid hash values for a victim process.
->
-> Add support for storing a per-thread hash key, and setting/clearing
-> HASHKEYR appropriately.
->
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
-> ---
->  arch/powerpc/include/asm/book3s/64/kexec.h |  3 +++
->  arch/powerpc/include/asm/processor.h       |  1 +
->  arch/powerpc/include/asm/reg.h             |  1 +
->  arch/powerpc/kernel/process.c              | 12 ++++++++++++
->  4 files changed, 17 insertions(+)
->
-> diff --git a/arch/powerpc/include/asm/book3s/64/kexec.h b/arch/powerpc/in=
-clude/asm/book3s/64/kexec.h
-> index 563baf94a962..163de935df28 100644
-> --- a/arch/powerpc/include/asm/book3s/64/kexec.h
-> +++ b/arch/powerpc/include/asm/book3s/64/kexec.h
-> @@ -24,6 +24,9 @@ static inline void reset_sprs(void)
->  	if (cpu_has_feature(CPU_FTR_ARCH_31))
->  		mtspr(SPRN_DEXCR, 0);
-> =20
-> +	if (cpu_has_feature(CPU_FTR_DEXCR_NPHIE))
-> +		mtspr(SPRN_HASHKEYR, 0);
-> +
->  	/*  Do we need isync()? We are going via a kexec reset */
->  	isync();
->  }
-> diff --git a/arch/powerpc/include/asm/processor.h b/arch/powerpc/include/=
-asm/processor.h
-> index c17ec1e44c86..2381217c95dc 100644
-> --- a/arch/powerpc/include/asm/processor.h
-> +++ b/arch/powerpc/include/asm/processor.h
-> @@ -264,6 +264,7 @@ struct thread_struct {
->  	unsigned long   mmcr3;
->  	unsigned long   sier2;
->  	unsigned long   sier3;
-> +	unsigned long	hashkeyr;
-> =20
->  #endif
->  };
-> diff --git a/arch/powerpc/include/asm/reg.h b/arch/powerpc/include/asm/re=
-g.h
-> index cdd1f174c399..854664cf844f 100644
-> --- a/arch/powerpc/include/asm/reg.h
-> +++ b/arch/powerpc/include/asm/reg.h
-> @@ -384,6 +384,7 @@
->  #define SPRN_HRMOR	0x139	/* Real mode offset register */
->  #define SPRN_HSRR0	0x13A	/* Hypervisor Save/Restore 0 */
->  #define SPRN_HSRR1	0x13B	/* Hypervisor Save/Restore 1 */
-> +#define SPRN_HASHKEYR	0x1D4	/* Non-privileged hashst/hashchk key registe=
-r */
->  #define SPRN_ASDR	0x330	/* Access segment descriptor register */
->  #define SPRN_DEXCR	0x33C	/* Dynamic execution control register */
->  #define   DEXCR_PRO_MASK(aspect)	__MASK(63 - (32 + (aspect)))	/* Aspect =
-number to problem state aspect mask */
-> diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.=
-c
-> index 17d26f652b80..4d7b0c7641d0 100644
-> --- a/arch/powerpc/kernel/process.c
-> +++ b/arch/powerpc/kernel/process.c
-> @@ -1229,6 +1229,9 @@ static inline void restore_sprs(struct thread_struc=
-t *old_thread,
->  	    old_thread->tidr !=3D new_thread->tidr)
->  		mtspr(SPRN_TIDR, new_thread->tidr);
-> =20
-> +	if (cpu_has_feature(CPU_FTR_DEXCR_NPHIE))
-> +		mtspr(SPRN_HASHKEYR, new_thread->hashkeyr);
+On Mon, Mar 06, 2023 at 09:51:09PM +0000, Conor Dooley wrote:
+> Hey Sunil,
+> 
+> On Fri, Mar 03, 2023 at 07:06:27PM +0530, Sunil V L wrote:
+> > This patch series enables the basic ACPI infrastructure for RISC-V.
+> > Supporting external interrupt controllers is in progress and hence it is
+> > tested using poll based HVC SBI console and RAM disk.
+> > 
+> > The first patch in this series is one of the patch from Jisheng's
+> > series [1] which is not merged yet. This patch is required to support
+> > ACPI since efi_init() which gets called before sbi_init() can enable
+> > static branches and hits a panic.
+> > 
+> > Patch 2 and 3 are ACPICA patches which are not merged into acpica yet
+> > but a PR is raised already.
+> > 
+> > Below are two ECRs approved by ASWG.
+> > RINTC - https://drive.google.com/file/d/1R6k4MshhN3WTT-hwqAquu5nX6xSEqK2l/view
+> > RHCT - https://drive.google.com/file/d/1nP3nFiH4jkPMp6COOxP6123DCZKR-tia/view
+> > 
+> > The series depends on Anup's IPI improvement series [2].
+> > 
+> > [1] https://lore.kernel.org/all/20220821140918.3613-1-jszhang@kernel.org/
+> > [2] https://lore.kernel.org/lkml/20230103141221.772261-7-apatel@ventanamicro.com/T/
+> 
+> Building a clang-15 allmodconfig (I didn't try gcc) with this series, and
+> Anup's IPI bits, results in a broken build, due to failings in cmpxchg:
+> 
+> /stuff/linux/drivers/platform/surface/aggregator/controller.c:61:25: error: call to __compiletime_assert_335 declared with 'error' attribute: BUILD_BUG failed
+>         while (unlikely((ret = cmpxchg(&c->value, old, new)) != old)) {
+>                                ^
+Hi Conor,
 
-I wonder if we'd want to avoid switching it when switching to kernel
-threads, and from kernel thread back to the same user thread. Might
-want to optimise it to do that in future but for an initial enablement
-patch this is okay.
+I am able to build without any of these issues using clang-15. I am
+wondering whether the base is proper. I had rebased on top of the master
+and couple of patches from IPI series were already merged in the master.
 
-> +
->  	if (cpu_has_feature(CPU_FTR_ARCH_31)) {
->  		unsigned long new_dexcr =3D get_thread_dexcr(new_thread);
-> =20
-> @@ -1818,6 +1821,10 @@ int copy_thread(struct task_struct *p, const struc=
-t kernel_clone_args *args)
->  		childregs->ppr =3D DEFAULT_PPR;
-> =20
->  	p->thread.tidr =3D 0;
-> +#endif
-> +#ifdef CONFIG_PPC_BOOK3S_64
-> +	if (cpu_has_feature(CPU_FTR_DEXCR_NPHIE))
-> +		p->thread.hashkeyr =3D current->thread.hashkeyr;
->  #endif
+Do you mind verifying with my branch
+https://github.com/vlsunil/linux/commits/acpi_b1_us_review_ipi17_V3?
 
-Similar comment about your accessor style, if we had get/set_thread_hashkey=
-r()
-functions then no ifdef required.
+Or if you could provide me your branch details, I can look further.
 
-I think it is not quite per-process? I don't actually know how the user
-toolchain side is put together, but I'm thinking we can not give it a new
-salt on fork(), but we could on exec(). I think we could actually give
-each thread their own salt within a process too, right?
-
-I don't know off the top of my head whether that can be translated into
-a simple test at the copy_thread level. For now you're giving out a new
-salt on exec I think, which should be fine at least to start with.
-
-Thanks,
-Nick
-
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-
->  	/*
->  	 * Run with the current AMR value of the kernel
-> @@ -1947,6 +1954,11 @@ void start_thread(struct pt_regs *regs, unsigned l=
-ong start, unsigned long sp)
->  	current->thread.load_tm =3D 0;
->  #endif /* CONFIG_PPC_TRANSACTIONAL_MEM */
->  #ifdef CONFIG_PPC_BOOK3S_64
-> +	if (cpu_has_feature(CPU_FTR_DEXCR_NPHIE)) {
-> +		current->thread.hashkeyr =3D get_random_long();
-> +		mtspr(SPRN_HASHKEYR, current->thread.hashkeyr);
-> +	}
-> +
->  	if (cpu_has_feature(CPU_FTR_ARCH_31))
->  		mtspr(SPRN_DEXCR, get_thread_dexcr(&current->thread));
->  #endif /* CONFIG_PPC_BOOK3S_64 */
-> --=20
-> 2.38.1
-
+Thanks!
+Sunil
