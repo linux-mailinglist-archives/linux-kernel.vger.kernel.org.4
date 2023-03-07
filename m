@@ -2,137 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF1A6AF8F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E496AF726
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjCGWgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        id S230236AbjCGVE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:04:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231679AbjCGWg2 (ORCPT
+        with ESMTP id S230117AbjCGVEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:36:28 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51F9B06C8;
-        Tue,  7 Mar 2023 14:35:20 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso102480wmo.0;
-        Tue, 07 Mar 2023 14:35:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678228471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hKTAoz/5c2gh8Y+1xcGszVL+VPGe5qIqtDhWxElzHg8=;
-        b=bmWCwUNdPhKNN9p+nZQXhBFaHDLu+KgOmPb24fbdtT0mjRUG1KrEYzNhG67eD3YIMH
-         /cwjoZaxdjSmPGdNDHV/Ty5YXutJ/Z6U0jwovIhA+QwS0TNDBbtc4dOulwXkQV/pMIWo
-         BA9j6RNiSm+ZHaPe/YXNdki+nqv8nbR16iX7Z0Rv3u3wpA/T9AG/tCpyZDMwY21VaFbf
-         phHxbG/u4fqzHz2CE/3+zZgmMr3qrJHV4w3CMd2two27XYe1aGM4wsVluuBhVx33WiI2
-         phMKoNiN6HSr/0H5lX5zB91Qup2Y/fubRWzJah0w65AXTTF4e+jB3hKE8Ly/72IYVXi7
-         zA1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678228471;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hKTAoz/5c2gh8Y+1xcGszVL+VPGe5qIqtDhWxElzHg8=;
-        b=ozHeJHW5E/+S91PlAF81gzn9aiCrLREa58QWD4CAw8kDPvkSmE/CtMqRGWoBg1bOSj
-         ws4FLqXrw0W4DU0sxfKaI+HaUeK69cNgKvI7TfZydFzRJmPUJ14ZzbUeUa/VuDYoJh5y
-         TG4Q6Ro4HS7j6ok8+hbmbSC9aDg+OOPsrO5gUZmXzJug1qxmATJ4V3C7+8m40dPPyBTb
-         JoK3+qRGbnPVLRTuyyFqL05gtHDqNIy5QxbR/1uwG30X0NKHB5M49D89jkvlWL+n2sZu
-         CY6Na6VzxtRLZmE/8dlSvX7IXvhXEjO09SfQZ2UpUQEtlapATGdUKPWGj19eImDM0X2A
-         iihA==
-X-Gm-Message-State: AO0yUKW57cjvi9od4czPnbrkKZ+QZlEmJ6q4h0TWjElNCPM4Ohdp4XBj
-        8O/NG8MlieKsZ56IGhiUuVE=
-X-Google-Smtp-Source: AK7set97ILq+tPtPnouKud8rXPxJOPNvTRK+NaUnkpwLzM9tqFszkITYpw1Y2fNyPsx/kSnTlPE3rw==
-X-Received: by 2002:a05:600c:5491:b0:3eb:5739:7591 with SMTP id iv17-20020a05600c549100b003eb57397591mr14801310wmb.23.1678228470804;
-        Tue, 07 Mar 2023 14:34:30 -0800 (PST)
-Received: from localhost.localdomain (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
-        by smtp.googlemail.com with ESMTPSA id q11-20020a05600c46cb00b003dc1d668866sm19233101wmo.10.2023.03.07.14.33.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 14:34:30 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, Lee Jones <lee@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: [net-next PATCH 11/11] arm: mvebu: dt: Add PHY LED support for 370-rd WAN port
-Date:   Tue,  7 Mar 2023 18:00:46 +0100
-Message-Id: <20230307170046.28917-12-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307170046.28917-1-ansuelsmth@gmail.com>
-References: <20230307170046.28917-1-ansuelsmth@gmail.com>
+        Tue, 7 Mar 2023 16:04:24 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B815A8C583
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:04:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678223062; x=1709759062;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OiPnkRM1DCeuvAbu26k0+jb5D0wuc1VbMIv8dv5ojaU=;
+  b=K8/ORVrB+uXH4gwl0TGJ1WxX81d5abRCNE4JMD3nPGZ370a5E3bDrY9a
+   TUpuBzSMlU1/pSKnhJ9OKhUK25ZzC80BOilGGjxE5owGVXKSVwaoJU6Er
+   jmeR1NnwZS6zOMAitEWZTP1h0bUHTTK2jnWY1GjFwnUYQVM2avSSyaF+r
+   fjf9zvfVIsfskLcA5VhBcXga5OSVhocsw1R17d1Hwq38Fk/swFcjwsTC2
+   SypRY06RBoEnWhJyL8XGcHhOuA/muMgnvwCLFoV5CMn918EJE+qj9u+Bt
+   Eu1fvADSYMVOeENPZRwXu0EjinlxVTx0t2joF08c84Thhn7xxs6PLIe+D
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="337492918"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="337492918"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:04:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="676706960"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="676706960"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 07 Mar 2023 13:04:19 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZeTq-0001bf-2z;
+        Tue, 07 Mar 2023 21:04:18 +0000
+Date:   Wed, 8 Mar 2023 05:03:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        Maxime Ripard <maxime@cerno.tech>,
+        David Gow <davidgow@google.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        Arthur Grillo <arthurgrillo@riseup.net>
+Subject: Re: [PATCH] drm/format-helper: Make conversion_buf_size() support
+ sub-byte pixel fmts
+Message-ID: <202303080420.T1VvHVxo-lkp@intel.com>
+References: <20230307193457.331360-1-javierm@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307193457.331360-1-javierm@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+Hi Javier,
 
-The WAN port of the 370-RD has a Marvell PHY, with one LED on
-the front panel. List this LED in the device tree.
+I love your patch! Perhaps something to improve:
 
-Set the LED default state to "keep" to not change any blink rule
-set by default.
+[auto build test WARNING on drm-misc/drm-misc-next]
+[also build test WARNING on linus/master v6.3-rc1 next-20230307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
- arch/arm/boot/dts/armada-370-rd.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Javier-Martinez-Canillas/drm-format-helper-Make-conversion_buf_size-support-sub-byte-pixel-fmts/20230308-033619
+base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
+patch link:    https://lore.kernel.org/r/20230307193457.331360-1-javierm%40redhat.com
+patch subject: [PATCH] drm/format-helper: Make conversion_buf_size() support sub-byte pixel fmts
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230308/202303080420.T1VvHVxo-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/5f0f9d30de18661bdabebde361180893b8ddba27
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Javier-Martinez-Canillas/drm-format-helper-Make-conversion_buf_size-support-sub-byte-pixel-fmts/20230308-033619
+        git checkout 5f0f9d30de18661bdabebde361180893b8ddba27
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpu/
 
-diff --git a/arch/arm/boot/dts/armada-370-rd.dts b/arch/arm/boot/dts/armada-370-rd.dts
-index be005c9f42ef..ccd4699b219f 100644
---- a/arch/arm/boot/dts/armada-370-rd.dts
-+++ b/arch/arm/boot/dts/armada-370-rd.dts
-@@ -20,6 +20,7 @@
- /dts-v1/;
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/leds/common.h>
- #include <dt-bindings/gpio/gpio.h>
- #include "armada-370.dtsi"
- 
-@@ -135,6 +136,19 @@ &mdio {
- 	pinctrl-names = "default";
- 	phy0: ethernet-phy@0 {
- 		reg = <0>;
-+		leds {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			led@0 {
-+				reg = <0>;
-+				label = "WAN";
-+				color = <LED_COLOR_ID_WHITE>;
-+				function = LED_FUNCTION_LAN;
-+				function-enumerator = <1>;
-+				default-state = "keep";
-+			};
-+		};
- 	};
- 
- 	switch: switch@10 {
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303080420.T1VvHVxo-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/tests/drm_format_helper_test.c: In function 'conversion_buf_size':
+>> drivers/gpu/drm/tests/drm_format_helper_test.c:412:27: warning: variable 'cpp' set but not used [-Wunused-but-set-variable]
+     412 |         unsigned int bpp, cpp;
+         |                           ^~~
+
+
+vim +/cpp +412 drivers/gpu/drm/tests/drm_format_helper_test.c
+
+   397	
+   398	/*
+   399	 * conversion_buf_size - Return the destination buffer size required to convert
+   400	 * between formats.
+   401	 * @dst_format: destination buffer pixel format (DRM_FORMAT_*)
+   402	 * @dst_pitch: Number of bytes between two consecutive scanlines within dst
+   403	 * @clip: Clip rectangle area to convert
+   404	 *
+   405	 * Returns:
+   406	 * The size of the destination buffer or negative value on error.
+   407	 */
+   408	static size_t conversion_buf_size(u32 dst_format, unsigned int dst_pitch,
+   409					  const struct drm_rect *clip)
+   410	{
+   411		const struct drm_format_info *dst_fi = drm_format_info(dst_format);
+ > 412		unsigned int bpp, cpp;
+   413	
+   414		if (!dst_fi)
+   415			return -EINVAL;
+   416	
+   417		if (!dst_pitch) {
+   418			bpp = drm_format_info_bpp(dst_fi, 0);
+   419			cpp = DIV_ROUND_UP(bpp, 8);
+   420			dst_pitch = DIV_ROUND_UP(drm_rect_width(clip) * bpp, 8);
+   421		}
+   422	
+   423		return dst_pitch * drm_rect_height(clip);
+   424	}
+   425	
+
 -- 
-2.39.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
