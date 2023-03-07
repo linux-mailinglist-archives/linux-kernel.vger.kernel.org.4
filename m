@@ -2,133 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A4566AF66C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971B86AF66B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjCGUJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:09:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
+        id S230460AbjCGUJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:09:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCGUJo (ORCPT
+        with ESMTP id S230144AbjCGUJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:09:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B819BA71
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:09:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678219739;
+        Tue, 7 Mar 2023 15:09:22 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8FB2A6C0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:09:17 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A6F9F1EC0688;
+        Tue,  7 Mar 2023 21:09:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678219755;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aTa3k5Nu5kG9KD5q86aaFluSTkM03P8RErYO6vqZrgw=;
-        b=a+S5frqsy0xcjWd+zJfWlzo1o3Q3ZVPfsFEgmaOKSE/vMnt8s1tK1UwvtcpEZUWYeqUBP7
-        3b9vLy7ZTjLABj/8gxPpND2v+Oo5iQNmcj54tnoZpMUshl6KfoR05QezyDuyNX8yglbtk2
-        lpfpMuviefbpyXRI+KNXKxAnwCUTQrU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-353-ehAYRET4MjCI1UEAKGa0dw-1; Tue, 07 Mar 2023 15:08:56 -0500
-X-MC-Unique: ehAYRET4MjCI1UEAKGa0dw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 21F643C0F675;
-        Tue,  7 Mar 2023 20:08:55 +0000 (UTC)
-Received: from [10.22.9.63] (unknown [10.22.9.63])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EA5D2140EBF4;
-        Tue,  7 Mar 2023 20:08:52 +0000 (UTC)
-Message-ID: <f3a99500-e51c-032f-a0c6-01763f0a5be6@redhat.com>
-Date:   Tue, 7 Mar 2023 15:08:52 -0500
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NL0Fj5tWdSV5sPCmkwv5b9tNtDRbTqKhaYee0FG+wA0=;
+        b=JTEiliCzp27QvlqSQc9C6WJEmJLr+u/K3kgQNP4VyBmjcF639CANM39Lv1Qk5tc+6FMjP1
+        zFBxI+KUSNVxlnQ928HBM7Pv/hwm4nrpNjY70H9/ezXH9mEreGZL1LqKnAQ92Z2k0K6txr
+        ULDJIFAh0Wn7aPRUW93uHfDoCHWABqU=
+Date:   Tue, 7 Mar 2023 21:09:11 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Andrew Cooper <andrew.cooper3@citrix.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Tavis Ormandy <taviso@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Alexander Monakov <amonakov@ispras.ru>
+Subject: Re: [PATCH] x86/amd: Work around Erratum 1386 - XSAVES malfunction
+ on context switch
+Message-ID: <20230307200911.GIZAeZ54t0tchbZSTa@fat_crate.local>
+References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
+ <20230307174643.1240184-1-andrew.cooper3@citrix.com>
+ <20230307175050.GCZAd5eu0/Mk2fdLz5@fat_crate.local>
+ <940596cc-a440-181a-a72a-36282a26dd0a@citrix.com>
+ <20230307185632.GDZAeI4LwBDUU3/OP9@fat_crate.local>
+ <ee866b3e-a53b-4c26-0272-20e798c0650d@citrix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on
- suspend-resume
-Content-Language: en-US
-To:     Hao Luo <haoluo@google.com>, Qais Yousef <qyousef@layalina.io>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
-        x86@kernel.org
-References: <20230206221428.2125324-1-qyousef@layalina.io>
- <CA+khW7i_Sc0M4FXzojmQ5PSfkPwk6AdcbN9j0gDXZ9FsOMQAwA@mail.gmail.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <CA+khW7i_Sc0M4FXzojmQ5PSfkPwk6AdcbN9j0gDXZ9FsOMQAwA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ee866b3e-a53b-4c26-0272-20e798c0650d@citrix.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/23 14:56, Hao Luo wrote:
-> On Mon, Feb 6, 2023 at 2:15 PM Qais Yousef <qyousef@layalina.io> wrote:
->> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting information")
->> enabled rebuilding root domain on cpuset and hotplug operations to
->> correct deadline accounting.
->>
->> Rebuilding root domain is a slow operation and we see 10+ of ms delays
->> on suspend-resume because of that (worst case captures 20ms which
->> happens often).
->>
->> Since nothing is expected to change on suspend-resume operation; skip
->> rebuilding the root domains to regain the some of the time lost.
->>
->> Achieve this by refactoring the code to pass whether dl accoutning needs
->> an update to rebuild_sched_domains(). And while at it, rename
->> rebuild_root_domains() to update_dl_rd_accounting() which I believe is
->> a more representative name since we are not really rebuilding the root
->> domains, but rather updating dl accounting at the root domain.
->>
->> Some users of rebuild_sched_domains() will skip dl accounting update
->> now:
->>
->>          * Update sched domains when relaxing the domain level in cpuset
->>            which only impacts searching level in load balance
->>          * update sched domains when cpufreq governor changes and we need
->>            to create the perf domains
->>
->> Users in arch/x86 and arch/s390 are left with the old behavior.
->>
->> Debugged-by: Rick Yiu <rickyiu@google.com>
->> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
->> ---
-> Hi Qais,
->
-> Thank you for reporting this. We observed the same issue in our
-> production environment. Rebuild_root_domains() is also called under
-> cpuset_write_resmask, which handles writing to cpuset.cpus. Under
-> production workloads, on a 4.15 kernel, we observed the median latency
-> of writing cpuset.cpus at 3ms, p99 at 7ms. Now the median becomes
-> 60ms, p99 at >100ms. Writing cpuset.cpus is a fairly frequent and
-> critical path in production, but blindly traversing every task in the
-> system is not scalable. And its cost is really unnecessary for users
-> who don't use deadline tasks at all.
+On Tue, Mar 07, 2023 at 08:01:36PM +0000, Andrew Cooper wrote:
+> Sure, but why is that helpful?
+> 
+> XSAVES and XSAVEC are functionally identical on Zen1/2 because these
+> CPUs don't advertise any supervisor XSAVE states.
 
-The rebuild_root_domains() function shouldn't be called when updating 
-cpuset.cpus unless it is a partition root. Is it?
+I guess... We'll know soon enough.
 
-Cheers,
-Longman
+> It is only Zen3 where XSAVES starts doing more than XSAVEC (and even
+> then, only after the CET series actually gets merged...)
 
+Yeah, latter should probably happen this time around. :-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
