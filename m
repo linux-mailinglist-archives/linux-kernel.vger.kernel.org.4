@@ -2,116 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0E36AECEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9551D6AECF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjCGR72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:59:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S230328AbjCGR7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:59:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjCGR7A (ORCPT
+        with ESMTP id S229733AbjCGR7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:59:00 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2694C907B5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 09:53:14 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id f14-20020a056a00228e00b005e46dd41b67so7419813pfe.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 09:53:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678211594;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FH5HroVi/C3VxZfsb2/P+6HagVCxSp9FIUS8qc4SYho=;
-        b=r38YVV5DocwCciXQg3DFck+9jJ0axjzxdDx/79RPsGOKD/mbFJu0/nmzh151/5ihzQ
-         V4ni2EHRcrNyxgcAlYbZnL5vuNmtlt1TI/LHuA31KqDXUtb/J7GlzJjObxZgK9UJVThC
-         dSTJN4VlnmLpMcsMXY55KYnYG14wMfrnekgU2kvaWLnG9KqjZXcDl2yfvm4bUyv0YexM
-         8AvnyN15Gf6SsEOUbUMGIsBuVInEn3/eUax06b2PKUbzzSchbibnuS+1rACY0lITQpAt
-         fMJ+RQzkvi20PXbxSflfzrz1K1hikW+vZdNKPIO3dXbIYSxtWfZgMEY292DOB3n/ZzuR
-         ESyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678211594;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FH5HroVi/C3VxZfsb2/P+6HagVCxSp9FIUS8qc4SYho=;
-        b=FI86YY43TYxJq1kKlfBiqWJtK/u0CE2ON2xm9yTbAuwE/ZMcFpIriZr5+keIIELdPC
-         ZQWCmmuhnBwRzLpTCczwfi1On23RLe+vFl9gjzNyUaQikfmki7HDAV6qdEp0uLFofj1V
-         V2jkoT+qqlnrmzvSZa4Rb+wfgQj00bUGQgZ7eP1utOW1kgx658XQghfalBlYo91b4Hmm
-         NEdUDQhiy4Pec8VvZ9wZHO8vPQKons1nDrDR0K37eLhdb958Awrd75FX+neOuHkZIgfw
-         AfqtPrdBSOM+GgKpJc/TpLB6j4uAGF0I1B5XykGPNKIC4DjNdqnyvS1JmV3+J7RCjkVV
-         2zUg==
-X-Gm-Message-State: AO0yUKVLIH+/E39UQanQ/5OG9r/Gn/0+Q5iO8DTxFsLE2ZK3C1ztCirZ
-        yRK+xGQW917zLVR0ikPI6mqh/wn60tk=
-X-Google-Smtp-Source: AK7set8i6YBNwec80PM3pvXSqrgujM0vdkzrzCgf37/cB3hOh0c+pDYUrnfCowrQfggC00zJAIpWBop6tgg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:ef8d:b0:19a:fa2f:559e with SMTP id
- iz13-20020a170902ef8d00b0019afa2f559emr6221804plb.3.1678211594391; Tue, 07
- Mar 2023 09:53:14 -0800 (PST)
-Date:   Tue, 7 Mar 2023 09:53:12 -0800
-In-Reply-To: <425d56ca2a2c9eb3a0bd4019706aee6db5dd8fc6.camel@linux.intel.com>
-Mime-Version: 1.0
-References: <20230217225449.811957-1-seanjc@google.com> <20230217225449.811957-3-seanjc@google.com>
- <425d56ca2a2c9eb3a0bd4019706aee6db5dd8fc6.camel@linux.intel.com>
-Message-ID: <ZAd6CMlwf7cZkQo9@google.com>
-Subject: Re: [PATCH 2/2] Documentation/process: Add a maintainer handbook for
- KVM x86
-From:   Sean Christopherson <seanjc@google.com>
-To:     Robert Hoo <robert.hu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Tue, 7 Mar 2023 12:59:16 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [217.70.178.230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A0EA54EC;
+        Tue,  7 Mar 2023 09:53:27 -0800 (PST)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E6F8E240007;
+        Tue,  7 Mar 2023 17:53:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678211606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PkMO+Jw/uttVQ+r0YmA8JCj+V92xDGuGq7clStMIibM=;
+        b=o4ScyL+3tdMQoPoCb8YiFP0cFna15soe8tj4k05ZlNdBJGzRaytTV7DOw5CLrA1jXdl/QR
+        a9I+3v/1aOg58OtZNXYd5KzXhxzTK82W0m3H5ahcle73qkmZWHBIhvwmm2UM0Dgo97k0dP
+        Sc+yCRkVRURCPh5I61DHhwOgSXfl9CVjXuMXsvFNPRGXHGeosqyVHyu0WhIDVeDEh86D6O
+        vOECVwPx8HIxXjn2k6CzZV7AaP+ZK6k0hgVowF3KKJuGMjkuyuo7Hi1t3ReojhN7spdspZ
+        isM3BzPAMm4Qh4oMM1HSiPiNzBu2Z7+NxkUS1qes9+nCysmp3qhXU6pe+SwsVQ==
+Date:   Tue, 7 Mar 2023 18:53:22 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv7 05/11] mfd: rk808: split into core and i2c
+Message-ID: <20230307175322fdcc32a2@mail.local>
+References: <20230307153617.643260-1-sebastian.reichel@collabora.com>
+ <20230307153617.643260-6-sebastian.reichel@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307153617.643260-6-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,99 +61,743 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023, Robert Hoo wrote:
-> On Fri, 2023-02-17 at 14:54 -0800, Sean Christopherson wrote:
-> > +Branches
-> > +~~~~~~~~
-> > +The KVM x86 tree is organized into multiple topic branches.  The
-> > purpose of
-> > +using finer-grained topic branches is to make it easier to keep tabs
-> > on an area
-> > +of development, and to limit the collateral damage of human errors
-> > and/or buggy
-> > +commits, e.g. dropping the HEAD commit of a topic branch has no
-> > impact on other
-> > +in-flight commits' SHA1 hashes, and having to reject a pull request
-> > due to bugs
-> > +delays only that topic branch.
-> > +
-> > +All topic branches, except for ``next`` and ``fixes``
+On 07/03/2023 16:36:11+0100, Sebastian Reichel wrote:
+> Split rk808 into a core and an i2c part in preperation for
+> SPI support.
 > 
-> What's this "fixes" branch for?
-> If fixes for current cycle, will apply to main KVM tree; if fixes for
-> next cycle, why not directly to its topic branch or next branch (kvm-
-> x86 tree)?
+> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com> # for RTC
 
-kvm-x86/fixes is a placeholder for carrying fixes for the current cycle.  I
-deliberately hedged in the previous section by saying "Generally speaking".  I.e.
-the vast majority of fixes will be applied to the main tree, but there may be
-situations where I gather fixes in kvm-x86 and send a pull request to Paolo, e.g.
-that may be easier if Paolo is on holiday for an extended period.
-
- : Generally speaking, fixes for the current cycle are applied directly to the
- : main KVM tree, while all development for the next cycle is routed through the
- : KVM x86 tree.
-
-I'll add a blurb to the above paragraph to clarify that fixes _may_ be carried in
-kvm-x86/fixes.
-
-> I see in main KVM tree, its "fixes" branch is very inactive.
-
-AFAIK, Paolo doesn't use it at all.
-
-> Too many functional branches will add your maintenance burden.
-
-There's definitely a point where more branches would be a bad thing, but I don't
-think having a "fixes" branch moves the needle on that front.
-
-> > , are rolled into ``next``
-> > +via a cthulu merge on an as-needed basis, i.e. when a topic branch
-> > is updated.
-> > +As a result, force pushes to ``next`` are common.
-> > +
-> > +Lifecycle
-> > +~~~~~~~~~
-> > +Pull requests for the next release cycle are sent to the main KVM
-> > tree, one
-> > +for each KVM x86 topic branch. 
+> ---
+>  drivers/clk/Kconfig                   |   2 +-
+>  drivers/input/misc/Kconfig            |   2 +-
+>  drivers/mfd/Kconfig                   |   7 +-
+>  drivers/mfd/Makefile                  |   3 +-
+>  drivers/mfd/{rk808.c => rk8xx-core.c} | 209 +++++---------------------
+>  drivers/mfd/rk8xx-i2c.c               | 200 ++++++++++++++++++++++++
+>  drivers/pinctrl/Kconfig               |   2 +-
+>  drivers/power/supply/Kconfig          |   2 +-
+>  drivers/regulator/Kconfig             |   2 +-
+>  drivers/rtc/Kconfig                   |   2 +-
+>  include/linux/mfd/rk808.h             |   6 +
+>  sound/soc/codecs/Kconfig              |   2 +-
+>  12 files changed, 256 insertions(+), 183 deletions(-)
+>  rename drivers/mfd/{rk808.c => rk8xx-core.c} (76%)
+>  create mode 100644 drivers/mfd/rk8xx-i2c.c
 > 
-> Will each KVM x86 topic branch has a mapping topic branch in main KVM
-> tree? I mean where is their pull target(s), next branch in main KVM
-> tree? or their counterpart branches in main KVM tree?
-
-Barring some esoteric edge case, the target will be kvm/next or kvm/queue.  Merging
-to a topic branch and then merging again would add no value.  I'd prefer not to add
-anything to clarify the target because (a) it's technically outside the scope of KVM
-x86 and (b) it simply doesn't matter as far as KVM x86 is concerned.  E.g. if Paolo
-wants/needs to merge a topic branch somewhere else for whatever reason, that doesn't
-impact the KVM x86 lifecycle in any way.
-
-> >  If all goes well, the topic branches are rolled
-> > +into the main KVM pull request sent during Linus' merge
-> > window.  Pull requests
-> > +for KVM x86 branches are typically made the week before Linus'
-> > opening of the
-> > +merge window, e.g. the week following rc7 for "normal" releases.
-> > +
-> > +The KVM x86 tree doesn't have its own official merge window, but
-> > there's a soft
-> > +close around rc5 for new features, and a soft close around rc6 for
-> > fixes.
-> > +
-> > 
-> > +Comments
-> > +~~~~~~~~
-> > +Write comments using imperative mood and avoid pronouns.  Use
-> > comments to
-> > +provide a high level overview of the code, and/or to explain why the
-> > code does
-> > +what it does.  Do not reiterate what the code literally does; let
-> > the code
-> > +speak for itself.  If the code itself is inscrutable, comments will
-> > not help.
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index b6c5bf69a2b2..b08fa3273c84 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -82,7 +82,7 @@ config COMMON_CLK_MAX9485
+>  
+>  config COMMON_CLK_RK808
+>  	tristate "Clock driver for RK805/RK808/RK809/RK817/RK818"
+> -	depends on MFD_RK808
+> +	depends on MFD_RK8XX
+>  	help
+>  	  This driver supports RK805, RK809 and RK817, RK808 and RK818 crystal oscillator clock.
+>  	  These multi-function devices have two fixed-rate oscillators, clocked at 32KHz each.
+> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+> index 5c2d0c06d2a5..6a6978fc68fa 100644
+> --- a/drivers/input/misc/Kconfig
+> +++ b/drivers/input/misc/Kconfig
+> @@ -598,7 +598,7 @@ config INPUT_PWM_VIBRA
+>  
+>  config INPUT_RK805_PWRKEY
+>  	tristate "Rockchip RK805 PMIC power key support"
+> -	depends on MFD_RK808
+> +	depends on MFD_RK8XX
+>  	help
+>  	  Select this option to enable power key driver for RK805.
+>  
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index fcc141e067b9..2998d04f8756 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1176,12 +1176,17 @@ config MFD_RC5T583
+>  	  Additional drivers must be enabled in order to use the
+>  	  different functionality of the device.
+>  
+> -config MFD_RK808
+> +config MFD_RK8XX
+> +	bool
+> +	select MFD_CORE
+> +
+> +config MFD_RK8XX_I2C
+>  	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 Power Management Chip"
+>  	depends on I2C && OF
+>  	select MFD_CORE
+>  	select REGMAP_I2C
+>  	select REGMAP_IRQ
+> +	select MFD_RK8XX
+>  	help
+>  	  If you say yes here you get support for the RK805, RK808, RK809,
+>  	  RK817 and RK818 Power Management chips.
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 2f6c89d1e277..be9e4806d2e6 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -213,7 +213,8 @@ obj-$(CONFIG_MFD_PALMAS)	+= palmas.o
+>  obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
+>  obj-$(CONFIG_MFD_NTXEC)		+= ntxec.o
+>  obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
+> -obj-$(CONFIG_MFD_RK808)		+= rk808.o
+> +obj-$(CONFIG_MFD_RK8XX)		+= rk8xx-core.o
+> +obj-$(CONFIG_MFD_RK8XX_I2C)	+= rk8xx-i2c.o
+>  obj-$(CONFIG_MFD_RN5T618)	+= rn5t618.o
+>  obj-$(CONFIG_MFD_SEC_CORE)	+= sec-core.o sec-irq.o
+>  obj-$(CONFIG_MFD_SYSCON)	+= syscon.o
+> diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk8xx-core.c
+> similarity index 76%
+> rename from drivers/mfd/rk808.c
+> rename to drivers/mfd/rk8xx-core.c
+> index ce52307cbaea..5c0a5acef34c 100644
+> --- a/drivers/mfd/rk808.c
+> +++ b/drivers/mfd/rk8xx-core.c
+> @@ -1,18 +1,15 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * MFD core driver for Rockchip RK808/RK818
+> + * MFD core driver for Rockchip RK8XX
+>   *
+>   * Copyright (c) 2014, Fuzhou Rockchip Electronics Co., Ltd
+> + * Copyright (C) 2016 PHYTEC Messtechnik GmbH
+>   *
+>   * Author: Chris Zhong <zyw@rock-chips.com>
+>   * Author: Zhang Qing <zhangqing@rock-chips.com>
+> - *
+> - * Copyright (C) 2016 PHYTEC Messtechnik GmbH
+> - *
+>   * Author: Wadim Egorov <w.egorov@phytec.de>
+>   */
+>  
+> -#include <linux/i2c.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/mfd/rk808.h>
+>  #include <linux/mfd/core.h>
+> @@ -27,92 +24,6 @@ struct rk808_reg_data {
+>  	int value;
+>  };
+>  
+> -static bool rk808_is_volatile_reg(struct device *dev, unsigned int reg)
+> -{
+> -	/*
+> -	 * Notes:
+> -	 * - Technically the ROUND_30s bit makes RTC_CTRL_REG volatile, but
+> -	 *   we don't use that feature.  It's better to cache.
+> -	 * - It's unlikely we care that RK808_DEVCTRL_REG is volatile since
+> -	 *   bits are cleared in case when we shutoff anyway, but better safe.
+> -	 */
+> -
+> -	switch (reg) {
+> -	case RK808_SECONDS_REG ... RK808_WEEKS_REG:
+> -	case RK808_RTC_STATUS_REG:
+> -	case RK808_VB_MON_REG:
+> -	case RK808_THERMAL_REG:
+> -	case RK808_DCDC_UV_STS_REG:
+> -	case RK808_LDO_UV_STS_REG:
+> -	case RK808_DCDC_PG_REG:
+> -	case RK808_LDO_PG_REG:
+> -	case RK808_DEVCTRL_REG:
+> -	case RK808_INT_STS_REG1:
+> -	case RK808_INT_STS_REG2:
+> -		return true;
+> -	}
+> -
+> -	return false;
+> -}
+> -
+> -static bool rk817_is_volatile_reg(struct device *dev, unsigned int reg)
+> -{
+> -	/*
+> -	 * Notes:
+> -	 * - Technically the ROUND_30s bit makes RTC_CTRL_REG volatile, but
+> -	 *   we don't use that feature.  It's better to cache.
+> -	 */
+> -
+> -	switch (reg) {
+> -	case RK817_SECONDS_REG ... RK817_WEEKS_REG:
+> -	case RK817_RTC_STATUS_REG:
+> -	case RK817_CODEC_DTOP_LPT_SRST:
+> -	case RK817_GAS_GAUGE_ADC_CONFIG0 ... RK817_GAS_GAUGE_CUR_ADC_K0:
+> -	case RK817_PMIC_CHRG_STS:
+> -	case RK817_PMIC_CHRG_OUT:
+> -	case RK817_PMIC_CHRG_IN:
+> -	case RK817_INT_STS_REG0:
+> -	case RK817_INT_STS_REG1:
+> -	case RK817_INT_STS_REG2:
+> -	case RK817_SYS_STS:
+> -		return true;
+> -	}
+> -
+> -	return false;
+> -}
+> -
+> -static const struct regmap_config rk818_regmap_config = {
+> -	.reg_bits = 8,
+> -	.val_bits = 8,
+> -	.max_register = RK818_USB_CTRL_REG,
+> -	.cache_type = REGCACHE_RBTREE,
+> -	.volatile_reg = rk808_is_volatile_reg,
+> -};
+> -
+> -static const struct regmap_config rk805_regmap_config = {
+> -	.reg_bits = 8,
+> -	.val_bits = 8,
+> -	.max_register = RK805_OFF_SOURCE_REG,
+> -	.cache_type = REGCACHE_RBTREE,
+> -	.volatile_reg = rk808_is_volatile_reg,
+> -};
+> -
+> -static const struct regmap_config rk808_regmap_config = {
+> -	.reg_bits = 8,
+> -	.val_bits = 8,
+> -	.max_register = RK808_IO_POL_REG,
+> -	.cache_type = REGCACHE_RBTREE,
+> -	.volatile_reg = rk808_is_volatile_reg,
+> -};
+> -
+> -static const struct regmap_config rk817_regmap_config = {
+> -	.reg_bits = 8,
+> -	.val_bits = 8,
+> -	.max_register = RK817_GPIO_INT_CFG,
+> -	.cache_type = REGCACHE_NONE,
+> -	.volatile_reg = rk817_is_volatile_reg,
+> -};
+> -
+>  static const struct resource rtc_resources[] = {
+>  	DEFINE_RES_IRQ(RK808_IRQ_RTC_ALARM),
+>  };
+> @@ -605,9 +516,9 @@ static int rk808_restart(struct sys_off_data *data)
+>  	return NOTIFY_DONE;
+>  }
+>  
+> -static void rk8xx_shutdown(struct i2c_client *client)
+> +void rk8xx_shutdown(struct device *dev)
+>  {
+> -	struct rk808 *rk808 = i2c_get_clientdata(client);
+> +	struct rk808 *rk808 = dev_get_drvdata(dev);
+>  	int ret;
+>  
+>  	switch (rk808->variant) {
+> @@ -628,61 +539,31 @@ static void rk8xx_shutdown(struct i2c_client *client)
+>  		return;
+>  	}
+>  	if (ret)
+> -		dev_warn(&client->dev,
+> +		dev_warn(dev,
+>  			 "Cannot switch to power down function\n");
+>  }
+> +EXPORT_SYMBOL_GPL(rk8xx_shutdown);
+>  
+> -static const struct of_device_id rk808_of_match[] = {
+> -	{ .compatible = "rockchip,rk805" },
+> -	{ .compatible = "rockchip,rk808" },
+> -	{ .compatible = "rockchip,rk809" },
+> -	{ .compatible = "rockchip,rk817" },
+> -	{ .compatible = "rockchip,rk818" },
+> -	{ },
+> -};
+> -MODULE_DEVICE_TABLE(of, rk808_of_match);
+> -
+> -static int rk808_probe(struct i2c_client *client)
+> +int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap *regmap)
+>  {
+> -	struct device_node *np = client->dev.of_node;
+>  	struct rk808 *rk808;
+>  	const struct rk808_reg_data *pre_init_reg;
+>  	const struct mfd_cell *cells;
+>  	int nr_pre_init_regs;
+>  	int nr_cells;
+> -	int msb, lsb;
+> -	unsigned char pmic_id_msb, pmic_id_lsb;
+>  	int ret;
+>  	int i;
+>  
+> -	rk808 = devm_kzalloc(&client->dev, sizeof(*rk808), GFP_KERNEL);
+> +	rk808 = devm_kzalloc(dev, sizeof(*rk808), GFP_KERNEL);
+>  	if (!rk808)
+>  		return -ENOMEM;
+> -
+> -	if (of_device_is_compatible(np, "rockchip,rk817") ||
+> -	    of_device_is_compatible(np, "rockchip,rk809")) {
+> -		pmic_id_msb = RK817_ID_MSB;
+> -		pmic_id_lsb = RK817_ID_LSB;
+> -	} else {
+> -		pmic_id_msb = RK808_ID_MSB;
+> -		pmic_id_lsb = RK808_ID_LSB;
+> -	}
+> -
+> -	/* Read chip variant */
+> -	msb = i2c_smbus_read_byte_data(client, pmic_id_msb);
+> -	if (msb < 0)
+> -		return dev_err_probe(&client->dev, msb, "failed to read the chip id MSB\n");
+> -
+> -	lsb = i2c_smbus_read_byte_data(client, pmic_id_lsb);
+> -	if (lsb < 0)
+> -		return dev_err_probe(&client->dev, lsb, "failed to read the chip id LSB\n");
+> -
+> -	rk808->variant = ((msb << 8) | lsb) & RK8XX_ID_MSK;
+> -	dev_info(&client->dev, "chip id: 0x%x\n", (unsigned int)rk808->variant);
+> +	rk808->dev = dev;
+> +	rk808->variant = variant;
+> +	rk808->regmap = regmap;
+> +	dev_set_drvdata(dev, rk808);
+>  
+>  	switch (rk808->variant) {
+>  	case RK805_ID:
+> -		rk808->regmap_cfg = &rk805_regmap_config;
+>  		rk808->regmap_irq_chip = &rk805_irq_chip;
+>  		pre_init_reg = rk805_pre_init_reg;
+>  		nr_pre_init_regs = ARRAY_SIZE(rk805_pre_init_reg);
+> @@ -690,7 +571,6 @@ static int rk808_probe(struct i2c_client *client)
+>  		nr_cells = ARRAY_SIZE(rk805s);
+>  		break;
+>  	case RK808_ID:
+> -		rk808->regmap_cfg = &rk808_regmap_config;
+>  		rk808->regmap_irq_chip = &rk808_irq_chip;
+>  		pre_init_reg = rk808_pre_init_reg;
+>  		nr_pre_init_regs = ARRAY_SIZE(rk808_pre_init_reg);
+> @@ -698,7 +578,6 @@ static int rk808_probe(struct i2c_client *client)
+>  		nr_cells = ARRAY_SIZE(rk808s);
+>  		break;
+>  	case RK818_ID:
+> -		rk808->regmap_cfg = &rk818_regmap_config;
+>  		rk808->regmap_irq_chip = &rk818_irq_chip;
+>  		pre_init_reg = rk818_pre_init_reg;
+>  		nr_pre_init_regs = ARRAY_SIZE(rk818_pre_init_reg);
+> @@ -707,7 +586,6 @@ static int rk808_probe(struct i2c_client *client)
+>  		break;
+>  	case RK809_ID:
+>  	case RK817_ID:
+> -		rk808->regmap_cfg = &rk817_regmap_config;
+>  		rk808->regmap_irq_chip = &rk817_irq_chip;
+>  		pre_init_reg = rk817_pre_init_reg;
+>  		nr_pre_init_regs = ARRAY_SIZE(rk817_pre_init_reg);
+> @@ -715,27 +593,20 @@ static int rk808_probe(struct i2c_client *client)
+>  		nr_cells = ARRAY_SIZE(rk817s);
+>  		break;
+>  	default:
+> -		dev_err(&client->dev, "Unsupported RK8XX ID %lu\n",
+> -			rk808->variant);
+> +		dev_err(dev, "Unsupported RK8XX ID %lu\n", rk808->variant);
+>  		return -EINVAL;
+>  	}
+>  
+> -	rk808->dev = &client->dev;
+> -	i2c_set_clientdata(client, rk808);
+> -
+> -	rk808->regmap = devm_regmap_init_i2c(client, rk808->regmap_cfg);
+> -	if (IS_ERR(rk808->regmap))
+> -		return dev_err_probe(&client->dev, PTR_ERR(rk808->regmap),
+> -				     "regmap initialization failed\n");
+> +	dev_info(dev, "chip id: 0x%x\n", (unsigned int)rk808->variant);
+>  
+> -	if (!client->irq)
+> -		return dev_err_probe(&client->dev, -EINVAL, "No interrupt support, no core IRQ\n");
+> +	if (!irq)
+> +		return dev_err_probe(dev, -EINVAL, "No interrupt support, no core IRQ\n");
+>  
+> -	ret = devm_regmap_add_irq_chip(&client->dev, rk808->regmap, client->irq,
+> +	ret = devm_regmap_add_irq_chip(dev, rk808->regmap, irq,
+>  				       IRQF_ONESHOT, -1,
+>  				       rk808->regmap_irq_chip, &rk808->irq_data);
+>  	if (ret)
+> -		return dev_err_probe(&client->dev, ret, "Failed to add irq_chip\n");
+> +		return dev_err_probe(dev, ret, "Failed to add irq_chip\n");
+>  
+>  	for (i = 0; i < nr_pre_init_regs; i++) {
+>  		ret = regmap_update_bits(rk808->regmap,
+> @@ -743,45 +614,46 @@ static int rk808_probe(struct i2c_client *client)
+>  					pre_init_reg[i].mask,
+>  					pre_init_reg[i].value);
+>  		if (ret)
+> -			return dev_err_probe(&client->dev, ret, "0x%x write err\n",
+> +			return dev_err_probe(dev, ret, "0x%x write err\n",
+>  					     pre_init_reg[i].addr);
+>  	}
+>  
+> -	ret = devm_mfd_add_devices(&client->dev, PLATFORM_DEVID_NONE,
+> +	ret = devm_mfd_add_devices(dev, PLATFORM_DEVID_NONE,
+>  			      cells, nr_cells, NULL, 0,
+>  			      regmap_irq_get_domain(rk808->irq_data));
+>  	if (ret)
+> -		return dev_err_probe(&client->dev, ret, "failed to add MFD devices\n");
+> +		return dev_err_probe(dev, ret, "failed to add MFD devices\n");
+>  
+> -	if (of_property_read_bool(np, "rockchip,system-power-controller")) {
+> -		ret = devm_register_sys_off_handler(&client->dev,
+> +	if (device_property_read_bool(dev, "rockchip,system-power-controller")) {
+> +		ret = devm_register_sys_off_handler(dev,
+>  				    SYS_OFF_MODE_POWER_OFF_PREPARE, SYS_OFF_PRIO_HIGH,
+>  				    &rk808_power_off, rk808);
+>  		if (ret)
+> -			return dev_err_probe(&client->dev, ret,
+> +			return dev_err_probe(dev, ret,
+>  					     "failed to register poweroff handler\n");
+>  
+>  		switch (rk808->variant) {
+>  		case RK809_ID:
+>  		case RK817_ID:
+> -			ret = devm_register_sys_off_handler(&client->dev,
+> +			ret = devm_register_sys_off_handler(dev,
+>  							    SYS_OFF_MODE_RESTART, SYS_OFF_PRIO_HIGH,
+>  							    &rk808_restart, rk808);
+>  			if (ret)
+> -				dev_warn(&client->dev, "failed to register rst handler, %d\n", ret);
+> +				dev_warn(dev, "failed to register rst handler, %d\n", ret);
+>  			break;
+>  		default:
+> -			dev_dbg(&client->dev, "pmic controlled board reset not supported\n");
+> +			dev_dbg(dev, "pmic controlled board reset not supported\n");
+>  			break;
+>  		}
+>  	}
+>  
+>  	return 0;
+>  }
+> +EXPORT_SYMBOL_GPL(rk8xx_probe);
+>  
+> -static int __maybe_unused rk8xx_suspend(struct device *dev)
+> +int rk8xx_suspend(struct device *dev)
+>  {
+> -	struct rk808 *rk808 = i2c_get_clientdata(to_i2c_client(dev));
+> +	struct rk808 *rk808 = dev_get_drvdata(dev);
+>  	int ret = 0;
+>  
+>  	switch (rk808->variant) {
+> @@ -804,10 +676,11 @@ static int __maybe_unused rk8xx_suspend(struct device *dev)
+>  
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL_GPL(rk8xx_suspend);
+>  
+> -static int __maybe_unused rk8xx_resume(struct device *dev)
+> +int rk8xx_resume(struct device *dev)
+>  {
+> -	struct rk808 *rk808 = i2c_get_clientdata(to_i2c_client(dev));
+> +	struct rk808 *rk808 = dev_get_drvdata(dev);
+>  	int ret = 0;
+>  
+>  	switch (rk808->variant) {
+> @@ -824,22 +697,10 @@ static int __maybe_unused rk8xx_resume(struct device *dev)
+>  
+>  	return ret;
+>  }
+> -static SIMPLE_DEV_PM_OPS(rk8xx_pm_ops, rk8xx_suspend, rk8xx_resume);
+> -
+> -static struct i2c_driver rk808_i2c_driver = {
+> -	.driver = {
+> -		.name = "rk808",
+> -		.of_match_table = rk808_of_match,
+> -		.pm = &rk8xx_pm_ops,
+> -	},
+> -	.probe_new = rk808_probe,
+> -	.shutdown = rk8xx_shutdown,
+> -};
+> -
+> -module_i2c_driver(rk808_i2c_driver);
+> +EXPORT_SYMBOL_GPL(rk8xx_resume);
+>  
+>  MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Chris Zhong <zyw@rock-chips.com>");
+>  MODULE_AUTHOR("Zhang Qing <zhangqing@rock-chips.com>");
+>  MODULE_AUTHOR("Wadim Egorov <w.egorov@phytec.de>");
+> -MODULE_DESCRIPTION("RK808/RK818 PMIC driver");
+> +MODULE_DESCRIPTION("RK8xx PMIC core");
+> diff --git a/drivers/mfd/rk8xx-i2c.c b/drivers/mfd/rk8xx-i2c.c
+> new file mode 100644
+> index 000000000000..6d121b589fec
+> --- /dev/null
+> +++ b/drivers/mfd/rk8xx-i2c.c
+> @@ -0,0 +1,200 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Rockchip RK808/RK818 Core (I2C) driver
+> + *
+> + * Copyright (c) 2014, Fuzhou Rockchip Electronics Co., Ltd
+> + * Copyright (C) 2016 PHYTEC Messtechnik GmbH
+> + *
+> + * Author: Chris Zhong <zyw@rock-chips.com>
+> + * Author: Zhang Qing <zhangqing@rock-chips.com>
+> + * Author: Wadim Egorov <w.egorov@phytec.de>
+> + */
+> +
+> +#include <linux/i2c.h>
+> +#include <linux/mfd/rk808.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/regmap.h>
+> +
+> +static bool rk808_is_volatile_reg(struct device *dev, unsigned int reg)
+> +{
+> +	/*
+> +	 * Notes:
+> +	 * - Technically the ROUND_30s bit makes RTC_CTRL_REG volatile, but
+> +	 *   we don't use that feature.  It's better to cache.
+> +	 * - It's unlikely we care that RK808_DEVCTRL_REG is volatile since
+> +	 *   bits are cleared in case when we shutoff anyway, but better safe.
+> +	 */
+> +
+> +	switch (reg) {
+> +	case RK808_SECONDS_REG ... RK808_WEEKS_REG:
+> +	case RK808_RTC_STATUS_REG:
+> +	case RK808_VB_MON_REG:
+> +	case RK808_THERMAL_REG:
+> +	case RK808_DCDC_UV_STS_REG:
+> +	case RK808_LDO_UV_STS_REG:
+> +	case RK808_DCDC_PG_REG:
+> +	case RK808_LDO_PG_REG:
+> +	case RK808_DEVCTRL_REG:
+> +	case RK808_INT_STS_REG1:
+> +	case RK808_INT_STS_REG2:
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +static bool rk817_is_volatile_reg(struct device *dev, unsigned int reg)
+> +{
+> +	/*
+> +	 * Notes:
+> +	 * - Technically the ROUND_30s bit makes RTC_CTRL_REG volatile, but
+> +	 *   we don't use that feature.  It's better to cache.
+> +	 */
+> +
+> +	switch (reg) {
+> +	case RK817_SECONDS_REG ... RK817_WEEKS_REG:
+> +	case RK817_RTC_STATUS_REG:
+> +	case RK817_CODEC_DTOP_LPT_SRST:
+> +	case RK817_GAS_GAUGE_ADC_CONFIG0 ... RK817_GAS_GAUGE_CUR_ADC_K0:
+> +	case RK817_PMIC_CHRG_STS:
+> +	case RK817_PMIC_CHRG_OUT:
+> +	case RK817_PMIC_CHRG_IN:
+> +	case RK817_INT_STS_REG0:
+> +	case RK817_INT_STS_REG1:
+> +	case RK817_INT_STS_REG2:
+> +	case RK817_SYS_STS:
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +
+> +static const struct regmap_config rk818_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = RK818_USB_CTRL_REG,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.volatile_reg = rk808_is_volatile_reg,
+> +};
+> +
+> +static const struct regmap_config rk805_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = RK805_OFF_SOURCE_REG,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.volatile_reg = rk808_is_volatile_reg,
+> +};
+> +
+> +static const struct regmap_config rk808_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = RK808_IO_POL_REG,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.volatile_reg = rk808_is_volatile_reg,
+> +};
+> +
+> +static const struct regmap_config rk817_regmap_config = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.max_register = RK817_GPIO_INT_CFG,
+> +	.cache_type = REGCACHE_NONE,
+> +	.volatile_reg = rk817_is_volatile_reg,
+> +};
+> +
+> +static int rk8xx_i2c_get_variant(struct i2c_client *client)
+> +{
+> +	u8 pmic_id_msb, pmic_id_lsb;
+> +	int msb, lsb;
+> +
+> +	if (of_device_is_compatible(client->dev.of_node, "rockchip,rk817") ||
+> +	    of_device_is_compatible(client->dev.of_node, "rockchip,rk809")) {
+> +		pmic_id_msb = RK817_ID_MSB;
+> +		pmic_id_lsb = RK817_ID_LSB;
+> +	} else {
+> +		pmic_id_msb = RK808_ID_MSB;
+> +		pmic_id_lsb = RK808_ID_LSB;
+> +	}
+> +
+> +	/* Read chip variant */
+> +	msb = i2c_smbus_read_byte_data(client, pmic_id_msb);
+> +	if (msb < 0)
+> +		return dev_err_probe(&client->dev, msb, "failed to read the chip id MSB\n");
+> +
+> +	lsb = i2c_smbus_read_byte_data(client, pmic_id_lsb);
+> +	if (lsb < 0)
+> +		return dev_err_probe(&client->dev, lsb, "failed to read the chip id LSB\n");
+> +
+> +	return ((msb << 8) | lsb) & RK8XX_ID_MSK;
+> +}
+> +
+> +static int rk8xx_i2c_probe(struct i2c_client *client)
+> +{
+> +	const struct regmap_config *regmap_cfg;
+> +	struct regmap *regmap;
+> +	int variant;
+> +
+> +	variant = rk8xx_i2c_get_variant(client);
+> +	if (variant < 0)
+> +		return variant;
+> +
+> +	switch (variant) {
+> +	case RK805_ID:
+> +		regmap_cfg = &rk805_regmap_config;
+> +		break;
+> +	case RK808_ID:
+> +		regmap_cfg = &rk808_regmap_config;
+> +		break;
+> +	case RK818_ID:
+> +		regmap_cfg = &rk818_regmap_config;
+> +		break;
+> +	case RK809_ID:
+> +	case RK817_ID:
+> +		regmap_cfg = &rk817_regmap_config;
+> +		break;
+> +	default:
+> +		return dev_err_probe(&client->dev, -EINVAL, "Unsupported RK8XX ID %x\n", variant);
+> +	}
+> +
+> +	regmap = devm_regmap_init_i2c(client, regmap_cfg);
+> +	if (IS_ERR(regmap))
+> +		return dev_err_probe(&client->dev, PTR_ERR(regmap),
+> +				     "regmap initialization failed\n");
+> +
+> +	return rk8xx_probe(&client->dev, variant, client->irq, regmap);
+> +}
+> +
+> +static void rk8xx_i2c_shutdown(struct i2c_client *client)
+> +{
+> +	rk8xx_shutdown(&client->dev);
+> +}
+> +
+> +static SIMPLE_DEV_PM_OPS(rk8xx_i2c_pm_ops, rk8xx_suspend, rk8xx_resume);
+> +
+> +static const struct of_device_id rk8xx_i2c_of_match[] = {
+> +	{ .compatible = "rockchip,rk805" },
+> +	{ .compatible = "rockchip,rk808" },
+> +	{ .compatible = "rockchip,rk809" },
+> +	{ .compatible = "rockchip,rk817" },
+> +	{ .compatible = "rockchip,rk818" },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, rk8xx_i2c_of_match);
+> +
+> +static struct i2c_driver rk8xx_i2c_driver = {
+> +	.driver = {
+> +		.name = "rk8xx-i2c",
+> +		.of_match_table = rk8xx_i2c_of_match,
+> +		.pm = &rk8xx_i2c_pm_ops,
+> +	},
+> +	.probe_new = rk8xx_i2c_probe,
+> +	.shutdown  = rk8xx_i2c_shutdown,
+> +};
+> +module_i2c_driver(rk8xx_i2c_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Chris Zhong <zyw@rock-chips.com>");
+> +MODULE_AUTHOR("Zhang Qing <zhangqing@rock-chips.com>");
+> +MODULE_AUTHOR("Wadim Egorov <w.egorov@phytec.de>");
+> +MODULE_DESCRIPTION("RK8xx I2C PMIC driver");
+> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+> index dcb53c4a9584..38e6c5401554 100644
+> --- a/drivers/pinctrl/Kconfig
+> +++ b/drivers/pinctrl/Kconfig
+> @@ -407,7 +407,7 @@ config PINCTRL_PISTACHIO
+>  
+>  config PINCTRL_RK805
+>  	tristate "Pinctrl and GPIO driver for RK805 PMIC"
+> -	depends on MFD_RK808
+> +	depends on MFD_RK8XX
+>  	select GPIOLIB
+>  	select PINMUX
+>  	select GENERIC_PINCONF
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index c78be9f322e6..4a5e8e1d1237 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -706,7 +706,7 @@ config CHARGER_BQ256XX
+>  
+>  config CHARGER_RK817
+>  	tristate "Rockchip RK817 PMIC Battery Charger"
+> -	depends on MFD_RK808
+> +	depends on MFD_RK8XX
+>  	help
+>  	  Say Y to include support for Rockchip RK817 Battery Charger.
+>  
+> diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+> index aae28d0a489c..7f479753de5c 100644
+> --- a/drivers/regulator/Kconfig
+> +++ b/drivers/regulator/Kconfig
+> @@ -1056,7 +1056,7 @@ config REGULATOR_RC5T583
+>  
+>  config REGULATOR_RK808
+>  	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 Power regulators"
+> -	depends on MFD_RK808
+> +	depends on MFD_RK8XX
+>  	help
+>  	  Select this option to enable the power regulator of ROCKCHIP
+>  	  PMIC RK805,RK809&RK817,RK808 and RK818.
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 5a71579af0a1..86c5cee2cb33 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -395,7 +395,7 @@ config RTC_DRV_NCT3018Y
+>  
+>  config RTC_DRV_RK808
+>  	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
+> -	depends on MFD_RK808
+> +	depends on MFD_RK8XX
+>  	help
+>  	  If you say yes here you will get support for the
+>  	  RTC of RK805, RK809 and RK817, RK808 and RK818 PMIC.
+> diff --git a/include/linux/mfd/rk808.h b/include/linux/mfd/rk808.h
+> index a89ddd9ba68e..4183427a80fe 100644
+> --- a/include/linux/mfd/rk808.h
+> +++ b/include/linux/mfd/rk808.h
+> @@ -794,4 +794,10 @@ struct rk808 {
+>  	const struct regmap_config	*regmap_cfg;
+>  	const struct regmap_irq_chip	*regmap_irq_chip;
+>  };
+> +
+> +void rk8xx_shutdown(struct device *dev);
+> +int rk8xx_probe(struct device *dev, int variant, unsigned int irq, struct regmap *regmap);
+> +int rk8xx_suspend(struct device *dev);
+> +int rk8xx_resume(struct device *dev);
+> +
+>  #endif /* __LINUX_REGULATOR_RK808_H */
+> diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+> index 07747565c3b5..8b7cc25a6618 100644
+> --- a/sound/soc/codecs/Kconfig
+> +++ b/sound/soc/codecs/Kconfig
+> @@ -1257,7 +1257,7 @@ config SND_SOC_RK3328
+>  
+>  config SND_SOC_RK817
+>  	tristate "Rockchip RK817 audio CODEC"
+> -	depends on MFD_RK808 || COMPILE_TEST
+> +	depends on MFD_RK8XX || COMPILE_TEST
+>  
+>  config SND_SOC_RL6231
+>  	tristate
+> -- 
+> 2.39.2
 > 
-> Welcome comments that state preconditions for calling this function?
-> e.g. some lock held.
 
-Hard "no".  Any non-obvious preconditions should be conveyed through lockdep
-assertions, WARNs, etc...
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
