@@ -2,95 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546C06ADDDD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF596ADDED
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:48:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbjCGLpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S231379AbjCGLso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:48:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbjCGLpU (ORCPT
+        with ESMTP id S231350AbjCGLsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:45:20 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F393D2ED50
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 03:43:05 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id k199so11068699ybf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 03:43:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678189362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W0Pg/5go5okMOd8kzLpnIadugYtaUbM7sSSdCILMJbA=;
-        b=PZzwQiyUsm+OelT9posUdixTHFgvGtfVWeJuRqXA4TiNXqrrR31AtdCb6Oq7VSZyv0
-         RQ5gWik383Dy5PFfulCm11qs3amFSCEZM4/Nzd7Pt9mElfhvIkr6gs27by3aSWQ+IeXf
-         r+irHBbTGxIrSazYY5d5k3ObiMf7lji8dJvGWPNX1WA7GZIApEVqL+m+1LGm5WbX42SK
-         68LT0wHLgdrp1oScW/JagcrR+fDN+HrohMLUXmP5W8p8MIaq6UWgFya3M2FbqIWuYkE/
-         tGH9FuOGmdqlTLNSqjUlKudBTl3ipTrjsz1O8xhzYilWj1TrRA3CjHcYhHNm0A8fNpDe
-         LCsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678189362;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W0Pg/5go5okMOd8kzLpnIadugYtaUbM7sSSdCILMJbA=;
-        b=FpjZVpVRECRG57ek3VYEWNVwjfHCfUD+sfWT0aTw+YULgVFmK+gzOTaJPRkVxcowvN
-         noLgIJDjEkl88xZ8O64fuqHBXT8fHIZ+cYUH9aPg7z6xDMOl/8GWho0eW8HellLUKStg
-         pdgWy12Yhk5Joixg2lPa7bK+my89/dNHsjr8UGojbzkpmTJpkIV/pMzOIeFRRDm1cD2a
-         9Je+NSXlA/I1aFYRUBU+MEONS363U1r1ijKSbSFYnPeJa8mC44z5S2kZ3L31EVU+cUdQ
-         7M+3C5N8B+9nDcjaJ2xIYjFNImT5TBAy5xZA2ENIsrH63/MNozSqxPvXcjAyrpl1PxBL
-         EFfg==
-X-Gm-Message-State: AO0yUKVRP300MZeh2W6mbigZOl0fC2V7qEa8aDAHmIvhf/WDCObJ3Mzd
-        /WNy8S/Ek+Kn/mmn0/wkGv7kGQn7Gby8F1SIGV0hv0DhNMw6ow==
-X-Google-Smtp-Source: AK7set8storig3MmF0kJHWCV9+wOH8QIHS7JYIfte9OuP8C6W6QkB3Uln28mbHrF4iwqRwDpJFQEQWc3nbiUZGoVKOs=
-X-Received: by 2002:a5b:191:0:b0:a6f:b921:cded with SMTP id
- r17-20020a5b0191000000b00a6fb921cdedmr6637988ybl.2.1678189362569; Tue, 07 Mar
- 2023 03:42:42 -0800 (PST)
+        Tue, 7 Mar 2023 06:48:22 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C79A7B129;
+        Tue,  7 Mar 2023 03:47:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678189646; x=1709725646;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=ABa115dzYhbKqxSWjzfNIHa1e+/UpB5wXI8AqnFj1B8=;
+  b=ND3BhInNqYYDdwVTdXvVkZLjlzB7QOtSTX6sc5q5u8KLubZNnj4iM75f
+   UQDU/qKA+Qd7wFWVvr0Jv/DPPlZp5VmuopDndctr34otG95hhjvYP9mc3
+   xWByA5stMt19+Fuhax0v9ZxMA9YNigR7gLBG5LmGEsUCfx+yPqjjid6BX
+   H2n7Hf+Vl0pvNntWBCrqOf+Dhmv2pS5FjaoYcxroF80yl95HIp2aL8XMi
+   EDBaNdaHHe7XzqOO0tsflFlsvqsj7UKiOUmN28v/9nVFKO6u0LphbSSqT
+   o0ZrBq5jgfDzvV+Vd9sf/uSViXqTWw4ylnR0I2OGIIQU/0ul8hIcBf7ew
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="316229508"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="316229508"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 03:43:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="706777464"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="706777464"
+Received: from unknown (HELO ijarvine-MOBL2.mshome.net) ([10.237.66.32])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 03:43:37 -0800
+Date:   Tue, 7 Mar 2023 13:43:35 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
+cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
+        "hdanton@sina.com" <hdanton@sina.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
+        Rohit Fule <rohit.fule@nxp.com>,
+        Sherry Sun <sherry.sun@nxp.com>
+Subject: Re: [PATCH v6 3/3] Bluetooth: NXP: Add protocol support for NXP
+ Bluetooth chipsets
+In-Reply-To: <AM9PR04MB86037CDF6A032963405AF0CEE7B69@AM9PR04MB8603.eurprd04.prod.outlook.com>
+Message-ID: <48e776a1-7526-5b77-568b-322d4555a138@linux.intel.com>
+References: <20230301154514.3292154-1-neeraj.sanjaykale@nxp.com> <20230301154514.3292154-4-neeraj.sanjaykale@nxp.com> <73527cb7-6546-6c47-768c-5f4648b6d477@linux.intel.com> <AM9PR04MB86037CDF6A032963405AF0CEE7B69@AM9PR04MB8603.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <20230306220947.1982272-1-trix@redhat.com> <CAKwvOdkd7pUu_oxt4=CW3fxXz2y7evtU9J5Gd7oQuyi1MkDMCw@mail.gmail.com>
- <C01C39FE-E776-48DA-84F2-402B49A705A8@kernel.org> <899b639b-3c93-b96d-863d-9e25d1824dc3@redhat.com>
-In-Reply-To: <899b639b-3c93-b96d-863d-9e25d1824dc3@redhat.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 7 Mar 2023 12:42:31 +0100
-Message-ID: <CANiq72kKmVzQYU7aOy4k0GsrgV=jfi_fLk2TvtWVGV_sXc8e2w@mail.gmail.com>
-Subject: Re: [PATCH] init/Kconfig: extend -Wno-array-bounds to gcc 13
-To:     Tom Rix <trix@redhat.com>
-Cc:     Kees Cook <kees@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>, mhiramat@kernel.org,
-        akpm@linux-foundation.org, masahiroy@kernel.org,
-        paulmck@kernel.org, hannes@cmpxchg.org, ojeda@kernel.org,
-        thunder.leizhen@huawei.com, christophe.leroy@csgroup.eu,
-        vbabka@suse.cz, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 2:07=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> The build with fail generally with gcc 13.
->
-> The warnings could be cleaned without having an error, but I looked at
-> multiple errors, none of them were real.
->
-> imo this is a broken compiler option.
+On Mon, 6 Mar 2023, Neeraj sanjay kale wrote:
 
-I am not sure I understand -- my reading of Kees' message is that he
-would prefer to get the warning (rather than the kernel) fixed before
-GCC 13 releases.
+> Hi Ilpo,
+> 
+> Thank you for reviewing this patch. I have resolved most of your review comments in v7 patch, and I have some clarification inline below:
 
-Are you asking to have the option disabled until GCC 13 releases and
-reevaluate then? How many warnings are you getting? Are those actual
-errors or `-Werror`?
+Further discussion below + I sent a few against v7.
 
-Cheers,
-Miguel
+ 
+> > > +static bool nxp_fw_change_baudrate(struct hci_dev *hdev, u16 req_len)
+> > > +{
+> > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
+> > > +     struct nxp_bootloader_cmd nxp_cmd5;
+> > > +     struct uart_config uart_config;
+> > > +
+> > > +     if (req_len == sizeof(nxp_cmd5)) {
+> > > +             nxp_cmd5.header = __cpu_to_le32(5);
+> > > +             nxp_cmd5.arg = 0;
+> > > +             nxp_cmd5.payload_len = __cpu_to_le32(sizeof(uart_config));
+> > > +             nxp_cmd5.crc = swab32(crc32_be(0UL, (char *)&nxp_cmd5,
+> > > +                                            sizeof(nxp_cmd5) - 4));
+> > 
+> > swab32(crc32_be(...)) seems and odd construct instead of __cpu_to_le32().
+> Earlier I had tried using __cpu_to_le32() but that did not work. The FW expects a swapped
+> CRC value for it's header and payload data.
+
+So the .crc member should be __be32 then?
+
+> > > +     serdev_device_write_buf(nxpdev->serdev, (u8 *)&nxp_cmd7,
+> > > + req_len);
+> > 
+> > Is it safe to assume req_len is small enough to not leak stack content?
+> The chip requests chunk of FW data which is never more than 2048 bytes 
+> at a time. 
+
+Eh, sizeof(*nxp_cmd7) is 16 bytes!?! Are you sure that req_len given to 
+serdev_device_write_buf() is not larger than 16 bytes?
+
+> > > +static bool nxp_check_boot_sign(struct btnxpuart_dev *nxpdev) {
+> > > +     int ret;
+> > > +
+> > > +     serdev_device_set_baudrate(nxpdev->serdev,
+> > HCI_NXP_PRI_BAUDRATE);
+> > > +     serdev_device_set_flow_control(nxpdev->serdev, 0);
+> > > +     set_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state);
+> > > +
+> > > +     ret = wait_event_interruptible_timeout(nxpdev-
+> > >check_boot_sign_wait_q,
+> > > +                                            !test_bit(BTNXPUART_CHECK_BOOT_SIGNATURE,
+> > > +                                                      &nxpdev->tx_state),
+> > > +                                            msecs_to_jiffies(1000));
+> > > +     if (ret == 0)
+> > > +             return false;
+> > > +     else
+> > > +             return true;
+> > 
+> > How does does this handle -ERESTARTSYS? But this runs in nxp_setup() so is
+> > that even relevant (I don't know).
+> This function is waits for 1 second and checks if it is receiving any bootloader signatures
+> over UART. If yes, it means FW download is needed. If no, it means FW is already present
+> on the chip, and we skip FW download.
+
+Okay, it seems your changes had a side-effect of addressing this.
+
+> > > +static int nxp_enqueue(struct hci_dev *hdev, struct sk_buff *skb) {
+> > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
+> > > +     struct ps_data *psdata = nxpdev->psdata;
+> > > +     struct hci_command_hdr *hdr;
+> > > +     u8 param[MAX_USER_PARAMS];
+> > > +
+> > > +     if (!nxpdev || !psdata)
+> > > +             goto free_skb;
+> > > +
+> > > +     /* if vendor commands are received from user space (e.g. hcitool),
+> > update
+> > > +      * driver flags accordingly and ask driver to re-send the command to
+> > FW.
+> > > +      */
+> > > +     if (bt_cb(skb)->pkt_type == HCI_COMMAND_PKT &&
+> > > + !psdata->driver_sent_cmd) {
+> > 
+> > Should this !psdata->driver_sent_cmd do something else than end up into a
+> > place labelled send_skb. Maybe return early (or free skb + return)?
+> > There's a comment elsewhere stating: "set flag to prevent re-sending
+> > command in nxp_enqueue."
+> I'm sorry if the comment was misleading. This flag is set to prevent nxp_enqueue() from
+> Parsing the command parameters again, and calling hci_cmd_sync_queue() again.
+> The commands sent from user space, as well as the commands sent by __hci_cmd_sync(),
+> both endup in nxp_enqueue().
+> Hope this helps!
+
+Okay, makes sense now and the logic is also clearer now. However, the
+brace blocks you added into those cases in bxp_enqueue() you should try to 
+remove. I realize you do it to avoid name collisions because you reused 
+param in each but they introduced these ugly constructs:
+	case XX:
+		{
+			...
+			goto free_skb;
+		}
+		break;
+
+-- 
+ i.
+
