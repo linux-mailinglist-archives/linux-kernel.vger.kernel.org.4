@@ -2,142 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49B76ADAED
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F40D6ADB37
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjCGJu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:50:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
+        id S230333AbjCGJ5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjCGJuw (ORCPT
+        with ESMTP id S231143AbjCGJ5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:50:52 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42254488;
-        Tue,  7 Mar 2023 01:50:18 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so628303wms.0;
-        Tue, 07 Mar 2023 01:50:18 -0800 (PST)
+        Tue, 7 Mar 2023 04:57:39 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB6A5DEF1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:57:31 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id x3so49837670edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 01:57:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678182617;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yl2mpHuveUP7tQhvAv3v7QFO0cT2TOycTTxsdGGCBaU=;
-        b=DO0/ionGVI+UCkpAP0wJ0Ky4zV5JZ4ipAfi4ou5qX9KaKgTXlOUNeMIgPkPYsBxbOe
-         SSPbbBpHSWxw3H61cawOk/3Rwl/9yI2a9bKwMwMCkCME5LBo4v8O5l5GRX+vCsf28I9K
-         uPtXvVhfmyyRqIO9AlF8RyoIEQqd1SttVIyCAIl8yAuOVsLHymKx55pNRaenW4JK83Ot
-         rmvILk6HMWy0cuAptYPwIeFc94YchYKy8pCZHgydZSA4ok0PyccCb23MN/QaSyWz6nMP
-         dyElaKAXnPTDZKYZaEfBJiXFyX1y4kLF/1N3zYP6hT3vgDdOxLw8AO7mdXTDspYE8coj
-         tw0w==
+        d=gmail.com; s=20210112; t=1678183050;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TFfKfYm0N3LqI8J25elWBtfff5jc/IewGs/5ZXYbR2Y=;
+        b=k/vFYgRI98XywIxfj6etk9eZK/GVCsBdkpfc2n830ZoUNYN70vLMXrdPpyp6Xixy2f
+         PnXogX/1ic6pQAzaJziIPKpGGC1V0OavKzBzXhOnW1askbYrC2BZOHPGS7pR728a/5ME
+         VTUZtASbT9xpvwVOMvHejY+iAaV0sT9NHAhpDDqLesymV4Bb8NpYexKvzKdEJGkGIF90
+         2sdLCgKptczVcCk7Jy5vP0quDNXcmlJuNK7Xq2/VGH0ZYyHv/qbq5JM8uq5th831itak
+         yhtmCHkqMuEe/elS4BnDDeO6TcBsPhdbuGIeUAXC035FDWCJ3yGPIZaH70fwBhFZtp8N
+         NZmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678182617;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yl2mpHuveUP7tQhvAv3v7QFO0cT2TOycTTxsdGGCBaU=;
-        b=k8GWY0bMignN7OoxT5RGG0BUjOo/Usrdi+cbA/nwjVNWSsW9V/IFRYoKiri6mpcppm
-         3TZiMCQPL+f/mI5kKjslj5gU41gEDvf+ygUl9IOEDioo20yKsbQW5YxYgZKfRnMV9tF9
-         jCHs65s/Pq4l+f08ryeYlr5VjnLmdQ8LcQIgQKv6aYP+s3KwPhFaRucE5BZiNZ2sUWvk
-         yv4CkX/CZjwMoaSYOQ0/3Zq5VkuLObtjb9hqlh+VPV3m3lhGj6u6+m+/yvEpV2VKn4L+
-         tWlO9rAlf0SRXrVefpAOA+eyrUbgjKfOgFdybzF37YZ6ZszoN7kzjBLB3RRHJTHr+ZWT
-         i1kg==
-X-Gm-Message-State: AO0yUKWzCFH/CDKEKbndckqyM7b/QIeqK8xsOOsrNscf6WvfCzST3DOa
-        CRVo8et7A/iTr2Z+8f/HZAw=
-X-Google-Smtp-Source: AK7set/ppE7inaeTkWIv4ddlbRUVSqik1YeZrdxSZaUZnn15JQHNkAkVC05c0k8FepeErWjWwG5+ew==
-X-Received: by 2002:a05:600c:a01:b0:3eb:29fe:70ec with SMTP id z1-20020a05600c0a0100b003eb29fe70ecmr13133009wmp.27.1678182616641;
-        Tue, 07 Mar 2023 01:50:16 -0800 (PST)
-Received: from arinc9-PC.lan ([212.68.60.226])
-        by smtp.gmail.com with ESMTPSA id o6-20020a5d6706000000b002c573778432sm11841451wru.102.2023.03.07.01.50.13
+        d=1e100.net; s=20210112; t=1678183050;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TFfKfYm0N3LqI8J25elWBtfff5jc/IewGs/5ZXYbR2Y=;
+        b=tDWgXhOwobNIVSk4Rb5AZxckGWCF9ZMA/n4TA29ncMYYTmWZTw0dZmJwhHmX83UnJD
+         dS3g4mPJkc4LIgqo3d9ab3elZ7QxQKlYp1k+wk5b5PdQcQ//X64jksp4PqxzCDNlsCHc
+         L8NgWbXl8SvQgMG7R8OlLKlVquC/v91atlh9GqWFpcMDl9vpruQBO421kU91SH2Gml7H
+         +b4e3Myx9JahkK7GHC+opZvRkEqqYELBjthhcUtkLpWqP0e7N/nKh/G6/UFprlpHpd/4
+         c52BkHxAFawnXFHaio6iMts2CvG1/yTPoRGnII+GDYY/iSUNUGH3zt70GT3nU87qnUY+
+         YHKA==
+X-Gm-Message-State: AO0yUKWzdbRp68wOKP9FKOKq2ejDPcZZmCN8HJPNuZ1pmDV+OYOfo2RI
+        FMHkE0F7t2svnDMDCWphUFLlSDIkSFc=
+X-Google-Smtp-Source: AK7set+RY1Ebp/m623hHdxsxRhKyzketswA64mEzoss9/AfYZunkCdB5cDSdwxc8t78rEGjMAWFzhg==
+X-Received: by 2002:a05:6402:105a:b0:4ea:a9b0:a518 with SMTP id e26-20020a056402105a00b004eaa9b0a518mr3351386edu.17.1678183050330;
+        Tue, 07 Mar 2023 01:57:30 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id fx14-20020a1709069e8e00b008e56a0d546csm5787189ejc.123.2023.03.07.01.57.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 01:50:16 -0800 (PST)
-From:   "=?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?=" <arinc9.unal@gmail.com>
-X-Google-Original-From: =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Rob Herring <robh@kernel.org>, erkin.bozoglu@xeront.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] dt-bindings: net: dsa: mediatek,mt7530: change some descriptions to literal
-Date:   Tue,  7 Mar 2023 12:49:48 +0300
-Message-Id: <20230307094947.12450-1-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 07 Mar 2023 01:57:29 -0800 (PST)
+Date:   Tue, 7 Mar 2023 12:51:14 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Masami Ichikawa <masami.ichikawa@miraclelinux.com>
+Cc:     cip-dev <cip-dev@lists.cip-project.org>,
+        linux-kernel@vger.kernel.org, lwn@lwn.net, smatch@ver.kernel.org
+Subject: Who is looking at CVEs to prevent them?
+Message-ID: <59f7f076-a9d5-4bfb-a6da-bbe0a7567688@kili.mountain>
+References: <CAODzB9qjdhQkZ+tALHpDLHoK7GAf8Uybfzp8mxXt=Dwnn_0RjA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAODzB9qjdhQkZ+tALHpDLHoK7GAf8Uybfzp8mxXt=Dwnn_0RjA@mail.gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The line endings must be preserved on gpio-controller, io-supply, and
-reset-gpios properties to look proper when the YAML file is parsed.
+On Thu, Jan 19, 2023 at 09:14:53AM +0900, Masami Ichikawa wrote:
+> CVE-2023-0210: ksmbd: check nt_len to be at least CIFS_ENCPWD_SIZE in
+> ksmbd_decode_ntlmssp_auth_blob
+> 
+> 5.15, 6.0, and 6.1 were fixed.
+> 
+> Fixed status
+> mainline: [797805d81baa814f76cf7bdab35f86408a79d707]
+> stable/5.15: [e32f867b37da7902685c9a106bef819506aa1a92]
+> stable/6.0: [1e7ed525c60d8d51daf2700777071cd0dfb6f807]
+> stable/6.1: [5e7d97dbae25ab4cb0ac1b1b98aebc4915689a86]
 
-Currently it's interpreted as a single line when parsed. Change the style
-of the description of these properties to literal style to preserve the
-line endings.
+Sorry, I have kind of hijacked the cip-dev email list...  I use these
+lists to figure out where we are failing.
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
+I created a static checker warning for this bug.  I also wrote a blog
+stepping through the process:
+https://staticthinking.wordpress.com/2023/03/07/triaging-security-bugs/
 
-Sending again now that net-next is open.
+If anyone wants to review the warnings, just email me and I can send
+them to you.  I Cc'd LWN because I was going to post the warnings but I
+chickened out because that didn't feel like responsible disclosure. The
+instructions for how to find these yourself are kind of right there in
+the blog so it's not too hard to generate these results yourself...  I
+don't really have enough time to review static checker warnings anymore
+but I don't know who wants to do that job now.
 
-Arınç
-
----
- .../devicetree/bindings/net/dsa/mediatek,mt7530.yaml        | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-index 449ee0735012..5ae9cd8f99a2 100644
---- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
-@@ -93,7 +93,7 @@ properties:
- 
-   gpio-controller:
-     type: boolean
--    description:
-+    description: |
-       If defined, LED controller of the MT7530 switch will run on GPIO mode.
- 
-       There are 15 controllable pins.
-@@ -112,7 +112,7 @@ properties:
-     maxItems: 1
- 
-   io-supply:
--    description:
-+    description: |
-       Phandle to the regulator node necessary for the I/O power.
-       See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt for
-       details for the regulator setup on these boards.
-@@ -124,7 +124,7 @@ properties:
-       switch is a part of the multi-chip module.
- 
-   reset-gpios:
--    description:
-+    description: |
-       GPIO to reset the switch. Use this if mediatek,mcm is not used.
-       This property is optional because some boards share the reset line with
-       other components which makes it impossible to probe the switch if the
--- 
-2.37.2
+regards,
+dan carpenter
 
