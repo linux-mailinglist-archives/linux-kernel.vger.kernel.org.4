@@ -2,239 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41ECA6ADDFC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B27F86ADE00
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:51:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjCGLvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:51:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
+        id S230435AbjCGLvm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:51:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjCGLvA (ORCPT
+        with ESMTP id S230474AbjCGLvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:51:00 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32454DBD9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 03:49:46 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id bi9so16725079lfb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 03:49:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678189781;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8NLnfgcJkBrupO9VeOIsatAqwiLwPWa5rkw2fb5PnaE=;
-        b=UYvQ5bO2RzR51Mh38ODTgBjtWo2rd01w2DzKJ+NpS1vMuXxsIZJk1UL0Y9tvMY/erS
-         WdcNtewN6BoWBvzNWdC7D5OzAVWUwrl418t7qzmoVXLW7HeQHGUJUllTxOAxPKMuos/I
-         FnEFJdlTkGoepl4EBTUDhWvpEm1hlggXZgbJrM2QDGjqMvK09RAhyBe4g/zdhhWeZs19
-         2H7fcl1zyhk9DpjhmRDIDtaXkwftLIFWTRPHIHuoKTmaWO3N6eMFm5Cla1kFSe7fPjxJ
-         Tas0sI2JB1IcP++DNwbqE8ksYqoqgZh125kLDgfhq0VIpwRgE5vveM3yXSMv/dLCUqEN
-         /+TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678189781;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8NLnfgcJkBrupO9VeOIsatAqwiLwPWa5rkw2fb5PnaE=;
-        b=rEKbLCYxtMO1sOJi0WntAu6gqlM+9+TPSiJFSFG0/lbPiCEhawAj5ReiQUM/A6yHqJ
-         hKeMDdx++ZHvTUWfFGn9ikrQJmvVkCGSGM6bxxxlERe9O/cCmNGpy92PKODVz5bZC1An
-         JzI3GR2NZdvejvOkjnvaq9hjWB0L2aU9u7H+mNcv5QgNDfBB/HV1uPd4FRueSPTK06pi
-         wFdM72j9D0bov/oJOd4k3ZZRRaYO1OogJ/wgo/qHTvoWjI9SCZ0FiOfJX5dHca2oIubt
-         5QUGFM2ah6DjYHypOl4v/TuVb+bGBxogsBs8d3GCWZBtLmWOWfKEr5fK5TSJS2COqZcj
-         noDA==
-X-Gm-Message-State: AO0yUKVeXAutNlf3OQ1Tv1Ru5ULUIUPKc2/m7pirTiMcE6XqIFKHPPCe
-        vfGbga1lOAySArpszxKOcUSrAQ==
-X-Google-Smtp-Source: AK7set820Wh82BGJ6Ihvrw7CYOrPuMDU5y9XvpQtW63tea7D4cxj+nT71DKMYqTpL9A9f0fzFll76w==
-X-Received: by 2002:ac2:558e:0:b0:4dc:852d:9b88 with SMTP id v14-20020ac2558e000000b004dc852d9b88mr3812252lfg.45.1678189781415;
-        Tue, 07 Mar 2023 03:49:41 -0800 (PST)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id j19-20020a19f513000000b004dc721ea6a1sm1997226lfb.273.2023.03.07.03.49.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 03:49:40 -0800 (PST)
-Message-ID: <47b591c0-2f68-429d-6d1b-fa8b701785ac@linaro.org>
-Date:   Tue, 7 Mar 2023 13:49:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Tue, 7 Mar 2023 06:51:20 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45B037B102;
+        Tue,  7 Mar 2023 03:50:29 -0800 (PST)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxedkDJQdknlgJAA--.11831S3;
+        Tue, 07 Mar 2023 19:50:27 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxHuT+JAdk6f9NAA--.33988S2;
+        Tue, 07 Mar 2023 19:50:27 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Georgi Djakov <djakov@kernel.org>
-References: <cover.1677749625.git.quic_varada@quicinc.com>
- <6b8d17006d8ee9a1b0c4df803c1cc7caf53ea3ef.1677749625.git.quic_varada@quicinc.com>
- <CAA8EJprbMybV0o1-436yLhVnnEX6qywrj=JmWDCL5usaH0DXiQ@mail.gmail.com>
- <61e8c730-e46d-728d-d770-f1ead4405d12@quicinc.com>
- <83184da4-b183-3271-983f-3a1a62fb9f1a@linaro.org>
- <365f2609-d3b4-df23-5b6e-7a190815a640@quicinc.com>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <365f2609-d3b4-df23-5b6e-7a190815a640@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v13 1/2] dt-bindings: clock: add loongson-2 boot clock index
+Date:   Tue,  7 Mar 2023 19:50:21 +0800
+Message-Id: <20230307115022.12846-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8AxHuT+JAdk6f9NAA--.33988S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KFW8Wr4UAFykuw47Wry8Krg_yoW8XFW5pr
+        4kuFW7Kry2yF4xKw4vqr13Kr43u3yxGw1UAF47uF4UXF17A3WkJwsruF4fAryUXFykGFyx
+        Za1DCw40va9rW37anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bVxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq
+        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaV
+        Av8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8C
+        rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8Zw
+        CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+        67AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+        0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7J3v
+        UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 08:36, Varadarajan Narayanan wrote:
-> 
-> On 3/6/2023 5:21 PM, Dmitry Baryshkov wrote:
->> On 06/03/2023 13:26, Varadarajan Narayanan wrote:
->>> Dmitry,
->>>
->>> On 3/2/2023 9:52 PM, Dmitry Baryshkov wrote:
->>>> On Thu, 2 Mar 2023 at 11:57, Varadarajan Narayanan
->>>> <quic_varada@quicinc.com> wrote:
->>>>> Add USB phy and controller related nodes
->>>>>
->>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->>>>> ---
->>>>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 92 
->>>>> +++++++++++++++++++++++++++++++++++
->>>>>   1 file changed, 92 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi 
->>>>> b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>>>> index 2bb4053..319b5bd 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>
->> [skipped]
->>
->>
->>>>> +               usb3: usb3@8A00000 {
->>>> You know the drill. This node is in the wrong place.
->>>>
->>>>> +                       compatible = "qcom,dwc3";
->>>>> +                       reg = <0x8AF8800 0x400>;
->>>>> +                       #address-cells = <1>;
->>>>> +                       #size-cells = <1>;
->>>>> +                       ranges;
->>>>> +
->>>>> +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
->>>>> +                               <&gcc GCC_ANOC_USB_AXI_CLK>,
->>>>> +                               <&gcc GCC_USB0_MASTER_CLK>,
->>>>> +                               <&gcc GCC_USB0_SLEEP_CLK>,
->>>>> +                               <&gcc GCC_USB0_MOCK_UTMI_CLK>;
->>>>> +
->>>>> +                       clock-names = "sys_noc_axi",
->>>>> +                               "anoc_axi",
->>>>> +                               "master",
->>>>> +                               "sleep",
->>>>> +                               "mock_utmi";
->>>> Please fix the indentation of the lists.
->>>>
->>>>> +
->>>>> +                       assigned-clocks = <&gcc GCC_SNOC_USB_CLK>,
->>>>> +                                         <&gcc GCC_ANOC_USB_AXI_CLK>,
->>>> Why do you assign clock rates to the NOC clocks? Should they be set
->>>> using the interconnect instead?
->>>
->>> The SNOC and ANOC run at a fixed speed of 350MHz and 342MHz 
->>> respectively and are not scaled. These clocks are for the interface 
->>> between the USB block and the SNOC/ANOC. Do we still need to use 
->>> interconnect?
->>
->> Maybe I misunderstand something here. If the snoc and anoc speeds are 
->> at 350 MHz and 342 MHz, why do you assign clock-rates of 200 MHz?
->>
->> Is it enough to call clk_prepare_enable() for these clocks or the rate 
->> really needs to be set?
-> 
-> The rate of 200MHz is not being set for the SNOC/ANOC. It is for the
-> NIU that connects the USB and SNOC/ANOC. The reason for setting the
-> rate to 200MHz is to configure the RCG parent for these interface
-> clocks. That said can we configure this RCG standalone in the driver
-> and enable these clocks?
+The Loongson-2 boot clock was used to spi and lio peripheral and
+this patch was to add boot clock index number.
 
-We discussed this separately with Georgi Djakov. Let me quote his IRC 
-message: "it sounds like this is for USB port that connects to the NOC. 
-if bandwidth scaling is not needed (or other interconnect 
-configuration), then maybe this can go without interconnect provider 
-driver."
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ include/dt-bindings/clock/loongson,ls2k-clk.h | 25 ++++++++++---------
+ 1 file changed, 13 insertions(+), 12 deletions(-)
 
-However as we discover more and more about this platform (e.g. PCIe 
-using the aggre_noc region to setup some magic registers, see [1]), I'm 
-more and more biased towards suggesting implementing the interconnect 
-driver to setup all these tiny little things. With the DT tree being an 
-ABI, it is much preferable to overestimate the needs rather than 
-underestimating them (and having to cope with the backwards 
-compatibility issues).
-
-Generally I think that PCIe/USB/whatever should not poke into NoC 
-registers or NoC/NIU clocks directly (because this is a very 
-platform-specific item). Rather than that it should tell the 
-icc/opp/whatever subsystem, "please configure the SoC for me to work".
-
-[1] 
-https://lore.kernel.org/linux-arm-msm/30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com/
-
-> 
-> Thanks
-> Varada
-> 
-> 
->>
->>
->>>
->>>>> + <&gcc GCC_USB0_MASTER_CLK>,
->>>>> +                                         <&gcc 
->>>>> GCC_USB0_MOCK_UTMI_CLK>;
->>>>> +                       assigned-clock-rates = <200000000>,
->>>>> + <200000000>,
->>>>> + <200000000>,
->>>>> + <24000000>;
->>>>> +
->>>>> +                       resets = <&gcc GCC_USB_BCR>;
->>>>> +                       status = "disabled";
->>>>> +
->>>>> +                       dwc_0: dwc3@8A00000 {
->>>>> +                               compatible = "snps,dwc3";
->>>>> +                               reg = <0x8A00000 0xcd00>;
->>>>> +                               clock-names = "ref";
->>>>> +                               clocks = <&gcc 
->>>>> GCC_USB0_MOCK_UTMI_CLK>;
->>>> clocks before clock-names
->>>>
->>>>> + interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
->>>>> +                               phys = <&qusb_phy_0>, <&usb0_ssphy>;
->>>>> +                               phy-names = "usb2-phy", "usb3-phy";
->>>>> +                               tx-fifo-resize;
->>>>> +                               snps,dis_ep_cache_eviction;
->>>>> +                               snps,is-utmi-l1-suspend;
->>>>> +                               snps,hird-threshold = /bits/ 8 <0x0>;
->>>>> +                               snps,dis_u2_susphy_quirk;
->>>>> +                               snps,dis_u3_susphy_quirk;
->>>>> + snps,quirk-frame-length-adjustment = <0x0A87F0A0>;
->>>>> +                               dr_mode = "host";
->>>>> +                       };
->>>>> +               };
->>>>> +
->>>>>                  pcie0_phy: phy@84000 {
->>>>>                          compatible = 
->>>>> "qcom,ipq9574-qmp-gen3x1-pcie-phy";
->>>>>                          reg = <0x00084000 0x1bc>; /* Serdes PLL */
->>>>> -- 
->>>>> 2.7.4
->>>
->>> Will address these and post a new revision.
->>>
->>> Thanks
->>>
->>> Varada
->>>
->>
-
+diff --git a/include/dt-bindings/clock/loongson,ls2k-clk.h b/include/dt-bindings/clock/loongson,ls2k-clk.h
+index db1e27e792ff1..e86804365e506 100644
+--- a/include/dt-bindings/clock/loongson,ls2k-clk.h
++++ b/include/dt-bindings/clock/loongson,ls2k-clk.h
+@@ -13,17 +13,18 @@
+ #define LOONGSON2_DC_PLL				3
+ #define LOONGSON2_PIX0_PLL				4
+ #define LOONGSON2_PIX1_PLL				5
+-#define LOONGSON2_NODE_CLK				6
+-#define LOONGSON2_HDA_CLK				7
+-#define LOONGSON2_GPU_CLK				8
+-#define LOONGSON2_DDR_CLK				9
+-#define LOONGSON2_GMAC_CLK				10
+-#define LOONGSON2_DC_CLK				11
+-#define LOONGSON2_APB_CLK				12
+-#define LOONGSON2_USB_CLK				13
+-#define LOONGSON2_SATA_CLK				14
+-#define LOONGSON2_PIX0_CLK				15
+-#define LOONGSON2_PIX1_CLK				16
+-#define LOONGSON2_CLK_END				17
++#define LOONGSON2_BOOT_CLK				6
++#define LOONGSON2_NODE_CLK				7
++#define LOONGSON2_HDA_CLK				8
++#define LOONGSON2_GPU_CLK				9
++#define LOONGSON2_DDR_CLK				10
++#define LOONGSON2_GMAC_CLK				11
++#define LOONGSON2_DC_CLK				12
++#define LOONGSON2_APB_CLK				13
++#define LOONGSON2_USB_CLK				14
++#define LOONGSON2_SATA_CLK				15
++#define LOONGSON2_PIX0_CLK				16
++#define LOONGSON2_PIX1_CLK				17
++#define LOONGSON2_CLK_END				18
+ 
+ #endif
 -- 
-With best wishes
-Dmitry
+2.31.1
 
