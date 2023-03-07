@@ -2,61 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E476AF81D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:57:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148FE6AF81F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjCGV5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:57:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40980 "EHLO
+        id S230314AbjCGV6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCGV5K (ORCPT
+        with ESMTP id S229808AbjCGV6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:57:10 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83AFAD02F;
-        Tue,  7 Mar 2023 13:57:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678226228; x=1709762228;
-  h=from:to:cc:subject:date:message-id:mime-version:reply-to:
-   content-transfer-encoding;
-  bh=8vgY/QVBJu+X9HRFZSvBWKypnSnfRJHbl/eOU7wG2o4=;
-  b=SgSDl/8dCMoCFnDaMC14DGdjo5SGSgtd+eK55VAdU4UN7VJvr8mUDqy7
-   ttXQoCvybknpF2JXQUvHEHSL5QHvQoF84fM6RC2Gr+CCL+n7ocBMkkwWJ
-   qi4pUGct+GwyWcKV66DhV80evm+uHKg688r0AhdbDNqxnDMkIO2mzC8DU
-   luol4ridf32lOWvCVRAQ9wJlo7B8IdjT6b4G4WtVWhuYT7AZeyYcXaYRu
-   x3w9q1qRUzd+wk0Iahkm5Q4iky0BxAoNrjqjfY8qDzqg5Tp0M2BAfxBzY
-   mJBOxla+ZHMjXUhr57KFV6BZHa+80P8Xdz1GqnVrqTwrxDkS0dQNdS3ih
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="400810562"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="400810562"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:57:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="786853606"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="786853606"
-Received: from kmdehmer-mobl1.amr.corp.intel.com (HELO lenb-mobl1.amr.corp.intel.com) ([10.212.14.112])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:57:06 -0800
-From:   Len Brown <len.brown@intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] hci_qca: do not interfere with system suspend
-Date:   Tue,  7 Mar 2023 15:56:06 -0600
-Message-Id: <7687c4239424f2a49c6c596d19eea8dd7ebe8a30.1678226070.git.len.brown@intel.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 7 Mar 2023 16:58:53 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8A9A838F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:58:51 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id i3so15666989plg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 13:58:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678226331;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8iOhf16yBRlTqpgU2xhQ0C0E2y1FmHsBFKjMtFiPcqY=;
+        b=jyPFABP0iq67dhiNelpg0gcKI68C81QtJN99IxQNCdbDw1Dl3mR6UglI4waySu+AaA
+         R9rYlKxcqmRFIXfVdWuH69JglgjnH/RHmZJQjtAT2ZUBCrzNQ5ZbYTLL5q3UxxYvWRBs
+         nq27YbkXIh9vZeARLzKdgy9kbQnpl58dz+rlcxQ79ZMIhNFikAnOIcVLU0hK1qClrwYT
+         Ukjy251AvVgXfN2YUpnGH5/o31KDq6yvlnqiryouGYrYlAlQt9YR0PfKj2cbQXdaFhDv
+         8XOkhsyoSUEyEtaTR8at7D3TdQ0MSdxuOrFDVNA2UXD2VzZ35GmKxxLLTFeuP8TDwxF9
+         an3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678226331;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8iOhf16yBRlTqpgU2xhQ0C0E2y1FmHsBFKjMtFiPcqY=;
+        b=gUqx6ZQ9jXvTPgpw/5GommIc7jedItUibo745P4rkVyxKYmgqSiwHDFh/Pk9tOsckZ
+         nWlrmjeblIEshqe0Omukn+gtZ4J0Bn5WW88kzXEr5NyLU0jaBZDTtxFPsADZWAUgDQj+
+         4mvPtQdiYtNakYjAVrfblQANc8TQD+lsLOrKp2Dv9klTMZvnQUzAmbMEif2+O5c9wQYo
+         wTZMc/y7gjAKm1rBTgGvOxtonQtnFWHrGh+/M6z9AgB/IEzgqdC4Fla6g56JbgNUvGNU
+         6o+k34TiE0ztQuhAmAPSxSDlMDFtkjBUhAOSS01m7gOFhGnvZTeByEct7gaOXLW5Dslj
+         Kvkw==
+X-Gm-Message-State: AO0yUKXIzOEuMRMBsfjRuVyVk1Dt8fJ8ZA3ozTjZYmuHN/aWq8CjhRni
+        XsCMY70hNfXJupu27YBbLc6HBRpvPO4jwy3IwDyG2A==
+X-Google-Smtp-Source: AK7set+x/KTztFG24s7NOV/+Lsi388WnW3JQ8NmFTLQhBS7lZJKThP/yskEKi/aK81KfU8aOgZTY1nUa9FYCxuYANCg=
+X-Received: by 2002:a17:90a:f10b:b0:23a:6ed6:7817 with SMTP id
+ cc11-20020a17090af10b00b0023a6ed67817mr6026857pjb.5.1678226331109; Tue, 07
+ Mar 2023 13:58:51 -0800 (PST)
 MIME-Version: 1.0
-Reply-To: Len Brown <lenb@kernel.org>
-Organization: Intel Open Source Technology Center
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+References: <20230303231133.1486085-1-eranian@google.com> <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
+ <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
+ <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
+ <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
+ <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
+ <CAHk-=whCA4-uc5WV_-68Mpmu-TiSv6fxkSjZ19zzcW9jpSxDvA@mail.gmail.com> <SJ1PR11MB60835681E8FE389EC0A1825DFCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
+In-Reply-To: <SJ1PR11MB60835681E8FE389EC0A1825DFCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 7 Mar 2023 13:58:39 -0800
+Message-ID: <CAKwvOdn9cWJO96mpWAAUh4i37+ED=S5CFKPGP7jO0SdaRumgfA@mail.gmail.com>
+Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in __resctrl_sched_in
+To:     "Torvalds, Linus" <torvalds@linux-foundation.org>
+Cc:     Jakub Jelinek <jakub@redhat.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Eranian, Stephane" <eranian@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "peternewman@google.com" <peternewman@google.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "babu.moger@amd.com" <babu.moger@amd.com>,
+        "ananth.narayan@amd.com" <ananth.narayan@amd.com>,
+        "vschneid@redhat.com" <vschneid@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,51 +91,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When hci_qca returns an error to its pm_ops.suspend routine,
-the PM subsystem will terminate the system wide suspend.
+On Tue, Mar 7, 2023 at 1:35=E2=80=AFPM Luck, Tony <tony.luck@intel.com> wro=
+te:
+>
+> > Ok, so here's a *ttoally* untested and mindless patch to maybe fix
+> > what I dislike about that resctl code.
+> >
+> > Does it fix the code generation issue? I have no idea. But this is
+> > what I would suggest is the right answer, without actually knowing the
+> > code any better, and just going on a mindless rampage.
+> >
+> > It seems to compile for me, fwiw.
+>
+> Beyond compiling it boots and passes the tools/testing/selftests/resctrl =
+test suite.
+>
+> Tested-by: Tony Luck <tony.luck@intel.com>
 
-It is extremely unlikely that there will ever be a justification
-for hci_qca, no matter what its internal malfunction, should
-cause system-wide suspend to terminate.
+LGTM; reloading of current becomes irrelevant now that we're reusing
+the existing variable `next_p`.
 
-Doing so, could result in the scenario where a laptop lid is closed,
-suspend termnates, the user places the running laptop into a breifcase,
-not expecting it to be overheating or draining its battery...
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-This is not a theoretical issue.
-The 6.3-rc1 currently fails this way on the Dell XPS-13-9310:
+Might be nice to tag this for stable.
 
-Bluetooth: hci0: SSR or FW download time out
-hci_uart_qca serial0-0: PM: dpm_run_callback(): acpi_subsys_suspend+0x0/0x70 returns -110
-hci_uart_qca serial0-0: PM: failed to suspend: error -110
-PM: suspend of devices aborted after 3218.724 msecs
-PM: start suspend of devices aborted after 3246.859 msecs
-PM: Some devices failed to suspend, or early wake event detected
-PM: resume of devices complete after 84.988 msecs
+Cc: <stable@vger.kernel.org>
 
-Signed-off-by: Len Brown <len.brown@intel.com>
-Cc: Marcel Holtmann <marcel@holtmann.org>
-Cc: Johan Hedberg <johan.hedberg@gmail.com>
-Cc: Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: linux-bluetooth@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+And credit Stephane who did a nice job tracking this down and having a
+concise reproducer.
+
+Reported-by: Stephane Eranian <eranian@google.com>
+
+Perhaps relevant links
+
+Link: https://lore.kernel.org/lkml/20230303231133.1486085-1-eranian@google.=
+com/
+Link: https://lore.kernel.org/lkml/alpine.LFD.2.01.0908011214330.3304@local=
+host.localdomain/
+
+Consider reusing parts of Stephane's message from the initial Link above?
+
+Thanks for the patch.
+
 ---
- drivers/bluetooth/hci_qca.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 3df8c3606e93..1795cc527b88 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -2309,7 +2309,7 @@ static int __maybe_unused qca_suspend(struct device *dev)
- error:
- 	clear_bit(QCA_SUSPENDING, &qca->flags);
- 
--	return ret;
-+	return 0;
- }
- 
- static int __maybe_unused qca_resume(struct device *dev)
--- 
-2.37.2
+While this issue was specific to the usage of `current` (implemented
+as a macro that uses `this_cpu_read_stable`, I wonder if we might hit
+issues again in the future (at least on x86 using the "p" constraint)
+in code that:
+1. uses this_cpu_read_stable to access a per cpu variable
+2. updates that per cpu variable
+3. uses this_cpu_read_stable to access the variable hoping to get the
+new value rather than the old.
 
+I guess that this_cpu_read should be used rather than
+this_cpu_read_stable? Maybe we can beef up the comment in
+arch/x86/include/asm/percpu.h to warn about this? The sentence about
+get_thread_info() being a user of this_cpu_read_stable() seems
+outdated/due for a refresh?
+
+Is __switch_to the only place that should be updating current?  Are
+there other variables other than current that might be afflicted by
+that 1,2,3 pattern I mention above?
+
+current_top_of_stack() uses this_cpu_read_stable() for instance.
+Perhaps there could be a caller that measures the stack depth, grows
+the stack, then rereads the wrong value?
+--=20
+Thanks,
+~Nick Desaulniers
