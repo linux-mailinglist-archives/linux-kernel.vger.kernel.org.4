@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6D76AF2CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:56:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BA56AF161
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbjCGS4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S231687AbjCGSmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 13:42:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233513AbjCGS4O (ORCPT
+        with ESMTP id S231300AbjCGSlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:56:14 -0500
+        Tue, 7 Mar 2023 13:41:50 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EA69749E;
-        Tue,  7 Mar 2023 10:43:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4EC9E30E;
+        Tue,  7 Mar 2023 10:32:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A6799CE1C79;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 726B1CE1C85;
+        Tue,  7 Mar 2023 18:29:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C80C433AE;
         Tue,  7 Mar 2023 18:28:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F30C433D2;
-        Tue,  7 Mar 2023 18:28:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678213736;
-        bh=3JdjywG6DsWfWzdvnLIaNQak/6ZVrelHGxK1Jb+bRtg=;
+        s=k20201202; t=1678213738;
+        bh=sxhOUKyK/NsC1MzrNzYBeE7kuwoED0rqhP9R9JiXQ3o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tvRTfYfCSLh/IziCDBzjHgXEvc0lyIja1XSjGQKUO6wnvdwH8JANNu7u651awRvem
-         hX5/li75IpG+veKKl+988VGOcqNgjqGj2szYqfWShD4a60S0cOc5bMXjQXXB2AmBGA
-         l83ZS7yFYNEUhHdcG3ElFzNtSZ6Brkz2aypJJlzaEliKmpXpNL3468i81xyqPf/YzM
-         Frtn4G9z1RuT4gS95ggjuZd7qysoazZFtCzU0onGYJDUASzG0LV9OjaJ0e6wp7Bwgb
-         +C/VVR/nFuAKNdQt1u/4ycjYeu2cL2OZTqGBKuAHNqluODtPXf6hVfQXMdjXt6+oMv
-         7CUHbBrFoQL7Q==
+        b=t8HGFNMk4sJ7JvkVF9YJaqueJncGoydFlLJnNwSGxSxKXyYHv0fBeoPg3MUFQDLBa
+         tPTfvdqfiyqOpnhWUEO2+AkaAbb5Chn8COeK6LZJrB++fwGRv+uI2HsOEQ9zquY19J
+         KR1BYAzcUGIGArw5s6U7u6UIhUMnOwrq865wfsvERv1wiHGDaIDW5W77rPLxmlU1Nn
+         +KlC8gboOR8gPABhqyHOsH/zh5K/duy25zCpG+cwCZCfU4DSZx68sYszBiZtf0VbpB
+         RWVr5X2Y6IK7Y03amLzW6gewbFAq78Fe9ZhraC2i9gNkKAkg3wy4w4VnWE7UnDD+1g
+         eAkS3AEfSP80A==
 From:   Bjorn Helgaas <helgaas@kernel.org>
 To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bjorn Helgaas <bhelgaas@google.com>,
-        Ketan Mukadam <ketan.mukadam@broadcom.com>
-Subject: [PATCH 03/10] scsi: be2iscsi: Drop redundant pci_enable_pcie_error_reporting()
-Date:   Tue,  7 Mar 2023 12:28:35 -0600
-Message-Id: <20230307182842.870378-4-helgaas@kernel.org>
+        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
+Subject: [PATCH 04/10] scsi: bfa: Drop redundant pci_enable_pcie_error_reporting()
+Date:   Tue,  7 Mar 2023 12:28:36 -0600
+Message-Id: <20230307182842.870378-5-helgaas@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230307182842.870378-1-helgaas@kernel.org>
 References: <20230307182842.870378-1-helgaas@kernel.org>
@@ -71,58 +72,56 @@ Message may cause the Root Port to generate an interrupt, depending on the
 AER Root Error Command register managed by the AER service driver.
 
 Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Ketan Mukadam <ketan.mukadam@broadcom.com>
+Cc: Anil Gurumurthy <anil.gurumurthy@qlogic.com>
+Cc: Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
 ---
- drivers/scsi/be2iscsi/be_main.c | 9 ---------
- drivers/scsi/be2iscsi/be_main.h | 1 -
- 2 files changed, 10 deletions(-)
+ drivers/scsi/bfa/bfad.c     | 6 ------
+ drivers/scsi/bfa/bfad_drv.h | 1 -
+ 2 files changed, 7 deletions(-)
 
-diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
-index 50a577ac3bb4..0aaf6fc47683 100644
---- a/drivers/scsi/be2iscsi/be_main.c
-+++ b/drivers/scsi/be2iscsi/be_main.c
-@@ -5545,13 +5545,6 @@ static int beiscsi_dev_probe(struct pci_dev *pcidev,
- 		goto disable_pci;
+diff --git a/drivers/scsi/bfa/bfad.c b/drivers/scsi/bfa/bfad.c
+index e5aa982ffedc..529b73a83d69 100644
+--- a/drivers/scsi/bfa/bfad.c
++++ b/drivers/scsi/bfa/bfad.c
+@@ -738,9 +738,6 @@ bfad_pci_init(struct pci_dev *pdev, struct bfad_s *bfad)
+ 		goto out_release_region;
  	}
  
--	/* Enable EEH reporting */
--	ret = pci_enable_pcie_error_reporting(pcidev);
--	if (ret)
--		beiscsi_log(phba, KERN_WARNING, BEISCSI_LOG_INIT,
--			    "BM_%d : PCIe Error Reporting "
--			    "Enabling Failed\n");
+-	/* Enable PCIE Advanced Error Recovery (AER) if kernel supports */
+-	pci_enable_pcie_error_reporting(pdev);
 -
- 	pci_save_state(pcidev);
+ 	bfad->pci_bar0_kva = pci_iomap(pdev, 0, pci_resource_len(pdev, 0));
+ 	bfad->pci_bar2_kva = pci_iomap(pdev, 2, pci_resource_len(pdev, 2));
  
- 	/* Initialize Driver configuration Paramters */
-@@ -5736,7 +5729,6 @@ static int beiscsi_dev_probe(struct pci_dev *pcidev,
- 	pci_disable_msix(phba->pcidev);
- 	pci_dev_put(phba->pcidev);
- 	iscsi_host_free(phba->shost);
--	pci_disable_pcie_error_reporting(pcidev);
- 	pci_set_drvdata(pcidev, NULL);
- disable_pci:
- 	pci_release_regions(pcidev);
-@@ -5779,7 +5771,6 @@ static void beiscsi_remove(struct pci_dev *pcidev)
+@@ -801,8 +798,6 @@ bfad_pci_uninit(struct pci_dev *pdev, struct bfad_s *bfad)
+ 	pci_iounmap(pdev, bfad->pci_bar0_kva);
+ 	pci_iounmap(pdev, bfad->pci_bar2_kva);
+ 	pci_release_regions(pdev);
+-	/* Disable PCIE Advanced Error Recovery (AER) */
+-	pci_disable_pcie_error_reporting(pdev);
+ 	pci_disable_device(pdev);
+ }
  
- 	pci_dev_put(phba->pcidev);
- 	iscsi_host_free(phba->shost);
--	pci_disable_pcie_error_reporting(pcidev);
- 	pci_set_drvdata(pcidev, NULL);
- 	pci_release_regions(pcidev);
- 	pci_disable_device(pcidev);
-diff --git a/drivers/scsi/be2iscsi/be_main.h b/drivers/scsi/be2iscsi/be_main.h
-index 98977c0700f1..71c95d144560 100644
---- a/drivers/scsi/be2iscsi/be_main.h
-+++ b/drivers/scsi/be2iscsi/be_main.h
-@@ -16,7 +16,6 @@
- #include <linux/in.h>
- #include <linux/ctype.h>
- #include <linux/module.h>
+@@ -1562,7 +1557,6 @@ bfad_pci_slot_reset(struct pci_dev *pdev)
+ 	if (restart_bfa(bfad) == -1)
+ 		goto out_disable_device;
+ 
+-	pci_enable_pcie_error_reporting(pdev);
+ 	dev_printk(KERN_WARNING, &pdev->dev,
+ 		   "slot_reset completed  flags: 0x%x!\n", bfad->bfad_flags);
+ 
+diff --git a/drivers/scsi/bfa/bfad_drv.h b/drivers/scsi/bfa/bfad_drv.h
+index eaee7c8bc2d2..7682cfa34265 100644
+--- a/drivers/scsi/bfa/bfad_drv.h
++++ b/drivers/scsi/bfa/bfad_drv.h
+@@ -30,7 +30,6 @@
+ #include <linux/vmalloc.h>
+ #include <linux/workqueue.h>
+ #include <linux/bitops.h>
 -#include <linux/aer.h>
  #include <scsi/scsi.h>
- #include <scsi/scsi_cmnd.h>
- #include <scsi/scsi_device.h>
+ #include <scsi/scsi_host.h>
+ #include <scsi/scsi_tcq.h>
 -- 
 2.25.1
 
