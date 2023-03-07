@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2746A6AE4DB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:35:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0292B6AE4FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCGPfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59372 "EHLO
+        id S230386AbjCGPhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:37:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjCGPel (ORCPT
+        with ESMTP id S231467AbjCGPh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:34:41 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A986BDF7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:34:30 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id y2so13565113pjg.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:34:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678203270;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=56U3L/n2SWLavdhRRg0Yc0+2596Qz1l4ZkRdkLejoUU=;
-        b=XE05ce7VjhLcmg2b6k24qZ4CG2aON6h0dnP5MrZA7IpCmkFOjSc56jZtmJXScBxysC
-         uJJMGpzLgPndF5BdD9l+kufPJ39Ds74mzp56H+CzM0KXzWKUOTDPLVmWW3gXyFx8P1/n
-         GV0A471MymaCiJnMtpsLU+ZoVZr3jOMnkdp0koibRo66Z+etqMOd9SPmoqw20DzVpsY3
-         SEQC7+fdkqaXdj2WQuAtaDGp3MP4dIS8h+Yp5p6/2Ya9f2f71af2eupeXiRmWz/J4avN
-         0H/Wo6xNB2JfaOQT2oVegcDKEl2/JTAciqpmqBfBsglS/G7R2T/MxPqLhfDrOXNPDABH
-         X9ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678203270;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=56U3L/n2SWLavdhRRg0Yc0+2596Qz1l4ZkRdkLejoUU=;
-        b=TzwZlM94hGcS4fShdSNE6mf6BfLv6CRTBTl792sWbhsHTP6oFDudW4XWHWV1An6n0+
-         stREqJiv+wmKcuYJfV8V3qTNxMjo12ahI1Ui1e+Sl2nUH3jsyYXg2i85zuncvw5O1CZ0
-         I1dQQuS7U8QuPkPTUXbc5WhJJY1+jcfdJgMgzZfs/NpWB3cpIA/VKTlWilWDF3cb/TWG
-         tpvc9P0P96q4r4kapk/op1a6lsPWByp8V9wf56gSTHNHoxpKRQNnj9J7nWBR/qJ6+7uX
-         KbO2U3boJ8Mb6iv4CuqYLpVP8WwOvz9zu0IA24dULgj545FWHvS/xIgFDawkkpVJazEE
-         TSKA==
-X-Gm-Message-State: AO0yUKX44g719TI9UM1yAK4TzQkFfa+0EavHzt7ouaKDpLVvaTdthXDD
-        jPUSpg9xsRBmDxVBNZpruPHI19phHw0h+Qw5wg==
-X-Google-Smtp-Source: AK7set9i5jTidB+5iLfFo/kIgbSP2yrxjysm14B1X3GeeckSSVOgQIQZ65cMFS64KvQAHlRwWUL6jMSu/c/TEMm3E1Q=
-X-Received: by 2002:a17:90a:a793:b0:237:9ca5:4d5d with SMTP id
- f19-20020a17090aa79300b002379ca54d5dmr5442398pjq.6.1678203269829; Tue, 07 Mar
- 2023 07:34:29 -0800 (PST)
+        Tue, 7 Mar 2023 10:37:29 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43EC78093C;
+        Tue,  7 Mar 2023 07:36:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=iL0BA
+        0gE4EmKLeYtSSOEBUD0N390Hz2s7HW1XrquUFw=; b=BoNuXBr1Y5eer5pvkhVcA
+        LBwFwIfMzogGFEbGCTI3atjdmrC+c8i6c9Tg3NtyRAn03LR/7oYbEcqQmu9OTR1a
+        y/gwPpVN+o065CVRdYkm63SH66BpRDmFFzYAbKIY5oFKM036X4cZ8apvSf5rG2KP
+        G5xpPkfbuL5wCD1RUNi/t0=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wD3LifPWQdkZzrLCQ--.14702S2;
+        Tue, 07 Mar 2023 23:35:43 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     ezequiel@vanguardiasur.com.ar
+Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] media: hantro: fix use after free bug in hantro_release due to race condition
+Date:   Tue,  7 Mar 2023 23:35:42 +0800
+Message-Id: <20230307153542.1178065-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:6745:b0:410:da3a:5074 with HTTP; Tue, 7 Mar 2023
- 07:34:29 -0800 (PST)
-Reply-To: westernuniont27@gmail.com
-From:   Western Union Togo <yatche512@gmail.com>
-Date:   Tue, 7 Mar 2023 15:34:29 +0000
-Message-ID: <CALrTvTpK7z_gR8=vCLW9vZHQ5Y+sSttB9CQP5=xcGTA0TiMq3Q@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102c listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8485]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [yatche512[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [yatche512[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [westernuniont27[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wD3LifPWQdkZzrLCQ--.14702S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Wry3Xw4kJw47Jr4rWr4kZwb_yoW8GF13pF
+        W7GrW7CrWjqF42gFnrJw409ayrCa4YgFW3Wrsru343AF9xtrnrGrW0y3W8AF9rtrZ3ZF45
+        XF48KrWrX39FvFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-eOJUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBErU1Xl52W07wAAsc
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Your overdue fund payment has been approved for payment via Western Union
-Money Transfer. Get back to us now for your payment. Note, your Transaction
-Code is: TG104110KY.
+In hantro_probe, vpu->watchdog_work is bound with
+hantro_watchdog. Then hantro_end_prepare_run may
+be called to start the work.
+
+If we close the file or remove the module which will
+call hantro_release and hantro_remove to make cleanup,
+there may be a unfinished work. The possible sequence
+is as follows, which will cause a typical UAF bug.
+
+The same thing will happen in hantro_release, and use
+ctx after freeing it.
+
+Fix it by canceling the work before cleanup in hantro_release.
+
+CPU0                  CPU1
+
+                    |hantro_watchdog
+hantro_remove     |
+  v4l2_m2m_release  |
+    kfree(m2m_dev); |
+                    |
+                    | v4l2_m2m_get_curr_priv
+                    |   m2m_dev->curr_ctx //use
+
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/media/platform/verisilicon/hantro_drv.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
+index b0aeedae7b65..cf00ccaa7829 100644
+--- a/drivers/media/platform/verisilicon/hantro_drv.c
++++ b/drivers/media/platform/verisilicon/hantro_drv.c
+@@ -601,6 +601,7 @@ static int hantro_release(struct file *filp)
+ 	 * No need for extra locking because this was the last reference
+ 	 * to this file.
+ 	 */
++	cancel_delayed_work(&vpu->watchdog_work);
+ 	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+ 	v4l2_fh_del(&ctx->fh);
+ 	v4l2_fh_exit(&ctx->fh);
+-- 
+2.25.1
+
