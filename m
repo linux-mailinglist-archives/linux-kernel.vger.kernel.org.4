@@ -2,271 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD12F6ADA5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50CFB6ADA60
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjCGJaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S230375AbjCGJaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230393AbjCGJ35 (ORCPT
+        with ESMTP id S230132AbjCGJaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:29:57 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34BEAD0B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:29:55 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id o6so11726370vsq.10
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 01:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678181395;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8goPimXtY9eXF8BKLvHmZ0u83Zt2PKSi+B0JmB3vsfc=;
-        b=NE+mKXAo+H3QjK0P0/OVAwrbvbtxvH1cdEHWvMUeuvH+pB7Eb1arYYOdiMdYqdn5fd
-         di6B53hmkM4z5HtrPs8vg+iDSWVHYYboYULC/5WjvGz78AK5lGIytP23gFTWVYYQlvpa
-         ILRLUXbl4vZs6YeRqZKizelS6VdpNtxzjYVFc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678181395;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8goPimXtY9eXF8BKLvHmZ0u83Zt2PKSi+B0JmB3vsfc=;
-        b=0Kga+6wYMr0VIs6VZSi7Fu1TEB4Xyzl/RephV6u6PkFu7ZYulj8VFzIir2NRzSdo0R
-         rBotDUuKWyWuIDSe/ic5JnQDA3x5ZcRUHqr/OydKNs+aB9G43aunv2TBID0RKoSRMc0W
-         47pIm5tmuGhI+xSVqZacG61RUFb0Y3P+AlX8PVFC3hK8DvYfYNJz7v9bN2sTVOKpwKku
-         PUr4Y/Pa0gDeOFxSpROr35nbd1T74+GAfBFNHTj2+nxnjhW9k/0FCMUDg1JVuA5KQ25j
-         CJqHA51VOW6J7ab6V2yg7LyQ0fFMeqDgfBTcG4BXLowZno1Wy8v1lUC6U7TpPPR4BmrI
-         IegA==
-X-Gm-Message-State: AO0yUKW+Zv97EkMeM2eNIk79N/sZWHlVrtLyjo9vc6YI+gqXQhXsBAR9
-        VCWhQoUsCjeXJCYxNK2aVtuYcHfHvbJZcDjAaYsStw==
-X-Google-Smtp-Source: AK7set9IkGlmYXilT5agN2FXyJziAMhQFQMkO74+iSB4SZT5UPALL4hZi2qilSE5uy1FMm4UoDTQVSQrzs0rQLH41qk=
-X-Received: by 2002:a67:e053:0:b0:415:48dd:e0b9 with SMTP id
- n19-20020a67e053000000b0041548dde0b9mr9546490vsl.3.1678181395014; Tue, 07 Mar
- 2023 01:29:55 -0800 (PST)
+        Tue, 7 Mar 2023 04:30:13 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 765A3125A2;
+        Tue,  7 Mar 2023 01:30:08 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EC8EB6602FE5;
+        Tue,  7 Mar 2023 09:30:06 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678181407;
+        bh=9SABq8iXVESIcH7tVR9rm9V3gZZHiNkHp84CGrGa3yw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kTiWBQcC1KNkom+7BnNGE14JbRpIEIei0qbqkSFZ72GTl5OX9nIC8dnmrWK4W6H4M
+         MX6DRSWIeb/+Q44pGw6CPbzEmIp8a71X0IpiWrg4eV2d+dFFR/j4u42PnoGq6DYhMs
+         iY9M7EU0KDQ6TLe7BWv2pOIr72vtvSb7WxC18w7+T8VxEbKi++TIVKl4YpjMXFefLv
+         frb58kPCfJ1TSNVVGRi8i/r8iWwgJtgh3rpjg5KJXZZfvEUR0sonHwhJQf5hkJ1eIj
+         i+9HTSUOZbSjPCruhMDgeBy+5zhhrU4DTcKV1f5yF0erZz1ZxQIkrQIa7/1mKZMsLz
+         O5nFudCcv+1LQ==
+Message-ID: <e1b9d901-421c-3509-c92a-c59d49ff2b0d@collabora.com>
+Date:   Tue, 7 Mar 2023 10:30:04 +0100
 MIME-Version: 1.0
-References: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com>
- <20230206100105.861720-8-angelogioacchino.delregno@collabora.com>
- <CAGXv+5Ey02hzNQA2O2ussAt9sXxxy9mOjze2GH90Ko9HeoETXQ@mail.gmail.com> <a890fd4c-f15e-480a-64e3-c42c73584417@collabora.com>
-In-Reply-To: <a890fd4c-f15e-480a-64e3-c42c73584417@collabora.com>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 7 Mar 2023 17:29:44 +0800
-Message-ID: <CAGXv+5E_2iKH625PTRwo-qJONc2HqgHY5_+QJcuCmdZuEf7csw@mail.gmail.com>
-Subject: Re: [PATCH v3 7/7] clk: mediatek: mt8195: Add support for frequency
- hopping through FHCTL
-To:     AngeloGioacchino Del Regno 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 12/19] arm64: dts: mediatek: mt8192-asurada: Couple
+ VGPU and VSRAM_OTHER regulators
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
+ <20230301095523.428461-13-angelogioacchino.delregno@collabora.com>
+ <CAGXv+5GHdtbheL6wxtDo-szk+=3BGk2z93SBowd4Z=E9XupZkw@mail.gmail.com>
+ <5dba27e1-d480-ea24-c1ba-03bb7f77b1b1@collabora.com>
+ <CAGXv+5FwNfZ7TwKVMM5_uAjYQ6ZmhZVFsWREb_da-jxC6EUVJw@mail.gmail.com>
+ <CAGXv+5F8A4kLq3y8dE4mrcVb338-afDorWsS5MRBvWVPgiAhEA@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
-        miles.chen@mediatek.com, chun-jie.chen@mediatek.com,
-        rex-bc.chen@mediatek.com, jose.exposito89@gmail.com,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAGXv+5F8A4kLq3y8dE4mrcVb338-afDorWsS5MRBvWVPgiAhEA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 5:27=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 07/03/23 05:43, Chen-Yu Tsai ha scritto:
-> > On Mon, Feb 6, 2023 at 6:01=E2=80=AFPM AngeloGioacchino Del Regno
-> > <angelogioacchino.delregno@collabora.com> wrote:
-> >>
-> >> Add FHCTL parameters and register PLLs through FHCTL to add support
-> >> for frequency hopping and SSC. FHCTL will be enabled only on PLLs
-> >> specified in devicetree.
-> >>
-> >> This commit brings functional changes only upon addition of
-> >> devicetree configuration.
-> >>
-> >> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@c=
-ollabora.com>
-> >> ---
-> >>   drivers/clk/mediatek/clk-mt8195-apmixedsys.c | 69 ++++++++++++++++++=
-+-
-> >>   1 file changed, 66 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c b/drivers/cl=
-k/mediatek/clk-mt8195-apmixedsys.c
-> >> index 1bc917f2667e..c0db31ce0741 100644
-> >> --- a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> >> +++ b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
-> >> @@ -3,9 +3,11 @@
-> >>   // Copyright (c) 2021 MediaTek Inc.
-> >>   // Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
-> >>
-> >> +#include "clk-fhctl.h"
-> >>   #include "clk-gate.h"
-> >>   #include "clk-mtk.h"
-> >>   #include "clk-pll.h"
-> >> +#include "clk-pllfh.h"
-> >>
-> >>   #include <dt-bindings/clock/mt8195-clk.h>
-> >>   #include <linux/of_device.h>
-> >> @@ -105,6 +107,61 @@ static const struct mtk_pll_data plls[] =3D {
-> >>              0, 0, 22, 0x0158, 24, 0, 0, 0, 0x0158, 0, 0x0158, 0, 9),
-> >>   };
-> >>
-> >> +enum fh_pll_id {
-> >> +       FH_ARMPLL_LL,
-> >> +       FH_ARMPLL_BL,
-> >> +       FH_MEMPLL,
-> >> +       FH_ADSPPLL,
-> >> +       FH_NNAPLL,
-> >> +       FH_CCIPLL,
-> >> +       FH_MFGPLL,
-> >> +       FH_TVDPLL2,
-> >> +       FH_MPLL,
-> >> +       FH_MMPLL,
-> >> +       FH_MAINPLL,
-> >> +       FH_MSDCPLL,
-> >> +       FH_IMGPLL,
-> >> +       FH_VDECPLL,
-> >> +       FH_TVDPLL1,
-> >> +       FH_NR_FH,
-> >> +};
-> >> +
-> >> +#define FH(_pllid, _fhid, _offset) {                                 =
-  \
-> >> +               .data =3D {                                           =
-    \
-> >> +                       .pll_id =3D _pllid,                           =
-    \
-> >> +                       .fh_id =3D _fhid,                             =
-    \
-> >> +                       .fh_ver =3D FHCTL_PLLFH_V2,                   =
-    \
-> >> +                       .fhx_offset =3D _offset,                      =
-    \
-> >> +                       .dds_mask =3D GENMASK(21, 0),                 =
-    \
-> >
-> >> +                       .slope0_value =3D 0x6003c97,                  =
-    \
-> >> +                       .slope1_value =3D 0x6003c97,                  =
-    \
-> >
-> > Are these
-> >
-> >> +                       .sfstrx_en =3D BIT(2),                        =
-    \
-> >> +                       .frddsx_en =3D BIT(1),                        =
-    \
-> >> +                       .fhctlx_en =3D BIT(0),                        =
-    \
-> >> +                       .tgl_org =3D BIT(31),                         =
-    \
-> >> +                       .dvfs_tri =3D BIT(31),                        =
-    \
-> >> +                       .pcwchg =3D BIT(31),                          =
-    \
-> >
-> >> +                       .dt_val =3D 0x0,                              =
-    \
-> >> +                       .df_val =3D 0x9,                              =
-    \
-> >
-> > and these just copied from MT8186?
->
-> Yes, and that's because they're really the same.
+Il 07/03/23 10:24, Chen-Yu Tsai ha scritto:
+> On Fri, Mar 3, 2023 at 12:09 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
+>>
+>> On Thu, Mar 2, 2023 at 6:17 PM AngeloGioacchino Del Regno
+>> <angelogioacchino.delregno@collabora.com> wrote:
+>>>
+>>> Il 02/03/23 11:03, Chen-Yu Tsai ha scritto:
+>>>> On Wed, Mar 1, 2023 at 5:55 PM AngeloGioacchino Del Regno
+>>>> <angelogioacchino.delregno@collabora.com> wrote:
+>>>>>
+>>>>> Add coupling for these regulators, as VSRAM_OTHER is used to power the
+>>>>> GPU SRAM, and they have a strict voltage output relation to satisfy in
+>>>>> order to ensure GPU stable operation.
+>>>>> While at it, also add voltage constraint overrides for the GPU SRAM
+>>>>> regulator "mt6359_vsram_others" so that we stay in a safe range of
+>>>>> 0.75-0.80V.
+>>>>>
+>>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>>>>> ---
+>>>>>    arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 9 +++++++++
+>>>>>    1 file changed, 9 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>>>>> index 8570b78c04a4..f858eca219d7 100644
+>>>>> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
+>>>>> @@ -447,6 +447,13 @@ &mt6359_vrf12_ldo_reg {
+>>>>>           regulator-always-on;
+>>>>>    };
+>>>>>
+>>>>> +&mt6359_vsram_others_ldo_reg {
+>>>>> +       regulator-min-microvolt = <750000>;
+>>>>> +       regulator-max-microvolt = <800000>;
+>>>>> +       regulator-coupled-with = <&mt6315_7_vbuck1>;
+>>>>> +       regulator-coupled-max-spread = <10000>;
+>>>>
+>>>> Looking again at the downstream OPP table, it seems there's no voltage
+>>>> difference requirement. It only needs V_SRAM >= V_GPU. Same applies to
+>>>> MT8195. Looks like only MT8183 and MT8186 need V_SRAM - V_GPU >= 10000.
+>>>
+>>> On MT8195 we don't need any regulator coupling. There, the GPU-SRAM voltage
+>>> is fixed at .. I don't remember, 0.7V? - anyway - MT8195 doesn't need to
+>>> scale the vsram.
+>>
+>> Looks like it's fixed at 0.75V. I guess we're Ok on MT8195.
+>>
+>>>>
+>>>> Would setting max-spread to 0 work? I ask because with both regulator's
+>>>> maximum voltage set to 0.8V, there's no way we can reach the highest
+>>>> OPP.
+>>>>
+>>>
+>>> No that doesn't work. I can raise the Vgpu max voltage to 0.88V to solve the
+>>> issue right here and right now, or we can leave it like that and revisit it
+>>> later.
+>>>
+>>> I would at this point go for setting mt6315_7_vbuck1's max-microvolt to
+>>> 880000, as this is the maximum recommended voltage for the GPU as per the
+>>> MT8192 datasheet, it would also make sense as we would be still describing
+>>> the hardware in a correct manner.
+>>>
+>>> What do you think?
+>>
+>> If it's just to accommodate the coupler stuff, I say just set the maximum
+>> at the lowest possible setting that satisfies the coupler constraint and
+>> granularity of the regulator. The regulator does 6250 uV steps, so I guess
+>> we could set the maximum at 812500 uV, with a comment stating the nominal
+>> voltage of 800000 uV and that the extra 12500 uV is to workaround coupler
+>> limitations.
+>>
+>> Does that sound OK?
+> 
+> Even without changing anything, the coupler seems to work OK:
+> 
+>   vsram_others                     1    1      0  normal   800mV
+> 0mA   750mV   800mV
+>      10006000.syscon:power-controller-domain   1
+>           0mA     0mV     0mV
+>   Vgpu                             2    2      0  normal   800mV
+> 0mA   606mV   800mV
+>      13000000.gpu-mali             1
+> 0mA   800mV   800mV
+>      10006000.syscon:power-controller-domain   1
+>           0mA     0mV     0mV
+> 
+> Am I missing something?
+> 
 
-Just to be safe, I asked MediaTek to take a look at the parameters.
+I don't think you are... I may be getting confused by all of the changesets
+that I'm pushing at once.
 
-> >
-> >> +                       .updnlmt_shft =3D 16,                         =
-    \
-> >> +                       .msk_frddsx_dys =3D GENMASK(23, 20),          =
-    \
-> >> +                       .msk_frddsx_dts =3D GENMASK(19, 16),          =
-    \
-> >> +               },                                                    =
-  \
-> >> +       }
-> >> +
-> >> +static struct mtk_pllfh_data pllfhs[] =3D {
-> >> +       FH(CLK_APMIXED_ADSPPLL, FH_ADSPPLL, 0x78),
-> >> +       FH(CLK_APMIXED_NNAPLL, FH_NNAPLL, 0x8c),
-> >> +       FH(CLK_APMIXED_MFGPLL, FH_MFGPLL, 0xb4),
-> >> +       FH(CLK_APMIXED_TVDPLL2, FH_TVDPLL2, 0xc8),
-> >> +       FH(CLK_APMIXED_MMPLL, FH_MMPLL, 0xf0),
-> >> +       FH(CLK_APMIXED_MAINPLL, FH_MAINPLL, 0x104),
-> >> +       FH(CLK_APMIXED_MSDCPLL, FH_MSDCPLL, 0x118),
-> >> +       FH(CLK_APMIXED_IMGPLL, FH_IMGPLL, 0x12c),
-> >> +       FH(CLK_APMIXED_VDECPLL, FH_VDECPLL, 0x140),
-> >> +       FH(CLK_APMIXED_TVDPLL2, FH_TVDPLL1, 0x154),
-> >> +};
-> >> +
-> >>   static const struct of_device_id of_match_clk_mt8195_apmixed[] =3D {
-> >>          { .compatible =3D "mediatek,mt8195-apmixedsys", },
-> >>          {}
-> >> @@ -114,13 +171,17 @@ static int clk_mt8195_apmixed_probe(struct platf=
-orm_device *pdev)
-> >>   {
-> >>          struct clk_hw_onecell_data *clk_data;
-> >>          struct device_node *node =3D pdev->dev.of_node;
-> >> +       const u8 *fhctl_node =3D "mediatek,mt8195-fhctl";
-> >>          int r;
-> >>
-> >>          clk_data =3D mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-> >>          if (!clk_data)
-> >>                  return -ENOMEM;
-> >>
-> >> -       r =3D mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_=
-data);
-> >> +       fhctl_parse_dt(fhctl_node, pllfhs, ARRAY_SIZE(pllfhs));
-> >> +
-> >> +       r =3D mtk_clk_register_pllfhs(node, plls, ARRAY_SIZE(plls),
-> >> +                                   pllfhs, ARRAY_SIZE(pllfhs), clk_da=
-ta);
-> >>          if (r)
-> >>                  goto free_apmixed_data;
-> >>
-> >> @@ -140,7 +201,8 @@ static int clk_mt8195_apmixed_probe(struct platfor=
-m_device *pdev)
-> >>   unregister_gates:
-> >>          mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clk=
-s), clk_data);
-> >>   unregister_plls:
-> >> -       mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-> >> +       mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
-> >> +                                 ARRAY_SIZE(pllfhs), clk_data);
-> >
-> > Nit: I think this could be squeezed into one line.
-> >
-> >>   free_apmixed_data:
-> >>          mtk_free_clk_data(clk_data);
-> >>          return r;
-> >> @@ -153,7 +215,8 @@ static int clk_mt8195_apmixed_remove(struct platfo=
-rm_device *pdev)
-> >>
-> >>          of_clk_del_provider(node);
-> >>          mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clk=
-s), clk_data);
-> >> -       mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
-> >> +       mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
-> >> +                                 ARRAY_SIZE(pllfhs), clk_data);
-> >
-> > Same here.
-> >
->
-> That's the same on the others as well, but if I compress those lines I wi=
-ll have
-> to rebase the clocks cleanup series again and send the 54 patches again..=
- I'd like
-> to avoid that noise.
->
-> If you really want though, I can do that... what should I do?
+Hence, is this commit fine as it is?
 
-I see. Let's keep it the way it is then.
+Regards,
+Angelo
