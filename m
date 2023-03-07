@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D956ADD65
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9C9E6ADD6D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjCGLbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S230396AbjCGLbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjCGLbH (ORCPT
+        with ESMTP id S230161AbjCGLbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:31:07 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2082.outbound.protection.outlook.com [40.107.212.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23516A1C7;
-        Tue,  7 Mar 2023 03:30:30 -0800 (PST)
+        Tue, 7 Mar 2023 06:31:32 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2074.outbound.protection.outlook.com [40.107.100.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6E454C85;
+        Tue,  7 Mar 2023 03:30:55 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UGU+xn9xzYrY599TAFzTzOe5pwcjzQI2tjL8gQYc0v6hl31tg4ccH7DoNnUXIUofM1jjOTc4vormJlx19Gif68GMrGRd+1gfmWL1yX10gKV4hRExEqzS6d9bq6VyBSmv7YiTOjQxWIQHshgduAHLnJQqbeUv/e5VwxZvCMHYyZ45IjhTAGpmgWU0i3a4J8RyVM4XheeD3cqETkkbW1j74kKNHmVKUCgYIxaGvdoy6VnZf5EAf/nXRQ2oBFuyiAA0YjgG15j5CVOL0cOwO14PLQPFjXZwWsgcRNoTKYR5C6z9yqFL6ZV3Hln/N09ZMqiHKuFFZNEeqiPyqSKzsEqN3Q==
+ b=oPhlRy5r8eMTrnquTz0yCmJQbnGrecdGU/7wMdlCtnnW19vSbpUHOGnu/dzPhlMtc+fVEMiNpq1sPj3sFgIp7K06z1Ny81k5qLKANrl/bx1YOzFP+Hd0O1l966NOsSmbDnz31YdmILnVEmriBb4Py5HlYdH/bwx+Eh1P/QOVuAGU8sAZE+9cVMmTSGJUzzspDHFZHj3jeJnjs/rkMQkTmAxr3rq3LtBv20nunQXqAxZWOmJ5VsgYPuCc0iihtiPSeSehmRh9zXWUO3isyRHoIu3NNtQA68SZO0ZEu+qBVGYpVrtPFP8TfQgv6XODkxw5/F7AUoGwCsbK9xyChDaPCw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5cYgxY7jS9RkiNJddweKT7G3Fpt9JgJeRru7SxRPUno=;
- b=ceIvr3Xmnpt57RcQX/9UbgmicFRzRqKjcriKc78FS0qJDw8g7KqgWjfKTSoTMNWkSnBP8IEA2aCa6C04OH0kcbmdtrAGE9fIyhWmz13HUrLAOVoZyidbxlHufuYmn4y3VbKrXJu4wPShwGiT7vaHib1uQIW6khXkBn/MTCacNZ4a0626OSsAVzNhC84h9K1XeNcC9SFApv/JhU50GiVe7EEFEBEOqbSLiJerjIuqKuSQpGudfHoUX+y6yWsQPs3QCQS9D1wcTihyhdLHc2yTN+AUM2ix28u3BkGnoC3oed6gtWUmcwCO0y308oGqZoeUS2iCY9InCfKwHK+ZPZj1yQ==
+ bh=UOnZlLrGEYf1/bHyJj+hOsRjUJ2z2CxK+Pf03tzIqFM=;
+ b=NN/PW7tFbvwKZGz6Q7MPQaA5OTCcselLkjfLGrgMw1UjyD14C7XRMEWQRUq/xufDGwkzPwQI2QiHwX8poa5G6UMmX0CwWI06kM6gltfLbG+zdy4cXyIZS1d0W4HDVD7b9ZUblem5uXpv+SYWxFptET8jGxb9N0t1Rz0JY97coC8USrL7k8H0oSZl/CJE2BhmSYVkPYOuXzQfK4GPYPoYi2LBJWVEsZO0+XQnQOw/o19swBclVq0ZpyCXne/AbuYc/C6FzX+T64KWPd1yslFF8O8XgTZmsr+K1AQw7ewXbS4LO1jObaaDJHfAqeGMKcXj1Bn4XlsSb5NZwa9WPXu5tw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5cYgxY7jS9RkiNJddweKT7G3Fpt9JgJeRru7SxRPUno=;
- b=YyYdfraE1Kx+aITe/LtqyWDJKq3vdxdWg5lUWsjvrro10QWIxjixj2zD1Y713a/dvmp0WFWBr3DKRlkTu3m4pXYCnIbRSpU0eiFrQl/AoJQhs9LpfX9iK+QkmcG/J0KqYmnw7kC09kYNJzzhUa2XbrBmvib1PjStfbxI9bS/IvQ=
-Received: from MW4PR04CA0352.namprd04.prod.outlook.com (2603:10b6:303:8a::27)
- by MN2PR12MB4208.namprd12.prod.outlook.com (2603:10b6:208:1d0::18) with
+ bh=UOnZlLrGEYf1/bHyJj+hOsRjUJ2z2CxK+Pf03tzIqFM=;
+ b=h03eehklU2syzUzCmtlsoo3E/Fn29cXtBXe/nYt9WnrkFmd6ArXIyIs5vHphLRDcC0VfB3EDtjjc+ctnHTTmglEJq/+bgHkFyxxdoT38n9gRjn51VQze5zfvkfhP4QtyTJ2HWYQ1kTrC2eMouTzNe1FLI+5EvaLrBzFsNCg6jE8=
+Received: from DS7PR03CA0244.namprd03.prod.outlook.com (2603:10b6:5:3b3::9) by
+ BY5PR12MB4243.namprd12.prod.outlook.com (2603:10b6:a03:20f::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 11:30:01 +0000
-Received: from CO1NAM11FT112.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8a:cafe::b4) by MW4PR04CA0352.outlook.office365.com
- (2603:10b6:303:8a::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29 via Frontend
- Transport; Tue, 7 Mar 2023 11:30:01 +0000
+ 2023 11:30:25 +0000
+Received: from DS1PEPF0000B07A.namprd05.prod.outlook.com
+ (2603:10b6:5:3b3:cafe::c7) by DS7PR03CA0244.outlook.office365.com
+ (2603:10b6:5:3b3::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28 via Frontend
+ Transport; Tue, 7 Mar 2023 11:30:25 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT112.mail.protection.outlook.com (10.13.174.213) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 11:30:00 +0000
+ DS1PEPF0000B07A.mail.protection.outlook.com (10.167.17.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.13 via Frontend Transport; Tue, 7 Mar 2023 11:30:25 +0000
 Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 7 Mar
- 2023 05:29:54 -0600
+ 2023 05:30:19 -0600
 From:   Wyes Karny <wyes.karny@amd.com>
 To:     Rafael J Wysocki <rafael@kernel.org>,
         Huang Rui <ray.huang@amd.com>,
@@ -71,9 +71,9 @@ CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Wyes Karny <wyes.karny@amd.com>,
         Mario Limonciello <mario.limonciello@amd.com>,
         Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: [PATCH v8 4/6] cpufreq: amd-pstate: Add guided autonomous mode
-Date:   Tue, 7 Mar 2023 11:27:38 +0000
-Message-ID: <20230307112740.132338-5-wyes.karny@amd.com>
+Subject: [PATCH v8 5/6] cpufreq: amd-pstate: Add guided mode control support via sysfs
+Date:   Tue, 7 Mar 2023 11:27:39 +0000
+Message-ID: <20230307112740.132338-6-wyes.karny@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230307112740.132338-1-wyes.karny@amd.com>
 References: <20230307112740.132338-1-wyes.karny@amd.com>
@@ -85,23 +85,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT112:EE_|MN2PR12MB4208:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ab298db-f4c1-4dc7-8840-08db1eff4a1d
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000B07A:EE_|BY5PR12MB4243:EE_
+X-MS-Office365-Filtering-Correlation-Id: a5867b76-837c-4455-60e9-08db1eff58ae
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: f6GJiI4EnrAnqL7YSqT9gBxD+PjWPXrLoXXZYZd2QEE819PDUNo9EZ3FJRi/RIiJnpItHwdODh6A5ATD6QhuGOW38QhJh0MPDW63v/25waFPID0J8zFRTBFhN0M5pz0IP16IFUwnI48kBJm+xZCeBvwwt9Cw2q1OevyY7QmkRrEkLwXZhIky06yfXNvSiynDUF6nEBANchi+9BrnAvZIfEI/+//Z5kWdslwQOM6B7cnkNd3OuDTEybwmp3ap9EJole6EVa45sN2akrFTPOgWHm2CXUGeT51ONrWZwl0q0lDhG65JH3yf9rqkHmQ/r9FKm1kfDPpyPt6CUyxDjzQajVyiDAme59RY/P5mOmwswKvytbKWCZj79kHU0iLYpkkmyAkzdaPv7K23hI5x6fvSZxKCkguhOVhA337EJ0420V24o7gGr9RVT/dEby0Ze22iIwWWVRuX1AyRNGAk7ucx8NW+68AmEOj5H/JII1gadEIfVUAUuLMNd8oEqDaq0MwG4Ah2AQuz0pc6YnRraLBNETHSo+mcfYiMPtxH/J9DJk/1qTkE4xXLRc9nzfadiGCQjXj7Aur0RZH9IGXWwWKI1NEIDtDRWR/XUUenwLZA6lSrWHWn7kC5pBCBAu3G/JQYPdAOWgQYsvKgBRS95qisz2CatZmolP9vO3sNimk1RlRFDbHjADCRyO2fS7leybo27fzNAUjGMsY4UFOyIULke5ZxUvQBIiJt1R+90UfASQM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(396003)(136003)(346002)(451199018)(40470700004)(36840700001)(46966006)(8936002)(44832011)(5660300002)(7416002)(2906002)(41300700001)(4326008)(70206006)(83380400001)(70586007)(8676002)(316002)(54906003)(6636002)(6666004)(478600001)(110136005)(7696005)(40460700003)(426003)(1076003)(336012)(40480700001)(2616005)(186003)(86362001)(16526019)(47076005)(82310400005)(81166007)(356005)(82740400003)(26005)(36756003)(36860700001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: JY5kw0sn8HoqDGWNwgX6gxZReGkH0R88wOi+dconLSC7f2dk7juFrxJXm8//2y46F589d7KkKFDkpw6B7RGY3KHd2DrDaDAOqDhn1ZeVg79Jir0bhQpYpKYe6hKQiVmPTdTspGbZNomA2BxvqGNX9CvI8r031SZjU21VMqBG6EQ5suVTWkmEotUtLlJvoKVFs+AjZpAkk6sPa+33tx/iufnNISNluexdfH5W/xaQu8Dz4qkw82//E25wbjuRu7hx6V+mangh9q6/106L0doKE5RCiHOQHdjjh7EKve+VNw8IZTVOqgRkfTTEEbJUmo53JhSYc+781JWSD/nh8uc9MoB42v1iC/ZyPGv5Px4+jc6rYtkNQJCQglaDF24qCu3a5U38HiP3s9dm9vl68RZNFYDl0DjU2vf0+DjJb3VyOAgi443E5eAA0xn3CTifG//fdTrtfKmHBvkT1YWtnZQK0UTvFmxFhcX+5XSnjOz3YKXSBg3QJxrJhHepYWKZLI4RAPIf4jQIn1aN+6xKSrsB84MXJ3ErzOYwik9BNPxVcQaW8yk9wFGdcOOLKROdDYFrW4fKmQ0ogZMLPhY820PRR6R5ote/u7klVOdxqHX4n/NsB5xNIc+ucnwpp/B1cNNOfdfBk55Qo0Ct4HHPrHvq92La+2Up1LcpI/O5APqrK8WZRv3hNHq/HEcmpfGF5B8eqLuGbRdFovQIe7gKl2ClWYwU360CIL6z/iRQwcq8WhM=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(376002)(39860400002)(136003)(396003)(346002)(451199018)(36840700001)(40470700004)(46966006)(2906002)(356005)(81166007)(36860700001)(336012)(82740400003)(186003)(26005)(16526019)(2616005)(1076003)(44832011)(7696005)(6666004)(40460700003)(82310400005)(478600001)(70586007)(70206006)(5660300002)(8936002)(7416002)(40480700001)(41300700001)(47076005)(110136005)(426003)(54906003)(6636002)(36756003)(4326008)(8676002)(316002)(86362001)(83380400001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 11:30:00.9656
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 11:30:25.5592
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ab298db-f4c1-4dc7-8840-08db1eff4a1d
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5867b76-837c-4455-60e9-08db1eff58ae
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT112.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B07A.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4208
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4243
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -112,176 +112,215 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From ACPI spec below 3 modes for CPPC can be defined:
-1. Non autonomous: OS scaling governor specifies operating frequency/
-   performance level through `Desired Performance` register and platform
-follows that.
-2. Guided autonomous: OS scaling governor specifies min and max
-   frequencies/ performance levels through `Minimum Performance` and
-`Maximum Performance` register, and platform can autonomously select an
-operating frequency in this range.
-3. Fully autonomous: OS only hints (via EPP) to platform for the required
-   energy performance preference for the workload and platform autonomously
-scales the frequency.
+amd_pstate driver's `status` sysfs entry helps to control the driver's
+mode dynamically by user. After the addition of guided mode the
+combinations of mode transitions have been increased (16 combinations).
+Therefore optimise the amd_pstate_update_status function by implementing
+a state transition table.
 
-Currently (1) is supported by amd_pstate as passive mode, and (3) is
-implemented by EPP support. This change is to support (2).
+There are 4 states amd_pstate supports, namely: 'disable', 'passive',
+'active', and 'guided'.  The transition from any state to any other
+state is possible after this change.
 
-In guided autonomous mode the min_perf is based on the input from the
-scaling governor. For example, in case of schedutil this value depends
-on the current utilization. And max_perf is set to max capacity.
+Sysfs interface:
 
-To activate guided auto mode ``amd_pstate=guided`` command line
-parameter has to be passed in the kernel.
+To disable amd_pstate driver:
+ # echo disable > /sys/devices/system/cpu/amd_pstate/status
+
+To enable passive mode:
+ # echo passive > /sys/devices/system/cpu/amd_pstate/status
+
+To change mode to active:
+ # echo active > /sys/devices/system/cpu/amd_pstate/status
+
+To change mode to guided:
+ # echo guided > /sys/devices/system/cpu/amd_pstate/status
 
 Acked-by: Huang Rui <ray.huang@amd.com>
 Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 Signed-off-by: Wyes Karny <wyes.karny@amd.com>
 ---
- .../admin-guide/kernel-parameters.txt         | 15 +++++---
- drivers/cpufreq/amd-pstate.c                  | 34 +++++++++++++++----
- include/linux/amd-pstate.h                    |  2 ++
- 3 files changed, 40 insertions(+), 11 deletions(-)
+ drivers/cpufreq/amd-pstate.c | 143 +++++++++++++++++++++++++----------
+ 1 file changed, 101 insertions(+), 42 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 1e38f3ae0e62..1e5fe4891dd7 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -344,11 +344,11 @@
- 			  Do not enable amd_pstate as the default
- 			  scaling driver for the supported processors
- 			passive
--			  Use amd_pstate as a scaling driver, driver requests a
--			  desired performance on this abstract scale and the power
--			  management firmware translates the requests into actual
--			  hardware states (core frequency, data fabric and memory
--			  clocks etc.)
-+			  Use amd_pstate with passive mode as a scaling driver.
-+			  In this mode autonomous selection is disabled.
-+			  Driver requests a desired performance level and platform
-+			  tries to match the same performance level if it is
-+			  satisfied by guaranteed performance level.
- 			active
- 			  Use amd_pstate_epp driver instance as the scaling driver,
- 			  driver provides a hint to the hardware if software wants
-@@ -356,6 +356,11 @@
- 			  to the CPPC firmware. then CPPC power algorithm will
- 			  calculate the runtime workload and adjust the realtime cores
- 			  frequency.
-+			guided
-+			  Activate guided autonomous mode. Driver requests minimum and
-+			  maximum performance level and the platform autonomously
-+			  selects a performance level in this range and appropriate
-+			  to the current workload.
- 
- 	amijoy.map=	[HW,JOY] Amiga joystick support
- 			Map of devices attached to JOY0DAT and JOY1DAT
 diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 73c7643b2697..61dcd7b89b26 100644
+index 61dcd7b89b26..7955cfc91c31 100644
 --- a/drivers/cpufreq/amd-pstate.c
 +++ b/drivers/cpufreq/amd-pstate.c
-@@ -308,7 +308,22 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
- 		   cppc_perf.lowest_nonlinear_perf);
- 	WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
+@@ -106,6 +106,8 @@ static unsigned int epp_values[] = {
+ 	[EPP_INDEX_POWERSAVE] = AMD_CPPC_EPP_POWERSAVE,
+  };
  
--	return 0;
-+	if (cppc_state == AMD_PSTATE_ACTIVE)
-+		return 0;
++typedef int (*cppc_mode_transition_fn)(int);
 +
-+	ret = cppc_get_auto_sel_caps(cpudata->cpu, &cppc_perf);
-+	if (ret) {
-+		pr_warn("failed to get auto_sel, ret: %d\n", ret);
-+		return 0;
-+	}
-+
-+	ret = cppc_set_auto_sel(cpudata->cpu,
-+			(cppc_state == AMD_PSTATE_PASSIVE) ? 0 : 1);
-+
-+	if (ret)
-+		pr_warn("failed to set auto_sel, ret: %d\n", ret);
-+
-+	return ret;
- }
- 
- DEFINE_STATIC_CALL(amd_pstate_init_perf, pstate_init_perf);
-@@ -385,12 +400,18 @@ static inline bool amd_pstate_sample(struct amd_cpudata *cpudata)
- }
- 
- static void amd_pstate_update(struct amd_cpudata *cpudata, u32 min_perf,
--			      u32 des_perf, u32 max_perf, bool fast_switch)
-+			      u32 des_perf, u32 max_perf, bool fast_switch, int gov_flags)
+ static inline int get_mode_idx_from_str(const char *str, size_t size)
  {
- 	u64 prev = READ_ONCE(cpudata->cppc_req_cached);
- 	u64 value = prev;
- 
- 	des_perf = clamp_t(unsigned long, des_perf, min_perf, max_perf);
-+
-+	if ((cppc_state == AMD_PSTATE_GUIDED) && (gov_flags & CPUFREQ_GOV_DYNAMIC_SWITCHING)) {
-+		min_perf = des_perf;
-+		des_perf = 0;
-+	}
-+
- 	value &= ~AMD_CPPC_MIN_PERF(~0L);
- 	value |= AMD_CPPC_MIN_PERF(min_perf);
- 
-@@ -445,7 +466,7 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
- 
- 	cpufreq_freq_transition_begin(policy, &freqs);
- 	amd_pstate_update(cpudata, min_perf, des_perf,
--			  max_perf, false);
-+			  max_perf, false, policy->governor->flags);
- 	cpufreq_freq_transition_end(policy, &freqs, false);
- 
- 	return 0;
-@@ -479,7 +500,8 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
- 	if (max_perf < min_perf)
- 		max_perf = min_perf;
- 
--	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
-+	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true,
-+			policy->governor->flags);
- 	cpufreq_cpu_put(policy);
+ 	int i;
+@@ -838,6 +840,98 @@ static ssize_t show_energy_performance_preference(
+ 	return sysfs_emit(buf, "%s\n", energy_perf_strings[preference]);
  }
  
-@@ -1279,7 +1301,7 @@ static int __init amd_pstate_init(void)
- 	/* capability check */
- 	if (boot_cpu_has(X86_FEATURE_CPPC)) {
- 		pr_debug("AMD CPPC MSR based functionality is supported\n");
--		if (cppc_state == AMD_PSTATE_PASSIVE)
-+		if (cppc_state != AMD_PSTATE_ACTIVE)
- 			current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
- 	} else {
- 		pr_debug("AMD CPPC shared memory based functionality is supported\n");
-@@ -1341,7 +1363,7 @@ static int __init amd_pstate_param(char *str)
- 		if (cppc_state == AMD_PSTATE_ACTIVE)
- 			current_pstate_driver = &amd_pstate_epp_driver;
++static void amd_pstate_driver_cleanup(void)
++{
++	amd_pstate_enable(false);
++	cppc_state = AMD_PSTATE_DISABLE;
++	current_pstate_driver = NULL;
++}
++
++static int amd_pstate_register_driver(int mode)
++{
++	int ret;
++
++	if (mode == AMD_PSTATE_PASSIVE || mode == AMD_PSTATE_GUIDED)
++		current_pstate_driver = &amd_pstate_driver;
++	else if (mode == AMD_PSTATE_ACTIVE)
++		current_pstate_driver = &amd_pstate_epp_driver;
++	else
++		return -EINVAL;
++
++	cppc_state = mode;
++	ret = cpufreq_register_driver(current_pstate_driver);
++	if (ret) {
++		amd_pstate_driver_cleanup();
++		return ret;
++	}
++	return 0;
++}
++
++static int amd_pstate_unregister_driver(int dummy)
++{
++	cpufreq_unregister_driver(current_pstate_driver);
++	amd_pstate_driver_cleanup();
++	return 0;
++}
++
++static int amd_pstate_change_mode_without_dvr_change(int mode)
++{
++	int cpu = 0;
++
++	cppc_state = mode;
++
++	if (boot_cpu_has(X86_FEATURE_CPPC) || cppc_state == AMD_PSTATE_ACTIVE)
++		return 0;
++
++	for_each_present_cpu(cpu) {
++		cppc_set_auto_sel(cpu, (cppc_state == AMD_PSTATE_PASSIVE) ? 0 : 1);
++	}
++
++	return 0;
++}
++
++static int amd_pstate_change_driver_mode(int mode)
++{
++	int ret;
++
++	ret = amd_pstate_unregister_driver(0);
++	if (ret)
++		return ret;
++
++	ret = amd_pstate_register_driver(mode);
++	if (ret)
++		return ret;
++
++	return 0;
++}
++
++cppc_mode_transition_fn mode_state_machine[AMD_PSTATE_MAX][AMD_PSTATE_MAX] = {
++	[AMD_PSTATE_DISABLE]         = {
++		[AMD_PSTATE_DISABLE]     = NULL,
++		[AMD_PSTATE_PASSIVE]     = amd_pstate_register_driver,
++		[AMD_PSTATE_ACTIVE]      = amd_pstate_register_driver,
++		[AMD_PSTATE_GUIDED]      = amd_pstate_register_driver,
++	},
++	[AMD_PSTATE_PASSIVE]         = {
++		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
++		[AMD_PSTATE_PASSIVE]     = NULL,
++		[AMD_PSTATE_ACTIVE]      = amd_pstate_change_driver_mode,
++		[AMD_PSTATE_GUIDED]      = amd_pstate_change_mode_without_dvr_change,
++	},
++	[AMD_PSTATE_ACTIVE]          = {
++		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
++		[AMD_PSTATE_PASSIVE]     = amd_pstate_change_driver_mode,
++		[AMD_PSTATE_ACTIVE]      = NULL,
++		[AMD_PSTATE_GUIDED]      = amd_pstate_change_driver_mode,
++	},
++	[AMD_PSTATE_GUIDED]          = {
++		[AMD_PSTATE_DISABLE]     = amd_pstate_unregister_driver,
++		[AMD_PSTATE_PASSIVE]     = amd_pstate_change_mode_without_dvr_change,
++		[AMD_PSTATE_ACTIVE]      = amd_pstate_change_driver_mode,
++		[AMD_PSTATE_GUIDED]      = NULL,
++	},
++};
++
+ static ssize_t amd_pstate_show_status(char *buf)
+ {
+ 	if (!current_pstate_driver)
+@@ -846,57 +940,22 @@ static ssize_t amd_pstate_show_status(char *buf)
+ 	return sysfs_emit(buf, "%s\n", amd_pstate_mode_string[cppc_state]);
+ }
  
--		if (cppc_state == AMD_PSTATE_PASSIVE)
-+		if (cppc_state == AMD_PSTATE_PASSIVE || cppc_state == AMD_PSTATE_GUIDED)
- 			current_pstate_driver = &amd_pstate_driver;
+-static void amd_pstate_driver_cleanup(void)
+-{
+-	current_pstate_driver = NULL;
+-}
+-
+ static int amd_pstate_update_status(const char *buf, size_t size)
+ {
+-	int ret = 0;
+ 	int mode_idx;
  
- 		return 0;
-diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-index f5f22418e64b..c10ebf8c42e6 100644
---- a/include/linux/amd-pstate.h
-+++ b/include/linux/amd-pstate.h
-@@ -97,6 +97,7 @@ enum amd_pstate_mode {
- 	AMD_PSTATE_DISABLE = 0,
- 	AMD_PSTATE_PASSIVE,
- 	AMD_PSTATE_ACTIVE,
-+	AMD_PSTATE_GUIDED,
- 	AMD_PSTATE_MAX,
- };
+-	if (size > 7 || size < 6)
++	if (size > strlen("passive") || size < strlen("active"))
+ 		return -EINVAL;
+-	mode_idx = get_mode_idx_from_str(buf, size);
  
-@@ -104,6 +105,7 @@ static const char * const amd_pstate_mode_string[] = {
- 	[AMD_PSTATE_DISABLE]     = "disable",
- 	[AMD_PSTATE_PASSIVE]     = "passive",
- 	[AMD_PSTATE_ACTIVE]      = "active",
-+	[AMD_PSTATE_GUIDED]      = "guided",
- 	NULL,
- };
- #endif /* _LINUX_AMD_PSTATE_H */
+-	switch(mode_idx) {
+-	case AMD_PSTATE_DISABLE:
+-		if (!current_pstate_driver)
+-			return -EINVAL;
+-		if (cppc_state == AMD_PSTATE_ACTIVE)
+-			return -EBUSY;
+-		cpufreq_unregister_driver(current_pstate_driver);
+-		amd_pstate_driver_cleanup();
+-		break;
+-	case AMD_PSTATE_PASSIVE:
+-		if (current_pstate_driver) {
+-			if (current_pstate_driver == &amd_pstate_driver)
+-				return 0;
+-			cpufreq_unregister_driver(current_pstate_driver);
+-			cppc_state = AMD_PSTATE_PASSIVE;
+-			current_pstate_driver = &amd_pstate_driver;
+-		}
++	mode_idx = get_mode_idx_from_str(buf, size);
+ 
+-		ret = cpufreq_register_driver(current_pstate_driver);
+-		break;
+-	case AMD_PSTATE_ACTIVE:
+-		if (current_pstate_driver) {
+-			if (current_pstate_driver == &amd_pstate_epp_driver)
+-				return 0;
+-			cpufreq_unregister_driver(current_pstate_driver);
+-			current_pstate_driver = &amd_pstate_epp_driver;
+-			cppc_state = AMD_PSTATE_ACTIVE;
+-		}
++	if (mode_idx < 0 || mode_idx >= AMD_PSTATE_MAX)
++		return -EINVAL;
+ 
+-		ret = cpufreq_register_driver(current_pstate_driver);
+-		break;
+-	default:
+-		ret = -EINVAL;
+-		break;
+-	}
++	if (mode_state_machine[cppc_state][mode_idx])
++		return mode_state_machine[cppc_state][mode_idx](mode_idx);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static ssize_t show_status(struct kobject *kobj,
 -- 
 2.34.1
 
