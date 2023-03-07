@@ -2,72 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E696ADE98
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9228D6ADE9E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjCGMWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39974 "EHLO
+        id S231232AbjCGMXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjCGMW2 (ORCPT
+        with ESMTP id S231402AbjCGMXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:22:28 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AB37389B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:22:24 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso7060645wmp.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:22:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678191743;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GAH2B+NW5SSU/xj3C75LgiyZHEfWnwFX1N205HLY+Fc=;
-        b=A6oZlSPABgn1fHOjhktak/Y+JGuxv6+EOsexhmrKMotPXWuKxMEYZxSaBI8waEbPgY
-         4DO3THjR9GzcOh9uKkGlIl87MgIpmaKw0xTI1nL6VdBWyWmJHNPFF/bTwmHwuaavm7a7
-         YYVHCf3ubL4LC7+34+ZLwdaJYFlGvsq/lcbB6gQKzH5MN9fGipsMsjWmgbkA8gIUcEd6
-         Gyn/+ZX56RjE97jioAGUFQOgMCIM2bq9XImdUo4x2lsQ4ZD2tVMKZ99PG2YvvV3sE8+C
-         AEMv4gfyZoCgjh9z4Fp7oWvBw45aSl3AFYHhb989zA2jrNlX4QO5wy+eixXKALxBaaVO
-         kpSg==
+        Tue, 7 Mar 2023 07:23:50 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B853B3B222
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:23:45 -0800 (PST)
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 93E883F591
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:23:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678191821;
+        bh=gcBjgTyFzqziFUQTuD3fuF6hhRUdHz1Lc7VypcmVc5Y=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=WpJE/LXCYJbGg7pIZwbw8HzM5FpbcRF62miUduTwPndq1IjX8sb32x8kx3ZsbFNGY
+         xtm1yw0KEreCekiaeMjzeW3UPHguVbT8pCdlibzmYdOVgZF1eo8cMjMzGec6tL6mF3
+         +qSSUaWFtQpmFAnjtjs6GjIfbYAR6VzIc9+Qwkpykw9ANpu5Qv9uyrxs7/8rFbhSaF
+         eOVlcEVz0V7gVLjVWHzD6qI/rca/Y3B52kM4w5UQtGw0G/eJnj7oOZnykufl9modKr
+         wpI4jivy3ES8sE1CWIXL9BikULTnZhm5OkMTF3gaWy29xVvBmRmUU8/8B79zmLVOfK
+         Sd0pMdVQCTznQ==
+Received: by mail-qv1-f71.google.com with SMTP id jy22-20020a0562142b5600b005710b856106so7421975qvb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:23:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678191743;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678191820;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GAH2B+NW5SSU/xj3C75LgiyZHEfWnwFX1N205HLY+Fc=;
-        b=tsIjMqt6OH12juw5RHGC4tO5G0AsYhVQ0gQt1eLX/NYrgpjuV7Mg08gzNNlVeDDe6i
-         lNqZkyKH7LpTdNrQt1RcEIIsMo0mrB5ptyEma9iX8nn6+t8WUJxXO3KGqtxC2vrb0gPb
-         pwwlm1JGUs3Qx0uT8fscGRepjPW1FWWlZsLoYMAF3FuqkRU7wDaXMWhKxpaXxjIQadAm
-         59cQrlgW/WpRfPEWU6EeNTbj4MmglIKD5Z5SzhPklAY6h4PXqc5tyrpRsuF6OQHUhjxK
-         iuBun+DS7QQ38sdMETzGFhgu4xoMKMSbGvHpahJ2OcXP7enhC5c2BTbRMwoIl/sBGFva
-         9M3g==
-X-Gm-Message-State: AO0yUKV22hy+JsCwQ65DEsfPku4FKNus6/M9WI0bO1WShZtx6kgMlPXV
-        S/gfbTBNJNYWQtF4mKSO6HE=
-X-Google-Smtp-Source: AK7set8O+WdQEH9ujZVQ5z8j7ijAjdM4QQfsFC+4ZsMblyy2L2gx9CqIfzBbHTb0XsYORGrjD+fiMg==
-X-Received: by 2002:a05:600c:a4c:b0:3dc:d5c:76d9 with SMTP id c12-20020a05600c0a4c00b003dc0d5c76d9mr13352304wmq.0.1678191743096;
-        Tue, 07 Mar 2023 04:22:23 -0800 (PST)
-Received: from suse.localnet (host-79-43-1-179.retail.telecomitalia.it. [79.43.1.179])
-        by smtp.gmail.com with ESMTPSA id j21-20020a05600c075500b003e0238d9101sm12640029wmn.31.2023.03.07.04.22.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 04:22:22 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] fs/sysv: Don't round down address for kunmap_flush_on_unmap()
-Date:   Tue, 07 Mar 2023 13:22:21 +0100
-Message-ID: <1820093.atdPhlSkOF@suse>
-In-Reply-To: <20230306172759.GB3390869@ZenIV>
-References: <20230306125150.12166-1-fmdefrancesco@gmail.com>
- <20230306172759.GB3390869@ZenIV>
+        bh=gcBjgTyFzqziFUQTuD3fuF6hhRUdHz1Lc7VypcmVc5Y=;
+        b=tSKC6IFKYGssOkWpgkedIPKZFtruaYBmuyOxwQ0qxmVyqRk4Nxz4YJYn9+uFzSa8vb
+         wy+8B3aNSJ06lgYkEHEuX5SnjwNow+pfr0qIIUw6OkbSxRDfGK4bo9KxAItsiPbukobq
+         oZIar+oM/SBMr4O/MKhUOq2z0jnHflb/YJA7CPGQ/yuHrnyZDYVGDyUz1Sp9+MyuLaXV
+         i7q4JTSUmsr5utSCQSU4NhKEk17y5/N0Thd9yXwg8B7U0gh8NputhEMv5tTLPCB4eClL
+         tj5SaEMy47r+aAJkpj6CFjNPWITQjnBqt6nggfRVU/VTffGn+mqV66IrsZHIT/kGwnDr
+         IzsA==
+X-Gm-Message-State: AO0yUKX4ty9QLMBH3qxh/FwMwxP7PTV0sUR8h0WX1KU7utVrdoF21Eo2
+        QKcDoKZSM1gngRsoW3gp8TXGQ519Jwmma0W2yOxW9Uxrz1NDpwfEPHX3gQljQ9yPUBTRpp9qBuk
+        8cIuakps//qlRXMVFYpoodso+xFyMuzCZq7aY9dxsHVBhzQ3woU3Hej4Cmw==
+X-Received: by 2002:a05:6214:b04:b0:56e:917a:1c19 with SMTP id u4-20020a0562140b0400b0056e917a1c19mr3445626qvj.0.1678191820512;
+        Tue, 07 Mar 2023 04:23:40 -0800 (PST)
+X-Google-Smtp-Source: AK7set/xv6+E6KxtnITdbAjC4xYrTm6Drs+UHv7miXjwgKWU+sirb/BaI9S4untDNyhwiOt1iKsR4BAo+UXPdUSi9e0=
+X-Received: by 2002:a05:6214:b04:b0:56e:917a:1c19 with SMTP id
+ u4-20020a0562140b0400b0056e917a1c19mr3445610qvj.0.1678191820260; Tue, 07 Mar
+ 2023 04:23:40 -0800 (PST)
 MIME-Version: 1.0
+References: <20230303085928.4535-1-samin.guo@starfivetech.com>
+ <20230303085928.4535-13-samin.guo@starfivetech.com> <CAJM55Z-WpxJUshAa_gN5GD+mMp1VaxPbnF6AV-ua0HzsFWsB6w@mail.gmail.com>
+ <99a9eccd-2886-832f-07e6-4ba620c522b5@starfivetech.com>
+In-Reply-To: <99a9eccd-2886-832f-07e6-4ba620c522b5@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Tue, 7 Mar 2023 13:23:24 +0100
+Message-ID: <CAJM55Z9P9PG2TBU_UVHWhRikg5YXoi=77ObjeCc4TU1FykLK1w@mail.gmail.com>
+Subject: Re: [PATCH v5 12/12] riscv: dts: starfive: visionfive 2: Enable gmac
+ device tree node
+To:     Guo Samin <samin.guo@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,89 +92,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=EC 6 marzo 2023 18:27:59 CET Al Viro wrote:
-> On Mon, Mar 06, 2023 at 01:51:50PM +0100, Fabio M. De Francesco wrote:
-> > The kernel virtual address passed to kunmap_flush_on_unmap() has no more
-> > any need to be rounded down.
-> >=20
-> > Therefore, delete the rounding down of "page_addr" when passed to
-> > kunmap_local() in dir_put_page().
-> >=20
-> > Don't backport without commit 88d7b12068b9 ("highmem: round down the
-> > address passed to kunmap_flush_on_unmap()").
->=20
-> Applied (#work.misc).
+On Tue, 7 Mar 2023 at 02:21, Guo Samin <samin.guo@starfivetech.com> wrote:
 
-Thanks!
+> =E5=9C=A8 2023/3/6 21:04:28, Emil Renner Berthing =E5=86=99=E9=81=93:
+> > On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wro=
+te:
+> >> From: Yanhong Wang <yanhong.wang@starfivetech.com>
+> >>
+> >> Update gmac device tree node status to okay.
+> >>
+> >> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> >> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> >> ---
+> >>  .../dts/starfive/jh7110-starfive-visionfive-2.dtsi     | 10 +++++++++=
++
+> >>  1 file changed, 10 insertions(+)
+> >>
+> >> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2=
+.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> >> index c2aa8946a0f1..d1c409f40014 100644
+> >> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> >> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+> >> @@ -12,6 +12,8 @@
+> >>  / {
+> >>         aliases {
+> >>                 serial0 =3D &uart0;
+> >> +               ethernet0 =3D &gmac0;
+> >> +               ethernet1 =3D &gmac1;
+> >
+> > Please sort these alphabetically.
+> Thanks, will fix.
+> >
+> >>                 i2c0 =3D &i2c0;
+> >>                 i2c2 =3D &i2c2;
+> >>                 i2c5 =3D &i2c5;
+> >> @@ -92,6 +94,14 @@
+> >>         status =3D "okay";
+> >>  };
+> >>
+> >> +&gmac0 {
+> >> +       status =3D "okay";
+> >> +};
+> >> +
+> >> +&gmac1 {
+> >> +       status =3D "okay";
+> >> +};
+> >
+> > Since you'll need to add to the gmac0 and gmac1 nodes in the board
+> > specific files too and it's only one line, consider just dropping this
+> > here and add the status =3D "okay" there instead.
+> >
+> According to Andrew's suggestion, can I put the nodes of mdio and phy her=
+e?
 
-I'm using (again, sorry) this opportunity to remind you that I'd really=20
-appreciate if you could also set aside some time to look at my patch to fs/
-aio.c.
+Yeah, if the boards then end up sharing more information it's fine to
+put it here. It just seemed a little much to add 8 lines here when all
+the boards shared was a status =3D "okay";
 
-Instead I'm not sure yet who is at the moment responsible for the patches t=
-o=20
-fs/ufs...=20
-
-> FWIW, I've rebased the ext2 series to -rc1 (and
-> realized what got Jan confused about ext2_rename() changes).
-
-I just git-clone(ed) your "vfs" tree and started with building and testing =
-the =20
-#work.ext2 branch, without and with your latest commits (from Linux 6.3-rc1=
-=20
-merge onward).
-
-As said in the thread with the pull request of my fs/sysv related patches I=
-'ll=20
-test with (x)fstests in a QEMU/KVM x86_32 VM, 6GB RAM, running an HIGHMEM64=
-GB=20
-kernel.
-
-> Re minixfs: it's actually very close to sysv, so much that at one point
-> I considered merging them - making minixfs one of sysvfs flavours.
-
-OK, so porting fs/sysv (or fs/ufs) changes to fs/minix should be an easy ta=
-sk.
-
-> Think of it as v7 filesystem with the simpler improvements copied from
-> FFS.  Cylinder groups and variable-sized directory entries - too
-> complex for Minix purposes.  Lifting the name length limit from 14 to
-> 30 - sure, why not?  32bit block numbers - eventually made it,
-> so did 32bit inode numbers (in v3).
->=20
-> The main advance compared to v7 is the use of bitmaps for block
-> and inode allocation.  Unlike FFS it's all in one lump, but at least
-> it's not the "free block list".
->=20
-> For directory contents handling it doesn't matter at all - there minixfs
-> is really just another sysvfs variant.  Directory is stored the same
-> way as a regular file would've been, the data in it is an array of
-> fixed-sized entries (16, 32 or 64 bytes, depending upon the filesystem
-> version), each consisting of inode number (2 or 4 bytes) + array of
-> characters representing the name; name shorter than the longest possible
-> are NUL-terminated.
->=20
-> Anyway, I've slapped together a counterpart of your sysv series,
-> see #work.minix
-
-I must admit that I don't yet own enough good knowledge of the details you =
-are=20
-mentioning above. However, thanks for sharing!
-
-Those insights surely help me to better understand what details to look at=
-=20
-when trying to tell the differences and commonalities between filesystems.
-
-I'll take a look at #work.minix in the next days (build, test, review), but=
-=20
-only when I'm done with #work.ext2 (I have little spare time because ATM I'=
-m=20
-attending some courses and, in the meantime, I'm also volunteering as a co-
-mentor with Ira).
-
-Again thanks,
-
-=46abio
-
-
-
+> >>  &i2c0 {
+> >>         clock-frequency =3D <100000>;
+> >>         i2c-sda-hold-time-ns =3D <300>;
+> >> --
+> >> 2.17.1
+> >>
+> >>
+> >> _______________________________________________
+> >> linux-riscv mailing list
+> >> linux-riscv@lists.infradead.org
+> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>
+> Best regards,
+> Samin
+> --
+> Best regards,
+> Samin
