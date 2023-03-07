@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EA06AE48A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0EE6AE491
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbjCGPW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39792 "EHLO
+        id S231328AbjCGPYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjCGPWP (ORCPT
+        with ESMTP id S231135AbjCGPYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:22:15 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BDA2195C
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:20:06 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id k10so29764041edk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:20:06 -0800 (PST)
+        Tue, 7 Mar 2023 10:24:17 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5689A7C3DA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:21:53 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id g3so53818259eda.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:21:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678202403;
+        d=linaro.org; s=google; t=1678202509;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0vUqYOABwC6dH9eXtw+7fd144/F3EeLBv064ik05cls=;
-        b=VcAn9G3JE1EJjbm4iUox8vRzl6w5qvNV4fQa3Ajfo/UJOyqJLmuTZ+YQUdiia+jxd0
-         ATfgbOVyPJimxKLVb7tDSBJ6x2XKAmxikpkP0ChBkDgeyHZZFORoKI4bk6s+oljfZrYU
-         6G+4XSGWDw36ROV8RBKJx/gXDCEGnAt/LheVn5+8QmL+3WrHnB8XmNbgslzWcoa8Gqea
-         y4rKww6To/GGXo2rCvubaxOFyjsPAxF6ioIOIBywMPLRmT2SE/FviYCtKB2/P//ZFUwr
-         e2f8CxEs6JV/3I+YgNYjqtHEMphG+Yzdmy8TgJ6L7JcUPm6oL0ZNRm9mJmXbcH6I4g9s
-         2ePQ==
+        bh=hv3uTxY1cPVK/8fUVsbHScrqp/m3XoVAD3dk5MpvuPw=;
+        b=d5iNCTJTH0h35spNeejDEjGOJewVdxdGGnZadbC/clXywot6FdXSSUKlHXJockohB3
+         tghC1vAf6vWlDi81H+xjTkUhG8UkRGb4p9XhDNllmRmuBw46dW9CXQwU5QGvxq5rZiPE
+         EQC9gGP+JDytQwXClx5l+u0D0FkJlmjYzZjy1qAR+QoVfPHeLWlAMV4WwQEFNrfMoG3r
+         3Cx4NbIzeFjpCw0A5p31qmwxh+8RnmQV2SSOdEchJ7rKiRtr0POnPWNXvgK+fUrLjlHG
+         rJg4UZqfDOwkgP8FVmgAwfhfmIFmiPsNDGSqMhGCD7KNPsyMNMb/pMtVe9cPk0CUllh+
+         RplQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678202403;
+        d=1e100.net; s=20210112; t=1678202509;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0vUqYOABwC6dH9eXtw+7fd144/F3EeLBv064ik05cls=;
-        b=6WnLIeylMwmEupVC0PFpPtBZXF6RPqdFnZYiU8ZpFZahuEafAgCrV3ydP/cSuFsdM2
-         j3zcGv9Ofj5324sGPa3GzIlVdrD0HjQfIo/MwfOtb5dwzOgO9tQ275RGqo1BmOVArVNK
-         eh1NPcGXrxdUOrqfY66rw4MnfJfftdIl9NOh1TOmlN3BWAxRPWICQR/s/E9cWfmO2aqD
-         jcxMrBlx8vODsfMYCVIyH+f1S0OxSxoSO6UQDuJ7PrmvqOMdGCJJGjaospi/ElV20UBh
-         UtRcuTz11nxYf3CJlDgk7ZnjpkHt29skA/JKimd6clYmnhLvtTQu+5YcsLeqvRYYkmjY
-         vqtg==
-X-Gm-Message-State: AO0yUKX5kfSEGPOZLkkDO152qp0xm5ZiD1Olf58jrsPvJck7pHydbeHf
-        8byY0v78/0URUAAJRBZpLRGIgQ==
-X-Google-Smtp-Source: AK7set9aJQcmRihzLRtukwurj+6TQ1BOf6lzmT9UIyJQalcHMYZt6SnWGXL7g5D+/z5yObv1kwbADQ==
-X-Received: by 2002:a50:fe99:0:b0:4cd:e84d:1e74 with SMTP id d25-20020a50fe99000000b004cde84d1e74mr15028688edt.0.1678202403026;
-        Tue, 07 Mar 2023 07:20:03 -0800 (PST)
+        bh=hv3uTxY1cPVK/8fUVsbHScrqp/m3XoVAD3dk5MpvuPw=;
+        b=EbY0/xcZdswIqNYvocdmOoNNkdXlAE96s0ppHj8cYU9EdYBewPQXKs+Dvms1i6h6H9
+         Cv7jzi+8/pmgO0PCh+PelHHhwoUy6Po+IQllRuLnXXKFMmYEdI1USHHpv3xKPkn6Zhxw
+         0mjoOK1FGCLmqYsLxGeL94L3fpNQU/jdsUbdKmM5H7mV928BjlGe25sOO2wHiRlemJso
+         MqsfmApvQzXrHzCFc+IQpsgVfRS+B3hSmNCJlW7L7Qv+A6ziTAtrOQFtEvdpBfgOUq/I
+         blnffyAhIzHTu1g5Su+srhPWUkbrbLJOKvyMRqwmPnoTSpbmwcojvFg7wpiDUcxJnHlZ
+         016Q==
+X-Gm-Message-State: AO0yUKXrxqteFL2Nlhp8RMhQ0/5joYNyj3dteMGIZpr0Ja2GDylr0snL
+        QQIIksoXNwjN8uejMZcMQ/udPA==
+X-Google-Smtp-Source: AK7set8arbE2CUBMCgi960hgaL0lT08XB6xHhmS+tbFjTJC+nbJD80ZZ0/G0d0VqfKNa4iw3d+AVEQ==
+X-Received: by 2002:a17:906:d542:b0:8b2:e93:3f59 with SMTP id cr2-20020a170906d54200b008b20e933f59mr17023919ejc.31.1678202509557;
+        Tue, 07 Mar 2023 07:21:49 -0800 (PST)
 Received: from ?IPV6:2a02:810d:15c0:828:a60f:e604:c252:1f3d? ([2a02:810d:15c0:828:a60f:e604:c252:1f3d])
-        by smtp.gmail.com with ESMTPSA id r15-20020a50c00f000000b004bbc90e1fa3sm6874179edb.93.2023.03.07.07.20.01
+        by smtp.gmail.com with ESMTPSA id bl15-20020a170906c24f00b008d83ad86fe8sm6248110ejb.59.2023.03.07.07.21.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 07:20:02 -0800 (PST)
-Message-ID: <ec7af3f9-5feb-0785-278c-209eeefd0aac@linaro.org>
-Date:   Tue, 7 Mar 2023 16:20:00 +0100
+        Tue, 07 Mar 2023 07:21:49 -0800 (PST)
+Message-ID: <19d5ce31-284c-4028-bf9e-190b97dca906@linaro.org>
+Date:   Tue, 7 Mar 2023 16:21:47 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 07/11] mailbox: qcom-apcs-ipc: Add IPQ5018 APCS IPC
- support
+Subject: Re: [PATCH 02/11] dt-bindings: mailbox: qcom: Add IPQ5018 APCS
+ compatible
 Content-Language: en-US
 To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
         agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -72,9 +72,9 @@ Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
         quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
         quic_poovendh@quicinc.com
 References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-8-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-3-git-send-email-quic_mmanikan@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1678164097-13247-8-git-send-email-quic_mmanikan@quicinc.com>
+In-Reply-To: <1678164097-13247-3-git-send-email-quic_mmanikan@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,24 +88,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
-> Enable IPQ5018 APCS IPC support by adding the compatible.
+> Add compatible for the Qualcomm IPQ5018 APCS block.
+
+Is it compatible with ipq6018 or ipq8074? Your driver tells it is...
+
 > 
 > Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 > ---
->  drivers/mailbox/qcom-apcs-ipc-mailbox.c | 1 +
->  1 file changed, 1 insertion(+)
+>  .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml      | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> index 6bbf87c6d60b..0b873c76fd7e 100644
-> --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
-> @@ -141,6 +141,7 @@ static int qcom_apcs_ipc_remove(struct platform_device *pdev)
->  
->  /* .data is the offset of the ipc register within the global block */
->  static const struct of_device_id qcom_apcs_ipc_of_match[] = {
-> +	{ .compatible = "qcom,ipq5018-apcs-apps-global", .data = &ipq6018_apcs_data },
 
-Why do you need new entry with same driver data?
+
 
 Best regards,
 Krzysztof
