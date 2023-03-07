@@ -2,216 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE2006AEAD4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 140CC6AEAF2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjCGRhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:37:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43272 "EHLO
+        id S231953AbjCGRit (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:38:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjCGRhS (ORCPT
+        with ESMTP id S231947AbjCGRiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:37:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EC220044;
-        Tue,  7 Mar 2023 09:33:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5797AB817AE;
-        Tue,  7 Mar 2023 17:33:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F51EC4339C;
-        Tue,  7 Mar 2023 17:33:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678210394;
-        bh=dbWa0dh6TW5y30BdIUcuVUIG35+wcQGVwS2WNIVbWMk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=uMVUe1mxfahIDhWS/tx8YAJMvwMstDT/nqbJHVPFWRT+AUoVq04VzuzIhPN7WnBNc
-         s7D2xfiNmwc/ErFx4rAxn1DOdMjFA1NVre71Nc0+/HtnA62NmN2RPYh+83QDBWbMeU
-         yZR0il8wfoqwWfkSXaXvP+vCSdd/Tk6AKYXyCCAB1wMMrcknniS4sfTarht1QJM/3R
-         90c3Nt9kiJbYIDDSQQ+csETRn13u1KHOT3mR8TuvzJaNpPE9oR9nZxrS/8BFCZspts
-         rNTx22IQyE9kTkl56t7xOCLe/SEkDufTx7l/c+dyLSRgP1sAkZC6MhmvBjNSRXNMBX
-         bdTirIWj24QXg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A2C085C01E4; Tue,  7 Mar 2023 09:33:13 -0800 (PST)
-Date:   Tue, 7 Mar 2023 09:33:13 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Message-ID: <20230307173313.GJ1301832@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230303213851.2090365-1-joel@joelfernandes.org>
- <ZAc1wsvd4trjP/xi@lothringen>
- <ZAc+vVZUhXdhpSki@pc636>
- <CAEXW_YRTLQpQpOW-+n+X59pmB=4TkV=gdsMiQfBkdK_4wO9Jug@mail.gmail.com>
+        Tue, 7 Mar 2023 12:38:25 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5681517C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 09:34:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678210458; x=1709746458;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N2iDi8TxZlVV7Ym+Dgej1t3agdElwUgAkbAt+oaz2Rw=;
+  b=SIfL1I/x0g/Rwxjo6rkJaSC6u04u9uirjBgmphaIZvkXQErOujbhe6hG
+   QWco1/4WKfZhnTq0lTCymQKaPoRJTfv45NrHKLSQEQrqBH6zR2pG4Jqiq
+   9lnTE9MDMNashj1gf5WZuAs8Fx8WJYkR0vowhTHY+2V6riAT7ZzstzsSX
+   Hz2h/+DmOA4JM4+gJ6soGas79W1uMUOgblksWPM0LGytLczaRmbLSnH0v
+   PmOw9taRloqzdTQGOyB240AHwPLMp52JZVOFh8X0ZDbHnOQV9h/v5DQCl
+   ZoxR7BbLdu1vYVict0rG+irnlb7XxkwsuvhnOi11LUI0lU5dZlKPGF2T8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="333388385"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="333388385"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 09:34:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="626617877"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="626617877"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Mar 2023 09:34:15 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZbCY-0001VX-2x;
+        Tue, 07 Mar 2023 17:34:14 +0000
+Date:   Wed, 08 Mar 2023 01:33:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.03.06a] BUILD REGRESSION
+ b5f34f7f546f7746ed4ca21da873aea5f408f295
+Message-ID: <64077585.f+7ODNdBgYVt0Mbj%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YRTLQpQpOW-+n+X59pmB=4TkV=gdsMiQfBkdK_4wO9Jug@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 08:48:52AM -0500, Joel Fernandes wrote:
-> On Tue, Mar 7, 2023 at 8:40 AM Uladzislau Rezki <urezki@gmail.com> wrote:
-> >
-> > On Tue, Mar 07, 2023 at 02:01:54PM +0100, Frederic Weisbecker wrote:
-> > > On Fri, Mar 03, 2023 at 09:38:51PM +0000, Joel Fernandes (Google) wrote:
-> > > > On many systems, a great deal of boot (in userspace) happens after the
-> > > > kernel thinks the boot has completed. It is difficult to determine if
-> > > > the system has really booted from the kernel side. Some features like
-> > > > lazy-RCU can risk slowing down boot time if, say, a callback has been
-> > > > added that the boot synchronously depends on. Further expedited callbacks
-> > > > can get unexpedited way earlier than it should be, thus slowing down
-> > > > boot (as shown in the data below).
-> > > >
-> > > > For these reasons, this commit adds a config option
-> > > > 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter rcupdate.boot_end_delay.
-> > > > Userspace can also make RCU's view of the system as booted, by writing the
-> > > > time in milliseconds to: /sys/module/rcupdate/parameters/rcu_boot_end_delay
-> > > > Or even just writing a value of 0 to this sysfs node.
-> > > > However, under no circumstance will the boot be allowed to end earlier
-> > > > than just before init is launched.
-> > > >
-> > > > The default value of CONFIG_RCU_BOOT_END_DELAY is chosen as 15s. This
-> > > > suites ChromeOS and also a PREEMPT_RT system below very well, which need
-> > > > no config or parameter changes, and just a simple application of this patch. A
-> > > > system designer can also choose a specific value here to keep RCU from marking
-> > > > boot completion.  As noted earlier, RCU's perspective of the system as booted
-> > > > will not be marker until at least rcu_boot_end_delay milliseconds have passed
-> > > > or an update is made via writing a small value (or 0) in milliseconds to:
-> > > > /sys/module/rcupdate/parameters/rcu_boot_end_delay.
-> > > >
-> > > > One side-effect of this patch is, there is a risk that a real-time workload
-> > > > launched just after the kernel boots will suffer interruptions due to expedited
-> > > > RCU, which previous ended just before init was launched. However, to mitigate
-> > > > such an issue (however unlikely), the user should either tune
-> > > > CONFIG_RCU_BOOT_END_DELAY to a smaller value than 15 seconds or write a value
-> > > > of 0 to /sys/module/rcupdate/parameters/rcu_boot_end_delay, once userspace
-> > > > boots, and before launching the real-time workload.
-> > > >
-> > > > Qiuxu also noted impressive boot-time improvements with earlier version
-> > > > of patch. An excerpt from the data he shared:
-> > > >
-> > > > 1) Testing environment:
-> > > >     OS            : CentOS Stream 8 (non-RT OS)
-> > > >     Kernel     : v6.2
-> > > >     Machine : Intel Cascade Lake server (2 sockets, each with 44 logical threads)
-> > > >     Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=2,sockets=2, …
-> > > >
-> > > > 2) OS boot time definition:
-> > > >     The time from the start of the kernel boot to the shell command line
-> > > >     prompt is shown from the console. [ Different people may have
-> > > >     different OS boot time definitions. ]
-> > > >
-> > > > 3) Measurement method (very rough method):
-> > > >     A timer in the kernel periodically prints the boot time every 100ms.
-> > > >     As soon as the shell command line prompt is shown from the console,
-> > > >     we record the boot time printed by the timer, then the printed boot
-> > > >     time is the OS boot time.
-> > > >
-> > > > 4) Measured OS boot time (in seconds)
-> > > >    a) Measured 10 times w/o this patch:
-> > > >         8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
-> > > >         The average OS boot time was: ~8.7s
-> > > >
-> > > >    b) Measure 10 times w/ this patch:
-> > > >         8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
-> > > >         The average OS boot time was: ~8.3s.
-> > > >
-> > > > Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-> > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > >
-> > > I still don't really like that:
-> > >
-> > > 1) It feels like we are curing a symptom for which we don't know the cause.
-> > >    Which RCU write side caller is the source of this slow boot? Some tracepoints
-> > >    reporting the wait duration within synchronize_rcu() calls between the end of
-> > >    the kernel boot and the end of userspace boot may be helpful.
-> > >
-> > > 2) The kernel boot was already covered before this patch so this is about
-> > >    userspace code calling into the kernel. Is that piece of code also called
-> > >    after the boot? In that case are we missing a conversion from
-> > >    synchronize_rcu() to synchronize_rcu_expedited() somewhere? Because then
-> > >    the problem is more general than just boot.
-> > >
-> > > This needs to be analyzed first and if it happens that the issue really
-> > > needs to be fixed with telling the kernel that userspace has completed
-> > > booting, eg: because the problem is not in a few callsites that need conversion
-> > > to expedited but instead in the accumulation of lots of calls that should stay
-> > > as is:
-> > >
-> > > 3) This arbitrary timeout looks dangerous to me as latency sensitive code
-> > >    may run right after the boot. Either you choose a value that is too low
-> > >    and you miss the optimization or the value is too high and you may break
-> > >    things.
-> > >
-> > > 4) This should be fixed the way you did:
-> > >    a) a kernel parameter like you did
-> > >    b) The init process (systemd?) tells the kernel when it judges that userspace
-> > >       has completed booting.
-> > >    c) Make these interfaces more generic, maybe that information will be useful
-> > >       outside RCU. For example the kernel parameter should be
-> > >       "user_booted_reported" and the sysfs (should be sysctl?):
-> > >       kernel.user_booted = 1
-> > >    d) But yuck, this means we must know if the init process supports that...
-> > >
-> > > For these reasons, let's make sure we know exactly what is going on first.
-> > >
-> > > Thanks.
-> > Just add some notes and thoughts. There is a rcupdate.rcu_expedited=1
-> > parameter that can be used during the boot. For example on our devices
-> > to speedup a boot we boot the kernel with rcu_expedited:
-> >
-> > XQ-DQ54:/ # cat /proc/cmdline
-> > stack_depot_disable=on kasan.stacktrace=off kvm-arm.mode=protected cgroup_disable=pressure console=ttyMSM0,115200n8 loglevel=6 kpti=0 log_buf_len=256K kernel.panic_on_rcu_stall=1 service_locator.enable=1 msm_rtb.filter=0x237 rcupdate.rcu_expedited=1 rcu_nocbs=0-7 ftrace_dump_on_oops swiotlb=noforce loop.max_part=7 fw_devlink.strict=1 allow_mismatched_32bit_el0 cpufreq.default_governor=performance printk.console_no_auto_verbose=1 kasan=off sysctl.kernel.sched_pelt_multiplier=4 can.stats_timer=0 pcie_ports=compat irqaffinity=0-2 disable_dma32=on no-steal-acc cgroup.memory=nokmem,nosocket video=vfb:640x400,bpp=32,memsize=3072000 page_owner=on stack_depot_disable=off printk.console_no_auto_verbose=0 nosoftlockup bootconfig buildvariant=userdebug  msm_drm.dsi_display0=somc,1_panel: rootwait ro init=/init  qcom_geni_serial.con_enabled=0 oembootloader.startup=0x00000001 oembootloader.warmboot=0x00000000 oembootloader.securityflags=0x00000001
-> > XQ-DQ54:/ #
-> >
-> > then a user space can decides if it is needed or not:
-> >
-> > <snip>
-> > rcu_expedited  rcu_normal
-> > XQ-DQ54:/ # ls -al /sys/kernel/rcu_*
-> > -rw-r--r-- 1 root root 4096 2023-02-16 09:27 /sys/kernel/rcu_expedited
-> > -rw-r--r-- 1 root root 4096 2023-02-16 09:27 /sys/kernel/rcu_normal
-> > XQ-DQ54:/ #
-> > <snip>
-> >
-> > for lazy we can add "rcu_cb_lazy" parameter and boot the kernel with
-> > true or false. So we can follow and be aligned with rcu_expedited and
-> > rcu_normal parameters.
-> 
-> Speaking of aligning, there is also the automated
-> rcu_normal_after_boot boot option correct? I prefer the automated
-> option of doing this. So the approach here is not really unprecedented
-> and is much more robust than relying on userspace too much (I am ok
-> with adding your suggestion *on top* of the automated toggle, but I
-> probably would not have ChromeOS use it if the automated way exists).
-> Or did I miss something?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.03.06a
+branch HEAD: b5f34f7f546f7746ed4ca21da873aea5f408f295  locktorture: Add long_hold to adjust lock-hold delays
 
-See this commit:
+Error/Warning reports:
 
-3705b88db0d7cc ("rcu: Add a module parameter to force use of expedited RCU primitives")
+https://lore.kernel.org/oe-kbuild-all/202303071604.o6pvgZPl-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202303071727.8CfkaGXj-lkp@intel.com
 
-Antti provided this commit precisely in order to allow Android devices
-to expedite the boot process and to shut off the expediting at a time of
-Android userspace's choosing.  So Android has been making this work for
-about ten years, which strikes me as an adequate proof of concept.  ;-)
+Error/Warning: (recently discovered and may have been fixed)
 
-Of course, Android has a rather tightly controlled userspace, as do
-real-time embedded systems (I sure hope, anyway!).  Which is why your
-timeout-based fallback/backup makes a lot of sense.  And why someone might
-want an aggressive indication when that timeout-based backup is needed.
+aarch64-linux-ld: rcutorture.c:(.text+0x5f00): undefined reference to `set_nmi_torture'
+arc-elf-ld: rcutorture.c:(.text+0x2080): undefined reference to `set_nmi_torture'
+arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for 'set_nmi_torture' [-Wmissing-prototypes]
+arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function 'set_nmi_torture' [-Wmissing-prototypes]
+hppa-linux-ld: rcutorture.c:(.text+0x2adc): undefined reference to `set_nmi_torture'
+microblaze-linux-ld: kernel/rcu/rcutorture.c:3301: undefined reference to `set_nmi_torture'
+rcutorture.c:(.text+0x5ee0): undefined reference to `set_nmi_torture'
+s390x-linux-ld: rcutorture.c:(.text+0x1a0): undefined reference to `set_nmi_torture'
 
-							Thanx, Paul
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- arc-randconfig-r006-20230305
+|   `-- arc-elf-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
+|-- arm64-randconfig-r034-20230306
+|   |-- aarch64-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
+|   `-- rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
+|-- microblaze-randconfig-r013-20230306
+|   `-- microblaze-linux-ld:kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
+|-- parisc-randconfig-r006-20230306
+|   `-- hppa-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
+`-- x86_64-randconfig-r002-20230306
+    `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
+clang_recent_errors
+|-- s390-randconfig-r033-20230305
+|   `-- s39-linux-ld:rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
+`-- x86_64-randconfig-r023-20230306
+    `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-function-set_nmi_torture
+
+elapsed time: 735m
+
+configs tested: 127
+configs skipped: 9
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r003-20230307   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r016-20230305   gcc  
+alpha                randconfig-r034-20230305   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r003-20230306   gcc  
+arc                  randconfig-r006-20230305   gcc  
+arc                  randconfig-r021-20230305   gcc  
+arc                  randconfig-r043-20230305   gcc  
+arc                  randconfig-r043-20230306   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r025-20230305   clang
+arm                  randconfig-r046-20230305   clang
+arm                  randconfig-r046-20230306   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r006-20230307   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r033-20230306   gcc  
+arm64                randconfig-r034-20230306   gcc  
+csky         buildonly-randconfig-r005-20230307   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r026-20230305   gcc  
+hexagon              randconfig-r011-20230306   clang
+hexagon              randconfig-r041-20230305   clang
+hexagon              randconfig-r041-20230306   clang
+hexagon              randconfig-r045-20230305   clang
+hexagon              randconfig-r045-20230306   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230306   gcc  
+i386                 randconfig-a002-20230306   gcc  
+i386                 randconfig-a003-20230306   gcc  
+i386                 randconfig-a004-20230306   gcc  
+i386                 randconfig-a005-20230306   gcc  
+i386                 randconfig-a006-20230306   gcc  
+i386                 randconfig-a011-20230306   clang
+i386                 randconfig-a012-20230306   clang
+i386                 randconfig-a013-20230306   clang
+i386                 randconfig-a014-20230306   clang
+i386                 randconfig-a015-20230306   clang
+i386                 randconfig-a016-20230306   clang
+i386                 randconfig-r036-20230306   gcc  
+ia64                             allmodconfig   gcc  
+ia64         buildonly-randconfig-r002-20230307   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r012-20230305   gcc  
+ia64                 randconfig-r022-20230305   gcc  
+ia64                 randconfig-r023-20230305   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r011-20230305   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r001-20230307   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r021-20230306   gcc  
+m68k                 randconfig-r022-20230306   gcc  
+m68k                 randconfig-r024-20230305   gcc  
+microblaze           randconfig-r005-20230306   gcc  
+microblaze           randconfig-r013-20230305   gcc  
+microblaze           randconfig-r013-20230306   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r015-20230305   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r001-20230306   gcc  
+nios2                randconfig-r004-20230306   gcc  
+nios2                randconfig-r024-20230306   gcc  
+nios2                randconfig-r035-20230305   gcc  
+openrisc             randconfig-r002-20230305   gcc  
+openrisc             randconfig-r004-20230305   gcc  
+openrisc             randconfig-r014-20230306   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r006-20230306   gcc  
+parisc               randconfig-r014-20230305   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r035-20230306   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r001-20230305   clang
+riscv                randconfig-r042-20230305   gcc  
+riscv                randconfig-r042-20230306   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r003-20230305   clang
+s390                 randconfig-r016-20230306   clang
+s390                 randconfig-r033-20230305   clang
+s390                 randconfig-r044-20230305   gcc  
+s390                 randconfig-r044-20230306   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r012-20230306   gcc  
+sh                   randconfig-r015-20230306   gcc  
+sparc        buildonly-randconfig-r004-20230307   gcc  
+sparc                               defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230306   gcc  
+x86_64               randconfig-a002-20230306   gcc  
+x86_64               randconfig-a003-20230306   gcc  
+x86_64               randconfig-a004-20230306   gcc  
+x86_64               randconfig-a005-20230306   gcc  
+x86_64               randconfig-a006-20230306   gcc  
+x86_64               randconfig-a011-20230306   clang
+x86_64               randconfig-a012-20230306   clang
+x86_64               randconfig-a013-20230306   clang
+x86_64               randconfig-a014-20230306   clang
+x86_64               randconfig-a015-20230306   clang
+x86_64               randconfig-a016-20230306   clang
+x86_64               randconfig-r002-20230306   gcc  
+x86_64               randconfig-r023-20230306   clang
+x86_64               randconfig-r031-20230306   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r026-20230306   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
