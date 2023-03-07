@@ -2,144 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7E36AE5E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:07:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FEB6AE5FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbjCGQHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S230108AbjCGQIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:08:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbjCGQG4 (ORCPT
+        with ESMTP id S229816AbjCGQIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:06:56 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6990E1FF4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:05:14 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id D6EE81F8AF;
-        Tue,  7 Mar 2023 16:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678205112; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9a+pGfmvncKwIDz1ROk+vUHJYuwF6PClygZKgAHKv5Y=;
-        b=nIYe0oa9MURxaJkb99TtsGf1+euTRiX+2I9SoCMi7htNTfpoQU0QtojxyHsCq0AyHqy/Ac
-        Kw14HQkUE+/mOnLixN2JY+stmMmtTzAe/UyZAHLCmaSZ5e4kS9O/jx2zd/8GawDpG7h+4X
-        u30KLDZo0SwK0hUwMLfZ3Z3NXovj8TQ=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8376B2C142;
-        Tue,  7 Mar 2023 16:05:12 +0000 (UTC)
-Date:   Tue, 7 Mar 2023 17:05:09 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v1 02/18] printk: Add NMI check to
- down_trylock_console_sem()
-Message-ID: <ZAdgtcbPyQ/8dIDw@alley>
-References: <20230302195618.156940-1-john.ogness@linutronix.de>
- <20230302195618.156940-3-john.ogness@linutronix.de>
+        Tue, 7 Mar 2023 11:08:04 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADB38FBCA
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:06:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678205213; x=1709741213;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=v6waBatXx3XkI8tF12MNTcc05fpv5KRWhE7ptpCmzDo=;
+  b=jKQd2fKxk3FRG51sXPzs2vsdBHxTqh+BafyLikjgP3USM3cDXgdd0Pwm
+   r7x8F28CeaXprSlsEEe0/zXgxtTzb4QyHAxn9pFZdOjW66z7c6NIAOLEx
+   2jkHptXbWzuwMK+qV+HcshbKv9YVKS5aVtRmU+htGEeAV/zl3zyo6kiVT
+   bjBKhlteq3icHYh0IgzLlQB6uLnOc7r4Mvgx8SFpSbkBd0Vu763O9iLBB
+   BAfsHpn3+E/eazzRCFy9sdU+6Miena5aILq1ekXHMwNFCRq5wCGlnNPXX
+   PHMJD0HPPPsU6FsZkjxpiUH2zcdQ75rrLmDhILtMoc/XYfuu4qVH/h/bL
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="334602815"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="334602815"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 08:05:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="850747989"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="850747989"
+Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.116.173]) ([10.212.116.173])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 08:05:39 -0800
+Message-ID: <e4ac3d74-9a91-e4ff-eee3-67237f35ac7b@intel.com>
+Date:   Tue, 7 Mar 2023 09:05:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302195618.156940-3-john.ogness@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.6.0
+Subject: Re: [PATCH v2] ntb_tool: check null return of devm_kcalloc in
+ tool_init_mws
+Content-Language: en-US
+To:     Kang Chen <void0red@gmail.com>, fancer.lancer@gmail.com
+Cc:     allenbh@gmail.com, jdmason@kudzu.us, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev
+References: <20230306152810.ptb622tfhoxehhdc@mobilestation>
+ <20230307122021.1569285-1-void0red@gmail.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20230307122021.1569285-1-void0red@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-03-02 21:02:02, John Ogness wrote:
-> The printk path is NMI safe because it only adds content to the
-> buffer and then triggers the delayed output via irq_work. If the
-> console is flushed or unblanked (on panic) from NMI then it can
-> deadlock in down_trylock_console_sem() because the semaphore is not
-> NMI safe.
 
-Do you have any particular code path in mind, please?
-This does not work in console_flush_on_panic(), see below.
 
-> Avoid try-locking the console from NMI and assume it failed.
+On 3/7/23 5:20 AM, Kang Chen wrote:
+> devm_kcalloc may fails, tc->peers[pidx].outmws might be null
+> and will cause null pointer dereference later.
 > 
-> Signed-off-by: John Ogness <john.ogness@linutronix.de>
+> Fixes: 7f46c8b3a552 ("NTB: ntb_tool: Add full multi-port NTB API support")
+> Signed-off-by: Kang Chen <void0red@gmail.com>
+> Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+You forgot to pick up my review tag. I do recommend using the tool 'b4'. 
+It picks up all the tags for you and works rather well.
+
 > ---
->  kernel/printk/printk.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> v2 -> v1: add Fixes and Reviewed-by tags
 > 
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index 40c5f4170ac7..84af038292d9 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -318,6 +318,10 @@ static int __down_trylock_console_sem(unsigned long ip)
->  	int lock_failed;
->  	unsigned long flags;
->  
-> +	/* Semaphores are not NMI-safe. */
-> +	if (in_nmi())
-> +		return 1;
-
-console_flush_on_panic() ignores the console_trylock() return value:
-
-void console_flush_on_panic(enum con_flush_mode mode)
-{
-[...]
-	/*
-	 * If someone else is holding the console lock, trylock will fail
-	 * and may_schedule may be set.  Ignore and proceed to unlock so
-	 * that messages are flushed out.  As this can be called from any
-	 * context and we don't want to get preempted while flushing,
-	 * ensure may_schedule is cleared.
-	 */
-	console_trylock();
-	console_may_schedule = 0;
-	console_unlock();
-}
-
-So that this change would cause a non-paired console_unlock().
-And console_unlock might still deadlock on the console_sem->lock.
-
-
-OK, your change makes sense. But we still should try flushing
-the messages in console_flush_on_panic() even in NMI.
-
-One solution would be to call console_flush_all() directly in
-console_flush_on_panic() without taking console_lock().
-It should not be worse than the current code which ignores
-the console_trylock() return value.
-
-Note that it mostly works because console_flush_on_panic() is called
-when other CPUs are supposed to be stopped.
-
-We only would need to prevent other CPUs from flushing messages
-as well if they were still running by chance. But we actually already
-do this, see abandon_console_lock_in_panic(). Well, we should
-make sure that the abandon_console_lock_in_panic() check is
-done before flushing the first message.
-
-All these changes together would prevent deadlock on console_sem->lock.
-But the synchronization "guarantees" should stay the same.
-
-> +
->  	/*
->  	 * Here and in __up_console_sem() we need to be in safe mode,
->  	 * because spindump/WARN/etc from under console ->lock will
-
-Alternative solution would be to make the generic down_trylock() safe
-in NMI or in panic(). It might do spin_trylock() when oops_in_progress
-is set. I mean to do the same trick and console drivers do with
-port->lock.
-
-But I am not sure if other down_trylock() users would be happy with
-this change. Yes, it might get solved by introducing down_trylock_panic()
-that might be used only in console_flush_on_panic(). But it might
-be more hairy than the solution proposed above.
-
-Best Regards,
-Petr
+>   drivers/ntb/test/ntb_tool.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/ntb/test/ntb_tool.c b/drivers/ntb/test/ntb_tool.c
+> index 5ee0afa62..eeeb4b1c9 100644
+> --- a/drivers/ntb/test/ntb_tool.c
+> +++ b/drivers/ntb/test/ntb_tool.c
+> @@ -998,6 +998,8 @@ static int tool_init_mws(struct tool_ctx *tc)
+>   		tc->peers[pidx].outmws =
+>   			devm_kcalloc(&tc->ntb->dev, tc->peers[pidx].outmw_cnt,
+>   				   sizeof(*tc->peers[pidx].outmws), GFP_KERNEL);
+> +		if (tc->peers[pidx].outmws == NULL)
+> +			return -ENOMEM;
+>   
+>   		for (widx = 0; widx < tc->peers[pidx].outmw_cnt; widx++) {
+>   			tc->peers[pidx].outmws[widx].pidx = pidx;
