@@ -2,106 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2090F6AF919
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DA0E6AF927
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbjCGWnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S231730AbjCGWpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjCGWmf (ORCPT
+        with ESMTP id S230214AbjCGWpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:42:35 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655E2A2C1E;
-        Tue,  7 Mar 2023 14:41:56 -0800 (PST)
-Date:   Tue, 07 Mar 2023 22:41:31 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678228891;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
+        Tue, 7 Mar 2023 17:45:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBED9DE18
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:43:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678228991;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j15x+BYOBOkwPBLJCLLZQ9uWzQhHFZ6rz4FIHGL1vUs=;
-        b=G58vKNsGiHwS7dZ21eWHkB8qcgUb/0r0+ZotATHhrIrI1mwc2gwq+qoTtkaxAX6rMi4SV+
-        gex+vAjrv0TmZ/NumFAjqPYvh87gvaZVJys+9EPWYKDUgYHMJsAzk+NcpA85cQwnInpX5X
-        qKG1hseYNnrbXKOt7XAi6rx/6z4YWWbebf3LYXiobZyHuYsgiwrxpBl6oEb7QC1VnfogyF
-        FeoQiyt2lffXvQfuvS0BGR3jhvfWpsp0YSylSpcEMsVj2ybYAxbQKH2ryM1EwgZa7l2zYN
-        ghB7uycBMiYH3ZKnr/OqzbT8FOgrymvSb+KHUnKe5FyfFU5llblPEZ7FJyMihw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678228891;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j15x+BYOBOkwPBLJCLLZQ9uWzQhHFZ6rz4FIHGL1vUs=;
-        b=XI22hM2EbI8xOwZPfKDqbtkl5JVbRTvSBcB0WLAU3nTBfvYH3K5VES4oYr8Zr9asfUMArZ
-        LkKn9ubhcCbu5lAQ==
-From:   "tip-bot2 for Terry Bowman" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] tools/x86/kcpuid: Fix avx512bw and avx512lvl fields
- in Fn00000007
-Cc:     Terry Bowman <terry.bowman@amd.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Feng Tang <feng.tang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230206141832.4162264-2-terry.bowman@amd.com>
-References: <20230206141832.4162264-2-terry.bowman@amd.com>
+        bh=bBISRmWtyk5b0q7tO/ZlpLIwLMdyIaEEvwZMNTD2oyo=;
+        b=LnhD8ZopbZZz6e9Rn9+o+e3d+qD1qJNluPe3gkNt0xwI5PeCpDF/vDrBcDmhuALu0s8iuy
+        gJH+ogCO9ro4ZUSahvmWP4X5TKf8lVWRyu++5NY4KKE2MVwIcep6NXGITo4oD3wTff+tqF
+        Ogvk4/WOmL6N3FGLLR0hSaN//xL56xA=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-445-CAR8tR0uO1CAJXxqFYJQqA-1; Tue, 07 Mar 2023 17:43:10 -0500
+X-MC-Unique: CAR8tR0uO1CAJXxqFYJQqA-1
+Received: by mail-qt1-f198.google.com with SMTP id l17-20020ac84cd1000000b003bfbae42753so7984696qtv.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:43:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678228990;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bBISRmWtyk5b0q7tO/ZlpLIwLMdyIaEEvwZMNTD2oyo=;
+        b=pHi9KvuG8CNtJtw9A3IzKrmgv7HyGk2Pzl5UEcc158TTR2wJScFFcvzW7nCOsaY5ra
+         2XDjctKGFeGmwqMAynynWieXR31keUXzwiol9sP5z43YhWFsqygTSm+7Y9Jiyls8wGcq
+         hhw/l4LifYHNNK2+vVcrIpUcQaMoBPkg7valE6c8DRTGWiN4VErDs+quRV+UWCEHOa3k
+         TBUdkLL5czn7D2MWSwPm3NDw2Ys1aRy8Bu54ASpV6WCi3WVUGmRCV15QI8xQtLOWBmBz
+         iZBOiq1HxLb0jpEs1CGoWfBLltpkxIG+Kwhnv7NK4b5rqibZ8QViK9jDvoBfxzwXclz2
+         OI9g==
+X-Gm-Message-State: AO0yUKXYyKKwGFJ/Pr/bZUDIUkV0UTMlM/FntjFrFmF0/INjn5Q1WOte
+        tQPCd5djRg+/rQ07Eia44k3I6vr1LiGBpvER6S5/ewj4doAXhmNMD05GJ3BkoaKGHORaBIPBva6
+        ENrvKgs1NigIYiqB9mi8yFgwd
+X-Received: by 2002:ac8:5c02:0:b0:3b8:525e:15ec with SMTP id i2-20020ac85c02000000b003b8525e15ecmr30590750qti.27.1678228989822;
+        Tue, 07 Mar 2023 14:43:09 -0800 (PST)
+X-Google-Smtp-Source: AK7set+Me9bTPhI1hFsGeGjWpMBd7fZ9BKtiTY5Thb2DH2wKRapu1088yY+WA0JY2Qyr92U3nNacYw==
+X-Received: by 2002:ac8:5c02:0:b0:3b8:525e:15ec with SMTP id i2-20020ac85c02000000b003b8525e15ecmr30590731qti.27.1678228989586;
+        Tue, 07 Mar 2023 14:43:09 -0800 (PST)
+Received: from ?IPv6:2600:4040:5c68:6800::feb? ([2600:4040:5c68:6800::feb])
+        by smtp.gmail.com with ESMTPSA id u24-20020a37ab18000000b006fa16fe93bbsm10313451qke.15.2023.03.07.14.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 14:43:09 -0800 (PST)
+Message-ID: <2732d141a82c0f9410d001fe656d30c5e32311de.camel@redhat.com>
+Subject: Re: [PATCH 0/2] drm/nouveau: avoid usage of list iterator after loop
+From:   Lyude Paul <lyude@redhat.com>
+To:     Jakob Koschel <jkl820.git@gmail.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>
+Date:   Tue, 07 Mar 2023 17:43:07 -0500
+In-Reply-To: <20230301-drm-nouveau-avoid-iter-after-loop-v1-0-0702ec23f970@gmail.com>
+References: <20230301-drm-nouveau-avoid-iter-after-loop-v1-0-0702ec23f970@gmail.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Message-ID: <167822889104.5837.1505725503143263010.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-Commit-ID:     4e347bdf44c1fd4296a7b9657a2c0e1bd900fa50
-Gitweb:        https://git.kernel.org/tip/4e347bdf44c1fd4296a7b9657a2c0e1bd900fa50
-Author:        Terry Bowman <terry.bowman@amd.com>
-AuthorDate:    Mon, 06 Feb 2023 08:18:30 -06:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 07 Mar 2023 23:27:07 +01:00
+Will push upstream in just a moment
 
-tools/x86/kcpuid: Fix avx512bw and avx512lvl fields in Fn00000007
+On Wed, 2023-03-01 at 18:25 +0100, Jakob Koschel wrote:
+> This patch set includes two instances where the list iterator variable
+> 'pstate' is implicitly assumed to be valid after the iterator loop.
+> While in pratice that is most likely the case (if
+> 'pstatei'/'args->v0.state' is <=3D the elements in clk->states), we shoul=
+d
+> explicitly only allow 'pstate' to always point to correct 'nvkm_pstate'
+> structs.
+>=20
+> That allows catching potential bugs with BUG_ON(!pstate) that otherwise
+> would be completely undetectable.
+>=20
+> It also helps the greater mission to hopefully move the list iterator
+> variable into the iterating macro directly [1].
+>=20
+> Link: https://lore.kernel.org/all/CAHk-=3DwgRr_D8CB-D9Kg-c=3DEHreAsk5SqXP=
+wr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+> ---
+> Jakob Koschel (2):
+>       drm/nouveau/device: avoid usage of list iterator after loop
+>       drm/nouveau/clk: avoid usage of list iterator after loop
+>=20
+>  drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c | 9 ++++++---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c    | 9 ++++++---
+>  2 files changed, 12 insertions(+), 6 deletions(-)
+> ---
+> base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
+> change-id: 20230301-drm-nouveau-avoid-iter-after-loop-4bff97166efa
+>=20
+> Best regards,
 
-Leaf Fn00000007 contains avx512bw at bit 26 and avx512vl at bit 28. This
-is incorrect per the SDM. Correct avx512bw to be bit 30 and avx512lvl to
-be bit 31.
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
-Fixes: c6b2f240bf8d ("tools/x86: Add a kcpuid tool to show raw CPU features")
-Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Feng Tang <feng.tang@intel.com>
-Link: https://lore.kernel.org/r/20230206141832.4162264-2-terry.bowman@amd.com
----
- tools/arch/x86/kcpuid/cpuid.csv | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/arch/x86/kcpuid/cpuid.csv b/tools/arch/x86/kcpuid/cpuid.csv
-index 4f1c4b0..9914bdf 100644
---- a/tools/arch/x86/kcpuid/cpuid.csv
-+++ b/tools/arch/x86/kcpuid/cpuid.csv
-@@ -184,8 +184,8 @@
- 	 7,    0,  EBX,     27, avx512er, AVX512 Exponent Reciproca instr
- 	 7,    0,  EBX,     28, avx512cd, AVX512 Conflict Detection instr
- 	 7,    0,  EBX,     29, sha, Intel Secure Hash Algorithm Extensions instr
--	 7,    0,  EBX,     26, avx512bw, AVX512 Byte & Word instr
--	 7,    0,  EBX,     28, avx512vl, AVX512 Vector Length Extentions (VL)
-+	 7,    0,  EBX,     30, avx512bw, AVX512 Byte & Word instr
-+	 7,    0,  EBX,     31, avx512vl, AVX512 Vector Length Extentions (VL)
- 	 7,    0,  ECX,      0, prefetchwt1, X
- 	 7,    0,  ECX,      1, avx512vbmi, AVX512 Vector Byte Manipulation Instructions
- 	 7,    0,  ECX,      2, umip, User-mode Instruction Prevention
