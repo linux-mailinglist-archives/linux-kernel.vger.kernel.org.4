@@ -2,158 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47D06AE74E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31A36AE755
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjCGQxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S230389AbjCGQxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:53:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjCGQwj (ORCPT
+        with ESMTP id S229748AbjCGQw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:52:39 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E50096C37
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:48:36 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso7630072wmo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:48:36 -0800 (PST)
+        Tue, 7 Mar 2023 11:52:58 -0500
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A272984FE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:49:02 -0800 (PST)
+Received: by mail-vs1-xe2a.google.com with SMTP id f23so12826435vsa.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:49:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678207708;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=80Y0cuJ9iz5XmFa4pR2hxDaox/dZrrCFfXs87VRlzo8=;
-        b=sbgLUZSUGcIj6Z9snoz0pPlFnAXVGWVaQXuQgOTbN0cfao+NvOjOJwgyj9aDFnqNMx
-         ZJVQUgh0HjoaqvqNbtJR7WGfo4xidNaDisonw6d706CvAvnaaphEWle0R+l8IJ/Npv4v
-         dooSruLWTwttqeDBaZFA360vwFYFe5f2tSbSRU0+8uZnPO1QC6r1HjGVTYAz6ILYKMU6
-         R5lAvM0MoTRKtj03I9tJpvB+dKKLval5zyq1o0Z4I/uWQ0OS5TqTwxs3nu4y5ZAvcuh0
-         MSrXtNkOkw+qEyLSIhbv+NP9oyyG2Jgv6enl+6AEJvVKWhreANuu7lRE3qpq59xvwqXp
-         sqcg==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678207740;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BAM6KLGzntkSWdjqY00tOO6Re1CtThRvd/af47qdcys=;
+        b=sMlSZ99iY1HXbVfOwHWFFNCePy6z5mMJc7oroohOrUO5Kd6B/PA4UN67MKzkTIxBlr
+         0XDLyNp2UMVwMgLjhSbmqBS5pHRXTpRHGdPbbOH5EL64VbBmd/hA/94DVXvxqt+8CNEQ
+         f25B+F75LFjlhslV28C/rEhR0lE6N+uOI6de+I7EMlLSqZj7sdUqm5gDDkTVoYk7KfjJ
+         mUFwn2S2OQ0F6yfEr5zB38OS+OuvtzjMjqBIaoB6iq+T/OSB2JbIjrK7bMxBUr02pIBG
+         x6EZDyyt7243EaX3u/ayDVZJkJwbXwbOPUBv+RVL9FCdEFDyhEz/fb+Qtpow3oyYsAaP
+         iPOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678207708;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=80Y0cuJ9iz5XmFa4pR2hxDaox/dZrrCFfXs87VRlzo8=;
-        b=agMzc0JxblLAc17wwJ9Czw9H6gpXj3hIgcXjULV3RGtNCyjloAG+op2SUlYnHkPn9C
-         ni26pSDI/seP7r3ibYFkQhP1wvhlnd8yUO3U0umjUE7ZAcfo57avsItiTD8kKS2PvHYI
-         jUunicDvrJXuk3v6yEz/ShiLbTfaO/LYTiX5MChU1pbapmY0lqFv2xN5uhtpRgcxzXte
-         xxqQL/ncEpV1DEIoJCRvnIthXHhYDMZfVyH/CQk/drx9pxSdHki86qKRD3nfrx+esYzJ
-         Tv7vVbbTzykvKWaGblfatQyeRW/2eYWx6BrIaoEianBr9QacNRoq/qIfKi54EzEsKGV6
-         wlWQ==
-X-Gm-Message-State: AO0yUKU9SKc+E6OvZA7dNtHCo2OOaME58V890SS05PKd0urGeAYEGK4B
-        mRvMYS2lVH1v4pV8pu1+2Pr98A==
-X-Google-Smtp-Source: AK7set/YqWZVYs3gaQ5vga3bWWCfW7nayHNhZmi0Qr1jmqzAOJvDCjKWDPPHAJkGN+xGCpho9N7PlQ==
-X-Received: by 2002:a05:600c:3591:b0:3eb:3998:8c05 with SMTP id p17-20020a05600c359100b003eb39988c05mr10600494wmq.6.1678207708244;
-        Tue, 07 Mar 2023 08:48:28 -0800 (PST)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id e18-20020adffc52000000b002ca864b807csm12952085wrs.0.2023.03.07.08.48.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 08:48:27 -0800 (PST)
-Message-ID: <696004ca-ff21-cc74-7952-424244244dda@linaro.org>
-Date:   Tue, 7 Mar 2023 16:48:26 +0000
+        d=1e100.net; s=20210112; t=1678207740;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BAM6KLGzntkSWdjqY00tOO6Re1CtThRvd/af47qdcys=;
+        b=b67Flo8P0jOBJU0dEvQVjcq6BKyrZP7sAgMiFsHyYQANKYCbFvWvYT3c0FHa8Rd2lm
+         znQ3Ekmb25rAU8nV2dgzCTdZ/TcxIJ5a3VPzfrIXA3RAJSUiFpHuy8sy1J3w3B5Kpznr
+         Twj7oGo+ipvC5LdWnD+z2KFQTsJOqdvdrPQwIoSNnvxpFJu21BRbkZTILH+6FBDT+lLK
+         p+tDzKQehhZc3X3D535Vs4LohHCJ1paRHk43+fghyE1JlLyWA0sccb/xl4P758nhDWYt
+         EFzXGNVjKEcnZUxALRRoB3QRBZGBVK/U2JMtOAVvZkv22xwyLGF0/Sq382IM4+w+KQiJ
+         vu8A==
+X-Gm-Message-State: AO0yUKVilwa5fJ1/ws74oXAVEjtZu13bO+7eNQ0lUejMftiSH3abKWAR
+        5XVfjqghCjS28fZdTUUwNbj5AamWF+uST5rBh/kDNA==
+X-Google-Smtp-Source: AK7set/aGZTSkM0B9sWQYZhfE6LKKIa7JSaHfa8fNaeVAqzf3UgTfODCbnSXRvhpl/MM03uqaOH4EQYIMkUsDvh2F0s=
+X-Received: by 2002:a67:ead9:0:b0:411:ffe1:9c6 with SMTP id
+ s25-20020a67ead9000000b00411ffe109c6mr10136669vso.0.1678207739881; Tue, 07
+ Mar 2023 08:48:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] tty: serial: qcom-geni-serial: check for valid size
- before starting dma
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, bartosz.golaszewski@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230307155543.31021-1-srinivas.kandagatla@linaro.org>
- <20230307155543.31021-2-srinivas.kandagatla@linaro.org>
- <c7830eaa-f4b9-dac9-93b2-c3cc032ed4fb@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <c7830eaa-f4b9-dac9-93b2-c3cc032ed4fb@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230302125215.214014-1-keguang.zhang@gmail.com>
+ <20230302125215.214014-2-keguang.zhang@gmail.com> <CAMRc=Me=Yrr5BuRaMd4r91URzmdYHWUvVGvLL9YFuZPaV0WYFA@mail.gmail.com>
+ <CAJhJPsVf8EvFc9N8eMtc8Qu2BhODv7PzZm9C5ePR+GdTFiAY1w@mail.gmail.com>
+In-Reply-To: <CAJhJPsVf8EvFc9N8eMtc8Qu2BhODv7PzZm9C5ePR+GdTFiAY1w@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 7 Mar 2023 17:48:49 +0100
+Message-ID: <CAMRc=Me3Lnf0W=Y0oMkUGJ59rVCRb+qGq2Eb3vqRZm5gQUwOxQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] gpio: loongson1: Convert to SPDX identifier
+To:     Keguang Zhang <keguang.zhang@gmail.com>
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 7, 2023 at 3:25=E2=80=AFAM Keguang Zhang <keguang.zhang@gmail.c=
+om> wrote:
+>
+> On Mon, Mar 6, 2023 at 5:29=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
+> >
+> > On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@gma=
+il.com> wrote:
+> > >
+> > > Use SPDX-License-Identifier instead of the license text and
+> > > update the author information.
+> > >
+> > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > > ---
+> > > V1 -> V2: Keep GPLv2, just convert to SPDX identifier
+> > > ---
+> > >  drivers/gpio/gpio-loongson1.c | 9 +++------
+> > >  1 file changed, 3 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongs=
+on1.c
+> > > index 5d90b3bc5a25..8862c9ea0d41 100644
+> > > --- a/drivers/gpio/gpio-loongson1.c
+> > > +++ b/drivers/gpio/gpio-loongson1.c
+> > > @@ -1,11 +1,8 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > >  /*
+> > >   * GPIO Driver for Loongson 1 SoC
+> > >   *
+> > > - * Copyright (C) 2015-2016 Zhang, Keguang <keguang.zhang@gmail.com>
+> > > - *
+> > > - * This file is licensed under the terms of the GNU General Public
+> > > - * License version 2. This program is licensed "as is" without any
+> > > - * warranty of any kind, whether express or implied.
+> > > + * Copyright (C) 2015-2023 Keguang Zhang <keguang.zhang@gmail.com>
+> > >   */
+> > >
+> > >  #include <linux/module.h>
+> > > @@ -90,6 +87,6 @@ static struct platform_driver ls1x_gpio_driver =3D =
+{
+> > >
+> > >  module_platform_driver(ls1x_gpio_driver);
+> > >
+> > > -MODULE_AUTHOR("Kelvin Cheung <keguang.zhang@gmail.com>");
+> >
+> > Why are you removing credits of the old author?
+> Kelvin Cheung and Keguang Zhang are the same person.
+> This change is to keep pace with the related entry of MAINTAINERS.
+>
 
+Even so - how could I have possibly known this? Please put it into the
+commit message, it's crucial information for this change.
 
-On 07/03/2023 16:20, Konrad Dybcio wrote:
-> 
-> 
-> On 7.03.2023 16:55, Srinivas Kandagatla wrote:
->> Check if there are valid length of bytes to transfer before starting dma.
->>
->> without this check we can see below kernel warning when we try to map a zero size buffers.
->>
->> ------------[ cut here ]------------
->> WARNING: CPU: 0 PID: 0 at drivers/iommu/dma-iommu.c:1046 iommu_dma_unmap_page+0xe0/0xfc
->> Modules linked in:
->> CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W          6.3.0-rc1-dirty #347
->> Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
->> pstate: 804000c5 (Nzcv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> pc : iommu_dma_unmap_page+0xe0/0xfc
->> lr : iommu_dma_unmap_page+0x38/0xfc
->> ...
->> Call trace:
->>   iommu_dma_unmap_page+0xe0/0xfc
->>   dma_unmap_page_attrs+0x30/0x1ec
->>   geni_se_tx_dma_unprep+0x58/0x80
->>   qcom_geni_serial_isr+0x350/0x750
->>   __handle_irq_event_percpu+0x58/0x148
->>   handle_irq_event_percpu+0x18/0x4c
->>   handle_irq_event+0x48/0x88
->>   handle_fasteoi_irq+0xb0/0x130
->>   generic_handle_domain_irq+0x2c/0x44
->>   gic_handle_irq+0xd4/0x140
->>   call_on_irq_stack+0x24/0x4c
->>   do_interrupt_handler+0x80/0x84
->>   el1_interrupt+0x38/0x6c
->>   el1h_64_irq_handler+0x18/0x24
->>   el1h_64_irq+0x64/0x68
->>   cpuidle_enter_state+0x1e4/0x310
->>   cpuidle_enter+0x3c/0x54
->>   call_cpuidle+0x1c/0x40
->>   do_idle+0x204/0x260
->>   cpu_startup_entry+0x28/0x2c
->>   kernel_init+0x0/0x12c
->>   arch_post_acpi_subsys_init+0x0/0x8
->>   start_kernel+0x3cc/0x74c
->>   __primary_switched+0xbc/0xc4
->>
->> Fixes: 2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for serial engine DMA")
->> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> S-o-b but no C-d-b? Weird..
-> 
-Yes, I did mess up this part.
-thanks for spotting this, Will fix this in next spin!
-
---srini
->> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->> ---
-> Anyway, the change is good!
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Konrad
->>   drivers/tty/serial/qcom_geni_serial.c | 3 +++
->>   1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
->> index 5972b5c317d3..bb63a00f4c07 100644
->> --- a/drivers/tty/serial/qcom_geni_serial.c
->> +++ b/drivers/tty/serial/qcom_geni_serial.c
->> @@ -637,6 +637,9 @@ static void qcom_geni_serial_start_tx_dma(struct uart_port *uport)
->>   
->>   	xmit_size = CIRC_CNT_TO_END(xmit->head, xmit->tail, UART_XMIT_SIZE);
->>   
->> +	if (!xmit_size)
->> +		return;
->> +
->>   	qcom_geni_serial_setup_tx(uport, xmit_size);
->>   
->>   	ret = geni_se_tx_dma_prep(&port->se, &xmit->buf[xmit->tail],
+Bart
