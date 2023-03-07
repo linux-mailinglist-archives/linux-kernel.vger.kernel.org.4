@@ -2,69 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5C16AD5D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 04:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F026AD5E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 04:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjCGDp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 22:45:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
+        id S230194AbjCGDru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 22:47:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229619AbjCGDpz (ORCPT
+        with ESMTP id S230192AbjCGDri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 22:45:55 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC7B3250C;
-        Mon,  6 Mar 2023 19:45:54 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id g3so47340480eda.1;
-        Mon, 06 Mar 2023 19:45:54 -0800 (PST)
+        Mon, 6 Mar 2023 22:47:38 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC3E6BDF1;
+        Mon,  6 Mar 2023 19:47:20 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id d7so13093435qtr.12;
+        Mon, 06 Mar 2023 19:47:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678160753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7WFYzmYMI13NGyI9RVWU+B5u5ZNy5SSZeg3RTeQ3FS4=;
-        b=RbGZd472V0mVea6Q/CdYoaWjP6UZwTd+MXhE38lo2a4xGqBjdGJBk/FxdFXeribDDi
-         3zDaZmVB7PU2pwW/kHOM2RuQFCkUTuLt9OIRjqHmoVIbrxY9+NlxD9PjMsk67Llj5L2o
-         qgQuRhr/fNfRypyEir8uyuKCNINxA71JFHyfxAFRal+zMnJEIiUOikmzR3oiqcefc76m
-         X7SBfQQVCJw0CCpMWhLPPvme8sPIlbztqy8VqrwdmrBP3Nv98hrK1MbB3fdd0Nu25N0L
-         Gkwozz8oRk1N2ZPFA6lPCPqMr4gCVCNbycQCMyu2rhd+yDXCKkRmEEbdGgKtCeWaEkX+
-         3LEA==
+        d=gmail.com; s=20210112; t=1678160813;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bGgWQRdFIzl1Y3g1dgV/zFO10xfrflw7I7b73eveKLY=;
+        b=Jk1sjQ4XJF+U0eeqj2YaRbudxWApeNhC0bPeEUGU7IfLSPL42UhVRXb1Cg+5KfwyZX
+         l9dkuFX3iFNJVmNhoIfv03nph8Ey83myh/tw/x0mSID1/m581bO7l0SfnNUc7QMtRhk7
+         m4KU4xtYQ/Z/kvzAHQvq8mUMGKIfaT3mddqDqyXJDAnCO6aRelzsi4sDpQDHkoT5nBZv
+         LyBGTO4WTyJdZX7rhjw8UwW87eKQTFYJDnWISoKTw8b2xssQqlW4qcBnmFwmfHYsQSqH
+         qO4K6iZnscGyzb/rlgC2u2v8KdVm7YXcP7LhTC8bi/G5KP6Wi6AsTDsCgG1L45bZV+/J
+         dpjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678160753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7WFYzmYMI13NGyI9RVWU+B5u5ZNy5SSZeg3RTeQ3FS4=;
-        b=xiuhe3XH7IZfxjGh4kuB6Pk6pLXdiPU7mqeaD0miF1fmN/DQowENxP8VP9RcK2+KpH
-         2/OgR51dlbgoxfEXc37mNsqHD0H+NlQMPt/Yc/fxOVFRsCL5+GjKepNrumy1h3jXceM+
-         fVIBjlu4id9QqcJcp7/vSLWU1CNjDB858/+6IDv45AfixtZawYsU3Kdtl7RN+aRaW8n9
-         aa8CIesNevcaO2aZQKRZC2Hs94xqKir0Xqy+PzCVp2kb1q3LtGMzWz2ACRIkBelIBvf1
-         7MvBM/j/WYYN09k+ulvlLBQloBLVMB7rejTyx40rQFxdQUqzQxcJ1DXPBhKdWbJI12ls
-         hhYQ==
-X-Gm-Message-State: AO0yUKXGydHu/uvutjoLOL1WMNbjjsVfOopQDR2cbfhtTHgZdKxrbQiT
-        wLNaKmKjnxEx2PcrVSKs6OkMG1D2KPQmzhb7tek=
-X-Google-Smtp-Source: AK7set/bDf7jZs8BadF17KUJmFRr2SpATO3txBELeojm6hKxTx9bH/strG41JGbMxurM5Eq8vfjECTwY7Abzb+ve+gg=
-X-Received: by 2002:a50:d581:0:b0:4ab:4b85:a6a8 with SMTP id
- v1-20020a50d581000000b004ab4b85a6a8mr7092721edi.4.1678160753041; Mon, 06 Mar
- 2023 19:45:53 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678160813;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bGgWQRdFIzl1Y3g1dgV/zFO10xfrflw7I7b73eveKLY=;
+        b=YWFQmxWMBuF+K8DHTZH38I+om01UNGAOGUcBDP0NpSS9M8sWuUyE1aQVqEvbg3ESb8
+         kACPND5URzLNtCYhhhjAZocdJfs7IaY5sL/5DivxZ1zayHrYPUisWfptfaRz0pLPyRhd
+         /nUCxbnVGY45cXjIX0AnGxgadMZqTbX0OK+zM+bGbRElJcYVhXxm9Rlp+OhRPqARWs1/
+         HjVMb0Vz9WInO7O8UrRIBdzQ+R2eGR2b3Ym/jd8nyM+g86NQJoPLqgKYhuhbyz/Q/WLE
+         YS+YOqFXo7Uh4SsVP3Lq00vlDx6r9z+hzo6Gc/A3Cyb2f1kxu9KXSxLNGskpj1gR1pI0
+         ptyA==
+X-Gm-Message-State: AO0yUKUgZqx1BQ7arwnHbvMwpE7iG5v+vzE6FEBjz+J4KuKNAI2AHx1n
+        Lu6KLIpDqtxe0keMZchN6ZE=
+X-Google-Smtp-Source: AK7set9PVaJBUrzneXIr1jxdEgyaaGEnL7v2KZxGmtvzFeNJdAyuN5S0K2SGI8b6p+ASHr18V/RpGQ==
+X-Received: by 2002:a05:622a:1a0c:b0:3bf:df2e:a494 with SMTP id f12-20020a05622a1a0c00b003bfdf2ea494mr615544qtb.6.1678160812749;
+        Mon, 06 Mar 2023 19:46:52 -0800 (PST)
+Received: from [192.168.1.105] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id s15-20020ac85ecf000000b003afbf704c7csm8583252qtx.24.2023.03.06.19.46.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 19:46:52 -0800 (PST)
+Message-ID: <84094771-7f98-0d8d-fe79-7c22e15a602d@gmail.com>
+Date:   Mon, 6 Mar 2023 19:46:49 -0800
 MIME-Version: 1.0
-References: <20230302125215.214014-1-keguang.zhang@gmail.com>
- <20230302125215.214014-3-keguang.zhang@gmail.com> <CAMRc=Me3yVwQm8=CmUVM2gyYnFxntW47-OOPdmq1TzXTJB5ETg@mail.gmail.com>
-In-Reply-To: <CAMRc=Me3yVwQm8=CmUVM2gyYnFxntW47-OOPdmq1TzXTJB5ETg@mail.gmail.com>
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-Date:   Tue, 7 Mar 2023 11:45:36 +0800
-Message-ID: <CAJhJPsX1q6PGSb+eoCSdCC2_vDtbaShLLzEbuNOqD_Jzd8Ozdw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] gpio: loongson1: Use readl() & writel()
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] net: asix: fix modprobe "sysfs: cannot create duplicate
+ filename"
+Content-Language: en-US
+To:     Grant Grundler <grundler@chromium.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Anton Lundin <glance@acc.umu.se>,
+        Eizan Miyamoto <eizan@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20230307005028.2065800-1-grundler@chromium.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230307005028.2065800-1-grundler@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,67 +83,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 5:30=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
->
-> On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@gmail=
-.com> wrote:
-> >
-> > This patch replace __raw_readl() & __raw_writel() with readl() & writel=
-().
-> >
->
-> Please say WHY you're doing this.
->
-readl & writel contain memory barriers which can guarantee access order.
-
-> Bart
->
-> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
-> > ---
-> > V1 -> V2: Split this change to a separate patch
-> > ---
-> >  drivers/gpio/gpio-loongson1.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loongson=
-1.c
-> > index 8862c9ea0d41..b6c11caa3ade 100644
-> > --- a/drivers/gpio/gpio-loongson1.c
-> > +++ b/drivers/gpio/gpio-loongson1.c
-> > @@ -23,8 +23,8 @@ static int ls1x_gpio_request(struct gpio_chip *gc, un=
-signed int offset)
-> >         unsigned long flags;
-> >
-> >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
-> > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) | BIT(offset=
-),
-> > -                    gpio_reg_base + GPIO_CFG);
-> > +       writel(readl(gpio_reg_base + GPIO_CFG) | BIT(offset),
-> > +              gpio_reg_base + GPIO_CFG);
-> >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
-> >
-> >         return 0;
-> > @@ -35,8 +35,8 @@ static void ls1x_gpio_free(struct gpio_chip *gc, unsi=
-gned int offset)
-> >         unsigned long flags;
-> >
-> >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
-> > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) & ~BIT(offse=
-t),
-> > -                    gpio_reg_base + GPIO_CFG);
-> > +       writel(readl(gpio_reg_base + GPIO_CFG) & ~BIT(offset),
-> > +              gpio_reg_base + GPIO_CFG);
-> >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
-> >  }
-> >
-> > --
-> > 2.34.1
-> >
 
 
+On 3/6/2023 4:50 PM, Grant Grundler wrote:
+> "modprobe asix ; rmmod asix ; modprobe asix" fails with:
+>     sysfs: cannot create duplicate filename \
+>     	'/devices/virtual/mdio_bus/usb-003:004'
+> 
+> Issue was originally reported by Anton Lundin on 2022-06-22 14:16 UTC:
+>     https://lore.kernel.org/netdev/20220623063649.GD23685@pengutronix.de/T/
+> 
+> Chrome OS team hit the same issue in Feb, 2023 when trying to find
+> work arounds for other issues with AX88172 devices.
+> 
+> The use of devm_mdiobus_register() with usbnet devices results in the
+> MDIO data being associated with the USB device. When the asix driver
+> is unloaded, the USB device continues to exist and the corresponding
+> "mdiobus_unregister()" is NOT called until the USB device is unplugged
+> or unauthorized. So the next "modprobe asix" will fail because the MDIO
+> phy sysfs attributes still exist.
+> 
+> The 'easy' (from a design PoV) fix is to use the non-devm variants of
+> mdiobus_* functions and explicitly manage this use in the asix_bind
+> and asix_unbind function calls. I've not explored trying to fix usbnet
+> initialization so devm_* stuff will work.
+> 
+> Reported-by: Anton Lundin <glance@acc.umu.se>
+> Tested-by: Eizan Miyamoto <eizan@chromium.org>
+> Signed-off-by: Grant Grundler <grundler@chromium.org>
 
---
-Best regards,
+Should we have a Fixes: tag here? One more question below
 
-Kelvin Cheung
+> ---
+>   drivers/net/usb/asix_devices.c | 32 ++++++++++++++++++++++++--------
+>   1 file changed, 24 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> index 30e87389aefa1..f0a87b933062a 100644
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -640,8 +640,9 @@ static int asix_resume(struct usb_interface *intf)
+>   static int ax88772_init_mdio(struct usbnet *dev)
+>   {
+>   	struct asix_common_private *priv = dev->driver_priv;
+> +	int ret;
+>   
+> -	priv->mdio = devm_mdiobus_alloc(&dev->udev->dev);
+> +	priv->mdio = mdiobus_alloc();
+>   	if (!priv->mdio)
+>   		return -ENOMEM;
+>   
+> @@ -653,7 +654,27 @@ static int ax88772_init_mdio(struct usbnet *dev)
+>   	snprintf(priv->mdio->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
+>   		 dev->udev->bus->busnum, dev->udev->devnum);
+>   
+> -	return devm_mdiobus_register(&dev->udev->dev, priv->mdio);
+> +	ret = mdiobus_register(priv->mdio);
+> +	if (ret) {
+> +		netdev_err(dev->net, "Could not register MDIO bus (err %d)\n", ret);
+> +		goto mdio_regerr;
+> +	}
+> +
+> +	priv->phydev = mdiobus_get_phy(priv->mdio, priv->phy_addr);
+> +	if (priv->phydev)
+> +		return 0;
+
+This was in ax88772_init_phy() before, why is this being moved here now?
+
+> +
+> +	netdev_err(dev->net, "Could not find PHY\n");
+> +	mdiobus_unregister(priv->mdio);
+> +mdio_regerr:
+> +	mdiobus_free(priv->mdio);
+> +	return ret;
+> +}
+> +
+> +static void ax88772_release_mdio(struct asix_common_private *priv)
+> +{
+> +	mdiobus_unregister(priv->mdio);
+> +	mdiobus_free(priv->mdio);
+>   }
+>   
+>   static int ax88772_init_phy(struct usbnet *dev)
+> @@ -661,12 +682,6 @@ static int ax88772_init_phy(struct usbnet *dev)
+>   	struct asix_common_private *priv = dev->driver_priv;
+>   	int ret;
+>   
+> -	priv->phydev = mdiobus_get_phy(priv->mdio, priv->phy_addr);
+> -	if (!priv->phydev) {
+> -		netdev_err(dev->net, "Could not find PHY\n");
+> -		return -ENODEV;
+> -	}
+> -
+>   	ret = phy_connect_direct(dev->net, priv->phydev, &asix_adjust_link,
+>   				 PHY_INTERFACE_MODE_INTERNAL);
+>   	if (ret) {
+> @@ -805,6 +820,7 @@ static void ax88772_unbind(struct usbnet *dev, struct usb_interface *intf)
+>   	struct asix_common_private *priv = dev->driver_priv;
+>   
+>   	phy_disconnect(priv->phydev);
+> +	ax88772_release_mdio(priv);
+>   	asix_rx_fixup_common_free(dev->driver_priv);
+>   }
+>   
+
+-- 
+Florian
