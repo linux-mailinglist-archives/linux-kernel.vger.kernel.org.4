@@ -2,112 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29736ADEC0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC17F6ADEC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCGMbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
+        id S230215AbjCGMcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjCGMbW (ORCPT
+        with ESMTP id S229913AbjCGMcG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:31:22 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C816A769F5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:31:20 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id l25so11959305wrb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:31:20 -0800 (PST)
+        Tue, 7 Mar 2023 07:32:06 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878B9769E3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:32:04 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id t11so16863348lfr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:32:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=metaspace-dk.20210112.gappssmtp.com; s=20210112; t=1678192279;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=BLN4UncZUSgoRCKUIm4eF2t2H/1MDhbeJ976lCdE5GA=;
-        b=08E6zZ8ABAZEGeccsGotZ9ZWL0kfvCUtAvAvNJl07mtxkbgz/541DjYIs/InFQKg9+
-         fuLPWU89TlX/x6VLupGJ3eUxcBzXKVo+/XXSxP6ipyPYLDXWe3D558CqSmDR29BNa8OG
-         Ko3vC/EcuZqQ8zVVXq/UVKNIttyyNg9V+fQ1Yi5n4aj1faPxJogMSe6b629k53PLZfwp
-         KqiMqeWEApNyR4t29rMNEUgMCfRydMhiKdKgIi8ZG4Hmtg+NJydam3IcZBvSJT1xYwjN
-         gqORAVYSDVDOdqYopXt1Zgr1fmgHuh8tzKRGSYk3mMDjD879comzzEWESjj721C3GFqT
-         y9fg==
+        d=linaro.org; s=google; t=1678192323;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aPs2AsYZOYaw55T4/U7uB6HluDp2jLmqFur5Lgl7Udk=;
+        b=lK7Eu/N/ysN2wh72dor8CsgesQs98RJOZna5u/ukEz1oLX8YRdNbNDRGc4jcyEMRKM
+         4TfTARbnX6WoV0YH69UfNrmSwElbwyZrSqKbNwZ1V8MwedHXNeMdGIm7h/QQlLz9fV9l
+         yTawG25BE1AjrcycBPi60mgp838z4VmStZpC1dR/+9lWjJ/p85l2lyDpIoTiQ0oHSmXu
+         vIOuWX9mg+iiMBUN7N5fVDcfBLFMFbUM42f7sSzXxa11YrsSoLrT+Jj5Rnr7HnUr/+5R
+         qdtk4y8K/I63delBF3PAs61PurOwHiYTHMW/BkVRn108GPWOeH4eh5XB+R7SMVDSu1Mk
+         Nf7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678192279;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BLN4UncZUSgoRCKUIm4eF2t2H/1MDhbeJ976lCdE5GA=;
-        b=a7/Dm11iQbTHI5VNEC1wejH6sTkoFp1Tm3NtLkF8O4ypeZ3Eisk1qVbDXMQRt7xhbK
-         dKysElxIZiVSW0kMSDB2T4x24zvlxRddOfYG6x7FYwMmxxQbbzVB+C9G/jOFc3aAef8k
-         HhN5B0+ReJJks8HI4w0ULVstNT3VGwXK7HO3l6Cf3KQRTcz0p0K99Md2go5XmE5pwu1w
-         FfMdHk/Ce05vbQYqM0FSEQjj/GslXIpnyI+UwLmXJt9kvQd8jctkon/XXGyfY9zrOQBd
-         aZ3bvRt10cIy2KjUxhONDAuMmDvmN++dP6mXmqPO9mBsfoHdPCiOcVZaZXxOVp6AlbY/
-         JaEQ==
-X-Gm-Message-State: AO0yUKXF/1WZ42Sis2DVjUw7yn/cl1vhzZsgEV3Tw4GbeJEKKmXzHzZJ
-        SL8GU576mTJj2ClJJ7jnvWDjYQ==
-X-Google-Smtp-Source: AK7set+iDIpJXiSmE9vwoJaVBF7W/DlBhKqa+iqOiX3z9Vaq+qXlgewnIdG6jqHUBIct8A5xJj+qXw==
-X-Received: by 2002:adf:e44c:0:b0:2c7:148c:b04f with SMTP id t12-20020adfe44c000000b002c7148cb04fmr9024090wrm.37.1678192279337;
-        Tue, 07 Mar 2023 04:31:19 -0800 (PST)
-Received: from localhost ([165.225.194.197])
-        by smtp.gmail.com with ESMTPSA id z1-20020adff1c1000000b002c70c99db74sm12525038wro.86.2023.03.07.04.31.18
+        d=1e100.net; s=20210112; t=1678192323;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aPs2AsYZOYaw55T4/U7uB6HluDp2jLmqFur5Lgl7Udk=;
+        b=xjGpBH3sJucitffOxvPhfV+VjA6QDkbyhO2e9OYx+JGrBP5/mWNorrlrzAON5W819m
+         Tto136pj/lXsv/Mre6vEHWqXhfRG8Yabej2TZH6RrPINQgbAffbxRuxurZoA9AG04vgR
+         A1B7x2SMrwaP9epsApVZNUT4EpTuDxH1NhtYKEmdZIpzT/WobOb4orn/YdcMbkQzBESb
+         q0YA7eWbsUjAfbUUJQzR9+jJj9ZNjvUBf4U+UsBc4vNyBhsKUhnD8kqYmhQbnUYjb6bR
+         5LTaSWskA4dFE8U85is5HVE05peBaCyHbGZk8cqKLByKCTTnxjlUkMwMEGqjXlqivHlI
+         vjUw==
+X-Gm-Message-State: AO0yUKW+qV/win/xH38x/vVp7+B7BFpBQqW94EnfDXX+4Nh/WfMzPLZS
+        8cp+s9zb0rPkeivh6zycppDPYQ==
+X-Google-Smtp-Source: AK7set+U3njUjM09dNb3PhuIwUi7v92VZ3jxeQsc4pQp6g50/l2NlUMjFGNBfyAF+0AeOnOrTUXGgQ==
+X-Received: by 2002:ac2:560b:0:b0:4db:2c28:8974 with SMTP id v11-20020ac2560b000000b004db2c288974mr3923462lfd.12.1678192322765;
+        Tue, 07 Mar 2023 04:32:02 -0800 (PST)
+Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id t20-20020a2e7814000000b0029462e98c07sm2156501ljc.35.2023.03.07.04.32.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 04:31:18 -0800 (PST)
-References: <20230306220959.240235-1-ojeda@kernel.org>
-User-agent: mu4e 1.9.18; emacs 28.2.50
-From:   Andreas Hindborg <nmi@metaspace.dk>
-To:     Miguel Ojeda <ojeda@kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] docs: rust: point directly to the standalone installers
-Date:   Tue, 07 Mar 2023 13:29:44 +0100
-In-reply-to: <20230306220959.240235-1-ojeda@kernel.org>
-Message-ID: <87ilfcivzf.fsf@metaspace.dk>
+        Tue, 07 Mar 2023 04:32:02 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] clk: qcom: gcc-sm6375: Update the .pwrsts for usb gdsc
+Date:   Tue,  7 Mar 2023 13:31:57 +0100
+Message-Id: <20230307123159.3797551-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The USB controller on sm6375 doesn't retain its state when the system
+goes into low power state and the GDSCs are turned off.
 
-Miguel Ojeda <ojeda@kernel.org> writes:
+This can be observed by the USB connection not coming back alive after
+putting the device into suspend, essentially breaking USB.
 
-> The Quick Start guide points to the Rust programming language front
-> page when it mentions the possibility of using the standalone
-> installers instead of `rustup`.
->
-> This was done to have a hopefully stable link, but it is not too
-> helpful: readers need to figure out how to reach the standalone
-> installers from there.
->
-> Thus point directly to the page (and anchor) with the table that
-> contains the standalone installers (plus signing key etc.).
->
-> If the link breaks in the future, we can always update it as
-> needed. And anyway having the full link includes the domain and
-> gives more information about where the old docs were in such
-> a broken link case, which may help.
->
-> Link: https://lore.kernel.org/linux-doc/CANiq72=gpzQyh1ExGbBWWNdgH-mTATdG5F600jKD1=NLLCn7wg@mail.gmail.com/
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> ---
->  Documentation/rust/quick-start.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/rust/quick-start.rst b/Documentation/rust/quick-start.rst
-> index 13b7744b1e27..253d47791f0f 100644
-> --- a/Documentation/rust/quick-start.rst
-> +++ b/Documentation/rust/quick-start.rst
-> @@ -40,7 +40,7 @@ and run::
->  
->  Otherwise, fetch a standalone installer or install ``rustup`` from:
+Work around this by updating the .pwrsts for the USB GDSCs so they only
+transition to retention state in low power.
 
-I guess we should remove "or install ``rustup``" from this sentence?
+This change should be reverted when a proper suspend sequence is
+implemented in the USB drivers.
 
-BR Andreas
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+v1 -> v2:
+- Reword "fix" to "work around", mention it should be temporary
+- Add TODO:
+
+ drivers/clk/qcom/gcc-sm6375.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/qcom/gcc-sm6375.c b/drivers/clk/qcom/gcc-sm6375.c
+index ad3c4833990d..417a0fd242ec 100644
+--- a/drivers/clk/qcom/gcc-sm6375.c
++++ b/drivers/clk/qcom/gcc-sm6375.c
+@@ -3534,7 +3534,8 @@ static struct gdsc usb30_prim_gdsc = {
+ 	.pd = {
+ 		.name = "usb30_prim_gdsc",
+ 	},
+-	.pwrsts = PWRSTS_OFF_ON,
++	/* TODO: Change to OFF_ON when USB drivers get proper suspend support */
++	.pwrsts = PWRSTS_RET_ON,
+ };
+ 
+ static struct gdsc ufs_phy_gdsc = {
+-- 
+2.39.2
+
