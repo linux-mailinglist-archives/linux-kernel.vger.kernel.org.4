@@ -2,144 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A796AE0FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B316ADFF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjCGNol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:44:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
+        id S230459AbjCGNGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:06:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbjCGNoS (ORCPT
+        with ESMTP id S230250AbjCGNFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:44:18 -0500
-X-Greylist: delayed 4351 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 05:43:06 PST
-Received: from mail.belitungtimurkab.go.id (unknown [103.205.56.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BBE2942A;
-        Tue,  7 Mar 2023 05:43:05 -0800 (PST)
-Received: from mail.belitungtimurkab.go.id (localhost.localdomain [127.0.0.1])
-        by mail.belitungtimurkab.go.id (Postfix) with ESMTPS id BC3138A700C;
-        Tue,  7 Mar 2023 14:59:49 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.belitungtimurkab.go.id (Postfix) with ESMTP id 3C3F68A5006;
-        Tue,  7 Mar 2023 14:43:12 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.belitungtimurkab.go.id 3C3F68A5006
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=belitungtimurkab.go.id; s=mail; t=1678174992;
-        bh=1yQ6sMopnzyP9MqfXA851yTH5iXi+5F1MZ7Sp6JOGqk=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=cWIOu3KKPNXyPgATk6HA3te214RWKMqlx4e5EfFPu3dFqlcYzZudfH2wpLCmrVI08
-         nFyDYPdQvfPeI6FivksFbNns1f1keqpCfjwspx7vOIgaEXJiyeAXdxqdckKe5LtqOh
-         M5TTDnOCVTyF2yZD+n9wF+zNJEudz+rDhPTnsrKIQsm8MYh8B5q1BGVvOfryzrymjY
-         h36ot5evmptJ0NGT4cYY6XaB86xlcOJ1hQhrsuY/pNGlqMBqmt0jq/TX3/E97K3SGg
-         sdTYg4TF7HSbhGP0/0XxP8Uasw9N4iHqBbv0QnTRZD+4G4gt3lb9ZCGV8HQEsu/u7X
-         Kt82hZoXNz/5Q==
-Received: from mail.belitungtimurkab.go.id ([127.0.0.1])
-        by localhost (mail.belitungtimurkab.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id yxFEx8rgsstj; Tue,  7 Mar 2023 14:43:11 +0700 (WIB)
-Received: from mail.belitungtimurkab.go.id (mail.belitungtimurkab.go.id [103.205.56.27])
-        by mail.belitungtimurkab.go.id (Postfix) with ESMTP id 0E8528A6A72;
-        Tue,  7 Mar 2023 14:43:05 +0700 (WIB)
-Date:   Tue, 7 Mar 2023 14:43:04 +0700 (WIB)
-From:   =?utf-8?B?INCh0LjRgdGC0LXQvNC90YvQuSDQsNC00LzQuNC90LjRgdGC0YDQsNGC0L7RgA==?= 
-        <dinkes@belitungtimurkab.go.id>
-Reply-To: sistemassadmins@mail2engineer.com
-Message-ID: <1909914973.29538.1678174984936.JavaMail.zimbra@belitungtimurkab.go.id>
-Subject: 
+        Tue, 7 Mar 2023 08:05:42 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA617B4AF;
+        Tue,  7 Mar 2023 05:05:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678194312; x=1709730312;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=+vbr9rIbJSDX3OWKNxWC1uREEyrLtgxy3MbKqbQOSmw=;
+  b=RxwID/qXgqFBG3h3s6ltc784XbhtVO7n3tI0j81Xx8bnGBkUsdh+OE0l
+   99rv1RCCPOHN5aJpsN9EZ21V8UWjJ1IFtoM60NvyLLbBPDT3B/LNuIVMS
+   a92ACILumrwEMLoZMB/gBfStZJXPrRnH47c982B/s5gLAc12Rs3s5Erjv
+   l7fJRhEs/7fCSPtUMa4yOPqOvFLULKypaShYSBTxKsbjy/rqO3RUeBP/A
+   wRqmEwKiGXMy5uOgABP6KWf+v1C4lQ8FLBAfRicutZiX2hSLNolDBxxl7
+   5WykN1XuGcqOGuAhqaogTKu1dT7XiLX2D1vHFhMsdHL8tQPdzmaKwGyZ+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400666219"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="400666219"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 05:03:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="800383592"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="800383592"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.218.236])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 05:03:23 -0800
+Message-ID: <bf7a4d48-ebf5-301e-5142-e728242c8b6a@intel.com>
+Date:   Tue, 7 Mar 2023 15:03:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-Originating-IP: [103.205.56.27]
-X-Mailer: Zimbra 8.7.11_GA_3789 (zclient/8.7.11_GA_3789)
-Thread-Index: Yuws0KvB5P8LfkgJLrQpfFdkkbfUkg==
-Thread-Topic: 
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        MISSING_HEADERS,RDNS_NONE,REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: belitungtimurkab.go.id]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.0 MISSING_HEADERS Missing To: header
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: ******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH 1/8] perf bpf filter: Introduce basic BPF filter
+ expression
+To:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+References: <20230222230141.1729048-1-namhyung@kernel.org>
+ <20230222230141.1729048-2-namhyung@kernel.org>
+Content-Language: en-US
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230222230141.1729048-2-namhyung@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=D0=92=D0=9D=D0=98=D0=9C=D0=90=D0=9D=D0=98=D0=95;
+On 23/02/23 01:01, Namhyung Kim wrote:
+> This implements a tiny parser for the filter expressions used for BPF.
+> Each expression will be converted to struct perf_bpf_filter_expr and
+> be passed to a BPF map.
+> 
+> For now, I'd like to start with the very basic comparisons like EQ or
+> GT.  The LHS should be a term for sample data and the RHS is a number.
+> The expressions are connected by a comma.  For example,
+> 
+>     period > 10000
+>     ip < 0x1000000000000, cpu == 3
+> 
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/util/Build        | 16 +++++++
+>  tools/perf/util/bpf-filter.c | 37 ++++++++++++++++
+>  tools/perf/util/bpf-filter.h | 36 ++++++++++++++++
+>  tools/perf/util/bpf-filter.l | 82 ++++++++++++++++++++++++++++++++++++
+>  tools/perf/util/bpf-filter.y | 54 ++++++++++++++++++++++++
+>  5 files changed, 225 insertions(+)
+>  create mode 100644 tools/perf/util/bpf-filter.c
+>  create mode 100644 tools/perf/util/bpf-filter.h
+>  create mode 100644 tools/perf/util/bpf-filter.l
+>  create mode 100644 tools/perf/util/bpf-filter.y
+> 
+> diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
+> new file mode 100644
+> index 000000000000..fd5b1164a322
+> --- /dev/null
+> +++ b/tools/perf/util/bpf-filter.h
+> @@ -0,0 +1,36 @@
+> +// SPDX-License-Identifier: GPL-2.0
 
-=D0=92=D0=B0=D1=88 =D0=BF=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D1=8B=D0=B9 =D1=8F=
-=D1=89=D0=B8=D0=BA =D0=BF=D1=80=D0=B5=D0=B2=D1=8B=D1=81=D0=B8=D0=BB =D0=BE=
-=D0=B3=D1=80=D0=B0=D0=BD=D0=B8=D1=87=D0=B5=D0=BD=D0=B8=D0=B5 =D1=85=D1=80=
-=D0=B0=D0=BD=D0=B8=D0=BB=D0=B8=D1=89=D0=B0, =D0=BA=D0=BE=D1=82=D0=BE=D1=80=
-=D0=BE=D0=B5 =D1=81=D0=BE=D1=81=D1=82=D0=B0=D0=B2=D0=BB=D1=8F=D0=B5=D1=82=
- 5 =D0=93=D0=91, =D0=BA=D0=B0=D0=BA =D0=BE=D0=BF=D1=80=D0=B5=D0=B4=D0=B5=D0=
-=BB=D0=B5=D0=BD=D0=BE =D0=B0=D0=B4=D0=BC=D0=B8=D0=BD=D0=B8=D1=81=D1=82=D1=
-=80=D0=B0=D1=82=D0=BE=D1=80=D0=BE=D0=BC, =D0=BA=D0=BE=D1=82=D0=BE=D1=80=D1=
-=8B=D0=B9 =D0=B2 =D0=BD=D0=B0=D1=81=D1=82=D0=BE=D1=8F=D1=89=D0=B5=D0=B5 =D0=
-=B2=D1=80=D0=B5=D0=BC=D1=8F =D1=80=D0=B0=D0=B1=D0=BE=D1=82=D0=B0=D0=B5=D1=
-=82 =D0=BD=D0=B0 10,9 =D0=93=D0=91, =D0=B2=D1=8B =D0=BD=D0=B5 =D1=81=D0=BC=
-=D0=BE=D0=B6=D0=B5=D1=82=D0=B5 =D0=BE=D1=82=D0=BF=D1=80=D0=B0=D0=B2=D0=BB=
-=D1=8F=D1=82=D1=8C =D0=B8=D0=BB=D0=B8 =D0=BF=D0=BE=D0=BB=D1=83=D1=87=D0=B0=
-=D1=82=D1=8C =D0=BD=D0=BE=D0=B2=D1=83=D1=8E =D0=BF=D0=BE=D1=87=D1=82=D1=83=
- =D0=B4=D0=BE =D1=82=D0=B5=D1=85 =D0=BF=D0=BE=D1=80, =D0=BF=D0=BE=D0=BA=D0=
-=B0 =D0=BD=D0=B5 =D0=BF=D1=80=D0=BE=D0=B2=D0=B5=D1=80=D0=B8=D1=82=D0=B5 =D0=
-=BF=D0=BE=D1=87=D1=82=D1=83 =D0=BF=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D0=BE=D0=
-=B3=D0=BE =D1=8F=D1=89=D0=B8=D0=BA=D0=B0 =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=
-=80=D0=BD=D0=BE. =D0=A7=D1=82=D0=BE=D0=B1=D1=8B =D0=BF=D0=BE=D0=B2=D1=82=D0=
-=BE=D1=80=D0=BD=D0=BE =D0=BF=D1=80=D0=BE=D0=B2=D0=B5=D1=80=D0=B8=D1=82=D1=
-=8C =D1=81=D0=B2=D0=BE=D0=B9 =D0=BF=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D1=8B=D0=
-=B9 =D1=8F=D1=89=D0=B8=D0=BA, =D0=BE=D1=82=D0=BF=D1=80=D0=B0=D0=B2=D1=8C=D1=
-=82=D0=B5 =D1=81=D0=BB=D0=B5=D0=B4=D1=83=D1=8E=D1=89=D1=83=D1=8E =D0=B8=D0=
-=BD=D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=D0=B8=D1=8E =D0=BD=D0=B8=D0=B6=D0=
-=B5:
-
-=D0=B8=D0=BC=D1=8F:
-=D0=98=D0=BC=D1=8F =D0=BF=D0=BE=D0=BB=D1=8C=D0=B7=D0=BE=D0=B2=D0=B0=D1=82=
-=D0=B5=D0=BB=D1=8F:
-=D0=BF=D0=B0=D1=80=D0=BE=D0=BB=D1=8C:
-=D0=9F=D0=BE=D0=B4=D1=82=D0=B2=D0=B5=D1=80=D0=B4=D0=B8=D1=82=D0=B5 =D0=BF=
-=D0=B0=D1=80=D0=BE=D0=BB=D1=8C:
-=D0=AD=D0=BB=D0=B5=D0=BA=D1=82=D1=80=D0=BE=D0=BD=D0=BD=D0=B0=D1=8F =D0=BF=
-=D0=BE=D1=87=D1=82=D0=B0:
-=D0=A2=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD:
-
-=D0=95=D1=81=D0=BB=D0=B8 =D0=B2=D1=8B =D0=BD=D0=B5 =D0=BC=D0=BE=D0=B6=D0=B5=
-=D1=82=D0=B5 =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=D0=BE =D0=BF=D1=80=
-=D0=BE=D0=B2=D0=B5=D1=80=D0=B8=D1=82=D1=8C =D1=81=D0=B2=D0=BE=D0=B9 =D0=BF=
-=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D1=8B=D0=B9 =D1=8F=D1=89=D0=B8=D0=BA, =D0=B2=
-=D0=B0=D1=88 =D0=BF=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D1=8B=D0=B9 =D1=8F=D1=89=
-=D0=B8=D0=BA =D0=B1=D1=83=D0=B4=D0=B5=D1=82 =D0=BE=D1=82=D0=BA=D0=BB=D1=8E=
-=D1=87=D0=B5=D0=BD!
-
-=D0=9F=D1=80=D0=B8=D0=BD=D0=BE=D1=81=D0=B8=D0=BC =D0=B8=D0=B7=D0=B2=D0=B8=
-=D0=BD=D0=B5=D0=BD=D0=B8=D1=8F =D0=B7=D0=B0 =D0=BD=D0=B5=D1=83=D0=B4=D0=BE=
-=D0=B1=D1=81=D1=82=D0=B2=D0=B0.
-=D0=9F=D1=80=D0=BE=D0=B2=D0=B5=D1=80=D0=BE=D1=87=D0=BD=D1=8B=D0=B9 =D0=BA=
-=D0=BE=D0=B4: en: WEB. =D0=90=D0=94=D0=9C=D0=98=D0=9D=D0=98=D0=A1=D0=A2=D0=
-=A0=D0=90=D0=A2=D0=9E=D0=A0=D0=90. RU006,524765 @2023 =D0=9F=D0=BE=D1=87=D1=
-=82=D0=BE=D0=B2=D0=B0=D1=8F =D1=82=D0=B5=D1=85=D0=BD=D0=B8=D1=87=D0=B5=D1=
-=81=D0=BA=D0=B0=D1=8F =D0=BF=D0=BE=D0=B4=D0=B4=D0=B5=D1=80=D0=B6=D0=BA=D0=
-=B0 @2023
-
-=D0=A1=D0=BF=D0=B0=D1=81=D0=B8=D0=B1=D0=BE
-=D0=A1=D0=B8=D1=81=D1=82=D0=B5=D0=BC=D0=BD=D1=8B=D0=B9 =D0=B0=D0=B4=D0=BC=
-=D0=B8=D0=BD=D0=B8=D1=81=D1=82=D1=80=D0=B0=D1=82=D0=BE=D1=80.
+/* */ is preferred SPDX comment style for header files
