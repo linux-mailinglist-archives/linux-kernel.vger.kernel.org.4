@@ -2,137 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7D46AD6BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CE46AD6C1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:24:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCGFWq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 00:22:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34114 "EHLO
+        id S230031AbjCGFYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 00:24:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjCGFW3 (ORCPT
+        with ESMTP id S229611AbjCGFYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 00:22:29 -0500
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CE5567BF;
-        Mon,  6 Mar 2023 21:22:25 -0800 (PST)
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay01.hostedemail.com (Postfix) with ESMTP id 08FCC1C4A58;
-        Tue,  7 Mar 2023 05:22:23 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf02.hostedemail.com (Postfix) with ESMTPA id 0FFBA8000E;
-        Tue,  7 Mar 2023 05:22:17 +0000 (UTC)
-Message-ID: <912474d3804791ef5757a44bae6ab72701e15bc3.camel@perches.com>
-Subject: Re: [PATCH] checkpatch: Error out if deprecated RCU API used
-From:   Joe Perches <joe@perches.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
-        Uladzislau Rezki <urezki@gmail.com>
-Date:   Mon, 06 Mar 2023 21:22:17 -0800
-In-Reply-To: <CAEXW_YQt976k6tRJBoYy=S-CpacgB+MpMr-H=TEtZBaP=CPwnQ@mail.gmail.com>
-References: <20230307030457.3499834-1-joel@joelfernandes.org>
-         <753b72f5ecd03f94511495a333eb192c5fc42087.camel@perches.com>
-         <CAEXW_YRYnikDRTQXwrTpTsQ1r-32FRPABj_Viu+X6Qr7EWqh4g@mail.gmail.com>
-         <802731d7bf187573a9084cb23196c096be81b5e1.camel@perches.com>
-         <20230307044104.GA3532764@google.com>
-         <497c07579fb51ed6f0b8a72471017b4dec258e9e.camel@perches.com>
-         <CAEXW_YQt976k6tRJBoYy=S-CpacgB+MpMr-H=TEtZBaP=CPwnQ@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 7 Mar 2023 00:24:10 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7981F3CE0C;
+        Mon,  6 Mar 2023 21:24:09 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id E3BE020BBF92; Mon,  6 Mar 2023 21:24:08 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E3BE020BBF92
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678166648;
+        bh=eqYZYAifD2hsVeXmbmbT0pdZ4aIRGfqq5HT40bm6dR4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H2jt2qW4L5Pm9qcfYbe2Jynx1axvirGjecr0Mzkb8oAObF9VtZnmnzJ78gK14GZ+7
+         Ljjn8f2AoU1pL6IEG4z/yxuQ4xe/DvkHCUn89LdFHoUXYN+Jo+HxIdPzm+t/ACFZ9m
+         ENCiaC4vM738N8dEbI+moC/ax5DgoUuc0vtw/rgs=
+Date:   Mon, 6 Mar 2023 21:24:08 -0800
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH] hv/hv_kvp_daemon: Add support for keyfile config based
+ connection profile in NM
+Message-ID: <20230307052408.GA11548@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1677133334-6958-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <ZAYJhm9fVAgCtTiC@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 0FFBA8000E
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Stat-Signature: j3t64s8w1tou5tg9qaksxwzr8a6kry5o
-X-Rspamd-Server: rspamout02
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18dD60VU4TcNc6X9YoMwW5z72oj27v1Oz0=
-X-HE-Tag: 1678166537-328782
-X-HE-Meta: U2FsdGVkX19SZ/s76yRrDn7PMrAGvf7jxoeLgQRwVGYu61ycYnAdDJmb0sMqW1jyhvKEnGE12joQbhDTkgjdZg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAYJhm9fVAgCtTiC@liuwe-devbox-debian-v2>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-07 at 00:11 -0500, Joel Fernandes wrote:
-
-> Do you mind sharing which tree you are looking at? I checked both
-> 6.3-rc1 and linux-next.
+On Mon, Mar 06, 2023 at 03:40:54PM +0000, Wei Liu wrote:
+> On Wed, Feb 22, 2023 at 10:22:14PM -0800, Shradha Gupta wrote:
+> > As communicated in BZ <2122115>, ifcfg config file support in
 > 
-> Your grep returned:
+> What is BZ <2122115>? I guess that's Red Hat's bugzilla?
 > 
-> kernel/trace/trace_osnoise.c:   kvfree_rcu(inst);
-> kernel/trace/trace_probe.c:     kvfree_rcu(link);
-> lib/test_vmalloc.c:             kvfree_rcu(p);
-> mm/list_lru.c:   * We need kvfree_rcu() here. And the walking of the list
-> net/core/pktgen.c:      /* Don't need rcu_barrier() due to use of kfree_rcu() */
-> net/core/sysctl_net_core.c:
-> kvfree_rcu(orig_sock_table);
-> net/core/sysctl_net_core.c:                             kfree_rcu(cur);
-> net/mac802154/scan.c:   kfree_rcu(request);
-> net/mac802154/scan.c:   kfree_rcu(request);
-
-rather old.  I'm not subscribed and haven't been following much.
-
-Add linux-next specific files for 20230217
-
-Updating to today's next:
-
-Add linux-next specific files for 20230307
-
-I get several instances:
-
-$ git grep -P '\bkv?free_rcu\s*\(' -- '*.[ch]' | grep -v -P 'kv?free_rcu\s*\([^,]+,.*\)'
-drivers/block/drbd/drbd_nl.c:	kvfree_rcu(old_disk_conf);
-drivers/block/drbd/drbd_nl.c:	kvfree_rcu(old_net_conf);
-drivers/block/drbd/drbd_nl.c:		kvfree_rcu(old_disk_conf);
-drivers/block/drbd/drbd_receiver.c:	kvfree_rcu(old_net_conf);
-drivers/block/drbd/drbd_receiver.c:			kvfree_rcu(old_disk_conf);
-drivers/block/drbd/drbd_state.c:		kvfree_rcu(old_conf);
-drivers/infiniband/core/device.c:		kfree_rcu(container_of(dev->port_data, struct ib_port_data_rcu,
-drivers/infiniband/core/rdma_core.c:	 * kfree_rcu(). However the object may still have been released and
-drivers/infiniband/sw/rxe/rxe_mr.c:	kfree_rcu(mr);
-drivers/misc/vmw_vmci/vmci_context.c:		kvfree_rcu(notifier);
-drivers/misc/vmw_vmci/vmci_event.c:	kvfree_rcu(s);
-drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c:	kfree_rcu(int_port);
-drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c:	kfree_rcu(tx_sa);
-drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c:	kfree_rcu(rx_sc);
-drivers/target/target_core_configfs.c:			 * callbacks to complete post kfree_rcu(), before allowing
-fs/ext4/super.c:				kfree_rcu(qname);
-include/linux/rcupdate.h: *     kvfree_rcu(ptr);
-include/linux/rcupdate.h:#define kvfree_rcu(...) KVFREE_GET_MACRO(__VA_ARGS__,		\
-include/linux/rcutiny.h:	// kvfree_rcu(one_arg) call.
-include/rdma/ib_verbs.h:	struct rcu_head		rcu;		/* kfree_rcu() overhead */
-include/scsi/scsi_device.h: * @rcu: For kfree_rcu().
-kernel/rcu/rcuscale.c:		pr_alert("CONFIG_RCU_LAZY is disabled, falling back to kfree_rcu() for delayed RCU kfree'ing\n");
-kernel/rcu/tree.c: * struct kvfree_rcu_bulk_data - single block to store kvfree_rcu() pointers
-kernel/rcu/tree.c: * @records: Array of the kvfree_rcu() pointers
-kernel/rcu/tree.c: * struct kfree_rcu_cpu_work - single batch of kfree_rcu() requests
-kernel/rcu/tree.c: * @head_free: List of kfree_rcu() objects waiting for a grace period
-kernel/rcu/tree.c: * @bulk_head_free: Bulk-List of kvfree_rcu() objects waiting for a grace period
-kernel/rcu/tree.c: * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
-kernel/rcu/tree.c: * @head: List of kfree_rcu() objects not yet waiting for a grace period
-kernel/rcu/tree.c: * @bulk_head: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
-kernel/rcu/tree.c: * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
-kernel/rcu/tree.c:	 * double-argument of kvfree_rcu().  This happens when the
-kernel/rcu/tree.c: * reduce the number of grace periods during heavy kfree_rcu()/kvfree_rcu() load.
-kernel/rcu/tree.c:		// Probable double kfree_rcu(), just leak.
-kernel/trace/trace_osnoise.c:	kvfree_rcu(inst);
-kernel/trace/trace_probe.c:	kvfree_rcu(link);
-net/core/pktgen.c:	/* Don't need rcu_barrier() due to use of kfree_rcu() */
-net/core/sysctl_net_core.c:				kvfree_rcu(orig_sock_table);
-net/core/sysctl_net_core.c:				kfree_rcu(cur);
-
+> I don't think this is useful information for the commit message, since
+> the community cannot access that ticket.
+Thanks for the pointer, will change this
+> 
+> > NetworkManger is deprecated. This patch provides support for the
+> > new keyfile config format for connection profiles in NetworkManager.
+> > The patch modifies the hv_kvp_daemon code to generate the new network
+> > configuration in keyfile format(.ini-style format) instead of ifcfg
+> > format.
+> 
+> Okay, so the wire protocol for the KVP daemon is not changed. It is just
+> the intermediate file format that's changed.
+> 
+That is correct.
+> > This configuration is stored in a temp file which is further translated
+> > using the hv_set_ifconfig.sh script. This script is implemented by
+> > individual distros based on the network management commands supported.
+> > For example, RHEL's implementation could be found here:
+> > https://gitlab.com/redhat/centos-stream/src/hyperv-daemons/-/blob/c9s/hv_set_ifconfig.sh
+> > Debian's implementation could be found here:
+> > https://github.com/endlessm/linux/blob/master/debian/cloud-tools/hv_set_ifconfig
+> > 
+> > The next part of this support is to inform the Distro vendors to
+> > modify these implementations to consume the new configuration format.
+> > 
+> 
+> I guess they will figure out the format has changed when they upgrade to
+> a new kernel?
+Yeah, so whenever they decide to use the latest kernel, they would have to change
+their implementation to consume these changes.
+> 
+> Thanks,
+> Wei.
