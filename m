@@ -2,88 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8BC6AD391
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C3046AD3A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjCGA6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 19:58:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58122 "EHLO
+        id S229726AbjCGBBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 20:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjCGA6f (ORCPT
+        with ESMTP id S229688AbjCGBB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 19:58:35 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBB32ED72;
-        Mon,  6 Mar 2023 16:58:34 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVxs332LJz4xD5;
-        Tue,  7 Mar 2023 11:58:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1678150712;
-        bh=CHWXVrMkdiyq4zwPZtjE+TsoQPPFRbjP3aPXqFScr8M=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=KWVVCGW43d7K7bKL3+7NAS3VQRFJRrNz2O6qEQSCe3iM0mAGIBLB0wpEx+hq1cgob
-         zWrSY4r1DMNDvtk/jqhxoZ30OwLv16WASzFeifWZILoHN3jHCWsvTtmBOnGX3qdRK6
-         l1lpOlGCLel5N3Z1MvgzoxbYsYBqPF6aKYYqR7dABs1WFXYIYTtmKn0P0o/cEKa8ya
-         lW8DcOqf6hegaMGqy2+XpmpZ19j9hAutwRaz8eg/A2Sun/lZdLj8UX1yrRseK7ub8j
-         6WcXKAD8niU8B//ISRCJPfq1nUy29cV9iN/fMEEr0y6Zvit+Gu412hJF5m69g5zV8B
-         6ECeucihx/xAg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
-        Baoquan He <bhe@redhat.com>, linux-sh@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-hexagon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-parisc@vger.kernel.org, linux-alpha@vger.kernel.org,
-        sparclinux@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 2/2] arch/*/io.h: remove ioremap_uc in some
- architectures
-In-Reply-To: <5dec69d0-0bc9-4f6c-8d0d-ee5422783100@app.fastmail.com>
-References: <20230303102817.212148-1-bhe@redhat.com>
- <20230303102817.212148-3-bhe@redhat.com>
- <87sfej1rie.fsf@mpe.ellerman.id.au>
- <CAMuHMdXoM24uAZGcjBtscNMOSY_+4u08PEOR7gOfCH7jvCceDg@mail.gmail.com>
- <5dec69d0-0bc9-4f6c-8d0d-ee5422783100@app.fastmail.com>
-Date:   Tue, 07 Mar 2023 11:58:27 +1100
-Message-ID: <87jzzt1ioc.fsf@mpe.ellerman.id.au>
+        Mon, 6 Mar 2023 20:01:29 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52062ED7A
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:00:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678150841;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VHFntejT56JbD/rUEQWs9tWFnUbRv9RbZFyVXVHrMio=;
+        b=QKc4tHj0uA9tHypZjodaQoxN620igqamgCURW7UwR8x5CEkLVUNnmI34qyKG0RGtHTQXtY
+        FZVGMTxNT9QNFBvmZCIhiKT/lH+2QuqBF5ZB4Bg8bb5B+tc+U9Wd0ik0jBmjphP2bLxa/S
+        54F1p6hUgpOihlOIxWuYNFv7Cpe+mso=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-321-JPeUHaEyN5Oboq8gM-K4VQ-1; Mon, 06 Mar 2023 20:00:38 -0500
+X-MC-Unique: JPeUHaEyN5Oboq8gM-K4VQ-1
+Received: by mail-qk1-f200.google.com with SMTP id m25-20020ae9e019000000b007421ddd945eso6421774qkk.6
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:00:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678150838;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VHFntejT56JbD/rUEQWs9tWFnUbRv9RbZFyVXVHrMio=;
+        b=gegcroF34SktlBM7DsjYGc/LuSS9GwYTZxi7o4tjSAC44WgNdR8P+zW5jPfr+E88mG
+         MSfMvU/QnEZy27bQwCTYDI8eBBVfwZ+y6yc/DvYknVvkCEVImxuIfUTgxarxj1FPSJNY
+         ei2WAVXixee+QhilPijCqLnSyUkJhhh9ww9OjuNIps9FiPmX1dvmIsU1BMMT7sZRrg0K
+         ckniQRcz0k1gHiH5aa3oKDkMVXIaIJm4um/79WGeWTqUC3K2pr9GFOfi+lLdKi3etGfA
+         rhAEzWCjx/nO5M/vV7XRnbtNxuEObGivSInUaJZ5njREFRpgD1ZnNbcJprwdv5EjgMEg
+         K5hQ==
+X-Gm-Message-State: AO0yUKXs3nztgIoZWT3B9rC0SqgWfqw/e7qcyJwLfk87EkqyzC1kCMTL
+        NIUlvMOK2dO5RDdXfQf2/lwwaGiYGG7VGfHjPM+GdCO9Y3smO3TWxfhn780YWy+lwc7ieM3SXhT
+        MDQBDVL47QCcBIRP/yx3GjZKh
+X-Received: by 2002:ac8:4e49:0:b0:3bf:a564:573b with SMTP id e9-20020ac84e49000000b003bfa564573bmr22624857qtw.0.1678150837985;
+        Mon, 06 Mar 2023 17:00:37 -0800 (PST)
+X-Google-Smtp-Source: AK7set9mNewiLEJ/Qcl0fkXX58JVHG+qYCqPmSyNkMCeEvogUl0mdbdtpfbHSmtHHB3rrhxwI1DA3g==
+X-Received: by 2002:ac8:4e49:0:b0:3bf:a564:573b with SMTP id e9-20020ac84e49000000b003bfa564573bmr22624808qtw.0.1678150837670;
+        Mon, 06 Mar 2023 17:00:37 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id v25-20020ac873d9000000b003c033b23a9asm1407231qtp.12.2023.03.06.17.00.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 17:00:37 -0800 (PST)
+Date:   Mon, 6 Mar 2023 20:00:35 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
+        James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 3/5] mm: userfaultfd: combine 'mode' and 'wp_copy'
+ arguments
+Message-ID: <ZAaMs44nspRQJmrk@x1n>
+References: <20230306225024.264858-1-axelrasmussen@google.com>
+ <20230306225024.264858-4-axelrasmussen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20230306225024.264858-4-axelrasmussen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Arnd Bergmann" <arnd@arndb.de> writes:
-> On Sun, Mar 5, 2023, at 10:29, Geert Uytterhoeven wrote:
->> On Sun, Mar 5, 2023 at 10:23=E2=80=AFAM Michael Ellerman <mpe@ellerman.i=
-d.au> wrote:
->>> Maybe that exact code path is only reachable on x86/ia64? But if so
->>> please explain why.
->>>
->>> Otherwise it looks like this series could break that driver on powerpc
->>> at least.
->>
->> Indeed.
->
-> When I last looked into this, I sent a patch to use ioremap()
-> on non-x86:
->
-> https://lore.kernel.org/all/20191111192258.2234502-1-arnd@arndb.de/
+On Mon, Mar 06, 2023 at 02:50:22PM -0800, Axel Rasmussen wrote:
+> Many userfaultfd ioctl functions take both a 'mode' and a 'wp_copy'
+> argument. In future commits we plan to plumb the flags through to more
+> places, so we'd be proliferating the very long argument list even
+> further.
+> 
+> Let's take the time to simplify the argument list. Combine the two
+> arguments into one - and generalize, so when we add more flags in the
+> future, it doesn't imply more function arguments.
+> 
+> Since the modes (copy, zeropage, continue) are mutually exclusive, store
+> them as an integer value (0, 1, 2) in the low bits. Place combine-able
+> flag bits in the high bits.
+> 
+> This is quite similar to an earlier patch proposed by Nadav Amit
+> ("userfaultfd: introduce uffd_flags" - for some reason Lore no longer
+> has a copy of the patch). The main difference is that patch only handled
 
-OK thanks.
+Lore has. :)
 
-Baoquan can you add that patch to the start of this series if/when you
-post the next version?
+https://lore.kernel.org/all/20220619233449.181323-2-namit@vmware.com
 
-cheers
+And btw sorry to review late.
+
+> flags, whereas this patch *also* combines the "mode" argument into the
+> same type to shorten the argument list.
+> 
+> Acked-by: James Houghton <jthoughton@google.com>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+
+Mostly good to me, a few nitpicks below.
+
+[...]
+
+> +/* A combined operation mode + behavior flags. */
+> +typedef unsigned int __bitwise uffd_flags_t;
+> +
+> +/* Mutually exclusive modes of operation. */
+> +enum mfill_atomic_mode {
+> +	MFILL_ATOMIC_COPY = (__force uffd_flags_t) 0,
+> +	MFILL_ATOMIC_ZEROPAGE = (__force uffd_flags_t) 1,
+> +	MFILL_ATOMIC_CONTINUE = (__force uffd_flags_t) 2,
+> +	NR_MFILL_ATOMIC_MODES,
+>  };
+
+I never used enum like this.  I had a feeling that this will enforce
+setting the enum entries but would the enforce applied to later
+assignments?  I'm not sure.
+
+I had a quick test and actually I found sparse already complains about
+calculating the last enum entry:
+
+---8<---
+$ cat a.c
+typedef unsigned int __attribute__((bitwise)) flags_t;
+
+enum {
+    FLAG1 = (__attribute__((force)) flags_t) 0,
+    FLAG_NUM,
+};
+
+void main(void)
+{
+    uffd_flags_t flags = FLAG1;
+}
+$ sparse a.c
+a.c:5:5: error: can't increment the last enum member
+---8<---
+
+Maybe just use the simple "#define"s?
+
+>  
+> +#define MFILL_ATOMIC_MODE_BITS (const_ilog2(NR_MFILL_ATOMIC_MODES - 1) + 1)
+
+Here IIUC it should be "const_ilog2(NR_MFILL_ATOMIC_MODES) + 1", but
+maybe..  we don't bother and define every bit explicitly?
+
+> +#define MFILL_ATOMIC_BIT(nr) ((__force uffd_flags_t) BIT(MFILL_ATOMIC_MODE_BITS + (nr)))
+> +#define MFILL_ATOMIC_MODE_MASK (MFILL_ATOMIC_BIT(0) - 1)
+> +
+> +/* Flags controlling behavior. */
+> +#define MFILL_ATOMIC_WP MFILL_ATOMIC_BIT(0)
+
+[...]
+
+> @@ -312,9 +312,9 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
+>  					      unsigned long dst_start,
+>  					      unsigned long src_start,
+>  					      unsigned long len,
+> -					      enum mcopy_atomic_mode mode,
+> -					      bool wp_copy)
+> +					      uffd_flags_t flags)
+>  {
+> +	int mode = flags & MFILL_ATOMIC_MODE_MASK;
+>  	struct mm_struct *dst_mm = dst_vma->vm_mm;
+>  	int vm_shared = dst_vma->vm_flags & VM_SHARED;
+>  	ssize_t err;
+> @@ -333,7 +333,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
+>  	 * by THP.  Since we can not reliably insert a zero page, this
+>  	 * feature is not supported.
+>  	 */
+> -	if (mode == MCOPY_ATOMIC_ZEROPAGE) {
+> +	if (mode == MFILL_ATOMIC_ZEROPAGE) {
+
+The mode comes from "& MFILL_ATOMIC_MODE_MASK" but it doesn't quickly tell
+whether there's a shift for the mask.
+
+Would it look better we just have a helper to fetch the mode?  The function
+tells that whatever it returns must be the mode:
+
+       if (uffd_flags_get_mode(flags) == MFILL_ATOMIC_ZEROPAGE)
+
+We also avoid quite a few "mode" variables.  All the rest bits will be fine
+to use "flags & FLAG1" if it's a boolean (so only this "mode" is slightly
+tricky).
+
+What do you think?
+
+Thanks,
+
+-- 
+Peter Xu
+
