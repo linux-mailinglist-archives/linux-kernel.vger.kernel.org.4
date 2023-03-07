@@ -2,73 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EA46AF43A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BD46AF3D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbjCGTPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:15:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S233716AbjCGTKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233835AbjCGTOg (ORCPT
+        with ESMTP id S233696AbjCGTJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:14:36 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2796F7E7AC;
-        Tue,  7 Mar 2023 10:58:13 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B68141EC03CA;
-        Tue,  7 Mar 2023 19:58:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678215491;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=j9UdRduiFLUBTidAQ4yNTj8dDk3AVNZs37HLqoaeIPs=;
-        b=bg33dwve99R6zfkG4pNPV4/f3XQXjhnjz1zjzB2af8yEl7OWnzS1UTXLRrEZCuAmJlyXeP
-        3yCfrF+WrhWO+0gkL17fZoh/wTfomWHKqEsDVLXSsCITuOTYAsXp+s92lV9p1VGMCFJS4L
-        HSgJTkmbOfRSDoxhQYTzBXTXN7LOCHQ=
-Date:   Tue, 7 Mar 2023 19:58:11 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Takahiro Itazuri <itazur@amazon.com>,
-        dave.hansen@linux.intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com, tglx@linutronix.de,
-        x86@kernel.org, zulinx86@gmail.com
-Subject: Re: [PATCH 0/2] KVM: x86: Propagate AMD-specific IBRS bits to guests
-Message-ID: <20230307185811.GEZAeJQ8U+NYySH8up@fat_crate.local>
-References: <Y/5oBKi6vjZe83ac@zn.tnic>
- <20230228222416.61484-1-itazur@amazon.com>
- <Y/6FIeJ5KCOfKEPN@zn.tnic>
- <ZAZYKe4L8jhMG4An@google.com>
- <20230306214419.GDZAZes941k+4NPgDL@fat_crate.local>
- <25249e7d-4fd9-e1c1-8efb-31750740ec27@redhat.com>
- <20230306215450.GFZAZhKnr6zMCeeDNd@fat_crate.local>
- <ZAeHMgp9U7giJpHs@google.com>
+        Tue, 7 Mar 2023 14:09:41 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC51E9AFE5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:54:34 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id s11so56415569edy.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:54:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dectris.com; s=google; t=1678215266;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/VPBd1/cIEQ8mvitb5S4xC+5LiGWv+b4kdw/T6kpKD0=;
+        b=Us2QhbUw+z3a2uMeUo1LJSWaebmcvd+wDCt5aYNo2hpwlTJSznm8XCZbQ/Hii9DzQK
+         0iODEn5ABEY6J5Hq5ltbknnHfB9rnPSWiFoI9H1QE2wFDEmc6nFqGD41YQWfyPXLvDZf
+         5wrFua3K05oDlr5QlF+zW6aXgF2AnFskagR24=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678215266;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/VPBd1/cIEQ8mvitb5S4xC+5LiGWv+b4kdw/T6kpKD0=;
+        b=2pDk9pi5wcVGmdynXgalllzO1wWxcIFNKnt2DoYMkfY/QyI1bn1jMC2YtKT9KNFuHT
+         cwzPi5zfZ7WtoDbZj1P77Vdfrm9wIPTq1mtmKCPWLJMXAZKfN+hSswDvrrxvNgAPfJin
+         ZmGUEZVBW6qPKp6x/oqznJqXe4lWidvpYu2Q33G4NNCKJOZO8OaWJfYeutjUPvogz6RL
+         M0K5UfCPdpd1UVxQn+5bgAQAqFrQTo5+szmsvwUnBIi8U8uic2u/5grjGtYIWJk0q4ed
+         wMPi3WHoobFOyOUBqNu6XPyXM8YzZA1fL9CKxvvyHew8Yu79R1nfB2svePdIvh4q5Rp5
+         knIg==
+X-Gm-Message-State: AO0yUKUVvUA6cA7u6t+hBGTeD0wLVrQZ7IiKuMSrxOTwsnkvmDGCzWuh
+        FYk4OolYuHa0QxKjtpIi3CilAImFLpXe5BNPeI0ERA==
+X-Google-Smtp-Source: AK7set85kBrN1ckdrgzPkzy2USMui/e5AnEbftp45IcxQYYItIX0J6t9Ki/qiu+re1+A5Mqm8btG1ezrj/FIr7l48Xo=
+X-Received: by 2002:a50:9fcd:0:b0:4ad:7389:d298 with SMTP id
+ c71-20020a509fcd000000b004ad7389d298mr8543872edf.4.1678215266512; Tue, 07 Mar
+ 2023 10:54:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZAeHMgp9U7giJpHs@google.com>
+References: <20230307172306.786657-1-kal.conley@dectris.com> <ee0aa756-4a9c-1d7a-4179-78024e41d37e@intel.com>
+In-Reply-To: <ee0aa756-4a9c-1d7a-4179-78024e41d37e@intel.com>
+From:   Kal Cutter Conley <kal.conley@dectris.com>
+Date:   Tue, 7 Mar 2023 19:58:51 +0100
+Message-ID: <CAHApi-kcvc2qB0D6dV7OG99FsnzAEa-rchOMfySkZ-E=EOh_4w@mail.gmail.com>
+Subject: Re: [PATCH] xsk: Add missing overflow check in xdp_umem_reg
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 10:49:22AM -0800, Sean Christopherson wrote:
-> I don't see what such a rule buys us beyond complexity and, IMO, unnecessary
-> maintenance burden.  As Paolo pointed out, when there's an existing word, the
+> The RCT declaration style is messed up in the whole block. Please move
+> lines around, there's nothing wrong in that.
 
-Maybe I wasn't clear enough - I don't mind existing words. What I mind
-is adding new ones only for KVM's sake.
+I think I figured out what this is. Is this preference documented
+somewhere? I will fix it.
 
--- 
-Regards/Gruss,
-    Boris.
+>
+> >       int err;
+> >
+> >       if (chunk_size < XDP_UMEM_MIN_CHUNK_SIZE || chunk_size > PAGE_SIZE) {
+> > @@ -188,8 +189,8 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+> >       if (npgs > U32_MAX)
+> >               return -EINVAL;
+> >
+> > -     chunks = (unsigned int)div_u64_rem(size, chunk_size, &chunks_rem);
+> > -     if (chunks == 0)
+> > +     chunks = div_u64_rem(size, chunk_size, &chunks_rem);
+> > +     if (chunks == 0 || chunks > U32_MAX)
+>
+> You can change the first cond to `!chunks` while at it, it's more
+> preferred than `== 0`.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+If you want, I can change it. I generally like to keep unrelated
+changes to a minimum.
+
+>
+> >               return -EINVAL;
+>
+> Do you have any particular bugs that the current code leads to? Or it's
+> just something that might hypothetically happen?
+
+If the UMEM is large enough, the code is broke. Maybe it can be
+exploited somehow? It should be checked for exactly the same reasons
+as `npgs` right above it.
+
+>
+> >
+> >       if (!unaligned_chunks && chunks_rem)
+> > @@ -201,7 +202,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
+> >       umem->size = size;
+> >       umem->headroom = headroom;
+> >       umem->chunk_size = chunk_size;
+> > -     umem->chunks = chunks;
+> > +     umem->chunks = (u32)chunks;
+>
+> You already checked @chunks fits into 32 bits, so the cast can be
+> omitted here, it's redundant.
+
+I made it consistent with the line right below it. It seems like the
+cast may improve readability since it makes it known the truncation is
+on purpose. I don't see how that is redundant with the safety check.
+Should I change both lines?
+
+>
+> >       umem->npgs = (u32)npgs;
+> >       umem->pgs = NULL;
+> >       umem->user = NULL;
+>
+> Thanks,
+> Olek
+
+Kal
