@@ -2,149 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DCC6ADD8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4EA6ADD93
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjCGLgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:36:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S231248AbjCGLhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:37:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjCGLgn (ORCPT
+        with ESMTP id S231168AbjCGLgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:36:43 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF7D298CE;
-        Tue,  7 Mar 2023 03:36:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=BVGCRdlhXoJzmQdf8XCmE7+QIsrubV9w+1i9PXTee9Q=; b=AtCcCdOUx85ga5lHlCmY0z81qz
-        2tmPFeofVlDLYKOOg/L8sNg9UjNMazGTqOBNu1Wb/hnLZwth8w08sMGf9PKN/bsltVpCyiKZpsGkZ
-        01AdlAKXcSQAJtgmXrfbgE4cm1FkFd2EtIx6Do9mmhCPTl3/lvnIooUlaROXxvOLOiPSjPNKKDNaH
-        56j7TAwdl2hA28zqjHt/oyyHidVbLh2Pfz9Z3Hsk09SaJOMrVDX3wPx9UO2qBLIDsrNLKo6C5pVsu
-        Gqbm1k00C0tM5lvmzMb7rtadzTYT0ehEHEISdsDRwhNgCLmJ/zBQcsWZWQ57eKT4xGB4oQZrNJejc
-        UaRQxNLw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pZVbf-00H1sR-25;
-        Tue, 07 Mar 2023 11:35:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8966830031E;
-        Tue,  7 Mar 2023 12:35:45 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 629FA23A1D2ED; Tue,  7 Mar 2023 12:35:45 +0100 (CET)
-Date:   Tue, 7 Mar 2023 12:35:45 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Stephane Eranian <eranian@google.com>,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com,
-        reinette.chatre@intel.com, fenghua.yu@intel.com,
-        peternewman@google.com, james.morse@arm.com, babu.moger@amd.com,
-        ananth.narayan@amd.com, vschneid@redhat.com,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in
- __resctrl_sched_in
-Message-ID: <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
-References: <20230303231133.1486085-1-eranian@google.com>
- <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
- <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
+        Tue, 7 Mar 2023 06:36:51 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C668052F61;
+        Tue,  7 Mar 2023 03:36:24 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3276mTum012987;
+        Tue, 7 Mar 2023 05:36:04 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=qE/pOQbPGtEALzSxE353IyUrRX1F9n9Ysy8nZBmQSQc=;
+ b=BAdQO7BrtXVjSf9xdGGSFoLVxW1hRDgjo5WgRaoZXIR+3BCy0F2GOwxcV/KIt/o4V2ev
+ /N54nY03WFSJZAB4IZLBHVmiy3quxTji7hx9RFSY8m/qtLNxigYPBbPCDeb8KwpeVEqw
+ 0JzdeyS7ybpT6amnL2P6LgaLiMEvdmKMTJtZIEwtLVFP5PIKUqboN9/OhSMkl5sz5f94
+ ve0lQQVR8BOUUzRPOwn3pSW2K7qgrUG3wyi/7IVyi/5R/tkVQiihxGyVABIaZkcNJ3HO
+ mR3bojh0rSOqqHl3vkhF9DNqlApsYA1r3qfpKTyJHWHmokEFfYn416tgH5a38FyBf+je TA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3p449742f4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 05:36:03 -0600
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Tue, 7 Mar
+ 2023 05:36:01 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Tue, 7 Mar 2023 05:36:01 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BAA5C45;
+        Tue,  7 Mar 2023 11:36:01 +0000 (UTC)
+Date:   Tue, 7 Mar 2023 11:36:01 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Schspa Shi <schspa@gmail.com>, Marc Zyngier <maz@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-pwm@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <patches@opensource.cirrus.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Nandor Han <nandor.han@ge.com>,
+        Semi Malinen <semi.malinen@ge.com>
+Subject: Re: [PATCH v1 15/16] gpio: wm8994: Utilize helpers from
+ string_choices.h
+Message-ID: <20230307113601.GV68926@ediswmail.ad.cirrus.com>
+References: <20230306195556.55475-1-andriy.shevchenko@linux.intel.com>
+ <20230306195556.55475-16-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306195556.55475-16-andriy.shevchenko@linux.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: lfMpGTS3UyB_ceFJsXDewKvJ5F4h_XaD
+X-Proofpoint-ORIG-GUID: lfMpGTS3UyB_ceFJsXDewKvJ5F4h_XaD
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 04:16:52PM -0800, Nick Desaulniers wrote:
-> Start of Lore thread:
-> https://lore.kernel.org/lkml/20230303231133.1486085-1-eranian@google.com/
+On Mon, Mar 06, 2023 at 09:55:55PM +0200, Andy Shevchenko wrote:
+> There are a few helpers available to convert a boolean variable
+> to the dedicated string literals depending on the application.
+> Use them in the driver.
 > 
-> On Mon, Mar 6, 2023 at 4:01 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Fri, Mar 03, 2023 at 03:11:33PM -0800, Stephane Eranian wrote:
-> >
-> > > The problem is located in the __resctrl_sched_in() routine which rewrites
-> > > the active closid via the PQR_ASSOC register. Because this is an expensive
-> > > operation, the kernel only does it when the context switch involves tasks
-> > > with different CLOSID. And to check that, it needs to access the current
-> > > task's closid field using current->closid. current is actually a macro
-> > > that reads the per-cpu variable pcpu_hot.current_task.
-> > >
-> > > After an investigation by compiler experts, the problem has been tracked down
-> > > to the usage of the get_current() macro in the __resctrl_sched_in() code and
-> > > in particular the per-cpu macro:
-> > >
-> > > static __always_inline struct task_struct *get_current(void)
-> > > {
-> > >         return this_cpu_read_stable(pcpu_hot.current_task);
-> > > }
-> > >
-> > > And as per percpu.h:
-> > >
-> > > /*
-> > >  * this_cpu_read() makes gcc load the percpu variable every time it is
-> > >  * accessed while this_cpu_read_stable() allows the value to be cached.
-> > >  * this_cpu_read_stable() is more efficient and can be used if its value
-> > >  * is guaranteed to be valid across cpus.  The current users include
-> > >  * get_current() and get_thread_info() both of which are actually
-> > >  * per-thread variables implemented as per-cpu variables and thus
-> > >  * stable for the duration of the respective task.
-> > >  */
-> > >
-> > > The _stable version of the macro allows the value to be cached, meaning it
-> > > does not force a reload.
-> >
-> > Right, so afaict the difference between this_cpu_read() and
-> > this_cpu_read_stable() is the volatile qualifier.
-> >
-> > this_cpu_read() is asm volatile(), while this_cpu_read_stable() and
-> > raw_cpu_read() are both an unqualified asm().
-> >
-> > Now, afaiu we're inlining all of this into __switch_to(), which has
-> > raw_cpu_write(pcpu_hot.current_task, next_p).
-> >
-> > And I suppose what the compiler is doing is lifting the 'current' load
-> > over that store, but how is it allowed that? I thought C was supposed to
-> > have PO consistency, That raw_cpu_write() should be seen as a store to
-> > to pcpu_hot.current_task, why can it lift a load over the store?
-> >
-> > Specifically, percpu_to_op() has a "+m" output constaint while
-> > percpu_stable_op() has a "p" input constraint on the same address.
-> 
-> I definitely think the issue is specific to "p" constraints.
-> https://godbolt.org/z/34YeG6WbY is the test case I reduced which I
-> think demonstrates the issue.
-> 
-> https://reviews.llvm.org/D145416
-> -> click "Show Older Changes" for the ongoing discussion.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
 
-So per that summary, I'm going to nit-pick and state we very much want
-CSE. CSE good. What we don't want it violating store-load ordering.
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-> I don't have a satisfactory answer yet, but am looking into this.
-
-Oh, geez, what a twisty tale that... So Linus knew back in '09 that "p"
-was icky, but it sorta was the only thing and it 'worked' -- until now
-:/
-
-Is there a way to explicitly order these things? barrier() obviously
-isn't going to help here.
-
-So ideally we'd get something that respects the whole store-load
-ordering but still allows agressive CSE. And works for both toolchains.
-Small ask, I know :-)
+Thanks,
+Charles
