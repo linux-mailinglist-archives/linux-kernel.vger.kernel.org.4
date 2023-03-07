@@ -2,105 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9406AE4E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DCDC6AE4BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:31:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjCGPgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
+        id S231163AbjCGPbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:31:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjCGPf6 (ORCPT
+        with ESMTP id S231260AbjCGPbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:35:58 -0500
-X-Greylist: delayed 347 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 07:35:57 PST
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FDF3A9C;
-        Tue,  7 Mar 2023 07:35:56 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id A97B92B071D6;
-        Tue,  7 Mar 2023 10:30:06 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 07 Mar 2023 10:30:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1678203006; x=1678210206; bh=MRcKO6pD8Tc+Ex6F7GSZYpROWLf8RaYsLIo
-        /Rd7Ddn4=; b=VLeRC4RRakZxwsCBaCfdbEijLT5NIOhOjuKdOzlcSq3CeFWt4hc
-        /Y+yUgKmGxQrqD5b+JJ+/zTP4DLh8zxL6Us0kLorJNzpAcIgp3ukw3Vwnrxvn8Xg
-        QA70bbfC6dpk4J9qR+Oi0u9zs9M2rzYaeKG0+cf/eftU7uCv1i1TpXo6XN8gMGMs
-        4WzKUbffHBIoQ+IyGF1RoyS5Z49Uc1OEQSHJxaVhQVDrK7QGyMIxLnVkerji1U85
-        eLXwfby8p5dq8XCvolTNuRLC0ydlfViVQxCssi0uYA723yaidQ/75hSL03TBfFYk
-        79HiHX1dPSFUbVKqRMgWgekjGdpB6aIVaWQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1678203006; x=1678210206; bh=MRcKO6pD8Tc+Ex6F7GSZYpROWLf8RaYsLIo
-        /Rd7Ddn4=; b=MoUg8SUoJjhWmcJyn+qEZoysvXzlay61F4eG+nuZE+hjqrqO1tN
-        Ab4lEqRtCC+CEK37DGEq3QlITo7QxZLy1Lka47OlacwD2XLgbKOkVmeYl7NnRh0x
-        jL5XcbMRHYiv4QAgzGs2gLAWrJvaKMrJB8qEhfqp+LxSwThSVoiJjtUtm17IQQ0e
-        xZBZ84FNPz1t7Cu90PkGaWa/hdqaoWAuFulDN2Azvf9KoO++tmiQ2cRC/MGfvBhk
-        Unvscwx0T6jTLWfCrvCxlUodrnQ/sUQE7azvK2djNaaJviFM3u6dU6ddpAAnGSr7
-        y9SsWikCWucWNUoQCQH+439jqpgToKEMGPw==
-X-ME-Sender: <xms:fVgHZC6ag0xA6TP6Yz4rYMVqHyyq9mpPjQTJRyCTpQ7Smv8kXiiDoA>
-    <xme:fVgHZL4V7B4H6jCYhacSk73BFS6UpgZzIkLt3IV5rci8TRPIzygjUZng1tCXVJcGE
-    t1uwQi6UzMaCOiR_4o>
-X-ME-Received: <xmr:fVgHZBdOlgx0ZsE0G8N5FkrfWFawCHrc4AyTw6pXG30FWjny7NqeLcVbHuutUJ8PaB-oTaTpY9qdy6fOXuWPo712xhQjti0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddutddgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvegjfhfukfffgggtgffosehtjeertdertdejnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepleeifffgvdetjeejueejieehuedvteeigeehtefhhfeifeegleekudek
-    teegueffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:fVgHZPJVP5ryypiRBzeseFg74QqhrObdWuXlWGsKt4RYsjf__-0Ajw>
-    <xmx:fVgHZGLIiucFzjFD66_RMAJ2zX5CDho8p_HyTkMOGhB1j7nxQAF1xA>
-    <xmx:fVgHZAz6XX3yaGDasZaVrlkgOgcFNBiDKnALVFEgqdDwMwhv9HyGYg>
-    <xmx:flgHZL4HCc8QZ-_C5ww9Am64rj9EehJZMHrG9hdusoO5TCLd8VCGPZ6UcQk>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 Mar 2023 10:30:04 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-In-Reply-To: <20230306103242.4775-1-johan+linaro@kernel.org>
-References: <20230306103242.4775-1-johan+linaro@kernel.org>
-Subject: Re: (subset) [PATCH] drm/sun4i: fix missing component unbind on
- bind errors
-Message-Id: <167820298545.105326.9045991101528563547.b4-ty@cerno.tech>
-Date:   Tue, 07 Mar 2023 16:29:45 +0100
+        Tue, 7 Mar 2023 10:31:10 -0500
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922081BB;
+        Tue,  7 Mar 2023 07:30:59 -0800 (PST)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 327FUqEN074727;
+        Tue, 7 Mar 2023 09:30:52 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678203052;
+        bh=PuWg1KrKq8dl0F/f6mEpT2obJODTES6ox27OnS5IhC8=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Wx4BMvIj6RXFBMeU0jhLXNBhI8sl0kRu8UYNISk+0Nyd1M/2XHeKg0BG8xhGSPLJi
+         OumPvdQDCAq2wJ2L60JZgVRAPjIC9hOtNZMjpb2B8Go7mtdmMys+Etnyg93al9Koby
+         f4j6kjgrcApt6JXkOWgDH4PHBQ+1BHqQ2VnQVZ7A=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 327FUq9d003961
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Mar 2023 09:30:52 -0600
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 7
+ Mar 2023 09:30:51 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 7 Mar 2023 09:30:52 -0600
+Received: from [10.250.175.93] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 327FUmqG020149;
+        Tue, 7 Mar 2023 09:30:49 -0600
+Message-ID: <0e7dabfc-8350-2225-36ee-92aca36e069d@ti.com>
+Date:   Tue, 7 Mar 2023 21:00:47 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v1 06/11] thermal/drivers/ti: Use fixed update interval
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, <rafael@kernel.org>
+CC:     <rui.zhang@intel.com>, <amitk@kernel.org>,
+        Keerthy <j-keerthy@ti.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" <linux-pm@vger.kernel.org>,
+        "open list:TI BANDGAP AND THERMAL DRIVER" 
+        <linux-omap@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+ <20230307133735.90772-7-daniel.lezcano@linaro.org>
+Content-Language: en-US
+From:   "Gole, Dhruva" <d-gole@ti.com>
+Organization: Texas Instruments Incorporated
+In-Reply-To: <20230307133735.90772-7-daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023 11:32:42 +0100, Johan Hovold wrote:
-> Make sure to unbind all subcomponents when binding the aggregate device
-> fails.
-> 
-> 
 
-Applied to drm/drm-misc (drm-misc-fixes).
+On 3/7/2023 7:07 PM, Daniel Lezcano wrote:
+> Currently the TI thermal driver sets the sensor update interval based
+> on the polling of the thermal zone. In order to get the polling rate,
+> the code inspects the thermal zone device strcuture internals, thus
+> breaking the self-encapsulation of the thermal framework core
+> framework.
+>
+> On the other side, we see the common polling rates set in the device
+> tree for the platforms using this driver are 500 or 1000 ms.
+>
+> Setting the polling rate to 250 ms would be far enough to cover the
+> combination we found in the device tree.
+>
+> Instead of accessing the thermal zone device structure polling rate,
+> let's use a common update interval of 250 ms for the driver.
+>
+> Cc: Keerthy <j-keerthy@ti.com>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> index 0c8914017c18..430c4b43151f 100644
+> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> @@ -23,6 +23,8 @@
+>  #include "ti-bandgap.h"
+>  #include "../thermal_hwmon.h"
+>  
+> +#define TI_BANDGAP_UPDATE_INTERVAL_MS 250
+> +
+>  /* common data structures */
+>  struct ti_thermal_data {
+>  	struct cpufreq_policy *policy;
+> @@ -159,7 +161,6 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>  			     char *domain)
+>  {
+>  	struct ti_thermal_data *data;
+> -	int interval;
+>  
+>  	data = ti_bandgap_get_sensor_data(bgp, id);
+>  
+> @@ -177,10 +178,9 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>  		return PTR_ERR(data->ti_thermal);
+>  	}
+>  
+> -	interval = jiffies_to_msecs(data->ti_thermal->polling_delay_jiffies);
+> -
+>  	ti_bandgap_set_sensor_data(bgp, id, data);
+> -	ti_bandgap_write_update_interval(bgp, data->sensor_id, interval);
+> +	ti_bandgap_write_update_interval(bgp, data->sensor_id,
+> +					 TI_BANDGAP_UPDATE_INTERVAL_MS);
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+>  
+>  	if (devm_thermal_add_hwmon_sysfs(bgp->dev, data->ti_thermal))
+>  		dev_warn(bgp->dev, "failed to add hwmon sysfs attributes\n");
 
-Thanks!
-Maxime
+-- 
+Regards,
+Dhruva Gole <d-gole@ti.com>
 
