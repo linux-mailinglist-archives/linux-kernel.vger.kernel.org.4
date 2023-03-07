@@ -2,92 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1186AF3E2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A449A6AF3EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbjCGTKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33072 "EHLO
+        id S233792AbjCGTLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:11:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233696AbjCGTKR (ORCPT
+        with ESMTP id S233680AbjCGTKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:10:17 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1149E31D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:55:06 -0800 (PST)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327Gg5hT013017;
-        Tue, 7 Mar 2023 18:54:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=StuDxdzwe246OJVWMdOXxOlz8Rjeg+UVwZ4EJarO83Y=;
- b=XUSORQG/a+L/NoP5yM4y8Q8CDCFpNXzl3Dc41PKSWE3Y/skcv7X248kKny7N4bNaugx3
- GR8ofwUuClaw9kjwP6YtD/7pTJICDLpk3ErZFOMDX1msJGosHugzD1hetyjaNDSwKLuf
- O0vKolXziBdtB3Xn3F7aCDz6XLE4EVgWsYHzMmjxzAtI9EtFdKKq59zIExxKFA3jB12a
- tzYxC70WnL+x2hV3rhOXoDJsWj1BNw2XuZEXwC/0X0Exvxvyq9mDC55dRP4aEymH40QZ
- xcIiQlVMMbNp/ABxIW52zScSqazOvyqDMhfbXyS4iKkac1fPtoVITVK0lUsgftZYjngc DQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6914b998-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:54:32 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 327IL42X015451;
-        Tue, 7 Mar 2023 18:54:31 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6914b98d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:54:31 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 327EdQKi005745;
-        Tue, 7 Mar 2023 18:54:29 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3p41brcq07-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:54:29 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 327IsQJ53867298
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Mar 2023 18:54:26 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B636020043;
-        Tue,  7 Mar 2023 18:54:26 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E94820040;
-        Tue,  7 Mar 2023 18:54:26 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.179.29.172])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
-        Tue,  7 Mar 2023 18:54:26 +0000 (GMT)
-Date:   Tue, 7 Mar 2023 19:53:13 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     <yang.yang29@zte.com.cn>
-Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <jiang.xuexin@zte.com.cn>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
-        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>
-Subject: Re: [PATCH v6 6/6] selftest: add testing unsharing and counting ksm
- zero  page
-Message-ID: <20230307195313.2e21245a@p-imbrenda>
-In-Reply-To: <202302100921574141612@zte.com.cn>
-References: <202302100921574141612@zte.com.cn>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Tue, 7 Mar 2023 14:10:50 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD4BC85A2;
+        Tue,  7 Mar 2023 10:55:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1678215228; i=frank-w@public-files.de;
+        bh=+owYiX7jswArKs3fL+HnoSgqSO+sE7J8CBPiU44HSVA=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Ud9W7IEd/03xmWP/ai64n/sHBhn0fBsP6DlJXdr5l0uNkSfa4zEU/lAo34Tm/y6RP
+         bJNoR3KxCBkO9chRoQSPcSMDRyajidiVJgYrgfB6KEnrCLgdWahy7vkNS6AVC9MGFk
+         +sQf/9G03qLckfMgAPncpMxMwS1fu9OraROpcVONaOkMIKqsd2YbtOi7nrxGN5y6G0
+         iF7zovhxIvx+TbxQ8kAUZztBSNez95df01rwHNs6piXujUsggN5qxuwMecDtI7XRTj
+         I0uxYTTwaFFn7ef/eVODUgVKUVwrSkGYmMY6r5++ywCI/21cTfqMt3UjX7gZWcN6gz
+         iheRYz9g6tmiQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.156.24] ([217.61.156.24]) by web-mail.gmx.net
+ (3c-app-gmx-bs16.server.lan [172.19.170.68]) (via HTTP); Tue, 7 Mar 2023
+ 19:53:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kvpUDED9MjvBZKmEK_05C8Wt5bbNlwXS
-X-Proofpoint-GUID: Th0uJZ0gBlU7CEkZA-IIqI7cizQB622e
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_12,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 bulkscore=0 clxscore=1015
- mlxlogscore=538 impostorscore=0 spamscore=0 mlxscore=0 phishscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303070164
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <trinity-c28f2d1c-6730-416a-ad34-6e03182c2cd5-1678215227989@3c-app-gmx-bs16>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Aw: [PATCH net-next v12 07/18] net: ethernet: mtk_eth_soc: only
+ write values if needed
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 7 Mar 2023 19:53:48 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <d2db725199011ec06082926830cf9fb2a8aeb147.1678201958.git.daniel@makrotopia.org>
+References: <cover.1678201958.git.daniel@makrotopia.org>
+ <d2db725199011ec06082926830cf9fb2a8aeb147.1678201958.git.daniel@makrotopia.org>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:pkz3K6WA6EmNJMhsiAcvkx7bjekeiDSDQDd8tCucyVIXTL57c1OwHykxVgZKG1lGsNyg1
+ 0cWV/hriObkPzyLS+0mGKLemW65VGLyO2iap2e1yYSL0GICfo5VbTKwQ8DkKaGAEY1NspIXVaseU
+ lDoQX7fOwYvYMS2ZGrGAg+YIjOJiAkww3nvUJWFN21/EG7AIU5SydbGcwR6Y+xK9xx0tsk+cUGZr
+ kB+K7tsWcuBEK5/xd/TbPnoqFd097MJDgdQbXT7+bzEicx/1VLzODjxPMN3Gn1Yui8bM/sKvC6QH
+ Lo=
+UI-OutboundReport: notjunk:1;M01:P0:mxzF7MLmkLI=;/RFfM47ZWNU2XSMGrw0gxKEoCRi
+ xN13YE1EvN8VdTw8rS/2cyFNG+AoWNsqWM9YR7IhvFNPKeYDE+SoLwGeXs0oagtNQLQf9EOxk
+ gcgJkOXmEIJDd41Gv1DnWJ13fAIj+FBM6XIDYbsi/IwJw+mDYvsRYxk5RT9uUeTx7uAirIAEc
+ kdVMqy37arAgw1BjHnWZWh4wR57GDqgkvAK13qPvyiFAfPusc3lNFxTPJIU7n3NmS08WNbpDF
+ FMjMuUZuJ5JgMNXGRVg5quf+z+P2FgkMNDtm6c8aaiFshuZ0b0lAlyR3z2HJhQDgzC+zytIub
+ foMFAK1Dikg24AkfeeQP7qE/9yZBoZnk9C3/xsyPKr3GmWzzh3MbLXVU3J8eosodFg249eIHn
+ 7lJNSEr7aAERqaWXOcKNaSUBLAmmin6sKHBSvTwlSCXE7fMjMsgGTDXWM2Vm1pCbkKRDn2aUB
+ ZK9E+ZYWu7cca711Q8/UjOi0C6DxiYPH2W1CNNhNRh/I9V1J/bGAJY9aTzbl3+3LZDmW9DjIm
+ mZKFLid0r+020WWqHU6Dyz/T36itBN2wwOtQR/kQ6hk+Gw6KBJKepHXUZ3J53aW8FWtJrZ0cR
+ cT89vsQa06PLXUF2PimUVABhFLki555V+5YGQJRPEHrYFdD0DY966B66ovTLwK11S7ZXTQhXc
+ naFm23TpAk2anx7XQmJteQnGAiPI+v0l1XFdiaJVVZRUxgcBpUzY4p747w2C573ynKluLEP0U
+ fSwj+7zOjp4QIY8zNNFmfEX/gr3PcIXslEVP/By46T9tK+LhX9OfkQyo6OFlr4hPHpa5SNtaS
+ 125/WcdSyvOnLbZ8kXoo7R9Mhw2WRgQp92LxqvW+KULJk=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,54 +97,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 09:21:57 +0800 (CST)
-<yang.yang29@zte.com.cn> wrote:
+> Gesendet: Dienstag, 07=2E M=C3=A4rz 2023 um 16:53 Uhr
+> Von: "Daniel Golle" <daniel@makrotopia=2Eorg>
+> Only restart auto-negotiation and write link timer if actually
+> necessary=2E This prevents loosing the link in case of minor
+> changes=2E
 
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> Add a function test_unmerge_zero_page() to test the functionality on
-> unsharing and counting ksm-placed zero pages and counting of this patch
-> series.
-> 
-> test_unmerge_zero_page() actually contains three subjct test objects:
-> 	1) whether the count of ksm zero page can react correctly to cow
-> 	   (copy on write);
-> 	2) whether the count of ksm zero page can react correctly to unmerge;
-> 	3) whether ksm zero pages are really unmerged.
-> 
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Xuexin Jiang <jiang.xuexin@zte.com.cn>
-> Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-> Reviewed-by: Yang Yang <yang.yang29@zte.com.cn>
+Hi,
 
-[...]
+have tested Parts 1-12 this on bananapi-r3 (mt7986) with 1G Fiber SFP (no =
+2g5 available yet) on gmac1 and lan4 (mt7531 p5)
 
-> +static int unmerge_zero_page(char *start, unsigned long size)
-> +{
-> +	int ret;
-> +
-> +	ret = madvise(start, size, MADV_UNMERGEABLE);
-> +	if (ret) {
-> +		ksft_test_result_fail("MADV_UNMERGEABLE failed\n");
-> +		return ret;
-> +	}
-> +
-> +	/*
-> +	 * Wait for two full scans such that any possible unmerging of zero
-> +	 * pages happened. Why? Because the unmerge action of zero pages is not
+Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
 
-please remove "Why? Because"
+Thx Daniel for working on SFP support :)
 
-> +	 * done in the context of madvise(), but in the context of
-> +	 * unshare_zero_pages() of the ksmd thread.
-> +	 */
-> +	return wait_two_full_scans();
-> +}
-> +
->  static char *mmap_and_merge_range(char val, unsigned long size)
->  {
->  	char *map;
-
-[...]
+regards Frank
