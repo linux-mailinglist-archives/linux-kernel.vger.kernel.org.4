@@ -2,57 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272956AF87F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DFF6AF8AF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjCGWWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:22:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S229900AbjCGW2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:28:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjCGWWT (ORCPT
+        with ESMTP id S231339AbjCGW21 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:22:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FECF96D;
-        Tue,  7 Mar 2023 14:22:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 7 Mar 2023 17:28:27 -0500
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEFDAF778;
+        Tue,  7 Mar 2023 14:27:43 -0800 (PST)
+Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327L5gJ4028321;
+        Tue, 7 Mar 2023 22:24:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=LaaPqV7Flc0GLDHQpIpi/BIcyjij0wSdtMhbcCHYsgA=;
+ b=KucE5UTqJQpxT11mxXz+EBR8v0tavcjUv9Ui2FHab40WoQiuV3yFIDgqKk3q5kcdvuwo
+ drWjaXC7Yx+uiwl1OenpwWu47udmJqwKjE9dILefQUZGqLmGaEP1NLYCkNLYgQXE55IH
+ pJ+yRhi5GSJ5jKQ8RWB3Nr3EtesnmJ05hdKeHlS8cBLT36zWyHn3FQ9/R6GqQyfwyefx
+ YeGHnWIch0H3I5hz2qQ78crYlcNTY741RdGLewUR/aekyotj3MBUgHiSeyPnIKvgWPEK
+ jg+AIfQknv6WWMr+5LSHk3ZVcc7cEeQsQPCw1ideabEOY7fb99n90BFJHjYRpVRpYa7A Vw== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3p6bu8114b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 22:24:17 +0000
+Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B11EB81A40;
-        Tue,  7 Mar 2023 22:22:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBF9EC433EF;
-        Tue,  7 Mar 2023 22:22:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678227732;
-        bh=hep12z65/htc8VobV1reqBOHqul0NinommIACH39giU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ldLwEkbOPvId1SGhV49JymfWZJ4wtC1cB1ISU8VtHRd6mgfBM4VJqByD8C6rSfEl+
-         oVMB5vsm8ffgDNJ8ydcbfH7o+aK9pRJ87QDnxtGspc3bcNUImPb403UxwDmtZ9gxI0
-         xWZ02PpOSKMaL1k5I71nBxuM6Fi6+loXhYHI/KSULt3RYJXHfJjHFqGToS6IVgyr3/
-         u+35JFk1nXXWx3QzmGK3dWZtldE9q5qfHMkzG7jHVGPYNEj762Pj/0A+cl50FISavT
-         fQLC1i3yqJGcn2DQIbv2XpJ56P7irz1XT9i9pGTQA2xFOAIALi05rhVUGuxD7eENhY
-         +8pUG/+qSzZUg==
-Date:   Tue, 7 Mar 2023 16:22:39 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] wifi: ath11k: Replace fake flex-array with
- flexible-array member
-Message-ID: <ZAe5L5DtmsQxzqRH@work>
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id CBB17130A9;
+        Tue,  7 Mar 2023 22:24:16 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 9C74F80AD9E;
+        Tue,  7 Mar 2023 22:24:12 +0000 (UTC)
+Date:   Tue, 7 Mar 2023 16:24:10 -0600
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, minyard@acm.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, song@kernel.org, robinmholt@gmail.com,
+        steve.wahl@hpe.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, jgross@suse.com, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com, xen-devel@lists.xenproject.org,
+        j.granados@samsung.com, zhangpeng362@huawei.com,
+        tangmeng@uniontech.com, willy@infradead.org, nixiaoming@huawei.com,
+        sujiaxun@uniontech.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-hyperv@vger.kernel.org,
+        openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/7] sgi-xp: simplify sysctl registration
+Message-ID: <ZAe5batlkUwlKoxx@swahl-home.5wahls.com>
+References: <20230302204612.782387-1-mcgrof@kernel.org>
+ <20230302204612.782387-6-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20230302204612.782387-6-mcgrof@kernel.org>
+X-Proofpoint-GUID: -gScpSVwE5aPWwo4gsaN-rEbeWVyAJK_
+X-Proofpoint-ORIG-GUID: -gScpSVwE5aPWwo4gsaN-rEbeWVyAJK_
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ mlxscore=0 malwarescore=0 impostorscore=0 adultscore=0 priorityscore=1501
+ suspectscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070197
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,221 +89,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zero-length arrays as fake flexible arrays are deprecated and we are
-moving towards adopting C99 flexible-array members instead.
+On Thu, Mar 02, 2023 at 12:46:10PM -0800, Luis Chamberlain wrote:
+> Although this driver is a good use case for having a directory
+> that is not other directories and then subdirectories with more
+> entries, the usage of register_sysctl_table() can recurse and
+> increases complexity so to avoid that just split out the
+> registration to each directory with its own entries.
+> 
+> register_sysctl_table() is a deprecated compatibility wrapper.
+> register_sysctl() can do the directory creation for you so just use
+> that.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Address 25 of the following warnings found with GCC-13 and
--fstrict-flex-arrays=3 enabled:
-drivers/net/wireless/ath/ath11k/debugfs_htt_stats.c:30:51: warning: array subscript <unknown> is outside array bounds of ‘const u32[0]’ {aka ‘const unsigned int[]’} [-Warray-bounds=]
+Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -fstrict-flex-arrays=3 [1].
+> ---
+>  drivers/misc/sgi-xp/xpc_main.c | 24 ++++++++++--------------
+>  1 file changed, 10 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/misc/sgi-xp/xpc_main.c b/drivers/misc/sgi-xp/xpc_main.c
+> index b2c3c22fc13c..6da509d692bb 100644
+> --- a/drivers/misc/sgi-xp/xpc_main.c
+> +++ b/drivers/misc/sgi-xp/xpc_main.c
+> @@ -93,7 +93,7 @@ int xpc_disengage_timelimit = XPC_DISENGAGE_DEFAULT_TIMELIMIT;
+>  static int xpc_disengage_min_timelimit;	/* = 0 */
+>  static int xpc_disengage_max_timelimit = 120;
+>  
+> -static struct ctl_table xpc_sys_xpc_hb_dir[] = {
+> +static struct ctl_table xpc_sys_xpc_hb[] = {
+>  	{
+>  	 .procname = "hb_interval",
+>  	 .data = &xpc_hb_interval,
+> @@ -112,11 +112,7 @@ static struct ctl_table xpc_sys_xpc_hb_dir[] = {
+>  	 .extra2 = &xpc_hb_check_max_interval},
+>  	{}
+>  };
+> -static struct ctl_table xpc_sys_xpc_dir[] = {
+> -	{
+> -	 .procname = "hb",
+> -	 .mode = 0555,
+> -	 .child = xpc_sys_xpc_hb_dir},
+> +static struct ctl_table xpc_sys_xpc[] = {
+>  	{
+>  	 .procname = "disengage_timelimit",
+>  	 .data = &xpc_disengage_timelimit,
+> @@ -127,14 +123,9 @@ static struct ctl_table xpc_sys_xpc_dir[] = {
+>  	 .extra2 = &xpc_disengage_max_timelimit},
+>  	{}
+>  };
+> -static struct ctl_table xpc_sys_dir[] = {
+> -	{
+> -	 .procname = "xpc",
+> -	 .mode = 0555,
+> -	 .child = xpc_sys_xpc_dir},
+> -	{}
+> -};
+> +
+>  static struct ctl_table_header *xpc_sysctl;
+> +static struct ctl_table_header *xpc_sysctl_hb;
+>  
+>  /* non-zero if any remote partition disengage was timed out */
+>  int xpc_disengage_timedout;
+> @@ -1041,6 +1032,8 @@ xpc_do_exit(enum xp_retval reason)
+>  
+>  	if (xpc_sysctl)
+>  		unregister_sysctl_table(xpc_sysctl);
+> +	if (xpc_sysctl_hb)
+> +		unregister_sysctl_table(xpc_sysctl_hb);
+>  
+>  	xpc_teardown_partitions();
+>  
+> @@ -1243,7 +1236,8 @@ xpc_init(void)
+>  		goto out_1;
+>  	}
+>  
+> -	xpc_sysctl = register_sysctl_table(xpc_sys_dir);
+> +	xpc_sysctl = register_sysctl("xpc", xpc_sys_xpc);
+> +	xpc_sysctl_hb = register_sysctl("xpc/hb", xpc_sys_xpc_hb);
+>  
+>  	/*
+>  	 * Fill the partition reserved page with the information needed by
+> @@ -1308,6 +1302,8 @@ xpc_init(void)
+>  	(void)unregister_die_notifier(&xpc_die_notifier);
+>  	(void)unregister_reboot_notifier(&xpc_reboot_notifier);
+>  out_2:
+> +	if (xpc_sysctl_hb)
+> +		unregister_sysctl_table(xpc_sysctl_hb);
+>  	if (xpc_sysctl)
+>  		unregister_sysctl_table(xpc_sysctl);
+>  
+> -- 
+> 2.39.1
+> 
 
-Link: https://github.com/KSPP/linux/issues/21
-Link: https://github.com/KSPP/linux/issues/266
-Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- .../wireless/ath/ath11k/debugfs_htt_stats.h   | 50 +++++++++----------
- 1 file changed, 25 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath11k/debugfs_htt_stats.h b/drivers/net/wireless/ath/ath11k/debugfs_htt_stats.h
-index 2b97cbbd28cb..db5c176e2e5b 100644
---- a/drivers/net/wireless/ath/ath11k/debugfs_htt_stats.h
-+++ b/drivers/net/wireless/ath/ath11k/debugfs_htt_stats.h
-@@ -143,7 +143,7 @@ enum htt_tx_pdev_underrun_enum {
- /* Bytes stored in little endian order */
- /* Length should be multiple of DWORD */
- struct htt_stats_string_tlv {
--	u32 data[0]; /* Can be variable length */
-+	DECLARE_FLEX_ARRAY(u32, data); /* Can be variable length */
- } __packed;
- 
- #define HTT_STATS_MAC_ID	GENMASK(7, 0)
-@@ -205,27 +205,27 @@ struct htt_tx_pdev_stats_cmn_tlv {
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_pdev_stats_urrn_tlv_v {
--	u32 urrn_stats[0]; /* HTT_TX_PDEV_MAX_URRN_STATS */
-+	DECLARE_FLEX_ARRAY(u32, urrn_stats); /* HTT_TX_PDEV_MAX_URRN_STATS */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_pdev_stats_flush_tlv_v {
--	u32 flush_errs[0]; /* HTT_TX_PDEV_MAX_FLUSH_REASON_STATS */
-+	DECLARE_FLEX_ARRAY(u32, flush_errs); /* HTT_TX_PDEV_MAX_FLUSH_REASON_STATS */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_pdev_stats_sifs_tlv_v {
--	u32 sifs_status[0]; /* HTT_TX_PDEV_MAX_SIFS_BURST_STATS */
-+	DECLARE_FLEX_ARRAY(u32, sifs_status); /* HTT_TX_PDEV_MAX_SIFS_BURST_STATS */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_pdev_stats_phy_err_tlv_v {
--	u32  phy_errs[0]; /* HTT_TX_PDEV_MAX_PHY_ERR_STATS */
-+	DECLARE_FLEX_ARRAY(u32, phy_errs); /* HTT_TX_PDEV_MAX_PHY_ERR_STATS */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_pdev_stats_sifs_hist_tlv_v {
--	u32 sifs_hist_status[0]; /* HTT_TX_PDEV_SIFS_BURST_HIST_STATS */
-+	DECLARE_FLEX_ARRAY(u32, sifs_hist_status); /* HTT_TX_PDEV_SIFS_BURST_HIST_STATS */
- };
- 
- struct htt_tx_pdev_stats_tx_ppdu_stats_tlv_v {
-@@ -591,19 +591,19 @@ struct htt_tx_hwq_difs_latency_stats_tlv_v {
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_hwq_cmd_result_stats_tlv_v {
- 	/* Histogram of sched cmd result */
--	u32 cmd_result[0]; /* HTT_TX_HWQ_MAX_CMD_RESULT_STATS */
-+	DECLARE_FLEX_ARRAY(u32, cmd_result); /* HTT_TX_HWQ_MAX_CMD_RESULT_STATS */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_hwq_cmd_stall_stats_tlv_v {
- 	/* Histogram of various pause conitions */
--	u32 cmd_stall_status[0]; /* HTT_TX_HWQ_MAX_CMD_STALL_STATS */
-+	DECLARE_FLEX_ARRAY(u32, cmd_stall_status); /* HTT_TX_HWQ_MAX_CMD_STALL_STATS */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_hwq_fes_result_stats_tlv_v {
- 	/* Histogram of number of user fes result */
--	u32 fes_result[0]; /* HTT_TX_HWQ_MAX_FES_RESULT_STATS */
-+	DECLARE_FLEX_ARRAY(u32, fes_result); /* HTT_TX_HWQ_MAX_FES_RESULT_STATS */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size
-@@ -636,7 +636,7 @@ struct htt_tx_hwq_tried_mpdu_cnt_hist_tlv_v {
-  */
- struct htt_tx_hwq_txop_used_cnt_hist_tlv_v {
- 	/* Histogram of txop used cnt */
--	u32 txop_used_cnt_hist[0]; /* HTT_TX_HWQ_TXOP_USED_CNT_HIST */
-+	DECLARE_FLEX_ARRAY(u32, txop_used_cnt_hist); /* HTT_TX_HWQ_TXOP_USED_CNT_HIST */
- };
- 
- /* == TX SELFGEN STATS == */
-@@ -804,17 +804,17 @@ struct htt_tx_pdev_mpdu_stats_tlv {
- /* == TX SCHED STATS == */
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_sched_txq_cmd_posted_tlv_v {
--	u32 sched_cmd_posted[0]; /* HTT_TX_PDEV_SCHED_TX_MODE_MAX */
-+	DECLARE_FLEX_ARRAY(u32, sched_cmd_posted); /* HTT_TX_PDEV_SCHED_TX_MODE_MAX */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_sched_txq_cmd_reaped_tlv_v {
--	u32 sched_cmd_reaped[0]; /* HTT_TX_PDEV_SCHED_TX_MODE_MAX */
-+	DECLARE_FLEX_ARRAY(u32, sched_cmd_reaped); /* HTT_TX_PDEV_SCHED_TX_MODE_MAX */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_sched_txq_sched_order_su_tlv_v {
--	u32 sched_order_su[0]; /* HTT_TX_PDEV_NUM_SCHED_ORDER_LOG */
-+	DECLARE_FLEX_ARRAY(u32, sched_order_su); /* HTT_TX_PDEV_NUM_SCHED_ORDER_LOG */
- };
- 
- enum htt_sched_txq_sched_ineligibility_tlv_enum {
-@@ -842,7 +842,7 @@ enum htt_sched_txq_sched_ineligibility_tlv_enum {
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_sched_txq_sched_ineligibility_tlv_v {
- 	/* indexed by htt_sched_txq_sched_ineligibility_tlv_enum */
--	u32 sched_ineligibility[0];
-+	DECLARE_FLEX_ARRAY(u32, sched_ineligibility);
- };
- 
- #define	HTT_TX_PDEV_STATS_SCHED_PER_TXQ_MAC_ID	GENMASK(7, 0)
-@@ -888,17 +888,17 @@ struct htt_stats_tx_sched_cmn_tlv {
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_tqm_gen_mpdu_stats_tlv_v {
--	u32 gen_mpdu_end_reason[0]; /* HTT_TX_TQM_MAX_GEN_MPDU_END_REASON */
-+	DECLARE_FLEX_ARRAY(u32, gen_mpdu_end_reason); /* HTT_TX_TQM_MAX_GEN_MPDU_END_REASON */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_tqm_list_mpdu_stats_tlv_v {
--	u32 list_mpdu_end_reason[0]; /* HTT_TX_TQM_MAX_LIST_MPDU_END_REASON */
-+	DECLARE_FLEX_ARRAY(u32, list_mpdu_end_reason); /* HTT_TX_TQM_MAX_LIST_MPDU_END_REASON */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_tx_tqm_list_mpdu_cnt_tlv_v {
--	u32 list_mpdu_cnt_hist[0];
-+	DECLARE_FLEX_ARRAY(u32, list_mpdu_cnt_hist);
- 			/* HTT_TX_TQM_MAX_LIST_MPDU_CNT_HISTOGRAM_BINS */
- };
- 
-@@ -1098,7 +1098,7 @@ struct htt_tx_de_compl_stats_tlv {
-  *                               ENTRIES_PER_BIN_COUNT)
-  */
- struct htt_tx_de_fw2wbm_ring_full_hist_tlv {
--	u32 fw2wbm_ring_full_hist[0];
-+	DECLARE_FLEX_ARRAY(u32, fw2wbm_ring_full_hist);
- };
- 
- struct htt_tx_de_cmn_stats_tlv {
-@@ -1151,7 +1151,7 @@ struct htt_ring_if_cmn_tlv {
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_sfm_client_user_tlv_v {
- 	/* Number of DWORDS used per user and per client */
--	u32 dwords_used_by_user_n[0];
-+	DECLARE_FLEX_ARRAY(u32, dwords_used_by_user_n);
- };
- 
- struct htt_sfm_client_tlv {
-@@ -1436,12 +1436,12 @@ struct htt_rx_soc_fw_stats_tlv {
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_rx_soc_fw_refill_ring_empty_tlv_v {
--	u32 refill_ring_empty_cnt[0]; /* HTT_RX_STATS_REFILL_MAX_RING */
-+	DECLARE_FLEX_ARRAY(u32, refill_ring_empty_cnt); /* HTT_RX_STATS_REFILL_MAX_RING */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_rx_soc_fw_refill_ring_num_refill_tlv_v {
--	u32 refill_ring_num_refill[0]; /* HTT_RX_STATS_REFILL_MAX_RING */
-+	DECLARE_FLEX_ARRAY(u32, refill_ring_num_refill); /* HTT_RX_STATS_REFILL_MAX_RING */
- };
- 
- /* RXDMA error code from WBM released packets */
-@@ -1473,7 +1473,7 @@ enum htt_rx_rxdma_error_code_enum {
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_rx_soc_fw_refill_ring_num_rxdma_err_tlv_v {
--	u32 rxdma_err[0]; /* HTT_RX_RXDMA_MAX_ERR_CODE */
-+	DECLARE_FLEX_ARRAY(u32, rxdma_err); /* HTT_RX_RXDMA_MAX_ERR_CODE */
- };
- 
- /* REO error code from WBM released packets */
-@@ -1505,7 +1505,7 @@ enum htt_rx_reo_error_code_enum {
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_rx_soc_fw_refill_ring_num_reo_err_tlv_v {
--	u32 reo_err[0]; /* HTT_RX_REO_MAX_ERR_CODE */
-+	DECLARE_FLEX_ARRAY(u32, reo_err); /* HTT_RX_REO_MAX_ERR_CODE */
- };
- 
- /* == RX PDEV STATS == */
-@@ -1622,13 +1622,13 @@ struct htt_rx_pdev_fw_stats_phy_err_tlv {
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_rx_pdev_fw_ring_mpdu_err_tlv_v {
- 	/* Num error MPDU for each RxDMA error type  */
--	u32 fw_ring_mpdu_err[0]; /* HTT_RX_STATS_RXDMA_MAX_ERR */
-+	DECLARE_FLEX_ARRAY(u32, fw_ring_mpdu_err); /* HTT_RX_STATS_RXDMA_MAX_ERR */
- };
- 
- /* NOTE: Variable length TLV, use length spec to infer array size */
- struct htt_rx_pdev_fw_mpdu_drop_tlv_v {
- 	/* Num MPDU dropped  */
--	u32 fw_mpdu_drop[0]; /* HTT_RX_STATS_FW_DROP_REASON_MAX */
-+	DECLARE_FLEX_ARRAY(u32, fw_mpdu_drop); /* HTT_RX_STATS_FW_DROP_REASON_MAX */
- };
- 
- #define HTT_PDEV_CCA_STATS_TX_FRAME_INFO_PRESENT               (0x1)
 -- 
-2.34.1
-
+Steve Wahl, Hewlett Packard Enterprise
