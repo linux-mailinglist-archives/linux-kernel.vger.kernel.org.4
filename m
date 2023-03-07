@@ -2,123 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E016C6AF7FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:50:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B3D6AF805
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbjCGVuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:50:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S231615AbjCGVua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjCGVuL (ORCPT
+        with ESMTP id S231604AbjCGVuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:50:11 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B3856164;
-        Tue,  7 Mar 2023 13:50:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678225810; x=1709761810;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=77dMKDKBCqeHL/BHmh65e59P0A/ZjNveCWI4JDmFEZA=;
-  b=UUX5VioKVRc7gcShTU24XxcSbgLSi7qhevbpwWXnhyaLufUdFZ2O6OX6
-   XbEewKsn0HyCURKQnPkILVhaQ6ZuV4IN27rQT0S0i/krxt1sjBLPh0phL
-   4muuRTcVGoI/fglUON+x0L5LeGEFFAw5HwG9lbPVBJqMAmytOnYnZU4ew
-   rODVeIH1XerNfMX+LyuvGX67816nLznZdHx84daK/0e+LcZ3sq1qygYOZ
-   br4BVI1VLdAzWTG8lK7V10atv7EVEc4G3DVJWMZ41+zao+HjlGD+67W8D
-   h4OoHYYLlw9vVM9Tv1C2gdxq2xpKzxSaZZrWaSujZ/kE98qm/OlvoLXXY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="333455340"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="333455340"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:50:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="670082995"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="670082995"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.212.116.173]) ([10.212.116.173])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:50:09 -0800
-Message-ID: <18a73c95-53da-9acb-9e10-0e6095e7dd31@intel.com>
-Date:   Tue, 7 Mar 2023 14:50:08 -0700
+        Tue, 7 Mar 2023 16:50:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A9195465;
+        Tue,  7 Mar 2023 13:50:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 940A1B81A45;
+        Tue,  7 Mar 2023 21:50:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D27CC4339E;
+        Tue,  7 Mar 2023 21:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678225821;
+        bh=GSPQKquktL4JjjyNEvTusF3QMpG6B42fKmFuoGQsiUE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=X+MJZfXY6UhEk7esMG/W6kx9hyk8iv0MavK0k3GV+wF6eQvV62uAEAOOCmbNPaU29
+         pMVq3h8VB6whmED9qmrkPlQv+Ot7tf+Z2KMjT2qYT8uzdKwkaNEQumc7aWVQgmZKKa
+         BBStzr63dIUC5c1OV21YCbmjdVMtsy+f+qf4gcS2cBh+a7U9zQXSFvCbZ9XPmBrFfJ
+         n66B6SAArNaM5YvjARreNjYd4yp6AUwUoSeyDFofs3kgQxWUePBp35eNVD9GydWBAh
+         Wwlji4jKoRJq/xh8ZvB1/dwGonTT9Q8FBwgxXoNgmX4ve2D8G83QVgTZX9Y+NGrHSz
+         7w7HUgP/LkyHg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB66EE61B67;
+        Tue,  7 Mar 2023 21:50:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH] dmaengine: ioat: use PCI core macros for PCIe Capability
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230307214615.887354-1-helgaas@kernel.org>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230307214615.887354-1-helgaas@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] nfc: change order inside nfc_se_io error path
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167822582089.6774.886285380993481424.git-patchwork-notify@kernel.org>
+Date:   Tue, 07 Mar 2023 21:50:20 +0000
+References: <20230306212650.230322-1-pchelkin@ispras.ru>
+In-Reply-To: <20230306212650.230322-1-pchelkin@ispras.ru>
+To:     Fedor Pchelkin <pchelkin@ispras.ru>
+Cc:     kuba@kernel.org, krzysztof.kozlowski@linaro.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khoroshilov@ispras.ru, lvc-project@linuxtesting.org
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On 3/7/23 2:46 PM, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
+On Tue,  7 Mar 2023 00:26:50 +0300 you wrote:
+> cb_context should be freed on the error path in nfc_se_io as stated by
+> commit 25ff6f8a5a3b ("nfc: fix memory leak of se_io context in
+> nfc_genl_se_io").
 > 
-> The PCIe Capability is defined by the PCIe spec, so use the PCI_EXP_DEVCTL
-> macros defined by the PCI core instead of defining copies in IOAT.  This
-> makes it easier to find all uses of the PCIe Device Control register.  No
-> functional change intended.
+> Make the error path in nfc_se_io unwind everything in reverse order, i.e.
+> free the cb_context after unlocking the device.
 > 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> [...]
 
-Acked-by: Dave Jiang <dave.jiang@intel.com>
+Here is the summary with links:
+  - [v2] nfc: change order inside nfc_se_io error path
+    https://git.kernel.org/netdev/net/c/7d834b4d1ab6
 
-> ---
->   drivers/dma/ioat/init.c      | 6 +++---
->   drivers/dma/ioat/registers.h | 7 -------
->   2 files changed, 3 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/dma/ioat/init.c b/drivers/dma/ioat/init.c
-> index 5d707ff63554..fa7c0f9aa61d 100644
-> --- a/drivers/dma/ioat/init.c
-> +++ b/drivers/dma/ioat/init.c
-> @@ -1191,13 +1191,13 @@ static int ioat3_dma_probe(struct ioatdma_device *ioat_dma, int dca)
->   		ioat_dma->dca = ioat_dca_init(pdev, ioat_dma->reg_base);
->   
->   	/* disable relaxed ordering */
-> -	err = pcie_capability_read_word(pdev, IOAT_DEVCTRL_OFFSET, &val16);
-> +	err = pcie_capability_read_word(pdev, PCI_EXP_DEVCTL, &val16);
->   	if (err)
->   		return pcibios_err_to_errno(err);
->   
->   	/* clear relaxed ordering enable */
-> -	val16 &= ~IOAT_DEVCTRL_ROE;
-> -	err = pcie_capability_write_word(pdev, IOAT_DEVCTRL_OFFSET, val16);
-> +	val16 &= ~PCI_EXP_DEVCTL_RELAX_EN;
-> +	err = pcie_capability_write_word(pdev, PCI_EXP_DEVCTL, val16);
->   	if (err)
->   		return pcibios_err_to_errno(err);
->   
-> diff --git a/drivers/dma/ioat/registers.h b/drivers/dma/ioat/registers.h
-> index f55a5f92f185..54cf0ad39887 100644
-> --- a/drivers/dma/ioat/registers.h
-> +++ b/drivers/dma/ioat/registers.h
-> @@ -14,13 +14,6 @@
->   #define IOAT_PCI_CHANERR_INT_OFFSET		0x180
->   #define IOAT_PCI_CHANERRMASK_INT_OFFSET		0x184
->   
-> -/* PCIe config registers */
-> -
-> -/* EXPCAPID + N */
-> -#define IOAT_DEVCTRL_OFFSET			0x8
-> -/* relaxed ordering enable */
-> -#define IOAT_DEVCTRL_ROE			0x10
-> -
->   /* MMIO Device Registers */
->   #define IOAT_CHANCNT_OFFSET			0x00	/*  8-bit */
->   
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
