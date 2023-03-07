@@ -2,86 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BE56AF9F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7C36AF9A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:57:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjCGXBD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 18:01:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S231266AbjCGW5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:57:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbjCGXAk (ORCPT
+        with ESMTP id S230496AbjCGW5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:00:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6303996C3D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:57:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678229835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y2LyFwXcQIcYGF8iAkhqDIIxOMMkwRfJpuYXazPS08Y=;
-        b=imzZsUhOVmJP4h3ALRt9rO3KtXTPFX4w7D/pDQB6AUgIaHj8x77Dt67dLcUf+M+faEQePn
-        +bz7Fw7riiWpztRkc6rRPPgKId4DUGlcIjbdBYbeQbPThpIgobD0lF19OYtTHRiaEQNzRE
-        6UbktWCtx0D2DQsNPPu9LXEIWroRRts=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-209-1c3Maf1pOxSC79g_rPxf1w-1; Tue, 07 Mar 2023 17:50:55 -0500
-X-MC-Unique: 1c3Maf1pOxSC79g_rPxf1w-1
-Received: by mail-qk1-f198.google.com with SMTP id x14-20020ae9e90e000000b007429af46d5eso8254793qkf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:50:55 -0800 (PST)
+        Tue, 7 Mar 2023 17:57:11 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE069B5FCC
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:54:12 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5384ff97993so273588377b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:54:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=skydio.com; s=google; t=1678229583;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vemO8k1u3XZqdTI6RbhHJ2h2a6/5NFDCW7enHPRNpkY=;
+        b=E/OucL9ZmQNqVGYqLtxV7vY2sBEWuX4VyLEfszQ2+G6kqzF1Hn/20/WJQgAeh+0e2Y
+         FhE/Z7guBuB3+x/hrPMA7j4PirVxlzkdAv4aT1MfvaOQZJ2U8fLalZOZ0zFrp4jIr577
+         VOc+Rq0z3Mwd8gbtVMCiXQJzdnaCIFvB2mN+vfUw9KiTHROx2+vxg7//K1Wb11g86Py3
+         dExk54JG2Bko5NrNIOrglsYELMIUohMcjo4Tmn/InpNyh1ZtAyAQOvDlk85OIDDD4t93
+         AFyXkd8/cgc1U+68z2+75f6X0EfgjqROr5GrJkqesuyBRQZE0G2PfhC+zoni8/QSa5rg
+         ChDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678229432;
-        h=mime-version:user-agent:content-transfer-encoding:organization
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y2LyFwXcQIcYGF8iAkhqDIIxOMMkwRfJpuYXazPS08Y=;
-        b=AxbLuXmqt6F49Yk1kf2OZYxqvL/CkcCcCZ7W0pb2tAI84CAdkgWG49BXAX9fW2mG27
-         qp9z+4oIorRUNc4+0AXzicce4z+0iLKqhe1iE6GJrx7MHpmvxcy3hfLOlzwK46+p21O3
-         9tqis+9M7mRemHlk1iAINbQwZasEfWasIWyti3EfnZXw/8ZaCm7SUTlWOzPqyEDq7oGP
-         jWL0BX4nlrLoWEiYFSAbuPtPUS8h3Gnl/GlIU5lfsbKaP0FXP6Xb+3WuVV9oDXKiLcqg
-         k+eZwcdfTuvrO+V4o/Adpj7ZlPWrFGZx3fUvUfn4p4vlkfIa2jvGwJmbKGr6WSJtmPVd
-         Tolw==
-X-Gm-Message-State: AO0yUKXfWkWAnQtTS2byRpWBI4WMk6bM+QENMIe6qZE6CIrlSJ/HEgs6
-        Y5dRP8Q+G46m8z6WlLd5h/C2mkYJK7FqSVX3J5HzPM7cHEu+vxKiNLhaV28/o43Roz4OIEbZDO/
-        JP4KC0SXBRT1SiIkxVe4/whHByAQRPkCW
-X-Received: by 2002:ac8:5f83:0:b0:3bf:d07e:edf6 with SMTP id j3-20020ac85f83000000b003bfd07eedf6mr29489381qta.36.1678229432662;
-        Tue, 07 Mar 2023 14:50:32 -0800 (PST)
-X-Google-Smtp-Source: AK7set+fAl+u8fQ2G5Wb7L0bClfPehMChq1xc2zVWkDzlMZ5FpEupjFrdvUmM3UqA5658lgeZF5ZsQ==
-X-Received: by 2002:ac8:5f83:0:b0:3bf:d07e:edf6 with SMTP id j3-20020ac85f83000000b003bfd07eedf6mr29489358qta.36.1678229432411;
-        Tue, 07 Mar 2023 14:50:32 -0800 (PST)
-Received: from ?IPv6:2600:4040:5c68:6800::feb? ([2600:4040:5c68:6800::feb])
-        by smtp.gmail.com with ESMTPSA id r15-20020ac867cf000000b003bfc2fc3235sm10349179qtp.67.2023.03.07.14.50.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 14:50:31 -0800 (PST)
-Message-ID: <ba3790cb9f3adcb4f7d3935ce9aa88ecacb3bf7d.camel@redhat.com>
-Subject: Re: [PATCH 2/2] drm/nouveau/clk: avoid usage of list iterator after
- loop
-From:   Lyude Paul <lyude@redhat.com>
-To:     Jakob Koschel <jkl820.git@gmail.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Date:   Tue, 07 Mar 2023 17:50:30 -0500
-In-Reply-To: <20230301-drm-nouveau-avoid-iter-after-loop-v1-2-0702ec23f970@gmail.com>
-References: <20230301-drm-nouveau-avoid-iter-after-loop-v1-0-0702ec23f970@gmail.com>
-         <20230301-drm-nouveau-avoid-iter-after-loop-v1-2-0702ec23f970@gmail.com>
-Organization: Red Hat Inc.
+        d=1e100.net; s=20210112; t=1678229583;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vemO8k1u3XZqdTI6RbhHJ2h2a6/5NFDCW7enHPRNpkY=;
+        b=Fyagd3k6kozb5ck/P2Sb1u2pZfaOetnJKUE29NfiEYVD8haBoEvMKoiarC9D8AvUcA
+         UusaR5oIcH1MHM3KfpwKP73XuqNIXLOT8uwlovfJNd66xqkwmYEniaFHVLjrMe/iMhjx
+         bvdgKocaojCJXSSWGbkHGdD9Yaj1+gO9yZgTL97LpNYTypVvbcHChZlOlwSOR0DI0CV4
+         wxVVJFUdqTKRcPRo5J5hwkGuBdGQIvemwLxbLah/fc91pmxong3JFrzPrIRJ3BtZIwht
+         hHbtsDWr+DB/WSgXhkjbEwu6ujrf6Oq5IEEIndNATCT82BKBt/Ouqi8X5T++52WUbTn3
+         csbw==
+X-Gm-Message-State: AO0yUKU/wY3dra87Im7n4DPQ2t99sy7Q4bjwyEkyZcl6yGoAivfQ2WxK
+        l7g+UUhdSdNDSt4dgtbkzNe3rZlQB8O7G460kcdhgWYzXRbnQ2FoLPA=
+X-Google-Smtp-Source: AK7set//d3d6ReCx/Lqh7Vi87eutnSWzCCuhRJrjuaJQTKDk3daZ5I3q+H2ah9vTH7AQGhcZjHOurb/SuVEOuucJCE8=
+X-Received: by 2002:a81:ad46:0:b0:52e:cea7:f6e0 with SMTP id
+ l6-20020a81ad46000000b0052ecea7f6e0mr9839474ywk.7.1678229582622; Tue, 07 Mar
+ 2023 14:53:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20230307220525.54895-1-Jerry@skydio.com> <167822825917.8008.11050193827453206272@noble.neil.brown.name>
+In-Reply-To: <167822825917.8008.11050193827453206272@noble.neil.brown.name>
+From:   Jerry Zhang <jerry@skydio.com>
+Date:   Tue, 7 Mar 2023 14:52:53 -0800
+Message-ID: <CAMKO5Cv1Uh1rSFQ0cR1kfA88iXXHP5RMO-euU15Xrn2i93J5rg@mail.gmail.com>
+Subject: Re: [PATCH] sunrpc: Fix incorrect parsing of expiry time
+To:     NeilBrown <neilb@suse.de>
+Cc:     embedded@skydio.com, Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        "J. Bruce Fields" <bfields@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,21 +73,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-01 at 18:25 +0100, Jakob Koschel wrote:
-> +		}
-> =C2=A0	}
-> =C2=A0
-> +	BUG_ON(!pstate);
-> =C2=A0	nvkm_debug(subdev, "setting performance state %d\n", pstatei);
-> =C2=A0	clk->pstate =3D pstatei;
+On Tue, Mar 7, 2023 at 2:31=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
+>
+> On Wed, 08 Mar 2023, Jerry Zhang wrote:
+> > The expiry time field is mean to be expressed in seconds since boot.
+>
+> Correct.
+>
+> > The get_expiry() function parses a relative time value in seconds.
+>
+> Incorrect.  It parses and absoulte wall-clock time.
+I'm not familiar with the source of truth for this info. Is there a
+specification of some sort?
 
-We should probably also replace this with
+For reference, we were seeing writes to
+/proc/net/rpc/nfsd.export/channel randomly fail with EINVAL despite
+usually succeeding with the same invocation. Upon investigation this
+was the string that exportfs was writing "-test-client- /path/to/mount
+ 3 0 65534 65534 0". "3" was the value for expiry in this message,
+which led me to conclude that this is a relative field. If it isn't,
+perhaps this is a bug in userspace nfs tools?
 
-	if (WARN_ON(!pstate)
-		return -EINVAL;
-
---=20
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
-
+The failure in this was if nfs-server starts exactly 3s after bootup,
+boot.tv_sec would be 3 and thus get_expiry() returns 0, causing a
+failure to be returned.
+>
+> NeilBrown
+>
+> > In order to get the absolute time of seconds since boot that the given
+> > message will expire, the right thing is to add seconds_since_boot()
+> > to the given relative value.
+> >
+> > Previously this logic was subtracting boot.tv_sec from the relative
+> > value, which was causing some confusing behavior. The return type of
+> > time64_t could possibly underflow if time since boot is greater than
+> > the passed in relative argument. Also several checks in nfs code compar=
+e
+> > the return value to 0 to indicate failure, and this could spuriously
+> > be tripped if seconds since boot happened to match the argument.
+> >
+> > Fixes: c5b29f885afe ("sunrpc: use seconds since boot in expiry cache")
+> > Signed-off-by: Jerry Zhang <Jerry@skydio.com>
+> > ---
+> >  include/linux/sunrpc/cache.h | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> >
+> > diff --git a/include/linux/sunrpc/cache.h b/include/linux/sunrpc/cache.=
+h
+> > index ec5a555df96f..b96b1319c93d 100644
+> > --- a/include/linux/sunrpc/cache.h
+> > +++ b/include/linux/sunrpc/cache.h
+> > @@ -301,16 +301,14 @@ static inline int get_time(char **bpp, time64_t *=
+time)
+> >  }
+> >
+> >  static inline time64_t get_expiry(char **bpp)
+> >  {
+> >       time64_t rv;
+> > -     struct timespec64 boot;
+> >
+> >       if (get_time(bpp, &rv))
+> >               return 0;
+> >       if (rv < 0)
+> >               return 0;
+> > -     getboottime64(&boot);
+> > -     return rv - boot.tv_sec;
+> > +     return rv + seconds_since_boot();
+> >  }
+> >
+> >  #endif /*  _LINUX_SUNRPC_CACHE_H_ */
+> > --
+> > 2.37.3
+> >
+> >
+>
