@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45A36AE5C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 274EF6AE5CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbjCGQDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:03:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S231697AbjCGQDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:03:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjCGQCn (ORCPT
+        with ESMTP id S229899AbjCGQCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:02:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81519AA08;
-        Tue,  7 Mar 2023 08:00:28 -0800 (PST)
+        Tue, 7 Mar 2023 11:02:54 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F497FD4D;
+        Tue,  7 Mar 2023 08:00:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 496F5B81929;
-        Tue,  7 Mar 2023 16:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EEBFBC433D2;
-        Tue,  7 Mar 2023 16:00:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9B867CE1C17;
+        Tue,  7 Mar 2023 16:00:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A69C433EF;
+        Tue,  7 Mar 2023 16:00:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678204819;
-        bh=gxm0l3mSjzr0MUO4bkvTPkm5kKjBdTIob0I0BBX1z/0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=PASVappLx5cSXEFAFKUaawNvcR52njMk/PY6qHm3yOFaEBWqUFVpROHx52TFhF8ck
-         lY3tZc0gEqz37FjH1mfZZA3A/+8ZVLUTX3tHXlgDSkWUSORKaJ0IlMRPL8vPEIu/Eh
-         /kPqS3riDhLTElrsQW9gUYAk2bR0SG/NADY1auYE+cHEFDlViO+wr5MnGYVij9Ubxm
-         lu1LtkPEkaP3EWg8yGJNSqdVIb07XAOLPjzNwcSmCvvgxsum38c1mk/z3yOCgpvoyN
-         GHi86CCep2vkqo6ND+oGrqkTDmHeUp/cUl5hRKb++5pRslx6+uEwpor9S2qwA98w7L
-         ZbvWK4Wh/BaeA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BF266E61B63;
-        Tue,  7 Mar 2023 16:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1678204833;
+        bh=XELSBi6E3+FbM/LiXAELFwCSOKXenhaobdNpjoZaK00=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XzCfG+RbhV7fm4X9jGeuuYZ7Dwg/nLxgYz3b192FZwW0x7HfiQxE67RBV3apXnLsc
+         GmEZPntEaMxS1mHW1UiRtDnCD/+YdcgjHNM8UXEcNId/Tm75RtRwyEJx4Q8vcjU9Z8
+         6ZPFwQU/PcaPr0DZuEK11FbgDf7ubX5YuF+qQ0eGGEK6ggoR00RhVZE5tjgNHc8MO9
+         qL6U91zjPS5wYLBx6WdbtJdmthaakLZVWCK1PyoOAVO/JRv69gjqTuwoFp9/Vy2dxR
+         knYGWBBgk2fbrb3R8hBFSea/pw0ZOCqnlQEtb04UQm0YJ13k3pfptTx/Tv+Z3qLPXy
+         sk8V98dtkyISA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pZZka-0000Od-JP; Tue, 07 Mar 2023 17:01:16 +0100
+Date:   Tue, 7 Mar 2023 17:01:16 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        linux-serial@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] tty: serial: qcom-geni-serial: Fix kdb/kgdb after
+ port shutdown (again)
+Message-ID: <ZAdfzHnRtBtcDbKK@hovoldconsulting.com>
+References: <20230307073155.1.Iaab0159b8d268060a0e131ebb27125af4750ef99@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Increase size of BTF_ID_LIST without
- CONFIG_DEBUG_INFO_BTF again
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167820481876.4140.8715511443190797476.git-patchwork-notify@kernel.org>
-Date:   Tue, 07 Mar 2023 16:00:18 +0000
-References: <20230307-bpf-kfuncs-warray-bounds-v1-1-00ad3191f3a6@kernel.org>
-In-Reply-To: <20230307-bpf-kfuncs-warray-bounds-v1-1-00ad3191f3a6@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, ndesaulniers@google.com,
-        trix@redhat.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307073155.1.Iaab0159b8d268060a0e131ebb27125af4750ef99@changeid>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,36 +64,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Tue, 07 Mar 2023 08:14:06 -0700 you wrote:
-> After commit 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and
-> bpf_dynptr_slice_rdwr"), clang builds without CONFIG_DEBUG_INFO_BTF
-> warn:
+On Tue, Mar 07, 2023 at 07:32:11AM -0800, Douglas Anderson wrote:
+> Commit d8aca2f96813 ("tty: serial: qcom-geni-serial: stop operations
+> in progress at shutdown") was basically a straight revert of the
+> commit it claims to fix without any explanation of why the problems
+> talked about in the original patch were no longer relevant. Indeed,
+> commit d8aca2f96813 ("tty: serial: qcom-geni-serial: stop operations
+> in progress at shutdown") re-introduces the same problem that commit
+> e83766334f96 ("tty: serial: qcom_geni_serial: No need to stop tx/rx on
+> UART shutdown") fixed.
 > 
->   kernel/bpf/verifier.c:10298:24: warning: array index 16 is past the end of the array (that has type 'u32[16]' (aka 'unsigned int[16]')) [-Warray-bounds]
->                                      meta.func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
->                                                      ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
->   kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared here
->   BTF_ID_LIST(special_kfunc_list)
->   ^
->   include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
->   #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
->                             ^
->   1 warning generated.
+> The problems are very easy to see by simply doing this on a
+> sc7180-based Chromebook:
 > 
-> [...]
+> 1. Boot in developer mode with serial console enabled and kdb setup on
+>    the serial console.
+> 2. via ssh: stop console-ttyMSM0; echo g > /proc/sysrq-trigger
+> 
+> When you do the above you'll see the "kdb" prompt printed on the
+> serial console but be unable to interact with it.
+> 
+> Let's fix the problem again by noting that the console port is never
+> configured in DMA mode and thus we don't need to stop things for the
+> console.
+> 
+> Fixes: d8aca2f96813 ("tty: serial: qcom-geni-serial: stop operations in progress at shutdown")
 
-Here is the summary with links:
-  - [bpf-next] bpf: Increase size of BTF_ID_LIST without CONFIG_DEBUG_INFO_BTF again
-    https://git.kernel.org/bpf/bpf-next/c/2d5bcdcda879
+The offending commit broke serial console more generally by breaking TX
+and thus hanging the system when stopping the getty on reboot.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The underlying bug has been there since this driver was first merged,
+and as fixing it properly is going to be a bit involved, I was about to
+post a patch equivalent to this one to fix the immediate regression and
+get us back to status quo.
 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
 
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+
+> ---
+> 
+>  drivers/tty/serial/qcom_geni_serial.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index d69592e5e2ec..74a0e074c2de 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -1070,8 +1070,10 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
+>  static void qcom_geni_serial_shutdown(struct uart_port *uport)
+>  {
+>  	disable_irq(uport->irq);
+> -	qcom_geni_serial_stop_tx(uport);
+> -	qcom_geni_serial_stop_rx(uport);
+> +	if (!uart_console(uport)) {
+> +		qcom_geni_serial_stop_tx(uport);
+> +		qcom_geni_serial_stop_rx(uport);
+> +	}
+>  }
+>  
+>  static int qcom_geni_serial_port_setup(struct uart_port *uport)
+
+Johan
