@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 971B86AF66B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427B36AF674
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbjCGUJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:09:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S231728AbjCGUMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjCGUJW (ORCPT
+        with ESMTP id S231290AbjCGUME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:09:22 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8FB2A6C0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:09:17 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A6F9F1EC0688;
-        Tue,  7 Mar 2023 21:09:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678219755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=NL0Fj5tWdSV5sPCmkwv5b9tNtDRbTqKhaYee0FG+wA0=;
-        b=JTEiliCzp27QvlqSQc9C6WJEmJLr+u/K3kgQNP4VyBmjcF639CANM39Lv1Qk5tc+6FMjP1
-        zFBxI+KUSNVxlnQ928HBM7Pv/hwm4nrpNjY70H9/ezXH9mEreGZL1LqKnAQ92Z2k0K6txr
-        ULDJIFAh0Wn7aPRUW93uHfDoCHWABqU=
-Date:   Tue, 7 Mar 2023 21:09:11 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Tavis Ormandy <taviso@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Alexander Monakov <amonakov@ispras.ru>
-Subject: Re: [PATCH] x86/amd: Work around Erratum 1386 - XSAVES malfunction
- on context switch
-Message-ID: <20230307200911.GIZAeZ54t0tchbZSTa@fat_crate.local>
-References: <Y/W4x7/KFqmDmmR7@thinkstation.cmpxchg8b.net>
- <20230307174643.1240184-1-andrew.cooper3@citrix.com>
- <20230307175050.GCZAd5eu0/Mk2fdLz5@fat_crate.local>
- <940596cc-a440-181a-a72a-36282a26dd0a@citrix.com>
- <20230307185632.GDZAeI4LwBDUU3/OP9@fat_crate.local>
- <ee866b3e-a53b-4c26-0272-20e798c0650d@citrix.com>
+        Tue, 7 Mar 2023 15:12:04 -0500
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBA29DE0D;
+        Tue,  7 Mar 2023 12:11:59 -0800 (PST)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1pZdfA-0003Ur-M0; Tue, 07 Mar 2023 21:11:56 +0100
+Date:   Tue, 7 Mar 2023 21:11:56 +0100
+From:   Florian Westphal <fw@strlen.de>
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, daniel@iogearbox.net
+Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets
+ in BPF
+Message-ID: <20230307201156.GF13059@breakpoint.cc>
+References: <cover.1677526810.git.dxu@dxuuu.xyz>
+ <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
+ <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain>
+ <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
+ <20230228231716.a5uwc4tdo3kjlkg7@aviatrix-fedora.tail1b9c7.ts.net>
+ <CAADnVQKK+a_0effQW5qBSq1AXoQOJg5-79q3d1NWJ2Vv8SHvOw@mail.gmail.com>
+ <20230307194801.mopwvidrkrybm7h5@kashmir.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ee866b3e-a53b-4c26-0272-20e798c0650d@citrix.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230307194801.mopwvidrkrybm7h5@kashmir.localdomain>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 08:01:36PM +0000, Andrew Cooper wrote:
-> Sure, but why is that helpful?
-> 
-> XSAVES and XSAVEC are functionally identical on Zen1/2 because these
-> CPUs don't advertise any supervisor XSAVE states.
+Daniel Xu <dxu@dxuuu.xyz> wrote:
+> From my reading (I'll run some tests later) it looks like netfilter
+> will defrag all ipv4/ipv6 packets in any netns with conntrack enabled.
+> It appears to do so in NF_INET_PRE_ROUTING.
 
-I guess... We'll know soon enough.
+Yes, and output.
 
-> It is only Zen3 where XSAVES starts doing more than XSAVEC (and even
-> then, only after the CET series actually gets merged...)
+> One thing we would need though are (probably kfunc) wrappers around
+> nf_defrag_ipv4_enable() and nf_defrag_ipv6_enable() to ensure BPF progs
+> are not transitively depending on defrag support from other netfilter
+> modules.
+>
+> The exact mechanism would probably need some thinking, as the above
+> functions kinda rely on module_init() and module_exit() semantics. We
+> cannot make the prog bump the refcnt every time it runs -- it would
+> overflow.  And it would be nice to automatically free the refcnt when
+> prog is unloaded.
 
-Yeah, latter should probably happen this time around. :-)
+Probably add a flag attribute that is evaluated at BPF_LINK time, so
+progs can say they need defrag enabled.  Same could be used to request
+conntrack enablement.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Will need some glue on netfilter side to handle DEFRAG=m, but we already
+have plenty of those.
