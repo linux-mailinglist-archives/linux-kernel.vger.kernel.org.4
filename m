@@ -2,111 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 841106AD887
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 422BE6AD889
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:54:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjCGHxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 02:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
+        id S229768AbjCGHyD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 02:54:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbjCGHxQ (ORCPT
+        with ESMTP id S229748AbjCGHyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 02:53:16 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C282BEF0
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:53:08 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id i34so48763481eda.7
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 23:53:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678175587;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2fbNVSLqIHvV0bqpOfDOpCzWFojulNanBN36qBfwsNY=;
-        b=rVPWF+vVajj/Wd3RGxj9W095GMsUmEBJ+RFpZsT2scO9I9NRRnLYld/8Q1hJ1G5fwj
-         GmzFnNH9zU/khqjqWTOVykHFA2d+oRCJZtisU8Ic+P2sBTV1fpvBUhs9T5gKgVYeJQyo
-         g8/XAOXuwpAVabq+UbSdS4NOAHMzwzc31lV5sSjyKqAz6BxhkOvAgE4T4Fqp1a2RtjMJ
-         SKeBrvJY83OYH0Oy3vdr73E0NfvlZMbFTNznEuFQH+LPEZWqPAvcBCiiDPh1oE3s1Xes
-         ZGURO/lZdyMOQIPo7tjaCnaUzxLwetkd9bqk4R7yFrYEcQF4pIIKUTmiu+2R19RzG3yk
-         uqZg==
+        Tue, 7 Mar 2023 02:54:00 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67B53CE3D;
+        Mon,  6 Mar 2023 23:53:53 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id l18so13523732qtp.1;
+        Mon, 06 Mar 2023 23:53:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678175587;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2fbNVSLqIHvV0bqpOfDOpCzWFojulNanBN36qBfwsNY=;
-        b=fw/G284izrqFqmJdBUNF6IxM3hOvh9uzlcG3LcRZUoBpZD1GotW0Y5/RE25OGa6b8k
-         Lo9vHGSvMlg2uWA1TU63e1zoguP/F98j2gVih9vvNi/eUzdAaUc1AVhSURrOZwD9/QHC
-         oXxgta9NAI4f0V3N7PzAtBwNiJeTU1t5PZMqCuolpcMnVWCTIWXiOFvdQU0iPBUfXdsO
-         /ZBxwakRRZztNyIBFyZ+B43y36gU74DS0j6eM7zjfKtlsCzuzoB7SG6jGj98kNCR3Fhv
-         2phVP/QCWw3iiCnid90hSdZ5w7OjxWTCexpL0qZSjsKAZJeUc4/q3g/m5SfdASiV7TGM
-         4KhQ==
-X-Gm-Message-State: AO0yUKUyynXoczPgEZ2I/awRdzfRJCOAJqeRHpsNL/m2ewX8inZpo9ge
-        fsc3GjypGo+MQJZ5vGsT8Vqk3Q==
-X-Google-Smtp-Source: AK7set86p4C3BL6LTMri6M4GNxY1CcyOYdrJhQ/9UfGZbb6pzNqA9GJE7GOxr4oUcC+vU7iKO++hNQ==
-X-Received: by 2002:a17:906:b1cc:b0:8b1:7684:dfab with SMTP id bv12-20020a170906b1cc00b008b17684dfabmr14962870ejb.38.1678175587076;
-        Mon, 06 Mar 2023 23:53:07 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:5310:35c7:6f9e:2cd3? ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
-        by smtp.gmail.com with ESMTPSA id b2-20020a50b402000000b004be64b284b2sm6252792edh.3.2023.03.06.23.53.06
+        d=1e100.net; s=20210112; t=1678175632;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G6v56biJISo0k1NX6M3k2oB4vNanTMqcuoG+TH0gcNY=;
+        b=c/8yjuFspe4GjYgtNgkSMrDGwQTHRZ+nc6Mt1xleBwfGRs8Rdj68XerPyJhTZvorK2
+         47ZDHzdUfgvdNnlthz5fD7M/bajzIltqd2FPky/c25By/k5+0+YUI1/4z8H84URQmqV3
+         G/RhEVqhZqh7mk9aZqmC6MbodAZF0DaKSguh+vRN4givUlAoSjjCCvXXDqU/tz/B5bqm
+         57MOPHtGuBCp277GAKbCYx53d70Xc6o4XFsIdVgo4ukfGIug7qSc+XGeGeZoWcimz2oC
+         wuLXIytGVCx4ZfC1O4dKeKfTnR+Q8nmpv1mKcAtC4DGsz/RRJWogl7mTJcxrvdiQJZaB
+         YHMw==
+X-Gm-Message-State: AO0yUKUyRzQdq/2LEzuEyNr7DnwT85XmYy25WZ9alIQDipcTa8nxo7oh
+        P036SUeRVXzOcQd6UID6UP1hmNXA5kLeeg==
+X-Google-Smtp-Source: AK7set+TVCks7/4gD4tAAgJSTUEXz/p9U+wHelySvFvLuM+avD0iNsMbAm5KXXYd2wSw1RwWB8iFJg==
+X-Received: by 2002:ac8:7d84:0:b0:3b9:fb0e:adba with SMTP id c4-20020ac87d84000000b003b9fb0eadbamr22957757qtd.25.1678175632688;
+        Mon, 06 Mar 2023 23:53:52 -0800 (PST)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id s4-20020a372c04000000b0074283b87a4esm8979351qkh.90.2023.03.06.23.53.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 23:53:06 -0800 (PST)
-Message-ID: <6aeaa895-7f99-3598-2490-88eb48735a15@linaro.org>
-Date:   Tue, 7 Mar 2023 08:53:05 +0100
+        Mon, 06 Mar 2023 23:53:51 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-536b7ffdd34so230419417b3.6;
+        Mon, 06 Mar 2023 23:53:50 -0800 (PST)
+X-Received: by 2002:a81:b61d:0:b0:52e:f66d:b70f with SMTP id
+ u29-20020a81b61d000000b0052ef66db70fmr8277658ywh.5.1678175630175; Mon, 06 Mar
+ 2023 23:53:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1 02/11] media: dt-bindings: starfive,jh7110-mipi-csi2:
- add binding docmuent
-Content-Language: en-US
-To:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, changhuang.liang@starfivetech.com
-References: <20230302091921.43309-1-jack.zhu@starfivetech.com>
- <20230302091921.43309-3-jack.zhu@starfivetech.com>
- <11e7c986-e6cc-ee57-b36e-816af8cc11a7@linaro.org>
- <30000009-cf05-988a-9817-97a7af36db37@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <30000009-cf05-988a-9817-97a7af36db37@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230306160016.4459-1-tzimmermann@suse.de>
+In-Reply-To: <20230306160016.4459-1-tzimmermann@suse.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Mar 2023 08:53:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU5AwE0pK=ppip4J81ByEye+jmvff1s8saeEuWZWZiqPw@mail.gmail.com>
+Message-ID: <CAMuHMdU5AwE0pK=ppip4J81ByEye+jmvff1s8saeEuWZWZiqPw@mail.gmail.com>
+Subject: Re: [PATCH 00/99] fbdev: Fix memory leak in option parsing
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     deller@gmx.de, paulus@samba.org, benh@kernel.crashing.org,
+        linux@armlinux.org.uk, pjones@redhat.com, timur@kernel.org,
+        adaplas@gmail.com, s.hauer@pengutronix.de, shawnguo@kernel.org,
+        mbroemme@libmpq.org, thomas@winischhofer.net,
+        James.Bottomley@hansenpartnership.com, spock@gentoo.org,
+        sudipm.mukherjee@gmail.com, teddy.wang@siliconmotion.com,
+        corbet@lwn.net, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 07:41, Jack Zhu wrote:
-> 
-> 
-> On 2023/3/3 16:47, Krzysztof Kozlowski wrote:
->> On 02/03/2023 10:19, jack.zhu wrote:
->>> Add DT binding document for Starfive MIPI CSI2 receiver
->>
->> Ehh... you have entire commit msg to explain what you do here. Yet there
->> is nothing mentioning that you actually have Cadence MIPI CSI here.
->>
->> Since you decided to add new bindings, you receive review matching new
->> bindings. I don't think this is correct approach (duplicated bindings),
->> but could work for me. However how are you going to solve all the points
->> of my review?
-> 
-> Maybe I don't need to add the CSI yaml file, since it already exists on the Linux mainline.
+Hi Thomas,
 
-If you add *only* new compatible, you do not need new binding. If you
-add any new properties, then depends, but old binding anyway would need
-conversion from TXT.
+On Mon, Mar 6, 2023 at 5:00 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
+> Introduce struct option_iter and helpers to parse command-line
+> options with comma-separated key-value pairs. Then convert fbdev
+> drivers to the new interface. Fixes a memory leak in the parsing of
+> the video= option.
+>
+> Before commit 73ce73c30ba9 ("fbdev: Transfer video= option strings to
+> caller; clarify ownership"), a call to fb_get_options() either
+> returned an internal string or a duplicated string; hence ownership of
+> the string's memory buffer was not well defined, but depended on how
+> users specified the video= option on the kernel command line. For
+> global settings, the caller owned the returned memory and for per-driver
+> settings, fb_get_options() owned the memory. As calling drivers were
+> unable to detect the case, the memory was leaked.
+>
+> Commit 73ce73c30ba9 ("fbdev: Transfer video= option strings to caller;
+> clarify ownership") changed sematics to caller-owned strings. Drivers
+> still leaked the memory, but at least ownership was clear.
+>
+> This patchset fixes the memory leak and changes string ownership back
+> to fb_get_options(). Patch 1 introduces struct option_iter and a few
+> helpers. The interface takes an option string, such as video=, in the
+> common form value1,key2:value2,value3 etc and returns the individial
+> comma-separated pairs. Various modules use this pattern, so the code
+> is located under lib/.
+>
+> Patches 2 to 98 go through fbdev drivers and convert them to the new
+> interface. This often requires a number of cleanups. A driver would
+> typically refer to the option string's video mode. Such strings are now
+> copied to driver-allocated memory so that drivers don't refer directly
+> to the option string's memory. The option iterator then replaces manual
+> parsing loops based on strsep(",").
 
-Best regards,
-Krzysztof
+Thanks for your series!
 
+Unfortunately I cannot say I'm thrilled about this: you are replacing
+a single small dynamic memory leak by 36 larger static memory leaks.
+Am I missing something?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
