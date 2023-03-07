@@ -2,103 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC9A6AE164
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:53:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D5D6AE16F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjCGNxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:53:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54320 "EHLO
+        id S229803AbjCGNyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjCGNxJ (ORCPT
+        with ESMTP id S231297AbjCGNyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:53:09 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A770B83888;
-        Tue,  7 Mar 2023 05:52:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678197158; x=1709733158;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=sQ7LWgB/6JVGYkKwEe+WCyTFEuM/QI03P1Yc2gqbCAg=;
-  b=DsEKCHkffa/VMJPmZfwtfWKapbE3Q+Ep0Jmie9MnOokls+JwHn5aOne7
-   hpVyrfMXaJwKbGFFfeNoC3NLr6xbsUHnJoF61LJ1aUKIwuihTmbo7Cc/o
-   KSI2VOf1hjidNPZiUAG1LcWc0udParN6p7Co/H8fvo31WoL3Qp2XnxEDi
-   KFoOWfPsbHSKM2md0GtkWD4HfeiANrdu+PfWYGxiasjA/DCxaOPPoKCuT
-   KKwRR6FP5Fu1FqWqN2QYx6VMYLY7jimkdcxS5h9DUiaEaYUHVaKFJMUwX
-   WU2xOR09tpPYCnBQuBE4LDoAM3SadLLfqi9/rSe475H9goybJP4MyGL8m
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400675435"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="400675435"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 05:52:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="626551621"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="626551621"
-Received: from tdx-lm.sh.intel.com ([10.239.53.27])
-  by orsmga003.jf.intel.com with ESMTP; 07 Mar 2023 05:52:35 -0800
-From:   Wei Wang <wei.w.wang@intel.com>
-To:     seanjc@google.com, dmatlack@google.com, mizhang@google.com,
-        isaku.yamahata@gmail.com, pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Wang <wei.w.wang@intel.com>
-Subject: [PATCH v2] KVM: allow KVM_BUG/KVM_BUG_ON to handle 64-bit cond
-Date:   Tue,  7 Mar 2023 21:52:33 +0800
-Message-Id: <20230307135233.54684-1-wei.w.wang@intel.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 7 Mar 2023 08:54:15 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5B05597
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:54:11 -0800 (PST)
+Received: from localhost (36-226-179-130.dynamic-ip.hinet.net [36.226.179.130])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id DCFDF3F0E1;
+        Tue,  7 Mar 2023 13:54:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678197249;
+        bh=xPBz9N8CBbExdFLBr+cIY26Ubw3p0nhKguR8fCGx6Bo=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=sxPyZqxYpvT5V/SvqJs4re/xSBdUyBZjgTlqgWOX+6X3VjN7EUHd3OI4AuJGcAel8
+         yzoxJdYCcnW+QyCJtr2ekZr0NNc33/vq1WtGHTdNvcJaSqjJBxYQsgUy4kvPmSt9uz
+         RMxYOikwxBm1oyVUUcpGz+oUnDemv2dq7cD1i749VKUr6FlfHmIIP/wQfqEhd4Utoa
+         flJwo8L3PACFbYZwaOV3Lnv4CtWTg6bXWve17VCc9l6ElotDfNAWS8rprTR55DPDtc
+         LEVXqkW57kpE/2V21BJnd+eSKOWG7Be2MuZzr4XNr184cE6xywcM9In5vAXjvusogD
+         7HCqhyWxg7oZQ==
+From:   Jeremy Szu <jeremy.szu@canonical.com>
+To:     tiwai@suse.com
+Cc:     Jeremy Szu <jeremy.szu@canonical.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Andy Chi <andy.chi@canonical.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
+        Gabriele Mazzotta <gabriele.mzt@gmail.com>,
+        Yuchi Yang <yangyuchi66@gmail.com>,
+        alsa-devel@alsa-project.org (moderated list:SOUND),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] ALSA: hda/realtek: fix speaker, mute/micmute LEDs not work on a HP platform
+Date:   Tue,  7 Mar 2023 21:53:16 +0800
+Message-Id: <20230307135317.37621-1-jeremy.szu@canonical.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current KVM_BUG and KVM_BUG_ON assume that 'cond' passed from callers is
-32-bit as it casts 'cond' to the type of int. This will be wrong if 'cond'
-provided by a caller is 64-bit, e.g. an error code of 0xc0000d0300000000
-will be converted to 0, which is not expected.
+There is a HP platform needs ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED quirk to
+make mic-mute/audio-mute/speaker working.
 
-Improves the implementation by using bool in KVM_BUG and KVM_BUG_ON.
-'bool' is preferred to 'int' as __ret is essentially used as a boolean
-and coding-stytle.rst documents that use of bool is encouraged to improve
-readability and is often a better option than 'int' for storing boolean
-values.
-
-Fixes: 0b8f11737cff ("KVM: Add infrastructure and macro to mark VM as bugged")
-Signed-off-by: Wei Wang <wei.w.wang@intel.com>
+Signed-off-by: Jeremy Szu <jeremy.szu@canonical.com>
 ---
- include/linux/kvm_host.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index f06635b24bd0..0221a48b3e3d 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -881,7 +881,7 @@ static inline void kvm_vm_bugged(struct kvm *kvm)
- 
- #define KVM_BUG(cond, kvm, fmt...)				\
- ({								\
--	int __ret = (cond);					\
-+	bool __ret = !!(cond);					\
- 								\
- 	if (WARN_ONCE(__ret && !(kvm)->vm_bugged, fmt))		\
- 		kvm_vm_bugged(kvm);				\
-@@ -890,7 +890,7 @@ static inline void kvm_vm_bugged(struct kvm *kvm)
- 
- #define KVM_BUG_ON(cond, kvm)					\
- ({								\
--	int __ret = (cond);					\
-+	bool __ret = !!(cond);					\
- 								\
- 	if (WARN_ON_ONCE(__ret && !(kvm)->vm_bugged))		\
- 		kvm_vm_bugged(kvm);				\
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 3c629f4ae080..5d530b489c48 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9447,6 +9447,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8b8a, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b8b, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b8d, "HP", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8b8f, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b92, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8bf0, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
 -- 
-2.27.0
+2.38.1
 
