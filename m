@@ -2,125 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 514A66AE1A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:06:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DAB6AE1F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjCGOGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:06:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S231535AbjCGOOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:14:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCGOGl (ORCPT
+        with ESMTP id S230380AbjCGONd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:06:41 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EA469239
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:06:40 -0800 (PST)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PWHKX35GVzrS1N;
-        Tue,  7 Mar 2023 22:05:52 +0800 (CST)
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 7 Mar 2023 22:06:37 +0800
-Message-ID: <494b157f-fd16-1b01-82d4-75cec1587128@huawei.com>
-Date:   Tue, 7 Mar 2023 22:06:37 +0800
+        Tue, 7 Mar 2023 09:13:33 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD435BCA0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:09:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=e34Iqvr6gyZS37VW/1C63Y8nOm9Y+LfjVrnWyuPPiMA=; b=T01P46nwK9y3LCBuhX2NKziVrc
+        vRqmiNsB6LWTHXfJtbPd9GT3aeBY/DVIUVvdcKBLREsvqYnjcQ829l3rUlGWyyU7tQBoA4DHiunYw
+        igtZh5F68oEKy7q2N3WUs2NDeNWXaXVuGDip9bDCV1TST9tY7zO241ab1WcLtryDvSutFLq8oLxPc
+        FabwXv2FAo5NTA/1mN7tyH3gWuJEQ5lEtAp/cmoM9eS3X0krEb1F+rA9L45LSOTGxVyjbO0bNPTAS
+        POkWClpnHB/63vyt1PsqVNaMw0R0q1uwGXJTeZn4i8EuUAr1hEUr4H0iOwzu0ocz8vk6vrpt49zuB
+        D5qV1g3g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pZXzx-00H3qu-1A;
+        Tue, 07 Mar 2023 14:09:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0F7C5300642;
+        Tue,  7 Mar 2023 15:08:59 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DC02423A1D2EA; Tue,  7 Mar 2023 15:08:58 +0100 (CET)
+Date:   Tue, 7 Mar 2023 15:08:58 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        John Stultz <jstultz@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, Wei Wang <wvw@google.com>,
+        Midas Chien <midaschieh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Tony Luck <tony.luck@intel.com>, kernel-team@android.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH] pstore: Revert pmsg_lock back to a normal mutex
+Message-ID: <20230307140858.GE2017917@hirez.programming.kicks-ass.net>
+References: <20230302062741.483079-1-jstultz@google.com>
+ <20230302082414.77613351@gandalf.local.home>
+ <CANDhNCo4ruC4pP+iDe49b3e1nAcWtYQj4bx82+oZhyLFYkdFJQ@mail.gmail.com>
+ <20230302152103.2618f1b7@gandalf.local.home>
+ <20230302163253.541ac3a8@gandalf.local.home>
+ <20230302163603.223313ba@gandalf.local.home>
+ <20230302165613.2dcc18ca@gandalf.local.home>
+ <20230302200136.381468f0@gandalf.local.home>
+ <20230303181134.GA1837196@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-CC:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <vschneid@redhat.com>, <rkagan@amazon.de>,
-        <linux-kernel@vger.kernel.org>
-References: <20230306132418.50389-1-zhangqiao22@huawei.com>
- <1587bdc3-908e-1d63-1d38-019e88ace4df@arm.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <1587bdc3-908e-1d63-1d38-019e88ace4df@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230303181134.GA1837196@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 03, 2023 at 06:11:34PM +0000, Joel Fernandes wrote:
+> What  makes the rtmutex spin logic different from normal mutex in this
+> scenario, so that rtmutex wants to do that but normal ones dont?
 
+Regular mutex uses osq 'lock' to serialize waiters and only the top
+spinner gets to spin on the mutex itself, this greatly reduces the
+contention on the mutex.
 
-在 2023/3/7 20:45, Dietmar Eggemann 写道:
-> On 06/03/2023 14:24, Zhang Qiao wrote:
->> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
->> entity being placed") fix an overflowing bug, but ignore
->> a case that se->exec_start is reset after a migration.
->>
->> For fixing this case, we reset the vruntime of a long
->> sleeping task in migrate_task_rq_fair().
->>
->> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
->> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
->> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
-> 
-> [...]
-> 
->> @@ -7635,7 +7653,23 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>  	if (READ_ONCE(p->__state) == TASK_WAKING) {
->>  		struct cfs_rq *cfs_rq = cfs_rq_of(se);
->>  
->> -		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
->> +		/*
->> +		 * We determine whether a task sleeps for long by checking
->> +		 * se->exec_start, and if it is, we sanitize its vruntime at
->> +		 * place_entity(). However, after a migration, this detection
->> +		 * method fails due to se->exec_start being reset.
->> +		 *
->> +		 * For fixing this case, we add the same check here. For a task
->> +		 * which has slept for a long time, its vruntime should be reset
->> +		 * to cfs_rq->min_vruntime with a sleep credit. Because waking
->> +		 * task's vruntime will be added to cfs_rq->min_vruntime when
-> 
-> Isn't this the other way around? `vruntime += min_vruntime`
-> 
->> +		 * enqueue, we only need to reset the se->vruntime of waking task
->> +		 * to a credit here.
-> 
-> You not reset it to credit, you subtract the credit from vruntime ?
-> 
-> I assume this is done to have sleeper credit accounted on both
-> (se->vruntime and vruntime) for `se->vruntime =
-> max_vruntime(se->vruntime, vruntime)` in place_entity() since
-> entity_is_long_sleep(se)=false for a remove wakeup since `se->exec_start=0`.
-> 
-> 
->> +		 */
->> +		if (entity_is_long_sleep(se))
->> +			se->vruntime = -sched_sleeper_credit(se);
->> +		else
->> +			se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-> 
-> Not sure I understand this part.
-> Don't we have to do `vruntime -= min_vruntime` here for long sleeping
-> task as well?
-
-Hi, Dietmar，
-
-At this time, `se->vruntime - min_vruntime` maybe greater than s64max as well.
-
-thanks,
-ZhangQiao
-
-> 
-> Since we always do the `vruntime += min_vruntime` on the new CPU for a
-> remote wakeup.
-> 
-> [...]
-> 
-> .
-> 
+OSQ is FIFO, which is not what RT-mutex needs.
