@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE0A26AE749
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 834B86AE754
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjCGQwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
+        id S230496AbjCGQx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjCGQwe (ORCPT
+        with ESMTP id S231246AbjCGQwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:52:34 -0500
+        Tue, 7 Mar 2023 11:52:55 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A6D301BF;
-        Tue,  7 Mar 2023 08:48:30 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DE699D6A;
+        Tue,  7 Mar 2023 08:48:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D5E8B81920;
-        Tue,  7 Mar 2023 16:48:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 322FEC433A4;
-        Tue,  7 Mar 2023 16:48:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95236B8198B;
+        Tue,  7 Mar 2023 16:48:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5525C433A1;
+        Tue,  7 Mar 2023 16:48:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678207699;
-        bh=zHO+u1qrk2DZ4LziGJ9LYpByCrkQlrxSC/s7+kUpHcc=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=Ju9WUoiMo2Q/Z6Z3v8/oMBS3Q9M4Apl3Rpr+qNw8fwPrDnfcg5Yl7qNRw0taQxnOl
-         0uwk3DyAyTGvLsOFNsxgHa5Fu1U7cs/bfhCQMuzKfbY9fMPfMUcFg1zHO0mFRniUwd
-         jzcuHuBS+3rvMt3h0rQIA/rZp59zfS+xDhuEqkbQ9pJg4QgkNRdJ6TdkmKT2lTrcYU
-         gph0mUdrAIn0/Hm24pa8iNKwFZ1Fh4rsQtDJsTV8ed+vM9F38x89hdG+er2KfhM0Rg
-         /ERjQonlhffWXMpi1YUiwG3aOhNVmtwQzDyAHgPDHZAPPQsyvUrp4sevUCp/SyQeSg
-         s08zL+JXibM5g==
+        s=k20201202; t=1678207704;
+        bh=BQDWbacKIj0sZ5ntfqrCn223xIsx3mwq66IH9bAzQME=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=JAogVIjjgiyqT4oIPiknavi9S+d0WhXKnvu4afiFSxI70MnlfmwiecVZ0CTYDUXjH
+         vyVKzvyBQO3/6b9skUTUwrBHhP1uCUvmyUdZM/+128tAD196mqYI8Z2SntYR2AEKc3
+         mK/JPK7Wj8PPo/oc21D79y3njLVB523cywRhqXdDHNtpSv1fGQ5iDP301rXNf3bOz0
+         19MbIJBq+h83dbXoJbdZ4FpVl2ALmosjnvi1mQd3Zr6rd6FPV5aQx7XKUyRWXEVZQE
+         bi282tqpPcfXRw1hKYGXfxcgCockvU9yAQo2V0kCkiXQ27ihILsOPyEmSDnQNSz7cj
+         Ec2xEeGyszjxw==
 From:   Mark Brown <broonie@kernel.org>
-To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230306182913.87231-1-andriy.shevchenko@linux.intel.com>
-References: <20230306182913.87231-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: Propagate firmware node
-Message-Id: <167820769891.97370.14605696476587563702.b4-ty@kernel.org>
-Date:   Tue, 07 Mar 2023 16:48:18 +0000
+To:     Linux SPI List <linux-spi@vger.kernel.org>,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        William Zhang <william.zhang@broadcom.com>
+Cc:     joel.peshkin@broadcom.com, dregan@mail.com, jonas.gorski@gmail.com,
+        dan.beygelman@broadcom.com, f.fainelli@gmail.com,
+        anand.gore@broadcom.com, kursad.oney@broadcom.com,
+        tomer.yacoby@broadcom.com, kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230307012004.414502-1-william.zhang@broadcom.com>
+References: <20230307012004.414502-1-william.zhang@broadcom.com>
+Subject: Re: [PATCH] spi: Fix cocci warnings
+Message-Id: <167820770115.97370.5301180632243342942.b4-ty@kernel.org>
+Date:   Tue, 07 Mar 2023 16:48:21 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -53,10 +59,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023 20:29:13 +0200, Andy Shevchenko wrote:
-> Propagate firmware node by using a specific API call, i.e. device_set_node().
+On Mon, 06 Mar 2023 17:20:04 -0800, William Zhang wrote:
+> cocci reported warning: !A || A && B is equivalent to !A || B. This fix
+> simplified the condition check to !A || B.
 > 
+> Fixes: 76a85704cb91 ("spi: spi-mem: Allow controller supporting mem_ops without exec_op")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202303010051.HrHWSr9y-lkp@intel.com/
 > 
+> [...]
 
 Applied to
 
@@ -64,8 +75,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: Propagate firmware node
-      commit: c7cc588bf0054ce33a11b98d05859105c046c706
+[1/1] spi: Fix cocci warnings
+      commit: 20064c47f63e995216e0dfb0a6ea37b653ed534c
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
