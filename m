@@ -2,78 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EA46AFA50
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D75B66AFA54
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjCGX2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 18:28:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35956 "EHLO
+        id S229768AbjCGX3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 18:29:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCGX16 (ORCPT
+        with ESMTP id S229659AbjCGX3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:27:58 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E873CA01
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 15:27:56 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id z5so14884761ljc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 15:27:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678231675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dgM5UWACpA1ziJGubEWxyksAdshP8CY52eV8GhV8Gkg=;
-        b=TGT2yqt1nWpJRPljNttb9FcVv36E/Jt8A84ByzTR4qfutxQ7fHbpdB+EgF/6Hu8QEA
-         lGav8SrhhYCem9wRNTeicDzl5ewmc3qyFq1vE8KfXRp3zg47pIamj2eOLTILU7cqykpP
-         eIRethLM6K4/tMKQANyi6ZEnJZjZRMB/OCTP+DWXQsvO2zKmMTsPyQD8swSXLVTS2D5g
-         zpu9uzYUHyfgWtbbJ7XEYTACwoPmJeHTPKHV/ad884DyulUXcTRi/oc/IJ8NR/H3zqZs
-         tKa1AESMTbEZ0h1SvjwaE/87vK4azcWvVNgcCANUEXMYEwcMUPSMOuu0EJJvRrTgBIy/
-         aRPg==
+        Tue, 7 Mar 2023 18:29:30 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778E1272D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 15:28:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678231723;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E2yRyaL4Cdt0nv2G/McwhWPHJse7+eFAUs/kNScOsNI=;
+        b=EmgzBsdMjvc3vUpsk4RXYSG03/UF1AAob2Fg4Mgxiq0pYS2FmY8WcrYC5pMUwwLbuvH4WJ
+        1VH3cv+5P8swjIFoeeqqbA9eNzTTLzEuNVgNcPcQz1iK9f7m2qz+yIJNVQcqCUMzmGXOrL
+        vwlY6SN8HjjcHk2QJ4bKMoYHY/uaLo0=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-384-QXr_crOAN7utkxzfhQ8j9Q-1; Tue, 07 Mar 2023 18:28:42 -0500
+X-MC-Unique: QXr_crOAN7utkxzfhQ8j9Q-1
+Received: by mail-il1-f200.google.com with SMTP id q8-20020a92ca48000000b00320ed437f04so3571844ilo.19
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 15:28:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678231675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678231722;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dgM5UWACpA1ziJGubEWxyksAdshP8CY52eV8GhV8Gkg=;
-        b=Xib6mP721MmydsCFAeHE/ct4Virqnga7yGzyC+cvCdktBZCMfB+6in0Tnt5NLbzLPd
-         S1RW1zQJgJ803YG6lZRQCl98wte9slyTc3syeHn4VIiVEBAIfIdUzarJyVDA0DcbR6RN
-         7gZu+YS0ClESuoJB79t2xErfvpUYUEoY+Vux39iqP5dEtt+zhlLa2YWeI5Z4rG3/A5kq
-         rdInOhvhHmMINseZf/uxg9/SAs4DDtJzmhDD4sEESOIGb1fuv1fCg7AGjXNAy+NyEtI+
-         jdEBGcYvkEOhzlNXAp/IQoa1+8TmI5lwjHlXnBQiWg1m/yMg1XsWA7gQ0jB8rMF1axt7
-         hhlA==
-X-Gm-Message-State: AO0yUKWo6aihQlQDf0IdcuBRp6YPUr2rK2KWFnMuoTEPDejYqkIKjdp/
-        WVnk5wgznRal4XnPM412ldMwo9EIkIjc3I39le7xjZG7yinyAOFU2KU=
-X-Google-Smtp-Source: AK7set9qzhTKfHxML+MgHqsSuJRnPMnUneATXidb0+SUYjXa+h00K/U7lnIkoXpbPJNdsASUF+bM31GH9FkDBDE6CkE=
-X-Received: by 2002:a05:651c:11c6:b0:295:d460:5a2d with SMTP id
- z6-20020a05651c11c600b00295d4605a2dmr4907216ljo.2.1678231674431; Tue, 07 Mar
- 2023 15:27:54 -0800 (PST)
+        bh=E2yRyaL4Cdt0nv2G/McwhWPHJse7+eFAUs/kNScOsNI=;
+        b=r7wnUG5ZLZ3gp5e0V7j+CHvAx7UNsLN1BZ4c11rzqJJ2m3zgajtG4UkTKNj5brlajr
+         35Q8Liet6REGbA13ji+yB6k98j5ma+RHjk6OmtHgx8d55HBPvo9jukP76rO3YqTZ0uNe
+         yhGsQYzCjJzucY+pJXJclmTKAymUQSp0xmRfhrz31412Hz/9Z95grVpAl07q8t+OXjLS
+         zL/7yYs9hOrRDKyuPYMPE1Aen0EczYFqjTz/dmM6ZyuDN8xfX2RppixKadSEUP1RM2BC
+         R921KhyAH+7+KbPp24PsAmT0xnA5ceTJC7jqpWsziAPcOsiKDn57lNYz4vg/HdvOvp4E
+         /KRQ==
+X-Gm-Message-State: AO0yUKUJJAFQ9XYXeIULolCoXO1iNnawgw17WCK5qE9H+uDwv2yiUb9I
+        otJqVBGIpDpo0y9lz867LnWpwnioL9YFhXC9hcXDhKfpqFsU3qd5qqnSQnRx71WeYJi1dyvJYDl
+        6NU6dpoWMjRbvcUIVTPiYI1v+
+X-Received: by 2002:a6b:610b:0:b0:74c:b52a:4176 with SMTP id v11-20020a6b610b000000b0074cb52a4176mr13160507iob.3.1678231721888;
+        Tue, 07 Mar 2023 15:28:41 -0800 (PST)
+X-Google-Smtp-Source: AK7set/ZSaStFtuAniVvnUczY6tbm/AadxBDJfjTKQ8+27dLYnvlWQY7Dk5xsND07ZUEJebO3m78uQ==
+X-Received: by 2002:a6b:610b:0:b0:74c:b52a:4176 with SMTP id v11-20020a6b610b000000b0074cb52a4176mr13160497iob.3.1678231721655;
+        Tue, 07 Mar 2023 15:28:41 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id a14-20020a5d958e000000b00746c45ff173sm4581387ioo.5.2023.03.07.15.28.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 15:28:41 -0800 (PST)
+Date:   Tue, 7 Mar 2023 16:28:39 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        "K V P, Satyanarayana" <satyanarayana.k.v.p@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "cohuck@redhat.com" <cohuck@redhat.com>
+Subject: Re: [PATCH] vfio/pci: Add DVSEC PCI Extended Config Capability to
+ user visible list.
+Message-ID: <20230307162839.2236640d.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB52764ABF8381FCDB8CE0FFF78CB79@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230303055426.2299006-1-satyanarayana.k.v.p@intel.com>
+        <ZAXxTiWU489dDssW@ziepe.ca>
+        <BN9PR11MB52764ABF8381FCDB8CE0FFF78CB79@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230306225024.264858-1-axelrasmussen@google.com>
- <20230306225024.264858-4-axelrasmussen@google.com> <ZAaMs44nspRQJmrk@x1n>
-In-Reply-To: <ZAaMs44nspRQJmrk@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 7 Mar 2023 15:27:17 -0800
-Message-ID: <CAJHvVciQWctUoZtrPga-fhgBf2dtc+6ypwE3FYe8ApQWpQyL0Q@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] mm: userfaultfd: combine 'mode' and 'wp_copy' arguments
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,170 +85,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 5:00=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
->
-> On Mon, Mar 06, 2023 at 02:50:22PM -0800, Axel Rasmussen wrote:
-> > Many userfaultfd ioctl functions take both a 'mode' and a 'wp_copy'
-> > argument. In future commits we plan to plumb the flags through to more
-> > places, so we'd be proliferating the very long argument list even
-> > further.
-> >
-> > Let's take the time to simplify the argument list. Combine the two
-> > arguments into one - and generalize, so when we add more flags in the
-> > future, it doesn't imply more function arguments.
-> >
-> > Since the modes (copy, zeropage, continue) are mutually exclusive, stor=
-e
-> > them as an integer value (0, 1, 2) in the low bits. Place combine-able
-> > flag bits in the high bits.
-> >
-> > This is quite similar to an earlier patch proposed by Nadav Amit
-> > ("userfaultfd: introduce uffd_flags" - for some reason Lore no longer
-> > has a copy of the patch). The main difference is that patch only handle=
-d
->
-> Lore has. :)
->
-> https://lore.kernel.org/all/20220619233449.181323-2-namit@vmware.com
->
-> And btw sorry to review late.
->
-> > flags, whereas this patch *also* combines the "mode" argument into the
-> > same type to shorten the argument list.
-> >
-> > Acked-by: James Houghton <jthoughton@google.com>
-> > Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
->
-> Mostly good to me, a few nitpicks below.
->
-> [...]
->
-> > +/* A combined operation mode + behavior flags. */
-> > +typedef unsigned int __bitwise uffd_flags_t;
-> > +
-> > +/* Mutually exclusive modes of operation. */
-> > +enum mfill_atomic_mode {
-> > +     MFILL_ATOMIC_COPY =3D (__force uffd_flags_t) 0,
-> > +     MFILL_ATOMIC_ZEROPAGE =3D (__force uffd_flags_t) 1,
-> > +     MFILL_ATOMIC_CONTINUE =3D (__force uffd_flags_t) 2,
-> > +     NR_MFILL_ATOMIC_MODES,
-> >  };
->
-> I never used enum like this.  I had a feeling that this will enforce
-> setting the enum entries but would the enforce applied to later
-> assignments?  I'm not sure.
->
-> I had a quick test and actually I found sparse already complains about
-> calculating the last enum entry:
->
-> ---8<---
-> $ cat a.c
-> typedef unsigned int __attribute__((bitwise)) flags_t;
->
-> enum {
->     FLAG1 =3D (__attribute__((force)) flags_t) 0,
->     FLAG_NUM,
-> };
->
-> void main(void)
-> {
->     uffd_flags_t flags =3D FLAG1;
-> }
-> $ sparse a.c
-> a.c:5:5: error: can't increment the last enum member
-> ---8<---
->
-> Maybe just use the simple "#define"s?
+On Tue, 7 Mar 2023 05:54:46 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
 
-Agreed, if sparse isn't happy with this then using the force macros is
-pointless.
+> > From: Jason Gunthorpe <jgg@ziepe.ca>
+> > Sent: Monday, March 6, 2023 9:58 PM
+> > 
+> > On Fri, Mar 03, 2023 at 05:54:26AM +0000, K V P, Satyanarayana wrote:  
+> > > Intel Platform Monitoring Technology (PMT) support is indicated by  
+> > presence  
+> > > of an Intel defined PCIe Designated Vendor Specific Extended Capabilities
+> > > (DVSEC) structure with a PMT specific ID.However DVSEC structures may  
+> > also  
+> > > be used by Intel to indicate support for other features. The Out Of Band  
+> > Management  
+> > > Services Module (OOBMSM) uses DVSEC to enumerate several features,  
+> > including PMT.  
+> > >
+> > > The current VFIO driver does not pass DVSEC capabilities to virtual machine  
+> > (VM)  
+> > > which makes intel_vsec driver not to work in the VM. This series adds  
+> > DVSEC  
+> > > capability to user visible list to allow its use with VFIO.
+> > >
+> > > Signed-off-by: K V P Satyanarayana <satyanarayana.k.v.p@intel.com>
+> > > ---
+> > >  drivers/vfio/pci/vfio_pci_config.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)  
+> > 
+> > Wasn't the IDXD/SIOV team proposing to use the fact that DVSEC doesn't
+> > propogate to indicate that IMS doesn't work?
+> > 
+> > Did this plan get abandoned? It seems at odds with this patch.  
+> 
+> No. Guest IMS will be indicated via hypercall/vIR as planned. 
 
-The enum is valuable because it lets us get the # of modes; assuming
-we agree that's useful below ...
+Thank goodness, basing a feature on the absence of a capability that's
+subject to change would have really put us, or IMS, in a corner.
 
->
-> >
-> > +#define MFILL_ATOMIC_MODE_BITS (const_ilog2(NR_MFILL_ATOMIC_MODES - 1)=
- + 1)
->
-> Here IIUC it should be "const_ilog2(NR_MFILL_ATOMIC_MODES) + 1", but
-> maybe..  we don't bother and define every bit explicitly?
+> > Why would you use a "Platform Monitoring Technology" device with VFIO
+> > anyhow?  
+> 
+> Ack. I guess it's a monitoring capability per PCI device to form a
+> platform-level monitoring technology. But w/o all those background
+> and usage description it's really strange to pass a 'platform' capability
+> into a guest.
 
-If my reading of const_ilog2's definition is correct, then:
+Is this perhaps for validation of the device, because yes, assigning
+platform devices to a VM doesn't seem like something a system vendor
+would tend to promote.
 
-const_ilog2(4) =3D 2
-const_ilog2(3) =3D 1
-const_ilog2(2) =3D 1
+> > Honestly I'm a bit reluctant to allow arbitary config space, some of
+> > the stuff people put there can be dangerous.
+> >   
+> 
+> Probably an allowed list to manage which DVSEC ID can be exposed
+> to userspace via vfio-pci, e.g. if the PMT ID in this patch is proved
+> to be safe for a meaningful usage?
 
-For either 3 or 4 modes, we need 2 bits to represent them (0, 1, 2,
-3), i.e. we want MFILL_ATOMIC_MODE_BITS =3D 2. I think this is correct
-as is, because const_ilog2(4 - 1) + 1 =3D 2, and const_ilog2(3 - 1) + 1
-=3D 2.
+Well, let me take this a different direction because the support
+proposed here only allows read-only access to the DVSEC capability.  Is
+that actually useful?  Drivers making use of write access to DVSEC are
+going to fail in unpredictable ways if their writes are dropped.  That
+seems worse than our current state of hiding it.
 
-In other words, I think const_ilog2 is defined as floor(log2()),
-whereas what we want is ceil(log2()).
+We already provide raw write access to both the standard and extended
+vendor specific capabilities, why wouldn't we by default do the same
+for DVSEC?  Devices aren't limited to config space if they want to do
+something dangerous, at some point we need to rely on platform
+isolation.
 
-The benefit of doing this vs. just doing defines with fixed values is,
-if we ever added a new mode, we wouldn't have to do bit twiddling and
-update the mask, flag bits, etc. - it would happen "automatically". I
-prefer it this way, but I agree it is a matter of opinion / taste. :)
-If you or others feel strongly this is overcomplicated, I can take the
-other approach.
+If there are underlying concerns here, then we probably need some sort
+of opt-in policy which restricts vfio-pci from binding to anything but
+VFs.  Thanks,
 
->
-> > +#define MFILL_ATOMIC_BIT(nr) ((__force uffd_flags_t) BIT(MFILL_ATOMIC_=
-MODE_BITS + (nr)))
-> > +#define MFILL_ATOMIC_MODE_MASK (MFILL_ATOMIC_BIT(0) - 1)
-> > +
-> > +/* Flags controlling behavior. */
-> > +#define MFILL_ATOMIC_WP MFILL_ATOMIC_BIT(0)
->
-> [...]
->
-> > @@ -312,9 +312,9 @@ static __always_inline ssize_t mfill_atomic_hugetlb=
-(
-> >                                             unsigned long dst_start,
-> >                                             unsigned long src_start,
-> >                                             unsigned long len,
-> > -                                           enum mcopy_atomic_mode mode=
-,
-> > -                                           bool wp_copy)
-> > +                                           uffd_flags_t flags)
-> >  {
-> > +     int mode =3D flags & MFILL_ATOMIC_MODE_MASK;
-> >       struct mm_struct *dst_mm =3D dst_vma->vm_mm;
-> >       int vm_shared =3D dst_vma->vm_flags & VM_SHARED;
-> >       ssize_t err;
-> > @@ -333,7 +333,7 @@ static __always_inline ssize_t mfill_atomic_hugetlb=
-(
-> >        * by THP.  Since we can not reliably insert a zero page, this
-> >        * feature is not supported.
-> >        */
-> > -     if (mode =3D=3D MCOPY_ATOMIC_ZEROPAGE) {
-> > +     if (mode =3D=3D MFILL_ATOMIC_ZEROPAGE) {
->
-> The mode comes from "& MFILL_ATOMIC_MODE_MASK" but it doesn't quickly tel=
-l
-> whether there's a shift for the mask.
->
-> Would it look better we just have a helper to fetch the mode?  The functi=
-on
-> tells that whatever it returns must be the mode:
->
->        if (uffd_flags_get_mode(flags) =3D=3D MFILL_ATOMIC_ZEROPAGE)
->
-> We also avoid quite a few "mode" variables.  All the rest bits will be fi=
-ne
-> to use "flags & FLAG1" if it's a boolean (so only this "mode" is slightly
-> tricky).
+Alex
 
-Agreed, this is simpler. I'll make this change.
-
->
-> What do you think?
->
-> Thanks,
->
-> --
-> Peter Xu
->
