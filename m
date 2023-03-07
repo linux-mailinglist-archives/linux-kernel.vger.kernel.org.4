@@ -2,240 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9946A6AE0F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456776AE0F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjCGNmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:42:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37664 "EHLO
+        id S230031AbjCGNm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:42:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjCGNmC (ORCPT
+        with ESMTP id S230119AbjCGNmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:42:02 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494CF84F5D
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:41:31 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id i9so17100724lfc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:41:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678196489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BfVNWRy9a0gMO1Pid/nllP9Vg6biqTw3XLwrBavINRo=;
-        b=Fkh2gZT69D42Vozm9kyxGPBUzGIu197ZYeGELkVhpyUTCPh+23qoqk7xkTF0ahwOAZ
-         jcfMITK1MCmmjILs80UGXYT6fF2d6qqMfkLLx8ruZP08146Z1rTIwQJ8yTFEUvo3b58D
-         tXx7Ni3AkpuXC7OOAv43xYILVlXswC7/cDfBI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678196489;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BfVNWRy9a0gMO1Pid/nllP9Vg6biqTw3XLwrBavINRo=;
-        b=J/U3dkaYzsuh3K4x9vNK8y/YVj1aofwEVo1At+pF1qRKiNzkXq3kSIn7J//KM/2FR3
-         wy9FuaXZHyDJv9DV0zLwXuBaDeaAt9ewh6lz0Q+kzYhEsMqOy7bkFK51hu4QCAgcBcYX
-         Ke4LaTZFW5nXrCp1qsK/wnsMTlPcJoBjMFak31HDEFayfYvdSVq3XCIHrBMVG889nf2c
-         j8CTBkUmOqq5nVT+B1zMtvxMo1YEq2Dx7SqZ0WyjFIJr4jRZyOF9PSaizmXENaGfiglt
-         uzed1ZyYcjiAZHOdHXinCoA8xty4ibBfXS47XfuZ4DWUgJwoKPj47GIa+9/jDq20ZmMd
-         IQ+Q==
-X-Gm-Message-State: AO0yUKXSGdVo9YfCzPKwy2Faikap6YE/Bo0X9+t84WCn2m9VdHlzP2AW
-        R2+tCT88neQH8PdChKVjM41Un4o7Fu47g5CNi3OoFw==
-X-Google-Smtp-Source: AK7set9RWntswalOZp7n6m4+l8CAeu4q46lBrQJupqbgtr9kTxlgbnNNvgkboBD1MjO2KqCK/IVL+GT7IThaMzn5eQY=
-X-Received: by 2002:ac2:530d:0:b0:4db:1809:29a1 with SMTP id
- c13-20020ac2530d000000b004db180929a1mr8373690lfh.2.1678196489356; Tue, 07 Mar
- 2023 05:41:29 -0800 (PST)
+        Tue, 7 Mar 2023 08:42:05 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FBF746D4
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:41:35 -0800 (PST)
+Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PWGk72tk3z16Nww;
+        Tue,  7 Mar 2023 21:38:39 +0800 (CST)
+Received: from [10.67.111.186] (10.67.111.186) by
+ dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 7 Mar 2023 21:41:26 +0800
+Message-ID: <d4d849e3-ea4b-1f84-b287-513fb7bff415@huawei.com>
+Date:   Tue, 7 Mar 2023 21:41:25 +0800
 MIME-Version: 1.0
-References: <20230303213851.2090365-1-joel@joelfernandes.org> <ZAc1wsvd4trjP/xi@lothringen>
-In-Reply-To: <ZAc1wsvd4trjP/xi@lothringen>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 7 Mar 2023 08:41:17 -0500
-Message-ID: <CAEXW_YRf9MuJ9YTXGkxJn5BVA2-vt+OD2=b2hN4uLgN3RxWwTw@mail.gmail.com>
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        rcu@vger.kernel.org, urezki@gmail.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.1.1
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <juri.lelli@redhat.com>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <rkagan@amazon.de>
+References: <20230306132418.50389-1-zhangqiao22@huawei.com>
+ <CAKfTPtAYpkQVDBR0mcymVgu7aYY5rN1svW713mGJxbewHGJRqQ@mail.gmail.com>
+ <CAKfTPtAOFthDtQj=EGbTzwG6ZE7GPpp_3Xg9wVr_8epO+fiFjw@mail.gmail.com>
+From:   Zhang Qiao <zhangqiao22@huawei.com>
+In-Reply-To: <CAKfTPtAOFthDtQj=EGbTzwG6ZE7GPpp_3Xg9wVr_8epO+fiFjw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.186]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500018.china.huawei.com (7.185.36.186)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 8:01=E2=80=AFAM Frederic Weisbecker <frederic@kernel=
-.org> wrote:
->
-> On Fri, Mar 03, 2023 at 09:38:51PM +0000, Joel Fernandes (Google) wrote:
-> > On many systems, a great deal of boot (in userspace) happens after the
-> > kernel thinks the boot has completed. It is difficult to determine if
-> > the system has really booted from the kernel side. Some features like
-> > lazy-RCU can risk slowing down boot time if, say, a callback has been
-> > added that the boot synchronously depends on. Further expedited callbac=
-ks
-> > can get unexpedited way earlier than it should be, thus slowing down
-> > boot (as shown in the data below).
-> >
-> > For these reasons, this commit adds a config option
-> > 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter rcupdate.boot_end_dela=
-y.
-> > Userspace can also make RCU's view of the system as booted, by writing =
-the
-> > time in milliseconds to: /sys/module/rcupdate/parameters/rcu_boot_end_d=
-elay
-> > Or even just writing a value of 0 to this sysfs node.
-> > However, under no circumstance will the boot be allowed to end earlier
-> > than just before init is launched.
-> >
-> > The default value of CONFIG_RCU_BOOT_END_DELAY is chosen as 15s. This
-> > suites ChromeOS and also a PREEMPT_RT system below very well, which nee=
-d
-> > no config or parameter changes, and just a simple application of this p=
-atch. A
-> > system designer can also choose a specific value here to keep RCU from =
-marking
-> > boot completion.  As noted earlier, RCU's perspective of the system as =
-booted
-> > will not be marker until at least rcu_boot_end_delay milliseconds have =
-passed
-> > or an update is made via writing a small value (or 0) in milliseconds t=
-o:
-> > /sys/module/rcupdate/parameters/rcu_boot_end_delay.
-> >
-> > One side-effect of this patch is, there is a risk that a real-time work=
-load
-> > launched just after the kernel boots will suffer interruptions due to e=
-xpedited
-> > RCU, which previous ended just before init was launched. However, to mi=
-tigate
-> > such an issue (however unlikely), the user should either tune
-> > CONFIG_RCU_BOOT_END_DELAY to a smaller value than 15 seconds or write a=
- value
-> > of 0 to /sys/module/rcupdate/parameters/rcu_boot_end_delay, once usersp=
-ace
-> > boots, and before launching the real-time workload.
-> >
-> > Qiuxu also noted impressive boot-time improvements with earlier version
-> > of patch. An excerpt from the data he shared:
-> >
-> > 1) Testing environment:
-> >     OS            : CentOS Stream 8 (non-RT OS)
-> >     Kernel     : v6.2
-> >     Machine : Intel Cascade Lake server (2 sockets, each with 44 logica=
-l threads)
-> >     Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=3D2,sockets=3D=
-2, =E2=80=A6
-> >
-> > 2) OS boot time definition:
-> >     The time from the start of the kernel boot to the shell command lin=
-e
-> >     prompt is shown from the console. [ Different people may have
-> >     different OS boot time definitions. ]
-> >
-> > 3) Measurement method (very rough method):
-> >     A timer in the kernel periodically prints the boot time every 100ms=
-.
-> >     As soon as the shell command line prompt is shown from the console,
-> >     we record the boot time printed by the timer, then the printed boot
-> >     time is the OS boot time.
-> >
-> > 4) Measured OS boot time (in seconds)
-> >    a) Measured 10 times w/o this patch:
-> >         8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
-> >         The average OS boot time was: ~8.7s
-> >
-> >    b) Measure 10 times w/ this patch:
-> >         8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
-> >         The average OS boot time was: ~8.3s.
-> >
-> > Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->
-> I still don't really like that:
->
-> 1) It feels like we are curing a symptom for which we don't know the caus=
-e.
->    Which RCU write side caller is the source of this slow boot? Some trac=
-epoints
->    reporting the wait duration within synchronize_rcu() calls between the=
- end of
->    the kernel boot and the end of userspace boot may be helpful.
 
-Just to clarify (and I feel we discussed this recently) -- there is no
-callback I am aware of right now causing a slow boot. The reason for
-doing this is we don't have such issues in the future; so it is a
-protection. Note the repeated call outs to the scsi callback and also
-the rcu_barrier() issue previously fixed. Further, we already see
-slight improvements in boot times with disabling lazy during boot (its
-not much but its there). Yes, we should fix issues instead of hiding
-them - but we also would like to improve the user experience -- just
-like we disable lazy and expedited during suspend.
 
-So what is the problem that you really have with this patch even with
-data showing improvements? I actually wanted a mechanism like this
-from the beginning and was trying to get Intel to write the patch, but
-I ended up writing it.
+在 2023/3/7 18:26, Vincent Guittot 写道:
+> On Mon, 6 Mar 2023 at 14:53, Vincent Guittot <vincent.guittot@linaro.org> wrote:
+>>
+>> On Mon, 6 Mar 2023 at 13:57, Zhang Qiao <zhangqiao22@huawei.com> wrote:
+>>>
+>>> Commit 829c1651e9c4 ("sched/fair: sanitize vruntime of
+>>> entity being placed") fix an overflowing bug, but ignore
+>>> a case that se->exec_start is reset after a migration.
+>>>
+>>> For fixing this case, we reset the vruntime of a long
+>>> sleeping task in migrate_task_rq_fair().
+>>>
+>>> Fixes: 829c1651e9c4 ("sched/fair: sanitize vruntime of entity being placed")
+>>> Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
+>>> Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
+>>
+>> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+>>
+>>> ---
+>>>
+>>> v1 -> v2:
+>>> - fix some typos and update comments
+>>> - reformat the patch
+>>>
+>>> ---
+>>>  kernel/sched/fair.c | 76 ++++++++++++++++++++++++++++++++-------------
+>>>  1 file changed, 55 insertions(+), 21 deletions(-)
+>>>
+>>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>>> index 7a1b1f855b96..74c9918ffe76 100644
+>>> --- a/kernel/sched/fair.c
+>>> +++ b/kernel/sched/fair.c
+>>> @@ -4648,11 +4648,45 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>>>  #endif
+>>>  }
+>>>
+>>> +static inline bool entity_is_long_sleep(struct sched_entity *se)
+>>> +{
+>>> +       struct cfs_rq *cfs_rq;
+>>> +       u64 sleep_time;
+>>> +
+>>> +       if (se->exec_start == 0)
+>>> +               return false;
+>>> +
+>>> +       cfs_rq = cfs_rq_of(se);
+>>> +       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+>>> +       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+>>> +               return true;
+>>> +
+>>> +       return false;
+>>> +}
+>>> +
+>>> +static inline u64 sched_sleeper_credit(struct sched_entity *se)
+>>> +{
+>>> +       unsigned long thresh;
+>>> +
+>>> +       if (se_is_idle(se))
+>>> +               thresh = sysctl_sched_min_granularity;
+>>> +       else
+>>> +               thresh = sysctl_sched_latency;
+>>> +
+>>> +       /*
+>>> +        * Halve their sleep time's effect, to allow
+>>> +        * for a gentler effect of sleepers:
+>>> +        */
+>>> +       if (sched_feat(GENTLE_FAIR_SLEEPERS))
+>>> +               thresh >>= 1;
+>>> +
+>>> +       return thresh;
+>>> +}
+>>> +
+>>>  static void
+>>>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>>>  {
+>>>         u64 vruntime = cfs_rq->min_vruntime;
+>>> -       u64 sleep_time;
+>>>
+>>>         /*
+>>>          * The 'current' period is already promised to the current tasks,
+>>> @@ -4664,23 +4698,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>>>                 vruntime += sched_vslice(cfs_rq, se);
+>>>
+>>>         /* sleeps up to a single latency don't count. */
+>>> -       if (!initial) {
+>>> -               unsigned long thresh;
+>>> -
+>>> -               if (se_is_idle(se))
+>>> -                       thresh = sysctl_sched_min_granularity;
+>>> -               else
+>>> -                       thresh = sysctl_sched_latency;
+>>> -
+>>> -               /*
+>>> -                * Halve their sleep time's effect, to allow
+>>> -                * for a gentler effect of sleepers:
+>>> -                */
+>>> -               if (sched_feat(GENTLE_FAIR_SLEEPERS))
+>>> -                       thresh >>= 1;
+>>> -
+>>> -               vruntime -= thresh;
+>>> -       }
+>>> +       if (!initial)
+>>> +               vruntime -= sched_sleeper_credit(se);
+>>>
+>>>         /*
+>>>          * Pull vruntime of the entity being placed to the base level of
+>>> @@ -4689,8 +4708,7 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+>>>          * the base as it may be too far off and the comparison may get
+>>>          * inversed due to s64 overflow.
+>>>          */
+>>> -       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+>>> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+>>> +       if (entity_is_long_sleep(se))
+>>>                 se->vruntime = vruntime;
+>>>         else
+>>>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
+>>> @@ -7635,7 +7653,23 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+>>>         if (READ_ONCE(p->__state) == TASK_WAKING) {
+>>>                 struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>>>
+>>> -               se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+>>> +               /*
+>>> +                * We determine whether a task sleeps for long by checking
+>>> +                * se->exec_start, and if it is, we sanitize its vruntime at
+>>> +                * place_entity(). However, after a migration, this detection
+>>> +                * method fails due to se->exec_start being reset.
+>>> +                *
+>>> +                * For fixing this case, we add the same check here. For a task
+>>> +                * which has slept for a long time, its vruntime should be reset
+>>> +                * to cfs_rq->min_vruntime with a sleep credit. Because waking
+>>> +                * task's vruntime will be added to cfs_rq->min_vruntime when
+>>> +                * enqueue, we only need to reset the se->vruntime of waking task
+>>> +                * to a credit here.
+>>> +                */
+>>> +               if (entity_is_long_sleep(se))
+> 
+> I completely overlooked that we can't use rq_clock_task here. Need to
+> think a bit more on this
 
-> 2) The kernel boot was already covered before this patch so this is about
->    userspace code calling into the kernel. Is that piece of code also cal=
-led
->    after the boot? In that case are we missing a conversion from
->    synchronize_rcu() to synchronize_rcu_expedited() somewhere? Because th=
-en
->    the problem is more general than just boot.
->
-> This needs to be analyzed first and if it happens that the issue really
-> needs to be fixed with telling the kernel that userspace has completed
-> booting, eg: because the problem is not in a few callsites that need conv=
-ersion
-> to expedited but instead in the accumulation of lots of calls that should=
- stay
-> as is:
+Hi,Vincent,
 
-There is no such callback I am aware off that needs such a conversion
-and I don't think that will help give any guarantees because there is
-no preventing someone from adding a callback that synchronously slows
-boot. The approach here is to put a protection. However, I will do
-some more investigations into what else may be slowing things as I do
-hold a lot of weight for your words! :)
+How about using exec_start of the parent sched_entity instant of rq_clock_task()?
 
->
-> 3) This arbitrary timeout looks dangerous to me as latency sensitive code
->    may run right after the boot. Either you choose a value that is too lo=
-w
->    and you miss the optimization or the value is too high and you may bre=
-ak
->    things.
+If during the waking sched_entity sleep, there are sibling sched_entity running,
+than `pse->exec_start` was up to date.
+If the cfs_rq was idle, we don't have a problem of possible overflow.
 
-So someone is presenting a timing sensitive workload within 15 seconds
-of boot? Please provide some evidence of that. The only evidence right
-now is on the plus side even for the RT system.
+static inline bool vruntime_need_sanitized(struct sched_entity *se)
+{
+	struct sched_entity *pse = parent_entity(se);
+	u64 diff ;
 
-> 4) This should be fixed the way you did:
->    a) a kernel parameter like you did
->    b) The init process (systemd?) tells the kernel when it judges that us=
-erspace
->       has completed booting.
->    c) Make these interfaces more generic, maybe that information will be =
-useful
->       outside RCU. For example the kernel parameter should be
->       "user_booted_reported" and the sysfs (should be sysctl?):
->       kernel.user_booted =3D 1
->    d) But yuck, this means we must know if the init process supports that=
-...
->
-> For these reasons, let's make sure we know exactly what is going on first=
-.
+	if (se->exec_start == 0 || !pse)
+		return false;
 
-I can investigate this more and get back to you.
+	diff = pse->exec_start - se->exec_start;
+	if ((s64)diff > 60LL * NSEC_PER_SEC)
+		return true;
 
-One of the challenges is getting boot tracing working properly.
-Systems do weird things like turning off tracing during boot and/or
-clearing trace buffers.
+	return false;
+}
 
- - Joel
+Thanks.
+ZhangQiao.
+
+> 
+>>> +                       se->vruntime = -sched_sleeper_credit(se);
+>>> +               else
+>>> +                       se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+>>>         }
+>>>
+>>>         if (!task_on_rq_migrating(p)) {
+>>> --
+>>> 2.17.1
+>>>
+> .
+> 
