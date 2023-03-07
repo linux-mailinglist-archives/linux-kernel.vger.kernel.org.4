@@ -2,123 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795426AF8FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5086AF904
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjCGWig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:38:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        id S231676AbjCGWkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjCGWiQ (ORCPT
+        with ESMTP id S231983AbjCGWkP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:38:16 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CD3AF69F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:37:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678228652; x=1709764652;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=rZ3c8+SfbUn5SnrzPXv/QMzk7aoCjx/eMAVVxoN89bM=;
-  b=GmXb2GZLWNcPBhauV8MLNA4mxKCkwtaZu0m0KuaYEDHNubu77+G88VYf
-   wDlmVDuRjM1EArmxGKMovxWa9DjQwYiPiufKB2W8B9uualYEfEuDc5qWp
-   bF16iSInOvvFFVuQc18CrT4pFcoD+c9b0fEUAEOd9cNWBx+180aH8Q1q+
-   KMNieV2JbOnUCDva1BJc63b/bncBncPf6L8Mec75be37w3DJdsyRkQLoM
-   geqs9+IKspt7ZZ7LFzv9IWWOSm17xhGFnDy/lwNO/fd6Hc/ukdCi7hPZ/
-   Q+hJ58Dibes26g/BXGaPLLArFXwEyERriULvrUrjxvDQf7xMXhnq8sl6P
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="338314784"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="338314784"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 14:36:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="1006057151"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="1006057151"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 07 Mar 2023 14:36:25 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZfuy-0001f3-2o;
-        Tue, 07 Mar 2023 22:36:24 +0000
-Date:   Wed, 8 Mar 2023 06:35:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: drivers/cpufreq/davinci-cpufreq.c:151:12: warning: no previous
- prototype for function 'davinci_cpufreq_init'
-Message-ID: <202303080649.fobTolG2-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 7 Mar 2023 17:40:15 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE37A2192
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:39:41 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536a5a0b6e3so152190577b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:39:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678228780;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=d5sV/9QBhMVgVGTAWq7/DnOA4YA0+xQYxnQrYod4TUo=;
+        b=hhrXN3bOat3CTLco/yNvAbB70x8BJlerST3ZLVjOJzB7utq6BOLTd7rIV7HndRvIFK
+         GIGvF1jH9qZWEqLuYbNVOERQUuL0SbhQOLbQA2TgYZnzzt5ttwCFjX9yZXyXAcJMb3ob
+         WM/E3UgrXVANjxIgyI19FkuQeGNLwU4c0ESoHihWk2Cbu6ylYm0PAPEEUfrYGdY4MhHc
+         cvdzR1Y2pucigncVY2XBxKvNVgwtcAruaoPTul2p7zy95FH44VOKVfffeK5Z4g/0f4Dj
+         tyW0dLqKDFb/KzndpXfbmAdfnfjWzd6MPGcG+rvPk87FQGOX2XDKhLUiLdwfd4dpQbbc
+         wO0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678228780;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d5sV/9QBhMVgVGTAWq7/DnOA4YA0+xQYxnQrYod4TUo=;
+        b=mvAZGqdCMidoUAHh2fxdvv+O09ym61XO/yAias2Thazr3fpPoK1QDRBi4yzx/a5x9m
+         +P4hkj9V1srdw9VncjZqXRiBT1BHvJekjtcxXa7JvlIKickC4qlWtCAhOcyVbtQflY4K
+         D3KPrMj7w36FwRN30yyNgftS+HOOQKTjEjdjz9iAJ8SvB0wmeTXuDydv/KzN6jZ/ntGm
+         l7hnPXVp/ATVKCG2UBTTPWujlqYE8vKy1iSYVkCnGcI/ts1nfN9s44A4nG7NZHXNc3os
+         /wpplvffSXgsEbpAkTDHGrdrKVd1ha64WtPSbsWYRf9GRSAOpVsz/nqBjrW/ywImBvKC
+         y+hQ==
+X-Gm-Message-State: AO0yUKUzQxixImcTuWs+GbYzkN9mKHP7vt9HhPBn/NsfBmgEXH2DYIm7
+        C0utjyFpTro+PmEzzqMbJt3TM7HHcA==
+X-Google-Smtp-Source: AK7set8pGkC2UiAO2v5rfMCf88X6exkHaZm9sKuSofYPS3FONpBilcB29gYsZHLSAgiF/8ooPtlfqeaXGA==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a5b:bc6:0:b0:a0d:8150:be04 with SMTP id
+ c6-20020a5b0bc6000000b00a0d8150be04mr7829283ybr.13.1678228780098; Tue, 07 Mar
+ 2023 14:39:40 -0800 (PST)
+Date:   Tue,  7 Mar 2023 22:39:35 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230307223937.2892762-1-rmoar@google.com>
+Subject: [PATCH v3 1/3] kunit: fix bug in debugfs logs of parameterized tests
+From:   Rae Moar <rmoar@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com, dlatypov@google.com
+Cc:     skhan@linuxfoundation.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Fix bug in debugfs logs that causes individual parameterized results to not
+appear because the log is reinitialized (cleared) when each parameter is
+run.
 
-First bad commit (maybe != root cause):
+Ensure these results appear in the debugfs logs, increase log size to
+allow for the size of parameterized results. As a result, append lines to
+the log directly rather than using an intermediate variable that can cause
+stack size warnings due to the increased log size.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8ca09d5fa3549d142c2080a72a4c70ce389163cd
-commit: 250c1a694ff304e5d69e74ab32755eddcc2b8f65 ARM: pxa: convert to multiplatform
-date:   10 months ago
-config: arm-randconfig-r046-20230307 (https://download.01.org/0day-ci/archive/20230308/202303080649.fobTolG2-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 250c1a694ff304e5d69e74ab32755eddcc2b8f65
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/clk/ drivers/cpufreq/
+Here is the debugfs log of ext4_inode_test which uses parameterized tests
+before the fix:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303080649.fobTolG2-lkp@intel.com/
+     KTAP version 1
 
-All warnings (new ones prefixed by >>):
+     # Subtest: ext4_inode_test
+     1..1
+ # Totals: pass:16 fail:0 skip:0 total:16
+ ok 1 ext4_inode_test
 
->> drivers/cpufreq/davinci-cpufreq.c:151:12: warning: no previous prototype for function 'davinci_cpufreq_init' [-Wmissing-prototypes]
-   int __init davinci_cpufreq_init(void)
-              ^
-   drivers/cpufreq/davinci-cpufreq.c:151:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int __init davinci_cpufreq_init(void)
-   ^
-   static 
-   1 warning generated.
+As you can see, this log does not include any of the individual
+parametrized results.
 
+After (in combination with the next two fixes to remove extra empty line
+and ensure KTAP valid format):
 
-vim +/davinci_cpufreq_init +151 drivers/cpufreq/davinci-cpufreq.c
+ KTAP version 1
+ 1..1
+     KTAP version 1
+     # Subtest: ext4_inode_test
+     1..1
+        KTAP version 1
+         # Subtest: inode_test_xtimestamp_decoding
+         ok 1 1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits
+         ... (the rest of the individual parameterized tests)
+         ok 16 2446-05-10 Upper bound of 32bit >=0 timestamp. All extra
+     # inode_test_xtimestamp_decoding: pass:16 fail:0 skip:0 total:16
+     ok 1 inode_test_xtimestamp_decoding
+ # Totals: pass:16 fail:0 skip:0 total:16
+ ok 1 ext4_inode_test
 
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  150  
-3aa3e8407ae9023 arch/arm/mach-davinci/cpufreq.c Shawn Guo   2012-04-26 @151  int __init davinci_cpufreq_init(void)
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  152  {
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  153  	return platform_driver_probe(&davinci_cpufreq_driver,
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  154  							davinci_cpufreq_probe);
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  155  }
-6601b8030de3e9c arch/arm/mach-davinci/cpufreq.c Sekhar Nori 2009-09-22  156  
+Signed-off-by: Rae Moar <rmoar@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
+---
 
-:::::: The code at line 151 was first introduced by commit
-:::::: 3aa3e8407ae9023c5ff59bf5c81fc2553c31eb70 ARM: davinci: use machine specific hook for late init
+Changes from v2 -> v3:
+- Fix a off-by-one bug in the kunit_log_append method.
 
-:::::: TO: Shawn Guo <shawn.guo@linaro.org>
-:::::: CC: Shawn Guo <shawn.guo@linaro.org>
+Changes from v1 -> v2:
+- Remove the use of the line variable in kunit_log_append that was causing
+  stack size warnings.
+- Add before and after to the commit message.
 
+ include/kunit/test.h |  2 +-
+ lib/kunit/test.c     | 18 ++++++++++++------
+ 2 files changed, 13 insertions(+), 7 deletions(-)
+
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index 08d3559dd703..0668d29f3453 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+-#define KUNIT_LOG_SIZE	512
++#define KUNIT_LOG_SIZE 1500
+ 
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c9e15bb60058..c4d6304edd61 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -114,22 +114,27 @@ static void kunit_print_test_stats(struct kunit *test,
+  */
+ void kunit_log_append(char *log, const char *fmt, ...)
+ {
+-	char line[KUNIT_LOG_SIZE];
+ 	va_list args;
+-	int len_left;
++	int len, log_len, len_left;
+ 
+ 	if (!log)
+ 		return;
+ 
+-	len_left = KUNIT_LOG_SIZE - strlen(log) - 1;
++	log_len = strlen(log);
++	len_left = KUNIT_LOG_SIZE - log_len - 1;
+ 	if (len_left <= 0)
+ 		return;
+ 
++	/* Evaluate length of line to add to log */
+ 	va_start(args, fmt);
+-	vsnprintf(line, sizeof(line), fmt, args);
++	len = vsnprintf(NULL, 0, fmt, args) + 1;
++	va_end(args);
++
++	/* Print formatted line to the log */
++	va_start(args, fmt);
++	vsnprintf(log + log_len, min(len, len_left), fmt, args);
+ 	va_end(args);
+ 
+-	strncat(log, line, len_left);
+ }
+ EXPORT_SYMBOL_GPL(kunit_log_append);
+ 
+@@ -437,7 +442,6 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
+ 	struct kunit_try_catch_context context;
+ 	struct kunit_try_catch *try_catch;
+ 
+-	kunit_init_test(test, test_case->name, test_case->log);
+ 	try_catch = &test->try_catch;
+ 
+ 	kunit_try_catch_init(try_catch,
+@@ -533,6 +537,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 		struct kunit_result_stats param_stats = { 0 };
+ 		test_case->status = KUNIT_SKIPPED;
+ 
++		kunit_init_test(&test, test_case->name, test_case->log);
++
+ 		if (!test_case->generate_params) {
+ 			/* Non-parameterised test. */
+ 			kunit_run_case_catch_errors(suite, test_case, &test);
+
+base-commit: 60684c2bd35064043360e6f716d1b7c20e967b7d
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.0.rc0.216.gc4246ad0f0-goog
+
