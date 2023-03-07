@@ -2,151 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A50D6AD452
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C73276AD456
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjCGB4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 20:56:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55842 "EHLO
+        id S229910AbjCGB6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 20:58:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCGB4j (ORCPT
+        with ESMTP id S229933AbjCGB6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:56:39 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D04B4392E;
-        Mon,  6 Mar 2023 17:56:38 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id cp7-20020a17090afb8700b0023756229427so15111908pjb.1;
-        Mon, 06 Mar 2023 17:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678154198;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nzo/UKrDg68SSlPoKhUPm6gAiurUzxTEKzLrV5f+/WI=;
-        b=KyRVWbYNUG479AwJ9Yeb60Hbl5tQ4IwkvYqmongkJx9o83QWlzimUq27qLojsX9wgC
-         w3JO55BhwYDocYgGlgIUjthKbhJ8hptnTv/S3T7Oo/vHctmwO9+K3ZmlGIpQUrJoUOl6
-         SNvYeFyaEttzMGEbfWa3RX/LVZ4qPqThnXfx/7L6oNeUXHeu/X46KX/xVj5xFjO0aXiQ
-         s5dufWgrF5Z7FZsg+ZqOBvtQQw6sknYFzAeBtM2ZiEePNNegdkH1QL6ebfmuKzgLv1eQ
-         Haa4O6sLBhELTBvhlnKvNCSLh3VspGcE316vrx2826PZ8enq0t7C8Ja7b3CUxYFG7mOE
-         rTSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678154198;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nzo/UKrDg68SSlPoKhUPm6gAiurUzxTEKzLrV5f+/WI=;
-        b=vwXOsHr96yRuWgsDzd4ApmAb6w5vqA50iH2namrxBSGRgmrV4xBpZD+OYMN7iEKcWT
-         16p8pWjW09vkYWET7QOoP97JRLOqlbUr0NKD2xCd5eohzDrnTD807vEltDJDF3qVMrku
-         JIYzRZHxGa7CBQtB/zUCgRG1wY4kX6mJMFZBugoq28ILai64yslBxnc9IMUCS+XvaCYu
-         9+1q+n4/Y0ETKTSMhJmgu4XA3DaMSboecEOQpUxCyRXNjeVI1QheEYG5my7ZqVURa0uS
-         BIUri/CVqrO50HqBnAJ+hATm9rqxyuLYEPa+suT2NduQn5lSwg3qC3GHFLDnqXAiCm1i
-         XtTg==
-X-Gm-Message-State: AO0yUKUKW4walyJbRRJFfDzoMFRzZBLIoXM7W/ChpArw0K3fMi+5te0n
-        NzKMsqejOTnEBFgmm12Oiu0=
-X-Google-Smtp-Source: AK7set9o4+61KviBTKqqtQOIP6plj3L7fBGPXGNOQrTDrgRMVIcRXHEzLp6ip403Ej0sbR/l6mip6A==
-X-Received: by 2002:a17:90b:3812:b0:23a:4875:6e1a with SMTP id mq18-20020a17090b381200b0023a48756e1amr14105428pjb.25.1678154197717;
-        Mon, 06 Mar 2023 17:56:37 -0800 (PST)
-Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
-        by smtp.gmail.com with ESMTPSA id c4-20020a170902d90400b0019a593e45f1sm7240315plz.261.2023.03.06.17.56.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 17:56:37 -0800 (PST)
-From:   Jason Xing <kerneljasonxing@gmail.com>
-To:     simon.horman@corigine.com, willemdebruijn.kernel@gmail.com,
-        davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kerneljasonxing@gmail.com,
-        Jason Xing <kernelxing@tencent.com>
-Subject: [PATCH v3 net-next] udp: introduce __sk_mem_schedule() usage
-Date:   Tue,  7 Mar 2023 09:56:20 +0800
-Message-Id: <20230307015620.18301-1-kerneljasonxing@gmail.com>
-X-Mailer: git-send-email 2.33.0
+        Mon, 6 Mar 2023 20:58:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A41332511;
+        Mon,  6 Mar 2023 17:58:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA496B81289;
+        Tue,  7 Mar 2023 01:58:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B80C433A4;
+        Tue,  7 Mar 2023 01:58:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678154304;
+        bh=N3kCIZXvpJcz2QZXiYH4iMRNR11TLpTrveVjRHahOdA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pZh9nkChLMk7fCj090g6RML1nINIOyeCeFVbFRi39ZyOJyurOHNr+nMoA6NPkQ+u9
+         xcViPquuQsAwIgwhgqicEO+ZFUP7SADrSuPyov19IWIelVhhHpLIfsq/f31VQIuIsc
+         IUuv7myeh8S3b7eJuO1q7AIsEuiPl3B+iyMOXSPW2BSRDYH4x7e4SNtoZHdKKGrkrm
+         EO74Q3nE8GO17amHrvev6xML5AsCpjlUDPY51cTR29CloAwAMgV2oSKy9vcrpJiiC2
+         9VLyxRPlX5mD4GmolAeSqSLDHht+3zb0QOtNB03L5vQJnyBBeV19JzkgFJSg2ZhvNQ
+         liTB2vHwvpTyQ==
+Received: by mail-oi1-f175.google.com with SMTP id e21so8614378oie.1;
+        Mon, 06 Mar 2023 17:58:24 -0800 (PST)
+X-Gm-Message-State: AO0yUKUKg/tCpqdJc0WEsDN5WThtOAi9bYdLerXq4hVvBUObBdXYCyoy
+        dBsqS8Lc417V4m+MMEIY2B9ZnK9NdbNpoY1Uwo0=
+X-Google-Smtp-Source: AK7set9AqGnHWX4MzrCtiCcINd/s2K9vqNNfSac4GgnBF80ofq1oVksKZExfx2gs0oZ9WLEauJoLa0icmOJyST5i84U=
+X-Received: by 2002:aca:f17:0:b0:37f:83ba:ee74 with SMTP id
+ 23-20020aca0f17000000b0037f83baee74mr7637997oip.1.1678154303623; Mon, 06 Mar
+ 2023 17:58:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230306101451.375844-1-arnd@kernel.org> <20230306101451.375844-2-arnd@kernel.org>
+In-Reply-To: <20230306101451.375844-2-arnd@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 7 Mar 2023 10:57:47 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT=_wXhrbnW38bHZKpOqLwO-7hhrCWtTxQSi0WJL=CSBA@mail.gmail.com>
+Message-ID: <CAK7LNAT=_wXhrbnW38bHZKpOqLwO-7hhrCWtTxQSi0WJL=CSBA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kallsyms: expand symbol name into comment for debugging
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason Xing <kernelxing@tencent.com>
+On Mon, Mar 6, 2023 at 7:15=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
+e:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The assembler output of kallsyms.c is not meant for people to understand,
+> and is generally not helpful when debugging "Inconsistent kallsyms data"
+> warnings. I have previously struggled with these, but found it helpful
+> to list which symbols changed between the first and second pass in the
+> .tmp_vmlinux.kallsyms*.S files.
+>
+> As this file is preprocessed, it's possible to add a C-style multiline
+> comment with the full type/name tuple.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> No idea if there is already a better way to debug this kind of problem,
+> or if this causes a notable slowdown.
+> ---
+>  scripts/kallsyms.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index a239a87e7bec..ea1e3d3aaa6b 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -525,7 +525,8 @@ static void write_src(void)
+>                                         table[i]->addr);
+>                                 exit(EXIT_FAILURE);
+>                         }
+> -                       printf("\t.long\t%#x\n", (int)offset);
+> +                       expand_symbol(table[i]->sym, table[i]->len, buf);
+> +                       printf("\t.long\t%#x    /* %s */\n", (int)offset,=
+ buf);
 
-Keep the accounting schema consistent across different protocols
-with __sk_mem_schedule(). Besides, it adjusts a little bit on how
-to calculate forward allocated memory compared to before. After
-applied this patch, we could avoid receive path scheduling extra
-amount of memory.
 
-Link: https://lore.kernel.org/lkml/20230221110344.82818-1-kerneljasonxing@gmail.com/
-Signed-off-by: Jason Xing <kernelxing@tencent.com>
----
-v3:
-1) get rid of inline suggested by Simon Horman
 
-v2:
-1) change the title and body message
-2) use __sk_mem_schedule() instead suggested by Paolo Abeni
----
- net/ipv4/udp.c | 31 ++++++++++++++++++-------------
- 1 file changed, 18 insertions(+), 13 deletions(-)
 
-diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-index c605d171eb2d..60473781933c 100644
---- a/net/ipv4/udp.c
-+++ b/net/ipv4/udp.c
-@@ -1531,10 +1531,23 @@ static void busylock_release(spinlock_t *busy)
- 		spin_unlock(busy);
- }
- 
-+static int udp_rmem_schedule(struct sock *sk, int size)
-+{
-+	int delta;
-+
-+	delta = size - sk->sk_forward_alloc;
-+	if (delta > 0 && !__sk_mem_schedule(sk, delta, SK_MEM_RECV))
-+		return -ENOBUFS;
-+
-+	sk->sk_forward_alloc -= size;
-+
-+	return 0;
-+}
-+
- int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
- {
- 	struct sk_buff_head *list = &sk->sk_receive_queue;
--	int rmem, delta, amt, err = -ENOMEM;
-+	int rmem, err = -ENOMEM;
- 	spinlock_t *busy = NULL;
- 	int size;
- 
-@@ -1567,20 +1580,12 @@ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
- 		goto uncharge_drop;
- 
- 	spin_lock(&list->lock);
--	if (size >= sk->sk_forward_alloc) {
--		amt = sk_mem_pages(size);
--		delta = amt << PAGE_SHIFT;
--		if (!__sk_mem_raise_allocated(sk, delta, amt, SK_MEM_RECV)) {
--			err = -ENOBUFS;
--			spin_unlock(&list->lock);
--			goto uncharge_drop;
--		}
--
--		sk->sk_forward_alloc += delta;
-+	err = udp_rmem_schedule(sk, size);
-+	if (err) {
-+		spin_unlock(&list->lock);
-+		goto uncharge_drop;
- 	}
- 
--	sk->sk_forward_alloc -= size;
--
- 	/* no need to setup a destructor, we will explicitly release the
- 	 * forward allocated memory on dequeue
- 	 */
--- 
-2.37.3
+This is printed only for base_relative,
+but ia64 will go away sooner or later,
+so this seems good to me.
 
+Applied to linux-kbuild. Thanks.
+
+
+
+
+
+
+
+
+
+
+
+>                 } else if (!symbol_absolute(table[i])) {
+>                         output_address(table[i]->addr);
+>                 } else {
+> --
+> 2.39.2
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
