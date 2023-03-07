@@ -2,111 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9038C6ADF24
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:51:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C6A6ADF2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:52:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCGMvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
+        id S229733AbjCGMwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:52:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCGMvq (ORCPT
+        with ESMTP id S229806AbjCGMwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:51:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB027E785;
-        Tue,  7 Mar 2023 04:51:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 7 Mar 2023 07:52:25 -0500
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2F17EA29
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:52:07 -0800 (PST)
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5DEF6134E;
-        Tue,  7 Mar 2023 12:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91FA6C433D2;
-        Tue,  7 Mar 2023 12:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678193504;
-        bh=u6uEwsBCL6nGQbSlMqbnHQ+iJaISGHA0T5I3s7tvcwE=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=g3lXajyBdXJOqhAyX7z7yVHNS+GdnsiTEzuB9X9yKvEUQfwUeaO64ryFfrTKnYEIp
-         OmcBnyxy3Gx9D232f8Mt9FI7sscOP/mV6wMpDUMpVTJsKcz6dHXTXQ+ceAFB5VEXaG
-         Bsodoo9BQhKGMZuxdjIzxbKKvrdHZPn5NNdR3ezf0GhJdMJ0wKYQbs97GlJ6c6wWN+
-         3bQ4YkezFu+xYEb5a90ta74ESZBbykW92OGTczOGpcnfIZ9kELKGxPiiCinV4HPI8V
-         Lmj9+/cDMqocfuxZ6ZKEdy0iJ+8gbloNioNnMwsC/xlLHUzbUdZ/GuENfPWDF7pcyI
-         dGRVLnZ75IdnA==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 07 Mar 2023 12:51:28 +0000
-Subject: [PATCH v2 2/2] pinctrl: at91: Remove pioc_index from struct
- at91_gpio_chip
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 5C5CB3F828
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:52:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678193526;
+        bh=nmWr6ekGjQZxJ+Q7zdHZXafHGNlXxBrbViGkz8bn1+c=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=HW4d0JXq8/NOQpK+uYGqtLow9FuTQ0hec+KBDX0jbd3ron+mwaz/ZZ/kt1UEqF5+L
+         BvwY+XN/SH3QEBLn4rvul478UcfBrM6S27xWZHk81tvGUqVEMU7rLpy9LfaoXXnlzO
+         KzcAVjGv3mwRx2l11+ogLbjQReZN9GnYBHHAaFgxImTO1fseHRAqYg0zHPnmMrUIUc
+         PutfpxWF/RtYVZcm0zuq+R/mwRrkhJAbiyWdB3EBcsfouvHd/6CWk9QXlyjuBA2UwK
+         4tuxjD10LsKQTVoyIwkySdOV/l3vvQVggsW9nW6br6HO9c+3xkaOFq7dWSnlaEpwyd
+         8kPpErUXrWQ5g==
+Received: by mail-qv1-f69.google.com with SMTP id u18-20020a0cec92000000b0056ea549d728so7391576qvo.10
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:52:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678193525;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nmWr6ekGjQZxJ+Q7zdHZXafHGNlXxBrbViGkz8bn1+c=;
+        b=JqXUqqYMzXzJBoeVbWLEVFchGpdQHpJtnO4OmYlhboUtnjSYhMIHYeUKksTrkhycK4
+         H1IM5J2GITW+2CJY3MZAAq/hchoJkIYEwuU6BpxJxjIulyvrn/pNZ/J59MM0gcstw3nB
+         Q2tVL5wtV1XIPISL0YtdaTvLTxGC2UHDSJd39VeauAKV4rWtkzFWAVgJWnfUekZQA1Ns
+         Z6Aca537qZfBvk/gld/QXE3t4KS85Rkl4QXZKvaYpMT74M0V8nJWLlCqA4Zco60d/iqe
+         en6/gk0i78PGa0w/Av31BOe3OO93nes5m+0FlP0WDoRutAYQ2BIN/QVWhIiUL3C/30S4
+         SlKw==
+X-Gm-Message-State: AO0yUKW7My49JDIgvcPC2HzH9SrJzwZH1Fp4Cee6A32gbhXWlBk7BOVc
+        8QUMzmLv2XMu3pCIzWR00fZaN4E4liLIjs8nogtkMqXZ07iul7qI8OUpaywOO7E22Am+IY0eF7K
+        0CZAWPiFHMwnJcGaUIcf0cfL6cFnpYw96Q48IpuUwoMTIodFeY1+1Vz4uSA==
+X-Received: by 2002:ad4:4e28:0:b0:56e:b446:34f1 with SMTP id dm8-20020ad44e28000000b0056eb44634f1mr4079235qvb.5.1678193525415;
+        Tue, 07 Mar 2023 04:52:05 -0800 (PST)
+X-Google-Smtp-Source: AK7set8EvyNc/L3E70dvuWathZFkQOqKVEkT1IIx0wT1ixr8AJw2s+ppYU5aOJDsokfzAi4ghyW4HUFDQpSET1IIO54=
+X-Received: by 2002:ad4:4e28:0:b0:56e:b446:34f1 with SMTP id
+ dm8-20020ad44e28000000b0056eb44634f1mr4079223qvb.5.1678193525129; Tue, 07 Mar
+ 2023 04:52:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230216-gpio-at91-immutable-v2-2-326ef362dbc7@kernel.org>
-References: <20230216-gpio-at91-immutable-v2-0-326ef362dbc7@kernel.org>
-In-Reply-To: <20230216-gpio-at91-immutable-v2-0-326ef362dbc7@kernel.org>
-To:     Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-bd1bf
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1320; i=broonie@kernel.org;
- h=from:subject:message-id; bh=u6uEwsBCL6nGQbSlMqbnHQ+iJaISGHA0T5I3s7tvcwE=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBzNZSviMNzbuOXjTW1WneZjdKuzkbhnyyUx0YLGo
- 1R8WoSuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAczWQAKCRAk1otyXVSH0IE8B/
- 9ru71XlErQlFhf6ZFw2hStyrDioUse0B2y+vjnA3FN64GrhigEY1KJmmEceQAeL3xY66aw90RE4YuY
- d9GC3LzGIms4LvvDIqLJNtCM/BnUeC0KyYnm+S0Qc/L0tvLKOdyTu1goYmMSJKJ3LQWb6EMGNXASAa
- 2jRjzcPY4hLtSTzoF/sUA1XyQO3+snbO+y++u0AYjgcZAUhsYMtHTnxsCF1nJcdqzPQciHEgZdalae
- JATQSNDzsA6nxlRuYm0S/LeN97Ry0Hgtfd/EMNufZ3QLFtIlIivxnksNvi+wpjezXyGH9ALhfXJT2d
- Ki5xAm5Gj6G4XMyjEzKxD/3p28bG+N
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20230307024646.10216-1-william.qiu@starfivetech.com> <20230307024646.10216-3-william.qiu@starfivetech.com>
+In-Reply-To: <20230307024646.10216-3-william.qiu@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Tue, 7 Mar 2023 13:51:49 +0100
+Message-ID: <CAJM55Z_mzzAW52RMC6cfgiKNLicF9ip74csbsrbikE3tN+taaw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] mmc: starfive: Add initialization of prev_err
+To:     William Qiu <william.qiu@starfivetech.com>
+Cc:     devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pioc_idx member of struct at91_gpio_chip is write only, just remove it.
+On Tue, 7 Mar 2023 at 03:49, William Qiu <william.qiu@starfivetech.com> wrote:
+> Add a incremental updates to fix a bug that prev_err is uninitialized.
+>
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
 
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/pinctrl/pinctrl-at91.c | 3 ---
- 1 file changed, 3 deletions(-)
+Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
 
-diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
-index 1e083fc7666b..871209c24153 100644
---- a/drivers/pinctrl/pinctrl-at91.c
-+++ b/drivers/pinctrl/pinctrl-at91.c
-@@ -42,7 +42,6 @@ struct at91_pinctrl_mux_ops;
-  * @next: bank sharing same clock
-  * @pioc_hwirq: PIO bank interrupt identifier on AIC
-  * @pioc_virq: PIO bank Linux virtual interrupt
-- * @pioc_idx: PIO bank index
-  * @regbase: PIO bank virtual address
-  * @clock: associated clock
-  * @ops: at91 pinctrl mux ops
-@@ -56,7 +55,6 @@ struct at91_gpio_chip {
- 	struct at91_gpio_chip	*next;
- 	int			pioc_hwirq;
- 	int			pioc_virq;
--	int			pioc_idx;
- 	void __iomem		*regbase;
- 	struct clk		*clock;
- 	const struct at91_pinctrl_mux_ops *ops;
-@@ -1849,7 +1847,6 @@ static int at91_gpio_probe(struct platform_device *pdev)
- 
- 	at91_chip->ops = of_device_get_match_data(dev);
- 	at91_chip->pioc_virq = irq;
--	at91_chip->pioc_idx = alias_idx;
- 
- 	at91_chip->clock = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(at91_chip->clock))
-
--- 
-2.30.2
-
+> ---
+>  drivers/mmc/host/dw_mmc-starfive.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/dw_mmc-starfive.c b/drivers/mmc/host/dw_mmc-starfive.c
+> index 40f5969b07a6..dab1508bf83c 100644
+> --- a/drivers/mmc/host/dw_mmc-starfive.c
+> +++ b/drivers/mmc/host/dw_mmc-starfive.c
+> @@ -51,7 +51,7 @@ static int dw_mci_starfive_execute_tuning(struct dw_mci_slot *slot,
+>         struct dw_mci *host = slot->host;
+>         struct starfive_priv *priv = host->priv;
+>         int rise_point = -1, fall_point = -1;
+> -       int err, prev_err;
+> +       int err, prev_err = 0;
+>         int i;
+>         bool found = 0;
+>         u32 regval;
+> --
+> 2.34.1
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
