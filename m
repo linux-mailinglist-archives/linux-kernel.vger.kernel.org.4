@@ -2,186 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41836ADA2D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 680F56ADA2F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjCGJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:21:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S229591AbjCGJVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:21:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCGJVk (ORCPT
+        with ESMTP id S229994AbjCGJVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:21:40 -0500
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CD753704;
-        Tue,  7 Mar 2023 01:21:15 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PW9123tKNz4f3m6v;
-        Tue,  7 Mar 2023 17:21:10 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-        by APP4 (Coremail) with SMTP id gCh0CgD3qa0HAgdkG0+gEw--.54420S2;
-        Tue, 07 Mar 2023 17:21:12 +0800 (CST)
-Message-ID: <1d1cb28f-c587-2359-b298-23766de66138@huaweicloud.com>
-Date:   Tue, 7 Mar 2023 17:21:11 +0800
+        Tue, 7 Mar 2023 04:21:43 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6753D5372D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:21:19 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id s11so49562332edy.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 01:21:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678180878;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ImknzI3+zNXeJrlCA1icMSZ6b0iyjrhhLI3KblQlRyU=;
+        b=O+VlgSxtnovXaHyjEVIV8KV4l+J3jKScOqh1e165d5VfDiFCAHHgiwejOdiNgeLx0m
+         pa2FEhdQ1dzivAuXUTujmVmrR7WgoTvYBpfU5EF8AhbzxOIHNCMqNziQeQXlsG5BnCpB
+         G1IWqJT4rySWpHTpwugW8CX3cwxhlaI4ihhEVfncQXuT5UFoynyXvSvUCQm7v3C0eKQY
+         ekXmoIqiPNZrK2A6FMlDTCfC4GeYbTQedGx50meYT9O0RHoOmWB4AMVwwssOAyDQ7icI
+         io9GYUHX4xQh8cUJmIR+Nm+DA5r3jBueMVmK39FdFF3jtjNVmG8KMGmemJ7SaPNa8Xx7
+         s+KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678180878;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ImknzI3+zNXeJrlCA1icMSZ6b0iyjrhhLI3KblQlRyU=;
+        b=TSGbS2OP/AwDfC7yGNhG6zxOP65I5elp3GP8A39y8oHVFq/6eowzhZYuraHio7VmmX
+         KrjTOPmWIbJvKFtEAvLWtk5boZy2W2SgWX5tjernVw+BBFxC1urWo0+FF9hxfyqUV9Wn
+         XiOXe4xpyxmq2Y/xI33Fla6i+tOjNppc/LEJwEyg73joz7d68AkprPodOSanE5AD41e3
+         EScmgCvy7HK9D7ND7D+/clmo3lcogCxpCPm2h1zivw9GhzRCAeFA5oG7695cUQljuaoy
+         gp1X4U0lMnZGD7bfunmuhp8cB3Fh7lcFap428b1vED4VD46Nwb1jUungPvvb3rRlXP0+
+         Utsw==
+X-Gm-Message-State: AO0yUKWjv4I8KS5VGLdVRJjWSulzbrcrezGtoetQiDRDnT65SUarNSpE
+        5Eko6tUrLGj0OB6LOdFE8f0fAg==
+X-Google-Smtp-Source: AK7set/8q1Dpn1fKoXGTnw4DYza29NwMw6JpXmdx/lsPqm8Z5LVvZcCJ0RLSFQYk3xrmhvSUrtjLLA==
+X-Received: by 2002:a17:906:ce34:b0:8e0:2887:8263 with SMTP id sd20-20020a170906ce3400b008e028878263mr13454388ejb.39.1678180877879;
+        Tue, 07 Mar 2023 01:21:17 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:5310:35c7:6f9e:2cd3? ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
+        by smtp.gmail.com with ESMTPSA id v7-20020a170906338700b008e51a1fd7bfsm5843951eja.172.2023.03.07.01.21.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 01:21:17 -0800 (PST)
+Message-ID: <87271ce2-8db4-187f-4bb6-31a7ef687557@linaro.org>
+Date:   Tue, 7 Mar 2023 10:21:15 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next 1/2] bpf: update 32-bit bounds when the lower
- 32-bit value is not wrapping
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Patch v2 0/9] Tegra234 Memory interconnect support
 Content-Language: en-US
-From:   Xu Kuohai <xukuohai@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20230307220449.2933650-1-xukuohai@huaweicloud.com>
- <20230307220449.2933650-2-xukuohai@huaweicloud.com>
-In-Reply-To: <20230307220449.2933650-2-xukuohai@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
+        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        lpieralisi@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
+        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+References: <20230220140559.28289-1-sumitg@nvidia.com>
+ <c8cf2435-8b18-7af7-c751-267021142f5a@linaro.org>
+ <22525720-9def-27de-cf41-8fd8165d6e01@linaro.org>
+ <b1a98a10-cc8d-e2f1-f234-c4804763b6ab@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b1a98a10-cc8d-e2f1-f234-c4804763b6ab@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: gCh0CgD3qa0HAgdkG0+gEw--.54420S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrW3Kr4DXw4fWw47Wr13CFg_yoWrAry3pr
-        W5GF1DGF4kX348C3yxtws8t34vyF18Aa1xWFWUury8ArnIg34qvr17Kry5KasayFyxZa1I
-        q3ZrX3yUK3yUt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvab4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyT
-        uYvjxUrR6zUUUUU
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/2023 6:04 AM, Xu Kuohai wrote:
-> The following XDP prog is accepted by verifier.
+On 06/03/2023 21:43, Sumit Gupta wrote:
 > 
-> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
-> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
-> 2: (bf) r1 = r2
-> 3: (07) r1 += 1
-> 4: (2d) if r1 > r3 goto pc+6
-> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
-> 6: (b4) w0 = 0x7fffff10
-> 7: (0c) w1 += w0                      ; R1_w=scalar(umin=0x7fffff10,umax=0x8000000f,var_off=(0x0; 0xffffffff))
-> 8: (b4) w0 = 0x80000000
-> 9: (04) w0 += 1
-> 10: (ae) if w0 < w1 goto pc-2
-> 11: (b7) r0 = 0
-> 12: (95) exit
 > 
-> while the following 64-bit version is rejected.
+> On 06/03/23 20:37, Krzysztof Kozlowski wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 06/03/2023 16:05, Krzysztof Kozlowski wrote:
+>>> On 20/02/2023 15:05, Sumit Gupta wrote:
+>>>> This patch series adds memory interconnect support for Tegra234 SoC.
+>>>> It is used to dynamically scale DRAM Frequency as per the bandwidth
+>>>> requests from different Memory Controller (MC) clients.
+>>>> MC Clients use ICC Framework's icc_set_bw() api to dynamically request
+>>>> for the DRAM bandwidth (BW). As per path, the request will be routed
+>>>> from MC to the EMC driver. MC driver passes the request info like the
+>>>> Client ID, type, and frequency request info to the BPMP-FW which will
+>>>> set the final DRAM freq considering all exisiting requests.
+>>>>
+>>>> MC and EMC are the ICC providers. Nodes in path for a request will be:
+>>>>       Client[1-n] -> MC -> EMC -> EMEM/DRAM
+>>>>
+>>>> The patch series also adds interconnect support in below client drivers:
+>>>> 1) CPUFREQ driver for scaling bandwidth with CPU frequency. For that,
+>>>>     added per cluster OPP table which will be used in the CPUFREQ driver
+>>>>     by requesting the minimum BW respective to the given CPU frequency in
+>>>>     the OPP table of given cluster.
+>>>> 2) PCIE driver to request BW required for different modes.
+>>>
+>>> No dependencies or ordering written, so I am free to take memory
+>>> controller bits, I assume.
+>>
+>> And not.. NAK, since you decided to ignore my comments. Really, we do
+>> not have time for such useless ping pong.
+>>
+>> Best regards,
+>> Krzysztof
+>>
 > 
-> 0: (61) r2 = *(u32 *)(r1 +0)          ; R2_w=pkt(off=0,r=0,imm=0)
-> 1: (61) r3 = *(u32 *)(r1 +4)          ; R3_w=pkt_end(off=0,imm=0)
-> 2: (bf) r1 = r2
-> 3: (07) r1 += 1
-> 4: (2d) if r1 > r3 goto pc+8
-> 5: (71) r1 = *(u8 *)(r2 +0)           ; R1_w=scalar(umax=255,var_off=(0x0; 0xff))
-> 6: (18) r0 = 0x7fffffffffffff10
-> 8: (0f) r1 += r0                      ; R1_w=scalar(umin=0x7fffffffffffff10,umax=0x800000000000000f)
-> 9: (18) r0 = 0x8000000000000000
-> 11: (07) r0 += 1
-> 12: (ad) if r0 < r1 goto pc-2
-> 13: (b7) r0 = 0
-> 14: (95) exit
+> Hi Krzysztof,
 > 
-> The verifier log says:
+> I tried to address the comments given during review of v1 in v2.
+> I am sorry if in case I missed any suggestion. Please let me know so I 
+> can incorporate that.
 > 
-> [...]
-> 
-> from 12 to 11: R0_w=-9223372036854775794 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 11: (07) r0 += 1                      ; R0_w=-9223372036854775793
-> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775823,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 13: safe
-> 
-> from 12 to 11: R0_w=-9223372036854775793 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 11: (07) r0 += 1                      ; R0_w=-9223372036854775792
-> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=-9223372036854775792 R1=scalar(umin=9223372036854775824,umax=9223372036854775823,var_off=(0x8000000000000000; 0xffffffff))
-> 13: safe
-> 
-> [...]
-> 
-> The loop crosses termination condition r0 == r1.umax, and does not stop.
-> 
-> The reason is that when the verifier enumerates to r1.umin == r1.umax, the value
-> 0x800000000000000f of r1.umin is greater than U32_MAX, so __reg_combine_64_into_32
-> sets the u32 range of r1 to [0, U32_MAX] instead of marking r1 as a constant,
-> making is_branch_taken() in check_cond_jmp_op() be skipped.
-> 
-> To fix it, update 32-bit bounds when the lower 32-bit value is not wrapping,
-> even if the 64-bit value is beyond the range of [0, U32_MAX] or [S32_MIN, S32_MAX].
-> 
-> Signed-off-by: Xu Kuohai <xukuohai@huaweicloud.com>
 
-Oops, missing fixes tag, will resend
+I never got any feedback and my first glance suggested nothing changed.
+Let me check again.
 
-> ---
->   kernel/bpf/verifier.c | 27 +++++++++++----------------
->   1 file changed, 11 insertions(+), 16 deletions(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b2116ca78d9a..64c9ee3857ec 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -2013,26 +2013,21 @@ static void __reg_combine_32_into_64(struct bpf_reg_state *reg)
->   	reg_bounds_sync(reg);
->   }
->   
-> -static bool __reg64_bound_s32(s64 a)
-> -{
-> -	return a >= S32_MIN && a <= S32_MAX;
-> -}
-> -
-> -static bool __reg64_bound_u32(u64 a)
-> -{
-> -	return a >= U32_MIN && a <= U32_MAX;
-> -}
-> -
->   static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
->   {
-> +	s64 smin = reg->smin_value;
-> +	s64 smax = reg->smax_value;
-> +	u64 umin = reg->umin_value;
-> +	u64 umax = reg->umax_value;
-> +
->   	__mark_reg32_unbounded(reg);
-> -	if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->smax_value)) {
-> -		reg->s32_min_value = (s32)reg->smin_value;
-> -		reg->s32_max_value = (s32)reg->smax_value;
-> +	if ((u64)(smax - smin) <= (u64)U32_MAX && (s32)smin <= (s32)smax) {
-> +		reg->s32_min_value = (s32)smin;
-> +		reg->s32_max_value = (s32)smax;
->   	}
-> -	if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->umax_value)) {
-> -		reg->u32_min_value = (u32)reg->umin_value;
-> -		reg->u32_max_value = (u32)reg->umax_value;
-> +	if (umax - umin <= U32_MAX && (u32)umin <= (u32)umax) {
-> +		reg->u32_min_value = (u32)umin;
-> +		reg->u32_max_value = (u32)umax;
->   	}
->   	reg_bounds_sync(reg);
->   }
+Best regards,
+Krzysztof
 
