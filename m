@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724BF6ADAB5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F10236ADABA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:44:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjCGJn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:43:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37472 "EHLO
+        id S229967AbjCGJoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:44:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjCGJnp (ORCPT
+        with ESMTP id S230306AbjCGJoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:43:45 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E1F8A39E;
-        Tue,  7 Mar 2023 01:43:32 -0800 (PST)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id EF9851C0005;
-        Tue,  7 Mar 2023 09:43:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678182210;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=01+uAnOiSLbTM0wZcSQJcnuJqtQP5yT5es3lE/RNx8s=;
-        b=W0FOXboaN+ZfaE1tOFAvB0nH9CZUt2e57a9f90MZdoalOOiRKe0aTlMaeJ30NwVZqfyo7Z
-        E7WglxyOR0vU8/phJe7AxiQe+XKeN5p2ay7pUIouDSX2Ay0fBGasMnn9/cSzAtIjyXvIQJ
-        Rh4itmk/epniRXUBvtOCitKQ2WBfhBnYYLsISU4V8mS/NeEvdFBoWqyCIlFUXbetFBE4qd
-        nqOOcIBvSesXGNQcH5WFlReYR0+9moZA4Qmn1GzlWA6Do6HpxR0cQvHIqFwiQwhzrl9oR6
-        prAQn9sFF5bs4Bnu/mh0mzYOUwG2LOouY+sy65380JLuYEXYQye9zegYfMJQrw==
-Date:   Tue, 7 Mar 2023 10:43:24 +0100
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Fabio Estevam" <festevam@gmail.com>,
-        "NXP Linux Team" <linux-imx@nxp.com>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Sylwester Nawrocki" <s.nawrocki@samsung.com>,
-        Artur =?UTF-8?Q?=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Alim Akhtar" <alim.akhtar@samsung.com>,
-        "Thierry Reding" <thierry.reding@gmail.com>,
-        "Jonathan Hunter" <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Alexandre Bailon <abailon@baylibre.com>
-Subject: Re: [PATCH v2 04/23] interconnect: imx: fix registration race
-Message-ID: <20230307104324.121166d1@booty>
-In-Reply-To: <20230306075651.2449-5-johan+linaro@kernel.org>
-References: <20230306075651.2449-1-johan+linaro@kernel.org>
-        <20230306075651.2449-5-johan+linaro@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 7 Mar 2023 04:44:08 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807E04989C;
+        Tue,  7 Mar 2023 01:43:58 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AA1826602FE6;
+        Tue,  7 Mar 2023 09:43:56 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678182237;
+        bh=DBT3ffnUomO4XpSs3uQJEKNgfx80plMtUGZEvV2r8tE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BT8Mu3NolapWoYEbgr83LNJXuN9DdogBZ5cSwFj+bjXKfQ8ahqFcsjKXYeqs2yXiZ
+         GO0enFGX0WlNfKuElyrhP+WYsZaGS86XY3xorq3SNLweDQgrzhFq+3etbFzbDFXJP+
+         P7zrhqzmFr6DhCjMBkw1u+E5K6IQFF4jYROFS2gk14FZLKSBTNymimQhiruxfRrjIq
+         +KTAYj4xFCUjywHgSvPgcmKsrzm6aFjNyoeJr5OmxZz3irEV9Iah3VcrF5ppwBVqXn
+         xuMP84kaq/AyfhYJanL8xNLuUUqUXp/LnIKBTovEUjoKWXJ8AiRZRhgnX1G+aIzPYV
+         Aoo5OZwZa8RGQ==
+Message-ID: <ff81cce8-9203-f90c-5a23-2d1c09fe4267@collabora.com>
+Date:   Tue, 7 Mar 2023 10:43:53 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/2] arm64: dts: mediatek: add i2c support for mt8365
+ SoC
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-i2c@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org
+References: <20221122-mt8365-i2c-support-v3-0-ad9bb1076d7f@baylibre.com>
+ <20221122-mt8365-i2c-support-v3-1-ad9bb1076d7f@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221122-mt8365-i2c-support-v3-1-ad9bb1076d7f@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,29 +65,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  6 Mar 2023 08:56:32 +0100
-Johan Hovold <johan+linaro@kernel.org> wrote:
-
-> The current interconnect provider registration interface is inherently
-> racy as nodes are not added until the after adding the provider. This
-> can specifically cause racing DT lookups to fail.
+Il 06/03/23 14:47, Alexandre Mergnat ha scritto:
+> There are four I2C master channels in MT8365 with a same HW architecture.
 > 
-> Switch to using the new API where the provider is not registered until
-> after it has been fully initialised.
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8365.dtsi | 52 ++++++++++++++++++++++++++++++++
+>   1 file changed, 52 insertions(+)
 > 
-> Fixes: f0d8048525d7 ("interconnect: Add imx core driver")
-> Cc: stable@vger.kernel.org      # 5.8
-> Cc: Alexandre Bailon <abailon@baylibre.com>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> index 15ac4c1f0966..553c7516406a 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+> @@ -282,6 +282,45 @@ pwm: pwm@11006000 {
+>   			clock-names = "top", "main", "pwm1", "pwm2", "pwm3";
+>   		};
+>   
+> +		i2c0: i2c@11007000 {
+> +			compatible = "mediatek,mt8365-i2c", "mediatek,mt8168-i2c";
+> +			reg = <0 0x11007000 0 0xa0>, <0 0x11000080 0 0x80>;
+> +			interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_LOW>;
+> +			clock-div = <1>;
+> +			clocks = <&infracfg CLK_IFR_I2C0_AXI>,
+> +				 <&infracfg CLK_IFR_AP_DMA>;
 
-v2 works just as well, so my Tested-by is confirmed. Maybe it's useful
-mentioning the hardware used for testing so:
+You can compress the clocks to one single line, reaching 91 columns, on all of the
+new i2c nodes that you're introducing. Please do that.
 
-[Tested on i.MX8MP using an MSC SM2-MB-EP1 Board]
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+With that done:
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Regards,
+Angelo
