@@ -2,281 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB7E6ADB44
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87EF6ADB5F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjCGKB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:01:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S229972AbjCGKFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 05:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjCGKBZ (ORCPT
+        with ESMTP id S229667AbjCGKFd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:01:25 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7BD51C80
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:01:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678183283; x=1709719283;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mUR4QPHbQfrTILf46RP054a5pwNONEsnfgfAdtK1w+g=;
-  b=SlwHiGsmR4ZNMuwyY6oMHwe3aca8vw/sZpJpE55P4XCkfH7BthMsBNG/
-   y2an5YLc9PwnCsASbeZ3gMjeOckBjt1Wib8OfyE56g3g0AZud5vPPHafe
-   KgczBhHqRw91ysP0T6SQHSdsHyUVNZrlOy18x73sXoVNXw3N+n3PRXmuE
-   5pT34YRzzI0RqO65GxKtEGJKKvEdVP4o9TQYr8QGMghfrFw8YYFspDac4
-   /yj5oQCZNiw/TT6A25T09gf2wHrE6CnPsXkTFhBikv3DhqRfgXlS/ZpHe
-   n7ow1orgD+cD5CbZAAumoQQ+YPvaWHTItncFAMJf5iUViSis4MzEDRBGH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="334527946"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="334527946"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 02:01:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="669811998"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="669811998"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 07 Mar 2023 02:01:00 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZU7v-0001CX-1T;
-        Tue, 07 Mar 2023 10:00:59 +0000
-Date:   Tue, 07 Mar 2023 18:00:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:dev.2023.02.27a] BUILD REGRESSION
- b171cbcbbd8e5f5f2e0638c5b5b5c77e3cc79007
-Message-ID: <64070b4b.PYts85aeBoT4aARn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Tue, 7 Mar 2023 05:05:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90A23CE37
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:04:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678183481;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zadC5YEQxS3jLhvS31mnw2aDuHtd3wOc5As59iWb8VQ=;
+        b=NVOyzcOqcTqeZH527dT2LWCZ9KKQ2Jwm6P6YRX60KWDgl3nNtNwi+/0Gm2HD/TUuL8kVOP
+        0W1TDXm72Zy5I0fF5Ts+so5nZ50CX0pIZlYvO41DwwmtjMNaX7v1b1eo/U/ttwUu4RD/M4
+        +E5spCxpVVT5D4ZYfta2MNmyCN0jeVs=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-217-7iGNvO4_NuCWS4PM-QbV2Q-1; Tue, 07 Mar 2023 05:04:40 -0500
+X-MC-Unique: 7iGNvO4_NuCWS4PM-QbV2Q-1
+Received: by mail-wm1-f71.google.com with SMTP id m31-20020a05600c3b1f00b003e9de8c95easo4614992wms.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 02:04:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678183479;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zadC5YEQxS3jLhvS31mnw2aDuHtd3wOc5As59iWb8VQ=;
+        b=48aG3A4dbgQTKnKEj1xlgC6MNXlxsnpmjbdVgbSqOsqZAInGVwHC215d4PirpnxjNG
+         lsREhwEnYlm51jkrK69Ebzv4NtNIrF84LkQ8VYTDW+5OKrGjnQNsVsEIpADo+mubzLQY
+         snnQ5Vm4zZqqn4uuXucg2ohzf0TRmhAx8l93Ry1TBeKzoyU4Jkp8VPgPq+wKIepwDv3X
+         gaVPATf3zGI79RNTolEPvXxQZt2M57cdLyjPpXkU85jFGsutFJ+wxBhYh1PsDZF6F1Mk
+         1ehOu0Z6s3sbmxg/Qx0l1llPRFNF291sf0WRLfLy/LF019KDnkG8c0ZiQDXA0VXC3W0s
+         4zKQ==
+X-Gm-Message-State: AO0yUKURYJaxNYN2Hamo8XaWs2bSHrnNix2iJ15306i0mAhq6n8Rd76R
+        dHgTql2nszBoBALL7M+MMS64HGonZcMN1woslYU4e2OWnzsWMe2C6DbCmZjkvf3ApCUQtcRX99i
+        N5xxWm1KS19MkZLmc/2ZudOu2jnfI0PD5
+X-Received: by 2002:adf:ecc1:0:b0:2c7:df22:117d with SMTP id s1-20020adfecc1000000b002c7df22117dmr8565952wro.31.1678183479372;
+        Tue, 07 Mar 2023 02:04:39 -0800 (PST)
+X-Google-Smtp-Source: AK7set9Jm3b2K174FUeCQCXv+ffg3MWCpkiqQjFM6XjLHKoG6rGgvc4bPFpjha+S58Y3sn5TwdiW8g==
+X-Received: by 2002:adf:ecc1:0:b0:2c7:df22:117d with SMTP id s1-20020adfecc1000000b002c7df22117dmr8565939wro.31.1678183479008;
+        Tue, 07 Mar 2023 02:04:39 -0800 (PST)
+Received: from ?IPV6:2003:cb:c707:a100:e20:41da:c49b:8974? (p200300cbc707a1000e2041dac49b8974.dip0.t-ipconnect.de. [2003:cb:c707:a100:e20:41da:c49b:8974])
+        by smtp.gmail.com with ESMTPSA id n18-20020adfe352000000b002c567881dbcsm12116359wrj.48.2023.03.07.02.04.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 02:04:38 -0800 (PST)
+Message-ID: <4c223e9c-2d43-fb8f-7ac9-ad2121914170@redhat.com>
+Date:   Tue, 7 Mar 2023 11:04:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm: fix potential invalid pointer dereference in
+ kmemdup()
+Content-Language: en-US
+To:     Xujun Leng <lengxujun2007@126.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230307090358.21346-1-lengxujun2007@126.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230307090358.21346-1-lengxujun2007@126.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.02.27a
-branch HEAD: b171cbcbbd8e5f5f2e0638c5b5b5c77e3cc79007  rcutorture: Test NMI diagnostics
+On 07.03.23 10:03, Xujun Leng wrote:
+> If kmemdup() was called with src == NULL, then memcpy() source address
+> is fatal, and if kmemdup() was called with len == 0, kmalloc_track_caller()
+> will return ZERO_SIZE_PTR to variable p, then memcpy() destination address
+> is fatal. Both 2 cases will cause an invalid pointer dereference.
+> 
 
-Error/Warning reports:
+"fix" in subject implies that there is actually a case broken. Is there, 
+or is this rather a "sanitize" ?
 
-https://lore.kernel.org/oe-kbuild-all/202303070906.VxnzlSyY-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303071057.1r9aTmDM-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303071217.ajqvt2rz-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303071235.NvgrGJl5-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202303071331.kR21mwSK-lkp@intel.com
+> Signed-off-by: Xujun Leng <lengxujun2007@126.com>
+> ---
+>   mm/util.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/mm/util.c b/mm/util.c
+> index dd12b9531ac4..d1a3b3d2988e 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -128,6 +128,9 @@ void *kmemdup(const void *src, size_t len, gfp_t gfp)
+>   {
+>   	void *p;
+>   
+> +	if (!src || len == 0)
+> +		return NULL;
+> +
+>   	p = kmalloc_track_caller(len, gfp);
+>   	if (p)
+>   		memcpy(p, src, len);
 
-Error/Warning: (recently discovered and may have been fixed)
-
-arch/arm64/kernel/process.c:75:1: warning: 'noreturn' function does return
-arch/csky/kernel/smp.c:320:1: warning: 'noreturn' function does return
-arch/mips/kernel/process.c:46:1: warning: 'noreturn' function does return
-arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for 'set_nmi_torture' [-Wmissing-prototypes]
-arch/x86/kernel/nmi.c:441:6: warning: no previous prototype for function 'set_nmi_torture' [-Wmissing-prototypes]
-arm-linux-gnueabi-ld: kernel/rcu/rcutorture.c:3301: undefined reference to `set_nmi_torture'
-csky-linux-ld: kernel/rcu/rcutorture.c:3301: undefined reference to `set_nmi_torture'
-hppa-linux-ld: (.text+0x2b80): undefined reference to `set_nmi_torture'
-hppa-linux-ld: kernel/rcu/rcutorture.c:3301: undefined reference to `set_nmi_torture'
-kernel/rcu/rcutorture.c:(.text+0x5c44): undefined reference to `set_nmi_torture'
-kernel/rcu/rcutorture.c:3289: undefined reference to `set_nmi_torture'
-ld.lld: error: undefined symbol: set_nmi_torture
-mips64-linux-ld: kernel/rcu/rcutorture.c:(.text+0x5c64): undefined reference to `set_nmi_torture'
-nios2-linux-ld: kernel/rcu/rcutorture.c:3301: undefined reference to `set_nmi_torture'
-rcutorture.c:(.text+0x49ac): undefined reference to `set_nmi_torture'
-vmlinux.o: warning: objtool: exc_nmi+0x13b: call to __const_udelay() leaves .noinstr.text section
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arm-randconfig-r006-20230305
-|   |-- arm-linux-gnueabi-ld:kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|   `-- kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|-- arm64-randconfig-r021-20230305
-|   `-- arch-arm64-kernel-process.c:warning:noreturn-function-does-return
-|-- csky-randconfig-r035-20230306
-|   |-- arch-csky-kernel-smp.c:warning:noreturn-function-does-return
-|   `-- csky-linux-ld:kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|-- i386-randconfig-a004-20230306
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-|-- loongarch-randconfig-r032-20230306
-|   `-- rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- mips-randconfig-r023-20230306
-|   |-- kernel-rcu-rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|   `-- mips64-linux-ld:kernel-rcu-rcutorture.c:(.text):undefined-reference-to-set_nmi_torture
-|-- mips-randconfig-r025-20230306
-|   `-- arch-mips-kernel-process.c:warning:noreturn-function-does-return
-|-- nios2-randconfig-r021-20230306
-|   |-- kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|   `-- nios2-linux-ld:kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|-- parisc-randconfig-r014-20230305
-|   `-- hppa-linux-ld:(.text):undefined-reference-to-set_nmi_torture
-|-- parisc-randconfig-r033-20230305
-|   `-- hppa-linux-ld:kernel-rcu-rcutorture.c:undefined-reference-to-set_nmi_torture
-|-- x86_64-allmodconfig
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-|-- x86_64-allyesconfig
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-|-- x86_64-defconfig
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-|-- x86_64-kexec
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-|-- x86_64-randconfig-a001-20230306
-|   `-- vmlinux.o:warning:objtool:exc_nmi:call-to-__const_udelay()-leaves-.noinstr.text-section
-`-- x86_64-rhel-8.3
-    `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-set_nmi_torture
-clang_recent_errors
-|-- riscv-randconfig-r003-20230305
-|   `-- ld.lld:error:undefined-symbol:set_nmi_torture
-|-- riscv-randconfig-r026-20230306
-|   `-- ld.lld:error:undefined-symbol:set_nmi_torture
-|-- x86_64-randconfig-a014-20230306
-|   `-- arch-x86-kernel-nmi.c:warning:no-previous-prototype-for-function-set_nmi_torture
-`-- x86_64-randconfig-a015-20230306
-    `-- vmlinux.o:warning:objtool:exc_nmi:call-to-__const_udelay()-leaves-.noinstr.text-section
-
-elapsed time: 742m
-
-configs tested: 127
-configs skipped: 9
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r002-20230306   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r012-20230305   gcc  
-alpha                randconfig-r022-20230305   gcc  
-alpha                randconfig-r023-20230305   gcc  
-alpha                randconfig-r031-20230306   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r004-20230306   gcc  
-arc                  randconfig-r043-20230305   gcc  
-arc                  randconfig-r043-20230306   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r003-20230306   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r006-20230305   gcc  
-arm                  randconfig-r016-20230306   gcc  
-arm                  randconfig-r046-20230305   clang
-arm                  randconfig-r046-20230306   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r001-20230306   gcc  
-arm64                randconfig-r004-20230305   clang
-arm64                randconfig-r013-20230306   clang
-arm64                randconfig-r021-20230305   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r035-20230306   gcc  
-hexagon              randconfig-r012-20230306   clang
-hexagon              randconfig-r034-20230305   clang
-hexagon              randconfig-r041-20230305   clang
-hexagon              randconfig-r041-20230306   clang
-hexagon              randconfig-r045-20230305   clang
-hexagon              randconfig-r045-20230306   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230306   gcc  
-i386                 randconfig-a002-20230306   gcc  
-i386                 randconfig-a003-20230306   gcc  
-i386                 randconfig-a004-20230306   gcc  
-i386                 randconfig-a005-20230306   gcc  
-i386                 randconfig-a006-20230306   gcc  
-i386                 randconfig-a011-20230306   clang
-i386                 randconfig-a012-20230306   clang
-i386                 randconfig-a013-20230306   clang
-i386                 randconfig-a014-20230306   clang
-i386                 randconfig-a015-20230306   clang
-i386                 randconfig-a016-20230306   clang
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230305   gcc  
-ia64                 randconfig-r005-20230306   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r015-20230306   gcc  
-loongarch            randconfig-r032-20230306   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r004-20230306   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r036-20230306   gcc  
-microblaze   buildonly-randconfig-r001-20230306   gcc  
-microblaze           randconfig-r024-20230305   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r011-20230306   gcc  
-mips                 randconfig-r023-20230306   gcc  
-mips                 randconfig-r025-20230305   clang
-mips                 randconfig-r025-20230306   gcc  
-mips                 randconfig-r026-20230305   clang
-mips                 randconfig-r033-20230306   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r021-20230306   gcc  
-openrisc             randconfig-r013-20230305   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r014-20230305   gcc  
-parisc               randconfig-r014-20230306   gcc  
-parisc               randconfig-r033-20230305   gcc  
-parisc               randconfig-r034-20230306   gcc  
-parisc               randconfig-r035-20230305   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r022-20230306   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230305   clang
-riscv                randconfig-r026-20230306   clang
-riscv                randconfig-r042-20230305   gcc  
-riscv                randconfig-r042-20230306   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230306   gcc  
-s390                 randconfig-r044-20230305   gcc  
-s390                 randconfig-r044-20230306   clang
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r005-20230306   gcc  
-sh                   randconfig-r006-20230306   gcc  
-sh                   randconfig-r036-20230305   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r002-20230306   gcc  
-sparc                randconfig-r011-20230305   gcc  
-sparc64              randconfig-r016-20230305   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230306   gcc  
-x86_64               randconfig-a002-20230306   gcc  
-x86_64               randconfig-a003-20230306   gcc  
-x86_64               randconfig-a004-20230306   gcc  
-x86_64               randconfig-a005-20230306   gcc  
-x86_64               randconfig-a006-20230306   gcc  
-x86_64               randconfig-a011-20230306   clang
-x86_64               randconfig-a012-20230306   clang
-x86_64               randconfig-a013-20230306   clang
-x86_64               randconfig-a014-20230306   clang
-x86_64               randconfig-a015-20230306   clang
-x86_64               randconfig-a016-20230306   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r002-20230305   gcc  
+Why should we take care of kmemdup(), but not memdup_user() ? Shouldn't 
+it suffer from similar problems?
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+
+David / dhildenb
+
