@@ -2,174 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2576ADDC2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A6C6ADDB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjCGLm4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 06:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
+        id S230293AbjCGLlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbjCGLlu (ORCPT
+        with ESMTP id S230456AbjCGLkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:41:50 -0500
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D92D7E890;
-        Tue,  7 Mar 2023 03:39:23 -0800 (PST)
-Received: by mail-ed1-f42.google.com with SMTP id a25so51187912edb.0;
-        Tue, 07 Mar 2023 03:39:23 -0800 (PST)
+        Tue, 7 Mar 2023 06:40:12 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2680F7B9BA;
+        Tue,  7 Mar 2023 03:38:43 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id bo22so12881243pjb.4;
+        Tue, 07 Mar 2023 03:38:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678189120;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xBr07fqk3Uu+urBt4c4cihx7vLrlxAn9QH0wdjegu1Y=;
+        b=GMo4EBNY0vAkJ/JhtmzVHgtrvMenDLrTsWOjWmavqeReEFASZqRzme1ecj1Lx9jwRq
+         OISCZB6GCCll9UKXDAkzRoa7XFXmebggK+bCTS0dJIgrWh0wihiGtkjlER9tfkyAg/aP
+         0Fii+h1QQsHzzIlhhQS63AvddxRU9L/Jt3GwzRdGYxrA82q46X1/bNGc4xMTjTLrvHFL
+         ElLZk1BHgIBVpYkjEuEXgh8W5fszrvQwhFn4yqlfqr0xFh9HsGQ29oezPdhCUzsJnKvZ
+         rRR1HBpjX0EE2ed4wS/kFtfIC3y1jyXI6b98WoZVEjrRI3U8RN2X1P6NzbPp9k3qikrX
+         fm2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678189093;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=827BZ7QHKXX/o/3YKoJ2JGa31MebA6PuHwtCfOkih34=;
-        b=rkz6279ZsoFhZfvNeJyco8gp7CbXeQgUy6JYpfD0qwcuT1pLfrCcjaA7RgM4Z2cizA
-         y4zUkT2Vn4unwQSOZ+WNpNs4fj+1TaESJthIZcbIvY2oNQJ5ffO5NSw8IfYRvs09WE0q
-         eW9SHQXg4ucctAj1ioSkWh12BMdWh2JBpaYR5Z9M4VYGDryVhhP57rIXpQ+V+Tx09PsT
-         pi0a3G4N5zyfsvhuQRFwAjjKlk+xB5JvaAsx46/WSxXmfHsxuIHMX1cKqgFcr/te7QYy
-         73j1jUoXt9bSFQIT0IHOmO+CyrpASksOSszFTvrNLOXXuZpu0EXylQGpJiUOFJmWkkXt
-         GImQ==
-X-Gm-Message-State: AO0yUKW6IwLGDaTWWlV1ce02CQA6x9XEmDE02+5Kot6geiJ9Pq/3kb63
-        uL+qfE7z+kSUtwYeVL6VAbE7UdTfD4uW6Mk49v+SMKjPjsM=
-X-Google-Smtp-Source: AK7set91GVVFAjSNfN3Wl524EpgJm6XPO7jUSYGAzuwAJ7KbSmoxDYk6absqcEyIjriEfblA2UpLdwuGsMvhpKo3Kt4=
-X-Received: by 2002:a17:906:a14:b0:8b1:38d6:9853 with SMTP id
- w20-20020a1709060a1400b008b138d69853mr6407368ejf.2.1678189093313; Tue, 07 Mar
- 2023 03:38:13 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678189120;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xBr07fqk3Uu+urBt4c4cihx7vLrlxAn9QH0wdjegu1Y=;
+        b=vw3uItXce6GI0zDpoN+qQgZFlt+CvFEJ192U8eyM4VUPND8TdqYW78XaHBDoB0NKN2
+         Bq4OzwtOeKK7sQ/WzecAWp+WYj0a6ay14vgFO3BJKi7GZvgHIIrcXe6o8Bl788sEQRJb
+         kCXfmkiAA0Zkk63RoD551BDdey9h5oooZ5ML4ymlUrmRG86snPvDOWy6aI90lwM8zCrO
+         knOD5OVAGWVwO+WM9anUmqiyuZORI/aZbkabSOVvIRHP2J6sTdFeN30OybhgqcQxvCJo
+         vpZgiPsW59amrRgEbrBugYHUkr9v/FBNBvzyU6YPKk68nDivuw/qTiumIZsniqrdjfZz
+         UPQg==
+X-Gm-Message-State: AO0yUKX89VN1OKttly942LVvWswgyZZji1nJRZMeKRGImQnSaoGtH9JF
+        vZZbqbIEtUiBlS7qnFTKgv8=
+X-Google-Smtp-Source: AK7set/9lXzBGsl5ZgNcAY4YHsv/xUC197l3u42zj/zoTAYetCEmb18q0gmsoz5ALwsd+5Y8+xN83w==
+X-Received: by 2002:a17:902:d50f:b0:19c:d6fe:39c7 with SMTP id b15-20020a170902d50f00b0019cd6fe39c7mr17517044plg.41.1678189119830;
+        Tue, 07 Mar 2023 03:38:39 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id z15-20020a170902d54f00b0019a928a8982sm8255974plf.118.2023.03.07.03.38.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 03:38:38 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pmu: Disable vPMU if EVENTSEL_GUESTONLY bit doesn't exist
+Date:   Tue,  7 Mar 2023 19:38:19 +0800
+Message-Id: <20230307113819.34089-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230307114145.8933-1-yu.c.chen@intel.com>
-In-Reply-To: <20230307114145.8933-1-yu.c.chen@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 7 Mar 2023 12:38:02 +0100
-Message-ID: <CAJZ5v0h8Z8_zb_seSfsFsgWksG6N41jFcuTycrEicJYJOG1yLQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: tools: pfrut: Check if the input of level and type
- is in the right numeric range
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-acpi@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
-        linux-kernel@vger.kernel.org,
-        Hariganesh Govindarajulu <hariganesh.govindarajulu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 4:46 AM Chen Yu <yu.c.chen@intel.com> wrote:
->
-> The user can provide arbitrary non-numeic value to level and type, which
-> brings unexpected behavior:
+From: Like Xu <likexu@tencent.com>
 
-So I guess the expected behavior would be to throw an error?
+Unlike Intel's msr atomic_switch mechanism, AMD supports guest pmu
+basic counter feature by setting the GUESTONLY bit on the host, so the
+presence or absence of this bit determines whether vPMU is emulatable
+(e.g. in nested virtualization). Since on AMD, writing reserved bits of
+EVENTSEL register does not bring #GP, KVM needs to update the global
+enable_pmu value by checking the persistence of this GUESTONLY bit.
 
->  pfrut -h
-> usage: pfrut [OPTIONS]
-> code injection:
-> -l, --load
-> -s, --stage
-> -a, --activate
-> -u, --update [stage and activate]
-> -q, --query
-> -d, --revid
-> update telemetry:
-> -G, --getloginfo
-> -T, --type(0:execution, 1:history)
-> -L, --level(0, 1, 2, 4)
-> -R, --read
-> -D, --revid log
->
->  pfrut -T A
->  pfrut -G
-> log_level:0
-> log_type:0
-> log_revid:2
-> max_data_size:65536
-> chunk1_size:0
-> chunk2_size:1530
-> rollover_cnt:0
-> reset_cnt:17
->
-> Fix this by restricting the input is in the expected range.
->
-> Reported-by: Hariganesh Govindarajulu <hariganesh.govindarajulu@intel.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
->  tools/power/acpi/tools/pfrut/pfrut.c | 33 ++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->
-> diff --git a/tools/power/acpi/tools/pfrut/pfrut.c b/tools/power/acpi/tools/pfrut/pfrut.c
-> index 52aa0351533c..ed672efef83b 100644
-> --- a/tools/power/acpi/tools/pfrut/pfrut.c
-> +++ b/tools/power/acpi/tools/pfrut/pfrut.c
-> @@ -22,6 +22,7 @@
->  #include <sys/ioctl.h>
->  #include <sys/mman.h>
->  #include <uuid/uuid.h>
-> +#include <ctype.h>
->  #include PFRUT_HEADER
->
->  char *capsule_name;
-> @@ -77,6 +78,18 @@ static void help(void)
->                 progname);
->  }
->
-> +static int is_digit_input(char *str)
-> +{
-> +       char *scan;
-> +
-> +       for (scan = str; *scan != '\0'; scan++) {
-> +               if (!isdigit(*scan))
-> +                       return 0;
-> +       }
-> +
-> +       return 1;
-> +}
-> +
->  char *option_string = "l:sauqd:GT:L:RD:h";
->  static struct option long_options[] = {
->         {"load", required_argument, 0, 'l'},
-> @@ -125,11 +138,31 @@ static void parse_options(int argc, char **argv)
->                         log_getinfo = 1;
->                         break;
->                 case 'T':
-> +                       if (!is_digit_input(optarg)) {
-> +                               printf("Please provide numeric value for type (0:execution, 1:history) - Exiting.\n");
-> +                               exit(1);
-> +                       }
-> +
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/svm/svm.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
-Wouldn't using strtol() instead of atoi() work?
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index dd21e8b1a259..f41d96e638ef 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -4866,6 +4866,16 @@ static __init void svm_adjust_mmio_mask(void)
+ 	kvm_mmu_set_mmio_spte_mask(mask, mask, PT_WRITABLE_MASK | PT_USER_MASK);
+ }
+ 
++static __init bool pmu_has_guestonly_mode(void)
++{
++	u64 value;
++
++	wrmsrl(MSR_F15H_PERF_CTL0, AMD64_EVENTSEL_GUESTONLY);
++	rdmsrl(MSR_F15H_PERF_CTL0, value);
++
++	return value == AMD64_EVENTSEL_GUESTONLY;
++}
++
+ static __init void svm_set_cpu_caps(void)
+ {
+ 	kvm_set_cpu_caps();
+@@ -4911,8 +4921,11 @@ static __init void svm_set_cpu_caps(void)
+ 		kvm_cpu_cap_set(X86_FEATURE_VIRT_SSBD);
+ 
+ 	/* AMD PMU PERFCTR_CORE CPUID */
+-	if (enable_pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE))
++	if (enable_pmu && boot_cpu_has(X86_FEATURE_PERFCTR_CORE) &&
++	    pmu_has_guestonly_mode())
+ 		kvm_cpu_cap_set(X86_FEATURE_PERFCTR_CORE);
++	else
++		enable_pmu = false;
+ 
+ 	/* CPUID 0x8000001F (SME/SEV features) */
+ 	sev_set_cpu_caps();
 
->                         log_type = atoi(optarg);
-> +                       if (log_type != 0 && log_type != 1) {
-> +                               printf("Please provide numeric value for type (0:execution, 1:history) - Exiting.\n");
-> +                               exit(1);
-> +                       }
-> +
->                         set_log_type = 1;
->                         break;
->                 case 'L':
-> +                       if (!is_digit_input(optarg)) {
-> +                               printf("Please provide numeric value for level (0, 1, 2, 4) - Exiting.\n");
-> +                               exit(1);
-> +                       }
-> +
->                         log_level = atoi(optarg);
-> +                       if (log_level > 4) {
-> +                               printf("Please provide numeric value for level (0, 1, 2, 4) - Exiting.\n");
-> +                               exit(1);
-> +                       }
-> +
->                         set_log_level = 1;
->                         break;
->                 case 'R':
-> --
-> 2.25.1
->
+base-commit: 13738a3647368f7f600b30d241779bcd2a3ebbfd
+-- 
+2.39.2
+
