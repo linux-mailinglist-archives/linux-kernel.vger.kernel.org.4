@@ -2,109 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AB806AE631
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B63ED6AE639
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:21:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjCGQTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:19:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
+        id S230263AbjCGQVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:21:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbjCGQTY (ORCPT
+        with ESMTP id S230315AbjCGQUc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:19:24 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EA58F723
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:19:07 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id f18so17807414lfa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:19:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678205945;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+H+ZN9OLeA0/ZCnSrIPhMAdnIB2BziPIyfYKYdHQ0+0=;
-        b=YCm6kNCGPK1W0qmWKKUU2mwfxxnSid1jyLNFUM+ogXtQkTgGkO8oBRfz4LM4kWQSoy
-         J/OqmX34CvnoIxp9xaUKCshlRRHCVz92C5GwqIi3dCAHIPYojukbiGIO9b8uKbBd6C+W
-         00JRgd3mlyPB8Vu7W9OMn2w6BDv/x3P2s3WhajiESWo2+AcnxNqhIwNfsMJQsK9xE5NU
-         dbwVhycL99YbC4qj6sDwBB6cl66DNKQo9I1P54rUuSet69rXFfCssKUccg4auxN+QAHg
-         oRQfsAIjL4xAlSEhISnGdSkYdTVrr/SCCZ9iO109i5U2Aubp+wQL3AB6318Bb8Mxn7AQ
-         hoYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678205945;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+H+ZN9OLeA0/ZCnSrIPhMAdnIB2BziPIyfYKYdHQ0+0=;
-        b=gB/LJGgIxZKmO5X66g2okwwxRSDSBGV9BUzigjh+pe2CaBqlpHeo9bzYZYxAEGMG96
-         pseCtb2gO5Jd0qmPGlJMsufwwwxlZ0rkPhiwiQyqePCxO4FHoT0z2eP/epoB/yNb7Jnj
-         EctjI5JlfrdZN12a4o6NihrtbhlQ0uoKBpSoai7RCFhOtDSxdqezLUvA3ofRK68my4Np
-         N2kwPmtQ27yA/sOITSA3zYGQTA1RliKY21opRA7UStH0AyzrWEA+RAn3mp7MBFu221kU
-         c7wkmW2GNlj7o4/cDQ8j3OoJHbS/jqRgAWppyFk8OQOS0i0OIv4gEgvaZl8d9ijXVnwU
-         AbmA==
-X-Gm-Message-State: AO0yUKWwy/QalVfoowoedoAfB8ZOMp/OUcnxhCgQuKwR7XbzCr9/w2t0
-        L1fgs4Qjc+bzOCXQqnFa5UGagg==
-X-Google-Smtp-Source: AK7set+ocIWUpDOgeFtUce9WvuyYOBDDQsDPp3s6GYZPyOW1EvXNtf3C/zBbm2kpKzTKWoB8rzEdLw==
-X-Received: by 2002:ac2:48aa:0:b0:4db:38a2:e989 with SMTP id u10-20020ac248aa000000b004db38a2e989mr4046350lfg.63.1678205945548;
-        Tue, 07 Mar 2023 08:19:05 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id x20-20020ac24894000000b004b6f00832cesm2064327lfc.166.2023.03.07.08.19.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 08:19:05 -0800 (PST)
-Message-ID: <aca0e83b-3ad9-6153-f51e-f522cbe979d6@linaro.org>
-Date:   Tue, 7 Mar 2023 17:19:03 +0100
+        Tue, 7 Mar 2023 11:20:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC43590789;
+        Tue,  7 Mar 2023 08:20:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F818614A0;
+        Tue,  7 Mar 2023 16:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9841CC433D2;
+        Tue,  7 Mar 2023 16:20:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678206024;
+        bh=pg76cuXog+TE4GEzbHcXsItKi5PKb6+RWQ0zGaGHaU0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I9pj6z9pXrfP2M22HGDuYlnksbX/jVEX+G4QgBj1C3Q8fmgKmyGfxIIjWbDxnvDI1
+         azPQy4/svhoq5cyBCFII8Hts9o+m+FwqjgVQ/u3ItcT5rt68bDvs+OXXDldFU4GH0y
+         sKuqNtpjIZEY+LLtiMRJydsesccGl/SKHlA3G6TOmQ7LVlOUG8L4NX7SV+tGsDBbGe
+         o1SSx7oWjeKR1OuSWQ1MoGvCmTYZ9t+Y+SE7LdXuMYnDR1akZKafxYctVIbds/35BD
+         D1tQrcFSuxLxOEzuum2lglWFKcxii2Od6qaRwUV/HP4sIsiA3YkaLBl0U82T/nnSiH
+         st543hSyab7Gw==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Yang Shen <shenyang39@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Nick Terrell <terrelln@fb.com>, Kai Ye <yekai13@huawei.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Weili Qian <qianweili@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        qat-linux@intel.com
+Subject: [PATCH 0/6] crypto: remove unnecessary PCI error handling
+Date:   Tue,  7 Mar 2023 10:19:41 -0600
+Message-Id: <20230307161947.857491-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] tty: serial: qcom-geni-serial: check correct dma
- address before unprep
-Content-Language: en-US
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        agross@kernel.org, andersson@kernel.org, gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, bartosz.golaszewski@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230307155543.31021-1-srinivas.kandagatla@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230307155543.31021-1-srinivas.kandagatla@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Bjorn Helgaas <bhelgaas@google.com>
 
+Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"),
+which appeared in v6.0, the PCI core has enabled PCIe error reporting for
+all devices during enumeration.
 
-On 7.03.2023 16:55, Srinivas Kandagatla wrote:
-> looks like there was a typo while checking validatity of tx_dma_addr, the
-> code was checking rx instead of tx.
-> This can potentially lead to memory leak, this patch fixes the typo.
-> 
-> Fixes: 2aaa43c70778 ("tty: serial: qcom-geni-serial: add support for serial engine DMA")
-> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Remove driver code to do this (qat_4xxx) and remove unnecessary includes of
+<linux/aer.h> from several other drivers.
 
-Konrad
->  drivers/tty/serial/qcom_geni_serial.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index d69592e5e2ec..5972b5c317d3 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -596,7 +596,7 @@ static void qcom_geni_serial_stop_tx_dma(struct uart_port *uport)
->  	if (!qcom_geni_serial_main_active(uport))
->  		return;
->  
-> -	if (port->rx_dma_addr) {
-> +	if (port->tx_dma_addr) {
->  		geni_se_tx_dma_unprep(&port->se, port->tx_dma_addr,
->  				      port->tx_remaining);
->  		port->tx_dma_addr = 0;
+Bjorn Helgaas (6):
+  crypto: qat - drop redundant adf_enable_aer()
+  crypto: cavium/nitrox - remove unnecessary aer.h include
+  crypto: hisilicon/hpre - remove unnecessary aer.h include
+  crypto: hisilicon/qm - remove unnecessary aer.h include
+  crypto: hisilicon/sec - remove unnecessary aer.h include
+  crypto: hisilicon/zip - remove unnecessary aer.h include
+
+ drivers/crypto/cavium/nitrox/nitrox_main.c    |  1 -
+ drivers/crypto/hisilicon/hpre/hpre_main.c     |  1 -
+ drivers/crypto/hisilicon/qm.c                 |  1 -
+ drivers/crypto/hisilicon/sec2/sec_main.c      |  1 -
+ drivers/crypto/hisilicon/zip/zip_main.c       |  1 -
+ drivers/crypto/qat/qat_4xxx/adf_drv.c         | 11 ++----
+ drivers/crypto/qat/qat_c3xxx/adf_drv.c        |  9 ++---
+ drivers/crypto/qat/qat_c62x/adf_drv.c         |  9 ++---
+ drivers/crypto/qat/qat_common/adf_aer.c       | 35 -------------------
+ .../crypto/qat/qat_common/adf_common_drv.h    |  2 --
+ drivers/crypto/qat/qat_dh895xcc/adf_drv.c     |  9 ++---
+ 11 files changed, 9 insertions(+), 71 deletions(-)
+
+-- 
+2.25.1
+
