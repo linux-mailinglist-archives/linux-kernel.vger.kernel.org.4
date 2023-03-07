@@ -2,62 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295BA6AE496
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F776AE498
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjCGPZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:25:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S230518AbjCGP0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:26:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjCGPZC (ORCPT
+        with ESMTP id S230300AbjCGP0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:25:02 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF9C1730;
-        Tue,  7 Mar 2023 07:22:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A52CBB81901;
-        Tue,  7 Mar 2023 15:22:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 411F4C4339B;
-        Tue,  7 Mar 2023 15:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678202547;
-        bh=KbIiLNhqeEyzx6niDi9glBJj8B6x8z7c8vaxWx3SMIw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=fe7vaQ4Bz3/c6W3/nJz2MCQzPWmjaywHHIMuhK9rzgBF/NTcOWn3RW58y9vtQ8oZd
-         ly3MQmteRJKdB8uIJN78MNs7fxUD8vsE0hhUWXHUcSZ9GQVXck340rlsxidLDR/4ol
-         F1dTJ7i5qaGz3lmKXxV33SsGk1sNHtlwxki7IKHU/ME4gksur45tTSbhws5RnzLSqh
-         iQSuzVj8gaiAxSBlZaiRvkCKfsm2G6lr7XMZaGWAYGygqD8TF0DEv5UR20VFKCDEFn
-         CRQwVeOiQhs9GSUeTu8NgKWEb9KPAFmxSs/WWRsFMp+ZyBeosowHazCZlnaycs6sAl
-         cHkF0h6RS32cg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D6EB95C01E4; Tue,  7 Mar 2023 07:22:26 -0800 (PST)
-Date:   Tue, 7 Mar 2023 07:22:26 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "urezki@gmail.com" <urezki@gmail.com>
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Message-ID: <20230307152226.GG1301832@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230303213851.2090365-1-joel@joelfernandes.org>
- <20230304010251.GD1301832@paulmck-ThinkPad-P17-Gen-1>
- <IA1PR11MB617141A98ADB1F301FCA07E589B69@IA1PR11MB6171.namprd11.prod.outlook.com>
- <20230306144950.GR1301832@paulmck-ThinkPad-P17-Gen-1>
- <IA1PR11MB61710CDB2B6B47118832770E89B79@IA1PR11MB6171.namprd11.prod.outlook.com>
+        Tue, 7 Mar 2023 10:26:05 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D405DEE4
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:23:35 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id s20so17503715lfb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:23:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678202610;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ntOhmfI7LNXsfCz9NbFIlgIVUJK8u9CoLls1OMKPzIM=;
+        b=thjWary0XRwPP4CDmQDz9e8dqTGhZkGpEhJwZ0+8P63yVrTHpPSJ1M2z/fM6lRjE2U
+         aC8yEIGyU4VyL43SI7PANrYIl5bspSEvHaq0Vk26k6S4vspyDijpTH7fYIKDzBQo3g0d
+         o1Hno68NJIMG9BDmHd+83oDtQo81DLEI2MmCg+2WnxVzxn4lud21Edc8wvsC2PvlBAFG
+         MuW6VfGvYMEZaEUeKHGfu0M/8k+b9+oLLNYIllqOVZMg6/ZilQPAoNzUW4lJx6l5chUx
+         nZHcr6hInwXAFPHheEExBpJUoOuMjZIqO01oczrVlLCyGJeZxsq5pffVf0jB0v8+rwE5
+         SGQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678202610;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ntOhmfI7LNXsfCz9NbFIlgIVUJK8u9CoLls1OMKPzIM=;
+        b=pKivabtqASamjynXxdgTEe6TmHlb7q3p0hmXt3ZeYerofBc9dypeJ49S6jm9+NLsr2
+         MZDuEGjs6YY/t+MXB+3nM+sPhX652WwKaU/oBk7WA/dxMEocXyySrlAcVI4YSyNifIwH
+         QATeQpJzdn10FPuoDioNJftQZJtGQPbl8dreYdVNKWJBmXsaOZX+PBZldhb+aMrsivLV
+         eoWw0q/R0pgRmYGTM3KRV0AkShwfdE5NvYGtBBo16AbPD+oAZdWrUplTNCxQ8qpWe99Q
+         Nj1lK5E6flboyK5X1v/sPoCFFecAyZ0vDZ1bsg42wYXTWow3vYA/WKr4SaT3g1IXwxbZ
+         Dmpg==
+X-Gm-Message-State: AO0yUKWt1miseh3UA+6te/CmdpMdB/EqeJXWwCoWrQPhP2fGDjURdp9O
+        g51lRKEU3Gx0IYaN1kmUKXFqKg==
+X-Google-Smtp-Source: AK7set+pc7wLrQkUVD1In+vcq2OeM8phcHF/svKhWMobRBcFVrjGDpYJHeG1C0UJYqRCoUzRHjyOhw==
+X-Received: by 2002:a05:6512:505:b0:4b5:688e:ee10 with SMTP id o5-20020a056512050500b004b5688eee10mr3895793lfb.16.1678202610516;
+        Tue, 07 Mar 2023 07:23:30 -0800 (PST)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id q8-20020ac25a08000000b004cc548b35fbsm2051258lfn.71.2023.03.07.07.23.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 07:23:30 -0800 (PST)
+Message-ID: <a2c97f09-3360-b2b1-184a-8e3b869a70ef@linaro.org>
+Date:   Tue, 7 Mar 2023 17:23:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <IA1PR11MB61710CDB2B6B47118832770E89B79@IA1PR11MB6171.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/4] firmware: qcom_scm: Export SCM call functions
+Content-Language: en-GB
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230305022119.1331495-1-luzmaximilian@gmail.com>
+ <20230305022119.1331495-2-luzmaximilian@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230305022119.1331495-2-luzmaximilian@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,188 +87,515 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 07:49:49AM +0000, Zhuo, Qiuxu wrote:
-> > From: Paul E. McKenney <paulmck@kernel.org>
-> > [...]
-> > >
-> > > Thank you so much Paul for the detailed comments on the measured data.
-> > >
-> > > I'm curious how did you figure out the number 24 that we at *least* need.
-> > > This can guide me on whether the number of samples is enough for
-> > > future testing ;-).
-> > 
-> > It is a rough rule of thumb.  For more details and accuracy, study up on the
-> > Student's t-test and related statistical tests.
-> > 
-> > Of course, this all assumes that the data fits a normal distribution.
+On 05/03/2023 04:21, Maximilian Luz wrote:
+> Make qcom_scm_call, qcom_scm_call_atomic and associated types accessible
+> to other modules.
+
+Generally all the qcom_scm calls are a part of qcom_scm.c. I think it is 
+better to make qseecom_scm_call a part qcom_scm.c (as we were previously 
+doing) rather than exporting the core function.
+
+If you wish to limit the kernel bloat, you can split the qcom_scm into 
+per-driver backend and add Kconfig symbols to limit the impact. However 
+I think that these functions are pretty small to justify the effort.
+
 > 
-> Thanks for this extra information. Good to know the Student's t-test.
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+> ---
 > 
-> > > I did another 48 measurements (2x of 24) for each case (w/o and w/
-> > > Joel's v2 patch) as below.
-> > > All the testing configurations for the new testing are the same as
-> > > before.
-> > >
-> > > a) Measured 48 times w/o v2 patch (in seconds):
-> > >     8.4, 8.8, 9.2, 9.0, 8.3, 9.6, 8.8, 9.4,
-> > >     8.7, 9.2, 8.3, 9.4, 8.4, 9.6, 8.5, 8.8,
-> > >     8.8, 8.9, 9.3, 9.2, 8.6, 9.7, 9.2, 8.8,
-> > >     8.7, 9.0, 9.1, 9.5, 8.6, 8.9, 9.1, 8.6,
-> > >     8.2, 9.1, 8.8, 9.2, 9.1, 8.9, 8.4, 9.0,
-> > >     9.8, 9.8, 8.7, 8.8, 9.1, 9.5, 9.5, 8.7
-> > >     The average OS boot time was: ~9.0s
-> > 
-> > The range is 8.2 through 9.8.
-> > 
-> > > b) Measure 48 times w/ v2 patch (in seconds):
-> > >     7.7, 8.6, 8.1, 7.8, 8.2, 8.2, 8.8, 8.2,
-> > >     9.8, 8.0, 9.2, 8.8, 9.2, 8.5, 8.4, 9.2,
-> > >     8.5, 8.3, 8.1, 8.3, 8.6, 7.9, 8.3, 8.3,
-> > >     8.6, 8.9, 8.0, 8.5, 8.4, 8.6, 8.7, 8.0,
-> > >     8.8, 8.8, 9.1, 7.9, 9.7, 7.9, 8.2, 7.8,
-> > >     8.1, 8.5, 8.6, 8.4, 9.2, 8.6, 9.6, 8.3,
-> > >     The average OS boot time was: ~8.5s
-> > 
-> > The range is 7.7 through 9.8.
-> > 
-> > There is again significant overlap, so it is again unclear that you have a
-> > statistically significant difference.  So could you please calculate the standard
-> > deviations?
+> Changes in v3:
+>   - Rebase ontop of latest qcom_scm changes.
+>   - Fix doc-comment.
 > 
-> a's standard deviation is ~0.4.
-> b's standard deviation is ~0.5.
+> Changes in v2:
+>   - No functional changes.
 > 
-> a's average 9.0 is at the upbound of the standard deviation of b's [8.0, 9].
-> So, the measurements should be statistically significant to some degree.
-
-That single standard deviation means that you have 68% confidence that the
-difference is real.  This is not far above the 50% leval of random noise.
-95% is the lowest level that is normally considered to be statistically
-significant.
-
-> The calculated standard deviations are via: 
-> https://www.gigacalculator.com/calculators/standard-deviation-calculator.php
-
-Fair enough.  Formulas are readily available as well, and most spreadsheets
-support standard deviation.
-
-> > > @Joel Fernandes (Google), you may replace my old data with the above
-> > > new data in your commit message.
-> > >
-> > > > But we can apply the binomial distribution instead of the usual
-> > > > normal distribution.  First, let's sort and take the medians:
-> > > >
-> > > > a: 8.2 8.3 8.4 8.6 8.7 8.7 8.8 8.8 9.0 9.3  Median: 8.7
-> > > > b: 7.6 7.8 8.2 8.2 8.2 8.2 8.4 8.5 8.7 9.3  Median: 8.2
-> > > >
-> > > > 8/10 of a's data points are greater than 0.1 more than b's median
-> > > > and 8/10 of b's data points are less than 0.1 less than a's median.
-> > > > What are the odds that this happens by random chance?
-> > > >
-> > > > This is given by sum_0^2 (0.5^10 * binomial(10,i)), which is about 0.055.
-> > >
-> > > What's the meaning of 0.5 here? Was it the probability (we assume?)
-> > > that each time b's data point failed (or didn't satisfy) "less than
-> > > 0.1 less than a's median"?
-> > 
-> > The meaning of 0.5 is the probability of a given data point being on one side
-> > or the other of the corresponding distribution's median.  This of course
-> > assumes that the median of the measured data matches that of the
-> > corresponding distribution, though the fact that the median is also a mode of
-> > both of the old data sets gives some hope.
+> ---
+>   drivers/firmware/qcom_scm.c            | 120 ++++++++++++++++---------
+>   drivers/firmware/qcom_scm.h            |  47 ----------
+>   include/linux/firmware/qcom/qcom_scm.h |  49 ++++++++++
+>   3 files changed, 129 insertions(+), 87 deletions(-)
 > 
->   Thanks for the detailed comments on the meaning of 0.5 here. :-)
-> 
-> > The meaning of the 0.1 is the smallest difference that the data could measure.
-> > I could have instead chosen 0.0 and asked if there was likely some (perhaps
-> > tiny) difference, but instead, I chose to ask if there was likely some small but
-> > meaningful difference.  It is better to choose the desired difference before
-> > measuring the data.
-> 
->   Thanks for the detailed comments on the meaning of 0.1 here. :-)
-> 
-> > Why don't you try applying this approach to the new data?  You will need the
-> > general binomial formula.
-> 
->    Thank you Paul for the suggestion. 
->    I just tried it, but not sure whether my analysis was correct ...
-> 
->    Analysis 1:
->    a's median is 8.9. 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 468d4d5ab550..9b3e4449a563 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -212,16 +212,17 @@ static enum qcom_scm_convention __get_convention(void)
+>   }
+>   
+>   /**
+> - * qcom_scm_call() - Invoke a syscall in the secure world
+> - * @dev:	device
+> + * __qcom_scm_call() - Invoke a syscall in the secure world
+> + * @dev:	Device. Depending on the command and number of arguments, this
+> + *		is optional.
+>    * @desc:	Descriptor structure containing arguments and return values
+>    * @res:        Structure containing results from SMC/HVC call
+>    *
+>    * Sends a command to the SCM and waits for the command to finish processing.
+>    * This should *only* be called in pre-emptible context.
+>    */
+> -static int qcom_scm_call(struct device *dev, const struct qcom_scm_desc *desc,
+> -			 struct qcom_scm_res *res)
+> +static int __qcom_scm_call(struct device *dev, const struct qcom_scm_desc *desc,
+> +			   struct qcom_scm_res *res)
+>   {
+>   	might_sleep();
+>   	switch (__get_convention()) {
+> @@ -237,17 +238,38 @@ static int qcom_scm_call(struct device *dev, const struct qcom_scm_desc *desc,
+>   }
+>   
+>   /**
+> - * qcom_scm_call_atomic() - atomic variation of qcom_scm_call()
+> - * @dev:	device
+> + * qcom_scm_call() - Invoke a syscall in the secure world
+> + * @desc:	Descriptor structure containing arguments and return values
+> + * @res:        Structure containing results from SMC/HVC call
+> + *
+> + * Sends a command to the SCM and waits for the command to finish processing.
+> + * This should *only* be called in pre-emptible context.
+> + *
+> + * Returns zero on success, -ENODEV if the SCM device has not been set up yet,
+> + * or other non-zero status codes on failure.
+> + */
+> +int qcom_scm_call(const struct qcom_scm_desc *desc, struct qcom_scm_res *res)
+> +{
+> +	if (!__scm)
+> +		return -ENODEV;
+> +
+> +	return __qcom_scm_call(__scm->dev, desc, res);
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_scm_call);
+> +
+> +/**
+> + * __qcom_scm_call_atomic() - atomic variation of __qcom_scm_call()
+> + * @dev:	Device. Depending on the command and number of arguments, this
+> + *		is optional.
+>    * @desc:	Descriptor structure containing arguments and return values
+>    * @res:	Structure containing results from SMC/HVC call
+>    *
+>    * Sends a command to the SCM and waits for the command to finish processing.
+>    * This can be called in atomic context.
+>    */
+> -static int qcom_scm_call_atomic(struct device *dev,
+> -				const struct qcom_scm_desc *desc,
+> -				struct qcom_scm_res *res)
+> +static int __qcom_scm_call_atomic(struct device *dev,
+> +				  const struct qcom_scm_desc *desc,
+> +				  struct qcom_scm_res *res)
+>   {
+>   	switch (__get_convention()) {
+>   	case SMC_CONVENTION_ARM_32:
+> @@ -261,6 +283,26 @@ static int qcom_scm_call_atomic(struct device *dev,
+>   	}
+>   }
+>   
+> +/**
+> + * qcom_scm_call_atomic() - atomic variation of qcom_scm_call()
+> + * @desc:	Descriptor structure containing arguments and return values
+> + * @res:	Structure containing results from SMC/HVC call
+> + *
+> + * Sends a command to the SCM and waits for the command to finish processing.
+> + * This can be called in atomic context.
+> + *
+> + * Returns zero on success, -ENODEV if the SCM device has not been set up yet,
+> + * or other non-zero status codes on failure.
+> + */
+> +int qcom_scm_call_atomic(const struct qcom_scm_desc *desc, struct qcom_scm_res *res)
+> +{
+> +	if (!__scm)
+> +		return -ENODEV;
+> +
+> +	return __qcom_scm_call_atomic(__scm->dev, desc, res);
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_scm_call_atomic);
+> +
+>   static bool __qcom_scm_is_call_available(struct device *dev, u32 svc_id,
+>   					 u32 cmd_id)
+>   {
+> @@ -287,7 +329,7 @@ static bool __qcom_scm_is_call_available(struct device *dev, u32 svc_id,
+>   		return false;
+>   	}
+>   
+> -	ret = qcom_scm_call(dev, &desc, &res);
+> +	ret = __qcom_scm_call(dev, &desc, &res);
+>   
+>   	return ret ? false : !!res.result[0];
+>   }
+> @@ -312,7 +354,7 @@ static int qcom_scm_set_boot_addr(void *entry, const u8 *cpu_bits)
+>   	desc.args[0] = flags;
+>   	desc.args[1] = virt_to_phys(entry);
+>   
+> -	return qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
+> +	return __qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
+>   }
+>   
+>   static int qcom_scm_set_boot_addr_mc(void *entry, unsigned int flags)
+> @@ -334,7 +376,7 @@ static int qcom_scm_set_boot_addr_mc(void *entry, unsigned int flags)
+>   	if (!__scm || __get_convention() == SMC_CONVENTION_LEGACY)
+>   		return -EOPNOTSUPP;
+>   
+> -	return qcom_scm_call(__scm->dev, &desc, NULL);
+> +	return __qcom_scm_call(__scm->dev, &desc, NULL);
+>   }
+>   
+>   /**
+> @@ -384,7 +426,7 @@ void qcom_scm_cpu_power_down(u32 flags)
+>   		.owner = ARM_SMCCC_OWNER_SIP,
+>   	};
+>   
+> -	qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
+> +	__qcom_scm_call_atomic(__scm ? __scm->dev : NULL, &desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_cpu_power_down);
+>   
+> @@ -401,7 +443,7 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
+>   	struct qcom_scm_res res;
+>   	int ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   
+>   	return ret ? : res.result[0];
+>   }
+> @@ -419,7 +461,7 @@ static int __qcom_scm_set_dload_mode(struct device *dev, bool enable)
+>   
+>   	desc.args[1] = enable ? QCOM_SCM_BOOT_SET_DLOAD_MODE : 0;
+>   
+> -	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call_atomic(&desc, NULL);
+>   }
+>   
+>   static void qcom_scm_set_download_mode(bool enable)
+> @@ -499,7 +541,7 @@ int qcom_scm_pas_init_image(u32 peripheral, const void *metadata, size_t size,
+>   
+>   	desc.args[1] = mdata_phys;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = __qcom_scm_call(__scm->dev, &desc, &res);
+>   
+>   	qcom_scm_bw_disable();
+>   	qcom_scm_clk_disable();
+> @@ -565,7 +607,7 @@ int qcom_scm_pas_mem_setup(u32 peripheral, phys_addr_t addr, phys_addr_t size)
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   	qcom_scm_bw_disable();
+>   	qcom_scm_clk_disable();
+>   
+> @@ -600,7 +642,7 @@ int qcom_scm_pas_auth_and_reset(u32 peripheral)
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   	qcom_scm_bw_disable();
+>   	qcom_scm_clk_disable();
+>   
+> @@ -634,7 +676,7 @@ int qcom_scm_pas_shutdown(u32 peripheral)
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   
+>   	qcom_scm_bw_disable();
+>   	qcom_scm_clk_disable();
+> @@ -666,7 +708,7 @@ bool qcom_scm_pas_supported(u32 peripheral)
+>   					  QCOM_SCM_PIL_PAS_IS_SUPPORTED))
+>   		return false;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = __qcom_scm_call(__scm->dev, &desc, &res);
+>   
+>   	return ret ? false : !!res.result[0];
+>   }
+> @@ -685,7 +727,7 @@ static int __qcom_scm_pas_mss_reset(struct device *dev, bool reset)
+>   	struct qcom_scm_res res;
+>   	int ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   
+>   	return ret ? : res.result[0];
+>   }
+> @@ -725,8 +767,7 @@ int qcom_scm_io_readl(phys_addr_t addr, unsigned int *val)
+>   	struct qcom_scm_res res;
+>   	int ret;
+>   
+> -
+> -	ret = qcom_scm_call_atomic(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call_atomic(&desc, &res);
+>   	if (ret >= 0)
+>   		*val = res.result[0];
+>   
+> @@ -745,7 +786,7 @@ int qcom_scm_io_writel(phys_addr_t addr, unsigned int val)
+>   		.owner = ARM_SMCCC_OWNER_SIP,
+>   	};
+>   
+> -	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call_atomic(&desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_io_writel);
+>   
+> @@ -775,7 +816,7 @@ int qcom_scm_restore_sec_cfg(u32 device_id, u32 spare)
+>   	struct qcom_scm_res res;
+>   	int ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   
+>   	return ret ? : res.result[0];
+>   }
+> @@ -793,7 +834,7 @@ int qcom_scm_iommu_secure_ptbl_size(u32 spare, size_t *size)
+>   	struct qcom_scm_res res;
+>   	int ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   
+>   	if (size)
+>   		*size = res.result[0];
+> @@ -816,7 +857,7 @@ int qcom_scm_iommu_secure_ptbl_init(u64 addr, u32 size, u32 spare)
+>   	};
+>   	int ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, NULL);
+> +	ret = qcom_scm_call(&desc, NULL);
+>   
+>   	/* the pg table has been initialized already, ignore the error */
+>   	if (ret == -EPERM)
+> @@ -837,7 +878,7 @@ int qcom_scm_iommu_set_cp_pool_size(u32 spare, u32 size)
+>   		.owner = ARM_SMCCC_OWNER_SIP,
+>   	};
+>   
+> -	return qcom_scm_call(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call(&desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_iommu_set_cp_pool_size);
+>   
+> @@ -859,7 +900,7 @@ int qcom_scm_mem_protect_video_var(u32 cp_start, u32 cp_size,
+>   	};
+>   	struct qcom_scm_res res;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   
+>   	return ret ? : res.result[0];
+>   }
+> @@ -887,7 +928,7 @@ static int __qcom_scm_assign_mem(struct device *dev, phys_addr_t mem_region,
+>   	};
+>   	struct qcom_scm_res res;
+>   
+> -	ret = qcom_scm_call(dev, &desc, &res);
+> +	ret = __qcom_scm_call(dev, &desc, &res);
+>   
+>   	return ret ? : res.result[0];
+>   }
+> @@ -1004,7 +1045,7 @@ int qcom_scm_ocmem_lock(enum qcom_scm_ocmem_client id, u32 offset, u32 size,
+>   		.arginfo = QCOM_SCM_ARGS(4),
+>   	};
+>   
+> -	return qcom_scm_call(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call(&desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_ocmem_lock);
+>   
+> @@ -1027,7 +1068,7 @@ int qcom_scm_ocmem_unlock(enum qcom_scm_ocmem_client id, u32 offset, u32 size)
+>   		.arginfo = QCOM_SCM_ARGS(3),
+>   	};
+>   
+> -	return qcom_scm_call(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call(&desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_ocmem_unlock);
+>   
+> @@ -1068,7 +1109,7 @@ int qcom_scm_ice_invalidate_key(u32 index)
+>   		.owner = ARM_SMCCC_OWNER_SIP,
+>   	};
+>   
+> -	return qcom_scm_call(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call(&desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_ice_invalidate_key);
+>   
+> @@ -1129,7 +1170,7 @@ int qcom_scm_ice_set_key(u32 index, const u8 *key, u32 key_size,
+>   	memcpy(keybuf, key, key_size);
+>   	desc.args[1] = key_phys;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, NULL);
+> +	ret = qcom_scm_call(&desc, NULL);
+>   
+>   	memzero_explicit(keybuf, key_size);
+>   
+> @@ -1198,7 +1239,7 @@ int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt, u32 *resp)
+>   	if (ret)
+>   		return ret;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, &res);
+> +	ret = qcom_scm_call(&desc, &res);
+>   	*resp = res.result[0];
+>   
+>   	qcom_scm_clk_disable();
+> @@ -1219,7 +1260,7 @@ int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt)
+>   		.owner = ARM_SMCCC_OWNER_SIP,
+>   	};
+>   
+> -	return qcom_scm_call(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call(&desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_iommu_set_pt_format);
+>   
+> @@ -1234,8 +1275,7 @@ int qcom_scm_qsmmu500_wait_safe_toggle(bool en)
+>   		.owner = ARM_SMCCC_OWNER_SIP,
+>   	};
+>   
+> -
+> -	return qcom_scm_call_atomic(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call_atomic(&desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_qsmmu500_wait_safe_toggle);
+>   
+> @@ -1255,7 +1295,7 @@ int qcom_scm_lmh_profile_change(u32 profile_id)
+>   		.owner = ARM_SMCCC_OWNER_SIP,
+>   	};
+>   
+> -	return qcom_scm_call(__scm->dev, &desc, NULL);
+> +	return qcom_scm_call(&desc, NULL);
+>   }
+>   EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
+>   
+> @@ -1290,7 +1330,7 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+>   
+>   	desc.args[0] = payload_phys;
+>   
+> -	ret = qcom_scm_call(__scm->dev, &desc, NULL);
+> +	ret = __qcom_scm_call(__scm->dev, &desc, NULL);
+>   
+>   	dma_free_coherent(__scm->dev, payload_size, payload_buf, payload_phys);
+>   	return ret;
+> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+> index e6e512bd57d1..87eb726be7d0 100644
+> --- a/drivers/firmware/qcom_scm.h
+> +++ b/drivers/firmware/qcom_scm.h
+> @@ -13,53 +13,6 @@ enum qcom_scm_convention {
+>   
+>   extern enum qcom_scm_convention qcom_scm_convention;
+>   
+> -#define MAX_QCOM_SCM_ARGS 10
+> -#define MAX_QCOM_SCM_RETS 3
+> -
+> -enum qcom_scm_arg_types {
+> -	QCOM_SCM_VAL,
+> -	QCOM_SCM_RO,
+> -	QCOM_SCM_RW,
+> -	QCOM_SCM_BUFVAL,
+> -};
+> -
+> -#define QCOM_SCM_ARGS_IMPL(num, a, b, c, d, e, f, g, h, i, j, ...) (\
+> -			   (((a) & 0x3) << 4) | \
+> -			   (((b) & 0x3) << 6) | \
+> -			   (((c) & 0x3) << 8) | \
+> -			   (((d) & 0x3) << 10) | \
+> -			   (((e) & 0x3) << 12) | \
+> -			   (((f) & 0x3) << 14) | \
+> -			   (((g) & 0x3) << 16) | \
+> -			   (((h) & 0x3) << 18) | \
+> -			   (((i) & 0x3) << 20) | \
+> -			   (((j) & 0x3) << 22) | \
+> -			   ((num) & 0xf))
+> -
+> -#define QCOM_SCM_ARGS(...) QCOM_SCM_ARGS_IMPL(__VA_ARGS__, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+> -
+> -
+> -/**
+> - * struct qcom_scm_desc
+> - * @arginfo:	Metadata describing the arguments in args[]
+> - * @args:	The array of arguments for the secure syscall
+> - */
+> -struct qcom_scm_desc {
+> -	u32 svc;
+> -	u32 cmd;
+> -	u32 arginfo;
+> -	u64 args[MAX_QCOM_SCM_ARGS];
+> -	u32 owner;
+> -};
+> -
+> -/**
+> - * struct qcom_scm_res
+> - * @result:	The values returned by the secure syscall
+> - */
+> -struct qcom_scm_res {
+> -	u64 result[MAX_QCOM_SCM_RETS];
+> -};
+> -
+>   int qcom_scm_wait_for_wq_completion(u32 wq_ctx);
+>   int scm_get_wq_ctx(u32 *wq_ctx, u32 *flags, u32 *more_pending);
+>   
+> diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
+> index 1e449a5d7f5c..162746467c22 100644
+> --- a/include/linux/firmware/qcom/qcom_scm.h
+> +++ b/include/linux/firmware/qcom/qcom_scm.h
+> @@ -11,6 +11,55 @@
+>   
+>   #include <dt-bindings/firmware/qcom,scm.h>
+>   
+> +#define QCOM_SCM_ARGS_IMPL(num, a, b, c, d, e, f, g, h, i, j, ...) (\
+> +			   (((a) & 0x3) << 4) | \
+> +			   (((b) & 0x3) << 6) | \
+> +			   (((c) & 0x3) << 8) | \
+> +			   (((d) & 0x3) << 10) | \
+> +			   (((e) & 0x3) << 12) | \
+> +			   (((f) & 0x3) << 14) | \
+> +			   (((g) & 0x3) << 16) | \
+> +			   (((h) & 0x3) << 18) | \
+> +			   (((i) & 0x3) << 20) | \
+> +			   (((j) & 0x3) << 22) | \
+> +			   ((num) & 0xf))
+> +
+> +#define QCOM_SCM_ARGS(...) QCOM_SCM_ARGS_IMPL(__VA_ARGS__, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+> +
+> +#define MAX_QCOM_SCM_ARGS 10
+> +#define MAX_QCOM_SCM_RETS 3
+> +
+> +enum qcom_scm_arg_types {
+> +	QCOM_SCM_VAL,
+> +	QCOM_SCM_RO,
+> +	QCOM_SCM_RW,
+> +	QCOM_SCM_BUFVAL,
+> +};
+> +
+> +/**
+> + * struct qcom_scm_desc - SCM call descriptor.
+> + * @arginfo:	Metadata describing the arguments in args[]
+> + * @args:	The array of arguments for the secure syscall
+> + */
+> +struct qcom_scm_desc {
+> +	u32 svc;
+> +	u32 cmd;
+> +	u32 arginfo;
+> +	u64 args[MAX_QCOM_SCM_ARGS];
+> +	u32 owner;
+> +};
+> +
+> +/**
+> + * struct qcom_scm_res - SCM call response.
+> + * @result:	The values returned by the secure syscall
+> + */
+> +struct qcom_scm_res {
+> +	u64 result[MAX_QCOM_SCM_RETS];
+> +};
+> +
+> +int qcom_scm_call(const struct qcom_scm_desc *desc, struct qcom_scm_res *res);
+> +int qcom_scm_call_atomic(const struct qcom_scm_desc *desc, struct qcom_scm_res *res);
+> +
+>   #define QCOM_SCM_VERSION(major, minor)	(((major) << 16) | ((minor) & 0xFF))
+>   #define QCOM_SCM_CPU_PWR_DOWN_L2_ON	0x0
+>   #define QCOM_SCM_CPU_PWR_DOWN_L2_OFF	0x1
 
-I get 8.95, which is the average of the 24th and 25th members of a
-in numerical order.
+-- 
+With best wishes
+Dmitry
 
->    35/48 b's data points are less than 0.1 less than a's median.
->    For a's binomial distribution P(X >= 35) = 0.1%, where p=0.5.
->    So, we have strong confidence that b is 100ms faster than a.
-
-I of course get quite a bit stronger confidence, but your 99.9% is
-good enough.  And I get even stronger confidence going in the other
-direction.  However, the fact that a's median varies from 8.7 in the old
-experiment to 8.95 in this experiment does give some pause.  These are
-after all supposedly drawn from the same distribution.  Or did you use
-a different machine or different OS version or some such in the two
-sets of measurements?  Different time of day and thus different ambient
-temperature, thus different CPU clock frequency?
-
-Assuming identical test setups, let's try the old value of 8.7 from old
-a to new b.  There are 14 elements in new b greater than 8.6, for a
-probability of 0.17%, or about 98.3% significance.  This is still OK.
-
-In contrast, the median of the old b is 8.2, which gives extreme
-confidence.  So let's be conservative and use the large-set median.
-
-In real life, additional procedures would be needed to estimate the
-confidence in the median, which turns oout to be nontrivial.  When I apply
-this sort of technique, I usually have all data from each sample being
-on one side of the median of the other, which simplifies things.  ;-)
-
-The easiest way to estimate bounds on the median is to "bootstrap",
-but that works best if you have 1000 samples and can randomly draw 1000
-sub-samples each of size 10 from the larger sample and compute the median
-of each.  You can sort these medians and obtain a cumulative distribution.
-But you have to have an extremely good reason to collect data from 1000
-boots, and I don't believe we have that good of a reason.
-
->    Analysis 2:
->    a's median - 0.4 = 8.9 - 0.4 = 8.5. 
->    24/48 b's data points are less than 0.4 less than a's median.
->    The probability that a's data points are less than 8.5 is p = 7/48 = 0.1458 
-This is only 85.4% significant, so...
-
->    For a's binomial distribution P(X >= 24) = 0.0%, where p=0.1458.
->    So, looks like we have confidence that b is 400ms faster than a.
-
-...we really cannot say anything about 400ms faster.  Again, you need 95%
-and preferably 99% to really make any sort of claim.  You probably need
-quite a few more samples to say much about 200ms, let alone 400ms.
-
-Plus, you really should select the speedup and only then take the
-measurements.  Otherwise, you end up fitting noise.
-
-However, assuming identical tests setups, you really can calculate
-the median from the full data set.
-
->    The calculated cumulative binomial distributions P(X) is via:
->    https://www.gigacalculator.com/calculators/binomial-probability-calculator.php
-
-The maxima program's binomial() function agrees with it, so good.  ;-)
-
->    I apologize if this analysis/discussion bored some of you. ;-)
-
-Let's just say that it is a lot simpler when you are measuring
-larger differences in data with tighter distributions.  Me, I usually
-just say "no" to drawing any sort of conclusion from data sets that
-overlap this much.
-
-Instead, I might check to see if there is some random events adding
-noise to the boot duration, eliminate that, and hopefully get data
-that is easier to analyze.
-
-But I am good with the 98.3% confidence in a 100ms improvement.
-
-So if Joel wishes to make this point, he should feel free to take both
-of your datasets and use the computation with the worse mean.
-
-							Thanx, Paul
