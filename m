@@ -2,98 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8FE6AE476
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52166AE47A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjCGPVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S230502AbjCGPVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:21:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbjCGPVL (ORCPT
+        with ESMTP id S230484AbjCGPV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:21:11 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0558287D86
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:18:48 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id o12so53597574edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:18:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678202316;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bwl4tCXVwjpJh7IhcTJKMi7gkXOGrvpoou3pIHWnxxM=;
-        b=u4y2ycachlHPFB/neVV7xdZG1TNs4w0W6CUPYi/mJ61GcBiSCyCyxeckpOEFcXGJoV
-         6Q+9x82W4fYzaIVTj588a4TfJVz50lIYVzKJadiNp6lvBlv7H7Kj2YnHSgH15oV5wj00
-         lo6u/H97zvfhVqKmUWi1SZ0iRzSEses9vD+gobXRfBUMJBVEc3fda8YyQs5bc+UCwI/A
-         CLwV0sbNMptzUkOcBBu/YYcNMRX0fyosfRNstR2BNiNP+kB5PVJsRv05yXJkm0hUYUq9
-         B7s6Pi4aLp4v4oywhpwQuc/fc0Y048bJj7SJJvPqosdkeOR0ZaqnXgP1sIpOY8BFv0sc
-         mTZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678202316;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bwl4tCXVwjpJh7IhcTJKMi7gkXOGrvpoou3pIHWnxxM=;
-        b=ZQ7Kz7E7hcTysnlQk7EAklzHtTnYX0tojKwUxfR0LakRuEGx07tsLkdvBUzswuizQs
-         TBSf8sH7NA0rVt6fgY2xhXeZkCayXAw6KuM+atmhGDz849ukk7qxF52JNz9Yawgv185Q
-         5U9+2E26n9TyLJ8jzaoL71xV+9j4vj1td/oSdOYpYTJD03FZq1f/b3USTolJt6E7X39u
-         3T3csvEkGL3J7jBblUNq+/aCQCy0qla93++nh6XI/oZaFwwfhecr2AZbvAuz/DBAgv5S
-         tkICek/d9OSWaypA/JvLrkyR9DLvS1mL+6ro7JtZEoxP65feJvtKObnRXpqgAUXfRygi
-         qOEw==
-X-Gm-Message-State: AO0yUKUkISehC/i6vnkRNSn8WxbxVhmdE3E9jtCSD17PtG7Zgjb1Q4h2
-        dNbovEG0DqjiO0PJ8mDgSDJtmLj0vSSSLGokWbo=
-X-Google-Smtp-Source: AK7set/OTiyBx5HQzigvX9pyuSerEVTOaJqZrHtQx4SxfYIW/eKaiPNd7K+ki4jEhrErvL0QOFGhfw==
-X-Received: by 2002:aa7:c983:0:b0:4aa:a0ed:e373 with SMTP id c3-20020aa7c983000000b004aaa0ede373mr9891525edt.7.1678202316731;
-        Tue, 07 Mar 2023 07:18:36 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:a60f:e604:c252:1f3d? ([2a02:810d:15c0:828:a60f:e604:c252:1f3d])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170906164d00b008deba75e89csm6252637ejd.66.2023.03.07.07.18.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 07:18:36 -0800 (PST)
-Message-ID: <ef0f48ac-f258-e7b5-405d-5def6c63c1c2@linaro.org>
-Date:   Tue, 7 Mar 2023 16:18:34 +0100
+        Tue, 7 Mar 2023 10:21:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5427D0A7;
+        Tue,  7 Mar 2023 07:19:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01AB7B818FF;
+        Tue,  7 Mar 2023 15:18:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D1DC433EF;
+        Tue,  7 Mar 2023 15:18:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678202330;
+        bh=lQZ5rERaQRLgIyK7bi6stqZey4jwiIUgFUF4gu9goyE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uX7gx9S3/Fv3Oe5xX8ftkcdY3CRsMQvYdGZKayDbGX/tXTxj/qovMiYjQN1LAXrad
+         iUtV94FxViEBP86p27LIkgu7rebVu4T7Cm6d9P8a1XKB4f8BW+GLPzD6D1yQ+EDHIp
+         LkjKcDBE9ZDh/Ml4VwVqMAoBMb5zR8sPvMJdayLBaQclOyycxfE7QQxvw6yAYq5vz1
+         g+XRJG9M30q2yfmkgbgtyBUZRth62RzDAim7J3P7RqSBgNLLCLdEqqOtjhcdEl0rQS
+         YELHzd+VS6ttWo/t5bqXF0z2Hn+llnokTPCOFsw83J7yVj2O0FnikSDWrvQo0zHFFl
+         gcq1Ip2dgZfmA==
+Date:   Tue, 7 Mar 2023 20:48:39 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Vidya Sagar <vidyas@nvidia.com>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>, jingoohan1@gmail.com,
+        gustavo.pimentel@synopsys.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        Sergey.Semin@baikalelectronics.ru, dmitry.baryshkov@linaro.org,
+        linmq006@gmail.com, ffclaire1224@gmail.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com
+Subject: Re: [PATCH V5 0/3] PCI: designware-ep: Fix DBI access before core
+ init
+Message-ID: <20230307151839.GE5599@thinkpad>
+References: <20221013175712.7539-1-vidyas@nvidia.com>
+ <20230214130329.GC4981@thinkpad>
+ <ccc4b7fe-db07-cddb-2d0b-b6a89d7b1155@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 03/11] dt-bindings: scm: Add compatible for IPQ5018
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
-        loic.poulain@linaro.org, quic_eberman@quicinc.com,
-        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-4-git-send-email-quic_mmanikan@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1678164097-13247-4-git-send-email-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ccc4b7fe-db07-cddb-2d0b-b6a89d7b1155@nvidia.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
-> Add the scm compatible string for IPQ5018 SoC
+On Tue, Feb 14, 2023 at 07:27:54PM +0530, Vidya Sagar wrote:
 > 
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> 
+> On 2/14/2023 6:33 PM, Manivannan Sadhasivam wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Thu, Oct 13, 2022 at 11:27:09PM +0530, Vidya Sagar wrote:
+> > > This series attempts to fix the issue with core register (Ex:- DBI) accesses
+> > > causing system hang issues in platforms where there is a dependency on the
+> > > availability of PCIe Reference clock from the host for their core
+> > > initialization.
+> > > This series is verified on Tegra194 & Tegra234 platforms.
+> > > 
+> > > Manivannan, could you please verify on qcom platforms?
+> > > 
+> > 
+> > Vidya, any plan to respin this series? The EPC rework series is now merged for
+> > v6.3.
+> 
+> Yes. I'll send an updated series soon.
+> Currently, I'm observing some regression with linux-next on Tegra platform
+> for endpoint mode. I'll post the patches as soon as that is resolved.
+> 
 
+Ping!
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks,
+Mani
 
-Best regards,
-Krzysztof
+> Thanks,
+> Vidya Sagar
+> 
+> > 
+> > Thanks,
+> > Mani
+> > 
+> > > V5:
+> > > * Addressed review comments from Bjorn
+> > > * Changed dw_pcie_ep_init_complete() to dw_pcie_ep_init_late()
+> > > * Skipped memory allocation if done already. This is to avoid freeing and then
+> > >    allocating again during PERST# toggles from the host.
+> > > 
+> > > V4:
+> > > * Addressed review comments from Bjorn and Manivannan
+> > > * Added .ep_init_late() ops
+> > > * Added patches to refactor code in qcom and tegra platforms
+> > > 
+> > > Vidya Sagar (3):
+> > >    PCI: designware-ep: Fix DBI access before core init
+> > >    PCI: qcom-ep: Refactor EP initialization completion
+> > >    PCI: tegra194: Refactor EP initialization completion
+> > > 
+> > >   .../pci/controller/dwc/pcie-designware-ep.c   | 125 +++++++++++-------
+> > >   drivers/pci/controller/dwc/pcie-designware.h  |  10 +-
+> > >   drivers/pci/controller/dwc/pcie-qcom-ep.c     |  27 ++--
+> > >   drivers/pci/controller/dwc/pcie-tegra194.c    |   4 +-
+> > >   4 files changed, 97 insertions(+), 69 deletions(-)
+> > > 
+> > > --
+> > > 2.17.1
+> > > 
+> > 
+> > --
+> > மணிவண்ணன் சதாசிவம்
 
+-- 
+மணிவண்ணன் சதாசிவம்
