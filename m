@@ -2,133 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314946AF6FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E966AF6FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjCGUyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:54:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49676 "EHLO
+        id S230401AbjCGUy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:54:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbjCGUy2 (ORCPT
+        with ESMTP id S231153AbjCGUym (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:54:28 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00806A9081
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:54:26 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id k10so33723087edk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 12:54:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678222465;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S1a1wUr/c8UneDltFnq/GcX6Q8fOFZMqB2rkkJLxpEA=;
-        b=gOEtkVbZ4ASgeHG6Zs1ydUV8FfFAJNaOpw2xQ3GFBni4xp2Gi+ImjdltT0scnqNaBc
-         YerVhh48BZzejtZeo74rKuNBXMYitUPCt6oCuFA/WegkYQ1MG9TGiKhxrZDCFSWjOXeq
-         whXM4SnqvZM3tmqxOGEaN7XbkkuUDTguuZ+YY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678222465;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S1a1wUr/c8UneDltFnq/GcX6Q8fOFZMqB2rkkJLxpEA=;
-        b=v2v6guTxMG8s4yDk526lIfpqsQWg1zb6vuln6MsnrcmzHekY4riZl8jm+gz1P7nZ8j
-         cbdei1uu/slNoQuYkOwjMXhHIaA70CM00V1agQT+5SVOHgi7LQcR+1LiYxs19ARFysYt
-         jj7ehHHRGDHHi8lqz4HuDjrgwi7HfnlxnoRAFAL5gapSnVTDS7FYOFBiRY7UzjjW7ihx
-         bfqMaEHLUlT2xZHXhVys+eMEgZOVS6y6U7/l51qt8utZ03AKa9lBBzxDVVYZDRxOqzVr
-         jnjH3wYGYuFJSo6Ux7s+WBabI/7bPF3Xqdt+npRpB+FKZG7YfW8+J5ONh45AHv7Hp1qA
-         MqcA==
-X-Gm-Message-State: AO0yUKUUnzlYtMZy4ScNqKFZGxwx9rr2OCr5JsWvKYysmc98ZX/H2Lm3
-        UVtc4Ebao05tGLrKZVspnz85Ry0PdGesQq+5abKrIaJt
-X-Google-Smtp-Source: AK7set9DVNRJH+FgQtFqWX6SaciTiZtgD0TKauvj6bcbUFVCNB/2BBSSXssNprYM+UisjrIqWWOdBg==
-X-Received: by 2002:a17:906:550a:b0:8e6:1726:df82 with SMTP id r10-20020a170906550a00b008e61726df82mr12962985ejp.30.1678222465415;
-        Tue, 07 Mar 2023 12:54:25 -0800 (PST)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id si7-20020a170906cec700b008e68d2c11d8sm6576069ejb.218.2023.03.07.12.54.24
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 12:54:25 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id a25so57854207edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 12:54:24 -0800 (PST)
-X-Received: by 2002:a50:cd94:0:b0:4c2:1a44:642e with SMTP id
- p20-20020a50cd94000000b004c21a44642emr8987314edi.5.1678222464569; Tue, 07 Mar
- 2023 12:54:24 -0800 (PST)
+        Tue, 7 Mar 2023 15:54:42 -0500
+X-Greylist: delayed 168021 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 12:54:36 PST
+Received: from ns2.wdyn.eu (ns2.wdyn.eu [IPv6:2a03:4000:40:5b2::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 245C3A72BF;
+        Tue,  7 Mar 2023 12:54:36 -0800 (PST)
+Message-ID: <debc7fe9-204d-63a7-aa61-91b20a46f385@wetzel-home.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=wetzel-home.de;
+        s=wetzel-home; t=1678222473;
+        bh=gVULR4YUbSKl0259vw/9Yr2iJf2/4S6O/2d2pKa3l4Q=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To;
+        b=ozwFpPHmovVcG0ko+0n17rnI4Y79AXv07fyPPwHZLZtJwOtbX9+ZdehneBd3SU0xA
+         /HcpwC76txJt2U4ASZUJjd639Nd0/Y3lOTb1gUW57Hhk7WXQ53MR8eP6w3iAFokEfy
+         fZXtzWjBvQ+ddWDUKf2Jgmdzi3EW1z6qq6ti36Dg=
+Date:   Tue, 7 Mar 2023 21:54:31 +0100
 MIME-Version: 1.0
-References: <20230303231133.1486085-1-eranian@google.com> <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
- <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
- <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
- <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
-In-Reply-To: <ZAeh8g0nr3IFRSVI@tucnak>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 7 Mar 2023 12:54:07 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
-Message-ID: <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
-Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in __resctrl_sched_in
-To:     Jakub Jelinek <jakub@redhat.com>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        linux-kernel@vger.kernel.org, tony.luck@intel.com,
-        reinette.chatre@intel.com, fenghua.yu@intel.com,
-        peternewman@google.com, james.morse@arm.com, babu.moger@amd.com,
-        ananth.narayan@amd.com, vschneid@redhat.com,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Alexander Wetzel <alexander@wetzel-home.de>
+Subject: Re: [Regression] rt2800usb - Wifi performance issues and connection
+ drops
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Mann <rauchwolke@gmx.net>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Helmut Schaa <helmut.schaa@googlemail.com>,
+        Johannes Berg <johannes.berg@intel.com>
+References: <b8efebc6-4399-d0b8-b2a0-66843314616b@leemhuis.info>
+ <5a7cd098-1d83-6297-e802-ce998c8ec116@leemhuis.info>
+ <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
+Content-Language: en-US
+In-Reply-To: <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 12:43=E2=80=AFPM Jakub Jelinek <jakub@redhat.com> wr=
-ote:
->
-> Are we actually talking here about "p" constraint or about p/P (x86) modi=
-fiers
-> (asm ("%p0" : : "i" (42));)?
+>>
+> 
+> I just uploaded a test patch to bugzilla.
+> Please have a look if that fixes the issue.
+> 
+> If not I would be interested in the output of your iTXQ status.
+> Enable CONFIG_MAC80211_DEBUGFS and run this command when the connection 
+> is bad and send/share/upload to bugzilla the resulting debug.out:
+> 
+> k=1; while [ $k -lt 10 ]; do \
+> cat /sys/kernel/debug/ieee80211/phy?/netdev:*/stations/*/aqm; \
+> k=$(($k+1)); done >> debug.out
 
-In this case it's actually the "p" constraint.
+Thomas and I continued with some debugging in
+https://bugzilla.kernel.org/show_bug.cgi?id=217119
 
-And the "percpu_stable_op()" thing uses it exactly because it thinks
-it wants the "I don't care about data dependencies in memory, because
-this memory location doesn't change".
+But the results so far are unexpected and we decided to continue the 
+debugging with the round here. Hoping someone sees something I miss.
 
-Of course, that "this memory location doesn't change" is then always
-technically a lie. It's exactly things like "current" that obviously
-*does* change in the big picture, but from the context of a particular
-_thread_, "current" is a fixed value.
+A very summary where we are:
+I can't reproduce the bug with a very similar card and kernel config so 
+far. Thomas card stops the iTXQs for intervalls >30s. Mine operates 
+normally.
 
-Which then causes problems when you use that "percpu_stable_op()"
-thing from within the scheduler (generally without being *aware* of
-this issue at all, since the use is hidden a few macro expansions
-down).
+A more useful but longer summary:
 
-I think the problem is that the <asm/resctrl.h> code is disgusting and
-horrible in multiple ways:
+Thomas updated to a 6.2 kernel and reported "connection drops and 
+bandwidth problems" with his rt2800usb wlan card. (6.1 is ok.) Asked for 
+some more details he reported:
+"...slow bandwidth stuff works better, but the main problem/test case is 
+to start a 8-16 mbit video stream, which sometimes runs for a few 
+seconds and then stops or it doesn't start at all"
 
- (a) it shouldn't define and declare a static function in a header file
+He bisected the issue and identified my commit 4444bc2116ae ("wifi: 
+mac80211: Proper mark iTXQs for resumption") as culprit.
 
- (b) the resctrl_sched_in() inline function is midesigned to begin with
+Checking the internal iTXQ status when the issue is ongoing shows, that 
+TID zero is flagged as dirty and thus is not transmitting queued 
+packets. Interesting line from 
+/sys/kernel/debug/ieee80211/phy?/netdev:*/stations/*/aqm:
+tid ac backlog-bytes backlog-packets new-flows drops marks overlimit 
+collisions tx-bytes tx-packets flags
+0 2 619736 404 1681 0 0 0 1 4513965 3019 0xe(RUN AMPDU NO-AMSDU DIRTY)
 
-basically, the actual scheduling functions should *never* look at
-"current" at all. They are - byu definition - changing it, and they
-already *know* what both the "incoming current" (aka "prev_p") and
-"new current" (aka "next_p") are.
+--> The "normal" iTXQ handling IEEE80211_AC_BE has queued packets and is 
+flagged as DIRTY. There even is a potential race setting the DIRTY flag, 
+but the fix for that is not helping.
 
-So any scheduling function that uses "current" is hot garbage.
+Thus Thomas applied two debug patches, to better understand why the 
+DIRTY flag is not cleared.
 
-In this case, that hot garbage is resctrl_sched_in().
+And looking at the output from those we see that the driver stops Tx by 
+calling ieee80211_stop_queue(). When ieee80211_wake_queue() mac80211 
+correctly resumes TX but is getting stopped by the driver after a single 
+packet again. (The start of the relevant log is missing, so that may be 
+initially more).
+I assume TX is still ok at that stage. But after some singe Tx 
+operations the driver stops the queues again. Here the relevant part of 
+the log:
+[  179.584997] XXXX __ieee80211_wake_txqs: waking TID 0
+[  179.585022] XXXX drv_tx: TX
+[  179.585027] XXXX ieee80211_stop_queue: called
+[  179.585028] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.585030] XXXX __ieee80211_wake_txqs: TID 3 NOT dirty
+[  179.585031] XXXX __ieee80211_wake_txqs: TID 8 NOT dirty
+[  179.585033] XXXX __ieee80211_wake_txqs: TID 11 NOT dirty
+[  179.585034] XXXX __ieee80211_wake_txqs: EXIT
+[  179.585035] XXXX __ieee80211_wake_txqs: ENTRY
+[  179.585036] XXXX __ieee80211_wake_txqs: TID 1 NOT dirty
+[  179.585037] XXXX __ieee80211_wake_txqs: TID 2 NOT dirty
+[  179.585038] XXXX __ieee80211_wake_txqs: TID 9 NOT dirty
+[  179.585040] XXXX __ieee80211_wake_txqs: TID 10 NOT dirty
+[  179.585041] XXXX __ieee80211_wake_txqs: EXIT
+[  179.585047] XXXX drv_tx: TX
+[  179.585056] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.585271] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.585868] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.586120] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.586544] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.586792] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.587317] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.587591] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+[  179.588569] XXXX ieee80211_tx_dequeue: mark TID 0 dirty. Reason: 1
+....
+[  214.307617] XXXX ieee80211_wake_queue: called
 
-I do not believe this is a compiler issue. This is literally just a
-kernel bug, and that resctrl code being very very wrong.
 
-              Linus
+--> So the driver blocked TX for more than 30s. Which is a good 
+explanation of what Thomas observes.
+
+But there is nothing mac80211 can do differently here. Whatever is the 
+real reason for the issue, it's nothing obvious I see.
+
+Luckily I found a card using the same driver and nearly the same card:
+Thomas systems:Linux version 6.2.2-gentoo (root@foo) (gcc (Gentoo 
+Hardened 12.2.1_p20230121-r1 p10) 12.2.1 20230121, GNU ld (Gentoo 2.39 
+p5) 2.39.0) #2 SMP Fri Mar  3 16:59:02 CET 2023ieee80211 phy0: 
+rt2x00_set_rt: Info - RT chipset 3070, rev 0201 detected
+ieee80211 phy0: rt2x00_set_rf: Info - RF chipset 0005 detected
+ieee80211 phy0: Selected rate control algorithm 'minstrel_ht'
+
+My system, using the kernel config from Thomas with only minor 
+modifications (different filesystems and initramfs settings and enabled 
+mac80211 debug and developer options):
+Linux version 6.2.2-gentoo (root@Perry.mordor) (gcc (Gentoo 
+12.2.1_p20230121-r1 p10) 12.2.1 20230121, GNU ld (Gentoo 2.40 p2) 
+2.40.0) #2 SMP Tue Mar  7 18:18:47 CET 2023ieee80211 phy0: 
+rt2x00_set_rt: Info - RT chipset 3070, rev 0200 detected
+ieee80211 phy0: rt2x00_set_rf: Info - RF chipset 0005 detected
+ieee80211 phy0: Selected rate control algorithm 'minstrel_ht'
+ieee80211 phy0: rt2x00lib_request_firmware: Info - Loading firmware file 
+'rt2870.bin'
+ieee80211 phy0: rt2x00lib_request_firmware: Info - Firmware detected - 
+version: 0.36
+
+But there is one big difference on my system: I can't reproduce the bug 
+so far. It's working as it should... (I did not apply the debug patches 
+myself so far)
+
+I'm now planning to look a bit more into the rt2800usb driver and 
+provide another debug patch for interesting looking code pieces in it.
+
+@Thomas:
+I've also uploaded you my binary kernel I'm running at the moment here:
+https://www.awhome.eu/s/5FjqMS73rtCtSBM
+
+That kernel should also be able to boot and operate your system. Can you 
+try that and tell me, if that makes any difference?
+
+I'm also planning to provide some more debug patches, to figuring out 
+which part of commit 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs 
+for resumption") fixes the issue for you. Assuming my understanding 
+above is correct the patch should not really fix/break anything for 
+you...With the findings above I would have expected your git bisec to 
+identify commit a790cc3a4fad ("wifi: mac80211: add wake_tx_queue 
+callback to drivers") as the first broken commit...
+
+Alexander
