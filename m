@@ -2,91 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0816AF3E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA956AF3B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:08:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbjCGTLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:11:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S233555AbjCGTH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:07:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233631AbjCGTKr (ORCPT
+        with ESMTP id S233460AbjCGTHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:10:47 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBA8C8597
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:55:20 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327HFKPk002280;
-        Tue, 7 Mar 2023 18:54:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=FkW88o2DovWlh2UEIlYTAwTKA7K+MRCGlcyCOilz1p0=;
- b=RA+BsyYZd5ir73cngNuaK/qLlUp7clOw4/849+JG8J7Wmino+awYdqmKKIXgCesVROPn
- 3iThPH2ivH3kKXAd/MqgJ/oBmLsezRgRbeucsHoY8LlieDZFUOwEQg21JHUqyufPOC6w
- 0LLHQhHhS4yXgyskvVs1lCIMzakkSpOElFqPmJbNjLdAoKqiYzugX3jJuRGJ6H5dkypi
- Lra0zCfbzrpKAJGth8xNXfnUj7pAMMQMAac9GDWva72rnd29HSAAbmUmLXmtLh/WTsYR
- vihq95Uk64ZMlzeJySj9AWDRTiwhhh0Es+p5XjUluocuFFaSH+7PVe6YDxp1F/yxUIMo MA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p67wfnj59-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:54:25 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 327Ifvfs018468;
-        Tue, 7 Mar 2023 18:54:25 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p67wfnj43-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:54:24 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 327Eo5l9005880;
-        Tue, 7 Mar 2023 18:54:22 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3p418cvpd2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:54:22 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 327IsKss54002076
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Mar 2023 18:54:20 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE5EF2004E;
-        Tue,  7 Mar 2023 18:54:19 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6097720040;
-        Tue,  7 Mar 2023 18:54:19 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.179.29.172])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
-        Tue,  7 Mar 2023 18:54:19 +0000 (GMT)
-Date:   Tue, 7 Mar 2023 19:51:19 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     <yang.yang29@zte.com.cn>
-Cc:     <akpm@linux-foundation.org>, <david@redhat.com>,
-        <jiang.xuexin@zte.com.cn>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
-        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>
-Subject: Re: [PATCH v6 5/6] ksm: add zero_pages_sharing documentation
-Message-ID: <20230307195119.745d0b46@p-imbrenda>
-In-Reply-To: <202302100920429071565@zte.com.cn>
-References: <202302100920429071565@zte.com.cn>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Tue, 7 Mar 2023 14:07:40 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972A3C2D82;
+        Tue,  7 Mar 2023 10:52:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1678215136; i=frank-w@public-files.de;
+        bh=JTGTLkZ8OoT+RqpyAx1sW9UaQMm0R5ZBqK9JTQc9Wc4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=b+QmKzfHv8rGk0ljlZiia03mXcX9YPLoQBedOXDh8wOm8154pyHvOo9m8uzMhFpz7
+         Vk5N2ZeRsp2inDmS91qBkw/E8thjZoKu87XjyKFfUXPG3sBQUXATK4Ubn26D5JSb5M
+         Fhbx+fFOdwP+AI0DNWFsfzF9Z1wYqaVYY0EsDYgS8Td9JUCRUcBc3dmhaB2zowbeWo
+         HIs0hQ6NDVytqY8aYp2TKnq0LpvywaY1w/bgvHmj8LfvJdpmGTKGUPWEOMsG1srNgY
+         GACR2+YD1eFxpDY9VZeB6eoGAU5tBnEK4oFRVm3qrURSaj4Gye2Q8MlWbgS780hAnH
+         ZavwqdiHoqGJA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.156.24] ([217.61.156.24]) by web-mail.gmx.net
+ (3c-app-gmx-bs16.server.lan [172.19.170.68]) (via HTTP); Tue, 7 Mar 2023
+ 19:52:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: I7_o-mVw1jZiJGmap1zDh5aDhQdCXHWj
-X-Proofpoint-ORIG-GUID: SvKl6EkmaQht5Re9opWMW3J3QiOqk5Ay
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_12,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- clxscore=1015 malwarescore=0 bulkscore=0 mlxscore=0 suspectscore=0
- spamscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
- mlxlogscore=882 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070164
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <trinity-d2a4c07d-5278-494f-9e10-fd366d539604-1678215136485@3c-app-gmx-bs16>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Russell King <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Aw: [PATCH net-next v12 11/18] net: pcs: add driver for MediaTek
+ SGMII PCS
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 7 Mar 2023 19:52:16 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <05e6d08bba07ab2462178e51bbc146bdea508f46.1678201958.git.daniel@makrotopia.org>
+References: <cover.1678201958.git.daniel@makrotopia.org>
+ <05e6d08bba07ab2462178e51bbc146bdea508f46.1678201958.git.daniel@makrotopia.org>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:PwtmZC5NIT1sqzXVXjKmB8ju6BS93xlMNGejBocvc9T1IS+s8osXo7fjoDMrpnGZXcQoo
+ ZVBjFJeCbQBsCFnEYKc2UUAem12eiW8c996KCKdD5m/bQWp+7FK6LqKt4pUTdgUZ1ReSdPsbUE/p
+ lMegGXMXFmoMnKLPeoDdr1UNIE+hEni2F+952KY7spa10Mzvx9EgODLqOaM/8mt48rE934OOsppQ
+ XObs3vkdgVRuw9bTJX4xnRPxqI1McLrZdm58yLIIxsD4zO6ErxEtKBwzfh44gIFUDCswevyup7EX
+ 4U=
+UI-OutboundReport: notjunk:1;M01:P0:Am6NJr4guOY=;WJNN6VHGMn/i+3O1d7Gc5MoWki9
+ C2foELMSUwRbHwq6Z8uu9Wtjh/WEEGXkL/K/cmEP016qneV/GdE2jAbweZOEXEFPeI/AZzKgU
+ sbSHxFsEl812pBkRVk5UMyNa1YdPNMLXuwMqTVw/YHk5EpXrge3y4mlb5yMNfGvpGevk/3Gb3
+ 5nNfbEiqCGSVu4DbzJ8Pd6R6TRijCUDDk1l7PhBedLe+F6Z0A+b43YNQ2HuI2PkeIXyvqhc4o
+ HEadAC2mJHymigjDuoVKhYeA/9nlqjvxclSQsLV2gFVEftCRuiN8lP97wetwwVFd1j9O6ADVw
+ 9LOuQGYwerWI9tZZfdiMUuOPH2Ab5U+2xTndjHOuyEbGLKcQhu95Q5h379ZKBK95//HuT7UhH
+ Gl/jeL3HvpiDhPtcg6Tg/vPyyR4l4v20oyWMEE+6sMAXzGY0gEl2CJo/+jSriwN9BiZHPpahS
+ Wc4dmDy8OJnFN7MwSAoymsgB4LrdRutC8tFNE4ULdwH2dlw9DuliJwCtHUdLdqH0Qw6ziDR6C
+ Tb0461FmjASVUx4x1HraIIiuRzxTLkEY1dxgtt+RfU+hsi989fsZNvseN2qwh1XXPSczHRncw
+ ABlDRl9iYvL3IZC+Cl0EFlAtQFKSwbEwGuXAeZqo7sDbfVs0H+jz9cPTulZjNrAFyw99uofz3
+ yAC0k1TmL+iz/DhXZHqp18cIc7pKhTA4o7YioGlRstCHGpjkBiPUWmWGR9nEMXL08ejg6hkHJ
+ CKlCOZtsczSeVbfmHCEAqGep30mGAgXXV9e7REN7Wa5d5kmMbzq5CNno36BR+RHLDJ+NTmsvz
+ RzH090yGyZRlOCzUOl6bA0mQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,53 +97,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Feb 2023 09:20:42 +0800 (CST)
-<yang.yang29@zte.com.cn> wrote:
+> Gesendet: Dienstag, 07=2E M=C3=A4rz 2023 um 16:54 Uhr
+> Von: "Daniel Golle" <daniel@makrotopia=2Eorg>
+> The SGMII core found in several MediaTek SoCs is identical to what can
+> also be found in MediaTek's MT7531 Ethernet switch IC=2E
+> As this has not always been clear, both drivers developed different
+> implementations to deal with the PCS=2E
+> Recently Alexander Couzens pointed out this fact which lead to the
+> development of this shared driver=2E
+>=20
+> Add a dedicated driver, mostly by copying the code now found in the
+> Ethernet driver=2E The now redundant code will be removed by a follow-up
+> commit=2E
+Hi,
 
-> From: xu xin <xu.xin16@zte.com.cn>
-> 
-> When enabling use_zero_pages, pages_sharing cannot represent how
-> much memory saved indeed. zero_pages_sharing + pages_sharing does.
-> add the description of zero_pages_sharing.
-> 
-> Cc: Xiaokai Ran <ran.xiaokai@zte.com.cn>
-> Cc: Yang Yang <yang.yang29@zte.com.cn>
-> Cc: Jiang Xuexin <jiang.xuexin@zte.com.cn>
-> Cc: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Signed-off-by: xu xin <xu.xin16@zte.com.cn>
-> ---
->  Documentation/admin-guide/mm/ksm.rst | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/mm/ksm.rst b/Documentation/admin-guide/mm/ksm.rst
-> index fb6ba2002a4b..f160f9487a90 100644
-> --- a/Documentation/admin-guide/mm/ksm.rst
-> +++ b/Documentation/admin-guide/mm/ksm.rst
-> @@ -173,6 +173,13 @@ stable_node_chains
->          the number of KSM pages that hit the ``max_page_sharing`` limit
->  stable_node_dups
->          number of duplicated KSM pages
-> +zero_pages_sharing
-> +        how many empty pages are sharing kernel zero page(s) instead of
+have tested Parts 1-12 this on bananapi-r3 (mt7986) with 1G Fiber SFP (no =
+2g5 available yet) on gmac1 and lan4 (mt7531 p5)
 
-how many empty pages are sharing the kernel zero page(s) instead of
-other user pages as it would happen normally. Only meaningful when
-``use_zero_pages`` is enabled.
+Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
 
-> +        with each other as it would happen normally. Only effective when
-> +        enabling ``use_zero_pages`` knob.
-> +
-> +When enabling ``use_zero_pages``, the sum of ``pages_sharing`` +
+Thx Daniel for working on SFP support :)
 
-When ``use_zero_pages`` is enabled, the sum of ``pages_sharing`` +
-
-> +``zero_pages_sharing`` represents how much really saved by KSM.
-
-``zero_pages_sharing`` represents the actual number of pages saved
-by KSM.
-
-> 
->  A high ratio of ``pages_sharing`` to ``pages_shared`` indicates good
->  sharing, but a high ratio of ``pages_unshared`` to ``pages_sharing``
-
+regards Frank
