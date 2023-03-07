@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C876AF8BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FEF6AF8F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCGWcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
+        id S229870AbjCGWgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjCGWcl (ORCPT
+        with ESMTP id S231748AbjCGWfq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:32:41 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC9E7B114;
-        Tue,  7 Mar 2023 14:32:32 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327FEULh003451;
-        Tue, 7 Mar 2023 22:32:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Ta5Vpfm87qjvX/lqhv2vJzZiXNq0T2VHXd4yuanzdD4=;
- b=YLJENy4O+Q9mVISQMwHmlye5cnmoe3E1d3I9wnRC4ipg7V4Qq5A0JvS5VNSQv86uRLIW
- gxjR25iLRSg5LJWFfSyCDTyfSj+GeARUnyI0LHFDGUB8JBqb/ZUucrR5AWCVK2lNohwK
- MJCHrtwO5+50wM0tvjrDj1Dmgew/W5QlYo5bqImNE0WWx4ZO1hIQQbcZ1Imrr0T+8iKE
- yXbxzU356F/b4AMiAIU1m5IkV0zIgYFV25w9JBUCE9VDKRB+B/Kyjt7xova5DJ4f0SCu
- YRU4Xd4aWzQ1m46b2+aAK3jjgoAwlErc/PGLuL4Tfi+J4hmGIWrovSZHo5nOy1af5wbw sw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5usx2x00-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 22:32:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 327MWGAd012529
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Mar 2023 22:32:16 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 7 Mar 2023
- 14:32:15 -0800
-Message-ID: <71d2cafd-ddf7-25a6-4df7-01f686cb322f@quicinc.com>
-Date:   Tue, 7 Mar 2023 15:32:14 -0700
+        Tue, 7 Mar 2023 17:35:46 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72C7B2570;
+        Tue,  7 Mar 2023 14:34:54 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 434BF21A19;
+        Tue,  7 Mar 2023 22:33:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678228438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MX+2KpqT8wrCqyg7j0dP+wq52LnT6AyIVkSxEYwnFa8=;
+        b=SSBWxDam7wOMnt7TF0pQLTpDz6cVUcjH4zfaXE84D6yczhNPEpnCNC2Uw3+ivHmi6wGK92
+        3xIFlD7ccw6c+bztZE+fbhx79TxDDLGCQW4LdhH1hjNIUR5syrqiZ9J45Q2IS6u8kxMUDz
+        mOeVX8CZxtJ+1IFKqxGOkoPWugbJHhw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678228438;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MX+2KpqT8wrCqyg7j0dP+wq52LnT6AyIVkSxEYwnFa8=;
+        b=qnPLRNUlptwMcZkRvHJNVydHAdcCorh/vpKqdZx7AhnBbWklvsD0c6RYBynY7oBv+9TzC6
+        lzcRhv6HHWRQ8JDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D0A7113440;
+        Tue,  7 Mar 2023 22:33:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id b3I6IdO7B2T3AwAAMHmgww
+        (envelope-from <neilb@suse.de>); Tue, 07 Mar 2023 22:33:55 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] bus: mhi: host: pci_generic: Drop redundant
- pci_enable_pcie_error_reporting()
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Bjorn Helgaas <bhelgaas@google.com>
-References: <20230307201625.879567-1-helgaas@kernel.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20230307201625.879567-1-helgaas@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: tiTRTKatob8zmhGKBaDS_yts7XMWj9P9
-X-Proofpoint-GUID: tiTRTKatob8zmhGKBaDS_yts7XMWj9P9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- clxscore=1011 priorityscore=1501 mlxscore=0 bulkscore=0 impostorscore=0
- phishscore=0 adultscore=0 mlxlogscore=833 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070198
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+From:   "NeilBrown" <neilb@suse.de>
+To:     "Mariusz Tkaczyk" <mariusz.tkaczyk@linux.intel.com>
+Cc:     "Song Liu" <song@kernel.org>,
+        "Linux regressions mailing list" <regressions@lists.linux.dev>,
+        Jes.Sorensen@gmail.com, "linux-raid" <linux-raid@vger.kernel.org>,
+        "LKML" <linux-kernel@vger.kernel.org>,
+        "Nikolay Kichukov" <hijacker@oldum.net>
+Subject: Re: [regression] Bug 217074 - upgrading to kernel 6.1.12 from 5.15.x
+ can no longer assemble software raid0
+In-reply-to: <20230307095258.00001cb3@linux.intel.com>
+References: <a13cd3b5-cc41-bf2f-c8ac-e031ad0d5dd7@leemhuis.info>,
+ <CAPhsuW7ZWthh0PZt71hQh1_51C0yMSpOqWYJKc_+VzzTmW_r5A@mail.gmail.com>,
+ <167805126796.8008.3635368722810568057@noble.neil.brown.name>,
+ <20230307095258.00001cb3@linux.intel.com>
+Date:   Wed, 08 Mar 2023 09:33:52 +1100
+Message-id: <167822843274.8008.1142380266687607670@noble.neil.brown.name>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,24 +77,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/2023 1:16 PM, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> pci_enable_pcie_error_reporting() enables the device to send ERR_*
-> Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
-> native"), the PCI core does this for all devices during enumeration, so the
-> driver doesn't need to do it itself.
-> 
-> Remove the redundant pci_enable_pcie_error_reporting() call from the
-> driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
-> from the driver .remove() path.
-> 
-> Note that this only controls ERR_* Messages from the device.  An ERR_*
-> Message may cause the Root Port to generate an interrupt, depending on the
-> AER Root Error Command register managed by the AER service driver.
-> 
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+On Tue, 07 Mar 2023, Mariusz Tkaczyk wrote:
+> On Mon, 06 Mar 2023 08:21:07 +1100
+> "NeilBrown" <neilb@suse.de> wrote:
+>=20
+> > On Sat, 04 Mar 2023, Song Liu wrote:
+> > > + Jes.
+> > >=20
+> > > It appeared to me that we can assemble the array if we have any of the
+> > > following:
+> > > 1. Enable CONFIG_BLOCK_LEGACY_AUTOLOAD;
+> > > 2. Have a valid /etc/mdadm.conf;
+> > > 3. Update mdadm to handle this case. (I tried some ugly hacks, which wo=
+rked
+> > > but weren't clean).
+> > >=20
+> > > Since we eventually would like to get rid of CONFIG_BLOCK_LEGACY_AUTOLO=
+AD, I
+> > > think we need mdadm to handle this properly. But the logistics might
+> > > be complicated, as
+> > > mdadm are shipped separately.
+> > >=20
+> > > Jes, what do you think about this? AFAICT, we need to update the logic =
+in
+> > > mdopen.c:create_mddev(). =20
+> >=20
+> > mdadm already handles this, but only if=20
+> >    CREATE names=3Dyes
+> > is present in /etc/mdadm.conf
+>=20
+> Hi,
+>=20
+> "CREATE names=3Dyes" enforces creation of /dev/md_name arrays instead of
+> /dev/mdXXX. It is a large change for users, too aggressive IMO. It will des=
+troy
+> many setups.
+>=20
+> To resolve it, we need is to use create_named_array() but respect old naming
+> convention. We already have find_free_devnm(), and we are able to keep
+> consistency because we can create 'mdXXX':
+>=20
+> /sys/module/md_mod/parameters # echo md125 > new_array
+>=20
+> /sys/module/md_mod/parameters # ll /sys/block/md125
+> lrwxrwxrwx 1 root root 0 Mar  7 10:54 /sys/block/md125 ->
+> ../devices/virtual/block/md125
+>=20
+> That will require adjustments in mdadm, but I think that we can keep
+> names the same way. I created the test for verification of base creation fl=
+ows,
+> we can use it to avoid regression:
+> https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/tree/tests/00createnam=
+es
+>=20
+> Thoughts?
 
-Looks sane to me.
+Yes, that is probably sensible.
 
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+It would be nice to have a way to expose the "names=3Dyes" functionality
+more obviously.  I think people would generally prefer it (/proc/mdstat
+becomes more meaningful) but I agree that forcing it on people is the
+the best approach.
+
+Maybe a super-block flag that enables it for that array, and we start
+setting that flag when creating new arrays?
+
+NeilBrown
+
+
+>=20
+> BTW. I wanted to get rid of this legacy "create_on_open" from mdadm anyway =
+but
+> never had time to. If you agree, I can proceed with fixing it.
+>=20
+> Thanks,
+> Mariusz
+>=20
+
