@@ -2,148 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7C36AF9A3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDE76AF9A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjCGW5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S229932AbjCGW6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjCGW5L (ORCPT
+        with ESMTP id S230259AbjCGW5d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:57:11 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE069B5FCC
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:54:12 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5384ff97993so273588377b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:54:12 -0800 (PST)
+        Tue, 7 Mar 2023 17:57:33 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE24B6D17
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:54:41 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id o4-20020a9d6d04000000b00694127788f4so8065614otp.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:54:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=skydio.com; s=google; t=1678229583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vemO8k1u3XZqdTI6RbhHJ2h2a6/5NFDCW7enHPRNpkY=;
-        b=E/OucL9ZmQNqVGYqLtxV7vY2sBEWuX4VyLEfszQ2+G6kqzF1Hn/20/WJQgAeh+0e2Y
-         FhE/Z7guBuB3+x/hrPMA7j4PirVxlzkdAv4aT1MfvaOQZJ2U8fLalZOZ0zFrp4jIr577
-         VOc+Rq0z3Mwd8gbtVMCiXQJzdnaCIFvB2mN+vfUw9KiTHROx2+vxg7//K1Wb11g86Py3
-         dExk54JG2Bko5NrNIOrglsYELMIUohMcjo4Tmn/InpNyh1ZtAyAQOvDlk85OIDDD4t93
-         AFyXkd8/cgc1U+68z2+75f6X0EfgjqROr5GrJkqesuyBRQZE0G2PfhC+zoni8/QSa5rg
-         ChDg==
+        d=usp.br; s=usp-google; t=1678229632;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pKVqxub/Fk+VY98iPdnTOYqYL+oFSC0KdiMA5tq1zzQ=;
+        b=cjO2r2iCTHNkY+LCiq5PTW5GA9posA/IfRrUE3PgSJAgub8XuFtnDujBteNqeBeiKm
+         9Ip4gcSwzNtDCsEd0lQUnFbSLel7lraorSoJJuLzPmHLe6gnRl/GmWxScST82K/BYYcs
+         kbeFTrZrNY+vkt9r1277I3/M4QvMqWrELhs2q0ld8Sar2C7RacUnJKvyjo6rYTTcPq2c
+         AG6ATsN6CORQxMEnklmjPKfe1IKIonNIWc5POfYDTaXqLxS+kI/hFExi1duHiV47je43
+         6ZvPcrwL2tRZKisOIWbDfXms4QjxqtVXieaR8w8o06pWGAB+YeEYyQ2ytIp1VPUdiZvW
+         pHcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678229583;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vemO8k1u3XZqdTI6RbhHJ2h2a6/5NFDCW7enHPRNpkY=;
-        b=Fyagd3k6kozb5ck/P2Sb1u2pZfaOetnJKUE29NfiEYVD8haBoEvMKoiarC9D8AvUcA
-         UusaR5oIcH1MHM3KfpwKP73XuqNIXLOT8uwlovfJNd66xqkwmYEniaFHVLjrMe/iMhjx
-         bvdgKocaojCJXSSWGbkHGdD9Yaj1+gO9yZgTL97LpNYTypVvbcHChZlOlwSOR0DI0CV4
-         wxVVJFUdqTKRcPRo5J5hwkGuBdGQIvemwLxbLah/fc91pmxong3JFrzPrIRJ3BtZIwht
-         hHbtsDWr+DB/WSgXhkjbEwu6ujrf6Oq5IEEIndNATCT82BKBt/Ouqi8X5T++52WUbTn3
-         csbw==
-X-Gm-Message-State: AO0yUKU/wY3dra87Im7n4DPQ2t99sy7Q4bjwyEkyZcl6yGoAivfQ2WxK
-        l7g+UUhdSdNDSt4dgtbkzNe3rZlQB8O7G460kcdhgWYzXRbnQ2FoLPA=
-X-Google-Smtp-Source: AK7set//d3d6ReCx/Lqh7Vi87eutnSWzCCuhRJrjuaJQTKDk3daZ5I3q+H2ah9vTH7AQGhcZjHOurb/SuVEOuucJCE8=
-X-Received: by 2002:a81:ad46:0:b0:52e:cea7:f6e0 with SMTP id
- l6-20020a81ad46000000b0052ecea7f6e0mr9839474ywk.7.1678229582622; Tue, 07 Mar
- 2023 14:53:02 -0800 (PST)
-MIME-Version: 1.0
-References: <20230307220525.54895-1-Jerry@skydio.com> <167822825917.8008.11050193827453206272@noble.neil.brown.name>
-In-Reply-To: <167822825917.8008.11050193827453206272@noble.neil.brown.name>
-From:   Jerry Zhang <jerry@skydio.com>
-Date:   Tue, 7 Mar 2023 14:52:53 -0800
-Message-ID: <CAMKO5Cv1Uh1rSFQ0cR1kfA88iXXHP5RMO-euU15Xrn2i93J5rg@mail.gmail.com>
-Subject: Re: [PATCH] sunrpc: Fix incorrect parsing of expiry time
-To:     NeilBrown <neilb@suse.de>
-Cc:     embedded@skydio.com, Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        "J. Bruce Fields" <bfields@redhat.com>, linux-nfs@vger.kernel.org,
+        d=1e100.net; s=20210112; t=1678229632;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pKVqxub/Fk+VY98iPdnTOYqYL+oFSC0KdiMA5tq1zzQ=;
+        b=kqhjuWscktGRru0kkdMJR7DmG8GdhtcG48aOYbwOq3eChYNZ7SPleReXzgfrWX8eQT
+         SQ2QoJGbAUJJnrU8GlEmpVBJrLvD7W2IoTdl3EO7kLTwiebBLkkbG4Ew8KD95j2y+6Le
+         YNt8XgvyoTkkZfce0qY8zetSf8eLf2CWEovMzdZQ/dXTQmKT/5iYwdaisUIYYoOg1HkN
+         Icih0ks6V3lRetxCJXUsOnX50uUkgFdkJHZwRjJvkZ6ytIymNKMbGsWNDTm1mconeNMI
+         FSoobA8adTzfpkqAo7Kecj+xS8H7tx/BT6Q80WCoG+D06T3EGfSsooLmYwUG2O7tC1Pp
+         EhEA==
+X-Gm-Message-State: AO0yUKUhed92xUaCYzzQGsebX7uAVAIwh/9uDHckrpqwAOv4RuzKCUfu
+        lXJ7l1a4p5sdn0HHnoz9XGuT5RahaTU0F8KlfPbDkrA0
+X-Google-Smtp-Source: AK7set9wBHhbtGK0bt/+x7+CPlbUY/sT7o5N4KRvbzNLjC9F9hzn9NTWZpYjpUbJL2xzCAIMknEg8g==
+X-Received: by 2002:a05:6830:56c:b0:690:a6b3:a2f6 with SMTP id f12-20020a056830056c00b00690a6b3a2f6mr7070475otc.0.1678229632403;
+        Tue, 07 Mar 2023 14:53:52 -0800 (PST)
+Received: from localhost.localdomain ([2804:14c:63:8ae3:4d1f:9fc2:9fe6:c88e])
+        by smtp.gmail.com with ESMTPSA id w3-20020a9d70c3000000b0069451a9274bsm5251208otj.28.2023.03.07.14.53.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 14:53:51 -0800 (PST)
+From:   David Tadokoro <davidbtadokoro@usp.br>
+To:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch
+Cc:     David Tadokoro <davidbtadokoro@usp.br>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: [PATCH] drm/amd/display: remove legacy fields of dc_plane_cap struct
+Date:   Tue,  7 Mar 2023 19:53:41 -0300
+Message-Id: <20230307225341.246596-1-davidbtadokoro@usp.br>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 2:31=E2=80=AFPM NeilBrown <neilb@suse.de> wrote:
->
-> On Wed, 08 Mar 2023, Jerry Zhang wrote:
-> > The expiry time field is mean to be expressed in seconds since boot.
->
-> Correct.
->
-> > The get_expiry() function parses a relative time value in seconds.
->
-> Incorrect.  It parses and absoulte wall-clock time.
-I'm not familiar with the source of truth for this info. Is there a
-specification of some sort?
+The fields blends_with_above and blends_with_below of struct
+dc_plane_cap (defined in dc/dc.h) are boolean and set to true by
+default. All instances of a dc_plane_cap maintain the default values of
+both. Also, there is only one if statement that checks those fields and
+there would be the same effect if it was deleted (assuming that those
+fields are always going to be true).
 
-For reference, we were seeing writes to
-/proc/net/rpc/nfsd.export/channel randomly fail with EINVAL despite
-usually succeeding with the same invocation. Upon investigation this
-was the string that exportfs was writing "-test-client- /path/to/mount
- 3 0 65534 65534 0". "3" was the value for expiry in this message,
-which led me to conclude that this is a relative field. If it isn't,
-perhaps this is a bug in userspace nfs tools?
+For this reason, considering both fields as legacy ones, this commit
+removes them and the aforementioned if statement.
 
-The failure in this was if nfs-server starts exactly 3s after bootup,
-boot.tv_sec would be 3 and thus get_expiry() returns 0, causing a
-failure to be returned.
->
-> NeilBrown
->
-> > In order to get the absolute time of seconds since boot that the given
-> > message will expire, the right thing is to add seconds_since_boot()
-> > to the given relative value.
-> >
-> > Previously this logic was subtracting boot.tv_sec from the relative
-> > value, which was causing some confusing behavior. The return type of
-> > time64_t could possibly underflow if time since boot is greater than
-> > the passed in relative argument. Also several checks in nfs code compar=
-e
-> > the return value to 0 to indicate failure, and this could spuriously
-> > be tripped if seconds since boot happened to match the argument.
-> >
-> > Fixes: c5b29f885afe ("sunrpc: use seconds since boot in expiry cache")
-> > Signed-off-by: Jerry Zhang <Jerry@skydio.com>
-> > ---
-> >  include/linux/sunrpc/cache.h | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/include/linux/sunrpc/cache.h b/include/linux/sunrpc/cache.=
-h
-> > index ec5a555df96f..b96b1319c93d 100644
-> > --- a/include/linux/sunrpc/cache.h
-> > +++ b/include/linux/sunrpc/cache.h
-> > @@ -301,16 +301,14 @@ static inline int get_time(char **bpp, time64_t *=
-time)
-> >  }
-> >
-> >  static inline time64_t get_expiry(char **bpp)
-> >  {
-> >       time64_t rv;
-> > -     struct timespec64 boot;
-> >
-> >       if (get_time(bpp, &rv))
-> >               return 0;
-> >       if (rv < 0)
-> >               return 0;
-> > -     getboottime64(&boot);
-> > -     return rv - boot.tv_sec;
-> > +     return rv + seconds_since_boot();
-> >  }
-> >
-> >  #endif /*  _LINUX_SUNRPC_CACHE_H_ */
-> > --
-> > 2.37.3
-> >
-> >
->
+Signed-off-by: David Tadokoro <davidbtadokoro@usp.br>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c       | 3 ---
+ drivers/gpu/drm/amd/display/dc/dc.h                     | 2 --
+ drivers/gpu/drm/amd/display/dc/dce110/dce110_resource.c | 3 ---
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c   | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c   | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c   | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c   | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c   | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c   | 2 --
+ drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c | 2 --
+ 17 files changed, 36 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index b472931cb7ca..fdcb375e908a 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -4354,9 +4354,6 @@ static int amdgpu_dm_initialize_drm_device(struct amdgpu_device *adev)
+ 		if (plane->type != DC_PLANE_TYPE_DCN_UNIVERSAL)
+ 			continue;
+ 
+-		if (!plane->blends_with_above || !plane->blends_with_below)
+-			continue;
+-
+ 		if (!plane->pixel_format_support.argb8888)
+ 			continue;
+ 
+diff --git a/drivers/gpu/drm/amd/display/dc/dc.h b/drivers/gpu/drm/amd/display/dc/dc.h
+index f0a1934ebf8c..ccc27d482640 100644
+--- a/drivers/gpu/drm/amd/display/dc/dc.h
++++ b/drivers/gpu/drm/amd/display/dc/dc.h
+@@ -82,8 +82,6 @@ enum det_size {
+ 
+ struct dc_plane_cap {
+ 	enum dc_plane_type type;
+-	uint32_t blends_with_above : 1;
+-	uint32_t blends_with_below : 1;
+ 	uint32_t per_pixel_alpha : 1;
+ 	struct {
+ 		uint32_t argb8888 : 1;
+diff --git a/drivers/gpu/drm/amd/display/dc/dce110/dce110_resource.c b/drivers/gpu/drm/amd/display/dc/dce110/dce110_resource.c
+index f808315b2835..a4a45a6ce61e 100644
+--- a/drivers/gpu/drm/amd/display/dc/dce110/dce110_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dce110/dce110_resource.c
+@@ -401,8 +401,6 @@ static const struct resource_caps stoney_resource_cap = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 		.type = DC_PLANE_TYPE_DCE_RGB,
+-		.blends_with_below = true,
+-		.blends_with_above = true,
+ 		.per_pixel_alpha = 1,
+ 
+ 		.pixel_format_support = {
+@@ -428,7 +426,6 @@ static const struct dc_plane_cap plane_cap = {
+ 
+ static const struct dc_plane_cap underlay_plane_cap = {
+ 		.type = DC_PLANE_TYPE_DCE_UNDERLAY,
+-		.blends_with_above = true,
+ 		.per_pixel_alpha = 1,
+ 
+ 		.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
+index 6bfac8088ab0..2bb8e11f26e0 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_resource.c
+@@ -504,8 +504,6 @@ static const struct resource_caps rv2_res_cap = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
+index 3af24ef9cb2d..00668df0938e 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_resource.c
+@@ -670,8 +670,6 @@ static const struct resource_caps res_cap_nv10 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
+index cd46701398d9..6ea70da28aaa 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn201/dcn201_resource.c
+@@ -571,8 +571,6 @@ static const struct resource_caps res_cap_dnc201 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+index 8f9244fe5c86..3ac8c0282589 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn21/dcn21_resource.c
+@@ -609,8 +609,6 @@ static const struct resource_caps res_cap_rn_FPGA_2pipe_dsc = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
+index b5b5320c7bef..d60c17d5a0d8 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_resource.c
+@@ -680,8 +680,6 @@ static const struct resource_caps res_cap_dcn3 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+index ee62ae3eb98f..b93b4498dba4 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn301/dcn301_resource.c
+@@ -651,8 +651,6 @@ static struct resource_caps res_cap_dcn301 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c b/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
+index 03ddf4f5f065..6ccad53f1e49 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn302/dcn302_resource.c
+@@ -147,8 +147,6 @@ static const struct resource_caps res_cap_dcn302 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 		.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-		.blends_with_above = true,
+-		.blends_with_below = true,
+ 		.per_pixel_alpha = true,
+ 		.pixel_format_support = {
+ 				.argb8888 = true,
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c b/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
+index 727f458f6ee9..5c28f7151d13 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn303/dcn303_resource.c
+@@ -126,8 +126,6 @@ static const struct resource_caps res_cap_dcn303 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 		.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-		.blends_with_above = true,
+-		.blends_with_below = true,
+ 		.per_pixel_alpha = true,
+ 		.pixel_format_support = {
+ 				.argb8888 = true,
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+index d3918a10773a..eaaa2e01f6d0 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_resource.c
+@@ -827,8 +827,6 @@ static const struct resource_caps res_cap_dcn31 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
+index f9dfbc7407ee..50ed7e09d5ba 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn314/dcn314_resource.c
+@@ -855,8 +855,6 @@ static const struct resource_caps res_cap_dcn314 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+index 7887078c5f64..41c972c8eb19 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn315/dcn315_resource.c
+@@ -824,8 +824,6 @@ static const struct resource_caps res_cap_dcn31 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
+index dc0b49506275..9ead347a33e9 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn316/dcn316_resource.c
+@@ -824,8 +824,6 @@ static const struct resource_caps res_cap_dcn31 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
+index 87f7669e81d7..100b6df33b33 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_resource.c
+@@ -657,8 +657,6 @@ static const struct resource_caps res_cap_dcn32 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+index deaa4769be10..0f477d50e935 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn321/dcn321_resource.c
+@@ -655,8 +655,6 @@ static const struct resource_caps res_cap_dcn321 = {
+ 
+ static const struct dc_plane_cap plane_cap = {
+ 	.type = DC_PLANE_TYPE_DCN_UNIVERSAL,
+-	.blends_with_above = true,
+-	.blends_with_below = true,
+ 	.per_pixel_alpha = true,
+ 
+ 	.pixel_format_support = {
+-- 
+2.39.2
+
