@@ -2,109 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 960A46AD6CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB2996AD6CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCGFat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 00:30:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
+        id S230203AbjCGFc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 00:32:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjCGFaq (ORCPT
+        with ESMTP id S229527AbjCGFc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 00:30:46 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C4557093;
-        Mon,  6 Mar 2023 21:30:45 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 132so6909329pgh.13;
-        Mon, 06 Mar 2023 21:30:45 -0800 (PST)
+        Tue, 7 Mar 2023 00:32:57 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1382D7D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 21:32:54 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id m6so15651518lfq.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 21:32:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678167045;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=joelfernandes.org; s=google; t=1678167173;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3XCBEBrW4KvfUOG26x/G4IxQZmFPxnQCEMhbweDvrUY=;
-        b=lVPfTyASkjYG0xnrzjzqppKWof6Fj7btl93WfQOXnLLBEdWjofk1J/zkxO0wKN01Mt
-         qzTElNXMsRid7cPPq/vg1kgTNAOKFLQnrbrWnOp4kdsu/UGmkOxOPh1oRCtVc2ehho+t
-         i30X9XZ29qj35nP3aKkosVNaig8oWBJHrdi3lNz3wMT4/f1VJ6GSjd7nwvy3+48b4FHQ
-         fGw6yQkLyg0j9IRe3IcW3/b+m4/0A1VUZOw4rnfv3a1pUZE0EwYqYRYLqMoIW29op7+0
-         R/87PmsUMwNipi4JxdzXMmG4OtS45dbRrBrqlyqYb4UThmJfd1+hf9xpYTB5C5JIQRpA
-         jXbw==
+        bh=U+hoIWbYaHKn+jXxJFShlyzgyWQZXEqFyUdN31BS+ow=;
+        b=QxVrRKuw+Vhq1UaNtIwVtPEhQ0dYsjqf8eV2dFZeG0nSPFsyRW3ctmKiu/V9AeyD0+
+         wu5DTGMmWYx5CKpc+mEk700WHgFjEzyrj7M9A4nM6usVle4vBhIx31AiTaAadMYrB5+u
+         TGD5v9xVz+NYEYAIzyNmRlrpIllfE4gwq+nsc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678167045;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3XCBEBrW4KvfUOG26x/G4IxQZmFPxnQCEMhbweDvrUY=;
-        b=3e0Xz7FatkdnGQqVbTyToWDcVDxwTaHQKlTqLxHAVdD35NOU0kvp0kKhMblYHXctj1
-         WK8cWdjqbODiGduvVdjJ4o46w5H3X52G2jkR4d0J+sAHqmlxCnvYu+0LeJhiF5vleGbU
-         w/I1gJn69LteUxx43yF4u2LBCYPTzkZc3qSeolUiGuJ8GUkM1R/2++UwFPGHitB1E3jt
-         5lF1Q+Hayp7aHjr7PPzdLY78BNJ+M1ooIPrM7qkgjj4f4t/RKOfn4l/Y6P6rDp3y0KhA
-         xqCiKzjzq2vjOxQuKbk5OaL7dJHGiChk2LRCpitN6FIbFlPueeAwkwv2JQcXAKmXs0ij
-         drMw==
-X-Gm-Message-State: AO0yUKWUT03khKi7/qiM7YOgwH8lgyo4dC7MH2fZnJbkPKbvvRWQyw74
-        twXDBL8gvbXxoPzyno2Cinc=
-X-Google-Smtp-Source: AK7set+TN1hNGmcvzRh0OOKH77hWokb+NdmKcrZ8TCKMjxGyGrByxJaL0z9+yvxtyzYG8jN4g3ZT5w==
-X-Received: by 2002:a62:1dd4:0:b0:5d6:138f:5596 with SMTP id d203-20020a621dd4000000b005d6138f5596mr14087706pfd.14.1678167044871;
-        Mon, 06 Mar 2023 21:30:44 -0800 (PST)
-Received: from localhost ([203.220.77.23])
-        by smtp.gmail.com with ESMTPSA id j13-20020aa78dcd000000b005a8bf239f5csm7174096pfr.193.2023.03.06.21.30.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 21:30:44 -0800 (PST)
-Mime-Version: 1.0
+        d=1e100.net; s=20210112; t=1678167173;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U+hoIWbYaHKn+jXxJFShlyzgyWQZXEqFyUdN31BS+ow=;
+        b=n7WnWaBnK29yhbhFzJzv0FIwzg81bzPz8k9+e9bs4yRt0jyRPczwZtVrb+CIs8U++W
+         G8gtUWs2wZXdSIclesOk6lNs8vS+P926uMm9FJawtGEm6hhPBy/U2SiW56zyLbuw39Qb
+         +X9oQajW9iuyUEHQhrMGOy2CJHD20Z1KHEu4cpOsfLA1CbiY6mry+9ieDzaGGBaqf8F7
+         zBsHM6qveRR6FiG+kocpsEjN2jEZMAMc3UnypSblc2kmqR5Pf0Bc+CUJNEppOfAtzJmR
+         ECLo1BTyefOBDdTAf9FkwHuFshCYH8w8VtmmcuPYOausBBaGioFM5YGw8anHdLn5zfU0
+         8vow==
+X-Gm-Message-State: AO0yUKV2QocvS4iyKqfiJwDnmmGFKv/ROEmTXJNyP8F6WOUqOS9VUipw
+        4Jmlntp0r25JvY/tfii1b+TZhVn4KqtY0VvGt2nkNg==
+X-Google-Smtp-Source: AK7set9nuJxu/QeD4Zon6yI0dNi/RPi/rmEoSdQV9+KgJ3VsUP4rBA4yHXiH6/oC6o6yqwVpXHDR7YcuZGQI2nyxKCs=
+X-Received: by 2002:a05:6512:24f:b0:4dd:fd4e:5a21 with SMTP id
+ b15-20020a056512024f00b004ddfd4e5a21mr3969019lfo.11.1678167172717; Mon, 06
+ Mar 2023 21:32:52 -0800 (PST)
+MIME-Version: 1.0
+References: <20230307030457.3499834-1-joel@joelfernandes.org>
+ <753b72f5ecd03f94511495a333eb192c5fc42087.camel@perches.com>
+ <CAEXW_YRYnikDRTQXwrTpTsQ1r-32FRPABj_Viu+X6Qr7EWqh4g@mail.gmail.com>
+ <802731d7bf187573a9084cb23196c096be81b5e1.camel@perches.com>
+ <20230307044104.GA3532764@google.com> <497c07579fb51ed6f0b8a72471017b4dec258e9e.camel@perches.com>
+ <CAEXW_YQt976k6tRJBoYy=S-CpacgB+MpMr-H=TEtZBaP=CPwnQ@mail.gmail.com> <912474d3804791ef5757a44bae6ab72701e15bc3.camel@perches.com>
+In-Reply-To: <912474d3804791ef5757a44bae6ab72701e15bc3.camel@perches.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 7 Mar 2023 00:32:40 -0500
+Message-ID: <CAEXW_YQbSySm++iXeXn7uMdGVatCKo88L5WXecL2=WkJg7XDEg@mail.gmail.com>
+Subject: Re: [PATCH] checkpatch: Error out if deprecated RCU API used
+To:     Joe Perches <joe@perches.com>
+Cc:     linux-kernel@vger.kernel.org, Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
+        Uladzislau Rezki <urezki@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 07 Mar 2023 15:30:39 +1000
-Message-Id: <CQZWKF2U2GVM.1X6AAD3SM05D6@bobo>
-To:     "Benjamin Gray" <bgray@linux.ibm.com>,
-        <linuxppc-dev@lists.ozlabs.org>
-Cc:     <ajd@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <cmr@bluescreens.de>
-Subject: Re: [RFC PATCH 07/13] powerpc/dexcr: Add sysctl entry for SBHE
- system override
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-X-Mailer: aerc 0.13.0
-References: <20221128024458.46121-1-bgray@linux.ibm.com>
- <20221128024458.46121-8-bgray@linux.ibm.com>
-In-Reply-To: <20221128024458.46121-8-bgray@linux.ibm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Nov 28, 2022 at 12:44 PM AEST, Benjamin Gray wrote:
-> The DEXCR Speculative Branch Hint Enable (SBHE) aspect controls whether
-> the hints provided by BO field of Branch instructions are obeyed during
-> speculative execution.
+On Tue, Mar 7, 2023 at 12:22=E2=80=AFAM Joe Perches <joe@perches.com> wrote=
+:
 >
-> SBHE behaviour per ISA 3.1B:
+> On Tue, 2023-03-07 at 00:11 -0500, Joel Fernandes wrote:
 >
-> 0:	The hints provided by BO field of Branch instructions may be
-> 	ignored during speculative execution
+> > Do you mind sharing which tree you are looking at? I checked both
+> > 6.3-rc1 and linux-next.
+> >
+> > Your grep returned:
+> >
+> > kernel/trace/trace_osnoise.c:   kvfree_rcu(inst);
+> > kernel/trace/trace_probe.c:     kvfree_rcu(link);
+> > lib/test_vmalloc.c:             kvfree_rcu(p);
+> > mm/list_lru.c:   * We need kvfree_rcu() here. And the walking of the li=
+st
+> > net/core/pktgen.c:      /* Don't need rcu_barrier() due to use of kfree=
+_rcu() */
+> > net/core/sysctl_net_core.c:
+> > kvfree_rcu(orig_sock_table);
+> > net/core/sysctl_net_core.c:                             kfree_rcu(cur);
+> > net/mac802154/scan.c:   kfree_rcu(request);
+> > net/mac802154/scan.c:   kfree_rcu(request);
 >
-> 1:	The hints provided by BO field of Branch instructions are obeyed
-> 	during speculative execution
+> rather old.  I'm not subscribed and haven't been following much.
 >
-> Add a sysctl entry to allow changing this aspect globally in the system
-> at runtime:
->
-> 	/proc/sys/kernel/speculative_branch_hint_enable
->
-> Three values are supported:
->
-> -1:	Disable DEXCR SBHE sysctl override
->  0:	Override and set DEXCR[SBHE] aspect to 0
->  1:	Override and set DEXCR[SBHE] aspect to 1
->
-> Internally, introduces a mechanism to apply arbitrary system wide
-> overrides on top of the prctl() config.
+> Add linux-next specific files for 20230217
 
-Why have an override for this, and not others?
+I am surprised though why you don't see the usage in trace_osnoise.c
+though because that was added in 2021 (see diff below).
 
-Thanks,
-Nick
+Anyway, I take it you are Ok with the checkpatch patch. If so, do
+provide your Ack tag in advance. We can push from our side only if
+needed. There is a chance that we may not need it if we are successful
+in having made the conversions to the "good API" in time for the next
+merge window.
 
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index 7520d43aed55..4719a848bf17 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -138,8 +138,7 @@ static void osnoise_unregister_instance(struct
+trace_array *tr)
+        if (!found)
+                return;
+
+-       synchronize_rcu();
+-       kfree(inst);
++       kvfree_rcu(inst);
+ }
+
+ /*
+
+
+>
+> Updating to today's next:
+>
+> Add linux-next specific files for 20230307
+>
+> I get several instances:
+>
+> $ git grep -P '\bkv?free_rcu\s*\(' -- '*.[ch]' | grep -v -P 'kv?free_rcu\=
+s*\([^,]+,.*\)'
+> drivers/block/drbd/drbd_nl.c:   kvfree_rcu(old_disk_conf);
+> drivers/block/drbd/drbd_nl.c:   kvfree_rcu(old_net_conf);
+> drivers/block/drbd/drbd_nl.c:           kvfree_rcu(old_disk_conf);
+> drivers/block/drbd/drbd_receiver.c:     kvfree_rcu(old_net_conf);
+> drivers/block/drbd/drbd_receiver.c:                     kvfree_rcu(old_di=
+sk_conf);
+> drivers/block/drbd/drbd_state.c:                kvfree_rcu(old_conf);
+> drivers/infiniband/core/device.c:               kfree_rcu(container_of(de=
+v->port_data, struct ib_port_data_rcu,
+> drivers/infiniband/core/rdma_core.c:     * kfree_rcu(). However the objec=
+t may still have been released and
+> drivers/infiniband/sw/rxe/rxe_mr.c:     kfree_rcu(mr);
+> drivers/misc/vmw_vmci/vmci_context.c:           kvfree_rcu(notifier);
+> drivers/misc/vmw_vmci/vmci_event.c:     kvfree_rcu(s);
+> drivers/net/ethernet/mellanox/mlx5/core/en/tc/int_port.c:       kfree_rcu=
+(int_port);
+> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c:      kfree_rcu=
+(tx_sa);
+> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec.c:      kfree_rcu=
+(rx_sc);
+> drivers/target/target_core_configfs.c:                   * callbacks to c=
+omplete post kfree_rcu(), before allowing
+> fs/ext4/super.c:                                kfree_rcu(qname);
+> include/linux/rcupdate.h: *     kvfree_rcu(ptr);
+> include/linux/rcupdate.h:#define kvfree_rcu(...) KVFREE_GET_MACRO(__VA_AR=
+GS__,          \
+> include/linux/rcutiny.h:        // kvfree_rcu(one_arg) call.
+> include/rdma/ib_verbs.h:        struct rcu_head         rcu;            /=
+* kfree_rcu() overhead */
+> include/scsi/scsi_device.h: * @rcu: For kfree_rcu().
+> kernel/rcu/rcuscale.c:          pr_alert("CONFIG_RCU_LAZY is disabled, fa=
+lling back to kfree_rcu() for delayed RCU kfree'ing\n");
+> kernel/rcu/tree.c: * struct kvfree_rcu_bulk_data - single block to store =
+kvfree_rcu() pointers
+> kernel/rcu/tree.c: * @records: Array of the kvfree_rcu() pointers
+> kernel/rcu/tree.c: * struct kfree_rcu_cpu_work - single batch of kfree_rc=
+u() requests
+> kernel/rcu/tree.c: * @head_free: List of kfree_rcu() objects waiting for =
+a grace period
+> kernel/rcu/tree.c: * @bulk_head_free: Bulk-List of kvfree_rcu() objects w=
+aiting for a grace period
+> kernel/rcu/tree.c: * struct kfree_rcu_cpu - batch up kfree_rcu() requests=
+ for RCU grace period
+> kernel/rcu/tree.c: * @head: List of kfree_rcu() objects not yet waiting f=
+or a grace period
+> kernel/rcu/tree.c: * @bulk_head: Bulk-List of kvfree_rcu() objects not ye=
+t waiting for a grace period
+> kernel/rcu/tree.c: * @krw_arr: Array of batches of kfree_rcu() objects wa=
+iting for a grace period
+> kernel/rcu/tree.c:       * double-argument of kvfree_rcu().  This happens=
+ when the
+> kernel/rcu/tree.c: * reduce the number of grace periods during heavy kfre=
+e_rcu()/kvfree_rcu() load.
+> kernel/rcu/tree.c:              // Probable double kfree_rcu(), just leak=
+.
+> kernel/trace/trace_osnoise.c:   kvfree_rcu(inst);
+> kernel/trace/trace_probe.c:     kvfree_rcu(link);
+> net/core/pktgen.c:      /* Don't need rcu_barrier() due to use of kfree_r=
+cu() */
+> net/core/sysctl_net_core.c:                             kvfree_rcu(orig_s=
+ock_table);
+> net/core/sysctl_net_core.c:                             kfree_rcu(cur);
+>
