@@ -2,294 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E1F6ADAC5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B0F6ADAD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjCGJpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:45:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S230217AbjCGJrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjCGJpo (ORCPT
+        with ESMTP id S230194AbjCGJrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:45:44 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610B839CD3;
-        Tue,  7 Mar 2023 01:45:42 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3277IqHs017882;
-        Tue, 7 Mar 2023 09:45:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Mhno23f9v3er4tDoxC2ORjmssJ3m2pYGBAvzXv7SrWk=;
- b=oMws0QMgsjJuGR3VfFPkzXW4KYTBIZ8MrowdlxNTo/itd0EjkpyMtYRJg+FGS2IFrO4i
- s4VWi0z8Kwc2igTmr8XoA8Iel1CdxvAIQ8boVKDLOtwzjulByN7VGl08ebq5J7fn2cG9
- Y+qB0hTgzLMiUjq23bRLbK+oXLsOLjRoxYIyEkEzhniYVBW9Q/OJRwaAi2N9JWFxCdp6
- YA0laUVW30A81DhOediRmP6sf1KDipgO2gy+ozbx1nkicUZaUHi2moyKclkKIec6T3bx
- I03+Hwnratnz5hdXBzWqS5fmPJ5MR7ztzITQx1IsnBJrWhPpG2Y21iNmcaIZGpDitT48 Xg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5wee8vu6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 09:45:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3279jKjN002603
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Mar 2023 09:45:20 GMT
-Received: from [10.216.11.93] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 7 Mar 2023
- 01:45:11 -0800
-Message-ID: <30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com>
-Date:   Tue, 7 Mar 2023 15:15:08 +0530
+        Tue, 7 Mar 2023 04:47:23 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2050.outbound.protection.outlook.com [40.107.92.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9EB56167;
+        Tue,  7 Mar 2023 01:47:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dNv7nWJ5nEcVcqfbaLjIa7Es9mbN3ZddC38PxLhhXD2p/NWd3/1omZi2C6reTuv0GBk7faGPeY8oIq2aP3tRaS1/8Q4z3zjwYZ21GCrZKvJDdlWbpjlE/kVSvQ7+nCr9QXsGoY8khSTweesQSAPAFKlFxzp4VgvxCnZ1KF95hNGNjHdYIvQvpOuAW0yWbVlq2PPaegz6qOmxfEX/TbqLsCt+0S4cE4Wnb7bDsP6D6hTcbLAKAEQ1Zpi+BzxDuWn8PyNuV7WeHs0OcN3F8G+mv+bgKdyEtmxaglJ8UM0S2wkWSOg6dXMQRKaFnTgy/vhMt847OrAai5ITT+DvSiFH8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DA5HMa94GjlMbRcd1xSm7oa5D0Tq7NIj3XAs6Syqfog=;
+ b=A8vjbK+X9BqLGJzLXIrRk+bCutd7nV5LHttylpnUUQK9p1GXTbjepfpXoKnf/IRmDUXr3OzPHrSrF5h6lM+JHFKPJM/+mHRTf2LEC57ayn9y0YqjKr6QiJq3NC2uCFe8flMgJ+0LZ9vYgiFsXWIRZUmOFtD7Xlga2iYN6Paiu+GLvIMDiMG3lA8eGsUCcb5TDgysp5pfVcfJj2K8SwtsWjDnuS777Hz9rr1jq+SubHyUTRohYF6ckShEDJk9TewJTEAcYsFXLT+v8aU15yzwK96DvcyuHGStcjbptTYSLHUKTPuLc3u/cFzfGLzFaqKwD85KAx4g6ekjBamM8WfTOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DA5HMa94GjlMbRcd1xSm7oa5D0Tq7NIj3XAs6Syqfog=;
+ b=sntoBYJJIJDj+aLZXH3xd0RiEvRVtprg2PrJUN9yj7yGRkaa5vEiDRegRKC4NLcrqZm7x0DLiHV4l9Fi5XGdRwsJVn7/Mb8lRAqyKBgc2YrJyXnSDEhHUcb7bB/GW34Ep4wpayxFrDr2I1F4XN86GHae8HNoD7JsGCCDyH41yOf5PJhci7hqFbgMYmelk9Gxf2ibMxmzv+5BuyGCD82ID+gV2l5GjZqdgSU2lTtfD2K21NMiggkldmxWYyukMWOhUT9FslV7m63jVIkM7B4EF+fy1OLle9DRWHSwZSnsSobcQj0INflX+cyDlXnuPpYdQToVdKnocKmxV2rwr/7r8A==
+Received: from DM6PR18CA0031.namprd18.prod.outlook.com (2603:10b6:5:15b::44)
+ by BL1PR12MB5730.namprd12.prod.outlook.com (2603:10b6:208:385::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.22; Tue, 7 Mar
+ 2023 09:47:06 +0000
+Received: from DM6NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:15b:cafe::ca) by DM6PR18CA0031.outlook.office365.com
+ (2603:10b6:5:15b::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28 via Frontend
+ Transport; Tue, 7 Mar 2023 09:47:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT059.mail.protection.outlook.com (10.13.172.92) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 09:47:06 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 7 Mar 2023
+ 01:47:01 -0800
+Received: from nvidia.com (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 7 Mar 2023
+ 01:46:57 -0800
+From:   Gavin Li <gavinl@nvidia.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <roopa@nvidia.com>,
+        <eng.alaamohamedsoliman.am@gmail.com>, <bigeasy@linutronix.de>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <gavi@nvidia.com>, <roid@nvidia.com>, <maord@nvidia.com>,
+        <saeedm@nvidia.com>
+Subject: [PATCH net-next v5 0/4] net/mlx5e: Add GBP VxLAN HW offload support
+Date:   Tue, 7 Mar 2023 11:46:33 +0200
+Message-ID: <20230307094637.246993-1-gavinl@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-From:   Devi Priya <quic_devipriy@quicinc.com>
-Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific
- compatible
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
-        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <p.zabel@pengutronix.de>, <svarbanov@mm-sol.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
-References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
- <20230214164135.17039-2-quic_devipriy@quicinc.com>
- <20230224082332.GA5443@thinkpad>
- <bd153038-4427-1f11-1941-5f13fec01cf7@quicinc.com>
- <20230228063358.GA4839@thinkpad>
- <9BD62D8E-4E14-4269-B72D-C83EF4D43040@linaro.org>
- <20230303174036.GB6782@thinkpad>
-Content-Language: en-US
-In-Reply-To: <20230303174036.GB6782@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: acFhR0WU2dnQYcCltNuR2nn7AUBIs0Ft
-X-Proofpoint-ORIG-GUID: acFhR0WU2dnQYcCltNuR2nn7AUBIs0Ft
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_03,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
- mlxlogscore=999 priorityscore=1501 phishscore=0 clxscore=1015 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070087
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT059:EE_|BL1PR12MB5730:EE_
+X-MS-Office365-Filtering-Correlation-Id: ad17efa5-0922-4c38-b42e-08db1ef0e988
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aBIfyXHeu64/esGWWiyBRfDhZ6LTeXBG5iDizHyqZX8lws65pnUf5blu9EwBjqFjDQ8syoKowDiaza2BBmF9posr3xfA1i+wnB3LpRTOMRBUDwLg6AQX+KRwLd4nUhGLMAbW7+ZlHT6De7M5QZhV0J0ZOOubS01Civlar5th0UoxOW9cM0tA2k8OAT5KnXIfV5GslakXwYVtjWyKQka6WDGY7z0fw58bGsC82qmcBoL/kb/v61ENdvqfAfkw9pUefOq44c81MEqV1ZKHkEMiFlTaC94aGi6hXnnO6tmZ9WOtX3JjdPPnMMHYTeHyv+wdl8xhT1lxVyw26p+K/pKCSvZRTOeoIEN8ZCnoefbz12yqRQ4B/huHJ4yiioYg9AkLZSp2td+q9AYjeFx2KvPEIN3/v46BGIWXrqPYhCH/QtIbK2ALFsGn15HuGN+lNWUAhvNfGCtG9wz6ZOr/hHY57SriyTXTU6bwyBixCq0uh17JRwsURAVV3+pDyykUmQnq0U76fMbkc4c+WJQ1setpGW6Lvx/AtH3S+kSAlvKIYG41nFZhctyBTe6VDdTkusk/NOQcTAm1xrLbSBa1wPcKFTREstxm0TNFFRmqxnajRf1aBjwb3qJflUKzmNCIERgydpX7h+ZAxTRYlvv8GjxpW8+OcMxRrv1CI+4VG+g6GCbWEgHSTkpY56PkcaJqczeGqk66sYJtJzh5klI7OwIEqQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(376002)(396003)(136003)(451199018)(46966006)(36840700001)(40470700004)(83380400001)(316002)(54906003)(110136005)(40480700001)(82310400005)(55016003)(36756003)(86362001)(336012)(6286002)(40460700003)(186003)(2906002)(16526019)(5660300002)(1076003)(70206006)(70586007)(82740400003)(41300700001)(36860700001)(4326008)(8936002)(8676002)(6666004)(426003)(2616005)(478600001)(26005)(47076005)(7696005)(107886003)(356005)(7636003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 09:47:06.0678
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad17efa5-0922-4c38-b42e-08db1ef0e988
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5730
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Patch-1: Remove unused argument from functions.
+Patch-2: Expose helper function vxlan_build_gbp_hdr.
+Patch-3: Add helper function for encap_info_equal for tunnels with options.
+Patch-4: Add HW offloading support for TC flows with VxLAN GBP encap/decap
+        in mlx ethernet driver.
 
+Gavin Li (4):
+  vxlan: Remove unused argument from vxlan_build_gbp_hdr( ) and
+    vxlan_build_gpe_hdr( )
+---
+changelog:
+v2->v3
+- Addressed comments from Paolo Abeni
+- Add new patch
+---
+  vxlan: Expose helper vxlan_build_gbp_hdr
+---
+changelog:
+v1->v2
+- Addressed comments from Alexander Lobakin
+- Use const to annotate read-only the pointer parameter
+---
+  net/mlx5e: Add helper for encap_info_equal for tunnels with options
+---
+changelog:
+v3->v4
+- Addressed comments from Alexander Lobakin
+- Fix vertical alignment issue
+v1->v2
+- Addressed comments from Alexander Lobakin
+- Replace confusing pointer arithmetic with function call
+- Use boolean operator NOT to check if the function return value is not zero
+---
+  net/mlx5e: TC, Add support for VxLAN GBP encap/decap flows offload
+---
+changelog:
+v4->v5
+- Addressed comments from Simon Horman
+- Remove Simon Horman from Reviewed-by list
+v3->v4
+- Addressed comments from Simon Horman
+- Using cast in place instead of changing API
+v2->v3
+- Addressed comments from Alexander Lobakin
+- Remove the WA by casting away
+v1->v2
+- Addressed comments from Alexander Lobakin
+- Add a separate pair of braces around bitops
+- Remove the WA by casting away
+- Fit all log messages into one line
+- Use NL_SET_ERR_MSG_FMT_MOD to print the invalid value on error
+---
 
-On 3/3/2023 11:10 PM, Manivannan Sadhasivam wrote:
-> On Fri, Mar 03, 2023 at 05:16:58PM +0200, Dmitry Baryshkov wrote:
->> 28 февраля 2023 г. 08:33:58 GMT+02:00, Manivannan Sadhasivam <mani@kernel.org> пишет:
->>> On Tue, Feb 28, 2023 at 10:56:53AM +0530, Devi Priya wrote:
->>>>
->>>>
->>>> On 2/24/2023 1:53 PM, Manivannan Sadhasivam wrote:
->>>>> On Tue, Feb 14, 2023 at 10:11:29PM +0530, Devi Priya wrote:
->>>>>> Document the compatible for IPQ9574
->>>>>>
->>>> Hi Mani, Thanks for taking time to review the patch.
->>>>>
->>>>> You didn't mention about the "msi-parent" property that is being added
->>>>> by this patch
->>>> Sure, will update the commit message in the next spin
->>>>>
->>>>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->>>>>> ---
->>>>>>    .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++++++++-
->>>>>>    1 file changed, 70 insertions(+), 2 deletions(-)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->>>>>> index 872817d6d2bd..dabdf2684e2d 100644
->>>>>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->>>>>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->>>>>> @@ -26,6 +26,7 @@ properties:
->>>>>>              - qcom,pcie-ipq8064-v2
->>>>>>              - qcom,pcie-ipq8074
->>>>>>              - qcom,pcie-ipq8074-gen3
->>>>>> +          - qcom,pcie-ipq9574
->>>>>>              - qcom,pcie-msm8996
->>>>>>              - qcom,pcie-qcs404
->>>>>>              - qcom,pcie-sa8540p
->>>>>> @@ -44,11 +45,11 @@ properties:
->>>>>>      reg:
->>>>>>        minItems: 4
->>>>>> -    maxItems: 5
->>>>>> +    maxItems: 6
->>>>>>      reg-names:
->>>>>>        minItems: 4
->>>>>> -    maxItems: 5
->>>>>> +    maxItems: 6
->>>>>>      interrupts:
->>>>>>        minItems: 1
->>>>>> @@ -105,6 +106,8 @@ properties:
->>>>>>        items:
->>>>>>          - const: pciephy
->>>>>> +  msi-parent: true
->>>>>> +
->>>>>>      power-domains:
->>>>>>        maxItems: 1
->>>>>> @@ -173,6 +176,27 @@ allOf:
->>>>>>                - const: parf # Qualcomm specific registers
->>>>>>                - const: config # PCIe configuration space
->>>>>> +  - if:
->>>>>> +      properties:
->>>>>> +        compatible:
->>>>>> +          contains:
->>>>>> +            enum:
->>>>>> +              - qcom,pcie-ipq9574
->>>>>> +    then:
->>>>>> +      properties:
->>>>>> +        reg:
->>>>>> +          minItems: 5
->>>>>> +          maxItems: 6
->>>>>> +        reg-names:
->>>>>> +          minItems: 5
->>>>>> +          items:
->>>>>> +            - const: dbi # DesignWare PCIe registers
->>>>>> +            - const: elbi # External local bus interface registers
->>>>>> +            - const: atu # ATU address space
->>>>>> +            - const: parf # Qualcomm specific registers
->>>>>> +            - const: config # PCIe configuration space
->>>>>> +            - const: aggr_noc #PCIe aggr_noc
->>>>>
->>>>> Why do you need this region unlike other SoCs? Is the driver making use of it?
->>>> We have the aggr_noc region in ipq9574 to achieve higher throughput & to
->>>> handle multiple PCIe instances. The driver uses it to rate adapt 1-lane PCIe
->>>> clocks. My bad, missed it. Will add the driver changes in V2.
->>>
->>> Hmm, this is something new. How can you achieve higher throughput with this
->>> region? Can you explain more on how it is used?
->>
->> Based on the name of the region, it looks like it is an interconnect region.
->>
-> 
-> Well, we only have BCM based interconnects so far. That's why I was curious
-> about this region and its purpose.
-For connected PCIe slave devices that are running at frequency lesser
-than the ANOC frequency (342MHz), the rate adapter of ANOC needs to be
-configured
-> 
->> Devi, if this is the case, then you have to handle it through the interconnect driver, rather than poking directly into these registers.
-> 
-> If that so, it doesn't need to be added in this series itself. I believe that
-> without aggr_noc region, the PCIe controller can still function properly with
-> reduced performance. But you can add the interconnect support later as a
-> separate series.
-Sure, okay. The ANOC runs at a fixed frequency of 342MHz and the 
-interconnect clocks are not scaled. The aggr_noc register is just a 
-magic register for configuring it's rate adapter to ensure no wait 
-cycles are inserted.
+ .../ethernet/mellanox/mlx5/core/en/tc_tun.h   |  3 +
+ .../mellanox/mlx5/core/en/tc_tun_encap.c      | 32 ++++++++
+ .../mellanox/mlx5/core/en/tc_tun_geneve.c     | 24 +-----
+ .../mellanox/mlx5/core/en/tc_tun_vxlan.c      | 76 ++++++++++++++++++-
+ drivers/net/vxlan/vxlan_core.c                | 27 +------
+ include/linux/mlx5/device.h                   |  6 ++
+ include/linux/mlx5/mlx5_ifc.h                 | 13 +++-
+ include/net/vxlan.h                           | 19 +++++
+ 8 files changed, 149 insertions(+), 51 deletions(-)
 
-> 
-> Thanks,
-> Mani
-> 
->>
->>
->>>
->>> Thanks,
->>> Mani
->>>
->>>>>
->>>>> Thanks,
->>>>> Mani
->>>>>
->>>>>> +
->>>>>>      - if:
->>>>>>          properties:
->>>>>>            compatible:
->>>>>> @@ -365,6 +389,39 @@ allOf:
->>>>>>                - const: ahb # AHB Reset
->>>>>>                - const: axi_m_sticky # AXI Master Sticky reset
->>>>>> +  - if:
->>>>>> +      properties:
->>>>>> +        compatible:
->>>>>> +          contains:
->>>>>> +            enum:
->>>>>> +              - qcom,pcie-ipq9574
->>>>>> +    then:
->>>>>> +      properties:
->>>>>> +        clocks:
->>>>>> +          minItems: 6
->>>>>> +          maxItems: 6
->>>>>> +        clock-names:
->>>>>> +          items:
->>>>>> +            - const: ahb  # AHB clock
->>>>>> +            - const: aux  # Auxiliary clock
->>>>>> +            - const: axi_m # AXI Master clock
->>>>>> +            - const: axi_s # AXI Slave clock
->>>>>> +            - const: axi_bridge # AXI bridge clock
->>>>>> +            - const: rchng
->>>>>> +        resets:
->>>>>> +          minItems: 8
->>>>>> +          maxItems: 8
->>>>>> +        reset-names:
->>>>>> +          items:
->>>>>> +            - const: pipe # PIPE reset
->>>>>> +            - const: sticky # Core Sticky reset
->>>>>> +            - const: axi_s_sticky # AXI Slave Sticky reset
->>>>>> +            - const: axi_s # AXI Slave reset
->>>>>> +            - const: axi_m_sticky # AXI Master Sticky reset
->>>>>> +            - const: axi_m # AXI Master reset
->>>>>> +            - const: aux # AUX Reset
->>>>>> +            - const: ahb # AHB Reset
->>>>>> +
->>>>>>      - if:
->>>>>>          properties:
->>>>>>            compatible:
->>>>>> @@ -681,6 +738,16 @@ allOf:
->>>>>>            - interconnects
->>>>>>            - interconnect-names
->>>>>> +  - if:
->>>>>> +      properties:
->>>>>> +        compatible:
->>>>>> +          contains:
->>>>>> +            enum:
->>>>>> +              - qcom,pcie-ipq9574
->>>>>> +    then:
->>>>>> +      required:
->>>>>> +        - msi-parent
->>>>>> +
->>>>>>      - if:
->>>>>>          not:
->>>>>>            properties:
->>>>>> @@ -693,6 +760,7 @@ allOf:
->>>>>>                    - qcom,pcie-ipq8064v2
->>>>>>                    - qcom,pcie-ipq8074
->>>>>>                    - qcom,pcie-ipq8074-gen3
->>>>>> +                - qcom,pcie-ipq9574
->>>>>>                    - qcom,pcie-qcs404
->>>>>>        then:
->>>>>>          required:
->>>>>> -- 
->>>>>> 2.17.1
->>>>>>
->>>>>
->>>> Thanks,
->>>> Devi Priya
->>>
->>
-> 
-Thanks,
-Devi Priya
+-- 
+2.31.1
+
