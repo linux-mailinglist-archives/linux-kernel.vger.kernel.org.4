@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64EBB6ADE17
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 401BD6ADE3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjCGL4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:56:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S231163AbjCGMBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:01:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjCGL4n (ORCPT
+        with ESMTP id S229682AbjCGMA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:56:43 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D338B2D5D;
-        Tue,  7 Mar 2023 03:56:41 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-536b7ffdd34so240009557b3.6;
-        Tue, 07 Mar 2023 03:56:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678190201;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fpzu6mM9TObEaWPqTRbV/lVIlKZNjyI+OGMeOTlpmmM=;
-        b=HlTlFZ6JpzfQr4iv30oIdQyWt5EKVG4KlPTb+CtXgnhcokg9agdArzRPjQaAhjClKC
-         ZdKh92km6nxWkT3uQOqDjCk/L1h0yTo3J3/U6pK8OkC1WlgHQdR+UJzqYNSNfKh56g1h
-         P6SjgUcedkQsE7840DprGK0z/3YIOuMtgwSwzxamhNMXCsjz/bOD5MvATFVETc5SR+UT
-         iBVMPMKPl2EtwWqT8Im+I1/eoqcIyrslwnxUhawQPD4rEIjHRjbkTYaGZlWu3279wo1m
-         o9hRTRw9GolZcvpByHOv1j8JCWQJ9mYMpP+s0DjAfQlcib7hjtoM8L2U5RyjFmGHJHtj
-         o/vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678190201;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fpzu6mM9TObEaWPqTRbV/lVIlKZNjyI+OGMeOTlpmmM=;
-        b=cHALOOMvsCyHU1iZevMB7BNvTmCEuGZ2QrVW+xMmkzlu1fZWWQEpOsx+BE81RwGuaX
-         i3Qwy24l9zkQ+fvWX8GyPJF9HLRWND3W2vGGTIGJ4mz2GPVNtMiT/IHqb7YvCrLZqtPK
-         9DCONtTxtUhKUMj4FK5OHzAqPYBdy46K2NHMTEbTT/VAQNLq9AO6tbq7JYYsG6mRXifL
-         4apwYv+s4Q0T8I42gKDHqAOX2yjW1Lj2NPhyO1W2gd7qw+nNxINOiWGtKKjhCScvFX/z
-         Yowgqg6AXw9MKABOd5LXb301jsw0OGr43Lszzb8AYQVmN9gAXb0a6PRWubmi73JBqHvF
-         j+zg==
-X-Gm-Message-State: AO0yUKVniY7V+qj2Hrl+BiLwk0F355pCLoZ9CKPZn4FPbXnqs5NAp/H3
-        jNiWcVj+yAFa4rVVf8HpTKKmDtzSgk/2/OHM1kY=
-X-Google-Smtp-Source: AK7set+XuApmsHpeE59OAObEV85h6yLM1xkplSm7PT1n4hNgCYOTpCcCuw40R2D3CdnvscfMkze9+dwV/8bTBkxG6YU=
-X-Received: by 2002:a81:b61a:0:b0:52e:c79a:cda with SMTP id
- u26-20020a81b61a000000b0052ec79a0cdamr9075327ywh.10.1678190201054; Tue, 07
- Mar 2023 03:56:41 -0800 (PST)
+        Tue, 7 Mar 2023 07:00:57 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA17930B3F;
+        Tue,  7 Mar 2023 04:00:54 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PWDXl435Nz6J7Pg;
+        Tue,  7 Mar 2023 20:00:23 +0800 (CST)
+Received: from localhost (10.126.173.40) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 7 Mar
+ 2023 12:00:51 +0000
+Date:   Tue, 7 Mar 2023 12:00:50 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     James Morse <james.morse@arm.com>
+CC:     <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        <kvmarm@lists.linux.dev>, <kvm@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+        <linux-ia64@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <x86@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Oliver Upton" <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        <kangkang.shen@futurewei.com>
+Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual
+ cpuhotplug
+Message-ID: <20230307120050.000032f1@Huawei.com>
+In-Reply-To: <20230203135043.409192-1-james.morse@arm.com>
+References: <20230203135043.409192-1-james.morse@arm.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <20230307102441.94417-3-conor.dooley@microchip.com> <CANiq72nLjBgMSUTtWuF7qU5vG9rA3v=ekWk1d6+SNiGkfcaS8Q@mail.gmail.com>
- <ZAcZeWYUU75BK5FO@wendy>
-In-Reply-To: <ZAcZeWYUU75BK5FO@wendy>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 7 Mar 2023 12:56:30 +0100
-Message-ID: <CANiq72kz2qxsB9JG7OB02KMAfy-YvokCFWMuEj_bkaY8i5tdVg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] RISC-V: enable building 64-bit kernels with rust support
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-riscv@lists.infradead.org, conor@kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.173.40]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,16 +72,204 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 12:01=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> Cool. Git should resolve that, probably without even generating a
-> conflict in -next, right?
+On Fri,  3 Feb 2023 13:50:11 +0000
+James Morse <james.morse@arm.com> wrote:
 
-I think it will conflict.
 
-Since the cleanup is elsewhere and it may add work for the -next
-maintainer, it is probably best to take it out in v2.
+...
 
-Cheers,
-Miguel
+> On a system that supports cpuhotplug the MADT has to describe every possible
+> CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+> the guest is started.
+> With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+> policy about which CPUs can be brought online.
+> 
+> This series adds support for virtual-cpuhotplug as exactly that: firmware
+> policy. This may even work on a physical machine too; for a guest the part of
+> firmware is played by the VMM. (typically Qemu).
+> 
+> PSCI support is modified to return 'DENIED' if the CPU can't be brought
+> online/enabled yet. The CPU object's _STA method's enabled bit is used to
+> indicate firmware's current disposition. If the CPU has its enabled bit clear,
+> it will not be registered with sysfs, and attempts to bring it online will
+> fail. The notifications that _STA has changed its value then work in the same
+> way as physical hotplug, and firmware can cause the CPU to be registered some
+> time later, allowing it to be brought online.
+
+Hi James,
+
+As we discussed on an LOD call a while back, I think that we need some path to
+find out if the guest supports vCPU HP or not so that info can be queried by
+an orchestrator / libvirt etc.  In general the entity responsible for allocating
+extra vCPUs may not know what support the VM has for this feature.
+
+There are various ways we could get this information into the VMM.
+My immediate thought is to use one of the ACPI interfaces that lets us write
+AML that can set an emulated register. A query to the VMM can check if this
+register is set.
+
+So options.
+
+_OSI() - Deprecated on ARM64 so lets not use that ;)
+_OSC() - Could add a bit to Table 6.13 Platform-Wide Capabilites in ACPI 6.5 spec.
+         Given x86 has a similar online capable bit perhaps this is the best option
+         though it is the one that requires a formal code first proposal to ASWG.
+_OSC() - Could add a new UUID and put it under a suitable device - maybe all CPUs?
+         You could definitely argue this feature is an operating system property.
+_DSM() - Similar to OSC but always under a device.
+         Whilst can be used for this I'm not sure it really matches intended usecase.
+
+Assuming everyone agrees this bit of introspection is useful,
+Rafael / other ACPI specialists: Any suggestions on how best to do this?
+
+Jonathan
+
+
+
+
+
+> 
+> This creates something that looks like cpuhotplug to user-space, as the sysfs
+> files appear and disappear, and the udev notifications look the same.
+> 
+> One notable difference is the CPU present mask, which is exposed via sysfs.
+> Because the CPUs remain present throughout, they can still be seen in that mask.
+> This value does get used by webbrowsers to estimate the number of CPUs
+> as the CPU online mask is constantly changed on mobile phones.
+> 
+> Linux is tolerant of PSCI returning errors, as its always been allowed to do
+> that. To avoid confusing OS that can't tolerate this, we needed an additional
+> bit in the MADT GICC flags. This series copies ACPI_MADT_ONLINE_CAPABLE, which
+> appears to be for this purpose, but calls it ACPI_MADT_GICC_CPU_CAPABLE as it
+> has a different bit position in the GICC.
+> 
+> This code is unconditionally enabled for all ACPI architectures.
+> If there are problems with firmware tables on some devices, the CPUs will
+> already be online by the time the acpi_processor_make_enabled() is called.
+> A mismatch here causes a firmware-bug message and kernel taint. This should
+> only affect people with broken firmware who also boot with maxcpus=1, and
+> bring CPUs online later.
+> 
+> I had a go at switching the remaining architectures over to GENERIC_CPU_DEVICES,
+> so that the Kconfig symbol can be removed, but I got stuck with powerpc
+> and s390.
+> 
+> 
+> The first patch has already been posted as a fix here:
+> https://www.spinics.net/lists/linux-ia64/msg21920.html
+> I've only build tested Loongarch and ia64.
+> 
+> 
+> If folk want to play along at home, you'll need a copy of Qemu that supports this.
+> https://github.com/salil-mehta/qemu.git salil/virt-cpuhp-armv8/rfc-v1-port29092022.psci.present
+> 
+> You'll need to fix the numbers of KVM_CAP_ARM_HVC_TO_USER and KVM_CAP_ARM_PSCI_TO_USER
+> to match your host kernel. Replace your '-smp' argument with something like:
+> | -smp cpus=1,maxcpus=3,cores=3,threads=1,sockets=1
+> 
+> then feed the following to the Qemu montior;
+> | (qemu) device_add driver=host-arm-cpu,core-id=1,id=cpu1
+> | (qemu) device_del cpu1
+> 
+> 
+> This series is based on v6.2-rc3, and can be retrieved from:
+> https://git.kernel.org/pub/scm/linux/kernel/git/morse/linux.git/ virtual_cpu_hotplug/rfc/v1
+> 
+> 
+> Thanks,
+> 
+> James Morse (29):
+>   ia64: Fix build error due to switch case label appearing next to
+>     declaration
+>   ACPI: Move ACPI_HOTPLUG_CPU to be enabled per architecture
+>   drivers: base: Use present CPUs in GENERIC_CPU_DEVICES
+>   drivers: base: Allow parts of GENERIC_CPU_DEVICES to be overridden
+>   drivers: base: Move cpu_dev_init() after node_dev_init()
+>   arm64: setup: Switch over to GENERIC_CPU_DEVICES using
+>     arch_register_cpu()
+>   ia64/topology: Switch over to GENERIC_CPU_DEVICES
+>   x86/topology: Switch over to GENERIC_CPU_DEVICES
+>   LoongArch: Switch over to GENERIC_CPU_DEVICES
+>   arch_topology: Make register_cpu_capacity_sysctl() tolerant to late
+>     CPUs
+>   ACPI: processor: Add support for processors described as container
+>     packages
+>   ACPI: processor: Register CPUs that are online, but not described in
+>     the DSDT
+>   ACPI: processor: Register all CPUs from acpi_processor_get_info()
+>   ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
+>   ACPI: Move acpi_bus_trim_one() before acpi_scan_hot_remove()
+>   ACPI: Rename acpi_processor_hotadd_init and remove pre-processor
+>     guards
+>   ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
+>   ACPI: Check _STA present bit before making CPUs not present
+>   ACPI: Warn when the present bit changes but the feature is not enabled
+>   drivers: base: Implement weak arch_unregister_cpu()
+>   LoongArch: Use the __weak version of arch_unregister_cpu()
+>   arm64: acpi: Move get_cpu_for_acpi_id() to a header
+>   ACPICA: Add new MADT GICC flags fields [code first?]
+>   arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check into a
+>     helper
+>   irqchip/gic-v3: Don't return errors from gic_acpi_match_gicc()
+>   irqchip/gic-v3: Add support for ACPI's disabled but 'online capable'
+>     CPUs
+>   ACPI: add support to register CPUs based on the _STA enabled bit
+>   arm64: document virtual CPU hotplug's expectations
+>   cpumask: Add enabled cpumask for present CPUs that can be brought
+>     online
+> 
+> Jean-Philippe Brucker (3):
+>   arm64: psci: Ignore DENIED CPUs
+>   KVM: arm64: Pass hypercalls to userspace
+>   KVM: arm64: Pass PSCI calls to userspace
+> 
+>  Documentation/arm64/cpu-hotplug.rst       |  79 ++++++++++++
+>  Documentation/arm64/index.rst             |   1 +
+>  Documentation/virt/kvm/api.rst            |  31 ++++-
+>  Documentation/virt/kvm/arm/hypercalls.rst |   1 +
+>  arch/arm64/Kconfig                        |   1 +
+>  arch/arm64/include/asm/acpi.h             |  11 ++
+>  arch/arm64/include/asm/cpu.h              |   1 -
+>  arch/arm64/include/asm/kvm_host.h         |   2 +
+>  arch/arm64/kernel/acpi_numa.c             |  11 --
+>  arch/arm64/kernel/psci.c                  |   2 +-
+>  arch/arm64/kernel/setup.c                 |  13 +-
+>  arch/arm64/kernel/smp.c                   |   5 +-
+>  arch/arm64/kvm/arm.c                      |  15 ++-
+>  arch/arm64/kvm/hypercalls.c               |  28 ++++-
+>  arch/arm64/kvm/psci.c                     |  13 ++
+>  arch/ia64/Kconfig                         |   2 +
+>  arch/ia64/include/asm/acpi.h              |   2 +-
+>  arch/ia64/include/asm/cpu.h               |  11 --
+>  arch/ia64/kernel/acpi.c                   |   6 +-
+>  arch/ia64/kernel/setup.c                  |   2 +-
+>  arch/ia64/kernel/sys_ia64.c               |   7 +-
+>  arch/ia64/kernel/topology.c               |  35 +-----
+>  arch/loongarch/Kconfig                    |   2 +
+>  arch/loongarch/kernel/topology.c          |  31 +----
+>  arch/x86/Kconfig                          |   2 +
+>  arch/x86/include/asm/cpu.h                |   6 -
+>  arch/x86/kernel/acpi/boot.c               |   4 +-
+>  arch/x86/kernel/topology.c                |  19 +--
+>  drivers/acpi/Kconfig                      |   5 +-
+>  drivers/acpi/acpi_processor.c             | 146 +++++++++++++++++-----
+>  drivers/acpi/processor_core.c             |   2 +-
+>  drivers/acpi/scan.c                       | 116 +++++++++++------
+>  drivers/base/arch_topology.c              |  38 ++++--
+>  drivers/base/cpu.c                        |  31 ++++-
+>  drivers/base/init.c                       |   2 +-
+>  drivers/firmware/psci/psci.c              |   2 +
+>  drivers/irqchip/irq-gic-v3.c              |  38 +++---
+>  include/acpi/acpi_bus.h                   |   1 +
+>  include/acpi/actbl2.h                     |   1 +
+>  include/kvm/arm_hypercalls.h              |   1 +
+>  include/kvm/arm_psci.h                    |   4 +
+>  include/linux/acpi.h                      |  10 +-
+>  include/linux/cpu.h                       |   6 +
+>  include/linux/cpumask.h                   |  25 ++++
+>  include/uapi/linux/kvm.h                  |   2 +
+>  kernel/cpu.c                              |   3 +
+>  46 files changed, 532 insertions(+), 244 deletions(-)
+>  create mode 100644 Documentation/arm64/cpu-hotplug.rst
+> 
+
