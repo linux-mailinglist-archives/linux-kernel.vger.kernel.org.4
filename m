@@ -2,87 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD10F6AF759
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BC86AF767
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231342AbjCGVQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:16:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S231394AbjCGVSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:18:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCGVQe (ORCPT
+        with ESMTP id S231370AbjCGVSi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:16:34 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0111697FF7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:16:29 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 16so8412469pge.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 13:16:29 -0800 (PST)
+        Tue, 7 Mar 2023 16:18:38 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F23099D65;
+        Tue,  7 Mar 2023 13:18:37 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id ec29so27021601edb.6;
+        Tue, 07 Mar 2023 13:18:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678223789;
+        d=gmail.com; s=20210112; t=1678223915;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wq4KUb4AQDQDZAJfCHW99QkUDmJEUq6txcnU3C+LjQ4=;
-        b=gMSwBZTgJBJQ4w9QChpBrXq27XNV+GbgdQgzvZrW+Bz1Bps+xs/O1d1UVxqBcZDt+s
-         tljQnKT+33xxQWHlmGk5rCRrJ5eUoAuPvBW/hAdGFZs88ItPmGx9/cUpiKkwCt8n1K/5
-         avqg9h81nUgqFwMLraXM6fDRZ6o+CnIK7Tl1MP+/C89UvOnldPp5RpHTFDYne7TDr2dW
-         mOuiK8t8KZsXD6u4JSvudLe+VUIfV2FOi+6FhPpporVijAHYV+lY2mTkiViUY9/5tz0K
-         YBniOLB863c04B/w5VAWznk1GX7lm+Eb+AI6vVryRESFzcnBGRORMaR4J69T7g9YuARz
-         yQjw==
+        bh=bT9FiASK1DB4QbD0wXIRsqFb1t5m7/WMXyE4zipQBgs=;
+        b=XZRUHZNlOVWWar8OmQxc4l18Ns4Ay3zk1r5/iP0nGgvrTarrD1WtX4t7ZDUeAU+Kmn
+         y3gux0xqokeG1SF1sfRK8kH6Fs4eK/RB3DJDFJateRr3aPzJO/rdAB33D1DxBCmMvug1
+         2+t/rOZmMi9aCK9I8RXUjUslBeJtPNIejQlHCpUdxA/6eyfbUFM9w37VUA1uKho+LTWc
+         CC6uwViT8Xbi5YfZ5sxgklTr+38MZrlyneYHCqEEFrcAi/gzGISimm7UQJKVDiZYkpcn
+         8L4DjJ3sPxFDMWliMIZaLeEF/uitLcKCkMjVzBypmiqjyFBvfKhUi2jAGDUpLX9HbWYf
+         1h1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678223789;
+        d=1e100.net; s=20210112; t=1678223915;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wq4KUb4AQDQDZAJfCHW99QkUDmJEUq6txcnU3C+LjQ4=;
-        b=zodi5CyGjK8nEVt/47iyAzR0ZxLIZ5RqgwGu2NlQFFbMAFd76tDxrG6d6wrWujhNxe
-         iwLA7bjX8Yke2Pwmst9TOIyXLW4S1qDMqVD2HLJ1kA9bbnxJnvNs+vQIYQcB8Rvopeha
-         YXfvx7xsSCBN+d9wLIgfHCrrVR9J8Wh/Da6JWmYxjf9O1cw7vhEVSwMxuzmKu2m250XL
-         GWJ+jkX6K2LMTtgaxQrAc8nsLjCZze2ohpiewC9ByzhLNPe5ms9SzTzYOTLkDzeiUPvj
-         ULLtC+yMVLC3QkiYxYKwz9Auqheg4trvsjHCiqEniyzrB9i/S1sBghmfFHQSdvV8cQpf
-         oouA==
-X-Gm-Message-State: AO0yUKWyOV/O5DrsdNypDRB6fi+Bz07RzCItpXt6CPorGN+eDiu+1Aqw
-        G8U+1OzLSkx7gSqqxq5m0tl0RnUT16oQHz6iHY8UXQ==
-X-Google-Smtp-Source: AK7set9swkPIU3+FmVnffWCutWKaDjtCc2F5Qzk3K1MmlefOTTgZZaa8Ns3PAoAD3GqD1PlRCrTqynicTSvsvXaeG0I=
-X-Received: by 2002:a63:d809:0:b0:503:354c:41ad with SMTP id
- b9-20020a63d809000000b00503354c41admr5317120pgh.11.1678223789186; Tue, 07 Mar
- 2023 13:16:29 -0800 (PST)
+        bh=bT9FiASK1DB4QbD0wXIRsqFb1t5m7/WMXyE4zipQBgs=;
+        b=F+lbrUxRtBxt4NZRLnH5iJsbhQQBfN120YX2ExOnMQXLymfoPa7sOm+LT2CmedHG+l
+         2PfaUHUrLPiGnuTB9ThcFu0I3miBbQGE1bNVF4rHCoLetN+l7XAU2ALTF/M97CGmaWJ5
+         ODN3XT9sD+5KIQEvdcAN2PB+iMeUxPsTshxQcQCFPADOIfjljIjRZ94AmXIwPAUcVWo3
+         yBgLJTpqxJk8m1/Zp7I23tDtWKjqxBYcbu7b4YQbngqY6JpZi019ORtphKV6dZM4BoZq
+         VeJSMpNfOWq785+ONJNGp/tk3sRyYJ2oVfDQoeOJr1cqaJA0qlFkZTfwnmFsajPdhTdJ
+         hFSg==
+X-Gm-Message-State: AO0yUKUj72GNPDC19RdZn+Cx8brRvDRrelUQpdn4jn/hZEBuAADeH/V8
+        FGYZ86zONEsMpSxhf30FhSm7zOgkVHudPLvKshqeQ1r2HzY=
+X-Google-Smtp-Source: AK7set+Se0iunflJpZCYnoGyjZ2gQplgrdTsGwS0vBTFJC6JhbRPQsBREQBt88sd9cj+dWd/Nc5Ban1xnd1TF7pS/ps=
+X-Received: by 2002:a17:906:948:b0:8b1:2898:2138 with SMTP id
+ j8-20020a170906094800b008b128982138mr7898708ejd.3.1678223915375; Tue, 07 Mar
+ 2023 13:18:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20230303231133.1486085-1-eranian@google.com> <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
- <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
- <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
- <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
- <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com> <SJ1PR11MB6083CADB2B6E859915D456F7FCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
-In-Reply-To: <SJ1PR11MB6083CADB2B6E859915D456F7FCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 7 Mar 2023 13:16:17 -0800
-Message-ID: <CAKwvOdna5NZ0ZTv0pXVVz15=4FLkw7pfFgr6KsRtXRmi2o1uEw@mail.gmail.com>
-Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in __resctrl_sched_in
-To:     "Luck, Tony" <tony.luck@intel.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>
-Cc:     Jakub Jelinek <jakub@redhat.com>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "peternewman@google.com" <peternewman@google.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "babu.moger@amd.com" <babu.moger@amd.com>,
-        "ananth.narayan@amd.com" <ananth.narayan@amd.com>,
-        "vschneid@redhat.com" <vschneid@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>
+References: <cover.1677526810.git.dxu@dxuuu.xyz> <20230227230338.awdzw57e4uzh4u7n@MacBook-Pro-6.local>
+ <20230228015712.clq6kyrsd7rrklbz@kashmir.localdomain> <CAADnVQ+a633QyZgkbXfRiT_WRbPgr5n8RN0w=ntEkBHUeqRcbw@mail.gmail.com>
+ <20230228231716.a5uwc4tdo3kjlkg7@aviatrix-fedora.tail1b9c7.ts.net>
+ <CAADnVQKK+a_0effQW5qBSq1AXoQOJg5-79q3d1NWJ2Vv8SHvOw@mail.gmail.com>
+ <20230307194801.mopwvidrkrybm7h5@kashmir.localdomain> <20230307201156.GF13059@breakpoint.cc>
+In-Reply-To: <20230307201156.GF13059@breakpoint.cc>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 7 Mar 2023 13:18:23 -0800
+Message-ID: <CAADnVQJXpkzic+v-TTn2o8hAu94S2ARq86DUamKiMEqmJ1zy+g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/8] Support defragmenting IPv(4|6) packets in BPF
+To:     Florian Westphal <fw@strlen.de>
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,142 +80,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 1:11=E2=80=AFPM Luck, Tony <tony.luck@intel.com> wro=
+On Tue, Mar 7, 2023 at 12:11=E2=80=AFPM Florian Westphal <fw@strlen.de> wro=
 te:
 >
-> > (a) it shouldn't define and declare a static function in a header file
+> Daniel Xu <dxu@dxuuu.xyz> wrote:
+> > From my reading (I'll run some tests later) it looks like netfilter
+> > will defrag all ipv4/ipv6 packets in any netns with conntrack enabled.
+> > It appears to do so in NF_INET_PRE_ROUTING.
+>
+> Yes, and output.
+>
+> > One thing we would need though are (probably kfunc) wrappers around
+> > nf_defrag_ipv4_enable() and nf_defrag_ipv6_enable() to ensure BPF progs
+> > are not transitively depending on defrag support from other netfilter
+> > modules.
 > >
-> >  (b) the resctrl_sched_in() inline function is midesigned to begin with
+> > The exact mechanism would probably need some thinking, as the above
+> > functions kinda rely on module_init() and module_exit() semantics. We
+> > cannot make the prog bump the refcnt every time it runs -- it would
+> > overflow.  And it would be nice to automatically free the refcnt when
+> > prog is unloaded.
 >
-> Fixing "b" would seem to be to just pass "next_p" to the function to
-> use instead of "current".
-
-```
-diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.=
-h
-index 52788f79786f..f46c0b97334d 100644
---- a/arch/x86/include/asm/resctrl.h
-+++ b/arch/x86/include/asm/resctrl.h
-@@ -49,7 +49,7 @@ DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
-  *   simple as possible.
-  * Must be called with preemption disabled.
-  */
--static void __resctrl_sched_in(void)
-+static void __resctrl_sched_in(struct task_struct *next)
- {
-  struct resctrl_pqr_state *state =3D this_cpu_ptr(&pqr_state);
-  u32 closid =3D state->default_closid;
-@@ -61,13 +61,13 @@ static void __resctrl_sched_in(void)
-  * Else use the closid/rmid assigned to this cpu.
-  */
-  if (static_branch_likely(&rdt_alloc_enable_key)) {
-- tmp =3D READ_ONCE(current->closid);
-+ tmp =3D READ_ONCE(next->closid);
-  if (tmp)
-  closid =3D tmp;
-  }
-
-  if (static_branch_likely(&rdt_mon_enable_key)) {
-- tmp =3D READ_ONCE(current->rmid);
-+ tmp =3D READ_ONCE(next->rmid);
-  if (tmp)
-  rmid =3D tmp;
-  }
-@@ -88,17 +88,17 @@ static inline unsigned int
-resctrl_arch_round_mon_val(unsigned int val)
-  return val * scale;
- }
-
--static inline void resctrl_sched_in(void)
-+static inline void resctrl_sched_in(struct task_struct *next)
- {
-  if (static_branch_likely(&rdt_enable_key))
-- __resctrl_sched_in();
-+ __resctrl_sched_in(next);
- }
-
- void resctrl_cpu_detect(struct cpuinfo_x86 *c);
-
- #else
-
--static inline void resctrl_sched_in(void) {}
-+static inline void resctrl_sched_in(struct task_struct *next) {}
- static inline void resctrl_cpu_detect(struct cpuinfo_x86 *c) {}
-
- #endif /* CONFIG_X86_CPU_RESCTRL */
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index e2c1599d1b37..d970347838a4 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -314,7 +314,7 @@ static void update_cpu_closid_rmid(void *info)
-  * executing task might have its own closid selected. Just reuse
-  * the context switch code.
-  */
-- resctrl_sched_in();
-+ resctrl_sched_in(current);
- }
-
- /*
-@@ -530,7 +530,7 @@ static void _update_task_closid_rmid(void *task)
-  * Otherwise, the MSR is updated when the task is scheduled in.
-  */
-  if (task =3D=3D current)
-- resctrl_sched_in();
-+ resctrl_sched_in(current);
- }
-
- static void update_task_closid_rmid(struct task_struct *t)
-diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
-index 470c128759ea..708c87b88cc1 100644
---- a/arch/x86/kernel/process_32.c
-+++ b/arch/x86/kernel/process_32.c
-@@ -212,7 +212,7 @@ __switch_to(struct task_struct *prev_p, struct
-task_struct *next_p)
-  switch_fpu_finish();
-
-  /* Load the Intel cache allocation PQR MSR. */
-- resctrl_sched_in();
-+ resctrl_sched_in(next_p);
-
-  return prev_p;
- }
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 4e34b3b68ebd..bb65a68b4b49 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -656,7 +656,7 @@ __switch_to(struct task_struct *prev_p, struct
-task_struct *next_p)
-  }
-
-  /* Load the Intel cache allocation PQR MSR. */
-- resctrl_sched_in();
-+ resctrl_sched_in(next_p);
-
-  return prev_p;
- }
-
-```
-?
-
+> Probably add a flag attribute that is evaluated at BPF_LINK time, so
+> progs can say they need defrag enabled.  Same could be used to request
+> conntrack enablement.
 >
-> Can you expand about part "a" ... Linux has zillions of static inline fun=
-ctions
-> in header files to handle CONFIG options. One version is the real McCoy
-> while the other is just a stub for the CONFIG=3Dn case.
+> Will need some glue on netfilter side to handle DEFRAG=3Dm, but we alread=
+y
+> have plenty of those.
 
-Right, I had the same question.
-
-Perhaps it's more so that no one calls __resctrl_sched_in, only
-resctrl_sched_in, therefor they should be folded into one function?
-
->
-> What's different about this one?
->
-> -Tony
-
-
-
---=20
-Thanks,
-~Nick Desaulniers
+All makes perfect sense to me.
+It's cleaner than a special netdevice.
+ipv4_conntrack_defrag() is pretty neat. I didn't know about it.
+If we can reuse it as-is that would be ideal.
+Conceptually it fits perfectly.
+If we cannot reuse it (for whatever unlikely reason) I would
+argue that TC hook should gain similar functionality.
