@@ -2,134 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB5C6AF0D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3C26AF0CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:36:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbjCGSgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:36:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        id S230190AbjCGSgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 13:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjCGSef (ORCPT
+        with ESMTP id S233486AbjCGSgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:34:35 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B16A92C5;
-        Tue,  7 Mar 2023 10:26:47 -0800 (PST)
-Received: from [IPv6:2a00:23c6:c311:3401:45a5:b946:dcd1:2820] (unknown [IPv6:2a00:23c6:c311:3401:45a5:b946:dcd1:2820])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: martyn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DFA196602ED2;
-        Tue,  7 Mar 2023 18:26:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678213588;
-        bh=u6mJpttFNSifR4K1NDRG4h+hJGm9NmqmYCl2Fbq1kzI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Ds0gjBfyKIZ+m7yI8L5IG9U749Wc6eqcDlHJ3x4hGYnSXOxZHWGOxMr2k++fFhhb7
-         4pF+ryVZIhGJkCR1bI8Wz8/1JpSru79h4AijS/u15zKpZY+QDd78HWAOZ+aiCg0Qeh
-         6AC6OT7IylvBuwdDOx+vXbCWsHSpdGtar9Cfy0TUAy4aE253TlcDT+r5dnxJtSgvIR
-         Ujkwzw6CLbA9LmI7vy01eR3WadHUfQEuuz7faGdstguTSZMihA04bM8oird5kLcsx3
-         my+P41+1UrkAagw2B6VBVtuWejbMuPVaR95k7kAsmWwspZatdZUEjv5WEm3hA3YsLw
-         OCdpZbCcV8f0A==
-Message-ID: <c2bebcbf9d463d656ae69d489e0e5a88f2540c2e.camel@collabora.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: remoteproc: k3-m4f: Add bindings
- for K3 AM64x SoCs
-From:   Martyn Welch <martyn.welch@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Hari Nagalla <hnagalla@ti.com>
-Cc:     kernel@collabora.com, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 07 Mar 2023 18:26:25 +0000
-In-Reply-To: <5c9130de-5092-9446-6e00-d86de7dcd6b4@linaro.org>
-References: <20230302171450.1598576-1-martyn.welch@collabora.com>
-         <20230302171450.1598576-2-martyn.welch@collabora.com>
-         <5c9130de-5092-9446-6e00-d86de7dcd6b4@linaro.org>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-1 
+        Tue, 7 Mar 2023 13:36:19 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500A09FE75
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:28:31 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pZc2A-0006PO-4x; Tue, 07 Mar 2023 19:27:34 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pZc28-0002RL-RD; Tue, 07 Mar 2023 19:27:32 +0100
+Date:   Tue, 7 Mar 2023 19:27:32 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
+        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: add ETS Qdisc
+ support for KSZ9477 series
+Message-ID: <20230307182732.GA1692@pengutronix.de>
+References: <20230306124940.865233-1-o.rempel@pengutronix.de>
+ <20230306124940.865233-2-o.rempel@pengutronix.de>
+ <20230306140651.kqayqatlrccfky2b@skbuf>
+ <20230306163542.GB11936@pengutronix.de>
+ <20230307164614.jy2mzxvk3xgc4z7b@skbuf>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230307164614.jy2mzxvk3xgc4z7b@skbuf>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-03 at 09:06 +0100, Krzysztof Kozlowski wrote:
-> On 02/03/2023 18:14, Martyn Welch wrote:
->=20
-> > +
-> > +=C2=A0 mboxes:
-> > +=C2=A0=C2=A0=C2=A0 description: |
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 OMAP Mailbox specifier denoting the sub=
--mailbox, to be used
-> > for
->=20
-> OMAP?
->=20
+On Tue, Mar 07, 2023 at 06:46:14PM +0200, Vladimir Oltean wrote:
+> On Mon, Mar 06, 2023 at 05:35:42PM +0100, Oleksij Rempel wrote:
+> > > So what does the user gain using tc-ets over tc-mqprio? That has a way
+> > > to set up strict prioritization and prio:tc maps as well, and to my
+> > > knowledge mqprio is vastly more popular in non-DCB setups than tc-ets.
+> > > The only thing is that with mqprio, AFAIK, the round robin between TXQs
+> > > belonging to the same traffic class is not weighted.
+> > 
+> > Do mqprio already supports strict prio mode? net-next was not supporting
+> > this back for two weeks. I do not care what to use, my motivation was based on
+> > following points:
+> > - tc-ets supports strict prio. mqprio need to be extended to do this
+> > - tc-ets refers to IEEE 802.1Q specification, so i feel safe
+> >   and do not need to invent new things.
+> > - mqprio automatically creates software queues, but it seems to not
+> >   provide any advantage for a typical bridged DSA setup. For example
+> >   i can use queue mapping only for traffic from CPU to external DSA port
+> >   but can't use multi queue advantages of CPU MAC for same traffic  (do I'm
+> >   missing something). For bridged traffic i'll need to use HW offloading any
+> >   way.
+> 
+> Sorry, my inbox is a mess and I forgot to respond to this.
 
-This device uses a mailbox compatible with the OMAP Mailbox, as defined
-in Documentation/devicetree/bindings/mailbox/ti,omap-mailbox.yaml.
+No problem :)
 
-I note that documents title reads "TI OMAP2+ and K3 Mailbox devices".
-I'll drop the "OMAP" here.
+> What do you mean tc-mqprio doesn't support strict priority? Strict
+> priority between traffic classes is what it *does* (the "prio" in the name),
+> although without hardware offload, the prioritization isn't enforced anywhere.
+> Perhaps I'm misunderstanding what you mean?
 
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 communication with the remote processor=
-. This property
-> > should match
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 with the sub-mailbox node used in the f=
-irmware image.
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +
-> > +=C2=A0 memory-region:
-> > +=C2=A0=C2=A0=C2=A0 description: |
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 phandle to the reserved memory nodes to=
- be associated with
-> > the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 remoteproc device. There should be at l=
-east two reserved
-> > memory nodes
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 defined.=20
->=20
-> Don't repeat constraints in free form text.
->=20
-> > The reserved memory nodes should be carveout nodes, and
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 should be defined with a "no-map" prope=
-rty as per the
-> > bindings in
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Documentation/devicetree/bindings/reser=
-ved-memory/reserved-
-> > memory.yaml
-> > +=C2=A0=C2=A0=C2=A0 minItems: 2
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 8
-> > +=C2=A0=C2=A0=C2=A0 items:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: region used for dynamic =
-DMA allocations like
-> > vrings and
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vring buffers
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: region reserved for firm=
-ware image sections
-> > +=C2=A0=C2=A0=C2=A0 additionalItems: true
->=20
-> And what is the purpose of the rest of reserved nodes?
->=20
+Huh.. you have right, I overlooked this part of documentation:
+"As one specific example numerous Ethernet cards support the
+802.1Q link strict priority transmission selection algorithm
+(TSA). MQPRIO enabled hardware in conjunction with the
+classification methods below can provide hardware offloaded
+support for this TSA."
 
-Up to 8 regions can be specified with their purpose determined by the
-firmware running on the M4F core. The suggestion (and the
-implementation in the example firmware) is to use the first 2 regions
-as defined above for remoteproc with the others available to be used
-for other purposes if necessary. The address translation module used
-can cope with up to 8 regions.
+But other parts of manual confuse me. May be you can help here:
+- "map - The priority to traffic class map. Maps priorities 0..15 to a
+   specified traffic class"
+   "Priorities" is probably SO_PRIORITY? If yes, this option can't be offloaded
+   by the KSZ switch.
+- "queues - Provide count and offset of queue range for each traffic class..."
+  If I see it correctly, I can map a traffic class to some queue. But traffic
+  class is not priority? I can create traffic class with high number and map
+  it to a low number queue but actual queue priority is HW specific and there
+  is no way to notify user about it.
+   
+KSZ HW is capable of mapping 8 traffic classes separately to any available
+queue. Ok, if I replace words used in manual from "priority" to "traffic class"
+and "traffic class" to "queues". But even in this case the code will be even
+more confusing - i'll have to use qopt->prio_tc_map array which is SO_PRIO to
+TC map, as TC to queue map.
 
->=20
+I still have difficulties to understand how priorities of actual queues
+are organized. I see how to map traffic class to a queue, but I can't find
+any thing in manual about queue priority. For example, if I assign traffic
+class 3 to the Queue0 this traffic will have lowest priority in my HW. Is
+it some how documented or known for users?
 
-Martyn
+One more question is, what is actual expected behavior of mqprio if max_rate
+option is used? In my case, if max_rate is set to a queue (even to max value),
+then strict priority TSA will not work:
+queue0---max rate 100Mbit/s---\
+                               |---100Mbit/s---
+queue1---max rate 100Mbit/s---/
+
+in this example both streams will get 49Mbit/s. My expectation of strict prio
+is that queue1 should get 100Mbit/s and queue 0Mbit/s
+
+On other hand tc-ets made perfect sense to me from documentation and code pow.
+TC is mapped to bands. Bands have documented priorities and it fit's to what
+KSZ is supporting. Except of WRR configuration.
+
+> For strict prioritization using multi-queue on the DSA master you should
+> be able to set up a separate Qdisc.
+
+I'll need to do more testing with FEC later, it didn't worked at first try, but
+as you can see I still have a lot of misunderstandings.
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
