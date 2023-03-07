@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056CD6AF666
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B876AF627
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbjCGUHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:07:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S231654AbjCGTy1 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 14:54:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjCGUGr (ORCPT
+        with ESMTP id S230419AbjCGTx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:06:47 -0500
-X-Greylist: delayed 930 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 07 Mar 2023 12:06:37 PST
-Received: from mail.vukad.in (mail.vukad.in [134.209.187.160])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19C899D65;
-        Tue,  7 Mar 2023 12:06:37 -0800 (PST)
-Received: from kreator.vukad.in (dh207-125-167.xnet.hr [88.207.125.167])
-        by mail.vukad.in (Postfix) with ESMTPSA id 5707B160081;
-        Tue,  7 Mar 2023 20:40:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=vukad.in; s=mail;
-        t=1678218047; bh=vo3sVDOx/JkAqhi7qGWauEgDUk5ce+94wjbTjZGEpM0=;
-        h=From:To:Cc:Subject:Date;
-        b=aMcWaM4Hvqel5L5QeIMqdNGjegztyXTkQCVn6v5YMT3+eWBzKgo0San2jKL3QC2Bt
-         7HsEq3ZvwpQbVOyRESs+KQMdgZCyuGubrM2Rg1/e59uIsljaHuaOVpuoyaoPqFMjup
-         Kaw7wyh9Li7FiFWr8QyBWU1KRVEgCrWiB8r8W9cIzamnm5wyBhE0ptFfXR6ThN2So6
-         1oTHev4uQJH9j58gezEb3CBK3COq4ZdaqsXRYMzy/nLfqe4Kz1dwjzuJ+ovFmUulXQ
-         0aEsUBxtZz3IGqPmwnCflbu+kJvOJerGomOGnwLLBvV47tcE8WycSL1zgtXSORl/NI
-         FIC/Wi3WAu40Q==
-From:   Jurica Vukadin <jura@vukad.in>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jurica Vukadin <jura@vukad.in>
-Subject: [PATCH] kconfig: Update config changed flag before calling callback
-Date:   Tue,  7 Mar 2023 20:40:39 +0100
-Message-Id: <20230307194039.8825-1-jura@vukad.in>
-X-Mailer: git-send-email 2.39.2
+        Tue, 7 Mar 2023 14:53:58 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FEDA72A3
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 11:45:54 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id a9so15278899plh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 11:45:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678218046;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:to:from:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CWFDL0Togo3L/5bvFloyMlrVxNWJz2dZaxBpDesLPPY=;
+        b=Pa9BBCmTeJg1n5s9EMKwVOU/T8E6eGJN9SqvHPMoxvIFmLtoVbdLmA3hKRSeIteDfq
+         UYBbJmBNnPd0jfvn3RmfVSkyKdG60K9gskih9g8hUtSw6yo4AN4ixti5xhNLlTbdlTwb
+         Ps26qA17qp3cKTtDFE7C1dZ4oKkpY5SjvVLlq5yWxP+DXfX1zd9gYuaHd3n6E9gdWYf/
+         33GINCBT2miNa+YjeYa8c3VoYKG0PKFOqjWtAYt5CIGS+8ZViuA54HHq1PrhDRzSk4ET
+         UXenu8I+SyJaXBelIOUbXuxsGlYSPFGepYi88Oqani3jQOf5Ul8cQr4FyXiB5Y2M9RpB
+         0cEA==
+X-Gm-Message-State: AO0yUKVp+Pd8GSueMv9KOGONC6OmtWi6dTXXLyNnWI3WBSIL/HiNfgq2
+        mM8zPwXqkhnWlmeXiJmCGqW20A==
+X-Google-Smtp-Source: AK7set9Pfl0SQYm8o4d/CzeLw+E0U3nXeg314CNzFcmKQNtPX+Scglz04h5m+eRyrouDFqS1XFo04A==
+X-Received: by 2002:a17:90b:4b49:b0:234:234c:72d9 with SMTP id mi9-20020a17090b4b4900b00234234c72d9mr16195349pjb.14.1678218046516;
+        Tue, 07 Mar 2023 11:40:46 -0800 (PST)
+Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
+        by smtp.gmail.com with ESMTPSA id fy1-20020a17090b020100b0022bfcf5d297sm9742902pjb.9.2023.03.07.11.40.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 11:40:45 -0800 (PST)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Bernhard =?utf-8?Q?Rosenkr?= =?utf-8?Q?=C3=A4nzer?= 
+        <bero@baylibre.com>, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
+        linus.walleij@linaro.org, gregkh@linuxfoundation.org,
+        daniel.lezcano@linaro.org, chunfeng.yun@mediatek.com,
+        angelogioacchino.delregno@collabora.com, nfraprado@collabora.com,
+        allen-kh.cheng@mediatek.com, sean.wang@mediatek.com,
+        zhiyong.tao@mediatek.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v9 8/9] dt-bindings: serial: mediatek,uart: add MT8365
+In-Reply-To: <0dec66ce-424c-e682-3f73-594e5b1edb65@gmail.com>
+References: <20230125143503.1015424-1-bero@baylibre.com>
+ <20230125143503.1015424-9-bero@baylibre.com>
+ <0dec66ce-424c-e682-3f73-594e5b1edb65@gmail.com>
+Date:   Tue, 07 Mar 2023 11:40:45 -0800
+Message-ID: <7httywfiyq.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to commit 5ee546594025 ("kconfig: change sym_change_count to a
-boolean flag"), the conf_updated flag was set to the new value *before*
-calling the callback. xconfig's save action depends on this behaviour,
-because xconfig calls conf_get_changed() directly from the callback and
-now sees the old value, thus never enabling the save button or the
-shortcut.
+Hi Matthias,
 
-Restore the previous behaviour.
+Matthias Brugger <matthias.bgg@gmail.com> writes:
 
-Fixes: 5ee546594025 ("kconfig: change sym_change_count to a boolean flag")
-Signed-off-by: Jurica Vukadin <jura@vukad.in>
----
- scripts/kconfig/confdata.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> On 25/01/2023 15:35, Bernhard Rosenkränzer wrote:
+>> Add binding description for mediatek,mt8365-uart
+>> 
+>> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> Greg will you take 5,6 and 8 from this series through your branch or are you Ok 
+> if I take them. They are all just adding a new compatible string to the 
+> following files:
+> Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml
+> Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+> and
+> Documentation/devicetree/bindings/serial/mediatek,uart.yaml
 
-diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
-index b7c9f1dd5e42..992575f1e976 100644
---- a/scripts/kconfig/confdata.c
-+++ b/scripts/kconfig/confdata.c
-@@ -1226,10 +1226,12 @@ static void (*conf_changed_callback)(void);
- 
- void conf_set_changed(bool val)
- {
--	if (conf_changed_callback && conf_changed != val)
--		conf_changed_callback();
-+	bool changed = conf_changed != val;
- 
- 	conf_changed = val;
-+
-+	if (conf_changed_callback && changed)
-+		conf_changed_callback();
- }
- 
- bool conf_get_changed(void)
--- 
-2.39.2
+Might I gently suggest that you take these along with patch 9 through
+your tree?
 
+The driver portions were all been merged and the bindings and DT all
+reviewed since end of January.
+
+Thanks,
+
+Kevin
