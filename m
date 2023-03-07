@@ -2,170 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4A96AF893
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F65B6AF892
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjCGWYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
+        id S231694AbjCGWX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbjCGWXD (ORCPT
+        with ESMTP id S231483AbjCGWXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:23:03 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB2D18B0F;
-        Tue,  7 Mar 2023 14:22:58 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1678227764;
-        bh=wMlMqNF3HdsYBhiMwlY00yIFmFgEItJMu93P1cpiTpQ=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=NmpjSn5YwfoF1abfuFJijYMNNRIa0mx8eQEZFvBSGeYztxwiE/Me+n99EAMrGX6Fv
-         gI1qjXLVit3g103iTC5gfOKWsqCRtT/gKQV1Ml8vy3OQvmxwWySaLKhbaErh/KC1cF
-         ugjQwa6WJ922MDTuy/bSkVZbcNw3QEdg4L2f8dwI=
-Date:   Tue, 07 Mar 2023 22:22:34 +0000
-Subject: [PATCH RFC 5/5] tools/nolibc: tests: add test for
- -fstack-protector
+        Tue, 7 Mar 2023 17:23:02 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B50DABB0E
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:22:47 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id c80so5968746ybf.5
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 14:22:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678227766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5YjSGVFL23aGYtOKm1Ftz/b64+tciORVkVlETDnLgUk=;
+        b=D2t4vF6DzPY+77yDIu1t4LFweWOShObHecQg5NqGy/oZK9AjKf5QnwOAFUwW2JwrY+
+         vo2Ko3K76Hufbxsgketu/Kq7FNcZwnlOIgaF8CahifqfRieoDIA68MGTO/Nqua8tBp9o
+         sa8B540PwXujUNNmfJ2jXarBM0DGPOOEQ3M24Opk+JJCqaza+atah7OXtgMVIFD49esI
+         ARhh+ixJG6ViSTC+YegTevzvt35O5lZj9CVx5b3JLS3NMLsZxahY5NZmThxCFv53KokQ
+         vWK+kPd40Cg7PJ//fEwHLYiMVoo5EUvsbysXQnchoSHa+i8LrZHgIIU6pe26OiY5IWio
+         W/qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678227766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5YjSGVFL23aGYtOKm1Ftz/b64+tciORVkVlETDnLgUk=;
+        b=RwFGj+ESFTk/Q+me1uNKXZWH+RMY/o2qxuSEcHRU7AZlDKk208OTo9c5hap6Y37ty6
+         xbegiYlMVZ5Og8N6pj5fw4h4e4Qzl7VVRMeYBYPXejlee1WjWAifz0eVYz3xYopz6Af+
+         FzpPWzWhv57PTC9RVpZSvquYe6fOib/A5h6TqfxOu3XJQmkKxoEu/vFVroMWHH+l6Bdo
+         ps1NFg8Wo3fS3Zr/F52CwHvDPzan7J6WEXUAdhkE6SLXk2gfyBza/68rQWIZpuDuBX8o
+         jbbQQnoVgWPI5XYHsfeSEFZLtCHCuhpKYM2NembX9pA57+SWIGOsvcBGO+Zj6O6NTrb1
+         zKvQ==
+X-Gm-Message-State: AO0yUKVBA2NHBT91tH51kh+/ArXn1VOaQ1+mxVJ9Ur0qV5KSN6Oq+2Lo
+        C47tFTMhAHKmkqMO28NuUVRVBgMOJ7hXxy3KO8elKw==
+X-Google-Smtp-Source: AK7set9r2P3aZtqkFd8o65fo0pR9pujvbwTr8Q0ckC+reGxZ6RbMx9OnXFP41k7NDPtIp8qWJODCk28Yw6NompBM0ek=
+X-Received: by 2002:a05:6902:c3:b0:9f1:6c48:f95f with SMTP id
+ i3-20020a05690200c300b009f16c48f95fmr7759792ybs.5.1678227766488; Tue, 07 Mar
+ 2023 14:22:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
-References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
-In-Reply-To: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
-To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678227756; l=3131;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=wMlMqNF3HdsYBhiMwlY00yIFmFgEItJMu93P1cpiTpQ=;
- b=LUG3ujBuABS0LQOJZ/EC+fRvBT+VCTd8tKxSAkaQ/VV8PiWPHofAfK/UB+9qTeTgG+SngI5BU
- Cn6xoSswl9+COeeKYUc6FbOjZ2q/+j/slBLKz6tcRU8R8JIdpFwXD5W
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <20230220121258.10727-1-lujianhua000@gmail.com>
+In-Reply-To: <20230220121258.10727-1-lujianhua000@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 7 Mar 2023 23:22:35 +0100
+Message-ID: <CACRpkdZ=6bU2gPv4zVzMBFaCgEY+fkRbrnLAB6NGOhWus1gwaA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: display: panel: Add Novatek NT36523 bindings
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test the previously introduce stack protector functionality in nolibc.
+On Mon, Feb 20, 2023 at 1:13=E2=80=AFPM Jianhua Lu <lujianhua000@gmail.com>=
+ wrote:
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 74 +++++++++++++++++++++++++++-
- 1 file changed, 72 insertions(+), 2 deletions(-)
+> Novatek NT36523 is a display driver IC used to drive DSI panels.
+>
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> ---
+> Changes in v2:
+>   - Drop unnecessary description
+>   - dsi0 -> dsi
+>   - Correct indentation
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index fb2d4872fac9..4990b2750279 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -45,6 +45,7 @@ char **environ;
- struct test {
- 	const char *name;              // test name
- 	int (*func)(int min, int max); // handler
-+	char skip_by_default;         // don't run by default
- };
- 
- #ifndef _NOLIBC_STDLIB_H
-@@ -667,6 +668,70 @@ int run_stdlib(int min, int max)
- 	return ret;
- }
- 
-+#if defined(__clang__)
-+__attribute__((optnone))
-+#elif defined(__GNUC__)
-+__attribute__((optimize("O0")))
-+#endif
-+static int run_smash_stack(int min, int max)
-+{
-+	char buf[100];
-+
-+	for (size_t i = 0; i < 200; i++)
-+		buf[i] = 15;
-+
-+	return 1;
-+}
-+
-+int run_stackprotector(int min, int max)
-+{
-+	int llen = 0;
-+
-+	llen += printf("0 ");
-+
-+#if !defined(NOLIBC_STACKPROTECTOR)
-+	llen += printf("stack smashing detection not supported");
-+	pad_spc(llen, 64, "[SKIPPED]\n");
-+	return 0;
-+#endif
-+
-+	pid_t pid = fork();
-+
-+	switch (pid) {
-+	case -1:
-+		llen += printf("fork()");
-+		pad_spc(llen, 64, "[FAIL]\n");
-+		return 1;
-+
-+	case 0:
-+		close(STDOUT_FILENO);
-+		close(STDERR_FILENO);
-+
-+		char *const argv[] = {
-+			"/proc/self/exe",
-+			"_smash_stack",
-+			NULL,
-+		};
-+		execve("/proc/self/exe", argv, NULL);
-+		return 1;
-+
-+	default: {
-+		int status;
-+
-+		pid = waitpid(pid, &status, 0);
-+
-+		if (pid == -1 || !WIFSIGNALED(status) || WTERMSIG(status) != SIGABRT) {
-+			llen += printf("waitpid()");
-+			pad_spc(llen, 64, "[FAIL]\n");
-+			return 1;
-+		}
-+		llen += printf("stack smashing detected");
-+		pad_spc(llen, 64, " [OK]\n");
-+		return 0;
-+	}
-+	}
-+}
-+
- /* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
- int prepare(void)
- {
-@@ -719,8 +784,11 @@ int prepare(void)
- /* This is the definition of known test names, with their functions */
- static const struct test test_names[] = {
- 	/* add new tests here */
--	{ .name = "syscall",   .func = run_syscall  },
--	{ .name = "stdlib",    .func = run_stdlib   },
-+	{ .name = "syscall",        .func = run_syscall         },
-+	{ .name = "stdlib",         .func = run_stdlib          },
-+	{ .name = "stackprotector", .func = run_stackprotector, },
-+	{ .name = "_smash_stack",   .func = run_smash_stack,
-+	  .skip_by_default = 1                                  },
- 	{ 0 }
- };
- 
-@@ -811,6 +879,8 @@ int main(int argc, char **argv, char **envp)
- 	} else {
- 		/* no test mentioned, run everything */
- 		for (idx = 0; test_names[idx].name; idx++) {
-+			if (test_names[idx].skip_by_default)
-+				continue;
- 			printf("Running test '%s'\n", test_names[idx].name);
- 			err = test_names[idx].func(min, max);
- 			ret += err;
+I'd like Konrad and Neil to look at this before we merge it.
 
--- 
-2.39.2
+> +required:
+> +  - compatible
+> +  - reg
+> +  - vddio-supply
+> +  - vddpos-supply
+> +  - vddneg-supply
 
+It appears vddpos and vddneg are not necessary on
+all variants, can they be made non-required?
+
+It is also possible to do some - if -construction of course
+based on the compatible, if we want to be fancy.
+
+Yours,
+Linus Walleij
