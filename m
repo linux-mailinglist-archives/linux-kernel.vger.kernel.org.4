@@ -2,91 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E018C6AD881
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4AA06AD883
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:52:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjCGHv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 02:51:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S229843AbjCGHwC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 02:52:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjCGHv3 (ORCPT
+        with ESMTP id S229720AbjCGHv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 02:51:29 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A38617E
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:51:07 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 597D660BA5
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCAFC433D2;
-        Tue,  7 Mar 2023 07:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678175466;
-        bh=EHSYx70OmALyZKpquN+PuVafSdwvNOxA/K6t/OhikYc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=UblaqUjBSJTigui6gYHI0abjrdRdNd+6Z5lqtsDVEGLLcpxlsA+DsYJdUDIS2K1Iq
-         3JIZM0/fMJD/sBqSIak29ZfcNiyIfR015QGdld9OpjXH25PVsoO+WHftd/IIiij0Il
-         XV+3gaLsIzthKAO5ruSDUxe+awjTXwMw0Pa1ym6A=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH] driver core: class: fix block class problem when removing CONFIG_SYSFS_DEPRECATED*
-Date:   Tue,  7 Mar 2023 08:51:02 +0100
-Message-Id: <20230307075102.3537-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
+        Tue, 7 Mar 2023 02:51:57 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCCEC59425;
+        Mon,  6 Mar 2023 23:51:41 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 9A36024E30E;
+        Tue,  7 Mar 2023 15:51:40 +0800 (CST)
+Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 15:51:40 +0800
+Received: from [192.168.125.108] (183.27.97.46) by EXMBX071.cuchost.com
+ (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 15:51:39 +0800
+Message-ID: <ce013b9a-ea3c-7942-263f-3afa673ce5ee@starfivetech.com>
+Date:   Tue, 7 Mar 2023 15:51:39 +0800
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1344; i=gregkh@linuxfoundation.org; h=from:subject; bh=EHSYx70OmALyZKpquN+PuVafSdwvNOxA/K6t/OhikYc=; b=owGbwMvMwCRo6H6F97bub03G02pJDClsb55cy83cf63rgKLz4b/Suif5TcMetSdFpR1dVFH8cdLi DaelOmJYGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAiZtwMC/ZVLJn1dp8av73ylPY/Hl +cPxbPF2GYsT//YduL/QK6yQbSs+4EPGvgcNIEAA==
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 3/3] dts: usb: add StarFive JH7110 USB dts configuration.
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+References: <20230306095408.26057-1-minda.chen@starfivetech.com>
+ <CAJM55Z_kUPYOXwccDOaGk2DoRd9sNrGdpKKMyRUijh5SoPnJ4w@mail.gmail.com>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <CAJM55Z_kUPYOXwccDOaGk2DoRd9sNrGdpKKMyRUijh5SoPnJ4w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.46]
+X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX071.cuchost.com
+ (172.16.6.81)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In removing the CONFIG_SYSFS_DEPRECATED and CONFIG_SYSFS_DEPRECATED_V2
-config options, I messed up in the __class_register() function and got
-the logic incorrect.  Fix this all up by just removing the special case
-of a block device class logic in this function, as that is what is
-intended.
 
-In testing, this solves the boot problem on my systems, hopefully on
-others as well.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 721da5cee9d4 ("driver core: remove CONFIG_SYSFS_DEPRECATED and CONFIG_SYSFS_DEPRECATED_V2")
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/base/class.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/drivers/base/class.c b/drivers/base/class.c
-index fb8f2a1e1c19..5983eead8391 100644
---- a/drivers/base/class.c
-+++ b/drivers/base/class.c
-@@ -178,13 +178,7 @@ int __class_register(struct class *cls, struct lock_class_key *key)
- 	if (!cls->dev_kobj)
- 		cls->dev_kobj = sysfs_dev_char_kobj;
- 
--#if defined(CONFIG_BLOCK)
--	/* let the block class directory show up in the root of sysfs */
--	if (cls != &block_class)
--		cp->subsys.kobj.kset = class_kset;
--#else
- 	cp->subsys.kobj.kset = class_kset;
--#endif
- 	cp->subsys.kobj.ktype = &class_ktype;
- 	cp->class = cls;
- 	cls->p = cp;
--- 
-2.39.2
-
+On 2023/3/7 2:32, Emil Renner Berthing wrote:
+> On Mon, 6 Mar 2023 at 10:55, Minda Chen <minda.chen@starfivetech.com> wrote:
+>>
+>> USB phy dts configuration. Also includes Cadence USB
+>> subnode configuration.
+>>
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         |  6 +++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 39 +++++++++++++++++++
+>>  2 files changed, 45 insertions(+)
+>>
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index e8b8f4346fdd..2a9ed8b9ee25 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -244,3 +244,9 @@
+>>                 };
+>>         };
+>>  };
+>> +
+>> +&usb0 {
+>> +       starfive,usb2-only;
+>> +       dr_mode = "peripheral";
+>> +       status = "okay";
+>> +};
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> index be180f23963e..ee665cdc3510 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> @@ -628,5 +628,44 @@
+>>                         starfive,sysreg = <&sys_syscon 0x9c 0x1 0x3e>;
+>>                         status = "disabled";
+>>                 };
+>> +
+>> +               usb0: usbphy@10200000 {
+> 
+> Please keep the nodes sorted by the address after @
+>ok. Thanks.
+>> +                       compatible = "starfive,jh7110-usb";
+>> +                       reg = <0x0 0x10210000 0x0 0x1000>,
+>> +                             <0x0 0x10200000 0x0 0x1000>;
+>> +                       reg-names = "usb3", "usb2";
+>> +                       clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
+>> +                                <&stgcrg JH7110_STGCLK_USB0_APP_125>,
+>> +                                <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>> +                                <&stgcrg JH7110_STGCLK_USB0_STB>,
+>> +                                <&stgcrg JH7110_STGCLK_USB0_APB>,
+>> +                                <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>> +                                <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>> +                       clock-names = "usb_125m", "usb0_app_125", "usb0_lpm",
+>> +                               "usb0_stb", "usb0_apb", "usb0_axi", "usb0_utmi_apb";
+>> +                       resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>> +                                <&stgcrg JH7110_STGRST_USB0_APB>,
+>> +                                <&stgcrg JH7110_STGRST_USB0_AXI>,
+>> +                                <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>> +                       starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
+>> +                       starfive,sys-syscon = <&sys_syscon 0x18>;
+>> +                       status = "disabled";
+>> +                       #address-cells = <2>;
+>> +                       #size-cells = <2>;
+>> +                       #interrupt-cells = <1>;
+>> +                       #phy-cells = <0>;
+>> +                       ranges;
+> 
+> Please add an empty line here.
+> ok.
+>> +                       usbdrd_cdns3: usb@10100000 {
+>> +                               compatible = "cdns,usb3";
+>> +                               reg = <0x0 0x10100000 0x0 0x10000>,
+>> +                                     <0x0 0x10110000 0x0 0x10000>,
+>> +                                     <0x0 0x10120000 0x0 0x10000>;
+>> +                               reg-names = "otg", "xhci", "dev";
+>> +                               interrupts = <100>, <108>, <110>;
+>> +                               interrupt-names = "host", "peripheral", "otg";
+>> +                               phy-names = "cdns3,usb3-phy", "cnds3,usb2-phy";
+>> +                               maximum-speed = "super-speed";
+>> +                       };
+>> +               };
+>>         };
+>>  };
+>> --
+>> 2.17.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
