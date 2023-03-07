@@ -2,133 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B2D6AFA2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:21:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1366AFA41
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:24:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjCGXU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 18:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55658 "EHLO
+        id S229885AbjCGXYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 18:24:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjCGXUx (ORCPT
+        with ESMTP id S229549AbjCGXYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:20:53 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613E09E318;
-        Tue,  7 Mar 2023 15:20:52 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 119491FE26;
-        Tue,  7 Mar 2023 23:20:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678231251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HMrWr+VoLJb8eV9cWCPJgwNzeJNpYJum7vLTBxBsNyk=;
-        b=Qg2kW99mPIQpQEPmoLij9WuZWAGey9AXl/BYkX9Fl3ptIVz//ZTXSLdbN7GTf6AqKQ/DJ7
-        QMgtkgE8AUBtGuWJr4mFSMP0xVxC3xCTpdciFzcycLgrlqF1O/AzHEtZ5CdPNJtysYthP2
-        f6vBCHMJfMfScfnUds8v3EyxxictXww=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678231251;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HMrWr+VoLJb8eV9cWCPJgwNzeJNpYJum7vLTBxBsNyk=;
-        b=QB6kSoRGVEgFn/VmLXPwOkHCMNGiCiByihGeyFmcjTb5yOxkE4qo1xX8v8mMsPqzArbxcS
-        k33IhxX6GscHt2Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3102313440;
-        Tue,  7 Mar 2023 23:20:47 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1xN8Ns/GB2TYGQAAMHmgww
-        (envelope-from <neilb@suse.de>); Tue, 07 Mar 2023 23:20:47 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Tue, 7 Mar 2023 18:24:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA937C3DD
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 15:23:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678231430;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=L1VSODuSHT6h/z9IAuPAvJcAN7vDMCMVV0tl0uco2PU=;
+        b=VtsQ3MY4wrad9qA8bppUqeceRDC3Xfo1+llADGnbD/WUWXLl8J51krUX9v91LQ2R4pgfuf
+        C4hBcNMml7BT2EKT8gNnWUPojUzevu38e10gIal3RvUJzJpRLlpHbSUhaJVRHQmtISpZ24
+        PQ/RZLZELPO+xfszskjPArrqLYzxmgE=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-444-B4zzyCR6OtyVoAqLY6_1hA-1; Tue, 07 Mar 2023 18:23:48 -0500
+X-MC-Unique: B4zzyCR6OtyVoAqLY6_1hA-1
+Received: by mail-qk1-f199.google.com with SMTP id pc36-20020a05620a842400b00742c715894bso8308551qkn.21
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 15:23:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678231428;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L1VSODuSHT6h/z9IAuPAvJcAN7vDMCMVV0tl0uco2PU=;
+        b=6eKQpyIWnef8xVxg3fhXNqlPp2NMUFQGq39p2M2AYAiz67pDxEQU8p73uXLVeD3UjJ
+         0qVC6fOfpxFflQ28YFSkVVlKJWdiEQqTrSkYfnDLUWYLwtZ8UWKdTmjTPJjQd36J2T+/
+         TL+Oq3yShIRKbKkvfgZBtgQEY2OcEHFql0OLhsSBsu+UJoEm8Kk1zxRyGy2P5Yw3jXM6
+         Kk42D3NhvEvN2jTcnpx3/RQXSH5XXr4pbfNZw+mDS07kAh2uZSB+FQdJR8x64JU42j5t
+         rfX6k1QP+/K+AfgInW932GRUJLdWCZsh6MzJqtpEQnOXKU0Z+02WfvdIrOa6Ye39iz/p
+         JxiQ==
+X-Gm-Message-State: AO0yUKX53tezlpYkcGzf44xFA9MJX4qWBnD9AmYw/Z0HsBTN9d71Z/Yu
+        RVZGgYXwJGtT6NLvL5v/oLO4xmrmnKkpGcuYeYWPXoa0MKMytcJgl/vGVnzlZJWozC4vUZhgKo/
+        XsFc7ivPG/2SmOPdLtWvgmExV
+X-Received: by 2002:a05:6214:1250:b0:538:a431:862e with SMTP id r16-20020a056214125000b00538a431862emr28167920qvv.19.1678231428404;
+        Tue, 07 Mar 2023 15:23:48 -0800 (PST)
+X-Google-Smtp-Source: AK7set9vDzIHs5mt0XlKyBy4hLxi39WDRWptCE7iC2Ek8YGBhCCTIL5pFVQdE5rV3MHj/lZGxFaXPA==
+X-Received: by 2002:a05:6214:1250:b0:538:a431:862e with SMTP id r16-20020a056214125000b00538a431862emr28167899qvv.19.1678231428131;
+        Tue, 07 Mar 2023 15:23:48 -0800 (PST)
+Received: from x1.. (c-73-214-169-22.hsd1.pa.comcast.net. [73.214.169.22])
+        by smtp.gmail.com with ESMTPSA id do32-20020a05620a2b2000b0073b7568d998sm10280819qkb.2.2023.03.07.15.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 15:23:47 -0800 (PST)
+From:   Brian Masney <bmasney@redhat.com>
+To:     andersson@kernel.org
+Cc:     quic_shazhuss@quicinc.com, agross@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sa8540p-ride: correct name of remoteproc_nsp0 firmware
+Date:   Tue,  7 Mar 2023 18:23:40 -0500
+Message-Id: <20230307232340.2370476-1-bmasney@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-From:   "NeilBrown" <neilb@suse.de>
-To:     "Jerry Zhang" <jerry@skydio.com>
-Cc:     embedded@skydio.com, "Chuck Lever" <chuck.lever@oracle.com>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "Trond Myklebust" <trond.myklebust@hammerspace.com>,
-        "Anna Schumaker" <anna@kernel.org>,
-        "J. Bruce Fields" <bfields@redhat.com>, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sunrpc: Fix incorrect parsing of expiry time
-In-reply-to: <CAMKO5Cv1Uh1rSFQ0cR1kfA88iXXHP5RMO-euU15Xrn2i93J5rg@mail.gmail.com>
-References: <20230307220525.54895-1-Jerry@skydio.com>,
- <167822825917.8008.11050193827453206272@noble.neil.brown.name>,
- <CAMKO5Cv1Uh1rSFQ0cR1kfA88iXXHP5RMO-euU15Xrn2i93J5rg@mail.gmail.com>
-Date:   Wed, 08 Mar 2023 10:20:42 +1100
-Message-id: <167823124256.8008.4738010782615192469@noble.neil.brown.name>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 08 Mar 2023, Jerry Zhang wrote:
-> On Tue, Mar 7, 2023 at 2:31 PM NeilBrown <neilb@suse.de> wrote:
-> >
-> > On Wed, 08 Mar 2023, Jerry Zhang wrote:
-> > > The expiry time field is mean to be expressed in seconds since boot.
-> >
-> > Correct.
-> >
-> > > The get_expiry() function parses a relative time value in seconds.
-> >
-> > Incorrect.  It parses and absoulte wall-clock time.
-> I'm not familiar with the source of truth for this info. Is there a
-> specification of some sort?
-> 
-> For reference, we were seeing writes to
-> /proc/net/rpc/nfsd.export/channel randomly fail with EINVAL despite
-> usually succeeding with the same invocation. Upon investigation this
-> was the string that exportfs was writing "-test-client- /path/to/mount
->  3 0 65534 65534 0". "3" was the value for expiry in this message,
-> which led me to conclude that this is a relative field. If it isn't,
-> perhaps this is a bug in userspace nfs tools?
+The cdsp.mbn firmware that's referenced in sa8540p-ride.dts is actually
+named cdsp0.mbn in the deliverables from Qualcomm. Let's go ahead and
+correct the name to match what's in Qualcomm's deliverable.
 
-The above information is very useful.  This sort of detail should always
-be included with a bug report, or a patch proposing to fix a bug.
+Signed-off-by: Brian Masney <bmasney@redhat.com>
+---
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The intent of that "3" is to be a time in the past.  We don't want the
--test-client- entry to be added to the cache, but we want a failure
-message if the path cannot be exported.  So we set a time in the past as
-the expiry time.
-Using 0 is awkward as it often has special meaning, so I chose '3'. 
-
-> 
-> The failure in this was if nfs-server starts exactly 3s after bootup,
-> boot.tv_sec would be 3 and thus get_expiry() returns 0, causing a
-> failure to be returned.
-
-I don't understand this. getboottime64() doesn't report time since boot.
-It reports the time when the system booted.  It only changes when the
-system time is deliberately changed.
-At boot, it presumably reports 0.  As soon as some tool (e.g. systemd or
-ntpdate) determines what the current time it and calls settimeofday() or
-a similar function, the system time is changed, and the boot-time is
-changed by the same amount.  Typically this will make it well over 1
-billion (for anything booted this century).
-So for the boot time to report as '3', something would need to set the
-current time to a moment early in January 1970.  I'd be surprised if
-anything is doing that.
-
-How much tracing have you done?  Have you printed out the value of
-boot.tv_sec and confirmed that it is '3' or have you only deduced it
-from other evidence.
-Exactly what firm evidence do you have?
-
-Thanks,
-NeilBrown
+diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+index 6c547f1b13dc..0f560a4661eb 100644
+--- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
++++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
+@@ -177,7 +177,7 @@ &qup2_uart17 {
+ };
+ 
+ &remoteproc_nsp0 {
+-	firmware-name = "qcom/sa8540p/cdsp.mbn";
++	firmware-name = "qcom/sa8540p/cdsp0.mbn";
+ 	status = "okay";
+ };
+ 
+-- 
+2.39.2
 
