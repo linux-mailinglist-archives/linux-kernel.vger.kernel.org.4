@@ -2,158 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FED6AD8FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D806AD8F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjCGIQj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 03:16:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
+        id S230057AbjCGIQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:16:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCGIQc (ORCPT
+        with ESMTP id S230022AbjCGIQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:16:32 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A1B50997;
-        Tue,  7 Mar 2023 00:16:31 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id c18so13526454qte.5;
-        Tue, 07 Mar 2023 00:16:31 -0800 (PST)
+        Tue, 7 Mar 2023 03:16:28 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E203A5072D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:16:23 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id ec29so18150391edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678176982;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4nDYeNViOfggxIfzDROShYRUgmdfTcb/BnnR2M5KEIc=;
+        b=w8llI7QPcpMyUTDXYAZJGp1+kvh1rlpFLMjH8wbFFDZww7zjI+hLF3l0py/pym6MY+
+         9cQAvW2mQjavd2f/CXHyyk1bGlydLLpHrz7RdnmV+HxkdBx77YoqhVUog+iBKCE4AjHm
+         e9etJqugxqb3EEaDRF0LNlr+GsmIdkLLhLnPezid7kcj3lGI0g8YHFmeis9nEDeNlNPX
+         JgTXzDmZIfR6Mrp6YXdD1CWaToVyoHMRHIFRXLqPvqX6kct1VQGPDgv5X/pdbahI8yyj
+         Vo3glMnWIRVqSIXYXW7jRIsim2WlegveWdkCOeM+fZ4hrzb42ehfmxa8V8KSomzkVPa6
+         yXSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678176990;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZjZIlXQTpJ24PjO5Zb7phOIg9/5X/qOSvWi0SXZ0qlg=;
-        b=cWJYXA8g2I9BMvqLFQTJktFLE0djSfaQD338DLADU+XFxwafja68e7wdmc4yQ1yckb
-         tulKhBIcgZwYJ2CVNn30vXA349qT8L9XYo1ZDcmX/EzNIezT1avylhMBCcYrnGPKSnch
-         H/84elGIBd/+8ynnkyLtlp4/RBfd5c9V+EnzocndWwhO5cG2oqlRzbiqw2JM6f1TXLlv
-         vauIig8reNow6GqCaGQw+SANdPAm5Dv1/YfVnEUhnqeL2yJc0JJtmtO9VBfE5Pn4qnYm
-         STy6kqEqSfnuyfrAYSIWIDDFT+aBejtpEjtsko0gnAgCkQtv0W/nh5k8m7d74npRMc1z
-         tz/A==
-X-Gm-Message-State: AO0yUKXD5vXmC4luBGdV/213Ud/QQRSTo669Ql0mg4D7e9YcUR5dbgXA
-        ozXNXrXamivaS3bsmi0oDmpuD3lyHrsjYQ==
-X-Google-Smtp-Source: AK7set/q89VBoBwSUxxrPgcoIGi81XAI2rtm+SJ0GrPhnuL13aqHOpDXwEliwQK24YXbclySAJnQ5w==
-X-Received: by 2002:a05:622a:15ce:b0:3b8:6442:2575 with SMTP id d14-20020a05622a15ce00b003b864422575mr23256946qty.49.1678176990249;
-        Tue, 07 Mar 2023 00:16:30 -0800 (PST)
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
-        by smtp.gmail.com with ESMTPSA id o6-20020a05622a138600b003b63a734434sm9411780qtk.52.2023.03.07.00.16.28
+        d=1e100.net; s=20210112; t=1678176982;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4nDYeNViOfggxIfzDROShYRUgmdfTcb/BnnR2M5KEIc=;
+        b=crB0+1iGQkh/2vrxhMBZ99XgfxWbKDR1etAfNM6Yq5q5mGRrLNZkSJXMR9wyTgqVKd
+         0xUrviUvXDmeYZ3mIWvTFBtOQNmQd58RrkebXZ+E/pcpn4N/8ML1UHW0mU+/dc6g3dx+
+         oKqfHbshyx7yZv2xk5h9b7ZXh4xsII/E0Yu2kazAzxsDDhERMFSjzRL1tac1BW4jp/BX
+         AVxNwvkz6DsIcPvCeoodQdN6b7SubU+OeOrwKpRC4ULOu9OsQCGvdyzOn98GC3/th2P3
+         ZjH+Xq9SrPqhLNez0CD1ymsmUCFzXJeDtRXr2JL+aeiI6MZl17BwbihU1kPr+fwbJdTS
+         dAnQ==
+X-Gm-Message-State: AO0yUKXmlPtRCWwGGPtZkF0NKhJuDD/MKS9O/GGxM9LpJU1lRbFMkttC
+        3Ar3qad/rKzYIDCaYIwWFv++8A==
+X-Google-Smtp-Source: AK7set9pStbAm3PmBs5vLzhyt+fZdTXRfRWPgXBTYQeJjhU+7VkWzt64OghaTAQEV09Vb5icRVNAlA==
+X-Received: by 2002:a17:906:6a1e:b0:8b1:fc58:a4ad with SMTP id qw30-20020a1709066a1e00b008b1fc58a4admr18504773ejc.11.1678176982155;
+        Tue, 07 Mar 2023 00:16:22 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:5310:35c7:6f9e:2cd3? ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
+        by smtp.gmail.com with ESMTPSA id j23-20020a170906255700b008d9c518a318sm5788324ejb.142.2023.03.07.00.16.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 00:16:29 -0800 (PST)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-53852143afcso231552817b3.3;
-        Tue, 07 Mar 2023 00:16:28 -0800 (PST)
-X-Received: by 2002:a81:af0c:0:b0:52f:1c23:ef1 with SMTP id
- n12-20020a81af0c000000b0052f1c230ef1mr8939020ywh.5.1678176988688; Tue, 07 Mar
- 2023 00:16:28 -0800 (PST)
+        Tue, 07 Mar 2023 00:16:21 -0800 (PST)
+Message-ID: <e8c0f0db-fe2a-52b6-ac8c-7810b348af8c@linaro.org>
+Date:   Tue, 7 Mar 2023 09:16:20 +0100
 MIME-Version: 1.0
-References: <20230307075923.28821-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20230307075923.28821-1-lukas.bulwahn@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 7 Mar 2023 09:16:17 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV1eYWhDKwTAxC32Qp0CcxrWxgu=uRNTdu_G8K=gHS9Yw@mail.gmail.com>
-Message-ID: <CAMuHMdV1eYWhDKwTAxC32Qp0CcxrWxgu=uRNTdu_G8K=gHS9Yw@mail.gmail.com>
-Subject: Re: [PATCH] arch: sh: remove references to config USB_OHCI_SH
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        linux-sh@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] dt-bindings: display: mediatek: Fix the duplicated
+ fallback
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org
+References: <20230306-ccorr-binding-fix-v3-0-7877613a35cb@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230306-ccorr-binding-fix-v3-0-7877613a35cb@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas,
+On 06/03/2023 17:20, Alexandre Mergnat wrote:
+> The item which have the mediatek,mt8192-disp-ccorr const compatible already
+> exist above. Remove duplicated fallback.
 
-On Tue, Mar 7, 2023 at 9:02 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> Commit 4f6dfc2136fb ("usb: remove the dead USB_OHCI_SH option") left some
-> references to the config USB_OHCI_SH in ./arch/sh/ around, expecting those
-> to be removed with the whole SH architecture deletion.
->
-> As that did not happen, do minor clean-up instead and remove the references
-> to the removed config USB_OHCI_SH instead.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Your commit msg is really misleading - I was looking for duplicated
+compatible, but could not find it. You just have there unnecessary one
+more list in oneOf, so this could be written simpler, but no compatibles
+are duplicated...
 
-Thanks for your patch!
+> 
+> Fixes: 137272ef1b0f ("dt-bindings: display: mediatek: Fix the fallback for mediatek,mt8186-disp-ccorr")
 
-> --- a/arch/sh/Kconfig
-> +++ b/arch/sh/Kconfig
-> @@ -326,7 +326,6 @@ config CPU_SUBTYPE_SH7720
->         select CPU_SH3
->         select CPU_HAS_DSP
->         select SYS_SUPPORTS_SH_CMT
-> -       select USB_OHCI_SH if USB_OHCI_HCD
+Style issue, not a fix, because nothing is duplicated.
 
-Shouldn't this select USB_OHCI_HCD_PLATFORM instead, as the (now
-removed) Kconfig help text for USB_OHCI_SH used to say?
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+> Fix MTK color correction binding
+> 
+> The fallback compatible has been duplicated in the 137272ef1b0f commit.
 
-    +       select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
-
-I completely forgot I already made that comment before, cfr.
-https://lore.kernel.org/all/CAMuHMdVM3BpvVD3c4gp1OidnwF5zFd4MJecij7zWBnahzNaSNw@mail.gmail.com
-
-The same is true for the three selects below.
-As USB is now broken, the proper solution will need
-Fixes: 4f6dfc2136fb2e8d ("usb: remove the dead USB_OHCI_SH option")
-
->         select PINCTRL
->         help
->           Select SH7720 if you have a SH3-DSP SH7720 CPU.
-> @@ -336,7 +335,6 @@ config CPU_SUBTYPE_SH7721
->         select CPU_SH3
->         select CPU_HAS_DSP
->         select SYS_SUPPORTS_SH_CMT
-> -       select USB_OHCI_SH if USB_OHCI_HCD
->         help
->           Select SH7721 if you have a SH3-DSP SH7721 CPU.
->
-> @@ -425,7 +423,6 @@ config CPU_SUBTYPE_SH7757
->  config CPU_SUBTYPE_SH7763
->         bool "Support SH7763 processor"
->         select CPU_SH4A
-> -       select USB_OHCI_SH if USB_OHCI_HCD
->         help
->           Select SH7763 if you have a SH4A SH7763(R5S77631) CPU.
->
-> @@ -451,7 +448,6 @@ config CPU_SUBTYPE_SH7786
->         select CPU_SHX3
->         select CPU_HAS_PTEAEX
->         select GENERIC_CLOCKEVENTS_BROADCAST if SMP
-> -       select USB_OHCI_SH if USB_OHCI_HCD
->         select USB_EHCI_SH if USB_EHCI_HCD
->         select PINCTRL
->
-> diff --git a/arch/sh/configs/sh7757lcr_defconfig b/arch/sh/configs/sh7757lcr_defconfig
-> index f10fb730b6f4..cd404818e33f 100644
-> --- a/arch/sh/configs/sh7757lcr_defconfig
-> +++ b/arch/sh/configs/sh7757lcr_defconfig
-> @@ -58,7 +58,6 @@ CONFIG_USB=y
->  CONFIG_USB_EHCI_HCD=y
->  CONFIG_USB_EHCI_SH=y
->  CONFIG_USB_OHCI_HCD=y
-> -CONFIG_USB_OHCI_SH=y
->  CONFIG_USB_STORAGE=y
->  CONFIG_MMC=y
->  CONFIG_MMC_SDHI=y
-
-This part is fine.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Best regards,
+Krzysztof
+
