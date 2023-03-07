@@ -2,101 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1636AFAA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936856AFAAC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjCGXmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 18:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
+        id S229689AbjCGXq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 18:46:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCGXmi (ORCPT
+        with ESMTP id S229497AbjCGXqx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:42:38 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0424991B55
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 15:42:36 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id d3-20020a17090acd0300b00237659aae8dso154718pju.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 15:42:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678232555;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HqzrjtunBCbTiG/9hLGZPz4HpJ6gvwCBlEocXHjYpgc=;
-        b=BVf//gG8V71fiiDyfQ8szqCJ4bPgO7DaUm8HJJeelmc7d3Ds9PorlXTBXqfj5tMMNV
-         z09vFhbJ4QjN/CU2ZSUhTRHikpPlTSK+EaJVWLb3roygPLeCUV0KXD/Diuh8QkiCadOt
-         bH2E45Az1vag7vGPFljLbj5mRe6VAtWdo0Dy+y6ViSvhY8QS7RVt/eV9eyoZMY5sVC1Z
-         FlOUGwA08Lc9OOiAuWHNDEcrzin4G8yyIWTF2CWSPuk8EMq7eF01Op8VG46MFFDus/n/
-         4wotVknXaiPlF0jq7ZXvMcMpVGXqCNY2+xTzv79y6iXlcNUygElR1376y7sqwAxhwd2j
-         ELzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678232555;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HqzrjtunBCbTiG/9hLGZPz4HpJ6gvwCBlEocXHjYpgc=;
-        b=7RcIsGDNMzihNzmVkVdY5l76KmC5ONdb2iY/wgEzH/8LK5LpH0vebDPX+BgkUGAgKo
-         HDwL4nDbkxLrUSaq4oErJeROd+YaS9h/YnRnmYyyAxCXaZ+zUYol8fXjd94XlNcq7iU5
-         HAmidtuWsSUc2mXV8kR0AleWrhAHkTiLD8wRyVrUHmGhD0lGeH/inaxTQBK+8qQa81r2
-         fJMgw+0biA6Z1lBDePt0b9eT9ZtmprpWfke4yFMXnotY6/eTMsJkAw8ORHtWVQJXT9qH
-         Ufxd9K09uXdqwiH06fA+1fLsIinJAYQDIUIFKPzWk7gFFbN5epfOlI41F2P73Uz7+2ka
-         TrtA==
-X-Gm-Message-State: AO0yUKUBxTl3fzEQvecEtmMWGHFiz95aW+XpgOZOLjmw6oz92HE5E09l
-        UdZs+f4nLcsgHlsvwlC/A8Vwqvsr/A4=
-X-Google-Smtp-Source: AK7set8Z3jueSenBo8cEWwdWq3U4Z/X1tE6ANTZZWfxuL+FcDB0ZeH55jX9W6vlqIO+zJdj0BIGfAjJfTe4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:e40e:0:b0:5a8:a56f:1c3a with SMTP id
- r14-20020a62e40e000000b005a8a56f1c3amr9036088pfh.0.1678232555455; Tue, 07 Mar
- 2023 15:42:35 -0800 (PST)
-Date:   Tue, 7 Mar 2023 15:42:33 -0800
-In-Reply-To: <20230303165050.2918-3-mario.limonciello@amd.com>
-Mime-Version: 1.0
-References: <20230303165050.2918-1-mario.limonciello@amd.com> <20230303165050.2918-3-mario.limonciello@amd.com>
-Message-ID: <ZAfL6SK0jMtsAhGv@google.com>
-Subject: Re: [PATCH v3 2/9] crypto: ccp: Add a header for multiple drivers to
- use `__psp_pa`
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Jan =?utf-8?B?RMSFYnJvxZs=?=" <jsd@semihalf.com>,
-        Grzegorz Bernacki <gjb@semihalf.com>, Rijo-john.Thomas@amd.com,
-        Thomas.Lendacky@amd.com, herbert@gondor.apana.org.au,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org,
-        op-tee@lists.trustedfirmware.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 7 Mar 2023 18:46:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304B395469;
+        Tue,  7 Mar 2023 15:46:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D1FB9B81B22;
+        Tue,  7 Mar 2023 23:46:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BFAAC433EF;
+        Tue,  7 Mar 2023 23:46:48 +0000 (UTC)
+Date:   Tue, 7 Mar 2023 18:46:45 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Ross Zwisler <zwisler@google.com>
+Subject: [PATCH] tracing, hardirq: Do not test lockdep on irq trace points
+ when disabled
+Message-ID: <20230307184645.521db5c9@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023, Mario Limonciello wrote:
-> The TEE subdriver for CCP, the amdtee driver and the i2c-designware-amdpsp
-> drivers all include `psp-sev.h` even though they don't use SEV
-> functionality.
-> 
-> Move the definition of `__psp_pa` into a common header to be included
-> by all of these drivers.
-> 
-> Reviewed-by: Jan Dabros <jsd@semihalf.com>
-> Acked-by: Jarkko Nikula <jarkko.nikula@linux.intel.com> # For the drivers/i2c/busses/i2c-designware-amdpsp.c
-> Acked-by: Sumit Garg <sumit.garg@linaro.org> # For TEE subsystem bits
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Acked-by: Sean Christopherson <seanjc@google.com> # KVM
+When CONFIG_LOCKDEP is enabled, the trace points have:
+
+	static inline void trace_##name(proto)				\
+	{								\
+		if (static_key_false(&__tracepoint_##name.key))		\
+			__DO_TRACE(name,				\
+				TP_ARGS(args),				\
+				TP_CONDITION(cond), 0);			\
+		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
+			rcu_read_lock_sched_notrace();			\
+			rcu_dereference_sched(__tracepoint_##name.funcs);\
+			rcu_read_unlock_sched_notrace();		\
+		}							\
+	}								\
+
+Where it will test lockdep for trace points even when they are not
+enabled, to make sure they do not cause RCU issues, and lockdep will
+trigger even when the trace points are not enabled.
+
+The trace_<tracepoint>_rcuidle() skipped this check as it was called when
+RCU was not watching. With the lastest changes with noinstr, this is
+becoming less of an issue.
+
+The trace points that cover enabling and disabling irqs use to have the
+_rcuidle() variant. This was removed as noinstr made it no longer needed.
+
+My tests started failing with this on 32 bit when LOCKDEP was enabled,
+with a soft lockup:
+
+Testing tracer function_graph:
+ watchdog: BUG: soft lockup - CPU#0 stuck for 26s! [swapper/0:1]
+ Modules linked in:
+ irq event stamp: 15379006
+ hardirqs last  enabled at (15379005): [<ca0cbd6d>] __text_poke+0x3d5/0x4dc
+ hardirqs last disabled at (15379006): [<cad13fac>] sysvec_apic_timer_interrupt+0xc/0x40
+ softirqs last  enabled at (15349578): [<ca1011b8>] return_to_handler+0x0/0x18
+ softirqs last disabled at (15349457): [<ca0c6f09>] call_on_stack+0x45/0x4c
+ CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.2.0-test-06742-g307e14c03906-dirty #934
+ Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+ EIP: __text_poke+0x3d9/0x4dc
+ Code: 16 cb 6a 00 6a 0c e8 2e 17 04 00 5a 59 81 7d dc 50 b7 0c ca 0f 84 97 00 00 00 8b 45 c0 85 c0 74 06 e8 bf 0d 1a 00 fb 8b 45 ec <e8> de 51 c5 00 89 f0 e8 1f ff 2a 00 64 a1 00 4b 4f cb 83 a8 ac 0e
+ EAX: c1016758 EBX: 00000001 ECX: 00000040 EDX: cb13b63e
+ ESI: fffbb060 EDI: ca8fd0e9 EBP: c123de0c ESP: c123dd9c
+ DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00000202
+ CR0: 80050033 CR2: ff9ff000 CR3: 0b504000 CR4: 00150ef0
+ Call Trace:
+  ? text_poke_memset+0x14/0x14
+  ? trace_graph_entry_watchdog+0x1f/0x6c
+  ? function_graph_enter+0xe8/0x13c
+  ? arch_unregister_cpu+0x24/0x24
+  ? ftrace_graph_caller+0x1c/0x1c
+  text_poke_bp_batch+0x18d/0x30c
+  ? __traceiter_regmap_async_io_complete+0x1/0x34
+  ? __mptcp_init_sock+0xc4/0x150
+  ? regmap_update_bits_base+0x68/0x68
+  ? ftrace_graph_caller+0x1c/0x1c
+  text_poke_queue+0x5a/0x84
+  ftrace_replace_code+0x103/0x174
+  ftrace_modify_all_code+0x10c/0x198
+  arch_ftrace_update_code+0x8/0xc
+  ftrace_startup+0xac/0x14c
+  register_ftrace_graph+0x376/0x3b0
+  trace_selftest_startup_function_graph+0x72/0x248
+  run_tracer_selftest+0x89/0x230
+  register_tracer+0xc7/0x25c
+  ? init_graph_tracefs+0x2c/0x2c
+  init_graph_trace+0x48/0x74
+  do_one_initcall+0x5e/0x300
+  kernel_init_freeable+0x22c/0x460
+  ? rest_init+0x168/0x168
+  kernel_init+0x17/0x1b8
+  ret_from_fork+0x1c/0x28
+
+I found that the lockdep checks did slow down the functions slightly, just
+enough to trigger the soft lockup detector when enabling function graph
+tracing.
+
+By adding:
+
+  if (!IS_ENABLED(CONFIG_LOCKDEP) || trace_##point##_enabled())
+
+around the call to the trace point, it would make it act more like the
+rcuidle() trace point, and would not cause the soft lockup detection.
+
+Note, without this change, the normal system is slowed down much more with
+LOCKDEP enabled than it was before. This brings it back to the normal slow
+performance of LOCKDEP.
+
+Fixes: 9aedeaed6fc6 ("tracing, hardirq: No moar _rcuidle() tracing")
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ kernel/trace/trace_preemptirq.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+index f992444a0b1f..4765e1a6c7f4 100644
+--- a/kernel/trace/trace_preemptirq.c
++++ b/kernel/trace/trace_preemptirq.c
+@@ -26,9 +26,17 @@ static DEFINE_PER_CPU(int, tracing_irq_cpu);
+  *
+  * On older architectures, use the rcuidle tracing methods (which
+  * aren't NMI-safe - so exclude NMI contexts):
++ *
++ * Note, when LOCKDEP is enabled, the default checks for the trace point
++ * can cause a noticeable slowdown even when the trace point is not
++ * enabled. By only calling the trace point when the trace point is
++ * enabled, will keep the lockdep checks from being always triggered
++ * and slowing down the system.
+  */
+ #ifdef CONFIG_ARCH_WANTS_NO_INSTR
+-#define trace(point)	trace_##point
++#define trace(point)							\
++	if (!IS_ENABLED(CONFIG_LOCKDEP) || trace_##point##_enabled())	\
++		trace_##point
+ #else
+ #define trace(point)	if (!in_nmi()) trace_##point##_rcuidle
+ #endif
+-- 
+2.39.1
+
