@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F367A6AFA77
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A354A6AFA7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjCGXdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 18:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S230092AbjCGXdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 18:33:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjCGXdX (ORCPT
+        with ESMTP id S229995AbjCGXdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:33:23 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B97C76F54;
-        Tue,  7 Mar 2023 15:33:22 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id z10so8620708pgr.8;
-        Tue, 07 Mar 2023 15:33:22 -0800 (PST)
+        Tue, 7 Mar 2023 18:33:25 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CB37BA2A;
+        Tue,  7 Mar 2023 15:33:23 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id m8-20020a17090a4d8800b002377bced051so470788pjh.0;
+        Tue, 07 Mar 2023 15:33:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678232001;
+        d=gmail.com; s=20210112; t=1678232003;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BSYFKW/f4cBllB72XD0Anmg2JAAmUIvfnX1lH/HWE8g=;
-        b=PXqbxPmcykJazCAipqVop4Vgq8LFaDno2vr4y2dpXqgZLGMST1LwAAKXtuauhxZkJ9
-         e6WqoK7uW8mwFtLjywvT8CYkLGlkYacHiJ4vnEQg97U7q4lPZbpj4nTWWB3AJG6j9/XF
-         icw9rojoLATo22XQv0BjhFOilzpu/B5lIWmY33ltkUXtF+kPmu7fqnyF6O7jZcHfZmPN
-         2/Q9HM1Ra4bT6iCCy5ZzsY+D7IDtgq9bXPkSoeVRAZOBnDuXXtrySJuqRTB7GttMKMEi
-         +7zpfdQPW35xe7FT7fnhuejXIYWFYKTSgbhm2hWcnflbNkkU1O9gE9lPPQkNCxx+ZypK
-         4DSA==
+        bh=x3XJiLzYWTl1qdcO6Aoy/MeuV984OrXXQga9tTJym9M=;
+        b=k/ZMLtxDsB+YHPhfeOKHYIWLbC8qdI6ZoY7C2sPPUkIl3TUW1OeJkzWUQdTijzRFDO
+         GhExusyellPgYMqpl4alfdYq9NFrrgu6GUlAOKd03NJOY9x11JoBc9pGxQznHCfw+Vkc
+         5FT8HDnVzrVhFAB9g2h7otDaInhTm5KRBrOQkLlR31DNoBrNv+QLLhAX/AXG3Kb86Uqq
+         feJZ1nEjMTimEuVqxg6Wlf2+R8vVyi8QN3pnFuFxH4nvbVY5ZQAo6O0qPJI9NbJFrpOa
+         EEFJ5uMniBL+MR72jGxlelEI4gxgxwG6vJP/JH9qp/FTHWGGxuInYjcxa0xACDmz5/i6
+         eopw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678232001;
+        d=1e100.net; s=20210112; t=1678232003;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=BSYFKW/f4cBllB72XD0Anmg2JAAmUIvfnX1lH/HWE8g=;
-        b=G2GOD2XagFFs80oWuvfS9iaJu6/tBxaTOY7N/BbLIfodeHj7JZDCYNt3lAVi7GO+oY
-         Gfe4ut3CkUIxBlZqak8xEWJiZRFbE7uOZRV0ydL2RM9yS9upfH9xIZ/8sjszrkmLVQUN
-         N+9EvxGzsKw95OYkbc7QXDa1rzNrBOt4n9oL4nVbgdbRNnQPtNcIXNc24hlhkcOat2l8
-         l/Qx5QJxAI8JbwNAgr9qQ0Q7T5YGlk777PWq6HBlaWns2NkmY+FL+zO7XizaME4XA8HU
-         GJ2Q0OIFv/+9DDSlwP3mKwsRApLtiiiVJTrrSNVbcRvqCV7At853CBjmoFHGfxdi04nH
-         BRQQ==
-X-Gm-Message-State: AO0yUKXWL8V8t8WZQiO2CbydhiKQCSs5pJNCMz++CjKmoZ28E3GGLH6n
-        HjokW+Q++pp3yUpI2ZxpmG4=
-X-Google-Smtp-Source: AK7set/yygdmTl2Ud7hNbNr8heUCT5ybTO6ZS2vMDtheV59zz2PQDvMkTyDGtoXM8bOHMPfehAnlfQ==
-X-Received: by 2002:aa7:941d:0:b0:5f1:f57a:b0c3 with SMTP id x29-20020aa7941d000000b005f1f57ab0c3mr14936637pfo.5.1678232001457;
-        Tue, 07 Mar 2023 15:33:21 -0800 (PST)
+        bh=x3XJiLzYWTl1qdcO6Aoy/MeuV984OrXXQga9tTJym9M=;
+        b=18D/Bj9CzvvvpAdwDlQKfNVt/jG7IUH4BiaBzkPD12yGE8hzcMDSRQurqwXQHDU3Db
+         DUbC9HWtHObWcUdWgdnd4vCVFtvFMk64EWWUFf5iEmK1zc7YML1zCv7ZJyGjWbN6veHc
+         x6PLbgQN/IlqlRHbX46ENacUaCwdA7mLv+0szG6aQ/VRjQf9s9dnzYf0N+/OT9xo263m
+         IJHZQenmpamRGhVsd2JDXFYdt+FM1tEj5yo0Jxa5vbu3vgXcAVbzwUEZ9pKlQEIZOldH
+         Ipfqm5l6+WXyDbcqWw2QfcyK2Nux9qpnfSZm3UjlT1rKVGNpsotzttCl3qj+HPUHHeHb
+         Jscw==
+X-Gm-Message-State: AO0yUKXH5cr7r2ceIhbaDTlXxczc1Hz03vPTUun6/HH3vy4lmskMj9L3
+        653dtmzXzj8184774o6vEbw=
+X-Google-Smtp-Source: AK7set//M15swegfo840vAPhluG6X15dTHI61Dzkynwcp3PxVLv8165+EUMgSytQouKSSp4bTw+byA==
+X-Received: by 2002:a05:6a20:a01a:b0:cc:7967:8a75 with SMTP id p26-20020a056a20a01a00b000cc79678a75mr15029486pzj.46.1678232003035;
+        Tue, 07 Mar 2023 15:33:23 -0800 (PST)
 Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:15e8:b801:cd55:a496])
-        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.19
+        by smtp.gmail.com with ESMTPSA id l11-20020a62be0b000000b005da23d8cbffsm8342217pff.158.2023.03.07.15.33.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 15:33:20 -0800 (PST)
+        Tue, 07 Mar 2023 15:33:22 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 5/9] perf bpf filter: Add 'pid' sample data support
-Date:   Tue,  7 Mar 2023 15:33:05 -0800
-Message-Id: <20230307233309.3546160-6-namhyung@kernel.org>
+Subject: [PATCH 6/9] perf bpf filter: Add more weight sample data support
+Date:   Tue,  7 Mar 2023 15:33:06 -0800
+Message-Id: <20230307233309.3546160-7-namhyung@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230307233309.3546160-1-namhyung@kernel.org>
 References: <20230307233309.3546160-1-namhyung@kernel.org>
@@ -85,155 +85,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pid is special because it's saved in the PERF_SAMPLE_TID together.
-So it needs to differenciate tid and pid using the 'part' field in the
-perf bpf filter entry struct.
+The weight data consists of a couple of fields with the
+PERF_SAMPLE_WEIGHT_STRUCT.  Add weight{1,2,3} term to select them
+separately.  Also add their aliases like 'ins_lat', 'p_stage_cyc'
+and 'retire_lat'.
 
 Acked-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/bpf-filter.c                 |  4 +++-
- tools/perf/util/bpf-filter.h                 |  3 ++-
- tools/perf/util/bpf-filter.l                 | 11 ++++++++++-
- tools/perf/util/bpf-filter.y                 |  7 +++++--
- tools/perf/util/bpf_skel/sample-filter.h     |  3 ++-
- tools/perf/util/bpf_skel/sample_filter.bpf.c |  5 ++++-
- 6 files changed, 26 insertions(+), 7 deletions(-)
+ tools/perf/util/bpf-filter.l                 | 6 ++++++
+ tools/perf/util/bpf_skel/sample_filter.bpf.c | 8 ++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
-index 7bd6f2e41513..743c69fd6cd4 100644
---- a/tools/perf/util/bpf-filter.c
-+++ b/tools/perf/util/bpf-filter.c
-@@ -36,6 +36,7 @@ int perf_bpf_filter__prepare(struct evsel *evsel)
- 	list_for_each_entry(expr, &evsel->bpf_filters, list) {
- 		struct perf_bpf_filter_entry entry = {
- 			.op = expr->op,
-+			.part = expr->part,
- 			.flags = expr->sample_flags,
- 			.value = expr->val,
- 		};
-@@ -76,7 +77,7 @@ u64 perf_bpf_filter__lost_count(struct evsel *evsel)
- 	return skel ? skel->bss->dropped : 0;
- }
- 
--struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
-+struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags, int part,
- 						       enum perf_bpf_filter_op op,
- 						       unsigned long val)
- {
-@@ -85,6 +86,7 @@ struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flag
- 	expr = malloc(sizeof(*expr));
- 	if (expr != NULL) {
- 		expr->sample_flags = sample_flags;
-+		expr->part = part;
- 		expr->op = op;
- 		expr->val = val;
- 	}
-diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
-index f0c66764c6d0..3f8827bd965f 100644
---- a/tools/perf/util/bpf-filter.h
-+++ b/tools/perf/util/bpf-filter.h
-@@ -9,6 +9,7 @@
- struct perf_bpf_filter_expr {
- 	struct list_head list;
- 	enum perf_bpf_filter_op op;
-+	int part;
- 	unsigned long sample_flags;
- 	unsigned long val;
- };
-@@ -16,7 +17,7 @@ struct perf_bpf_filter_expr {
- struct evsel;
- 
- #ifdef HAVE_BPF_SKEL
--struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags,
-+struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long sample_flags, int part,
- 						       enum perf_bpf_filter_op op,
- 						       unsigned long val);
- int perf_bpf_filter__parse(struct list_head *expr_head, const char *str);
 diff --git a/tools/perf/util/bpf-filter.l b/tools/perf/util/bpf-filter.l
-index f6c0b74ea285..ec12fc4d2ab8 100644
+index ec12fc4d2ab8..419f923b35c0 100644
 --- a/tools/perf/util/bpf-filter.l
 +++ b/tools/perf/util/bpf-filter.l
-@@ -11,7 +11,15 @@
- 
- static int sample(unsigned long sample_flag)
- {
--	perf_bpf_filter_lval.sample = sample_flag;
-+	perf_bpf_filter_lval.sample.type = sample_flag;
-+	perf_bpf_filter_lval.sample.part = 0;
-+	return BFT_SAMPLE;
-+}
-+
-+static int sample_part(unsigned long sample_flag, int part)
-+{
-+	perf_bpf_filter_lval.sample.type = sample_flag;
-+	perf_bpf_filter_lval.sample.part = part;
- 	return BFT_SAMPLE;
- }
- 
-@@ -56,6 +64,7 @@ ident		[_a-zA-Z][_a-zA-Z0-9]+
- ip		{ return sample(PERF_SAMPLE_IP); }
- id		{ return sample(PERF_SAMPLE_ID); }
- tid		{ return sample(PERF_SAMPLE_TID); }
-+pid		{ return sample_part(PERF_SAMPLE_TID, 1); }
- cpu		{ return sample(PERF_SAMPLE_CPU); }
- time		{ return sample(PERF_SAMPLE_TIME); }
- addr		{ return sample(PERF_SAMPLE_ADDR); }
-diff --git a/tools/perf/util/bpf-filter.y b/tools/perf/util/bpf-filter.y
-index 13eca612ecca..0ca6532afd8d 100644
---- a/tools/perf/util/bpf-filter.y
-+++ b/tools/perf/util/bpf-filter.y
-@@ -20,7 +20,10 @@ static void perf_bpf_filter_error(struct list_head *expr __maybe_unused,
- %union
- {
- 	unsigned long num;
--	unsigned long sample;
-+	struct {
-+		unsigned long type;
-+		int part;
-+	} sample;
- 	enum perf_bpf_filter_op op;
- 	struct perf_bpf_filter_expr *expr;
- }
-@@ -48,7 +51,7 @@ filter_term
- filter_term:
- BFT_SAMPLE BFT_OP BFT_NUM
- {
--	$$ = perf_bpf_filter_expr__new($1, $2, $3);
-+	$$ = perf_bpf_filter_expr__new($1.type, $1.part, $2, $3);
- }
- 
- %%
-diff --git a/tools/perf/util/bpf_skel/sample-filter.h b/tools/perf/util/bpf_skel/sample-filter.h
-index 862060bfda14..6b9fd554ad7b 100644
---- a/tools/perf/util/bpf_skel/sample-filter.h
-+++ b/tools/perf/util/bpf_skel/sample-filter.h
-@@ -17,7 +17,8 @@ enum perf_bpf_filter_op {
- /* BPF map entry for filtering */
- struct perf_bpf_filter_entry {
- 	enum perf_bpf_filter_op op;
--	__u64 flags;
-+	__u32 part; /* sub-sample type info when it has multiple values */
-+	__u64 flags; /* perf sample type flags */
- 	__u64 value;
- };
- 
+@@ -71,6 +71,12 @@ addr		{ return sample(PERF_SAMPLE_ADDR); }
+ period		{ return sample(PERF_SAMPLE_PERIOD); }
+ txn		{ return sample(PERF_SAMPLE_TRANSACTION); }
+ weight		{ return sample(PERF_SAMPLE_WEIGHT); }
++weight1		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 1); }
++weight2		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 2); }
++weight3		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); }
++ins_lat		{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 2); } /* alias for weight2 */
++p_stage_cyc	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for weight3 */
++retire_lat	{ return sample_part(PERF_SAMPLE_WEIGHT_STRUCT, 3); } /* alias for weight3 */
+ phys_addr	{ return sample(PERF_SAMPLE_PHYS_ADDR); }
+ code_pgsz	{ return sample(PERF_SAMPLE_CODE_PAGE_SIZE); }
+ data_pgsz	{ return sample(PERF_SAMPLE_DATA_PAGE_SIZE); }
 diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-index c07256279c3e..dddf38c27bb7 100644
+index dddf38c27bb7..d930401c5bfc 100644
 --- a/tools/perf/util/bpf_skel/sample_filter.bpf.c
 +++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-@@ -40,7 +40,10 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
- 	case PERF_SAMPLE_ID:
- 		return kctx->data->id;
- 	case PERF_SAMPLE_TID:
--		return kctx->data->tid_entry.tid;
-+		if (entry->part)
-+			return kctx->data->tid_entry.pid;
-+		else
-+			return kctx->data->tid_entry.tid;
- 	case PERF_SAMPLE_CPU:
- 		return kctx->data->cpu_entry.cpu;
- 	case PERF_SAMPLE_TIME:
+@@ -54,6 +54,14 @@ static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *kctx,
+ 		return kctx->data->period;
+ 	case PERF_SAMPLE_TRANSACTION:
+ 		return kctx->data->txn;
++	case PERF_SAMPLE_WEIGHT_STRUCT:
++		if (entry->part == 1)
++			return kctx->data->weight.var1_dw;
++		if (entry->part == 2)
++			return kctx->data->weight.var2_w;
++		if (entry->part == 3)
++			return kctx->data->weight.var3_w;
++		/* fall through */
+ 	case PERF_SAMPLE_WEIGHT:
+ 		return kctx->data->weight.full;
+ 	case PERF_SAMPLE_PHYS_ADDR:
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
