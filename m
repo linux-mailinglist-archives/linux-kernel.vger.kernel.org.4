@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C682D6AE455
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A946AE45F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjCGPSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:18:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
+        id S231132AbjCGPSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:18:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjCGPRf (ORCPT
+        with ESMTP id S230400AbjCGPRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:17:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA4448E25
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:13:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678201999;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WvISTS/f4ZrOg4Qn5jDzcftulng+Jaj+2XVbo0ebuCg=;
-        b=DHrBC22zzCIzS2hQW1YNBk1sQPnLpMYb3JQtDDor0lUlzByubQeo/SiTiVFGjXNSwpAlAG
-        HQ+ikHg4NpkKHUhykXytYijnx1d3V/54CLQP+axhfo2DwpeA45dQmS7l0rjJP/dIhkVEW/
-        USfgjIrwHEXHV47wnMpqaze6mQZ9iFM=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-336-okAT5TNxNRqkrnHfZ_keTQ-1; Tue, 07 Mar 2023 10:13:13 -0500
-X-MC-Unique: okAT5TNxNRqkrnHfZ_keTQ-1
-Received: by mail-qk1-f200.google.com with SMTP id dm13-20020a05620a1d4d00b00742a22c4239so7583756qkb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:13:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678201992;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WvISTS/f4ZrOg4Qn5jDzcftulng+Jaj+2XVbo0ebuCg=;
-        b=QldcJR0pymEzxOG7r480/CAXbT2m+qdFEGPI7BRmVCKIYBWeXniGUhj9LUDN5NoU3J
-         WaeSnNaNdMKBBBmZ4wJZ/XuM/vgioDOmXxYKknaVGq2bYrOl7T9wtQB3fpGsMM7qqODo
-         lBtR/EtYG1hJin8BdFsmtmcLuYFNHaEA21dUgq1h1o1RYQRmvYb4e6kj8F7v0F7EgOF/
-         hC9JIPlqpoqv+EIt1qJ9/Ni8CFuXyP+wigLq3yt1wuh055vUxs8BLmH8pq4ByPE5dMLZ
-         SU4G0GApgzmjtcO31qPQp+XUmaSZgIbGRpNjKYTkDMmPhLDhnPViGmL3Uh6Td8m5qZLp
-         Wdsg==
-X-Gm-Message-State: AO0yUKUWaGhcXvwgG4gbpVgeThqdVGkUd81fiFjeJzmaGqx6QQQ82K4V
-        JZl2XR5gj4PCZlHcqx8i18FZFNPJjQOFWpw1iMSL/TuecEIbM8DpgG2CofpIqzCKTpJjYopo3Iw
-        vHEaExXZFTk20CgyeyFp4BEDX
-X-Received: by 2002:a05:622a:1443:b0:3bf:c994:c9b6 with SMTP id v3-20020a05622a144300b003bfc994c9b6mr23589674qtx.29.1678201992402;
-        Tue, 07 Mar 2023 07:13:12 -0800 (PST)
-X-Google-Smtp-Source: AK7set9TmvzsR4HqKIqb+BcjJiWtp9AaRyGnpSJemAFjbkf0yUgxhC8H5Nq/lMkoHAF+O/d53/mIuQ==
-X-Received: by 2002:a05:622a:1443:b0:3bf:c994:c9b6 with SMTP id v3-20020a05622a144300b003bfc994c9b6mr23589642qtx.29.1678201992132;
-        Tue, 07 Mar 2023 07:13:12 -0800 (PST)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id d79-20020ae9ef52000000b007296805f607sm9712804qkg.17.2023.03.07.07.13.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 07:13:11 -0800 (PST)
-From:   Tom Rix <trix@redhat.com>
-To:     martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, nathan@kernel.org,
-        ndesaulniers@google.com, joannelkoong@gmail.com
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] bpf: extend btf id list
-Date:   Tue,  7 Mar 2023 10:12:39 -0500
-Message-Id: <20230307151239.1994179-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 7 Mar 2023 10:17:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D521499D;
+        Tue,  7 Mar 2023 07:14:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 130F960E93;
+        Tue,  7 Mar 2023 15:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8682EC4339C;
+        Tue,  7 Mar 2023 15:14:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678202089;
+        bh=JR9By7TqD68NUWsozTFvETKhHnJ6NH8v+yJVvkVzOps=;
+        h=From:Date:Subject:To:Cc:From;
+        b=qnpmnBdmeVbcm4fbFN0ouYx5E7pUBwv1ALU5PxHBAmMQ4eJrp7DcHr2bbFGtGlqKC
+         HFB5+TVTk1S7vPeQERbYiuE7pIWXXaNfrhb0ZdmVjvs/8QuFI1y7e9vF9c6zTGd/gx
+         oEoJPMC4L+LD/QDSjiavR1sK3eWuAsU2NshtXlgbz/GWHvtu/J4UFVaENNaUV9LAD8
+         C6IEXk4CGrfESKH7rxbcGF+6Bu8Vme6mWm1MsRYLTfjqYQ8sXWHGAgXO2JFZikbjxV
+         fiCIdVTe2HTDtpJ5gCY1UwdyB0KJAPEYtWyJiTHEnlCIGQ1XAh7lhKdySeZ5U1Omsb
+         KiNpr5bB2gD0A==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Tue, 07 Mar 2023 08:14:06 -0700
+Subject: [PATCH bpf-next] bpf: Increase size of BTF_ID_LIST without
+ CONFIG_DEBUG_INFO_BTF again
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230307-bpf-kfuncs-warray-bounds-v1-1-00ad3191f3a6@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAL1UB2QC/x2N0QrCMBAEf6XcswcxFSr+iviQpBsbxLTctbVS+
+ u8mPg7Dzu6kkASlW7OTYE2axlzgfGooDC4/wakvTNbY1rSmYz9FfsUlB+WPE3Ff9uOSe+VgzcX
+ gCnQAlbl3Cvbichhq4O10hlQxCWLa/p93qrmMbabHcfwA7VJoAY0AAAA=
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
+Cc:     martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, ndesaulniers@google.com,
+        trix@redhat.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1971; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=JR9By7TqD68NUWsozTFvETKhHnJ6NH8v+yJVvkVzOps=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCnsIS9MpK98mS7Le0Q9eu0KLUs7sf7jT/8/DPzhqd0v7
+ XpuckZqRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhIQTLDf4eoO2y6866tdarR
+ KLtzYuFlx8aQ1Mv2Xbe3qh9zM8jkOcXwm22F+E1ViX3ZHRpuHtHLRNUqd5jVfue5f2Vmo+Tfzlh
+ DDgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With clang and W=1, there is this error
+After commit 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and
+bpf_dynptr_slice_rdwr"), clang builds without CONFIG_DEBUG_INFO_BTF
+warn:
 
-kernel/bpf/verifier.c:10298:24: error: array index 16 is past
- the end of the array (that has type 'u32[16]'
- (aka 'unsigned int[16]')) [-Werror,-Warray-bounds]
-    meta.func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
-                    ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
-kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared here
-BTF_ID_LIST(special_kfunc_list)
-^
-./include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
- #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
+  kernel/bpf/verifier.c:10298:24: warning: array index 16 is past the end of the array (that has type 'u32[16]' (aka 'unsigned int[16]')) [-Warray-bounds]
+                                     meta.func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
+                                                     ^                  ~~~~~~~~~~~~~~~~~~~~~~~~
+  kernel/bpf/verifier.c:9150:1: note: array 'special_kfunc_list' declared here
+  BTF_ID_LIST(special_kfunc_list)
+  ^
+  include/linux/btf_ids.h:207:27: note: expanded from macro 'BTF_ID_LIST'
+  #define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
+                            ^
+  1 warning generated.
 
-When KF_bpf_dynptr_slice_rdwr was added to the enum special_kfunc_type
-the total exceeded 16.  Increase the array size to 32.
+A warning of this nature was previously addressed by
+commit beb3d47d1d3d ("bpf: Fix a BTF_ID_LIST bug with
+CONFIG_DEBUG_INFO_BTF not set") but there have been new kfuncs added
+since then.
 
-Fixes: 66e3a13e7c2c ("bpf: Add bpf_dynptr_slice and bpf_dynptr_slice_rdwr")
-Signed-off-by: Tom Rix <trix@redhat.com>
+Quadruple the size of the CONFIG_DEBUG_INFO_BTF=n definition so that
+this problem is unlikely to show up for some time.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1810
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
  include/linux/btf_ids.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 3a4f7cd882ca..166c387b48f7 100644
+index 3a4f7cd882ca..00950cc03bff 100644
 --- a/include/linux/btf_ids.h
 +++ b/include/linux/btf_ids.h
 @@ -204,7 +204,7 @@ extern struct btf_id_set8 name;
@@ -110,10 +106,16 @@ index 3a4f7cd882ca..166c387b48f7 100644
  #else
  
 -#define BTF_ID_LIST(name) static u32 __maybe_unused name[16];
-+#define BTF_ID_LIST(name) static u32 __maybe_unused name[32];
++#define BTF_ID_LIST(name) static u32 __maybe_unused name[64];
  #define BTF_ID(prefix, name)
  #define BTF_ID_FLAGS(prefix, name, ...)
  #define BTF_ID_UNUSED
+
+---
+base-commit: 36e5e391a25af28dc1f4586f95d577b38ff4ed72
+change-id: 20230307-bpf-kfuncs-warray-bounds-c2040e8ee7ee
+
+Best regards,
 -- 
-2.27.0
+Nathan Chancellor <nathan@kernel.org>
 
