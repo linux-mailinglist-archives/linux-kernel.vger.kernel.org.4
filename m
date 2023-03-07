@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E595B6AE7B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DFE6AE7B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjCGQ7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:59:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
+        id S231406AbjCGQ76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjCGQ6M (ORCPT
+        with ESMTP id S230482AbjCGQ6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Mar 2023 11:58:12 -0500
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F95190096;
-        Tue,  7 Mar 2023 08:54:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551E89009A;
+        Tue,  7 Mar 2023 08:54:59 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B623EC0009;
-        Tue,  7 Mar 2023 16:54:53 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8EB8FC0007;
+        Tue,  7 Mar 2023 16:54:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678208096;
+        t=1678208097;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+8KBJRUvcteGrcXB2dPcvKQXMIPPTo96B4W8ORMytWg=;
-        b=Yr3FZKImd9D4HbqsfoBk+mm8YZ/3s9YDFloLhooDu8S0DJb9p7XI3IyDJhfleAo+qg35Bi
-        8/K6+gW/14Vf/d6aLcW+pC00XS2IKd44eMKPluCRRysIVFfQt54WzmosQ3goHCY8TC0k+Z
-        MFpqlpp1klW8YbDHfdetOf5/r7t+oynKqp+8+VzPOb20UNl/SgrvJWyx6gRphzsJtPCoXZ
-        4vchA9z9vNyXyviwQjM6R8uuyONisbqDI9ZTFLQIdJxM/2lqSRnVXOJZlOwaUKzTdAhd8a
-        yI41jVNW5w2ay/TGDE/7uKUjjj3tTl5u7+H2GoLS7KZGeKSDSrm17r0XM5qbEQ==
+        bh=DwN8++5oxOIgSYePzy5PVeFCPn/l7NHxvR0eNwHxoIY=;
+        b=AJ2YizgdA7smSYMK0mDqF39mE19zmeIEJ0v3fdjJG7WZJYpCKYZdEXUNUUVTY61WQqWLKX
+        SkKeYZtx2bIgdv8/eiR+l9oIIr9huk3BEdkYQbmlqQY1kucxiqHh/Br0TWU2iJbFykXQk3
+        NuGTK45+jel8ZsbCm1vV9fXAiF9/Y3Aq/ecHSsUamlDw+2zYMrgaVWhaSZEDuojV7vl29C
+        ECOOkIDlOJ8seAaevB3xXCYb0FGjzvCfgwP+LqjLwfZhgVhxuPoY9Zoh4/+bLD72BoGOko
+        TN3Es7PhgYoA79GLaQeDTc7VM3VriNCosLrQLnPKBCB54pRAqmejC1v+5ORqKQ==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         <linux-kernel@vger.kernel.org>
@@ -43,9 +43,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v2 15/21] nvmem: imx-ocotp: replace global post processing with layouts
-Date:   Tue,  7 Mar 2023 17:53:53 +0100
-Message-Id: <20230307165359.225361-16-miquel.raynal@bootlin.com>
+Subject: [PATCH v2 16/21] nvmem: cell: drop global cell_post_process
+Date:   Tue,  7 Mar 2023 17:53:54 +0100
+Message-Id: <20230307165359.225361-17-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230307165359.225361-1-miquel.raynal@bootlin.com>
 References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
@@ -62,81 +62,70 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-In preparation of retiring the global post processing hook change this
-driver to use layouts. The layout will be supplied during registration
-and will be used to add the post processing hook to all added cells.
+There are no users anymore for the global cell_post_process callback
+anymore. New users should use proper nvmem layouts.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Tested-by: Michael Walle <michael@walle.cc> # on kontron-pitx-imx8m
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/nvmem/imx-ocotp.c | 30 +++++++++++++++++++-----------
- 1 file changed, 19 insertions(+), 11 deletions(-)
+ drivers/nvmem/core.c           | 9 ---------
+ include/linux/nvmem-provider.h | 2 --
+ 2 files changed, 11 deletions(-)
 
-diff --git a/drivers/nvmem/imx-ocotp.c b/drivers/nvmem/imx-ocotp.c
-index e9b52ecb3f72..ac0edb6398f1 100644
---- a/drivers/nvmem/imx-ocotp.c
-+++ b/drivers/nvmem/imx-ocotp.c
-@@ -225,18 +225,13 @@ static int imx_ocotp_read(void *context, unsigned int offset,
- static int imx_ocotp_cell_pp(void *context, const char *id, int index,
- 			     unsigned int offset, void *data, size_t bytes)
- {
--	struct ocotp_priv *priv = context;
-+	u8 *buf = data;
-+	int i;
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 82e11b9576ad..31d1d10c0e1c 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -39,7 +39,6 @@ struct nvmem_device {
+ 	unsigned int		nkeepout;
+ 	nvmem_reg_read_t	reg_read;
+ 	nvmem_reg_write_t	reg_write;
+-	nvmem_cell_post_process_t cell_post_process;
+ 	struct gpio_desc	*wp_gpio;
+ 	struct nvmem_layout	*layout;
+ 	void *priv;
+@@ -903,7 +902,6 @@ struct nvmem_device *nvmem_register(const struct nvmem_config *config)
+ 	nvmem->type = config->type;
+ 	nvmem->reg_read = config->reg_read;
+ 	nvmem->reg_write = config->reg_write;
+-	nvmem->cell_post_process = config->cell_post_process;
+ 	nvmem->keepout = config->keepout;
+ 	nvmem->nkeepout = config->nkeepout;
+ 	if (config->of_node)
+@@ -1576,13 +1574,6 @@ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+ 			return rc;
+ 	}
  
- 	/* Deal with some post processing of nvmem cell data */
--	if (id && !strcmp(id, "mac-address")) {
--		if (priv->params->reverse_mac_address) {
--			u8 *buf = data;
--			int i;
--
--			for (i = 0; i < bytes/2; i++)
--				swap(buf[i], buf[bytes - i - 1]);
--		}
+-	if (nvmem->cell_post_process) {
+-		rc = nvmem->cell_post_process(nvmem->priv, id, index,
+-					      cell->offset, buf, cell->bytes);
+-		if (rc)
+-			return rc;
 -	}
-+	if (id && !strcmp(id, "mac-address"))
-+		for (i = 0; i < bytes / 2; i++)
-+			swap(buf[i], buf[bytes - i - 1]);
+-
+ 	if (len)
+ 		*len = cell->bytes;
  
- 	return 0;
- }
-@@ -488,7 +483,6 @@ static struct nvmem_config imx_ocotp_nvmem_config = {
- 	.stride = 1,
- 	.reg_read = imx_ocotp_read,
- 	.reg_write = imx_ocotp_write,
--	.cell_post_process = imx_ocotp_cell_pp,
- };
- 
- static const struct ocotp_params imx6q_params = {
-@@ -595,6 +589,17 @@ static const struct of_device_id imx_ocotp_dt_ids[] = {
- };
- MODULE_DEVICE_TABLE(of, imx_ocotp_dt_ids);
- 
-+static void imx_ocotp_fixup_cell_info(struct nvmem_device *nvmem,
-+				      struct nvmem_layout *layout,
-+				      struct nvmem_cell_info *cell)
-+{
-+	cell->read_post_process = imx_ocotp_cell_pp;
-+}
-+
-+struct nvmem_layout imx_ocotp_layout = {
-+	.fixup_cell_info = imx_ocotp_fixup_cell_info,
-+};
-+
- static int imx_ocotp_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -619,6 +624,9 @@ static int imx_ocotp_probe(struct platform_device *pdev)
- 	imx_ocotp_nvmem_config.size = 4 * priv->params->nregs;
- 	imx_ocotp_nvmem_config.dev = dev;
- 	imx_ocotp_nvmem_config.priv = priv;
-+	if (priv->params->reverse_mac_address)
-+		imx_ocotp_nvmem_config.layout = &imx_ocotp_layout;
-+
- 	priv->config = &imx_ocotp_nvmem_config;
- 
- 	clk_prepare_enable(priv->clk);
+diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+index be81cc88eabc..d3d7af86a283 100644
+--- a/include/linux/nvmem-provider.h
++++ b/include/linux/nvmem-provider.h
+@@ -85,7 +85,6 @@ struct nvmem_cell_info {
+  * @no_of_node:	Device should not use the parent's of_node even if it's !NULL.
+  * @reg_read:	Callback to read data.
+  * @reg_write:	Callback to write data.
+- * @cell_post_process:	Callback for vendor specific post processing of cell data
+  * @size:	Device size.
+  * @word_size:	Minimum read/write access granularity.
+  * @stride:	Minimum read/write access stride.
+@@ -118,7 +117,6 @@ struct nvmem_config {
+ 	bool			no_of_node;
+ 	nvmem_reg_read_t	reg_read;
+ 	nvmem_reg_write_t	reg_write;
+-	nvmem_cell_post_process_t cell_post_process;
+ 	int	size;
+ 	int	word_size;
+ 	int	stride;
 -- 
 2.34.1
 
