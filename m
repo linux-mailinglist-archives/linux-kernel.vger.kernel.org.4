@@ -2,115 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E946ADD76
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BC36ADD88
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjCGLck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:32:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
+        id S231129AbjCGLfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbjCGLch (ORCPT
+        with ESMTP id S231139AbjCGLeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:32:37 -0500
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A52251CBB;
-        Tue,  7 Mar 2023 03:31:59 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3277tv94022730;
-        Tue, 7 Mar 2023 05:30:19 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=8Gw+hMjGj1I9H2fg3ljNbnH8D9RaMuxw0VHL6fBZJv4=;
- b=RLWayBHYAC3WRv9HPpNTERg+r3oTqRoc1PhTaiH7YBIi+g27pmBKE71aOiAvS27S3N07
- +QHcy5hOfjEbFGHVcXXvt9qIN3WGOS3Bqlri7NiCAQhOhMOgUcVD/jtynzPS4OAO8V4x
- y0soTVGFyQ8h0rjtQN8pahOoaJaEwQF+b1XRYG7PlC2fH/BI33BVKPohDXEuq+sfwinQ
- st9ocuKEdqcae/7gnnLT1gkEC3NHxNf2+QnaoIAl+yku5tDVskg+wvMD2woy7I197Y8b
- atlA+qMh5usVUKVHiqBqRp3egA8oAV2JdrRPRQRVEwGGY4zU2uz2Qv/12AeFgHJufFHL 1A== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3p4497427y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 05:30:19 -0600
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Tue, 7 Mar
- 2023 05:30:16 -0600
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 7 Mar 2023 05:30:16 -0600
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C72ED11D3;
-        Tue,  7 Mar 2023 11:30:16 +0000 (UTC)
-Date:   Tue, 7 Mar 2023 11:30:16 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-CC:     <perex@perex.cz>, <tiwai@suse.com>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <james.schulman@cirrus.com>,
-        <david.rhodes@cirrus.com>, <tanureal@opensource.cirrus.com>,
-        <rf@opensource.cirrus.com>, <oder_chiou@realtek.com>,
-        <shengjiu.wang@gmail.com>, <Xiubo.Lee@gmail.com>,
-        <festevam@gmail.com>, <nicoleotsuka@gmail.com>,
-        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
-        <kernel@pengutronix.de>, <linux-imx@nxp.com>,
-        <cezary.rojewski@intel.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <peter.ujfalusi@linux.intel.com>,
-        <yung-chuan.liao@linux.intel.com>,
-        <ranjani.sridharan@linux.intel.com>,
-        <kai.vehmanen@linux.intel.com>, <matthias.bgg@gmail.com>,
-        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
-        <vkoul@kernel.org>, <daniel.baluta@nxp.com>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <jarkko.nikula@bitmer.com>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <sound-open-firmware@alsa-project.org>,
-        <linux-tegra@vger.kernel.org>, <linux-omap@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: do not include pm_runtime.h if not used
-Message-ID: <20230307113016.GS68926@ediswmail.ad.cirrus.com>
-References: <20230307103022.1007420-1-claudiu.beznea@microchip.com>
+        Tue, 7 Mar 2023 06:34:46 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C7032CE2;
+        Tue,  7 Mar 2023 03:33:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678188824; x=1709724824;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xylpS4dMHvwStOXeEA691mA7Cx1+UtxKNUF6D05Th1k=;
+  b=BYcPsIrrsoLF9jSky3eECHOFdGnIQ8xZJQyLdQoEIfmOuxk65d0t1dRT
+   0sYWHjpfpOGXGTk4uESAIkwhMDZAZCQucRNC/FoZMuJZmsLN+0lAEJVbV
+   wsOsXRlDjV0hiWNFPkm+QPueP+GcxaPSss9atms0QN9X+6za8jSdK68hn
+   2M3hOLed/U2FzO5bWM4+X+wGdAsaHI+YEv/cy1X2fuRVc6boGBDxA2YEb
+   iD9HZ9FBJF2l6k4Fck/1G+2XGELfu9P/k1KRk6DpRK1cKL9s3u6pQKZ9k
+   P9V63GT/1jjcM4zMudYlbCMJJda7JoOGM2Q2ZPgXdraNhaz4TQ3nO1Mgd
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="338151866"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="338151866"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 03:33:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="653947214"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="653947214"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 07 Mar 2023 03:33:03 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZVZ0-0001GJ-0s;
+        Tue, 07 Mar 2023 11:33:02 +0000
+Date:   Tue, 7 Mar 2023 19:32:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Vipin Sharma <vipinsh@google.com>, seanjc@google.com,
+        pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com
+Cc:     oe-kbuild-all@lists.linux.dev, jmattson@google.com,
+        mizhang@google.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
+Subject: Re: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU
+ page caches globally
+Message-ID: <202303071940.sFeQ4FpU-lkp@intel.com>
+References: <20230306224127.1689967-4-vipinsh@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307103022.1007420-1-claudiu.beznea@microchip.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-GUID: 8AhJH_Etb0kWl8-U4QDOKiyr044l28y7
-X-Proofpoint-ORIG-GUID: 8AhJH_Etb0kWl8-U4QDOKiyr044l28y7
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230306224127.1689967-4-vipinsh@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 12:30:22PM +0200, Claudiu Beznea wrote:
-> Do not include pm_runtime.h header in files where runtime PM support is
-> not implemented.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
->  sound/soc/codecs/cs35l45.h                                | 1 -
-> diff --git a/sound/soc/codecs/cs35l45.h b/sound/soc/codecs/cs35l45.h
-> index 53fe9d2b7b15..0555702eac03 100644
-> --- a/sound/soc/codecs/cs35l45.h
-> +++ b/sound/soc/codecs/cs35l45.h
-> @@ -11,7 +11,6 @@
->  #ifndef CS35L45_H
->  #define CS35L45_H
->  
-> -#include <linux/pm_runtime.h>
->  #include <linux/regmap.h>
->  #include <linux/regulator/consumer.h>
->  
+Hi Vipin,
 
-cs35l45 does already make use of some functions from that header,
-and more support is in the process of being upstreamed. So this
-part should be dropped.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks,
-Charles
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvmarm/next linus/master v6.3-rc1 next-20230307]
+[cannot apply to mst-vhost/linux-next kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vipin-Sharma/KVM-x86-mmu-Change-KVM-mmu-shrinker-to-no-op/20230307-064510
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20230306224127.1689967-4-vipinsh%40google.com
+patch subject: [Patch v4 03/18] KVM: x86/mmu: Track count of pages in KVM MMU page caches globally
+config: i386-randconfig-a003-20230306 (https://download.01.org/0day-ci/archive/20230307/202303071940.sFeQ4FpU-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/511e837798da25063830276b8a3345c7601c6459
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Vipin-Sharma/KVM-x86-mmu-Change-KVM-mmu-shrinker-to-no-op/20230307-064510
+        git checkout 511e837798da25063830276b8a3345c7601c6459
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 olddefconfig
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303071940.sFeQ4FpU-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> arch/x86/kvm/mmu/mmu.c:676: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Caller should hold mutex lock corresponding to cache, if available.
+   arch/x86/kvm/mmu/mmu.c:693: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * Caller should hold mutex lock corresponding to kvm_mmu_memory_cache, if
+   arch/x86/kvm/mmu/mmu.c:1404: warning: Function parameter or member 'kvm' not described in 'kvm_arch_mmu_enable_log_dirty_pt_masked'
+   arch/x86/kvm/mmu/mmu.c:1404: warning: Function parameter or member 'slot' not described in 'kvm_arch_mmu_enable_log_dirty_pt_masked'
+   arch/x86/kvm/mmu/mmu.c:1404: warning: Function parameter or member 'gfn_offset' not described in 'kvm_arch_mmu_enable_log_dirty_pt_masked'
+   arch/x86/kvm/mmu/mmu.c:1404: warning: Function parameter or member 'mask' not described in 'kvm_arch_mmu_enable_log_dirty_pt_masked'
+
+
+vim +676 arch/x86/kvm/mmu/mmu.c
+
+   674	
+   675	/**
+ > 676	 * Caller should hold mutex lock corresponding to cache, if available.
+   677	 */
+   678	static int mmu_topup_sp_memory_cache(struct kvm_mmu_memory_cache *cache,
+   679					     int min)
+   680	{
+   681		int orig_nobjs, r;
+   682	
+   683		orig_nobjs = cache->nobjs;
+   684		r = kvm_mmu_topup_memory_cache(cache, min);
+   685		if (orig_nobjs != cache->nobjs)
+   686			percpu_counter_add(&kvm_total_unused_cached_pages,
+   687					   (cache->nobjs - orig_nobjs));
+   688	
+   689		return r;
+   690	}
+   691	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
