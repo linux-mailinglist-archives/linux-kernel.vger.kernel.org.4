@@ -2,191 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA8C6AF7BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D3C6AF7C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjCGVfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:35:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43274 "EHLO
+        id S230110AbjCGVgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:36:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCGVfW (ORCPT
+        with ESMTP id S229956AbjCGVf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:35:22 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80C05943F;
-        Tue,  7 Mar 2023 13:35:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678224918; x=1709760918;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=4elv+gvVeWWcJ7WJmdjLRu86h5q421ZQa7kTQHBYc90=;
-  b=RrHPkM2sayiNh+ZysrO/PWFpwd0ngPsUMaWVDSDXZgmWcMqK3p+9Ebiw
-   dIaxrDt1dc2nzJZWsSP5YULM1ZC6RwZ5aB3a4nSOY2j9H2BWAiV4n0YKw
-   1RqRsO3PKBxMLPbsb+1zbPHNBCddigle+jfhW5JV0h1mNBD6IW8zBk3rk
-   EnYyJwD2x8trs4Ogm//uAOyuvstYkjPNnXw7oPiO9vofBRegUuykIYmuN
-   S6SGeSAoY1oLa3vqIRS+ryncZSwjiba+POL04OS5G1aTeBwQlUuMQBXQy
-   71bF/OlHfH+lRPLL1u8H1DsQ+IQc4v9e0FVVBaN5GWi4WCQbKOV5dkml3
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="334694814"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="334694814"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:35:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="819924858"
-X-IronPort-AV: E=Sophos;i="5.98,242,1673942400"; 
-   d="scan'208";a="819924858"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga001.fm.intel.com with ESMTP; 07 Mar 2023 13:35:17 -0800
-Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 7 Mar 2023 13:35:16 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 7 Mar 2023 13:35:16 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.41) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 7 Mar 2023 13:35:15 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A2GZVuOICArmQ7Dce51XuNoEjbNO81uHpLAHUcTJxlr8ar8YNrpLcl23OU0WyT74y1a1ct0+ZwuwtQakmNsGZQyFZGihqNwVeOHT1xw8r/WN3ksafQazgHjNdfS02yGJyG4HL6D+72j7O3XrO62fOLcleNwjkKp21ZoPMEO4J/NSCbxDYBvtGOe93UUv72zkNppDHEfqrWwtWuwy9kj3aHZN/OPa/7zs+FxNiG4v4n8JeFvRP5DZNlDiEIHohrMCDD9Uu3b5thwdD48VPXofFO2niFI8QvAJuCicTMFsfQSKRe/NbNqNmv3/ULPJz7lLKB3VrLYksHuUO/txKFwxMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4elv+gvVeWWcJ7WJmdjLRu86h5q421ZQa7kTQHBYc90=;
- b=gWLiqdNfIDmPGTC1hpXS4kf/GTsKi0It44OQLuDe92hkeLVC14sE05lltMR8maFmJj34GxTL88POOLCBFS0o9t+RlJWialpFcK9+SyTMNK4lak6I7/xbRj2JFE12USSh8Rh3aNk2sARvV7nddVLmvvtKm4SPkV3bsfI4KpRjSUu7DS6sAml7tjV1vEmxKV3aPEUbN92Hni5X+7ZhNe89hfyD8pM5UxpnTtTOyX4+aM1bdZE0Dz7IpG99Aaj2mTANc9sbJWE3FlI2Zf6QXuF9fFd395RItIs3yKkvtl2SEhO/Tk4gyxtouAAu836rV62aBy/mGQ45sHAdEDZzwWNAqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by SA1PR11MB6568.namprd11.prod.outlook.com (2603:10b6:806:253::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.28; Tue, 7 Mar
- 2023 21:35:13 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::ee6a:b9b2:6f37:86a1]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::ee6a:b9b2:6f37:86a1%8]) with mapi id 15.20.6156.019; Tue, 7 Mar 2023
- 21:35:13 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        Jakub Jelinek <jakub@redhat.com>
-CC:     Segher Boessenkool <segher@kernel.crashing.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "peternewman@google.com" <peternewman@google.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "babu.moger@amd.com" <babu.moger@amd.com>,
-        "ananth.narayan@amd.com" <ananth.narayan@amd.com>,
-        "vschneid@redhat.com" <vschneid@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>
-Subject: RE: [PATCH] x86/resctrl: avoid compiler optimization in
- __resctrl_sched_in
-Thread-Topic: [PATCH] x86/resctrl: avoid compiler optimization in
- __resctrl_sched_in
-Thread-Index: AQHZTiWcwVo9jaQOt0u1ztY/yRpe/a7tql4AgADNkgCAAL2tgIAAd3MAgAAhmACAAAL3gIAAA3SAgAAHhrA=
-Date:   Tue, 7 Mar 2023 21:35:12 +0000
-Message-ID: <SJ1PR11MB60835681E8FE389EC0A1825DFCB79@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20230303231133.1486085-1-eranian@google.com>
- <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
- <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
- <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
- <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
- <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
- <CAHk-=whCA4-uc5WV_-68Mpmu-TiSv6fxkSjZ19zzcW9jpSxDvA@mail.gmail.com>
-In-Reply-To: <CAHk-=whCA4-uc5WV_-68Mpmu-TiSv6fxkSjZ19zzcW9jpSxDvA@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|SA1PR11MB6568:EE_
-x-ms-office365-filtering-correlation-id: d09f8fc5-1cf8-42d4-c0aa-08db1f53d59f
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qy19Ch/wotzyQg6auaTpFwn6dO7ynv++lwUXMxZavE9jgNwUl9NkttwbRI/5PUKZbST7b+B3WDkVaapVdr+ML8wbmU3SYvWTlutx3eYWm7CZZjm52ynJNlUGUpvud3NOpNldbP31GlNnY46HqOG8VyeaVg/TmXd+0VXu78pJSj3XFvefNzFtHVAYB7HSMdUYLzWGHOvbGqqwpUo1gi86zkcx+4b5dfI55WzMY//vcU5l2C8jkNFWwRRum8Z1Wqw6wqOQNJB/mCv4wCTq9m45RdAAqyzDDe13wJUqEler60tpyHthTfNmGYbQu6XN7VHoRenLlNPP6T2thGT8tTBrH6+nBKnIwhf314msm/FSSwNLZuzPBvV7DbPfb+gnVE4jRjKyjFZvxjSgtOpilel2km1Qpu3CwGEr2dN8f9Vi2dbcwIzuRiumAS5llBw5r4QXi/teaVzzsakEls1V5aViNQP0jvmqQXMctHVw1cG3EGH8uvSqkLHFZgqeVeyHDbgK0pllNlc+kur9UsfkcVttmDmwjLJFhmP+LRuK+gIUV48cONl8YhroWefNSRiTcV4eAziGNJul0fUzBh7/0/QiCA8YdrO+r/GohyZgy54Ihc1U1gIZX6rVtoGKRYSPZSJrtY9AdT52rv3mMmAlIuFbemP2mF/0ylQrbCFSM9Dgv6Xpat5CUVNV3LDOMn+q7DAVfop8qiSey5Qu0PMgCSRJAg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39860400002)(366004)(346002)(136003)(396003)(451199018)(52536014)(8936002)(7416002)(5660300002)(4744005)(41300700001)(66476007)(66446008)(66946007)(66556008)(76116006)(4326008)(64756008)(8676002)(2906002)(54906003)(110136005)(316002)(478600001)(71200400001)(7696005)(26005)(6506007)(186003)(55016003)(82960400001)(86362001)(33656002)(38070700005)(122000001)(38100700002)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QnBzUkw2N3VCUzZ1SEtaNXVuakFpRVdlQ0dQVHFnK2xYRGN2SXp6UThmbmdl?=
- =?utf-8?B?Y3ZMc0JCNGpXczZrMUh2WWJWUnh6cVRieHA5M0VETVFtVTN6dzFKc0lwQXN1?=
- =?utf-8?B?WGlZcGVyVDkwMFFvalYxY0kvUFJLbzc3T3NpNWhtVERrWm4zZUlQUEZ2eGJN?=
- =?utf-8?B?cDhNdW04SUhsR3lEeW1tYzBROUtEd0QwTHppdFV1enlJYk9Rb2M4WTdJczh4?=
- =?utf-8?B?eENkbGlYMkxmcWJ0TXFYQUJqd3RjWXRtL29TclZtUHoyV3FlbmNxQk44VlMv?=
- =?utf-8?B?aVFEZVMrQVR4MTBubHd1RS9jUE1oTy9BeGYxczVtdmNKRmhKTXREZ1hybG9W?=
- =?utf-8?B?MnZVbEpQQ3VSRGlMQWVNeFRMVGJJYzlyU21OWnhiR0V1bXFYZEtDcmZpSEJC?=
- =?utf-8?B?VkVrby9IakdnRVVWcmRQOWovay9LVEdtY3VCVlBJN0c3Q0JnbkFmeWRSMlIy?=
- =?utf-8?B?dWJNZmtaYU9BR1J3ZnBvMkthWG9YNW9TbURuSXJidllFZzFjUlk5RGhKRTJP?=
- =?utf-8?B?ZlNKRnNCME1aZjBjZ1lCTnkyRmdpS1JQeU42OW4wNnJLLzFDaWliYmtHM2cv?=
- =?utf-8?B?TWJXR1V2a1VvWTNyMzMzS2JxU0U2d2VZWkpLUkpaOFRaK2RRaUxyRHh4TGMx?=
- =?utf-8?B?QVAzTUFPSFFCL3c0am9HaFdLMEhkMm0vdmZsL2JqckdKcXZTQlE0YkRSek45?=
- =?utf-8?B?OWVST0s4Lzl0eE55bDBPdCtsbmVZT2tRYkkxYXlrb3VUMUZOUXRxdi9hZlNR?=
- =?utf-8?B?bW0vMjBUS3B1Rld1MkhrZUxXZ01lTTY0SWpZdW11aVNDUFZkYTJEOThDb2hh?=
- =?utf-8?B?ZmdzdjUzbVpIR2x2dHVMWHc2NlZGbERBSzV1VWgzUkEwNy90ZHV1Y2t4Q1FP?=
- =?utf-8?B?NUNuZjJ1VzlWSWtBQnpXbGluSXhJcEdnQWV0dHk4Sk10YUt2akxWWEhWUmU4?=
- =?utf-8?B?eHBlZjUxWGdIamRLTnZraHRuWVlrRXpuc1pDTGhqZ2VleSt6eXFBU1hVak52?=
- =?utf-8?B?M0p1Mm9NOS9VZkxGVEFtVVRIWnRtMmhUSW84alVGS1JSRFpUMnlTQ2QxTzBo?=
- =?utf-8?B?ZUpXUmJNUzR2MzI0MjQvOVJ0WVVEZFpDc3JDRG9Nd1JGZTlpclB2cGtIdisz?=
- =?utf-8?B?QUdQR0gvWkVnNE5ITHRnbW9naTgwZW8zYUFMRWEydWZaM0JPOFBYV3RobG4z?=
- =?utf-8?B?S0s5V09QeUNTT1N2OU1sMnlFU1o2NXY3c0NFNUVyV0RyMHdROTE0RWcyN1RK?=
- =?utf-8?B?bCtzZXFmdXRxcFNEdzdCSWZ0WTIzQWJhY3NaaXZPNURiN1orZkN6M0x3QTlo?=
- =?utf-8?B?Q2kxYjcrUDZxKzF2aVAzUHZlS3VQMVZ5bitrYTZqUVdsQ1VCdHRJQ2dCTk95?=
- =?utf-8?B?ZmV6UUNwMWdPUDdONzY5NnNPV0luWWl5V0tDdDBRVHY4U2NlTXBPVFo2YWw1?=
- =?utf-8?B?aTlkZXQwMUVzbUxKclQ2WHg3eHBEYStxMHZTTUgxRng4TFZJeDlEMXVHdzB2?=
- =?utf-8?B?WjNnWlB1dFJLVkNselBSMHFlMkJHRlpmcjlBV2RKODBvWDhoMG1MYmU4UnVY?=
- =?utf-8?B?TjZjdjE0RWlSaDl2OVE3NkhsdHlzalVMa2ZCemF1Z05BbEEyT1ZrS2VsYzJo?=
- =?utf-8?B?TGM3ZjVUOUZSWG9FN1hqYmdyMWNKWTh4Zk1KTmo1Z1JROTVZSy91WDF6US96?=
- =?utf-8?B?bWtOTVZKWTBrcHZ6Z2Jtd1BNV1BuQmx3a1RsY1gxcDlPQ1JzdGhnL2E2bk9p?=
- =?utf-8?B?aW55c1JXQ3hxSGhUNnBCK2x4ZGxWZEFnS293REhhTlFJM3BDdnpIZzkvaXZo?=
- =?utf-8?B?NmZPamNralhJTkNNci9wQjRwWkdEMUk2UnhHY2pBUStheWxVS0pLb2RhQjZx?=
- =?utf-8?B?bVRCMTlUekMwQXdwdkFUdkp4ck5FZmlZU2dFOEY5alJFY2lDUXYwL3JqYS9h?=
- =?utf-8?B?QkdwSmY0YW9kejBlVUtFYjhsMzRBMk5jRldBa2gybEdGbVBaWVEwRXVoMkIr?=
- =?utf-8?B?QVIyT290RzNybHA2aDF4SmVrNEw0dHhJY3lZdmwrN0x5Nk5iYU1SRFEzYVhB?=
- =?utf-8?B?Y0dqamh1UzkwemliQVVVMVNtdHN2WkpjWHRnWVBMTGYzTzhrRXhEbzdCRW9n?=
- =?utf-8?Q?zLDVRwe0rZTXQdfDLQpc/rO7Y?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d09f8fc5-1cf8-42d4-c0aa-08db1f53d59f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Mar 2023 21:35:12.9507
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dJvj/EuK7L4aWQ3BysoEUu4V30Tlo/N9seuzU8KuJs4xwdpQDdZHYg+gdpwIeCh9WlSOyjfg/FUrsP1EzKYY0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6568
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 7 Mar 2023 16:35:59 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A12A8808
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:35:49 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536c039f859so150658357b3.21
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 13:35:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678224948;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=UBRLflv0ERmYWEGxux8KOqlDY0ttAP+wczhdOTWc7q0=;
+        b=h6ePJYurdp6mVaZhTcXLSGIV8hbDFCoivfyXcPh2EeTMhPrB8iO8CL8lk5emJrslV2
+         pKzBWiayBqsS8mEOVZFdHBSYj12D/0YORA8xV8xvBeOt4igBBNkCFStqKkCWa0nOUYuE
+         ts2zPRkBvHy9+dF6i+GUCHQrOzoZYdaa5Va6KIcu67GB2GbWvI72A04YmpWm2juj8S9w
+         PP82f6TvEoOLLQ3RCxcawjj6/L6X8FVFX23WSronerhSVradTU3C3pMc+NZIm8PjWfMC
+         EVSfSeICTXRpw0grj8A5LL4cEcd0mK/pPFOu28fDkv0/tjGpVKm1P9lzf6Qp521CVqy3
+         Ag0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678224948;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UBRLflv0ERmYWEGxux8KOqlDY0ttAP+wczhdOTWc7q0=;
+        b=nr5dIUVr3f+Vp6SkobkUpW9Lp+oqDhZ4Hnognn0jT6XNjkBB1BO94d/rWHoA+IF1eI
+         JwEw6bFkJVQc0mU0BzS4psa2aQYc+b98IK9XdNaSkIBpF/r+d6rzQ+2lSHwP1CBJVxBM
+         HfEAuRZzxPY4lMnWOl0QB+v4T1SD/8eknafTAVdRuYhKyCxZ992Nr6v+nKRSFtFVoZUf
+         vyTc8doPzMEzFxW7KuD0v9xl5yATVP78Ka9REl+iJvUSudV7NKhvRKlW9ZvwkJ+jGDo4
+         FawUOt8I9pi7IBg8nWnoz8oXE5ujGF1lYwUXeqN8fd6BMB6G7YXDGGs9Y/tAEnIUa/cN
+         YLZg==
+X-Gm-Message-State: AO0yUKXzHKAjAQDqD0FAIrZj6JvVyZDPWk2tN0cG23lJaoXr7N/C6mBP
+        mzZiQv+Pvu2fODl97rJbh3xtSXQ=
+X-Google-Smtp-Source: AK7set/ZbRp1neaq/Th9h/MR15eb7wtXqy0EV4oqwdSkpMVPNAPt+XcwmOJdMWNOoS6hV/i6jm2sgzk=
+X-Received: from svv.mtv.corp.google.com ([2620:15c:211:202:94a9:c9e2:405f:e3be])
+ (user=svv job=sendgmr) by 2002:a5b:c84:0:b0:b1a:64ba:9cb5 with SMTP id
+ i4-20020a5b0c84000000b00b1a64ba9cb5mr1766785ybq.1.1678224948418; Tue, 07 Mar
+ 2023 13:35:48 -0800 (PST)
+Date:   Tue,  7 Mar 2023 13:35:36 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc0.216.gc4246ad0f0-goog
+Message-ID: <20230307213536.2299487-1-svv@google.com>
+Subject: [PATCH v2] Add rumble support to latest xbox controllers
+From:   Siarhei Vishniakou <svv@google.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Siarhei Vishniakou <svv@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPaywgc28gaGVyZSdzIGEgKnR0b2FsbHkqIHVudGVzdGVkIGFuZCBtaW5kbGVzcyBwYXRjaCB0
-byBtYXliZSBmaXgNCj4gd2hhdCBJIGRpc2xpa2UgYWJvdXQgdGhhdCByZXNjdGwgY29kZS4NCj4N
-Cj4gRG9lcyBpdCBmaXggdGhlIGNvZGUgZ2VuZXJhdGlvbiBpc3N1ZT8gSSBoYXZlIG5vIGlkZWEu
-IEJ1dCB0aGlzIGlzDQo+IHdoYXQgSSB3b3VsZCBzdWdnZXN0IGlzIHRoZSByaWdodCBhbnN3ZXIs
-IHdpdGhvdXQgYWN0dWFsbHkga25vd2luZyB0aGUNCj4gY29kZSBhbnkgYmV0dGVyLCBhbmQganVz
-dCBnb2luZyBvbiBhIG1pbmRsZXNzIHJhbXBhZ2UuDQo+DQo+IEl0IHNlZW1zIHRvIGNvbXBpbGUg
-Zm9yIG1lLCBmd2l3Lg0KDQpCZXlvbmQgY29tcGlsaW5nIGl0IGJvb3RzIGFuZCBwYXNzZXMgdGhl
-IHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3Jlc2N0cmwgdGVzdCBzdWl0ZS4NCg0KVGVzdGVkLWJ5
-OiBUb255IEx1Y2sgPHRvbnkubHVja0BpbnRlbC5jb20+DQoNCi1Ub255DQo=
+Currently, rumble is only supported via bluetooth on a single xbox
+controller, called 'model 1708'. On the back of the device, it's named
+'wireless controller for xbox one'. However, in 2021, Microsoft released
+a firmware update for this controller. As part of this update, the HID
+descriptor of the device changed. The product ID was also changed from
+0x02fd to 0x0b20. On this controller, rumble was supported via
+hid-microsoft, which matched against the old product id (0x02fd). As a
+result, the firmware update broke rumble support on this controller.
+
+The hid-microsoft driver actually supports rumble on the new firmware,
+as well. So simply adding new product id is sufficient to bring back
+this support.
+
+After discussing further with the xbox team, it was pointed out that
+another xbox controller, xbox elite series 2, can be supported in a
+similar way.
+
+Add rumble support for all of these devices in this patch. Two of the
+devices have received firmware updates that caused their product id's to
+change. Both old and new firmware versions of these devices were tested.
+
+The tested controllers are:
+
+1. 'wireless controller for xbox one', model 1708
+2. 'xbox wireless controller', model 1914. This is also sometimes
+   referred to as 'xbox series S|X'.
+3. 'elite series 2', model 1797.
+
+The tested configurations are:
+1. model 1708, pid 0x02fd (old firmware)
+2. model 1708, pid 0x0b20 (new firmware)
+3. model 1914, pid 0x0b13
+4. model 1797, pid 0x0b05 (old firmware)
+5. model 1797, pid 0x0b22 (new firmware)
+
+I verified rumble support on both bluetooth and usb.
+
+Signed-off-by: Siarhei Vishniakou <svv@google.com>
+Change-Id: I3337a7ab5f40759c85bf67bf0dbe5d4de31ce1ff
+---
+ drivers/hid/hid-ids.h       |  6 +++++-
+ drivers/hid/hid-microsoft.c | 11 ++++++++++-
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+index 053853a891c5..c9b75f8ba49a 100644
+--- a/drivers/hid/hid-ids.h
++++ b/drivers/hid/hid-ids.h
+@@ -903,7 +903,11 @@
+ #define USB_DEVICE_ID_MS_TYPE_COVER_2    0x07a9
+ #define USB_DEVICE_ID_MS_POWER_COVER     0x07da
+ #define USB_DEVICE_ID_MS_SURFACE3_COVER		0x07de
+-#define USB_DEVICE_ID_MS_XBOX_ONE_S_CONTROLLER	0x02fd
++#define USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1708	0x02fd
++#define USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1708_BLE	0x0b20
++#define USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1914	0x0b13
++#define USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1797	0x0b05
++#define USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1797_BLE	0x0b22
+ #define USB_DEVICE_ID_MS_PIXART_MOUSE    0x00cb
+ #define USB_DEVICE_ID_8BITDO_SN30_PRO_PLUS      0x02e0
+ 
+diff --git a/drivers/hid/hid-microsoft.c b/drivers/hid/hid-microsoft.c
+index 071fd093a5f4..9345e2bfd56e 100644
+--- a/drivers/hid/hid-microsoft.c
++++ b/drivers/hid/hid-microsoft.c
+@@ -446,7 +446,16 @@ static const struct hid_device_id ms_devices[] = {
+ 		.driver_data = MS_PRESENTER },
+ 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, 0x091B),
+ 		.driver_data = MS_SURFACE_DIAL },
+-	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_XBOX_ONE_S_CONTROLLER),
++
++	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1708),
++		.driver_data = MS_QUIRK_FF },
++	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1708_BLE),
++		.driver_data = MS_QUIRK_FF },
++	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1914),
++		.driver_data = MS_QUIRK_FF },
++	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1797),
++		.driver_data = MS_QUIRK_FF },
++	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_XBOX_CONTROLLER_MODEL_1797_BLE),
+ 		.driver_data = MS_QUIRK_FF },
+ 	{ HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_8BITDO_SN30_PRO_PLUS),
+ 		.driver_data = MS_QUIRK_FF },
+-- 
+2.40.0.rc0.216.gc4246ad0f0-goog
+
