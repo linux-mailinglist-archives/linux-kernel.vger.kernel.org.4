@@ -2,197 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B336AE385
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFE26AE38A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjCGO7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:59:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37840 "EHLO
+        id S229732AbjCGO74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCGO6g (ORCPT
+        with ESMTP id S229621AbjCGO7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:58:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDE09079F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:41:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678200113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=4ygI/x1GYEj/V+iFapis9+U0j5L90poPGMG3zDcgRww=;
-        b=bO/tBlCMZfGXnhVZXscOVHhf7E+TGy7MzcSrVCviwGEJSAev+3897++vtBHgLaWcb2PRZI
-        YA4yUnuwYkQnglWgAzJ4x9W3Ii0NESJshDJizeQhb+t1aqIid9EYBSFdHksj/Nw/tfbJ1M
-        LK9CkdL2gA4xhIPh4IyTLTo4sQU3rQs=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-541-kaWr1rxQOyyZl-RsEoeHCw-1; Tue, 07 Mar 2023 09:41:52 -0500
-X-MC-Unique: kaWr1rxQOyyZl-RsEoeHCw-1
-Received: by mail-yb1-f200.google.com with SMTP id c192-20020a25c0c9000000b0092aabd4fa90so14334563ybf.18
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 06:41:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678200112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ygI/x1GYEj/V+iFapis9+U0j5L90poPGMG3zDcgRww=;
-        b=WY3isE3+f+Hi2RFPCYar4goNkaEkt9kevXyfEr9NErb2koz9SrTcF3h9b2+075ypav
-         1Kf7c1CzPXxeXkcvZBq9xpKnSpSfeRxAtOOa9rTrtHPoIFR7qFrVjSrJ4lzjW6vufX11
-         oKAeHkhKQaQZpfczqR59QQ8YHwdT6M/EMBwHPDWAg28jp2opngJDdPyg8Daqip12hLFB
-         BIIqGSPBAtEnUdLbsFVad/ZiT+Jl91YnSEV1xfFyY+VcgwQYmxaChRrT1Rn9s9CqC8r9
-         aBfnEr+LTdJH0FStdnleRBVDSKoTY6OMnmTAkkd3zxzy4+KsygrP9tTJ1TTizdsBqh/5
-         UeQQ==
-X-Gm-Message-State: AO0yUKXZ62I2PwcwHYd2eygSPSVykQuu8Ty7uPiVZAnzRqeLaVsV1S9S
-        IGN6Pvp/CyTg6uKnJZKIqneVr3fKYjTibhynZ+sGv/0LJCqKLI32tbpQdFtwxIyyAtMtJCfrY/y
-        ysuPMe7udP9JE0vLMv2M83UcsjDJFUqebKB3JTWl0
-X-Received: by 2002:a81:af52:0:b0:52e:b48f:7349 with SMTP id x18-20020a81af52000000b0052eb48f7349mr9533930ywj.6.1678200112113;
-        Tue, 07 Mar 2023 06:41:52 -0800 (PST)
-X-Google-Smtp-Source: AK7set9ixXAAHHo/8o29LDnmEb5f6L2XNGBVYyCaZKFPomMROpar6Cg07AkJfPb1iOUBXcvRdnJgpJfRxV1yopb92kE=
-X-Received: by 2002:a81:af52:0:b0:52e:b48f:7349 with SMTP id
- x18-20020a81af52000000b0052eb48f7349mr9533913ywj.6.1678200111807; Tue, 07 Mar
- 2023 06:41:51 -0800 (PST)
+        Tue, 7 Mar 2023 09:59:33 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFF830DB;
+        Tue,  7 Mar 2023 06:42:54 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327Bkl0S012653;
+        Tue, 7 Mar 2023 14:42:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Fvo30gbRhGuaT9z0lbU6iqwACOjYaP9OqUzlO2c5XS8=;
+ b=hF7B9wigMBFHN3jiZ3XMdck5AkE8acHFz8zs5JQ7rmWaty0Ah+T5iTKwts/p/EyQdN9D
+ 9Kgxl5qiTzwEeHRpQ5yPZQjK1S4f0l67AcU1vukuCSVxdltMb81cjQmU1DcRfaD/coiF
+ 89fl+1+ntZ7xR6bvj4uYYWTfD+bQmOXmm9PaDLw16GkRoGGJioU2d7Y+T/09scojdWP4
+ 3bOE5aPZrufL1QuMwpD9lnTS8poKvAcRfHUE0Ve1Z6iStAM3XnqUWBwMRCyjEag11A4W
+ 9k/4VriUwAN7H0cgA05A2LQY7BIBRLzVZlO+NKP3aQcdV5d6wIsAceHYCBX8yuE6JAgW TA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p417k0b9q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 14:42:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 327EgdkW012791
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Mar 2023 14:42:39 GMT
+Received: from [10.216.11.93] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 7 Mar 2023
+ 06:42:29 -0800
+Message-ID: <1350dee1-a79d-6169-1eb7-4ab93f97c8d6@quicinc.com>
+Date:   Tue, 7 Mar 2023 20:12:25 +0530
 MIME-Version: 1.0
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Tue, 7 Mar 2023 15:41:15 +0100
-Message-ID: <CAJaqyWdSRksBh0PX-6Hz6Qy4EZ48zLYh79+_hROQn-7oo_fsww@mail.gmail.com>
-Subject: Emulated CVQ in vdpa-net framework
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Shannon Nelson <snelson@pensando.io>,
-        Gautam Dawar <gdawar@xilinx.com>,
-        Laurent Vivier <lvivier@redhat.com>,
-        Alvaro Karsz <alvaro.karsz@solid-run.com>,
-        Longpeng <longpeng2@huawei.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Cindy Lu <lulu@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Liuxiangdong <liuxiangdong5@huawei.com>,
-        Parav Pandit <parav@mellanox.com>,
-        Eli Cohen <eli@mellanox.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        Harpreet Singh Anand <hanand@xilinx.com>,
-        "Gonglei (Arei)" <arei.gonglei@huawei.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Devi Priya <quic_devipriy@quicinc.com>
+Subject: Re: [PATCH 7/7] arm64: dts: qcom: ipq9574: Add PCIe PHYs and
+ controller nodes
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <svarbanov@mm-sol.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
+References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
+ <20230214164135.17039-8-quic_devipriy@quicinc.com>
+ <20230224085902.GC5443@thinkpad>
+Content-Language: en-US
+In-Reply-To: <20230224085902.GC5443@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zPu9AwwOwNLsfXpvZgreshGezWA2tLf9
+X-Proofpoint-ORIG-GUID: zPu9AwwOwNLsfXpvZgreshGezWA2tLf9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_08,2023-03-07_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ clxscore=1015 adultscore=0 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070131
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
 
-tl;dr the emulated CVQ is duplicated across some vdpa-net devices (For
-example, betwen vdpa-sim-net and mlx5). This emulated CVQ is useful to
-the rest of the parent drivers because it helps them to offload the
-process of the virtio CVQ commands and convert them to device-specific
-messages in the driver.
 
-To merge these implementations in a separated object will reduce the
-duplication of the code and the maintenance costs of the parent
-drivers.
----
+On 2/24/2023 2:29 PM, Manivannan Sadhasivam wrote:
+> On Tue, Feb 14, 2023 at 10:11:35PM +0530, Devi Priya wrote:
+>> Add PCIe0, PCIe1, PCIe2, PCIe3 (and corresponding PHY) devices
+>> found on IPQ9574 platform. The PCIe0 & PCIe1 are 1-lane Gen3
+>> host whereas PCIe2 & PCIe3 are 2-lane Gen3 host.
+>>
+> 
+> Please split the board devicetree changes into a separate patch.
+Sure, okay
+> 
+>> Co-developed-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts |  28 ++
+>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi        | 477 ++++++++++++++++++-
+>>   2 files changed, 499 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>> index 2c8430197ec0..21b53f34ce84 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>> +++ b/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dts
+>> @@ -8,6 +8,7 @@
+>>   
+>>   /dts-v1/;
+>>   
+>> +#include <dt-bindings/gpio/gpio.h>
+>>   #include "ipq9574.dtsi"
+>>   
+>>   / {
+>> @@ -29,6 +30,33 @@
+>>   	status = "okay";
+>>   };
+>>   
+>> +&pcie1_phy {
+>> +	status = "okay";
+> 
+> No PHY power supply needed? Same comment for rest of the PHY nodes.
+The PHY power supplies (VDDA_0P9 and VDDA_1P8) would be turned 'on'
+by default and so no supply is added here
 
-I'd distribute the work in two phases. The first one consists of
-adding a specialized vringh module to make CVQ tasks. Let's call it
-net_ctrl_vringh provisionally. I'll use the mlx5 vdpa driver as an
-example, although there is no need to actually modify mlx5_vdpa in
-this first stage.
-
-This first step would simply merge vdpasim_handle_cvq and
-mlx5_cvq_kick_handler to abstract the CVQ message handling. The parent
-driver is still in charge of receiving the kick and forwarding it to
-net_ctrl_vringh. We should be able to replace all vringh referenced
-code for this new net_ctrl_vringh in the mlx5 driver
-
-Since control messages actually need to handle each message
-differently, the vendor driver must supply a struct of pointers in the
-line of:
-net_ctrl_vringh_ops = {
-  .mac_table_set = ...
-  .mac_addr_set = ...
-  .vlan_add = ...
-  .vlan_del = ...
-  ...
-}
----
-
-So cmd handling and validation is shared between all parent drivers.
-Let's say the net_ctrl_vringh callback to fetch a control message is
-net_ctrl_vringh_handle_cvq(net_ctrl_vringh *v, ...). We can choose
-between passing this struct as a parameter or to embed it in
-net_ctrl_vringh. I prefer to use parameters.
-
-This is already a big win as we offload vendors drivers to have to
-worry about vringh nuances.
-
-Second phase is to actually move it to the vdpa frontend. This step is
-less defined at this moment, but it should be also doable with little
-effort.
-
-My main goal with this is to offload vendors from having to worry of
-DMA and ASID nuances if they don't need to. These simple parent
-drivers do not need to contain a single line about ASID, DMA, etc: All
-of that is handled by vdpa frontend.
-
-There are many possibilities to do it. One of them is to include some
-property on vdpa_device like "emulated_virtqueues" or similar. Another
-could be to create vdpa_net_device, which uses vdpa_device internally.
-Although I think the second is simpler, it would be great if we can
-abstract emulated virtqueues somehow.
-
-For simplicity, I'm going to assume we create a new vdpa_net_device.
-It will be in the line of:
-struct vdpa_net_device {
-  struct vdpa_device v;
-  struct vringh ctrl_vq;
-  const struct vdpa_config_ops *parent_ops;
-  const struct
-  ...
-}
----
-
-And it creates / register itself like a regular vdpa device, but
-wrapping vendor's properties and callbacks to accommodate this new
-CVQ. So we can do what Jason proposes in [1] vdpa-wise, not
-vendor-wise. If the vdpa_device has an emulated CVQ, we can do:
-
-int vhost_vdpa_net_set_vq_address(vdev, idx, areas...) {
-  if (!is_ctrl_vq_idx(vdev, idx)) {
-    return parent_ops->set_vq_address(vdev, idx, areas);
-  }
-
-  vdev->ctrl_vq.desc_addr = ...
-  ...
-}
-
-struct vdpa_net_ops = {
-  .set_vq_address = vhost_vdpa_net_set_vq_address
-  ...
-}
-
-struct vdpa_net_device *vdpa_net_alloc_device(struct device *parent,
-ngroups, nas, ...) {
-  nas++; // emulated CVQ can always be in another AS
-  ngroups++ // emulated CVQ will always be in an independent group
-  ...
-  vdpa_alloc_device(vdev, parent, vdpa_net_ops, ngroups, nas, ...
-}
----
-
-So the simple HW that does not care about DMA, ASID, etc does not need
-to include a single line about these aspects. I think this can be done
-incrementally too.
-
-Thoughts?
-
-Thanks!
-
-[1] https://lore.kernel.org/virtualization/20230119061525.75068-6-jasowang@redhat.com/
-
+> 
+>> +};
+>> +
+>> +&pcie1_x1 {
+> 
+> No need to add a suffix to node label indicating the lane config.
+Okay
+> 
+>> +	perst-gpios = <&tlmm 26 GPIO_ACTIVE_LOW>;
+> 
+> What about "wake" pin? Don't you need pinctrl definitions for these GPIOs?
+> Same comment for rest of the PCIe nodes.
+In IPQ9574, Wake pin isn't required as the slave devices are not
+hot-pluggable & they get enumerated during the bootup. Will add the
+pinctrl definition for the Perst gpio in V2
+> 
+>> +	status = "okay";
+>> +};
+>> +
+>> +&pcie2_phy {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&pcie2_x2 {
+>> +	perst-gpios = <&tlmm 29 GPIO_ACTIVE_LOW>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&pcie3_phy {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&pcie3_x2 {
+>> +	perst-gpios = <&tlmm 32 GPIO_ACTIVE_LOW>;
+>> +	status = "okay";
+>> +};
+>> +
+>>   &sdhc_1 {
+>>   	pinctrl-0 = <&sdc_default_state>;
+>>   	pinctrl-names = "default";
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> index 062f80798ebb..a32dbdeb5bed 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>> @@ -6,8 +6,8 @@
+>>    * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>>    */
+>>   
+>> -#include <dt-bindings/interrupt-controller/arm-gic.h>
+>>   #include <dt-bindings/clock/qcom,ipq9574-gcc.h>
+>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>>   #include <dt-bindings/reset/qcom,ipq9574-gcc.h>
+>>   
+>>   / {
+>> @@ -22,11 +22,41 @@
+>>   			#clock-cells = <0>;
+>>   		};
+>>   
+>> +		pcie30_phy0_pipe_clk: pcie30_phy0_pipe_clk {
+>> +			compatible = "fixed-clock";
+>> +			clock-frequency = <250000000>;
+>> +			#clock-cells = <0>;
+>> +		};
+>> +
+>> +		pcie30_phy1_pipe_clk: pcie30_phy1_pipe_clk {
+>> +			compatible = "fixed-clock";
+>> +			clock-frequency = <250000000>;
+>> +			#clock-cells = <0>;
+>> +		};
+>> +
+>> +		pcie30_phy2_pipe_clk: pcie30_phy2_pipe_clk {
+>> +			compatible = "fixed-clock";
+>> +			clock-frequency = <250000000>;
+>> +			#clock-cells = <0>;
+>> +		};
+>> +
+>> +		pcie30_phy3_pipe_clk: pcie30_phy3_pipe_clk {
+>> +			compatible = "fixed-clock";
+>> +			clock-frequency = <250000000>;
+>> +			#clock-cells = <0>;
+>> +		};
+> 
+> Why PIPE clocks are modeled as fixed clocks unlike other SoCs?
+Sure, will add the clocks to corresponding PHY node and use the phandle
+similar to other targets
+> 
+>> +
+>>   		sleep_clk: sleep-clk {
+>>   			compatible = "fixed-clock";
+>>   			#clock-cells = <0>;
+>>   		};
+>>   
+>> +		usb3phy_0_cc_pipe_clk: usb3phy_0_cc_pipe_clk {
+>> +			compatible = "fixed-clock";
+>> +			clock-frequency = <125000000>;
+>> +			#clock-cells = <0>;
+>> +		};
+> 
+> Spurious?
+Will drop it
+> 
+>> +
+>>   		xo_board_clk: xo-board-clk {
+>>   			compatible = "fixed-clock";
+>>   			#clock-cells = <0>;
+>> @@ -121,6 +151,155 @@
+>>   		#size-cells = <1>;
+>>   		ranges = <0 0 0 0xffffffff>;
+>>   
+>> +		pcie0_phy: phy@84000 {
+>> +			compatible = "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+>> +			reg = <0x00084000 0x1bc>; /* Serdes PLL */
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges;
+>> +			clocks = <&gcc GCC_PCIE0_AUX_CLK>,
+>> +				 <&gcc GCC_PCIE0_AHB_CLK>,
+>> +				 <&gcc GCC_ANOC_PCIE0_1LANE_M_CLK>,
+>> +				 <&gcc GCC_SNOC_PCIE0_1LANE_S_CLK>;
+>> +			clock-names = "aux", "cfg_ahb", "anoc_lane", "snoc_lane";
+> 
+> Care to explain what these anoc_lane and snoc_lane clocks are?
+snoc & anoc lane clocks are used in the SNOC/ANOC Network Interface Unit
+(NIU) which connects to the corresponding PCIE master/slave interface
+> 
+>> +
+>> +			assigned-clocks = <&gcc GCC_PCIE0_AUX_CLK>;
+>> +			assigned-clock-rates = <20000000>;
+>> +
+>> +			resets = <&gcc GCC_PCIE0_PHY_BCR>,
+>> +				 <&gcc GCC_PCIE0PHY_PHY_BCR>;
+>> +			reset-names = "phy", "common";
+>> +
+>> +			status = "disabled";
+>> +
+>> +			pcie0_lane: phy@84200 {
+>> +				reg = <0x00084200 0x16c>, /* Serdes Tx */
+>> +				      <0x00084400 0x200>, /* Serdes Rx */
+>> +				      <0x00084800 0x1f0>, /* PCS: Lane0, COM, PCIE */
+>> +				      <0x00084c00 0xf4>;  /* pcs_misc */
+>> +				#phy-cells = <0>;
+>> +
+>> +				clocks = <&gcc GCC_PCIE0_PIPE_CLK>;
+>> +				clock-names = "pipe0";
+>> +				clock-output-names = "gcc_pcie0_pipe_clk_src";
+>> +				#clock-cells = <0>;
+>> +			};
+>> +		};
+>> +
+> 
+> [...]
+> 
+>> +		pcie1_x1: pci@10000000 {
+>> +			compatible = "qcom,pcie-ipq9574";
+>> +			reg =  <0x10000000 0xf1d>,
+>> +			       <0x10000F20 0xa8>,
+>> +			       <0x10001000 0x1000>,
+>> +			       <0x000F8000 0x4000>,
+>> +			       <0x10100000 0x1000>,
+>> +			       <0x00618108 0x4>;
+>> +			reg-names = "dbi", "elbi", "atu", "parf", "config", "aggr_noc";
+> 
+> As I asked in the binding patch, why "aggr_noc" region is required?
+The ANOC runs at a fixed frequency of 342MHz.
+For the connected PCIe slave devices that run at lesser frequency,
+the aggr_noc's rate adapter register is updated to configure
+the packet transmission rate to ensure no wait cycles are inserted.
+Can we use the 'syscon' property here to set the rate adapter?
+> 
+>> +			device_type = "pci";
+>> +			linux,pci-domain = <2>;
+>> +			bus-range = <0x00 0xff>;
+>> +			num-lanes = <1>;
+>> +			#address-cells = <3>;
+>> +			#size-cells = <2>;
+>> +
+>> +			ranges = <0x81000000 0 0x10200000 0x10200000
+>> +				  0 0x00100000   /* downstream I/O */
+>> +				  0x82000000 0 0x10300000 0x10300000
+>> +				  0 0x07d00000>; /* non-prefetchable memory */
+> 
+> Don't split the ranges and encode them in a single line.
+Okay
+> 
+> Also, the I'm not sure why you have set the relocatable flag (n) for both
+> ranges i.e., in 0x81000000 and 0x82000000.
+Will check and add comment in V2
+> 
+>> +
+>> +			#interrupt-cells = <1>;
+>> +			interrupt-map-mask = <0 0 0 0x7>;
+>> +			interrupt-map = <0 0 0 1 &intc 0 35
+>> +					IRQ_TYPE_LEVEL_HIGH>, /* int_a */
+>> +					<0 0 0 2 &intc 0 49
+>> +					IRQ_TYPE_LEVEL_HIGH>, /* int_b */
+>> +					<0 0 0 3 &intc 0 84
+>> +					IRQ_TYPE_LEVEL_HIGH>, /* int_c */
+>> +					<0 0 0 4 &intc 0 85
+>> +					IRQ_TYPE_LEVEL_HIGH>; /* int_d */
+>> +
+> 
+> Again, wrap the interrupts in a single line.
+Sure, okay
+> 
+>> +			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-names = "global_irq";
+>> +
+> 
+> Linux doesn't support global_irq yet. But since devicetree is supposed to
+> describe the hardware, you can keep it.
+Okay
+> 
+> Above comment applies to rest of the PCIe nodes.
+> 
+>> +			/* clocks and clock-names are used to enable the clock in CBCR */
+>> +			clocks = <&gcc GCC_PCIE1_AHB_CLK>,
+>> +				 <&gcc GCC_PCIE1_AUX_CLK>,
+>> +				 <&gcc GCC_PCIE1_AXI_M_CLK>,
+>> +				 <&gcc GCC_PCIE1_AXI_S_CLK>,
+>> +				 <&gcc GCC_PCIE1_AXI_S_BRIDGE_CLK>,
+>> +				 <&gcc GCC_PCIE1_RCHNG_CLK>;
+>> +			clock-names = "ahb",
+>> +				      "aux",
+>> +				      "axi_m",
+>> +				      "axi_s",
+>> +				      "axi_bridge",
+>> +				      "rchng";
+>> +
+>> +			resets = <&gcc GCC_PCIE1_PIPE_ARES>,
+>> +				 <&gcc GCC_PCIE1_CORE_STICKY_ARES>,
+>> +				 <&gcc GCC_PCIE1_AXI_S_STICKY_ARES>,
+>> +				 <&gcc GCC_PCIE1_AXI_S_ARES>,
+>> +				 <&gcc GCC_PCIE1_AXI_M_STICKY_ARES>,
+>> +				 <&gcc GCC_PCIE1_AXI_M_ARES>,
+>> +				 <&gcc GCC_PCIE1_AUX_ARES>,
+>> +				 <&gcc GCC_PCIE1_AHB_ARES>;
+>> +			reset-names = "pipe",
+>> +				      "sticky",
+>> +				      "axi_s_sticky",
+>> +				      "axi_s",
+>> +				      "axi_m_sticky",
+>> +				      "axi_m",
+>> +				      "aux",
+>> +				      "ahb";
+>> +
+>> +			phys = <&pcie1_lane>;
+>> +			phy-names = "pciephy";
+>> +			msi-parent = <&v2m0>;
+>> +			status = "disabled";
+>> +		};
+>> +
+> 
+> [...]
+> 
+>> +		pcie2_x2: pci@20000000 {
+>> +			compatible = "qcom,pcie-ipq9574";
+>> +			reg =  <0x20000000 0xf1d>,
+>> +			       <0x20000F20 0xa8>,
+>> +			       <0x20001000 0x1000>,
+>> +			       <0x00088000 0x4000>,
+>> +			       <0x20100000 0x1000>;
+>> +			reg-names = "dbi", "elbi", "atu", "parf", "config";
+>> +			device_type = "pci";
+>> +			linux,pci-domain = <3>;
+>> +			bus-range = <0x00 0xff>;
+>> +			num-lanes =<2>;
+> 
+> Space after =
+Sure, okay
+> 
+> Thanks,
+> Mani
+> 
