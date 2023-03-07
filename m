@@ -2,79 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAF86AD6B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:11:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5118B6AD6C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjCGFLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 00:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
+        id S230076AbjCGF1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 00:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjCGFLh (ORCPT
+        with ESMTP id S229611AbjCGF1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 00:11:37 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE41567A5
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 21:11:34 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id r27so15589190lfe.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 21:11:34 -0800 (PST)
+        Tue, 7 Mar 2023 00:27:33 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D927E41B7C;
+        Mon,  6 Mar 2023 21:27:32 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id z11so7332669pfh.4;
+        Mon, 06 Mar 2023 21:27:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678165892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ciKmOSJZqDuKZvgr9ceYGQTfxQjjQPGSAx7cECZjTfE=;
-        b=DV80ICr6A37Pmft3psmmxyD9upkJ+xXbbgIqAO6JtifUoTYpYno5aPf4fx4VuYH60i
-         LKIdBfWdgjFKpoYkdBjzeUvw0Sy9929c51Yh/c5+Cv+eBWAiP1WaK+odpj6dlRU/hS02
-         NVi96EG9WbtDg/+CS6DIZnfkqTrGQMagWlLWs=
+        d=gmail.com; s=20210112; t=1678166852;
+        h=in-reply-to:references:message-id:date:content-transfer-encoding:to
+         :from:subject:cc:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AlK7Hs19AjyIKqP3f0Dwl6HgKXmloRUX9J0NNF4qZqI=;
+        b=KiEN0lSrI7WdHvK+rnjlsSC8PfIXOqThM5Yhp6on6h/pS31vZIWhH8yTZ2qjPpe5xx
+         UisPU6FWCL9VtMjr0XD0FrVJdu8YtEuykkldNDr+WwhFsP/F2L/Ne7TzEO35zH/95bcJ
+         Dp9+DwQeI8qzAXIIGQ1RvRmUNtswyBa3EbimAMf71e18GzxGYULJFWQslySGV8fQ2Uuo
+         /+TYis8hkk9bNjVuQ0C47MRsNetBokRMxAA40JwP935fdjdtGoody8r/p6wUjtBo6zfK
+         f04A52pp7kPEEgX+t5potcw4pVyMQ6OGAO23JYjSahl4xpQqux4T0WH1z2DpwPPydO8g
+         mgCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678165892;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ciKmOSJZqDuKZvgr9ceYGQTfxQjjQPGSAx7cECZjTfE=;
-        b=NQg9sJNDVMsh1mYgn9e9uv+qns1qTgWgWEJqZqmSrGihdnzP3pAH4tOKZ//tGAGPLn
-         WaNoqGTlbIcuEpl5KBwhkpKHnXnPz3pzYHrnW34NmHb9IGI/HLqHQHn0QY5c8qo/p0Jl
-         OVsmRZZU0bNQcNidTs6oskK+P9v3X7C5cozG1rdeXyat84T2ncTpCHgZ/7p9PQ7xP6K7
-         Gx1yDHsgmutPEyx4YOndBaI5pJMO2P9F4qKstjxO9HOe/CCF8lhDfAuYSClSwQPlL64R
-         A+4Uzd425Ao1CxP4wXmpLHVDbzhYJuLS4HjCNXEGq2cIj6hl6d4k1OIMrn0hhT1pU9hq
-         Pk3Q==
-X-Gm-Message-State: AO0yUKXtZzWLR4cjQUl0VXZHc8Zp+pabzzrz6vnnYqqwaVdf7WYmlHIk
-        qj+J8vbvynqKSaVzeVWdPWk6XyFhB3r9H6Wyc/dImQ==
-X-Google-Smtp-Source: AK7set+x4pGBpQtZSzewoBFzZHpTCsSoM+foYjC6/2kfqcZIpxLXt+M1wNgynlswpNvWuaueDTE0Lqu4diZFlp0EL7c=
-X-Received: by 2002:a19:750b:0:b0:4de:6514:2ee4 with SMTP id
- y11-20020a19750b000000b004de65142ee4mr3957772lfe.11.1678165892149; Mon, 06
- Mar 2023 21:11:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20230307030457.3499834-1-joel@joelfernandes.org>
- <753b72f5ecd03f94511495a333eb192c5fc42087.camel@perches.com>
- <CAEXW_YRYnikDRTQXwrTpTsQ1r-32FRPABj_Viu+X6Qr7EWqh4g@mail.gmail.com>
- <802731d7bf187573a9084cb23196c096be81b5e1.camel@perches.com>
- <20230307044104.GA3532764@google.com> <497c07579fb51ed6f0b8a72471017b4dec258e9e.camel@perches.com>
-In-Reply-To: <497c07579fb51ed6f0b8a72471017b4dec258e9e.camel@perches.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 7 Mar 2023 00:11:20 -0500
-Message-ID: <CAEXW_YQt976k6tRJBoYy=S-CpacgB+MpMr-H=TEtZBaP=CPwnQ@mail.gmail.com>
-Subject: Re: [PATCH] checkpatch: Error out if deprecated RCU API used
-To:     Joe Perches <joe@perches.com>
-Cc:     linux-kernel@vger.kernel.org, Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>,
-        Uladzislau Rezki <urezki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20210112; t=1678166852;
+        h=in-reply-to:references:message-id:date:content-transfer-encoding:to
+         :from:subject:cc:mime-version:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AlK7Hs19AjyIKqP3f0Dwl6HgKXmloRUX9J0NNF4qZqI=;
+        b=EpK8gmKG8tQDoUSA7J3nuHT5376ewZQG9ZRcfLzncPQLvpwyk2NXY+rtHhWq7z84Dn
+         D+flSu5QkAeGpbQVU7ftWpOW5wBCpJinrnKb3Y4oGDfrBIdsVtC175D4SnmofQAKsAkK
+         SHAYTvyADwY9gUjyGaZDhJ5YlJS+2odEadsfmbLOHCRg2CNtyiY1JVik/f42KEIaGm+Z
+         pTktY4WR+UhGvmRiH3Ka2wbYB23rvDx1bMdJJw8s+DvrGYVmsB4jcyZo26T+wNePqciT
+         SnD4ixKgNzkGvb10evlc3jXS1gAJCHUbqUGFfPNGeCmVY6cwOOvJWr0xL0uwvfKjwxuk
+         y+nw==
+X-Gm-Message-State: AO0yUKX92pF28O47XCDIKIQMr2pMHinmeL2f0HAhhfaFBkuMCMs+ooGc
+        17Nm1BLD9pU/tz1SdefWmRc=
+X-Google-Smtp-Source: AK7set+9FsF4BJMmdn0oPnSFIvoRnnZoR2gOxBSb5vcLt0/zI12PgdR5eqnOvR8okCGeDSq2c4ccgw==
+X-Received: by 2002:a62:5401:0:b0:5e2:da34:4aaf with SMTP id i1-20020a625401000000b005e2da344aafmr10320547pfb.4.1678166852291;
+        Mon, 06 Mar 2023 21:27:32 -0800 (PST)
+Received: from localhost ([203.220.77.23])
+        by smtp.gmail.com with ESMTPSA id q18-20020a62e112000000b005a8de0f4c64sm7137152pfh.82.2023.03.06.21.27.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Mar 2023 21:27:31 -0800 (PST)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Cc:     <ajd@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>, <cmr@bluescreens.de>
+Subject: Re: [RFC PATCH 06/13] powerpc/dexcr: Add prctl implementation
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Benjamin Gray" <bgray@linux.ibm.com>,
+        <linuxppc-dev@lists.ozlabs.org>
 Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 07 Mar 2023 15:12:57 +1000
+Message-Id: <CQZW6V070YIU.3Q6OJGKRPH3KY@bobo>
+X-Mailer: aerc 0.13.0
+References: <20221128024458.46121-1-bgray@linux.ibm.com>
+ <20221128024458.46121-7-bgray@linux.ibm.com>
+In-Reply-To: <20221128024458.46121-7-bgray@linux.ibm.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,134 +75,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 11:53=E2=80=AFPM Joe Perches <joe@perches.com> wrote=
-:
+On Mon Nov 28, 2022 at 12:44 PM AEST, Benjamin Gray wrote:
+> Adds an initial prctl interface implementation. Unprivileged processes
+> can query the current prctl setting, including whether an aspect is
+> implemented by the hardware or is permitted to be modified by a setter
+> prctl. Editable aspects can be changed by a CAP_SYS_ADMIN privileged
+> process.
 >
-> On Tue, 2023-03-07 at 04:41 +0000, Joel Fernandes wrote:
-> > On Mon, Mar 06, 2023 at 07:23:23PM -0800, Joe Perches wrote:
-> > > On Mon, 2023-03-06 at 22:10 -0500, Joel Fernandes wrote:
-> > > > On Mon, Mar 6, 2023 at 10:08=E2=80=AFPM Joe Perches <joe@perches.co=
-m> wrote:
-> > > > >
-> > > > > On Tue, 2023-03-07 at 03:04 +0000, Joel Fernandes (Google) wrote:
-> > > > > > Single-argument kvfree_rcu() usage is being deprecated [1] [2] =
-as it is
-> > > > > > error-prone. However, till all users are converted, we would li=
-ke to introduce
-> > > > > > checkpatch errors for new patches submitted.
-> > > > > >
-> > > > > > This patch adds support for the same. Tested with a trial patch=
-.
-> > > > > >
-> > > > > > For now, we are only considering usages that don't have compoun=
-d
-> > > > > > nesting, for example ignore: kvfree_rcu( (rcu_head_obj), rcu_he=
-ad_name).
-> > > > > > This is sufficient as such usages are unlikely.
-> > > > > >
-> > > > > > Once all users are converted and we remove the old API, we can =
-also revert this
-> > > > > > checkpatch patch then.
-> > > > >
-> > > > > I think this should be added to the deprecated_apis hash instead
-> > > > >
-> > > > > our %deprecated_apis =3D (
-> > > > >         "synchronize_rcu_bh"                    =3D> "synchronize=
-_rcu",
-> > > > >         "synchronize_rcu_bh_expedited"          =3D> "synchronize=
-_rcu_expedited",
-> > > > >         "call_rcu_bh"                           =3D> "call_rcu",
-> > > > >         "rcu_barrier_bh"                        =3D> "rcu_barrier=
-",
-> > > > >         "synchronize_sched"                     =3D> "synchronize=
-_rcu",
-> > > > >         "synchronize_sched_expedited"           =3D> "synchronize=
-_rcu_expedited",
-> > > > >         "call_rcu_sched"                        =3D> "call_rcu",
-> > > > >         "rcu_barrier_sched"                     =3D> "rcu_barrier=
-",
-> > > > >         "get_state_synchronize_sched"           =3D> "get_state_s=
-ynchronize_rcu",
-> > > > >         "cond_synchronize_sched"                =3D> "cond_synchr=
-onize_rcu",
-> > > > >         "kmap"                                  =3D> "kmap_local_=
-page",
-> > > > >         "kunmap"                                =3D> "kunmap_loca=
-l",
-> > > > >         "kmap_atomic"                           =3D> "kmap_local_=
-page",
-> > > > >         "kunmap_atomic"                         =3D> "kunmap_loca=
-l",
-> > > > > );
-> > > >
-> > > > This is not an API name change though, it is a "number of arguments=
-"
-> > > > or argument list change. Is there a different way to do it?
-> > >
-> > > Ah, no, not really.
-> > >
-> > > btw: I don't see a single use of this call without a comma in the tre=
-e.
-> >
-> > Did you look for kvfree_rcu? It is either kvfree_rcu() or kfree_rcu().
+> The prctl setting represents what the process itself has requested, and
+> does not account for any overrides. Either the kernel or a hypervisor
+> may enforce a different setting for an aspect.
 >
-> $ git grep -P '\bkv?free_rcu\s*\(' -- '*.[ch]' | grep -v -P 'kv?free_rcu\=
-s*\([^,]+,.*\)'
-> drivers/infiniband/core/device.c:               kfree_rcu(container_of(de=
-v->port_data, struct ib_port_data_rcu,
-> drivers/infiniband/core/rdma_core.c:     * kfree_rcu(). However the objec=
-t may still have been released and
-> drivers/target/target_core_configfs.c:                   * callbacks to c=
-omplete post kfree_rcu(), before allowing
-> include/linux/rcupdate.h: *     kvfree_rcu(ptr);
-> include/linux/rcupdate.h:#define kvfree_rcu(...) KVFREE_GET_MACRO(__VA_AR=
-GS__,          \
-> include/linux/rcutiny.h:        // kvfree_rcu(one_arg) call.
-> include/rdma/ib_verbs.h:        struct rcu_head         rcu;            /=
-* kfree_rcu() overhead */
-> include/scsi/scsi_device.h: * @rcu: For kfree_rcu().
-> kernel/rcu/rcuscale.c:          pr_alert("CONFIG_RCU_LAZY is disabled, fa=
-lling back to kfree_rcu() for delayed RCU kfree'ing\n");
-> kernel/rcu/tree.c: * struct kvfree_rcu_bulk_data - single block to store =
-kvfree_rcu() pointers
-> kernel/rcu/tree.c: * @records: Array of the kvfree_rcu() pointers
-> kernel/rcu/tree.c: * struct kfree_rcu_cpu_work - single batch of kfree_rc=
-u() requests
-> kernel/rcu/tree.c: * @head_free: List of kfree_rcu() objects waiting for =
-a grace period
-> kernel/rcu/tree.c: * @bulk_head_free: Bulk-List of kvfree_rcu() objects w=
-aiting for a grace period
-> kernel/rcu/tree.c: * struct kfree_rcu_cpu - batch up kfree_rcu() requests=
- for RCU grace period
-> kernel/rcu/tree.c: * @head: List of kfree_rcu() objects not yet waiting f=
-or a grace period
-> kernel/rcu/tree.c: * @bulk_head: Bulk-List of kvfree_rcu() objects not ye=
-t waiting for a grace period
-> kernel/rcu/tree.c: * @krw_arr: Array of batches of kfree_rcu() objects wa=
-iting for a grace period
-> kernel/rcu/tree.c:       * double-argument of kvfree_rcu().  This happens=
- when the
-> kernel/rcu/tree.c: * reduce the number of grace periods during heavy kfre=
-e_rcu()/kvfree_rcu() load.
-> kernel/rcu/tree.c:              // Probable double kfree_rcu(), just leak=
-.
-> net/core/pktgen.c:      /* Don't need rcu_barrier() due to use of kfree_r=
-cu() */
+> Userspace can access a readonly view of the current DEXCR via SPR 812,
+> and a readonly view of the aspects enforced by the hypervisor via
+> SPR 455. A bitwise OR of these two SPRs will give the effective
+> DEXCR aspect state of the process.
+
+You said (offline) that you were looking at the PR_SPEC_* speculation
+control APIs but that this was different enough that you needed a
+different one.
+
+It would be good to know what some of those issues were in the
+changelog, would be nice to have some docs (could we add something
+to spec_ctrl.rst maybe?). I assume at least one difference is that
+some of our bits are not speculative but architectural (e.g., the
+stack hash check).
+
+I also wonder if we could implement some of the PR_SPEC controls
+APIs by mapping relevant DEXCR aspects to them instead of (or as well
+as) the DEXCR controls? Or would the PR_SPEC users be amenable to
+extensions that make our usage fit a bit better?
+
+I'm just thinking if we can reduce reliance on arch specific APIs a
+bit would be nice.
+
 >
+> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+> ---
+>  arch/powerpc/include/asm/processor.h |  13 +++
+>  arch/powerpc/kernel/dexcr.c          | 133 ++++++++++++++++++++++++++-
+>  arch/powerpc/kernel/process.c        |   6 ++
+>  3 files changed, 151 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/powerpc/include/asm/processor.h b/arch/powerpc/include/=
+asm/processor.h
+> index 2381217c95dc..4c995258f668 100644
+> --- a/arch/powerpc/include/asm/processor.h
+> +++ b/arch/powerpc/include/asm/processor.h
+> @@ -265,6 +265,9 @@ struct thread_struct {
+>  	unsigned long   sier2;
+>  	unsigned long   sier3;
+>  	unsigned long	hashkeyr;
+> +	unsigned int	dexcr_override;
+> +	unsigned int	dexcr_mask;
 
-Do you mind sharing which tree you are looking at? I checked both
-6.3-rc1 and linux-next.
+Hmm, what's the mask doing here? It only gets bits set and never
+cleared AFAIKS. What is different between an initial state and a
+SET then CLEAR state?
 
-Your grep returned:
-
-kernel/trace/trace_osnoise.c:   kvfree_rcu(inst);
-kernel/trace/trace_probe.c:     kvfree_rcu(link);
-lib/test_vmalloc.c:             kvfree_rcu(p);
-mm/list_lru.c:   * We need kvfree_rcu() here. And the walking of the list
-net/core/pktgen.c:      /* Don't need rcu_barrier() due to use of kfree_rcu=
-() */
-net/core/sysctl_net_core.c:
-kvfree_rcu(orig_sock_table);
-net/core/sysctl_net_core.c:                             kfree_rcu(cur);
-net/mac802154/scan.c:   kfree_rcu(request);
-net/mac802154/scan.c:   kfree_rcu(request);
+Thanks,
+Nick
