@@ -2,82 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5716AE770
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BADD6AE773
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjCGQ5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S230523AbjCGQ6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:58:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjCGQ5M (ORCPT
+        with ESMTP id S229754AbjCGQ5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:57:12 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23D987355
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:53:23 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id s20so17900322lfb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:53:23 -0800 (PST)
+        Tue, 7 Mar 2023 11:57:44 -0500
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5BF96C1C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:53:52 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id a65so4670308qkg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:53:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678208002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y08XOal2sgn9w+oPn6eHEeifVAZN/V1k1ETzFCvtzUw=;
-        b=DmSXjgGrqTSxm9a6f5KXrU6uCRcQDbSZYnralTMu1sG9TkN3d7E8YwHm2nS/EJcKFL
-         ix0+um5qTzy5d7M/8kJVbaHOe3vtf5C/0gn2gmz2AWk2FhnbyzolLSgbeUmLHgv4aV+a
-         Pab5zT9nDYcf8rax2Gvy5KtZtYR2W0rep9QQ0UCDqg7n4qL7mUjaBsivKYeLyw602Au0
-         Cgehi2m8L1PpuPp3edK7lHhQvKGqhjfS6Ih/KBykKPdUW9YWe8CYRAxsK5cwITPN4+70
-         OKBq0GhHFS4szdGs9yPSVzH1ABwDzpeFPPytklhMwjliaAkUAWetTpxFJWo9fhCad+MI
-         EcHQ==
+        d=broadcom.com; s=google; t=1678208032;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RLjzoBnlY+N8c+BPItOeN27vRL9Wum4fM9tcJ2O3obw=;
+        b=ArKcoU50WA1bub0Rjl6km4fU1VFTN25LL5jAnNotJTiFTjblb7GMuzTfMzSRu0Baid
+         ShEcq6Zj/nVLPfk/WbSVCjTpfF+WAA+FJnJRimjo9PxRfLbx0qh+SQivbHikPlM0rhJW
+         XDYWVDgEePnKfqjl8oYqdwO5XYvRVVG+egUYI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678208002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y08XOal2sgn9w+oPn6eHEeifVAZN/V1k1ETzFCvtzUw=;
-        b=rwcIwyW+VXBmZEZK0AxwH8XuqgiTCTI6onOoDlot7AM43CEeNEzubFwvApON4zy7Bb
-         dH0405+MRHVjJrk1ZQRNbLnUAExxrglvka/rTpZsvnjCCrY5naBQp094cw8lHkDqFZqJ
-         JLiL3wqcN26y6JKFnctbtwPUBJgQKx55wWnBracxh09dtwhJOG4AyECo89N38tmGgjbG
-         aLCxGxDktxyuW8kxHcFuwT1H+7vjzPxoeXAncwJU4djqRgMVFkaxea59+d9jrAZ6qEzM
-         0Z+xvZGUoETuUK9L+8NVs8c3dn4HgPj2N8DhxYmVOrOiUYMuwmmD4GEJcBLOb9+FBS/d
-         hOGA==
-X-Gm-Message-State: AO0yUKXrfCKXGW8WVU3fYVgrYzvfXPOadbbPpnv+ZIzvzaNtzhI4PN/W
-        e/H9OkbNEvrpqAbokbUvGvEFDA==
-X-Google-Smtp-Source: AK7set/TMsQfD3SSttUjeT2HgdBvrTfvMnAChaUCUF1G6wdV0NzcJSMh82qkk3rYfvqwTuFoI+Ldjw==
-X-Received: by 2002:ac2:5096:0:b0:4b9:a91c:b0c9 with SMTP id f22-20020ac25096000000b004b9a91cb0c9mr3972936lfm.7.1678208002180;
-        Tue, 07 Mar 2023 08:53:22 -0800 (PST)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id u3-20020a056512094300b004d7d13387b5sm2077894lft.116.2023.03.07.08.53.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 08:53:21 -0800 (PST)
-Message-ID: <8093d73c-aa26-65b0-529a-c7b482b315cb@linaro.org>
-Date:   Tue, 7 Mar 2023 18:53:21 +0200
+        d=1e100.net; s=20210112; t=1678208032;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RLjzoBnlY+N8c+BPItOeN27vRL9Wum4fM9tcJ2O3obw=;
+        b=kW/HFbNVQwgSfraLpi2kowpprcNXsUavHaiIilL7zCRiTl1KYN8yn5zwpmZHC4ZvwD
+         c/UZkFosBz7VOOZevxejGeljGrsxqpK5a219Y2+f4+zC4lE1Mz+vaiPZTi73KTQCTsLj
+         HoE0DzNQ832wCmkGwYB02DVyDyyqcUqUueN77u+DUfbT8VGTqR2ld8K8swptYBS6KNSB
+         /skUtoQrIHwmgLiA4yIx2c8km8DnPcG6fjqj6ygU0VGoHXyc00P9rhZEx3Gku2HZ7J1l
+         SEvtWOpLXVuWtxQcnFgEUNosW8UUEDMT1ZXpoS1a/0RMlWR22RYimLShdsFTI0nTUGm7
+         HLgQ==
+X-Gm-Message-State: AO0yUKWJ9koNjTvEWoTqduiWkC2L64z8lERLYjZ3PBG1cdHK6IRMa5W+
+        5avXPoZG52JTX8Fcqzgwep1lONLPF6Qv2K24dyWUNCjArFsLjEolNMToH3Iq9+gmAuAcXA5yMyY
+        ORVdjkvPx1clxCZsJxqflxKG2L9Ey+A==
+X-Google-Smtp-Source: AK7set+TFuAgbBwvn7lhclTzjFDWa+c6N6vB9e/bBA8YxPohfMd/oXTyxiKUntM12zqJ6O/HUt60F0QytzXVFrpx69A=
+X-Received: by 2002:a37:6514:0:b0:742:9d0f:775f with SMTP id
+ z20-20020a376514000000b007429d0f775fmr3231324qkb.15.1678208031823; Tue, 07
+ Mar 2023 08:53:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 4/6] iommu/qcom: Index contexts by asid number to allow
- asid 0
-Content-Language: en-GB
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, agross@kernel.org
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, joro@8bytes.org,
-        will@kernel.org, robin.murphy@arm.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
-        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        marijn.suijten@somainline.org, kernel@collabora.com,
-        luca@z3ntu.xyz, a39.skl@gmail.com, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20221115101122.155440-1-angelogioacchino.delregno@collabora.com>
- <20221115101122.155440-5-angelogioacchino.delregno@collabora.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221115101122.155440-5-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+References: <20230225100135.2109330-1-haowenchao2@huawei.com>
+In-Reply-To: <20230225100135.2109330-1-haowenchao2@huawei.com>
+From:   Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
+Date:   Tue, 7 Mar 2023 09:53:35 -0700
+Message-ID: <CAFdVvOwxxvMGNTS9KQ-N-Q_Xo3+qKA64ok=2sv-FYmnerzwfGQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: mpt3sas: fix NULL pointer access in mpt3sas_transport_port_add()
+To:     Wenchao Hao <haowenchao2@huawei.com>
+Cc:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linfeilong@huawei.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000009e6d6505f652419a"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,111 +71,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/11/2022 12:11, AngeloGioacchino Del Regno wrote:
-> This driver was indexing the contexts by asid-1, which is probably
-> done under the assumption that the first ASID is always 1.
-> 
-> Unfortunately this is not always true: at least for MSM8956 and
-> MSM8976's GPU IOMMU, the gpu_user context's ASID number is zero.
-> To allow using a zero asid number, index the contexts by `asid`
-> instead of by `asid - 1`.
-> 
-> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-> [Marijn: Rebased over next-20221111]
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+--0000000000009e6d6505f652419a
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Feb 25, 2023 at 3:02=E2=80=AFAM Wenchao Hao <haowenchao2@huawei.com=
+> wrote:
+>
+> port is allocated by sas_port_alloc_num() and rphy is allocated by
+> sas_end_device_alloc() or sas_expander_alloc() which may return NULL,
+> so we need to check the rphy to avoid possible NULL pointer access.
+>
+> If sas_rphy_add() called with failure rphy is set to NULL, we would
+> access the rphy in next lines which would also result NULL pointer
+> access.
+>
+> Fix commit 78316e9dfc24 ("scsi: mpt3sas: Fix possible resource leaks
+> in mpt3sas_transport_port_add()")
+>
+> Signed-off-by: Wenchao Hao <haowenchao2@huawei.com>
+Acked-by: Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>
 > ---
->   drivers/iommu/arm/arm-smmu/qcom_iommu.c | 24 ++++++++++++------------
->   1 file changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-> index 49f4308f1bd2..94f51cafee17 100644
-> --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-> +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-> @@ -52,7 +52,7 @@ struct qcom_iommu_dev {
->   	void __iomem		*local_base;
->   	u32			 sec_id;
->   	u8			 num_ctxs;
-> -	struct qcom_iommu_ctx	*ctxs[];   /* indexed by asid-1 */
-> +	struct qcom_iommu_ctx	*ctxs[];   /* indexed by asid */
->   };
->   
->   struct qcom_iommu_ctx {
-> @@ -94,7 +94,7 @@ static struct qcom_iommu_ctx * to_ctx(struct qcom_iommu_domain *d, unsigned asid
->   	struct qcom_iommu_dev *qcom_iommu = d->iommu;
->   	if (!qcom_iommu)
->   		return NULL;
-> -	return qcom_iommu->ctxs[asid - 1];
-> +	return qcom_iommu->ctxs[asid];
->   }
->   
->   static inline void
-> @@ -563,12 +563,10 @@ static int qcom_iommu_of_xlate(struct device *dev, struct of_phandle_args *args)
->   	qcom_iommu = platform_get_drvdata(iommu_pdev);
->   
->   	/* make sure the asid specified in dt is valid, so we don't have
-> -	 * to sanity check this elsewhere, since 'asid - 1' is used to
-> -	 * index into qcom_iommu->ctxs:
-> +	 * to sanity check this elsewhere:
->   	 */
-> -	if (WARN_ON(asid < 1) ||
-> -	    WARN_ON(asid > qcom_iommu->num_ctxs) ||
-> -	    WARN_ON(qcom_iommu->ctxs[asid - 1] == NULL)) {
-> +	if (WARN_ON(asid >= qcom_iommu->num_ctxs) ||
-
-Could you please change qcom_iommu to store max_asid rather than 
-num_ctxs. This piece becomes logical then.
-
-Looks good to me otherwise.
-
-> +	    WARN_ON(qcom_iommu->ctxs[asid] == NULL)) {
->   		put_device(&iommu_pdev->dev);
->   		return -EINVAL;
->   	}
-> @@ -726,7 +724,7 @@ static int qcom_iommu_ctx_probe(struct platform_device *pdev)
->   
->   	dev_dbg(dev, "found asid %u\n", ctx->asid);
->   
-> -	qcom_iommu->ctxs[ctx->asid - 1] = ctx;
-> +	qcom_iommu->ctxs[ctx->asid] = ctx;
->   
->   	return 0;
->   }
-> @@ -738,7 +736,7 @@ static int qcom_iommu_ctx_remove(struct platform_device *pdev)
->   
->   	platform_set_drvdata(pdev, NULL);
->   
-> -	qcom_iommu->ctxs[ctx->asid - 1] = NULL;
-> +	qcom_iommu->ctxs[ctx->asid] = NULL;
->   
->   	return 0;
->   }
-> @@ -779,7 +777,7 @@ static int qcom_iommu_device_probe(struct platform_device *pdev)
->   	struct device *dev = &pdev->dev;
->   	struct resource *res;
->   	struct clk *clk;
-> -	int ret, max_asid = 0;
-> +	int ret, num_ctxs, max_asid = 0;
->   
->   	/* find the max asid (which is 1:1 to ctx bank idx), so we know how
->   	 * many child ctx devices we have:
-> @@ -787,11 +785,13 @@ static int qcom_iommu_device_probe(struct platform_device *pdev)
->   	for_each_child_of_node(dev->of_node, child)
->   		max_asid = max(max_asid, get_asid(child));
->   
-> -	qcom_iommu = devm_kzalloc(dev, struct_size(qcom_iommu, ctxs, max_asid),
-> +	num_ctxs = max_asid + 1;
+>  drivers/scsi/mpt3sas/mpt3sas_transport.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_transport.c b/drivers/scsi/mpt3=
+sas/mpt3sas_transport.c
+> index e5ecd6ada6cd..e8a4750f6ec4 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_transport.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_transport.c
+> @@ -785,7 +785,7 @@ mpt3sas_transport_port_add(struct MPT3SAS_ADAPTER *io=
+c, u16 handle,
+>                 goto out_fail;
+>         }
+>         port =3D sas_port_alloc_num(sas_node->parent_dev);
+> -       if ((sas_port_add(port))) {
+> +       if (!port || (sas_port_add(port))) {
+>                 ioc_err(ioc, "failure at %s:%d/%s()!\n",
+>                         __FILE__, __LINE__, __func__);
+>                 goto out_fail;
+> @@ -824,6 +824,12 @@ mpt3sas_transport_port_add(struct MPT3SAS_ADAPTER *i=
+oc, u16 handle,
+>                             mpt3sas_port->remote_identify.sas_address;
+>         }
+>
+> +       if (!rphy) {
+> +               ioc_err(ioc, "failure at %s:%d/%s()!\n",
+> +                       __FILE__, __LINE__, __func__);
+> +               goto out_delete_port;
+> +       }
 > +
-> +	qcom_iommu = devm_kzalloc(dev, struct_size(qcom_iommu, ctxs, num_ctxs),
->   				  GFP_KERNEL);
->   	if (!qcom_iommu)
->   		return -ENOMEM;
-> -	qcom_iommu->num_ctxs = max_asid;
-> +	qcom_iommu->num_ctxs = num_ctxs;
->   	qcom_iommu->dev = dev;
->   
->   	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>         rphy->identify =3D mpt3sas_port->remote_identify;
+>
+>         if ((sas_rphy_add(rphy))) {
+> @@ -831,6 +837,7 @@ mpt3sas_transport_port_add(struct MPT3SAS_ADAPTER *io=
+c, u16 handle,
+>                         __FILE__, __LINE__, __func__);
+>                 sas_rphy_free(rphy);
+>                 rphy =3D NULL;
+> +               goto out_delete_port;
+>         }
+>
+>         if (mpt3sas_port->remote_identify.device_type =3D=3D SAS_END_DEVI=
+CE) {
+> @@ -857,7 +864,10 @@ mpt3sas_transport_port_add(struct MPT3SAS_ADAPTER *i=
+oc, u16 handle,
+>                     rphy_to_expander_device(rphy), hba_port->port_id);
+>         return mpt3sas_port;
+>
+> - out_fail:
+> +out_delete_port:
+> +       sas_port_delete(port);
+> +
+> +out_fail:
+>         list_for_each_entry_safe(mpt3sas_phy, next, &mpt3sas_port->phy_li=
+st,
+>             port_siblings)
+>                 list_del(&mpt3sas_phy->port_siblings);
+> --
+> 2.32.0
+>
 
--- 
-With best wishes
-Dmitry
+--=20
+This electronic communication and the information and any files transmitted=
+=20
+with it, or attached to it, are confidential and are intended solely for=20
+the use of the individual or entity to whom it is addressed and may contain=
+=20
+information that is confidential, legally privileged, protected by privacy=
+=20
+laws, or otherwise restricted from disclosure to anyone else. If you are=20
+not the intended recipient or the person responsible for delivering the=20
+e-mail to the intended recipient, you are hereby notified that any use,=20
+copying, distributing, dissemination, forwarding, printing, or copying of=
+=20
+this e-mail is strictly prohibited. If you received this e-mail in error,=
+=20
+please return the e-mail to the sender, delete it from your computer, and=
+=20
+destroy any printed copy of it.
 
+--0000000000009e6d6505f652419a
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+v82E+npLwqC8bSHh1m6BJewfpawx72uKM9aFs6SVpLPtN6a5369OCwVeEwkk2FeFU9tZXWBnI4Wu
+d1Q4a3vhOColD6PdTWv74Ez2I3ahCkmpeEQ1YMt61TUH3W8NUJJeYN2xkR6OGsA1AgMBAAGjggHc
+MIIB2DAOBgNVHQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRw
+Oi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
+MC5jcnQwQQYIKwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJz
+b25hbHNpZ24yY2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZo
+dHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRC
+MEAwPqA8oDqGOGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJj
+YTIwMjAuY3JsMCYGA1UdEQQfMB2BG3NhdGh5YS5wcmFrYXNoQGJyb2FkY29tLmNvbTATBgNVHSUE
+DDAKBggrBgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU
+VyBc/F5XGkYNCP9Rb96mru8lU4AwDQYJKoZIhvcNAQELBQADggEBACiysbqj0ggjcc9uzOpBkt1Q
+nGtvHhd9pbNmshJRUoNL11pQEzupSsUkDoAa6hPrOaJVobIO+yC84D4GXQc13Jk0QZQhRJJRYLwk
+vdq704JPh4ULIwofTWqwsiZ1OvINzX9h9KEw/+h+Mc3YUCO7tvKBGLJTUaUhrjxyjLQdEK1Xp/8B
+kYd5quZssxYPJ3nl37Moy/U9ZM2F0Ivv4U3wyP5y5cdmBUBAGOd94rH60fVDVogEo5F9gXrZhT/4
+jKzCG3LclOOzLinCkK2J5GYngIUHSmnqk909QPG6jkx5RJWwkpTzm+AAVbJ9a+1F/8iR3FiDddEK
+8wQJuWG84jqd/9wxggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxT
+aWduIG52LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAy
+MDIwAgx2rp2oPFt1hdtt8l8wDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEICsJaJwu
+hlRGgy1FCrG3ScvNveT29J6XtA1uwTQ4oqe1MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
+KoZIhvcNAQkFMQ8XDTIzMDMwNzE2NTM1MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
+CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
+hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQC1+aqsFM8MBfmaIbHo4Uj10MNB
+6aEadZzjWPWgKImMM3szKWfGimtfYSyWa+qoYShyVT0/encTS5fM9jSre9eOQzx64ZZWPIyZubTT
+vU9g21vTlROiOSLupaiJVmzLCtHu4O2wQFQ2AE/mZPZExzI7/q+toAQYGeNeGn/axt0FrpE6r5Jh
+FGAE4iKzHLJ0VPcKG2m1jFp2PrtAOm/Y5m2JGoL3BaSMcME3m0TBNzZ44jd7Xqg3r5q4EqaCRU6u
+a9k/veAIIzup5Ju8nRbKHrGreE0pg95unmM5QunP0cstFUR856dPJl4DPb0ptLiqwxTzwwRIcpYG
+jayN2myoTeyW
+--0000000000009e6d6505f652419a--
