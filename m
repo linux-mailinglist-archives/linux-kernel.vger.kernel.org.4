@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C936ADBCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EB26ADBCC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCGKZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:25:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S230214AbjCGKZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 05:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjCGKZ1 (ORCPT
+        with ESMTP id S229525AbjCGKZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Mar 2023 05:25:27 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAB95073C;
-        Tue,  7 Mar 2023 02:25:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA6C5290F;
+        Tue,  7 Mar 2023 02:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678184720; x=1709720720;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=OInxuMJtdIyDPn0imEFBCcfPVJWWAD2dQ/VhXFHBFuY=;
-  b=Gwp215xaiOgI+uTvcjyvH1nPDsHOfrIjUIwFUhV8yeAujtjxiRJ1rNNx
-   vwlJDCs86lytaHGkRF6y6UYj0tVXhftNddrWhkN/B6jeA/iypDOYRyXXG
-   QPYm2Tie/YoSmyE/6UEK7NZ/xN2z7ZK2r+Rp0tl/n/P0AjEWEB2Ic4vK/
-   Pd9f1GW3Ze2H7QGwBdHxl/Drj52Yh9xdmoBumWouQwE4IImcMG9B8URJB
-   qTHvcZnfjJCWoteQwlCQFWW2vmscntcXHsHnyWRsKrKf/mcYplBHERdY3
-   WOSTn91EM+95OhKnZIlMqSTrPZQ2Pz2LO4wnmk9Sgda3ZFMqed37p/FXL
+  t=1678184721; x=1709720721;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XVOGB1MKbCD9q0kwWf3Y939WJhlxGIP60HVW5R87Egg=;
+  b=sVib/3ghsWOA/pyidmygcrT9U9ZQY7TuBI6NgDpH1qjN88FVgGR3Ewlm
+   lqoyyWcUdhorxRNKupldnC6Ut2MDuYEgYWqy3Seb+AkzOnl/XG3rgJyF6
+   3+MqCn7RYB3BNhq4hs60oqI5/U66SSea57VqAFeHfxonWvIsOO3KH0LMI
+   G4GtKROBOIBl/aee7tvvY8eMZNmqPVL7UFmP6WcPX0v2F+1wycrj94CMa
+   WqHfSJVyvSYTpCkjyQgh0AP9f/y9OTICZuP7l/xbVbbTkFxwh0lz3Sw8x
+   hPJdt8Hz4JEYP5xxJEwkPPn1e6dy6M90Q+oDHmVhvofT9xjgT/VVO5AkX
    g==;
 X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
-   d="scan'208";a="140694248"
+   d="scan'208";a="140694259"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 03:25:18 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 03:25:19 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Mar 2023 03:25:15 -0700
+ 15.1.2507.16; Tue, 7 Mar 2023 03:25:19 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
- Transport; Tue, 7 Mar 2023 03:25:12 -0700
+ Transport; Tue, 7 Mar 2023 03:25:16 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     <linux-riscv@lists.infradead.org>
 CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
@@ -55,15 +55,17 @@ CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
         Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
         <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <llvm@lists.linux.dev>
-Subject: [PATCH v1 0/2] RISC-V: enable rust
-Date:   Tue, 7 Mar 2023 10:24:39 +0000
-Message-ID: <20230307102441.94417-1-conor.dooley@microchip.com>
+Subject: [PATCH v1 1/2] scripts: generate_rust_target: enable building on RISC-V
+Date:   Tue, 7 Mar 2023 10:24:40 +0000
+Message-ID: <20230307102441.94417-2-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307102441.94417-1-conor.dooley@microchip.com>
+References: <20230307102441.94417-1-conor.dooley@microchip.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2088; i=conor.dooley@microchip.com; h=from:subject; bh=OInxuMJtdIyDPn0imEFBCcfPVJWWAD2dQ/VhXFHBFuY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCnsAs8kPwY+WPDTW83kbZ7n9rULE84/3btU3L1pj9Su+gea apKSHaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZhIhAPDP9vQmtgpq6++Ptj9MuPKLd 5J942cmbL2szoy/Ciezv3hViXD//KFmxlmvp0gz2ITs0bPJ+dy7MGQD2/k7rwL1QlWf+3wgRcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1821; i=conor.dooley@microchip.com; h=from:subject; bh=pr00Ws4xP6t9YpK/ZLk9y5gdrCaL6G8nYnSeAmZhBfg=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCnsAs9qpdez1rj9zF+iHerL/93bMvKB8jeJviVJhybu/Gd6 68z8jlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzEZyUjw2KV9qAllV8z2ve1q2iqfm rlu9qzNcK9bYd+ztKJZU6ZjQz/ayUOsLFt2TB1drtIkkjf9F3xt/UNFiqeuT6LKXBXxOtGTgA=
 X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
@@ -74,63 +76,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the authorship debacle on the RFC, I've tried to be even more
-careful this time around. Gary opted for a Co-developed-by in the replies
-of the RFC stuff, so I have given them one.
-I have added SoB's too, but if that is not okay Gary, then please scream
-loudly.
+From: Miguel Ojeda <ojeda@kernel.org>
 
-As this is lifted from the state of the Rust-for-Linux tree, the commit
-messages from there cannot be preserved, so these patches have commit
-messages that I wrote.
+Add the required bits from rust-for-linux to enable generating a RISC-V
+target for rust. The script, written by Miguel, was originally a
+config file contributed by Gary.
 
-I've tested this on Icicle, and the modules seem to work as expected.
-Unfortunately there appear to be implicit 32-bit divisions (or similar)
-in core Rust code, so, as in the downstream Rust-for-Linux tree, Rust is
-only enabled for 64-bit.
+Co-developed-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+Despite removing 32-bit support, I kept the structure of the if
+statement, despite early return being stylistically preferred, for
+alignment with the Rust-for-Linux tree. I'm happy to respin to sort that
+out of desired.
+---
+ scripts/generate_rust_target.rs | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Thanks,
-Conor.
-
-Changes in v1:
-- rebase on v6.3-rc1
-- resort the `um` entry in the arch-support table while adding RISC-V
-  to it
-- drop 32-bit bits
-- have another crack at assigning authorship
-
-Changes in RFC-RESEND:
-- fix the asymmetrical additions in the Makefile bits
-- add cc-cover to my git send-email command...
-
-CC: Miguel Ojeda <ojeda@kernel.org>
-CC: Alex Gaynor <alex.gaynor@gmail.com>
-CC: Wedson Almeida Filho <wedsonaf@gmail.com>
-CC: Boqun Feng <boqun.feng@gmail.com>
-CC: Gary Guo <gary@garyguo.net>
-CC: Björn Roy Baron <bjorn3_gh@protonmail.com>
-CC: Jonathan Corbet <corbet@lwn.net>
-CC: Paul Walmsley <paul.walmsley@sifive.com>
-CC: Palmer Dabbelt <palmer@dabbelt.com>
-CC: Nathan Chancellor <nathan@kernel.org>
-CC: Nick Desaulniers <ndesaulniers@google.com>
-CC: Tom Rix <trix@redhat.com>
-CC: rust-for-linux@vger.kernel.org
-CC: linux-doc@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: linux-riscv@lists.infradead.org
-CC: llvm@lists.linux.dev
-
-Miguel Ojeda (2):
-  scripts: generate_rust_target: enable building on RISC-V
-  RISC-V: enable building 64-bit kernels with rust support
-
- Documentation/rust/arch-support.rst |  3 ++-
- arch/riscv/Kconfig                  |  1 +
- arch/riscv/Makefile                 |  2 ++
- scripts/generate_rust_target.rs     | 16 ++++++++++++++++
- 4 files changed, 21 insertions(+), 1 deletion(-)
-
+diff --git a/scripts/generate_rust_target.rs b/scripts/generate_rust_target.rs
+index 3c6cbe2b278d3..85d690f764389 100644
+--- a/scripts/generate_rust_target.rs
++++ b/scripts/generate_rust_target.rs
+@@ -161,6 +161,22 @@ fn main() {
+         ts.push("features", features);
+         ts.push("llvm-target", "x86_64-linux-gnu");
+         ts.push("target-pointer-width", "64");
++    } else if cfg.has("RISCV") {
++        if cfg.has("64BIT") {
++            ts.push("arch", "riscv64");
++            ts.push("data-layout", "e-m:e-p:64:64-i64:64-i128:128-n64-S128");
++            ts.push("llvm-target", "riscv64-linux-gnu");
++            ts.push("target-pointer-width", "64");
++        } else {
++            panic!("32-bit RISC-V is an unsupported architecture")
++        }
++        ts.push("code-model", "medium");
++        ts.push("disable-redzone", true);
++        let mut features = "+m,+a".to_string();
++        if cfg.has("RISCV_ISA_C") {
++            features += ",+c";
++        }
++        ts.push("features", features);
+     } else {
+         panic!("Unsupported architecture");
+     }
 -- 
 2.39.2
 
