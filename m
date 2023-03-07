@@ -2,155 +2,816 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C106AE511
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 963226AE510
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231364AbjCGPkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:40:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44858 "EHLO
+        id S230523AbjCGPkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:40:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjCGPkI (ORCPT
+        with ESMTP id S231534AbjCGPkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:40:08 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2122.outbound.protection.outlook.com [40.107.93.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA80925E23;
-        Tue,  7 Mar 2023 07:39:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bdEl8onomhDtJVr0IWfcrW1H8bkAmAErvG7WEUEGQWxIu6jwqUud5Q5/sxumHo2M1s/JUVbQwC7kVy8FsmujHEoHguOhq8W3PxUuw5BZ6zoalOCbIlwgpSaxehbhUUb4vlZTEH8V278SUNe5i2c+nJCGfqI8siXRfbD+FSom9lSz4hW8iI96WWyUPHGqYd4l5j/M7crEVljHkxTSyDnP8gUUcFii18lDlch1zVtJAWgVS5FjHh7qCgfNzIf6ba6+pgC40+BzDKEre7PqBGFJDq1eav3UTO/9+iVSIFwerfBPrtVzcoT4D75RX2ANBVDz11mZZLyFA4aECWf/Ux0PDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PaFnE6fNHRu6Ob11T0/JZiaBAwRe5hfPBtthp/nQvU4=;
- b=H67HHJz8BGerEsUiXhaG+wxCsPY+HGZjKgxoDkQZQAsWnhVXH+O0oA+MokYXtcb8ogYrdbcrTji90Ffhe6/h1gb/DBatvz59Ej7JE197p2y/YLZnIue2DD8491nVU6xhXbkzGopkyLloQYht71TSYwrcoISrBVYROXNQrMuApBTb+xsPx/GFy2ikWTIEgSUNbkXKF2DHXwl+4Pu052ybVAPe1aTgXeyJXRQsrX2k0gym9tYlZzwUEkWasxt0fnl7XGYt4MJwraUlCt652lMqYf2010QhUF86qosdn51Z+ug3VulAR4nrJf9GZ7g5SJJ0iaFC6LZpErfENVP2wmn7Tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 7 Mar 2023 10:40:13 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FAB85341
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:39:41 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id cy23so53803305edb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:39:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PaFnE6fNHRu6Ob11T0/JZiaBAwRe5hfPBtthp/nQvU4=;
- b=sc6QV7qnSHaQ8FdZNmP25qU8d/YDj/ePMXZj1X28i+cId3tySuB/aqF9jXHhRM4tK4S5WKpOvtU4eMjFvr9phrPtebZ0G4stpRImOYFVOIqOilaj3nOnfwfcrQEgqejRLrQb7Elt+a4Z4PrQlSSahbNTOBscIcOV8/3H67WQgNI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5035.namprd13.prod.outlook.com (2603:10b6:510:75::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 15:39:22 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 15:39:22 +0000
-Date:   Tue, 7 Mar 2023 16:39:15 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Manish Chopra <manishc@marvell.com>,
-        Rahul Verma <rahulv@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, GR-Linux-NIC-Dev@marvell.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] netxen_nic: Replace fake flex-array with
- flexible-array member
-Message-ID: <ZAdao7B1yeXy0OWH@corigine.com>
-References: <ZAZ57I6WdQEwWh7v@work>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZAZ57I6WdQEwWh7v@work>
-X-ClientProxiedBy: AM0PR02CA0226.eurprd02.prod.outlook.com
- (2603:10a6:20b:28f::33) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1678203560;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NBP4yZy0AVeC0MnD40cQqAFe/SHBra0LCgpXTLIauoo=;
+        b=trVxxTQOYz0Su1ie3bNBkqYpGwqjWhQup5lfaC+uL+kNNLkqAoe/KeoPJFPCGyPIfd
+         jX/zWg+L607/6JPCXz1CQVGTdn9fKQLAtHibGn3kJ0YztKcQM6Ip8C0rwx2IjY1q7Usv
+         s6Y0uKaFjsLsJEl/ON1yT9Blsx6DUZd6w3N7MUosPdD1fUwdNtvkGomlDRbf1QrRXho6
+         zPAB/ABqBcVJhXLvfyixBVRdaF9PoRuarLMXDr0AYcYKd2Q2Ut+Glc4KUEgnT+xYkxAR
+         eK5ph8+8dXw2wM5aNE0KaqMTX60pUYrZXHGKRt0p/ktrX4NKKNRnnMBRISz8DMQKmLQs
+         JLMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678203560;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NBP4yZy0AVeC0MnD40cQqAFe/SHBra0LCgpXTLIauoo=;
+        b=GQMv8l0XfQDqAT1D0JPPx+AfQB19ZEFBGxvWryiiNu0oRQSkgcyClDBh+DEVKOQx0s
+         3xqd5AoBcILVKrSBrL3YPH4sVnF+O4MY4hSQSvZ7F/cwGQX8at9x8HthkEPf1gzJn2oW
+         jJBTKVfG9pdKtusjzIid3Pp2MyD2jvAGS8bKMporHR2mAN0g7NpveoTgsciy40vIiV06
+         yDT3FGedx6CqaDm8KNo2h5l8+PyCO9tZ7x9/YLrnP+k6620zMMqQX8y5VsbPxaCbaiPJ
+         GKWHR/j2JHMPR3EOUpJQ7YTfwLTkA8ZrIphNYLXXEi/t+FroTMOSvutotTcCHl2SmFHN
+         Veyg==
+X-Gm-Message-State: AO0yUKV2qLiogVg9+ssgmtwluKVcUinEE7DT63JqQNxYzPyJS28tFsot
+        cYB28YO+FUlBegsLlrXvVfrtNA==
+X-Google-Smtp-Source: AK7set+xTuAJzQc0uULFQeqTwUTCoMklSzXAufpbBVloRdxCMVGokbPwteSaL1f1+7dcXUf7gQLZDA==
+X-Received: by 2002:a17:907:9713:b0:861:7a02:1046 with SMTP id jg19-20020a170907971300b008617a021046mr20673191ejc.37.1678203559630;
+        Tue, 07 Mar 2023 07:39:19 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:a60f:e604:c252:1f3d? ([2a02:810d:15c0:828:a60f:e604:c252:1f3d])
+        by smtp.gmail.com with ESMTPSA id q10-20020a50c34a000000b004bda465da32sm6965274edb.1.2023.03.07.07.39.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 07:39:19 -0800 (PST)
+Message-ID: <059bec3f-0c77-fc16-83a3-d78cf82d543f@linaro.org>
+Date:   Tue, 7 Mar 2023 16:39:17 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5035:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4eab3f16-6c8e-4756-c74f-08db1f221f7d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JZ1XQ7R5ZD9nTp5UZ3LeJlFAVTzVNfdYU7rFiM+iILOsanxYcARemQktqKFW21Z/oNvj4OI0RAcehMvdl0nchVtnXD08K9xss646JAotwT2a3vKFMzsvXbHamk64vL3JMmmWrbZFrAMicqpUrXrhurVdI44qYbdWucHKp+t+zTqPbKcrINLbajkgYw/G2Gexlv1G2MspnE3EeeRpvzpebC5x+4canifVNpyZDOiiWNCVdoX9SRaF5oSAeaiqRQx9xyp5X3CfeJufHhfH4sdszNXYhc762fdbopdJa72RI9fGaOJrtXoWbJCEwGhr/uMS2EZFPD5jghp9QrHCSIlq4w4Zkyt3Qt/NqHBUBL/Zhn8qMqo/sAnIlDA9t5LsYHnMTx8W9X3/VwfQ1ymmwtzXcC1KNgBsl0ylpmhYXc0f98VmWYlBvjZClznzJcGPFI46D14z/EFCOuB6YgNyjUtvCK06BsZzldATziT2o8WSUgg3LaIIkIk2an61qu7j17ZnUw9ZFjCVhi5A1S5/1CbjP+3fVnbOGVEYr3IiysiswX5D33zA3WQFX+igwoThNw70qVfZpclI6lbV0yRiorxiLQkhicm/u0fPl6THuRPbp3UlUM12TCZ2zjn+3Ql9IY9Y
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39840400004)(136003)(376002)(366004)(396003)(346002)(451199018)(38100700002)(86362001)(5660300002)(6666004)(36756003)(7416002)(44832011)(2906002)(4326008)(6916009)(66476007)(8676002)(8936002)(66946007)(66556008)(41300700001)(2616005)(186003)(83380400001)(316002)(6512007)(54906003)(6506007)(966005)(478600001)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MVV5Z2VxNDN5cG40Uy96U1hXbUdBdW9HQWhGWkp2b2l4ejM1NXlHVUNONHJk?=
- =?utf-8?B?SUFvNHMwQ2lHV1ZWR01yWWcyQjV3WXlPb3RBWUs1cGxkWTJHekZNSW9tOHIv?=
- =?utf-8?B?K0pTQ0NDeTFlMFVCclNnNFVrNFM3cTcrWW5zOXVqSnJnTytVeUJKQVFZbzJD?=
- =?utf-8?B?S0Zia3NPdng0NHNJY3hQZFFOWmdnRkxWNkRGVUI0RStUTTVZT04rTHlDZmYy?=
- =?utf-8?B?WVNLSFhLWjk1aTZDM1UvRkFUWkVlODVvdndtMUpGMHQyY3NwK3lCaGlHME1V?=
- =?utf-8?B?WGlmRERzVG5qYy8rZGo2YU1la24ybEQ0RFFGWDdHdS9PTUJuQ215WjN2dHlw?=
- =?utf-8?B?Sml6ek5EK3U1QUFDWi9uM1ZRaENEOW9iM0NXZUQrZktHS0tYWUlwbDVmK0Y2?=
- =?utf-8?B?WExqRWlucDJGQTNtNFNnVERka0tKOG52WGQwVkNyc2ovR2dtVEFJQ0FrcHlW?=
- =?utf-8?B?QWxkS3hsbXRFRlRVaGxlYUdFT1J2WDdjSHQ2VmdqQ080UjEzOVM1YlRUWlRs?=
- =?utf-8?B?bjNCYktiY2ZSYlpKWXdXK3p6RTUyVnM2dmxURnpTQUxSTExBYUZUdlpwL0w4?=
- =?utf-8?B?eW9lSkJGSGU2OEIzUnRtY01oUlRXVkozL1VkMWJMZ1NsakFram01aGRQaEVI?=
- =?utf-8?B?bnpPWVI1akFGaTZZUzNENVlldmtvbDhOU29tTGxQbnVSNjNsRVkwYnhoUGgr?=
- =?utf-8?B?eVd0OHBNUE9xWkVxTTMvb1dzWFhRMjF4RG5MYUc0WmhxRkwreFdJa0ZCVlJP?=
- =?utf-8?B?SFBKOWw5Ny9WSDhlSXFJbHdhajYvL3Q5Vm5Qa3FyT1dQTTFqQ1ZxUC9EWkha?=
- =?utf-8?B?U0xYNE5NNlYvdTByYlBYdEtENlArQTlDdVhBRll6MEhyMnpCTVV0VlUyN2wy?=
- =?utf-8?B?N0tQb2hjM2dxOCtaNnNNMXBrVTZURjI0NktEd2ppelFETldud1I4V3pyelg1?=
- =?utf-8?B?YXJoa1k0NVRpMHRBOGN2YzMvdWo0K1p6blY2ZHhOM3RtamI4dVQzUXNuRFhl?=
- =?utf-8?B?VnE4TlNrVlluMUZTUkRmQWpzclNCZmhQdlozRDdPS3Jaakptb2NXVEJWZ2p0?=
- =?utf-8?B?OURKcjhwZ0QrNWhhQ2duNUtOL2FGUTFQNlNSWjlCZ0lTQUxBNFNIQ2NFSE9L?=
- =?utf-8?B?RWJqQ1FUS1EzNE1EMFNpRGNIRm1NcWVQWFNjZHlwbkZnZUltdWIyVmIyTFF1?=
- =?utf-8?B?Qnh0dGM3U0N0ZEtGQWZwb0M5RXF0MEh1OVpPc0xZOU5ESUNVYzIxMW5Sekc5?=
- =?utf-8?B?VzlFRXdwdE1pMm9JY1FCMzdTaXNQZjl4WWZwU3BHcHo0Qkd0bDMxTUNRc3VS?=
- =?utf-8?B?ZUZnSjVqak9pcmhXdUpjMFR4ekZqdEI0UlNvYmJDSzVBd3R3UnNORzVnNGIw?=
- =?utf-8?B?dmhDOEttWWR3VGNQNGROQXJIU29qZFhWVC9mYW1RVUdiOUw4LzdOQVk2dElG?=
- =?utf-8?B?bkJkbjM2bkhWSElPQm1PK3hjYUMrN3JEZVArRTlja3hSNWlxajNZRDNlY0ti?=
- =?utf-8?B?b2s2KytsRW9sRnMyNjREdHhFM3dWYW1aUDQvbysyUFZ5VlVpRTFINEtvMlBO?=
- =?utf-8?B?VnJoWVpJMzV3RWMzN2FVbmJCci8yc2FLTDZTWkpiMUNKVCtyZVFnYU9VdWNW?=
- =?utf-8?B?YktZS1VRakpNRUc4dGxiR2FtVHZreUtKK09Uakp6YTRQZURHNHRiVmhsVlhQ?=
- =?utf-8?B?LzVKSjE1TkZLbFdpbVpqTTRzVnlJR3pkcTF5dGVKRlZhYWV3ZHFydUY4eUNK?=
- =?utf-8?B?d2gxU3BBZk1BK1ZlV3F5NXBqaFZPZHRsWlg4eWFhZ1Z2ZzMwR0dna0wwTEUv?=
- =?utf-8?B?eEI5Sm5UcXlKTG50RUhCSC9tdFN4Q0hhTHZJenVSQzRWc0NRV1grTXZHbUQy?=
- =?utf-8?B?TWViN09oT1RzTVJnbjZ0bm13MU45amU5Q1BvK3BvNFJ5QUxiNDVzL3dLUDQz?=
- =?utf-8?B?S0FhcTlxMHB5RWVobHZoVm0rOXM5aCtkTVE3ci9IeGkvTUNLeDF2QVZaS3Fh?=
- =?utf-8?B?cjdSWFVmd1haRFZobzRUWU9YWm5uS1prU202akNYbnhrdVpRbXhoSHVsYWw0?=
- =?utf-8?B?dWplbWdERjdYUDBTUjRTcVBQWXpTMFJBV0xReVA3bUpVVmtxZE82czhiZDBn?=
- =?utf-8?B?ZWhwL3NQekV6aDNyZ05jSmJZWkRlcWtHNS9vb2s5T0xJbjYxR3UrZ2E1M2Zx?=
- =?utf-8?B?UG0wVHBzQ2grSDB5eEtBc2pWQjk4NTBHQkx1Q2hvYWZxb2Y5YlBkTVhEbFYv?=
- =?utf-8?B?cnZvZmVhOVU3Nm1uYms3SGRtMVdRPT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4eab3f16-6c8e-4756-c74f-08db1f221f7d
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 15:39:22.2305
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p1dz9wxcrgLSnedW5iasGclZMU9KFjgvVjweTMEduxHBU3KStH1yjUwP+ecyQQcfOCCE53sqzFLaPWnjBYLlefW6SXE74zVSPO/yTfttANk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5035
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 08/11] remoteproc: qcom: Add Hexagon based multipd rproc
+ driver
+Content-Language: en-US
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
+        loic.poulain@linaro.org, quic_eberman@quicinc.com,
+        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-9-git-send-email-quic_mmanikan@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1678164097-13247-9-git-send-email-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 05:40:28PM -0600, Gustavo A. R. Silva wrote:
-> Zero-length arrays as fake flexible arrays are deprecated and we are
-> moving towards adopting C99 flexible-array members instead.
+On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
+> APSS brings Q6 out of reset and then Q6 brings
+> WCSS block (wifi radio's) out of reset.
 > 
-> Transform zero-length array into flexible-array member in struct
-> nx_cardrsp_rx_ctx_t.
+> 				   ---------------
+> 			      -->  |WiFi 2G radio|
+> 			      |	   --------------
+> 			      |
+> --------	-------	      |
+> | APSS | --->   |QDSP6|  -----|
+> ---------	-------       |
+>                               |
+>       			      |
+> 			      |   --------------
+> 			      --> |WiFi 5G radio|
+> 				  --------------
 > 
-> Address the following warnings found with GCC-13 and
-> -fstrict-flex-arrays=3 enabled:
-> drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c:361:26: warning: array subscript <unknown> is outside array bounds of ‘char[0]’ [-Warray-bounds=]
-> drivers/net/ethernet/qlogic/netxen/netxen_nic_ctx.c:372:25: warning: array subscript <unknown> is outside array bounds of ‘char[0]’ [-Warray-bounds=]
+> Problem here is if any radio crashes, subsequently other
+> radio also should crash because Q6 crashed. Let's say
+> 2G radio crashed, Q6 should pass this info to APSS. Only
+> Q6 processor interrupts registered with APSS. Obviously
+> Q6 should crash and raise fatal interrupt to APSS. Due
+> to this 5G radio also crashed. But no issue in 5G radio,
+> because of 2G radio crash 5G radio also impacted.
 > 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
-> 
-> Link: https://github.com/KSPP/linux/issues/21
-> Link: https://github.com/KSPP/linux/issues/265
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+
+Please wrap commit message according to Linux coding style / submission
+process (neither too early nor over the limit):
+https://elixir.bootlin.com/linux/v5.18-rc4/source/Documentation/process/submitting-patches.rst#L586
+
+> In multi pd model, this problem is resolved. Here WCSS
+> functionality (WiFi radio's) moved out from Q6 root pd
+> to a separate user pd. Due to this, radio's independently
+> pass their status info to APPS with out crashing Q6. So
+> other radio's won't be impacted.
+> 
+> 						---------
+> 					    	|WiFi    |
+> 					    --> |2G radio|
+> 					    | 	---------
+> ------	Start Q6     		-------     |
+> |    |	------------------>     |     |     |
+> |    |  Start WCSS PD1 (2G)   	|     |	    |
+> |APSS|	----------------------->|QDSP6|-----|
+> |    |	Start WCSS PD1 (5G)	|     |
+> |    |	----------------------->|     |-----|
+> ------		     		-------     |
+> 					    |
+> 					    |	-----------
+> 					    |-->|WiFi	  |
+> 						|5G radio |
+> 						-----------
+> According to linux terminology, here consider Q6 as root
+> i.e it provide all services, WCSS (wifi radio's) as user
+> i.e it uses services provided by root.
+> 
+> Since Q6 root & WCSS user pd's able to communicate with
+> APSS individually, multipd remoteproc driver registers
+> each PD with rproc framework. Here clients (Wifi host drivers)
+> intrested on WCSS PD rproc, so multipd driver start's root
+> pd in the context of WCSS user pd rproc start. Similarly
+> on down path, root pd will be stopped after wcss user pd
+> stopped.
+> 
+> Here WCSS(user) PD is dependent on Q6(root) PD, so first
+> q6 pd should be up before wcss pd. After wcss pd goes down,
+> q6 pd should be turned off.
+> 
+> rproc->ops->start(userpd_rproc) {
+> 	/* Boot root pd rproc */
+> 	rproc_boot(upd_dev->parent);
+> 	---
+> 	/* user pd rproc start sequence */
+> 	---
+> 	---
+> }
+> With this way we ensure that root pd brought up before userpd.
+> 
+> rproc->ops->stop(userpd_rproc) {
+> 	---
+> 	---
+> 	/* user pd rproc stop sequence */
+> 	---
+> 	---
+> 	/* Shutdown root pd rproc */
+> 	rproc_shutdown(upd_dev->parent);
+> }
+> After userpd rproc stops, root pd rproc will be stopped.
+> IPQ5018, IPQ9574 supports multipd remoteproc driver.
+> 
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+>  drivers/firmware/qcom_scm.c            | 114 +++++
+>  drivers/firmware/qcom_scm.h            |   6 +
+>  drivers/remoteproc/Kconfig             |  20 +
+>  drivers/remoteproc/Makefile            |   1 +
+>  drivers/remoteproc/qcom_common.c       |  23 +
+>  drivers/remoteproc/qcom_common.h       |   1 +
+>  drivers/remoteproc/qcom_q6v5.c         |  41 +-
+>  drivers/remoteproc/qcom_q6v5.h         |  15 +-
+>  drivers/remoteproc/qcom_q6v5_adsp.c    |   5 +-
+>  drivers/remoteproc/qcom_q6v5_mpd.c     | 668 +++++++++++++++++++++++++
+
+Why exactly do you need a new driver for this instead of extending
+existing PIL? I feel all this is growing because no one wants to touch
+existing code and merge with it...
+
+
+>  drivers/remoteproc/qcom_q6v5_mss.c     |   4 +-
+>  drivers/remoteproc/qcom_q6v5_pas.c     |   3 +-
+>  drivers/soc/qcom/mdt_loader.c          | 314 ++++++++++++
+>  include/linux/firmware/qcom/qcom_scm.h |   3 +
+>  include/linux/soc/qcom/mdt_loader.h    |  19 +
+>  15 files changed, 1228 insertions(+), 9 deletions(-)
+>  create mode 100644 drivers/remoteproc/qcom_q6v5_mpd.c
+> 
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index d88c5f14bd54..d69560963353 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -654,6 +654,120 @@ int qcom_scm_pas_shutdown(u32 peripheral)
+>  }
+>  EXPORT_SYMBOL(qcom_scm_pas_shutdown);
+>  
+> +/**
+> + * qti_scm_int_radio_powerup - Bring up internal radio userpd
+> + *
+> + * @peripheral:	peripheral id
+> + *
+> + * Return 0 on success.
+> + */
+
+...
+
+> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+> index 91314a9b43ce..b64051080ec1 100644
+> --- a/drivers/remoteproc/Makefile
+> +++ b/drivers/remoteproc/Makefile
+> @@ -25,6 +25,7 @@ obj-$(CONFIG_QCOM_PIL_INFO)		+= qcom_pil_info.o
+>  obj-$(CONFIG_QCOM_RPROC_COMMON)		+= qcom_common.o
+>  obj-$(CONFIG_QCOM_Q6V5_COMMON)		+= qcom_q6v5.o
+>  obj-$(CONFIG_QCOM_Q6V5_ADSP)		+= qcom_q6v5_adsp.o
+> +obj-$(CONFIG_QCOM_Q6V5_MPD)		+= qcom_q6v5_mpd.o
+>  obj-$(CONFIG_QCOM_Q6V5_MSS)		+= qcom_q6v5_mss.o
+>  obj-$(CONFIG_QCOM_Q6V5_PAS)		+= qcom_q6v5_pas.o
+>  obj-$(CONFIG_QCOM_Q6V5_WCSS)		+= qcom_q6v5_wcss.o
+> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+> index a0d4238492e9..b72fbda02242 100644
+> --- a/drivers/remoteproc/qcom_common.c
+> +++ b/drivers/remoteproc/qcom_common.c
+> @@ -510,5 +510,28 @@ void qcom_remove_ssr_subdev(struct rproc *rproc, struct qcom_rproc_ssr *ssr)
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_remove_ssr_subdev);
+>  
+> +/**
+> + * qcom_get_pd_asid() - get the pd asid number from DT node
+> + * @node:	device tree node
+> + *
+> + * Returns asid if node name has 'pd' string
+> + */
+> +s8 qcom_get_pd_asid(struct device_node *node)
+> +{
+> +	char *str;
+> +	u8 pd_asid;
+> +
+> +	if (!node)
+> +		return -EINVAL;
+> +
+> +	str = strstr(node->name, "pd");
+> +	if (!str)
+> +		return 0;
+> +
+> +	str += strlen("pd");
+> +	return kstrtos8(str, 10, &pd_asid) ? -EINVAL : pd_asid;
+> +}
+> +EXPORT_SYMBOL(qcom_get_pd_asid);
+
+Why do you need it in shared file?
+
+> +
+>  MODULE_DESCRIPTION("Qualcomm Remoteproc helper driver");
+>  MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/remoteproc/qcom_common.h b/drivers/remoteproc/qcom_common.h
+> index 9ef4449052a9..9f3fb11224aa 100644
+> --- a/drivers/remoteproc/qcom_common.h
+> +++ b/drivers/remoteproc/qcom_common.h
+> @@ -75,5 +75,6 @@ static inline bool qcom_sysmon_shutdown_acked(struct qcom_sysmon *sysmon)
+>  	return false;
+>  }
+>  #endif
+> +s8 qcom_get_pd_asid(struct device_node *node);
+>  
+>  #endif
+> diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+> index 192c7aa0e39e..b88bf3a8e53b 100644
+> --- a/drivers/remoteproc/qcom_q6v5.c
+> +++ b/drivers/remoteproc/qcom_q6v5.c
+> @@ -118,7 +118,7 @@ static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+> +irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+
+The amount of changes you are doing to other interfaces is worrying...
+Actually it points to the fact that you are duplicating a lot instead of
+merging the code.
+
+Also this patch is doing so many things at the same time.
+
+>  {
+>  	struct qcom_q6v5 *q6v5 = data;
+>  	size_t len;
+> @@ -139,7 +139,7 @@ static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -static irqreturn_t q6v5_ready_interrupt(int irq, void *data)
+> +irqreturn_t q6v5_ready_interrupt(int irq, void *data)
+>  {
+>  	struct qcom_q6v5 *q6v5 = data;
+>  
+> @@ -183,7 +183,16 @@ static irqreturn_t q6v5_handover_interrupt(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -static irqreturn_t q6v5_stop_interrupt(int irq, void *data)
+> +irqreturn_t q6v5_spawn_interrupt(int irq, void *data)
+
+> +{
+> +	struct qcom_q6v5 *q6v5 = data;
+> +
+> +	complete(&q6v5->spawn_done);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +irqreturn_t q6v5_stop_interrupt(int irq, void *data)
+>  {
+>  	struct qcom_q6v5 *q6v5 = data;
+>  
+> @@ -220,6 +229,28 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon)
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
+>  
+> +/**
+> + * qcom_q6v5_request_spawn() - request the remote processor to spawn
+> + * @q6v5:      reference to qcom_q6v5 context
+> + *
+> + * Return: 0 on success, negative errno on failure
+> + */
+> +int qcom_q6v5_request_spawn(struct qcom_q6v5 *q6v5)
+> +{
+> +	int ret;
+> +
+> +	ret = qcom_smem_state_update_bits(q6v5->spawn_state,
+> +					  BIT(q6v5->spawn_bit), BIT(q6v5->spawn_bit));
+> +
+> +	ret = wait_for_completion_timeout(&q6v5->spawn_done, 5 * HZ);
+> +
+> +	qcom_smem_state_update_bits(q6v5->spawn_state,
+> +				    BIT(q6v5->spawn_bit), 0);
+> +
+> +	return ret == 0 ? -ETIMEDOUT : 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_q6v5_request_spawn);
+> +
+>  /**
+>   * qcom_q6v5_panic() - panic handler to invoke a stop on the remote
+>   * @q6v5:	reference to qcom_q6v5 context
+> @@ -250,7 +281,8 @@ EXPORT_SYMBOL_GPL(qcom_q6v5_panic);
+>   * Return: 0 on success, negative errno on failure
+>   */
+>  int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+> -		   struct rproc *rproc, int crash_reason, const char *load_state,
+> +		   struct rproc *rproc, int remote_id, int crash_reason,
+> +		   const char *load_state,
+>  		   void (*handover)(struct qcom_q6v5 *q6v5))
+>  {
+>  	int ret;
+> @@ -258,6 +290,7 @@ int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+>  	q6v5->rproc = rproc;
+>  	q6v5->dev = &pdev->dev;
+>  	q6v5->crash_reason = crash_reason;
+> +	q6v5->remote_id = remote_id;
+>  	q6v5->handover = handover;
+>  
+>  	init_completion(&q6v5->start_done);
+> diff --git a/drivers/remoteproc/qcom_q6v5.h b/drivers/remoteproc/qcom_q6v5.h
+> index 5a859c41896e..d00568339d46 100644
+> --- a/drivers/remoteproc/qcom_q6v5.h
+> +++ b/drivers/remoteproc/qcom_q6v5.h
+> @@ -18,22 +18,29 @@ struct qcom_q6v5 {
+>  
+>  	struct qcom_smem_state *state;
+>  	struct qmp *qmp;
+> +	struct qcom_smem_state *shutdown_state;
+> +	struct qcom_smem_state *spawn_state;
+>  
+>  	struct icc_path *path;
+>  
+>  	unsigned stop_bit;
+> +	unsigned shutdown_bit;
+> +	unsigned spawn_bit;
+>  
+>  	int wdog_irq;
+>  	int fatal_irq;
+>  	int ready_irq;
+>  	int handover_irq;
+>  	int stop_irq;
+> +	int spawn_irq;
+>  
+>  	bool handover_issued;
+>  
+>  	struct completion start_done;
+>  	struct completion stop_done;
+> +	struct completion spawn_done;
+>  
+> +	int remote_id;
+>  	int crash_reason;
+>  
+>  	bool running;
+> @@ -43,14 +50,20 @@ struct qcom_q6v5 {
+>  };
+>  
+>  int qcom_q6v5_init(struct qcom_q6v5 *q6v5, struct platform_device *pdev,
+> -		   struct rproc *rproc, int crash_reason, const char *load_state,
+> +		   struct rproc *rproc, int remote_id, int crash_reason,
+> +		   const char *load_state,
+>  		   void (*handover)(struct qcom_q6v5 *q6v5));
+>  void qcom_q6v5_deinit(struct qcom_q6v5 *q6v5);
+>  
+>  int qcom_q6v5_prepare(struct qcom_q6v5 *q6v5);
+>  int qcom_q6v5_unprepare(struct qcom_q6v5 *q6v5);
+>  int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon);
+> +int qcom_q6v5_request_spawn(struct qcom_q6v5 *q6v5);
+>  int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout);
+>  unsigned long qcom_q6v5_panic(struct qcom_q6v5 *q6v5);
+> +irqreturn_t q6v5_fatal_interrupt(int irq, void *data);
+> +irqreturn_t q6v5_ready_interrupt(int irq, void *data);
+> +irqreturn_t q6v5_spawn_interrupt(int irq, void *data);
+> +irqreturn_t q6v5_stop_interrupt(int irq, void *data);
+>  
+>  #endif
+> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
+> index 08d8dad22ca7..bf8909ad5ff5 100644
+> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+> @@ -733,8 +733,9 @@ static int adsp_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto disable_pm;
+>  
+> -	ret = qcom_q6v5_init(&adsp->q6v5, pdev, rproc, desc->crash_reason_smem,
+> -			     desc->load_state, qcom_adsp_pil_handover);
+> +	ret = qcom_q6v5_init(&adsp->q6v5, pdev, rproc, QCOM_SMEM_HOST_ANY,
+> +			     desc->crash_reason_smem, desc->load_state,
+> +			     qcom_adsp_pil_handover);
+>  	if (ret)
+>  		goto disable_pm;
+>  
+> diff --git a/drivers/remoteproc/qcom_q6v5_mpd.c b/drivers/remoteproc/qcom_q6v5_mpd.c
+> new file mode 100644
+> index 000000000000..853aa3bc5859
+> --- /dev/null
+> +++ b/drivers/remoteproc/qcom_q6v5_mpd.c
+> @@ -0,0 +1,668 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2016-2018 Linaro Ltd.
+> + * Copyright (C) 2014 Sony Mobile Communications AB
+> + * Copyright (c) 2012-2018, 2021 The Linux Foundation. All rights reserved.
+> + */
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_reserved_mem.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/soc/qcom/mdt_loader.h>
+> +#include <linux/soc/qcom/smem.h>
+> +#include <linux/soc/qcom/smem_state.h>
+> +#include <linux/firmware/qcom/qcom_scm.h>
+> +#include <linux/interrupt.h>
+> +#include "qcom_common.h"
+> +#include "qcom_q6v5.h"
+> +
+> +#include "remoteproc_internal.h"
+> +
+> +#define WCSS_CRASH_REASON		421
+> +#define WCSS_SMEM_HOST			1
+> +
+> +#define WCNSS_PAS_ID			6
+> +#define MPD_WCNSS_PAS_ID        0xD
+> +
+> +#define BUF_SIZE			35
+> +
+> +/**
+> + * enum state - state of a wcss (private)
+> + * @WCSS_NORMAL: subsystem is operating normally
+> + * @WCSS_CRASHED: subsystem has crashed and hasn't been shutdown
+> + * @WCSS_RESTARTING: subsystem has been shutdown and is now restarting
+> + * @WCSS_SHUTDOWN: subsystem has been shutdown
+> + *
+> + */
+> +enum q6_wcss_state {
+> +	WCSS_NORMAL,
+> +	WCSS_CRASHED,
+> +	WCSS_RESTARTING,
+> +	WCSS_SHUTDOWN,
+> +};
+> +
+> +enum {
+> +	Q6_IPQ,
+> +	WCSS_AHB_IPQ,
+> +	WCSS_PCIE_IPQ,
+> +};
+> +
+> +struct q6_wcss {
+> +	struct device *dev;
+> +	struct qcom_rproc_glink glink_subdev;
+> +	struct qcom_rproc_ssr ssr_subdev;
+> +	struct qcom_q6v5 q6;
+> +	phys_addr_t mem_phys;
+> +	phys_addr_t mem_reloc;
+> +	void *mem_region;
+> +	size_t mem_size;
+> +	int crash_reason_smem;
+> +	u32 version;
+> +	s8 pd_asid;
+> +	enum q6_wcss_state state;
+> +};
+> +
+> +struct wcss_data {
+> +	int (*init_irq)(struct qcom_q6v5 *q6, struct platform_device *pdev,
+> +			struct rproc *rproc, int remote_id,
+> +			int crash_reason, const char *load_state,
+> +			void (*handover)(struct qcom_q6v5 *q6));
+> +	const char *q6_firmware_name;
+> +	int crash_reason_smem;
+> +	int remote_id;
+> +	u32 version;
+> +	const char *ssr_name;
+> +	const struct rproc_ops *ops;
+> +	bool need_auto_boot;
+> +	bool glink_subdev_required;
+> +	s8 pd_asid;
+> +	bool reset_seq;
+> +	u32 pasid;
+> +	int (*mdt_load_sec)(struct device *dev, const struct firmware *fw,
+> +			    const char *fw_name, int pas_id, void *mem_region,
+> +			    phys_addr_t mem_phys, size_t mem_size,
+> +			    phys_addr_t *reloc_base);
+> +};
+> +
+> +static int q6_wcss_start(struct rproc *rproc)
+> +{
+> +	struct q6_wcss *wcss = rproc->priv;
+> +	int ret;
+> +	struct device_node *upd_np;
+> +	struct platform_device *upd_pdev;
+> +	struct rproc *upd_rproc;
+> +	struct q6_wcss *upd_wcss;
+> +	const struct wcss_data *desc;
+> +
+> +	desc = of_device_get_match_data(wcss->dev);
+
+Why do you match in start callback, not in probe?
+
+> +	if (!desc)
+> +		return -EINVAL;
+> +
+> +	qcom_q6v5_prepare(&wcss->q6);
+> +
+> +	ret = qcom_scm_pas_auth_and_reset(desc->pasid);
+> +	if (ret) {
+> +		dev_err(wcss->dev, "wcss_reset failed\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = qcom_q6v5_wait_for_start(&wcss->q6, 5 * HZ);
+> +	if (ret == -ETIMEDOUT)
+> +		dev_err(wcss->dev, "start timed out\n");
+> +
+> +	/* Bring userpd wcss state to default value */
+> +	for_each_available_child_of_node(wcss->dev->of_node, upd_np) {
+> +		if (!strstr(upd_np->name, "pd"))
+
+Device node names are not an ABI. Don't try to make them, NAK.
+
+> +			continue;
+> +		upd_pdev = of_find_device_by_node(upd_np);
+> +		upd_rproc = platform_get_drvdata(upd_pdev);
+> +		upd_wcss = upd_rproc->priv;
+> +		upd_wcss->state = WCSS_NORMAL;
+> +	}
+> +	return ret;
+
+So all this looks pretty standard and simialr to other wcss/pils...
+
+> +}
+> +
+> +static int q6_wcss_spawn_pd(struct rproc *rproc)
+> +{
+> +	int ret;
+> +	struct q6_wcss *wcss = rproc->priv;
+> +
+> +	ret = qcom_q6v5_request_spawn(&wcss->q6);
+> +	if (ret == -ETIMEDOUT) {
+> +		pr_err("%s spawn timedout\n", rproc->name);
+> +		return ret;
+> +	}
+> +
+> +	ret = qcom_q6v5_wait_for_start(&wcss->q6, msecs_to_jiffies(10000));
+> +	if (ret == -ETIMEDOUT) {
+> +		pr_err("%s start timedout\n", rproc->name);
+> +		wcss->q6.running = false;
+> +		return ret;
+> +	}
+> +	wcss->q6.running = true;
+> +	return ret;
+> +}
+> +
+> +static int wcss_ahb_pcie_pd_start(struct rproc *rproc)
+> +{
+> +	struct q6_wcss *wcss = rproc->priv;
+> +	const struct wcss_data *desc = of_device_get_match_data(wcss->dev);
+> +	int ret;
+> +
+> +	if (desc->reset_seq) {
+> +		ret = qti_scm_int_radio_powerup(desc->pasid);
+> +		if (ret) {
+> +			dev_err(wcss->dev, "failed to power up ahb pd\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (wcss->q6.spawn_bit) {
+> +		ret = q6_wcss_spawn_pd(rproc);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	wcss->state = WCSS_NORMAL;
+> +	return 0;
+> +}
+> +
+> +static int q6_wcss_stop(struct rproc *rproc)
+> +{
+> +	struct q6_wcss *wcss = rproc->priv;
+> +	int ret;
+> +	const struct wcss_data *desc =
+> +			of_device_get_match_data(wcss->dev);
+> +
+> +	if (!desc)
+> +		return -EINVAL;
+> +
+> +	ret = qcom_scm_pas_shutdown(desc->pasid);
+> +	if (ret) {
+> +		dev_err(wcss->dev, "not able to shutdown\n");
+> +		return ret;
+> +	}
+> +	qcom_q6v5_unprepare(&wcss->q6);
+> +
+> +	return 0;
+> +}
+> +
+> +static int wcss_ahb_pcie_pd_stop(struct rproc *rproc)
+> +{
+> +	struct q6_wcss *wcss = rproc->priv;
+> +	struct rproc *rpd_rproc = dev_get_drvdata(wcss->dev->parent);
+> +	const struct wcss_data *desc = of_device_get_match_data(wcss->dev);
+> +	int ret;
+> +
+> +	if (rproc->state != RPROC_CRASHED && wcss->q6.stop_bit) {
+> +		ret = qcom_q6v5_request_stop(&wcss->q6, NULL);
+> +		if (ret) {
+> +			dev_err(&rproc->dev, "pd not stopped\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (desc->reset_seq) {
+> +		ret = qti_scm_int_radio_powerdown(desc->pasid);
+> +		if (ret) {
+> +			dev_err(wcss->dev, "failed to power down pd\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	if (rproc->state != RPROC_CRASHED)
+> +		rproc_shutdown(rpd_rproc);
+> +
+> +	wcss->state = WCSS_SHUTDOWN;
+> +	return 0;
+> +}
+> +
+> +static void *q6_wcss_da_to_va(struct rproc *rproc, u64 da, size_t len,
+> +			      bool *is_iomem)
+> +{
+> +	struct q6_wcss *wcss = rproc->priv;
+> +	int offset;
+> +
+> +	offset = da - wcss->mem_reloc;
+> +	if (offset < 0 || offset + len > wcss->mem_size)
+> +		return NULL;
+> +
+> +	return wcss->mem_region + offset;
+> +}
+> +
+> +static int q6_wcss_load(struct rproc *rproc, const struct firmware *fw)
+> +{
+> +	struct q6_wcss *wcss = rproc->priv;
+> +	const struct firmware *m3_fw;
+> +	int ret;
+> +	const char *m3_fw_name;
+> +	struct device_node *upd_np;
+> +	struct platform_device *upd_pdev;
+> +	const struct wcss_data *desc =
+> +				of_device_get_match_data(wcss->dev);
+> +
+> +	if (!desc)
+> +		return -EINVAL;
+> +
+> +	/* load m3 firmware */
+> +	for_each_available_child_of_node(wcss->dev->of_node, upd_np) {
+> +		if (!strstr(upd_np->name, "pd"))
+> +			continue;
+> +		upd_pdev = of_find_device_by_node(upd_np);
+> +
+> +		ret = of_property_read_string(upd_np, "m3_firmware",
+> +					      &m3_fw_name);
+
+Undocumented property. Drop.
+
+> +		if (!ret && m3_fw_name) {
+> +			ret = request_firmware(&m3_fw, m3_fw_name,
+> +					       &upd_pdev->dev);
+> +			if (ret)
+> +				continue;
+> +
+> +			ret = qcom_mdt_load_no_init(wcss->dev, m3_fw,
+> +						    m3_fw_name, 0,
+> +						    wcss->mem_region,
+> +						    wcss->mem_phys,
+> +						    wcss->mem_size,
+> +						    &wcss->mem_reloc);
+> +
+> +			release_firmware(m3_fw);
+> +
+> +			if (ret) {
+> +				dev_err(wcss->dev,
+> +					"can't load m3_fw.bXX ret:%d\n", ret);
+> +				return ret;
+> +			}
+> +		}
+> +	}
+> +
+> +	return qcom_mdt_load(wcss->dev, fw, rproc->firmware,
+> +				desc->pasid, wcss->mem_region,
+> +				wcss->mem_phys, wcss->mem_size,
+> +				&wcss->mem_reloc);
+> +}
+> +
+> +static int wcss_ahb_pcie_pd_load(struct rproc *rproc, const struct firmware *fw)
+> +{
+> +	struct q6_wcss *wcss = rproc->priv, *wcss_rpd;
+> +	struct rproc *rpd_rproc = dev_get_drvdata(wcss->dev->parent);
+> +	int ret;
+> +	const struct wcss_data *desc =
+> +				of_device_get_match_data(wcss->dev);
+
+Actually now I see you match devices in all over the place. Don't do it,
+there is no need. Match it once and use the result.
+
+This really should not introduce its own patterns and coding style.
+
+> +
+> +	if (!desc)
+> +		return -EINVAL;
+> +
+> +	wcss_rpd = rpd_rproc->priv;
+> +
+> +	/* Boot rootpd rproc */
+> +	ret = rproc_boot(rpd_rproc);
+> +	if (ret || wcss->state == WCSS_NORMAL)
+> +		return ret;
+> +
+> +	return desc->mdt_load_sec(wcss->dev, fw, rproc->firmware,
+> +				desc->pasid, wcss->mem_region,
+> +				wcss->mem_phys, wcss->mem_size,
+> +				&wcss->mem_reloc);
+> +}
+
+(...)
+
+> +MODULE_DESCRIPTION("Hexagon WCSS Multipd Peripheral Image Loader");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+> index ab053084f7a2..48685bb85718 100644
+> --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> @@ -28,6 +28,7 @@
+>  #include <linux/soc/qcom/mdt_loader.h>
+>  #include <linux/iopoll.h>
+>  #include <linux/slab.h>
+> +#include <linux/soc/qcom/smem.h>
+>  
+>  #include "remoteproc_internal.h"
+>  #include "qcom_common.h"
+> @@ -2070,7 +2071,8 @@ static int q6v5_probe(struct platform_device *pdev)
+>  	qproc->need_mem_protection = desc->need_mem_protection;
+>  	qproc->has_mba_logs = desc->has_mba_logs;
+>  
+> -	ret = qcom_q6v5_init(&qproc->q6v5, pdev, rproc, MPSS_CRASH_REASON_SMEM, "modem",
+> +	ret = qcom_q6v5_init(&qproc->q6v5, pdev, rproc, QCOM_SMEM_HOST_ANY,
+
+Not obvious... aren't you doing multiple things in one patch?
+
+
+Best regards,
+Krzysztof
 
