@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3276AD9B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A386AD9C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjCGI6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:58:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S230178AbjCGI7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:59:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjCGI6F (ORCPT
+        with ESMTP id S230182AbjCGI7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:58:05 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9858A32534
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:58:03 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id ay14so45637027edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:58:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678179482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVTfPiVagOZL90gtIf96Yys0KYhqSZTVjW5Vb21u5PM=;
-        b=lMOa5uVEs630Vnh6L/HLw1O+7z304xtCXQWssdZJSHBtS4gIfwMxoSXq/0Zgf/xUbN
-         PN1HG2FZxjcmO345RxD5HR4grPkXWhRsqUFgr+JvkV6aWU72WtqZAe/ZZCkkq+sgsB7p
-         fx4vQxO+UJweosWCMiYvgAzNM1YfAP9OG9zO3yJvtLyT4cA1G0ud0lgINu7+Gbm+/6Gd
-         qa1h8WDwJJGEWNAxdRiEPORgRxXprK2YQflKCXc3dUfIcRoueho+UxtOkW3L/SOLWnrD
-         xkMAvbpKIcDVZqMHPIrVJJMNjpMaPY96d0ICAOMq8opK6t40l4RJ4EO05Fmv0hpF3O3g
-         axKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678179482;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZVTfPiVagOZL90gtIf96Yys0KYhqSZTVjW5Vb21u5PM=;
-        b=AagRIfGBZGBABafYOQWOi59wWaNJKXY82G6CEpVupv84XHLpEnIvaU63/USFj2R8Ms
-         Kv/HIRsFtqbuXSpWC+mJT5c0ouBhTDOIL62H8ju/Gw4zHZO5lrvka3XEkh4avO2RDt1a
-         qo4xZc2bT9RkKV15KxZ2OzrsNVUKTxjoK4EYrTNT8QyM0VRzx2jx8F5gH/NOP6p38YAm
-         19qCu3x36w8lbxd6S8zpTgdqloKnNCtZw3URhHZ+4HwxPApJilg5z8em/PKT0MQP+UN0
-         8zKeydHIqBt0HMCttKI6IyK7Ukh4h3Ws3Vzw9OgLOWfrHeZk5HZOXZYfhV9syHqd2ASO
-         WtfA==
-X-Gm-Message-State: AO0yUKXXjEA5D81DlOiB3+3NMD7046W3JQg9fXmrYU4LmbT/2CpvWibo
-        vxxRpOCRsqZsrMltrR3hRiTsrw==
-X-Google-Smtp-Source: AK7set9i6XN8jLMfyZaebyCVBR+PyyIEq6PPzmiHj6R2qI1SLS1ib+ru7uB7rd79hwfISF1aZfF07Q==
-X-Received: by 2002:aa7:d7c3:0:b0:4af:5aa1:6e58 with SMTP id e3-20020aa7d7c3000000b004af5aa16e58mr13274064eds.21.1678179482002;
-        Tue, 07 Mar 2023 00:58:02 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:5310:35c7:6f9e:2cd3? ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
-        by smtp.gmail.com with ESMTPSA id o22-20020a509b16000000b004c4eed3fe20sm6364807edi.5.2023.03.07.00.58.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 00:58:01 -0800 (PST)
-Message-ID: <63dbbda7-a444-8dac-6399-45e305652155@linaro.org>
-Date:   Tue, 7 Mar 2023 09:58:00 +0100
+        Tue, 7 Mar 2023 03:59:09 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C23D5CC3E;
+        Tue,  7 Mar 2023 00:59:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678179542; x=1709715542;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3umUm4ahFVMYfF3/FeLculY9PKxRgx3vNRzzbJ6yOzU=;
+  b=TMMvdFMiX5NfeQVBtwrp0c8GuZIbHlGIcxGC0LOT4LO3uL/QeaX42IMC
+   VlgcLevCgk4GUtl9/3GouvZLVaaVOk/I4Lxz9jkX4O3Dxy4BMwzEEeMHO
+   mqSA+v+tAXX4M2erlQRICPo9KaI95R4tbM9/9YjrzS2EWkpyExwAeTXom
+   FdrMorhJJBT1SRa5I/EVNjQ3OkiFEAlY37n/GYSeN3febQLieklXC/9YD
+   fFo5ex8aJvYkLAsaaLoK7SY+gRV3z7/CZRudidqcxPT4SP2DmAkFUroGk
+   YjexWvc3ORMesrTKbDEMBbA4P+5w8S/hIYTQr4cGloRD6PjQYY77DA3am
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="400624120"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="400624120"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 00:59:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="626464657"
+X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
+   d="scan'208";a="626464657"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 07 Mar 2023 00:58:58 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pZT9t-00019L-1R;
+        Tue, 07 Mar 2023 08:58:57 +0000
+Date:   Tue, 7 Mar 2023 16:58:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mani@kernel.org, lpieralisi@kernel.org, kw@linux.com,
+        bhelgaas@google.com, manivannan.sadhasivam@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: Re: [PATCH 6/6] ARM: dts: qcom: sdx65-mtp: Enable PCIe EP
+Message-ID: <202303071612.HZ9bDCp7-lkp@intel.com>
+References: <1678080302-29691-7-git-send-email-quic_rohiagar@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [EXTERNAL] Re: [PATCH v5 1/2] dt-bindings: net: Add ICSSG
- Ethernet
-Content-Language: en-US
-To:     Md Danish Anwar <a0501179@ti.com>, Rob Herring <robh@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>
-Cc:     "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>, andrew@lunn.ch, nm@ti.com,
-        ssantosh@kernel.org, srk@ti.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230210114957.2667963-1-danishanwar@ti.com>
- <20230210114957.2667963-2-danishanwar@ti.com>
- <20230210192001.GB2923614-robh@kernel.org>
- <43df3c2c-d0d0-f2b8-cf8b-8a2453ca43b4@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <43df3c2c-d0d0-f2b8-cf8b-8a2453ca43b4@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1678080302-29691-7-git-send-email-quic_rohiagar@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,30 +71,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 05:57, Md Danish Anwar wrote:
->>> +allOf:
->>> +  - $ref: /schemas/remoteproc/ti,pru-consumer.yaml#
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - ti,am654-icssg-prueth  # for AM65x SoC family
->>> +
->>> +  ti,sram:
->>> +    $ref: /schemas/types.yaml#/definitions/phandle
->>> +    description:
->>> +      phandle to MSMC SRAM node
->>
->> I believe we have a standard 'sram' property to point to SRAM nodes 
->> assuming this is just mmio-sram or similar.
->>
-> 
-> Yes, we have standard 'sram' property but Krzysztof had asked me to make the
-> sram property vendor specific in last revision of this series.
+Hi Rohit,
 
-Sorry about that. I missed that we already have a 'sram'. The question
-remains whether this is a phandle to MMIO SRAM or similar (sram.yaml).
+Thank you for the patch! Yet something to improve:
 
-Best regards,
-Krzysztof
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on lee-mfd/for-mfd-next lee-mfd/for-mfd-fixes pci/next pci/for-linus linus/master v6.3-rc1 next-20230306]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Rohit-Agarwal/dt-bindings-mfd-qcom-tcsr-Add-compatible-for-sdx65/20230306-132618
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/1678080302-29691-7-git-send-email-quic_rohiagar%40quicinc.com
+patch subject: [PATCH 6/6] ARM: dts: qcom: sdx65-mtp: Enable PCIe EP
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230307/202303071612.HZ9bDCp7-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/51b8272710554bf9cbee6604f73951179e85ffa7
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rohit-Agarwal/dt-bindings-mfd-qcom-tcsr-Add-compatible-for-sdx65/20230306-132618
+        git checkout 51b8272710554bf9cbee6604f73951179e85ffa7
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303071612.HZ9bDCp7-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> Error: arch/arm/boot/dts/qcom-sdx65-mtp.dts:287.1-2 syntax error
+   FATAL ERROR: Unable to parse input tree
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
