@@ -2,161 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D856AF67A
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D38256AF689
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjCGUN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:13:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S231754AbjCGUQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:16:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjCGUNy (ORCPT
+        with ESMTP id S229672AbjCGUQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:13:54 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41002A17E6
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:13:46 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-53852143afcso266094677b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 12:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678220025;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vjGAL4qrsSnlU11pFe+NqHmPaSOhpiqbOMFZKmTdwJk=;
-        b=ZQCRA+z6IbB5A9BR3+GiXKBVo0i5HsmP6OcepjeqGDuRAaqWXKAhNfeHl4ERQ7+hdf
-         mpxrMOpIV27dQoxpR6wq/6qRhhjoMID5Y8AHTkSNbtumvOzYeQZGaxoY8junXegKzVE7
-         iKHuHTYq0Q1XdPTcvyy82Ut94yI1bcf9VPiZg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678220025;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vjGAL4qrsSnlU11pFe+NqHmPaSOhpiqbOMFZKmTdwJk=;
-        b=bz7ZIE9qJFFuV5jCJIO0XB2lIBgw/kiDuoABbYRCteFz5VA1mKsrdsbaEGXqu81Orr
-         SDAT+0X+c5kSVbNmKrof7neNXm+vSvhqosZ0B6lMaYCIc6xeTsvnd2N3DIeaxudXySTz
-         2zcfNg7dhXXG8pAVMJqs8Wja59OxAuJaOprSPnn4Qzl/669dpcY977hZxI8jKQHTDThh
-         p6jEvMz25/7p2fh3VXdjaGaKfO8cbgjROF3CbAXfqFbTgnuYIuXagn0QFGa2EvRBzju9
-         XDHTtQ+Kle8gn+ia0cgLYwHJfJaTKavBt70OY4PM0D1W5tjHmBGp7IZwDgxBGjOy7jWb
-         27ZA==
-X-Gm-Message-State: AO0yUKVWrO5bEUruufM4OWTcm1KxZD7serChL/gIP3pzZf3uHNuECfpC
-        0ae/9nDdJ3v/F6FKPduXXDS6glYjwTO/hBELrHZjxw==
-X-Google-Smtp-Source: AK7set8x25qXHmjdLMpukA8IBbcp+jaqrfaDZlGy4YLoE8QUykP0ZTUaQihDzQZycNyyTAQ72mx0Sf40TwO3YHEAQn4=
-X-Received: by 2002:a81:ac5f:0:b0:535:a5eb:99d7 with SMTP id
- z31-20020a81ac5f000000b00535a5eb99d7mr8451952ywj.2.1678220025216; Tue, 07 Mar
- 2023 12:13:45 -0800 (PST)
+        Tue, 7 Mar 2023 15:16:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C054E5C1;
+        Tue,  7 Mar 2023 12:16:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90129B81A13;
+        Tue,  7 Mar 2023 20:16:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13B3DC433EF;
+        Tue,  7 Mar 2023 20:16:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678220193;
+        bh=FupbKwelwLHLV++gMmX5dmMnAyDReIjpfS4XTY/hr5U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=U5ni1xNATlVfMAIzrN1+nBzrPIn62wUdqocGJ1nsTr7ZeDSxyO2wmoxAqgdgWOp6V
+         e9WvLpw8HM1S003EyuAd8FNa4VEl9Ma+TXQgj+CZ3PkLVSgutM3hR6suMqqwpU+UgT
+         RSgxob6o1RiF3LI0rRh9ElDFu6LREuN0hSuh3OKedhaZHEXFsQu/y4gsQRiFdW5TqX
+         Grdl+1bW6ekgWha+9JKkcjV0vwo1BNEy5yjyY+DZrsBBJ0HenTW027ymdd58wbAapb
+         AKndnJGh9hZyEyeoBzq3nSQsCeduwT0PVTiYfJV0zUVMgmXx9joctHTAwFN20TAgND
+         0GqmMwk0jk5Ew==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH] bus: mhi: host: pci_generic: Drop redundant pci_enable_pcie_error_reporting()
+Date:   Tue,  7 Mar 2023 14:16:25 -0600
+Message-Id: <20230307201625.879567-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230307200502.2263655-1-grundler@chromium.org> <20230307200502.2263655-2-grundler@chromium.org>
-In-Reply-To: <20230307200502.2263655-2-grundler@chromium.org>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Tue, 7 Mar 2023 12:13:33 -0800
-Message-ID: <CANEJEGt4RCZX8uPBgGcRPmb=Ws6jHFC8h98phfA4sz-8rdtkkA@mail.gmail.com>
-Subject: Re: [PATCHv2 2/2] net: asix: init mdiobus from one function
-To:     Grant Grundler <grundler@chromium.org>
-Cc:     Oleksij Rempel <linux@rempel-privat.de>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Eizan Miyamoto <eizan@chromium.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 12:05=E2=80=AFPM Grant Grundler <grundler@chromium.o=
-rg> wrote:
->
-> Make asix driver consistent with other drivers (e.g. tg3 and r8169) which
-> use mdiobus calls: setup and tear down be handled in one function each.
->
-> Signed-off-by: Grant Grundler <grundler@chromium.org>
-> ---
->  drivers/net/usb/asix_devices.c | 27 ++++++++++++++++-----------
->  1 file changed, 16 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_device=
-s.c
-> index 21845b88a64b9..d7caab4493d15 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -637,7 +637,7 @@ static int asix_resume(struct usb_interface *intf)
->         return usbnet_resume(intf);
->  }
->
-> -static int ax88772_init_mdio(struct usbnet *dev)
-> +static int ax88772_mdio_register(struct usbnet *dev)
->  {
->         struct asix_common_private *priv =3D dev->driver_priv;
->         int ret;
-> @@ -657,10 +657,22 @@ static int ax88772_init_mdio(struct usbnet *dev)
->         ret =3D mdiobus_register(priv->mdio);
->         if (ret) {
->                 netdev_err(dev->net, "Could not register MDIO bus (err %d=
-)\n", ret);
-> -               mdiobus_free(priv->mdio);
-> -               priv->mdio =3D NULL;
-> +               goto mdio_register_err;
->         }
->
-> +       priv->phydev =3D mdiobus_get_phy(priv->mdio, priv->phy_addr);
-> +       if (!priv->phydev) {
-> +               netdev_err(dev->net, "Could not find PHY\n");
-> +               ret=3D-ENODEV;
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-My apologies: checkpatch wants spaces around "=3D" and especially
-because it should be "ret =3D -ENODEV".
+pci_enable_pcie_error_reporting() enables the device to send ERR_*
+Messages.  Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is
+native"), the PCI core does this for all devices during enumeration, so the
+driver doesn't need to do it itself.
 
-I can resend - but is this trivial enough to fix up by maintainer?
+Remove the redundant pci_enable_pcie_error_reporting() call from the
+driver.  Also remove the corresponding pci_disable_pcie_error_reporting()
+from the driver .remove() path.
 
-cheers,
-grant
+Note that this only controls ERR_* Messages from the device.  An ERR_*
+Message may cause the Root Port to generate an interrupt, depending on the
+AER Root Error Command register managed by the AER service driver.
 
-> +               goto mdio_phy_err;
-> +       }
-> +
-> +       return 0;
-> +
-> +mdio_phy_err:
-> +       mdiobus_unregister(priv->mdio);
-> +mdio_register_err:
-> +       mdiobus_free(priv->mdio);
->         return ret;
->  }
->
-> @@ -675,13 +687,6 @@ static int ax88772_init_phy(struct usbnet *dev)
->         struct asix_common_private *priv =3D dev->driver_priv;
->         int ret;
->
-> -       priv->phydev =3D mdiobus_get_phy(priv->mdio, priv->phy_addr);
-> -       if (!priv->phydev) {
-> -               netdev_err(dev->net, "Could not find PHY\n");
-> -               ax88772_mdio_unregister(priv);
-> -               return -ENODEV;
-> -       }
-> -
->         ret =3D phy_connect_direct(dev->net, priv->phydev, &asix_adjust_l=
-ink,
->                                  PHY_INTERFACE_MODE_INTERNAL);
->         if (ret) {
-> @@ -799,7 +804,7 @@ static int ax88772_bind(struct usbnet *dev, struct us=
-b_interface *intf)
->         priv->presvd_phy_bmcr =3D 0;
->         priv->presvd_phy_advertise =3D 0;
->
-> -       ret =3D ax88772_init_mdio(dev);
-> +       ret =3D ax88772_mdio_register(dev);
->         if (ret)
->                 return ret;
->
-> --
-> 2.39.2
->
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+ drivers/bus/mhi/host/pci_generic.c | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index f39657f71483..6e13c43a84d1 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -8,7 +8,6 @@
+  * Copyright (C) 2020 Linaro Ltd <loic.poulain@linaro.org>
+  */
+ 
+-#include <linux/aer.h>
+ #include <linux/delay.h>
+ #include <linux/device.h>
+ #include <linux/mhi.h>
+@@ -903,11 +902,9 @@ static int mhi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	mhi_pdev->pci_state = pci_store_saved_state(pdev);
+ 	pci_load_saved_state(pdev, NULL);
+ 
+-	pci_enable_pcie_error_reporting(pdev);
+-
+ 	err = mhi_register_controller(mhi_cntrl, mhi_cntrl_config);
+ 	if (err)
+-		goto err_disable_reporting;
++		return err;
+ 
+ 	/* MHI bus does not power up the controller by default */
+ 	err = mhi_prepare_for_power_up(mhi_cntrl);
+@@ -941,8 +938,6 @@ static int mhi_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	mhi_unprepare_after_power_down(mhi_cntrl);
+ err_unregister:
+ 	mhi_unregister_controller(mhi_cntrl);
+-err_disable_reporting:
+-	pci_disable_pcie_error_reporting(pdev);
+ 
+ 	return err;
+ }
+@@ -965,7 +960,6 @@ static void mhi_pci_remove(struct pci_dev *pdev)
+ 		pm_runtime_get_noresume(&pdev->dev);
+ 
+ 	mhi_unregister_controller(mhi_cntrl);
+-	pci_disable_pcie_error_reporting(pdev);
+ }
+ 
+ static void mhi_pci_shutdown(struct pci_dev *pdev)
+-- 
+2.25.1
+
