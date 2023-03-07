@@ -2,61 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06FB56ADD28
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0586ADD2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:22:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjCGLV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S229966AbjCGLWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:22:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCGLVU (ORCPT
+        with ESMTP id S229549AbjCGLV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:21:20 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F4F30B11;
-        Tue,  7 Mar 2023 03:21:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678188073; x=1709724073;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eCfUgtTxJ2t2NJLQ6fRvVzcuPMgRk/uF6FvhuOQIZow=;
-  b=fGk3d1X47cO0LJuHD/Ysknf/qoI/G3WING6BYp7y9lHHYQMkr7wGZrHa
-   K7n1jriMC082Bvtw6UUrc+OtLfHa2qkm83hWVOSQwynUi0USpNZCithAe
-   wFzmTs9EYGMOYPJ0LwjTuqx4lM+4nlRQd1gpAZt7vXzwWZ/5aRK23Teua
-   4Okp5Do0ExJFCm0qTcKohwLN2ejK1MC+uv7rdo8iAaDu4TWTgQosntIf5
-   i6ByyHCJXq08ID99VVw4oxprVtNjEkye98aOVH5TeeFHn8JyhjYMZtTJr
-   o/4kn1Rtbj9dm1O8nOObxB6vGufecn2D2d56/9hytXZWNvJoFzLZWSUgW
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
-   d="scan'208";a="200344170"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 04:21:12 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Mar 2023 04:21:11 -0700
-Received: from DEN-LT-70577.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Tue, 7 Mar 2023 04:21:09 -0700
-From:   Daniel Machon <daniel.machon@microchip.com>
-To:     <netdev@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <lars.povlsen@microchip.com>,
-        <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
-        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
-        <error27@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH net] net: microchip: sparx5: fix deletion of existing DSCP mappings
-Date:   Tue, 7 Mar 2023 12:21:03 +0100
-Message-ID: <20230307112103.2733285-1-daniel.machon@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 7 Mar 2023 06:21:59 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418FB7D8C;
+        Tue,  7 Mar 2023 03:21:58 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id t4so10983745ybg.11;
+        Tue, 07 Mar 2023 03:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678188117;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+6M7Rrz8d9sk58/G5zmHZtDU4PDW4DV0zcA0ptQ1Png=;
+        b=UvPobudrKein15cSeOXHadW3ZwXyETu9tdRk/e0W67OcmbQVHqprMAqPs5BFbtRInN
+         bMb0324eNAx+3ZRMjr0fYXKGBZ//61yIXN3o9Xz87LSxsjbWhsu+oDg0E6JsnjeENazR
+         CZgdgsEndyjCgUTVtXV4OXqJ9POmLz7IwIanvZ4YrF91nK5YWyZjnaIO32evJzdmPd07
+         pp4n5JdsJTv2tOXxrOaaZ4LdXFJwVLjcJV0mbdPq9cV385dnSujp9ht4BW9THOovXQO8
+         iU7s9FaQ4pw1yIkqdjsnDZvp3YOrtzvlEg0GrliwRMC8uHJ/W6ibcE2v4OG0RdrEAKyk
+         Rwvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678188117;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+6M7Rrz8d9sk58/G5zmHZtDU4PDW4DV0zcA0ptQ1Png=;
+        b=dOgS5he6N0pDv/yggWMSWBGYZy4gAexc6NUmfrtsC24BoKhMJOsPzGvLWtC0i+wChK
+         RZCh2sJIEnn9pQMLZQkN2RKIv4wkm2YFJb1bGEXk6c1kCoZgbLXlMDmDcyHIwSgvXOVm
+         L4CanNDLhV6jIjP9OTqBaLk4mZfOXIwOg+qmaoXvhXW9amWVMn0TgSnJ35ClJVx+Womz
+         o5IJYtudSVN+1TKRwGrZHJFTsIp3VCsWRPx0T4hFozE3ifs+Bed9lf7S7z44zI9h+Mgl
+         sKEl4U0EPvX6iljXydueQ4pgmzymBEkaNLNBNU6tmLi2As2wM/O1kUwXu4bjklYjgz0D
+         NOVQ==
+X-Gm-Message-State: AO0yUKUFRgUV7YCcTcChTLnhCSKJbtg84BcAtUNf48n6drCfKXx0YOL/
+        vlV8j8RB6hlkTCjWfjnE2FfE5ZzT2Dz/1d9k0SQhVNXzlfhUrQ==
+X-Google-Smtp-Source: AK7set9Xm/+t4RsbYIh8ZTtsG14e7fG27l8U4WG+CAhTtfNoZ/TFjDRHLzJOC1Pb6hQWIxMo+D0M4xfhEHmOcmY6vLs=
+X-Received: by 2002:a5b:b03:0:b0:ad7:b81e:69bd with SMTP id
+ z3-20020a5b0b03000000b00ad7b81e69bdmr6382804ybp.2.1678188117463; Tue, 07 Mar
+ 2023 03:21:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+References: <20230307102441.94417-1-conor.dooley@microchip.com> <20230307102441.94417-2-conor.dooley@microchip.com>
+In-Reply-To: <20230307102441.94417-2-conor.dooley@microchip.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 7 Mar 2023 12:21:46 +0100
+Message-ID: <CANiq72mB5jXPuLy4mcYsa-q4yjHeryVWZrDf6wavvpj5FkwMOw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] scripts: generate_rust_target: enable building on RISC-V
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-riscv@lists.infradead.org, conor@kernel.org,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, rust-for-linux@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,89 +81,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix deletion of existing DSCP mappings in the APP table.
+On Tue, Mar 7, 2023 at 11:25=E2=80=AFAM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
+>
+> Despite removing 32-bit support, I kept the structure of the if
+> statement, despite early return being stylistically preferred, for
+> alignment with the Rust-for-Linux tree. I'm happy to respin to sort that
+> out of desired.
 
-Adding and deleting DSCP entries are replicated per-port, since the
-mapping table is global for all ports in the chip. Whenever a mapping
-for a DSCP value already exists, the old mapping is deleted first.
-However, it is only deleted for the specified port. Fix this by calling
-sparx5_dcb_ieee_delapp() instead of dcb_ieee_delapp() as it ought to be.
+This is a case of 2 "equal" sides to the branch (though at the moment
+an error), so it sounds good, and it will mean a smaller diff later.
 
-Reproduce:
+> +            panic!("32-bit RISC-V is an unsupported architecture")
 
-// Map and remap DSCP value 63
-$ dcb app add dev eth0 dscp-prio 63:1
-$ dcb app add dev eth0 dscp-prio 63:2
+Nit: if there is a v2, please add a semicolon to be consistent with
+the others in the file (not sure which style we will go for, it looks
+like `rustfmt` accepts both ways).
 
-$ dcb app show dev eth0 dscp-prio
-dscp-prio 63:2
-
-$ dcb app show dev eth1 dscp-prio
-dscp-prio 63:1 63:2 <-- 63:1 should not be there
-
-Fixes: 8dcf69a64118 ("net: microchip: sparx5: add support for offloading dscp table")
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- .../ethernet/microchip/sparx5/sparx5_dcb.c    | 32 +++++++++----------
- 1 file changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c b/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
-index 871a3e62f852..2d763664dcda 100644
---- a/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
-+++ b/drivers/net/ethernet/microchip/sparx5/sparx5_dcb.c
-@@ -249,6 +249,21 @@ static int sparx5_dcb_ieee_dscp_setdel(struct net_device *dev,
- 	return 0;
- }
- 
-+static int sparx5_dcb_ieee_delapp(struct net_device *dev, struct dcb_app *app)
-+{
-+	int err;
-+
-+	if (app->selector == IEEE_8021QAZ_APP_SEL_DSCP)
-+		err = sparx5_dcb_ieee_dscp_setdel(dev, app, dcb_ieee_delapp);
-+	else
-+		err = dcb_ieee_delapp(dev, app);
-+
-+	if (err < 0)
-+		return err;
-+
-+	return sparx5_dcb_app_update(dev);
-+}
-+
- static int sparx5_dcb_ieee_setapp(struct net_device *dev, struct dcb_app *app)
- {
- 	struct dcb_app app_itr;
-@@ -264,7 +279,7 @@ static int sparx5_dcb_ieee_setapp(struct net_device *dev, struct dcb_app *app)
- 	if (prio) {
- 		app_itr = *app;
- 		app_itr.priority = prio;
--		dcb_ieee_delapp(dev, &app_itr);
-+		sparx5_dcb_ieee_delapp(dev, &app_itr);
- 	}
- 
- 	if (app->selector == IEEE_8021QAZ_APP_SEL_DSCP)
-@@ -281,21 +296,6 @@ static int sparx5_dcb_ieee_setapp(struct net_device *dev, struct dcb_app *app)
- 	return err;
- }
- 
--static int sparx5_dcb_ieee_delapp(struct net_device *dev, struct dcb_app *app)
--{
--	int err;
--
--	if (app->selector == IEEE_8021QAZ_APP_SEL_DSCP)
--		err = sparx5_dcb_ieee_dscp_setdel(dev, app, dcb_ieee_delapp);
--	else
--		err = dcb_ieee_delapp(dev, app);
--
--	if (err < 0)
--		return err;
--
--	return sparx5_dcb_app_update(dev);
--}
--
- static int sparx5_dcb_setapptrust(struct net_device *dev, u8 *selectors,
- 				  int nselectors)
- {
--- 
-2.34.1
-
+Cheers,
+Miguel
