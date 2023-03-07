@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D7E6AE4C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D967B6AE4C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjCGPcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:32:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S230314AbjCGPcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:32:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230246AbjCGPb7 (ORCPT
+        with ESMTP id S230508AbjCGPcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:31:59 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09351BB
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:31:57 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id c80so4792528ybf.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:31:57 -0800 (PST)
+        Tue, 7 Mar 2023 10:32:13 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5EC4FF06
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:32:08 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id x20-20020a17090a8a9400b00233ba727724so1529341pjn.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:32:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678203117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ej1wMX0xmC5g1dxLkHmNOArc3+7GOqB/eA4DE4RyK4c=;
-        b=dZkA6PzJvWsX5mEy6t5JDiwxiahiFz/4Eawhp1d/Bcqk+dR2z7JNj2riwjQyAzKAAe
-         ciH0PyY6MAb2wVOkmIiDO4+CKoUZnw1pfewuR8t2OziaNck88JqQL7ydiWq25OX7An9w
-         7PgZKQJ1Gbr+HTlUYfGmoHQrRSl5Y2rfdaWC0ZuJJjKOagyHZBWNc+gaiPlUWmRU7Yte
-         f+GlwwdjXVHydKtRFbgCoLUzkM71TNc35lZ5Co+HcPeF79NXdhE04gxghtFxXLlZSD17
-         CgP1oOjXIDM8OxEh+VvDxMQkhkCtgRbQ0SpAz3xnxIk95wo11cIqS98nHkXmheLpfRh2
-         wfDA==
+        d=linaro.org; s=google; t=1678203128;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=99KcN0KUzxUMOifeobUywCVUN2cCL7LQNwuX/8gz59Q=;
+        b=RuRCRqRkSJ46eOsUdOViqsVJku4VaLtx75eL33+hukIU6nffPYmW8HTfQ3Uyq0S+fB
+         tQpgbHKRUOBDc14AhvxeruizL//11F5CcP3PeU4AhSlqVWEXDl1gFYPnSXuAroyTGI6v
+         6Cat1tHcRul0ClCFj64PPgs4HZpKmXvNz9sLRCnTwzKP0UoVLm/nVobmkaycnilYOTi1
+         AweoDWEM6MuRvYRXgR7j4XHVFayLlTxz6XeRZl3i6iu3Ao+6KBBWj2gihcsPvoZzXZFU
+         +1BhPsPlT3zpnVrpaDwxmU3/hbuFMmcK37uNymWCqRgleypjSxkHiipVMnCXCPJckng3
+         tePw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678203117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ej1wMX0xmC5g1dxLkHmNOArc3+7GOqB/eA4DE4RyK4c=;
-        b=VNYlmAOYKYHDkrd2mc3ch4ngLbHdRDwPdkk55jR/W9WDsEpgtszoGd2tJEN5hu6bNH
-         Bgu74tg5ifR2dRp/P2LMmPW3CnBrGVTBNHg/P2muYCui+1bGDM8IOq0CxlVUTYzHbqOQ
-         ycZAJPfMl0YEuoYo6lcTVBOFZ/TsjLZpIVF/1UHCoAbo8CVR7968wOmzENP/1QprGqEr
-         XBX61Yl2KZ6JngvgVAIujTauYEGR3ybtcqmLG6H5qqFCveDitQTRXUZGY3hhZSOyS0vd
-         lwM8Ra1mVfZytzEm2dBoBi+xkIMs28+aVLZdpC/o0o+5YE5kU16GGTV7Pmb2VaWE2jng
-         pFGA==
-X-Gm-Message-State: AO0yUKUgrwKR9XRE8ssXFlMr4scqbWFEiSsMyd13q3aCRAkHcniy7+Gu
-        Xua8mkKqU/0tbHNxn38AOfkh6GnwlRyHq3WUE3PUzw==
-X-Google-Smtp-Source: AK7set9/2bK3mUzyiRzESQsU6pjbcNV8AIUilPKmGcvAAgOXm1cAbDz62p+1ObNkkp4uRo5v+YJxbxzZR5pLCAEFUKE=
-X-Received: by 2002:a25:e90b:0:b0:9fc:e3d7:d60f with SMTP id
- n11-20020a25e90b000000b009fce3d7d60fmr6590460ybd.5.1678203116816; Tue, 07 Mar
- 2023 07:31:56 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678203128;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=99KcN0KUzxUMOifeobUywCVUN2cCL7LQNwuX/8gz59Q=;
+        b=EL80pLJFEyclEgtJvqBEbpyq+in0QPN9+idTrr+xf+Dr1EtIp+mjXMl7cjPh+rDjq8
+         QWZx33QzzL9OyYt533/SzyIqzV/71Qf0WJnZjjVekk32sVT5kBk6eBsZfE0HVXCY+TW2
+         Iq0RLIt3P+FPzsTssAPV7JkqPgZ4jbL+kkVDij1kXCcB+DW1Thu/Pg1sWpd3k5FcdzDH
+         W5Q1i8kYLmvdKk/cnb74f75KgX8NL8K/0jVyc906cvaPn4InuREiLDGyCjE5l2Rn+/nJ
+         dZlWFm60Xogap8JEsNib/M/YsS5lMFlXyBazCTjFmAbRtw/JRPSu0tFZVTzOIEOWnbBY
+         fVMg==
+X-Gm-Message-State: AO0yUKV587vMX8C4lIZ5r3C33S/IH0VGaSK2CIo17xQy5SV1lGrh7JI4
+        +wbFBqmpj3zeXgUJTEcowBFP
+X-Google-Smtp-Source: AK7set8mwO7YodY1cgNPBX2a08RLyOa/1GpC9j29FcBop7qYPg1YswB3SfdzYgYE884ytRDiP3YkEw==
+X-Received: by 2002:a17:903:1d1:b0:19e:6947:3b27 with SMTP id e17-20020a17090301d100b0019e69473b27mr19965986plh.58.1678203127913;
+        Tue, 07 Mar 2023 07:32:07 -0800 (PST)
+Received: from localhost.localdomain ([59.97.52.140])
+        by smtp.gmail.com with ESMTPSA id f18-20020a170902ce9200b0019c93ee6902sm8541436plg.109.2023.03.07.07.32.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 07:32:07 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 1/2] arm64: dts: qcom: sm8350: Mark UFS controller as cache coherent
+Date:   Tue,  7 Mar 2023 21:02:00 +0530
+Message-Id: <20230307153201.180626-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <ZAVu/XHbL9IR5D3h@gondor.apana.org.au> <E1pZ2fs-000e27-4H@formenos.hmeau.com>
- <CACRpkdY8iN_ga0VuQ-z=8KUWaJ6=5rh2vZEwcp+oNgcBuPFk=g@mail.gmail.com> <ZAcNhtm/+mik1N2m@gondor.apana.org.au>
-In-Reply-To: <ZAcNhtm/+mik1N2m@gondor.apana.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 7 Mar 2023 16:31:44 +0100
-Message-ID: <CACRpkdbcrCa9v82xVWtixWdDPvCu6E6Rkw-3Vg3APisdvYGwqQ@mail.gmail.com>
-Subject: Re: [v5 PATCH 7/7] crypto: stm32 - Save and restore between each request
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
-        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 11:10=E2=80=AFAM Herbert Xu <herbert@gondor.apana.or=
-g.au> wrote:
-> On Mon, Mar 06, 2023 at 11:08:13AM +0100, Linus Walleij wrote:
-> >
-> > This partly works (after my folded in fix in patch 5)!
-> >
-> > Clean SHA1 and SHA256 works flawlessly.
-> > HMAC still fails, but not until we start testing random vectors:
-> >
-> > [    7.541954] alg: ahash: stm32-hmac-sha256 digest() failed on test
-> > vector "random: psize=3D0 ksize=3D80"; expected_error=3D0,
-> > actual_error=3D-110, cfg=3D"random: may_sleep"
-> > [    7.567212] alg: self-tests for hmac(sha256) using
-> > stm32-hmac-sha256 failed (rc=3D-110)
->
-> So it's timing out.  I wonder if the timeout in stm32_hash_wait_busy
-> is long enough.  Perhaps try adding a zero so that the timeout becomes
-> 100,000us and see if it still breaks?
+The UFS controller on SM8350 supports cache coherency, hence add the
+"dma-coherent" property to mark it as such.
 
-Sadly this doesn't work.
+Fixes: 59c7cf814783 ("arm64: dts: qcom: sm8350: Add UFS nodes")
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm8350.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-I tried increasing with one and even two orders of magnitude,
-but the timeouts still happen, usually two of them, sometimes
-one sometimes three, depending on randomness, as can be
-expected.
+diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+index 1c97e28da6ad..1a5a612d4234 100644
+--- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
+@@ -1664,6 +1664,7 @@ ufs_mem_hc: ufshc@1d84000 {
+ 			power-domains = <&gcc UFS_PHY_GDSC>;
+ 
+ 			iommus = <&apps_smmu 0xe0 0x0>;
++			dma-coherent;
+ 
+ 			clock-names =
+ 				"core_clk",
+-- 
+2.25.1
 
-I think you mentioned something about that we need to store
-the key in the state as well though?
-
-Yours,
-Linus Walleij
