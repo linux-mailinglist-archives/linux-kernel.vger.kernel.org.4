@@ -2,123 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FD36AF5C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:35:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2C06AF5C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbjCGTfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S233114AbjCGTg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:36:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234272AbjCGTew (ORCPT
+        with ESMTP id S230511AbjCGTgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:34:52 -0500
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6C8AFBAA;
-        Tue,  7 Mar 2023 11:21:47 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-17638494edbso16177893fac.10;
-        Tue, 07 Mar 2023 11:21:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678216907;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zhRiVT/qBtmkjy7WxqhkqSdjANQulevS1fkYVnIeB8I=;
-        b=Od1ozCy+5nFpaAn16UDS5EgVldYYsLMTpa5G8VLkLZclgAPeP8UfHk2L0ntM8oJAN8
-         h4KAv2HFOE2i2y5BSReAp9mO2KOun1n4OT/or29Dx92Og088SGbykzTjyDGlfgxin4E9
-         kb40QGVp01EPScKCduxS58CqLUM4Gtnzmr/RY2ADMv2uQLVggPgL5H1eQtGssPEyL1KF
-         G3jDosjwHNKBFiBsn4FdCppC9Bx/nKdWzmbroCQFy0kfJQkA3m4ba3cIxZzzskpYivXD
-         X4IOXkyIqvMS0Mga5d1qXhOVDerHeY7w+Lo4EyKIrhgHSJ4o1kN+LNkMYIySgJG5n2kg
-         u3mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678216907;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zhRiVT/qBtmkjy7WxqhkqSdjANQulevS1fkYVnIeB8I=;
-        b=kqAMwKdrGT5AKwdtvgFCa7byHKNlk0n/vS3zuSf17EfyXMGYIeon3hcstQBTyFTYmI
-         GtkIB3GEEyzRU2aLflhxNG634GVSznZpfHa49JF2MKVa5UOLT+4MqnF8EG1tsd0eGpMQ
-         R+0RH0coeY3jIjyxFOuE3tjgwrsIye7dOGbHNDGYvTpq4aelQV0gVL7pEKx09O0qusO/
-         Z3jnVzEQqDpWugR3ZEsczHEsYijki/G/Cq61ZQm80UzF8t98ow8kdgN7lH8tuoEVWFQn
-         wiimWaK6TMMd3G8bqTjRbBgvwu0N6o98UyE8ypD7O9efUMHEprE89ZuAZNHvbR4CnxNr
-         pmvg==
-X-Gm-Message-State: AO0yUKVICulnalsBlRQJnX+zcNJRYW2Yes3+yop+0HYW0/VMDQ3MQqbU
-        Kr7LIevYYsv5BNm4gEDT2KAlMgwecYjFEVZXnko=
-X-Google-Smtp-Source: AK7set/z3NJWfYPgz3oGl/RPEjJKQCI8IMnZlfRg60l9fl5OgNDCuxjK5GrQrqP6rkl81nleyRQqyvXI5sxEKvhuZaI=
-X-Received: by 2002:a05:6870:d346:b0:172:426c:8304 with SMTP id
- h6-20020a056870d34600b00172426c8304mr4153366oag.3.1678216907057; Tue, 07 Mar
- 2023 11:21:47 -0800 (PST)
+        Tue, 7 Mar 2023 14:36:07 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E97D3773D;
+        Tue,  7 Mar 2023 11:23:06 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 410FD240003;
+        Tue,  7 Mar 2023 19:23:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678216984;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5P9AcKH+YezSJtK9lbnU6QQK7ZoiMZqMhUgw4Rvj/2o=;
+        b=cHoo1ImK0XY8bwtiihM1e2oVZPfFgcF3OA7p5nE/bUeybkFQKAqO4d+x0Fc696mzDdxHnN
+        Ppd0L2D0je9SWF/vAf/wkCzvqT5wNOqWfDGc8SkmSUC9Ijtu1+j4a4tQzbK//Khy7ByCNr
+        Ysz3PEVZlz0vp/0p+epfAC1pplv6N/XMPRCE+XU1QwEZLTqvERByRL2b4MTk+F/xkQqrQ4
+        /9M1u9bWDS2HkPPf7D7c3W+kOEtbDnjgSCxhhzGtWQsGQ5qqTatAqvy7OeA5PGY7Nhvz0V
+        8oZnNz997DsBxluk/TYfqz8M2OCzi+iI5XrOSIlrDhPdb+lo8OMXI3qojBEY8g==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Nick Alcock <nick.alcock@oracle.com>, mcgrof@kernel.org
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 18/27] mtd: bcm63xxpart: remove MODULE_LICENSE in non-modules
+Date:   Tue,  7 Mar 2023 20:23:02 +0100
+Message-Id: <20230307192302.353514-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230224150811.80316-19-nick.alcock@oracle.com>
+References: 
 MIME-Version: 1.0
-References: <20230307174627.23787-1-rdunlap@infradead.org> <CAOMZO5DDH=9MMbJX3O8yU7RQjudeC-oXhoT-nu91p1arqHcBGg@mail.gmail.com>
-In-Reply-To: <CAOMZO5DDH=9MMbJX3O8yU7RQjudeC-oXhoT-nu91p1arqHcBGg@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 7 Mar 2023 11:21:35 -0800
-Message-ID: <CAF6AEGtgMtRbP9OLh4P+2xL4SnyhP5ROgg2Yt=ZcoAY_+=S7rg@mail.gmail.com>
-Subject: Re: [Freedreno] [PATCH] drm/msm: fix PM_DEVFREQ kconfig dependency warning
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Rob Clark <robdclark@chromium.org>,
-        kernel test robot <lkp@intel.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'9116000828de4f9973e65a11fd7530dc03d1bdda'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 10:48=E2=80=AFAM Fabio Estevam <festevam@gmail.com> =
-wrote:
->
-> On Tue, Mar 7, 2023 at 2:46=E2=80=AFPM Randy Dunlap <rdunlap@infradead.or=
-g> wrote:
-> >
-> > Since DEVFREQ_GOV_SIMPLE_ONDEMAND depends on PM_DEVFREQ, the latter
-> > should either be selected or DRM_MSM should depend on PM_DEVFREQ.
-> > Since most drivers select PM_DEVFREQ instead of depending on it,
-> > add a select here to satisfy kconfig.
-> >
-> > WARNING: unmet direct dependencies detected for DEVFREQ_GOV_SIMPLE_ONDE=
-MAND
-> >   Depends on [n]: PM_DEVFREQ [=3Dn]
-> >   Selected by [y]:
-> >   - DRM_MSM [=3Dy] && HAS_IOMEM [=3Dy] && DRM [=3Dy] && (ARCH_QCOM || S=
-OC_IMX5 || COMPILE_TEST [=3Dy]) && COMMON_CLK [=3Dy] && IOMMU_SUPPORT [=3Dy=
-] && (QCOM_OCMEM [=3Dn] || QCOM_OCMEM [=3Dn]=3Dn) && (QCOM_LLCC [=3Dn] || Q=
-COM_LLCC [=3Dn]=3Dn) && (QCOM_COMMAND_DB [=3Dy] || QCOM_COMMAND_DB [=3Dy]=
-=3Dn)
-> >
-> > Fixes: 6563f60f14cb ("drm/msm/gpu: Add devfreq tuning debugfs")
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Link: lore.kernel.org/r/202303071922.wJqDWQpe-lkp@intel.com
-> > Cc: Rob Clark <robdclark@chromium.org>
-> > Cc: Paul Gazzillo <paul@pgazz.com>
-> > Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
-> > Cc: Chia-I Wu <olvaffe@gmail.com>
-> > Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> > Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Cc: linux-arm-msm@vger.kernel.org
-> > Cc: dri-devel@lists.freedesktop.org
-> > Cc: freedreno@lists.freedesktop.org
->
-> This fixes the warning after running 'make imx_v6_v7_defconfig', thanks:
->
-> Tested-by: Fabio Estevam <festevam@gmail.com>
+On Fri, 2023-02-24 at 15:08:02 UTC, Nick Alcock wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
+> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+> Cc: Richard Weinberger <richard@nod.at>
+> Cc: Vignesh Raghavendra <vigneshr@ti.com>
+> Cc: linux-mtd@lists.infradead.org
 
-https://patchwork.freedesktop.org/patch/523353 is the fix we actually
-want.. I thought I'd already pulled that into msm-fixes but it seems
-like it got lost somewhere.. I'll rectify that
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
 
-BR,
--R
+Miquel
