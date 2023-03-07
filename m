@@ -2,155 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E42C46AD689
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:47:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 385B56AD68D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCGErh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 23:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S230241AbjCGEs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 23:48:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjCGEre (ORCPT
+        with ESMTP id S230225AbjCGEsz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 23:47:34 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7227337F3E;
-        Mon,  6 Mar 2023 20:47:11 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3272TPTg011713;
-        Tue, 7 Mar 2023 04:46:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DKvqvzb5WzxlmzYw8eEdTTMow8wfzTGqnqd88w9RdPQ=;
- b=AWPH2CqvNANYZlAmFyh/l7tPJ4CU1yTBqCuOvoA9V+4CXMCG4GXrIsDgDoZ/ukukGXku
- TZ8dkIn+PxnsMpTK2cIBdxuECevnYgwPE7I7V7eu2HAFFIg4VN+VG7vgagvFWM9YT3hg
- uGZ6HS6QVECq3OSYUublYgOpWTSB+jguxYmBfCiiRpgfNRzWwqNA6gkfllJiRrtM4RPj
- mYYI4EDex4i70YlXUKoPiFgpizTLxuF3WSHLACWhYIYmvfS5wS+ZN2wRZiA/VwaAUhdY
- g/MllHEX9uc6kyJNBM1aw041GVeXy3OPrE8xuNb/ARjlaD5O69Olf7nMGPd3d370SXGa 1A== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5rqjrr8y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 04:46:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3274k1Mj020082
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Mar 2023 04:46:01 GMT
-Received: from [10.50.8.76] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
- 20:45:55 -0800
-Message-ID: <3d0315fa-14ca-dc34-81ae-467d9ed5133d@quicinc.com>
-Date:   Tue, 7 Mar 2023 10:15:45 +0530
+        Mon, 6 Mar 2023 23:48:55 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42812BF2D
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 20:48:26 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id ay18so7306814pfb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 20:48:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678164506;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=STW7qruBhVR0gEyrFVepjZKXX6IzFFtUbDhI7bfVrIY=;
+        b=PgB6iylFvaSMcAvFUkWc7vMWr2tYd/pzwguNtRHcuCPCitwz8CfEYJz+USeraSUQ2O
+         lJ6ULML4JKSR5TwzRPVTsVeNGFUDKKmJ5ZEWExeymkHWkvWFidrAdCMh5dfbU5JbWESp
+         cKuHBCoYrhrlX0ictLZuklrW65c+AncCB0qLwo5/BunD2nNCVuq5xoM9+nqGbqMIWuhc
+         2H42tC1cemj+Wr1f0LxWn1DaE2PsnQHOvdO6jHMbHg6UDhwL/KbSALxy4nZxXJajxIF0
+         6tav5oKHkrF2BDh+9b/46vCifW1kZlSEn5IUGRsrD3C+/Hczzk7hYCBR5d3k3ueJqdOX
+         V6tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678164506;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=STW7qruBhVR0gEyrFVepjZKXX6IzFFtUbDhI7bfVrIY=;
+        b=eI9S/XqAMK45QveqeBkVTXTsUt5Qvn0F3gf3xJkftdcyEjff28KtxQGgILDpmCPZPO
+         Qyh/3a2xCYSTRYfEl2qeSMrgKPglQNHvhldsyHPJOGOTgK68HZrsSSW2Vv0lUjTMqxoJ
+         izMGNIWhsQxcF7SRYwmdKA3g5iKLOQXD2sQqpHMMK1YO7KJGEnmsYsumlYZ6rAIEvOy0
+         6sZxrwx6E9BsAsybDBcJKqQ/REqCBqOA29/KxSlTKXGvbJKyNOeaZVYeTR3u14TtXcF+
+         uFrioFX8I/jIbldKkStnIu8gUGz18p4nBxknhxH8RMFdcb6s+ztUaBfg6sru//oNqg+j
+         NAbA==
+X-Gm-Message-State: AO0yUKV6dAQ54jbPyC2Xe5dTy9kO0V8tpNN0yph03Yvc/ZXpkwVwT21S
+        Y59nctH7Tjw/PgqzxypUIs0M8QhLZEp+tOK3/Py/gA==
+X-Google-Smtp-Source: AK7set8HvWOKLdo++SGONzexHM/kSOnmjJoguD/k0KVsEHXOSbN45WeBVZ0WOkf9vWu1DFoKUPbcsRqQeMiHcf+SKV4=
+X-Received: by 2002:a63:af53:0:b0:507:469a:ca54 with SMTP id
+ s19-20020a63af53000000b00507469aca54mr2255004pgo.7.1678164505961; Mon, 06 Mar
+ 2023 20:48:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: venus: dec: Fix capture formats enumeration order
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        Jordan Crouse <jorcrous@amazon.com>
-CC:     <linux-kernel@vger.kernel.org>, Albert Esteve <aesteve@redhat.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Sergio Lopez <slp@redhat.com>,
-        Enric Balletbo i Serra <eballetb@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>
-References: <20230210081835.2054482-1-javierm@redhat.com>
- <20230303220918.qr5ydbin3nye3qtz@amazon.com>
- <87h6uydwel.fsf@minerva.mail-host-address-is-not-set>
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-In-Reply-To: <87h6uydwel.fsf@minerva.mail-host-address-is-not-set>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 0bLYU3qYMLhLGdt-CXXjJfU1If5MXsqK
-X-Proofpoint-GUID: 0bLYU3qYMLhLGdt-CXXjJfU1If5MXsqK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- priorityscore=1501 clxscore=1011 lowpriorityscore=0 adultscore=0
- mlxscore=0 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070042
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302023509.319903-1-saravanak@google.com> <2cc752fb-a25d-0789-0fad-54b99f08ced7@i2se.com>
+ <CAGETcx_nCdm2WYLC7h1s8i9tnHc_LcHk2oZUQ0sUDr-PBsUWDg@mail.gmail.com>
+ <faad8810-7aa4-e122-f497-73553feb8bcd@gmail.com> <CAGETcx_crW9BJmUoVJv1iU-KTr+9WPp_bpfrKoxzQiJGpqDgAA@mail.gmail.com>
+In-Reply-To: <CAGETcx_crW9BJmUoVJv1iU-KTr+9WPp_bpfrKoxzQiJGpqDgAA@mail.gmail.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 6 Mar 2023 20:47:48 -0800
+Message-ID: <CAGETcx8e4eUqXPrKTxjJWENs2iwP-d3L_EK4Qp-pit0hrm9FaA@mail.gmail.com>
+Subject: Re: [PATCH v1] serdev: Set fwnode for serdev devices
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, kernel-team@android.com,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/6/2023 3:38 PM, Javier Martinez Canillas wrote:
-> Jordan Crouse <jorcrous@amazon.com> writes:
+On Thu, Mar 2, 2023 at 10:07=E2=80=AFAM Saravana Kannan <saravanak@google.c=
+om> wrote:
 >
-> Hello Jordan,
+> On Thu, Mar 2, 2023 at 9:51=E2=80=AFAM Florian Fainelli <f.fainelli@gmail=
+.com> wrote:
+> >
+> >
+> >
+> > On 3/2/2023 9:20 AM, Saravana Kannan wrote:
+> > > On Thu, Mar 2, 2023 at 9:01=E2=80=AFAM Stefan Wahren <stefan.wahren@i=
+2se.com> wrote:
+> > >>
+> > >> Hi Saravana,
+> > >>
+> > >> Am 02.03.23 um 03:35 schrieb Saravana Kannan:
+> > >>> This allow fw_devlink to do dependency tracking for serdev devices.
+> > >>>
+> > >>> Reported-by: Florian Fainelli <f.fainelli@gmail.com>
+> > >>> Link: https://lore.kernel.org/lkml/03b70a8a-0591-f28b-a567-9d2f736f=
+17e5@gmail.com/
+> > >>> Cc: Stefan Wahren <stefan.wahren@i2se.com>
+> > >>> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > >>
+> > >> since this fixes an issue on Raspberry Pi 4, shouldn't this be menti=
+oned
+> > >> in the commit message and providing a Fixes tag?
+> > >
+> > > So RPi 4 was never creating a device links between serdev devices and
+> > > their consumers. The error message was just a new one I added and we
+> > > are noticing and catching the fact that serdev wasn't setting fwnode
+> > > for a device.
+> > >
+> > > I'm also not sure if I can say this commit "Fixes" an issue in serdev
+> > > core because when serdev core was written, fw_devlink wasn't a thing.
+> > > Once I add Fixes, people will start pulling this into stable
+> > > branches/other trees where I don't think this should be pulled into
+> > > older stable branches.
+> >
+> > That is kind of the point of Fixes: tag, is not it? It is appropriate t=
+o
+> > list a commit that is not specific to serdev, but maybe a particular
+> > point into the fw_devlink history.
 >
->> On Fri, Feb 10, 2023 at 09:18:35AM +0100, Javier Martinez Canillas wrote:
->>> Commit 9593126dae3e ("media: venus: Add a handling of QC08C compressed
->>> format") and commit cef92b14e653 ("media: venus: Add a handling of QC10C
->>> compressed format") added support for the QC08C and QC10C compressed
->>> formats respectively.
->>>
->>> But these also caused a regression, because the new formats where added
->>> at the beginning of the vdec_formats[] array and the vdec_inst_init()
->>> function sets the default format output and capture using fixed indexes
->>> of that array:
->>>
->>> static void vdec_inst_init(struct venus_inst *inst)
->>> {
->>> ...
->>> 	inst->fmt_out = &vdec_formats[8];
->>> 	inst->fmt_cap = &vdec_formats[0];
->>> ...
->>> }
->>>
->>> Since now V4L2_PIX_FMT_NV12 is not the first entry in the array anymore,
->>> the default capture format is not set to that as it was done before.
->>>
->>> Both commits changed the first index to keep inst->fmt_out default format
->>> set to V4L2_PIX_FMT_H264, but did not update the latter to keep .fmt_out
->>> default format set to V4L2_PIX_FMT_NV12.
->>>
->>> Rather than updating the index to the current V4L2_PIX_FMT_NV12 position,
->>> let's reorder the entries so that this format is the first entry again.
->>>
->>> This would also make VIDIOC_ENUM_FMT report the V4L2_PIX_FMT_NV12 format
->>> with an index 0 as it did before the QC08C and QC10C formats were added.
->>>
->>> Fixes: 9593126dae3e ("media: venus: Add a handling of QC08C compressed format")
->>> Fixes: cef92b14e653 ("media: venus: Add a handling of QC10C compressed format")
->>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
->> I just came across this issue independently and can confirm this patch fixes
->> the GStreamer V4L2 decoder on QRB5165.
->>
->> Tested-by: Jordan Crouse <jorcrous@amazon.com>
->>
-> Thanks for testing it!
+> I don't want to pick an arbitrary point in fw_devlink as I don't want
+> people picking this up with some old version of fw_devlink and having
+> to support it there.
 >
-> Stanimir, can we please get this for v6.3 as well?
+> > Given this did not appear to have a
+> > functional impact, we could go without one.
+>
+> This is my take too.
+>
+> Greg/Rob,
+>
+> If you really want a Fixes here, can you please just add it instead of
+> a v2 patch just for that? You can use this commit:
+> 3fb16866b51d driver core: fw_devlink: Make cycle detection more robust
 
-Hi Javier, Jordan
+Rob/Greg,
 
-Could you please explain what regression/issue you see with patch?
+Can you pick this up for 6.3-rc2 please?
 
-venus hardware supports QC08C which provides better performance hence 
-driver is publishing it as preferred color format.
-
-if client doesn't support this or want to use any other format, they can 
-set the desired format with s_fmt.
-
-Thanks,
-
-Dikshita
-
+-Saravana
