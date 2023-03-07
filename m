@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784036AE70C
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07916AE710
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:46:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjCGQqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:46:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
+        id S229504AbjCGQqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:46:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjCGQp3 (ORCPT
+        with ESMTP id S229687AbjCGQqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:45:29 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D37150F97
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:42:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3010411FB;
-        Tue,  7 Mar 2023 08:43:22 -0800 (PST)
-Received: from [10.1.29.181] (C02CF1NRLVDN.cambridge.arm.com [10.1.29.181])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 791653F67D;
-        Tue,  7 Mar 2023 08:42:37 -0800 (PST)
-Message-ID: <8e931b7c-3c10-10f7-5d59-546b1a9d5735@arm.com>
-Date:   Tue, 7 Mar 2023 16:42:36 +0000
+        Tue, 7 Mar 2023 11:46:31 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE3AD59C5;
+        Tue,  7 Mar 2023 08:43:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ZvgJq
+        6YQjqwerye4CIoGP8CONxW/nYcnI2f8hDW3NOY=; b=eCxvF9lelgvUf1BW4fTWU
+        3/qR3RaQjjJsIkdrGJ4A2xerExV7DE9Y8u0dyiGlEVFxwCugEImCwBTqxRpY54z0
+        yZWmDDyIKS8GkOJOtKxaVovt3+HrONz2E+BxmboUgVlVRY4Za3C2HuM1XFckVdaH
+        +TlYktQr7cJcHRHCwv+I/8=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-4 (Coremail) with SMTP id _____wAnL_eIaQdk3p3pCQ--.58784S2;
+        Wed, 08 Mar 2023 00:42:48 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     maximlevitsky@gmail.com
+Cc:     oakad@yahoo.com, ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] memstick: r592: Fix UAF bug in r592_remove due to race condition
+Date:   Wed,  8 Mar 2023 00:42:47 +0800
+Message-Id: <20230307164247.1245293-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v3 09/60] arm64: mm: Reclaim unused vmemmap region for
- vmalloc use
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Kees Cook <keescook@chromium.org>
-References: <20230307140522.2311461-1-ardb@kernel.org>
- <20230307140522.2311461-10-ardb@kernel.org>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230307140522.2311461-10-ardb@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wAnL_eIaQdk3p3pCQ--.58784S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Jr1rJryfAr4rKrWxGFyUWrg_yoWkuwb_uF
+        yrZFySgr48Grn5Ww1UCFy3ur4Uuw1qgFZ7Za18Kry3JayUGF1UXr1kZr9ava1xu3y29Fy3
+        CrWUJ3WIgw15ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKBMNUUUUUU==
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXAorU1Xl52YmvgAAsH
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,50 +53,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 14:04, Ard Biesheuvel wrote:
-> The vmemmap array is statically sized based on the maximum supported
-> size of the virtual address space, but it is located inside the upper VA
-> region, which is statically sized based on the *minimum* supported size
-> of the VA space. This doesn't matter much when using 64k pages, which is
-> the only configuration that currently supports 52-bit virtual
-> addressing.
+In r592_probe, dev->detect_timer was bound with r592_detect_timer.
+In r592_irq function, the timer function will be invoked by mod_timer.
 
-As I understand it, the vmemmap section only holds struct pages, and the number
-of struct pages in the system is surely a function of PA size, not VA size? So
-why is the region sized based on VA size?
+If we remove the module which will call hantro_release to make cleanup,
+there may be a unfinished work. The possible sequence is as follows,
+which will cause a typical UAF bug.
 
-> 
-> However, upcoming LPA2 support will change this picture somewhat, as in
-> that case, the vmemmap array will take up more than 25% of the upper VA
-> region when using 4k pages. Given that most of this space is never used
-> when running on a system that does not support 52-bit virtual
-> addressing, let's reclaim the unused vmemmap area in that case.
-> 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/arm64/include/asm/pgtable.h | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 3eff06c5d0eb73c7..2259898e8c3d990a 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -18,11 +18,15 @@
->   * VMALLOC range.
->   *
->   * VMALLOC_START: beginning of the kernel vmalloc space
-> - * VMALLOC_END: extends to the available space below vmemmap, PCI I/O space
-> - *	and fixed mappings
-> + * VMALLOC_END: extends to the available space below vmemmap
->   */
->  #define VMALLOC_START		(MODULES_END)
-> +#if VA_BITS == VA_BITS_MIN
->  #define VMALLOC_END		(VMEMMAP_START - SZ_8M)
-> +#else
-> +#define VMEMMAP_UNUSED_NPAGES	((_PAGE_OFFSET(vabits_actual) - PAGE_OFFSET) >> PAGE_SHIFT)
-> +#define VMALLOC_END		(VMEMMAP_START + VMEMMAP_UNUSED_NPAGES * sizeof(struct page) - SZ_8M)
-> +#endif
->  
->  #define vmemmap			((struct page *)VMEMMAP_START - (memstart_addr >> PAGE_SHIFT))
->  
+Fix it by canceling the work before cleanup in r592_remove.
+
+CPU0                  CPU1
+
+                    |r592_detect_timer
+r592_remove         |
+  memstick_free_host|
+  put_device;       |
+  kfree(host);      |
+                    |
+                    | queue_work
+                    |   &host->media_checker //use
+
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/memstick/host/r592.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/memstick/host/r592.c b/drivers/memstick/host/r592.c
+index 1d35d147552d..2bfa7eaae80a 100644
+--- a/drivers/memstick/host/r592.c
++++ b/drivers/memstick/host/r592.c
+@@ -829,7 +829,7 @@ static void r592_remove(struct pci_dev *pdev)
+ 	/* Stop the processing thread.
+ 	That ensures that we won't take any more requests */
+ 	kthread_stop(dev->io_thread);
+-
++del_timer_sync(&dev->detect_timer);
+ 	r592_enable_device(dev, false);
+ 
+ 	while (!error && dev->req) {
+-- 
+2.25.1
 
