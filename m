@@ -2,89 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F59C6AF69B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32FF6AF69E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:23:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjCGUWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
+        id S231810AbjCGUXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:23:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbjCGUWo (ORCPT
+        with ESMTP id S232086AbjCGUX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:22:44 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEABA6144;
-        Tue,  7 Mar 2023 12:22:40 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-536cb25982eso265730007b3.13;
-        Tue, 07 Mar 2023 12:22:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678220559;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OBSyTdrPOJVHUi62H8HJoL0JClhcgKSy5jHuy2pt1Ro=;
-        b=moRxMRhToGIlBlURExNXwaSqcDqloQmsfa6GGj7GDlwLRkD93O48yrUADnGC/lXSPJ
-         V2GzzO1lYJkNgtJqoVmZm0aT4Sm3u3lU7Hi07XGKEzZrWMhuDxKZEopMfzNbLWhpBTRF
-         7slSWL0b0G9RwjS9Zyd0L0Ud3ta6nb20QvbZuFQq7zksZtlo2337D76LNG+yePOD3SBK
-         gQuDRvl5CbKHea+RINhAva920U0ekvqLvXhd6aZ8Rwkcj8C2Bd7qPEcaiPW1of7ifyW+
-         /M6XgrYJklZmaQo+cVa8uBIJEv3il2+ty2MWxddrKfjJrs569x/u9QpK/pcBx2vykkDj
-         dOdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678220559;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OBSyTdrPOJVHUi62H8HJoL0JClhcgKSy5jHuy2pt1Ro=;
-        b=edQQxAz8XjNL0keK1dE/TgZha12g+Et6ficUKjvpzPiWdbUQOWQyNyh8xmrml1rDGH
-         nXFu1TtL1Devkf8BNYL7b6wp2Rz9OI40geHIlkyb78YUD4146LIcNpg09SlQ9Vf96Tgn
-         GOtsBjeFTdseJbZunabWoyYawT97fZ1oD1vqElXopiAy56y2DZYtQ3/QlEkEaVEYr1Ej
-         eH9v21rQ4lGjsKJbkBeSJ2iGMA2DGZHfn6chGKISWUDOK7yw1lCDthvuj8gcjU4G+7uv
-         dd7vIZsGrUOeN2WtM9AESUAbTPNvDbcjSoUnZePOv5bTK/3ZWHLvT4GFNov4MaHCh4oq
-         MLow==
-X-Gm-Message-State: AO0yUKWsxt+GtHPnmGh4Z1Sb5H3qeJee83HRDX2146zEDmsvcjRPqY+9
-        wk4iORISd/vJpINiTNLrDvthDwQFsBuOvCfn384=
-X-Google-Smtp-Source: AK7set+L982y6Gqt0c6yuAz3Ny1/mK3S/lN4t37WxZPkJKzOI8RPld789a+1NBfsZIEjJtxEa8/6pZZjmpfINNZCZ/M=
-X-Received: by 2002:a81:ad24:0:b0:52e:bb2d:2841 with SMTP id
- l36-20020a81ad24000000b0052ebb2d2841mr9466387ywh.10.1678220559220; Tue, 07
- Mar 2023 12:22:39 -0800 (PST)
+        Tue, 7 Mar 2023 15:23:28 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3178A6BC9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:23:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81CC961535
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 20:23:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D7BCC433EF;
+        Tue,  7 Mar 2023 20:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678220603;
+        bh=aBBo7ND5PU6BMsXweP6p08wP+hF3qkanOx37NJDOja4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KSeZYvRchNHv7BSW0Mm9hcYhmc3FzuHKbfx+D28jey9I8MRgkVzvfOJgkGJwlYmqt
+         wzg6SgCHSlNKLPS0yds2dqAGMrnPnZBdPlwBo2oHJ5E6D1L4fnYFLfMyixIZsxHjSN
+         HVzpFE9mp6Npp3Rulv/le4qAvajfi+EFWB2zeKFNWaKLWriDocdUMJkn8dqrkppl0y
+         DS8D+2L5Yl2x90mxikE2E5jxO5Zj894Ccorz9jJ7FFbLM23lO+31k6D9zK5hL3krbS
+         03AfeqwKM8A+C5wlYyEZw7RZ308xdCozh6axITR89Um50Dn5mD9iAMjqrrdl6tWvxu
+         EKZiiUAQuztlg==
+From:   Conor Dooley <conor@kernel.org>
+To:     linux-riscv@lists.infradead.org
+Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/8] Hey Jassi, all,
+Date:   Tue,  7 Mar 2023 20:22:50 +0000
+Message-Id: <20230307202257.1762151-1-conor@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230224-rust-macros-v1-0-b39fae46e102@asahilina.net>
- <20230224-rust-macros-v1-2-b39fae46e102@asahilina.net> <20230225003156.4858d79e.gary@garyguo.net>
-In-Reply-To: <20230225003156.4858d79e.gary@garyguo.net>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Tue, 7 Mar 2023 21:22:28 +0100
-Message-ID: <CANiq72mSjqkib1gpocT3YbWRMz1Uj68Yh5DTZjthAd+=z_4tSg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] rust: macros: concat_idents: Allow :: paths in the
- first argument
-To:     Gary Guo <gary@garyguo.net>
-Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3553; i=conor.dooley@microchip.com; h=from:subject; bh=objaY8Iic30N8AZK2EQh6NRbGiNWI0wnNHpQoF1qVRg=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCnsc4U8MldyXExRan+ctiQjQmdj4fSe+UyL13kHPLxQc UxqZumvjlIWBjEOBlkxRZbE230tUuv/uOxw7nkLM4eVCWQIAxenAEzkFDMjw/YKaY3OPz8PfumQ WmTsmS23Z3fFvPzwpk9alVPVlhuc72b478DNm/L4xft8rYpOi8jlfNyp7rt3mpgoFadZdr6cV87 PDwA=
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Feb 25, 2023 at 1:32=E2=80=AFAM Gary Guo <gary@garyguo.net> wrote:
->
-> It seems weird to me that this is called `concat_idents` despite
-> working for more things than just idents.
->
-> How about just implement a simple version of the `paste` macro instead?
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Opened https://github.com/Rust-for-Linux/linux/issues/983 in case we
-end up applying the patch.
+Here are some fixes for the system controller on PolarFire SoC that I
+ran into while implementing support for using the system controller to
+re-program the FPGA. A few are just minor bits that I fixed in passing,
+but the bulk of the patchset is changes to how the mailbox figures out
+if a "service" has completed.
 
-Cheers,
-Miguel
+Prior to implementing this particular functionality, the services
+requested from the system controller, via its mailbox interface, always
+triggered an interrupt when the system controller was finished with
+the service.
+
+Unfortunately some of the services used to validate the FPGA images
+before programming them do not trigger an interrupt if they fail.
+For example, the service that checks whether an FPGA image is actually
+a newer version than what is already programmed, does not trigger an
+interrupt, unless the image is actually newer than the one currently
+programmed. If it has an earlier version, no interrupt is triggered
+and a status is set in the system controller's status register to
+signify the reason for the failure.
+
+In order to differentiate between the service succeeding & the system
+controller being inoperative or otherwise unable to function, I had to
+switch the controller to poll a busy bit in the system controller's
+registers to see if it has completed a service.
+This makes sense anyway, as the interrupt corresponds to "data ready"
+rather than "tx done", so I have changed the mailbox controller driver
+to do that & left the interrupt solely for signalling data ready.
+It just so happened that all of the services that I had worked with and
+tested up to this point were "infallible" & did not set a status, so the
+particular code paths were never tested.
+
+Jassi, the mailbox and soc patches depend on each other, as the change
+in what the interrupt is used for requires changing the client driver's
+behaviour too, as mbox_send_message() will now return when the system
+controller is no longer busy rather than when the data is ready.
+I'm happy to send the lot via the soc tree with your Ack and/or reivew,
+if that also works you?
+I've got some other bits that I'd like to change in the client driver,
+so via the soc tree would suit me better.
+
+Thanks,
+Conor.
+
+Changes in v3:
+- check the service status in the .tx_done() callback rather than
+  mpfs_mbox_rx_data()
+- re-order the if/else bits in mpfs_blocking_transaction() to please my
+  eyes a bit more
+- expand on the comment in same
+
+Changes in v2:
+- up the timeout to 30 seconds, as required for services like image
+  validation, which may vary significantly in execution time
+- fixed a typo!
+
+CC: Conor Dooley <conor.dooley@microchip.com>
+CC: Daire McNamara <daire.mcnamara@microchip.com>
+CC: Jassi Brar <jassisinghbrar@gmail.com>
+CC: linux-riscv@lists.infradead.org
+CC: linux-kernel@vger.kernel.org
+
+Conor Dooley (8):
+  mailbox: mpfs: fix an incorrect mask width
+  mailbox: mpfs: switch to txdone_poll
+  mailbox: mpfs: ditch a useless busy check
+  mailbox: mpfs: check the service status in .tx_done()
+  soc: microchip: mpfs: fix some horrible alignment
+  soc: microchip: mpfs: use a consistent completion timeout
+  soc: microchip: mpfs: simplify error handling in
+    mpfs_blocking_transaction()
+  soc: microchip: mpfs: handle timeouts and failed services differently
+
+ drivers/mailbox/mailbox-mpfs.c              | 55 ++++++++++++---------
+ drivers/soc/microchip/mpfs-sys-controller.c | 52 +++++++++++++------
+ 2 files changed, 67 insertions(+), 40 deletions(-)
+
+-- 
+2.39.2
+
