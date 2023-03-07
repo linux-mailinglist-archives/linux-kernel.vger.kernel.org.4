@@ -2,154 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A0D6AD950
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 449E06AD954
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCGIgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:36:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43838 "EHLO
+        id S229759AbjCGIgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:36:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCGIgF (ORCPT
+        with ESMTP id S229673AbjCGIgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:36:05 -0500
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EDE4D2AF;
-        Tue,  7 Mar 2023 00:36:04 -0800 (PST)
-Received: by mail-pj1-x1042.google.com with SMTP id l1so12498070pjt.2;
-        Tue, 07 Mar 2023 00:36:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678178164;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dVV7L3qYLKYMexLWKRK/2c4/r4h3dFdM7tR8nzD9LW8=;
-        b=pNkFSovT8XQOKBhC6qK1O+NeD/Jtmwwpf5x5NnPKAMoSjn0US7tVs9ocrmvxgJEVhu
-         HYbW9VeL14bR4vd9qjdjmwG/MX6X/RR49sy+TCU4TN3UTvowxoKSHFSt0lisJ2pLEOr+
-         xZMU6obCtg744zSEKJ/gsAGiFzji+XX36wZJOjyB1NI0MygwrpM+xChFHF9gzRBQN3nl
-         JcWfWL9mAGNWjT7iLXJpcWy0Jc9MQbmR2EuunzLiwK7SSznbD+34W8hlpvu3A566TDZY
-         KVYlzorXRvCDekSG8OyVRNFQcpn4McK5IiXrLbByfH47/Rl1G9GdF3gFxZmCrEiYYCmX
-         B35A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678178164;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dVV7L3qYLKYMexLWKRK/2c4/r4h3dFdM7tR8nzD9LW8=;
-        b=iY5FUwkT/zx1jXC0oxKIw8W+EhhAybCr947f3c0WplAfWr00VtmoVPDVvnhoxXxlf0
-         sylTUnb8wE4YGRm/1yk56TEXemf8dL64JtFhnrMm97koexPoGwHVjZf2x8zIxTjVbxSA
-         NAtNH4IEc5dWnDlq+txTKOJd71aB5JFAnNNlG0tHy3OlyM0SGu9jvvb+OECkJQThfSnE
-         +ox6sAZ4ZpC5fihPdJoZJrMe1JU9+OgXGmbHkdLTsoiOo/Q22im33E5xp4LDsbW0Iv1V
-         lbNef5BQtoi4rcr/wTrd5ROL1TAeNauFQzrTwNdoIp/KYyqzDPt5tmSwmDPtj+24IMGG
-         GpbA==
-X-Gm-Message-State: AO0yUKXXOZKp+QNhpCn8nH9N8ZLHbUP4WhSJ8pkah00SQEAizptwuCx9
-        +kv3Yorwy3WEf4jK0x/aLrk=
-X-Google-Smtp-Source: AK7set+Li7VjSseMkvHU1Tjn56/7Rw2YZ9NQuKIQGizRKj+yFyFGEJY3TY0tSt6LJZ/QtaTLG8OZZw==
-X-Received: by 2002:a05:6a20:9305:b0:cb:e98e:d1eb with SMTP id r5-20020a056a20930500b000cbe98ed1ebmr12664155pzh.29.1678178163927;
-        Tue, 07 Mar 2023 00:36:03 -0800 (PST)
-Received: from localhost.localdomain ([43.132.141.8])
-        by smtp.gmail.com with ESMTPSA id 19-20020a631253000000b004fb171df68fsm7209860pgs.7.2023.03.07.00.36.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 00:36:03 -0800 (PST)
-From:   korantwork@gmail.com
-To:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
-        jonathan.derrick@linux.dev, lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-Subject: [PATCH v2] PCI:vmd: add the module param to adjust msi mode
-Date:   Tue,  7 Mar 2023 16:35:59 +0800
-Message-Id: <20230307083559.2379758-1-korantwork@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 7 Mar 2023 03:36:47 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D35C4D62B;
+        Tue,  7 Mar 2023 00:36:45 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 9648024E023;
+        Tue,  7 Mar 2023 16:36:43 +0800 (CST)
+Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 16:36:43 +0800
+Received: from [192.168.125.124] (183.27.97.46) by EXMBX172.cuchost.com
+ (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 16:36:42 +0800
+Message-ID: <3a605bc8-104e-0935-4fd8-2da16ab9053b@starfivetech.com>
+Date:   Tue, 7 Mar 2023 16:36:41 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v4 00/19] Basic clock, reset & device tree support for
+ StarFive JH7110 RISC-V SoC
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ben Dooks <ben.dooks@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230221024645.127922-1-hal.feng@starfivetech.com>
+From:   Hal Feng <hal.feng@starfivetech.com>
+In-Reply-To: <20230221024645.127922-1-hal.feng@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [183.27.97.46]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX172.cuchost.com
+ (172.16.6.92)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinghui Li <korantli@tencent.com>
+On Tue, 21 Feb 2023 10:46:26 +0800, Hal Feng wrote:
+> This patch series adds basic clock, reset & DT support for StarFive
+> JH7110 SoC. Patch 17 depends on series [1] which provides pinctrl
+> dt-bindings. Patch 19 depends on series [2] which provides dt-bindings
+> of VisionFive 2 board and JH7110 SoC.
+> 
+> You can simply review or test the patches at the link [3].
+> 
+> [1]: https://lore.kernel.org/all/20230209143702.44408-1-hal.feng@starfivetech.com/
+> [2]: https://lore.kernel.org/all/20230216131511.3327943-1-conor.dooley@microchip.com/
+> [3]: https://github.com/hal-feng/linux/commits/visionfive2-minimal
 
-In the legacy, the vmd msi-mode can only be adjusted by configing
-vmd_ids table.This patch adds another way to adjust msi mode by
-adjusting module param, which allow users easier to adjust the vmd
-according to the I/O scenario without rebuilding driver.There are two
-params could be recognized: on, off. The default param is "NULL",
-the goal is not to affect the existing settings of the device.
+Hi Conor,
 
-Signed-off-by: Xinghui Li <korantli@tencent.com>
-Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
----
- drivers/pci/controller/vmd.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+When I tried to rebase these patches on v6.3-rc1, I found the kernel
+would crash on the VisionFive 2 board during startup. The logs are as
+below. I checkout the branch to the mainline and found that the kernel
+would also crash on the VisionFive board which is equipped with JH7100
+SoC.
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 990630ec57c6..8b42b2c1d949 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -34,6 +34,20 @@
- #define MB2_SHADOW_OFFSET	0x2000
- #define MB2_SHADOW_SIZE		16
- 
-+/*
-+ * The VMD msi_remap module parameter provides the alternative way
-+ * to adjust msi mode when loading vmd.ko other than vmd_ids table.
-+ * There are two params could be recognized:
-+ *
-+ * 1-off
-+ * 2-on
-+ *
-+ * The default param is "NULL", the goal is not to affect the existing
-+ * settings of the device.
-+ */
-+char *msi_remap = "NULL";
-+module_param(msi_remap, charp, 0444);
-+
- enum vmd_features {
- 	/*
- 	 * Device may contain registers which hint the physical location of the
-@@ -875,6 +889,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 			return ret;
- 
- 		vmd_set_msi_remapping(vmd, true);
-+		dev_info(&vmd->dev->dev, "init vmd with remapping msi-x\n");
- 
- 		ret = vmd_create_irq_domain(vmd);
- 		if (ret)
-@@ -887,6 +902,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
- 	} else {
- 		vmd_set_msi_remapping(vmd, false);
-+		dev_info(&vmd->dev->dev, "init vmd with bypass msi-x\n");
- 	}
- 
- 	pci_add_resource(&resources, &vmd->resources[0]);
-@@ -955,6 +971,14 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 	return 0;
- }
- 
-+static void vmd_config_msi_remap_param(unsigned long *features)
-+{
-+	if (strcmp(msi_remap, "on") == 0)
-+		*features &= ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
-+	else if (strcmp(msi_remap, "off") == 0)
-+		*features |= VMD_FEAT_CAN_BYPASS_MSI_REMAP;
-+}
-+
- static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
- {
- 	unsigned long features = (unsigned long) id->driver_data;
-@@ -984,6 +1008,8 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	if (err < 0)
- 		goto out_release_instance;
- 
-+	vmd_config_msi_remap_param(&features);
-+
- 	vmd->cfgbar = pcim_iomap(dev, VMD_CFGBAR, 0);
- 	if (!vmd->cfgbar) {
- 		err = -ENOMEM;
--- 
-2.31.1
+--------------------------------
+Unable to handle kernel paging request at virtual address 0000004cccccccd4
+Oops [#1]
+Modules linked in:
+CPU: 3 PID: 87 Comm: udevd Not tainted 6.3.0-rc1-00019-g239e7809f291 #305
+Hardware name: StarFive VisionFive 2 v1.3B (DT)
+epc : enqueue_timer+0x18/0x90
+ ra : internal_add_timer+0x2c/0x38
+epc : ffffffff8006a714 ra : ffffffff8006a7b8 sp : ffffffc80443bc80
+ gp : ffffffff80eb5100 tp : ffffffd8c01db200 t0 : 0000000000000000
+ t1 : 000000000000000f t2 : 0000000038b3ea28 s0 : ffffffc80443bcb0
+ s1 : ffffffff80813940 a0 : ffffffff80813940 a1 : ffffffc80443bd48
+ a2 : 000000000000020b a3 : cccccccd0b000000 a4 : cccccccccccccccc
+ a5 : 000000000000020b a6 : ffffffff80814a08 a7 : 0000000000000001
+ s2 : ffffffc80443bd48 s3 : 0000000008400040 s4 : ffffffff80813940
+ s5 : ffffffff80eea0b8 s6 : ffffffff80eb7220 s7 : 0000000000000040
+ s8 : ffffffff80eb61e0 s9 : 0000002ac84a2548 s10: 0000002ad53e92c0
+ s11: 0000000000000001 t3 : 000000000000003f t4 : 0000000000000000
+ t5 : 0000000000000004 t6 : 0000000000000003
+status: 0000000200000100 badaddr: 0000004cccccccd4 cause: 000000000000000f
+[<ffffffff8006a714>] enqueue_timer+0x18/0x90
+[<ffffffff8006aa64>] add_timer_on+0xf0/0x134
+[<ffffffff80500f18>] try_to_generate_entropy+0x1ec/0x232
+[<ffffffff8035a636>] urandom_read_iter+0x42/0xc2
+[<ffffffff800fff16>] vfs_read+0x17c/0x1e4
+[<ffffffff801005b6>] ksys_read+0x78/0x98
+[<ffffffff801005e4>] sys_read+0xe/0x16
+[<ffffffff800035dc>] ret_from_syscall+0x0/0x2
+Code: 9381 9713 0037 0813 0705 983a 3703 0008 e198 c311 (e70c) d713 
+---[ end trace 0000000000000000 ]---
+note: udevd[87] exited with irqs disabled
+Segmentation fault
+FAIL
+Saving random seed: 
+rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
+rcu: 	1-...0: (0 ticks this GP) idle=19c4/1/0x4000000000000000 softirq=42/42 fqs=7474
+rcu: 	(detected by 2, t=15005 jiffies, g=-195, q=35 ncpus=4)
+Task dump for CPU 1:
+task:dd              state:R  running task     stack:0     pid:92    ppid:88     flags:0x00000008
+Call Trace:
+[<ffffffff80003764>] ret_from_fork+0x0/0xc
+rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
+rcu: 	1-...0: (0 ticks this GP) idle=19c4/1/0x4000000000000000 softirq=42/42 fqs=29814
+rcu: 	(detected by 2, t=60018 jiffies, g=-195, q=35 ncpus=4)
+Task dump for CPU 1:
+task:dd              state:R  running task     stack:0     pid:92    ppid:88     flags:0x00000008
+Call Trace:
+[<ffffffff80003764>] ret_from_fork+0x0/0xc
+...
+--------------------------------
 
+I used 'git bisect' and found out the commit 9493e6f3ce02 is the
+cause. I tried to revert this commit on the tag v6.3-rc1, but it
+seems there is no improvement.
+
+Any options I am missing? Could you please give me some suggestions
+to adapt to the new changes between 6.2 and 6.3? Thank you in
+advance.
+
+Best regards,
+Hal
