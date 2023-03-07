@@ -2,89 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CE46AD6C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4C46AD6CA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 06:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjCGFYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 00:24:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
+        id S230028AbjCGF3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 00:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjCGFYK (ORCPT
+        with ESMTP id S229591AbjCGF3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 00:24:10 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7981F3CE0C;
-        Mon,  6 Mar 2023 21:24:09 -0800 (PST)
-Received: by linux.microsoft.com (Postfix, from userid 1134)
-        id E3BE020BBF92; Mon,  6 Mar 2023 21:24:08 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E3BE020BBF92
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1678166648;
-        bh=eqYZYAifD2hsVeXmbmbT0pdZ4aIRGfqq5HT40bm6dR4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H2jt2qW4L5Pm9qcfYbe2Jynx1axvirGjecr0Mzkb8oAObF9VtZnmnzJ78gK14GZ+7
-         Ljjn8f2AoU1pL6IEG4z/yxuQ4xe/DvkHCUn89LdFHoUXYN+Jo+HxIdPzm+t/ACFZ9m
-         ENCiaC4vM738N8dEbI+moC/ax5DgoUuc0vtw/rgs=
-Date:   Mon, 6 Mar 2023 21:24:08 -0800
-From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH] hv/hv_kvp_daemon: Add support for keyfile config based
- connection profile in NM
-Message-ID: <20230307052408.GA11548@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1677133334-6958-1-git-send-email-shradhagupta@linux.microsoft.com>
- <ZAYJhm9fVAgCtTiC@liuwe-devbox-debian-v2>
+        Tue, 7 Mar 2023 00:29:15 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298CA303EC;
+        Mon,  6 Mar 2023 21:29:14 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3274vBFG023618;
+        Tue, 7 Mar 2023 05:29:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zIcPVBUeUBQdl6AWsmE3wWjlUlrp0aiR2TixVhS40IE=;
+ b=dxoG765QjYFELpF7tugo8xwAIYKi0otjjl22E2ovLRFqsXRiBO4q76yvUIF0iKMPC9pg
+ DqoxCMv5EK47BezXjmNPzkpXhyXTX6rd38A1rt3dycvNINAmj9hXYg9oDuTEHnVh79ja
+ CVEa9vHn6vxZNxRL7uJqNHDGhba+K/dlcDZySYrfc0AxLj7B12pU/BXJWDNk9uM6DB8c
+ zkj9A7x1snnZ49ecxd7ILF4/yOgCVLJnmn3JFdegBAdMlfGZJBy1Z+LzYZPz0CifkU+Z
+ 32c2YSsqKugc0x6LdFIshdmOMp7UiI53aMyoBl21hZb9j/osU1ztMKxk3jOjkPSndC62 Bg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5x5c83v0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 05:29:04 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3275T3qe027367
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 Mar 2023 05:29:03 GMT
+Received: from [10.201.3.104] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 6 Mar 2023
+ 21:29:00 -0800
+Message-ID: <cb86687c-f07c-f484-b4fa-ae73e124a59a@quicinc.com>
+Date:   Tue, 7 Mar 2023 10:58:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAYJhm9fVAgCtTiC@liuwe-devbox-debian-v2>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/5] spi: qup: Use
+ devm_platform_get_and_ioremap_resource()
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_sjaganat@quicinc.com>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.com>
+References: <20230306144404.15517-1-quic_mdalam@quicinc.com>
+ <9ca4c6a5-3d1a-4a66-9a5f-43f6f41ed7a1@sirena.org.uk>
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <9ca4c6a5-3d1a-4a66-9a5f-43f6f41ed7a1@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: J73DZkt2zmbQbNpWNVhpNh_cGajjRV3o
+X-Proofpoint-GUID: J73DZkt2zmbQbNpWNVhpNh_cGajjRV3o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=640
+ phishscore=0 suspectscore=0 clxscore=1015 adultscore=0 malwarescore=0
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070048
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 03:40:54PM +0000, Wei Liu wrote:
-> On Wed, Feb 22, 2023 at 10:22:14PM -0800, Shradha Gupta wrote:
-> > As communicated in BZ <2122115>, ifcfg config file support in
-> 
-> What is BZ <2122115>? I guess that's Red Hat's bugzilla?
-> 
-> I don't think this is useful information for the commit message, since
-> the community cannot access that ticket.
-Thanks for the pointer, will change this
-> 
-> > NetworkManger is deprecated. This patch provides support for the
-> > new keyfile config format for connection profiles in NetworkManager.
-> > The patch modifies the hv_kvp_daemon code to generate the new network
-> > configuration in keyfile format(.ini-style format) instead of ifcfg
-> > format.
-> 
-> Okay, so the wire protocol for the KVP daemon is not changed. It is just
-> the intermediate file format that's changed.
-> 
-That is correct.
-> > This configuration is stored in a temp file which is further translated
-> > using the hv_set_ifconfig.sh script. This script is implemented by
-> > individual distros based on the network management commands supported.
-> > For example, RHEL's implementation could be found here:
-> > https://gitlab.com/redhat/centos-stream/src/hyperv-daemons/-/blob/c9s/hv_set_ifconfig.sh
-> > Debian's implementation could be found here:
-> > https://github.com/endlessm/linux/blob/master/debian/cloud-tools/hv_set_ifconfig
-> > 
-> > The next part of this support is to inform the Distro vendors to
-> > modify these implementations to consume the new configuration format.
-> > 
-> 
-> I guess they will figure out the format has changed when they upgrade to
-> a new kernel?
-Yeah, so whenever they decide to use the latest kernel, they would have to change
-their implementation to consume these changes.
-> 
-> Thanks,
-> Wei.
+
+On 3/6/2023 9:14 PM, Mark Brown wrote:
+> On Mon, Mar 06, 2023 at 08:14:04PM +0530, Md Sadre Alam wrote:
+>> Convert platform_get_resource(), devm_ioremap_resource() to a single
+>> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+>> what this function does.
+> You've not copied me on the rest of the series so I don't know what's
+> going on with dependencies.  When sending a patch series it is important
+> to ensure that all the various maintainers understand what the
+> relationship between the patches as the expecation is that there will be
+> interdependencies.  Either copy everyone on the whole series or at least
+> copy them on the cover letter and explain what's going on.  If there are
+> no strong interdependencies then it's generally simplest to just send
+> the patches separately to avoid any possible confusion.
+
+Thanks for you update. Yes! these all patches are not dependent at all.
+
+So i will send these all patches separately.
+
+
