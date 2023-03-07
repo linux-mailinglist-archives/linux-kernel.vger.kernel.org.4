@@ -2,222 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 625696AD87D
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:51:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E018C6AD881
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:52:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjCGHvD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 02:51:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
+        id S229758AbjCGHv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 02:51:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjCGHuy (ORCPT
+        with ESMTP id S229527AbjCGHv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 02:50:54 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ED055531;
-        Mon,  6 Mar 2023 23:50:36 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C6EB124E2EF;
-        Tue,  7 Mar 2023 15:50:28 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
- 2023 15:50:28 +0800
-Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
- 2023 15:50:27 +0800
-Message-ID: <46773d26-d798-58d9-d5ce-07241bf27478@starfivetech.com>
-Date:   Tue, 7 Mar 2023 15:50:26 +0800
+        Tue, 7 Mar 2023 02:51:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5A38617E
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:51:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 597D660BA5
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:51:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCAFC433D2;
+        Tue,  7 Mar 2023 07:51:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678175466;
+        bh=EHSYx70OmALyZKpquN+PuVafSdwvNOxA/K6t/OhikYc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UblaqUjBSJTigui6gYHI0abjrdRdNd+6Z5lqtsDVEGLLcpxlsA+DsYJdUDIS2K1Iq
+         3JIZM0/fMJD/sBqSIak29ZfcNiyIfR015QGdld9OpjXH25PVsoO+WHftd/IIiij0Il
+         XV+3gaLsIzthKAO5ruSDUxe+awjTXwMw0Pa1ym6A=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] driver core: class: fix block class problem when removing CONFIG_SYSFS_DEPRECATED*
+Date:   Tue,  7 Mar 2023 08:51:02 +0100
+Message-Id: <20230307075102.3537-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v5 05/12] riscv: dts: starfive: jh7110: Add ethernet
- device nodes
-To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
-CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-References: <20230303085928.4535-1-samin.guo@starfivetech.com>
- <20230303085928.4535-6-samin.guo@starfivetech.com>
- <CAJM55Z_SV3ig56JY9BF5LeWt4M+bKYh_HdxSY02CP+9i7F0vCQ@mail.gmail.com>
-Content-Language: en-US
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <CAJM55Z_SV3ig56JY9BF5LeWt4M+bKYh_HdxSY02CP+9i7F0vCQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1344; i=gregkh@linuxfoundation.org; h=from:subject; bh=EHSYx70OmALyZKpquN+PuVafSdwvNOxA/K6t/OhikYc=; b=owGbwMvMwCRo6H6F97bub03G02pJDClsb55cy83cf63rgKLz4b/Suif5TcMetSdFpR1dVFH8cdLi DaelOmJYGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAiZtwMC/ZVLJn1dp8av73ylPY/Hl +cPxbPF2GYsT//YduL/QK6yQbSs+4EPGvgcNIEAA==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In removing the CONFIG_SYSFS_DEPRECATED and CONFIG_SYSFS_DEPRECATED_V2
+config options, I messed up in the __class_register() function and got
+the logic incorrect.  Fix this all up by just removing the special case
+of a block device class logic in this function, as that is what is
+intended.
 
+In testing, this solves the boot problem on my systems, hopefully on
+others as well.
 
-在 2023/3/5 6:57:18, Emil Renner Berthing 写道:
-> On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wrote:
->>
->> Add JH7110 ethernet device node to support gmac driver for the JH7110
->> RISC-V SoC.
->>
->> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
->> ---
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 91 ++++++++++++++++++++++++
->>  1 file changed, 91 insertions(+)
->>
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index 09806418ed1b..2ce28292b721 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -233,6 +233,13 @@
->>                 #clock-cells = <0>;
->>         };
->>
->> +       stmmac_axi_setup: stmmac-axi-config {
->> +               snps,lpi_en;
->> +               snps,wr_osr_lmt = <4>;
->> +               snps,rd_osr_lmt = <4>;
->> +               snps,blen = <256 128 64 32 0 0 0>;
->> +       };
->> +
->>         tdm_ext: tdm-ext-clock {
->>                 compatible = "fixed-clock";
->>                 clock-output-names = "tdm_ext";
->> @@ -518,5 +525,89 @@
->>                         gpio-controller;
->>                         #gpio-cells = <2>;
->>                 };
->> +
->> +               gmac0: ethernet@16030000 {
->> +                       compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
->> +                       reg = <0x0 0x16030000 0x0 0x10000>;
->> +                       clocks = <&aoncrg JH7110_AONCLK_GMAC0_AXI>,
->> +                                <&aoncrg JH7110_AONCLK_GMAC0_AHB>,
->> +                                <&syscrg JH7110_SYSCLK_GMAC0_PTP>,
->> +                                <&aoncrg JH7110_AONCLK_GMAC0_TX_INV>,
->> +                                <&syscrg JH7110_SYSCLK_GMAC0_GTXC>;
->> +                       clock-names = "stmmaceth", "pclk", "ptp_ref",
->> +                                     "tx", "gtx";
->> +                       resets = <&aoncrg JH7110_AONRST_GMAC0_AXI>,
->> +                                <&aoncrg JH7110_AONRST_GMAC0_AHB>;
->> +                       reset-names = "stmmaceth", "ahb";
->> +                       interrupts = <7>, <6>, <5>;
->> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
->> +                       phy-mode = "rgmii-id";
->> +                       snps,multicast-filter-bins = <64>;
->> +                       snps,perfect-filter-entries = <8>;
->> +                       rx-fifo-depth = <2048>;
->> +                       tx-fifo-depth = <2048>;
->> +                       snps,fixed-burst;
->> +                       snps,no-pbl-x8;
->> +                       snps,force_thresh_dma_mode;
->> +                       snps,axi-config = <&stmmac_axi_setup>;
->> +                       snps,tso;
->> +                       snps,en-tx-lpi-clockgating;
->> +                       snps,txpbl = <16>;
->> +                       snps,rxpbl = <16>;
->> +                       status = "disabled";
->> +                       phy-handle = <&phy0>;
->> +
->> +                       mdio {
->> +                               #address-cells = <1>;
->> +                               #size-cells = <0>;
->> +                               compatible = "snps,dwmac-mdio";
->> +
->> +                               phy0: ethernet-phy@0 {
->> +                                       reg = <0>;
->> +                               };
->> +                       };
->> +               };
->> +
->> +               gmac1: ethernet@16040000 {
->> +                       compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
->> +                       reg = <0x0 0x16040000 0x0 0x10000>;
->> +                       clocks = <&syscrg JH7110_SYSCLK_GMAC1_AXI>,
->> +                                <&syscrg JH7110_SYSCLK_GMAC1_AHB>,
->> +                                <&syscrg JH7110_SYSCLK_GMAC1_PTP>,
->> +                                <&syscrg JH7110_SYSCLK_GMAC1_TX_INV>,
->> +                                <&syscrg JH7110_SYSCLK_GMAC1_GTXC>;
->> +                       clock-names = "stmmaceth", "pclk", "ptp_ref",
->> +                                     "tx", "gtx";
->> +                       resets = <&syscrg JH7110_SYSRST_GMAC1_AXI>,
->> +                                <&syscrg JH7110_SYSRST_GMAC1_AHB>;
->> +                       reset-names = "stmmaceth", "ahb";
->> +                       interrupts = <78>, <77>, <76>;
->> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
->> +                       phy-mode = "rgmii-id";
->> +                       snps,multicast-filter-bins = <64>;
->> +                       snps,perfect-filter-entries = <8>;
->> +                       rx-fifo-depth = <2048>;
->> +                       tx-fifo-depth = <2048>;
->> +                       snps,fixed-burst;
->> +                       snps,no-pbl-x8;
->> +                       snps,force_thresh_dma_mode;
->> +                       snps,axi-config = <&stmmac_axi_setup>;
->> +                       snps,tso;
->> +                       snps,en-tx-lpi-clockgating;
->> +                       snps,txpbl = <16>;
->> +                       snps,rxpbl = <16>;
->> +                       status = "disabled";
->> +                       phy-handle = <&phy1>;
->> +
->> +                       mdio {
->> +                               #address-cells = <1>;
->> +                               #size-cells = <0>;
->> +                               compatible = "snps,dwmac-mdio";
->> +
->> +                               phy1: ethernet-phy@1 {
->> +                                       reg = <0>;
-> 
-> I'm getting errors on eth1 unless this is set to <1>. In any case the
-> number after @ in the node name should match the reg value.
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 721da5cee9d4 ("driver core: remove CONFIG_SYSFS_DEPRECATED and CONFIG_SYSFS_DEPRECATED_V2")
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/base/class.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-Hi，Emil，which board are you using?  (v1.2a or v1.3b?). 
-I have tested it on v1.2a and 1.3b, all network ports work normally when the phy address is set to 0.
-Maybe your eth1 doesn't work for other reasons?
-
-General, the phy address is fixed when the bord is designed.
-(For example,the phy address of YT8512 depends on the hardware resistance pull-up or pull-down.
-However, some phy addresses can be configured through software, but not yt8512.)
-
-The phy address is a borad-related attribute, and I will follow Andrew's suggestion and put the phy address in borad*.dts
-
-
-Best regards,
-Samin
-> 
->> +                               };
->> +                       };
->> +               };
->>         };
->>  };
->> --
->> 2.17.1
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
-
+diff --git a/drivers/base/class.c b/drivers/base/class.c
+index fb8f2a1e1c19..5983eead8391 100644
+--- a/drivers/base/class.c
++++ b/drivers/base/class.c
+@@ -178,13 +178,7 @@ int __class_register(struct class *cls, struct lock_class_key *key)
+ 	if (!cls->dev_kobj)
+ 		cls->dev_kobj = sysfs_dev_char_kobj;
+ 
+-#if defined(CONFIG_BLOCK)
+-	/* let the block class directory show up in the root of sysfs */
+-	if (cls != &block_class)
+-		cp->subsys.kobj.kset = class_kset;
+-#else
+ 	cp->subsys.kobj.kset = class_kset;
+-#endif
+ 	cp->subsys.kobj.ktype = &class_ktype;
+ 	cp->class = cls;
+ 	cls->p = cp;
 -- 
-Best regards,
-Samin
+2.39.2
+
