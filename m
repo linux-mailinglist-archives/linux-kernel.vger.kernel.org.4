@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CBB6AF6F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D416AF6F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 21:52:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjCGUvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 15:51:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S230389AbjCGUww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 15:52:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjCGUu5 (ORCPT
+        with ESMTP id S229941AbjCGUwv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 15:50:57 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE16AA734
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:50:56 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id b4-20020a92c844000000b00317983ace21so7610597ilq.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 12:50:56 -0800 (PST)
+        Tue, 7 Mar 2023 15:52:51 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DB3AA73C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 12:52:49 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id i6so12715657ybu.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 12:52:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678222368;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WtlzL8PevPLLFXmTlyBP00LAI0VoVwlqLagNnjCZdv4=;
+        b=fdlVTqePrrMgmLA0JW6a0Ng4I6EcBFnbxzj1f8rvz9FF7sq40JYQC2DdqpIRaUXwtF
+         41DGdXVFgMYIgg/CWadBAkKsiFqZVJDRVcT/G0T0TAkyR2d0ws0jMh8wEQEqQRgq9yoc
+         U7COOaBe3VbfqlYczUr2DLpZa2xMBTTfH6ldU7N7JBpUakNOmIgXBMWu9Ffvx/K9Au7n
+         VcvKRlDOWPOONtVpSY34SZw0r/Gm2NlMNU77Ll1Hc+M/jMXuZB8+VXbuyHJa/Ox0ZOHE
+         Fo2MsvQV/i9CeqRz3ko4u+oTQvEjguxWHtXDnT9NJepNOKFsju2F4Q0Q/HJbvVbtJAgq
+         inGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678222255;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d2TaVkmzoFnbidPsxAEaZiPwl2GKYJdrifj1ZuLmWyE=;
-        b=xRPHsKSCWx0YOeFVnqLzFq5bt55w4YqQFDGvbmKdiSZQI/vRKriAhG7BfF74mGhU+V
-         EDr3Z9eXfc9L2lfbekIx5P792XDwKZG2wKFp+1K1akeOPqKAcPTqAiDUL4+m9dg0mrym
-         QstwzBlXxx8Sjig0itKKRzF2ipqan7T3AbTqa96E/RCy1QBZZbBG1DHIiKvopfqEjaaX
-         1hAFu4qJvagFUEldAvOFcZpdq//Rd4+ykNjBDydosQ/UJvGbqREsRR25Rgcal/jEfAGe
-         +GbPZTo3347NZnaBq5J98a8pGCDCdNz7HQfj5eOkhMbWlKhNaVMsFiErRKS9DSt5rEYY
-         WD2A==
-X-Gm-Message-State: AO0yUKV+INP67gHcaaBas64vn/D7Xy2R528E0dctxtQFspYy37kqTDGu
-        5FKNGq0nikO5hmbnd6J91OTl/d8rrinC3m1RmlvAkeZHS/nh
-X-Google-Smtp-Source: AK7set9Q3fQ7QaebeZqWPyLaB4izydi5rzt3N6zz4x1KYKQBL2nLH7IYDELTuCVnn9h+Bb+GOTRlBr6Fa6b2pcs9kZQi6Wq5+kxF
+        d=1e100.net; s=20210112; t=1678222368;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WtlzL8PevPLLFXmTlyBP00LAI0VoVwlqLagNnjCZdv4=;
+        b=fi88Db/t8r5d6/p3gl1eBLp5VEpBgPkv+kP7/GgSNFBYjlLp6Tg4I7UuZyabtxBlbF
+         6i4VdocwJvIUOGdBDlvVkKzaHvrCbk+E9Nu0f3cyyG+MeujqL8ZdATqNh5LvaKHKWnms
+         zJS40RIFoz44je9nKEwEAxBMMoHYSB+wtX5XzU9Pr4TJi6uJ3PSR/8opT2NzgZ7XSKdc
+         O0+0XlvVn0+2YdgHmI8CPWOMOMS9EMezqmLnYkNbn54yRBDMtfs6r4QHQ309vSbX3obc
+         P5nt0aKLldVv6l+BPPK7jzx+sTMu37yOxENq57InpTbvvyn10bZm/ZIjRx1pTeqajuBO
+         2kMg==
+X-Gm-Message-State: AO0yUKXd1QzONL+iKBSjmb7jUkKLdobSdu+hzOyFbAQhAzRF29CJQQ6s
+        MZqe6zjdN/qWCbpWKOwH3yvgDsZ4ezTzyIySJkuXELAmCYwXEzz0
+X-Google-Smtp-Source: AK7set/rWOufzYEq91GvmMEo7+BJ2m+ocGgid3S1JGWCk/qBjg1hP5yymE1zHmoD9Uvh4Fqvigk7F62XPCO37pxDjKI=
+X-Received: by 2002:a25:9281:0:b0:b0a:7108:71e9 with SMTP id
+ y1-20020a259281000000b00b0a710871e9mr5325940ybl.4.1678222368490; Tue, 07 Mar
+ 2023 12:52:48 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a02:7310:0:b0:3e0:6875:f5e2 with SMTP id
- y16-20020a027310000000b003e06875f5e2mr7593499jab.6.1678222255359; Tue, 07 Mar
- 2023 12:50:55 -0800 (PST)
-Date:   Tue, 07 Mar 2023 12:50:55 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000062913f05f655919e@google.com>
-Subject: [syzbot] [9p?] KASAN: wild-memory-access Write in v9fs_get_acl
-From:   syzbot <syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, ericvh@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net,
-        syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
+References: <20230307133735.90772-1-daniel.lezcano@linaro.org> <20230307133735.90772-5-daniel.lezcano@linaro.org>
+In-Reply-To: <20230307133735.90772-5-daniel.lezcano@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 7 Mar 2023 21:52:37 +0100
+Message-ID: <CACRpkdYqUHVkdTwfoQFLM_mkkb8XkUA1FN8=h04BpioDdQAL3g@mail.gmail.com>
+Subject: Re: [PATCH v1 04/11] thermal/drivers/db8500: Use driver dev instead
+ of tz->device
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,160 +71,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Mar 7, 2023 at 2:37=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
+o.org> wrote:
 
-syzbot found the following issue on:
+> The db8500 driver uses the thermal zone device instead of the device
+> attached to it. In order to prevent the drivers to access the thermal
+> zone device structure, replace the thermal zone device by the driver
+> to show the debug message.
+>
+> Cc: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-HEAD commit:    596b6b709632 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=12ce3de4c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3519974f3f27816d
-dashboard link: https://syzkaller.appspot.com/bug?extid=cb1d16facb3cc90de5fb
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b2e204c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17e74fb0c80000
+Yep that's the right thing to do.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/06e2210b88a3/disk-596b6b70.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/79e6930ab577/vmlinux-596b6b70.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/56b95e6bcb5c/Image-596b6b70.gz.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/e12043e9faac/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 256
-MINIX-fs: mounting unchecked file system, running fsck is recommended
-==================================================================
-BUG: KASAN: wild-memory-access in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
-BUG: KASAN: wild-memory-access in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
-BUG: KASAN: wild-memory-access in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-BUG: KASAN: wild-memory-access in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-BUG: KASAN: wild-memory-access in refcount_dec_and_test include/linux/refcount.h:333 [inline]
-BUG: KASAN: wild-memory-access in posix_acl_release include/linux/posix_acl.h:57 [inline]
-BUG: KASAN: wild-memory-access in v9fs_get_acl+0x1a4/0x390 fs/9p/acl.c:102
-Write of size 4 at addr 9fffeb37f97f1c00 by task syz-executor798/5923
-
-CPU: 0 PID: 5923 Comm: syz-executor798 Not tainted 6.2.0-syzkaller-18302-g596b6b709632 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-Call trace:
- dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- print_report+0xe4/0x4c0 mm/kasan/report.c:420
- kasan_report+0xd4/0x130 mm/kasan/report.c:517
- kasan_check_range+0x264/0x2a4 mm/kasan/generic.c:189
- __kasan_check_write+0x2c/0x3c mm/kasan/shadow.c:37
- instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
- atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
- __refcount_sub_and_test include/linux/refcount.h:272 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- posix_acl_release include/linux/posix_acl.h:57 [inline]
- v9fs_get_acl+0x1a4/0x390 fs/9p/acl.c:102
- v9fs_mount+0x77c/0xa5c fs/9p/vfs_super.c:183
- legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
- vfs_get_tree+0x90/0x274 fs/super.c:1489
- do_new_mount+0x25c/0x8c8 fs/namespace.c:3145
- path_mount+0x590/0xe58 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount fs/namespace.c:3674 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3674
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-==================================================================
-Unable to handle kernel paging request at virtual address 9fffeb37f97f1c00
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-[9fffeb37f97f1c00] address between user and kernel address ranges
-Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 5923 Comm: syz-executor798 Tainted: G    B              6.2.0-syzkaller-18302-g596b6b709632 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __lse_atomic_fetch_add_release arch/arm64/include/asm/atomic_lse.h:62 [inline]
-pc : __lse_atomic_fetch_sub_release arch/arm64/include/asm/atomic_lse.h:76 [inline]
-pc : arch_atomic_fetch_sub_release arch/arm64/include/asm/atomic.h:51 [inline]
-pc : atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:177 [inline]
-pc : __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-pc : __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-pc : refcount_dec_and_test include/linux/refcount.h:333 [inline]
-pc : posix_acl_release include/linux/posix_acl.h:57 [inline]
-pc : v9fs_get_acl+0x1b0/0x390 fs/9p/acl.c:102
-lr : arch_atomic_fetch_sub_release arch/arm64/include/asm/atomic.h:51 [inline]
-lr : atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:177 [inline]
-lr : __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-lr : __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-lr : refcount_dec_and_test include/linux/refcount.h:333 [inline]
-lr : posix_acl_release include/linux/posix_acl.h:57 [inline]
-lr : v9fs_get_acl+0x1ac/0x390 fs/9p/acl.c:102
-sp : ffff80001e607970
-x29: ffff80001e607970 x28: dfff800000000000 x27: 1ffff00003cc0f3c
-x26: 1ffff00003cc0f38 x25: ffff0000ddbe4648 x24: ffff0000ddbe45e0
-x23: ffff0000de2a0000 x22: dfff800000000000 x21: 9fffeb37f97f1c00
-x20: 00000000fffffffb x19: fffffffffffffffb x18: 1fffe0003689b776
-x17: ffff800015b8d000 x16: ffff80001235d16c x15: 0000000000000000
-x14: 0000000040000000 x13: 0000000000000002 x12: 0000000000000001
-x11: ff80800009d500bc x10: 0000000000000000 x9 : ffff800009d500bc
-x8 : 00000000ffffffff x7 : 1fffe0003689b777 x6 : ffff800008288c58
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff8000081b9ce8
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- arch_atomic_fetch_sub_release arch/arm64/include/asm/atomic.h:51 [inline]
- atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:177 [inline]
- __refcount_sub_and_test include/linux/refcount.h:272 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- posix_acl_release include/linux/posix_acl.h:57 [inline]
- v9fs_get_acl+0x1b0/0x390 fs/9p/acl.c:102
- v9fs_mount+0x77c/0xa5c fs/9p/vfs_super.c:183
- legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
- vfs_get_tree+0x90/0x274 fs/super.c:1489
- do_new_mount+0x25c/0x8c8 fs/namespace.c:3145
- path_mount+0x590/0xe58 fs/namespace.c:3475
- do_mount fs/namespace.c:3488 [inline]
- __do_sys_mount fs/namespace.c:3697 [inline]
- __se_sys_mount fs/namespace.c:3674 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3674
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Code: 97b08d5c d503201f 979ee91f 12800008 (b86802b6) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	97b08d5c 	bl	0xfffffffffec23570
-   4:	d503201f 	nop
-   8:	979ee91f 	bl	0xfffffffffe7ba484
-   c:	12800008 	mov	w8, #0xffffffff            	// #-1
-* 10:	b86802b6 	ldaddl	w8, w22, [x21] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Yours,
+Linus Walleij
