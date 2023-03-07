@@ -2,168 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314606AEE58
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 977646AEE5B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232476AbjCGSLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:11:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S229570AbjCGSLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 13:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjCGSKu (ORCPT
+        with ESMTP id S232413AbjCGSKv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:10:50 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFE35DECD;
-        Tue,  7 Mar 2023 10:05:40 -0800 (PST)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327HGv5u002333;
-        Tue, 7 Mar 2023 18:05:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=hoz4RkVCJGwvQNNgSt4WLK6sHH0UVal/pigvAKVzo24=;
- b=KmYsR+wgzGHSKd2v0EhZiBj2MtYYjTed21FDk7VT0FDzn++Pa9LUhrxtOEdxY1tP0GZn
- VCO1Pk7iNQb8lGXM/S9XQPemTobWQnBQj7eT7rsay6FepXWh4Vk2WHPUWmiWf3X26ynZ
- xpKLFriFrXs4D92nYjxy3GxMkhkqhHPc0vCg4KiBUo0ZneDWg2BskimpR5tEBFVlRJNp
- wYFOMgYkiaVk7X23H12gTFeYEu5DwpqaxTHc6dbfJXw6dVhwAczgX0yMrDagPpdZdOyt
- fSDCSzMNYNS3VWM9c6Y1/VrYkJm+ZPLzWaqGz+/s2UEAxhn8pGxzUTYZf/f+1/lYJ/dc hw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p67wfmdtg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:05:03 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 327HqNgi004706;
-        Tue, 7 Mar 2023 18:05:02 GMT
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p67wfmdsy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:05:02 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 327H9dUc015329;
-        Tue, 7 Mar 2023 18:05:01 GMT
-Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3p4199sp2n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 18:05:01 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 327I4xJr32309734
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 7 Mar 2023 18:05:00 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE1DD5805A;
-        Tue,  7 Mar 2023 18:04:59 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 600B15803F;
-        Tue,  7 Mar 2023 18:04:55 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  7 Mar 2023 18:04:55 +0000 (GMT)
-Message-ID: <4b158d7e-a96d-58ae-cc34-0ad6abc1cea9@linux.ibm.com>
-Date:   Tue, 7 Mar 2023 13:04:54 -0500
+        Tue, 7 Mar 2023 13:10:51 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568EA9224F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:05:43 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id d6-20020a92d786000000b00316f1737173so7552840iln.16
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:05:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678212342;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xMmGBPDCyE1o0KJbX11oQKUWmAnPR1ykDR3aht2SgWI=;
+        b=6E6y3FqtbOKIkXHmhnvTzNkFWQKJKd7wi4nf428w46bNF1PRGF4957G5k1m86vvqMv
+         fUC5xOJr+Fv0ORla7bJ3qtzAYc75Wh/fR4ebiW4HRF3M5erZB/3++ni/udrilHqoWLKA
+         xAC6Mkfv76VFPxvmUAYBaweo/9n505nWnoZbYIgay6RSqHB/lqRreEbqzR30f9wRfu/t
+         dcQXQz4ubdo+1KIuCYe1IxiCRLvvXlQPmCZ94kjC8cT7De+KCPGRMVLMGxhSpejcj+25
+         1pN5v7xqvmBR+d8oYzcpcuDLlxqKeSS2WR9Fc4R50+wlSUDwso5erAeDzFfTdugAY+Gp
+         Y5jQ==
+X-Gm-Message-State: AO0yUKWPC5zrYlXsa71KqmpDDRzbc1uhQbag2G1+RVaqPAle0C5HW/45
+        ZO4s8z0ZiQmn3Ch4m7X6xUsXwgDko1Y3cBkiHkrNvxy8tWEN
+X-Google-Smtp-Source: AK7set8LdW7Z5z903MhX750iHI+wLlKjA8IaDjBcJO9bYMe5iSsz69Kbuu35dLmnF/adaamHiU82LHqVZL8BP6K74ahoUX08nDSj
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 23/28] security: Introduce LSM_ORDER_LAST
-Content-Language: en-US
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
- <20230303182602.1088032-1-roberto.sassu@huaweicloud.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <20230303182602.1088032-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: z2sA_jePHs3pgRRx2w8x57GTfaIXwbl5
-X-Proofpoint-ORIG-GUID: giscmAA8yJRKHabeezSzr5z2e0B3EN--
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_12,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- clxscore=1015 malwarescore=0 bulkscore=0 mlxscore=0 suspectscore=0
- spamscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070161
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:f43:b0:317:98ef:7060 with SMTP id
+ y3-20020a056e020f4300b0031798ef7060mr7447962ilj.1.1678212342548; Tue, 07 Mar
+ 2023 10:05:42 -0800 (PST)
+Date:   Tue, 07 Mar 2023 10:05:42 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000890fab05f65342b6@google.com>
+Subject: [syzbot] [scsi?] memory leak in __proc_create
+From:   syzbot <syzbot+645a4616b87a2f10e398@syzkaller.appspotmail.com>
+To:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    8ca09d5fa354 cpumask: fix incorrect cpumask scanning resul..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=17c39338c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=337fc5840f41dbbe
+dashboard link: https://syzkaller.appspot.com/bug?extid=645a4616b87a2f10e398
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17500b98c80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/7b252fbf60d5/disk-8ca09d5f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4bd32a89510e/vmlinux-8ca09d5f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3d1b299dadec/bzImage-8ca09d5f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+645a4616b87a2f10e398@syzkaller.appspotmail.com
+
+BUG: memory leak
+unreferenced object 0xffff88810af45b40 (size 192):
+  comm "kworker/1:5", pid 5185, jiffies 4294972950 (age 13.730s)
+  hex dump (first 32 bytes):
+    00 00 00 00 01 00 00 00 48 5b f4 0a 81 88 ff ff  ........H[......
+    48 5b f4 0a 81 88 ff ff 00 00 00 00 00 00 00 00  H[..............
+  backtrace:
+    [<ffffffff81749860>] kmem_cache_zalloc include/linux/slab.h:710 [inline]
+    [<ffffffff81749860>] __proc_create+0x1a0/0x3b0 fs/proc/generic.c:426
+    [<ffffffff8174a42e>] proc_create_reg+0xae/0x120 fs/proc/generic.c:553
+    [<ffffffff8174a4d5>] proc_create_data+0x35/0x90 fs/proc/generic.c:573
+    [<ffffffff82c2559c>] scsi_proc_host_add+0xdc/0x160 drivers/scsi/scsi_proc.c:233
+    [<ffffffff82c0c26b>] scsi_add_host_with_dma+0x48b/0x500 drivers/scsi/hosts.c:311
+    [<ffffffff832b7f52>] scsi_add_host include/scsi/scsi_host.h:774 [inline]
+    [<ffffffff832b7f52>] usb_stor_probe2+0x2f2/0x410 drivers/usb/storage/usb.c:1056
+    [<ffffffff832c5ff7>] sddr09_probe+0xb7/0x110 drivers/usb/storage/sddr09.c:1772
+    [<ffffffff831c2549>] usb_probe_interface+0x179/0x3c0 drivers/usb/core/driver.c:396
+    [<ffffffff82b40b0d>] call_driver_probe drivers/base/dd.c:552 [inline]
+    [<ffffffff82b40b0d>] really_probe+0x12d/0x430 drivers/base/dd.c:631
+    [<ffffffff82b40ecf>] __driver_probe_device+0xbf/0x140 drivers/base/dd.c:768
+    [<ffffffff82b40f7a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:798
+    [<ffffffff82b4116b>] __device_attach_driver+0xfb/0x150 drivers/base/dd.c:926
+    [<ffffffff82b3e0f1>] bus_for_each_drv+0xc1/0x110 drivers/base/bus.c:457
+    [<ffffffff82b41692>] __device_attach+0x102/0x2a0 drivers/base/dd.c:998
+    [<ffffffff82b3f79a>] bus_probe_device+0xca/0xd0 drivers/base/bus.c:532
+    [<ffffffff82b3bdf1>] device_add+0x991/0xc80 drivers/base/core.c:3589
 
 
-On 3/3/23 13:25, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
-> 
-> Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs willing to be
-> the last, e.g. the 'integrity' LSM, without changing the kernel command
-> line or configuration.
-> 
-> As for LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled and put
-> at the end of the LSM list in no particular order.
-> 
 
-I think you should describe the reason for the change for LSM_ORDER_MUTABLE as well.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->   include/linux/lsm_hooks.h |  1 +
->   security/security.c       | 12 +++++++++---
->   2 files changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 21a8ce23108..05c4b831d99 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -93,6 +93,7 @@ extern void security_add_hooks(struct security_hook_list *hooks, int count,
->   enum lsm_order {
->   	LSM_ORDER_FIRST = -1,	/* This is only for capabilities. */
->   	LSM_ORDER_MUTABLE = 0,
-> +	LSM_ORDER_LAST = 1,
->   };
->   
->   struct lsm_info {
-> diff --git a/security/security.c b/security/security.c
-> index 322090a50cd..24f52ba3218 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -284,9 +284,9 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
->   		bool found = false;
->   
->   		for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
-> -			if (lsm->order == LSM_ORDER_MUTABLE &&
-> -			    strcmp(lsm->name, name) == 0) {
-> -				append_ordered_lsm(lsm, origin);
-> +			if (strcmp(lsm->name, name) == 0) {
-> +				if (lsm->order == LSM_ORDER_MUTABLE)
-> +					append_ordered_lsm(lsm, origin);
->   				found = true;
->   			}
->   		}
-> @@ -306,6 +306,12 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
->   		}
->   	}
->   
-> +	/* LSM_ORDER_LAST is always last. */
-> +	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
-> +		if (lsm->order == LSM_ORDER_LAST)
-> +			append_ordered_lsm(lsm, "   last");
-> +	}
-> +
->   	/* Disable all LSMs not in the ordered list. */
->   	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
->   		if (exists_ordered_lsm(lsm))
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
