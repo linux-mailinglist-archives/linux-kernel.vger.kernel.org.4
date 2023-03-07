@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5D76AD7D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 07:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0E0A6AD7D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 07:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbjCGG5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 01:57:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59174 "EHLO
+        id S230381AbjCGG6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 01:58:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbjCGG5O (ORCPT
+        with ESMTP id S231179AbjCGG5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 01:57:14 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D60848DE
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 22:56:22 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id z11so7416583pfh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 22:56:22 -0800 (PST)
+        Tue, 7 Mar 2023 01:57:34 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8087848DB
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 22:56:34 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id p3-20020a17090ad30300b0023a1cd5065fso11048881pju.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 22:56:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678172179;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xnc/F2CDRO2PmqdLINKWRn/GpEkzyr0mGNPS5puv6KI=;
-        b=D6qL9lxH8H/W2+EDbBE/xJ+qO+md9Tx4IhLuncQXNvVNJQ1m+A2NLUWRCCeopoTyV3
-         gjdbDYTvDHDcxOtnRHOWjTyHDivTeBglZK1Jv6z0bEPhzCiOGfioAGjh5Jg7eHRph0Co
-         z7JuDiOugNXGXQrICABLwPr6OEcARVaq/m12Uetzcp4vFAtdtIjniJFFuKa1PQowXngE
-         fyAFet+4Lq5r+v+ceEcUe9PAqfpS7Ah7dzLMiUeqZZ0WhpGv0ByrBpYKp/izKQAi+4Dy
-         uTN+/srvfHv7gCw+7O/jHQtSuRcRgJhyvoqTXeIhk4Pd+x6N9zLSlwye0ycWv3r46rP3
-         0pEA==
+        d=bytedance.com; s=google; t=1678172189;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ER53Y4QROl37259eb6APCiUTawgi9lN6yGxvXXCwSQY=;
+        b=e8fFg/1ZMWrDBYFiJGMfpaUyPuJWpCLpWWZq+9/2MnqY7SWb0mfveVeBZnGqQEScRg
+         SRpcjengd7bibS0+sCjtTNAacG5ZTh6UzMHGYHGhLesxbisy2K8z9u5WBafxqENJ3cle
+         +aareyjuZRIYh2a2Es/Zb9QV30TYYKVFPL1aymJscHSeoeSE0VJP3FXWjmFFNrBEf2bt
+         qFIAa0MZmcpqbFGrop17AAgZicTZfc+oz5iTO0ILfWsXzt07POPSqui0chCoPVnuTfpa
+         jEpmE0LmM4BFlo/QSmO5S+SEmZWa4v5rkEHKIznIKzxalv0FQT/NqtWCuLU5TuTPr1k7
+         kJ+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678172179;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Xnc/F2CDRO2PmqdLINKWRn/GpEkzyr0mGNPS5puv6KI=;
-        b=Pz7lscSP+zQrAiugqykZgI0F05AZCROJS9SEoCQleTvo/dTp7Vq5HGhY0ZmK4eciaa
-         BCuBQFBuHIr/ekpDTFXQ5q7b+mUdv7cnb+1BObVpUHCIs/l1/K7CxmF+TSwYDfx0mzl0
-         rmEhzDxyBJbsz4JfFEaYbxhJ+TcUwRPlb+x79KwE6LFYbyHFmzyGmGcS6TBPHF98CC0b
-         zD8Qs4FsiKQsLSW9TsK7P7WkBPAm7hwoq+086hBA/dxEwAstAB9GdvZPPzYn0fy6ZAgw
-         onCLuMgrZN7byteRotq7bWlEPEbYU00Bdt6aIRPOFSWJO54f9Q4fDTe/ON+GN65pHZV9
-         fCoA==
-X-Gm-Message-State: AO0yUKW9jtgHoPJBogwOsKTLVtoKie/aGuYutnZP7HcLDeU+3Dux3PqI
-        tekLiRbrWm4/I5mtsUGKo+mmaw==
-X-Google-Smtp-Source: AK7set9XrblQF4RUBncUqUzNPJAHzViKIx63eUfVPqUkhjCejP+viBvjqEI4hVH6jlyCyAOqan+3FA==
-X-Received: by 2002:a05:6a00:2a08:b0:5ef:8b7f:f69b with SMTP id ce8-20020a056a002a0800b005ef8b7ff69bmr13597328pfb.0.1678172178869;
-        Mon, 06 Mar 2023 22:56:18 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678172189;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ER53Y4QROl37259eb6APCiUTawgi9lN6yGxvXXCwSQY=;
+        b=OoWQe99pMt8R+oCbBgCHxTNBphX9YG6m6QhfmrkoqZNMjihvHwLSIYpSeeiMUmYEFV
+         OUFYU87oHPipXPz9Hkk2wd9VpG2Aq/HlzVakdBwXLaY1d+2aiERye3AiXhENzZIEjHwj
+         +73IGTR6QtXrU/iIo/5rOrFfPLlEt+ZZ/HehrUMwZ/Zk8oHeRx464Gk1fqsF7EEaXHK+
+         /+Gov2WBwOsRt69QMdn/UkUL6NRnwIz6zKJOYj82uVWn0cjcJCFM3hNaXsgqcaAgX+XI
+         TATPDo24Nx2eChjRjqf5e/6fmaB2tPKrvoQbJDGSzuOEXk2zW5xdZ6YzqiG3XIV9cyTR
+         mrRQ==
+X-Gm-Message-State: AO0yUKVqJsZ/LpJYHUZoKKqavxpKs3QazA3QOpfOGbKX5fO7C1z7qRrS
+        ZyEdBLj6PxohgFQ5g76Ub+LsBg==
+X-Google-Smtp-Source: AK7set93IUuefTEJlKAupAfnJncofKj6xEUjv3QuTx2o0at5hbUln/n/Dabc1bi7Ww06YH0cGT/21Q==
+X-Received: by 2002:a05:6a20:8404:b0:c0:2875:9e8c with SMTP id c4-20020a056a20840400b000c028759e8cmr16929564pzd.1.1678172189271;
+        Mon, 06 Mar 2023 22:56:29 -0800 (PST)
 Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id e5-20020a62ee05000000b00608dae58695sm7230854pfi.209.2023.03.06.22.56.11
+        by smtp.gmail.com with ESMTPSA id e5-20020a62ee05000000b00608dae58695sm7230854pfi.209.2023.03.06.22.56.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 22:56:18 -0800 (PST)
+        Mon, 06 Mar 2023 22:56:28 -0800 (PST)
 From:   Qi Zheng <zhengqi.arch@bytedance.com>
 To:     akpm@linux-foundation.org, tkhai@ya.ru, hannes@cmpxchg.org,
         shakeelb@google.com, mhocko@kernel.org, roman.gushchin@linux.dev,
@@ -58,10 +59,12 @@ Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
         penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH v4 0/8] make slab shrink lockless
-Date:   Tue,  7 Mar 2023 14:55:57 +0800
-Message-Id: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
+Subject: [PATCH v4 1/8] mm: vmscan: add a map_nr_max field to shrinker_info
+Date:   Tue,  7 Mar 2023 14:55:58 +0800
+Message-Id: <20230307065605.58209-2-zhengqi.arch@bytedance.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+In-Reply-To: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
+References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,289 +77,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+To prepare for the subsequent lockless memcg slab shrink,
+add a map_nr_max field to struct shrinker_info to records
+its own real shrinker_nr_max.
 
-This patch series aims to make slab shrink lockless.
+Suggested-by: Kirill Tkhai <tkhai@ya.ru>
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+ include/linux/memcontrol.h |  1 +
+ mm/vmscan.c                | 41 ++++++++++++++++++++++----------------
+ 2 files changed, 25 insertions(+), 17 deletions(-)
 
-1. Background
-=============
-
-On our servers, we often find the following system cpu hotspots:
-
-  52.22% [kernel]        [k] down_read_trylock
-  19.60% [kernel]        [k] up_read
-   8.86% [kernel]        [k] shrink_slab
-   2.44% [kernel]        [k] idr_find
-   1.25% [kernel]        [k] count_shadow_nodes
-   1.18% [kernel]        [k] shrink lruvec
-   0.71% [kernel]        [k] mem_cgroup_iter
-   0.71% [kernel]        [k] shrink_node
-   0.55% [kernel]        [k] find_next_bit
-
-And we used bpftrace to capture its calltrace as follows:
-
-@[
-    down_read_trylock+1
-    shrink_slab+128
-    shrink_node+371
-    do_try_to_free_pages+232
-    try_to_free_pages+243
-    _alloc_pages_slowpath+771
-    _alloc_pages_nodemask+702
-    pagecache_get_page+255
-    filemap_fault+1361
-    ext4_filemap_fault+44
-    __do_fault+76
-    handle_mm_fault+3543
-    do_user_addr_fault+442
-    do_page_fault+48
-    page_fault+62
-]: 1161690
-@[
-    down_read_trylock+1
-    shrink_slab+128
-    shrink_node+371
-    balance_pgdat+690
-    kswapd+389
-    kthread+246
-    ret_from_fork+31
-]: 8424884
-@[
-    down_read_trylock+1
-    shrink_slab+128
-    shrink_node+371
-    do_try_to_free_pages+232
-    try_to_free_pages+243
-    __alloc_pages_slowpath+771
-    __alloc_pages_nodemask+702
-    __do_page_cache_readahead+244
-    filemap_fault+1674
-    ext4_filemap_fault+44
-    __do_fault+76
-    handle_mm_fault+3543
-    do_user_addr_fault+442
-    do_page_fault+48
-    page_fault+62
-]: 20917631
-
-We can see that down_read_trylock() of shrinker_rwsem is being called with
-high frequency at that time. Because of the poor multicore scalability of atomic
-operations, this can lead to a significant drop in IPC (instructions per cycle).
-
-And more, the shrinker_rwsem is a global read-write lock in shrinkers subsystem,
-which protects most operations such as slab shrink, registration and
-unregistration of shrinkers, etc. This can easily cause problems in the
-following cases.
-
-1) When the memory pressure is high and there are many filesystems mounted or
-   unmounted at the same time, slab shrink will be affected (down_read_trylock()
-   failed).
-
-   Such as the real workload mentioned by Kirill Tkhai:
-
-   ```
-   One of the real workloads from my experience is start of an overcommitted
-   node containing many starting containers after node crash (or many resuming
-   containers after reboot for kernel update). In these cases memory pressure is
-   huge, and the node goes round in long reclaim.
-   ```
-
-2) If a shrinker is blocked (such as the case mentioned in [1]) and a writer
-   comes in (such as mount a fs), then this writer will be blocked and cause all
-   subsequent shrinker-related operations to be blocked.
-
-[1]. https://lore.kernel.org/lkml/20191129214541.3110-1-ptikhomirov@virtuozzo.com/
-
-All the above cases can be solved by replacing the shrinker_rwsem trylocks with
-SRCU.
-
-2. Survey
-=========
-
-Before doing the code implementation, I found that there were many similar
-submissions in the community:
-
-a. Davidlohr Bueso submitted a patch in 2015.
-   Subject: [PATCH -next v2] mm: srcu-ify shrinkers
-   Link: https://lore.kernel.org/all/1437080113.3596.2.camel@stgolabs.net/
-   Result: It was finally merged into the linux-next branch, but failed on arm
-           allnoconfig (without CONFIG_SRCU)
-
-b. Tetsuo Handa submitted a patchset in 2017.
-   Subject: [PATCH 1/2] mm,vmscan: Kill global shrinker lock.
-   Link: https://lore.kernel.org/lkml/1510609063-3327-1-git-send-email-penguin-kernel@I-love.SAKURA.ne.jp/
-   Result: Finally chose to use the current simple way (break when
-           rwsem_is_contended()). And Christoph Hellwig suggested to using SRCU,
-           but SRCU was not unconditionally enabled at the time.
-
-c. Kirill Tkhai submitted a patchset in 2018.
-   Subject: [PATCH RFC 00/10] Introduce lockless shrink_slab()
-   Link: https://lore.kernel.org/lkml/153365347929.19074.12509495712735843805.stgit@localhost.localdomain/
-   Result: At that time, SRCU was not unconditionally enabled, and there were
-           some objections to enabling SRCU. Later, because Kirill's focus was
-           moved to other things, this patchset was not continued to be updated.
-
-d. Sultan Alsawaf submitted a patch in 2021.
-   Subject: [PATCH] mm: vmscan: Replace shrinker_rwsem trylocks with SRCU protection
-   Link: https://lore.kernel.org/lkml/20210927074823.5825-1-sultan@kerneltoast.com/
-   Result: Rejected because SRCU was not unconditionally enabled.
-
-We can find that almost all these historical commits were abandoned because SRCU
-was not unconditionally enabled. But now SRCU has been unconditionally enable
-by Paul E. McKenney in 2023 [2], so it's time to replace shrinker_rwsem trylocks
-with SRCU.
-
-[2] https://lore.kernel.org/lkml/20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1/
-
-3. Reproduction and testing
-===========================
-
-We can reproduce the down_read_trylock() hotspot through the following script:
-
-```
-#!/bin/bash
-
-DIR="/root/shrinker/memcg/mnt"
-
-do_create()
-{
-    mkdir -p /sys/fs/cgroup/memory/test
-    mkdir -p /sys/fs/cgroup/perf_event/test
-    echo 4G > /sys/fs/cgroup/memory/test/memory.limit_in_bytes
-    for i in `seq 0 $1`;
-    do
-        mkdir -p /sys/fs/cgroup/memory/test/$i;
-        echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
-        echo $$ > /sys/fs/cgroup/perf_event/test/cgroup.procs;
-        mkdir -p $DIR/$i;
-    done
-}
-
-do_mount()
-{
-    for i in `seq $1 $2`;
-    do
-        mount -t tmpfs $i $DIR/$i;
-    done
-}
-
-do_touch()
-{
-    for i in `seq $1 $2`;
-    do
-        echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
-        echo $$ > /sys/fs/cgroup/perf_event/test/cgroup.procs;
-            dd if=/dev/zero of=$DIR/$i/file$i bs=1M count=1 &
-    done
-}
-
-case "$1" in
-  touch)
-    do_touch $2 $3
-    ;;
-  test)
-      do_create 4000
-    do_mount 0 4000
-    do_touch 0 3000
-    ;;
-  *)
-    exit 1
-    ;;
-esac
-```
-
-Save the above script, then run test and touch commands. Then we can use the
-following perf command to view hotspots:
-
-perf top -U -F 999
-
-1) Before applying this patchset:
-
-  32.31%  [kernel]           [k] down_read_trylock
-  19.40%  [kernel]           [k] pv_native_safe_halt
-  16.24%  [kernel]           [k] up_read
-  15.70%  [kernel]           [k] shrink_slab
-   4.69%  [kernel]           [k] _find_next_bit
-   2.62%  [kernel]           [k] shrink_node
-   1.78%  [kernel]           [k] shrink_lruvec
-   0.76%  [kernel]           [k] do_shrink_slab
-
-2) After applying this patchset:
-
-  27.83%  [kernel]           [k] _find_next_bit
-  16.97%  [kernel]           [k] shrink_slab
-  15.82%  [kernel]           [k] pv_native_safe_halt
-   9.58%  [kernel]           [k] shrink_node
-   8.31%  [kernel]           [k] shrink_lruvec
-   5.64%  [kernel]           [k] do_shrink_slab
-   3.88%  [kernel]           [k] mem_cgroup_iter
-
-At the same time, we use the following perf command to capture IPC information:
-
-perf stat -e cycles,instructions -G test -a --repeat 5 -- sleep 10
-
-1) Before applying this patchset:
-
- Performance counter stats for 'system wide' (5 runs):
-
-      454187219766      cycles                    test                    ( +-  1.84% )
-       78896433101      instructions              test #    0.17  insn per cycle           ( +-  0.44% )
-
-        10.0020430 +- 0.0000366 seconds time elapsed  ( +-  0.00% )
-
-2) After applying this patchset:
-
- Performance counter stats for 'system wide' (5 runs):
-
-      841954709443      cycles                    test                    ( +- 15.80% )  (98.69%)
-      527258677936      instructions              test #    0.63  insn per cycle           ( +- 15.11% )  (98.68%)
-
-          10.01064 +- 0.00831 seconds time elapsed  ( +-  0.08% )
-
-We can see that IPC drops very seriously when calling down_read_trylock() at
-high frequency. After using SRCU, the IPC is at a normal level.
-
-This series is based on next-20230306.
-
-Comments and suggestions are welcome.
-
-Thanks,
-Qi.
-
-Changelog in v3 -> v4:
- - fix bug in [PATCH v3 1/7]
- - revise commit messages
- - rebase onto the next-20230306
-
-Changelog in v2 -> v3:
- - fix bug in [PATCH v2 1/7] (per Kirill)
- - add Kirill's pacth which restore a check similar to the rwsem_is_contendent()
-   check by adding shrinker_srcu_generation
-
-Changelog in v1 -> v2:
- - add a map_nr_max field to shrinker_info (suggested by Kirill)
- - use shrinker_mutex in reparent_shrinker_deferred() (pointed by Kirill)
-
-Kirill Tkhai (1):
-  mm: vmscan: add shrinker_srcu_generation
-
-Qi Zheng (7):
-  mm: vmscan: add a map_nr_max field to shrinker_info
-  mm: vmscan: make global slab shrink lockless
-  mm: vmscan: make memcg slab shrink lockless
-  mm: shrinkers: make count and scan in shrinker debugfs lockless
-  mm: vmscan: hold write lock to reparent shrinker nr_deferred
-  mm: vmscan: remove shrinker_rwsem from synchronize_shrinkers()
-  mm: shrinkers: convert shrinker_rwsem to mutex
-
- drivers/md/dm-cache-metadata.c |   2 +-
- drivers/md/dm-thin-metadata.c  |   2 +-
- fs/super.c                     |   2 +-
- include/linux/memcontrol.h     |   1 +
- mm/shrinker_debug.c            |  38 +++-----
- mm/vmscan.c                    | 166 +++++++++++++++++++--------------
- 6 files changed, 112 insertions(+), 99 deletions(-)
-
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index b6eda2ab205d..aa69ea98e2d8 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -97,6 +97,7 @@ struct shrinker_info {
+ 	struct rcu_head rcu;
+ 	atomic_long_t *nr_deferred;
+ 	unsigned long *map;
++	int map_nr_max;
+ };
+ 
+ struct lruvec_stats_percpu {
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 9414226218f0..2dcc01682026 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -224,9 +224,16 @@ static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
+ 					 lockdep_is_held(&shrinker_rwsem));
+ }
+ 
++static inline bool need_expand(int new_nr_max, int old_nr_max)
++{
++	return round_up(new_nr_max, BITS_PER_LONG) >
++	       round_up(old_nr_max, BITS_PER_LONG);
++}
++
+ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
+ 				    int map_size, int defer_size,
+-				    int old_map_size, int old_defer_size)
++				    int old_map_size, int old_defer_size,
++				    int new_nr_max)
+ {
+ 	struct shrinker_info *new, *old;
+ 	struct mem_cgroup_per_node *pn;
+@@ -240,12 +247,17 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
+ 		if (!old)
+ 			return 0;
+ 
++		/* Already expanded this shrinker_info */
++		if (!need_expand(new_nr_max, old->map_nr_max))
++			continue;
++
+ 		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
+ 		if (!new)
+ 			return -ENOMEM;
+ 
+ 		new->nr_deferred = (atomic_long_t *)(new + 1);
+ 		new->map = (void *)new->nr_deferred + defer_size;
++		new->map_nr_max = new_nr_max;
+ 
+ 		/* map: set all old bits, clear all new bits */
+ 		memset(new->map, (int)0xff, old_map_size);
+@@ -295,6 +307,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
+ 		}
+ 		info->nr_deferred = (atomic_long_t *)(info + 1);
+ 		info->map = (void *)info->nr_deferred + defer_size;
++		info->map_nr_max = shrinker_nr_max;
+ 		rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
+ 	}
+ 	up_write(&shrinker_rwsem);
+@@ -302,23 +315,14 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
+ 	return ret;
+ }
+ 
+-static inline bool need_expand(int nr_max)
+-{
+-	return round_up(nr_max, BITS_PER_LONG) >
+-	       round_up(shrinker_nr_max, BITS_PER_LONG);
+-}
+-
+ static int expand_shrinker_info(int new_id)
+ {
+ 	int ret = 0;
+-	int new_nr_max = new_id + 1;
++	int new_nr_max = round_up(new_id + 1, BITS_PER_LONG);
+ 	int map_size, defer_size = 0;
+ 	int old_map_size, old_defer_size = 0;
+ 	struct mem_cgroup *memcg;
+ 
+-	if (!need_expand(new_nr_max))
+-		goto out;
+-
+ 	if (!root_mem_cgroup)
+ 		goto out;
+ 
+@@ -332,7 +336,8 @@ static int expand_shrinker_info(int new_id)
+ 	memcg = mem_cgroup_iter(NULL, NULL, NULL);
+ 	do {
+ 		ret = expand_one_shrinker_info(memcg, map_size, defer_size,
+-					       old_map_size, old_defer_size);
++					       old_map_size, old_defer_size,
++					       new_nr_max);
+ 		if (ret) {
+ 			mem_cgroup_iter_break(NULL, memcg);
+ 			goto out;
+@@ -352,9 +357,11 @@ void set_shrinker_bit(struct mem_cgroup *memcg, int nid, int shrinker_id)
+ 
+ 		rcu_read_lock();
+ 		info = rcu_dereference(memcg->nodeinfo[nid]->shrinker_info);
+-		/* Pairs with smp mb in shrink_slab() */
+-		smp_mb__before_atomic();
+-		set_bit(shrinker_id, info->map);
++		if (!WARN_ON_ONCE(shrinker_id >= info->map_nr_max)) {
++			/* Pairs with smp mb in shrink_slab() */
++			smp_mb__before_atomic();
++			set_bit(shrinker_id, info->map);
++		}
+ 		rcu_read_unlock();
+ 	}
+ }
+@@ -432,7 +439,7 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
+ 	for_each_node(nid) {
+ 		child_info = shrinker_info_protected(memcg, nid);
+ 		parent_info = shrinker_info_protected(parent, nid);
+-		for (i = 0; i < shrinker_nr_max; i++) {
++		for (i = 0; i < child_info->map_nr_max; i++) {
+ 			nr = atomic_long_read(&child_info->nr_deferred[i]);
+ 			atomic_long_add(nr, &parent_info->nr_deferred[i]);
+ 		}
+@@ -899,7 +906,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
+ 	if (unlikely(!info))
+ 		goto unlock;
+ 
+-	for_each_set_bit(i, info->map, shrinker_nr_max) {
++	for_each_set_bit(i, info->map, info->map_nr_max) {
+ 		struct shrink_control sc = {
+ 			.gfp_mask = gfp_mask,
+ 			.nid = nid,
 -- 
 2.20.1
 
