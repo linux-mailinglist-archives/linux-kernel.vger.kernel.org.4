@@ -2,296 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6534D6AD357
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECCE6AD35E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:31:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjCGA1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 19:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
+        id S229842AbjCGAbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 19:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjCGA1X (ORCPT
+        with ESMTP id S229579AbjCGAbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 19:27:23 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FCA2B291;
-        Mon,  6 Mar 2023 16:27:21 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PVx910jpdz4whh;
-        Tue,  7 Mar 2023 11:27:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678148837;
-        bh=UjxEY4JMdU+v4Ea7+Ufew8YWqYvURVFt/iiJkJ/ewxI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ciCfjQQmNpN47wmzs451YacZDxKvc88SuncQ/YGQkborZ+8RBU0iozrLZkVJy+43d
-         naP9QBFFrg6JGbLJSwIi/wUKpR3FfWV2UKgOzwv/a2mBd900TCIWJmKpG4iURXVK9h
-         itLviYtLbnDec8V588zmhIwoTTcnSYZ5VJr4aHlM5J37/+e2FqpH12ytmTEvPtSVed
-         NNI8uz9xfJh9Kb3B9qvC5MQ1Lp/nwkhcQIFGmP9sfXXWMlVwoTkxreUWrsAEHFigbA
-         +7wGYu3BNQPQoYNdxAiRKLdWPLT0ItyYMgap3q1DoqdZnQkPu04CiHWlhCdZ97EBxT
-         Dcg7MPqmkevkA==
-Date:   Tue, 7 Mar 2023 11:27:16 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bitmap tree with Linus' tree
-Message-ID: <20230307112716.067bd9c3@canb.auug.org.au>
+        Mon, 6 Mar 2023 19:31:35 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324E46C1A3;
+        Mon,  6 Mar 2023 16:31:35 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id l18so12808550qtp.1;
+        Mon, 06 Mar 2023 16:31:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678149094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3OcxBWi+fVPcj6LdXeac5WEwf/t01OSULuob77wgPfk=;
+        b=YR0KwaaBJA1hGXLSZTGyWJ533Jw/LtfGeqKUCa6BkRF42fBEKLBNZHEAZ+U68FzxTh
+         cJAJUHB7mxZiwFewO/gPTHhUz7X2rfcC1w38up2x+SCgam+5cBYfcFeC9U+2qJ6EAiSa
+         EjUCd02FnxMpTgM3diqQbLL0jlW9tf/24lOdpRHaY6aBaz9pQtuT+QHCfafw1ASoe61l
+         wzlpfc0GbxEy1OiNnKagcUf0KYwVw0f/yDjIx7PjnWVMzmCDCiOU6MxQEQ+yVgvmz1OJ
+         eAeKCNUS0+IpDgwjCDrykg2ts1zNDucwKf6qB3mhNPWyPzjzpx8e6SQLMYoE1LTdLJ2c
+         g7Aw==
+X-Gm-Message-State: AO0yUKXBG1IhnBzi63KJMiCsfDoymBbzOCqqe+krUKL94Y0anT5vxzNq
+        8krHWf9gjPmWS/ukOy/97g==
+X-Google-Smtp-Source: AK7set8fUnjreVZQ0144g6g2i5wEN0n+GrJKJ96YTx91SjVQkoi4tSAg2pTObyRW7ccAlKfX+Zxpdw==
+X-Received: by 2002:ac8:5c08:0:b0:3b9:bc8c:c1f9 with SMTP id i8-20020ac85c08000000b003b9bc8cc1f9mr29744892qti.4.1678149094187;
+        Mon, 06 Mar 2023 16:31:34 -0800 (PST)
+Received: from robh_at_kernel.org (adsl-72-50-3-187.prtc.net. [72.50.3.187])
+        by smtp.gmail.com with ESMTPSA id a4-20020a379804000000b007417affecdcsm8643332qke.69.2023.03.06.16.31.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 16:31:33 -0800 (PST)
+Received: (nullmailer pid 6585 invoked by uid 1000);
+        Tue, 07 Mar 2023 00:31:32 -0000
+Date:   Mon, 6 Mar 2023 18:31:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        devicetree@vger.kernel.org,
+        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@axis.com>
+Subject: Re: [PATCH] virt-pci: add platform bus support
+Message-ID: <20230307003132.GA6366-robh@kernel.org>
+References: <20230127-uml-pci-platform-v1-1-ec6b45d2829f@axis.com>
+ <d3f6d627290bb1a6a1fcfdfd5fad915578453e02.camel@sipsolutions.net>
+ <Y+t6qXBxLqf/+eQM@axis.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bWIMc5Bufqt2RdLa7DK2Bab";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+t6qXBxLqf/+eQM@axis.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/bWIMc5Bufqt2RdLa7DK2Bab
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Feb 14, 2023 at 01:12:25PM +0100, Vincent Whitchurch wrote:
+> On Mon, Feb 13, 2023 at 06:54:49PM +0100, Johannes Berg wrote:
+> > On Fri, 2023-01-27 at 15:30 +0100, Vincent Whitchurch wrote:
+> > > My first approach to getting platform drivers working on UML was by
+> > > adding a minimal PCI-to-platform bridge driver, which worked without
+> > > modifications to virt-pci, but that got shot down:
+> > > 
+> > >  https://lore.kernel.org/lkml/20230120-simple-mfd-pci-v1-1-c46b3d6601ef@axis.com/
+> > 
+> > Reading through that ... OK that isn't fun either :-)
+> > 
+> > Sounds like there's a use case for something else though, but the PCI
+> > IDs issue also makes that thorny.
+> 
+> Yes, Greg was initially totally opposed to the idea of putting platform
+> devices under PCI devices, but in his latest email he seemed to
+> allow it in some cases.  It's still unclear if he'd be OK with a
+> "virtual PCI-to-platform bridge" though.  And yes, adding platform
+> devices support like in this patch removes one layer and also eliminates
+> the disadvantage of having to wait for user space to specify a PCI ID
+> for the bridge device.
 
-Hi all,
+Like I said in that thread, we have multiple usecases needing something 
+similar for non-discoverable MMIO devices behind a PCI device. And I 
+convinced Greg a platform device was okay, so please continue that path.
 
-Today's linux-next merge of the bitmap tree got a conflict in:
+I'm adding you to the thread of other usecases.
 
-  include/linux/cpumask.h
-
-between commit:
-
-  596ff4a09b89 ("cpumask: re-introduce constant-sized cpumask optimizations=
-")
-
-from Linus' tree and commit:
-
-  1507ca9f866c ("bitmap: switch from inline to __always_inline")
-
-from the bitmap tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/cpumask.h
-index ce8eb7ef2107,fcb35ea34090..000000000000
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@@ -157,9 -124,9 +157,9 @@@ static __always_inline unsigned int cpu
-   *
-   * Returns >=3D nr_cpu_ids if no cpus set.
-   */
-- static inline unsigned int cpumask_first(const struct cpumask *srcp)
-+ static __always_inline unsigned int cpumask_first(const struct cpumask *s=
-rcp)
-  {
- -	return find_first_bit(cpumask_bits(srcp), nr_cpumask_bits);
- +	return find_first_bit(cpumask_bits(srcp), small_cpumask_bits);
-  }
- =20
-  /**
-@@@ -168,9 -135,9 +168,9 @@@
-   *
-   * Returns >=3D nr_cpu_ids if all cpus are set.
-   */
-- static inline unsigned int cpumask_first_zero(const struct cpumask *srcp)
-+ static __always_inline unsigned int cpumask_first_zero(const struct cpuma=
-sk *srcp)
-  {
- -	return find_first_zero_bit(cpumask_bits(srcp), nr_cpumask_bits);
- +	return find_first_zero_bit(cpumask_bits(srcp), small_cpumask_bits);
-  }
- =20
-  /**
-@@@ -180,10 -147,10 +180,10 @@@
-   *
-   * Returns >=3D nr_cpu_ids if no cpus set in both.  See also cpumask_next=
-_and().
-   */
-- static inline
-+ static __always_inline
-  unsigned int cpumask_first_and(const struct cpumask *srcp1, const struct =
-cpumask *srcp2)
-  {
- -	return find_first_and_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_c=
-pumask_bits);
- +	return find_first_and_bit(cpumask_bits(srcp1), cpumask_bits(srcp2), smal=
-l_cpumask_bits);
-  }
- =20
-  /**
-@@@ -192,9 -159,9 +192,9 @@@
-   *
-   * Returns	>=3D nr_cpumask_bits if no CPUs set.
-   */
-- static inline unsigned int cpumask_last(const struct cpumask *srcp)
-+ static __always_inline unsigned int cpumask_last(const struct cpumask *sr=
-cp)
-  {
- -	return find_last_bit(cpumask_bits(srcp), nr_cpumask_bits);
- +	return find_last_bit(cpumask_bits(srcp), small_cpumask_bits);
-  }
- =20
-  /**
-@@@ -279,10 -246,20 +279,10 @@@ unsigned int cpumask_next_and(int n, co
-   * After the loop, cpu is >=3D nr_cpu_ids.
-   */
-  #define for_each_cpu(cpu, mask)				\
- -	for_each_set_bit(cpu, cpumask_bits(mask), nr_cpumask_bits)
- -
- -/**
- - * for_each_cpu_not - iterate over every cpu in a complemented mask
- - * @cpu: the (optionally unsigned) integer iterator
- - * @mask: the cpumask pointer
- - *
- - * After the loop, cpu is >=3D nr_cpu_ids.
- - */
- -#define for_each_cpu_not(cpu, mask)				\
- -	for_each_clear_bit(cpu, cpumask_bits(mask), nr_cpumask_bits)
- +	for_each_set_bit(cpu, cpumask_bits(mask), small_cpumask_bits)
- =20
-  #if NR_CPUS =3D=3D 1
-- static inline
-+ static __always_inline
-  unsigned int cpumask_next_wrap(int n, const struct cpumask *mask, int sta=
-rt, bool wrap)
-  {
-  	cpumask_check(start);
-@@@ -377,9 -354,9 +377,9 @@@ unsigned int cpumask_any_but(const stru
-   *
-   * Returns >=3D nr_cpu_ids if such cpu doesn't exist.
-   */
-- static inline unsigned int cpumask_nth(unsigned int cpu, const struct cpu=
-mask *srcp)
-+ static __always_inline unsigned int cpumask_nth(unsigned int cpu, const s=
-truct cpumask *srcp)
-  {
- -	return find_nth_bit(cpumask_bits(srcp), nr_cpumask_bits, cpumask_check(c=
-pu));
- +	return find_nth_bit(cpumask_bits(srcp), small_cpumask_bits, cpumask_chec=
-k(cpu));
-  }
- =20
-  /**
-@@@ -518,23 -495,19 +518,23 @@@ static __always_inline bool cpumask_tes
-  /**
-   * cpumask_setall - set all cpus (< nr_cpu_ids) in a cpumask
-   * @dstp: the cpumask pointer
- + *
- + * Note: since we set bits, we should use the tighter 'bitmap_set()' with
- + * the eact number of bits, not 'bitmap_fill()' that will fill past the
- + * end.
-   */
-- static inline void cpumask_setall(struct cpumask *dstp)
-+ static __always_inline void cpumask_setall(struct cpumask *dstp)
-  {
- -	bitmap_fill(cpumask_bits(dstp), nr_cpumask_bits);
- +	bitmap_set(cpumask_bits(dstp), 0, nr_cpumask_bits);
-  }
- =20
-  /**
-   * cpumask_clear - clear all cpus (< nr_cpu_ids) in a cpumask
-   * @dstp: the cpumask pointer
-   */
-- static inline void cpumask_clear(struct cpumask *dstp)
-+ static __always_inline void cpumask_clear(struct cpumask *dstp)
-  {
- -	bitmap_zero(cpumask_bits(dstp), nr_cpumask_bits);
- +	bitmap_zero(cpumask_bits(dstp), large_cpumask_bits);
-  }
- =20
-  /**
-@@@ -652,9 -637,9 +652,9 @@@ static __always_inline bool cpumask_sub
-   * cpumask_empty - *srcp =3D=3D 0
-   * @srcp: the cpumask to that all cpus < nr_cpu_ids are clear.
-   */
-- static inline bool cpumask_empty(const struct cpumask *srcp)
-+ static __always_inline bool cpumask_empty(const struct cpumask *srcp)
-  {
- -	return bitmap_empty(cpumask_bits(srcp), nr_cpumask_bits);
- +	return bitmap_empty(cpumask_bits(srcp), small_cpumask_bits);
-  }
- =20
-  /**
-@@@ -670,9 -655,9 +670,9 @@@ static __always_inline bool cpumask_ful
-   * cpumask_weight - Count of bits in *srcp
-   * @srcp: the cpumask to count bits (< nr_cpu_ids) in.
-   */
-- static inline unsigned int cpumask_weight(const struct cpumask *srcp)
-+ static __always_inline unsigned int cpumask_weight(const struct cpumask *=
-srcp)
-  {
- -	return bitmap_weight(cpumask_bits(srcp), nr_cpumask_bits);
- +	return bitmap_weight(cpumask_bits(srcp), small_cpumask_bits);
-  }
- =20
-  /**
-@@@ -680,10 -665,10 +680,10 @@@
-   * @srcp1: the cpumask to count bits (< nr_cpu_ids) in.
-   * @srcp2: the cpumask to count bits (< nr_cpu_ids) in.
-   */
-- static inline unsigned int cpumask_weight_and(const struct cpumask *srcp1,
-+ static __always_inline unsigned int cpumask_weight_and(const struct cpuma=
-sk *srcp1,
-  						const struct cpumask *srcp2)
-  {
- -	return bitmap_weight_and(cpumask_bits(srcp1), cpumask_bits(srcp2), nr_cp=
-umask_bits);
- +	return bitmap_weight_and(cpumask_bits(srcp1), cpumask_bits(srcp2), small=
-_cpumask_bits);
-  }
- =20
-  /**
-@@@ -717,10 -702,10 +717,10 @@@ static __always_inline void cpumask_shi
-   * @dstp: the result
-   * @srcp: the input cpumask
-   */
-- static inline void cpumask_copy(struct cpumask *dstp,
-+ static __always_inline void cpumask_copy(struct cpumask *dstp,
-  				const struct cpumask *srcp)
-  {
- -	bitmap_copy(cpumask_bits(dstp), cpumask_bits(srcp), nr_cpumask_bits);
- +	bitmap_copy(cpumask_bits(dstp), cpumask_bits(srcp), large_cpumask_bits);
-  }
- =20
-  /**
-@@@ -802,9 -787,9 +802,9 @@@ static __always_inline int cpulist_pars
-  /**
-   * cpumask_size - size to allocate for a 'struct cpumask' in bytes
-   */
-- static inline unsigned int cpumask_size(void)
-+ static __always_inline unsigned int cpumask_size(void)
-  {
- -	return BITS_TO_LONGS(nr_cpumask_bits) * sizeof(long);
- +	return BITS_TO_LONGS(large_cpumask_bits) * sizeof(long);
-  }
- =20
-  /*
-
---Sig_/bWIMc5Bufqt2RdLa7DK2Bab
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQGhOQACgkQAVBC80lX
-0Gw4fAgApO3Ztrqi/4su3TYLBkwoKw0sjZy4OleOxJ2E+54YOZ0Iu+lQsymvL52S
-jlQHIaaTa4MV8tW1ZWgygYAHBRN6eDpq0w5yFnNXlFhsUN0wUruHNBZK/D0mdajh
-LUTzDzuCrCzYx/ImXuxorYnHjycKjolHEvd6Z17YpvN4FZ835PTo38FQwnPcn+24
-UaW9sWlnJbn7adEU0ZnuZAziA40FXfCcAKnXz6w90slex7/QgQJtmVulhUxHS6cp
-q0nW9U61Z53PSv6eaIfd70pGs9EyAdo8Q6IrJLjtiUS54Udybu2C4SCAArK9XZQo
-3nRI/BZAmz0tUrKYKJS7LwXpc4SU6g==
-=EoWQ
------END PGP SIGNATURE-----
-
---Sig_/bWIMc5Bufqt2RdLa7DK2Bab--
+Rob
