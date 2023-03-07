@@ -2,160 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE9A6AE0CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A173E6AE0D8
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231250AbjCGNiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
+        id S229794AbjCGNkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:40:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjCGNiM (ORCPT
+        with ESMTP id S229621AbjCGNkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:38:12 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D067A3A879
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:38:05 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id r18so12163152wrx.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:38:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678196285;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r31ohlDpv5otoAeD1bVOzDiFSts1H09pvgDJbkHz6kE=;
-        b=TrUavH00tT8Tlc+XRCN+f0574vfg/jdmj2Iyd/dME2zutf2oub0jR4gbiET5ga102A
-         HyoDuym9ddEz4WOlG7ymyFBAaTKtxu+JAFJi5Z7z+L0cp/yEFhaHHLbYheaxkxzuUXPy
-         /MP2+UF36Miaj3r6lQxR2JuGjCQFo5LhpOEWKBzraqBuzEtNIz6qoqHylZVuvqIHHqkV
-         ZFAsAGbVOyNoQOH739V4xtKjtdSnEIDUf6hL9ZlHLf79ausXxl3+oAdbr9E5ZtRbSV8T
-         4PHv71I2DWaXwgT1BbkhdL++T6oHDj8AniwXTJRSSBTVdBLohG05y+6BJ2+okXwyF/UX
-         vBdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678196285;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r31ohlDpv5otoAeD1bVOzDiFSts1H09pvgDJbkHz6kE=;
-        b=BQHX/53X3hwhWls2/hRogk7eeb6/UI9n5krsNq7fhcvEh2YfvrbY0MBVdXeojDg68W
-         yqXrLgw8UaKPReuMdq2jwPrDeHaEYYE91lR5sxVXD2kigjRmT6Sgf//VC4Fb8NbpdFDO
-         +K69P65DUd/319vFyxEjccVE5VRMdGn4h3IVrwDaeScfOkHfozRaoocc+netMLmlJDmV
-         I+Dw7pt0+OklXwrV5Vu0gbn3R9Vhl8k8Ga5ausoF7YqqZAyba22xnASVYeRORtniymaB
-         CrjH7rJ4nQa40WV1rCKOO3CW/N4faxIAvmpmOs4UlJmmBY2LVYhj+qiTq/Rx7q6/KakA
-         QNaw==
-X-Gm-Message-State: AO0yUKW4pRhShtDVeWpvDyElSa/UbG98Q37XZwngCa/N9fg5JQlzu3JC
-        r6Xe+DnbE4jcQtiTCi3BL78lUQ==
-X-Google-Smtp-Source: AK7set+Tx3PciiUAChxOXg06dWYuz/nGFE4lhye4WaWUJHVZ6BSEpSWXgQBpiWbJ17Umzi/bfQDSOA==
-X-Received: by 2002:adf:e30f:0:b0:2c8:309d:77b0 with SMTP id b15-20020adfe30f000000b002c8309d77b0mr9443409wrj.0.1678196285292;
-        Tue, 07 Mar 2023 05:38:05 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5ab9:1ac6:870d:35c])
-        by smtp.gmail.com with ESMTPSA id v5-20020a5d43c5000000b002c55de1c72bsm12311477wrr.62.2023.03.07.05.38.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 05:38:04 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, amitk@kernel.org, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org (open list:ACPI THERMAL DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 11/11] thermal/acpi: Use the thermal zone parameter to specify the device link
-Date:   Tue,  7 Mar 2023 14:37:35 +0100
-Message-Id: <20230307133735.90772-12-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230307133735.90772-1-daniel.lezcano@linaro.org>
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
+        Tue, 7 Mar 2023 08:40:04 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980E228D2C;
+        Tue,  7 Mar 2023 05:39:29 -0800 (PST)
+Received: from [192.168.10.12] (unknown [39.45.145.7])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F2216602082;
+        Tue,  7 Mar 2023 13:39:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678196366;
+        bh=WMlBdvHIScuFkkoGPtchKNS9u9P7bVVOeTivxhzjEG8=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=OzGvfTjKJ4s7PoMfHks/3lUdyc4iM4qP/SliI7hK+EiFlD3OiRuFDXM+UdgBdtW6L
+         XuTMtTrI9hme7OJX95cfox8cbNQdcrUFLid4o2gO4Wz5jmMfuoUqbd0ME2+CYyKxZ7
+         aKd2wo27Xgs6qAbez7XMauEjCogyMUeENDi9+fJYq6NVb/8BRLVPVP3958xWERIi+I
+         d7xKJ5KY6i1CYrU7JIR1jAEfgIlB7XSdPFajWTgHzMgjdTpjWTHC0MlkDs0yztjR/+
+         EBZCF1x/XWmiihGF2RCt6sMZUeRj31TDFVWbHioTiNI3LV+yWhmM9MxC2eRB9B8R82
+         HoJPKpOeWgGDg==
+Message-ID: <df8a446a-e8a9-3b3d-fd0f-791f0d01a0c9@collabora.com>
+Date:   Tue, 7 Mar 2023 18:39:20 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@collabora.com,
+        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] qede: remove linux/version.h and linux/compiler.h
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+References: <20230303185351.2825900-1-usama.anjum@collabora.com>
+ <20230303155436.213ee2c0@kernel.org>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230303155436.213ee2c0@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The thermal framework can create a cyclic link between the driver and
-the device via the thermal zone parameters when registering the
-thermal zone.
+On 3/4/23 4:54 AM, Jakub Kicinski wrote:
+> On Fri,  3 Mar 2023 23:53:50 +0500 Muhammad Usama Anjum wrote:
+>> make versioncheck reports the following:
+>> ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
+>> ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+>>
+>> So remove linux/version.h from both of these files. Also remove
+>> linux/compiler.h while at it as it is also not being used.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> 
+> # Form letter - net-next is closed
+> 
+> The merge window for v6.3 has begun and therefore net-next is closed
+> for new drivers, features, code refactoring and optimizations.
+> We are currently accepting bug fixes only.
+> 
+> Please repost when net-next reopens after Mar 6th.
+It is Mar 7th. Please review.
 
-As this option is supported by the thermal core code, let's use it and
-remove the specific code in the ACPI driver. This change has the
-benefit of self-encapsulate the thermal zone device structure.
+> 
+> RFC patches sent for review only are obviously welcome at any time.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/acpi/thermal.c | 24 ++++--------------------
- 1 file changed, 4 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/acpi/thermal.c b/drivers/acpi/thermal.c
-index 255efa73ed70..7d5c56564556 100644
---- a/drivers/acpi/thermal.c
-+++ b/drivers/acpi/thermal.c
-@@ -789,6 +789,7 @@ static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
- 
- static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- {
-+	struct thermal_zone_params tzp = { .linked_dev = &tz->device->dev };
- 	int trips = 0;
- 	int result;
- 	acpi_status status;
-@@ -808,33 +809,23 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 
- 	if (tz->trips.passive.flags.valid)
- 		tz->thermal_zone = thermal_zone_device_register("acpitz", trips, 0, tz,
--								&acpi_thermal_zone_ops, NULL,
-+								&acpi_thermal_zone_ops, &tzp,
- 								tz->trips.passive.tsp * 100,
- 								tz->polling_frequency * 100);
- 	else
- 		tz->thermal_zone =
- 			thermal_zone_device_register("acpitz", trips, 0, tz,
--						     &acpi_thermal_zone_ops, NULL,
-+						     &acpi_thermal_zone_ops, &tzp,
- 						     0, tz->polling_frequency * 100);
- 
- 	if (IS_ERR(tz->thermal_zone))
- 		return -ENODEV;
- 
--	result = sysfs_create_link(&tz->device->dev.kobj,
--				   &tz->thermal_zone->device.kobj, "thermal_zone");
--	if (result)
--		goto unregister_tzd;
--
--	result = sysfs_create_link(&tz->thermal_zone->device.kobj,
--				   &tz->device->dev.kobj, "device");
--	if (result)
--		goto remove_tz_link;
--
- 	status =  acpi_bus_attach_private_data(tz->device->handle,
- 					       tz->thermal_zone);
- 	if (ACPI_FAILURE(status)) {
- 		result = -ENODEV;
--		goto remove_dev_link;
-+		goto unregister_tzd;
- 	}
- 
- 	result = thermal_zone_device_enable(tz->thermal_zone);
-@@ -848,20 +839,13 @@ static int acpi_thermal_register_thermal_zone(struct acpi_thermal *tz)
- 
- acpi_bus_detach:
- 	acpi_bus_detach_private_data(tz->device->handle);
--remove_dev_link:
--	sysfs_remove_link(&tz->thermal_zone->device.kobj, "device");
--remove_tz_link:
--	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
- unregister_tzd:
- 	thermal_zone_device_unregister(tz->thermal_zone);
--
- 	return result;
- }
- 
- static void acpi_thermal_unregister_thermal_zone(struct acpi_thermal *tz)
- {
--	sysfs_remove_link(&tz->device->dev.kobj, "thermal_zone");
--	sysfs_remove_link(&tz->thermal_zone->device.kobj, "device");
- 	thermal_zone_device_unregister(tz->thermal_zone);
- 	tz->thermal_zone = NULL;
- 	acpi_bus_detach_private_data(tz->device->handle);
 -- 
-2.34.1
-
+BR,
+Muhammad Usama Anjum
