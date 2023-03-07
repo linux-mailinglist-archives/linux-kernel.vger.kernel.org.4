@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAAF6AF395
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 521876AF4EA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:21:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbjCGTGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:06:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S233864AbjCGTVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbjCGTGV (ORCPT
+        with ESMTP id S233785AbjCGTUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:06:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207C1C6E71;
-        Tue,  7 Mar 2023 10:51:43 -0800 (PST)
+        Tue, 7 Mar 2023 14:20:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB411E9FF;
+        Tue,  7 Mar 2023 11:04:33 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A188A61520;
-        Tue,  7 Mar 2023 18:51:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8809BC433EF;
-        Tue,  7 Mar 2023 18:51:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B80861522;
+        Tue,  7 Mar 2023 19:04:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E06C433D2;
+        Tue,  7 Mar 2023 19:04:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678215094;
-        bh=j4WV0doVcqcXU/GoQxcUE4PFr43m0wuP6FLx2M2TvIA=;
+        s=korg; t=1678215872;
+        bh=dFncEYxzp4fxw/6dqAiNEGbjwMW6fJDfmWHBfGObDsc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zCGCEZrflMf84XHxAMAsfLG9jd+V5D7ubfppyEFQQizWSwGsDtOK1ahi3hNtS483U
-         hUfw03oabzYt6f1+qI2Rg9QccWCJZzD7Uo1PKkL1TON64ui85fwENpBIvoPbAZIJUj
-         uyruVmuEGW6lmZFwoh586aQ/RrArX900/V4t6bL4=
+        b=yvYzZRF47r8GyNO71QSCyS3CMiHVSJTNBgLTnQwft1HQkO6JaWOVpphRFUQhScJBo
+         yQU4qKG9o5903FBPaYo6mJK9bC+JCQYnCptmJmusfI02U9ENV2mNUQ8F8VADTqlAS7
+         9Dxn/SIr6nTaEn7vERl2GatpCTcSaFdVwOj/9QZg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Peter Gonda <pgonda@google.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        John Allen <john.allen@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 122/567] crypto: ccp - Refactor out sev_fw_alloc()
-Date:   Tue,  7 Mar 2023 17:57:38 +0100
-Message-Id: <20230307165911.189186313@linuxfoundation.org>
+Subject: [PATCH 5.15 368/567] trace/blktrace: fix memory leak with using debugfs_lookup()
+Date:   Tue,  7 Mar 2023 18:01:44 +0100
+Message-Id: <20230307165921.799977578@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307165905.838066027@linuxfoundation.org>
 References: <20230307165905.838066027@linuxfoundation.org>
@@ -54,8 +49,8 @@ User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,84 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Gonda <pgonda@google.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit cc17982d58d1e67eab831e7023ede999dda56173 ]
+[ Upstream commit 83e8864fee26f63a7435e941b7c36a20fd6fe93e ]
 
-Create a helper function sev_fw_alloc() which can be used to allocate
-aligned memory regions for use by the PSP firmware. Currently only used
-for the SEV-ES TMR region but will be used for the SEV_INIT_EX NV memory
-region.
+When calling debugfs_lookup() the result must have dput() called on it,
+otherwise the memory will leak over time.  To make things simpler, just
+call debugfs_lookup_and_remove() instead which handles all of the logic
+at once.
 
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Reviewed-by: Marc Orr <marcorr@google.com>
-Acked-by: David Rientjes <rientjes@google.com>
-Acked-by: Brijesh Singh <brijesh.singh@amd.com>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Brijesh Singh <brijesh.singh@amd.com>
-Cc: Marc Orr <marcorr@google.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: David Rientjes <rientjes@google.com>
-Cc: John Allen <john.allen@amd.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: linux-crypto@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: linux-block@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Stable-dep-of: 46a334a98f58 ("crypto: ccp - Flush the SEV-ES TMR memory before giving it to firmware")
+Cc: linux-trace-kernel@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Link: https://lore.kernel.org/r/20230202141956.2299521-1-gregkh@linuxfoundation.org
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/ccp/sev-dev.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ kernel/trace/blktrace.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-index 15ef60cd4b149..7c9149492970d 100644
---- a/drivers/crypto/ccp/sev-dev.c
-+++ b/drivers/crypto/ccp/sev-dev.c
-@@ -141,6 +141,17 @@ static int sev_cmd_buffer_len(int cmd)
- 	return 0;
- }
- 
-+static void *sev_fw_alloc(unsigned long len)
-+{
-+	struct page *page;
-+
-+	page = alloc_pages(GFP_KERNEL, get_order(len));
-+	if (!page)
-+		return NULL;
-+
-+	return page_address(page);
-+}
-+
- static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
- {
- 	struct psp_device *psp = psp_master;
-@@ -1087,7 +1098,6 @@ EXPORT_SYMBOL_GPL(sev_issue_cmd_external_user);
- void sev_pci_init(void)
- {
- 	struct sev_device *sev = psp_master->sev_data;
--	struct page *tmr_page;
- 	int error, rc;
- 
- 	if (!sev)
-@@ -1103,14 +1113,10 @@ void sev_pci_init(void)
- 		sev_get_api_version();
- 
- 	/* Obtain the TMR memory area for SEV-ES use */
--	tmr_page = alloc_pages(GFP_KERNEL, get_order(SEV_ES_TMR_SIZE));
--	if (tmr_page) {
--		sev_es_tmr = page_address(tmr_page);
--	} else {
--		sev_es_tmr = NULL;
-+	sev_es_tmr = sev_fw_alloc(SEV_ES_TMR_SIZE);
-+	if (!sev_es_tmr)
- 		dev_warn(sev->dev,
- 			 "SEV: TMR allocation failed, SEV-ES support unavailable\n");
--	}
- 
- 	/* Initialize the platform */
- 	rc = sev_platform_init(&error);
+diff --git a/kernel/trace/blktrace.c b/kernel/trace/blktrace.c
+index 16b0d3fa56e00..e6d03cf148597 100644
+--- a/kernel/trace/blktrace.c
++++ b/kernel/trace/blktrace.c
+@@ -319,8 +319,8 @@ static void blk_trace_free(struct request_queue *q, struct blk_trace *bt)
+ 	 * under 'q->debugfs_dir', thus lookup and remove them.
+ 	 */
+ 	if (!bt->dir) {
+-		debugfs_remove(debugfs_lookup("dropped", q->debugfs_dir));
+-		debugfs_remove(debugfs_lookup("msg", q->debugfs_dir));
++		debugfs_lookup_and_remove("dropped", q->debugfs_dir);
++		debugfs_lookup_and_remove("msg", q->debugfs_dir);
+ 	} else {
+ 		debugfs_remove(bt->dir);
+ 	}
 -- 
 2.39.2
 
