@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8F36ADA9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3946ADAA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:43:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjCGJnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35720 "EHLO
+        id S230060AbjCGJnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229983AbjCGJnC (ORCPT
+        with ESMTP id S229968AbjCGJnS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:43:02 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51CDA27D;
-        Tue,  7 Mar 2023 01:42:59 -0800 (PST)
+        Tue, 7 Mar 2023 04:43:18 -0500
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98AFD30B13;
+        Tue,  7 Mar 2023 01:43:15 -0800 (PST)
 Received: from booty (unknown [77.244.183.192])
         (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D1F0F60003;
-        Tue,  7 Mar 2023 09:42:54 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id AEE37E0005;
+        Tue,  7 Mar 2023 09:43:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678182178;
+        t=1678182194;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=A/nrrM7GOwNypzZEIPS3KZcPQ6pGpKzGHZi2T20yll0=;
-        b=PbqPkEUab+79Gt+LmPzjN2iHg5Z5eimhqS+BTKlPK6x8Q++UPNoN34mtHjZGL1mSJhlvU5
-        G/a9FmDimWgcYRjPkydKswdoGfPhBW97D0ycBO9mwE6rwkeoTaqLPJTAJM05vnS3B4PcLo
-        n5g/7H1ZfHQsSVpoGTiOGCpRpfGXv3mQw4L+iEmDyexWGDV/lbENpJlPYdpJolh9PxD2dS
-        n26q2Py5+TfcpKQpmgPfYwI0G+cuyHQ4LamHDPTLJ4uL/M7zTaX3Y5OTD0B9d/cW7kggme
-        BVm3zRagdt/UZu2aAgnrjpD3uRNAmAR1Xk5hGLVPPmKSSsJWqK7tFzWRCNWBQA==
-Date:   Tue, 7 Mar 2023 10:42:53 +0100
+        bh=fBXMFy24pB1L3M53iT14RCAKjfqpFvZO6FaFdhmAFPk=;
+        b=gVTSj14MgoBG4gs3EBb/yS4z1UVGC9WxSCIkJr4xV9QLRIAWT4/qYoadkpXoySXjOiMDO5
+        TFbuaNtobklneO5eVFomlh1zHpmNtpmaLafLZtFd+YONwhGkaZn2qfgNguB95FiyLrBF8e
+        Y3729IfU6UNr94JzAgJWMqAOy1chLkJPj7nG6zA4Ll6Q/aBgHJiTiAl4WqFcxjtCD8Y26J
+        A50G6X6U+5TMn8PQvoJ7FkW8mvvxC4l3jN7v5FtXKxpsOGIXEhDTXlHffEXM7fHSdohoUz
+        VY2DDDCwyOy73TFdosMsPQXQ66tkdiS2Pfsmd60O20MbL0Hxf1IyoJClfNyTAA==
+Date:   Tue, 7 Mar 2023 10:43:08 +0100
 From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
 To:     Johan Hovold <johan+linaro@kernel.org>
 Cc:     Georgi Djakov <djakov@kernel.org>,
@@ -53,11 +53,12 @@ Cc:     Georgi Djakov <djakov@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
         stable@vger.kernel.org
-Subject: Re: [PATCH v2 01/23] interconnect: fix mem leak when freeing nodes
-Message-ID: <20230307104253.761c048f@booty>
-In-Reply-To: <20230306075651.2449-2-johan+linaro@kernel.org>
+Subject: Re: [PATCH v2 02/23] interconnect: fix icc_provider_del() error
+ handling
+Message-ID: <20230307104308.3bd7b595@booty>
+In-Reply-To: <20230306075651.2449-3-johan+linaro@kernel.org>
 References: <20230306075651.2449-1-johan+linaro@kernel.org>
-        <20230306075651.2449-2-johan+linaro@kernel.org>
+        <20230306075651.2449-3-johan+linaro@kernel.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
@@ -73,18 +74,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Johan,
-
-thanks for respinning.
-
-On Mon,  6 Mar 2023 08:56:29 +0100
+On Mon,  6 Mar 2023 08:56:30 +0100
 Johan Hovold <johan+linaro@kernel.org> wrote:
 
-> The node link array is allocated when adding links to a node but is not
-> deallocated when nodes are destroyed.
+> The interconnect framework currently expects that providers are only
+> removed when there are no users and after all nodes have been removed.
+> 
+> There is currently nothing that guarantees this to be the case and the
+> framework does not do any reference counting, but refusing to remove the
+> provider is never correct as that would leave a dangling pointer to a
+> resource that is about to be released in the global provider list (e.g.
+> accessible through debugfs).
+> 
+> Replace the current sanity checks with WARN_ON() so that the provider is
+> always removed.
 > 
 > Fixes: 11f1ceca7031 ("interconnect: Add generic on-chip interconnect API")
-> Cc: stable@vger.kernel.org      # 5.1
+> Cc: stable@vger.kernel.org      # 5.1: 680f8666baf6: interconnect: Make icc_provider_del() return void
 > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
