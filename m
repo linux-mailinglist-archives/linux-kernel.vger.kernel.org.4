@@ -2,146 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8ACA6ADBBE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C936ADBCB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCGKXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
+        id S230250AbjCGKZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 05:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjCGKXL (ORCPT
+        with ESMTP id S230164AbjCGKZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:23:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472A5265A4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 02:22:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678184542;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H/IPZqHOoz7jiojxziiZXAo+iRRmEKFV9o6Kto64+sI=;
-        b=JhxT2o6KMG1ramiX4xI8zSuhYbWU75bhc97b5xk7T2JBhzsn+WmeoD5WdRvjBDi+sCVTFK
-        UoPNOmVsS2YdtPjwetrv/h/c8gSbv2xkRPTOrbMALlvwR8ezXodOidhEtrTIdYzpszqh/n
-        05ikZq8HG4YC7XlQzv2/633ustqL2/4=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-169-rt_pAKHaMjWugdbTKIrbCA-1; Tue, 07 Mar 2023 05:22:19 -0500
-X-MC-Unique: rt_pAKHaMjWugdbTKIrbCA-1
-Received: by mail-wr1-f72.google.com with SMTP id d14-20020adfa34e000000b002bfc062eaa8so2095964wrb.20
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 02:22:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678184538;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H/IPZqHOoz7jiojxziiZXAo+iRRmEKFV9o6Kto64+sI=;
-        b=ngIaghqxj3fUbWTiHIDXwsmeo+TjONuSF5vLcmNraeWZ765uaFYGK3TlCa8GmcWyOB
-         Dgv00biMS5Vq5cGu9jbe1mhuVaBxankvnAUO3X3CplxTLkf+DypTMOVZ3ufF234aCS2i
-         V0vecTwVfkYZldQGpgexh0Dkj4LCfhjQ5jI5jg4U0/IwIleQ2Zwzbv53XPsJIqjbV/Hc
-         xe+kyk/dUrwhrTJoYny1brxAaD7ijCYnI7EQBXc/TkerdUAbWmcFMV1vbjoOxZOO1uU+
-         QHpUOlJQDm7dk9o5legFJLc4FZpJACtk0aD68+U3gtx3sNJmEL4zKrrjFXWFmvENUsFZ
-         UdIw==
-X-Gm-Message-State: AO0yUKXwV+KBJzrjUhw5q24KZoFpppNzSh4XNsqO5g4kmL4pAaXyeGG/
-        T65LvWZrYaD4Q8SF0/VdUKrL2OgKA0WlI+KHQHYvDcQyj6Ru6obXiWgTjOX92rDGTw7yBE+wGFL
-        AdgsrV8oMig8XSkLR4gMTtHS8
-X-Received: by 2002:a5d:5452:0:b0:2ce:50a9:6d8e with SMTP id w18-20020a5d5452000000b002ce50a96d8emr6603682wrv.20.1678184537904;
-        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
-X-Google-Smtp-Source: AK7set/i5Nv1U3NOAuCbE4btJ9ZAiOioRnHyw6o9C90eWaBZTs9BfvSsigkdVvJPs3CCoLRzMZNrMw==
-X-Received: by 2002:a5d:5452:0:b0:2ce:50a9:6d8e with SMTP id w18-20020a5d5452000000b002ce50a96d8emr6603670wrv.20.1678184537566;
-        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
-Received: from ?IPV6:2003:cb:c707:a100:e20:41da:c49b:8974? (p200300cbc707a1000e2041dac49b8974.dip0.t-ipconnect.de. [2003:cb:c707:a100:e20:41da:c49b:8974])
-        by smtp.gmail.com with ESMTPSA id a17-20020a056000101100b002c553e061fdsm12270849wrx.112.2023.03.07.02.22.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 02:22:17 -0800 (PST)
-Message-ID: <9ce5434e-4c19-cb34-d3fa-99738c265b03@redhat.com>
-Date:   Tue, 7 Mar 2023 11:22:16 +0100
+        Tue, 7 Mar 2023 05:25:27 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAB95073C;
+        Tue,  7 Mar 2023 02:25:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678184720; x=1709720720;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OInxuMJtdIyDPn0imEFBCcfPVJWWAD2dQ/VhXFHBFuY=;
+  b=Gwp215xaiOgI+uTvcjyvH1nPDsHOfrIjUIwFUhV8yeAujtjxiRJ1rNNx
+   vwlJDCs86lytaHGkRF6y6UYj0tVXhftNddrWhkN/B6jeA/iypDOYRyXXG
+   QPYm2Tie/YoSmyE/6UEK7NZ/xN2z7ZK2r+Rp0tl/n/P0AjEWEB2Ic4vK/
+   Pd9f1GW3Ze2H7QGwBdHxl/Drj52Yh9xdmoBumWouQwE4IImcMG9B8URJB
+   qTHvcZnfjJCWoteQwlCQFWW2vmscntcXHsHnyWRsKrKf/mcYplBHERdY3
+   WOSTn91EM+95OhKnZIlMqSTrPZQ2Pz2LO4wnmk9Sgda3ZFMqed37p/FXL
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
+   d="scan'208";a="140694248"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 03:25:18 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 7 Mar 2023 03:25:15 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.16 via Frontend
+ Transport; Tue, 7 Mar 2023 03:25:12 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     <linux-riscv@lists.infradead.org>
+CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>
+Subject: [PATCH v1 0/2] RISC-V: enable rust
+Date:   Tue, 7 Mar 2023 10:24:39 +0000
+Message-ID: <20230307102441.94417-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] selftests/mm: fix split huge page tests
-Content-Language: en-US
-To:     Zi Yan <ziy@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Zach O'Keefe <zokeefe@google.com>
-References: <20230306160907.16804-1-zi.yan@sent.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230306160907.16804-1-zi.yan@sent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2088; i=conor.dooley@microchip.com; h=from:subject; bh=OInxuMJtdIyDPn0imEFBCcfPVJWWAD2dQ/VhXFHBFuY=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCnsAs8kPwY+WPDTW83kbZ7n9rULE84/3btU3L1pj9Su+gea apKSHaUsDGIcDLJiiiyJt/tapNb/cdnh3PMWZg4rE8gQBi5OAZhIhAPDP9vQmtgpq6++Ptj9MuPKLd 5J942cmbL2szoy/Ciezv3hViXD//KFmxlmvp0gz2ITs0bPJ+dy7MGQD2/k7rwL1QlWf+3wgRcA
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.03.23 17:09, Zi Yan wrote:
-> From: Zi Yan <ziy@nvidia.com>
-> 
-> Fixed two inputs to check_anon_huge() and one if condition, so the tests
-> work as expected.
-> 
-> Fixes: c07c343cda8e ("selftests/vm: dedup THP helpers")
-> Signed-off-by: Zi Yan <ziy@nvidia.com>
-> Cc: Zach O'Keefe <zokeefe@google.com>
-> ---
->   tools/testing/selftests/mm/split_huge_page_test.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index 76e1c36dd9e5..b8558c7f1a39 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -106,7 +106,7 @@ void split_pmd_thp(void)
->   	for (i = 0; i < len; i++)
->   		one_page[i] = (char)i;
->   
-> -	if (!check_huge_anon(one_page, 1, pmd_pagesize)) {
-> +	if (!check_huge_anon(one_page, 4, pmd_pagesize)) {
->   		printf("No THP is allocated\n");
->   		exit(EXIT_FAILURE);
->   	}
-> @@ -122,7 +122,7 @@ void split_pmd_thp(void)
->   		}
->   
->   
-> -	if (check_huge_anon(one_page, 0, pmd_pagesize)) {
-> +	if (!check_huge_anon(one_page, 0, pmd_pagesize)) {
->   		printf("Still AnonHugePages not split\n");
->   		exit(EXIT_FAILURE);
->   	}
-> @@ -169,7 +169,7 @@ void split_pte_mapped_thp(void)
->   	for (i = 0; i < len; i++)
->   		one_page[i] = (char)i;
->   
-> -	if (!check_huge_anon(one_page, 1, pmd_pagesize)) {
-> +	if (!check_huge_anon(one_page, 4, pmd_pagesize)) {
->   		printf("No THP is allocated\n");
->   		exit(EXIT_FAILURE);
->   	}
+After the authorship debacle on the RFC, I've tried to be even more
+careful this time around. Gary opted for a Co-developed-by in the replies
+of the RFC stuff, so I have given them one.
+I have added SoB's too, but if that is not okay Gary, then please scream
+loudly.
 
-Hard to read. It should probably be "get_huge_anon()" to then check for 
-the value in the caller manually. Negative value could be used as an 
-indicator for an error obtaining the value.
+As this is lifted from the state of the Rust-for-Linux tree, the commit
+messages from there cannot be preserved, so these patches have commit
+messages that I wrote.
 
-Anyhow, was briefly confused about the 4 ("magic value" also apprearing 
-in "size_t len = 4 * pmd_pagesize;") but it seems to be the right thing 
-to do.
+I've tested this on Icicle, and the modules seem to work as expected.
+Unfortunately there appear to be implicit 32-bit divisions (or similar)
+in core Rust code, so, as in the downstream Rust-for-Linux tree, Rust is
+only enabled for 64-bit.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Thanks,
+Conor.
+
+Changes in v1:
+- rebase on v6.3-rc1
+- resort the `um` entry in the arch-support table while adding RISC-V
+  to it
+- drop 32-bit bits
+- have another crack at assigning authorship
+
+Changes in RFC-RESEND:
+- fix the asymmetrical additions in the Makefile bits
+- add cc-cover to my git send-email command...
+
+CC: Miguel Ojeda <ojeda@kernel.org>
+CC: Alex Gaynor <alex.gaynor@gmail.com>
+CC: Wedson Almeida Filho <wedsonaf@gmail.com>
+CC: Boqun Feng <boqun.feng@gmail.com>
+CC: Gary Guo <gary@garyguo.net>
+CC: Björn Roy Baron <bjorn3_gh@protonmail.com>
+CC: Jonathan Corbet <corbet@lwn.net>
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Nathan Chancellor <nathan@kernel.org>
+CC: Nick Desaulniers <ndesaulniers@google.com>
+CC: Tom Rix <trix@redhat.com>
+CC: rust-for-linux@vger.kernel.org
+CC: linux-doc@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: linux-riscv@lists.infradead.org
+CC: llvm@lists.linux.dev
+
+Miguel Ojeda (2):
+  scripts: generate_rust_target: enable building on RISC-V
+  RISC-V: enable building 64-bit kernels with rust support
+
+ Documentation/rust/arch-support.rst |  3 ++-
+ arch/riscv/Kconfig                  |  1 +
+ arch/riscv/Makefile                 |  2 ++
+ scripts/generate_rust_target.rs     | 16 ++++++++++++++++
+ 4 files changed, 21 insertions(+), 1 deletion(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.39.2
 
