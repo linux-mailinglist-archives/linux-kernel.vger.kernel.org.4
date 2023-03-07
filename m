@@ -2,96 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42166AD3CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E7046AD3D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjCGBW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 20:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S229865AbjCGBY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 20:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCGBWy (ORCPT
+        with ESMTP id S229582AbjCGBY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:22:54 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081FC29E2F
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:22:52 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id i28so15283786lfv.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:22:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678152170;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=v2x8CT0qC69q7YoY7JhCMWzXWvhAS15Aiyex8pxnv7E=;
-        b=RQdubjvBLAVFreilW44I42iQiHFUhj1JbyenLwezjpLlLVlGhy2HWQWxrGj74EeQ7H
-         QcR4HXjUoRM2gjf8O5gXoG93Uar0xzDxgKOuFCz0iyqBToqHIGJSQdI78e2vj9QZLEay
-         QdVnOdJH387WGiXeRRZulzPsl4Dr7xIRsQ11gXmAUoOvvW4G96DN/4lM7UVTuyh6MJz9
-         FIzFUz7cbKkqByIZwefZCb0EyHI62Mw9nTrwjoCDhKUQ/mxEAlkgFRpM3BZ++KEUO4jp
-         6JZEvduDK1Je8SojN76prW4Ln4U2pad5U1w8ND2n9Ez/Co/wvUilJKuarXR1CV+yxDZH
-         Ubpw==
+        Mon, 6 Mar 2023 20:24:27 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7124EDC
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:23:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678152220;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VqFd56y4+LzHfJxq40JHsrzkzmxYaLDJMh6dCS+VZKQ=;
+        b=C0kAeLZ4m80kQ4W4REDmVUtUNvdH71ufoL66+MFJQcGyuqIkGfNppwFbe4jSHyzbvaQnyj
+        t6xAqIUceq+fI32Pio566tw018E1mehq4s2XcmtiGgimP8DkQojH2Wr+koeHkdsho8PX2Y
+        Imuov6DiiRJ8Uqa3mDmjklKLEbbdtCY=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-Ml_uBytEM2WpcqMrx3bG1w-1; Mon, 06 Mar 2023 20:23:39 -0500
+X-MC-Unique: Ml_uBytEM2WpcqMrx3bG1w-1
+Received: by mail-qk1-f198.google.com with SMTP id c13-20020a05620a0ced00b007422bf7c4aeso6598695qkj.0
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:23:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678152170;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v2x8CT0qC69q7YoY7JhCMWzXWvhAS15Aiyex8pxnv7E=;
-        b=k69erqrnhzUv7GZVNYKXggbgOnmme4LEX4ecf7kNxfZuS/dM7Jz0NlCAUf4fqPpl5d
-         eKmv6g74r386vPeb79/okCfpbvUaKaZq7T3TnV5dy0ghsAyqvAwJIJ7yiaJ4ohy+yD7w
-         nsQrLnSMSGVwwWhF8iz9KMYKmzc0dVbEXyvHnF8rkZJWLRBZTepjIRk4lR69EGRVHINi
-         z/mDbLkF1qLQwgbvrQq4T3KaGbpp+rQ/U4X/3X6vCpHwYAU+wiQ8+ThyZBAw/7teOTPj
-         ZCVyY2F5UAVSvE++SZfItkE/SHCFw1PgGa/MaS3BDSxaii+cChUNKQXrH8T4MJVKxbph
-         t/0A==
-X-Gm-Message-State: AO0yUKWLtyvfjpGjgIcvumLo/+j4t71ICu9JrBB+pS4apXjT71CPunOp
-        FO/bRgSYQqfqnDvuMOLHdPky4j91twou7OfFfRs=
-X-Google-Smtp-Source: AK7set/Wo1Bhvg6d91uy/i9lev8howJuGnZgjPUqpM2a4K9IBOjlWDJyG/BbkIgCqi1LhJ/QsW5k/A==
-X-Received: by 2002:a19:7506:0:b0:4dc:790c:910b with SMTP id y6-20020a197506000000b004dc790c910bmr3198637lfe.20.1678152170215;
-        Mon, 06 Mar 2023 17:22:50 -0800 (PST)
-Received: from localhost.localdomain (abym99.neoplus.adsl.tpnet.pl. [83.9.32.99])
-        by smtp.gmail.com with ESMTPSA id u28-20020ac2519c000000b004dd7fefd2c8sm1819076lfi.242.2023.03.06.17.22.49
+        d=1e100.net; s=20210112; t=1678152218;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VqFd56y4+LzHfJxq40JHsrzkzmxYaLDJMh6dCS+VZKQ=;
+        b=hWHKjN2Sn5dzsZUGlJvvoykB08stASK9SLNQ2Jm8bjpR53vJ5swr1xbDHhLpuwkIhf
+         jdmKGgyxm7UwNqpsVxLuwlsVoVRh5kJn6m8g+fA8eQItmSkRx4G6Pqg2DoqgwbScXGvD
+         ldGwQaDZeaVTo9WYnylF6jllbsra6dlYUUKmsrVSZ5eZlNTLVOfRr8m3Y5wQldiqrvZJ
+         Ler7/PcFNlUSp1jmHEEBd+Qrv2BRXAKYZgRpJAzx5r22dhmjp46rAQn7Y55Ae+/QZL7Y
+         fhh6a8dgR3zXM9Awua/HfT0yELionkXPnHYTv3Z3gQAqyzEuFkqJPDn/SJUhD8VObY9M
+         mY6w==
+X-Gm-Message-State: AO0yUKU0bw0+tDoGGQGgSdmCrTOuDQQg7SHimmZL699Xxh8IWAN/5Nww
+        BAaeeqT80OoBSILG80xKzmyfBqNvCuFzMzy8s1hJTwyzE01cILCcFGq0bjA3/bJGTs3OAy0fw7h
+        P6J3s88RF1pbIg+t2N35/4hjU
+X-Received: by 2002:ac8:4e49:0:b0:3b6:309e:dfe1 with SMTP id e9-20020ac84e49000000b003b6309edfe1mr22807067qtw.3.1678152218568;
+        Mon, 06 Mar 2023 17:23:38 -0800 (PST)
+X-Google-Smtp-Source: AK7set9NpW+IRYzeTwvzpjcmeG0lCpLiSMH4ix2ZZfLC9vuxmSNZLU9/wHTDN/VWK1ddDO5/7LNY8w==
+X-Received: by 2002:ac8:4e49:0:b0:3b6:309e:dfe1 with SMTP id e9-20020ac84e49000000b003b6309edfe1mr22807045qtw.3.1678152218368;
+        Mon, 06 Mar 2023 17:23:38 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id e15-20020ac85dcf000000b003bfad864e81sm8708948qtx.69.2023.03.06.17.23.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 17:22:49 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] firmware: qcom_scm: Add SM6375 compatible
-Date:   Tue,  7 Mar 2023 02:22:47 +0100
-Message-Id: <20230307012247.3655547-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 06 Mar 2023 17:23:37 -0800 (PST)
+Date:   Mon, 6 Mar 2023 20:23:36 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Nadav Amit <namit@vmware.com>, Shuah Khan <shuah@kernel.org>,
+        James Houghton <jthoughton@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to
+ install WP PTEs
+Message-ID: <ZAaSGGzylNFCR+ql@x1n>
+References: <20230306225024.264858-1-axelrasmussen@google.com>
+ <20230306225024.264858-6-axelrasmussen@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230306225024.264858-6-axelrasmussen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While it was introduced in bindings, requiring a core clock, and added
-into the DT, this compatible was apparently forgotten about on the driver
-side of things. Fix it.
+On Mon, Mar 06, 2023 at 02:50:24PM -0800, Axel Rasmussen wrote:
+> UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
+> PTE to resolve a missing fault, one can install a write-protected one.
+> This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
+> combination.
+> 
+> So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
+> but for *minor* faults.
+> 
+> Update the selftest to do some very basic exercising of the new flag.
+> 
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/firmware/qcom_scm.c | 1 +
- 1 file changed, 1 insertion(+)
+Some mentioning on the use case would be nice. :) No objection having it.
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 916a0c2fc903..2e8961c84b68 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -1494,6 +1494,7 @@ static const struct of_device_id qcom_scm_dt_match[] = {
- 	},
- 	{ .compatible = "qcom,scm-msm8994" },
- 	{ .compatible = "qcom,scm-msm8996" },
-+	{ .compatible = "qcom,scm-sm6375", .data = (void *)SCM_HAS_CORE_CLK },
- 	{ .compatible = "qcom,scm" },
- 	{}
- };
+Acked-by: Peter Xu <peterx@redhat.com>
+
+Thanks,
+
 -- 
-2.39.2
+Peter Xu
 
