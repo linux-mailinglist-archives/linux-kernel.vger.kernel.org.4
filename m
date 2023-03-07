@@ -2,113 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1905A6ADA47
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791AD6ADA49
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjCGJZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:25:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S230110AbjCGJ0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:26:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbjCGJZC (ORCPT
+        with ESMTP id S229613AbjCGJ0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:25:02 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96613144B5;
-        Tue,  7 Mar 2023 01:24:59 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E3036602FE5;
-        Tue,  7 Mar 2023 09:24:55 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678181097;
-        bh=q3luoZTgpNdhEHW9jdKgy83al0aOJTjkSQZabZ2eSNI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=W8ZSG78OC0e/uulkRGd5Gm6py5CcblJbNWn1TQOWZv/EZ0g0shxFXfxDTp0262JYR
-         liRNvSmuJOPli90jo2/hE6h6gkO0GePEbxa5OOIRAS7ADdfRlCptRhPAsR0ZtMTFOZ
-         y+QLPOFue9xJHHJQrG0J4bLfTMhJmxChge6xibg9M3APxTzLNeEJPjBDxPtPXNj1tI
-         A0mgGGcOhmhCLgAqxjxMPgtLaJ0gUge6mPI5Z4q0A9jGMBaywuerKA3cBPnySWXzx8
-         j/AtZCGNrZGSHqJrmoHpC/IiG0jtBidJsLHkNy0zVuKmJNOdb/LRks7cFxQqIUBP2z
-         +JnIUIZpky/Aw==
-Message-ID: <5ca9ad61-0a79-5700-8c6a-e9afa94a59c5@collabora.com>
-Date:   Tue, 7 Mar 2023 10:24:52 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v6 47/54] clk: mediatek: mt8192: Move apmixedsys clock
- driver to its own file
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
-        wenst@chromium.org, johnson.wang@mediatek.com,
-        miles.chen@mediatek.com, chun-jie.chen@mediatek.com,
-        fparent@baylibre.com, msp@baylibre.com, nfraprado@collabora.com,
-        rex-bc.chen@mediatek.com, zhaojh329@gmail.com,
-        sam.shih@mediatek.com, edward-jw.yang@mediatek.com,
-        yangyingliang@huawei.com, granquet@baylibre.com,
-        pablo.sun@mediatek.com, sean.wang@mediatek.com,
-        chen.zhong@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230306140543.1813621-1-angelogioacchino.delregno@collabora.com>
- <20230306140543.1813621-48-angelogioacchino.delregno@collabora.com>
- <ZAZjYTv4TLKSunFZ@makrotopia.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <ZAZjYTv4TLKSunFZ@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Tue, 7 Mar 2023 04:26:20 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7F653717;
+        Tue,  7 Mar 2023 01:26:19 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id k10so25722872edk.13;
+        Tue, 07 Mar 2023 01:26:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678181178;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6ztapAqrp0P0arwM5QDm4n16xyUTGqlP0zUmPheiyv8=;
+        b=ajw0Ap8dLJ0TFUrTkUnw3NQh/6Hl0eG+9B/0Z8Yq8vvj9ltkeF2rPq7WWmcgAjZVkF
+         bxz27W2e73rYXr0qP7TsVMmHHd3f2707LiWu8HnA9FJJdGvjByP3u2JwFrd+2IEjpMh2
+         VXx1liWRNYheg/Z4ARSHN7aAPHjB8ZJYzp8GAq668mmoAGIr860MEy5QgntC+Qdtmr2Z
+         Hcr+1aAyzC6pyp22E3MAl0/YmvGo/OHR8BJgORQLg4SRU6CJzU5CfdF5hl8ZLz1VDKrz
+         UnaKsxxdqy26QfWtTtfYH6+AkiCn2lq6EjqHDHbBX+zcFLevhTfHK+m6BBWqML6HxdzI
+         Qv3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678181178;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6ztapAqrp0P0arwM5QDm4n16xyUTGqlP0zUmPheiyv8=;
+        b=fJpNKTbFRGagRufsVsf9sdNDDCkoMnWDR0/ncYQtejM8hDZ427Mq5JLl4uiQE5p5o8
+         L01c52rkfOHOn+7myJbaLsBv1VbBG71THSJOxwYtWcZoSgBUmSjsybBUQVD1P6R1yg0s
+         aR9kMXdkK8suqb07RVQ6h7gvgVYyJHNAhyXJOhJS6cxXEhoahHFG4Tg8w1Vf77GQMWih
+         mOzoVD1tN/yLzk2WC1AiUnGm2g72ebOZdSenz4z7YsiFHKmr5mvhMaFlqEbsvJOnXPpt
+         JUdjmgUbuywx9Y5hTd7yzBa1p9xLyWdqxPy5782AtKGWx3cI3V/Iy5gClzI50wceaRVV
+         jQ4w==
+X-Gm-Message-State: AO0yUKVsXvF3SZa8j+aZe9Jb8j0Qr9ZgNxQNLT0mKsQ4Gk6BMr+r1RNB
+        FPh8laKIg2vrFGJYL2id2FY=
+X-Google-Smtp-Source: AK7set9vnOx118VHRJHv28HiwsiIKXKtrIehHz+W/nZGoYhuq4nLXCAiKufIQdTAhvQTJ74zUjoavQ==
+X-Received: by 2002:a17:906:fa82:b0:8ea:a647:a5aa with SMTP id lt2-20020a170906fa8200b008eaa647a5aamr18566645ejb.38.1678181178059;
+        Tue, 07 Mar 2023 01:26:18 -0800 (PST)
+Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
+        by smtp.gmail.com with ESMTPSA id hb15-20020a170906b88f00b008d09b900614sm5741459ejb.80.2023.03.07.01.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 01:26:17 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 07 Mar 2023 10:26:16 +0100
+Message-Id: <CR01KTDBXXM6.1IJUOC2OAJQX2@vincent-arch>
+Cc:     <linux-doc@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>
+Subject: Re: [PATCH] docs: rust: point directly to the standalone installers
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Miguel Ojeda" <ojeda@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+References: <20230306220959.240235-1-ojeda@kernel.org>
+In-Reply-To: <20230306220959.240235-1-ojeda@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/03/23 23:04, Daniel Golle ha scritto:
-> On Mon, Mar 06, 2023 at 03:05:36PM +0100, AngeloGioacchino Del Regno wrote:
->> This is the last man standing in clk-mt8192.c that won't allow us to
->> use the module_platform_driver() macro, and for *no* good reason.
->> Move it to clk-mt8192-apmixedsys.c and while at it, also add a
->> .remove() callback for it.
->>
->> Also, since the need for "clk-mt8192-simple" and "clk-mt8192" was
->> just due to them being in the same file and probing different clocks,
->> and since now there's just one platform_driver struct per file, it
->> seemed natural to rename the `-simple` variant to just "clk-mt8192".
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
->> Tested-by: Miles Chen <miles.chen@mediatek.com>
->> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
->> ---
->>   drivers/clk/mediatek/Makefile                |   2 +-
->>   drivers/clk/mediatek/clk-mt8192-apmixedsys.c | 214 ++++++++++++++++++
->>   drivers/clk/mediatek/clk-mt8192.c            | 221 +------------------
->>   3 files changed, 219 insertions(+), 218 deletions(-)
->>   create mode 100644 drivers/clk/mediatek/clk-mt8192-apmixedsys.c
-> 
-> I've tried to apply this on clk-next (currently v6.3-rc1) and also
-> linux-next (next-20230306), on both this patch doesn't apply:
-> 
-> Applying: clk: mediatek: mt8192: Move apmixedsys clock driver to its own file
-> error: patch failed: drivers/clk/mediatek/clk-mt8192.c:12
-> error: drivers/clk/mediatek/clk-mt8192.c: patch does not apply
-> Patch failed at 0047 clk: mediatek: mt8192: Move apmixedsys clock driver to its own file
-> hint: Use 'git am --show-current-patch=diff' to see the failed patch
-> When you have resolved this problem, run "git am --continue".
-> If you prefer to skip this patch, run "git am --skip" instead.
-> To restore the original branch and stop patching, run "git am --abort".
-> 
+> The Quick Start guide points to the Rust programming language front
+> page when it mentions the possibility of using the standalone
+> installers instead of `rustup`.
+>
+> This was done to have a hopefully stable link, but it is not too
+> helpful: readers need to figure out how to reach the standalone
+> installers from there.
+>
+> Thus point directly to the page (and anchor) with the table that
+> contains the standalone installers (plus signing key etc.).
+>
+> If the link breaks in the future, we can always update it as
+> needed. And anyway having the full link includes the domain and
+> gives more information about where the old docs were in such
+> a broken link case, which may help.
+>
+> Link: https://lore.kernel.org/linux-doc/CANiq72=3DgpzQyh1ExGbBWWNdgH-mTAT=
+dG5F600jKD1=3DNLLCn7wg@mail.gmail.com/
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
 
-You've missed the dependency that I've listed in the cover letter.
-
-https://patchwork.kernel.org/project/linux-mediatek/list/?series=719067
-
-Regards,
-Angelo
-
+Reviewed-by: Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
