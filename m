@@ -2,183 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17D126AF719
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF89A6AF71D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:01:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjCGVBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:01:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
+        id S230317AbjCGVBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:01:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjCGVA6 (ORCPT
+        with ESMTP id S230518AbjCGVBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:00:58 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAAF9BE1B
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:00:50 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id p16so8637402wmq.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 13:00:50 -0800 (PST)
+        Tue, 7 Mar 2023 16:01:17 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DDD39E521
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:01:10 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id ec29so26856449edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 13:01:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678222849;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZiWKyCKsYgQsvAQyb2xD/X2o3aURk6fuaflgIR8iSQ4=;
-        b=BMIYiSis2+aabp49ceTNPqBoCLm6q/4kyfwl5yGyHxTpOKhwh1tZih4+ol7WNnRLWr
-         EckKpnJrl07beVzZuP1JODe40FDDJuQwWLD3bGoCS0Mm6uOHk9LF8an5koz7vJQrl/dO
-         V9kmmPp+wAxxVHL2RdmXK8HgIzhXjZG5mWryMrkHebZZnG2r5TVxDcCrIHoRTUMdQPNs
-         szKjTPDtEh16y33F6yqqK8uMHEPGwnofbSG0zVe2qC8JnEpWEW8atXVuHfCNqkEXsd8i
-         JnV2eOKV3LdmBIxnE8QmuG7WdbcbSBBOubKXAEadcxODd3rL+4hL9LJVMlQHy//6uLQQ
-         3blQ==
+        d=gmail.com; s=20210112; t=1678222869;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+laKuP5cAVSNtPYHlxeAmSs0nLf7ZBBLqCdQZgZeOuw=;
+        b=pP8JZTf/ySfxULNY/h6PvVv+THp2rayv+OJYRT4KQh4uQhrRgyCfIuSlGzJWfC5WAw
+         iL1sUouNGDPhFTUtxIR5InIUZ6jBKsTGAG+C8KrXDV5mb/LDAS3RUqkDhlfZNiWk+etX
+         883/y1oRQz0BpS5IBX8xbImf7iKLQFuy0zKE/0UOm3RBXaSlu6DPmib5/2aN5FLyK+zj
+         wyc07QcbQXzOxZm1VsxcCwIPZk/ELGXByKhoSqosjVDYe4nQ4IDnzb9Fy5ERXB10pJo1
+         KkmOzXXnqFvZXjKRfBxox6Kcl7Hkh+PSybG0kmJWpB2BlTIi+UPvOSYHbTdERNNnXfu8
+         ticQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678222849;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZiWKyCKsYgQsvAQyb2xD/X2o3aURk6fuaflgIR8iSQ4=;
-        b=ltl0s5/zIlAxOqHcV7j7KeoTrpZyWDuHjGLtY7baL7krmC6JosO0fGzcidCVSybqLs
-         P+ETVyZBJyIwndK5y9kraWMEtuhuwm4tOr+07JKmyfBg2398LYSrXXjCl4NCxBXcMg88
-         oHyzXgOrtr5lSi6ZncmEd2CbyWc3miScKKXUJA3AUrL18Db8KzVrRLU6yBDPIYqiQYu5
-         9iuJtTEcQzpB7gym349NZBFKJZcwKQiLJjUJSCbWJc0mNY3ZPqNOS9togXEKmUupVEl1
-         7C1QGZQQo/1oJQw9s13tvHKnNnVf6qs0AnMONawcA2urXpRpxKoSRYAkUdfadkMWhelO
-         UXsw==
-X-Gm-Message-State: AO0yUKVcR5V6w/VK+019rPA2QzQmbSQXve0/CDWYXpJgSV5Ry9mQBkVo
-        7e70NKZ5BLule3J/PO1PDPao4g==
-X-Google-Smtp-Source: AK7set8+9/DumNsGhMPBhvbpwOv9d/L451f47xO9+A5TiXwFCw/MOvhQ6h6Bn/5f3TUFmMyC7xTX1Q==
-X-Received: by 2002:a05:600c:1c96:b0:3eb:3300:1d13 with SMTP id k22-20020a05600c1c9600b003eb33001d13mr13894148wms.14.1678222848676;
-        Tue, 07 Mar 2023 13:00:48 -0800 (PST)
-Received: from ?IPV6:2a02:6b6a:b566:0:52ca:aea8:eb67:a912? ([2a02:6b6a:b566:0:52ca:aea8:eb67:a912])
-        by smtp.gmail.com with ESMTPSA id he5-20020a05600c540500b003e2058a7109sm17692993wmb.14.2023.03.07.13.00.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 13:00:48 -0800 (PST)
-Message-ID: <cb82069c-cd81-1799-91c7-dea79916ab1a@bytedance.com>
-Date:   Tue, 7 Mar 2023 21:00:47 +0000
+        d=1e100.net; s=20210112; t=1678222869;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+laKuP5cAVSNtPYHlxeAmSs0nLf7ZBBLqCdQZgZeOuw=;
+        b=SsQ3/z2JZA6zGJd8opqkMBw64f76OjnhJUJVJ2FDB8LYjRvdNSb1ZVznxG2w6zdSnR
+         jLioAt5Yly7zliqrACIqZPsEEALJzMZvPwjkScMwd7iH9xjpcHksBKSaODr5I06yeqCh
+         NObmByEID4pRDMIl1uFoqvqX0teGb16GwAwzRta6hZ33rrubyywcocuEgDvmnsNrZWQK
+         +Qtg7CqNuLPBulwk8GQnLED+2q8swogHupMSOoyYhJGmdLJgFkUjFnUciYViVETyydmM
+         GUDdben4la7X5YALAKdqYkn1lcB+hARBEftDMe5etefrorRTNFvsn01YfLfq5/GyWCLc
+         UyQw==
+X-Gm-Message-State: AO0yUKXMhHrwcyIt2gtsKkzulV2y6r4UNjxOD4oUiXwYIOiwd6bihRPo
+        KdrJ69pj5o7r+UytYlAlMv0=
+X-Google-Smtp-Source: AK7set/FUB119mWbKzYcHi8ScWt6wwPseoHRsgkIPsjCex7BdjgyMe6HiZ3+12nBTjyhKl8UDuOIiA==
+X-Received: by 2002:a05:6402:274d:b0:4af:7bdc:18a5 with SMTP id z13-20020a056402274d00b004af7bdc18a5mr20098565edd.0.1678222868751;
+        Tue, 07 Mar 2023 13:01:08 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170906640500b008be0b7242d5sm6640808ejm.90.2023.03.07.13.01.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 13:01:08 -0800 (PST)
+Date:   Tue, 7 Mar 2023 22:01:06 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] staging: rtl8192e: Remove unused Array
+ Rtl8192PciERadioC_Array
+Message-ID: <ed1e0df7ed677c335340f42c1108e7b5c0f18462.1678222487.git.philipp.g.hortmann@gmail.com>
+References: <cover.1678222487.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [External] Re: [PATCH v13 00/11] Parallel CPU bringup for x86_64
-Content-Language: en-US
-To:     David Woodhouse <dwmw2@infradead.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, tglx@linutronix.de,
-        kim.phillips@amd.com, brgerst@gmail.com,
-        "Rapan, Sabin" <sabrapan@amazon.com>
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        seanjc@google.com, pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
-        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
-        liangma@liangbit.com
-References: <20230302111227.2102545-1-usama.arif@bytedance.com>
- <faa0eb3bb8ba0326d501516a057ab46eaf1f3c05.camel@infradead.org>
- <effbb6e2-c5a1-af7f-830d-8d7088f57477@amd.com>
- <269ed38b5eed9c3a259c183d59d4f1eb5128f132.camel@infradead.org>
-From:   Usama Arif <usama.arif@bytedance.com>
-In-Reply-To: <269ed38b5eed9c3a259c183d59d4f1eb5128f132.camel@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1678222487.git.philipp.g.hortmann@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The array Rtl8192PciERadioC_Array is only used in function
+rtl92e_config_rf_path which is only called in function rtl92e_config_rf.
+In function rtl92e_config_rf a termination condition for the loop is set
+to priv->num_total_rf_path = RTL819X_TOTAL_RF_PATH = 2. The loop is only
+executed with numbers 0 and 1 for eRFPath. So the function
+rtl92e_config_rf_path is only called with eRFPath for 0 and 1 and never
+with 2 that would make the "case RF90_PATH_C:" be called. Remove
+resulting dead code.
 
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+V1->V2: Changed argumentation in the description and subject
+---
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 12 ------------
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.h |  2 --
+ drivers/staging/rtl8192e/rtl8192e/table.c      |  3 ---
+ drivers/staging/rtl8192e/rtl8192e/table.h      |  2 --
+ 4 files changed, 19 deletions(-)
 
-
-> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> index 9d956571ecc1..d194c4ffeef8 100644
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -1510,6 +1510,71 @@ void __init smp_prepare_cpus_common(void)
->   	set_cpu_sibling_map(0);
->   }
->   
-> +
-> +/*
-> + * We can do 64-bit AP bringup in parallel if the CPU reports its APIC
-> + * ID in CPUID (either leaf 0x0B if we need the full APIC ID in X2APIC
-> + * mode, or leaf 0x01 if 8 bits are sufficient). Otherwise it's too
-> + * hard. And not for SEV-ES guests because they can't use CPUID that
-> + * early.
-> + */
-> +static bool __init prepare_parallel_bringup(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_X86_32) || boot_cpu_data.cpuid_level < 1)
-> +		return false;
-> +
-> +	if (x2apic_mode) {
-> +		unsigned int eax, ebx, ecx, edx;
-> +
-> +		if (boot_cpu_data.cpuid_level < 0xb)
-> +			return false;
-> +
-> +		/*
-> +		 * To support parallel bringup in x2apic mode, the AP will need
-> +		 * to obtain its APIC ID from CPUID 0x0B, since CPUID 0x01 has
-> +		 * only 8 bits. Check that it is present and seems correct.
-> +		 */
-> +		cpuid_count(0xb, 0, &eax, &ebx, &ecx, &edx);
-> +
-> +		/*
-> +		 * AMD says that if executed with an umimplemented level in
-> +		 * ECX, then it will return all zeroes in EAX. Intel says it
-> +		 * will return zeroes in both EAX and EBX. Checking only EAX
-> +		 * should be sufficient.
-> +		 */
-> +		if (!eax) {
-> +			pr_info("Disabling parallel bringup because CPUID 0xb looks untrustworthy\n");
-> +			return false;
-> +		}
-> +
-> +		if (IS_ENABLED(AMD_MEM_ENCRYPT) && static_branch_unlikely(&sev_es_enable_key)) {
-> +			pr_debug("Using SEV-ES CPUID 0xb for parallel CPU startup\n");
-> +			smpboot_control = STARTUP_APICID_SEV_ES;
-> +		} else if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-> +			/*
-> +			 * Other forms of memory encryption need to implement a way of
-> +			 * finding the APs' APIC IDs that early.
-> +			 */
-> +			return false;
-> +		} else {
-> +			pr_debug("Using CPUID 0xb for parallel CPU startup\n");
-> +			smpboot_control = STARTUP_APICID_CPUID_0B;
-
-I believe TDX guests with x2apic mode will end up here and enable 
-parallel smp if Sean was correct in this 
-(https://lore.kernel.org/all/Y91PoIfc2jdRv0WG@google.com/). i.e. "TDX 
-guest state is also encrypted, but TDX doesn't return true 
-CC_ATTR_GUEST_STATE_ENCRYPT.".
-
-So I believe the above else if 
-(cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) is not useful as thats 
-set for just SEV-ES guests? which is covered in the if part.
-
-Thanks,
-Usama
-
-
-> +		}
-> +	} else {
-> +		if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-> +			return false;
-> +
-> +		/* Without X2APIC, what's in CPUID 0x01 should suffice. */
-> +		pr_debug("Using CPUID 0x1 for parallel CPU startup\n");
-> +		smpboot_control = STARTUP_APICID_CPUID_01;
-> +	}
-> +
-> +	cpuhp_setup_state_nocalls(CPUHP_BP_PARALLEL_DYN, "x86/cpu:kick",
-> +				  native_cpu_kick, NULL);
-> +
-> +	return true;
-> +}
-> +
->   /*
->    * Prepare for SMP bootup.
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+index 35ca01ab65ff..fe0ef52c163a 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+@@ -649,18 +649,6 @@ u8 rtl92e_config_rf_path(struct net_device *dev, enum rf90_radio_path eRFPath)
+ 					  bMask12Bits,
+ 					  Rtl819XRadioB_Array[i+1]);
+ 
+-		}
+-		break;
+-	case RF90_PATH_C:
+-		for (i = 0; i < RadioC_ArrayLength; i += 2) {
+-			if (Rtl819XRadioC_Array[i] == 0xfe) {
+-				msleep(100);
+-				continue;
+-			}
+-			rtl92e_set_rf_reg(dev, eRFPath, Rtl819XRadioC_Array[i],
+-					  bMask12Bits,
+-					  Rtl819XRadioC_Array[i+1]);
+-
+ 		}
+ 		break;
+ 	case RF90_PATH_D:
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.h
+index 561a4c874fe3..6772ed300591 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.h
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.h
+@@ -14,7 +14,6 @@
+ #define RadioA_ArrayLength			RadioA_ArrayLengthPciE
+ #define RadioB_ArrayLength			RadioB_ArrayLengthPciE
+ #define MACPHY_Array_PGLength			MACPHY_Array_PGLengthPciE
+-#define RadioC_ArrayLength			RadioC_ArrayLengthPciE
+ #define RadioD_ArrayLength			RadioD_ArrayLengthPciE
+ #define PHY_REG_1T2RArrayLength			PHY_REG_1T2RArrayLengthPciE
+ 
+@@ -22,7 +21,6 @@
+ #define Rtl819XMACPHY_Array			Rtl8192PciEMACPHY_Array
+ #define Rtl819XRadioA_Array			Rtl8192PciERadioA_Array
+ #define Rtl819XRadioB_Array			Rtl8192PciERadioB_Array
+-#define Rtl819XRadioC_Array			Rtl8192PciERadioC_Array
+ #define Rtl819XRadioD_Array			Rtl8192PciERadioD_Array
+ #define Rtl819XAGCTAB_Array			Rtl8192PciEAGCTAB_Array
+ #define Rtl819XPHY_REG_1T2RArray		Rtl8192PciEPHY_REG_1T2RArray
+diff --git a/drivers/staging/rtl8192e/rtl8192e/table.c b/drivers/staging/rtl8192e/rtl8192e/table.c
+index d04608d99cbf..4e97ad4b8fd7 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/table.c
++++ b/drivers/staging/rtl8192e/rtl8192e/table.c
+@@ -325,9 +325,6 @@ u32 Rtl8192PciERadioB_Array[RadioB_ArrayLengthPciE] = {
+ 	0x007, 0x00000700,
+ };
+ 
+-u32 Rtl8192PciERadioC_Array[RadioC_ArrayLengthPciE] = {
+-	0x0,  };
+-
+ u32 Rtl8192PciERadioD_Array[RadioD_ArrayLengthPciE] = {
+ 	0x0, };
+ 
+diff --git a/drivers/staging/rtl8192e/rtl8192e/table.h b/drivers/staging/rtl8192e/rtl8192e/table.h
+index 177fe2173430..981e8b57d3de 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/table.h
++++ b/drivers/staging/rtl8192e/rtl8192e/table.h
+@@ -17,8 +17,6 @@ extern u32 Rtl8192PciEPHY_REG_1T2RArray[PHY_REG_1T2RArrayLengthPciE];
+ extern u32 Rtl8192PciERadioA_Array[RadioA_ArrayLengthPciE];
+ #define RadioB_ArrayLengthPciE 78
+ extern u32 Rtl8192PciERadioB_Array[RadioB_ArrayLengthPciE];
+-#define RadioC_ArrayLengthPciE 2
+-extern u32 Rtl8192PciERadioC_Array[RadioC_ArrayLengthPciE];
+ #define RadioD_ArrayLengthPciE 2
+ extern u32 Rtl8192PciERadioD_Array[RadioD_ArrayLengthPciE];
+ #define MACPHY_ArrayLengthPciE 18
+-- 
+2.39.2
 
