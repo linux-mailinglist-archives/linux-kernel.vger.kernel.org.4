@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 455B46ADF1F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:51:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 085C16ADF21
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:51:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjCGMu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S229698AbjCGMvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:51:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCGMu5 (ORCPT
+        with ESMTP id S229613AbjCGMvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:50:57 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D557BA05
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:50:52 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id ec29so20936379edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678193451;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9UY5iuEzddJy7Jsu/1PTiy8KE7WoMJiAayKTBsEV99c=;
-        b=b+bXytXwVgLrHVTUhYHA/o+BOCnksL/g7Qxp00rpVB1PeDBaCfpzd08Bu1xy8G7A1F
-         A5tQULIHCYSWRP7w/6qrYje6Xt2oJE9VzIoHyqJsd5YmRUS2x6BJijVkcrPT/ZCsQ5xt
-         kcb4VD2uNVgef8W8eEvXtjno/rfagdBix+CDNWXYsx9JtTOazq6Of2kulJgHHCbwyoA3
-         Bcj1FWl3oWamfjtxLohEkZ6rw1/97UX4I1qwPL2jHqVguB8cYuQ+PHKlkSX6oD+nBuqx
-         TDVp5xOKCwaC/6gFNglgJgO7efCGio1+ldQ3NvUYPfeyJ+z+0hsMwyUpKXOnSTQWVF6S
-         mQvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678193451;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9UY5iuEzddJy7Jsu/1PTiy8KE7WoMJiAayKTBsEV99c=;
-        b=QM4Y9U6OT7rzqDyR7ripYjt4DEYelQ7QGBTf9XJckFXBbGcgQIA9S03UGmg0nkeKuu
-         Am1A6QiAJOqwHp9tKFI3ZCCNcNyGvl0GNJRdIiOXX6R+t+L3nU3dklDRvW5TtHJ8zedJ
-         MUBPLXGdXXJa/QZWfNdlJPnqRr4pC/uQHKTXwcCafuKynODbwgyZCqUtDoB+wP+liJB1
-         mMkHHoHuvPDiDLfgCSZykLedcAdiP2Y/cQeu8JsEk2FnWtHtJOViLdEXvu7xIXz0N3CW
-         rK16smoZZFFWc8vOEx2XqipkuGm1Jb8nLUri7pzr0pE7WmeN4RAQnaKAgh5vkcYnSX+H
-         u/hQ==
-X-Gm-Message-State: AO0yUKXVL0jVpQiafpSK6Nj6MjYuZ5eOJPmSdjqn5fGrME4dvswxjGDI
-        C2VYMxriTt/mtAl3YFiatcBSjQ==
-X-Google-Smtp-Source: AK7set+pdgHLGptuoirUA/qeW3eypJ8kze1cqV+VkXp/vY5g9ijFcb6atsoRCHygwl7vA0Nuj441XA==
-X-Received: by 2002:aa7:c1c4:0:b0:4c5:bc48:d422 with SMTP id d4-20020aa7c1c4000000b004c5bc48d422mr11627825edp.7.1678193450993;
-        Tue, 07 Mar 2023 04:50:50 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:a60f:e604:c252:1f3d? ([2a02:810d:15c0:828:a60f:e604:c252:1f3d])
-        by smtp.gmail.com with ESMTPSA id n24-20020a509358000000b004af5001c7ecsm6666266eda.12.2023.03.07.04.50.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 04:50:50 -0800 (PST)
-Message-ID: <caf54c57-f9a0-b434-8973-6734851153ff@linaro.org>
-Date:   Tue, 7 Mar 2023 13:50:49 +0100
+        Tue, 7 Mar 2023 07:51:41 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138AA7BA05;
+        Tue,  7 Mar 2023 04:51:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9378D61354;
+        Tue,  7 Mar 2023 12:51:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37392C433EF;
+        Tue,  7 Mar 2023 12:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678193500;
+        bh=Zo0wnvFTycDHaoRZvtwRIJG6IH0TJ/chf9KnXuXEC0k=;
+        h=From:Subject:Date:To:Cc:From;
+        b=W7069/89i6YN6jzXXHBwaUdYnbt1Vx1XIy6UQNuF+VQ/pG/2j8a6sBzc3pFcKLzjI
+         AKEZigiLapjZPIOvCfCPdfluoGuXnDqYFYWPIbRLX38JrwrzvGOBUSaMvNJ8snIEOZ
+         JjYvO/61bWPvPdOPcsnxXI2OCqpPRII3jGcSml1ou5YnZEQeTOoqHcn1eR/OwBQ1Ye
+         /ENSTQfJCM2ODPP99JqVbtmBtGSPXYh9o5m2uiauNE8cGA2abYWcu/MhN3BHBDsopY
+         FlpW/pJ+motoff2Q4LBl02lQX9Mrashf6ckGmC0XBHMUKZEI54bbvjANHAvhSxqYtH
+         XptTO9m0RJulg==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH v2 0/2] pinctrl: at91: Minor cleanups
+Date:   Tue, 07 Mar 2023 12:51:26 +0000
+Message-Id: <20230216-gpio-at91-immutable-v2-0-326ef362dbc7@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] dt-bindings: display: mediatek: clean unnecessary item
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        David Airlie <airlied@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20230306-ccorr-binding-fix-v4-0-117daea88efb@baylibre.com>
- <25019fb1-87f7-b863-48e8-a164d0e08265@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <25019fb1-87f7-b863-48e8-a164d0e08265@collabora.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAE4zB2QC/32NQQ6CMBBFr2K6dgwt1FBX3sOwaHEKE4GSaSUaw
+ t0tHMDl+z8vbxURmTCK22kVjAtFClMGdT6JtrdTh0DPzEIVqiyUvEI3UwCbjAQax3eybkDQpW+
+ dMdqpWotsOhsRHNup7Xd3tDEh78fM6Olz5B5N5p5iCvw96ovc1/+hRUIBVeW18rKqrTP3F/KEw
+ yVwJ5pt237oOSBN0AAAAA==
+To:     Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bd1bf
+X-Developer-Signature: v=1; a=openpgp-sha256; l=905; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=Zo0wnvFTycDHaoRZvtwRIJG6IH0TJ/chf9KnXuXEC0k=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkBzNXoQNZFXDo5VZwccpab70++10eQsUHws2D7gMl
+ ScqNBQSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZAczVwAKCRAk1otyXVSH0NpCB/
+ 4+3JW3aY4u0RfZLOSMWvZVHdZ7weUyroE+MmXVOygTCUNb1HnY1Zf158uxjzF0mK6oWLUIUhAuanuB
+ 702UQGUooghxUaDB85MBDGYTMNx9a0BkgktULL/puWRtIjko8oNdvtQDS0DwTvftbIzd5sLM/PSLjN
+ GORwK7HG9CMhhucUq3Ce9W4bmjCrC9tHIfiw9E3Rtw8IDoRP8yBGEYztnh2o6gAOlleNHBo66zN6AO
+ wdFXnPaUQtw+pXpDaNKc+HU7YjfRvLEL7HXqs4Jn3Ch1VcoWvZteLjJZxFiq4vDrW+nm6UJ2426lNq
+ MTFpXgqHGF7yRKgTnQC81tIUM+5x5o
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 11:17, AngeloGioacchino Del Regno wrote:
-> Il 07/03/23 11:07, Alexandre Mergnat ha scritto:
->> The item which have the mediatek,mt8192-disp-ccorr as const compatible
->> already exist above. Merge all compatibles which have the same fallback
->> under the same item.
->>
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> 
-> Alexandre, the Acked-by tag from Krzysztof goes *after* your S-o-b :-)
+A few cleanups for the at91 driver, making the GPIO irqchip
+immutable and removing an unused member from the driver data.
+The driver is still using statically assigned GPIO numbers, we
+can't just remove that since the driver itself is still relying
+on them even if there are no longer board files for this
+platform.
 
-b4 puts them like this and there is even rationale from Konstantin about
-it. Anyway, it's not submitters job to correct b4. Our tools should
-implement the process, not us (the users), thus if the result is
-incorrect, then the tool should be fixed. Not the user.
+Changes in v2:
+- Rebased onto Linus' devel branch.
+- Link to v1: https://lore.kernel.org/r/20230216-gpio-at91-immutable-v1-0-44f52f148ab9@kernel.org
+
+---
+Mark Brown (2):
+      pinctrl: at91: Make the irqchip immutable
+      pinctrl: at91: Remove pioc_index from struct at91_gpio_chip
+
+ drivers/pinctrl/pinctrl-at91.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
+---
+base-commit: 00408f28c344fd1cafe6e66fe0f454607a2605f9
+change-id: 20230216-gpio-at91-immutable-53fcb995b285
 
 Best regards,
-Krzysztof
+-- 
+Mark Brown <broonie@kernel.org>
 
