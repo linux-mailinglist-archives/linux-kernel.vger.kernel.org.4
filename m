@@ -2,94 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A449A6AF3EE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 419476AF3DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbjCGTLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
+        id S233747AbjCGTKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbjCGTKu (ORCPT
+        with ESMTP id S231522AbjCGTKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:10:50 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD4BC85A2;
-        Tue,  7 Mar 2023 10:55:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1678215228; i=frank-w@public-files.de;
-        bh=+owYiX7jswArKs3fL+HnoSgqSO+sE7J8CBPiU44HSVA=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Ud9W7IEd/03xmWP/ai64n/sHBhn0fBsP6DlJXdr5l0uNkSfa4zEU/lAo34Tm/y6RP
-         bJNoR3KxCBkO9chRoQSPcSMDRyajidiVJgYrgfB6KEnrCLgdWahy7vkNS6AVC9MGFk
-         +sQf/9G03qLckfMgAPncpMxMwS1fu9OraROpcVONaOkMIKqsd2YbtOi7nrxGN5y6G0
-         iF7zovhxIvx+TbxQ8kAUZztBSNez95df01rwHNs6piXujUsggN5qxuwMecDtI7XRTj
-         I0uxYTTwaFFn7ef/eVODUgVKUVwrSkGYmMY6r5++ywCI/21cTfqMt3UjX7gZWcN6gz
-         iheRYz9g6tmiQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.156.24] ([217.61.156.24]) by web-mail.gmx.net
- (3c-app-gmx-bs16.server.lan [172.19.170.68]) (via HTTP); Tue, 7 Mar 2023
- 19:53:48 +0100
+        Tue, 7 Mar 2023 14:10:04 -0500
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D59DC809A
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:54:46 -0800 (PST)
+Received: by mail-qt1-x832.google.com with SMTP id l18so15552961qtp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:54:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678215285;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=F4xcIFGTkJIa2afS8u13V+CyxRx2+v6q7ZJyuV3ij5A=;
+        b=VxOF7oZFnxAp0PuJXfdRZBpAy987iNoCBFxsNyZnRbqqOqxLd+xD+4wBPudD7/TfZc
+         mP+iqHlLRrVQ07UMRjp7hA23lfiDV6awUNyS4OoCNzSzz7zOBiYKGbLph1dP/uaYWZb2
+         u4dW6DYhrDzRgwSGFMkWbcoaLBW1/iLkuyr4U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678215285;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F4xcIFGTkJIa2afS8u13V+CyxRx2+v6q7ZJyuV3ij5A=;
+        b=yIqUiC+3YfeOXMKR+HvyWWb1NIonLXkNOOAs3bQdKObAkC+HYXpMOFink6oCMKiOVU
+         73ibtJT/4SWaHiniMqjvr8mv4R+EZYnW4YL+S3v8nbxwrEU0kHwrUNsq6Z4E/mBVp4Jb
+         NF/N9wrRyG0jNZliMNLugxBMRE1bSmhVt+zYa1rg/XyvEA4T7KP2ZvH+GkVq04Zl+ADW
+         H5V4QvA0Vfd6dKxhDkqHkX9TRokmYg6xOFP+CS40Llcb0cna9Vg9qNYN9iWVF5SfitHT
+         qY3jQ4nX4xMNXweJKuEzbyg9vhrLxj3fvpi/Xy6k4H/HN1HiTTHg6bc7qJsPwOtXav12
+         y7UQ==
+X-Gm-Message-State: AO0yUKWUfmPVeLKdEFrh6BKw1K4FMUQsRtHa0v/pOyjN0fyG+WIGOmcZ
+        WVPFedUKclEEsIVtbFXcbEdhqA==
+X-Google-Smtp-Source: AK7set877zQEwXlX10Ic1ofJiWgEghqAP1Ogzxtlk8vOnDKfYrUqhwLKZBma0eF3OzMFxyfPX5QEzw==
+X-Received: by 2002:a05:622a:c:b0:3b9:bc8c:c207 with SMTP id x12-20020a05622a000c00b003b9bc8cc207mr34381761qtw.18.1678215284681;
+        Tue, 07 Mar 2023 10:54:44 -0800 (PST)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id y206-20020a3764d7000000b00741a8e96f25sm10012734qkb.88.2023.03.07.10.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 10:54:44 -0800 (PST)
+Date:   Tue, 7 Mar 2023 18:54:43 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
+Message-ID: <20230307185443.GA516865@google.com>
+References: <20230303213851.2090365-1-joel@joelfernandes.org>
+ <ZAc1wsvd4trjP/xi@lothringen>
+ <ZAc+vVZUhXdhpSki@pc636>
+ <CAEXW_YRTLQpQpOW-+n+X59pmB=4TkV=gdsMiQfBkdK_4wO9Jug@mail.gmail.com>
+ <20230307173313.GJ1301832@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Message-ID: <trinity-c28f2d1c-6730-416a-ad34-6e03182c2cd5-1678215227989@3c-app-gmx-bs16>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Aw: [PATCH net-next v12 07/18] net: ethernet: mtk_eth_soc: only
- write values if needed
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 7 Mar 2023 19:53:48 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <d2db725199011ec06082926830cf9fb2a8aeb147.1678201958.git.daniel@makrotopia.org>
-References: <cover.1678201958.git.daniel@makrotopia.org>
- <d2db725199011ec06082926830cf9fb2a8aeb147.1678201958.git.daniel@makrotopia.org>
-Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:pkz3K6WA6EmNJMhsiAcvkx7bjekeiDSDQDd8tCucyVIXTL57c1OwHykxVgZKG1lGsNyg1
- 0cWV/hriObkPzyLS+0mGKLemW65VGLyO2iap2e1yYSL0GICfo5VbTKwQ8DkKaGAEY1NspIXVaseU
- lDoQX7fOwYvYMS2ZGrGAg+YIjOJiAkww3nvUJWFN21/EG7AIU5SydbGcwR6Y+xK9xx0tsk+cUGZr
- kB+K7tsWcuBEK5/xd/TbPnoqFd097MJDgdQbXT7+bzEicx/1VLzODjxPMN3Gn1Yui8bM/sKvC6QH
- Lo=
-UI-OutboundReport: notjunk:1;M01:P0:mxzF7MLmkLI=;/RFfM47ZWNU2XSMGrw0gxKEoCRi
- xN13YE1EvN8VdTw8rS/2cyFNG+AoWNsqWM9YR7IhvFNPKeYDE+SoLwGeXs0oagtNQLQf9EOxk
- gcgJkOXmEIJDd41Gv1DnWJ13fAIj+FBM6XIDYbsi/IwJw+mDYvsRYxk5RT9uUeTx7uAirIAEc
- kdVMqy37arAgw1BjHnWZWh4wR57GDqgkvAK13qPvyiFAfPusc3lNFxTPJIU7n3NmS08WNbpDF
- FMjMuUZuJ5JgMNXGRVg5quf+z+P2FgkMNDtm6c8aaiFshuZ0b0lAlyR3z2HJhQDgzC+zytIub
- foMFAK1Dikg24AkfeeQP7qE/9yZBoZnk9C3/xsyPKr3GmWzzh3MbLXVU3J8eosodFg249eIHn
- 7lJNSEr7aAERqaWXOcKNaSUBLAmmin6sKHBSvTwlSCXE7fMjMsgGTDXWM2Vm1pCbkKRDn2aUB
- ZK9E+ZYWu7cca711Q8/UjOi0C6DxiYPH2W1CNNhNRh/I9V1J/bGAJY9aTzbl3+3LZDmW9DjIm
- mZKFLid0r+020WWqHU6Dyz/T36itBN2wwOtQR/kQ6hk+Gw6KBJKepHXUZ3J53aW8FWtJrZ0cR
- cT89vsQa06PLXUF2PimUVABhFLki555V+5YGQJRPEHrYFdD0DY966B66ovTLwK11S7ZXTQhXc
- naFm23TpAk2anx7XQmJteQnGAiPI+v0l1XFdiaJVVZRUxgcBpUzY4p747w2C573ynKluLEP0U
- fSwj+7zOjp4QIY8zNNFmfEX/gr3PcIXslEVP/By46T9tK+LhX9OfkQyo6OFlr4hPHpa5SNtaS
- 125/WcdSyvOnLbZ8kXoo7R9Mhw2WRgQp92LxqvW+KULJk=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230307173313.GJ1301832@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,19 +77,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Dienstag, 07=2E M=C3=A4rz 2023 um 16:53 Uhr
-> Von: "Daniel Golle" <daniel@makrotopia=2Eorg>
-> Only restart auto-negotiation and write link timer if actually
-> necessary=2E This prevents loosing the link in case of minor
-> changes=2E
+On Tue, Mar 07, 2023 at 09:33:13AM -0800, Paul E. McKenney wrote:
+> On Tue, Mar 07, 2023 at 08:48:52AM -0500, Joel Fernandes wrote:
+> > On Tue, Mar 7, 2023 at 8:40 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > >
+> > > On Tue, Mar 07, 2023 at 02:01:54PM +0100, Frederic Weisbecker wrote:
+> > > > On Fri, Mar 03, 2023 at 09:38:51PM +0000, Joel Fernandes (Google) wrote:
+> > > > > On many systems, a great deal of boot (in userspace) happens after the
+> > > > > kernel thinks the boot has completed. It is difficult to determine if
+> > > > > the system has really booted from the kernel side. Some features like
+> > > > > lazy-RCU can risk slowing down boot time if, say, a callback has been
+> > > > > added that the boot synchronously depends on. Further expedited callbacks
+> > > > > can get unexpedited way earlier than it should be, thus slowing down
+> > > > > boot (as shown in the data below).
+> > > > >
+> > > > > For these reasons, this commit adds a config option
+> > > > > 'CONFIG_RCU_BOOT_END_DELAY' and a boot parameter rcupdate.boot_end_delay.
+> > > > > Userspace can also make RCU's view of the system as booted, by writing the
+> > > > > time in milliseconds to: /sys/module/rcupdate/parameters/rcu_boot_end_delay
+> > > > > Or even just writing a value of 0 to this sysfs node.
+> > > > > However, under no circumstance will the boot be allowed to end earlier
+> > > > > than just before init is launched.
+> > > > >
+> > > > > The default value of CONFIG_RCU_BOOT_END_DELAY is chosen as 15s. This
+> > > > > suites ChromeOS and also a PREEMPT_RT system below very well, which need
+> > > > > no config or parameter changes, and just a simple application of this patch. A
+> > > > > system designer can also choose a specific value here to keep RCU from marking
+> > > > > boot completion.  As noted earlier, RCU's perspective of the system as booted
+> > > > > will not be marker until at least rcu_boot_end_delay milliseconds have passed
+> > > > > or an update is made via writing a small value (or 0) in milliseconds to:
+> > > > > /sys/module/rcupdate/parameters/rcu_boot_end_delay.
+> > > > >
+> > > > > One side-effect of this patch is, there is a risk that a real-time workload
+> > > > > launched just after the kernel boots will suffer interruptions due to expedited
+> > > > > RCU, which previous ended just before init was launched. However, to mitigate
+> > > > > such an issue (however unlikely), the user should either tune
+> > > > > CONFIG_RCU_BOOT_END_DELAY to a smaller value than 15 seconds or write a value
+> > > > > of 0 to /sys/module/rcupdate/parameters/rcu_boot_end_delay, once userspace
+> > > > > boots, and before launching the real-time workload.
+> > > > >
+> > > > > Qiuxu also noted impressive boot-time improvements with earlier version
+> > > > > of patch. An excerpt from the data he shared:
+> > > > >
+> > > > > 1) Testing environment:
+> > > > >     OS            : CentOS Stream 8 (non-RT OS)
+> > > > >     Kernel     : v6.2
+> > > > >     Machine : Intel Cascade Lake server (2 sockets, each with 44 logical threads)
+> > > > >     Qemu  args  : -cpu host -enable-kvm, -smp 88,threads=2,sockets=2, …
+> > > > >
+> > > > > 2) OS boot time definition:
+> > > > >     The time from the start of the kernel boot to the shell command line
+> > > > >     prompt is shown from the console. [ Different people may have
+> > > > >     different OS boot time definitions. ]
+> > > > >
+> > > > > 3) Measurement method (very rough method):
+> > > > >     A timer in the kernel periodically prints the boot time every 100ms.
+> > > > >     As soon as the shell command line prompt is shown from the console,
+> > > > >     we record the boot time printed by the timer, then the printed boot
+> > > > >     time is the OS boot time.
+> > > > >
+> > > > > 4) Measured OS boot time (in seconds)
+> > > > >    a) Measured 10 times w/o this patch:
+> > > > >         8.7s, 8.4s, 8.6s, 8.2s, 9.0s, 8.7s, 8.8s, 9.3s, 8.8s, 8.3s
+> > > > >         The average OS boot time was: ~8.7s
+> > > > >
+> > > > >    b) Measure 10 times w/ this patch:
+> > > > >         8.5s, 8.2s, 7.6s, 8.2s, 8.7s, 8.2s, 7.8s, 8.2s, 9.3s, 8.4s
+> > > > >         The average OS boot time was: ~8.3s.
+> > > > >
+> > > > > Tested-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> > > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > >
+> > > > I still don't really like that:
+> > > >
+> > > > 1) It feels like we are curing a symptom for which we don't know the cause.
+> > > >    Which RCU write side caller is the source of this slow boot? Some tracepoints
+> > > >    reporting the wait duration within synchronize_rcu() calls between the end of
+> > > >    the kernel boot and the end of userspace boot may be helpful.
+> > > >
+> > > > 2) The kernel boot was already covered before this patch so this is about
+> > > >    userspace code calling into the kernel. Is that piece of code also called
+> > > >    after the boot? In that case are we missing a conversion from
+> > > >    synchronize_rcu() to synchronize_rcu_expedited() somewhere? Because then
+> > > >    the problem is more general than just boot.
+> > > >
+> > > > This needs to be analyzed first and if it happens that the issue really
+> > > > needs to be fixed with telling the kernel that userspace has completed
+> > > > booting, eg: because the problem is not in a few callsites that need conversion
+> > > > to expedited but instead in the accumulation of lots of calls that should stay
+> > > > as is:
+> > > >
+> > > > 3) This arbitrary timeout looks dangerous to me as latency sensitive code
+> > > >    may run right after the boot. Either you choose a value that is too low
+> > > >    and you miss the optimization or the value is too high and you may break
+> > > >    things.
+> > > >
+> > > > 4) This should be fixed the way you did:
+> > > >    a) a kernel parameter like you did
+> > > >    b) The init process (systemd?) tells the kernel when it judges that userspace
+> > > >       has completed booting.
+> > > >    c) Make these interfaces more generic, maybe that information will be useful
+> > > >       outside RCU. For example the kernel parameter should be
+> > > >       "user_booted_reported" and the sysfs (should be sysctl?):
+> > > >       kernel.user_booted = 1
+> > > >    d) But yuck, this means we must know if the init process supports that...
+> > > >
+> > > > For these reasons, let's make sure we know exactly what is going on first.
+> > > >
+> > > > Thanks.
+> > > Just add some notes and thoughts. There is a rcupdate.rcu_expedited=1
+> > > parameter that can be used during the boot. For example on our devices
+> > > to speedup a boot we boot the kernel with rcu_expedited:
+> > >
+> > > XQ-DQ54:/ # cat /proc/cmdline
+> > > XQ-DQ54:/ #
+> > >
+> > > then a user space can decides if it is needed or not:
+> > >
+> > > <snip>
+> > > rcu_expedited  rcu_normal
+> > > XQ-DQ54:/ # ls -al /sys/kernel/rcu_*
+> > > -rw-r--r-- 1 root root 4096 2023-02-16 09:27 /sys/kernel/rcu_expedited
+> > > -rw-r--r-- 1 root root 4096 2023-02-16 09:27 /sys/kernel/rcu_normal
+> > > XQ-DQ54:/ #
+> > > <snip>
+> > >
+> > > for lazy we can add "rcu_cb_lazy" parameter and boot the kernel with
+> > > true or false. So we can follow and be aligned with rcu_expedited and
+> > > rcu_normal parameters.
+> > 
+> > Speaking of aligning, there is also the automated
+> > rcu_normal_after_boot boot option correct? I prefer the automated
+> > option of doing this. So the approach here is not really unprecedented
+> > and is much more robust than relying on userspace too much (I am ok
+> > with adding your suggestion *on top* of the automated toggle, but I
+> > probably would not have ChromeOS use it if the automated way exists).
+> > Or did I miss something?
+> 
+> See this commit:
+> 
+> 3705b88db0d7cc ("rcu: Add a module parameter to force use of expedited RCU primitives")
+> 
+> Antti provided this commit precisely in order to allow Android devices
+> to expedite the boot process and to shut off the expediting at a time of
+> Android userspace's choosing.  So Android has been making this work for
+> about ten years, which strikes me as an adequate proof of concept.  ;-)
 
-Hi,
+Thanks for the pointer. That's true. Looking at Android sources, I find that
+Android Mediatek devices at least are setting rcu_expedited to 1 at late
+stage of their userspace boot (which is weird, it should be set to 1 as early
+as possible), and interestingly I cannot find them resetting it back to 0!.
+Maybe they set rcu_normal to 1? But I cannot find that either. Vlad? :P
 
-have tested Parts 1-12 this on bananapi-r3 (mt7986) with 1G Fiber SFP (no =
-2g5 available yet) on gmac1 and lan4 (mt7531 p5)
+> Of course, Android has a rather tightly controlled userspace, as do
+> real-time embedded systems (I sure hope, anyway!).  Which is why your
+> timeout-based fallback/backup makes a lot of sense.  And why someone might
+> want an aggressive indication when that timeout-based backup is needed.
 
-Tested-by: Frank Wunderlich <frank-w@public-files=2Ede>
+Or someone designs a system but is unaware of RCU behavior during boot. ;-)
 
-Thx Daniel for working on SFP support :)
+thanks,
 
-regards Frank
+ - Joel
+
