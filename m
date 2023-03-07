@@ -2,119 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1776AE733
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D796AE735
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbjCGQsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:48:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
+        id S230466AbjCGQt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjCGQsF (ORCPT
+        with ESMTP id S230203AbjCGQtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:48:05 -0500
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE6C9CFD4
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:44:36 -0800 (PST)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-536c02eea4dso255299797b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:44:36 -0800 (PST)
+        Tue, 7 Mar 2023 11:49:07 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE10C90B4D
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:45:21 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id me6-20020a17090b17c600b0023816b0c7ceso17138621pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:45:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678207475;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fudFHVuFTBFg/trnMAjwYtHP559hB1IlUkkm8c37Y50=;
-        b=C1FtktTUZLRScveIKZ9szc5tqFc6zTVlhosAm5W76bIoTA3+jownCZemOQJtXqOj/i
-         OswV+evhE1bJddGQbzMng1HQJDkU2BUx6B9RB9Pe9n0f/n4QtjzYtDChr0Ayz2e7bRUU
-         kMYvci9lBkG6mamdFC3GBN0aEpock3bvfim3piuR76BI/d3rspNk8J3Z8ZaumNx/OMzA
-         UmV9535q5E0zVsf9yBGCMIGTSfIdpnxUU0qb6MG9EKVAD7TIPSkEsDGgQGFOerMUOlB4
-         jfqW9qFop3MurMcW8Upi8uSgzVR1WrvzZOgJtH517PHHvOzldcVVB2GjoDgA3OVlz4hs
-         OO6w==
+        d=gmail.com; s=20210112; t=1678207521;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4F8gpjDoT3xNy3Qvl/wLkY5/N3k6H9FAAlC8tegJRMg=;
+        b=IQ4KFU8wM+Rqah+cboOqSKl+U/jM8agWUmucajCdme/QLHkVNQXf73Jgwv7tDWM1yD
+         VZ+oZYEzGPHInJHveDz7yQFeGMW3yU1EN/f9SBJSzfHRt3QiITp9n0RjPpaRx2idpS7C
+         WdlDhvZG/cQ7K69ZhZnDw8VsDBZHzR+11NeTZpOtOnOBxd+c5rvxFfmL5hzRsZRUcN1t
+         ty/VaRH/uq2qWIcWHZeQ+KvApTi2vK9WgQU03IEuUa+/p+5H5kP/qirpPyNa4zx7Vyxv
+         lCI34WDUhCRb8lPF86RQkLT6A31qEue3jz6cGOedh7G5ThzIlXBzh32HDPud66HATBkz
+         ZejA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678207475;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fudFHVuFTBFg/trnMAjwYtHP559hB1IlUkkm8c37Y50=;
-        b=TFOcJuhdahMScHxs9VuiM37IvlFVdO5IKEjJX+P+iyWGmWEmAqE2OqF6u+knUK4Lr3
-         qGF88uYmCXfqZQBw28MW5HoiXB61IvTAzhe4EWXYfJOeQvzrbrQLk1wTQZsB7Qn7TBTM
-         DJsJ2/lfa0kwYceLhhA/vWi2l+a/3MfXxAlKr3rG6o33hYHlhov+wK1LPOs4kd1vy6Db
-         xuiCueICB3LVd5m+7sFR1TGplc9CQXX/2/qQt3pNUAQGkF4T5M7cdsXQ9ysWrEQZIrOO
-         SECyYhEqJmMroE+244uAo9tmvstC0Lhjjk8i1335qLEbtcjMRx0wDtFqmXDYcpI5nvg7
-         QHAQ==
-X-Gm-Message-State: AO0yUKVeWYt8GVwdIk9UUNFNvowjz1Tbeg3yROPgsQcj7wM1rOEUc/jK
-        CLQKhiqLklcAy1OrkcGcpjONKy9g+/G1awhqy1yBxA==
-X-Google-Smtp-Source: AK7set8Mlhd3BMu0el6kBe6TVY9uurv9wWYfzGKZYZ3v+8bg59K0iPFTbzTLcG3qzqvWFFLjae+E3TdWxy0lihl0lxw=
-X-Received: by 2002:a81:ae26:0:b0:52f:1c40:b1f9 with SMTP id
- m38-20020a81ae26000000b0052f1c40b1f9mr9643617ywh.7.1678207475364; Tue, 07 Mar
- 2023 08:44:35 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678207521;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4F8gpjDoT3xNy3Qvl/wLkY5/N3k6H9FAAlC8tegJRMg=;
+        b=QBTW1yAe1oo3dFQdclX7nG37QiF+3Pu7erWc1Gg8QUv/WCWxP9ou3GCHFZbjR4SOI4
+         CCeWI29jvtobgwWdZ6cLTTToRZCqGFMtaIfpH85TiS2GKrCxULif/GzimeoDfnud/WdF
+         zZcBLox6HpnassDdZ7BvLIuWV/t2TRjfsjRoJNCC1d/itzfOg2IEFX5yy47dVzv/6PZw
+         lmfDMskuw5WuafdJOiBNrlrsFcLEVSsyCJiaHqJyDTOf7eBr2aKgIfHZkwC43SherxX/
+         M/YmcApHbSfAqXuMbKh1sDd8BfAmdhRwrfjzim28FS2ya6UiHFX6A1DE35KZJcpdS8+L
+         8NjA==
+X-Gm-Message-State: AO0yUKWDSD/sRJpCfsbvkhwBUnig/Co3tDbCPvWgxpbxsakyZaeSgHxW
+        aFqADR7xwZgPAWN7fzwZeJo=
+X-Google-Smtp-Source: AK7set+8wHZJLIImgkWkf6FdpWY+4jxIEMQlterWqs0VbXnAPJwy1i/5DOO/9epxJFT25Infm/uuVQ==
+X-Received: by 2002:a17:902:db02:b0:19c:edcd:26cf with SMTP id m2-20020a170902db0200b0019cedcd26cfmr15118652plx.61.1678207521111;
+        Tue, 07 Mar 2023 08:45:21 -0800 (PST)
+Received: from thinkstation.cmpxchg8b.net ([76.133.164.192])
+        by smtp.gmail.com with ESMTPSA id s5-20020a170902988500b0019a6d3851afsm7039787plp.141.2023.03.07.08.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 08:45:20 -0800 (PST)
+Date:   Tue, 7 Mar 2023 08:45:19 -0800
+From:   Tavis Ormandy <taviso@gmail.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Alexander Monakov <amonakov@ispras.ru>,
+        linux-kernel@vger.kernel.org, x86@kernel.org
+Subject: Re: x86: AMD Zen2 ymm registers rolling back
+Message-ID: <ZAdqHwqik9kP5ELs@thinkstation.cmpxchg8b.net>
+References: <Y/Xp73KJe3c/1jrn@zn.tnic>
+ <4737f149-c5b7-8a51-7cc5-8bda6e98308b@ispras.ru>
+ <Y/5T4ScbM/99DhgT@zn.tnic>
+ <3d007f98-a42a-3c0e-8d6a-c86c5d0e25be@ispras.ru>
+ <Y/5VIECduoyCJKP5@zn.tnic>
+ <4d21fe93-7b77-bf5a-9ba8-645256ab0983@ispras.ru>
+ <Y/5qbJgwHhkrMQqr@zn.tnic>
+ <7ce3ea01-9758-0a97-e810-2bf38e7d59a7@ispras.ru>
+ <2eccf8e2-4aa3-dcda-064d-ca39d2295548@citrix.com>
+ <Y/8StpL8atNwyzip@zn.tnic>
 MIME-Version: 1.0
-References: <20230307164405.14218-1-johan+linaro@kernel.org>
-In-Reply-To: <20230307164405.14218-1-johan+linaro@kernel.org>
-From:   Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date:   Tue, 7 Mar 2023 17:44:24 +0100
-Message-ID: <CACMJSes3usJUvCsrMBR_9dDGCbo2y7JqA8-B5mP28H2Cjg-v6A@mail.gmail.com>
-Subject: Re: [PATCH 0/4] serial: qcom-geni: fix console shutdown hang
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y/8StpL8atNwyzip@zn.tnic>
+User-Agent: Mutt/2.2.7 (2022-08-07)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Mar 2023 at 17:43, Johan Hovold <johan+linaro@kernel.org> wrote:
->
-> This series fixes some of the fallout after a recent series adding
-> support for DMA transfers to the Qualcomm geni serial driver.
->
-> Most importantly it fixes a hang during reboot when using a serial
-> console and the getty is stopped during reboot.
->
-> Doug just posted an equivalent fix here:
->
->         https://lore.kernel.org/lkml/20230307073155.1.Iaab0159b8d268060a0e131ebb27125af4750ef99@changeid
->
-> but the commit message only mentions the regression with respect to
-> kgdb, which is not as widely used serial consoles generally, so I
-> figured I'd post my version for completeness.
->
-> Either version of that fix should address the immediate regression, but
-> fixing the underlying problems which have been there since the driver
-> was first merged is going to be a bit more involved.
->
-> The rest of the series fixes a few bugs in the new DMA support that I
-> found while investigating the console regression.
->
-> Johan
->
->
-> Johan Hovold (4):
->   serial: qcom-geni: fix console shutdown hang
->   serial: qcom-geni: fix DMA mapping leak on shutdown
->   serial: qcom-geni: fix mapping of empty DMA buffer
->   serial: qcom-geni: drop bogus uart_write_wakeup()
->
->  drivers/tty/serial/qcom_geni_serial.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->
-> --
-> 2.39.2
->
+On Wed, Mar 01, 2023 at 09:54:14AM +0100, Borislav Petkov wrote:
+> On Wed, Mar 01, 2023 at 12:23:01AM +0000, Andrew Cooper wrote:
+> > So we need a table for all Zen2 parts of ucode revisions below which we
+> > force hide XSAVES as the erratum workaround.
+> 
+> Working on it - stay tuned.
+> 
 
-Hey Johan,
+FYI, I heard from someone offlist that they can reproduce with the
+latest microcode available on this cpu:
 
-Douglas and Srini beat you to these fixes but thanks!
+cpu family  : 23
+model       : 17
+model name  : AMD Ryzen 3 2200G with Radeon Vega Graphics
+stepping    : 0
+microcode   : 0x8101016
 
-Bart
+It seems likely many zen1 systems are affected without any microcode
+patch, which seems not great to me.
+
+I guess it would be nice if AMD could provide a list of devices they're
+not going to provide a patch for...
+
+Tavis.
+
+-- 
+ _o)            $ lynx lock.cmpxchg8b.com
+ /\\  _o)  _o)  $ finger taviso@sdf.org
+_\_V _( ) _( )  @taviso
