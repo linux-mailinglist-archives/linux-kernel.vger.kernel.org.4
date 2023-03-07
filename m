@@ -2,73 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0FA6AF5BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DF66AF5C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234233AbjCGTeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:34:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S231591AbjCGTe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:34:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbjCGTdp (ORCPT
+        with ESMTP id S233221AbjCGTej (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:33:45 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0125BCBB0;
-        Tue,  7 Mar 2023 11:20:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BED161520;
-        Tue,  7 Mar 2023 19:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB88C433D2;
-        Tue,  7 Mar 2023 19:20:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678216843;
-        bh=v+R8uNYyvl6BXMep+iIQa4rgGlsTJcYTdpVSEaeL+2s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qssyoXV6oKqrID6jpSFU+zfGamVCT1S6yqdmKgV040D1m5WMln3CCvn9d4k8CGZvE
-         ZHrJTJLKgffxwdC1rVzM8pQWXwxyDicrp0TZpg5ViZQ+G/EGbJgolTYixUCs48Bp5b
-         OR+BuL3HWXOR+2+z67erIekRvHa1fRKj29W9qpwBn5bW13qucNtqJAYGVO3KLAl94/
-         vgHj6DJt/h8tXdxyZCEGhe4/gHq/JiM6ue07J7dw/WGepmum0tg3/Cv82B4y1GrT2U
-         s6Kg1DHCg648hLhcz4HGP5rpQtKTeXWeUS8rRBZsPCLpG6dJySDmXBGRuiFhAxUjIV
-         J4YQPCt2dkNCg==
-Date:   Tue, 7 Mar 2023 19:20:42 +0000
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     syzbot <syzbot+0c73d1d8b952c5f3d714@syzkaller.appspotmail.com>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Subject: Re: [syzbot] [ext4?] WARNING: bad unlock balance in ext4_rename2
-Message-ID: <ZAeOilzUDPQX7joj@gmail.com>
-References: <000000000000435c6905f639ae8e@google.com>
+        Tue, 7 Mar 2023 14:34:39 -0500
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30714A0F32;
+        Tue,  7 Mar 2023 11:21:32 -0800 (PST)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 9AF451BF205;
+        Tue,  7 Mar 2023 19:21:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678216891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RxdKgF0FoJ8o93pAtFh/ei+gKLeFCdS2rikMZuG/uH0=;
+        b=Y2NDczmdy4t+ddy4/B7pcehkSH7NVY7Yh9fCf/HP/QTBG6VfvC2+qeuZiq3PT2TtZEvHrh
+        dNskcRbXB3YfRTcr9S35hQNf/r+GT0yGxphzV8C6QBz8AEZMwu+pCrG0Iz76pPhlLh4/NU
+        ijID7TxI6NhaqnC2BrIwT0cHLsfyX+3HYlmIuNAy8uk5soatKdReOvBmBHRJdzvpSx//zl
+        Fi+wCcmqlJAkGvmbrJfamt7FXMNSsE+KeE+GDXMGbmkccpso6uvHyStZc2gMhlwk6P2cKU
+        icL5Ue1qo6pSFqC7qYd7lafsir/AWK7Y2ZGGCO5DlLAhtkYNfMNiTimhQ42Phg==
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH] mtd: nand: mxic-ecc: Fix mxic_ecc_data_xfer_wait_for_completion() when irq is used
+Date:   Tue,  7 Mar 2023 20:21:27 +0100
+Message-Id: <20230307192127.274869-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To:  <beddbc374557e44ceec897e68c4a5d12764ddbb9.1676459308.git.christophe.jaillet@wanadoo.fr>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000435c6905f639ae8e@google.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+X-linux-mtd-patch-notification: thanks
+X-linux-mtd-patch-commit: b'75dce6a941e3f16c3b4878c8b2f46d5d07c619ce'
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 03:34:40AM -0800, syzbot wrote:
-> =====================================
-> WARNING: bad unlock balance detected!
-> 6.2.0-syzkaller-13467-g0988a0ea7919 #0 Not tainted
-> -------------------------------------
-> syz-executor.3/8027 is trying to release lock (&type->i_mutex_dir_key) at:
-> [<ffffffff82448753>] inode_unlock include/linux/fs.h:763 [inline]
-> [<ffffffff82448753>] ext4_rename fs/ext4/namei.c:4017 [inline]
-> [<ffffffff82448753>] ext4_rename2+0x3d03/0x4410 fs/ext4/namei.c:4193
-> but there are no more locks to release!
+On Wed, 2023-02-15 at 11:08:45 UTC, Christophe JAILLET wrote:
+> wait_for_completion_timeout() and readl_poll_timeout() don't handle their
+> return value the same way.
+> 
+> wait_for_completion_timeout() returns 0 on time out (and >0 in all other
+> cases)
+> readl_poll_timeout() returns 0 on success and -ETIMEDOUT upon a timeout.
+> 
+> In order for the error handling path to work in both cases, the logic
+> against wait_for_completion_timeout() needs to be inverted.
+> 
+> Fixes: 48e6633a9fa2 ("mtd: nand: mxic-ecc: Add Macronix external ECC engine support")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-I think this is the same as
-"[bug report] ext4: Fix possible corruption when moving a directory"
-(https://lore.kernel.org/linux-ext4/5efbe1b9-ad8b-4a4f-b422-24824d2b775c@kili.mountain).
-See there for the root cause (double unlock).
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/fixes, thanks.
 
-- Eric
+Miquel
