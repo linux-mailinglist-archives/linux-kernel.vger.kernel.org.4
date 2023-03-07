@@ -2,100 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC15A6AD8F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FED6AD8FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjCGIQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:16:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S230079AbjCGIQj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 03:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjCGIQZ (ORCPT
+        with ESMTP id S229729AbjCGIQc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:16:25 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843A350997;
-        Tue,  7 Mar 2023 00:16:11 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id F03A65C013F;
-        Tue,  7 Mar 2023 03:16:10 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 07 Mar 2023 03:16:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678176970; x=1678263370; bh=8C
-        6VRDlcxQhH+mSpw+nDDgGpxEIKQm9RL18lCT50WgQ=; b=N8RZhZsHo49RtxHhXw
-        eIIUbw2NFCNlTZbpZ9Tb9n7m9U8jpOkbuQyD8MDvJynsAzzGqWWvr8U3Ydt3VF7m
-        0oQTKWO3wF+3/vs85ZLKWq5ofm9fntOwAfcrzN00x5QGyleNeQs12kfOESuY1G5u
-        nqKKrtRTCZv3Ot3zNRRjzlv6ft/YlWQhIllf+pe32fvkbib65DqdoipTxi4WXLZJ
-        qBGCl5vO3imvGX/0m/sibUq2O4Sac/yrV+0FMEfxuX8jLxdaolFK7Jg+0Eco/76t
-        E9EhGpAaWxeOq05tLIaP/eDl1UkBZ601+fU32NEMOxr13mwkgqGGL346hAMZ7lHL
-        hb8g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1678176970; x=1678263370; bh=8C6VRDlcxQhH+
-        mSpw+nDDgGpxEIKQm9RL18lCT50WgQ=; b=oYBKZNa2k+kbf6GRcK2SQFkYf55sJ
-        hF//TPcdDfl81FggoAOg/Ado4CtID9mymJDqhFAVOhUnUvTqxPpu4nY33IpLzbd0
-        dasK94wHOAXu/NVgW2qJJ63tqawoxXvg0Vr0+AdgxlAtxY0OgfwVSnJaCKF8R3P+
-        V90rZbuQMzX15HfoIthX/O16jRx8wg6A+RVFtkdEtX0yoe62OfhGOM8bTuv+GkOz
-        N5Zf5Im4Vf4JeGSZ8x3vp+5yWxJJRHAiK0yf079J/E/16e3O47q/mBdptLp3wyrV
-        7m205vQgLtXv1Lf35YnClj2GcO8KpMMnMD+tUYA+Ae/igN9AEjonuG8XA==
-X-ME-Sender: <xms:yvIGZM0Yybb5PhVUQ3udu_2OKChQFsPHEnKjXth8E4c_lrg_RJE9-g>
-    <xme:yvIGZHHZ2WqH9A7L0MfSpRhvSes4_T94uSrx_J09K3yPhPMrmysbo5cRZK8Pcnx2a
-    RSd_MWEpAbMuDCswMk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtledgudduiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:yvIGZE5zqaF0cM3HRyIFRF5zCBj5snQdOENGGLlv9V0KcJVV17daUQ>
-    <xmx:yvIGZF2YiUepTP5aTlW837uM0rB2EJ538_m72vALVev3SO9gcfQFLg>
-    <xmx:yvIGZPExeWxW_d1SGJ0LHKlKSKc2JQX8WI0BUPR6mFn19i8R1xcMVg>
-    <xmx:yvIGZDjhMMAVNutvq8vUxcH6VRw61DzMNZ2jp5VDXLSgi-Jcs2SZhQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 73950B60086; Tue,  7 Mar 2023 03:16:10 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-206-g57c8fdedf8-fm-20230227.001-g57c8fded
-Mime-Version: 1.0
-Message-Id: <61c230da-a826-4cbf-8e4c-79e607ce5878@app.fastmail.com>
-In-Reply-To: <20230307074038.17391-1-lukas.bulwahn@gmail.com>
-References: <20230307074038.17391-1-lukas.bulwahn@gmail.com>
-Date:   Tue, 07 Mar 2023 09:15:49 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
-        "Miquel Raynal" <miquel.raynal@bootlin.com>,
-        "Richard Weinberger" <richard@nod.at>,
-        "Vignesh Raghavendra" <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: parsers: remove reference to config MTD_NAND_TMIO
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 7 Mar 2023 03:16:32 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A1B50997;
+        Tue,  7 Mar 2023 00:16:31 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id c18so13526454qte.5;
+        Tue, 07 Mar 2023 00:16:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678176990;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZjZIlXQTpJ24PjO5Zb7phOIg9/5X/qOSvWi0SXZ0qlg=;
+        b=cWJYXA8g2I9BMvqLFQTJktFLE0djSfaQD338DLADU+XFxwafja68e7wdmc4yQ1yckb
+         tulKhBIcgZwYJ2CVNn30vXA349qT8L9XYo1ZDcmX/EzNIezT1avylhMBCcYrnGPKSnch
+         H/84elGIBd/+8ynnkyLtlp4/RBfd5c9V+EnzocndWwhO5cG2oqlRzbiqw2JM6f1TXLlv
+         vauIig8reNow6GqCaGQw+SANdPAm5Dv1/YfVnEUhnqeL2yJc0JJtmtO9VBfE5Pn4qnYm
+         STy6kqEqSfnuyfrAYSIWIDDFT+aBejtpEjtsko0gnAgCkQtv0W/nh5k8m7d74npRMc1z
+         tz/A==
+X-Gm-Message-State: AO0yUKXD5vXmC4luBGdV/213Ud/QQRSTo669Ql0mg4D7e9YcUR5dbgXA
+        ozXNXrXamivaS3bsmi0oDmpuD3lyHrsjYQ==
+X-Google-Smtp-Source: AK7set/q89VBoBwSUxxrPgcoIGi81XAI2rtm+SJ0GrPhnuL13aqHOpDXwEliwQK24YXbclySAJnQ5w==
+X-Received: by 2002:a05:622a:15ce:b0:3b8:6442:2575 with SMTP id d14-20020a05622a15ce00b003b864422575mr23256946qty.49.1678176990249;
+        Tue, 07 Mar 2023 00:16:30 -0800 (PST)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id o6-20020a05622a138600b003b63a734434sm9411780qtk.52.2023.03.07.00.16.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 00:16:29 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-53852143afcso231552817b3.3;
+        Tue, 07 Mar 2023 00:16:28 -0800 (PST)
+X-Received: by 2002:a81:af0c:0:b0:52f:1c23:ef1 with SMTP id
+ n12-20020a81af0c000000b0052f1c230ef1mr8939020ywh.5.1678176988688; Tue, 07 Mar
+ 2023 00:16:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20230307075923.28821-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20230307075923.28821-1-lukas.bulwahn@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 7 Mar 2023 09:16:17 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV1eYWhDKwTAxC32Qp0CcxrWxgu=uRNTdu_G8K=gHS9Yw@mail.gmail.com>
+Message-ID: <CAMuHMdV1eYWhDKwTAxC32Qp0CcxrWxgu=uRNTdu_G8K=gHS9Yw@mail.gmail.com>
+Subject: Re: [PATCH] arch: sh: remove references to config USB_OHCI_SH
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        linux-sh@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023, at 08:40, Lukas Bulwahn wrote:
-> Commit 568494db6809 ("mtd: remove tmio_nand driver") removes the config
-> MTD_NAND_TMIO and its corresponding driver.
+Hi Lukas,
+
+On Tue, Mar 7, 2023 at 9:02 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> Commit 4f6dfc2136fb ("usb: remove the dead USB_OHCI_SH option") left some
+> references to the config USB_OHCI_SH in ./arch/sh/ around, expecting those
+> to be removed with the whole SH architecture deletion.
 >
-> Remove the reference in MTD_SHARPSL_PARTS to that removed config.
+> As that did not happen, do minor clean-up instead and remove the references
+> to the removed config USB_OHCI_SH instead.
 >
 > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Arnd, please ack.
-> Miquel, please pick this minor non-urgent patch on top of the commit above.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+Thanks for your patch!
+
+> --- a/arch/sh/Kconfig
+> +++ b/arch/sh/Kconfig
+> @@ -326,7 +326,6 @@ config CPU_SUBTYPE_SH7720
+>         select CPU_SH3
+>         select CPU_HAS_DSP
+>         select SYS_SUPPORTS_SH_CMT
+> -       select USB_OHCI_SH if USB_OHCI_HCD
+
+Shouldn't this select USB_OHCI_HCD_PLATFORM instead, as the (now
+removed) Kconfig help text for USB_OHCI_SH used to say?
+
+    +       select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
+
+I completely forgot I already made that comment before, cfr.
+https://lore.kernel.org/all/CAMuHMdVM3BpvVD3c4gp1OidnwF5zFd4MJecij7zWBnahzNaSNw@mail.gmail.com
+
+The same is true for the three selects below.
+As USB is now broken, the proper solution will need
+Fixes: 4f6dfc2136fb2e8d ("usb: remove the dead USB_OHCI_SH option")
+
+>         select PINCTRL
+>         help
+>           Select SH7720 if you have a SH3-DSP SH7720 CPU.
+> @@ -336,7 +335,6 @@ config CPU_SUBTYPE_SH7721
+>         select CPU_SH3
+>         select CPU_HAS_DSP
+>         select SYS_SUPPORTS_SH_CMT
+> -       select USB_OHCI_SH if USB_OHCI_HCD
+>         help
+>           Select SH7721 if you have a SH3-DSP SH7721 CPU.
+>
+> @@ -425,7 +423,6 @@ config CPU_SUBTYPE_SH7757
+>  config CPU_SUBTYPE_SH7763
+>         bool "Support SH7763 processor"
+>         select CPU_SH4A
+> -       select USB_OHCI_SH if USB_OHCI_HCD
+>         help
+>           Select SH7763 if you have a SH4A SH7763(R5S77631) CPU.
+>
+> @@ -451,7 +448,6 @@ config CPU_SUBTYPE_SH7786
+>         select CPU_SHX3
+>         select CPU_HAS_PTEAEX
+>         select GENERIC_CLOCKEVENTS_BROADCAST if SMP
+> -       select USB_OHCI_SH if USB_OHCI_HCD
+>         select USB_EHCI_SH if USB_EHCI_HCD
+>         select PINCTRL
+>
+> diff --git a/arch/sh/configs/sh7757lcr_defconfig b/arch/sh/configs/sh7757lcr_defconfig
+> index f10fb730b6f4..cd404818e33f 100644
+> --- a/arch/sh/configs/sh7757lcr_defconfig
+> +++ b/arch/sh/configs/sh7757lcr_defconfig
+> @@ -58,7 +58,6 @@ CONFIG_USB=y
+>  CONFIG_USB_EHCI_HCD=y
+>  CONFIG_USB_EHCI_SH=y
+>  CONFIG_USB_OHCI_HCD=y
+> -CONFIG_USB_OHCI_SH=y
+>  CONFIG_USB_STORAGE=y
+>  CONFIG_MMC=y
+>  CONFIG_MMC_SDHI=y
+
+This part is fine.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
