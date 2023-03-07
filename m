@@ -2,267 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B54866AD67F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:44:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8FD6AD679
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 05:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjCGEo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 23:44:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
+        id S230247AbjCGEoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 23:44:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjCGEoL (ORCPT
+        with ESMTP id S230216AbjCGEoH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 23:44:11 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEAB367C0;
-        Mon,  6 Mar 2023 20:43:45 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3274KHuj017089;
-        Tue, 7 Mar 2023 04:43:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bV/tTebdqkEC/fcXxVlgJIGBuJKm7eTXWETRWlyJ25k=;
- b=XS8CbBRigRuAraGjLBYVMlKphaKmgcjDQ0Brl5ZOkp646NGpOCXCXyl1AwJqW/+II4pl
- gxNbhn3LN7iKpC68ybhraFx7vyo+jGAtMUsnTO/xs69ZZ1HJYcBl2p/akX9liBgz54mJ
- 5kU5D+Sp3EnVNYMiU44rbqVXyNcoKhcWzutdCMkM9wWVKOARe/tyDOhO/hTpbnK1tess
- 6s8+waSQAHcFcErD92r6m4wqkmw+HpS6i6th5Ek13Uq6K1FcmsVUtf0yZcAxx9Dg/uMk
- YyisVml3dm984D4YyZBiMhuIP1SRMp7dk87XIXIGeQ28nf9G4KvJnzv7+lLsHS1n5+IX LQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p5nkw966w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 04:43:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3274hIwX029795
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Mar 2023 04:43:18 GMT
-Received: from mmanikan-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 6 Mar 2023 20:43:11 -0800
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_mmanikan@quicinc.com>,
-        <quic_gurus@quicinc.com>, <loic.poulain@linaro.org>,
-        <quic_eberman@quicinc.com>, <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-Subject: [PATCH 11/11] arm64: dtsi: qcom: ipq9574: Add nodes to bring up multipd
-Date:   Tue, 7 Mar 2023 10:11:37 +0530
-Message-ID: <1678164097-13247-12-git-send-email-quic_mmanikan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+        Mon, 6 Mar 2023 23:44:07 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6949F497F8
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 20:43:27 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id d20so11269047vsf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 20:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678164205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KhJjKxrUhurA/m4r0Y8ciLGDFRFz3Zu/L7FJeZQi0n0=;
+        b=jOKDEzTFJKDobwqd/AaLDsioLxzunt0PU3HWIuUlngMXLEufc/ZCoVD6guXfhWzOE3
+         LP/FGV+ei6S/XtPrBkbWJJ8vNgJyyTKabNa36UqfPYgp4WmojFFtOvg2oP9Ml7dgWHsm
+         ls1XlNpd8H6AMm6H4FpPD5j7Evsrqn73rJ+2U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678164205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KhJjKxrUhurA/m4r0Y8ciLGDFRFz3Zu/L7FJeZQi0n0=;
+        b=x+FgeFwOQLTrDEny77AB5zy9XkzcDqWs2PUWrzB9eMUXYuEsnh2qwooXcgN8maID+I
+         ljq1nQf20SqD++c1HGstZO9EgOiATQbGlky0hjGKA8Mq3CGVZfKVRlAOs/wGoIO75z1Y
+         o7K0I5KRpl3KxU0K82YjVjCCBiGj84zt6NAsliAxlKso+qUGiRy93ED/NB35lRa/NDI4
+         kP3u98bK594ajdFhLuu0BCCm16U5hglf45tMfRkE5EacH/4PJ8ywVzSvPkNjeJlxyKl4
+         +swlrio17RqXqJ/DvXxg/qaVT+sDdUDaPxaYgCavXgKjxiPMHv+a74yPiIfnyfF/4UDo
+         FOEQ==
+X-Gm-Message-State: AO0yUKWT8x4T4V6VGJmQMXySze8T0gTTfvazF71xZse28AGFHOVzopd9
+        YTj025tZhfG3XFcZVElvmSiwDkGCvd0soJt4WCVxgQ==
+X-Google-Smtp-Source: AK7set/1DJCH0yxSVzq1QxxilcX1Ry7rj5FrT+uT+Ty9POkTz3gYzHgrQh11DgQu5fT4OEg/HkjyYznfw7u/BjjiNaA=
+X-Received: by 2002:a67:e3cb:0:b0:421:e25b:3d0c with SMTP id
+ k11-20020a67e3cb000000b00421e25b3d0cmr2865465vsm.3.1678164205669; Mon, 06 Mar
+ 2023 20:43:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: qPS7C2bFnGGR52C9N5WSF0b_6SJO9qhe
-X-Proofpoint-ORIG-GUID: qPS7C2bFnGGR52C9N5WSF0b_6SJO9qhe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-06_14,2023-03-06_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- adultscore=0 malwarescore=0 mlxlogscore=666 lowpriorityscore=0
- suspectscore=0 mlxscore=0 phishscore=0 impostorscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070041
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com> <20230206100105.861720-8-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230206100105.861720-8-angelogioacchino.delregno@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 7 Mar 2023 12:43:14 +0800
+Message-ID: <CAGXv+5Ey02hzNQA2O2ussAt9sXxxy9mOjze2GH90Ko9HeoETXQ@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] clk: mediatek: mt8195: Add support for frequency
+ hopping through FHCTL
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
+        miles.chen@mediatek.com, chun-jie.chen@mediatek.com,
+        rex-bc.chen@mediatek.com, jose.exposito89@gmail.com,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable nodes required for multipd remoteproc bring up.
+On Mon, Feb 6, 2023 at 6:01=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Add FHCTL parameters and register PLLs through FHCTL to add support
+> for frequency hopping and SSC. FHCTL will be enabled only on PLLs
+> specified in devicetree.
+>
+> This commit brings functional changes only upon addition of
+> devicetree configuration.
+>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> ---
+>  drivers/clk/mediatek/clk-mt8195-apmixedsys.c | 69 +++++++++++++++++++-
+>  1 file changed, 66 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c b/drivers/clk/m=
+ediatek/clk-mt8195-apmixedsys.c
+> index 1bc917f2667e..c0db31ce0741 100644
+> --- a/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
+> +++ b/drivers/clk/mediatek/clk-mt8195-apmixedsys.c
+> @@ -3,9 +3,11 @@
+>  // Copyright (c) 2021 MediaTek Inc.
+>  // Author: Chun-Jie Chen <chun-jie.chen@mediatek.com>
+>
+> +#include "clk-fhctl.h"
+>  #include "clk-gate.h"
+>  #include "clk-mtk.h"
+>  #include "clk-pll.h"
+> +#include "clk-pllfh.h"
+>
+>  #include <dt-bindings/clock/mt8195-clk.h>
+>  #include <linux/of_device.h>
+> @@ -105,6 +107,61 @@ static const struct mtk_pll_data plls[] =3D {
+>             0, 0, 22, 0x0158, 24, 0, 0, 0, 0x0158, 0, 0x0158, 0, 9),
+>  };
+>
+> +enum fh_pll_id {
+> +       FH_ARMPLL_LL,
+> +       FH_ARMPLL_BL,
+> +       FH_MEMPLL,
+> +       FH_ADSPPLL,
+> +       FH_NNAPLL,
+> +       FH_CCIPLL,
+> +       FH_MFGPLL,
+> +       FH_TVDPLL2,
+> +       FH_MPLL,
+> +       FH_MMPLL,
+> +       FH_MAINPLL,
+> +       FH_MSDCPLL,
+> +       FH_IMGPLL,
+> +       FH_VDECPLL,
+> +       FH_TVDPLL1,
+> +       FH_NR_FH,
+> +};
+> +
+> +#define FH(_pllid, _fhid, _offset) {                                   \
+> +               .data =3D {                                              =
+ \
+> +                       .pll_id =3D _pllid,                              =
+ \
+> +                       .fh_id =3D _fhid,                                =
+ \
+> +                       .fh_ver =3D FHCTL_PLLFH_V2,                      =
+ \
+> +                       .fhx_offset =3D _offset,                         =
+ \
+> +                       .dds_mask =3D GENMASK(21, 0),                    =
+ \
 
-Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 145 ++++++++++++++++++++++++++
- 1 file changed, 145 insertions(+)
+> +                       .slope0_value =3D 0x6003c97,                     =
+ \
+> +                       .slope1_value =3D 0x6003c97,                     =
+ \
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 2bb4053641da..e0645bc39db4 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -201,6 +201,11 @@ tz_region: tz@4a600000 {
- 			no-map;
- 		};
- 
-+		q6_region: wcnss@4ab00000 {
-+			reg = <0x0 0x4ab00000 0x0 0x02b00000>;
-+			no-map;
-+		};
-+
- 		smem@4aa00000 {
- 			compatible = "qcom,smem";
- 			reg = <0x0 0x4aa00000 0x0 0x00100000>;
-@@ -209,6 +214,30 @@ smem@4aa00000 {
- 		};
- 	};
- 
-+	wcss: wcss-smp2p {
-+		compatible = "qcom,smp2p";
-+		qcom,smem = <435>, <428>;
-+
-+		interrupt-parent = <&intc>;
-+		interrupts = <GIC_SPI 322 IRQ_TYPE_EDGE_RISING>;
-+
-+		mboxes = <&apcs_glb 9>;
-+
-+		qcom,local-pid = <0>;
-+		qcom,remote-pid = <1>;
-+
-+		wcss_smp2p_out: master-kernel {
-+			qcom,entry-name = "master-kernel";
-+			#qcom,smem-state-cells = <1>;
-+		};
-+
-+		wcss_smp2p_in: slave-kernel {
-+			qcom,entry-name = "slave-kernel";
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
- 	soc: soc@0 {
- 		compatible = "simple-bus";
- 		#address-cells = <1>;
-@@ -829,6 +858,122 @@ IRQ_TYPE_LEVEL_HIGH>, /* int_c */
- 			msi-parent = <&v2m0>;
- 			status = "disabled";
- 		};
-+
-+		q6v5_wcss: remoteproc@cd00000 {
-+			compatible = "qcom,ipq9574-q6-mpd";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges;
-+			reg = <0x0cd00000 0x4040>;
-+			interrupts-extended = <&intc GIC_SPI 325 IRQ_TYPE_EDGE_RISING>,
-+					      <&wcss_smp2p_in 0 0>,
-+					      <&wcss_smp2p_in 1 0>,
-+					      <&wcss_smp2p_in 2 0>,
-+					      <&wcss_smp2p_in 3 0>;
-+			interrupt-names = "wdog",
-+					  "fatal",
-+					  "ready",
-+					  "handover",
-+					  "stop-ack";
-+
-+			clocks = <&gcc GCC_ANOC_WCSS_AXI_M_CLK>,
-+				 <&gcc GCC_WCSS_AHB_S_CLK>,
-+				 <&gcc GCC_WCSS_ECAHB_CLK>,
-+				 <&gcc GCC_WCSS_ACMT_CLK>,
-+				 <&gcc GCC_WCSS_AXI_M_CLK>,
-+				 <&gcc GCC_Q6_AXIM_CLK>,
-+				 <&gcc GCC_Q6_AXIM2_CLK>,
-+				 <&gcc GCC_Q6_AHB_CLK>,
-+				 <&gcc GCC_Q6_AHB_S_CLK>,
-+				 <&gcc GCC_Q6SS_BOOT_CLK>,
-+				 <&gcc GCC_WCSS_DBG_IFC_APB_BDG_CLK>,
-+				 <&gcc GCC_WCSS_DBG_IFC_ATB_BDG_CLK>,
-+				 <&gcc GCC_WCSS_DBG_IFC_DAPBUS_BDG_CLK>,
-+				 <&gcc GCC_WCSS_DBG_IFC_NTS_BDG_CLK>,
-+				 <&gcc GCC_WCSS_DBG_IFC_APB_CLK>,
-+				 <&gcc GCC_WCSS_DBG_IFC_ATB_CLK>,
-+				 <&gcc GCC_WCSS_DBG_IFC_DAPBUS_CLK>,
-+				 <&gcc GCC_WCSS_DBG_IFC_NTS_CLK>,
-+				 <&gcc GCC_Q6_TSCTR_1TO2_CLK>,
-+				 <&gcc GCC_Q6SS_ATBM_CLK>,
-+				 <&gcc GCC_Q6SS_PCLKDBG_CLK>,
-+				 <&gcc GCC_Q6SS_TRIG_CLK>,
-+				 <&gcc GCC_MEM_NOC_Q6_AXI_CLK>,
-+				 <&gcc GCC_WCSS_Q6_TBU_CLK>,
-+				 <&gcc GCC_SYS_NOC_WCSS_AHB_CLK>;
-+
-+			clock-names = "anoc_wcss_axi_m",
-+				      "wcss_ahb_s",
-+				      "wcss_ecahb",
-+				      "wcss_acmt",
-+				      "wcss_axi_m",
-+				      "q6_axim",
-+				      "q6_axim2",
-+				      "q6_ahb",
-+				      "q6_ahb_s",
-+				      "q6ss_boot",
-+				      "dbg-apb-bdg",
-+				      "dbg-atb-bdg",
-+				      "dbg-dapbus-bdg",
-+				      "dbg-nts-bdg",
-+				      "dbg-apb",
-+				      "dbg-atb",
-+				      "dbg-dapbus",
-+				      "dbg-nts",
-+				      "q6_tsctr_1to2_clk",
-+				      "q6ss_atbm_clk",
-+				      "q6ss_pclkdbg_clk",
-+				      "q6ss_trig_clk",
-+				      "mem_noc_q6_axi",
-+				      "wcss_q6_tbu",
-+				      "sys_noc_wcss_ahb";
-+
-+			assigned-clocks = <&gcc GCC_ANOC_WCSS_AXI_M_CLK>,
-+				 <&gcc GCC_WCSS_AHB_S_CLK>,
-+				 <&gcc GCC_WCSS_ECAHB_CLK>,
-+				 <&gcc GCC_WCSS_ACMT_CLK>,
-+				 <&gcc GCC_WCSS_AXI_M_CLK>,
-+				 <&gcc GCC_Q6_AXIM_CLK>,
-+				 <&gcc GCC_Q6_AXIM2_CLK>,
-+				 <&gcc GCC_Q6_AHB_CLK>,
-+				 <&gcc GCC_Q6_AHB_S_CLK>,
-+				 <&gcc GCC_Q6SS_BOOT_CLK>,
-+				 <&gcc GCC_MEM_NOC_Q6_AXI_CLK>,
-+				 <&gcc GCC_WCSS_Q6_TBU_CLK>,
-+				 <&gcc GCC_SYS_NOC_WCSS_AHB_CLK>;
-+
-+			assigned-clock-rates = <266666667>,
-+						<133333333>,
-+						<133333333>,
-+						<133333333>,
-+						<266666667>,
-+						<533000000>,
-+						<342857143>,
-+						<133333333>,
-+						<133333333>,
-+						<342857143>,
-+						<533000000>,
-+						<533000000>,
-+						<133333333>;
-+
-+			qcom,smem-states = <&wcss_smp2p_out 0>,
-+					   <&wcss_smp2p_out 1>;
-+			qcom,smem-state-names = "shutdown",
-+						"stop";
-+
-+			memory-region = <&q6_region>;
-+
-+			glink-edge {
-+				interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
-+				label = "rtr";
-+				qcom,remote-pid = <1>;
-+				mboxes = <&apcs_glb 8>;
-+			};
-+
-+			q6_wcss_pd1: remoteproc_pd1 {
-+				compatible = "qcom,ipq9574-wcss-ahb-mpd";
-+			};
-+		};
- 	};
- 
- 	rpm-glink {
--- 
-2.34.1
+Are these
 
+> +                       .sfstrx_en =3D BIT(2),                           =
+ \
+> +                       .frddsx_en =3D BIT(1),                           =
+ \
+> +                       .fhctlx_en =3D BIT(0),                           =
+ \
+> +                       .tgl_org =3D BIT(31),                            =
+ \
+> +                       .dvfs_tri =3D BIT(31),                           =
+ \
+> +                       .pcwchg =3D BIT(31),                             =
+ \
+
+> +                       .dt_val =3D 0x0,                                 =
+ \
+> +                       .df_val =3D 0x9,                                 =
+ \
+
+and these just copied from MT8186?
+
+> +                       .updnlmt_shft =3D 16,                            =
+ \
+> +                       .msk_frddsx_dys =3D GENMASK(23, 20),             =
+ \
+> +                       .msk_frddsx_dts =3D GENMASK(19, 16),             =
+ \
+> +               },                                                      \
+> +       }
+> +
+> +static struct mtk_pllfh_data pllfhs[] =3D {
+> +       FH(CLK_APMIXED_ADSPPLL, FH_ADSPPLL, 0x78),
+> +       FH(CLK_APMIXED_NNAPLL, FH_NNAPLL, 0x8c),
+> +       FH(CLK_APMIXED_MFGPLL, FH_MFGPLL, 0xb4),
+> +       FH(CLK_APMIXED_TVDPLL2, FH_TVDPLL2, 0xc8),
+> +       FH(CLK_APMIXED_MMPLL, FH_MMPLL, 0xf0),
+> +       FH(CLK_APMIXED_MAINPLL, FH_MAINPLL, 0x104),
+> +       FH(CLK_APMIXED_MSDCPLL, FH_MSDCPLL, 0x118),
+> +       FH(CLK_APMIXED_IMGPLL, FH_IMGPLL, 0x12c),
+> +       FH(CLK_APMIXED_VDECPLL, FH_VDECPLL, 0x140),
+> +       FH(CLK_APMIXED_TVDPLL2, FH_TVDPLL1, 0x154),
+> +};
+> +
+>  static const struct of_device_id of_match_clk_mt8195_apmixed[] =3D {
+>         { .compatible =3D "mediatek,mt8195-apmixedsys", },
+>         {}
+> @@ -114,13 +171,17 @@ static int clk_mt8195_apmixed_probe(struct platform=
+_device *pdev)
+>  {
+>         struct clk_hw_onecell_data *clk_data;
+>         struct device_node *node =3D pdev->dev.of_node;
+> +       const u8 *fhctl_node =3D "mediatek,mt8195-fhctl";
+>         int r;
+>
+>         clk_data =3D mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
+>         if (!clk_data)
+>                 return -ENOMEM;
+>
+> -       r =3D mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_dat=
+a);
+> +       fhctl_parse_dt(fhctl_node, pllfhs, ARRAY_SIZE(pllfhs));
+> +
+> +       r =3D mtk_clk_register_pllfhs(node, plls, ARRAY_SIZE(plls),
+> +                                   pllfhs, ARRAY_SIZE(pllfhs), clk_data)=
+;
+>         if (r)
+>                 goto free_apmixed_data;
+>
+> @@ -140,7 +201,8 @@ static int clk_mt8195_apmixed_probe(struct platform_d=
+evice *pdev)
+>  unregister_gates:
+>         mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), =
+clk_data);
+>  unregister_plls:
+> -       mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
+> +       mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
+> +                                 ARRAY_SIZE(pllfhs), clk_data);
+
+Nit: I think this could be squeezed into one line.
+
+>  free_apmixed_data:
+>         mtk_free_clk_data(clk_data);
+>         return r;
+> @@ -153,7 +215,8 @@ static int clk_mt8195_apmixed_remove(struct platform_=
+device *pdev)
+>
+>         of_clk_del_provider(node);
+>         mtk_clk_unregister_gates(apmixed_clks, ARRAY_SIZE(apmixed_clks), =
+clk_data);
+> -       mtk_clk_unregister_plls(plls, ARRAY_SIZE(plls), clk_data);
+> +       mtk_clk_unregister_pllfhs(plls, ARRAY_SIZE(plls), pllfhs,
+> +                                 ARRAY_SIZE(pllfhs), clk_data);
+
+Same here.
+
+ChenYu
+
+>         mtk_free_clk_data(clk_data);
+>
+>         return 0;
+> --
+> 2.39.1
+>
