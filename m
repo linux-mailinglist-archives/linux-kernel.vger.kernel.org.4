@@ -2,82 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A873C6AD3BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8FE6AD3C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjCGBNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 20:13:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42470 "EHLO
+        id S229692AbjCGBTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 20:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjCGBNB (ORCPT
+        with ESMTP id S229680AbjCGBTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:13:01 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F736581
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:12:59 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id cy23so46191276edb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:12:58 -0800 (PST)
+        Mon, 6 Mar 2023 20:19:50 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F802A6DF
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:19:44 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id y10so7086877pfi.8
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:19:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=eitmlabs-org.20210112.gappssmtp.com; s=20210112; t=1678151577;
+        d=google.com; s=20210112; t=1678151984;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dl1FcRy0TeAMgauTpPXJJt6/ucIRQy2Jj3gg1G+tuS0=;
-        b=2T0PG/vBlkkLCa2dk1BhimigsSPmhllprjrnuQd95BcBGr/o2CKTcyYF9/EwCo4vX7
-         gXp0MxzUJKgi4GC+M/bMmphfpnTRAYU2QyJn4Q0ocANv+YyLC55VsmB3i7kg22mG9bme
-         99wDd6KKFlIvLxXwECwvIcDx67JxJg8eLtXVaUadkcaZqlWtjLqFv3lpE7XvE+a/JxYT
-         kNkzweS5BP/Lsq/7iFtQQpOIEkyEpgFkjyrYcf8Ji5nfQ094z7fLQ7s9b5B9PHOsNcMh
-         9uw8yMYZuSNF4YDf9cvOHapzpg8113LJqvn5zXvpd84I7h1JFlTXYPV9dXpXa1kigyYg
-         h4yQ==
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XlvRoDOZGkFFgyhD/mAoM2l807X5W3icksKBlwcwVSw=;
+        b=QInKjmq1d/lftVQQm3th9Xnc9fmHpsAazEnocQ1JESHI8/EHInm050AJuFFRaHY10m
+         ohkGhMwSBZENGVjd97tBBfwhB8GwQoCyj7YgC4WAcDqaujdeRIlnwLU98cHu1pkCkjoA
+         Yn1jRMWpPHTd0U4EIJLiTQ4iKqrIOD1tMAQZKNFI1rnkucCttBvcGXGWSRh4QqKBQAKF
+         df51ZCR6fxjvrJ+f2l254vk7RSNii9/N+X9HlgcpOkIJymtRVu0ErufD9BUtoiBBEqGU
+         oInYp9F5TxJAV0DGVmNo5vy55b+Xtismbdjmym/uV0oCnSQnQcWM1WLeainoOjxfh7Re
+         0WnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678151577;
+        d=1e100.net; s=20210112; t=1678151984;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dl1FcRy0TeAMgauTpPXJJt6/ucIRQy2Jj3gg1G+tuS0=;
-        b=Ytj3+5UMEHLeYQjf/cope0foXR3L7Aw803vu+V2KXalKR3qmgEhIPofM317HVgjzAz
-         /zRqBrG7cDWaFfv5kRmhJtBLkB+Sb+bPfkdms5cvHuL2q2+5eud3abgXYil3MhPo2hRV
-         rx2jbMiijeqaTAqX813W7hcyqcFj0yQT8WRpptCEi026bK1QlVNkv11LLBYeL4+D4frg
-         YhEIrXnViOL0eBBiRnb175yWYHlXPaT1gX82VjZQ2lgMMbAxTaJ1hh/lgos+uJwRBI0O
-         gpKuAnb0KZc+B+IPzktNSVx/SzmTClpYP1HnmyEncj4L4I2FQsdLwKCIQB+GC4HvAn+g
-         1hnA==
-X-Gm-Message-State: AO0yUKUiZWayxMGIyT/mUPGOCho2ASe81YA8cKyif5SQ/SuGGeUvaw0L
-        Drmrv3kjsxl+bx2o+3MxvV8rJwktmcnbkzi+vm24zQ==
-X-Google-Smtp-Source: AK7set/tdIvuOQNvQ+ZMbuEkG/dsK9FjCH40MiK/WlaogjPtI0sTQSngaCQyK+fMEz5t6ZyYJ+K0TEUEpLB7gX3dKiA=
-X-Received: by 2002:a50:cd94:0:b0:4c2:1a44:642e with SMTP id
- p20-20020a50cd94000000b004c21a44642emr7132123edi.5.1678151577440; Mon, 06 Mar
- 2023 17:12:57 -0800 (PST)
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XlvRoDOZGkFFgyhD/mAoM2l807X5W3icksKBlwcwVSw=;
+        b=dJkyXtHct82Z33seGME7lJOuw86kMXm9wDWDJzTCehSCDymi9scMVOYCiKTo2yu7qp
+         VaWohKZ1dzk6DXZ/2Ae3hMca0PW2/MVGvm23/klLJe2jqPvIYUB9R1Ic/Pd4KiEbV+x2
+         hHTWFtJFJFf7zbGoiUEJMocRXuFZTseUVKj8SO3gJHsZ4wYiFSaYbueVD2muQzUNg8cm
+         qKFbRcCqSOAQ/3/qfjOSmKN6QQiQFmdcdAHIuDFaJTUYeYIreGpnvfUiqi6rxkrk941t
+         miIwpOxVte+Mg+srezzwwdPgyh7fWnAViXz+gkhsO1UOMpFkZBPiG0x9On/bmdEaCKTn
+         A4Kg==
+X-Gm-Message-State: AO0yUKVTbQxyvKQgnZ3GRvoMwAO4M68TcxEKUjIahHFyRjte/TevawpF
+        4GvJrS8D5yE5kN5rHp35HCB402t8CGtLwVCzGopoZA==
+X-Google-Smtp-Source: AK7set/8/oT7jPhV0zxjPPXpQxyJk5AbN05kjN+U/CvY4iejQ8uOmh0pRiMH5vHPQJuCpzoyHo13sQlQyXOv4EyoHrU=
+X-Received: by 2002:a63:7356:0:b0:4fc:a80e:e6ec with SMTP id
+ d22-20020a637356000000b004fca80ee6ecmr4270561pgn.5.1678151983944; Mon, 06 Mar
+ 2023 17:19:43 -0800 (PST)
 MIME-Version: 1.0
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
- <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
- <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
- <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
- <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
- <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
- <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
- <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com>
- <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com> <CALKgVmdqircMjn+iEuta5a7v5rROmYGXmQ0VJtzcCQnZYbJX6w@mail.gmail.com>
-In-Reply-To: <CALKgVmdqircMjn+iEuta5a7v5rROmYGXmQ0VJtzcCQnZYbJX6w@mail.gmail.com>
-Reply-To: jonathan@eitm.org
-From:   Jonathan Katz <jkatz@eitmlabs.org>
-Date:   Mon, 6 Mar 2023 17:12:41 -0800
-Message-ID: <CALKgVmfZdVnqMAW81T12sD5ZLTO0fp-oADp-WradW5O=PBjp1Q@mail.gmail.com>
-Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
- missing in lower/upper fs
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+References: <20230215010717.3612794-1-rananta@google.com> <20230215010717.3612794-11-rananta@google.com>
+In-Reply-To: <20230215010717.3612794-11-rananta@google.com>
+From:   Reiji Watanabe <reijiw@google.com>
+Date:   Mon, 6 Mar 2023 17:19:27 -0800
+Message-ID: <CAAeT=FyCQxhhFqhfWbFQB9uAcUxmktRa3SC_Yfne2f_MEeXOJw@mail.gmail.com>
+Subject: Re: [REPOST PATCH 10/16] selftests: KVM: aarch64: Add KVM EVTYPE
+ filter PMU test
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>,
+        Ricardo Koller <ricarkol@google.com>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,118 +78,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Hi Raghu,
 
-In pursuing this issue, I downloaded the kernel source to see if I
-could debug it further.  In so doing, it looks like Christian's patch
-was never committed to the main source tree (sorry if my terminology
-is wrong).  This is up to and including the 6.3-rc1.  I could also
-find no mention of the fix in the log.
+On Tue, Feb 14, 2023 at 5:07=E2=80=AFPM Raghavendra Rao Ananta
+<rananta@google.com> wrote:
+>
+> KVM doest't allow the guests to modify the filter types
+> such counting events in nonsecure/secure-EL2, EL3, and
+> so on. Validate the same by force-configuring the bits
+> in PMXEVTYPER_EL0, PMEVTYPERn_EL0, and PMCCFILTR_EL0
+> registers.
+>
+> The test extends further by trying to create an event
+> for counting only in EL2 and validates if the counter
+> is not progressing.
+>
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  .../testing/selftests/kvm/aarch64/vpmu_test.c | 85 +++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_test.c b/tools/test=
+ing/selftests/kvm/aarch64/vpmu_test.c
+> index 3dfb770b538e9..5c166df245589 100644
+> --- a/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> +++ b/tools/testing/selftests/kvm/aarch64/vpmu_test.c
+> @@ -15,6 +15,10 @@
+>   * of allowing or denying the events. The guest validates it by
+>   * checking if it's able to count only the events that are allowed.
+>   *
+> + * 3. KVM doesn't allow the guest to count the events attributed with
+> + * higher exception levels (EL2, EL3). Verify this functionality by
+> + * configuring and trying to count the events for EL2 in the guest.
+> + *
+>   * Copyright (c) 2022 Google LLC.
+>   *
+>   */
+> @@ -23,6 +27,7 @@
+>  #include <test_util.h>
+>  #include <vgic.h>
+>  #include <asm/perf_event.h>
+> +#include <linux/arm-smccc.h>
+>  #include <linux/bitfield.h>
+>  #include <linux/bitmap.h>
+>
+> @@ -259,6 +264,7 @@ struct vpmu_vm {
+>  enum test_stage {
+>         TEST_STAGE_COUNTER_ACCESS =3D 1,
+>         TEST_STAGE_KVM_EVENT_FILTER,
+> +       TEST_STAGE_KVM_EVTYPE_FILTER,
+>  };
+>
+>  struct guest_data {
+> @@ -678,6 +684,70 @@ static void guest_event_filter_test(unsigned long *p=
+mu_filter)
+>         }
+>  }
+>
+> +static void guest_evtype_filter_test(void)
+> +{
+> +       int i;
+> +       struct pmc_accessor *acc;
+> +       uint64_t typer, cnt;
+> +       struct arm_smccc_res res;
+> +
+> +       pmu_enable();
+> +
+> +       /*
+> +        * KVM blocks the guests from creating events for counting in Sec=
+ure/Non-Secure Hyp (EL2),
+> +        * Monitor (EL3), and Multithreading configuration. It applies th=
+e mask
+> +        * ARMV8_PMU_EVTYPE_MASK against guest accesses to PMXEVTYPER_EL0=
+, PMEVTYPERn_EL0,
+> +        * and PMCCFILTR_EL0 registers to prevent this. Check if KVM hono=
+rs this using all possible
+> +        * ways to configure the EVTYPER.
+> +        */
 
-I am trying to manually apply this patch now, but, I am wondering if
-there was some reason that it was not applied (e.g. it introduces some
-instability?)?
+I would prefer to break long lines into multiple lines for these comments
+(or other comments in these patches), as "Linux kernel coding style"
+suggests.
+---
+[https://www.kernel.org/doc/html/latest/process/coding-style.html#breaking-=
+long-lines-and-strings]
+
+The preferred limit on the length of a single line is 80 columns.
+
+Statements longer than 80 columns should be broken into sensible
+chunks, unless exceeding 80 columns significantly increases
+readability and does not hide information.
+---
+
+> +       for (i =3D 0; i < ARRAY_SIZE(pmc_accessors); i++) {
+> +               acc =3D &pmc_accessors[i];
+> +
+> +               /* Set all filter bits (31-24), readback, and check again=
+st the mask */
+> +               acc->write_typer(0, 0xff000000);
+> +               typer =3D acc->read_typer(0);
+> +
+> +               GUEST_ASSERT_2((typer | ARMV8_PMU_EVTYPE_EVENT) =3D=3D AR=
+MV8_PMU_EVTYPE_MASK,
+> +                               typer | ARMV8_PMU_EVTYPE_EVENT, ARMV8_PMU=
+_EVTYPE_MASK);
+
+It appears that bits[29:26] don't have to be zero depending on
+feature availability to the guest (Those bits needs to be zero
+only when relevant features are not available on the guest).
+So, the expected value must be changed depending on the feature
+availability if the test checks those bits.
+I have the same comment for the cycle counter.
+
+> +
+> +               /*
+> +                * Regardless of ARMV8_PMU_EVTYPE_MASK, KVM sets perf att=
+r.exclude_hv
+> +                * to not count NS-EL2 events. Verify this functionality =
+by configuring
+> +                * a NS-EL2 event, for which the couunt shouldn't increme=
+nt.
+> +                */
+> +               typer =3D ARMV8_PMUV3_PERFCTR_INST_RETIRED;
+> +               typer |=3D ARMV8_PMU_INCLUDE_EL2 | ARMV8_PMU_EXCLUDE_EL1 =
+| ARMV8_PMU_EXCLUDE_EL0;
+> +               acc->write_typer(0, typer);
+> +               acc->write_cntr(0, 0);
+> +               enable_counter(0);
+> +
+> +               /* Issue a hypercall to enter EL2 and return */
+> +               memset(&res, 0, sizeof(res));
+> +               smccc_hvc(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0, 0, 0, 0, 0,=
+ &res);
+> +
+> +               cnt =3D acc->read_cntr(0);
+> +               GUEST_ASSERT_3(cnt =3D=3D 0, cnt, typer, i);
+> +       }
+> +
+> +       /* Check the same sequence for the Cycle counter */
+> +       write_pmccfiltr(0xff000000);
+> +       typer =3D read_pmccfiltr();
+> +       GUEST_ASSERT_2((typer | ARMV8_PMU_EVTYPE_EVENT) =3D=3D ARMV8_PMU_=
+EVTYPE_MASK,
+> +                               typer | ARMV8_PMU_EVTYPE_EVENT, ARMV8_PMU=
+_EVTYPE_MASK);
+> +
+> +       typer =3D ARMV8_PMU_INCLUDE_EL2 | ARMV8_PMU_EXCLUDE_EL1 | ARMV8_P=
+MU_EXCLUDE_EL0;
+> +       write_pmccfiltr(typer);
+> +       reset_cycle_counter();
+> +       enable_cycle_counter();
+> +
+> +       /* Issue a hypercall to enter EL2 and return */
+> +       memset(&res, 0, sizeof(res));
+> +       smccc_hvc(ARM_SMCCC_VERSION_FUNC_ID, 0, 0, 0, 0, 0, 0, 0, &res);
+> +
+> +       cnt =3D read_cycle_counter();
+
+Perhaps it's worth considering having the helpers for PMC registers
+(e.g. write_cntr()) accepting the cycle counter as the index=3D=3D31
+to simplify the test code implementation ?
 
 Thank you,
-Jonathan
+Reiji
 
-
-
-On Thu, Feb 23, 2023 at 3:11=E2=80=AFPM Jonathan Katz <jkatz@eitmlabs.org> =
-wrote:
+> +       GUEST_ASSERT_2(cnt =3D=3D 0, cnt, typer);
+> +}
+> +
+>  static void guest_code(void)
+>  {
+>         switch (guest_data.test_stage) {
+> @@ -687,6 +757,9 @@ static void guest_code(void)
+>         case TEST_STAGE_KVM_EVENT_FILTER:
+>                 guest_event_filter_test(guest_data.pmu_filter);
+>                 break;
+> +       case TEST_STAGE_KVM_EVTYPE_FILTER:
+> +               guest_evtype_filter_test();
+> +               break;
+>         default:
+>                 GUEST_ASSERT_1(0, guest_data.test_stage);
+>         }
+> @@ -1014,10 +1087,22 @@ static void run_kvm_event_filter_test(void)
+>         run_kvm_event_filter_error_tests();
+>  }
 >
-> Hi all,
+> +static void run_kvm_evtype_filter_test(void)
+> +{
+> +       struct vpmu_vm *vpmu_vm;
+> +
+> +       guest_data.test_stage =3D TEST_STAGE_KVM_EVTYPE_FILTER;
+> +
+> +       vpmu_vm =3D create_vpmu_vm(guest_code, NULL);
+> +       run_vcpu(vpmu_vm->vcpu);
+> +       destroy_vpmu_vm(vpmu_vm);
+> +}
+> +
+>  static void run_tests(uint64_t pmcr_n)
+>  {
+>         run_counter_access_tests(pmcr_n);
+>         run_kvm_event_filter_test();
+> +       run_kvm_evtype_filter_test();
+>  }
 >
-> Problem persists with me with 6.2.0
-> # mainline --install-latest
-> # reboot
+>  /*
+> --
+> 2.39.1.581.gbfd45094c4-goog
 >
-> # uname -r
-> 6.2.0-060200-generic
->
->
-> Representative log messages when mounting:
-> Feb 23 22:50:43 instance-20220314-1510-fileserver-for-overlay kernel:
-> [   44.641683] overlayfs: null uuid detected in lower fs '/', falling
-> back to xino=3Doff,index=3Doff,nfs_export=3Doff.
->
->
->
-> Representative log messages when accessing files:
-> eb 23 23:06:31 instance-20220314-1510-fileserver-for-overlay kernel: [
->  992.505357] overlayfs: failed to retrieve lower fileattr (8020
-> MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.=
-d/Storage.mcf_idx,
-> err=3D-38)
-> Feb 23 23:06:32 instance-20220314-1510-fileserver-for-overlay kernel:
-> [  993.523712] overlayfs: failed to retrieve lower fileattr (8020
-> MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.=
-d/Storage.mcf_idx,
-> err=3D-38)
->
->
-> On Mon, Jan 30, 2023 at 11:27 AM Jonathan Katz <jkatz@eitmlabs.org> wrote=
-:
-> >
-> > On Thu, Jan 26, 2023 at 5:26 AM Miklos Szeredi <miklos@szeredi.hu> wrot=
-e:
-> > >
-> > > On Wed, 18 Jan 2023 at 04:41, Jonathan Katz <jkatz@eitmlabs.org> wrot=
-e:
-> > >
-> > > > I believe that I am still having issues occur within Ubuntu 22.10 w=
-ith
-> > > > the 5.19 version of the kernel that might be associated with this
-> > > > discussion.  I apologize up front for any faux pas I make in writin=
-g
-> > > > this email.
-> > >
-> > > No need to apologize.   The fix in question went into v6.0 of the
-> > > upstream kernel.  So apparently it's still missing from the distro yo=
-u
-> > > are using.
-> >
-> > Thank you for the reply! ---  I have upgraded the Kernel and it still
-> > seems to be throwing errors.  Details follow:
-> >
-> > Distro: Ubuntu 22.10.
-> > Upgraded kernel using mainline (mainline --install-latest)
-> >
-> > # uname -a
-> > Linux instance-20220314-1510-fileserver-for-overlay
-> > 6.1.8-060108-generic #202301240742 SMP PREEMPT_DYNAMIC Tue Jan 24
-> > 08:13:53 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-> >
-> > On mount I still get the following notice in syslog (representative):
-> > Jan 30 19:11:46 instance-20220314-1510-fileserver-for-overlay kernel:
-> > [   71.613334] overlayfs: null uuid detected in lower fs '/', falling
-> > back to xino=3Doff,index=3Doff,nfs_export=3Doff.
-> >
-> > And on access (via samba) I still see the following errors in the
-> > syslog (representative):
-> > Jan 30 19:19:34 instance-20220314-1510-fileserver-for-overlay kernel:
-> > [  539.181858] overlayfs: failed to retrieve lower fileattr (8020
-> > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-172=
-2.d/Storage.mcf_idx,
-> > err=3D-38)
-> >
-> > And on the Windows client, the software still fails with the same sympt=
-omology.
-> >
-> >
-> >
-> >
-> > >
-> > > > An example error from our syslog:
-> > > >
-> > > > kernel: [2702258.538549] overlayfs: failed to retrieve lower fileat=
-tr
-> > > > (8020 MeOHH2O
-> > > > RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.d/=
-analysis.tsf,
-> > > > err=3D-38)
-> > >
-> > > Yep, looks like the same bug.
-> > >
-> > > Thanks,
-> > > Miklos
