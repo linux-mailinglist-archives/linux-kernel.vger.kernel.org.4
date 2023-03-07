@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0E46AD8AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C37B6AD8B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:07:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjCGIHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:07:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37122 "EHLO
+        id S229870AbjCGIHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbjCGIHE (ORCPT
+        with ESMTP id S229787AbjCGIH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:07:04 -0500
+        Tue, 7 Mar 2023 03:07:28 -0500
 Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF3388EF5;
-        Tue,  7 Mar 2023 00:06:50 -0800 (PST)
-X-UUID: 00081338bcbf11ed945fc101203acc17-20230307
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00E189F20;
+        Tue,  7 Mar 2023 00:07:02 -0800 (PST)
+X-UUID: 07e0fdc2bcbf11ed945fc101203acc17-20230307
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=FjBHmRxprSsiUmoCbFbBZKR1yp9tOMy5ZFNVKi6vHHk=;
-        b=HtsjVDOSETWvVL1umkJSl4ewU1wQIRTAQ0boY1QyhZFz9SGA0dTDwafM/1DJSabrhv0cTw9yuw4nTGBqJ0HcyAc1Kj65YHc2yGtBwtqqc4MMMPGE1WSsbNMxYm3vbMJKxzQ7058D9olfS4/HZ4XdAglgkdSWaLqtjB2tGMZwDnE=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=xAqiSL5q8Gh+S1L23c3KDMjgCKj/zpy72hoyqmRWx7k=;
+        b=eqok0fI4gJ7crlJp3HoYHHyjuAfRnlyN4Kx48PkbyM7gvs43DhVf7gSFnFDaK6mQdQNBavdCXC/nXXyhKC8Iu7gUIRZ16enqv6MOYGQYmyDckSyDWCGqs0kfEKUfDy4IqkUlQ+abs5bQLqtDAs5chYwNrz2YGVCRD3nHqC93UBE=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.20,REQID:507ed4bf-048f-4f93-98a9-fa8c85cc9ea2,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:25b5999,CLOUDID:0e7774b2-beed-4dfc-bd9c-e1b22fa6ccc4,B
+X-CID-O-INFO: VERSION:1.1.20,REQID:30953b9f-204f-4659-ad4a-ea9741d5f104,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:25b5999,CLOUDID:f72402f5-ddba-41c3-91d9-10eeade8eac7,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-UUID: 00081338bcbf11ed945fc101203acc17-20230307
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+X-CID-BVR: 0
+X-UUID: 07e0fdc2bcbf11ed945fc101203acc17-20230307
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
         (envelope-from <yong.wu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1072675638; Tue, 07 Mar 2023 16:06:44 +0800
+        with ESMTP id 431727085; Tue, 07 Mar 2023 16:06:57 +0800
 Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Tue, 7 Mar 2023 16:06:42 +0800
+ 15.2.1118.25; Tue, 7 Mar 2023 16:06:56 +0800
 Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
  mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Tue, 7 Mar 2023 16:06:42 +0800
+ 15.2.1118.25 via Frontend Transport; Tue, 7 Mar 2023 16:06:55 +0800
 From:   Yong Wu <yong.wu@mediatek.com>
 To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -53,9 +53,9 @@ CC:     Robin Murphy <robin.murphy@arm.com>,
         <linux-arm-kernel@lists.infradead.org>, <mingyuan.ma@mediatek.com>,
         <yf.wang@mediatek.com>, <jianjiao.zeng@mediatek.com>,
         <chengci.xu@mediatek.com>, <youlin.pei@mediatek.com>
-Subject: [PATCH v8 2/7] iommu/mediatek: Set dma_mask for PGTABLE_PA_35_EN
-Date:   Tue, 7 Mar 2023 16:05:50 +0800
-Message-ID: <20230307080555.14399-3-yong.wu@mediatek.com>
+Subject: [PATCH v8 3/7] iommu/mediatek: Fix two IOMMU share pagetable issue
+Date:   Tue, 7 Mar 2023 16:05:51 +0800
+Message-ID: <20230307080555.14399-4-yong.wu@mediatek.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230307080555.14399-1-yong.wu@mediatek.com>
 References: <20230307080555.14399-1-yong.wu@mediatek.com>
@@ -73,35 +73,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we enable PGTABLE_PA_35_EN, the PA for pgtable may be 35bits.
-Thus add dma_mask for it.
+From: "Chengci.Xu" <chengci.xu@mediatek.com>
 
-Fixes: 301c3ca12576 ("iommu/mediatek: Allow page table PA up to 35bit")
+Prepare for mt8188 to fix a two IOMMU HWs share pagetable issue.
+
+We have two MM IOMMU HWs in mt8188, one is VPP-IOMMU, another is VDO-IOMMU.
+The 2 MM IOMMU HWs share pagetable don't work in this case:
+ a) VPP-IOMMU probe firstly.
+ b) VDO-IOMMU probe.
+ c) The master for VDO-IOMMU probe (means frstdata is vpp-iommu).
+ d) The master in another domain probe. No matter it is vdo or vpp.
+Then it still create a new pagetable in step d). The problem is
+"frstdata->bank[0]->m4u_dom" was not initialized. Then when d) enter, it
+still create a new one.
+
+In this patch, we create a new variable "share_dom" for this share
+pgtable case, it should be helpful for readable. and put all the share
+pgtable logic in the mtk_iommu_domain_finalise.
+
+In mt8195, the master of VPP-IOMMU probes before than VDO-IOMMU
+from its dtsi node sequence, we don't see this issue in it. Prepare for
+mt8188.
+
 Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
 Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 ---
- drivers/iommu/mtk_iommu.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/iommu/mtk_iommu.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-index e0264d5f1c9a..f2716896fee4 100644
+index f2716896fee4..1bdb0e0022a8 100644
 --- a/drivers/iommu/mtk_iommu.c
 +++ b/drivers/iommu/mtk_iommu.c
-@@ -1297,6 +1297,14 @@ static int mtk_iommu_probe(struct platform_device *pdev)
- 			return PTR_ERR(data->bclk);
+@@ -258,6 +258,8 @@ struct mtk_iommu_data {
+ 	struct device			*smicomm_dev;
+ 
+ 	struct mtk_iommu_bank_data	*bank;
++	struct mtk_iommu_domain		*share_dom; /* For 2 HWs share pgtable */
++
+ 	struct regmap			*pericfg;
+ 	struct mutex			mutex; /* Protect m4u_group/m4u_dom above */
+ 
+@@ -624,15 +626,14 @@ static int mtk_iommu_domain_finalise(struct mtk_iommu_domain *dom,
+ 				     struct mtk_iommu_data *data,
+ 				     unsigned int region_id)
+ {
++	struct mtk_iommu_domain	*share_dom = data->share_dom;
+ 	const struct mtk_iommu_iova_region *region;
+-	struct mtk_iommu_domain	*m4u_dom;
+-
+-	/* Always use bank0 in sharing pgtable case */
+-	m4u_dom = data->bank[0].m4u_dom;
+-	if (m4u_dom) {
+-		dom->iop = m4u_dom->iop;
+-		dom->cfg = m4u_dom->cfg;
+-		dom->domain.pgsize_bitmap = m4u_dom->cfg.pgsize_bitmap;
++
++	/* Always use share domain in sharing pgtable case */
++	if (MTK_IOMMU_HAS_FLAG(data->plat_data, SHARE_PGTABLE) && share_dom) {
++		dom->iop = share_dom->iop;
++		dom->cfg = share_dom->cfg;
++		dom->domain.pgsize_bitmap = share_dom->cfg.pgsize_bitmap;
+ 		goto update_iova_region;
  	}
  
-+	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN)) {
-+		ret = dma_set_mask(dev, DMA_BIT_MASK(35));
-+		if (!ret) {
-+			dev_err(dev, "Failed to set dma_mask 35.\n");
-+			return ret;
-+		}
-+	}
-+
- 	pm_runtime_enable(dev);
+@@ -662,6 +663,9 @@ static int mtk_iommu_domain_finalise(struct mtk_iommu_domain *dom,
+ 	/* Update our support page sizes bitmap */
+ 	dom->domain.pgsize_bitmap = dom->cfg.pgsize_bitmap;
  
- 	if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_MM)) {
++	if (MTK_IOMMU_HAS_FLAG(data->plat_data, SHARE_PGTABLE))
++		data->share_dom = dom;
++
+ update_iova_region:
+ 	/* Update the iova region for this domain */
+ 	region = data->plat_data->iova_region + region_id;
+@@ -712,7 +716,9 @@ static int mtk_iommu_attach_device(struct iommu_domain *domain,
+ 		/* Data is in the frstdata in sharing pgtable case. */
+ 		frstdata = mtk_iommu_get_frst_data(hw_list);
+ 
++		mutex_lock(&frstdata->mutex);
+ 		ret = mtk_iommu_domain_finalise(dom, frstdata, region_id);
++		mutex_unlock(&frstdata->mutex);
+ 		if (ret) {
+ 			mutex_unlock(&dom->mutex);
+ 			return ret;
 -- 
 2.25.1
 
