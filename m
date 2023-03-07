@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6EC6AE1AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 527EA6AE1AB
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjCGOGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:06:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S230032AbjCGOGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230032AbjCGOGp (ORCPT
+        with ESMTP id S230088AbjCGOGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:06:45 -0500
+        Tue, 7 Mar 2023 09:06:48 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10B37EA3A
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:06:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F0D83143
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:06:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8C655CE1BDD
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D5EC433A4;
-        Tue,  7 Mar 2023 14:06:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 05D1BCE1BDF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:06:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282A4C433A7;
+        Tue,  7 Mar 2023 14:06:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678198000;
-        bh=UU7UHHKN3Bd0erW9JoS5OAfIvVMowd83YmJWUTJJyEU=;
+        s=k20201202; t=1678198003;
+        bh=zTJJcfi4SEXlPHHgiZzEiE+Bb8xBDVbYVHpApgM1uRw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uc+w1oi7J43W+sD4f84reyCRhvx0QojS7oA8M0lOPvS0aFzJKjUuEgNxf9ToK6s9H
-         t5NKs9aiJSi4y6ECXVmFzT7L5R6oT9nhikg9pIBHIJNXBQkADMSEntgvaHVatFhP03
-         n/WdLin+s9pnhkEaY9KiL/eV06cWSA4zmnKpSnCN/PHmRRkGFF7ohSZaEbIowVEgrH
-         cjgqyleUtRxu9/mpXpndcjP+jPwNVTXNOoVC2AIqc/1nArhkEuENQWWo5s4Zx9JoKu
-         ymYJt15AFHg4rKXCor9PpfVU8vVmka8c8XCfuo/hEG7AG1rOWzVnQ/SRbZUMlfgIy2
-         U5pRvMDz1+LDQ==
+        b=YG60S4NTJZYgf3VEsEcTvEU1ODazqeuMok+heVfq9BEVOpoLLoRlc+L36ndWed+Vd
+         Y/kNnRROpeBA4CAZPt2aPeEnf7Y4IpJ4veTA5A3sb0Ooe9ey1J90gXWhIdK6FBiyHD
+         ndoaG1DMjk0mbVAu3oKL8bXI3aPjCvMWiP6amOjD9EdXwwahb+svONi2hfby7rJupk
+         m00Mp4wQ6WE3qMqPcAauZnNujdlPUJnuGVA4mgZKkismjjOa+G3aWrGaKxfPtdtL0j
+         CJ6VCR1V03Z3EdfcAog4jL4BorLGM0tiu0r1pIi0gyVOFefQk13K1z0R5Ulz/XK/PC
+         gPPE/c6iQ0/+w==
 From:   Ard Biesheuvel <ardb@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -42,14 +42,14 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         Ryan Roberts <ryan.roberts@arm.com>,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Kees Cook <keescook@chromium.org>
-Subject: [PATCH v3 01/60] arm64: kernel: Disable latent_entropy GCC plugin in early C runtime
-Date:   Tue,  7 Mar 2023 15:04:23 +0100
-Message-Id: <20230307140522.2311461-2-ardb@kernel.org>
+Subject: [PATCH v3 02/60] arm64: mm: Take potential load offset into account when KASLR is off
+Date:   Tue,  7 Mar 2023 15:04:24 +0100
+Message-Id: <20230307140522.2311461-3-ardb@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307140522.2311461-1-ardb@kernel.org>
 References: <20230307140522.2311461-1-ardb@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=849; i=ardb@kernel.org; h=from:subject; bh=UU7UHHKN3Bd0erW9JoS5OAfIvVMowd83YmJWUTJJyEU=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXd+d/V5Cme/D+mi/NJGKn5Lcrht9rvkyvS90//SWbo/ 41eltc6SlkYxDgYZMUUWQRm/3238/REqVrnWbIwc1iZQIYwcHEKwERWujD89+3Q6bQ9XsZZ9DDh 9J6VMdFZz4Nmx57J2xIq8LhbYU9+DiPDvai9f307ln1mOLlHKEtLYVurzUH73XN25TuaR2Tu/97 NBAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1054; i=ardb@kernel.org; h=from:subject; bh=zTJJcfi4SEXlPHHgiZzEiE+Bb8xBDVbYVHpApgM1uRw=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdhVFh1hf+2B0Xupfde1M390PLw8mn1ebfWHuToyHbc Fq5zt61HaUsDGIcDLJiiiwCs/++23l6olSt8yxZmDmsTCBDGLg4BWAiAnoM/z0bzqXare9T+fh1 5b5a0ZvP995afGTb08qvjU+PhqrP+/OdkaHl1UefP3x2TjnRh8vj1xS7zA3frX5Bc+4bqdrH+t+ s1VgA
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,26 +61,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid build issues in the early C code related to the latent_entropy GCC
-plugin, by incorporating the C flags fragment that disables it.
+We enable CONFIG_RELOCATABLE even when CONFIG_RANDOMIZE_BASE is
+disabled, and this permits the loader (i.e., EFI) to place the kernel
+anywhere in physical memory as long as the base address is 64k aligned.
+
+This means that the 'KASLR' case described in the header that defines
+the size of the statically allocated page tables could take effect even
+when CONFIG_RANDMIZE_BASE=n. So check for CONFIG_RELOCATABLE instead.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/arm64/kernel/pi/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/include/asm/kernel-pgtable.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kernel/pi/Makefile b/arch/arm64/kernel/pi/Makefile
-index 4c0ea3cd4ea406b6..c844a0546d7f0e62 100644
---- a/arch/arm64/kernel/pi/Makefile
-+++ b/arch/arm64/kernel/pi/Makefile
-@@ -3,6 +3,7 @@
+diff --git a/arch/arm64/include/asm/kernel-pgtable.h b/arch/arm64/include/asm/kernel-pgtable.h
+index fcd14197756f0619..4d13c73171e1e360 100644
+--- a/arch/arm64/include/asm/kernel-pgtable.h
++++ b/arch/arm64/include/asm/kernel-pgtable.h
+@@ -53,7 +53,7 @@
+  * address is just pushed over a boundary and the start address isn't).
+  */
  
- KBUILD_CFLAGS	:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) -fpie \
- 		   -Os -DDISABLE_BRANCH_PROFILING $(DISABLE_STACKLEAK_PLUGIN) \
-+		   $(DISABLE_LATENT_ENTROPY_PLUGIN) \
- 		   $(call cc-option,-mbranch-protection=none) \
- 		   -I$(srctree)/scripts/dtc/libfdt -fno-stack-protector \
- 		   -include $(srctree)/include/linux/hidden.h \
+-#ifdef CONFIG_RANDOMIZE_BASE
++#ifdef CONFIG_RELOCATABLE
+ #define EARLY_KASLR	(1)
+ #else
+ #define EARLY_KASLR	(0)
 -- 
 2.39.2
 
