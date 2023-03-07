@@ -2,181 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A152D6ADD70
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A96BF6ADD62
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjCGLcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S230426AbjCGLbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbjCGLcD (ORCPT
+        with ESMTP id S230391AbjCGLbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:32:03 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20630.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C784843475;
-        Tue,  7 Mar 2023 03:31:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=diujgsvmhBVoHCCWnBRwkiQCAc+800K8j1d2KwrMOxx29ZwU2PdNc9Bj9dxVuFbGU5Shwo40QtvLDtmZDq/SXFN9kKuKvIRphaVybdx6GD68DJvkvlu4q9iXu7Ow+oO1Ia9jwb3bKnY0FXS5MmIbDOv7j4ulAOheTNFi/kyxwMNXNJ0YesN9QeUZ/HWuS3JA8ayfz5G1abQ2SElszPm0bl9ftTX1NJl331uAPcT3zHnqexXSMmTH67FSo+jjIqSdiHJzL2c/UZBSrr+u3AdrfSJvCYJJA7DC0sWLpgf2KTwlfiBb2/QO4I+j0TId002dtcV3G4clPPiIjlhnmNOu7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oqrccLHy/K9iCZa7u8ey+Sxd+xqfVbX3jNE54cX1UI0=;
- b=mE3dhRmEFwOSCUhPUHFk8opibbmNrsMBRUW7HVSD37red+C87IcAgFplS8pJH7q5U375QZhaFmdye1fdcwIZL5dKGlpGoIQwL7KarNxh7ThXQs7o1YIihT/wnU1nrD5DVCZ+REK6BA98lX3vZ4LSt3IAEFY88VXtwJDFsN/R3ciuKMja+rI3VwUlwe/bgIDOOi+Mcb/megXl1fOkuN53siWwAztvxlwoRz9HRTdm0M4PxOhO86SK4uNNpCkKFI3zpnPyWK8fvfIMr6HFTVyNU3etKkmg+ZDcCkcd6EW/l5Td+kFoB84zrJwDmRsCXevbB0gex0Oq92waZldLaAeZnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oqrccLHy/K9iCZa7u8ey+Sxd+xqfVbX3jNE54cX1UI0=;
- b=KJuRE4125cBYBbeyr30LE1GKwAgLza94azU66UI7zcag/cnaEEXJ0IEmLaljgJtMJamLvVlbOp8NjVtbOzrktCJ0AU5YR92lPKc9tthqKWwDXscvj1uwbDaFhHHEAshQvSsL7raNBr3pf+7IbdXlH8BPeuH5ppLYCs8E5s/4zls=
-Received: from DS7P222CA0003.NAMP222.PROD.OUTLOOK.COM (2603:10b6:8:2e::19) by
- DM4PR12MB5988.namprd12.prod.outlook.com (2603:10b6:8:6b::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6156.23; Tue, 7 Mar 2023 11:31:14 +0000
-Received: from DS1PEPF0000B078.namprd05.prod.outlook.com
- (2603:10b6:8:2e:cafe::a1) by DS7P222CA0003.outlook.office365.com
- (2603:10b6:8:2e::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29 via Frontend
- Transport; Tue, 7 Mar 2023 11:31:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0000B078.mail.protection.outlook.com (10.167.17.9) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6178.16 via Frontend Transport; Tue, 7 Mar 2023 11:31:14 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 7 Mar
- 2023 05:31:08 -0600
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     Rafael J Wysocki <rafael@kernel.org>,
-        Huang Rui <ray.huang@amd.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        <Mario.Limonciello@amd.com>, <Perry.Yuan@amd.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>,
-        <santosh.shukla@amd.com>, Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Ananth Narayan <ananth.narayan@amd.com>,
-        <gautham.shenoy@amd.com>, Tor Vic <torvic9@mailbox.org>,
-        Russell Haley <yumpusamongus@gmail.com>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: [PATCH v8 6/6] Documentation: cpufreq: amd-pstate: Update amd_pstate status sysfs for guided
-Date:   Tue, 7 Mar 2023 11:27:40 +0000
-Message-ID: <20230307112740.132338-7-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230307112740.132338-1-wyes.karny@amd.com>
-References: <20230307112740.132338-1-wyes.karny@amd.com>
+        Tue, 7 Mar 2023 06:31:02 -0500
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A226F56166;
+        Tue,  7 Mar 2023 03:30:26 -0800 (PST)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3278mdJu015800;
+        Tue, 7 Mar 2023 06:29:22 -0500
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3p43s9g9fg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 06:29:22 -0500
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 327BTKDG031916
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Mar 2023 06:29:20 -0500
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 7 Mar 2023 06:29:19 -0500
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Tue, 7 Mar 2023 06:29:19 -0500
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Tue, 7 Mar 2023 06:29:19 -0500
+Received: from okan.localdomain (IST-LT-43126.ad.analog.com [10.25.36.20])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 327BSiLp011140;
+        Tue, 7 Mar 2023 06:28:47 -0500
+From:   Okan Sahin <okan.sahin@analog.com>
+To:     <okan.sahin@analog.com>
+CC:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Cosmin Tanislav <demonsingur@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ibrahim Tilki <Ibrahim.Tilki@analog.com>,
+        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        "Ramona Bolboaca" <ramona.bolboaca@analog.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>
+Subject: [PATCH v6 0/5] Add MAX77541/MAX77540 PMIC Support
+Date:   Tue, 7 Mar 2023 14:28:10 +0300
+Message-ID: <20230307112835.81886-1-okan.sahin@analog.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000B078:EE_|DM4PR12MB5988:EE_
-X-MS-Office365-Filtering-Correlation-Id: 651aabe1-ae6f-485b-8560-08db1eff75b5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: H4nJyLVBaZwV3BgL+ogLwUt+cPAU2BfrOROLEooVGL/xMLNdflGo+mz3gAaveYa9au3ANfy1X80Sd59aNSpNjFVfXxuQUh/Tt6NC33/QJ4isWTti8IXF0QJ//P649FyFV7cWfR999Sn2Ebqki8ajQi4kpZUPy9O6uXOlPj/KHluTG+ih+21IPv50NbFDgNJ8fHfJ+vFu0c0oDVaV9H8aLz3DfqvBgcPA4jz7UNKUbvkKHAC7oHCR5OquKhDf1VBwBBo64m8CWB/c7LrV43eMiVGGkQelwWpS2qb3FjQ1w0IJ5s7D2vk25oEnPnheQavMLH+5Ajf9MmaZqBqf4lbtnCLRRMc3F7GcZAPczwFGRVkRjNbrveJ8306/De+vZ0ceEMJu7J26B2Sy02Ji5wfOYxD6WRYkIHT512SUCe79O7TplhBgulIlgSYNlGC7zmcuDSrasKD8ajXP5qVm2FdBvdWUhzxH06uyC7RlJaAGrkuxcK9uhLY4qnMTDH0KX3A3Krq6M8cegbyxmrwe2VNKOeTyHU49oP8/V14tOorfJDy1nw2wkBHzZXq3VED/TIkl1SFgdgxiKkBsOBo+82xWd+EC22hhodxv1e1RgOIHpYG7Oiqdh55xDmpQA2+VBbmj8/cV8i0n7KKQW95fwM8JjC+UmWrWzZ4y35fM6s+WBgj5Xj0e+z66zzyKEEFtkcMMKxOTu3Rn25N7baZuiZzOJ6+EJcMO6ygO6/JBRMTYPGc=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199018)(36840700001)(46966006)(40470700004)(82310400005)(82740400003)(6666004)(47076005)(36860700001)(83380400001)(36756003)(478600001)(6636002)(81166007)(316002)(356005)(110136005)(7696005)(336012)(16526019)(5660300002)(41300700001)(1076003)(54906003)(40460700003)(26005)(15650500001)(426003)(70586007)(7416002)(186003)(44832011)(8676002)(2616005)(8936002)(2906002)(40480700001)(70206006)(4326008)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 11:31:14.2600
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 651aabe1-ae6f-485b-8560-08db1eff75b5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B078.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5988
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-ORIG-GUID: PB2r2TabIPF9nOqSEVu8sUtr9frayXks
+X-Proofpoint-GUID: PB2r2TabIPF9nOqSEVu8sUtr9frayXks
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_06,2023-03-07_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ mlxscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0 spamscore=0
+ priorityscore=1501 suspectscore=0 mlxlogscore=999 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303070103
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update amd_pstate status sysfs for guided mode.
+MFD, regulator and ADC driver and related bindings for MAX77540/MAX77541.
+The patches are required to be applied in sequence.
 
-Acked-by: Huang Rui <ray.huang@amd.com>
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 31 ++++++++++++++++-----
- 1 file changed, 24 insertions(+), 7 deletions(-)
+Changes in v6:
+* Patch 1: "dt-bindings: regulator: max77541: Add ADI MAX77541/MAX77540 Regulator"
+  * NO CHANGE
+* Patch 2: "regulator: max77541: Add ADI MAX77541/MAX77540 Regulator Support"
+  * Drop unnecessary headers
+* Patch 3: "iio: adc: : max77541 Add ADI MAX77541 ADC Support"
+  * Drop unnecessary headers
+* Patch 4: "dt-bindings: mfd: max77541: adi,max77541.yaml Add MAX77541 bindings"
+  * NO CHANGE
+* Patch 5: "mfd: max77541: Add MAX77541/MAX77540 PMIC Support"
+  * Add more explanation to Kconfig
+  * Drop unnecessary headers
+  * Change differentiate method for different IC's
+  * Modify order of registers in header file
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 6e5298b521b1..1cf40f69278c 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -303,13 +303,18 @@ efficiency frequency management method on AMD processors.
- AMD Pstate Driver Operation Modes
- =================================
- 
--``amd_pstate`` CPPC has two operation modes: CPPC Autonomous(active) mode and
--CPPC non-autonomous(passive) mode.
--active mode and passive mode can be chosen by different kernel parameters.
--When in Autonomous mode, CPPC ignores requests done in the Desired Performance
--Target register and takes into account only the values set to the Minimum requested
--performance, Maximum requested performance, and Energy Performance Preference
--registers. When Autonomous is disabled, it only considers the Desired Performance Target.
-+``amd_pstate`` CPPC has 3 operation modes: autonomous (active) mode,
-+non-autonomous (passive) mode and guided autonomous (guided) mode.
-+Active/passive/guided mode can be chosen by different kernel parameters.
-+
-+- In autonomous mode, platform ignores the desired performance level request
-+  and takes into account only the values set to the minimum, maximum and energy
-+  performance preference registers.
-+- In non-autonomous mode, platform gets desired performance level
-+  from OS directly through Desired Performance Register.
-+- In guided-autonomous mode, platform sets operating performance level
-+  autonomously according to the current workload and within the limits set by
-+  OS through min and max performance registers.
- 
- Active Mode
- ------------
-@@ -338,6 +343,15 @@ to the Performance Reduction Tolerance register. Above the nominal performance l
- processor must provide at least nominal performance requested and go higher if current
- operating conditions allow.
- 
-+Guided Mode
-+-----------
-+
-+``amd_pstate=guided``
-+
-+If ``amd_pstate=guided`` is passed to kernel command line option then this mode
-+is activated.  In this mode, driver requests minimum and maximum performance
-+level and the platform autonomously selects a performance level in this range
-+and appropriate to the current workload.
- 
- User Space Interface in ``sysfs`` - General
- ===========================================
-@@ -358,6 +372,9 @@ control its functionality at the system level.  They are located in the
- 	"passive"
- 		The driver is functional and in the ``passive mode``
- 
-+	"guided"
-+		The driver is functional and in the ``guided mode``
-+
- 	"disable"
- 		The driver is unregistered and not functional now.
- 
+Changes in v5:
+* Patch 1: "dt-bindings: regulator: max77541: Add ADI MAX77541/MAX77540 Regulator"
+  * Drop compatible properties.
+* Patch 2: "regulator: max77541: Add ADI MAX77541/MAX77540 Regulator Support"
+  * Change if-else ladder to switch case for chip->id
+  * Drop driver_data in platform_device_id
+* Patch 3: "iio: adc: : max77541 Add ADI MAX77541 ADC Support"
+  * Drop max77541_adc_iio struct
+* Patch 4: "dt-bindings: mfd: max77541: adi,max77541.yaml Add MAX77541 bindings"
+  * Drop allOf
+* Patch 5: "mfd: max77541: Add MAX77541/MAX77540 PMIC Support"
+  * Dont use compatible when using MFD_CELL_OF MACRO
+
+Changes in v4:
+* Patch 1: "dt-bindings: regulator: Add ADI MAX77541/MAX77540 Regulator"
+  * NO CHANGE
+* Patch 2: "drivers: regulator: Add ADI MAX77541/MAX77540 Regulator Support"
+  * Drop OF ID Table
+  * Drop driver_data in platform_device_id
+* Patch 3: "drivers: iio: adc: Add ADI MAX77541 ADC Support"
+  * Add missing blank line
+* Patch 4: "dt-bindings: mfd: adi,max77541.yaml Add MAX77541 bindings"
+  * NO CHANGE(Order of patchset changed, and [4/5] has dependency to [1/5])
+* Patch 5: "drivers: mfd: Add MAX77541/MAX77540 PMIC Support"
+  * Use pointers in the driver_data
+  * Use probe_new instead of probe
+  * Use PLATFORM_DEVID_NONE macro instead of "-1"
+
+Changes in v3:
+* Patch 1: "drivers: mfd: Add ADI MAX77541/MAX77540 PMIC Support"
+  * Change struct name from max77541_dev to max77541
+  * Adjust max-line-length lower than 80
+* Patch 2: "dt-bindings: mfd: Add ADI MAX77541/MAX77540"
+  * Remove adc object as we do not need
+  * Remove adc node from example
+* Patch 3: "drivers: regulator: Add ADI MAX77541/MAX77540 Regulator Support"
+  * Change node name from "BUCK#_id" to "buck#_id" in regulator desc
+* Patch 4: "dt-bindings: regulator: Add ADI MAX77541/MAX77540 Regulator"
+  * Change node name from "BUCK" to "buck" in regulators
+* Patch 5: "drivers: iio: adc: Add ADI MAX77541 ADC Support"
+  * Convert voltage values from V to mV for scaling.
+  * Convert temperature values from C to miliC for scale and offset
+  * Do not set offset bit in info_mask_separate for voltage that does not need offset
+  * Remove unnecessary dev_get_drvdata() instead of it use dev_get_regmap to have regmap.
+  * Assing hard coded name for adc dev name
+
+Changes in v2:
+* Patch 1: "drivers: mfd: Add MAX77541/MAX77540 PMIC Support"
+  * Drop "this patch adds" from commit message.
+  * Drop redundant blank lines.
+  * Drop module version
+  * Use definition for parameter of devm_mfd_add_devices(.., -1,..)
+  * Use desc in chip_info to adding desc for different devices.
+  * Add missing headers and forward declarations.
+  * Drop unused elements from max77541_dev struct
+  * Add chip_info into max77541_dev struct to identify different devices.
+* Patch 2: "dt-bindings: mfd: adi,max77541.yaml Add MAX77541 bindings"
+  * Drop "this patch adds" from commit message.
+  * Fix $ref path
+  * Drop adc part under allOf
+  * Keep only one example (more complex one)
+  * Fix make dt_binding_check errors.(trailing space, No newline)
+* Patch 3: "drivers: regulator: Add MAX77541 Regulator Support"
+  * Drop "this patch adds" from commit message.
+  * Add trailing comma for required structs.
+  * Fix wrong indentation.
+  * Drop redundant blank lines.
+  * Drop max77541_regulator_dev struct.
+  * Use "regulator_desc *desc" for both regulator
+    regarding to "max77541->id"
+* Patch 4: "dt-bindings: regulator: max77541-regulator.yaml Add MAX77541
+            Regulator bindings"
+  * Drop "this patch adds" from commit message.
+  * Chance filename (matching compatible), so adi,max77541-regulator.yaml
+  * Fix make dt_binding_check errors.(trailing space, No newline)
+* Patch 5: "drivers: iio: adc: Add MAX77541 ADC Support"
+  * Drop "this patch adds" from commit message.
+  * Drop redundant blank lines.
+  * Fix wrong include path.
+  * Use switch instead of if-else for range setting in max77541_adc_scale
+  * Move max77541_adc_range enum from max77541.h to here.
+  * Use definition from units.h
+  * Drop unused elements from max77541_adc_iio struct
+  * Drop the .data from platform_device_id
+
+Okan Sahin (5):
+  dt-bindings: regulator: max77541: Add ADI MAX77541/MAX77540 Regulator
+  regulator: max77541: Add ADI MAX77541/MAX77540 Regulator Support
+  iio: adc: max77541: Add ADI MAX77541 ADC Support
+  dt-bindings: mfd: max77541: Add ADI MAX77541/MAX77540
+  mfd: max77541: Add ADI MAX77541/MAX77540 PMIC Support
+
+ .../devicetree/bindings/mfd/adi,max77541.yaml |  68 ++++++
+ .../regulator/adi,max77541-regulator.yaml     |  38 +++
+ drivers/iio/adc/Kconfig                       |  11 +
+ drivers/iio/adc/Makefile                      |   1 +
+ drivers/iio/adc/max77541-adc.c                | 194 +++++++++++++++
+ drivers/mfd/Kconfig                           |  13 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max77541.c                        | 224 ++++++++++++++++++
+ drivers/regulator/Kconfig                     |   9 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/max77541-regulator.c        | 153 ++++++++++++
+ include/linux/mfd/max77541.h                  |  97 ++++++++
+ 12 files changed, 810 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541-regulator.yaml
+ create mode 100644 drivers/iio/adc/max77541-adc.c
+ create mode 100644 drivers/mfd/max77541.c
+ create mode 100644 drivers/regulator/max77541-regulator.c
+ create mode 100644 include/linux/mfd/max77541.h
+
 -- 
-2.34.1
+2.30.2
 
