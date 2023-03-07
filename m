@@ -2,108 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A69246ADA84
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E84E6ADA87
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230403AbjCGJjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
+        id S230404AbjCGJkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjCGJjB (ORCPT
+        with ESMTP id S229901AbjCGJkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:39:01 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1E938E89;
-        Tue,  7 Mar 2023 01:38:59 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7CC6840004;
-        Tue,  7 Mar 2023 09:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678181938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NDq6dn5XEZ71hXN61bU2yKt3eeIpO4KyeL1VjmE9bE8=;
-        b=A6nvvRdSS5kpgFpOPvgMexh7eJZlPxmw6Z0aTE3+5g3Ep+dHs0rWa0Rf+weD8TcTlug+IH
-        qX0PYpRYU7XWS9P75itYVa10bfR70eF/WEsqH09SQf7r61xWwj2ueIceEBKW4UAVSt5av3
-        lf62gTpalVFwOMpBktqJHw2O9EOOrsmvVvWcA/QumZPcXEkZxu83zMuftWycJqTRFO5r84
-        6k722+eRbN76rK5G5ERfrLgeGNbNC98rZ9OeiL9Wjh5D728jGwBObq5NQjtDIdeallmLCi
-        6Z7RIq1wFyk0QPlEZm9naIchhqUtt1UTeBJdUul/8aO8L0f5EVIbyRMjgUvJhA==
-Date:   Tue, 7 Mar 2023 10:38:54 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        syzbot+bd85b31816913a32e473@syzkaller.appspotmail.com,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: ieee802154: fix a null pointer in
- nl802154_trigger_scan
-Message-ID: <20230307103854.6536ad12@xps-13>
-In-Reply-To: <20230307090546.994258-1-dzm91@hust.edu.cn>
-References: <20230307090546.994258-1-dzm91@hust.edu.cn>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 7 Mar 2023 04:40:49 -0500
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4289F3D0A1
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:40:48 -0800 (PST)
+Received: by mail-io1-f77.google.com with SMTP id m25-20020a6bea19000000b0074cc271437bso6740702ioc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 01:40:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678182047;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IvbFoG9v2/yHE6QziVGs+IqGEwhK3oeHPZrzHiBqA8E=;
+        b=HyVb2hix7wlHu96ljDnSOEurpSu1b6xYtHWFajLppujDilf82r8Zdo9DcGOJ3IyQW/
+         sM3ZQZzwfbZvQ8evV1LoKAQlMI5G6cEm+DHhlJsUaxMidTMxyB/2Eorht1qBfUSkTywC
+         eIH1Fw6kG869LLqI8dpWByFlkhPkKJ4myUmltGVRG/CHS7+H8QKKQ2BSkJdJah+kgwDC
+         OQHYVY4goF/gBAp/dG8mVlREbkWHcfAvGMHN7SXjZjHmbUXGMXv2MqiuItucLnAGqJcq
+         Wu/JbxLjo8wXaZiXcup8I7eeZo4XLbqDQKjSW76j76MRFQVstYyaFk2dYll2oiy8DBUI
+         9wjA==
+X-Gm-Message-State: AO0yUKWbQP2B57/tVgbgI86z/qh/52VVU72j9JvGQvgaTl6gXjO+8q1t
+        aqbWm1lISe8SxesJkudbbdM69mDafHMxgOZrY5+xCxLv5a2+
+X-Google-Smtp-Source: AK7set8pbKSkqVoVVFBVTi66lhjFABa0+EALH2TkGSW3jXhBY45NLCY9YHSd6d4JTgYt2Q/kNi2+n4YvrwKGe2r8uujIphdrbd+g
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:ec09:0:b0:74d:4684:9dda with SMTP id
+ c9-20020a6bec09000000b0074d46849ddamr6282528ioh.1.1678182047543; Tue, 07 Mar
+ 2023 01:40:47 -0800 (PST)
+Date:   Tue, 07 Mar 2023 01:40:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cff89d05f64c34b6@google.com>
+Subject: [syzbot] [fs?] KMSAN: uninit-value in vfs_write
+From:   syzbot <syzbot+c9bfd85eca611ebf5db1@syzkaller.appspotmail.com>
+To:     bcrl@kvack.org, glider@google.com, linux-aio@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dongliang,
+Hello,
 
-dzm91@hust.edu.cn wrote on Tue,  7 Mar 2023 17:05:46 +0800:
+syzbot found the following issue on:
 
-> There is a null pointer dereference if NL802154_ATTR_SCAN_TYPE is
-> not set by the user.
->=20
-> Fix this by adding a null pointer check.
->=20
-> Reported-and-tested-by: syzbot+bd85b31816913a32e473@syzkaller.appspotmail=
-.com
+HEAD commit:    eda666ff2276 kmsan: silence -Wmissing-prototypes warnings
+git tree:       https://github.com/google/kmsan.git master
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=170c25d9480000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f27365aeb365b358
+dashboard link: https://syzkaller.appspot.com/bug?extid=c9bfd85eca611ebf5db1
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10825603480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17cdabab480000
 
-Still wrong :)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/6789c9ec45dd/disk-eda666ff.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/cb93f5d6b4fd/vmlinux-eda666ff.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b51c1727def7/bzImage-eda666ff.xz
 
-> Fixes: a0b6106672b5 ("ieee802154: Convert scan error messages to extack")
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
-> ---
-> v1->v2: add fixes tag
->  net/ieee802154/nl802154.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/net/ieee802154/nl802154.c b/net/ieee802154/nl802154.c
-> index 2215f576ee37..1cf00cffd63f 100644
-> --- a/net/ieee802154/nl802154.c
-> +++ b/net/ieee802154/nl802154.c
-> @@ -1412,7 +1412,8 @@ static int nl802154_trigger_scan(struct sk_buff *sk=
-b, struct genl_info *info)
->  		return -EOPNOTSUPP;
->  	}
-> =20
-> -	if (!nla_get_u8(info->attrs[NL802154_ATTR_SCAN_TYPE])) {
-> +	if (!info->attrs[NL802154_ATTR_SCAN_TYPE] ||
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c9bfd85eca611ebf5db1@syzkaller.appspotmail.com
 
-Already handled :)
+=====================================================
+BUG: KMSAN: uninit-value in aio_rw_done fs/aio.c:1520 [inline]
+BUG: KMSAN: uninit-value in aio_write+0x899/0x950 fs/aio.c:1600
+ aio_rw_done fs/aio.c:1520 [inline]
+ aio_write+0x899/0x950 fs/aio.c:1600
+ io_submit_one+0x1d1c/0x3bf0 fs/aio.c:2019
+ __do_sys_io_submit fs/aio.c:2078 [inline]
+ __se_sys_io_submit+0x293/0x770 fs/aio.c:2048
+ __x64_sys_io_submit+0x92/0xd0 fs/aio.c:2048
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-> +	    !nla_get_u8(info->attrs[NL802154_ATTR_SCAN_TYPE])) {
+Uninit was created at:
+ slab_post_alloc_hook mm/slab.h:766 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ __kmem_cache_alloc_node+0x71f/0xce0 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:967 [inline]
+ __kmalloc+0x11d/0x3b0 mm/slab_common.c:981
+ kmalloc_array include/linux/slab.h:636 [inline]
+ bcm_tx_setup+0x80e/0x29d0 net/can/bcm.c:930
+ bcm_sendmsg+0x3a2/0xce0 net/can/bcm.c:1351
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ sock_write_iter+0x495/0x5e0 net/socket.c:1108
+ call_write_iter include/linux/fs.h:2189 [inline]
+ aio_write+0x63a/0x950 fs/aio.c:1600
+ io_submit_one+0x1d1c/0x3bf0 fs/aio.c:2019
+ __do_sys_io_submit fs/aio.c:2078 [inline]
+ __se_sys_io_submit+0x293/0x770 fs/aio.c:2048
+ __x64_sys_io_submit+0x92/0xd0 fs/aio.c:2048
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Also handled!
-
->  		NL_SET_ERR_MSG(info->extack, "Malformed request, missing scan type");
->  		return -EINVAL;
->  	}
+CPU: 1 PID: 5034 Comm: syz-executor350 Not tainted 6.2.0-rc6-syzkaller-80422-geda666ff2276 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/12/2023
+=====================================================
 
 
-Thanks,
-Miqu=C3=A8l
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
