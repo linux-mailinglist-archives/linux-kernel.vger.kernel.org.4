@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A173E6AE0D8
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:40:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF03E6AE0E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCGNkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:40:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37774 "EHLO
+        id S230354AbjCGNkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:40:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCGNkE (ORCPT
+        with ESMTP id S230270AbjCGNkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:40:04 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980E228D2C;
-        Tue,  7 Mar 2023 05:39:29 -0800 (PST)
-Received: from [192.168.10.12] (unknown [39.45.145.7])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F2216602082;
-        Tue,  7 Mar 2023 13:39:23 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678196366;
-        bh=WMlBdvHIScuFkkoGPtchKNS9u9P7bVVOeTivxhzjEG8=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=OzGvfTjKJ4s7PoMfHks/3lUdyc4iM4qP/SliI7hK+EiFlD3OiRuFDXM+UdgBdtW6L
-         XuTMtTrI9hme7OJX95cfox8cbNQdcrUFLid4o2gO4Wz5jmMfuoUqbd0ME2+CYyKxZ7
-         aKd2wo27Xgs6qAbez7XMauEjCogyMUeENDi9+fJYq6NVb/8BRLVPVP3958xWERIi+I
-         d7xKJ5KY6i1CYrU7JIR1jAEfgIlB7XSdPFajWTgHzMgjdTpjWTHC0MlkDs0yztjR/+
-         EBZCF1x/XWmiihGF2RCt6sMZUeRj31TDFVWbHioTiNI3LV+yWhmM9MxC2eRB9B8R82
-         HoJPKpOeWgGDg==
-Message-ID: <df8a446a-e8a9-3b3d-fd0f-791f0d01a0c9@collabora.com>
-Date:   Tue, 7 Mar 2023 18:39:20 +0500
+        Tue, 7 Mar 2023 08:40:40 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0098237F
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 05:40:04 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id ec29so21535259edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 05:40:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678196401;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XC4sVtRhs3Zf6p7vrRaYLHSxDBdL4Db27wMBtNXLbys=;
+        b=rUV2Kjw3Vymhi+3LKUBky0XBHG5Bn1YsrJOxxxgNTd/dIPrFQa0FRIoo4OJVabJWKC
+         ektMNMm9qE+yli/81Yj1BBSBM+L8jcraUhWPIgjWV1GGnFSZJltoowdn8WgQGDg4/3Jf
+         chAOi0h/L4I6TwCh9AfTdguU0Cqpeo048SkVAynoadLVkiOr/zyDz5Ey5N0tpU7Ekmc8
+         KMtQb0dfhpnKwcLFWLhvXDvBTJ+RQvHTuiEUt82hV/ZJrBqyJ0d8MxtXEih5R+b+ujbA
+         TCekESNVB6kCqT2dJbKl5bQtdZ0kPVHQS7d689xPq3c90SV1hNsccw34xMkGNzXGEyk6
+         HZew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678196401;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XC4sVtRhs3Zf6p7vrRaYLHSxDBdL4Db27wMBtNXLbys=;
+        b=ZxG6VvVpnRTMVBKnL+M8/xwtADxM2NJ3iV5mQgF/6cfI6AKpIDNKJFol4mE1denfxv
+         Aw9WohiaF2JuE4wxAmuv56+ONQrmhP1CzoVXNPQxEfttWRIgIene23awF7p+Uz4yUQli
+         8qrItTSIFl0Ot8XfwRoDias8YIcFlrAdPY10guWTlciRLTwWXyHDIJVTX20bbA6sNTav
+         EbhhCPcfoRc4Th3dZRdHRw3IPrv8cgoyK73fs7WdGRODzK3g40CYIdl+Ke+UTD1TP0xZ
+         GXsWuvOrGf/2/3OZB224ehZqiy0NsqmiZkotYgZz5XtYHJAMRlu03k1K8NBjn9JcuTwu
+         skMw==
+X-Gm-Message-State: AO0yUKXeCEOshc5DJVBj7Akx/OCdatrmrjk9SmNp61eg8KqaVGPAq1Hj
+        C8o5BjDm3//X7kfjGFGobdnV0Q==
+X-Google-Smtp-Source: AK7set+FpSCgfpPHYilbHlEYTxWZBSw+CdQ3OZVBTpRaGlOWlMx6OlovVFAPZa2UCli9MyVzxG6i3g==
+X-Received: by 2002:a17:907:6e1f:b0:8af:2a97:91d4 with SMTP id sd31-20020a1709076e1f00b008af2a9791d4mr16691610ejc.14.1678196401027;
+        Tue, 07 Mar 2023 05:40:01 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:a60f:e604:c252:1f3d? ([2a02:810d:15c0:828:a60f:e604:c252:1f3d])
+        by smtp.gmail.com with ESMTPSA id ga1-20020a170906b84100b008b17879ec95sm6090160ejb.22.2023.03.07.05.40.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 05:40:00 -0800 (PST)
+Message-ID: <08aa9325-ed36-250c-d4d6-de6af1e82de5@linaro.org>
+Date:   Tue, 7 Mar 2023 14:39:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@collabora.com,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] qede: remove linux/version.h and linux/compiler.h
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] dt-bindings: pinctrl: qcom: lpass-lpi: correct
+ description of second reg
 Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-References: <20230303185351.2825900-1-usama.anjum@collabora.com>
- <20230303155436.213ee2c0@kernel.org>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20230303155436.213ee2c0@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230302155255.857065-1-krzysztof.kozlowski@linaro.org>
+ <CACRpkdbe=sHG9KVaGrbEaFoVbMY-2=r2X4WkcbNhCfZ9KOw1sQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CACRpkdbe=sHG9KVaGrbEaFoVbMY-2=r2X4WkcbNhCfZ9KOw1sQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/23 4:54 AM, Jakub Kicinski wrote:
-> On Fri,  3 Mar 2023 23:53:50 +0500 Muhammad Usama Anjum wrote:
->> make versioncheck reports the following:
->> ./drivers/net/ethernet/qlogic/qede/qede.h: 10 linux/version.h not needed.
->> ./drivers/net/ethernet/qlogic/qede/qede_ethtool.c: 7 linux/version.h not needed.
+On 07/03/2023 14:32, Linus Walleij wrote:
+> On Thu, Mar 2, 2023 at 4:52 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> 
+>> The description of second IO address is a bit confusing.  It is supposed
+>> to be the MCC range which contains the slew rate registers, not the slew
+>> rate register base.  The Linux driver then accesses slew rate register
+>> with hard-coded offset (0xa000).
 >>
->> So remove linux/version.h from both of these files. Also remove
->> linux/compiler.h while at it as it is also not being used.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> # Form letter - net-next is closed
-> 
-> The merge window for v6.3 has begun and therefore net-next is closed
-> for new drivers, features, code refactoring and optimizations.
-> We are currently accepting bug fixes only.
-> 
-> Please repost when net-next reopens after Mar 6th.
-It is Mar 7th. Please review.
+> LGTM, is this something I should just apply or will you collect a larger
+> series of Qcom DT patches this time around as well?
 
-> 
-> RFC patches sent for review only are obviously welcome at any time.
+Please grab it. I think I cleaned up Qualcomm pinctrl bindings from
+technical debt, thus no more work for me!
 
--- 
-BR,
-Muhammad Usama Anjum
+Best regards,
+Krzysztof
+
