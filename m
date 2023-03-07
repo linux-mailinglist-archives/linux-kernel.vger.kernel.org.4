@@ -2,176 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4389E6ADAE5
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 675D86ADAEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231151AbjCGJs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:48:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S229998AbjCGJuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:50:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjCGJsL (ORCPT
+        with ESMTP id S229890AbjCGJuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:48:11 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC4854CA4;
-        Tue,  7 Mar 2023 01:47:44 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 75E7B6602FE6;
-        Tue,  7 Mar 2023 09:47:41 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678182462;
-        bh=FIy3VD1GcrwVsZV6x47mkmmqykaahfq9tEgiYJql5Dw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AcS5VvvvocXA1mATfJ1yLsnVJXSonHGJFAjamsq7Df9hwXl8FiLubQx5r1Zc+JBbf
-         y6e6FQ9q8IEdd/qZDiOXUOw7A/YcJczybOx9O+ml3scQNTvyh436KGEoZDzY56oPs9
-         YJz2WhQInhdERkkVE/ub+lAu3+mY8vDuYaS9hgdnBFmyVMHSNGMyFJ6b4z8NzhKsno
-         bNPxNpoHdF2HTwwX7nCGBClWaiEKCXJJOCjkn9zlNWlRxc+fqYQqMfGJANfLlKLOtm
-         Bj2c8X6SoFft0i7NaGYNzWoPlbwGmleC+/+IQAeoGzm7TSfDcH2GtRGpnnTVWpD2p4
-         RVmOFyaIqMwGw==
-Message-ID: <f7453c57-d921-a789-75f6-c837ca50187c@collabora.com>
-Date:   Tue, 7 Mar 2023 10:47:39 +0100
+        Tue, 7 Mar 2023 04:50:37 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5491654CBF
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 01:50:11 -0800 (PST)
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PW9bS4gsszKqJx;
+        Tue,  7 Mar 2023 17:47:32 +0800 (CST)
+Received: from [10.67.110.89] (10.67.110.89) by kwepemi500009.china.huawei.com
+ (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 7 Mar
+ 2023 17:49:36 +0800
+Message-ID: <50e3be73-5fb1-0505-6ddb-422cee6e466b@huawei.com>
+Date:   Tue, 7 Mar 2023 17:49:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 12/19] arm64: dts: mediatek: mt8192-asurada: Couple
- VGPU and VSRAM_OTHER regulators
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
- <20230301095523.428461-13-angelogioacchino.delregno@collabora.com>
- <CAGXv+5GHdtbheL6wxtDo-szk+=3BGk2z93SBowd4Z=E9XupZkw@mail.gmail.com>
- <5dba27e1-d480-ea24-c1ba-03bb7f77b1b1@collabora.com>
- <CAGXv+5FwNfZ7TwKVMM5_uAjYQ6ZmhZVFsWREb_da-jxC6EUVJw@mail.gmail.com>
- <CAGXv+5F8A4kLq3y8dE4mrcVb338-afDorWsS5MRBvWVPgiAhEA@mail.gmail.com>
- <e1b9d901-421c-3509-c92a-c59d49ff2b0d@collabora.com>
- <CAGXv+5EcAMmGro9UFLmQvkgcBykS9rsUdF_YsdbRUbtipfEFJA@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5EcAMmGro9UFLmQvkgcBykS9rsUdF_YsdbRUbtipfEFJA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] kobject: Fix global-out-of-bounds in
+ kobject_action_type()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <prajnoha@redhat.com>, <linux-kernel@vger.kernel.org>
+References: <20230307063757.247430-1-xiafukun@huawei.com>
+ <ZAby1q1kA71S2WCv@kroah.com>
+ <396e6a21-5270-1624-1229-1e59701cce35@huawei.com>
+ <ZAcDlAkujTLkbrqr@kroah.com>
+From:   Xia Fukun <xiafukun@huawei.com>
+In-Reply-To: <ZAcDlAkujTLkbrqr@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.89]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500009.china.huawei.com (7.221.188.199)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/03/23 10:44, Chen-Yu Tsai ha scritto:
-> On Tue, Mar 7, 2023 at 5:30 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 07/03/23 10:24, Chen-Yu Tsai ha scritto:
->>> On Fri, Mar 3, 2023 at 12:09 PM Chen-Yu Tsai <wenst@chromium.org> wrote:
->>>>
->>>> On Thu, Mar 2, 2023 at 6:17 PM AngeloGioacchino Del Regno
->>>> <angelogioacchino.delregno@collabora.com> wrote:
->>>>>
->>>>> Il 02/03/23 11:03, Chen-Yu Tsai ha scritto:
->>>>>> On Wed, Mar 1, 2023 at 5:55 PM AngeloGioacchino Del Regno
->>>>>> <angelogioacchino.delregno@collabora.com> wrote:
->>>>>>>
->>>>>>> Add coupling for these regulators, as VSRAM_OTHER is used to power the
->>>>>>> GPU SRAM, and they have a strict voltage output relation to satisfy in
->>>>>>> order to ensure GPU stable operation.
->>>>>>> While at it, also add voltage constraint overrides for the GPU SRAM
->>>>>>> regulator "mt6359_vsram_others" so that we stay in a safe range of
->>>>>>> 0.75-0.80V.
->>>>>>>
->>>>>>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>>>>> ---
->>>>>>>     arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi | 9 +++++++++
->>>>>>>     1 file changed, 9 insertions(+)
->>>>>>>
->>>>>>> diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
->>>>>>> index 8570b78c04a4..f858eca219d7 100644
->>>>>>> --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
->>>>>>> +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
->>>>>>> @@ -447,6 +447,13 @@ &mt6359_vrf12_ldo_reg {
->>>>>>>            regulator-always-on;
->>>>>>>     };
->>>>>>>
->>>>>>> +&mt6359_vsram_others_ldo_reg {
->>>>>>> +       regulator-min-microvolt = <750000>;
->>>>>>> +       regulator-max-microvolt = <800000>;
->>>>>>> +       regulator-coupled-with = <&mt6315_7_vbuck1>;
->>>>>>> +       regulator-coupled-max-spread = <10000>;
->>>>>>
->>>>>> Looking again at the downstream OPP table, it seems there's no voltage
->>>>>> difference requirement. It only needs V_SRAM >= V_GPU. Same applies to
->>>>>> MT8195. Looks like only MT8183 and MT8186 need V_SRAM - V_GPU >= 10000.
->>>>>
->>>>> On MT8195 we don't need any regulator coupling. There, the GPU-SRAM voltage
->>>>> is fixed at .. I don't remember, 0.7V? - anyway - MT8195 doesn't need to
->>>>> scale the vsram.
->>>>
->>>> Looks like it's fixed at 0.75V. I guess we're Ok on MT8195.
->>>>
->>>>>>
->>>>>> Would setting max-spread to 0 work? I ask because with both regulator's
->>>>>> maximum voltage set to 0.8V, there's no way we can reach the highest
->>>>>> OPP.
->>>>>>
->>>>>
->>>>> No that doesn't work. I can raise the Vgpu max voltage to 0.88V to solve the
->>>>> issue right here and right now, or we can leave it like that and revisit it
->>>>> later.
->>>>>
->>>>> I would at this point go for setting mt6315_7_vbuck1's max-microvolt to
->>>>> 880000, as this is the maximum recommended voltage for the GPU as per the
->>>>> MT8192 datasheet, it would also make sense as we would be still describing
->>>>> the hardware in a correct manner.
->>>>>
->>>>> What do you think?
->>>>
->>>> If it's just to accommodate the coupler stuff, I say just set the maximum
->>>> at the lowest possible setting that satisfies the coupler constraint and
->>>> granularity of the regulator. The regulator does 6250 uV steps, so I guess
->>>> we could set the maximum at 812500 uV, with a comment stating the nominal
->>>> voltage of 800000 uV and that the extra 12500 uV is to workaround coupler
->>>> limitations.
->>>>
->>>> Does that sound OK?
->>>
->>> Even without changing anything, the coupler seems to work OK:
->>>
->>>    vsram_others                     1    1      0  normal   800mV
->>> 0mA   750mV   800mV
->>>       10006000.syscon:power-controller-domain   1
->>>            0mA     0mV     0mV
->>>    Vgpu                             2    2      0  normal   800mV
->>> 0mA   606mV   800mV
->>>       13000000.gpu-mali             1
->>> 0mA   800mV   800mV
->>>       10006000.syscon:power-controller-domain   1
->>>            0mA     0mV     0mV
->>>
->>> Am I missing something?
->>>
->>
->> I don't think you are... I may be getting confused by all of the changesets
->> that I'm pushing at once.
->>
->> Hence, is this commit fine as it is?
+I know how to modify it to meet your requirements:
+
+	for (action = 0; action < ARRAY_SIZE(kobject_actions); action++) {
+		if (strncmp(kobject_actions[action], buf, count_first) != 0)
+			continue;
+		if (strlen(kobject_actions[action]) > count_first)
+			continue;
+		if (args)
+			*args = args_start;
+		*type = action;
+		ret = 0;
+		break;
+	}
+
+So I will modify the patch and resubmit it. Please review it again
+
+在 2023/3/7 17:27, Greg KH 写道:
+
 > 
-> It works for some reason. Maybe it's a bug in the coupler. Either way I
-> think it works, even though the numbers might be a bit off. We can revisit
-> it later.
+> On Tue, Mar 07, 2023 at 05:08:02PM +0800, Xia Fukun wrote:
+>> Thanks for your reply.
+>> Your understanding is correct."offline\0\0\0\0\0\0\0\0\0\0" is indeed blocked
+>> from matching "offline" and returns a failed result.
+>>
+>> I'm not sure whether to relax the restrictions to make it match successfully.
+>> After all, the incoming count is too large and not the actual length of
+>> "offline".
 > 
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-
-
-Thanks!
-
-Angelo
-
+> But that doesn't matter at all.  Sometimes you do not have control over
+> the buffer length when writing to a file like this, what matters is the
+> content of the buffer and we should stop at the first \0 as that's the
+> "end of a string" in this type of api.
+> 
+> So your change here might break existing userspace code, and we can't do
+> that, sorry.
+> 
+> thanks,
+> 
+> greg k-h
