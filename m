@@ -2,112 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F20A6AE484
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882BA6AE482
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjCGPWa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 10:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S230200AbjCGPW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:22:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCGPWF (ORCPT
+        with ESMTP id S229954AbjCGPWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:22:05 -0500
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD003584;
-        Tue,  7 Mar 2023 07:19:50 -0800 (PST)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pZZ5X-000U6x-Rz; Tue, 07 Mar 2023 16:18:51 +0100
-Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pZZ5X-001GRG-Ke; Tue, 07 Mar 2023 16:18:51 +0100
-Message-ID: <04af6ead8bd4ac6680d5dc5024b0c9ef2e422778.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 0/7 v4] sh: various doc, build, init fixes
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>,
-        linux-sh@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 07 Mar 2023 16:18:50 +0100
-In-Reply-To: <20230306040037.20350-1-rdunlap@infradead.org>
-References: <20230306040037.20350-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Tue, 7 Mar 2023 10:22:02 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845C6136CB
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:19:43 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id u9so53771252edd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:19:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678202380;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8A0oGiHbXpdCnrD62ngIGsGezBV7Cv5UAeMhuYzoX0g=;
+        b=geizSapugaHROWrVGsQnWr/dCZU7wvrng7DV4SGe0KUZQRQWMXwkcUewE5Tef8ieGJ
+         sP/aaySqxkcdOBhNUZEjzrPgIk1EOAgNvxomRk3PNyS7gUYoREdgw/vdXPAMU81pV1Bx
+         W07fBPFUZTLpRkpjPpDXIbjrt1S0GuZgaepvulXj2NHtmGoJ14PxUQScmEdhNzrY8kIN
+         zGCZpncBYk+rQ/YOixtmgv414Rc7JOI4xeCFhf0Ur4ABKMu2ofDG37/ToifS8WMajiQL
+         yMblVdBGmFJIIBHh25vkvO/4sVFKo/Fjhl/ToJGsd1eZGjlRVSfSNcSpePZUEa9WHns0
+         CmOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678202380;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8A0oGiHbXpdCnrD62ngIGsGezBV7Cv5UAeMhuYzoX0g=;
+        b=g+I/O94d5W+2p4Tc70hKkJIXAKgtu4LWSOnov9yYaf6KzXjNlfU4ni1INWOlj54hON
+         UWaUhfGf2Ruy1U2D29jE7+CRsUHov/ACDacTSFo67gOlbG9mQ8Pr2x2rXWH6nyLIKXAN
+         SPDbqgQCNM20VruNK3UDaGtf2KjGGEQvuWgag1O9zK7xBQfeBB2xK8ZDuSXpz53e+acF
+         GxwY3Hpw8tnJxLHZXDwg3XsrccHHXEyfMKrkl/wZzq8G0JP9GoH7roZeuDLUa0rT2xEy
+         f3DlZTDZLPCcnaNaFQeXqpz6cB2mUwsVYAyNg2xjvoQTEYNeA+XANIFS3Dpk9oxPnyY8
+         MSww==
+X-Gm-Message-State: AO0yUKXZO2ULkgOvi4+6c+19A8wPWE+1nz0RR2NsICBK2enEvAQAv+nX
+        WV2rfbrtLIP1BMqEbB/uQ4sW2g==
+X-Google-Smtp-Source: AK7set83GaVEvUkFlsR9cXM91TEHzQDTNBEkuKX58uHQUXifG2PlIRuHuvOT0pNDQQwGucSVBhKhKA==
+X-Received: by 2002:a05:6402:1357:b0:4ad:7bd3:bb43 with SMTP id y23-20020a056402135700b004ad7bd3bb43mr15205289edw.21.1678202380303;
+        Tue, 07 Mar 2023 07:19:40 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:a60f:e604:c252:1f3d? ([2a02:810d:15c0:828:a60f:e604:c252:1f3d])
+        by smtp.gmail.com with ESMTPSA id d17-20020a50f691000000b004c0cc79f4aesm6856641edn.92.2023.03.07.07.19.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 07:19:39 -0800 (PST)
+Message-ID: <95c57098-aa37-a203-2ed3-f36449abefea@linaro.org>
+Date:   Tue, 7 Mar 2023 16:19:38 +0100
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.155.194
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 05/11] dt-bindings: clock: qcom: gcc-ipq9574: Add Q6 gcc
+ clock control
+Content-Language: en-US
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
+        loic.poulain@linaro.org, quic_eberman@quicinc.com,
+        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-6-git-send-email-quic_mmanikan@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1678164097-13247-6-git-send-email-quic_mmanikan@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy!
-
-On Sun, 2023-03-05 at 20:00 -0800, Randy Dunlap wrote:
-> All of these patches have been sent previously, anywhere from
-> one to 3 times.  All patches are now called "v4".
+On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
+> Add support for the QDSP6 gcc clock control used on IPQ9574
+> based devices. This would allow mpd remoteproc driver to control
+> the required gcc clocks to bring the subsystem out of reset.
 > 
-> This refresh/resend is to assist the new SH maintainer.
+> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+> ---
+>  include/dt-bindings/clock/qcom,ipq9574-gcc.h | 159 ++++++++++---------
+>  1 file changed, 83 insertions(+), 76 deletions(-)
 > 
->  [PATCH 1/7 v4] sh: SH2007: drop the bad URL info
->  [PATCH 2/7 v4] sh: nmi_debug: fix return value of __setup handler
->  [PATCH 3/7 v4] sh: init: use OF_EARLY_FLATTREE for early init
->  [PATCH 4/7 v4] sh: math-emu: fix macro redefined warning
->  [PATCH 5/7 v4] sh: remove sh5/sh64 last fragments
->  [PATCH 6/7 v4] sh: fix Kconfig entry for NUMA => SMP
->  [PATCH 7/7 v4] sh: mcount.S: fix build error when PRINTK is not enabled
-> 
-> diffstat:
->  Documentation/kbuild/kbuild.rst                           |    1 -
->  Documentation/scheduler/sched-arch.rst                    |    2 --
->  Documentation/translations/zh_CN/scheduler/sched-arch.rst |    2 --
->  arch/sh/Kconfig                                           |    4 ++++
->  arch/sh/Kconfig.debug                                     |    2 +-
->  arch/sh/boards/Kconfig                                    |    1 -
->  arch/sh/kernel/head_32.S                                  |    6 +++---
->  arch/sh/kernel/nmi_debug.c                                |    4 ++--
->  arch/sh/kernel/setup.c                                    |    4 ++--
->  arch/sh/math-emu/sfp-util.h                               |    4 ----
->  scripts/checkstack.pl                                     |    7 -------
->  tools/perf/arch/common.c                                  |    2 --
->  tools/scripts/Makefile.arch                               |    5 -----
->  tools/testing/selftests/mm/Makefile                       |    2 +-
->  tools/testing/selftests/mm/run_vmtests.sh                 |    2 +-
->  15 files changed, 14 insertions(+), 34 deletions(-)
-> 
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Hitoshi Mitake <mitake@dcl.info.waseda.ac.jp>
-> Cc: linux-sh@vger.kernel.org
-> Cc: Frank Rowand <frowand.list@gmail.com>
-> Cc: devicetree@vger.kernel.org
-> Cc: Arnd Bergmann <arnd@arndb.de>
+> diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+> index c89e96d568c6..8bd6350ecd56 100644
+> --- a/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+> +++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
+> @@ -138,80 +138,87 @@
+>  #define WCSS_AHB_CLK_SRC				129
+>  #define GCC_Q6_AHB_CLK					130
+>  #define GCC_Q6_AHB_S_CLK				131
+> -#define GCC_WCSS_ECAHB_CLK				132
+> -#define GCC_WCSS_ACMT_CLK				133
 
-Thanks for these fixes. All changes look good to me and I'm going to test
-them on my SH-7785LCR board on top of 6.3-rc1 and report back. The documentation
-changes obviously won't have any impact in this regard.
+That's an ABI break, if file was accepted. Or a very weird change
+anyway, if it wasn't (why adding entry and immediately changing it?).
 
-Adrian
+Best regards,
+Krzysztof
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
