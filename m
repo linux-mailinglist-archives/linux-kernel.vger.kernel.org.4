@@ -2,79 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593696ADBFA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E7D6ADC06
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 11:33:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjCGKbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 05:31:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
+        id S230211AbjCGKde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 05:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjCGKbO (ORCPT
+        with ESMTP id S230432AbjCGKdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 05:31:14 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9ABC58C1C;
-        Tue,  7 Mar 2023 02:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678185052; x=1709721052;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=SLl1OqBXiMS0Tw8+D/cIywKGd+YIZF1lMtVXvkNLbQo=;
-  b=hI114185Ej74jdUezMoZKjAGh7tfzUNQfybJ5JVxXTmrX8rJNdh/cXxZ
-   YNKr8wLVkHOmxD+m9O5Oq3Tl1tTjDgTPXxvhE35WpHvjuVDgY7gA0HBSb
-   T6UP/UXahfbVyKIoRlbc8pD0AJvkP2o+MoJhnTVhKVs41Ta18Pq40NR4G
-   aOEYMAv9rRrVyG9LZ8XSCtYgWzM0iLTbOcUnQSjbu9QLZA/ZQKCk9dKU1
-   FYcc243jTrmQfReZ8Szve4XuR93997Ec1aTFSBSUQZ6DGDmZNy60WYERH
-   Ff2qJ1ZEMqDUXqNDg1LJ1wgVZLT3YBoFb1odsiYefvZbxXSJ6UODIrDvH
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,240,1673938800"; 
-   d="scan'208";a="215129817"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Mar 2023 03:30:51 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Tue, 7 Mar 2023 03:30:50 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.16 via Frontend Transport; Tue, 7 Mar 2023 03:30:40 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <perex@perex.cz>, <tiwai@suse.com>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <james.schulman@cirrus.com>,
-        <david.rhodes@cirrus.com>, <tanureal@opensource.cirrus.com>,
-        <rf@opensource.cirrus.com>, <oder_chiou@realtek.com>,
-        <shengjiu.wang@gmail.com>, <Xiubo.Lee@gmail.com>,
-        <festevam@gmail.com>, <nicoleotsuka@gmail.com>,
-        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
-        <kernel@pengutronix.de>, <linux-imx@nxp.com>,
-        <cezary.rojewski@intel.com>,
-        <pierre-louis.bossart@linux.intel.com>,
-        <peter.ujfalusi@linux.intel.com>,
-        <yung-chuan.liao@linux.intel.com>,
-        <ranjani.sridharan@linux.intel.com>,
-        <kai.vehmanen@linux.intel.com>, <matthias.bgg@gmail.com>,
-        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
-        <vkoul@kernel.org>, <daniel.baluta@nxp.com>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <jarkko.nikula@bitmer.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <sound-open-firmware@alsa-project.org>,
-        <linux-tegra@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH] ASoC: do not include pm_runtime.h if not used
-Date:   Tue, 7 Mar 2023 12:30:22 +0200
-Message-ID: <20230307103022.1007420-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 7 Mar 2023 05:33:00 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA046195;
+        Tue,  7 Mar 2023 02:32:32 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3278kgIu028652;
+        Tue, 7 Mar 2023 10:32:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : content-type : in-reply-to
+ : mime-version; s=pp1; bh=+pkEcBhDX7653P4CgydRWh+nO8hBvA2oBpE7vIGSOY8=;
+ b=jKrHW8txiPnT4lgmdT/ergByxJ+ttompPYwaSualxsvkt/Hl/PDUfSwtdObvPluh5nA2
+ bBeAohQ9B2sWlia3RViKmTGHFvfn8UhqmCPlL/Pi8qeB8oRenfw3tmiyqMVl/CEAxD7Q
+ QhrgDzLX59fO3U+AllTuMasUeE/uA3Is5rMgSwiF1g/yCQ9Nill85HhX2DacVt/pQKG0
+ dF8SYwqg+MYjPByBdfS9WaYv9C6ShNIUo7UBZ52ctbqe6CJ3CZdkcp7WxWMnXRAFrikm
+ lw71hhhBAaRufOCASa+h7xtnqvIbtMJxXNvvNLPpEpAB7xb+KzD4M1Iw0My6QcMhYafG lg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4ysekr19-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 10:32:21 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3279uCiQ028541;
+        Tue, 7 Mar 2023 10:32:21 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p4ysekr07-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 10:32:21 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3271Ojd2005745;
+        Tue, 7 Mar 2023 10:32:18 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3p41brc3j0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 10:32:18 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 327AWGCD39059878
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 7 Mar 2023 10:32:16 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3EA4320043;
+        Tue,  7 Mar 2023 10:32:16 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7F4C920040;
+        Tue,  7 Mar 2023 10:32:14 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Tue,  7 Mar 2023 10:32:14 +0000 (GMT)
+Date:   Tue, 7 Mar 2023 16:02:13 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Lee Duncan <leeman.duncan@gmail.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Duncan <lduncan@suse.com>, Martin Wilck <mwilck@suse.com>,
+        Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH] scsi: core: Add BLIST_NO_ASK_VPD_SIZE for some VDASD
+Message-ID: <20230307103213.GA1005120@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20220928181350.9948-1-leeman.duncan@gmail.com>
+ <88927435-ae58-c24b-e7b7-b675985de433@leemhuis.info>
+ <86D685F2-D411-460B-A09B-6BE942372F0A@gmail.com>
+ <yq1zg8pl1nq.fsf@ca-mkp.ca.oracle.com>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <yq1zg8pl1nq.fsf@ca-mkp.ca.oracle.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: oaQB3v3l3wz0LKU3agbe5k4sXfoFBVSn
+X-Proofpoint-GUID: eRvwFxqcGhOo7TEa-KxFXtMofFzJRTyl
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-07_04,2023-03-07_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
+ malwarescore=0 adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0
+ mlxlogscore=999 suspectscore=0 bulkscore=0 priorityscore=1501 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303070095
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,482 +98,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not include pm_runtime.h header in files where runtime PM support is
-not implemented.
+* Martin K. Petersen <martin.petersen@oracle.com> [2023-03-06 21:54:42]:
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
- sound/hda/hdac_regmap.c                                   | 1 -
- sound/pci/hda/hda_bind.c                                  | 1 -
- sound/soc/amd/acp/acp-pci.c                               | 1 -
- sound/soc/amd/acp/acp-platform.c                          | 1 -
- sound/soc/codecs/cs35l45.h                                | 1 -
- sound/soc/codecs/max98090.c                               | 1 -
- sound/soc/codecs/max98373-i2c.c                           | 1 -
- sound/soc/codecs/pcm186x.c                                | 1 -
- sound/soc/codecs/rk3328_codec.c                           | 1 -
- sound/soc/codecs/rt5682-i2c.c                             | 1 -
- sound/soc/codecs/rt5682s.c                                | 1 -
- sound/soc/codecs/tas2562.c                                | 1 -
- sound/soc/codecs/tas5720.c                                | 1 -
- sound/soc/codecs/tas6424.c                                | 1 -
- sound/soc/codecs/wm_adsp.c                                | 1 -
- sound/soc/fsl/imx-audmix.c                                | 1 -
- sound/soc/intel/atom/sst/sst_acpi.c                       | 1 -
- sound/soc/intel/atom/sst/sst_ipc.c                        | 1 -
- sound/soc/intel/atom/sst/sst_loader.c                     | 1 -
- sound/soc/intel/atom/sst/sst_pci.c                        | 1 -
- sound/soc/intel/atom/sst/sst_stream.c                     | 1 -
- sound/soc/mediatek/mt8186/mt8186-afe-control.c            | 1 -
- sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c | 1 -
- sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c  | 1 -
- sound/soc/mediatek/mt8192/mt8192-afe-control.c            | 2 --
- sound/soc/qcom/lpass-sc7180.c                             | 1 -
- sound/soc/qcom/lpass-sc7280.c                             | 1 -
- sound/soc/soc-compress.c                                  | 1 -
- sound/soc/soc-pcm.c                                       | 1 -
- sound/soc/sof/intel/hda-loader-skl.c                      | 1 -
- sound/soc/sof/intel/hda-stream.c                          | 1 -
- sound/soc/sof/intel/skl.c                                 | 1 -
- sound/soc/sof/mediatek/mt8186/mt8186-clk.c                | 1 -
- sound/soc/sof/mediatek/mt8195/mt8195-clk.c                | 1 -
- sound/soc/tegra/tegra20_ac97.c                            | 1 -
- sound/soc/ti/omap-mcbsp-st.c                              | 1 -
- 36 files changed, 37 deletions(-)
+Hi Martin,
+> 
+> Lee,
+> 
+> > I really prefer specifically listing ???offending??? hardware, rather than
+> > automatically covering for it.
+> 
+> Would the following patch work?
+> 
 
-diff --git a/sound/hda/hdac_regmap.c b/sound/hda/hdac_regmap.c
-index fe3587547cfe..7cfaa908ff57 100644
---- a/sound/hda/hdac_regmap.c
-+++ b/sound/hda/hdac_regmap.c
-@@ -17,7 +17,6 @@
- #include <linux/regmap.h>
- #include <linux/export.h>
- #include <linux/pm.h>
--#include <linux/pm_runtime.h>
- #include <sound/core.h>
- #include <sound/hdaudio.h>
- #include <sound/hda_regmap.h>
-diff --git a/sound/pci/hda/hda_bind.c b/sound/pci/hda/hda_bind.c
-index 1a868dd9dc4b..323c388b1219 100644
---- a/sound/pci/hda/hda_bind.c
-+++ b/sound/pci/hda/hda_bind.c
-@@ -10,7 +10,6 @@
- #include <linux/module.h>
- #include <linux/export.h>
- #include <linux/pm.h>
--#include <linux/pm_runtime.h>
- #include <sound/core.h>
- #include <sound/hda_codec.h>
- #include "hda_local.h"
-diff --git a/sound/soc/amd/acp/acp-pci.c b/sound/soc/amd/acp/acp-pci.c
-index a0c84cd07fde..8154fbfd1229 100644
---- a/sound/soc/amd/acp/acp-pci.c
-+++ b/sound/soc/amd/acp/acp-pci.c
-@@ -15,7 +15,6 @@
- #include <linux/interrupt.h>
- #include <linux/pci.h>
- #include <linux/platform_device.h>
--#include <linux/pm_runtime.h>
- #include <linux/module.h>
- 
- #include "amd.h"
-diff --git a/sound/soc/amd/acp/acp-platform.c b/sound/soc/amd/acp/acp-platform.c
-index 447612a7a762..f220378ec20e 100644
---- a/sound/soc/amd/acp/acp-platform.c
-+++ b/sound/soc/amd/acp/acp-platform.c
-@@ -18,7 +18,6 @@
- #include <sound/pcm_params.h>
- #include <sound/soc.h>
- #include <sound/soc-dai.h>
--#include <linux/pm_runtime.h>
- #include <linux/dma-mapping.h>
- 
- #include "amd.h"
-diff --git a/sound/soc/codecs/cs35l45.h b/sound/soc/codecs/cs35l45.h
-index 53fe9d2b7b15..0555702eac03 100644
---- a/sound/soc/codecs/cs35l45.h
-+++ b/sound/soc/codecs/cs35l45.h
-@@ -11,7 +11,6 @@
- #ifndef CS35L45_H
- #define CS35L45_H
- 
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- 
-diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
-index 06ed2a938108..508086e6e39f 100644
---- a/sound/soc/codecs/max98090.c
-+++ b/sound/soc/codecs/max98090.c
-@@ -10,7 +10,6 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/pm.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- #include <linux/acpi.h>
-diff --git a/sound/soc/codecs/max98373-i2c.c b/sound/soc/codecs/max98373-i2c.c
-index ec0905df65d1..0ef33404252d 100644
---- a/sound/soc/codecs/max98373-i2c.c
-+++ b/sound/soc/codecs/max98373-i2c.c
-@@ -9,7 +9,6 @@
- #include <linux/mod_devicetable.h>
- #include <linux/of.h>
- #include <linux/of_gpio.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- #include <linux/cdev.h>
-diff --git a/sound/soc/codecs/pcm186x.c b/sound/soc/codecs/pcm186x.c
-index dd21803ba13c..451a8fd8fac5 100644
---- a/sound/soc/codecs/pcm186x.c
-+++ b/sound/soc/codecs/pcm186x.c
-@@ -12,7 +12,6 @@
- #include <linux/init.h>
- #include <linux/delay.h>
- #include <linux/pm.h>
--#include <linux/pm_runtime.h>
- #include <linux/regulator/consumer.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
-diff --git a/sound/soc/codecs/rk3328_codec.c b/sound/soc/codecs/rk3328_codec.c
-index 1d523bfd9d84..9697aefc6e03 100644
---- a/sound/soc/codecs/rk3328_codec.c
-+++ b/sound/soc/codecs/rk3328_codec.c
-@@ -11,7 +11,6 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/mfd/syscon.h>
- #include <sound/dmaengine_pcm.h>
-diff --git a/sound/soc/codecs/rt5682-i2c.c b/sound/soc/codecs/rt5682-i2c.c
-index 2935c1bb81f3..05d1d8ef0b9c 100644
---- a/sound/soc/codecs/rt5682-i2c.c
-+++ b/sound/soc/codecs/rt5682-i2c.c
-@@ -11,7 +11,6 @@
- #include <linux/init.h>
- #include <linux/delay.h>
- #include <linux/pm.h>
--#include <linux/pm_runtime.h>
- #include <linux/i2c.h>
- #include <linux/platform_device.h>
- #include <linux/spi/spi.h>
-diff --git a/sound/soc/codecs/rt5682s.c b/sound/soc/codecs/rt5682s.c
-index f5e5dbc3b0f0..8dc63a81d1e0 100644
---- a/sound/soc/codecs/rt5682s.c
-+++ b/sound/soc/codecs/rt5682s.c
-@@ -11,7 +11,6 @@
- #include <linux/init.h>
- #include <linux/delay.h>
- #include <linux/pm.h>
--#include <linux/pm_runtime.h>
- #include <linux/i2c.h>
- #include <linux/platform_device.h>
- #include <linux/spi/spi.h>
-diff --git a/sound/soc/codecs/tas2562.c b/sound/soc/codecs/tas2562.c
-index b486d0bd86c9..a788a5412000 100644
---- a/sound/soc/codecs/tas2562.c
-+++ b/sound/soc/codecs/tas2562.c
-@@ -8,7 +8,6 @@
- #include <linux/errno.h>
- #include <linux/device.h>
- #include <linux/i2c.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- #include <linux/gpio/consumer.h>
-diff --git a/sound/soc/codecs/tas5720.c b/sound/soc/codecs/tas5720.c
-index 3885c0bf0b01..4ada42d04ee9 100644
---- a/sound/soc/codecs/tas5720.c
-+++ b/sound/soc/codecs/tas5720.c
-@@ -11,7 +11,6 @@
- #include <linux/errno.h>
- #include <linux/device.h>
- #include <linux/i2c.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- #include <linux/regulator/consumer.h>
-diff --git a/sound/soc/codecs/tas6424.c b/sound/soc/codecs/tas6424.c
-index f8ff69fa2549..f8398cbef11a 100644
---- a/sound/soc/codecs/tas6424.c
-+++ b/sound/soc/codecs/tas6424.c
-@@ -11,7 +11,6 @@
- #include <linux/errno.h>
- #include <linux/device.h>
- #include <linux/i2c.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
- #include <linux/regulator/consumer.h>
-diff --git a/sound/soc/codecs/wm_adsp.c b/sound/soc/codecs/wm_adsp.c
-index ea0dbc634ecf..84b0ab461074 100644
---- a/sound/soc/codecs/wm_adsp.c
-+++ b/sound/soc/codecs/wm_adsp.c
-@@ -15,7 +15,6 @@
- #include <linux/firmware.h>
- #include <linux/list.h>
- #include <linux/pm.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/slab.h>
-diff --git a/sound/soc/fsl/imx-audmix.c b/sound/soc/fsl/imx-audmix.c
-index 1292a845c424..54383c489c62 100644
---- a/sound/soc/fsl/imx-audmix.c
-+++ b/sound/soc/fsl/imx-audmix.c
-@@ -15,7 +15,6 @@
- #include <linux/clk.h>
- #include <sound/soc.h>
- #include <sound/soc-dapm.h>
--#include <linux/pm_runtime.h>
- #include "fsl_sai.h"
- #include "fsl_audmix.h"
- 
-diff --git a/sound/soc/intel/atom/sst/sst_acpi.c b/sound/soc/intel/atom/sst/sst_acpi.c
-index 3be64430c256..abddcf6687f5 100644
---- a/sound/soc/intel/atom/sst/sst_acpi.c
-+++ b/sound/soc/intel/atom/sst/sst_acpi.c
-@@ -15,7 +15,6 @@
- #include <linux/io.h>
- #include <linux/platform_device.h>
- #include <linux/firmware.h>
--#include <linux/pm_runtime.h>
- #include <linux/pm_qos.h>
- #include <linux/dmi.h>
- #include <linux/acpi.h>
-diff --git a/sound/soc/intel/atom/sst/sst_ipc.c b/sound/soc/intel/atom/sst/sst_ipc.c
-index 4e039c7173d8..3fc2c9a6c44d 100644
---- a/sound/soc/intel/atom/sst/sst_ipc.c
-+++ b/sound/soc/intel/atom/sst/sst_ipc.c
-@@ -15,7 +15,6 @@
- #include <linux/firmware.h>
- #include <linux/sched.h>
- #include <linux/delay.h>
--#include <linux/pm_runtime.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
- #include <sound/soc.h>
-diff --git a/sound/soc/intel/atom/sst/sst_loader.c b/sound/soc/intel/atom/sst/sst_loader.c
-index eea889001c24..bf4ba6bcc429 100644
---- a/sound/soc/intel/atom/sst/sst_loader.c
-+++ b/sound/soc/intel/atom/sst/sst_loader.c
-@@ -20,7 +20,6 @@
- #include <linux/sched.h>
- #include <linux/firmware.h>
- #include <linux/dmaengine.h>
--#include <linux/pm_runtime.h>
- #include <linux/pm_qos.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
-diff --git a/sound/soc/intel/atom/sst/sst_pci.c b/sound/soc/intel/atom/sst/sst_pci.c
-index 5862fe968083..4058b4f80a0c 100644
---- a/sound/soc/intel/atom/sst/sst_pci.c
-+++ b/sound/soc/intel/atom/sst/sst_pci.c
-@@ -15,7 +15,6 @@
- #include <linux/pci.h>
- #include <linux/fs.h>
- #include <linux/firmware.h>
--#include <linux/pm_runtime.h>
- #include <sound/core.h>
- #include <sound/soc.h>
- #include <asm/platform_sst_audio.h>
-diff --git a/sound/soc/intel/atom/sst/sst_stream.c b/sound/soc/intel/atom/sst/sst_stream.c
-index ea1ef8a61fa6..862a19ae5429 100644
---- a/sound/soc/intel/atom/sst/sst_stream.c
-+++ b/sound/soc/intel/atom/sst/sst_stream.c
-@@ -15,7 +15,6 @@
- #include <linux/firmware.h>
- #include <linux/sched.h>
- #include <linux/delay.h>
--#include <linux/pm_runtime.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
- #include <sound/soc.h>
-diff --git a/sound/soc/mediatek/mt8186/mt8186-afe-control.c b/sound/soc/mediatek/mt8186/mt8186-afe-control.c
-index d714e9641571..55edf6374578 100644
---- a/sound/soc/mediatek/mt8186/mt8186-afe-control.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-afe-control.c
-@@ -6,7 +6,6 @@
- // Author: Jiaxin Yu <jiaxin.yu@mediatek.com>
- 
- #include "mt8186-afe-common.h"
--#include <linux/pm_runtime.h>
- 
- enum {
- 	MTK_AFE_RATE_8K = 0,
-diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-index 970b980a81e6..f21c904e2981 100644
---- a/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-da7219-max98357.c
-@@ -10,7 +10,6 @@
- #include <linux/input.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
--#include <linux/pm_runtime.h>
- #include <sound/jack.h>
- #include <sound/pcm_params.h>
- #include <sound/soc.h>
-diff --git a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-index 8f77a0bc1dc8..ab5a9ae90d9c 100644
---- a/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-mt6366-rt1019-rt5682s.c
-@@ -12,7 +12,6 @@
- #include <linux/input.h>
- #include <linux/module.h>
- #include <linux/of_device.h>
--#include <linux/pm_runtime.h>
- #include <sound/jack.h>
- #include <sound/pcm_params.h>
- #include <sound/rt5682.h>
-diff --git a/sound/soc/mediatek/mt8192/mt8192-afe-control.c b/sound/soc/mediatek/mt8192/mt8192-afe-control.c
-index 9163e05e54e1..d01b62e10088 100644
---- a/sound/soc/mediatek/mt8192/mt8192-afe-control.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-afe-control.c
-@@ -6,8 +6,6 @@
- // Author: Shane Chien <shane.chien@mediatek.com>
- //
- 
--#include <linux/pm_runtime.h>
--
- #include "mt8192-afe-common.h"
- 
- enum {
-diff --git a/sound/soc/qcom/lpass-sc7180.c b/sound/soc/qcom/lpass-sc7180.c
-index 41db6617e2ed..dc892fac4baa 100644
---- a/sound/soc/qcom/lpass-sc7180.c
-+++ b/sound/soc/qcom/lpass-sc7180.c
-@@ -12,7 +12,6 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
--#include <linux/pm_runtime.h>
- #include <dt-bindings/sound/sc7180-lpass.h>
- #include <sound/pcm.h>
- #include <sound/soc.h>
-diff --git a/sound/soc/qcom/lpass-sc7280.c b/sound/soc/qcom/lpass-sc7280.c
-index d43f480cbae3..ee4a4b553e74 100644
---- a/sound/soc/qcom/lpass-sc7280.c
-+++ b/sound/soc/qcom/lpass-sc7280.c
-@@ -8,7 +8,6 @@
- #include <linux/module.h>
- #include <sound/pcm.h>
- #include <sound/soc.h>
--#include <linux/pm_runtime.h>
- 
- #include <dt-bindings/sound/sc7180-lpass.h>
- 
-diff --git a/sound/soc/soc-compress.c b/sound/soc/soc-compress.c
-index 870f13e1d389..843ae2b4ecb1 100644
---- a/sound/soc/soc-compress.c
-+++ b/sound/soc/soc-compress.c
-@@ -20,7 +20,6 @@
- #include <sound/initval.h>
- #include <sound/soc-dpcm.h>
- #include <sound/soc-link.h>
--#include <linux/pm_runtime.h>
- 
- static int snd_soc_compr_components_open(struct snd_compr_stream *cstream)
- {
-diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-index 579a44d81d9a..808a243a4a5a 100644
---- a/sound/soc/soc-pcm.c
-+++ b/sound/soc/soc-pcm.c
-@@ -14,7 +14,6 @@
- #include <linux/init.h>
- #include <linux/delay.h>
- #include <linux/pinctrl/consumer.h>
--#include <linux/pm_runtime.h>
- #include <linux/slab.h>
- #include <linux/workqueue.h>
- #include <linux/export.h>
-diff --git a/sound/soc/sof/intel/hda-loader-skl.c b/sound/soc/sof/intel/hda-loader-skl.c
-index 69fdef8f89ae..1e77ca936f80 100644
---- a/sound/soc/sof/intel/hda-loader-skl.c
-+++ b/sound/soc/sof/intel/hda-loader-skl.c
-@@ -15,7 +15,6 @@
- #include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/pci.h>
--#include <linux/pm_runtime.h>
- #include <linux/slab.h>
- #include <sound/hdaudio_ext.h>
- #include <sound/sof.h>
-diff --git a/sound/soc/sof/intel/hda-stream.c b/sound/soc/sof/intel/hda-stream.c
-index 7f0fd05a96e6..7968173c19c6 100644
---- a/sound/soc/sof/intel/hda-stream.c
-+++ b/sound/soc/sof/intel/hda-stream.c
-@@ -15,7 +15,6 @@
-  * Hardware interface for generic Intel audio DSP HDA IP
-  */
- 
--#include <linux/pm_runtime.h>
- #include <sound/hdaudio_ext.h>
- #include <sound/hda_register.h>
- #include <sound/sof.h>
-diff --git a/sound/soc/sof/intel/skl.c b/sound/soc/sof/intel/skl.c
-index 13efdb94d071..d24e64e71b58 100644
---- a/sound/soc/sof/intel/skl.c
-+++ b/sound/soc/sof/intel/skl.c
-@@ -19,7 +19,6 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/pci.h>
--#include <linux/pm_runtime.h>
- #include <sound/hdaudio_ext.h>
- #include <sound/pcm_params.h>
- #include <sound/sof.h>
-diff --git a/sound/soc/sof/mediatek/mt8186/mt8186-clk.c b/sound/soc/sof/mediatek/mt8186/mt8186-clk.c
-index 2df3b7ae1c6f..cb2ab5884b8c 100644
---- a/sound/soc/sof/mediatek/mt8186/mt8186-clk.c
-+++ b/sound/soc/sof/mediatek/mt8186/mt8186-clk.c
-@@ -8,7 +8,6 @@
- // Hardware interface for mt8186 DSP clock
- 
- #include <linux/clk.h>
--#include <linux/pm_runtime.h>
- #include <linux/io.h>
- 
- #include "../../sof-audio.h"
-diff --git a/sound/soc/sof/mediatek/mt8195/mt8195-clk.c b/sound/soc/sof/mediatek/mt8195/mt8195-clk.c
-index 9ef08e43aa38..7cffcad00f9b 100644
---- a/sound/soc/sof/mediatek/mt8195/mt8195-clk.c
-+++ b/sound/soc/sof/mediatek/mt8195/mt8195-clk.c
-@@ -7,7 +7,6 @@
- // Hardware interface for mt8195 DSP clock
- 
- #include <linux/clk.h>
--#include <linux/pm_runtime.h>
- #include <linux/io.h>
- #include "mt8195.h"
- #include "mt8195-clk.h"
-diff --git a/sound/soc/tegra/tegra20_ac97.c b/sound/soc/tegra/tegra20_ac97.c
-index 87facfbcdd11..23c066ec636c 100644
---- a/sound/soc/tegra/tegra20_ac97.c
-+++ b/sound/soc/tegra/tegra20_ac97.c
-@@ -19,7 +19,6 @@
- #include <linux/of.h>
- #include <linux/of_gpio.h>
- #include <linux/platform_device.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
-diff --git a/sound/soc/ti/omap-mcbsp-st.c b/sound/soc/ti/omap-mcbsp-st.c
-index 8163f453bf36..b047add5d887 100644
---- a/sound/soc/ti/omap-mcbsp-st.c
-+++ b/sound/soc/ti/omap-mcbsp-st.c
-@@ -19,7 +19,6 @@
- #include <linux/delay.h>
- #include <linux/io.h>
- #include <linux/slab.h>
--#include <linux/pm_runtime.h>
- 
- #include "omap-mcbsp.h"
- #include "omap-mcbsp-priv.h"
+Yes, this patch also works atleast for me.
+
+> Martin
+> 
+> ---8<---
+> 
+> Subject: [PATCH] scsi: core: Add BLIST_NO_VPD_SIZE for some VDASD
+> 
+> Some storage, such as AIX VDASD (virtual storage) and IBM 2076 (front
+> end) do not like commit c92a6b5d6335 ("scsi: core: Query VPD size
+> before getting full page").
+> 
+> That commit changed getting SCSI VPD pages so that we now read just
+> enough of the page to get the actual page size, then read the whole
+> page in a second read. The problem is that the above mentioned
+> hardware returns zero for the page size, because of a firmware
+> error. In such cases, until the firmware is fixed, this new blacklist
+> flag says to revert to the original method of reading the VPD pages,
+> i.e. try to read as a whole buffer's worth on the first try.
+> 
+> [mkp: reworked somewhat]
+> 
+> Link: https://lore.kernel.org/r/20220928181350.9948-1-leeman.duncan@gmail.com
+> Fixes: c92a6b5d6335 ("scsi: core: Query VPD size before getting full page")
+> Reported-by: Martin Wilck <mwilck@suse.com>
+> Suggested-by: Hannes Reinecke <hare@suse.de>
+> Signed-off-by: Lee Duncan <lduncan@suse.com>
+> Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+> 
+> diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
+> index 9feb0323bc44..dff1d692e756 100644
+> --- a/drivers/scsi/scsi.c
+> +++ b/drivers/scsi/scsi.c
+> @@ -326,6 +326,9 @@ static int scsi_get_vpd_size(struct scsi_device *sdev, u8 page)
+>  	unsigned char vpd_header[SCSI_VPD_HEADER_SIZE] __aligned(4);
+>  	int result;
+>  
+> +	if (sdev->no_vpd_size)
+> +		return SCSI_DEFAULT_VPD_LEN;
+> +
+>  	/*
+>  	 * Fetch the VPD page header to find out how big the page
+>  	 * is. This is done to prevent problems on legacy devices
+> diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
+> index c7080454aea9..bc9d280417f6 100644
+> --- a/drivers/scsi/scsi_devinfo.c
+> +++ b/drivers/scsi/scsi_devinfo.c
+> @@ -134,7 +134,7 @@ static struct {
+>  	{"3PARdata", "VV", NULL, BLIST_REPORTLUN2},
+>  	{"ADAPTEC", "AACRAID", NULL, BLIST_FORCELUN},
+>  	{"ADAPTEC", "Adaptec 5400S", NULL, BLIST_FORCELUN},
+> -	{"AIX", "VDASD", NULL, BLIST_TRY_VPD_PAGES},
+> +	{"AIX", "VDASD", NULL, BLIST_TRY_VPD_PAGES | BLIST_NO_VPD_SIZE},
+>  	{"AFT PRO", "-IX CF", "0.0>", BLIST_FORCELUN},
+>  	{"BELKIN", "USB 2 HS-CF", "1.95",  BLIST_FORCELUN | BLIST_INQUIRY_36},
+>  	{"BROWNIE", "1200U3P", NULL, BLIST_NOREPORTLUN},
+> @@ -188,6 +188,7 @@ static struct {
+>  	{"HPE", "OPEN-", "*", BLIST_REPORTLUN2 | BLIST_TRY_VPD_PAGES},
+>  	{"IBM", "AuSaV1S2", NULL, BLIST_FORCELUN},
+>  	{"IBM", "ProFibre 4000R", "*", BLIST_SPARSELUN | BLIST_LARGELUN},
+> +	{"IBM", "2076", NULL, BLIST_NO_VPD_SIZE},
+>  	{"IBM", "2105", NULL, BLIST_RETRY_HWERROR},
+>  	{"iomega", "jaz 1GB", "J.86", BLIST_NOTQ | BLIST_NOLUN},
+>  	{"IOMEGA", "ZIP", NULL, BLIST_NOTQ | BLIST_NOLUN},
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index f9b18fdc7b3c..6042a5587bc3 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1055,6 +1055,9 @@ static int scsi_add_lun(struct scsi_device *sdev, unsigned char *inq_result,
+>  	else if (*bflags & BLIST_SKIP_VPD_PAGES)
+>  		sdev->skip_vpd_pages = 1;
+>  
+> +	if (*bflags & BLIST_NO_VPD_SIZE)
+> +		sdev->no_vpd_size = 1;
+> +
+>  	transport_configure_device(&sdev->sdev_gendev);
+>  
+>  	if (sdev->host->hostt->slave_configure) {
+> diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+> index 3642b8e3928b..15169d75c251 100644
+> --- a/include/scsi/scsi_device.h
+> +++ b/include/scsi/scsi_device.h
+> @@ -145,6 +145,7 @@ struct scsi_device {
+>  	const char * model;		/* ... after scan; point to static string */
+>  	const char * rev;		/* ... "nullnullnullnull" before scan */
+>  
+> +#define SCSI_DEFAULT_VPD_LEN	255	/* default SCSI VPD page size (max) */
+>  	struct scsi_vpd __rcu *vpd_pg0;
+>  	struct scsi_vpd __rcu *vpd_pg83;
+>  	struct scsi_vpd __rcu *vpd_pg80;
+> @@ -215,6 +216,7 @@ struct scsi_device {
+>  					 * creation time */
+>  	unsigned ignore_media_change:1; /* Ignore MEDIA CHANGE on resume */
+>  	unsigned silence_suspend:1;	/* Do not print runtime PM related messages */
+> +	unsigned no_vpd_size:1;		/* No VPD size reported in header */
+>  
+>  	unsigned int queue_stopped;	/* request queue is quiesced */
+>  	bool offline_already;		/* Device offline message logged */
+> diff --git a/include/scsi/scsi_devinfo.h b/include/scsi/scsi_devinfo.h
+> index 5d14adae21c7..6b548dc2c496 100644
+> --- a/include/scsi/scsi_devinfo.h
+> +++ b/include/scsi/scsi_devinfo.h
+> @@ -32,7 +32,8 @@
+>  #define BLIST_IGN_MEDIA_CHANGE	((__force blist_flags_t)(1ULL << 11))
+>  /* do not do automatic start on add */
+>  #define BLIST_NOSTARTONADD	((__force blist_flags_t)(1ULL << 12))
+> -#define __BLIST_UNUSED_13	((__force blist_flags_t)(1ULL << 13))
+> +/* do not ask for VPD page size first on some broken targets */
+> +#define BLIST_NO_VPD_SIZE	((__force blist_flags_t)(1ULL << 13))
+>  #define __BLIST_UNUSED_14	((__force blist_flags_t)(1ULL << 14))
+>  #define __BLIST_UNUSED_15	((__force blist_flags_t)(1ULL << 15))
+>  #define __BLIST_UNUSED_16	((__force blist_flags_t)(1ULL << 16))
+> @@ -74,8 +75,7 @@
+>  #define __BLIST_HIGH_UNUSED (~(__BLIST_LAST_USED | \
+>  			       (__force blist_flags_t) \
+>  			       ((__force __u64)__BLIST_LAST_USED - 1ULL)))
+> -#define __BLIST_UNUSED_MASK (__BLIST_UNUSED_13 | \
+> -			     __BLIST_UNUSED_14 | \
+> +#define __BLIST_UNUSED_MASK (__BLIST_UNUSED_14 | \
+>  			     __BLIST_UNUSED_15 | \
+>  			     __BLIST_UNUSED_16 | \
+>  			     __BLIST_UNUSED_24 | \
+
 -- 
-2.34.1
-
+Thanks and Regards
+Srikar Dronamraju
