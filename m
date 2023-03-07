@@ -2,141 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EBF6AD3B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:08:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A4C6AD3B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 02:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjCGBIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 20:08:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
+        id S229725AbjCGBIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 20:08:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCGBIg (ORCPT
+        with ESMTP id S229570AbjCGBI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 20:08:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE6667819
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 17:07:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678151267;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q1dx5SRFJt30qkFOM5quycQQfnL680S8jPbZ0eS+2Fw=;
-        b=LGCEY9+6BZrIiN7b4eITlujntJDdbort1mdYwCpJ2XPeLGg4gw2LabcvbSRW4o6/VOUGlj
-        Ptv4F39Jr0HPRk8H7LsUUgHOj1y4mIA0qIsIq2/M4HytQRjdE7T4qcRa+BjzOVOGJPQ+6m
-        WBIivI7dEnCKCoKMG6in5+ECknW3sXU=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-636-P1LwFeZhNQ-YduYhOkFycw-1; Mon, 06 Mar 2023 20:07:46 -0500
-X-MC-Unique: P1LwFeZhNQ-YduYhOkFycw-1
-Received: by mail-qk1-f197.google.com with SMTP id dm13-20020a05620a1d4d00b00742a22c4239so6538593qkb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 17:07:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678151266;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q1dx5SRFJt30qkFOM5quycQQfnL680S8jPbZ0eS+2Fw=;
-        b=NKb5IxY2O4Jd6qUq265UsNyM2PJndrIdvisbDqOIGrMoH0tZaeOyVH5O0OOBzkVYk8
-         Q9ncPjTgKJggHdlygTVPDtRL4zQE53uQusKWkW18keIG9UU06O/hWhlWBUZ695A4AEPe
-         HhRS4Uu9QVL++zZ9o1l3AYNCUJwYd4axkOyK3R10thA/mTMBaYdgxPvAKXPKbri2ATkN
-         PFwN++0BT9DKGixv1Ie7H7SxDGXzJt5IAcYMtMqIcsUHfqBPptL1eNBdxjPzvt5Wqbxw
-         g1uGrfpqVNwWNR1gjHTpCp/A0Sl1nXfDfXHmDp8Rgrbzbar9PmWoP7QbL0Un24Y4HrHk
-         fmdA==
-X-Gm-Message-State: AO0yUKWOvDQbHHvPtQ6mpOgIIVYVrPJqGZ2jaF5Fjpf25ZUaNhFHB2y0
-        QCGqt+NQ0O2k3a8ZDlB4vfMem5iCtBlIBOIVgSIB/raMwXHFqKlB4FCLKfCVGa7UEg8UVF7e21U
-        GikZmHF3XKL13P0KtBBe7bGY9kzdIDfbzdeSV+gxiRxgYnLt9f5XxZSbtICCkDu2UmDDGiyFQpZ
-        YQ5kE=
-X-Received: by 2002:a05:622a:348:b0:3bf:dc2e:ce3f with SMTP id r8-20020a05622a034800b003bfdc2ece3fmr17366440qtw.16.1678151265923;
-        Mon, 06 Mar 2023 17:07:45 -0800 (PST)
-X-Google-Smtp-Source: AK7set+O9AR/zAebLHTqZOqIU8pqBL5bY3EH/iBlzeZ7TNswlxRKXxlGGaBUf+Ef0MDMppts75qN3A==
-X-Received: by 2002:a05:622a:348:b0:3bf:dc2e:ce3f with SMTP id r8-20020a05622a034800b003bfdc2ece3fmr17366399qtw.16.1678151265454;
-        Mon, 06 Mar 2023 17:07:45 -0800 (PST)
-Received: from [192.168.1.19] (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id s15-20020ac85ecf000000b003afbf704c7csm8368670qtx.24.2023.03.06.17.07.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 17:07:45 -0800 (PST)
-Subject: Re: [PATCH] init/Kconfig: extend -Wno-array-bounds to gcc 13
-To:     Kees Cook <kees@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     mhiramat@kernel.org, akpm@linux-foundation.org,
-        masahiroy@kernel.org, paulmck@kernel.org, hannes@cmpxchg.org,
-        ojeda@kernel.org, thunder.leizhen@huawei.com,
-        christophe.leroy@csgroup.eu, vbabka@suse.cz,
-        linux-kernel@vger.kernel.org
-References: <20230306220947.1982272-1-trix@redhat.com>
- <CAKwvOdkd7pUu_oxt4=CW3fxXz2y7evtU9J5Gd7oQuyi1MkDMCw@mail.gmail.com>
- <C01C39FE-E776-48DA-84F2-402B49A705A8@kernel.org>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <899b639b-3c93-b96d-863d-9e25d1824dc3@redhat.com>
-Date:   Mon, 6 Mar 2023 17:07:42 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Mon, 6 Mar 2023 20:08:29 -0500
+Received: from sonata.ens-lyon.org (domu-toccata.ens-lyon.fr [140.77.166.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEA330B04;
+        Mon,  6 Mar 2023 17:08:27 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by sonata.ens-lyon.org (Postfix) with ESMTP id 6FCD62012C;
+        Tue,  7 Mar 2023 02:08:25 +0100 (CET)
+Received: from sonata.ens-lyon.org ([127.0.0.1])
+        by localhost (sonata.ens-lyon.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XPqUQ-mWdehP; Tue,  7 Mar 2023 02:08:25 +0100 (CET)
+Received: from begin.home (lfbn-bor-1-1163-184.w92-158.abo.wanadoo.fr [92.158.138.184])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by sonata.ens-lyon.org (Postfix) with ESMTPSA id 1360D200EE;
+        Tue,  7 Mar 2023 02:08:25 +0100 (CET)
+Received: from samy by begin.home with local (Exim 4.96)
+        (envelope-from <samuel.thibault@ens-lyon.org>)
+        id 1pZLoW-001GOs-1z;
+        Tue, 07 Mar 2023 02:08:24 +0100
+Date:   Tue, 7 Mar 2023 02:08:24 +0100
+From:   Samuel Thibault <samuel.thibault@ens-lyon.org>
+To:     Aleksandr Nogikh <nogikh@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        syzbot <syzbot+3af17071816b61e807ed@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [syzbot] [hardening?] [mm?] BUG: bad usercopy in con_font_op
+Message-ID: <20230307010824.foxfdlhvuqc43dex@begin>
+Mail-Followup-To: Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        syzbot <syzbot+3af17071816b61e807ed@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com, Jiri Slaby <jirislaby@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <0000000000001d1fb505f605c295@google.com>
+ <64026f89.170a0220.7940.49ff@mx.google.com>
+ <20230305175457.kp6b5lmwwdxw4ii6@begin>
+ <CANp29Y4dNRuu1u8Dz+eXhi2NJ=MsN5wfCr1h9sJ73o25Of63Ww@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <C01C39FE-E776-48DA-84F2-402B49A705A8@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANp29Y4dNRuu1u8Dz+eXhi2NJ=MsN5wfCr1h9sJ73o25Of63Ww@mail.gmail.com>
+Organization: I am not organized
+User-Agent: NeoMutt/20170609 (1.8.3)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Aleksandr Nogikh, le lun. 06 mars 2023 11:28:04 +0100, a ecrit:
+> On Mon, Mar 6, 2023 at 8:36 AM Samuel Thibault
+> <samuel.thibault@ens-lyon.org> wrote:
+> >
+> > The patch below should be fixing it, could you check?
+> >
+> > I don't know how I am supposed to properly reference the syzbot report
+> > etc., could somebody used to the process handle submitting the fix?
+> 
+> As Jiri Slaby correctly said above, you just need to add the
+> `Reported-by` tag from the syzbot bug report to your patch so that the
+> bot can recognize the fix later.
+> 
+> If you just want syzbot to check whether the reproducer still triggers
+> the bug after your changes, you can send an email with the `syz test`
+> command and the raw diff patch. Here are the instructions:
+> https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
+> and here are many examples:
+> https://groups.google.com/g/syzkaller-bugs/search?q=%22%23syz%20test%22
 
-On 3/6/23 3:02 PM, Kees Cook wrote:
-> On March 6, 2023 2:20:50 PM PST, Nick Desaulniers <ndesaulniers@google.com> wrote:
->> + Kees
->> https://lore.kernel.org/lkml/20230306220947.1982272-1-trix@redhat.com/
->>
->> On Mon, Mar 6, 2023 at 2:10 PM Tom Rix <trix@redhat.com> wrote:
->>> With gcc 13.0.1 on x86, there are several false positives like
->>>
->>> drivers/net/ethernet/microchip/sparx5/sparx5_psfp.c:167:31:
->>>    error: array subscript 4 is above array bounds of ‘const struct sparx5_psfp_gce[4]’ [-Werror=array-bounds=]
->>>    167 |                 gce = &sg->gce[i];
->>>        |                        ~~~~~~~^~~
->>> In file included from drivers/net/ethernet/microchip/sparx5/sparx5_psfp.c:8:
->>> drivers/net/ethernet/microchip/sparx5/sparx5_main.h:506:32: note: while referencing ‘gce’
->>>    506 |         struct sparx5_psfp_gce gce[SPX5_PSFP_GCE_CNT];
->>>        |                                ^~~
->>>
->>> The code lines for the reported problem
->>>          /* For each scheduling entry */
->>>          for (i = 0; i < sg->num_entries; i++) {
->>>                  gce = &sg->gce[i];
->>>
->>> i is bounded by num_entries, which is set in sparx5_tc_flower.c
->>>          if (act->gate.num_entries >= SPX5_PSFP_GCE_CNT) {
->>>                  NL_SET_ERR_MSG_MOD(extack, "Invalid number of gate entries");
->>>                  return -EINVAL;
->>>          }
->>> ..
->>>          sg->num_entries = act->gate.num_entries;
->>>
->>> So disable array-bounds as was done on gcc 11 and 12
-> GCC 13 isn't released yet, and we've been working to make Linux warning-free under -Wareay-bounds. (And we succeeded briefly with GCC 11.)
->
-> I'd much rather get GCC fixed. This is due to the shift sanitizer reducing the scope of num_entries (via macro args) to 0-31, which is still >4. This seems like a hinting bug in GCC: just because the variable was used in a shift doesn't mean the compiler can make any value assumptions.
+Thanks! The patch does fix the reproducer case.
 
-The build with fail generally with gcc 13.
-
-The warnings could be cleaned without having an error, but I looked at 
-multiple errors, none of them were real.
-
-imo this is a broken compiler option.
-
-Tom
-
->
-> -Kees
->
->
->
-
+Samuel
