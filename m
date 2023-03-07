@@ -2,221 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 700866AD958
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:38:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C64A6AD95B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjCGIiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:38:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
+        id S229832AbjCGIie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:38:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCGIiS (ORCPT
+        with ESMTP id S229818AbjCGIic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:38:18 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEC02B291
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:38:15 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id a25so49392291edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:38:15 -0800 (PST)
+        Tue, 7 Mar 2023 03:38:32 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB72E0EE;
+        Tue,  7 Mar 2023 00:38:29 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id k10so25264978edk.13;
+        Tue, 07 Mar 2023 00:38:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1678178294;
+        d=gmail.com; s=20210112; t=1678178308;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DnRKhcahxkatbm2bFGkk7mnKxouvXhMRB3sMCcT+Nuc=;
-        b=HpJm56Gg6LXY6d/a4PlAxpXPEchq3Rzd3dRLN/jhNSdLcKE4JZQEBXsbr8yRI8D0pW
-         G9x0kKTYbndW1sf1JpiSuHVWXz1t4BURAtzoiXRqBDxVRm/AUTMa4Gsk3+kEcYKjT+VB
-         j/q3zaS0YJi/F/Mgc8whfBMA3DXlbC7PLrYpE=
+        bh=QFkwqhkT+lIt2irVF6rhRMk0pnuU8Ja1oB/xp+FXlr8=;
+        b=lUvWp6toVHkr4XQ7hhtU/YiewW60L/6LagLE9I0VbD7fq1zn7c+LpYUcPLm4sStnaI
+         o90OrqJ36nric2PeL0uS1QEdYAkrOEsnb6h+nZ+FYT7mi8lAupvgVxZk9X0IOqV0tR56
+         Ib1sShHJrT0vCcGZnMmjx/xmO7mezHQV54kCzaz63gbVPrvvKzw2U5QsF/MVI2BYz++A
+         ljYMIBdbtWLRfOqEK72sMBh4mXAzXRjn6vpArJRx9wVM6TDQt3YZz6cVoxY+inyyfr9e
+         rfbxhjlHLA+lXZfHSoC74fXRH+dDLWALUYu0hYHQ52awLQ9Nuka2gOGBjmnwa5vSS/W3
+         M4kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678178294;
+        d=1e100.net; s=20210112; t=1678178308;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DnRKhcahxkatbm2bFGkk7mnKxouvXhMRB3sMCcT+Nuc=;
-        b=7HbVw5Fe4C2Roy3Poa0liHvzw52ocUY3STwOTj//JlbzRURbUry6SMrsrAfaGwnerM
-         tnTRIGtZZk6AVSfHiuiPSBrCiWVfoGWs5uvt86oTHRXxCbSNqvcShj9Fo5HBp7PZueVH
-         pXFhamYMdOLPIF2WZuO4PyKYYnH35LgiL6xcZb0ogU5QZ+cU0CGUx5woE12xE/lVtdZT
-         kFAR2lloX1XuVXTLX6aub+ukJbWGdXn8UwSYn9gT75rqa02ysQ62EBIKmTPbt5Lor3ja
-         fNReoe5m9mhe2iV3Mcve0+0B8USgGNb23i+rYu8VqxU0AsKnQovpRJ3O8Lrc3TbPCZ/z
-         fX6g==
-X-Gm-Message-State: AO0yUKWEo9BfsTPqXrB2FJlD+6X+qqX8vK4n7EpkY4YEW3uGqN+oG7BE
-        3r8b3/3CjlEPwz1QlA0Jzoy0W+F2dhCJB/srrClapg==
-X-Google-Smtp-Source: AK7set+LKfm+lJJUQWrDUy8KTAYqnLSbU3m7VfgPjpiUrJJ1R3y17dvAZ3Vwwj6530T5sEFBkzKHMtXLp5v5ISIT548=
-X-Received: by 2002:a17:906:3d51:b0:8f1:4c6a:e72 with SMTP id
- q17-20020a1709063d5100b008f14c6a0e72mr6358643ejf.0.1678178294468; Tue, 07 Mar
- 2023 00:38:14 -0800 (PST)
+        bh=QFkwqhkT+lIt2irVF6rhRMk0pnuU8Ja1oB/xp+FXlr8=;
+        b=Bk1Wne6zUK7t6oron0ipXlO7uTXI49TIElwIZzj3Eau53Q8CEVDaGL/23Dz64+t8+l
+         RB6NbE6CYcaGc7YJq8jltxvFeZeUJzNI6KEvYHirL/v3e5USDaQeoGYviw/8DnTpsyxT
+         T7aCvT0BbudMv50kM5eMBCsHbxvvUBqgkU7a1ZECxy1FbmwmKflQAYea+waQy1ZLLkar
+         n/6YccqFhzASNtsJuAFSaY0GXW07AGfgFuBWsq0g1e/hIqu9s18jJRuLc6LEtCU/eDUv
+         Az7ac/SsQbFFmJGMx0lYeZF6nyb2sAsLQULva0rwIzm9x0S2h4NCisfeKqWv9HNixkEO
+         y/kA==
+X-Gm-Message-State: AO0yUKV+sMkOq82UgV5lEv1S7P0GiVyjv65qJKRx151XgvaHwF00BOUe
+        mHHsHT/Ysvz6ArPzLSSx3GiBb9FI9I0aEwfG7Xk=
+X-Google-Smtp-Source: AK7set835bG0dJ6ngtk0PjuuqUnLs8sqgHQUsfUtZuyvpNqCpDSFdEABaR2fb1BA1EJAY+RMipe53NieyYlhlK8/Rk0=
+X-Received: by 2002:a17:906:a4b:b0:879:9c05:f5fb with SMTP id
+ x11-20020a1709060a4b00b008799c05f5fbmr6743103ejf.5.1678178307909; Tue, 07 Mar
+ 2023 00:38:27 -0800 (PST)
 MIME-Version: 1.0
-References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
- <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
- <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
- <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
- <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
- <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
- <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
- <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
- <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
- <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
- <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com>
- <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
- <CALKgVmdqircMjn+iEuta5a7v5rROmYGXmQ0VJtzcCQnZYbJX6w@mail.gmail.com> <CALKgVmfZdVnqMAW81T12sD5ZLTO0fp-oADp-WradW5O=PBjp1Q@mail.gmail.com>
-In-Reply-To: <CALKgVmfZdVnqMAW81T12sD5ZLTO0fp-oADp-WradW5O=PBjp1Q@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 7 Mar 2023 09:38:03 +0100
-Message-ID: <CAJfpeguKVzCyUraDQPGw6vdQFfPwTCuZv0JkMxNA69AiRib3kg@mail.gmail.com>
-Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
- missing in lower/upper fs
-To:     jonathan@eitm.org
-Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
-        <christian@kohlschutter.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+References: <20230307075923.28821-1-lukas.bulwahn@gmail.com>
+ <CAMuHMdV1eYWhDKwTAxC32Qp0CcxrWxgu=uRNTdu_G8K=gHS9Yw@mail.gmail.com> <c85990e892571ae5da7a9c4b0e86897ee34286a7.camel@physik.fu-berlin.de>
+In-Reply-To: <c85990e892571ae5da7a9c4b0e86897ee34286a7.camel@physik.fu-berlin.de>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Tue, 7 Mar 2023 09:38:16 +0100
+Message-ID: <CAKXUXMyRd2V+a9yoqfgkVPY3UufKHKTOPxxXLSJCK49DDEUQEA@mail.gmail.com>
+Subject: Re: [PATCH] arch: sh: remove references to config USB_OHCI_SH
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Mar 2023 at 02:12, Jonathan Katz <jkatz@eitmlabs.org> wrote:
+On Tue, Mar 7, 2023 at 9:19=E2=80=AFAM John Paul Adrian Glaubitz
+<glaubitz@physik.fu-berlin.de> wrote:
 >
-> Hi all,
+> Hi Geert!
 >
-> In pursuing this issue, I downloaded the kernel source to see if I
-> could debug it further.  In so doing, it looks like Christian's patch
-> was never committed to the main source tree (sorry if my terminology
-> is wrong).  This is up to and including the 6.3-rc1.  I could also
-> find no mention of the fix in the log.
+> On Tue, 2023-03-07 at 09:16 +0100, Geert Uytterhoeven wrote:
+> > Hi Lukas,
+> >
+> > On Tue, Mar 7, 2023 at 9:02=E2=80=AFAM Lukas Bulwahn <lukas.bulwahn@gma=
+il.com> wrote:
+> > > Commit 4f6dfc2136fb ("usb: remove the dead USB_OHCI_SH option") left =
+some
+> > > references to the config USB_OHCI_SH in ./arch/sh/ around, expecting =
+those
+> > > to be removed with the whole SH architecture deletion.
+> > >
+> > > As that did not happen, do minor clean-up instead and remove the refe=
+rences
+> > > to the removed config USB_OHCI_SH instead.
+> > >
+> > > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> >
+> > Thanks for your patch!
+> >
+> > > --- a/arch/sh/Kconfig
+> > > +++ b/arch/sh/Kconfig
+> > > @@ -326,7 +326,6 @@ config CPU_SUBTYPE_SH7720
+> > >         select CPU_SH3
+> > >         select CPU_HAS_DSP
+> > >         select SYS_SUPPORTS_SH_CMT
+> > > -       select USB_OHCI_SH if USB_OHCI_HCD
+> >
+> > Shouldn't this select USB_OHCI_HCD_PLATFORM instead, as the (now
+> > removed) Kconfig help text for USB_OHCI_SH used to say?
+> >
+> >     +       select USB_OHCI_HCD_PLATFORM if USB_OHCI_HCD
+> >
+> > I completely forgot I already made that comment before, cfr.
+> > https://lore.kernel.org/all/CAMuHMdVM3BpvVD3c4gp1OidnwF5zFd4MJecij7zWBn=
+ahzNaSNw@mail.gmail.com
+> >
+> > The same is true for the three selects below.
+> > As USB is now broken, the proper solution will need
+> > Fixes: 4f6dfc2136fb2e8d ("usb: remove the dead USB_OHCI_SH option")
 >
-> I am trying to manually apply this patch now, but, I am wondering if
-> there was some reason that it was not applied (e.g. it introduces some
-> instability?)?
 
-It's fixing the bug in the wrong place, i.e. it's checking for an
--ENOSYS return from vfs_fileattr_get(), but that return value is not
-valid at that point.
+Well, I assumed that I am just cleaning up some minor stuff, not
+fixing broken code...
 
-The right way to fix this bug is to prevent -ENOSYS from being
-returned in the first place.
+With your link and explanation, Geert, I know what needs to be done. Thanks=
+.
 
-Commit 02c0cab8e734 ("fuse: ioctl: translate ENOSYS") fixes one of
-those bugs, but of course it's possible that I missed something in
-that fix.
-
-Can you please first verify that an upstream kernel (>v6.0) can also
-reproduce this issue?
-
-Thanks,
-Miklos
-
-
-
+> Thanks a lot for catching this!
 >
-> Thank you,
-> Jonathan
+> @Lukas: Can you send a new patch with the suggested changes?
 >
+
+I will send a new patch in a second.
+
+Lukas
+
+> Adrian
 >
->
-> On Thu, Feb 23, 2023 at 3:11=E2=80=AFPM Jonathan Katz <jkatz@eitmlabs.org=
-> wrote:
-> >
-> > Hi all,
-> >
-> > Problem persists with me with 6.2.0
-> > # mainline --install-latest
-> > # reboot
-> >
-> > # uname -r
-> > 6.2.0-060200-generic
-> >
-> >
-> > Representative log messages when mounting:
-> > Feb 23 22:50:43 instance-20220314-1510-fileserver-for-overlay kernel:
-> > [   44.641683] overlayfs: null uuid detected in lower fs '/', falling
-> > back to xino=3Doff,index=3Doff,nfs_export=3Doff.
-> >
-> >
-> >
-> > Representative log messages when accessing files:
-> > eb 23 23:06:31 instance-20220314-1510-fileserver-for-overlay kernel: [
-> >  992.505357] overlayfs: failed to retrieve lower fileattr (8020
-> > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-172=
-2.d/Storage.mcf_idx,
-> > err=3D-38)
-> > Feb 23 23:06:32 instance-20220314-1510-fileserver-for-overlay kernel:
-> > [  993.523712] overlayfs: failed to retrieve lower fileattr (8020
-> > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-172=
-2.d/Storage.mcf_idx,
-> > err=3D-38)
-> >
-> >
-> > On Mon, Jan 30, 2023 at 11:27 AM Jonathan Katz <jkatz@eitmlabs.org> wro=
-te:
-> > >
-> > > On Thu, Jan 26, 2023 at 5:26 AM Miklos Szeredi <miklos@szeredi.hu> wr=
-ote:
-> > > >
-> > > > On Wed, 18 Jan 2023 at 04:41, Jonathan Katz <jkatz@eitmlabs.org> wr=
-ote:
-> > > >
-> > > > > I believe that I am still having issues occur within Ubuntu 22.10=
- with
-> > > > > the 5.19 version of the kernel that might be associated with this
-> > > > > discussion.  I apologize up front for any faux pas I make in writ=
-ing
-> > > > > this email.
-> > > >
-> > > > No need to apologize.   The fix in question went into v6.0 of the
-> > > > upstream kernel.  So apparently it's still missing from the distro =
-you
-> > > > are using.
-> > >
-> > > Thank you for the reply! ---  I have upgraded the Kernel and it still
-> > > seems to be throwing errors.  Details follow:
-> > >
-> > > Distro: Ubuntu 22.10.
-> > > Upgraded kernel using mainline (mainline --install-latest)
-> > >
-> > > # uname -a
-> > > Linux instance-20220314-1510-fileserver-for-overlay
-> > > 6.1.8-060108-generic #202301240742 SMP PREEMPT_DYNAMIC Tue Jan 24
-> > > 08:13:53 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
-> > >
-> > > On mount I still get the following notice in syslog (representative):
-> > > Jan 30 19:11:46 instance-20220314-1510-fileserver-for-overlay kernel:
-> > > [   71.613334] overlayfs: null uuid detected in lower fs '/', falling
-> > > back to xino=3Doff,index=3Doff,nfs_export=3Doff.
-> > >
-> > > And on access (via samba) I still see the following errors in the
-> > > syslog (representative):
-> > > Jan 30 19:19:34 instance-20220314-1510-fileserver-for-overlay kernel:
-> > > [  539.181858] overlayfs: failed to retrieve lower fileattr (8020
-> > > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1=
-722.d/Storage.mcf_idx,
-> > > err=3D-38)
-> > >
-> > > And on the Windows client, the software still fails with the same sym=
-ptomology.
-> > >
-> > >
-> > >
-> > >
-> > > >
-> > > > > An example error from our syslog:
-> > > > >
-> > > > > kernel: [2702258.538549] overlayfs: failed to retrieve lower file=
-attr
-> > > > > (8020 MeOHH2O
-> > > > > RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.=
-d/analysis.tsf,
-> > > > > err=3D-38)
-> > > >
-> > > > Yep, looks like the same bug.
-> > > >
-> > > > Thanks,
-> > > > Miklos
+> --
+>  .''`.  John Paul Adrian Glaubitz
+> : :' :  Debian Developer
+> `. `'   Physicist
+>   `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
