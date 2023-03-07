@@ -2,203 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16606ADED2
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:35:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE466ADED5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:36:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjCGMfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56750 "EHLO
+        id S230280AbjCGMgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:36:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjCGMfe (ORCPT
+        with ESMTP id S230386AbjCGMgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:35:34 -0500
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2059.outbound.protection.outlook.com [40.107.22.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C235D4C6D0;
-        Tue,  7 Mar 2023 04:35:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aJliNPtzFo3KDSim4m/rP38rV9TcRRjwF1/O92jlgbu3AZ9ApvVC3tTM3KcT/eS7JnGXaR6aLAgoahzkMXSB/sSyI5T/VDOzNqONbAvUThRPI4LggmigC0piXUi3xr8mMGxjmX0lmHSLfEns8EuTyx6FXWaZ7IiMMLJHM5z+gcGof/OP5CrQuR9zP1AwqUeKf/AN4zuEb3wnd4rwagl2VKMQbWGP5w8iKxvflP44LQ01zMRlrTQSoDmCHwpEhNLIz3QxcZn3TXzWrJmet6njnRyJHn3bMAyDTauvQOpaOqjwbTuXXTQN+F3fFyz2RGg0AuNtewA59zcMCEYkiiSKHg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JxQSvhKd7MlIaK1vDjA6iBigRIsnaD9dndT6fCNEDV4=;
- b=ZE+hy14UztAJ5z2yjWjVjDxw4tEJRccCXBokoSB1bN57H2hFkt0UAtdlMht2JGGXevQakWn18DZFTihJt7R3iCCWmIel7SDXyoTVPyHks85uWAR8BKJrKcBrL3DCO2BGgM/25+KloDeIooQpluVtv9/FHx+wCTF6Utxf0D5p+hP1hBn2O/TDv+/IP2nX2nlH6EWLncAFsH7dIocM6Fy7jp2ND11HbvpK5LE5TU75NYUv8QSiNw1OSNJ6+eolvTkxdI7O0qbuKD4esnbaiyQPsKTG3Y8yyf0y9eauaT39F8Ae4H5ZszB/wmhmFxTEKo90P23Xa3g2B7thhqpUrnxvHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JxQSvhKd7MlIaK1vDjA6iBigRIsnaD9dndT6fCNEDV4=;
- b=s/pSMEXH2p4r+FOjUDI35sKMlCP5MS20cjyFvk9H+VsqOTBn4pq7/2vdLPGC2YGbYNyDn5xzygewYMe5Pn5QCFmAOMhN2VSnhqk3XZfPex5yzd2ZpDe/tvVS3AOwKoay2dzBaWm+K6SA2GVN1HZWA9SU/dwMCP4t8HIKcV9YJqI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by AS8PR04MB7669.eurprd04.prod.outlook.com (2603:10a6:20b:29b::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 12:35:27 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::29a3:120c:7d42:3ca8]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::29a3:120c:7d42:3ca8%7]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 12:35:27 +0000
-Date:   Tue, 7 Mar 2023 14:35:22 +0200
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     "Song, Xiongwei" <Xiongwei.Song@windriver.com>
-Cc:     "claudiu.manoil@nxp.com" <claudiu.manoil@nxp.com>,
-        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: Response error to fragmented ICMP echo request
-Message-ID: <20230307123522.rtit24jseb5b2vep@skbuf>
-References: <PH0PR11MB51923E3796E4D2420C700580ECB79@PH0PR11MB5192.namprd11.prod.outlook.com>
- <PH0PR11MB51923E3796E4D2420C700580ECB79@PH0PR11MB5192.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB51923E3796E4D2420C700580ECB79@PH0PR11MB5192.namprd11.prod.outlook.com>
- <PH0PR11MB51923E3796E4D2420C700580ECB79@PH0PR11MB5192.namprd11.prod.outlook.com>
-X-ClientProxiedBy: VI1PR04CA0086.eurprd04.prod.outlook.com
- (2603:10a6:803:64::21) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Tue, 7 Mar 2023 07:36:13 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EB44A1D6;
+        Tue,  7 Mar 2023 04:36:11 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id B1CFD1C0DE7; Tue,  7 Mar 2023 13:36:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1678192568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=1PlvY26tIHyNiqhAYJQIp+i1zuL+i9oLYMD+0Zno304=;
+        b=ZdR2Q3VmAJbqIfmzQBuo80BePszCATog/JJr5+3pFSbAMZNNSxBs7oym0QL+HViHRo5h6B
+        PYL3JAeEErPbwg/Wskp6+LcC+1vQxKIhkPWh8P1vtIY4vpfcbz0Tny+UxFtuZlkyCh9H4o
+        4dWOfIeGVD2Ar7HNt4W/L/jrIz+qUl8=
+Date:   Tue, 7 Mar 2023 13:36:08 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-omap@vger.kernel.org, tony@atomide.com, sre@kernel.org,
+        nekit1000@gmail.com, mpartap@gmx.net, merlijn@wizzup.org,
+        martin_rysavy@centrum.cz, phone-devel@vger.kernel.org,
+        maemo-leste@lists.dyne.org
+Subject: Motorola Droid 4 -- Stopping charger when battery is full
+Message-ID: <ZAcvuP8kmWveLoE/@duo.ucw.cz>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AS8PR04MB7669:EE_
-X-MS-Office365-Filtering-Correlation-Id: b0ce30f2-0946-4eb9-726e-08db1f086d59
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: npy52ROSib+oIsCsJVARcILctxnkMhvIC8IaAfvkfRkYkLZfhti/JMDTEKp9P0hkCQ+F7BR+JBPxtQQCWJ05IYCRfqPQ4f4x6CZ2vvLQyeo3s7eSr+VE0QuQfqS24TuogQ3LUr7THamCjcJe8JMP23knP0a9GBY60D4i70P11Jh/eunef7+XoZh3GzGn9gUw8KEiryp7RL0WDBVn8DB266PycL7LCwSly0LbCp5zzShY5hau5+T4uqTAvfTDPrcAS7jYUFQIxLBtbJJ6HrgON1bKKYztCPl6Ej/J+s1/5e8Vm+RX+WeOW7RIR1A7I7ADvKwlx3J8YQ67ZF1POQ7FW9w32RQP05nAwRzgg86kQxdFGDFEL4wBC6XGwF3Hwx5Uz+QF3vgPThu35+nwiQeIK24d5BZGrX4PNa2AYscUsR2Wo6DD+6eu1DuSPSUqc6Mlwbs5C4xyQWRJrizcx1Z8JQMekAvgAR/tY4lbfPCwm+cvoaO4l+ByM90GoNm4yqsbRktFfQoOu4UJL6hXOAPv780/UsejEw4dji3Y+kjqi5ydx0W5ZlkBGHBSzN34h9wcFI9xcxfsJccMJAANTnmasNqNnTILWgzzCijTGR2ph7EmUZ9YAacwZaBXpDZB5W7W9NCiUafg8wZaepsf7TGxgQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(376002)(39860400002)(366004)(136003)(396003)(346002)(451199018)(316002)(54906003)(38100700002)(86362001)(6506007)(26005)(6512007)(1076003)(83380400001)(9686003)(186003)(33716001)(5660300002)(8936002)(7416002)(478600001)(6486002)(4326008)(41300700001)(6666004)(44832011)(66556008)(2906002)(8676002)(6916009)(66946007)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Fn1ZTE7PAJZJM/yD0OIhwVAjnHql4wR+ak0UZYGJtngAg2ABqcfK6VJLmIGr?=
- =?us-ascii?Q?otK7nfXQoOTmBP5zFBIXumnT+8HBlB9YHCF32XUW1qbyvM3iKPOB/Pd8HFkV?=
- =?us-ascii?Q?ruFm73LnV/tCwkjZXXfmOa0v1foZ1P8SeCg54GubtSMfhR0q9+WHjMCZzzyR?=
- =?us-ascii?Q?j4ubPlHJoGy6NBLftSy6uW8HveoF6DeBEge7xlK9lAdkL3SYxUxkbY5zAyjJ?=
- =?us-ascii?Q?ajSTQT3uMEhpY3/edS71Ru7cAH9OH65L51ho13+N8UVBru3E3TvuHH4+6eMT?=
- =?us-ascii?Q?1UjQMf3GFdcHuEEe870W5OslV07MUyk9kmyNN6/iEuwKlVKVIZ23qkb82FmM?=
- =?us-ascii?Q?4K5Li6q2ojm5SuHeIiCRGOO/mr5CllrADwIlE7G1gOYHIm36R2zv8FrB3LaP?=
- =?us-ascii?Q?mm1HhhQe5CIpUorCDQJcGU81etzwMcgHC/Oib8pk++oNxqwyDASZaH0qYVRM?=
- =?us-ascii?Q?+FnSrVuhwSXVjzfT88JDzadDuCrTYyd8kK/2cVSPYxX3KwHX8wcKRp2G4JIR?=
- =?us-ascii?Q?nWSAecaiOGZzGSa2sx+jRMyycH1EHIKo5KH9J70Rfd0INzg3ThQVH79+xmxT?=
- =?us-ascii?Q?IXd4XieP7Rpl7XNfYhYsXVZEghh1ymoYxWVB/x6DhdZXxe79l1Yg2oNO0A9z?=
- =?us-ascii?Q?lZs7e7oJQ1fggoBxTEHjLY32eiAT2+G4VUc4+lNTjLHmTKCEv0lEYEnjwc9M?=
- =?us-ascii?Q?Hu26Joo1eyZLnxmFInqeO1aURlgI6CO5DDGi6mfDQm6uvrAGVdUF1zVLLrVz?=
- =?us-ascii?Q?kzoOm+YntaY6oTGmGP50lb3trawzO2rwtzYlZiswEtG6+m7TUNe81OvJzqn+?=
- =?us-ascii?Q?po7vigzqPiymzhpQWlfF0ybmJMFPpraMZ1n+BzjZsIKZ5s4/SvyUGXBAjqDS?=
- =?us-ascii?Q?1HlI/rjHQpoQlz5mwoFJ73+SaGqlZtiALLeppqGCyy02nKuZIm/esiDv+T/u?=
- =?us-ascii?Q?gAEibOUalyC3WPY1PM+c4ClU9AWchzKQvUnrtq6/lFyzayDwUCEqq+qEHtkX?=
- =?us-ascii?Q?xEOG21FZUYOn9Y9kVhyLW10P2X8bgrhEBBqHLhb6yw4feJXpSZOyYWTAAx6g?=
- =?us-ascii?Q?JHgs5TLqTRS2O/moTTlfNB9iaCGfi/WMPnMvpwEZJURImv9MMTNaDEuK3Krm?=
- =?us-ascii?Q?XQVrW7LgVXWB+ubAtNEcyFEEJw9N/8Mg3ISTB/fPkTeEZMr8wpPvr9Xj5N0B?=
- =?us-ascii?Q?oejrtL0vDvkyiTti1O1XoABcTI9TlcNSd+3jYaBDoTb4ZymfsbYVMG18/e3y?=
- =?us-ascii?Q?UBopPWo93IFgYMlQtQS1dgoYXO9m6eK6kAeIftk5mLLouVfAopXnpn8Scx1Q?=
- =?us-ascii?Q?QGiZlT9F29Sa/GLbxrZzQ8ylGrf6qTfYCGulI2IOtud10a5AvgQNGTZNvseS?=
- =?us-ascii?Q?oSZWHPaRPW0MYeo0kctgdeQBDqq2Y19guzucvVTm1JHlamJR1Vs5FWCIjjJe?=
- =?us-ascii?Q?sawZtFF0KNEhNBBIZ4eAHWsTHxOYqkjRT2kqfndL/4Bd0QLJY/AsN79tsvpX?=
- =?us-ascii?Q?GhUFqGf4DLEcVdTOAZdlvbomVXV98BPwBPwdvqE1dF+n2ymLP0IT6VA5ONJ8?=
- =?us-ascii?Q?FCmKHKaCxCaKWfHB3lSqYh7buUHrHEos7MBELtLYaflDGeAxLVwFHPGMoXpX?=
- =?us-ascii?Q?sg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0ce30f2-0946-4eb9-726e-08db1f086d59
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 12:35:27.3927
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3d2dS8opELBFG3z/FcM75F/NQKCXzcwdbsZchgse2yLWW/wJ28P7EgSH5CvwvxgudKBhXLsoCJrzln2DTF2GJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7669
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="7xbXmd+4l/jRSr+Y"
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Xiongwei,
 
-On Tue, Mar 07, 2023 at 12:11:52PM +0000, Song, Xiongwei wrote:
-> ......snip......
-> failing SW:
-> rx_octets                       +64
-> rx_unicast                      +1
-> rx_frames_below_65_octets       +1
-> rx_yellow_prio_0                +1
-> *drop_yellow_prio_0              +1
-> ......snip......
-> 
-> 3). From pcap file(the pcap was collected on the senderside (VM))
-> 
-> Frame 1: 64 bytes on wire (512 bits), 64 bytes captured (512 bits)
-> Ethernet II, Src: 7c:72:6e:d4:44:5f (7c:72:6e:d4:44:5f), Dst: aa:3a:b3:e7:67:5c (aa:3a:b3:e7:67:5c)
->     Destination: aa:3a:b3:e7:67:5c (aa:3a:b3:e7:67:5c)
->     Source: 7c:72:6e:d4:44:5f (7c:72:6e:d4:44:5f)
->     Type: 802.1Q Virtual LAN (0x8100)
-> 802.1Q Virtual LAN, PRI: 6, DEI: 0, ID: 981
->     110. .... .... .... = Priority: Internetwork Control (6)
->     ...0 .... .... .... = DEI: Ineligible
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--7xbXmd+4l/jRSr+Y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->     .... 0011 1101 0101 = ID: 981
->     Type: ARP (0x0806)
->     Padding: 0000000000000000000000000000
->     Trailer: 00000000
-> 
-> Frame 2: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
-> Ethernet II, Src: aa:3a:b3:e7:67:5c (aa:3a:b3:e7:67:5c), Dst: 7c:72:6e:d4:44:5f (7c:72:6e:d4:44:5f)
-> 802.1Q Virtual LAN, PRI: 0, DEI: 0, ID: 981
->     000. .... .... .... = Priority: Best Effort (default) (0)
->     ...0 .... .... .... = DEI: Ineligible
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hi!
 
->     .... 0011 1101 0101 = ID: 981
->     Type: ARP (0x0806)
-> 
-> Frame 3: 47 bytes on wire (376 bits), 47 bytes captured (376 bits)
-> Ethernet II, Src: aa:3a:b3:e7:67:5c (aa:3a:b3:e7:67:5c), Dst: 7c:72:6e:d4:44:5f (7c:72:6e:d4:44:5f)
-> 802.1Q Virtual LAN, PRI: 0, DEI: 1, ID: 981
->     000. .... .... .... = Priority: Best Effort (default) (0)
->     ...1 .... .... .... = DEI: Eligible
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I complained that "battery life is very poor" with leste. It seems to
+be combination of several factors.
 
->     .... 0011 1101 0101 = ID: 981
->     Type: IPv4 (0x0800)
-> 
-> Frame 4: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
-> Ethernet II, Src: aa:3a:b3:e7:67:5c (aa:3a:b3:e7:67:5c), Dst: 7c:72:6e:d4:44:5f (7c:72:6e:d4:44:5f)
-> 802.1Q Virtual LAN, PRI: 0, DEI: 1, ID: 981
->     000. .... .... .... = Priority: Best Effort (default) (0)
->     ...1 .... .... .... = DEI: Eligible
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1) I was using very old battery
 
->     .... 0011 1101 0101 = ID: 981
->     Type: IPv4 (0x0800)
-> 
-> 4). What we've found so far
-> 
-> According binary search, we found out the following commit causes this issue:
-> a4ae997adcbd("net: mscc: ocelot: initialize watermarks to sane defaults").
-> Without this commit the test case was passed.
-> 
-> Could you please take a look? Please let me know if you need more debug info.
+2) My charger is detected as "USB", not as "AC"
 
-I've marked the DEI values in the message you posted above.
+3) Charger was cycling on/off, which was annoying and I often ending
+up dissconnecting the charger
 
-Commit a4ae997adcbd ("net: mscc: ocelot: initialize watermarks to sane defaults")
-tells the hardware to not allow frames with DEI=1 consume from the shared switch
-resources (buffers / frame references) by default. Drop Eligible Indicator = 1
-means "eligible for dropping". The only chance for DEI=1 frames to not be dropped
-is to set up a resource reservation for that stream, via the devlink-sb command.
+4) It probably has a bit higher power consuption than original android
 
-Frames 3 and 4 are sent with DEI=1 and are dropped, frames 1 and 2 are
-sent with DEI=0 and are not dropped. I'm not sure if varying the DEI
-field is part of the intentions of the test? Is there any RFC which says
-that IP fragments over VLAN should use DEI=1, or some other reason?
+5) Android is more aggressive, charges to 4.35V, and allows deeper
+discharge
+
+According to my measurements "CPCAP_REG_CRM_FET_OVRD |
+CPCAP_REG_CRM_FET_CTRL" results in battery discharding and 0A drawn
+frmo the USB.  "CPCAP_REG_CRM_FET_OVRD" is phone powered from USB,
+with battery more or less disconnected (<12mA), which is what we want
+in battery full situation.
+
+Second problem was that phone never really stayed in "battery full",
+immediately exiting it.
+
+This should solve both issues (plus it enables a lot of
+debugging).
+
+Best regards,
+								Pavel
+
+Signed-off-by: Pavel Machek <pavel@ucw.cz>
+
+diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cp=
+cap-charger.c
+index 8bd1abe246cc..af268fc87fbf 100644
+--- a/drivers/power/supply/cpcap-charger.c
++++ b/drivers/power/supply/cpcap-charger.c
+@@ -10,6 +10,7 @@
+  * Copyright (C) 2009-2010 Motorola, Inc.
+  */
+=20
++#define DEBUG
+ #include <linux/atomic.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
+@@ -410,8 +411,7 @@ static int cpcap_charger_disable(struct cpcap_charger_d=
+data *ddata)
+ 	int error;
+=20
+ 	error =3D regmap_update_bits(ddata->reg, CPCAP_REG_CRM, 0x3fff,
+-				   CPCAP_REG_CRM_FET_OVRD |
+-				   CPCAP_REG_CRM_FET_CTRL);
++				   CPCAP_REG_CRM_FET_OVRD);
+ 	if (error)
+ 		dev_err(ddata->dev, "%s failed with %i\n", __func__, error);
+=20
+@@ -686,8 +686,11 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 	if (error)
+ 		return;
+=20
++	dev_dbg(ddata->dev, "%d %d %d %d\n", s.chrg_det, s.chrgcurr1, s.chrgcurr2=
+, s.vbusvld);
++
+ 	/* Just init the state if a charger is connected with no chrg_det set */
+ 	if (!s.chrg_det && s.chrgcurr1 && s.vbusvld) {
++	  printk("Just init -- not chrg_det\n");
+ 		cpcap_charger_update_state(ddata,
+ 					   POWER_SUPPLY_STATUS_NOT_CHARGING);
+=20
+@@ -699,6 +702,7 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 	 * charged to 4.35V by Android. Try again in 10 minutes.
+ 	 */
+ 	if (cpcap_charger_get_charge_voltage(ddata) > ddata->voltage) {
++	  printk("Battery overcharged, wait\n");
+ 		cpcap_charger_disconnect(ddata,
+ 					 POWER_SUPPLY_STATUS_NOT_CHARGING,
+ 					 HZ * 60 * 10);
+@@ -713,14 +717,24 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 			break;
+ 		new_state =3D POWER_SUPPLY_STATUS_FULL;
+=20
++		printk("No current -> we are done\n");
++
+ 		if (s.chrgcurr1 && s.vbusvld) {
+ 			cpcap_charger_disconnect(ddata, new_state, HZ * 5);
+ 			return;
+ 		}
+ 		break;
+ 	case POWER_SUPPLY_STATUS_FULL:
++		if (s.vbusvld) {
++			printk("Full, stay full\n");
++			schedule_delayed_work(&ddata->detect_work, HZ * 10);
++			return;
++		}
+ 		if (!s.chrgcurr2)
+ 			break;
++
++		printk("Full but we need to do something\n");
++
+ 		if (s.vbusvld)
+ 			new_state =3D POWER_SUPPLY_STATUS_NOT_CHARGING;
+ 		else
+@@ -762,6 +776,7 @@ static void cpcap_usb_detect(struct work_struct *work)
+ 		if (!delayed_work_pending(&ddata->ramp_work))
+ 			schedule_delayed_work(&ddata->ramp_work, HZ/20);
+ 	} else {
++	  printk("No feeding bus, disabling\n");
+ 		ddata->set_current =3D 0;
+ 		error =3D cpcap_charger_disable(ddata);
+ 		if (error)
+
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--7xbXmd+4l/jRSr+Y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZAcvuAAKCRAw5/Bqldv6
+8sS2AJ0c/lCr9NYEJajukVCVSMDNpN4GqwCdHZ/pDLpGHZKrHJxNE8IBo6IXG3A=
+=zONU
+-----END PGP SIGNATURE-----
+
+--7xbXmd+4l/jRSr+Y--
