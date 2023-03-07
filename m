@@ -2,136 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5A86AE9B7
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD45A6AE9D2
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjCGR1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:27:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S231646AbjCGR1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:27:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjCGR0h (ORCPT
+        with ESMTP id S231615AbjCGR1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:26:37 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630479AA17;
-        Tue,  7 Mar 2023 09:21:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XSqU1Vaxn1A71jmt6ddX6zAGwFHiMcKn20JXj2bElaRSN5ja0a0YUFmPI61ShwMF7ghLGN+pydKcy6INbCmJmTOAe0V4yv1/BkGCbxVTZZuXjW/NDXttMnKrqsOmDGuMgCEKQwuR7XKUHlaCfa6sbMpVstYjxtun+0v4W1em/RUgysQpVgF6fZZnMhg0wL4DWvpswbDZTyHHxWv3dDrnOwZhG3a6FNINlCQLctOsIaasH909KUe1ZczDaofmgOgWePvDiGDjYlkRFzk5nsXMKCD2B/GIsvrlb6+MBRpEYlHtmPcFUVwS+bsKpqwSsKIThSc/lRnHoUHqkZVE59asbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RzNnw1MuTfIMpCnxrHUqkNCjPFtLDt81gzmGxj05USE=;
- b=ImCxoD1mbZliTNdnC2T8pElwJ6xoEijQs1blT6P+EIpMRy449MMTlPEZ7z+ZxvaQaXJN2etpS01xU5j+hGkR23xWsEWoJcr/jbQeJJzWO9QnbO6JN1JDir+CL2P8uuZ7UungyCmSe6dtQTTefWLVS/0dEaRlLF5T931NGkM9H1e86wYZOhPbLInrNVjd0oBf62rO90mufxpbubXX9FoG0HYHvLqRdCgEJeWH9xlsuP/MjzVLZCTEAYdRptjAb7QA/c6GMwU71jN9CAZZXHKdTy4FLSWtBSYZ0Cw/bdBBCL8mdvGXvnHASjV/yUdLKZYIo/cUkyQ2hUVNQsdhWICCvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 7 Mar 2023 12:27:23 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEE598E9B;
+        Tue,  7 Mar 2023 09:22:41 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id i34so55323266eda.7;
+        Tue, 07 Mar 2023 09:22:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RzNnw1MuTfIMpCnxrHUqkNCjPFtLDt81gzmGxj05USE=;
- b=Iq3v3c8uH3mdJGImcMYHsrH7ffPZFhNdn2j0tP++wNiFQ123A1QRf8BSIw96cTVy1VK4AYfvBoAEuRRuG6TDFNfnRZdrvkgK0AyivTJc/YMPVuNA7Hur4+082l/V5rJ3OKCFHyQbLE7kBmR95p2xLYLNMnkQXshMHpWE/Kc3Zq4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5683.namprd13.prod.outlook.com (2603:10b6:510:112::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Tue, 7 Mar
- 2023 17:21:28 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6156.029; Tue, 7 Mar 2023
- 17:21:27 +0000
-Date:   Tue, 7 Mar 2023 18:21:20 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/11] ravb: remove R-Car H3 ES1.* handling
-Message-ID: <ZAdykH6hMtAa5QoI@corigine.com>
-References: <20230307163041.3815-1-wsa+renesas@sang-engineering.com>
- <20230307163041.3815-8-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307163041.3815-8-wsa+renesas@sang-engineering.com>
-X-ClientProxiedBy: AM3PR05CA0140.eurprd05.prod.outlook.com
- (2603:10a6:207:3::18) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20210112; t=1678209760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QX9d0kgXQURozDFuIvakR/LVRy3evUuOWuMgoK4cT+g=;
+        b=KYbuBGMTm/O97tpiJqbC3UA2u2PmSRLd3BXaSJSzbOKrcpnC1hbia9Ulnm//kf17Ft
+         s2KgO/waG1KDDBCkfLL/wrk8Uh0HdZFjBRXin7uAB/V4FIyBmtsray2lwwUC17Ky8ROC
+         Ep8xBqg6KMq3//jUGyV2An9/LR3ZnM/cQCZR/nNQVIE/SfJ1nQfiG5Srbg/oxKZu1JjS
+         km655NJCbEEkyuwRIxRu7TohWZlQld2XN9Y42LRyFIBhgGKxlQf/5LEs1OpgjiZbruJI
+         kVQkLrQqZpo8j138Gde8dioPweszb88XCgR1gVeGr9bTd815i8FqfOeNubW4VJkLXn2D
+         BBQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678209760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QX9d0kgXQURozDFuIvakR/LVRy3evUuOWuMgoK4cT+g=;
+        b=DHGEi6hgY2yKeOGa49RFxkJewvsr5rmgLxj3SxkGYOdQovtxQ/aLHGkVB8Y8PLjTlD
+         mK6rFALQL0MG5DB9So0VJ7Yx9/tKUbh5PRPy9+H+oHaaO4kR93/HvhoKcTRzHt/HFURc
+         GIvST1g+3Knl3SD1cnJHfn3Z0ciWwx290ORI7xswgX4tYfYdtxbY2hQSRitC/vHW1l2d
+         IuIZFgY94prPFqvBPSi7+dhRqIJCG/TMuQyNnOwH8cqZJZXnvsu0u8kURE2KP5WSqfXM
+         a0PtOaW4zM5vuRXPagJQOU2aFhoMe6pI3mChoPbWv7lANUoNdDy1Md7BpIbPPe3mWeax
+         Semw==
+X-Gm-Message-State: AO0yUKX35BhOBb/MJkty4NCutm4GtatLAv/N4ORxIwgshK94ZmNiNAex
+        Qi3JtuB7UX8IS53SatP9j+ECZDLvvtyu6LPIOQk=
+X-Google-Smtp-Source: AK7set9LgTZn0HgFblAoXaH39W4h78GaBj+CHvntuYnzSuYHhLZ8me8dMoTLncFVsvKsy8oNT+TV7qReuhARn94FJOE=
+X-Received: by 2002:a17:906:747:b0:87b:dce7:c245 with SMTP id
+ z7-20020a170906074700b0087bdce7c245mr6851404ejb.3.1678209760095; Tue, 07 Mar
+ 2023 09:22:40 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5683:EE_
-X-MS-Office365-Filtering-Correlation-Id: e2a465b9-154d-4e4d-3832-08db1f306295
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O7sWGVk/O84tOQmkXy8zomAceqqm4F+KPt6CTRleDMDoLAW2i3shAckD1n5jIYe2fuuZonevBWvXE9I5ylSrPqsqEZ7jwZFryUdUhMA9xoYKtsnx6aj/GRMW+JyaS7cwnuFu0XA7Z4D9YRqeHUZXZQ3f+jgfkL/p/f5tu98qn7+mJTH4AOK8TjjtNEYYUUOip6o5FuwypTD346Z19r2bE1OqlcweQ7ioYCiOAPLLIvgh2kLuA8Sz/akC8gSiky6rwJubQvmeH8Q2eE3GifHGFaHQF96k2E1SN84NdWc36MjpXDC/rNqb57z9nzlq+8CHmox+0U0EUSkEgKbXmbNH66nvGSr7ZnsSgOcSxTNzwg5JFbizpqE5XxoVAtfZKizvBUkMg9yl9pYBuS/kaIEkpqdXwm++ivF0lKs23xCk0+bjDTRyiXGQKH4eFJAMgWXlQqACbD4lFgCNy1zMIRCNOTP6XPbIUD14mgmANBaDNuOlb/xJbH92gv71T53WzBkFY8RhwwrNoRo6Zhq28eye+yz1OWxqViPEYWL2VkRVuo6Y8fOHfdTxE1rGEr0WH58+j/wWCf/wKghQCt7M+HoGyx2ZdYG9JpGZoxg/LE0CqfYUN2APLgK5vuSArtxNGCQEDS7m42eo4COq8oRVBNwkGHZrAuOhjqbOC6amzerp6TD7HaRIyCMWAx8NEDiYm6nw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(39840400004)(346002)(136003)(396003)(451199018)(2906002)(38100700002)(186003)(6506007)(6512007)(2616005)(44832011)(6666004)(4744005)(66946007)(66476007)(8936002)(66556008)(478600001)(5660300002)(6486002)(7416002)(41300700001)(54906003)(36756003)(4326008)(8676002)(316002)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zEczywK45NtEX42Vxp3TKOrY2KXrJiBtTXQRcRy3toqow1Qqir4of6CAnA3l?=
- =?us-ascii?Q?WZm5j+RW3hNyjGhTySLB10Xu48POr8LegBcax7n8xdxMP6B8D9MEviSRpEgf?=
- =?us-ascii?Q?CWqd8Q3b4ajJDVvlMfsv868j1aj5Re+dHgHVQyl10jqiUTWmMCiHAazJCoZw?=
- =?us-ascii?Q?LyxadzLYawiIbIQbIGGu3CYAUMfYTjJQ8q5ME13+6u+lKmRtSYzVz0/N6Hp/?=
- =?us-ascii?Q?j4l/8xeTrEvsuvT1b9gWFCLKVmh6WSl4YFjH5Goy7HPjGY5+QiNcqHzlwnca?=
- =?us-ascii?Q?cAX1+o/WFBRITVnWqWy0ncYUX12QMYVzp4FWKiLN0t4d+6fAmdqTus42FfA0?=
- =?us-ascii?Q?991YXNdqEKVBoXRGZq8oBdyj1baaA0ygVKHHWZOSMU/uLTgENhOhE1ggeg/C?=
- =?us-ascii?Q?Z9U8CNGM5Hp9uLLOOmQOaO/mbUEIg186Gd4AMbSPGb+wvtams/qCWvwjbO2e?=
- =?us-ascii?Q?TmOsdWcJ6BEVGsS/rA5FnoCaN14ik6W2QeZ2y3GpyBSxHaehVJ0idLEcePa6?=
- =?us-ascii?Q?b0PmjjqGMszxPoyYuk6GnSZCzfDeR7cKPHx4Ijt8LxTA4q2C8COWMmltS3fc?=
- =?us-ascii?Q?3qjygUFTDSY00NCbzszeaBgS4bEvyDayTy7ttcCeTwg1OojxAmXZc5ilfNpP?=
- =?us-ascii?Q?LMaHPwnf7Y0TY1d4z0AKWjLC5zf9jVAyBKo/ITG22/9rJEgMVm8nRIr6pxPQ?=
- =?us-ascii?Q?KsEPqjcDX7WRKtfTiqPxLlxWVdg8OfIujwHEempIj4orR/9WiU+3Gr2sU2nT?=
- =?us-ascii?Q?i2WIErGYQ9pZWqTbNp5ePHBfBXDxUTxsNBQBoWW6tAPaVZLUs6Ys5ufKl6na?=
- =?us-ascii?Q?Uxa+OO9UgsZrsUeKBdUqZxUzTCjfUbAIOsoACbFXDI/Ezw6Lk3mqwK334s0+?=
- =?us-ascii?Q?9Wa6/8LvsJnlJrzkF9yZ0fHVyWyZjSTfX2EMBeHKxO+ZF9NEZ6GN0PFyrKCc?=
- =?us-ascii?Q?3N6U6gEorsshI43yo0A0ywc/I8YoOo7JoJVOloV9RBqKnC0HKWPV5gfOgaf/?=
- =?us-ascii?Q?pdnwAFTZReJfg8WMcIiuBwByjUwJe0l+9JK0J01+nsXGcUfYy7xStwDJBY/8?=
- =?us-ascii?Q?yDNxR/VDwsFoEQajNzS1SgP+pM4tKVTVFxeQPfg902xOp/BY3eAOF/5dmWep?=
- =?us-ascii?Q?+WK5KvIzHgOIUvzTjvNmx9wnkJ6teTQXLTKmFzsuQWBopMNhjz08GjDxn4+r?=
- =?us-ascii?Q?vIoLDUk959jrarRqUWbJqG4Kyas7B2z9k7zh0Or1+klT70JKBsay92Y6F4Tp?=
- =?us-ascii?Q?Kyikdz/zNIkwK3KW4USbayVqSnxFJjyvLrAVrq1uRa4QbcIMmy1ShcfimILF?=
- =?us-ascii?Q?ym+KGmjmEDrRJKDzv75TsU7N8Knev4HEEb1ZBG0HbAbDnwVgYtZXPFoddynk?=
- =?us-ascii?Q?pOSqVIjuhhh8any9eyaVB1hJNFFv4hfEHiKXiJHHoHHbAZTaHtrnHhogdDFz?=
- =?us-ascii?Q?UF4kpbVWmVgwJAiU719SfyviasW56GJLJJxoL+82DfxiNQRrxeEQa5G8yiFS?=
- =?us-ascii?Q?Brcfaf/W+aVMpoT1Xwbl5hOry7GP+Rarnm1R1KK0wNtE1/1xucFKn5Yf4Jf1?=
- =?us-ascii?Q?sBGlTcT06M+upNbVCC9ARlbDWBZSIItjRsVfxi8dfrAvTpI0Vdm2ADyUtUhW?=
- =?us-ascii?Q?TfYi2nZ8b9f0TJrXM4Ys4DvTqk0eVdsFyTIo5wJkVlMqgko5E6QiaBhMfu44?=
- =?us-ascii?Q?qXdHEg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e2a465b9-154d-4e4d-3832-08db1f306295
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Mar 2023 17:21:27.7925
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BlucwB8iM5uYqkMEEKYRPNOeKqWN0yvtd23/TCKHmzpDY7qzFv3SnOaXOxH0ADedTI4bM7CPI9lMWmRPXud2ckte9wpz2IH0dg9KpsAbfHU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5683
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307220449.2933650-1-xukuohai@huaweicloud.com> <20230307220449.2933650-2-xukuohai@huaweicloud.com>
+In-Reply-To: <20230307220449.2933650-2-xukuohai@huaweicloud.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 7 Mar 2023 09:22:08 -0800
+Message-ID: <CAADnVQLDmP0A7Pr7628nH8YSo3-xTjzAr5-x-0YCZvuS8xu09A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: update 32-bit bounds when the lower
+ 32-bit value is not wrapping
+To:     Xu Kuohai <xukuohai@huaweicloud.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 05:30:35PM +0100, Wolfram Sang wrote:
-> R-Car H3 ES1.* was only available to an internal development group and
-> needed a lot of quirks and workarounds. These become a maintenance
-> burden now, so our development group decided to remove upstream support
-> and disable booting for this SoC. Public users only have ES2 onwards.
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On Tue, Mar 7, 2023 at 1:05=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.com>=
+ wrote:
+>
+> The following XDP prog is accepted by verifier.
+>
+> 0: (61) r2 =3D *(u32 *)(r1 +0)          ; R2_w=3Dpkt(off=3D0,r=3D0,imm=3D=
+0)
+> 1: (61) r3 =3D *(u32 *)(r1 +4)          ; R3_w=3Dpkt_end(off=3D0,imm=3D0)
+> 2: (bf) r1 =3D r2
+> 3: (07) r1 +=3D 1
+> 4: (2d) if r1 > r3 goto pc+6
+> 5: (71) r1 =3D *(u8 *)(r2 +0)           ; R1_w=3Dscalar(umax=3D255,var_of=
+f=3D(0x0; 0xff))
+> 6: (b4) w0 =3D 0x7fffff10
+> 7: (0c) w1 +=3D w0                      ; R1_w=3Dscalar(umin=3D0x7fffff10=
+,umax=3D0x8000000f,var_off=3D(0x0; 0xffffffff))
+> 8: (b4) w0 =3D 0x80000000
+> 9: (04) w0 +=3D 1
+> 10: (ae) if w0 < w1 goto pc-2
+> 11: (b7) r0 =3D 0
+> 12: (95) exit
+>
+> while the following 64-bit version is rejected.
+>
+> 0: (61) r2 =3D *(u32 *)(r1 +0)          ; R2_w=3Dpkt(off=3D0,r=3D0,imm=3D=
+0)
+> 1: (61) r3 =3D *(u32 *)(r1 +4)          ; R3_w=3Dpkt_end(off=3D0,imm=3D0)
+> 2: (bf) r1 =3D r2
+> 3: (07) r1 +=3D 1
+> 4: (2d) if r1 > r3 goto pc+8
+> 5: (71) r1 =3D *(u8 *)(r2 +0)           ; R1_w=3Dscalar(umax=3D255,var_of=
+f=3D(0x0; 0xff))
+> 6: (18) r0 =3D 0x7fffffffffffff10
+> 8: (0f) r1 +=3D r0                      ; R1_w=3Dscalar(umin=3D0x7fffffff=
+ffffff10,umax=3D0x800000000000000f)
+> 9: (18) r0 =3D 0x8000000000000000
+> 11: (07) r0 +=3D 1
+> 12: (ad) if r0 < r1 goto pc-2
+> 13: (b7) r0 =3D 0
+> 14: (95) exit
 
-This brought back some memories.
+These two programs are not equivalent.
+Not clear how apples to oranges comparison explains anything.
 
-Signed-off-by: Simon Horman <simon.horman@corigine.com>
+> The verifier log says:
+>
+> [...]
+>
+> from 12 to 11: R0_w=3D-9223372036854775794 R1=3Dscalar(umin=3D92233720368=
+54775823,umax=3D9223372036854775823,var_off=3D(0x8000000000000000; 0xffffff=
+ff))
+> 11: (07) r0 +=3D 1                      ; R0_w=3D-9223372036854775793
+> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=3D-9223372036854775793 R1=3D=
+scalar(umin=3D9223372036854775823,umax=3D9223372036854775823,var_off=3D(0x8=
+000000000000000; 0xffffffff))
+> 13: safe
+>
+> from 12 to 11: R0_w=3D-9223372036854775793 R1=3Dscalar(umin=3D92233720368=
+54775824,umax=3D9223372036854775823,var_off=3D(0x8000000000000000; 0xffffff=
+ff))
+
+First thing to debug is why umin is higher than umax.
+
+> 11: (07) r0 +=3D 1                      ; R0_w=3D-9223372036854775792
+> 12: (ad) if r0 < r1 goto pc-2         ; R0_w=3D-9223372036854775792 R1=3D=
+scalar(umin=3D9223372036854775824,umax=3D9223372036854775823,var_off=3D(0x8=
+000000000000000; 0xffffffff))
+> 13: safe
+>
+> [...]
+>
+> The loop crosses termination condition r0 =3D=3D r1.umax, and does not st=
+op.
+>
+> The reason is that when the verifier enumerates to r1.umin =3D=3D r1.umax=
+, the value
+> 0x800000000000000f of r1.umin is greater than U32_MAX, so __reg_combine_6=
+4_into_32
+> sets the u32 range of r1 to [0, U32_MAX] instead of marking r1 as a const=
+ant,
+> making is_branch_taken() in check_cond_jmp_op() be skipped.
+
+And it's fine. The verifier is conservative.
+
+>
+> To fix it, update 32-bit bounds when the lower 32-bit value is not wrappi=
+ng,
+> even if the 64-bit value is beyond the range of [0, U32_MAX] or [S32_MIN,=
+ S32_MAX].
+
+That's not safe in general.
+
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huaweicloud.com>
+> ---
+>  kernel/bpf/verifier.c | 27 +++++++++++----------------
+>  1 file changed, 11 insertions(+), 16 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b2116ca78d9a..64c9ee3857ec 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2013,26 +2013,21 @@ static void __reg_combine_32_into_64(struct bpf_r=
+eg_state *reg)
+>         reg_bounds_sync(reg);
+>  }
+>
+> -static bool __reg64_bound_s32(s64 a)
+> -{
+> -       return a >=3D S32_MIN && a <=3D S32_MAX;
+> -}
+> -
+> -static bool __reg64_bound_u32(u64 a)
+> -{
+> -       return a >=3D U32_MIN && a <=3D U32_MAX;
+> -}
+> -
+>  static void __reg_combine_64_into_32(struct bpf_reg_state *reg)
+>  {
+> +       s64 smin =3D reg->smin_value;
+> +       s64 smax =3D reg->smax_value;
+> +       u64 umin =3D reg->umin_value;
+> +       u64 umax =3D reg->umax_value;
+> +
+>         __mark_reg32_unbounded(reg);
+> -       if (__reg64_bound_s32(reg->smin_value) && __reg64_bound_s32(reg->=
+smax_value)) {
+> -               reg->s32_min_value =3D (s32)reg->smin_value;
+> -               reg->s32_max_value =3D (s32)reg->smax_value;
+> +       if ((u64)(smax - smin) <=3D (u64)U32_MAX && (s32)smin <=3D (s32)s=
+max) {
+> +               reg->s32_min_value =3D (s32)smin;
+> +               reg->s32_max_value =3D (s32)smax;
+>         }
+> -       if (__reg64_bound_u32(reg->umin_value) && __reg64_bound_u32(reg->=
+umax_value)) {
+> -               reg->u32_min_value =3D (u32)reg->umin_value;
+> -               reg->u32_max_value =3D (u32)reg->umax_value;
+> +       if (umax - umin <=3D U32_MAX && (u32)umin <=3D (u32)umax) {
+> +               reg->u32_min_value =3D (u32)umin;
+> +               reg->u32_max_value =3D (u32)umax;
+
+This looks like a workaround for umin > umax issue.
+Please debug that instead.
+
+>         }
+>         reg_bounds_sync(reg);
+>  }
+> --
+> 2.30.2
+>
