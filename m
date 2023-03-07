@@ -2,241 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37576AE529
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0576AE52F
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjCGPoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:44:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S230434AbjCGPpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:45:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjCGPog (ORCPT
+        with ESMTP id S229947AbjCGPpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 10:44:36 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF0739BB0
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:44:26 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id u9so54116521edd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:44:26 -0800 (PST)
+        Tue, 7 Mar 2023 10:45:31 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194D032CD0
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 07:45:29 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id f11so12572013wrv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 07:45:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678203865;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pELUsp6yWcX3CCqh+SbGeeFg/b7go8wzOCVsRgt5zwM=;
-        b=ydLI2+dorOlsuYhWP2zsWARMk6lgEr41/nPZDVCjE8vfPGA7ZkynpTY1Iw1FtkB1t6
-         DPPA35j2Pc8pGeizv6b4jONr6Dy19NNHIjoQ7CgBFeNiPmsbaTkmGxXUmv1gOFXXz4Q7
-         iRd3DumPvXQSIZ8oUQivbR6U2rV41hsY6P7zIW7AxOJAHuBHczFsbT5j5cwQDJ74gvcl
-         /oAnKfr3gA/Z3lBnpH7HqAcLIUB/JqhLoD9ESkTpvbprFydsWEeVzWenGHBHj683+snp
-         4k16GdWLVMj2RtV1mLoauY0t06h8Um6OWYPC5JGmdkaExGWZdIbzwfLX45I15pN7KxMh
-         uPbA==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678203927;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0NMT354TdG7a+Mjd6nR8XY28RmDaq3SVnAflnava9+4=;
+        b=hMkvX07ZWoEiUrNshSUONwBDA8mCpjSl9GndL4JQtN8MUn8/BnoS2vISYH7f/VMaBf
+         3hveIte2Is2YGBevN1S5N46ox8c4WHSl4yZCnT4eydXX6lN4ozH2k/5Z9P1C1p2yY6Y6
+         UXvo62ShrMcy7kC0Wpd3efQsBiXiMT5Vi24vQ+bIxtTENvmbWZt7b5w+PIFu40sgcf+w
+         4tcZHu3Ncvf7+aFNMnKhCIWk16fLycz2FCVwP8noBTWbzETc0mefmwm+lz58SGhoQNbg
+         z80QcsPVIuLS3/Au9xz8pUr/yUVnBkLaJx1LSJmLuXzSvsLrN4xxUONwQYZZyY6efQkk
+         fErA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678203865;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pELUsp6yWcX3CCqh+SbGeeFg/b7go8wzOCVsRgt5zwM=;
-        b=htGUkXR5aCMP5qqSXs8wXc5g0NFa6//EOWRQlt8Gd0lirSctwMNXP8a4XlF+8htImM
-         TaDMKgPyjnDlHVcLZqNzK43VT9PL21YaLcxMqJBnsOUosG6W1ltqh1IeoOnWkQbIsCoB
-         gVgfymeR8RPPYsYih4e9T8yQ+0+IwJhcgGIs7NZ0jk3hU2c0/IFo+QCoD5jcBYti9zIi
-         cjE5MBK4zVnUrau1RMxXdS1YivNzXiNpJfTfzO7qBkcSwZPPqs9PD/Xi+HFyfl8UJMsJ
-         5kYGdwyjqIOsVwip6c6TU7a/mkK+PzLaY3ON0kToJevlIx9ZniXg8IqLD5GD4npZziD4
-         YLnw==
-X-Gm-Message-State: AO0yUKVdfVWlpZfn7/LBiAvlQD9w17RHKQU7n/y5iyRfOln6nEt7LZVF
-        VukgtncNyNZL/LlQ93j5y7dWlA==
-X-Google-Smtp-Source: AK7set8/P7VfJR9EkoyuPlWLt539pgRHouLThdqqpFF177TUeWAJVJV+TPJqqOuWra8yPAxD5Ao1Dg==
-X-Received: by 2002:a17:907:7242:b0:8df:8381:52f7 with SMTP id ds2-20020a170907724200b008df838152f7mr20172769ejc.17.1678203865457;
-        Tue, 07 Mar 2023 07:44:25 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:a60f:e604:c252:1f3d? ([2a02:810d:15c0:828:a60f:e604:c252:1f3d])
-        by smtp.gmail.com with ESMTPSA id hy3-20020a1709068a6300b008e57b5e0ce9sm6261800ejc.108.2023.03.07.07.44.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 07:44:25 -0800 (PST)
-Message-ID: <c89d2b2b-fea1-c255-582d-60a783e2f555@linaro.org>
-Date:   Tue, 7 Mar 2023 16:44:23 +0100
+        d=1e100.net; s=20210112; t=1678203927;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0NMT354TdG7a+Mjd6nR8XY28RmDaq3SVnAflnava9+4=;
+        b=skSi8/BVCG7Lmm5CAN5cImzudAX4cKpY5n3cmLcDh02VCVB9pgFI4B1LTjrOHjFTeX
+         ltsVM8qp8MCZ9EMtMbRs7aR272CxHIduI8qlNMom68yKf+M8q1ILkJdNTVLMA0oNdMO4
+         pgEekCwgGL42bFEyACz+0YFr8jddvJVOsulRl5xpEStzGv2F9z+U8GG15wYbTxr9n/4I
+         BuxypngAPvcmNKn+c9nzHs+nzp9ke6Pl6/UOUP0xULUVL0ZixjNEqJs9FYXKdVGt93st
+         ICnmkpowjocLO/Rja7+msMR197peMFVq9pY1BEgFqLZqv6t172HS+jwJQa+r+B4xjCB5
+         Yf7A==
+X-Gm-Message-State: AO0yUKUGfnhYki4Z388nkNzRcMYnnSlFi0BgPT6t4OzqGHBcu3rWL+FC
+        YkbddDAg6CHUaTMbkT6nFYiQpQ==
+X-Google-Smtp-Source: AK7set9EHu+HV/Mv7v6/4EnH+ZLw8tMFVfGqynaBEs9+XXablQK4YXk5bcSSsrLRLVgmSo2ZJFT/wQ==
+X-Received: by 2002:a5d:4bca:0:b0:2c5:4ca8:a5a1 with SMTP id l10-20020a5d4bca000000b002c54ca8a5a1mr9236688wrt.23.1678203927555;
+        Tue, 07 Mar 2023 07:45:27 -0800 (PST)
+Received: from localhost.localdomain (laubervilliers-657-1-248-155.w90-24.abo.wanadoo.fr. [90.24.137.155])
+        by smtp.gmail.com with ESMTPSA id f2-20020a5d50c2000000b002c704271b05sm12697905wrt.66.2023.03.07.07.45.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 07:45:27 -0800 (PST)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
+Date:   Tue,  7 Mar 2023 16:45:20 +0100
+Message-Id: <20230307154524.118541-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 11/11] arm64: dtsi: qcom: ipq9574: Add nodes to bring up
- multipd
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
-        loic.poulain@linaro.org, quic_eberman@quicinc.com,
-        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-12-git-send-email-quic_mmanikan@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1678164097-13247-12-git-send-email-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
-> Enable nodes required for multipd remoteproc bring up.
-> 
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 145 ++++++++++++++++++++++++++
->  1 file changed, 145 insertions(+)
-> 
+From: Balsam CHIHI <bchihi@baylibre.com>
+
+Add AP thermal domain support to LVTS Driver for MediaTek MT8195 SoC.
+
+This series is a continuation of the original series "Add LVTS Thermal Architecture" v14 :
+    https://patchwork.kernel.org/project/linux-pm/cover/20230209105628.50294-1-bchihi@baylibre.com/
+
+Based on top of thermal/linux-next :
+    base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
+
+Depends on these patches as they are not yet applyied to thermal/linux-next branch :
+    [v14,3/6] arm64: dts: mt8195: Add efuse node to mt8195 (already included in linux master branch)
+    https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-4-bchihi@baylibre.com/
+    [v14,5/6] arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
+    https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-6-bchihi@baylibre.com/
+    [v14,6/6] arm64: dts: mediatek: mt8195: Add temperature mitigation threshold
+    https://patchwork.kernel.org/project/linux-pm/patch/20230209105628.50294-7-bchihi@baylibre.com/
+
+Balsam CHIHI (4):
+  dt-bindings: thermal: mediatek: Add AP domain to LVTS thermal
+    controllers for mt8195
+  thermal/drivers/mediatek/lvts_thermal: Add AP domain for mt8195
+  arm64: dts: mediatek: mt8195: Add AP domain thermal zones
+  arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
+
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 180 ++++++++++++++++++
+ drivers/thermal/mediatek/lvts_thermal.c       |  94 +++++++--
+ .../thermal/mediatek,lvts-thermal.h           |  10 +
+ 3 files changed, 264 insertions(+), 20 deletions(-)
 
 
->  	soc: soc@0 {
->  		compatible = "simple-bus";
->  		#address-cells = <1>;
-> @@ -829,6 +858,122 @@ IRQ_TYPE_LEVEL_HIGH>, /* int_c */
->  			msi-parent = <&v2m0>;
->  			status = "disabled";
->  		};
-> +
-> +		q6v5_wcss: remoteproc@cd00000 {
-
-Be sure you put it in correct place - ordered by unit address.
-
-> +			compatible = "qcom,ipq9574-q6-mpd";
-> +			#address-cells = <1>;
-> +			#size-cells = <1>;
-> +			ranges;
-
-Why do you need them?
-
-> +			reg = <0x0cd00000 0x4040>;
-
-reg is always a second property.
-
-> +			interrupts-extended = <&intc GIC_SPI 325 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wcss_smp2p_in 0 0>,
-> +					      <&wcss_smp2p_in 1 0>,
-> +					      <&wcss_smp2p_in 2 0>,
-> +					      <&wcss_smp2p_in 3 0>;
-> +			interrupt-names = "wdog",
-> +					  "fatal",
-> +					  "ready",
-> +					  "handover",
-> +					  "stop-ack";
-> +
-> +			clocks = <&gcc GCC_ANOC_WCSS_AXI_M_CLK>,
-> +				 <&gcc GCC_WCSS_AHB_S_CLK>,
-> +				 <&gcc GCC_WCSS_ECAHB_CLK>,
-> +				 <&gcc GCC_WCSS_ACMT_CLK>,
-> +				 <&gcc GCC_WCSS_AXI_M_CLK>,
-> +				 <&gcc GCC_Q6_AXIM_CLK>,
-> +				 <&gcc GCC_Q6_AXIM2_CLK>,
-> +				 <&gcc GCC_Q6_AHB_CLK>,
-> +				 <&gcc GCC_Q6_AHB_S_CLK>,
-> +				 <&gcc GCC_Q6SS_BOOT_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_APB_BDG_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_ATB_BDG_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_DAPBUS_BDG_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_NTS_BDG_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_APB_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_ATB_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_DAPBUS_CLK>,
-> +				 <&gcc GCC_WCSS_DBG_IFC_NTS_CLK>,
-> +				 <&gcc GCC_Q6_TSCTR_1TO2_CLK>,
-> +				 <&gcc GCC_Q6SS_ATBM_CLK>,
-> +				 <&gcc GCC_Q6SS_PCLKDBG_CLK>,
-> +				 <&gcc GCC_Q6SS_TRIG_CLK>,
-> +				 <&gcc GCC_MEM_NOC_Q6_AXI_CLK>,
-> +				 <&gcc GCC_WCSS_Q6_TBU_CLK>,
-> +				 <&gcc GCC_SYS_NOC_WCSS_AHB_CLK>;
-> +
-> +			clock-names = "anoc_wcss_axi_m",
-> +				      "wcss_ahb_s",
-> +				      "wcss_ecahb",
-> +				      "wcss_acmt",
-> +				      "wcss_axi_m",
-> +				      "q6_axim",
-> +				      "q6_axim2",
-> +				      "q6_ahb",
-> +				      "q6_ahb_s",
-> +				      "q6ss_boot",
-> +				      "dbg-apb-bdg",
-> +				      "dbg-atb-bdg",
-> +				      "dbg-dapbus-bdg",
-> +				      "dbg-nts-bdg",
-> +				      "dbg-apb",
-> +				      "dbg-atb",
-> +				      "dbg-dapbus",
-> +				      "dbg-nts",
-> +				      "q6_tsctr_1to2_clk",
-> +				      "q6ss_atbm_clk",
-> +				      "q6ss_pclkdbg_clk",
-> +				      "q6ss_trig_clk",
-> +				      "mem_noc_q6_axi",
-> +				      "wcss_q6_tbu",
-> +				      "sys_noc_wcss_ahb";
-> +
-> +			assigned-clocks = <&gcc GCC_ANOC_WCSS_AXI_M_CLK>,
-> +				 <&gcc GCC_WCSS_AHB_S_CLK>,
-> +				 <&gcc GCC_WCSS_ECAHB_CLK>,
-> +				 <&gcc GCC_WCSS_ACMT_CLK>,
-> +				 <&gcc GCC_WCSS_AXI_M_CLK>,
-> +				 <&gcc GCC_Q6_AXIM_CLK>,
-> +				 <&gcc GCC_Q6_AXIM2_CLK>,
-> +				 <&gcc GCC_Q6_AHB_CLK>,
-> +				 <&gcc GCC_Q6_AHB_S_CLK>,
-> +				 <&gcc GCC_Q6SS_BOOT_CLK>,
-> +				 <&gcc GCC_MEM_NOC_Q6_AXI_CLK>,
-> +				 <&gcc GCC_WCSS_Q6_TBU_CLK>,
-> +				 <&gcc GCC_SYS_NOC_WCSS_AHB_CLK>;
-> +
-> +			assigned-clock-rates = <266666667>,
-> +						<133333333>,
-> +						<133333333>,
-> +						<133333333>,
-> +						<266666667>,
-> +						<533000000>,
-> +						<342857143>,
-> +						<133333333>,
-> +						<133333333>,
-> +						<342857143>,
-> +						<533000000>,
-> +						<533000000>,
-> +						<133333333>;
-> +
-> +			qcom,smem-states = <&wcss_smp2p_out 0>,
-> +					   <&wcss_smp2p_out 1>;
-> +			qcom,smem-state-names = "shutdown",
-> +						"stop";
-> +
-> +			memory-region = <&q6_region>;
-> +
-> +			glink-edge {
-> +				interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
-> +				label = "rtr";
-> +				qcom,remote-pid = <1>;
-> +				mboxes = <&apcs_glb 8>;
-> +			};
-> +
-> +			q6_wcss_pd1: remoteproc_pd1 {
-> +				compatible = "qcom,ipq9574-wcss-ahb-mpd";
-
-Why do you need empty node? Usually there is no benefit and these should
-be just part of parent.
-
-> +			};
-> +		};
->  	};
->  
->  	rpm-glink {
-
-Best regards,
-Krzysztof
+base-commit: 6828e402d06f7c574430b61c05db784cd847b19f
+prerequisite-patch-id: 73be949bd16979769e5b94905b244dcee4a8f687
+prerequisite-patch-id: 9076e9b3bd3cc411b7b80344211364db5f0cca17
+prerequisite-patch-id: e220d6ae26786f524c249588433f02e5f5f906ad
+prerequisite-patch-id: 58e295ae36ad4784f3eb3830412f35dad31bb8b6
+prerequisite-patch-id: d23d83a946e5b876ef01a717fd51b07df1fa08dd
+prerequisite-patch-id: d67f2455eef1c4a9ecc460dbf3c2e3ad47d213ec
+-- 
+2.34.1
 
