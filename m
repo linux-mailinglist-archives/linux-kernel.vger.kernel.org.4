@@ -2,149 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449E06AD954
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:36:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 700866AD958
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjCGIgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:36:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S229812AbjCGIiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjCGIgr (ORCPT
+        with ESMTP id S229542AbjCGIiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:36:47 -0500
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D35C4D62B;
-        Tue,  7 Mar 2023 00:36:45 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 9648024E023;
-        Tue,  7 Mar 2023 16:36:43 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
- 2023 16:36:43 +0800
-Received: from [192.168.125.124] (183.27.97.46) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
- 2023 16:36:42 +0800
-Message-ID: <3a605bc8-104e-0935-4fd8-2da16ab9053b@starfivetech.com>
-Date:   Tue, 7 Mar 2023 16:36:41 +0800
+        Tue, 7 Mar 2023 03:38:18 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEC02B291
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 00:38:15 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id a25so49392291edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 00:38:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1678178294;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DnRKhcahxkatbm2bFGkk7mnKxouvXhMRB3sMCcT+Nuc=;
+        b=HpJm56Gg6LXY6d/a4PlAxpXPEchq3Rzd3dRLN/jhNSdLcKE4JZQEBXsbr8yRI8D0pW
+         G9x0kKTYbndW1sf1JpiSuHVWXz1t4BURAtzoiXRqBDxVRm/AUTMa4Gsk3+kEcYKjT+VB
+         j/q3zaS0YJi/F/Mgc8whfBMA3DXlbC7PLrYpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678178294;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DnRKhcahxkatbm2bFGkk7mnKxouvXhMRB3sMCcT+Nuc=;
+        b=7HbVw5Fe4C2Roy3Poa0liHvzw52ocUY3STwOTj//JlbzRURbUry6SMrsrAfaGwnerM
+         tnTRIGtZZk6AVSfHiuiPSBrCiWVfoGWs5uvt86oTHRXxCbSNqvcShj9Fo5HBp7PZueVH
+         pXFhamYMdOLPIF2WZuO4PyKYYnH35LgiL6xcZb0ogU5QZ+cU0CGUx5woE12xE/lVtdZT
+         kFAR2lloX1XuVXTLX6aub+ukJbWGdXn8UwSYn9gT75rqa02ysQ62EBIKmTPbt5Lor3ja
+         fNReoe5m9mhe2iV3Mcve0+0B8USgGNb23i+rYu8VqxU0AsKnQovpRJ3O8Lrc3TbPCZ/z
+         fX6g==
+X-Gm-Message-State: AO0yUKWEo9BfsTPqXrB2FJlD+6X+qqX8vK4n7EpkY4YEW3uGqN+oG7BE
+        3r8b3/3CjlEPwz1QlA0Jzoy0W+F2dhCJB/srrClapg==
+X-Google-Smtp-Source: AK7set+LKfm+lJJUQWrDUy8KTAYqnLSbU3m7VfgPjpiUrJJ1R3y17dvAZ3Vwwj6530T5sEFBkzKHMtXLp5v5ISIT548=
+X-Received: by 2002:a17:906:3d51:b0:8f1:4c6a:e72 with SMTP id
+ q17-20020a1709063d5100b008f14c6a0e72mr6358643ejf.0.1678178294468; Tue, 07 Mar
+ 2023 00:38:14 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v4 00/19] Basic clock, reset & device tree support for
- StarFive JH7110 RISC-V SoC
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>, <linux-riscv@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230221024645.127922-1-hal.feng@starfivetech.com>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <20230221024645.127922-1-hal.feng@starfivetech.com>
+References: <4B9D76D5-C794-4A49-A76F-3D4C10385EE0@kohlschutter.com>
+ <CAJfpegs1Kta-HcikDGFt4=fa_LDttCeRmffKhUjWLr=DxzXg-A@mail.gmail.com>
+ <83A29F9C-1A91-4753-953A-0C98E8A9832C@kohlschutter.com> <CAJfpegv5W0CycWCc2-kcn4=UVqk1hP7KrvBpzXHwW-Nmkjx8zA@mail.gmail.com>
+ <FFA26FD1-60EF-457E-B914-E1978CCC7B57@kohlschutter.com> <CAJfpeguDAJpLMABsomBFQ=w6Li0=sBW0bFyALv4EJrAmR2BkpQ@mail.gmail.com>
+ <A31096BA-C128-4D0B-B27D-C34560844ED0@kohlschutter.com> <CAJfpegvBSCQwkCv=5LJDx1LRCN_ztTh9VMvrTbCyt0zf7W2trw@mail.gmail.com>
+ <CAHk-=wjg+xyBwMpQwLx_QWPY7Qf8gUOVek8rXdQccukDyVmE+w@mail.gmail.com>
+ <EE5E5841-3561-4530-8813-95C16A36D94A@kohlschutter.com> <CAHk-=wh5V8tQScw9Bgc8OiD0r5XmfVSCPp2OHPEf0p5T3obuZg@mail.gmail.com>
+ <CAJfpeguXB9mAk=jwWQmk3rivYnaWoLrju_hq-LwtYyNXG4JOeg@mail.gmail.com>
+ <CAHk-=wg+bpP5cvcaBhnmJKzTmAtgx12UhR4qzFXXb52atn9gDw@mail.gmail.com>
+ <56E6CAAE-FF25-4898-8F9D-048164582E7B@kohlschutter.com> <490c5026-27bd-1126-65dd-2ec975aae94c@eitmlabs.org>
+ <CAJfpegt7CMMapxD0W41n2SdwiBn8+B08vsov-iOpD=eQEiPN1w@mail.gmail.com>
+ <CALKgVmeaPJj4e9sYP7g+v4hZ7XaHKAm6BUNz14gvaBd=sFCs9Q@mail.gmail.com>
+ <CALKgVmdqircMjn+iEuta5a7v5rROmYGXmQ0VJtzcCQnZYbJX6w@mail.gmail.com> <CALKgVmfZdVnqMAW81T12sD5ZLTO0fp-oADp-WradW5O=PBjp1Q@mail.gmail.com>
+In-Reply-To: <CALKgVmfZdVnqMAW81T12sD5ZLTO0fp-oADp-WradW5O=PBjp1Q@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 7 Mar 2023 09:38:03 +0100
+Message-ID: <CAJfpeguKVzCyUraDQPGw6vdQFfPwTCuZv0JkMxNA69AiRib3kg@mail.gmail.com>
+Subject: Re: [PATCH] [REGRESSION] ovl: Handle ENOSYS when fileattr support is
+ missing in lower/upper fs
+To:     jonathan@eitm.org
+Cc:     =?UTF-8?Q?Christian_Kohlsch=C3=BCtter?= 
+        <christian@kohlschutter.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.46]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 21 Feb 2023 10:46:26 +0800, Hal Feng wrote:
-> This patch series adds basic clock, reset & DT support for StarFive
-> JH7110 SoC. Patch 17 depends on series [1] which provides pinctrl
-> dt-bindings. Patch 19 depends on series [2] which provides dt-bindings
-> of VisionFive 2 board and JH7110 SoC.
-> 
-> You can simply review or test the patches at the link [3].
-> 
-> [1]: https://lore.kernel.org/all/20230209143702.44408-1-hal.feng@starfivetech.com/
-> [2]: https://lore.kernel.org/all/20230216131511.3327943-1-conor.dooley@microchip.com/
-> [3]: https://github.com/hal-feng/linux/commits/visionfive2-minimal
+On Tue, 7 Mar 2023 at 02:12, Jonathan Katz <jkatz@eitmlabs.org> wrote:
+>
+> Hi all,
+>
+> In pursuing this issue, I downloaded the kernel source to see if I
+> could debug it further.  In so doing, it looks like Christian's patch
+> was never committed to the main source tree (sorry if my terminology
+> is wrong).  This is up to and including the 6.3-rc1.  I could also
+> find no mention of the fix in the log.
+>
+> I am trying to manually apply this patch now, but, I am wondering if
+> there was some reason that it was not applied (e.g. it introduces some
+> instability?)?
 
-Hi Conor,
+It's fixing the bug in the wrong place, i.e. it's checking for an
+-ENOSYS return from vfs_fileattr_get(), but that return value is not
+valid at that point.
 
-When I tried to rebase these patches on v6.3-rc1, I found the kernel
-would crash on the VisionFive 2 board during startup. The logs are as
-below. I checkout the branch to the mainline and found that the kernel
-would also crash on the VisionFive board which is equipped with JH7100
-SoC.
+The right way to fix this bug is to prevent -ENOSYS from being
+returned in the first place.
 
---------------------------------
-Unable to handle kernel paging request at virtual address 0000004cccccccd4
-Oops [#1]
-Modules linked in:
-CPU: 3 PID: 87 Comm: udevd Not tainted 6.3.0-rc1-00019-g239e7809f291 #305
-Hardware name: StarFive VisionFive 2 v1.3B (DT)
-epc : enqueue_timer+0x18/0x90
- ra : internal_add_timer+0x2c/0x38
-epc : ffffffff8006a714 ra : ffffffff8006a7b8 sp : ffffffc80443bc80
- gp : ffffffff80eb5100 tp : ffffffd8c01db200 t0 : 0000000000000000
- t1 : 000000000000000f t2 : 0000000038b3ea28 s0 : ffffffc80443bcb0
- s1 : ffffffff80813940 a0 : ffffffff80813940 a1 : ffffffc80443bd48
- a2 : 000000000000020b a3 : cccccccd0b000000 a4 : cccccccccccccccc
- a5 : 000000000000020b a6 : ffffffff80814a08 a7 : 0000000000000001
- s2 : ffffffc80443bd48 s3 : 0000000008400040 s4 : ffffffff80813940
- s5 : ffffffff80eea0b8 s6 : ffffffff80eb7220 s7 : 0000000000000040
- s8 : ffffffff80eb61e0 s9 : 0000002ac84a2548 s10: 0000002ad53e92c0
- s11: 0000000000000001 t3 : 000000000000003f t4 : 0000000000000000
- t5 : 0000000000000004 t6 : 0000000000000003
-status: 0000000200000100 badaddr: 0000004cccccccd4 cause: 000000000000000f
-[<ffffffff8006a714>] enqueue_timer+0x18/0x90
-[<ffffffff8006aa64>] add_timer_on+0xf0/0x134
-[<ffffffff80500f18>] try_to_generate_entropy+0x1ec/0x232
-[<ffffffff8035a636>] urandom_read_iter+0x42/0xc2
-[<ffffffff800fff16>] vfs_read+0x17c/0x1e4
-[<ffffffff801005b6>] ksys_read+0x78/0x98
-[<ffffffff801005e4>] sys_read+0xe/0x16
-[<ffffffff800035dc>] ret_from_syscall+0x0/0x2
-Code: 9381 9713 0037 0813 0705 983a 3703 0008 e198 c311 (e70c) d713 
----[ end trace 0000000000000000 ]---
-note: udevd[87] exited with irqs disabled
-Segmentation fault
-FAIL
-Saving random seed: 
-rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
-rcu: 	1-...0: (0 ticks this GP) idle=19c4/1/0x4000000000000000 softirq=42/42 fqs=7474
-rcu: 	(detected by 2, t=15005 jiffies, g=-195, q=35 ncpus=4)
-Task dump for CPU 1:
-task:dd              state:R  running task     stack:0     pid:92    ppid:88     flags:0x00000008
-Call Trace:
-[<ffffffff80003764>] ret_from_fork+0x0/0xc
-rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
-rcu: 	1-...0: (0 ticks this GP) idle=19c4/1/0x4000000000000000 softirq=42/42 fqs=29814
-rcu: 	(detected by 2, t=60018 jiffies, g=-195, q=35 ncpus=4)
-Task dump for CPU 1:
-task:dd              state:R  running task     stack:0     pid:92    ppid:88     flags:0x00000008
-Call Trace:
-[<ffffffff80003764>] ret_from_fork+0x0/0xc
-...
---------------------------------
+Commit 02c0cab8e734 ("fuse: ioctl: translate ENOSYS") fixes one of
+those bugs, but of course it's possible that I missed something in
+that fix.
 
-I used 'git bisect' and found out the commit 9493e6f3ce02 is the
-cause. I tried to revert this commit on the tag v6.3-rc1, but it
-seems there is no improvement.
+Can you please first verify that an upstream kernel (>v6.0) can also
+reproduce this issue?
 
-Any options I am missing? Could you please give me some suggestions
-to adapt to the new changes between 6.2 and 6.3? Thank you in
-advance.
+Thanks,
+Miklos
 
-Best regards,
-Hal
+
+
+>
+> Thank you,
+> Jonathan
+>
+>
+>
+> On Thu, Feb 23, 2023 at 3:11=E2=80=AFPM Jonathan Katz <jkatz@eitmlabs.org=
+> wrote:
+> >
+> > Hi all,
+> >
+> > Problem persists with me with 6.2.0
+> > # mainline --install-latest
+> > # reboot
+> >
+> > # uname -r
+> > 6.2.0-060200-generic
+> >
+> >
+> > Representative log messages when mounting:
+> > Feb 23 22:50:43 instance-20220314-1510-fileserver-for-overlay kernel:
+> > [   44.641683] overlayfs: null uuid detected in lower fs '/', falling
+> > back to xino=3Doff,index=3Doff,nfs_export=3Doff.
+> >
+> >
+> >
+> > Representative log messages when accessing files:
+> > eb 23 23:06:31 instance-20220314-1510-fileserver-for-overlay kernel: [
+> >  992.505357] overlayfs: failed to retrieve lower fileattr (8020
+> > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-172=
+2.d/Storage.mcf_idx,
+> > err=3D-38)
+> > Feb 23 23:06:32 instance-20220314-1510-fileserver-for-overlay kernel:
+> > [  993.523712] overlayfs: failed to retrieve lower fileattr (8020
+> > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-172=
+2.d/Storage.mcf_idx,
+> > err=3D-38)
+> >
+> >
+> > On Mon, Jan 30, 2023 at 11:27 AM Jonathan Katz <jkatz@eitmlabs.org> wro=
+te:
+> > >
+> > > On Thu, Jan 26, 2023 at 5:26 AM Miklos Szeredi <miklos@szeredi.hu> wr=
+ote:
+> > > >
+> > > > On Wed, 18 Jan 2023 at 04:41, Jonathan Katz <jkatz@eitmlabs.org> wr=
+ote:
+> > > >
+> > > > > I believe that I am still having issues occur within Ubuntu 22.10=
+ with
+> > > > > the 5.19 version of the kernel that might be associated with this
+> > > > > discussion.  I apologize up front for any faux pas I make in writ=
+ing
+> > > > > this email.
+> > > >
+> > > > No need to apologize.   The fix in question went into v6.0 of the
+> > > > upstream kernel.  So apparently it's still missing from the distro =
+you
+> > > > are using.
+> > >
+> > > Thank you for the reply! ---  I have upgraded the Kernel and it still
+> > > seems to be throwing errors.  Details follow:
+> > >
+> > > Distro: Ubuntu 22.10.
+> > > Upgraded kernel using mainline (mainline --install-latest)
+> > >
+> > > # uname -a
+> > > Linux instance-20220314-1510-fileserver-for-overlay
+> > > 6.1.8-060108-generic #202301240742 SMP PREEMPT_DYNAMIC Tue Jan 24
+> > > 08:13:53 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
+> > >
+> > > On mount I still get the following notice in syslog (representative):
+> > > Jan 30 19:11:46 instance-20220314-1510-fileserver-for-overlay kernel:
+> > > [   71.613334] overlayfs: null uuid detected in lower fs '/', falling
+> > > back to xino=3Doff,index=3Doff,nfs_export=3Doff.
+> > >
+> > > And on access (via samba) I still see the following errors in the
+> > > syslog (representative):
+> > > Jan 30 19:19:34 instance-20220314-1510-fileserver-for-overlay kernel:
+> > > [  539.181858] overlayfs: failed to retrieve lower fileattr (8020
+> > > MeOHH2O RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1=
+722.d/Storage.mcf_idx,
+> > > err=3D-38)
+> > >
+> > > And on the Windows client, the software still fails with the same sym=
+ptomology.
+> > >
+> > >
+> > >
+> > >
+> > > >
+> > > > > An example error from our syslog:
+> > > > >
+> > > > > kernel: [2702258.538549] overlayfs: failed to retrieve lower file=
+attr
+> > > > > (8020 MeOHH2O
+> > > > > RecoverySample2-20221219-A-JJL-WebinarHilic10C-TOF-TT54-Neg-1722.=
+d/analysis.tsf,
+> > > > > err=3D-38)
+> > > >
+> > > > Yep, looks like the same bug.
+> > > >
+> > > > Thanks,
+> > > > Miklos
