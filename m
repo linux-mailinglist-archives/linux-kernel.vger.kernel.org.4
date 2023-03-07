@@ -2,143 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FC76AD894
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BEB6AD896
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbjCGH7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 02:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
+        id S229768AbjCGH7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 02:59:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCGH7A (ORCPT
+        with ESMTP id S229729AbjCGH7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 02:59:00 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E55D328
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:58:55 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id v16so11266872wrn.0
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 23:58:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678175934;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=JdQshwHadK10TmyUGi+IO4oTSOyXtNeO1NzLyvLX7/o=;
-        b=HkwxPNf+tiVkKPFF0uH1B7W5Ln/8j+HEsd8iKXyC4RD/377WMWxe56M0Pcm80EltvD
-         BEOfv3OsizBjRzVfzGbs21+j+q6d2E9X/del/0572CNBjMSe7arpF9++/PJpm3KxN/21
-         T0+tgr/U2lKTfQpODmlmyuwCm6lE5eZ+TLmWgn6mSR9RekC02tur80JD1q9CPrs7wywB
-         aINIK/ZJyOUtM+igtlVZ3JOBqmxSICbG+xtwYulVIQxXOdZLeldiczydfL1kBt4mibUM
-         35y8/kjmyjSQaI+v8rGD/P7b3IW0vRSGSsTBqglcIw796nBQJbEsaihq7YcwF+rDKmBK
-         1SYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678175934;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JdQshwHadK10TmyUGi+IO4oTSOyXtNeO1NzLyvLX7/o=;
-        b=kNGxSFENsfXNtkcsnPCIO3P6DughP4LNe2H4iF9M5BqVOtBsTfxTp8I0D1QmOeVewa
-         Eo2ujrJHf6Yp5087FHajUnl1qcdLTV9TyYkXJtnpCF8APnBHe0bdFSQ2hzEp08cr1VdD
-         1JLT8jDpOs/TuO5RTNFIT6gFJB0M2aMDj2pHBZPCT/JVfsX8ObcFIiTdSgncTefzofSl
-         r1ElkxrcgV1iGpWXv7l401iPVoZvaDeRyvg2mN/I5t30DEbqXhcDC0XrK8F2AZrYcL1g
-         I5R/eQV7S6+jT5HhrCBV/DbqMwK1em3vvEeHXhHUJIgDsP5qg3SIPPoGH/JUVOkC7fCY
-         wTlg==
-X-Gm-Message-State: AO0yUKVyvXCGAJnyJ5q+wWfT55hfkApy9AqyhFZprXE/Q1SwzPxBZhbB
-        lwh9B3XwGAZIPJv2pGWyGsvGnw==
-X-Google-Smtp-Source: AK7set+vkYi1NjFrFf/LVhqK8+JRWiJ85O5XnmwZEXRqNBqZ8jCna39sM0MO1QyYct729rWgCSzp8Q==
-X-Received: by 2002:adf:ec09:0:b0:2c7:e48:8c87 with SMTP id x9-20020adfec09000000b002c70e488c87mr10613238wrn.25.1678175934284;
-        Mon, 06 Mar 2023 23:58:54 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:6faa:6d13:586e:871d? ([2a01:e0a:982:cbb0:6faa:6d13:586e:871d])
-        by smtp.gmail.com with ESMTPSA id z9-20020adfec89000000b002425be3c9e2sm11913168wrn.60.2023.03.06.23.58.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 06 Mar 2023 23:58:53 -0800 (PST)
-Message-ID: <ef4ef0da-f6e3-7235-5178-3ef579f17a21@linaro.org>
-Date:   Tue, 7 Mar 2023 08:58:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 2/2] arm64: dts: amlogic: Add initial support for
- BPI-CM4 module with BPI-CM4IO baseboard
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        Christian Hewitt <christianshewitt@gmail.com>
-References: <20230303-topic-amlogic-upstream-bpi-cm4-v2-0-2ecfde76fc4d@linaro.org>
- <20230303-topic-amlogic-upstream-bpi-cm4-v2-2-2ecfde76fc4d@linaro.org>
- <CAFBinCDSWHg1uc8+c_QwoQy2j8K5Ny6xfMfXm-zp67eYH_Zxdg@mail.gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <CAFBinCDSWHg1uc8+c_QwoQy2j8K5Ny6xfMfXm-zp67eYH_Zxdg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 7 Mar 2023 02:59:15 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9ACE3B854;
+        Mon,  6 Mar 2023 23:59:10 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxUOXN7gZkU0QJAA--.11695S3;
+        Tue, 07 Mar 2023 15:59:09 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTL7K7gZkSsRNAA--.4529S2;
+        Tue, 07 Mar 2023 15:59:07 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v3 RESEND] checksyscalls: Ignore fstat to silence build warning on LoongArch
+Date:   Tue,  7 Mar 2023 15:59:00 +0800
+Message-Id: <1678175940-20872-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8BxTL7K7gZkSsRNAA--.4529S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7KF47Aw4DtF4kGrWfGw4DJwb_yoW8GF47p3
+        WSya40qr95GF18uw1293W3try7Awn3ArnrGFy5urs8AFZ8tan5tr9ava98GrnFvayxKa45
+        WrWkua47XFyqgFDanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bS8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262
+        kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
+        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
+        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
+        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
+        1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
+        YxBIdaVFxhVjvjDU0xZFpf9x07j7BMNUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/03/2023 23:11, Martin Blumenstingl wrote:
-> Hi Neil,
-> 
-> On Mon, Mar 6, 2023 at 9:31 AM Neil Armstrong <neil.armstrong@linaro.org> wrote:
->>
->> Add support for both the BananaPi BPI-CM4 module and the BananaPi
->> baseboard which is comnpatible with the RaspberryPi CM4IO baseboard.
-> s/comnpatible/compatible/
-> 
->>
->> The BananaPi BPI-CM4 module follows the CM4 specifications at [1],
->> but with a single HDMI port and a since DSI output.
-> s/since/single/
-> 
->>
->> The current CM4IO baseboard DT should work fine on the Raspberry CM4
->> baseboard and other derivatives baseboards, but proper DT should
->> be written for other baseboards.
->>
->> The split is done so it's easy to describe a new CM4 baseboard, enabling
->> only the necessary HW used on the baseboard.
->>
->> [1] https://datasheets.raspberrypi.com/cm4io/cm4io-datasheet.pdf
->>
->> Tested-by: Christian Hewitt <christianshewitt@gmail.com>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> With the typos above fixed:
+fstat is replaced by statx on the new architecture, so an exception
+is added to the checksyscalls script to silence the following build
+warning on LoongArch:
 
-I'll fix those while applying
+  CALL    scripts/checksyscalls.sh
+<stdin>:569:2: warning: #warning syscall fstat not implemented [-Wcpp]
 
+Suggested-by: WANG Xuerui <kernel@xen0n.name>
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+---
 
-> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> 
-> [...]
->> +&ext_mdio {
->> +       external_phy: ethernet-phy@0 {
->> +               /* Realtek RTL8211F (0x001cc916) */
->> +               reg = <0>;
->> +               max-speed = <1000>;
->> +
->> +               interrupt-parent = <&gpio_intc>;
->> +               /* MAC_INTR on GPIOZ_14 */
->> +               interrupts = <26 IRQ_TYPE_LEVEL_LOW>;
-> It would be great to have the reset GPIO (GPIOZ_15) described as well.
-> But this can be done in a follow-up patch.
+This warning still exists when build 6.3-rc1, it looks like
+not so good, just resend the patch (2022-08-30):
 
-I'll send a follow-up
+https://lore.kernel.org/lkml/1661830021-8643-1-git-send-email-yangtiezhu@loongson.cn/
 
-> 
-> 
-> Best regards,
-> Martin
+ scripts/checksyscalls.sh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks !
-Neil
+diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+index f33e61a..1e5d2ee 100755
+--- a/scripts/checksyscalls.sh
++++ b/scripts/checksyscalls.sh
+@@ -114,7 +114,6 @@ cat << EOF
+ #define __IGNORE_truncate
+ #define __IGNORE_stat
+ #define __IGNORE_lstat
+-#define __IGNORE_fstat
+ #define __IGNORE_fcntl
+ #define __IGNORE_fadvise64
+ #define __IGNORE_newfstatat
+@@ -255,6 +254,9 @@ cat << EOF
+ /* 64-bit ports never needed these, and new 32-bit ports can use statx */
+ #define __IGNORE_fstat64
+ #define __IGNORE_fstatat64
++
++/* Newer ports are not required to provide fstat in favor of statx */
++#define __IGNORE_fstat
+ EOF
+ }
+ 
+-- 
+2.1.0
+
