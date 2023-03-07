@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A636AE7B3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E595B6AE7B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjCGRAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
+        id S231313AbjCGQ7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:59:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjCGQ6M (ORCPT
+        with ESMTP id S230496AbjCGQ6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Mar 2023 11:58:12 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6C959E0;
-        Tue,  7 Mar 2023 08:54:54 -0800 (PST)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F95190096;
+        Tue,  7 Mar 2023 08:54:58 -0800 (PST)
 Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 49391C0007;
-        Tue,  7 Mar 2023 16:54:51 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id B623EC0009;
+        Tue,  7 Mar 2023 16:54:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678208093;
+        t=1678208096;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6hNxCYBR5yzRDGBSbfvJ7idoAKl7NjU5wAcCzaXPD2w=;
-        b=SXd0K+s7oI2QByaA7bb9vJpRXYpl2uydhFjRxV+TmG/Ic38saSyLyA/G8YCRyzs8L8Scek
-        NjRlMTPTf/IeLkL8n6psTRSeR3QNrdWCNXb+pnZZCwY2p2+Yg5BwXvp2Qgpd/l8vD/9sLi
-        0w/QBkDSAcR6oXrTrdNiIiCpifkfphn8Slu9GCN02HvqIdRIQuT3YGMadwJ+yUvbZAs33I
-        HCdP9bsnuXnxkhcx+N4RaT3Qna0xFb+aa1mckogyeUpMK7XLILmTfkj49OHELeXQP3BbqW
-        /u99Ugi5LgvVeXLtI/l0il/lGuBeYuJ3Wr7bSoBTKQkr2uz76FIqTf0WBLtMvA==
+        bh=+8KBJRUvcteGrcXB2dPcvKQXMIPPTo96B4W8ORMytWg=;
+        b=Yr3FZKImd9D4HbqsfoBk+mm8YZ/3s9YDFloLhooDu8S0DJb9p7XI3IyDJhfleAo+qg35Bi
+        8/K6+gW/14Vf/d6aLcW+pC00XS2IKd44eMKPluCRRysIVFfQt54WzmosQ3goHCY8TC0k+Z
+        MFpqlpp1klW8YbDHfdetOf5/r7t+oynKqp+8+VzPOb20UNl/SgrvJWyx6gRphzsJtPCoXZ
+        4vchA9z9vNyXyviwQjM6R8uuyONisbqDI9ZTFLQIdJxM/2lqSRnVXOJZlOwaUKzTdAhd8a
+        yI41jVNW5w2ay/TGDE/7uKUjjj3tTl5u7+H2GoLS7KZGeKSDSrm17r0XM5qbEQ==
 From:   Miquel Raynal <miquel.raynal@bootlin.com>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         <linux-kernel@vger.kernel.org>
@@ -43,9 +43,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org,
         Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v2 14/21] nvmem: core: allow to modify a cell before adding it
-Date:   Tue,  7 Mar 2023 17:53:52 +0100
-Message-Id: <20230307165359.225361-15-miquel.raynal@bootlin.com>
+Subject: [PATCH v2 15/21] nvmem: imx-ocotp: replace global post processing with layouts
+Date:   Tue,  7 Mar 2023 17:53:53 +0100
+Message-Id: <20230307165359.225361-16-miquel.raynal@bootlin.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230307165359.225361-1-miquel.raynal@bootlin.com>
 References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
@@ -62,61 +62,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Michael Walle <michael@walle.cc>
 
-Provide a way to modify a cell before it will get added. This is useful
-to attach a custom post processing hook via a layout.
+In preparation of retiring the global post processing hook change this
+driver to use layouts. The layout will be supplied during registration
+and will be used to add the post processing hook to all added cells.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
+Tested-by: Michael Walle <michael@walle.cc> # on kontron-pitx-imx8m
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/nvmem/core.c           | 4 ++++
- include/linux/nvmem-provider.h | 5 +++++
- 2 files changed, 9 insertions(+)
+ drivers/nvmem/imx-ocotp.c | 30 +++++++++++++++++++-----------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 664d48f0dfa7..82e11b9576ad 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -695,6 +695,7 @@ static int nvmem_validate_keepouts(struct nvmem_device *nvmem)
- 
- static int nvmem_add_cells_from_of(struct nvmem_device *nvmem)
+diff --git a/drivers/nvmem/imx-ocotp.c b/drivers/nvmem/imx-ocotp.c
+index e9b52ecb3f72..ac0edb6398f1 100644
+--- a/drivers/nvmem/imx-ocotp.c
++++ b/drivers/nvmem/imx-ocotp.c
+@@ -225,18 +225,13 @@ static int imx_ocotp_read(void *context, unsigned int offset,
+ static int imx_ocotp_cell_pp(void *context, const char *id, int index,
+ 			     unsigned int offset, void *data, size_t bytes)
  {
-+	struct nvmem_layout *layout = nvmem->layout;
- 	struct device *dev = &nvmem->dev;
- 	struct device_node *child;
- 	const __be32 *addr;
-@@ -724,6 +725,9 @@ static int nvmem_add_cells_from_of(struct nvmem_device *nvmem)
+-	struct ocotp_priv *priv = context;
++	u8 *buf = data;
++	int i;
  
- 		info.np = of_node_get(child);
+ 	/* Deal with some post processing of nvmem cell data */
+-	if (id && !strcmp(id, "mac-address")) {
+-		if (priv->params->reverse_mac_address) {
+-			u8 *buf = data;
+-			int i;
+-
+-			for (i = 0; i < bytes/2; i++)
+-				swap(buf[i], buf[bytes - i - 1]);
+-		}
+-	}
++	if (id && !strcmp(id, "mac-address"))
++		for (i = 0; i < bytes / 2; i++)
++			swap(buf[i], buf[bytes - i - 1]);
  
-+		if (layout && layout->fixup_cell_info)
-+			layout->fixup_cell_info(nvmem, layout, &info);
+ 	return 0;
+ }
+@@ -488,7 +483,6 @@ static struct nvmem_config imx_ocotp_nvmem_config = {
+ 	.stride = 1,
+ 	.reg_read = imx_ocotp_read,
+ 	.reg_write = imx_ocotp_write,
+-	.cell_post_process = imx_ocotp_cell_pp,
+ };
+ 
+ static const struct ocotp_params imx6q_params = {
+@@ -595,6 +589,17 @@ static const struct of_device_id imx_ocotp_dt_ids[] = {
+ };
+ MODULE_DEVICE_TABLE(of, imx_ocotp_dt_ids);
+ 
++static void imx_ocotp_fixup_cell_info(struct nvmem_device *nvmem,
++				      struct nvmem_layout *layout,
++				      struct nvmem_cell_info *cell)
++{
++	cell->read_post_process = imx_ocotp_cell_pp;
++}
 +
- 		ret = nvmem_add_one_cell(nvmem, &info);
- 		kfree(info.name);
- 		if (ret) {
-diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
-index 3bfc23553a9e..be81cc88eabc 100644
---- a/include/linux/nvmem-provider.h
-+++ b/include/linux/nvmem-provider.h
-@@ -155,6 +155,8 @@ struct nvmem_cell_table {
-  * @add_cells:		Will be called if a nvmem device is found which
-  *			has this layout. The function will add layout
-  *			specific cells with nvmem_add_one_cell().
-+ * @fixup_cell_info:	Will be called before a cell is added. Can be
-+ *			used to modify the nvmem_cell_info.
-  * @owner:		Pointer to struct module.
-  * @node:		List node.
-  *
-@@ -168,6 +170,9 @@ struct nvmem_layout {
- 	const struct of_device_id *of_match_table;
- 	int (*add_cells)(struct device *dev, struct nvmem_device *nvmem,
- 			 struct nvmem_layout *layout);
-+	void (*fixup_cell_info)(struct nvmem_device *nvmem,
-+				struct nvmem_layout *layout,
-+				struct nvmem_cell_info *cell);
++struct nvmem_layout imx_ocotp_layout = {
++	.fixup_cell_info = imx_ocotp_fixup_cell_info,
++};
++
+ static int imx_ocotp_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -619,6 +624,9 @@ static int imx_ocotp_probe(struct platform_device *pdev)
+ 	imx_ocotp_nvmem_config.size = 4 * priv->params->nregs;
+ 	imx_ocotp_nvmem_config.dev = dev;
+ 	imx_ocotp_nvmem_config.priv = priv;
++	if (priv->params->reverse_mac_address)
++		imx_ocotp_nvmem_config.layout = &imx_ocotp_layout;
++
+ 	priv->config = &imx_ocotp_nvmem_config;
  
- 	/* private */
- 	struct module *owner;
+ 	clk_prepare_enable(priv->clk);
 -- 
 2.34.1
 
