@@ -2,87 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721A06AFA8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA6096AFA8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 00:36:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjCGXfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 18:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S230095AbjCGXgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 18:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjCGXer (ORCPT
+        with ESMTP id S230052AbjCGXgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 18:34:47 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC324ABAD9;
-        Tue,  7 Mar 2023 15:33:59 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id v16so13822364wrn.0;
-        Tue, 07 Mar 2023 15:33:59 -0800 (PST)
+        Tue, 7 Mar 2023 18:36:24 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1FCA80C2
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 15:35:53 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id y35-20020a056a00182300b005e8e2c6afe2so7980745pfa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 15:35:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678232037;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EkNaxXiMy7dB/CrQfOiflJv5/zBXe0f/wSftJOqjPTs=;
-        b=I0EQtsf9xtV2ehvI+faofQ58gjc4ZydAC68khJeEksSH1rhQD/n4WgRIUsQu+EY2TL
-         KcL/UawUoIDbRQSyH3rV1QyaoUIDSnrZ+SBiQkunnbW6Ax+ndjKEtjnI9aNJN3ZqzXTB
-         q9cdGqdluLApOFQioTUcZA4grcwG1olMdiDNZ5+ZuyXtefpZZHyHDiodyQBMxXgZ3zSF
-         V+PkJGIS2R1UXl9IGOLOue+f8/yX2K6Hq+dzZfKmG0hkDcSa6qB5E7j4u4Y0nan7fZ4x
-         UdrU8fhjs5N5SZalVQdiWSR/tNlHlmeDBFuL0WV+xFNbNn/07+/z/hPQFSuGeYMkozgR
-         Ms3w==
+        d=google.com; s=20210112; t=1678232122;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VIH8Bv5Ykr7/smxSwhKOUZWo2aKYjq3BzEdqNFBOM70=;
+        b=f423UdcfrDasHFrLZePcpAz5qCrdTuGn1xD/hhkNaa4mm8glQdWdtpd6nf5dChy6jh
+         20WueVt1VTWj1FEruy9hOrrZP1VEu3YRffsyAtsHSD3YxGeJ7zxGxXaGh9ULoWNRlFnD
+         2/HaT6rUp39lNXH04UyJKQbxVYTc+1VhpnhxDOANj8i7Si5NvBSGcV7b58ViHJ+CS/bF
+         1bluE+5GBwndpMr6olqGVZQXA6C6tbVs4lrg1blZK9PxLD2q+Ufy+3a9ZRUZw2s6uuje
+         uI7QfpQeBC1FSIvM84tW49CWiYHoxAM/24ErFheqnsLBFk8Vch+FUK1mJl86prciC2dC
+         jZAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678232037;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EkNaxXiMy7dB/CrQfOiflJv5/zBXe0f/wSftJOqjPTs=;
-        b=YX485z8O9NqBdcXSktysp3XDPV+yO3J+hzLbNVOtFMAKEwwgcP6ERP8NwQZhM1Eids
-         9urjAm2847RZesBNpZ1BHzljIpGXHbMoAoKdVbM83HAeIRhJG0URH0wc9tBsJX4fYD5O
-         Makbd/Ce8jAWJlZpfC47QK7CQEhNMv86KfU0mErZtl/iGkxYcqnlSaxpMDJO4kKH21wg
-         fyWLnNpNcKrtIy+quIUDRBgo+ewi6vRNPgFgw5pJeRltci6xhxeGNKJMtmGqHX7edbc7
-         7RejsBO8BiNnrAIDBly8QbiGSZMBhgqQu4xN9smD3j5mcSKbc7ko4bg6C0cifI8c14nB
-         ubdQ==
-X-Gm-Message-State: AO0yUKWWIX1CbNvvVJzwOtiW/MSEaul45TUJ3tiozFAj5e/771y4nPZs
-        f1/qaSVCg8tLDZsV6wMMDHg=
-X-Google-Smtp-Source: AK7set+LWjjzrdvVfaBUwqng1pTIQRvZqWOtnZ08kw66e0Pnm2ILtlPlvo1bsvLwii2gYhC1QyMMFg==
-X-Received: by 2002:a5d:5746:0:b0:2c9:5dd8:2978 with SMTP id q6-20020a5d5746000000b002c95dd82978mr10764040wrw.59.1678232037233;
-        Tue, 07 Mar 2023 15:33:57 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id x17-20020adfdcd1000000b002c5804b6afasm13832424wrm.67.2023.03.07.15.33.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 15:33:57 -0800 (PST)
-Date:   Wed, 8 Mar 2023 01:33:54 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        =?utf-8?B?UmVuw6k=?= van Dorst <opensource@vdorst.com>,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net 2/2] net: dsa: mt7530: set PLL frequency only when
- trgmii is used
-Message-ID: <20230307233354.y3srdoggy2yzugnq@skbuf>
-References: <20230307220328.11186-1-arinc.unal@arinc9.com>
- <20230307220328.11186-2-arinc.unal@arinc9.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230307220328.11186-2-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        d=1e100.net; s=20210112; t=1678232122;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VIH8Bv5Ykr7/smxSwhKOUZWo2aKYjq3BzEdqNFBOM70=;
+        b=1SVp0oz2Yp1ga9bQzlRBsksU+H7+X4V9/HhF5EzPbutJwCvmTiGEQE243PXDuEE/6s
+         1E4erWPcznRHaMPXhGZavXp5t/uIenwsimHjYNLBDxTnQkcFHWg6gt3wCZv6j4nVdzQL
+         ZkAhLguKV+lS4HBhid3omcrk4AzwTgf9mMNgxHeJcpXuA/J3Xfe8EVoX+Q2r67NuZ6xy
+         MOdeT3rSHi/L51bV3wFwZsUi/vmfhZR+0TKBLXVFCpfwYMWMNAjVt8dojbMRFoGYChq+
+         lz0WXEzVIs76xD7tzuN0DsIRhPsdmNtYuoVbItL986NCBuXBBSvxxev8Q4Wtx5IEgKDj
+         4TAw==
+X-Gm-Message-State: AO0yUKWneCl4EPfXrR0S5LCFoB40tj+0+7FRZksFX+wCNdxDOenQH/zM
+        QdLhfTCb6ndFBh0zDfBqXKC+Oka/OJQ=
+X-Google-Smtp-Source: AK7set9Ju5tpzlTnXY1oXfZjiCM1nmrM2VRSS9w2LzXO0+2nPGi7AlJf1sXEiCgAc5P3QFviYLpOTe2tBYw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:2253:b0:603:51de:c0dd with SMTP id
+ i19-20020a056a00225300b0060351dec0ddmr6895870pfu.6.1678232122326; Tue, 07 Mar
+ 2023 15:35:22 -0800 (PST)
+Date:   Tue, 7 Mar 2023 15:35:20 -0800
+In-Reply-To: <1975308c952236895f2d8f0e56af9db288eaf330.camel@infradead.org>
+Mime-Version: 1.0
+References: <20230302111227.2102545-1-usama.arif@bytedance.com>
+ <faa0eb3bb8ba0326d501516a057ab46eaf1f3c05.camel@infradead.org>
+ <effbb6e2-c5a1-af7f-830d-8d7088f57477@amd.com> <269ed38b5eed9c3a259c183d59d4f1eb5128f132.camel@infradead.org>
+ <0c56683a-c258-46f6-056e-e85da8a557db@amd.com> <3bfbbd92-b2ed-8189-7b57-0533f6c87ae7@amd.com>
+ <1975308c952236895f2d8f0e56af9db288eaf330.camel@infradead.org>
+Message-ID: <ZAfDhT97ctXSYiYe@google.com>
+Subject: Re: [PATCH v13 00/11] Parallel CPU bringup for x86_64
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        Usama Arif <usama.arif@bytedance.com>, tglx@linutronix.de,
+        kim.phillips@amd.com, brgerst@gmail.com,
+        Sabin Rapan <sabrapan@amazon.com>, piotrgorski@cachyos.org,
+        oleksandr@natalenko.name, arjan@linux.intel.com, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        x86@kernel.org, pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        pmenzel@molgen.mpg.de, fam.zheng@bytedance.com,
+        punit.agrawal@bytedance.com, simon.evans@bytedance.com,
+        liangma@liangbit.com
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,52 +81,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 01:03:28AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Tue, Mar 07, 2023, David Woodhouse wrote:
+> On Tue, 2023-03-07 at 16:22 -0600, Tom Lendacky wrote:
+> > 
+> > I did some Qemu/KVM testing. One thing I noticed is that on AMD, CPUID 0xB 
+> > EAX will be non-zero only if SMT is enabled. So just booting some guests 
+> > without CPU topology never did parallel booting ("smpboot: Disabling 
+> > parallel bringup because CPUID 0xb looks untrustworthy"). I would imagine 
+> > a bare-metal system that has diabled SMT will not do parallel booting, too 
+> > (but I haven't had time to test that).
 > 
-> As my testing on the MCM MT7530 switch on MT7621 SoC shows, setting the PLL
-> frequency does not affect MII modes other than trgmii on port 5 and port 6.
-> So the assumption is that the operation here called "setting the PLL
-> frequency" actually sets the frequency of the TRGMII TX clock.
-> 
-> Make it so that it is set only when the trgmii mode is used.
-> 
-> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-> ---
->  drivers/net/dsa/mt7530.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
-> index b1a79460df0e..961306c1ac14 100644
-> --- a/drivers/net/dsa/mt7530.c
-> +++ b/drivers/net/dsa/mt7530.c
-> @@ -430,8 +430,6 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
->  	switch (interface) {
->  	case PHY_INTERFACE_MODE_RGMII:
->  		trgint = 0;
-> -		/* PLL frequency: 125MHz */
-> -		ncpo1 = 0x0c80;
->  		break;
->  	case PHY_INTERFACE_MODE_TRGMII:
->  		trgint = 1;
-> -- 
-> 2.37.2
-> 
+> Interesting, thanks. Should I change to checking for *both* EAX and EBX
+> being zero? That's what I did first, after reading only the Intel SDM.
+> But I changed to only EAX because the AMD doc only says that EAX will
+> be zero for unsupported leaves.
 
-NACK.
+LOL, nice.  '0' is a prefectly valid output for the shift if there's exactly one
+CPU at the current level, which is why Intel states that both EAX and EBX are
+cleared.  I assume/hope this is effectively a documentation goof, in that the APM
+assumes that all "real" CPUs that support CPUID 0xB also support sub-function 0.
 
-By deleting the assignment to the ncpo1 variable, it becomes
-uninitialized when port 6's interface mode is PHY_INTERFACE_MODE_RGMII.
-In the C language, uninitialized variables take the value of whatever
-memory happens to be on the stack at the address they are placed,
-interpreted as an appropriate data type for that variable - here u32.
+Nit, the AMD says EAX will be zero for unsupported _levels_.  The distinction
+matters because if the entire leaf is unsupported, AMD behavior is to zero out
+all output registers, even if the input leaf is above the max supported leaf.
 
-Writing the value to CORE_PLL_GROUP5 happens when the function below is
-called, not when the "ncpo1" variable is assigned.
-
-	core_write(priv, CORE_PLL_GROUP5, RG_LCDDS_PCW_NCPO1(ncpo1));
-
-It is not a good idea to write uninitialized kernel stack memory to
-hardware registers, unless perhaps you want to use it as some sort of
-poor quality entropy source for a random number generator...
+Anyways, the kernel already sanity checks the outputs on all x86 CPUs, just
+piggyback that logic, e.g. expose detect_extended_topology_leaf() or so.  If AMD
+or a VMM is doing something crazy, the kernel is doomed anyways.
