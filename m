@@ -2,48 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B07A6AD879
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625696AD87D
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:51:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbjCGHuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 02:50:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        id S230265AbjCGHvD convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 02:51:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjCGHuF (ORCPT
+        with ESMTP id S229484AbjCGHuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 02:50:05 -0500
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECFFD848EF
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:49:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=VwKFzaPAhb21yGNMRNg/WNeNXMmPB5JmgKh/nfRZDe8=;
-  b=vRRBy8D4qUntCtN98rmxHdjWrHPCY+qOiFQeVbzmkU/QUu0xqST9eJNO
-   gB0AXMEj8k57/2fOtd75l6bw3hKm7wcKUCYRA4Po22DrFmCx3+Qgp0rmM
-   tqaQQMMvSL1A7RNQqz3P1FL4fdAAz+ANgpO6GQ28yRSjMsIfUgddVY387
-   k=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,240,1673910000"; 
-   d="scan'208";a="49410178"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 08:49:56 +0100
-Date:   Tue, 7 Mar 2023 08:49:55 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-To:     Khadija <kamrankhadijadj@gmail.com>
-cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: axis-fifo: alignment should match opening
- parenthesis in axis-fifo.c
-In-Reply-To: <CACcTnM5GR0ZM5WBaL+BDEK_0QJGr6h2t4tnsnjerHta_nq6Tmg@mail.gmail.com>
-Message-ID: <ab0fd80-22c-d982-2f4-6fa5f43f858@inria.fr>
-References: <ZAZSmPpB6fcozGa4@khadija-virtual-machine> <alpine.DEB.2.22.394.2303062202500.3050@hadrien> <CACcTnM5GR0ZM5WBaL+BDEK_0QJGr6h2t4tnsnjerHta_nq6Tmg@mail.gmail.com>
+        Tue, 7 Mar 2023 02:50:54 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ED055531;
+        Mon,  6 Mar 2023 23:50:36 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C6EB124E2EF;
+        Tue,  7 Mar 2023 15:50:28 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 15:50:28 +0800
+Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 7 Mar
+ 2023 15:50:27 +0800
+Message-ID: <46773d26-d798-58d9-d5ce-07241bf27478@starfivetech.com>
+Date:   Tue, 7 Mar 2023 15:50:26 +0800
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1184433621-1678175395=:3785"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 05/12] riscv: dts: starfive: jh7110: Add ethernet
+ device nodes
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+References: <20230303085928.4535-1-samin.guo@starfivetech.com>
+ <20230303085928.4535-6-samin.guo@starfivetech.com>
+ <CAJM55Z_SV3ig56JY9BF5LeWt4M+bKYh_HdxSY02CP+9i7F0vCQ@mail.gmail.com>
+Content-Language: en-US
+From:   Guo Samin <samin.guo@starfivetech.com>
+In-Reply-To: <CAJM55Z_SV3ig56JY9BF5LeWt4M+bKYh_HdxSY02CP+9i7F0vCQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,104 +69,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1184433621-1678175395=:3785
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
 
 
+在 2023/3/5 6:57:18, Emil Renner Berthing 写道:
+> On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wrote:
+>>
+>> Add JH7110 ethernet device node to support gmac driver for the JH7110
+>> RISC-V SoC.
+>>
+>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+>> ---
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi | 91 ++++++++++++++++++++++++
+>>  1 file changed, 91 insertions(+)
+>>
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> index 09806418ed1b..2ce28292b721 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> @@ -233,6 +233,13 @@
+>>                 #clock-cells = <0>;
+>>         };
+>>
+>> +       stmmac_axi_setup: stmmac-axi-config {
+>> +               snps,lpi_en;
+>> +               snps,wr_osr_lmt = <4>;
+>> +               snps,rd_osr_lmt = <4>;
+>> +               snps,blen = <256 128 64 32 0 0 0>;
+>> +       };
+>> +
+>>         tdm_ext: tdm-ext-clock {
+>>                 compatible = "fixed-clock";
+>>                 clock-output-names = "tdm_ext";
+>> @@ -518,5 +525,89 @@
+>>                         gpio-controller;
+>>                         #gpio-cells = <2>;
+>>                 };
+>> +
+>> +               gmac0: ethernet@16030000 {
+>> +                       compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
+>> +                       reg = <0x0 0x16030000 0x0 0x10000>;
+>> +                       clocks = <&aoncrg JH7110_AONCLK_GMAC0_AXI>,
+>> +                                <&aoncrg JH7110_AONCLK_GMAC0_AHB>,
+>> +                                <&syscrg JH7110_SYSCLK_GMAC0_PTP>,
+>> +                                <&aoncrg JH7110_AONCLK_GMAC0_TX_INV>,
+>> +                                <&syscrg JH7110_SYSCLK_GMAC0_GTXC>;
+>> +                       clock-names = "stmmaceth", "pclk", "ptp_ref",
+>> +                                     "tx", "gtx";
+>> +                       resets = <&aoncrg JH7110_AONRST_GMAC0_AXI>,
+>> +                                <&aoncrg JH7110_AONRST_GMAC0_AHB>;
+>> +                       reset-names = "stmmaceth", "ahb";
+>> +                       interrupts = <7>, <6>, <5>;
+>> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
+>> +                       phy-mode = "rgmii-id";
+>> +                       snps,multicast-filter-bins = <64>;
+>> +                       snps,perfect-filter-entries = <8>;
+>> +                       rx-fifo-depth = <2048>;
+>> +                       tx-fifo-depth = <2048>;
+>> +                       snps,fixed-burst;
+>> +                       snps,no-pbl-x8;
+>> +                       snps,force_thresh_dma_mode;
+>> +                       snps,axi-config = <&stmmac_axi_setup>;
+>> +                       snps,tso;
+>> +                       snps,en-tx-lpi-clockgating;
+>> +                       snps,txpbl = <16>;
+>> +                       snps,rxpbl = <16>;
+>> +                       status = "disabled";
+>> +                       phy-handle = <&phy0>;
+>> +
+>> +                       mdio {
+>> +                               #address-cells = <1>;
+>> +                               #size-cells = <0>;
+>> +                               compatible = "snps,dwmac-mdio";
+>> +
+>> +                               phy0: ethernet-phy@0 {
+>> +                                       reg = <0>;
+>> +                               };
+>> +                       };
+>> +               };
+>> +
+>> +               gmac1: ethernet@16040000 {
+>> +                       compatible = "starfive,jh7110-dwmac", "snps,dwmac-5.20";
+>> +                       reg = <0x0 0x16040000 0x0 0x10000>;
+>> +                       clocks = <&syscrg JH7110_SYSCLK_GMAC1_AXI>,
+>> +                                <&syscrg JH7110_SYSCLK_GMAC1_AHB>,
+>> +                                <&syscrg JH7110_SYSCLK_GMAC1_PTP>,
+>> +                                <&syscrg JH7110_SYSCLK_GMAC1_TX_INV>,
+>> +                                <&syscrg JH7110_SYSCLK_GMAC1_GTXC>;
+>> +                       clock-names = "stmmaceth", "pclk", "ptp_ref",
+>> +                                     "tx", "gtx";
+>> +                       resets = <&syscrg JH7110_SYSRST_GMAC1_AXI>,
+>> +                                <&syscrg JH7110_SYSRST_GMAC1_AHB>;
+>> +                       reset-names = "stmmaceth", "ahb";
+>> +                       interrupts = <78>, <77>, <76>;
+>> +                       interrupt-names = "macirq", "eth_wake_irq", "eth_lpi";
+>> +                       phy-mode = "rgmii-id";
+>> +                       snps,multicast-filter-bins = <64>;
+>> +                       snps,perfect-filter-entries = <8>;
+>> +                       rx-fifo-depth = <2048>;
+>> +                       tx-fifo-depth = <2048>;
+>> +                       snps,fixed-burst;
+>> +                       snps,no-pbl-x8;
+>> +                       snps,force_thresh_dma_mode;
+>> +                       snps,axi-config = <&stmmac_axi_setup>;
+>> +                       snps,tso;
+>> +                       snps,en-tx-lpi-clockgating;
+>> +                       snps,txpbl = <16>;
+>> +                       snps,rxpbl = <16>;
+>> +                       status = "disabled";
+>> +                       phy-handle = <&phy1>;
+>> +
+>> +                       mdio {
+>> +                               #address-cells = <1>;
+>> +                               #size-cells = <0>;
+>> +                               compatible = "snps,dwmac-mdio";
+>> +
+>> +                               phy1: ethernet-phy@1 {
+>> +                                       reg = <0>;
+> 
+> I'm getting errors on eth1 unless this is set to <1>. In any case the
+> number after @ in the node name should match the reg value.
 
-On Tue, 7 Mar 2023, Khadija wrote:
+Hi，Emil，which board are you using?  (v1.2a or v1.3b?). 
+I have tested it on v1.2a and 1.3b, all network ports work normally when the phy address is set to 0.
+Maybe your eth1 doesn't work for other reasons?
 
-> Hey Julia! Thank you for the feedback. I will make the following changes and
-> resend the patch:
-> 1. Correct the patch description that is right under the subject line (make
-> it precise and imperative) and make sure that it does not have more than 70
-> characters per line.
-> 2. Adjust all the arguments of wait_event_interruptible_timeout so that they
-> are lined up. All of them should begin right under ( .
+General, the phy address is fixed when the bord is designed.
+(For example,the phy address of YT8512 depends on the hardware resistance pull-up or pull-down.
+However, some phy addresses can be configured through software, but not yt8512.)
 
-The problem here is that the ( is really far to the right.  My opinion is
-that the position of the second argument (ie the first one that is on a
-line of its own) is ok in this case.  So you can leave that one where it
-is and line up the other one.
+The phy address is a borad-related attribute, and I will follow Andrew's suggestion and put the phy address in borad*.dts
 
-julia
 
-> Kindly let me know if I have understood it
-> right.[EIu7f6EdNusD0UITKM3h?rid=EIu7f6EdNusD0UITKM3h]
->
-> On Tue, Mar 7, 2023 at 2:08 AM Julia Lawall <julia.lawall@inria.fr> wrote:
->
->
->       On Tue, 7 Mar 2023, Khadija Kamran wrote:
->
->       > In file drivers/staging/axis-fifo/axis-fifo.c the alignment
->       did not match the opening parenthesis. So, a few tabs were added
->       to match the alignment to exactly where the parenthesis started.
->
->       Hello Khadija,
->
->       Thanks for plunging in and being the first participant!
->
->       However, there are a number of issues with the proposed patch.
->
->       1.  The log message should be at most around 70 characters
->       wide.  You have
->       one long line.
->
->       2.  The log message should be written in the imperative. 
->       Instead of "a
->       few tabs were added", ay "add a few tabs".
->
->       3.  I'm not sure that it is worth creating a very long line to
->       respect the
->       rule about (.  On the other hand, the way the code is written at
->       the
->       moment seems to be very misleading, because the third argument
->       to
->       wait_event_interruptible_timeout is written as though it is the
->       second
->       argument to ioread32.  So you can adjust the argument list of
->       wait_event_interruptible_timeout so that at least all of the
->       arguments
->       that are not on the same line as the function call are lined up.
->
->       julia
->
->       >
->       > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
->       > ---
->       >  drivers/staging/axis-fifo/axis-fifo.c | 2 +-
->       >  1 file changed, 1 insertion(+), 1 deletion(-)
->       >
->       > diff --git a/drivers/staging/axis-fifo/axis-fifo.c
->       b/drivers/staging/axis-fifo/axis-fifo.c
->       > index dfd2b357f484..6e959224add0 100644
->       > --- a/drivers/staging/axis-fifo/axis-fifo.c
->       > +++ b/drivers/staging/axis-fifo/axis-fifo.c
->       > @@ -383,7 +383,7 @@ static ssize_t axis_fifo_read(struct file
->       *f, char __user *buf,
->       >                */
->       >               mutex_lock(&fifo->read_lock);
->       >               ret =
->       wait_event_interruptible_timeout(fifo->read_queue,
->       > -                     ioread32(fifo->base_addr +
->       XLLF_RDFO_OFFSET),
->       > +                                                   
->       ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
->       >                                (read_timeout >= 0) ?
->       >                                 msecs_to_jiffies(read_timeout)
->       :
->       >                                 MAX_SCHEDULE_TIMEOUT);
->       > --
->       > 2.34.1
->       >
->       >
->       >
->
->
->
---8323329-1184433621-1678175395=:3785--
+Best regards,
+Samin
+> 
+>> +                               };
+>> +                       };
+>> +               };
+>>         };
+>>  };
+>> --
+>> 2.17.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
+-- 
+Best regards,
+Samin
