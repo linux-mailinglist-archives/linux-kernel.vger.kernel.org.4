@@ -2,85 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086FE6AF734
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B1C6AF737
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjCGVHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:07:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
+        id S231178AbjCGVIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:08:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjCGVHL (ORCPT
+        with ESMTP id S230445AbjCGVIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:07:11 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FDDAA736
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:07:09 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id fd25so8957985pfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 13:07:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678223229;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ht5LN05corsofYoRRZ6LtuPGm1HccZj2Qv4agF8zMXE=;
-        b=j56rWVMq8AcAbG91+IFHoGnDYEKdEhPpWXttHuOCR9ZdEgqreHqaCEhELwykgJTclB
-         rgqtjUgRgeI58Y7JhFG2bz3LQdOGRetfU31lRgyq+dl8CucVnMQp/oOSQsC48IB9K6+g
-         hFehKk3LYl6xHfwqzf6XGkDsnIsz037HXGHbRuvtt3Z8IhyD121NivSzU/m9hA2H6rxh
-         Lf0aJetdsL8le7mzSvfLD4j0dul5xrEvBKyw6tsGDAkeKa8Ci8OV3CZwni72Y+CJF3o+
-         3dE9D7q4P2O+b5YsJbbC4vJwi+9NXDGYIBnpJnF2VnD+fENEF7Guz3Oh4otbyF+ZnIlA
-         W8pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678223229;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ht5LN05corsofYoRRZ6LtuPGm1HccZj2Qv4agF8zMXE=;
-        b=ACIun0b1FILU36ZGdd+/3f9M8D/AyMM7BMi+otnRdgv1wUnQC3pjJar4Xjju2uwAL5
-         I6bV0WjulX06h2udLEtkK1HkFY5Bn709hOKgmUxsoLlaWS5wlwVOXuGBZmnIBs5FFcZK
-         Cbna29rFWa/7YdZcF5UvYBmE3hO0H9M6PRWBc8SC51YkjaNjBKYJzDS445GDYVxAanIB
-         sRWIi3KwS8h5CHQoQNu8n5NVgOcO5XKo1KGMms9V/6+yhe6y8aUadqdLeMKCdW9AJ2gC
-         90qOEtrSXI24j4x7bFR2YVIFACx0YKREdjPggCl1wz66nFJ/008rEm4LmRqH2ZSD0QiC
-         r6nA==
-X-Gm-Message-State: AO0yUKUdNqKpRiTf4EdLYWfHMe+SlUqtqGX7E1yEawXmemq3+kXBzqRC
-        CGUW0SwKqkog9DhHsvBvmdV9nf4wezRrqZsi3BvEUA==
-X-Google-Smtp-Source: AK7set8u+1Eh0MMGGELIeBwi9KpF81YnEVJ6HrRYnUhsWF0KJOIm5xTeDLbPuOPKQW+PIVapl6rkrS0+i226bORB290=
-X-Received: by 2002:a62:f80d:0:b0:5e6:f9a1:e224 with SMTP id
- d13-20020a62f80d000000b005e6f9a1e224mr6517647pfh.6.1678223228845; Tue, 07 Mar
- 2023 13:07:08 -0800 (PST)
+        Tue, 7 Mar 2023 16:08:07 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEA630E97
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:08:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678223284; x=1709759284;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7IrEeKk0snZCSklr5bDVVFjLXU88F+WBESrvUTYCgG4=;
+  b=H4Tbl2l0Kc/vhM07pVSF1jyr81P2Z0NbwLEVo7tEZktuJh/SkrX60q9D
+   RO8BE3xxyYiTVw7fRnrgE3YNPrfX+PQU78Kb+y8wUBui6oAc4tA1YCAQq
+   M4G5qdLS4MW8L0NFlTbwfk0iaMn4YsySv6ZWOOmy+brj4u5FybO2zrdEu
+   YCFKeIEKe+2Hu/a7hCvKrq4DhF3DUrd21mpxuuv/C4nymjJJlMUFhv6AU
+   GNXmuSe7EwDzdl45KzKji3Z6yFul2UM3MyMCydufDNc5L3Dft8XF2hhDK
+   9hvYZg7nGcWgpLyaYdjtK0x9AsXWQkbEM7+5/hbv8uuQG56Exjlg6Urjt
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="400799542"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="400799542"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:08:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="670070952"
+X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
+   d="scan'208";a="670070952"
+Received: from jyankelo-mobl.amr.corp.intel.com (HELO [10.255.32.245]) ([10.255.32.245])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 13:08:02 -0800
+Message-ID: <9399110b-bbba-f96e-85ef-a317e8f4d518@linux.intel.com>
+Date:   Tue, 7 Mar 2023 15:08:01 -0600
 MIME-Version: 1.0
-References: <20230206221428.2125324-1-qyousef@layalina.io> <CA+khW7i_Sc0M4FXzojmQ5PSfkPwk6AdcbN9j0gDXZ9FsOMQAwA@mail.gmail.com>
- <f3a99500-e51c-032f-a0c6-01763f0a5be6@redhat.com>
-In-Reply-To: <f3a99500-e51c-032f-a0c6-01763f0a5be6@redhat.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Tue, 7 Mar 2023 13:06:57 -0800
-Message-ID: <CA+khW7iWAn6bbXdkJX1Lt4dWUsN6o4KqVQ8OFTs0B+VTtVjBkw@mail.gmail.com>
-Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on suspend-resume
-To:     Waiman Long <longman@redhat.com>
-Cc:     Qais Yousef <qyousef@layalina.io>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.7.1
+Subject: Re: [PATCH V6 8/8] soundwire: amd: add pm_prepare callback and pm ops
+ support
+Content-Language: en-US
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>, vkoul@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mario.Limonciello@amd.com,
+        amadeuszx.slawinski@linux.intel.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, claudiu.beznea@microchip.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
+ <20230307133135.545952-9-Vijendar.Mukunda@amd.com>
+ <4330af6a-ce97-53ed-f675-6d3d0ac8f32f@linux.intel.com>
+ <d5a75826-d762-27fc-5820-6826debdecd9@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <d5a75826-d762-27fc-5820-6826debdecd9@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,63 +73,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 12:09=E2=80=AFPM Waiman Long <longman@redhat.com> wr=
-ote:
->
-> On 3/7/23 14:56, Hao Luo wrote:
-> > On Mon, Feb 6, 2023 at 2:15=E2=80=AFPM Qais Yousef <qyousef@layalina.io=
-> wrote:
-> >> Commit f9a25f776d78 ("cpusets: Rebuild root domain deadline accounting=
- information")
-> >> enabled rebuilding root domain on cpuset and hotplug operations to
-> >> correct deadline accounting.
-> >>
-> >> Rebuilding root domain is a slow operation and we see 10+ of ms delays
-> >> on suspend-resume because of that (worst case captures 20ms which
-> >> happens often).
-> >>
-> >> Since nothing is expected to change on suspend-resume operation; skip
-> >> rebuilding the root domains to regain the some of the time lost.
-> >>
-> >> Achieve this by refactoring the code to pass whether dl accoutning nee=
-ds
-> >> an update to rebuild_sched_domains(). And while at it, rename
-> >> rebuild_root_domains() to update_dl_rd_accounting() which I believe is
-> >> a more representative name since we are not really rebuilding the root
-> >> domains, but rather updating dl accounting at the root domain.
-> >>
-> >> Some users of rebuild_sched_domains() will skip dl accounting update
-> >> now:
-> >>
-> >>          * Update sched domains when relaxing the domain level in cpus=
-et
-> >>            which only impacts searching level in load balance
-> >>          * update sched domains when cpufreq governor changes and we n=
-eed
-> >>            to create the perf domains
-> >>
-> >> Users in arch/x86 and arch/s390 are left with the old behavior.
-> >>
-> >> Debugged-by: Rick Yiu <rickyiu@google.com>
-> >> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> >> ---
-> > Hi Qais,
-> >
-> > Thank you for reporting this. We observed the same issue in our
-> > production environment. Rebuild_root_domains() is also called under
-> > cpuset_write_resmask, which handles writing to cpuset.cpus. Under
-> > production workloads, on a 4.15 kernel, we observed the median latency
-> > of writing cpuset.cpus at 3ms, p99 at 7ms. Now the median becomes
-> > 60ms, p99 at >100ms. Writing cpuset.cpus is a fairly frequent and
-> > critical path in production, but blindly traversing every task in the
-> > system is not scalable. And its cost is really unnecessary for users
-> > who don't use deadline tasks at all.
->
-> The rebuild_root_domains() function shouldn't be called when updating
-> cpuset.cpus unless it is a partition root. Is it?
->
 
-I think it's because we were using the legacy hierarchy. I'm not
-familiar with cpuset partition though.
 
-Hao
+On 3/7/23 14:25, Mukunda,Vijendar wrote:
+> On 07/03/23 20:58, Pierre-Louis Bossart wrote:
+>>> +static int amd_resume_child_device(struct device *dev, void *data)
+>>> +{
+>>> +	struct sdw_slave *slave = dev_to_sdw_dev(dev);
+>>> +	int ret;
+>>> +
+>>> +	if (!slave->probed) {
+>>> +		dev_dbg(dev, "skipping device, no probed driver\n");
+>>> +		return 0;
+>>> +	}
+>>> +	if (!slave->dev_num_sticky) {
+>>> +		dev_dbg(dev, "skipping device, never detected on bus\n");
+>>> +		return 0;
+>>> +	}
+>>> +	if (!pm_runtime_suspended(dev))
+>>> +		return 0;
+>>> +	ret = pm_request_resume(dev);
+>> I still don't get why the test above was needed. It's racy and brings
+>> limited benefits.
+> As explained below thread,
+> 
+> https://lore.kernel.org/lkml/acd3a560-1218-9f1d-06ec-19e4d3d4e2c9@amd.com
+> 
+> Our scenario is multiple peripheral devices are connected
+> over the same link.
+> 
+> In our implementation, device_for_each_child() function invokes
+> amd_resume_child_device callback for each child.
+> When any one of the child device is active, It will break the
+> iteration, which results in failure resuming all child devices.
+
+Can you clarify the 'it will break the iteration' statement?
+
+Are you saying pm_request_resume() will return a negative error code if
+the device is already active?
+
+We've used an unconditional pm_request_resume() in the Intel code for
+quite some time, including with multiple amplifiers per link, and have
+never observed the issue you report, so I'd like to get to the root
+cause pretty please. You took the Intel code and added a test for AMD
+platforms, and I'd really like to understand if the Intel code was wrong
+in the first place, or if the test is not needed. Something does not add
+up here.
+
+> 
+> If we skip , pm_suspended check , it will not resume all
+> peripheral devices when any one of the peripheral device is active.
+>>
+>>> +	if (ret < 0)
+>>> +		dev_err(dev, "pm_request_resume failed: %d\n", ret);
+>>> +
+>>> +	return ret;
+>>> +}
+> 
