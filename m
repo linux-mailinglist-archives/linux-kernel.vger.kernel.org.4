@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5334B6ADDF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 150F26ADDF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbjCGLt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:49:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49256 "EHLO
+        id S230478AbjCGLu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231365AbjCGLsm (ORCPT
+        with ESMTP id S230435AbjCGLtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:48:42 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0506A6F
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 03:47:56 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id s11so51035100edy.8
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 03:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678189649;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zXmsPUQYwGJMekA8Fy8rD+9tRxaJGDIKc6SP+399FoE=;
-        b=vQMimmeoShJhHytbnlC85/RZg8J73ZyWQScnYNdFmQL0c2eO6eHU6pYSBPEaQ8hy+L
-         FoHj4aY9HT4N6R4T+XNBbq7mOJ6EA4bjPC+DCF106P4ZrYK0YF/k/9X2daPocewHYyYw
-         EgdivDNQKJwLRLH9Mb5R6Jv5izZZduEwCicEHFNS88MwnJ8D1ZVwz8wyXc/5im2jeaDJ
-         cjYIWBz0OBw+3eU5Y/wzdPksJvoi7irwos+2CeAyGF2uC66mJrSfT0huLuazGO3iyXA/
-         xqHWPk8sQbFhrWixuity/g/uJPY6CqU8Ts+OxHOq0VtBDnTvvg4PXcW4aQSXgl+vCV6W
-         ezUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678189649;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zXmsPUQYwGJMekA8Fy8rD+9tRxaJGDIKc6SP+399FoE=;
-        b=T/KtpwrCb0oNWvbKwTBAZsgXgS8OH75ABdyi9Gl0QuGnNY1afWUVdJ67Zg4kRcWht6
-         4jjECnTPBUkfm0cuW53LFYi/MNq0Goz4lT/kccBOk6QKvOLN55Mvr9SiMBEqtQRSQsj0
-         AKbwr2ptcKPLrL3iGPZF9bM7cvkdBXQ5iUk62Ums0YuBUu/TMzFMFVQXzYGy7BTUSA9j
-         K78zpWQIekgYeomA/mrtC9y+huxM3Z3L1xioO4V4VhIjdykYcfteszgB5Uq6926yiwbI
-         vBhAhEk8q169ChIod7rtcdMg6Bt7/Bvsh/zYfjuL+0cMIIfmTMQKyRlDzTBx6NDflxYc
-         rLtQ==
-X-Gm-Message-State: AO0yUKXyPzp9faHkfDoXuNq+nHNPV67+1zONmm2SQSVv8pR57IbjKdWu
-        2WZNWf2/S9GQ8B1RW0yE6KLLww==
-X-Google-Smtp-Source: AK7set/1gpL/LLC2huoOCatJikHhDjXi04XynN+FMDrg5BYAUanVJbwTkH0/o6MQETKaewMXnljpog==
-X-Received: by 2002:a05:6402:1a4d:b0:4a2:223d:4514 with SMTP id bf13-20020a0564021a4d00b004a2223d4514mr13782735edb.8.1678189649366;
-        Tue, 07 Mar 2023 03:47:29 -0800 (PST)
-Received: from [192.168.2.107] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id w22-20020a17090633d600b008b907006d5dsm6072533eja.173.2023.03.07.03.47.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 03:47:29 -0800 (PST)
-Message-ID: <f88b7164-881b-5ada-0d52-05fe418f7b85@linaro.org>
-Date:   Tue, 7 Mar 2023 11:47:27 +0000
+        Tue, 7 Mar 2023 06:49:40 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABC279B03;
+        Tue,  7 Mar 2023 03:48:39 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 66C2B219CF;
+        Tue,  7 Mar 2023 11:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678189690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9hjD8LQcZYDIaD2cn2Ci7sCSCxSiYhDam8lrzoxeMEg=;
+        b=JQV3NjUl9nVYUQGlF7Eg0z8ZJbj04FsR0J30QBCd0jhe40fcqvVfNoN1JWnadMVMKFlUTt
+        WCL/xwTLzx/jhkkGO/46mzYqdfBCTHwMPK415gNK6F/TxBt81COL882jGHX7AJoAhh9RVt
+        Ovr2VZ3Xuak7qVSwWB1TW383c7e2M24=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678189690;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9hjD8LQcZYDIaD2cn2Ci7sCSCxSiYhDam8lrzoxeMEg=;
+        b=wB2CYFd/6/hMueFx8RJjQ7MpKHFJLORZerGd6O0/gfd6T+iW5CwI6r/FkLw/bps6ajzdPX
+        HHAkXq+XhBdMhJAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BC75B13440;
+        Tue,  7 Mar 2023 11:48:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id fi/wG3kkB2SCFgAAMHmgww
+        (envelope-from <mpdesouza@suse.com>); Tue, 07 Mar 2023 11:48:09 +0000
+Date:   Tue, 7 Mar 2023 08:48:06 -0300
+From:   Marcos Paulo de Souza <mpdesouza@suse.de>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: Re: [PATCH v7 05/10] documentation: Update on livepatch elf format
+Message-ID: <20230307114806.7pvqsjijnf2r42qh@daedalus>
+References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
+ <20230306140824.3858543-6-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH V5 09/15] spi: Add stacked and parallel memories support
- in SPI core
-Content-Language: en-US
-To:     "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "pratyush@kernel.org" <pratyush@kernel.org>
-Cc:     "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230306172109.595464-1-amit.kumar-mahapatra@amd.com>
- <20230306172109.595464-10-amit.kumar-mahapatra@amd.com>
- <1bbda9e6-37fb-195b-fd62-0e437847c636@linaro.org>
- <BN7PR12MB2802992D71DDA252B008AFDADCB79@BN7PR12MB2802.namprd12.prod.outlook.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <BN7PR12MB2802992D71DDA252B008AFDADCB79@BN7PR12MB2802.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306140824.3858543-6-joe.lawrence@redhat.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,37 +73,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 06, 2023 at 09:08:19AM -0500, Joe Lawrence wrote:
+> Add a section to Documentation/livepatch/module-elf-format.rst
+> describing how klp-convert works for fixing relocations.
+> 
+> Signed-off-by: Joao Moreira <jmoreira@suse.de>
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 
+LGTM:
 
-On 3/7/23 11:37, Mahapatra, Amit Kumar wrote:
-> 
-> 
->> -----Original Message-----
->> From: Tudor Ambarus <tudor.ambarus@linaro.org>
->> Sent: Tuesday, March 7, 2023 9:51 AM
->> To: Mahapatra, Amit Kumar <amit.kumar-mahapatra@amd.com>;
->> broonie@kernel.org; miquel.raynal@bootlin.com; richard@nod.at;
->> vigneshr@ti.com; jic23@kernel.org; pratyush@kernel.org
->> Cc: linux-spi@vger.kernel.org; linux-mtd@lists.infradead.org; linux-
->> kernel@vger.kernel.org
->> Subject: Re: [PATCH V5 09/15] spi: Add stacked and parallel memories
->> support in SPI core
->>
->> There were too many recipients in To and Cc and I couldn't reply to the
->> email. I whipped off the Cc filed and most of the people from To and added
->> the lists in Cc.
->>
->> On 3/6/23 17:21, Amit Kumar Mahapatra wrote:	
->>> Multi CS support using GPIO is not tested due to unavailability of
->>> necessary hardware setup.
->>
->> Please don't add code that is not used or tested.
-> 
-> During our discussion on the RFC, Mark had suggested to add multi-cs support
-> via GPIO as well. We had agreed to add multi-cs support via GPIO, but had also
-> mentioned that we don't have a hardware setup to test the CS GPIO use case.
-> https://lore.kernel.org/linux-arm-kernel/BN7PR12MB2802E2A9079E505932832270DC979@BN7PR12MB2802.namprd12.prod.outlook.com/
-> 
+Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 
-Ok, his call then.
-Cheers.
+> ---
+>  Documentation/livepatch/livepatch.rst         |  3 ++
+>  Documentation/livepatch/module-elf-format.rst | 42 +++++++++++++++++--
+>  2 files changed, 42 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/livepatch/livepatch.rst b/Documentation/livepatch/livepatch.rst
+> index 68e3651e8af9..6b317a57c276 100644
+> --- a/Documentation/livepatch/livepatch.rst
+> +++ b/Documentation/livepatch/livepatch.rst
+> @@ -261,6 +261,9 @@ into three levels:
+>      absolute position in the database, but rather the order it has been found
+>      only for a particular object ( vmlinux or a kernel module ). Note that
+>      kallsyms allows for searching symbols according to the object name.
+> +    Uniquely named symbols may use a symbol position of 0.  Non-unique
+> +    symbols need to specify their object / kallsyms position, starting
+> +    at position 1.
+>  
+>    - struct klp_object defines an array of patched functions (struct
+>      klp_func) in the same object. Where the object is either vmlinux
+> diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
+> index 7347638895a0..72a072514581 100644
+> --- a/Documentation/livepatch/module-elf-format.rst
+> +++ b/Documentation/livepatch/module-elf-format.rst
+> @@ -2,7 +2,8 @@
+>  Livepatch module Elf format
+>  ===========================
+>  
+> -This document outlines the Elf format requirements that livepatch modules must follow.
+> +This document outlines the Elf format requirements that livepatch modules must
+> +follow.
+>  
+>  
+>  .. Table of Contents
+> @@ -259,7 +260,8 @@ Livepatch symbol names must conform to the following format::
+>    The position of the symbol in the object (as according to kallsyms)
+>    This is used to differentiate duplicate symbols within the same
+>    object. The symbol position is expressed numerically (0, 1, 2...).
+> -  The symbol position of a unique symbol is 0.
+> +  The symbol position of a unique symbol is 0.  The symbol position of
+> +  the first non-unique symbol is 1, the second is 2, etc.
+>  
+>  Examples:
+>  ---------
+> @@ -291,7 +293,41 @@ Examples:
+>    Note that the 'Ndx' (Section index) for these symbols is SHN_LIVEPATCH (0xff20).
+>    "OS" means OS-specific.
+>  
+> -5. Symbol table and Elf section access
+> +5. Automatic conversion of unresolved relocations
+> +=================================================
+> +Sometimes livepatches may operate on symbols which are not self-contained nor
+> +exported. When this happens, these symbols remain unresolved in the elf object
+> +and will trigger an error during the livepatch instantiation.
+> +
+> +Whenever possible, the kernel building infrastructure solves this problem
+> +automatically. First, a symbol database containing information on all compiled
+> +objects is built. Second, this database - a file named symbols.klp, placed in
+> +the kernel source root directory - is used to identify targets for unresolved
+> +relocations, converting them in the livepatch elf accordingly to the
+> +specifications above-described. While the first stage is fully handled by the
+> +building system, the second is done by a tool called klp-convert, which can be
+> +found in "scripts/livepatch".
+> +
+> +When an unresolved relocation has as target a symbol whose name is also used by
+> +different symbols throughout the kernel, the relocation cannot be resolved
+> +automatically. In these cases, the livepatch developer must add annotations to
+> +the livepatch, making it possible for the system to identify which is the
+> +correct target amongst multiple homonymous symbols. Such annotations must be
+> +done through a data structure as follows:::
+> +
+> +	struct KLP_MODULE_RELOC(object) data_structure_name[] = {
+> +		KLP_SYMPOS(symbol, pos)
+> +	};
+> +
+> +In the above example, object refers to the object file which contains the
+> +symbol, being vmlinux or a module; symbol refers to the symbol name that will
+> +be relocated and pos is its position in the object.
+> +
+> +When a data structure like this is added to the livepatch, the resulting elf
+> +will hold symbols that will be identified by klp-convert and used to solve name
+> +ambiguities.
+> +
+> +6. Symbol table and Elf section access
+>  ======================================
+>  A livepatch module's symbol table is accessible through module->symtab.
+>  
+> -- 
+> 2.39.2
+> 
