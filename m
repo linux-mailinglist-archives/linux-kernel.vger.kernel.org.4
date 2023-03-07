@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D16E36AE1BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6DC6AE1BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:08:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCGOIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:08:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        id S230361AbjCGOIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbjCGOHl (ORCPT
+        with ESMTP id S229698AbjCGOHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:07:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472088ABF9
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:07:09 -0800 (PST)
+        Tue, 7 Mar 2023 09:07:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182D88ABE9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:07:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B96B761457
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:07:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 338C3C433A1;
-        Tue,  7 Mar 2023 14:07:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2915A61463
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EF3C4339E;
+        Tue,  7 Mar 2023 14:07:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678198027;
-        bh=Hq8nHTyQr1XHq5oR1wC0C3a0J3sTD/A+RXL9gidFldA=;
+        s=k20201202; t=1678198029;
+        bh=1oCuWk9VXyzMZa12N2n3i7rjkfl0ioumXcP43D4virk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tasMtYwVLBsYQ2coKtO/UrLuNh5Xk04axrum5aB+CLGXjp2+1xnnfrDABu+WuSdFR
-         sFKVeRhFY/rtzakdiLI9Vx9zHgeju92OdtjnyyWJK9W0lP041NFlw7x5tY9MRtMEVh
-         P45tZmK/0H1DuVTOHtalkzTXpWOAyXQr67p0hNoeXjdshmmlhni9HA8jS+qNWVeFx1
-         oC+5r5Km1QyyyXZkSaDgc/I5r+SSCvTKxh86NSSTh0fIFG2wmJ35E+RN8ojn5jrVGu
-         TFPUyrz+CMcFWrf3MUW/nRk1HjPHaLaPT+Wudbn63vTeXHaRsssPUhsFNjZw+4ypJ9
-         riEyjmcFs3NJA==
+        b=LZxoqVBA3o+TyPC758j6soT3BLLlD+0n2bXQHlRjTHq7geYmp6Z8l4AS488r1xkuv
+         f2bgyEgCycl8ABzRlf+0gVsyFwlRKMU4xaCTa4ZzhIxzTgqRzvmpGZmbG0KWEP/HOQ
+         VpbGvaQLWT+EG8nsz+5NDqtZ8YGTFkvfvdpEnfQ0mFitGbXRH8TQtmQEEuobjvxqD3
+         6eSJVA2Vp5rswFTQ/MX5afnlJaGDDzN/v9bLKW8KWtTHoI3xaTWp5ywNjdsvd9q8r5
+         Mrw88ipYYgdh1nvW39wimqxkvhcHveIfaM4iUvtPtWqTDxOGyWwrgrkI83Y02kz8Tj
+         zdRYobKGrWuTw==
 From:   Ard Biesheuvel <ardb@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -42,18 +42,18 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         Ryan Roberts <ryan.roberts@arm.com>,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Kees Cook <keescook@chromium.org>
-Subject: [PATCH v3 12/60] arm64: Turn kaslr_feature_override into a generic SW feature override
-Date:   Tue,  7 Mar 2023 15:04:34 +0100
-Message-Id: <20230307140522.2311461-13-ardb@kernel.org>
+Subject: [PATCH v3 13/60] arm64: kvm: honour 'nokaslr' command line option for the HYP VA space
+Date:   Tue,  7 Mar 2023 15:04:35 +0100
+Message-Id: <20230307140522.2311461-14-ardb@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307140522.2311461-1-ardb@kernel.org>
 References: <20230307140522.2311461-1-ardb@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4014; i=ardb@kernel.org; h=from:subject; bh=GSuvLi6RwTLuJqeqKu2UWNgSFMdiiU3kHbNFtROgd2w=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdRWzH1bdWNns5bhsHSbeKR5p8q2/fmdl97PnBHRcbO ufbPlveUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACYincnIsH/u4TUfvh0MmHMg 3nyO8enfLZccfx5cPmtCV/EqdY1d0/4wMvy52bzHzZV3gcT6dyr/T0/dm5SWXOzFmckQ0XEowf3 1V3YA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3632; i=ardb@kernel.org; h=from:subject; bh=1oCuWk9VXyzMZa12N2n3i7rjkfl0ioumXcP43D4virk=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdRdJbqv235+uE8w374+M/zdWw+XQn9vDuVzFzE5YF2 l3Ivx7cUcrCIMbBICumyCIw+++7nacnStU6z5KFmcPKBDKEgYtTACaiuYORod/hRt3pTfbXdvie +zon9n8PzyKlohXsTTab7JbF9f+8tIHhnwGj8hnP7Gev/7+3l1qjZ9am5nk+fWIvq/HTeubDlY8 +MgAA
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,121 +61,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marc Zyngier <maz@kernel.org>
+Debugging the code that runs in HYP is rather difficult, especially when
+its placement is randomized. So let's take the 'nokaslr' command line
+option into account, and allow it to be disabled at boot.
 
-Disabling KASLR from the command line is implemented as a feature
-override. Repaint it slightly so that it can further be used as
-more generic infrastructure for SW override purposes.
-
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-[ardb: don't apply the override mask to val]
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/arm64/include/asm/cpufeature.h |  4 ++++
- arch/arm64/kernel/cpufeature.c      |  2 ++
- arch/arm64/kernel/idreg-override.c  | 16 ++++++----------
- arch/arm64/kernel/kaslr.c           |  5 ++---
- 4 files changed, 14 insertions(+), 13 deletions(-)
+ arch/arm64/include/asm/memory.h | 15 -------------
+ arch/arm64/include/asm/mmu.h    | 23 ++++++++++++++++++++
+ arch/arm64/kernel/kaslr.c       |  3 +--
+ arch/arm64/kvm/va_layout.c      |  3 ++-
+ 4 files changed, 26 insertions(+), 18 deletions(-)
 
-diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-index 6bf013fb110d7923..bc10098901808c00 100644
---- a/arch/arm64/include/asm/cpufeature.h
-+++ b/arch/arm64/include/asm/cpufeature.h
-@@ -15,6 +15,8 @@
- #define MAX_CPU_FEATURES	128
- #define cpu_feature(x)		KERNEL_HWCAP_ ## x
+diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+index 830740ff79bab902..f96975466ef1b752 100644
+--- a/arch/arm64/include/asm/memory.h
++++ b/arch/arm64/include/asm/memory.h
+@@ -197,21 +197,6 @@ extern s64			memstart_addr;
+ /* the offset between the kernel virtual and physical mappings */
+ extern u64			kimage_voffset;
  
-+#define ARM64_SW_FEATURE_OVERRIDE_NOKASLR	0
-+
- #ifndef __ASSEMBLY__
- 
- #include <linux/bug.h>
-@@ -925,6 +927,8 @@ extern struct arm64_ftr_override id_aa64smfr0_override;
- extern struct arm64_ftr_override id_aa64isar1_override;
- extern struct arm64_ftr_override id_aa64isar2_override;
- 
-+extern struct arm64_ftr_override arm64_sw_feature_override;
-+
- u32 get_kvm_ipa_limit(void);
- void dump_cpu_features(void);
- 
-diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-index e9a138b7e3b22cc7..88cec6c14743c4c5 100644
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@ -657,6 +657,8 @@ struct arm64_ftr_override __ro_after_init id_aa64smfr0_override;
- struct arm64_ftr_override __ro_after_init id_aa64isar1_override;
- struct arm64_ftr_override __ro_after_init id_aa64isar2_override;
- 
-+struct arm64_ftr_override arm64_sw_feature_override;
-+
- static const struct __ftr_reg_entry {
- 	u32			sys_id;
- 	struct arm64_ftr_reg 	*reg;
-diff --git a/arch/arm64/kernel/idreg-override.c b/arch/arm64/kernel/idreg-override.c
-index d833d78a7f313563..434703e4e55cb785 100644
---- a/arch/arm64/kernel/idreg-override.c
-+++ b/arch/arm64/kernel/idreg-override.c
-@@ -138,15 +138,11 @@ static const struct ftr_set_desc smfr0 __initconst = {
- 	},
- };
- 
--extern struct arm64_ftr_override kaslr_feature_override;
+-static inline unsigned long kaslr_offset(void)
+-{
+-	return (u64)&_text - KIMAGE_VADDR;
+-}
 -
--static const struct ftr_set_desc kaslr __initconst = {
--	.name		= "kaslr",
--#ifdef CONFIG_RANDOMIZE_BASE
--	.override	= &kaslr_feature_override,
--#endif
-+static const struct ftr_set_desc sw_features __initconst = {
-+	.name		= "arm64_sw",
-+	.override	= &arm64_sw_feature_override,
- 	.fields		= {
--		FIELD("disabled", 0, NULL),
-+		FIELD("nokaslr", ARM64_SW_FEATURE_OVERRIDE_NOKASLR, NULL),
- 		{}
- 	},
- };
-@@ -158,7 +154,7 @@ static const struct ftr_set_desc * const regs[] __initconst = {
- 	&isar1,
- 	&isar2,
- 	&smfr0,
--	&kaslr,
-+	&sw_features,
- };
+-static inline bool kaslr_enabled(void)
+-{
+-	/*
+-	 * The KASLR offset modulo MIN_KIMG_ALIGN is taken from the physical
+-	 * placement of the image rather than from the seed, so a displacement
+-	 * of less than MIN_KIMG_ALIGN means that no seed was provided.
+-	 */
+-	return kaslr_offset() >= MIN_KIMG_ALIGN;
+-}
+-
+ /*
+  * Allow all memory at the discovery stage. We will clip it later.
+  */
+diff --git a/arch/arm64/include/asm/mmu.h b/arch/arm64/include/asm/mmu.h
+index 48f8466a4be92ac3..9b9a206e4e9c9d4e 100644
+--- a/arch/arm64/include/asm/mmu.h
++++ b/arch/arm64/include/asm/mmu.h
+@@ -72,6 +72,29 @@ extern void *fixmap_remap_fdt(phys_addr_t dt_phys, int *size, pgprot_t prot);
+ extern void mark_linear_text_alias_ro(void);
+ extern bool kaslr_requires_kpti(void);
  
- static const struct {
-@@ -175,7 +171,7 @@ static const struct {
- 	  "id_aa64isar1.api=0 id_aa64isar1.apa=0 "
- 	  "id_aa64isar2.gpa3=0 id_aa64isar2.apa3=0"	   },
- 	{ "arm64.nomte",		"id_aa64pfr1.mte=0" },
--	{ "nokaslr",			"kaslr.disabled=1" },
-+	{ "nokaslr",			"arm64_sw.nokaslr=1" },
- };
++static inline unsigned long kaslr_offset(void)
++{
++	return (u64)&_text - KIMAGE_VADDR;
++}
++
++static inline bool kaslr_enabled(void)
++{
++	/*
++	 * The KASLR offset modulo MIN_KIMG_ALIGN is taken from the physical
++	 * placement of the image rather than from the seed, so a displacement
++	 * of less than MIN_KIMG_ALIGN means that no seed was provided.
++	 */
++	return kaslr_offset() >= MIN_KIMG_ALIGN;
++}
++
++static inline bool kaslr_disabled_cmdline(void)
++{
++	if (cpuid_feature_extract_unsigned_field(arm64_sw_feature_override.val,
++						 ARM64_SW_FEATURE_OVERRIDE_NOKASLR))
++		return true;
++	return false;
++}
++
+ #define INIT_MM_CONTEXT(name)	\
+ 	.pgd = init_pg_dir,
  
- static int __init find_field(const char *cmdline,
 diff --git a/arch/arm64/kernel/kaslr.c b/arch/arm64/kernel/kaslr.c
-index e7477f21a4c9d062..abcd996c747b8c97 100644
+index abcd996c747b8c97..9e7f0bae5b5fb24b 100644
 --- a/arch/arm64/kernel/kaslr.c
 +++ b/arch/arm64/kernel/kaslr.c
-@@ -23,8 +23,6 @@
- u64 __ro_after_init module_alloc_base;
- u16 __initdata memstart_offset_seed;
- 
--struct arm64_ftr_override kaslr_feature_override __initdata;
--
- static int __init kaslr_init(void)
- {
- 	u64 module_range;
-@@ -36,7 +34,8 @@ static int __init kaslr_init(void)
+@@ -34,8 +34,7 @@ static int __init kaslr_init(void)
  	 */
  	module_alloc_base = (u64)_etext - MODULES_VSIZE;
  
--	if (kaslr_feature_override.val & kaslr_feature_override.mask & 0xf) {
-+	if (cpuid_feature_extract_unsigned_field(arm64_sw_feature_override.val,
-+						 ARM64_SW_FEATURE_OVERRIDE_NOKASLR)) {
+-	if (cpuid_feature_extract_unsigned_field(arm64_sw_feature_override.val,
+-						 ARM64_SW_FEATURE_OVERRIDE_NOKASLR)) {
++	if (kaslr_disabled_cmdline()) {
  		pr_info("KASLR disabled on command line\n");
  		return 0;
+ 	}
+diff --git a/arch/arm64/kvm/va_layout.c b/arch/arm64/kvm/va_layout.c
+index 91b22a014610b22f..341b67e2f2514e55 100644
+--- a/arch/arm64/kvm/va_layout.c
++++ b/arch/arm64/kvm/va_layout.c
+@@ -72,7 +72,8 @@ __init void kvm_compute_layout(void)
+ 	va_mask = GENMASK_ULL(tag_lsb - 1, 0);
+ 	tag_val = hyp_va_msb;
+ 
+-	if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) && tag_lsb != (vabits_actual - 1)) {
++	if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) && tag_lsb != (vabits_actual - 1) &&
++	    !kaslr_disabled_cmdline()) {
+ 		/* We have some free bits to insert a random tag. */
+ 		tag_val |= get_random_long() & GENMASK_ULL(vabits_actual - 2, tag_lsb);
  	}
 -- 
 2.39.2
