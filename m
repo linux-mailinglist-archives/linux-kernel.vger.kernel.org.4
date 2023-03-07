@@ -2,139 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE916AE17E
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 755676AE181
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 14:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjCGN4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 08:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S230272AbjCGN5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 08:57:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjCGN4F (ORCPT
+        with ESMTP id S229743AbjCGN5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 08:56:05 -0500
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0DA3D934;
-        Tue,  7 Mar 2023 05:56:01 -0800 (PST)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327ClLYn007111;
-        Tue, 7 Mar 2023 14:55:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- references : in-reply-to : subject : date : message-id : mime-version :
- content-type : content-transfer-encoding; s=selector1;
- bh=yLH8kRBL+xgt5uffNynZZbuGSAhtYDNWHHu3XGprTUc=;
- b=OhYSUGzK3W8Akvv4Sg72S70p5RDqVxgEWp/25j9vXehUjO1hI0b8tP0F6q4bkCa7NdC1
- g9I1wkcCPejiMuOH6OLiDg7pkzv97rkoUkGbbnHUI/tm0K02RLb2Hc943R7+URdoPM7k
- eA+wrS77jNVk2f89cQsmHYve63BkK2+W6xny07K+rFKr9kb9eu+KiuqTui+D/UWtqqau
- o02Vv9QeoZjnctUJp1WDDO0eeskyP0F7u0pGzpNg9/jgjp0LbfrEP6k9EkvqovfAGHgL
- S42j0LCbdvafcnYmktXYWk3YeZMVipcQsYVpaCwfGTNbbgkut/QGzv2Knu3B1IAB7c8L cQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3p416026yk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 14:55:40 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9168110002A;
-        Tue,  7 Mar 2023 14:55:36 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 541BB21D3B0;
-        Tue,  7 Mar 2023 14:55:36 +0100 (CET)
-Received: from LMECWL1288 (10.201.28.198) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Tue, 7 Mar
- 2023 14:55:35 +0100
-From:   <lionel.debieve@foss.st.com>
-To:     'Herbert Xu' <herbert@gondor.apana.org.au>,
-        'Linus Walleij' <linus.walleij@linaro.org>
-CC:     'Li kunyu' <kunyu@nfschina.com>, <davem@davemloft.net>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-crypto@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <mcoquelin.stm32@gmail.com>
-References: <Y/yIbPBVCPx9K/0s@gondor.apana.org.au> <CACRpkdZC4z2Xng4=k94rmM=AFzNzTdXkvtkArMnK7afouz=7VA@mail.gmail.com> <Y/3FYZJeLE7DVPBf@gondor.apana.org.au> <Y/3IA4OjmUmjMgh1@gondor.apana.org.au> <Y/3N6zFOZeehJQ/p@gondor.apana.org.au> <CACRpkdZ3rCsOWqooNkPL6m7vZ2Z2Frh2sdxruKhrS0t3QHcSKw@mail.gmail.com> <Y/6sCC2nH0FcD6kJ@gondor.apana.org.au> <CACRpkdYN-SDfxXKLt3HWGVkWb3V1rABwvWuytwDrzfTqm81fNA@mail.gmail.com> <ZAA8doNUjYmTRScB@gondor.apana.org.au> <ZAMQjOdi8GfqDUQI@gondor.apana.org.au> <ZAVu/XHbL9IR5D3h@gondor.apana.org.au>
-In-Reply-To: <ZAVu/XHbL9IR5D3h@gondor.apana.org.au>
-Subject: RE: [v6 PATCH 0/7] crypto: stm32 - Save and restore between each request
-Date:   Tue, 7 Mar 2023 14:55:29 +0100
-Message-ID: <009901d950fc$7e0f68a0$7a2e39e0$@foss.st.com>
+        Tue, 7 Mar 2023 08:57:49 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5813D934;
+        Tue,  7 Mar 2023 05:57:48 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id v11so14115128plz.8;
+        Tue, 07 Mar 2023 05:57:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678197468;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e26yGfrppj54n5vu7MfF/4DYSTLCxazeKAAKghatviY=;
+        b=k/LZaCEOhH/zfw12s8b5z0xjRas5BMADQ6kguj4C3m0zq1lB+MXNW1Fd8Fjuahrynt
+         eDorKtTgJrkOE0rzQiVFYgMzVFk8oGeKxaHzQskwupYpLsqvLPmuchycVQWV2Vgz4fiK
+         u7jSI+8UUKIN0rrao7v1iXyDGLrvHr9tHa66HMvrDCEWM+wqe2mZSbW5mTFlLTyD5lF1
+         I7mU3a48MjsXv5HCqXfHZwYYl07VuFI4GMFa7WZkyy3Mr++BfuzXgfZkAolFoF5LZEPT
+         2tR1Zs4S9WF9DcNUV8eMK0vi6NMXPtWfmolKSMpvI0OtvzQycSHdk9GL1CPnDhgfwqgC
+         nkUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678197468;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e26yGfrppj54n5vu7MfF/4DYSTLCxazeKAAKghatviY=;
+        b=aCzY/YNEipiwFhHbsDZhS+5ggguMRgToUhueEPlLv0fmmnczfI7HidhjUZBUqfO4Z1
+         /7WsF5NSEnOT7ZUeJlW5Gv5bEX+hpZ/Zkcp17JyZ22bd+cs9W+5npBY2BkMfXk/zKoTY
+         HtLylGrXmHRt3oRnIZPfHjYugp7zfufVGmSQ4Svl4L8wmtYu7LuKAlcrgQIdlTSq+NRl
+         92dCz4ppK2pS5E5Q9WOVaEOSvyEAxsVWJ8+jiHrqUxW43W7lVOnqZFGET38eX+E4cLIh
+         5sjgaCAYMaSzCNh3DzYSVNrAM1MbKfdGRWb3+m8R/NSJOjTiMQpE5lhiS6O4MoXUvw7T
+         KTDA==
+X-Gm-Message-State: AO0yUKWP0WMasAnHUNUqxlEwuSx3dNY517rcO1978YdNQUwPEGy4gSkR
+        baueciDCo+bZVUh3bptDTJM=
+X-Google-Smtp-Source: AK7set9r+bjjz1RVMZbPFkGSq6WmI+Zg//SSBPKYDlE0h7u9jAfa342u/wsZvjs2SDljBlts4ZFswA==
+X-Received: by 2002:a17:903:41c6:b0:19d:181f:511 with SMTP id u6-20020a17090341c600b0019d181f0511mr17521973ple.30.1678197468004;
+        Tue, 07 Mar 2023 05:57:48 -0800 (PST)
+Received: from c1ion.lan ([139.227.13.23])
+        by smtp.gmail.com with ESMTPSA id x7-20020a1709029a4700b0019339f3368asm8535554plv.3.2023.03.07.05.57.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 05:57:47 -0800 (PST)
+From:   MIngyi Cong <congmingyi@gmail.com>
+To:     linkinjeon@kernel.org, senozhatsky@chromium.org, sfrench@samba.org,
+        tom@talpey.com
+Cc:     congmingyi@gmail.com, linux-kernel@vger.kernel.org,
+        linux-cifs@vger.kernel.org
+Subject: [PATCH v2] fs: add the tuncate check of hfs, exfat and hfsplus
+Date:   Tue,  7 Mar 2023 21:57:40 +0800
+Message-Id: <20230307135740.13209-1-congmingyi@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230304083559.172398-1-congmingyi@gmail.com>
+References: <20230304083559.172398-1-congmingyi@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQM1VOWhy180cDq7iroA9b7idoF8/ALVghyWASjSKLcBK0rUMwI+YZijAmT0ufgCFKWGPgLboMstAYC561sCOBC6OgG+LZC+q5VZXhA=
-Content-Language: en-us
-msip_labels: MSIP_Label_23add6c0-cfdb-4bb9-b90f-bf23b83aa6c0_Enabled=true; MSIP_Label_23add6c0-cfdb-4bb9-b90f-bf23b83aa6c0_SetDate=2023-03-07T13:55:29Z; MSIP_Label_23add6c0-cfdb-4bb9-b90f-bf23b83aa6c0_Method=Standard; MSIP_Label_23add6c0-cfdb-4bb9-b90f-bf23b83aa6c0_Name=23add6c0-cfdb-4bb9-b90f-bf23b83aa6c0; MSIP_Label_23add6c0-cfdb-4bb9-b90f-bf23b83aa6c0_SiteId=75e027c9-20d5-47d5-b82f-77d7cd041e8f; MSIP_Label_23add6c0-cfdb-4bb9-b90f-bf23b83aa6c0_ActionId=4d2247e7-9cb5-451b-91d6-e6b3793df82d; MSIP_Label_23add6c0-cfdb-4bb9-b90f-bf23b83aa6c0_ContentBits=2
-X-Originating-IP: [10.201.28.198]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_08,2023-03-07_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+HFS, EXFAT and HFSPLUS will fill zero data in truncated range.
+Fix this by adding *_SUPER_MAGIC check.
 
-Sorry for the very (very very) late response.
-Thanks for highlighting the issue. I'm worried about the issue seen that
-we've fixed at our downstream level.
-We (ST) are currently working on upstreaming the new peripheral update for
-STM32MP13 that fixed the old issue seen (such as CSR register numbers), and
-so on....
+Signed-off-by: MIngyi Cong <congmingyi@gmail.com>
+---
+V1 -> V2: add the truncate check of hfs and remove EXFAT_SUPER_MAGIC in magic.h
+ fs/ksmbd/smb2pdu.c         | 5 ++++-
+ include/uapi/linux/magic.h | 2 ++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
 
-The issue about the context management relies on a question I've get time to
-ask you. There is no internal test purpose (using test manager) that really
-show the need of a hash update that needs to be "self-content". We've seen
-the issue using openssl use cases that is not using import/export.
-I'm wondering to understand the real need of import/export in the framework
-if the request must be safe itself?
-
-From hardware point of view, it is a penalty to wait for completion to save
-the context after each request. I understand the need of multiple hash
-request in // but I was wondering that it can be managed by the
-import/export, but it seems I was wrong. The penalty of the context saving
-will impact all hash requests where, in a runtime context is probably not
-the most important use case.
-I'm looking deeper to check with the DMA use case and there is some new HW
-restriction on the coming hash version that doesn't allow the read of CSR
-register at some times.
-
-BR,
-Lionel
-
-
-ST Restricted
-
------Original Message-----
-From: Herbert Xu <herbert@gondor.apana.org.au> 
-Sent: Monday, March 6, 2023 5:42 AM
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Lionel Debieve <lionel.debieve@foss.st.com>; Li kunyu
-<kunyu@nfschina.com>; davem@davemloft.net;
-linux-arm-kernel@lists.infradead.org; linux-crypto@vger.kernel.org;
-linux-kernel@vger.kernel.org; linux-stm32@st-md-mailman.stormreply.com;
-mcoquelin.stm32@gmail.com
-Subject: [v6 PATCH 0/7] crypto: stm32 - Save and restore between each
-request
-
-On Sat, Mar 04, 2023 at 05:34:04PM +0800, Herbert Xu wrote:
-> 
-> I've split the patch up into smaller chunks for easier testing.
-
-v6 fixes a bug in the finup patch that caused the new data to be discarded
-instead of hashed.
-
-This patch series fixes the import/export functions in the stm32 driver.  As
-usual, a failure in import/export indicates a general bug in the hash driver
-that may break as soon as two concurrent users show up and hash at the same
-time using any method other than digest or init+finup.
-
-Cheers,
---
-Email: Herbert Xu <herbert@gondor.apana.org.au> Home Page:
-http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+diff --git a/fs/ksmbd/smb2pdu.c b/fs/ksmbd/smb2pdu.c
+index 0685c1c77b9f..881a2b37fab0 100644
+--- a/fs/ksmbd/smb2pdu.c
++++ b/fs/ksmbd/smb2pdu.c
+@@ -5746,7 +5746,10 @@ static int set_end_of_file_info(struct ksmbd_work *work, struct ksmbd_file *fp,
+ 	 * truncate of some filesystem like FAT32 fill zero data in
+ 	 * truncated range.
+ 	 */
+-	if (inode->i_sb->s_magic != MSDOS_SUPER_MAGIC) {
++	if (inode->i_sb->s_magic != MSDOS_SUPER_MAGIC ||
++		inode->i_sb->s_magic != EXFAT_SUPER_MAGIC ||
++		inode->i_sb->s_magic != HFSPLUS_SUPER_MAGIC ||
++		inode->i_sb->s_magic != HFS_SUPER_MAGIC) {
+ 		ksmbd_debug(SMB, "truncated to newsize %lld\n", newsize);
+ 		rc = ksmbd_vfs_truncate(work, fp, newsize);
+ 		if (rc) {
+diff --git a/include/uapi/linux/magic.h b/include/uapi/linux/magic.h
+index 6325d1d0e90f..db2c81755025 100644
+--- a/include/uapi/linux/magic.h
++++ b/include/uapi/linux/magic.h
+@@ -46,6 +46,8 @@
+ 
+ #define MSDOS_SUPER_MAGIC	0x4d44		/* MD */
+ #define EXFAT_SUPER_MAGIC	0x2011BAB0
++#define HFSPLUS_SUPER_MAGIC	0x482b		/* HFSPLUS */
++#define HFS_SUPER_MAGIC	0x4244		/* "BD": HFS MDB (super block) */
+ #define NCP_SUPER_MAGIC		0x564c		/* Guess, what 0x564c is :-) */
+ #define NFS_SUPER_MAGIC		0x6969
+ #define OCFS2_SUPER_MAGIC	0x7461636f
+-- 
+2.34.1
 
