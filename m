@@ -2,108 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B966AD870
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A486AD873
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 08:49:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjCGHrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 02:47:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S229645AbjCGHtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 02:49:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjCGHrt (ORCPT
+        with ESMTP id S229576AbjCGHtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 02:47:49 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB7C3D0B4
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:47:48 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x3so48632352edb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 23:47:48 -0800 (PST)
+        Tue, 7 Mar 2023 02:49:03 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6645FCE
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 23:49:02 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id p20so13145471plw.13
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 23:49:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678175266;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V3DhLATozJtMgPvFoqUY3SKZwNKda35qxdXt7pVBes0=;
-        b=AgOVd2Jshcd1P7nVmgyija6vx3o4lu2Tdx2fffUGqAq3MYn+VgEEfYyq2Whc1krruW
-         Ln1eakWHebJ0xe9w9thitxiPhbglfl/+FiRGEyo/MCCJnxT2g6izAsD8L7lAysP1uB4V
-         i6K7Y0x8DHKld88eP/aSJX3esPf7J974Rdqdf2cvpBqn09v6yFs9lIwrb+QKjfrH6m70
-         0NclLOuens30RbfFu5CSnZgOjl61uecmgNbfJmzy1jhg/A82nc/4WIjwQ2zuJEBymP7R
-         UfzAdP/oixccp/fq54xXc4E0TetwJmYI7kJKEhKM+2sbXvwHvS3llimIj2NIF9SCx3qA
-         AHvQ==
+        d=shopee.com; s=shopee.com; t=1678175342;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5/0dHmlbYMl8JGzVTPk6nV0NKYl8wDENDKsl5texprU=;
+        b=PBmMz327qjFJYp6lc4XsmGReKAbWj/vd1lIcVGm+UXdnrxxZyF08S1xIcNHDHhtRI0
+         MgPakAbOPqLAJz0IA/OTTy9rnWA4fW3kDPlwYIWpISay8mwkhor+pZ1XSbvJ3PuqXY5S
+         8zseNOdxhid5xc879kz01okxB0bzz4BOQTPx46uJpTwXyFRIty4ecB0Nf+aJQPLKCqRc
+         W3PCbYEb7hlBVfNCyWu7KLl40nmFXF0WV3C2akZzTVTSbBnTHjaFP6kMhC5HVKpJKZyY
+         6JvCtuCLV3y0Puqda8KIEH9ovF4zrrJBKd7kQAyC/eJIAfwxmjxed1TR+mtT9/GJ8Hl7
+         QO+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678175266;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V3DhLATozJtMgPvFoqUY3SKZwNKda35qxdXt7pVBes0=;
-        b=44cS5XzlL8dmH1dwuxGlpqN7PzkOkV8Mqb/xQY5924ST2tOQYgpobjH0C1DGwkEvjK
-         bV0lcmDzXLvcjK8qEvIafVBjJW/nqddSWanjepR0aD1sPHtHz1WqFx4iFq+W63k1cxGI
-         Tv7ArftSokfRYLdICu49aNG87rkh/jOnRaneu4iWHbRaWorRr+NIZKiBxBSeJGneHfCx
-         AGZgu6tqyVFYFEIFRfrmT0vgd9bbOUUm8y6DFAqOBriMGUodaPFrPh+CJqhOVtTNRsR4
-         ewYHjwGwKP8640lThWJAQFyUqxYh5nOjDgYb3tBqafjZFn/x6dX5/zXugYpDyiQLNzTN
-         GcJw==
-X-Gm-Message-State: AO0yUKVUGWkDuCeInpV6aTHuS72Ox32PTV3YBZ5wxmCp6AWtmdoRRewM
-        RvbzgMwobDq90HnK/48S4T9jFw==
-X-Google-Smtp-Source: AK7set9DV8c6V+0UvF/rPKB+JoZu2W8Fux9M3UTl8ASI9Ub72eM9wV6VrNXRM1/ge4sXzaw7R1WJpg==
-X-Received: by 2002:a17:907:a4c:b0:8b1:3d15:1e2c with SMTP id be12-20020a1709070a4c00b008b13d151e2cmr17935319ejc.9.1678175266708;
-        Mon, 06 Mar 2023 23:47:46 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:5310:35c7:6f9e:2cd3])
-        by smtp.gmail.com with ESMTPSA id bl15-20020a170906c24f00b008d83ad86fe8sm5672808ejb.59.2023.03.06.23.47.45
+        d=1e100.net; s=20210112; t=1678175342;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5/0dHmlbYMl8JGzVTPk6nV0NKYl8wDENDKsl5texprU=;
+        b=WiFEXd43aUnAoKp4yYQmJdnCwyBxRKKP1i1e/uWhRVhQpkEQBj51yoSbGTXFQwsxi0
+         lpGsmpqgmE8hy4DxFRCHRUDmbytOpucJiRka92McqA8AdhAoRg1ktvN+i/i/0xO/RW/U
+         wGH59kJb9ZJoA0yiyH35O4zG5/CLk3UDgj/Kao5lvbr4NZPSApp8W9UHx15oB+S3sd+e
+         RAleqltBVh7EtIPq3Ic0vmvElEtfxIGFx2UJTlYdbOROsrR8GEZMnIQMwTCE3ET5FiRB
+         kVR0++DpNLgUiyD+1D+1Ktpxw+QXZqEvx/5A6vvHFKF5cF5Xo0a3CV/NVKPAmLmWIssC
+         skUQ==
+X-Gm-Message-State: AO0yUKU2xcbiCrPE2JZ0dGRIqgTCzE0HEHq0+ufQ16VnYJnrTzir9O8S
+        IgE+PzcZOJ5n09yXPN/t+o/mtQ==
+X-Google-Smtp-Source: AK7set9AX+z+O3GC1BUn+/Ixdi4fNKXrB1mNKK9sgi3krus2z7HASC4eVClH+fDyaMMFaB+CCaWsiQ==
+X-Received: by 2002:a17:902:c94b:b0:19a:c65d:f93 with SMTP id i11-20020a170902c94b00b0019ac65d0f93mr17706680pla.53.1678175341930;
+        Mon, 06 Mar 2023 23:49:01 -0800 (PST)
+Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
+        by smtp.gmail.com with ESMTPSA id ju5-20020a170903428500b0019cad2de863sm7841459plb.176.2023.03.06.23.49.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Mar 2023 23:47:46 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>, linux-clk@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        David Virag <virag.david003@gmail.com>,
-        linux-samsung-soc@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 0/3] clk: samsung: Add PM support for ARM64 Exynos chips
-Date:   Tue,  7 Mar 2023 08:47:42 +0100
-Message-Id: <167817525834.15038.16744450666463613247.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230307002423.24454-1-semen.protsenko@linaro.org>
-References: <20230307002423.24454-1-semen.protsenko@linaro.org>
+        Mon, 06 Mar 2023 23:49:01 -0800 (PST)
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Haifeng Xu <haifeng.xu@shopee.com>
+Subject: [PATCH] mm/oom_kill: don't kill exiting tasks in oom_kill_memcg_member
+Date:   Tue,  7 Mar 2023 07:48:08 +0000
+Message-Id: <20230307074808.235649-1-haifeng.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Mar 2023 18:24:20 -0600, Sam Protsenko wrote:
-> In order to prepare for PM enablement in clk-exynos850, common PM code
-> was extracted from clk-exynos5433 to clk-exynos-arm64. Also some related
-> cleanups were done prior to that. More specifically:
-> 
->   - patches #1..2: cleanups
->   - patch #3: PM code extraction
-> 
-> [...]
+If oom_group is set, oom_kill_process() invokes oom_kill_memcg_member()
+to kill all processes in the memcg. When scanning tasks in memcg, maybe
+the provided task is marked as oom victim. Also, some tasks are likely
+to release their address space. There is no need to kill the exiting tasks.
 
-Applied, thanks!
+In order to handle these tasks which may free memory in the future, add
+a function helper reap_task_will_free_mem() to mark it oom victim and
+queue it in oom reaper.
 
-[1/3] clk: samsung: Extract clocks registration to common function
-      https://git.kernel.org/krzk/linux/c/bed76f697a9adda26c40ce4a064f371d54e71331
-[2/3] clk: samsung: Extract parent clock enabling to common function
-      https://git.kernel.org/krzk/linux/c/454e8d296ce4267ca1728bf4f6fe6d41eabe080e
-[3/3] clk: samsung: exynos5433: Extract PM support to common ARM64 layer
-      https://git.kernel.org/krzk/linux/c/f05dc20243163d0218bbb258b6461681865cff5c
+Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+---
+ mm/oom_kill.c | 35 +++++++++++++++++++++++++++++------
+ 1 file changed, 29 insertions(+), 6 deletions(-)
 
-Best regards,
+diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+index 044e1eed720e..36f5848fbc99 100644
+--- a/mm/oom_kill.c
++++ b/mm/oom_kill.c
+@@ -996,15 +996,43 @@ static void __oom_kill_process(struct task_struct *victim, const char *message)
+ }
+ #undef K
+ 
++static bool reap_task_will_free_mem(struct task_struct *victim)
++{
++	bool ret = false;
++
++	task_lock(victim);
++	if (task_will_free_mem(victim)) {
++		mark_oom_victim(victim);
++		queue_oom_reaper(victim);
++		ret = true;
++	}
++	task_unlock(victim);
++
++	return ret;
++}
++
+ /*
+  * Kill provided task unless it's secured by setting
+  * oom_score_adj to OOM_SCORE_ADJ_MIN.
++ * If the task is marked as oom_victim or will free
++ * memory, there is no need to kill it again.
+  */
+ static int oom_kill_memcg_member(struct task_struct *task, void *message)
+ {
+ 	if (task->signal->oom_score_adj != OOM_SCORE_ADJ_MIN &&
+ 	    !is_global_init(task)) {
+ 		get_task_struct(task);
++
++		/*
++		 * If the task is already exiting, don't alarm the sysadmin or kill
++		 * its children or threads, just give it access to memory reserves
++		 * so it can die quickly
++		 */
++		if (tsk_is_oom_victim(task) || reap_task_will_free_mem(task)) {
++			put_task_struct(task);
++			return 0;
++		}
++
+ 		__oom_kill_process(task, message);
+ 	}
+ 	return 0;
+@@ -1022,15 +1050,10 @@ static void oom_kill_process(struct oom_control *oc, const char *message)
+ 	 * its children or threads, just give it access to memory reserves
+ 	 * so it can die quickly
+ 	 */
+-	task_lock(victim);
+-	if (task_will_free_mem(victim)) {
+-		mark_oom_victim(victim);
+-		queue_oom_reaper(victim);
+-		task_unlock(victim);
++	if (reap_task_will_free_mem(victim)) {
+ 		put_task_struct(victim);
+ 		return;
+ 	}
+-	task_unlock(victim);
+ 
+ 	if (__ratelimit(&oom_rs))
+ 		dump_header(oc, victim);
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2.25.1
+
