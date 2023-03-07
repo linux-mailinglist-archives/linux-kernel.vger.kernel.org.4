@@ -2,214 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C176ADD4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:29:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E946ADD76
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjCGL3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:29:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
+        id S229525AbjCGLck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:32:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjCGL3V (ORCPT
+        with ESMTP id S230161AbjCGLch (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:29:21 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA2048E33;
-        Tue,  7 Mar 2023 03:29:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678188549; x=1709724549;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=1mX4LRq0+12Aka49QpG0ZBKYtnX84ry57MkwdauthQg=;
-  b=l3RphQtLqF8h8rJRSC9xz8ujQ6zF16/syJz8YJSTFOAvQvKaxQfJ5Q1z
-   oKyfpZYR0nOC1MrpnUWQcRWs4YCZqjOl5QgpLIAT9n889xEzljR/c4Q7X
-   UnRfQs09yfyV98wH6fR+CDAb7GsgN0WGFmyfPgOOcqSuMIJdVtnazU7US
-   K9O0tHC1saoCBOz5RqXAwqzHN1XEpJirmXEddm3I+dbRe+GLUmU6TGxOn
-   aOlO5GWXt+ADCK8mp9iwIJGBa8LG73M975L9S5M7VET/74+viSa42obLx
-   SxC6UNbBgzweAqmS0b34sxedoR+j4oiwJstRbUYvhp5JVtjCWwcY8c0xs
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="334542577"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="334542577"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 03:29:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10641"; a="678899577"
-X-IronPort-AV: E=Sophos;i="5.98,240,1673942400"; 
-   d="scan'208";a="678899577"
-Received: from unknown (HELO ijarvine-MOBL2.mshome.net) ([10.237.66.32])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 03:29:02 -0800
-Date:   Tue, 7 Mar 2023 13:29:00 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, alok.a.tiwari@oracle.com,
-        hdanton@sina.com, leon@kernel.org, Netdev <netdev@vger.kernel.org>,
-        devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-bluetooth@vger.kernel.org,
-        linux-serial <linux-serial@vger.kernel.org>,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
-Subject: Re: [PATCH v7 3/3] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-In-Reply-To: <20230306170525.3732605-4-neeraj.sanjaykale@nxp.com>
-Message-ID: <f7a1c4de-1865-533e-c0cb-944bfdc19052@linux.intel.com>
-References: <20230306170525.3732605-1-neeraj.sanjaykale@nxp.com> <20230306170525.3732605-4-neeraj.sanjaykale@nxp.com>
+        Tue, 7 Mar 2023 06:32:37 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A52251CBB;
+        Tue,  7 Mar 2023 03:31:59 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3277tv94022730;
+        Tue, 7 Mar 2023 05:30:19 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=8Gw+hMjGj1I9H2fg3ljNbnH8D9RaMuxw0VHL6fBZJv4=;
+ b=RLWayBHYAC3WRv9HPpNTERg+r3oTqRoc1PhTaiH7YBIi+g27pmBKE71aOiAvS27S3N07
+ +QHcy5hOfjEbFGHVcXXvt9qIN3WGOS3Bqlri7NiCAQhOhMOgUcVD/jtynzPS4OAO8V4x
+ y0soTVGFyQ8h0rjtQN8pahOoaJaEwQF+b1XRYG7PlC2fH/BI33BVKPohDXEuq+sfwinQ
+ st9ocuKEdqcae/7gnnLT1gkEC3NHxNf2+QnaoIAl+yku5tDVskg+wvMD2woy7I197Y8b
+ atlA+qMh5usVUKVHiqBqRp3egA8oAV2JdrRPRQRVEwGGY4zU2uz2Qv/12AeFgHJufFHL 1A== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3p4497427y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 07 Mar 2023 05:30:19 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Tue, 7 Mar
+ 2023 05:30:16 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 7 Mar 2023 05:30:16 -0600
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id C72ED11D3;
+        Tue,  7 Mar 2023 11:30:16 +0000 (UTC)
+Date:   Tue, 7 Mar 2023 11:30:16 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+CC:     <perex@perex.cz>, <tiwai@suse.com>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <james.schulman@cirrus.com>,
+        <david.rhodes@cirrus.com>, <tanureal@opensource.cirrus.com>,
+        <rf@opensource.cirrus.com>, <oder_chiou@realtek.com>,
+        <shengjiu.wang@gmail.com>, <Xiubo.Lee@gmail.com>,
+        <festevam@gmail.com>, <nicoleotsuka@gmail.com>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <linux-imx@nxp.com>,
+        <cezary.rojewski@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <peter.ujfalusi@linux.intel.com>,
+        <yung-chuan.liao@linux.intel.com>,
+        <ranjani.sridharan@linux.intel.com>,
+        <kai.vehmanen@linux.intel.com>, <matthias.bgg@gmail.com>,
+        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
+        <vkoul@kernel.org>, <daniel.baluta@nxp.com>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <jarkko.nikula@bitmer.com>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <sound-open-firmware@alsa-project.org>,
+        <linux-tegra@vger.kernel.org>, <linux-omap@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: do not include pm_runtime.h if not used
+Message-ID: <20230307113016.GS68926@ediswmail.ad.cirrus.com>
+References: <20230307103022.1007420-1-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-796130503-1678188547=:2203"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230307103022.1007420-1-claudiu.beznea@microchip.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: 8AhJH_Etb0kWl8-U4QDOKiyr044l28y7
+X-Proofpoint-ORIG-GUID: 8AhJH_Etb0kWl8-U4QDOKiyr044l28y7
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-796130503-1678188547=:2203
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Mon, 6 Mar 2023, Neeraj Sanjay Kale wrote:
-
-> This adds a driver based on serdev driver for the NXP BT serial protocol
-> based on running H:4, which can enable the built-in Bluetooth device
-> inside an NXP BT chip.
+On Tue, Mar 07, 2023 at 12:30:22PM +0200, Claudiu Beznea wrote:
+> Do not include pm_runtime.h header in files where runtime PM support is
+> not implemented.
 > 
-> This driver has Power Save feature that will put the chip into sleep state
-> whenever there is no activity for 2000ms, and will be woken up when any
-> activity is to be initiated over UART.
-> 
-> This driver enables the power save feature by default by sending the vendor
-> specific commands to the chip during setup.
-> 
-> During setup, the driver checks if a FW is already running on the chip
-> by waiting for the bootloader signature, and downloads device specific FW
-> file into the chip over UART if bootloader signature is received..
-> 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 > ---
-> v2: Removed conf file support and added static data for each chip based
-> on compatibility devices mentioned in DT bindings. Handled potential
-> memory leaks and null pointer dereference issues, simplified FW download
-> feature, handled byte-order and few cosmetic changes. (Ilpo Järvinen,
-> Alok Tiwari, Hillf Danton)
-> v3: Added conf file support necessary to support different vendor modules,
-> moved .h file contents to .c, cosmetic changes. (Luiz Augusto von Dentz,
-> Rob Herring, Leon Romanovsky)
-> v4: Removed conf file support, optimized driver data, add logic to select
-> FW name based on chip signature (Greg KH, Ilpo Järvinen, Sherry Sun)
-> v5: Replaced bt_dev_info() with bt_dev_dbg(), handled user-space cmd
-> parsing in nxp_enqueue() in a better way. (Greg KH, Luiz Augusto von Dentz)
-> v6: Add support for fw-init-baudrate parameter from device tree,
-> modified logic to detect FW download is needed or FW is running. (Greg
-> KH, Sherry Sun)
-> v7: Renamed variables, improved FW download functions, include ps_data
-> into btnxpuart_dev. (Ilpo Järvinen)
-> ---
->  MAINTAINERS                   |    1 +
->  drivers/bluetooth/Kconfig     |   11 +
->  drivers/bluetooth/Makefile    |    1 +
->  drivers/bluetooth/btnxpuart.c | 1309 +++++++++++++++++++++++++++++++++
->  4 files changed, 1322 insertions(+)
->  create mode 100644 drivers/bluetooth/btnxpuart.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 030ec6fe89df..fdb9b0788c89 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22840,6 +22840,7 @@ M:	Amitkumar Karwar <amitkumar.karwar@nxp.com>
->  M:	Neeraj Kale <neeraj.sanjaykale@nxp.com>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-> +F:	drivers/bluetooth/btnxpuart.c
+>  sound/soc/codecs/cs35l45.h                                | 1 -
+> diff --git a/sound/soc/codecs/cs35l45.h b/sound/soc/codecs/cs35l45.h
+> index 53fe9d2b7b15..0555702eac03 100644
+> --- a/sound/soc/codecs/cs35l45.h
+> +++ b/sound/soc/codecs/cs35l45.h
+> @@ -11,7 +11,6 @@
+>  #ifndef CS35L45_H
+>  #define CS35L45_H
 >  
->  THE REST
->  M:	Linus Torvalds <torvalds@linux-foundation.org>
-> diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
-> index 5a1a7bec3c42..359a4833e31f 100644
-> --- a/drivers/bluetooth/Kconfig
-> +++ b/drivers/bluetooth/Kconfig
-> @@ -465,4 +465,15 @@ config BT_VIRTIO
->  	  Say Y here to compile support for HCI over Virtio into the
->  	  kernel or say M to compile as a module.
+> -#include <linux/pm_runtime.h>
+>  #include <linux/regmap.h>
+>  #include <linux/regulator/consumer.h>
 >  
-> +config BT_NXPUART
-> +	tristate "NXP protocol support"
-> +	depends on SERIAL_DEV_BUS
 
-select CRC32 since you're using it now.
+cs35l45 does already make use of some functions from that header,
+and more support is in the process of being upstreamed. So this
+part should be dropped.
 
-> +	help
-> +	  NXP is serial driver required for NXP Bluetooth
-> +	  devices with UART interface.
-> +
-> +	  Say Y here to compile support for NXP Bluetooth UART device into
-> +	  the kernel, or say M here to compile as a module (btnxpuart).
-> +
-> +
->  endmenu
-
-
-> +static void ps_control(struct hci_dev *hdev, u8 ps_state)
-> +{
-> +	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-> +	struct ps_data *psdata = &nxpdev->psdata;
-> +	int status;
-> +
-> +	if (psdata->ps_state == ps_state ||
-> +	    !test_bit(BTNXPUART_SERDEV_OPEN, &nxpdev->tx_state))
-> +		return;
-> +
-> +	switch (psdata->cur_h2c_wakeupmode) {
-> +	case WAKEUP_METHOD_DTR:
-> +		if (ps_state == PS_STATE_AWAKE)
-> +			status = serdev_device_set_tiocm(nxpdev->serdev, TIOCM_DTR, 0);
-> +		else
-> +			status = serdev_device_set_tiocm(nxpdev->serdev, 0, TIOCM_DTR);
-> +		break;
-> +	case WAKEUP_METHOD_BREAK:
-> +	default:
-> +		if (ps_state == PS_STATE_AWAKE)
-> +			status = serdev_device_break_ctl(nxpdev->serdev, 0);
-> +		else
-> +			status = serdev_device_break_ctl(nxpdev->serdev, -1);
-> +		bt_dev_dbg(hdev, "Set UART break: %s, status=%d",
-> +			   str_on_off(ps_state == PS_STATE_SLEEP), status);
-
-Add the #include for str_on_off too.
-
-
-> +/* for legacy chipsets with V1 bootloader */
-> +static int nxp_recv_fw_req_v1(struct hci_dev *hdev, struct sk_buff *skb)
-> +{
-> +	struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-> +	struct btnxpuart_data *nxp_data = nxpdev->nxp_data;
-> +	struct v1_data_req *req;
-> +	u32 requested_len;
-> +
-> +	if (test_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state)) {
-> +		clear_bit(BTNXPUART_CHECK_BOOT_SIGNATURE, &nxpdev->tx_state);
-> +		wake_up_interruptible(&nxpdev->check_boot_sign_wait_q);
-> +		goto ret;
-> +	}
-> +
-> +	if (!is_fw_downloading(nxpdev))
-> +		goto ret;
-
-That BTNXPUART_CHECK_BOOT_SIGNATURE check above is also the same in 3 
-callsites of is_fw_downloading() so too should be moved into a common 
-helper (there was 4th call into is_fw_downloading() so make another 
-help for these 3 users).
-
-
--- 
- i.
-
---8323329-796130503-1678188547=:2203--
+Thanks,
+Charles
