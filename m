@@ -2,89 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826646AE2D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 142386AE233
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjCGOkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:40:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S230078AbjCGOYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:24:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjCGOjp (ORCPT
+        with ESMTP id S231159AbjCGOXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:39:45 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E9C85A4E;
-        Tue,  7 Mar 2023 06:35:34 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327B5E8R017812;
-        Tue, 7 Mar 2023 14:15:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=22F4noZPb63n/Fu8WfKBMwmtnCYP0DerF7zoTtdP7tA=;
- b=CL7L7fhEO46kgHviiR6q7B4au2uBuAm0A4Vz8+NiLC4geYiCkuOySXtk73xobNYf9CfU
- mbWBUYVhazB6b8NyFR1dFmxvuIt//TPEULFHE5Jkcl2WEd6LQXMbRRKdjjgE2ra48JiY
- s6XTyADRNvbU50k2oGNLtxSiIAfz/LKI917ICiJqKQBLvIZMLOz4CxnymqK19J/NtPyo
- YhNHCQtQZruv2knudCGCPkO4t5lNvtRmN97LwV6QE5efk+YhFD6z6e9xm55temF4fpey
- if3LlOUCIv1O1YJR2Bt4BuFPiWPoG1fneLo+2UW18nHKnQ7RpiKQv7Tau6DVHbXzD0DN Tg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p60bx93j5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 14:15:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 327EFXt4011566
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 7 Mar 2023 14:15:33 GMT
-Received: from [10.50.22.82] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 7 Mar 2023
- 06:15:24 -0800
-Message-ID: <918ea75e-a890-b9cf-0f85-ed5ea102b7ec@quicinc.com>
-Date:   Tue, 7 Mar 2023 19:45:20 +0530
+        Tue, 7 Mar 2023 09:23:48 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1F78F505;
+        Tue,  7 Mar 2023 06:18:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=/3jbkIwpVJ/VerNvF0LcqYUDPFjsDPeMNCNxu5wBOKE=; b=hFkr/k0HYfEwqSYnZYQjP6xJlB
+        SXxUkyEFol6rmETacQwE3KcRkl3rQHT4mbB04b6bCdS0j7xAD2GH7E7L4ts18nSpzS4KqTFTsCNl5
+        ozUNCPHKQefQC1Jwu6hiksRNHavxszZXWjuK359WHoH8pHiD18dz0cNTLvhsiIV5AqGBzf/jdJLIP
+        n4eVT0xafl+uZ2d5mgpQERBO2dnkFMU1DCF+sIJl5FZ5mzSbCRUcd+pYBi/utNHEeySvJdB7rAUic
+        CUZlnDu/ByqumJYilKO6h4lA/8GIkaHjAOzr6hqBIq3F8cp14EHEJ2iJpAQ8nABsWOB6QtexfHf9q
+        Og4lznRg==;
+Received: from [2001:8b0:10b:5:640c:634b:db90:9c87] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pZY8h-006TLE-Q9; Tue, 07 Mar 2023 14:18:04 +0000
+Message-ID: <26e3ecb35c36d178cc7d02d04dfaeaaf51d58366.camel@infradead.org>
+Subject: Re: [PATCH v6 20/20] irqdomain: Switch to per-domain locking
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Juergen Gross <jgross@suse.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        xen-devel <xen-devel@lists.xenproject.org>
+Cc:     x86@kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+Date:   Tue, 07 Mar 2023 14:18:01 +0000
+In-Reply-To: <33118f0b-6752-7e4c-49a3-a8c9345f02a1@suse.com>
+References: <20230213104302.17307-1-johan+linaro@kernel.org>
+         <20230213104302.17307-21-johan+linaro@kernel.org>
+         <f149fe1eb3836c14655e3e7eaa4032298ae68545.camel@infradead.org>
+         <33118f0b-6752-7e4c-49a3-a8c9345f02a1@suse.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-O5rbambac+Czr9Q3WDDZ"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 10/11] arm64: dts: qcom: ipq5018: Add MP03.5-c1 board
- support
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
-        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-11-git-send-email-quic_mmanikan@quicinc.com>
-Content-Language: en-US
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-In-Reply-To: <1678164097-13247-11-git-send-email-quic_mmanikan@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: erFlmWjba7D_nHM6VxB3s50gPP6iK8c8
-X-Proofpoint-ORIG-GUID: erFlmWjba7D_nHM6VxB3s50gPP6iK8c8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_08,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 impostorscore=0 suspectscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 mlxlogscore=999 spamscore=0 phishscore=0
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070128
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,121 +61,158 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 3/7/2023 10:11 AM, Manikanta Mylavarapu wrote:
-> Add initial device tree support for the MP03.5-C1 board.
->
-> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> ---
->   arch/arm64/boot/dts/qcom/Makefile             |  1 +
->   .../arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts | 64 +++++++++++++++++++
->   2 files changed, 65 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts
->
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index b77a95e97a56..10d1eafe57e4 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -4,6 +4,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= ipq5018-mp03.1-c2.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= ipq5018-mp03.5-c1.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= ipq6018-cp01-c1.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk01.dtb
->   dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c1.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts b/arch/arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts
-> new file mode 100644
-> index 000000000000..51ddd7367ac6
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/ipq5018-mp03.5-c1.dts
-> @@ -0,0 +1,64 @@
-> +// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
-> +/*
-> + * IPQ5018 CP01 board device tree source
-> + *
-> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "ipq5018.dtsi"
-> +
-> +/ {
-> +	model = "Qualcomm Technologies, Inc. IPQ5018/AP-MP03.5-C1";
-> +	compatible = "qcom,ipq5018-mp03.5-c1", "qcom,ipq5018";
-> +
-> +	aliases {
-> +		serial0 = &blsp1_uart1;
-> +	};
-> +
-> +	chosen {
-> +		bootargs = "console=ttyMSM0,115200,n8 rw init=/init swiotlb=1 coherent_pool=2M";
+--=-O5rbambac+Czr9Q3WDDZ
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, 2023-03-07 at 15:06 +0100, Juergen Gross wrote:
+> On 07.03.23 14:51, David Woodhouse wrote:
+> > On Mon, 2023-02-13 at 11:43 +0100, Johan Hovold wrote:
+> > > The IRQ domain structures are currently protected by the global
+> > > irq_domain_mutex. Switch to using more fine-grained per-domain lockin=
+g,
+> > > which can speed up parallel probing by reducing lock contention.
+> > >=20
+> > > On a recent arm64 laptop, the total time spent waiting for the locks
+> > > during boot drops from 160 to 40 ms on average, while the maximum
+> > > aggregate wait time drops from 550 to 90 ms over ten runs for example=
+.
+> > >=20
+> > > Note that the domain lock of the root domain (innermost domain) must =
+be
+> > > used for hierarchical domains. For non-hierarchical domains (as for r=
+oot
+> > > domains), the new root pointer is set to the domain itself so that
+> > > &domain->root->mutex always points to the right lock.
+> > >=20
+> > > Also note that hierarchical domains should be constructed using
+> > > irq_domain_create_hierarchy() (or irq_domain_add_hierarchy()) to avoi=
+d
+> > > having racing allocations access a not fully initialised domain. As a
+> > > safeguard, the lockdep assertion in irq_domain_set_mapping() will cat=
+ch
+> > > any offenders that also fail to set the root domain pointer.
+> > >=20
+> > > Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> > > Tested-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> >=20
+> > Broke Xen.
+>=20
+> Fixed with commit ad32ab9604f2.
+
+Thanks.
+
+--=-O5rbambac+Czr9Q3WDDZ
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzA3MTQxODAxWjAvBgkqhkiG9w0BCQQxIgQgtFKrZPkh
+35qQ1OUst9mi5TytFQGHvChC43pzoLEutQgwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAeAyUJ27zvjBYOYdSzp3h4W+0KitGJdW2R
+WNLQETCB6qVFTvle/EZ9iZyMoOWDOV5vGV+0s6QulHjmP0UHU7DGwNVWHtUBAkPGKnon0QiKcS4s
+ZuE+iYyu/Ey7LqMvLXwnZQBnmuLo9TE+ezzbyHDmTpFv7VQyZFqiHtT5NqndLsxDhHvdVeGX4Iwx
+mAX2UEIAbYEp9AdIwQk4SZV0V2L28BfhEkg/CfC0fI9j3e8G6yyOa2D4unzXw6gvrSQ3t3TynWU3
+qIdYNxC0dMKZpfPJvr9qjlo6bT1fJHeL7rm2RjeucerIyEoPTsoLafGvAEJcY5dSVohHfqKS4yEC
+JAiuyQExSFfHjmkigpX9nu/9/OJ5rGlrJ94Psl1ZdBzjyI5JqzMCHA2zk9J0bucXGLbt5w9ZMhGK
+soZR4RL4xZpOuvkLYcDvOeTFNEL90dg1hd/SHwmHXaW4Mj5nZvHIj4LYzkjCI13dPlKO87YVsevx
+MrGssQXuwId57pqEZL5FEdVtx+bRKIvGI4ieGG0u1qSAhyp00eC69NyU8bSm5zHlaq1nQWKaLTCO
+eEyC5J0ghShA6bviXnqn9FJGQBnm4mQ7fvf3CTsblyee/HxRlEOBWGDTowdZ4ak0BOhiZJ0dUatT
+I/oN3hJkZTHYAPZ7rL6Gqmor0MzYCTIzzc+Zqe7ZQQAAAAAAAA==
 
 
-Is the bootargs required?
-
-
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +};
-> +
-> +&tlmm {
-> +	blsp0_uart_pins: uart_pins {
-
-
-node name should be uart-state {. Didn't dtbs_check complain it or am I 
-missing something?
-
-
-> +		pins = "gpio20", "gpio21";
-> +		function = "blsp0_uart0";
-> +		bias-disable;
-> +	};
-> +};
-> +
-> +&blsp1_uart1 {
-> +	pinctrl-0 = <&blsp0_uart_pins>;
-> +	pinctrl-names = "default";
-> +	status = "ok";
-
-
-s/ok/okay/
-
-
-> +};
-> +
-> +&q6v5_wcss {
-> +	q6_wcss_pd1: remoteproc_pd1 {
-> +		interrupts-extended = <&wcss_smp2p_in 8 0>,
-> +				<&wcss_smp2p_in 9 0>,
-> +				<&wcss_smp2p_in 12 0>,
-> +				<&wcss_smp2p_in 11 0>;
-
-
-please align all these entries
-
-
-> +		interrupt-names = "fatal",
-> +				"ready",
-> +				"spawn-ack",
-> +				"stop-ack";
-> +		qcom,smem-states = <&wcss_smp2p_out 8>,
-> +				<&wcss_smp2p_out 9>,
-> +				<&wcss_smp2p_out 10>;
-> +		qcom,smem-state-names = "shutdown",
-> +					"stop",
-> +					"spawn";
-> +	};
-
-
-leave a blank line
-
-
-> +	q6_wcss_pd2: remoteproc_pd2 {
-> +		status = "okay";
-> +	};
-> +
-> +	q6_wcss_pd3: remoteproc_pd3 {
-> +		status = "okay";
-> +	};
-> +};
+--=-O5rbambac+Czr9Q3WDDZ--
