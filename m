@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150F26ADDF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41ECA6ADDFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 12:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjCGLu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 06:50:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
+        id S231187AbjCGLvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 06:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjCGLtk (ORCPT
+        with ESMTP id S230467AbjCGLvA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 06:49:40 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ABC279B03;
-        Tue,  7 Mar 2023 03:48:39 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 66C2B219CF;
-        Tue,  7 Mar 2023 11:48:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678189690; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9hjD8LQcZYDIaD2cn2Ci7sCSCxSiYhDam8lrzoxeMEg=;
-        b=JQV3NjUl9nVYUQGlF7Eg0z8ZJbj04FsR0J30QBCd0jhe40fcqvVfNoN1JWnadMVMKFlUTt
-        WCL/xwTLzx/jhkkGO/46mzYqdfBCTHwMPK415gNK6F/TxBt81COL882jGHX7AJoAhh9RVt
-        Ovr2VZ3Xuak7qVSwWB1TW383c7e2M24=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678189690;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9hjD8LQcZYDIaD2cn2Ci7sCSCxSiYhDam8lrzoxeMEg=;
-        b=wB2CYFd/6/hMueFx8RJjQ7MpKHFJLORZerGd6O0/gfd6T+iW5CwI6r/FkLw/bps6ajzdPX
-        HHAkXq+XhBdMhJAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BC75B13440;
-        Tue,  7 Mar 2023 11:48:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id fi/wG3kkB2SCFgAAMHmgww
-        (envelope-from <mpdesouza@suse.com>); Tue, 07 Mar 2023 11:48:09 +0000
-Date:   Tue, 7 Mar 2023 08:48:06 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: Re: [PATCH v7 05/10] documentation: Update on livepatch elf format
-Message-ID: <20230307114806.7pvqsjijnf2r42qh@daedalus>
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
- <20230306140824.3858543-6-joe.lawrence@redhat.com>
+        Tue, 7 Mar 2023 06:51:00 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32454DBD9
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 03:49:46 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id bi9so16725079lfb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 03:49:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678189781;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8NLnfgcJkBrupO9VeOIsatAqwiLwPWa5rkw2fb5PnaE=;
+        b=UYvQ5bO2RzR51Mh38ODTgBjtWo2rd01w2DzKJ+NpS1vMuXxsIZJk1UL0Y9tvMY/erS
+         WdcNtewN6BoWBvzNWdC7D5OzAVWUwrl418t7qzmoVXLW7HeQHGUJUllTxOAxPKMuos/I
+         FnEFJdlTkGoepl4EBTUDhWvpEm1hlggXZgbJrM2QDGjqMvK09RAhyBe4g/zdhhWeZs19
+         2H7fcl1zyhk9DpjhmRDIDtaXkwftLIFWTRPHIHuoKTmaWO3N6eMFm5Cla1kFSe7fPjxJ
+         Tas0sI2JB1IcP++DNwbqE8ksYqoqgZh125kLDgfhq0VIpwRgE5vveM3yXSMv/dLCUqEN
+         /+TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678189781;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8NLnfgcJkBrupO9VeOIsatAqwiLwPWa5rkw2fb5PnaE=;
+        b=rEKbLCYxtMO1sOJi0WntAu6gqlM+9+TPSiJFSFG0/lbPiCEhawAj5ReiQUM/A6yHqJ
+         hKeMDdx++ZHvTUWfFGn9ikrQJmvVkCGSGM6bxxxlERe9O/cCmNGpy92PKODVz5bZC1An
+         JzI3GR2NZdvejvOkjnvaq9hjWB0L2aU9u7H+mNcv5QgNDfBB/HV1uPd4FRueSPTK06pi
+         wFdM72j9D0bov/oJOd4k3ZZRRaYO1OogJ/wgo/qHTvoWjI9SCZ0FiOfJX5dHca2oIubt
+         5QUGFM2ah6DjYHypOl4v/TuVb+bGBxogsBs8d3GCWZBtLmWOWfKEr5fK5TSJS2COqZcj
+         noDA==
+X-Gm-Message-State: AO0yUKVeXAutNlf3OQ1Tv1Ru5ULUIUPKc2/m7pirTiMcE6XqIFKHPPCe
+        vfGbga1lOAySArpszxKOcUSrAQ==
+X-Google-Smtp-Source: AK7set820Wh82BGJ6Ihvrw7CYOrPuMDU5y9XvpQtW63tea7D4cxj+nT71DKMYqTpL9A9f0fzFll76w==
+X-Received: by 2002:ac2:558e:0:b0:4dc:852d:9b88 with SMTP id v14-20020ac2558e000000b004dc852d9b88mr3812252lfg.45.1678189781415;
+        Tue, 07 Mar 2023 03:49:41 -0800 (PST)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id j19-20020a19f513000000b004dc721ea6a1sm1997226lfb.273.2023.03.07.03.49.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 03:49:40 -0800 (PST)
+Message-ID: <47b591c0-2f68-429d-6d1b-fa8b701785ac@linaro.org>
+Date:   Tue, 7 Mar 2023 13:49:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306140824.3858543-6-joe.lawrence@redhat.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Georgi Djakov <djakov@kernel.org>
+References: <cover.1677749625.git.quic_varada@quicinc.com>
+ <6b8d17006d8ee9a1b0c4df803c1cc7caf53ea3ef.1677749625.git.quic_varada@quicinc.com>
+ <CAA8EJprbMybV0o1-436yLhVnnEX6qywrj=JmWDCL5usaH0DXiQ@mail.gmail.com>
+ <61e8c730-e46d-728d-d770-f1ead4405d12@quicinc.com>
+ <83184da4-b183-3271-983f-3a1a62fb9f1a@linaro.org>
+ <365f2609-d3b4-df23-5b6e-7a190815a640@quicinc.com>
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <365f2609-d3b4-df23-5b6e-7a190815a640@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,103 +85,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 09:08:19AM -0500, Joe Lawrence wrote:
-> Add a section to Documentation/livepatch/module-elf-format.rst
-> describing how klp-convert works for fixing relocations.
+On 07/03/2023 08:36, Varadarajan Narayanan wrote:
 > 
-> Signed-off-by: Joao Moreira <jmoreira@suse.de>
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-
-LGTM:
-
-Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-
-> ---
->  Documentation/livepatch/livepatch.rst         |  3 ++
->  Documentation/livepatch/module-elf-format.rst | 42 +++++++++++++++++--
->  2 files changed, 42 insertions(+), 3 deletions(-)
+> On 3/6/2023 5:21 PM, Dmitry Baryshkov wrote:
+>> On 06/03/2023 13:26, Varadarajan Narayanan wrote:
+>>> Dmitry,
+>>>
+>>> On 3/2/2023 9:52 PM, Dmitry Baryshkov wrote:
+>>>> On Thu, 2 Mar 2023 at 11:57, Varadarajan Narayanan
+>>>> <quic_varada@quicinc.com> wrote:
+>>>>> Add USB phy and controller related nodes
+>>>>>
+>>>>> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+>>>>> ---
+>>>>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 92 
+>>>>> +++++++++++++++++++++++++++++++++++
+>>>>>   1 file changed, 92 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi 
+>>>>> b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>>> index 2bb4053..319b5bd 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>>>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+>>
+>> [skipped]
+>>
+>>
+>>>>> +               usb3: usb3@8A00000 {
+>>>> You know the drill. This node is in the wrong place.
+>>>>
+>>>>> +                       compatible = "qcom,dwc3";
+>>>>> +                       reg = <0x8AF8800 0x400>;
+>>>>> +                       #address-cells = <1>;
+>>>>> +                       #size-cells = <1>;
+>>>>> +                       ranges;
+>>>>> +
+>>>>> +                       clocks = <&gcc GCC_SNOC_USB_CLK>,
+>>>>> +                               <&gcc GCC_ANOC_USB_AXI_CLK>,
+>>>>> +                               <&gcc GCC_USB0_MASTER_CLK>,
+>>>>> +                               <&gcc GCC_USB0_SLEEP_CLK>,
+>>>>> +                               <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+>>>>> +
+>>>>> +                       clock-names = "sys_noc_axi",
+>>>>> +                               "anoc_axi",
+>>>>> +                               "master",
+>>>>> +                               "sleep",
+>>>>> +                               "mock_utmi";
+>>>> Please fix the indentation of the lists.
+>>>>
+>>>>> +
+>>>>> +                       assigned-clocks = <&gcc GCC_SNOC_USB_CLK>,
+>>>>> +                                         <&gcc GCC_ANOC_USB_AXI_CLK>,
+>>>> Why do you assign clock rates to the NOC clocks? Should they be set
+>>>> using the interconnect instead?
+>>>
+>>> The SNOC and ANOC run at a fixed speed of 350MHz and 342MHz 
+>>> respectively and are not scaled. These clocks are for the interface 
+>>> between the USB block and the SNOC/ANOC. Do we still need to use 
+>>> interconnect?
+>>
+>> Maybe I misunderstand something here. If the snoc and anoc speeds are 
+>> at 350 MHz and 342 MHz, why do you assign clock-rates of 200 MHz?
+>>
+>> Is it enough to call clk_prepare_enable() for these clocks or the rate 
+>> really needs to be set?
 > 
-> diff --git a/Documentation/livepatch/livepatch.rst b/Documentation/livepatch/livepatch.rst
-> index 68e3651e8af9..6b317a57c276 100644
-> --- a/Documentation/livepatch/livepatch.rst
-> +++ b/Documentation/livepatch/livepatch.rst
-> @@ -261,6 +261,9 @@ into three levels:
->      absolute position in the database, but rather the order it has been found
->      only for a particular object ( vmlinux or a kernel module ). Note that
->      kallsyms allows for searching symbols according to the object name.
-> +    Uniquely named symbols may use a symbol position of 0.  Non-unique
-> +    symbols need to specify their object / kallsyms position, starting
-> +    at position 1.
->  
->    - struct klp_object defines an array of patched functions (struct
->      klp_func) in the same object. Where the object is either vmlinux
-> diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
-> index 7347638895a0..72a072514581 100644
-> --- a/Documentation/livepatch/module-elf-format.rst
-> +++ b/Documentation/livepatch/module-elf-format.rst
-> @@ -2,7 +2,8 @@
->  Livepatch module Elf format
->  ===========================
->  
-> -This document outlines the Elf format requirements that livepatch modules must follow.
-> +This document outlines the Elf format requirements that livepatch modules must
-> +follow.
->  
->  
->  .. Table of Contents
-> @@ -259,7 +260,8 @@ Livepatch symbol names must conform to the following format::
->    The position of the symbol in the object (as according to kallsyms)
->    This is used to differentiate duplicate symbols within the same
->    object. The symbol position is expressed numerically (0, 1, 2...).
-> -  The symbol position of a unique symbol is 0.
-> +  The symbol position of a unique symbol is 0.  The symbol position of
-> +  the first non-unique symbol is 1, the second is 2, etc.
->  
->  Examples:
->  ---------
-> @@ -291,7 +293,41 @@ Examples:
->    Note that the 'Ndx' (Section index) for these symbols is SHN_LIVEPATCH (0xff20).
->    "OS" means OS-specific.
->  
-> -5. Symbol table and Elf section access
-> +5. Automatic conversion of unresolved relocations
-> +=================================================
-> +Sometimes livepatches may operate on symbols which are not self-contained nor
-> +exported. When this happens, these symbols remain unresolved in the elf object
-> +and will trigger an error during the livepatch instantiation.
-> +
-> +Whenever possible, the kernel building infrastructure solves this problem
-> +automatically. First, a symbol database containing information on all compiled
-> +objects is built. Second, this database - a file named symbols.klp, placed in
-> +the kernel source root directory - is used to identify targets for unresolved
-> +relocations, converting them in the livepatch elf accordingly to the
-> +specifications above-described. While the first stage is fully handled by the
-> +building system, the second is done by a tool called klp-convert, which can be
-> +found in "scripts/livepatch".
-> +
-> +When an unresolved relocation has as target a symbol whose name is also used by
-> +different symbols throughout the kernel, the relocation cannot be resolved
-> +automatically. In these cases, the livepatch developer must add annotations to
-> +the livepatch, making it possible for the system to identify which is the
-> +correct target amongst multiple homonymous symbols. Such annotations must be
-> +done through a data structure as follows:::
-> +
-> +	struct KLP_MODULE_RELOC(object) data_structure_name[] = {
-> +		KLP_SYMPOS(symbol, pos)
-> +	};
-> +
-> +In the above example, object refers to the object file which contains the
-> +symbol, being vmlinux or a module; symbol refers to the symbol name that will
-> +be relocated and pos is its position in the object.
-> +
-> +When a data structure like this is added to the livepatch, the resulting elf
-> +will hold symbols that will be identified by klp-convert and used to solve name
-> +ambiguities.
-> +
-> +6. Symbol table and Elf section access
->  ======================================
->  A livepatch module's symbol table is accessible through module->symtab.
->  
-> -- 
-> 2.39.2
+> The rate of 200MHz is not being set for the SNOC/ANOC. It is for the
+> NIU that connects the USB and SNOC/ANOC. The reason for setting the
+> rate to 200MHz is to configure the RCG parent for these interface
+> clocks. That said can we configure this RCG standalone in the driver
+> and enable these clocks?
+
+We discussed this separately with Georgi Djakov. Let me quote his IRC 
+message: "it sounds like this is for USB port that connects to the NOC. 
+if bandwidth scaling is not needed (or other interconnect 
+configuration), then maybe this can go without interconnect provider 
+driver."
+
+However as we discover more and more about this platform (e.g. PCIe 
+using the aggre_noc region to setup some magic registers, see [1]), I'm 
+more and more biased towards suggesting implementing the interconnect 
+driver to setup all these tiny little things. With the DT tree being an 
+ABI, it is much preferable to overestimate the needs rather than 
+underestimating them (and having to cope with the backwards 
+compatibility issues).
+
+Generally I think that PCIe/USB/whatever should not poke into NoC 
+registers or NoC/NIU clocks directly (because this is a very 
+platform-specific item). Rather than that it should tell the 
+icc/opp/whatever subsystem, "please configure the SoC for me to work".
+
+[1] 
+https://lore.kernel.org/linux-arm-msm/30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com/
+
 > 
+> Thanks
+> Varada
+> 
+> 
+>>
+>>
+>>>
+>>>>> + <&gcc GCC_USB0_MASTER_CLK>,
+>>>>> +                                         <&gcc 
+>>>>> GCC_USB0_MOCK_UTMI_CLK>;
+>>>>> +                       assigned-clock-rates = <200000000>,
+>>>>> + <200000000>,
+>>>>> + <200000000>,
+>>>>> + <24000000>;
+>>>>> +
+>>>>> +                       resets = <&gcc GCC_USB_BCR>;
+>>>>> +                       status = "disabled";
+>>>>> +
+>>>>> +                       dwc_0: dwc3@8A00000 {
+>>>>> +                               compatible = "snps,dwc3";
+>>>>> +                               reg = <0x8A00000 0xcd00>;
+>>>>> +                               clock-names = "ref";
+>>>>> +                               clocks = <&gcc 
+>>>>> GCC_USB0_MOCK_UTMI_CLK>;
+>>>> clocks before clock-names
+>>>>
+>>>>> + interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+>>>>> +                               phys = <&qusb_phy_0>, <&usb0_ssphy>;
+>>>>> +                               phy-names = "usb2-phy", "usb3-phy";
+>>>>> +                               tx-fifo-resize;
+>>>>> +                               snps,dis_ep_cache_eviction;
+>>>>> +                               snps,is-utmi-l1-suspend;
+>>>>> +                               snps,hird-threshold = /bits/ 8 <0x0>;
+>>>>> +                               snps,dis_u2_susphy_quirk;
+>>>>> +                               snps,dis_u3_susphy_quirk;
+>>>>> + snps,quirk-frame-length-adjustment = <0x0A87F0A0>;
+>>>>> +                               dr_mode = "host";
+>>>>> +                       };
+>>>>> +               };
+>>>>> +
+>>>>>                  pcie0_phy: phy@84000 {
+>>>>>                          compatible = 
+>>>>> "qcom,ipq9574-qmp-gen3x1-pcie-phy";
+>>>>>                          reg = <0x00084000 0x1bc>; /* Serdes PLL */
+>>>>> -- 
+>>>>> 2.7.4
+>>>
+>>> Will address these and post a new revision.
+>>>
+>>> Thanks
+>>>
+>>> Varada
+>>>
+>>
+
+-- 
+With best wishes
+Dmitry
+
