@@ -2,148 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4276AD314
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 00:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B2946AD320
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 01:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjCFX6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 6 Mar 2023 18:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
+        id S229627AbjCGAFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 6 Mar 2023 19:05:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCFX6X (ORCPT
+        with ESMTP id S229490AbjCGAFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 6 Mar 2023 18:58:23 -0500
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720113C08
-        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 15:58:20 -0800 (PST)
-Received: from localhost (88-113-24-128.elisa-laajakaista.fi [88.113.24.128])
-        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-        id c4170a49-bc7a-11ed-a9de-005056bdf889;
-        Tue, 07 Mar 2023 01:58:18 +0200 (EET)
-From:   andy.shevchenko@gmail.com
-Date:   Tue, 7 Mar 2023 01:58:17 +0200
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de,
-        marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
-Subject: Re: [PATCH V8 4/7] pinctrl: qcom: Add IPQ9574 pinctrl driver
-Message-ID: <ZAZ+GeGu8mW1XqpG@surfacebook>
-References: <20230214163116.9924-1-quic_devipriy@quicinc.com>
- <20230214163116.9924-5-quic_devipriy@quicinc.com>
+        Mon, 6 Mar 2023 19:05:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F111C301A1
+        for <linux-kernel@vger.kernel.org>; Mon,  6 Mar 2023 16:04:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678147457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Hm7OyfDHZHod7VjHk1wTL2jptyUJSz+TF+BnRS3YH4M=;
+        b=LcBDvX0cWkXSaUhFvhZ8KJRaTHWAeSqrCu5z0iFWLRDxOhudjZGJc5ctASMLnmPqv9971x
+        FUISFaaBzTHMfIj2FjdifX+bcTPvXI5A23rFAprN17l1XavvFW5SvA/V2E0tHOkSXIN3XP
+        Cwuu5YABPqOVffcKHiwtlFVetUiq+4w=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-240-WEY-CNvUNCirDKH47lNaLA-1; Mon, 06 Mar 2023 19:04:16 -0500
+X-MC-Unique: WEY-CNvUNCirDKH47lNaLA-1
+Received: by mail-qt1-f199.google.com with SMTP id c11-20020ac85a8b000000b003bfdd43ac76so6167615qtc.5
+        for <linux-kernel@vger.kernel.org>; Mon, 06 Mar 2023 16:04:15 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678147455;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hm7OyfDHZHod7VjHk1wTL2jptyUJSz+TF+BnRS3YH4M=;
+        b=WeNmX2Ic+kaXyxa+z/fqE/XUW30fwUPguPoEjN8nE0+08pPbUGnm8D+2/FOzWbBhiR
+         160QZeyxxjStN28yoh1w3HJZyAcwmp7WHaa48bBom3I9tMrc15PCozhrQTTxbaCngtfW
+         5OhxEKQPLOo9QlIu2CM9lI18Gi5EfnETCq0EZ2vAedtuE8boa2z/yNhidGyG0H3RvBpY
+         TOu1SW2S1FJnHD1VzZxuJYjaUDLyoKD9J2J0mBdammviEa8zhH9O+6PS0Dqwf0stCDdn
+         1uXwl49rLZ/GBEkSPUpwGd48zYB3/2gXbiIMnZHZpBMBmB9SIDlitvjV77S30hY4tnLK
+         vDWQ==
+X-Gm-Message-State: AO0yUKXiWR3Mp2mwSiwgEfVlZj05mLOxGKYuvNml1GJiQ392rApvqYY+
+        URSrpH62H9sSGJuVyysOfKp/pd9F9UP9Dlh0tHWYEcMsbkV+4aBvgWNv08u8rlGVm6j7Ve7+MZd
+        Ep9P8bAdj5CRQOdOolwREojRF
+X-Received: by 2002:ac8:5c83:0:b0:3a8:e35:258f with SMTP id r3-20020ac85c83000000b003a80e35258fmr22529593qta.31.1678147455581;
+        Mon, 06 Mar 2023 16:04:15 -0800 (PST)
+X-Google-Smtp-Source: AK7set9JP7mAg5m3cVZualEUszyw1XG+IBEsB4vFC4l/lnJoUCNQJOWCfSLVzf+bdS0kt1V9nLDD8w==
+X-Received: by 2002:ac8:5c83:0:b0:3a8:e35:258f with SMTP id r3-20020ac85c83000000b003a80e35258fmr22529561qta.31.1678147455349;
+        Mon, 06 Mar 2023 16:04:15 -0800 (PST)
+Received: from ?IPv6:2600:4040:5c68:6800::feb? ([2600:4040:5c68:6800::feb])
+        by smtp.gmail.com with ESMTPSA id d64-20020a37b443000000b0073b587194d0sm8383852qkf.104.2023.03.06.16.04.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Mar 2023 16:04:14 -0800 (PST)
+Message-ID: <c1dbdc4a41e67496eb8533e5a271eb2bbdc318d6.camel@redhat.com>
+Subject: Re: [PATCH] drm/nouveau/mmu: fix use-after-free bug in
+ nvkm_vmm_pfn_map
+From:   Lyude Paul <lyude@redhat.com>
+To:     Zheng Wang <zyytlz.wz@163.com>, nouveau@lists.freedesktop.org
+Cc:     bskeggs@redhat.com, kherbst@redhat.com, airlied@gmail.com,
+        hackerzheng666@gmail.com, alex000young@gmail.com,
+        security@kernel.org, daniel@ffwll.ch, Julia.Lawall@inria.fr,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 06 Mar 2023 19:04:13 -0500
+In-Reply-To: <20221029074654.203153-1-zyytlz.wz@163.com>
+References: <20221029074654.203153-1-zyytlz.wz@163.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214163116.9924-5-quic_devipriy@quicinc.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Feb 14, 2023 at 10:01:13PM +0530, Devi Priya kirjoitti:
-> Add pinctrl definitions for the TLMM of IPQ9574
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-...
+Will push upstream in a moment
 
-> +	depends on OF
+On Sat, 2022-10-29 at 15:46 +0800, Zheng Wang wrote:
+> If it failed in kzalloc, vma will be freed in nvkm_vmm_node_merge.
+> The later use of vma will casue use after free.
+>=20
+> Reported-by: Zheng Wang <hackerzheng666@gmail.com>
+> Reported-by: Zhuorao Yang <alex000young@gmail.com>
+>=20
+> Fix it by returning to upper caller as soon as error occurs.
+>=20
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+>  drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c b/drivers/gpu/=
+drm/nouveau/nvkm/subdev/mmu/vmm.c
+> index ae793f400ba1..04befd28f80b 100644
+> --- a/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> +++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c
+> @@ -1272,8 +1272,7 @@ nvkm_vmm_pfn_map(struct nvkm_vmm *vmm, u8 shift, u6=
+4 addr, u64 size, u64 *pfn)
+>  						       page -
+>  						       vmm->func->page, map);
+>  			if (WARN_ON(!tmp)) {
+> -				ret =3D -ENOMEM;
+> -				goto next;
+> +				return -ENOMEM;
+>  			}
+> =20
+>  			if ((tmp->mapped =3D map))
 
-No compile test on non-OF configurations?
-
-> +	depends on ARM64 || COMPILE_TEST
-
-...
-
-> +#define FUNCTION(fname)			                \
-
-PINCTRL_PINFUNCTION() ?
-
-> +	[msm_mux_##fname] = {		                \
-> +		.name = #fname,				\
-> +		.groups = fname##_groups,               \
-> +		.ngroups = ARRAY_SIZE(fname##_groups),	\
-> +	}
-
-...
-
-> +#define REG_SIZE 0x1000
-> +#define PINGROUP(id, f1, f2, f3, f4, f5, f6, f7, f8, f9)	\
-> +	{					        \
-> +		.name = "gpio" #id,			\
-> +		.pins = gpio##id##_pins,		\
-> +		.npins = (unsigned int)ARRAY_SIZE(gpio##id##_pins),	\
-
-Can you embed struct pingroup?
-
-> +		.funcs = (int[]){			\
-> +			msm_mux_gpio, /* gpio mode */	\
-> +			msm_mux_##f1,			\
-> +			msm_mux_##f2,			\
-> +			msm_mux_##f3,			\
-> +			msm_mux_##f4,			\
-> +			msm_mux_##f5,			\
-> +			msm_mux_##f6,			\
-> +			msm_mux_##f7,			\
-> +			msm_mux_##f8,			\
-> +			msm_mux_##f9			\
-> +		},				        \
-> +		.nfuncs = 10,				\
-> +		.ctl_reg = REG_SIZE * id,			\
-> +		.io_reg = 0x4 + REG_SIZE * id,		\
-> +		.intr_cfg_reg = 0x8 + REG_SIZE * id,		\
-> +		.intr_status_reg = 0xc + REG_SIZE * id,	\
-> +		.intr_target_reg = 0x8 + REG_SIZE * id,	\
-> +		.mux_bit = 2,			\
-> +		.pull_bit = 0,			\
-> +		.drv_bit = 6,			\
-> +		.oe_bit = 9,			\
-> +		.in_bit = 0,			\
-> +		.out_bit = 1,			\
-> +		.intr_enable_bit = 0,		\
-> +		.intr_status_bit = 0,		\
-> +		.intr_target_bit = 5,		\
-> +		.intr_target_kpss_val = 3,	\
-> +		.intr_raw_status_bit = 4,	\
-> +		.intr_polarity_bit = 1,		\
-> +		.intr_detection_bit = 2,	\
-> +		.intr_detection_width = 2,	\
-> +	}
-
-...
-
-> +	PINGROUP(62, blsp1_spi, audio_sec, audio_pdm1, audio_sec, pta, prng_rosc2, gcc_plltest,
-> +		 _, _),
-
-Can be one line.
-
-...
-
-> +static const struct of_device_id ipq9574_pinctrl_of_match[] = {
-> +	{ .compatible = "qcom,ipq9574-tlmm", },
-
-> +	{ },
-
-No comma for terminator line.
-
-> +};
-
-No MODULE_DEVICE_TABLE()?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
