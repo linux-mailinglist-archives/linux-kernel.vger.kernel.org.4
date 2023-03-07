@@ -2,186 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DFF6AF8AF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:28:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE6716AF8A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 23:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCGW2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 17:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S230206AbjCGW2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 17:28:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjCGW21 (ORCPT
+        with ESMTP id S231219AbjCGW1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 17:28:27 -0500
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEFDAF778;
-        Tue,  7 Mar 2023 14:27:43 -0800 (PST)
-Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 327L5gJ4028321;
-        Tue, 7 Mar 2023 22:24:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=LaaPqV7Flc0GLDHQpIpi/BIcyjij0wSdtMhbcCHYsgA=;
- b=KucE5UTqJQpxT11mxXz+EBR8v0tavcjUv9Ui2FHab40WoQiuV3yFIDgqKk3q5kcdvuwo
- drWjaXC7Yx+uiwl1OenpwWu47udmJqwKjE9dILefQUZGqLmGaEP1NLYCkNLYgQXE55IH
- pJ+yRhi5GSJ5jKQ8RWB3Nr3EtesnmJ05hdKeHlS8cBLT36zWyHn3FQ9/R6GqQyfwyefx
- YeGHnWIch0H3I5hz2qQ78crYlcNTY741RdGLewUR/aekyotj3MBUgHiSeyPnIKvgWPEK
- jg+AIfQknv6WWMr+5LSHk3ZVcc7cEeQsQPCw1ideabEOY7fb99n90BFJHjYRpVRpYa7A Vw== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3p6bu8114b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 07 Mar 2023 22:24:17 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id CBB17130A9;
-        Tue,  7 Mar 2023 22:24:16 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTPS id 9C74F80AD9E;
-        Tue,  7 Mar 2023 22:24:12 +0000 (UTC)
-Date:   Tue, 7 Mar 2023 16:24:10 -0600
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com, minyard@acm.org,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, song@kernel.org, robinmholt@gmail.com,
-        steve.wahl@hpe.com, arnd@arndb.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, jgross@suse.com, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com, xen-devel@lists.xenproject.org,
-        j.granados@samsung.com, zhangpeng362@huawei.com,
-        tangmeng@uniontech.com, willy@infradead.org, nixiaoming@huawei.com,
-        sujiaxun@uniontech.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, apparmor@lists.ubuntu.com,
-        linux-raid@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-hyperv@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/7] sgi-xp: simplify sysctl registration
-Message-ID: <ZAe5batlkUwlKoxx@swahl-home.5wahls.com>
-References: <20230302204612.782387-1-mcgrof@kernel.org>
- <20230302204612.782387-6-mcgrof@kernel.org>
+        Tue, 7 Mar 2023 17:27:44 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C433EAF0CC;
+        Tue,  7 Mar 2023 14:27:03 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id da10so58555317edb.3;
+        Tue, 07 Mar 2023 14:27:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112; t=1678228021;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8gjcCprh0YtfA6Dnk0t8C1b7TfZOQ0dz/8SnTGInkFw=;
+        b=GX5tKBTUsIR1Y3f5WlAlOygrvh+AjgsTKfFdsV7j8TjOfzu0KDs1huN4yai3/K4+xV
+         lLuyCyS4mhgtbXMUf/mhycv6ttOCbPvsWfDL/+Jq39lzsmsvVJTfNSmjEhzEkBzxO1JC
+         +KgOysHLqNB4zgqjqI/XypqKidEGESmCUr7CklJsULGF5bugnyfUpgLbi5KKoYalOMuo
+         X9kSmaV+RWFZ4SzjBhzWpA8Om5u/CQ8T2kgwUz5nH20C1zEMMzALEq9oA4po/+CUKDrE
+         S8KrBg6/NB6KsnPkxR1nmTEgoOkLzCwvW441q825numITyeG8TGOM/9qVwoBq3xa1FfP
+         KdKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678228021;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8gjcCprh0YtfA6Dnk0t8C1b7TfZOQ0dz/8SnTGInkFw=;
+        b=is29HrHSmRpTyA4UUsdfFSiAa7n6YXL9RmqefNlwQMdDCEpQvWCBk9/cr8F7iWPwld
+         uHYwCjDFGDu5GTTdD5KPAUM8UiwahjOZobOYvGckLa8rZuXD9W2f4MeUDpGIhGsGEuIm
+         Si4Eew3HCYmgM1DVWfXc3nxT+QhM0527g+SZ0VeqxrHWGdLJguRF5R3AadsxZWlgEKa0
+         rjANtvrpVd/e6DkAW0oA79PmOXFExwC3PdKt6PipgA0HZzfCttiXFzW08aVB2pdjnFlq
+         2QSAIsPjg4PLcN2XXE+vrSUawRwQ2WmRpbb8dZGXesPzLSTEgdBzDdETbdtvrCA3fjK8
+         fA9g==
+X-Gm-Message-State: AO0yUKUl5G9ZVTFsly7r0vOexLuAEwxqtI45wIhUCMkCR6OSxUVr8Pzo
+        jcPWhD86EAZ2FQszQvUCLDIa/5HT9Bg=
+X-Google-Smtp-Source: AK7set+1wRh2vgznuNAkSHl6cmRUMN6CNrWvNayb33+wDRXF+1iPXKb/NZPh5Uroj+Zs8Mmntku6nQ==
+X-Received: by 2002:a17:906:dac3:b0:8a9:fa2f:e440 with SMTP id xi3-20020a170906dac300b008a9fa2fe440mr21240590ejb.55.1678228021589;
+        Tue, 07 Mar 2023 14:27:01 -0800 (PST)
+Received: from localhost.localdomain (dynamic-2a01-0c23-c485-ef00-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c485:ef00::e63])
+        by smtp.googlemail.com with ESMTPSA id t19-20020a170906065300b008be996c1630sm6669412ejb.39.2023.03.07.14.27.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 14:27:01 -0800 (PST)
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+To:     linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jirislaby@kernel.org, neil.armstrong@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org,
+        Christian Hewitt <christianshewitt@gmail.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v3 0/3] meson-uart: Use "divide XTAL by 2" bit on G12A
+Date:   Tue,  7 Mar 2023 23:26:48 +0100
+Message-Id: <20230307222651.2106615-1-martin.blumenstingl@googlemail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230302204612.782387-6-mcgrof@kernel.org>
-X-Proofpoint-GUID: -gScpSVwE5aPWwo4gsaN-rEbeWVyAJK_
-X-Proofpoint-ORIG-GUID: -gScpSVwE5aPWwo4gsaN-rEbeWVyAJK_
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_16,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- mlxscore=0 malwarescore=0 impostorscore=0 adultscore=0 priorityscore=1501
- suspectscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303070197
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 12:46:10PM -0800, Luis Chamberlain wrote:
-> Although this driver is a good use case for having a directory
-> that is not other directories and then subdirectories with more
-> entries, the usage of register_sysctl_table() can recurse and
-> increases complexity so to avoid that just split out the
-> registration to each directory with its own entries.
-> 
-> register_sysctl_table() is a deprecated compatibility wrapper.
-> register_sysctl() can do the directory creation for you so just use
-> that.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+This series improves support for UART attached Bluetooth modules on
+Amlogic Meson G12A and newer SoCs. These SoCs also support the "divide
+XTAL by 2" bit which (greatly) reduces jitter when generating baud
+rates such as 1500000 (which is used by the Bluetooth part of the
+RTL8822CS SDIO WiFi and UART Bluetooth combo chip).
 
-Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+Without this the baud rate calculation is based on the XTAL clock
+(running at 24MHz) divided by 3 (meaning: 8MHz). 8MHz cannot be divided
+with integer division to a 1500000 baud rate. Using the "divide XTAL
+by 2" bit however means that we can achieve 1500000 cleanly, without any
+jitter.
 
-> ---
->  drivers/misc/sgi-xp/xpc_main.c | 24 ++++++++++--------------
->  1 file changed, 10 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/misc/sgi-xp/xpc_main.c b/drivers/misc/sgi-xp/xpc_main.c
-> index b2c3c22fc13c..6da509d692bb 100644
-> --- a/drivers/misc/sgi-xp/xpc_main.c
-> +++ b/drivers/misc/sgi-xp/xpc_main.c
-> @@ -93,7 +93,7 @@ int xpc_disengage_timelimit = XPC_DISENGAGE_DEFAULT_TIMELIMIT;
->  static int xpc_disengage_min_timelimit;	/* = 0 */
->  static int xpc_disengage_max_timelimit = 120;
->  
-> -static struct ctl_table xpc_sys_xpc_hb_dir[] = {
-> +static struct ctl_table xpc_sys_xpc_hb[] = {
->  	{
->  	 .procname = "hb_interval",
->  	 .data = &xpc_hb_interval,
-> @@ -112,11 +112,7 @@ static struct ctl_table xpc_sys_xpc_hb_dir[] = {
->  	 .extra2 = &xpc_hb_check_max_interval},
->  	{}
->  };
-> -static struct ctl_table xpc_sys_xpc_dir[] = {
-> -	{
-> -	 .procname = "hb",
-> -	 .mode = 0555,
-> -	 .child = xpc_sys_xpc_hb_dir},
-> +static struct ctl_table xpc_sys_xpc[] = {
->  	{
->  	 .procname = "disengage_timelimit",
->  	 .data = &xpc_disengage_timelimit,
-> @@ -127,14 +123,9 @@ static struct ctl_table xpc_sys_xpc_dir[] = {
->  	 .extra2 = &xpc_disengage_max_timelimit},
->  	{}
->  };
-> -static struct ctl_table xpc_sys_dir[] = {
-> -	{
-> -	 .procname = "xpc",
-> -	 .mode = 0555,
-> -	 .child = xpc_sys_xpc_dir},
-> -	{}
-> -};
-> +
->  static struct ctl_table_header *xpc_sysctl;
-> +static struct ctl_table_header *xpc_sysctl_hb;
->  
->  /* non-zero if any remote partition disengage was timed out */
->  int xpc_disengage_timedout;
-> @@ -1041,6 +1032,8 @@ xpc_do_exit(enum xp_retval reason)
->  
->  	if (xpc_sysctl)
->  		unregister_sysctl_table(xpc_sysctl);
-> +	if (xpc_sysctl_hb)
-> +		unregister_sysctl_table(xpc_sysctl_hb);
->  
->  	xpc_teardown_partitions();
->  
-> @@ -1243,7 +1236,8 @@ xpc_init(void)
->  		goto out_1;
->  	}
->  
-> -	xpc_sysctl = register_sysctl_table(xpc_sys_dir);
-> +	xpc_sysctl = register_sysctl("xpc", xpc_sys_xpc);
-> +	xpc_sysctl_hb = register_sysctl("xpc/hb", xpc_sys_xpc_hb);
->  
->  	/*
->  	 * Fill the partition reserved page with the information needed by
-> @@ -1308,6 +1302,8 @@ xpc_init(void)
->  	(void)unregister_die_notifier(&xpc_die_notifier);
->  	(void)unregister_reboot_notifier(&xpc_reboot_notifier);
->  out_2:
-> +	if (xpc_sysctl_hb)
-> +		unregister_sysctl_table(xpc_sysctl_hb);
->  	if (xpc_sysctl)
->  		unregister_sysctl_table(xpc_sysctl);
->  
-> -- 
-> 2.39.1
-> 
+In future we should allow dynamic switching of these UART controller
+internal dividers to pick the best divider automatically for the
+requested baud rate. This however still requires the new compatible
+string - which is added by this series - to enable the "divide XTAL
+by 2" logic on SoCs that support it (G12A and newer).
+
+Changes since v1 at [1]:
+- make meson-gx-uart a valid fallback compatible string for the newer
+  meson-g12a-uart
+- rebased on top of v6.3-rc1
+
+Changes since v2 at [2]:
+- simplify the dt-bindings patch as suggested by Krzysztof Kozlowski
+  (thank you!) which actually uncovers an unwanted change
+
+
+[0] https://lore.kernel.org/linux-bluetooth/3B9D4DB2-D2CD-44FE-817A-F6EA8A0AD734@gmail.com/
+[1] https://lore.kernel.org/lkml/20230222210425.626474-1-martin.blumenstingl@googlemail.com/
+[2] https://lore.kernel.org/lkml/20230306194223.1869814-1-martin.blumenstingl@googlemail.com/
+
+
+Martin Blumenstingl (3):
+  dt-bindings: serial: amlogic,meson-uart: Add compatible string for
+    G12A
+  tty: serial: meson: Add a new compatible string for the G12A SoC
+  arm64: dts: meson-g12-common: Use the G12A UART compatible string
+
+ .../bindings/serial/amlogic,meson-uart.yaml       |  9 +++++++++
+ arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 15 ++++++++++-----
+ drivers/tty/serial/meson_uart.c                   |  8 ++++++--
+ 3 files changed, 25 insertions(+), 7 deletions(-)
 
 -- 
-Steve Wahl, Hewlett Packard Enterprise
+2.39.2
+
