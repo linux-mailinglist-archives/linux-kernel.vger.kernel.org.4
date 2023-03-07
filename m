@@ -2,76 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A7676AE61B
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:17:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A156AE62A
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 17:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCGQR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 11:17:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46226 "EHLO
+        id S230149AbjCGQR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 11:17:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCGQR0 (ORCPT
+        with ESMTP id S229951AbjCGQRo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 11:17:26 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955038C512
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 08:16:52 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id oj5so13711129pjb.5
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 08:16:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678205812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UYrq8v4HuBX2RB3d/VYQuTqaXQLxDy94/DGyKGTa8GE=;
-        b=hhzoLo9mKt/chtZRRSOWW58mZp/EbLNymdzmTurgTLcgtj8rNx6VnB/zZIJiN5dEMU
-         eVe5J6srcOE82KYyn5ItH6i9pMruynIPB389vTFujaSn/WVOs0lKDCeeyD+wkJS5kmr9
-         vRbRLHKU1Jo6wjY7Af+eOUM374qWjJrS6eTxxIL3WGPR9d7y47OHFyNzOdNF5ND96sdP
-         XywFbkdI+e0GX6cdCgibnT1u4bIUjU256+5wLjw1VjSrShhAQAX69wZdErCstme3BwZe
-         ZjJPbdMR3xt2o0B7+zoNSUs1nlpJj5QYPHkos75VEGPw3Hmk75Dm0DaoigmV72xRC4OF
-         5jkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678205812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UYrq8v4HuBX2RB3d/VYQuTqaXQLxDy94/DGyKGTa8GE=;
-        b=RCD1REuXWr7W5Kef8qhrv4j7gaOuSQGEN0izi7x/UNhtn7phGtXUEWNIOc4NDhVYOa
-         uScD8NKv5sHGVe/NegZo97lP65uX8YH4NtFAVW+iBOj1X6l0NIhSq3pHKguMFMR3A3fY
-         6ucqfmomkEzXniydFtpltMuNrvTse1Qzmae1ZkBVh55WJhNcY2SIe3AuyXt07fhDqA/C
-         EJaCmMTO5bJQQCndtqr1+l74M8RHjrE6OXVEkzJyqiDiNaxWWKs3t4ngz1GC3awI6A1Y
-         j8tMQEZrX1cJ20t+f/EmAvkANaBKAnzDhy8wys4xlBtuUAiZFJPa1xhM7Cw3tEn+MRjJ
-         ksgg==
-X-Gm-Message-State: AO0yUKUodByyac6rzLk0s1ARZmUetqud1h65ZVaw7PvyyVEMlpcH6tMx
-        u4XM47Zp8ebtNN2ygx3HLy+2dtINGhIzL4u81U4=
-X-Google-Smtp-Source: AK7set88BIwUJLFdpOXlbPGslKaEFH1+u9BuN0cxiLp2l426wfCtLQ01n+NArA7B7dU5e3lv3y6Fyw==
-X-Received: by 2002:a17:90b:3ec9:b0:230:7c78:6a7 with SMTP id rm9-20020a17090b3ec900b002307c7806a7mr15672363pjb.28.1678205812067;
-        Tue, 07 Mar 2023 08:16:52 -0800 (PST)
-Received: from [10.200.8.102] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id fv24-20020a17090b0e9800b002340f58e19bsm7568391pjb.45.2023.03.07.08.16.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 08:16:51 -0800 (PST)
-Message-ID: <d0d2f9f9-4ad0-65f8-96e7-39decbb6ac54@bytedance.com>
-Date:   Wed, 8 Mar 2023 00:16:45 +0800
+        Tue, 7 Mar 2023 11:17:44 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AFA85B27;
+        Tue,  7 Mar 2023 08:17:38 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 327GHFD6085462;
+        Tue, 7 Mar 2023 10:17:15 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678205836;
+        bh=TIz0wj83tGtFyVuB+1Uhg4HM0KaXiat40rbW5+4Mhnk=;
+        h=From:To:CC:Subject:Date;
+        b=CJAcvncaQnOpYLF1FSGwLlnLMrrk+2fatrnGtQUesQjn+tP5G+8kIuvaNB8PrIO5B
+         xoPyLvu2vM3n7MkKnmk0F093VKpS3VlTvOmtt1uybKLx4b3xHeEK3y7LcHQH2X1jUC
+         cTay6f2bzR200AuiX61/Kr+YNtuJ3R7Idp/aKYco=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 327GHFfr008390
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 7 Mar 2023 10:17:15 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 7
+ Mar 2023 10:17:15 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 7 Mar 2023 10:17:15 -0600
+Received: from ula0226330.dal.design.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 327GHFEu003079;
+        Tue, 7 Mar 2023 10:17:15 -0600
+From:   Andrew Davis <afd@ti.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?q?Beno=C3=AEt=20Cousson?= <bcousson@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, Andrew Davis <afd@ti.com>
+Subject: [PATCH v4 0/3] AM57x EVM Device Tree Overlays
+Date:   Tue, 7 Mar 2023 10:17:12 -0600
+Message-ID: <20230307161715.15209-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] maple_tree: Fix mas_skip_node() end slot detection
-To:     Snild Dolkow <snild@sony.com>,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     Stable@vger.kernel.org, maple-tree@lists.infradead.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230303021540.1056603-1-Liam.Howlett@oracle.com>
- <cec2dec7-818a-b32c-3ad4-8b23fc1351f3@bytedance.com>
- <73971153-b46e-0332-aa4a-0dbe0a59fd22@sony.com>
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-In-Reply-To: <73971153-b46e-0332-aa4a-0dbe0a59fd22@sony.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,64 +68,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Snild,
+Hello all,
 
-在 2023/3/7 22:30, Snild Dolkow 写道:
-> On 2023-03-07 14:05, Peng Zhang wrote:
->> Hi, Liam,
->>> -    } while (slot > slot_count);
->>> +    } while (mas->offset >= mas_data_end(mas));
->>> -    mas->offset = ++slot;
->>> +    mt = mte_node_type(mas->node);
->>>       pivots = ma_pivots(mas_mn(mas), mt);
->>> -    if (slot > 0)
->>> -        mas->min = pivots[slot - 1] + 1;
->>> -
->>> -    if (slot <= slot_count)
->>> -        mas->max = pivots[slot];
->>> +    mas->min = pivots[mas->offset] + 1;
->>> +    mas->offset++;
->>> +    if (mas->offset < mt_slots[mt])
->>> +        mas->max = pivots[mas->offset];
->> There is a bug here, the assignment of mas->min and mas->max is wrong.
->> The assignment will make them represent the range of a child node, 
->> but it should represent the range of the current node. After 
->> mas_ascend() returns, mas-min and mas->max already represent the 
->> range of the current node, so we should delete these assignments of 
->> mas->min and mas->max.
->
->
-> Thanks for your suggestion, Peng. Applying it literally by removing 
-> only the min/max assignments:
->
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 6fc1ad42b409..9b6e581cf83f 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -5118,10 +5118,7 @@ static inline bool mas_skip_node
->
->         mt = mte_node_type(mas->node);
->         pivots = ma_pivots(mas_mn(mas), mt);
-> -       mas->min = pivots[mas->offset] + 1;
->         mas->offset++;
-> -       if (mas->offset < mt_slots[mt])
-> -               mas->max = pivots[mas->offset];
->
->         return true;
->  }
->
->
-> This allowed my test to pass 100/100 runs. Still in qemu with the test 
-> as init, so not really stressed in any way except that specific usecase.
->
-> //Snild
+These are a set of uncontroversial (hopefully) DT Overlays to support the
+TI AM57x EVM and displays for AM57x IDKs. More complex cases are staged
+and ready to follow, but wanted to test the water with these first.
 
-Thanks for the test, I'm happy if it happens to fix your problem. So a 
-patch was made.
-This patch needs to be applied after Liam's patch.
+For some reason dtbs_check does not get run on overlays, this
+will need further investigation to fix in kbuild. For now I ran
+it through manually but am not 100% sure it actually checked it,
+so double checks here very welcome.
 
-Sincerely yours,
-Peng.
+Thanks,
+Andrew
 
+Changes from v3:
+ - Rebased on v6.3-rc1
 
+Changes from v2:
+ - Rebased on v6.2-rc5
+
+Changes from v1:
+ - Made touchscreen node name generic
+ - Used proper interrupt flags
+
+Andrew Davis (3):
+  ARM: dts: ti: Add AM57xx GP EVM board support
+  ARM: dts: ti: Add AM57xx GP EVM Rev A3 board support
+  ARM: dts: am57xx-idk: Add IDK displays and touchscreens
+
+ arch/arm/boot/dts/Makefile                    |   8 ++
+ arch/arm/boot/dts/am571x-idk-touchscreen.dtso |  32 +++++
+ arch/arm/boot/dts/am572x-idk-touchscreen.dtso |  32 +++++
+ arch/arm/boot/dts/am57xx-evm.dtso             | 127 ++++++++++++++++++
+ .../boot/dts/am57xx-idk-lcd-osd101t2045.dtso  |  63 +++++++++
+ .../boot/dts/am57xx-idk-lcd-osd101t2587.dtso  |  66 +++++++++
+ 6 files changed, 328 insertions(+)
+ create mode 100644 arch/arm/boot/dts/am571x-idk-touchscreen.dtso
+ create mode 100644 arch/arm/boot/dts/am572x-idk-touchscreen.dtso
+ create mode 100644 arch/arm/boot/dts/am57xx-evm.dtso
+ create mode 100644 arch/arm/boot/dts/am57xx-idk-lcd-osd101t2045.dtso
+ create mode 100644 arch/arm/boot/dts/am57xx-idk-lcd-osd101t2587.dtso
+
+-- 
+2.39.2
 
