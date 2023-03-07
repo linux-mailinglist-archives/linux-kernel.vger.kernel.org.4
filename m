@@ -2,129 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94DA76ADAE9
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A49B76ADAED
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjCGJul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:50:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S229972AbjCGJu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjCGJud (ORCPT
+        with ESMTP id S229890AbjCGJuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:50:33 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37CE456173;
-        Tue,  7 Mar 2023 01:50:08 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 834976602FE5;
-        Tue,  7 Mar 2023 09:49:31 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678182572;
-        bh=bFdUBSoZid4noEejpjbjSQLY78Rr8UCoRauX0ECcyZA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kcggbC72pydIcHkWby/ACFWWdCiqdOuN0UM0dY+WlDJcji32m0LSpuaHeJQzMfqID
-         SNZU4O4gOX9VBuV1AY0lgnanwvNp0V+VctHE+4BMgDQb2WBzH0YfV5IcomBGeTSLI7
-         qGZvfX5i/1+Jta4RCeH+0eUmB2T+03z01JP0TZgV6MRUCnBLjaOVX6X+mKQNsa6YgF
-         KatpFW1/mYXcuW3vv7gk4fyuFQCm7y4LLzeu5P8bwYRGZMzQpJ5NNtdVhL3sotm3aG
-         9gVq7W2vOtuNlI21Sw9WYPaLBbdmsRJP3cBrHmal8Ymjbuhg4GiALNL/TsSeV/3rIB
-         zhrED7sSSTScg==
-Message-ID: <57c17bfd-83f3-fcce-0eab-e28469fb0ced@collabora.com>
-Date:   Tue, 7 Mar 2023 10:49:28 +0100
+        Tue, 7 Mar 2023 04:50:52 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42254488;
+        Tue,  7 Mar 2023 01:50:18 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so628303wms.0;
+        Tue, 07 Mar 2023 01:50:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678182617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yl2mpHuveUP7tQhvAv3v7QFO0cT2TOycTTxsdGGCBaU=;
+        b=DO0/ionGVI+UCkpAP0wJ0Ky4zV5JZ4ipAfi4ou5qX9KaKgTXlOUNeMIgPkPYsBxbOe
+         SSPbbBpHSWxw3H61cawOk/3Rwl/9yI2a9bKwMwMCkCME5LBo4v8O5l5GRX+vCsf28I9K
+         uPtXvVhfmyyRqIO9AlF8RyoIEQqd1SttVIyCAIl8yAuOVsLHymKx55pNRaenW4JK83Ot
+         rmvILk6HMWy0cuAptYPwIeFc94YchYKy8pCZHgydZSA4ok0PyccCb23MN/QaSyWz6nMP
+         dyElaKAXnPTDZKYZaEfBJiXFyX1y4kLF/1N3zYP6hT3vgDdOxLw8AO7mdXTDspYE8coj
+         tw0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678182617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yl2mpHuveUP7tQhvAv3v7QFO0cT2TOycTTxsdGGCBaU=;
+        b=k8GWY0bMignN7OoxT5RGG0BUjOo/Usrdi+cbA/nwjVNWSsW9V/IFRYoKiri6mpcppm
+         3TZiMCQPL+f/mI5kKjslj5gU41gEDvf+ygUl9IOEDioo20yKsbQW5YxYgZKfRnMV9tF9
+         jCHs65s/Pq4l+f08ryeYlr5VjnLmdQ8LcQIgQKv6aYP+s3KwPhFaRucE5BZiNZ2sUWvk
+         yv4CkX/CZjwMoaSYOQ0/3Zq5VkuLObtjb9hqlh+VPV3m3lhGj6u6+m+/yvEpV2VKn4L+
+         tWlO9rAlf0SRXrVefpAOA+eyrUbgjKfOgFdybzF37YZ6ZszoN7kzjBLB3RRHJTHr+ZWT
+         i1kg==
+X-Gm-Message-State: AO0yUKWzCFH/CDKEKbndckqyM7b/QIeqK8xsOOsrNscf6WvfCzST3DOa
+        CRVo8et7A/iTr2Z+8f/HZAw=
+X-Google-Smtp-Source: AK7set/ppE7inaeTkWIv4ddlbRUVSqik1YeZrdxSZaUZnn15JQHNkAkVC05c0k8FepeErWjWwG5+ew==
+X-Received: by 2002:a05:600c:a01:b0:3eb:29fe:70ec with SMTP id z1-20020a05600c0a0100b003eb29fe70ecmr13133009wmp.27.1678182616641;
+        Tue, 07 Mar 2023 01:50:16 -0800 (PST)
+Received: from arinc9-PC.lan ([212.68.60.226])
+        by smtp.gmail.com with ESMTPSA id o6-20020a5d6706000000b002c573778432sm11841451wru.102.2023.03.07.01.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 01:50:16 -0800 (PST)
+From:   "=?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?=" <arinc9.unal@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        Rob Herring <robh@kernel.org>, erkin.bozoglu@xeront.com,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] dt-bindings: net: dsa: mediatek,mt7530: change some descriptions to literal
+Date:   Tue,  7 Mar 2023 12:49:48 +0300
+Message-Id: <20230307094947.12450-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RESEND PATCH] media: mtk-jpeg: Fix use after free bug due to
- uncanceled work
-Content-Language: en-US
-To:     Zheng Hacker <hackerzheng666@gmail.com>,
-        Zheng Wang <zyytlz.wz@163.com>,
-        Irui Wang <irui.wang@mediatek.com>
-Cc:     mchehab@kernel.org, bin.liu@mediatek.com, matthias.bgg@gmail.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-References: <20230306062633.200427-1-zyytlz.wz@163.com>
- <CAJedcCzeVwwi9SkkwouFXUAVhF-tKF4dkqsFqVQwszSwY1SJ0A@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAJedcCzeVwwi9SkkwouFXUAVhF-tKF4dkqsFqVQwszSwY1SJ0A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/03/23 10:27, Zheng Hacker ha scritto:
-> Hi,
-> 
-> Is there anyone who can help with this? I can provide more details
-> like invoking chain if needed.
-> 
+The line endings must be preserved on gpio-controller, io-supply, and
+reset-gpios properties to look proper when the YAML file is parsed.
 
-Providing more details is always good. Please do.
+Currently it's interpreted as a single line when parsed. Change the style
+of the description of these properties to literal style to preserve the
+line endings.
 
-Meanwhile, adding Irui Wang to the loop: he's doing mtk-jpeg.
+Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
 
-Regards,
-Angelo
+Sending again now that net-next is open.
 
-> Thanks,
-> Zheng
-> 
-> Zheng Wang <zyytlz.wz@163.com> 于2023年3月6日周一 14:28写道：
->>
->> In mtk_jpeg_probe, &jpeg->job_timeout_work is bound with
->> mtk_jpeg_job_timeout_work. Then mtk_jpeg_dec_device_run
->> and mtk_jpeg_enc_device_run may be called to start the
->> work.
->> If we remove the module which will call mtk_jpeg_remove
->> to make cleanup, there may be a unfinished work. The
->> possible sequence is as follows, which will cause a
->> typical UAF bug.
->>
->> Fix it by canceling the work before cleanup in the mtk_jpeg_remove
->>
->> CPU0                  CPU1
->>
->>                      |mtk_jpeg_job_timeout_work
->> mtk_jpeg_remove     |
->>    v4l2_m2m_release  |
->>      kfree(m2m_dev); |
->>                      |
->>                      | v4l2_m2m_get_curr_priv
->>                      |   m2m_dev->curr_ctx //use
->>
->> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
->> ---
->>   drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
->> index 969516a940ba..364513e7897e 100644
->> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
->> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
->> @@ -1793,7 +1793,7 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
->>   static int mtk_jpeg_remove(struct platform_device *pdev)
->>   {
->>          struct mtk_jpeg_dev *jpeg = platform_get_drvdata(pdev);
->> -
->> +       cancel_delayed_work(&jpeg->job_timeout_work);
->>          pm_runtime_disable(&pdev->dev);
->>          video_unregister_device(jpeg->vdev);
->>          v4l2_m2m_release(jpeg->m2m_dev);
->> --
->> 2.25.1
->>
+Arınç
 
+---
+ .../devicetree/bindings/net/dsa/mediatek,mt7530.yaml        | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+index 449ee0735012..5ae9cd8f99a2 100644
+--- a/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/mediatek,mt7530.yaml
+@@ -93,7 +93,7 @@ properties:
+ 
+   gpio-controller:
+     type: boolean
+-    description:
++    description: |
+       If defined, LED controller of the MT7530 switch will run on GPIO mode.
+ 
+       There are 15 controllable pins.
+@@ -112,7 +112,7 @@ properties:
+     maxItems: 1
+ 
+   io-supply:
+-    description:
++    description: |
+       Phandle to the regulator node necessary for the I/O power.
+       See Documentation/devicetree/bindings/regulator/mt6323-regulator.txt for
+       details for the regulator setup on these boards.
+@@ -124,7 +124,7 @@ properties:
+       switch is a part of the multi-chip module.
+ 
+   reset-gpios:
+-    description:
++    description: |
+       GPIO to reset the switch. Use this if mediatek,mcm is not used.
+       This property is optional because some boards share the reset line with
+       other components which makes it impossible to probe the switch if the
+-- 
+2.37.2
 
