@@ -2,152 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E3C26AF0CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:36:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E2D6AF139
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 19:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjCGSgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 13:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S233139AbjCGSlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 13:41:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233486AbjCGSgT (ORCPT
+        with ESMTP id S231373AbjCGSlC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 13:36:19 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500A09FE75
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:28:31 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZc2A-0006PO-4x; Tue, 07 Mar 2023 19:27:34 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZc28-0002RL-RD; Tue, 07 Mar 2023 19:27:32 +0100
-Date:   Tue, 7 Mar 2023 19:27:32 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
-        kernel@pengutronix.de, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: add ETS Qdisc
- support for KSZ9477 series
-Message-ID: <20230307182732.GA1692@pengutronix.de>
-References: <20230306124940.865233-1-o.rempel@pengutronix.de>
- <20230306124940.865233-2-o.rempel@pengutronix.de>
- <20230306140651.kqayqatlrccfky2b@skbuf>
- <20230306163542.GB11936@pengutronix.de>
- <20230307164614.jy2mzxvk3xgc4z7b@skbuf>
+        Tue, 7 Mar 2023 13:41:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55705AB0B7;
+        Tue,  7 Mar 2023 10:31:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E185ECE1C5D;
+        Tue,  7 Mar 2023 18:28:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB53C4339B;
+        Tue,  7 Mar 2023 18:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678213731;
+        bh=s1okTGIMaAIY9nZ5e8wO0yRssC1n4ZF/qmfPWCwZ6dM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kY7wjfPIyzksxdVq43zVu33obwVSkcW6mn8YmiJMErydBmSdwQojgdp+L5cNg84QJ
+         YmC5EPBaNhICC9TGChTfqygz7G8TeJXT7D01LFdxVmwJVhEJSna0DGAUGimirlNr4p
+         TSadofqjcYHyVgXWvgJzuyRYyatRLgELpOdLTxEJaMDhqDWPo668b7MK+1PX1BITar
+         nPMmzgyWtGS7sUdF1LC2mU1dwcbAen7qxUMhEfjCh34U8b9MAviGqvwKS+jxGDybw+
+         8RonpWsfvzotU2AJzRRV6PCodcv5zqxFKp6UsLmTh9+DO+/oVxG/4sTPq/hCKAViE4
+         RDqQPgC/wPsMA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        Don Brace <don.brace@microchip.com>,
+        James Smart <james.smart@broadcom.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Ketan Mukadam <ketan.mukadam@broadcom.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Raghava Aditya Renukunta <raghavaaditya.renukunta@pmcs.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Tomas Henzl <thenzl@redhat.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        MPT-FusionLinux.pdl@broadcom.com, storagedev@microchip.com
+Subject: [PATCH 00/10] PCI/AER: Remove redundant Device Control Error Reporting Enable
+Date:   Tue,  7 Mar 2023 12:28:32 -0600
+Message-Id: <20230307182842.870378-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230307164614.jy2mzxvk3xgc4z7b@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 06:46:14PM +0200, Vladimir Oltean wrote:
-> On Mon, Mar 06, 2023 at 05:35:42PM +0100, Oleksij Rempel wrote:
-> > > So what does the user gain using tc-ets over tc-mqprio? That has a way
-> > > to set up strict prioritization and prio:tc maps as well, and to my
-> > > knowledge mqprio is vastly more popular in non-DCB setups than tc-ets.
-> > > The only thing is that with mqprio, AFAIK, the round robin between TXQs
-> > > belonging to the same traffic class is not weighted.
-> > 
-> > Do mqprio already supports strict prio mode? net-next was not supporting
-> > this back for two weeks. I do not care what to use, my motivation was based on
-> > following points:
-> > - tc-ets supports strict prio. mqprio need to be extended to do this
-> > - tc-ets refers to IEEE 802.1Q specification, so i feel safe
-> >   and do not need to invent new things.
-> > - mqprio automatically creates software queues, but it seems to not
-> >   provide any advantage for a typical bridged DSA setup. For example
-> >   i can use queue mapping only for traffic from CPU to external DSA port
-> >   but can't use multi queue advantages of CPU MAC for same traffic  (do I'm
-> >   missing something). For bridged traffic i'll need to use HW offloading any
-> >   way.
-> 
-> Sorry, my inbox is a mess and I forgot to respond to this.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-No problem :)
+Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"),
+which appeared in v6.0, the PCI core has enabled PCIe error reporting for
+all devices during enumeration.
 
-> What do you mean tc-mqprio doesn't support strict priority? Strict
-> priority between traffic classes is what it *does* (the "prio" in the name),
-> although without hardware offload, the prioritization isn't enforced anywhere.
-> Perhaps I'm misunderstanding what you mean?
+Remove driver code to do this and remove unnecessary includes of
+<linux/aer.h> from several other drivers.
 
-Huh.. you have right, I overlooked this part of documentation:
-"As one specific example numerous Ethernet cards support the
-802.1Q link strict priority transmission selection algorithm
-(TSA). MQPRIO enabled hardware in conjunction with the
-classification methods below can provide hardware offloaded
-support for this TSA."
+Bjorn Helgaas (10):
+  scsi: aacraid: Drop redundant pci_enable_pcie_error_reporting()
+  scsi: arcmsr: Remove unnecessary aer.h include
+  scsi: be2iscsi: Drop redundant pci_enable_pcie_error_reporting()
+  scsi: bfa: Drop redundant pci_enable_pcie_error_reporting()
+  scsi: csiostor: Remove unnecessary aer.h include
+  scsi: hpsa: Remove unnecessary pci_disable_pcie_error_reporting()
+    comment
+  scsi: lpfc: Drop redundant pci_enable_pcie_error_reporting()
+  scsi: mpt3sas: Drop redundant pci_enable_pcie_error_reporting()
+  scsi: qla2xxx: Drop redundant pci_enable_pcie_error_reporting()
+  scsi: qla4xxx: Drop redundant pci_enable_pcie_error_reporting()
 
-But other parts of manual confuse me. May be you can help here:
-- "map - The priority to traffic class map. Maps priorities 0..15 to a
-   specified traffic class"
-   "Priorities" is probably SO_PRIORITY? If yes, this option can't be offloaded
-   by the KSZ switch.
-- "queues - Provide count and offset of queue range for each traffic class..."
-  If I see it correctly, I can map a traffic class to some queue. But traffic
-  class is not priority? I can create traffic class with high number and map
-  it to a low number queue but actual queue priority is HW specific and there
-  is no way to notify user about it.
-   
-KSZ HW is capable of mapping 8 traffic classes separately to any available
-queue. Ok, if I replace words used in manual from "priority" to "traffic class"
-and "traffic class" to "queues". But even in this case the code will be even
-more confusing - i'll have to use qopt->prio_tc_map array which is SO_PRIO to
-TC map, as TC to queue map.
+ drivers/scsi/aacraid/linit.c         |  3 -
+ drivers/scsi/arcmsr/arcmsr_hba.c     |  1 -
+ drivers/scsi/be2iscsi/be_main.c      |  9 ---
+ drivers/scsi/be2iscsi/be_main.h      |  1 -
+ drivers/scsi/bfa/bfad.c              |  6 --
+ drivers/scsi/bfa/bfad_drv.h          |  1 -
+ drivers/scsi/csiostor/csio_init.c    |  1 -
+ drivers/scsi/hpsa.c                  |  1 -
+ drivers/scsi/lpfc/lpfc.h             |  2 -
+ drivers/scsi/lpfc/lpfc_attr.c        | 96 ++++++++--------------------
+ drivers/scsi/lpfc/lpfc_init.c        |  1 -
+ drivers/scsi/lpfc/lpfc_sli.c         | 55 ----------------
+ drivers/scsi/mpt3sas/mpt3sas_base.c  |  5 --
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |  1 -
+ drivers/scsi/qla2xxx/qla_def.h       |  1 -
+ drivers/scsi/qla2xxx/qla_os.c        |  6 --
+ drivers/scsi/qla4xxx/ql4_def.h       |  1 -
+ drivers/scsi/qla4xxx/ql4_os.c        |  4 --
+ 18 files changed, 27 insertions(+), 168 deletions(-)
 
-I still have difficulties to understand how priorities of actual queues
-are organized. I see how to map traffic class to a queue, but I can't find
-any thing in manual about queue priority. For example, if I assign traffic
-class 3 to the Queue0 this traffic will have lowest priority in my HW. Is
-it some how documented or known for users?
-
-One more question is, what is actual expected behavior of mqprio if max_rate
-option is used? In my case, if max_rate is set to a queue (even to max value),
-then strict priority TSA will not work:
-queue0---max rate 100Mbit/s---\
-                               |---100Mbit/s---
-queue1---max rate 100Mbit/s---/
-
-in this example both streams will get 49Mbit/s. My expectation of strict prio
-is that queue1 should get 100Mbit/s and queue 0Mbit/s
-
-On other hand tc-ets made perfect sense to me from documentation and code pow.
-TC is mapped to bands. Bands have documented priorities and it fit's to what
-KSZ is supporting. Except of WRR configuration.
-
-> For strict prioritization using multi-queue on the DSA master you should
-> be able to set up a separate Qdisc.
-
-I'll need to do more testing with FEC later, it didn't worked at first try, but
-as you can see I still have a lot of misunderstandings.
-
-Regards,
-Oleksij
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.25.1
+
