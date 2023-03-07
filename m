@@ -2,115 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2449F6AD975
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:43:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0FA6AD978
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 09:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjCGInv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 03:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S229896AbjCGIo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 03:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjCGInt (ORCPT
+        with ESMTP id S229571AbjCGIo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 03:43:49 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A12E1A946;
-        Tue,  7 Mar 2023 00:43:49 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B6A031FE14;
-        Tue,  7 Mar 2023 08:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678178627; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 7 Mar 2023 03:44:26 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD7C2820F;
+        Tue,  7 Mar 2023 00:44:25 -0800 (PST)
+Message-ID: <a92721ac-4b8a-10a8-fc12-1618dbf69653@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678178662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DN/mC5ywri8Tsr8fRJnnEanEH8sLUKMhH0fMNv5LE7Y=;
-        b=fWJINjvv/d1bPyDVsCT+SjeYPcy+aywiRxkhivpY9ybDJHt8CZHV5mlkjuMOkeCdMdckJe
-        ITMI21Wd4DBV8vcSKJ1UzU2XVR/PfLhxiSMBJXVONSk+jl4kYj54usdC8zMpWuiwPJc4CB
-        x0CKbthybB6/dILpkLmKnMuCHsmeW5o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678178627;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        bh=Z8fhns1/t0qPYmlpXG0YGly9EViYHyRd3uo6neBHqUA=;
+        b=pO3XOyV0NFVCI9vlN9vZdapa+Fe2Dh1dc0v7gFENMBuWGVucyvCH5VtVefCGeKRbR6KfV2
+        Rj6gPNW5IadrJzvPimzX6cAqIWjTqMVjklYfhRu2UCSkxI3pf5YU0fiUInJF1CaxXTLRhB
+        Bb3MEwABJ4KW52U1yBXhBxuwSdaB0JT0TB0WH5LM3m3bwsv6zNsZpHo0SOMCKfyx/evHdL
+        u6mOLmiHZMNag0gRGCcone6ydWu/YJxown0K8HudDVMyyEuoQCtivPC2kR/Pc5cegiwPqo
+        1GIff/VuJdzV5JRgv2rTXvT+R5j5Jw4o5booTvaKo57TicEIH4Q6glIYOEOW/w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678178662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DN/mC5ywri8Tsr8fRJnnEanEH8sLUKMhH0fMNv5LE7Y=;
-        b=26NSbNE9AJTm123tuDIcwVywsZC/oRTLii70lcvHsybEbJ7RntZuMe6nyoB/9/MrnysFn/
-        BFlJWQ5P4Yv1i4DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 07B2613440;
-        Tue,  7 Mar 2023 08:43:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6fEOOkL5BmRhIQAAMHmgww
-        (envelope-from <dkirjanov@suse.de>); Tue, 07 Mar 2023 08:43:46 +0000
-Message-ID: <782a6f2d-84ae-3530-7e3c-07f31a4f303b@suse.de>
-Date:   Tue, 7 Mar 2023 11:43:46 +0300
+        bh=Z8fhns1/t0qPYmlpXG0YGly9EViYHyRd3uo6neBHqUA=;
+        b=TJ2Aktf3Jv5bP18GzTk65SkpOQhTIZNdf3/2J2rLEjGnbnIqfhFwPVxNjwXbpBjN4P/MBH
+        xJplTzznHM4FrBAQ==
+Date:   Tue, 7 Mar 2023 09:44:21 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] net: ieee802154: fix a null pointer in
- nl802154_trigger_scan
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     syzbot+bd85b31816913a32e473@syzkaller.appspotmail.com,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230307073004.74224-1-dzm91@hust.edu.cn>
-Content-Language: en-US
-From:   Denis Kirjanov <dkirjanov@suse.de>
-In-Reply-To: <20230307073004.74224-1-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 1/1] kbuild: deb-pkg: default dpkg-buildpackage --build
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230305232536.19528-1-bage@linutronix.de>
+ <20230305232536.19528-2-bage@linutronix.de>
+ <CAK7LNARnkOyusNFZsE9Hj9cg=TWJtv1By8e4UPCso92Wn=jgEQ@mail.gmail.com>
+Content-Language: de-DE-frami
+From:   Bastian Germann <bage@linutronix.de>
+In-Reply-To: <CAK7LNARnkOyusNFZsE9Hj9cg=TWJtv1By8e4UPCso92Wn=jgEQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/7/23 10:30, Dongliang Mu wrote:
-> There is a null pointer dereference if NL802154_ATTR_SCAN_TYPE is
-> not set by the user.
+Am 07.03.23 um 04:21 schrieb Masahiro Yamada:
+> On Mon, Mar 6, 2023 at 8:25 AM Bastian Germann <bage@linutronix.de> wrote:
+>>
+>> deb-pkg's dpkg-buildpackage invocation was added --build=source,binary
+>> recently. Before, it relied on the default, which is
+>> --build=source,binary,all and makes no difference for the built packages
+>> as there is no "Arch: all" package.
 > 
-> Fix this by adding a null pointer check.
 > 
-> Reported-and-tested-by: syzbot+bd85b31816913a32e473@syzkaller.appspotmail.com
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
-
-Please add a Fixes: tag 
-
-> ---
->  net/ieee802154/nl802154.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> Is this paragraph true?
 > 
-> diff --git a/net/ieee802154/nl802154.c b/net/ieee802154/nl802154.c
-> index 2215f576ee37..1cf00cffd63f 100644
-> --- a/net/ieee802154/nl802154.c
-> +++ b/net/ieee802154/nl802154.c
-> @@ -1412,7 +1412,8 @@ static int nl802154_trigger_scan(struct sk_buff *skb, struct genl_info *info)
->  		return -EOPNOTSUPP;
->  	}
->  
-> -	if (!nla_get_u8(info->attrs[NL802154_ATTR_SCAN_TYPE])) {
-> +	if (!info->attrs[NL802154_ATTR_SCAN_TYPE] ||
-> +	    !nla_get_u8(info->attrs[NL802154_ATTR_SCAN_TYPE])) {
->  		NL_SET_ERR_MSG(info->extack, "Malformed request, missing scan type");
->  		return -EINVAL;
->  	}
+> --build=source,binary,all sounds strange because
+> 'all' is contained in 'binary'.
+> 
+> 
+> 
+> According to dpkb-buildpackage(1),
+> 
+>   binary = any,all
+> 
+>   full = source,binary = source,any,all  (default)
+> 
+> 
+> --build=source,binary would build everything
+> even if there were 'Arch: all'.
+
+You are right. The point was that it does not change the output.
+
+> 
+> The code change is fine.
+> My plan was to use --build=source,binary later,
+> but I could not finish the entire work in the last cycle.
+> 
+> 
+> 
+> 
+>> However, the explicit --build eliminates overriding it via DPKG_FLAGS,
+>> which used to fill the gap of generating only a source package without
+>> building it.
+>>
+>> Recover the old, default behavior.
+>>
+>> Fixes: 7bf4582d7aad ("kbuild: deb-pkg: create source package without cleaning")
+>> Signed-off-by: Bastian Germann <bage@linutronix.de>
+>> ---
+>>   scripts/Makefile.package | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
+>> index b941e6341b36..fe1721915a59 100644
+>> --- a/scripts/Makefile.package
+>> +++ b/scripts/Makefile.package
+>> @@ -120,7 +120,7 @@ debian-orig: linux.tar.gz debian
+>>   PHONY += deb-pkg
+>>   deb-pkg: debian-orig
+>>          +dpkg-buildpackage -r$(KBUILD_PKG_ROOTCMD) -a$$(cat debian/arch) $(DPKG_FLAGS) \
+>> -               --build=source,binary -nc -us -uc
+>> +               -nc -us -uc
+>>
+>>   PHONY += bindeb-pkg
+>>   bindeb-pkg: debian
+>> --
+>> 2.39.2
+>>
+> 
+> 
