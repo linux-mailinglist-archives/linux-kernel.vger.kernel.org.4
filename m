@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC17F6ADEC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:32:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 922E56ADEC9
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:32:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbjCGMcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:32:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S229755AbjCGMcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbjCGMcG (ORCPT
+        with ESMTP id S230128AbjCGMcI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:32:06 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878B9769E3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:32:04 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id t11so16863348lfr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:32:04 -0800 (PST)
+        Tue, 7 Mar 2023 07:32:08 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B62E477C97
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:32:05 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id z42so12916779ljq.13
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 04:32:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678192323;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aPs2AsYZOYaw55T4/U7uB6HluDp2jLmqFur5Lgl7Udk=;
-        b=lK7Eu/N/ysN2wh72dor8CsgesQs98RJOZna5u/ukEz1oLX8YRdNbNDRGc4jcyEMRKM
-         4TfTARbnX6WoV0YH69UfNrmSwElbwyZrSqKbNwZ1V8MwedHXNeMdGIm7h/QQlLz9fV9l
-         yTawG25BE1AjrcycBPi60mgp838z4VmStZpC1dR/+9lWjJ/p85l2lyDpIoTiQ0oHSmXu
-         vIOuWX9mg+iiMBUN7N5fVDcfBLFMFbUM42f7sSzXxa11YrsSoLrT+Jj5Rnr7HnUr/+5R
-         qdtk4y8K/I63delBF3PAs61PurOwHiYTHMW/BkVRn108GPWOeH4eh5XB+R7SMVDSu1Mk
-         Nf7w==
+        d=linaro.org; s=google; t=1678192324;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vcymAsSfgo0T3+vs1DGeeROeS5a7cMEN49XDIkMpxfg=;
+        b=MpcYncKvmfwJI9vzqRxHDqSv5X7Je8evTDWTOx5wvFHZcXomu1VweUaiPNyzlsduEm
+         4P1Q1jBSFlnB+gItEhtlEcregtrwdezxyGMZV5GgWfiFA1y4Ij2C+LIIG7hv9BxSRh//
+         wlIPD93XE4CKqzxO8zcZ40MEEoXqE2prYPonzjp2277dKoIqCxhxuqec+20N++G/XI8E
+         CvnJaEqWl5WYsdozc12OfHWvO/FD6ydGxLe/ZZ8LQ3tBUi5emx9nic8MuwyJB0iJKhmi
+         7J+f//sZon4XMK6izt1ffXgPicd6ZR+8xRnOJWEvsjpzgQttiWAULtI8lgkl5CDWsIoD
+         OytQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678192323;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aPs2AsYZOYaw55T4/U7uB6HluDp2jLmqFur5Lgl7Udk=;
-        b=xjGpBH3sJucitffOxvPhfV+VjA6QDkbyhO2e9OYx+JGrBP5/mWNorrlrzAON5W819m
-         Tto136pj/lXsv/Mre6vEHWqXhfRG8Yabej2TZH6RrPINQgbAffbxRuxurZoA9AG04vgR
-         A1B7x2SMrwaP9epsApVZNUT4EpTuDxH1NhtYKEmdZIpzT/WobOb4orn/YdcMbkQzBESb
-         q0YA7eWbsUjAfbUUJQzR9+jJj9ZNjvUBf4U+UsBc4vNyBhsKUhnD8kqYmhQbnUYjb6bR
-         5LTaSWskA4dFE8U85is5HVE05peBaCyHbGZk8cqKLByKCTTnxjlUkMwMEGqjXlqivHlI
-         vjUw==
-X-Gm-Message-State: AO0yUKW+qV/win/xH38x/vVp7+B7BFpBQqW94EnfDXX+4Nh/WfMzPLZS
-        8cp+s9zb0rPkeivh6zycppDPYQ==
-X-Google-Smtp-Source: AK7set+U3njUjM09dNb3PhuIwUi7v92VZ3jxeQsc4pQp6g50/l2NlUMjFGNBfyAF+0AeOnOrTUXGgQ==
-X-Received: by 2002:ac2:560b:0:b0:4db:2c28:8974 with SMTP id v11-20020ac2560b000000b004db2c288974mr3923462lfd.12.1678192322765;
-        Tue, 07 Mar 2023 04:32:02 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678192324;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vcymAsSfgo0T3+vs1DGeeROeS5a7cMEN49XDIkMpxfg=;
+        b=drfMyBPbQPK/y+xdAMwW1kHamRYxj/rAnowEbxtItQNVeNutdYQs49SweZnGCSbrPT
+         RsL35FWSwq2Rpw1wfNF04ddhmmgss7Ge1GKrkxS7motEmoElLXJps6rRUY7z7Jg3fT4d
+         82Qu76VgdfTJ3paJIr5V84pTFMrtqvpaJl2ee38bcESAOQdLhVjtKyqoG7PFS/R7KR+L
+         EPK0AHoQZfGxOFhVdLrox9Aslx0+mo97brYXm2ITHdNejbrdcXXRl7v6gAVFMkV2zkNA
+         GmBCG858PTkp/t378lisgCsQl6aM3/yeejbRqRQ0OYWRde4unyTpiAtSLcArbZx+pXWZ
+         IYrA==
+X-Gm-Message-State: AO0yUKW2c8GItLNRoa+I5YnH1gtegXV/CDFXd7lR1S03ABrKqYYBw/Nn
+        PbOV5CjtWoup+Vj5JfYIxTw7+A==
+X-Google-Smtp-Source: AK7set8Xluj3z4kdkoAfA+C0uJMMYeVXR25gUn+Ad+6Q6ioHztyMvL9LUJvm9yiW2GZGzgdWngcF/g==
+X-Received: by 2002:a05:651c:1682:b0:293:2bf4:d939 with SMTP id bd2-20020a05651c168200b002932bf4d939mr4188139ljb.12.1678192323932;
+        Tue, 07 Mar 2023 04:32:03 -0800 (PST)
 Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id t20-20020a2e7814000000b0029462e98c07sm2156501ljc.35.2023.03.07.04.32.01
+        by smtp.gmail.com with ESMTPSA id t20-20020a2e7814000000b0029462e98c07sm2156501ljc.35.2023.03.07.04.32.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 04:32:02 -0800 (PST)
+        Tue, 07 Mar 2023 04:32:03 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org
@@ -57,10 +58,12 @@ Cc:     marijn.suijten@somainline.org,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/3] clk: qcom: gcc-sm6375: Update the .pwrsts for usb gdsc
-Date:   Tue,  7 Mar 2023 13:31:57 +0100
-Message-Id: <20230307123159.3797551-1-konrad.dybcio@linaro.org>
+Subject: [PATCH v2 2/3] clk: qcom: gcc-msm8996: Update the .pwrsts for usb gdsc
+Date:   Tue,  7 Mar 2023 13:31:58 +0100
+Message-Id: <20230307123159.3797551-2-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230307123159.3797551-1-konrad.dybcio@linaro.org>
+References: <20230307123159.3797551-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The USB controller on sm6375 doesn't retain its state when the system
+The USB controller on MSM8996 doesn't retain its state when the system
 goes into low power state and the GDSCs are turned off.
 
 This can be observed by the USB connection not coming back alive after
@@ -91,23 +94,23 @@ v1 -> v2:
 - Reword "fix" to "work around", mention it should be temporary
 - Add TODO:
 
- drivers/clk/qcom/gcc-sm6375.c | 3 ++-
+ drivers/clk/qcom/gcc-msm8996.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/qcom/gcc-sm6375.c b/drivers/clk/qcom/gcc-sm6375.c
-index ad3c4833990d..417a0fd242ec 100644
---- a/drivers/clk/qcom/gcc-sm6375.c
-+++ b/drivers/clk/qcom/gcc-sm6375.c
-@@ -3534,7 +3534,8 @@ static struct gdsc usb30_prim_gdsc = {
+diff --git a/drivers/clk/qcom/gcc-msm8996.c b/drivers/clk/qcom/gcc-msm8996.c
+index e16163706735..5e44d1bcca9e 100644
+--- a/drivers/clk/qcom/gcc-msm8996.c
++++ b/drivers/clk/qcom/gcc-msm8996.c
+@@ -3455,7 +3455,8 @@ static struct gdsc usb30_gdsc = {
  	.pd = {
- 		.name = "usb30_prim_gdsc",
+ 		.name = "usb30",
  	},
 -	.pwrsts = PWRSTS_OFF_ON,
 +	/* TODO: Change to OFF_ON when USB drivers get proper suspend support */
 +	.pwrsts = PWRSTS_RET_ON,
  };
  
- static struct gdsc ufs_phy_gdsc = {
+ static struct gdsc pcie0_gdsc = {
 -- 
 2.39.2
 
