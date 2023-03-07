@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212466AF327
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:01:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531716AF33C
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 20:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbjCGTBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 14:01:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        id S233606AbjCGTCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 14:02:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233498AbjCGTAn (ORCPT
+        with ESMTP id S233196AbjCGTBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 14:00:43 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6397A74DC8
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 10:47:26 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id l2so8949925ilg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:47:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678214841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O7BUelKDKk+33uckJ7LNeCbNjLijtX6ljbEKj2F7sL0=;
-        b=mmKJPqfK6CbrD8XkPRewXyJ00DJMkprNnqvUdvJD3PrFuWnuda8yN3z2tyuHmzBzSi
-         RjPA8mQzv8ntVFz+2/+MeDF8oLMW+gy1a1WyenLLr3HnpO4Q9dzZS88n6I6ey78FxYp+
-         zw6j6o5KPZKbsVuVWmnH/CW19k9d9JYzgS2pE=
+        Tue, 7 Mar 2023 14:01:47 -0500
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E05F92728;
+        Tue,  7 Mar 2023 10:48:12 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-176261d7f45so16061631fac.11;
+        Tue, 07 Mar 2023 10:48:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678214841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O7BUelKDKk+33uckJ7LNeCbNjLijtX6ljbEKj2F7sL0=;
-        b=f8s4Q7cuHS95yPpz5wag7k6YhrPEQ914sRN7DhOSZsWwXpl3mBkafxurRSzo/xr/HJ
-         E4uAV2CwYdIyGcy4T4DG+xL++QX2ff8tKl7LrvLYzXnKV0Awer7OaL2Qri+xPFY47zll
-         pxM4KwanL8T1u+vJJQWbGPY9qGgc9F+fs0IhNvVSRMHVW7e/D2U1+4504vSBWBa+eRXn
-         4v4d9LkPjuUouemIwVfeOWEYDGb1KqdhaHzE1KE7NcAsKNjTLcaHDZE5YHgHHY8jC1dZ
-         OpI9tPDXhUmQAVt7IH+bEOlLJBSEqv2yRdPc80CQIog4rjKUdFlps8xFtSQW4o9+PBgQ
-         nLMQ==
-X-Gm-Message-State: AO0yUKUXz2eWVDF4yBGH+ez6Tw817nQpvbEpO3BpSd3yzX4S/cJ4qgWQ
-        uvt5XhTHhTrw3PtaTHjnijHtrlMlgtud3Wv4nvc=
-X-Google-Smtp-Source: AK7set8O8k5rtCdoZsakVzW35/u63kFWO+QoorpyE4YOKrDKcWZI5qQoEa9t1aV7gn2MBK+vZxidXg==
-X-Received: by 2002:a05:6e02:1a4e:b0:316:e941:245d with SMTP id u14-20020a056e021a4e00b00316e941245dmr13911927ilv.20.1678214840758;
-        Tue, 07 Mar 2023 10:47:20 -0800 (PST)
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com. [209.85.166.47])
-        by smtp.gmail.com with ESMTPSA id w2-20020a02cf82000000b003ec3b5225c3sm4199396jar.156.2023.03.07.10.47.19
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Mar 2023 10:47:20 -0800 (PST)
-Received: by mail-io1-f47.google.com with SMTP id e11so5793742ioe.3
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 10:47:19 -0800 (PST)
-X-Received: by 2002:a02:aa0b:0:b0:3c4:e84b:2a40 with SMTP id
- r11-20020a02aa0b000000b003c4e84b2a40mr7756944jam.6.1678214839473; Tue, 07 Mar
- 2023 10:47:19 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678214861;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=EYv+2HBstCYOAGO0B/PqnqkLSTg8ReJUcduYsWRrFq4=;
+        b=FD5iEPjwx8xTIi5yG+I5mUcCHQVwk6+lpzTfySD26+4OdH1M2RF/DZKP/w+GrEkzeN
+         TWSbSQ6xSlPBRQEMf0V1rPfGl/84WGcs2ll7SQCZawpHelQfBdnsN/w0wtCsp4m1qLYW
+         pJnyQlqHZr25qYQ2GzRCFm3T3WW9/HFGM2gSxBhVqRXynfZPgO6Feg2h3/QBymGjVvWh
+         rtvqChqsGuTKIR1kZhj9AO2BH8CHLIAgqPDfIk2boXqljLCMjWbQsIORgzYKwMxEI9t0
+         aZxrLsPqLs4D6Pb6fjBLFENCN4XaO6ZRP3ncAqnXJTSX8/r5wi4FAgujGQppIHPlncIi
+         Vnqw==
+X-Gm-Message-State: AO0yUKVuzd9IJUYvWw/nTfMe968iuQD9chX4wLvVEQumX6e1os68vA5b
+        S3OldhPLtUQ16gujfWmqnQ==
+X-Google-Smtp-Source: AK7set/JqDyA+rmOGAi8FVuE/rNvFjo7TJGk4GVdnIOtbdb9IJ7/xaQBSceult7k1VVkVPcVKar00Q==
+X-Received: by 2002:a05:6870:9724:b0:14b:bdda:7754 with SMTP id n36-20020a056870972400b0014bbdda7754mr9986559oaq.37.1678214861419;
+        Tue, 07 Mar 2023 10:47:41 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u10-20020a4ae68a000000b00524f47b4682sm5308118oot.10.2023.03.07.10.47.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 10:47:41 -0800 (PST)
+Received: (nullmailer pid 5166 invoked by uid 1000);
+        Tue, 07 Mar 2023 18:47:40 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230307164405.14218-1-johan+linaro@kernel.org> <20230307164405.14218-5-johan+linaro@kernel.org>
-In-Reply-To: <20230307164405.14218-5-johan+linaro@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 7 Mar 2023 10:47:07 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VTDHFkSf4qnexNOBoXzV-sMPBRjSqMrB_nrsuCPpO=WQ@mail.gmail.com>
-Message-ID: <CAD=FV=VTDHFkSf4qnexNOBoXzV-sMPBRjSqMrB_nrsuCPpO=WQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] serial: qcom-geni: drop bogus uart_write_wakeup()
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sean Paul <sean@poorly.run>,
+        Bjorn Andersson <andersson@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org
+In-Reply-To: <20230307-topic-dsi_qcm-v3-1-8bd7e1add38a@linaro.org>
+References: <20230307-topic-dsi_qcm-v3-0-8bd7e1add38a@linaro.org>
+ <20230307-topic-dsi_qcm-v3-1-8bd7e1add38a@linaro.org>
+Message-Id: <167821477672.5007.12890440677076105146.robh@kernel.org>
+Subject: Re: [PATCH v3 01/10] dt-bindings: display/msm:
+ dsi-controller-main: Fix deprecated QCM2290 compatible
+Date:   Tue, 07 Mar 2023 12:47:40 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, Mar 7, 2023 at 8:43=E2=80=AFAM Johan Hovold <johan+linaro@kernel.or=
-g> wrote:
->
-> Drop the bogus uart_write_wakeup() from when setting up a new DMA
-> transfer, which does not free up any more space in the ring buffer.
->
-> Any pending writers will be woken up when the transfer completes.
->
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+On Tue, 07 Mar 2023 14:01:39 +0100, Konrad Dybcio wrote:
+> The qcom, prefix was missed previously. Fix it.
+> 
+> Fixes: 0c0f65c6dd44 ("dt-bindings: msm: dsi-controller-main: Add compatible strings for every current SoC")
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  drivers/tty/serial/qcom_geni_serial.c | 4 ----
->  1 file changed, 4 deletions(-)
+>  Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.example.dtb: dsi@5e94000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['qcom,dsi-ctrl-6g-qcm2290'] is too short
+	'qcom,dsi-ctrl-6g-qcm2290' is not one of ['qcom,apq8064-dsi-ctrl', 'qcom,msm8916-dsi-ctrl', 'qcom,msm8953-dsi-ctrl', 'qcom,msm8974-dsi-ctrl', 'qcom,msm8996-dsi-ctrl', 'qcom,msm8998-dsi-ctrl', 'qcom,qcm2290-dsi-ctrl', 'qcom,sc7180-dsi-ctrl', 'qcom,sc7280-dsi-ctrl', 'qcom,sdm660-dsi-ctrl', 'qcom,sdm845-dsi-ctrl', 'qcom,sm8150-dsi-ctrl', 'qcom,sm8250-dsi-ctrl', 'qcom,sm8350-dsi-ctrl', 'qcom,sm8450-dsi-ctrl', 'qcom,sm8550-dsi-ctrl']
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.example.dtb: dsi@5e94000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.example.dtb: dsi@5e94000: compatible: 'oneOf' conditional failed, one must be fixed:
+	['qcom,dsi-ctrl-6g-qcm2290'] is too short
+	'qcom,dsi-ctrl-6g-qcm2290' is not one of ['qcom,apq8064-dsi-ctrl', 'qcom,msm8916-dsi-ctrl', 'qcom,msm8953-dsi-ctrl', 'qcom,msm8974-dsi-ctrl', 'qcom,msm8996-dsi-ctrl', 'qcom,msm8998-dsi-ctrl', 'qcom,qcm2290-dsi-ctrl', 'qcom,sc7180-dsi-ctrl', 'qcom,sc7280-dsi-ctrl', 'qcom,sdm660-dsi-ctrl', 'qcom,sdm845-dsi-ctrl', 'qcom,sm8150-dsi-ctrl', 'qcom,sm8250-dsi-ctrl', 'qcom,sm8350-dsi-ctrl', 'qcom,sm8450-dsi-ctrl', 'qcom,sm8550-dsi-ctrl']
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/qcom,qcm2290-mdss.example.dtb: dsi@5e94000: Unevaluated properties are not allowed ('compatible' was unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230307-topic-dsi_qcm-v3-1-8bd7e1add38a@linaro.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
