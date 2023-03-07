@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0921D6ADF00
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A52A6ADF03
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 13:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjCGMnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 07:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S229645AbjCGMpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 07:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjCGMne (ORCPT
+        with ESMTP id S229639AbjCGMpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 07:43:34 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0CC49892
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 04:43:32 -0800 (PST)
-Received: from fabio-Precision-3551.. (unknown [IPv6:2804:14c:485:4b69:479c:7535:eb9:ae35])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: festevam@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 5CF4D85B1E;
-        Tue,  7 Mar 2023 13:43:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1678193009;
-        bh=QZATXNgCvjsN1UDwyI8/mzKko22hR/juVJM5m31ZcHg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=m1lEIUAqCzb/yrdw5Pzj3nVbdT0QKbpDJo0RfrCaWG6s5VE+OjugoB6jJ8s+NAg3y
-         KKtd0XwGpYE6G20GC1dlhsGIsp95TnEUqDuE4KS+7uyY1pjEg6YT5gMWUsKEFAR5QU
-         X9FdnnTeWsRiUp9tTjSXEKGLYwKLREBEel56fa4nzWarsgqiWE3qXbwr4i2ov0zC2H
-         Fv/RzcQ15DVL0LgK0pGaeoinqDKIRwnpi/CvIGMM173qUoZDnxjOCEiFMr26mAVGKB
-         c5VDQ5kDUiaj1M2GXrErUFOnLEwHFxHVG5HumoNJAwmdNkxa+U6QugHUooR0D1kYpe
-         eaafZ4HE4Z/RQ==
-From:   Fabio Estevam <festevam@denx.de>
-To:     daniel.lezcano@linaro.org
-Cc:     shawnguo@kernel.org, linux-imx@nxp.com, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Fabio Estevam <festevam@denx.de>
-Subject: [PATCH] clocksource/drivers/timer-imx-gpt: Remove non-DT function
-Date:   Tue,  7 Mar 2023 09:43:13 -0300
-Message-Id: <20230307124313.708255-1-festevam@denx.de>
-X-Mailer: git-send-email 2.34.1
+        Tue, 7 Mar 2023 07:45:20 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835BB4D28D;
+        Tue,  7 Mar 2023 04:45:19 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id e82so11208773ybh.9;
+        Tue, 07 Mar 2023 04:45:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678193118;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6fe876EcuA+jdmCESHMii/7cG2YSZKquEdS/vIty4+A=;
+        b=ODIJueFdMNGe95gTEbyF5NczLJmY23TtUj51PPOLopdCMmLFgcThOhcAVkvfDnoWal
+         kGcukFh7EtTc0RW08h2lwJk9aOVAolceIRIuOJKABA+/zAdgaUpAp0J6WXyT61J/a/ft
+         tMygDnofeR6ck4paPkOSPfFEJuAPyTXIDnzWEuv74MGISTIw5i3wp84FjjkivYkMTQNV
+         FU0w7dBuB3gmGh574Vs6I2bg7ztdeRTZAVPhfzpAy8Wm7v0N0ZXCBkDy2WwAsC0hnMsQ
+         Jq33qja3vVL9a+IU3LhBjW8TtcIMuTPXr7vEKx28eD2rp6bXV+a/1SMLI9FZ3Nb60QUo
+         VT9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678193118;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6fe876EcuA+jdmCESHMii/7cG2YSZKquEdS/vIty4+A=;
+        b=6n44r0H4VAevPhKEl8J/JUIJduSE0hjVGB9hovq+oiJxmICYT1Qq7rxd3R079/FUve
+         oYR87JL2Zdda0bf7I/Rz2rdRQjBI7m0UyTSji/Xc5s1GD/+gyNTbKT3cQnhL2/7c27ZA
+         MFYiFrkMHS3jTYzcWX2+36y4NltP7XwG8Vj9/simPSHPZMu1rQNNaRc7lyDBVYsryB1n
+         VavQrstQVsMrwGs42VPNvyLBkoprbcydbMibk7WIBajvWKwL2DMHBc89hZazox5XLafM
+         xjrPO9up8hOI1QsTtWnCZX+c0N8v3RwG7plVcvZOxIvZ5AXWiVglD7t5tXiY8sd35O7z
+         2Clg==
+X-Gm-Message-State: AO0yUKW04GYUCBabe/yPe5pJFk/YLFp46tk7ejCrujdvsodPYX0wDqSn
+        yqQfcMzpJdB2NERsn6xuBQK8tmOvdGJ7/JOOvjE=
+X-Google-Smtp-Source: AK7set+4i6X4+McENdJYEtkgtVMIkW1tvDFHTItHQ5/EcD88Yp6L91Q8oXnhMttrnbcAi9OAVXl2NClL+dgdZd9VEek=
+X-Received: by 2002:a25:656:0:b0:a27:3ecc:ffe7 with SMTP id
+ 83-20020a250656000000b00a273eccffe7mr11410509ybg.3.1678193118746; Tue, 07 Mar
+ 2023 04:45:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230306220959.240235-1-ojeda@kernel.org> <87ilfcivzf.fsf@metaspace.dk>
+In-Reply-To: <87ilfcivzf.fsf@metaspace.dk>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 7 Mar 2023 13:45:07 +0100
+Message-ID: <CANiq72m_y=eCsJLxRP+bFvhmR5yAVK7=W6Hijb_CozWnL__dQw@mail.gmail.com>
+Subject: Re: [PATCH] docs: rust: point directly to the standalone installers
+To:     Andreas Hindborg <nmi@metaspace.dk>
+Cc:     Miguel Ojeda <ojeda@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        linux-doc@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mxc_timer_init() was originally only used by non-DT i.MX platforms.
+On Tue, Mar 7, 2023 at 1:31=E2=80=AFPM Andreas Hindborg <nmi@metaspace.dk> =
+wrote:
+>
+> I guess we should remove "or install ``rustup``" from this sentence?
 
-i.MX has already been converted to be a DT-only platform.
+Good point -- the page contains installers for `rustup` itself too
+above the URL fragment, but we are pointing directly to the fragment,
+so it can be confusing.
 
-Remove the unused mxc_timer_init() function.
+I think I will split the sentence and add an extra link to the other
+fragment, since there is one for that too (`#rustup`).
 
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
- drivers/clocksource/timer-imx-gpt.c | 19 -------------------
- include/soc/imx/timer.h             |  7 -------
- 2 files changed, 26 deletions(-)
-
-diff --git a/drivers/clocksource/timer-imx-gpt.c b/drivers/clocksource/timer-imx-gpt.c
-index 7b2c70f2f353..ca3e4cbc80c6 100644
---- a/drivers/clocksource/timer-imx-gpt.c
-+++ b/drivers/clocksource/timer-imx-gpt.c
-@@ -420,25 +420,6 @@ static int __init _mxc_timer_init(struct imx_timer *imxtm)
- 	return mxc_clockevent_init(imxtm);
- }
- 
--void __init mxc_timer_init(unsigned long pbase, int irq, enum imx_gpt_type type)
--{
--	struct imx_timer *imxtm;
--
--	imxtm = kzalloc(sizeof(*imxtm), GFP_KERNEL);
--	BUG_ON(!imxtm);
--
--	imxtm->clk_per = clk_get_sys("imx-gpt.0", "per");
--	imxtm->clk_ipg = clk_get_sys("imx-gpt.0", "ipg");
--
--	imxtm->base = ioremap(pbase, SZ_4K);
--	BUG_ON(!imxtm->base);
--
--	imxtm->type = type;
--	imxtm->irq = irq;
--
--	_mxc_timer_init(imxtm);
--}
--
- static int __init mxc_timer_init_dt(struct device_node *np,  enum imx_gpt_type type)
- {
- 	struct imx_timer *imxtm;
-diff --git a/include/soc/imx/timer.h b/include/soc/imx/timer.h
-index b888d5076b4d..25f29c6bbd0b 100644
---- a/include/soc/imx/timer.h
-+++ b/include/soc/imx/timer.h
-@@ -13,11 +13,4 @@ enum imx_gpt_type {
- 	GPT_TYPE_IMX6DL,	/* i.MX6DL/SX/SL */
- };
- 
--/*
-- * This is a stop-gap solution for clock drivers like imx1/imx21 which call
-- * mxc_timer_init() to initialize timer for non-DT boot.  It can be removed
-- * when these legacy non-DT support is converted or dropped.
-- */
--void mxc_timer_init(unsigned long pbase, int irq, enum imx_gpt_type type);
--
- #endif  /* __SOC_IMX_TIMER_H__ */
--- 
-2.34.1
-
+Cheers,
+Miguel
