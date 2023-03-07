@@ -2,84 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47B3D6AF805
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66D36AF808
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 22:51:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjCGVua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 16:50:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
+        id S231183AbjCGVvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 16:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjCGVuZ (ORCPT
+        with ESMTP id S229548AbjCGVvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 16:50:25 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A9195465;
-        Tue,  7 Mar 2023 13:50:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 940A1B81A45;
-        Tue,  7 Mar 2023 21:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0D27CC4339E;
-        Tue,  7 Mar 2023 21:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678225821;
-        bh=GSPQKquktL4JjjyNEvTusF3QMpG6B42fKmFuoGQsiUE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=X+MJZfXY6UhEk7esMG/W6kx9hyk8iv0MavK0k3GV+wF6eQvV62uAEAOOCmbNPaU29
-         pMVq3h8VB6whmED9qmrkPlQv+Ot7tf+Z2KMjT2qYT8uzdKwkaNEQumc7aWVQgmZKKa
-         BBStzr63dIUC5c1OV21YCbmjdVMtsy+f+qf4gcS2cBh+a7U9zQXSFvCbZ9XPmBrFfJ
-         n66B6SAArNaM5YvjARreNjYd4yp6AUwUoSeyDFofs3kgQxWUePBp35eNVD9GydWBAh
-         Wwlji4jKoRJq/xh8ZvB1/dwGonTT9Q8FBwgxXoNgmX4ve2D8G83QVgTZX9Y+NGrHSz
-         7w7HUgP/LkyHg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DB66EE61B67;
-        Tue,  7 Mar 2023 21:50:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 7 Mar 2023 16:51:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F417A8C48
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 13:50:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678225845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=YF8J1V/HdyW06qHE0PQyU5JTwvkaiAFhMsVbeRAMzxc=;
+        b=EYpqUxU0TuqDv5TqA3HoCfG7UkFvzRDGyyVjCnSYL3/WvSATweSMp3sPwmjqyZpE2jW/jZ
+        LpJDW85tLj0bZe58vuxw46nVCQ3EAChqHn7wi6qmnzufuLtftKGIRd5C29nm4dfxfEaYvf
+        7Z5ukW9R2t0qFN4rJD0cT8t6gvru5fU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-642-HaRtYFU_NrCw_3Vfjfw3uQ-1; Tue, 07 Mar 2023 16:50:44 -0500
+X-MC-Unique: HaRtYFU_NrCw_3Vfjfw3uQ-1
+Received: by mail-wm1-f70.google.com with SMTP id x18-20020a1c7c12000000b003e1e7d3cf9fso26012wmc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 13:50:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678225843;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YF8J1V/HdyW06qHE0PQyU5JTwvkaiAFhMsVbeRAMzxc=;
+        b=2kvF5DmuEWr38f4kGfqgYjPqJVaGNsEgLw/mUYyuM834NDxZuJ9ZpQSQRuOz9LZxZ8
+         8ix7f54gIdr+oUwk+YBx0gtItxO/DOFqWJi5+44yxJKkbsWrZsa++RETxKCNt7FO3cOY
+         nymIIvcYjoIKNbLegzdsVnv5b+5tSSlCpdIO1nOQ23CTA8kSwRYmt5kHU5Rn7i3w36Fd
+         v3HSfUMsn7MYIxACKMMWhwnQIRViZBk2CTTZbIjb2SEgrTnz9703ehaCj4gq7fAGHUyr
+         RpPhm5dDJglI/6SYoBayVwkXAY7x0qc78k7Awv/bgxsPuQNlDFun7gsjrVmjZjSvFPQU
+         Haww==
+X-Gm-Message-State: AO0yUKWO/G3m6U7QpABwL+gHF/y/dlPRbKf0UiIVOXPmxCy/etsrunpT
+        K0xk5SEAr1vzJAtUH5pX/tOObw+SpXCd6r0/DyDFXrEkZi69PP9nov41dkVT+lRSUQ9zMZ0uF3N
+        h66ps3HO0dTHId7CHkxZqQHRIckTnAQH1TOFSxJEVe2C+Nernh9dkwZg4kBreTizyH0qfJnmSqI
+        QNeBCxaBY=
+X-Received: by 2002:adf:dc90:0:b0:2c5:4c1f:3c9 with SMTP id r16-20020adfdc90000000b002c54c1f03c9mr9559851wrj.49.1678225843090;
+        Tue, 07 Mar 2023 13:50:43 -0800 (PST)
+X-Google-Smtp-Source: AK7set+uVPmsd4FkYozdPgfD3LO/a/Iz7EnaE1PW2RaXdbG/aTax4E/3JZNF5gCuRxnqwggEuHOsiw==
+X-Received: by 2002:adf:dc90:0:b0:2c5:4c1f:3c9 with SMTP id r16-20020adfdc90000000b002c54c1f03c9mr9559834wrj.49.1678225842666;
+        Tue, 07 Mar 2023 13:50:42 -0800 (PST)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id j2-20020a5d6042000000b002c70d269b4esm13305988wrt.91.2023.03.07.13.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Mar 2023 13:50:42 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Arthur Grillo <arthurgrillo@riseup.net>,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        David Gow <davidgow@google.com>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v2] drm/format-helper: Make conversion_buf_size() support sub-byte pixel fmts
+Date:   Tue,  7 Mar 2023 22:50:39 +0100
+Message-Id: <20230307215039.346863-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] nfc: change order inside nfc_se_io error path
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167822582089.6774.886285380993481424.git-patchwork-notify@kernel.org>
-Date:   Tue, 07 Mar 2023 21:50:20 +0000
-References: <20230306212650.230322-1-pchelkin@ispras.ru>
-In-Reply-To: <20230306212650.230322-1-pchelkin@ispras.ru>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     kuba@kernel.org, krzysztof.kozlowski@linaro.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khoroshilov@ispras.ru, lvc-project@linuxtesting.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+There are DRM fourcc formats that have pixels smaller than a byte, but the
+conversion_buf_size() function assumes that pixels are a multiple of bytes
+and use the struct drm_format_info .cpp field to calculate the dst_pitch.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Instead, calculate it by using the bits per pixel (bpp) and divide it by 8
+to account for formats that have sub-byte pixels.
 
-On Tue,  7 Mar 2023 00:26:50 +0300 you wrote:
-> cb_context should be freed on the error path in nfc_se_io as stated by
-> commit 25ff6f8a5a3b ("nfc: fix memory leak of se_io context in
-> nfc_genl_se_io").
-> 
-> Make the error path in nfc_se_io unwind everything in reverse order, i.e.
-> free the cb_context after unlocking the device.
-> 
-> [...]
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
+Tested by making sure that the following command still succeeds:
 
-Here is the summary with links:
-  - [v2] nfc: change order inside nfc_se_io error path
-    https://git.kernel.org/netdev/net/c/7d834b4d1ab6
+./tools/testing/kunit/kunit.py run \
+--kunitconfig=drivers/gpu/drm/tests/.kunitconfig
 
-You are awesome, thank you!
+Changes in v2:
+- Drop an unused variable, that was pointed out by the kernel robot.
+
+ drivers/gpu/drm/tests/drm_format_helper_test.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
+index 9536829c6e3a..84b5cc29c8fc 100644
+--- a/drivers/gpu/drm/tests/drm_format_helper_test.c
++++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
+@@ -409,12 +409,15 @@ static size_t conversion_buf_size(u32 dst_format, unsigned int dst_pitch,
+ 				  const struct drm_rect *clip)
+ {
+ 	const struct drm_format_info *dst_fi = drm_format_info(dst_format);
++	unsigned int bpp;
+ 
+ 	if (!dst_fi)
+ 		return -EINVAL;
+ 
+-	if (!dst_pitch)
+-		dst_pitch = drm_rect_width(clip) * dst_fi->cpp[0];
++	if (!dst_pitch) {
++		bpp = drm_format_info_bpp(dst_fi, 0);
++		dst_pitch = DIV_ROUND_UP(drm_rect_width(clip) * bpp, 8);
++	}
+ 
+ 	return dst_pitch * drm_rect_height(clip);
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
