@@ -2,148 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F976AE918
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39D466AE951
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjCGRUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:20:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41644 "EHLO
+        id S231446AbjCGRWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:22:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231298AbjCGRU3 (ORCPT
+        with ESMTP id S231303AbjCGRWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:20:29 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968949885D;
-        Tue,  7 Mar 2023 09:15:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678209350; x=1709745350;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:to:cc;
-  bh=9MNP27OkAjl3jxgBz3lw6r+bSQsZ0Oli1yJ8N573650=;
-  b=dYbPWmTN7El0qn4S9Dbnvo/h6y2phGrgfoW47ixoIpbwIVgj5TmXqEx4
-   900UPZLD36JO8A+XgBbqm+egdNm75+fMLbw9FQmT2+k1Hc22uLdeOQnep
-   AhnXOvV6cTWcAMO+b8Ul9Aeu+HrqDo6ZqDvgNsJDIwDMLgjNrJdzsqgx+
-   sDWkUPeAST7INdTOrTZ9O4Vy5x0VNGjIHKshDGw5JZGLW7/UyM9G6FNZE
-   0IiDqbwUGzSw2w5ulbecgeKi8gtAGb7bOg6BHR3wpU0/DyhO0DW8kVnn1
-   YXYIj7uOBRewJV2u6XdgMJolzG4SZQPRAoF/sTd47LKZc/kzEKnfy4v0I
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="335933992"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="335933992"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 09:15:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="740788884"
-X-IronPort-AV: E=Sophos;i="5.98,241,1673942400"; 
-   d="scan'208";a="740788884"
-Received: from iweiny-desk3.amr.corp.intel.com (HELO localhost) ([10.212.194.83])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 09:15:33 -0800
-From:   Ira Weiny <ira.weiny@intel.com>
-Date:   Tue, 07 Mar 2023 09:15:31 -0800
-Subject: [PATCH] rdma/qib: Remove deprecated kmap() call
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230217-kmap-qib-v1-1-e5a6fde167e0@intel.com>
-X-B4-Tracking: v=1; b=H4sIADJxB2QC/x2MQQqDQAxFryJZN+BkUEuvUrrIaNSgndoZFEG8u
- 8Hl+7z/DsiSVDK8igOSbJr1Fw3co4B25DgIamcMVJIvyTU4fXnBvwakhqvak3f9swLTA2fBkDi
- 2ox3iOs82Lkl63e/++3OeFzEcYblvAAAA
-To:     Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>
-X-Mailer: b4 0.13-dev-ada30
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678209331; l=2276;
- i=ira.weiny@intel.com; s=20221222; h=from:subject:message-id;
- bh=9MNP27OkAjl3jxgBz3lw6r+bSQsZ0Oli1yJ8N573650=;
- b=5CE9oyeRnpd2lsobXE/e6ZLHnnJ9s5mGi2JYSu3s2zdQXFo5QH8kP7CdtU71ZjYsbct0OtE8n
- vdtu9XdtpY/Au6wkyOrFD83HN8iZnAJDTbHQGoybTazgk3kSgqveQk9
-X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
- pk=brwqReAJklzu/xZ9FpSsMPSQ/qkSalbg6scP3w809Ec=
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 7 Mar 2023 12:22:25 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C000BD520
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 09:17:57 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id n17-20020a056a000d5100b005e5e662a4ccso7499950pfv.4
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 09:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678209477;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BQbU304qvSe6nuiEdh3ek4tMw5wjustEnfRjLs3CfHM=;
+        b=j+aMVBky7KGuSLjcrRldCBoPalyFGKtwLYUzNYdAPt3sGxrfr7whsHi+EOY3ovdrih
+         fcbrsz+5WW9wXg9ZmX/TgxhOiMrNneN2O3Ta1NQU2+mmWdX7l7BoV2V8MOKwIGrAkOrp
+         BYo0ZcOhBviE0jiUuBOmk07QuXlHTW/u1y1pYDIqHmJ44bP1e3IeiMDDqMKXyNRjWpeX
+         d7TkFgTvceOtLjiwyAtUbqNWz1DkZHjZaC2U688CBRYhR4WNI2P8KEzlrHuSVPwY8sH+
+         Pr3VymEjZYKWrTK17O95PvhD591awdOlK3F+EWPFM1sWmZbheOi3805hBnwFLN9eN6xo
+         KGUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678209477;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BQbU304qvSe6nuiEdh3ek4tMw5wjustEnfRjLs3CfHM=;
+        b=Rria/50Rv5jaqzUiocpcRVAz2Sv6XQc/8vm+G7ocfo3I3lj6Lv1CR8OjTbvRh99k6y
+         gyaHe8PdxHBeGoVabQ3XvZMYGXJKDrMsBjv2tYC1mDFbj5ROf5lcHV2V9sjoK81DGWaE
+         Q0iwnGACI9rDCVWSdZV/32tfjrTyZiD97LQ+4yoBbeR+CxOWKCKAkQD/eQwbmVqV1YyQ
+         co4eGTI8sBc/cNbtNkMMIP9BMKST4pMZi4yOkLVxsIIceyUd8SX+0WmNVTb1psjCW1Zz
+         SYSerjxIl4z+FY+dmVi/Mo18ogy+g1QjobKiE2Q0r0hrJbEjaC9bRk41WDHX0vYFKILp
+         qxIQ==
+X-Gm-Message-State: AO0yUKXzhsmufnTnKP11KkTI9ZvT4P1GXcFEPjjpamsqA88+HClViosX
+        xHoT7g6RPGM0GOW9PLero56L/M3xvLY=
+X-Google-Smtp-Source: AK7set8sR8ySb9lpmNR1FMTrx/uaJ4kn2aKYyg7bzNnvLBuFScEEfqZhvbQg/F1tThOSaIDmSJDvM3qvYmo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:3246:b0:19c:9037:d742 with SMTP id
+ ji6-20020a170903324600b0019c9037d742mr6229067plb.1.1678209477326; Tue, 07 Mar
+ 2023 09:17:57 -0800 (PST)
+Date:   Tue, 7 Mar 2023 09:17:55 -0800
+In-Reply-To: <3aec157afb6727e603d80c2232b3718033295f13.camel@intel.com>
+Mime-Version: 1.0
+References: <20230301105438.599196-1-kai.huang@intel.com> <ZAA1+EMTIkBJvdZF@gao-cwp>
+ <3aec157afb6727e603d80c2232b3718033295f13.camel@intel.com>
+Message-ID: <ZAdxNgv0M6P63odE@google.com>
+Subject: Re: [PATCH] KVM: VMX: Make setup_vmcs_config() preemption disabled
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() has been deprecated in favor of the kmap_local_page() call.
-kmap_local_page() is thread local.
+On Thu, Mar 02, 2023, Huang, Kai wrote:
+> On Thu, 2023-03-02 at 13:36 +0800, Gao, Chao wrote:
+> > On Wed, Mar 01, 2023 at 11:54:38PM +1300, Kai Huang wrote:
+> > > Make setup_vmcs_config() preemption disabled so it always performs on
+> > > the same local cpu.
+> > > 
+> > > During module loading time, KVM intends to call setup_vmcs_config() to
+> > > set up the global VMCS configurations on _one_ cpu in hardware_setup(),
 
-In the sdma coalesce case the page allocated is potentially free'ed in a
-different context through qib_sdma_get_complete() ->
-qib_user_sdma_make_progress().  The use of kmap_local_page() is
-inappropriate in this call path.  However, the page is allocated using
-GFP_KERNEL and will never be from highmem.
+That may have been the very original intention, but I don't think it has been the
+true intention for a very long time.
 
-Remove the use of kmap calls and use page_address() in this case.
+> > > Change the existing setup_vmcs_config() to __setup_vmcs_config() and
+> > > call the latter directly in the compatibility check code path.  Change
+> > > setup_vmcs_config() to call __setup_vmcs_config() with preemption
+> > > disabled so __setup_vmcs_config() is always done on the same cpu.
+> > 
+> > Maybe you can simply disable preemption in hardware_setup() although I
+> > don't have a strong preference.
+> > 
+> > nested_vmx_setup_ctls_msrs() also reads some MSRs and sets up part of
+> > vmcs_conf, should it be called on the same CPU as setup_vmcs_config()?
+> 
+> Yes I think so.  I missed this :)
+> 
+> Not sure whether there are other similar places too even outside of
+> hardware_setup().
+> 
+> But compatibility check only checks things calculated via setup_vmcs_config()
+> and nested_vmx_setup_ctls_msrs(), so I think it's fair to only put
+> hardware_setup() inside preemption disabled.
 
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
- drivers/infiniband/hw/qib/qib_user_sdma.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+Disabling preemption across hardware_setup() isn't feasible as there are a number
+of allocations that might sleep.  But disabling preemption isn't necessary to
+ensure setup runs on one CPU, that only requires disabling _migration_.  So _if_
+we want to handle this in the kernel, we could simply do:
 
-diff --git a/drivers/infiniband/hw/qib/qib_user_sdma.c b/drivers/infiniband/hw/qib/qib_user_sdma.c
-index 9fe03d6ffac1..336eb15a721f 100644
---- a/drivers/infiniband/hw/qib/qib_user_sdma.c
-+++ b/drivers/infiniband/hw/qib/qib_user_sdma.c
-@@ -320,7 +320,6 @@ static int qib_user_sdma_page_to_frags(const struct qib_devdata *dd,
- 			unpin_user_page(page);
- 		} else {
- 			/* coalesce case */
--			kunmap(page);
- 			__free_page(page);
- 		}
- 		ret = -ENOMEM;
-@@ -572,7 +571,7 @@ static int qib_user_sdma_coalesce(const struct qib_devdata *dd,
- 		goto done;
- 	}
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 541982de5762..9126fdf02649 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9470,7 +9470,9 @@ int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
+        int r;
  
--	mpage = kmap(page);
-+	mpage = page_address(page);
- 	mpage_save = mpage;
- 	for (i = 0; i < niov; i++) {
- 		int cfur;
-@@ -581,7 +580,7 @@ static int qib_user_sdma_coalesce(const struct qib_devdata *dd,
- 				      iov[i].iov_base, iov[i].iov_len);
- 		if (cfur) {
- 			ret = -EFAULT;
--			goto free_unmap;
-+			goto page_free;
- 		}
+        mutex_lock(&vendor_module_lock);
++       migrate_disable();
+        r = __kvm_x86_vendor_init(ops);
++       migrate_enable();
+        mutex_unlock(&vendor_module_lock);
  
- 		mpage += iov[i].iov_len;
-@@ -592,8 +591,7 @@ static int qib_user_sdma_coalesce(const struct qib_devdata *dd,
- 			page, 0, 0, len, mpage_save);
- 	goto done;
- 
--free_unmap:
--	kunmap(page);
-+page_free:
- 	__free_page(page);
- done:
- 	return ret;
-@@ -627,9 +625,6 @@ static void qib_user_sdma_free_pkt_frag(struct device *dev,
- 				       pkt->addr[i].dma_length,
- 				       DMA_TO_DEVICE);
- 
--		if (pkt->addr[i].kvaddr)
--			kunmap(pkt->addr[i].page);
--
- 		if (pkt->addr[i].put_page)
- 			unpin_user_page(pkt->addr[i].page);
- 		else
+        return r;
 
----
-base-commit: 8ca09d5fa3549d142c2080a72a4c70ce389163cd
-change-id: 20230217-kmap-qib-27a563231f85
 
-Best regards,
--- 
-Ira Weiny <ira.weiny@intel.com>
+But I'm not convinced we should handle this in the kernel.  Many of the checks,
+especially in SVM, query boot_cpu_has(), not this_cpu_has(), i.e. to truly perform
+setup on a single CPU, all of those would need to be converted to this_cpu_has().
 
+Some of those boot_cpu_has() calls should be changed regardless of whether or not
+migration is disabled, e.g. kvm_is_svm_supported() is arguably straight up buggy
+due to cpu_has_svm() checking the boot CPU (I'll fix that by adding a patch after
+open coding cpu_has_svm() into kvm_is_svm_supported()[*]).
+
+But things like kvm_timer_init() should NOT be blindlgly converted to this_cpu_has(),
+because the teardown path needs to mirror the setup path, e.g. if KVM ended up
+running on frankenstein hardware where not all CPUs have a constant TSC, KVM could
+leave a callback dangling and hose the kernel.  Obviously such hardware wouldn't
+correctly run VMs, but crashing the kernel is a touch worse than KVM not working
+correctly.
+
+I'm not totally against converting to this_cpu_has() for the setup, as it would be
+more intuitive in a lot of ways.  But, I don't think pinning the task actually
+hardens KVM in a meaningful way.  If there are any divergences between CPUs, then
+either KVM will notice before running VMs, e.g. the VMCS sanity checks, or KVM will
+never notice, e.g. the myriad runtime paths that check boot_cpu_has() (or variants
+thereof) without sanity checking across CPUs.  And if userspace _really_ wants to
+have guarantees about how setup is performed, e.g. for repeatable, deterministic
+behavior, then userspace should force loading of KVM to be done on CPU0.
+
+So my vote is to leave things as-is (modulo the cpu_has_svm() mess).  But maybe add
+documentation to explain the caveats about loading KVM, and how userspace can
+mitigate those caveats?
+
+[*] https://lore.kernel.org/all/20221201232655.290720-14-seanjc@google.com
