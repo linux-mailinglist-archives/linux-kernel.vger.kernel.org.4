@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7736AE1E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA16D6AE1EF
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 15:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbjCGOMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 09:12:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49126 "EHLO
+        id S231231AbjCGONd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 09:13:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbjCGOKX (ORCPT
+        with ESMTP id S230191AbjCGOMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 09:10:23 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B84888A1
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:08:46 -0800 (PST)
+        Tue, 7 Mar 2023 09:12:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 534498315C
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:09:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BC896135E
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:08:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA955C4339E;
-        Tue,  7 Mar 2023 14:08:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F8C4B818FE
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 14:08:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C8BC433A0;
+        Tue,  7 Mar 2023 14:08:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678198118;
-        bh=jq0ZfsvwfvGD7dc7+4ei8T6xxeCdjcLuVSzc5ozEYYU=;
+        s=k20201202; t=1678198121;
+        bh=gZ6gT92QoewG67ylJsd53DevrQCpgBq5112YtMXuQRo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P/g1FxQvtQ6Djb0efLquHx4sC5zwNZTzw6ha7e7dDSnGZtiJkcdGLhAJOIbO7Udrr
-         c/pOatQglTTG4auyFwSaRThUdUosTsqq8d0NXzEt3QV9CzO9jtP37D1/KPzds7wH+X
-         iP0lQkhdXjUMc+gIAoZpf0kTBUVYuSr0BYnrH6c2QUDuAl/7jsVa/FpkBUsHMTLxM1
-         VuXoIvbr6ldY+JSpVneCzpiOuUWgYh6w2DJ8eLlEmMyTGEe6LsmKBzDyoOSkp9EjIV
-         7kIVdgnn0PwRwNNqe9Jz7RuZdjmXLDXFUrz41yln2eVd24ywrvCeY5wWzD1qdtalDJ
-         /RcDxpv06whmg==
+        b=TRNBdv0NFEKBnS2lFqek4SATtENdEPGBRch+JF41rd9uNvJhbI17ES1Td3abUFDER
+         Ke6ptVpzc28DJ1gF0r+NHw1mFqi2YHyp7EDnh6fOpae2aHwCBDKhUWx4vYGX32vHgA
+         9ObQl4V/08s/85qs1tljGmIOYbsd99LB4S3a6A8DNFcuLnXl3Z/jPimstby0RP1CGl
+         eE5ZSVjT1mweedTOg7ca8Ig3cdZ7h/f+hU6o1NVlBnK/JCSb1NjlMrerDZuMvgw93K
+         Bj0yluZ6KFNOUtnqGvTaIMcYp9gT/WedJDVZe7Wrca4HkHdsEbJ7E5DyhfIEit5Nfr
+         CWRK8+qbRq5Ng==
 From:   Ard Biesheuvel <ardb@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org,
@@ -42,14 +42,14 @@ Cc:     linux-arm-kernel@lists.infradead.org,
         Ryan Roberts <ryan.roberts@arm.com>,
         Anshuman Khandual <anshuman.khandual@arm.com>,
         Kees Cook <keescook@chromium.org>
-Subject: [PATCH v3 50/60] arm64: mm: Add 5 level paging support to fixmap and swapper handling
-Date:   Tue,  7 Mar 2023 15:05:12 +0100
-Message-Id: <20230307140522.2311461-51-ardb@kernel.org>
+Subject: [PATCH v3 51/60] arm64: kasan: Reduce minimum shadow alignment and enable 5 level paging
+Date:   Tue,  7 Mar 2023 15:05:13 +0100
+Message-Id: <20230307140522.2311461-52-ardb@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230307140522.2311461-1-ardb@kernel.org>
 References: <20230307140522.2311461-1-ardb@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6571; i=ardb@kernel.org; h=from:subject; bh=jq0ZfsvwfvGD7dc7+4ei8T6xxeCdjcLuVSzc5ozEYYU=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdpUX48+cq3RMuB7/WPMm/4j+p8uWBmeqSBgce7tNIk Um+O+FrRykLgxgHg6yYIovA7L/vdp6eKFXrPEsWZg4rE8gQBi5OAZjIG3aG/4UHXR/4de2Ysdhj Btuf1Jipx7veRyn9luW25rl0RXo1635Ghmtid2bd9fz36cClqTu/2B3bu2/eKtOSN4zfXx36c39 ShgMHAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9265; i=ardb@kernel.org; h=from:subject; bh=gZ6gT92QoewG67ylJsd53DevrQCpgBq5112YtMXuQRo=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JIYXdpS2Xof1souYOwccVnnP/nZX7HPXzp8WNVaXc3Y1ru pkreQo6SlkYxDgYZMUUWQRm/3238/REqVrnWbIwc1iZQIYwcHEKwEQSEhgZOvK/PnTfUsn9ItrP vE9HPLs8NSbG5P2Oo1V6Fs3bQrS3MTIcFXq0xyzk0wO3XSemrC/hsX9QkbFLTiX2y6yHb2XCFFz 5AA==
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,216 +61,245 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for using 5 levels of paging in the fixmap, as well as in
-the kernel page table handling code which uses fixmaps internally.
-This also handles the case where a 5 level build runs on hardware that
-only supports 4 levels of paging.
+Allow the KASAN init code to deal with 5 levels of paging, and relax the
+requirement that the shadow region is aligned to the top level pgd_t
+size. This is necessary for LPA2 based 52-bit virtual addressing, where
+the KASAN shadow will never be aligned to the pgd_t size. Allowing this
+also enables the 16k/48-bit case for KASAN, which is a nice bonus.
+
+This involves some hackery to manipulate the root and next level page
+tables without having to distinguish all the various configurations,
+including 16k/48-bits (which has a two entry pgd_t level), and LPA2
+configurations running with one translation level less on non-LPA2
+hardware.
 
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/arm64/include/asm/fixmap.h  |  1 +
- arch/arm64/include/asm/pgtable.h | 45 ++++++++++++--
- arch/arm64/mm/mmu.c              | 64 +++++++++++++++++---
- 3 files changed, 96 insertions(+), 14 deletions(-)
+ arch/arm64/Kconfig         |   2 +-
+ arch/arm64/mm/kasan_init.c | 143 ++++++++++++++++++--
+ 2 files changed, 130 insertions(+), 15 deletions(-)
 
-diff --git a/arch/arm64/include/asm/fixmap.h b/arch/arm64/include/asm/fixmap.h
-index 71ed5fdf718bd0fd..8d4ec7bf74afb7a6 100644
---- a/arch/arm64/include/asm/fixmap.h
-+++ b/arch/arm64/include/asm/fixmap.h
-@@ -90,6 +90,7 @@ enum fixed_addresses {
- 	FIX_PTE,
- 	FIX_PMD,
- 	FIX_PUD,
-+	FIX_P4D,
- 	FIX_PGD,
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index d287dad29198c843..52aac583823863e4 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -157,7 +157,7 @@ config ARM64
+ 	select HAVE_ARCH_HUGE_VMAP
+ 	select HAVE_ARCH_JUMP_LABEL
+ 	select HAVE_ARCH_JUMP_LABEL_RELATIVE
+-	select HAVE_ARCH_KASAN if !(ARM64_16K_PAGES && ARM64_VA_BITS_48)
++	select HAVE_ARCH_KASAN
+ 	select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
+ 	select HAVE_ARCH_KASAN_SW_TAGS if HAVE_ARCH_KASAN
+ 	select HAVE_ARCH_KASAN_HW_TAGS if (HAVE_ARCH_KASAN && ARM64_MTE)
+diff --git a/arch/arm64/mm/kasan_init.c b/arch/arm64/mm/kasan_init.c
+index 7e32f21fb8e1e227..7ab7520133946e91 100644
+--- a/arch/arm64/mm/kasan_init.c
++++ b/arch/arm64/mm/kasan_init.c
+@@ -23,7 +23,7 @@
  
- 	__end_of_fixed_addresses
-diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-index c667073e3f56755d..a286ecc447d33b24 100644
---- a/arch/arm64/include/asm/pgtable.h
-+++ b/arch/arm64/include/asm/pgtable.h
-@@ -613,12 +613,12 @@ static inline bool pud_table(pud_t pud) { return true; }
- 				 PUD_TYPE_TABLE)
- #endif
+ #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
  
--extern pgd_t init_pg_dir[PTRS_PER_PGD];
-+extern pgd_t init_pg_dir[];
- extern pgd_t init_pg_end[];
--extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
--extern pgd_t idmap_pg_dir[PTRS_PER_PGD];
--extern pgd_t tramp_pg_dir[PTRS_PER_PGD];
--extern pgd_t reserved_pg_dir[PTRS_PER_PGD];
-+extern pgd_t swapper_pg_dir[];
-+extern pgd_t idmap_pg_dir[];
-+extern pgd_t tramp_pg_dir[];
-+extern pgd_t reserved_pg_dir[];
+-static pgd_t tmp_pg_dir[PTRS_PER_PGD] __initdata __aligned(PGD_SIZE);
++static pgd_t tmp_pg_dir[PTRS_PER_PTE] __initdata __aligned(PAGE_SIZE);
  
- extern void set_swapper_pgd(pgd_t *pgdp, pgd_t pgd);
- 
-@@ -883,12 +883,47 @@ static inline p4d_t *p4d_offset(pgd_t *pgdp, unsigned long addr)
- 	return p4d_offset_lockless(pgdp, READ_ONCE(*pgdp), addr);
+ /*
+  * The p*d_populate functions call virt_to_phys implicitly so they can't be used
+@@ -99,6 +99,19 @@ static pud_t *__init kasan_pud_offset(p4d_t *p4dp, unsigned long addr, int node,
+ 	return early ? pud_offset_kimg(p4dp, addr) : pud_offset(p4dp, addr);
  }
  
-+static inline p4d_t *p4d_set_fixmap(unsigned long addr)
++static p4d_t *__init kasan_p4d_offset(pgd_t *pgdp, unsigned long addr, int node,
++				      bool early)
 +{
-+	if (!pgtable_l5_enabled())
-+		return NULL;
-+	return (p4d_t *)set_fixmap_offset(FIX_P4D, addr);
++	if (pgd_none(READ_ONCE(*pgdp))) {
++		phys_addr_t p4d_phys = early ?
++				__pa_symbol(kasan_early_shadow_p4d)
++					: kasan_alloc_zeroed_page(node);
++		__pgd_populate(pgdp, p4d_phys, PGD_TYPE_TABLE);
++	}
++
++	return early ? p4d_offset_kimg(pgdp, addr) : p4d_offset(pgdp, addr);
 +}
 +
-+static inline p4d_t *p4d_set_fixmap_offset(pgd_t *pgdp, unsigned long addr)
-+{
-+	if (!pgtable_l5_enabled())
-+		return pgd_to_folded_p4d(pgdp, addr);
-+	return p4d_set_fixmap(p4d_offset_phys(pgdp, addr));
-+}
-+
-+static inline void p4d_clear_fixmap(void)
-+{
-+	if (pgtable_l5_enabled())
-+		clear_fixmap(FIX_P4D);
-+}
-+
-+/* use ONLY for statically allocated translation tables */
-+static inline p4d_t *p4d_offset_kimg(pgd_t *pgdp, u64 addr)
-+{
-+	if (!pgtable_l5_enabled())
-+		return pgd_to_folded_p4d(pgdp, addr);
-+	return (p4d_t *)__phys_to_kimg(p4d_offset_phys(pgdp, addr));
-+}
-+
- #define pgd_page(pgd)		pfn_to_page(__phys_to_pfn(__pgd_to_phys(pgd)))
- 
- #else
- 
- static inline bool pgtable_l5_enabled(void) { return false; }
- 
-+/* Match p4d_offset folding in <asm/generic/pgtable-nop4d.h> */
-+#define p4d_set_fixmap(addr)		NULL
-+#define p4d_set_fixmap_offset(p4dp, addr)	((p4d_t *)p4dp)
-+#define p4d_clear_fixmap()
-+
-+#define p4d_offset_kimg(dir,addr)	((p4d_t *)dir)
-+
- #endif  /* CONFIG_PGTABLE_LEVELS > 4 */
- 
- #define pgd_ERROR(e)	\
-diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
-index 6426df5211456cfe..77cd163375124c6a 100644
---- a/arch/arm64/mm/mmu.c
-+++ b/arch/arm64/mm/mmu.c
-@@ -315,15 +315,14 @@ static void alloc_init_cont_pmd(pud_t *pudp, unsigned long addr,
- 	} while (addr = next, addr != end);
- }
- 
--static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
-+static void alloc_init_pud(p4d_t *p4dp, unsigned long addr, unsigned long end,
- 			   phys_addr_t phys, pgprot_t prot,
- 			   phys_addr_t (*pgtable_alloc)(int),
- 			   int flags)
+ static void __init kasan_pte_populate(pmd_t *pmdp, unsigned long addr,
+ 				      unsigned long end, int node, bool early)
+ {
+@@ -144,12 +157,12 @@ static void __init kasan_p4d_populate(pgd_t *pgdp, unsigned long addr,
+ 				      unsigned long end, int node, bool early)
  {
  	unsigned long next;
--	pud_t *pudp;
 -	p4d_t *p4dp = p4d_offset(pgdp, addr);
- 	p4d_t p4d = READ_ONCE(*p4dp);
-+	pud_t *pudp;
- 
- 	if (p4d_none(p4d)) {
- 		p4dval_t p4dval = P4D_TYPE_TABLE | P4D_TABLE_UXN;
-@@ -371,6 +370,46 @@ static void alloc_init_pud(pgd_t *pgdp, unsigned long addr, unsigned long end,
- 	pud_clear_fixmap();
- }
- 
-+static void alloc_init_p4d(pgd_t *pgdp, unsigned long addr, unsigned long end,
-+			   phys_addr_t phys, pgprot_t prot,
-+			   phys_addr_t (*pgtable_alloc)(int),
-+			   int flags)
-+{
-+	unsigned long next;
-+	pgd_t pgd = READ_ONCE(*pgdp);
-+	p4d_t *p4dp;
-+
-+	if (pgd_none(pgd)) {
-+		pgdval_t pgdval = PGD_TYPE_TABLE | PGD_TABLE_UXN;
-+		phys_addr_t p4d_phys;
-+
-+		if (flags & NO_EXEC_MAPPINGS)
-+			pgdval |= PGD_TABLE_PXN;
-+		BUG_ON(!pgtable_alloc);
-+		p4d_phys = pgtable_alloc(P4D_SHIFT);
-+		__pgd_populate(pgdp, p4d_phys, pgdval);
-+		pgd = READ_ONCE(*pgdp);
-+	}
-+	BUG_ON(pgd_bad(pgd));
-+
-+	p4dp = p4d_set_fixmap_offset(pgdp, addr);
-+	do {
-+		p4d_t old_p4d = READ_ONCE(*p4dp);
-+
-+		next = p4d_addr_end(addr, end);
-+
-+		alloc_init_pud(p4dp, addr, next, phys, prot,
-+			       pgtable_alloc, flags);
-+
-+		BUG_ON(p4d_val(old_p4d) != 0 &&
-+		       p4d_val(old_p4d) != READ_ONCE(p4d_val(*p4dp)));
-+
-+		phys += next - addr;
-+	} while (p4dp++, addr = next, addr != end);
-+
-+	p4d_clear_fixmap();
-+}
-+
- static void __create_pgd_mapping_locked(pgd_t *pgdir, phys_addr_t phys,
- 					unsigned long virt, phys_addr_t size,
- 					pgprot_t prot,
-@@ -393,7 +432,7 @@ static void __create_pgd_mapping_locked(pgd_t *pgdir, phys_addr_t phys,
++	p4d_t *p4dp = kasan_p4d_offset(pgdp, addr, node, early);
  
  	do {
- 		next = pgd_addr_end(addr, end);
--		alloc_init_pud(pgdp, addr, next, phys, prot, pgtable_alloc,
-+		alloc_init_p4d(pgdp, addr, next, phys, prot, pgtable_alloc,
- 			       flags);
- 		phys += next - addr;
- 	} while (pgdp++, addr = next, addr != end);
-@@ -1120,10 +1159,19 @@ void vmemmap_free(unsigned long start, unsigned long end,
+ 		next = p4d_addr_end(addr, end);
+ 		kasan_pud_populate(p4dp, addr, next, node, early);
+-	} while (p4dp++, addr = next, addr != end);
++	} while (p4dp++, addr = next, addr != end && p4d_none(READ_ONCE(*p4dp)));
  }
- #endif /* CONFIG_MEMORY_HOTPLUG */
  
--static inline pud_t *fixmap_pud(unsigned long addr)
-+static inline p4d_t *fixmap_p4d(unsigned long addr)
- {
- 	pgd_t *pgdp = pgd_offset_k(addr);
--	p4d_t *p4dp = p4d_offset(pgdp, addr);
-+	pgd_t pgd = READ_ONCE(*pgdp);
+ static void __init kasan_pgd_populate(unsigned long addr, unsigned long end,
+@@ -165,14 +178,48 @@ static void __init kasan_pgd_populate(unsigned long addr, unsigned long end,
+ 	} while (pgdp++, addr = next, addr != end);
+ }
+ 
++#if defined(CONFIG_ARM64_64K_PAGES) || CONFIG_PGTABLE_LEVELS > 4
++#define SHADOW_ALIGN	P4D_SIZE
++#else
++#define SHADOW_ALIGN	PUD_SIZE
++#endif
 +
-+	BUG_ON(pgd_none(pgd) || pgd_bad(pgd));
++/*
++ * Return whether 'addr' is aligned to the size covered by a root level
++ * descriptor.
++ */
++static bool __init root_level_aligned(u64 addr)
++{
++	int shift = (ARM64_HW_PGTABLE_LEVELS(vabits_actual) - 1) * (PAGE_SHIFT - 3);
 +
-+	return p4d_offset_kimg(pgdp, addr);
++	return (addr % (PAGE_SIZE << shift)) == 0;
 +}
 +
-+static inline pud_t *fixmap_pud(unsigned long addr)
-+{
-+	p4d_t *p4dp = fixmap_p4d(addr);
- 	p4d_t p4d = READ_ONCE(*p4dp);
- 
- 	BUG_ON(p4d_none(p4d) || p4d_bad(p4d));
-@@ -1154,14 +1202,12 @@ static inline pte_t *fixmap_pte(unsigned long addr)
-  */
- void __init early_fixmap_init(void)
+ /* The early shadow maps everything to a single page of zeroes */
+ asmlinkage void __init kasan_early_init(void)
  {
--	pgd_t *pgdp;
- 	p4d_t *p4dp, p4d;
- 	pud_t *pudp;
- 	pmd_t *pmdp;
- 	unsigned long addr = FIXADDR_START;
+ 	BUILD_BUG_ON(KASAN_SHADOW_OFFSET !=
+ 		KASAN_SHADOW_END - (1UL << (64 - KASAN_SHADOW_SCALE_SHIFT)));
+-	BUILD_BUG_ON(!IS_ALIGNED(_KASAN_SHADOW_START(VA_BITS), PGDIR_SIZE));
+-	BUILD_BUG_ON(!IS_ALIGNED(_KASAN_SHADOW_START(VA_BITS_MIN), PGDIR_SIZE));
+-	BUILD_BUG_ON(!IS_ALIGNED(KASAN_SHADOW_END, PGDIR_SIZE));
++	BUILD_BUG_ON(!IS_ALIGNED(_KASAN_SHADOW_START(VA_BITS), SHADOW_ALIGN));
++	BUILD_BUG_ON(!IS_ALIGNED(_KASAN_SHADOW_START(VA_BITS_MIN), SHADOW_ALIGN));
++	BUILD_BUG_ON(!IS_ALIGNED(KASAN_SHADOW_END, SHADOW_ALIGN));
++
++	if (!root_level_aligned(KASAN_SHADOW_START)) {
++		/*
++		 * The start address is misaligned, and so the next level table
++		 * will be shared with the linear region. This can happen with
++		 * 4 or 5 level paging, so install a generic pte_t[] as the
++		 * next level. This prevents the kasan_pgd_populate call below
++		 * from inserting an entry that refers to the shared KASAN zero
++		 * shadow pud_t[]/p4d_t[], which could end up getting corrupted
++		 * when the linear region is mapped.
++		 */
++		static pte_t tbl[PTRS_PER_PTE] __page_aligned_bss;
++		pgd_t *pgdp = pgd_offset_k(KASAN_SHADOW_START);
++
++		set_pgd(pgdp, __pgd(__pa_symbol(tbl) | PGD_TYPE_TABLE));
++	}
++
+ 	kasan_pgd_populate(KASAN_SHADOW_START, KASAN_SHADOW_END, NUMA_NO_NODE,
+ 			   true);
+ }
+@@ -184,20 +231,75 @@ static void __init kasan_map_populate(unsigned long start, unsigned long end,
+ 	kasan_pgd_populate(start & PAGE_MASK, PAGE_ALIGN(end), node, false);
+ }
  
--	pgdp = pgd_offset_k(addr);
--	p4dp = p4d_offset(pgdp, addr);
-+	p4dp = fixmap_p4d(addr);
- 	p4d = READ_ONCE(*p4dp);
- 	if (CONFIG_PGTABLE_LEVELS > 3 &&
- 	    !(p4d_none(p4d) || p4d_page_paddr(p4d) == __pa_symbol(bm_pud))) {
+-static void __init clear_pgds(unsigned long start,
+-			unsigned long end)
++/*
++ * Return the descriptor index of 'addr' in the root level table
++ */
++static int __init root_level_idx(u64 addr)
+ {
+ 	/*
+-	 * Remove references to kasan page tables from
+-	 * swapper_pg_dir. pgd_clear() can't be used
+-	 * here because it's nop on 2,3-level pagetable setups
++	 * On 64k pages, the TTBR1 range root tables are extended for 52-bit
++	 * virtual addressing, and TTBR1 will simply point to the pgd_t entry
++	 * that covers the start of the 48-bit addressable VA space if LVA is
++	 * not implemented. This means we need to index the table as usual,
++	 * instead of masking off bits based on vabits_actual.
+ 	 */
+-	for (; start < end; start += PGDIR_SIZE)
+-		set_pgd(pgd_offset_k(start), __pgd(0));
++	u64 vabits = IS_ENABLED(CONFIG_ARM64_64K_PAGES) ? VA_BITS
++							: vabits_actual;
++	int shift = (ARM64_HW_PGTABLE_LEVELS(vabits) - 1) * (PAGE_SHIFT - 3);
++
++	return (addr & ~_PAGE_OFFSET(vabits)) >> (shift + PAGE_SHIFT);
++}
++
++/*
++ * Clone a next level table from swapper_pg_dir into tmp_pg_dir
++ */
++static void __init clone_next_level(u64 addr, pgd_t *tmp_pg_dir, pud_t *pud)
++{
++	int idx = root_level_idx(addr);
++	pgd_t pgd = READ_ONCE(swapper_pg_dir[idx]);
++	pud_t *pudp = (pud_t *)__phys_to_kimg(__pgd_to_phys(pgd));
++
++	memcpy(pud, pudp, PAGE_SIZE);
++	tmp_pg_dir[idx] = __pgd(__phys_to_pgd_val(__pa_symbol(pud)) |
++				PUD_TYPE_TABLE);
++}
++
++/*
++ * Return the descriptor index of 'addr' in the next level table
++ */
++static int __init next_level_idx(u64 addr)
++{
++	int shift = (ARM64_HW_PGTABLE_LEVELS(vabits_actual) - 2) * (PAGE_SHIFT - 3);
++
++	return (addr >> (shift + PAGE_SHIFT)) % PTRS_PER_PTE;
++}
++
++/*
++ * Dereference the table descriptor at 'pgd_idx' and clear the entries from
++ * 'start' to 'end' (exclusive) from the table.
++ */
++static void __init clear_next_level(int pgd_idx, int start, int end)
++{
++	pgd_t pgd = READ_ONCE(swapper_pg_dir[pgd_idx]);
++	pud_t *pudp = (pud_t *)__phys_to_kimg(__pgd_to_phys(pgd));
++
++	memset(&pudp[start], 0, (end - start) * sizeof(pud_t));
++}
++
++static void __init clear_shadow(u64 start, u64 end)
++{
++	int l = root_level_idx(start), m = root_level_idx(end);
++
++	if (!root_level_aligned(start))
++		clear_next_level(l++, next_level_idx(start), PTRS_PER_PTE);
++	if (!root_level_aligned(end))
++		clear_next_level(m, 0, next_level_idx(end));
++	memset(&swapper_pg_dir[l], 0, (m - l) * sizeof(pgd_t));
+ }
+ 
+ static void __init kasan_init_shadow(void)
+ {
++	static pud_t pud[2][PTRS_PER_PUD] __initdata __aligned(PAGE_SIZE);
+ 	u64 kimg_shadow_start, kimg_shadow_end;
+ 	u64 mod_shadow_start, mod_shadow_end;
+ 	u64 vmalloc_shadow_end;
+@@ -220,10 +322,23 @@ static void __init kasan_init_shadow(void)
+ 	 * setup will be finished.
+ 	 */
+ 	memcpy(tmp_pg_dir, swapper_pg_dir, sizeof(tmp_pg_dir));
++
++	/*
++	 * If the start or end address of the shadow region is not aligned to
++	 * the root level size, we have to allocate a temporary next-level table
++	 * in each case, clone the next level of descriptors, and install the
++	 * table into tmp_pg_dir. Note that with 5 levels of paging, the next
++	 * level will in fact be p4d_t, but that makes no difference in this
++	 * case.
++	 */
++	if (!root_level_aligned(KASAN_SHADOW_START))
++		clone_next_level(KASAN_SHADOW_START, tmp_pg_dir, pud[0]);
++	if (!root_level_aligned(KASAN_SHADOW_END))
++		clone_next_level(KASAN_SHADOW_END, tmp_pg_dir, pud[1]);
+ 	dsb(ishst);
+ 	cpu_replace_ttbr1(lm_alias(tmp_pg_dir));
+ 
+-	clear_pgds(KASAN_SHADOW_START, KASAN_SHADOW_END);
++	clear_shadow(KASAN_SHADOW_START, KASAN_SHADOW_END);
+ 
+ 	kasan_map_populate(kimg_shadow_start, kimg_shadow_end,
+ 			   early_pfn_to_nid(virt_to_pfn(lm_alias(KERNEL_START))));
 -- 
 2.39.2
 
