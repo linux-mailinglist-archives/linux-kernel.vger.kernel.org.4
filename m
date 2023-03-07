@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0886AEB30
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:41:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5942D6AEB40
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 18:41:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbjCGRlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 12:41:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S232066AbjCGRlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 12:41:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjCGRkk (ORCPT
+        with ESMTP id S232046AbjCGRla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 12:40:40 -0500
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 340AC584A3
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 09:36:51 -0800 (PST)
-Received: by mail-pl1-x649.google.com with SMTP id s15-20020a170902ea0f00b0019d0c7a83dfso8045633plg.14
-        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 09:36:51 -0800 (PST)
+        Tue, 7 Mar 2023 12:41:30 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563B8A6BD4
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 09:37:29 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id ce8-20020a17090aff0800b0023a61cff2c6so2034430pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 07 Mar 2023 09:37:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678210610;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PxpL9SaKPLHbA1QJI98FYZl3BCCEz9LLYkrnEJ9FjEs=;
-        b=e1fzQlSnDJCAcz4K9UBRHdg0rSfo66vsFG7yP3aQFTzXqFznVEGMz8KeRdUQulyF7k
-         J7jAl/bQMfOaOcqJSj/qsL16y7lrF8Qtq6dp3GRaXN7nUANPlsJDDNX8H6onGWZMLZ1Q
-         ojjvxdsDy25LxoEZOifEcDtE8W/WILkWax7uM10ZO4aRo+ikeGbrH+mSDT07UcQR/SqJ
-         +TMoK2tjcJ7vaK44JDVzOR5FfmqeRkFfxod7YiwpvODGttvbt4QWrlh1k029nhWxyuzV
-         D+NaRtV3MH4UdBCAFjyWs6aOZAf8JPKbwerIQJcreV+HAhDiZ71sKtidlp3v/BhzD9C3
-         Qe3A==
+        d=linaro.org; s=google; t=1678210648;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o3zPHvN5mm4IalrCf6zpCmyS4kHEJ7HoGLzRUhQSOoA=;
+        b=o2ytZ6qS0PtfXoLYe5TafISzM6/h2NxL3pqfUqiGJeoJyjjcLmWruuJ3X0G/cQZI/Y
+         GA8IYvcfCRsdkKAPInrw3325Sv6gVIjQvQZMQxeDW96heslTnIO2xfDZjDmjHC8W6S8x
+         8Z/2W26QDYD+sh27LwKdicEwMxzzwNiKSCkfYYiyxDmhqDTlfyv/GgQVFNeN9y63ynUc
+         FJWQqXZIYzZfNoOQhPSUGyELPnY1YZET2qLKlry8+WtVnxDK6ZPqoUCsVZmIiYTHYfmu
+         AdbkopUuQy/vh3LicKLoQLp/1cN+bszEMZwG8pn13IbJ1xhfs2KAVC1bJolPRpetFKGQ
+         3vcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678210610;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PxpL9SaKPLHbA1QJI98FYZl3BCCEz9LLYkrnEJ9FjEs=;
-        b=Jro4BFeQx2Y3vL+lvxrilxkd3UK4JW0tQwSNM/YypbNRTZUCczV5lJGwfDYUoJoaJM
-         L3gP3yKSPtJNt2iFPtlUofFFJwoJuWgjX8OsV15oBN54+SkK29L5sc2+JxMrnzG7wHGL
-         HExFAZxb4XzNqZnP7Z4Yu5ag1ZxgoyXichCB5Eol7ErQrr1AoimiSYddek/h9AKmwzGl
-         djvib1OFHQExz6u/2GibdnXD+PiExywaRs+E6paacvta3VGiEwYelcwlydp8+fPN3tx5
-         jQmao0ahJhj8b4vhdMYuEMqsjDQZJyiz+Lv0RU71TltZdEiBXMovGPmKTZXffW53A5Xt
-         QYrg==
-X-Gm-Message-State: AO0yUKXovAVHe3VRFJY8i9bUvu39jR1Eyu3IKoEsBpFAdN/coy+2pd6G
-        g/DxskqMHrjWOdA+ku7m2xcn1mSMsQ4=
-X-Google-Smtp-Source: AK7set9sNtzP9C+hlG/N8yqWacbflBWRYd1F0puMDP8ANixRXK41/z2vt1aEJdT3a0zQwl4kkns17hbDW7g=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:7453:0:b0:503:bb5:4cec with SMTP id
- e19-20020a637453000000b005030bb54cecmr5528891pgn.7.1678210610636; Tue, 07 Mar
- 2023 09:36:50 -0800 (PST)
-Date:   Tue, 7 Mar 2023 09:36:49 -0800
-In-Reply-To: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
-Mime-Version: 1.0
-References: <20230227171751.1211786-1-jpiotrowski@linux.microsoft.com>
-Message-ID: <ZAd2MRNLw1JAXmOf@google.com>
-Subject: Re: [PATCH] KVM: SVM: Disable TDP MMU when running on Hyper-V
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Tianyu Lan <ltykernel@gmail.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        d=1e100.net; s=20210112; t=1678210648;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o3zPHvN5mm4IalrCf6zpCmyS4kHEJ7HoGLzRUhQSOoA=;
+        b=MRCiCTpKX9zesa6ckG9yFj6Xjz7BcVcZHyvFGbygtY9D00zgWyQaL7SqOb6izRVSDM
+         2RgRS30emOmELqDRGWGp1z7DTb8XXEWI4igZwDJLaSYBUKh8fSNZTz6CHwH1Wq+CHXnf
+         Ceo0HaH0GXacT55NxtcLwn0eeCAhZA8ofECKJ68qIXT9rH9dwkGe9nVdbQRYTRUsDrJn
+         Oxk6QVBisKLNF/DYeLUnU0zXf6nABtKK76cC0xGcrS3BdmQr46HaqVu3ZjFkb0nl4+dG
+         Zj6AsiZgTD9OEyzzM36MniwB/6Afz+86d93Bh0r58WGoF7dXd3OdIsWShvZFD08o7SOo
+         7EKA==
+X-Gm-Message-State: AO0yUKUooe2QT4yZytGIlxw0/3tMjiCIr0eQwVle1OsYOUW9h1ZTUbG2
+        eFuG+c2w1Y6xGf4uK0TSA+77g2z2UKcU405jGO3xfg==
+X-Google-Smtp-Source: AK7set+Kh/juOXVGFGBZq6ZQe/2ECYCsr+2HZ6cR5iMeJ5OSD5b0x9Znktqaib7dBWyXbAGUvwFiALZMirOESQVRZNg=
+X-Received: by 2002:a17:90a:9295:b0:233:fa52:828e with SMTP id
+ n21-20020a17090a929500b00233fa52828emr5658345pjo.1.1678210648212; Tue, 07 Mar
+ 2023 09:37:28 -0800 (PST)
+MIME-Version: 1.0
+References: <20230223042133.26551-1-semen.protsenko@linaro.org>
+ <167811290503.11716.15730246749418548221.b4-ty@linaro.org>
+ <48c8a0cf-08dc-a831-33ef-3b8e32eef2d3@linaro.org> <CAPLW+4=9Vwxd4upa3j_cKtRrNyyx_XCz+TgOOziMguEonbHb0g@mail.gmail.com>
+ <3a27febc-4d4e-1cfd-45dc-6ade4f25ca13@linaro.org>
+In-Reply-To: <3a27febc-4d4e-1cfd-45dc-6ade4f25ca13@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Tue, 7 Mar 2023 11:37:17 -0600
+Message-ID: <CAPLW+4nZF2POmD1kRUDktn2_gUWH_e84Lnqx=8qhuqbSnrdJ2A@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] clk: samsung: exynos850: Add missing clocks for PM
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Stephen Boyd <sboyd@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-clk@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        David Virag <virag.david003@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,141 +81,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023, Jeremi Piotrowski wrote:
-> Disable TDP MMU when using SVM Hyper-V for the time being while we
-> search for a better fix.
+On Tue, 7 Mar 2023 at 01:47, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 06/03/2023 19:55, Sam Protsenko wrote:
+> > On Mon, 6 Mar 2023 at 09:51, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 06/03/2023 15:28, Krzysztof Kozlowski wrote:
+> >>> On Wed, 22 Feb 2023 22:21:27 -0600, Sam Protsenko wrote:
+> >>>> As a part of preparation for PM enablement in Exynos850 clock driver,
+> >>>> this patch series implements CMU_G3D, and also main gate clocks for AUD
+> >>>> and HSI CMUs. The series brings corresponding changes to bindings, the
+> >>>> driver and SoC dts file.
+> >>>>
+> >>>> Changes in v2:
+> >>>>   - Rebased all patches on top of the most recent soc/for-next tree
+> >>>>   - Added A-b and R-b tags
+> >>>>   - Minor fixes
+> >>>>
+> >>>> [...]
+> >>>
+> >>> Applied, thanks!
+> >>>
+> >>> [1/6] dt-bindings: clock: exynos850: Add Exynos850 CMU_G3D
+> >>>       https://git.kernel.org/krzk/linux/c/067ba1605806e52118bb598afb357718df9f0e19
+> >>> [2/6] dt-bindings: clock: exynos850: Add AUD and HSI main gate clocks
+> >>>       https://git.kernel.org/krzk/linux/c/e289665ed0d6df9fca3ebc128f1232d305e4600b
+> >>> [3/6] clk: samsung: clk-pll: Implement pll0818x PLL type
+> >>>       https://git.kernel.org/krzk/linux/c/a6feedab8ab9a9e4483deb0bcc87919d92c88b7e
+> >>> [4/6] clk: samsung: exynos850: Implement CMU_G3D domain
+> >>>       https://git.kernel.org/krzk/linux/c/c5704a56893b4e77e434597c7c53d878bb3073b0
+> >>> [5/6] clk: samsung: exynos850: Add AUD and HSI main gate clocks
+> >>>       https://git.kernel.org/krzk/linux/c/d8d12e0d079aff4b1d8079a0a55944c0596f1d67
+> >>> [6/6] arm64: dts: exynos: Add CMU_G3D node for Exynos850 SoC
+> >>>       https://git.kernel.org/krzk/linux/c/ad8f6ad9a4f219950df65731a8ff91baa022c4b0
+> >>
+> >> And builds are broken. Please mention in cover letter or commit
+> >> dependencies and ordering...
+> >>
+> >
+> > Just checked all most recent commits on your for-next and next/clk
+> > branches. Seem to build fine for me. AFAIR I checked all patches in
+> > that series, and I guess there shouldn't be any issues if you apply
+> > those in the same order they are numbered inside the series. Or you
+> > mean you have some clash between different series? Anyways, I'm glad
+> > to help, but I'd need more details on where exactly the problem is (or
+> > maybe you already fixed it?).
+>
+> The builds were failing after I applied everything to respective
+> branches (so DTS separate). I did not notice that your DTS and driver
+> (both) depend on bindings header constant. This requires special
+> handling. It actually always required, because it was going through
+> different trees. Now it goes through my tree, but I still need to handle
+> it. I reworked the branches and force-pushed, thus you did not see the
+> exact issue.
+>
 
-...
+Thanks for explaining this. Next time I'll provide the dependencies
+info in my patch #0.
 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index c91ee2927dd7..5c0e28a7a3bc 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -5787,14 +5787,15 @@ void kvm_mmu_invpcid_gva(struct kvm_vcpu *vcpu, gva_t gva, unsigned long pcid)
->  }
->  
->  void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
-> -		       int tdp_max_root_level, int tdp_huge_page_level)
-> +		       int tdp_max_root_level, int tdp_huge_page_level,
-> +		       bool enable_tdp_mmu)
->  {
->  	tdp_enabled = enable_tdp;
->  	tdp_root_level = tdp_forced_root_level;
->  	max_tdp_level = tdp_max_root_level;
->  
->  #ifdef CONFIG_X86_64
-> -	tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled;
-> +	tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled && enable_tdp_mmu;
->  #endif
-
-Thinking about this more, I would rather revert commit 1e0c7d40758b ("KVM: SVM:
-hyper-v: Remote TLB flush for SVM") or fix the thing properly straitaway.  KVM
-doesn't magically handle the flushes correctly for the shadow/legacy MMU, KVM just
-happens to get lucky and not run afoul of the underlying bugs.  The revert appears
-to be reasonably straightforward (see bottom).
-
-And _if_ we want to hack-a-fix it, then I would strongly prefer a very isolated,
-obviously hacky fix, e.g.
-
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 36e4561554ca..a9ba4ae14fda 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5779,8 +5779,13 @@ void kvm_configure_mmu(bool enable_tdp, int tdp_forced_root_level,
-        tdp_root_level = tdp_forced_root_level;
-        max_tdp_level = tdp_max_root_level;
- 
-+       /*
-+        * FIXME: Remove the enlightened TLB restriction when KVM properly
-+        * handles TLB flushes for said enlightenment.
-+        */.
- #ifdef CONFIG_X86_64
--       tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled;
-+       tdp_mmu_enabled = tdp_mmu_allowed && tdp_enabled &&
-+                         !(ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB);
- #endif
-        /*
-         * max_huge_page_level reflects KVM's MMU capabilities irrespective
-
-
-
-
-The revert...
-
----
- arch/x86/kvm/svm/svm.c          |  3 ---
- arch/x86/kvm/svm/svm_onhyperv.h | 27 ---------------------------
- 2 files changed, 30 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 11068e8eb969..292650dc85a0 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1320,7 +1320,6 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
- 	if (sev_guest(vcpu->kvm))
- 		sev_init_vmcb(svm);
- 
--	svm_hv_init_vmcb(vmcb);
- 	init_vmcb_after_set_cpuid(vcpu);
- 
- 	vmcb_mark_all_dirty(vmcb);
-@@ -4075,8 +4074,6 @@ static void svm_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
- 		svm->vmcb->control.nested_cr3 = __sme_set(root_hpa);
- 		vmcb_mark_dirty(svm->vmcb, VMCB_NPT);
- 
--		hv_track_root_tdp(vcpu, root_hpa);
--
- 		cr3 = vcpu->arch.cr3;
- 	} else if (root_level >= PT64_ROOT_4LEVEL) {
- 		cr3 = __sme_set(root_hpa) | kvm_get_active_pcid(vcpu);
-diff --git a/arch/x86/kvm/svm/svm_onhyperv.h b/arch/x86/kvm/svm/svm_onhyperv.h
-index 6981c1e9a809..5118fd273e73 100644
---- a/arch/x86/kvm/svm/svm_onhyperv.h
-+++ b/arch/x86/kvm/svm/svm_onhyperv.h
-@@ -15,31 +15,8 @@ static struct kvm_x86_ops svm_x86_ops;
- 
- int svm_hv_enable_l2_tlb_flush(struct kvm_vcpu *vcpu);
- 
--static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
--{
--	struct hv_vmcb_enlightenments *hve = &vmcb->control.hv_enlightenments;
--
--	BUILD_BUG_ON(sizeof(vmcb->control.hv_enlightenments) !=
--		     sizeof(vmcb->control.reserved_sw));
--
--	if (npt_enabled &&
--	    ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB)
--		hve->hv_enlightenments_control.enlightened_npt_tlb = 1;
--
--	if (ms_hyperv.nested_features & HV_X64_NESTED_MSR_BITMAP)
--		hve->hv_enlightenments_control.msr_bitmap = 1;
--}
--
- static inline void svm_hv_hardware_setup(void)
- {
--	if (npt_enabled &&
--	    ms_hyperv.nested_features & HV_X64_NESTED_ENLIGHTENED_TLB) {
--		pr_info(KBUILD_MODNAME ": Hyper-V enlightened NPT TLB flush enabled\n");
--		svm_x86_ops.tlb_remote_flush = hv_remote_flush_tlb;
--		svm_x86_ops.tlb_remote_flush_with_range =
--				hv_remote_flush_tlb_with_range;
--	}
--
- 	if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH) {
- 		int cpu;
- 
-@@ -80,10 +57,6 @@ static inline void svm_hv_update_vp_id(struct vmcb *vmcb, struct kvm_vcpu *vcpu)
- }
- #else
- 
--static inline void svm_hv_init_vmcb(struct vmcb *vmcb)
--{
--}
--
- static inline void svm_hv_hardware_setup(void)
- {
- }
-
-base-commit: cb8748a781fe983e451f616ce4861a1c49ce79dd
--- 
-
+> Best regards,
+> Krzysztof
+>
