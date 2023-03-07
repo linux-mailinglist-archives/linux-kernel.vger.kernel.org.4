@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89BA6ADA71
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090266ADA7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 10:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbjCGJeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 04:34:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S230381AbjCGJhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 04:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCGJeL (ORCPT
+        with ESMTP id S229718AbjCGJhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 04:34:11 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8525E27D7D;
-        Tue,  7 Mar 2023 01:34:09 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 944C91C0009;
-        Tue,  7 Mar 2023 09:34:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678181647;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QDE5jIWAYfQpCOINixYsq1hsvXLaCt7Nc3SPYJnvYDc=;
-        b=nTW0QOTEaiFyfQ+e9Nx28gaIWZ1wGjwgKrjLCabaFFdcMGCghCGvpNYEEVc+DuE+AwYaPR
-        xzXNXvK3rf5NY3Orai7vDoSJOOk0Xzg69su+39pk/fQBUfJug4qYjod2sW3jWVtnip4q2n
-        q2dLsEtnVOm2yGkfal1Bcas50L/oXVbpoqZ1MGNYmX29YXuPTe/HqZvnUttDNXbfXEqJSZ
-        do8+7oVlIWq/XjQAFFh2xXzFRmMTa1QG9TI8qK9DN9y1DhL1Sp9zZDKOeOft/UECb4FqoT
-        6x9egD+HXjVTO5PeH6P4JFt0lwHViomHVNgHGAE9DvZXhkQdOPovP+Now53MEg==
-Date:   Tue, 7 Mar 2023 10:34:02 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?5oWV5Yas5Lqu?= <dzm91@hust.edu.cn>
-Cc:     "denis kirjanov" <dkirjanov@suse.de>,
-        "alexander aring" <alex.aring@gmail.com>,
-        "stefan schmidt" <stefan@datenfreihafen.org>,
-        "david s. miller" <davem@davemloft.net>,
-        "eric dumazet" <edumazet@google.com>,
-        "jakub kicinski" <kuba@kernel.org>,
-        "paolo abeni" <pabeni@redhat.com>,
-        syzbot+bd85b31816913a32e473@syzkaller.appspotmail.com,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: ieee802154: fix a null pointer in
- nl802154_trigger_scan
-Message-ID: <20230307103402.4c15d223@xps-13>
-In-Reply-To: <2b209456.234a2.186bb608224.Coremail.dzm91@hust.edu.cn>
-References: <20230307073004.74224-1-dzm91@hust.edu.cn>
-        <782a6f2d-84ae-3530-7e3c-07f31a4f303b@suse.de>
-        <20230307100903.71e2d9b2@xps-13>
-        <2b209456.234a2.186bb608224.Coremail.dzm91@hust.edu.cn>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 7 Mar 2023 04:37:21 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51015372C;
+        Tue,  7 Mar 2023 01:37:19 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1C39C6602FE5;
+        Tue,  7 Mar 2023 09:37:18 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678181838;
+        bh=OeykOkW8+/Iy30seH866GojCFZ7qr8owGJJxiI7/Wkc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XrR7KDyD6Nraz6gTIYm2cS67mhiONhfQmb3R8S7Te3eUoNyNQTpUpji8Ym0IH84I3
+         oJUk4xXckeFwQqexpD5MtXFrYbHugJbiMmVzdIHz3fwZK/sELHsj6YVWBL+kLTr0Tv
+         Ij0okU3h/h2/KDsPC6I36GRmCmxHTPl/I8ljysdlbmbwMuuMyHIz0UQIA3ccSTT5xr
+         HuLInCtlRJ5bcS3qOtCjnlht6bMAk6PH3jrp1rBvnRJMkd7mDBnSCktuvPoz+p5pNQ
+         lBJCxuhyQbYWe8Y8ewbDD47KFZNGsSbrezAeA9olmgr8QGf1q+/1a6cRtZM5PFMuLj
+         Kp4N+2YlprhXQ==
+Message-ID: <81d9c330-9b8a-0fd6-149e-30c77629650a@collabora.com>
+Date:   Tue, 7 Mar 2023 10:37:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 00/19] Enable GPU with DVFS support on MediaTek SoCs
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230301095523.428461-1-angelogioacchino.delregno@collabora.com>
+ <b4fc6bd8-e300-0f40-4216-8b99589c21cc@gmail.com>
+ <895abaa2-5fd3-9928-4e53-86ce160fbad8@collabora.com>
+ <CAGXv+5EPVhH-O+ZdoLeW4OZVcEtS824oracmu3jHTa8k-tEU0A@mail.gmail.com>
+ <e5302c3e-f985-b020-5f8c-fba876768eaf@gmail.com>
+ <CAGXv+5FR5unBbdp0MDZY1TtSMoTtxzi2F4tO=3qZsh=3b3Ru9w@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5FR5unBbdp0MDZY1TtSMoTtxzi2F4tO=3qZsh=3b3Ru9w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,94 +65,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi =E6=85=95=E5=86=AC=E4=BA=AE,
+Il 07/03/23 10:27, Chen-Yu Tsai ha scritto:
+> On Thu, Mar 2, 2023 at 7:28 PM Matthias Brugger <matthias.bgg@gmail.com> wrote:
+>> On 02/03/2023 11:11, Chen-Yu Tsai wrote:
+>>> On Thu, Mar 2, 2023 at 6:10 PM AngeloGioacchino Del Regno
+>>> <angelogioacchino.delregno@collabora.com> wrote:
+>>>>
+>>>> Il 02/03/23 10:36, Matthias Brugger ha scritto:
+>>>>> Series looks good but from my understanding has a dependency on:
+>>>>> [PATCH v4 00/12] Panfrost: Improve and add MediaTek SoCs support
+>>>>> (https://lore.kernel.org/linux-mediatek/20230228102610.707605-1-angelogioacchino.delregno@collabora.com/)
+>>>>>
+>>>>> Did I get that right?
+>>>>>
+>>>>
+>>>> Yes you got it right - without the mentioned series, this one will do nothing
+>>>> at all (and will also fail binding checks, as the bindings are introduced in
+>>>> that other series).
+>>>
+>>> Please also let me test them on MT8183 and MT8186 before merging them.
+>>>
+>>
+>> Of course, I'll wait for your tested-by tags then.
+>> Thanks for testing!
+> 
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> 
+> on MT8183, MT8186, MT8192 and MT8195 Chromebooks.
+> 
+> BTW, Angelo, I see that Panfrost keeps the GPU regulator enabled, but
+> the power domains, and thus the SRAM regulator, get powered off when
+> the GPU is not in use. There doesn't seem to be any damaging effects,
+> but I worry about idle power consumption.
+> 
+> ChenYu
 
-dzm91@hust.edu.cn wrote on Tue, 7 Mar 2023 17:21:49 +0800 (GMT+08:00):
+Yes I've seen that as well... and it's true there will be some unwanted
+small power leakage.
 
-> > -----=E5=8E=9F=E5=A7=8B=E9=82=AE=E4=BB=B6-----
-> > =E5=8F=91=E4=BB=B6=E4=BA=BA: "Miquel Raynal" <miquel.raynal@bootlin.com>
-> > =E5=8F=91=E9=80=81=E6=97=B6=E9=97=B4: 2023-03-07 17:09:03 (=E6=98=9F=E6=
-=9C=9F=E4=BA=8C)
-> > =E6=94=B6=E4=BB=B6=E4=BA=BA: "Denis Kirjanov" <dkirjanov@suse.de>
-> > =E6=8A=84=E9=80=81: "Dongliang Mu" <dzm91@hust.edu.cn>, "Alexander Arin=
-g" <alex.aring@gmail.com>, "Stefan Schmidt" <stefan@datenfreihafen.org>, "D=
-avid
-> >  S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>=
-, "Jakub
-> >  Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, syzbot=
-+bd85b31816913a32e473@syzkaller.appspotmail.com, linux-wpan@vger.kernel.org=
-, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-> > =E4=B8=BB=E9=A2=98: Re: [PATCH] net: ieee802154: fix a null pointer in =
-nl802154_trigger_scan
-> >=20
-> > Hello,
-> >=20
-> > dkirjanov@suse.de wrote on Tue, 7 Mar 2023 11:43:46 +0300:
-> >  =20
-> > > On 3/7/23 10:30, Dongliang Mu wrote: =20
-> > > > There is a null pointer dereference if NL802154_ATTR_SCAN_TYPE is
-> > > > not set by the user.
-> > > >=20
-> > > > Fix this by adding a null pointer check. =20
-> >=20
-> > Thanks for the patch! This has been fixed already:
-> > https://lore.kernel.org/linux-wpan/20230301154450.547716-1-miquel.rayna=
-l@bootlin.com/T/#u =20
->=20
-> Oh, I see. Thanks for your reply.
->=20
-> A small issue: should we still check !nla_get_u8(info->attrs[NL802154_ATT=
-R_SCAN_TYPE])?
+Though, I would propose to do things step by step. Right now, as it is, the
+platform is fully stable... so let's get this in so that we estabilish a
+known working baseline... what I have in mind is, exactly:
 
-Isn't it already handled? There is a switch case over it with a default
-statement to handle unsupported scan types.
+1. Get Panfrost+DVFS working on current platforms; then
+2. Resolve the GPU binning situation (eFuses -> opp-supported-hw)
+3. Improve the power consumption (all GPU regulators off during suspend)
 
-> > > > Reported-and-tested-by: syzbot+bd85b31816913a32e473@syzkaller.appsp=
-otmail.com =20
-> >=20
-> > Just for reference, this tag shall not be used:
-> >=20
-> > 	"Please do not use combined tags, e.g.
-> > 	``Reported-and-tested-by``"
-> > 	Documentation/process/maintainer-tip.rst
-> >  =20
->=20
-> Okay. This is suggested by Syzbot. I will use separate tags in the future.
->=20
-> > > > Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>   =20
-> > >=20
-> > > Please add a Fixes: tag=20
-> > >  =20
-> > > > ---
-> > > >  net/ieee802154/nl802154.c | 3 ++-
-> > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > >=20
-> > > > diff --git a/net/ieee802154/nl802154.c b/net/ieee802154/nl802154.c
-> > > > index 2215f576ee37..1cf00cffd63f 100644
-> > > > --- a/net/ieee802154/nl802154.c
-> > > > +++ b/net/ieee802154/nl802154.c
-> > > > @@ -1412,7 +1412,8 @@ static int nl802154_trigger_scan(struct sk_bu=
-ff *skb, struct genl_info *info)
-> > > >  		return -EOPNOTSUPP;
-> > > >  	}
-> > > > =20
-> > > > -	if (!nla_get_u8(info->attrs[NL802154_ATTR_SCAN_TYPE])) {
-> > > > +	if (!info->attrs[NL802154_ATTR_SCAN_TYPE] ||
-> > > > +	    !nla_get_u8(info->attrs[NL802154_ATTR_SCAN_TYPE])) {
-> > > >  		NL_SET_ERR_MSG(info->extack, "Malformed request, missing scan ty=
-pe");
-> > > >  		return -EINVAL;
-> > > >  	}   =20
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l =20
->=20
->=20
-> --
-> Best regards,
-> Dongliang Mu
+Thanks for all the valuable testing and support!
 
-
-Thanks,
-Miqu=C3=A8l
+Cheers,
+Angelo
