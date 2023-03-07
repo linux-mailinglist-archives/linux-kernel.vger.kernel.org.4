@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927646AE3A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915926AE39E
+	for <lists+linux-kernel@lfdr.de>; Tue,  7 Mar 2023 16:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbjCGPAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 10:00:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
+        id S230106AbjCGPAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 10:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbjCGPAJ (ORCPT
+        with ESMTP id S229937AbjCGPAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 7 Mar 2023 10:00:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50DF92243
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F461911FA
         for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 06:42:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1678200165;
@@ -21,23 +21,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=sqdAC23AFCpafEftyGbYSrYoVeo5kk0ftc/PmTPLnCU=;
-        b=RnC1oS1yl0HbZ6NepuOhyPYVwAjK6Mk7qGZXoASawD2ef7nVBqaZ6swRZ0HWFA2cmztZqt
-        qImrU8q6eS3qjV4LXLya5ja/QLYrcd0WUi3zCK+WDsUBEeEUEDh8l8rCy5jMaKPTkSM0zN
-        8OZ8AZBy8/I6JvGvtDb3ktw1MLPK6/0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=R/JDRBOJ0RahTCrjIdMCtZjfHIx1klFK6Q58AJO1eeI=;
+        b=Yyp24+CxFtZHnffgy6XQKS7a1bup4Xv1fBMexITfHR1eIK9agbkeCZZwgW3OMkx0NZTWbN
+        az6Y7z1t9vd8aOG/7Gilp6/N0XU/ee5lbkzHaozpUJBmLHx2jxL5mem1+1mc3ihFmDnFB6
+        cP7Np+vRLdFzCRLxK8b4Z2CXNhx291k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-316--Mbwj-W3NLC_0yM8Mt1Txw-1; Tue, 07 Mar 2023 09:36:31 -0500
-X-MC-Unique: -Mbwj-W3NLC_0yM8Mt1Txw-1
+ us-mta-647-cKdzLVebMX-g-x2dQoaFHQ-1; Tue, 07 Mar 2023 09:36:38 -0500
+X-MC-Unique: cKdzLVebMX-g-x2dQoaFHQ-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FCA33C6986A;
-        Tue,  7 Mar 2023 14:36:30 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 362CE185A794;
+        Tue,  7 Mar 2023 14:36:36 +0000 (UTC)
 Received: from vschneid.remote.csb (unknown [10.33.37.13])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 79249401B290;
-        Tue,  7 Mar 2023 14:36:26 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CCE18400DFA1;
+        Tue,  7 Mar 2023 14:36:30 +0000 (UTC)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-snps-arc@lists.infradead.org,
@@ -50,6 +50,7 @@ To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
         sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
         x86@kernel.org
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -66,9 +67,9 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Nicholas Piggin <npiggin@gmail.com>,
         Guo Ren <guoren@kernel.org>,
         "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH v5 1/7] trace: Add trace_ipi_send_cpumask()
-Date:   Tue,  7 Mar 2023 14:35:52 +0000
-Message-Id: <20230307143558.294354-2-vschneid@redhat.com>
+Subject: [PATCH v5 2/7] sched, smp: Trace IPIs sent via send_call_function_single_ipi()
+Date:   Tue,  7 Mar 2023 14:35:53 +0000
+Message-Id: <20230307143558.294354-3-vschneid@redhat.com>
 In-Reply-To: <20230307143558.294354-1-vschneid@redhat.com>
 References: <20230307143558.294354-1-vschneid@redhat.com>
 MIME-Version: 1.0
@@ -84,51 +85,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-trace_ipi_raise() is unsuitable for generically tracing IPI sources due to
-its "reason" argument being an uninformative string (on arm64 all you get
-is "Function call interrupts" for SMP calls).
+send_call_function_single_ipi() is the thing that sends IPIs at the bottom
+of smp_call_function*() via either generic_exec_single() or
+smp_call_function_many_cond(). Give it an IPI-related tracepoint.
 
-Add a variant of it that exports a target cpumask, a callsite and a callback.
+Note that this ends up tracing any IPI sent via __smp_call_single_queue(),
+which covers __ttwu_queue_wakelist() and irq_work_queue_on() "for free".
 
 Signed-off-by: Valentin Schneider <vschneid@redhat.com>
 Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Acked-by: Ingo Molnar <mingo@kernel.org>
 ---
- include/trace/events/ipi.h | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ arch/arm/kernel/smp.c   | 3 ---
+ arch/arm64/kernel/smp.c | 1 -
+ kernel/sched/core.c     | 7 +++++--
+ kernel/smp.c            | 4 ++++
+ 4 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/include/trace/events/ipi.h b/include/trace/events/ipi.h
-index 0be71dad6ec03..b1125dc27682c 100644
---- a/include/trace/events/ipi.h
-+++ b/include/trace/events/ipi.h
-@@ -35,6 +35,28 @@ TRACE_EVENT(ipi_raise,
- 	TP_printk("target_mask=%s (%s)", __get_bitmask(target_cpus), __entry->reason)
- );
+diff --git a/arch/arm/kernel/smp.c b/arch/arm/kernel/smp.c
+index 0b8c25763adc3..b6c832e195427 100644
+--- a/arch/arm/kernel/smp.c
++++ b/arch/arm/kernel/smp.c
+@@ -48,9 +48,6 @@
+ #include <asm/mach/arch.h>
+ #include <asm/mpu.h>
  
-+TRACE_EVENT(ipi_send_cpumask,
-+
-+	TP_PROTO(const struct cpumask *cpumask, unsigned long callsite, void *callback),
-+
-+	TP_ARGS(cpumask, callsite, callback),
-+
-+	TP_STRUCT__entry(
-+		__cpumask(cpumask)
-+		__field(void *, callsite)
-+		__field(void *, callback)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_cpumask(cpumask, cpumask_bits(cpumask));
-+		__entry->callsite = (void *)callsite;
-+		__entry->callback = callback;
-+	),
-+
-+	TP_printk("cpumask=%s callsite=%pS callback=%pS",
-+		  __get_cpumask(cpumask), __entry->callsite, __entry->callback)
-+);
-+
- DECLARE_EVENT_CLASS(ipi_handler,
+-#define CREATE_TRACE_POINTS
+-#include <trace/events/ipi.h>
+-
+ /*
+  * as from 2.5, kernels no longer have an init_tasks structure
+  * so we need some other way of telling a new secondary core
+diff --git a/arch/arm64/kernel/smp.c b/arch/arm64/kernel/smp.c
+index 4e83272642552..438c16fc44633 100644
+--- a/arch/arm64/kernel/smp.c
++++ b/arch/arm64/kernel/smp.c
+@@ -51,7 +51,6 @@
+ #include <asm/ptrace.h>
+ #include <asm/virt.h>
  
- 	TP_PROTO(const char *reason),
+-#define CREATE_TRACE_POINTS
+ #include <trace/events/ipi.h>
+ 
+ DEFINE_PER_CPU_READ_MOSTLY(int, cpu_number);
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index af017e038b482..85114f75f1c9c 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -81,6 +81,7 @@
+ #include <linux/sched/rseq_api.h>
+ #include <trace/events/sched.h>
+ #undef CREATE_TRACE_POINTS
++#include <trace/events/ipi.h>
+ 
+ #include "sched.h"
+ #include "stats.h"
+@@ -3830,10 +3831,12 @@ void send_call_function_single_ipi(int cpu)
+ {
+ 	struct rq *rq = cpu_rq(cpu);
+ 
+-	if (!set_nr_if_polling(rq->idle))
++	if (!set_nr_if_polling(rq->idle)) {
++		trace_ipi_send_cpumask(cpumask_of(cpu), _RET_IP_, NULL);
+ 		arch_send_call_function_single_ipi(cpu);
+-	else
++	} else {
+ 		trace_sched_wake_idle_without_ipi(cpu);
++	}
+ }
+ 
+ /*
+diff --git a/kernel/smp.c b/kernel/smp.c
+index 06a413987a14a..e2ca1e2f31274 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -26,6 +26,10 @@
+ #include <linux/sched/debug.h>
+ #include <linux/jump_label.h>
+ 
++#define CREATE_TRACE_POINTS
++#include <trace/events/ipi.h>
++#undef CREATE_TRACE_POINTS
++
+ #include "smpboot.h"
+ #include "sched/smp.h"
+ 
 -- 
 2.31.1
 
