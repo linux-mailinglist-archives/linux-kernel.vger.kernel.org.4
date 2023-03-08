@@ -2,227 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758496B1694
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 00:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA526B16B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 00:39:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCHXgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 18:36:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
+        id S230388AbjCHXjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 18:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjCHXgn (ORCPT
+        with ESMTP id S230312AbjCHXi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 18:36:43 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846B39545E;
-        Wed,  8 Mar 2023 15:36:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678318602; x=1709854602;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=EgHSHL1djFaEpU2CRFN9CP5gjaRgCo+Pp3SNE/rYdng=;
-  b=oHZLWaR9eCsF5wZTBkGhkP4PDdy1z4rsBRkDh/jETSTt5EuAhTDrzG1s
-   SyF39lkMtGfOsSjRON6xLJ/4aqPC583vwrPTOtZU6rYT7dkNBAN/nTdIl
-   qUwTPYuoa8nQKNA2sAL5kEV+1Ag5QetWdRbP+qY0WxQH1KzrO/Ughfg8T
-   zmQ/Uwyoes3DibcTA/zbPYZl45r2M4OnpN9jqP9MnX7ZN1U9is7UurN8W
-   YJ31fMaihue2SIvtecCpD3BCDTqZG8vYF11CDrbZW43wo4mq7TjYy/A5N
-   EgQhER7O7hbPp0vy0Er/xlvyVZQQWtLSt6BVf/sU2+Z5jkemyTvBIfwa0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316697694"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="316697694"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 15:36:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="800954533"
-X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
-   d="scan'208";a="800954533"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga004.jf.intel.com with ESMTP; 08 Mar 2023 15:36:38 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 8 Mar 2023 15:36:38 -0800
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 8 Mar 2023 15:36:36 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Wed, 8 Mar 2023 15:36:36 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Wed, 8 Mar 2023 15:36:35 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dSyWOmz/XWuSzdozXrOUH7rCdFu0N0IPSDtL9EUHfmxxfkHCoc5tWZIFxXRQ8tL/IkVDLI/r5YqxPs3ZJ81ApvOHKgUiwTTNCsLJ7nRByUfxhonLoiavq+/oE9OoLceUVd9ssMiT/dVs+Q6RrEUkSlIbuLYG1525KfU3YOSE78azAT3fr3RQiu4GwbA3dOxPXBSGfSNlyXldghq2TBuUCpSN4w3t4W0owu0Q5GkLTGLzhj3eb9lsvzBBE9cAIRWtg0/3RVeKAsMlHYizZVfZbeyp6ryDXQMgxO6pW1B+CjGQa/322527ipgCEyJzWWDWL1B4aYlT5IxrwXvfSBZvPw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EgHSHL1djFaEpU2CRFN9CP5gjaRgCo+Pp3SNE/rYdng=;
- b=GQQVWGXNrXwU2Ro8RGacv4Ka5IUkj9SQY2Nbue63cb/NYoghJjmbwT4rBQapD2LXCgSC9Wtyg9CYURCbSTbFUMip4ZkrvjoIwtauJI490XOJA5dw2vJXqb3xcIhBbcvC0ml/RUDLI5hF04EJbFFxD88QD15HfZ23eWmpIKyBlA2EBZ3UVXL4b/tdmgp34yP065xWYofQBg99/NC7QYW1Isf3xuZTM3Ea8liOzklWgvLFKLe+8eo30ymTukJP59BExa8Dfx9xDxnDoSwVdA0FUKMBihRNsltIjhYrIzw5um69ZWYp7H+W0xvFLQjJNW6Q0ES7EGFxAcF7nza6Q3H5WQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by SA0PR11MB4701.namprd11.prod.outlook.com (2603:10b6:806:9a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.16; Wed, 8 Mar
- 2023 23:36:25 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6178.017; Wed, 8 Mar 2023
- 23:36:25 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "bp@alien8.de" <bp@alien8.de>
-CC:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 26/41] mm: Warn on shadow stack memory in wrong vma
-Thread-Topic: [PATCH v7 26/41] mm: Warn on shadow stack memory in wrong vma
-Thread-Index: AQHZSvtF7PSwYp+R/UC2yJIIvXkld67woQ8AgAD2kQA=
-Date:   Wed, 8 Mar 2023 23:36:25 +0000
-Message-ID: <85e19c517092e406a9433ce43c4627d33930a99a.camel@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
-         <20230227222957.24501-27-rick.p.edgecombe@intel.com>
-         <ZAhNInCPPYt0q6Kl@zn.tnic>
-In-Reply-To: <ZAhNInCPPYt0q6Kl@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|SA0PR11MB4701:EE_
-x-ms-office365-filtering-correlation-id: 6835426b-7a1a-4744-da48-08db202deec2
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WDL4UKvWdT1BXd6Jttx9wybLLmPEqgxuiDRSyfs1S69oERIm81pzBkN05d1OJ8WY3YMnVXxqxyJMdBwaK0CcpEdQZMfThbMuKjwsj6hpIfwi4zQ+eoX0mxiA56kQEUfO+LdYG947t9oEcIPvEkPEnuX1aq5L3GdhC0KUQWkFhhX0HtJ35R2eXIKkjyptgKYj1Yk2yJp0f5WbAbeazlWIgmStp58KQcElq4RAQNI7ZsKJ15eM0jD5YwLXY29v2T6gGVQS7Y1VjByK7PXMdPdDaB232W5i1zPsKE42BOhsGt/1k+JZvJmWcD2qkdxks7eahvE8bwIEW3dThPxvDlSYIhFsKbQ4aIpL/pK4YQtMsPQ8NQtE68cbHXlAt+fodkZXbdm4vL9AL42ELh0J2xpKnPiN8Nj9vW5LQA2zyr6o+A43lXGQy/MIzdi/VDUxpnb5LnA3/mO1j9Tu8iRboYy0W6IRBaQdnzZ8iePUHaWgGsn268DZ/Rh8lmdj6dJbcDap47iE5typQAg+wNgap6YmADW779j8ve4mXHt85n6QDzhjgBVfrlhv+qWYgSu0VhLT++pJ+/becPZwgTklumB/EBrnY21F5id8CqiC7So56mvJkO/q4N5Wd3omoTyrYDBG51Oc/k4wPyra1kAMiZFIRi3unmNTNSrc1l5U/o/c/PtvM3kED8YOgUWMfmy2YjV/L+osCpPi5wRxK5DuehV1eBtewhlUYqoNVq8Ne8cRRsk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(39860400002)(366004)(396003)(346002)(451199018)(2906002)(71200400001)(6486002)(186003)(38100700002)(26005)(6512007)(83380400001)(6506007)(66946007)(41300700001)(91956017)(86362001)(76116006)(66446008)(66556008)(64756008)(66476007)(4326008)(8676002)(478600001)(38070700005)(54906003)(316002)(6916009)(2616005)(7416002)(122000001)(36756003)(7406005)(82960400001)(8936002)(5660300002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RHphZjRpWHBBSmJTbGJqaFR0VjMvV3RYTmV6eUVPcTMzbDFYRC9SU3cyY0ha?=
- =?utf-8?B?dnI0d1ViSXNMQzZZa00yOXBtR21SakZDSG9iSU1tV25UQzRKaHV0Z0xwTS94?=
- =?utf-8?B?R2FZQW0wRVpiRTduaVYzSVpoczRWa0dFWEhXY09BUVZiSzJvRk8vdWFpYWZS?=
- =?utf-8?B?TVo1dTkrN2l2TSttQkFBaEhyTXVOQWtGcnJvM2R0a2Q4SVdNNWZScTM5cFhL?=
- =?utf-8?B?cDZRMHIxbTU3YkFJVExwc1JRVVQ0R0VKNUorRDg0ZS9VYmFKeGp1Y3RralpE?=
- =?utf-8?B?V2FjRUFFOCsxUm5Na1QvODJDTWlHTEFuV0QyZ21IUk00VmRHNFRRYkZ4dTBP?=
- =?utf-8?B?SFBjam43aVM4TDI3U2txQ2EybjBydWRDTWM1MU10eW5LZWZMSDZSZEc1dEFF?=
- =?utf-8?B?L2VybHRzMk9DaG9HSGJwb08ySFluMnM4YWZ3VVdwYlY3VElTS2hoMVpPZ0ll?=
- =?utf-8?B?cG5rM1h0ZnFQUWRCNkNYazh5b0ZQUHpZbmMxWHBtTS93Ti9DSFBQT3l3bEs5?=
- =?utf-8?B?am12dVlGTGU3M0JhV29zWHcyanNiM2FNZ2RGS2RYdkc1eFFsWTQ1YWU4NTJ1?=
- =?utf-8?B?czZxeFR0N1kwYzluNVNCdGFSNlY5MU4xbEh1U0I0clFuK1FlbmlqUktQOUpV?=
- =?utf-8?B?SnNSdHVHa3U2NytWV2JJdFpGZk5QZ0JMWXhjNCtCUUY0T1lBUmpadkpsT2NN?=
- =?utf-8?B?WUQrSGxUcWM2dWY5cS8wOFZaa09QUStpdjJ0dEhPdGlETDZEZ09PUzBxMnlU?=
- =?utf-8?B?bUZ4clRJSUVUTWR1RndpbnpiUWlYaHNZakNFSk9SeXIya05EUGdCb3Axcy9E?=
- =?utf-8?B?ODYyMDByUDFvc2FKNHVJMFNMc3ROL0ovL1ZlYUU2Zmk0NnBwZHprTjdRVUQ1?=
- =?utf-8?B?ZEI4VjIzdXFmVk5yY1A3ZWRXMUJzckRvSWNwUk15S1MyR0VsZTZ2Q2NTa2ZC?=
- =?utf-8?B?cEZwWTNEYUt5WHYvY2dOSHVRQW9TTXNQNk5UMkxqZVFNZ005QVFHQkV0NEli?=
- =?utf-8?B?aDY0MVJTalF5ZHpscTFSd3J3Und5K0tySG93MGJ0Q2ZvbjRJS2ZTdzVqS1BT?=
- =?utf-8?B?eWNPWUFYNy9tNkVBbjE2bmNKaUtGcDhZOWsrWTR2ZUhDZ0M2TVFRY3NKRU9O?=
- =?utf-8?B?alQ1U1ZLS3M5TVY4Rkl0ejIrbmQ1SlZ4bmYxQWV5VERSNGpFZ3UzbzFUTW5h?=
- =?utf-8?B?eHhuaDgvZk45TFErYTBXT3MyYkxkVHErdlpkMlk4bFVyNVNvRUd0NlJEaGRn?=
- =?utf-8?B?RUJoRnZqeGltcUtxUjA3dGcvZ24zVkpYaEJXeEZqelNJWks1bGphT2lXTGxE?=
- =?utf-8?B?NWRFSWdhbVgxRlYzVk9wRlQ2ZHEvWm53MWszOFd1aGxYbWN6YWF3RE0vTld6?=
- =?utf-8?B?V1ZiQzl5Z2VCZHJCMDczOVRqbjVncSt2Uk9VR1VYS2luQjFiRnpBUis3WXlM?=
- =?utf-8?B?S3hCdXlsaXFXaXA3UHAvdUtpcGlGZEVsQ1dFYlBBcFJ6dGY5SUFGUXQ4SFJO?=
- =?utf-8?B?ZWhTVUE3YWF6cFp4WDE0LzcxeVRUVDNVa1IxOHRPYmRkZDdNY2NNOEt4a0VC?=
- =?utf-8?B?YTg5anFnV2Q2dUsvaWZOSFBmMGoyYUlRTXluVU5HM3VHekU4SjdvRFkzcC9a?=
- =?utf-8?B?SFkyWU1Jdzdtb1dTY0EreTlqY0U4SEY5c2R3bFQ5am53QzlSTEdxM3ZZeEhB?=
- =?utf-8?B?eXdJUEdNc1hXeTJVMUlvcTlaR3A0SFhXWUxXdElSYjd6aUhWdEh3dGdUWFp2?=
- =?utf-8?B?UlJ4Nm1iYXhNU0dodzRNUjZiL0hxSG8rQjVZZjU3S244TC9XVEdrQXpYOWEx?=
- =?utf-8?B?M2VSUVhKeHNkbVZvWDFrRW05N25VZkdMK01nbnF3OTZVbmVvdzE0Y3pXU2pi?=
- =?utf-8?B?VEJzSnArOFFnM1MwUmcyS0h2K3JUajlETjRBL2wyU0pyNkZrZEwxbGZMQ0xm?=
- =?utf-8?B?T2g0MGpsN1dMdnVMYWVnUU1uWWVibUN3MWkxRGx3dU1oMG11RlgvOEVrUU0x?=
- =?utf-8?B?NXBEZWlxS0g3MmVSZ3B0Zk5ITnA0VGVSdEV5bkpjMmJqVW1hQUVFT3RFbnNw?=
- =?utf-8?B?eURWQ3hDMzBFbWtlK1loM2wrRWFvZ3I4bXAvM21BZytNUDAwYnpBUFJ0ZnI5?=
- =?utf-8?B?QW0zVzAySjJaQzRjakQ4ZjBzTU95bGhXV3V5MnV2MmJ6RjNHOWRGc0JFQlp6?=
- =?utf-8?Q?82gL1Qjw2vBkK0XOmJTreU4=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5BD280454F750742A36FCE83256285B3@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 8 Mar 2023 18:38:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC6C193DD
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 15:38:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678318688;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vQh0drW5TlB+nMRkrwjuf/guCjqUNLrt66sZFoz2Zx4=;
+        b=UXOseoEq++iGsV4ooDmYTqhSCQ1ZcXAzgQqnlP/VWjki9zh07Tvcg5fzBH2N4TMHdXPVaG
+        8Vb6wLHLaXtU64p1JXYgaIuAmpyzhtGkkNgewvJH3uMgaYtkQlF0/pOcMcx++OuSF8PZ9D
+        Yvbb/gVwJXxSdMmxBo0GpqX+6eoyAy4=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-191-6b3YrDUfMG-KXtk57jetyA-1; Wed, 08 Mar 2023 18:38:07 -0500
+X-MC-Unique: 6b3YrDUfMG-KXtk57jetyA-1
+Received: by mail-il1-f197.google.com with SMTP id h19-20020a056e021d9300b00318f6b50475so80424ila.21
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 15:38:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678318687;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vQh0drW5TlB+nMRkrwjuf/guCjqUNLrt66sZFoz2Zx4=;
+        b=i1FcWkLG3U3H9XPEyyXp+TQng76eE9lAiQXB4aVXodyF07tH6BTBy/6pPQPPaG/xuW
+         cFbQWqk/WFw7sZSQ4IHSEOSj4TROHQLNNdvVsFOshh5KEH6vsXGnPtZbkFBodpZ0N/aw
+         qga3X0rxsQn3z+zpDbFnAYb+zcNe76/iRHb3dKGH3ZuBEYonQYmmEHCdSiEN2Cg/gqhk
+         INwOq2kNCaRNNQdYR1tlo+v++yKghWgdSwG8QV8TRp9wW4MvDHj21hmovy/jYUxR5mmC
+         qb1HqY7wvuwPfzhIehBEyxlYPIfkYvWWs5AGI6KCP/wNbZ0ch282uj19pj4Z5osO3xwY
+         i2Yg==
+X-Gm-Message-State: AO0yUKUM4/x3FAXXL1mN/c7Ju0lpEh6Gl4T3Xw9bBFkxr9AXjrXDV52Q
+        QA9EpKpNko8WQiBotwC1qr0V/r4t4W6QbD+VAO2K04YIkooA/H4CgcKHZHRLql5t8DbhR7+xcTI
+        zHyo2qViiK/tBXg4CD+Yt5Uys
+X-Received: by 2002:a5d:904e:0:b0:74c:87b5:a083 with SMTP id v14-20020a5d904e000000b0074c87b5a083mr222478ioq.17.1678318686531;
+        Wed, 08 Mar 2023 15:38:06 -0800 (PST)
+X-Google-Smtp-Source: AK7set8ZTTdc1V8/mXUIfkFzmtAh6Sqf9otuzL5L9q7AV9CasEm1PWwPQVqwzZCh+DKWPHf2/8jSaw==
+X-Received: by 2002:a5d:904e:0:b0:74c:87b5:a083 with SMTP id v14-20020a5d904e000000b0074c87b5a083mr222461ioq.17.1678318686224;
+        Wed, 08 Mar 2023 15:38:06 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id p11-20020a92d28b000000b003192b0b85eesm4890627ilp.81.2023.03.08.15.38.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 15:38:05 -0800 (PST)
+Date:   Wed, 8 Mar 2023 16:38:03 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Dominik Behr <dbehr@google.com>
+Cc:     Dominik Behr <dbehr@chromium.org>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        linux-kernel@vger.kernel.org, dmy@semihalf.com, tn@semihalf.com,
+        upstream@semihalf.com, dtor@google.com, jgg@ziepe.ca,
+        kevin.tian@intel.com, cohuck@redhat.com, abhsahu@nvidia.com,
+        yishaih@nvidia.com, yi.l.liu@intel.com, kvm@vger.kernel.org,
+        libvir-list@redhat.com
+Subject: Re: [PATCH] vfio/pci: Propagate ACPI notifications to the
+ user-space
+Message-ID: <20230308163803.6bfc2922.alex.williamson@redhat.com>
+In-Reply-To: <CABUrSUBBbXRVRo6b1EKBpgu7zk=8yZhQ__UXFGL_GpO+BA4Pkg@mail.gmail.com>
+References: <20230307220553.631069-1-jaz@semihalf.com>
+        <20230307164158.4b41e32f.alex.williamson@redhat.com>
+        <CAH76GKNapD8uB0B2+m70ZScDaOM8TmPNAii9TGqRSsgN4013+Q@mail.gmail.com>
+        <20230308104944.578d503c.alex.williamson@redhat.com>
+        <CABUrSUD6hE=h3-Ho7L_J=OYeRUw_Bmg9o4fuw591iw9QyBQv9A@mail.gmail.com>
+        <20230308130619.3736cf18.alex.williamson@redhat.com>
+        <CABUrSUBBbXRVRo6b1EKBpgu7zk=8yZhQ__UXFGL_GpO+BA4Pkg@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6835426b-7a1a-4744-da48-08db202deec2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2023 23:36:25.4109
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kRYBqFbK613aa689DscHL3DmvpnIhITncclFBlcAVCB4ckYU91ABxt5PxQM4tOaIxzlhIdNgUaKQjNJ1F23E/m4JDsmQQXHthaDyfbyY+iA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4701
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTAzLTA4IGF0IDA5OjUzICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
-DQo+IE9uIE1vbiwgRmViIDI3LCAyMDIzIGF0IDAyOjI5OjQyUE0gLTA4MDAsIFJpY2sgRWRnZWNv
-bWJlIHdyb3RlOg0KPiA+IFRoZSB4ODYgQ29udHJvbC1mbG93IEVuZm9yY2VtZW50IFRlY2hub2xv
-Z3kgKENFVCkgZmVhdHVyZSBpbmNsdWRlcw0KPiA+IGEgbmV3DQo+ID4gdHlwZSBvZiBtZW1vcnkg
-Y2FsbGVkIHNoYWRvdyBzdGFjay4gVGhpcyBzaGFkb3cgc3RhY2sgbWVtb3J5IGhhcw0KPiA+IHNv
-bWUNCj4gPiB1bnVzdWFsIHByb3BlcnRpZXMsIHdoaWNoIHJlcXVpcmVzIHNvbWUgY29yZSBtbSBj
-aGFuZ2VzIHRvIGZ1bmN0aW9uDQo+ID4gcHJvcGVybHkuDQo+ID4gDQo+ID4gT25lIHNoYXJwIGVk
-Z2UgaXMgdGhhdCBQVEVzIHRoYXQgYXJlIGJvdGggV3JpdGU9MCBhbmQgRGlydHk9MSBhcmUNCj4g
-PiB0cmVhdGVkIGFzIHNoYWRvdyBieSB0aGUgQ1BVLCBidXQgdGhpcyBjb21iaW5hdGlvbiB1c2Vk
-IHRvIGJlDQo+ID4gY3JlYXRlZCBieQ0KPiA+IHRoZSBrZXJuZWwgb24geDg2LiBQcmV2aW91cyBw
-YXRjaGVzIGhhdmUgY2hhbmdlZCB0aGUga2VybmVsIHRvIG5vdw0KPiA+IGF2b2lkDQo+ID4gY3Jl
-YXRpbmcgdGhlc2UgUFRFcyB1bmxlc3MgdGhleSBhcmUgZm9yIHNoYWRvdyBzdGFjayBtZW1vcnku
-IEluDQo+ID4gY2FzZSBhbnkNCj4gPiBtaXNzZWQgY29ybmVycyBvZiB0aGUga2VybmVsIGFyZSBz
-dGlsbCBjcmVhdGluZyBQVEVzIGxpa2UgdGhpcyBmb3INCj4gPiBub24tc2hhZG93IHN0YWNrIG1l
-bW9yeSwgYW5kIHRvIGNhdGNoIGFueSByZS1pbnRyb2R1Y3Rpb25zIG9mIHRoZQ0KPiA+IGxvZ2lj
-LA0KPiA+IHdhcm4gaWYgYW55IHNoYWRvdyBzdGFjayBQVEVzIChXcml0ZT0wLCBEaXJ0eT0xKSBh
-cmUgZm91bmQgaW4gbm9uLQ0KPiA+IHNoYWRvdw0KPiA+IHN0YWNrIFZNQXMgd2hlbiB0aGV5IGFy
-ZSBiZWluZyB6YXBwZWQuIFRoaXMgd29uJ3QgY2F0Y2ggdHJhbnNpZW50DQo+ID4gY2FzZXMNCj4g
-PiBidXQgc2hvdWxkIGhhdmUgZGVjZW50IGNvdmVyYWdlLiBJdCB3aWxsIGJlIGNvbXBpbGVkIG91
-dCB3aGVuDQo+ID4gc2hhZG93DQo+ID4gc3RhY2sgaXMgbm90IGNvbmZpZ3VyZWQuDQo+ID4gDQo+
-ID4gSW4gb3JkZXIgdG8gY2hlY2sgaWYgYSBwdGUgaXMgc2hhZG93IHN0YWNrIGluIGNvcmUgbW0g
-Y29kZSwgYWRkIHR3bw0KPiA+IGFyY2gNCj4gDQo+IHMvcHRlL1BURS8NCg0KWWVzLCBpdCBtYXRj
-aGVzIHRoZSByZXN0Lg0K
+On Wed, 8 Mar 2023 14:44:28 -0800
+Dominik Behr <dbehr@google.com> wrote:
+
+> On Wed, Mar 8, 2023 at 12:06=E2=80=AFPM Alex Williamson
+> <alex.williamson@redhat.com> wrote:
+> >
+> > On Wed, 8 Mar 2023 10:45:51 -0800
+> > Dominik Behr <dbehr@chromium.org> wrote:
+> > =20
+> > > It is the same interface as other ACPI events like AC adapter LID etc
+> > > are forwarded to user-space.
+> > >  ACPI events are not particularly high frequency like interrupts. =20
+> >
+> > I'm not sure that's relevant, these interfaces don't proclaim to
+> > provide isolation among host processes which manage behavior relative
+> > to accessories.  These are effectively system level services.  It's only
+> > a very, very specialized use case that places a VMM as peers among these
+> > processes.  Generally we don't want to grant a VMM any privileges beyond
+> > what it absolutely needs, so letting a VMM managing an assigned NIC
+> > really ought not to be able to snoop host events related to anything
+> > other than the NIC. =20
+> How is that related to the fact that we are forwarding VFIO-PCI events
+> to netlink? Kernel does not grant any privileges to VMM.
+> There are already other ACPI events on netlink. The implementer of the
+> VMM can choose to allow VMM to snoop them or not.
+> In our case our VMM (crosvm) does already snoop LID, battery and AC
+> adapter events so the guest can adjust its behavior accordingly.
+> This change just adds another class of ACPI events that are forwarded
+> to netlink.
+
+That's true, it is the VMM choice whether to allow snooping netlink,
+but this is being proposed as THE solution to allow VMMs to receive
+ACPI events related to vfio assigned devices.  If the solution
+inherently requires escalating the VMM privileges to see all netlink
+events, that's a weakness in the proposal.  As noted previously,
+there's also no introspection here, the VMM can't know whether it
+should listen to netlink for ACPI events or include AML related to a
+GPE for the device.  It cannot determine if either the kernel supports
+this feature or if the device has an ACPI companion that can generate
+these events.
+
+> > =20
+> > > > > > What sort of ACPI events are we expecting to see here and what =
+does user space do with them? =20
+> > > The use we are looking at right now are D-notifier events about the
+> > > GPU power available to mobile discrete GPUs.
+> > > The firmware notifies the GPU driver and resource daemon to
+> > > dynamically adjust the amount of power that can be used by the GPU.
+> > > =20
+> > > > The proposed interface really has no introspection, how does the VMM
+> > > > know which devices need ACPI tables added "upfront"?  How do these
+> > > > events factor into hotplug device support, where we may not be able=
+ to
+> > > > dynamically inject ACPI code into the VM? =20
+> > >
+> > > The VMM can examine PCI IDs and the associated firmware node of the
+> > > PCI device to figure out what events to expect and what ACPI table to
+> > > generate to support it but that should not be necessary. =20
+> >
+> > I'm not entirely sure where your VMM is drawing the line between the VM
+> > and management tools, but I think this is another case where the
+> > hypervisor itself should not have privileges to examine the host
+> > firmware tables to build its own.  Something like libvirt would be
+> > responsible for that. =20
+> Yes, but that depends on the design of hypervisor and VMM and is not
+> related to this patch.
+
+It is very much related to this patch if it proposes an interface to
+solve a problem which is likely not compatible with the security model
+of other VMMs.  We need a single solution to support all VMMs.
+
+> > =20
+> > > A generic GPE based ACPI event forwarder as Grzegorz proposed can be
+> > > injected at VM init time and handle any notification that comes later,
+> > > even from hotplug devices. =20
+> >
+> > It appears that forwarder is sending the notify to a specific ACPI
+> > device node, so it's unclear to me how that becomes boilerplate AML
+> > added to all VMs.  We'll need to notify different devices based on
+> > different events, right? =20
+> Valid point. The notifications have a "scope" ACPI path.
+> In my experience these events are consumed without looking where they
+> came from but I believe the patch can be extended to
+> provide ACPI path, in your example "_SB.PCI0.GPP0.PEGP" instead of
+> generic vfio_pci which VMM could use to translate an equivalent ACPI
+> path in the guest and pass it to a generic ACPI GPE based notifier via
+> shared memory. Grzegorz could you chime in whether that would be
+> possible?
+
+So effectively we're imposing the host ACPI namespace on the VM, or at
+least a mapping between the host and VM namespace?  The generality of
+this is not improving.
+
+> > > > The acpi_bus_generate_netlink_event() below really only seems to fo=
+rm a
+> > > > u8 event type from the u32 event.  Is this something that could be
+> > > > provided directly from the vfio device uAPI with an ioeventfd, thus
+> > > > providing introspection that a device supports ACPI event notificat=
+ions
+> > > > and the ability for the VMM to exclusively monitor those events, and
+> > > > only those events for the device, without additional privileges? =20
+> > >
+> > > From what I can see these events are 8 bit as they come from ACPI.
+> > > They also do not carry any payload and it is up to the receiving
+> > > driver to query any additional context/state from the device.
+> > > This will work the same in the VM where driver can query the same
+> > > information from the passed through PCI device.
+> > > There are multiple other netflink based ACPI events forwarders which
+> > > do exactly the same thing for other devices like AC adapter, lid/power
+> > > button, ACPI thermal notifications, etc.
+> > > They all use the same mechanism and can be received by user-space
+> > > programs whether VMMs or others. =20
+> >
+> > But again, those other receivers are potentially system services, not
+> > an isolated VM instance operating in a limited privilege environment.
+> > IMO, it's very different if the host display server has access to lid
+> > or power events than it is to allow some arbitrary VM that happens to
+> > have an unrelated assigned device that same privilege. =20
+> Therefore these VFIO related ACPI events could be received by a system
+> service via this netlink event and selectively forwarded to VMM if
+> such is a desire of whoever implements the userspace.
+> This is outside the scope of this patch. In our case our VMM does
+> receive these LID, AC or battery events.
+
+But this is backwards, we're presupposing the choice to use netlink
+based on the convenience of one VMM, which potentially creates
+obstacles, maybe even security isolation issues for other VMMs.  The
+method of delivering ACPI events to a VMM is very much within the scope
+of this proposal.  Thanks,
+
+Alex
+
