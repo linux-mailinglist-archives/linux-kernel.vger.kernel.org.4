@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820C56AFF69
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93F06AFF73
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjCHHGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 02:06:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53906 "EHLO
+        id S229967AbjCHHHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 02:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjCHHGx (ORCPT
+        with ESMTP id S229845AbjCHHGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 8 Mar 2023 02:06:53 -0500
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A091FA2F1C;
-        Tue,  7 Mar 2023 23:06:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99315A2F2C;
+        Tue,  7 Mar 2023 23:06:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678259205; x=1709795205;
+  t=1678259206; x=1709795206;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=z04W7IK3HWPevOQCOCC1nmevtDlBplawxogbGdCtTYc=;
-  b=Woz/7CRPFEZTjN/InVcQr5EfK3qyNMvpvG/tP8m7m5WcOjLNQLH6eMYD
-   X39k5YaUrl6jHnytW2t+af6FZjDNSl+/DlFPSK9lvLUNvEiKtKZU2iB7j
-   YHQc4Cwfnq5W5XEhD4mIZmM3g2x9wqBrIL6CGpejiCSL+5hgDUX2oBK9q
-   Q4hHwWvxzzOPtPk3RGcXhnVuQnZV1qlHeNuj9wOjA4S6hVXhcrc8nrKkb
-   OZRfHWHgBSRoDfmLwkmXNYKDKYr6k8SGCX9Uxh1yX3dF9nu551piZmHmB
-   o2hITVmPT+CFIWBwGN3kXBCV3MmJYlaQVkaiT8XPXTE+DSNylOL6BgJKI
+  bh=wjZGX2lZghsukQ6+ZHa9NfZBUoqLg/C435YpkbFPhYg=;
+  b=DsVMHCn2CkcCwWUPTpPNEBLoaRHZNSOXMGdLL2V0aVLxich7mXOTM6EX
+   9mxdX4GVvZHLidb50gukfDUYixlV4GJQRN9vNa2USlfhny2EX8mbtmBMQ
+   BNMKHRj60l8/Vvygxgzjy8YU16Kk9D1AeW9PumqLoPHe+zLC1JuJhT2wR
+   dUlT5mXU5Fn47dGyzMAXGnxA3HM4XcyPO3p/gt63qtleFTIqP65DzQoz2
+   1dK+0TUMUif7MEp243MyQKfYDfucTze85nTEnjNFt53b0gx5NBqTinBoO
+   B8bDmxr0hHa7bpTS4Gcm0wzo4o/Pno0USW2f+dXPr/r69ieQPHIT+jXzr
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="333553971"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="333553975"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="333553971"
+   d="scan'208";a="333553975"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2023 23:06:44 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="850986380"
+X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="850986383"
 X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="850986380"
+   d="scan'208";a="850986383"
 Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga005.jf.intel.com with ESMTP; 07 Mar 2023 23:06:43 -0800
+  by orsmga005.jf.intel.com with ESMTP; 07 Mar 2023 23:06:44 -0800
 From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 To:     hdegoede@redhat.com, markgross@kernel.org
 Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Pragya Tanwar <pragya.tanwar@intel.com>
-Subject: [PATCH v2 2/8] platform/x86: ISST: Enumerate TPMI SST and create framework
-Date:   Tue,  7 Mar 2023 23:06:36 -0800
-Message-Id: <20230308070642.1727167-3-srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 3/8] platform/x86: ISST: Parse SST MMIO and update instance
+Date:   Tue,  7 Mar 2023 23:06:37 -0800
+Message-Id: <20230308070642.1727167-4-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230308070642.1727167-1-srinivas.pandruvada@linux.intel.com>
 References: <20230308070642.1727167-1-srinivas.pandruvada@linux.intel.com>
@@ -62,474 +62,404 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enumerate TPMI SST driver and create basic framework to add more
-features.
+SST registers are presented to OS in multi-layer structures starting
+with a SST header showing version information freezing current
+definition.
 
-The basic user space interface is still same as the legacy using
-/dev/isst_interface. Users of "intel-speed-select" utility should
-be able to use same commands as prior gens without being aware
-of new underlying hardware interface.
+For details on SST terminology refer to
+Documentation/admin-guide/pm/intel-speed-select.rst
+under the kernel documentation
 
-TPMI SST driver enumerates on device "intel_vsec.tpmi-sst". Since there
-can be multiple instances and there is one common SST core, split
-implementation into two parts: A common core part and an enumeration
-part. The enumeration driver is loaded for each device instance and
-register with the TPMI SST core driver.
+SST TPMI details are published in the following document:
+https://github.com/intel/tpmi_power_management/blob/main/SST_TPMI_public_disclosure_FINAL.docx
 
-On very first enumeration the TPMI SST core driver register with SST
-core driver to get IOCTL callbacks. The api_version is incremented
-for IOCTL ISST_IF_GET_PLATFORM_INFO, so that user space can issue
-new IOCTLs.
+SST MMIO structure layout follows:
+SST-HEADER
+	SST-CP Header
+		SST-CP CONTROL
+		SST-CP STATUS
+		SST-CP CONFIG0
+		SST-CP CONFIG1
+		...
+		...
+	SST-PP Header
+		SST-PP OFFSET_0
+		SST-PP OFFSET_1
+					SST_PP_0_INFO
+					SST_PP_1_INFO
+					SST_PP_2_INFO
+					SST_PP_3_INFO
+		SST-PP CONTROL
+		SST-PP STATUS
 
-Each TPMI package contains multiple power domains. Each power domain
-has its own set of SST controls. For each domain map the MMIO memory
-and update per domain struct tpmi_per_power_domain_info. This information
-will be used to implement other SST interfaces.
-
-Implement first IOCTL commands to get number of TPMI SST instances
-and instance mask as some of the power domains may not have any
-SST controls.
+Each register bank contains information to get to next lower level
+information. This information is parsed and stored in the struct
+tpmi_per_power_domain_info for each domain. This information is
+used to process each SST requests.
 
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Reviewed-by: Zhang Rui <rui.zhang@intel.com>
 Tested-by: Pragya Tanwar <pragya.tanwar@intel.com>
 ---
 v2:
 No change
 
- .../x86/intel/speed_select_if/Kconfig         |   4 +
- .../x86/intel/speed_select_if/Makefile        |   2 +
- .../x86/intel/speed_select_if/isst_tpmi.c     |  53 ++++
- .../intel/speed_select_if/isst_tpmi_core.c    | 274 ++++++++++++++++++
- .../intel/speed_select_if/isst_tpmi_core.h    |  16 +
- include/uapi/linux/isst_if.h                  |  18 ++
- 6 files changed, 367 insertions(+)
- create mode 100644 drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
- create mode 100644 drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
- create mode 100644 drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
+ .../intel/speed_select_if/isst_tpmi_core.c    | 291 +++++++++++++++++-
+ 1 file changed, 287 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/speed_select_if/Kconfig b/drivers/platform/x86/intel/speed_select_if/Kconfig
-index ce3e3dc076d2..4eb3ad299db0 100644
---- a/drivers/platform/x86/intel/speed_select_if/Kconfig
-+++ b/drivers/platform/x86/intel/speed_select_if/Kconfig
-@@ -2,8 +2,12 @@ menu "Intel Speed Select Technology interface support"
- 	depends on PCI
- 	depends on X86_64 || COMPILE_TEST
- 
-+config INTEL_SPEED_SELECT_TPMI
-+	tristate
-+
- config INTEL_SPEED_SELECT_INTERFACE
- 	tristate "Intel(R) Speed Select Technology interface drivers"
-+	select INTEL_SPEED_SELECT_TPMI if INTEL_TPMI
- 	help
- 	  This config enables the Intel(R) Speed Select Technology interface
- 	  drivers. The Intel(R) speed select technology features are non
-diff --git a/drivers/platform/x86/intel/speed_select_if/Makefile b/drivers/platform/x86/intel/speed_select_if/Makefile
-index 856076206f35..1d878a36d0ab 100644
---- a/drivers/platform/x86/intel/speed_select_if/Makefile
-+++ b/drivers/platform/x86/intel/speed_select_if/Makefile
-@@ -8,3 +8,5 @@ obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += isst_if_common.o
- obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += isst_if_mmio.o
- obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += isst_if_mbox_pci.o
- obj-$(CONFIG_INTEL_SPEED_SELECT_INTERFACE) += isst_if_mbox_msr.o
-+obj-$(CONFIG_INTEL_SPEED_SELECT_TPMI) += isst_tpmi_core.o
-+obj-$(CONFIG_INTEL_SPEED_SELECT_TPMI) += isst_tpmi.o
-diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c b/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
-new file mode 100644
-index 000000000000..7b4bdeefb8bc
---- /dev/null
-+++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * isst_tpmi.c: SST TPMI interface
-+ *
-+ * Copyright (c) 2023, Intel Corporation.
-+ * All Rights Reserved.
-+ *
-+ */
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/module.h>
-+#include <linux/intel_tpmi.h>
-+
-+#include "isst_tpmi_core.h"
-+
-+static int intel_sst_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
-+{
-+	int ret;
-+
-+	ret = tpmi_sst_init();
-+	if (ret)
-+		return ret;
-+
-+	ret = tpmi_sst_dev_add(auxdev);
-+	if (ret)
-+		tpmi_sst_exit();
-+
-+	return ret;
-+}
-+
-+static void intel_sst_remove(struct auxiliary_device *auxdev)
-+{
-+	tpmi_sst_dev_remove(auxdev);
-+	tpmi_sst_exit();
-+}
-+
-+static const struct auxiliary_device_id intel_sst_id_table[] = {
-+	{ .name = "intel_vsec.tpmi-sst" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(auxiliary, intel_sst_id_table);
-+
-+static struct auxiliary_driver intel_sst_aux_driver = {
-+	.id_table       = intel_sst_id_table,
-+	.remove         = intel_sst_remove,
-+	.probe          = intel_sst_probe,
-+};
-+
-+module_auxiliary_driver(intel_sst_aux_driver);
-+
-+MODULE_IMPORT_NS(INTEL_TPMI_SST);
-+MODULE_DESCRIPTION("Intel TPMI SST Driver");
-+MODULE_LICENSE("GPL");
 diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-new file mode 100644
-index 000000000000..6b37016c0417
---- /dev/null
+index 6b37016c0417..3453708c2dd0 100644
+--- a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
 +++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.c
-@@ -0,0 +1,274 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * isst_tpmi.c: SST TPMI interface core
-+ *
-+ * Copyright (c) 2023, Intel Corporation.
-+ * All Rights Reserved.
-+ *
-+ * This information will be useful to understand flows:
-+ * In the current generation of platforms, TPMI is supported via OOB
-+ * PCI device. This PCI device has one instance per CPU package.
-+ * There is a unique TPMI ID for SST. Each TPMI ID also has multiple
-+ * entries, representing per power domain information.
-+ *
-+ * There is one dev file for complete SST information and control same as the
-+ * prior generation of hardware. User spaces don't need to know how the
-+ * information is presented by the hardware. The TPMI core module implements
-+ * the hardware mapping.
-+ */
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/intel_tpmi.h>
-+#include <linux/fs.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <uapi/linux/isst_if.h>
-+
-+#include "isst_tpmi_core.h"
-+#include "isst_if_common.h"
+@@ -20,6 +20,7 @@
+ #include <linux/auxiliary_bus.h>
+ #include <linux/intel_tpmi.h>
+ #include <linux/fs.h>
++#include <linux/io.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <uapi/linux/isst_if.h>
+@@ -27,10 +28,192 @@
+ #include "isst_tpmi_core.h"
+ #include "isst_if_common.h"
+ 
++/* Supported SST hardware version by this driver */
++#define ISST_HEADER_VERSION		1
 +
 +/**
-+ * struct tpmi_per_power_domain_info -	Store per power_domain SST info
-+ * @package_id:		Package id for this power_domain
-+ * @power_domain_id:	Power domain id, Each entry from the SST-TPMI instance is a power_domain.
-+ * @sst_base:		Mapped SST base IO memory
-+ * @auxdev:		Auxiliary device instance enumerated this instance
++ * struct sst_header -	SST main header
++ * @interface_version:	Version number for this interface
++ * @cap_mask:		Bitmask of the supported sub features. 1=the sub feature is enabled.
++ *			0=disabled.
++ *			Bit[8]= SST_CP enable (1), disable (0)
++ *			bit[9]= SST_PP enable (1), disable (0)
++ *			other bits are reserved for future use
++ * @cp_offset:		Qword (8 bytes) offset to the SST_CP register bank
++ * @pp_offset:		Qword (8 bytes) offset to the SST_PP register bank
++ * @reserved:		Reserved for future use
 + *
-+ * This structure is used store complete SST information for a power_domain. This information
-+ * is used to read/write request for any SST IOCTL. Each physical CPU package can have multiple
-+ * power_domains. Each power domain describes its own SST information and has its own controls.
++ * This register allows SW to discover SST capability and the offsets to SST-CP
++ * and SST-PP register banks.
 + */
-+struct tpmi_per_power_domain_info {
-+	int package_id;
-+	int power_domain_id;
-+	void __iomem *sst_base;
-+	struct auxiliary_device *auxdev;
-+};
++struct sst_header {
++	u8 interface_version;
++	u8 cap_mask;
++	u8 cp_offset;
++	u8 pp_offset;
++	u32 reserved;
++} __packed;
 +
 +/**
-+ * struct tpmi_sst_struct -	Store sst info for a package
-+ * @package_id:			Package id for this aux device instance
-+ * @number_of_power_domains:	Number of power_domains pointed by power_domain_info pointer
-+ * @power_domain_info:		Pointer to power domains information
++ * struct cp_header -	SST-CP (core-power) header
++ * @feature_id:		0=SST-CP, 1=SST-PP, 2=SST-BF, 3=SST-TF
++ * @feature_rev:	Interface Version number for this SST feature
++ * @ratio_unit:		Frequency ratio unit. 00: 100MHz. All others are reserved
++ * @reserved:		Reserved for future use
 + *
-+ * This structure is used store full SST information for a package.
-+ * Each package has a unique OOB PCI device, which enumerates TPMI.
-+ * Each Package will have multiple power_domains.
++ * This structure is used store SST-CP header. This is packed to the same
++ * format as defined in the specifications.
 + */
-+struct tpmi_sst_struct {
-+	int package_id;
-+	int number_of_power_domains;
-+	struct tpmi_per_power_domain_info *power_domain_info;
-+};
++struct cp_header {
++	u64 feature_id :4;
++	u64 feature_rev :8;
++	u64 ratio_unit :2;
++	u64 reserved :50;
++} __packed;
 +
 +/**
-+ * struct tpmi_sst_common_struct -	Store all SST instances
-+ * @max_index:		Maximum instances currently present
-+ * @sst_inst:		Pointer to per package instance
++ * struct pp_header -	SST-PP (Perf profile) header
++ * @feature_id:		0=SST-CP, 1=SST-PP, 2=SST-BF, 3=SST-TF
++ * @feature_rev:	Interface Version number for this SST feature
++ * @level_en_mask:	SST-PP level enable/disable fuse mask
++ * @allowed_level_mask:	Allowed level mask used for dynamic config level switching
++ * @reserved0:		Reserved for future use
++ * @ratio_unit:		Frequency ratio unit. 00: 100MHz. All others are reserved
++ * @block_size:		Size of PP block in Qword unit (8 bytes)
++ * @dynamic_switch:	If set (1), dynamic switching of SST PP is supported
++ * @memory_ratio_unit:	Memory Controller frequency ratio unit. 00: 100MHz, others reserved
++ * @reserved1:		Reserved for future use
 + *
-+ * Stores every SST Package instance.
++ * This structure is used store SST-PP header. This is packed to the same
++ * format as defined in the specifications.
 + */
-+struct tpmi_sst_common_struct {
-+	int max_index;
-+	struct tpmi_sst_struct **sst_inst;
++struct pp_header {
++	u64 feature_id :4;
++	u64 feature_rev :8;
++	u64 level_en_mask :8;
++	u64 allowed_level_mask :8;
++	u64 reserved0 :4;
++	u64 ratio_unit :2;
++	u64 block_size :8;
++	u64 dynamic_switch :1;
++	u64 memory_ratio_unit :2;
++	u64 reserved1 :19;
++} __packed;
++
++/**
++ * struct feature_offset -	Offsets to SST-PP features
++ * @pp_offset:		Qword offset within PP level for the SST_PP register bank
++ * @bf_offset:		Qword offset within PP level for the SST_BF register bank
++ * @tf_offset:		Qword offset within PP level for the SST_TF register bank
++ * @reserved:		Reserved for future use
++ *
++ * This structure is used store offsets for SST features in the register bank.
++ * This is packed to the same format as defined in the specifications.
++ */
++struct feature_offset {
++	u64 pp_offset :8;
++	u64 bf_offset :8;
++	u64 tf_offset :8;
++	u64 reserved :40;
++} __packed;
++
++/**
++ * struct levels_offset -	Offsets to each SST PP level
++ * @sst_pp_level0_offset:	Qword offset to the register block of PP level 0
++ * @sst_pp_level1_offset:	Qword offset to the register block of PP level 1
++ * @sst_pp_level2_offset:	Qword offset to the register block of PP level 2
++ * @sst_pp_level3_offset:	Qword offset to the register block of PP level 3
++ * @sst_pp_level4_offset:	Qword offset to the register block of PP level 4
++ * @reserved:			Reserved for future use
++ *
++ * This structure is used store offsets of SST PP levels in the register bank.
++ * This is packed to the same format as defined in the specifications.
++ */
++struct levels_offset {
++	u64 sst_pp_level0_offset :8;
++	u64 sst_pp_level1_offset :8;
++	u64 sst_pp_level2_offset :8;
++	u64 sst_pp_level3_offset :8;
++	u64 sst_pp_level4_offset :8;
++	u64 reserved :24;
++} __packed;
++
++/**
++ * struct pp_control_offset -	Offsets for SST PP controls
++ * @perf_level:		A SST-PP level that SW intends to switch to
++ * @perf_level_lock:	SST-PP level select lock. 0 - unlocked. 1 - locked till next reset
++ * @resvd0:		Reserved for future use
++ * @current_state:	Bit mask to control the enable(1)/disable(0) state of each feature
++ *			of the current PP level, bit 0 = BF, bit 1 = TF, bit 2-7 = reserved
++ * @reserved:		Reserved for future use
++ *
++ * This structure is used store offsets of SST PP controls in the register bank.
++ * This is packed to the same format as defined in the specifications.
++ */
++struct pp_control_offset {
++	u64 perf_level :3;
++	u64 perf_level_lock :1;
++	u64 resvd0 :4;
++	u64 current_state :8;
++	u64 reserved :48;
++} __packed;
++
++/**
++ * struct pp_status_offset -	Offsets for SST PP status fields
++ * @sst_pp_level:	Returns the current SST-PP level
++ * @sst_pp_lock:	Returns the lock bit setting of perf_level_lock in pp_control_offset
++ * @error_type:		Returns last error of SST-PP level change request. 0: no error,
++ *			1: level change not allowed, others: reserved
++ * @feature_state:	Bit mask to indicate the enable(1)/disable(0) state of each feature of the
++ *			current PP level. bit 0 = BF, bit 1 = TF, bit 2-7 reserved
++ * @reserved0:		Reserved for future use
++ * @feature_error_type: Returns last error of the specific feature. Three error_type bits per
++ *			feature. i.e. ERROR_TYPE[2:0] for BF, ERROR_TYPE[5:3] for TF, etc.
++ *			0x0: no error, 0x1: The specific feature is not supported by the hardware.
++ *			0x2-0x6: Reserved. 0x7: feature state change is not allowed.
++ * @reserved1:		Reserved for future use
++ *
++ * This structure is used store offsets of SST PP status in the register bank.
++ * This is packed to the same format as defined in the specifications.
++ */
++struct pp_status_offset {
++	u64 sst_pp_level :3;
++	u64 sst_pp_lock :1;
++	u64 error_type :4;
++	u64 feature_state :8;
++	u64 reserved0 :16;
++	u64 feature_error_type : 24;
++	u64 reserved1 :8;
++} __packed;
++
++/**
++ * struct perf_level -	Used to store perf level and mmio offset
++ * @mmio_offset:	mmio offset for a perf level
++ * @level:		perf level for this offset
++ *
++ * This structure is used store final mmio offset of each perf level from the
++ * SST base mmio offset.
++ */
++struct perf_level {
++	int mmio_offset;
++	int level;
 +};
 +
-+/*
-+ * Each IOCTL request is processed under this lock. Also used to protect
-+ * registration functions and common data structures.
-+ */
-+static DEFINE_MUTEX(isst_tpmi_dev_lock);
+ /**
+  * struct tpmi_per_power_domain_info -	Store per power_domain SST info
+  * @package_id:		Package id for this power_domain
+  * @power_domain_id:	Power domain id, Each entry from the SST-TPMI instance is a power_domain.
++ * @max_level:		Max possible PP level possible for this power_domain
++ * @ratio_unit:		Ratio unit for converting to MHz
++ * @avx_levels:		Number of AVX levels
++ * @pp_block_size:	Block size from PP header
++ * @sst_header:		Store SST header for this power_domain
++ * @cp_header:		Store SST-CP header for this power_domain
++ * @pp_header:		Store SST-PP header for this power_domain
++ * @perf_levels:	Pointer to each perf level to map level to mmio offset
++ * @feature_offsets:	Store feature offsets for each PP-level
++ * @control_offset:	Store the control offset for each PP-level
++ * @status_offset:	Store the status offset for each PP-level
+  * @sst_base:		Mapped SST base IO memory
+  * @auxdev:		Auxiliary device instance enumerated this instance
+  *
+@@ -41,6 +224,17 @@
+ struct tpmi_per_power_domain_info {
+ 	int package_id;
+ 	int power_domain_id;
++	int max_level;
++	int ratio_unit;
++	int avx_levels;
++	int pp_block_size;
++	struct sst_header sst_header;
++	struct cp_header cp_header;
++	struct pp_header pp_header;
++	struct perf_level *perf_levels;
++	struct feature_offset feature_offsets;
++	struct pp_control_offset control_offset;
++	struct pp_status_offset status_offset;
+ 	void __iomem *sst_base;
+ 	struct auxiliary_device *auxdev;
+ };
+@@ -85,6 +279,86 @@ static int isst_core_usage_count;
+ /* Stores complete SST information for every package and power_domain */
+ static struct tpmi_sst_common_struct isst_common;
+ 
++#define SST_MAX_AVX_LEVELS	3
 +
-+/* Usage count to track, number of TPMI SST instances registered to this core. */
-+static int isst_core_usage_count;
++#define SST_PP_OFFSET_0		8
++#define SST_PP_OFFSET_1		16
++#define SST_PP_OFFSET_SIZE	8
 +
-+/* Stores complete SST information for every package and power_domain */
-+static struct tpmi_sst_common_struct isst_common;
-+
-+static int isst_if_get_tpmi_instance_count(void __user *argp)
++static int sst_add_perf_profiles(struct auxiliary_device *auxdev,
++				 struct tpmi_per_power_domain_info *pd_info,
++				 int levels)
 +{
-+	struct isst_tpmi_instance_count tpmi_inst;
-+	struct tpmi_sst_struct *sst_inst;
++	u64 perf_level_offsets;
 +	int i;
 +
-+	if (copy_from_user(&tpmi_inst, argp, sizeof(tpmi_inst)))
-+		return -EFAULT;
++	pd_info->perf_levels = devm_kcalloc(&auxdev->dev, levels,
++					    sizeof(struct perf_level),
++					    GFP_KERNEL);
++	if (!pd_info->perf_levels)
++		return 0;
 +
-+	if (tpmi_inst.socket_id >= topology_max_packages())
-+		return -EINVAL;
++	pd_info->ratio_unit = pd_info->pp_header.ratio_unit;
++	pd_info->avx_levels = SST_MAX_AVX_LEVELS;
++	pd_info->pp_block_size = pd_info->pp_header.block_size;
 +
-+	tpmi_inst.count = isst_common.sst_inst[tpmi_inst.socket_id]->number_of_power_domains;
++	/* Read PP Offset 0: Get feature offset with PP level */
++	*((u64 *)&pd_info->feature_offsets) = readq(pd_info->sst_base +
++						    pd_info->sst_header.pp_offset +
++						    SST_PP_OFFSET_0);
 +
-+	sst_inst = isst_common.sst_inst[tpmi_inst.socket_id];
-+	tpmi_inst.valid_mask = 0;
-+	for (i = 0; i < sst_inst->number_of_power_domains; ++i) {
-+		struct tpmi_per_power_domain_info *power_domain_info;
++	perf_level_offsets = readq(pd_info->sst_base + pd_info->sst_header.pp_offset +
++				   SST_PP_OFFSET_1);
 +
-+		power_domain_info = &sst_inst->power_domain_info[i];
-+		if (power_domain_info->sst_base)
-+			tpmi_inst.valid_mask |= BIT(i);
++	for (i = 0; i < levels; ++i) {
++		u64 offset;
++
++		offset = perf_level_offsets & (0xff << (i * SST_PP_OFFSET_SIZE));
++		offset >>= (i * 8);
++		offset &= 0xff;
++		offset *= 8; /* Convert to byte from QWORD offset */
++		pd_info->perf_levels[i].mmio_offset = pd_info->sst_header.pp_offset + offset;
 +	}
-+
-+	if (copy_to_user(argp, &tpmi_inst, sizeof(tpmi_inst)))
-+		return -EFAULT;
 +
 +	return 0;
 +}
 +
-+static long isst_if_def_ioctl(struct file *file, unsigned int cmd,
-+			      unsigned long arg)
++static int sst_main(struct auxiliary_device *auxdev, struct tpmi_per_power_domain_info *pd_info)
 +{
-+	void __user *argp = (void __user *)arg;
-+	long ret = -ENOTTY;
++	int i, mask, levels;
 +
-+	mutex_lock(&isst_tpmi_dev_lock);
-+	switch (cmd) {
-+	case ISST_IF_COUNT_TPMI_INSTANCES:
-+		ret = isst_if_get_tpmi_instance_count(argp);
-+		break;
-+	default:
-+		break;
++	*((u64 *)&pd_info->sst_header) = readq(pd_info->sst_base);
++	pd_info->sst_header.cp_offset *= 8;
++	pd_info->sst_header.pp_offset *= 8;
++
++	if (pd_info->sst_header.interface_version != ISST_HEADER_VERSION) {
++		dev_err(&auxdev->dev, "SST: Unsupported version:%x\n",
++			pd_info->sst_header.interface_version);
++		return -ENODEV;
 +	}
-+	mutex_unlock(&isst_tpmi_dev_lock);
 +
-+	return ret;
++	/* Read SST CP Header */
++	*((u64 *)&pd_info->cp_header) = readq(pd_info->sst_base + pd_info->sst_header.cp_offset);
++
++	/* Read PP header */
++	*((u64 *)&pd_info->pp_header) = readq(pd_info->sst_base + pd_info->sst_header.pp_offset);
++
++	/* Force level_en_mask level 0 */
++	pd_info->pp_header.level_en_mask |= 0x01;
++
++	mask = 0x01;
++	levels = 0;
++	for (i = 0; i < 8; ++i) {
++		if (pd_info->pp_header.level_en_mask & mask)
++			levels = i;
++		mask <<= 1;
++	}
++	pd_info->max_level = levels;
++	sst_add_perf_profiles(auxdev, pd_info, levels + 1);
++
++	return 0;
 +}
 +
-+int tpmi_sst_dev_add(struct auxiliary_device *auxdev)
-+{
-+	struct intel_tpmi_plat_info *plat_info;
-+	struct tpmi_sst_struct *tpmi_sst;
-+	int i, pkg = 0, inst = 0;
-+	int num_resources;
+ static int isst_if_get_tpmi_instance_count(void __user *argp)
+ {
+ 	struct isst_tpmi_instance_count tpmi_inst;
+@@ -102,10 +376,10 @@ static int isst_if_get_tpmi_instance_count(void __user *argp)
+ 	sst_inst = isst_common.sst_inst[tpmi_inst.socket_id];
+ 	tpmi_inst.valid_mask = 0;
+ 	for (i = 0; i < sst_inst->number_of_power_domains; ++i) {
+-		struct tpmi_per_power_domain_info *power_domain_info;
++		struct tpmi_per_power_domain_info *pd_info;
+ 
+-		power_domain_info = &sst_inst->power_domain_info[i];
+-		if (power_domain_info->sst_base)
++		pd_info = &sst_inst->power_domain_info[i];
++		if (pd_info->sst_base)
+ 			tpmi_inst.valid_mask |= BIT(i);
+ 	}
+ 
+@@ -134,11 +408,13 @@ static long isst_if_def_ioctl(struct file *file, unsigned int cmd,
+ 	return ret;
+ }
+ 
++#define TPMI_SST_AUTO_SUSPEND_DELAY_MS	2000
 +
-+	plat_info = tpmi_get_platform_data(auxdev);
-+	if (!plat_info) {
-+		dev_err(&auxdev->dev, "No platform info\n");
-+		return -EINVAL;
-+	}
-+
-+	pkg = plat_info->package_id;
-+	if (pkg >= topology_max_packages()) {
-+		dev_err(&auxdev->dev, "Invalid package id :%x\n", pkg);
-+		return -EINVAL;
-+	}
-+
-+	if (isst_common.sst_inst[pkg])
-+		return -EEXIST;
-+
-+	num_resources = tpmi_get_resource_count(auxdev);
-+
-+	if (!num_resources)
-+		return -EINVAL;
-+
-+	tpmi_sst = devm_kzalloc(&auxdev->dev, sizeof(*tpmi_sst), GFP_KERNEL);
-+	if (!tpmi_sst)
-+		return -ENOMEM;
-+
-+	tpmi_sst->power_domain_info = devm_kcalloc(&auxdev->dev, num_resources,
-+						   sizeof(*tpmi_sst->power_domain_info),
-+						   GFP_KERNEL);
-+	if (!tpmi_sst->power_domain_info)
-+		return -ENOMEM;
-+
-+	tpmi_sst->number_of_power_domains = num_resources;
-+
-+	for (i = 0; i < num_resources; ++i) {
-+		struct resource *res;
-+
-+		res = tpmi_get_resource_at_index(auxdev, i);
-+		if (!res) {
-+			tpmi_sst->power_domain_info[i].sst_base = NULL;
+ int tpmi_sst_dev_add(struct auxiliary_device *auxdev)
+ {
+ 	struct intel_tpmi_plat_info *plat_info;
+ 	struct tpmi_sst_struct *tpmi_sst;
+-	int i, pkg = 0, inst = 0;
++	int i, ret, pkg = 0, inst = 0;
+ 	int num_resources;
+ 
+ 	plat_info = tpmi_get_platform_data(auxdev);
+@@ -189,6 +465,13 @@ int tpmi_sst_dev_add(struct auxiliary_device *auxdev)
+ 		if (IS_ERR(tpmi_sst->power_domain_info[i].sst_base))
+ 			return PTR_ERR(tpmi_sst->power_domain_info[i].sst_base);
+ 
++		ret = sst_main(auxdev, &tpmi_sst->power_domain_info[i]);
++		if (ret) {
++			devm_iounmap(&auxdev->dev, tpmi_sst->power_domain_info[i].sst_base);
++			tpmi_sst->power_domain_info[i].sst_base =  NULL;
 +			continue;
 +		}
 +
-+		tpmi_sst->power_domain_info[i].package_id = pkg;
-+		tpmi_sst->power_domain_info[i].power_domain_id = i;
-+		tpmi_sst->power_domain_info[i].auxdev = auxdev;
-+		tpmi_sst->power_domain_info[i].sst_base = devm_ioremap_resource(&auxdev->dev, res);
-+		if (IS_ERR(tpmi_sst->power_domain_info[i].sst_base))
-+			return PTR_ERR(tpmi_sst->power_domain_info[i].sst_base);
-+
-+		++inst;
-+	}
-+
-+	if (!inst)
-+		return -ENODEV;
-+
-+	tpmi_sst->package_id = pkg;
-+	auxiliary_set_drvdata(auxdev, tpmi_sst);
-+
-+	mutex_lock(&isst_tpmi_dev_lock);
-+	if (isst_common.max_index < pkg)
-+		isst_common.max_index = pkg;
-+	isst_common.sst_inst[pkg] = tpmi_sst;
-+	mutex_unlock(&isst_tpmi_dev_lock);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_add, INTEL_TPMI_SST);
-+
-+void tpmi_sst_dev_remove(struct auxiliary_device *auxdev)
-+{
-+	struct tpmi_sst_struct *tpmi_sst = auxiliary_get_drvdata(auxdev);
-+
-+	mutex_lock(&isst_tpmi_dev_lock);
-+	isst_common.sst_inst[tpmi_sst->package_id] = NULL;
-+	mutex_unlock(&isst_tpmi_dev_lock);
-+}
-+EXPORT_SYMBOL_NS_GPL(tpmi_sst_dev_remove, INTEL_TPMI_SST);
-+
-+#define ISST_TPMI_API_VERSION	0x02
-+
-+int tpmi_sst_init(void)
-+{
-+	struct isst_if_cmd_cb cb;
-+	int ret = 0;
-+
-+	mutex_lock(&isst_tpmi_dev_lock);
-+
-+	if (isst_core_usage_count) {
-+		++isst_core_usage_count;
-+		goto init_done;
-+	}
-+
-+	isst_common.sst_inst = kcalloc(topology_max_packages(),
-+				       sizeof(*isst_common.sst_inst),
-+				       GFP_KERNEL);
-+	if (!isst_common.sst_inst)
-+		return -ENOMEM;
-+
-+	memset(&cb, 0, sizeof(cb));
-+	cb.cmd_size = sizeof(struct isst_if_io_reg);
-+	cb.offset = offsetof(struct isst_if_io_regs, io_reg);
-+	cb.cmd_callback = NULL;
-+	cb.api_version = ISST_TPMI_API_VERSION;
-+	cb.def_ioctl = isst_if_def_ioctl;
-+	cb.owner = THIS_MODULE;
-+	ret = isst_if_cdev_register(ISST_IF_DEV_TPMI, &cb);
-+	if (ret)
-+		kfree(isst_common.sst_inst);
-+init_done:
-+	mutex_unlock(&isst_tpmi_dev_lock);
-+	return ret;
-+}
-+EXPORT_SYMBOL_NS_GPL(tpmi_sst_init, INTEL_TPMI_SST);
-+
-+void tpmi_sst_exit(void)
-+{
-+	mutex_lock(&isst_tpmi_dev_lock);
-+	if (isst_core_usage_count)
-+		--isst_core_usage_count;
-+
-+	if (!isst_core_usage_count) {
-+		isst_if_cdev_unregister(ISST_IF_DEV_TPMI);
-+		kfree(isst_common.sst_inst);
-+	}
-+	mutex_unlock(&isst_tpmi_dev_lock);
-+}
-+EXPORT_SYMBOL_NS_GPL(tpmi_sst_exit, INTEL_TPMI_SST);
-+
-+MODULE_IMPORT_NS(INTEL_TPMI);
-+MODULE_IMPORT_NS(INTEL_TPMI_POWER_DOMAIN);
-+
-+MODULE_LICENSE("GPL");
-diff --git a/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
-new file mode 100644
-index 000000000000..356cb02273b1
---- /dev/null
-+++ b/drivers/platform/x86/intel/speed_select_if/isst_tpmi_core.h
-@@ -0,0 +1,16 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Intel Speed Select Interface: Drivers Internal defines
-+ * Copyright (c) 2023, Intel Corporation.
-+ * All rights reserved.
-+ *
-+ */
-+
-+#ifndef _ISST_TPMI_CORE_H
-+#define _ISST_TPMI_CORE_H
-+
-+int tpmi_sst_init(void);
-+void tpmi_sst_exit(void);
-+int tpmi_sst_dev_add(struct auxiliary_device *auxdev);
-+void tpmi_sst_dev_remove(struct auxiliary_device *auxdev);
-+#endif
-diff --git a/include/uapi/linux/isst_if.h b/include/uapi/linux/isst_if.h
-index ba078f8e9add..bf32d959f6e8 100644
---- a/include/uapi/linux/isst_if.h
-+++ b/include/uapi/linux/isst_if.h
-@@ -163,10 +163,28 @@ struct isst_if_msr_cmds {
- 	struct isst_if_msr_cmd msr_cmd[1];
- };
+ 		++inst;
+ 	}
  
-+/**
-+ * struct isst_tpmi_instance_count - Get number of TPMI instances per socket
-+ * @socket_id:	Socket/package id
-+ * @count:	Number of instances
-+ * @valid_mask: Mask of instances as there can be holes
-+ *
-+ * Structure used to get TPMI instances information using
-+ * IOCTL ISST_IF_COUNT_TPMI_INSTANCES.
-+ */
-+struct isst_tpmi_instance_count {
-+	__u8 socket_id;
-+	__u8 count;
-+	__u16 valid_mask;
-+};
-+
- #define ISST_IF_MAGIC			0xFE
- #define ISST_IF_GET_PLATFORM_INFO	_IOR(ISST_IF_MAGIC, 0, struct isst_if_platform_info *)
- #define ISST_IF_GET_PHY_ID		_IOWR(ISST_IF_MAGIC, 1, struct isst_if_cpu_map *)
- #define ISST_IF_IO_CMD		_IOW(ISST_IF_MAGIC, 2, struct isst_if_io_regs *)
- #define ISST_IF_MBOX_COMMAND	_IOWR(ISST_IF_MAGIC, 3, struct isst_if_mbox_cmds *)
- #define ISST_IF_MSR_COMMAND	_IOWR(ISST_IF_MAGIC, 4, struct isst_if_msr_cmds *)
-+
-+#define ISST_IF_COUNT_TPMI_INSTANCES	_IOR(ISST_IF_MAGIC, 5, struct isst_tpmi_instance_count *)
-+
- #endif
 -- 
 2.34.1
 
