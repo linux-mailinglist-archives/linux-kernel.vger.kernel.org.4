@@ -2,121 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E756B134E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99096B1349
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjCHUna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:43:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        id S230377AbjCHUms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjCHUn1 (ORCPT
+        with ESMTP id S230151AbjCHUmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:43:27 -0500
-Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1875580F1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:43:26 -0800 (PST)
-Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 641178033171
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 20:43:26 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 12CB510043B49
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 20:42:25 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id a0cCpMl2PNX2aa0cCp4NLi; Wed, 08 Mar 2023 20:42:25 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=6408f331
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=WzVMo6mmhJd9EY20C/Af9KjmQLQ/fvgOnPTPasIwdW0=; b=iBQUPhlx+4bW7G4WWiD8kz5lRs
-        BKHZL975RfHIb3mZhXFGJwfykdGvCUaypfrxrAPEJywKVrOYa3kkiawVOD6lUV7Q35ZNGeT4lgE/w
-        cazvBWjtK6OBTYE5p3R/Oj1GYtnDdJEr/NOMD16yHAf919ezxNbphP1jSox7Gpt8Bf+vW4PD3C87u
-        2PfI+OR2V7DHnBgOhv+BuyUNHP0amdEgRX/LR3KhM1XLAmE6FWowF/TkUDi33ZUTf6TQvdV1t5Prj
-        VzA/Q2I/DL1xQZs5FdUYaufxvkO7oftuavh1QgSBRgY64n8H9Pjb9n7hMGy8+I7EO0t4OTtyjjafi
-        rDehkn8A==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:59618 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1pa0cB-001eoR-AB;
-        Wed, 08 Mar 2023 13:42:23 -0700
-Subject: Re: [PATCH 6.1 000/887] 6.1.16-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230308091853.132772149@linuxfoundation.org>
-In-Reply-To: <20230308091853.132772149@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <d91ecd0b-f26f-a8fc-2e69-9e92758ec367@w6rz.net>
-Date:   Wed, 8 Mar 2023 12:42:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 8 Mar 2023 15:42:46 -0500
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D1B1F91A;
+        Wed,  8 Mar 2023 12:42:45 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id m25-20020a05683026d900b006941a2838caso9701855otu.7;
+        Wed, 08 Mar 2023 12:42:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678308165;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bx+D/aRg96Xv1xhHfuRNJtHE/XSALiBjprbVX5obgUQ=;
+        b=rxQW0f5eIhURPWzSXRSyjSVNKFitYo26dPH05Kc188yNwXPVAsUJZVvrRE7yuFzWV7
+         S+UpO7FEhOE9uUBeQivc0MbPtGnHXEoTg0KEgYDfWG+NT/5koebXSJmKyXS9QzIkMlus
+         x0afi4fdLVzi3ivzvigR3TMiDqBhGDPaTFO02n0nv5B8ixGp4DMBQcHEHqhYPms5JhPh
+         9Vy1Ypdf0lMsqSvUQo+wnxigZS0N/xc9hL7u7SoSGWbuskfMev8U1si9acd0ECpa0FS6
+         rHEsBGJhT7NmuipiW9pRlvb3+OkdbZBZIodf6ruyAhYklaPIrmR+CMIQU6xjMV+GuP47
+         Qtbw==
+X-Gm-Message-State: AO0yUKV+TuoTbMDZ7wpJS2mvMQAEBVZkwQ/eCUjPmBnGoySCdWW4KIuO
+        rPmejdI4isI8u41h+L6ySdcIHqMWsA==
+X-Google-Smtp-Source: AK7set/6BsPdujjJq8G0YkPgYq2OeOO2li/rSi30P2jJIG98XFB0DpAns146xxM0NNpmfpFIsy83JQ==
+X-Received: by 2002:a05:6830:565:b0:694:88f5:f5ed with SMTP id f5-20020a056830056500b0069488f5f5edmr2829378otc.24.1678308164741;
+        Wed, 08 Mar 2023 12:42:44 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id k3-20020a9d4b83000000b00690e6d56670sm6980752otf.25.2023.03.08.12.42.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 12:42:44 -0800 (PST)
+Received: (nullmailer pid 3744004 invoked by uid 1000);
+        Wed, 08 Mar 2023 20:42:43 -0000
+Date:   Wed, 8 Mar 2023 14:42:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     arinc9.unal@gmail.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Subject: Re: [PATCH 07/20] dt-bindings: pinctrl: ralink: improve bindings
+Message-ID: <20230308204243.GA3735537-robh@kernel.org>
+References: <20230303002850.51858-1-arinc.unal@arinc9.com>
+ <20230303002850.51858-8-arinc.unal@arinc9.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1pa0cB-001eoR-AB
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:59618
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230303002850.51858-8-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 1:29 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.16 release.
-> There are 887 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 10 Mar 2023 09:16:12 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.16-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Mar 03, 2023 at 03:28:36AM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> Move additionalProperties to the top. It's easier to read than after a long
+> indented section.
+> 
+> Drop the quotes from the referred schemas.
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Not the greatest subject as every change improves something and bindings 
+is stated twice. Hard to come up with something better since you've 
+combined 2 different kinds of changes which you shouldn't do either. So 
+I'd split this patch into 2.
 
-Tested-by: Ron Economos <re@w6rz.net>
-
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> ---
+>  .../bindings/pinctrl/ralink,mt7620-pinctrl.yaml          | 9 ++++-----
+>  .../bindings/pinctrl/ralink,mt7621-pinctrl.yaml          | 9 ++++-----
+>  .../bindings/pinctrl/ralink,rt2880-pinctrl.yaml          | 9 ++++-----
+>  .../bindings/pinctrl/ralink,rt305x-pinctrl.yaml          | 9 ++++-----
+>  .../bindings/pinctrl/ralink,rt3883-pinctrl.yaml          | 9 ++++-----
+>  5 files changed, 20 insertions(+), 25 deletions(-)
