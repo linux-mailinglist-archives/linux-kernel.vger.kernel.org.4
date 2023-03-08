@@ -2,117 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CFE6AFD30
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C47E56AFD33
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 04:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjCHDBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 22:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S229891AbjCHDBt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 7 Mar 2023 22:01:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjCHDBV (ORCPT
+        with ESMTP id S229887AbjCHDBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 22:01:21 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE91A3375;
-        Tue,  7 Mar 2023 19:01:19 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3282mgvO011303;
-        Wed, 8 Mar 2023 03:01:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=3XXnDnblTu0EK4aaQgq7s0zMJDrtKcirk7Sy688Cgf4=;
- b=esaq0YQCJI7NASfm2N97ByyEGI7MQJhz+yUM8E24+kA/uOY+4oH34WWBEztb2nGQBCeo
- ei9E419dbaTbFIAOxLyHFd0aWtOE7Ope2vTrd59+UVxEfBQJBHgggu0Mttyy6mUtuuUS
- 0bKo93qL6y5RZ1XzuHjEIPBmZC96Qql/+jvKX+tj6ctDJ3sU7paAhDS8tFLfh+B5+Hdf
- MshFN9+WBTf9nE0gX61BGDiFZ+LYb1w4Ylk+l9jkD0e7kgkG82bK71xQs0UmgpLLE2EL
- m4Iwxb/nKkT+E62bi1/8xqYsvxdVjcfB8f/09RBmm4Cvm7SOV/1OxcaVFsOb/ejHKD95 bA== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6fmm0a0w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 03:01:05 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 328314qL018168
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Mar 2023 03:01:04 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 7 Mar 2023 19:01:03 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
-        <stanley.chu@mediatek.com>, <adrian.hunter@intel.com>,
-        <bvanassche@acm.org>, <avri.altman@wdc.com>, <mani@kernel.org>,
-        <beanhuo@micron.com>, Asutosh Das <quic_asutoshd@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "open list" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 1/1] scsi: ufs: mcq: Use active_reqs to check busy in clock scaling
-Date:   Tue, 7 Mar 2023 19:00:09 -0800
-Message-ID: <e8d303eff0713a3e5f3c3725cdf6e5c5d3de2b01.1678244386.git.quic_asutoshd@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Tue, 7 Mar 2023 22:01:45 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABE0AA701;
+        Tue,  7 Mar 2023 19:01:37 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id A528424E2E2;
+        Wed,  8 Mar 2023 11:01:24 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
+ 2023 11:01:24 +0800
+Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
+ (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 8 Mar
+ 2023 11:01:23 +0800
+Message-ID: <aa404236-9845-3a3a-3327-b3a075b37a32@starfivetech.com>
+Date:   Wed, 8 Mar 2023 11:01:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: HEjOp2cq81wtiGcYwWl7XfVrTCJJYVnS
-X-Proofpoint-ORIG-GUID: HEjOp2cq81wtiGcYwWl7XfVrTCJJYVnS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-07_18,2023-03-07_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 malwarescore=0 phishscore=0 clxscore=1011 adultscore=0
- mlxscore=0 lowpriorityscore=0 impostorscore=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2212070000 definitions=main-2303080024
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 11/12] riscv: dts: starfive: visionfive-2-v1.2a: Add
+ gmac+phy's delay configuration
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+References: <20230303085928.4535-1-samin.guo@starfivetech.com>
+ <20230303085928.4535-12-samin.guo@starfivetech.com>
+ <CAJM55Z_8m42vfoPDicTP18S6Z1ZXYbFeS1edTjzYVB3Kq2xFeQ@mail.gmail.com>
+ <8bd8654e-4bba-c718-4b17-5291e70f05fe@starfivetech.com>
+ <CAJM55Z8-65ENJHfSUOTd+FSNx2b-mYF1L64CKT+Gez2jK3Qr2Q@mail.gmail.com>
+From:   Guo Samin <samin.guo@starfivetech.com>
+In-Reply-To: <CAJM55Z8-65ENJHfSUOTd+FSNx2b-mYF1L64CKT+Gez2jK3Qr2Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS063.cuchost.com (172.16.6.23) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Multi Circular Queue doesn't use outstanding_reqs.
-But the ufs clock scaling functions use outstanding_reqs to
-determine if there're requests pending. When MCQ is enabled
-this check always returns false.
 
-Hence use active_reqs to check if there're pending requests.
 
-Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
----
- drivers/ufs/core/ufshcd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+-------- 原始信息 --------
+主题: Re: [PATCH v5 11/12] riscv: dts: starfive: visionfive-2-v1.2a: Add gmac+phy's delay configuration
+From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+收件人: Guo Samin <samin.guo@starfivetech.com>
+日期: 2023/3/7
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 172d25fef740..c6b35123c83b 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -1500,7 +1500,7 @@ static int ufshcd_devfreq_get_dev_status(struct device *dev,
- 	scaling->window_start_t = curr_t;
- 	scaling->tot_busy_t = 0;
- 
--	if (hba->outstanding_reqs) {
-+	if (scaling->active_reqs) {
- 		scaling->busy_start_t = curr_t;
- 		scaling->is_busy_started = true;
- 	} else {
-@@ -2118,7 +2118,7 @@ static void ufshcd_clk_scaling_update_busy(struct ufs_hba *hba)
- 
- 	spin_lock_irqsave(hba->host->host_lock, flags);
- 	hba->clk_scaling.active_reqs--;
--	if (!hba->outstanding_reqs && scaling->is_busy_started) {
-+	if (!scaling->active_reqs && scaling->is_busy_started) {
- 		scaling->tot_busy_t += ktime_to_us(ktime_sub(ktime_get(),
- 					scaling->busy_start_t));
- 		scaling->busy_start_t = 0;
+> On Tue, 7 Mar 2023 at 02:43, Guo Samin <samin.guo@starfivetech.com> wrote:
+>> 在 2023/3/6 21:00:19, Emil Renner Berthing 写道:
+>>> On Fri, 3 Mar 2023 at 10:01, Samin Guo <samin.guo@starfivetech.com> wrote:
+>>>> v1.2A gmac0 uses motorcomm YT8531(rgmii-id) PHY, and needs delay
+>>>> configurations.
+>>>>
+>>>> v1.2A gmac1 uses motorcomm YT8512(rmii) PHY, and needs to
+>>>> switch rx and rx to external clock sources.
+>>>>
+>>>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+>>>> ---
+>>>>  .../starfive/jh7110-starfive-visionfive-2-v1.2a.dts | 13 +++++++++++++
+>>>>  1 file changed, 13 insertions(+)
+>>>>
+>>>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
+>>>> index 4af3300f3cf3..205a13d8c8b1 100644
+>>>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
+>>>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
+>>>> @@ -11,3 +11,16 @@
+>>>>         model = "StarFive VisionFive 2 v1.2A";
+>>>>         compatible = "starfive,visionfive-2-v1.2a", "starfive,jh7110";
+>>>>  };
+>>>> +
+>>>> +&gmac1 {
+>>>> +       phy-mode = "rmii";
+>>>> +       assigned-clocks = <&syscrg JH7110_SYSCLK_GMAC1_TX>,
+>>>> +                         <&syscrg JH7110_SYSCLK_GMAC1_RX>;
+>>>> +       assigned-clock-parents = <&syscrg JH7110_SYSCLK_GMAC1_RMII_RTX>,
+>>>> +                                <&syscrg JH7110_SYSCLK_GMAC1_RMII_RTX>;
+>>>> +};
+>>>> +
+>>>> +&phy0 {
+>>>> +       rx-internal-delay-ps = <1900>;
+>>>> +       tx-internal-delay-ps = <1350>;
+>>>> +};
+>>>
+>>> Here you're not specifying the internal delays for phy1 which means it
+>>> defaults to 1950ps for both rx and tx. Is that right or did you mean
+>>> to set them to 0 like the v1.3b phy1?
+>>
+>> Hi, emil, usually, only 1000M (rgmii) needs to configure the delay, and 100M(rmii) does not.
+> 
+> Ah, I see.
+> 
+>>> Also your u-boot seems to set what the linux phy driver calls
+>>> motorcomm,keep-pll-enabled and motorcomm,auto-sleep-disabled for all
+>>> the phys. Did you leave those out on purpose?
+>>
+>> Hi, Emil, We did configure motorcomm,auto-sleep-disabled for yt8512 in uboot,
+>> but Yutai upstream's Linux driver only yt8521/yt8531 supports this property.
+> 
+> I'm confused. Is Yutai also Frank Sae? Because he is the one who added
+> support for the yt8531 upstream.
+
+My fault , Frank Sae is from Motorcomm, also known as Yutai. 
+yt8531 ==> Yutai 8531
+> 
+>> Yt8512 is a Generic PHY driver and does not support the configuration of
+>> motorcomm,auto-sleep-disabled and motorcomm,keep-pll-enabled.
+> 
+> Right phy1 of the 1.2a might use a different phy, but I'm also talking
+> about phy0 and the v1.3b which does use the yt8531 right?
+Right:
+v1.3b: gmac0:yt8531   gmac1:yt8531
+v1.2a: gmac0:yt8531   gmac1:yt8512
+> 
+>> And without configuring these two attributes, vf2-1.2a gmac1 also works normally.
+> 
+> Yes, but what I'm worried about is that it only works because u-boot
+> initialises the PHYs and ethernet may stop working if you're using a
+> different bootloader or Linux gains support for resetting the PHYs
+> before use.
+> 
+I have tested that in uboot, use the sd card to start Linux, do not run network programs (do not use uboot to initialize phy and gmac),
+and the network works normally in Linux.
+
+Best regards,
+Samin
+
+>>
+>> Best regards,
+>> Samin
+>>>
+>>>> --
+>>>> 2.17.1
+>>>>
+>>>>
+>>>> _______________________________________________
+>>>> linux-riscv mailing list
+>>>> linux-riscv@lists.infradead.org
+>>>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>>
+>> --
+>> Best regards,
+>> Samin
+
 -- 
-2.7.4
-
+Best regards,
+Samin
