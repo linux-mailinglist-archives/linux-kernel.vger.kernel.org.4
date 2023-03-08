@@ -2,156 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D5E6B0D39
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D516B0D38
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbjCHPpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S230409AbjCHPpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:45:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjCHPop (ORCPT
+        with ESMTP id S232067AbjCHPob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:44:45 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EE372BC;
-        Wed,  8 Mar 2023 07:43:37 -0800 (PST)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328FDBc8022813;
-        Wed, 8 Mar 2023 15:43:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=1XKBGz6L+Gmy5WXWv/bJ3Jr0o/2Oj4GpILFhfE6SF5Q=;
- b=W0RX9YQPbFFzSZKz4S6lT0pK8pXGaBt0Zt3QBrRu8SzdLDepB++7EChTr+pfFIAN6YQs
- VeakPa5nDKcWifN24gb+yFjoHPHSYncpW90gH7w9KJ7/CixOQUiPbpfEwOUVxJYax7xw
- NVy+ZR/pSR6I7V4dyDjwgJ9+qeXvgdWSnxx4ePOG+jVovOnn5Wze3gmXGujVCJWw2Ln7
- g7JlvXMmb3pJLsRMuFZmCtK6c4euol13voxq9G/Rpnlh66I0veZ0wUgOfnWbI6L3Hgrr
- O7g8pZXQGg59rwezZZz9ztiQjY0CMKEYGSupxhWqJ68AVxfwYcz4qENrqu87zGAIVJfJ PQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6pa73136-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 15:43:09 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 328FcEiS025409;
-        Wed, 8 Mar 2023 15:43:08 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6pa7312n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 15:43:08 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 328EsNS4011838;
-        Wed, 8 Mar 2023 15:43:07 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([9.208.129.114])
-        by ppma04dal.us.ibm.com (PPS) with ESMTPS id 3p6gbv4pvp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 15:43:07 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 328Fh53I51183992
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 Mar 2023 15:43:05 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 52FB858059;
-        Wed,  8 Mar 2023 15:43:05 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB86658057;
-        Wed,  8 Mar 2023 15:43:03 +0000 (GMT)
-Received: from sig-9-77-134-135.ibm.com (unknown [9.77.134.135])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  8 Mar 2023 15:43:03 +0000 (GMT)
-Message-ID: <f5a61c0f09c1b8d8aaeb99ad7ba4aab15818c5ed.camel@linux.ibm.com>
-Subject: Re: [PATCH 15/28] security: Introduce inode_post_removexattr hook
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
-        jlayton@kernel.org, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
-        jarkko@kernel.org, stephen.smalley.work@gmail.com,
-        eparis@parisplace.org, casey@schaufler-ca.com, brauner@kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Mar 2023 10:43:03 -0500
-In-Reply-To: <20230303181842.1087717-16-roberto.sassu@huaweicloud.com>
-References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
-         <20230303181842.1087717-16-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: rcDnmFkSeRtMQr31Sk-ko2LOYipxVCr9
-X-Proofpoint-ORIG-GUID: lX655t0e_XgQfnp5nDGpuFc_8fvKNGV9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_08,2023-03-08_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 phishscore=0 mlxlogscore=999 clxscore=1015
- lowpriorityscore=0 mlxscore=0 spamscore=0 adultscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303080133
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 8 Mar 2023 10:44:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AECF7AA7;
+        Wed,  8 Mar 2023 07:43:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3075160FCF;
+        Wed,  8 Mar 2023 15:43:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B33C433EF;
+        Wed,  8 Mar 2023 15:43:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678290208;
+        bh=kYutHpejNtmmeokplIU5qESykQhQfmRXB0B3UcVHJ/A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pTEH+9+A2VlNt/UDNUfumfNn78n4Ayb3ttC8+3prI+UMqUH008tp6mbaFrNOs/srD
+         L1ZAJ/t4+FGpDhT0uxetSddfLKNg2ESCG1ofsXlnnUoERbqSc72SIrgZx3pPPF7uuN
+         oEoNQrrCXRczlB4Pj61yTWNqjNHnLvd/m9JjeT+w=
+Date:   Wed, 8 Mar 2023 16:43:25 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        matthias.bgg@gmail.com, weiqing.kong@mediatek.com,
+        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH 0/2] pwm: mtk-disp: Fix backlight configuration at boot
+Message-ID: <ZAitHYRCUHsIvZMk@kroah.com>
+References: <20230123160615.375969-1-angelogioacchino.delregno@collabora.com>
+ <06918fde-64ea-37b2-da1a-1c8316457223@collabora.com>
+ <06909bd8-3da2-1cf0-82ac-3ed4f3e63def@collabora.com>
+ <ZAigsHAgqkLlBD1y@kroah.com>
+ <28142704-d82d-d533-d2a8-b1061182f1f6@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <28142704-d82d-d533-d2a8-b1061182f1f6@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roberto,
-
-On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On Wed, Mar 08, 2023 at 03:55:59PM +0100, AngeloGioacchino Del Regno wrote:
+> Il 08/03/23 15:50, Greg Kroah-Hartman ha scritto:
+> > On Wed, Mar 08, 2023 at 12:46:07PM +0100, AngeloGioacchino Del Regno wrote:
+> > > Il 23/02/23 15:16, AngeloGioacchino Del Regno ha scritto:
+> > > > Il 23/01/23 17:06, AngeloGioacchino Del Regno ha scritto:
+> > > > > Since the pwm-mtk-disp driver was fixed to get PWM_EN state from the
+> > > > > right register, an old two-wrongs-make-one-right issue emerged: as a
+> > > > > result, MT8192 Asurada Spherion got no backlight at boot unless a
+> > > > > suspend/resume cycle was performed.
+> > > > > Also, the backlight would sometimes not get updated with the requested
+> > > > > value, requiring the user to change it back and forth until it worked.
+> > > > > 
+> > > > > This series fixes both of the aforementioned issues found on MT8192.
+> > > > > 
+> > > > > AngeloGioacchino Del Regno (2):
+> > > > >     pwm: mtk-disp: Disable shadow registers before setting backlight
+> > > > >       values
+> > > > >     pwm: mtk-disp: Configure double buffering before reading in
+> > > > >       .get_state()
+> > > > > 
+> > > > >    drivers/pwm/pwm-mtk-disp.c | 34 +++++++++++++++++++++++-----------
+> > > > >    1 file changed, 23 insertions(+), 11 deletions(-)
+> > > > > 
+> > > > 
+> > > > Gentle ping for this one: this is fixing backlight issues on multiple MediaTek
+> > > > SoCs and was well tested.
+> > > > 
+> > > > Thanks,
+> > > > Angelo
+> > > 
+> > > Since this series was sent more than one month ago, and since this fixes broken
+> > > backlight on a number of Chromebooks with MT8183 and MT8192 SoCs, and seen the
+> > > urgency of getting these fixes in, I'm adding Greg to the loop.
+> > 
+> > $ ./scripts/get_maintainer.pl drivers/pwm/pwm-mtk-disp.c
+> > Thierry Reding <thierry.reding@gmail.com> (maintainer:PWM SUBSYSTEM)
+> > "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de> (reviewer:PWM SUBSYSTEM)
+> > Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC support)
+> > AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> (reviewer:ARM/Mediatek SoC support)
+> > linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM)
+> > linux-kernel@vger.kernel.org (open list:ARM/Mediatek SoC support)
+> > linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+> > linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+> > 
+> > I don't see my name in there, did I become the PWM maintainer somehow?
+> > 
+> > What's wrong with Thierry taking this like normal?
+> > 
 > 
-> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
-> the inode_post_removexattr hook.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  fs/xattr.c                    |  1 +
->  include/linux/lsm_hook_defs.h |  2 ++
->  include/linux/security.h      |  5 +++++
->  security/security.c           | 14 ++++++++++++++
->  4 files changed, 22 insertions(+)
-> 
-> diff --git a/fs/xattr.c b/fs/xattr.c
-> index 14a7eb3c8fa..10c959d9fc6 100644
-> --- a/fs/xattr.c
-> +++ b/fs/xattr.c
-> @@ -534,6 +534,7 @@ __vfs_removexattr_locked(struct mnt_idmap *idmap,
->  
->  	if (!error) {
->  		fsnotify_xattr(dentry);
-> +		security_inode_post_removexattr(dentry, name);
->  		evm_inode_post_removexattr(dentry, name);
->  	}
+> Nothing wrong with that. I felt like this series got ignored as I've never
+> received any reply from Thierry, even though it's a Fixes series that I deem
+> to be moderately urgent; that's why I added you to the loop.
 
-Nothing wrong with this, but other places in this function test "if
-(error) goto ...".   Perhaps it is time to clean this up.
+Then ask Thierry and Uwe, what would you want to have happen if you were
+the maintainer of a subsystem?
 
->  
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index eedefbcdde3..2ae5224d967 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -147,6 +147,8 @@ LSM_HOOK(int, 0, inode_getxattr, struct dentry *dentry, const char *name)
->  LSM_HOOK(int, 0, inode_listxattr, struct dentry *dentry)
->  LSM_HOOK(int, 0, inode_removexattr, struct mnt_idmap *idmap,
->  	 struct dentry *dentry, const char *name)
-> +LSM_HOOK(void, LSM_RET_VOID, inode_post_removexattr, struct dentry *dentry,
-> +	 const char *name)
+> If that created unnecessary noise, I'm extremely sorry and won't happen again.
 
-@Christian should the security_inode_removexattr() and
-security_inode_post_removexattr() arguments be the same?
+Not noise, just confusion on my part.  I'm glad to take patches that
+have no obvious maintainers, or maintainers that have disappeared, but
+that doesn't seem to be the case here.
 
->  LSM_HOOK(int, 0, inode_set_acl, struct mnt_idmap *idmap,
->  	 struct dentry *dentry, const char *acl_name, struct posix_acl *kacl)
->  LSM_HOOK(int, 0, inode_get_acl, struct mnt_idmap *idmap,
+Also remember that we had the merge window, which is 2 weeks of us not
+being able to take any new code at all, even for fixes.
 
--- 
+And finally, to make it easier for your code to be accepted, please take
+the time to review other's code for the subsystems you care about to
+make the maintainer's load easier.  If you do that, you will often find
+your patches getting faster response just by virtue of there being less
+work to do on the subsystem overall.  Why not do that right now to help
+out with other PWM patches?
+
 thanks,
 
-Mimi
-
+greg k-h
