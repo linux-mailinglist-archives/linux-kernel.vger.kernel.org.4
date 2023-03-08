@@ -2,242 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA0D6B0ED5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:35:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EC86B0EDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 17:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjCHQfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 11:35:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
+        id S229952AbjCHQhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 11:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbjCHQfE (ORCPT
+        with ESMTP id S229453AbjCHQhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 11:35:04 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21C65262;
-        Wed,  8 Mar 2023 08:35:01 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 80F85FF811;
-        Wed,  8 Mar 2023 16:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678293300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lUqLGRcG0w1R1iyEPwO1Ebbfe3rcU5gyLFk3k2avVAA=;
-        b=aHrGdIQeeaiSvYoxSkLc+KAYSRX4ac2bF5cebMcenP1fS2MSr2Knm0vLB2OazwSvbodCvH
-        ngNLG2Qkv7cwBX15KF36vC4m+gfmMsAw32l/HChTK739+bFor3Ya7fTEwEfCsMB6j8F5IA
-        RzZqXkwxa1dp7Wy86wS7S9tFCtqbmrM2NvGOeOoP02m8zdKIqAymEDeXyy0rwnfnaYf08F
-        8MhV9B8uD4Ht0JD0Hhb1m2PiSPW1P8k7lUrV+dI4RkgATib9HdhOihqM4U60ZNPH2vr68V
-        pF+33zGbMA2taiYfi7KHopl6udaUGxzqC8X2EXQaW80UuRJ95luD65pOC+ArPw==
-Date:   Wed, 8 Mar 2023 17:34:53 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Vincent Shih <vincent.sunplus@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Evgeniy Polyakov <zbr@ioremap.net>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-sunxi@lists.linux.dev, linux-rtc@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH V2] nvmem: add explicit config option to read OF fixed
- cells
-Message-ID: <20230308173256.3837b87b@xps-13>
-In-Reply-To: <20230224072903.20945-1-zajec5@gmail.com>
-References: <20230224072903.20945-1-zajec5@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 8 Mar 2023 11:37:50 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2136.outbound.protection.outlook.com [40.107.237.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4786C48AB;
+        Wed,  8 Mar 2023 08:37:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FnEVqvOjYIV38D5NBna6Vs8K76gWOjTghwZKXSP5tFxJyEH4kiW5XFSFgEekt1vq8jUvnxdsXztY9s/lgVqQU+VKHa9wlhk4Q/mWWsocql/vKSrqaSV1mu7hSxlr2rK0g55+KRtO07SIIBzkb5fkIf7H6wSJFBVDRmW2mCSHKx4Sizy5dyo7zIZ/CW9mnY3rQ0FUr/7EvaIdxfLIJluoEbK9jpAcbyl62B6ArsNWcm+F0FhmPUgSrPoY8PWOqFDYujY51v2BKmn1K7NiKyvEeduBwb1avLLOubck2UdQKcYuSmtFCTLCoCjpY+6kzSfMFLddqxbcd6S7upwXWLfCJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HwveoQ7svcvyQa3bDOMwEoXS5U79IJ/EJ3vfg5QqDsM=;
+ b=XpjT4uyy8/IKxDBnvtnsVC8EGpOBw7v0stwedqwWSANX7YTXOEFAdYJ3iojLTmMBMmusUgsaj6+HbMngdDGzZKMyRsP7oD3CezCI9CSEgmKhuRPdveWJmbAL/L0ui4saoBJC2b8HWUf44LbSLi3krf87551zFiw5NYoy72eu77PaP6LUmwr9ZlCc2Jyj3U7ltmX7njJEyZx+k+vkCDFFH1aADIpjaNN5isRy4QGU6ZAdlN+jBeRBieIow/5woVZuKBgH6iz3Kr13XtlHw6XQ1AwE1KKXOvX3TLZiOc0QuehybVLeZ2+VrKnlYDEaFqPYlDnUhsCIXSg4j79W2vkRWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HwveoQ7svcvyQa3bDOMwEoXS5U79IJ/EJ3vfg5QqDsM=;
+ b=VdHkI4X+72K36rfLAxDxaf1pTQfQnWQVIPAvy2F06pllR9kqtRXkleU3gEOWvvsIjOPtPj/OcgE/ELGR9gQu7rvSMOgyC/Tdy6TNbKkuD/4ziU9fP7eUQXknxZ/u+WL2ScZsxgbIbhi/cdJw7sjeH2IQt863COyCPbZe/GIWhAo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BN0PR13MB4582.namprd13.prod.outlook.com (2603:10b6:408:117::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.17; Wed, 8 Mar
+ 2023 16:37:45 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6156.029; Wed, 8 Mar 2023
+ 16:37:44 +0000
+Date:   Wed, 8 Mar 2023 17:37:36 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next v2 2/2] net: dsa: microchip: add ETS Qdisc
+ support for KSZ9477 series
+Message-ID: <ZAi50OqlVD+47iTG@corigine.com>
+References: <20230308091237.3483895-1-o.rempel@pengutronix.de>
+ <20230308091237.3483895-3-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308091237.3483895-3-o.rempel@pengutronix.de>
+X-ClientProxiedBy: AS4P192CA0026.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e1::10) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BN0PR13MB4582:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5ca9abf2-7a27-41ff-f604-08db1ff37172
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: W0AinsqxJ9ctPth+EQxdKmiGcozeFPsVbIDqnN8qSOulnWdtVC3YOFkffjaeCvJ3LvT00qRYN2PlVQlXrCzx2QroY1bv1ZbeR0yUnRSNWvTfylVmO5YusVmE9WUzbBJmtKcxTG0MhkCMHj2XiV6v/yil6Jn2YvgW4CPWJCoMuGM3vQHXWhNqCUUEXYM4BMUWWTYTeMqgPsyx/zH2MRzWz9cRNolzTHfsCihE4Pd2VRH2laparA5vWRFWzJy9mTQBoL4sYoM6BBbi8wk0ODnlx+ZvN/rkS1IVUbi5sPfwlPj67QVFyUNJHyYbjeZv9zDJcPHhfaqKktpeVv4RkUpUyqNgq3Z99KOpEt8sQv5cyeFyyMPWouEnipcouzvXGXVwHTBOSm3lyoqXkw4MKLgSkCYW5gYibq1tjIWzXx7bqk4+DoGR1cj7z0VHsfcI3YfMWxCwhFuOeZYzvxltZsFEEE1GJK4J++8zab4eA0MeBaM3X0NTaH22Cv9K9H5afGYKVq3Kj6GOQBENSy5v5LlbEIwDgBvAXxgz/0/I+jRDNzyjuig9Obb2gW+rr4WfvTHcHaXpQDbm6iAfzAIMYX7pDLLxcpXZhipN0IHbYL9iWZ+yo0svfVFJcHoJDr8qhif52Tl5ddcuoEpnD6xltewMQb2+kqvltMgQgO0+F73Av4D882tGpSJ4r3Jwe2tUK+28
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(366004)(39840400004)(346002)(451199018)(36756003)(4744005)(8936002)(7416002)(5660300002)(6506007)(6666004)(38100700002)(6512007)(83380400001)(186003)(2616005)(54906003)(86362001)(316002)(66556008)(41300700001)(6916009)(66476007)(8676002)(6486002)(966005)(478600001)(66946007)(2906002)(4326008)(44832011)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?c7JdlihUzI5tprUUjCj1jigkRafbqwniyetDTWJNYwfilewHyEKpHh1CP77o?=
+ =?us-ascii?Q?HWG0/ebCJ+ESQZ8gz7p2WdH1N0mMpD/JXrb2ovNw1ki5UyxcZnNPlZ+bzh0h?=
+ =?us-ascii?Q?DUUMx6BMMIDo+XTG0CEnb4XO5E0qOAAXAuSR1U4inUvtPYnnOPOyss5KZaHj?=
+ =?us-ascii?Q?zLyZgBDHBjHW6eOz9bCQ4fV/KmhU5ikBV+Xu6hXVcf+z8990KIsgO9St5D+n?=
+ =?us-ascii?Q?e2889jbhWO/FhjxkTJ5A9xWycQrJKTPtHE06ygJ8C9DAUCFdyT5KNAUNTRaJ?=
+ =?us-ascii?Q?jwk8cgnnYpauoTlvvHZKKF5V7tjRQz72u/OqkExNGSG1s1cgWDmib/xal+/I?=
+ =?us-ascii?Q?DdxtqtFX2BQ7Jn1QJJd0VzBy7HzOSxJ4CFF7sgyPfnXYzmLF99Z2RPpvOYbR?=
+ =?us-ascii?Q?EE+zygI1fqA6zytsZzubwITAzGJUK0nLwM0gbtlkiMR1MIkdWXavrhB1Er4v?=
+ =?us-ascii?Q?l83CezyytUGH07qKZrnRky0JR2D6vCDHiZS6KJUgzCPt/HAjnS5ulL1mB7Bd?=
+ =?us-ascii?Q?NEeTiZfEBQ6VuT+c+u+w3fXFpglDGceCzEl9ESgDZPoS4r665v6QayKE98A9?=
+ =?us-ascii?Q?kreOkitSXmvAuroEeMg43Tw5jhS/uR7I+G2J1glK4vF2PpsvGtJ8zYDXzyHK?=
+ =?us-ascii?Q?8t/SJYYLCvOyL03BmxaVTGdpdJupm8reE31nlHX8CQO6i9IPvZesQz0wtUy/?=
+ =?us-ascii?Q?w+okKsZPPPsi4SoFZWLloAxTs97bJFdQmADKhk0XqLA/b0Eclujw32gMNlt1?=
+ =?us-ascii?Q?zwbFLZHJfaaqyG1x8RW7hhLUcvT9jo6WvvLQGwyFy4YLkDhG/Jpf8n+Qc8Q9?=
+ =?us-ascii?Q?Ac5hRyKgQzOsLHfKv+SXN0kCS2vloyOjxXmkcqz8rq23rhY7BGnioz1B5QyO?=
+ =?us-ascii?Q?vR1qr3M5JeIGcTQZRlLgg8KOfcoVht90aXWaLYj2lm2cQ4Ry89+UITQKQb6d?=
+ =?us-ascii?Q?rUj4OOYIkAbpk81emKdrhafGlqparx2wkIOyehlIpccN67pVo29+z6RncVGQ?=
+ =?us-ascii?Q?mJ5/2O/zuDpoWJik5YOv0uJQEVBgaKG243AzKy6TcBWRitMr+2DYu0RF4kyj?=
+ =?us-ascii?Q?V28cwn1Mq/NxIlm2zWLXlwY6l1JFYvs3Lk7Aych1Ve90ktp4cMrgu2LiRtC9?=
+ =?us-ascii?Q?Q+sw4ZMdctfS9J7I/LJgzDW74ilgvpLMfCOiqx5NihJIqSOfX9gZ7ICu1d6P?=
+ =?us-ascii?Q?AfbkB/7hHMqd2IEiMxTB/I5fv/pwIub1IjTs/BFfczMdEu09J2Ibg/gJSy/W?=
+ =?us-ascii?Q?b6vrGm86c7zg6EPt/VWT5YwpBl6PxGK5WiKRNyGxrDlDhN6423NtU2oPdwtK?=
+ =?us-ascii?Q?8ne5UGgJQlVXYbh8YjlHFCbrj2UeZso/VcXEoib1QTIakAE62QHUwalobCMP?=
+ =?us-ascii?Q?w7IHExBCehAgMAX+z9rzeXhV8vA8Oko5GpLO9eETnJBYn2s+WX+UYoEASrC7?=
+ =?us-ascii?Q?391fQbW0InDmui44KNKDnvAtKe+EKNZEpfHKs9mJQoiLyMcwBuB7fTpH5bvD?=
+ =?us-ascii?Q?Ua8B58FMD5dRLJcFqyB50koe77nk7daTGIqBYPiVdFG51tiL/12bRYmDDvoW?=
+ =?us-ascii?Q?XeBybpYdaG087EXBNmH5tfkTmcms76J89dSOl7IVb/rfC245Vf4c2QSfjG5i?=
+ =?us-ascii?Q?pqENipSdKfalZUEdoWKp2QNCBqNdt+p3un0LTFBphr9Wx092JxYwRROynOuv?=
+ =?us-ascii?Q?2fJmew=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ca9abf2-7a27-41ff-f604-08db1ff37172
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 16:37:44.6430
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sElGhThT40veGSpGgd6SECTx82NhElhi4YtzHBNNJzF+JskGMPG8vvBL8SWcQB4sOcUQyVAhZ5tvuNMoI2lu1tjCCQQrc17S5PtdJFn1obU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR13MB4582
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafa=C5=82,
+On Wed, Mar 08, 2023 at 10:12:37AM +0100, Oleksij Rempel wrote:
+> Add ETS Qdisc support for KSZ9477 of switches. Current implementation is
+> limited to strict priority mode.
+> 
+> Tested on KSZ8563R with following configuration:
+> tc qdisc replace dev lan2 root handle 1: ets strict 4 \
+>   priomap 3 3 2 2 1 1 0 0
+> ip link add link lan2 name v1 type vlan id 1 \
+>   egress-qos-map 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
+> 
+> and patched iperf3 version:
+> https://github.com/esnet/iperf/pull/1476
+> iperf3 -c 172.17.0.1 -b100M  -l1472 -t100 -u -R --sock-prio 2
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-zajec5@gmail.com wrote on Fri, 24 Feb 2023 08:29:03 +0100:
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
->=20
-> NVMEM subsystem looks for fixed NVMEM cells (specified in DT) by
-> default. This behaviour made sense in early days before adding support
-> for dynamic cells.
->=20
-> With every new supported NVMEM device with dynamic cells current
-> behaviour becomes non-optimal. It results in unneeded iterating over DT
-> nodes and may result in false discovery of cells (depending on used DT
-> properties).
->=20
-> This behaviour has actually caused a problem already with the MTD
-> subsystem. MTD subpartitions were incorrectly treated as NVMEM cells.
-
-That's true, but I expect this to be really MTD specific.
-
-A concrete proposal below.
-
-> Also with upcoming support for NVMEM layouts no new binding or driver
-> should support fixed cells defined in device node.
-
-I'm not sure I agree with this statement. We are not preventing new
-binding/driver to use fixed cells, or...? We offer a new way to expose
-nvmem cells with another way than "fixed-offset" and "fixed-size" OF
-nodes.
-
-> Solve this by modifying drivers for bindings that support specifying
-> fixed NVMEM cells in DT. Make them explicitly tell NVMEM subsystem to
-> read cells from DT.
->=20
-> It wasn't clear (to me) if rtc and w1 code actually uses fixed cells. I
-> enabled them to don't risk any breakage.
->=20
-> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
-> [for drivers/nvmem/meson-{efuse,mx-efuse}.c]
-> Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
-> V2: Fix stm32-romem.c typo breaking its compilation
->     Pick Martin's Acked-by
->     Add paragraph about layouts deprecating use_fixed_of_cells
-> ---
->  drivers/mtd/mtdcore.c          | 2 ++
->  drivers/nvmem/apple-efuses.c   | 1 +
->  drivers/nvmem/core.c           | 8 +++++---
->  drivers/nvmem/imx-ocotp-scu.c  | 1 +
->  drivers/nvmem/imx-ocotp.c      | 1 +
->  drivers/nvmem/meson-efuse.c    | 1 +
->  drivers/nvmem/meson-mx-efuse.c | 1 +
->  drivers/nvmem/microchip-otpc.c | 1 +
->  drivers/nvmem/mtk-efuse.c      | 1 +
->  drivers/nvmem/qcom-spmi-sdam.c | 1 +
->  drivers/nvmem/qfprom.c         | 1 +
->  drivers/nvmem/rave-sp-eeprom.c | 1 +
->  drivers/nvmem/rockchip-efuse.c | 1 +
->  drivers/nvmem/sc27xx-efuse.c   | 1 +
->  drivers/nvmem/sprd-efuse.c     | 1 +
->  drivers/nvmem/stm32-romem.c    | 1 +
->  drivers/nvmem/sunplus-ocotp.c  | 1 +
->  drivers/nvmem/sunxi_sid.c      | 1 +
->  drivers/nvmem/uniphier-efuse.c | 1 +
->  drivers/nvmem/zynqmp_nvmem.c   | 1 +
->  drivers/rtc/nvmem.c            | 1 +
->  drivers/w1/slaves/w1_ds250x.c  | 1 +
->  include/linux/nvmem-provider.h | 2 ++
->  23 files changed, 29 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
-> index 0feacb9fbdac..1bb479c0f758 100644
-> --- a/drivers/mtd/mtdcore.c
-> +++ b/drivers/mtd/mtdcore.c
-> @@ -523,6 +523,7 @@ static int mtd_nvmem_add(struct mtd_info *mtd)
->  	config.dev =3D &mtd->dev;
->  	config.name =3D dev_name(&mtd->dev);
->  	config.owner =3D THIS_MODULE;
-> +	config.use_fixed_of_cells =3D of_device_is_compatible(node, "nvmem-cell=
-s");
-
-I am wondering how mtd specific this is? For me all OF nodes containing
-the nvmem-cells compatible should be treated as cells providers and
-populate nvmem cells as for each children.
-
-Why don't we just check for this compatible to be present? in
-nvmem_add_cells_from_of() ? And if not we just skip the operation.
-
-This way we still follow the bindings (even though using nvmem-cells in
-the compatible property to require cells population was a mistake in
-the first place, as discussed in the devlink thread recently) but there
-is no need for a per-driver config option?
-
->  	config.reg_read =3D mtd_nvmem_reg_read;
->  	config.size =3D mtd->size;
->  	config.word_size =3D 1;
-> @@ -891,6 +892,7 @@ static struct nvmem_device *mtd_otp_nvmem_register(st=
-ruct mtd_info *mtd,
->  	config.name =3D kasprintf(GFP_KERNEL, "%s-%s", dev_name(&mtd->dev), com=
-patible);
->  	config.id =3D NVMEM_DEVID_NONE;
->  	config.owner =3D THIS_MODULE;
-> +	config.use_fixed_of_cells =3D true;
->  	config.type =3D NVMEM_TYPE_OTP;
->  	config.root_only =3D true;
->  	config.ignore_wp =3D true;
-> diff --git a/drivers/nvmem/apple-efuses.c b/drivers/nvmem/apple-efuses.c
-> index 9b7c87102104..0119bac43b2c 100644
-> --- a/drivers/nvmem/apple-efuses.c
-> +++ b/drivers/nvmem/apple-efuses.c
-> @@ -36,6 +36,7 @@ static int apple_efuses_probe(struct platform_device *p=
-dev)
->  	struct resource *res;
->  	struct nvmem_config config =3D {
->  		.dev =3D &pdev->dev,
-> +		.use_fixed_of_cells =3D true,
->  		.read_only =3D true,
->  		.reg_read =3D apple_efuses_read,
->  		.stride =3D sizeof(u32),
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index 174ef3574e07..6783cd8478d7 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -844,9 +844,11 @@ struct nvmem_device *nvmem_register(const struct nvm=
-em_config *config)
->  	if (rval)
->  		goto err_remove_cells;
-> =20
-> -	rval =3D nvmem_add_cells_from_of(nvmem);
-> -	if (rval)
-> -		goto err_remove_cells;
-> +	if (config->use_fixed_of_cells) {
-> +		rval =3D nvmem_add_cells_from_of(nvmem);
-> +		if (rval)
-> +			goto err_remove_cells;
-> +	}
-> =20
->  	dev_dbg(&nvmem->dev, "Registering nvmem device %s\n", config->name);
-> =20
-
-Thanks,
-Miqu=C3=A8l
