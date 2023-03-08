@@ -2,103 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22406B0753
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 700636B0755
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 13:41:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjCHMlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 07:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S231264AbjCHMl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 07:41:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCHMlT (ORCPT
+        with ESMTP id S229676AbjCHMly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 07:41:19 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A3ABCBB1
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 04:41:10 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id h14so15230073wru.4
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 04:41:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678279269;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kR8tWO1bqdzPwR+CyHIXGzui34xc8/chkF+wza09xWU=;
-        b=QG6LXlNFfnft7i/QIKVvlf8v9OsNFn7+8xAKiVvhkikj8Nft1TV/nSnzcsCFeZg53o
-         yhk0NU7Hy07dWpVBxHD4foWIJ0zMxKXWSQmpe1sI3lEtqJF/QdWFm8RWQh1FK1M+BIsZ
-         zOW82lNiBlLVzJEDmWGmMpYe5GLpe8PAkbjuF87I0f1FYx3KH3mrsUBBN9NTg4wEk1yq
-         RVf9uXSJp3KEdq4wac+ploVrdklATHfYOhlZZ0kvnJJtvo79i+WAHkXltKF/Ktg+GkCS
-         EShKwtdscfC4UL4yXAJKWF75ZqSA2JGMVs2CyyrD16ggpz6BYQZDh8fQKDwFl6wwAgFa
-         /FBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678279269;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kR8tWO1bqdzPwR+CyHIXGzui34xc8/chkF+wza09xWU=;
-        b=aCIuAe8fm9XYyZee/wSQrPrePKwy+d7GTgySCHvSb7fl/hnlD6JeoghieKVtk1UO+L
-         OD6+Cu46WLFYAALZxKEnanmkN5xss3u/ROLzYSn2MXGC4W+keaDVHdp9hCZnPyqBuBUm
-         91FG8z80OP/CbNYhu4NOS3DF56PwGa0MT4lonLDfEoYBJP+0A67uzFT2AvSyURFlhbUY
-         ApwT5KVdmfdEzrf6+ZIIzAhmnKmfOHPo+775VP1ry3KTSDv6xYl7hUcCpC3nrEuObKJi
-         kfMS6VOu5UWs6Xo1keECSzh8MugFD88lE4UVmAiq9m8aGuuj/EyjVWRKCcQGQwpi+hPq
-         oYzA==
-X-Gm-Message-State: AO0yUKWER0GrEBRYNt6luIShsL0p+r1ivuxgK7DbNSuKlhNAI9/yzvz3
-        IwXLqi8ncxY8Kf1VNW0Ye4Wfi1NeEtPAvX3h2wQ=
-X-Google-Smtp-Source: AK7set83BkM4KnsY+ONEc5XNT4mKP1FJ+j04ErgrxABh2EnB/l5v+g8IQB/SE1tW0drQiC3dqVv2vMCeih5J6UftXQo=
-X-Received: by 2002:adf:fd0b:0:b0:2c9:f41d:6200 with SMTP id
- e11-20020adffd0b000000b002c9f41d6200mr3415381wrr.4.1678279269260; Wed, 08 Mar
- 2023 04:41:09 -0800 (PST)
+        Wed, 8 Mar 2023 07:41:54 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF5873AFC;
+        Wed,  8 Mar 2023 04:41:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mxTVyA0v8n+ugEViShja2/nO02YnajTUleuPEutG1sQ=; b=T+w7GXVJVVPmscwBKGpRvQR8zj
+        YVH7+/jayql7u5RcsbMj6+18P66imDJylWjpgFe7Sx9+qVt0KkNQijLdt/d38RBhhC4CA8BJr3ddq
+        tj1GqkTnjmuvuCbxp2M0ocSpuJyd16xGRyY9HhuGZzIHhxq/FG3+iAEauQ40db/8ERt6MNs4sHez9
+        y5BmlsgTiRE2JabGiY93BQ6SWDsX/YcYO4/VpG8vMsSTO2sBx+n/5i/7ae2I2z9MF/WeXE1o8bi4w
+        lswaeNTgUvO9LsCiaIh0IPhx7fZ8uNAE0UaqCi6qA0TKFdjjMJGjn3ON0FtR/Z9UCUpw5TWq3TXRg
+        BZuOvnVQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41488)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pZt74-0002Ux-Qt; Wed, 08 Mar 2023 12:41:46 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pZt71-0002ae-2L; Wed, 08 Mar 2023 12:41:43 +0000
+Date:   Wed, 8 Mar 2023 12:41:43 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
+ 1000Base-X and 2500Base-X modes
+Message-ID: <ZAiCh8wkdTBT+6Id@shell.armlinux.org.uk>
+References: <cover.1678201958.git.daniel@makrotopia.org>
+ <fd5c7ea79a7f84caac7d0b64b39fe5c4043edfa8.1678201958.git.daniel@makrotopia.org>
+ <ZAhzDDjZ8+gxyo3V@shell.armlinux.org.uk>
+ <ZAh7hA4JuJm1b2M6@makrotopia.org>
 MIME-Version: 1.0
-Received: by 2002:adf:f68a:0:b0:2c5:5249:8392 with HTTP; Wed, 8 Mar 2023
- 04:41:08 -0800 (PST)
-Reply-To: roselinekim200@gmail.com
-From:   Roseline Kim <roselinekim001@gmail.com>
-Date:   Wed, 8 Mar 2023 04:41:08 -0800
-Message-ID: <CABgJjrDm86-xXwF4=+Vsutg2BqZDcrmveQa70Wj9tWUQPQdb7w@mail.gmail.com>
-Subject: =?UTF-8?B?7JWM65286rCAIOuLueyLoOydhCDstpXrs7Xtlanri4jri6Qs?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:429 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4999]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [roselinekim001[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [roselinekim001[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [roselinekim200[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAh7hA4JuJm1b2M6@makrotopia.org>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-7JWM65286rCAIOuLueyLoOydhCDstpXrs7Xtlanri4jri6QsDQrsoIDripQgUm9zZWxpbmUgS2lt
-IOu2gOyduOyeheuLiOuLpC4g7KCA64qUIO2YhOyerCA1NuyEuCDsl6zshLHsnoXri4jri6QuDQrt
-lYTrpqztlYDsl5Ag7J6F7JuQ7ZW0IOyeiOyWtOyalCwg7Jes67O0LCDqsIDriqXtlZjshLjsmpQN
-CuyasOumrOulvCDsnITtlbQg7ZSE66Gc7KCd7Yq466W8IOyymOumrO2VmOq4sCDsnITtlbQ/IOyX
-kCDsoIDsl5Dqsowg7Jew65297ZWY7Iut7Iuc7JikDQrsg4HshLgg7IKs7ZWt7J2ALg0K6rCQ7IKs
-7ZW07JqUDQpNcnMuIE1ycy5Sb3NlbGluZSBLaW0NCg==
+On Wed, Mar 08, 2023 at 12:11:48PM +0000, Daniel Golle wrote:
+> On Wed, Mar 08, 2023 at 11:35:40AM +0000, Russell King (Oracle) wrote:
+> > On Tue, Mar 07, 2023 at 03:53:58PM +0000, Daniel Golle wrote:
+> > > After conversion to phylink_pcs the 1000Base-X and 2500Base-X modes
+> > > would work only after `ethtool -s eth1 autoneg off`.
+> > > As ethtool autoneg and the ETHTOOL_LINK_MODE_Autoneg_BIT is supposed
+> > > to control auto-negotiation on the external interface it doesn't make
+> > > much sense to use it to control on-board SGMII auto-negotiation between
+> > > MAC and PHY.
+> > > Set correct values to really only enable SGMII auto-negotiation when
+> > > actually operating in SGMII mode. For 1000Base-X and 2500Base-X mode,
+> > > enable remote-fault detection only if in-band-status is enabled.
+> > > This fixes using 1000Base-X and 2500Base-X SFPs on the BananaPi R3
+> > > board and also makes it possible to use interface-mode-switching PHYs
+> > > operating in either SGMII mode for 10M/100M/1000M or in 2500Base-X for
+> > > 2500M mode on other boards.
+> > > 
+> > > Fixes: 14a44ab0330d ("net: mtk_eth_soc: partially convert to phylink_pcs")
+> > > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > 
+> > NAK.
+> > 
+> > There are PHYs out there which operate in SGMII mode but do not
+> > exchange the SGMII 16-bit configuration word. The code implemented
+> > here by me was explicitly to allow such a configuration to work,
+> > which is defined as:
+> > 
+> > 	SGMII *without* mode == inband
+> > 
+> > An example of this is the Broadcom 84881 PHY which can be found on
+> > SFP modules.
+> 
+> I also have multiple such 1000Base-T SFP modules here (finisar, AJYA),
+> and this change doesn't touch the codepaths relevant for those. They
+> are operating in SGMII mode, they have always been working fine.
+> 
+> What I'm trying to fix here is 1000Base-X and 2500Base-X mode which
+> has been broken by introducing ETHTOOL_LINK_MODE_Autoneg_BIT as the
+> deciding factor for in-band AN here.
+
+... which is correct.
+
+> Can you explain why ETHTOOL_LINK_MODE_Autoneg_BIT was used there in
+> first place? Is my understanding of this bit controlling autoneg on the
+> *external* interface rather than on the *system-side* interface wrong?
+
+Think about what 1000BASE-X is for. It's not really for internal links,
+it's intended by IEEE 802.3 to be the 1G *media* side protocol for
+1000BASE-SX, 1000BASE-LX, 1000BASE-CX etc links.
+
+Therefore, when being used in that case, one may wish to disable
+autoneg over the fibre link. Hence, turning off autoneg via ethtool
+*should* turn off autoneg over the fibre link. So, using
+ETHTOOL_LINK_MODE_Autoneg_BIT to gate 802.3z autonegotiation the
+correct thing to do.
+
+If we have a PHY using 1000BASE-X, then it is at odds with the
+primary purpose of this protocol, especially with it comes to AN.
+This is why phylink used to refuse to accept PHYs when using 802.3z
+mode, but Marek wanted this to work, so relaxed the checks
+preventing such a setup working.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
