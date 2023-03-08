@@ -2,134 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2296B15AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:54:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C83C6B15AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjCHWyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:54:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58930 "EHLO
+        id S229917AbjCHW5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCHWyd (ORCPT
+        with ESMTP id S229645AbjCHW5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:54:33 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7047EB4F63;
-        Wed,  8 Mar 2023 14:54:31 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id o12so71934743edb.9;
-        Wed, 08 Mar 2023 14:54:31 -0800 (PST)
+        Wed, 8 Mar 2023 17:57:18 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0562565447
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:57:17 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id v11so87266plz.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:57:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678316070;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+J0b8VSa/m7CpwvWD16+VUtDl7LeR0FAxAMR+W7ckJc=;
-        b=nTJ0zv0CYJkHIUxwc6QFze1Z7fTuDKOX3WhFNdJUvFRbnnu4P0YoFvcJNyh+8qKg+a
-         9SQaYQvHAnIMo7hu9JLWrhblRyozZNPe/6qMHmI39gSez0wZdOk8iWb8OvYruLhydk4h
-         RqRmCxMImh3W5wm9xrJQLX7acssLQDXDkBpOG35fWSOKD3AZriAvXM5NGyE/ShKZ2y3E
-         uD42gkqrpIULtfb0oRfCrJewfMSrtEjWsHlIzA9i5BXVMbK3gyfV5ZoRF7aTnKvuFQyY
-         p5+n42JUCJGP8up/SRgYZco4ZLZ4lmkTGs8NYb5LHbuP0F7EkuJzCWIEEfeHOtYNk+O6
-         Q47Q==
+        d=chromium.org; s=google; t=1678316236;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dAK9CzL+zrevBUMkpokUm3TFCKwT1+VpG+72EOhUpw4=;
+        b=PYk53ijBC97VpoEV2dqmf6xQpnC+MN1CDULqjxExB4rX2qXKFLCXRKi7w/vRZl3cd9
+         rRlFh9+bA9MdpRILUNPVDv3kV8iA4y1nlQPBGSVgKPkAUDCHbYQz0LT+ur0NBBuXW+78
+         mGJYzl+Fx/o6Fj5Jc4etvYg1Y8a/LDfNeBhPk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678316070;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+J0b8VSa/m7CpwvWD16+VUtDl7LeR0FAxAMR+W7ckJc=;
-        b=8Ark+Ck0I4HqqhyX9n9jor+p7+muxq3eHHAFfXUAq0dSuxFQ+fTXjaUdhQUqyvRyKw
-         gaoG3alFF4MBUV2d6cFT//j5KfdC3/js0eEvlLYuLCaQ+6WbtXd4g4dCuAHxGddwnFYq
-         ei3f+o0cRCw1HS+l2FeaS0bRHLJfT0jV3nqeHWxHZnp44rDXuIyXCrTyQw8/XWPNw59+
-         2CN/Xtno0drMHVvSR7sBpXm1xeeHV+Am/MBld12tz75P0SUOcg3lVcpZub4jiZjy1GUw
-         k+t+qX9PBo68oqR/4oeyIXadhA0G/yISJQacRqA+nSdZdMKcG47uWQfK16XEAqvpQx1e
-         bX1Q==
-X-Gm-Message-State: AO0yUKXvRjTtH13jHxzqv8RRQVvDA2ezezyfKKGd7ZEeXARIxlvMBjuC
-        ZqtMU/Sro/f7F9nfefMIOGSjl1XSriQQeg==
-X-Google-Smtp-Source: AK7set/J2a/dCSAr+3ZD7kva5xaOieFb8KurXmVhg0eTSxMT844CdYCsJxox9jvOqm3Y1muk4FXh8Q==
-X-Received: by 2002:a17:907:cf48:b0:8e0:4baf:59bb with SMTP id uv8-20020a170907cf4800b008e04baf59bbmr21320047ejc.22.1678316069809;
-        Wed, 08 Mar 2023 14:54:29 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id lo2-20020a170906fa0200b008e09deb6610sm7995732ejb.200.2023.03.08.14.54.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 14:54:29 -0800 (PST)
-Date:   Thu, 9 Mar 2023 00:54:25 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
-        Michael Walle <michael@walle.cc>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Guangbin Huang <huangguangbin2@huawei.com>,
-        Jie Wang <wangjie125@huawei.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Maxim Korotkov <korotkov.maxim.s@gmail.com>,
-        Marco Bonelli <marco@mebeim.net>
-Subject: Re: [PATCH v3 2/5] net: Expose available time stamping layers to
- user space.
-Message-ID: <20230308225425.v6q3dglfz7me44ht@skbuf>
-References: <20230308135936.761794-1-kory.maincent@bootlin.com>
- <20230308135936.761794-1-kory.maincent@bootlin.com>
- <20230308135936.761794-3-kory.maincent@bootlin.com>
- <20230308135936.761794-3-kory.maincent@bootlin.com>
+        d=1e100.net; s=20210112; t=1678316236;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dAK9CzL+zrevBUMkpokUm3TFCKwT1+VpG+72EOhUpw4=;
+        b=xnu8wJm8wDuN8kScAWkoqSKvnDNKoIKkruNd+Ulk+oqQ8tP10SAV/Dxjf6xWQlj5zr
+         /cDZIX+loYax3H3HVkd5ABhnV8/QODmol8kh8DnRhHzolbnFd1NbfmnOkHITCMUcKVaj
+         1E4KQSDtUWWJIOCr53g+u2K8bXf0E0OmFLfnZxVx9a9RkxW+LO1CN3QvDPglKrgUvFKE
+         E2fXDIB3nE2SXeDyirS0huF+L2x47de5nTy0sTpK44nYiBDqBvoCTfUJWxa5Q/DqY3Yd
+         CEFo+p1zkjATojITgR2a+sXRswYlf8MO3saTtv9l0kbCkah2P0cTQNn2eoMMpCGR+CrV
+         e/hg==
+X-Gm-Message-State: AO0yUKVBu6bawgxO1YgK1O3MFyZWzPYNwuyiN5OpNtRtnzKtuPNyaPGj
+        mYwHFVzEOLiT4+maofbXCViAZGUDlG468kM/JVv8bQ==
+X-Google-Smtp-Source: AK7set/9BekLMEyVSqqqtQLPZi/SWUxzXMuCGCmRLKsX86j2/FOo/nIFNihNMHQlPOAkVNSNDIE+Qw==
+X-Received: by 2002:a17:902:e809:b0:19a:9890:eac6 with SMTP id u9-20020a170902e80900b0019a9890eac6mr23775978plg.24.1678316236230;
+        Wed, 08 Mar 2023 14:57:16 -0800 (PST)
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com. [209.85.210.171])
+        by smtp.gmail.com with ESMTPSA id kd12-20020a17090313cc00b0019cb6222691sm8758875plb.133.2023.03.08.14.57.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 14:57:15 -0800 (PST)
+Received: by mail-pf1-f171.google.com with SMTP id fd25so308696pfb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:57:15 -0800 (PST)
+X-Received: by 2002:a63:5847:0:b0:4eb:1c07:e5d7 with SMTP id
+ i7-20020a635847000000b004eb1c07e5d7mr7049690pgm.6.1678316235129; Wed, 08 Mar
+ 2023 14:57:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230308135936.761794-3-kory.maincent@bootlin.com>
- <20230308135936.761794-3-kory.maincent@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230111-uvc_privacy_subdev-v1-0-f859ac9a01e3@chromium.org>
+ <CANiDSCuq483Eha-KfUM_1y4zb0sC8rNgf-yki5SjiUo3czaKBw@mail.gmail.com> <CAEDqmY7XqqFrQCEMFe3kmOFJkgOcHoJcUH5bJAueyH0oQivzmw@mail.gmail.com>
+In-Reply-To: <CAEDqmY7XqqFrQCEMFe3kmOFJkgOcHoJcUH5bJAueyH0oQivzmw@mail.gmail.com>
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 8 Mar 2023 23:57:04 +0100
+X-Gmail-Original-Message-ID: <CANiDSCtdx2URrXCy+T5VOWejqP8V-jVLqa2P9RXNbc2vbZnzog@mail.gmail.com>
+Message-ID: <CANiDSCtdx2URrXCy+T5VOWejqP8V-jVLqa2P9RXNbc2vbZnzog@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/3] meida: uvcvideo: reimplement privacy gpio as a
+ separate subdevice
+To:     Yunke Cao <yunkec@chromium.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Köry,
+On Tue, 14 Feb 2023 at 06:46, Yunke Cao <yunkec@chromium.org> wrote:
+>
+> Hi!
+>
+> On Fri, Jan 13, 2023 at 5:26 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
+> >
+> > Hi Yunke
+> >
+> > Thank you very much for the patchset :)
+> >
+> > On Wed, 11 Jan 2023 at 09:52, Yunke Cao <yunkec@chromium.org> wrote:
+> > >
+> > > privacy_gpio in uvc were added as V4L2_CID_PRIVACY in uvc video node in
+> > > https://lore.kernel.org/all/20201223133528.55014-1-ribalda@chromium.org/
+> > >
+> > > Userspace applications often require to constantly poll privacy control.
+> > > Currently, polling privacy control requires keeping the video node open,
+> > > which prevents the camera from autosuspending.
+> > >
+> > > This patchset adds a separate v4l2 subdevice. Userspace access the gpio
+> > > via V4L2_CID_PRIVACY in the new subdevice. Applications can poll the
+> > > privacy control status without opening the video node and activate the
+> > > camera.
+> > >
+> > > The non-gpio V4L2_CID_PRIVACY in uvc is not affected.
+> >
+> > Since this is a RFC, lets focus on the idea and not on the code itself.
+> >
+> > - I am missing a reference to the subdevice from the media device. How
+> > will a user figure out that /dev/v4l-subdev0 is the privacy gpio of
+> > /dev/media0 and not /dev/media1?. Thake a look to the "ancillary
+> > links"
+> > - We have already exposed the control as part of the main video
+> > device, that means that we need to keep that API. The control on
+> > /dev/v4l-subdev0 should "mirror" the control on /dev/video0
+> > - There is no need to v4l2_ctrl_fill_event(), if you modify the
+> > control with a set controll function, the media controller should take
+> > care of everything
+>
+> Thanks! I will fix these in the next version if we decide to proceed.
+>
+> >
+> > @Sakari Ailus @Hans Verkuil : Assuming a correct implementation, how
+> > would you feel about exposing a privacy gpio as a subdevice?
+> >
+>
+> Sakari, Hans, do you think this idea makes sense?
 
-On Wed, Mar 08, 2023 at 02:59:26PM +0100, Köry Maincent wrote:
-> From: Kory Maincent <kory.maincent@bootlin.com>
-> 
-> Time stamping on network packets may happen either in the MAC or in
-> the PHY, but not both.  In preparation for making the choice
-> selectable, expose both the current and available layers via ethtool.
-> 
-> In accordance with the kernel implementation as it stands, the current
-> layer will always read as "phy" when a PHY time stamping device is
-> present.  Future patches will allow changing the current layer
-> administratively.
-> 
-> Signed-off-by: Richard Cochran <richardcochran@gmail.com>
-> Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-> ---
+Friendly ping
 
-I'm pretty sure that all new ethtool commands must be implemented
-through the genetlink socket interface. The ioctl interface stopped
-being extended and is in maintenance mode only.
+>
+> Best,
+> Yunke
+>
+> >
+> > Thanks!!!
+> >
+> >
+> > >
+> > > Suggested-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > Signed-off-by: Yunke Cao <yunkec@chromium.org>
+> > > ---
+> > > Yunke Cao (3):
+> > >       media: v4l2-ctrls: Expose v4l2_ctrl_fill_event()
+> > >       media: uvcvideo: remove entity privacy control in the uvc video node
+> > >       media: uvcvideo: reimplement privacy GPIO as a separate subdevice
+> > >
+> > >  drivers/media/usb/uvc/uvc_ctrl.c          | 17 -------
+> > >  drivers/media/usb/uvc/uvc_driver.c        | 44 ++----------------
+> > >  drivers/media/usb/uvc/uvc_entity.c        | 76 +++++++++++++++++++++++++++++++
+> > >  drivers/media/usb/uvc/uvcvideo.h          | 19 +++++---
+> > >  drivers/media/v4l2-core/v4l2-ctrls-core.c |  9 ++--
+> > >  include/media/v4l2-ctrls.h                | 12 +++++
+> > >  6 files changed, 111 insertions(+), 66 deletions(-)
+> > > ---
+> > > base-commit: 7dd4b804e08041ff56c88bdd8da742d14b17ed25
+> > > change-id: 20230111-uvc_privacy_subdev-1e7a167e86eb
+> > >
+> > > Best regards,
+> > > --
+> > > Yunke Cao <yunkec@chromium.org>
+> >
+> >
+> >
+> > --
+> > Ricardo Ribalda
+
+
+
+-- 
+Ricardo Ribalda
