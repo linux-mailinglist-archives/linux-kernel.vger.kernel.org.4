@@ -2,119 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E99BC6B167A
-	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 00:25:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95026B168B
+	for <lists+linux-kernel@lfdr.de>; Thu,  9 Mar 2023 00:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCHXZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 18:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
+        id S229757AbjCHXeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 18:34:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjCHXZm (ORCPT
+        with ESMTP id S229462AbjCHXeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 18:25:42 -0500
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF4636423D;
-        Wed,  8 Mar 2023 15:25:41 -0800 (PST)
-Received: by mail-pl1-f169.google.com with SMTP id u5so155539plq.7;
-        Wed, 08 Mar 2023 15:25:41 -0800 (PST)
+        Wed, 8 Mar 2023 18:34:23 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A9F62DB3
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 15:34:22 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id z5so61546ljc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 15:34:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1678318460;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ApZcN/clhztxkBCrrdq75AIej//C1Akoazz2oc+iFsg=;
+        b=bzcE8Eu0G71O0Q+G3YwDQZToN0QKr0TZU63k6JpO6xoizNELCjKlTAeD9Tc2lU1qFa
+         ua1PMRrmfCHErCeeNgXZty2Cr8pthB1F2vJ3mOPai3zdEF1+cVimyIWGJiV7cu3mAM87
+         pqYuEF1qffc3Wl5wsJc9KhADOTyzZs+lDaczs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678317941;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ugad4+Q+eKUn0g86TD3ttr1CmSivswhGxYdUjaKKTUQ=;
-        b=PTPZM7MZiop2RXUwCPyUWwFMwM+qukzTD5ogRz5xWUkhlhsVjymhx+W04mNzlWjmDg
-         0nmf0NodwI7xkqU7vTxNDrhL/GWOmTszsfOzuYazNazo63DGP+O/0seKDzAG+PxiVeYD
-         3F1HbCojSdOEmXMcDRHt943bd6y9nGZsNyHORHFyKTQWZFf1vlosdlFZGOf3mtBi9J/x
-         uSDHEwP2fvHtVRXkSA8/4P2ETHoMlCtGgW+YyomsLWUk5nesSZHUc6gsxDcg2zrQk2iK
-         icnB3AFoUmAmpobUhDSZrbKbJoxFs81s8oRuoOlCW04jm3LoapX0gxT0tlhe7cFZlmE9
-         tEHg==
-X-Gm-Message-State: AO0yUKVQ0ZJvtKcW0xVbP4sqGXaZLib7j3LIUk/Rlrglgbm4JdCFlgZr
-        C702yGBR3TcXvw/5RZMDAa4=
-X-Google-Smtp-Source: AK7set+ZPREWQuqlRy2+K8H5xp0+oZPR6c0IVXcge9N+72YdBZvlPpxDCHTW3t4XdVvMyAJYduWedw==
-X-Received: by 2002:a05:6a21:99a3:b0:b6:99a4:66bd with SMTP id ve35-20020a056a2199a300b000b699a466bdmr22863712pzb.38.1678317941340;
-        Wed, 08 Mar 2023 15:25:41 -0800 (PST)
-Received: from [192.168.132.235] ([63.145.95.70])
-        by smtp.gmail.com with ESMTPSA id j6-20020aa78dc6000000b005938f5b7231sm9815063pfr.201.2023.03.08.15.25.40
+        d=1e100.net; s=20210112; t=1678318460;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ApZcN/clhztxkBCrrdq75AIej//C1Akoazz2oc+iFsg=;
+        b=gsM61C/aGldnCC0GiG8Lw+a0WYPy+v/xTQZyv5jZJmS4v7UjzHSj5Ip+iBlnI4uZ+x
+         muD0NVYR4524fC1ceSQ1h+jzmqtOQ17HHXL1EKH3ENDyP0l0mreMvkvzmpgBEKKwflKY
+         CjCNPVhZkajiu99xelf29KrUPBBztYABnSgvv2rZ8o33phQKEdN0pJdSA6MgN+LMvPoh
+         QtV+9TJ5V0MxBTKElp4184rxmug3DxmPWpNa5fMrknxuef8VpI6sZd3KdDrKxf4JvG55
+         8RIPGymKfGUqiK85TH8JTnmDvRDYTjdI0QS/dO2aT5ZAw4qNXIA/wndYTYIJ1586VUdn
+         XPZw==
+X-Gm-Message-State: AO0yUKVVIA+0+gVP8CsucKCVw/OafSVbWZsNFkMQuAAreuDL2Q0N3U9X
+        1U9beFTqQQRqVsIwq1+0GH35CbI9o77dN4tAJmPhtk5r
+X-Google-Smtp-Source: AK7set+EqojSsPShuTlLQOPEGz5PD/wyYAq2RbBTUMAdQ8z3SmbFMbKaq2zX6w1VX+HGZeZVQFjtig==
+X-Received: by 2002:a2e:aa98:0:b0:294:6e65:4ca6 with SMTP id bj24-20020a2eaa98000000b002946e654ca6mr5454750ljb.38.1678318460419;
+        Wed, 08 Mar 2023 15:34:20 -0800 (PST)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id a23-20020a2e88d7000000b00290b375a068sm2728014ljk.39.2023.03.08.15.34.20
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 15:25:40 -0800 (PST)
-Message-ID: <e354dece-5dc8-9cdc-b822-59a1e0f3a9c3@acm.org>
-Date:   Wed, 8 Mar 2023 15:25:39 -0800
+        Wed, 08 Mar 2023 15:34:20 -0800 (PST)
+Received: by mail-lf1-f54.google.com with SMTP id g17so107508lfv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 15:34:20 -0800 (PST)
+X-Received: by 2002:a17:906:398a:b0:877:747e:f076 with SMTP id
+ h10-20020a170906398a00b00877747ef076mr9357904eje.0.1678317959537; Wed, 08 Mar
+ 2023 15:25:59 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v1 4/4] ufs: mcq: Added ufshcd_mcq_abort()
-Content-Language: en-US
-To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1678247309.git.quic_nguyenb@quicinc.com>
- <c7fcbb70f0e74d225c1a09f107ba1058270739be.1678247309.git.quic_nguyenb@quicinc.com>
- <85994527-d09d-f381-3dda-7cfb9ce98d4b@acm.org>
- <ec627f76-380b-bdfd-e736-1626d5bde0e4@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <ec627f76-380b-bdfd-e736-1626d5bde0e4@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230303231133.1486085-1-eranian@google.com> <20230306120106.GE1267364@hirez.programming.kicks-ass.net>
+ <CAKwvOdnRvd5KK01awAyeyt5S36TPPW4_8Z6YL1r4gB-pBrHTbg@mail.gmail.com>
+ <20230307113545.GB2017917@hirez.programming.kicks-ass.net>
+ <20230307184315.GS25951@gate.crashing.org> <ZAeh8g0nr3IFRSVI@tucnak>
+ <CAHk-=whOLcy=oz=gHyoSSEnqc3M-APKFKTtTvA_3wYYPV8L+oA@mail.gmail.com>
+ <CAHk-=whCA4-uc5WV_-68Mpmu-TiSv6fxkSjZ19zzcW9jpSxDvA@mail.gmail.com> <CABPqkBR_U06L8skMsDXxSXfMptezequzRCxOTELAXxGDK+F+DA@mail.gmail.com>
+In-Reply-To: <CABPqkBR_U06L8skMsDXxSXfMptezequzRCxOTELAXxGDK+F+DA@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 8 Mar 2023 15:25:42 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wjqRUVq_U8D+ZrP_2sUzJ2bq5oGdD_7xi=mQnEY3b=O2Q@mail.gmail.com>
+Message-ID: <CAHk-=wjqRUVq_U8D+ZrP_2sUzJ2bq5oGdD_7xi=mQnEY3b=O2Q@mail.gmail.com>
+Subject: Re: [PATCH] x86/resctrl: avoid compiler optimization in __resctrl_sched_in
+To:     Stephane Eranian <eranian@google.com>
+Cc:     Jakub Jelinek <jakub@redhat.com>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, tony.luck@intel.com,
+        reinette.chatre@intel.com, fenghua.yu@intel.com,
+        peternewman@google.com, james.morse@arm.com, babu.moger@amd.com,
+        ananth.narayan@amd.com, vschneid@redhat.com,
+        Nathan Chancellor <nathan@kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 14:37, Bao D. Nguyen wrote:
-> On 3/8/2023 11:02 AM, Bart Van Assche wrote:
->> On 3/7/23 20:01, Bao D. Nguyen wrote:
->>> +    if (ufshcd_mcq_cqe_search(hba, hwq, tag)) {
->>> +        dev_err(hba->dev, "%s: cmd found in cq. hwq=%d, tag=%d\n",
->>> +                __func__, hwq->id, tag);
->>> +        /*
->>> +         * The command should not be 'stuck' in the CQ for such a 
->>> long time.
->>> +         * Is interrupt missing? Process the CQEs here. If the 
->>> interrupt is
->>> +         * invoked at a later time, the CQ will be empty because the 
->>> CQEs
->>> +         * are already processed here.
->>> +         */
->>> +        ufshcd_mcq_poll_cqe_lock(hba, hwq);
->>> +        err = SUCCESS;
->>> +        goto out;
->>> +    }
->>
->> Please remove the above code and also the definition of the 
->> ufshcd_mcq_cqe_search() function. The SCSI error handler submits an 
->> abort to deal with command processing timeouts. 
->> ufshcd_mcq_cqe_search() can only return true in case of a software bug 
->> at the host side. Addressing such bugs is out of scope for the SCSI 
->> error handler.
-> 
-> This is an attempt to handle the error case similar to SDB mode where it 
-> prints "%s: cmd was completed, but without a notifying intr, tag = %d" 
-> in the ufshcd_abort() function.
-> 
-> In this case the command has been completed by the hardware, but some 
-> reasons the software has not processed it. We have seen this print 
-> happened during debug sessions, so the error case does happen in SBL mode.
-> 
-> Are you suggesting we should return error in this case without calling 
-> ufshcd_mcq_poll_cqe_lock()?
+On Tue, Mar 7, 2023 at 10:13=E2=80=AFPM Stephane Eranian <eranian@google.co=
+m> wrote:
+>
+> Tested-by: Stephane Eranian <eranian@google.com>
 
-What I am asking is to remove ufshcd_mcq_poll_cqe_lock() and all code 
-that depends on that function returning true. Although such code might 
-be useful for SoC debugging, helping with SoC debugging is out of scope 
-for Linux kernel drivers.
+It's out as commit 7fef09970252 ("x86/resctl: fix scheduler confusion
+with 'current'") if anybody cares.
 
-Thanks,
-
-Bart.
-
+           Linus
