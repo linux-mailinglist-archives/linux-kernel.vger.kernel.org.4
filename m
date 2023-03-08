@@ -2,89 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89C86B0CE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF146B0CF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:35:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231656AbjCHPeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 10:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51252 "EHLO
+        id S231332AbjCHPfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbjCHPd2 (ORCPT
+        with ESMTP id S231366AbjCHPfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:33:28 -0500
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA135D27C;
-        Wed,  8 Mar 2023 07:32:39 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id BDA28FF81D;
-        Wed,  8 Mar 2023 15:32:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678289557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XyICmylP7PDUApTv+q/07vUt9nI5bdRkLXudAMFgC28=;
-        b=bKlS9q1921Sq3Bj8UY1Rb7cKzUzLjNl/vjj+XTmKeZuoHEU4q5nE18hZL7vr548/nGiUiP
-        Eh3f7mvX9jwh5ABpvmNKOOXvbMPI+EnGHyJlyIj8gPDLiMs3H8PJl2kHAC6qaKexJP+33R
-        EkVNXVH/3hw3F6Q/BIb6fKA0EtkBTM9RH87YuOGWuCV0i4/v5HKTSY9K7ItDp4FQ7d6KV7
-        k5IdUHXFSPcpDmHvAUiIVaJjHW2tBJoWNr0Id/7B/aV9ksNrx/OvQIf/rLEYt4RnfXv6qT
-        eTyFteqvTpjH0xna1C9eegKiwPNfnTX2nfQ2pCta8+OhiBgLCU4poJaod4avWw==
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH v3 20/20] MAINTAINERS: Add myself as ONIE tlv NVMEM layout maintainer
-Date:   Wed,  8 Mar 2023 16:32:00 +0100
-Message-Id: <20230308153200.682248-21-miquel.raynal@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230308153200.682248-1-miquel.raynal@bootlin.com>
-References: <20230308153200.682248-1-miquel.raynal@bootlin.com>
+        Wed, 8 Mar 2023 10:35:02 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CBACB078
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 07:34:00 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id ay14so63647934edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 07:34:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1678289628;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FOdmNK9WOQhlHB8lGx17ROzXlswee6Xo6KzJiX35bEc=;
+        b=IGbyZwzKWrnuucRDByz/T9XdybVORTyEUzEwmCw9V8AeXk4C/Vbt1Y9DvTo+PocdyV
+         +ZglmnhJlRwQjA/yEvs2zTY7iaEoULmcBkV+DAWRRr7fxQYcxZn3ZnjPnJxGm2wQLGZ3
+         SBE0Kx8A4/knCvNrWKZl4R6AwwC/zngJc0cDg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678289628;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FOdmNK9WOQhlHB8lGx17ROzXlswee6Xo6KzJiX35bEc=;
+        b=6JYOVhF5h65sG1gMyy+0i+y2765wP2iyoIfbM9Z5C9Gd4BP3Oh++DDfSqlpFkvvBiV
+         9MbXdrtbhA1ujbwa37K4PlVj/N2FP0u9dPLX1fVycTRYeqTYc3lSZ3I1toYZSIpZ+zfA
+         0CjeQ94WWJA8vZrrUqS7xQIFM+Wx6xeZSe06FwjsT9D6YABc5FlSidaCt54iOUM0O3UH
+         xBe7ZvuPGGFogYJKTJSTSk9b6sbFxPHQVPap7SWRx2IJGEG+oo7ti2tI5+ij4ywTN4ps
+         8khh6fmMlZ3uNfN0tjYtJ7OQVeec1hhEgbenMj6gRlRtr9hbq0Y+VsSwPNUDutiTJDux
+         3Ugw==
+X-Gm-Message-State: AO0yUKUsc4KYRv8kT1az7R4ufrL+G3GKF2nuiiZcLXV7fjKpP+FckS9O
+        Bo5g81RiYfv4sNng47MW2A7zFF5SixxREN7Q/ugGwQ==
+X-Google-Smtp-Source: AK7set8fCE+xVLpgwIvK6mlnHQtOhFn2Tstvgvpl6/ijsEsoNnESBLlosp3w1GqSEiDUZi7rq+daTFslIoRw8G0vaGE=
+X-Received: by 2002:a50:d615:0:b0:4bc:7c78:4304 with SMTP id
+ x21-20020a50d615000000b004bc7c784304mr10244649edi.8.1678289627857; Wed, 08
+ Mar 2023 07:33:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308143754.1976726-1-dhowells@redhat.com> <20230308143754.1976726-4-dhowells@redhat.com>
+In-Reply-To: <20230308143754.1976726-4-dhowells@redhat.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 8 Mar 2023 16:33:37 +0100
+Message-ID: <CAJfpeguGksS3sCigmRi9hJdUec8qtM9f+_9jC1rJhsXT+dV01w@mail.gmail.com>
+Subject: Re: [PATCH v16 03/13] overlayfs: Implement splice-read
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        linux-unionfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following the introduction of the bindings for this NVMEM parser and the
-layout driver, add myself as maintainer.
+On Wed, 8 Mar 2023 at 15:38, David Howells <dhowells@redhat.com> wrote:
+>
+> Implement splice-read for overlayfs by passing the request down a layer
+> rather than going through generic_file_splice_read() which is going to be
+> changed to assume that ->read_folio() is present on buffered files.
+>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: John Hubbard <jhubbard@nvidia.com>
+> cc: David Hildenbrand <david@redhat.com>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Miklos Szeredi <miklos@szeredi.hu>
+> cc: linux-unionfs@vger.kernel.org
+> cc: linux-block@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-mm@kvack.org
+> ---
+>
+> Notes:
+>     ver #15)
+>      - Remove redundant FMODE_CAN_ODIRECT check on real file.
+>      - Do rw_verify_area() on the real file, not the overlay file.
+>      - Fix a file leak.
+>
+>  fs/overlayfs/file.c | 33 ++++++++++++++++++++++++++++++++-
+>  1 file changed, 32 insertions(+), 1 deletion(-)
+>
+> diff --git a/fs/overlayfs/file.c b/fs/overlayfs/file.c
+> index 7c04f033aadd..a12919e9ccba 100644
+> --- a/fs/overlayfs/file.c
+> +++ b/fs/overlayfs/file.c
+> @@ -419,6 +419,37 @@ static ssize_t ovl_write_iter(struct kiocb *iocb, struct iov_iter *iter)
+>         return ret;
+>  }
+>
+> +static ssize_t ovl_splice_read(struct file *in, loff_t *ppos,
+> +                              struct pipe_inode_info *pipe, size_t len,
+> +                              unsigned int flags)
+> +{
+> +       const struct cred *old_cred;
+> +       struct fd real;
+> +       ssize_t ret;
+> +
+> +       ret = ovl_real_fdget(in, &real);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = -EINVAL;
+> +       if (!real.file->f_op->splice_read)
+> +               goto out_fdput;
+> +
+> +       ret = rw_verify_area(READ, real.file, ppos, len);
+> +       if (unlikely(ret < 0))
+> +               goto out_fdput;
+> +
+> +       old_cred = ovl_override_creds(file_inode(in)->i_sb);
+> +       ret = real.file->f_op->splice_read(real.file, ppos, pipe, len, flags);
 
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+I don't think you replied to my suggestion of using a helper here.
+E.g. it could be as simple as exporting do_splice_to(), or renaming it
+to vfs_splice_read() to be more readable.  It would remove the
+boilerplate and be more robust if any changes are done to the splice
+reading code.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 60ed770b0212..3a53f9d5ac56 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15550,6 +15550,12 @@ L:	linux-hwmon@vger.kernel.org
- S:	Maintained
- F:	drivers/hwmon/oxp-sensors.c
- 
-+ONIE TLV NVMEM LAYOUT DRIVER
-+M:	Miquel Raynal <miquel.raynal@bootlin.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/nvmem/layouts/onie,tlv-layout.yaml
-+F:	drivers/nvmem/layouts/onie-tlv.c
-+
- ONION OMEGA2+ BOARD
- M:	Harvey Hunt <harveyhuntnexus@gmail.com>
- L:	linux-mips@vger.kernel.org
--- 
-2.34.1
-
+Thanks,
+Miklos
