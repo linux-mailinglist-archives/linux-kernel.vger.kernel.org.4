@@ -2,183 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CD86AFBB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A87556AFBB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:03:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjCHBCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 20:02:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S229628AbjCHBD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 20:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjCHBCf (ORCPT
+        with ESMTP id S229525AbjCHBDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 20:02:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7D0A90A1;
-        Tue,  7 Mar 2023 17:02:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A50E2B81B36;
-        Wed,  8 Mar 2023 01:02:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B05C4339B;
-        Wed,  8 Mar 2023 01:02:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678237340;
-        bh=Lxae2JkB6XrMVsOr/4j17kRZOa6ZDLkrW786APkNZIY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=W+RThuMkzeT6sn/qxtvA/Y9iq/SpR8sqv6dL9Q0OV18BA9STIjkrFzl1OqAs27RqG
-         kQn8/xRh++twr2cFzCc8eecPCxE8CdHTrIwTnzI6SsDsvHTxeRukOsJOW4QIw2EBj1
-         SqvokV/MOwfPCQWEbe2fjbFj5XXO7Zxst224d6hJSspN0Fvx/gywGBdkh9dc/1qM+2
-         C1Ne9cwK/HwkU+MeaY8G6/LGSGgfWjcAm008Owoh2IDIvKnRHs/hQ5WhT2d7iHcHSe
-         8tTjkHfZDoB8jlBlkDowlBrUzHXGOpSK2UmhC80yUzahkqSWRHbSnfSMcDbbw8BL0Q
-         TrxCDHsAdEW4Q==
-Date:   Tue, 7 Mar 2023 17:02:19 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, idosch@mellanox.com,
-        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
-        pabeni@redhat.com, edumazet@google.com, davem@davemloft.net
-Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if
- no suitable device available
-Message-ID: <20230307170219.4699af9b@kernel.org>
-In-Reply-To: <20230307150030.527726-1-po-hsu.lin@canonical.com>
-References: <20230307150030.527726-1-po-hsu.lin@canonical.com>
+        Tue, 7 Mar 2023 20:03:25 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE21974A7
+        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 17:03:12 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PWYrk5DBCz16Nxd;
+        Wed,  8 Mar 2023 09:00:22 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 8 Mar 2023 09:03:09 +0800
+Message-ID: <4f0970e5-1a9d-4e07-c368-5a96a6da9e71@huawei.com>
+Date:   Wed, 8 Mar 2023 09:03:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/3] mm/damon/paddr: minor refactor of damon_pa_young()
+Content-Language: en-US
+To:     SeongJae Park <sj@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <damon@lists.linux.dev>
+References: <20230307180023.152415-1-sj@kernel.org>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20230307180023.152415-1-sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  7 Mar 2023 23:00:30 +0800 Po-Hsu Lin wrote:
-> The `devlink -j port show` command output may not contain the "flavour"
-> key, an example from s390x LPAR with Ubuntu 22.10 (5.19.0-37-generic),
-> iproute2-5.15.0:
->   {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
->            "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
->            "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
->            "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
+
+
+On 2023/3/8 2:00, SeongJae Park wrote:
+> On Tue, 7 Mar 2023 09:22:33 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
 > 
-> This will cause a KeyError exception.
-
-I looked closer and I don't understand why the key is not there.
-Both 5.19 kernel should always put this argument out, and 5.15
-iproute2 should always interpret it.
-
-Am I looking wrong? Do you see how we can get a dump with no flavor?
-
-I worry that this is some endianness problem, and we just misreport
-stuff on big-endian.
-
-> Create a validate_devlink_output() to check for this "flavour" from
-> devlink command output to avoid this KeyError exception. Also let
-> it handle the check for `devlink -j dev show` output in main().
+>>
+>>
+>> On 2023/3/7 5:27, SeongJae Park wrote:
+>>> Hi Kefeng,
+>>>
+>>> On Mon, 6 Mar 2023 09:56:49 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
+>>>
+>>>>
+>>>>
+>>>> On 2023/3/6 9:10, Kefeng Wang wrote:
+>>>>>
+>>>>>
+>>>>> On 2023/3/4 2:39, SeongJae Park wrote:
+>>>>>> Hi Kefeng,
+>>>>>>
+>>>>>> On Fri, 3 Mar 2023 16:43:42 +0800 Kefeng Wang
+>>>>>> <wangkefeng.wang@huawei.com> wrote:
+>>>>>>
+>>>>>>> Omit three lines by unified folio_put(), and make code more clear.
+>>>>>>>
+>>>>>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>>>>>>> ---
+>>>>>>>     mm/damon/paddr.c | 11 ++++-------
+>>>>>>>     1 file changed, 4 insertions(+), 7 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+>>>>>>> index 3fda00a0f786..2ef9db0189ca 100644
+>>>>>>> --- a/mm/damon/paddr.c
+>>>>>>> +++ b/mm/damon/paddr.c
+>>>>>>> @@ -130,24 +130,21 @@ static bool damon_pa_young(unsigned long paddr,
+>>>>>>> unsigned long *folio_sz)
+>>>>>>>                 accessed = false;
+>>>>>>>             else
+>>>>>>>                 accessed = true;
+>>>>>>> -        folio_put(folio);
+>>>>>>>             goto out;
+>>>>>>
+>>>>>> Because you moved 'out' label to not include *folio_sz setting,
+>>>>>> folio_sz will
+>>>>>> not set in this case.  It should be set.
+>>>>> oh, it should be fixed.
+>>>>>>
+>>>>>>>         }
+>>>>>>>         need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
+>>>>>>> -    if (need_lock && !folio_trylock(folio)) {
+>>>>>>> -        folio_put(folio);
+>>>>>>> -        return false;
+>>>>>>> -    }
+>>>>
+>>>> Hi SJ,  apart from above issue, it looks that this branch need the
+>>>> folio_size() setting, right?
+>>>
+>>> folio_sz is effectively used by caller of damon_pa_young() only if this
+>>> function returns true, so this branch doesn't need to set folio_sz.
+>>
+>> __damon_pa_check_access() store last_addr, last_accessed and
+>> last_folio_sz, even damon_pa_young() return false, the following check
+>> still use last_folio_sz,
+>>
+>>     ALIGN_DOWN(last_addr, last_folio_sz) == ALIGN_DOWN(r->sampling_addr,
+>> last_folio_sz)
+>>
+>> but last_folio_sz is not up to date, so I think it need to update, and
+>> update last_folio_sz is harmless, which could let's unify the return
+>> path, correct me if I am wrong.
 > 
-> Apart from this, if the test was not started because of any reason
-> (e.g. "lanes" does not exist, max lanes is 0 or the flavour of the
-> designated device is not "physical" and etc.) The script will still
-> return 0 and thus causing a false-negative test result.
+> Ah, you're right.  Thank you for kind explanation.  I was out of my mind for
+> some reason.  Maybe we could just do 'goto out' in the branch.
+
+Yes, will update this patchset with this change.
 > 
-> Use a test_ran flag to determine if these tests were skipped and
-> return KSFT_SKIP to make it more clear.
 > 
-> V2: factor out the skip logic from main(), update commit message and
->     skip reasons accordingly.
-> Link: https://bugs.launchpad.net/bugs/1937133
-> Fixes: f3348a82e727 ("selftests: net: Add port split test")
-> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> ---
->  tools/testing/selftests/net/devlink_port_split.py | 36 +++++++++++++++++++----
->  1 file changed, 31 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/testing/selftests/net/devlink_port_split.py
-> index 2b5d6ff..749606c 100755
-> --- a/tools/testing/selftests/net/devlink_port_split.py
-> +++ b/tools/testing/selftests/net/devlink_port_split.py
-> @@ -59,6 +59,8 @@ class devlink_ports(object):
->          assert stderr == ""
->          ports = json.loads(stdout)['port']
->  
-> +        validate_devlink_output(ports, 'flavour')
-
-If it's just a matter of kernel/iproute2 version we shouldn't need to
-check here again?
-
->          for port in ports:
->              if dev in port:
->                  if ports[port]['flavour'] == 'physical':
-> @@ -220,6 +222,27 @@ def split_splittable_port(port, k, lanes, dev):
->      unsplit(port.bus_info)
->  
->  
-> +def validate_devlink_output(devlink_data, target_property=None):
-> +    """
-> +    Determine if test should be skipped by checking:
-> +      1. devlink_data contains values
-> +      2. The target_property exist in devlink_data
-> +    """
-> +    skip_reason = None
-> +    if any(devlink_data.values()):
-> +        if target_property:
-> +            skip_reason = "{} not found in devlink output, test skipped".format(target_property)
-> +            for key in devlink_data:
-> +                if target_property in devlink_data[key]:
-> +                    skip_reason = None
-> +    else:
-> +        skip_reason = 'devlink output is empty, test skipped'
-> +
-> +    if skip_reason:
-> +        print(skip_reason)
-> +        sys.exit(KSFT_SKIP)
-
-Looks good, so..
-
->  def make_parser():
->      parser = argparse.ArgumentParser(description='A test for port splitting.')
->      parser.add_argument('--dev',
-> @@ -231,6 +254,7 @@ def make_parser():
->  
->  
->  def main(cmdline=None):
-> +    test_ran = False
-
-I don't think we need the test_ran tracking any more?
-
->      parser = make_parser()
->      args = parser.parse_args(cmdline)
->  
-> @@ -240,12 +264,9 @@ def main(cmdline=None):
->          stdout, stderr = run_command(cmd)
->          assert stderr == ""
->  
-> +        validate_devlink_output(json.loads(stdout))
->          devs = json.loads(stdout)['dev']
-> -        if devs:
-> -            dev = list(devs.keys())[0]
-> -        else:
-> -            print("no devlink device was found, test skipped")
-> -            sys.exit(KSFT_SKIP)
-> +        dev = list(devs.keys())[0]
->  
->      cmd = "devlink dev show %s" % dev
->      stdout, stderr = run_command(cmd)
-> @@ -277,6 +298,11 @@ def main(cmdline=None):
->                  split_splittable_port(port, lane, max_lanes, dev)
->  
->                  lane //= 2
-> +        test_ran = True
-> +
-> +    if not test_ran:
-> +        print("Test not started, no suitable device for the test")
-> +        sys.exit(KSFT_SKIP)
->  
->  
->  if __name__ == "__main__":
-
+> Thanks,
+> SJ
