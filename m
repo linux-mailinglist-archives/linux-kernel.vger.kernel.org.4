@@ -2,69 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF296B1498
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535366B149A
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:57:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjCHV41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:56:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S229475AbjCHV5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:57:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCHV4P (ORCPT
+        with ESMTP id S229801AbjCHV5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:56:15 -0500
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377DBD23BC
+        Wed, 8 Mar 2023 16:57:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3472FD13EE
         for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:56:14 -0800 (PST)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-53916ab0c6bso329890277b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:56:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678312573;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5SNpxUvoL3wJxQvDMk4hmZFaxXnNEcCgcZlciVtsvXc=;
-        b=CDQcTCIVb/Mbv0ESOZ6tgosr11PuDIjK/sne0DVXVcMGwsaSV0+NmVsnd2HG1WfuNG
-         Y4KzJFuCJ6sorGtK20lC8/nM/kecNTJdJRJs1wMs9axjzcPpn8LjzNn6YEPUQ1N6heOI
-         y72YJ7p4DvB3ei8QC1Mlj8qEvqjtXS+pIgguSFuCWqR98j4MYIvP7capwe2QYoMpUqwC
-         bK5Q7HAEQRGCFdGZjcGNLx/BRRPYpN4TtN1wFSygnsKwCj4Y1hQ83NVZTM9a2MOWIcWu
-         mdR0TryaP9O58xQ5iYRXdRa/LnUMjrdF1so+7ag4xgSMK5SR10JQJq2Wl1FAnHx/2zNu
-         cPaQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678312573;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wsgsdwLQ2sHKnCaynlDgL1yX7eYq5aKUeQbZiXK8wdw=;
+        b=fpLgPdL+eL4bSnu8GGqqsmHX7cc8DcvBwXCUkfrkS2J7MV2xEEP9dHCs64NzGpkuZV6OpI
+        4RhokkZE6wq35r8HsrEFClCrMBK8bx6AF4zWRU7rw7VV35MbJKVfhDloQAlFZDlJo2d9y9
+        cUGX3rkZ7bLNAwuSWUG1vm199H03/20=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-592-F-5-BBNrO0C3S4V-CTG0bw-1; Wed, 08 Mar 2023 16:56:12 -0500
+X-MC-Unique: F-5-BBNrO0C3S4V-CTG0bw-1
+Received: by mail-qk1-f199.google.com with SMTP id 19-20020a370c13000000b007428253bb55so30667qkm.23
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:56:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678312573;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5SNpxUvoL3wJxQvDMk4hmZFaxXnNEcCgcZlciVtsvXc=;
-        b=fzidUKQ5o7obixEM7i8YDNDy53uwP3RQ5Jh7nqDJJWeGRHBkzeewkhTq31wMsrab2W
-         gzj1DfWv3v+PdqrsDxw5KrjQm4W7yWtFt0bVpmulwPFEcbpSs76JYL6iji/X1o8LyUCf
-         aV8vSoccvK5UdVTBtvohLCbWM2cgpVB+uCIFs0nfk1BH09AflGSDz2Wora4wK8s0a+iJ
-         yorZpjAxamJkNvtkIVqYn1gYC9IhcxtpSypiseU46j/gkbvA/SWeWbAtysQ+CA3M9onl
-         15lVgf+yWxGp6ExorfEyyBDdsv7VAaJQd7tWv2GQ+5RuWzBFRTXFqBVrpCKYOYj406I5
-         zbSA==
-X-Gm-Message-State: AO0yUKVy+bs10YlP6YoIXKgIfFxU1ohNG40AWQmCJZZaBVbdwJz6u5fX
-        hgXLDKfDa3u/eALxJL0oFe/FWmGp0wUggztcBI6Mlg==
-X-Google-Smtp-Source: AK7set8yauEv2vcx8SVSOeBSvIcZLRFAawEdiiK3vsGVmvLq0nGKK1nv0pzzTynl2uX93OymJM1VQT+KwzqxmI6CYtw=
-X-Received: by 2002:a81:b149:0:b0:530:b21f:d604 with SMTP id
- p70-20020a81b149000000b00530b21fd604mr4893153ywh.9.1678312573418; Wed, 08 Mar
- 2023 13:56:13 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678312572;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wsgsdwLQ2sHKnCaynlDgL1yX7eYq5aKUeQbZiXK8wdw=;
+        b=DOZvWDZZrnlH2aFej3+u89SbhCgicwwGW7Y80pcFgaS6XmdmazlpCk7ThohgO9awvJ
+         mLI9fW4Vzd8YtuOGV1CqNlG+s/dL0PE1qAzO7nJsxVAoQMtKXwJPCiqoU6z7sY4BTN7u
+         xt1zzYhbJj6hztryiWchp8+dwHVz6iu8/SfItbFP8GPs6wNeO8Yho6e0DXSIY7dUiHLV
+         iK+zRF1Zc8LbwNp3caCjnJ1vVQvI6oSyK4s+zndOV3YUgyHTd3P3O4GLWYNQaPqV7fO0
+         6zaH2nHYzHB0UHctYki7ZRqA8SuU8EQVP5VuXzN1PGEhQg0bvq3dDdRQ2WZBTVfcuD2I
+         oMWg==
+X-Gm-Message-State: AO0yUKUZdJrNFCUDRe089MEjb+5ICyMrfx4FZ2zRmM0vPbY6rMLKGAj0
+        d1HUrq5vJD/0FHTnu6JENOeYZj/R1mo9QSWHmIJTo6VrmO+jXyQQ/LznNJD9+HSNlRcsPzc0VBO
+        GUOXANaCysVHraP2V0W3oUrbu
+X-Received: by 2002:a05:622a:10e:b0:3b9:a4d4:7f37 with SMTP id u14-20020a05622a010e00b003b9a4d47f37mr1860715qtw.3.1678312571807;
+        Wed, 08 Mar 2023 13:56:11 -0800 (PST)
+X-Google-Smtp-Source: AK7set/f14mHWNw8mLgQFLAbBUa6nIqkOXtRuE+h2nLt7y+/nJ5xYiOJlQbJcpDFrAqQE7qxJvURSg==
+X-Received: by 2002:a05:622a:10e:b0:3b9:a4d4:7f37 with SMTP id u14-20020a05622a010e00b003b9a4d47f37mr1860690qtw.3.1678312571536;
+        Wed, 08 Mar 2023 13:56:11 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id fu22-20020a05622a5d9600b003be56bdd3b1sm12114385qtb.92.2023.03.08.13.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 13:56:10 -0800 (PST)
+Date:   Wed, 8 Mar 2023 16:56:09 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Hugh Dickins <hughd@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm: rmap: make hugetlb pages participate in
+ _nr_pages_mapped
+Message-ID: <ZAkEecMShUAGwZ62@x1n>
+References: <20230306230004.1387007-1-jthoughton@google.com>
+ <20230306230004.1387007-2-jthoughton@google.com>
+ <20230307215420.GA59222@monkey>
+ <CADrL8HVa3vzmrfFJD5hx_GuXVnsWhSo9hzJFb4TTzzjMhWG+sQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230308145303.826942-1-arnd@kernel.org>
-In-Reply-To: <20230308145303.826942-1-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 8 Mar 2023 22:56:02 +0100
-Message-ID: <CACRpkdZAJJr5+f8wiEhnAAV8mLjzYCBMDC9GXwQOAmsQLfShoA@mail.gmail.com>
-Subject: Re: [PATCH] mips: ar71: include linux/gpio/driver.h
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CADrL8HVa3vzmrfFJD5hx_GuXVnsWhSo9hzJFb4TTzzjMhWG+sQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,23 +90,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 3:53=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
+On Tue, Mar 07, 2023 at 04:36:51PM -0800, James Houghton wrote:
+> > >       if (likely(!compound)) {
+> > > +             if (unlikely(folio_test_hugetlb(folio)))
+> > > +                     VM_BUG_ON_PAGE(HPageVmemmapOptimized(&folio->page),
+> > > +                                    page);
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> The change to remove the implicit gpio/driver.h include was done
-> after fixing all the other users, but the ar7 file still needs
-> the same change.
->
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Fixes: 21d9526d13b5 ("gpiolib: Make the legacy <linux/gpio.h> consumer-on=
-ly")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+How about moving folio_test_hugetlb() into the BUG_ON()?
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+                VM_BUG_ON_PAGE(folio_test_hugetlb(folio) &&
+                               HPageVmemmapOptimized(&folio->page),
+                               page);
 
-If this is the only problem merging this set was amazingly painless.
+Note that BUG_ON() already contains an "unlikely".
 
-Yours,
-Linus Walleij
+> > >               first = atomic_inc_and_test(&page->_mapcount);
+> > >               nr = first;
+> > >               if (first && folio_test_large(folio)) {
+> > >                       nr = atomic_inc_return_relaxed(mapped);
+> > >                       nr = (nr < COMPOUND_MAPPED);
+> > >               }
+> > > -     } else if (folio_test_pmd_mappable(folio)) {
+> > > -             /* That test is redundant: it's for safety or to optimize out */
+> >
+> > I 'think' removing this check is OK.  It would seem that the caller
+> > knows if the folio is mappable.  If we want a similar test, we might be
+> > able to use something like:
+> >
+> >         arch_hugetlb_valid_size(folio_size(folio))
+> >
+> 
+> Ack. I think leaving the check(s) removed is fine.
+
+Would it still be good to keep that as another BUG_ON()?
+
+-- 
+Peter Xu
+
