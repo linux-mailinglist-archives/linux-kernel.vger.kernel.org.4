@@ -2,78 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CD26B060A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C196B060B
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:36:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjCHLfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:35:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57104 "EHLO
+        id S230171AbjCHLfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbjCHLe6 (ORCPT
+        with ESMTP id S230283AbjCHLfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:34:58 -0500
-X-Greylist: delayed 2489 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Mar 2023 03:34:55 PST
-Received: from sym2.noone.org (sym.noone.org [IPv6:2a01:4f8:120:4161::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBD2984CA;
-        Wed,  8 Mar 2023 03:34:54 -0800 (PST)
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 4PWqwr1gvfzvjfm; Wed,  8 Mar 2023 12:34:52 +0100 (CET)
-Date:   Wed, 8 Mar 2023 12:34:51 +0100
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Dmitry Safonov <dima@arista.com>,
-        linux-kselftest@vger.kernel.org, Andrey Vagin <avagin@openvz.org>,
+        Wed, 8 Mar 2023 06:35:20 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D8E39DE05
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 03:35:18 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFE981042;
+        Wed,  8 Mar 2023 03:36:01 -0800 (PST)
+Received: from bogus (unknown [10.57.16.230])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7CD7A3F71A;
+        Wed,  8 Mar 2023 03:35:16 -0800 (PST)
+Date:   Wed, 8 Mar 2023 11:35:10 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, pierre.gondois@arm.com,
+        conor.dooley@microchip.com, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/clone3: test clone3 with CLONE_NEWTIME
-Message-ID: <20230308113451.a23d7rxbrsuacd6t@distanz.ch>
-References: <20230308105126.10107-1-tklauser@distanz.ch>
- <20230308105320.10685-1-tklauser@distanz.ch>
+Subject: Re: [PATCH] Revert "riscv: Set more data to cacheinfo"
+Message-ID: <20230308113510.fb6y2xhylavkrgtl@bogus>
+References: <20230308064734.512457-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308105320.10685-1-tklauser@distanz.ch>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230308064734.512457-1-suagrfillet@gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-08 at 11:53:20 +0100, Tobias Klauser <tklauser@distanz.ch> wrote:
-> Verify that clone3 can be called successfully with CLONE_NEWTIME in
-> flags.
-
-Appologies, I somehow messed up the recepient list in this patch leading
-to it not being sent to LKML. Please let me know in case you want me to
-send it again.
-
-> Cc: Andrey Vagin <avagin@openvz.org>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
-> ---
->  tools/testing/selftests/clone3/clone3.c | 3 +++
->  1 file changed, 3 insertions(+)
+On Wed, Mar 08, 2023 at 02:47:34PM +0800, Song Shuai wrote:
+> This reverts commit baf7cbd94b5688f167443a2cc3dcea3300132099.
 > 
-> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-> index cd4582129c7d..4fce46afe6db 100644
-> --- a/tools/testing/selftests/clone3/clone3.c
-> +++ b/tools/testing/selftests/clone3/clone3.c
-> @@ -195,5 +195,8 @@ int main(int argc, char *argv[])
->  	test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
->  			CLONE3_ARGS_NO_TEST);
->  
-> +	/* Do a clone3() in a new time namespace */
-> +	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
-> +
->  	return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
->  }
-> -- 
-> 2.39.1
+> There are some duplicate cache attributes populations executed
+> in both ci_leaf_init() and later cache_setup_properties().
 > 
+> Revert the commit baf7cbd94b56 ("riscv: Set more data to cacheinfo")
+> to setup only the level and type attributes at this early place.
+>
+
+I had noticed the same and had something similar when we did some rework
+around for v6.1 merge window. But there were lot of other issues to be
+addressed at the moment and hence deferred this.
+
+So for the change in general, but as Conor responded, it would be good
+to do some checking to ensure nothing breaks and all the requirements
+this patch(baf7cbd94b56) addressed are already handled in the core.
+
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+
+--
+Regards,
+Sudeep
