@@ -2,54 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9616B01BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090B56B01A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjCHIlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        id S229958AbjCHIgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:36:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjCHIk7 (ORCPT
+        with ESMTP id S230451AbjCHIgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:40:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EC21EFC7
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:40:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678264809;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=X0KoJnquJwCBewFQWK8K8R7qBNk2GV9aWNYG4njGess=;
-        b=FzU3Nz8lEI+8zC7E5HQc5AVVnBHyGi3wso+zvkP2NkER+D12v2sIjUKf2wyZ4aXNwUG86f
-        8sBr/jxp0pfisDzu4UT8++ydIg7UuTfMii0JzYEY3n5YYHHP/QYsgiFPuj0OVpUvtJ3RAc
-        iWT7isrsR8EMnyN/BDWM23+aQ3HJygY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-601-nTc6oYKJN3K9945J8dK-Aw-1; Wed, 08 Mar 2023 03:34:00 -0500
-X-MC-Unique: nTc6oYKJN3K9945J8dK-Aw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 8 Mar 2023 03:36:04 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D55B3730;
+        Wed,  8 Mar 2023 00:35:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EE3503C02190;
-        Wed,  8 Mar 2023 08:33:59 +0000 (UTC)
-Received: from ihuguet-laptop.redhat.com (unknown [10.39.194.164])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 332D14024CA1;
-        Wed,  8 Mar 2023 08:33:59 +0000 (UTC)
-From:   =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
-To:     linux-kernel@vger.kernel.org, masahiroy@kernel.org
-Cc:     =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>
-Subject: [PATCH resend] Add .editorconfig file for basic formatting
-Date:   Wed,  8 Mar 2023 09:33:56 +0100
-Message-Id: <20230308083356.6229-1-ihuguet@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B138616EB;
+        Wed,  8 Mar 2023 08:34:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75CAAC433EF;
+        Wed,  8 Mar 2023 08:34:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678264458;
+        bh=g6FWDWTVvtbUVJ0kus/OK9I+nhtkZyDFnv104tDpUdg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KJayE8QeTlag7cnxN2nStkgFonskLPD56vS7wrJt+yEbZIwhYJINJVweCe2mwGX2f
+         LealC9F1CqMnXhkgKUGh/1H2M8d/N8+IAVzeFOW1tyuTTORDlUiU7EapRTleS5DdMz
+         CBfkBuiaUcm5DvlHs6UK1QFx6qN4SuZ5ai812CgrkCg3Q8mbMk6Hdkk2M7vE+d1woQ
+         EQ5o1TtFdU94PHElLD7IXLKn+GRjq1wUrvdLXq2xWIbmZe4a1rfGakc1/6q2ycFmC6
+         L91jKRyk6/z7unULkymS1imZT2yLyVsBPOB9ipPjS53SudX8BBI4h6otu2iQTIHqq0
+         TnbJ12NOPyLHw==
+Message-ID: <2f039534-dd21-7361-0fcd-b91da1636a3a@kernel.org>
+Date:   Wed, 8 Mar 2023 10:34:12 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 4/6] soc: ti: pruss: Add helper functions to set GPI
+ mode, MII_RT_event and XFR
+Content-Language: en-US
+To:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <t-kristo@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230306110934.2736465-1-danishanwar@ti.com>
+ <20230306110934.2736465-5-danishanwar@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230306110934.2736465-5-danishanwar@ti.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,66 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-EditorConfig is a specification to define the most basic code formatting
-stuff, and it's supported by many editors and IDEs, either directly or
-via plugins, including Vim and emacs.
+Hi Danish,
 
-It allows to define formatting style related to indentation, charset,
-end of lines and trailing whitespaces. It also allows to apply different
-formats for different files based on wildcards, so for example it is
-possible to apply different configs to *.{c,h}, *.py and *.rs.
+On 06/03/2023 13:09, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
+> 
+> The PRUSS CFG module is represented as a syscon node and is currently
+> managed by the PRUSS platform driver. Add easy accessor functions to set
+> GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
+> to enable the PRUSS Ethernet usecase. These functions reuse the generic
+> pruss_cfg_update() API function.
+> 
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> ---
+>  include/linux/remoteproc/pruss.h | 55 ++++++++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+> 
+> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+> index d41bec448f06..7952f250301a 100644
+> --- a/include/linux/remoteproc/pruss.h
+> +++ b/include/linux/remoteproc/pruss.h
+> @@ -240,4 +240,59 @@ static inline bool is_pru_rproc(struct device *dev)
+>  	return true;
+>  }
+>  
+> +/**
+> + * pruss_cfg_gpimode() - set the GPI mode of the PRU
+> + * @pruss: the pruss instance handle
+> + * @pru_id: id of the PRU core within the PRUSS
+> + * @mode: GPI mode to set
+> + *
+> + * Sets the GPI mode for a given PRU by programming the
+> + * corresponding PRUSS_CFG_GPCFGx register
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +static inline int pruss_cfg_gpimode(struct pruss *pruss,
+> +				    enum pruss_pru_id pru_id,
+> +				    enum pruss_gpi_mode mode)
+> +{
+> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+> +		return -EINVAL;
+> +
 
-In linux project, defining a .editorconfig might help to those people
-that work on different projects with different indentation styles, so
-they cannot define a global style. Now they will directly see the
-correct indentation on every fresh clone of the project.
+Should we check for invalid gpi mode and error out if so?
 
-See https://editorconfig.org
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+> +				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
+> +				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
+> +}
+> +
+> +/**
+> + * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
+> + * @pruss: the pruss instance
+> + * @enable: enable/disable
+> + *
+> + * Enable/disable the MII RT Events for the PRUSS.
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +static inline int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+> +{
+> +	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
+> +				PRUSS_MII_RT_EVENT_EN, set);
+> +}
+> +
+> +/**
+> + * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
+> + * @pruss: the pruss instance
+> + * @enable: enable/disable
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +static inline int pruss_cfg_xfr_enable(struct pruss *pruss, bool enable)
+> +{
+> +	u32 set = enable ? PRUSS_SPP_XFER_SHIFT_EN : 0;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_SPP,
+> +				PRUSS_SPP_XFER_SHIFT_EN, set);
+> +}
+> +
+>  #endif /* __LINUX_PRUSS_H */
 
-Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
----
- .editorconfig | 19 +++++++++++++++++++
- .gitignore    |  1 +
- 2 files changed, 20 insertions(+)
- create mode 100644 .editorconfig
-
-diff --git a/.editorconfig b/.editorconfig
-new file mode 100644
-index 000000000000..0791a12a20f0
---- /dev/null
-+++ b/.editorconfig
-@@ -0,0 +1,19 @@
-+root = true
-+
-+[*]
-+charset = utf-8
-+end_of_line = lf
-+trim_trailing_whitespace = true
-+insert_final_newline = true
-+
-+[*.{c,h}]
-+indent_style = tab
-+indent_size = 8
-+
-+[{Makefile,Makefile.*,*.mk}]
-+indent_style = tab
-+indent_size = 8
-+
-+[*.{py,rs}]
-+indent_style = space
-+indent_size = 4
-diff --git a/.gitignore b/.gitignore
-index 20dce5c3b9e0..6d09f3003484 100644
---- a/.gitignore
-+++ b/.gitignore
-@@ -102,6 +102,7 @@ modules.order
- !.gitignore
- !.mailmap
- !.rustfmt.toml
-+!.editorconfig
- 
- #
- # Generated include files
--- 
-2.34.3
-
+cheers,
+-roger
