@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A656AFF8B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:17:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A836AFF97
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 08:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCHHRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 02:17:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S229730AbjCHHTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 02:19:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCHHRA (ORCPT
+        with ESMTP id S229462AbjCHHTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 02:17:00 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9EEA8817
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 23:16:59 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZo2d-0005BM-Pk; Wed, 08 Mar 2023 08:16:51 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pZo2b-0004gI-Ne; Wed, 08 Mar 2023 08:16:49 +0100
-Date:   Wed, 8 Mar 2023 08:16:49 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v1 2/2] net: dsa: microchip: add ETS Qdisc
- support for KSZ9477 series
-Message-ID: <20230308071649.GD1692@pengutronix.de>
-References: <20230306124940.865233-1-o.rempel@pengutronix.de>
- <20230306124940.865233-2-o.rempel@pengutronix.de>
+        Wed, 8 Mar 2023 02:19:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C0B95BEC;
+        Tue,  7 Mar 2023 23:19:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3384F60B4B;
+        Wed,  8 Mar 2023 07:19:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F931C433EF;
+        Wed,  8 Mar 2023 07:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678259969;
+        bh=T79gADW5BJP58DL1ihiPjZCsFdOC5qR/ClSIWFq1bfU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MnBfyA4CPK+uMi2a/tdZgGM/O3AAsRJtwj0xtgWMWz5hqiJxeY+J6UlU62FLAwk6V
+         1PySqQONH2JXPd0E7N93ObfM2/PNivUXvzhTwIMF8uulVHph4LFvkkzBX50FFke+C9
+         rXcWaq6OXWhnceUTt3BjUtoxF6euCQEx8tQXgx9Y=
+Date:   Wed, 8 Mar 2023 08:19:19 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vegard Nossum <vegard.nossum@oracle.com>
+Cc:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Darren Kenny <darren.kenny@oracle.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: Re: [PATCH 5.15 000/567] 5.15.99-rc1 review
+Message-ID: <ZAg2989Hzuc1Wmlp@kroah.com>
+References: <20230307165905.838066027@linuxfoundation.org>
+ <6f792ece-b7c0-3af0-b1c0-631f1cc4f5fb@oracle.com>
+ <583f7dd7-dc40-724e-aa49-33287754cc5c@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230306124940.865233-2-o.rempel@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <583f7dd7-dc40-724e-aa49-33287754cc5c@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,50 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 01:49:40PM +0100, Oleksij Rempel wrote:
-> +static int ksz_queue_set_strict(struct ksz_device *dev, int port, int queue)
-> +{
-> +	int ret;
-> +
-> +	/* In order to ensure proper prioritization, it is necessary to set the
-> +	 * rate limit for the related queue to zero. Otherwise strict priority
-> +	 * mode will not work.
-> +	 */
-> +	ret = ksz_pwrite8(dev, port, KSZ9477_REG_PORT_OUT_RATE_0 + queue,
-> +			  KSZ9477_OUT_RATE_NO_LIMIT);
+On Tue, Mar 07, 2023 at 09:12:48PM +0100, Vegard Nossum wrote:
+> 
+> On 3/7/23 21:02, Harshit Mogalapalli wrote:
+> > On 07/03/23 10:25 pm, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.15.99 release.
+> > > There are 567 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > > 
+> > 
+> > While trying to build 5.15.99-rc1 with
+> > * make -C tools/perf all
+> > 
+> > The following build errors are seen.
+> > 
+> > util/intel-pt-decoder/intel-pt-decoder.c: In function
+> > 'intel_pt_eptw_lookahead_cb':
+> > util/intel-pt-decoder/intel-pt-decoder.c:1445:14: error: 'INTEL_PT_CFE'
+> [...]
+> > 
+> > [PATCH 5.15 264/567] perf intel-pt: Add support for emulated ptwrite
+> > is causing this error.
+> 
+> In addition, cherry-picking this fixes the build (but we haven't done a
+> full test with it):
+> 
+> commit 2750af50a360b52c6df1f5652ae728878bececc0
+> Author: Adrian Hunter <adrian.hunter@intel.com>
+> Date:   Mon Jan 24 10:41:39 2022 +0200
+> 
+>     perf intel-pt: pkt-decoder: Add CFE and EVD packets
+> 
+> Greg: Do you prefer this kind of error report go to the 0/N email (like
+> in this case) or to the specific problematic patch email if we've
+> already identified it?
 
-Uff, this part works by accident. KSZ9477_REG_PORT_OUT_RATE_0 registers
-should be written in a direct order. According to the documentation
-"update will not take effect until the Port Queue 3 Egress Limit
-Control Register is written.". But we are writing in a reverse order -
-queue 3 is written first.
+Either works for me, I'll go queue this up now, thanks!
 
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ksz_pwrite32(dev, port, REG_PORT_MTI_QUEUE_INDEX__4, queue);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ksz_setup_tc_mode(dev, port, MTI_SCHEDULE_STRICT_PRIO,
-> +				 MTI_SHAPING_OFF);
-> +}
-> +
-> +static int ksz_queue_set_wrr(struct ksz_device *dev, int port, int queue,
-> +			     int weight)
-> +{
-> +	int ret;
-> +
-> +	/* In order to ensure proper prioritization, it is necessary to set the
-> +	 * rate limit for the related queue to zero. Otherwise weighted round
-> +	 * robin mode will not work.
-> +	 */
-> +	ret = ksz_pwrite8(dev, port, KSZ9477_REG_PORT_OUT_RATE_0 + queue,
-> +			  KSZ9477_OUT_RATE_NO_LIMIT);
-
-same here.
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+greg k-h
