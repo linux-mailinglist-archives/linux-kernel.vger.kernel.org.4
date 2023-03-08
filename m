@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E33B66B05AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406376B05B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjCHLRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:17:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33222 "EHLO
+        id S230525AbjCHLUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:20:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjCHLRC (ORCPT
+        with ESMTP id S231359AbjCHLTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:17:02 -0500
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C39A1897;
-        Wed,  8 Mar 2023 03:17:00 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 328BGoNY074126;
-        Wed, 8 Mar 2023 05:16:50 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678274210;
-        bh=tOTypc+6262QRQQESOpfgWw/sy/2QsFXvceW69f9osE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=MnjGnxfas5RGnXYPWt0z5I2wyma6lF02/MXvUW7WPaiJhNsuW9WOWlsRlKm6uJDg+
-         u1H/NOynQ6nm1TcKGWryr3c5ciBvmI3DkXF3v4pHR/+G7Ifl4Z6mrybMVXwYs0l4x8
-         2Z3+RDkB/OPkbuEQGejFy6tJZh9iwvhB8Y0lyhOE=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 328BGofM030807
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Mar 2023 05:16:50 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 8
- Mar 2023 05:16:49 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 8 Mar 2023 05:16:49 -0600
-Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 328BGiaj110972;
-        Wed, 8 Mar 2023 05:16:45 -0600
-Message-ID: <a8bbed2d-4abc-2cde-3c74-5ea7ea30b231@ti.com>
-Date:   Wed, 8 Mar 2023 16:46:44 +0530
+        Wed, 8 Mar 2023 06:19:55 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6018F70D;
+        Wed,  8 Mar 2023 03:19:54 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id o12so64229379edb.9;
+        Wed, 08 Mar 2023 03:19:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678274392;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rMOE4fBtmW9fxcbhT3oZcCKs1+lTss3ZikJx1taQjKU=;
+        b=T4/GVkXywp+4cICmFamoeqgn7jvt4fF5m2WVkgiICwK8ht4foeX8WxKlFXztplgXRM
+         dX2fn8nqp9THVMlkxjDFP9nYjdivlYkqgsKPEQx3Kj/We++6cIf5IvW5ccVeRITHaVvt
+         wm3AO/cJBiywnvk4mMdQ62OhLnYdmxJkYeCUevEw7Puii5efZZy9lPcfDP9bhH63dvUX
+         2YO+IHaTjAznTdfJMlJ7LvucEmUfLdZ6wZRzw8yP92CFL14hVp8o/laLoCgDhQyr8aQ4
+         3W4xoAqkmsOKRY4Exnz3N5bVSw5j6i0XzcfEGGC8mw+WKLYIwcCKiSJVOqmVkFKY2Bjt
+         Y+Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678274392;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rMOE4fBtmW9fxcbhT3oZcCKs1+lTss3ZikJx1taQjKU=;
+        b=VnOlgThdyBpRnjOW7pEwSd9mImi+tjyDN5O0ac/BrHlmh33UTtWanxXLTB5y6fM6An
+         DovhWu5tukiVcwZ5TX6CLhucqUpIj5227dQBZEAiN28SLNkQmg289mHFIl4AhoAJzaOe
+         kD5uQcP7N923X2rYl3SJIAgOCGQKYsXf60qeFWDhqngsJnQ6ivJWlaQXZYpnXK3Oxsg6
+         sDYuLPPmkm6AAbYZYQaA3J4y0+YyXGhAwks9PIUnofaKX+rVUw0l7CRaTiiKmlmpjxop
+         4hxu7VaEy3M7MKQz4YcmTmUV5IG6/3ydnvvD1K21Xe2DNbm0adRcYySBIa6lFi4RgVT9
+         u6XQ==
+X-Gm-Message-State: AO0yUKXUpzNTjtv89jRiDBj0D7YbzejengvGPea+i447+QtxKLkFmMt1
+        myNgmG6EoRkeB6c1Gq5KbF0=
+X-Google-Smtp-Source: AK7set+9r3i7LbfHeh1tBgU6dJjoqHBsw/K789VGlq2goukzgVBj3+t1mlxo80W+KWGDeRUflq30cQ==
+X-Received: by 2002:a17:907:9485:b0:8a9:f870:d259 with SMTP id dm5-20020a170907948500b008a9f870d259mr20081841ejc.48.1678274392526;
+        Wed, 08 Mar 2023 03:19:52 -0800 (PST)
+Received: from [127.0.0.1] ([188.163.112.76])
+        by smtp.gmail.com with ESMTPSA id v8-20020a50c408000000b004c09f0ba24dsm8042358edf.48.2023.03.08.03.19.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 03:19:52 -0800 (PST)
+Date:   Wed, 08 Mar 2023 13:19:51 +0200
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Jean Delvare <jdelvare@suse.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] hwmon: ina2xx: add optional regulator support
+User-Agent: K-9 Mail for Android
+In-Reply-To: <a1187c2e-122e-36d1-dddd-c7beba282800@roeck-us.net>
+References: <20230308094024.14115-1-clamor95@gmail.com> <20230308094024.14115-3-clamor95@gmail.com> <378db0d7-4d5a-a445-3e1a-ee6d8da5a9e2@linaro.org> <CAPVz0n2KgUKi-m+kjvbxq8fA_G0+KNHtkNe4T0UGpmasMjWK2A@mail.gmail.com> <a1187c2e-122e-36d1-dddd-c7beba282800@roeck-us.net>
+Message-ID: <70325083-25B9-434F-9F48-9EE7AE28B550@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v3 5/6] soc: ti: pruss: Add
- helper function to enable OCP master ports
-Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <srk@ti.com>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20230306110934.2736465-1-danishanwar@ti.com>
- <20230306110934.2736465-6-danishanwar@ti.com>
- <39879d9f-041b-9156-95a5-a81702721739@kernel.org>
- <c5c2fbcc-0955-0325-ef05-289b7a339110@ti.com>
- <4b8d8b8e-9062-e4e6-770b-86bd40cc3683@kernel.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <4b8d8b8e-9062-e4e6-770b-86bd40cc3683@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,255 +80,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 08/03/23 16:44, Roger Quadros wrote:
-> 
-> 
-> On 08/03/2023 13:09, Md Danish Anwar wrote:
->> Hi Roger,
->>
->> On 08/03/23 14:11, Roger Quadros wrote:
->>>
->>>
->>> On 06/03/2023 13:09, MD Danish Anwar wrote:
->>>> From: Suman Anna <s-anna@ti.com>
->>>>
->>>> The PRU-ICSS subsystem on OMAP-architecture based SoCS (AM33xx, AM437x
->>>> and AM57xx SoCs) has a control bit STANDBY_INIT in the PRUSS_CFG register
->>>> to initiate a Standby sequence (when set) and trigger a MStandby request
->>>> to the SoC's PRCM module. This same bit is also used to enable the OCP
->>>> master ports (when cleared). The clearing of the STANDBY_INIT bit requires
->>>> an acknowledgment from PRCM and is done through the monitoring of the
->>>> PRUSS_SYSCFG.SUB_MWAIT bit.
->>>>
->>>> Add a helper function pruss_cfg_ocp_master_ports() to allow the PRU
->>>> client drivers to control this bit and enable or disable the firmware
->>>> running on PRU cores access to any peripherals or memory to achieve
->>>> desired functionality. The access is disabled by default on power-up
->>>> and on any suspend (context is not maintained).
->>>>
->>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+8 =D0=B1=D0=B5=D1=80=D0=B5=D0=B7=D0=BD=D1=8F 2023 =D1=80=2E 13:13:18 GMT+0=
+2:00, Guenter Roeck <linux@roeck-us=2Enet> =D0=BD=D0=B0=D0=BF=D0=B8=D1=81=
+=D0=B0=D0=B2(-=D0=BB=D0=B0):
+>On 3/8/23 02:35, Svyatoslav Ryhel wrote:
+>> =D1=81=D1=80, 8 =D0=B1=D0=B5=D1=80=2E 2023=E2=80=AF=D1=80=2E =D0=BE 12:=
+25 Krzysztof Kozlowski
+>> <krzysztof=2Ekozlowski@linaro=2Eorg> =D0=BF=D0=B8=D1=88=D0=B5:
+>>>=20
+>>> On 08/03/2023 10:40, Svyatoslav Ryhel wrote:
+>>>> Some devices may need a specific supply provided
+>>>> for this sensor to work properly, like p895 does=2E
+>>>>=20
+>>>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail=2Ecom>
 >>>> ---
->>>>  drivers/soc/ti/pruss.c           | 81 +++++++++++++++++++++++++++++++-
->>>>  include/linux/remoteproc/pruss.h |  6 +++
->>>>  2 files changed, 85 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->>>> index 537a3910ffd8..dc3abda0b8c2 100644
->>>> --- a/drivers/soc/ti/pruss.c
->>>> +++ b/drivers/soc/ti/pruss.c
->>>> @@ -22,14 +22,19 @@
->>>>  #include <linux/remoteproc.h>
->>>>  #include <linux/slab.h>
->>>>  
->>>> +#define SYSCFG_STANDBY_INIT	BIT(4)
->>>> +#define SYSCFG_SUB_MWAIT_READY	BIT(5)
+>>>>   drivers/hwmon/ina2xx=2Ec | 12 ++++++++++++
+>>>>   1 file changed, 12 insertions(+)
+>>>>=20
+>>>> diff --git a/drivers/hwmon/ina2xx=2Ec b/drivers/hwmon/ina2xx=2Ec
+>>>> index 00fc70305a89=2E=2E4a3e2b1bbe8b 100644
+>>>> --- a/drivers/hwmon/ina2xx=2Ec
+>>>> +++ b/drivers/hwmon/ina2xx=2Ec
+>>>> @@ -119,6 +119,7 @@ struct ina2xx_data {
+>>>>        long power_lsb_uW;
+>>>>        struct mutex config_lock;
+>>>>        struct regmap *regmap;
+>>>> +     struct regulator *vdd_supply;
+>>>>=20
+>>>>        const struct attribute_group *groups[INA2XX_MAX_ATTRIBUTE_GROU=
+PS];
+>>>>   };
+>>>> @@ -656,6 +657,17 @@ static int ina2xx_probe(struct i2c_client *clien=
+t)
+>>>>                return PTR_ERR(data->regmap);
+>>>>        }
+>>>>=20
+>>>> +     data->vdd_supply =3D devm_regulator_get_optional(dev, "vdd");
+>>>> +     if (IS_ERR(data->vdd_supply))
+>>>> +             return dev_err_probe(dev, PTR_ERR(data->vdd_supply),
+>>>> +                                  "failed to get vdd regulator\n");
 >>>> +
->>>>  /**
->>>>   * struct pruss_private_data - PRUSS driver private data
->>>>   * @has_no_sharedram: flag to indicate the absence of PRUSS Shared Data RAM
->>>>   * @has_core_mux_clock: flag to indicate the presence of PRUSS core clock
->>>> + * @has_ocp_syscfg: flag to indicate if OCP SYSCFG is present
->>>>   */
->>>>  struct pruss_private_data {
->>>>  	bool has_no_sharedram;
->>>>  	bool has_core_mux_clock;
->>>> +	bool has_ocp_syscfg;
->>>>  };
->>>>  
->>>>  /**
->>>> @@ -205,6 +210,72 @@ int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
->>>>  }
->>>>  EXPORT_SYMBOL_GPL(pruss_cfg_update);
->>>>  
->>>> +/**
->>>> + * pruss_cfg_ocp_master_ports() - configure PRUSS OCP master ports
->>>> + * @pruss: the pruss instance handle
->>>> + * @enable: set to true for enabling or false for disabling the OCP master ports
->>>> + *
->>>> + * This function programs the PRUSS_SYSCFG.STANDBY_INIT bit either to enable or
->>>> + * disable the OCP master ports (applicable only on SoCs using OCP interconnect
->>>> + * like the OMAP family). Clearing the bit achieves dual functionalities - one
->>>> + * is to deassert the MStandby signal to the device PRCM, and the other is to
->>>> + * enable OCP master ports to allow accesses outside of the PRU-ICSS. The
->>>> + * function has to wait for the PRCM to acknowledge through the monitoring of
->>>> + * the PRUSS_SYSCFG.SUB_MWAIT bit when enabling master ports. Setting the bit
->>>> + * disables the master access, and also signals the PRCM that the PRUSS is ready
->>>> + * for Standby.
->>>> + *
->>>> + * Return: 0 on success, or an error code otherwise. ETIMEDOUT is returned
->>>> + * when the ready-state fails.
->>>> + */
->>>> +int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable)
->>>> +{
->>>> +	int ret;
->>>> +	u32 syscfg_val, i;
->>>> +	const struct pruss_private_data *data;
->>>> +
->>>> +	if (IS_ERR_OR_NULL(pruss))
->>>> +		return -EINVAL;
->>>> +
->>>> +	data = of_device_get_match_data(pruss->dev);
->>>> +
->>>> +	/* nothing to do on non OMAP-SoCs */
->>>> +	if (!data || !data->has_ocp_syscfg)
->>>> +		return 0;
->>>> +
->>>> +	/* assert the MStandby signal during disable path */
->>>> +	if (!enable)
->>>> +		return pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG,
->>>> +					SYSCFG_STANDBY_INIT,
->>>> +					SYSCFG_STANDBY_INIT);
->>>
->>> You can omit the above if() if you just encapsulate the below in
->>>
->>> if (enable) {
->>>
->>>
->> Sure, I can omit the above if() and put the below block inside if (enable) {}.
->>
->> Currently when API pruss_cfg_ocp_master_ports()is called with enable as false
->> i.e. disabling PRUSS OCP master ports is requested, we directly return
->> pruss_cfg_update() where as if we remove the above if() section and encapsulate
->> below block in if (enable) {}, then in disable scenario, call flow will
->> directly reach the label disable. In the label disable, we are updating cfg and
->> then returning "ret", but at this point the variable ret is not assigned.
->>
->> To counter this should I change the label disable to below?
->>
->> disable:
->> 	return pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT,
->> 			 SYSCFG_STANDBY_INIT);
-> 
-> But you will loose the error code if we came here due to failure in pruss_cfg_read().
-> 
+>>>> +     ret =3D regulator_enable(data->vdd_supply);
+>>>> +     if (ret < 0) {
+>>>> +             dev_err(dev, "failed to enable vdd power supply\n");
+>>>> +             return ret;
+>>>=20
+>>> And where is disable? On each error path, removal etc=2E
+>>>=20
+>>=20
+>> error path ok, should I create a remove function just to disable the re=
+gulator?
+>>=20
+>Use devm_add_action_or_reset()=2E
+>
+>Guenter
+>
 
-Yes that's why I think it's better to leave it as it is.
+That is good suggestion=2E Thanks!
 
-> It's ok, don't make the change I suggested and leave it as it is.
-> 
+Best regards,
+Svyatoslav R=2E
 
-Sure
-
->>
->>>> +
->>>> +	/* enable the OCP master ports and disable MStandby */
->>>> +	ret = pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT, 0);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	/* wait till we are ready for transactions - delay is arbitrary */
->>>> +	for (i = 0; i < 10; i++) {
->>>> +		ret = pruss_cfg_read(pruss, PRUSS_CFG_SYSCFG, &syscfg_val);
->>>> +		if (ret)
->>>> +			goto disable;
->>>> +
->>
->> Changing the disable label will also result in losing the return value of
->> pruss_cfg_read() API call here.
->>
->>>> +		if (!(syscfg_val & SYSCFG_SUB_MWAIT_READY))
->>>> +			return 0;
->>>> +
->>>> +		udelay(5);
->>>> +	}
->>>> +
->>>> +	dev_err(pruss->dev, "timeout waiting for SUB_MWAIT_READY\n");
->>>> +	ret = -ETIMEDOUT;
->>
->> Changing the disable label will also result in losing ret = -ETIMEDOUT here.
->>
->>>
->>> }
->>>
->>>> +
->>>> +disable:
->>>> +	pruss_cfg_update(pruss, PRUSS_CFG_SYSCFG, SYSCFG_STANDBY_INIT,
->>>> +			 SYSCFG_STANDBY_INIT);
->>>> +	return ret;
->>>> +}
->>
->> So should I do this modification or keep it as it is?
->>
->>>> +EXPORT_SYMBOL_GPL(pruss_cfg_ocp_master_ports);
->>>> +
->>>>  static void pruss_of_free_clk_provider(void *data)
->>>>  {
->>>>  	struct device_node *clk_mux_np = data;
->>>> @@ -495,10 +566,16 @@ static int pruss_remove(struct platform_device *pdev)
->>>>  /* instance-specific driver private data */
->>>>  static const struct pruss_private_data am437x_pruss1_data = {
->>>>  	.has_no_sharedram = false,
->>>> +	.has_ocp_syscfg = true,
->>>>  };
->>>>  
->>>>  static const struct pruss_private_data am437x_pruss0_data = {
->>>>  	.has_no_sharedram = true,
->>>> +	.has_ocp_syscfg = false,
->>>> +};
->>>> +
->>>> +static const struct pruss_private_data am33xx_am57xx_data = {
->>>> +	.has_ocp_syscfg = true,
->>>>  };
->>>
->>> How about keeping platform data for different platforms separate?
->>>
->>> i.e. am33xx_pruss_data and am57xx_pruss_data
->>>
->>
->> Sure. I'll split am33xx_am57xx_data into am33xx_pruss_data and
->> am57xx_pruss_data as well as am65x_j721e_pruss_data into am65x_pruss_data and
->> j721e_pruss_data.
->>
->>>>  
->>>>  static const struct pruss_private_data am65x_j721e_pruss_data = {
->>>> @@ -506,10 +583,10 @@ static const struct pruss_private_data am65x_j721e_pruss_data = {
->>>>  };
->>>>  
->>>>  static const struct of_device_id pruss_of_match[] = {
->>>> -	{ .compatible = "ti,am3356-pruss" },
->>>> +	{ .compatible = "ti,am3356-pruss", .data = &am33xx_am57xx_data },
->>>>  	{ .compatible = "ti,am4376-pruss0", .data = &am437x_pruss0_data, },
->>>>  	{ .compatible = "ti,am4376-pruss1", .data = &am437x_pruss1_data, },
->>>> -	{ .compatible = "ti,am5728-pruss" },
->>>> +	{ .compatible = "ti,am5728-pruss", .data = &am33xx_am57xx_data },
->>>>  	{ .compatible = "ti,k2g-pruss" },
->>>>  	{ .compatible = "ti,am654-icssg", .data = &am65x_j721e_pruss_data, },
->>>>  	{ .compatible = "ti,j721e-icssg", .data = &am65x_j721e_pruss_data, },
->>>> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
->>>> index 7952f250301a..8cb99d3cad0d 100644
->>>> --- a/include/linux/remoteproc/pruss.h
->>>> +++ b/include/linux/remoteproc/pruss.h
->>>> @@ -168,6 +168,7 @@ int pruss_release_mem_region(struct pruss *pruss,
->>>>  int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val);
->>>>  int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
->>>>  		     unsigned int mask, unsigned int val);
->>>> +int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable);
->>>>  
->>>>  #else
->>>>  
->>>> @@ -203,6 +204,11 @@ static inline int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
->>>>  	return -EOPNOTSUPP;
->>>>  }
->>>>  
->>>> +static inline int pruss_cfg_ocp_master_ports(struct pruss *pruss, bool enable)
->>>> +{
->>>> +	return -EOPNOTSUPP;
->>>> +}
->>>> +
->>>>  #endif /* CONFIG_TI_PRUSS */
->>>>  
->>>>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
->>>
->>> cheers,
->>> -roger
->>
-> 
-> cheers,
-> -roger
-
--- 
-Thanks and Regards,
-Danish.
+>>> Best regards,
+>>> Krzysztof
+>>>=20
+>
