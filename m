@@ -2,134 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A146B1558
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A876B155C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:40:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCHWj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:39:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
+        id S229672AbjCHWkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbjCHWjW (ORCPT
+        with ESMTP id S229513AbjCHWkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:39:22 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9898B56C4
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:39:21 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a25so72110721edb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678315159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RgHOh6/Mv9MfzuVql9i7aCQo+w921G9eVyn2ZtvpMeA=;
-        b=XQXaw6SveWahy2vB5VNPk9scfWmxZaNlQgREb/CuY/yZUytGHjqPn864hIBUArPFn1
-         y7zz67wMDKFhJFysg8iELT8s+Eqzks3zF0isZaefpIONj9oeZlPfqnQUX6N/ae7XMtK6
-         s4tbuPIabvLC4k3jI13hdl3b4BXHTK/yn6DKM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678315159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RgHOh6/Mv9MfzuVql9i7aCQo+w921G9eVyn2ZtvpMeA=;
-        b=o82wQkD1HxHnedPRzkX7HDXqK4MqlmFPtZ+fhRHcdh5cb0iYpTTZszPDL8I5JyKQZQ
-         R0i4XN3u3tF/XbQ+k/Mho3e91KKdpuVxbRt9WDTCYyu7YZMGqdYVUhsgfC9Q83b42PxA
-         zIPNOqDqpJULeXba6XjUCWmPKjao1XWO/6aKkj63ojVaZaGruWAlxs46L4PA0f3DW5Yy
-         IzZ4QmJdqQU96o8eKxXvRKi4HF8sSPJPLXpa+dc4zGhfj/9wpNllTE+XrVqGFwMxl99N
-         cibvOM0CVOFmWxCy6+YEZc5I2WUqnJSXPq7Etdik2oGlgd+ASMTyOsoffhM1Nsnq8cKc
-         BEEg==
-X-Gm-Message-State: AO0yUKUaQebVBBF3LmzA7OzbxbeWCIGXr3aCvqx/YG4bQpqjg0rSjk+E
-        fXqXq/eNZsa/gFP0vMC062LFAO3JELT+/ppmkX0XiA==
-X-Google-Smtp-Source: AK7set+TfeCx1SJImdYXmcWQwDxAZ9tbcKmrIEpMUQtHyE6DrZnEK27z1LDcr+lBYuZNduoKQvxBTw==
-X-Received: by 2002:a17:907:7f09:b0:8b1:7e21:f0e9 with SMTP id qf9-20020a1709077f0900b008b17e21f0e9mr24590739ejc.18.1678315159552;
-        Wed, 08 Mar 2023 14:39:19 -0800 (PST)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id l6-20020a50d6c6000000b004bdcc480c41sm8760499edj.96.2023.03.08.14.39.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 14:39:18 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id ay14so68150089edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:39:18 -0800 (PST)
-X-Received: by 2002:a50:8750:0:b0:4c2:ed2:1196 with SMTP id
- 16-20020a508750000000b004c20ed21196mr10973452edv.5.1678315158081; Wed, 08 Mar
- 2023 14:39:18 -0800 (PST)
+        Wed, 8 Mar 2023 17:40:00 -0500
+Received: from forward502c.mail.yandex.net (forward502c.mail.yandex.net [178.154.239.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CDE144B1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:39:58 -0800 (PST)
+Received: from sas2-ee8a69bedcfd.qloud-c.yandex.net (sas2-ee8a69bedcfd.qloud-c.yandex.net [IPv6:2a02:6b8:c14:252d:0:640:ee8a:69be])
+        by forward502c.mail.yandex.net (Yandex) with ESMTP id A5E6C5F425;
+        Thu,  9 Mar 2023 01:39:56 +0300 (MSK)
+Received: by sas2-ee8a69bedcfd.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id qdlK4ADc3mI1-YobY5zlJ;
+        Thu, 09 Mar 2023 01:39:55 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1678315195;
+        bh=jtp2l4lNFJPAxiRvDYywOQOC6WaE6pPy91DLgHdQQhI=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=AItsOs1tUQbS7iAuk2AT3NjB2XQBUNKQspE0WlDkhD+jJT1LG0nOLzhGV0oCoyS/A
+         LOTbtus5nWHPWBaW0X3g7s+eLhJCCWUHcE6qAEU6NBRUkM1BZsYWCz/VmZLV9JwWSA
+         a4xjilBcji57Mbv5zrKn1AeWxqphWGgIONs/6HjU=
+Authentication-Results: sas2-ee8a69bedcfd.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
+Message-ID: <bc829246-4606-cc8d-4a4f-da285255f5a3@ya.ru>
+Date:   Thu, 9 Mar 2023 01:39:52 +0300
 MIME-Version: 1.0
-References: <20230308165251.2078898-1-dhowells@redhat.com> <20230308165251.2078898-4-dhowells@redhat.com>
-In-Reply-To: <20230308165251.2078898-4-dhowells@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 8 Mar 2023 14:39:00 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
-Message-ID: <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
-Subject: Re: [PATCH v17 03/14] shmem: Implement splice-read
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Daniel Golle <daniel@makrotopia.org>,
-        Guenter Roeck <groeck7@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 7/8] mm: vmscan: remove shrinker_rwsem from
+ synchronize_shrinkers()
+Content-Language: en-US
+To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
+        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
+        shy828301@gmail.com, rppt@kernel.org
+Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
+        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
+ <20230307065605.58209-8-zhengqi.arch@bytedance.com>
+From:   Kirill Tkhai <tkhai@ya.ru>
+In-Reply-To: <20230307065605.58209-8-zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 8:53=E2=80=AFAM David Howells <dhowells@redhat.com> =
-wrote:
->
-> The new filemap_splice_read() has an implicit expectation via
-> filemap_get_pages() that ->read_folio() exists if ->readahead() doesn't
-> fully populate the pagecache of the file it is reading from[1], potential=
-ly
-> leading to a jump to NULL if this doesn't exist.  shmem, however, (and by
-> extension, tmpfs, ramfs and rootfs), doesn't have ->read_folio(),
+On 07.03.2023 09:56, Qi Zheng wrote:
+> Now there are no readers of shrinker_rwsem, so
+> synchronize_shrinkers() does not need to hold the
+> writer of shrinker_rwsem to wait for all running
+> shinkers to complete, synchronize_srcu() is enough.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> ---
+>  mm/vmscan.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 7aaf6f94ac1b..ac7ab4aa344f 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -796,15 +796,11 @@ EXPORT_SYMBOL(unregister_shrinker);
+>  /**
+>   * synchronize_shrinkers - Wait for all running shrinkers to complete.
+>   *
+> - * This is equivalent to calling unregister_shrink() and register_shrinker(),
+> - * but atomically and with less overhead. This is useful to guarantee that all
+> - * shrinker invocations have seen an update, before freeing memory, similar to
+> - * rcu.
+> + * This is useful to guarantee that all shrinker invocations have seen an
+> + * update, before freeing memory.
+>   */
+>  void synchronize_shrinkers(void)
+>  {
+> -	down_write(&shrinker_rwsem);
+> -	up_write(&shrinker_rwsem);
+>  	atomic_inc(&shrinker_srcu_generation);
+>  	synchronize_srcu(&shrinker_srcu);
+>  }
 
-This patch is the only one in your series that I went "Ugh, that's
-really ugly" for.
-
-Do we really want to basically duplicate all of filemap_splice_read()?
-
-I get the feeling that the zeropage case just isn't so important that
-we'd need to duplicate filemap_splice_read() just for that, and I
-think that the code should either
-
- (a) just make a silly "read_folio()" for shmfs that just clears the page.
-
-     Ugly but maybe simple and not horrid?
-
-or
-
- (b) teach filemap_splice_read() that a NULL 'read_folio' function
-means "use the zero page"
-
-     That might not be splice() itself, but maybe in
-filemap_get_pages() or something.
-
-or
-
- (c) go even further, and teach read_folio() in general about file
-holes, and allow *any* filesystem to read zeroes that way in general
-without creating a folio for it.
-
-in a perfect world, if done well I think shmem_file_read_iter() should
-go away, and it could use generic_file_read_iter too.
-
-I dunno. Maybe shm really is *so* special that this is the right way
-to do things, but I did react quite negatively to this patch. So not a
-complete NAK, but definitely a "do we _really_ have to do this?"
-
-                       Linus
+Just curious, callers of synchronize_shrinkers() don't want to have parallel register_shrinker() and unregister_shrink() are completed?
+Here we only should wait for parallel shrink_slab(), correct?
