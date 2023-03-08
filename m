@@ -2,171 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C83C6B15AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3276B6B15B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:57:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbjCHW5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:57:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60660 "EHLO
+        id S229970AbjCHW51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCHW5S (ORCPT
+        with ESMTP id S229932AbjCHW5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:57:18 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0562565447
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:57:17 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id v11so87266plz.8
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:57:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678316236;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAK9CzL+zrevBUMkpokUm3TFCKwT1+VpG+72EOhUpw4=;
-        b=PYk53ijBC97VpoEV2dqmf6xQpnC+MN1CDULqjxExB4rX2qXKFLCXRKi7w/vRZl3cd9
-         rRlFh9+bA9MdpRILUNPVDv3kV8iA4y1nlQPBGSVgKPkAUDCHbYQz0LT+ur0NBBuXW+78
-         mGJYzl+Fx/o6Fj5Jc4etvYg1Y8a/LDfNeBhPk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678316236;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dAK9CzL+zrevBUMkpokUm3TFCKwT1+VpG+72EOhUpw4=;
-        b=xnu8wJm8wDuN8kScAWkoqSKvnDNKoIKkruNd+Ulk+oqQ8tP10SAV/Dxjf6xWQlj5zr
-         /cDZIX+loYax3H3HVkd5ABhnV8/QODmol8kh8DnRhHzolbnFd1NbfmnOkHITCMUcKVaj
-         1E4KQSDtUWWJIOCr53g+u2K8bXf0E0OmFLfnZxVx9a9RkxW+LO1CN3QvDPglKrgUvFKE
-         E2fXDIB3nE2SXeDyirS0huF+L2x47de5nTy0sTpK44nYiBDqBvoCTfUJWxa5Q/DqY3Yd
-         CEFo+p1zkjATojITgR2a+sXRswYlf8MO3saTtv9l0kbCkah2P0cTQNn2eoMMpCGR+CrV
-         e/hg==
-X-Gm-Message-State: AO0yUKVBu6bawgxO1YgK1O3MFyZWzPYNwuyiN5OpNtRtnzKtuPNyaPGj
-        mYwHFVzEOLiT4+maofbXCViAZGUDlG468kM/JVv8bQ==
-X-Google-Smtp-Source: AK7set/9BekLMEyVSqqqtQLPZi/SWUxzXMuCGCmRLKsX86j2/FOo/nIFNihNMHQlPOAkVNSNDIE+Qw==
-X-Received: by 2002:a17:902:e809:b0:19a:9890:eac6 with SMTP id u9-20020a170902e80900b0019a9890eac6mr23775978plg.24.1678316236230;
-        Wed, 08 Mar 2023 14:57:16 -0800 (PST)
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com. [209.85.210.171])
-        by smtp.gmail.com with ESMTPSA id kd12-20020a17090313cc00b0019cb6222691sm8758875plb.133.2023.03.08.14.57.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 14:57:15 -0800 (PST)
-Received: by mail-pf1-f171.google.com with SMTP id fd25so308696pfb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:57:15 -0800 (PST)
-X-Received: by 2002:a63:5847:0:b0:4eb:1c07:e5d7 with SMTP id
- i7-20020a635847000000b004eb1c07e5d7mr7049690pgm.6.1678316235129; Wed, 08 Mar
- 2023 14:57:15 -0800 (PST)
+        Wed, 8 Mar 2023 17:57:25 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253A4CD674;
+        Wed,  8 Mar 2023 14:57:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 325E3CE21E5;
+        Wed,  8 Mar 2023 22:57:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BA4C433EF;
+        Wed,  8 Mar 2023 22:57:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678316240;
+        bh=Vlvn8CfBYizVQlVUd+yCpK3GnQGiqG3oOT5tnHgDjXI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=d7xnvR229RhW7YOMcKr4+DOZ/iEdVNp9dUw8rYV3O6DQ6eKjp32bcmxiQKq+eN5Is
+         ADfYUISgRX61tRsXnm7gsr/YbRrzetF2sS4mbsHa88L3HMIkT0z1ddpfKYuBgszLdq
+         qHv3Et3UWC+BtDHPX83xQkkfwuf7KnzRf7tKXqO9cELUnwlv93nXtM7z2q7C+oiE1D
+         kRWDfg8QOnGacMC/zXGNhNUMzVBPVVHZ/5DDC58RvnBK5dhkXYM0AQZp3dRzmwPboP
+         xU8+MxtOb3EiR8QBzxvMgl3YNy+DzC7Psu72L9I8SMR8jLe1mlLNWHibBui5hjYIZd
+         mwfHzG/ZAvYvA==
+Date:   Wed, 8 Mar 2023 16:57:18 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     korantwork@gmail.com
+Cc:     nirmal.patel@linux.intel.com, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Subject: Re: [PATCH v2] PCI:vmd: add the module param to adjust msi mode
+Message-ID: <20230308225718.GA1054189@bhelgaas>
 MIME-Version: 1.0
-References: <20230111-uvc_privacy_subdev-v1-0-f859ac9a01e3@chromium.org>
- <CANiDSCuq483Eha-KfUM_1y4zb0sC8rNgf-yki5SjiUo3czaKBw@mail.gmail.com> <CAEDqmY7XqqFrQCEMFe3kmOFJkgOcHoJcUH5bJAueyH0oQivzmw@mail.gmail.com>
-In-Reply-To: <CAEDqmY7XqqFrQCEMFe3kmOFJkgOcHoJcUH5bJAueyH0oQivzmw@mail.gmail.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Wed, 8 Mar 2023 23:57:04 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtdx2URrXCy+T5VOWejqP8V-jVLqa2P9RXNbc2vbZnzog@mail.gmail.com>
-Message-ID: <CANiDSCtdx2URrXCy+T5VOWejqP8V-jVLqa2P9RXNbc2vbZnzog@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/3] meida: uvcvideo: reimplement privacy gpio as a
- separate subdevice
-To:     Yunke Cao <yunkec@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307083559.2379758-1-korantwork@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023 at 06:46, Yunke Cao <yunkec@chromium.org> wrote:
->
-> Hi!
->
-> On Fri, Jan 13, 2023 at 5:26 PM Ricardo Ribalda <ribalda@chromium.org> wrote:
-> >
-> > Hi Yunke
-> >
-> > Thank you very much for the patchset :)
-> >
-> > On Wed, 11 Jan 2023 at 09:52, Yunke Cao <yunkec@chromium.org> wrote:
-> > >
-> > > privacy_gpio in uvc were added as V4L2_CID_PRIVACY in uvc video node in
-> > > https://lore.kernel.org/all/20201223133528.55014-1-ribalda@chromium.org/
-> > >
-> > > Userspace applications often require to constantly poll privacy control.
-> > > Currently, polling privacy control requires keeping the video node open,
-> > > which prevents the camera from autosuspending.
-> > >
-> > > This patchset adds a separate v4l2 subdevice. Userspace access the gpio
-> > > via V4L2_CID_PRIVACY in the new subdevice. Applications can poll the
-> > > privacy control status without opening the video node and activate the
-> > > camera.
-> > >
-> > > The non-gpio V4L2_CID_PRIVACY in uvc is not affected.
-> >
-> > Since this is a RFC, lets focus on the idea and not on the code itself.
-> >
-> > - I am missing a reference to the subdevice from the media device. How
-> > will a user figure out that /dev/v4l-subdev0 is the privacy gpio of
-> > /dev/media0 and not /dev/media1?. Thake a look to the "ancillary
-> > links"
-> > - We have already exposed the control as part of the main video
-> > device, that means that we need to keep that API. The control on
-> > /dev/v4l-subdev0 should "mirror" the control on /dev/video0
-> > - There is no need to v4l2_ctrl_fill_event(), if you modify the
-> > control with a set controll function, the media controller should take
-> > care of everything
->
-> Thanks! I will fix these in the next version if we decide to proceed.
->
-> >
-> > @Sakari Ailus @Hans Verkuil : Assuming a correct implementation, how
-> > would you feel about exposing a privacy gpio as a subdevice?
-> >
->
-> Sakari, Hans, do you think this idea makes sense?
+Please adjust the subject line to match previous history, e.g.,
 
-Friendly ping
+  PCI: vmd: Add ... MSI ...
 
->
-> Best,
-> Yunke
->
-> >
-> > Thanks!!!
-> >
-> >
-> > >
-> > > Suggested-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > Signed-off-by: Yunke Cao <yunkec@chromium.org>
-> > > ---
-> > > Yunke Cao (3):
-> > >       media: v4l2-ctrls: Expose v4l2_ctrl_fill_event()
-> > >       media: uvcvideo: remove entity privacy control in the uvc video node
-> > >       media: uvcvideo: reimplement privacy GPIO as a separate subdevice
-> > >
-> > >  drivers/media/usb/uvc/uvc_ctrl.c          | 17 -------
-> > >  drivers/media/usb/uvc/uvc_driver.c        | 44 ++----------------
-> > >  drivers/media/usb/uvc/uvc_entity.c        | 76 +++++++++++++++++++++++++++++++
-> > >  drivers/media/usb/uvc/uvcvideo.h          | 19 +++++---
-> > >  drivers/media/v4l2-core/v4l2-ctrls-core.c |  9 ++--
-> > >  include/media/v4l2-ctrls.h                | 12 +++++
-> > >  6 files changed, 111 insertions(+), 66 deletions(-)
-> > > ---
-> > > base-commit: 7dd4b804e08041ff56c88bdd8da742d14b17ed25
-> > > change-id: 20230111-uvc_privacy_subdev-1e7a167e86eb
-> > >
-> > > Best regards,
-> > > --
-> > > Yunke Cao <yunkec@chromium.org>
-> >
-> >
-> >
-> > --
-> > Ricardo Ribalda
+On Tue, Mar 07, 2023 at 04:35:59PM +0800, korantwork@gmail.com wrote:
+> From: Xinghui Li <korantli@tencent.com>
+> 
+> In the legacy, the vmd msi-mode can only be adjusted by configing
+> vmd_ids table.This patch adds another way to adjust msi mode by
+> adjusting module param, which allow users easier to adjust the vmd
+> according to the I/O scenario without rebuilding driver.There are two
+> params could be recognized: on, off. The default param is "NULL",
+> the goal is not to affect the existing settings of the device.
 
+Please add a space after the period that ends each sentence.
+Capitalize "MSI" to match usage in spec.
 
+> Signed-off-by: Xinghui Li <korantli@tencent.com>
+> Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
 
--- 
-Ricardo Ribalda
+I didn't see a response from Nirmal on the mailing list with the
+Reviewed-by.  I think it's better if Nirmal responds to the patch
+directly on the mailing list with the Reviewed-by, and whoever applies
+the patch can incorporate it.  Otherwise we have no visibility into
+any interaction between you and Nirmal.
+
+> ---
+>  drivers/pci/controller/vmd.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index 990630ec57c6..8b42b2c1d949 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -34,6 +34,20 @@
+>  #define MB2_SHADOW_OFFSET	0x2000
+>  #define MB2_SHADOW_SIZE		16
+>  
+> +/*
+> + * The VMD msi_remap module parameter provides the alternative way
+> + * to adjust msi mode when loading vmd.ko other than vmd_ids table.
+> + * There are two params could be recognized:
+> + *
+> + * 1-off
+> + * 2-on
+
+It looks like your code matches either "on" or "off", not "1" or "2".
+
+> + * The default param is "NULL", the goal is not to affect the existing
+> + * settings of the device.
+> + */
+> +char *msi_remap = "NULL";
+
+Looks like this should be static?  And using "NULL" (as opposed to
+something like the empty string "") suggests some intrinsic meaning of
+"NULL", but I think there is no intrinsic meaning and the only point
+is that "NULL" doesn't match either "on" or "off".
+
+> +module_param(msi_remap, charp, 0444);
+> +
+>  enum vmd_features {
+>  	/*
+>  	 * Device may contain registers which hint the physical location of the
+> @@ -875,6 +889,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  			return ret;
+>  
+>  		vmd_set_msi_remapping(vmd, true);
+> +		dev_info(&vmd->dev->dev, "init vmd with remapping msi-x\n");
+>  
+>  		ret = vmd_create_irq_domain(vmd);
+>  		if (ret)
+> @@ -887,6 +902,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
+>  	} else {
+>  		vmd_set_msi_remapping(vmd, false);
+> +		dev_info(&vmd->dev->dev, "init vmd with bypass msi-x\n");
+>  	}
+>  
+>  	pci_add_resource(&resources, &vmd->resources[0]);
+> @@ -955,6 +971,14 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  	return 0;
+>  }
+>  
+> +static void vmd_config_msi_remap_param(unsigned long *features)
+> +{
+> +	if (strcmp(msi_remap, "on") == 0)
+> +		*features &= ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
+> +	else if (strcmp(msi_remap, "off") == 0)
+> +		*features |= VMD_FEAT_CAN_BYPASS_MSI_REMAP;
+> +}
+> +
+>  static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  {
+>  	unsigned long features = (unsigned long) id->driver_data;
+> @@ -984,6 +1008,8 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	if (err < 0)
+>  		goto out_release_instance;
+>  
+> +	vmd_config_msi_remap_param(&features);
+> +
+>  	vmd->cfgbar = pcim_iomap(dev, VMD_CFGBAR, 0);
+>  	if (!vmd->cfgbar) {
+>  		err = -ENOMEM;
+> -- 
+> 2.31.1
+> 
