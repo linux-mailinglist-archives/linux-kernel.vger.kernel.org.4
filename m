@@ -2,171 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87806B138D
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535266B1390
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjCHVHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 16:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45876 "EHLO
+        id S230172AbjCHVIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:08:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCHVHo (ORCPT
+        with ESMTP id S229492AbjCHVIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 16:07:44 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBC5D514E
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:07:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 51798CE1FBE
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 21:07:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2815FC433D2;
-        Wed,  8 Mar 2023 21:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1678309656;
-        bh=5sBw8YBMWuDsTbdbyhx6tx4mTGUCbOpZNEfsUaiN8/E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hE0xSCDWku5sQr6qlduKFf1GwZt4ZBDMUM3uyCf7WAbSYeYDfiycmTFVOtGYinABV
-         aXQeB0zoYOeqzrlJRs2QonBG1I70ayGpj86gpHo8vLSlYWg9yKdRMhY+gQ3e6nmvJt
-         6sYQhVCQucWgD8VeGFMYr7MkVPudVjXguKEFHt3c=
-Date:   Wed, 8 Mar 2023 13:07:35 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Marco Elver <elver@google.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>
-Subject: Re: ld.lld: error: undefined symbol: memcpy
-Message-Id: <20230308130735.bbc4b21a3aff977bced451fa@linux-foundation.org>
-In-Reply-To: <202303090422.ss2Hbm4f-lkp@intel.com>
-References: <202303090422.ss2Hbm4f-lkp@intel.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 8 Mar 2023 16:08:42 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0C57A923
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 13:08:40 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id p20so18895313plw.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 13:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1678309720;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uQjAWnx5lQ/2cENFz0YdGZbVbhOf2bedNqDxQZfmLmE=;
+        b=DC948+R6ch+RYEfp2Fh69Wc5fEuezDxGyjm5a2ojDEmAJabOsIgx14BASBdNePqbO7
+         A1sw5VdAMlS5De8EQ1Mm1vUNzQNIf8mMGPmHf6r/y99zKv0JSCyUIT8mU6KxsnmQiIGd
+         2B7JuvDg8ms78MFJG+iPG8At90jWfpGWObImE5SBbRydaL5IUtud20x8Y8wdTtN/9Z/W
+         FzgSTkckrxVQvBO3vI9A4viY2HXPPIyGkYnjb7ahWkZxK/znzbWaSMEhWHYPxrHDOVw0
+         dduyixO5zIoWd/R5IIIWgSjIMTiv4qyyJ8WE80iykm3ooAeKS7B1hW5TcRKXHes0mAAN
+         iYKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678309720;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uQjAWnx5lQ/2cENFz0YdGZbVbhOf2bedNqDxQZfmLmE=;
+        b=JDp23vAZOsAhHF4xfaHumMbMtW2fte9eZkOz0r/Fg56PpcGuesyb8CXlY/wVHrBXUh
+         M+u4o45Gy60DKgbm6rJqD3qgPhl9FzddE9L4YW5qiZw5ZUcVp59XCpe/9CwcFwYStOqW
+         PB5ENHF4KoB9kr4a6K1GKC2bVlx8Zbjh9lBFD6t6Vf3lqKkoNyu2tczfrfj4d/ZTkVBd
+         O95dA90zbvTaayAc4t7URx3TFHxBVQ5Gr7R7yrXtfiGahbEQdCKBr95GhuZPoeyVj5nm
+         0BX63gG1HxaBKD7yHDjsVwgJ2CFVgDqcNjE9UEj7uwTEyKUnB/Xo12y+EXzpzolmzmQq
+         jUlg==
+X-Gm-Message-State: AO0yUKWrKnQ9ptObd4nYXEcp5K/JiWoCvZxxkGpDrAFkBKWGVJiipy2s
+        v+dN874tWlGOoEW3gSleqQqN/IARO9lCLMBjh1c=
+X-Google-Smtp-Source: AK7set8/nCJPbgdHyS22yS22YNGDj4za3NiHgaPgzaWsI9o9vVTaHqTsc2ZqcZJtvgEtszxlzM/WcA==
+X-Received: by 2002:a17:902:d38c:b0:19d:16e4:ac20 with SMTP id e12-20020a170902d38c00b0019d16e4ac20mr18011067pld.63.1678309719618;
+        Wed, 08 Mar 2023 13:08:39 -0800 (PST)
+Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
+        by smtp.gmail.com with ESMTPSA id kq3-20020a170903284300b0019b9a075f1fsm10217942plb.80.2023.03.08.13.08.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 13:08:39 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pa11Y-006QqV-6V; Thu, 09 Mar 2023 08:08:36 +1100
+Date:   Thu, 9 Mar 2023 08:08:36 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v17 09/14] iomap: Don't get an reference on ZERO_PAGE for
+ direct I/O block zeroing
+Message-ID: <20230308210836.GV2825702@dread.disaster.area>
+References: <20230308165251.2078898-1-dhowells@redhat.com>
+ <20230308165251.2078898-10-dhowells@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308165251.2078898-10-dhowells@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Mar 2023 05:01:04 +0800 kernel test robot <lkp@intel.com> wrote:
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   63355b9884b3d1677de6bd1517cd2b8a9bf53978
-> commit: 36be5cba99f6f9984a9a9f0454f95a38f4184d3e kasan: treat meminstrinsic as builtins in uninstrumented files
-> date:   6 days ago
-> config: powerpc-randconfig-r036-20230305 (https://download.01.org/0day-ci/archive/20230309/202303090422.ss2Hbm4f-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install powerpc cross compiling tool for clang build
->         # apt-get install binutils-powerpc-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=36be5cba99f6f9984a9a9f0454f95a38f4184d3e
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 36be5cba99f6f9984a9a9f0454f95a38f4184d3e
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+On Wed, Mar 08, 2023 at 04:52:46PM +0000, David Howells wrote:
+> ZERO_PAGE can't go away, no need to hold an extra reference.
 > 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303090422.ss2Hbm4f-lkp@intel.com/
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: David Hildenbrand <david@redhat.com>
+> cc: linux-fsdevel@vger.kernel.org
+> ---
+>  fs/iomap/direct-io.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> All errors (new ones prefixed by >>):
-> 
-> >> ld.lld: error: undefined symbol: memcpy
->    >>> referenced by xmon.c:1896 (arch/powerpc/xmon/xmon.c:1896)
->    >>>               arch/powerpc/xmon/xmon.o:(prregs) in archive vmlinux.a
->    >>> referenced by zstd_compress.c:4814 (lib/zstd/compress/zstd_compress.c:4814)
->    >>>               lib/zstd/compress/zstd_compress.o:(ZSTD_createCDict_advanced2) in archive vmlinux.a
->    >>> referenced by zstd_compress.c:4910 (lib/zstd/compress/zstd_compress.c:4910)
->    >>>               lib/zstd/compress/zstd_compress.o:(ZSTD_initStaticCDict) in archive vmlinux.a
->    >>> referenced 5 more times
-> --
-> >> ld.lld: error: undefined symbol: memset
->    >>> referenced by slab_common.c:579 (mm/slab_common.c:579)
->    >>>               mm/slab_common.o:(kmem_dump_obj) in archive vmlinux.a
->    >>> referenced by kasan_test.c:558 (mm/kasan/kasan_test.c:558)
->    >>>               mm/kasan/kasan_test.o:(kmalloc_oob_in_memset) in archive vmlinux.a
->    >>> referenced by kasan_test.c:505 (mm/kasan/kasan_test.c:505)
->    >>>               mm/kasan/kasan_test.o:(kmalloc_oob_memset_2) in archive vmlinux.a
->    >>> referenced 10 more times
-> 
+> diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
+> index f771001574d0..850fb9870c2f 100644
+> --- a/fs/iomap/direct-io.c
+> +++ b/fs/iomap/direct-io.c
+> @@ -202,7 +202,7 @@ static void iomap_dio_zero(const struct iomap_iter *iter, struct iomap_dio *dio,
+>  	bio->bi_private = dio;
+>  	bio->bi_end_io = iomap_dio_bio_end_io;
+>  
+> -	get_page(page);
+> +	bio_set_flag(bio, BIO_NO_PAGE_REF);
+>  	__bio_add_page(bio, page, len, 0);
+>  	iomap_dio_submit_bio(iter, dio, bio, pos);
+>  }
 
-Will this fix?
+Looks fine.
 
-From: Alexander Potapenko <glider@google.com>
-Subject: x86: kmsan: don't rename memintrinsics in uninstrumented files
-Date: Fri, 3 Mar 2023 15:14:30 +0100
-
-clang -fsanitize=kernel-memory already replaces calls to
-memset/memcpy/memmove and their __builtin_ versions with
-__msan_memset/__msan_memcpy/__msan_memmove in instrumented files, so
-there is no need to override them.
-
-In non-instrumented versions we are now required to leave memset() and
-friends intact, so we cannot replace them with __msan_XXX() functions.
-
-Link: https://lkml.kernel.org/r/20230303141433.3422671-1-glider@google.com
-Signed-off-by: Alexander Potapenko <glider@google.com>
-Suggested-by: Marco Elver <elver@google.com>
-Reviewed-by: Marco Elver <elver@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Helge Deller <deller@gmx.de>
-Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
-
---- a/arch/x86/include/asm/string_64.h~x86-kmsan-dont-rename-memintrinsics-in-uninstrumented-files
-+++ a/arch/x86/include/asm/string_64.h
-@@ -15,22 +15,11 @@
- #endif
- 
- #define __HAVE_ARCH_MEMCPY 1
--#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
--#undef memcpy
--#define memcpy __msan_memcpy
--#else
- extern void *memcpy(void *to, const void *from, size_t len);
--#endif
- extern void *__memcpy(void *to, const void *from, size_t len);
- 
- #define __HAVE_ARCH_MEMSET
--#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
--extern void *__msan_memset(void *s, int c, size_t n);
--#undef memset
--#define memset __msan_memset
--#else
- void *memset(void *s, int c, size_t n);
--#endif
- void *__memset(void *s, int c, size_t n);
- 
- #define __HAVE_ARCH_MEMSET16
-@@ -70,13 +59,7 @@ static inline void *memset64(uint64_t *s
- }
- 
- #define __HAVE_ARCH_MEMMOVE
--#if defined(__SANITIZE_MEMORY__) && defined(__NO_FORTIFY)
--#undef memmove
--void *__msan_memmove(void *dest, const void *src, size_t len);
--#define memmove __msan_memmove
--#else
- void *memmove(void *dest, const void *src, size_t count);
--#endif
- void *__memmove(void *dest, const void *src, size_t count);
- 
- int memcmp(const void *cs, const void *ct, size_t count);
-_
-
+Reviewed-by: Dave Chinner <dchinner@redhat.com>
+-- 
+Dave Chinner
+david@fromorbit.com
