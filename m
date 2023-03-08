@@ -2,142 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CC36B1303
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:25:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367DE6B1304
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:25:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjCHUZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:25:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
+        id S229717AbjCHUZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 15:25:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229897AbjCHUZD (ORCPT
+        with ESMTP id S229913AbjCHUZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:25:03 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2100.outbound.protection.outlook.com [40.107.101.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D591BAD2E;
-        Wed,  8 Mar 2023 12:25:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=brlSPJvV1g0u1UAgEWNJVBCcV2e8RzSJN/DyOhiL79I9pHgrus9KsWSEr4NL1rbnI9uLk4KgS6tWaSiKfvmGr8wS7SRneevFBxvCtphBcu5pR9cFo5qNq+TkH78rj/ScZ0DIB1AlPkIYIttR3azTMFtHW79egPxUgxL8tP1s2NtDwBRlzq1N64undTKh9UwaHwjPyoymKBJovRvdmpQR7OznwqqXH0WjBbDht9LUfSSOn8pCb5+1uochzaId5JxwHyJaoZxKULALIpnp/L8nvN9rZ6ZkA3LDa5s9GX2BPq8W7T/XCK9baaQKMD9ewrEsUIt6QVE5qDlYSPIpk1a9hQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pew5pUUtaTG6fl4NfwoCNIqOjTM+x/4G4fCPOC5498o=;
- b=RJ4C0ziuAe73i8+BET04OPdjM48Ji8IpB2907QkByBafTfRYddVqpPwNSQyWJBtNcUIHgtF+2Ek1vvZqy29aQ8p9UKI8yLJ9Vj3dvQeKecotxvCq9wkLxcM2/ELTdNzYwBsBjN79AMgXfzHsJF0i5IEbH7CHlvpwlqcTtVnAvQH9S2Mo42xXXeqHeTsA8XlXDAJrBZpRwojio6x5N1qfjd2xoKCxfXS5mkO0PfprGZXVGGvWRnHzDKQM311ztM9oaaAGRrr8lHIUPjLb3MIyA1mF5x+n4XbgXkM30hF84dwIA+HlVvecCDrXZEYOObuYuepgNJhwzv/VGLUgUKuxMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
- header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pew5pUUtaTG6fl4NfwoCNIqOjTM+x/4G4fCPOC5498o=;
- b=KGxKcAB74JOn8WrWysKY4fIDsWSf96gST0rjcLxwvVuD/01qviPyWwqjsVMDXl6H5DYv5vHU+M6Elm2N3X6G5GfTivPQzpQqGEyR8szoDQdB+XZh4BpiTcsiQUmMDJBwDp+E74HHS6KNU8IC+IV8JNaQcUYdUp8/mir7sN3JEpYZT4lbRpveNvr3uxVpWqgk7eLdYtEVbOqYA6yYhIznJWerLpeczBfaqc4dCaGUVuhRKZpk9YcGVvPT+fk/XSra8YP+bTCpqLJyBpOANzMDUa/JECNQbaolNaKENTytgCKdxvef8QGC+Qf/o573gZ7Yp3I3zcf5PF3CGqvLYztIYA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
-Received: from BN6PR01MB2610.prod.exchangelabs.com (2603:10b6:404:d0::7) by
- CY4PR01MB2535.prod.exchangelabs.com (2603:10b6:903:6a::9) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.17; Wed, 8 Mar 2023 20:24:57 +0000
-Received: from BN6PR01MB2610.prod.exchangelabs.com
- ([fe80::5844:6112:4eb1:a8f8]) by BN6PR01MB2610.prod.exchangelabs.com
- ([fe80::5844:6112:4eb1:a8f8%9]) with mapi id 15.20.6178.011; Wed, 8 Mar 2023
- 20:24:57 +0000
-Message-ID: <110becd9-3511-b7ab-f34c-1a4fe7fc9e82@cornelisnetworks.com>
-Date:   Wed, 8 Mar 2023 15:24:55 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] rdma/qib: Remove deprecated kmap() call
-Content-Language: en-US
-To:     Ira Weiny <ira.weiny@intel.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230217-kmap-qib-v1-1-e5a6fde167e0@intel.com>
-From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-In-Reply-To: <20230217-kmap-qib-v1-1-e5a6fde167e0@intel.com>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 8 Mar 2023 15:25:07 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A982BB2575
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:25:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69A55B81DED
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 20:24:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2175C433EF;
+        Wed,  8 Mar 2023 20:24:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1678307098;
+        bh=UCyiu0MqqS19+lZgnlc6a3l76NggCl8OTpzsm5nRp4Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Bwvbfji6t3wccvTv7HhYeTshSx1BlFaRjCxxQsQfHVU5/3NdoINAdlveqeiSfDAxM
+         yZUlxeiTsByih50GA6MnK0LlHWCdDzydKurb3wtMiHTiQJI9qKubtukJVmDy4iFcvj
+         nzPidM6lN9p9r51dh0kifWQPuM3TN7A1NK/YgSK4=
+Date:   Wed, 8 Mar 2023 12:24:57 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+8d95422d3537159ca390@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        Liam Howlett <liam.howlett@oracle.com>
+Subject: Re: [syzbot] [mm?] kernel BUG in find_mergeable_anon_vma
+Message-Id: <20230308122457.c5620872df8e70c7f0621417@linux-foundation.org>
+In-Reply-To: <000000000000b0a65805f663ace6@google.com>
+References: <000000000000b0a65805f663ace6@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL0PR02CA0070.namprd02.prod.outlook.com
- (2603:10b6:207:3d::47) To BN6PR01MB2610.prod.exchangelabs.com
- (2603:10b6:404:d0::7)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN6PR01MB2610:EE_|CY4PR01MB2535:EE_
-X-MS-Office365-Filtering-Correlation-Id: b3a39f37-5856-47d7-1f2a-08db20132f63
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: saI6yiyPvrcKKnzoCn7ePnCk8l178wG22NvAQG11Pl+JRnHFmOE31FoWx8tR1xXkiapHiZClU9A6G+8P8AHxkIanUmfH83v2GTnRFGm1D14qgY5yvX+w1HCK2VdxX6VTW7yK+AZvGkc8ZeCgeXD+IlhpdLfSDI71oJAK1Jbfzj1k1CA+bcogtwjud73dwVWd7I9Bq4NwnMhNa15tapIretC4p0oy4QDNMZXRBIEH9f/AovxI/ocY6SF8cOUDTmblRVGyOPc/G3qMZ/gmq/cGW/Qxp+SP0ViV67DlVCvuqU6EREOVunxnyvqUF1I5EisRE0hXpNB74HrPUR+2B/z2VLTUsmg5ZDbO7XRtYRgEyeqhCNLf+XldtLxBd5nMDutS7PuvtxqJgWvDPbVMDw8H5qtcSad+9TS1xsTaRY/FC7UO1aBRg9r5ZExmvhiOy3i0K6Q7t6aO7tT0izNPvaiZFqIMfwd694rO12qaZ8SbbXjOoBA+nmQQK2lJR8ndLdt1nEn2HLuEJFWTvdHbYl/NeG+NkMAY/+wXSy0SWq2umO/xwuATZeZNHPmftWGGDQbI+FBW+K6BmiIIsUYbKNWBNRi5CcH+V9VJzjKD3eAASLz59s4t2UkD3yc25VMW9o15D5miZ2y3iaMu8mMfjk2InpQIi1C/nLFV/yWKt/wi9dm7Qg5wfezG1xazt/n2Tt/mbDonzy6L4kaHHX7C6Si005gabD89HQ1KOTxqXJZlOOc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR01MB2610.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39840400004)(136003)(346002)(366004)(376002)(451199018)(36756003)(316002)(110136005)(478600001)(6486002)(5660300002)(52116002)(8936002)(66476007)(66556008)(4326008)(66946007)(44832011)(8676002)(2906002)(41300700001)(4744005)(6512007)(38100700002)(26005)(86362001)(186003)(38350700002)(2616005)(53546011)(6506007)(31696002)(31686004)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UVI5OXlpREpNNWoxcUp5K0JxQnhKN1ZlV2JnYy9ibEhHUFRRQTBGUzRvSlRJ?=
- =?utf-8?B?SFBWODg3eENOaVdCNURmbnRldkpYOW5jWGZudWdremdLdTAwWnBUbGVqV2VP?=
- =?utf-8?B?RTBwenBOQy9qWTFoY2JHaEF6TnJadE41ZDc5azN2U1diTWR6MXhnYTBJZmJB?=
- =?utf-8?B?cFlRUEo1ZzVmSTBuRlRpcXo3YWEycElPcHB3NitSbVZBQzhRb25uTmIyRTNy?=
- =?utf-8?B?eEwveUdadkNsL2RRVzZOSDNteS9tVFRvRkpoYzFEaUtEeVRaMmFpTk1OYTlw?=
- =?utf-8?B?eDRZMzJzdDhoQ0Z0VVFBbmJJUFBQaFVjOXFIVGU0WVhYbXh3b0lpMW1lV2xN?=
- =?utf-8?B?RjhUU3I4aGhmTE1VNm41RmZyRXlrV0VKOTZ1TGhNY3Z4VXdUTXZuZVBscm9Y?=
- =?utf-8?B?YkZ4WWFRRmlLVDQ0OGRhR1pBOXo5S3NOcUIvQldHVHRJK2xkMTVDS1VYNzdr?=
- =?utf-8?B?STdJL3VGVjdvVGhheGtuT0xkTFJkRWlUL3FqOGxnaUZVS20rTE5HUXlrbG9C?=
- =?utf-8?B?WUNFaWpYZFpWaWJDdG1FM09zVE1DQkhuSVVFS1B3a09yeEo2NWc5dURiZnVa?=
- =?utf-8?B?bmVIRmRZdnFZMlRWVWhKRkVMQldjbG8rYkdkOXlISE1Mei96dVJiN3FSc2ow?=
- =?utf-8?B?aExsQ3U5Y3RVcHRWczRaUWJVOGh3T2RQZE84NjlJT2wrRkV1S0NhWHlRMitn?=
- =?utf-8?B?eXJnOTVmZ1YyaVJNaEhXZmVlK3JVOXFzZU14dyswblNFVG1sUTdUNkNWY3ZQ?=
- =?utf-8?B?TSt4YXR5MXBkWjB3WndPZEVxMWQ0L3RnKzFXd0t1SWFsWStlaUlTRnB3dkhh?=
- =?utf-8?B?d2psOWQ5cG1Cb1diWVhrL1l6bDZlN1dFTyttby9rZGJNLzlueVJ2MEpkcnZa?=
- =?utf-8?B?TUhLQk52U25XbW9JQ3p6TnZLazdZRUdKcGZFN3VwZi82azBrZHRxUFJUQzJS?=
- =?utf-8?B?VVVFMllHbUNJdUk5QjdKT1Z5QzNnSHB3M0RMUXZoTE9JNVJOQkd3MmRhemxW?=
- =?utf-8?B?R0kvalRFbzBQTG9JNUR0Z25rUFB4ZTVyWXd3N1lBWFR3ODJIdis4bGN0S1Rv?=
- =?utf-8?B?cU0xNk43eThEa2lqbWFJZzczYUcvREJMTGcyMDFSSFAzTHlKZXV4YW80YTdj?=
- =?utf-8?B?dmMwdlV5VUVDTDZKaTh0V3AyaWlzT2FkWlpiZ1hZdzZVblVwTVFMZitmY1lC?=
- =?utf-8?B?ZlIwRWVFQ2E2T2xHZ1d4a282dUpRRER3WGZCSXFJRmJGL0tSbWxyUkt2SURX?=
- =?utf-8?B?MmxrT1VHQTlMVGlLb2NkTUdTNlpxeWUwZHpaUGo0WElyOVBERGJ5NHpLRDRQ?=
- =?utf-8?B?eng2VjhKNlRrNjdtVkswL3RIdDlway8xRFQ5R1RncFROM0Y1bWlHY1N6N1FE?=
- =?utf-8?B?WGptUnZIYUNuNkovUjlWUHQ4L0MyUFRFZVI4SWVFMHcyMCtsVVlZK05kZC9G?=
- =?utf-8?B?eGsweGtBYVNtelcvbHkzYTVVejlZZllYazdqMXozclZCQWd6c3U2cE1xNVJ2?=
- =?utf-8?B?bEY3RnkwME42ODBjTGE2RWpDV2JjcTVSdXV4aXpyOW5iYkpwZWppOGxuNUVC?=
- =?utf-8?B?dE0zTnRhblMxYVBOMjVZT1ZISERyVXltZmRrNWJncW9tNHVWUVJ6aUk2VURl?=
- =?utf-8?B?cHVqUU4xTnlPbEsyWGtTZ2V4cDRYeGMwaUhSWlFHOHp3bzgwazhUWjgyYVBS?=
- =?utf-8?B?M01NWkgrb0FFcE5NSllCSGRjRC91U1E5bXlXK1FXNUcvOUJBUmVKS1lQbTFj?=
- =?utf-8?B?aWhGUS9OMFFOS1l1QW9yb3hWOWNDdmZmQmxBbjFtTzBDajVFVjF0MDJRZmwx?=
- =?utf-8?B?cDNRMTRUTllqR296Z1d0VlFIOC9TYVNJMHFQcVAzZjJpdllzQmEwVnI0OFht?=
- =?utf-8?B?bTBXMkpOZzhkYWNJbngwQ0E4Y3FXWjMxNkRxV3pyckZtNmllM0NrUnRxaFdB?=
- =?utf-8?B?ZVFwK1lOQmxMTEdrY0N3WTMyRjNBWVpJTmpFU2t6cFhEOUhHa0J5U1VwYjBH?=
- =?utf-8?B?QWhiaDR0TndmZzJBTmJNdG91WDlndHUyMVhtTU05a0RXVVhkaFpFR2xJRmlJ?=
- =?utf-8?B?R2JlVksxT3VWRzNzbVFOemlaVDltZlVEeHdLd2tqYkhzbTd0T1gzcEFTZjlk?=
- =?utf-8?B?ZTRCaWp6enZEWXVtUVVrSCtSSjBnZkx5N2MxSHV1c2JtM3JWNUpKRjgwZTFT?=
- =?utf-8?Q?3XiDPnTNhacW6GG+Ti8D03Y=3D?=
-X-OriginatorOrg: cornelisnetworks.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3a39f37-5856-47d7-1f2a-08db20132f63
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR01MB2610.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Mar 2023 20:24:57.6112
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lezGPxgLJ4EZeT5Lyg6lquThISk57opxnLHSEmwV0DMYlkmBMy6lvYpnj2WSM8v5hUlRFQSb8Xka2eunDSq8Wa2LS0CqW+fPITFXf9wqUt+PUng2pOn/oXmHqBkogRBH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR01MB2535
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/7/23 12:15 PM, Ira Weiny wrote:
-> kmap() has been deprecated in favor of the kmap_local_page() call.
-> kmap_local_page() is thread local.
-> 
-> In the sdma coalesce case the page allocated is potentially free'ed in a
-> different context through qib_sdma_get_complete() ->
-> qib_user_sdma_make_progress().  The use of kmap_local_page() is
-> inappropriate in this call path.  However, the page is allocated using
-> GFP_KERNEL and will never be from highmem.
-> 
-> Remove the use of kmap calls and use page_address() in this case.
-> 
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+(cc Liam)
 
-Acked-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+On Wed, 08 Mar 2023 05:40:42 -0800 syzbot <syzbot+8d95422d3537159ca390@syzkaller.appspotmail.com> wrote:
+
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    0988a0ea7919 Merge tag 'for-v6.3-part2' of git://git.kerne..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13fc4754c80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8d95422d3537159ca390
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130602bcc80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b61b54c80000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/e2d28852dbc0/disk-0988a0ea.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/9ad7e6fa3a8d/vmlinux-0988a0ea.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/7430e1576859/bzImage-0988a0ea.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8d95422d3537159ca390@syzkaller.appspotmail.com
+> 
+> pgoff 20000 file 0000000000000000 private_data 0000000000000000
+> flags: 0x8102172(write|mayread|maywrite|mayexec|growsdown|locked|account|softdirty)
+> ------------[ cut here ]------------
+> kernel BUG at mm/mmap.c:1108!
+
+Thanks.  That's VM_BUG_ON_VMA(prev != vma, vma);
+
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 24456 Comm: syz-executor216 Not tainted 6.2.0-syzkaller-13467-g0988a0ea7919 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+> RIP: 0010:find_mergeable_anon_vma+0x6f0/0x840 mm/mmap.c:1108
+> Code: df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 6b 48 3b 6b 50 0f 85 08 fb ff ff e9 06 fb ff ff e8 58 ad bf ff 48 89 ef e8 70 a5 fa ff <0f> 0b 4c 89 f7 e8 06 29 11 00 e9 d2 f9 ff ff e8 fc 28 11 00 e9 a0
+> RSP: 0018:ffffc9000b61f888 EFLAGS: 00010286
+> RAX: 0000000000000130 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff816931bc RDI: 0000000000000005
+> RBP: ffff8880783f97e0 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000080000000 R11: 0000000000000000 R12: ffffc9000b61f8b0
+> R13: 1ffff920016c3f12 R14: ffff8880783f97e8 R15: fff0000000000fff
+> FS:  00007fe0f1f58700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffc5b9a8960 CR3: 000000002bd88000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __anon_vma_prepare+0x7d/0x580 mm/rmap.c:199
+>  anon_vma_prepare include/linux/rmap.h:159 [inline]
+>  do_anonymous_page mm/memory.c:4050 [inline]
+>  handle_pte_fault mm/memory.c:4907 [inline]
+>  __handle_mm_fault+0x3a8f/0x3e60 mm/memory.c:5051
+>  handle_mm_fault+0x2ba/0x9c0 mm/memory.c:5197
+>  faultin_page mm/gup.c:925 [inline]
+>  __get_user_pages+0x4da/0xf30 mm/gup.c:1147
+>  populate_vma_page_range+0x2df/0x420 mm/gup.c:1543
+>  __mm_populate+0x105/0x3b0 mm/gup.c:1652
+>  mm_populate include/linux/mm.h:3026 [inline]
+>  vm_mmap_pgoff+0x201/0x280 mm/util.c:547
+>  ksys_mmap_pgoff+0x7d/0x5a0 mm/mmap.c:1410
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7fe0f1fa6959
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fe0f1f582f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
+> RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fe0f1fa6959
+> RDX: 0000000000000002 RSI: 0000000000001000 RDI: 0000000020002000
+> RBP: 00007fe0f202e3e8 R08: 00000000ffffffff R09: 0000000000000000
+> R10: 840000000000a132 R11: 0000000000000246 R12: 840000000000a132
+> R13: 00007fe0f202e3e0 R14: 00007fe0f202e3ec R15: 0000000000022000
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:find_mergeable_anon_vma+0x6f0/0x840 mm/mmap.c:1108
+> Code: df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 6b 48 3b 6b 50 0f 85 08 fb ff ff e9 06 fb ff ff e8 58 ad bf ff 48 89 ef e8 70 a5 fa ff <0f> 0b 4c 89 f7 e8 06 29 11 00 e9 d2 f9 ff ff e8 fc 28 11 00 e9 a0
+> RSP: 0018:ffffc9000b61f888 EFLAGS: 00010286
+> RAX: 0000000000000130 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff816931bc RDI: 0000000000000005
+> RBP: ffff8880783f97e0 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000080000000 R11: 0000000000000000 R12: ffffc9000b61f8b0
+> R13: 1ffff920016c3f12 R14: ffff8880783f97e8 R15: fff0000000000fff
+> FS:  00007fe0f1f58700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fe0f1ffc01d CR3: 000000002bd88000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
