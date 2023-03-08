@@ -2,232 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CA96B020E
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE9A6B0210
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:51:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbjCHIux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:50:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
+        id S229702AbjCHIvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:51:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjCHIup (ORCPT
+        with ESMTP id S229513AbjCHIvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:50:45 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3C3B0B90;
-        Wed,  8 Mar 2023 00:50:32 -0800 (PST)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3285ZZbf020714;
-        Wed, 8 Mar 2023 08:50:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+QZf7jsqZCz/mjUR8sKf9eOaujlmzzUJO/yJGxi9XBY=;
- b=ojN6dUALKEyWJx+ed10wpYxRNad8rpfxY21M0xIjaoAxMaQm7KpHeDHBnCABrBxdfHs0
- S0MtyqcmDnOw2SBdst+MLXIqh9BTj+uNJWydsJ9lZiS219q092FQtYMuUKvGg05oKLI2
- scWt09XLInYdfwc8AWcg8C718BA3JRUiuTwx6l6dX3B8MRq1HZPZm4KEcLS61ThemiTp
- v7wKNAKMD4CJ/ywxUHNJ7Otd+nGEqwDSDqN3nB5T3TKXut+i4xnT0bPP20zDdwEVN8ap
- iyf5FgDleQemxiFxdVmwVuYYXIKSvmmBC8WNJLYba97OgG7vaajEfxEiNsBMAObPiGgQ tw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p6fets179-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 08 Mar 2023 08:50:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3288oGdY014924
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 8 Mar 2023 08:50:16 GMT
-Received: from [10.216.47.125] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 8 Mar 2023
- 00:50:07 -0800
-Message-ID: <dd48782f-e5ff-2bbe-93d0-cfdd491d5292@quicinc.com>
-Date:   Wed, 8 Mar 2023 14:19:58 +0530
+        Wed, 8 Mar 2023 03:51:13 -0500
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C338AFBBA
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:51:04 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1678265417; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=nzA2/7aGm9uqLYDPWojlBg5rCiXMU7vgMolusMiB66EVidBr8ubCd8eBZMTIbRAcLFfqBt/lLJUoXtoH9eztT6MlCKXcZeZ+voDoOxceTLLfXcqQQcZtEMWKFOGUVy+xAPlG7NtlyAOe9sngBTqYNwqlGOGdd8Rnq/I9LFtuHkY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1678265417; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=RegfERULej+941mOyU4tNlczm+KFqme2Zd1D/0dQ1IU=; 
+        b=kMaQa6pEwulqF0zPTD39nfyi2qxQ2XC2U7GK9liKteKIPwfw0tgQ1g5/vz+StBwNNW6Pwe7eHdKVv2OZLnS9X0Zz+OtK9pH/sw3jjpiboZTzxrbq6jqEti1Y0KjBNyInpiJySh9DWZlF75q/UTpRJBr9274Zjrw0aUuybqrCDDI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678265417;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:From:From:Subject:Subject:To:To:Cc:Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=RegfERULej+941mOyU4tNlczm+KFqme2Zd1D/0dQ1IU=;
+        b=HlkNjF9v5Zf6d1Mx44X+xqW4F86Z9W/hMSv5ZqtpsEt6kER3e03w+6cQ3o9BdYud
+        Ps+OCu/I1OkytJX4hmR8X7O/IcysoaWcm4EO1vuUJ7/uuQbJd3NLYQMV6o48DGRskuc
+        Q0Garo2rY7BHFToHb1Gcs5uibkXem2ZFWQeMN/tg=
+Received: from [10.10.10.3] (212.68.60.226 [212.68.60.226]) by mx.zohomail.com
+        with SMTPS id 1678265416245518.3169018503368; Wed, 8 Mar 2023 00:50:16 -0800 (PST)
+Message-ID: <c46f5be8-2d64-65dc-33c1-a71b3d5cc70c@arinc9.com>
+Date:   Wed, 8 Mar 2023 11:50:09 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/7] dt-bindings: PCI: qcom: Add IPQ9574 specific
- compatible
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Manivannan Sadhasivam <mani@kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <lpieralisi@kernel.org>, <kw@linux.com>, <robh@kernel.org>,
-        <bhelgaas@google.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <vkoul@kernel.org>, <kishon@kernel.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>
-References: <20230214164135.17039-1-quic_devipriy@quicinc.com>
- <20230214164135.17039-2-quic_devipriy@quicinc.com>
- <20230224082332.GA5443@thinkpad>
- <bd153038-4427-1f11-1941-5f13fec01cf7@quicinc.com>
- <20230228063358.GA4839@thinkpad>
- <9BD62D8E-4E14-4269-B72D-C83EF4D43040@linaro.org>
- <20230303174036.GB6782@thinkpad>
- <30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com>
- <20230307125655.GC5599@thinkpad>
- <2afe8c7e-7e54-460f-7206-64a290beccfb@quicinc.com>
- <CAA8EJpo-_PXhBnKWD-TWEqY8+uAEjbRsrhJ7XO1PTcYV-MHV9Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+Subject: Re: [PATCH net 2/2] net: dsa: mt7530: set PLL frequency only when
+ trgmii is used
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        =?UTF-8?Q?Ren=c3=a9_van_Dorst?= <opensource@vdorst.com>,
+        erkin.bozoglu@xeront.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230307220328.11186-1-arinc.unal@arinc9.com>
+ <20230307220328.11186-2-arinc.unal@arinc9.com>
+ <20230307233354.y3srdoggy2yzugnq@skbuf>
 Content-Language: en-US
-From:   Devi Priya <quic_devipriy@quicinc.com>
-In-Reply-To: <CAA8EJpo-_PXhBnKWD-TWEqY8+uAEjbRsrhJ7XO1PTcYV-MHV9Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <20230307233354.y3srdoggy2yzugnq@skbuf>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3FS99f6BK8LW-UQxleOQcX1kBEicXoD_
-X-Proofpoint-ORIG-GUID: 3FS99f6BK8LW-UQxleOQcX1kBEicXoD_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-08_04,2023-03-08_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- impostorscore=0 phishscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 suspectscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303080076
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/7/2023 8:26 PM, Dmitry Baryshkov wrote:
-> On Tue, 7 Mar 2023 at 16:40, Devi Priya <quic_devipriy@quicinc.com> wrote:
+On 8.03.2023 02:33, Vladimir Oltean wrote:
+> On Wed, Mar 08, 2023 at 01:03:28AM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 >>
+>> As my testing on the MCM MT7530 switch on MT7621 SoC shows, setting the PLL
+>> frequency does not affect MII modes other than trgmii on port 5 and port 6.
+>> So the assumption is that the operation here called "setting the PLL
+>> frequency" actually sets the frequency of the TRGMII TX clock.
 >>
+>> Make it so that it is set only when the trgmii mode is used.
 >>
->> On 3/7/2023 6:26 PM, Manivannan Sadhasivam wrote:
->>> On Tue, Mar 07, 2023 at 03:15:08PM +0530, Devi Priya wrote:
->>>>
->>>>
->>>> On 3/3/2023 11:10 PM, Manivannan Sadhasivam wrote:
->>>>> On Fri, Mar 03, 2023 at 05:16:58PM +0200, Dmitry Baryshkov wrote:
->>>>>> 28 февраля 2023 г. 08:33:58 GMT+02:00, Manivannan Sadhasivam <mani@kernel.org> пишет:
->>>>>>> On Tue, Feb 28, 2023 at 10:56:53AM +0530, Devi Priya wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 2/24/2023 1:53 PM, Manivannan Sadhasivam wrote:
->>>>>>>>> On Tue, Feb 14, 2023 at 10:11:29PM +0530, Devi Priya wrote:
->>>>>>>>>> Document the compatible for IPQ9574
->>>>>>>>>>
->>>>>>>> Hi Mani, Thanks for taking time to review the patch.
->>>>>>>>>
->>>>>>>>> You didn't mention about the "msi-parent" property that is being added
->>>>>>>>> by this patch
->>>>>>>> Sure, will update the commit message in the next spin
->>>>>>>>>
->>>>>>>>>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->>>>>>>>>> ---
->>>>>>>>>>      .../devicetree/bindings/pci/qcom,pcie.yaml    | 72 ++++++++++++++++++-
->>>>>>>>>>      1 file changed, 70 insertions(+), 2 deletions(-)
->>>>>>>>>>
->>>>>>>>>> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->>>>>>>>>> index 872817d6d2bd..dabdf2684e2d 100644
->>>>>>>>>> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->>>>>>>>>> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
->>>>>>>>>> @@ -26,6 +26,7 @@ properties:
->>>>>>>>>>                - qcom,pcie-ipq8064-v2
->>>>>>>>>>                - qcom,pcie-ipq8074
->>>>>>>>>>                - qcom,pcie-ipq8074-gen3
->>>>>>>>>> +          - qcom,pcie-ipq9574
->>>>>>>>>>                - qcom,pcie-msm8996
->>>>>>>>>>                - qcom,pcie-qcs404
->>>>>>>>>>                - qcom,pcie-sa8540p
->>>>>>>>>> @@ -44,11 +45,11 @@ properties:
->>>>>>>>>>        reg:
->>>>>>>>>>          minItems: 4
->>>>>>>>>> -    maxItems: 5
->>>>>>>>>> +    maxItems: 6
->>>>>>>>>>        reg-names:
->>>>>>>>>>          minItems: 4
->>>>>>>>>> -    maxItems: 5
->>>>>>>>>> +    maxItems: 6
->>>>>>>>>>        interrupts:
->>>>>>>>>>          minItems: 1
->>>>>>>>>> @@ -105,6 +106,8 @@ properties:
->>>>>>>>>>          items:
->>>>>>>>>>            - const: pciephy
->>>>>>>>>> +  msi-parent: true
->>>>>>>>>> +
->>>>>>>>>>        power-domains:
->>>>>>>>>>          maxItems: 1
->>>>>>>>>> @@ -173,6 +176,27 @@ allOf:
->>>>>>>>>>                  - const: parf # Qualcomm specific registers
->>>>>>>>>>                  - const: config # PCIe configuration space
->>>>>>>>>> +  - if:
->>>>>>>>>> +      properties:
->>>>>>>>>> +        compatible:
->>>>>>>>>> +          contains:
->>>>>>>>>> +            enum:
->>>>>>>>>> +              - qcom,pcie-ipq9574
->>>>>>>>>> +    then:
->>>>>>>>>> +      properties:
->>>>>>>>>> +        reg:
->>>>>>>>>> +          minItems: 5
->>>>>>>>>> +          maxItems: 6
->>>>>>>>>> +        reg-names:
->>>>>>>>>> +          minItems: 5
->>>>>>>>>> +          items:
->>>>>>>>>> +            - const: dbi # DesignWare PCIe registers
->>>>>>>>>> +            - const: elbi # External local bus interface registers
->>>>>>>>>> +            - const: atu # ATU address space
->>>>>>>>>> +            - const: parf # Qualcomm specific registers
->>>>>>>>>> +            - const: config # PCIe configuration space
->>>>>>>>>> +            - const: aggr_noc #PCIe aggr_noc
->>>>>>>>>
->>>>>>>>> Why do you need this region unlike other SoCs? Is the driver making use of it?
->>>>>>>> We have the aggr_noc region in ipq9574 to achieve higher throughput & to
->>>>>>>> handle multiple PCIe instances. The driver uses it to rate adapt 1-lane PCIe
->>>>>>>> clocks. My bad, missed it. Will add the driver changes in V2.
->>>>>>>
->>>>>>> Hmm, this is something new. How can you achieve higher throughput with this
->>>>>>> region? Can you explain more on how it is used?
->>>>>>
->>>>>> Based on the name of the region, it looks like it is an interconnect region.
->>>>>>
->>>>>
->>>>> Well, we only have BCM based interconnects so far. That's why I was curious
->>>>> about this region and its purpose.
->>>> For connected PCIe slave devices that are running at frequency lesser
->>>> than the ANOC frequency (342MHz), the rate adapter of ANOC needs to be
->>>> configured
->>>>>
->>>>>> Devi, if this is the case, then you have to handle it through the interconnect driver, rather than poking directly into these registers.
->>>>>
->>>>> If that so, it doesn't need to be added in this series itself. I believe that
->>>>> without aggr_noc region, the PCIe controller can still function properly with
->>>>> reduced performance. But you can add the interconnect support later as a
->>>>> separate series.
->>>> Sure, okay. The ANOC runs at a fixed frequency of 342MHz and the
->>>> interconnect clocks are not scaled. The aggr_noc register is just a magic
->>>> register for configuring it's rate adapter to ensure no wait cycles are
->>>> inserted.
->>>>
->>>
->>> If the purpose of the aggr_noc region is to configure the interconnect clock,
->>> then it should be modeled as an interconnect driver.
->> Can we use 'syscon' here, as we are not scaling the interconnect
->> frequency and this is just a single register write for setting
->> the rate adapter?
+>> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   drivers/net/dsa/mt7530.c | 2 --
+>>   1 file changed, 2 deletions(-)
+>>
+>> diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+>> index b1a79460df0e..961306c1ac14 100644
+>> --- a/drivers/net/dsa/mt7530.c
+>> +++ b/drivers/net/dsa/mt7530.c
+>> @@ -430,8 +430,6 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
+>>   	switch (interface) {
+>>   	case PHY_INTERFACE_MODE_RGMII:
+>>   		trgint = 0;
+>> -		/* PLL frequency: 125MHz */
+>> -		ncpo1 = 0x0c80;
+>>   		break;
+>>   	case PHY_INTERFACE_MODE_TRGMII:
+>>   		trgint = 1;
+>> -- 
+>> 2.37.2
+>>
 > 
-> It should be done outside of the PCIe driver.
-> It is not "just a single register". It is also setting the anoc/snoc
-> clocks for USB. And maybe something else, which we haven't seen at
-> this moment. You are still setting up the NoC, even if the icc
-> frequency is not scaled.
+> NACK.
 > 
-Sure Dmitry, Got it
+> By deleting the assignment to the ncpo1 variable, it becomes
+> uninitialized when port 6's interface mode is PHY_INTERFACE_MODE_RGMII.
+> In the C language, uninitialized variables take the value of whatever
+> memory happens to be on the stack at the address they are placed,
+> interpreted as an appropriate data type for that variable - here u32.
+> 
+> Writing the value to CORE_PLL_GROUP5 happens when the function below is
+> called, not when the "ncpo1" variable is assigned.
+> 
+> 	core_write(priv, CORE_PLL_GROUP5, RG_LCDDS_PCW_NCPO1(ncpo1));
+> 
+> It is not a good idea to write uninitialized kernel stack memory to
+> hardware registers, unless perhaps you want to use it as some sort of
+> poor quality entropy source for a random number generator...
 
-Regards,
-Devi Priya
+Thanks a lot for this. Now that you moved setting the core clock to
+somewhere else, I think we can run the TRGMII setup only when trgmii
+mode is used, exactly what I already explained on the patch log, with
+the diff below. This should make it so that writing the value to
+CORE_PLL_GROUP5 happens in the case where ncpo1 is always set.
+
+diff --git a/drivers/net/dsa/mt7530.c b/drivers/net/dsa/mt7530.c
+index b1a79460df0e..c2d81b7a429d 100644
+--- a/drivers/net/dsa/mt7530.c
++++ b/drivers/net/dsa/mt7530.c
+@@ -430,8 +430,6 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
+  	switch (interface) {
+  	case PHY_INTERFACE_MODE_RGMII:
+  		trgint = 0;
+-		/* PLL frequency: 125MHz */
+-		ncpo1 = 0x0c80;
+  		break;
+  	case PHY_INTERFACE_MODE_TRGMII:
+  		trgint = 1;
+@@ -462,38 +460,40 @@ mt7530_pad_clk_setup(struct dsa_switch *ds, phy_interface_t interface)
+  	mt7530_rmw(priv, MT7530_P6ECR, P6_INTF_MODE_MASK,
+  		   P6_INTF_MODE(trgint));
+  
+-	/* Lower Tx Driving for TRGMII path */
+-	for (i = 0 ; i < NUM_TRGMII_CTRL ; i++)
+-		mt7530_write(priv, MT7530_TRGMII_TD_ODT(i),
+-			     TD_DM_DRVP(8) | TD_DM_DRVN(8));
+-
+-	/* Disable MT7530 core and TRGMII Tx clocks */
+-	core_clear(priv, CORE_TRGMII_GSW_CLK_CG,
+-		   REG_GSWCK_EN | REG_TRGMIICK_EN);
+-
+-	/* Setup the MT7530 TRGMII Tx Clock */
+-	core_write(priv, CORE_PLL_GROUP5, RG_LCDDS_PCW_NCPO1(ncpo1));
+-	core_write(priv, CORE_PLL_GROUP6, RG_LCDDS_PCW_NCPO0(0));
+-	core_write(priv, CORE_PLL_GROUP10, RG_LCDDS_SSC_DELTA(ssc_delta));
+-	core_write(priv, CORE_PLL_GROUP11, RG_LCDDS_SSC_DELTA1(ssc_delta));
+-	core_write(priv, CORE_PLL_GROUP4,
+-		   RG_SYSPLL_DDSFBK_EN | RG_SYSPLL_BIAS_EN |
+-		   RG_SYSPLL_BIAS_LPF_EN);
+-	core_write(priv, CORE_PLL_GROUP2,
+-		   RG_SYSPLL_EN_NORMAL | RG_SYSPLL_VODEN |
+-		   RG_SYSPLL_POSDIV(1));
+-	core_write(priv, CORE_PLL_GROUP7,
+-		   RG_LCDDS_PCW_NCPO_CHG | RG_LCCDS_C(3) |
+-		   RG_LCDDS_PWDB | RG_LCDDS_ISO_EN);
+-
+-	/* Enable MT7530 core and TRGMII Tx clocks */
+-	core_set(priv, CORE_TRGMII_GSW_CLK_CG,
+-		 REG_GSWCK_EN | REG_TRGMIICK_EN);
+-
+-	if (!trgint)
++	if (trgint) {
++		/* Lower Tx Driving for TRGMII path */
++		for (i = 0 ; i < NUM_TRGMII_CTRL ; i++)
++			mt7530_write(priv, MT7530_TRGMII_TD_ODT(i),
++				     TD_DM_DRVP(8) | TD_DM_DRVN(8));
++
++		/* Disable MT7530 core and TRGMII Tx clocks */
++		core_clear(priv, CORE_TRGMII_GSW_CLK_CG,
++			   REG_GSWCK_EN | REG_TRGMIICK_EN);
++
++		/* Setup the MT7530 TRGMII Tx Clock */
++		core_write(priv, CORE_PLL_GROUP5, RG_LCDDS_PCW_NCPO1(ncpo1));
++		core_write(priv, CORE_PLL_GROUP6, RG_LCDDS_PCW_NCPO0(0));
++		core_write(priv, CORE_PLL_GROUP10, RG_LCDDS_SSC_DELTA(ssc_delta));
++		core_write(priv, CORE_PLL_GROUP11, RG_LCDDS_SSC_DELTA1(ssc_delta));
++		core_write(priv, CORE_PLL_GROUP4,
++			   RG_SYSPLL_DDSFBK_EN | RG_SYSPLL_BIAS_EN |
++			   RG_SYSPLL_BIAS_LPF_EN);
++		core_write(priv, CORE_PLL_GROUP2,
++			   RG_SYSPLL_EN_NORMAL | RG_SYSPLL_VODEN |
++			   RG_SYSPLL_POSDIV(1));
++		core_write(priv, CORE_PLL_GROUP7,
++			   RG_LCDDS_PCW_NCPO_CHG | RG_LCCDS_C(3) |
++			   RG_LCDDS_PWDB | RG_LCDDS_ISO_EN);
++
++		/* Enable MT7530 core and TRGMII Tx clocks */
++		core_set(priv, CORE_TRGMII_GSW_CLK_CG,
++			 REG_GSWCK_EN | REG_TRGMIICK_EN);
++	} else {
+  		for (i = 0 ; i < NUM_TRGMII_CTRL; i++)
+  			mt7530_rmw(priv, MT7530_TRGMII_RD(i),
+  				   RD_TAP_MASK, RD_TAP(16));
++	}
++
+  	return 0;
+  }
+  
+
+I'll do some tests to make sure everything works fine.
+
+Arınç
