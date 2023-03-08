@@ -2,144 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6D76B08A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 981B26B08B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbjCHN1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:27:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
+        id S230030AbjCHN25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:28:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjCHN1V (ORCPT
+        with ESMTP id S231491AbjCHN2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:27:21 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17DDC5ACD;
-        Wed,  8 Mar 2023 05:24:37 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id a65so5638974qkg.13;
-        Wed, 08 Mar 2023 05:24:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678281876;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qZoP71+5c3FVKBx98Aqiaa+ZcAlza86aEyQCRu3z974=;
-        b=Q4QesLjAGlM42tRSwoI+HcvMCyjJlBF+MYJeMSF2XPXBTWsvyYPu6iekvSGCkG7K3M
-         ZU/XdVEunzvpxGOr7gUeUo1E/0qRwzJlaw/1f6N/4eBsyhkMDJA4cnshQDglSrFfkD4r
-         0OeYmtW6Y7gFIdTZBL+6yi9LiE+OSKDMe4d3Hj9AlkKZRWHbYKzqoLZTmfxSnoA0TQa9
-         zaVnSwD7KgYWnPg7f0VHzCVWaqRlF3btsJJBIrXNRxZ4M53M8TkkIRmE36Psy9CG6JQ5
-         chas3FBi7Bsd59EEdSKSCA3Xo/cZW2SzjqHNLdY0G/ZMywVBZSiQNu/la/6XNiavwvp0
-         BOng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678281876;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qZoP71+5c3FVKBx98Aqiaa+ZcAlza86aEyQCRu3z974=;
-        b=bReBjz09RD1L5PK5pspcQ2ryeyaC/F/8rWQE269OBxZ/+PppEGsA7fx6hINnWJZ6Z+
-         h+vfRNyEbupHcdSfcQ3dUPYXEGHZafi3LjQu/orTmTYCYXXnr3i2zZgBAmERwmqi1gTj
-         8SQUbm39YSthUVT7YAj56rAoq4XVa0KwA+VUicMWg5eeXiVlWuEqwk9Mn+0viJQ/fhzF
-         1y8aifU3/OiogW4Gp0mLOwmdH1r3juK2o//FQRUURSLIqXlrE6hZLg72iQWxkvBRpiiW
-         pa6/gvxPFty8qnbGXci9trRWNlcDfy8VmCUiH1eH3G84iO+gjhpDnNL5WKRX7XJxQ6B1
-         I44A==
-X-Gm-Message-State: AO0yUKVtBNmwGE0kEpl8E2NDkbv0Tm4lYzKmxlKIViqCDhpzjB2g7jWZ
-        TZycdLIOOn3OAzk5kc1TaiJAE4N9/BiCzlXeZNU=
-X-Google-Smtp-Source: AK7set+3+KOGVmoTKCyVDclv+hazU63yGvn2mTBscxNnBRm23ESammya3zfhhVhmcnKROal6d062iEm7APHU+6r5cjY=
-X-Received: by 2002:a05:620a:713:b0:742:7e5a:4cee with SMTP id
- 19-20020a05620a071300b007427e5a4ceemr5114611qkc.10.1678281876099; Wed, 08 Mar
- 2023 05:24:36 -0800 (PST)
-MIME-Version: 1.0
-References: <20230214163116.9924-1-quic_devipriy@quicinc.com>
- <20230214163116.9924-5-quic_devipriy@quicinc.com> <ZAZ+GeGu8mW1XqpG@surfacebook>
- <15d270ca-1068-b926-efc9-a14ddfc90a54@quicinc.com>
-In-Reply-To: <15d270ca-1068-b926-efc9-a14ddfc90a54@quicinc.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 8 Mar 2023 15:24:00 +0200
-Message-ID: <CAHp75VfMae9M2R0Bw6-sYuHPPberakEzKct65SXV0XEaOFtXTg@mail.gmail.com>
-Subject: Re: [PATCH V8 4/7] pinctrl: qcom: Add IPQ9574 pinctrl driver
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        linus.walleij@linaro.org, catalin.marinas@arm.com, will@kernel.org,
-        p.zabel@pengutronix.de, shawnguo@kernel.org, arnd@arndb.de,
-        marcel.ziswiler@toradex.com, dmitry.baryshkov@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com
+        Wed, 8 Mar 2023 08:28:31 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4382621964;
+        Wed,  8 Mar 2023 05:27:17 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4PWtDN5PRKz9xxgf;
+        Wed,  8 Mar 2023 21:18:28 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwC3gVgQjQhkS_F9AQ--.22101S2;
+        Wed, 08 Mar 2023 14:26:53 +0100 (CET)
+Message-ID: <ee5d9eb3addb9d408408fd748d52686bd9b85e24.camel@huaweicloud.com>
+Subject: Re: [PATCH 23/28] security: Introduce LSM_ORDER_LAST
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
+        chuck.lever@oracle.com, jlayton@kernel.org,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 08 Mar 2023 14:26:37 +0100
+In-Reply-To: <a0320926ebfe732dabc4e53c3a35ede450c75474.camel@linux.ibm.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+         <20230303182602.1088032-1-roberto.sassu@huaweicloud.com>
+         <a0320926ebfe732dabc4e53c3a35ede450c75474.camel@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwC3gVgQjQhkS_F9AQ--.22101S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxWF1Utr1UJrW5WrWDur1Utrb_yoW5Cr45pa
+        yktFWfGr40yFy8GanrZ3ZxK3W8t395CFyUGa9xWr1UZa9agryv9r4fCr1fuFyUXFyqyF1I
+        vr4avw43Can0yaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj4ZW-gADsQ
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 11:52 AM Devi Priya <quic_devipriy@quicinc.com> wrote:
-> On 3/7/2023 5:28 AM, andy.shevchenko@gmail.com wrote:
+On Wed, 2023-03-08 at 08:13 -0500, Mimi Zohar wrote:
+> Hi Roberto,
+> 
+> On Fri, 2023-03-03 at 19:25 +0100, Roberto Sassu wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Introduce LSM_ORDER_LAST, to satisfy the requirement of LSMs willing to be
+> > the last, e.g. the 'integrity' LSM, without changing the kernel command
+> > line or configuration.
+> 
+> Please reframe this as a bug fix for 79f7865d844c ("LSM: Introduce
+> "lsm=" for boottime LSM selection") and upstream it first, with
+> 'integrity' as the last LSM.   The original bug fix commit 92063f3ca73a
+> ("integrity: double check iint_cache was initialized") could then be
+> removed.
 
-...
+Ok, I should complete the patch by checking the cache initialization in
+iint.c.
 
-> >> +    depends on OF
-> >
-> > No compile test on non-OF configurations?
+> > As for LSM_ORDER_FIRST, LSMs with LSM_ORDER_LAST are always enabled and put
+> > at the end of the LSM list in no particular order.
+> 
+> ^Similar to LSM_ORDER_FIRST ...
+> 
+> And remove "in no particular order".
 
-> As per the generic convention followed in other
-> SoCs, we do not have compile test on non-OF configurations
+The reason for this is that I originally thought that the relative
+order of LSMs specified in the kernel configuration or the command line
+was respected (if more than one LSM specifies LSM_ORDER_LAST). In fact
+not. To do this, we would have to parse the LSM string again, as it is
+done for LSM_ORDER_MUTABLE LSMs.
 
-Why not? So, you have to explain the deliberate narrowing of the test coverage.
+Thanks
 
-> >> +    depends on ARM64 || COMPILE_TEST
+Roberto
 
-...
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/linux/lsm_hooks.h |  1 +
+> >  security/security.c       | 12 +++++++++---
+> >  2 files changed, 10 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index 21a8ce23108..05c4b831d99 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -93,6 +93,7 @@ extern void security_add_hooks(struct security_hook_list *hooks, int count,
+> >  enum lsm_order {
+> >  	LSM_ORDER_FIRST = -1,	/* This is only for capabilities. */
+> >  	LSM_ORDER_MUTABLE = 0,
+> > +	LSM_ORDER_LAST = 1,
+> >  };
+> >  
+> >  struct lsm_info {
+> > diff --git a/security/security.c b/security/security.c
+> > index 322090a50cd..24f52ba3218 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -284,9 +284,9 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+> >  		bool found = false;
+> >  
+> >  		for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+> > -			if (lsm->order == LSM_ORDER_MUTABLE &&
+> > -			    strcmp(lsm->name, name) == 0) {
+> > -				append_ordered_lsm(lsm, origin);
+> > +			if (strcmp(lsm->name, name) == 0) {
+> > +				if (lsm->order == LSM_ORDER_MUTABLE)
+> > +					append_ordered_lsm(lsm, origin);
+> >  				found = true;
+> >  			}
+> >  		}
+> > @@ -306,6 +306,12 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+> >  		}
+> >  	}
+> >  
+> > +	/* LSM_ORDER_LAST is always last. */
+> > +	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+> > +		if (lsm->order == LSM_ORDER_LAST)
+> > +			append_ordered_lsm(lsm, "   last");
+> > +	}
+> > +
+> >  	/* Disable all LSMs not in the ordered list. */
+> >  	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+> >  		if (exists_ordered_lsm(lsm))
 
-> >> +#define FUNCTION(fname)                                     \
-> >
-> > PINCTRL_PINFUNCTION() ?
-> I see that there are quite a bunch of files that has to
-> be modified for using the generic data type and
-> macro for the pin function definition
-> We shall post a separate series to accommodate the changes
-
-Sure, that's fine. Please do!
-
-> >> +    [msm_mux_##fname] = {                           \
-> >> +            .name = #fname,                         \
-> >> +            .groups = fname##_groups,               \
-> >> +            .ngroups = ARRAY_SIZE(fname##_groups),  \
-> >> +    }
-
-...
-
-> >> +#define PINGROUP(id, f1, f2, f3, f4, f5, f6, f7, f8, f9)    \
-> >> +    {                                               \
-> >> +            .name = "gpio" #id,                     \
-> >> +            .pins = gpio##id##_pins,                \
-> >> +            .npins = (unsigned int)ARRAY_SIZE(gpio##id##_pins),     \
-> >
-> > Can you embed struct pingroup?
-> Will take care of this in a separate series
-
-Ditto. Thanks!
-
-> >> +    }
-
-...
-
-> >> +};
-> >
-> > No MODULE_DEVICE_TABLE()?
-> The MODULE_DEVICE_TABLE(of, ipq9574_pinctrl_of_match) entry has
-> been added at the end of the file
-
-So, you know what to do then to address my comment :-)
-
--- 
-With Best Regards,
-Andy Shevchenko
