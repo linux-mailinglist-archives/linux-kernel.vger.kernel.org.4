@@ -2,115 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3C36B060F
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50A66B0614
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjCHLgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
+        id S229819AbjCHLgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 06:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjCHLfz (ORCPT
+        with ESMTP id S230059AbjCHLgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:35:55 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12FDAFBBF;
-        Wed,  8 Mar 2023 03:35:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7q5WRUhB8xv0RmSiXrjbZQTqBS/OimwrA3VM7RORVD0=; b=AMlDmF0qS7/JM218n5xSc6B/il
-        0fN2kNupiUXxRe+kzYu2XBBq403g9gC55gVLbJ/sN3USW+t3cMnbjVMv1cQxEBMuYjeiAPI8PhDtD
-        lIYeO9dz7RVb4vkk7cu5AOr4RrSvza1Tikl2KyxdqvclclEP1pKICKtbtHcivpmP9idHEpaStDG31
-        QXFsFdAJfWILtRrn4Z1dr009qSE8DUVGILTTUqq9JKpELdqm/W+u6Z+fwhim3k366hBAwodhKKTRE
-        A5A7x75q3eKme2IVkQgndmFwAs/tm4/Ex79eraWChy7xrqv0uZIMR+qrTTdaiMLJVlvVomq8jymKb
-        aaWjx07w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34522)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pZs5C-0002MJ-Ax; Wed, 08 Mar 2023 11:35:46 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pZs57-0002XC-0y; Wed, 08 Mar 2023 11:35:41 +0000
-Date:   Wed, 8 Mar 2023 11:35:40 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jianhui Zhao <zhaojh329@gmail.com>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
- 1000Base-X and 2500Base-X modes
-Message-ID: <ZAhzDDjZ8+gxyo3V@shell.armlinux.org.uk>
-References: <cover.1678201958.git.daniel@makrotopia.org>
- <fd5c7ea79a7f84caac7d0b64b39fe5c4043edfa8.1678201958.git.daniel@makrotopia.org>
+        Wed, 8 Mar 2023 06:36:04 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31684AF294;
+        Wed,  8 Mar 2023 03:36:03 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id a25so64692931edb.0;
+        Wed, 08 Mar 2023 03:36:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678275361;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pkqtkcAPDhHcKXHJJhzZGkadcuoCSlM8Je8c/sebOSk=;
+        b=Uxditw6bMjdlAa4tQirez9bPQT80pkxBdU0vkvdov83E7EJCKgtMgvvEzigUMmICqo
+         7r/28EKK/HXqXqGNu15VJbPT/3FwMttnWz4rKiQcNDFj1ZpavEgj7JulU+J/Q0vYFNQO
+         Dg4rQpFnQetRbBsl2TFx10mpdUpQ9XHuPuDagLxxMQ2VCgIYgBul67bTcSjTYfNmluYF
+         WJQvqrJRnlRhnNV10ouHOMtcuwSlTh5yQP9UcydhkTx16LtxJJcFrsk3f0MhooN+RwQ8
+         qHPdkuOKtekXLgETObHPMZqt4UJw/xk5X4tfcJYCHGQ7qCWSpoOspReezBbzdOt2ZpJA
+         lVxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678275361;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pkqtkcAPDhHcKXHJJhzZGkadcuoCSlM8Je8c/sebOSk=;
+        b=tXNX81rztjA3XYCJ97q0PVaAkPH6rZSWCGMkOMIiKt/qGc8fyF9WTQCn8HZpFs6fAR
+         uk/XCkHdIAqeoplov+ACdx0hsehAblQDgROlbk5MkuNNybDX/XGQ9Oq0io/kdkDaXfZc
+         fI0nPxhosgJN9wBWBaxK7q0J+VR2U6ezRhcCZoAFqMqL0e78F6zKO2SxtJ/0dt+ygopu
+         yfi6R1VeJmFbWU0X80gbRLv6kCS8+kIHHs+uLUdHdz51Vl2gIhbbEzGjydljfMUINCt2
+         5tRYfDDfOK46RtapZtSsLBHHruOiXCjJl69iVUVYujoPMaDpSV/aOG+E7R16F1Hck3JT
+         B+dg==
+X-Gm-Message-State: AO0yUKVzzeRIRrWAHVHtcTdo3PkypiBPJagSdDyzK6k6YxwI1Xjza1RJ
+        ICouQhVxifU4s41IndZcX42dxtBWqhCnSRAdsZ0=
+X-Google-Smtp-Source: AK7set+8IVqHUCP7lpW4Tu0PFR/uGhVXOh2XCgJ0nI8owJdMs3y7iNlYcasQPs28+hxxB5z53ejUH1b0gSyCIQYYEl4=
+X-Received: by 2002:a50:baa6:0:b0:4c1:6acc:ea5 with SMTP id
+ x35-20020a50baa6000000b004c16acc0ea5mr9818706ede.4.1678275361500; Wed, 08 Mar
+ 2023 03:36:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd5c7ea79a7f84caac7d0b64b39fe5c4043edfa8.1678201958.git.daniel@makrotopia.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302125215.214014-1-keguang.zhang@gmail.com>
+ <20230302125215.214014-3-keguang.zhang@gmail.com> <CAMRc=Me3yVwQm8=CmUVM2gyYnFxntW47-OOPdmq1TzXTJB5ETg@mail.gmail.com>
+ <CAJhJPsX1q6PGSb+eoCSdCC2_vDtbaShLLzEbuNOqD_Jzd8Ozdw@mail.gmail.com> <2d5521ff21ea4b99be3dd2e449f53934@AcuMS.aculab.com>
+In-Reply-To: <2d5521ff21ea4b99be3dd2e449f53934@AcuMS.aculab.com>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Wed, 8 Mar 2023 19:35:45 +0800
+Message-ID: <CAJhJPsUy0U-SdP2Vk9B8qz=CGA=oDSxbaaqqS+HOiDnQoBAThA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] gpio: loongson1: Use readl() & writel()
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 03:53:58PM +0000, Daniel Golle wrote:
-> After conversion to phylink_pcs the 1000Base-X and 2500Base-X modes
-> would work only after `ethtool -s eth1 autoneg off`.
-> As ethtool autoneg and the ETHTOOL_LINK_MODE_Autoneg_BIT is supposed
-> to control auto-negotiation on the external interface it doesn't make
-> much sense to use it to control on-board SGMII auto-negotiation between
-> MAC and PHY.
-> Set correct values to really only enable SGMII auto-negotiation when
-> actually operating in SGMII mode. For 1000Base-X and 2500Base-X mode,
-> enable remote-fault detection only if in-band-status is enabled.
-> This fixes using 1000Base-X and 2500Base-X SFPs on the BananaPi R3
-> board and also makes it possible to use interface-mode-switching PHYs
-> operating in either SGMII mode for 10M/100M/1000M or in 2500Base-X for
-> 2500M mode on other boards.
-> 
-> Fixes: 14a44ab0330d ("net: mtk_eth_soc: partially convert to phylink_pcs")
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+On Wed, Mar 8, 2023 at 5:42=E2=80=AFPM David Laight <David.Laight@aculab.co=
+m> wrote:
+>
+> From: Keguang Zhang
+> > Sent: 07 March 2023 03:46
+> >
+> > On Mon, Mar 6, 2023 at 5:30=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.=
+pl> wrote:
+> > >
+> > > On Thu, Mar 2, 2023 at 1:52=E2=80=AFPM Keguang Zhang <keguang.zhang@g=
+mail.com> wrote:
+> > > >
+> > > > This patch replace __raw_readl() & __raw_writel() with readl() & wr=
+itel().
+> > > >
+> > >
+> > > Please say WHY you're doing this.
+> > >
+> > readl & writel contain memory barriers which can guarantee access order=
+.
+>
+> So what...
+>
+> There is a data dependency between the read and write.
+> The read can't be scheduled before the lock is acquired.
+> The write can't be scheduled after the lock is released.
+>
+> So any barriers in readl()/writel() aren't needed.
+>
+> If they are only compile barriers they'll have no real effect.
+> OTOH if the cpu needs actual synchronising instructions (as some
+> ppc do) then they will slow things down.
+>
+Thanks for the explanation.
+The intention of this change is to prevent possible order issues.
+At present, __raw_readl() & __raw_writel() do work fine.
+I will drop this patch in the next version.
 
-NAK.
 
-There are PHYs out there which operate in SGMII mode but do not
-exchange the SGMII 16-bit configuration word. The code implemented
-here by me was explicitly to allow such a configuration to work,
-which is defined as:
+>         David
+>
+> >
+> > > Bart
+> > >
+> > > > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > > > ---
+> > > > V1 -> V2: Split this change to a separate patch
+> > > > ---
+> > > >  drivers/gpio/gpio-loongson1.c | 8 ++++----
+> > > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/drivers/gpio/gpio-loongson1.c b/drivers/gpio/gpio-loon=
+gson1.c
+> > > > index 8862c9ea0d41..b6c11caa3ade 100644
+> > > > --- a/drivers/gpio/gpio-loongson1.c
+> > > > +++ b/drivers/gpio/gpio-loongson1.c
+> > > > @@ -23,8 +23,8 @@ static int ls1x_gpio_request(struct gpio_chip *gc=
+, unsigned int offset)
+> > > >         unsigned long flags;
+> > > >
+> > > >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+> > > > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) | BIT(of=
+fset),
+> > > > -                    gpio_reg_base + GPIO_CFG);
+> > > > +       writel(readl(gpio_reg_base + GPIO_CFG) | BIT(offset),
+> > > > +              gpio_reg_base + GPIO_CFG);
+> > > >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+> > > >
+> > > >         return 0;
+> > > > @@ -35,8 +35,8 @@ static void ls1x_gpio_free(struct gpio_chip *gc, =
+unsigned int offset)
+> > > >         unsigned long flags;
+> > > >
+> > > >         raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+> > > > -       __raw_writel(__raw_readl(gpio_reg_base + GPIO_CFG) & ~BIT(o=
+ffset),
+> > > > -                    gpio_reg_base + GPIO_CFG);
+> > > > +       writel(readl(gpio_reg_base + GPIO_CFG) & ~BIT(offset),
+> > > > +              gpio_reg_base + GPIO_CFG);
+> > > >         raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+> > > >  }
+> > > >
+> > > > --
+> > > > 2.34.1
+> > > >
+> >
+> >
+> >
+> > --
+> > Best regards,
+> >
+> > Kelvin Cheung
+>
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1=
+ 1PT, UK
+> Registration No: 1397386 (Wales)
 
-	SGMII *without* mode == inband
 
-An example of this is the Broadcom 84881 PHY which can be found on
-SFP modules.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+--
+Best regards,
+
+Kelvin Cheung
