@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9826B04BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DA26B04C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:40:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjCHKkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 05:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
+        id S230148AbjCHKkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:40:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjCHKkQ (ORCPT
+        with ESMTP id S230007AbjCHKkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 05:40:16 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862529BE24
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:40:15 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso853159wmo.0
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:40:15 -0800 (PST)
+        Wed, 8 Mar 2023 05:40:18 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837A59CFC9
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:40:16 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id l1so14837455wry.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:40:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678272014;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kRt6WpwvIBdAlT9GjoYenrjmoiuuxf6pyvSRjhj1Zk8=;
-        b=P22IwubSswfi5Y1ZOPXW0kJgYGFtJKeYzWgoDnpdOOvHv2DtgD34zPQITW0TFucU55
-         1yHrwLoimyc90xed+aRwK+OujXY4zKkuX9uTH9tOeNmDzcBz0J09RIqej3RPHC80ELdU
-         KWCM8cn5NrrJlziMXepiPu0Ah/oZFNYWdbmnb8vBtBnCutNpYIrh4Lg6i7OASn2uVJ98
-         ck2caaQARl6tAJnttJN1BIdQ3pGWn77oHrU8FZS9hNxJeB0Ztbr3F3YvjcmIdOTytaci
-         /1lqWG7ytz3D16u4cLi5CChi//MQCw3EVHbZBqSl7Hw7WXQtAeI27bPkmxepKd/GGmks
-         2TIw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678272015;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6crUD0nELm/BVOKaOmrsnATs1eKM4ep25RzmB9fG+c4=;
+        b=6BzixgFox6capZv7CQM8jct/uzDTPBatobRgwmWp5D9zZHFsMBsqa8rliMbu5rZl2H
+         03J6CdayY1o9YfFwLasMqNBBULVtNW/hN8eG4C6tPuA9dEBr9NNjRvcn+BgKBFUblB74
+         6WY+VXb6QB0LcDSkb4/z+tIpQkwBtQjNj/53+FNm9EKzMhot9LKtqvvxP1fGQd2tnAVv
+         1bXqMR/ThgMnId4sfDkHJGn4sLALd5E2THYblDLZHuGR6O0npcZm4ifkHTV0xY5Mdkzz
+         yn2oUq2sSH0+stRk2PSAThsXZq63Y7brJZog7wrlBWv51BSNdPwz2thx5J7+Hza4Ah+Q
+         EphQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678272014;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kRt6WpwvIBdAlT9GjoYenrjmoiuuxf6pyvSRjhj1Zk8=;
-        b=ftwovdYnN/4pimGstcaZDVilZ+izsXU0TaEoxR/HHj2ZIG5TTDqlHmxP3FRivCla48
-         0V4f37lJSlbOLeefVsC7g4MZMA81y+RgB0nw8gvkOxxTjdyf4rCgqvXYDHagGnbH/wZj
-         Lw6xxmwRSt3dCbVLIr43aiXT9HfPfU+itJrGfj/ZErVDByElHjzn2eNWrJ+r9m7uHb5D
-         bOLtDsaVq2v7VXxwDjPbjefFXLjmC+7S84ahYi2tGLY/za+JX1aG9/+y44Kwv0g2e/QG
-         KltKrBeF/anR8liO0DUfIJuUuhmd7+7slxTllQSeLbADka4wzRjkisqz0uE92grdICEj
-         ANbA==
-X-Gm-Message-State: AO0yUKXllYisIM/pTNmF5EK8XuE7kbwjtWvmt2bHWmL0UXKpBa5K4L+p
-        EDyvrzksGllaIKIrIZ6QTrGLFg==
-X-Google-Smtp-Source: AK7set9dVGEfZHhUM3HA8qAwJI7yFv02IvknxgLGZkwoV/7kENikLbazTYXO4xLFyFJjDDZJUac+vQ==
-X-Received: by 2002:a05:600c:4fc2:b0:3eb:37ce:4c3e with SMTP id o2-20020a05600c4fc200b003eb37ce4c3emr16327392wmq.16.1678272014061;
-        Wed, 08 Mar 2023 02:40:14 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678272015;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6crUD0nELm/BVOKaOmrsnATs1eKM4ep25RzmB9fG+c4=;
+        b=rOkQwvHkoKQ5xYZv3G8Ca12Ui9dCAbgebAHMyVR6ZMUYDlZUYu8cgeiH97S/HjlQIb
+         d6+jE0LudKP2WggxL8u/NewgcM2sP9Wonfgb921SnsfnXVSE01yGBntyipBsTueXTtyl
+         CuOBmYBjNT/whRN3+F4aUVN9b41CQwRALM8/9FCfBFuC2+VGO8jICL1zNIz8lhUxnw47
+         /E15bxXdIja4iLCTei3lqDCGxrmlAb+EPUzYvlwLGsbC4c7N89Aghg5KWBsKWNU5+3iQ
+         n16qcjF0sCROR7w45Pp3i7m+074Yn3+Mk3GVtqswy1DN7p9gYu1SmKMqlJPShbICyKOV
+         sfdw==
+X-Gm-Message-State: AO0yUKXt09sHusAZIvnyCXQwAvMhSwdxvUmCPJAROkQ2Mgy89PbYW1jy
+        Mg7vttEhNzAN374rrNrKEhPhwg==
+X-Google-Smtp-Source: AK7set/n2FVksWX9l/ZnXw3LrpxDHYkhQHvlHFYtw1uNqGvwmOVMaS5MgBjjiPP4w7bYpfL/nQqc8A==
+X-Received: by 2002:a5d:650d:0:b0:2c5:48bd:d494 with SMTP id x13-20020a5d650d000000b002c548bdd494mr13303404wru.29.1678272015023;
+        Wed, 08 Mar 2023 02:40:15 -0800 (PST)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:2326:fd4c:82e3:7e07])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003eb0d6f48f3sm20664135wmn.27.2023.03.08.02.40.13
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003eb0d6f48f3sm20664135wmn.27.2023.03.08.02.40.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 02:40:13 -0800 (PST)
+        Wed, 08 Mar 2023 02:40:14 -0800 (PST)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -58,15 +59,17 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v4 0/9] arm64: dts: qcom: sa8775p-ride: enable relevant QUPv3 IPs
-Date:   Wed,  8 Mar 2023 11:40:00 +0100
-Message-Id: <20230308104009.260451-1-brgl@bgdev.pl>
+Subject: [PATCH v4 1/9] arm64: dts: qcom: sa8775p: add the QUPv3 #2 node
+Date:   Wed,  8 Mar 2023 11:40:01 +0100
+Message-Id: <20230308104009.260451-2-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230308104009.260451-1-brgl@bgdev.pl>
+References: <20230308104009.260451-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,40 +78,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-This enables the QUPv3 interfaces that are exposed on the sa8775p-ride
-board: I2C, SPI and the Bluetooth and GNSS UART ports.
+Add the second instance of the QUPv3 engine to the sa8775p.dtsi.
 
-v3 -> v4:
-- use interconnect constants instead of magic numbers where applicable
-- pad addresses in reg to 8 digits
-- group pins under state nodes for UART
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-v2 -> v3:
-- fix the interrupt number for uart12
-- replace underscores with hyphens in DT node names (although make dtbs_check
-  does not raise warnings about this)
-- rearrange the commits so that they're more fine-grained with separate
-  patches for adding nodes to dtsi and enabling them for the board
-
-v1 -> v2:
-- uart17 is the Bluetooth port, not GNSS
-- add uart12 for GNSS too in that case
-
-Bartosz Golaszewski (9):
-  arm64: dts: qcom: sa8775p: add the QUPv3 #2 node
-  arm64: dts: qcom: sa8775p-ride: enable QUPv3 #2
-  arm64: dts: qcom: sa8775p: add the i2c18 node
-  arm64: dts: qcom: sa8775p-ride: enable i2c18
-  arm64: dts: qcom: sa8775p: add the spi16 node
-  arm64: dts: qcom: sa8775p-ride: enable the SPI node
-  arm64: dts: qcom: sa8775p: add high-speed UART nodes
-  arm64: dts: qcom: sa8775p-ride: enable the GNSS UART port
-  arm64: dts: qcom: sa8775p-ride: enable the BT UART port
-
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 99 +++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/sa8775p.dtsi     | 87 ++++++++++++++++++++
- 2 files changed, 186 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+index 8e15a24e11dc..5efb3e4f2335 100644
+--- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
++++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+@@ -491,6 +491,19 @@ &clk_virt SLAVE_QUP_CORE_1 0>,
+ 			};
+ 		};
+ 
++		qupv3_id_2: geniqup@8c0000 {
++			compatible = "qcom,geni-se-qup";
++			reg = <0x0 0x008c0000 0x0 0x6000>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges;
++			clocks = <&gcc GCC_QUPV3_WRAP_2_M_AHB_CLK>,
++				 <&gcc GCC_QUPV3_WRAP_2_S_AHB_CLK>;
++			clock-names = "m-ahb", "s-ahb";
++			iommus = <&apps_smmu 0x5a3 0x0>;
++			status = "disabled";
++		};
++
+ 		intc: interrupt-controller@17a00000 {
+ 			compatible = "arm,gic-v3";
+ 			reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
 -- 
 2.37.2
 
