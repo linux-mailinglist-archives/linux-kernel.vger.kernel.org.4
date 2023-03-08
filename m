@@ -2,91 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0E06B09FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE616B0A04
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 14:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbjCHNxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 08:53:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S231883AbjCHNyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 08:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjCHNxK (ORCPT
+        with ESMTP id S231818AbjCHNxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 08:53:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945914C6F3;
-        Wed,  8 Mar 2023 05:53:07 -0800 (PST)
+        Wed, 8 Mar 2023 08:53:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B873E087;
+        Wed,  8 Mar 2023 05:53:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17E26B81CE5;
-        Wed,  8 Mar 2023 13:53:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42A86C4339B;
-        Wed,  8 Mar 2023 13:53:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D487961812;
+        Wed,  8 Mar 2023 13:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67893C4339E;
+        Wed,  8 Mar 2023 13:53:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678283584;
-        bh=z6Fl1IZWcy0KRIvlPtXRkINhMxXIEpmPhQork/dwI7o=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=KrSLM8/PvZvSU1n/mv6jFpQS9K/SJmnvHaHdNiunwWuFgzyJcTLms0X013zKKsdBu
-         kxJPfvAmEPgXos1p4UTT4kru4dVakOD49+2RgYEySYdSfMm0pKNITskxwBEw6OeIdq
-         IYCZpNfaVsFwbpGgEavFc8QVCTvcvW8bLbIvzLm2eYdX68jh724CBLL3DsbtE2Bi48
-         lL3FCfXOfyg9+ebMP7B/lzKTqbxmeMzYFF8TQJG8y3RxhHaoJCtwAYgkQu8VMA6fWI
-         W3rWg4oIDf29JHEayMw9yHYZienmAUDP6CkdlXbAzqDHWhYhMlC95xu3pC9EsoZ1wG
-         /QaZNJpTXXsvQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        cy_huang@richtek.com
-Cc:     lgirdwood@gmail.com, u0084500@gmail.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-In-Reply-To: <1678063358-18128-1-git-send-email-cy_huang@richtek.com>
-References: <1678063358-18128-1-git-send-email-cy_huang@richtek.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: regulator: Add Richtek RT5739
-Message-Id: <167828358298.32113.17014444602601238459.b4-ty@kernel.org>
-Date:   Wed, 08 Mar 2023 13:53:02 +0000
+        s=k20201202; t=1678283592;
+        bh=scIBUCibkZ6ezqacbiLi2xkfwIP7lbG0QjO+CwNdsuI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cWsn6VcLigVWXFE12TziUl2A+goLVmmqhaU8/hQ1WT38LkiXMswpG0+LJVQdVe0RT
+         kq42+k3yNkY/6JKCq0AKCzo8xvw0tgnSoi5JA3TSQaN9jnWmUyjxyLA6F8bGgvaIxs
+         xbHMXaGh8ogtYE3GZ+C33iPcfaZ40kpJxHhrkksqMAUiDxba4Pek7pI0qNX8GkYl6U
+         eZfassxObD41O+SMSlPce1xhDBbIYECuANHGxVyja0vI17+Vtinc8cKvmwVgVDJAHR
+         iKAiVStQF6U6YKT5KNYiI+9JWZ5jey0XJfg/bCHpsG+yf1fo1fduDnJuDwpEWhTELa
+         qfNMziOjoMgIA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Sasha Levin <sashal@kernel.org>, nathan@kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 1/3] scripts: handle BrokenPipeError for python scripts
+Date:   Wed,  8 Mar 2023 08:53:04 -0500
+Message-Id: <20230308135309.2927462-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023 08:42:37 +0800, cy_huang@richtek.com wrote:
-> Add the binding document for Richtek RT5739.
-> 
-> 
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-Applied to
+[ Upstream commit 87c7ee67deb7fce9951a5f9d80641138694aad17 ]
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+In the follow-up of commit fb3041d61f68 ("kbuild: fix SIGPIPE error
+message for AR=gcc-ar and AR=llvm-ar"), Kees Cook pointed out that
+tools should _not_ catch their own SIGPIPEs [1] [2].
 
-Thanks!
+Based on his feedback, LLVM was fixed [3].
 
-[1/2] dt-bindings: regulator: Add Richtek RT5739
-      commit: 2e238605a9d631fc8b9b130ba79cd54f2a22df10
-[2/2] regulator: Add support for Richtek RT5739 voltage regulator
-      commit: 4536f3b93a3373cac21911103cbaa8c4c2932c38
+However, Python's default behavior is to show noisy bracktrace when
+SIGPIPE is sent. So, scripts written in Python are basically in the
+same situation as the buggy llvm tools.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Example:
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+  $ make -s allnoconfig
+  $ make -s allmodconfig
+  $ scripts/diffconfig .config.old .config | head -n1
+  -ALIX n
+  Traceback (most recent call last):
+    File "/home/masahiro/linux/scripts/diffconfig", line 132, in <module>
+      main()
+    File "/home/masahiro/linux/scripts/diffconfig", line 130, in main
+      print_config("+", config, None, b[config])
+    File "/home/masahiro/linux/scripts/diffconfig", line 64, in print_config
+      print("+%s %s" % (config, new_value))
+  BrokenPipeError: [Errno 32] Broken pipe
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+Python documentation [4] notes how to make scripts die immediately and
+silently:
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+  """
+  Piping output of your program to tools like head(1) will cause a
+  SIGPIPE signal to be sent to your process when the receiver of its
+  standard output closes early. This results in an exception like
+  BrokenPipeError: [Errno 32] Broken pipe. To handle this case,
+  wrap your entry point to catch this exception as follows:
 
-Thanks,
-Mark
+    import os
+    import sys
+
+    def main():
+        try:
+            # simulate large output (your code replaces this loop)
+            for x in range(10000):
+                print("y")
+            # flush output here to force SIGPIPE to be triggered
+            # while inside this try block.
+            sys.stdout.flush()
+        except BrokenPipeError:
+            # Python flushes standard streams on exit; redirect remaining output
+            # to devnull to avoid another BrokenPipeError at shutdown
+            devnull = os.open(os.devnull, os.O_WRONLY)
+            os.dup2(devnull, sys.stdout.fileno())
+            sys.exit(1)  # Python exits with error code 1 on EPIPE
+
+    if __name__ == '__main__':
+        main()
+
+  Do not set SIGPIPE’s disposition to SIG_DFL in order to avoid
+  BrokenPipeError. Doing that would cause your program to exit
+  unexpectedly whenever any socket connection is interrupted while
+  your program is still writing to it.
+  """
+
+Currently, tools/perf/scripts/python/intel-pt-events.py seems to be the
+only script that fixes the issue that way.
+
+tools/perf/scripts/python/compaction-times.py uses another approach
+signal.signal(signal.SIGPIPE, signal.SIG_DFL) but the Python
+documentation clearly says "Don't do it".
+
+I cannot fix all Python scripts since there are so many.
+I fixed some in the scripts/ directory.
+
+[1]: https://lore.kernel.org/all/202211161056.1B9611A@keescook/
+[2]: https://github.com/llvm/llvm-project/issues/59037
+[3]: https://github.com/llvm/llvm-project/commit/4787efa38066adb51e2c049499d25b3610c0877b
+[4]: https://docs.python.org/3/library/signal.html#note-on-sigpipe
+
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ scripts/checkkconfigsymbols.py         | 13 ++++++++++++-
+ scripts/clang-tools/run-clang-tools.py | 21 ++++++++++++++-------
+ scripts/diffconfig                     | 16 ++++++++++++++--
+ 3 files changed, 40 insertions(+), 10 deletions(-)
+
+diff --git a/scripts/checkkconfigsymbols.py b/scripts/checkkconfigsymbols.py
+index 1548f9ce46827..697972432bbe7 100755
+--- a/scripts/checkkconfigsymbols.py
++++ b/scripts/checkkconfigsymbols.py
+@@ -113,7 +113,7 @@ def parse_options():
+     return args
+ 
+ 
+-def main():
++def print_undefined_symbols():
+     """Main function of this module."""
+     args = parse_options()
+ 
+@@ -472,5 +472,16 @@ def parse_kconfig_file(kfile):
+     return defined, references
+ 
+ 
++def main():
++    try:
++        print_undefined_symbols()
++    except BrokenPipeError:
++        # Python flushes standard streams on exit; redirect remaining output
++        # to devnull to avoid another BrokenPipeError at shutdown
++        devnull = os.open(os.devnull, os.O_WRONLY)
++        os.dup2(devnull, sys.stdout.fileno())
++        sys.exit(1)  # Python exits with error code 1 on EPIPE
++
++
+ if __name__ == "__main__":
+     main()
+diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+index f754415af398b..f42699134f1c0 100755
+--- a/scripts/clang-tools/run-clang-tools.py
++++ b/scripts/clang-tools/run-clang-tools.py
+@@ -60,14 +60,21 @@ def run_analysis(entry):
+ 
+ 
+ def main():
+-    args = parse_arguments()
++    try:
++        args = parse_arguments()
+ 
+-    lock = multiprocessing.Lock()
+-    pool = multiprocessing.Pool(initializer=init, initargs=(lock, args))
+-    # Read JSON data into the datastore variable
+-    with open(args.path, "r") as f:
+-        datastore = json.load(f)
+-        pool.map(run_analysis, datastore)
++        lock = multiprocessing.Lock()
++        pool = multiprocessing.Pool(initializer=init, initargs=(lock, args))
++        # Read JSON data into the datastore variable
++        with open(args.path, "r") as f:
++            datastore = json.load(f)
++            pool.map(run_analysis, datastore)
++    except BrokenPipeError:
++        # Python flushes standard streams on exit; redirect remaining output
++        # to devnull to avoid another BrokenPipeError at shutdown
++        devnull = os.open(os.devnull, os.O_WRONLY)
++        os.dup2(devnull, sys.stdout.fileno())
++        sys.exit(1)  # Python exits with error code 1 on EPIPE
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/scripts/diffconfig b/scripts/diffconfig
+index d5da5fa05d1d3..43f0f3d273ae7 100755
+--- a/scripts/diffconfig
++++ b/scripts/diffconfig
+@@ -65,7 +65,7 @@ def print_config(op, config, value, new_value):
+         else:
+             print(" %s %s -> %s" % (config, value, new_value))
+ 
+-def main():
++def show_diff():
+     global merge_style
+ 
+     # parse command line args
+@@ -129,4 +129,16 @@ def main():
+     for config in new:
+         print_config("+", config, None, b[config])
+ 
+-main()
++def main():
++    try:
++        show_diff()
++    except BrokenPipeError:
++        # Python flushes standard streams on exit; redirect remaining output
++        # to devnull to avoid another BrokenPipeError at shutdown
++        devnull = os.open(os.devnull, os.O_WRONLY)
++        os.dup2(devnull, sys.stdout.fileno())
++        sys.exit(1)  # Python exits with error code 1 on EPIPE
++
++
++if __name__ == '__main__':
++    main()
+-- 
+2.39.2
 
