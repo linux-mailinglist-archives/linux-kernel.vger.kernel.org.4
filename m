@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071096B1060
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A14B06B106F
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:50:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjCHRpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 12:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49592 "EHLO
+        id S229565AbjCHRuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 12:50:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCHRpn (ORCPT
+        with ESMTP id S229806AbjCHRuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 12:45:43 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CD3830CD
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:45:41 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 930B71063;
-        Wed,  8 Mar 2023 09:46:24 -0800 (PST)
-Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12EBA3F67D;
-        Wed,  8 Mar 2023 09:45:37 -0800 (PST)
-Message-ID: <c8d85eae-e291-99a6-509c-94c41514ac16@arm.com>
-Date:   Wed, 8 Mar 2023 17:45:35 +0000
+        Wed, 8 Mar 2023 12:50:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4C182360
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:49:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678297789;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WgdFb9a/r4I/6TdwH5fprS/6S6YWoahUY0hwaQaBHxE=;
+        b=aXPNgcAwH+55Eh5HHMy98zNM7c6TYLunb6YtCYGiL95/MQaorC3AXyPvLDab0I/8zsF8BC
+        ThrrMOzXtLW9fBn4c7qD7Qowx8y6ZayCap16Q4BBnePLXRT3sJ2soOSuUN/nwQA+JowvVG
+        yGr7cW+J890oKqlBaPhOY5YhP9gdLvs=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-341-j61OraVVNdK0UJam4zyQPQ-1; Wed, 08 Mar 2023 12:49:48 -0500
+X-MC-Unique: j61OraVVNdK0UJam4zyQPQ-1
+Received: by mail-il1-f197.google.com with SMTP id g14-20020a92dd8e000000b00316ea7ce6d3so8927261iln.15
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:49:48 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678297787;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WgdFb9a/r4I/6TdwH5fprS/6S6YWoahUY0hwaQaBHxE=;
+        b=uW6f+LbIADb1Besq0wESJGQ2Kz6Rh5cB0DrLYXoz/BJDH7L97hr6Tk/NWlfFgy0U7U
+         Wv4x9UqvUA6vyWqVjIdHb5q13qWi/brjDBjQurUBcyQog8WsfuH9SKx40x0PWfSPeJfh
+         Bs49UaJ21LMgF3mGvnfwn6VpWmW+Hz/mijN7R2QsjCmbI2+Wj/awR4/At0dCDZ1lHjXV
+         iCt2ToFNoKgx7+WJT0lkCFhQ4wP/S1plQJQBKbxJ5ZXh4NhkyQ62Pe/tv3yyflwwsw/F
+         FbQo3oV3OcGY5rQuvMVd0r7Ky1gaarLIYJ8FrTOMrpn0plB3eMf8QtSpFhXjuQfrwXWi
+         jthw==
+X-Gm-Message-State: AO0yUKU1Se5/FLuNjkMrwgIxXhGFjuokL8CEcYXp/3TLchWA2YaUMrzA
+        zMjh4X55CDpU+p0CLbUoCp2VPSCxXooNXqX3w7R8gYr5oXIzbwJCbu27H6FTc1AAMG9pvVY/szu
+        fj86ZGo7QreUy61fHt2R1lBfN
+X-Received: by 2002:a6b:3b0f:0:b0:74c:9907:e5b4 with SMTP id i15-20020a6b3b0f000000b0074c9907e5b4mr17063893ioa.6.1678297787349;
+        Wed, 08 Mar 2023 09:49:47 -0800 (PST)
+X-Google-Smtp-Source: AK7set8OYIVemkemA8xPWwNCCOrWkEXAWthGjSV8k7moF0OEkSmcqT/tCLgVdMS9dE8mb1oayoGrVw==
+X-Received: by 2002:a6b:3b0f:0:b0:74c:9907:e5b4 with SMTP id i15-20020a6b3b0f000000b0074c9907e5b4mr17063872ioa.6.1678297787018;
+        Wed, 08 Mar 2023 09:49:47 -0800 (PST)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id s13-20020a6bdc0d000000b0074c8a021d4csm5242741ioc.44.2023.03.08.09.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 09:49:46 -0800 (PST)
+Date:   Wed, 8 Mar 2023 10:49:44 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>
+Cc:     linux-kernel@vger.kernel.org, dmy@semihalf.com, tn@semihalf.com,
+        dbehr@google.com, upstream@semihalf.com, dtor@google.com,
+        jgg@ziepe.ca, kevin.tian@intel.com, cohuck@redhat.com,
+        abhsahu@nvidia.com, yishaih@nvidia.com, yi.l.liu@intel.com,
+        kvm@vger.kernel.org, Dominik Behr <dbehr@chromium.org>,
+        <libvir-list@redhat.com>
+Subject: Re: [PATCH] vfio/pci: Propagate ACPI notifications to the
+ user-space
+Message-ID: <20230308104944.578d503c.alex.williamson@redhat.com>
+In-Reply-To: <CAH76GKNapD8uB0B2+m70ZScDaOM8TmPNAii9TGqRSsgN4013+Q@mail.gmail.com>
+References: <20230307220553.631069-1-jaz@semihalf.com>
+        <20230307164158.4b41e32f.alex.williamson@redhat.com>
+        <CAH76GKNapD8uB0B2+m70ZScDaOM8TmPNAii9TGqRSsgN4013+Q@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 09/18] x86/resctrl: Allow resctrl_arch_rmid_read() to
- sleep
-Content-Language: en-GB
-To:     Peter Newman <peternewman@google.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>,
-        Stephane Eranian <eranian@google.com>
-References: <20230113175459.14825-1-james.morse@arm.com>
- <20230113175459.14825-10-james.morse@arm.com>
- <CALPaoCg4T52ju5XJC-BVX-EuZUtc67LruWbgyH5s8CoiEwOUPw@mail.gmail.com>
- <c3ca6d66-e58c-8ace-e88e-45ded5de836f@arm.com>
- <CALPaoCik0j7ATCv-He5HWVqbL+3njpqO1fhF5FQJO7qqT1zR3w@mail.gmail.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <CALPaoCik0j7ATCv-He5HWVqbL+3njpqO1fhF5FQJO7qqT1zR3w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,88 +86,233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+[Cc +libvir-list]
 
-On 06/03/2023 13:14, Peter Newman wrote:
-> On Mon, Mar 6, 2023 at 12:34 PM James Morse <james.morse@arm.com> wrote:
->> On 23/01/2023 15:33, Peter Newman wrote:
->>> On Fri, Jan 13, 2023 at 6:56 PM James Morse <james.morse@arm.com> wrote:
->>>> MPAM's cache occupancy counters can take a little while to settle once
->>>> the monitor has been configured. The maximum settling time is described
->>>> to the driver via a firmware table. The value could be large enough
->>>> that it makes sense to sleep.
->>>
->>> Would it be easier to return an error when reading the occupancy count
->>> too soon after configuration? On Intel it is already normal for counter
->>> reads to fail on newly-allocated RMIDs.
->>
->> For x86, you have as many counters as there are RMIDs, so there is no issue just accessing
->> the counter.
-> 
-> I should have said AMD instead of Intel, because their implementations
-> have far fewer counters than RMIDs.
+On Wed, 8 Mar 2023 12:41:24 +0100
+Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
 
-Right, I assume Intel and AMD behaved in the same way here.
+> =C5=9Br., 8 mar 2023 o 00:42 Alex Williamson <alex.williamson@redhat.com>=
+ napisa=C5=82(a):
+> >
+> > On Tue,  7 Mar 2023 22:05:53 +0000
+> > Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
+> > =20
+> > > From: Dominik Behr <dbehr@chromium.org>
+> > >
+> > > Hitherto there was no support for propagating ACPI notifications to t=
+he
+> > > guest drivers. In order to provide such support, install a handler for
+> > > notifications on an ACPI device during vfio-pci device registration. =
+The
+> > > handler role is to propagate such ACPI notifications to the user-space
+> > > via acpi netlink events, which allows VMM to receive and propagate th=
+em
+> > > further to the VMs.
+> > >
+> > > Thanks to the above, the actual driver for the pass-through device,
+> > > which belongs to the guest, can receive and react to device specific
+> > > notifications. =20
+>=20
+> > What consumes these events? =20
+>=20
+> Those events are consumed by the VMM, which can have a built-in ACPI
+> event listener.
+>=20
+> > Has this been proposed to any VM management tools like libvirt? =20
+>=20
+> This patch was evaluated and tested with crosvm VMM (but since the
+> kernel part is not in the tree the implementation is marked as WIP).
 
+Adding libvirt folks.  This intentionally designs the interface in a
+way that requires a privileged intermediary to monitor netlink on the
+host, associate messages to VMs based on an attached device, and
+re-inject the event to the VMM.  Why wouldn't we use a channel
+associated with the device for such events, such that the VMM has
+direct access?  The netlink path seems like it has more moving pieces,
+possibly scalability issues, and maybe security issues?
 
->> With MPAM there may be as few as 1 monitor for the CSU (cache storage utilisation)
->> counter, which needs to be multiplexed between different PARTID to find the cache
->> occupancy (This works for CSU because its a stable count, it doesn't work for the
->> bandwidth monitors)
->> On such a platform the monitor needs to be allocated and programmed before it reads a
->> value for a particular PARTID/CLOSID. If you had two threads trying to read the same
->> counter, they could interleave perfectly to prevent either thread managing to read a value.
->> The 'not ready' time is advertised in a firmware table, and the driver will wait at most
->> that long before giving up and returning an error.
+> > What sort of ACPI events are we expecting to see here and what does use=
+r space do with them? =20
+>=20
+> With this patch we are expecting to see and propagate any device
+> specific notifications, which are aimed to notify the proper device
+> (driver) which belongs to the guest.
+>=20
+> Here is the description how propagating such notification could be
+> implemented by VMM:
+>=20
+> 1) VMM could upfront generate proper virtual ACPI description for
+> guest per vfio-pci device (more precisely it could be e.g.  ACPI GPE
+> handler, which aim is only to notify relevant device):
 
-> Likewise, on AMD, a repeating sequence of tasks which are LRU in terms
-> of counter -> RMID allocation could prevent RMID event reads from ever
-> returning a value.
+The proposed interface really has no introspection, how does the VMM
+know which devices need ACPI tables added "upfront"?  How do these
+events factor into hotplug device support, where we may not be able to
+dynamically inject ACPI code into the VM?
 
-Isn't that a terrible user-space interface? "If someone else is reading a similar file,
-neither of you make progress".
+>=20
+>         Scope (_GPE)
+>         {
+>             Method (_E00, 0, NotSerialized)  // _Exx: Edge-Triggered
+> GPE, xx=3D0x00-0xFF
+>             {
+>                 Local0 =3D \_SB.PC00.PE08.NOTY
+>                 Notify (\_SB.PC00.PE08, Local0)
+>             }
+>         }
+>=20
+> 2) Now, when the VMM receives ACPI netlink event (thanks to VMM
+> builtin ACPI event listener, which is able to receive any event
+> generated through acpi_bus_generate_netlink_event) VMM classifies it
+> based on device_class ("vfio_pci" in this case) and parses it further
+> to get device name and the notification value for it. This
+> notification value is stored in a virtual register and VMM triggers
+> GPE associated with the pci-vfio device.
 
+Each VMM is listening for netlink events and sees all the netlink
+traffic from the host, including events destined for other VMMs?  This
+doesn't seem terribly acceptable from a security perspective.
+=20
+> 3) Guest kernel upon handling GPE, thanks to generated AML (ad 1.),
+> triggers Notify on required pass-through device and therefore
+> replicates the ACPI Notification on the guest side (Accessing
+> \_SB.PC00.PE08.NOTY from above example, result with trap to VMM, which
+> returns previously stored notify value).
 
-> The main difference I see with MPAM is that software allocates the
-> counters instead of hardware, but the overall behavior sounds the same.
-> 
-> The part I object to is introducing the wait to the counter read because
-> existing software already expects an immediate error when reading a
-> counter too soon. To produce accurate data, these readings are usually
-> read at intervals of multiple seconds.
-
-
-> Instead, when configuring a counter, could you use the firmware table
-> value to compute the time when the counter will next be valid and return
-> errors on read requests received before that?
-
-The monitor might get re-allocated, re-programmed and become valid for a different
-PARTID+PMG in the mean time. I don't think these things should remain allocated over a
-return to user-space. Without doing that I don't see how we can return-early and make
-progress.
-
-How long should a CSU monitor remain allocated to a PARTID+PMG? Currently its only for the
-duration of the read() syscall on the file.
-
-
-The problem with MPAM is too much of it is optional. This particular behaviour is only
-valid for CSU monitors, (llc_occupancy), and then, only if your hardware designers didn't
-have a value to hand when the monitor is programmed, and need to do a scan of the cache to
-come up with a result. The retry is only triggered if the hardware sets NRDY.
-This is also only necessary if there aren't enough monitors for every RMID/(PARTID*PMG) to
-have its own. If there were enough, the monitors could be allocated and programmed at
-startup, and the whole thing becomes cheaper to access.
-
-If a hardware platform needs time to do this, it has to come from somewhere. I don't think
-maintaining an epoch based list of which monitor secretly belongs to a PARTID+PMG in the
-hope user-space reads the file again 'quickly enough' is going to be maintainable.
-
-If returning errors early is an important use-case, I can suggest ensuring the MPAM driver
-allocates CSU monitors up-front if there are enough (today it only does this for MBWU
-monitors). We then have to hope that folk who care about this also build hardware
-platforms with enough monitors.
-
-
+The acpi_bus_generate_netlink_event() below really only seems to form a
+u8 event type from the u32 event.  Is this something that could be
+provided directly from the vfio device uAPI with an ioeventfd, thus
+providing introspection that a device supports ACPI event notifications
+and the ability for the VMM to exclusively monitor those events, and
+only those events for the device, without additional privileges?
 Thanks,
 
-James
+Alex
+=20
+> With above the ACPI notifications are actually replicated on the guest
+> side and from a guest driver perspective they don't differ from native
+> ones.
+>=20
+> > =20
+> > > Signed-off-by: Dominik Behr <dbehr@chromium.org>
+> > > Co-developed-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+> > > Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+> > > ---
+> > >  drivers/vfio/pci/vfio_pci_core.c | 33 ++++++++++++++++++++++++++++++=
+++
+> > >  1 file changed, 33 insertions(+)
+> > >
+> > > diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio=
+_pci_core.c
+> > > index a5ab416cf476..92b8ed8d087c 100644
+> > > --- a/drivers/vfio/pci/vfio_pci_core.c
+> > > +++ b/drivers/vfio/pci/vfio_pci_core.c
+> > > @@ -10,6 +10,7 @@
+> > >
+> > >  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> > >
+> > > +#include <linux/acpi.h>
+> > >  #include <linux/aperture.h>
+> > >  #include <linux/device.h>
+> > >  #include <linux/eventfd.h>
+> > > @@ -2120,10 +2121,20 @@ void vfio_pci_core_release_dev(struct vfio_de=
+vice *core_vdev)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(vfio_pci_core_release_dev);
+> > >
+> > > +static void vfio_pci_core_acpi_notify(acpi_handle handle, u32 event,=
+ void *data)
+> > > +{
+> > > +     struct vfio_pci_core_device *vdev =3D (struct vfio_pci_core_dev=
+ice *)data;
+> > > +     struct device *dev =3D &vdev->pdev->dev;
+> > > +
+> > > +     acpi_bus_generate_netlink_event("vfio_pci", dev_name(dev), even=
+t, 0); =20
+> >
+> > Who listens to this?  Should there be an in-band means to provide
+> > notifies related to the device?  How does a userspace driver know to
+> > look for netlink events for a particular device? =20
+>=20
+> VMM which has implemented logic responsible for listening on acpi
+> netlink events. This netlink message already passes the device name so
+> VMM will associate it with a particular device. I've elaborated a bit
+> more in my previous answer.
+>=20
+> > =20
+> > > +}
+> > > +
+> > >  int vfio_pci_core_register_device(struct vfio_pci_core_device *vdev)
+> > >  {
+> > > +     acpi_status status;
+> > >       struct pci_dev *pdev =3D vdev->pdev;
+> > >       struct device *dev =3D &pdev->dev;
+> > > +     struct acpi_device *adev =3D ACPI_COMPANION(&pdev->dev);
+> > >       int ret;
+> > >
+> > >       /* Drivers must set the vfio_pci_core_device to their drvdata */
+> > > @@ -2201,8 +2212,24 @@ int vfio_pci_core_register_device(struct vfio_=
+pci_core_device *vdev)
+> > >       ret =3D vfio_register_group_dev(&vdev->vdev);
+> > >       if (ret)
+> > >               goto out_power;
+> > > +
+> > > +     if (!adev) {
+> > > +             pci_info(pdev, "No ACPI companion"); =20
+> >
+> > This would be a log message generated for 99.99% of devices. =20
+>=20
+> Sure - I will remove that.
+>=20
+> > =20
+> > > +             return 0;
+> > > +     }
+> > > +
+> > > +     status =3D acpi_install_notify_handler(adev->handle, ACPI_DEVIC=
+E_NOTIFY,
+> > > +                                     vfio_pci_core_acpi_notify, (voi=
+d *)vdev); =20
+> >
+> > vfio-pci supports non-ACPI platforms, I don't see any !CONFIG_ACPI
+> > prototypes for this function.  Thanks, =20
+>=20
+> Good point, I will address this in the next version.
+>=20
+> Thank you,
+> Grzegorz
+>=20
+> >
+> > Alex
+> > =20
+> > > +
+> > > +     if (ACPI_FAILURE(status)) {
+> > > +             pci_err(pdev, "Failed to install notify handler");
+> > > +             goto out_group_register;
+> > > +     }
+> > > +
+> > >       return 0;
+> > >
+> > > +out_group_register:
+> > > +     vfio_unregister_group_dev(&vdev->vdev);
+> > >  out_power:
+> > >       if (!disable_idle_d3)
+> > >               pm_runtime_get_noresume(dev);
+> > > @@ -2216,6 +2243,12 @@ EXPORT_SYMBOL_GPL(vfio_pci_core_register_devic=
+e);
+> > >
+> > >  void vfio_pci_core_unregister_device(struct vfio_pci_core_device *vd=
+ev)
+> > >  {
+> > > +     struct acpi_device *adev =3D ACPI_COMPANION(&vdev->pdev->dev);
+> > > +
+> > > +     if (adev)
+> > > +             acpi_remove_notify_handler(adev->handle, ACPI_DEVICE_NO=
+TIFY,
+> > > +                                        vfio_pci_core_acpi_notify);
+> > > +
+> > >       vfio_pci_core_sriov_configure(vdev, 0);
+> > >
+> > >       vfio_unregister_group_dev(&vdev->vdev); =20
+> > =20
+>=20
+
