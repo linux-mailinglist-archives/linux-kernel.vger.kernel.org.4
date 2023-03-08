@@ -2,283 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4198A6B100C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48846B1011
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjCHRPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 12:15:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
+        id S229850AbjCHRQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 12:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbjCHROp (ORCPT
+        with ESMTP id S230041AbjCHRQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 12:14:45 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7225980F
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:13:43 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id j3so10264815wms.2
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:13:43 -0800 (PST)
+        Wed, 8 Mar 2023 12:16:30 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3CEC858C
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 09:15:18 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id k9so10281701ilu.13
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 09:15:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678295622;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mosdFsrcIEkA46HQNIyXRd63tpdvn/eB+TgfpH3JfkU=;
-        b=GXJVfUESLDZAK0xOv0SYSEf9LQ5T16o6gGb1FkoALpEemM1Fs//0/fqwck3ZqatW3/
-         /AfdGaA0kmWGzUJaVqxZN4q5q0ueGZ16l3Bt9dDWZ3gahFPg0wg5E514BO1wfBcLTYhe
-         dpEnknBEG1vY2HRr+RVtqzgiDPODtACoolF94h2BUI8hLdXAmY6ZXl2LR01j1QQRt10N
-         V3xRHWh6VE/gyPEwdCSnuXeyo68hz/BVrETSrlH5HhgA+ZdB4DYtQELW2Ue5cJIWXMm6
-         OeT34T96MjMKjHUSkprbwJOkznAh6W1hY2ylov4fT7ehbcipe8w0q9vVQ64mNcO+9RiZ
-         JOLw==
+        d=chromium.org; s=google; t=1678295700;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Pg2CXYfzc/WTDquji0TW2Mdpepw4Jnm/5KTgUCpFsYs=;
+        b=eA9abkj424I7Bk9UgGWnxfkK72qfNxDVXh0PTzZq0VYGXp/EWghlsM7uUKZ0c45Iyr
+         qWbxyDuJ9lio3AbNH+ZWmetdQ4T4lZ98Asd6y2EA640B1o5m745XpkciuUhOitcItmpz
+         Uo7wr9Rw2US8ksR05895D/qfDO6OlLrtjQdUc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678295622;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mosdFsrcIEkA46HQNIyXRd63tpdvn/eB+TgfpH3JfkU=;
-        b=4e+cRYnaJEIfufmMHTWlike/LfccvkFLLbHDNtYH/8GV2SEL5hjO0mGU7MgePKeoSS
-         Ya/sXbsYEUx/PkD7cuyAkCqx/GXjW9NR+etB5wKqAOm29DT91loSoNPOnxkUyVb9dXqi
-         gH+P9wSF4bjRlsA2Hl//qmNA7opDbO0LrevcTiaOhkoi3TAVN3YymU1fQEAyHzDz6oXf
-         m4OuB/Ukx6V64gL8hl+KruIm3U7Q/UOxeUOjIMJOaRsoxEjuwTEBqC5awuI8SUYvbv0H
-         XmXoV29fHc2lIpPOIF6mI/0Yj1SH+oMLd5c2Lc10Q0IsVtbsW4lWfuDC3dg2GVq1LB07
-         TVQA==
-X-Gm-Message-State: AO0yUKUmtEt+P3Ar7hd+ytu3YSyt5zkY0rcLD0r4bK8F4pKln/TuYoSn
-        n647aszrvYZsNP6L7NpAidjzlA==
-X-Google-Smtp-Source: AK7set/S7MYh0ogOnZeTTceMqUOxg9FOMLMCIrj3ZxPePxHv8doCChoKpcH0BfVFreXSwsaFmpVEFw==
-X-Received: by 2002:a05:600c:3548:b0:3dc:5390:6499 with SMTP id i8-20020a05600c354800b003dc53906499mr17651652wmq.1.1678295622120;
-        Wed, 08 Mar 2023 09:13:42 -0800 (PST)
-Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:fe40:3ba4:afe4:4609])
-        by smtp.gmail.com with ESMTPSA id l15-20020a1c790f000000b003e0238d9101sm11668wme.31.2023.03.08.09.13.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 09:13:41 -0800 (PST)
-From:   Usama Arif <usama.arif@bytedance.com>
-To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
-        brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH v14 12/12] x86/smpboot: Allow parallel bringup for SEV-ES
-Date:   Wed,  8 Mar 2023 17:13:28 +0000
-Message-Id: <20230308171328.1562857-13-usama.arif@bytedance.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230308171328.1562857-1-usama.arif@bytedance.com>
-References: <20230308171328.1562857-1-usama.arif@bytedance.com>
+        d=1e100.net; s=20210112; t=1678295700;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pg2CXYfzc/WTDquji0TW2Mdpepw4Jnm/5KTgUCpFsYs=;
+        b=MJpFOb1MjKdO/kfcp2+40pfHAfwbniLAMs5F/CCrhbJtFkJfXFhGX+EwIE6K8OJxFn
+         23zWj8JmWrRvhqWhih46Kodnbv8xXHSjfe3iEMER0zlLGz3zYbUTJPEN/w/OraEC3Dl0
+         Cs4Urd8bmtpPrhHw4jbuTUZ2Zw97WBaaPIxNEG3LvOKhrA9Oc4eF3vQ+Pc0OYp0e2OPm
+         NiwIJ5Ytv8PX1Pk50r+udRqZijnC8XMPYDUxvFXVDBeyc6LhZazpydY8rV4fNMOYbCt3
+         5XhPArTXkkGDoToNtn9VMqNkPMaLm2Yl2dJwvQhEqhqpUxP5PcF7ivt12MZatAMIYZKK
+         Rl1w==
+X-Gm-Message-State: AO0yUKVnkTI1Wi+GTnne/hiBudwqo4HHOYq7W7UMcmWy9PTENboPsubm
+        aiGdczmP0O8bwrTu7WAL7R3daQ==
+X-Google-Smtp-Source: AK7set9F71PT/ydIVZkDvkzPR36BxReD7EzmnGMuIHot6IWeo4MSNQX9bVhi4Bldc6U3HI93ep5P2g==
+X-Received: by 2002:a05:6e02:1bab:b0:316:61c1:d9d1 with SMTP id n11-20020a056e021bab00b0031661c1d9d1mr14730173ili.24.1678295700632;
+        Wed, 08 Mar 2023 09:15:00 -0800 (PST)
+Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
+        by smtp.gmail.com with UTF8SMTPSA id b18-20020a920b12000000b003157b2c504bsm4709315ilf.24.2023.03.08.09.15.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 09:15:00 -0800 (PST)
+Date:   Wed, 8 Mar 2023 17:14:59 +0000
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        kernel-team@android.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] driver core: Add fw_devlink.sync_state command
+ line param
+Message-ID: <ZAjCk1w3YLRHzNnu@google.com>
+References: <20230224070506.4157738-1-saravanak@google.com>
+ <20230224070506.4157738-2-saravanak@google.com>
+ <CAD=FV=XQnLpD1P8sRBcizTMjCQyHTjaiNvjcPdgyZc5JCzvOtw@mail.gmail.com>
+ <CAGETcx9aRPEU3pW4Dtn_pp5c7dKd7ZhyyKWF6XnfLp+aCxo=OA@mail.gmail.com>
+ <CAD=FV=W=EJ1LCDeKzHJ_X+nEtoqf8OzO1sqKFKOay5gSbUPjpQ@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAD=FV=W=EJ1LCDeKzHJ_X+nEtoqf8OzO1sqKFKOay5gSbUPjpQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Woodhouse <dwmw@amazon.co.uk>
+On Wed, Mar 08, 2023 at 07:39:03AM -0800, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Mar 3, 2023 at 4:53 PM Saravana Kannan <saravanak@google.com> wrote:
+> >
+> > > IMO better would be to say something like when sync_state=strict that
+> > > you'll just leave resources in a high power state
+> >
+> > But this statement is not true either. Just because a device driver
+> > has a sync_state() doesn't mean the device was left in a powered on
+> > state by the bootloader.
+> 
+> Though I guess it's theoretically possible that a device using
+> sync_state will leave resources in a _lower_ power state until
+> sync_state is reached, I'm skeptical if that actually happens. Can you
+> point to any examples? The sync state docs
+> "sysfs-devices-state_synced" actually document that the common case is
+> when the bootloader left a resource enabled and we won't disable the
+> resource until sync_state is reached. That's almost certainly a higher
+> power state.
+> 
+> I would also point to one of the users of sync_state: the interconnect
+> framework. Take a look at commit b1d681d8d324 ("interconnect: Add sync
+> state support"). You can see that in icc_node_add() if we can't read
+> the bandwidth at bootup we end up at the max (INT_MAX). That's exactly
+> the case we actually hit for Qualcomm. It's not that we just avoid
+> touching the resources until sync state is reached--we actually max it
+> out.
 
-Enable parallel bringup for SEV-ES guests. The APs can't actually
-execute the CPUID instruction directly during early startup, but they
-can make the GHCB call directly instead, just as the VC trap handler
-would do.
+Another example is commit 3a39049f88e4 ("soc: qcom: rpmhpd: Use highest
+corner until sync_state"), which does the same for rpmhpds.
 
-Thanks to Sabin for talking me through the way this works.
+> In general, something feels a bit awkward here in defining this as
+> "however the bootloader left it". That concept makes sense for things
+> where we need to manage a handoff from the bootloader for the kernel,
+> but it's not the answer for all things. The bootloader's job is to
+> boot the system and get out of the way, not to init all resources. It
+> only inits resources that it cares about. That means if the bootloader
+> displays a splash screen then it might init resources for the display.
+> if it doesn't display a splash screen it might not. The kernel needs
+> to handle either case.
+> 
+> In general, the problems being solved with sync_state seem to require
+> resources to be left on and in high power until sync state is reached.
+> Today, you define that as "the state the bootloader left it in".
+> ...but if the bootloader didn't leave it in a high power state then
+> you'd need to change this definition.
+> 
+> If you truly want to couch the verbiage, I guess I'd be OK with saying
+> "when sync_state=strict that you'll _LIKELY_ leave resources in a high
+> power state if sync_state is never reached"
+> 
+> 
+> > > While I don't object to this being a kernel command line flag, the
+> > > default should also be a Kconfig option. The kernel command line is
+> > > not a great place for general configuration. As we jam too much stuff
+> > > in the kernel command line it gets unwieldy quickly. IMO:
+> > >
+> > > * Kconfig: the right place for stuff for config options that a person
+> > > building the kernel might want to tweak.
+> > >
+> > > * Kernel command line: the right place for a user of a pre-built
+> > > kernel to tweak; also (sometimes) the right place for the bootloader
+> > > to pass info to the kernel; also a good place for debug options that a
+> > > kernel engineer might want to tweak w/out rebuilding the kernel.
+> > >
+> > > In this case it makes sense for the person building the kernel to
+> > > choose a default that makes sense for the hardware that their kernel
+> > > is targetting. It can also make sense for a user of a pre-built kernel
+> > > to tweak this if their hardware isn't working correctly. Thus it makes
+> > > sense for Kconfig to choose the default and the kernel command line to
+> > > override.
+> >
+> > I don't mind adding a Kconfig to select the default behavior, but
+> > maybe as a separate patch in the future so if there's any debate about
+> > that, you'll at least get this option.
+> 
+> I don't mind it being a separate patch, but it should be part of the
+> initial series.
 
-Suggested-by: Sabin Rapan <sabrapan@amazon.com>
-Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Usama Arif <usama.arif@bytedance.com>
----
- arch/x86/include/asm/sev-common.h |  3 +++
- arch/x86/include/asm/sev.h        |  5 +++++
- arch/x86/include/asm/smp.h        |  5 ++++-
- arch/x86/kernel/head_64.S         | 30 ++++++++++++++++++++++++++++++
- arch/x86/kernel/smpboot.c         | 31 +++++++++++++++++++++++++------
- 5 files changed, 67 insertions(+), 7 deletions(-)
++1
 
-diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
-index b8357d6ecd47..f25df4bd318e 100644
---- a/arch/x86/include/asm/sev-common.h
-+++ b/arch/x86/include/asm/sev-common.h
-@@ -70,6 +70,7 @@
- 	/* GHCBData[63:12] */				\
- 	(((u64)(v) & GENMASK_ULL(63, 12)) >> 12)
- 
-+#ifndef __ASSEMBLY__
- /*
-  * SNP Page State Change Operation
-  *
-@@ -160,6 +161,8 @@ struct snp_psc_desc {
- 
- #define GHCB_RESP_CODE(v)		((v) & GHCB_MSR_INFO_MASK)
- 
-+#endif /* __ASSEMBLY__ */
-+
- /*
-  * Error codes related to GHCB input that can be communicated back to the guest
-  * by setting the lower 32-bits of the GHCB SW_EXITINFO1 field to 2.
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index ebc271bb6d8e..d687a586cafa 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -135,6 +135,10 @@ struct snp_secrets_page_layout {
- 
- #ifdef CONFIG_AMD_MEM_ENCRYPT
- extern struct static_key_false sev_es_enable_key;
-+static inline bool sev_es_active(void)
-+{
-+	return static_branch_unlikely(&sev_es_enable_key);
-+}
- extern void __sev_es_ist_enter(struct pt_regs *regs);
- extern void __sev_es_ist_exit(void);
- static __always_inline void sev_es_ist_enter(struct pt_regs *regs)
-@@ -198,6 +202,7 @@ bool snp_init(struct boot_params *bp);
- void __init __noreturn snp_abort(void);
- int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, unsigned long *fw_err);
- #else
-+static inline bool sev_es_active(void) { return false; }
- static inline void sev_es_ist_enter(struct pt_regs *regs) { }
- static inline void sev_es_ist_exit(void) { }
- static inline int sev_es_setup_ap_jump_table(struct real_mode_header *rmh) { return 0; }
-diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
-index defe76ee9e64..1584f04a7007 100644
---- a/arch/x86/include/asm/smp.h
-+++ b/arch/x86/include/asm/smp.h
-@@ -204,7 +204,10 @@ extern unsigned int smpboot_control;
- /* Control bits for startup_64 */
- #define STARTUP_APICID_CPUID_0B	0x80000000
- #define STARTUP_APICID_CPUID_01	0x40000000
-+#define STARTUP_APICID_SEV_ES	0x20000000
- 
--#define STARTUP_PARALLEL_MASK (STARTUP_APICID_CPUID_01 | STARTUP_APICID_CPUID_0B)
-+#define STARTUP_PARALLEL_MASK (STARTUP_APICID_CPUID_01 | \
-+			       STARTUP_APICID_CPUID_0B | \
-+			       STARTUP_APICID_SEV_ES)
- 
- #endif /* _ASM_X86_SMP_H */
-diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index c35f7c173832..714c2afdbd9a 100644
---- a/arch/x86/kernel/head_64.S
-+++ b/arch/x86/kernel/head_64.S
-@@ -26,6 +26,7 @@
- #include <asm/nospec-branch.h>
- #include <asm/fixmap.h>
- #include <asm/smp.h>
-+#include <asm/sev-common.h>
- 
- /*
-  * We are not able to switch in one step to the final KERNEL ADDRESS SPACE
-@@ -242,6 +243,7 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	 *
- 	 * Bit 31	STARTUP_APICID_CPUID_0B flag (use CPUID 0x0b)
- 	 * Bit 30	STARTUP_APICID_CPUID_01 flag (use CPUID 0x01)
-+	 * Bit 29	STARTUP_APICID_SEV_ES flag (CPUID 0x0b via GHCB MSR)
- 	 * Bit 0-24	CPU# if STARTUP_APICID_CPUID_xx flags are not set
- 	 */
- 	movl	smpboot_control(%rip), %ecx
-@@ -249,6 +251,10 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	jnz	.Luse_cpuid_0b
- 	testl	$STARTUP_APICID_CPUID_01, %ecx
- 	jnz	.Luse_cpuid_01
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+	testl	$STARTUP_APICID_SEV_ES, %ecx
-+	jnz	.Luse_sev_cpuid_0b
-+#endif
- 	andl	$0x0FFFFFFF, %ecx
- 	jmp	.Lsetup_cpu
- 
-@@ -259,6 +265,30 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	shr	$24, %edx
- 	jmp	.Lsetup_AP
- 
-+#ifdef CONFIG_AMD_MEM_ENCRYPT
-+.Luse_sev_cpuid_0b:
-+	/* Set the GHCB MSR to request CPUID 0xB_EDX */
-+	movl	$MSR_AMD64_SEV_ES_GHCB, %ecx
-+	movl	$(GHCB_CPUID_REQ_EDX << 30) | GHCB_MSR_CPUID_REQ, %eax
-+	movl	$0x0B, %edx
-+	wrmsr
-+
-+	/* Perform GHCB MSR protocol */
-+	rep; vmmcall		/* vmgexit */
-+
-+	/*
-+	 * Get the result. After the RDMSR:
-+	 *   EAX should be 0xc0000005
-+	 *   EDX should have the CPUID register value and since EDX
-+	 *   is the target register, no need to move the result.
-+	 */
-+	rdmsr
-+	andl	$GHCB_MSR_INFO_MASK, %eax
-+	cmpl	$GHCB_MSR_CPUID_RESP, %eax
-+	jne	1f
-+	jmp	.Lsetup_AP
-+#endif
-+
- .Luse_cpuid_0b:
- 	mov	$0x0B, %eax
- 	xorl	%ecx, %ecx
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 0dc123a536ab..b4265c5b46da 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1515,15 +1515,29 @@ void __init smp_prepare_cpus_common(void)
-  * We can do 64-bit AP bringup in parallel if the CPU reports its APIC
-  * ID in CPUID (either leaf 0x0B if we need the full APIC ID in X2APIC
-  * mode, or leaf 0x01 if 8 bits are sufficient). Otherwise it's too
-- * hard. And not for SEV-ES guests because they can't use CPUID that
-- * early.
-+ * hard.
-  */
- static bool prepare_parallel_bringup(void)
- {
--	if (IS_ENABLED(CONFIG_X86_32) || cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT))
-+	bool has_sev_es = sev_es_active();
-+
-+	if (IS_ENABLED(CONFIG_X86_32))
- 		return false;
- 
--	if (x2apic_mode) {
-+	/*
-+	 * Encrypted guests other than SEV-ES (in the future) will need to
-+	 * implement an early way of finding the APIC ID, since they will
-+	 * presumably block direct CPUID too. Be kind to our future selves
-+	 * by warning here instead of just letting them break. Parallel
-+	 * startup doesn't have to be in the first round of enabling patches
-+	 * for any such technology.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT) && !has_sev_es) {
-+		pr_info("Disabling parallel bringup due to guest memory encryption\n");
-+		return false;
-+	}
-+
-+	if (x2apic_mode || has_sev_es) {
- 		if (boot_cpu_data.cpuid_level < 0x0b)
- 			return false;
- 
-@@ -1532,8 +1546,13 @@ static bool prepare_parallel_bringup(void)
- 			return false;
- 		}
- 
--		pr_debug("Using CPUID 0xb for parallel CPU startup\n");
--		smpboot_control = STARTUP_APICID_CPUID_0B;
-+		if (has_sev_es) {
-+			pr_debug("Using SEV-ES CPUID 0xb for parallel CPU startup\n");
-+			smpboot_control = STARTUP_APICID_SEV_ES;
-+		} else {
-+			pr_debug("Using CPUID 0xb for parallel CPU startup\n");
-+			smpboot_control = STARTUP_APICID_CPUID_0B;
-+		}
- 	} else {
- 		/* Without X2APIC, what's in CPUID 0x01 should suffice. */
- 		if (boot_cpu_data.cpuid_level < 0x01)
--- 
-2.25.1
+> > > Specifically, I think this warning message gets printed out after
+> > > we've given up waiting for devices to show up. At this point
+> > > -EPROBE_DEFER becomes an error that we won't retry.
+> >
+> > This is not true. We will always retry on an -EPROBE_DEFER, even after timeout.
+> 
+> OK, so I think this is the main point of contention here, so let's get
+> to the bottom of it first and then we can address anything else.
+> 
+> I guess I'm trying to figure out what "deferred_probe_timeout" is
+> supposed to be about. From reading
+> driver_deferred_probe_check_state(), I see that the idea is that once
+> the timeout expires then we'll start returning -ETIMEDOUT when we used
+> to return -EPROBE_DEFER. I guess I mispoke then. You're correct that
+> -EPROBE_DEFER will still be retried. That being said, things that used
+> to be retired (because they returned -EPROBE_DEFER) will now become
+> permanent/non-retired errors (because they return -ETIMEDOUT).
+> 
+> My point is that if we ever actually hit that case (where we return
+> -ETIMEDOUT instead of -EPROBE_DEFER) we really enter a state where
+> it's not going to be great to load any more drivers. Once a driver
+> failed to probe (because it got back an -ETIMEDOUT instead of
+> -EPROBE_DEFER) then the user needs to manually unbind/rebind the
+> device to retry. That's not a good state.
+> 
+> So the above is the crux of my argument that once
+> "deferred_probe_timeout" fires that the system really isn't in good
+> shape to load more drivers.
+> 
+> So looking more carefully, I think I can understand where you're
+> coming from. Specifically I note that very few subsystems have "opted
+> in" to the deferred_probe_timeout on ToT. I can also see that recently
+> you made the effort to delete driver_deferred_probe_check_state(),
+> though those were reverted. That means that, as it stands, devices
+> will _probably_ not end up with the problem I describe above (unless
+> they depend on a subsystem that has opted-in). ...and, if your plans
+> come to fruition, then eventually we'll never hit it.
+> 
+> Where does that leave us? I guess I will step back on my assertion
+> that when the timeout fires that drivers can't load anymore. Certainly
+> the state that ToT Linux is in is confusing. "deferred_probe_timeout"
+> is still documented (in kernel-parameters.txt) to cause us to "give
+> up" waiting for dependencies. ...and it still causes a few subsystems
+> to give up. ...but I guess it mostly works.
+> 
+> 
+> > > I would perhaps also make it sound a little scarier since,
+> >
+> > I definitely don't want to make it sound scarier and get everyone to
+> > enable the timeout by default without actually knowing if it has a
+> > power impact on their system.
+> >
+> > > IMO, this
+> > > is a problem that really shouldn't be "shipped" if this is an embedded
+> > > kernel. Maybe something like:
+> >
+> > This is how it's shipped on all Android devices in the past 2 years.
+> > So it's not a global problem like you make it to be.
+> 
+> You're saying devices _shipped_ but booted up where devices never
+> reached sync_state? ...and that's not a power consumption problem???
+> I'm not saying that the sync_state concept couldn't ship, I'm saying
+> that if this printout shows up in boot logs that it's highly likely
+> there's a problem that needs to be fixed and that's causing extra
+> power consumption. That's why I want the printout to sound scarier.
 
++1
