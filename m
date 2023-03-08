@@ -2,288 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCE16B10C6
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B7C6B10CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjCHSM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:12:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S230091AbjCHSNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:13:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjCHSMx (ORCPT
+        with ESMTP id S230062AbjCHSNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:12:53 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC32CEFB6;
-        Wed,  8 Mar 2023 10:12:38 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id l15-20020a9d7a8f000000b0069447f0db6fso9453395otn.4;
-        Wed, 08 Mar 2023 10:12:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678299158;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7v3Me2y7t7dCURwLEAGtEDEw0TqjC7V3ocAkq0mf58g=;
-        b=zh6UuwyK+gR/e7fEh5drwQJqfzxjJkpJwy/jvRYhZAlf8WiAf0ICGJe42IMCRVbY8t
-         8AtP9oz7qxhNjXGSVLjsRhikjtIS0OB5fk3egoBFzaD+14B0nrPdx019FUCZQKRXP6Br
-         n5YpqiOvw6IDQ+l0uxz2vP/yyPP8AK3yPWBRETPgVJZ7NYJyFDg8wAYTZEq97es5LgfA
-         CgttVQlEEweST+YmXD8WGZY8pO3tQqJHqMRnEJPgjNKly8nW6XtZpsbTEFOisqcwNZcQ
-         wvEh9DMgviJJqjXz2a4Q6X1Ck4cD75iM1VPEY6NEwWaED9hW85hoHGkJM4j/A5XkM+b8
-         MMUw==
-X-Gm-Message-State: AO0yUKVRvIqLscEZEkHCQFxL5E1bQPDdtjAmw0Rfi3OiENpMxpmLTsbg
-        joKnzqUHVXQp+ySSKlrD7A==
-X-Google-Smtp-Source: AK7set+9aSSHh9EYLXwvCVkULUEr9F1S3fp5AOhM216juwlOAQ55mt9toBGuxByRpZcKPLlBVPwBlQ==
-X-Received: by 2002:a05:6830:920:b0:68b:c60c:de58 with SMTP id v32-20020a056830092000b0068bc60cde58mr11918010ott.7.1678299157654;
-        Wed, 08 Mar 2023 10:12:37 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t20-20020a056830083400b0068bbf5f2e49sm6678351ots.37.2023.03.08.10.12.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 10:12:37 -0800 (PST)
-Received: (nullmailer pid 3527197 invoked by uid 1000);
-        Wed, 08 Mar 2023 18:12:36 -0000
-Date:   Wed, 8 Mar 2023 12:12:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: Add StarFive JH7110 USB
- dt-binding
-Message-ID: <20230308181236.GA3512870-robh@kernel.org>
-References: <20230308082800.3008-1-minda.chen@starfivetech.com>
- <20230308082800.3008-2-minda.chen@starfivetech.com>
+        Wed, 8 Mar 2023 13:13:15 -0500
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF0112BD2;
+        Wed,  8 Mar 2023 10:12:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1678299177; x=1709835177;
+  h=date:from:to:cc:message-id:references:mime-version:
+   content-transfer-encoding:in-reply-to:subject;
+  bh=XPPM5cG1Lc8BsmZVegn83SYjFbU765xkniaab9xstAw=;
+  b=jsk9bG+VLj4zCW4VEQsLkiOpSb2Qd9yvoC/OgmmCSXxI71Yx/2efhxp0
+   FDQS66VRqB71d2mD1yQL4i6xkyRMsWF26WJq7nIjNvfvFlDDMHhpwVGTJ
+   jc1328bvQ2vgpMldNN3WeP+NTOrCTMMYMS22k8uTmpMonMMB0ipuLB4y+
+   U=;
+X-IronPort-AV: E=Sophos;i="5.98,244,1673913600"; 
+   d="scan'208";a="268068705"
+Subject: Re: [PATCH] media: venus: dec: Fix capture formats enumeration order
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-366646a6.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 18:12:55 +0000
+Received: from EX13MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-366646a6.us-east-1.amazon.com (Postfix) with ESMTPS id 97F6DA2702;
+        Wed,  8 Mar 2023 18:12:49 +0000 (UTC)
+Received: from EX19D047UWB002.ant.amazon.com (10.13.138.34) by
+ EX13MTAUWB002.ant.amazon.com (10.43.161.202) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.45; Wed, 8 Mar 2023 18:12:48 +0000
+Received: from amazon.com (10.187.170.17) by EX19D047UWB002.ant.amazon.com
+ (10.13.138.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.24; Wed, 8 Mar
+ 2023 18:12:47 +0000
+Date:   Wed, 8 Mar 2023 11:12:45 -0700
+From:   Jordan Crouse <jorcrous@amazon.com>
+To:     Enric Balletbo i Serra <eballetb@redhat.com>
+CC:     Javier Martinez Canillas <javierm@redhat.com>,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, Albert Esteve <aesteve@redhat.com>,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Sergio Lopez <slp@redhat.com>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-media@vger.kernel.org>
+Message-ID: <20230308181245.nbnwkdtdnsldd65l@amazon.com>
+References: <20230210081835.2054482-1-javierm@redhat.com>
+ <20230303220918.qr5ydbin3nye3qtz@amazon.com>
+ <87h6uydwel.fsf@minerva.mail-host-address-is-not-set>
+ <3d0315fa-14ca-dc34-81ae-467d9ed5133d@quicinc.com>
+ <87sfeh0yjn.fsf@minerva.mail-host-address-is-not-set>
+ <CALE0LRvR=DjUp2_DBuPQkEr9jvzGH4Mx4-7=rc6zOw1APQdyeQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20230308082800.3008-2-minda.chen@starfivetech.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALE0LRvR=DjUp2_DBuPQkEr9jvzGH4Mx4-7=rc6zOw1APQdyeQ@mail.gmail.com>
+X-Originating-IP: [10.187.170.17]
+X-ClientProxiedBy: EX19D046UWA001.ant.amazon.com (10.13.139.112) To
+ EX19D047UWB002.ant.amazon.com (10.13.138.34)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 04:27:58PM +0800, Minda Chen wrote:
-> Add StarFive JH7110 SoC USB 3.0 phy dt-binding.
-> USB controller is cadence USB 3.0 IP.
+On Tue, Mar 07, 2023 at 05:20:18PM +0100, Enric Balletbo i Serra wrote:
+> Hi all,
 > 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> ---
->  .../bindings/phy/starfive,jh7110-usb-phy.yaml | 158 ++++++++++++++++++
->  1 file changed, 158 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+> On Tue, Mar 7, 2023 at 9:13 AM Javier Martinez Canillas
+> <javierm@redhat.com> wrote:
+> >
+> > Dikshita Agarwal <quic_dikshita@quicinc.com> writes:
+> >
+> > Hello Dikshita,
+> >
+> > > On 3/6/2023 3:38 PM, Javier Martinez Canillas wrote:
+> > >> Jordan Crouse <jorcrous@amazon.com> writes:
+> > >>
+> > >> Hello Jordan,
+> > >>
+> > >>> On Fri, Feb 10, 2023 at 09:18:35AM +0100, Javier Martinez Canillas wrote:
+> > >>>> Commit 9593126dae3e ("media: venus: Add a handling of QC08C compressed
+> > >>>> format") and commit cef92b14e653 ("media: venus: Add a handling of QC10C
+> > >>>> compressed format") added support for the QC08C and QC10C compressed
+> > >>>> formats respectively.
+> > >>>>
+> > >>>> But these also caused a regression, because the new formats where added
+> > >>>> at the beginning of the vdec_formats[] array and the vdec_inst_init()
+> > >>>> function sets the default format output and capture using fixed indexes
+> > >>>> of that array:
+> > >>>>
+> > >>>> static void vdec_inst_init(struct venus_inst *inst)
+> > >>>> {
+> > >>>> ...
+> > >>>>    inst->fmt_out = &vdec_formats[8];
+> > >>>>    inst->fmt_cap = &vdec_formats[0];
+> > >>>> ...
+> > >>>> }
+> > >>>>
+> > >>>> Since now V4L2_PIX_FMT_NV12 is not the first entry in the array anymore,
+> > >>>> the default capture format is not set to that as it was done before.
+> > >>>>
+> > >>>> Both commits changed the first index to keep inst->fmt_out default format
+> > >>>> set to V4L2_PIX_FMT_H264, but did not update the latter to keep .fmt_out
+> > >>>> default format set to V4L2_PIX_FMT_NV12.
+> > >>>>
+> > >>>> Rather than updating the index to the current V4L2_PIX_FMT_NV12 position,
+> > >>>> let's reorder the entries so that this format is the first entry again.
+> > >>>>
+> > >>>> This would also make VIDIOC_ENUM_FMT report the V4L2_PIX_FMT_NV12 format
+> > >>>> with an index 0 as it did before the QC08C and QC10C formats were added.
+> > >>>>
+> > >>>> Fixes: 9593126dae3e ("media: venus: Add a handling of QC08C compressed format")
+> > >>>> Fixes: cef92b14e653 ("media: venus: Add a handling of QC10C compressed format")
+> > >>>> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> > >>> I just came across this issue independently and can confirm this patch fixes
+> > >>> the GStreamer V4L2 decoder on QRB5165.
+> > >>>
+> > >>> Tested-by: Jordan Crouse <jorcrous@amazon.com>
+> > >>>
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-> new file mode 100644
-> index 000000000000..daa88d065deb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-
-Filename should match the compatible. The filename seems more correct 
-than the compatible...
-
-> @@ -0,0 +1,158 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/starfive,jh7110-usb-phy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: StarFive USB 2.0 and 3.0 PHY
-> +
-> +maintainers:
-> +  - Minda Chen<minda.chen@starfivetech.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - const: starfive,jh7110-usb
-
-What's the USB controller called?
-
-> +
-> +  reg:
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: usb3
-> +      - const: usb2
-> +
-> +  clocks:
-> +    items:
-> +      - description: usb 125m clock
-> +      - description: app 125m clock
-> +      - description: lpm clock
-> +      - description: stb clock
-> +      - description: apb clock
-> +      - description: axi clock
-> +      - description: utmi apb clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: usb_125m
-> +      - const: usb0_app_125
-> +      - const: usb0_lpm
-> +      - const: usb0_stb
-> +      - const: usb0_apb
-> +      - const: usb0_axi
-> +      - const: usb0_utmi_apb
-
-usb_ and usb0_ is redundant, drop.
-
-> +
-> +  resets:
-> +    items:
-> +      - description: USB0_PWRUP reset
-> +      - description: USB0_APB reset
-> +      - description: USB0_AXI reset
-> +      - description: USB0_UTMI_APB reset
-> +
-> +  starfive,sys-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-
-Are there multiple entries of phandle+offset because this says there 
-are. You want '- items:' here to limit it to 1 phandle+offset.
-
-> +        - description: phandle to System Register Controller sys_syscon node.
-> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
-> +    description:
-> +      The phandle to System Register Controller syscon node and the offset
-> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
-> +
-> +  starfive,stg-syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      items:
-
-Same here.
-
-> +        - description: phandle to System Register Controller stg_syscon node.
-> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
-> +    description:
-> +      The phandle to System Register Controller syscon node and the offset
-> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
-> +      for USB.
-> +
-> +  dr_mode:
-
-Usually this belongs in the controller node.
-
-> +    description: PHY mode.
-> +    enum:
-> +      - host
-> +      - peripheral
-> +      - otg
-> +
-> +  "#address-cells":
-> +    maximum: 2
-> +
-> +  "#size-cells":
-> +    maximum: 2
-> +
-> +  ranges: true
-> +
-> +  starfive,usb2-only:
-> +    type: boolean
-> +    description: Set USB using usb 2.0 phy. Supprt USB 2.0 only
-
-The 'maximum-speed' property in the controller should be enough. Why is 
-this needed.
-
-Being a PHY, you are missing #phy-cells.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - clocks
-> +  - clock-names
-> +  - resets
-> +  - starfive,sys-syscon
-> +  - starfive,stg-syscon
-> +  - dr_mode
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - ranges
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    type: object
-> +    description: |
-> +      usbphy node should have '1' usb controller subnode.
-> +      It could be Cadence USB3 DRD controller.
-> +      Cadence USB3 should follow the bindings specified in
-> +      Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-
-Why is the controller a child of the phy?
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    usbphy@10200000 {
-> +      compatible = "starfive,jh7110-usb";
-> +      reg = <0x10210000 0x1000>,
-> +            <0x10200000 0x1000>;
-> +      reg-names = "usb3", "usb2";
-> +      clocks = <&syscrg 95>,
-> +               <&stgcrg 6>,
-> +               <&stgcrg 4>,
-> +               <&stgcrg 5>,
-> +               <&stgcrg 1>,
-> +               <&stgcrg 3>,
-> +               <&stgcrg 2>;
-> +      clock-names = "usb_125m", "usb0_app_125", "usb0_lpm",
-> +                    "usb0_stb", "usb0_apb", "usb0_axi", "usb0_utmi_apb";
-> +      resets = <&stgcrg 10>,
-> +               <&stgcrg 8>,
-> +               <&stgcrg 7>,
-> +               <&stgcrg 9>;
-> +      starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
-> +      starfive,sys-syscon = <&sys_syscon 0x18>;
-> +      dr_mode = "host";
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-> +      ranges;
-> +
-> +      usb@10100000 {
-> +        compatible = "cdns,usb3";
-
-This needs a platform specific compatible.
-
-> +        reg = <0x10100000 0x10000>,
-> +              <0x10110000 0x10000>,
-> +              <0x10120000 0x10000>;
-> +        reg-names = "otg", "xhci", "dev";
-> +        interrupts = <100>, <108>, <110>;
-> +        interrupt-names = "host", "peripheral", "otg";
-> +        phy-names = "cdns3,usb3-phy", "cnds3,usb2-phy";
-> +        maximum-speed = "super-speed";
-> +      };
-> +    };
-> -- 
-> 2.17.1
+> This patch also fixes an issue running a V4L2 based decoder on Acer
+> Chromebook Spin 513 which is very similar to the HP X2 Chromebook, not
+> surprising as both platforms are basically the same, but anyway:
 > 
+> Tested-by: Enric Balletbo i Serra <eballetbo@redhat.com>
+> 
+> >
+> > >> Thanks for testing it!
+> > >>
+> > >> Stanimir, can we please get this for v6.3 as well?
+> > >
+> > > Hi Javier, Jordan
+> > >
+> > > Could you please explain what regression/issue you see with patch?
+> > >
+> > > venus hardware supports QC08C which provides better performance hence
+> > > driver is publishing it as preferred color format.
+> > >
+> > > if client doesn't support this or want to use any other format, they can
+> > > set the desired format with s_fmt.
+> > >
+> 
+> I guess general clients are unlikely to support this format as it is
+> an opaque intermediate format used by Qualcomm platforms, and the
+> purpose of that format is to be used for other Qualcomm hardware
+> blocks that know about this format. So I'd say that returning by
+> default a more common format is more reliable. Using your argument if
+> someone wants to use QC08C (because he knows it can use it) set with
+> s_fmt will do the trick too.
+> 
+> In any case, the problem here seems to be that s_fmt is not working,
+> so it would be nice to have a solution for that first and meanwhile do
+> not change the old behaviour. Just my two cents.
+> 
+> Best regards,
+>  Enric Balletbo
+> 
+> >
+> > VIDIOC_S_FMT is currently broken for venus, at least on the HP X2
+> > Chromebook and only the default works. I'm still investigating why
+> > vdec_s_fmt() is not working.
+> >
+> > But basically, if VIDIOC_S_FMT is called for the capture queue,
+> > then later the VIDIOC_G_FMT ioctl fails with -EINVAL. This is due
+> > the following condition checked in vdec_check_src_change():
+> >
+> > static int vdec_check_src_change(struct venus_inst *inst)
+> > {
+> > ...
+> >         if (inst->subscriptions & V4L2_EVENT_SOURCE_CHANGE &&
+> >             inst->codec_state == VENUS_DEC_STATE_INIT &&
+> >             !inst->reconfig)
+> >                 return -EINVAL;
+> > ...
+> > }
+> >
+> > But regardless, I think that it would be better for a driver to
+> > not change the order of advertised VIDIOC_ENUM_FMT pixel formats.
+> >
+> > Because what happens now is that a decoding that was previously
+> > working by default is not working anymore due a combination of
+> > the default being changed and S_FMT not working as expected.
+
+For my part, I was using the gstreamer v4l2 decoder which for some reason tries
+to verify it can support whatever format it gets with G_FMT *before*
+trying a S_FMT. I can't confirm or deny if S_FMT currently works or not.
+
+That said, I entirely agree with Javier. While it might be more
+bandwidth efficient, QC08C is a obscure format. It is far more likely that the
+average open source user would rather use a well known output format and, as
+has been mentioned, once S_FMT is fixed those in the know can use the other
+formats if they are working with other Qualcomm hardware blocks.
+
+Jordan
