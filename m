@@ -2,104 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BF96B009B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6E96B00AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjCHIN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:13:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54918 "EHLO
+        id S229762AbjCHIRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:17:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCHINM (ORCPT
+        with ESMTP id S229695AbjCHIRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:13:12 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E14D659C
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:13:07 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3288CpML036718;
-        Wed, 8 Mar 2023 02:12:51 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678263171;
-        bh=ZAKzkH4bhOF+KFTeADwqrqZoPLAYaOM3ZPL0M1civv4=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=IgsRRn++GzzUfUta4lIqphzIqJjrXpgfikN0IbLa4/klkziZb1YYzzpLcouU/WR1f
-         C9qnp9e+WQJ/IdxD+u1RUhVJVzaqIyJQiXcV8e24zUhP8lMLIiAIPMqwsDugdbkVO6
-         bQM2kgI/QNDQgJf1qo5k0uI/iJi6fqgASyG9D6WI=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3288Cp3c051142
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 8 Mar 2023 02:12:51 -0600
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 8
- Mar 2023 02:12:50 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 8 Mar 2023 02:12:50 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3288CoZd038184;
-        Wed, 8 Mar 2023 02:12:50 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Santosh Shilimkar <ssantosh@kernel.org>,
-        Keerthy <j-keerthy@ti.com>, Tony Lindgren <tony@atomide.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Miaoqian Lin <linmq006@gmail.com>
-CC:     Nishanth Menon <nm@ti.com>
-Subject: Re: [PATCH] soc: ti: pm33xx: Fix refcount leak in am33xx_pm_probe
-Date:   Wed, 8 Mar 2023 02:12:50 -0600
-Message-ID: <167826314024.381778.9401502729139366282.b4-ty@ti.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230106054022.947529-1-linmq006@gmail.com>
-References: <20230106054022.947529-1-linmq006@gmail.com>
+        Wed, 8 Mar 2023 03:17:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B33656514;
+        Wed,  8 Mar 2023 00:17:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48D4DB81B36;
+        Wed,  8 Mar 2023 08:17:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D68FDC4339B;
+        Wed,  8 Mar 2023 08:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678263430;
+        bh=/DmKvE64jy+VQaJF7BJjUBA7XhjwlHhUA/RA1GKDLlE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tsq5LR825UCsRWx880DWBOUIq5P8s0+0KUpvRKLXIycUa6DZ7Qcl7qwP7VdJz2LFF
+         C35KpHuHYZ8o8kIogOgMq1fJT3wyAc5xu12wDzcQSpqcBMrb78N5vkBYHIPPjA3sDt
+         h+RNz2VwWSIEOmk1QgxCN6GBjdDw+tkeSRMI4VE9GADUS0vcmt1bH9gXog2aduJzTJ
+         iS1p1LqBgCqfkrPKlXfPQJeQTRvs13L+dMX0y8+r+e6plLI/Rfdxw751vhVuZv6Xlq
+         fMqlKYMn2MiQgKLjmSgSYtGrmZlotd/+TZ3EfPsj0b1KT+Z7ltQdNvjzJE5cFNI8H3
+         2GyuitlKZnyPQ==
+Date:   Wed, 8 Mar 2023 08:17:05 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 0000/1001] 6.2.3-rc1 review
+Message-ID: <2d40fc92-a4e0-48db-955c-edadc3ff12e6@spud>
+References: <20230307170022.094103862@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gVp6IIn9yD+fl6f4"
+Content-Disposition: inline
+In-Reply-To: <20230307170022.094103862@linuxfoundation.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaoqian Lin,
 
-On Fri, 06 Jan 2023 09:40:22 +0400, Miaoqian Lin wrote:
-> wkup_m3_ipc_get() takes refcount, which should be freed by
-> wkup_m3_ipc_put(). Add missing refcount release in the error paths.
-> 
-> 
+--gVp6IIn9yD+fl6f4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I have applied the following to branch ti-drivers-soc-next on [1].
-Thank you!
+On Tue, Mar 07, 2023 at 05:46:12PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.3 release.
+> There are 1001 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-[1/1] soc: ti: pm33xx: Fix refcount leak in am33xx_pm_probe
-      commit: 8f3c307b580a4a6425896007325bddefc36e8d91
+No issues here either from my pov,
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Thanks,
+Conor.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--gVp6IIn9yD+fl6f4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZAhEfgAKCRB4tDGHoIJi
+0lX8AP9XLKXjd6SdRxkTEm1orgTSQadbTqBVBTikZPE5PU0c0gD7B4B1ii8bnGmt
+6rjFZSF5yHbJ0d9DZVmHu+hHHHngOgU=
+=fJhz
+-----END PGP SIGNATURE-----
 
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-
+--gVp6IIn9yD+fl6f4--
