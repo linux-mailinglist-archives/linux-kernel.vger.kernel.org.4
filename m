@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A87556AFBB3
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:03:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D564E6AFBB6
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:04:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjCHBD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 20:03:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S229764AbjCHBEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 20:04:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCHBDZ (ORCPT
+        with ESMTP id S229525AbjCHBEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 20:03:25 -0500
+        Tue, 7 Mar 2023 20:04:22 -0500
 Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE21974A7
-        for <linux-kernel@vger.kernel.org>; Tue,  7 Mar 2023 17:03:12 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PWYrk5DBCz16Nxd;
-        Wed,  8 Mar 2023 09:00:22 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA07A224D;
+        Tue,  7 Mar 2023 17:04:20 -0800 (PST)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PWYt34p8Sz16Nxd;
+        Wed,  8 Mar 2023 09:01:31 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 8 Mar 2023 09:03:09 +0800
-Message-ID: <4f0970e5-1a9d-4e07-c368-5a96a6da9e71@huawei.com>
-Date:   Wed, 8 Mar 2023 09:03:09 +0800
+ 15.1.2507.21; Wed, 8 Mar 2023 09:04:18 +0800
+Message-ID: <0f0ac9eb-1432-a61f-717f-88bd3d6fa7fc@huawei.com>
+Date:   Wed, 8 Mar 2023 09:04:18 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 2/3] mm/damon/paddr: minor refactor of damon_pa_young()
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v5 1/2] ext4: commit super block if fs record error when
+ journal record without error
 Content-Language: en-US
-To:     SeongJae Park <sj@kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <damon@lists.linux.dev>
-References: <20230307180023.152415-1-sj@kernel.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20230307180023.152415-1-sj@kernel.org>
+To:     Ye Bin <yebin@huaweicloud.com>, <tytso@mit.edu>,
+        <adilger.kernel@dilger.ca>, <linux-ext4@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
+        Ye Bin <yebin10@huawei.com>
+References: <20230307061703.245965-1-yebin@huaweicloud.com>
+ <20230307061703.245965-2-yebin@huaweicloud.com>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20230307061703.245965-2-yebin@huaweicloud.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -50,82 +53,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/3/7 14:17, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+>
+> Now, 'es->s_state' maybe covered by recover journal. And journal errno
+> maybe not recorded in journal sb as IO error. ext4_update_super() only
+> update error information when 'sbi->s_add_error_count' large than zero.
+> Then 'EXT4_ERROR_FS' flag maybe lost.
+> To solve above issue just recover 'es->s_state' error flag after journal
+> replay like error info.
+>
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
 
-On 2023/3/8 2:00, SeongJae Park wrote:
-> On Tue, 7 Mar 2023 09:22:33 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
-> 
->>
->>
->> On 2023/3/7 5:27, SeongJae Park wrote:
->>> Hi Kefeng,
->>>
->>> On Mon, 6 Mar 2023 09:56:49 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->>>
->>>>
->>>>
->>>> On 2023/3/6 9:10, Kefeng Wang wrote:
->>>>>
->>>>>
->>>>> On 2023/3/4 2:39, SeongJae Park wrote:
->>>>>> Hi Kefeng,
->>>>>>
->>>>>> On Fri, 3 Mar 2023 16:43:42 +0800 Kefeng Wang
->>>>>> <wangkefeng.wang@huawei.com> wrote:
->>>>>>
->>>>>>> Omit three lines by unified folio_put(), and make code more clear.
->>>>>>>
->>>>>>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->>>>>>> ---
->>>>>>>     mm/damon/paddr.c | 11 ++++-------
->>>>>>>     1 file changed, 4 insertions(+), 7 deletions(-)
->>>>>>>
->>>>>>> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
->>>>>>> index 3fda00a0f786..2ef9db0189ca 100644
->>>>>>> --- a/mm/damon/paddr.c
->>>>>>> +++ b/mm/damon/paddr.c
->>>>>>> @@ -130,24 +130,21 @@ static bool damon_pa_young(unsigned long paddr,
->>>>>>> unsigned long *folio_sz)
->>>>>>>                 accessed = false;
->>>>>>>             else
->>>>>>>                 accessed = true;
->>>>>>> -        folio_put(folio);
->>>>>>>             goto out;
->>>>>>
->>>>>> Because you moved 'out' label to not include *folio_sz setting,
->>>>>> folio_sz will
->>>>>> not set in this case.  It should be set.
->>>>> oh, it should be fixed.
->>>>>>
->>>>>>>         }
->>>>>>>         need_lock = !folio_test_anon(folio) || folio_test_ksm(folio);
->>>>>>> -    if (need_lock && !folio_trylock(folio)) {
->>>>>>> -        folio_put(folio);
->>>>>>> -        return false;
->>>>>>> -    }
->>>>
->>>> Hi SJ,  apart from above issue, it looks that this branch need the
->>>> folio_size() setting, right?
->>>
->>> folio_sz is effectively used by caller of damon_pa_young() only if this
->>> function returns true, so this branch doesn't need to set folio_sz.
->>
->> __damon_pa_check_access() store last_addr, last_accessed and
->> last_folio_sz, even damon_pa_young() return false, the following check
->> still use last_folio_sz,
->>
->>     ALIGN_DOWN(last_addr, last_folio_sz) == ALIGN_DOWN(r->sampling_addr,
->> last_folio_sz)
->>
->> but last_folio_sz is not up to date, so I think it need to update, and
->> update last_folio_sz is harmless, which could let's unify the return
->> path, correct me if I am wrong.
-> 
-> Ah, you're right.  Thank you for kind explanation.  I was out of my mind for
-> some reason.  Maybe we could just do 'goto out' in the branch.
 
-Yes, will update this patchset with this change.
-> 
-> 
-> Thanks,
-> SJ
+Looks good to me.
+
+Reviewed-by: Baokun Li <libaokun1@huawei.com>
+
+
+> ---
+>   fs/ext4/super.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+>
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 88f7b8a88c76..dfa31eea1346 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -5920,6 +5920,7 @@ static int ext4_load_journal(struct super_block *sb,
+>   		err = jbd2_journal_wipe(journal, !really_read_only);
+>   	if (!err) {
+>   		char *save = kmalloc(EXT4_S_ERR_LEN, GFP_KERNEL);
+> +
+>   		if (save)
+>   			memcpy(save, ((char *) es) +
+>   			       EXT4_S_ERR_START, EXT4_S_ERR_LEN);
+> @@ -5928,6 +5929,14 @@ static int ext4_load_journal(struct super_block *sb,
+>   			memcpy(((char *) es) + EXT4_S_ERR_START,
+>   			       save, EXT4_S_ERR_LEN);
+>   		kfree(save);
+> +		es->s_state |= cpu_to_le16(EXT4_SB(sb)->s_mount_state &
+> +					   EXT4_ERROR_FS);
+> +		/* Write out restored error information to the superblock */
+> +		if (!bdev_read_only(sb->s_bdev)) {
+> +			int err2;
+> +			err2 = ext4_commit_super(sb);
+> +			err = err ? : err2;
+> +		}
+>   	}
+>   
+>   	if (err) {
+-- 
+With Best Regards,
+Baokun Li
+.
