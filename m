@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D6E6B1372
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 21:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A067D6B1379
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 22:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCHU6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 15:58:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
+        id S229801AbjCHVAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 16:00:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjCHU6r (ORCPT
+        with ESMTP id S229545AbjCHVAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 15:58:47 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8D98C83D
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 12:58:45 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id f18so23021131lfa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 12:58:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678309124;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uNJiJRqzTIJmEZGIdAoWu3k4M01PZusme6WbXOwMXeU=;
-        b=s2qIda+Ogt9+xzbriwpMjHJZyITeYygTX8UZbSnQcMAvlzbnQE+F6r+98c9l0ATB9j
-         GATbrKf284ZP/7TYJbqjVKgChQwuiiEY82tNaUYBksKBzs+PxMcV1G/KlHWedTgDVKn/
-         nMcvfVFn2DIGBDYxxqRlAdN5cQ1pnjMwa5FrPwaWfppR1JUafs+X5J8b+GVBd4fv7BQm
-         veLJaJMzhTIYtJR+lEp3GtMDQXEw9Win8tvDv7dGnH9yooEhua3Jl1FIMD+2BVgjHNdo
-         qbjHmLxFTqTKfLf8lobJXPGFA9S2kNzqRh4O7iSijU3q0BYxOpSbeUskTvR5cjb7FwWv
-         wYRQ==
+        Wed, 8 Mar 2023 16:00:19 -0500
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AD5A80928;
+        Wed,  8 Mar 2023 13:00:19 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso9711787oti.8;
+        Wed, 08 Mar 2023 13:00:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678309124;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678309218;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNJiJRqzTIJmEZGIdAoWu3k4M01PZusme6WbXOwMXeU=;
-        b=G/xh0jqdrB4dslCz0hiZcDjmd5bPCmZtXggBTMQVUojlUEDlIh+S87UzxvmcEzkVWA
-         KEwXi06tLjgjA7zEOnR8U3UR7F1abC7A0bemTlpeZa62Ox+VO2lrwbdiD7r7VHERZsEA
-         0UgOk1gtKtSIe98KnV0fYk9AwRVl2G7G6fQtT6IexVISscAG/GaKfBZCkR8Uc45nu5R0
-         HQ+6xtzmqRhYRnwp/L5T3RbkRPDIZQc60qPYjoLKada0YVPSUVRhlSgf/SuYhOTaXlyB
-         4F7blMq4pvYtcgYLQ2kmDK/X8HR+OkjcBlEv7wG7T32Q5J4wewbeUQGMwV0KoMzk4wJQ
-         c1NQ==
-X-Gm-Message-State: AO0yUKVQ7CvLdreqsuWncYM5+oYun49k24fzMv9ge9UytNhS+ZjqkI22
-        hRSZ+WNEMyDa1sQeXVFnU+z5UQ==
-X-Google-Smtp-Source: AK7set801/CtXpPx1Z9upNz1VTWuexNLTuuutWkKmfXN/t0hFJPIRYY7dwhJWUFLtc2A04pLrzZOAg==
-X-Received: by 2002:ac2:46e5:0:b0:4db:3e31:20fa with SMTP id q5-20020ac246e5000000b004db3e3120famr5515822lfo.53.1678309124067;
-        Wed, 08 Mar 2023 12:58:44 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id t5-20020ac25485000000b004dc4b0a0543sm2441721lfk.58.2023.03.08.12.58.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Mar 2023 12:58:43 -0800 (PST)
-Message-ID: <2563238d-b480-1717-4afa-dba52159508b@linaro.org>
-Date:   Wed, 8 Mar 2023 21:58:42 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8450-hdk: align WCD9385 reset pin
- with downstream config
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        bh=6ZdO8B4SE0hK6baO5Lz8pAHYpW240oNtgnEAr4GbZks=;
+        b=qluHPesACLVoZJL9jpEzqkHw38CHYqRLD0lhlndCcGLmpUbkNmwUNZ1aHZ7Wx61rPh
+         JvuOkxAzp8psfG7heB7ZrWGOgIUouZMA5FK9vMY1s8Wm2akgiFRNRZUO454R/hgZTPSw
+         JNUwF2N9GTSnNUpNvK0fN5oTahv2ON86Qo57cXtTpTZTxp+FCFxrEtcwN/io3xB1pmyG
+         xVjPpCzcxsf5CxjV455ZylaCfQ9ZcWItN6h0nVskJNK7RxpgVcbI7JbSjCDRrCvu1FwX
+         h0IagmHQ0fhkJUGIMM3tdP7VypP5SMbpbDznXooLlVNqkeAJkETn0JYLLaOrvRQCCAfP
+         DQrQ==
+X-Gm-Message-State: AO0yUKVQMaB7A5ByJYwhjSvKCf7S/vHHwofG2V/po6W843BzTZhph54c
+        dCWz3RTSBvVfIamdMlbZKM6sXOnHvg==
+X-Google-Smtp-Source: AK7set+tW7tYKfBIsVQdLPPlbctu7CwHbL8aGPyNilvWijRtLffT6epCXw3arwIWAtYdIAEiSgtH4w==
+X-Received: by 2002:a9d:715e:0:b0:68b:dfcc:bed with SMTP id y30-20020a9d715e000000b0068bdfcc0bedmr9758516otj.15.1678309218403;
+        Wed, 08 Mar 2023 13:00:18 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id f9-20020a9d5f09000000b0068bce0cd4e1sm6804531oti.9.2023.03.08.13.00.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Mar 2023 13:00:18 -0800 (PST)
+Received: (nullmailer pid 3767368 invoked by uid 1000);
+        Wed, 08 Mar 2023 21:00:17 -0000
+Date:   Wed, 8 Mar 2023 15:00:17 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     arinc9.unal@gmail.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230308183317.559253-1-krzysztof.kozlowski@linaro.org>
- <20230308183317.559253-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230308183317.559253-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com
+Subject: Re: [PATCH 08/20] dt-bindings: pinctrl: ralink: add new compatible
+ strings
+Message-ID: <20230308210017.GA3744272-robh@kernel.org>
+References: <20230303002850.51858-1-arinc.unal@arinc9.com>
+ <20230303002850.51858-9-arinc.unal@arinc9.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230303002850.51858-9-arinc.unal@arinc9.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8.03.2023 19:33, Krzysztof Kozlowski wrote:
-> Downstream DTS uses 16 mA drive strength for the WCD9385 audio codec
-> RESET_N reset pin.  It also pulls the pin down in shutdown mode, thus it
-> is more like a shutdown pin, not a reset.  Use the same settings here
-> for HDK8450 and keep the WCD9385 by default in powered off (so pin as
-> low).  Align the name of pin configuration node with other pins in the
-> DTS.
+On Fri, Mar 03, 2023 at 03:28:37AM +0300, arinc9.unal@gmail.com wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Add the new mediatek compatible strings. Change the compatible string on
+> the examples with the mediatek compatible strings.
+> 
+> Add the new compatible strings for mt7620, mt76x8, and rt305x to be able to
+> properly document the pin muxing information of each SoC, or SoCs that use
+> the same pinmux data.
+> 
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm64/boot/dts/qcom/sm8450-hdk.dts | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  .../devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml | 7 +++++--
+>  .../devicetree/bindings/pinctrl/ralink,mt7621-pinctrl.yaml | 6 ++++--
+>  .../devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml | 5 ++++-
+>  3 files changed, 13 insertions(+), 5 deletions(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> index 9cd1d1bd86cb..4020e54e16f5 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8450-hdk.dts
-> @@ -767,9 +767,11 @@ spkr_2_sd_n_active: spkr-2-sd-n-active-state {
->  		output-low;
->  	};
+> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+> index cde6de77e228..a94d2e7a5f37 100644
+> --- a/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,mt7620-pinctrl.yaml
+> @@ -17,7 +17,10 @@ description:
 >  
-> -	wcd_default: wcd-default-state {
-> +	wcd_default: wcd-reset-n-active-state {
->  		pins = "gpio43";
->  		function = "gpio";
-> +		drive-strength = <16>;
->  		bias-disable;
-> +		output-low;
->  	};
->  };
+>  properties:
+>    compatible:
+> -    const: ralink,mt7620-pinctrl
+> +    enum:
+> +      - mediatek,mt7620-pinctrl
+> +      - mediatek,mt76x8-pinctrl
+> +      - ralink,mt7620-pinctrl
+
+To repeat the options from last time:
+
+>Carrying both strings is a NAK. Either you (and everyone using
+>these platforms) care about the ABI and are stuck with the "wrong"
+>string. In the end, they are just unique identifiers. Or you don't care
+>and break the ABI and rename everything. If you do that, do just that 
+>in your patches and make it crystal clear in the commit msg that is 
+>your intention and why that is okay.
+
+Marketing/acquistion renames was just an example and common reason. That 
+doesn't make other reasons okay. I don't see any reason given here.
+
+If you want to break the ABI (do you??, because the commit message 
+still doesn't say), then you don't need "ralink,mt7620-pinctrl".
+
+Rob
