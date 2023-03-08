@@ -2,112 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2889B6B0C6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF3B6B0C77
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 16:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229508AbjCHPT3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 8 Mar 2023 10:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
+        id S232143AbjCHPUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 10:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232165AbjCHPTD (ORCPT
+        with ESMTP id S232090AbjCHPTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 10:19:03 -0500
-Received: from DEU01-FR2-obe.outbound.protection.outlook.com (mail-fr2deu01on2112.outbound.protection.outlook.com [40.107.135.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C5F5C9C3;
-        Wed,  8 Mar 2023 07:18:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W9PBKhxZlnG7Zo4RrCPkG7xZRase0qZCzCMmJVM3zttDx1mpMtd/X/nRDzh0VCgN9mcHapRSPT5jvf/veovL4P4T1Q1lSwGQRrSoZ3p5dGNw86hKx/mbmKW3/pVpReToKY/8knUUJZGw6vUqS8JD8/ML7aT5XmVqCVpD53vHNpj+uhXSH7wWohuaitmpkR6cKQRz6+WrqMSSFmCePJ5prBZiV/Neh6yO9O66WhIIIaWhKMWNuFtVhtzGVnIBeshI6PphzzAKvrrRLdiPAXn5eoocTvkVcF0PhB1Icnb3OaAY5nNb4b1yddbDvN5FDLwq55IlGcqI19U1nxtB1S7Q5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uoY6ynpPmvLaHSleObisjGDUY1ESdg1vSY6p1WAXrRk=;
- b=LFewOpamZP32rQEckU0rTOMRUgMAznSg2jXX/5ut0FQIQMLNNYFVZN4FSF0T++ud6BYtzLUxFpLqw+zwtxBnd1wkwfZiSB4cWAm7VM6rXAt9PPDlSvBhsfSiIgF+BNTcs+GmRMspBtK3OKomPfjJJDdbISZW+7bzWkphhjI/ro6O/ESZ2NlFEYP+pAmfZLAAzvK+7qmvtlWxi0JyKIxTeNUIWqu3C+dIJeoEa6QYdrrwtP6+yVnVJ3EfcddZSDZ6iBX0o2I9EDHHpWRMNKOep8Qqt/i/tDNh+DbHOA02Ycd7TJdj66GVXPUA0C59F61HDveqjk6rn3U9jZura9dCXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=eks-intec.de; dmarc=pass action=none header.from=eks-intec.de;
- dkim=pass header.d=eks-intec.de; arc=none
-Received: from BE1P281MB1858.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:31::10)
- by BEZP281MB2566.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10:2b::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29; Wed, 8 Mar
- 2023 15:18:55 +0000
-Received: from BE1P281MB1858.DEUP281.PROD.OUTLOOK.COM
- ([fe80::7331:4276:a6d7:4924]) by BE1P281MB1858.DEUP281.PROD.OUTLOOK.COM
- ([fe80::7331:4276:a6d7:4924%8]) with mapi id 15.20.6178.016; Wed, 8 Mar 2023
- 15:18:55 +0000
-From:   Adnan Dizdarevic <adnan.dizdarevic@eks-intec.de>
-To:     "willemdebruijn.kernel@gmail.com" <willemdebruijn.kernel@gmail.com>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] net/packet: Allow MSG_NOSIGNAL flag in packet_recvmsg
-Thread-Topic: [PATCH] net/packet: Allow MSG_NOSIGNAL flag in packet_recvmsg
-Thread-Index: AdlR0Ka7ViCRuFYNTDm8ZA0ECs1Fww==
-Date:   Wed, 8 Mar 2023 15:18:55 +0000
-Message-ID: <BE1P281MB18589C91B10886A86B26EB6BA3B49@BE1P281MB1858.DEUP281.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=eks-intec.de;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BE1P281MB1858:EE_|BEZP281MB2566:EE_
-x-ms-office365-filtering-correlation-id: 0c1d280e-934b-477f-5b5b-08db1fe86ec5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YXlwszA0gYpvkrXcOLcjHpzinxtJKDc+jZnbaxGUOm0jjbd4XsdBiF1WUKfZCou1v+ms+KRDQo0EHN5jVQZyBiJvmflyIrirX6Mb9NbsPDh2/nyAzAirOd6kKhw7gDmIdCUIudDPEsmQEbW5k+KJsfFOGnAhsd79qLY9dskB3J+mT552W10VX8LKKAownN1HQeSKyMvy1X5XPZtDbNEB24ndW/frDMd6DF/8VMjQ4nJBDOHrP7r25RFpF438QB00Vd1IzOOOGPQT7XoXSrfezH6jbKBRhm6HRbLi+lK3l/23B/GjYITrSVlqyuYynCCoI0OnqYOB4qIp5w2F466IY5Wi2t/r7VoT1e5Oz0jxhIsVcLGWOcGGlr3NMUoJSCog8NglsaQSUKcfk+BGRghaM9+j86HKOX3S25l3BMB0zmM3oj2sPkyjeAqdpPQSMLK8L6aZTJpwAKXvjgKNkPSW6Y95xeHM/8dhZhj/sStvaBTrCiB8rnAdC/oVwkryaMCO0A9+Dl78sDV32pKRtRKZBa7ys470aMJWuAglrHiYXTakbcoBx2n63NpZmHjKquEXTPECsc7wq639HIv7273HYD63JKx8QFqt617d/gD/dKKybdMznnyfqMhAM1Pd+PbNNs3S8n5UGjNSpYk7k4S0kUZ7W++FR/uXYnAoOUTm6s+R+Xe0H6PW/TFcRYY6zIdcHuHInGYPNK+YsNUJuA1phA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BE1P281MB1858.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(346002)(396003)(376002)(136003)(451199018)(44832011)(5660300002)(2906002)(8936002)(52536014)(41300700001)(8676002)(66446008)(64756008)(66946007)(76116006)(83380400001)(4744005)(316002)(54906003)(4326008)(478600001)(6506007)(7696005)(71200400001)(6916009)(33656002)(66476007)(55016003)(122000001)(26005)(9686003)(186003)(86362001)(66556008)(38100700002)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/3tzcMWp7neOv2U9wenUhLvi5XiSxv3Fdpnk7eL499wl27IbppUacAtJfz+5?=
- =?us-ascii?Q?+zi1isEqAo0jFgDwSoUnP0UubMkUDxzKNu6S+h3tsGjJ+S1H45iKQf9VsfKu?=
- =?us-ascii?Q?dWR2ofJikFH2Eiir73DiqsPuZqQzB+hWbwXL3IphNqzNJOJegbN01D8Nj2mo?=
- =?us-ascii?Q?m8o24S0Pu/e5DCoqyci+fB4vYftWLsVyo2z31M5x5b38HU5qxtomRhnhy2mt?=
- =?us-ascii?Q?edjJPv4MZlRFdlDPYH8MY1tseD7FyagDqKNGPNa/NA08L0s8a9A8oPFk/+n7?=
- =?us-ascii?Q?czdeSTHd6b8E+sWX7WKIc9m0xdbaRVwD0A/LVvgej4fznIvjr890Z28TqDWA?=
- =?us-ascii?Q?vgg2W/QMISHkW4faWx6v4oabMY4yfHZT1TOZAS8ipRu1ufhAG6p+j2lRTLcx?=
- =?us-ascii?Q?flC1WAzEgaf6+eKto3jgrR/MRj3mDEKfmaZ5WRa1C/aug7GXoKXqASBTAHch?=
- =?us-ascii?Q?uyDyFLixSElMdhdUIdIX9zbv6t2rHP168HOYd+euyNF9miR4oHwjItywct7T?=
- =?us-ascii?Q?pTVbft8laRBE0PWz9vfxQXNqigVSWa+CU0m+I26c9Q8jmW7ZGTMuDbOzq78V?=
- =?us-ascii?Q?84VABzqTX1iVcFP+rNH4SDaOhVAT29RQKFU8uU0+Ek6fJZUEj4OfKcOqqDbZ?=
- =?us-ascii?Q?6mb84NQwfEz50VkD2fvjJ3L0061g1rHDyu1+xG5AjPw8KsI+Dfpw/BThtRpw?=
- =?us-ascii?Q?u9rsZ2LSVKTYNeW6LuXp1Q6euGmSdzq+0R3NaM7mEkON3dPN1fSiF2rTILXg?=
- =?us-ascii?Q?YyQORoUST7SYodLUwzVN+F8m3xxZQBUa2Qb+XmvJfC1EV5bX6jrbZynsX7Zb?=
- =?us-ascii?Q?EQWlKTvqxlMjjco/6J6pQd64d1D+LPjeRDD6iq4hr6jqmWlcyk/zMK6kAAwF?=
- =?us-ascii?Q?3Auviu8VXjMcKmEtDueTrBzaj5oa2WmFeW4W0KffPTWcIZqdZjaCdB0X/pHG?=
- =?us-ascii?Q?6zrGfCer3JsWLxhtzWd75qAfo/57aP+nSWkato7FajS3J03XpvKygIMZ6Iaw?=
- =?us-ascii?Q?2gpa1sEpQtJjk907FNdxZ2ygPBcUyc5MsISiv++qya2puoK9VaR6VzkZWEVW?=
- =?us-ascii?Q?VmHi0OvbtWjdfXsy3bc29ZC20J30r+pr66r8DSzve+r/v6uhdxdlXu3CoPnH?=
- =?us-ascii?Q?tCFWKEQbikBwV6j3VPiFpIBvImVxXTVSmxMGFs4vlDT07QXlxyyO9Cb3tVor?=
- =?us-ascii?Q?Lr72R142zVy5DS17+uSLGi75953OFZZ8P6Op8yMaopVfaBgTsaRRQhwutDPI?=
- =?us-ascii?Q?TvjHBubMxmORzofuwJ2h/APKJmXsRKgWsPbNrW9OPfnnUd3vmdqxo2rub3ca?=
- =?us-ascii?Q?LC0o7bM2/MShtApi8UK4/JpTHpgk2Rp2aA/jvuQQYH3x/hhUgsltXYYlo1W9?=
- =?us-ascii?Q?TugS3Nq82mZevkdbcsnE0UUkT370rXE39pg/AecjFo9rTGrumQ33gRIHm9M4?=
- =?us-ascii?Q?mp2YF/jPHFhOI305160iJJ/U84SqMsvVrZESb0x32tsX8Vjd1E3NESRO27rE?=
- =?us-ascii?Q?QA/f9bNcvy0ssP9j9IR8itfW4+OobjGbTjUhJZy++/HbGoU0oeom2BPedFXz?=
- =?us-ascii?Q?ytbXUCznQiJzstV6N+/kyautyO6lM6CQn0zBcGQ58y50N4XYMZpYf7pRBqdE?=
- =?us-ascii?Q?NA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-OriginatorOrg: eks-intec.de
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BE1P281MB1858.DEUP281.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c1d280e-934b-477f-5b5b-08db1fe86ec5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Mar 2023 15:18:55.4202
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 24a4746e-2db7-4bee-9bc1-9d6f336af481
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xZH0V6+wTS1vOR0UNOOJIcqh6AG6vkYjXUO25Cii6QrAe6bmAtrcm5SKLehGxxVpJIv3EJGysOfGbrt6GMOtGTFv8nYE8pPvkQc7/N46v9U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BEZP281MB2566
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Wed, 8 Mar 2023 10:19:40 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7495AF6A3;
+        Wed,  8 Mar 2023 07:19:36 -0800 (PST)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 328Eof4v028629;
+        Wed, 8 Mar 2023 15:19:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=4CtqSlTtRa2zDBj0noBeDCXB//5VJ5JU8QEKZuC7gks=;
+ b=maCDxhsr97CfgXrXkOWCS5pYGdjfzE1yWoQuguY61Jt6S7ZQiYe0UYFP/TdPtn1422WW
+ CND34myf7HeHSqY+LmVQ1MC2oTwfBzlBjITUujAVX6UM0osO19J7Xgp7hTOTmDc61OJb
+ q2Ke0SxwTq7NWv1SQuJyln968M83E0wgnzKSV8K8ZP7XGicO3xZeiOTycfuwsaeD+e55
+ hk63okT/kTznU83BoeCeUs4eMDltoPCytPOlbsehZXBwtvLfBhNQDO0qynAxshKjRR9m
+ s3FUx04OCRm+EgPcvugAjZcBQ4fGgolE7N6VzJEHHSSv6jGDIO2jLfsiFAy7f4l9r+X+ OQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6pmxa0s4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:19:10 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 328EvbHe012765;
+        Wed, 8 Mar 2023 15:19:09 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p6pmxa0r8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:19:09 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 328E0Jsu016684;
+        Wed, 8 Mar 2023 15:19:07 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3p6fhk3va4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 08 Mar 2023 15:19:07 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 328FJ7gW53608940
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 8 Mar 2023 15:19:07 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E09D458068;
+        Wed,  8 Mar 2023 15:19:06 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 831A858052;
+        Wed,  8 Mar 2023 15:19:05 +0000 (GMT)
+Received: from sig-9-77-134-135.ibm.com (unknown [9.77.134.135])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  8 Mar 2023 15:19:05 +0000 (GMT)
+Message-ID: <1221e9c0192d8a6c55dd10471d7259549d87f0b2.camel@linux.ibm.com>
+Subject: Re: [PATCH 14/28] security: Introduce inode_post_setattr hook
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        viro@zeniv.linux.org.uk, chuck.lever@oracle.com,
+        jlayton@kernel.org, dmitry.kasatkin@gmail.com, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, dhowells@redhat.com,
+        jarkko@kernel.org, stephen.smalley.work@gmail.com,
+        eparis@parisplace.org, casey@schaufler-ca.com, brauner@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stefanb@linux.ibm.com, Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 08 Mar 2023 10:19:05 -0500
+In-Reply-To: <20230303181842.1087717-15-roberto.sassu@huaweicloud.com>
+References: <20230303181842.1087717-1-roberto.sassu@huaweicloud.com>
+         <20230303181842.1087717-15-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: loRp11pt8bKz3W85sk6ovHzNEIL7iZqZ
+X-Proofpoint-ORIG-GUID: rOvpUuENJFdUZHal6Vhi53pHGu5LFb3F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-08_08,2023-03-08_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ phishscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
+ impostorscore=0 spamscore=0 mlxscore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303080129
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,33 +100,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By adding MSG_NOSIGNAL flag to allowed flags in packet_recvmsg, this
-patch fixes io_uring recvmsg operations returning -EINVAL when used with
-packet socket file descriptors.
+Hi Roberto,
 
-In io_uring, MSG_NOSIGNAL flag is added in:
-io_uring/net.c/io_recvmsg_prep
+On Fri, 2023-03-03 at 19:18 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+> the inode_post_setattr hook.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-Signed-off-by: Adnan Dizdarevic <adnan.dizdarevic@eks-intec.de>
----
- net/packet/af_packet.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Other than the one minor comment below,
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index d4e76e2ae153..5ce62194af9e 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -3410,7 +3410,8 @@ static int packet_recvmsg(struct socket *sock, struct msghdr *msg, size_t len,
- 	unsigned int origlen = 0;
- 
- 	err = -EINVAL;
--	if (flags & ~(MSG_PEEK|MSG_DONTWAIT|MSG_TRUNC|MSG_CMSG_COMPAT|MSG_ERRQUEUE))
-+	if (flags & ~(MSG_PEEK | MSG_DONTWAIT | MSG_TRUNC | MSG_CMSG_COMPAT |
-+			MSG_ERRQUEUE | MSG_NOSIGNAL))
- 		goto out;
- 
- #if 0
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>  fs/attr.c                     |  1 +
+>  include/linux/lsm_hook_defs.h |  2 ++
+>  include/linux/security.h      |  7 +++++++
+>  security/security.c           | 16 ++++++++++++++++
+>  4 files changed, 26 insertions(+)
+> 
+> diff --git a/fs/attr.c b/fs/attr.c
+> index da45cf01be6..343d6d62435 100644
+> --- a/fs/attr.c
+> +++ b/fs/attr.c
+> @@ -485,6 +485,7 @@ int notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
+>  
+>  	if (!error) {
+>  		fsnotify_change(dentry, ia_valid);
+> +		security_inode_post_setattr(idmap, dentry, ia_valid);
+>  		ima_inode_post_setattr(idmap, dentry, ia_valid);
+>  		evm_inode_post_setattr(idmap, dentry, ia_valid);
+>  	}
+> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
+> index 4372a6b2632..eedefbcdde3 100644
+> --- a/include/linux/lsm_hook_defs.h
+> +++ b/include/linux/lsm_hook_defs.h
+> @@ -135,6 +135,8 @@ LSM_HOOK(int, 0, inode_follow_link, struct dentry *dentry, struct inode *inode,
+>  LSM_HOOK(int, 0, inode_permission, struct inode *inode, int mask)
+>  LSM_HOOK(int, 0, inode_setattr, struct mnt_idmap *idmap, struct dentry *dentry,
+>  	 struct iattr *attr)
+> +LSM_HOOK(void, LSM_RET_VOID, inode_post_setattr, struct mnt_idmap *idmap,
+> +	 struct dentry *dentry, int ia_valid)
+>  LSM_HOOK(int, 0, inode_getattr, const struct path *path)
+>  LSM_HOOK(int, 0, inode_setxattr, struct mnt_idmap *idmap,
+>  	 struct dentry *dentry, const char *name, const void *value,
+> diff --git a/include/linux/security.h b/include/linux/security.h
+> index cd23221ce9e..64224216f6c 100644
+> --- a/include/linux/security.h
+> +++ b/include/linux/security.h
+> @@ -354,6 +354,8 @@ int security_inode_follow_link(struct dentry *dentry, struct inode *inode,
+>  int security_inode_permission(struct inode *inode, int mask);
+>  int security_inode_setattr(struct mnt_idmap *idmap,
+>  			   struct dentry *dentry, struct iattr *attr);
+> +void security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+> +				 int ia_valid);
+>  int security_inode_getattr(const struct path *path);
+>  int security_inode_setxattr(struct mnt_idmap *idmap,
+>  			    struct dentry *dentry, const char *name,
+> @@ -855,6 +857,11 @@ static inline int security_inode_setattr(struct mnt_idmap *idmap,
+>  	return 0;
+>  }
+>  
+> +static inline void
+> +security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+> +			    int ia_valid)
+> +{ }
+> +
+>  static inline int security_inode_getattr(const struct path *path)
+>  {
+>  	return 0;
+> diff --git a/security/security.c b/security/security.c
+> index f7fe252e9d3..2dbf225f5d8 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -2190,6 +2190,22 @@ int security_inode_getattr(const struct path *path)
+>  	return call_int_hook(inode_getattr, 0, path);
+>  }
+>  
+
+Like the definitions, move the security_inode_post_setattr() to after
+security_inode_setattr().
+
+> +/**
+> + * security_inode_post_setattr() - Update the inode after a setattr operation
+> + * @idmap: idmap of the mount
+> + * @dentry: file
+> + * @ia_valid: file attributes set
+> + *
+> + * Update inode security field after successful setting file attributes.
+> + */
+> +void security_inode_post_setattr(struct mnt_idmap *idmap, struct dentry *entry,
+> +				 int ia_valid)
+> +{
+> +	if (unlikely(IS_PRIVATE(d_backing_inode(dentry))))
+> +		return;
+> +	call_void_hook(inode_post_setattr, idmap, dentry, ia_valid);
+> +}
+> +
+>  /**
+>   * security_inode_setxattr() - Check if setting file xattrs is allowed
+>   * @idmap: idmap of the mounth
+
 -- 
-2.37.2
+thanks,
 
+Mimi
 
