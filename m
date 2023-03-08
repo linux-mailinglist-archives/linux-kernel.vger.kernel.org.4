@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2607D6B14D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C88F6B14D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 23:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjCHWN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 17:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55678 "EHLO
+        id S230184AbjCHWPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 17:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjCHWN5 (ORCPT
+        with ESMTP id S230173AbjCHWPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 17:13:57 -0500
-Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB526B301
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:13:55 -0800 (PST)
-Received: from sas9-2d24a7e69f58.qloud-c.yandex.net (sas9-2d24a7e69f58.qloud-c.yandex.net [IPv6:2a02:6b8:c11:2298:0:640:2d24:a7e6])
-        by forward500c.mail.yandex.net (Yandex) with ESMTP id 805F55F549;
-        Thu,  9 Mar 2023 01:13:50 +0300 (MSK)
-Received: by sas9-2d24a7e69f58.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id kDlcdlCbhiE1-cRauS9rr;
-        Thu, 09 Mar 2023 01:13:49 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail; t=1678313629;
-        bh=xdccCaJ2uM3xKLdwF8haF7QmfYfYr7q3gK61RWrDLYk=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=m/K4SAMixCFnJYFJuDaEImnoqRs9V3PWl35JDYzoPPiAQd4e5Q1W+Ss1AevMuzfus
-         btyY1DBhgSzcVh8rkeLKUmVvQZyrqbXGx9aEaZWFshTtHvVzTsl9BghaISWCViNHJw
-         tKBVK0UfeyJRTxLJhRpOjoXsbsFKCBrHi8Yg+Xs8=
-Authentication-Results: sas9-2d24a7e69f58.qloud-c.yandex.net; dkim=pass header.i=@ya.ru
-Message-ID: <eab519de-1222-b097-9eb4-28a444458c28@ya.ru>
-Date:   Thu, 9 Mar 2023 01:13:46 +0300
+        Wed, 8 Mar 2023 17:15:37 -0500
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB7F848E0
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 14:15:36 -0800 (PST)
+Received: by mail-ua1-x934.google.com with SMTP id l24so12261441uac.12
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 14:15:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678313735;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OqQ3EI188CowuYOZmSAukdXapAzBQtZ77d6uRCmdYk4=;
+        b=gDVFrvZN1fTkmS59qr2tc1bOXYnDbM85t+ZAKK8LkT2S3Mqrh5RH8aE8i3dWv+lrdQ
+         mlblqFs10qLB58g4PxUakiMXZgBhTGcRVTmWGYaeTZHpEe/7tLOP0zKqA8kG3fobIg0L
+         fGMwRDjRw1sJEGyd1WsZEzsuBDDqbZ7rPUaJdcfJFZegx0y6PHcV0xp00c0xg3WaeH2f
+         q4qBATZgKxRkywY3g5NvzUBdWgGevJEoiiUK/us+rzRZ8JimIs4bQAu3MiQ+tgENchiJ
+         XvQteTBgPaZFBv7MJjVBbfN5lvf+UhokSYwqzq1B9w/AAyq4yt/bmySFWfIGhO88UfXq
+         YisA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678313735;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OqQ3EI188CowuYOZmSAukdXapAzBQtZ77d6uRCmdYk4=;
+        b=Wtq5kfvA6DaZV4e998+czXLyj/kJejv4Fj3QM9d/h0DM09ab3bCP6jABkLeAmRQ924
+         vqZd42eNb5j47OieIh9DUu+jP3MKjCFuKtDSvIH4u93pAQDsRkmqrjwAOhR6lmFPkrab
+         g0U5Ng7awg/9+3LcAncSC9lD8GefazIF2IGd8ilWSHayYrLa6P+3J1K92CclfLacS2ac
+         j2I7hnCleLgA5B0F9VIF5fQ/vuZObq4RV0PkI3zGJ7LKsJuzcXJkDP9rLKsxf04jLKAf
+         AfgLOyRgdTPEG0NOSCJBKkpMPN3EDQEneYX+VZvgTthNOH5TizDRy55et1aIQUcVXT36
+         jxfg==
+X-Gm-Message-State: AO0yUKUKsaFu7qhTe1tFaYvMB75+LJrF6a/RyPfH9IGR0I2XT3QoYmnK
+        n50xdi+f4V8NLUSekD0iQwWXSdjVFNHtCFTGZd3XZw==
+X-Google-Smtp-Source: AK7set8qOFCTlsiSulkEPgGML+flaI1zps+GAKkX3YWHu4GvtmRKJrr0ZCGTo8L6VyWz7WfxnrGjIpRpgaVIXo8gfiI=
+X-Received: by 2002:a1f:c847:0:b0:411:ff57:d3b9 with SMTP id
+ y68-20020a1fc847000000b00411ff57d3b9mr11444842vkf.2.1678313734597; Wed, 08
+ Mar 2023 14:15:34 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 1/8] mm: vmscan: add a map_nr_max field to
- shrinker_info
-To:     Qi Zheng <zhengqi.arch@bytedance.com>, akpm@linux-foundation.org,
-        hannes@cmpxchg.org, shakeelb@google.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, muchun.song@linux.dev, david@redhat.com,
-        shy828301@gmail.com, rppt@kernel.org
-Cc:     sultan@kerneltoast.com, dave@stgolabs.net,
-        penguin-kernel@I-love.SAKURA.ne.jp, paulmck@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230307065605.58209-1-zhengqi.arch@bytedance.com>
- <20230307065605.58209-2-zhengqi.arch@bytedance.com>
-Content-Language: en-US
-From:   Kirill Tkhai <tkhai@ya.ru>
-In-Reply-To: <20230307065605.58209-2-zhengqi.arch@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+References: <202303090422.ss2Hbm4f-lkp@intel.com> <20230308130735.bbc4b21a3aff977bced451fa@linux-foundation.org>
+In-Reply-To: <20230308130735.bbc4b21a3aff977bced451fa@linux-foundation.org>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 8 Mar 2023 23:14:58 +0100
+Message-ID: <CANpmjNMGd=mfz3tBJcGMYeVo3iRy7F2EqCk_5j+2mJT38_ZNbQ@mail.gmail.com>
+Subject: Re: ld.lld: error: undefined symbol: memcpy
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,158 +71,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 8 Mar 2023 at 22:07, Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Thu, 9 Mar 2023 05:01:04 +0800 kernel test robot <lkp@intel.com> wrote:
+>
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   63355b9884b3d1677de6bd1517cd2b8a9bf53978
+> > commit: 36be5cba99f6f9984a9a9f0454f95a38f4184d3e kasan: treat meminstrinsic as builtins in uninstrumented files
+> > date:   6 days ago
+> > config: powerpc-randconfig-r036-20230305 (https://download.01.org/0day-ci/archive/20230309/202303090422.ss2Hbm4f-lkp@intel.com/config)
+> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> > reproduce (this is a W=1 build):
+> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         # install powerpc cross compiling tool for clang build
+> >         # apt-get install binutils-powerpc-linux-gnu
+> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=36be5cba99f6f9984a9a9f0454f95a38f4184d3e
+> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> >         git fetch --no-tags linus master
+> >         git checkout 36be5cba99f6f9984a9a9f0454f95a38f4184d3e
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Link: https://lore.kernel.org/oe-kbuild-all/202303090422.ss2Hbm4f-lkp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> ld.lld: error: undefined symbol: memcpy
+> >    >>> referenced by xmon.c:1896 (arch/powerpc/xmon/xmon.c:1896)
+> >    >>>               arch/powerpc/xmon/xmon.o:(prregs) in archive vmlinux.a
+> >    >>> referenced by zstd_compress.c:4814 (lib/zstd/compress/zstd_compress.c:4814)
+> >    >>>               lib/zstd/compress/zstd_compress.o:(ZSTD_createCDict_advanced2) in archive vmlinux.a
+> >    >>> referenced by zstd_compress.c:4910 (lib/zstd/compress/zstd_compress.c:4910)
+> >    >>>               lib/zstd/compress/zstd_compress.o:(ZSTD_initStaticCDict) in archive vmlinux.a
+> >    >>> referenced 5 more times
+> > --
+> > >> ld.lld: error: undefined symbol: memset
+> >    >>> referenced by slab_common.c:579 (mm/slab_common.c:579)
+> >    >>>               mm/slab_common.o:(kmem_dump_obj) in archive vmlinux.a
+> >    >>> referenced by kasan_test.c:558 (mm/kasan/kasan_test.c:558)
+> >    >>>               mm/kasan/kasan_test.o:(kmalloc_oob_in_memset) in archive vmlinux.a
+> >    >>> referenced by kasan_test.c:505 (mm/kasan/kasan_test.c:505)
+> >    >>>               mm/kasan/kasan_test.o:(kmalloc_oob_memset_2) in archive vmlinux.a
+> >    >>> referenced 10 more times
+> >
+>
+> Will this fix?
 
-On 07.03.2023 09:55, Qi Zheng wrote:
-> To prepare for the subsequent lockless memcg slab shrink,
-> add a map_nr_max field to struct shrinker_info to records
-> its own real shrinker_nr_max.
-> 
-> Suggested-by: Kirill Tkhai <tkhai@ya.ru>
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> ---
->  include/linux/memcontrol.h |  1 +
->  mm/vmscan.c                | 41 ++++++++++++++++++++++----------------
->  2 files changed, 25 insertions(+), 17 deletions(-)
-> 
-> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-> index b6eda2ab205d..aa69ea98e2d8 100644
-> --- a/include/linux/memcontrol.h
-> +++ b/include/linux/memcontrol.h
-> @@ -97,6 +97,7 @@ struct shrinker_info {
->  	struct rcu_head rcu;
->  	atomic_long_t *nr_deferred;
->  	unsigned long *map;
-> +	int map_nr_max;
->  };
->  
->  struct lruvec_stats_percpu {
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 9414226218f0..2dcc01682026 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -224,9 +224,16 @@ static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
->  					 lockdep_is_held(&shrinker_rwsem));
->  }
->  
-> +static inline bool need_expand(int new_nr_max, int old_nr_max)
-> +{
-> +	return round_up(new_nr_max, BITS_PER_LONG) >
-> +	       round_up(old_nr_max, BITS_PER_LONG);
-> +}
-> +
->  static int expand_one_shrinker_info(struct mem_cgroup *memcg,
->  				    int map_size, int defer_size,
-> -				    int old_map_size, int old_defer_size)
-> +				    int old_map_size, int old_defer_size,
-> +				    int new_nr_max)
->  {
->  	struct shrinker_info *new, *old;
->  	struct mem_cgroup_per_node *pn;
-> @@ -240,12 +247,17 @@ static int expand_one_shrinker_info(struct mem_cgroup *memcg,
->  		if (!old)
->  			return 0;
->  
-> +		/* Already expanded this shrinker_info */
-> +		if (!need_expand(new_nr_max, old->map_nr_max))
+I think this patch got lost:
+https://lkml.kernel.org/r/20230227094726.3833247-1-elver@google.com
 
-need_expand() looks confusing here. It's strange that we round_up(old->map_nr_max),
-despite old->map never may exceed old->map_nr_max.
+By the looks of it 36be5cba99f6f9984a9a9f0454f95a38f4184d3e in
+mainline doesn't have any of the powerpc bits.
 
-Won't plain
-
-	if (new_nr_max <= old->map_nr_max)
-
-look clearer here?
-
-The rest in patch looks OK for me.
-
-> +			continue;
-> +
->  		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
->  		if (!new)
->  			return -ENOMEM;
->  
->  		new->nr_deferred = (atomic_long_t *)(new + 1);
->  		new->map = (void *)new->nr_deferred + defer_size;
-> +		new->map_nr_max = new_nr_max;
->  
->  		/* map: set all old bits, clear all new bits */
->  		memset(new->map, (int)0xff, old_map_size);
-> @@ -295,6 +307,7 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
->  		}
->  		info->nr_deferred = (atomic_long_t *)(info + 1);
->  		info->map = (void *)info->nr_deferred + defer_size;
-> +		info->map_nr_max = shrinker_nr_max;
->  		rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
->  	}
->  	up_write(&shrinker_rwsem);
-> @@ -302,23 +315,14 @@ int alloc_shrinker_info(struct mem_cgroup *memcg)
->  	return ret;
->  }
->  
-> -static inline bool need_expand(int nr_max)
-> -{
-> -	return round_up(nr_max, BITS_PER_LONG) >
-> -	       round_up(shrinker_nr_max, BITS_PER_LONG);
-> -}
-> -
->  static int expand_shrinker_info(int new_id)
->  {
->  	int ret = 0;
-> -	int new_nr_max = new_id + 1;
-> +	int new_nr_max = round_up(new_id + 1, BITS_PER_LONG);
->  	int map_size, defer_size = 0;
->  	int old_map_size, old_defer_size = 0;
->  	struct mem_cgroup *memcg;
->  
-> -	if (!need_expand(new_nr_max))
-> -		goto out;
-> -
->  	if (!root_mem_cgroup)
->  		goto out;
->  
-> @@ -332,7 +336,8 @@ static int expand_shrinker_info(int new_id)
->  	memcg = mem_cgroup_iter(NULL, NULL, NULL);
->  	do {
->  		ret = expand_one_shrinker_info(memcg, map_size, defer_size,
-> -					       old_map_size, old_defer_size);
-> +					       old_map_size, old_defer_size,
-> +					       new_nr_max);
->  		if (ret) {
->  			mem_cgroup_iter_break(NULL, memcg);
->  			goto out;
-> @@ -352,9 +357,11 @@ void set_shrinker_bit(struct mem_cgroup *memcg, int nid, int shrinker_id)
->  
->  		rcu_read_lock();
->  		info = rcu_dereference(memcg->nodeinfo[nid]->shrinker_info);
-> -		/* Pairs with smp mb in shrink_slab() */
-> -		smp_mb__before_atomic();
-> -		set_bit(shrinker_id, info->map);
-> +		if (!WARN_ON_ONCE(shrinker_id >= info->map_nr_max)) {
-> +			/* Pairs with smp mb in shrink_slab() */
-> +			smp_mb__before_atomic();
-> +			set_bit(shrinker_id, info->map);
-> +		}
->  		rcu_read_unlock();
->  	}
->  }
-> @@ -432,7 +439,7 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
->  	for_each_node(nid) {
->  		child_info = shrinker_info_protected(memcg, nid);
->  		parent_info = shrinker_info_protected(parent, nid);
-> -		for (i = 0; i < shrinker_nr_max; i++) {
-> +		for (i = 0; i < child_info->map_nr_max; i++) {
->  			nr = atomic_long_read(&child_info->nr_deferred[i]);
->  			atomic_long_add(nr, &parent_info->nr_deferred[i]);
->  		}
-> @@ -899,7 +906,7 @@ static unsigned long shrink_slab_memcg(gfp_t gfp_mask, int nid,
->  	if (unlikely(!info))
->  		goto unlock;
->  
-> -	for_each_set_bit(i, info->map, shrinker_nr_max) {
-> +	for_each_set_bit(i, info->map, info->map_nr_max) {
->  		struct shrink_control sc = {
->  			.gfp_mask = gfp_mask,
->  			.nid = nid,
-
+Thanks,
+-- Marco
