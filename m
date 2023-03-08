@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C426B0A84
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:08:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0A26B0A87
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbjCHOIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:08:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48760 "EHLO
+        id S232027AbjCHOIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:08:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbjCHOHt (ORCPT
+        with ESMTP id S231979AbjCHOHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:07:49 -0500
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECA430B25;
-        Wed,  8 Mar 2023 06:06:24 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id 32-20020a9d0323000000b0069426a71d79so9005640otv.10;
-        Wed, 08 Mar 2023 06:06:24 -0800 (PST)
+        Wed, 8 Mar 2023 09:07:50 -0500
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2020734002;
+        Wed,  8 Mar 2023 06:06:26 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id e21so12247136oie.1;
+        Wed, 08 Mar 2023 06:06:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678284384;
+        d=1e100.net; s=20210112; t=1678284385;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=qsP4LH+jP/I53IC0MPmff0Hsl8QZENzWh0+pWXfTco4=;
-        b=EJX8z89ngMLKnLjLrr+O38I9MG7mbYVlghmDgUOFNcyNcBFCwmAjYFU1/+aO5BZYIn
-         kKDD3NA9IucEgi8km3cQn0orBSuA+YpWMNe9zMqx2yQ1dlYZ2S508t/9JW1BiQ8MiKtm
-         ySPLMAN13zAypL25QlsngBXl1nO5r9JeKkTa14+dd8IQdAG9N3ipCpUJkPtA/vm+QmxF
-         KRfV2OVRp4DmLq32hrKW2GdGg0sElpRbiqthj6EdUZLfh3yS9p3/NCy5CxNBtBlSqq3I
-         4k+Xj4TvJTTCFHtj2aTWfLe71gAyU3zZs9eUUpIY47rgdbf2Y1yz3p9kUaRa6aU/RDgN
-         VI0g==
-X-Gm-Message-State: AO0yUKWXG/YfFGpk0ubmYtGQRXJH5Rxyh70YzdO72sX615mV18FYy6yK
-        RchTjvOQ+ClSwd44ryDwcA==
-X-Google-Smtp-Source: AK7set+Zbw7EyeuNPMCkpj6IQPnLXaNQIQOMlGUW7lXZ4HwtW5PLAJ2eBzxT4rkdpmbwwGgjfgVofQ==
-X-Received: by 2002:a05:6830:24b6:b0:68b:dcbe:d0af with SMTP id v22-20020a05683024b600b0068bdcbed0afmr8794679ots.2.1678284383790;
-        Wed, 08 Mar 2023 06:06:23 -0800 (PST)
+        bh=WpczFTCXijyH6v2uFsL0r+ne6zhQWpuAxK6dZ8HLc8w=;
+        b=hhPn5vzzQnLsj55S5avkZt0cS4CDLTPUSDXszASAkbS21eMuAtebnHidYBRu1PsVAp
+         VoYeDUu7wltur3k8eLOxienPgGPLxNCgB8/j7jBN9ZpsO6l1icSydI6BvXPWUlDqzJgl
+         l5IHb0rNMbK4LxhNH7ow8haaLrKoQUzZ5MNzOhqBiukKnh/dTGK3U5ABf84GLvwDOPIq
+         Yoi7pWkgtBen/X0t6hqTKs+GC5Sv4ZCQKp9nShfAMujNPRP+BHsBUFeKDSx3ku5ZJyoX
+         BdEUh+GAYzQt//ThtZekS0R/U7xBCjFgEXCd+Y3/zZvaziZIOdOS/HdDSnd71PMCdIm1
+         r6RQ==
+X-Gm-Message-State: AO0yUKV3kzx1f53qUEmqEBULDGyx7mvPkgXPHjT/vbzIz2kizFdZhNGX
+        m9gs3V6sex2rzDDlb7xS5A==
+X-Google-Smtp-Source: AK7set9TY7ANnw+LvWD6zq/I9SejqdyfAIYH25nwUFoQ1NaWeLROsqghaWZaYYnPSagPS99RJ5mp5A==
+X-Received: by 2002:a05:6808:c7:b0:384:3a4d:7f72 with SMTP id t7-20020a05680800c700b003843a4d7f72mr7023522oic.9.1678284385296;
+        Wed, 08 Mar 2023 06:06:25 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y22-20020a056830071600b0068d4dda3d61sm6434007ots.39.2023.03.08.06.06.21
+        by smtp.gmail.com with ESMTPSA id s82-20020acadb55000000b00383ecd10ea6sm6354226oig.20.2023.03.08.06.06.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Mar 2023 06:06:22 -0800 (PST)
-Received: (nullmailer pid 2666443 invoked by uid 1000);
+        Wed, 08 Mar 2023 06:06:24 -0800 (PST)
+Received: (nullmailer pid 2666455 invoked by uid 1000);
         Wed, 08 Mar 2023 14:06:21 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liu Peibao <liupeibao@loongson.cn>, devicetree@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn, Mark Brown <broonie@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Rob Herring <robh+dt@kernel.org>, wanghongliang@loongson.cn
-In-Reply-To: <20230308025908.21491-2-zhuyinbo@loongson.cn>
-References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
- <20230308025908.21491-2-zhuyinbo@loongson.cn>
-Message-Id: <167828359942.2612999.3798783623764270312.robh@kernel.org>
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230308090219.12710-2-clamor95@gmail.com>
+References: <20230308090219.12710-1-clamor95@gmail.com>
+ <20230308090219.12710-2-clamor95@gmail.com>
+Message-Id: <167828360145.2613122.1172986827662465150.robh@kernel.org>
+Subject: Re: [PATCH v1 1/4] dt-bindings: iio: light: add apds990x binding
 Date:   Wed, 08 Mar 2023 08:06:21 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,16 +73,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 08 Mar 2023 10:59:07 +0800, Yinbo Zhu wrote:
-> Add the Loongson platform spi binding with DT schema format using
-> json-schema.
+On Wed, 08 Mar 2023 11:02:16 +0200, Svyatoslav Ryhel wrote:
+> Add dt-binding for apds990x ALS/proximity sensor.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 > ---
->  .../bindings/spi/loongson,ls-spi.yaml         | 47 +++++++++++++++++++
->  MAINTAINERS                                   |  6 +++
->  2 files changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
+>  .../bindings/iio/light/avago,apds990x.yaml    | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -87,15 +89,12 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/light/avago,apds990x.example.dtb: light-sensor@39: 'interrupt' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230308025908.21491-2-zhuyinbo@loongson.cn
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230308090219.12710-2-clamor95@gmail.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
