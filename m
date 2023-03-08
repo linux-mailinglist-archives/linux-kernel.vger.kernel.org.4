@@ -2,277 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8C46B113B
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC626B1140
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 19:44:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjCHSm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 13:42:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39408 "EHLO
+        id S229475AbjCHSow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 13:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjCHSmQ (ORCPT
+        with ESMTP id S230105AbjCHSor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 13:42:16 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AABB4F64;
-        Wed,  8 Mar 2023 10:42:12 -0800 (PST)
-Received: from mercury (dyndsl-091-248-211-125.ewe-ip-backbone.de [91.248.211.125])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 8 Mar 2023 13:44:47 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD1E8B041
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 10:44:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678301086; x=1709837086;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/Ot7UuhTWj62y8Sg6scKa94wEO8HoMcFRcNWKJd2noI=;
+  b=UM9kV/An1sffQkw/pdjStUMyR95tx4pqdYtLpNAWS6e+1Ok7R7qLQw2j
+   93xyqr9wRA9iHIIJmKT61ib2+pipc8/z29yhf+3edPMr1IpPvyi7wZKNR
+   09pWQWr67UfB7YOoGgsPO4IlzQvbbSTRCJFItYq8wHRWjbPAcm9KwsBPT
+   48RKrM9j5t5kSm/JqBosmrsQD3IsD0j9pi2sECwB93W85ZgrTZFtE599X
+   ZtPPMkvynwtfwLsnwdqu0OOoYTKmRJQqkhsRJ+fSsgVDej/rHpJw7PwWx
+   DxQIfnpbY401HgPvDXSdQgpLFF/2IwtPQ3hM+JHFYiOzRjV3S9ZDSMOgw
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="316640109"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="316640109"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 10:44:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10643"; a="1006432009"
+X-IronPort-AV: E=Sophos;i="5.98,244,1673942400"; 
+   d="scan'208";a="1006432009"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 08 Mar 2023 10:44:45 -0800
+Received: from [10.212.213.11] (kliang2-mobl1.ccr.corp.intel.com [10.212.213.11])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A72966602FED;
-        Wed,  8 Mar 2023 18:42:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678300930;
-        bh=UKyWFZhNS8RsP12bD/s+1YGvw8RPwv6cAUSboZiUu6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m1pvZnDSr9a3Nd13D0yTZSXkrVYO6dOprifxTR3lYVan2ve4pf5sxHAlRs6H3gdpF
-         Ajt0fohTCBhzsNonhgncDSUldGRt/qrsbWOXkv80v22i7m+BiGIyx3n6zFvg/w2u4D
-         6aZ8HVqg5duEEbZqSsiKihvbjljKx1m2IBircm/1ULNhH/S9XrVxiY7de8vwJzIuBz
-         7Aqay29bwEQ6iDFqLUCOuC7c1klOIwFgYt9UW1W2UsdrMEGiGVdqFuuZ7RY0UxQR0m
-         i55lBt+DOP3Wjog71zD5Xn4ZrBlrTvWzLtm9GuWIb7ftMV7lBMFn4G4L7Gjq4bcus4
-         Z9MQl2APMdq6w==
-Received: by mercury (Postfix, from userid 1000)
-        id B49D3106083B; Wed,  8 Mar 2023 19:42:08 +0100 (CET)
-Date:   Wed, 8 Mar 2023 19:42:08 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [RESEND] [PATCHv3 4/7] thermal: rockchip: Simplify channel id
- logic
-Message-ID: <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
-References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
- <20230308112253.15659-5-sebastian.reichel@collabora.com>
- <6c13708d-d51a-73b8-bf01-d6893eae2af4@linaro.org>
+        by linux.intel.com (Postfix) with ESMTPS id 5B61E580377;
+        Wed,  8 Mar 2023 10:44:44 -0800 (PST)
+Message-ID: <77f1ac9f-0acd-1b70-c19e-3564caa45f41@linux.intel.com>
+Date:   Wed, 8 Mar 2023 13:44:43 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2t65xyuiafud7yss"
-Content-Disposition: inline
-In-Reply-To: <6c13708d-d51a-73b8-bf01-d6893eae2af4@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH V2 2/9] perf: Extend ABI to support post-processing
+ monotonic raw conversion
+To:     John Stultz <jstultz@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, peterz@infradead.org,
+        mingo@redhat.com, linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
+        adrian.hunter@intel.com
+References: <20230213190754.1836051-1-kan.liang@linux.intel.com>
+ <20230213190754.1836051-3-kan.liang@linux.intel.com>
+ <CANDhNCqVcrZHGW4QJBD8_hZehmRpnNAsGFsmwsxBZNm3wpFZpQ@mail.gmail.com>
+ <e306e2ea-dea5-0eab-9eae-f9ea5fe7d52e@linux.intel.com>
+ <CANDhNCq1b-7C=cox6ufC3Kxycu87qPzDHtJH_5jwPmPjjig5ww@mail.gmail.com>
+ <6898b1c8-9dbf-67ce-46e6-15d5307ced25@linux.intel.com>
+ <0df181b9-fb34-78e8-1376-65d45f7f938f@linux.intel.com>
+ <CANDhNCoZNmK12beqE5AAnQrpHEW01xKWwOWTQQEsWSuOaH0HRQ@mail.gmail.com>
+ <568b09ce-dc6a-8d2a-13ca-6df045236449@linux.intel.com>
+ <CANDhNCrooGXFvW6DDuRJHtM2K8wCbqajSP0KDVn+wkEcTNHJZA@mail.gmail.com>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CANDhNCrooGXFvW6DDuRJHtM2K8wCbqajSP0KDVn+wkEcTNHJZA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi John,
 
---2t65xyuiafud7yss
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2023-02-17 6:11 p.m., John Stultz wrote:
+> On Tue, Feb 14, 2023 at 12:38 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>> On 2023-02-14 3:11 p.m., John Stultz wrote:
+>>> On Tue, Feb 14, 2023 at 9:00 AM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>>> On 2023-02-14 9:51 a.m., Liang, Kan wrote:
+>>>>> If I understand correctly, the idea is to let the user space tool run
+>>>>> the above interpoloation algorithm several times to 'guess' the atomic
+>>>>> mapping. Using the mapping information to covert the TSC from the PEBS
+>>>>> record. Is my understanding correct?
+>>>>>
+>>>>> If so, to be honest, I doubt we can get the accuracy we want.
+>>>>>
+>>>>
+>>>> I implemented a simple test to evaluate the error.
+>>>
+>>> Very cool!
+>>>
+>>>> I collected TSC -> CLOCK_MONOTONIC_RAW mapping using the above algorithm
+>>>> at the start and end of perf cmd.
+>>>>         MONO_RAW        TSC
+>>>> start   89553516545645  223619715214239
+>>>> end     89562251233830  223641517000376
+>>>>
+>>>> Here is what I get via mult/shift conversion from this patch.
+>>>>         MONO_RAW        TSC
+>>>> PEBS    89555942691466  223625770878571
+>>>>
+>>>> Then I use the time information from start and end to create a linear
+>>>> function and 'guess' the MONO_RAW of PEBS from the TSC. I get
+>>>> 89555942692721.
+>>>> There is a 1255 ns difference.
+>>>> I tried several different PEBS records. The error is ~1000ns.
+>>>> I think it should be an observable error.
+>>>
+>>> Interesting. That's a good bit higher than I'd expect as I'd expect a
+>>> clock_gettime() call to take ~ double digit nanoseconds range on
+>>> average, so the error should be within that.
+>>>
+>>> Can you share your logic?
+>>>
+>>
+>> I run the algorithm right before and after the perf command as below.
+>> (The source code of time is attached.)
+>>
+>> $./time
+>> $perf record -e cycles:upp --clockid monotonic_raw $some_workaround
+>> $./time
+>>
+>> The time will dump both MONO_RAW and TSC. That's where "start" and "end"
+>> from.
+>> The perf command print out both TSC and converted MONO_RAW (using the
+>> mul/shift from this patch series). That's where "PEBS" value from.
+>>
+>> Than I use the below formula to calculate the guessed MONO_RAW of PEBS TSC.
+>> Guessed_MONO_RAW = (PEBS_TSC - start_TSC) / (end_TSC - start_TSC) *
+>> (end_MONO_RAW - start_MONO_RAW) + start_MONO_RAW.
+>>
+>> The guessed_MONO_RAW is 89555942692721.
+>> The PEBS_MONO_RAW is 89555942691466.
+>> The difference is 1255.
+>>
+>> Is the calculation correct?
+> 
+> Thanks for sharing it. The equation you have there looks ok at a high
+> level for the values you captured (there's small tweaks like doing the
+> mult before the div to make sure you don't hit integer precision
+> issues, but I didn't see that with your results).
+> 
+> I've got a todo to try to see how the calculation changes if we do
+> provide atomic TSC/RAW stamps, here but I got a little busy with other
+> work and haven't gotten to it.
+> So my apologies, but I'll try to get back to this soon.
+> 
 
-Hi Daniel,
+Have you got a chance to try the idea?
 
-On Wed, Mar 08, 2023 at 07:13:22PM +0100, Daniel Lezcano wrote:
-> On 08/03/2023 12:22, Sebastian Reichel wrote:
-> > Replace the channel ID lookup table by a simple offset, since
-> > the channel IDs are consecutive.
-> >=20
-> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->=20
-> As all the other patches are reviewed by Heiko, is the tag missing here?
+I just want to check whether the userspace interpolation approach works.
+Should I prepare V3 and go back to the kernel solution?
 
-Heiko was not happy with this in PATCHv2, when he reviewed most
-of the patches:
 
-https://lore.kernel.org/all/3601039.e9J7NaK4W3@phil/
-
-I replied, but never got a response, so I kept it as is:
-
-https://lore.kernel.org/all/20221206170232.xsm4kcbfwrmlrriw@mercury.elektra=
-nox.org/
-
-FWIW it is essential for the series and cannot be dropped, because
-RK3588 has more than 2 channels.
-
-Greetings,
-
--- Sebastian
-
-> > ---
-> >   drivers/thermal/rockchip_thermal.c | 48 +++++++++++++-----------------
-> >   1 file changed, 21 insertions(+), 27 deletions(-)
-> >=20
-> > diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockc=
-hip_thermal.c
-> > index 9ed45b318344..bcbdd618daae 100644
-> > --- a/drivers/thermal/rockchip_thermal.c
-> > +++ b/drivers/thermal/rockchip_thermal.c
-> > @@ -39,15 +39,6 @@ enum tshut_polarity {
-> >   	TSHUT_HIGH_ACTIVE,
-> >   };
-> > -/*
-> > - * The system has two Temperature Sensors.
-> > - * sensor0 is for CPU, and sensor1 is for GPU.
-> > - */
-> > -enum sensor_id {
-> > -	SENSOR_CPU =3D 0,
-> > -	SENSOR_GPU,
-> > -};
-> > -
-> >   /*
-> >    * The conversion table has the adc value and temperature.
-> >    * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_t=
-able)
-> > @@ -82,7 +73,7 @@ struct chip_tsadc_table {
-> >   /**
-> >    * struct rockchip_tsadc_chip - hold the private data of tsadc chip
-> > - * @chn_id: array of sensor ids of chip corresponding to the channel
-> > + * @chn_offset: the channel offset of the first channel
-> >    * @chn_num: the channel number of tsadc chip
-> >    * @tshut_temp: the hardware-controlled shutdown temperature value
-> >    * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
-> > @@ -98,7 +89,7 @@ struct chip_tsadc_table {
-> >    */
-> >   struct rockchip_tsadc_chip {
-> >   	/* The sensor id of chip correspond to the ADC channel */
-> > -	int chn_id[SOC_MAX_SENSORS];
-> > +	int chn_offset;
-> >   	int chn_num;
-> >   	/* The hardware-controlled tshut property */
-> > @@ -925,8 +916,8 @@ static void rk_tsadcv2_tshut_mode(int chn, void __i=
-omem *regs,
-> >   }
-> >   static const struct rockchip_tsadc_chip px30_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* 2 channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> > @@ -949,7 +940,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_=
-data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rv1108_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > +	/* cpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 1, /* one channel for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -973,7 +965,8 @@ static const struct rockchip_tsadc_chip rv1108_tsad=
-c_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3228_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > +	/* cpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 1, /* one channel for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -997,8 +990,8 @@ static const struct rockchip_tsadc_chip rk3228_tsad=
-c_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3288_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 1, /* cpu sensor is channel 1 */
-> > -	.chn_id[SENSOR_GPU] =3D 2, /* gpu sensor is channel 2 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 1,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1022,7 +1015,8 @@ static const struct rockchip_tsadc_chip rk3288_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3328_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > +	/* cpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 1, /* one channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_CRU, /* default TSHUT via CRU */
-> > @@ -1045,8 +1039,8 @@ static const struct rockchip_tsadc_chip rk3328_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3366_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1070,8 +1064,8 @@ static const struct rockchip_tsadc_chip rk3366_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3368_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1095,8 +1089,8 @@ static const struct rockchip_tsadc_chip rk3368_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3399_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1120,8 +1114,8 @@ static const struct rockchip_tsadc_chip rk3399_ts=
-adc_data =3D {
-> >   };
-> >   static const struct rockchip_tsadc_chip rk3568_tsadc_data =3D {
-> > -	.chn_id[SENSOR_CPU] =3D 0, /* cpu sensor is channel 0 */
-> > -	.chn_id[SENSOR_GPU] =3D 1, /* gpu sensor is channel 1 */
-> > +	/* cpu, gpu */
-> > +	.chn_offset =3D 0,
-> >   	.chn_num =3D 2, /* two channels for tsadc */
-> >   	.tshut_mode =3D TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC=
- */
-> > @@ -1404,7 +1398,7 @@ static int rockchip_thermal_probe(struct platform=
-_device *pdev)
-> >   	for (i =3D 0; i < thermal->chip->chn_num; i++) {
-> >   		error =3D rockchip_thermal_register_sensor(pdev, thermal,
-> >   						&thermal->sensors[i],
-> > -						thermal->chip->chn_id[i]);
-> > +						thermal->chip->chn_offset + i);
-> >   		if (error)
-> >   			return dev_err_probe(&pdev->dev, error,
-> >   				"failed to register sensor[%d].\n", i);
->=20
-> --=20
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->=20
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->=20
-
---2t65xyuiafud7yss
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQI1vUACgkQ2O7X88g7
-+ppZNw//SfB4nsAVHynPBqs+Lcg/+GxxvJorgui/g9iaOLLG52U1lwkCFaeZMEBj
-ZwhT3tVN5X5NGOUhqqub6cD5L4zyCFq7ZbS/WebxLnAxY31SmeOUJN4tRgwQ6IVj
-PvfvoP/RAZzJsXXjZD/6jNvYRC7EhIoSWfC9pj9vX/pLshWcmBcIiUIxXcQnxy5N
-CVgQZ6pM0VUuX6dZ4gQLYtkHOlnJ9HZITyLS3YFk/k5QyrWseS1uwtkBtiiUL1xN
-dpV4loMyHFTAdAlAe1Omnm1pxoNu2/L7DkMUy9YuLedrqBva3T4qZ1hYXwYdSXGH
-z4lL2K4EtTMovqUM8wD5APzuwQUsCb6F4qsZy+ESizl+TodCS0IMEvF1BNLIvq0c
-r977XWozyKM6eHhQFm+pZga6079fqEVmFmozgt9VpHSE8u51joLtoY/A9JJsI/7V
-Ewcpj4Qk/pHoIq9bziEFPvurlQncf7OrwiTUsbFU2wvQGVKlYu4fOYr+G77AQayR
-FPCd1GE9kHQelx/ZHCZKc363Lrbh1Ta+bpOx2/VbGq5svRfsYvMnL1feFLEeV2gV
-v3E4TRSfX1vm5852grSyOnA68G4JagjX8bCNqpwKMv1lDjv5vXEO42oxu2twaeFO
-pikaz2Ti7Qwdv7iJ57zHOmiNSxoeFi4MUV9moe5q2G3omNuLH64=
-=ay3r
------END PGP SIGNATURE-----
-
---2t65xyuiafud7yss--
+Thanks,
+Kan
