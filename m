@@ -2,91 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A50276B0BD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E279E6B0BDD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 15:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbjCHOvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 09:51:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S232171AbjCHOvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 09:51:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbjCHOu5 (ORCPT
+        with ESMTP id S231718AbjCHOvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 09:50:57 -0500
-Received: from smtp-190e.mail.infomaniak.ch (smtp-190e.mail.infomaniak.ch [185.125.25.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 264412CFF9
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 06:50:07 -0800 (PST)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PWwG55Yx3zMq40q;
-        Wed,  8 Mar 2023 15:50:05 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PWwG520w1z27K4;
-        Wed,  8 Mar 2023 15:50:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
-        s=20220412; t=1678287005;
-        bh=YhDejNIAOWA2ocTNivyb1veTdzyn6P8nvP8lg5eW2YY=;
-        h=Subject:From:Reply-To:To:Cc:Date:In-Reply-To:References:From;
-        b=hdNHd40PY4zOReDL1q7gbVE7q3MzfsWeo6BGF32ub7HnboqIoF/oFd8NIoZo4igGE
-         IowvS3Ee3E9Upt1x8k9hZDtfriCOOVBeYrtcP7oQJKzpVXlJQa4dbN49Ov8HQRSc40
-         G9jEMYvl0jfhQPGpHBe06lFyXF8sapQSdfZxw6AY=
-Message-ID: <93b5c8bb6ec2010792c117bc7ffad9692fdf063c.camel@pschenker.ch>
-Subject: Re: [PATCH v1 03/25] arm64: dts: colibri-imx8x: Sort properties
-From:   Philippe Schenker <dev@pschenker.ch>
-Reply-To: dev@pschenker.ch
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Frank Rowand <frowand.list@gmail.com>,
+        Wed, 8 Mar 2023 09:51:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9C9B744;
+        Wed,  8 Mar 2023 06:50:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE8C8B81D17;
+        Wed,  8 Mar 2023 14:50:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75ABAC433EF;
+        Wed,  8 Mar 2023 14:50:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678287029;
+        bh=k9CLjWy5LWSWIB8cQjG++VGjuzyrJmcSHzOfzGCShqI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TntO7ahg63zljF8Crhsm2K5w+vTvTTXZqa9CQWD0fz28JGAVrwfPJYpl83vsj4Uy3
+         7zzBuqM2MIDnOmgvp1nztTy3gGMdeNaPZ2D1r+cAEghYw1R2iP2TSML3+tk6EtbtF4
+         UvN4LzpBPIi0ExCW15UCqCUsztrAbZjP4Y7o/nwk=
+Date:   Wed, 8 Mar 2023 15:50:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        matthias.bgg@gmail.com, weiqing.kong@mediatek.com,
+        jitao.shi@mediatek.com, linux-pwm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 08 Mar 2023 15:50:05 +0100
-In-Reply-To: <48d0217d-283f-354b-fcb5-12801895376a@linaro.org>
-References: <20230308125300.58244-1-dev@pschenker.ch>
-         <20230308125300.58244-4-dev@pschenker.ch>
-         <9d213504-d457-21a6-d467-41d8783d53d3@linaro.org>
-         <309ec2042a73b943485671f926ec0f25c5d8f80a.camel@pschenker.ch>
-         <48d0217d-283f-354b-fcb5-12801895376a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: Re: [PATCH 0/2] pwm: mtk-disp: Fix backlight configuration at boot
+Message-ID: <ZAigsHAgqkLlBD1y@kroah.com>
+References: <20230123160615.375969-1-angelogioacchino.delregno@collabora.com>
+ <06918fde-64ea-37b2-da1a-1c8316457223@collabora.com>
+ <06909bd8-3da2-1cf0-82ac-3ed4f3e63def@collabora.com>
 MIME-Version: 1.0
-X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <06909bd8-3da2-1cf0-82ac-3ed4f3e63def@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-08 at 15:32 +0100, Krzysztof Kozlowski wrote:
-> On 08/03/2023 14:29, Philippe Schenker wrote:
-> > On Wed, 2023-03-08 at 13:57 +0100, Krzysztof Kozlowski wrote:
-> > > Is this approved coding style for IMX DTS?
-> >=20
-> > How the ordering should be done is nowhere specifically documented
-> > (at
-> > least this is my current understanding).
-> > The ordering how I noted it is what we gathered from multiple
-> > feedback
-> > on mailinglist discussions.
-> >=20
-> > With that ordering I hope everyone is happy.
-> >=20
-> > Philippe
->=20
-> Yeah, but what if next developer next month re-orders all your nodes
-> again because he will use different coding style?
+On Wed, Mar 08, 2023 at 12:46:07PM +0100, AngeloGioacchino Del Regno wrote:
+> Il 23/02/23 15:16, AngeloGioacchino Del Regno ha scritto:
+> > Il 23/01/23 17:06, AngeloGioacchino Del Regno ha scritto:
+> > > Since the pwm-mtk-disp driver was fixed to get PWM_EN state from the
+> > > right register, an old two-wrongs-make-one-right issue emerged: as a
+> > > result, MT8192 Asurada Spherion got no backlight at boot unless a
+> > > suspend/resume cycle was performed.
+> > > Also, the backlight would sometimes not get updated with the requested
+> > > value, requiring the user to change it back and forth until it worked.
+> > > 
+> > > This series fixes both of the aforementioned issues found on MT8192.
+> > > 
+> > > AngeloGioacchino Del Regno (2):
+> > >    pwm: mtk-disp: Disable shadow registers before setting backlight
+> > >      values
+> > >    pwm: mtk-disp: Configure double buffering before reading in
+> > >      .get_state()
+> > > 
+> > >   drivers/pwm/pwm-mtk-disp.c | 34 +++++++++++++++++++++++-----------
+> > >   1 file changed, 23 insertions(+), 11 deletions(-)
+> > > 
+> > 
+> > Gentle ping for this one: this is fixing backlight issues on multiple MediaTek
+> > SoCs and was well tested.
+> > 
+> > Thanks,
+> > Angelo
+> 
+> Since this series was sent more than one month ago, and since this fixes broken
+> backlight on a number of Chromebooks with MT8183 and MT8192 SoCs, and seen the
+> urgency of getting these fixes in, I'm adding Greg to the loop.
 
-Someone from Toradex will complain that we want to have it the way I
-sent now, since this is the way we agreed on internally.
+$ ./scripts/get_maintainer.pl drivers/pwm/pwm-mtk-disp.c
+Thierry Reding <thierry.reding@gmail.com> (maintainer:PWM SUBSYSTEM)
+"Uwe Kleine-König" <u.kleine-koenig@pengutronix.de> (reviewer:PWM SUBSYSTEM)
+Matthias Brugger <matthias.bgg@gmail.com> (maintainer:ARM/Mediatek SoC support)
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> (reviewer:ARM/Mediatek SoC support)
+linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM)
+linux-kernel@vger.kernel.org (open list:ARM/Mediatek SoC support)
+linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
 
->=20
-> Best regards,
-> Krzysztof
->=20
+I don't see my name in there, did I become the PWM maintainer somehow?
 
+What's wrong with Thierry taking this like normal?
+
+thanks,
+
+greg k-h
