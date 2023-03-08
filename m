@@ -2,62 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845186B0F91
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C776B0F94
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 18:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjCHRBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 12:01:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
+        id S230124AbjCHRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 12:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjCHRAT (ORCPT
+        with ESMTP id S231268AbjCHRAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 12:00:19 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DDB38B46
-        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:58:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=+l6pvPFSZzemwr93IjuxChf8Z8w25V8S4wILXsPthcg=; b=EfkP0FEVzkM+EhrE5eUOXwf/z/
-        BwhqVtvzR2VDJzg0nGR2I5ld03VrAl+FUNiUDjBiM1Zq0Uo7JUD3vgT9P/tk0lDlmaw/BC859tJ8Y
-        80+30jzQSldVlKEfoqwUhuNM+hDiA7JxZLzf4el9o88Tas7N5Nphf7UF9Tiw7/C/puIcC7r3sIIsq
-        wCfYdqQIxUyPw8dbvHlvWJKoRzKg8v8/O1IourmNZWL6QLNfk3fDSb6/Vsb1ABLg1NifjDx99jx/B
-        GtX3pp1oDPtu2N4GjdUTqelaQxqEjEcGzU5Maryt4Ybh8rRVlUjKfQs4LS1tElKzlE8YGLtm+d21t
-        ShHhg2GA==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pZx7h-006239-Ul; Wed, 08 Mar 2023 16:58:42 +0000
-Message-ID: <0b57bfa2-4d84-1661-f2cb-3e39cce56a42@infradead.org>
-Date:   Wed, 8 Mar 2023 08:58:39 -0800
+        Wed, 8 Mar 2023 12:00:51 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1025D38F1
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 08:59:37 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id b26-20020a5d805a000000b0074cfe3a44aeso8949143ior.10
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 08:59:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678294777;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TW94PL94rAgtjTLgcx7A+NZZu9eTzckKL/XxL1c3UGc=;
+        b=NOM14OnBHmGtBvQBxOSptiQEkjAcSb+CfPWedXMQnbRonmjOOT8HFoq0fS4BhNPaxs
+         MvZmac1dAkmx9fLS4qGVYqNMiW1RUcMBtaSGMQV0fo7wiobxr7wQtuHvXMAuSaIedadk
+         eECriSdN1cO7YBS4F6uoiXEf9xROJqIOU7tbDXON84BU9LHNkZ/2342dAbVn1Q14Q97w
+         rS9o61aiTLQihwQ8bDgw9aoIYpImIYL0/Q3djKaVAWM/K8yGQBvrI8sHOP6EeFeTHX/C
+         /kCJzGU8FT3/axnZ8TMWZknbJSHXaOPqHigwyqCXnlPJpSemY9EQIZNOn9wFsqj13EQL
+         wuxw==
+X-Gm-Message-State: AO0yUKW+9c+qH54Ny8VN611b5beV9uegLIFs9AaQKnwQ4N3MPmKYT4Sl
+        M4G/ts8tl+QS1Nc+qghj863XABfKoSJgTGdMor2nFMdPLBPq
+X-Google-Smtp-Source: AK7set9CaHwdImsr+AKNviMhC/MAiwkh8sc+H7gO78/S9FKmsyHdWYXPVNic30p293u8gUK928kJ+30QV7QzH/8/ZfeqVPMYs6hE
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: kismet: WARNING: unmet direct dependencies detected for
- IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>
-References: <202212221206.Lt61kYrt-lkp@intel.com>
- <e1680223-2819-172e-20ea-daea3282e9eb@infradead.org> <Y6tAgP7UoP3aYBjq@spud>
- <d5bd9e86-473e-7577-4472-33eb2acbe8fa@infradead.org> <Y/lUvq3TSXL6tJOk@spud>
- <ae2452d4-52cf-4e11-8248-05fb7be77dc8@infradead.org>
- <4F5BE5CB-1AB5-4725-860A-1231A72FCE1D@kernel.org>
- <9d44f863-8644-459a-9fd7-918f742d437e@spud>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <9d44f863-8644-459a-9fd7-918f742d437e@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Received: by 2002:a02:620f:0:b0:3c9:562:1366 with SMTP id
+ d15-20020a02620f000000b003c905621366mr9261142jac.3.1678294777238; Wed, 08 Mar
+ 2023 08:59:37 -0800 (PST)
+Date:   Wed, 08 Mar 2023 08:59:37 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000006a0df05f6667499@google.com>
+Subject: [syzbot] [ext4?] WARNING in ext4_xattr_block_set (2)
+From:   syzbot <syzbot+6385d7d3065524c5ca6d@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,126 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
+Hello,
 
-On 3/8/23 08:08, Conor Dooley wrote:
-> On Sat, Feb 25, 2023 at 01:43:44PM +0000, Conor Dooley wrote:
->>
->>
->> On 25 February 2023 00:28:36 GMT, Randy Dunlap <rdunlap@infradead.org> wrote:
->>>
->>>
->>> On 2/24/23 16:22, Conor Dooley wrote:
->>>> On Fri, Feb 24, 2023 at 04:12:49PM -0800, Randy Dunlap wrote:
->>>>> Hi Conor, Palmer,
->>>>>
->>>>> On 12/27/22 10:59, Conor Dooley wrote:
->>>>>> Hey Randy,
->>>>>>
->>>>>> On Thu, Dec 22, 2022 at 05:00:06PM -0800, Randy Dunlap wrote:
->>>>>>> On 12/21/22 20:49, kernel test robot wrote:
->>>>>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>>>>>>> head:   9d2f6060fe4c3b49d0cdc1dce1c99296f33379c8
->>>>>>>> commit: 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1 riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
->>>>>>>> date:   6 weeks ago
->>>>>>>> config: riscv-kismet-CONFIG_IOMMU_IO_PGTABLE_LPAE-CONFIG_IPMMU_VMSA-0-0
->>>>>>>> reproduce:
->>>>>>>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
->>>>>>>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>>>>>>>         git fetch --no-tags linus master
->>>>>>>>         git checkout 8292493c22c8e28b6e67a01e0f5c6db1cf231eb1
->>>>>>>>         # 1. reproduce by kismet
->>>>>>>>            # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
->>>>>>>>            kismet --linux-ksrc=linux --selectees CONFIG_IOMMU_IO_PGTABLE_LPAE --selectors CONFIG_IPMMU_VMSA -a=riscv
->>>>>>>>         # 2. reproduce by make
->>>>>>>>            # save the config file to linux source tree
->>>>>>>>            cd linux
->>>>>>>>            make ARCH=riscv olddefconfig
->>>>>>>>
->>>>>>>> If you fix the issue, kindly add following tag where applicable
->>>>>>>> | Reported-by: kernel test robot <lkp@intel.com>
->>>>>>>>
->>>>>>>> kismet warnings: (new ones prefixed by >>)
->>>>>>>>>> kismet: WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE when selected by IPMMU_VMSA
->>>>>>>>    .config:4814:warning: symbol value 'ONFIG_ARCH_MMAP_RND_BITS_MI' invalid for ARCH_MMAP_RND_BITS
->>>>>>>>    
->>>>>>>>    WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->>>>>>>>      Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
->>>>>>>>      Selected by [y]:
->>>>>>>>      - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=y] && !GENERIC_ATOMIC64 [=y])
->>>>>>>>
->>>>>>>
->>>>>>> Maybe this:
->>>>>>>
->>>>>>> ---
->>>>>>>  drivers/iommu/Kconfig |    3 ++-
->>>>>>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>>>>>
->>>>>>> diff -- a/drivers/iommu/Kconfig b/drivers/iommu/Kconfig
->>>>>>> --- a/drivers/iommu/Kconfig
->>>>>>> +++ b/drivers/iommu/Kconfig
->>>>>>> @@ -32,7 +32,8 @@ config IOMMU_IO_PGTABLE
->>>>>>>  config IOMMU_IO_PGTABLE_LPAE
->>>>>>>  	bool "ARMv7/v8 Long Descriptor Format"
->>>>>>>  	select IOMMU_IO_PGTABLE
->>>>>>> -	depends on ARM || ARM64 || (COMPILE_TEST && !GENERIC_ATOMIC64)
->>>>>>> +	depends on ARM || ARM64 || ARCH_RENESAS || \
->>>>>>> +		(COMPILE_TEST && !GENERIC_ATOMIC64)
->>>>>>>  	help
->>>>>>>  	  Enable support for the ARM long descriptor pagetable format.
->>>>>>>  	  This allocator supports 4K/2M/1G, 16K/32M and 64K/512M page
->>>>>>>
->>>>>>>
->>>>>>> or is way off?
->>>>>>
->>>>>> Apologies for the radio silence here..
->>>>>>
->>>>>> Palmer initially sent a workaround and there was some discussion there:
->>>>>> https://lore.kernel.org/all/20221214180409.7354-1-palmer@rivosinc.com/
->>>>>> Guo sent a patch too:
->>>>>> https://lore.kernel.org/linux-riscv/20221215073212.1966823-1-guoren@kernel.org/
->>>>>>
->>>>>> I suppose Christmas is doing Christmas things :)
->>>>>
->>>>> Has this been solved (merged) yet?
->>>>> I'm still seeing a warning on linux-next-20230224.
->>>>
->>>> I thought it was fixed in the iommu tree with this series:
->>>> https://lore.kernel.org/all/7a53ac6f-640b-436d-9bfa-3e49066b2460@arm.com/
->>>>
->>>> If it is not, I'll take a look tomorrow...
->>>
->>> I see this warning on today's linux-next-20230224:
->>>
->>> WARNING: unmet direct dependencies detected for IOMMU_IO_PGTABLE_LPAE
->>>  Depends on [n]: IOMMU_SUPPORT [=y] && (ARM || ARM64 || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
->>>  Selected by [y]:
->>>  - IPMMU_VMSA [=y] && IOMMU_SUPPORT [=y] && (ARCH_RENESAS [=y] || COMPILE_TEST [=n]) && !GENERIC_ATOMIC64 [=n]
->>>
->>> with the attached config file. Please have a look.
->>
->> My main hard drive in my dev machine died overnight, so I'll have to renage on my tomorrow promise above.
-> 
-> I finally got around to looking at this today. I tried Palmer's original
-> reproducer (riscv32 allmodconfig) on top of v6.3-rc1 & this randconfig +
-> olddefconfig on it, and couldn't get the selection to trigger.
-> Maybe I misunderstand the randconfig process, but I had thought that
-> olddefconfig was supposed to be (the equivalent of) idempotent for
-> randconfigs.
+syzbot found the following issue on:
 
-That's what I usually do also:
-cp some_old_randconfig_file .config
-make olddefconfig
+HEAD commit:    0988a0ea7919 Merge tag 'for-v6.3-part2' of git://git.kerne..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17319698c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f763d89e26d3d4c4
+dashboard link: https://syzkaller.appspot.com/bug?extid=6385d7d3065524c5ca6d
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=120ab7acc80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17459908c80000
 
-> Robin did make some changes to the IOMMU Kconfig stuff that landed in
-> v6.3, so perhaps that's what has eventually sorted this out.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e0aa29e9ae74/disk-0988a0ea.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6f64db0b58ef/vmlinux-0988a0ea.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/db391408e15d/bzImage-0988a0ea.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/40fdb4293020/mount_0.gz
 
-Yes, it looks like Robin's commit d286a58bc8f4 fixed this problem.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6385d7d3065524c5ca6d@syzkaller.appspotmail.com
 
-> Please LMK if I've misunderstood & ruined the randconfig w/
-> olddefconfig!
+WARNING: CPU: 0 PID: 5338 at fs/ext4/xattr.c:2141 ext4_xattr_block_set+0x2ef2/0x3680
+Modules linked in:
+CPU: 0 PID: 5338 Comm: syz-executor395 Not tainted 6.2.0-syzkaller-13467-g0988a0ea7919 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:ext4_xattr_block_set+0x2ef2/0x3680 fs/ext4/xattr.c:2141
+Code: b3 3d ff 48 8b 7c 24 50 4c 89 ee e8 88 2f c1 ff 45 31 ed e9 86 f4 ff ff e8 1b b3 3d ff 45 31 ed e9 79 f4 ff ff e8 0e b3 3d ff <0f> 0b e9 5d f2 ff ff e8 02 b3 3d ff 0f 0b 43 80 3c 26 00 0f 85 6f
+RSP: 0018:ffffc90004a0f4a0 EFLAGS: 00010293
+RAX: ffffffff824f0a52 RBX: 1ffff92000941f11 RCX: ffff888029c61d40
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
+RBP: ffffc90004a0f6d0 R08: ffffffff8213bec0 R09: ffffed100e12d2ae
+R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: ffffc90004a0f860
+FS:  00007f3928dee700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f3920a0d000 CR3: 000000001c94d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ext4_xattr_set_handle+0xcd4/0x15c0 fs/ext4/xattr.c:2458
+ ext4_initxattrs+0xa3/0x110 fs/ext4/xattr_security.c:44
+ security_inode_init_security+0x2df/0x3f0 security/security.c:1147
+ __ext4_new_inode+0x347e/0x43d0 fs/ext4/ialloc.c:1324
+ ext4_mkdir+0x425/0xce0 fs/ext4/namei.c:2992
+ vfs_mkdir+0x29d/0x450 fs/namei.c:4038
+ do_mkdirat+0x264/0x520 fs/namei.c:4061
+ __do_sys_mkdirat fs/namei.c:4076 [inline]
+ __se_sys_mkdirat fs/namei.c:4074 [inline]
+ __x64_sys_mkdirat+0x89/0xa0 fs/namei.c:4074
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f3928e426d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f3928dee2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000102
+RAX: ffffffffffffffda RBX: 00007f3928ec77a0 RCX: 00007f3928e426d9
+RDX: 0000000000000000 RSI: 0000000020000180 RDI: 0000000000000005
+RBP: 00007f3928e94590 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f3928e940c0
+R13: 3d6469677365722c R14: 0030656c69662f2e R15: 00007f3928ec77a8
+ </TASK>
 
-Looks good now. Thanks.
 
--- 
-~Randy
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
