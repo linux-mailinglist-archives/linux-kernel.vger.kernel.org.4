@@ -2,149 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3556B054A
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 12:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171346B04DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 11:44:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229889AbjCHLDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 06:03:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S229780AbjCHKop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 05:44:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjCHLCs (ORCPT
+        with ESMTP id S229468AbjCHKom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 06:02:48 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F3DBBB39;
-        Wed,  8 Mar 2023 03:02:31 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PWpY95Ntwz9xs6D;
-        Wed,  8 Mar 2023 18:32:45 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwAn8lg9Zghkeml9AQ--.21953S2;
-        Wed, 08 Mar 2023 11:41:13 +0100 (CET)
-Message-ID: <efd569cdf6bba1ee80686f73a64bc636975dd899.camel@huaweicloud.com>
-Subject: Re: [PATCH] bpf: Fix IMA test
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     andrii@kernel.org, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        shuah@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mattbobrowski@google.com, zohar@linux.ibm.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 08 Mar 2023 11:40:58 +0100
-In-Reply-To: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
-References: <20230308103713.1681200-1-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 8 Mar 2023 05:44:42 -0500
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8083B9CBE2
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 02:44:41 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id t11so20755977lfr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 02:44:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678272279;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=30MEqz3ekoK9YrvibKSzcjJnUJXtLtERwbSpRRNxC10=;
+        b=jZ11m4Ek6uQmMhCrEbnw8WqWxDHzr40K21uTTyT/b99ifrq6mNEDR+ivYcK0ffVrwU
+         ClggEht8mHzBnhjcMBFUa7TQbFOvmb/1UWKf90q+mw9pWBMiURYKcHthW81fqH8+1XIc
+         icfKYw63IBcyoIUhYISsMmLNeUTcNs4eehLZKQZLZWqDMaxNUUEyldda72G9VSpc3YVV
+         FXJFzLocy+n3alonU0ZVBhWpMXxqMqUZPrvokkSiJFdVJ4aRSIMQAjnpSz09ZNucevmX
+         I6OUqxKY/7lKcOSmXOt5WetN4W4PhdtF+5qesAz904Rc6IufNE3bJI+Nyv7Lf1eCLud2
+         C6wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678272279;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=30MEqz3ekoK9YrvibKSzcjJnUJXtLtERwbSpRRNxC10=;
+        b=1IB8ZIoiC38Y4XDy8SfNqxMsKFgbr48fEaeIgWU0ohRJ4RHDuCn4sHLc54gMg5s7c7
+         BdbFZiROL99pU1+wAgTefugD4bpDAvl+lvxds6f4XsCPao2+50uRVDxVBq4jZyItNcMk
+         vx3SJjj4QtTeQsWy1hLb5FvK6B3VsdjBvVxa+0UWVhKjmCYD7cZr7PxkhauduPtU+gDS
+         4EPc4Ys6ZXOVAaBy4LyIq1HkEcSKbA3BEmBlfMxWqivTPkXolbbMhP6yqO6UpNZrxSK/
+         /3YC+eLoZo4bKqrMQ8zR2kj5Ya3fQTykyJiP0kjrIhPqzCn2ay6OKEpo3TQN8ZfXtW8q
+         6YSg==
+X-Gm-Message-State: AO0yUKXiJfi9fzrJNcGhRzVG0QBGvEUn3aamsyQ/wqDhN84WTGYVCQ9N
+        TjUgAj6luhxX5MKoJsQ89rj/fAo5xpcKtLpPOpA=
+X-Google-Smtp-Source: AK7set9zvECOfCfy9i7ALwKCer+9dc6UCIzzQBu3X9/3XlfC5cbM+uHHqv8H6QiPk5rCZbI8gASXTA==
+X-Received: by 2002:a19:c501:0:b0:4bb:8d56:d859 with SMTP id w1-20020a19c501000000b004bb8d56d859mr4868010lfe.6.1678272279559;
+        Wed, 08 Mar 2023 02:44:39 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id u3-20020a2eb803000000b00295733a3390sm2465537ljo.101.2023.03.08.02.44.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 02:44:39 -0800 (PST)
+Message-ID: <197ea188-c59d-6c53-77fd-3a0551ef8e70@linaro.org>
+Date:   Wed, 8 Mar 2023 11:44:38 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     lkml <linux-kernel@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Qualcomm Kryo core compatibles
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwAn8lg9Zghkeml9AQ--.21953S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWFyUAr45Kw1kKryfWr18Grg_yoW5ZFy8p3
-        93Wr1Yyw1ktFyftrsrAayUWFZ3ZFnrXa1UWrn5J345Aw1UWryIgryIvFy0qa1DJrZ2qa1f
-        Za1fWrZrWw48Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I
-        0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
-        rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
-        IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY
-        0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0x
-        vE42xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1rMa5UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAKBF1jj4pS5wAAsB
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-08 at 11:37 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+Hi!
 
-The title should have been selftests/bpf: ...
+I was recently debating what to do about Qualcomm Kryo compatibles.
 
-Will send a new version once I get the test result.
+There are basically 3 cases:
 
-Roberto
+1. Falkor/"real Kryo" - the (never shipped?) server platform & MSM8996
 
-> Commit 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED
-> flag is set") caused bpf_ima_inode_hash() to refuse to give non-fresh
-> digests. IMA test #3 assumed the old behavior, that bpf_ima_inode_hash()
-> still returned also non-fresh digests.
-> 
-> Correct the test by accepting both cases. If the samples returned are 1,
-> assume that the commit above is applied and that the returned digest is
-> fresh. If the samples returned are 2, assume that the commit above is not
-> applied, and check both the non-fresh and fresh digest.
-> 
-> Fixes: 62622dab0a28 ("ima: return IMA digest value only when IMA_COLLECTED flag is set")
-> Reported by: David Vernet <void@manifault.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  .../selftests/bpf/prog_tests/test_ima.c       | 29 ++++++++++++++-----
->  1 file changed, 21 insertions(+), 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_ima.c b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> index b13feceb38f..810b14981c2 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_ima.c
-> @@ -70,7 +70,7 @@ void test_test_ima(void)
->  	u64 bin_true_sample;
->  	char cmd[256];
->  
-> -	int err, duration = 0;
-> +	int err, duration = 0, fresh_digest_idx = 0;
->  	struct ima *skel = NULL;
->  
->  	skel = ima__open_and_load();
-> @@ -129,7 +129,15 @@ void test_test_ima(void)
->  	/*
->  	 * Test #3
->  	 * - Goal: confirm that bpf_ima_inode_hash() returns a non-fresh digest
-> -	 * - Expected result: 2 samples (/bin/true: non-fresh, fresh)
-> +	 * - Expected result:
-> +	 *   1 sample (/bin/true: fresh) if commit 62622dab0a28 applied
-> +	 *   2 samples (/bin/true: non-fresh, fresh) if commit 62622dab0a28 is
-> +	 *     not applied
-> +	 *
-> +	 * If commit 62622dab0a28 ("ima: return IMA digest value only when
-> +	 * IMA_COLLECTED flag is set") is applied, bpf_ima_inode_hash() refuses
-> +	 * to give a non-fresh digest, hence the correct result is 1 instead of
-> +	 * 2.
->  	 */
->  	test_init(skel->bss);
->  
-> @@ -144,13 +152,18 @@ void test_test_ima(void)
->  		goto close_clean;
->  
->  	err = ring_buffer__consume(ringbuf);
-> -	ASSERT_EQ(err, 2, "num_samples_or_err");
-> -	ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-> -	ASSERT_NEQ(ima_hash_from_bpf[1], 0, "ima_hash");
-> -	ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample, "sample_equal_or_err");
-> +	ASSERT_GE(err, 1, "num_samples_or_err");
-> +	if (err == 2) {
-> +		ASSERT_NEQ(ima_hash_from_bpf[0], 0, "ima_hash");
-> +		ASSERT_EQ(ima_hash_from_bpf[0], bin_true_sample,
-> +			  "sample_equal_or_err");
-> +		fresh_digest_idx = 1;
-> +	}
-> +
-> +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], 0, "ima_hash");
->  	/* IMA refreshed the digest. */
-> -	ASSERT_NEQ(ima_hash_from_bpf[1], bin_true_sample,
-> -		   "sample_different_or_err");
-> +	ASSERT_NEQ(ima_hash_from_bpf[fresh_digest_idx], bin_true_sample,
-> +		   "sample_equal_or_err");
->  
->  	/*
->  	 * Test #4
+This one's easy, it's actually Kryo so it should stay Kryo.
 
+
+2. Fake Kryo ("customized" Arm Cortex cores) (MSM8998-SM8x50)
+
+This one's tough.. Qualcomm marketing material seems to sometimes say
+Cortex, sometimes Kryo, sometimes "customized Cortex".. They do use
+their own arm IMPLEMENTER_ID in the MIDR_EL1 register and their
+PART_NUM values are not Arm-stock, but these cores don't seem to be
+any special.. Maybe some irq lines are routed differently? Not sure.
+
+My proposition here is to do:
+
+"qcom,kryoXXX", "arm,cortex-ABC"
+
+or
+
+"qcom,kryoXXX-PQR", "arm,cortex-ABC"
+
+where PQR is one of:
+- silver (LITTLE cores)
+- gold (big cores)
+- gold_plus (prime core(s))
+
+
+3. Arm cores modified within Arm implementation-defined allowance (SC8280XP+)
+
+These cores report Arm IMPLEMENTER_IDs and actual Arm PART_NUMs, which would
+suggest they're bone stock Arm Cortex cores, with some Qualcomm-iness coming
+as part of implementation details which are.. expected since Cortex allows for
+some IMPLEMENTATION DEFINED things. The only non-obvious part here is that
+the REVISION field they report does not always seem covered by the Arm TRMs.
+
+In this case I think going with
+
+"arm,cortex-ABC"
+
+is fine.. I already did this for 8550 and 8280xp and Rob seems to have liked it.
+
+So, I suppose the real question is what to do about 2., should they stay as
+they are, or maybe my proposition seems attractive?
+
+Konrad
