@@ -2,122 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934E46B01BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7E06B01B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 09:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjCHIlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 8 Mar 2023 03:41:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S229701AbjCHIkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 8 Mar 2023 03:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjCHIlA (ORCPT
+        with ESMTP id S230405AbjCHIj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 8 Mar 2023 03:41:00 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85156570BE;
-        Wed,  8 Mar 2023 00:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678264842; x=1709800842;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uI574dYMWHoRIV9dkSEKRQgGOP12iLKca4LFvFOKB2Y=;
-  b=PP3ay2fc7j9WRhJb6PosoGE+Fgp7STtyDF+aCf4kpmzumczxYWO1bWdN
-   UoWlxJRviRJgZb7Syf5mGgjasIA7sGL5m8BUKQQz9iGC7eclxCyWCFewr
-   yEi4LtF9Rr9tz4G71Zy+FFrAjVgyTZ/9alqL6molDwArMb39WT1hVewkX
-   +0nbHzmejS8/NOphIRxa/ERREdjKaPZJwbOWqy3ni9QMi/V86kU/5oqd9
-   230KqeupuPKslwUvE3fyyPyiFsTTj97zlJ2iVr6h1k7lpzx42CQvDjvOl
-   wAg9OS1E9vKZK6K48UuSnGfizgihxut6LjrXFx0THb0eVVticN/TjV+RS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="422369805"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="422369805"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2023 00:40:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10642"; a="1006249533"
-X-IronPort-AV: E=Sophos;i="5.98,243,1673942400"; 
-   d="scan'208";a="1006249533"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 08 Mar 2023 00:40:40 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pZpLj-0001zS-2O;
-        Wed, 08 Mar 2023 08:40:39 +0000
-Date:   Wed, 8 Mar 2023 16:39:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Davis <afd@ti.com>, Peter Tyser <ptyser@xes-inc.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH v2 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to
- simplify remove path
-Message-ID: <202303081607.a3gt8vdz-lkp@intel.com>
-References: <20230307193346.8718-3-afd@ti.com>
+        Wed, 8 Mar 2023 03:39:59 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB3F87D98
+        for <linux-kernel@vger.kernel.org>; Wed,  8 Mar 2023 00:39:57 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id a25so62795443edb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 08 Mar 2023 00:39:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678264796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oCATe+ES1QvWDk0NlxC4dgDiGw0qgM6ywBS9VU95eKQ=;
+        b=SvAbix98aHr0n+4XlR2eJCiwQlHeIqX5t5/Qv+ConfYAZD8oJmse0VAK7zS6hoR9AI
+         2MslmufvRsU0s4jKXcmiO27eW8Mo98spP1BnyJ3j1tRPclEEfpyQTB0iyUXd2IG39S3T
+         oOG7UjkkfT0DLr5XregCqpZjy18qq/7/5idSzC7PdbM/rOaxwZTL+XWgDMH1TPsXt2RK
+         smj/4w4BajVsm4Oq5v/Xj7+4DkSkcl10NxmEN3lp/yEMki70wBtZ5sk0b7a0ODiDz1dt
+         TdQvO5ZXJYoUNxGkSTWxvMNEhowu4H62kg74XfTEWdeCHqt9Otnb+y8FTWVqeJsR/Kb1
+         npTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678264796;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oCATe+ES1QvWDk0NlxC4dgDiGw0qgM6ywBS9VU95eKQ=;
+        b=JoW2mMNX632S51jhCR5+Wmszzi2wHTxlwzUPCtb0qdEczuYDrk0que4X6d/kKEyCF7
+         6k6IT6STGGaLPfSCDiPYdfCkoVWGycQtQ6sNIdNyI5UIQ8SGKFafugoURyrPC9+4XlMW
+         fNnpQKT0jFOTe7itzE7oxLXh3jfuH8CPE9+xS3xko3UsWEi9+TzXDuKwVIPq58CnWqJ5
+         Z0I/8PfN0eRTsrrwuNnooxt1ac9LTe78KSI8If75krZXHZJQCV4oGmlUNNVw6UC7aqqU
+         Pk2rHsxLuVQO5m1NQ1OedCFb95fTo/Hq+g8kNFk9dW8CsJSecSjeSbIR+C3f/Rve88jL
+         uKkA==
+X-Gm-Message-State: AO0yUKU2zbkKXlWO4n05SINAeKz7LDfGkakecm4Td6mlFqVZmzAM5yow
+        vBpTylgE3JZYtvM1BSGDh0c/8A==
+X-Google-Smtp-Source: AK7set9wkUBdhf1G1i8b8fndGqKLSOFkvtThJa77CTISAHIS9U9+bfcE9q7p5tpR9nlB/XPo7ysVmg==
+X-Received: by 2002:a17:906:bcda:b0:8a4:e0a2:e77f with SMTP id lw26-20020a170906bcda00b008a4e0a2e77fmr18414259ejb.34.1678264796361;
+        Wed, 08 Mar 2023 00:39:56 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:bba:fbfa:8aec:a133? ([2a02:810d:15c0:828:bba:fbfa:8aec:a133])
+        by smtp.gmail.com with ESMTPSA id n21-20020a17090625d500b00905a1abecbfsm7145329ejb.47.2023.03.08.00.39.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Mar 2023 00:39:55 -0800 (PST)
+Message-ID: <990821fd-3271-9fe9-3bb3-a07ec57dcba0@linaro.org>
+Date:   Wed, 8 Mar 2023 09:39:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307193346.8718-3-afd@ti.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] dt-bindings: soc: qcom: smd-rpm: re-add missing
+ qcom,rpm-msm8994
+Content-Language: en-US
+To:     Petr Vorel <petr.vorel@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kathiravan T <kathirav@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230305122428.167580-1-krzysztof.kozlowski@linaro.org>
+ <CAB1t1CzF+E=h9bWWwKf1vpt+ThOOxHvYZ1Nh0f5ep6A=1WZNEw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAB1t1CzF+E=h9bWWwKf1vpt+ThOOxHvYZ1Nh0f5ep6A=1WZNEw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On 07/03/2023 20:48, Petr Vorel wrote:
+> Hi all,
+> 
+> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-Thank you for the patch! Yet something to improve:
+What did you review?
 
-[auto build test ERROR on brgl/gpio/for-next]
-[also build test ERROR on linus/master v6.3-rc1 next-20230308]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/gpio-twl4030-Use-devm_gpiochip_add_data-to-simplify-remove-path/20230308-034717
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-patch link:    https://lore.kernel.org/r/20230307193346.8718-3-afd%40ti.com
-patch subject: [PATCH v2 3/6] gpio: sch311x: Use devm_gpiochip_add_data() to simplify remove path
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230308/202303081607.a3gt8vdz-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/fcfc10c6817ac3ea88ced58cce2ae8568b0f2030
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andrew-Davis/gpio-twl4030-Use-devm_gpiochip_add_data-to-simplify-remove-path/20230308-034717
-        git checkout fcfc10c6817ac3ea88ced58cce2ae8568b0f2030
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303081607.a3gt8vdz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpio/gpio-sch311x.c:322:27: error: 'sch311x_gpio_remove' undeclared here (not in a function); did you mean 'sch311x_gpio_probe'?
-     322 |         .remove         = sch311x_gpio_remove,
-         |                           ^~~~~~~~~~~~~~~~~~~
-         |                           sch311x_gpio_probe
-
-
-vim +322 drivers/gpio/gpio-sch311x.c
-
-12262bef8f4614 Bruno Randolf 2013-12-04  318  
-12262bef8f4614 Bruno Randolf 2013-12-04  319  static struct platform_driver sch311x_gpio_driver = {
-12262bef8f4614 Bruno Randolf 2013-12-04  320  	.driver.name	= DRV_NAME,
-12262bef8f4614 Bruno Randolf 2013-12-04  321  	.probe		= sch311x_gpio_probe,
-12262bef8f4614 Bruno Randolf 2013-12-04 @322  	.remove		= sch311x_gpio_remove,
-12262bef8f4614 Bruno Randolf 2013-12-04  323  };
-12262bef8f4614 Bruno Randolf 2013-12-04  324  
-12262bef8f4614 Bruno Randolf 2013-12-04  325  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
