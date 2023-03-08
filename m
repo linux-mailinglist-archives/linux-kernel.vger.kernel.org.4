@@ -2,123 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 542F76AFAF5
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 362676AFAFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 01:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbjCHATJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 19:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S229654AbjCHAU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 19:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCHATG (ORCPT
+        with ESMTP id S229480AbjCHAUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 19:19:06 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B55493113;
-        Tue,  7 Mar 2023 16:19:05 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id bh20so11002355oib.9;
-        Tue, 07 Mar 2023 16:19:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678234744;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ydYIeT5CpiYV9PuLS2/dqB/u1lmO0H7llULte7BqSmU=;
-        b=dXaNWWU2oogYOaRcsy3he7qVSOodx2vdh2Dg5k3Y932dAWTSoipgH1rfrvGf0i1uIZ
-         EyhdfqbROX1uKS5wvrZJrt/MVWUfqefcQ/pcR1H6UHuOyPw7G1lQfzUvn+C2RbW8uQYs
-         kDzK1lAYNkf3MdIUOsbOlP3bB9Ex2j05bzbij6EgKZccDtYS3yIopvdl7N/CcYD2f+q5
-         EHt3qBF5ILm0xSlZrDub6WxfCLXPpLqT21kKSlZQpdCsj9stwFmPQiJ1GQST5gjye3DD
-         K31DrQpozBOfFo7eOJZodgF4S+LS1zL3URIPqDsWuZdzbZyVqKAd5iruJFDocE9MY1QW
-         B/gA==
-X-Gm-Message-State: AO0yUKW+mER3bodF93Ev+zNmVSgK9wp3HJFfOObJYunxOlv9pAJw82f4
-        bM20OPuRL5YLeSakh/NiYg==
-X-Google-Smtp-Source: AK7set/aNjBliRav8GyDeMZdpRrH2aJKfIXTqN1Oy6KTiiDWd6EsCHdNtr+8ou/LRrVmCKY5q4p1Rw==
-X-Received: by 2002:aca:1314:0:b0:360:c119:48fc with SMTP id e20-20020aca1314000000b00360c11948fcmr6925666oii.41.1678234744549;
-        Tue, 07 Mar 2023 16:19:04 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q81-20020acad954000000b0037fa61eb1dasm5655892oig.47.2023.03.07.16.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Mar 2023 16:19:04 -0800 (PST)
-Received: (nullmailer pid 524042 invoked by uid 1000);
-        Wed, 08 Mar 2023 00:19:03 -0000
-Date:   Tue, 7 Mar 2023 18:19:03 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michael Walle <michael@walle.cc>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Robert Marko <robert.marko@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 03/21] of: Rename of_modalias_node()
-Message-ID: <20230308001903.GA513330-robh@kernel.org>
-References: <20230307165359.225361-1-miquel.raynal@bootlin.com>
- <20230307165359.225361-4-miquel.raynal@bootlin.com>
+        Tue, 7 Mar 2023 19:20:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A43E96096;
+        Tue,  7 Mar 2023 16:20:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24534B815E6;
+        Wed,  8 Mar 2023 00:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0CA5C433D2;
+        Wed,  8 Mar 2023 00:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678234819;
+        bh=/1KG94RNtNfOwyEyvtWapeQN+ftz3LtLGEnFKj/PSwI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=DMOdH9lXNsxr7PqWBQwjns1cp7mftqZy9Nul7jq9dtoy6QnA5SMKVSTz9povKo+W3
+         u+XjL/yINkdzgx1ceqJaLCHQJ8z90esmhYfk3xZtU/sAcsCepNeLBedP0AG64rEwEy
+         peS2jQ+wNem/Y992dqlTf7GbTWzSRwLgKZbXlbO7dAKZz0+SXhGA32M5EypGMWseUJ
+         hVDsBuC7Le+JL2I3/HtnU1YujYAy7lDPDjFzF431fWIdN26ygGfQZzhiZgY0OwlsdA
+         ie640X8pg3cTb5FRcPKBQztQzQ3PIqwTxkv1r8iuGBcgRxYqLN/9AYXyJIJdGiNVxU
+         s1rQiSN1Ycb1A==
+Date:   Tue, 7 Mar 2023 18:20:18 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Janne Grunau <j@jannau.net>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] PCI: apple: Set only available ports up
+Message-ID: <20230308002018.GA913897@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307165359.225361-4-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230307-apple_pcie_disabled_ports-v1-1-b32ef91faf19@jannau.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 07, 2023 at 05:53:41PM +0100, Miquel Raynal wrote:
-> This helper does not produce a real modalias, but tries to get the
-> "product" compatible part of the "vendor,product" compatibles only. It
-> is far from creating a purely useful modalias string and does not seem
-> to be used like that directly anyway, so let's try to give this helper a
-> more meaningful name before moving there a real modalias helper (already
-> existing under of/device.c).
-> 
-> Also update the various documentations to refer to the strings as
-> "aliases" rather than "modaliases" which has a real meaning in the Linux
-> kernel.
-> 
-> There is no functional change.
-> 
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> Cc: Maxime Ripard <mripard@kernel.org>
-> Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: Wolfram Sang <wsa@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Thanks for your patch.
+
+On Tue, Mar 07, 2023 at 11:59:50PM +0100, Janne Grunau wrote:
+> Fixes "interrupt-map" parsing in of_irq_parse_raw() which takes the
+> node's availability into account.
+
+I don't really know what this means.  The patch looks like a fix to
+apple_pcie_init(), not to of_irq_parse_raw().  I assume maybe this is
+to do with the irq_of_parse_and_map() in apple_pcie_port_setup_irq()?
+
+> This became apparent after disabling unused PCIe ports in the Apple
+> silicon device trees instead of disabling them.
+
+"... disabling unused PCIe ports ... instead of disabling them"
+doesn't read quite right.  Maybe it should read "instead of *deleting*
+them"?  Not sure because I don't know the background here.
+
+> Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unused-v1-0-5ea0d3ddcde3@jannau.net/
+> Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org/
+> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Janne Grunau <j@jannau.net>
 > ---
->  drivers/acpi/bus.c                |  7 ++++---
->  drivers/gpu/drm/drm_mipi_dsi.c    |  2 +-
->  drivers/hsi/hsi_core.c            |  2 +-
-
-These should not have been using this function. The matching on just the 
-product was a relic from I2C and SPI which we don't want to propogate. 
-No clue why ACPI needed it...
-
-If you respin or want to fixup while applying, can you add a kerneldoc 
-comment to not add new users of the function. Not that anyone will 
-follow that... :(
-
-Reviewed-by: Rob Herring <robh@kernel.org>
-
->  drivers/i2c/busses/i2c-powermac.c |  2 +-
->  drivers/i2c/i2c-core-of.c         |  2 +-
->  drivers/of/base.c                 | 15 ++++++++-------
->  drivers/spi/spi.c                 |  4 ++--
->  include/linux/of.h                |  2 +-
->  8 files changed, 19 insertions(+), 17 deletions(-)
+>  drivers/pci/controller/pcie-apple.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> index 66f37e403a09..f8670a032f7a 100644
+> --- a/drivers/pci/controller/pcie-apple.c
+> +++ b/drivers/pci/controller/pcie-apple.c
+> @@ -783,7 +783,7 @@ static int apple_pcie_init(struct pci_config_window *cfg)
+>  	cfg->priv = pcie;
+>  	INIT_LIST_HEAD(&pcie->ports);
+>  
+> -	for_each_child_of_node(dev->of_node, of_port) {
+> +	for_each_available_child_of_node(dev->of_node, of_port) {
+>  		ret = apple_pcie_setup_port(pcie, of_port);
+>  		if (ret) {
+>  			dev_err(pcie->dev, "Port %pOF setup fail: %d\n", of_port, ret);
+> 
+> ---
+> base-commit: c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+> change-id: 20230307-apple_pcie_disabled_ports-0c17fb7a4738
+> 
+> Best regards,
+> -- 
+> Janne Grunau <j@jannau.net>
+> 
