@@ -2,252 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43E86AFC39
-	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BDF6AFC3C
+	for <lists+linux-kernel@lfdr.de>; Wed,  8 Mar 2023 02:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjCHBXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 7 Mar 2023 20:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
+        id S229952AbjCHB0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 7 Mar 2023 20:26:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjCHBXH (ORCPT
+        with ESMTP id S229653AbjCHB0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 7 Mar 2023 20:23:07 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D99C1F5E1;
-        Tue,  7 Mar 2023 17:23:05 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id g3so59918309eda.1;
-        Tue, 07 Mar 2023 17:23:05 -0800 (PST)
+        Tue, 7 Mar 2023 20:26:20 -0500
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1090B8235E;
+        Tue,  7 Mar 2023 17:26:19 -0800 (PST)
+Received: by mail-qt1-x829.google.com with SMTP id h19so16676105qtk.7;
+        Tue, 07 Mar 2023 17:26:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678238584;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KskDoY551EmOHdJiRobDKDE+GFk+1yzE3Gg+RoSEyLY=;
-        b=JkQ0bhqC4Am3GcwuI0OROo84uG8MtJapLie7+68UMHC5Os+sArhf+fMXrkFCEwU6ih
-         z3CNo5ZBcJnEAEyOG50vquTJXubVuAGEqRAiR31KBRlocW8rqfEsPA4BnETM4Yh7xcAm
-         YcKY/PFP7waSJx5BEx6c3DL89+jR12G/ty2oqNEFShnLxgaNCdxXu0tZH5LLqyra+MCT
-         HJwIeOkqve/OxsgaKJwKzTCSC9eb6CRCnxh4jAJ/6l9LNpdjbC+gwWf0sVXvg2pW9aUk
-         ozl55DldiDnJFtOtvrzhwLtnTEeybIg8Xv/RGwgIJyjv8wyNtfFqeb7kjyerqQ2I9QSO
-         lycA==
+        d=gmail.com; s=20210112; t=1678238778;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HrGCJ5MSZDYIh72odbfCXv3OjB4aPWORM8fS9BuSe6U=;
+        b=V6/rzhlNCD4Os6IPrpRaMcKvSZkNbVv8YoB7DAg2rZNFKC/gq+qYQANoB5tjiqIuLE
+         aECdRlPQgor7Pln0eWGQxW47KU3XgYoWhkjeQ1QqHmzG+ZE1L79qaQh9nn7Zq92RmdSa
+         0lS3qBCvE3YFBkMInugQln3+6mkx0+NyqRGp5xna1rxdDh5mC0u4PpjnMkTFDXkhLFtN
+         LkgXd0+46L1ciRg4NOCNI+Owbmn9UjB0EIgqMthqbsIoRJOyo54tFotuUIFApzw1stLY
+         Lwqu/LPD+WEdJ5Mq5j7p/xH7ofwhdWPmESuesK4j80nHuZKXlLd+G2uc2l1dP0vb+MHF
+         FeMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678238584;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KskDoY551EmOHdJiRobDKDE+GFk+1yzE3Gg+RoSEyLY=;
-        b=XurVw3H66Gb/y6VXWowUv8/exrs/A9+c/hbmyGwBbO0KCAZkfPRg2HiC6IYERBAcAE
-         AV127IHMCPu5+jNH2LPdTvMBz6bKat3xaqZ6xaZ952eNu6bcyQNv1gACrcTQeX+vhtu9
-         HRlMD6Esjsb4Koxn/UbzVuTyQ6GA3iXHcMWX59IqNd0KEgvfx9arLi/XzwB3coO2LEsU
-         4WTGRTr2AK+2HNcLN6fttBMJO1xjJFDC8k/dZ1lbZNnq76umcr7xcYdJFGro1VKNGJMN
-         vPDUD9bOx/Jsl6PVhAxFo9xCqG37VEjJ7fxKerq7u2KuLiBzA87bCOiPIqSrEisXAGgB
-         iMRQ==
-X-Gm-Message-State: AO0yUKXzOpEEeKCzOmFhGeKfM7fWis0zOemY47PH89shuzzA92UE3anW
-        0PE1qomW9EP0KLXIKcGEVz74jgqKIDmMGxvPErY=
-X-Google-Smtp-Source: AK7set8UF2ElgsF28TDecwVtSd8IHMfsKKXYJQppk+w1+yzC8tJQLsFc92Ik1julFeaWkn6KOgvNREeU2jUpuJ0aQbY=
-X-Received: by 2002:a17:907:33c1:b0:8b0:fbd5:2145 with SMTP id
- zk1-20020a17090733c100b008b0fbd52145mr8286182ejb.15.1678238583714; Tue, 07
- Mar 2023 17:23:03 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678238778;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HrGCJ5MSZDYIh72odbfCXv3OjB4aPWORM8fS9BuSe6U=;
+        b=Kh5sbxq9hKUJMcC4aS+IvLefdoTUHoA8UOFjdorsP7hD6EeYMN9bRzEfiVu6ktbsYN
+         agzjnlBTNtJUQECxHom7ZouC8Yd8cTjJJyTqd2uHrqBsSQwAMfTARljs0HSBNVZ/BtRg
+         b+f1u2emo/ffIxIXH38xbM+U1Ei9oNhARhdubKus0B+8aLC6ZDCN04tGeHXMqVQZgOz2
+         dFS1ILiEmjcatsC2GPFV8giYb8ERk1IcC+gKr3Yl2Sv3lLstI9/6gZ5NUOXZ1BJZ4q2k
+         7s1d8OyJg6vZJDDtDIKQFhqrNUmsE85fr0Py7f50ahIchu6S9h2iSuj6EYJtdrjcThrm
+         wTow==
+X-Gm-Message-State: AO0yUKUU7Yj5bJ7ewaqOVs+JfUByyjMQabJ5rZBf55EL9Rs4Mw4fxcS0
+        kNQZYfFiItCFXFs6NYR4MWA=
+X-Google-Smtp-Source: AK7set+dLHC4u0TbTmIumEqq6CCL5QcowmU62gPkQsoL1ySasKdM1qxtjrlwpgd66H5jV9QMV/5sNQ==
+X-Received: by 2002:a05:622a:d1:b0:3bf:d372:a5bf with SMTP id p17-20020a05622a00d100b003bfd372a5bfmr29304085qtw.45.1678238778121;
+        Tue, 07 Mar 2023 17:26:18 -0800 (PST)
+Received: from [10.4.10.38] (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
+        by smtp.gmail.com with ESMTPSA id r2-20020ac83b42000000b003c034837d8fsm3325676qtf.33.2023.03.07.17.26.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Mar 2023 17:26:17 -0800 (PST)
+Message-ID: <f8f291d9-2723-4ab8-3020-49018757d470@gmail.com>
+Date:   Tue, 7 Mar 2023 20:26:16 -0500
 MIME-Version: 1.0
-References: <20230228093206.821563-1-jolsa@kernel.org> <20230228093206.821563-6-jolsa@kernel.org>
-In-Reply-To: <20230228093206.821563-6-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 7 Mar 2023 17:22:51 -0800
-Message-ID: <CAEf4BzZsOvvPJRt69vj+YCAJ1DAXgLSD0E3rfoMOLo3c6mSKiQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 bpf-next 5/9] selftests/bpf: Add read_buildid function
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v3 0/3] Add RISC-V 32 NOMMU support
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-riscv@lists.infradead.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yimin Gu <ustcymgu@gmail.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Waldemar Brodkorb <wbx@openadk.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+References: <20230301002657.352637-1-Mr.Bossman075@gmail.com>
+ <42446784-a88b-df09-41e9-5f685b4df6ee@infradead.org>
+ <556ce787-80eb-dc48-f8d6-83e415538e36@opensource.wdc.com>
+From:   Jesse Taube <mr.bossman075@gmail.com>
+In-Reply-To: <556ce787-80eb-dc48-f8d6-83e415538e36@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 1:33=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Adding read_build_id function that parses out build id from
-> specified binary.
->
-> It will replace extract_build_id and also be used in following
-> changes.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  tools/testing/selftests/bpf/trace_helpers.c | 98 +++++++++++++++++++++
->  tools/testing/selftests/bpf/trace_helpers.h |  5 ++
->  2 files changed, 103 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
-selftests/bpf/trace_helpers.c
-> index 09a16a77bae4..c10e16626cd3 100644
-> --- a/tools/testing/selftests/bpf/trace_helpers.c
-> +++ b/tools/testing/selftests/bpf/trace_helpers.c
-> @@ -11,6 +11,9 @@
->  #include <linux/perf_event.h>
->  #include <sys/mman.h>
->  #include "trace_helpers.h"
-> +#include <linux/limits.h>
-> +#include <libelf.h>
-> +#include <gelf.h>
->
->  #define DEBUGFS "/sys/kernel/debug/tracing/"
->
-> @@ -230,3 +233,98 @@ ssize_t get_rel_offset(uintptr_t addr)
->         fclose(f);
->         return -EINVAL;
->  }
-> +
-> +static int
-> +parse_build_id_buf(const void *note_start, Elf32_Word note_size,
-> +                  char *build_id)
-> +{
-> +       Elf32_Word note_offs =3D 0, new_offs;
-> +
-> +       while (note_offs + sizeof(Elf32_Nhdr) < note_size) {
-> +               Elf32_Nhdr *nhdr =3D (Elf32_Nhdr *)(note_start + note_off=
-s);
-> +
-> +               if (nhdr->n_type =3D=3D 3 &&
-> +                   nhdr->n_namesz =3D=3D sizeof("GNU") &&
-> +                   !strcmp((char *)(nhdr + 1), "GNU") &&
-> +                   nhdr->n_descsz > 0 &&
-> +                   nhdr->n_descsz <=3D BPF_BUILD_ID_SIZE) {
-> +                       memcpy(build_id, note_start + note_offs +
-> +                              ALIGN(sizeof("GNU"), 4) + sizeof(Elf32_Nhd=
-r),
-> +                              nhdr->n_descsz);
-> +                       memset(build_id + nhdr->n_descsz, 0,
-> +                              BPF_BUILD_ID_SIZE - nhdr->n_descsz);
-
-I won't count :) but if something fits within 100 characters, please
-keep it on single line
-
-> +                       return (int) nhdr->n_descsz;
-> +               }
-> +
-> +               new_offs =3D note_offs + sizeof(Elf32_Nhdr) +
-> +                          ALIGN(nhdr->n_namesz, 4) + ALIGN(nhdr->n_descs=
-z, 4);
-> +
-> +               if (new_offs >=3D note_size)
-> +                       break;
-> +               note_offs =3D new_offs;
-> +       }
-> +
-> +       return -EINVAL;
-> +}
-> +
-> +/* Reads binary from *path* file and returns it in the *build_id*
-> + * which is expected to be at least BPF_BUILD_ID_SIZE bytes.
-> + * Returns size of build id on success. On error the error value
-> + * is returned.
-> + */
-> +int read_build_id(const char *path, char *build_id)
-> +{
-> +       int fd, err =3D -EINVAL;
-> +       Elf *elf =3D NULL;
-> +       GElf_Ehdr ehdr;
-> +       size_t max, i;
-> +
-> +       fd =3D open(path, O_RDONLY | O_CLOEXEC);
-> +       if (fd < 0)
-> +               return -errno;
-> +
-> +       (void)elf_version(EV_CURRENT);
-> +
-> +       elf =3D elf_begin(fd, ELF_C_READ, NULL);
-> +       if (!elf)
-> +               goto out;
-> +
-> +       if (elf_kind(elf) !=3D ELF_K_ELF)
-> +               goto out;
-> +
-> +       if (gelf_getehdr(elf, &ehdr) =3D=3D NULL)
-> +               goto out;
-> +
-> +       if (ehdr.e_ident[EI_CLASS] !=3D ELFCLASS64)
-> +               goto out;
-> +
-> +       for (i =3D 0; i < ehdr.e_phnum; i++) {
-> +               GElf_Phdr mem, *phdr;
-> +               char *data;
-> +
-> +               phdr =3D gelf_getphdr(elf, i, &mem);
-> +               if (!phdr)
-> +                       goto out;
-> +
-> +               if (phdr->p_type !=3D PT_NOTE)
-> +                       continue;
-> +
-> +               data =3D elf_rawfile(elf, &max);
-> +               if (!data)
-> +                       goto out;
-> +
-> +               if (phdr->p_offset >=3D max ||
-> +                  (phdr->p_offset + phdr->p_memsz >=3D max))
-> +                       goto out;
-> +
-> +               err =3D parse_build_id_buf(data + phdr->p_offset, phdr->p=
-_memsz, build_id);
-> +               if (err > 0)
-> +                       goto out;
-> +       }
-> +
-> +out:
-> +       if (elf)
-> +               elf_end(elf);
-> +       close(fd);
-> +       return err;
-> +}
-> diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/=
-selftests/bpf/trace_helpers.h
-> index 53efde0e2998..50b2cc498ba7 100644
-> --- a/tools/testing/selftests/bpf/trace_helpers.h
-> +++ b/tools/testing/selftests/bpf/trace_helpers.h
-> @@ -4,6 +4,9 @@
->
->  #include <bpf/libbpf.h>
->
-> +#define ALIGN(x, a)            __ALIGN_MASK(x, (typeof(x))(a)-1)
-> +#define __ALIGN_MASK(x, mask)  (((x)+(mask))&~(mask))
-
-nit: I know these are macros, but why would you first use __ALIGN_MASK
-and then #define it? swap them?
 
 
-> +
->  struct ksym {
->         long addr;
->         char *name;
-> @@ -23,4 +26,6 @@ void read_trace_pipe(void);
->  ssize_t get_uprobe_offset(const void *addr);
->  ssize_t get_rel_offset(uintptr_t addr);
->
-> +int read_build_id(const char *path, char *build_id);
-> +
->  #endif
-> --
-> 2.39.2
->
+On 2/28/23 23:42, Damien Le Moal wrote:
+> On 3/1/23 13:07, Randy Dunlap wrote:
+>> Hi--
+>>
+>> On 2/28/23 16:26, Jesse Taube wrote:
+>>> This patch-set aims to add NOMMU support to RV32.
+>>> Many people want to build simple emulators or HDL
+>>> models of RISC-V this patch makes it possible to
+>>> run linux on them.
+>>>
+>>> Yimin Gu is the original author of this set.
+>>> Submitted here:
+>>> https://lists.buildroot.org/pipermail/buildroot/2022-November/656134.html
+>>>
+>>> Though Jesse T rewrote the Dconf.
+>>
+>> Dconf?
+>>
+>>>
+>>> The new set:
+>>> https://lists.buildroot.org/pipermail/buildroot/2022-December/658258.html
+>>> ---
+>>> V1->V2:
+>>>   - Add Conor's clock patch for implicit div64
+>>>   - Fix typo in commit title 3/3
+>>>   - Fix typo in commit description 2/3
+>>> V2->V3
+>>>   - Change from defconfig file to a PHONY config
+>>> ---
+>>
+>> Is this 'rv32_nommu_virt_defconfig' target the only build target
+>> that is supported?
+>>
+>> I ask because I applied the 3 patches and did 25 randconfig builds.
+>> 5 of them failed the same way:
+>>
+>> riscv32-linux-ld: drivers/soc/canaan/k210-sysctl.o: in function `k210_soc_early_init':
+>> k210-sysctl.c:(.init.text+0x78): undefined reference to `k210_clk_early_init'
+I can not recreate this error.
+can you send me the .config you used.
+
+Thanks,
+Jesse Taube
+> 
+> Arg. Forgot about that. k210 is rv64 only and while the clk driver could still
+> compile test with rv32 (or any arch), that driver provides the
+> k210_clk_early_init() function which is called very early in the boot process
+> from k210_soc_early_init(), which is an SOC_EARLY_INIT_DECLARE() call. The
+> problem may be there. Probably should be disabled for rv32 if no SoC need that
+> sort of early init call.
+> 
+>>
+>> because
+>> # CONFIG_COMMON_CLK_K210 is not set
+>>
+>>
+>> Maybe SOC_CANAAN needs some more selects for required code?
+>>
+>>> Conor Dooley (1):
+>>>    clk: k210: remove an implicit 64-bit division
+>>>
+>>> Jesse Taube (1):
+>>>    riscv: configs: Add nommu PHONY defconfig for RV32
+>>>
+>>> Yimin Gu (1):
+>>>    riscv: Kconfig: Allow RV32 to build with no MMU
+>>>
+>>>   arch/riscv/Kconfig     | 5 ++---
+>>>   arch/riscv/Makefile    | 4 ++++
+>>>   drivers/clk/clk-k210.c | 2 +-
+>>>   3 files changed, 7 insertions(+), 4 deletions(-)
+>>>
+>>
+> 
